@@ -4,13 +4,13 @@
 
 buildDunePackage rec {
   pname = "elpi";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "LPCIC";
     repo = "elpi";
     rev = "v${version}";
-    sha256 = "0740a9bg33g7r3injpalmn2jd0h586481vrrkdw46nsaspwcjhza";
+    sha256 = "1q6s3x4gba0hdymlgj4rf1bny4v7ac4jj7q134cwd3sxiwqcyhww";
   };
 
   minimumOCamlVersion = "4.04";

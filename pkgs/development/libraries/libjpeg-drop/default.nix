@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libjpeg-drop-9b";
 
   srcs = [

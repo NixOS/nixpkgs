@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "bchunk-${version}";
+  pname = "bchunk";
   version = "1.2.2";
 
   src = fetchurl {
-    url = "http://he.fi/bchunk/${name}.tar.gz";
+    url = "http://he.fi/bchunk/${pname}-${version}.tar.gz";
     sha256 = "12dxx98kbpc5z4dgni25280088bhlsb677rp832r82zzc1drpng7";
   };
 

@@ -4,7 +4,8 @@ let
   version = "0.6";
 in
 stdenv.mkDerivation {
-  name = "abootimg-${version}";
+  pname = "abootimg";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ggrandou";

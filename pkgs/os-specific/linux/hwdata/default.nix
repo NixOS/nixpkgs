@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "hwdata-${version}";
+  pname = "hwdata";
   version = "0.316";
 
   src = fetchFromGitHub {

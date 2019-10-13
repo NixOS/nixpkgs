@@ -2,7 +2,8 @@
 
 let version = "0.6.4"; in
 stdenv.mkDerivation {
-  name = "confclerk-${version}";
+  pname = "confclerk";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.toastfreeware.priv.at/tarballs/confclerk/confclerk-${version}.tar.gz";

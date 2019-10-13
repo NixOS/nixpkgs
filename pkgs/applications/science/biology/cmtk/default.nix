@@ -1,6 +1,6 @@
 {stdenv, fetchurl, cmake}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "cmtk-3.3.1";
 
   src = fetchurl {

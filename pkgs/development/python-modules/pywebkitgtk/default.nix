@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://code.google.com/p/pywebkitgtk/";
-    description = "Python bindings for the WebKit GTK+ port";
+    description = "Python bindings for the WebKit GTK port";
     license = licenses.lgpl2Plus;
   };
 

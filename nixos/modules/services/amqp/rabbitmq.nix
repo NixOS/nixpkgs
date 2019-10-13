@@ -80,12 +80,10 @@ in {
       configItems = mkOption {
         default = {};
         type = types.attrsOf types.str;
-        example = ''
-          {
-            "auth_backends.1.authn" = "rabbit_auth_backend_ldap";
-            "auth_backends.1.authz" = "rabbit_auth_backend_internal";
-          }
-        '';
+        example = {
+          "auth_backends.1.authn" = "rabbit_auth_backend_ldap";
+          "auth_backends.1.authz" = "rabbit_auth_backend_internal";
+        };
         description = ''
           Configuration options in RabbitMQ's new config file format,
           which is a simple key-value format that can not express nested

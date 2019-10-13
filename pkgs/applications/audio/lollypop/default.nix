@@ -11,7 +11,6 @@
 , appstream-glib
 , desktop-file-utils
 , totem-pl-parser
-, hicolor-icon-theme
 , gobject-introspection
 , wrapGAppsHook
 , lastFMSupport ? true
@@ -20,7 +19,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.1.4.14";
+  version = "1.1.4.16";
 
   format = "other";
   doCheck = false;
@@ -29,7 +28,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "004cwbnxss6vmdsc6i0y83h3xbc2bzc0ra4z99pkizkky2mz6swj";
+    sha256 = "1azfxc1vc1j4ph0zrfsgz2gac1vwmbj65j6wjlxx3nr8kia4mccl";
   };
 
   nativeBuildInputs = [
@@ -51,7 +50,6 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
-    hicolor-icon-theme
     libsoup
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
@@ -71,9 +69,8 @@ python3.pkgs.buildPythonApplication rec  {
     patchShebangs meson_post_install.py
   '';
 
-  preFixup = ''
-    buildPythonPath "$out $propagatedBuildInputs"
-    patchPythonScript "$out/libexec/lollypop-sp"
+  postFixup = ''
+    wrapPythonProgramsIn $out/libexec "$out $propagatedBuildInputs"
   '';
 
   # Produce only one wrapper using wrap-python passing

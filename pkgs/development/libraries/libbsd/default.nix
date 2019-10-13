@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "libbsd-${version}";
+  pname = "libbsd";
   version = "0.9.1";
 
   src = fetchurl {
-    url = "https://libbsd.freedesktop.org/releases/${name}.tar.xz";
+    url = "https://libbsd.freedesktop.org/releases/${pname}-${version}.tar.xz";
     sha256 = "1957w2wi7iqar978qlfsm220dwywnrh5m58nrnn9zmi74ds3bn2n";
   };
 

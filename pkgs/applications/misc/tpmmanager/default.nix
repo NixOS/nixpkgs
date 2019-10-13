@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.8.1";
-  name = "tpmmanager-${version}";
+  pname = "tpmmanager";
 
   src = fetchgit {
     url = "https://github.com/Sirrix-AG/TPMManager";

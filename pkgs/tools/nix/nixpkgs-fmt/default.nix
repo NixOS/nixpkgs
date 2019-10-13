@@ -1,16 +1,16 @@
 { lib, rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage rec {
   pname = "nixpkgs-fmt";
-  version = "0.2.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sa0263pkpi423f1rdyg90axw9sdmgj8ma1mza0v46qzkwynwgh3";
+    sha256 = "18kvsgl3kpla33dp1nbpd1kdgndfqcmlwwpjls55fp4mlczf8lcx";
   };
 
-  cargoSha256 = "0p3qa1asdvw2npav4281lzndjczrzac6fr8z4y61m7rbn363s8sa";
+  cargoSha256 = "0wfx7shsdqrwbnzr2a0fnly1kd93mxbm96zjq5pzrq94lphkhqhz";
 
   meta = with lib; {
     description = "Nix code formatter for nixpkgs";

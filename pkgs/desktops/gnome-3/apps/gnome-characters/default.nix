@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       sed -e $"2iimports.package._findEffectiveEntryPointName = () => \'$(basename $file)\' " \
         -i $file
 
-      wrapProgram $file "''${gappsWrapperArgs[@]}"
+      wrapGApp "$file"
     done
   '';
 

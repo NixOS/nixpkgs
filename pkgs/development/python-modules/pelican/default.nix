@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pelican";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";
     rev = version;
-    sha256 = "1ww3kc5bzp5q7b23n2vmzqch1z06l7vrscn0h96cscvk45sxc7yz";
+    sha256 = "08lwbkgqdf6qx9vg17qj70k7nz2j34ymlnrc4cbz7xj98cw4ams1";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     glibcLocales
     # Note: Pelican has to adapt to a changed CLI of pandoc before enabling this
     # again. Compare https://github.com/getpelican/pelican/pull/2252.
-    # Version 4.1.0 is incompatible with our current pandoc version.
+    # Version 4.1.1 is incompatible with our current pandoc version.
     # pandoc
     git
     mock

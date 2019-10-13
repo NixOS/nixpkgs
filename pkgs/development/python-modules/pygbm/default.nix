@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = https://github.com/ogrisel/pygbm;
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

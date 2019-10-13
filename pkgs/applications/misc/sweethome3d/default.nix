@@ -71,7 +71,7 @@ let
 
   d2u = stdenv.lib.replaceChars ["."] ["_"];
 
-in rec {
+in {
 
   application = mkSweetHome3D rec {
     version = "6.2";

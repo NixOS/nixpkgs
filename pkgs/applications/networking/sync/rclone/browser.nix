@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "rclone-browser-${version}";
+  pname = "rclone-browser";
   version = "1.2";
 
   src = fetchFromGitHub {

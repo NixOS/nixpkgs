@@ -39,6 +39,6 @@
     };
     rainloop-standard = common {
       edition = "";
-      sha256 = "1fbnpk7l2fbmzn31vx36caqg9xm40g4hh4mv3s8d70slxwhlscw0";
+      sha256 = "e3ec8209cb3b9f092938a89094e645ef27659763432bedbe7fad4fa650554222";
     };
   }

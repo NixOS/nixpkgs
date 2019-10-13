@@ -6,11 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "eggdeps";
+  pname = "tl-eggdeps";
   version = "0.4";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "tl.eggdeps";
     sha256 = "a99de5e4652865224daab09b2e2574a4f7c1d0d9a267048f9836aa914a2caf3a";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages  }:
 
 python2Packages.buildPythonApplication rec {
-  name     = "amazon-glacier-cmd-interface-${version}";
+  pname = "amazon-glacier-cmd-interface";
   version  = "2016-09-01";
 
   src = fetchFromGitHub {

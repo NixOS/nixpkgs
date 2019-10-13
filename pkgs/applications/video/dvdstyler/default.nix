@@ -13,7 +13,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "dvdstyler-${version}";
+  pname = "dvdstyler";
   srcName = "DVDStyler-${version}";
   version = "3.1.2";
 

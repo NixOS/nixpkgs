@@ -62,7 +62,7 @@ let
   ];
 in
 stdenv.mkDerivation
-rec {
+{
   inherit (s) name version;
   inherit buildInputs propagatedBuildInputs;
 

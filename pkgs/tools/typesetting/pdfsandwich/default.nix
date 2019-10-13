@@ -1,6 +1,6 @@
 { stdenv, ocaml, makeWrapper, fetchsvn, ghostscript, imagemagick, perl, poppler_utils, tesseract, unpaper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.1.7";
   pname = "pdfsandwich";
 

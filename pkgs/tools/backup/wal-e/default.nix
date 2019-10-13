@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, lzop, postgresql, pv }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "wal-e-${version}";
+  pname = "wal-e";
   version = "0.6.10";
 
   namePrefix = "";

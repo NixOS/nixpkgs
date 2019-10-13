@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.7.2";
-  name = "boot-${version}";
+  pname = "boot";
 
   src = fetchurl {
     url = "https://github.com/boot-clj/boot-bin/releases/download/${version}/boot.sh";

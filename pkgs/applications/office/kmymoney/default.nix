@@ -15,11 +15,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "kmymoney-${version}";
+  pname = "kmymoney";
   version = "5.0.5";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
+    url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
     sha256 = "1hghs4676kn2giwpwz1y7p6djpmi41x64idf3ybiz8ky14a5s977";
   };
 
@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     homepage = https://kmymoney.org/;
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+    broken = true;
   };
 }

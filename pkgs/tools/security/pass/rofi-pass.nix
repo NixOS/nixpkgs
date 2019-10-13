@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rofi-pass-${version}";
+  pname = "rofi-pass";
   version = "2.0.2";
 
   src = fetchFromGitHub {

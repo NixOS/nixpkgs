@@ -3,7 +3,7 @@ let
   pythonPackages = python2Packages;
 
 in pythonPackages.buildPythonApplication rec {
-  name = "zabbix-cli-${version}";
+  pname = "zabbix-cli";
   version = "2.1.1";
 
   propagatedBuildInputs = with pythonPackages; [ ipaddr requests ];

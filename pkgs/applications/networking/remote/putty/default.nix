@@ -4,15 +4,18 @@
 
 stdenv.mkDerivation rec {
   version = "0.71";
-  name = "putty-${version}";
+  pname = "putty";
 
   src = fetchurl {
     urls = [
-      "https://the.earth.li/~sgtatham/putty/${version}/${name}.tar.gz"
-      "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${name}.tar.gz"
+      "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
+      "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
     sha256 = "1f66iss0kqk982azmxbk4xfm2i1csby91vdvly6cr04pz3i1r4rg";
   };
+
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
     perl mkfiles.pl

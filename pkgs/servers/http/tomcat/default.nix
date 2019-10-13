@@ -3,11 +3,11 @@
 let
 
   common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (rec {
-    name = "apache-tomcat-${version}";
+    pname = "apache-tomcat";
     version = "${versionMajor}.${versionMinor}";
 
     src = fetchurl {
-      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${name}.tar.gz";
+      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 

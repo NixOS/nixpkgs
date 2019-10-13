@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
 , xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, xkeyboard_config, alsaLib
-, libpulseaudio ? null, libredirect, quazip, less, which, unzip, llvmPackages
+, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
 }:
 
 let
@@ -26,18 +26,20 @@ let
     categories = "Network";
   };
 
+  fakeLess = writeShellScriptBin "less" "cat";
+
 in
 
 stdenv.mkDerivation rec {
-  name = "teamspeak-client-${version}";
+  pname = "teamspeak-client";
 
-  version = "3.3.0";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
     sha256 = if stdenv.is64bit
-                then "13286dbjp4qiyfv8my1hfpwzns4szdsnqa11j8ygsh5ikgjk338a"
-                else "04lwclq7nvw73v5fmn9795j5wi54syglc77ldl41caiqqhdqf1i5";
+                then "1n916ds67dxj5bfgc5zm9nz2xh2914k85pzzspzvfyr7njcw7hpi"
+                else "0csl5xklcb4v8bzwvby5m2n38zjrnaw8dcvha7qvfbjllxr75yn2";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -46,11 +48,11 @@ stdenv.mkDerivation rec {
     sha256 = "1bywmdj54glzd0kffvr27r84n4dsd0pskkbmh59mllbxvj0qwy7f";
   };
 
-  buildInputs = [ makeWrapper less which unzip ];
+  nativeBuildInputs = [ makeWrapper fakeLess which unzip ];
 
   unpackPhase =
     ''
-      echo -e 'q\ny' | sh -xe $src
+      echo -e '\ny' | sh -xe $src
       cd TeamSpeak*
     '';
 

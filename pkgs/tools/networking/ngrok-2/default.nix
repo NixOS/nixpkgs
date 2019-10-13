@@ -17,7 +17,7 @@ let versions = builtins.fromJSON (builtins.readFile ./versions.json);
 in
 stdenv.mkDerivation {
   name = "ngrok-${version}";
-  version = "${version}";
+  version = version;
 
   # run ./update
   src = fetchurl { inherit sha256 url; };

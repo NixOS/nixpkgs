@@ -1,10 +1,10 @@
 { stdenv, fetchurl, docutils, libev, openssl, pkgconfig }:
 stdenv.mkDerivation rec {
   version = "1.5.0";
-  name = "hitch-${version}";
+  pname = "hitch";
 
   src = fetchurl {
-    url = "https://hitch-tls.org/source/${name}.tar.gz";
+    url = "https://hitch-tls.org/source/${pname}-${version}.tar.gz";
     sha256 = "02sd2p3jsbnqmldsjwzk5qcjc45k9n1x4ygjkx0kxxwjj9lm9hhf";
   };
 

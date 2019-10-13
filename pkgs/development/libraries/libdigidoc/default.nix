@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
 
   version = "3.10.4";
-  name = "libdigidoc-${version}";
+  pname = "libdigidoc";
 
   src = fetchurl {
     url = "https://github.com/open-eid/libdigidoc/releases/download/v${version}/libdigidoc-${version}.tar.gz";

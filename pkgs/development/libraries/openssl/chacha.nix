@@ -3,8 +3,8 @@
 }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
-  name = "openssl-chacha-${version}";
+stdenv.mkDerivation {
+  pname = "openssl-chacha";
   version = "2016-08-22";
 
   src = fetchFromGitHub {

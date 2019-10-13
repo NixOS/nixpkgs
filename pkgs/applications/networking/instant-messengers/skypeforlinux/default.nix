@@ -66,7 +66,8 @@ let
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "skypeforlinux-${version}";
+  pname = "skypeforlinux";
+  inherit version;
 
   system = "x86_64-linux";
 

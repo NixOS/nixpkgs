@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "metasrht";
-  version = "0.34.3";
+  version = "0.35.2";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     rev = version;
-    sha256 = "1yj3npw1vlqawzj6q1mh6qryx009dg5prja9fn6rasfmxjn2gr7v";
+    sha256 = "10x00lydnrcgk7s27fddbrdb8bwc5ivwlpswkcrsi302qcjdff9w";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;

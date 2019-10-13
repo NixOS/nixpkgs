@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = version;
-    sha256 = "0p8ky306dnm4alkncmsnd8r2awpsi37p0bzvkv313pgqw2hbwq9i";
+    rev = "74e3126b77eb5f27c0ae3f53b0aff2d2eebc15af"; # patches of tip from gnome-3-28 branch
+    sha256 = "0gw1n1w3i040w5mv30kkg7g8a59ymjlc5yaklip0ngg8xv76g0zi";
   };
 
   patches = [
@@ -54,11 +54,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/os-patches/commit/d636a44885c5be662997f8e19f7dcd26670b3219.patch";
       sha256 = "12pbxk6f39a09jxjam5a5hxl4whp3cifzpck2m7fpp0n98nc63qh";
     })
+    # See patch commit message
+    ./0001-Revert-ClutterActor-Preserve-valid-paint-volumes-til.patch
   ];
 
   configureFlags = [
     "--with-x"
-    "--disable-static"
     "--enable-shape"
     "--enable-sm"
     "--enable-startup-notification"

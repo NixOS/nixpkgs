@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-    name = "dumptorrent-${version}";
+    pname = "dumptorrent";
     version = "1.2";
     
     src = fetchurl {

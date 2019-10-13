@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-expand";
-  version = "0.4.14";
+  version = "0.4.15";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = pname;
     rev = version;
-    sha256 = "0i59m34lav3cmrazaxfraj3jk5mdi5fgaq8p7l4s8qr1fpmmw9vy";
+    sha256 = "155b4azkrr0qfg52mk7934zavwsbl28i28hi1inb23d509hrr5ky";
   };
 
-  cargoSha256 = "1sjbcgscgvjq4qpcljrsj1dyxbr10jl6wpp27xh3bv8c2rv4bzz8";
+  cargoSha256 = "050q4rk1x3jghinxg6gszi993a6zbg41vg535dlvvsqi36l278qc";
 
   buildInputs = [ llvmPackages.libclang ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;

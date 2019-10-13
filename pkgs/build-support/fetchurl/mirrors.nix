@@ -1,4 +1,4 @@
-rec {
+{
 
   # Content-addressable Nix mirrors.
   hashedMirrors = [
@@ -7,6 +7,13 @@ rec {
 
   # Mirrors for mirror://site/filename URIs, where "site" is
   # "sourceforge", "gnu", etc.
+
+  luarocks = [
+    https://luarocks.org
+    https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/
+    http://luafr.org/moonrocks
+    http://luarocks.logiceditor.com/rocks
+  ];
 
   # SourceForge.
   sourceforge = [

@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.023.5";
-  name = "sympow-${version}";
+  pname = "sympow";
 
   src = fetchFromGitLab {
     group = "rezozer";

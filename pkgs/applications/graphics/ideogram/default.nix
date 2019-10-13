@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
+, vala
 , pkgconfig
 , python3
 , glib
@@ -11,7 +12,6 @@
 , pantheon
 , desktop-file-utils
 , xorg
-, hicolor-icon-theme
 , wrapGAppsHook
 }:
 
@@ -28,10 +28,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    hicolor-icon-theme # for setup-hook
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook

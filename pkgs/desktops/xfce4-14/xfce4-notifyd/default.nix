@@ -1,7 +1,7 @@
 { mkXfceDerivation, glib, exo, gtk3, libnotify, libxfce4ui, libxfce4util
 , xfce4-panel, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "xfce4-notifyd";
   version = "0.4.4";

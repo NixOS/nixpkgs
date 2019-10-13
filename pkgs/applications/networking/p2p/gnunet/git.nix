@@ -7,7 +7,7 @@
 let
   rev = 	"ce2864cfaa27e55096b480bf35db5f8cee2a5e7e";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gnunet-git-${rev}";
 
   src = fetchgit {

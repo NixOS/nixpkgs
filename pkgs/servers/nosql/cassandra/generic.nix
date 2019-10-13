@@ -15,12 +15,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "cassandra-${version}";
+  pname = "cassandra";
   inherit version;
 
   src = fetchurl {
     inherit sha256;
-    url = "mirror://apache/cassandra/${version}/apache-${name}-bin.tar.gz";
+    url = "mirror://apache/cassandra/${version}/apache-${pname}-${version}-bin.tar.gz";
   };
 
   nativeBuildInputs = [ makeWrapper coreutils ];
@@ -30,16 +30,16 @@ stdenv.mkDerivation rec {
     mv * $out
 
     # Clean up documentation.
-    mkdir -p $out/share/doc/${name}
+    mkdir -p $out/share/doc/${pname}-${version}
     mv $out/CHANGES.txt \
        $out/LICENSE.txt \
        $out/NEWS.txt \
        $out/NOTICE.txt \
        $out/javadoc \
-       $out/share/doc/${name}
+       $out/share/doc/${pname}-${version}
 
     if [[ -d $out/doc ]]; then
-      mv "$out/doc/"* $out/share/doc/${name}
+      mv "$out/doc/"* $out/share/doc/${pname}-${version}
       rmdir $out/doc
     fi
 

@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "trackballs-${version}";
+  pname = "trackballs";
   version = "1.3.1";
 
   src = fetchFromGitHub {

@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 
-fetchFromGitHub rec {
+fetchFromGitHub {
   name = "myrica-2.011.20160403";
 
   owner = "tomokuni";

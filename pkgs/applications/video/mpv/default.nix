@@ -1,6 +1,6 @@
 { config, stdenv, fetchurl, fetchFromGitHub, makeWrapper
-, docutils, perl, pkgconfig, python3, which, ffmpeg_4
-, freefont_ttf, freetype, libass, libpthreadstubs, mujs
+, addOpenGLRunpath, docutils, perl, pkgconfig, python3, which
+, ffmpeg_4, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null, darwin
 
 , waylandSupport ? stdenv.isLinux
@@ -95,7 +95,7 @@ let
   luaEnv = lua.withPackages(ps: with ps; [ luasocket ]);
 
 in stdenv.mkDerivation rec {
-  name = "mpv-${version}";
+  pname = "mpv";
   version = "0.29.1";
 
   src = fetchFromGitHub {
@@ -135,8 +135,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    docutils makeWrapper perl
-    pkgconfig python3 which
+    addOpenGLRunpath docutils makeWrapper perl pkgconfig python3 which
   ];
 
   buildInputs = [
@@ -214,11 +213,17 @@ in stdenv.mkDerivation rec {
       ${wrapperFlags}
   '';
 
+  # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
+  # See the explanation in addOpenGLRunpath.
+  postFixup = optionalString stdenv.isLinux ''
+    addOpenGLRunpath $out/bin/.mpv-wrapped
+  '';
+
   meta = with stdenv.lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = https://mpv.io;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz globin ];
+    maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz globin ivan ];
     platforms = platforms.darwin ++ platforms.linux;
 
     longDescription = ''

@@ -5,8 +5,9 @@ with stdenv.lib;
 
 let
   version = "60.4.0";
-in stdenv.mkDerivation rec {
-  name = "spidermonkey-${version}";
+in stdenv.mkDerivation {
+  pname = "spidermonkey";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";

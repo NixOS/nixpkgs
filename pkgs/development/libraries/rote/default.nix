@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "rote-${version}";
+  pname = "rote";
   version = "0.2.8";
 
   src = fetchurl {
     sha256 = "05v1lw99jv4cwxl7spyi7by61j2scpdsvx809x5cga7dm5dhlmky";
-    url = "mirror://sourceforge/rote/${name}.tar.gz";
+    url = "mirror://sourceforge/rote/${pname}-${version}.tar.gz";
   };
 
   buildInputs = [ ncurses ];

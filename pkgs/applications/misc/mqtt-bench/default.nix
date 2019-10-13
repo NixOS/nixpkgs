@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
-  name = "mqtt-bench-${version}";
+  pname = "mqtt-bench";
   version = "0.3.0";
   rev = "v${version}";
 

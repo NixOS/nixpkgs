@@ -11,7 +11,6 @@
 , gtk3
 , glib
 , gettext
-, hicolor-icon-theme
 , gobject-introspection
 , wrapGAppsHook
 }:
@@ -33,6 +32,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/granite/raw/0550b44ed6400c9b1ff7e70871913747df2ff323/f/00-datetime-clock-format-gsettings.patch";
       sha256 = "0i9yvdmn77x5fjdwd1raw6ym8js8yxa7w6ydc7syx7hcyls00dmq";
+    })
+
+    # Fix build latest vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/granite/commit/fd26013c84afdeb6300ae2f4a574856753fc2b58.patch";
+      sha256 = "01nxqhj8gr61n6wx6ccrqdn25nmbrhhk437k21g4mxqx0gnih265";
     })
   ];
 
@@ -56,7 +61,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    hicolor-icon-theme
     libgee
   ];
 
@@ -66,9 +70,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "An extension to GTK+ used by elementary OS";
+    description = "An extension to GTK used by elementary OS";
     longDescription = ''
-      Granite is a companion library for GTK+ and GLib. Among other things, it provides complex widgets and convenience functions
+      Granite is a companion library for GTK and GLib. Among other things, it provides complex widgets and convenience functions
       designed for use in apps built for elementary OS.
     '';
     homepage = https://github.com/elementary/granite;

@@ -7,10 +7,10 @@ let metadata = assert stdenv.hostPlatform.system == "i686-linux" || stdenv.hostP
     { arch = "x86_64"; sha256 = "12af47jhlrh9aq5b3d13l7cdhlndgnfpy61gz002hajbq7i00ixh"; };
 in stdenv.mkDerivation rec {
   version = "1.2";
-  name = "tuxguitar-${version}";
+  pname = "tuxguitar";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tuxguitar/${name}-linux-${metadata.arch}.tar.gz";
+    url = "mirror://sourceforge/tuxguitar/${pname}-${version}-linux-${metadata.arch}.tar.gz";
     sha256 = metadata.sha256;
   };
 

@@ -10,7 +10,6 @@
 , libXtst
 , wrapGAppsHook
 , gnome3
-, hicolor-icon-theme
 }:
 buildPythonApplication rec {
   pname = "screenkey";
@@ -40,7 +39,6 @@ buildPythonApplication rec {
 
   buildInputs = [
     gnome3.adwaita-icon-theme
-    hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [

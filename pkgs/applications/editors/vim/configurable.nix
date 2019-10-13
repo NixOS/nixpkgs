@@ -68,12 +68,12 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "vim_configurable-${version}";
+  pname = "vim_configurable";
 
   inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 
   src = builtins.getAttr source {
-    "default" = common.src; # latest release
+    default = common.src; # latest release
   };
 
   patches = [ ./cflags-prune.diff ] ++ stdenv.lib.optional ftNixSupport ./ft-nix-support.patch;

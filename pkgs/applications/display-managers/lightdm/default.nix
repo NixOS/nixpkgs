@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/lightdm/raw/4cf0d2bed8d1c68970b0322ccd5dbbbb7a0b12bc/f/lightdm-1.25.1-disable_dmrc.patch";
       sha256 = "06f7iabagrsiws2l75sx2jyljknr9js7ydn151p3qfi104d1541n";
     })
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://github.com/canonical/lightdm/commit/a99376f5f51aa147aaf81287d7ce70db76022c47.patch";
+      sha256 = "1zyx1qqajrmqcf9hbsapd39gmdanswd9l78rq7q6rdy4692il3yn";
+    })
   ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
@@ -61,13 +66,12 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-tests"
-    "--disable-static"
     "--disable-dmrc"
   ] ++ optional withQt4 "--enable-liblightdm-qt"
     ++ optional withQt5 "--enable-liblightdm-qt5";
 
   installFlags = [
-    "sysconfdir=${placeholder ''out''}/etc"
+    "sysconfdir=${placeholder "out"}/etc"
     "localstatedir=\${TMPDIR}"
   ];
 

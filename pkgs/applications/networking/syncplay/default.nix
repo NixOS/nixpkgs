@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildPythonApplication, pyside, twisted, certifi }:
 
 buildPythonApplication rec {
-  name = "syncplay-${version}";
+  pname = "syncplay";
   version = "1.6.4";
 
   format = "other";

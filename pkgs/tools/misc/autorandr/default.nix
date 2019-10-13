@@ -9,7 +9,8 @@ let
   version = "1.8.1";
 in
   stdenv.mkDerivation {
-    name = "autorandr-${version}";
+    pname = "autorandr";
+    inherit version;
 
     buildInputs = [ python ];
 
@@ -47,7 +48,7 @@ in
     src = fetchFromGitHub {
       owner = "phillipberndt";
       repo = "autorandr";
-      rev = "${version}";
+      rev = version;
       sha256 = "1bp1cqkrpg77rjyh4lq1agc719fmxn92jkiicf6nbhfl8kf3l3vy";
     };
 

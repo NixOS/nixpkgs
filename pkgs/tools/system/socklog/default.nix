@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "socklog-${version}";
+  pname = "socklog";
   version = "2.1.0";
 
   src = fetchurl {

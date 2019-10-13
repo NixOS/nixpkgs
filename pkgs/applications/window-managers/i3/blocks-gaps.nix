@@ -12,7 +12,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "i3blocks-gaps-${version}";
+  pname = "i3blocks-gaps";
   version = "1.4";
 
   src = fetchFromGitHub {

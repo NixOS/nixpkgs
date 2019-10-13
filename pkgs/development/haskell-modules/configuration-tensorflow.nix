@@ -44,7 +44,7 @@ in
   );
 
   tensorflow-proto = super.tensorflow-proto.override {
-    inherit proto-lens proto-lens-protoc proto-lens-protobuf-types;
+    inherit proto-lens proto-lens-protobuf-types;
   };
   tensorflow = super.tensorflow.override {
     inherit mainland-pretty proto-lens;

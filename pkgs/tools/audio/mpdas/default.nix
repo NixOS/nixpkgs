@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, mpd_clientlib, curl }:
 
 stdenv.mkDerivation rec {
-  name = "mpdas-${version}";
+  pname = "mpdas";
   version = "0.4.5";
 
   src = fetchFromGitHub {

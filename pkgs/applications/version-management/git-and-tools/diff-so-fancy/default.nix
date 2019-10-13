@@ -1,14 +1,14 @@
 {stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ...}:
 
 stdenv.mkDerivation rec {
-  name = "diff-so-fancy-${version}";
-  version = "1.2.6";
+  pname = "diff-so-fancy";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
-    sha256 = "1w8x2d83zdhrnydiqq1qjf3j1y4cawdg8p1isj8zqwblnc47ygjm";
+    sha256 = "0y5cp236gi6h7llzai5d27086l4zz58mz1zs01r97xnnmjs9vw21";
   };
 
   # Perl is needed here for patchShebangs

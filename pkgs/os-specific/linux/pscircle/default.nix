@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, meson, pkgconfig, ninja, cairo }:
 
 stdenv.mkDerivation rec {
-  name = "pscircle-${version}";
+  pname = "pscircle";
   version = "1.3.1";
 
   src = fetchFromGitLab {

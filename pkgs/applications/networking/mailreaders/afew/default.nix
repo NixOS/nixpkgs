@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = with pythonPackages; [ sphinx setuptools_scm ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pythonPackages.notmuch chardet dkimpy
+    pythonPackages.setuptools pythonPackages.notmuch chardet dkimpy
   ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) subprocess32;
 
   makeWrapperArgs = [

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "protozero-${version}";
+  pname = "protozero";
   version = "1.6.8";
 
   src = fetchFromGitHub {

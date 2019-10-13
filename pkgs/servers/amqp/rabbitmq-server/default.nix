@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rabbitmq-server-${version}";
+  pname = "rabbitmq-server";
 
-  version = "3.7.17";
+  version = "3.7.18";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
-    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${name}.tar.xz";
-    sha256 = "1ychgvjbi6ikapfcp4rgwa0vihhs1f34c2advb7833jym8alazrr";
+    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "1vzx9g2k7ynbv2gz450cwjyxcn3vcxsmlpnvq1r5wzcf25giy9ky";
   };
 
   buildInputs =

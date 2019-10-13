@@ -219,7 +219,7 @@ let
     };
 
     buildInputs = [ ArchiveExtract ];
-    TIDYP_DIR = "${pkgs.tidyp}";
+    TIDYP_DIR = pkgs.tidyp;
     propagatedBuildInputs = [ FileShareDir ];
   };
 
@@ -2879,6 +2879,18 @@ let
     };
   };
 
+  ConfigSimple = buildPerlPackage {
+    pname = "Config-Simple";
+    version = "4.59";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SH/SHERZODR/Config-Simple-4.59.tar.gz;
+      sha256 = "0m0hg29baarw5ds768q9r4rxb27im8kj4fazyf9gjqw4mmssjy6b";
+    };
+    meta = {
+      description = "Simple configuration file class";
+    };
+  };
+
   ConfigStd = buildPerlModule {
     pname = "Config-Std";
     version = "0.903";
@@ -4529,17 +4541,6 @@ let
     meta = {
       description = "Print out each line before it is executed (like sh -x)";
       license = stdenv.lib.licenses.publicDomain;
-    };
-  };
-
-  DeviceSerialPort = buildPerlPackage {
-    pname = "Device-SerialPort";
-    version = "1.04";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/COOK/Device-SerialPort-1.04.tar.gz;
-      sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
-    };
-    meta = {
     };
   };
 
@@ -6205,6 +6206,9 @@ let
       url = mirror://cpan/authors/id/E/ET/ETHER/FCGI-0.78.tar.gz;
       sha256 = "1cxavhzg4gyw4gl9kirpbdimjr8gk1rjc3pqs3xrnh1gjybld5xa";
     };
+    postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed -i '/use IO::File/d' Makefile.PL
+    '';
   };
 
   FCGIClient = buildPerlModule {
@@ -7533,7 +7537,7 @@ let
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
     meta = {
-      description = "Perl interface to the 3.x series of the gtk+ toolkit";
+      description = "Perl interface to the 3.x series of the GTK toolkit";
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -10657,23 +10661,26 @@ let
     };
   };
 
-  MHonArc = buildPerlPackage {
+  MHonArc = buildPerlPackage rec {
     pname = "MHonArc";
-    version = "2.6.18";
+    version = "2.6.19";
 
     src = fetchurl {
-      url    = "http://dcssrv1.oit.uci.edu/indiv/ehood/release/MHonArc/tar/MHonArc-2.6.18.tar.gz";
-      sha256 = "1xmf26dfwr8achprc3n1pxgl0mkiyr6pf25wq3dqgzqkghrrsxa2";
+      url = "https://www.mhonarc.org/release/MHonArc/tar/MHonArc-${version}.tar.gz";
+      sha256 = "0ll3v93yji334zqp6xfzfxc0127pmjcznmai1l5q6dzawrs2igzq";
     };
+
+    patches = [ ../development/perl-modules/mhonarc.patch ];
+
     outputs = [ "out" "dev" ]; # no "devdoc"
 
     installTargets = "install";
 
     meta = with stdenv.lib; {
-      homepage    = http://dcssrv1.oit.uci.edu/indiv/ehood/mhonarch.html;
+      homepage = "https://www.mhonarc.org/";
       description = "A mail-to-HTML converter";
       maintainers = with maintainers; [ lovek323 ];
-      license     = licenses.gpl2;
+      license = licenses.gpl2;
     };
   };
 
@@ -12273,6 +12280,20 @@ let
     doCheck = false; # Test performs network access.
   };
 
+  MustacheSimple = buildPerlPackage {
+    pname = "Mustache-Simple";
+    version = "1.3.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CM/CMS/Mustache-Simple-v1.3.6.tar.gz";
+      sha256 = "51db5d51ff4b25a670d8bfabe3902b6d45434ecf78b29bc1fff19af6e7383003";
+    };
+    propagatedBuildInputs = [ YAMLLibYAML ];
+    meta = {
+      description = "A simple Mustache Renderer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   namespaceautoclean = buildPerlPackage {
     pname = "namespace-autoclean";
     version = "0.28";
@@ -12654,6 +12675,21 @@ let
     propagatedBuildInputs = [ NetDNS ];
     meta = {
       description = "Programmable DNS resolver class for offline emulation of DNS";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetPrometheus = buildPerlModule {
+    pname = "Net-Prometheus";
+    version = "0.07";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.07.tar.gz;
+      sha256 = "1dh498b26wdaip053hw52317jjmb2n2r5209a1zv5yfrlxpblqm7";
+    };
+    propagatedBuildInputs = [ RefUtil StructDumb ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "export monitoring metrics for F<prometheus>";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -15004,6 +15040,19 @@ let
     };
   };
 
+  DeviceSerialPort = buildPerlPackage rec {
+    pname = "Device-SerialPort";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/COOK/${pname}-${version}.tar.gz";
+      sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
+    };
+    meta = with stdenv.lib; {
+      description = "Linux/POSIX emulation of Win32::SerialPort functions.";
+      license = with licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ServerStarter = buildPerlModule {
     pname = "Server-Starter";
     version = "0.34";
@@ -15713,6 +15762,20 @@ let
       description = "A Perl module for stripping bits of non-deterministic information";
       license = licenses.gpl3;
       maintainers = with maintainers; [ pSub ];
+    };
+  };
+
+  StructDumb = buildPerlModule {
+    pname = "Struct-Dumb";
+    version = "0.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.09.tar.gz;
+      sha256 = "0g9rziaqxkm00vh30g1yfwzq3b1xl23p8fbm4rszqsp641wr2z9k";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "make simple lightweight record-like structures";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -19362,7 +19425,7 @@ let
     };
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
-    #   Error: Unable to initialize GTK+, is DISPLAY set properly?"
+    #   Error: Unable to initialize GTK, is DISPLAY set properly?"
     doCheck = false;
     buildInputs = [ ExtUtilsXSpp ];
   };

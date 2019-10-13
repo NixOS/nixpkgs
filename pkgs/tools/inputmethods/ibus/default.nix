@@ -40,7 +40,7 @@ let
     '';
   };
   cldrEmojiAnnotation = stdenv.mkDerivation rec {
-    name = "cldr-emoji-annotation-${version}";
+    pname = "cldr-emoji-annotation";
     version = "31.90.0_1";
     src = fetchFromGitHub {
       owner = "fujiwarat";
@@ -60,7 +60,7 @@ let
       sha256 = "a1a3ca4381eb91f7b65afe7cb7df615cdcf67993fef4b486585f66b349993a10";
     };
   };
-  ucd = stdenv.mkDerivation rec {
+  ucd = stdenv.mkDerivation {
     name = "ucd-12.0.0";
     dontUnpack = true;
     installPhase = ''
@@ -80,7 +80,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ibus-${version}";
+  pname = "ibus";
   version = "1.5.20";
 
   src = fetchFromGitHub {
@@ -97,6 +97,8 @@ stdenv.mkDerivation rec {
       pythonSitePackages = python3.sitePackages;
     })
   ];
+
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     echo \#!${runtimeShell} > data/dconf/make-dconf-override-db.sh

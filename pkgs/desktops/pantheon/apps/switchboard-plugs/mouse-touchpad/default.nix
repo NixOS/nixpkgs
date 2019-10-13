@@ -10,6 +10,7 @@
 , gtk3
 , switchboard
 , elementary-settings-daemon
+, glib
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/Views/General.vala \
-      --subst-var-by GSD_GSETTINGS ${elementary-settings-daemon}/share/gsettings-schemas/${elementary-settings-daemon.name}/glib-2.0/schemas
+      --subst-var-by GSD_GSETTINGS ${glib.getSchemaPath elementary-settings-daemon}
   '';
 
   passthru = {
@@ -46,13 +47,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glib
     granite
     gtk3
     libgee
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Mouse & Touchpad Plug";

@@ -1,16 +1,16 @@
 { mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg_utils, dbus
-, qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc, libXrandr, libX11
+, qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc
+, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes
 , wrapQtAppsHook
 }:
 
-
 mkDerivation rec {
-  name = "teamviewer-${version}";
-  version = "14.5.1691";
+  pname = "teamviewer";
+  version = "14.6.2452";
 
   src = fetchurl {
     url = "https://dl.tvcdn.de/download/linux/version_14x/teamviewer_${version}_amd64.deb";
-    sha256 = "1dzvjyvcqcah6z1dvw4zvmbdn8iks9j2909slbkksavn1rp3akxc";
+    sha256 = "0j677bqwvlczbja9msayqpdgandb2mvyvcr0vasc3hhnmnk70ahw";
   };
 
   unpackPhase = ''
@@ -44,13 +44,17 @@ mkDerivation rec {
       --replace '/lib64/ld-linux-x86-64.so.2' '${glibc.out}/lib/ld-linux-x86-64.so.2'
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_config \
       --replace '/var/run/' '/run/'
+
     wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
     wrapProgram $out/share/teamviewer/tv_bin/teamviewerd --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes ]}"
 
     wrapQtApp $out/bin/teamviewer
   '';
 
   dontStrip = true;
+  preferLocalBuild = true;
 
   meta = with lib; {
     homepage = http://www.teamviewer.com;

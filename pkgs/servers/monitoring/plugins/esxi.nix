@@ -2,7 +2,7 @@
 
 let
   bName = "check_esxi_hardware";
-  pName = stdenv.lib.replaceStrings [ "_" ] [ "-" ] "${bName}";
+  pName = stdenv.lib.replaceStrings [ "_" ] [ "-" ] bName;
 
 in python2Packages.buildPythonApplication rec {
   name = "${pName}-${version}";

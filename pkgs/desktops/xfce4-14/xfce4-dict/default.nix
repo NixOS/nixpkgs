@@ -1,6 +1,6 @@
 { mkXfceDerivation, automakeAddFlags, gtk3, libxfce4ui, libxfce4util, xfce4-panel }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "xfce4-dict";
   version = "0.8.2";

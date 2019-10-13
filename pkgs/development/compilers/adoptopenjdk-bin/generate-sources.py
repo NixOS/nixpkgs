@@ -6,14 +6,15 @@ import re
 import requests
 import sys
 
-releases = ["openjdk11"]
-oses = ["mac", "linux"]
-types = ["jre", "jdk"]
-impls = ["hotspot", "openj9"]
+releases = ("openjdk8", "openjdk11")
+oses = ("mac", "linux")
+types = ("jre", "jdk")
+impls = ("hotspot", "openj9")
 
 arch_to_nixos = {
-    "x64": "x86_64",
-    "aarch64": "aarch64",
+    "x64": ("x86_64",),
+    "aarch64": ("aarch64",),
+    "arm": ("armv6l", "armv7l"),
 }
 
 def get_sha256(url):
@@ -23,7 +24,6 @@ def get_sha256(url):
         sys.exit(1)
     return resp.text.strip().split(" ")[0]
 
-RE_RELEASE_NAME = re.compile(r'[^-]+-([0-9.]+)\+([0-9]+)') # example release name: jdk-11.0.1+13
 def generate_sources(release, assets):
     out = {}
     for asset in assets:
@@ -33,7 +33,8 @@ def generate_sources(release, assets):
         if asset["heap_size"] != "normal": continue
         if asset["architecture"] not in arch_to_nixos: continue
 
-        version, build = RE_RELEASE_NAME.match(asset["release_name"]).groups()
+        # examples: 11.0.1+13, 8.0.222+10
+        version, build = asset["version_data"]["semver"].split("+")
 
         type_map = out.setdefault(asset["os"], {})
         impl_map = type_map.setdefault(asset["binary_type"], {})
@@ -42,12 +43,13 @@ def generate_sources(release, assets):
             "vmType": asset["openjdk_impl"],
         })
 
-        arch_map[arch_to_nixos[asset["architecture"]]] = {
-            "url": asset["binary_link"],
-            "sha256": get_sha256(asset["checksum_link"]),
-            "version": version,
-            "build": build,
-        }
+        for nixos_arch in arch_to_nixos[asset["architecture"]]:
+            arch_map[nixos_arch] = {
+                "url": asset["binary_link"],
+                "sha256": get_sha256(asset["checksum_link"]),
+                "version": version,
+                "build": build,
+            }
 
     return out
 

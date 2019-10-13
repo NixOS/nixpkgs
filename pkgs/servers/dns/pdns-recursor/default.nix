@@ -7,7 +7,7 @@ assert enableProtoBuf -> protobuf != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pdns-recursor-${version}";
+  pname = "pdns-recursor";
   version = "4.2.0";
 
   src = fetchurl {

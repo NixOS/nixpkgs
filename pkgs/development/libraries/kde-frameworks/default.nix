@@ -64,7 +64,7 @@ let
           let
 
             inherit (args) name;
-            inherit (srcs."${name}") src version;
+            inherit (srcs.${name}) src version;
 
             outputs = args.outputs or [ "bin" "dev" "out" ];
             hasSeparateDev = lib.elem "dev" outputs;
@@ -77,7 +77,7 @@ let
               license = with lib.licenses; [
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];
-              maintainers = [ lib.maintainers.ttuegel ];
+              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
               platforms = lib.platforms.linux;
             } // (args.meta or {});
 

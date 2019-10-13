@@ -23,7 +23,6 @@
 }:
 
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "dde-api";
   version = "3.18.4.1";
 
@@ -114,7 +113,7 @@ buildGoPackage rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Go-lang bindings for dde-daemon";

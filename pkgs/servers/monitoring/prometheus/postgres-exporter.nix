@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "postgres_exporter-${version}";
+  pname = "postgres_exporter";
   version = "0.5.1";
 
   goPackagePath = "github.com/wrouesnel/postgres_exporter";

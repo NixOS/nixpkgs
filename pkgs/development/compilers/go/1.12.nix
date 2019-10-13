@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tzdata, iana-etc, runCommand
+{ stdenv, fetchurl, fetchpatch, tzdata, iana-etc, runCommand
 , perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages, pkgsTargetTarget
@@ -17,24 +17,24 @@ let
   '';
 
   goarch = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
+    i686 = "386";
+    x86_64 = "amd64";
+    aarch64 = "arm64";
+    arm = "arm";
+    armv5tel = "arm";
+    armv6l = "arm";
+    armv7l = "arm";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
 in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.12.7";
+  version = "1.12.9";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "04rvwj69gmw3bz8pw5pf10r21ar0pgpnswp15nkddf04dxyl9s4m";
+    sha256 = "1z32imbwmpkzgyh5c3vi7rbvzbq94xjk5qi2xm9sccj7kknmc3mb";
   };
 
   # perl is used for testing go vet
@@ -137,6 +137,11 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     # breaks under load: https://github.com/golang/go/issues/25628
     ./skip-test-extra-files-on-386.patch
+    (fetchpatch { # probably included in >= 1.12.10
+      url = "https://github.com/golang/go/commit/aae0b5b0b.diff";
+      name = "TestGcSys-too-much-memory.diff";
+      sha256 = "1bl9d2pl6n99n9g65cq91sygmp1iva5rmrxbprwn4xd0ql36psa8";
+    })
   ];
 
   postPatch = ''

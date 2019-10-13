@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # disable tests as we don't need to depend on gtk+(2/3)
+    # disable tests as we don't need to depend on GTK (2/3)
     "-Dtests=false"
     "-Ddocbook_docs=disabled"
     "-Dgtk_doc=false"

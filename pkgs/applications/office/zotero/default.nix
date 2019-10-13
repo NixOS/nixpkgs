@@ -33,7 +33,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "zotero-${version}";
+  pname = "zotero";
   version = "5.0.73";
 
   src = fetchurl {
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     sed -i '/pref("app.update.enabled", true);/c\pref("app.update.enabled", false);' defaults/preferences/prefs.js
   '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "zotero-${version}";
     exec = "zotero -url %U";
     icon = "zotero";

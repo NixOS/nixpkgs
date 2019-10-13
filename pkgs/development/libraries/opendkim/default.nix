@@ -2,11 +2,11 @@
 , autoreconfHook, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "opendkim-${version}";
+  pname = "opendkim";
   version = "2.10.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/opendkim/files/${name}.tar.gz";
+    url = "mirror://sourceforge/opendkim/files/${pname}-${version}.tar.gz";
     sha256 = "06v8bqhh604sz9rh5bvw278issrwjgc4h1wx2pz9a84lpxbvm823";
   };
 

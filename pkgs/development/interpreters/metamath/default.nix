@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "metamath-${version}";
+stdenv.mkDerivation {
+  pname = "metamath";
   version = "0.172";
 
   buildInputs = [ autoreconfHook ];

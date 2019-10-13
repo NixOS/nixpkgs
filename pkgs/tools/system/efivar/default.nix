@@ -1,7 +1,7 @@
 { stdenv, buildPackages, fetchFromGitHub, fetchurl, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
-  name = "efivar-${version}";
+  pname = "efivar";
   version = "37";
 
   outputs = [ "bin" "out" "dev" "man" ];

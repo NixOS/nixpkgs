@@ -1,11 +1,11 @@
 { stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "linuxconsoletools-${version}";
+  pname = "linuxconsoletools";
   version = "1.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/linuxconsole/${name}.tar.bz2";
+    url = "mirror://sourceforge/linuxconsole/${pname}-${version}.tar.bz2";
     sha256 = "0d2r3j916fl2y7pk1y82b9fvbr10dgs1gw7rqwzfpispdidb1mp9";
   };
 

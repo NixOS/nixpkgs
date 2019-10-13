@@ -4,7 +4,6 @@
 
 stdenv.mkDerivation rec {
   pname = "mpDris2";
-  name = "${pname}-${version}";
   version = "0.8";
 
   src = fetchurl {

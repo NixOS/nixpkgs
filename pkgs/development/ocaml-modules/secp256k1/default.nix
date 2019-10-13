@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildDunePackage, base, stdio, configurator, secp256k1 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "secp256k1";
   version = "0.4.0";
 

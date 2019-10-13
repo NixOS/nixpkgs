@@ -43,7 +43,7 @@ let
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
                 nix_debug "Making wrapper $prg"
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix LUA_PATH ';' "$NIX_LUA_PATH"   --suffix LUA_CPATH ';' "$NIX_LUA_CPATH" ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
+                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix LUA_PATH ';' "$LUA_PATH"   --suffix LUA_CPATH ';' "$LUA_CPATH" ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
               fi
             fi
           done

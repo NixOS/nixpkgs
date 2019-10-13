@@ -21,7 +21,7 @@ let
     # Else: Don't modify the arguments:
     exec ${ruby}/bin/ruby "$@"
   '';
-in bundlerApp rec {
+in bundlerApp {
   pname = "jekyll";
   exes = [ "jekyll" ];
 

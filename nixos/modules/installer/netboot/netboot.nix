@@ -18,7 +18,7 @@ with lib;
 
   };
 
-  config = rec {
+  config = {
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;

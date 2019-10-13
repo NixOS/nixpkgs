@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "bluez-alsa-${version}";
+  pname = "bluez-alsa";
   version = "1.4.0";
 
   src = fetchFromGitHub {

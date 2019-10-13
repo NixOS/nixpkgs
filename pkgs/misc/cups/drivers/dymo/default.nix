@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, cups, ... }:
 
 stdenv.mkDerivation rec {
-  name = "cups-dymo-${version}";
+  pname = "cups-dymo";
   version = "1.4.0.5";
 
   # exposed version and 'real' version may differ

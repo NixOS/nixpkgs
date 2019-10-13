@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtermwidget,
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtermwidget,
   qtbase, qttools, qtx11extras }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qterminal";
   version = "0.14.1";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     qtermwidget
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight Qt-based terminal emulator";
     homepage = https://github.com/lxqt/qterminal;
     license = licenses.gpl2;

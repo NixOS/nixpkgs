@@ -61,8 +61,8 @@ in {
     };
 
     
-    users.groups."${cfg.group}" = {};
-    users.users."${cfg.user}" =
+    users.groups.${cfg.group} = {};
+    users.users.${cfg.user} =
       if cfg.user == "roon-server" then {
         isSystemUser = true;
         description = "Roon Server user";

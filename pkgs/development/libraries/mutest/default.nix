@@ -4,17 +4,17 @@
 , ninja
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mutest";
-  version = "unstable-2019-10-12";
+  version = "unstable-2019-08-26";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "ebassi";
     repo = "mutest";
-    rev = "822b5ddf07f957135ba39889d81e513d525b9b8e";
-    sha256 = "0a5fjdq9p0q5bibqngbbpd9lga0gzrv8yj5wgdfb8ylxzg0jph2p";
+    rev = "e6246c9ae4f36ffe8c021f0a80438f6c7a6efa3a";
+    sha256 = "0gdqwq6fvk06wld4rhnw5752hahrvhd69zrci045x25rwx90x26q";
   };
 
   nativeBuildInputs = [

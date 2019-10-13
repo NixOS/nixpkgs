@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.12.c";
-  name = "i3lock-color-${version}";
+  pname = "i3lock-color";
 
   src = fetchFromGitHub {
     owner = "PandorasFox";

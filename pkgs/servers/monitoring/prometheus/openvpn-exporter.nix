@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "openvpn_exporter-unstable-${version}";
+  pname = "openvpn_exporter-unstable";
   version = "2017-05-15";
   rev = "a2a179a222144fa9a10030367045f075375a2803";
 

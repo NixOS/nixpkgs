@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
-  name = "astromenace-${version}";
+  pname = "astromenace";
 
   src = fetchurl {
     url = "mirror://sourceforge/openastromenace/astromenace-src-${version}.tar.bz2";

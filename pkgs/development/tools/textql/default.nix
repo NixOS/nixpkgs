@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, sqlite }:
 
 buildGoPackage rec {
-  name = "textql-${version}";
+  pname = "textql";
   version = "2.0.3";
 
   goPackagePath = "github.com/dinedal/textql";

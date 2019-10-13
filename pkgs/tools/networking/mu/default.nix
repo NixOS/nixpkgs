@@ -4,14 +4,14 @@
 , withMug ? false }:
 
 stdenv.mkDerivation rec {
-  name = "mu-${version}";
-  version = "1.2";
+  pname = "mu";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "0yhjlj0z23jw3cf2wfnl98y8q6gikvmhkb8vdm87bd7jw0bdnrfz";
+    sha256 = "06z1l27rp3dpyphg3zqg0ww568a4g8iwz01vy4f7rl62asrbglsy";
   };
 
   # test-utils coredumps so don't run those

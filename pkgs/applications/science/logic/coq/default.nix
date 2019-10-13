@@ -28,8 +28,8 @@ let
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
    "8.9.1" = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
-   "8.10+beta2" = "0jk7pwydhd17ab7ii69zvi4sgrr630q2lsxhckaj3sz55cpjlhal";
-  }."${version}";
+   "8.10+beta3" = "08c7q97jyblsf7dhk8jf1fx1cp9qr3dr5s42wigx10wh7i6j7pca";
+  }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
   ideFlags = stdenv.lib.optionalString (buildIde && !versionAtLeast "8.10")
@@ -39,7 +39,8 @@ let
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
 self = stdenv.mkDerivation {
-  name = "coq-${version}";
+  pname = "coq";
+  inherit version;
 
   passthru = {
     inherit coq-version;

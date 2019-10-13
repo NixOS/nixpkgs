@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml }:
 
 stdenv.mkDerivation rec {
-  name = "cryptoverif-${version}";
+  pname = "cryptoverif";
   version = "2.01pl1";
 
   src = fetchurl {

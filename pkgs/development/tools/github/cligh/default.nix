@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildPythonApplication, pyxdg, PyGithub }:
 
 buildPythonApplication rec {
-  name = "cligh-${version}";
+  pname = "cligh";
   version = "0.3";
 
   doCheck = false; # no tests

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libchardet-${version}";
+  pname = "libchardet";
   version = "1.0.5";
 
   src = fetchFromGitHub {

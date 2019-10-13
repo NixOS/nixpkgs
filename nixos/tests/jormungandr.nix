@@ -5,9 +5,17 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   nodes = {
+    # Testing the Byzantine Fault Tolerant protocol
     bft = { ... }: {
       environment.systemPackages = [ pkgs.jormungandr ];
+      services.jormungandr.enable = true;
+      services.jormungandr.genesisBlockFile = "/var/lib/jormungandr/block-0.bin";
+      services.jormungandr.secretFile = "/etc/secrets/jormungandr.yaml";
+    };
 
+    # Testing the Ouroboros Genesis Praos protocol
+    genesis = { ... }: {
+      environment.systemPackages = [ pkgs.jormungandr ];
       services.jormungandr.enable = true;
       services.jormungandr.genesisBlockFile = "/var/lib/jormungandr/block-0.bin";
       services.jormungandr.secretFile = "/etc/secrets/jormungandr.yaml";
@@ -17,6 +25,7 @@ import ./make-test.nix ({ pkgs, ... }: {
   testScript = ''
     startAll;
 
+    ## Testing BFT
     # Let's wait for the StateDirectory
     $bft->waitForFile("/var/lib/jormungandr/");
 
@@ -45,5 +54,24 @@ import ./make-test.nix ({ pkgs, ... }: {
 
     # Now we can test if we are able to reach the REST API
     $bft->waitUntilSucceeds("curl -L http://localhost:8607/api/v0/node/stats | grep uptime");
+
+    ## Testing Genesis
+    # Let's wait for the StateDirectory
+    $genesis->waitForFile("/var/lib/jormungandr/");
+
+    # Bootstraping the configuration
+    $genesis->succeed("jormungandr-bootstrap -g -p 8607 -s 1");
+
+    # Moving generated files in place
+    $genesis->succeed("mkdir -p /etc/secrets");
+    $genesis->succeed("mv pool-secret1.yaml /etc/secrets/jormungandr.yaml");
+    $genesis->succeed("mv block-0.bin /var/lib/jormungandr/");
+
+    # We should have everything to start the service now
+    $genesis->succeed("systemctl restart jormungandr");
+    $genesis->waitForUnit("jormungandr.service");
+
+    # Now we can create and delegate an account
+    $genesis->succeed("./create-account-and-delegate.sh | tee -a /tmp/delegate.log");
   '';
 })

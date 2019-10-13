@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "minisign-${version}";
+  pname = "minisign";
   version = "0.8";
 
   src = fetchFromGitHub {

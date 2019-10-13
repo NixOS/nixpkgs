@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, CoreServices, darwin }:
 
 rustPlatform.buildRustPackage rec {
-  name = "mdbook-${version}";
+  pname = "mdbook";
   version = "0.3.1";
 
   src = fetchFromGitHub {

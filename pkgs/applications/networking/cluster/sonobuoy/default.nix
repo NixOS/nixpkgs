@@ -10,7 +10,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/heptio/sonobuoy";
 
   buildFlagsArray =
-    let t = "${goPackagePath}";
+    let t = goPackagePath;
     in ''
       -ldflags=
         -s -X ${t}/pkg/buildinfo.Version=${version}

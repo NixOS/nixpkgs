@@ -16,7 +16,7 @@ let
     "-t ${topic}"
   ];
 
-in rec {
+in {
   name = "mosquitto";
   meta = with pkgs.stdenv.lib; {
     maintainers = with maintainers; [ peterhoeg ];
@@ -34,7 +34,7 @@ in rec {
         enable = true;
         host = "0.0.0.0";
         checkPasswords = true;
-        users."${username}" = {
+        users.${username} = {
           inherit password;
           acl = [
             "topic readwrite ${topic}"

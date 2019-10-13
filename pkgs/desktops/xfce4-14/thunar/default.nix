@@ -1,7 +1,7 @@
 { mkXfceDerivation, docbook_xsl, exo, gdk-pixbuf, gtk3, libgudev
 , libnotify, libX11, libxfce4ui, libxfce4util, libxslt, xfconf, gobject-introspection, gvfs }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
   version = "1.8.9";

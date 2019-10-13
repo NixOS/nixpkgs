@@ -1,16 +1,29 @@
-{ stdenv, fetchurl, lua }:
+{ stdenv, fetchurl, lua, jemalloc }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.5";
-  name = "redis-${version}";
+  version = "5.0.6";
+  pname = "redis";
 
   src = fetchurl {
-    url = "http://download.redis.io/releases/${name}.tar.gz";
-    sha256 = "0xd3ak527cnkz2cn422l2ag9nsa6mhv7y2y49zwqy7fjk6bh0f91";
+    url = "http://download.redis.io/releases/${pname}-${version}.tar.gz";
+    sha256 = "1cr2dn9ilhj52snmlz38fw30gdlgbxq2sadyspawahp1cw988936";
   };
 
+  # Cross-compiling fixes
+  configurePhase = ''
+    ${stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      # This fixes hiredis, which has the AR awkwardly coded.
+      # Probably a good candidate for a patch upstream.
+      makeFlagsArray+=('STLIB_MAKE_CMD=${stdenv.cc.targetPrefix}ar rcs $(STLIBNAME)')
+    ''}
+  '';
+
   buildInputs = [ lua ];
-  makeFlags = "PREFIX=$(out)";
+  # More cross-compiling fixes.
+  # Note: this enables libc malloc as a temporary fix for cross-compiling.
+  # Due to hardcoded configure flags in jemalloc, we can't cross-compile vendored jemalloc properly, and so we're forced to use libc allocator.
+  # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
+  makeFlags = "PREFIX=$(out)" + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " AR=${stdenv.cc.targetPrefix}ar RANLIB=${stdenv.cc.targetPrefix}ranlib MALLOC=libc";
 
   enableParallelBuilding = true;
 

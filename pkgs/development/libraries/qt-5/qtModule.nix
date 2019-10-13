@@ -8,14 +8,14 @@ args:
 
 let
   inherit (args) name;
-  version = args.version or srcs."${name}".version;
-  src = args.src or srcs."${name}".src;
+  version = args.version or srcs.${name}.version;
+  src = args.src or srcs.${name}.src;
 in
 
 mkDerivation (args // {
   name = "${name}-${version}";
   inherit src;
-  patches = args.patches or patches."${name}" or [];
+  patches = args.patches or patches.${name} or [];
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);

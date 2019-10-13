@@ -265,7 +265,9 @@ make_deterministic_repo(){
     rm -f .git/config
 
     # Garbage collect unreferenced objects.
-    git gc --prune=all
+    # Note: --keep-largest-pack prevents non-deterministic ordering of packs
+    #   listed in .git/objects/info/packs by only using a single pack
+    git gc --prune=all --keep-largest-pack
     )
 }
 

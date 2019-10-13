@@ -3,7 +3,7 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-19.09">
- <title>Release 19.09 (“Loris”, 2019/09/??)</title>
+ <title>Release 19.09 (“Loris”, 2019/10/09)</title>
 
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -22,6 +22,26 @@
     <para>
      End of support is planned for end of April 2020, handing over to 20.03.
     </para>
+   </listitem>
+   <listitem>
+    <para>
+     Nix has been updated to 2.3; see its
+     <link xlink:href="https://nixos.org/nix/manual/#ssec-relnotes-2.3">release
+     notes</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>Core version changes:</para>
+    <para>systemd: 239 -&gt; 243</para>
+    <para>gcc: 7 -&gt; 8</para>
+    <para>glibc: 2.27 (unchanged)</para>
+    <para>linux: 4.19 LTS (unchanged)</para>
+    <para>openssl: 1.0 -&gt; 1.1</para>
+   </listitem>
+   <listitem>
+    <para>Desktop version changes:</para>
+    <para>plasma5: 5.14 -&gt; 5.16</para>
+    <para>gnome3: 3.30 -&gt; 3.32</para>
    </listitem>
    <listitem>
     <para>
@@ -48,6 +68,73 @@
      To gain root privileges use <literal>sudo -i</literal> without a password.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      We've updated to Xfce 4.14, which brings a new module <option>services.xserver.desktopManager.xfce4-14</option>.
+      If you'd like to upgrade, please switch from the <option>services.xserver.desktopManager.xfce</option> module as it
+      will be deprecated in a future release. They're incompatibilities with the current Xfce module; it doesn't support
+      <option>thunarPlugins</option> and it isn't recommended to use <option>services.xserver.desktopManager.xfce</option>
+      and <option>services.xserver.desktopManager.xfce4-14</option> simultaneously or to downgrade from Xfce 4.14 after upgrading.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The GNOME 3 desktop manager module sports an interface to enable/disable core services, applications, and optional GNOME packages
+      like games.
+      <itemizedlist>
+      <para>This can be achieved with the following options which the desktop manager default enables, excluding <literal>games</literal>.</para>
+      <listitem><para><xref linkend="opt-services.gnome3.core-os-services.enable"/></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.core-shell.enable"/></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.core-utilities.enable"/></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.games.enable"/></para></listitem>
+      </itemizedlist>
+      With these options we hope to give users finer grained control over their systems. Prior to this change you'd either have to manually
+      disable options or use <option>environment.gnome3.excludePackages</option> which only excluded the optional applications.
+      <option>environment.gnome3.excludePackages</option> is now unguarded, it can exclude any package installed with <option>environment.systemPackages</option>
+      in the GNOME 3 module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Orthogonal to the previous changes to the GNOME 3 desktop manager module, we've updated all default services and applications
+     to match as close as possible to a default reference GNOME 3 experience.
+    </para>
+
+    <bridgehead>The following changes were enacted in <option>services.gnome3.core-utilities.enable</option></bridgehead>
+
+    <itemizedlist>
+     <title>Applications removed from defaults:</title>
+     <listitem><para><literal>accerciser</literal></para></listitem>
+     <listitem><para><literal>dconf-editor</literal></para></listitem>
+     <listitem><para><literal>evolution</literal></para></listitem>
+     <listitem><para><literal>gnome-documents</literal></para></listitem>
+     <listitem><para><literal>gnome-nettool</literal></para></listitem>
+     <listitem><para><literal>gnome-power-manager</literal></para></listitem>
+     <listitem><para><literal>gnome-todo</literal></para></listitem>
+     <listitem><para><literal>gnome-tweaks</literal></para></listitem>
+     <listitem><para><literal>gnome-usage</literal></para></listitem>
+     <listitem><para><literal>gucharmap</literal></para></listitem>
+     <listitem><para><literal>nautilus-sendto</literal></para></listitem>
+     <listitem><para><literal>vinagre</literal></para></listitem>
+    </itemizedlist>
+    <itemizedlist>
+     <title>Applications added to defaults:</title>
+     <listitem><para><literal>cheese</literal></para></listitem>
+     <listitem><para><literal>geary</literal></para></listitem>
+    </itemizedlist>
+
+    <bridgehead>The following changes were enacted in <option>services.gnome3.core-shell.enable</option></bridgehead>
+
+    <itemizedlist>
+     <title>Applications added to defaults:</title>
+     <listitem><para><literal>gnome-color-manager</literal></para></listitem>
+     <listitem><para><literal>orca</literal></para></listitem>
+    </itemizedlist>
+    <itemizedlist>
+     <title>Services enabled:</title>
+     <listitem><para><option>services.avahi.enable</option></para></listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -68,7 +155,43 @@
      <literal>./programs/dwm-status.nix</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The new <varname>hardware.printers</varname> module allows to declaratively configure CUPS printers
+     via the <varname>ensurePrinters</varname> and
+     <varname>ensureDefaultPrinter</varname> options.
+     <varname>ensurePrinters</varname> will never delete existing printers,
+     but will make sure that the given printers are configured as declared.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     There is a new <xref linkend="opt-services.system-config-printer.enable"/> and <xref linkend="opt-programs.system-config-printer.enable"/> module
+     for the program of the same name. If you previously had <literal>system-config-printer</literal> enabled through some other
+     means you should migrate to using one of these modules.
+    </para>
+    <itemizedlist>
+     <para>If you're a user of the following desktopManager modules no action is needed:</para>
+     <listitem>
+      <para><option>services.xserver.desktopManager.plasma5</option></para>
+     </listitem>
+     <listitem>
+      <para><option>services.xserver.desktopManager.gnome3</option></para>
+     </listitem>
+     <listitem>
+      <para><option>services.xserver.desktopManager.pantheon</option></para>
+     </listitem>
+     <listitem>
+      <para><option>services.xserver.desktopManager.mate</option></para>
+      <para>
+       Note Mate uses <literal>programs.system-config-printer</literal> as it doesn't
+       use it as a service, but its graphical interface directly.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
+
  </section>
 
  <section xmlns="http://docbook.org/ns/docbook"
@@ -99,6 +222,11 @@
      if you run an application like eg. Nextcloud, where you need to use
      the Unix socket path as the database host name, you need to change it
      accordingly.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     PostgreSQL 9.4 is scheduled EOL during the 19.09 life cycle and has been removed.
     </para>
    </listitem>
    <listitem>
@@ -282,6 +410,155 @@
    <listitem>
      <para>
        Squid 3 has been removed and the <option>squid</option> derivation now refers to Squid 4.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <option>services.pdns-recursor.extraConfig</option> option has been replaced by
+       <option>services.pdns-recursor.settings</option>. The new option allows setting extra
+       configuration while being better type-checked and mergeable.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+     No service depends on <literal>keys.target</literal> anymore which is a systemd
+     target that indicates if all <link xlink:href="https://nixos.org/nixops/manual/#idm140737322342384">NixOps keys</link> were successfully uploaded.
+     Instead, <literal>&lt;key-name&gt;-key.service</literal> should be used to define
+     a dependency of a key in a service. The full issue behind the <literal>keys.target</literal>
+     dependency is described at <link xlink:href="https://github.com/NixOS/nixpkgs/issues/67265">NixOS/nixpkgs#67265</link>.
+    </para>
+    <para>
+     The following services are affected by this:
+     <itemizedlist>
+      <listitem><para><link linkend="opt-services.dovecot2.enable"><literal>services.dovecot2</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.nsd.enable"><literal>services.nsd</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.softether.enable"><literal>services.softether</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.strongswan.enable"><literal>services.strongswan</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.strongswan-swanctl.enable"><literal>services.strongswan-swanctl</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.httpd.enable"><literal>services.httpd</literal></link></para></listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <option>security.acme.directory</option> option has been replaced by a read-only <option>security.acme.certs.&lt;cert&gt;.directory</option> option for each certificate you define. This will be
+       a subdirectory of <literal>/var/lib/acme</literal>. You can use this read-only option to figure out where the certificates are stored for a specific certificate. For example,
+       the <option>services.nginx.virtualhosts.&lt;name&gt;.enableACME</option>  option will use this directory option to find the certs for the virtual host.
+     </para>
+     <para>
+       <option>security.acme.preDelay</option> and <option>security.acme.activationDelay</option> options have been removed. To execute a service before certificates
+       are provisioned or renewed add a <literal>RequiredBy=acme-${cert}.service</literal> to any service.
+     </para>
+     <para>
+       Furthermore, the acme module will not automatically add a dependency on <literal>lighttpd.service</literal> anymore. If you are using certficates provided by letsencrypt
+       for lighttpd, then you should depend on the certificate service <literal>acme-${cert}.service></literal> manually.
+     </para>
+     <para>
+       For nginx, the dependencies are still automatically managed when <option>services.nginx.virtualhosts.&lt;name&gt;.enableACME</option> is enabled just like before. What changed is that nginx now directly depends on the specific certificates that it needs,
+       instead of depending on the catch-all <literal>acme-certificates.target</literal>. This target unit was also removed from the codebase.
+       This will mean nginx will no longer depend on certificates it isn't explicitly managing and fixes a bug with certificate renewal
+       ordering racing with nginx restarting which could lead to nginx getting in a broken state as described at
+        <link xlink:href="https://github.com/NixOS/nixpkgs/issues/60180">NixOS/nixpkgs#60180</link>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The old deprecated <literal>emacs</literal> package sets have been dropped.
+       What used to be called <literal>emacsPackagesNg</literal> is now simply called <literal>emacsPackages</literal>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <option>services.xserver.desktopManager.xterm</option> is now disabled by default if <literal>stateVersion</literal> is 19.09 or higher.
+       Previously the xterm desktopManager was enabled when xserver was enabled, but it isn't useful for all people so it didn't make sense to
+       have any desktopManager enabled default.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+     The WeeChat plugin <literal>pkgs.weechatScripts.weechat-xmpp</literal> has been removed as it doesn't receive
+     any updates from upstream and depends on outdated Python2-based modules.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Old unsupported versions (<literal>logstash5</literal>,
+     <literal>kibana5</literal>,
+     <literal>filebeat5</literal>,
+     <literal>heartbeat5</literal>,
+     <literal>metricbeat5</literal>,
+     <literal>packetbeat5</literal>) of the ELK-stack and Elastic beats have been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     For NixOS 19.03, both Prometheus 1 and 2 were available to allow for
+     a seamless transition from version 1 to 2 with existing setups.
+     Because Prometheus 1 is no longer developed, it was removed.
+     Prometheus 2 is now configured with <literal>services.prometheus</literal>.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       Citrix Receiver (<literal>citrix_receiver</literal>) has been dropped in favor of Citrix Workspace
+       (<literal>citrix_workspace</literal>).
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <literal>services.gitlab</literal> module has had its literal secret options (<option>services.gitlab.smtp.password</option>,
+       <option>services.gitlab.databasePassword</option>,
+       <option>services.gitlab.initialRootPassword</option>,
+       <option>services.gitlab.secrets.secret</option>,
+       <option>services.gitlab.secrets.db</option>,
+       <option>services.gitlab.secrets.otp</option> and
+       <option>services.gitlab.secrets.jws</option>) replaced by file-based versions (<option>services.gitlab.smtp.passwordFile</option>,
+       <option>services.gitlab.databasePasswordFile</option>,
+       <option>services.gitlab.initialRootPasswordFile</option>,
+       <option>services.gitlab.secrets.secretFile</option>,
+       <option>services.gitlab.secrets.dbFile</option>,
+       <option>services.gitlab.secrets.otpFile</option> and
+       <option>services.gitlab.secrets.jwsFile</option>). This was done so that secrets aren't stored
+       in the world-readable nix store, but means that for each option you'll have to create a file with
+       the same exact string, add "File" to the end of the option name, and change the definition to a
+       string pointing to the corresponding file; e.g. <literal>services.gitlab.databasePassword = "supersecurepassword"</literal>
+       becomes <literal>services.gitlab.databasePasswordFile = "/path/to/secret_file"</literal> where the
+       file <literal>secret_file</literal> contains the string <literal>supersecurepassword</literal>.
+     </para>
+     <para>
+       The state path (<option>services.gitlab.statePath</option>) now has the following restriction:
+       no parent directory can be owned by any other user than <literal>root</literal> or the user
+       specified in <option>services.gitlab.user</option>; i.e. if <option>services.gitlab.statePath</option>
+       is set to <literal>/var/lib/gitlab/state</literal>, <literal>gitlab</literal> and all parent directories
+       must be owned by either <literal>root</literal> or the user specified in <option>services.gitlab.user</option>.
+     </para>
+     <para>
+      The <option>networking.useDHCP</option> option is unsupported in combination with
+      <option>networking.useNetworkd</option> in anticipation of defaulting to it by default.
+      It has to be set to <literal>false</literal> and enabled per
+      interface with <option>networking.interfaces.&lt;name&gt;.useDHCP = true;</option>
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The Twitter client <literal>corebird</literal> has been dropped as <link xlink:href="https://www.patreon.com/posts/corebirds-future-18921328">it is discontinued and does not work against the new Twitter API</link>.
+       Please use the fork <literal>cawbird</literal> instead which has been adapted to the API changes and is still maintained.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+      The <literal>nodejs-11_x</literal> package has been removed as it's EOLed by upstream.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Because of the systemd upgrade,
+       <application>systemd-timesyncd</application> will no longer work if
+       <option>system.stateVersion</option> is not set correctly. When
+       upgrading from NixOS 19.03, please make sure that
+       <option>system.stateVersion</option> is set to
+       <literal>"19.03"</literal>, or lower if the installation dates back to an
+       earlier version of NixOS.
      </para>
    </listitem>
   </itemizedlist>
@@ -482,8 +759,8 @@
       </para>
      </listitem>
     </itemizedlist>
-
-     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>.
+     This also configures the kernel to pass core dumps to <literal>systemd-coredump</literal>,
+     and restricts the SysRq key combinations to the sync command only.
      These sysctl snippets can be found in <literal>/etc/sysctl.d/50-*.conf</literal>,
      and overridden via <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link>
      (which will place the parameters in <literal>/etc/sysctl.d/60-nixos.conf</literal>).
@@ -491,21 +768,105 @@
    </listitem>
    <listitem>
     <para>
-      Coredumps are now acquired by <literal>systemd-coredump</literal> by default.
-      <literal>systemd-coredump</literal> behaviour can still be modified via
-      <option>systemd.coredump.extraConfig</option>.
-      To stick to the old behaviour (having the kernel dump to a file called <literal>core</literal>
-      in the working directory), without piping it through <literal>systemd-coredump</literal>, set
-      <option>boot.kernel.sysctl."kernel.core_pattern"</option> to <literal>"core"</literal>.
+      Core dumps are now processed by <literal>systemd-coredump</literal>
+      by default. <literal>systemd-coredump</literal> behaviour can
+      still be modified via
+      <option>systemd.coredump.extraConfig</option>. To stick to the
+      old behaviour (having the kernel dump to a file called
+      <literal>core</literal> in the working directory), without piping
+      it through <literal>systemd-coredump</literal>, set
+      <option>systemd.coredump.enable</option> to
+      <literal>false</literal>.
     </para>
    </listitem>
-  <listitem>
-   <para>
-    <literal>systemd.packages</literal> option now also supports generators and
-    shutdown scripts. Old <literal>systemd.generator-packages</literal> option has
-    been removed.
-   </para>
-  </listitem>
+   <listitem>
+    <para>
+     <literal>systemd.packages</literal> option now also supports generators and
+     shutdown scripts. Old <literal>systemd.generator-packages</literal> option has
+     been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>rmilter</literal> package was removed with associated module and options due deprecation by upstream developer.
+     Use <literal>rspamd</literal> in proxy mode instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      systemd cgroup accounting via the
+      <link linkend="opt-systemd.enableCgroupAccounting">systemd.enableCgroupAccounting</link>
+      option is now enabled by default. It now also enables the more recent Block IO and IP accounting
+      features.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     We no longer enable custom font rendering settings with <option>fonts.fontconfig.penultimate.enable</option> by default.
+     The defaults from fontconfig are sufficient.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>crashplan</literal> package and the
+      <literal>crashplan</literal> service have been removed from nixpkgs due to
+      crashplan shutting down the service, while the <literal>crashplansb</literal>
+      package and <literal>crashplan-small-business</literal> service have been
+      removed from nixpkgs due to lack of maintainer.
+    </para>
+    <para>
+      The <link linkend="opt-services.redis.enable">redis module</link> was hardcoded to use the <literal>redis</literal> user,
+      <filename class="directory">/run/redis</filename> as runtime directory and
+      <filename class="directory">/var/lib/redis</filename> as state directory.
+      Note that the NixOS module for Redis now disables kernel support for Transparent Huge Pages (THP),
+      because this features causes major performance problems for Redis,
+      e.g. (https://redis.io/topics/latency).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Using <option>fonts.enableDefaultFonts</option> adds a default emoji font <literal>noto-fonts-emoji</literal>.
+     <itemizedlist>
+      <para>Users of the following options will have this enabled by default:</para>
+      <listitem>
+       <para><option>services.xserver.enable</option></para>
+      </listitem>
+      <listitem>
+       <para><option>programs.sway.enable</option></para>
+      </listitem>
+      <listitem>
+       <para><option>programs.way-cooler.enable</option></para>
+      </listitem>
+      <listitem>
+       <para><option>services.xrdp.enable</option></para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <literal>altcoins</literal> categorization of packages has
+       been removed. You now access these packages at the top level,
+       ie. <literal>nix-shell -p dogecoin</literal> instead of
+       <literal>nix-shell -p altcoins.dogecoin</literal>, etc.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Ceph has been upgraded to v14.2.1.
+       See the <link xlink:href="https://ceph.com/releases/v14-2-0-nautilus-released/">release notes</link> for details.
+       The mgr dashboard as well as osds backed by loop-devices is no longer explicitly supported by the package and module.
+       Note: There's been some issues with python-cherrypy, which is used by the dashboard
+       and prometheus mgr modules (and possibly others), hence 0000-dont-check-cherrypy-version.patch.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <literal>pkgs.weechat</literal> is now compiled against <literal>pkgs.python3</literal>.
+      Weechat also recommends <link xlink:href="https://weechat.org/scripts/python3/">to use Python3
+      in their docs.</link>
+     </para>
+    </listitem>
   </itemizedlist>
  </section>
 </section>

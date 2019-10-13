@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgroundcontrol-${version}";
+  pname = "qgroundcontrol";
   version = "3.3.0";
 
   qtInputs = [
@@ -69,5 +69,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pxc ];
+    broken = true;
   };
 }

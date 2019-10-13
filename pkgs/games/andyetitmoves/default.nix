@@ -4,7 +4,7 @@ let plainName = "andyetitmoves";
     version   = "1.2.2";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${plainName}-${version}";
 
   src = if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux"

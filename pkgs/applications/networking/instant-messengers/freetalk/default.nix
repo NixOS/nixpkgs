@@ -3,7 +3,7 @@
 , libunwind, ncurses, curl, jansson, texinfo
 , automake, autoconf }:
 stdenv.mkDerivation rec {
-  name = "freetalk-${version}";
+  pname = "freetalk";
   version = "4.1";
   
   src = fetchFromGitHub {

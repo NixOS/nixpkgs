@@ -5,12 +5,13 @@
 let
   version = "1.6";
 in mkDerivation rec {
-  name = "qdirstat-${version}";
+  pname = "qdirstat";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "shundhammer";
     repo = "qdirstat";
-    rev = "${version}";
+    rev = version;
     sha256 = "0q4ccjmlbqifg251kyxwys8wspdskr8scqhacyfrs9cmnjxcjqan";
   };
 

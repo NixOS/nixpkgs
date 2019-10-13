@@ -3,8 +3,8 @@
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
 assert stdenv.lib.versionAtLeast kernel.version "3.10";
 
-stdenv.mkDerivation rec {
-  name = "wireguard-${version}";
+stdenv.mkDerivation {
+  pname = "wireguard";
   inherit (wireguard-tools) src version;
 
   preConfigure = ''

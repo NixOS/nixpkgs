@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "man-pages-${version}";
+  pname = "man-pages";
   version = "5.02";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/docs/man-pages/${name}.tar.xz";
+    url = "mirror://kernel/linux/docs/man-pages/${pname}-${version}.tar.xz";
     sha256 = "1s4pdz2pwf0kvhdwx2s6lqn3xxzi38yz5jfyq5ymdmswc9gaiyn2";
   };
 

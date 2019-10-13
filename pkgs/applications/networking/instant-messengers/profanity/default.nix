@@ -21,13 +21,13 @@ assert omemoSupport        -> libsignal-protocol-c != null && libgcrypt != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "profanity-${version}";
+  pname = "profanity";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
-    rev = "${version}";
+    rev = version;
     sha256 = "15adg7ndjkzy04lizjmnvv0pf0snhzp6a8x74mndcm0zma0dia0z";
   };
 

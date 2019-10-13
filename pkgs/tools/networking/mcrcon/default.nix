@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mcrcon-${version}";
+  pname = "mcrcon";
   version = "0.6.1";
 
   src = fetchFromGitHub {

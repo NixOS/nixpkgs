@@ -121,6 +121,7 @@ in {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 zookeeper - - -"
+      "Z '${cfg.dataDir}' 0700 zookeeper - - -"
     ];
 
     systemd.services.zookeeper = {

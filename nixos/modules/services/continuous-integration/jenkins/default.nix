@@ -193,7 +193,7 @@ in {
               then ""
               else
                 let pluginCmds = lib.attrsets.mapAttrsToList
-                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.hpi")
+                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
                       cfg.plugins;
                 in ''
                   rm -r ${cfg.home}/plugins || true

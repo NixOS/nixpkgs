@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libcardiacarrest-${version}";
+  pname = "libcardiacarrest";
   version = "12.2.8"; # <PA API version>.<version>
 
   src = fetchFromGitHub {
