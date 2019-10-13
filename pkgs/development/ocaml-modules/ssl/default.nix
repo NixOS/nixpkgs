@@ -19,7 +19,7 @@ buildDunePackage rec {
     description = "OCaml bindings for libssl ";
     license = "LGPL+link exception";
     maintainers = [
-      stdenv.lib.maintainers.maggesi
+      lib.maintainers.maggesi
     ];
   };
 }
