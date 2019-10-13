@@ -66,5 +66,10 @@ stdenv.mkDerivation rec {
         sha256 = "07x43xis0sr0hfchf36ap0cibx0lkfpqyszb3r3w9dzz301fk04z";
     })
     ./fix_pkgconfig_includedir.patch
+    (fetchurl {
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/f672277509705c4034bc92a141eefee4524d15aa.patch";
+      name = "CVE-2019-9928.patch";
+      sha256 = "0hz3lsq3ppmaf329sbyi05y1qniqfj9vlp2f3z918383pvrcms4i";
+    })
   ];
 }

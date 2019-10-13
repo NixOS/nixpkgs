@@ -18,11 +18,18 @@ stdenv.mkDerivation rec {
     sha256 = "0jp6hjlra98cnkal4n6bdmr577q8mcyp3c08s3a02c4hjhw5rr0z";
   };
 
-  patchPhase = ''
+  patches = [
+    ./gcc-4.9.patch
+    (fetchurl {
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/f672277509705c4034bc92a141eefee4524d15aa.patch";
+      name = "CVE-2019-9928.patch";
+      sha256 = "0hz3lsq3ppmaf329sbyi05y1qniqfj9vlp2f3z918383pvrcms4i";
+    })
+  ];
+
+  postPatch = ''
     sed -i 's@/bin/echo@echo@g' configure
     sed -i -e 's/^   /\t/' docs/{libs,plugins}/Makefile.in
-
-    patch -p1 < ${./gcc-4.9.patch}
   '';
 
   outputs = [ "out" "dev" ];
