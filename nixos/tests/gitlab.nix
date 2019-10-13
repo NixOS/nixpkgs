@@ -3,7 +3,7 @@
 let
   initialRootPassword = "notproduction";
 in
-import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
+import ./make-test.nix {} ({ pkgs, lib, ...} : with lib; {
   name = "gitlab";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ globin ];

@@ -1,6 +1,6 @@
 # Test for NixOS' container support.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "containers-ipv4";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aristid aszlig eelco kampfschlaefer ];

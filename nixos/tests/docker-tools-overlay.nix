@@ -1,6 +1,6 @@
 # this test creates a simple GNU image with docker tools and sees if it executes
 
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test.nix {} ({ pkgs, ... }:
 {
   name = "docker-tools-overlay";
   meta = with pkgs.stdenv.lib.maintainers; {

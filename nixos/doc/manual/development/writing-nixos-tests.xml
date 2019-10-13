@@ -8,7 +8,7 @@
  <para>
   A NixOS test is a Nix expression that has the following structure:
 <programlisting>
-import ./make-test.nix {
+import ./make-test.nix {} {
 
   # Either the configuration of a single machine:
   machine =

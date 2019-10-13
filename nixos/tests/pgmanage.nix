@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... } :
+import ./make-test.nix {} ({ pkgs, ... } :
 let
   role     = "test";
   password = "secret";

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test.nix {} ({ pkgs, ... }: {
   name = "boot-stage1";
 
   machine = { config, pkgs, lib, ... }: {

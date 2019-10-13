@@ -1,5 +1,5 @@
 {
-  timezone-static = import ./make-test.nix ({ pkgs, ... }: {
+  timezone-static = import ./make-test.nix {} ({ pkgs, ... }: {
     name = "timezone-static";
     meta.maintainers = with pkgs.lib.maintainers; [ lheckemann ];
 
@@ -13,7 +13,7 @@
     '';
   });
 
-  timezone-imperative = import ./make-test.nix ({ pkgs, ... }: {
+  timezone-imperative = import ./make-test.nix {} ({ pkgs, ... }: {
     name = "timezone-imperative";
     meta.maintainers = with pkgs.lib.maintainers; [ lheckemann ];
 

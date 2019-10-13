@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, ... } : {
+import ./make-test.nix {} ({ lib, ... } : {
   name = "nixos-generate-config";
   meta.maintainers = with lib.maintainers; [ basvandijk ];
   machine = {

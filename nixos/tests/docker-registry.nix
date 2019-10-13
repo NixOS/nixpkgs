@@ -1,6 +1,6 @@
 # This test runs docker-registry and check if it works
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "docker-registry";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ globin ma27 ironpinguin ];

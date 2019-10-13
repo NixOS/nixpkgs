@@ -1,5 +1,5 @@
 # run installed tests
-import ./make-test.nix ({ pkgs, lib, ... }: {
+import ./make-test.nix {} ({ pkgs, lib, ... }: {
   name = "ostree";
 
   meta = {

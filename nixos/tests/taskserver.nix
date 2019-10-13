@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: let
+import ./make-test.nix {} ({ pkgs, ... }: let
   snakeOil = pkgs.runCommand "snakeoil-certs" {
     outputs = [ "out" "cacert" "cert" "key" "crl" ];
     buildInputs = [ pkgs.gnutls.bin ];

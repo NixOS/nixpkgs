@@ -1,6 +1,6 @@
 # Mutable users tests.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "mutable-users";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ gleber ];

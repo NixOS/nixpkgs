@@ -5,7 +5,7 @@ let
   localIp = "fc00::1";
 in
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "containers-ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aristid aszlig eelco kampfschlaefer ];

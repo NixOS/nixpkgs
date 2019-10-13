@@ -1,6 +1,6 @@
 # Test the firewall module.
 
-import ./make-test.nix ( { pkgs, ... } : {
+import ./make-test.nix {} ( { pkgs, ... } : {
   name = "firewall";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];

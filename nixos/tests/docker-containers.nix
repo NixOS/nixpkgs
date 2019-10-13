@@ -1,6 +1,6 @@
 # Test Docker containers as systemd units
 
-import ./make-test.nix ({ pkgs, lib, ... }: {
+import ./make-test.nix {} ({ pkgs, lib, ... }: {
   name = "docker-containers";
   meta = {
     maintainers = with lib.maintainers; [ benley ];

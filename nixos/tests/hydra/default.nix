@@ -34,7 +34,7 @@ let
   };
 
   tests = pkgs.lib.flip pkgs.lib.mapAttrs hydraPkgs (name: nix:
-    callTest (import ../make-test.nix ({ pkgs, lib, ... }:
+    callTest (import ../make-test.nix {} ({ pkgs, lib, ... }:
       {
         name = "hydra-with-${name}";
         meta = with pkgs.stdenv.lib.maintainers; {

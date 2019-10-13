@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test.nix {} ({ pkgs, ... }:
 let
   # Download Big Buck Bunny example, licensed under CC Attribution 3.0.
   testMkv = pkgs.fetchurl {

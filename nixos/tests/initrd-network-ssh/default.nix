@@ -1,4 +1,4 @@
-import ../make-test.nix ({ lib, ... }:
+import ../make-test.nix {} ({ lib, ... }:
 
 {
   name = "initrd-network-ssh";

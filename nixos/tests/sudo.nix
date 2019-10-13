@@ -4,7 +4,7 @@ let
   password = "helloworld";
 
 in
-  import ./make-test.nix ({ pkgs, ...} : {
+  import ./make-test.nix {} ({ pkgs, ...} : {
     name = "sudo";
     meta = with pkgs.stdenv.lib.maintainers; {
       maintainers = [ lschuermann ];

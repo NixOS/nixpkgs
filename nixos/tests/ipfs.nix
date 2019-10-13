@@ -1,5 +1,5 @@
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "ipfs";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ mguentner ];

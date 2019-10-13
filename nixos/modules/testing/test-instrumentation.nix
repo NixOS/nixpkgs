@@ -1,7 +1,7 @@
 # This module allows the test driver to connect to the virtual machine
 # via a root shell attached to port 514.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, backdoorShell ? null, ... }:
 
 with lib;
 with import ../../lib/qemu-flags.nix { inherit pkgs; };
@@ -43,7 +43,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
             echo
-            PS1= exec /bin/sh
+            PS1= exec ${if (backdoorShell != null) then backdoorShell else "/bin/sh"}
           '';
         serviceConfig.KillSignal = "SIGHUP";
       };

@@ -3,7 +3,7 @@
 # client on the inside network, a server on the outside network, and a
 # router connected to both that performs Network Address Translation
 # for the client.
-import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false, ... }:
+import ./make-test.nix {} ({ pkgs, lib, withFirewall, withConntrackHelpers ? false, ... }:
   let
     unit = if withFirewall then "firewall" else "nat";
 

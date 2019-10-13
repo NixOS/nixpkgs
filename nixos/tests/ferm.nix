@@ -1,5 +1,5 @@
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "ferm";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ mic92 ];

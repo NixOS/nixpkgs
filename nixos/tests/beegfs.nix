@@ -1,4 +1,4 @@
-import ./make-test.nix ({ ... } :
+import ./make-test.nix {} ({ ... } :
 
 let
   connAuthFile="beegfs/auth-def.key";

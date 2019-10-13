@@ -95,7 +95,7 @@ let
       '';
     };
 
-in import ./make-test.nix ({ pkgs, ...} : {
+in import ./make-test.nix {} ({ pkgs, ...} : {
   name = "cockroachdb";
   meta.maintainers = with pkgs.stdenv.lib.maintainers;
     [ thoughtpolice ];

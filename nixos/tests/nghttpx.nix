@@ -1,7 +1,7 @@
 let
   nginxRoot = "/run/nginx";
 in
-  import ./make-test.nix ({...}: {
+  import ./make-test.nix {} ({...}: {
     name  = "nghttpx";
     nodes = {
       webserver = {

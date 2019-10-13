@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ...}:
+import ./make-test.nix {} ({ pkgs, lib, ...}:
 let
   test = with pkgs; runCommand "patch-test" {
     nativeBuildInputs = [ pgjwt ];

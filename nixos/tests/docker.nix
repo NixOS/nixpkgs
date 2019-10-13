@@ -1,6 +1,6 @@
 # This test runs docker and checks if simple container starts
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "docker";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ nequissimus offline ];

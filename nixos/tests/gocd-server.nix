@@ -2,7 +2,7 @@
 #   1. GoCD server starts
 #   2. GoCD server responds
 
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test.nix {} ({ pkgs, ...} :
 
 {
   name = "gocd-server";

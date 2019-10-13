@@ -10,7 +10,7 @@ let default-config = {
 
         virtualisation.memorySize = 128;
       };
-in import ./make-test.nix ({ pkgs, ...} : {
+in import ./make-test.nix {} ({ pkgs, ...} : {
   name = "networking-proxy";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [  ];

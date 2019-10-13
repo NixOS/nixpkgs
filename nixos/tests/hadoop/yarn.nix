@@ -1,4 +1,4 @@
-import ../make-test.nix ({...}: {
+import ../make-test.nix {} ({...}: {
   nodes = {
     resourcemanager = {pkgs, ...}: {
       services.hadoop.package = pkgs.hadoop_3_1;

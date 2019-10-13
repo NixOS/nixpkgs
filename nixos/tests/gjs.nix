@@ -1,5 +1,5 @@
 # run installed tests
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test.nix {} ({ pkgs, ... }: {
   name = "gjs";
 
   meta = {

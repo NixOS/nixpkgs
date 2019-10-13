@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test.nix {} ({ pkgs, ... }: {
   name = "limesurvey";
   meta.maintainers = [ pkgs.stdenv.lib.maintainers.aanderse ];
 

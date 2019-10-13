@@ -5,7 +5,7 @@
 # this succeeds an external client will try to connect to the port
 # mapping.
 
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test.nix {} ({ pkgs, ... }:
 
 let
   internalRouterAddress = "192.168.3.1";

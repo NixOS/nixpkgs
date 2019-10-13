@@ -3,7 +3,7 @@
 #   2. jenkins user can be extended on both master and slave
 #   3. jenkins service not started on slave node
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "jenkins";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ bjornfor coconnor domenkozar eelco ];

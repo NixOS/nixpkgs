@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, ... }: with lib;
+import ./make-test.nix {} ({ lib, ... }: with lib;
 
 rec {
   name = "tor";

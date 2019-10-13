@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "roundcube";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ globin ];

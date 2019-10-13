@@ -16,7 +16,7 @@ let
       };
     };
   };
-in import ./make-test.nix ({ pkgs, ...} :
+in import ./make-test.nix {} ({ pkgs, ...} :
 {
   name = "containers-restart_networking";
   meta = with pkgs.stdenv.lib.maintainers; {

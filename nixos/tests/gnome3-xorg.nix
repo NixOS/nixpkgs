@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "gnome3-xorg";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = pkgs.gnome3.maintainers;

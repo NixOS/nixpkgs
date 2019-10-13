@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...}:
+import ./make-test.nix {} ({ pkgs, ...}:
 
 let
   adminPrivateKey = pkgs.writeText "id_ed25519" ''

@@ -1,6 +1,6 @@
 # Test for NixOS' container support.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "containers-hosts";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ montag451 ];

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "initrd-network";
 
   meta.maintainers = [ pkgs.stdenv.lib.maintainers.eelco ];

@@ -1,6 +1,6 @@
 # This test start mongodb, runs a query using mongo shell
 
-import ./make-test.nix ({ pkgs, ...} : let
+import ./make-test.nix {} ({ pkgs, ...} : let
   testQuery = pkgs.writeScript "nixtest.js" ''
     db.greetings.insert({ "greeting": "hello" });
     print(db.greetings.findOne().greeting);

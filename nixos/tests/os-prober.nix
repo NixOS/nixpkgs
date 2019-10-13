@@ -1,4 +1,4 @@
-import ./make-test.nix ({pkgs, lib, ...}:
+import ./make-test.nix {} ({pkgs, lib, ...}:
 let
   # A filesystem image with a (presumably) bootable debian
   debianImage = pkgs.vmTools.diskImageFuns.debian9i386 {

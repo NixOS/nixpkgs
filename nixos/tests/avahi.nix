@@ -1,5 +1,5 @@
 # Test whether `avahi-daemon' and `libnss-mdns' work as expected.
-import ./make-test.nix ({ pkgs, ... } : {
+import ./make-test.nix {} ({ pkgs, ... } : {
   name = "avahi";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];

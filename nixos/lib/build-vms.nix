@@ -7,6 +7,8 @@
 , pkgs
 , # NixOS configuration to add to the VMs
   extraConfigurations ? []
+, # The shell used for accessing the VM through the backdoor
+  backdoorShell ? null
 }:
 
 with pkgs.lib;
@@ -35,7 +37,7 @@ rec {
       modules = configurations ++ extraConfigurations;
       baseModules =  (import ../modules/module-list.nix) ++
         [ ../modules/virtualisation/qemu-vm.nix
-          ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
+          (import ../modules/testing/test-instrumentation.nix { inherit config pkgs backdoorShell; lib = pkgs.lib; } )# !!! should only get added for automated test runs
           { key = "no-manual"; documentation.nixos.enable = false; }
           { key = "qemu"; system.build.qemu = qemu; }
           { key = "nodes"; _module.args.nodes = nodes; }

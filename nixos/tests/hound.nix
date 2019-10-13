@@ -1,5 +1,5 @@
 # Test whether `houndd` indexes nixpkgs
-import ./make-test.nix ({ pkgs, ... } : {
+import ./make-test.nix {} ({ pkgs, ... } : {
   name = "hound";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ grahamc ];

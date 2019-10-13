@@ -1,6 +1,6 @@
 # This test runs rabbitmq and checks if rabbitmq is up and running.
 
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test.nix {} ({ pkgs, ... }: {
   name = "rabbitmq";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco offline ];

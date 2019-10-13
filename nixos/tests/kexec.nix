@@ -1,6 +1,6 @@
 # Test whether fast reboots via kexec work.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "kexec";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];

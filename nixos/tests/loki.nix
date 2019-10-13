@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, pkgs, ... }:
+import ./make-test.nix {} ({ lib, pkgs, ... }:
 
 {
   name = "loki";

@@ -6,7 +6,7 @@ let
   containerIp2 = "192.168.1.254";
 in
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "containers-macvlans";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ montag451 ];

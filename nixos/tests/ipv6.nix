@@ -1,7 +1,7 @@
 # Test of IPv6 functionality in NixOS, including whether router
 # solicication/advertisement using radvd works.
 
-import ./make-test.nix ({ pkgs, lib, ...} : {
+import ./make-test.nix {} ({ pkgs, lib, ...} : {
   name = "ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];

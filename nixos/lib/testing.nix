@@ -5,9 +5,12 @@
   # Ignored
 , config ? {}
   # Modules to add to each VM
-, extraConfigurations ? [] }:
+, extraConfigurations ? []
+  # Backdoor shell to be used when accessing the VM
+, backdoorShell ? null
+}:
 
-with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
+with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations backdoorShell; };
 with pkgs;
 
 let

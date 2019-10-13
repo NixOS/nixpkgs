@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test.nix {} ({ pkgs, lib, ... }:
 
 let
   pythonEnv = pkgs.python3.withPackages (p: [p.beanstalkc]);

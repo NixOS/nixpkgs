@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test.nix {} ({ pkgs, ... }: {
   name = "dnscrypt-proxy";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ joachifm ];

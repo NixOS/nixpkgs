@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : rec {
+import ./make-test.nix {} ({ pkgs, ...} : rec {
   name = "mesos";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ offline kamilchm cstrahan ];

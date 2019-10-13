@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, pkgs, ... }: {
+import ./make-test.nix {} ({ lib, pkgs, ... }: {
   name = "syncthing-relay";
   meta.maintainers = with pkgs.stdenv.lib.maintainers; [ delroth ];
 

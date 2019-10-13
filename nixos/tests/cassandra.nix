@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test.nix {} ({ pkgs, lib, ... }:
 let
   # Change this to test a different version of Cassandra:
   testPackage = pkgs.cassandra;

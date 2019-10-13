@@ -45,7 +45,7 @@ let generateNodeConf = { lib, pkgs, config, privkpath, pubk, peerId, nodeId, ...
         };
       };
     };
-in import ./make-test.nix ({pkgs, ... }: {
+in import ./make-test.nix {} ({pkgs, ... }: {
   name = "networkd-wireguard";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ninjatrappeur ];

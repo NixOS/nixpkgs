@@ -1,7 +1,7 @@
 # This test runs basic munin setup with node and cron job running on the same
 # machine.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "munin";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ domenkozar eelco ];

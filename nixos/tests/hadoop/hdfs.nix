@@ -1,4 +1,4 @@
-import ../make-test.nix ({...}: {
+import ../make-test.nix {} ({...}: {
   nodes = {
     namenode = {pkgs, ...}: {
       services.hadoop = {

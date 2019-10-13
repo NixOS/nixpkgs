@@ -1,4 +1,4 @@
-import ../make-test.nix ({pkgs, ...}: {
+import ../make-test.nix {} ({pkgs, ...}: {
   name = "kerberos_server-heimdal";
   machine = { config, libs, pkgs, ...}:
   { services.kerberos_server =

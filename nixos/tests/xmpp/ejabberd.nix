@@ -1,4 +1,4 @@
-import ../make-test.nix ({ pkgs, ... }: {
+import ../make-test.nix {} ({ pkgs, ... }: {
   name = "ejabberd";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ajs124 ];

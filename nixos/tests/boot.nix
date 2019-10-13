@@ -1,9 +1,10 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. { inherit system config; },
+  backdoorShell ? null
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing.nix { inherit system pkgs backdoorShell; };
 with pkgs.lib;
 
 let
@@ -13,7 +14,7 @@ let
       inherit system;
       modules =
         [ ../modules/installer/cd-dvd/installation-cd-minimal.nix
-          ../modules/testing/test-instrumentation.nix
+          (import ../modules/testing/test-instrumentation.nix { inherit config pkgs backdoorShell; lib = pkgs.lib; })
         ];
     }).config.system.build.isoImage;
 
@@ -48,7 +49,7 @@ let
           inherit system;
           modules =
             [ ../modules/installer/netboot/netboot.nix
-              ../modules/testing/test-instrumentation.nix
+              (import ../modules/testing/test-instrumentation.nix { inherit config pkgs backdoorShell; lib = pkgs.lib; })
               { key = "serial"; }
             ];
         }).config;

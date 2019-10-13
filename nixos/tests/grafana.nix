@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, pkgs, ... }:
+import ./make-test.nix {} ({ lib, pkgs, ... }:
 
 let
   inherit (lib) mkMerge nameValuePair maintainers;

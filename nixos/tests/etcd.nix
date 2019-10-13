@@ -1,6 +1,6 @@
 # This test runs simple etcd node
 
-import ./make-test.nix ({ pkgs, ... } : {
+import ./make-test.nix {} ({ pkgs, ... } : {
   name = "etcd";
 
   meta = with pkgs.stdenv.lib.maintainers; {

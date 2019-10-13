@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test.nix {} ({ pkgs, lib, ... }:
 let inherit (import ./ssh-keys.nix pkgs)
       snakeOilPrivateKey snakeOilPublicKey;
     ssh-config = builtins.toFile "ssh.conf" ''

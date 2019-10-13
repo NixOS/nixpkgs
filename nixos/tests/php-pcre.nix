@@ -1,7 +1,7 @@
 
 let testString = "can-use-subgroups"; in
 
-import ./make-test.nix ({ ...}: {
+import ./make-test.nix {} ({ ...}: {
   name = "php-httpd-pcre-jit-test";
   machine = { lib, pkgs, ... }: {
     time.timeZone = "UTC";

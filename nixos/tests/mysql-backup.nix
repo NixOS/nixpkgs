@@ -1,5 +1,5 @@
 # Test whether mysqlBackup option works
-import ./make-test.nix ({ pkgs, ... } : {
+import ./make-test.nix {} ({ pkgs, ... } : {
   name = "mysql-backup";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ rvl ];

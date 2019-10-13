@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
+import ./make-test.nix {} ({ pkgs, latestKernel ? false, ... }:
 
 {
   name = "login";

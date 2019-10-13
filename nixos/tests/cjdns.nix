@@ -17,7 +17,7 @@ let
 
 in
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "cjdns";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ehmry ];

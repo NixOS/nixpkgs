@@ -1,6 +1,6 @@
 # Test printing via CUPS.
 
-import ./make-test.nix ({pkgs, ... }:
+import ./make-test.nix {} ({pkgs, ... }:
 let
   printingServer = startWhenNeeded: {
     services.printing.enable = true;

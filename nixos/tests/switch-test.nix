@@ -1,6 +1,6 @@
 # Test configuration switching.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "switch-test";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ gleber ];

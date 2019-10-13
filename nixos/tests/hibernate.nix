@@ -1,6 +1,6 @@
 # Test whether hibernation from partition works.
 
-import ./make-test.nix (pkgs: {
+import ./make-test.nix {} (pkgs: {
   name = "hibernate";
 
   nodes = {

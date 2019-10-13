@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test.nix {} ({ pkgs, ... }: {
   name = "metabase";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ mmahut ];

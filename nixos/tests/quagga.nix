@@ -5,7 +5,7 @@
 #
 # All interfaces are in OSPF Area 0.
 
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test.nix {} ({ pkgs, ... }:
   let
 
     ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ipv4.addresses).address;

@@ -1,7 +1,7 @@
 # Regression test for systemd-timesync having moved the state directory without
 # upstream providing a migration path. https://github.com/systemd/systemd/issues/12131
 
-import ./make-test.nix (let
+import ./make-test.nix {} (let
   common = { lib, ... }: {
     # override the `false` value from the qemu-vm base profile
     services.timesyncd.enable = lib.mkForce true;

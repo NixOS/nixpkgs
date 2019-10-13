@@ -1,6 +1,6 @@
 # This test runs peerflix and checks if peerflix starts
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix {} ({ pkgs, ...} : {
   name = "peerflix";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ offline ];
