@@ -2,11 +2,11 @@
 
 let
   # admittedly, we're using (printer firmware) blobs when we could compile them ourselves.
-  curaBinaryDataVersion = "3.6.18"; # Marlin v2.0.0.144. Keep this accurate wrt. the below.
+  curaBinaryDataVersion = "3.6.21"; # Marlin v2.0.0.174 for Bio, v2.0.0.144 for others.
   curaBinaryData = fetchgit {
     url = https://code.alephobjects.com/diffusion/CBD/cura-binary-data.git;
-    rev = "cdc046494bbfe1f65bfb34659a257eef9a0100a0";
-    sha256 = "0v0s036gxdjiglas2yzw95alv60sw3pq5k1zrrhmw9mxr4irrblb";
+    rev = "5c75d0f6c10d8b7a903e2072a48cd1f08059509e";
+    sha256 = "1qdsj6rczwzdwzyr7nz7fnypbphckjrnwl8c9dr6izsxyzs465c4";
   };
 
   libarcusLulzbot = callPackage ./libarcus.nix {
@@ -27,12 +27,12 @@ let
 in
 mkDerivation rec {
   pname = "cura-lulzbot";
-  version = "3.6.20";
+  version = "3.6.21";
 
   src = fetchgit {
     url = https://code.alephobjects.com/source/cura-lulzbot.git;
-    rev = "df5f905482114194eb1cfb85a7aed851b4a6d32a";
-    sha256 = "1xkqf89anxmy2aw0vr604ln7qsibacgk9l2g8jlf467hja8f0dzq";
+    rev = "7faeb18604c83004846a02c60cb240708db0034f";
+    sha256 = "10q38s8c8x6xkh1vns4p3iqa5y267vrjh5vq8h55mg1q5001scyq";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 ];
