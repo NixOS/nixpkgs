@@ -9749,7 +9749,6 @@ broken-packages:
   - unity-testresult-parser
   - unitym-yesod
   - universe-th
-  - universum
   - unix-fcntl
   - unix-handle
   - unix-process-conduit
