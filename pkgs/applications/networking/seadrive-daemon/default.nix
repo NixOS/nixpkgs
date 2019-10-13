@@ -31,7 +31,9 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    curl
+    (curl.override (oldAttrs: rec {
+      inherit openssl; # seadrive-daemon segfaults if curl uses a different version of openssl
+    }))
     fuse
     libevent_2_0
     libsearpc
