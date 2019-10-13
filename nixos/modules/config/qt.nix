@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.qt5;
+  cfg = config.qt;
 
   toQtIni = generators.toINI {
     mkKeyValue = key: value:
@@ -79,7 +79,7 @@ let
         }
         {
           assertion = cfg.font == null && cfg.iconTheme == null;
-          message = "`qt5.font` and `qt5.iconTheme` are only supported by kde platform.";
+          message = "`qt.font` and `qt.iconTheme` are only supported by kde platform.";
         }
       ];
       environment.variables.QT_QPA_PLATFORMTHEME = "gtk2";
@@ -99,7 +99,7 @@ let
       assertions = [
         {
           assertion = cfg.font == null && cfg.iconTheme == null;
-          message = "`qt5.font` and `qt5.iconTheme` are only supported by kde platform.";
+          message = "`qt.font` and `qt.iconTheme` are only supported by kde platform.";
         }
       ];
       environment.variables.QT_QPA_PLATFORMTHEME = "qgnomeplatform";
@@ -125,7 +125,7 @@ let
         }
         {
           assertion = cfg.font == null && cfg.iconTheme == null;
-          message = "`qt5.font` and `qt5.iconTheme` are only supported by kde platform.";
+          message = "`qt.font` and `qt.iconTheme` are only supported by kde platform.";
         }
       ];
       environment.variables.QT_QPA_PLATFORMTHEME = "gtk3";
@@ -154,16 +154,24 @@ in
 
 {
 
-  options = {
-    qt5 = {
+  imports = [
+    (mkRenamedOptionModule [ "qt5" "style" ] [ "qt" "style" ])
+    (mkRenamedOptionModule [ "qt5" "enable" ] [ "qt" "enable" ])
+    (mkRenamedOptionModule [ "qt5" "platformTheme" ] [ "qt" "platformTheme" ])
+    (mkRenamedOptionModule [ "qt5" "font" ] [ "qt" "font" ])
+    (mkRenamedOptionModule [ "qt5" "iconTheme" ] [ "qt" "iconTheme" ])
+  ];
 
-      enable = mkEnableOption "Qt5 theming configuration";
+  options = {
+    qt = {
+
+      enable = mkEnableOption "Qt theming configuration";
 
       platformTheme = mkOption {
         type = types.enum (attrNames platforms);
         example = head (attrNames platforms);
         description = ''
-          Selects the platform theme to use for Qt5 applications.</para>
+          Selects the platform theme to use for Qt applications.</para>
           <para>The options are
           <variablelist>
             ${concatStrings (mapAttrsToList (name: value: value.description) platforms)}
