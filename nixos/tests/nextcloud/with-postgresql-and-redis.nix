@@ -27,7 +27,7 @@ in {
           dbtype = "pgsql";
           dbname = "nextcloud";
           dbuser = "nextcloud";
-          dbhost = "localhost:5432";
+          dbhost = "/run/postgresql";
           inherit adminuser;
           adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
             ${adminpass}
@@ -61,8 +61,8 @@ in {
   testScript = let
     configureRedis = pkgs.writeScript "configure-redis" ''
       #!${pkgs.stdenv.shell}
-      nextcloud-occ config:system:set redis 'host' --value 'localhost:6379' --type string
-      nextcloud-occ config:system:set redis 'port' --value 0 --type integer
+      nextcloud-occ config:system:set redis 'host' --value 'localhost' --type string
+      nextcloud-occ config:system:set redis 'port' --value 6379 --type integer
       nextcloud-occ config:system:set memcache.local --value '\OC\Memcache\Redis' --type string
       nextcloud-occ config:system:set memcache.locking --value '\OC\Memcache\Redis' --type string
     '';
