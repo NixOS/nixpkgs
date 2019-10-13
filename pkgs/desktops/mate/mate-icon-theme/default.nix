@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, librsvg, hicolor-icon-theme, gtk3 }:
+{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, librsvg, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "mate-icon-theme";
@@ -11,7 +11,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils ];
 
-  buildInputs = [ librsvg hicolor-icon-theme ];
+  buildInputs = [ librsvg ];
+
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   postInstall = ''
     for theme in "$out"/share/icons/*; do

@@ -142,7 +142,6 @@
   ./programs/seahorse.nix
   ./programs/slock.nix
   ./programs/shadow.nix
-  ./programs/shell.nix
   ./programs/spacefm.nix
   ./programs/singularity.nix
   ./programs/ssh.nix
@@ -807,6 +806,7 @@
   ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
+  ./services/web-apps/shiori.nix
   ./services/web-apps/virtlyst.nix
   ./services/web-apps/wordpress.nix
   ./services/web-apps/youtrack.nix

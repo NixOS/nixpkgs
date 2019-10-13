@@ -2,7 +2,7 @@
 , libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
+, dpkg, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, libuuid
 , e2fsprogs, krb5
 }:
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
+  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme ];
 
   unpackCmd = ''
     mkdir out

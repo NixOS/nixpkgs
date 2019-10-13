@@ -41,9 +41,6 @@ common = rec { # attributes common to both builds
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
-  '' + optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/build_configurations/mysql_release.cmake \
-      --replace "SET(PLUGIN_AUTH_PAM YES)" ""
   '';
 
   patches = [
@@ -163,6 +160,8 @@ server = stdenv.mkDerivation (common // {
 
   patches = common.patches ++ [
     ./cmake-without-client.patch
+  ] ++ optionals stdenv.isDarwin [
+    ./cmake-without-plugin-auth-pam.patch
   ];
 
   cmakeFlags = common.cmakeFlags ++ [

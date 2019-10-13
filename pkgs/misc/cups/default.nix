@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     "--enable-dbus"
     "--enable-pam"
+    "--with-dbusdir=${placeholder "out"}/share/dbus-1"
   ] ++ optional (libusb != null) "--enable-libusb"
     ++ optional (gnutls != null) "--enable-ssl"
     ++ optional (avahi != null) "--enable-avahi"
@@ -81,7 +82,6 @@ stdenv.mkDerivation rec {
       "STATEDIR=$(TMPDIR)/dummy"
       # Idem for /etc.
       "PAMDIR=$(out)/etc/pam.d"
-      "DBUSDIR=$(out)/etc/dbus-1"
       "XINETD=$(out)/etc/xinetd.d"
       "SERVERROOT=$(out)/etc/cups"
       # Idem for /usr.

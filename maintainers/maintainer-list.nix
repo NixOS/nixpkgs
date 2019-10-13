@@ -356,6 +356,16 @@
     github = "alunduil";
     name = "Alex Brandt";
   };
+  alva = {
+    email = "alva@skogen.is";
+    github = "fjallarefur";
+    githubId = 42881386;
+    name = "Alva";
+    keys = [{
+      longkeyid = "ed25519/0xF53E323342F7A6D3";
+      fingerprint = "B422 CFB1 C9EF 73F7 E1E2 698D F53E 3233 42F7 A6D3A";
+    }];
+  };
   amar1729 = {
     email = "amar.paul16@gmail.com";
     github = "amar1729";
@@ -2272,7 +2282,7 @@
     name = "Frede Emil";
   };
   freepotion = {
-    email = "free.potion@yandex.ru";
+    email = "42352817+freepotion@users.noreply.github.com";
     github = "freepotion";
     githubId = 42352817;
     name = "Free Potion";
@@ -2626,6 +2636,11 @@
     github = "herberteuler";
     githubId = 1401179;
     name = "Guanpeng Xu";
+  };
+  hexa = {
+    github = "mweinelt";
+    githubId = 131599;
+    name = "Martin Weinelt";
   };
   hhm = {
     email = "heehooman+nixpkgs@gmail.com";
@@ -3261,6 +3276,12 @@
     githubId = 8460;
     name = "John Wiegley";
   };
+  jwijenbergh = {
+    email = "jeroenwijenbergh@protonmail.com";
+    github = "jwijenbergh";
+    githubId = 46386452;
+    name = "Jeroen Wijenbergh";
+  };
   jwilberding = {
     email = "jwilberding@afiniate.com";
     name = "Jordan Wilberding";
@@ -3302,6 +3323,12 @@
   karolchmist = {
     email = "info+nix@chmist.com";
     name = "karolchmist";
+  };
+  kayhide = {
+    email = "kayhide@gmail.com";
+    github = "kayhide";
+    githubId = 1730718;
+    name = "Hideaki Kawai";
   };
   kazcw = {
     email = "kaz@lambdaverse.org";
@@ -4267,6 +4294,15 @@
     github = "mulderr";
     githubId = 5698461;
     name = "Maciej Kazulak";
+  };
+  mkf = {
+    email = "m@mikf.pl";
+    github = "mkf";
+    name = "Michał Krzysztof Feiler";
+    keys = [{
+      longkeyid = "rsa4096/0xE35C2D7C2C6AC724";
+      fingerprint = "1E36 9940 CC7E 01C4 CFE8  F20A E35C 2D7C 2C6A C724";
+    }];
   };
   mkg = {
     email = "mkg@vt.edu";
@@ -6503,6 +6539,12 @@
     githubId = 224674;
     name = "Thomas Pham";
   };
+  Thra11 = {
+    email = "tahall256@protonmail.ch";
+    github = "Thra11";
+    githubId = 1391883;
+    name = "Tom Hall";
+  };
   tilpner = {
     email = "till@hoeppner.ws";
     github = "tilpner";
@@ -7045,6 +7087,12 @@
     github = "xeji";
     githubId = 36407913;
     name = "Uli Baum";
+  };
+  xfix = {
+    email = "konrad@borowski.pw";
+    github = "xfix";
+    githubId = 1297598;
+    name = "Konrad Borowski";
   };
   xnaveira = {
     email = "xnaveira@gmail.com";

@@ -8,4 +8,5 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtbase ki18n ];
   outputs = [ "out" "dev" ];
+  broken = true;
 }

@@ -7,6 +7,11 @@ let
 
   ruby = cfg.packages.gitlab.ruby;
 
+  postgresqlPackage = if config.services.postgresql.enable then
+                        config.services.postgresql.package
+                      else
+                        pkgs.postgresql;
+
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
@@ -21,6 +26,9 @@ let
       pool = cfg.databasePool;
     } // cfg.extraDatabaseConfig;
   };
+
+  # We only want to create a database if we're actually going to connect to it.
+  databaseActuallyCreateLocally = cfg.databaseCreateLocally && cfg.databaseHost == "";
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
@@ -138,7 +146,7 @@ let
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
      '';
@@ -153,7 +161,7 @@ let
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
      '';
   };
@@ -266,8 +274,8 @@ in {
         description = ''
           Whether a database should be automatically created on the
           local host. Set this to <literal>false</literal> if you plan
-          on provisioning a local database yourself or use an external
-          one.
+          on provisioning a local database yourself. This has no effect
+          if <option>services.gitlab.databaseHost</option> is customized.
         '';
       };
 
@@ -557,8 +565,8 @@ in {
 
     assertions = [
       {
-        assertion = cfg.databaseCreateLocally -> (cfg.user == cfg.databaseUsername);
-        message = "For local automatic database provisioning services.gitlab.user and services.gitlab.databaseUsername should be identical.";
+        assertion = databaseActuallyCreateLocally -> (cfg.user == cfg.databaseUsername);
+        message = ''For local automatic database provisioning (services.gitlab.databaseCreateLocally == true) with peer authentication (services.gitlab.databaseHost == "") to work services.gitlab.user and services.gitlab.databaseUsername must be identical.'';
       }
       {
         assertion = (cfg.databaseHost != "") -> (cfg.databasePasswordFile != null);
@@ -592,14 +600,14 @@ in {
     services.redis.enable = mkDefault true;
 
     # We use postgres as the main data store.
-    services.postgresql = optionalAttrs cfg.databaseCreateLocally {
+    services.postgresql = optionalAttrs databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = singleton { name = cfg.databaseUsername; };
     };
     # The postgresql module doesn't currently support concepts like
     # objects owners and extensions; for now we tack on what's needed
     # here.
-    systemd.services.postgresql.postStart = mkAfter (optionalString cfg.databaseCreateLocally ''
+    systemd.services.postgresql.postStart = mkAfter (optionalString databaseActuallyCreateLocally ''
       $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
       current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.databaseName}'")
       if [[ "$current_owner" != "${cfg.databaseUsername}" ]]; then
@@ -675,7 +683,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        config.services.postgresql.package
+        postgresqlPackage
         gitAndTools.git
         ruby
         openssh
@@ -756,81 +764,13 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        config.services.postgresql.package
+        postgresqlPackage
         gitAndTools.git
         openssh
         nodejs
         procps
         gnupg
       ];
-      preStart = ''
-        cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
-        rm -rf ${cfg.statePath}/db/*
-        cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
-        cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
-
-        ${cfg.packages.gitlab-shell}/bin/install
-
-        ${optionalString cfg.smtp.enable ''
-          install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
-          ${optionalString (cfg.smtp.passwordFile != null) ''
-            smtp_password=$(<'${cfg.smtp.passwordFile}')
-            ${pkgs.replace}/bin/replace-literal -e '@smtpPassword@' "$smtp_password" '${cfg.statePath}/config/initializers/smtp_settings.rb'
-          ''}
-        ''}
-
-        (
-          umask u=rwx,g=,o=
-
-          ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
-
-          ${if cfg.databasePasswordFile != null then ''
-              export db_password="$(<'${cfg.databasePasswordFile}')"
-
-              if [[ -z "$db_password" ]]; then
-                >&2 echo "Database password was an empty string!"
-                exit 1
-              fi
-
-              ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                                '.production.password = $ENV.db_password' \
-                                >'${cfg.statePath}/config/database.yml'
-            ''
-            else ''
-              ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                                >'${cfg.statePath}/config/database.yml'
-            ''
-          }
-
-          ${utils.genJqSecretsReplacementSnippet
-              gitlabConfig
-              "${cfg.statePath}/config/gitlab.yml"
-          }
-
-          if [[ -h '${cfg.statePath}/config/secrets.yml' ]]; then
-            rm '${cfg.statePath}/config/secrets.yml'
-          fi
-
-          export secret="$(<'${cfg.secrets.secretFile}')"
-          export db="$(<'${cfg.secrets.dbFile}')"
-          export otp="$(<'${cfg.secrets.otpFile}')"
-          export jws="$(<'${cfg.secrets.jwsFile}')"
-          ${pkgs.jq}/bin/jq -n '{production: {secret_key_base: $ENV.secret,
-                                              otp_key_base: $ENV.otp,
-                                              db_key_base: $ENV.db,
-                                              openid_connect_signing_key: $ENV.jws}}' \
-                            > '${cfg.statePath}/config/secrets.yml'
-        )
-
-        initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
-        ${gitlab-rake}/bin/gitlab-rake gitlab:db:configure GITLAB_ROOT_PASSWORD="$initial_root_password" \
-                                                           GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
-
-        # We remove potentially broken links to old gitlab-shell versions
-        rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
-
-        ${pkgs.git}/bin/git config --global core.autocrlf "input"
-      '';
 
       serviceConfig = {
         Type = "simple";
@@ -839,6 +779,89 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        ExecStartPre = let
+          preStartFullPrivileges = ''
+            shopt -s dotglob nullglob
+            chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
+            chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/config/*
+          '';
+          preStart = ''
+            cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+            rm -rf ${cfg.statePath}/db/*
+            rm -rf ${cfg.statePath}/config/initializers/*
+            cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+            cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
+
+            ${cfg.packages.gitlab-shell}/bin/install
+
+            ${optionalString cfg.smtp.enable ''
+              install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
+              ${optionalString (cfg.smtp.passwordFile != null) ''
+                smtp_password=$(<'${cfg.smtp.passwordFile}')
+                ${pkgs.replace}/bin/replace-literal -e '@smtpPassword@' "$smtp_password" '${cfg.statePath}/config/initializers/smtp_settings.rb'
+              ''}
+            ''}
+
+            (
+              umask u=rwx,g=,o=
+
+              ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
+
+              if [[ -h '${cfg.statePath}/config/database.yml' ]]; then
+                rm '${cfg.statePath}/config/database.yml'
+              fi
+
+              ${if cfg.databasePasswordFile != null then ''
+                  export db_password="$(<'${cfg.databasePasswordFile}')"
+
+                  if [[ -z "$db_password" ]]; then
+                    >&2 echo "Database password was an empty string!"
+                    exit 1
+                  fi
+
+                  ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
+                                    '.production.password = $ENV.db_password' \
+                                    >'${cfg.statePath}/config/database.yml'
+                ''
+                else ''
+                  ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
+                                    >'${cfg.statePath}/config/database.yml'
+                ''
+              }
+
+              ${utils.genJqSecretsReplacementSnippet
+                  gitlabConfig
+                  "${cfg.statePath}/config/gitlab.yml"
+              }
+
+              if [[ -h '${cfg.statePath}/config/secrets.yml' ]]; then
+                rm '${cfg.statePath}/config/secrets.yml'
+              fi
+
+              export secret="$(<'${cfg.secrets.secretFile}')"
+              export db="$(<'${cfg.secrets.dbFile}')"
+              export otp="$(<'${cfg.secrets.otpFile}')"
+              export jws="$(<'${cfg.secrets.jwsFile}')"
+              ${pkgs.jq}/bin/jq -n '{production: {secret_key_base: $ENV.secret,
+                                                  otp_key_base: $ENV.otp,
+                                                  db_key_base: $ENV.db,
+                                                  openid_connect_signing_key: $ENV.jws}}' \
+                                > '${cfg.statePath}/config/secrets.yml'
+            )
+
+            initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
+            ${gitlab-rake}/bin/gitlab-rake gitlab:db:configure GITLAB_ROOT_PASSWORD="$initial_root_password" \
+                                                               GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}' > /dev/null
+
+            # We remove potentially broken links to old gitlab-shell versions
+            rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
+
+            ${pkgs.git}/bin/git config --global core.autocrlf "input"
+          '';
+        in [
+          "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}"
+          "${pkgs.writeShellScript "gitlab-pre-start" preStart}"
+        ];
         ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/unicorn -c ${cfg.statePath}/config/unicorn.rb -E production";
       };
 

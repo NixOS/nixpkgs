@@ -1,7 +1,7 @@
 { config, stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
 , obex_data_server, xdg_utils, dnsmasq, dhcp, libappindicator, iproute
 , gnome3, librsvg, wrapGAppsHook, gobject-introspection
-, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
+, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
 
 let
   pythonPackages = python3Packages;
@@ -25,6 +25,14 @@ in stdenv.mkDerivation rec {
                   gnome3.adwaita-icon-theme iproute libappindicator networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
+
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/blueman-project/blueman/pull/1103.patch";
+      sha256 = "0zqdi6ya97jljwinn10n9q6bixl23ww55c0pkhskn140qnrj42wf";
+    })
+  ];
 
   postPatch = lib.optionalString withPulseAudio ''
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py

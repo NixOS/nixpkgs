@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpic";
-  version = "2016.01.12";
+  version = "2019.08.30";
 
   src = fetchurl {
     url = "https://ece.uwaterloo.ca/~aplevich/dpic/${pname}-${version}.tar.gz";
-    sha256 = "0iwwf8shgm8n4drz8mndvk7jga93yy8plnyby3lgk8376g5ps6cz";
+    sha256 = "059m53cppw67hwygm7l03ciaxbnaldx63bqdhx1vzbx3kiwz8iw2";
   };
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];

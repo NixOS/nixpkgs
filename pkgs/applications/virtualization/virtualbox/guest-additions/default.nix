@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "098kibz8dkiqd8shm44n4h6iyszcbj0ikav1b4vsi75dqzw8d9n8";
+    sha256 = "0hflsbx70dli34mpx94vd33p55ycfs3ahzwcdzqxdiwiiskjpykq";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -55,6 +55,8 @@ in stdenv.mkDerivation {
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
         isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
         chmod 755 ./VBoxLinuxAdditions.run
+        # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
+        sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
         ./VBoxLinuxAdditions.run --noexec --keep
       ''
       else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")

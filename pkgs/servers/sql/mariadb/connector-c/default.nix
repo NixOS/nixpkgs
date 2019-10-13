@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DWITH_EXTERNAL_ZLIB=ON"
-    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
+    "-DMARIADB_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DWITH_CURL=ON"
   ];
 

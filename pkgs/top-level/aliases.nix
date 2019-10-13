@@ -162,6 +162,7 @@ mapAliases ({
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
   jbuilder = dune; # added 2018-09-09
+  jikes = throw "deprecated in 2019-10-07: jikes was abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdiff3-qt5 = kdiff3; # added 2017-02-18
@@ -443,8 +444,8 @@ mapAliases ({
   };
 
   # added 2019-08-01
-  mumble_git = pkgs.mumble_rc;
-  murmur_git = pkgs.murmur_rc;
+  mumble_git = pkgs.mumble;
+  murmur_git = pkgs.murmur;
 
   # added 2019-09-06
   zeroc_ice = pkgs.zeroc-ice;

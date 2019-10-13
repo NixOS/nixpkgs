@@ -418,7 +418,7 @@ in {
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
 
   bap = callPackage ../development/python-modules/bap {
-    bap = pkgs.ocamlPackages.bap;
+    bap = pkgs.ocaml-ng.ocamlPackages_4_06.bap;
   };
 
   baselines = callPackage ../development/python-modules/baselines { };
@@ -2407,9 +2407,6 @@ in {
   };
 
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
-
-  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
-  google-cloud-sdk-gce = callPackage ../tools/admin/google-cloud-sdk { with-gce=true; };
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
@@ -6035,6 +6032,8 @@ in {
   yanc = callPackage ../development/python-modules/yanc { };
 
   yarl = callPackage ../development/python-modules/yarl { };
+
+  solo-python = disabledIf (! pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 
   suseapi = callPackage ../development/python-modules/suseapi { };
 

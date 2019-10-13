@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       asl20 # Licence for Oil itself
     ];
 
-    maintainers = with lib.maintainers; [ lheckemann ];
+    maintainers = with lib.maintainers; [ lheckemann alva ];
   };
 
   passthru = {

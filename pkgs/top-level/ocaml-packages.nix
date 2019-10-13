@@ -519,6 +519,8 @@ let
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
+    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
+
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
@@ -829,13 +831,15 @@ let
 
     # Jane Street
 
-    janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
+    janePackage =
+      if lib.versionOlder "4.07" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/janePackage_0_12.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
 
     janeStreet =
     if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {
-      janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage_0_12.nix {};
-      inherit ctypes num octavius ppxlib re;
+      inherit ctypes janePackage num octavius ppxlib re;
       inherit (pkgs) openssl;
     }
     else import ../development/ocaml-modules/janestreet {
@@ -1137,5 +1141,5 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_4_09;
 
-  ocamlPackages = ocamlPackages_4_06;
+  ocamlPackages = ocamlPackages_4_07;
 }

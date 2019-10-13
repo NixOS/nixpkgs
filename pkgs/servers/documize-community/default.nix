@@ -19,7 +19,7 @@ buildGoPackage rec {
     runHook preBuild
 
     pushd go/src/github.com/documize/community
-    go build -gcflags="all=-trimpath=$GOPATH" -o bin/documize ./edition/community.go
+    GO111MODULE=off go build -gcflags="all=-trimpath=$GOPATH" -o bin/documize ./edition/community.go
     popd
 
     runHook postBuild

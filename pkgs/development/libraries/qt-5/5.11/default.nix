@@ -69,6 +69,13 @@ let
     qtwebengine = [
       ./qtwebengine-no-build-skip.patch
       ./qtwebengine-darwin-no-platform-check.patch
+      # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/issues/707
+      # https://bugreports.qt.io/browse/QTBUG-77037
+      (fetchpatch {
+        name = "fix-build-with-pulseaudio-13.0.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
+        sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
+      })
     ];
     qtwebkit = [ ./qtwebkit.patch ];
   };
@@ -152,9 +159,7 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
-          inherit (stdenv) isDarwin;
-          qtbase_dev = self.qtbase.dev;
-          fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
+          fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;
 

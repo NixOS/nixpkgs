@@ -2,7 +2,7 @@
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
   fetchFromGitHub, lib, numpy, pyyaml, cffi, typing, cmake, hypothesis, numactl,
   linkFarm, symlinkJoin,
-  utillinux, which }:
+  utillinux, which, isPy3k }:
 
 assert cudnn == null || cudatoolkit != null;
 assert !cudaSupport || cudatoolkit != null;
@@ -27,6 +27,7 @@ let
 in buildPythonPackage rec {
   version = "1.0.0";
   pname = "pytorch";
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner  = "pytorch";
