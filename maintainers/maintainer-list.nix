@@ -2637,6 +2637,11 @@
     githubId = 1401179;
     name = "Guanpeng Xu";
   };
+  hexa = {
+    github = "mweinelt";
+    githubId = 131599;
+    name = "Martin Weinelt";
+  };
   hhm = {
     email = "heehooman+nixpkgs@gmail.com";
     github = "hhm0";
@@ -3271,6 +3276,12 @@
     githubId = 8460;
     name = "John Wiegley";
   };
+  jwijenbergh = {
+    email = "jeroenwijenbergh@protonmail.com";
+    github = "jwijenbergh";
+    githubId = 46386452;
+    name = "Jeroen Wijenbergh";
+  };
   jwilberding = {
     email = "jwilberding@afiniate.com";
     name = "Jordan Wilberding";
@@ -3312,6 +3323,12 @@
   karolchmist = {
     email = "info+nix@chmist.com";
     name = "karolchmist";
+  };
+  kayhide = {
+    email = "kayhide@gmail.com";
+    github = "kayhide";
+    githubId = 1730718;
+    name = "Hideaki Kawai";
   };
   kazcw = {
     email = "kaz@lambdaverse.org";

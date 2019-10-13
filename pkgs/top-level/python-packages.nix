@@ -6033,6 +6033,8 @@ in {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
+  solo-python = disabledIf (! pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
+
   suseapi = callPackage ../development/python-modules/suseapi { };
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };

@@ -519,6 +519,8 @@ let
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
+    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
+
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };

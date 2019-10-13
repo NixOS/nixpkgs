@@ -23,6 +23,7 @@ bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
 bling/vim-bufferline
+blueyed/vim-diminactive
 bogado/file-line
 brennanfee/vim-gui-position
 bronson/vim-trailing-whitespace
@@ -43,6 +44,7 @@ chrisgeo/sparkup
 chriskempson/base16-vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
+cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
 ctjhoa/spacevim
@@ -89,6 +91,7 @@ freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fsharp/vim-fsharp
 garbas/vim-snipmate
+gibiansky/vim-textobj-haskell
 glts/vim-textobj-comment
 gmarik/vundle
 godlygeek/csapprox
@@ -214,13 +217,13 @@ MarcWeber/vim-addon-sql
 MarcWeber/vim-addon-syntax-checker
 MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
-MaxMEllon/vim-jsx-pretty
 markonm/traces.vim
 martinda/Jenkinsfile-vim-syntax
 mattn/emmet-vim
 mattn/gist-vim
 mattn/webapi-vim
 maximbaz/lightline-ale
+MaxMEllon/vim-jsx-pretty
 mbbill/undotree
 megaannum/forms
 megaannum/self
@@ -233,6 +236,7 @@ mhinz/vim-signify
 mhinz/vim-startify
 michaeljsmith/vim-indent-object
 mileszs/ack.vim
+milkypostman/vim-togglelist
 mindriot101/vim-yapf
 mk12/vim-lean
 mkasa/lushtags
@@ -346,8 +350,8 @@ scrooloose/syntastic
 sebastianmarkow/deoplete-rust
 sheerun/vim-polyglot
 Shougo/context_filetype.vim
-Shougo/denite.nvim
 Shougo/defx.nvim
+Shougo/denite.nvim
 Shougo/deol.nvim
 Shougo/deoplete-lsp
 Shougo/deoplete.nvim
@@ -373,6 +377,7 @@ sk1418/last256
 slashmili/alchemist.vim
 sonph/onehalf
 stefandtw/quickfix-reflector.vim
+stephpy/vim-yaml
 t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime
@@ -386,9 +391,11 @@ thinca/vim-quickrun
 thinca/vim-scouter
 thinca/vim-themis
 thinca/vim-visualstar
+thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tikhomirov/vim-glsl
 tmux-plugins/vim-tmux
+tmux-plugins/vim-tmux-focus-events
 tomasr/molokai
 tomlion/vim-solidity
 tommcdo/vim-exchange
@@ -419,11 +426,13 @@ tpope/vim-tbone
 tpope/vim-unimpaired
 tpope/vim-vinegar
 travitch/hasksyn
+triglav/vim-visual-increment
 troydm/zoomwintab.vim
 twerth/ir_black
 twinside/vim-haskellconceal
 Twinside/vim-hoogle
 tyru/caw.vim
+tyru/open-browser-github.vim
 tyru/open-browser.vim
 ujihisa/neco-look
 valloric/youcompleteme
@@ -450,6 +459,7 @@ vim-scripts/jdaddy.vim
 vim-scripts/matchit.zip
 vim-scripts/mayansmoke
 vim-scripts/PreserveNoEOL
+vim-scripts/prev_indent
 vim-scripts/random.vim
 vim-scripts/Rename
 vim-scripts/ReplaceWithRegister
