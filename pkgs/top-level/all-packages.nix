@@ -5525,11 +5525,11 @@ in
     libcap = if stdenv.isDarwin then null else libcap;
   };
 
-  pinentry_curses = (stdenv.lib.getOutput "curses" pinentry);
-  pinentry_emacs = (stdenv.lib.getOutput "emacs" pinentry);
-  pinentry_gtk2 = (stdenv.lib.getOutput "gtk2" pinentry);
-  pinentry_qt = (stdenv.lib.getOutput "qt" pinentry);
-  pinentry_gnome = (stdenv.lib.getOutput "gnome" pinentry);
+  pinentry-curses = (stdenv.lib.getOutput "curses" pinentry);
+  pinentry-emacs = (stdenv.lib.getOutput "emacs" pinentry);
+  pinentry-gtk2 = (stdenv.lib.getOutput "gtk2" pinentry);
+  pinentry-qt = (stdenv.lib.getOutput "qt" pinentry);
+  pinentry-gnome = (stdenv.lib.getOutput "gnome" pinentry);
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;

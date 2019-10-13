@@ -290,6 +290,11 @@ mapAliases ({
   pg_hll = postgresqlPackages.pg_hll;
   pg_cron = postgresqlPackages.pg_cron;
   pg_topn = postgresqlPackages.pg_topn;
+  pinentry_curses = pinentry-curses; # added 2019-10-14
+  pinentry_emacs = pinentry-emacs; # added 2019-10-14
+  pinentry_gtk2 = pinentry-gtk2; # added 2019-10-14
+  pinentry_qt = pinentry-qt; # added 2019-10-14
+  pinentry_gnome = pinentry-gnome; # added 2019-10-14
   postgis = postgresqlPackages.postgis;
   # end
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
