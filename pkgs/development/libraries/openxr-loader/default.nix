@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr }:
+{ stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr, vulkan-headers, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ libX11 libXxf86vm libXrandr ];
+  buildInputs = [ libX11 libXxf86vm libXrandr vulkan-headers libGL ];
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
