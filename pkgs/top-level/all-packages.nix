@@ -10530,6 +10530,8 @@ in
 
   niv = haskellPackages.niv.bin;
 
+  ormolu = haskellPackages.ormolu.bin;
+
   capnproto = callPackage ../development/libraries/capnproto { };
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };

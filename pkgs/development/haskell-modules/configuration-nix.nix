@@ -97,7 +97,10 @@ self: super: builtins.intersectAttrs super {
   # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
   cachix = disableLibraryProfiling super.cachix;
 
+  # avoid compiling twice by providing executable as a separate output (with small closure size)
   niv = enableSeparateBinOutput super.niv;
+  ormolu = enableSeparateBinOutput super.ormolu;
+  ghcid = enableSeparateBinOutput super.ghcid;
 
   # Ensure the necessary frameworks for Darwin.
   OpenAL = if pkgs.stdenv.isDarwin
@@ -109,7 +112,6 @@ self: super: builtins.intersectAttrs super {
     then addExtraLibrary super.proteaaudio pkgs.darwin.apple_sdk.frameworks.AudioToolbox
     else super.proteaaudio;
 
-  ghcid = enableSeparateBinOutput super.ghcid;
 
   hzk = overrideCabal super.hzk (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
