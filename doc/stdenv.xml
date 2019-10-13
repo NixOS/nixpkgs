@@ -1692,7 +1692,7 @@ someVar=$(stripHash $name)
     </term>
     <listitem>
      <para>
-      Convenience function for <literal>makeWrapper</literal> that automatically creates a sane wrapper file It takes all the same arguments as <literal>makeWrapper</literal>, except for <literal>--argv0</literal>.
+      Convenience function for <literal>makeWrapper</literal> (needs the same as a build input) that automatically creates a sane wrapper file It takes all the same arguments as <literal>makeWrapper</literal>, except for <literal>--argv0</literal>.
      </para>
      <para>
       It cannot be applied multiple times, since it will overwrite the wrapper file.
