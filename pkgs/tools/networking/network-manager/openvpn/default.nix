@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkgconfig, file, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome3, kmod }:
+, gtk3, withGnome ? true, gnome3, kmod, fetchpatch }:
 
 let
   pname = "NetworkManager-openvpn";
@@ -16,6 +16,11 @@ in stdenv.mkDerivation {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit kmod openvpn;
+    })
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/merge_requests/13.patch";
+      sha256 = "06cvqi28v72dd53fw8ix95mqj885xhwi8qcs2q7hvm5bvnhwn704";
     })
   ];
 

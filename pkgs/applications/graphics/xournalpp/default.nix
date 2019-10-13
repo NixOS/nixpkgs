@@ -10,7 +10,6 @@
 , glib
 , gsettings-desktop-schemas
 , gtk3
-, hicolor-icon-theme
 , libsndfile
 , libxml2
 , libzip
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     [ glib
       gsettings-desktop-schemas
       gtk3
-      hicolor-icon-theme
       libsndfile
       libxml2
       libzip

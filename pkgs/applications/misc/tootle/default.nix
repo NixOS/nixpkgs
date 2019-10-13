@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub
 , vala, meson, ninja, pkgconfig, python3, libgee, gsettings-desktop-schemas
 , gnome3, pantheon, gobject-introspection, wrapGAppsHook
-, gtk3, json-glib, glib, glib-networking, hicolor-icon-theme
+, gtk3, json-glib, glib, glib-networking
 }:
 
 let
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
     wrapGAppsHook
   ];
   buildInputs = [
-    gtk3 pantheon.granite json-glib glib glib-networking hicolor-icon-theme
+    gtk3 pantheon.granite json-glib glib glib-networking
     libgee gnome3.libsoup gsettings-desktop-schemas
   ];
 

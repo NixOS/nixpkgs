@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, expat, pam, perl
+{ stdenv, fetchurl, pkgconfig, glib, expat, pam, perl, fetchpatch
 , intltool, spidermonkey_60 , gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
 , useSystemd ? stdenv.isLinux, systemd
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
     url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.gz";
     sha256 = "1c9lbpndh5zis22f154vjrhnqw65z8s85nrgl42v738yf6g0q5w8";
   };
+
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/polkit/polkit/merge_requests/11.patch";
+      sha256 = "17lv7xj5ksa27iv4zpm4zwd4iy8zbwjj4ximslfq3sasiz9kxhlp";
+    })
+  ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i -e "s/-Wl,--as-needed//" configure.ac

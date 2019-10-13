@@ -2408,9 +2408,6 @@ in {
 
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
-  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
-  google-cloud-sdk-gce = callPackage ../tools/admin/google-cloud-sdk { with-gce=true; };
-
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
   google-music = callPackage ../development/python-modules/google-music { };

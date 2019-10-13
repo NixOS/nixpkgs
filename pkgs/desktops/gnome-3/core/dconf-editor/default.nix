@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3
-, libxml2, gettext, docbook_xsl, hicolor-icon-theme, wrapGAppsHook, gobject-introspection }:
+, libxml2, gettext, docbook_xsl, wrapGAppsHook, gobject-introspection }:
 
 let
   pname = "dconf-editor";
@@ -15,7 +15,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson ninja vala libxslt pkgconfig wrapGAppsHook
     gettext docbook_xsl libxml2 gobject-introspection python3
-    hicolor-icon-theme # for setup-hook
   ];
 
   buildInputs = [ glib gtk3 gnome3.dconf ];

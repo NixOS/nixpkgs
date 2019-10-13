@@ -38,7 +38,7 @@ in py.pkgs.buildPythonApplication rec {
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = with py.pkgs; [
+  pythonPath = with py.pkgs; [
     botocore
     bcdoc
     s3transfer
@@ -49,6 +49,10 @@ in py.pkgs.buildPythonApplication rec {
     pyyaml
     groff
     less
+    urllib3
+    dateutil
+    jmespath
+    futures
   ];
 
   postInstall = ''

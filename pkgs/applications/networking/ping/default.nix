@@ -9,7 +9,6 @@
 , glib
 , gtk3
 , gtksourceview
-, hicolor-icon-theme
 , json-glib
 , libsoup
 , libgee
@@ -39,7 +38,6 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gtksourceview
-    hicolor-icon-theme
     json-glib
     libgee
     libsoup

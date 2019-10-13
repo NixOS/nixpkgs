@@ -12,7 +12,6 @@
 , pantheon
 , desktop-file-utils
 , xorg
-, hicolor-icon-theme
 , wrapGAppsHook
 }:
 
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    hicolor-icon-theme # for setup-hook
     meson
     ninja
     vala

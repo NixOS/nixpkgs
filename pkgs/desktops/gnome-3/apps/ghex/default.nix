@@ -6,7 +6,6 @@
 , ninja
 , python3
 , gnome3
-, hicolor-icon-theme
 , desktop-file-utils
 , appstream-glib
 , gettext
@@ -32,7 +31,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     gettext
-    hicolor-icon-theme # for setup-hook
     itstool
     meson
     ninja

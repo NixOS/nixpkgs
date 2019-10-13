@@ -1,6 +1,7 @@
 { thinkpad ? false
 , stdenv
 , fetchurl
+, fetchpatch
 , pkgconfig
 , intltool
 , libfprint-thinkpad ? null
@@ -21,6 +22,13 @@ stdenv.mkDerivation rec {
     url = "https://gitlab.freedesktop.org/libfprint/fprintd/uploads/9dec4b63d1f00e637070be1477ce63c0/fprintd-${version}.tar.xz";
     sha256 = "182gcnwb6zjwmk0dn562rjmpbk7ac7dhipbfdhfic2sn1jzis49p";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/libfprint/fprintd/merge_requests/16.patch";
+      sha256 = "1y39zsmxjll9hip8464qwhq5qg06c13pnafyafgxdph75lvhdll7";
+    })
+  ];
 
   nativeBuildInputs = [
     intltool

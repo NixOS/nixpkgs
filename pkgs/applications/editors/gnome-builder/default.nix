@@ -13,7 +13,6 @@
 , gtk-doc
 , gtk3
 , gtksourceview4
-, hicolor-icon-theme
 , json-glib
 , jsonrpc-glib
 , libdazzle
@@ -53,7 +52,6 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     gobject-introspection
     gtk-doc
-    hicolor-icon-theme
     (meson.override ({ inherit stdenv; }))
     ninja
     pkgconfig
