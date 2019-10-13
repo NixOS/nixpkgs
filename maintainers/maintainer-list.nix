@@ -4101,6 +4101,12 @@
     githubId = 1377571;
     name = "Matthew S. Daiter";
   };
+  MDeltaX = {
+    email = "mdeltax@tuta.io";
+    github = "MDeltaX";
+    githubId = 18199828;
+    name = "Maximilian König";
+  };
   mdevlamynck = {
     email = "matthias.devlamynck@mailoo.org";
     github = "mdevlamynck";

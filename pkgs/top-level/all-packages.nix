@@ -5926,6 +5926,8 @@ in
   riemann_c_client = callPackage ../tools/misc/riemann-c-client { };
   riemann-tools = callPackage ../tools/misc/riemann-tools { };
 
+  ripcord = callPackage ../applications/networking/instant-messengers/ripcord { };
+
   ripmime = callPackage ../tools/networking/ripmime {};
 
   rkflashtool = callPackage ../tools/misc/rkflashtool { };
