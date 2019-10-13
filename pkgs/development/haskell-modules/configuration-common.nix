@@ -1261,4 +1261,8 @@ self: super: {
     sha256 = "0l8zbc56dy8ilxl3k49aiknmfhgpcg3jhs72lh3dk51d0a09d9sv";
   });
 
+  # The doctests in universum-1.5.0 are broken.  The doctests in versions of universum after
+  # 1.5.0 should be fixed, so this should be able to be removed.
+  universum = dontCheck super.universum;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
