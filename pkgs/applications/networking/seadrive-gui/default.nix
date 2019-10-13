@@ -1,6 +1,6 @@
 { cmake
 , fetchFromGitHub
-, makeWrapper
+, mkDerivation
 , pkgconfig
 , stdenv
 # Package dependencies
@@ -14,7 +14,7 @@
 , seadrive-daemon
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "seadrive-gui";
   version = "1.0.7";
 
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    makeWrapper
     pkgconfig
   ];
   buildInputs = [
@@ -45,9 +44,9 @@ stdenv.mkDerivation rec {
   # seadrive-gui calls seadrive-daemon/bin/seadrive at runtime
   # seadrive-daemon implements the actual file syncing,
   # while seadrive-gui is a gui to call and monitor seadrive-daemon
-  postInstall = ''
-    wrapProgram $out/bin/seadrive-gui --prefix PATH : ${stdenv.lib.makeBinPath [ seadrive-daemon ]}
-  '';
+  qtWrapperArgs = [
+    "--prefix PATH : ${stdenv.lib.makeBinPath [ seadrive-daemon ]}"
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/haiwen/seadrive-gui;
