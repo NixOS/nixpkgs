@@ -21,7 +21,6 @@ stdenv.mkDerivation {
     "--enable-udev_rules"
     "--enable-udev_sync"
     "--enable-pkgconfig"
-    "--enable-applib"
     "--enable-cmdlib"
   ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd"
   ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
