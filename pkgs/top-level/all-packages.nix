@@ -20620,7 +20620,9 @@ in
 
   scribusUnstable = libsForQt5.callPackage ../applications/office/scribus/unstable.nix { };
 
-  seadrive-daemon = callPackage ../applications/networking/seadrive-daemon { };
+  seadrive-daemon = callPackage ../applications/networking/seadrive-daemon {
+    openssl = openssl_1_0_2;
+  };
   
   seadrive-gui = libsForQt5.callPackage ../applications/networking/seadrive-gui { };
 

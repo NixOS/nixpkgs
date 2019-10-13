@@ -8,7 +8,7 @@
 , curl
 , fuse
 , libsearpc
-, openssl_1_0_2
+, openssl
 , sqlite
 }:
 
@@ -44,8 +44,8 @@ in stdenv.mkDerivation rec {
 
     # seadrive-daemon looks for 'libssl.so.10' and 'libcrypto.so.10'
     mkdir $out/lib
-    ln -s ${lib.getLib openssl_1_0_2}/lib/libssl.so.1.0.0 $out/lib/libssl.so.10
-    ln -s ${lib.getLib openssl_1_0_2}/lib/libcrypto.so.1.0.0 $out/lib/libcrypto.so.10
+    ln -s ${lib.getLib openssl}/lib/libssl.so.1.0.0 $out/lib/libssl.so.10
+    ln -s ${lib.getLib openssl}/lib/libcrypto.so.1.0.0 $out/lib/libcrypto.so.10
   '';
 
   meta = with stdenv.lib; {
