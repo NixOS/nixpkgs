@@ -1202,7 +1202,7 @@ self: super: {
   hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_1; };
 
   # https://github.com/sol/hpack/issues/366
-  hpack = self.hpack_0_32_0;
+  hpack = self.hpack_0_33_0;
 
   # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
   graphviz = dontCheck super.graphviz;
