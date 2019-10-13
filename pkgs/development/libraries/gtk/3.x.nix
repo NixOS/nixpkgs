@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   setupHooks = [
-    ./gtk3-clean-immodules-cache.sh
-    ./drop-icon-theme-cache.sh
+    ./hooks/gtk3-clean-immodules-cache.sh
+    ./hooks/drop-icon-theme-cache.sh
   ];
 
   src = fetchurl {
@@ -60,19 +60,19 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./3.0-immodules.cache.patch
+    ./patches/3.0-immodules.cache.patch
     (fetchpatch {
       name = "Xft-setting-fallback-compute-DPI-properly.patch";
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
     })
     # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1002
-    ./01-build-Fix-path-handling-in-pkgconfig.patch
+    ./patches/01-build-Fix-path-handling-in-pkgconfig.patch
   ] ++ optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
     # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
-    ./3.0-darwin-x11.patch
+    ./patches/3.0-darwin-x11.patch
   ];
 
   mesonFlags = [
