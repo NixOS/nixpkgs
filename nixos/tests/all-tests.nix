@@ -59,6 +59,7 @@ in
   containers-physical_interfaces = handleTest ./containers-physical_interfaces.nix {};
   containers-restart_networking = handleTest ./containers-restart_networking.nix {};
   containers-tmpfs = handleTest ./containers-tmpfs.nix {};
+  containers-writable-apivfs = handleTest ./containers-writeable-apivfs.nix {};
   couchdb = handleTest ./couchdb.nix {};
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
