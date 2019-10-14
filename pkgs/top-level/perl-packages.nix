@@ -15234,6 +15234,21 @@ let
     };
   };
 
+  SmartComments = buildPerlPackage rec {
+    pname = "Smart-Comments";
+    version = "1.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Smart-Comments-1.06.tar.gz";
+      sha256 = "dcf8a312134a7c6b82926a0115d93b692472a662d28cdc3a9bdf28984ada9ee3";
+    };
+    meta = {
+      homepage = "https://github.com/neilb/Smart-Comments";
+      description = "Comments that do more than just sit there";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   SGMLSpm = buildPerlModule {
     pname = "SGMLSpm";
     version = "1.1";
