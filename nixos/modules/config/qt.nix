@@ -30,6 +30,12 @@ let
     optionalAttrs (cfg.iconTheme != null)
       { Theme = cfg.iconTheme.name; };
 
+  qt =
+    optionalAttrs (cfg.font != null)
+      { font = ''"${cfg.font.name}"''; }
+    //
+      { style = "GTK+"; };
+
   fontType = types.submodule {
     options = {
       package = mkOption {
@@ -168,6 +174,14 @@ in
 
       enable = mkEnableOption "Qt theming configuration";
 
+      qt4 = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable theming for obsolete Qt4 engine.
+        '';
+      };
+
       platformTheme = mkOption {
         type = types.enum (attrNames platforms);
         example = head (attrNames platforms);
@@ -227,7 +241,12 @@ in
 
     environment.variables = attrByPath [ cfg.platformTheme "environment" "variables" ] {} platforms;
 
-    environment.etc = attrByPath [ cfg.platformTheme "environment" "etc" ] {} platforms;
+    environment.etc = attrByPath [ cfg.platformTheme "environment" "etc" ] {} platforms // {
+      "xdg/Trolltech.conf".text =
+        toQtIni {
+          Qt = qt;
+        };
+    };
 
     environment.systemPackages = attrByPath [ cfg.platformTheme "environment" "systemPackages" ] [] platforms
       ++ optionalPackage cfg.font
