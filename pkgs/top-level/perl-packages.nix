@@ -11509,6 +11509,22 @@ let
     };
   };
 
+  MojoliciousPluginOpenAPI = buildPerlPackage {
+    pname = "Mojolicious-Plugin-OpenAPI";
+    version = "2.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-2.17.tar.gz";
+      sha256 = "c20f8b07fb8582fdbf0b540f4cfc5fe95f262743522a160526024342a7f0a1f0";
+    };
+    propagatedBuildInputs = [ JSONValidator ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/mojolicious-plugin-openapi";
+      description = "OpenAPI / Swagger plugin for Mojolicious";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MojoliciousPluginStatus = buildPerlPackage {
     pname = "Mojolicious-Plugin-Status";
     version = "1.0";
@@ -12897,6 +12913,7 @@ let
       sha256 = "1aiy7adirk3wpwlczd8sldi9k1dray0jrg1lbcrcw97zwcrkciam";
     };
     buildInputs = [ TestNoWarnings ];
+    perlPreHook = "export LD=$CC";
     meta = {
       description = "Internationalizing Domain Names in Applications (IDNA)";
     };
