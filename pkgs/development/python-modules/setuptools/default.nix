@@ -6,6 +6,7 @@
 , unzip
 , callPackage
 , bootstrapped-pip
+, lib
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,8 @@ buildPythonPackage rec {
       dst=$out/${python.sitePackages}
       mkdir -p $dst
       export PYTHONPATH="$dst:$PYTHONPATH"
+      ${lib.strings.optionalString (!stdenv.hostPlatform.isWindows)
+        "export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0"}
       ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
       wrapPythonPrograms
   '';
