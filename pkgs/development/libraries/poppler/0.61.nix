@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       url = "https://cgit.freedesktop.org/poppler/poppler/patch/?id=004e3c10df0abda214f0c293f9e269fdd979c5ee";
       sha256 = "1l8713s57xc6g81bldw934rsfm140fqc7ggd50ha5mxdl1b3app2";
     })
+    ./0.61-CVE-2019-9959.patch
   ];
 
   buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;
