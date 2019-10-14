@@ -110,11 +110,11 @@ stdenv.mkDerivation rec {
 
   passthru.linuxHeaders = linuxHeaders;
 
-  meta = {
+  meta = with lib; {
     description = "An efficient, small, quality libc implementation";
     homepage    = "http://www.musl-libc.org";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }
