@@ -6943,7 +6943,6 @@ broken-packages:
   - ls-usb
   - lscabal
   - LslPlus
-  - lsp-test
   - lsystem
   - ltext
   - ltk
