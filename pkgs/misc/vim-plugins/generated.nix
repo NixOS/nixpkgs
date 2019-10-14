@@ -4095,6 +4095,17 @@ let
     };
   };
 
+  vim-manpager = buildVimPluginFrom2Nix {
+    pname = "vim-manpager";
+    version = "2017-05-08";
+    src = fetchFromGitHub {
+      owner = "lambdalisue";
+      repo = "vim-manpager";
+      rev = "25bdd9448651a7669659b1b8d8d7a82acdfbf8af";
+      sha256 = "0d7rg4lvyxr4v34bimxpdkynmvs606fqvv0qpi7g139ng9hv6wqm";
+    };
+  };
+
   vim-markdown = buildVimPluginFrom2Nix {
     pname = "vim-markdown";
     version = "2019-07-09";
