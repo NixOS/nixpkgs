@@ -532,6 +532,8 @@
        is set to <literal>/var/lib/gitlab/state</literal>, <literal>gitlab</literal> and all parent directories
        must be owned by either <literal>root</literal> or the user specified in <option>services.gitlab.user</option>.
      </para>
+   </listitem>
+   <listitem>
      <para>
       The <option>networking.useDHCP</option> option is unsupported in combination with
       <option>networking.useNetworkd</option> in anticipation of defaulting to it by default.
