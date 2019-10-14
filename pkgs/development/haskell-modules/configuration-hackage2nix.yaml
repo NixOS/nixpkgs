@@ -4398,7 +4398,6 @@ broken-packages:
   - ekg-elasticsearch
   - ekg-influxdb
   - ekg-log
-  - ekg-prometheus-adapter
   - ekg-push
   - ekg-rrd
   - elevator
@@ -8078,7 +8077,6 @@ broken-packages:
   - projectile
   - prolog-graph
   - prolog-graph-lib
-  - prometheus
   - prometheus-effect
   - promise
   - pronounce
