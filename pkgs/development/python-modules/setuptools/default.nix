@@ -6,11 +6,17 @@
 , unzip
 , callPackage
 , bootstrapped-pip
+, lib
+, pipInstallHook
+, setuptoolsBuildHook
 }:
 
 buildPythonPackage rec {
   pname = "setuptools";
   version = "41.2.0";
+  # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
+  # Instead, we override it to remove setuptools to avoid a circular dependency.
+  # The same is done for pip and the pipInstallHook.
   format = "other";
 
   src = fetchPypi {
@@ -19,18 +25,17 @@ buildPythonPackage rec {
     sha256 = "66b86bbae7cc7ac2e867f52dc08a6bd064d938bac59dfec71b9b565dd36d6012";
   };
 
-  # There is nothing to build
-  dontBuild = true;
+  nativeBuildInputs = [
+    bootstrapped-pip
+    (pipInstallHook.override{pip=null;})
+    (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
+  ];
 
-  nativeBuildInputs = [ bootstrapped-pip ];
-
-  installPhase = ''
-      dst=$out/${python.sitePackages}
-      mkdir -p $dst
-      export PYTHONPATH="$dst:$PYTHONPATH"
-      ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
-      wrapPythonPrograms
+  preBuild = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+    export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '';
+
+  pipInstallFlags = [ "--ignore-installed" ];
 
   # Adds setuptools to nativeBuildInputs causing infinite recursion.
   catchConflicts = false;
