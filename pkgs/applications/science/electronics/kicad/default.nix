@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
     templates = mkLib version "templates" "1bagb0b94cjh7zp9z0h23b60j45kwxbsbb7b2bdk98dmph8lmzbb" {
       meta.license = licenses.cc-by-sa-40;
     };
-    packages3d = mkLib version "packages3d" "1xla9k1rnrs00fink90y9qz766iks5lyqwnf1h2i508djqhqm5zi" {
+    packages3d = mkLib version "packages3d" "0h2qjj8vf33jz6jhqdz90c80h5i1ydgfqnns7rn0fqphlnscb45g" {
       hydraPlatforms = []; # this is a ~1 GiB download, occupies ~5 GiB in store
       meta.license = licenses.cc-by-sa-40;
     };
