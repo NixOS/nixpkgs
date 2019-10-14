@@ -11278,6 +11278,23 @@ let
     };
   };
 
+  MojoSQLite = buildPerlModule {
+    pname = "Mojo-SQLite";
+    version = "3.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.002.tar.gz";
+      sha256 = "16dn0p14i6r4c8aspvkp7rfry3zy7kr2ffcmncj0pqygk62miinp";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstract URI URIdb ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Mojo-SQLite";
+      description = "A tiny Mojolicious wrapper for SQLite";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MojoIOLoopForkCall = buildPerlModule {
     pname = "Mojo-IOLoop-ForkCall";
     version = "0.20";
