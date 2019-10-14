@@ -113,6 +113,8 @@
 
     iaia = callPackage ./iaia.nix {};
 
+    idris2 = callPackage ./idris2 {};
+
     idrishighlighter = callPackage ./idrishighlighter.nix {};
 
     idrisscript = callPackage ./idrisscript.nix {};

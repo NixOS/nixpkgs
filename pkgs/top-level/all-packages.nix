@@ -8013,6 +8013,8 @@ in
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
+  idris2 = idrisPackages.idris2;
+
   intel-graphics-compiler = callPackage ../development/compilers/intel-graphics-compiler { };
 
   intercal = callPackage ../development/compilers/intercal { };

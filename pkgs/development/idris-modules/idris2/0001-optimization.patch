@@ -1,0 +1,16 @@
+diff --git a/idris2.ipkg b/idris2.ipkg
+index 6963bdc..457c353 100644
+--- a/idris2.ipkg
++++ b/idris2.ipkg
+@@ -124,9 +124,9 @@ modules =
+ 
+ sourcedir = src
+ executable = idris2
+--- opts = "--cg-opt -O2 --partial-eval"
++opts = "--cg-opt -O2 --partial-eval"
+ -- opts = "--cg-opt -pg --partial-eval"
+-opts = "--partial-eval"
++-- opts = "--partial-eval"
+ -- opts = "--partial-eval --cg-opt -lws2_32" -- windows
+ 
+ main = Idris.Main
