@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-netbook";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00n162bskbvxhy4k2w14f9zwlsg3wgi43228ssx7sc2p95psmm64";
+    sha256 = "0m38v2276s2d3zs7smxyf70nyl7bcwp5665zgva28lvs8ip3gijx";
   };
 
   nativeBuildInputs = [
