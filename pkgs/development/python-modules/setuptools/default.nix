@@ -20,18 +20,20 @@ buildPythonPackage rec {
     sha256 = "66b86bbae7cc7ac2e867f52dc08a6bd064d938bac59dfec71b9b565dd36d6012";
   };
 
-  # There is nothing to build
-  dontBuild = true;
-
   nativeBuildInputs = [ bootstrapped-pip ];
+
+  buildPhase = ''
+      ${lib.strings.optionalString (!stdenv.hostPlatform.isWindows)
+        "export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0"}
+      pip wheel --no-cache --no-index .
+  '';
 
   installPhase = ''
       dst=$out/${python.sitePackages}
       mkdir -p $dst
       export PYTHONPATH="$dst:$PYTHONPATH"
-      ${lib.strings.optionalString (!stdenv.hostPlatform.isWindows)
-        "export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0"}
-      ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
+      mkdir build-tmp
+      pip install --prefix "$out" --ignore-installed --no-cache --no-index --build ./build-tmp ./*.whl
       wrapPythonPrograms
   '';
 
