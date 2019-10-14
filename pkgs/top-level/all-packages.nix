@@ -6834,10 +6834,7 @@ in
 
   xe = callPackage ../tools/system/xe { };
 
-  testdisk = libsForQt5.callPackage ../tools/system/testdisk {
-    enableExtFs = !stdenv.isDarwin;
-    enableNtfs = !stdenv.isDarwin;
-  };
+  testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
   testdisk-qt = testdisk.override { enableQt = true; };
 

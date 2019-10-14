@@ -7,8 +7,8 @@
 , libjpeg
 , zlib
 , libewf
-, enableNtfs ? false, ntfs3g ? null
-, enableExtFs ? false, e2fsprogs ? null
+, enableNtfs ? stdenv.isDarwin, ntfs3g ? null
+, enableExtFs ? stdenv.isDarwin, e2fsprogs ? null
 , enableQt ? false, qtbase ? null, qttools ? null, qwt ? null
 }:
 
@@ -65,4 +65,3 @@ assert enableQt -> qwt != null;
     maintainers = with maintainers; [ fgaz eelco ];
   };
 }
-
