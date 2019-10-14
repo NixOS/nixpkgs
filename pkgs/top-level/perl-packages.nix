@@ -3508,6 +3508,23 @@ let
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
+  CryptPBKDF2 = buildPerlPackage {
+    pname = "Crypt-PBKDF2";
+    version = "0.161520";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/Crypt-PBKDF2-0.161520.tar.gz";
+      sha256 = "97dfa79a309a086e184a4e61047f8a10ffb3db051025e7d222a25f19130ba417";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ DigestHMAC DigestSHA3 Moo TryTiny TypeTiny namespaceautoclean strictures ];
+    meta = {
+      homepage = "https://metacpan.org/release/Crypt-PBKDF2";
+      description = "The PBKDF2 password hash algorithm";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptEd25519 = buildPerlPackage {
     pname = "Crypt-Ed25519";
     version = "1.04";
@@ -5122,6 +5139,21 @@ let
     meta = {
       description = "Perl interface to the SHA-1 algorithm";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DigestSHA3 = buildPerlPackage {
+    pname = "Digest-SHA3";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSHELOR/Digest-SHA3-1.04.tar.gz";
+      sha256 = "4a68b67c5034f40fbb1344b304cd66caaa5e320eb523005201cc24f76d470c14";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/Digest-SHA3";
+      description = "Perl extension for SHA-3";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
