@@ -205,19 +205,16 @@ index 0000000..9851f32
 +
 +]) dnl AX_CHECK_VSCRIPT
 diff --git a/src/Makefile.am b/src/Makefile.am
-index 8384b92..2ca6f1b 100644
+index 8384b92..e2c8e15 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -65,8 +65,14 @@ libbsd_la_LIBADD = \
+@@ -65,8 +65,11 @@ libbsd_la_LIBADD = \
  	$(ARC4RANDOM_ATFORK_LIBS) \
  	$(nil)
  libbsd_la_LDFLAGS = \
 -	-Wl,--version-script=$(srcdir)/libbsd.map \
  	-version-number $(LIBBSD_ABI)
 +if HAVE_VSCRIPT
-+libbsd_la_LDFLAGS += $(VSCRIPT_LDFLAGS),@srcdir@/libbsd.map
-+endif
-+if HAVE_VSCRIPT_COMPLEX
 +libbsd_la_LDFLAGS += $(VSCRIPT_LDFLAGS),@srcdir@/libbsd.map
 +endif
 +
