@@ -4757,6 +4757,23 @@ let
     };
   };
 
+  DBIxClassInflateColumnSerializer = buildPerlPackage {
+    pname = "DBIx-Class-InflateColumn-Serializer";
+    version = "0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MR/MRUIZ/DBIx-Class-InflateColumn-Serializer-0.09.tar.gz";
+      sha256 = "6262b4871db6a6c45a0cbe7cde8f1b890b22c291add4ecc40caaeeab5a3a6f50";
+    };
+    buildInputs = [ DBDSQLite TestException ];
+    propagatedBuildInputs = [ DBIxClass JSONMaybeXS YAML namespaceclean ];
+    meta = {
+      homepage = "https://metacpan.org/pod/DBIx::Class::InflateColumn::Serializer";
+      description = "Inflators to serialize data structures for DBIx::Class";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   DBIxClassIntrospectableM2M = buildPerlPackage {
     pname = "DBIx-Class-IntrospectableM2M";
     version = "0.001002";
