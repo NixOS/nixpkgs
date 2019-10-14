@@ -20,7 +20,12 @@ stdenv.mkDerivation rec {
   # there are missing dependencies in the Makefile, causing sporadic build failures
   enableParallelBuilding = false;
 
-  doCheck = true;
+  # The ispc test suite is brittle because it compares results to
+  # results computed with C.  This is sensitive to things like
+  # non-associative floating point summation, using the x87 FPU, and
+  # vagaries of the system math library (functions like sqrt are
+  # apparently not guaranteed by IEEE to be bit-exact).
+  doCheck = false;
 
   buildInputs = with llvmPackages; [
     which
