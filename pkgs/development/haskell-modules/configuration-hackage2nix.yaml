@@ -2584,6 +2584,8 @@ package-maintainers:
     - shakespeare
   abbradar:
     - Agda
+  roberth:
+    - arion-compose
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
@@ -2972,7 +2974,6 @@ broken-packages:
   - arguedit
   - ariadne
   - arion
-  - arion-compose
   - arith-encode
   - armada
   - armor
