@@ -1,14 +1,14 @@
-From b4fe78eb31f30ef499970b2ca7e7947c025588af Mon Sep 17 00:00:00 2001
+From 35e80f303ae6a6c4c53ba8eb3d84574cc03d68d8 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:35:58 -0500
-Subject: [PATCH 07/11] qtbase-xcursor
+Subject: [PATCH 07/12] qtbase-xcursor
 
 ---
  src/plugins/platforms/xcb/qxcbcursor.cpp | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/plugins/platforms/xcb/qxcbcursor.cpp b/src/plugins/platforms/xcb/qxcbcursor.cpp
-index fbadab4d..c83ce0af 100644
+index fbadab4d50..c83ce0af5b 100644
 --- a/src/plugins/platforms/xcb/qxcbcursor.cpp
 +++ b/src/plugins/platforms/xcb/qxcbcursor.cpp
 @@ -317,10 +317,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
@@ -25,5 +25,5 @@ index fbadab4d..c83ce0af 100644
          }
          if (xcursorFound) {
 -- 
-2.22.1
+2.23.GIT
 
