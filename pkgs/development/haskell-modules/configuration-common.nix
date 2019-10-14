@@ -15,6 +15,11 @@ with haskellLib;
 
 self: super: {
 
+  # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
+  # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
+  # store. Testing is done upstream.
+  arion-compose = dontCheck super.arion-compose;
+
   # This used to be a core package provided by GHC, but then the compiler
   # dropped it. We define the name here to make sure that old packages which
   # depend on this library still evaluate (even though they won't compile
