@@ -19,10 +19,6 @@ in {
   # mostly for moving and deleting files from the build directory
   # : lines
 , postInstall
-  # packages with setup hooks that should be run
-  # (see definition of `makeSetupHook`)
-  # : list drv
-, setupHooks ? []
   # : list Maintainer
 , maintainers ? []
 
@@ -66,8 +62,6 @@ in stdenv.mkDerivation {
 
   dontDisableStatic = true;
   enableParallelBuilding = true;
-
-  nativeBuildInputs = setupHooks;
 
   configureFlags = configureFlags ++ [
     "--enable-absolute-paths"
