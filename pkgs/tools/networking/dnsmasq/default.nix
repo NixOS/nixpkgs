@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus, nettle
+{ stdenv, fetchurl, pkgconfig, dbus, nettle, fetchpatch
 , libidn, libnetfilter_conntrack }:
 
 with stdenv.lib;
@@ -18,6 +18,15 @@ stdenv.mkDerivation rec {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
     sha256 = "1fv3g8vikj3sn37x1j6qsywn09w1jipvlv34j3q5qrljbrwa5ayd";
   };
+
+  patches = [
+    # Fix build with nettle 3.5
+    (fetchpatch {
+      name = "nettle-3.5.patch";
+      url = "thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=ab73a746a0d6fcac2e682c5548eeb87fb9c9c82e";
+      sha256 = "1hnixij3jp1p6zc3bx2dr92yyf9jp1ahhl9hiiq7bkbhbrw6mbic";
+    })
+  ];
 
   preBuild = ''
     makeFlagsArray=("COPTS=${copts}")
