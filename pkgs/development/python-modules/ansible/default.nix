@@ -14,6 +14,7 @@
 , dopy
 , windowsSupport ? false
 , pywinrm
+, hcloud # hcloud plugin
 }:
 
 buildPythonPackage rec {
@@ -39,7 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pycrypto paramiko jinja2 pyyaml httplib2 boto
-    six netaddr dnspython jmespath dopy
+    six netaddr dnspython jmespath dopy hcloud
   ] ++ lib.optional windowsSupport pywinrm;
 
   # dificult to test
