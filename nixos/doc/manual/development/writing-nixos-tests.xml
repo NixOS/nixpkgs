@@ -183,6 +183,13 @@ startAll;
       Take a picture of the display of the virtual machine, in PNG format. The
       screenshot is linked from the HTML log.
      </para>
+     <note>
+      <para>
+       Using characters from the <literal>\w</literal> regex class in the
+       screenshot name will place the screenshot in the build result directory,
+       otherwise interpreted as an absolute path on the host machine.
+      </para>
+     </note>
     </listitem>
    </varlistentry>
    <varlistentry>
