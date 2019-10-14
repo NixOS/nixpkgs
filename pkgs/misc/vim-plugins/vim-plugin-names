@@ -366,6 +366,7 @@ Shougo/neosnippet.vim
 Shougo/neoyank.vim
 Shougo/tabpagebuffer.vim
 Shougo/unite.vim
+Shougo/vimfiler.vim
 Shougo/vimproc.vim
 Shougo/vimshell.vim
 shumphrey/fugitive-gitlab.vim
