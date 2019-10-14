@@ -17335,7 +17335,7 @@ in
   source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
   source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
 
-  spleen = callPackage ../data/fonts/spleen { };
+  spleen = callPackage ../data/fonts/spleen { inherit (xorg) mkfontdir; };
 
   stilo-themes = callPackage ../data/themes/stilo { };
 
