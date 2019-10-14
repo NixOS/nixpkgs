@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, parallel
-, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
+, sassc, inkscape, libxml2, glib, gtk2, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     sha256 = "1sqmydvx36f6r4snw22s2q4dvcyg30jd7kg7dibpzqn3njfkkfag";
   };
 
-  preferLocalBuild = true;
-
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -42,12 +40,11 @@ stdenv.mkDerivation rec {
   ++ lib.optionals mateSupport [ gtk3 marco ]
   ++ lib.optional telegramSupport zip;
 
-  buildInputs = [
-    gdk-pixbuf
-    librsvg
+  # GTK2 engines must be on the system path at runtime to be loaded.
+  propagatedUserEnvPkgs = [
+    gtk2
+    gtk-engine-murrine
   ];
-
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   postPatch = "patchShebangs .";
 
