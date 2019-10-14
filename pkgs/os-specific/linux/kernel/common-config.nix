@@ -99,8 +99,6 @@ let
     networking = {
       NET                = yes;
       IP_PNP             = no;
-      NETFILTER          = yes;
-      NETFILTER_ADVANCED = yes;
       IP_VS_PROTO_TCP    = yes;
       IP_VS_PROTO_UDP    = yes;
       IP_VS_PROTO_ESP    = yes;
@@ -145,12 +143,25 @@ let
       KEY_DH_OPERATIONS = whenAtLeast "4.7" yes;
 
       # needed for nftables
-      NF_TABLES_INET              = whenAtLeast "4.17" yes;
-      NF_TABLES_NETDEV            = whenAtLeast "4.17" yes;
-      NF_TABLES_IPV4              = whenAtLeast "4.17" yes;
-      NF_TABLES_ARP               = whenAtLeast "4.17" yes;
-      NF_TABLES_IPV6              = whenAtLeast "4.17" yes;
-      NF_TABLES_BRIDGE            = whenBetween "4.17" "5.3" yes;
+      # Networking Options
+      NETFILTER                   = yes;
+      NETFILTER_ADVANCED          = yes;
+      # Core Netfilter Configuration
+      NF_CONNTRACK_ZONES          = yes;
+      NF_CONNTRACK_EVENTS         = yes;
+      NF_CONNTRACK_TIMEOUT        = yes;
+      NF_CONNTRACK_TIMESTAMP      = yes;
+      NETFILTER_NETLINK_GLUE_CT   = yes;
+      NF_TABLES_INET              = whenAtLeast "4.19" yes;
+      NF_TABLES_NETDEV            = whenAtLeast "4.19" yes;
+      # IP: Netfilter Configuration
+      NF_TABLES_IPV4              = yes;
+      NF_TABLES_ARP               = whenAtLeast "4.19" yes;
+      # IPv6: Netfilter Configuration
+      NF_TABLES_IPV6              = yes;
+      # Bridge Netfilter Configuration
+      NF_TABLES_BRIDGE            = mkMerge [ (whenBetween "4.19" "5.3" yes)
+                                              (whenAtLeast "5.3" module) ];
 
       # needed for ss
       INET_DIAG         = yes;
