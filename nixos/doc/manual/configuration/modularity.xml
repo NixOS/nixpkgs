@@ -114,7 +114,7 @@ true
 </screen>
   Interactive exploration of the configuration is possible using <command>nix
   repl</command>, a read-eval-print loop for Nix expressions. A typical use:
-<screen>
+ <screen>
 <prompt>$ </prompt>nix repl '&lt;nixpkgs/nixos>'
 
 <prompt>nix-repl> </prompt>config.<xref linkend="opt-networking.hostName"/>
@@ -122,7 +122,26 @@ true
 
 <prompt>nix-repl> </prompt>map (x: x.hostName) config.<xref linkend="opt-services.httpd.virtualHosts"/>
 [ "example.org" "example.gov" ]
+
+# in which files is this particular option set 
+<prompt> nix-repl> </prompt> :p options.environment.shellAliases.files
+[ "/home/danbst/power-profile/profiles/base.nix" "/nix/var/nix/profiles/per-user/root/channels/nixpkgs/nixos/modules/config/shells-environment.nix" ]                   
+
+# what values are defined in respective files
+</prompt>nix-repl> </prompt>:p options.environment.shellAliases.definitions
+[ { nix-env = /home/danbst/power-profile/experimental/declarative-env.sh; t = "/home/danbst/dev/todo.txt-cli/todo.sh"; } { l = { _type = "override"; content = "ls -alh"; priority = 1000; }; ll = { _type = "override"; content = "ls -l"; priority = 1000; }; ls = { _type = "override"; content = "ls --color=tty"; priority = 1000; }; } ]   
+
+# in which files is this option created (declared)
+<prompt> nix-repl> </prompt>:p options.environment.shellAliases.declarations
+[ "/nix/var/nix/profiles/per-user/root/channels/nixpkgs/nixos/modules/config/shells-environment.nix" ]                                                                  
+
+
+# read option description in-place
+<prompt> nix-repl> </prompt> options.environment.shellAliases.description
+"An attribute set that maps aliases (the top level attribute names in\nthis option) to command strings or directly to build outputs. The\naliases are added to all users' shells.\nAliases mapped to <code>null</code> are ignored.\n"
+
 </screen>
+  
  </para>
 
  <para>
