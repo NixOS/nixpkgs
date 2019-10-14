@@ -21,6 +21,8 @@ let
       # .note.GNU-stack section, and if that section is missing from any object,
       # the linker will make the stack executable.
       "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
+      # libressl will append this to the regular prefix for libdir
+      "-DCMAKE_INSTALL_LIBDIR=lib"
     ];
 
     # The autoconf build is broken as of 2.9.1, resulting in the following error:
