@@ -47,6 +47,7 @@ christoomey/vim-tmux-navigator
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
+cohama/lexima.vim
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
 dag/vim2hs
@@ -175,6 +176,7 @@ konfekt/fastfold
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
 lambdalisue/vim-gista
+lambdalisue/vim-manpager
 lambdalisue/vim-pager
 latex-box-team/latex-box
 leafgarland/typescript-vim
@@ -366,6 +368,7 @@ Shougo/neosnippet.vim
 Shougo/neoyank.vim
 Shougo/tabpagebuffer.vim
 Shougo/unite.vim
+Shougo/vimfiler.vim
 Shougo/vimproc.vim
 Shougo/vimshell.vim
 shumphrey/fugitive-gitlab.vim
