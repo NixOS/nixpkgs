@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "05qzak1mssnxcgdrafifxh9w86a4ha69qabkg4bsigk499xyxggw";
   };
 
+  patches = [
+    (fetchurl {
+      name = "CVE-2019-16275.patch";
+      url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
+      sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
+    })
+  ];
+
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
   extraConfig = ''
