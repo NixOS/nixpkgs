@@ -64,6 +64,8 @@ self: super: {
   tasty-hedgehog = doJailbreak super.tasty-hedgehog;
   test-framework = doJailbreak super.test-framework;
   th-expand-syns = doJailbreak super.th-expand-syns;
+  # TODO: remove when upstream accepts https://github.com/snapframework/io-streams-haproxy/pull/17
+  io-streams-haproxy = doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
 
   # use latest version to fix the build
   hackage-db = self.hackage-db_2_1_0;
