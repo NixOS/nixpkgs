@@ -31,7 +31,6 @@ assert enableQt -> qwt != null;
   buildInputs = [
     ncurses
     libuuid
-    pkgconfig
     libjpeg
     zlib
     libewf
@@ -39,6 +38,8 @@ assert enableQt -> qwt != null;
   ++ stdenv.lib.optional enableNtfs ntfs3g
   ++ stdenv.lib.optional enableExtFs e2fsprogs
   ++ stdenv.lib.optional enableQt [ qtbase qttools qwt ];
+
+  nativeBuildInputs = [ pkgconfig ];
 
   NIX_CFLAGS_COMPILE="-Wno-unused";
 
