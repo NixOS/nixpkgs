@@ -11806,6 +11806,8 @@ in
 
   libclxclient = callPackage ../development/libraries/libclxclient  { };
 
+  libco-canonical = callPackage ../development/libraries/libco-canonical { };
+
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
@@ -13492,6 +13494,8 @@ in
   qxt = callPackage ../development/libraries/qxt {};
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
+
+  raft-canonical = callPackage ../development/libraries/raft-canonical { };
 
   range-v3 = callPackage ../development/libraries/range-v3 {};
 
