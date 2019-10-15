@@ -807,7 +807,7 @@
     "venstar" = ps: with ps; [  ];
     "vera" = ps: with ps; [  ];
     "verisure" = ps: with ps; [  ];
-    "version" = ps: with ps; [  ];
+    "version" = ps: with ps; [ pyhaversion ];
     "vesync" = ps: with ps; [  ];
     "viaggiatreno" = ps: with ps; [  ];
     "vicare" = ps: with ps; [  ];
