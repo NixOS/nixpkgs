@@ -317,7 +317,7 @@
       monetdb = 290;
       restic = 291;
       openvpn = 292;
-      meguca = 293;
+      # meguca = 293; # removed 2019-10-15
       yarn = 294;
       hdfs = 295;
       mapred = 296;
@@ -618,7 +618,7 @@
       monetdb = 290;
       restic = 291;
       openvpn = 292;
-      meguca = 293;
+      # meguca = 293; # removed 2019-10-15
       yarn = 294;
       hdfs = 295;
       mapred = 296;
