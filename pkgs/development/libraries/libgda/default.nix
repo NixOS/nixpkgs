@@ -48,6 +48,6 @@ assert postgresSupport -> postgresql != null;
     homepage = https://www.gnome-db.org/;
     license = [ licenses.lgpl2 licenses.gpl2 ];
     maintainers = gnome3.maintainers;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
