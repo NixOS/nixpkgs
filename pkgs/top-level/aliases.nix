@@ -344,6 +344,7 @@ mapAliases ({
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
+  spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_60 instead."; # added 2019-10-16
   sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   squid4 = squid;  # added 2019-08-22
