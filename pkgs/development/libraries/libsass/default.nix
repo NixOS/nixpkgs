@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsass";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    sha256 = "1599j2lbsygy3883x9si7rbad1pkjhl6y72aimaapcv90ga5kxkm";
+    sha256 = "0z09nv08vcajvv70h8355zsnqw1w8d0hwiizym3ax1zvzkdx7941";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
