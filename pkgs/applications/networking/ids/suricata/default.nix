@@ -16,6 +16,7 @@
 , libpcap
 , libyaml
 , luajit
+, lz4
 , nspr
 , nss
 , pcre
@@ -29,11 +30,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "4.1.4";
+  version = "4.1.5";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    sha256 = "02901wjf90171rhkymcgp0h48hkn3wv8iwrhz4d8ppraz68hv99d";
+    sha256 = "0jy738rs3ds1gbn8hv26ck23z9k6pjrjxdpavkyn7znpbi9zdrff";
   };
 
   nativeBuildInputs = [
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     libpcap
     libyaml
     luajit
+    lz4
     nspr
     nss
     pcre
@@ -86,7 +88,7 @@ stdenv.mkDerivation rec {
     "--with-libnet-libraries=${libnet}/lib"
   ]
   ++ lib.optional hyperscanSupport [
-    "--with-libhs-includes=${hyperscan}/include"
+    "--with-libhs-includes=${hyperscan.dev}/include/hs"
     "--with-libhs-libraries=${hyperscan}/lib"
   ]
   ++ lib.optional redisSupport [ "--enable-hiredis" ]
