@@ -1,7 +1,7 @@
 [
   "@angular/cli"
 , "@antora/cli"
-, "@antora/site-generator-default" 
+, "@antora/site-generator-default"
 , "@vue/cli"
 , "@webassemblyjs/cli"
 , "@webassemblyjs/repl"
@@ -10,8 +10,6 @@
 , "@webassemblyjs/wast-refmt"
 , "alloy"
 , "asar"
-, "azure-cli"
-, "azure-functions-core-tools"
 , "bash-language-server"
 , "bower"
 , "bower2nix"
