@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, google_api_core, grpcio, pytest, mock }:
+, google_api_core, grpcio, pytest, mock, setuptools }:
 
 buildPythonPackage rec {
   pname = "google-cloud-core";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "d85b1aaaf3bad9415ad1d8ee5eadce96d7007a82f13ce0a0629a003a11e83f29";
   };
 
-  propagatedBuildInputs = [ google_api_core grpcio ];
+  propagatedBuildInputs = [ google_api_core grpcio setuptools ];
   checkInputs = [ pytest mock ];
 
   checkPhase = ''
