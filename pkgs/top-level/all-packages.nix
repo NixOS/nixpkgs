@@ -6285,8 +6285,6 @@ in
 
   syntex = callPackage ../tools/graphics/syntex {};
 
-  fusesmb = callPackage ../tools/filesystems/fusesmb { samba = samba3; };
-
   sl = callPackage ../tools/misc/sl { stdenv = gccStdenv; };
 
   socat = callPackage ../tools/networking/socat { };
@@ -15286,25 +15284,12 @@ in
 
   deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
 
-  samba3 = callPackage ../servers/samba/3.x.nix { };
-
   samba4 = callPackage ../servers/samba/4.x.nix {
     rpcgen = netbsd.rpcgen;
     python = python3;
   };
 
   samba = samba4;
-
-  # A lightweight Samba 3, useful for non-Linux-based OSes.
-  samba3_light = lowPrio (samba3.override {
-    pam = null;
-    fam = null;
-    cups = null;
-    acl = null;
-    openldap = null;
-    # libunwind 1.0.1 is not ported to GNU/Hurd.
-    libunwind = null;
-  });
 
   samba4Full = lowPrio (samba4.override {
     enableLDAP = true;

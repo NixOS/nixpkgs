@@ -119,7 +119,7 @@ in
         type = types.package;
         default = pkgs.samba;
         defaultText = "pkgs.samba";
-        example = literalExample "pkgs.samba3";
+        example = literalExample "pkgs.samba4Full";
         description = ''
           Defines which package should be used for the samba server.
         '';

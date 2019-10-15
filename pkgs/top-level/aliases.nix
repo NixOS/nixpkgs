@@ -110,6 +110,7 @@ mapAliases ({
   foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
+  fusesmb = throw "fusesmb is abandoned by upstream"; # added 2019-10-15
   gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
@@ -322,6 +323,8 @@ mapAliases ({
   s6PortableUtils = s6-portable-utils; # added 2018-07-23
   sagemath = sage; # added 2018-10-27
   sam = deadpixi-sam; # added 2018-04-25
+  samba3 = throw "Samba 3 is discontinued, please switch to samba4"; # added 2019-10-15
+  samba3_light = throw "Samba 3 is discontinued, please switch to samba4"; # added 2019-10-15
   sambaMaster = throw "removed 2019-09-13: outdated and no longer needed";
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
