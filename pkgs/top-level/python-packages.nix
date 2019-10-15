@@ -5001,6 +5001,8 @@ in {
 
   tadasets = callPackage ../development/python-modules/tadasets { };
 
+  tasklib = callPackage ../development/python-modules/tasklib { };
+
   tempita = callPackage ../development/python-modules/tempita { };
 
   terminado = callPackage ../development/python-modules/terminado { };
