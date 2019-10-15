@@ -16,6 +16,7 @@
 , libpcap
 , libyaml
 , luajit
+, lz4
 , nspr
 , nss
 , pcre
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     libpcap
     libyaml
     luajit
+    lz4
     nspr
     nss
     pcre
@@ -86,7 +88,7 @@ stdenv.mkDerivation rec {
     "--with-libnet-libraries=${libnet}/lib"
   ]
   ++ lib.optional hyperscanSupport [
-    "--with-libhs-includes=${hyperscan}/include"
+    "--with-libhs-includes=${hyperscan.dev}/include/hs"
     "--with-libhs-libraries=${hyperscan}/lib"
   ]
   ++ lib.optional redisSupport [ "--enable-hiredis" ]
