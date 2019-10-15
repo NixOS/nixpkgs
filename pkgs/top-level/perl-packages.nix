@@ -743,6 +743,23 @@ let
     };
   };
 
+  AuthenOATH = buildPerlPackage {
+    pname = "Authen-OATH";
+    version = "2.0.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/Authen-OATH-2.0.1.tar.gz";
+      sha256 = "1a813dbdc05c3fbd9dd39dbcfd85e2cfb0ba3d0f652cf6b26ec83ab8146ddc77";
+    };
+    buildInputs = [ TestNeeds ];
+    propagatedBuildInputs = [ DigestHMAC Moo TypeTiny ];
+    meta = {
+      homepage = "https://github.com/oalders/authen-oath";
+      description = "OATH One Time Passwords";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   AuthenPassphrase = buildPerlModule {
     pname = "Authen-Passphrase";
     version = "0.008";
@@ -2121,6 +2138,21 @@ let
     };
   };
 
+  CLASS = buildPerlPackage {
+    pname = "CLASS";
+    version = "1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSCHWERN/CLASS-1.00.tar.gz";
+      sha256 = "c5185620815701b3fec21314ccd8c5693e6bfd519431527da3370a8164220671";
+    };
+    meta = {
+      homepage = "https://metacpan.org/pod/CLASS";
+      description = "Alias for __PACKAGE__";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ClassAccessor = buildPerlPackage {
     pname = "Class-Accessor";
     version = "0.51";
@@ -2973,6 +3005,22 @@ let
     };
   };
 
+  ConvertBase32 = buildPerlPackage {
+    pname = "Convert-Base32";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IK/IKEGAMI/Convert-Base32-0.06.tar.gz";
+      sha256 = "4ba82c167c41f455aa8284738727e4c94a2ebcb1c4ce797f6fda07245a642115";
+    };
+    buildInputs = [ TestException ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Convert::Base32";
+      description = "Encoding and decoding of base32 strings";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ConvertColor = buildPerlModule {
     pname = "Convert-Color";
     version = "0.11";
@@ -3477,6 +3525,23 @@ let
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
+  CryptPBKDF2 = buildPerlPackage {
+    pname = "Crypt-PBKDF2";
+    version = "0.161520";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/Crypt-PBKDF2-0.161520.tar.gz";
+      sha256 = "97dfa79a309a086e184a4e61047f8a10ffb3db051025e7d222a25f19130ba417";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ DigestHMAC DigestSHA3 Moo TryTiny TypeTiny namespaceautoclean strictures ];
+    meta = {
+      homepage = "https://metacpan.org/release/Crypt-PBKDF2";
+      description = "The PBKDF2 password hash algorithm";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptEd25519 = buildPerlPackage {
     pname = "Crypt-Ed25519";
     version = "1.04";
@@ -3783,6 +3848,22 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/Data-Integer-0.006.tar.gz;
       sha256 = "0m53zxhx9sn49yqh7azlpyy9m65g54v8cd2ha98y77337gg7xdv3";
+    };
+  };
+
+  DataMessagePack = buildPerlPackage {
+    pname = "Data-MessagePack";
+    version = "1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SY/SYOHEX/Data-MessagePack-1.00.tar.gz";
+      sha256 = "c9f0eeaf56ee4dfd509eccba2dd838921aebdf186ba60de166443ffc4b0ba1a2";
+    };
+    buildInputs = [ FileCopyRecursive TestRequires TestLeakTrace ];
+    meta = {
+      homepage = "https://github.com/msgpack/msgpack-perl";
+      description = "MessagePack serializing/deserializing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -4544,6 +4625,39 @@ let
     };
   };
 
+  DeviceMAC = buildPerlPackage {
+    pname = "Device-MAC";
+    version = "1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JASONK/Device-MAC-1.00.tar.gz";
+      sha256 = "c42182a9a8489a314cbfe6e1c8452f32b3b626aa6c89fee1d8925e6dfb64fad5";
+    };
+    buildInputs = [ TestMost TestDifferences TestException TestWarn TestDeep ];
+    propagatedBuildInputs = [ DeviceOUI Moose ];
+    meta = {
+      description = "Handle hardware MAC Addresses (EUI-48 and EUI-64)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  DeviceOUI = buildPerlPackage {
+    pname = "Device-OUI";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JASONK/Device-OUI-1.04.tar.gz";
+      sha256 = "4b367e61b1fadde77fb6fb729f3cd5acd1d46e71218d96f406bcba38d43b4bef";
+    };
+    buildInputs = [ TestException ];
+    patches = [ ../development/perl-modules/Device-OUI-1.04-hash.patch ];
+    propagatedBuildInputs = [ ClassAccessorGrouped SubExporter LWP ];
+    meta = {
+      description = "Resolve an Organizationally Unique Identifier";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   DBDMock = buildPerlModule {
     pname = "DBD-Mock";
     version = "1.45";
@@ -4619,6 +4733,23 @@ let
     };
   };
 
+  DBICxTestDatabase = buildPerlPackage {
+    pname = "DBICx-TestDatabase";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JR/JROCKWAY/DBICx-TestDatabase-0.05.tar.gz";
+      sha256 = "8e3bc2530b01216188c3aa65acdbd2f59c4e631f3ae085dfc439abd89f8f0acf";
+    };
+    buildInputs = [ DBIxClass ];
+    propagatedBuildInputs = [ DBDSQLite SQLTranslator ];
+    meta = {
+      homepage = "https://metacpan.org/pod/DBICx::TestDatabase";
+      description = "Create a temporary database from a DBIx::Class::Schema";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   DBIxClass = buildPerlPackage {
     pname = "DBIx-Class";
     version = "0.082841";
@@ -4666,6 +4797,23 @@ let
     };
   };
 
+  DBIxClassDynamicDefault = buildPerlPackage {
+    pname = "DBIx-Class-DynamicDefault";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/DBIx-Class-DynamicDefault-0.04.tar.gz";
+      sha256 = "228f51ab224642584b4dc63db6de2667c5bfae2a894a9376b210a104806a5afb";
+    };
+    buildInputs = [ DBICxTestDatabase ];
+    propagatedBuildInputs = [ DBIxClass ];
+    meta = {
+      homepage = "https://metacpan.org/pod/DBIx::Class::DynamicDefault";
+      description = "Automatically set and update fields";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   DBIxClassHTMLWidget = buildPerlPackage {
     pname = "DBIx-Class-HTMLWidget";
     version = "0.16";
@@ -4689,6 +4837,23 @@ let
       homepage = https://github.com/frioux/DBIx-Class-Helpers;
       description = "Simplify the common case stuff for DBIx::Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DBIxClassInflateColumnSerializer = buildPerlPackage {
+    pname = "DBIx-Class-InflateColumn-Serializer";
+    version = "0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MR/MRUIZ/DBIx-Class-InflateColumn-Serializer-0.09.tar.gz";
+      sha256 = "6262b4871db6a6c45a0cbe7cde8f1b890b22c291add4ecc40caaeeab5a3a6f50";
+    };
+    buildInputs = [ DBDSQLite TestException ];
+    propagatedBuildInputs = [ DBIxClass JSONMaybeXS YAML namespaceclean ];
+    meta = {
+      homepage = "https://metacpan.org/pod/DBIx::Class::InflateColumn::Serializer";
+      description = "Inflators to serialize data structures for DBIx::Class";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -5040,6 +5205,21 @@ let
     meta = {
       description = "Perl interface to the SHA-1 algorithm";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DigestSHA3 = buildPerlPackage {
+    pname = "Digest-SHA3";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSHELOR/Digest-SHA3-1.04.tar.gz";
+      sha256 = "4a68b67c5034f40fbb1344b304cd66caaa5e320eb523005201cc24f76d470c14";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/Digest-SHA3";
+      description = "Perl extension for SHA-3";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -9088,6 +9268,23 @@ let
     };
   };
 
+  JSONValidator = buildPerlPackage {
+    pname = "JSON-Validator";
+    version = "3.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-3.15.tar.gz";
+      sha256 = "ce14ed018b9843ef022c4c14e2171545d3da92e533c8f122b8e33f27444b2a6c";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ Mojolicious YAMLLibYAML DataValidateDomain DataValidateIP NetIDNEncode ];
+    meta = {
+      homepage = "https://github.com/mojolicious/json-validator";
+      description = "Validate data against a JSON schema";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
  JSONWebToken = buildPerlModule {
     pname = "JSON-WebToken";
     version = "0.10";
@@ -11263,6 +11460,39 @@ let
     };
   };
 
+  MojoSQLite = buildPerlModule {
+    pname = "Mojo-SQLite";
+    version = "3.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.002.tar.gz";
+      sha256 = "16dn0p14i6r4c8aspvkp7rfry3zy7kr2ffcmncj0pqygk62miinp";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstract URI URIdb ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Mojo-SQLite";
+      description = "A tiny Mojolicious wrapper for SQLite";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  Mojomysql = buildPerlPackage rec {
+    pname = "Mojo-mysql";
+    version = "1.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojo-mysql-1.17.tar.gz";
+      sha256 = "93cd964760918a43124c3dc65d513372b6d1d00993427894e2f11a1f96662554";
+    };
+    propagatedBuildInputs = [ DBDmysql Mojolicious SQLAbstract ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/mojo-mysql";
+      description = "Mojolicious and Async MySQL/MariaDB";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MojoIOLoopForkCall = buildPerlModule {
     pname = "Mojo-IOLoop-ForkCall";
     version = "0.20";
@@ -11274,6 +11504,23 @@ let
     meta = {
       description = "Run blocking functions asynchronously by forking";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MojoJWT = buildPerlModule {
+    pname = "Mojo-JWT";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-JWT-0.08.tar.gz";
+      sha256 = "c910229e1182266b6666a2d65deea381a04e48d3aa788c42461b3184006934de";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/jberger/Mojo-JWT";
+      description = "JSON Web Token the Mojo way";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -12280,6 +12527,20 @@ let
     doCheck = false; # Test performs network access.
   };
 
+  MustacheSimple = buildPerlPackage {
+    pname = "Mustache-Simple";
+    version = "1.3.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CM/CMS/Mustache-Simple-v1.3.6.tar.gz";
+      sha256 = "51db5d51ff4b25a670d8bfabe3902b6d45434ecf78b29bc1fff19af6e7383003";
+    };
+    propagatedBuildInputs = [ YAMLLibYAML ];
+    meta = {
+      description = "A simple Mustache Renderer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   namespaceautoclean = buildPerlPackage {
     pname = "namespace-autoclean";
     version = "0.28";
@@ -12661,6 +12922,21 @@ let
     propagatedBuildInputs = [ NetDNS ];
     meta = {
       description = "Programmable DNS resolver class for offline emulation of DNS";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetPrometheus = buildPerlModule {
+    pname = "Net-Prometheus";
+    version = "0.07";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.07.tar.gz;
+      sha256 = "1dh498b26wdaip053hw52317jjmb2n2r5209a1zv5yfrlxpblqm7";
+    };
+    propagatedBuildInputs = [ RefUtil StructDumb ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "export monitoring metrics for F<prometheus>";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -15039,6 +15315,21 @@ let
     };
   };
 
+  SessionToken = buildPerlPackage rec {
+    pname = "Session-Token";
+    version = "1.503";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FRACTAL/Session-Token-1.503.tar.gz";
+      sha256 = "32c3df96ef455c71870363acd950ddc4fbc848c594f4bc55b21b44cf979f79a1";
+    };
+    meta = {
+      homepage = "https://github.com/hoytech/Session-Token";
+      description = "Secure, efficient, simple random session token generation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   SetInfinite = buildPerlPackage {
     pname = "Set-Infinite";
     version = "0.65";
@@ -15086,6 +15377,21 @@ let
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  SmartComments = buildPerlPackage rec {
+    pname = "Smart-Comments";
+    version = "1.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Smart-Comments-1.06.tar.gz";
+      sha256 = "dcf8a312134a7c6b82926a0115d93b692472a662d28cdc3a9bdf28984ada9ee3";
+    };
+    meta = {
+      homepage = "https://github.com/neilb/Smart-Comments";
+      description = "Comments that do more than just sit there";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -15733,6 +16039,20 @@ let
       description = "A Perl module for stripping bits of non-deterministic information";
       license = licenses.gpl3;
       maintainers = with maintainers; [ pSub ];
+    };
+  };
+
+  StructDumb = buildPerlModule {
+    pname = "Struct-Dumb";
+    version = "0.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.09.tar.gz;
+      sha256 = "0g9rziaqxkm00vh30g1yfwzq3b1xl23p8fbm4rszqsp641wr2z9k";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "make simple lightweight record-like structures";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

@@ -11,7 +11,6 @@
 , appstream-glib
 , desktop-file-utils
 , totem-pl-parser
-, hicolor-icon-theme
 , gobject-introspection
 , wrapGAppsHook
 , lastFMSupport ? true
@@ -51,7 +50,6 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
-    hicolor-icon-theme
     libsoup
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
@@ -71,9 +69,8 @@ python3.pkgs.buildPythonApplication rec  {
     patchShebangs meson_post_install.py
   '';
 
-  preFixup = ''
-    buildPythonPath "$out $propagatedBuildInputs"
-    patchPythonScript "$out/libexec/lollypop-sp"
+  postFixup = ''
+    wrapPythonProgramsIn $out/libexec "$out $propagatedBuildInputs"
   '';
 
   # Produce only one wrapper using wrap-python passing

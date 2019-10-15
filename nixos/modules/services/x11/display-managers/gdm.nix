@@ -42,10 +42,7 @@ in
     services.xserver.displayManager.gdm = {
 
       enable = mkEnableOption ''
-        GDM as the display manager.
-        <emphasis>GDM in NixOS is not well-tested with desktops other
-        than GNOME, so use with caution, as it could render the
-        system unusable.</emphasis>
+        GDM, the GNOME Display Manager
       '';
 
       debug = mkEnableOption ''
@@ -153,6 +150,12 @@ in
           mkdir -p /run/gdm/.config/pulse
           ln -sf ${pulseConfig} /run/gdm/.config/pulse/default.pa
           chown -R gdm:gdm /run/gdm/.config
+        '' + optionalString config.services.gnome3.gnome-initial-setup.enable ''
+          # Create stamp file for gnome-initial-setup to prevent run.
+          mkdir -p /run/gdm/.config
+          cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
+          yes
+          EOF
         '';
       };
 
@@ -162,6 +165,17 @@ in
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
+      "getty@tty${gdm.initialVT}.service"
+      "plymouth-quit.service"
+      "plymouth-start.service"
+    ];
+    systemd.services.display-manager.conflicts = [
+       "getty@tty${gdm.initialVT}.service"
+       # TODO: Add "plymouth-quit.service" so GDM can control when plymouth quits.
+       # Currently this breaks switching configurations while using plymouth.
+    ];
+    systemd.services.display-manager.onFailure = [
+      "plymouth-quit.service"
     ];
 
     systemd.services.display-manager.serviceConfig = {
@@ -171,6 +185,9 @@ in
       BusName = "org.gnome.DisplayManager";
       StandardOutput = "syslog";
       StandardError = "inherit";
+      ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
+      KeyringMode = "shared";
+      EnvironmentFile = "-/etc/locale.conf";
     };
 
     systemd.services.display-manager.path = [ pkgs.gnome3.gnome-session ];

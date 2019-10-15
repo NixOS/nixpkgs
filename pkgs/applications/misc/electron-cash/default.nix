@@ -56,6 +56,10 @@ python3Packages.buildPythonApplication rec {
       --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
   '';
 
+  postFixup = ''
+    wrapQtApp $out/bin/electron-cash
+  '';
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/electron-cash help >/dev/null

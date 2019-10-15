@@ -1,7 +1,7 @@
 { stdenv, pkgconfig, fetchurl, buildPythonApplication
 , autoreconfHook, wrapGAppsHook, gobject-introspection
-, intltool, yelp-tools, itstool, libxmlxx3
-, python, pygobject3, gtk3, gnome3, substituteAll, hicolor-icon-theme
+, gettext, yelp-tools, itstool, libxmlxx3
+, python, pygobject3, gtk3, gnome3, substituteAll
 , at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
 , xkbcomp, procps, lsof, coreutils, gsettings-desktop-schemas
 , speechd, brltty, liblouis, setproctitle, gst_all_1, gst-python
@@ -9,13 +9,13 @@
 
 buildPythonApplication rec {
   pname = "orca";
-  version = "3.32.0";
+  version = "3.34.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05jqzlg0f1x53hyl0l9282ynmw37159g6dsbrid12b7sjs12cc1i";
+    sha256 = "10h258cprsxzb2hz9wqrkzv1yrsm19ws46l6fsnspywza5wq0z4p";
   };
 
   patches = [
@@ -30,8 +30,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    intltool yelp-tools itstool gobject-introspection
-    hicolor-icon-theme # setup-hook
+    gettext yelp-tools itstool gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -44,11 +43,6 @@ buildPythonApplication rec {
     python gtk3 at-spi2-atk at-spi2-core dbus gsettings-desktop-schemas
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
-
-  # Run intltoolize to create po/Makefile.in.in
-  preConfigure = ''
-    intltoolize
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

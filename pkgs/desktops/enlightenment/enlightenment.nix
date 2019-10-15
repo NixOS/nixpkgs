@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
-  xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
-  luajit, bzip2, libpthreadstubs, gdbm, libcap, mesa,
-  xkeyboard_config, pcre,
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, alsaLib, bc,
+  bzip2, efl, gdbm, libXdmcp, libXrandr, libcap, libffi,
+  libpthreadstubs, libxcb, luajit, mesa, pam, pcre, xcbutilkeysyms,
+  xkeyboard_config,
 
   bluetoothSupport ? true, bluez5,
   pulseSupport ? !stdenv.isDarwin, libpulseaudio,
@@ -9,35 +9,36 @@
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
-  version = "0.23.0";
+  version = "0.23.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1y7x594gvyvl5zbb1rnf3clj2pm6j97n8wl5mp9x6xjmhx0d1idq";
+    sha256 = "0d1cyl07w9pvi2pf029kablazks2q9aislzl46b6fq5m1465jc75";
   };
 
   nativeBuildInputs = [
-    meson
-    ninja
     (pkgconfig.override { vanilla = true; })
     gettext
+    meson
+    ninja
   ];
 
   buildInputs = [
+    alsaLib
+    bc  # for the Everything module calculator mode
+    bzip2
     efl
+    gdbm
     libXdmcp
-    libxcb
-    xcbutilkeysyms
     libXrandr
     libffi
-    pam
-    alsaLib
-    luajit
-    bzip2
     libpthreadstubs
-    gdbm
-    pcre
+    libxcb
+    luajit
     mesa
+    pam
+    pcre
+    xcbutilkeysyms
     xkeyboard_config
   ]
   ++ stdenv.lib.optional stdenv.isLinux libcap
@@ -68,6 +69,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/bin/e_import_config_dialog.c \
       --replace "e_prefix_bin_get()" "\"${efl}/bin\""
+
+    substituteInPlace src/modules/everything/evry_plug_calc.c \
+      --replace "ecore_exe_pipe_run(\"bc -l\"" "ecore_exe_pipe_run(\"${bc}/bin/bc -l\""
   '';
 
   mesonFlags = [ "-Dsystemdunitdir=lib/systemd/user" ];

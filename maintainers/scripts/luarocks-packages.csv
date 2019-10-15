@@ -37,6 +37,7 @@ lua-zlib,,,,,koral
 lua_cliargs,,,,,
 luabitop,,,,,
 luacheck,,,,,
+luacov,,,,,
 luadbi,,,,,
 luadbi-mysql,,,,,
 luadbi-postgresql,,,,,
@@ -68,3 +69,4 @@ say,,,,,
 std__debug,std._debug,,,,
 std_normalize,std.normalize,,,,
 stdlib,,,,,vyp
+pulseaudio,,,,,doronbehar

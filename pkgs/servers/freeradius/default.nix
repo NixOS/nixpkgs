@@ -13,7 +13,7 @@
 , withMemcached ? false
 , hiredis
 , withRedis ? false
-, mysql
+, libmysqlclient
 , withMysql ? false
 , json_c
 , withJson ? false
@@ -31,7 +31,7 @@ assert withPcap -> libpcap != null;
 assert withCap -> libcap != null;
 assert withMemcached -> libmemcached != null;
 assert withRedis -> hiredis != null;
-assert withMysql -> mysql != null;
+assert withMysql -> libmysqlclient != null;
 assert withYubikey -> libyubikey != null;
 assert withCollectd -> collectd != null;
 assert withRest -> curl != null && withJson;
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ++ optional withCap libcap
     ++ optional withMemcached libmemcached
     ++ optional withRedis hiredis
-    ++ optional withMysql mysql.connector-c
+    ++ optional withMysql libmysqlclient
     ++ optional withJson json_c
     ++ optional withYubikey libyubikey
     ++ optional withCollectd collectd

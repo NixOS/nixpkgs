@@ -8,6 +8,7 @@
 , qtbase
 , qtx11extras
 , wrapQtAppsHook
+, wrapGAppsHook
 , gtk3
 , xmlto
 , docbook_xsl
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     docbook_xsl
     wrapQtAppsHook
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -50,10 +52,13 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
+  # Disable assertions which include -dev QtBase file paths.
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+
   configureFlags = [
     "--without-python"
   ] ++ (if enableDbus then [
-    "--with-dbusconfdir=${placeholder "out"}/etc"
+    "--with-dbusconfdir=${placeholder "out"}/share"
   ] else [
     "--without-dbus"
   ]) ++ (if enableVideo then [
@@ -68,7 +73,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = lib.optionalString enableVideo ''
-    wrapProgram "$out/bin/zbarcam-gtk" "''${gappsWrapperArgs[@]}"
+    wrapGApp "$out/bin/zbarcam-gtk"
     wrapQtApp "$out/bin/zbarcam-qt"
   '';
 

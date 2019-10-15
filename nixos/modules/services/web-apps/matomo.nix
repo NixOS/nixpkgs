@@ -105,8 +105,8 @@ in {
         default = null;
         example = {
           serverAliases = [
-            "matomo.$\{config.networking.domain\}"
-            "stats.$\{config.networking.domain\}"
+            "matomo.\${config.networking.domain}"
+            "stats.\${config.networking.domain}"
           ];
           enableACME = false;
         };
@@ -115,7 +115,7 @@ in {
             Either this option or the webServerUser option is mandatory.
             Set this to {} to just enable the virtualHost if you don't need any customization.
             If enabled, then by default, the <option>serverName</option> is
-            <literal>${user}.$\{config.networking.hostName\}.$\{config.networking.domain\}</literal>,
+            <literal>''${user}.''${config.networking.hostName}.''${config.networking.domain}</literal>,
             SSL is active, and certificates are acquired via ACME.
             If this is set to null (the default), no nginx virtualHost will be configured.
         '';
@@ -275,7 +275,7 @@ in {
           fastcgi_pass unix:${phpSocket};
         '';
         # Any other attempt to access any php files is forbidden
-        locations."~* ^.+\.php$".extraConfig = ''
+        locations."~* ^.+\\.php$".extraConfig = ''
           return 403;
         '';
         # Disallow access to unneeded directories
@@ -284,7 +284,7 @@ in {
           return 403;
         '';
         # Disallow access to several helper files
-        locations."~* \.(?:bat|git|ini|sh|txt|tpl|xml|md)$".extraConfig = ''
+        locations."~* \\.(?:bat|git|ini|sh|txt|tpl|xml|md)$".extraConfig = ''
           return 403;
         '';
         # No crawling of this site for bots that obey robots.txt - no useful information here.

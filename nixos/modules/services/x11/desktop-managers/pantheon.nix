@@ -109,8 +109,9 @@ in
     services.pantheon.files.enable = mkDefault true;
     services.tumbler.enable = mkDefault true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-    services.dbus.packages = [
-      pkgs.pantheon.switchboard-plug-power
+    services.dbus.packages = with pkgs.pantheon; [
+      switchboard-plug-power
+      elementary-default-settings
     ];
     services.pantheon.contractor.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
@@ -119,7 +120,7 @@ in
     # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
-    services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
+    services.udev.packages = [ pkgs.pantheon.elementary-settings-daemon ];
     services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
     services.gsignond.enable = mkDefault true;
@@ -154,11 +155,6 @@ in
     qt5.style = "adwaita";
 
     networking.networkmanager.enable = mkDefault true;
-    networking.networkmanager.basePackages =
-      { inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
-        inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
-                              networkmanager-openconnect networkmanager-fortisslvpn
-                              networkmanager-iodine networkmanager-l2tp; };
 
     # Override GSettings schemas
     environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

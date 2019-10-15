@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, cmake, pkgconfig
-, boost, curl, expat, glew, libpng, tbb, wxGTK30
+, boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK30
 , gtest, nlopt, xorg, makeDesktopItem
 }:
 let
@@ -9,7 +9,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
-  version = "2.0.0";
+  version = "2.1.0";
 
   enableParallelBuilding = true;
 
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
-  # We could add Eigen, but it doesn't currently compile with the version in
-  # nixpkgs.
   buildInputs = [
     boost
+    cereal
     curl
+    eigen
     expat
     glew
     libpng
@@ -40,10 +40,15 @@ stdenv.mkDerivation rec {
   # We need to set the path via the NLOPT environment variable instead.
   NLOPT = nlopt;
 
+  # Disable compiler warnings that clutter the build log
+  # It seems to be a known issue for Eigen:
+  # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
+  NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
+
   prePatch = ''
     # In nix ioctls.h isn't available from the standard kernel-headers package
-    # on other distributions. As the copy in glibc seems to be identical to the
-    # one in the kernel, we use that one instead.
+    # like in other distributions. The copy in glibc seems to be identical to the
+    # one in the kernel though, so we use that one instead.
     sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' src/libslic3r/GCodeSender.cpp
   '' + lib.optionalString (lib.versionOlder "2.5" nloptVersion) ''
     # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
@@ -54,7 +59,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    sha256 = "135wn2sza2f2kvbja1haxil5kx1b74lc1i7dsa35i1y3phabykhz";
+    sha256 = "172nz01iiqfjzkpcbl78j6almq6av70l71jgrzrcdw6ham1wqnpr";
     rev = "version_${version}";
   };
 

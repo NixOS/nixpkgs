@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchurl
 , python
-, jdk, cmake, libxml2, zlib, python3, ncurses
+, jdk, cmake, libxml2, zlib, python3, ncurses5
 }:
 
 with stdenv.lib;
@@ -34,7 +34,7 @@ let
 
           lldbLibPath=$out/clion-${version}/bin/lldb/linux/lib
           interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-          ln -s ${ncurses.out}/lib/libncurses.so $lldbLibPath/libtinfo.so.5
+          ln -s ${ncurses5.out}/lib/libtinfo.so.5 $lldbLibPath/libtinfo.so.5
 
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
@@ -134,7 +134,7 @@ let
           as IntelliJ.
         '';
         maintainers = with maintainers; [ edwtjo ];
-        platforms = platforms.linux;
+        platforms = platforms.linux ++ platforms.darwin;
       };
     });
 
@@ -201,11 +201,11 @@ let
         platforms = platforms.linux;
       };
     }) (attrs: {
-      patchPhase = attrs.patchPhase + ''
+      patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
         # Patch built-in mono for ReSharperHost to start successfully
         interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
         patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
-      '';
+      '');
     });
 
   buildRubyMine = { name, version, src, license, description, wmClass, ... }:
@@ -240,7 +240,7 @@ let
       patchPhase = (attrs.patchPhase or "") + optionalString (stdenv.isLinux) ''
         # Webstorm tries to use bundled jre if available.
         # Lets prevent this for the moment
-        rm -r jre64
+        rm -r jbr
       '';
     });
 in
@@ -250,12 +250,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2019.2.1"; /* updated by script */
+    version = "2019.2.3"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "13y2c3vzlklwz9cd7anpfdc3dqwh714xivm1g59s6p4x9sy172lp"; /* updated by script */
+      sha256 = "0kiqbcx64rlz1pajbn326zwy0d1vxdxpvk5xpqkcj7nva611pdq1"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -263,12 +263,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2019.2.2"; /* updated by script */
+    version = "2019.2.5"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "1babydzmgaas1rxjv11yhgbp0l5scsdwy17l9927qwlbgccf24mb"; /* updated by script */
+      sha256 = "18frmlchalpvc55j25ig2slf2h33gwmbmm8dvc29jb3kgsl0ny7p"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -276,12 +276,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2019.2.1"; /* updated by script */
+    version = "2019.2.2"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "16wmsf6c8x95d050grqgv6aaxlkc6pqhbqzlz6fzsngjnbkn64yj"; /* updated by script */
+      sha256 = "1wq1prgfn6wc7lc6qjhiykm62c56yrb5rv0hyylcsgdw0q3ns6z2"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -289,12 +289,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2019.2.1"; /* updated by script */
+    version = "2019.2.3"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1pbqnyqly09m7lw6356dydbvppq4i94rsk7c3y40mrc285qzj413"; /* updated by script */
+      sha256 = "0gy42x49yhdnp4ks6445xbc24dxw2vxnl12hdyx03mszdv0r58ni"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -302,12 +302,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2019.2.1"; /* updated by script */
+    version = "2019.2.3"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "0mslmhakjjgwj76hbfw9dcidic6zprjfjryggic7dqywl7vjwc95"; /* updated by script */
+      sha256 = "0allnibq8van3n1c5y85gscbpls0wshwffa6b2l2andw1jkhc259"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -315,12 +315,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2019.2.1"; /* updated by script */
+    version = "2019.2.3"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1m198p6586dych6mrgwqxs486qndypsmnikl0rxx45ddrwfjl42g"; /* updated by script */
+      sha256 = "0pra0hmyczxcxnvsc7rqiwhwj23ckx97c9m1wcyn7ik612xwik1i"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -328,12 +328,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2019.2.1"; /* updated by script */
+    version = "2019.2.3"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0a3fi2wjj0166199pyhvvpaih9nx0xr6q7zf7jfj8i7khpkdk8i5"; /* updated by script */
+      sha256 = "02fynwi54libibgigwggh6xaf5p4046n0kjsqsck1kjbnrlghp10"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -341,12 +341,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2019.2.1"; /* updated by script */
+    version = "2019.2.3"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "03i7qi0kcnx0irih468xaz7hzicaa5yh399r676drs22ak23qwrq"; /* updated by script */
+      sha256 = "19i3ll8p69n7jw7psv2nkhjq899gljwmc5ixpqhyl203rykavb7n"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
@@ -354,12 +354,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2019.2.1"; /* updated by script */
+    version = "2019.2.2"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "1p0mlch7qvkvgxjscx6rl65v6h8g6fwk8rcb8s27qkcjm0d78ic8"; /* updated by script */
+      sha256 = "1wv5vhiv3w1dwyklx1pr5javp4psqyiv4naq37cvxxp9zh7hk8rc"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider RELEASE";
@@ -367,12 +367,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2019.2.1"; /* updated by script */
+    version = "2019.2.3"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "0l0kwc1mih55px8j6bvp1g3pxrv0scd9vpydwvkaqmq5x0r1n3jf"; /* updated by script */
+      sha256 = "0g8yxsq9xn8l8wnmcm0y5y0ll5081s83mmwrb62k4bldlsr25iba"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";
@@ -380,12 +380,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2019.1.3"; /* updated by script */
+    version = "2019.2.3"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1bhx2p40r15zvfr6q10bj5y8jaa3i9x9adchczp0irkd3w2jgvy3"; /* updated by script */
+      sha256 = "0l3c3b1d53b3w90d4g99pjw8vmjj716jjaxsv4hy53shh1ncd55g"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";

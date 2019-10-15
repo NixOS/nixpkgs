@@ -98,7 +98,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.96.2";
+  hassVersion = "0.99.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";

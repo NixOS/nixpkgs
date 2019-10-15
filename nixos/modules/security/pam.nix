@@ -351,7 +351,7 @@ let
           ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
               "auth requisite ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
           ${let yubi = config.security.pam.yubico; in optionalString cfg.yubicoAuth
-              "auth ${yubi.control} ${pkgs.yubico-pam}/lib/security/pam_yubico.so id=${toString yubi.id} ${optionalString yubi.debug "debug"}"}
+              "auth ${yubi.control} ${pkgs.yubico-pam}/lib/security/pam_yubico.so mode=${toString yubi.mode} ${optionalString (yubi.mode == "client") "id=${toString yubi.id}"} ${optionalString yubi.debug "debug"}"}
         '' +
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
@@ -696,6 +696,23 @@ in
           Debug output to stderr.
         '';
       };
+      mode = mkOption {
+        default = "client";
+        type = types.enum [ "client" "challenge-response" ];
+        description = ''
+          Mode of operation.
+
+          Use "client" for online validation with a YubiKey validation service such as
+          the YubiCloud.
+
+          Use "challenge-response" for offline validation using YubiKeys with HMAC-SHA-1
+          Challenge-Response configurations. See the man-page ykpamcfg(1) for further
+          details on how to configure offline Challenge-Response validation. 
+
+          More information can be found <link
+          xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
+        '';
+      };
     };
 
     security.pam.enableEcryptfs = mkOption {
@@ -741,13 +758,6 @@ in
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
-
-    systemd.tmpfiles.rules = optionals
-      (any (s: s.updateWtmp) (attrValues config.security.pam.services))
-      [
-        "f /var/log/wtmp"
-        "f /var/log/lastlog"
-      ];
 
     security.pam.services =
       { other.text =

@@ -15,25 +15,26 @@
 , regex
 , cymem
 , pathlib
-, msgpack-python
+, msgpack
 , msgpack-numpy
 , jsonschema
 , blis
 , wasabi
 , srsly
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.1.8";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dja0crbai2n1l19m0hkv2fkj9r6zzy5ijd6dffp60v7lrch8lcw";
+    sha256 = "1a833dx8i4s106fk42x4dnayaq5p3qxaxnc012xij991i09v2pxn";
   };
 
   prePatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace setup.cfg \
       --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
   '';
 
@@ -49,12 +50,13 @@ buildPythonPackage rec {
    requests
    regex
    ftfy
-   msgpack-python
+   msgpack
    msgpack-numpy
    jsonschema
    blis
    wasabi
    srsly
+   setuptools
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [

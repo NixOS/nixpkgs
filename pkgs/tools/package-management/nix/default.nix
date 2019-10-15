@@ -174,10 +174,10 @@ in rec {
   };
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3";
+    name = "nix-2.3.1";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "b1d1b4d87390941fc64b19776f1ed9e3871231d38f5a1f295dd13925acd3a98d";
+      sha256 = "bb6578e9f20eebab6d78469ecc59c450ac54f276e5a86a882015d98fecb1bc7b";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -201,12 +201,12 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20190913_a25c022";
+    suffix = "pre20190922_382aa05";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "a25c022af3fa0a35be406942869edae1bdff2cf8";
-      hash = "sha256-HIvgrkXxQ57TPcf2pn9PkSDzM4XOCwXa1zYyIvcAdpg=";
+      rev = "382aa05ff71b61379f5c2792eaf517bdf4a5c5bf";
+      hash = "sha256-k4vV3Q1YVmLd+49AETnsSGetpDjD6sdd9yBrnpi8Q3g=";
     };
     fromGit = true;
 

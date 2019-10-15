@@ -2,7 +2,7 @@
 , libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
+, dpkg, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, libuuid
 , e2fsprogs, krb5
 }:
 
@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "1kvp0fbixpynb0wh8px1qm6gnxwc5ml2q0vwsll0pa8zrjdz4q3k";
+    sha256 = "1l1w8gr4ss0g2k7bfslnc7df4ls1av59jjjc8mrx97wsndrm3vxg";
   };
 
   libPath = makeLibraryPath [
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
+  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme ];
 
   unpackCmd = ''
     mkdir out

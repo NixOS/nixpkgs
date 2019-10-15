@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lua }:
+{ stdenv, fetchFromGitHub, lua52Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "z-lua";
@@ -13,10 +13,17 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  buildInputs = [ (lua.withPackages (p: with p; [ luafilesystem ])) ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ lua52Packages.lua ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 z.lua $out/bin/z
+    wrapProgram $out/bin/z --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so" --set _ZL_USE_LFS 1;
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

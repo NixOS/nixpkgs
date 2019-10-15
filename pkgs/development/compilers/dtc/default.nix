@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, flex, bison, pkgconfig, which
-, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform, python2, swig
+, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform, python, swig
 }:
 
 stdenv.mkDerivation rec {
@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "1jhhfrg22h53lvm2lqhd66pyk20pil08ry03wcwyx1c3ln27k73z";
   };
 
-  nativeBuildInputs = [ flex bison pkgconfig which ] ++ lib.optionals pythonSupport [ python2 swig ];
-  buildInputs = lib.optionals pythonSupport [ python2 ];
+  nativeBuildInputs = [ flex bison pkgconfig which ] ++ lib.optionals pythonSupport [ python swig ];
+  buildInputs = lib.optionals pythonSupport [ python ];
 
   postPatch = ''
     patchShebangs pylibfdt/
   '';
 
-  makeFlags = lib.optionals (!pythonSupport) [ "NO_PYTHON=1" ];
+  makeFlags = [ "PYTHON=python" ];
   installFlags = [ "INSTALL=install" "PREFIX=$(out)" "SETUP_PREFIX=$(out)" ];
 
   meta = with lib; {

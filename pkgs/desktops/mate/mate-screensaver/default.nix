@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-screensaver";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0c4qq5szsbfrz8hgkmlby2k7f1qs8kgqf2shd63z0pc8p6f47vvc";
+    sha256 = "1y8828g4bys8y4r5y478z6i7dgdqm2wkymi5fq75vxx4lzq919cb";
   };
 
   nativeBuildInputs = [

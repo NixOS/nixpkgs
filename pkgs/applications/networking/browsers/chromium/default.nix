@@ -50,6 +50,7 @@ in let
   widevine = let upstream-info = chromium.upstream-info; in stdenv.mkDerivation {
     name = "chromium-binary-plugin-widevine";
 
+    # The .deb file for Google Chrome
     src = upstream-info.binary;
 
     nativeBuildInputs = [ patchelfUnstable ];
@@ -57,14 +58,21 @@ in let
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
 
     unpackCmd = let
-      chan = if upstream-info.channel == "dev"    then "chrome-unstable"
-        else if upstream-info.channel == "stable" then "chrome"
-        else if upstream-info.channel == "beta" then "chrome-beta"
-        else throw "Unknown chromium channel.";
+      soPath =
+        if upstream-info.channel == "stable" then
+          "./opt/google/chrome/libwidevinecdm.so"
+        else if upstream-info.channel == "beta" then
+          "./opt/google/chrome-beta/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
+        else if upstream-info.channel == "dev" then
+          "./opt/google/chrome-unstable/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
+        else
+          throw "Unknown chromium channel.";
     in ''
       mkdir -p plugins
-      ar p "$src" data.tar.xz | tar xJ -C plugins --strip-components=4 \
-        ./opt/google/${chan}/libwidevinecdm.so
+      # Extract just libwidevinecdm.so from upstream's .deb file
+      ar p "$src" data.tar.xz | tar xJ -C plugins ${soPath}
+      mv plugins/${soPath} plugins/
+      rm -rf plugins/opt
     '';
 
     doCheck = true;
@@ -83,7 +91,10 @@ in let
         "$out/lib/libwidevinecdm.so"
     '';
 
-    meta.platforms = lib.platforms.x86_64;
+    meta = {
+      platforms = [ "x86_64-linux" ];
+      license = lib.licenses.unfree;
+    };
   };
 
   suffix = if channel != "stable" then "-" + channel else "";
@@ -92,18 +103,21 @@ in let
 
   version = chromium.browser.version;
 
-  # This is here because we want to add the widevine shared object at the last
-  # minute in order to avoid a full rebuild of chromium. Additionally, this
-  # isn't in `browser.nix` so we can avoid having to re-expose attributes of
-  # the chromium derivation (see above: we introspect `sandboxExecutableName`).
+  # We want users to be able to enableWideVine without rebuilding all of
+  # chromium, so we have a separate derivation here that copies chromium
+  # and adds the unfree libwidevinecdm.so.
   chromiumWV = let browser = chromium.browser; in if enableWideVine then
     runCommand (browser.name + "-wv") { version = browser.version; }
       ''
         mkdir -p $out
-        cp -R ${browser}/* $out/
-        chmod u+w $out/libexec/chromium*
-        cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/
-        # patchelf?
+        cp -a ${browser}/* $out/
+        chmod u+w $out/libexec/chromium
+        if [[ ${channel} != "dev" ]]; then
+          cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/
+        else
+          mkdir -p $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64
+          cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64/
+        fi
       ''
     else browser;
 in stdenv.mkDerivation {

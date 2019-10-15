@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   # Running tests in parallel does not work
   enableParallelChecking = false;
 
+  patches = [ ./0001-Fix-timeouts-in-libcouchbase-testsuite.patch ];
+
   doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {

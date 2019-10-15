@@ -23,6 +23,32 @@
      Support is planned until the end of October 2020, handing over to 20.09.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Postgresql for NixOS service now defaults to v11.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The graphical installer image starts the graphical session automatically.
+     Before you'd be greeted by a tty and asked to enter <command>systemctl start display-manager</command>.
+     It is now possible to disable the display-manager from running by selecting the <literal>Disable display-manager</literal>
+     quirk in the boot menu.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       By default zfs pools will now be trimmed on a weekly basis.
+       Trimming is only done on supported devices (i.e. NVME or SSDs)
+       and should improve throughput and lifetime of these devices.
+       It is controlled by the <varname>services.zfs.trim.enable</varname> varname.
+       The zfs scrub service (<varname>services.zfs.autoScrub.enable</varname>)
+       and the zfs autosnapshot service (<varname>services.zfs.autoSnapshot.enable</varname>)
+       are now only enabled if zfs is set in <varname>config.boot.initrd.supportedFilesystems</varname> or
+       <varname>config.boot.supportedFilesystems</varname>. These lists will automatically contain
+       zfs as soon as any zfs mountpoint is configured in <varname>fileSystems</varname>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -73,7 +99,7 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+     <para>SD images are now compressed by default using <literal>bzip2</literal>.</para>
    </listitem>
   </itemizedlist>
  </section>

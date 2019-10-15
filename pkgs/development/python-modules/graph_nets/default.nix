@@ -20,8 +20,6 @@ buildPythonPackage rec {
     sha256 = "6f27f0358a477d4ec3ab300bf09944b4dfdd5c10b0a5f7ac06bcb32d1327ebe1";
   };
 
-  buildInputs = [];
-
   postPatch = ''
     # https://github.com/deepmind/graph_nets/issues/63
     sed -i 's/dm-sonnet==1.23/dm-sonnet/' setup.py

@@ -19,9 +19,20 @@ with lib;
       "/share/pixmaps"
     ];
 
-    environment.profileRelativeSessionVariables = {
-      XCURSOR_PATH = [ "/share/icons" ];
-    };
+    # libXcursor looks for cursors in XCURSOR_PATH
+    # it mostly follows the spec for icons
+    # See: https://www.x.org/releases/current/doc/man/man3/Xcursor.3.xhtml Themes
+
+    # These are preferred so they come first in the list
+    environment.sessionVariables.XCURSOR_PATH = [
+      "$HOME/.icons"
+      "$HOME/.local/share/icons"
+    ];
+
+    environment.profileRelativeSessionVariables.XCURSOR_PATH = [
+      "/share/icons"
+      "/share/pixmaps"
+    ];
   };
 
 }

@@ -3,7 +3,7 @@
 , libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
 , asio, buildEnv, check, scons
-, less
+, less, fetchpatch
 , withoutClient ? false
 }:
 
@@ -18,13 +18,6 @@ mytopEnv = perl.withPackages (p: with p; [ DataDumper DBDmysql DBI TermReadKey ]
 mariadb = server // {
   inherit client; # MariaDB Client
   server = server; # MariaDB Server
-  inherit connector-c; # libmysqlclient.so
-  inherit galera;
-};
-
-galeraLibs = buildEnv {
-  name = "galera-lib-inputs-united";
-  paths = [ openssl.out boost check ];
 };
 
 common = rec { # attributes common to both builds
@@ -53,7 +46,12 @@ common = rec { # attributes common to both builds
   patches = [
     ./cmake-includedir.patch
     ./cmake-libmariadb-includedir.patch
-  ];
+  ] ++ optional stdenv.hostPlatform.isDarwin (fetchpatch {
+    url = "https://github.com/MariaDB/mariadb-connector-c/commit/ee91b2c98a63acb787114dee4f2694e154630928.patch";
+    extraPrefix = "libmariadb/";
+    sha256 = "06i865zwyhs9fvrgmargzn09pbg1cmably3c4wifd241bj8ig8qk";
+    stripLen = 1;
+  });
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
@@ -162,6 +160,8 @@ server = stdenv.mkDerivation (common // {
 
   patches = common.patches ++ [
     ./cmake-without-client.patch
+  ] ++ optionals stdenv.isDarwin [
+    ./cmake-without-plugin-auth-pam.patch
   ];
 
   cmakeFlags = common.cmakeFlags ++ [
@@ -215,95 +215,4 @@ server = stdenv.mkDerivation (common // {
 
   CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
 });
-
-connector-c = stdenv.mkDerivation rec {
-  pname = "mariadb-connector-c";
-  version = "2.3.7";
-
-  src = fetchurl {
-    url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//nyc2.mirrors.digitalocean.com/mariadb/";
-    sha256 = "13izi35vvxhiwl2dsnqrz75ciisy2s2k30giv7hrm01qlwnmiycl";
-    name   = "mariadb-connector-c-${version}-src.tar.gz";
-  };
-
-  # outputs = [ "dev" "out" ]; FIXME: cmake variables don't allow that < 3.0
-  cmakeFlags = [
-    "-DWITH_EXTERNAL_ZLIB=ON"
-    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
-  ];
-
-  # The cmake setup-hook uses $out/lib by default, this is not the case here.
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
-  '';
-
-  nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ openssl zlib ];
-  buildInputs = [ libiconv ];
-
-  enableParallelBuilding = true;
-
-  postFixup = ''
-    ln -sv mariadb_config $out/bin/mysql_config
-    ln -sv mariadb $out/lib/mysql
-    ln -sv mariadb $out/include/mysql
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Client library that can be used to connect to MySQL or MariaDB";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ globin ];
-    platforms = platforms.all;
-  };
-};
-
-galera = stdenv.mkDerivation rec {
-  pname = "mariadb-galera";
-  version = "25.3.26";
-
-  src = fetchFromGitHub {
-    owner = "codership";
-    repo = "galera";
-    rev = "release_${version}";
-    sha256 = "0fs0c1px9lknf1a5wwb12z1hj7j7b6hsfjddggikvkdkrnr2xs1f";
-    fetchSubmodules = true;
-  };
-
-  buildInputs = [ asio boost check openssl scons ];
-
-  postPatch = ''
-    substituteInPlace SConstruct \
-      --replace "boost_library_path = '''" "boost_library_path = '${boost}/lib'"
-  '';
-
-  preConfigure = ''
-    export CPPFLAGS="-I${asio}/include -I${boost.dev}/include -I${check}/include -I${openssl.dev}/include"
-    export LIBPATH="${galeraLibs}/lib"
-  '';
-
-  sconsFlags = "ssl=1 system_asio=0 strict_build_flags=0";
-
-  installPhase = ''
-    # copied with modifications from scripts/packages/freebsd.sh
-    GALERA_LICENSE_DIR="$share/licenses/${pname}-${version}"
-    install -d $out/{bin,lib/galera,share/doc/galera,$GALERA_LICENSE_DIR}
-    install -m 555 "garb/garbd"                       "$out/bin/garbd"
-    install -m 444 "libgalera_smm.so"                 "$out/lib/galera/libgalera_smm.so"
-    install -m 444 "scripts/packages/README"          "$out/share/doc/galera/"
-    install -m 444 "scripts/packages/README-MySQL"    "$out/share/doc/galera/"
-    install -m 444 "scripts/packages/freebsd/LICENSE" "$out/$GALERA_LICENSE_DIR"
-    install -m 444 "LICENSE"                          "$out/$GALERA_LICENSE_DIR/GPLv2"
-    install -m 444 "asio/LICENSE_1_0.txt"             "$out/$GALERA_LICENSE_DIR/LICENSE.asio"
-    install -m 444 "www.evanjones.ca/LICENSE"         "$out/$GALERA_LICENSE_DIR/LICENSE.crc32c"
-    install -m 444 "chromium/LICENSE"                 "$out/$GALERA_LICENSE_DIR/LICENSE.chromium"
-  '';
-
-  meta = {
-    description = "Galera 3 wsrep provider library";
-    homepage = http://galeracluster.com/;
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ izorkin ];
-    platforms = platforms.all;
-  };
-};
 in mariadb

@@ -32,4 +32,7 @@ buildPythonPackage rec {
       and not test_on_recv_wake \
       and not test_monitor"
   '';
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 }

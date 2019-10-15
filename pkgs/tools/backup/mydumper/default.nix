@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, glib, zlib, pcre, mysql, libressl }:
+, glib, zlib, pcre, libmysqlclient, libressl }:
 
 stdenv.mkDerivation rec {
   version = "0.9.5";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ glib zlib pcre mysql.connector-c libressl ];
+  buildInputs = [ glib zlib pcre libmysqlclient libressl ];
 
   meta = with stdenv.lib; {
     description = ''High-perfomance MySQL backup tool'';

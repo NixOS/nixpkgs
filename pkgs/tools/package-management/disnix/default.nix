@@ -8,6 +8,10 @@ stdenv.mkDerivation {
     sha256 = "1kc4520zjc1z72mknylfvrsyda9rbmm5c9mw8w13zhdwg3zbna06";
   };
 
+  configureFlags = [
+    " --with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+  ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib libxml2 libxslt getopt nixUnstable libintl libiconv dysnomia ];
 

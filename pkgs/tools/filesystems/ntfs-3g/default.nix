@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     "--enable-posix-acls"
     "--enable-xattr-mappings"
     "--${if crypto then "enable" else "disable"}-crypto"
+    "--enable-extras"
   ];
 
   postInstall =

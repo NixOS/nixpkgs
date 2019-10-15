@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , linkFarm
+, substituteAll
 , elementary-greeter
 , pantheon
 , pkgconfig
@@ -27,15 +28,15 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "unstable-2019-09-10";
+  version = "5.0";
 
   repoName = "greeter";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "cad7d28d2b40ed04f6ce49ab44408297b5c69468";
-    sha256 = "0m8iq04wdwgg6arm7dzwi7a0snxvss62zpnw2knpr6lp77vd7hqr";
+    rev = version;
+    sha256 = "01c8acarxwpakyq69xm4bjwppjf8v3ijmns8masd8raxligb2v8b";
   };
 
   passthru = {
@@ -86,6 +87,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sysconfdir-install.patch
+    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
+    (substituteAll {
+      src = ./hardcode-fallback-background.patch;
+      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png";
+    })
   ];
 
   preFixup = ''

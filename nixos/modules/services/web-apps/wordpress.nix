@@ -61,6 +61,19 @@ let
     ?>
   '';
 
+  secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
+  secretsScript = hostStateDir: ''
+    if ! test -e "${hostStateDir}/secret-keys.php"; then
+      umask 0177
+      echo "<?php" >> "${hostStateDir}/secret-keys.php"
+      ${concatMapStringsSep "\n" (var: ''
+        echo "define('${var}', '`tr -dc a-zA-Z0-9 </dev/urandom | head -c 64`');" >> "${hostStateDir}/secret-keys.php"
+      '') secretsVars}
+      echo "?>" >> "${hostStateDir}/secret-keys.php"
+      chmod 440 "${hostStateDir}/secret-keys.php"
+    fi
+  '';
+
   siteOpts = { lib, name, ... }:
     {
       options = {
@@ -340,14 +353,7 @@ in
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-wordpress-${hostName}.service" ];
           after = optional cfg.database.createLocally "mysql.service";
-          script = ''
-            if ! test -e "${stateDir hostName}/secret-keys.php"; then
-              echo "<?php" >> "${stateDir hostName}/secret-keys.php"
-              ${pkgs.curl}/bin/curl -s https://api.wordpress.org/secret-key/1.1/salt/ >> "${stateDir hostName}/secret-keys.php"
-              echo "?>" >> "${stateDir hostName}/secret-keys.php"
-              chmod 440 "${stateDir hostName}/secret-keys.php"
-            fi
-          '';
+          script = secretsScript (stateDir hostName);
 
           serviceConfig = {
             Type = "oneshot";

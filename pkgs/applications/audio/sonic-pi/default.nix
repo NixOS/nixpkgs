@@ -100,5 +100,6 @@ mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Phlogistique kamilchm ];
     platforms = lib.platforms.linux;
+    broken = true;
   };
 }

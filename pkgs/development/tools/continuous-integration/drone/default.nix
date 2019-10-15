@@ -1,26 +1,21 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, go-bindata, go-bindata-assetfs }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
-  pname = "drone.io";
-  version = "0.8.6-20180727-${stdenv.lib.strings.substring 0 7 revision}";
-  revision = "c48150767c2700d35dcc29b110a81c8b5969175e";
+buildGoModule rec {
+  name = "drone.io-${version}";
+  version = "1.6.0";
   goPackagePath = "github.com/drone/drone";
 
-  # These dependencies pulled (in `drone` buildprocess) via Makefile,
-  # so I extracted them here, all revisions pinned by same date, as ${version}
-  goDeps= ./deps.nix;
-
-  nativeBuildInputs = [ go-bindata go-bindata-assetfs ];
+  modSha256 = "0l33qib9riknrjdpsvd7n6slqp485vx66xl6w7m24b5sc7yfsg7m";
 
   src = fetchFromGitHub {
     owner = "drone";
     repo = "drone";
-    rev = revision;
-    sha256 = "0miq2012nivvr1ysi3aa2xrr5ak3mf0l3drybyc83iycy0kp4bda";
+    rev = "v${version}";
+    sha256 = "0ij4a6rh17ib360bxrpncf8lp839b6sl17bd0fp3xvwmibk6xgjz";
   };
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ avnik vdemeester ];
+    maintainers = with maintainers; [ elohmeier vdemeester ];
     license = licenses.asl20;
     description = "Continuous Integration platform built on container technology";
   };

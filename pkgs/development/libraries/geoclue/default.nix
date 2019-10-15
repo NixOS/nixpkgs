@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Ddbus-srv-user=geoclue"
+    "-Ddbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
   ] ++ optionals stdenv.isDarwin [
     "-D3g-source=false"
     "-Dcdma-source=false"
