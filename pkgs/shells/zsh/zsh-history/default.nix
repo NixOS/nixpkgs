@@ -11,6 +11,10 @@ buildGoModule rec {
     sha256 = "0r3p04my40dagsq1dssnk583qrlcps9f7ajp43z7mq73q3hrya5s";
   };
 
+  patches = [
+    ./0001-Fix-path-marshalling-when-saveing-config.patch
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   modSha256 = "0f10b86gyn7m7lw43c8y1m30mdg0i092a319v3cb2qj05jb9vn42";
