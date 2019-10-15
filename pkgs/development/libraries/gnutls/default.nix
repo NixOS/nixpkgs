@@ -8,7 +8,7 @@
 
 assert guileBindings -> guile != null;
 let
-  version = "3.6.9";
+  version = "3.6.10";
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
-    sha256 = "1jqz5s3lv8sa53348cfi9nr5pw5l55n8m40b8msdvv0pb2jzqca3";
+    sha256 = "14r2h73yfj66cm14k9mnb3kgzq5a7qjg5b31m53bf19vcxkwmwxi";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
