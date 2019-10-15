@@ -213,8 +213,6 @@ let
 
     doc-ock =  callPackage ../development/ocaml-modules/doc-ock { };
 
-    doc-ock-xml =  callPackage ../development/ocaml-modules/doc-ock-xml { };
-
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
