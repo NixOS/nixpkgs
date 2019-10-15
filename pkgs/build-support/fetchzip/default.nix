@@ -5,7 +5,7 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{ lib, fetchurl, unzip }:
+{ fetchurl, unzip }:
 
 { # Optionally move the contents of the unpacked tree up one level.
   stripRoot ? true

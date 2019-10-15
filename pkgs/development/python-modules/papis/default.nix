@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, xdg_utils
+{ lib, buildPythonPackage, fetchFromGitHub, xdg_utils
 , requests, filetype, pyparsing, configparser, arxiv2bib
 , pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
 , pylibgen, click, python-slugify, habanero, isbnlib
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Powerful command-line document and bibliography manager";
-    homepage = http://papis.readthedocs.io/en/latest/;
+    homepage = https://papis.readthedocs.io/en/latest/;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ nico202 teto ];
   };

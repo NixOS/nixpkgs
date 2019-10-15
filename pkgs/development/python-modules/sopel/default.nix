@@ -1,33 +1,48 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, pytest
+{ stdenv, buildPythonPackage, fetchPypi, isPyPy
+, dnspython
+, geoip2
+, ipython
 , praw
-, xmltodict
-, pytz
 , pyenchant
 , pygeoip
+, pytest
 , python
-, isPyPy
-, isPy27
+, pytz
+, xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "6.6.6";
+  version = "6.6.9";
+  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dfb6d6c349cbdd463736e4be781cc005efeb1be91dbdc60cc76fda7cad142def";
+    sha256 = "1arldn3p2yp09wnn2cw50r5ri303d5jdsjnf6lgfl82jhfmk49a2";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ praw xmltodict pytz pyenchant pygeoip ];
+  propagatedBuildInputs = [
+    dnspython
+    geoip2
+    ipython
+    praw
+    pyenchant
+    pygeoip
+    pytz
+    xmltodict
+  ];
 
-  disabled = isPyPy || isPy27;
+  # remove once https://github.com/sopel-irc/sopel/pull/1653 lands
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "praw<6.0.0" "praw<7.0.0"
+  '';
+
+  checkInputs = [ pytest ];
 
   checkPhase = ''
-    ${python.interpreter} test/*.py                                         #*/
+    HOME=$PWD # otherwise tries to create tmpdirs at root
+    pytest .
   '';
 
   meta = with stdenv.lib; {
@@ -36,5 +51,4 @@ buildPythonPackage rec {
     license = licenses.efl20;
     maintainers = with maintainers; [ mog ];
   };
-
 }

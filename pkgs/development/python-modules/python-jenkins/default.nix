@@ -1,16 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , mock
 , pbr
 , pyyaml
+, setuptools
 , six
 , multi_key_dict
-, testtools
 , testscenarios
-, testrepository
-, kerberos
 , requests
 , unittest2
 , requests-mock
@@ -26,7 +23,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ pbr pyyaml six multi_key_dict requests ];
+  propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
 
   checkInputs = [ unittest2 testscenarios requests-mock ];
   checkPhase = ''

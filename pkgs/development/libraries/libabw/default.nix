@@ -1,11 +1,11 @@
 { stdenv, fetchurl, boost, doxygen, gperf, pkgconfig, librevenge, libxml2, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libabw-${version}";
+  pname = "libabw";
   version = "0.1.2";
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/libabw/${name}.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libabw/${pname}-${version}.tar.xz";
     sha256 = "11949iscdb99f2jplxjd39282jxcrf2fw0sqbh5dl7gqb96r8whb";
   };
 

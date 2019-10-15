@@ -3,11 +3,11 @@
 # Should be bumped along with EFL!
 
 buildPythonPackage rec {
-  name = "python-efl-${version}";
+  pname = "python-efl";
   version = "1.22.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
+    url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
     sha256 = "1qhy63c3fs2bxkx2np5z14hyxbr12ii030crsjnhpbyw3mic0s63";
   };
 

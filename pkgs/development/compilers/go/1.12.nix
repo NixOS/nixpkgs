@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
+{ stdenv, fetchurl, fetchpatch, tzdata, iana-etc, runCommand
+, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages, pkgsTargetTarget
 }:
@@ -17,24 +17,24 @@ let
   '';
 
   goarch = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
+    i686 = "386";
+    x86_64 = "amd64";
+    aarch64 = "arm64";
+    arm = "arm";
+    armv5tel = "arm";
+    armv6l = "arm";
+    armv7l = "arm";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
 in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.12.5";
+  version = "1.12.10";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1s034pr60h20lsw171vbzqxqvcqn0s04dxfyqczyfcmkrf4g199a";
+    sha256 = "0m1rvawvpdl7kd0asw10m50xbxlhykix6dng9p4x6ih6x3y4hvpm";
   };
 
   # perl is used for testing go vet
@@ -137,6 +137,11 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     # breaks under load: https://github.com/golang/go/issues/25628
     ./skip-test-extra-files-on-386.patch
+    (fetchpatch { # probably included in >= 1.12.10
+      url = "https://github.com/golang/go/commit/aae0b5b0b.diff";
+      name = "TestGcSys-too-much-memory.diff";
+      sha256 = "1bl9d2pl6n99n9g65cq91sygmp1iva5rmrxbprwn4xd0ql36psa8";
+    })
   ];
 
   postPatch = ''
@@ -233,7 +238,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej velovix mic92 ];
+    maintainers = with maintainers; [ cstrahan orivej velovix mic92 rvolosatovs ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

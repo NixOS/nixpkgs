@@ -2,7 +2,8 @@
 
 let version = "0.98"; in
   stdenv.mkDerivation {
-    name = "fastjar-${version}";
+    pname = "fastjar";
+    inherit version;
 
     src = fetchurl {
       url = "https://download.savannah.gnu.org/releases/fastjar/fastjar-${version}.tar.gz";

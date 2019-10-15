@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
-  name = "psstop-${version}";
+  pname = "psstop";
   version = "1.3";
 
   src = fetchFromGitHub {

@@ -1,16 +1,28 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, ninja, vala, gtk3, granite, wingpanel, accountsservice
-, libgee, gobject-introspection, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, accountsservice
+, libgee
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-session";
-  version = "2.2.3";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1y0blff02p3w23sv17yg7fq0yq0g2k8j7vjmk92k664fx72kjjzh";
+    sha256 = "0lqh9g6qq09m744gncspm79lbwx1vjl1d6j2szwcq9f0jdm01pm5";
   };
 
   passthru = {
@@ -20,7 +32,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -37,7 +48,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   meta = with stdenv.lib; {
     description = "Session Indicator for Wingpanel";

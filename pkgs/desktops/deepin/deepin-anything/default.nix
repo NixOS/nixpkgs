@@ -1,16 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qtbase, udisks2-qt5, utillinux,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qtbase, udisks2-qt5, utillinux,
   dtkcore, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "deepin-anything";
-  version = "0.0.7";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1qggqjjqz2y51pag0v5qniv6763mgrmzjmr7248xx2paw3a923vk";
+    sha256 = "1kvyffrii4b012f6ld1ih14qrn7gg5cxbdpbkac0wxb22hnz0azm";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "DEB_HOST_MULTIARCH="
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
   ];
 
   postPatch = ''
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $modsrc  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin file search tool";

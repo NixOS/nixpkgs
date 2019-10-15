@@ -1,25 +1,28 @@
-{ stdenv, fetchgit, flex, bison, pkgconfig, python2, swig, which }:
+{ stdenv, lib, fetchgit, flex, bison, pkgconfig, which
+, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform, python, swig
+}:
 
 stdenv.mkDerivation rec {
   pname = "dtc";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
     rev = "refs/tags/v${version}";
-    sha256 = "075gj8bbahfdb8dlif3d2dpzjrkyf3bwbcmx96zpwhlgs0da8jxh";
+    sha256 = "1jhhfrg22h53lvm2lqhd66pyk20pil08ry03wcwyx1c3ln27k73z";
   };
 
-  nativeBuildInputs = [ flex bison pkgconfig swig which ];
-  buildInputs = [ python2 ];
+  nativeBuildInputs = [ flex bison pkgconfig which ] ++ lib.optionals pythonSupport [ python swig ];
+  buildInputs = lib.optionals pythonSupport [ python ];
 
   postPatch = ''
     patchShebangs pylibfdt/
   '';
 
+  makeFlags = [ "PYTHON=python" ];
   installFlags = [ "INSTALL=install" "PREFIX=$(out)" "SETUP_PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Device Tree Compiler";
     homepage = https://git.kernel.org/cgit/utils/dtc/dtc.git;
     license = licenses.gpl2; # dtc itself is GPLv2, libfdt is dual GPL/BSD

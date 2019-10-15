@@ -5,16 +5,15 @@
 , coverage
 , glibcLocales
 , flake8
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.31.1";
+  version = "4.32.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e22977e3ebe961f72362f6ddfb9197cc531c9737aaf5f607ef09740c849ecd05";
+    sha256 = "25d4c0ea02a305a688e7e9c2cdc8f862f989ef2a4701ab28ee963295f5b109ab";
   };
 
   buildInputs = [ nose coverage glibcLocales flake8 ];

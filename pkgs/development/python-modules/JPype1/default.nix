@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy3k, pytest }:
+{ buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "JPype1";

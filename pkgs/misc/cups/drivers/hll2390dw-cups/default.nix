@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hll2390dw-cups-${version}";
+  pname = "hll2390dw-cups";
   version = "4.0.0-1";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups ghostscript dpkg a2ps ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out

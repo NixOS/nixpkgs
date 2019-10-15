@@ -98,6 +98,20 @@ in {
           '';
         };
 
+        dmixConfig = mkOption {
+          type = types.lines;
+          default = "";
+          example = ''
+            period_size 2048
+            periods 2
+          '';
+          description = ''
+            For music production software that still doesn't support JACK natively you
+            would like to put buffer/period adjustments here
+            to decrease dmix device latency.
+          '';
+        };
+
         session = mkOption {
           type = types.lines;
           description = ''
@@ -150,6 +164,7 @@ in {
           ipc_key 219345
           slave {
             pcm loophw00
+            ${cfg.loopback.dmixConfig}
           }
         }
         pcm.asoftvol {

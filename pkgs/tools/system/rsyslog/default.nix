@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
-, libkrb5 ? null, systemd ? null, jemalloc ? null, mysql ? null, postgresql ? null
+, libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
 , libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
@@ -11,11 +11,11 @@ let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
-  name = "rsyslog-8.1905.0";
+  name = "rsyslog-8.1907.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
-    sha256 = "1r0nf5j4y8p1hbay3kdgkggr76qm7sw10pnl4anxd3vninmlzgcn";
+    sha256 = "1dcz0w5xalqsi2xjb5j7c9mq5kf9s9kq9j2inpv4w5wkrrg569zb";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis mongoc
-  ] ++ stdenv.lib.optional (mysql != null) mysql.connector-c
+  ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
     ++ stdenv.lib.optional stdenv.isLinux systemd;
 
   hardeningDisable = [ "format" ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     (mkFlag false                     "valgrind")
     (mkFlag false                     "diagtools")
     (mkFlag true                      "usertools")
-    (mkFlag (mysql != null)           "mysql")
+    (mkFlag (libmysqlclient != null)  "mysql")
     (mkFlag (postgresql != null)      "pgsql")
     (mkFlag (libdbi != null)          "libdbi")
     (mkFlag (net_snmp != null)        "snmp")

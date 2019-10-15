@@ -4,12 +4,14 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.24.2";
+  version = "1.24.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9a247273df709c4fedb38c711e44292304f73f39ab01beda9f6b9fc375669ac3";
+    sha256 = "2393a695cd12afedd0dcb26fe5d50d0cf248e5a66f75dbd89a3d4eb333a61af4";
   };
+
+  outputs = [ "out" "dev" ];
 
   NOSE_EXCLUDE = stdenv.lib.concatStringsSep "," [
     "test_headers" "test_headerdict" "test_can_validate_ip_san" "test_delayed_body_read_timeout"

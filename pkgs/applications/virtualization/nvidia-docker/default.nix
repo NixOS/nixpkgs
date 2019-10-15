@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, callPackage, makeWrapper
-, buildGoPackage, runc, libelf, libcap, libseccomp, glibc }:
+, buildGoPackage, runc, glibc }:
 
 with lib; let
 
@@ -24,8 +24,8 @@ with lib; let
     sha256 = "0jcj5xxbg7x7gyhbb67h3ds6vly62gx7j02zm6lg102h34jajj7a";
   };
 
-  nvidia-container-runtime-hook = buildGoPackage rec {
-    name = "nvidia-container-runtime-hook-${version}";
+  nvidia-container-runtime-hook = buildGoPackage {
+    pname = "nvidia-container-runtime-hook";
     version = "1.4.0";
 
     goPackagePath = "nvidia-container-runtime-hook";
@@ -46,7 +46,7 @@ with lib; let
   });
 
 in stdenv.mkDerivation rec {
-  name = "nvidia-docker-${version}";
+  pname = "nvidia-docker";
   version = "2.0.3";
 
   src = fetchFromGitHub {

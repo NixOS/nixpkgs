@@ -2,7 +2,7 @@
 , makeWrapper, enet, libXcursor, bullet, openal }:
 
 stdenv.mkDerivation rec {
-  name = "stunt-rally-${version}";
+  pname = "stunt-rally";
   version = "2.6.1";
 
   src = fetchurl {

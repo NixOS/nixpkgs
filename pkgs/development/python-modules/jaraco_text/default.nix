@@ -4,10 +4,10 @@
 
 buildPythonPackage rec {
   pname = "jaraco.text";
-  version = "3.0";
+  version = "3.0.1";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l5hq2jvz9xj05aayc42f85v8wx8rpi16lxph8blw51wgnvymsyx";
+    sha256 = "08n14knfarc3v9jibkl1pbcq2fd95cmz61wc6n4y922ccnrqn9gc";
   };
   doCheck = false;
   buildInputs =[ setuptools_scm ];

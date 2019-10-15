@@ -5,15 +5,15 @@
 }:
 
 let
-  release_version = "8.0.0";
+  release_version = "8.0.1";
   version = release_version; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
-    url = "https://releases.llvm.org/${release_version}/${name}-${version}.src.tar.xz";
+    url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${release_version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "0jwx6nnshp92pd5852y7ip7qhaqdf8az5g0440pli9q8whmi402g";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1qf3097bc5ia8p6cpmbx985rjr3yaah5s8fc0nv7pw742yv7jw8q";
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python isl release_version version fetch; });
@@ -145,7 +145,7 @@ let
       '' + mkExtraBuildCommands cc;
     };
 
-    lldClangNoCompilerRt = wrapCCWith rec {
+    lldClangNoCompilerRt = wrapCCWith {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = wrapBintoolsWith {

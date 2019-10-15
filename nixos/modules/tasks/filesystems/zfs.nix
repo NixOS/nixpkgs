@@ -1,8 +1,6 @@
 { config, lib, pkgs, utils, ... }:
 #
-# todo:
-#   - crontab for scrubs, etc
-#   - zfs tunables
+# TODO: zfs tunables
 
 with utils;
 with lib;
@@ -13,6 +11,7 @@ let
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
   cfgScrub = config.services.zfs.autoScrub;
+  cfgTrim = config.services.zfs.trim;
 
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
@@ -24,11 +23,9 @@ let
   kernel = config.boot.kernelPackages;
 
   packages = if config.boot.zfs.enableUnstable then {
-    spl = null;
     zfs = kernel.zfsUnstable;
     zfsUser = pkgs.zfsUnstable;
   } else {
-    spl = kernel.spl;
     zfs = kernel.zfs;
     zfsUser = pkgs.zfs;
   };
@@ -181,10 +178,9 @@ in
 
       requestEncryptionCredentials = mkOption {
         type = types.bool;
-        default = config.boot.zfs.enableUnstable;
+        default = true;
         description = ''
           Request encryption keys or passwords for all encrypted datasets on import.
-          Dataset encryption is only supported in zfsUnstable at the moment.
           For root pools the encryption key can be supplied via both an
           interactive prompt (keylocation=prompt) and from a file
           (keylocation=file://). Note that for data pools the encryption key can
@@ -271,14 +267,31 @@ in
       };
     };
 
-    services.zfs.autoScrub = {
+    services.zfs.trim = {
       enable = mkOption {
-        default = false;
+        description = "Whether to enable periodic TRIM on all ZFS pools.";
+        default = true;
+        example = false;
         type = types.bool;
+      };
+
+      interval = mkOption {
+        default = "weekly";
+        type = types.str;
+        example = "daily";
         description = ''
-          Enables periodic scrubbing of ZFS pools.
+          How often we run trim. For most desktop and server systems
+          a sufficient trimming frequency is once a week.
+
+          The format is described in
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
+    };
+
+    services.zfs.autoScrub = {
+      enable = mkEnableOption "Enables periodic scrubbing of ZFS pools.";
 
       interval = mkOption {
         default = "Sun, 02:00";
@@ -316,17 +329,13 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
-        {
-          assertion = cfgZfs.requestEncryptionCredentials -> cfgZfs.enableUnstable;
-          message = "This feature is only available for zfs unstable. Set the NixOS option boot.zfs.enableUnstable.";
-        }
       ];
 
       virtualisation.lxd.zfsSupport = true;
 
       boot = {
-        kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
-        extraModulePackages = with packages; [ zfs ] ++ optional (!cfgZfs.enableUnstable) spl;
+        kernelModules = [ "zfs" ];
+        extraModulePackages = with packages; [ zfs ];
       };
 
       boot.initrd = mkIf inInitrd {
@@ -465,7 +474,7 @@ in
                       map createSyncService allPools ++
                       map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
-      systemd.targets."zfs-import" =
+      systemd.targets.zfs-import =
         let
           services = map (pool: "zfs-import-${pool}.service") dataPools;
         in
@@ -475,7 +484,7 @@ in
             wantedBy = [ "zfs.target" ];
           };
 
-      systemd.targets."zfs".wantedBy = [ "multi-user.target" ];
+      systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })
 
     (mkIf enableAutoSnapshots {
@@ -540,6 +549,18 @@ in
           OnCalendar = cfgScrub.interval;
           Persistent = "yes";
         };
+      };
+    })
+
+    (mkIf cfgTrim.enable {
+      systemd.services.zpool-trim = {
+        description = "ZFS pools trim";
+        after = [ "zfs-import.target" ];
+        path = [ packages.zfsUser ];
+        startAt = cfgTrim.interval;
+        script = ''
+          zpool list -H -o name | xargs -n1 zpool trim
+        '';
       };
     })
   ];

@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, gtk3, atomEnv }:
+{ stdenv, pkgs, fetchurl, wrapGAppsHook, gvfs, gtk3, atomEnv }:
 
 let
   versions = {

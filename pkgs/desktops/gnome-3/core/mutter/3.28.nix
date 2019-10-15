@@ -1,7 +1,7 @@
 { fetchFromGitLab, stdenv, substituteAll, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
 , glib, gtk3, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3, fetchpatch
 , gsettings-desktop-schemas, gnome-desktop, wrapGAppsHook
-, libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
+, libtool, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , geocode-glib, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = version;
-    sha256 = "0p8ky306dnm4alkncmsnd8r2awpsi37p0bzvkv313pgqw2hbwq9i";
+    rev = "74e3126b77eb5f27c0ae3f53b0aff2d2eebc15af"; # patches of tip from gnome-3-28 branch
+    sha256 = "0gw1n1w3i040w5mv30kkg7g8a59ymjlc5yaklip0ngg8xv76g0zi";
   };
 
   patches = [
@@ -48,11 +48,18 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/mutter328/raw/fff28bebda02111b4c534952465ff967ba7efced/f/0075-backends-Update-to-new-output-setting-for-tablets-to.patch";
       sha256 = "141p3an83s042f67fw2fqmr79i5g634ndrbpd8cs47fd4wwiwpj5";
     })
+    # https://gitlab.gnome.org/GNOME/mutter/merge_requests/670
+    # Needed for gala redorder workspace
+    (fetchpatch {
+      url = "https://github.com/elementary/os-patches/commit/d636a44885c5be662997f8e19f7dcd26670b3219.patch";
+      sha256 = "12pbxk6f39a09jxjam5a5hxl4whp3cifzpck2m7fpp0n98nc63qh";
+    })
+    # See patch commit message
+    ./0001-Revert-ClutterActor-Preserve-valid-paint-volumes-til.patch
   ];
 
   configureFlags = [
     "--with-x"
-    "--disable-static"
     "--enable-shape"
     "--enable-sm"
     "--enable-startup-notification"

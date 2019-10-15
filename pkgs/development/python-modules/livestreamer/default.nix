@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
 , pkgs
 , isPyPy
 , pycrypto

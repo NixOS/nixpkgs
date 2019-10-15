@@ -1,12 +1,10 @@
 { lib
-, python
 , fetchPypi
 , buildPythonPackage
 , gmp
 , mpfr
 , libmpc
 , ppl
-, pari
 , cython
 , cysignals
 , gmpy2

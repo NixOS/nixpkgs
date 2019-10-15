@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, lua5, curl, quvi_scripts, libproxy, libgcrypt, glib }:
 
 stdenv.mkDerivation rec {
-  name = "libquvi-${version}";
+  pname = "libquvi";
   version="0.9.4";
 
   src = fetchurl {

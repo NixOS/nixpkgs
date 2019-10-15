@@ -1,9 +1,9 @@
-{ stdenv
-, buildPythonPackage
+{ buildPythonPackage
 , pytest
 , nose
 , scipy
 , scikitlearn
+, stdenv
 , xgboost
 , substituteAll
 , pandas
@@ -12,7 +12,7 @@
 , datatable
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "xgboost";
   inherit (xgboost) version src meta;
 
@@ -20,6 +20,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./lib-path-for-python.patch;
       libpath = "${xgboost}/lib";
+      extention = stdenv.hostPlatform.extensions.sharedLibrary;
     })
   ];
 

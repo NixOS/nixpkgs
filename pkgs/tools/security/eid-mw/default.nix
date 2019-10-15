@@ -7,7 +7,7 @@
 , substituteAll }:
 
 stdenv.mkDerivation rec {
-  name = "eid-mw-${version}";
+  pname = "eid-mw";
   version = "4.4.16";
 
   src = fetchFromGitHub {

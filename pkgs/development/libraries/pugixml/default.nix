@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, shared ? false }:
 
 stdenv.mkDerivation rec {
-  name = "pugixml-${version}";
+  pname = "pugixml";
   version = "1.9";
 
   src = fetchFromGitHub {

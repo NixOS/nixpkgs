@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
-  name = "ctpl-${version}";
+  pname = "ctpl";
   version = "0.3.4";
 
   src = fetchurl {

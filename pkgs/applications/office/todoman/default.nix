@@ -1,16 +1,15 @@
-{ stdenv, python3, glibcLocales, fetchpatch }:
+{ stdenv, python3, glibcLocales }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "3.5.0";
-  name = "${pname}-${version}";
+  version = "3.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "051qjdpwif06x7qspnb4pfwdhb8nnmz99yqcp4kla5hv0n3jh0w9";
+    sha256 = "1c0jh9bi2xfjc7w4kka68mygl00zkp2qxhffnipmfvvykfjmlhk0";
   };
 
     LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
@@ -20,7 +19,7 @@ buildPythonApplication rec {
 
   buildInputs = [ glibcLocales ];
   propagatedBuildInputs = with python3.pkgs;
-    [ atomicwrites click click-log configobj humanize icalendar parsedatetime
+    [ atomicwrites click click-log click-repl configobj humanize icalendar parsedatetime
       python-dateutil pyxdg tabulate urwid ];
 
   checkInputs = with python3.pkgs;

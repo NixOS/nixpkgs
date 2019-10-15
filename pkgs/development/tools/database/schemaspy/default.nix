@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   version = "6.0.0-rc2";
-  name = "schemaspy-${version}";
+  pname = "schemaspy";
 
   src = fetchurl {
-    url = "https://github.com/schemaspy/schemaspy/releases/download/v${version}/${name}.jar";
+    url = "https://github.com/schemaspy/schemaspy/releases/download/v${version}/${pname}-${version}.jar";
     sha256 = "0ph1l62hy163m2hgybhkccqbcj6brna1vdbr7536zc37lzjxq9rn";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [
     jre
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D ${src} "$out/share/java/${name}.jar"
+    install -D ${src} "$out/share/java/${pname}-${version}.jar"
 
     makeWrapper ${jre}/bin/java $out/bin/schemaspy \
-      --add-flags "-jar $out/share/java/${name}.jar" \
+      --add-flags "-jar $out/share/java/${pname}-${version}.jar" \
       --prefix PATH : "$wrappedPath"
   '';
 

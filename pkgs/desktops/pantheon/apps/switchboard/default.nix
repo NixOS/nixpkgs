@@ -1,6 +1,20 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja
-, vala, gtk3, libgee, granite, gettext, clutter-gtk, libunity
-, elementary-icon-theme, wrapGAppsHook, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, libgee
+, granite
+, gettext
+, clutter-gtk
+, libunity
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
@@ -21,7 +35,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gettext
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -39,7 +52,9 @@ stdenv.mkDerivation rec {
     libunity
   ];
 
-  patches = [ ./plugs-path-env.patch ];
+  patches = [
+    ./plugs-path-env.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

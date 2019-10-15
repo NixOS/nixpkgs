@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, meson, gettext, gobject-introspection, glib
-, clutter-gtk, clutter-gst, gnome3, gtksourceview, gjs
+, clutter-gtk, clutter-gst, gnome3, gtksourceview4, gjs
 , webkitgtk, libmusicbrainz5, icu, wrapGAppsHook, gst_all_1
-, gdk_pixbuf, librsvg, gtk3, harfbuzz, ninja }:
+, gdk-pixbuf, librsvg, gtk3, harfbuzz, ninja, epoxy }:
 
 stdenv.mkDerivation rec {
-  name = "sushi-${version}";
-  version = "3.32.0";
+  pname = "sushi";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0f1i8qp39gq749h90f7nwgrj4q6y55jnyh62n1v8hxvlk0b2wqnx";
+    url = "mirror://gnome/sources/sushi/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1zcr8wi5bgvvpb5ha1v96aiaz4vqqrsn6cvvalwzah6am85k78m8";
   };
 
   nativeBuildInputs = [
@@ -17,12 +17,10 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib gtk3 gnome3.evince icu harfbuzz
-    clutter-gtk clutter-gst gjs gtksourceview gdk_pixbuf
-    librsvg libmusicbrainz5 webkitgtk
+    clutter-gtk clutter-gst gjs gtksourceview4 gdk-pixbuf
+    librsvg libmusicbrainz5 webkitgtk epoxy
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
-
-  enableParallelBuilding = true;
 
   passthru = {
     updateScript = gnome3.updateScript {

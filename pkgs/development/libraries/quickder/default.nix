@@ -3,7 +3,6 @@
 
 stdenv.mkDerivation rec {
   pname = "quickder";
-  name = "${pname}-${version}";
   version = "1.2-6";
 
   src = fetchFromGitHub {

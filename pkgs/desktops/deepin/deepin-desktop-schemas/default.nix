@@ -2,15 +2,14 @@
   deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-desktop-schemas";
-  version = "3.13.0";
+  version = "3.13.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0bamjcpmsl8xhw3ksgl11wv5xwcdhrkl1namikfzc4an03sk1rdq";
+    sha256 = "03jqb47kjyb9b43m2yincfjn2i43ma1pn1hddyicrrpg937caa81";
   };
 
   nativeBuildInputs = [
@@ -33,7 +32,7 @@ stdenv.mkDerivation rec {
     # fix default background url
     sed -i -e 's,/usr/share/backgrounds/default_background.jpg,/usr/share/backgrounds/deepin/desktop.jpg,' \
       overrides/common/com.deepin.wrap.gnome.desktop.override
-      
+
     fixPath ${deepin-wallpapers} /usr/share/backgrounds \
       overrides/common/com.deepin.wrap.gnome.desktop.override
 
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
     #   /usr/share/desktop-directories
   '';
 
-  makeFlags = [ "PREFIX=${placeholder ''out''}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   doCheck = true;
   checkTarget = "test";
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "GSettings deepin desktop-wide schemas";

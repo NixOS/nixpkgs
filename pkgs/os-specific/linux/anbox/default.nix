@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl
+{ stdenv, fetchFromGitHub, fetchurl
 , cmake, pkgconfig, dbus, makeWrapper
 , gtest
 , boost
@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     SDL2 SDL2_image protobuf protobufc properties-cpp lxc python
     libGL
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=missing-field-initializers";
 
   patchPhase = ''
     patchShebangs scripts

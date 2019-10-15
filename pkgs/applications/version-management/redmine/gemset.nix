@@ -166,10 +166,10 @@
   ffi = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0j8pzj8raxbir5w5k6s7a042sb5k02pg0f8s4na1r5lan901j00p";
+      sha256 = "06mvxpjply8qh4j3fj9wh08kdzwkbnvsiysh0vrhlk5cwxzjmblh";
       type = "gem";
     };
-    version = "1.10.0";
+    version = "1.11.1";
   };
   globalid = {
     dependencies = ["activesupport"];
@@ -342,10 +342,10 @@
   public_suffix = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "08q64b5br692dd3v0a9wq9q5dvycc6kmiqmjbdxkxbfizggsvx6l";
+      sha256 = "1c7c5xxkx91hwj4572hbnyvxmydb90q69wlpr2l0dxrmwx2p365l";
       type = "gem";
     };
-    version = "3.0.3";
+    version = "3.1.0";
   };
   rack = {
     source = {
@@ -504,10 +504,10 @@
   rubyzip = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1n1lb2sdwh9h27y244hxzg1lrxxg2m53pk1vq7p33bna003qkyrj";
+      sha256 = "1w9gw28ly3zyqydnm8phxchf4ymyjl2r7zf7c12z8kla10cpmhlc";
       type = "gem";
     };
-    version = "1.2.2";
+    version = "1.2.3";
   };
   selenium-webdriver = {
     dependencies = ["childprocess" "rubyzip" "websocket"];

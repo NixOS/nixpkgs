@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ant, jre, jdk, swt, acl, attr }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "areca-7.5";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
-{ callPackage }:
+{ callPackage, CoreServices }:
 
 rec {
-  gstreamer = callPackage ./core { };
+  gstreamer = callPackage ./core { inherit CoreServices; };
 
   gstreamermm = callPackage ./gstreamermm { };
 
@@ -13,7 +13,7 @@ rec {
 
   gst-plugins-ugly = callPackage ./ugly { inherit gst-plugins-base; };
 
-  gst-rtsp-server = callPackage ./rtsp-server { inherit gst-plugins-base; };
+  gst-rtsp-server = callPackage ./rtsp-server { inherit gst-plugins-base gst-plugins-bad; };
 
   gst-libav = callPackage ./libav { inherit gst-plugins-base; };
 

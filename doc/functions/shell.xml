@@ -5,9 +5,7 @@
  <title>pkgs.mkShell</title>
 
  <para>
-  <function>pkgs.mkShell</function> is a special kind of derivation that is
-  only useful when using it combined with <command>nix-shell</command>. It will
-  in fact fail to instantiate when invoked with <command>nix-build</command>.
+  <function>pkgs.mkShell</function> is a special kind of derivation that is only useful when using it combined with <command>nix-shell</command>. It will in fact fail to instantiate when invoked with <command>nix-build</command>.
  </para>
 
  <section xml:id="sec-pkgs-mkShell-usage">

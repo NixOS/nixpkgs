@@ -1,6 +1,6 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, fftw, rtl-sdr, libusb1 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kalibrate-rtl-20131214";
 
   # There are no tags/releases, so use the latest commit from git master.

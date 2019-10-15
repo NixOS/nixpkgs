@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "sshpass-${version}";
+  pname = "sshpass";
   version = "1.06";
 
   src = fetchurl {

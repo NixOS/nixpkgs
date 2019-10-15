@@ -1,6 +1,6 @@
 { stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3, functools32, subprocess32
+, freetype, libpng, pkgconfig, mock, pytz, pygobject3
 , enableGhostscript ? true, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobject-introspection
 , enableGtk3 ? false, cairo
@@ -22,14 +22,14 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt4 != null;
 
 buildPythonPackage rec {
-  version = "3.0.3";
+  version = "3.1.1";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dzpgpj34i6lv9wgacqdshai2d237m3vymqrgl52sj1gwf4kblz1";
+    sha256 = "1febd22afe1489b13c6749ea059d392c03261b2950d1d45c17e3aed812080c93";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";

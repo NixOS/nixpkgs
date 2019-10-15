@@ -3,10 +3,11 @@
 , pkgs ? import ../.. { inherit system config; }
 }:
 
-with pkgs.lib;
-with import ../lib/testing.nix { inherit system pkgs; };
-
 let
+  inherit (import ../lib/testing.nix { inherit system pkgs; }) makeTest;
+  inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
+                     removeSuffix replaceChars singleton splitString;
+
   escape' = str: replaceChars [''"'' "$" "\n"] [''\\\"'' "\\$" ""] str;
 
 /*
@@ -73,7 +74,7 @@ let
       exporterTest = ''
         waitForUnit("prometheus-bind-exporter.service");
         waitForOpenPort(9119);
-        succeed("curl -sSf http://localhost:9119/metrics" | grep -q 'bind_query_recursions_total 0');
+        succeed("curl -sSf http://localhost:9119/metrics | grep -q 'bind_query_recursions_total 0'");
       '';
     };
 
@@ -187,6 +188,47 @@ let
       '';
     };
 
+    mail = {
+      exporterConfig = {
+        enable = true;
+        configuration = {
+          monitoringInterval = "2s";
+          mailCheckTimeout = "10s";
+          servers = [ {
+            name = "testserver";
+            server = "localhost";
+            port = 25;
+            from = "mail-exporter@localhost";
+            to = "mail-exporter@localhost";
+            detectionDir = "/var/spool/mail/mail-exporter/new";
+          } ];
+        };
+      };
+      metricProvider = {
+        services.postfix.enable = true;
+        systemd.services.prometheus-mail-exporter = {
+          after = [ "postfix.service" ];
+          requires = [ "postfix.service" ];
+          preStart = ''
+            mkdir -p 0600 mail-exporter/new
+          '';
+          serviceConfig = {
+            ProtectHome = true;
+            ReadOnlyPaths = "/";
+            ReadWritePaths = "/var/spool/mail";
+            WorkingDirectory = "/var/spool/mail";
+          };
+        };
+        users.users.mailexporter.isSystemUser = true;
+      };
+      exporterTest = ''
+        waitForUnit("postfix.service")
+        waitForUnit("prometheus-mail-exporter.service")
+        waitForOpenPort(9225)
+        waitUntilSucceeds("curl -sSf http://localhost:9225/metrics | grep -q 'mail_deliver_success{configname=\"testserver\"} 1'")
+      '';
+    };
+
     nginx = {
       exporterConfig = {
         enable = true;
@@ -228,6 +270,46 @@ let
         waitForUnit("prometheus-postfix-exporter.service");
         waitForOpenPort(9154);
         succeed("curl -sSf http://localhost:9154/metrics | grep -q 'postfix_smtpd_connects_total 0'");
+      '';
+    };
+
+    postgres = {
+      exporterConfig = {
+        enable = true;
+        runAsLocalSuperUser = true;
+      };
+      metricProvider = {
+        services.postgresql.enable = true;
+      };
+      exporterTest = ''
+        waitForUnit("prometheus-postgres-exporter.service");
+        waitForOpenPort(9187);
+        waitForUnit("postgresql.service");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_exporter_last_scrape_error 0'");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 1'");
+        systemctl("stop postgresql.service");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -qv 'pg_exporter_last_scrape_error 0'");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 0'");
+        systemctl("start postgresql.service");
+        waitForUnit("postgresql.service");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_exporter_last_scrape_error 0'");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 1'");
+      '';
+    };
+
+    rspamd = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.rspamd.enable = true;
+      };
+      exporterTest = ''
+        waitForUnit("rspamd.service");
+        waitForUnit("prometheus-rspamd-exporter.service");
+        waitForOpenPort(11334);
+        waitForOpenPort(7980);
+        waitUntilSucceeds("curl -sSf localhost:7980/metrics | grep -q 'rspamd_scanned{host=\"rspamd\"} 0'");
       '';
     };
 
@@ -311,8 +393,33 @@ let
       };
       exporterTest = ''
         waitForUnit("prometheus-varnish-exporter.service");
+        waitForOpenPort(6081);
         waitForOpenPort(9131);
         succeed("curl -sSf http://localhost:9131/metrics | grep -q 'varnish_up 1'");
+      '';
+    };
+
+    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in {
+      exporterConfig.enable = true;
+      metricProvider = {
+        networking.wireguard.interfaces.wg0 = {
+          ips = [ "10.23.42.1/32" "fc00::1/128" ];
+          listenPort = 23542;
+
+          inherit (snakeoil.peer0) privateKey;
+
+          peers = singleton {
+            allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
+
+            inherit (snakeoil.peer1) publicKey;
+          };
+        };
+        systemd.services.prometheus-wireguard-exporter.after = [ "wireguard-wg0.service" ];
+      };
+      exporterTest = ''
+        waitForUnit("prometheus-wireguard-exporter.service");
+        waitForOpenPort(9586);
+        waitUntilSucceeds("curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'");
       '';
     };
   };

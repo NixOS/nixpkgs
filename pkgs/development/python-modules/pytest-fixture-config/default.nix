@@ -1,18 +1,18 @@
 { stdenv, buildPythonPackage, fetchPypi
-, setuptools-git, pytest_3 }:
+, setuptools-git, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-fixture-config";
-  version = "1.4.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "839d70343c87d6dda5bca88e3ab06e7b2027998dc1ec452c14d50be5725180a3";
+    sha256 = "13i1qpz22w3x4dmw8vih5jdnbqfqvl7jiqs0dg764s0zf8bp98a1";
   };
 
   nativeBuildInputs = [ setuptools-git ];
 
-  buildInputs = [ pytest_3 ];
+  buildInputs = [ pytest ];
 
   doCheck = false;
 

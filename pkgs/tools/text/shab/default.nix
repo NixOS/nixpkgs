@@ -19,7 +19,6 @@ let
       done
     '';
 
-    doBuild = false;
     doCheck = true;
     doInstallCheck = true;
 

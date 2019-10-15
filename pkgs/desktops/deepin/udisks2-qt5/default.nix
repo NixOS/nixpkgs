@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, pkgconfig, deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "udisks2-qt5";
   version = "0.0.1";
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "UDisks2 D-Bus interfaces binding for Qt5";

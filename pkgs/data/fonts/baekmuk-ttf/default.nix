@@ -1,4 +1,4 @@
-{ lib, fetchzip }:
+{ fetchzip }:
 
 fetchzip rec {
   name = "baekmuk-ttf-2.2";

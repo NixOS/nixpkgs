@@ -1,7 +1,7 @@
-{ pkgs, fetchzip, stdenv, makeWrapper, openjdk }:
+{ fetchzip, stdenv, makeWrapper, openjdk }:
 
 stdenv.mkDerivation rec {
-  name = "gremlin-console-${version}";
+  pname = "gremlin-console";
   version = "3.3.4";
   src = fetchzip {
     url = "http://www-eu.apache.org/dist/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";

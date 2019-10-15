@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, file, lib, libX11, libXScrnSaver
+{ stdenv, fetchurl, file, libX11, libXScrnSaver
 , libGL, qt5, SDL, libpulseaudio
 , libXrandr, libXext, libXcursor, libXinerama, libXi
 , curl, sqlite, openssl
 , libuuid, openh264, libv4l, libxkbfile, libXv, zlib, libXmu
-, libXtst, libXdamage, pam, patchelfUnstable, libXfixes, libXrender, libjpeg_original
+, libXtst, libXdamage, pam, libXfixes, libXrender, libjpeg_original
 , ffmpeg
 }:
  let
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version_major = "2.1.7369";
   version_minor = "1";
   version = version_major + "." + version_minor;
-  name = "sky-${version}";
+  pname = "sky";
   unpackCmd = "ar x $curSrc; tar -xf data.tar.xz";
   src = fetchurl {
     url = "https://tel.red/repos/ubuntu/pool/non-free/sky_${version_major + "-" + version_minor}ubuntu+xenial_amd64.deb";

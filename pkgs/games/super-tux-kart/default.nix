@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchsvn, fetchpatch, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
 , openal, freealut, libGLU_combined, libvorbis, libogg, gettext, curl, freetype
 , fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr, enet }:
 
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = https://supertuxkart.net/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ c0dehero fuuzetsu peterhoeg ];
+    maintainers = with maintainers; [ pyrolagus fuuzetsu peterhoeg ];
     platforms = with platforms; linux;
   };
 }

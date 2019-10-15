@@ -35,7 +35,7 @@ in {
     };
 
     listenAddress = mkOption {
-      type = types.string;
+      type = types.str;
       default = "0.0.0.0";
       description = "IP interface to listen on for http connections.";
     };

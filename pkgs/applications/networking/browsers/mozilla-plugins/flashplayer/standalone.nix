@@ -9,7 +9,7 @@
 , expat
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , graphite2
@@ -48,9 +48,9 @@
 , debug ? false
 }:
 
-stdenv.mkDerivation rec {
-  name = "flashplayer-standalone-${version}";
-  version = "32.0.0.192";
+stdenv.mkDerivation {
+  pname = "flashplayer-standalone";
+  version = "32.0.0.255";
 
   src = fetchurl {
     url =
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "0j5rzamyajkiblalqkimx29bwm7yg9m4nj9z7z8hahcywpf81yqg"
+        "1igc23mljmw1bw6fwx3rwpz7kxiy8n5znkng20w3yin2zh8qw8sy"
       else
-        "0qnz383aggm07hbvyrnqphwhd5wp9xbairf908nk4i6ad8wg1x3r";
+        "0rfvgx1g0s8wswwpmfjx6p59yh1cxya3x3bczbissrq4rcb1v315";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk_pixbuf glib
+      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk-pixbuf glib
       glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
       libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng

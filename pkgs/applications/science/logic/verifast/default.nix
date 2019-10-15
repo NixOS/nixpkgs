@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, gtk2, gdk_pixbuf, atk, pango, glib, cairo, freetype
+{ stdenv, fetchurl, gtk2, gdk-pixbuf, atk, pango, glib, cairo, freetype
 , fontconfig, libxml2, gnome2 }:
 
 let
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.libc stdenv.cc.cc gtk2 gdk_pixbuf atk pango glib cairo
+    [ stdenv.cc.libc stdenv.cc.cc gtk2 gdk-pixbuf atk pango glib cairo
       freetype fontconfig libxml2 gnome2.gtksourceview
     ] + ":${stdenv.cc.cc.lib}/lib64:$out/libexec";
 
@@ -19,11 +19,11 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name    = "verifast-${version}";
+  pname = "verifast";
   version = "18.02";
 
   src = fetchurl {
-    url    = "https://github.com/verifast/verifast/releases/download/${version}/${name}-linux.tar.gz";
+    url    = "https://github.com/verifast/verifast/releases/download/${version}/${pname}-${version}-linux.tar.gz";
     sha256 = "19050be23b6d5e471690421fee59f84c58b29e38379fb86b8f3713a206a4423e";
   };
 

@@ -97,8 +97,8 @@ in
 
       preStart = ''
         mkdir -p ${cfg.dataDir}/.config/oxidized
-        cp -v ${cfg.routerDB} ${cfg.dataDir}/.config/oxidized/router.db
-        cp -v ${cfg.configFile} ${cfg.dataDir}/.config/oxidized/config
+        ln -f -s ${cfg.routerDB} ${cfg.dataDir}/.config/oxidized/router.db
+        ln -f -s ${cfg.configFile} ${cfg.dataDir}/.config/oxidized/config
       '';
 
       serviceConfig = {

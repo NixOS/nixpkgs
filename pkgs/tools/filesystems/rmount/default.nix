@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname   = "rmount";
   version = "1.0.1";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     rev = "v${version}";
     owner = "Luis-Hebendanz";
     repo = "rmount";

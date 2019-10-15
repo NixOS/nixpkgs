@@ -1,4 +1,4 @@
-{ stdenv, opl3bankeditor, fetchFromGitHub, fetchpatch }:
+{ opl3bankeditor, fetchFromGitHub }:
 
 opl3bankeditor.overrideAttrs (oldAttrs: rec {
   version = "1.3-beta";

@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , writeScript
 , coreutils
 , curl

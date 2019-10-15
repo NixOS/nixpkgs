@@ -7,27 +7,16 @@
 , markdown
 , pyct
 , testpath
-, pytest
-, scipy
-, plotly
-, altair
-, vega_datasets
-, hvplot
 }:
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.4.0";
+  version = "0.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "21fc6729909dba4ba8c9a84b7fadd293322cc2594d15ac73b0f66a5ceffd1f98";
+    sha256 = "04w8jjlf7yz3k84xnacahczc9mmddqyp756rj3n8hclks9c1ww40";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "testpath<0.4" "testpath"
-  '';
 
   propagatedBuildInputs = [
     bokeh

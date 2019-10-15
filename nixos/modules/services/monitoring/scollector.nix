@@ -51,7 +51,7 @@ in {
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "scollector";
         description = ''
           User account under which scollector runs.
@@ -59,7 +59,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "scollector";
         description = ''
           Group account under which scollector runs.
@@ -67,7 +67,7 @@ in {
       };
 
       bosunHost = mkOption {
-        type = types.string;
+        type = types.str;
         default = "localhost:8070";
         description = ''
           Host and port of the bosun server that will store the collected
@@ -116,7 +116,6 @@ in {
       path = [ pkgs.coreutils pkgs.iproute ];
 
       serviceConfig = {
-        PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
         ExecStart = "${cfg.package.bin}/bin/scollector -conf=${conf} ${lib.concatStringsSep " " cfg.extraOpts}";

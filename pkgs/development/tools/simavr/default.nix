@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, libelf, which, git, pkgconfig, freeglut
-, avrbinutils, avrgcc, avrlibc
+{ stdenv, fetchFromGitHub, libelf, which, pkgconfig, freeglut
+, avrgcc, avrlibc
 , libGLU_combined
 , GLUT }:
 
 stdenv.mkDerivation rec {
-  name = "simavr-${version}";
+  pname = "simavr";
   version = "1.5";
 
   src = fetchFromGitHub {

@@ -244,7 +244,7 @@ let
         description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
         requires = [ "wireguard-${interfaceName}.service" ];
         after = [ "wireguard-${interfaceName}.service" ];
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "multi-user.target" "wireguard-${interfaceName}.service" ];
         environment.DEVICE = interfaceName;
         environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
         path = with pkgs; [ iproute wireguard-tools ];
@@ -303,7 +303,7 @@ let
         };
 
         script = ''
-          ${optionalString (!config.boot.isContainer) "modprobe wireguard"}
+          ${optionalString (!config.boot.isContainer) "modprobe wireguard || true"}
 
           ${values.preSetup}
 

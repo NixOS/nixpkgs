@@ -1,6 +1,5 @@
 { stdenv
 , fetchgit
-, fetchurl
 , autoreconfHook
 , dbus-glib
 , glib
@@ -8,7 +7,6 @@
 , gnome-desktop
 , gnome3
 , gtk3
-, gsettings-desktop-schemas
 , pkgconfig
 , intltool
 , pam

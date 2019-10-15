@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, gnugrep, gnused,
+{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
   majorVersion ? "1.0" }:
 
 let
@@ -39,9 +39,14 @@ let
       sha256 = "1gm7xiqkbg415mbj9mlazcndmky81xvg4wmz0h94yv1whp7fslr0";
     };
     "2.2" = {
-      kafkaVersion = "2.2.0";
+      kafkaVersion = "2.2.1";
       scalaVersion = "2.12";
-      sha256 = "09q028kagpkzrvfdb040z8q9mspv8n7f2igrd1cs73v7mr7n42d0";
+      sha256 = "1svdnhdzq9a6jsig513i0ahaysfgar5i385bq9fz7laga6a4z3qv";
+    };
+    "2.3" = {
+      kafkaVersion = "2.3.0";
+      scalaVersion = "2.12";
+      sha256 = "1rz3xqv26h0zv5pmk65znzn08gycmrfj6vvbmrvl9i7hm4hm2vyq";
     };
   };
 in
@@ -50,14 +55,14 @@ with versionMap.${majorVersion};
 
 stdenv.mkDerivation rec {
   version = "${scalaVersion}-${kafkaVersion}";
-  name = "apache-kafka-${version}";
+  pname = "apache-kafka";
 
   src = fetchurl {
     url = "mirror://apache/kafka/${kafkaVersion}/kafka_${version}.tgz";
     inherit sha256;
   };
 
-  buildInputs = [ jre makeWrapper bash gnugrep gnused coreutils ];
+  buildInputs = [ jre makeWrapper bash gnugrep gnused coreutils ps ];
 
   installPhase = ''
     mkdir -p $out
@@ -70,6 +75,9 @@ stdenv.mkDerivation rec {
     # allow us the specify logging directory using env
     substituteInPlace $out/bin/kafka-run-class.sh \
       --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
+
+    substituteInPlace $out/bin/kafka-server-stop.sh \
+      --replace 'ps' '${ps}/bin/ps'
 
     for p in $out/bin\/*.sh; do
       wrapProgram $p \

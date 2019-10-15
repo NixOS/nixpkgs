@@ -2,7 +2,8 @@
 
 let version = "0.4"; in
 stdenv.mkDerivation {
-  name = "gcolor2-${version}";
+  pname = "gcolor2";
+  inherit version;
   arch = if stdenv.hostPlatform.system == "x86_64-linux" then "amd64" else "386";
 
   src = fetchurl {
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
     ++ (with perlPackages; [ perl XMLParser ]);
 
   meta = {
-    description = "Simple GTK+2 color selector";
+    description = "Simple GTK 2 color selector";
     homepage = http://gcolor2.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ notthemessiah ];

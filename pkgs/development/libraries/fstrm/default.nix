@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libevent, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "fstrm-${version}";
+  pname = "fstrm";
   version = "0.5.0";
 
   src = fetchFromGitHub {

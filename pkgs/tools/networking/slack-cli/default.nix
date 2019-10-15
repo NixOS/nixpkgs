@@ -5,10 +5,10 @@
 # for token storage, except that it would make the Nix package inconsistent with
 # upstream and other distributions.
 
-{ stdenv, lib, writeShellScriptBin, fetchFromGitHub, curl, jq, runtimeShell }:
+{ stdenv, lib, fetchFromGitHub, curl, jq, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "slack-cli-${version}";
+  pname = "slack-cli";
   version = "0.18.0";
 
   src = fetchFromGitHub {

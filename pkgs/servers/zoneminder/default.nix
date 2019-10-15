@@ -1,7 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, mysql, nettools, pcre, perl, perlPackages
+, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
-, avahi, dbus, gettext, git, gnutar, gzip, bzip2, libiconv, openssl, python
 , coreutils, procps, psmisc }:
 
 # NOTES:
@@ -78,7 +77,7 @@ let
   perlBin = "${perl}/bin/perl";
 
 in stdenv.mkDerivation rec {
-  name = "zoneminder-${version}";
+  pname = "zoneminder";
   version = "1.32.3";
 
   src = fetchFromGitHub {
@@ -90,6 +89,8 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./default-to-http-1dot1.patch
+    # Explicitly link with dynamic linking library to fix build
+    ./link-with-libdl.patch
   ];
 
   postPatch = ''
@@ -145,7 +146,7 @@ in stdenv.mkDerivation rec {
     # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap
     # run-time dependencies not checked at build-time
-    ClassStdFast DataDump JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
+    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
@@ -173,6 +174,7 @@ in stdenv.mkDerivation rec {
       perlFlags="$perlFlags -I$i"
     done
 
+    mkdir -p $out/libexec
     for f in $out/bin/*.pl ; do
       mv $f $out/libexec/
       makeWrapper ${perlBin} $f \
@@ -185,7 +187,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Video surveillance software system";
-    homepage = https://zoneminder.com;
+    homepage = "https://zoneminder.com";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

@@ -2,7 +2,7 @@
 , libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
 
 stdenv.mkDerivation rec {
-  name = "qdigidoc-${version}";
+  pname = "qdigidoc";
   version = "4.1.0";
 
   src = fetchgit {

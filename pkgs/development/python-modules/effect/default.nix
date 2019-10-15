@@ -1,6 +1,5 @@
 { buildPythonPackage
 , fetchPypi
-, isPy37
 , lib
 , six
 , attrs

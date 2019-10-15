@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoconf, automake, libtool, bison
+{ stdenv, fetchurl, autoconf, automake, libtool, bison
 , libasr, libevent, zlib, libressl, db, pam, nixosTests
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensmtpd-${version}";
-  version = "6.4.1p2";
+  pname = "opensmtpd";
+  version = "6.4.2p1";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "0cppqlx4fk6l8rbim5symh2fm1kzshf421256g596j6c9f9q96xn";
+    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
+    sha256 = "0pgv080ai7d98l9340jadp9wjiaqj2qvgpqhilcz0kps2mdiawbd";
   };
 
   patches = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, cups, libusb, libxml2, ghostscript, perl }:
+{ stdenv, fetchurl, cups, libusb, libxml2, perl }:
 
 let
 
@@ -7,7 +7,7 @@ let
       else "i386";
 
 in stdenv.mkDerivation rec {
-  name = "samsung-unified-linux-driver-${version}";
+  pname = "samsung-unified-linux-driver";
   version = "1.00.36";
 
   src = fetchurl {

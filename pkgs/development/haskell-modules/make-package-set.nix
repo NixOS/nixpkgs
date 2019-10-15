@@ -122,9 +122,9 @@ let
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
       sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
-    in pkgs.buildPackages.stdenv.mkDerivation {
+    in buildPackages.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      nativeBuildInputs = [ pkgs.buildPackages.cabal2nix ];
+      nativeBuildInputs = [ buildPackages.cabal2nix ];
       preferLocalBuild = true;
       allowSubstitutes = false;
       phases = ["installPhase"];
@@ -137,7 +137,7 @@ let
       '';
   };
 
-  all-cabal-hashes-component = name: version: pkgs.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
+  all-cabal-hashes-component = name: version: buildPackages.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
     tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
     mkdir -p $out
     mv */${name}/${version}/${name}.{json,cabal} $out
@@ -187,7 +187,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     # for any version that has been released on hackage as opposed to only
     # versions released before whatever version of all-cabal-hashes you happen
     # to be currently using.
-    callHackageDirect = {pkg, ver, sha256}@args:
+    callHackageDirect = {pkg, ver, sha256}:
       let pkgver = "${pkg}-${ver}";
       in self.callCabal2nix pkg (pkgs.fetchzip {
            url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";

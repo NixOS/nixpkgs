@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmatroska";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner  = "Matroska-Org";
     repo   = "libmatroska";
     rev    = "release-${version}";
-    sha256 = "01kp48ih9pqkm518ylbxicjmknqvb3njb71il2h2wa37whsaals8";
+    sha256 = "057iib6p62x31g1ikdjsjzmqzjlajqx6p74h7y4r524pzgb27fzy";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

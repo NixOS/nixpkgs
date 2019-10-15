@@ -1,0 +1,26 @@
+diff --git a/src/DkCore/DkMetaData.cpp b/src/DkCore/DkMetaData.cpp
+index d195757e..affec7be 100644
+--- a/src/DkCore/DkMetaData.cpp
++++ b/src/DkCore/DkMetaData.cpp
+@@ -42,6 +42,8 @@
+ #include <QApplication>
+ #pragma warning(pop)		// no warnings from includes - end
+
++#include <iostream>
++
+ namespace nmc {
+
+ // DkMetaDataT --------------------------------------------------------------------
+diff --git a/src/DkGui/DkNoMacs.cpp b/src/DkGui/DkNoMacs.cpp
+index 6a412f70..bbfba233 100644
+--- a/src/DkGui/DkNoMacs.cpp
++++ b/src/DkGui/DkNoMacs.cpp
+@@ -96,6 +96,8 @@
+ #include <QWinTaskbarButton>
+ #endif
+
++#include <iostream>
++
+ namespace nmc {
+
+ DkNomacsOSXEventFilter::DkNomacsOSXEventFilter(QObject *parent) : QObject(parent) {

@@ -1,6 +1,7 @@
 { stdenv, config, callPackage, wineBuild }:
 
 rec {
+  fonts = callPackage ../misc/emulators/wine/fonts.nix {};
   minimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
     inherit wineBuild;

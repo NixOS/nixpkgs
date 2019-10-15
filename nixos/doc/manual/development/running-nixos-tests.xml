@@ -12,12 +12,12 @@
 xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix">login.nix</filename>,
   you just do:
 <screen>
-$ nix-build '&lt;nixpkgs/nixos/tests/login.nix>'
+<prompt>$ </prompt>nix-build '&lt;nixpkgs/nixos/tests/login.nix>'
 </screen>
   or, if you don’t want to rely on <envar>NIX_PATH</envar>:
 <screen>
-$ cd /my/nixpkgs/nixos/tests
-$ nix-build login.nix
+<prompt>$ </prompt>cd /my/nixpkgs/nixos/tests
+<prompt>$ </prompt>nix-build login.nix
 …
 running the VM test script
 machine: QEMU running (pid 8841)
@@ -30,7 +30,7 @@ machine: QEMU running (pid 8841)
   fast, as no disk image needs to be created. Afterwards, you can view a
   pretty-printed log of the test:
 <screen>
-$ firefox result/log.html
+<prompt>$ </prompt>firefox result/log.html
 </screen>
  </para>
 </section>

@@ -1,0 +1,90 @@
+diff --git a/k5test/_utils.py b/k5test/_utils.py
+index e289fac..e2f486a 100644
+--- a/k5test/_utils.py
++++ b/k5test/_utils.py
+@@ -65,12 +65,12 @@ def find_plugin_dir():
+ 
+     # if there was no LD_LIBRARY_PATH, or the above failed
+     if _PLUGIN_DIR is None:
+-        lib_dir = os.path.join(get_output('krb5-config --prefix'), 'lib64')
++        lib_dir = os.path.join(get_output('@krb5FullDev@/bin/krb5-config --prefix'), 'lib64')
+         _PLUGIN_DIR = _decide_plugin_dir(_find_plugin_dirs_installed(lib_dir))
+ 
+     # /usr/lib64 seems only to be distinct on Fedora/RHEL/Centos family
+     if _PLUGIN_DIR is None:
+-        lib_dir = os.path.join(get_output('krb5-config --prefix'), 'lib')
++        lib_dir = os.path.join(get_output('@krb5FullDev@/bin/krb5-config --prefix'), 'lib')
+         _PLUGIN_DIR = _decide_plugin_dir(_find_plugin_dirs_installed(lib_dir))
+ 
+     if _PLUGIN_DIR is not None:
+@@ -89,7 +89,7 @@ def _decide_plugin_dir(dirs):
+ 
+     for path in shortest_first:
+         # check to see if it actually contains .so files
+-        if get_output('find %s -name "*.so"' % path):
++        if get_output('@findutils@/bin/find %s -name "*.so"' % path):
+             return path
+ 
+     return None
+@@ -97,7 +97,7 @@ def _decide_plugin_dir(dirs):
+ 
+ def _find_plugin_dirs_installed(search_path):
+     try:
+-        options_raw = get_output('find %s/ -type d \( ! -executable -o ! -readable \) '
++        options_raw = get_output('@findutils@/bin/find %s/ -type d \( ! -executable -o ! -readable \) '
+                                  '-prune -o '
+                                  '-type d -path "*/krb5/plugins" -print' % search_path,
+                                  stderr=subprocess.STDOUT)
+@@ -111,7 +111,7 @@ def _find_plugin_dirs_installed(search_path):
+ 
+ 
+ def _find_plugin_dirs_src(search_path):
+-    options_raw = get_output('find %s/../ -type d -name plugins' % search_path)
++    options_raw = get_output('@findutils@/bin/find %s/../ -type d -name plugins' % search_path)
+ 
+     if options_raw:
+         return options_raw.split('\n')
+diff --git a/k5test/realm.py b/k5test/realm.py
+index f57946b..ad78579 100644
+--- a/k5test/realm.py
++++ b/k5test/realm.py
+@@ -181,19 +181,13 @@ class K5Realm(object):
+             return path
+ 
+     def _init_paths(self, **paths):
+-        self.kdb5_util = self._discover_path('kdb5_util',
+-                                             '/usr/sbin/kdb5_util', paths)
+-        self.krb5kdc = self._discover_path('krb5kdc',
+-                                           '/usr/sbin/krb5kdc', paths)
+-        self.kadmin_local = self._discover_path('kadmin_local',
+-                                                '/usr/sbin/kadmin.local',
+-                                                paths)
+-        self.kprop = self._discover_path('kprop', '/usr/sbin/kprop', paths)
+-        self.kadmind = self._discover_path('kadmind',
+-                                           '/usr/sbin/kadmind', paths)
+-
+-        self._kinit = self._discover_path('kinit', '/usr/bin/kinit', paths)
+-        self._klist = self._discover_path('klist', '/usr/bin/klist', paths)
++        self.kdb5_util = '@krb5Full@/bin/kdb5_util'
++        self.krb5kdc = '@krb5Full@/bin/krb5kdc'
++        self.kadmin_local = '@krb5Full@/bin/kadmin.local'
++        self.kprop = '@krb5Full@/bin/kprop'
++        self.kadmind = '@krb5Full@/bin/kadmind'
++        self._kinit = '@krb5Full@/bin/kinit'
++        self._klist = '@krb5Full@/bin/klist'
+ 
+     def _create_conf(self, profile, filename):
+         with open(filename, 'w') as conf_file:
+diff --git a/k5test/unit.py b/k5test/unit.py
+index 4ee7f98..543d662 100644
+--- a/k5test/unit.py
++++ b/k5test/unit.py
+@@ -38,7 +38,7 @@ _KRB_VERSION = None
+ def krb_minversion_test(target_version, problem):
+     global _KRB_VERSION
+     if _KRB_VERSION is None:
+-        _KRB_VERSION = _utils.get_output("krb5-config --version")
++        _KRB_VERSION = _utils.get_output("@krb5FullDev@/bin/krb5-config --version")
+         _KRB_VERSION = _KRB_VERSION.split(' ')[-1].split('.')
+ 
+     def make_ext_test(func):

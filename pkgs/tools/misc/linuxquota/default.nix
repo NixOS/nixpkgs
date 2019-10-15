@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.05";
-  name = "quota-${version}";
+  pname = "quota";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxquota/quota-${version}.tar.gz";

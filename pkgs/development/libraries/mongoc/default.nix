@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mongoc-${version}";
+  pname = "mongoc";
   version = "1.8.0";
 
   src = fetchzip {

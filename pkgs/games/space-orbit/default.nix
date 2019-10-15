@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "space-orbit-${version}";
+  pname = "space-orbit";
   version = "1.01";
   patchversion = "9";
 

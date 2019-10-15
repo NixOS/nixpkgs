@@ -17,7 +17,7 @@
 
 buildGoPackage rec {
   project = "cri-o";
-  version = "1.14.1";
+  version = "1.15.2";
   name = "${project}-${version}${flavor}";
 
   goPackagePath = "github.com/${project}/${project}";
@@ -26,7 +26,7 @@ buildGoPackage rec {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "1cclxarwabk5zlqysm2dzgsm6qkxyzbnlylr0gs57ppn4ibky3nk";
+    sha256 = "0fiizxwxdq87h943421ivgw49jndk23yjz3saf1rzmn7g3xh2pn4";
   };
 
   outputs = [ "bin" "out" ];
@@ -41,15 +41,10 @@ buildGoPackage rec {
   buildPhase = ''
     pushd go/src/${goPackagePath}
 
-    # Build conmon and pause
+    # Build pause
     go build -tags ${makeFlags} -o bin/crio-config -buildmode=pie \
       -ldflags '-s -w ${ldflags}' ${goPackagePath}/cmd/crio-config
 
-    pushd conmon
-    ../bin/crio-config
-    popd
-
-    make -C conmon
     make -C pause
 
     # Build the crio binary
@@ -60,7 +55,6 @@ buildGoPackage rec {
     install -Dm755 bin/crio $bin/bin/crio${flavor}
 
     mkdir -p $bin/libexec/crio
-    install -Dm755 bin/conmon $bin/libexec/crio/conmon${flavor}
     install -Dm755 bin/pause $bin/libexec/crio/pause${flavor}
   '';
 

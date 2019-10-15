@@ -1,17 +1,17 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "mill-${version}";
-  version = "0.4.0";
+  pname = "mill";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "https://github.com/lihaoyi/mill/releases/download/${version}/${version}";
-    sha256 = "745756498e5a67c55277534c62959c6fdfa382cda2c1a6e34ef0ea6b49c90880";
+    sha256 = "1y5044m0qlwa1wlg7xkhg76agmfn7bgcf040wf56fvxhf0w78zjw";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
 

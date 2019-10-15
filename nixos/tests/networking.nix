@@ -21,7 +21,7 @@ let
         useNetworkd = networkd;
         firewall.checkReversePath = true;
         firewall.allowedUDPPorts = [ 547 ];
-        interfaces = mkOverride 0 (listToAttrs (flip map vlanIfs (n:
+        interfaces = mkOverride 0 (listToAttrs (forEach vlanIfs (n:
           nameValuePair "eth${toString n}" {
             ipv4.addresses = [ { address = "192.168.${toString n}.1"; prefixLength = 24; } ];
             ipv6.addresses = [ { address = "fd00:1234:5678:${toString n}::1"; prefixLength = 64; } ];
@@ -72,6 +72,7 @@ let
   testCases = {
     loopback = {
       name = "Loopback";
+      machine.networking.useDHCP = false;
       machine.networking.useNetworkd = networkd;
       testScript = ''
         startAll;
@@ -139,14 +140,16 @@ let
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
-          useDHCP = true;
+          useDHCP = false;
           interfaces.eth1 = {
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
+            useDHCP = true;
           };
           interfaces.eth2 = {
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
+            useDHCP = true;
           };
         };
       };
@@ -320,13 +323,19 @@ let
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
+          useDHCP = false;
           firewall.logReversePathDrops = true; # to debug firewall rules
           # reverse path filtering rules for the macvlan interface seem
           # to be incorrect, causing the test to fail. Disable temporarily.
           firewall.checkReversePath = false;
-          useDHCP = true;
           macvlans.macvlan.interface = "eth1";
-          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
+          interfaces.eth1 = {
+            ipv4.addresses = mkOverride 0 [ ];
+            useDHCP = true;
+          };
+          interfaces.macvlan = {
+            useDHCP = true;
+          };
         };
       };
       testScript = { ... }:
@@ -440,12 +449,14 @@ let
     virtual = {
       name = "Virtual";
       machine = {
-        networking.interfaces."tap0" = {
+        networking.useNetworkd = networkd;
+        networking.useDHCP = false;
+        networking.interfaces.tap0 = {
           ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
           ipv6.addresses = [ { address = "2001:1470:fffd:2096::"; prefixLength = 64; } ];
           virtual = true;
         };
-        networking.interfaces."tun0" = {
+        networking.interfaces.tun0 = {
           ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
           ipv6.addresses = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
           virtual = true;
@@ -489,6 +500,7 @@ let
         boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
         networking = {
           useNetworkd = networkd;
+          useDHCP = false;
           interfaces.eth1.ipv6.addresses = singleton {
             address = "fd00:1234:5678:1::1";
             prefixLength = 64;
@@ -510,15 +522,29 @@ let
           '';
         };
       };
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.clientWithPrivacy = { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
-          useDHCP = true;
+          useDHCP = false;
           interfaces.eth1 = {
             preferTempAddress = true;
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
+            useDHCP = true;
+          };
+        };
+      };
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+          interfaces.eth1 = {
+            preferTempAddress = false;
+            ipv4.addresses = mkOverride 0 [ ];
+            ipv6.addresses = mkOverride 0 [ ];
+            useDHCP = true;
           };
         };
       };
@@ -527,23 +553,29 @@ let
           startAll;
 
           $client->waitForUnit("network.target");
+          $clientWithPrivacy->waitForUnit("network.target");
           $router->waitForUnit("network-online.target");
 
           # Wait until we have an ip address
+          $clientWithPrivacy->waitUntilSucceeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'");
           $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'");
 
           # Test vlan 1
+          $clientWithPrivacy->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
           $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
 
           # Test address used is temporary
-          $client->waitUntilSucceeds("! ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
+          $clientWithPrivacy->waitUntilSucceeds("! ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
+
+          # Test address used is EUI-64
+          $client->waitUntilSucceeds("ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
         '';
     };
     routes = {
       name = "routes";
       machine = {
         networking.useDHCP = false;
-        networking.interfaces."eth0" = {
+        networking.interfaces.eth0 = {
           ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
           ipv6.addresses = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
           ipv6.routes = [

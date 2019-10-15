@@ -1,7 +1,7 @@
 { stdenv, fetchurl, atomEnv, libXScrnSaver, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "marp-${version}";
+  pname = "marp";
   version = "0.0.14";
 
   src = fetchurl {

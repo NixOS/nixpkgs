@@ -3,9 +3,7 @@
 , pkgconfig
 , qtbase
 , makeWrapper
-, jack2Full
 , python3Packages
-, a2jmidid
 }:
 
  stdenv.mkDerivation rec {

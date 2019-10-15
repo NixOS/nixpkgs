@@ -3,19 +3,18 @@
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
-  version = "unstable-2019-02-10";
+  version = "unstable-2019-06-10";
   pname = "i3pystatus";
-  disabled = !python3Packages.isPy3k;
 
   src = fetchFromGitHub
   {
     owner = "enkore";
     repo = "i3pystatus";
-    rev = "bcd8f12b18d491029fdd5bd0f433b4500fcdc68e";
-    sha256 = "0gw6sla73cid6gwxn2n4zmsg2svq5flf9zxly6x2rfljizgf0720";
+    rev = "56ce08d0ff8d5d64950d6b588ebede35a95e0ce2";
+    sha256 = "12938860jbcly1xwhd71jvy2dff28pwv9kqh6mab1859148bzmcg";
   };
 
-  propagatedBuildInputs = with python3Packages; [ keyring colour netifaces praw psutil basiciw ] ++
+  propagatedBuildInputs = with python3Packages; [ keyring colour netifaces psutil basiciw ] ++
     [ libpulseaudio ] ++ extraLibs;
 
   libpulseaudioPath = stdenv.lib.makeLibraryPath [ libpulseaudio ];

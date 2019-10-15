@@ -5,7 +5,6 @@
 , elasticsearch
 , ipaddress
 , python-dateutil
-, pytz
 , six
 }:
 

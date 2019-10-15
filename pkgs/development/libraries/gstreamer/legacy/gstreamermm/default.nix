@@ -4,7 +4,7 @@ let
   ver_maj = "0.10";
   ver_min = "11";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gstreamermm-${ver_maj}.${ver_min}";
 
   src = fetchurl {

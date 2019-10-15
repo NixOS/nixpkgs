@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake
 , python, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "tiled";
   version = "1.2.4";
 

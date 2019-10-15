@@ -1,10 +1,13 @@
-{stdenv, fetchurl, zlib, cmake, fetchpatch}:
+{ stdenv, fetchurl, cmake, fetchpatch
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-  name = "taglib-1.11.1";
+  pname = "taglib";
+  version = "1.11.1";
 
   src = fetchurl {
-    url = "http://taglib.org/releases/${name}.tar.gz";
+    url = "http://taglib.org/releases/${pname}-${version}.tar.gz";
     sha256 = "0ssjcdjv4qf9liph5ry1kngam1y7zp8fzr9xv4wzzrma22kabldn";
   };
 
@@ -22,6 +25,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/taglib/taglib/commit/272648ccfcccae30e002ccf34a22e075dd477278.patch";
       sha256 = "0p397qq4anvcm0p8xs68mxa8hg6dl07chg260lc6k2929m34xv72";
     })
+
+    (fetchpatch {
+      # many consumers of taglib have started vendoring taglib due to this bug
+      name = "fix_ogg_corruption.patch";
+      url = "https://github.com/taglib/taglib/commit/9336c82da3a04552168f208cd7a5fa4646701ea4.patch";
+      sha256 = "01wlwk4gmfxdg5hjj9jmrain7kia89z0zsdaf5gn3nibmy5bq70r";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -31,8 +41,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with stdenv.lib; {
-    homepage = http://taglib.org/;
-    repositories.git = git://github.com/taglib/taglib.git;
+    homepage = "http://taglib.org/";
+    repositories.git = "git://github.com/taglib/taglib.git";
     description = "A library for reading and editing audio file metadata.";
     longDescription = ''
       TagLib is a library for reading and editing the meta-data of several

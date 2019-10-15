@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.12-2";
-  name = "axoloti-${version}";
+  pname = "axoloti";
 
   src = fetchFromGitHub {
     owner = "axoloti";
     repo = "axoloti";
-    rev = "${version}";
+    rev = version;
     sha256 = "1qffis277wshldr3i939b0r2x3a2mlr53samxqmr2nk1sfm2b4w9";
   };
 

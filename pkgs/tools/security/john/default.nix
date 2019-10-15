@@ -5,15 +5,13 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "john-${version}";
-  version = "1.8.0-jumbo-1";
+  pname = "john";
+  version = "1.9.0-jumbo-1";
 
   src = fetchurl {
-    url = "http://www.openwall.com/john/j/${name}.tar.xz";
-    sha256 = "08q92sfdvkz47rx6qjn7qv57cmlpy7i7rgddapq5384mb413vjds";
+    url = "http://www.openwall.com/john/k/${pname}-${version}.tar.xz";
+    sha256 = "0fvz3v41hnaiv1ggpxanfykyfjq79cwp9qcqqn63vic357w27lgm";
   };
-
-  patches = [ ./gcc5.patch ];
 
   postPatch = ''
     sed -ri -e '

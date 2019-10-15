@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, cmake, nasm }:
+{ stdenv, fetchurl, cmake, nasm }:
 
 stdenv.mkDerivation rec {
 
   pname = "libjpeg-turbo";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1v9gx1gdzgxf51nd55ncq7rghmj4x9x91rby50ag36irwngmkf5c";
+    sha256 = "1ds16bnj17v6hzd43w8pzijz3imd9am4hw75ir0fxm240m8dwij2";
   };
 
   patches =
@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake nasm ];
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin" "-DENABLE_STATIC=0" ];
+  cmakeFlags = [
+    "-DENABLE_STATIC=0"
+  ];
 
   doInstallCheck = true;
   installCheckTarget = "test";

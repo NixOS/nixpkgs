@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, bash, which
+{ stdenv, fetchFromGitHub, which
 , boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
 , glew, zlib, icu, pkgconfig, cairo, libvpx }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "anura-engine";
   version = "unstable-2018-11-28";
 

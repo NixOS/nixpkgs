@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lvm2, json_c
+{ stdenv, fetchurl, lvm2, json_c
 , openssl, libuuid, pkgconfig, popt
 , enablePython ? false, python2 ? null }:
 
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lgcc_s";
 
   configureFlags = [
-    "--disable-kernel_crypto"
     "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
   ] ++ stdenv.lib.optional enablePython "--enable-python";

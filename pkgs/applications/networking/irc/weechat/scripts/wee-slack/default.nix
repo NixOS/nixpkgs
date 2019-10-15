@@ -1,14 +1,14 @@
-{ stdenv, substituteAll, buildEnv, fetchFromGitHub, pythonPackages }:
+{ stdenv, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation rec {
-  name = "wee-slack-${version}";
-  version = "2.2.0";
+  pname = "wee-slack";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
-    sha256 = "1iy70q630cgs7fvk2151fq9519dwxrlqq862sbrwypzr6na6yqpg";
+    sha256 = "0544j6vqbvb2xshq7ma2a3apx2vvpgfg3jh5prg265wnh4991nsw";
   };
 
   patches = [
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
       src = ./libpath.patch;
       env = "${buildEnv {
         name = "wee-slack-env";
-        paths = with pythonPackages; [ websocket_client six ];
-      }}/${pythonPackages.python.sitePackages}";
+        paths = with python3Packages; [ websocket_client six ];
+      }}/${python3Packages.python.sitePackages}";
     })
   ];
 

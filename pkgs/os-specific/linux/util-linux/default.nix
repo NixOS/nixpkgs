@@ -8,10 +8,11 @@ let
   patchVersion = "2";
 
 in stdenv.mkDerivation rec {
-  name = "util-linux-${version}";
+  pname = "util-linux";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
+    url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${pname}-${version}.tar.xz";
     sha256 = "15yf2dh4jd1kg6066hydlgdhhs2j3na13qld8yx30qngqvmfh6v3";
   };
 

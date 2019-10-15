@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "liblinear-${version}";
+  pname = "liblinear";
   version = "2.30";
 
   src = fetchurl {

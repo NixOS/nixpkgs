@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ stdenv
 , makeWrapper
 , runCommand, wrapBintoolsWith, wrapCCWith
 , buildAndroidndk, androidndk, targetAndroidndkPkgs
@@ -12,31 +12,31 @@ let
   # than we do. We don't just use theirs because ours are less ambiguous and
   # some builds need that clarity.
   ndkInfoFun = { config, ... }: {
-    "x86_64-apple-darwin" = {
+    x86_64-apple-darwin = {
       double = "darwin-x86_64";
     };
-    "x86_64-unknown-linux-gnu" = {
+    x86_64-unknown-linux-gnu = {
       double = "linux-x86_64";
     };
-    "i686-unknown-linux-android" = {
+    i686-unknown-linux-android = {
       triple = "i686-linux-android";
       arch = "x86";
       toolchain = "x86";
       gccVer = "4.9";
     };
-    "x86_64-unknown-linux-android" = {
+    x86_64-unknown-linux-android = {
       triple = "x86_64-linux-android";
       arch = "x86_64";
       toolchain = "x86_64";
       gccVer = "4.9";
     };
-    "armv7a-unknown-linux-androideabi" = {
+    armv7a-unknown-linux-androideabi = {
       arch = "arm";
       triple = "arm-linux-androideabi";
       toolchain = "arm-linux-androideabi";
       gccVer = "4.9";
     };
-    "aarch64-unknown-linux-android" = {
+    aarch64-unknown-linux-android = {
       arch = "arm64";
       triple = "aarch64-linux-android";
       toolchain = "aarch64-linux-android";
@@ -103,6 +103,6 @@ rec {
     cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include $out/include
     chmod +w $out/include
     cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include/${targetInfo.triple}/* $out/include
-    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/lib $out/lib
+    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/${if hostInfo.arch == "x86_64" then "lib64" else "lib"} $out/lib
   '';
 }

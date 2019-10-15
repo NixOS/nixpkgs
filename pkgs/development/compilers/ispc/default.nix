@@ -1,5 +1,5 @@
-{stdenv, fetchFromGitHub, fetchpatch, which, m4, python, bison, flex, llvmPackages,
-testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
+{stdenv, fetchFromGitHub, which, m4, python, bison, flex, llvmPackages,
+testedTargets ? ["sse2"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   inherit testedTargets;
 
-  name = "ispc-${version}";
+  pname = "ispc";
 
   src = fetchFromGitHub {
     owner = "ispc";

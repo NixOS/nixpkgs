@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "cygwin-setup-${version}";
+  pname = "cygwin-setup";
   version = "20131101";
 
   src = fetchcvs {

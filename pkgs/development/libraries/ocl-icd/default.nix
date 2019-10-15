@@ -1,26 +1,20 @@
 {stdenv, fetchurl, ruby, opencl-headers, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
-  name = "ocl-icd-${version}";
+  pname = "ocl-icd";
   version = "2.2.10";
 
   src = fetchurl {
-    url = "https://forge.imag.fr/frs/download.php/810/${name}.tar.gz";
+    url = "https://forge.imag.fr/frs/download.php/810/${pname}-${version}.tar.gz";
     sha256 = "0f14gpa13sdm0kzqv5yycp4pschbmi6n5fj7wl4ilspzsrqcgqr2";
   };
 
-  nativeBuildInputs = [ ruby addOpenGLRunpath ];
+  nativeBuildInputs = [ ruby ];
 
   buildInputs = [ opencl-headers ];
 
   postPatch = ''
     sed -i 's,"/etc/OpenCL/vendors","${addOpenGLRunpath.driverLink}/etc/OpenCL/vendors",g' ocl_icd_loader.c
-  '';
-
-  # Set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
-  postFixup = ''
-    addOpenGLRunpath $out/lib/libOpenCL.so
   '';
 
   meta = with stdenv.lib; {

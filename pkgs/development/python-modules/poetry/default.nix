@@ -10,6 +10,7 @@
 , pkginfo
 , html5lib
 , shellingham
+, subprocess32
 , tomlkit
 , typing
 , pathlib2
@@ -29,21 +30,25 @@ let
   });
 
   jsonschema3 = callPackage ./jsonschema.nix { };
+  glob2 = callPackage ./glob2.nix { };
 
 in buildPythonPackage rec {
   pname = "poetry";
-  version = "0.12.10";
+  version = "0.12.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00npb0jlimnk4r01zkhfmns4843j1hfhd388s326da5pd8n0dq7l";
+    sha256 = "0gxwcd65qjmzqzppf53x51sic1rbcd9py6cdzx3aprppipimslvf";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace \
       "requests-toolbelt>=0.8.0,<0.9.0" \
-      "requests-toolbelt>=0.8.0,<0.10.0"
+      "requests-toolbelt>=0.8.0,<0.10.0" \
+      --replace 'pyrsistent>=0.14.2,<0.15.0' 'pyrsistent>=0.14.2,<0.16.0'
   '';
+
+  format = "pyproject";
 
   propagatedBuildInputs = [
     cleo6
@@ -58,8 +63,8 @@ in buildPythonPackage rec {
     html5lib
     shellingham
     tomlkit
-  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 ]
-    ++ lib.optionals isPy27 [ virtualenv functools32 ];
+  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
+    ++ lib.optionals isPy27 [ virtualenv functools32 subprocess32 ];
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
@@ -82,5 +87,6 @@ in buildPythonPackage rec {
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
+    broken = true;
   };
 }

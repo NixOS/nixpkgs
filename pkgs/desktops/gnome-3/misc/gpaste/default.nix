@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter, fetchpatch
-, pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobject-introspection }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter
+, pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  version = "3.32.0";
-  name = "gpaste-${version}";
+  version = "3.34.0";
+  pname = "gpaste";
 
   src = fetchurl {
     url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "1fvpl9vqmrr1w22hm0ybabn9pjfii5qj9ghnc2jzihgrn2h486v6";
+    sha256 = "0mih07b3mb0m1bk8ng9175fgvdbmvsacl4v4kvdnnlnql6rh47gv";
   };
 
   patches = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/gnome-shell/prefs.js \
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/libgpaste/settings/gpaste-settings.c \
-      --subst-var-by gschemasCompiled "${placeholder "out"}/share/gsettings-schemas/${name}/glib-2.0/schemas"
+      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
   nativeBuildInputs = [

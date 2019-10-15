@@ -1,10 +1,10 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
-{ lib, stdenv, fetchurl, flex, bison, autoconf
-, mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+{ lib, stdenv, fetchurl, autoconf, bison, libtool, pkgconfig, re2c
+, libmysqlclient, libxml2, readline, zlib, curl, postgresql, gettext
+, openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
-, libzip, re2c, valgrind
+, libzip, valgrind
 }:
 
 with lib;
@@ -17,7 +17,7 @@ let
   , withSystemd ? config.php.systemd or stdenv.isLinux
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
-  , mhashSupport ? config.php.mhash or true
+  , mhashSupport ? config.php.mhash or false
   , mysqlndSupport ? config.php.mysqlnd or true
   , mysqliSupport ? config.php.mysqli or true
   , pdo_mysqlSupport ? config.php.pdo_mysql or true
@@ -48,7 +48,7 @@ let
   , ftpSupport ? config.php.ftp or true
   , fpmSupport ? config.php.fpm or true
   , gmpSupport ? config.php.gmp or true
-  , ztsSupport ? config.php.zts or false
+  , ztsSupport ? (config.php.zts or false) || (apxs2Support)
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
@@ -59,14 +59,12 @@ let
   , cliSupport ? config.php.cli or true
   , pharSupport ? config.php.phar or true
   , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
-  , re2cSupport ? config.php.re2c or true
-  , cgotoSupport ? (config.php.cgoto or false) && (re2cSupport)
+  , cgotoSupport ? config.php.cgoto or false
   , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
-  , valgrindPcreSupport ? (config.php.valgrindPcreSupport or false) && (valgrindSupport) && (versionAtLeast version "7.2")
   }:
 
     let
-      mysqlBuildInputs = optional (!mysqlndSupport) mysql.connector-c;
+      mysqlBuildInputs = optional (!mysqlndSupport) libmysqlclient;
       libmcrypt' = libmcrypt.override { disablePosixThreads = true; };
     in stdenv.mkDerivation {
 
@@ -76,8 +74,8 @@ let
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [ pkgconfig autoconf ];
-      buildInputs = [ flex bison ]
+      nativeBuildInputs = [ autoconf bison libtool pkgconfig re2c ];
+      buildInputs = [ ]
         ++ optional (versionOlder version "7.3") pcre
         ++ optional (versionAtLeast version "7.3") pcre2
         ++ optional withSystemd systemd
@@ -108,7 +106,6 @@ let
         ++ optional tidySupport html-tidy
         ++ optional argon2Support libargon2
         ++ optional libzipSupport libzip
-        ++ optional re2cSupport re2c
         ++ optional valgrindSupport valgrind;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
@@ -152,9 +149,9 @@ let
       ++ optional postgresqlSupport "--with-pgsql=${postgresql}"
       ++ optional pdo_odbcSupport "--with-pdo-odbc=unixODBC,${unixODBC}"
       ++ optional pdo_pgsqlSupport "--with-pdo-pgsql=${postgresql}"
-      ++ optional pdo_mysqlSupport "--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"
+      ++ optional pdo_mysqlSupport "--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else libmysqlclient}"
       ++ optionals mysqliSupport [
-        "--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"
+        "--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${libmysqlclient}/bin/mysql_config"}"
       ]
       ++ optional ( pdo_mysqlSupport || mysqliSupport ) "--with-mysql-sock=/run/mysqld/mysqld.sock"
       ++ optional bcmathSupport "--enable-bcmath"
@@ -192,8 +189,7 @@ let
       ++ optional (!pharSupport) "--disable-phar"
       ++ optional xmlrpcSupport "--with-xmlrpc"
       ++ optional cgotoSupport "--enable-re2c-cgoto"
-      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}"
-      ++ optional valgrindPcreSupport "--with-pcre-valgrind";
+      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}";
 
       hardeningDisable = [ "bindnow" ];
 
@@ -257,25 +253,17 @@ let
     };
 
 in {
-  php71 = generic {
-    version = "7.1.30";
-    sha256 = "1czcf5qwk727sdzx5n4wvsxvl50jx6d5x8ws1dqx46fa9xvm0j36";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
-  };
-
   php72 = generic {
-    version = "7.2.19";
-    sha256 = "16d0j0d4563bcrxlw5yysldscxpgyp917hmc4m4ys1zyfprv3l7b";
+    version = "7.2.23";
+    sha256 = "03a3snx8wdn2pwfy8qdk035da9g3qdnpgqvpz4qfgmr97mjg6ym1";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.6";
-    sha256 = "0xvgdxmhk0hsx8gh3ircm2s7pf59gm8i9a73204mr0sl05qchnhy";
+    version = "7.3.10";
+    sha256 = "0j2lqiw8miv9aqg55z2dvfg3mwm5vyqx6ggmfbw013zvq1qxhvah";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;

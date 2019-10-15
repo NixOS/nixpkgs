@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9efcc9fab3b49ab833475702b55edd5ae07af1af7a4c627678980b45e459c460";
+    sha256 = "8ea2d3ce97850f31e4a08b0e2b5e6c34997d7216a9d2c98e0f3978630d4da69a";
   };
 
   meta = with stdenv.lib; {

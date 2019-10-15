@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "swarm-2019-03-11";
 
   src = fetchFromGitHub {

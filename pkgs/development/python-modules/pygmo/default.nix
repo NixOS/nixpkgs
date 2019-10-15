@@ -1,5 +1,4 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
 , eigen
 , nlopt
@@ -28,7 +27,7 @@ let
     '';
   });
 
-in buildPythonPackage rec {
+in buildPythonPackage {
   pname = "pygmo";
   version = pagmo2WithPython.version;
 

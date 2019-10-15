@@ -15,7 +15,7 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "phantomjs-${version}";
+  pname = "phantomjs";
   version = "2.1.1";
 
   src = fetchFromGitHub {
@@ -105,7 +105,7 @@ in stdenv.mkDerivation rec {
       - Network Monitoring
     '';
 
-    homepage = http://phantomjs.org/;
+    homepage = https://phantomjs.org/;
     license = licenses.bsd3;
 
     maintainers = [ maintainers.aflatter ];

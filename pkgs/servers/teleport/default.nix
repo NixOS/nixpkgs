@@ -2,15 +2,15 @@
 { stdenv, buildGoPackage, zip, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "teleport-${version}";
-  version = "3.1.8";
+  pname = "teleport";
+  version = "4.0.4";
 
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "1jkng8zr5x7z9np2wm9ya1j1zv7bhcv9qsmgmrlfy6y9ld3bq8r2";
+    sha256 = "1ady9nh1mi1lb9a868w6ylncz2r6x7mk33ajiymn2frpcwk9m2l9";
   };
 
   goPackagePath = "github.com/gravitational/teleport";

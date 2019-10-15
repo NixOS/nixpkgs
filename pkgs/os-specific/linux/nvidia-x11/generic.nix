@@ -13,8 +13,8 @@
 , broken ? false
 }:
 
-{ stdenv, callPackage, pkgsi686Linux, fetchurl
-, kernel ? null, xorg, zlib, perl, nukeReferences
+{ stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
+, kernel ? null, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -32,6 +32,8 @@ let
   pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
   i686bundled = versionAtLeast version "391";
 
+  libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.xorg.libXext pkgs.xorg.libX11
+    pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc ];
 
   self = stdenv.mkDerivation {
     name = "nvidia-x11-${version}${nameSuffix}";
@@ -70,7 +72,8 @@ let
     dontStrip = true;
     dontPatchELF = true;
 
-    libPath = makeLibraryPath [ xorg.libXext xorg.libX11 xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc ];
+    libPath = libPathFor pkgs;
+    libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
     nativeBuildInputs = [ perl nukeReferences ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;

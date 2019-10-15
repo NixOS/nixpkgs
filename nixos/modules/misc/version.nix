@@ -1,4 +1,4 @@
-{ options, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -85,7 +85,7 @@ in
     # Generate /etc/os-release.  See
     # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
-    environment.etc."os-release".text =
+    environment.etc.os-release.text =
       ''
         NAME=NixOS
         ID=nixos

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, popt, libuuid, liburcu, lttng-ust, kmod, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "lttng-tools-${version}";
-  version = "2.10.6";
+  pname = "lttng-tools";
+  version = "2.10.7";
 
   src = fetchurl {
-    url = "https://lttng.org/files/lttng-tools/${name}.tar.bz2";
-    sha256 = "0z2kh6svszi332012id373bjwzcmzj6fks993f6yi35zpqmzapgh";
+    url = "https://lttng.org/files/lttng-tools/${pname}-${version}.tar.bz2";
+    sha256 = "04hkga0hnyjmv42mxj3njaykqmq9x4abd5qfyds5r62x1khfnwgd";
   };
 
   nativeBuildInputs = [ pkgconfig ];

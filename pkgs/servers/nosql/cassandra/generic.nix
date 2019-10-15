@@ -15,31 +15,31 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "cassandra-${version}";
+  pname = "cassandra";
   inherit version;
 
   src = fetchurl {
     inherit sha256;
-    url = "mirror://apache/cassandra/${version}/apache-${name}-bin.tar.gz";
+    url = "mirror://apache/cassandra/${version}/apache-${pname}-${version}-bin.tar.gz";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper coreutils ];
 
   installPhase = ''
     mkdir $out
     mv * $out
 
     # Clean up documentation.
-    mkdir -p $out/share/doc/${name}
+    mkdir -p $out/share/doc/${pname}-${version}
     mv $out/CHANGES.txt \
        $out/LICENSE.txt \
        $out/NEWS.txt \
        $out/NOTICE.txt \
        $out/javadoc \
-       $out/share/doc/${name}
+       $out/share/doc/${pname}-${version}
 
     if [[ -d $out/doc ]]; then
-      mv "$out/doc/"* $out/share/doc/${name}
+      mv "$out/doc/"* $out/share/doc/${pname}-${version}
       rmdir $out/doc
     fi
 
@@ -51,8 +51,17 @@ stdenv.mkDerivation rec {
                bin/sstablescrub \
                bin/sstableupgrade \
                bin/sstableutil \
-               bin/sstableverify \
-               tools/bin/cassandra-stress \
+               bin/sstableverify; do
+      # Check if file exists because some don't exist across all versions
+      if [ -f $out/$cmd ]; then
+        wrapProgram $out/bin/$(basename "$cmd") \
+          --suffix-each LD_LIBRARY_PATH : ${libPath} \
+          --prefix PATH : ${binPath} \
+          --set JAVA_HOME ${jre}
+      fi
+    done
+
+    for cmd in tools/bin/cassandra-stress \
                tools/bin/cassandra-stressd \
                tools/bin/sstabledump \
                tools/bin/sstableexpiredblockers \
@@ -62,11 +71,9 @@ stdenv.mkDerivation rec {
                tools/bin/sstablerepairedset \
                tools/bin/sstablesplit \
                tools/bin/token-generator; do
-
-      # check if file exists because some bin tools don't exist across all
-      # cassandra versions
+      # Check if file exists because some don't exist across all versions
       if [ -f $out/$cmd ]; then
-        makeWrapper $out/$cmd $out/bin/$(${coreutils}/bin/basename "$cmd") \
+        makeWrapper $out/$cmd $out/bin/$(basename "$cmd") \
           --suffix-each LD_LIBRARY_PATH : ${libPath} \
           --prefix PATH : ${binPath} \
           --set JAVA_HOME ${jre}

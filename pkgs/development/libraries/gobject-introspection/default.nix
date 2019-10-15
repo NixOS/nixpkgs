@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, flex, bison, meson, ninja, pkgconfig, libffi, python3
-, libintl, cctools, cairo, gnome3, glibcLocales, fetchpatch
+, libintl, cctools, cairo, gnome3, glibcLocales
 , substituteAll, nixStoreDir ? builtins.storeDir
 , x11Support ? true
 }:
@@ -9,7 +9,7 @@
 
 let
   pname = "gobject-introspection";
-  version = "1.60.1";
+  version = "1.62.0";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1cr4r3lh5alrks9q2ycs1kn2crnkhrhn2wrmibng6dndkr4x2i6q";
+    sha256 = "18lhglg9v6y83lhqzyifc1z0wrlawzrhzzxx0a3h1g7xaz97xvmi";
   };
 
   outputs = [ "out" "dev" "man" ];

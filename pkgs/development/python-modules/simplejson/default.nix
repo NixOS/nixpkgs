@@ -1,19 +1,20 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , stdenv
-, isPy3k
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.16.0";
+  version = "3.16.1";
   doCheck = !stdenv.isDarwin;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b1f329139ba647a9548aa05fb95d046b4a677643070dc2afc05fa2e975d09ca5";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1v80dbk3ajhgz7q5cc8k0dd22zj9rrlz838c90l5g3w1i280r1iq";
   };
 
   # Package does not need pytest, but its a bit easier debugging.

@@ -103,6 +103,13 @@ in {
               description = ''
                 Set this to <literal>true</literal> if the SSID of the network is hidden.
               '';
+              example = literalExample ''
+                { echelon = {
+                    hidden = true;
+                    psk = "abcdefgh";
+                  };
+                }
+              '';
             };
 
             priority = mkOption {
@@ -146,10 +153,13 @@ in {
         '';
         default = {};
         example = literalExample ''
-          { echelon = {
+          { echelon = {                   # SSID with no spaces or special characters
               psk = "abcdefgh";
             };
-            "free.wifi" = {};
+            "echelon's AP" = {            # SSID with spaces and/or special characters
+               psk = "ijklmnop";
+            };
+            "free.wifi" = {};             # Public wireless network
           }
         '';
       };
@@ -204,6 +214,7 @@ in {
     environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
+    services.udev.packages = [ pkgs.crda ];
 
     # FIXME: start a separate wpa_supplicant instance per interface.
     systemd.services.wpa_supplicant = let

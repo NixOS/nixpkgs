@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , pkgs
 , numpy
@@ -15,7 +14,7 @@
 let
   cntk = pkgs.cntk;
 in
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (cntk) name version src;
 
   nativeBuildInputs = [ swig openmpi ];

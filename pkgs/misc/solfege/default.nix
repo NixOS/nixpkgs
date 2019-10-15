@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, pythonPackages, gettext, texinfo
-, ghostscript, librsvg, gdk_pixbuf, txt2man, timidity, mpg123
+, ghostscript, librsvg, gdk-pixbuf, txt2man, timidity, mpg123
 , alsaUtils, vorbis-tools, csound, lilypond
 , makeWrapper
 }:
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python pygtk gettext texinfo
-    ghostscript librsvg gdk_pixbuf txt2man makeWrapper
+    ghostscript librsvg gdk-pixbuf txt2man makeWrapper
   ];
 
   preBuild = ''

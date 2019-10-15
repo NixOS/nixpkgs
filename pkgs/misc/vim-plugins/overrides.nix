@@ -11,13 +11,16 @@
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 
+# coc-go dependency
+, go
+
 # vim-go denpencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
 
-# vCoolor dep
+# vCoolor dependency
 , gnome3
 }:
 
@@ -30,6 +33,9 @@ self: super: {
     dependencies = with super; [ vim-addon-manager ];
   };
 
+  # Mainly used as a dependency for fzf-vim. Wraps the fzf program as a vim
+  # plugin, since part of the fzf vim plugin is included in the main fzf
+  # program.
   fzfWrapper = buildVimPluginFrom2Nix {
     pname = "fzf";
     version = fzf.version;
@@ -43,16 +49,16 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.146";
+    version = "0.1.154";
     LanguageClient-neovim-src = fetchurl {
       url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
-      sha256 = "1xm98pyzf2dlh04ijjf3nkh37lyqspbbjddkjny1g06xxb4kfxnk";
+      sha256 = "03sp643nihj9p2s9cx2dcazhz68s30qx7igqprgsmr1040rhg2py";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0dixvmwq611wg2g3rp1n1gqali46904fnhb90gcpl9a1diqb34sh";
+      cargoSha256 = "1bvbls2l1xa0s3k11crvd98il4i20z5sn0hqmsc1b915k03qq4zj";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -109,21 +115,24 @@ self: super: {
     '';
   });
 
-
-  coc-nvim = let
-    version = "0.0.67";
-    index_js = fetchzip {
-        url = "https://github.com/neoclide/coc.nvim/releases/download/v${version}/coc.tar.gz";
-        sha256 = "0cqgrfyaq9nck1y6mb63gmwgdrxqzgdgns5gjshpp1xzfq6asrqj";
-      };
-  in super.coc-nvim.overrideAttrs(old: {
-    # you still need to enable the node js provider in your nvim config
-    postInstall = ''
-      mkdir -p $out/share/vim-plugins/coc-nvim/build
-      cp ${index_js}/index.js $out/share/vim-plugins/coc-nvim/build/
+  coc-go = super.coc-go.overrideAttrs(old: {
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/coc-go/src/utils/tools.ts \
+        --replace 'const cmd = `GOPATH=''${gopath}; go ''${args}`' 'const cmd = `GOPATH=''${gopath}; ${go}/bin/go ''${args}`'
     '';
-
   });
+
+  # Only official releases contains the required index.js file
+  coc-nvim = buildVimPluginFrom2Nix rec {
+    pname = "coc-nvim";
+    version = "0.0.74";
+    src = fetchFromGitHub {
+      owner = "neoclide";
+      repo = "coc.nvim";
+      rev = "v${version}";
+      sha256 = "1s4nib2mnhagd0ymx254vf7l1iijwrh2xdqn3bdm4f1jnip81r10";
+    };
+  };
 
   command-t = super.command-t.overrideAttrs(old: {
     buildInputs = [ ruby rake ];
@@ -157,6 +166,10 @@ self: super: {
     '';
   });
 
+  defx-nvim = super.defx-nvim.overrideAttrs(old: {
+    dependencies = with super; [ nvim-yarp ];
+  });
+
   deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
     dependencies = with super; [ deoplete-nvim vim-fish ];
   });
@@ -178,6 +191,10 @@ self: super: {
 
   forms = super.forms.overrideAttrs(old: {
     dependencies = with super; [ super.self ];
+  });
+
+  ghcid = super.ghcid.overrideAttrs(old: {
+    configurePhase = "cd plugins/nvim";
   });
 
   gist-vim = super.gist-vim.overrideAttrs(old: {
@@ -213,6 +230,10 @@ self: super: {
 
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
+  });
+
+  fzf-vim = super.fzf-vim.overrideAttrs(old: {
+    dependencies = [ self.fzfWrapper ];
   });
 
   sved = let
@@ -416,19 +437,19 @@ self: super: {
   youcompleteme = super.youcompleteme.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
-        --replace "'ycm_path_to_python_interpreter', '''" \
-        "'ycm_path_to_python_interpreter', '${python}/bin/python'"
+        --replace "'ycm_python_interpreter_path', '''" \
+        "'ycm_python_interpreter_path', '${python3}/bin/python'"
 
       rm -r third_party/ycmd
       ln -s ${ycmd}/lib/ycmd third_party
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A code-completion engine for Vim";
-      homepage = https://github.com/Valloric/YouCompleteMe;
-      license = stdenv.lib.licenses.gpl3;
-      maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
-      platforms = stdenv.lib.platforms.unix;
+      homepage = "https://github.com/Valloric/YouCompleteMe";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ marcweber jagajaga ];
+      platforms = platforms.unix;
     };
   });
 

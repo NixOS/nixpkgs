@@ -2,11 +2,11 @@
 , libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, xlibsWrapper, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "voxelands-${version}";
+  pname = "voxelands";
   version = "1512.00";
 
   src = fetchurl {
-    url = "http://voxelands.com/downloads/${name}-src.tar.bz2";
+    url = "http://voxelands.com/downloads/${pname}-${version}-src.tar.bz2";
     sha256 = "0bims0y0nyviv2f2nxfj37s3258cjbfp9xd97najz0yylnk3qdfw";
   };
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Infinite-world block sandbox game based on Minetest";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ c0dehero ];
+    maintainers = with maintainers; [ ];
   };
 }

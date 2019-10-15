@@ -1,13 +1,13 @@
 { stdenv, fetchurl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "lzip-${version}";
+  pname = "lzip";
   version = "1.21";
 
   nativeBuildInputs = [ texinfo ];
 
   src = fetchurl {
-    url = "mirror://savannah/lzip/${name}.tar.gz";
+    url = "mirror://savannah/lzip/${pname}-${version}.tar.gz";
     sha256 = "12qdcw5k1cx77brv9yxi1h4dzwibhfmdpigrj43nfk8nscwm12z4";
   };
 

@@ -3,9 +3,9 @@
 
 let params =
   if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
-    version = "3.4.0";
-    uid = "37524";
-    sha256 = "023j9sd64brqvjdidqkn5m8d7a93zd9r86ggh573z9nkjm2m7vvg";
+    version = "3.4.1";
+    uid = "38104";
+    sha256 = "1zklv2w34k866fpwmw8q692mid5n6s75d2mmhhigrzpx5l3d4z6y";
   } else {
     version = "3.3.0";
     uid = "37077";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ which ];
   buildInputs = [ coq ];
-  propagatedBuildInputs = [ bignums coquelicot flocq mathcomp ];
+  propagatedBuildInputs = [ bignums coquelicot flocq ];
 
   configurePhase = "./configure --libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Interval";
   buildPhase = "./remake";
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" ];
   };
 
 

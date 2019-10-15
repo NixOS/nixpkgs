@@ -2,12 +2,12 @@
 , dbus, libconfuse, libjpeg, sane-backends, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "scanbd-${version}";
+  pname = "scanbd";
   version = "1.5.1";
 
   src = fetchurl {
     sha256 = "0pvy4qirfjdfm8aj6x5rkbgl7hk3jfa2s21qkk8ic5dqfjjab75n";
-    url = "mirror://sourceforge/scanbd/${name}.tgz";
+    url = "mirror://sourceforge/scanbd/${pname}-${version}.tgz";
   };
 
   nativeBuildInputs = [ pkgconfig ];

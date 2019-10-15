@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , which
 , buildPackages
 , toolset ? /**/ if stdenv.cc.isClang  then "clang"

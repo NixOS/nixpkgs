@@ -165,7 +165,7 @@ in
 
   }; # options.services
 
-  config = { 
+  config = {
 
     systemd.services.mwlib-nserve = mkIf cfg.nserve.enable
     {
@@ -191,7 +191,6 @@ in
       description = "mwlib job queue server";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "local-fs.target" ];
 
       preStart = ''
         mkdir -pv '${cfg.qserve.datadir}'
@@ -218,7 +217,7 @@ in
       description = "mwlib worker";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "local-fs.target" ];
+      after = [ "network.target" ];
 
       preStart = ''
         mkdir -pv '${cfg.nslave.cachedir}'

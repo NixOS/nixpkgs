@@ -3,33 +3,28 @@
          xml:id="chap-contributing">
  <title>Contributing to this documentation</title>
  <para>
-  The DocBook sources of the Nixpkgs manual are in the
-  <filename
-xlink:href="https://github.com/NixOS/nixpkgs/tree/master/doc">doc</filename>
-  subdirectory of the Nixpkgs repository.
+  The DocBook sources of the Nixpkgs manual are in the <filename
+xlink:href="https://github.com/NixOS/nixpkgs/tree/master/doc">doc</filename> subdirectory of the Nixpkgs repository.
  </para>
  <para>
   You can quickly check your edits with <command>make</command>:
  </para>
 <screen>
-  $ cd /path/to/nixpkgs/doc
-  $ nix-shell
-  [nix-shell]$ make
+<prompt>$ </prompt>cd /path/to/nixpkgs/doc
+<prompt>$ </prompt>nix-shell
+<prompt>[nix-shell]$ </prompt>make
 </screen>
  <para>
-  If you experience problems, run <command>make debug</command> to help
-  understand the docbook errors.
+  If you experience problems, run <command>make debug</command> to help understand the docbook errors.
  </para>
  <para>
-  After making modifications to the manual, it's important to build it before
-  committing. You can do that as follows:
+  After making modifications to the manual, it's important to build it before committing. You can do that as follows:
 <screen>
-  $ cd /path/to/nixpkgs/doc
-  $ nix-shell
-  [nix-shell]$ make clean
-  [nix-shell]$ nix-build .
+<prompt>$ </prompt>cd /path/to/nixpkgs/doc
+<prompt>$ </prompt>nix-shell
+<prompt>[nix-shell]$ </prompt>make clean
+<prompt>[nix-shell]$ </prompt>nix-build .
 </screen>
-  If the build succeeds, the manual will be in
-  <filename>./result/share/doc/nixpkgs/manual.html</filename>.
+  If the build succeeds, the manual will be in <filename>./result/share/doc/nixpkgs/manual.html</filename>.
  </para>
 </chapter>

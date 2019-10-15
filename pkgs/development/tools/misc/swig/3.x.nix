@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre, buildPackages }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "swig";

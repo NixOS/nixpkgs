@@ -45,7 +45,6 @@ let
     "sophus-*"
     "tomlib-*"
   ];
-  standardPackages = requiredPackages ++ autoloadedPackages;
   keepAll = keepAllPackages || (packageSet == "full");
   packagesToKeep = requiredPackages ++ lib.optionals (packageSet == "standard") autoloadedPackages;
 
@@ -62,11 +61,11 @@ in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.10.1";
+  version = "4.10.2";
 
   src = fetchurl {
     url = "https://www.gap-system.org/pub/gap/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
-    sha256 = "136s0zvhcw41fshj5zgsrjcy2kd58cdh2m3ddp5rdizi4rx54f10";
+    sha256 = "0cp6ddk0469zzv1m1vair6gm27ic6c5m77ri8rn0znq3gaps6x94";
   };
 
   # remove all non-essential packages (which take up a lot of space)

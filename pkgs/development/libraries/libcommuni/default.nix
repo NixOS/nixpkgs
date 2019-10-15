@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libcommuni-${version}";
+  pname = "libcommuni";
   version = "3.5.0";
 
   src = fetchFromGitHub {

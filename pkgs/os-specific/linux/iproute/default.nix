@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.1.0";
+  version = "5.3.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1kvvrz5mlpjxqcm7vl6i8w6l1cb2amp6p5xyq006pgzafc49hnnw";
+    sha256 = "0gvv269wjn4279hxr5zzwsk2c5qgswr47za3hm1x4frsk52iw76b";
   };
 
   preConfigure = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace " netem " " "
   '';
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   makeFlags = [
     "DESTDIR="
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ primeos eelco fpletz ];
+    maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }

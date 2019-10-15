@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "4.1.0";
+  version = "4.3.0";
   format = "other";
 
   src = fetchFromGitHub {
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = https://github.com/Ultimaker/libArcus;
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar gebner ];
   };
 }

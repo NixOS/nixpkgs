@@ -15,30 +15,32 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-, enablePFM ? !stdenv.isDarwin
+, enablePFM ? !(stdenv.isDarwin
+  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+  )
 , enablePolly ? false
 }:
 
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
+  # Used when creating a versioned symlinks of libLLVM.dylib
+  versionSuffixes = with stdenv.lib;
+    let parts = splitVersion release_version; in
+    imap (i: _: concatStringsSep "." (take i parts)) parts;
+
+in stdenv.mkDerivation ({
+  name = "llvm-${version}";
+
   src = fetch "llvm" "0r1p5didv4rkgxyvbkyz671xddg6i3dxvbpsi1xxipkla0l9pk0v";
   polly_src = fetch "polly" "16qkns4ab4x0azrvhy4j7cncbyb2rrbdrqj87zphvqxm5pvm8m1h";
 
-  # Used when creating a versioned symlinks of libLLVM.dylib
-  versionSuffixes = with stdenv.lib;
-    let parts = splitString "." release_version; in
-    imap (i: _: concatStringsSep "." (take i parts)) parts;
-
-in stdenv.mkDerivation (rec {
-  name = "llvm-${version}";
-
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
   '' + optionalString enablePolly ''
-    unpackFile ${polly_src}
+    unpackFile $polly_src
     mv polly-* $sourceRoot/tools/polly
   '';
 
@@ -84,6 +86,14 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+  '' + optionalString stdenv.hostPlatform.isAarch32 ''
+    # skip failing X86 test cases on armv7l
+    rm test/DebugInfo/X86/debug_addr.ll
+    rm test/tools/llvm-dwarfdump/X86/debug_addr.s
+    rm test/tools/llvm-dwarfdump/X86/debug_addr_address_size_mismatch.s
+    rm test/tools/llvm-dwarfdump/X86/debug_addr_dwarf4.s
+    rm test/tools/llvm-dwarfdump/X86/debug_addr_unsupported_version.s
+    rm test/tools/llvm-dwarfdump/X86/debug_addr_version_mismatch.s
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';
@@ -153,8 +163,6 @@ in stdenv.mkDerivation (rec {
   checkTarget = "check-all";
 
   enableParallelBuilding = true;
-
-  passthru.src = src;
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";

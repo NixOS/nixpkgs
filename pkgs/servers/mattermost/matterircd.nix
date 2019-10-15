@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "matterircd-${version}";
+  pname = "matterircd";
   version = "0.18.2";
 
   src = fetchFromGitHub {

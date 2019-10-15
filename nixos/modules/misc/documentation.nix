@@ -49,11 +49,7 @@ let
       if [ -z "$browser" ]; then
         browser="$(type -P xdg-open || true)"
         if [ -z "$browser" ]; then
-          browser="$(type -P w3m || true)"
-          if [ -z "$browser" ]; then
-            echo "$0: unable to start a web browser; please set \$BROWSER"
-            exit 1
-          fi
+          browser="${pkgs.w3m-nographics}/bin/w3m"
         fi
       fi
       exec "$browser" ${manual.manualHTMLIndex}
@@ -187,8 +183,6 @@ in
     })
 
     (mkIf cfg.doc.enable {
-      # TODO(@oxij): put it here and remove from profiles?
-      # environment.systemPackages = [ pkgs.w3m ]; # w3m-nox?
       environment.pathsToLink = [ "/share/doc" ];
       environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
     })

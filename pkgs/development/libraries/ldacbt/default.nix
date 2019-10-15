@@ -1,11 +1,10 @@
 { stdenv
 , fetchFromGitHub
-, pkgconfig
 , cmake
 }:
 
 stdenv.mkDerivation rec {
-  name = "ldacBT-${version}";
+  pname = "ldacBT";
   version = "2.0.2.3";
 
   src = fetchFromGitHub {

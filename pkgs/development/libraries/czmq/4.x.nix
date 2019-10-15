@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, zeromq }:
+{ stdenv, fetchurl, zeromq }:
 
 stdenv.mkDerivation rec {
   version = "4.2.0";
-  name = "czmq-${version}";
+  pname = "czmq";
 
   src = fetchurl {
-    url = "https://github.com/zeromq/czmq/releases/download/v${version}/${name}.tar.gz";
+    url = "https://github.com/zeromq/czmq/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "1szciz62sk3fm4ga9qjpxz0n0lazvphm32km95bq92ncng12kayg";
   };
 

@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 658548f7..f8f10bdb 100644
+index 74b1a7ff..0a713a32 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -288,6 +288,7 @@ if(MINGW)
+@@ -307,6 +307,7 @@ if(MINGW)
      set(PLUGIN_INSTALL_DIR ".")
      set(DATA_INSTALL_DIR "share")
  elseif(APPLE AND WITH_APP_BUNDLE)
@@ -10,24 +10,24 @@ index 658548f7..f8f10bdb 100644
      set(CMAKE_INSTALL_MANDIR "${PROGNAME}.app/Contents/Resources/man")
      set(CLI_INSTALL_DIR "${PROGNAME}.app/Contents/MacOS")
      set(PROXY_INSTALL_DIR "${PROGNAME}.app/Contents/MacOS")
-@@ -350,12 +351,6 @@ set(CMAKE_AUTORCC ON)
+@@ -369,12 +370,6 @@ set(CMAKE_AUTORCC ON)
  
  if(APPLE)
      set(CMAKE_MACOSX_RPATH TRUE)
 -    find_program(MACDEPLOYQT_EXE macdeployqt HINTS ${Qt5_PREFIX}/bin ENV PATH)
 -    if(NOT MACDEPLOYQT_EXE)
--        message(FATAL_ERROR "macdeployqt is required to build in macOS")
+-        message(FATAL_ERROR "macdeployqt is required to build on macOS")
 -    else()
 -        message(STATUS "Using macdeployqt: ${MACDEPLOYQT_EXE}")
 -    endif()
- endif()
- 
- # Debian sets the the build type to None for package builds.
+ elseif(MINGW)
+     find_program(WINDEPLOYQT_EXE windeployqt HINTS ${Qt5_PREFIX}/bin ENV PATH)
+     if(NOT WINDEPLOYQT_EXE)
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 110dc606..f9b58818 100644
+index f142f368..0742512d 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -343,11 +343,6 @@ if(APPLE AND WITH_APP_BUNDLE)
+@@ -351,11 +351,6 @@ if(APPLE AND WITH_APP_BUNDLE)
      set(CPACK_PACKAGE_FILE_NAME "${PROGNAME}-${KEEPASSXC_VERSION}")
      include(CPack)
  
@@ -40,10 +40,10 @@ index 110dc606..f9b58818 100644
  
  install(TARGETS ${PROGNAME}
 diff --git a/src/autotype/mac/CMakeLists.txt b/src/autotype/mac/CMakeLists.txt
-index f1c5387f..abf70b48 100644
+index 7427450a..a0a58d71 100644
 --- a/src/autotype/mac/CMakeLists.txt
 +++ b/src/autotype/mac/CMakeLists.txt
-@@ -12,7 +12,6 @@ if(WITH_APP_BUNDLE)
+@@ -8,7 +8,6 @@ if(WITH_APP_BUNDLE)
      add_custom_command(TARGET keepassx-autotype-cocoa
              POST_BUILD
              COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/libkeepassx-autotype-cocoa.so ${PLUGIN_INSTALL_DIR}

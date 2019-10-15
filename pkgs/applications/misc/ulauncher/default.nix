@@ -1,19 +1,15 @@
 { stdenv
-, fetchFromGitHub
 , fetchurl
 , python27Packages
-, substituteAll
 , gnome3
 , gobject-introspection
 , wrapGAppsHook
-, gtk3
 , webkitgtk
 , libnotify
 , keybinder3
 , libappindicator
 , intltool
 , wmctrl
-, hicolor-icon-theme
 , xvfb_run
 }:
 
@@ -39,7 +35,6 @@ python27Packages.buildPythonApplication rec  {
   buildInputs = [
     gnome3.adwaita-icon-theme
     gobject-introspection
-    hicolor-icon-theme
     keybinder3
     libappindicator
     libnotify
@@ -60,7 +55,7 @@ python27Packages.buildPythonApplication rec  {
 
   checkInputs = with python27Packages; [
     mock
-    pytest_3
+    pytest
     pytest-mock
     pytestpep8
     xvfb_run

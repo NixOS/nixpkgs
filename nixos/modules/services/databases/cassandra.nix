@@ -8,18 +8,21 @@ let
   cassandraConfig = flip recursiveUpdate cfg.extraConfig
     ({ commitlog_sync = "batch";
        commitlog_sync_batch_window_in_ms = 2;
+       start_native_transport = cfg.allowClients;
+       cluster_name = cfg.clusterName;
        partitioner = "org.apache.cassandra.dht.Murmur3Partitioner";
        endpoint_snitch = "SimpleSnitch";
-       seed_provider =
-         [{ class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
-            parameters = [ { seeds = "127.0.0.1"; } ];
-         }];
        data_file_directories = [ "${cfg.homeDir}/data" ];
        commitlog_directory = "${cfg.homeDir}/commitlog";
        saved_caches_directory = "${cfg.homeDir}/saved_caches";
-     } // (if builtins.compareVersions cfg.package.version "3" >= 0
-             then { hints_directory = "${cfg.homeDir}/hints"; }
-             else {})
+     } // (lib.optionalAttrs (cfg.seedAddresses != []) {
+       seed_provider = [{
+         class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
+         parameters = [ { seeds = concatStringsSep "," cfg.seedAddresses; } ];
+       }];
+     }) // (lib.optionalAttrs (lib.versionAtLeast cfg.package.version "3") {
+       hints_directory = "${cfg.homeDir}/hints";
+     })
     );
   cassandraConfigWithAddresses = cassandraConfig //
     ( if cfg.listenAddress == null
@@ -39,15 +42,42 @@ let
         mkdir -p "$out"
 
         echo "$cassandraYaml" > "$out/cassandra.yaml"
-        ln -s "$cassandraEnvPkg" "$out/cassandra-env.sh"
         ln -s "$cassandraLogbackConfig" "$out/logback.xml"
+
+        cp "$cassandraEnvPkg" "$out/cassandra-env.sh"
+
+        # Delete default JMX Port, otherwise we can't set it using env variable
+        sed -i '/JMX_PORT="7199"/d' "$out/cassandra-env.sh"
+
+        # Delete default password file
+        sed -i '/-Dcom.sun.management.jmxremote.password.file=\/etc\/cassandra\/jmxremote.password/d' "$out/cassandra-env.sh"
       '';
     };
+  defaultJmxRolesFile = builtins.foldl'
+     (left: right: left + right) ""
+     (map (role: "${role.username} ${role.password}") cfg.jmxRoles);
+  fullJvmOptions = cfg.jvmOpts
+    ++ lib.optionals (cfg.jmxRoles != []) [
+      "-Dcom.sun.management.jmxremote.authenticate=true"
+      "-Dcom.sun.management.jmxremote.password.file=${cfg.jmxRolesFile}"
+    ]
+    ++ lib.optionals cfg.remoteJmx [
+      "-Djava.rmi.server.hostname=${cfg.rpcAddress}"
+    ];
 in {
   options.services.cassandra = {
     enable = mkEnableOption ''
       Apache Cassandra – Scalable and highly available database.
     '';
+    clusterName = mkOption {
+      type = types.str;
+      default = "Test Cluster";
+      description = ''
+        The name of the cluster.
+        This setting prevents nodes in one logical cluster from joining
+        another. All nodes in a cluster must have the same value.
+      '';
+    };
     user = mkOption {
       type = types.str;
       default = defaultUser;
@@ -162,6 +192,28 @@ in {
         XML logback configuration for cassandra
       '';
     };
+    seedAddresses = mkOption {
+      type = types.listOf types.str;
+      default = [ "127.0.0.1" ];
+      description = ''
+        The addresses of hosts designated as contact points in the cluster. A
+        joining node contacts one of the nodes in the seeds list to learn the
+        topology of the ring.
+        Set to 127.0.0.1 for a single node cluster.
+      '';
+    };
+    allowClients = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Enables or disables the native transport server (CQL binary protocol).
+        This server uses the same address as the <literal>rpcAddress</literal>,
+        but the port it uses is not <literal>rpc_port</literal> but
+        <literal>native_transport_port</literal>. See the official Cassandra
+        docs for more information on these variables and set them using
+        <literal>extraConfig</literal>.
+      '';
+    };
     extraConfig = mkOption {
       type = types.attrs;
       default = {};
@@ -178,11 +230,11 @@ in {
       example = literalExample "null";
       description = ''
           Set the interval how often full repairs are run, i.e.
-          `nodetool repair --full` is executed. See
+          <literal>nodetool repair --full</literal> is executed. See
           https://cassandra.apache.org/doc/latest/operating/repair.html
           for more information.
 
-          Set to `null` to disable full repairs.
+          Set to <literal>null</literal> to disable full repairs.
         '';
     };
     fullRepairOptions = mkOption {
@@ -199,45 +251,160 @@ in {
       example = literalExample "null";
       description = ''
           Set the interval how often incremental repairs are run, i.e.
-          `nodetool repair` is executed. See
+          <literal>nodetool repair</literal> is executed. See
           https://cassandra.apache.org/doc/latest/operating/repair.html
           for more information.
 
-          Set to `null` to disable incremental repairs.
+          Set to <literal>null</literal> to disable incremental repairs.
         '';
     };
     incrementalRepairOptions = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       example = [ "--partitioner-range" ];
       description = ''
           Options passed through to the incremental repair command.
         '';
     };
+    maxHeapSize = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "4G";
+      description = ''
+        Must be left blank or set together with heapNewSize.
+        If left blank a sensible value for the available amount of RAM and CPU
+        cores is calculated.
+
+        Override to set the amount of memory to allocate to the JVM at
+        start-up. For production use you may wish to adjust this for your
+        environment. MAX_HEAP_SIZE is the total amount of memory dedicated
+        to the Java heap. HEAP_NEWSIZE refers to the size of the young
+        generation.
+
+        The main trade-off for the young generation is that the larger it
+        is, the longer GC pause times will be. The shorter it is, the more
+        expensive GC will be (usually).
+      '';
+    };
+    heapNewSize = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "800M";
+      description = ''
+        Must be left blank or set together with heapNewSize.
+        If left blank a sensible value for the available amount of RAM and CPU
+        cores is calculated.
+
+        Override to set the amount of memory to allocate to the JVM at
+        start-up. For production use you may wish to adjust this for your
+        environment. HEAP_NEWSIZE refers to the size of the young
+        generation.
+
+        The main trade-off for the young generation is that the larger it
+        is, the longer GC pause times will be. The shorter it is, the more
+        expensive GC will be (usually).
+
+        The example HEAP_NEWSIZE assumes a modern 8-core+ machine for decent pause
+        times. If in doubt, and if you do not particularly want to tweak, go with
+        100 MB per physical CPU core.
+      '';
+    };
+    mallocArenaMax = mkOption {
+      type = types.nullOr types.int;
+      default = null;
+      example = 4;
+      description = ''
+        Set this to control the amount of arenas per-thread in glibc.
+      '';
+    };
+    remoteJmx = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Cassandra ships with JMX accessible *only* from localhost.
+        To enable remote JMX connections set to true.
+
+        Be sure to also enable authentication and/or TLS.
+        See: https://wiki.apache.org/cassandra/JmxSecurity
+      '';
+    };
+    jmxPort = mkOption {
+      type = types.int;
+      default = 7199;
+      description = ''
+        Specifies the default port over which Cassandra will be available for
+        JMX connections.
+        For security reasons, you should not expose this port to the internet.
+        Firewall it if needed.
+      '';
+    };
+    jmxRoles = mkOption {
+      default = [];
+      description = ''
+        Roles that are allowed to access the JMX (e.g. nodetool)
+        BEWARE: The passwords will be stored world readable in the nix-store.
+                It's recommended to use your own protected file using
+                <literal>jmxRolesFile</literal>
+
+        Doesn't work in versions older than 3.11 because they don't like that
+        it's world readable.
+      '';
+      type = types.listOf (types.submodule {
+        options = {
+          username = mkOption {
+            type = types.str;
+            description = "Username for JMX";
+          };
+          password = mkOption {
+            type = types.str;
+            description = "Password for JMX";
+          };
+        };
+      });
+    };
+    jmxRolesFile = mkOption {
+      type = types.nullOr types.path;
+      default = if (lib.versionAtLeast cfg.package.version "3.11")
+                then pkgs.writeText "jmx-roles-file" defaultJmxRolesFile
+                else null;
+      example = "/var/lib/cassandra/jmx.password";
+      description = ''
+        Specify your own jmx roles file.
+
+        Make sure the permissions forbid "others" from reading the file if
+        you're using Cassandra below version 3.11.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     assertions =
-      [ { assertion =
-          (cfg.listenAddress == null || cfg.listenInterface == null)
-          && !(cfg.listenAddress == null && cfg.listenInterface == null);
+      [ { assertion = (cfg.listenAddress == null) != (cfg.listenInterface == null);
           message = "You have to set either listenAddress or listenInterface";
         }
-        { assertion =
-          (cfg.rpcAddress == null || cfg.rpcInterface == null)
-          && !(cfg.rpcAddress == null && cfg.rpcInterface == null);
+        { assertion = (cfg.rpcAddress == null) != (cfg.rpcInterface == null);
           message = "You have to set either rpcAddress or rpcInterface";
+        }
+        { assertion = (cfg.maxHeapSize == null) == (cfg.heapNewSize == null);
+          message = "If you set either of maxHeapSize or heapNewSize you have to set both";
+        }
+        { assertion = cfg.remoteJmx -> cfg.jmxRolesFile != null;
+          message = ''
+            If you want JMX available remotely you need to set a password using
+            <literal>jmxRoles</literal> or <literal>jmxRolesFile</literal> if
+            using Cassandra older than v3.11.
+          '';
         }
       ];
     users = mkIf (cfg.user == defaultUser) {
-      extraUsers."${defaultUser}" =
+      extraUsers.${defaultUser} =
         {  group = cfg.group;
            home = cfg.homeDir;
            createHome = true;
            uid = config.ids.uids.cassandra;
            description = "Cassandra service user";
         };
-      extraGroups."${defaultUser}".gid = config.ids.gids.cassandra;
+      extraGroups.${defaultUser}.gid = config.ids.gids.cassandra;
     };
 
     systemd.services.cassandra =
@@ -245,7 +412,12 @@ in {
         after = [ "network.target" ];
         environment =
           { CASSANDRA_CONF = "${cassandraEtc}";
-            JVM_OPTS = builtins.concatStringsSep " " cfg.jvmOpts;
+            JVM_OPTS = builtins.concatStringsSep " " fullJvmOptions;
+            MAX_HEAP_SIZE = toString cfg.maxHeapSize;
+            HEAP_NEWSIZE = toString cfg.heapNewSize;
+            MALLOC_ARENA_MAX = toString cfg.mallocArenaMax;
+            LOCAL_JMX = if cfg.remoteJmx then "no" else "yes";
+            JMX_PORT = toString cfg.jmxPort;
           };
         wantedBy = [ "multi-user.target" ];
         serviceConfig =

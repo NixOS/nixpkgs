@@ -1,13 +1,13 @@
-{ stdenv, fetchzip, fetchpatch
+{ stdenv, fetchzip
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
-, libwebp, libxml2, proj, python, scons, sqlite, zlib
+, libwebp, libxml2, proj, python, sqlite, zlib
 
 # supply a postgresql package to enable the PostGIS input plugin
 , postgresql ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "mapnik-${version}";
+  pname = "mapnik";
   version = "3.0.22";
 
   src = fetchzip {

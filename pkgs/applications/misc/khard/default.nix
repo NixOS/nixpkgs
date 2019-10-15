@@ -17,13 +17,13 @@ let
   };
 
 in with python.pkgs; buildPythonApplication rec {
-  version = "0.13.0";
-  name = "khard-${version}";
+  version = "0.14.0";
+  pname = "khard";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/scheibler/khard/archive/v${version}.tar.gz";
-    sha256 = "06b9xcdg1na6mxa2pnlh0wfsk02k2h6hlki089aaikbg8k8ykj8f";
+    sha256 = "0m1pc67jz663yfc0xzfpknymn8jj2bpfxaph3pl0mjd3h1zjfyaq";
   };
 
   # setup.py reads the UTF-8 encoded readme.

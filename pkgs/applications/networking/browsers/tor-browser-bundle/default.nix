@@ -21,8 +21,6 @@
 , mediaSupport ? false
 , ffmpeg
 
-, gmp
-
 # Extensions, common
 , zip
 
@@ -73,13 +71,13 @@ let
     ffmpeg
   ];
 in
-stdenv.mkDerivation rec {
-  name = "tor-browser-bundle-${version}";
+stdenv.mkDerivation {
+  pname = "tor-browser-bundle";
   version = tor-browser-unwrapped.version;
 
   buildInputs = [ tor-browser-unwrapped tor ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   buildPhase = ":";
 

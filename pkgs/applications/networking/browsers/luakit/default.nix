@@ -1,17 +1,9 @@
 { stdenv, fetchFromGitHub, pkgconfig, wrapGAppsHook
-, help2man, lua5, luafilesystem, luajit, sqlite
+, help2man, luafilesystem, luajit, sqlite
 , webkitgtk, gtk3, gst_all_1, glib-networking
 }:
 
-let
-  lualibs = [luafilesystem];
-  getPath       = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
-  getLuaPath    = lib : getPath lib "lua";
-  getLuaCPath   = lib : getPath lib "so";
-  luaPath       = stdenv.lib.concatStringsSep ";" (map getLuaPath lualibs);
-  luaCPath      = stdenv.lib.concatStringsSep ";" (map getLuaCPath lualibs);
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "luakit";
   version = "2.1";
 
@@ -27,7 +19,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    webkitgtk lua5 luafilesystem luajit sqlite gtk3
+    webkitgtk luafilesystem luajit sqlite gtk3
     gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
@@ -36,8 +28,10 @@ in stdenv.mkDerivation rec {
 
   preBuild = ''
     # build-utils/docgen/gen.lua:2: module 'lib.lousy.util' not found
-    # TODO: why is not this the default?
-    LUA_PATH=?.lua
+    # TODO: why is not this the default? The test runner adds
+    # ';./lib/?.lua;./lib/?/init.lua' to package.path, but the build-utils
+    # scripts don't add an equivalent
+    export LUA_PATH="$LUA_PATH;./?.lua;./?/init.lua"
   '';
 
   makeFlags = [
@@ -54,8 +48,8 @@ in stdenv.mkDerivation rec {
   in ''
     gappsWrapperArgs+=(
       --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
-      --set LUA_PATH '${luaKitPath};${luaPath};'
-      --set LUA_CPATH '${luaCPath};'
+      --prefix LUA_PATH ';' "${luaKitPath};$LUA_PATH"
+      --prefix LUA_CPATH ';' "$LUA_CPATH"
     )
   '';
 

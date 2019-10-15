@@ -3,14 +3,14 @@
 , bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
 stdenv.mkDerivation rec {
-  name = "gzdoom-${version}";
-  version = "4.0.0";
+  pname = "gzdoom";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "1054g9n5rdnkkfrxvaybki4clfvr9fbhza4jbg53h4vwxahmjmbx";
+    sha256 = "1fak8bmsb3jqcx28hr60yj3dd3khzhjw1kgq6q7piwnmgr27ibgd";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

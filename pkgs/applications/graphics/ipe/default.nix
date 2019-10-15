@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${name}/src";
 
-  IPEPREFIX="${placeholder "out"}";
+  IPEPREFIX=placeholder "out";
   URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 

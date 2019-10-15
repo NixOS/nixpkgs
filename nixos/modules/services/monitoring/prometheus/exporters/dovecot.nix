@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -39,8 +39,8 @@ in
             mail_plugins = $mail_plugins old_stats
             service old-stats {
               unix_listener old-stats {
-                user = nobody
-                group = nobody
+                user = dovecot-exporter
+                group = dovecot-exporter
               }
             }
           ''';
@@ -59,6 +59,7 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = false;
       ExecStart = ''
         ${pkgs.prometheus-dovecot-exporter}/bin/dovecot_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

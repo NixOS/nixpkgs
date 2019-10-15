@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, libgnomeui, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "verbiste-${version}";
+  pname = "verbiste";
 
-  version = "0.1.45";
+  version = "0.1.46";
 
   src = fetchurl {
-    url = "https://perso.b2b2c.ca/~sarrazip/dev/${name}.tar.gz";
-    sha256 = "180zyhdjspp7lk2291wsqs6bm7y27r7bd00447iimmjpx372s22c";
+    url = "https://perso.b2b2c.ca/~sarrazip/dev/${pname}-${version}.tar.gz";
+    sha256 = "13l8b8mbkdds955sn42hzrjzj48lg1drpd7vhpcjxadckbvlh1p0";
   };
 
   nativeBuildInputs = [ pkgconfig ];

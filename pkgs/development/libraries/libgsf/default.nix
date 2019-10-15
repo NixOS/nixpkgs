@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
-, python, perl, gdk_pixbuf, libiconv, libintl, gnome3 }:
+, python, perl, gdk-pixbuf, libiconv, libintl, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext bzip2 zlib python ];
   checkInputs = [ perl ];
 
-  propagatedBuildInputs = [ libxml2 glib gdk_pixbuf libiconv ];
+  propagatedBuildInputs = [ libxml2 glib gdk-pixbuf libiconv ];
 
   outputs = [ "out" "dev" ];
 

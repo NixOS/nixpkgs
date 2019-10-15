@@ -1,14 +1,14 @@
 { stdenv, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
 , liburcu, zlib, libaio, zstd, lz4 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "2019-05-29";
+  version = "2019-10-01";
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "34b93747051055c1076add36f4730c7715e27f07";
-    sha256 = "1z6ih0mssa9y9yr3v0dzrflliqz8qfdkjb29p9nqbpg8iqi45fa8";
+    rev = "7f69c4161c31b8f43723a9ccad1a9a358f4e2e70";
+    sha256 = "0v4b8h99cd434v349y8vmhj2igf0ryky7svd20ar1fr7da580kvj";
   };
 
   enableParallelBuilding = true;

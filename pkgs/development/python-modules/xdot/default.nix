@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
-, wrapGAppsHook, gobject-introspection, pygobject3, graphviz, gnome3, gtk3 }:
+, wrapGAppsHook, gobject-introspection, pygobject3, graphviz, gtk3 }:
 
 buildPythonPackage rec {
   pname = "xdot";

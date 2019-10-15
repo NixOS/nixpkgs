@@ -1,17 +1,22 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-expand";
-  version = "0.4.12";
+  version = "0.4.15";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = pname;
     rev = version;
-    sha256 = "0m57v7mh7wdl0rdbad7vkvcgy93p9gcb971wap8i5nzjvzmp4wlb";
+    sha256 = "155b4azkrr0qfg52mk7934zavwsbl28i28hi1inb23d509hrr5ky";
   };
 
-  cargoSha256 = "1wvqxj2w02d6zhyw3z5v0w4bfmbmldh63ygmvfxa3ngfb36gcacz";
+  cargoSha256 = "050q4rk1x3jghinxg6gszi993a6zbg41vg535dlvvsqi36l278qc";
+
+  buildInputs = [ llvmPackages.libclang ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+
+  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   meta = with stdenv.lib; {
     description = "A utility and Cargo subcommand designed to let people expand macros in their Rust source code";

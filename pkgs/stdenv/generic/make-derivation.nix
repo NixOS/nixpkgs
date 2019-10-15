@@ -99,7 +99,6 @@ in rec {
       separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
       outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
-      fixedOutputDrv = attrs ? outputHash;
       noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                       ++ depsHostHost ++ depsHostHostPropagated
                                       ++ buildInputs ++ propagatedBuildInputs
@@ -247,7 +246,7 @@ in rec {
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
              else if cmakeFlags == null      then []
              else                                     cmakeFlags)
-          ++ lib.optional (stdenv.hostPlatform.uname.system != null) "-DCMAKE_SYSTEM_NAME=${stdenv.hostPlatform.uname.system}"
+          ++ [ "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" [ stdenv.hostPlatform.uname.system ]}" ]
           ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
           ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.release}"
           ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"

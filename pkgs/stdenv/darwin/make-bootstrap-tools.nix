@@ -12,9 +12,7 @@ in rec {
     singleBinary = false;
   });
 
-  # We want a version of cctools without LLVM, because the LTO support ends up making
-  # the bootstrap tools huge and isn't really necessary for bootstrap
-  cctools_ = darwin.cctools.override { llvm = null; };
+  cctools_ = darwin.cctools;
 
   # Avoid debugging larger changes for now.
   bzip2_ = bzip2.override (args: { linkStatic = true; });

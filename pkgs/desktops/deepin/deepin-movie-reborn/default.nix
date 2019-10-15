@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
   dtkcore, dtkwidget, ffmpeg, ffmpegthumbnailer, mpv, pulseaudio,
   libdvdnav, libdvdread, xorg, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "deepin-movie-reborn";
-  version = "3.2.22.1";
+  version = "3.2.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1qh079j4c2n33z0ykv87af9vfkmdxxrv6dy54wdqdpr7vrhn89gb";
+    sha256 = "16mxym7dm6qk90q2w7xqm62047rq0lirrjmnnpaxshzaww9gngkh";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     sed -i src/libdmr/libdmr.pc.in -e "s,/usr,$out," -e 's,libdir=''${prefix}/,libdir=,'
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin movie player";

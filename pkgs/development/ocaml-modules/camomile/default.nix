@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "camomile";
-	version = "1.0.1";
+	version = "1.0.2";
 
 	src = fetchFromGitHub {
 		owner = "yoriyuki";
 		repo = pname;
 		rev = version;
-		sha256 = "1pfxr9kzkpd5bsdqrpxasfxkawwkg4cpx3m1h6203sxi7qv1z3fn";
+		sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
 	};
 
 	buildInputs = [ cppo ];

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, m4, which, yasm }:
 
 stdenv.mkDerivation rec {
-  name = "mpir-${version}";
+  pname = "mpir";
   version = "3.0.0";
 
   nativeBuildInputs = [ m4 which yasm ];

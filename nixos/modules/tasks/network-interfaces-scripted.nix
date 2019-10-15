@@ -103,7 +103,7 @@ let
 
             script =
               ''
-                ${optionalString (!config.environment.etc?"resolv.conf") ''
+                ${optionalString config.networking.resolvconf.enable ''
                   # Set the static DNS configuration, if given.
                   ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
                   ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
@@ -498,8 +498,8 @@ let
          // mapAttrs' createSitDevice cfg.sits
          // mapAttrs' createVlanDevice cfg.vlans
          // {
-           "network-setup" = networkSetup;
-           "network-local-commands" = networkLocalCommands;
+           network-setup = networkSetup;
+           network-local-commands = networkLocalCommands;
          };
 
     services.udev.extraRules =

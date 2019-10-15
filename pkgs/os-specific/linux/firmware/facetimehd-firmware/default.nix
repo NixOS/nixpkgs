@@ -35,7 +35,8 @@ in
 
 stdenv.mkDerivation {
 
-  name = "facetimehd-firmware-${version}";
+  pname = "facetimehd-firmware";
+  inherit version;
   src = fetchurl {
     url = dmgUrl;
     sha256 = "0xqkl4yds0n9fdjvnk0v5mj382q02crry6wm2q7j3ncdqwsv02sv";

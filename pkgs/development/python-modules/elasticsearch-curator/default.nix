@@ -45,6 +45,10 @@ buildPythonPackage rec {
     funcsigs
   ];
 
+  postPatch = ''
+    sed -i s/pyyaml==3.12/pyyaml==${pyyaml.version}/ setup.cfg setup.py
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/elastic/curator;
     description = "Curate, or manage, your Elasticsearch indices and snapshots";

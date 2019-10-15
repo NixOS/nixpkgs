@@ -1,14 +1,23 @@
-{ lib, stdenv, buildEnv
+{ lib, stdenv, pkgs
 , haskell, nodejs
-, fetchurl, fetchpatch, makeWrapper, git }:
-
+, fetchurl, fetchpatch, makeWrapper, writeScriptBin }:
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
-  hsPkgs = haskell.packages.ghc864.override {
+
+  patchBinwrap = import ./packages/patch-binwrap.nix { inherit lib writeScriptBin stdenv; };
+
+  elmNodePackages =
+    import ./packages/node-composition.nix {
+      inherit nodejs pkgs;
+      inherit (stdenv.hostPlatform) system;
+    };
+
+  hsPkgs = haskell.packages.ghc865.override {
     overrides = self: super: with haskell.lib;
-      let elmPkgs = {
+      let elmPkgs = rec {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
               # sadly with parallelism most of the time breaks compilation
+              # also compilation is slower with increasing number of cores anyway (Tested on Ryzen 7 and i7)
               enableParallelBuilding = false;
               preConfigure = self.fetchElmDeps {
                 elmPackages = (import ./packages/elm-srcs.nix);
@@ -30,12 +39,28 @@ let
 
             /*
             The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
-            `pacakge/nix/build.sh`
+            `package/nix/build.sh`
             */
             elm-format = justStaticExecutables (doJailbreak (self.callPackage ./packages/elm-format.nix {}));
 
+            elmi-to-json = justStaticExecutables (self.callPackage ./packages/elmi-to-json.nix {});
+
             inherit fetchElmDeps;
             elmVersion = elmPkgs.elm.version;
+
+            /*
+            Node/NPM based dependecies can be upgraded using script
+            `packages/generate-node-packages.sh`.
+            Packages which rely on `bin-wrap` will fail by default
+            and can be patched using `patchBinwrap` function defined in `packages/patch-binwrap.nix`.
+            */
+            elm-test = patchBinwrap [elmi-to-json] elmNodePackages.elm-test;
+            elm-verify-examples = patchBinwrap [elmi-to-json] elmNodePackages.elm-verify-examples;
+            elm-language-server = elmNodePackages."@elm-tooling/elm-language-server";
+
+            # elm-analyse@0.16.4 build is not working
+            elm-analyse = elmNodePackages."elm-analyse-0.16.3";
+            inherit (elmNodePackages) elm-doc-preview elm-live elm-upgrade elm-xref;
           };
       in elmPkgs // {
         inherit elmPkgs;

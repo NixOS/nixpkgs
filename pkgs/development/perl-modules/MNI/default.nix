@@ -1,7 +1,8 @@
 { fetchFromGitHub, buildPerlPackage, stdenv }:
 
-buildPerlPackage rec {
-  name = "MNI-Perllib-2012-04-13";
+buildPerlPackage {
+  pname = "MNI-Perllib";
+  version = "2012-04-13";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";

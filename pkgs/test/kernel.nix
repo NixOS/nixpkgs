@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs }:
+{ lib, pkgs }:
 
 with lib.kernel;
 with lib.asserts;

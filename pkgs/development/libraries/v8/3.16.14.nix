@@ -10,12 +10,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "v8-${version}";
+  pname = "v8";
   version = "3.16.14.11";
 
   src = fetchurl {
     url = "https://commondatastorage.googleapis.com/chromium-browser-official/"
-        + "${name}.tar.bz2";
+        + "${pname}-${version}.tar.bz2";
     sha256 = "1gpf2xvhxfs5ll3m2jlslsx9jfjbmrbz55iq362plflrvf8mbxhj";
   };
 

@@ -3,6 +3,7 @@
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
+, makeWrapper, buildRubyGem, defaultGemConfig
 } @ args:
 
 let
@@ -11,7 +12,7 @@ let
   opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl fetchpatch; };
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -29,11 +30,13 @@ let
     baseruby = self.override {
       useRailsExpress = false;
       docSupport = false;
+      rubygemsSupport = false;
     };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
+      , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
@@ -44,9 +47,11 @@ let
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
+      , makeWrapper, buildRubyGem, defaultGemConfig
       }:
       stdenv.mkDerivation rec {
-        name = "ruby-${version}";
+        pname = "ruby";
+        inherit version;
 
         src = if useRailsExpress then fetchFromGitHub {
           owner  = "ruby";
@@ -85,12 +90,14 @@ let
 
         patches =
           (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops;
+            inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
-          })."${ver.majMinTiny}";
+          }).${ver.majMinTiny};
 
-        postUnpack = ''
-          cp -r ${rubygems} $sourceRoot/rubygems
+        postUnpack = opString rubygemsSupport ''
+          rm -rf $sourceRoot/{lib,test}/rubygems*
+          cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
+          cp -r ${rubygems}/test/rubygems $sourceRoot/test
         '';
 
         postPatch = if atLeast25 then ''
@@ -135,12 +142,6 @@ let
         installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
-          # Update rubygems
-          pushd rubygems
-          chmod +w bundler/bundler.gemspec
-          ${buildRuby} setup.rb --destdir $GEM_HOME
-          popd
-
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
 
@@ -194,6 +195,12 @@ let
             ruby = self;
           };
 
+          inherit (import ../../ruby-modules/with-packages {
+            inherit lib stdenv makeWrapper buildRubyGem buildEnv;
+            gemConfig = defaultGemConfig;
+            ruby = self;
+          }) withPackages gems;
+
           # deprecated 2016-09-21
           majorVersion = ver.major;
           minorVersion = ver.minor;
@@ -204,35 +211,27 @@ let
     ) args; in self;
 
 in {
-  ruby_2_3 = generic {
-    version = rubyVersion "2" "3" "8" "";
-    sha256 = {
-      src = "1gwsqmrhpx1wanrfvrsj3j76rv888zh7jag2si2r14qf8ihns0dm";
-      git = "0158fg1sx6l6applbq0831kl8kzx5jacfl9lfg0shfzicmjlys3f";
-    };
-  };
-
   ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "5" "";
+    version = rubyVersion "2" "4" "9" "";
     sha256 = {
-      src = "162izk7c72y73vmdgcbsh8kqihrbm65xvp53r1s139pzwqd78dv7";
-      git = "181za4h6bd2bkyzyknxc18i5gq0pnqag60ybc17p0ixw3q7pdj43";
+      src = "1bn6n5b920qy3lsx99jr8495jkc3sg89swgb96d5fgd579g6p6zr";
+      git = "066kb1iki7mx7qkm10xhj5b6v8s47wg68v43l3nc36y2hyim1w2c";
     };
   };
 
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "5" "";
+    version = rubyVersion "2" "5" "7" "";
     sha256 = {
-      src = "0k2in88jymqh727s88yjsv7wrqs2hdj9h2w9zh2bmrj0ygylba98";
-      git = "0l7b7xv48gvvlqs27gghfi645qvc1nwiz8ym4j8w100rzzzfy6zz";
+      src = "1m6nmnj9shifp8g3yh7aimac01vl035bzcc19x2spdji6ig0sb8b";
+      git = "0wppf82c9ccdbnvj30mppr5a3mc7sxm05diahjdw7hhk29n43knp";
     };
   };
 
   ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "3" "";
+    version = rubyVersion "2" "6" "5" "";
     sha256 = {
-      src = "1yw23hmllxsc4b7zqndn5l4d9503gdik6rsf3lfdkf12bxwx6zsp";
-      git = "1h4k2kw0vr4jh2ra9l89i8lnddfh2qfw67y9cknjylf7kw2m1pmh";
+      src = "0zgdrgylq6avbblf78kpaf0k2xnkpc3jng3wkd7x67ycdrqnp5v6";
+      git = "0pay6ic22ag3bnvxffhgwp7z6clkd0p93944a1l4lvc5hxc8v77j";
     };
   };
 }

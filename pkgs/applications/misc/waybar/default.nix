@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, pkgconfig, ninja
-, wayland, wlroots, gtkmm3, libinput, libsigcxx, jsoncpp, fmt, spdlog
+, wayland, wlroots, gtkmm3, libinput, libsigcxx, jsoncpp, fmt, scdoc, spdlog
 , traySupport  ? true,  libdbusmenu-gtk3
 , pulseSupport ? false, libpulseaudio
 , nlSupport    ? true,  libnl
@@ -8,18 +8,18 @@
 , mpdSupport   ? true,  mpd_clientlib
 }:
   stdenv.mkDerivation rec {
-    name = "waybar-${version}";
-    version = "0.6.6";
+    pname = "waybar";
+    version = "0.8.0";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "0wxd03lkgssz0vsib9qc040vfg1i6nrg7ac2c6qwficx62j2zlm1";
+      sha256 = "0s8ck7qxka0l91ayma6amp9sc8cidi43byqgzcavi3a6id983r1z";
     };
 
     nativeBuildInputs = [
-      meson ninja pkgconfig
+      meson ninja pkgconfig scdoc
     ];
 
     buildInputs = with stdenv.lib;
@@ -31,19 +31,23 @@
       ++ optional  swaySupport  sway
       ++ optional  mpdSupport   mpd_clientlib;
 
-    mesonFlags = [
-      "-Ddbusmenu-gtk=${ if traySupport then "enabled" else "disabled" }"
-      "-Dpulseaudio=${ if pulseSupport then "enabled" else "disabled" }"
-      "-Dlibnl=${ if nlSupport then "enabled" else "disabled" }"
-      "-Dlibudev=${ if udevSupport then "enabled" else "disabled" }"
-      "-Dmpd=${ if mpdSupport then "enabled" else "disabled" }"
+    mesonFlags = (stdenv.lib.mapAttrsToList
+      (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
+      {
+        dbusmenu-gtk = traySupport;
+        pulseaudio = pulseSupport;
+        libnl = nlSupport;
+        libudev = udevSupport;
+        mpd = mpdSupport;
+      }
+    ) ++ [
       "-Dout=${placeholder "out"}"
     ];
 
     meta = with stdenv.lib; {
       description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
       license = licenses.mit;
-      maintainers = with maintainers; [ FlorianFranzen minijackson ];
+      maintainers = with maintainers; [ FlorianFranzen minijackson synthetica ];
       platforms = platforms.unix;
     };
   }

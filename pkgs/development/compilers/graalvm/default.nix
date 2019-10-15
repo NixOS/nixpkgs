@@ -1,15 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial, python27,
-  zlib, makeWrapper, openjdk, unzip, git, clang, llvm, which, icu, ruby, bzip2
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial, python27, setJavaClassPath,
+  zlib, makeWrapper, openjdk, unzip, git, clang, llvm, which, icu, ruby, bzip2, glibc
   # gfortran, readline, bzip2, lzma, pcre, curl, ed, tree ## WIP: fastr deps
 }:
 
 let
-  version = "1.0.0-rc15";
+  version = "19.1.1";
   truffleMake = ./truffle.make;
-  R = fetchurl {
-    url = "http://cran.rstudio.com/src/base/R-3/R-3.5.1.tar.gz";
-    sha256 = "1vap2k8kj5icy9naw61f9zyphf4rs0c9rxvil0zxkwx0xvsvyqq4";
-  };
   makeMxGitCache = list: out: ''
      mkdir ${out}
     ${lib.concatMapStrings ({ url, name, rev, sha256 }: ''
@@ -36,7 +32,7 @@ let
     hg checkout ${lib.escapeShellArg "vm${version}"}
   '';
 
-  # pre-download some cache entries ('mx' will not be able to download under nixbld1)
+  # pre-download some cache entries ('mx' will not be able to download under nixbld)
   makeMxCache = list:
     stdenv.mkDerivation {
       name = "mx-cache";
@@ -66,31 +62,27 @@ let
     };
 
   jvmci8-mxcache = [
-    rec { sha1 = "977b33afe2344a9ee801fd3317c54d8e1f9d7a79"; name = "JACOCOCORE_0.8.2_${sha1}/jacococore-0.8.2.jar";                                   url = mirror://maven/org/jacoco/org.jacoco.core/0.8.2/org.jacoco.core-0.8.2.jar; }
-    rec { sha1 = "46f38efb779fb08216379e1a196396f4e22bbe41"; name = "JACOCOCORE_0.8.2_${sha1}/jacococore-0.8.2.sources.jar";                           url = mirror://maven/org/jacoco/org.jacoco.core/0.8.2/org.jacoco.core-0.8.2-sources.jar; }
-    rec { sha1 = "50e133cdfd2d31ca5702b73615be70f801d3ae26"; name = "JACOCOREPORT_0.8.2_${sha1}/jacocoreport-0.8.2.jar";                               url = mirror://maven/org/jacoco/org.jacoco.report/0.8.2/org.jacoco.report-0.8.2.jar; }
-    rec { sha1 = "7488cd6e42cc4fa85b51200b7f451465692e033b"; name = "JACOCOREPORT_0.8.2_${sha1}/jacocoreport-0.8.2.sources.jar";                       url = mirror://maven/org/jacoco/org.jacoco.report/0.8.2/org.jacoco.report-0.8.2-sources.jar; }
-    rec { sha1 = "4806883004063feb978b8811f00d5ea2138750bb"; name = "JACOCOAGENT_0.8.2_${sha1}/jacocoagent-0.8.2.jar";                                 url = mirror://maven/org/jacoco/org.jacoco.agent/0.8.2/org.jacoco.agent-0.8.2-runtime.jar; }
+    rec { sha1 = "53addc878614171ff0fcbc8f78aed12175c22cdb"; name = "JACOCOCORE_0.8.4_${sha1}/jacococore-0.8.4.jar";                                   url = mirror://maven/org/jacoco/org.jacoco.core/0.8.4/org.jacoco.core-0.8.4.jar; }
+    rec { sha1 = "9bd1fa334d941005bc9ab3ac92478a590f5b7d73"; name = "JACOCOCORE_0.8.4_${sha1}/jacococore-0.8.4.sources.jar";                           url = mirror://maven/org/jacoco/org.jacoco.core/0.8.4/org.jacoco.core-0.8.4-sources.jar; }
+    rec { sha1 = "e5ca9511493b7e3bc2cabdb8ded92e855f3aac32"; name = "JACOCOREPORT_0.8.4_${sha1}/jacocoreport-0.8.4.jar";                               url = mirror://maven/org/jacoco/org.jacoco.report/0.8.4/org.jacoco.report-0.8.4.jar; }
+    rec { sha1 = "eb61e479b35b467954f28a565c094c563b790e19"; name = "JACOCOREPORT_0.8.4_${sha1}/jacocoreport-0.8.4.sources.jar";                       url = mirror://maven/org/jacoco/org.jacoco.report/0.8.4/org.jacoco.report-0.8.4-sources.jar; }
+    rec { sha1 = "869021a6d90cfb008b12e83fccbe42eca29e5355"; name = "JACOCOAGENT_0.8.4_${sha1}/jacocoagent-0.8.4.jar";                                 url = mirror://maven/org/jacoco/org.jacoco.agent/0.8.4/org.jacoco.agent-0.8.4-runtime.jar; }
     rec { sha1 = "306816fb57cf94f108a43c95731b08934dcae15c"; name = "JOPTSIMPLE_4_6_${sha1}/joptsimple-4-6.jar";                                       url = mirror://maven/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6.jar; }
     rec { sha1 = "9cd14a61d7aa7d554f251ef285a6f2c65caf7b65"; name = "JOPTSIMPLE_4_6_${sha1}/joptsimple-4-6.sources.jar";                               url = mirror://maven/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6-sources.jar; }
-    rec { sha1 = "b852fb028de645ad2852bbe998e084d253f450a5"; name = "JMH_GENERATOR_ANNPROCESS_1_18_${sha1}/jmh-generator-annprocess-1-18.jar";         url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.18/jmh-generator-annprocess-1.18.jar; }
-    rec { sha1 = "d455b0dc6108b5e6f1fb4f6cf1c7b4cbedbecc97"; name = "JMH_GENERATOR_ANNPROCESS_1_18_${sha1}/jmh-generator-annprocess-1-18.sources.jar"; url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.18/jmh-generator-annprocess-1.18-sources.jar; }
-    rec { sha1 = "7aac374614a8a76cad16b91f1a4419d31a7dcda3"; name = "JMH_GENERATOR_ANNPROCESS_1_21_${sha1}/jmh-generator-annprocess-1-21.jar";         url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.21/jmh-generator-annprocess-1.21.jar; }
-    rec { sha1 = "fb48e2a97df95f8b9dced54a1a37749d2a64d2ae"; name = "JMH_GENERATOR_ANNPROCESS_1_21_${sha1}/jmh-generator-annprocess-1-21.sources.jar"; url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.21/jmh-generator-annprocess-1.21-sources.jar; }
-    rec { sha1 = "c01b6798f81b0fc2c5faa70cbe468c275d4b50c7"; name = "ASM_6.2.1_${sha1}/asm-6.2.1.jar";                                                 url = mirror://maven/org/ow2/asm/asm/6.2.1/asm-6.2.1.jar; }
-    rec { sha1 = "cee28077ac7a63d3de0b205ec314d83944ff6267"; name = "ASM_6.2.1_${sha1}/asm-6.2.1.sources.jar";                                         url = mirror://maven/org/ow2/asm/asm/6.2.1/asm-6.2.1-sources.jar; }
-    rec { sha1 = "332b022092ecec53cdb6272dc436884b2d940615"; name = "ASM_TREE_6.2.1_${sha1}/asm-tree-6.2.1.jar";                                       url = mirror://maven/org/ow2/asm/asm-tree/6.2.1/asm-tree-6.2.1.jar; }
-    rec { sha1 = "072bd64989090e4ed58e4657e3d4481d96f643af"; name = "ASM_TREE_6.2.1_${sha1}/asm-tree-6.2.1.sources.jar";                               url = mirror://maven/org/ow2/asm/asm-tree/6.2.1/asm-tree-6.2.1-sources.jar; }
-    rec { sha1 = "e8b876c5ccf226cae2f44ed2c436ad3407d0ec1d"; name = "ASM_ANALYSIS_6.2.1_${sha1}/asm-analysis-6.2.1.jar";                               url = mirror://maven/org/ow2/asm/asm-analysis/6.2.1/asm-analysis-6.2.1.jar; }
-    rec { sha1 = "b0b249bd185677648692e7c57b488b6d7c2a6653"; name = "ASM_ANALYSIS_6.2.1_${sha1}/asm-analysis-6.2.1.sources.jar";                       url = mirror://maven/org/ow2/asm/asm-analysis/6.2.1/asm-analysis-6.2.1-sources.jar; }
-    rec { sha1 = "eaf31376d741a3e2017248a4c759209fe25c77d3"; name = "ASM_COMMONS_6.2.1_${sha1}/asm-commons-6.2.1.jar";                                 url = mirror://maven/org/ow2/asm/asm-commons/6.2.1/asm-commons-6.2.1.jar; }
-    rec { sha1 = "667fa0f9d370e7848b0e3d173942855a91fd1daf"; name = "ASM_COMMONS_6.2.1_${sha1}/asm-commons-6.2.1.sources.jar";                         url = mirror://maven/org/ow2/asm/asm-commons/6.2.1/asm-commons-6.2.1-sources.jar; }
+    rec { sha1 = "fa29aa438674ff19d5e1386d2c3527a0267f291e"; name = "ASM_7.1_${sha1}/asm-7.1.jar";                                                     url = mirror://maven/org/ow2/asm/asm/7.1/asm-7.1.jar; }
+    rec { sha1 = "9d170062d595240da35301362b079e5579c86f49"; name = "ASM_7.1_${sha1}/asm-7.1.sources.jar";                                             url = mirror://maven/org/ow2/asm/asm/7.1/asm-7.1-sources.jar; }
+    rec { sha1 = "a3662cf1c1d592893ffe08727f78db35392fa302"; name = "ASM_TREE_7.1_${sha1}/asm-tree-7.1.jar";                                           url = mirror://maven/org/ow2/asm/asm-tree/7.1/asm-tree-7.1.jar; }
+    rec { sha1 = "157238292b551de8680505fa2d19590d136e25b9"; name = "ASM_TREE_7.1_${sha1}/asm-tree-7.1.sources.jar";                                   url = mirror://maven/org/ow2/asm/asm-tree/7.1/asm-tree-7.1-sources.jar; }
+    rec { sha1 = "379e0250f7a4a42c66c5e94e14d4c4491b3c2ed3"; name = "ASM_ANALYSIS_7.1_${sha1}/asm-analysis-7.1.jar";                                   url = mirror://maven/org/ow2/asm/asm-analysis/7.1/asm-analysis-7.1.jar; }
+    rec { sha1 = "36789198124eb075f1a5efa18a0a7812fb16f47f"; name = "ASM_ANALYSIS_7.1_${sha1}/asm-analysis-7.1.sources.jar";                           url = mirror://maven/org/ow2/asm/asm-analysis/7.1/asm-analysis-7.1-sources.jar; }
+    rec { sha1 = "431dc677cf5c56660c1c9004870de1ed1ea7ce6c"; name = "ASM_COMMONS_7.1_${sha1}/asm-commons-7.1.jar";                                     url = mirror://maven/org/ow2/asm/asm-commons/7.1/asm-commons-7.1.jar; }
+    rec { sha1 = "a62ff3ae6e37affda7c6fb7d63b89194c6d006ee"; name = "ASM_COMMONS_7.1_${sha1}/asm-commons-7.1.sources.jar";                             url = mirror://maven/org/ow2/asm/asm-commons/7.1/asm-commons-7.1-sources.jar; }
     rec { sha1 = "ec2544ab27e110d2d431bdad7d538ed509b21e62"; name = "COMMONS_MATH3_3_2_${sha1}/commons-math3-3-2.jar";                                 url = mirror://maven/org/apache/commons/commons-math3/3.2/commons-math3-3.2.jar; }
     rec { sha1 = "cd098e055bf192a60c81d81893893e6e31a6482f"; name = "COMMONS_MATH3_3_2_${sha1}/commons-math3-3-2.sources.jar";                         url = mirror://maven/org/apache/commons/commons-math3/3.2/commons-math3-3.2-sources.jar; }
-    rec { sha1 = "0174aa0077e9db596e53d7f9ec37556d9392d5a6"; name = "JMH_1_18_${sha1}/jmh-1-18.jar";                                                   url = mirror://maven/org/openjdk/jmh/jmh-core/1.18/jmh-core-1.18.jar; }
-    rec { sha1 = "7ff1e1aafea436b6aa8b29a8b8f1c2d66be26f5b"; name = "JMH_1_18_${sha1}/jmh-1-18.sources.jar";                                           url = mirror://maven/org/openjdk/jmh/jmh-core/1.18/jmh-core-1.18-sources.jar; }
     rec { sha1 = "442447101f63074c61063858033fbfde8a076873"; name = "JMH_1_21_${sha1}/jmh-1-21.jar";                                                   url = mirror://maven/org/openjdk/jmh/jmh-core/1.21/jmh-core-1.21.jar; }
     rec { sha1 = "a6fe84788bf8cf762b0e561bf48774c2ea74e370"; name = "JMH_1_21_${sha1}/jmh-1-21.sources.jar";                                           url = mirror://maven/org/openjdk/jmh/jmh-core/1.21/jmh-core-1.21-sources.jar; }
+    rec { sha1 = "7aac374614a8a76cad16b91f1a4419d31a7dcda3"; name = "JMH_GENERATOR_ANNPROCESS_1_21_${sha1}/jmh-generator-annprocess-1-21.jar";         url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.21/jmh-generator-annprocess-1.21.jar; }
+    rec { sha1 = "fb48e2a97df95f8b9dced54a1a37749d2a64d2ae"; name = "JMH_GENERATOR_ANNPROCESS_1_21_${sha1}/jmh-generator-annprocess-1-21.sources.jar"; url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.21/jmh-generator-annprocess-1.21-sources.jar; }
     rec { sha1 = "2973d150c0dc1fefe998f834810d68f278ea58ec"; name = "JUNIT_${sha1}/junit.jar";                                                         url = mirror://maven/junit/junit/4.12/junit-4.12.jar; }
     rec { sha1 = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"; name = "JUNIT_${sha1}/junit.sources.jar";                                                 url = mirror://maven/junit/junit/4.12/junit-4.12-sources.jar; }
     rec { sha1 = "42a25dc3219429f0e5d060061f71acb49bf010a0"; name = "HAMCREST_${sha1}/hamcrest.jar";                                                   url = mirror://maven/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar; }
@@ -118,11 +110,11 @@ let
     rec { sha1 = "280c265b789e041c02e5c97815793dfc283fb1e6"; name = "LIBFFI_SOURCES_${sha1}/libffi-sources.tar.gz";                                    url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/libffi-3.2.1.tar.gz; }
     rec { sha1 = "8819cea8bfe22c9c63f55465e296b3855ea41786"; name = "TruffleJSON_${sha1}/trufflejson.jar";                                             url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/trufflejson-20180130.jar; }
     rec { sha1 = "9712a8124c40298015f04a74f61b3d81a51513af"; name = "CHECKSTYLE_8.8_${sha1}/checkstyle-8.8.jar";                                       url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/checkstyle-8.8-all.jar; }
-    rec { sha1 = "5a5574f03b58465226166a638641a384b9f44445"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-655.tar.gz; }
-    rec { sha1 = "64f07398bac9897e9b8123edeaf5cf9ff19517b5"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz";            url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-655-linux-amd64.tar.gz; }
+    rec { sha1 = "158ba6f2b346469b5f8083d1700c3f55b8b9082c"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-19_0_0-11.tar.gz; }
+    rec { sha1 = "eb5ffa476ed2f6fac0ecd4bb2ae32741f9646932"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz";            url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-19_0_0-11-linux-amd64.tar.gz; }
     rec { sha1 = "e6e60889b7211a80b21052a249bd7e0f88f79fee"; name = "Java-WebSocket_${sha1}/java-websocket.jar";                                       url = mirror://maven/org/java-websocket/Java-WebSocket/1.3.9/Java-WebSocket-1.3.9.jar; }
     rec { sha1 = "7a4d00d5ec5febd252a6182e8b6e87a0a9821f81"; name = "ICU4J_${sha1}/icu4j.jar";                                                         url = mirror://maven/com/ibm/icu/icu4j/62.1/icu4j-62.1.jar; }
-   # This duplication of asm with underscore and minus is totally weird
+    # This duplication of asm with underscore and minus is totally weird
     rec { sha1 = "c01b6798f81b0fc2c5faa70cbe468c275d4b50c7"; name = "ASM-6.2.1_${sha1}/asm-6.2.1.jar";                                                 url = mirror://maven/org/ow2/asm/asm/6.2.1/asm-6.2.1.jar; }
     rec { sha1 = "cee28077ac7a63d3de0b205ec314d83944ff6267"; name = "ASM-6.2.1_${sha1}/asm-6.2.1.sources.jar";                                         url = mirror://maven/org/ow2/asm/asm/6.2.1/asm-6.2.1-sources.jar; }
     rec { sha1 = "332b022092ecec53cdb6272dc436884b2d940615"; name = "ASM_TREE-6.2.1_${sha1}/asm-tree-6.2.1.jar";                                       url = mirror://maven/org/ow2/asm/asm-tree/6.2.1/asm-tree-6.2.1.jar; }
@@ -149,14 +141,10 @@ let
   ];
 
   graal-mxcachegit = [
-    { sha256 = "0siryzvmj9h8zkyr0d3gy9fqgyxb9s5xs15rf7lnx9zh3ykq549y"; name = "graaljs";
-      url = "http://github.com/graalvm/graaljs.git"; rev = "vm-${version}"; }
-    { sha256 = "1ii3mwa0c2zk9vm51hyrymdz3whfihm6sccd2r5ja2v53jcdc1a3"; name = "truffleruby";
-      url = "http://github.com/oracle/truffleruby.git"; rev = "vm-${version}"; }
-    { sha256 = "1nz8yqg2k9shpmhj3jv7k2icfg72cm55baf354rsh1pqanay8qb7"; name = "fastr";
-      url = "http://github.com/oracle/fastr.git"; rev = "vm-${version}"; }
-    { sha256 = "1c8nnrl30fys22gk3y6dvxzq0fq1a5hjkqrw15p68cwpz9wma4gi"; name = "graalpython";
-      url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
+    { sha256 = "05z2830ng71bhgsxc0zyc74l1bz7hg54la8j1r99993fhhch4y36"; name = "graaljs";     url = "https://github.com/graalvm/graaljs.git";     rev = "vm-${version}"; }
+    { sha256 = "0ai5x4n1c2lcfkfpp29zn1bcmp3khc5hvssyw1qr1l2zy79fxwjp"; name = "truffleruby"; url = "https://github.com/oracle/truffleruby.git";  rev = "vm-${version}"; }
+    { sha256 = "010079qsl6dff3yca8vlzcahq9z1ppyr758shjkm1f7izwphjv7p"; name = "fastr";       url = "https://github.com/oracle/fastr.git";        rev = "vm-${version}"; }
+    { sha256 = "0hcqbasqs0yb7p1sal63qbxqxh942gh5vzl95pfdlflmc2g82v4q"; name = "graalpython"; url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
   ];
 
   ninja-syntax = python27.pkgs.buildPythonPackage rec {
@@ -180,13 +168,13 @@ let
 in rec {
 
   mx = stdenv.mkDerivation rec {
-    version = "5.215.4";
+    version = "5.223.0";
     pname = "mx";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "mx";
       rev    = version;
-      sha256 = "0wrwfiwqjw6xp0bvp2g15jn6yrjb9w6jw1xnwvkyhkw1s6m0w0z1";
+      sha256 = "0q51dnm6n1472p93dxr4jh8d7cv09a70pq89cdgxwh42vapykrn9";
     };
     nativeBuildInputs = [ makeWrapper ];
     prePatch = ''
@@ -219,19 +207,19 @@ in rec {
     meta = with stdenv.lib; {
       homepage = https://github.com/graalvm/mx;
       description = "Command-line tool used for the development of Graal projects";
-      license = licenses.unfree;
+      license = licenses.gpl2;
       platforms = python27.meta.platforms;
     };
   };
 
   jvmci8 = stdenv.mkDerivation rec {
-    version = "0.58";
-    name = "jvmci-${version}";
+    version = "19.2-b01";
+    pname = "jvmci";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
       rev    = "jvmci-${version}";
-      sha256 = "0p8icn3d99zggsh6pqb15dz1j186ck442sjpn2cv43n4nvdmmp1m";
+      sha256 = "0maipj871vaxvap4576m0pzblzqxfjjzmwap3ndd84ny8d6vbqaa";
     };
     buildInputs = [ mx mercurial openjdk ];
     postUnpack = ''
@@ -249,6 +237,9 @@ in rec {
       # The hotspot version name regex fix
       substituteInPlace mx.jvmci/mx_jvmci.py \
         --replace "\\d+.\\d+-b\\d+" "\\d+.\\d+-bga"
+      substituteInPlace src/share/vm/jvmci/jvmciCompilerToVM.cpp \
+        --replace 'method->name_and_sig_as_C_string(), method->native_function(), entry' \
+                  'method->name_and_sig_as_C_string(), p2i(method->native_function()), p2i(entry)' || exit -1
     '';
     hardeningDisable = [ "fortify" ];
     NIX_CFLAGS_COMPILE = [
@@ -268,20 +259,33 @@ in rec {
       mv openjdk1.8.0_*/linux-amd64/product/* $out
       install -v -m0555 -D $MX_CACHE_DIR/hsdis*/hsdis.so $out/jre/lib/amd64/hsdis-amd64.so
     '';
-    dontFixup = true; # do not nuke path of ffmpeg etc
-    dontStrip = true; # why? see in oraclejdk derivation
-    meta = openjdk.meta // { inherit (graalvm8.meta) platforms; };
-    inherit (openjdk) postFixup;
+    # copy-paste openjdk's preFixup
+    preFixup = ''
+      # Propagate the setJavaClassPath setup hook from the JRE so that
+      # any package that depends on the JRE has $CLASSPATH set up
+      # properly.
+      mkdir -p $out/nix-support
+      printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
+
+      # Set JAVA_HOME automatically.
+      mkdir -p $out/nix-support
+      cat <<EOF > $out/nix-support/setup-hook
+      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+      EOF
+    '';
+    postFixup = openjdk.postFixup or null;
+    dontStrip = true; # stripped javac crashes with "segmentaion fault"
+    inherit (openjdk) meta;
   };
 
   graalvm8 = stdenv.mkDerivation rec {
     inherit version;
-    name = "graal-${version}";
+    pname = "graal";
     src = fetchFromGitHub {
       owner  = "oracle";
       repo   = "graal";
       rev    = "vm-${version}";
-      sha256 = "18fqah8x7gwz02ji40b4vyqav9x5dw703xwikjc117wlyymb1k56";
+      sha256 = "0abx6adk91yzaf1md4qbidxykpqcgphh6j4hj01ry57s4if0j66f";
     };
     patches = [ ./002_setjmp.c.patch ./003_mx_truffle.py.patch ];
     buildInputs = [ mx zlib mercurial jvmci8 git clang llvm
@@ -324,6 +328,10 @@ in rec {
 
       # Patch the native-image template, as it will be run during build
       chmod +x vm/mx.vm/launcher_template.sh && patchShebangs vm/mx.vm
+      # Prevent random errors from too low maxRuntimecompilemethods
+      substituteInPlace truffle/mx.truffle/macro-truffle.properties \
+        --replace '-H:MaxRuntimeCompileMethods=1400' \
+                  '-H:MaxRuntimeCompileMethods=28000'
     '';
 
     buildPhase = ''
@@ -349,19 +357,21 @@ in rec {
 
     installPhase = ''
       mkdir -p $out
-      cp -rf $MX_ALT_OUTPUT_ROOT/vm/linux-amd64/GRAALVM_CMP_GU_GVM_INS_JS_LIBPOLY_NFI_NJS_POLY_POLYNATIVE_PRO_PYN_RGX_SLG_SVM_SVMAG_SVMCF_SVML_TFL_VVM/graalvm-unknown-${version}/* $out
+      rm -rf $MX_ALT_OUTPUT_ROOT/vm/linux-amd64/GRAALVM_*STAGE1*
+      cp -rf $MX_ALT_OUTPUT_ROOT/vm/linux-amd64/GRAALVM*/graalvm-unknown-${version}/* $out
 
       # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
       substituteInPlace $out/jre/lib/security/java.security \
         --replace file:/dev/random    file:/dev/./urandom \
         --replace NativePRNGBlocking  SHA1PRNG
-      # Organize the out dir
-      mkdir -p $out/share && mv $out/man $out/share
-      rm $out/ASSEMBLY_EXCEPTION $out/release $out/LICENSE $out/THIRD_PARTY_README
+      # copy static and dynamic libraries needed for static compilation
+      cp -rf ${glibc}/lib/* $out/jre/lib/svm/clibraries/linux-amd64/
+      cp ${glibc.static}/lib/* $out/jre/lib/svm/clibraries/linux-amd64/
+      cp ${zlib.static}/lib/libz.a $out/jre/lib/svm/clibraries/linux-amd64/libz.a
     '';
 
-    dontFixup = true; # do not nuke path of ffmpeg etc
-    dontStrip = true; # why? see in oraclejdk derivation
+    inherit (jvmci8) preFixup;
+    dontStrip = true; # stripped javac crashes with "segmentaion fault"
     doInstallCheck = true;
     installCheckPhase = ''
       echo ${lib.escapeShellArg ''
@@ -381,8 +391,14 @@ in rec {
       $out/bin/native-image --no-server HelloWorld
       ./helloworld
       ./helloworld | fgrep 'Hello World'
+
+      # Ahead-Of-Time compilation with --static
+      $out/bin/native-image --no-server --static HelloWorld
+      ./helloworld
+      ./helloworld | fgrep 'Hello World'
     '';
 
+    enableParallelBuilding = true;
     passthru.home = graalvm8;
 
     meta = with stdenv.lib; {
@@ -390,7 +406,7 @@ in rec {
       description = "High-Performance Polyglot VM";
       license = licenses.gpl2;
       maintainers = with maintainers; [ volth hlolli ];
-      platforms = [ "x86_64-linux" ];
+      platforms = [ "x86_64-linux" /*"aarch64-linux" "x86_64-darwin"*/ ];
     };
   };
 }

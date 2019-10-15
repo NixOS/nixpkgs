@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pytest
 , python-rapidjson
 , pretend

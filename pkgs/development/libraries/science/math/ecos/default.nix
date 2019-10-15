@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "ecos-${version}";
+  pname = "ecos";
   version = "2.0.6";
 
   src = fetchFromGitHub {

@@ -7,27 +7,31 @@
 , ifaddr
 
 # Test dependencies
-, pytest_3, pylint, flake8, graphviz
+, pytest, pylint, flake8, graphviz
 , mock, sphinx, sphinx_rtd_theme
 }:
 
 buildPythonPackage rec {
   pname = "pysonos";
-  version = "0.0.13";
+  version = "0.0.23";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0azkbd20qdzdilv5pi4qngw7pjjcsv269dim7xh3qv7s9bp0xik8";
+    sha256 = "0kc2j2wl1bblqzay9gd3frd3imvylxjkqrp6jxixc4kmiivbg8h8";
   };
 
   propagatedBuildInputs = [ xmltodict requests ifaddr ];
 
   checkInputs = [
-    pytest_3 pylint flake8 graphviz
+    pytest pylint flake8 graphviz
     mock sphinx sphinx_rtd_theme
   ];
+
+  checkPhase = ''
+    pytest --deselect=tests/test_discovery.py::TestDiscover::test_discover
+  '';
 
   meta = {
     homepage = https://github.com/amelchio/pysonos;

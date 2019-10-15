@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libX11, libXrandr, glib, colord }:
 
 stdenv.mkDerivation rec {
-  name = "xiccd-${version}";
-  version = "0.2.4";
+  pname = "xiccd";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "agalakhov";
     repo = "xiccd";
     rev = "v${version}";
-    sha256 = "0dhv913njzm80g5lwak5znmxllfa6rrkifwja8vk133lyxnarqra";
+    sha256 = "159fyz5535lcabi5bzmxgmjdgxlqcjaiqgzr00mi3ax0i5fdldwn";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

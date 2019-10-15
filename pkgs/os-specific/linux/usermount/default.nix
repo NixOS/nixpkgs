@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, dbus, libnotify, udisks2, gdk_pixbuf }:
+{ stdenv, fetchgit, pkgconfig, dbus, libnotify, udisks2, gdk-pixbuf }:
 
 stdenv.mkDerivation {
   name = "usermount-0.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ dbus libnotify udisks2 gdk_pixbuf ];
+  buildInputs = [ dbus libnotify udisks2 gdk-pixbuf ];
 
   NIX_CFLAGS_COMPILE = [ "-DENABLE_NOTIFICATIONS" ];
 

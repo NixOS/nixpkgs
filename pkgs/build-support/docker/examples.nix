@@ -226,4 +226,12 @@ rec {
     '';
   };
 
+  # 14. Create another layered image, for comparing layers with image 10.
+  another-layered-image = pkgs.dockerTools.buildLayeredImage {
+    name = "another-layered-image";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    contents = [ pkgs.hello ];
+  };
+
 }

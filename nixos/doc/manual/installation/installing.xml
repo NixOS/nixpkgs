@@ -29,13 +29,14 @@
   </para>
 
   <para>
-   You are logged-in automatically as <literal>root</literal>. (The
-   <literal>root</literal> user account has an empty password.)
+   You are logged-in automatically as <literal>nixos</literal>.
+   The <literal>nixos</literal> user account has an empty password so you
+   can use <command>sudo</command> without a password.
   </para>
 
   <para>
    If you downloaded the graphical ISO image, you can run <command>systemctl
-   start display-manager</command> to start KDE. If you want to continue on the
+   start display-manager</command> to start the desktop environment. If you want to continue on the
    terminal, you can use <command>loadkeys</command> to switch to your
    preferred keyboard layout. (We even provide neo2 via <command>loadkeys de
    neo</command>!)
@@ -65,9 +66,9 @@
 
    <para>
     If you would like to continue the installation from a different machine you
-    need to activate the SSH daemon via <literal>systemctl start
-    sshd</literal>. In order to be able to login you also need to set a
-    password for <literal>root</literal> using <literal>passwd</literal>.
+    need to activate the SSH daemon via <command>systemctl start
+    sshd</command>. You then must set a password for either <literal>root</literal> or
+    <literal>nixos</literal> with <command>passwd</command> to be able to login.
    </para>
   </section>
  </section>
@@ -110,7 +111,7 @@
      <listitem>
       <para>
        Create a <emphasis>GPT</emphasis> partition table.
-<screen language="commands"># parted /dev/sda -- mklabel gpt</screen>
+<screen language="commands"><prompt># </prompt>parted /dev/sda -- mklabel gpt</screen>
       </para>
      </listitem>
      <listitem>
@@ -118,14 +119,14 @@
        Add the <emphasis>root</emphasis> partition. This will fill the disk
        except for the end part, where the swap will live, and the space left in
        front (512MiB) which will be used by the boot partition.
-<screen language="commands"># parted /dev/sda -- mkpart primary 512MiB -8GiB</screen>
+<screen language="commands"><prompt># </prompt>parted /dev/sda -- mkpart primary 512MiB -8GiB</screen>
       </para>
      </listitem>
      <listitem>
       <para>
        Next, add a <emphasis>swap</emphasis> partition. The size required will
        vary according to needs, here a 8GiB one is created.
-<screen language="commands"># parted /dev/sda -- mkpart primary linux-swap -8GiB 100%</screen>
+<screen language="commands"><prompt># </prompt>parted /dev/sda -- mkpart primary linux-swap -8GiB 100%</screen>
        <note>
         <para>
          The swap partition size rules are no different than for other Linux
@@ -140,8 +141,8 @@
        the ESP (EFI system partition) as its <emphasis>/boot</emphasis>
        partition. It uses the initially reserved 512MiB at the start of the
        disk.
-<screen language="commands"># parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-# parted /dev/sda -- set 3 boot on</screen>
+<screen language="commands"><prompt># </prompt>parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+<prompt># </prompt>parted /dev/sda -- set 3 boot on</screen>
       </para>
      </listitem>
     </orderedlist>
@@ -172,21 +173,21 @@
      <listitem>
       <para>
        Create a <emphasis>MBR</emphasis> partition table.
-<screen language="commands"># parted /dev/sda -- mklabel msdos</screen>
+<screen language="commands"><prompt># </prompt>parted /dev/sda -- mklabel msdos</screen>
       </para>
      </listitem>
      <listitem>
       <para>
        Add the <emphasis>root</emphasis> partition. This will fill the the disk
        except for the end part, where the swap will live.
-<screen language="commands"># parted /dev/sda -- mkpart primary 1MiB -8GiB</screen>
+<screen language="commands"><prompt># </prompt>parted /dev/sda -- mkpart primary 1MiB -8GiB</screen>
       </para>
      </listitem>
      <listitem>
       <para>
        Finally, add a <emphasis>swap</emphasis> partition. The size required
        will vary according to needs, here a 8GiB one is created.
-<screen language="commands"># parted /dev/sda -- mkpart primary linux-swap -8GiB 100%</screen>
+<screen language="commands"><prompt># </prompt>parted /dev/sda -- mkpart primary linux-swap -8GiB 100%</screen>
        <note>
         <para>
          The swap partition size rules are no different than for other Linux
@@ -218,7 +219,7 @@
        since this makes the file system configuration independent from device
        changes. For example:
 <screen>
-# mkfs.ext4 -L nixos /dev/sda1</screen>
+<prompt># </prompt>mkfs.ext4 -L nixos /dev/sda1</screen>
       </para>
      </listitem>
      <listitem>
@@ -227,7 +228,7 @@
        recommended to assign a label to the swap partition: <option>-L
        <replaceable>label</replaceable></option>. For example:
 <screen>
-# mkswap -L swap /dev/sda2</screen>
+<prompt># </prompt>mkswap -L swap /dev/sda2</screen>
       </para>
      </listitem>
      <listitem>
@@ -242,7 +243,7 @@
           it’s recommended to assign a label to the boot partition:
           <option>-n <replaceable>label</replaceable></option>. For example:
 <screen>
-# mkfs.fat -F 32 -n boot /dev/sda3</screen>
+<prompt># </prompt>mkfs.fat -F 32 -n boot /dev/sda3</screen>
          </para>
         </listitem>
        </varlistentry>
@@ -273,7 +274,7 @@
      Mount the target file system on which NixOS should be installed on
      <filename>/mnt</filename>, e.g.
 <screen>
-# mount /dev/disk/by-label/nixos /mnt
+<prompt># </prompt>mount /dev/disk/by-label/nixos /mnt
 </screen>
     </para>
    </listitem>
@@ -287,8 +288,8 @@
        <para>
         Mount the boot file system on <filename>/mnt/boot</filename>, e.g.
 <screen>
-# mkdir -p /mnt/boot
-# mount /dev/disk/by-label/boot /mnt/boot
+<prompt># </prompt>mkdir -p /mnt/boot
+<prompt># </prompt>mount /dev/disk/by-label/boot /mnt/boot
 </screen>
        </para>
       </listitem>
@@ -303,7 +304,7 @@
      the build actions that it may spawn) may need quite a bit of RAM,
      depending on your configuration.
 <screen>
-# swapon /dev/sda2</screen>
+<prompt># </prompt>swapon /dev/sda2</screen>
     </para>
    </listitem>
    <listitem>
@@ -325,16 +326,16 @@
      The command <command>nixos-generate-config</command> can generate an
      initial configuration file for you:
 <screen>
-# nixos-generate-config --root /mnt</screen>
+<prompt># </prompt>nixos-generate-config --root /mnt</screen>
      You should then edit <filename>/mnt/etc/nixos/configuration.nix</filename>
      to suit your needs:
 <screen>
-# nano /mnt/etc/nixos/configuration.nix
+<prompt># </prompt>nano /mnt/etc/nixos/configuration.nix
 </screen>
      If you’re using the graphical ISO image, other editors may be available
      (such as <command>vim</command>). If you have network access, you can also
      install other editors — for instance, you can install Emacs by running
-     <literal>nix-env -i emacs</literal>.
+     <literal>nix-env -f '&lt;nixpkgs&gt;' -iA emacs</literal>.
     </para>
     <variablelist>
      <varlistentry>
@@ -391,7 +392,11 @@
      <filename>hardware-configuration.nix</filename> is included from
      <filename>configuration.nix</filename> and will be overwritten by future
      invocations of <command>nixos-generate-config</command>; thus, you
-     generally should not modify it.)
+     generally should not modify it.) Additionally, you may want to look at 
+     <link xlink:href="https://github.com/NixOS/nixos-hardware">Hardware
+     configuration for known-hardware</link> at this point or after
+     installation.
+      
     </para>
     <note>
      <para>
@@ -412,7 +417,7 @@
     <para>
      Do the installation:
 <screen>
-# nixos-install</screen>
+<prompt># </prompt>nixos-install</screen>
      Cross fingers. If this fails due to a temporary problem (such as a network
      issue while downloading binaries from the NixOS binary cache), you can
      just re-run <command>nixos-install</command>. Otherwise, fix your
@@ -439,7 +444,7 @@ Retype new UNIX password: ***</screen>
     <para>
      If everything went well:
 <screen>
-# reboot</screen>
+<prompt># </prompt>reboot</screen>
     </para>
    </listitem>
    <listitem>
@@ -460,16 +465,16 @@ Retype new UNIX password: ***</screen>
      You’ll probably want to create some user accounts as well, which can be
      done with <command>useradd</command>:
 <screen>
-$ useradd -c 'Eelco Dolstra' -m eelco
-$ passwd eelco</screen>
+<prompt>$ </prompt>useradd -c 'Eelco Dolstra' -m eelco
+<prompt>$ </prompt>passwd eelco</screen>
     </para>
     <para>
      You may also want to install some software. For instance,
 <screen>
-$ nix-env -qa \*</screen>
+<prompt>$ </prompt>nix-env -qaP \*</screen>
      shows what packages are available, and
 <screen>
-$ nix-env -i w3m</screen>
+<prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -iA w3m</screen>
      install the <literal>w3m</literal> browser.
     </para>
    </listitem>
@@ -489,19 +494,19 @@ $ nix-env -i w3m</screen>
   <example xml:id="ex-partition-scheme-MBR">
    <title>Example partition schemes for NixOS on <filename>/dev/sda</filename> (MBR)</title>
 <screen language="commands">
-# parted /dev/sda -- mklabel msdos
-# parted /dev/sda -- mkpart primary 1MiB -8GiB
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%</screen>
+<prompt># </prompt>parted /dev/sda -- mklabel msdos
+<prompt># </prompt>parted /dev/sda -- mkpart primary 1MiB -8GiB
+<prompt># </prompt>parted /dev/sda -- mkpart primary linux-swap -8GiB 100%</screen>
   </example>
 
   <example xml:id="ex-partition-scheme-UEFI">
    <title>Example partition schemes for NixOS on <filename>/dev/sda</filename> (UEFI)</title>
 <screen language="commands">
-# parted /dev/sda -- mklabel gpt
-# parted /dev/sda -- mkpart primary 512MiB -8GiB
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
-# parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-# parted /dev/sda -- set 3 boot on</screen>
+<prompt># </prompt>parted /dev/sda -- mklabel gpt
+<prompt># </prompt>parted /dev/sda -- mkpart primary 512MiB -8GiB
+<prompt># </prompt>parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+<prompt># </prompt>parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+<prompt># </prompt>parted /dev/sda -- set 3 boot on</screen>
   </example>
 
   <example xml:id="ex-install-sequence">
@@ -509,23 +514,23 @@ $ nix-env -i w3m</screen>
    <para>
     With a partitioned disk.
 <screen language="commands">
-# mkfs.ext4 -L nixos /dev/sda1
-# mkswap -L swap /dev/sda2
-# swapon /dev/sda2
-# mkfs.fat -F 32 -n boot /dev/sda3        # <lineannotation>(for UEFI systems only)</lineannotation>
-# mount /dev/disk/by-label/nixos /mnt
-# mkdir -p /mnt/boot                      # <lineannotation>(for UEFI systems only)</lineannotation>
-# mount /dev/disk/by-label/boot /mnt/boot # <lineannotation>(for UEFI systems only)</lineannotation>
-# nixos-generate-config --root /mnt
-# nano /mnt/etc/nixos/configuration.nix
-# nixos-install
-# reboot</screen>
+<prompt># </prompt>mkfs.ext4 -L nixos /dev/sda1
+<prompt># </prompt>mkswap -L swap /dev/sda2
+<prompt># </prompt>swapon /dev/sda2
+<prompt># </prompt>mkfs.fat -F 32 -n boot /dev/sda3        # <lineannotation>(for UEFI systems only)</lineannotation>
+<prompt># </prompt>mount /dev/disk/by-label/nixos /mnt
+<prompt># </prompt>mkdir -p /mnt/boot                      # <lineannotation>(for UEFI systems only)</lineannotation>
+<prompt># </prompt>mount /dev/disk/by-label/boot /mnt/boot # <lineannotation>(for UEFI systems only)</lineannotation>
+<prompt># </prompt>nixos-generate-config --root /mnt
+<prompt># </prompt>nano /mnt/etc/nixos/configuration.nix
+<prompt># </prompt>nixos-install
+<prompt># </prompt>reboot</screen>
    </para>
   </example>
 
   <example xml:id='ex-config'>
    <title>NixOS Configuration</title>
-<screen>
+<programlisting>
 { config, pkgs, ... }: {
   imports = [
     # Include the results of the hardware scan.
@@ -543,7 +548,7 @@ $ nix-env -i w3m</screen>
   # Enable the OpenSSH server.
   services.sshd.enable = true;
 }
-  </screen>
+</programlisting>
   </example>
  </section>
  <section xml:id="sec-installation-additional-notes">

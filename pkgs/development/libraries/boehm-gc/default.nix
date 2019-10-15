@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
+{ lib, stdenv, fetchurl
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
 }:
 
 stdenv.mkDerivation rec {
-  name = "boehm-gc-${version}";
+  pname = "boehm-gc";
   version = "8.0.4";
 
   src = fetchurl {
@@ -14,34 +14,21 @@ stdenv.mkDerivation rec {
     sha256 = "1798rp3mcfkgs38ynkbg2p47bq59pisrc6mn0l20pb5iczf0ssj3";
   };
 
-  buildInputs = [ libatomic_ops ];
-  nativeBuildInputs = [ pkgconfig ];
-
   outputs = [ "out" "dev" "doc" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
     export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
   '';
 
-  patches =
-    # https://github.com/ivmai/bdwgc/pull/208
+  patches = # https://github.com/ivmai/bdwgc/pull/208
     lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
 
   configureFlags =
-    [ "--enable-cplusplus" ]
-    ++ lib.optional enableLargeConfig "--enable-large-config"
-    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static"
-    # Configure script can't detect whether C11 atomic intrinsics are available
-    # when cross-compiling, so it links to libatomic_ops, which has to be
-    # propagated to all dependencies. To avoid this, assume that the intrinsics
-    # are available.
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-libatomic-ops=none";
+    [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
+    ++ lib.optional enableLargeConfig "--enable-large-config";
 
   doCheck = true; # not cross;
-
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   enableParallelBuilding = true;
 

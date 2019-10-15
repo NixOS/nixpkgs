@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, glib, gtk3, gtksourceview3, libwnck3, libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-applets-${version}";
-  version = "1.22.1";
+  pname = "mate-applets";
+  version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "19sjm2180ir8a264rz8m528qaqjpl3q3cq095ab0sbkp2igksrfx";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1c32rkkry6kka2arrx5psjj037j79icp5jr1s0qh596dvsgxciqc";
   };
 
   nativeBuildInputs = [

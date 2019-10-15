@@ -1,17 +1,17 @@
 { fetchurl, stdenv, gtk, pkgconfig, libgsf, libofx, intltool, wrapGAppsHook
-, hicolor-icon-theme, libsoup, gnome3 }:
+, libsoup, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "grisbi-${version}";
+  pname = "grisbi";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/grisbi/${name}.tar.bz2";
+    url = "mirror://sourceforge/grisbi/${pname}-${version}.tar.bz2";
     sha1 = "1159c5491967fa7afd251783013579ffb45b891b";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ gtk libgsf libofx intltool hicolor-icon-theme libsoup
+  buildInputs = [ gtk libgsf libofx intltool libsoup
     gnome3.adwaita-icon-theme ];
 
   meta = with stdenv.lib; {

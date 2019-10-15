@@ -10,7 +10,6 @@
 , sqlite
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , zlib
-, callPackage
 , self
 , CF, configd
 , python-setup-hook
@@ -22,6 +21,12 @@
 , sha256
 , passthruFun
 , bash
+, stripConfig ? false
+, stripIdlelib ? false
+, stripTests ? false
+, stripTkinter ? false
+, rebuildBytecode ? true
+, stripBytecode ? false
 }:
 
 assert x11Support -> tcl != null
@@ -78,6 +83,8 @@ in with passthru; stdenv.mkDerivation {
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
+  '' + optionalString (stdenv.isDarwin && x11Support) ''
+    substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
   '';
 
   patches = [
@@ -122,8 +129,8 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
-  CPPFLAGS = "${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}";
-  LDFLAGS = "${concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs)}";
+  CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+  LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
   LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
   # Determinism: We fix the hashes of str, bytes and datetime objects.
@@ -135,6 +142,9 @@ in with passthru; stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (sqlite != null && isPy3k) [
+    "--enable-loadable-sqlite-extensions"
+  ] ++ optionals (openssl != null) [
     "--with-openssl=${openssl.dev}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
@@ -222,6 +232,21 @@ in with passthru; stdenv.mkDerivation {
     find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out '{}' +
     find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out '{}' +
 
+    '' + optionalString stripConfig ''
+    rm -R $out/bin/python*-config $out/lib/python*/config-*
+    '' + optionalString stripIdlelib ''
+    # Strip IDLE (and turtledemo, which uses it)
+    rm -R $out/bin/idle* $out/lib/python*/{idlelib,turtledemo}
+    '' + optionalString stripTkinter ''
+    rm -R $out/lib/python*/tkinter
+    '' + optionalString stripTests ''
+    # Strip tests
+    rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
+    '' + ''
+    # Include a sitecustomize.py file
+    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+    '' + optionalString rebuildBytecode ''
+
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails
     # We rebuild three times, once for each optimization level
@@ -230,6 +255,8 @@ in with passthru; stdenv.mkDerivation {
     find $out -name "*.py" | ${pythonForBuildInterpreter}     -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+    '' + optionalString stripBytecode ''
+    find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
   '';
 
   preFixup = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -239,9 +266,9 @@ in with passthru; stdenv.mkDerivation {
 
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
-  disallowedReferences = [
-    openssl.dev
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  disallowedReferences =
+    stdenv.lib.optionals (openssl != null) [ openssl.dev ]
+    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
     pythonForBuild buildPackages.bash

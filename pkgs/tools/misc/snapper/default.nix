@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, utillinux }:
+, lvm2, pam, python, utillinux, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "snapper-${version}";
+  pname = "snapper";
   version = "0.8.3";
 
   src = fetchFromGitHub {
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
     lvm2 pam python utillinux
+  ];
+
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://github.com/openSUSE/snapper/commit/c51708aea22d9436da287cba84424557ad03644b.patch";
+      sha256 = "106pf7pv8z3q37c8ckmgwxs1phf2fy7l53a9g5xq5kk2rjj1cx34";
+    })
   ];
 
   postPatch = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetch, fetchpatch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
@@ -8,8 +8,10 @@ let
   self = stdenv.mkDerivation ({
     name = "clang-${version}";
 
+    src = fetch "cfe" "0ihnbdl058gvl2wdy45p5am55bq8ifx8m9mhcsgj9ax8yxlzvvvh";
+
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "0svk1f70hvpwrjp6x5i9kqwrqwxnmcrw5s7f4cxyd100mdd12k08"}
+      unpackFile $src
       mv cfe-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
@@ -45,6 +47,8 @@ let
       # Backport for the `--unwindlib=[libgcc|compiler-rt]` flag, which is
       # needed for our bootstrapping to not interfere with C.
       ./unwindlib.patch
+      # https://reviews.llvm.org/D51899
+      ./compiler-rt-baremetal.patch
     ];
 
     postPatch = ''

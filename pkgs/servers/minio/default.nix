@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "minio-${version}";
+  pname = "minio";
   version = "2019-02-26T19-51-46Z";
 
   src = fetchFromGitHub {
@@ -12,6 +12,8 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/minio/minio";
+
+  subPackages = [ "." ];
 
   buildFlagsArray = [''-ldflags=
     -X github.com/minio/minio/cmd.Version=${version}

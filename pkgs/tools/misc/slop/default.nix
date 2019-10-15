@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "slop-${version}";
+  pname = "slop";
   version = "7.4";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Queries a selection from the user and prints to stdout";
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with maintainers; [ primeos mbakke ];
   };

@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, qt5, fetchFromGitHub }:
+{ stdenv, pkgconfig, qt5, fetchFromGitHub }:
 
 with qt5;
 
 stdenv.mkDerivation rec {
   version = "0.10.0";
-  name = "featherpad-${version}";
+  pname = "featherpad";
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "FeatherPad";

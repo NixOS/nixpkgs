@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.1.5";
-  name = "randoop-${version}";
+  pname = "randoop";
 
   src = fetchurl {
-    url = "https://github.com/randoop/randoop/releases/download/v${version}/${name}.zip";
+    url = "https://github.com/randoop/randoop/releases/download/v${version}/${pname}-${version}.zip";
     sha256 = "13zspyi9fgnqc90qfqqnj0hb7869l0aixv0vwgj8m4m1hggpadlx";
   };
 

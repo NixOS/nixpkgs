@@ -1,19 +1,19 @@
-{ buildGoModule, fetchFromGitHub, lib
-, wayland, libX11, xbitmaps, libXcursor, libXmu
+{ buildGoPackage, fetchFromGitHub, lib
+, wayland, libX11, xbitmaps, libXcursor, libXmu, libXpm
 }:
 
-buildGoModule rec {
-  name = "wallutils-${version}";
-  version = "5.8.0";
+buildGoPackage rec {
+  pname = "wallutils";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
-    sha256 = "1s9k2fwckpm1zpdxywckwbql38h0sp6y9ji88rxss7yjc2g12zaf";
+    sha256 = "1ghvcxsy5prj8l38r4lg39imsqbwmvn1zmiv7004j6skmgpaaawh";
   };
 
-  modSha256 = "0rfmqmm0jld7zrv192dqv7khwb2xm9i77sa1wgr7q6afdhbkrm21";
+  goPackagePath = "github.com/xyproto/wallutils";
 
   patches = [ ./lscollection-Add-NixOS-paths-to-DefaultWallpaperDirectories.patch ];
 
@@ -22,7 +22,7 @@ buildGoModule rec {
     sed -iE 's/VersionString = "[0-9].[0-9].[0-9]"/VersionString = "${version}"/' wallutils.go
   '';
 
-  buildInputs = [ wayland libX11 xbitmaps libXcursor libXmu ];
+  buildInputs = [ wayland libX11 xbitmaps libXcursor libXmu libXpm ];
 
   meta = with lib; {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";

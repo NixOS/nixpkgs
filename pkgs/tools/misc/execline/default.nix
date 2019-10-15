@@ -1,4 +1,4 @@
-{ stdenv, skawarePackages, makeWrapper }:
+{ skawarePackages, makeWrapper }:
 
 with skawarePackages;
 

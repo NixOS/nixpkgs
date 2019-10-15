@@ -1,17 +1,35 @@
 { lib, python3Packages }:
 
-python3Packages.buildPythonApplication rec {
+with python3Packages;
+buildPythonApplication rec {
   pname = "doh-proxy";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0mfl84mcklby6cnsw29kpcxj7mh1cx5yw6mjs4sidr1psyni7x6c";
+    sha256 = "1fxzxipzdvk75yrcr78mpdz8lwpisba67lk4jcwxdnkv6997dwfp";
   };
 
-  propagatedBuildInputs = with python3Packages;
-    [ aioh2 dnspython aiohttp-remotes pytestrunner flake8 ];
-  doCheck = false; # Trouble packaging unittest-data-provider
+  nativeBuildInputs = [ pytestrunner flake8];
+
+  propagatedBuildInputs = [
+    aioh2
+    dnspython
+    aiohttp-remotes
+  ];
+
+  checkInputs = [
+    asynctest
+    unittest-data-provider
+    pytest
+    pytestcov
+    pytest-aiohttp
+  ];
+
+  # attempts to resolve address
+  checkPhase = ''
+    pytest -k 'not servers'
+  '';
 
   meta = with lib; {
     homepage = https://facebookexperimental.github.io/doh-proxy/;

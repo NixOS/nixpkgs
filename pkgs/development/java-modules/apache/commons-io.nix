@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   commonsIo_2_1 = map (obj: fetchMaven {
     version = "2.1";
     artifactId = "commons-io";

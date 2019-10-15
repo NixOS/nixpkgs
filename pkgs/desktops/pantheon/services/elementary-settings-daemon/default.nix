@@ -36,25 +36,26 @@
 , systemd
 , tzdata
 , upower
+, libXtst
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "3.32.0";
+  version = "3.30.2";
 
-  projectName = "gnome-settings-daemon";
+  repoName = "gnome-settings-daemon";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${projectName}/${stdenv.lib.versions.majorMinor version}/${projectName}-${version}.tar.xz";
-    sha256 = "15w3sn9qf1zqlmk8c93kgrh2a20s62m5yfizkp21m5ylrrd07f63";
+    url = "mirror://gnome/sources/${repoName}/${stdenv.lib.versions.majorMinor version}/${repoName}-${version}.tar.xz";
+    sha256 = "0c663csa3gnsr6wm0xfll6aani45snkdj7zjwjfzcwfh8w4a3z12";
   };
 
   # Source for ubuntu's patchset
   src2 = fetchgit {
-    url = "https://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/${projectName}";
+    url = "https://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/${repoName}";
     rev = "refs/tags/ubuntu/${version}-1ubuntu1";
-    sha256 = "0ayd50mr0pv2h4j1r1haf8y2hj8jv59vypa7lx8jis0llrm7s3yn";
+    sha256 = "02awkhw6jqm7yh812mw0nsdmsljfi8ksz8mvd2qpns5pcv002g2c";
   };
 
   # We've omitted the 53_sync_input_sources_to_accountsservice patch because it breaks the build.
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
     "${patchPath}/64_restore_terminal_keyboard_shortcut_schema.patch"
     "${patchPath}/correct_logout_action.patch"
     "${patchPath}/ubuntu-lid-close-suspend.patch"
+    "${patchPath}/revert-wacom-migration.patch"
     "${patchPath}/revert-gsettings-removals.patch"
     "${patchPath}/revert-mediakeys-dbus-interface-drop.patch"
     "${patchPath}/ubuntu_ibus_configs.patch"
@@ -88,8 +90,6 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for f in $out/etc/xdg/autostart/*; do mv "$f" "''${f%.desktop}-pantheon.desktop"; done
-
     for autostart in $(grep -rl "OnlyShowIn=GNOME;" $out/etc/xdg/autostart)
     do
       echo "Patching OnlyShowIn to Pantheon in: $autostart"
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
 
     # This breaks lightlocker https://github.com/elementary/session-settings/commit/b0e7a2867608c3a3916f9e4e21a68264a20e44f8
     # TODO: shouldn't be neeed for the 5.1 greeter (awaiting release)
-    rm $out/etc/xdg/autostart/org.gnome.SettingsDaemon.ScreensaverProxy-pantheon.desktop
+    rm $out/etc/xdg/autostart/org.gnome.SettingsDaemon.ScreensaverProxy.desktop
 
     # So the polkit policy can reference /run/current-system/sw/bin/elementary-settings-daemon/gsd-backlight-helper
     mkdir -p $out/bin/elementary-settings-daemon
@@ -129,6 +129,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk3
     lcms2
+    libXtst
     libcanberra-gtk3
     libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
     libgudev
@@ -147,9 +148,15 @@ stdenv.mkDerivation rec {
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Default for release buildtype but passed manually because
+    # we're using plain
+    "-DG_DISABLE_CAST_CHECKS"
+  ];
+
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = projectName;
+      packageName = repoName;
       attrPath = "pantheon.${pname}";
     };
   };

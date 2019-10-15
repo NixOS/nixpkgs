@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, callPackage
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , attrs
 , pyrsistent
 , six

@@ -4,11 +4,11 @@
 }:
 
 mkDerivation rec {
-  name = "alkimia-${version}";
+  pname = "alkimia";
   version = "8.0.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/alkimia/${version}/${name}.tar.xz";
+    url = "mirror://kde/stable/alkimia/${version}/${pname}-${version}.tar.xz";
     sha256 = "059i6vn36sdq5zn2vqzh4asvvgdgs7n478nk9phvb5gdys01fq7m";
   };
 

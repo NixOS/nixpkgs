@@ -1,12 +1,12 @@
 { stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "mujs-${version}";
-  version = "1.0.5";
+  pname = "mujs";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "https://mujs.com/downloads/mujs-${version}.tar.xz";
-    sha256 = "02cqrfnww2s3ylcvqin1951f2c5nzpby8gxb207p2hbrivbg8f0l";
+    sha256 = "1q9w2dcspfp580pzx7sw7x9gbn8j0ak6dvj75wd1ml3f3q3i43df";
   };
 
   buildInputs = [ readline ];

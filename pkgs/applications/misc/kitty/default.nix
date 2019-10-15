@@ -1,15 +1,15 @@
 { stdenv, substituteAll, fetchFromGitHub, python3Packages, glfw, libunistring,
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
-  libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
+  libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  which, dbus, fetchpatch,
+  which, dbus,
   Cocoa,
   CoreGraphics,
   Foundation,
   IOKit,
   Kernel,
   OpenGL,
-  cf-private,
+  libcanberra,
   libicns,
   libpng,
   librsvg,
@@ -21,18 +21,19 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.14.1";
+  version = "0.14.6";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0nm8l8ki0csdapf5mj3vg605ki5hjsx7h7i3m01x1a4vjzjmk8bv";
+    sha256 = "1rb5ys9xsdhd2qa3kz5gqzz111c6b14za98va6hlglk69wqlmb51";
   };
 
   buildInputs = [
-    ncurses harfbuzz
+    harfbuzz
+    ncurses
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     Cocoa
     CoreGraphics
@@ -40,12 +41,11 @@ buildPythonApplication rec {
     IOKit
     Kernel
     OpenGL
-    cf-private
     libpng
     python3
     zlib
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    fontconfig glfw libunistring libX11
+    fontconfig glfw libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus
   ];
@@ -58,6 +58,8 @@ buildPythonApplication rec {
     librsvg
     optipng
   ];
+
+  propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;
 
   outputs = [ "out" "terminfo" ];
 
@@ -72,6 +74,10 @@ buildPythonApplication rec {
     ./png2icns.patch
   ];
 
+  preConfigure  = stdenv.lib.optional (!stdenv.isDarwin) ''
+    substituteInPlace glfw/egl_context.c --replace "libEGL.so.1" "${stdenv.lib.getLib libGL}/lib/libEGL.so.1"
+  '';
+
   buildPhase = if stdenv.isDarwin then ''
     make app
   '' else ''
@@ -83,13 +89,13 @@ buildPythonApplication rec {
     mkdir -p $out
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
-    ln -s ../Applications/kitty.app/Contents/MacOS/kitty-deref-symlink "$out/bin/kitty"
+    ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
     mkdir "$out/Applications"
     cp -r kitty.app "$out/Applications/kitty.app"
     '' else ''
     cp -r linux-package/{bin,share,lib} $out
     ''}
-    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ]}"
+    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
     runHook postInstall
 
     # ZSH completions need to be invoked with `source`:
@@ -117,6 +123,6 @@ buildPythonApplication rec {
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs ];
+    maintainers = with maintainers; [ tex rvolosatovs ma27 ];
   };
 }

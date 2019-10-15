@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python }:
+{ stdenv, fetchFromGitHub, cmake, python3 }:
 # Like many google projects, shaderc doesn't gracefully support separately compiled dependencies, so we can't easily use
 # the versions of glslang and spirv-tools used by vulkan-loader. Exact revisions are taken from
 # https://github.com/google/shaderc/blob/known-good/known_good.json
@@ -8,24 +8,24 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "712cd6618df2c77e126d68042ad7a81a69ee4a6f";
-    sha256 = "0wncdj6q1hn40lc7cnz97mx5qjvb8p13mhxilnncgcmf0crsvblz";
+    rev = "d3692c701b1265955221aa0d6ebc656bc4442b2a";
+    sha256 = "11cvwbzlpr4zrcmmyd9h0kbfhmhr6r696ydmn0yp1jrixby4bmji";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "df5bd2d05ac1fd3ec3024439f885ec21cc949b22";
-    sha256 = "0l8ds4nn2qcfi8535ai8891i3547x35hscs2jxwwq6qjgw1sgkax";
+    rev = "08cc49ec59c3ff4d6bd4bb4f2097ede35e802158";
+    sha256 = "1xhgcppx02fp3nr7654mr3qrgy1fxlxdyl87jhmn3k9jf24gmmmz";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "79b6681aadcb53c27d1052e5f8a0e82a981dbf2f";
-    sha256 = "0flng2rdmc4ndq3j71h6wk1ibcjvhjrg2rzd6rv445vcsf0jh2pj";
+    rev = "8b911bd2ba37677037b38c9bd286c7c05701bcda";
+    sha256 = "0qdnj34bkagszyvci6ifpqd7iqvybhmqzvc9lvqnls44qg90aqh2";
   };
 in stdenv.mkDerivation rec {
-  name = "shaderc-${version}";
-  version = "2018.0";
+  pname = "shaderc";
+  version = "2019.0";
 
   outputs = [ "out" "lib" "bin" "dev" "static" ];
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     owner = "google";
     repo = "shaderc";
     rev = "v${version}";
-    sha256 = "0qigmj0riw43pgjn5f6kpvk72fajssz1lc2aiqib5qvmj9rqq3hl";
+    sha256 = "1l5mmyxhzsbp0a6y2d86i8jmf46c6bjgjkdgkr5l8hmhflmm7gi2";
   };
 
   patchPhase = ''
@@ -42,15 +42,11 @@ in stdenv.mkDerivation rec {
     ln -s ${spirv-headers} third_party/spirv-tools/external/spirv-headers
   '';
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python3 ];
 
   postInstall = ''
     moveToOutput "lib/*.a" $static
   '';
-
-  preConfigure = ''cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_BINDIR=$bin/bin"'';
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 

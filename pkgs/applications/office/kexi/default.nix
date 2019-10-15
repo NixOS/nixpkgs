@@ -4,16 +4,15 @@
   breeze-icons, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kcrash, kguiaddons, ki18n, kiconthemes, kitemviews, kio, ktexteditor, ktextwidgets,
   kwidgetsaddons, kxmlgui,
-  kdb, kproperty, kreport, lcms2, mysql, marble, postgresql
+  kdb, kproperty, kreport, lcms2, libmysqlclient, marble, postgresql
 }:
 
 mkDerivation rec {
   pname = "kexi";
   version = "3.2.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
+    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
     sha256 = "1zy1q7q9rfdaws3rwf3my22ywkn6g747s3ixfcg9r80mm2g3z0bs";
   };
 
@@ -24,10 +23,21 @@ mkDerivation rec {
     breeze-icons karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
     kcrash kguiaddons ki18n kiconthemes kitemviews kio ktexteditor ktextwidgets
     kwidgetsaddons kxmlgui
-    kdb kproperty kreport lcms2 mysql.connector-c marble postgresql
+    kdb kproperty kreport lcms2 libmysqlclient marble postgresql
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];
+
+  patches = [
+    # Changes in Qt 5.13 mean that QDate isn't exported from certain places,
+    # which the build was relying on. This patch explicitly imports QDate where
+    # needed.
+    # Should be unnecessary with kexi >= 3.3
+    (fetchpatch {
+      url = "https://cgit.kde.org/kexi.git/patch/src/plugins/forms/widgets/kexidbdatepicker.cpp?id=511d99b7745a6ce87a208bdbf69e631f1f136d53";
+      sha256 = "0m5cwq2v46gb1b12p7acck6dadvn7sw4xf8lkqikj9hvzq3r1dnj";
+    })
+  ];
 
   meta = with lib; {
     description = "A open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";
