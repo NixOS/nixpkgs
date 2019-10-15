@@ -51,32 +51,6 @@ let
     ${cfg.extraConfig}
   '';
 
-  /*
-    [network-manager]
-    Identity=unix-group:networkmanager
-    Action=org.freedesktop.NetworkManager.*
-    ResultAny=yes
-    ResultInactive=no
-    ResultActive=yes
-
-    [modem-manager]
-    Identity=unix-group:networkmanager
-    Action=org.freedesktop.ModemManager*
-    ResultAny=yes
-    ResultInactive=no
-    ResultActive=yes
-  */
-  polkitConf = ''
-    polkit.addRule(function(action, subject) {
-      if (
-        subject.isInGroup("networkmanager")
-        && (action.id.indexOf("org.freedesktop.NetworkManager.") == 0
-            || action.id.indexOf("org.freedesktop.ModemManager")  == 0
-        ))
-          { return polkit.Result.YES; }
-    });
-  '';
-
   ns = xs: pkgs.writeText "nameservers" (
     concatStrings (map (s: "nameserver ${s}\n") xs)
   );
@@ -469,8 +443,6 @@ in {
         wireless.iwd.enable = true;
       })
     ];
-
-    security.polkit.extraConfig = polkitConf;
 
     services.dbus.packages = cfg.packages
       ++ optional cfg.enableStrongSwan pkgs.strongswanNM

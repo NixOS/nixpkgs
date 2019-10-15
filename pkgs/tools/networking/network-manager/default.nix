@@ -48,6 +48,8 @@ in stdenv.mkDerivation rec {
     "-Dqt=false"
     # Allow using iwd when configured to do so
     "-Diwd=true"
+    # Allow users to modify system connections
+    "-Dmodify_system=true"
     "-Dlibaudit=yes-disabled-by-default"
   ];
 

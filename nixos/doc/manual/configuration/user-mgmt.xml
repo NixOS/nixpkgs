@@ -14,12 +14,12 @@
   <link linkend="opt-users.users._name__.isNormalUser">isNormalUser</link> = true;
   <link linkend="opt-users.users._name__.home">home</link> = "/home/alice";
   <link linkend="opt-users.users._name__.description">description</link> = "Alice Foobar";
-  <link linkend="opt-users.users._name__.extraGroups">extraGroups</link> = [ "wheel" "networkmanager" ];
+  <link linkend="opt-users.users._name__.extraGroups">extraGroups</link> = [ "wheel" ];
   <link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">openssh.authorizedKeys.keys</link> = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
 };
 </programlisting>
   Note that <literal>alice</literal> is a member of the
-  <literal>wheel</literal> and <literal>networkmanager</literal> groups, which
+  <literal>wheel</literal> group, which
   allows her to use <command>sudo</command> to execute commands as
   <literal>root</literal> and to configure the network, respectively. Also note
   the SSH public key that allows remote logins with the corresponding private
