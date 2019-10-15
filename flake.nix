@@ -5,7 +5,6 @@
 
   outputs = { self }:
     let
-      pkgs = import ./. { system = "x86_64-linux"; };
       jobs = import ./pkgs/top-level/release.nix {
         nixpkgs = self;
       };
@@ -26,10 +25,6 @@
 
       checks.tarball = jobs.tarball;
 
-      builders = {
-        inherit (pkgs) stdenv fetchurl;
-      };
-
       htmlDocs = {
         nixpkgsManual = jobs.manual;
         nixosManual = (import ./nixos/release-small.nix {
@@ -37,11 +32,7 @@
         }).nixos.manual.x86_64-linux;
       };
 
-      packages = {
-        inherit (pkgs) hello nix fuse nlohmann_json boost firefox;
-      };
-
-      legacyPackages = pkgs;
+      legacyPackages = import ./. { system = "x86_64-linux"; };
 
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
