@@ -3975,6 +3975,20 @@ let
     };
   };
 
+  DataSExpression = buildPerlPackage {
+    pname = "Data-SExpression";
+    version = "0.41";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NELHAGE/Data-SExpression-0.41.tar.gz";
+      sha256 = "8162426a4285a094385fdfaf6d09ced106d5af57553f953acb1d56867dd0149b";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ ClassAccessor ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DataSpreadPagination = buildPerlPackage {
     pname = "Data-SpreadPagination";
     version = "0.1.2";
@@ -15136,6 +15150,21 @@ let
     };
     meta = {
       description = "Roles. Like a nouvelle cuisine portion size slice of Moose";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  RPCEPCService = buildPerlPackage {
+    pname = "RPC-EPC-Service";
+    version = "0.0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KI/KIWANAMI/RPC-EPC-Service-v0.0.11.tar.gz";
+      sha256 = "975f4134365258fb47fa921919053513adb9101f2bd420fcefe345f209128be3";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ AnyEvent DataSExpression ];
+    meta = {
+      description = "An Asynchronous Remote Procedure Stack";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
