@@ -5943,6 +5943,8 @@ in {
 
   twisted = callPackage ../development/python-modules/twisted { };
 
+  twitch-python = callPackage ../development/python-modules/twitch-python { };
+
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 
   tzlocal = callPackage ../development/python-modules/tzlocal { };

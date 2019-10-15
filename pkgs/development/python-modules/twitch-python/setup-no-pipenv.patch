@@ -1,0 +1,25 @@
+diff --git a/setup.py b/setup.py
+index ecb8f0d..4201bac 100644
+--- a/setup.py
++++ b/setup.py
+@@ -2,17 +2,15 @@
+
+ import os
+
+-from pipenv.project import Project
+-from pipenv.utils import convert_deps_to_pip
+ from setuptools import setup, find_packages
+
+ this_directory = os.path.abspath(os.path.dirname(__file__))
+ with open(os.path.join(this_directory, 'readme.md'), encoding='utf-8') as f:
+     readme = f.read()
+
+-pipfile = Project(chdir=False).parsed_pipfile
+-requirements = convert_deps_to_pip(pipfile['packages'], r=False)
+-test_requirements = convert_deps_to_pip(pipfile['dev-packages'], r=False)
++requirements = ['requests', 'rx>=3.0.0']
++test_requirements = ['pipenv', 'twine', 'pytest-cov', 'pytest', 'responses', 'wheel']
++
+ setup_requirements = ['pipenv', 'setuptools']
+
+ setup(
