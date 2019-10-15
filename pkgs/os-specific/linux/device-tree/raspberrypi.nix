@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation {
 
     cp ${raspberrypifw}/share/raspberrypi/boot/bcm*.dtb .
 
-    cp bcm2708-rpi-0-w.dtb bcm2835-rpi-zero-w.dtb
+    cp bcm2708-rpi-zero-w.dtb bcm2835-rpi-zero-w.dtb
     cp bcm2708-rpi-b.dtb bcm2835-rpi-a.dtb
     cp bcm2708-rpi-b.dtb bcm2835-rpi-b.dtb
     cp bcm2708-rpi-b.dtb bcm2835-rpi-b-rev2.dtb
