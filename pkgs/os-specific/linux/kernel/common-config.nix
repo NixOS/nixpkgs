@@ -33,7 +33,6 @@ let
       DYNAMIC_DEBUG             = yes;
       TIMER_STATS               = whenOlder "4.11" yes;
       DEBUG_NX_TEST             = whenOlder "4.11" no;
-      CPU_NOTIFIER_ERROR_INJECT = whenOlder "4.4" (option no);
       DEBUG_STACK_USAGE         = no;
       DEBUG_STACKOVERFLOW       = mkIf (!features.grsecurity) no;
       RCU_TORTURE_TEST          = no;
@@ -194,8 +193,6 @@ let
     };
 
     video = {
-      # Enable KMS for devices whose X.org driver supports it
-      DRM_I915_KMS           = whenOlder "4.3" yes;
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
@@ -264,7 +261,6 @@ let
       EXT2_FS_XATTR     = yes;
       EXT2_FS_POSIX_ACL = yes;
       EXT2_FS_SECURITY  = yes;
-      EXT2_FS_XIP       = whenOlder "4.0" yes; # Ext2 execute in place support
 
       EXT3_FS_POSIX_ACL = yes;
       EXT3_FS_SECURITY  = yes;
@@ -366,10 +362,6 @@ let
       MICROCODE       = yes;
       MICROCODE_INTEL = yes;
       MICROCODE_AMD   = yes;
-
-      MICROCODE_EARLY       = whenOlder "4.4" yes;
-      MICROCODE_INTEL_EARLY = whenOlder "4.4" yes;
-      MICROCODE_AMD_EARLY   = whenOlder "4.4" yes;
     } // optionalAttrs (versionAtLeast version "4.10") {
       # Write Back Throttling
       # https://lwn.net/Articles/682582/
@@ -714,7 +706,7 @@ let
 
       PREEMPT = no;
       PREEMPT_VOLUNTARY = yes;
-      
+
       X86_AMD_PLATFORM_DEVICE = yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
