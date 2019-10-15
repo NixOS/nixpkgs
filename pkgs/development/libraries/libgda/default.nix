@@ -15,9 +15,11 @@ assert postgresSupport -> postgresql != null;
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "16vxv2qvysh22s8h9h6irx96sacagxkz0i4qgi1wc6ibly6fvjjr";
   };
-  configureFlags = with stdenv.lib; [ "--enable-gi-system-install=no" ]
-    ++ (optional (mysqlSupport) "--with-mysql=yes")
-    ++ (optional (postgresSupport) "--with-postgres=yes");
+  configureFlags = with stdenv.lib; [
+    "--enable-gi-system-install=no"
+    "--with-mysql=${if mysqlSupport then "yes" else "no"}"
+    "--with-postgres=${if postgresSupport then "yes" else "no"}"
+  ];
 
   enableParallelBuilding = true;
 
