@@ -28,6 +28,7 @@ with pkgs;
         isPy35 = pythonVersion == "3.5";
         isPy36 = pythonVersion == "3.6";
         isPy37 = pythonVersion == "3.7";
+        isPy38 = pythonVersion == "3.8";
         isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
         isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
         isPy3k = isPy3;
