@@ -9262,6 +9262,8 @@ in
   electron_3 = callPackage ../development/tools/electron/3.x.nix { };
   electron = electron_4;
 
+  electron-packager = callPackage ../development/tools/electron-packager { };
+
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
@@ -18980,6 +18982,8 @@ in
   waybar = callPackage ../applications/misc/waybar {
     pulseSupport = config.pulseaudio or false;
   };
+
+  yakyak = callPackage ../applications/networking/instant-messengers/yakyak { };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
