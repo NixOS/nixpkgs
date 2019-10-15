@@ -48,21 +48,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.62.0";
+  version = "2.62.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "046sqfmr84blxh4vkipmh8ff7wd19fxmh6lnr5ibchx3l02p49bc";
+    sha256 = "1pzrw2x9r0kyghrvwdbx3nqn2wcrrxy962f5gbdacwh83m705n9x";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-    # fix loading dylibs on darwin
-    # Remove on 2.62.1
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/commit/e2409e5e180f1fa369d0e87e38e4d646d9f68791.patch";
-      sha256 = "1dhjwlsqdgnn8fr8pzfrnd63m7pdgf7mizdyn8lwg17ggvq6qsqf";
-    })
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
