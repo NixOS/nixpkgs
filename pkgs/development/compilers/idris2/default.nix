@@ -1,0 +1,57 @@
+# racket is busted: https://github.com/NixOS/nixpkgs/issues/11698
+
+{ stdenv, makeWrapper, runCommand
+, idris, chez, racket, chickenPkgs
+}:
+
+stdenv.mkDerivation rec {
+
+  pname = "idris2";
+
+  src = fetchGit {
+    url = "https://github.com/edwinb/Idris2";
+    rev = "bf5b2298e068ebeaddd70b695426f52ebe67c1ab";
+  };
+
+  version = builtins.readFile ( runCommand "getIdris2Version" {} ''
+    # grep through the make database to determine the computed value of IDRIS2_VERSION
+    make -np -f ${src}/Makefile 2>/dev/null | \
+      grep "^IDRIS2_VERSION" | \
+      head -n 1 | cut -d\  -f3 | tr -d '\n' >$out
+  '');
+
+  nativeBuildInputs = [ idris makeWrapper ];
+
+  propagatedBuildInputs =
+    [ chez
+      racket
+      chickenPkgs.chicken
+      chickenPkgs.chickenEggs.numbers ];
+
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  # The `network` library generates a test at build time, so we need to help it
+  # find the Chez binary.
+  CHEZ = "${chez}/bin/scheme";
+
+  postPatch = ''
+    patchShebangs tests/ideMode/ideMode002/gen_expected.sh
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/idris2 \
+      --set CHEZ ${chez}/bin/scheme \
+      --set RACKET ${racket}/bin/racket \
+      --set RACKET_RACO ${racket}/bin/raco \
+      --set CHICKEN_CSI ${chickenPkgs.chicken}/bin/csi \
+      --set CHICKEN_CSC ${chickenPkgs.chicken}/bin/csc
+  '';
+
+  meta = {
+    description = "A dependently typed programming language";
+    homepage = https://github.com/edwinb/Idris2;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ lodi ];
+  };
+
+}
