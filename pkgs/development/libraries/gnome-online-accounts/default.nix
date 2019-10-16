@@ -1,11 +1,13 @@
 { stdenv
-, fetchurl
+, fetchFromGitLab
 , pkgconfig
 , vala
 , glib
+, meson
+, ninja
+, python3
 , libxslt
 , gtk3
-, wrapGAppsHook
 , webkitgtk
 , json-glib
 , librest
@@ -21,36 +23,46 @@
 , gnome3
 , gcr
 , kerberos
+, gvfs
+, dbus
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
   version = "3.34.1";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0fkqckqkkah5k1xrfqjkk4345aq9c0a6yyvfczy9g96k927clcj8";
+  # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnome-online-accounts";
+    rev = version;
+    sha256 = "0ry06qw068rqn4y42953kwl6fkxpgfya58y87cd3zink6gj7q0fm";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
 
-  configureFlags = [
-    "--enable-media-server"
-    "--enable-kerberos"
-    "--enable-lastfm"
-    "--enable-todoist"
-    "--enable-gtk-doc"
-    "--enable-documentation"
+  mesonFlags = [
+    "-Dfedora=false" # not useful in NixOS or for NixOS users.
+    "-Dgtk_doc=true"
+    "-Dlastfm=true"
+    "-Dman=true"
+    "-Dmedia_server=true"
   ];
 
   nativeBuildInputs = [
+    dbus # used for checks and pkgconfig to install dbus service/s
     docbook_xml_dtd_412
     docbook_xsl
     gettext
     gobject-introspection
     gtk-doc
     libxslt
+    meson
+    ninja
     pkgconfig
+    python3
     vala
     wrapGAppsHook
   ];
@@ -60,6 +72,7 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gtk3
+    gvfs # OwnCloud, Google Drive
     icu
     json-glib
     kerberos
@@ -68,6 +81,13 @@ stdenv.mkDerivation rec {
     libsoup
     webkitgtk
   ];
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
