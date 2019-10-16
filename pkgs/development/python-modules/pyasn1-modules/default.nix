@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pyasn1-modules";
-  version = "0.2.5";
+  version = "0.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef721f68f7951fab9b0404d42590f479e30d9005daccb1699b0a51bb4177db96";
+    sha256 = "0c35a52e00b672f832e5846826f1fb7507907f7d52fba6faa9e3c4cbe874fe4b";
   };
 
   propagatedBuildInputs = [ pyasn1 ];
