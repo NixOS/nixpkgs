@@ -16,7 +16,7 @@ in
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName;
+      inherit executableName longName;
     };
 
     desktopItem = makeDesktopItem {
@@ -71,6 +71,8 @@ in
       if system == "x86_64-darwin" then ''
         mkdir -p "$out/Applications/${longName}.app" $out/bin
         cp -r ./* "$out/Applications/${longName}.app"
+
+        # vscodium's macOS release zip dosn't rename the code exectuable properly.
         ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/code" $out/bin/${executableName}
       '' else ''
         mkdir -p $out/lib/vscode $out/bin
