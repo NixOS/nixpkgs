@@ -6,6 +6,7 @@
 , glibcLocales
 , mock
 , pytest
+, nose
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "85103cee6548992780912c1a0a9ec2583a4a18f1ef79a248ec0db4446500bce3";
   };
 
-  checkInputs = [ pytest mock glibcLocales ];
+  checkInputs = [ pytest mock glibcLocales nose ];
   propagatedBuildInputs = [ ipython traitlets ];
 
   patches = [ ./tests_respect_pythonpath.patch ];
