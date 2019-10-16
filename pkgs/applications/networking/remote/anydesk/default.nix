@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/{applications,doc/anydesk,icons/hicolor}
     install -m755 anydesk $out/bin/anydesk
     cp copyright README $out/share/doc/anydesk
-    cp -r icons/* $out/share/icons/hicolor/
+    cp -r icons/hicolor/* $out/share/icons/hicolor/
     cp ${desktopItem}/share/applications/*.desktop $out/share/applications
 
     runHook postInstall
