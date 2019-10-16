@@ -1,9 +1,6 @@
-{ stdenv, lib, fetchurl, vscode, unzip }:
+{ stdenv, lib, fetchurl, unzip }:
 
 let
-  extendedPkgVersion = lib.getVersion vscode;
-  extendedPkgName = lib.removeSuffix "-${extendedPkgVersion}" vscode.name;
-
   mktplcExtRefToFetchArgs = ext: {
     url = "https://${ext.publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${ext.publisher}/extension/${ext.name}/${ext.version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage";
     sha256 = ext.sha256;
@@ -14,7 +11,6 @@ let
 
   buildVscodeExtension = a@{
     name,
-    namePrefix ? "${extendedPkgName}-extension-",
     src,
     # Same as "Unique Identifier" on the extension's web page.
     # For the moment, only serve as unique extension dir.
@@ -28,12 +24,12 @@ let
   }:
   stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) //  {
 
-    name = namePrefix + name;
+    name = "vscode-extension-${name}";
 
     inherit vscodeExtUniqueId;
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
-    installPrefix = "share/${extendedPkgName}/extensions/${vscodeExtUniqueId}";
+    installPrefix = "${vscodeExtUniqueId}";
 
     buildInputs = [ unzip ] ++ buildInputs;
 
