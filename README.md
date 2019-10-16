@@ -40,6 +40,7 @@ See code for all available configurations.
 | [Dell XPS 15 9550][]              | `<nixos-hardware/dell/xps/15-9550>`                |
 | [Inverse Path USB armory][]       | `<nixos-hardware/inversepath/usbarmory>`           |
 | Lenovo IdeaPad Z510               | `<nixos-hardware/lenovo/ideapad/z510>`             |
+| Lenovo ThinkPad P53               | `<nixos-hardware/lenovo/thinkpad/p53>`             |
 | Lenovo ThinkPad T410              | `<nixos-hardware/lenovo/thinkpad/t410>`            |
 | Lenovo ThinkPad T430              | `<nixos-hardware/lenovo/thinkpad/t430>`            |
 | Lenovo ThinkPad T440s             | `<nixos-hardware/lenovo/thinkpad/t440s>`           |
