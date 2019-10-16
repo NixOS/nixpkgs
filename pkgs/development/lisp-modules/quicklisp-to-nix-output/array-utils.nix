@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-{
+rec {
   baseName = ''array-utils'';
   version = ''20190710-git'';
 

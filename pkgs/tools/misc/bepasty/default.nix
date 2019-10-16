@@ -14,6 +14,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     flask
     pygments
+    setuptools
     xstatic
     xstatic-bootbox
     xstatic-bootstrap

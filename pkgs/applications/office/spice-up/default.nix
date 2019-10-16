@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , gdk-pixbuf
 , gtk3
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     vala
     wrapGAppsHook
   ];
+
   buildInputs = [
     pantheon.elementary-icon-theme
     pantheon.granite
@@ -47,6 +49,15 @@ stdenv.mkDerivation rec {
     libgee
     libgudev
     libsoup
+  ];
+
+  patches = [
+    # Fix build with Vala 0.46
+    # https://github.com/Philip-Scott/Spice-up/pull/288
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Philip-Scott/Spice-up/pull/288.patch";
+      sha256 = "0kyfd8v2sk4cvcq1j8ysp64snfjhnpr3iz7l04lx7if7h372xj39";
+    })
   ];
 
   meta = with stdenv.lib; {

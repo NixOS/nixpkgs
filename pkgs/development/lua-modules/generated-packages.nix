@@ -810,6 +810,25 @@ luacheck = buildLuarocksPackage {
     };
   };
 };
+luacov = buildLuarocksPackage {
+  pname = "luacov";
+  version = "0.13.0-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/luacov-0.13.0-1.src.rock;
+    sha256 = "16am0adzr4y64n94f64d4yrz65in8rwa8mmjz1p0k8afm5p5759i";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://keplerproject.github.io/luacov/";
+    description = "Coverage analysis tool for Lua scripts";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 luadbi = buildLuarocksPackage {
   pname = "luadbi";
   version = "0.7.2-1";

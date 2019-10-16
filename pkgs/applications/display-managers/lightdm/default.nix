@@ -1,8 +1,32 @@
-{ stdenv, fetchFromGitHub, pam, pkgconfig, autoconf, automake, libtool, libxcb
-, glib, libXdmcp, itstool, intltool, libxklavier, libgcrypt, audit, busybox
-, polkit, accountsservice, gtk-doc, gnome3, gobject-introspection, vala, fetchpatch
-, withQt4 ? false, qt4
-, withQt5 ? false, qtbase
+{ stdenv
+, fetchFromGitHub
+, substituteAll
+, plymouth
+, pam
+, pkgconfig
+, autoconf
+, automake
+, libtool
+, libxcb
+, glib
+, libXdmcp
+, itstool
+, intltool
+, libxklavier
+, libgcrypt
+, audit
+, busybox
+, polkit
+, accountsservice
+, gtk-doc
+, gnome3
+, gobject-introspection
+, vala
+, fetchpatch
+, withQt4 ? false
+, qt4
+, withQt5 ? false
+, qtbase
 }:
 
 with stdenv.lib;
@@ -53,10 +77,19 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/lightdm/raw/4cf0d2bed8d1c68970b0322ccd5dbbbb7a0b12bc/f/lightdm-1.25.1-disable_dmrc.patch";
       sha256 = "06f7iabagrsiws2l75sx2jyljknr9js7ydn151p3qfi104d1541n";
     })
+
     # Don't use etc/dbus-1/system.d
     (fetchpatch {
       url = "https://github.com/canonical/lightdm/commit/a99376f5f51aa147aaf81287d7ce70db76022c47.patch";
       sha256 = "1zyx1qqajrmqcf9hbsapd39gmdanswd9l78rq7q6rdy4692il3yn";
+    })
+
+    # Hardcode plymouth to fix transitions.
+    # For some reason it can't find `plymouth`
+    # even when it's in PATH in environment.systemPackages.
+    (substituteAll {
+      src = ./fix-paths.patch;
+      plymouth = "${plymouth}/bin/plymouth";
     })
   ];
 
@@ -81,6 +114,10 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/shared-data-manager.c \
       --replace /bin/rm ${busybox}/bin/rm
+  '';
+
+  postInstall = ''
+    rm -rf $out/etc/apparmor.d $out/etc/init $out/etc/pam.d
   '';
 
   meta = {

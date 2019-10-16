@@ -20,10 +20,11 @@ stdenv.mkDerivation rec {
     gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
     python3 # for data-generators
     systemd # used for checks to install systemd user service
+    dbus # used for checks and pkgconfig to install dbus service/s
   ];
 
   buildInputs = [
-    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json-glib libstemmer dbus
+    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json-glib libstemmer
   ];
 
   mesonFlags = [

@@ -1,7 +1,7 @@
 [
   "@angular/cli"
 , "@antora/cli"
-, "@antora/site-generator-default" 
+, "@antora/site-generator-default"
 , "@vue/cli"
 , "@webassemblyjs/cli"
 , "@webassemblyjs/repl"
@@ -32,7 +32,6 @@
 , "dnschain"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
-, "elm-live"
 , "elm-oracle"
 , "emoj"
 , "emojione"

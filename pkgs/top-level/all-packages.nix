@@ -153,6 +153,8 @@ in
 
   castxml = callPackage ../development/tools/castxml { };
 
+  cereal = callPackage ../development/libraries/cereal { };
+
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
   cmark = callPackage ../development/libraries/cmark { };
@@ -2967,10 +2969,6 @@ in
   enscript = callPackage ../tools/text/enscript { };
 
   entr = callPackage ../tools/misc/entr { };
-
-  envoy = callPackage ../tools/networking/envoy {
-    bazel = bazel_0_4;
-  };
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
@@ -5911,7 +5909,7 @@ in
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
 
-  rescuetime = callPackage ../applications/misc/rescuetime { };
+  rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
   reuse = callPackage ../tools/package-management/reuse { };
 
@@ -6491,8 +6489,6 @@ in
 
   termplay = callPackage ../tools/misc/termplay { };
 
-  testdisk-photorec = callPackage ../tools/system/testdisk-photorec { };
-
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = if stdenv.isDarwin
@@ -6921,7 +6917,9 @@ in
 
   xe = callPackage ../tools/system/xe { };
 
-  testdisk = callPackage ../tools/misc/testdisk { };
+  testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
+
+  testdisk-qt = testdisk.override { enableQt = true; };
 
   textql = callPackage ../development/tools/textql { };
 
@@ -7294,6 +7292,8 @@ in
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
+
+  zsh-history = callPackage ../shells/zsh/zsh-history { };
 
   zsh-history-substring-search = callPackage ../shells/zsh/zsh-history-substring-search { };
 
@@ -8431,6 +8431,7 @@ in
   cargo-audit = callPackage ../tools/package-management/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-deps = callPackage ../tools/package-management/cargo-deps { };
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
   cargo-graph = callPackage ../tools/package-management/cargo-graph { };
@@ -8543,6 +8544,7 @@ in
   swift = callPackage ../development/compilers/swift { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
+  swiPrologWithGui = callPackage ../development/compilers/swi-prolog { withGui = true; };
 
   tbb = callPackage ../development/libraries/tbb { };
 
@@ -8958,7 +8960,7 @@ in
   python35Packages = python35.pkgs;
   python36Packages = python36.pkgs;
   python37Packages = recurseIntoAttrs python37.pkgs;
-  python38Packages = python38.pkgs;
+  python38Packages = recurseIntoAttrs python38.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
@@ -9294,9 +9296,6 @@ in
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
   bazel = callPackage ../development/tools/build-managers/bazel {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
@@ -10533,6 +10532,8 @@ in
   cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
 
   niv = haskellPackages.niv.bin;
+
+  ormolu = haskellPackages.ormolu.bin;
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
@@ -11807,6 +11808,8 @@ in
   libclthreads = callPackage ../development/libraries/libclthreads  { };
 
   libclxclient = callPackage ../development/libraries/libclxclient  { };
+
+  libco-canonical = callPackage ../development/libraries/libco-canonical { };
 
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
@@ -13495,6 +13498,8 @@ in
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 
+  raft-canonical = callPackage ../development/libraries/raft-canonical { };
+
   range-v3 = callPackage ../development/libraries/range-v3 {};
 
   rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
@@ -15181,6 +15186,7 @@ in
   prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
   prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
+  prometheus-nextcloud-exporter = callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
@@ -16821,7 +16827,7 @@ in
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
-  cherry = callPackage ../data/fonts/cherry { };
+  cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
 
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder {};
 
@@ -17336,7 +17342,7 @@ in
   source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
   source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
 
-  spleen = callPackage ../data/fonts/spleen { };
+  spleen = callPackage ../data/fonts/spleen { inherit (xorg) mkfontdir; };
 
   stilo-themes = callPackage ../data/themes/stilo { };
 
@@ -20323,7 +20329,7 @@ in
 
   psi = callPackage ../applications/networking/instant-messengers/psi { };
 
-  psi-plus = callPackage ../applications/networking/instant-messengers/psi-plus { };
+  psi-plus = libsForQt5.callPackage ../applications/networking/instant-messengers/psi-plus { };
 
   psol = callPackage ../development/libraries/psol { };
 
@@ -21919,7 +21925,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  zoom-us = libsForQt59.callPackage ../applications/networking/instant-messengers/zoom-us { };
+  zoom-us = libsForQt5.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
 
@@ -22500,6 +22506,10 @@ in
   opentyrian = callPackage ../games/opentyrian { };
 
   openxcom = callPackage ../games/openxcom { };
+
+  openxray = callPackage ../games/openxray {
+    stdenv = gcc8Stdenv;
+  };
 
   orthorobot = callPackage ../games/orthorobot { };
 
@@ -23117,7 +23127,7 @@ in
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
-  
+
   delly = callPackage ../applications/science/biology/delly { };
 
   diamond = callPackage ../applications/science/biology/diamond { };
