@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Reader for the MaxMind DB format";
     homepage = "https://www.maxmind.com/en/home";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
 }
