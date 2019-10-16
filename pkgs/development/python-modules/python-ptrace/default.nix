@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, six
 }:
 
 buildPythonPackage rec {
@@ -14,6 +15,8 @@ buildPythonPackage rec {
 
   # requires distorm, which is optionally
   doCheck = false;
+
+  propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
     description = "Python binding of ptrace library";
