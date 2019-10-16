@@ -1891,6 +1891,8 @@ in {
 
   kafka-python = callPackage ../development/python-modules/kafka-python {};
 
+  confuse = callPackage ../development/python-modules/confuse {};
+
   construct = callPackage ../development/python-modules/construct {};
 
   consul = callPackage ../development/python-modules/consul { };
