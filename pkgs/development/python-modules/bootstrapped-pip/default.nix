@@ -13,20 +13,20 @@ let
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "41.2.0";
+    version = "41.4.0";
     format = "wheel";
-    sha256 = "4380abcf2a4ffd1a5ba22d687c6d690dce83b2b51c70e9c6d09f7e8c7e8040dc";
+    sha256 = "8d01f7ee4191d9fdcd9cc5796f75199deccb25b154eba82d44d6a042cf873670";
   };
 
 in stdenv.mkDerivation rec {
   pname = "pip";
-  version = "19.2.3";
+  version = "19.3";
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
-    sha256 = "340a0ba40fdeb16413914c0fcd8e0b4ebb0bf39a900ec80e11c05d836c05103f";
+    sha256 = "e100a7eccf085f0720b4478d3bb838e1c179b1e128ec01c0403f84e86e0e2dfb";
   };
 
   dontUseSetuptoolsBuild = true;
