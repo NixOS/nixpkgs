@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, tzdata, iana-etc, runCommand
+{ stdenv, fetchurl, tzdata, iana-etc, runCommand
 , perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages, pkgsTargetTarget
@@ -96,6 +96,12 @@ stdenv.mkDerivation rec {
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
 
+    # Disable TestGcSys because it's flakey in our tests, but the failure is not
+    # reproducible by multiple people in other environments.
+    # See https://github.com/NixOS/nixpkgs/issues/68361#issuecomment-537849272 and following
+    # NOTE: Try re-enabling for releases newer than 1.12.9
+    sed -i '/TestGcSys/areturn' src/runtime/gc_test.go
+
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isAarch32 ''
@@ -137,11 +143,6 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     # breaks under load: https://github.com/golang/go/issues/25628
     ./skip-test-extra-files-on-386.patch
-    (fetchpatch { # probably included in >= 1.12.10
-      url = "https://github.com/golang/go/commit/aae0b5b0b.diff";
-      name = "TestGcSys-too-much-memory.diff";
-      sha256 = "1bl9d2pl6n99n9g65cq91sygmp1iva5rmrxbprwn4xd0ql36psa8";
-    })
   ];
 
   postPatch = ''

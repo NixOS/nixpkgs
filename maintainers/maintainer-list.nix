@@ -551,6 +551,12 @@
     githubId = 56009;
     name = "Arcadio Rubio García";
   };
+  arcnmx = {
+    email = "arcnmx@users.noreply.github.com";
+    github = "arcnmx";
+    githubId = 13426784;
+    name = "arcnmx";
+  };
   ardumont = {
     email = "eniotna.t@gmail.com";
     github = "ardumont";

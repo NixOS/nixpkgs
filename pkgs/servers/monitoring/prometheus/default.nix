@@ -13,7 +13,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "15fk231kdp3h5w0ym3d84y9z255qqykzyhvv12fg0wchkv8vfhcj";
+    sha256 = "08fmicgrv9b37qapmqjbif19c9181mpp7abd2yrpc3xpyjd3h687";
   };
 
   buildFlagsArray = let
