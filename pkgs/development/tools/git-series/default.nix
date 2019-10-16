@@ -15,16 +15,12 @@ buildRustPackage rec {
 
   cargoSha256 = "07b25pcndhwvpwa5khdh8y1fl44hdv6ff2pfj1mjc0wchbspqm6q";
 
-  cargoDepsHook = ''
-    (
-      cd */
-      # see https://github.com/git-series/git-series/pull/56
-      patch -p1 < ${fetchpatch {
-        url = "https://github.com/Mic92/git-series/commit/3aa30a47d74ebf90b444dccdf8c153f07f119483.patch";
-        sha256 = "06v8br9skvy75kcw2zgbswxyk82sqzc8smkbqpzmivxlc2i9rnh0";
-      }}
-    )
-  '';
+  cargoPatches = [
+    (fetchpatch {
+      url = "https://github.com/Mic92/git-series/commit/3aa30a47d74ebf90b444dccdf8c153f07f119483.patch";
+      sha256 = "06v8br9skvy75kcw2zgbswxyk82sqzc8smkbqpzmivxlc2i9rnh0";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
   buildInputs = [ openssl_1_0_2 zlib ];
