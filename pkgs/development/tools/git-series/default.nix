@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, openssl_1_0_2, cmake, perl, pkgconfig, zlib }:
+{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, openssl, cmake, perl, pkgconfig, zlib }:
 
 with rustPlatform;
 
@@ -13,17 +13,22 @@ buildRustPackage rec {
     sha256 = "07mgq5h6r1gf3jflbv2khcz32bdazw7z1s8xcsafdarnm13ps014";
   };
 
-  cargoSha256 = "07b25pcndhwvpwa5khdh8y1fl44hdv6ff2pfj1mjc0wchbspqm6q";
+  cargoSha256 = "09y4fvv279cm5sgbpmskascb7rrwqgya5w5wkpz1bgx6pzw3mc7y";
 
   cargoPatches = [
     (fetchpatch {
       url = "https://github.com/Mic92/git-series/commit/3aa30a47d74ebf90b444dccdf8c153f07f119483.patch";
       sha256 = "06v8br9skvy75kcw2zgbswxyk82sqzc8smkbqpzmivxlc2i9rnh0";
     })
+    # Update Cargo.lock to allow using OpenSSL 1.1
+    (fetchpatch {
+      url = "https://github.com/edef1c/git-series/commit/11fe70ffcc18200e5f2a159c36aab070e8ff4228.patch";
+      sha256 = "0clwllf9mrhq86dhzyyhkw1q2ggpgqpw7s05dvp3gj9zhfsyya4s";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ openssl_1_0_2 zlib ];
+  buildInputs = [ openssl zlib ];
 
   postBuild = ''
     install -D "$src/git-series.1" "$out/man/man1/git-series.1"
