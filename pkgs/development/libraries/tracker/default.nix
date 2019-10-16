@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "2.3.0";
+  version = "2.3.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0yxzqvjm3ij28p6g8jc4pd90yhhslmykcvi1cnyb069lm16m611c";
+    sha256 = "1888vyz2l5n46ywb70fryd0qipyh3x5n6q0mk56jzbb5whk8fx5n";
   };
 
   nativeBuildInputs = [
