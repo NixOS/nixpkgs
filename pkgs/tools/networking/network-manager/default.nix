@@ -10,11 +10,11 @@ let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
   pname = "network-manager";
-  version = "1.20.2";
+  version = "1.20.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "115cgz448vypc7c592lqqjd7lp2kzdczhjk4ran6qls65hzkfkji";
+    sha256 = "0k4i6m8acp48vl6l13267wv6kfkmzfjq2mraaa5m9n82wyvkimx3";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -51,15 +51,6 @@ in stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # 1.20.2 added a decorators.sh script but they forgot to distribute it (breaking the build)
-    # as it was to fix things with gtk-doc 1.32 we can safely revert it.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/2d941dc95a1d94d023ac8f98df2f344dbb1d223e.patch";
-      sha256 = "1mvbajddwd6diwk6dgjg5p65i6852gx6b9p3949rs63d2i6yzg21";
-      excludes = [ "tools/decorators.sh" ];
-      revert = true;
-    })
-
     (substituteAll {
       src = ./fix-paths.patch;
       inherit iputils kmod openconnect ethtool gnused dbus;
