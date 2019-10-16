@@ -1090,6 +1090,8 @@ in {
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
 
+  pytmx = callPackage ../development/python-modules/pytmx { };
+
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
