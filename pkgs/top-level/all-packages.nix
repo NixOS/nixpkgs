@@ -6641,6 +6641,8 @@ in
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
+  trebleshot = libsForQt5.callPackage ../applications/networking/trebleshot { };
+
   trickle = callPackage ../tools/networking/trickle {};
 
   inherit (nodePackages) triton;
