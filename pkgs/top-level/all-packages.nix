@@ -761,6 +761,8 @@ in
 
   certigo = callPackage ../tools/admin/certigo { };
 
+  cetch = callPackage ../tools/misc/cetch { };
+
   chezmoi = callPackage ../tools/misc/chezmoi { };
 
   chipsec = callPackage ../tools/security/chipsec {

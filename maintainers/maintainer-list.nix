@@ -6890,6 +6890,11 @@
     githubId = 1595132;
     name = "Kranium Gikos Mendoza";
   };
+  wooosh = {
+    email = "crimsonwombat42@gmail.com";
+    github = "wooosh";
+    name = "wooosh";
+  };
   worldofpeace = {
     email = "worldofpeace@protonmail.ch";
     github = "worldofpeace";
