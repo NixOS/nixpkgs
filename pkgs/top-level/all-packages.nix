@@ -8265,6 +8265,11 @@ in
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
+  idris2 = callPackage ../development/compilers/idris2 {
+    idris = with idrisPackages; with-packages [ base contrib ]; # add contrib module
+    chickenPkgs = chickenPackages_4; # currently expects chicken4
+  };
+
   intel-graphics-compiler = callPackage ../development/compilers/intel-graphics-compiler { };
 
   intercal = callPackage ../development/compilers/intercal { };
