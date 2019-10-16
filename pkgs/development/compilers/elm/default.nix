@@ -4,20 +4,11 @@
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
-  patchBinwrap = import ./packages/patch-binwrap.nix { inherit lib writeScriptBin stdenv; };
-
-  elmNodePackages =
-    import ./packages/node-composition.nix {
-      inherit nodejs pkgs;
-      inherit (stdenv.hostPlatform) system;
-    };
-
   hsPkgs = haskell.packages.ghc865.override {
     overrides = self: super: with haskell.lib;
       let elmPkgs = rec {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
               # sadly with parallelism most of the time breaks compilation
-              # also compilation is slower with increasing number of cores anyway (Tested on Ryzen 7 and i7)
               enableParallelBuilding = false;
               preConfigure = self.fetchElmDeps {
                 elmPackages = (import ./packages/elm-srcs.nix);
@@ -42,25 +33,10 @@ let
             `package/nix/build.sh`
             */
             elm-format = justStaticExecutables (doJailbreak (self.callPackage ./packages/elm-format.nix {}));
-
             elmi-to-json = justStaticExecutables (self.callPackage ./packages/elmi-to-json.nix {});
 
             inherit fetchElmDeps;
             elmVersion = elmPkgs.elm.version;
-
-            /*
-            Node/NPM based dependecies can be upgraded using script
-            `packages/generate-node-packages.sh`.
-            Packages which rely on `bin-wrap` will fail by default
-            and can be patched using `patchBinwrap` function defined in `packages/patch-binwrap.nix`.
-            */
-            elm-test = patchBinwrap [elmi-to-json] elmNodePackages.elm-test;
-            elm-verify-examples = patchBinwrap [elmi-to-json] elmNodePackages.elm-verify-examples;
-            elm-language-server = elmNodePackages."@elm-tooling/elm-language-server";
-
-            # elm-analyse@0.16.4 build is not working
-            elm-analyse = elmNodePackages."elm-analyse-0.16.3";
-            inherit (elmNodePackages) elm-doc-preview elm-live elm-upgrade elm-xref;
           };
       in elmPkgs // {
         inherit elmPkgs;
@@ -69,4 +45,31 @@ let
         indents = self.callPackage ./packages/indents.nix {};
       };
   };
-in hsPkgs.elmPkgs
+
+  /*
+  Node/NPM based dependecies can be upgraded using script
+  `packages/generate-node-packages.sh`.
+  Packages which rely on `bin-wrap` will fail by default
+  and can be patched using `patchBinwrap` function defined in `packages/patch-binwrap.nix`.
+  */
+  elmNodePackages =
+    let
+      nodePkgs = import ./packages/node-composition.nix {
+          inherit nodejs pkgs;
+          inherit (stdenv.hostPlatform) system;
+        };
+    in with hsPkgs.elmPkgs; {
+      elm-test = patchBinwrap [elmi-to-json] nodePkgs.elm-test;
+      elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples;
+      elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
+
+      # elm-analyse@0.16.4 build is not working
+      elm-analyse = nodePkgs."elm-analyse-0.16.3";
+      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref;
+    };
+
+  patchBinwrap = import ./packages/patch-binwrap.nix { inherit lib writeScriptBin stdenv; };
+
+in hsPkgs.elmPkgs // elmNodePackages // {
+  lib = { inherit patchBinwrap; };
+}
