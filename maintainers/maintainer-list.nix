@@ -4333,6 +4333,12 @@
     githubId = 104795;
     name = "Marek Mahut";
   };
+  mmai = {
+    email = "henri.bourcereau@gmail.com";
+    github = "mmai";
+    githubId = 117842;
+    name = "Henri Bourcereau";
+  };
   mmlb = {
     email = "me.mmlb@mmlb.me";
     github = "mmlb";
