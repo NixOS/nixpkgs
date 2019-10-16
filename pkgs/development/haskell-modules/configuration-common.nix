@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1ackqjkwkfm3kazlyy4nwdjf6wwjlajql1hrznaki5138nw4gxs4";
+      sha256 = "0v3wgx3qbillmnn3amnl568ls113y3qlyf3k7y5b9lmz22k93680";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -144,6 +144,8 @@ self: super: {
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
     else super.halive;
+
+  barbly = addBuildDepend super.barbly pkgs.darwin.apple_sdk.frameworks.AppKit;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
   hakyll = if pkgs.stdenv.isDarwin
@@ -1200,7 +1202,7 @@ self: super: {
   hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_1; };
 
   # https://github.com/sol/hpack/issues/366
-  hpack = self.hpack_0_32_0;
+  hpack = self.hpack_0_33_0;
 
   # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
   graphviz = dontCheck super.graphviz;
@@ -1247,5 +1249,9 @@ self: super: {
     stripLen = 1;
     postFetch = "sed -i -e s,gtk.cabal-renamed,gtk.cabal, $out";
   });
+
+  # Version bounds for http-client are too strict:
+  # https://github.com/bitnomial/prometheus/issues/34
+  prometheus = doJailbreak super.prometheus;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -175,6 +175,8 @@ in {
 
   apprise = callPackage ../development/python-modules/apprise { };
 
+  aresponses = callPackage ../development/python-modules/aresponses { };
+
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
   asana = callPackage ../development/python-modules/asana { };
@@ -6033,6 +6035,8 @@ in {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
+  solo-python = disabledIf (! pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
+
   suseapi = callPackage ../development/python-modules/suseapi { };
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
@@ -6155,6 +6159,8 @@ in {
   behave = callPackage ../development/python-modules/behave { };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
+
+  pyhaversion = callPackage ../development/python-modules/pyhaversion { };
 
   parse = callPackage ../development/python-modules/parse { };
 

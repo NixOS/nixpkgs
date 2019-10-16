@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "babeld";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   preBuild = ''
     makeFlags="PREFIX=$out ETCDIR=$out/etc"
   '';
+
+  passthru.tests.babeld = nixosTests.babeld;
 
   meta = {
     homepage = http://www.pps.univ-paris-diderot.fr/~jch/software/babel/;

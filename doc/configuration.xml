@@ -45,7 +45,7 @@
   However, this does not allow unfree software for individual users. Their configurations are managed separately.
  </para>
  <para>
-  A user's of nixpkgs configuration is stored in a user-specific configuration file located at <filename>~/.config/nixpkgs/config.nix</filename>. For example:
+  A user's nixpkgs configuration is stored in a user-specific configuration file located at <filename>~/.config/nixpkgs/config.nix</filename>. For example:
 <programlisting>
 {
   allowUnfree = true;

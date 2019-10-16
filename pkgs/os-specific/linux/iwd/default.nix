@@ -5,32 +5,24 @@
 , pkgconfig
 , ell
 , coreutils
+, docutils
 , readline
 , python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "0.20";
+  version = "0.22";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "03ca47d4hn28vkf5fr6ck1gz5py4lm1pw3nw9s1ckw7cqxw961sf";
+    sha256 = "0mjc08ayq2k7sinqanrlm97dn88dxkqkyk2vqqcx1nqjvwvbpbsp";
   };
-
-  patches = [
-    # Undo creating ReadWritePaths as instalation target.
-    (fetchpatch {
-      name = "revert-create-dirs-on-install.patch";
-      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=5a96c11664eb553bc28a2142af382b190254edbb";
-      sha256 = "08gkz3ia1l5xsh3pbx4abimgf7m88wygfpfyg77yi6dwavjqm6cx";
-      revert = true;
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
+    docutils
     pkgconfig
     python3Packages.wrapPython
   ];

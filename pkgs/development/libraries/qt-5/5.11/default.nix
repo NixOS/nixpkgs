@@ -159,9 +159,7 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
-          inherit (stdenv) isDarwin;
-          qtbase_dev = self.qtbase.dev;
-          fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
+          fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;
 

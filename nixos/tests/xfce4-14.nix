@@ -14,7 +14,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       services.xserver.desktopManager.xfce4-14.enable = true;
 
       hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
-  
+
       virtualisation.memorySize = 1024;
     };
 
@@ -27,7 +27,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->sleep(10);
 
       # Check that logging in has given the user ownership of devices.
-      $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+      $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
 
       $machine->succeed("su - alice -c 'DISPLAY=:0.0 xfce4-terminal &'");
       $machine->waitForWindow(qr/Terminal/);

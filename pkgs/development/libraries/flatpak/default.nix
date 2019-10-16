@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-system-bubblewrap=${bubblewrap}/bin/bwrap"
     "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
-    "--dbus_config_dir=${placeholder "out"}/share/dbus-1/system.d"
+    "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--localstatedir=/var"
     "--enable-installed-tests"
   ];

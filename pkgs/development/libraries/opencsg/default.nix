@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm example/Makefile src/Makefile
-    qmakeFlags="$qmakeFlags INSTALLDIR=$out"
+    qmakeFlags=("''${qmakeFlags[@]}" "INSTALLDIR=$out")
   '';
 
   postInstall = ''
