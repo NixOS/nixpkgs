@@ -15,10 +15,13 @@ buildPythonPackage rec {
     sha256 = "e39a7e5b14e14dfff0de0ad720dfffa740c128d599ab14cfac13f4deb34164a6";
   };
 
-  propagatedBuildInputs = [ pytest six decorator ];
+  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
+
+  propagatedBuildInputs = [ six decorator ];
 
   patchPhase = ''
-    sed -i "s/pytest>=3,<3.3/pytest/g" setup.py
+    sed -i "s/pytest>=3,<5/pytest/g" setup.py
   '';
 
   # skip tests due to dir requirements
