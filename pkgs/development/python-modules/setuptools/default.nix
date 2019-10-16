@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "setuptools";
-  version = "41.2.0";
+  version = "41.4.0";
   # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
   # Instead, we override it to remove setuptools to avoid a circular dependency.
   # The same is done for pip and the pipInstallHook.
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "66b86bbae7cc7ac2e867f52dc08a6bd064d938bac59dfec71b9b565dd36d6012";
+    sha256 = "7eae782ccf36b790c21bde7d86a4f303a441cd77036b25c559a602cf5186ce4d";
   };
 
   nativeBuildInputs = [
