@@ -2613,6 +2613,8 @@ in {
 
   netdisco = callPackage ../development/python-modules/netdisco { };
 
+  neteria = callPackage ../development/python-modules/neteria { };
+
   Nikola = callPackage ../development/python-modules/Nikola { };
 
   nmigen = callPackage ../development/python-modules/nmigen { };
