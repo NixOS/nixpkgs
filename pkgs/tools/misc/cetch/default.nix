@@ -4,7 +4,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "cetch";
-  version = "071796fab4850034f1f45e687021d7ff05d8302a";
+  version = "v1.0";
 
   src = fetchFromGitHub {
     owner = "wooosh";
