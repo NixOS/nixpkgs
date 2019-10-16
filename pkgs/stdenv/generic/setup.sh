@@ -17,7 +17,8 @@ fi
 # code). The hooks for <hookName> are the shell function or variable
 # <hookName>, and the values of the shell array ‘<hookName>Hooks’.
 runHook() {
-    local oldOpts="$(shopt -po nounset)"
+    local oldOpts="-u"
+    shopt -qo nounset || oldOpts="+u"
     set -u # May be called from elsewhere, so do `set -u`.
 
     local hookName="$1"
@@ -32,7 +33,7 @@ runHook() {
         set -u # To balance `_eval`
     done
 
-    eval "${oldOpts}"
+    set "$oldOpts"
     return 0
 }
 
@@ -40,7 +41,8 @@ runHook() {
 # Run all hooks with the specified name, until one succeeds (returns a
 # zero exit code). If none succeed, return a non-zero exit code.
 runOneHook() {
-    local oldOpts="$(shopt -po nounset)"
+    local oldOpts="-u"
+    shopt -qo nounset || oldOpts="+u"
     set -u # May be called from elsewhere, so do `set -u`.
 
     local hookName="$1"
@@ -57,7 +59,7 @@ runOneHook() {
         set -u # To balance `_eval`
     done
 
-    eval "${oldOpts}"
+    set "$oldOpts"
     return "$ret"
 }
 
@@ -71,21 +73,18 @@ _callImplicitHook() {
     set -u
     local def="$1"
     local hookName="$2"
-    case "$(type -t "$hookName")" in
-        (function|alias|builtin)
-            set +u
-            "$hookName";;
-        (file)
-            set +u
-            source "$hookName";;
-        (keyword) :;;
-        (*) if [ -z "${!hookName:-}" ]; then
-                return "$def";
-            else
-                set +u
-                eval "${!hookName}"
-            fi;;
-    esac
+    if declare -F "$hookName" > /dev/null; then
+        set +u
+        "$hookName"
+    elif type -p "$hookName" > /dev/null; then
+        set +u
+        source "$hookName"
+    elif [ -n "${!hookName:-}" ]; then
+        set +u
+        eval "${!hookName}"
+    else
+        return "$def"
+    fi
     # `_eval` expects hook to need nounset disable and leave it
     # disabled anyways, so Ok to to delegate. The alternative of a
     # return trap is no good because it would affect nested returns.
@@ -96,7 +95,7 @@ _callImplicitHook() {
 # hooks exits the hook, not the caller. Also will only pass args if
 # command can take them
 _eval() {
-    if [ "$(type -t "$1")" = function ]; then
+    if declare -F "$1" > /dev/null 2>&1; then
         set +u
         "$@" # including args
     else
@@ -389,6 +388,7 @@ findInputs() {
     # The current package's host and target offset together
     # provide a <=-preserving homomorphism from the relative
     # offsets to current offset
+    local -i mapOffsetResult
     function mapOffset() {
         local -ri inputOffset="$1"
         if (( "$inputOffset" <= 0 )); then
@@ -396,7 +396,7 @@ findInputs() {
         else
             local -ri outputOffset="$inputOffset - 1 + $targetOffset"
         fi
-        echo "$outputOffset"
+        mapOffsetResult="$outputOffset"
     }
 
     # Host offset relative to that of the package whose immediate
@@ -408,8 +408,8 @@ findInputs() {
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
-        local -i hostOffsetNext
-        hostOffsetNext="$(mapOffset relHostOffset)"
+        mapOffset relHostOffset
+        local -i hostOffsetNext="$mapOffsetResult"
 
         # Ensure we're in bounds relative to the package currently
         # being built.
@@ -427,8 +427,8 @@ findInputs() {
 
             # Target offset relative to the package currently being
             # built.
-            local -i targetOffsetNext
-            targetOffsetNext="$(mapOffset relTargetOffset)"
+            mapOffset relTargetOffset
+            local -i targetOffsetNext="$mapOffsetResult"
 
             # Once again, ensure we're in bounds relative to the
             # package currently being built.
@@ -437,7 +437,8 @@ findInputs() {
             [[ -f "$pkg/nix-support/$file" ]] || continue
 
             local pkgNext
-            for pkgNext in $(< "$pkg/nix-support/$file"); do
+            read -r -d '' pkgNext < "$pkg/nix-support/$file" || true
+            for pkgNext in $pkgNext; do
                 findInputs "$pkgNext" "$hostOffsetNext" "$targetOffsetNext"
             done
         done
@@ -488,10 +489,11 @@ activatePackage() {
     (( "$hostOffset" <= "$targetOffset" )) || exit -1
 
     if [ -f "$pkg" ]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         source "$pkg"
-        eval "$oldOpts"
+        set "$oldOpts"
     fi
 
     # Only dependencies whose host platform is guaranteed to match the
@@ -510,10 +512,11 @@ activatePackage() {
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         source "$pkg/nix-support/setup-hook"
-        eval "$oldOpts"
+        set "$oldOpts"
     fi
 }
 
@@ -1261,17 +1264,19 @@ showPhaseHeader() {
 
 genericBuild() {
     if [ -f "${buildCommandPath:-}" ]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         source "$buildCommandPath"
-        eval "$oldOpts"
+        set "$oldOpts"
         return
     fi
     if [ -n "${buildCommand:-}" ]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         eval "$buildCommand"
-        eval "$oldOpts"
+        set "$oldOpts"
         return
     fi
 
@@ -1301,10 +1306,11 @@ genericBuild() {
 
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         eval "${!curPhase:-$curPhase}"
-        eval "$oldOpts"
+        set "$oldOpts"
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
