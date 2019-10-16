@@ -3,7 +3,7 @@
   extra-cmake-modules,
   kconfig, kconfigwidgets, kdbusaddons, kglobalaccel, ki18n, kwidgetsaddons,
   kxmlgui, libkscreen, qtdeclarative, qtgraphicaleffects, kwindowsystem, 
-  kdeclarative, plasma-framework
+  kdeclarative, kcmutils, plasma-framework
 }:
 
 mkDerivation {
@@ -11,7 +11,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kconfig kconfigwidgets kdbusaddons kglobalaccel ki18n kwidgetsaddons kxmlgui
-    libkscreen qtdeclarative qtgraphicaleffects kwindowsystem kdeclarative
+    libkscreen qtdeclarative qtgraphicaleffects kwindowsystem kdeclarative kcmutils
     plasma-framework
   ];
 }
