@@ -11,7 +11,7 @@
   knotifyconfig, kpackage, krunner, kscreenlocker, ktexteditor, ktextwidgets,
   kwallet, kwayland, kwin, kxmlrpcclient, libkscreen, libksysguard, libqalculate,
   networkmanager-qt, phonon, plasma-framework, prison, solid, kholidays,
-  breeze-qt5,
+  breeze-qt5, kactivities-stats, kpeople,
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
   qtwayland, qtx11extras,
@@ -31,6 +31,7 @@ mkDerivation {
     knotifyconfig kpackage krunner kscreenlocker ktexteditor ktextwidgets
     kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard libqalculate
     networkmanager-qt phonon plasma-framework prison solid kholidays
+    kactivities-stats kpeople
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
   ];
