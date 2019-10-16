@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/host $host
 
     moveToOutput bin/dig $dnsutils
+    moveToOutput bin/delv $dnsutils
     moveToOutput bin/nslookup $dnsutils
     moveToOutput bin/nsupdate $dnsutils
 
