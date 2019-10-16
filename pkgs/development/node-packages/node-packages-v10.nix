@@ -43010,6 +43010,15 @@ let
         sha512 = "mIb5VMXM5jI97HzCk2eadI1K//rCEZXte0wBqA7PGXsyJH4KTyJUaYk9MR+mbfpUl2vMi3HZw9GUOLGYLc6l5w==";
       };
     };
+    "vscode-jsonrpc-3.5.0" = {
+      name = "vscode-jsonrpc";
+      packageName = "vscode-jsonrpc";
+      version = "3.5.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-jsonrpc/-/vscode-jsonrpc-3.5.0.tgz";
+        sha1 = "87239d9e166b2d7352245b8a813597804c1d63aa";
+      };
+    };
     "vscode-jsonrpc-3.6.0" = {
       name = "vscode-jsonrpc";
       packageName = "vscode-jsonrpc";
@@ -43044,6 +43053,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/vscode-languageclient/-/vscode-languageclient-4.0.1.tgz";
         sha512 = "0fuBZj9pMkeJ8OMyIvSGeRaRVhUaJt+yeFxi7a3sz/AbrngQdcxOovMXPgKuieoBSBKS05gXPS88BsWpJZfBkA==";
+      };
+    };
+    "vscode-languageserver-3.5.1" = {
+      name = "vscode-languageserver";
+      packageName = "vscode-languageserver";
+      version = "3.5.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-languageserver/-/vscode-languageserver-3.5.1.tgz";
+        sha512 = "RYUKn0DgHTFcS8kS4VaNCjNMaQXYqiXdN9bKrFjXzu5RPKfjIYcoh47oVWwZj4L3R/DPB0Se7HPaDatvYY2XgQ==";
       };
     };
     "vscode-languageserver-4.0.0" = {
@@ -43100,6 +43118,15 @@ let
         sha512 = "b9PAxouMmtsLEe8ZjbIMPb7wRWPhckGfgjwZLmp/dWnaAuRPYtY3lGO0/rNbLc3jKIqCVlnEyYVFKalzDAzj0g==";
       };
     };
+    "vscode-languageserver-protocol-3.5.1" = {
+      name = "vscode-languageserver-protocol";
+      packageName = "vscode-languageserver-protocol";
+      version = "3.5.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.5.1.tgz";
+        sha512 = "1fPDIwsAv1difCV+8daOrJEGunClNJWqnUHq/ncWrjhitKWXgGmRCjlwZ3gDUTt54yRcvXz1PXJDaRNvNH6pYA==";
+      };
+    };
     "vscode-languageserver-protocol-3.6.0" = {
       name = "vscode-languageserver-protocol";
       packageName = "vscode-languageserver-protocol";
@@ -43134,6 +43161,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/vscode-languageserver-types/-/vscode-languageserver-types-3.15.0-next.5.tgz";
         sha512 = "7hrELhTeWieUgex3+6692KjCkcmO/+V/bFItM5MHGcBotzwmjEuXjapLLYTYhIspuJ1ibRSik5MhX5YwLpsPiw==";
+      };
+    };
+    "vscode-languageserver-types-3.5.0" = {
+      name = "vscode-languageserver-types";
+      packageName = "vscode-languageserver-types";
+      version = "3.5.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-languageserver-types/-/vscode-languageserver-types-3.5.0.tgz";
+        sha1 = "e48d79962f0b8e02de955e3f524908e2b19c0374";
       };
     };
     "vscode-languageserver-types-3.6.0" = {
@@ -65788,6 +65824,33 @@ in
       description = "A build system for PureScript projects";
       homepage = https://github.com/purescript-contrib/pulp;
       license = "LGPL-3.0+";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  purescript-language-server = nodeEnv.buildNodePackage {
+    name = "purescript-language-server";
+    packageName = "purescript-language-server";
+    version = "0.12.7";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/purescript-language-server/-/purescript-language-server-0.12.7.tgz";
+      sha512 = "uXYrzoKPjlgEOgJqctqcfddtkCa57N3/1t2wENxS8TnxJnZt1j/LVQCWMhrEUfw90DPohhRKaaQmdrWrCpq9ow==";
+    };
+    dependencies = [
+      sources."isexe-2.0.0"
+      sources."vscode-jsonrpc-3.5.0"
+      sources."vscode-languageserver-3.5.1"
+      sources."vscode-languageserver-protocol-3.5.1"
+      sources."vscode-languageserver-types-3.5.0"
+      sources."vscode-uri-1.0.8"
+      sources."which-1.3.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Language Server Protocol server for PureScript wrapping purs ide server functionality";
+      homepage = https://github.com/nwolverson/purescript-language-server;
+      license = "MIT";
     };
     production = true;
     bypassCache = true;
