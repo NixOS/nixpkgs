@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    mkdir -p $out/templates
+    mkdir -p $out/share/emacs/site-lisp/cask/templates
     mkdir -p $out/share/emacs/site-lisp/cask/bin
     install -Dm644 *.el *.elc $out/share/emacs/site-lisp/cask
     install -Dm755 bin/cask $out/share/emacs/site-lisp/cask/bin
-    install -Dm644 templates/* $out/templates/
+    install -Dm644 templates/* $out/share/emacs/site-lisp/cask/templates/
     touch $out/.no-upgrade
     ln -s $out/share/emacs/site-lisp/cask/bin/cask $out/bin/cask
   '';

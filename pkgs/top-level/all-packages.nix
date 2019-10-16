@@ -611,7 +611,7 @@ in
   inherit (callPackages ../servers/nosql/arangodb { }) arangodb_3_3 arangodb_3_4 arangodb_3_5;
   arangodb = arangodb_3_4;
 
-  arcanist = callPackage ../development/tools/misc/arcanist {};
+  arcanist = callPackage ../development/tools/misc/arcanist { php = php72; };
 
   arduino = arduino-core.override { withGui = true; };
 
@@ -652,6 +652,8 @@ in
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
     gsl = gsl_1;
   };
+
+  atinout = callPackage ../tools/networking/atinout { };
 
   atomicparsley = callPackage ../tools/video/atomicparsley {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -5822,7 +5824,7 @@ in
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
 
-  rescuetime = callPackage ../applications/misc/rescuetime { };
+  rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
   reuse = callPackage ../tools/package-management/reuse { };
 
@@ -8034,8 +8036,6 @@ in
       });
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
-
-  jikes = callPackage ../development/compilers/jikes { };
 
   julia_07 = callPackage ../development/compilers/julia/0.7.nix {
     gmp = gmp6;
@@ -21991,9 +21991,8 @@ in
 
   hawkthorne = callPackage ../games/hawkthorne { love = love_0_9; };
 
-  hedgewars = callPackage ../games/hedgewars {
+  hedgewars = libsForQt5.callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
-    ffmpeg = ffmpeg_2;
   };
 
   hexen = callPackage ../games/hexen { };

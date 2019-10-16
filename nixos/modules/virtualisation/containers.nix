@@ -824,5 +824,12 @@ in
     '';
 
     environment.systemPackages = [ pkgs.nixos-container ];
+
+    boot.kernelModules = [
+      "bridge"
+      "macvlan"
+      "tap"
+      "tun"
+    ];
   });
 }

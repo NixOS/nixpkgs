@@ -21,6 +21,8 @@ let
       # .note.GNU-stack section, and if that section is missing from any object,
       # the linker will make the stack executable.
       "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
+      # libressl will append this to the regular prefix for libdir
+      "-DCMAKE_INSTALL_LIBDIR=lib"
     ];
 
     # The autoconf build is broken as of 2.9.1, resulting in the following error:
@@ -66,7 +68,7 @@ in {
   };
 
   libressl_3_0 = generic {
-    version = "3.0.0";
-    sha256 = "0xiwri6xcnl3wb5nbc4aw8pv32s3hp13r9v465yr8wykaw211n81";
+    version = "3.0.1";
+    sha256 = "1js3fddxwzafiyspif0bwmvpp1fz98mkv10q5xaagqzvjw8xnsk4";
   };
 }
