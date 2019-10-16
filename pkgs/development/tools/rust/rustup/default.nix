@@ -4,13 +4,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.20.0";
+  version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup.rs";
     rev = version;
-    sha256 = "13i15banbb1k3h6h2pylbdrcpz7pg17x7dkkq36sian6gqq3c2dx";
+    sha256 = "0vfrfjfg5x1g44w03rdci2ky7s3s7rljdcmmp5h6pdvhzrd234aj";
   };
 
   cargoSha256 = "1lsv1d99dn6mngaqhd3lw90cr3zg4gq08wi0adxkkhaikc9jjdwh";
