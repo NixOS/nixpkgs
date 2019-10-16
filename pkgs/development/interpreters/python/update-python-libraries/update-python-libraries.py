@@ -194,6 +194,8 @@ def _determine_extension(text, fetcher):
                 src_format = 'setuptools'
             elif src_format == 'flit':
                 raise ValueError("Don't know how to update a Flit package.")
+            elif src_format == 'other':
+                raise ValueError("Don't know how to update a format='other' package.")
             extension = FORMATS[src_format]
 
     elif fetcher == 'fetchurl':
