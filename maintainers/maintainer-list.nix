@@ -4057,6 +4057,12 @@
     githubId = 169170;
     name = "Mathias Schreck";
   };
+  lodi = {
+    email = "anthony.lodi@gmail.com";
+    github = "lodi";
+    githubId = 918448;
+    name = "Anthony Lodi";
+  };
   loewenheim = {
     email = "loewenheim@mailbox.org";
     github = "loewenheim";
