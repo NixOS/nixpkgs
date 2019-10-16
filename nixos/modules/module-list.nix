@@ -771,7 +771,6 @@
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix
-  ./services/system/fancontrol.nix
   ./services/system/localtime.nix
   ./services/system/kerberos/default.nix
   ./services/system/nscd.nix

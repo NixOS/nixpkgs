@@ -3,8 +3,8 @@ import ./make-test.nix ({ pkgs, ... } : {
 
   machine =
     { ... }:
-    { services.fancontrol.enable = true;
-      services.fancontrol.config = ''
+    { hardware.fancontrol.enable = true;
+      hardware.fancontrol.config = ''
         INTERVAL=42
         DEVPATH=hwmon1=devices/platform/dummy
         DEVNAME=hwmon1=dummy
