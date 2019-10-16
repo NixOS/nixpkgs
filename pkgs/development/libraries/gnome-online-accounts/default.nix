@@ -1,14 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk3, wrapGAppsHook
-, webkitgtk, json-glib, librest, libsecret, gtk-doc, gobject-introspection
-, gettext, icu, glib-networking
-, libsoup, docbook_xsl, docbook_xml_dtd_412, gnome3, gcr, kerberos
+{ stdenv
+, fetchurl
+, pkgconfig
+, vala
+, glib
+, libxslt
+, gtk3
+, wrapGAppsHook
+, webkitgtk
+, json-glib
+, librest
+, libsecret
+, gtk-doc
+, gobject-introspection
+, gettext
+, icu
+, glib-networking
+, libsoup
+, docbook_xsl
+, docbook_xml_dtd_412
+, gnome3
+, gcr
+, kerberos
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
   version = "3.34.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
@@ -26,15 +43,30 @@ in stdenv.mkDerivation rec {
     "--enable-documentation"
   ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
-    pkgconfig gobject-introspection vala gettext wrapGAppsHook
-    libxslt docbook_xsl docbook_xml_dtd_412 gtk-doc
+    docbook_xml_dtd_412
+    docbook_xsl
+    gettext
+    gobject-introspection
+    gtk-doc
+    libxslt
+    pkgconfig
+    vala
+    wrapGAppsHook
   ];
+
   buildInputs = [
-    glib gtk3 webkitgtk json-glib librest libsecret glib-networking icu libsoup
-    gcr kerberos
+    gcr
+    glib
+    glib-networking
+    gtk3
+    icu
+    json-glib
+    kerberos
+    librest
+    libsecret
+    libsoup
+    webkitgtk
   ];
 
   passthru = {
@@ -45,7 +77,10 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
+    description = "Single sign-on framework for GNOME";
     platforms = platforms.linux;
+    license = licenses.lgpl2Plus;
     maintainers = gnome3.maintainers;
   };
 }
