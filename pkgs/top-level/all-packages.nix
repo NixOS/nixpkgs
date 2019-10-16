@@ -1901,6 +1901,8 @@ in
 
   optar = callPackage ../tools/graphics/optar {};
 
+  obinskit = callPackage ../applications/misc/obinskit {};
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
