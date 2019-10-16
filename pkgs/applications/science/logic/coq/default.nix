@@ -7,7 +7,7 @@
 
 { stdenv, fetchFromGitHub, writeText, pkgconfig
 , ocamlPackages, ncurses
-, buildIde ? true
+, buildIde ? !(stdenv.lib.versionAtLeast version "8.10" && stdenv.isDarwin) # GTK3 at version 3.24.10 on darwin has wrong gdkconfig.h
 , glib, gnome3, wrapGAppsHook
 , csdp ? null
 , version
