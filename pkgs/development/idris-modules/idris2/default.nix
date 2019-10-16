@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , contrib
 , lib
+, chez
 , optimized ? true
 }:
 build-idris-package rec {
@@ -9,6 +10,8 @@ build-idris-package rec {
   version = "unstable-2019-10-13";
 
   idrisDeps = [ contrib ];
+
+  extraBuildInputs = [ chez ];
 
   src = fetchFromGitHub {
     owner = "edwinb";
