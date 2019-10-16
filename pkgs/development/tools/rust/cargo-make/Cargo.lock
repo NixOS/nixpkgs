@@ -107,7 +107,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-make"
-version = "0.22.2"
+version = "0.23.0"
 dependencies = [
  "ci_info 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)",
