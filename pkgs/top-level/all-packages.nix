@@ -6886,6 +6886,10 @@ in
   wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen";
   wast-refmt = nodePackages."@webassemblyjs/wast-refmt";
 
+  wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   welkin = callPackage ../tools/graphics/welkin {};
 
   wf-recorder = callPackage ../applications/video/wf-recorder { };
