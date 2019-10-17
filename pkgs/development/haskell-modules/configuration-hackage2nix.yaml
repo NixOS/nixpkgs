@@ -5691,6 +5691,9 @@ broken-packages:
   - hgen
   - hgeometric
   - hgeometry
+  - hgeometry-combinatorial
+  - hgeometry-ipe
+  - hgeometry-svg
   - hgeos
   - hgettext
   - hgis
@@ -10218,6 +10221,7 @@ broken-packages:
   - yaya-hedgehog
   - yaya-unsafe
   - ycextra
+  - yeamer
   - yeller
   - yeshql-postgresql-simple
   - yesod-angular
