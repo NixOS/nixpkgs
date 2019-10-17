@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.23.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     rev = "v${version}";
-    sha256 = "1a4n1nira63lnbpv3si25l9jxxib512gcgvkhv8aam5634jsd70l";
+    sha256 = "029yrjlb0gl6338h1d299522cv3vfx5y08fs4kp61pmsw6x0c818";
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];

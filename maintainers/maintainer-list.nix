@@ -137,6 +137,11 @@
     githubId = 2321000;
     name = "Ruslan Babayev";
   };
+  acairncross = {
+    email = "acairncross@gmail.com";
+    github = "acairncross";
+    name = "Aiken Cairncross";
+  };
   acowley = {
     email = "acowley@gmail.com";
     github = "acowley";
@@ -545,6 +550,12 @@
     github = "arcadio";
     githubId = 56009;
     name = "Arcadio Rubio García";
+  };
+  arcnmx = {
+    email = "arcnmx@users.noreply.github.com";
+    github = "arcnmx";
+    githubId = 13426784;
+    name = "arcnmx";
   };
   ardumont = {
     email = "eniotna.t@gmail.com";
@@ -1438,6 +1449,12 @@
     github = "dancek";
     githubId = 245394;
     name = "Hannu Hartikainen";
+  };
+  danderson = {
+    email = "dave@natulte.net";
+    github = "danderson";
+    githubId = 1918;
+    name = "David Anderson";
   };
   danharaj = {
     email = "dan@obsidian.systems";
@@ -4321,6 +4338,12 @@
     github = "mmahut";
     githubId = 104795;
     name = "Marek Mahut";
+  };
+  mmai = {
+    email = "henri.bourcereau@gmail.com";
+    github = "mmai";
+    githubId = 117842;
+    name = "Henri Bourcereau";
   };
   mmlb = {
     email = "me.mmlb@mmlb.me";

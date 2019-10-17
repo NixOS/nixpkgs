@@ -850,9 +850,8 @@ Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is in
 Packages inside nixpkgs are written by hand. However many tools exist in
 community to help save time. No tool is preferred at the moment.
 
-- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov
-- [pypi2nix](https://github.com/garbas/pypi2nix) by Rok Garbas
-- [pypi2nix](https://github.com/offlinehacker/pypi2nix) by Jaka Hudoklin
+- [pypi2nix](https://github.com/nix-community/pypi2nix): Generate Nix expressions for your Python project. Note that [sharing derivations from pypi2nix with nixpkgs is possible but not encouraged](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376).
+- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov.
 
 ### Deterministic builds
 

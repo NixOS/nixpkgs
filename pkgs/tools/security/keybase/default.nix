@@ -5,7 +5,7 @@
 
 buildGoPackage rec {
   pname = "keybase";
-  version = "4.3.1";
+  version = "4.6.0";
 
   goPackagePath = "github.com/keybase/client";
   subPackages = [ "go/keybase" ];
@@ -16,7 +16,7 @@ buildGoPackage rec {
     owner = "keybase";
     repo = "client";
     rev = "v${version}";
-    sha256 = "1743d7a7ix882yxz9pk230vdvdj46sbscqv4wqyhb0la2pl9jqdp";
+    sha256 = "1aqj5s3vfji1zl7xdzphnsw3b8pnbg22n9rzdxkcdjf7via5wz2k";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox ];

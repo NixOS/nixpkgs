@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, autoreconfHook
-, gmp, python, iptables, ldns, unbound, openssl, pcsclite
+, gmp, python, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
 , systemd, pam
 , curl
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam iptables ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
-    ++ optionals enableNetworkManager [ networkmanager ];
+    ++ optionals enableNetworkManager [ networkmanager glib ];
 
   patches = [
     ./ext_auth-path.patch

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, lib, cmake, cacert }:
+{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch, buildShared ? true }:
 
 let
 
-  generic = { version, sha256 }: stdenv.mkDerivation rec {
+  generic = { version, sha256, patches ? [] }: stdenv.mkDerivation rec {
     pname = "libressl";
     inherit version;
 
@@ -15,13 +15,14 @@ let
 
     cmakeFlags = [
       "-DENABLE_NC=ON"
-      "-DBUILD_SHARED_LIBS=ON"
       # Ensure that the output libraries do not require an executable stack.
       # Without this define, assembly files in libcrypto do not include a
       # .note.GNU-stack section, and if that section is missing from any object,
       # the linker will make the stack executable.
       "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
-    ];
+      # libressl will append this to the regular prefix for libdir
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+    ] ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
 
     # The autoconf build is broken as of 2.9.1, resulting in the following error:
     # libressl-2.9.1/tls/.libs/libtls.a', needed by 'handshake_table'.
@@ -30,6 +31,8 @@ let
     preConfigure = ''
       rm configure
     '';
+
+    inherit patches;
 
     # Since 2.9.x the default location can't be configured from the build using
     # DEFAULT_CA_FILE anymore, instead we have to patch the default value.
@@ -69,10 +72,16 @@ in {
   libressl_2_9 = generic {
     version = "2.9.2";
     sha256 = "1m6mz515dcbrbnyz8hrpdfjzdmj1c15vbgnqxdxb89g3z9kq3iy4";
+    patches = stdenv.lib.optional stdenv.hostPlatform.isMusl [
+      (fetchpatch {
+        url = "https://github.com/libressl-portable/portable/pull/529/commits/a747aacc23607c993cc481378782b2c7dd5bc53b.patch";
+        sha256 = "0wbrcscdkjpk4mhh7f3saghi4smia4lhf7fl6la3ahhgx1krn5zm";
+      })
+    ];
   };
 
   libressl_3_0 = generic {
-    version = "3.0.0";
-    sha256 = "0xiwri6xcnl3wb5nbc4aw8pv32s3hp13r9v465yr8wykaw211n81";
+    version = "3.0.1";
+    sha256 = "1js3fddxwzafiyspif0bwmvpp1fz98mkv10q5xaagqzvjw8xnsk4";
   };
 }

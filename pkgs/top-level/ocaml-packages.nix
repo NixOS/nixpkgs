@@ -211,12 +211,6 @@ let
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
 
-    doc-ock =  callPackage ../development/ocaml-modules/doc-ock { };
-
-    doc-ock-html =  callPackage ../development/ocaml-modules/doc-ock-html { };
-
-    doc-ock-xml =  callPackage ../development/ocaml-modules/doc-ock-xml { };
-
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -238,6 +232,8 @@ let
     elpi = callPackage ../development/ocaml-modules/elpi { };
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
+
+    eqaf = callPackage ../development/ocaml-modules/eqaf { };
 
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 

@@ -153,6 +153,8 @@ in
 
   castxml = callPackage ../development/tools/castxml { };
 
+  cereal = callPackage ../development/libraries/cereal { };
+
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
   cmark = callPackage ../development/libraries/cmark { };
@@ -697,8 +699,6 @@ in
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
   iamy = callPackage ../tools/admin/iamy { };
-
-  azure-cli = nodePackages_10_x.azure-cli;
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
@@ -2967,10 +2967,6 @@ in
   enscript = callPackage ../tools/text/enscript { };
 
   entr = callPackage ../tools/misc/entr { };
-
-  envoy = callPackage ../tools/networking/envoy {
-    bazel = bazel_0_4;
-  };
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
@@ -5713,7 +5709,7 @@ in
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
-  pwndbg = python3Packages.callPackage ../development/tools/misc/pwndbg { };
+  pwndbg = callPackage ../development/tools/misc/pwndbg { };
 
   pycangjie = pythonPackages.pycangjie;
 
@@ -5911,7 +5907,7 @@ in
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
 
-  rescuetime = callPackage ../applications/misc/rescuetime { };
+  rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
   reuse = callPackage ../tools/package-management/reuse { };
 
@@ -6491,8 +6487,6 @@ in
 
   termplay = callPackage ../tools/misc/termplay { };
 
-  testdisk-photorec = callPackage ../tools/system/testdisk-photorec { };
-
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = if stdenv.isDarwin
@@ -6890,6 +6884,10 @@ in
   wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen";
   wast-refmt = nodePackages."@webassemblyjs/wast-refmt";
 
+  wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   welkin = callPackage ../tools/graphics/welkin {};
 
   wf-recorder = callPackage ../applications/video/wf-recorder { };
@@ -6921,7 +6919,9 @@ in
 
   xe = callPackage ../tools/system/xe { };
 
-  testdisk = callPackage ../tools/misc/testdisk { };
+  testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
+
+  testdisk-qt = testdisk.override { enableQt = true; };
 
   textql = callPackage ../development/tools/textql { };
 
@@ -7294,6 +7294,8 @@ in
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
+
+  zsh-history = callPackage ../shells/zsh/zsh-history { };
 
   zsh-history-substring-search = callPackage ../shells/zsh/zsh-history-substring-search { };
 
@@ -8431,6 +8433,7 @@ in
   cargo-audit = callPackage ../tools/package-management/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-deps = callPackage ../tools/package-management/cargo-deps { };
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
   cargo-graph = callPackage ../tools/package-management/cargo-graph { };
@@ -8543,6 +8546,7 @@ in
   swift = callPackage ../development/compilers/swift { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
+  swiPrologWithGui = callPackage ../development/compilers/swi-prolog { withGui = true; };
 
   tbb = callPackage ../development/libraries/tbb { };
 
@@ -8958,7 +8962,7 @@ in
   python35Packages = python35.pkgs;
   python36Packages = python36.pkgs;
   python37Packages = recurseIntoAttrs python37.pkgs;
-  python38Packages = python38.pkgs;
+  python38Packages = recurseIntoAttrs python38.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
@@ -9294,9 +9298,6 @@ in
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
   bazel = callPackage ../development/tools/build-managers/bazel {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
@@ -11810,6 +11811,8 @@ in
 
   libclxclient = callPackage ../development/libraries/libclxclient  { };
 
+  libco-canonical = callPackage ../development/libraries/libco-canonical { };
+
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
@@ -13496,6 +13499,8 @@ in
   qxt = callPackage ../development/libraries/qxt {};
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
+
+  raft-canonical = callPackage ../development/libraries/raft-canonical { };
 
   range-v3 = callPackage ../development/libraries/range-v3 {};
 
@@ -16824,7 +16829,7 @@ in
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
-  cherry = callPackage ../data/fonts/cherry { };
+  cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
 
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder {};
 
@@ -17339,7 +17344,7 @@ in
   source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
   source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
 
-  spleen = callPackage ../data/fonts/spleen { };
+  spleen = callPackage ../data/fonts/spleen { inherit (xorg) mkfontdir; };
 
   stilo-themes = callPackage ../data/themes/stilo { };
 
