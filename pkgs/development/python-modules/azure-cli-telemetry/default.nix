@@ -28,10 +28,10 @@ buildPythonPackage rec {
   # Remove overly restrictive version contraints and obsolete namespace setup
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "applicationinsights>=0.11.1,<0.11.8" "applicationinsights" \
-      --replace "portalocker==1.2.1" "portalocker"
+      --replace "applicationinsights>=0.11.1,<0.12" "applicationinsights"
     substituteInPlace setup.cfg \
       --replace "azure-namespace-package = azure-cli-nspkg" ""
+    rm azure_bdist_wheel.py # we'll fix PEP420 namespacing
   '';
 
   # Prevent these __init__'s from violating PEP420, only needed for python2
