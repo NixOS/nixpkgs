@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     ./split-dev-programs.patch
   ] ++ optional doCheck ./skip-timer-test.patch;
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ] ++ optional (!stdenv.isDarwin) "devdoc";
 
   setupHook = ./setup-hook.sh;
 
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${if stdenv.hostPlatform == stdenv.buildPlatform then "true" else "false"}"
+    "-Dgtk_doc=${if (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin then "true" else "false"}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder ''dev''}/bin"
   ];
