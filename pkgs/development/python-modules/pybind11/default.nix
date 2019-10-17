@@ -23,13 +23,19 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [ pytest cmake ]
+  nativeBuildInputs = [ cmake ];
+  checkInputs = [ pytest ]
     ++ (lib.optional (numpy != null) numpy)
     ++ (lib.optional (eigen != null) eigen)
     ++ (lib.optional (scipy != null) scipy);
   checkPhase = ''
     cmake ${if eigen != null then "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3" else ""}
     make -j $NIX_BUILD_CORES pytest
+  '';
+
+  # re-expose the headers to other packages
+  postInstall = ''
+    ln -s $out/include/python${python.pythonVersion}m/pybind11/ $out/include/pybind11
   '';
 
   meta = {
