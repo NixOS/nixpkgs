@@ -472,6 +472,7 @@ in {
     systemd.tmpfiles.rules = [
       "d /etc/NetworkManager/system-connections 0700 root root -"
       "d /etc/ipsec.d 0700 root root -"
+      "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
 
       "d /var/lib/dhclient 0755 root root -"
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
