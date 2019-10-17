@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, openssl, cmake, perl, pkgconfig, zlib, curl }:
+{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, openssl, cmake, perl, pkgconfig, zlib, curl, libgit2 }:
 
 with rustPlatform;
 
@@ -27,8 +27,9 @@ buildRustPackage rec {
     })
   ];
 
+  LIBGIT2_SYS_USE_PKG_CONFIG = true;
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ openssl zlib curl ];
+  buildInputs = [ openssl zlib curl libgit2 ];
 
   postBuild = ''
     install -D "$src/git-series.1" "$out/man/man1/git-series.1"
