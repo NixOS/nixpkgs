@@ -740,6 +740,8 @@ in
 
   havoc = callPackage ../applications/terminal-emulators/havoc { };
 
+  hachoir = with python3Packages; toPythonApplication hachoir;
+
   hyper = callPackage ../applications/terminal-emulators/hyper { };
 
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 {};
