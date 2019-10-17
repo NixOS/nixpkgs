@@ -26,6 +26,7 @@
 buildPythonPackage rec {
   pname = "notebook";
   version = "6.0.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
