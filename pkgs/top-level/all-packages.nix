@@ -25205,4 +25205,6 @@ in
 
   keycard-cli = callPackage ../tools/security/keycard-cli {};
 
+  sieveshell = with python3.pkgs; toPythonApplication managesieve;
+
 }
