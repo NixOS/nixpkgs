@@ -38,7 +38,7 @@ in py.pkgs.buildPythonApplication rec {
   # No tests included
   doCheck = false;
 
-  pythonPath = with py.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     botocore
     bcdoc
     s3transfer
@@ -62,6 +62,8 @@ in py.pkgs.buildPythonApplication rec {
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
     rm $out/bin/aws.cmd
   '';
+
+  passthru.python = py; # for aws_shell
 
   meta = with lib; {
     homepage = https://aws.amazon.com/cli/;
