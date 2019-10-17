@@ -1,8 +1,8 @@
 { mkDerivation }:
 
 mkDerivation {
-  version = "22.0.4";
-  sha256 = "1aqkhd6nwdn4xp5yz02zbymd4x8ij8fjw9ji8kh860n1a513k9ai";
+  version = "22.1.3";
+  sha256 = "02n7x208frbym63m1lpm3hscq6464gbmzqmf910m6fjpsyrxm8s2";
 
   prePatch = ''
     substituteInPlace make/configure.in --replace '`sw_vers -productVersion`' "''${MACOSX_DEPLOYMENT_TARGET:-10.12}"
