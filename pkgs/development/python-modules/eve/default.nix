@@ -19,6 +19,11 @@ buildPythonPackage rec {
     werkzeug
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "werkzeug==0.15.4" "werkzeug"
+  '';
+
   # tests call a running mongodb instance
   doCheck = false;
 
