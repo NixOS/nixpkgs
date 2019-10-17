@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebkit, openssl, xkeyboard_config, wrapQtAppsHook }:
+{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebkit, openssl_1_0_2, xkeyboard_config, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "p4v";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       qtscript
       qtsensors
       qtwebkit
-      openssl
+      openssl_1_0_2
   ];
 
   dontWrapQtApps = true;
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.perforce.com;
     license = stdenv.lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.nioncode ];
+    maintainers = with stdenv.lib.maintainers; [ nathyong nioncode ];
   };
 }
