@@ -1,5 +1,5 @@
 { mkDerivation, fetchFromGitHub, lib, makeWrapper, pkgconfig
-, kcoreaddons, ki18n, kwallet, mksh, pinentry-qt }:
+, kcoreaddons, ki18n, kwallet, mksh, pinentry_qt5 }:
 
 mkDerivation rec {
   pname = "kwalletcli";
@@ -36,7 +36,7 @@ mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/pinentry-kwallet \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry-qt ]} \
+      --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry_qt5 ]} \
       --set-default PINENTRY pinentry-qt
   '';
 

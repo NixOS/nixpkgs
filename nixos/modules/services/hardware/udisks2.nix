@@ -34,7 +34,10 @@ with lib;
 
     services.dbus.packages = [ pkgs.udisks2 ];
 
-    systemd.tmpfiles.rules = [ "d /var/lib/udisks2 0755 root root -" ];
+    system.activationScripts.udisks2 =
+      ''
+        mkdir -m 0755 -p /var/lib/udisks2
+      '';
 
     services.udev.packages = [ pkgs.udisks2 ];
 
