@@ -12,7 +12,7 @@ let
           The overlay file to apply, or '-' to apply parameters to the current
           device-tree.
         '';
-        example = literalExample "[\"\${pkgs.deviceTree_rpi.overlays}/w1-gpio.dtbo\"]";
+        example = literalExample "[\"\${pkgs.linuxPackages_rpi.kernel}/dtbs/overlays/w1-gpio.dtbo\"]";
       };
       params = mkOption {
         type = types.listOf types.str;
@@ -41,7 +41,6 @@ in {
         base = mkOption {
           default = "${config.boot.kernelPackages.kernel}/dtbs";
           defaultText = "\${config.boot.kernelPackages.kernel}/dtbs";
-          example = literalExample "pkgs.deviceTree_rpi";
           type = types.path;
           description = ''
             The package containing the base device-tree (.dtb) to boot. Contains
