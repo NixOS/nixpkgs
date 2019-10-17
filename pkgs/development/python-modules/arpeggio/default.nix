@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , glibcLocales
+, pytestrunner
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,6 +18,14 @@ buildPythonPackage rec {
   # Shall not be needed for next release
   LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
+
+  nativeBuildInputs = [ pytestrunner ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  disabledTests = [ "test_examples" "test_issue_22" ];
+
+  dontUseSetuptoolsCheck = true;
 
   meta = {
     description = "Packrat parser interpreter";
