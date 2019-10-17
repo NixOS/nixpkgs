@@ -6,11 +6,11 @@
 }:
 buildPythonPackage rec {
   pname = "Pillow";
-  version = "5.4.1";
+  version = "6.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5233664eadfa342c639b9b9977190d64ad7aca4edc51a966394d7e08e7f38a9f";
+    sha256 = "4548236844327a718ce3bb182ab32a16fa2050c61e334e959f554cac052fb0df";
   };
 
   doCheck = !stdenv.isDarwin && !isPyPy;
