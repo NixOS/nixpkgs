@@ -19,6 +19,7 @@ python3Packages.buildPythonApplication rec {
       click
       requests
       characteristic
+      setuptools
     ];
 
   meta = {
