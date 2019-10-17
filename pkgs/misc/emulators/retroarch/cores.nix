@@ -77,6 +77,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Atari800 to libretro";
     license = gpl2;
+    broken = true;
   }).override {
     makefile = "Makefile";
     buildPhase = "make";
@@ -445,6 +446,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Hatari to libretro";
     license = gpl2;
+    broken = true;
     extraBuildInputs = [ cmake SDL ];
   }).override {
     makefile = "Makefile.libretro";
@@ -701,6 +703,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Play! to libretro";
     license = bsd2;
+    broken = true;
     extraBuildInputs = [ cmake boost ];
   }).override {
     cmakeFlags = [ "-DBUILD_PLAY=OFF -DBUILD_LIBRETRO_CORE=ON" ];
@@ -786,8 +789,8 @@ in with stdenv.lib.licenses;
     core = "snes9x";
     src = fetchRetro {
       repo = core;
-      rev = "29b78df8c9f0f48ed4605d08a187a134b3b316d6";
-      sha256 = "004h1pkxvbn4zlh8bqs6z17k04jw5wzbwklpgvmb7hbxshsi4qid";
+      rev = "bd9246ddd75a5e9f78d6189c8c57754d843630f7";
+      sha256 = "1x498ca1cck93i6v0hqxljfdlgdhf0whqrbg72nz49332c2gmbyv";
     };
     description = "Port of SNES9x git to libretro";
     license = "Non-commercial";
