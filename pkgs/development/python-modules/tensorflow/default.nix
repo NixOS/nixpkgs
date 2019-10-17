@@ -112,6 +112,8 @@ let
         url = "https://github.com/tensorflow/tensorflow/pull/29673/commits/498e35a3bfe38dd75cf1416a1a23c07c3b59e6af.patch";
         sha256 = "1m2qmwv1ysqa61z6255xggwbq6mnxbig749bdvrhnch4zydxb4di";
       })
+
+      ./tf-1.15-bazel-1.0.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
@@ -258,6 +260,7 @@ let
     bazelFlags = [
       # temporary fixes to make the build work with bazel 0.27
       "--incompatible_no_support_tools_in_action_inputs=false"
+      "--incompatible_use_native_patch=false"
     ];
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
@@ -273,7 +276,7 @@ let
       sha256 = if cudaSupport then
         "1rbg8w8pjf15hpvzrclsi19lhsrwdns6f8psb1wz35ay0ggdw8c0"
       else
-        "0j9r7xgmkc5cj53m32jk8x0qkz05bcvnwjkd9g6l6wy10anx7kvq";
+        "0d8wq89iz9vrzvr971mgdclxxjcjr32r7aj817h019x3pc53qnwx";
     };
 
     buildAttrs = {
