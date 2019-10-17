@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = false; # custom test modifies sys.path
 
   meta = with stdenv.lib; {
     description = "A flexible test runner with layer support";
