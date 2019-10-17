@@ -23,6 +23,7 @@ in
 
       peers = mkOption {
         default = {};
+        description = "pppd peers.";
         type = types.attrsOf (types.submodule (
           { name, ... }:
           {
