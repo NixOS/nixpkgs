@@ -1,0 +1,26 @@
+This fix is based on https://www.sqlite.org/src/vpatch?from=4f5b2d938194fab7&to=98357d8c1263920b
+and is adapted to the "amalgamated" source release.
+
+It addresses https://nvd.nist.gov/vuln/detail/CVE-2019-16168
+
+--- a/sqlite3.c	2019-07-10 20:07:04.000000000 +0200
++++ b/sqlite3.c	2019-10-17 13:51:00.899376230 +0200
+@@ -105933,7 +105933,9 @@
+       if( sqlite3_strglob("unordered*", z)==0 ){
+         pIndex->bUnordered = 1;
+       }else if( sqlite3_strglob("sz=[0-9]*", z)==0 ){
+-        pIndex->szIdxRow = sqlite3LogEst(sqlite3Atoi(z+3));
++        int sz = sqlite3Atoi(z+3);
++        if( sz<2 ) sz = 2;
++        pIndex->szIdxRow = sqlite3LogEst(sz);
+       }else if( sqlite3_strglob("noskipscan*", z)==0 ){
+         pIndex->noSkipScan = 1;
+       }
+@@ -143260,6 +143262,7 @@
+     ** it to pNew->rRun, which is currently set to the cost of the index
+     ** seek only. Then, if this is a non-covering index, add the cost of
+     ** visiting the rows in the main table.  */
++    assert( pSrc->pTab->szTabRow>0 );
+     rCostIdx = pNew->nOut + 1 + (15*pProbe->szIdxRow)/pSrc->pTab->szTabRow;
+     pNew->rRun = sqlite3LogEstAdd(rLogSize, rCostIdx);
+     if( (pNew->wsFlags & (WHERE_IDX_ONLY|WHERE_IPK))==0 ){
