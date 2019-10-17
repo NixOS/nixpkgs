@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,9 @@ buildPythonPackage rec {
     sha256 = "fd135b8d35dfdcdb984828c84d695937e58cc5f49e1c854eb311c4d6aa03f4f1";
   };
 
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [ setuptools_scm ];
+
+  checkInputs = [ pytest ];
   checkPhase = ''
     py.test tests
   '';
