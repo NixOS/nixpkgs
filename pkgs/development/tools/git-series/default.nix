@@ -45,6 +45,6 @@ buildRustPackage rec {
     homepage = https://github.com/git-series/git-series;
 
     license = licenses.mit;
-    maintainers = [ maintainers.vmandela ];
+    maintainers = with maintainers; [ edef vmandela ];
   };
 }
