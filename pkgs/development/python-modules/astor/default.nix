@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytest }:
 
 buildPythonPackage rec {
   pname = "astor";
   version = "0.8.0";
+  disabled = isPy27; # setup.py is no longer valid with setuptools>=41.4
 
   src = fetchPypi {
     inherit pname version;
