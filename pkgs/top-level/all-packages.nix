@@ -7271,6 +7271,8 @@ in
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
 
+  zfsbackup = callPackage ../tools/backup/zfsbackup { };
+
   zfstools = callPackage ../tools/filesystems/zfstools { };
 
   zile = callPackage ../applications/editors/zile { };
