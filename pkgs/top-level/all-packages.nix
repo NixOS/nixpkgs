@@ -694,7 +694,7 @@ in
 
   aws_shell = callPackage ../tools/admin/aws_shell { };
 
-  aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
+  aws-sam-cli = callPackage ../development/tools/aws-sam-cli { python = python3; };
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
