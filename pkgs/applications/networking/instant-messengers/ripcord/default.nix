@@ -22,7 +22,7 @@ in appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/Ripcord_Icon.png $out/share/icons/hicolor/512x512/apps/Ripcord_Icon.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A desktop chat client for Discord and Slack";
     homepage = "https://cancel.fm/ripcord/";
     license = licenses.unfreeRedistributable;
