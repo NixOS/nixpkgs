@@ -6300,6 +6300,9 @@ in {
   pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
 
   hcloud = callPackage ../development/python-modules/hcloud { };
+
+  managesieve = callPackage ../development/python-modules/managesieve { };
+
 });
 
 in fix' (extends overrides packages)
