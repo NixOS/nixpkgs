@@ -31,9 +31,6 @@ with lib;
     # Let the user play Rogue on TTY 8 during the installation.
     #services.rogue.enable = true;
 
-    # Disable some other stuff we don't need.
-    services.udisks2.enable = mkDefault false;
-
     # Use less privileged nixos user
     users.users.nixos = {
       isNormalUser = true;

@@ -3497,10 +3497,12 @@ in
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
   gnupg20 = callPackage ../tools/security/gnupg/20.nix {
-    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry;
+    guiSupport = stdenv.isDarwin;
+    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry_gtk2;
   };
   gnupg22 = callPackage ../tools/security/gnupg/22.nix {
-    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry;
+    guiSupport = stdenv.isDarwin;
+    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry_gtk2;
   };
   gnupg = gnupg22;
 
@@ -5519,34 +5521,15 @@ in
 
   phodav = callPackage ../tools/networking/phodav { };
 
-  pinentry = callPackage ../tools/security/pinentry {
+  pinentry = libsForQt5.callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
-    gcr = null;
-    qt4 = null;
-    qt5 = null;
   };
 
-  pinentry_ncurses = res.pinentry.override {
-    gtk2 = null;
-  };
-
-  pinentry_emacs = res.pinentry.override {
-    enableEmacs = true;
-  };
-
-  pinentry_gnome = res.pinentry.override {
-    inherit gcr;
-  };
-
-  pinentry_qt4 = res.pinentry.override {
-    gtk2 = null;
-    inherit qt4;
-  };
-
-  pinentry_qt5 = res.pinentry.override {
-    gtk2 = null;
-    inherit qt5;
-  };
+  pinentry-curses = (stdenv.lib.getOutput "curses" pinentry);
+  pinentry-emacs = (stdenv.lib.getOutput "emacs" pinentry);
+  pinentry-gtk2 = (stdenv.lib.getOutput "gtk2" pinentry);
+  pinentry-qt = (stdenv.lib.getOutput "qt" pinentry);
+  pinentry-gnome = (stdenv.lib.getOutput "gnome" pinentry);
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
