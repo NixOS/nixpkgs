@@ -1234,7 +1234,9 @@ in {
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
-  tables = callPackage ../development/python-modules/tables {
+  tables = if isPy3k then callPackage ../development/python-modules/tables {
+    hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
+  } else callPackage ../development/python-modules/tables/3.5.nix {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
