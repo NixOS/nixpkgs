@@ -197,6 +197,24 @@ WRAPPER(int, openat)(int dirfd, const char * path, int flags, ...)
 }
 WRAPPER_DEF(openat)
 
+// In musl libc, openat64 is simply a macro for openat
+#if !defined(__APPLE__) && !defined(openat64)
+WRAPPER(int, openat64)(int dirfd, const char * path, int flags, ...)
+{
+    int (*openat64_real) (int, const char *, int, ...) = LOOKUP_REAL(openat64);
+    mode_t mode = 0;
+    if (open_needs_mode(flags)) {
+        va_list ap;
+        va_start(ap, flags);
+        mode = va_arg(ap, mode_t);
+        va_end(ap);
+    }
+    char buf[PATH_MAX];
+    return openat64_real(dirfd, rewrite(path, buf), flags, mode);
+}
+WRAPPER_DEF(openat64)
+#endif
+
 WRAPPER(FILE *, fopen)(const char * path, const char * mode)
 {
     FILE * (*fopen_real) (const char *, const char *) = LOOKUP_REAL(fopen);
