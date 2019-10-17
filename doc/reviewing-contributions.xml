@@ -115,19 +115,12 @@
       <para>
        It is possible to rebase the changes on nixos-unstable or nixpkgs-unstable for easier review by running the following commands from a nixpkgs clone.
 <screen>
-<prompt>$ </prompt>git remote add channels https://github.com/NixOS/nixpkgs-channels.git <co
-  xml:id='reviewing-rebase-1' />
-<prompt>$ </prompt>git fetch channels nixos-unstable <co xml:id='reviewing-rebase-2' />
+<prompt>$ </prompt>git fetch origin nixos-unstable <co xml:id='reviewing-rebase-2' />
 <prompt>$ </prompt>git fetch origin pull/PRNUMBER/head <co xml:id='reviewing-rebase-3' />
 <prompt>$ </prompt>git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD <co
   xml:id='reviewing-rebase-4' />
 </screen>
        <calloutlist>
-        <callout arearefs='reviewing-rebase-1'>
-         <para>
-          This should be done only once to be able to fetch channel branches from the nixpkgs-channels repository.
-         </para>
-        </callout>
         <callout arearefs='reviewing-rebase-2'>
          <para>
           Fetching the nixos-unstable branch.
