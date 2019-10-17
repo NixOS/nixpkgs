@@ -1,18 +1,13 @@
 { stdenv, fetchurl, pkgconfig, gwenhywfar, pcsclite, zlib }:
 
-let
-  inherit ((import ./sources.nix).libchipcard) sha256 releaseId version;
-in stdenv.mkDerivation rec {
-  pname = "libchipcard";
-  inherit version;
 
-  src = let
-    qstring = "package=02&release=${releaseId}&file=01";
-    mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
-  in fetchurl {
-    name = "${pname}-${version}.tar.gz";
-    urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
-    inherit sha256;
+stdenv.mkDerivation rec {
+  pname = "libchipcard";
+  version = "5.0.4";
+
+  src = fetchurl {
+    url = https://www.aquamaniac.de/rdm/attachments/download/158/libchipcard-5.0.4.tar.gz;
+    sha256 = "0fj2h39ll4kiv28ch8qgzdbdbnzs8gl812qnm660bw89rynpjnnj";
   };
 
   nativeBuildInputs = [ pkgconfig ];

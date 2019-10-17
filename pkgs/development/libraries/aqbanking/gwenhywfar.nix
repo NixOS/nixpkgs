@@ -10,19 +10,13 @@
   ]
 }:
 
-let
-  inherit ((import ./sources.nix).gwenhywfar) sha256 releaseId version;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gwenhywfar";
-  inherit version;
+  version = "4.20.0";
 
-  src = let
-    qstring = "package=01&release=${releaseId}&file=02";
-    mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
-  in fetchurl {
-    name = "${pname}-${version}.tar.gz";
-    urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
-    inherit sha256;
+  src = fetchurl {
+    url = https://www.aquamaniac.de/rdm/attachments/download/10/gwenhywfar-4.20.0.tar.gz;
+    sha256 = "1c0g3f8jk6j693774ifslx2ds4ksabgbbalhhm9gk20kpamxm22s";
   };
 
   configureFlags = [
