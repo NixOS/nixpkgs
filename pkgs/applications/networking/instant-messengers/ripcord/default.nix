@@ -6,7 +6,7 @@ let
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://cancel.fm/dl/${pname}-${version}-x86_64.AppImage";
+    url = "https://cancel.fm/dl/${name}-x86_64.AppImage";
     sha256 = "19nv5pq8643l57hr5bdgn84rrw3ak2p9s16gr202nvi62flnl44p";
   };
 
