@@ -1227,34 +1227,6 @@ self: super: {
   # The LTS-14.x version of optparse-applicative is too old.
   cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
 
-  # https://github.com/gtk2hs/gtk2hs/issues/276
-  glib = appendPatch super.glib (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/4bb428e144ef2de9390f0f2239dcc50b7fc9a259.patch;
-    sha256 = "1s72s683p2n5ri1a030zywciq0020ms64cmsy48axndp6dp9vri7";
-    stripLen = 1;
-  });
-  pango = appendPatch super.pango (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/0a6016e89ce98415bb395ca0cfafeaacf3b3fce6.patch;
-    sha256 = "1n9spriinyif4h1h9mfj9k87b80kcs39qlym5yxnxxg0yszqqcpc";
-    stripLen = 1;
-  });
-  gtk3 = appendPatch super.gtk3 (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/cc0d8e8ef9bdffc776182a1f92225750bfea8f57.patch;
-    sha256 = "175zs694d04d7jfj8xq33rizw38bc3ninr00n26jyrg39vgkmc5j";
-    stripLen = 1;
-  });
-  gio = appendPatch super.gio (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/f0f7cf524f1beaf227d8cce140abdf7c45efc8c6.patch;
-    sha256 = "1fadmibpk0q38fzp6a8ss6b1kh7v5d5mw3s9i45cd4dsg86hqb0i";
-    stripLen = 1;
-  });
-  gtk = appendPatch super.gtk (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/a09720ae8fdc2f9391ba88308312e42d091a4f88.patch;
-    sha256 = "12ja6sprzl9si51rng8s2xx66ihpm6d6p00qi5czkpkrhr0457n7";
-    stripLen = 1;
-    postFetch = "sed -i -e s,gtk.cabal-renamed,gtk.cabal, $out";
-  });
-
   # Version bounds for http-client are too strict:
   # https://github.com/bitnomial/prometheus/issues/34
   prometheus = doJailbreak super.prometheus;
