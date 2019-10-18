@@ -1,14 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytest, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "astor";
   version = "0.8.0";
-  disabled = isPy27; # setup.py is no longer valid with setuptools>=41.4
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0qkq5bf13fqcwablg0nk7rx83izxdizysd42n26j5wbingcfx9ip";
   };
+
+  # fix packaging for setuptools>=41.4
+  patches = [
+    ( fetchpatch {
+        url = "https://github.com/berkerpeksag/astor/pull/163/commits/c908d1136cdfb058f5e9d81b4d3687931aa1ebfb.patch";
+        sha256 = "06mrx3qxfjyx9v76kxsj2b7zyqwrwlyd5z1fh77jbb8yl6m0nacd";
+    })
+  ];
 
   # disable tests broken with python3.6: https://github.com/berkerpeksag/astor/issues/89
   checkInputs = [ pytest ];
