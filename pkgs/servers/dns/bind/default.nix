@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableSeccomp libseccomp
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
-  STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
-
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = [
@@ -65,6 +63,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/host $host
 
     moveToOutput bin/dig $dnsutils
+    moveToOutput bin/delv $dnsutils
     moveToOutput bin/nslookup $dnsutils
     moveToOutput bin/nsupdate $dnsutils
 
