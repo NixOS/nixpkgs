@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "05kydd5z9iil5iv4fp7l11cicda5n5lsg5sdmsmc55xpspnsg7hr";
   };
 
+  configureFlags = stdenv.lib.optionals stdenv.isDarwin [
+    "--without-nc-config"
+  ]; # prevent linking failure on Darwin
+
   buildInputs = [ netcdf hdf5 curl ];
   doCheck = true;
 
