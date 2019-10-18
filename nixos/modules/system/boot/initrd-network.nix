@@ -43,44 +43,57 @@ in
 
   options = {
 
-    boot.initrd.network.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Add network connectivity support to initrd. The network may be
-        configured using the <literal>ip</literal> kernel parameter,
-        as described in <link
-        xlink:href="https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt">the
-        kernel documentation</link>.  Otherwise, if
-        <option>networking.useDHCP</option> is enabled, an IP address
-        is acquired using DHCP.
+    boot.initrd.network = {
 
-        You should add the module(s) required for your network card to
-        boot.initrd.availableKernelModules.
-        <literal>lspci -v | grep -iA8 'network\|ethernet'</literal>
-        will tell you which.
-      '';
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Add network connectivity support to initrd. The network may be
+          configured using the <literal>ip</literal> kernel parameter,
+          as described in <link
+          xlink:href="https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt">the
+          kernel documentation</link>.  Otherwise, if
+          <option>networking.useDHCP</option> is enabled, an IP address
+          is acquired using DHCP.
+
+          You should add the module(s) required for your network card to
+          boot.initrd.availableKernelModules.
+          <literal>lspci -v | grep -iA8 'network\|ethernet'</literal>
+          will tell you which.
+        '';
+      };
+
+      udhcpc.extraArgs = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        description = ''
+          Additional command-line arguments passed verbatim to udhcpc if
+          <option>boot.initrd.network.enable</option> and <option>networking.useDHCP</option>
+          are enabled.
+        '';
+      };
+
+      postCommands = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          Shell commands to be executed after stage 1 of the
+          boot has initialised the network.
+        '';
+      };
+
+      stopAfter = mkOption {
+        default = versionAtLeast config.system.stateVersion "20.03";
+        type = types.bool;
+        description = ''
+          Whether to stop initrd networking after a successful mount so that main OS networking
+          can take over. Disable this only for compatibility with older setups that rely on
+          previous behaviour. This option might be removed in future releases.
+        '';
+      };
+
     };
-
-    boot.initrd.network.udhcpc.extraArgs = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      description = ''
-        Additional command-line arguments passed verbatim to udhcpc if
-        <option>boot.initrd.network.enable</option> and <option>networking.useDHCP</option>
-        are enabled.
-      '';
-    };
-
-    boot.initrd.network.postCommands = mkOption {
-      default = "";
-      type = types.lines;
-      description = ''
-        Shell commands to be executed after stage 1 of the
-        boot has initialised the network.
-      '';
-    };
-
 
   };
 
@@ -132,6 +145,13 @@ in
           ${cfg.postCommands}
         fi
       '');
+
+    boot.initrd.postMountCommands = mkIf cfg.stopAfter (mkAfter ''
+      # Stop networking on all interfaces.
+      for iface in $(cd /sys/class/net && ls); do
+        ip link set "$iface" down
+      done
+    '');
 
   };
 
