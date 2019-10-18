@@ -30,6 +30,10 @@ let
 
      cp -f ${pkgs.gnome3.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
+     ${optionalString flashbackEnabled ''
+       cp -f ${pkgs.gnome3.gnome-flashback}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+     ''}
+
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
@@ -175,6 +179,10 @@ in
               wmLabel = "Metacity";
               wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
             } ++ cfg.flashback.customSessions);
+
+      systemd.packages = with pkgs.gnome3; [
+        gnome-flashback
+      ];
 
       security.pam.services.gnome-screensaver = {
         enableGnomeKeyring = true;
