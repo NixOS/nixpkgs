@@ -69,9 +69,9 @@ let
       plugins = mkOption {
         type = types.listOf (types.enum [
           "cert.der" "cert.pem" "chain.pem" "external.sh"
-          "fullchain.pem" "full.pem" "key.der" "key.pem" "account_key.json"
+          "fullchain.pem" "full.pem" "key.der" "key.pem" "account_key.json" "account_reg.json"
         ]);
-        default = [ "fullchain.pem" "full.pem" "key.pem" "account_key.json" ];
+        default = [ "fullchain.pem" "full.pem" "key.pem" "account_key.json" "account_reg.json" ];
         description = ''
           Plugins to enable. With default settings simp_le will
           store public certificate bundle in <filename>fullchain.pem</filename>,
