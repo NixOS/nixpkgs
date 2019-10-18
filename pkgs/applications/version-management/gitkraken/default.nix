@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
     comment = "Graphical Git client from Axosoft";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme ];
+  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 
   unpackCmd = ''
     mkdir out
