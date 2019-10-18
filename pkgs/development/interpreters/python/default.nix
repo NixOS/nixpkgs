@@ -200,4 +200,9 @@ in {
     ncurses = ncurses5;
   };
 
+  graalpython37 = callPackage ./graalpython/default.nix {
+    self = pythonInterpreters.graalpython37;
+    inherit passthruFun;
+  };
+
 })
