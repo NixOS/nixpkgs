@@ -77,18 +77,6 @@
     EXTRA_LIB=""
     CRATE_NAME=$(echo ${libName} | sed -e "s/-/_/g")
 
-    if [[ -e target/link_ ]]; then
-      EXTRA_BUILD="$(cat target/link_) $EXTRA_BUILD"
-    fi
-
-    if [[ -e "${libPath}" ]]; then
-       build_lib ${libPath}
-    elif [[ -e src/lib.rs ]]; then
-       build_lib src/lib.rs
-    elif [[ -e src/${libName}.rs ]]; then
-       build_lib src/${libName}.rs
-    fi
-
     echo "$EXTRA_LINK_SEARCH" | while read i; do
        if [[ ! -z "$i" ]]; then
          for lib in $i; do
@@ -116,6 +104,19 @@
        tr '\n' ' ' < target/link > target/link_
        LINK=$(cat target/link_)
     fi
+
+    if [[ -e target/link_ ]]; then
+      EXTRA_BUILD="$(cat target/link_) $EXTRA_BUILD"
+    fi
+
+    if [[ -e "${libPath}" ]]; then
+       build_lib ${libPath}
+    elif [[ -e src/lib.rs ]]; then
+       build_lib src/lib.rs
+    elif [[ -e src/${libName}.rs ]]; then
+       build_lib src/${libName}.rs
+    fi
+
     ${lib.optionalString (crateBin != "") ''
     printf "%s\n" "${crateBin}" | head -n1 | tr -s ',' '\n' | while read -r BIN_NAME BIN_PATH; do
       mkdir -p target/bin
