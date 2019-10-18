@@ -38,6 +38,7 @@ let
   self = stdenv.mkDerivation {
     name = "nvidia-x11-${version}${nameSuffix}";
 
+    IGNORE_MISSING_MODULE_SYMVERS = optionalString (kernel.meta.branch == "5.4") "1";
     builder = ./builder.sh;
 
     src =
