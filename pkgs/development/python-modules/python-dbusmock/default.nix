@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.18.1";
+  version = "0.18.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hj02p65cic4jdc6a5xf1hx8j5icwy7dcrm5kg91lkjks4gwpg5h";
+    sha256 = "994a178268b6d74aeb158c0f155cd141e9a0cfae14226a764cd022c4949fe242";
   };
 
   prePatch = ''

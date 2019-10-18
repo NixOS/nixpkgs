@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.12.7";
+  version = "0.12.10";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zf7nwma801a9hvwwq4xy3rrkca9vydj30s3bnngmm4dvkk575c4";
+    sha256 = "e41ef52e711a82ef95c195674e5d8d41c75c6b1d6f5a275637eedd4cc2150a7f";
   };
 
   propagatedBuildInputs = [

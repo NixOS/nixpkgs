@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pyhocon";
-  version = "0.3.51";
+  version = "0.3.53";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10l014br012fa583rnj3wqf6g9gmljamcwpw4snqwwg15i0dmkll";
+    sha256 = "29d9b64d0141d202b77c18665dc4fcafc05fd4c1a4b0fd95ca57c8b58c0e6c2d";
   };
 
   propagatedBuildInputs = [ pyparsing ];

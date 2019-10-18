@@ -1,16 +1,15 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPy38
+{ stdenv, lib, fetchPypi, python, buildPythonPackage
 , cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
 
 with stdenv.lib;
 
 buildPythonPackage rec {
-  version = "3.6.0";
+  version = "3.5.2";
   pname = "tables";
-  disabled = isPy38; # unable to build, remove with next bump.
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k9xc0b49j311r6yayw7wzjay6ch3jznijhzc4x33yv490hqhd6v";
+    sha256 = "1hikrki0hx94ass31pn0jyz9iy0zhnkjacfk86m21cxsc8if685j";
   };
 
   buildInputs = [ hdf5 cython bzip2 lzo c-blosc ];

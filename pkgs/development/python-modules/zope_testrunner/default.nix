@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "zope.testrunner";
-  version = "4.9.2";
+  version = "5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2aa89531db6b7546e46be9d6113ac835a075f4dcb26e32c7276f4f30d4b14a5";
+    sha256 = "0d8a27e214033b6f1e557556e61bff9568ae95676dfcc8a032483fdeeee792c3";
   };
 
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = false; # custom test modifies sys.path
 
   meta = with stdenv.lib; {
     description = "A flexible test runner with layer support";

@@ -1,12 +1,8 @@
 { stdenv
-, buildPythonPackage
-, fetchPypi
 , awscli
-, prompt_toolkit
-, boto3
-, configobj
-, pygments
 }:
+
+with awscli.python.pkgs;
 
 buildPythonPackage rec {
   pname = "aws-shell";
@@ -24,6 +20,7 @@ buildPythonPackage rec {
     boto3
     configobj
     pygments
+    pyyaml
   ];
 
   #Checks are failing due to missing TTY, which won't exist.
