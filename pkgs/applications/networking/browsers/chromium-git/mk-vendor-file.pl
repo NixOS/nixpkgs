@@ -31,24 +31,26 @@ sub checkout {
 
 sub make_vendor_file {
   my $version = shift;
+  my $topdir = "$basedir/$version";
 
   # first checkout depot_tools for gclient.py which will help to produce list of deps
-  unless (-d "$basedir/$version/depot_tools") {
-    my $hash = checkout("https://chromium.googlesource.com/chromium/tools/depot_tools", "fcde3ba0a657dd3d5cac15ab8a1b6361e293c2fe", "$basedir/$version/depot_tools");
+  unless (-d "$topdir/depot_tools") {
+    my $hash = checkout("https://chromium.googlesource.com/chromium/tools/depot_tools", "fcde3ba0a657dd3d5cac15ab8a1b6361e293c2fe", "$topdir/depot_tools");
   }
 
   # like checkout() but do not delete .git (gclient expects it) and do not compute hash
   # this subdirectory must have "src" name for 'gclient.py' recognises it
-  my $top = getcwd();
-  unless(-d "$basedir/$version/src") {
-    make_path("$basedir/$version/src") or die "make_path($basedir/$version/src): $!";
-    chdir("$basedir/$version/src");
+  my $old = getcwd();
+  unless (-d "$topdir/src") {
+    make_path("$topdir/src") or die "make_path($topdir/src): $!";
+    chdir("$topdir/src");
     system("git init"                                                                    ) == 0 or die;
     system("git remote add origin \"https://chromium.googlesource.com/chromium/src.git\"") == 0 or die;
     system("git fetch --progress --depth 1 origin \"+$version\""                         ) == 0 or die;
     system("git checkout FETCH_HEAD"                                                     ) == 0 or die;
   } else {
-    chdir("$basedir/$version/src");
+    # restore $topdir into virgin state
+    chdir("$topdir/src");
     if (read_file(".git/FETCH_HEAD") =~ /tag '\Q$version\E' of/) {
       print("already at $version\n");
     } else {
@@ -57,19 +59,19 @@ sub make_vendor_file {
       system("git checkout FETCH_HEAD"                                                   ) == 0 or die;
     }
     # and remove all symlinks to subprojects, so their DEPS files won;t be included
-    system("find . -name .gitignore -exec rm {} \\;"                                     ) == 0 or die;
+    system("find . -name .gitignore -delete"                                             ) == 0 or die;
     system("git status -u -s | grep -v '^ D ' | cut -c4- | xargs --delimiter='\\n' rm"   );
     system("git checkout -f HEAD"                                                        ) == 0 or die;
   }
-  chdir($top);
+  chdir($old);
 
 
   my $need_another_iteration;
   my %deps;
   do {
     $need_another_iteration = 0;
-    my $top = getcwd();
-    chdir("$basedir/$version");
+    my $old = getcwd();
+    chdir($topdir);
 
     # flatten fail because of duplicate valiable names, so rename them
     if (-f 'src/third_party/angle/buildtools/DEPS') {
@@ -101,11 +103,11 @@ sub make_vendor_file {
         }
         if ($path ne 'src') {
           die "$basedir/$rev does not exist" unless -d "$basedir/$rev";
-          if (-e "$basedir/$version/$path") { # do not let `symtree_link` to do merge
-            remove_tree("$basedir/$version/$path") or die "remove_tree($basedir/$version/$path): $!";
+          if (-e "$topdir/$path") { # do not let `symtree_link` to do merge
+            remove_tree("$topdir/$path") or die "remove_tree($topdir/$path): $!";
           }
-          make_path(dirname("$basedir/$version/$path")) or die unless -e dirname("$basedir/$version/$path");
-          system("cp -al $basedir/$rev $basedir/$version/$path") == 0 or die;
+          make_path(dirname("$topdir/$path")) or die unless -e dirname("$topdir/$path");
+          system("cp -al $basedir/$rev $topdir/$path") == 0 or die;
         }
         if (-f "$basedir/$rev/DEPS") {  # new DEPS file appeared after checkout
           print("need_another_iteration\n");
@@ -114,7 +116,7 @@ sub make_vendor_file {
         $deps{$path} = { rev => $rev, hash => $hash, path => $path, url => $url };
       }
     }
-    chdir($top);
+    chdir($old);
   } while ($need_another_iteration);
 
   open(my $vendor_nix, ">vendor-$version.nix") or die;
@@ -127,7 +129,7 @@ sub make_vendor_file {
     printf $vendor_nix "  %-90s = fetchgit { url = %-128s; rev = \"$dep->{rev}\"; sha256 = \"$dep->{hash}\"; };\n", "\"$dep->{path}\"", "\"$dep->{url}\"";
   }
 
-  my $node_modules_sha = read_file("$basedir/$version/src/third_party/node/node_modules.tar.gz.sha1"    ) =~ s|\s+$||r;
+  my $node_modules_sha = read_file("$topdir/src/third_party/node/node_modules.tar.gz.sha1"    ) =~ s|\s+$||r;
   print $vendor_nix qq[
   "src/third_party/node/node_modules"       = runCommand "download_from_google_storage" {} ''
                                                 mkdir \$out
@@ -137,7 +139,7 @@ sub make_vendor_file {
                                                          }} --strip-components=1 -C \$out
                                               '';];
 
-  my $test_fonts_sha   = read_file("$basedir/$version/src/third_party/test_fonts/test_fonts.tar.gz.sha1") =~ s|\s+$||r;
+  my $test_fonts_sha   = read_file("$topdir/src/third_party/test_fonts/test_fonts.tar.gz.sha1") =~ s|\s+$||r;
   print $vendor_nix qq[
   "src/third_party/test_fonts/test_fonts"   = runCommand "download_from_google_storage" {} ''
                                                 mkdir \$out
