@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     pushd usr
     pushd share
@@ -89,6 +90,7 @@ stdenv.mkDerivation rec {
     popd
 
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+    runHook postInstall
   '';
 
   postFixup = ''
