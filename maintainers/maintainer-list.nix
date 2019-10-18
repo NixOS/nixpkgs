@@ -4059,6 +4059,12 @@
     githubId = 427866;
     name = "Matthias Beyer";
   };
+  matthuszagh = {
+    email = "huszaghmatt@gmail.com";
+    github = "matthuszagh";
+    githubId = 7377393;
+    name = "Matt Huszagh";
+  };
   matti-kariluoma = {
     email = "matti@kariluo.ma";
     github = "matti-kariluoma";
