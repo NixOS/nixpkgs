@@ -13,15 +13,6 @@
 , withDblatex ? false, dblatex
 }:
 
-let
-
-  # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42
-  python = python3.withPackages (p: with p; [
-    pygments
-  ]);
-
-in
-
 stdenv.mkDerivation rec {
   pname = "gtk-doc";
   version = "1.32";
@@ -51,7 +42,8 @@ stdenv.mkDerivation rec {
     docbook_xsl
     libxslt
     pkgconfig
-    python
+    python3
+    python3.pkgs.pygments # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42
     libxml2Python
   ]
   ++ stdenv.lib.optional withDblatex dblatex
