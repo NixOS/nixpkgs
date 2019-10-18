@@ -6646,6 +6646,12 @@
     githubId = 1312290;
     name = "Trevor Joynson";
   };
+  tricktron = {
+    email = "tgagnaux@gmail.com";
+    github = "tricktron";
+    githubId = 16036882;
+    name = "Thibault Gagnaux";
+  };
   trino = {
     email = "muehlhans.hubert@ekodia.de";
     github = "hmuehlhans";
