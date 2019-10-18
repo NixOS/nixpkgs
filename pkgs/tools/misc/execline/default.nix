@@ -1,6 +1,6 @@
 { lib, skawarePackages
 # for execlineb-with-builtins
-, coreutils, gnugrep, writeScriptBin, runCommand
+, coreutils, gnugrep, writeScriptBin, runCommand, runCommandCC
 # Whether to wrap bin/execlineb to have the execline tools on its PATH.
 , execlineb-with-builtins ? true
 }:
@@ -43,29 +43,24 @@ let
 
     };
 
-  # a wrapper around execlineb, which provides all execline
+  # A wrapper around execlineb, which provides all execline
   # tools on `execlineb`’s PATH.
-  execlineb-with-builtins-drv =
-    let eldir = "${execline}/bin";
-    in writeScriptBin "execlineb" ''
-      #!${eldir}/execlineb -s0
-      # appends the execlineb bin dir to PATH if not yet in PATH
-      ${eldir}/define eldir ${eldir}
-      ''${eldir}/ifelse
-      {
-        # since this is nix, we can grep for the execline drv hash in PATH
-        # to see whether it’s already in there
-        ''${eldir}/pipeline
-        { ${coreutils}/bin/printenv PATH }
-        ${gnugrep}/bin/grep --quiet "${eldir}"
-      }
-      # it’s there already
-      { ''${eldir}/execlineb $@ }
-      # not there yet, add it
-      ''${eldir}/importas oldpath PATH
-      ''${eldir}/export PATH "''${eldir}:''${oldpath}"
-      ''${eldir}/execlineb $@
-    '';
+  # It is implemented as a C script, because on non-Linux,
+  # nested shebang lines are not supported.
+  execlineb-with-builtins-drv = runCommandCC "execlineb" {} ''
+    mkdir -p $out/bin
+    cc \
+      -O \
+      -Wall -Wpedantic \
+      -D 'EXECLINEB_PATH()="${execline}/bin/execlineb"' \
+      -D 'EXECLINE_BIN_PATH()="${execline}/bin"' \
+      -I "${skalibs.dev}/include" \
+      -L "${skalibs.lib}/lib" \
+      -l"skarnet" \
+      -o "$out/bin/execlineb" \
+      ${./execlineb-wrapper.c}
+  '';
+
 
   # the original execline package, with bin/execlineb overwritten
   execline-with-builtins = runCommand "my-execline"
