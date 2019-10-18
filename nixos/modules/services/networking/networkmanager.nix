@@ -23,7 +23,7 @@ let
   enableIwd = cfg.wifi.backend == "iwd";
 
   # /var/lib/misc is for dnsmasq.leases.
-  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
+  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc /var/lib/NetworkManager-fortisslvpn";
 
   configFile = pkgs.writeText "NetworkManager.conf" ''
     [main]
