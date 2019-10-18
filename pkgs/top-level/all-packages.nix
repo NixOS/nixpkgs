@@ -662,6 +662,8 @@ in
     gsl = gsl_1;
   };
 
+  atheme = callPackage ../servers/irc/atheme { };
+
   atinout = callPackage ../tools/networking/atinout { };
 
   atomicparsley = callPackage ../tools/video/atomicparsley {
