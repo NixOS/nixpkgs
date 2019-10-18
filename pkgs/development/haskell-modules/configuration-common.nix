@@ -1266,4 +1266,7 @@ self: super: {
     sha256 = "0l8zbc56dy8ilxl3k49aiknmfhgpcg3jhs72lh3dk51d0a09d9sv";
   });
 
+  # https://github.com/erikd/hjsmin/issues/32
+  hjsmin = dontCheck super.hjsmin;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
