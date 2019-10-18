@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 , glibcLocales
 , pkgconfig
@@ -25,11 +25,13 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.29.13";
+  version = "unstable-2019-10-14"; # includes python3.8 fixes
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c29d069a4a30f472482343c866f7486731ad638ef9af92bfe5fca9c7323d638e";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "70dd7561d431f248e20c2a1365111418ea494cbd";
+    sha256 = "0l7h6z46a4870hwbi4g56f5lh1x78162yy5vzjz4ddzzgm7wap6a";
   };
 
   nativeBuildInputs = [
