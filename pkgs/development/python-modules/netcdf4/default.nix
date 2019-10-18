@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   # Variables used to configure the build process
   USE_NCCONFIG="0";
-  HDF5_DIR=hdf5;
+  HDF5_DIR=hdf5.dev;
   NETCDF4_DIR=netcdf;
   CURL_DIR=curl.dev;
   JPEG_DIR=libjpeg.dev;
