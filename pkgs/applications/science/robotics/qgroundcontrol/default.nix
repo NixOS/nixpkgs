@@ -7,7 +7,7 @@
 
 mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "3.5.4";
+  version = "3.5.5";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -59,7 +59,7 @@ mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/mavlink/qgroundcontrol.git";
     rev = "v${version}";
-    sha256 = "1ja92zk2fr96r8lj2bs9498afxxhvl2sh6v6brdk3p4krjqbwl3s";
+    sha256 = "05zy6w9lwwh254wa8c6wysa67kk0flywcvipii9b1rmy47slflhs";
     fetchSubmodules = true;
   };
 
