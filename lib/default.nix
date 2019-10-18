@@ -59,7 +59,7 @@ let
       stringLength sub substring tail;
     inherit (trivial) id const concat or and bitAnd bitOr bitXor bitNot
       boolToString mergeAttrs flip mapNullable inNixShell min max
-      importJSON warn info showWarnings nixpkgsVersion version mod compare
+      importJSON warn info showWarnings nixpkgsVersion mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction;
     inherit (fixedPoints) fix fix' converge extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
