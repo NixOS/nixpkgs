@@ -88,8 +88,8 @@ let
           '';
       };
     in stdenv.mkDerivation rec {
-      name = "chromium-git-${version}";
-      inherit src;
+      pname = "chromium-git";
+      inherit version src;
 
       nativeBuildInputs = [ gn ninja python2 pkg-config jre8 gperf bison ];
       buildInputs = [
