@@ -1257,4 +1257,16 @@ self: super: {
   # https://github.com/blamario/grampa/issues/19
   rank2classes = dontCheck super.rank2classes;
 
+  nix-tools = super.nix-tools.overrideScope (self: super: {
+    # Needs https://github.com/peti/hackage-db/pull/9
+    hackage-db = super.hackage-db.overrideAttrs (old: {
+      src = pkgs.fetchFromGitHub {
+        owner = "ElvishJerricco";
+        repo = "hackage-db";
+        rev = "84ca9fc75ad45a71880e938e0d93ea4bde05f5bd";
+        sha256 = "0y3kw1hrxhsqmyx59sxba8npj4ya8dpgjljc21gkgdvdy9628q4c";
+      };
+    });
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
