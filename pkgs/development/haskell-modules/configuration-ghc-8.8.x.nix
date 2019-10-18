@@ -70,11 +70,10 @@ self: super: {
       sha256 = "1p1pinca33vd10iy7hl20c1fc99vharcgcai6z3ngqbq50k2pd3q";
     };
   };
-  vector-th-unbox = appendPatch super.vector-th-unbox (pkgs.fetchpatch {
+  vector-th-unbox = appendPatch (doJailbreak super.vector-th-unbox) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/vector-th-unbox-0.2.1.6.patch";
     sha256 = "0169yf9ms1g5mmkc5l6hpffzm34zdrqdng4df02nbdmfgba45h19";
   });
-  cabal-doctest = super.cabal-doctest_1_0_7;
   regex-base = overrideCabal (appendPatch super.regex-base (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-base-0.93.2.patch";
     sha256 = "01d1plrdx6hcspwn2h6y9pyi5366qk926vb5cl5qcl6x4m23l6y1";
@@ -85,7 +84,7 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-posix-0.95.2.patch";
     sha256 = "006yli58jpqp786zm1xlncjsilc38iv3a09r4pv94l587sdzasd2";
   });
-  haskell-src-exts = appendPatch super.haskell-src-exts (pkgs.fetchpatch {
+  haskell-src-exts = appendPatch (doJailbreak super.haskell-src-exts) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/haskell-src-exts-1.21.0.patch";
     sha256 = "0alb28hcsp774c9s73dgrajcb44vgv1xqfg2n5a9y2bpyngqscs3";
   });
@@ -122,7 +121,7 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shakespeare-2.0.20.patch";
     sha256 = "1dgx41ylahj4wk8r422aik0d7qdpawdga4gqz905nvlnhqjla58y";
   });
-  socks = appendPatch super.socks (pkgs.fetchpatch {
+  socks = appendPatch (doJailbreak super.socks) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/socks-0.6.0.patch";
     sha256 = "1dsqmx0sw62x4glh43c0sbizd2y00v5xybiqadn96v6pmfrap5cp";
   });
@@ -159,7 +158,6 @@ self: super: {
     '';
   });
   system-fileio = doJailbreak super.system-fileio;
-  yaml = self.yaml_0_11_1_2;
   haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/8be3fb8a6779d0317066d501a3b9dffdf6bb06b0/patches/haskell-src-meta-0.8.2.patch";
     sha256 = "146im1amywyl29kcldvgrxpwj22lrpzxysl7vc8rmn3hrq130dyc";
@@ -169,4 +167,9 @@ self: super: {
     sha256 = "0a3159rnaw6shjzdm46799crd4pxh33s23qy51xa7z6nv5q8wsb5";
   });
   tls = self.tls_1_5_1;
+  alex = appendPatch (super.alex) (pkgs.fetchpatch {
+    url = "https://github.com/simonmar/alex/commit/deaae6eddef5186bfd0e42e2c3ced39e26afa4d6.patch";
+    sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
+  });
+  connection = doJailbreak super.connection;
 }
