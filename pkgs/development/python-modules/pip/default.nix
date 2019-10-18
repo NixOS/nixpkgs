@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "19.3";
+  version = "19.3.1";
   format = "other";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "324d234b8f6124846b4e390df255cacbe09ce22791c3b714aa1ea6e44a4f2861";
+    sha256 = "21207d76c1031e517668898a6b46a9fb1501c7a4710ef5dfd6a40ad9e6757ea7";
   };
 
   nativeBuildInputs = [ bootstrapped-pip ];
