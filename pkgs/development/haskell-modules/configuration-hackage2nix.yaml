@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 14.8
+  # LTS Haskell 14.10
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -247,7 +247,7 @@ default-package-overrides:
   - butcher ==1.3.2.3
   - butter ==0.1.0.6
   - bv ==0.5
-  - bv-little ==1.1.0
+  - bv-little ==1.1.1
   - byteable ==0.1.1
   - bytedump ==1.0
   - byteorder ==1.0.4
@@ -423,7 +423,7 @@ default-package-overrides:
   - crypto-cipher-tests ==0.0.11
   - crypto-cipher-types ==0.0.9
   - cryptocompare ==0.1.1
-  - crypto-enigma ==0.1.1.5
+  - crypto-enigma ==0.1.1.6
   - cryptohash ==0.11.9
   - cryptohash-cryptoapi ==0.1.4
   - cryptohash-md5 ==0.11.100.1
@@ -625,7 +625,7 @@ default-package-overrides:
   - eventful-sqlite ==0.2.0
   - eventful-test-helpers ==0.2.0
   - event-list ==0.1.2
-  - eventstore ==1.3.2
+  - eventstore ==1.3.3
   - every ==0.0.1
   - exact-combinatorics ==0.2.0.9
   - exact-pi ==0.5.0.1
@@ -770,7 +770,7 @@ default-package-overrides:
   - ghc-compact ==0.1.0.0
   - ghc-core ==0.5.6
   - ghc-exactprint ==0.6.1
-  - ghcid ==0.7.5
+  - ghcid ==0.7.6
   - ghci-hexcalc ==0.1.1.0
   - ghcjs-codemirror ==0.0.0.2
   - ghc-lib ==8.8.0.20190424
@@ -875,7 +875,7 @@ default-package-overrides:
   - haskell-src-meta ==0.8.3
   - haskey-btree ==0.3.0.1
   - haskintex ==0.8.0.0
-  - haskoin-core ==0.9.1
+  - haskoin-core ==0.9.2
   - hasql ==1.4
   - hasql-optparse-applicative ==0.3.0.5
   - hasql-pool ==0.5.1
@@ -915,7 +915,7 @@ default-package-overrides:
   - hinfo ==0.0.3.0
   - hinotify ==0.4
   - hint ==0.9.0.2
-  - hjsmin ==0.2.0.2
+  - hjsmin ==0.2.0.3
   - hkgr ==0.2.4
   - hlibgit2 ==0.18.0.16
   - hlibsass ==0.1.8.0
@@ -1011,7 +1011,7 @@ default-package-overrides:
   - http-client ==0.6.4
   - http-client-tls ==0.3.5.3
   - http-common ==0.8.2.0
-  - http-conduit ==2.3.7.2
+  - http-conduit ==2.3.7.3
   - http-date ==0.0.8
   - http-directory ==0.1.5
   - http-download ==0.1.0.0
@@ -1028,30 +1028,30 @@ default-package-overrides:
   - hvect ==0.4.0.0
   - hvega ==0.3.0.1
   - hw-balancedparens ==0.2.0.4
-  - hw-bits ==0.7.0.7
-  - hw-conduit ==0.2.0.5
+  - hw-bits ==0.7.0.8
+  - hw-conduit ==0.2.0.6
   - hw-conduit-merges ==0.2.0.0
   - hw-diagnostics ==0.0.0.7
   - hw-dsv ==0.3.5
   - hweblib ==0.6.3
   - hw-eliasfano ==0.1.1.0
-  - hw-excess ==0.2.2.0
-  - hw-fingertree ==0.1.1.0
-  - hw-fingertree-strict ==0.1.1.2
-  - hw-hedgehog ==0.1.0.3
-  - hw-hspec-hedgehog ==0.1.0.8
-  - hw-int ==0.0.0.3
-  - hw-ip ==2.3.4.1
+  - hw-excess ==0.2.2.1
+  - hw-fingertree ==0.1.1.1
+  - hw-fingertree-strict ==0.1.1.3
+  - hw-hedgehog ==0.1.0.5
+  - hw-hspec-hedgehog ==0.1.0.9
+  - hw-int ==0.0.0.4
+  - hw-ip ==2.3.4.2
   - hw-json ==1.0.0.2
-  - hw-json-simd ==0.1.0.3
-  - hw-mquery ==0.2.0.1
+  - hw-json-simd ==0.1.0.4
+  - hw-mquery ==0.2.0.2
   - hw-packed-vector ==0.0.0.3
-  - hw-parser ==0.1.0.1
-  - hw-prim ==0.6.2.35
+  - hw-parser ==0.1.0.2
+  - hw-prim ==0.6.2.36
   - hw-rankselect ==0.13.0.0
-  - hw-rankselect-base ==0.3.2.1
-  - hw-simd ==0.1.1.4
-  - hw-streams ==0.0.0.10
+  - hw-rankselect-base ==0.3.2.3
+  - hw-simd ==0.1.1.5
+  - hw-streams ==0.0.0.12
   - hw-string-parse ==0.0.0.4
   - hw-succinct ==0.1.0.1
   - hxt ==9.3.1.18
@@ -1080,7 +1080,7 @@ default-package-overrides:
   - Imlib ==0.1.2
   - immortal ==0.3
   - include-file ==0.1.0.4
-  - incremental-parser ==0.3.2.2
+  - incremental-parser ==0.3.3
   - indentation-core ==0.0.0.2
   - indentation-parsec ==0.0.0.2
   - indents ==0.5.0.1
@@ -1103,7 +1103,7 @@ default-package-overrides:
   - integration ==0.2.1
   - intern ==0.9.2
   - interpolate ==0.2.0
-  - interpolatedstring-perl6 ==1.0.1
+  - interpolatedstring-perl6 ==1.0.2
   - interpolatedstring-qq2 ==0.1.0.0
   - interpolation ==0.1.1.1
   - interpolator ==1.0.0
@@ -1283,7 +1283,7 @@ default-package-overrides:
   - massiv-test ==0.1.1
   - mathexpr ==0.3.0.0
   - math-functions ==0.3.3.0
-  - matplotlib ==0.7.4
+  - matplotlib ==0.7.5
   - matrices ==0.5.0
   - matrix ==0.3.6.1
   - matrix-market-attoparsec ==0.1.0.8
@@ -1517,7 +1517,7 @@ default-package-overrides:
   - pantry ==0.1.1.2
   - parallel ==3.2.2.0
   - parallel-io ==0.3.3
-  - paripari ==0.6.0.0
+  - paripari ==0.6.0.1
   - parseargs ==0.2.0.9
   - parsec ==3.1.14.0
   - parsec-class ==1.0.0.0
@@ -1554,7 +1554,7 @@ default-package-overrides:
   - percent-format ==0.0.1
   - peregrin ==0.3.0
   - perfect-hash-generator ==0.2.0.6
-  - persist ==0.1.1.3
+  - persist ==0.1.1.4
   - persistable-record ==0.6.0.4
   - persistable-types-HDBC-pg ==0.0.3.5
   - persistent ==2.9.2
@@ -1716,7 +1716,7 @@ default-package-overrides:
   - Ranged-sets ==0.4.0
   - range-set-list ==0.1.3.1
   - rank1dynamic ==0.4.0
-  - rank2classes ==1.3.1
+  - rank2classes ==1.3.1.1
   - Rasterific ==0.7.4.4
   - rasterific-svg ==0.3.3.2
   - ratel ==1.0.8
@@ -1733,7 +1733,7 @@ default-package-overrides:
   - read-editor ==0.1.0.2
   - read-env-var ==1.0.0.0
   - reanimate ==0.1.8.0
-  - reanimate-svg ==0.9.3.0
+  - reanimate-svg ==0.9.3.1
   - rebase ==1.3.1.1
   - record-dot-preprocessor ==0.2
   - record-hasfield ==1.0
@@ -1769,8 +1769,6 @@ default-package-overrides:
   - repa ==3.4.1.4
   - repa-algorithms ==3.4.1.3
   - repa-io ==3.4.1.1
-  - replace-attoparsec ==1.0.2.0
-  - replace-megaparsec ==1.1.4.0
   - repline ==0.2.1.0
   - req ==2.1.0
   - req-conduit ==1.0.0
@@ -1781,7 +1779,7 @@ default-package-overrides:
   - resourcet ==1.2.2
   - result ==0.2.6.0
   - rethinkdb-client-driver ==0.0.25
-  - retry ==0.8.0.2
+  - retry ==0.8.1.0
   - rev-state ==0.1.2
   - rfc1751 ==0.1.2
   - rfc5051 ==0.1.0.4
@@ -1883,14 +1881,13 @@ default-package-overrides:
   - servant-mock ==0.8.5
   - servant-multipart ==0.11.4
   - servant-pipes ==0.15.1
-  - servant-rawm ==0.3.2.0
   - servant-ruby ==0.9.0.0
   - servant-server ==0.16.2
   - servant-static-th ==0.2.2.1
   - servant-swagger ==1.1.7.1
-  - servant-swagger-ui ==0.3.4.3.22.2
+  - servant-swagger-ui ==0.3.4.3.23.11
   - servant-swagger-ui-core ==0.3.3
-  - servant-swagger-ui-redoc ==0.3.3.1.22.2
+  - servant-swagger-ui-redoc ==0.3.3.1.22.3
   - servant-tracing ==0.1.0.2
   - servant-xml ==1.0.1.4
   - servant-yaml ==0.1.0.1
@@ -1905,7 +1902,7 @@ default-package-overrides:
   - sexpr-parser ==0.1.1.2
   - SHA ==1.6.4.4
   - shake-language-c ==0.12.0
-  - shakespeare ==2.0.21
+  - shakespeare ==2.0.22
   - shared-memory ==0.2.0.0
   - shell-conduit ==4.7.0
   - shell-escape ==0.2.0
@@ -2208,7 +2205,7 @@ default-package-overrides:
   - TypeCompose ==0.9.14
   - typed-process ==0.2.6.0
   - type-errors ==0.2.0.0
-  - type-errors-pretty ==0.0.0.0
+  - type-errors-pretty ==0.0.1.0
   - type-fun ==0.1.1
   - type-hint ==0.1
   - type-level-integers ==0.0.1
@@ -2267,7 +2264,7 @@ default-package-overrides:
   - unordered-containers ==0.2.10.0
   - unordered-intmap ==0.1.1
   - unsafe ==0.0
-  - uri-bytestring ==0.3.2.1
+  - uri-bytestring ==0.3.2.2
   - uri-bytestring-aeson ==0.1.0.7
   - uri-encode ==1.5.0.5
   - uri-templater ==0.3.1.0
@@ -2448,7 +2445,7 @@ default-package-overrides:
   - yesod-recaptcha2 ==0.3.0
   - yesod-sitemap ==1.6.0
   - yesod-static ==1.6.0.1
-  - yesod-test ==1.6.6.2
+  - yesod-test ==1.6.7
   - yesod-text-markdown ==0.1.10
   - yesod-websockets ==0.3.0.2
   - yes-precure5-command ==5.5.3
@@ -2584,6 +2581,8 @@ package-maintainers:
     - shakespeare
   abbradar:
     - Agda
+  roberth:
+    - arion-compose
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
@@ -2972,7 +2971,6 @@ broken-packages:
   - arguedit
   - ariadne
   - arion
-  - arion-compose
   - arith-encode
   - armada
   - armor
@@ -5693,6 +5691,9 @@ broken-packages:
   - hgen
   - hgeometric
   - hgeometry
+  - hgeometry-combinatorial
+  - hgeometry-ipe
+  - hgeometry-svg
   - hgeos
   - hgettext
   - hgis
@@ -6942,7 +6943,6 @@ broken-packages:
   - ls-usb
   - lscabal
   - LslPlus
-  - lsp-test
   - lsystem
   - ltext
   - ltk
@@ -10221,6 +10221,7 @@ broken-packages:
   - yaya-hedgehog
   - yaya-unsafe
   - ycextra
+  - yeamer
   - yeller
   - yeshql-postgresql-simple
   - yesod-angular

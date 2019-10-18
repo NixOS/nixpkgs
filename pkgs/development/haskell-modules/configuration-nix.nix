@@ -444,6 +444,14 @@ self: super: builtins.intersectAttrs super {
                             [ pkgs.darwin.apple_sdk.frameworks.OpenCL ];
   });
 
+  # depends on 'hie' executable
+  lsp-test = dontCheck super.lsp-test;
+
+  # tests depend on executable
+  ghcide = overrideCabal super.ghcide (drv: {
+    preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
+  });
+
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
   # depend on freeglut, which provides GHC to necessary information to generate a correct RPATH.
