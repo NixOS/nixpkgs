@@ -52,9 +52,9 @@
 
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	@FRidh
-/pkgs/top-level/python-packages.nix     @FRidh
+/pkgs/top-level/python-packages.nix     @FRidh @jonringer
 /pkgs/development/interpreters/python   @FRidh
-/pkgs/development/python-modules        @FRidh
+/pkgs/development/python-modules        @FRidh @jonringer
 /doc/languages-frameworks/python.section.md     @FRidh
 
 # Haskell
