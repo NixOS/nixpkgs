@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
+{ lib, fetchPypi, buildPythonPackage, isPy3k, isPy35
 , mock
 , pysqlite
 , pytest
@@ -22,7 +22,9 @@ buildPythonPackage rec {
     sed -e 's:--max-worker-restart=5::g' -i setup.cfg
   '';
 
-  checkPhase = ''
+  checkPhase = if isPy35 then ''
+    pytest test -k 'not exception_persistent_flush_py3k'
+  '' else ''
     pytest test
   '';
 

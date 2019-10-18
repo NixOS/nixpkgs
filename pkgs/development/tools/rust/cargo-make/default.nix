@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.22.2";
+  version = "0.23.0";
 
   src =
     let
@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
         owner = "sagiegurari";
         repo = pname;
         rev = version;
-        sha256 = "17q6lcrn9xwgy20vvv7m3wxnf85k334751iksk89h9l1s2d36bcl";
+        sha256 = "1g62k0g9b5m8jaxxkbx0d59k8yb3di59l3p9m32hx617rn4k5wjd";
       };
     in
     runCommand "cargo-make-src" {} ''
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     description = "A Rust task runner and build tool";
     homepage = "https://github.com/sagiegurari/cargo-make";
     license = licenses.asl20;
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [ xrelkd ma27 ];
     platforms = platforms.all;
   };
 }

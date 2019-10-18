@@ -6,6 +6,7 @@
 , google_cloud_core
 , pytest
 , mock
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,8 +18,13 @@ buildPythonPackage rec {
     sha256 = "23e3d09f44f86128b754518c81492fac673ea39f7230356c126140f877c231c8";
   };
 
+  propagatedBuildInputs = [
+    google_resumable_media
+    google_api_core
+    google_cloud_core
+    setuptools
+  ];
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_resumable_media google_api_core google_cloud_core ];
 
   checkPhase = ''
    pytest tests/unit

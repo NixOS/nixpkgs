@@ -163,6 +163,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  aioredis = callPackage ../development/python-modules/aioredis { };
+
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
   ansi2html = callPackage ../development/python-modules/ansi2html { };
@@ -470,6 +472,8 @@ in {
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
 
   chalice = callPackage ../development/python-modules/chalice { };
+
+  channels-redis = callPackage ../development/python-modules/channels-redis { };
 
   cleo = callPackage ../development/python-modules/cleo { };
 
@@ -1085,6 +1089,8 @@ in {
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
+
+  pytmx = callPackage ../development/python-modules/pytmx { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
 
@@ -2909,9 +2915,13 @@ in {
 
   django_appconf = callPackage ../development/python-modules/django_appconf { };
 
+  django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap { };
+
   django_colorful = callPackage ../development/python-modules/django_colorful { };
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
+
+  django-cleanup = callPackage ../development/python-modules/django-cleanup { };
 
   django-configurations = callPackage ../development/python-modules/django-configurations { };
 
@@ -2927,11 +2937,15 @@ in {
 
   django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
+  django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
+
   django_environ = callPackage ../development/python-modules/django_environ { };
 
   django_evolution = callPackage ../development/python-modules/django_evolution { };
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
+
+  django-filter = callPackage ../development/python-modules/django-filter { };
 
   django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
 
@@ -2945,6 +2959,8 @@ in {
 
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
+  django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
+
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
   django-picklefield = callPackage ../development/python-modules/django-picklefield { };
@@ -2954,6 +2970,10 @@ in {
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
   django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
+
+  django-storages = callPackage ../development/python-modules/django-storages { };
+
+  django-versatileimagefield = callPackage ../development/python-modules/django-versatileimagefield  { };
 
   django-sites = callPackage ../development/python-modules/django-sites { };
 
@@ -3421,6 +3441,8 @@ in {
 
   hetzner = callPackage ../development/python-modules/hetzner { };
 
+  hiredis = callPackage ../development/python-modules/hiredis { };
+
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
@@ -3879,6 +3901,8 @@ in {
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
 
   neuronpy = callPackage ../development/python-modules/neuronpy { };
+
+  persisting-theory = callPackage ../development/python-modules/persisting-theory { };
 
   pint = callPackage ../development/python-modules/pint { };
 
@@ -4484,6 +4508,8 @@ in {
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 
+  pymemoize = callPackage ../development/python-modules/pymemoize { };
+
   pyobjc = if stdenv.isDarwin
     then callPackage ../development/python-modules/pyobjc {}
     else throw "pyobjc can only be built on Mac OS";
@@ -4775,6 +4801,8 @@ in {
 
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
+  requests-http-signature = callPackage ../development/python-modules/requests-http-signature { };
+
   resampy = callPackage ../development/python-modules/resampy { };
 
   restructuredtext_lint = callPackage ../development/python-modules/restructuredtext_lint { };
@@ -5002,6 +5030,8 @@ in {
   tabulate = callPackage ../development/python-modules/tabulate { };
 
   tadasets = callPackage ../development/python-modules/tadasets { };
+
+  tasklib = callPackage ../development/python-modules/tasklib { };
 
   tempita = callPackage ../development/python-modules/tempita { };
 
@@ -5440,6 +5470,8 @@ in {
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
+
+  unicode-slugify = callPackage ../development/python-modules/unicode-slugify { };
 
   unidiff = callPackage ../development/python-modules/unidiff { };
 

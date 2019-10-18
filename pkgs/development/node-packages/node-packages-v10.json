@@ -10,8 +10,6 @@
 , "@webassemblyjs/wast-refmt"
 , "alloy"
 , "asar"
-, "azure-cli"
-, "azure-functions-core-tools"
 , "bash-language-server"
 , "bower"
 , "bower2nix"

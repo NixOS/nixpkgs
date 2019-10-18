@@ -211,12 +211,6 @@ let
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
 
-    doc-ock =  callPackage ../development/ocaml-modules/doc-ock { };
-
-    doc-ock-html =  callPackage ../development/ocaml-modules/doc-ock-html { };
-
-    doc-ock-xml =  callPackage ../development/ocaml-modules/doc-ock-xml { };
-
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -748,6 +742,8 @@ let
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
+
+    spelll = callPackage ../development/ocaml-modules/spelll { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 

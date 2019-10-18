@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, libtool
-, boost, capnproto, cctz, clang-unwrapped, double-conversion, gperftools, icu
-, libcpuid, libxml2, lld, llvm, lz4 , libmysqlclient, openssl, poco, re2, rdkafka
-, readline, sparsehash, unixODBC, zstd, ninja, jemalloc, brotli, protobuf, xxHash
+{ stdenv, fetchFromGitHub, cmake, libtool, ninja
+, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion, gperftools
+, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl
+, poco, protobuf, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
+, xxHash, zstd
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake libtool ninja ];
   buildInputs = [
-    boost capnproto cctz clang-unwrapped double-conversion gperftools icu
-    libcpuid libxml2 lld llvm lz4 libmysqlclient openssl poco re2 rdkafka
-    readline sparsehash unixODBC zstd jemalloc brotli protobuf xxHash
+    boost brotli capnproto cctz clang-unwrapped double-conversion gperftools
+    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl
+    poco protobuf rapidjson re2 rdkafka readline sparsehash unixODBC
+    xxHash zstd
   ];
 
   cmakeFlags = [
