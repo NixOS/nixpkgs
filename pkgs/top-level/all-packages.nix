@@ -10160,6 +10160,8 @@ in
 
   snakemake = callPackage ../applications/science/misc/snakemake { python = python3Packages; };
 
+  snore = callPackage ../tools/misc/snore { };
+
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
   sparse = callPackage ../development/tools/analysis/sparse { };
