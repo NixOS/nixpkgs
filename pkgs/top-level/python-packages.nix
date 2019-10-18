@@ -4788,6 +4788,8 @@ in {
 
   geoalchemy2 = callPackage ../development/python-modules/geoalchemy2 { };
 
+  geographiclib = callPackage ../development/python-modules/geographiclib { };
+
   geopy = callPackage ../development/python-modules/geopy { };
 
   django-haystack = callPackage ../development/python-modules/django-haystack { };
