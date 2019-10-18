@@ -20,13 +20,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "pip";
-  version = "19.3";
+  version = "19.3.1";
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
-    sha256 = "e100a7eccf085f0720b4478d3bb838e1c179b1e128ec01c0403f84e86e0e2dfb";
+    sha256 = "6917c65fc3769ecdc61405d3dfd97afdedd75808d200b2838d7d961cebc0c2c7";
   };
 
   dontUseSetuptoolsBuild = true;
