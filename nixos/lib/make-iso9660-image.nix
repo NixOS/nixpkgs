@@ -12,7 +12,7 @@
 , # In addition to `contents', the closure of the store paths listed
   # in `storeContents' are also placed in the Nix store of the CD.
   # This is a list of attribute sets {object, symlink} where `object'
-  # if a store path whose closure will be copied, and `symlink' is a
+  # is a store path whose closure will be copied, and `symlink' is a
   # symlink to `object' that will be added to the CD.
   storeContents ? []
 
