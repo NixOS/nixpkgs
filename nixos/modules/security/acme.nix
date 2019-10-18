@@ -203,6 +203,11 @@ in
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];
                   wants = [ "network-online.target" ];
+                  # simp_le uses requests, which uses certifi under the hood,
+                  # which doesn't respect the system trust store.
+                  # At least in the acme test, we provision a fake CA, impersonating the LE endpoint.
+                  # REQUESTS_CA_BUNDLE is a way to teach python requests to use something else
+                  environment.REQUESTS_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
                   serviceConfig = {
                     Type = "oneshot";
                     SuccessExitStatus = [ "0" "1" ];

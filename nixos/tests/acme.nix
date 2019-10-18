@@ -80,7 +80,7 @@ in import ./make-test.nix {
     client = commonConfig;
   };
 
-  testScript = {nodes, ...}: 
+  testScript = {nodes, ...}:
     let
       newServerSystem = nodes.webserver2.config.system.build.toplevel;
       switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
@@ -91,9 +91,12 @@ in import ./make-test.nix {
     # get pulled in by the oneshot units. The target units linger after activation, and hence we
     # can use them to probe that a oneshot fired. It is a bit ugly, but it is the best we can do
     ''
-      $client->waitForUnit("default.target");
+      $client->start;
+      $letsencrypt->start;
+      $acmeStandalone->start;
+
       $letsencrypt->waitForUnit("default.target");
-      $letsencrypt->waitForUnit("boulder.service");
+      $letsencrypt->waitForUnit("pebble.service");
 
       subtest "can request certificate with HTTPS-01 challenge", sub {
         $acmeStandalone->waitForUnit("default.target");
@@ -101,15 +104,20 @@ in import ./make-test.nix {
         $acmeStandalone->waitForUnit("acme-finished-standalone.com.target");
       };
 
+      $client->waitForUnit("default.target");
+
+      $client->succeed('curl https://acme-v02.api.letsencrypt.org:15000/roots/0 > /tmp/ca.crt');
+      $client->succeed('curl https://acme-v02.api.letsencrypt.org:15000/intermediate-keys/0 >> /tmp/ca.crt');
+
       subtest "Can request certificate for nginx service", sub {
         $webserver->waitForUnit("acme-finished-a.example.com.target");
-        $client->succeed('curl https://a.example.com/ | grep -qF "hello world"');
+        $client->succeed('curl --cacert /tmp/ca.crt https://a.example.com/ | grep -qF "hello world"');
       };
 
       subtest "Can add another certificate for nginx service", sub {
         $webserver->succeed("/run/current-system/fine-tune/child-1/bin/switch-to-configuration test");
         $webserver->waitForUnit("acme-finished-b.example.com.target");
-        $client->succeed('curl https://b.example.com/ | grep -qF "hello world"');
+        $client->succeed('curl --cacert /tmp/ca.crt https://b.example.com/ | grep -qF "hello world"');
       };
     '';
 }
