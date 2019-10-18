@@ -1284,4 +1284,7 @@ self: super: {
   # 1.5.0 should be fixed, so this should be able to be removed.
   universum = dontCheck super.universum;
 
+  # https://github.com/erikd/hjsmin/issues/32
+  hjsmin = dontCheck super.hjsmin;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
