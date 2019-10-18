@@ -110,7 +110,8 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    sassc
+    # Disable until https://github.com/sass/libsass/issues/3006 is fixed
+    # sassc
     setupHooks
   ];
 
