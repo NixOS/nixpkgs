@@ -700,8 +700,6 @@ in
 
   iamy = callPackage ../tools/admin/iamy { };
 
-  azure-cli = nodePackages_10_x.azure-cli;
-
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
@@ -4371,6 +4369,8 @@ in
 
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
+  matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
+
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
@@ -5711,7 +5711,7 @@ in
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
-  pwndbg = python3Packages.callPackage ../development/tools/misc/pwndbg { };
+  pwndbg = callPackage ../development/tools/misc/pwndbg { };
 
   pycangjie = pythonPackages.pycangjie;
 
@@ -6885,6 +6885,10 @@ in
   wasm-strip = nodePackages."@webassemblyjs/wasm-strip";
   wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen";
   wast-refmt = nodePackages."@webassemblyjs/wast-refmt";
+
+  wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   welkin = callPackage ../tools/graphics/welkin {};
 

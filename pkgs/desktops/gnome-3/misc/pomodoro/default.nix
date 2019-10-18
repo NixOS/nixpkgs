@@ -22,14 +22,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-pomodoro-unstable";
-  version = "2019-09-15";
+  pname = "gnome-shell-pomodoro";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "codito";
     repo = "gnome-pomodoro";
-    rev = "cb1ad32587c209d3322cd1bbc139efa624a4436f";
-    sha256 = "1zp3z043zzkkn2305s55hnpf9bdzirlzljpzswfh1fj6j4dqlb9k";
+    rev = version;
+    sha256 = "1bjsjkbms9irn7nkzi0hmgr5vwcgh9xzr5vw4sk2n711wj5d96bi";
   };
 
   nativeBuildInputs = [
