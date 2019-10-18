@@ -43,7 +43,7 @@ let
         description = "Tool for building, changing, and versioning infrastructure";
         homepage = https://www.terraform.io/;
         license = licenses.mpl20;
-        maintainers = with maintainers; [ zimbatm peterhoeg kalbasit ];
+        maintainers = with maintainers; [ zimbatm peterhoeg kalbasit marsam ];
       };
     } // attrs');
 
