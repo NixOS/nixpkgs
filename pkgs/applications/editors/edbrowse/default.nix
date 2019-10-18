@@ -1,10 +1,38 @@
-{ stdenv, fetchFromGitHub, fetchpatch, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
+{ stdenv, buildPackages, fetchFromGitHub, fetchpatch
+, curl, duktape, html-tidy, openssl, pcre, perl, readline
+, odbcSupport ? true
+, unixODBC ? null
+}:
+
+let
+  inherit (stdenv) lib;
+in
 
 stdenv.mkDerivation rec {
   pname = "edbrowse";
   version = "3.7.4";
 
-  buildInputs = [ curl pcre readline openssl duktape perl html-tidy ];
+  src = fetchFromGitHub {
+    owner = "CMB";
+    repo = "edbrowse";
+    rev = "v${version}";
+    sha256 = "0i9ivyfy1dd16c89f392kwx6wxgkkpyq2hl32jhzra0fb0zyl0k6";
+  };
+
+  nativeBuildInputs = [
+    buildPackages.cmake
+  ];
+  buildInputs = [
+    curl
+    duktape
+    html-tidy
+    openssl
+    pcre
+    perl
+    readline
+  ] ++ lib.optional odbcSupport [
+    unixODBC
+  ];
 
   patches = [
     # Fix build against recent libcurl
@@ -15,21 +43,15 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for i in ./tools/*.pl
-    do
-      substituteInPlace $i --replace "/usr/bin/perl" "${perl}/bin/perl"
-    done
+    substituteInPlace CMakeLists.txt \
+      --replace 'Dir "/usr/' 'Dir "'
   '';
 
-  makeFlags = "-C src prefix=$(out)";
+  configureFlags = lib.optional odbcSupport [ "-DBUILD_EDBR_ODBC" ];
 
-  src = fetchFromGitHub {
-    owner = "CMB";
-    repo = "edbrowse";
-    rev = "v${version}";
-    sha256 = "0i9ivyfy1dd16c89f392kwx6wxgkkpyq2hl32jhzra0fb0zyl0k6";
-  };
-  meta = with stdenv.lib; {
+  makeFlags = [ "prefix=$(out)" ];
+
+  meta = {
     description = "Command Line Editor Browser";
     longDescription = ''
       Edbrowse is a combination editor, browser, and mail client that is 100% text based.
@@ -38,9 +60,9 @@ stdenv.mkDerivation rec {
       A batch job, or cron job, can access web pages on the internet, submit forms, and send email, with no human intervention whatsoever.
       edbrowse can also tap into databases through odbc. It was primarily written by Karl Dahlke.
       '';
-    license = licenses.gpl1Plus;
+    license = lib.licenses.gpl1Plus;
     homepage = http://edbrowse.org/;
-    maintainers = [ maintainers.schmitthenner maintainers.vrthra ];
-    platforms = platforms.linux;
+    maintainers = let m = lib.maintainers; in [ m.schmitthenner m.vrthra ];
+    platforms = lib.platforms.linux;
   };
 }
