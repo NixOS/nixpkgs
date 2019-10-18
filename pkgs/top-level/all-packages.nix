@@ -10518,6 +10518,8 @@ in
   botan = callPackage ../development/libraries/botan { openssl = openssl_1_0_2; };
   botan2 = callPackage ../development/libraries/botan/2.0.nix { };
 
+  boulder = callPackage ../tools/admin/boulder { };
+
   box2d = callPackage ../development/libraries/box2d { };
 
   buddy = callPackage ../development/libraries/buddy { };
