@@ -2,13 +2,13 @@
 
 callPackage ./generic.nix (args // rec {
   pname = "freeoffice";
-  version = "970";
+  version = "971";
   edition = "2018";
   suiteName = "FreeOffice";
 
   src = fetchurl {
     url = "https://www.softmaker.net/down/softmaker-freeoffice-${version}-amd64.tgz";
-    sha256 = "1maibr4x8mksb32ixvyy2rjn4x9f51191p5fcdj5qwz32pf8h2dr";
+    sha256 = "1h36pjbpbiy4cw383cbrwh1jx2kp1ay29734zailmhifz53gj44f";
   };
 
   archive = "freeoffice${edition}.tar.lzma";

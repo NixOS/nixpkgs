@@ -24,9 +24,6 @@ let
 
   enableIwd = cfg.wifi.backend == "iwd";
 
-  # /var/lib/misc is for dnsmasq.leases.
-  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
-
   configFile = pkgs.writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
@@ -472,17 +469,24 @@ in {
 
     systemd.packages = cfg.packages;
 
+    systemd.tmpfiles.rules = [
+      "d /etc/NetworkManager/system-connections 0700 root root -"
+      "d /etc/ipsec.d 0700 root root -"
+
+      "d /var/lib/dhclient 0755 root root -"
+      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+    ];
+
     systemd.services.NetworkManager = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
 
-      preStart = ''
-        mkdir -m 700 -p /etc/NetworkManager/system-connections
-        mkdir -m 700 -p /etc/ipsec.d
-        mkdir -m 755 -p ${stateDirs}
-      '';
-
       aliases = [ "dbus-org.freedesktop.NetworkManager.service" ];
+
+      serviceConfig = {
+        StateDirectory = "NetworkManager";
+        StateDirectoryMode = 755; # not sure if this really needs to be 755
+      };
     };
 
     systemd.services.NetworkManager-wait-online = {

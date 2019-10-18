@@ -662,6 +662,8 @@ in
     gsl = gsl_1;
   };
 
+  atheme = callPackage ../servers/irc/atheme { };
+
   atinout = callPackage ../tools/networking/atinout { };
 
   atomicparsley = callPackage ../tools/video/atomicparsley {
@@ -699,8 +701,6 @@ in
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
   iamy = callPackage ../tools/admin/iamy { };
-
-  azure-cli = nodePackages_10_x.azure-cli;
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
@@ -4371,6 +4371,8 @@ in
 
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
+  matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
+
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
@@ -5711,7 +5713,7 @@ in
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
-  pwndbg = python3Packages.callPackage ../development/tools/misc/pwndbg { };
+  pwndbg = callPackage ../development/tools/misc/pwndbg { };
 
   pycangjie = pythonPackages.pycangjie;
 
@@ -6886,6 +6888,10 @@ in
   wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen";
   wast-refmt = nodePackages."@webassemblyjs/wast-refmt";
 
+  wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   welkin = callPackage ../tools/graphics/welkin {};
 
   wf-recorder = callPackage ../applications/video/wf-recorder { };
@@ -7292,6 +7298,8 @@ in
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
+
+  zsh-history = callPackage ../shells/zsh/zsh-history { };
 
   zsh-history-substring-search = callPackage ../shells/zsh/zsh-history-substring-search { };
 
@@ -8429,6 +8437,7 @@ in
   cargo-audit = callPackage ../tools/package-management/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-deps = callPackage ../tools/package-management/cargo-deps { };
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
   cargo-graph = callPackage ../tools/package-management/cargo-graph { };
@@ -8957,7 +8966,7 @@ in
   python35Packages = python35.pkgs;
   python36Packages = python36.pkgs;
   python37Packages = recurseIntoAttrs python37.pkgs;
-  python38Packages = python38.pkgs;
+  python38Packages = recurseIntoAttrs python38.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
@@ -10152,6 +10161,8 @@ in
   smc = callPackage ../tools/misc/smc { };
 
   snakemake = callPackage ../applications/science/misc/snakemake { python = python3Packages; };
+
+  snore = callPackage ../tools/misc/snore { };
 
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
