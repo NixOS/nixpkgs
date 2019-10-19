@@ -7637,7 +7637,9 @@ let
       sha256 = "1044rj3wbfmgaif2jb0k28m2aczli6ai2n5yvn6pr7zjyw16kvd2";
     };
     buildInputs = [ pkgs.gtk2 Cairo ExtUtilsDepends ExtUtilsPkgConfig Glib Pango ];
-    doCheck = !stdenv.isDarwin;
+    # https://rt.cpan.org/Public/Bug/Display.html?id=130742
+    # doCheck = !stdenv.isDarwin;
+    doCheck = false;
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
