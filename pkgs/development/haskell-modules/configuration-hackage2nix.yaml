@@ -5123,7 +5123,6 @@ broken-packages:
   - grakn
   - grammar-combinators
   - GrammarProducts
-  - grammatical-parsers
   - grapefruit-examples
   - grapefruit-frp
   - grapefruit-records
