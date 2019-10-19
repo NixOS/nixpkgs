@@ -180,10 +180,6 @@ in
               wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
             } ++ cfg.flashback.customSessions);
 
-      systemd.packages = with pkgs.gnome3; [
-        gnome-flashback
-      ];
-
       security.pam.services.gnome-screensaver = {
         enableGnomeKeyring = true;
       };
