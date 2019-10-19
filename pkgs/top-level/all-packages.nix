@@ -2201,6 +2201,10 @@ in
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
+  cdrtools = callPackage ../tools/cd-dvd/cdrtools {
+    inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
+  };
+
   mdf2iso = callPackage ../tools/cd-dvd/mdf2iso { };
 
   nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
@@ -17818,10 +17822,6 @@ in
   cdparanoiaIII = callPackage ../applications/audio/cdparanoia {
     inherit (darwin) IOKit;
     inherit (darwin.apple_sdk.frameworks) Carbon;
-  };
-
-  cdrtools = callPackage ../applications/misc/cdrtools {
-    inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
   };
 
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
