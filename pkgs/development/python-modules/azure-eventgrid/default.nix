@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A fully-managed intelligent event routing service that allows for uniform event consumption using a publish-subscribe model";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/event-grid?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Key Vault Management Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/key-vault?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };
