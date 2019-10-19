@@ -22082,7 +22082,7 @@ in
 
   arena = callPackage ../games/arena {};
 
-  arx-libertatis = callPackage ../games/arx-libertatis {
+  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis {
     stdenv = gcc6Stdenv;
   };
 
