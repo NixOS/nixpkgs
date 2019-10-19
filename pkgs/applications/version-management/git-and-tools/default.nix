@@ -24,7 +24,7 @@ let
 
   bump2version = pkgs.python37Packages.callPackage ./bump2version { };
 
-  darcsToGit = callPackage ./darcs-to-git { };
+  darcs-to-git = callPackage ./darcs-to-git { };
 
   delta = callPackage ./delta { };
 
@@ -153,9 +153,9 @@ let
 
   git2cl = callPackage ./git2cl { };
 
-  gitFastExport = callPackage ./fast-export { };
+  git-fast-export = callPackage ./fast-export { };
 
-  gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
+  git-remote-gcrypt = callPackage ./git-remote-gcrypt { };
 
   gitflow = callPackage ./gitflow { };
 
@@ -192,7 +192,7 @@ let
 
   tig = callPackage ./tig { };
 
-  topGit = callPackage ./topgit { };
+  top-git = callPackage ./topgit { };
 
   transcrypt = callPackage ./transcrypt { };
 
@@ -200,8 +200,12 @@ let
 
 } // lib.optionalAttrs (config.allowAliases or true) (with self; {
   # aliases
+  darcsToGit = darcs-to-git;
   gitAnnex = git-annex;
+  gitFastExport = git-fast-export;
+  gitRemoteGcrypt = git-remote-gcrypt;
   svn_all_fast_export = svn-all-fast-export;
+  topGit = top-git;
 });
 in
   self
