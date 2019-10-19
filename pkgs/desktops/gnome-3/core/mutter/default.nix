@@ -9,6 +9,7 @@
 , wrapGAppsHook
 , sysprof
 , desktop-file-utils
+, libcap_ng
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     # required for pkgconfig to detect mutter-clutter
     libXtst
     json-glib
+    libcap_ng
   ];
 
   nativeBuildInputs = [
@@ -55,6 +57,9 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
+    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
+    ./drop-inheritable.patch
    # TODO: submit upstream
    ./0001-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
     (substituteAll {
