@@ -27,13 +27,13 @@ in
 stdenv.mkDerivation {
   pname = "macvim";
 
-  version = "8.1.1722";
+  version = "8.1.2234";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "snapshot-157";
-    sha256 = "1gmgc4pwaqy78gj4p7iib94n7j52ir0aa03ks595h3vy1hkcwwky";
+    rev = "snapshot-161";
+    sha256 = "1hp3y85pj1icz053g627a1wp5pnwgxhk07pyd4arwcxs2103agw4";
   };
 
   enableParallelBuilding = true;
@@ -106,9 +106,6 @@ stdenv.mkDerivation {
     substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include"
 
     substituteInPlace src/MacVim/vimrc --subst-var-by CSCOPE ${cscope}/bin/cscope
-
-    # Work around weird code-signing issue
-    substituteInPlace src/auto/config.mk --replace "XCODEFLAGS''\t=" "XCODEFLAGS''\t= CODE_SIGN_IDENTITY="
   '';
 
   postInstall = ''
@@ -151,5 +148,6 @@ stdenv.mkDerivation {
     license = licenses.vim;
     maintainers = with maintainers; [ cstrahan lilyball ];
     platforms   = platforms.darwin;
+    hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
 }
