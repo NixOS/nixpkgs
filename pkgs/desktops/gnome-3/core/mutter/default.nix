@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, substituteAll, stdenv, pkgconfig, gnome3, gettext, gobject-introspection, upower, cairo
-, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
+, pango, cogl, json-glib, libstartup_notification, zenity, libcanberra-gtk3
 , ninja, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , gsettings-desktop-schemas, glib, gtk3, gnome-desktop
 , geocode-glib, pipewire, libgudev, libwacom, xwayland, meson
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # required for pkgconfig to detect mutter-clutter
     libXtst
+    json-glib
   ];
 
   nativeBuildInputs = [
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib gobject-introspection gtk3 gsettings-desktop-schemas upower
-    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
+    gnome-desktop cairo pango cogl zenity libstartup_notification
     geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
     libxkbcommon pipewire xwayland
