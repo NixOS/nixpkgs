@@ -807,6 +807,8 @@ in
 
   claws = callPackage ../tools/misc/claws { };
 
+  cloud-custodian = python3Packages.callPackage ../tools/networking/cloud-custodian  { };
+
   codespell = with python3Packages; toPythonApplication codespell;
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
