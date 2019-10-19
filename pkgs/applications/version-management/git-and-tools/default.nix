@@ -104,6 +104,8 @@ let
 
   git-machete = python3Packages.callPackage ./git-machete { };
 
+  git-my = callPackage ./git-my { };
+
   git-octopus = callPackage ./git-octopus { };
 
   git-open = callPackage ./git-open { };
