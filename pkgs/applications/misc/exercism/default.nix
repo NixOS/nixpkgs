@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "1xvxcl7j5izx5lgmjd97zd28lg2sydwgbgn2cnisz5r0d27pj3ra";
   };
 
-  modSha256 = "1p4xjm2zb2xc1qpprj5wlcc9pangbxpx16hx3nbr2caa5gdll5y8";
+  modSha256 = "0pg0hxrr6jjd03wbjn5y65x02md3h352mnm1gr6vyiv7hn4ws14m";
+
+  subPackages = [ "./exercism" ];
 
   meta = with stdenv.lib; {
    inherit (src.meta) homepage;
