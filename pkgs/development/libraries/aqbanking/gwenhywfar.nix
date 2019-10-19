@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gwenhywfar";
-  version = "4.20.0";
+  version = "5.2.0";
 
   src = fetchurl {
-    url = https://www.aquamaniac.de/rdm/attachments/download/10/gwenhywfar-4.20.0.tar.gz;
-    sha256 = "1c0g3f8jk6j693774ifslx2ds4ksabgbbalhhm9gk20kpamxm22s";
+    url = https://www.aquamaniac.de/rdm/attachments/download/256/gwenhywfar-5.2.0.tar.gz;
+    sha256 = "0ri79mfy9qr7phqbshdwanz345mk1lwl17fbrj3w7j1jma0iz3pd";
   };
 
   configureFlags = [
