@@ -40,29 +40,6 @@ let
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-appraise = callPackage ./git-appraise {};
-
-  git-fame = callPackage ./git-fame {};
-
-  git-filter-repo = callPackage ./git-filter-repo {
-    pythonPackages = python3Packages;
-  };
-
-  gita = python3Packages.callPackage ./gita {};
-
-  # The full-featured Git.
-  gitFull = gitBase.override {
-    svnSupport = true;
-    guiSupport = true;
-    sendEmailSupport = true;
-    withLibsecret = !stdenv.isDarwin;
-  };
-
-  # Git with SVN support, but without GUI.
-  gitSVN = lowPrio (appendToName "with-svn" (gitBase.override {
-    svnSupport = true;
-  }));
-
   git-annex = pkgs.haskellPackages.git-annex;
 
   git-annex-metadata-gui = libsForQt5.callPackage ./git-annex-metadata-gui {
@@ -84,6 +61,8 @@ let
 
   git-annex-utils = callPackage ./git-annex-utils { };
 
+  git-appraise = callPackage ./git-appraise {};
+
   git-bug = callPackage ./git-bug { };
 
   # support for bugzilla
@@ -100,6 +79,14 @@ let
   };
 
   git-extras = callPackage ./git-extras { };
+
+  git-fame = callPackage ./git-fame {};
+
+  git-fast-export = callPackage ./fast-export { };
+
+  git-filter-repo = callPackage ./git-filter-repo {
+    pythonPackages = python3Packages;
+  };
 
   git-gone = callPackage ./git-gone {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -127,6 +114,8 @@ let
     utillinux = if stdenv.isLinux then utillinuxMinimal else utillinux;
   };
 
+  git-remote-gcrypt = callPackage ./git-remote-gcrypt { };
+
   git-remote-hg = callPackage ./git-remote-hg { };
 
   git-reparent = callPackage ./git-reparent { };
@@ -153,9 +142,20 @@ let
 
   git2cl = callPackage ./git2cl { };
 
-  git-fast-export = callPackage ./fast-export { };
+  # The full-featured Git.
+  gitFull = gitBase.override {
+    svnSupport = true;
+    guiSupport = true;
+    sendEmailSupport = true;
+    withLibsecret = !stdenv.isDarwin;
+  };
 
-  git-remote-gcrypt = callPackage ./git-remote-gcrypt { };
+  # Git with SVN support, but without GUI.
+  gitSVN = lowPrio (appendToName "with-svn" (gitBase.override {
+    svnSupport = true;
+  }));
+
+  gita = python3Packages.callPackage ./gita {};
 
   gitflow = callPackage ./gitflow { };
 
@@ -171,22 +171,21 @@ let
 
   lefthook = callPackage ./lefthook { };
 
-  pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
-
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
+
+  pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
   qgit = qt5.callPackage ./qgit { };
 
-  stgit = callPackage ./stgit {
-  };
+  stgit = callPackage ./stgit { };
 
   subgit = callPackage ./subgit { };
+
+  svn-all-fast-export = libsForQt5.callPackage ./svn-all-fast-export { };
 
   svn2git = callPackage ./svn2git {
     git = gitSVN;
   };
-
-  svn-all-fast-export = libsForQt5.callPackage ./svn-all-fast-export { };
 
   thicket = callPackage ./thicket { };
 
