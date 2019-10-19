@@ -20005,6 +20005,12 @@ in
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
 
+  ncspot = callPackage ../applications/audio/ncspot {
+    withALSA = stdenv.isLinux;
+    withPulseAudio = config.pulseaudio or stdenv.isLinux;
+    withPortAudio = stdenv.isDarwin;
+  };
+
   ncview = callPackage ../tools/X11/ncview { } ;
 
   ne = callPackage ../applications/editors/ne { };
