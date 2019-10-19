@@ -4508,6 +4508,12 @@
     githubId = 437005;
     name = "Mikkel Christiansen";
   };
+  mschuwalow = {
+    github = "mschuwalow";
+    githubId = 16665913;
+    name = "Maxim Schuwalow";
+    email = "maxim.schuwalow@gmail.com";
+  };
   msiedlarek = {
     email = "mikolaj@siedlarek.pl";
     github = "msiedlarek";
