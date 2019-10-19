@@ -2,12 +2,12 @@
 , pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  version = "3.34.0";
+  version = "3.34.1";
   pname = "gpaste";
 
   src = fetchurl {
     url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "0mih07b3mb0m1bk8ng9175fgvdbmvsacl4v4kvdnnlnql6rh47gv";
+    sha256 = "1vqa1r7niyfjrxlnd4jb4vx6n9jd2260g1scnjalrl0xrnpbsbds";
   };
 
   patches = [
