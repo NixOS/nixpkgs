@@ -18,6 +18,9 @@ buildPackage {
     "--dynlibdir=\${lib}/lib"
     "--includedir=\${dev}/include"
     "--sysdepdir=\${lib}/lib/skalibs/sysdeps"
+    # Empty the default path, which would be "/usr/bin:bin".
+    # It would be set when PATH is empty. This hurts hermeticity.
+    "--with-default-path="
   ];
 
   postInstall = ''
