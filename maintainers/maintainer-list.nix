@@ -591,6 +591,12 @@
       fingerprint = "3D2B B230 F9FA F0C5 1832  46DD 4FDC 96F1 61E7 BA8A";
     }];
   };
+  arthur = {
+    email = "me@arthur.li";
+    github = "arthurl";
+    githubId = 3965744;
+    name = "Arthur Lee";
+  };
   artuuge = {
     email = "artuuge@gmail.com";
     github = "artuuge";
