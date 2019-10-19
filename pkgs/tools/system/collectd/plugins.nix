@@ -41,6 +41,8 @@
 }:
 
 let
+  # All plugins and their dependencies.
+  # Please help complete this!
   plugins = {
     aggregation = {};
     amqp = {

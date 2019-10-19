@@ -30,6 +30,15 @@ let
     ${cfg.extraConfig}
   '';
 
+  package =
+    if cfg.buildMinimalPackage
+    then minimalPackage
+    else cfg.package;
+
+  minimalPackage = cfg.package.override {
+    enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
+  };
+
 in {
   options.services.collectd = with types; {
     enable = mkEnableOption "collectd agent";
@@ -40,7 +49,15 @@ in {
       description = ''
         Which collectd package to use.
       '';
-      type = package;
+      type = types.package;
+    };
+
+    buildMinimalPackage = mkOption {
+      default = false;
+      description = ''
+        Build a minimal collectd package with only the configured `services.collectd.plugins`
+      '';
+      type = types.bool;
     };
 
     user = mkOption {
@@ -105,7 +122,7 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/sbin/collectd -C ${conf} -f";
+        ExecStart = "${package}/sbin/collectd -C ${conf} -f";
         User = cfg.user;
         Restart = "on-failure";
         RestartSec = 3;
