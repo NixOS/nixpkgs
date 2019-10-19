@@ -20,6 +20,7 @@
 , libxml2
 , libapparmor, libcap_ng, numactl
 , lvm2
+, lua
 , lm_sensors
 , mongoc
 , mosquitto
@@ -139,7 +140,9 @@ let
       buildInputs = [ yajl ];
     };
     lpar = {};
-    lua = {};
+    lua = {
+      buildInputs = [ lua ];
+    };
     lvm = {};
     madwifi = {};
     match_empty_counter = {};
