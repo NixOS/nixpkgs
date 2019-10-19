@@ -77,6 +77,7 @@ in buildFHSUserEnv rec {
     libGL
 
     # Not formally in runtime but needed by some games
+    at_spi2_atk
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     libdrm
