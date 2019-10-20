@@ -817,7 +817,7 @@ in {
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
-  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
+  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman { });
 
   mailman-web = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/web.nix { });
 
