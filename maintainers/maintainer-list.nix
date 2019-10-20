@@ -6698,6 +6698,11 @@
     githubId = 483735;
     name = "Dmitry Geurkov";
   };
+  tscholak = {
+    email = "torsten.scholak@googlemail.com";
+    github = "tscholak";
+    name = "Torsten Scholak";
+  };
   tstrobel = {
     email = "4ZKTUB6TEP74PYJOPWIR013S2AV29YUBW5F9ZH2F4D5UMJUJ6S@hash.domains";
     name = "Thomas Strobel";
