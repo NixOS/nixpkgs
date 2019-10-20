@@ -233,6 +233,8 @@ let
 
     elpi = callPackage ../development/ocaml-modules/elpi { };
 
+    encore = callPackage ../development/ocaml-modules/encore { };
+
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
     eqaf = callPackage ../development/ocaml-modules/eqaf { };
