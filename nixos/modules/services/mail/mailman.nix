@@ -120,6 +120,14 @@ in {
         '';
       };
 
+      webUser = mkOption {
+        type = types.str;
+        default = config.services.httpd.user;
+        description = ''
+          User to run mailman-web as
+        '';
+      };
+
       hyperkittyBaseUrl = mkOption {
         type = types.str;
         default = "http://localhost/hyperkitty/";
@@ -197,7 +205,7 @@ in {
         ${mailmanWebExe}/bin/mailman-web compress
       '';
       serviceConfig = {
-        User = config.services.httpd.user;
+        User = cfg.webUser;
         Type = "oneshot";
         StateDirectory = "mailman-web";
         StateDirectoryMode = "0700";
@@ -221,7 +229,7 @@ in {
       wantedBy = [ "mailman.service" "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${mailmanWebExe}/bin/mailman-web qcluster";
-        User = config.services.httpd.user;
+        User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
     };
@@ -232,7 +240,7 @@ in {
       startAt = "minutely";
       serviceConfig = {
         ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs minutely";
-        User = config.services.httpd.user;
+        User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
     };
@@ -243,7 +251,7 @@ in {
       startAt = "*:00/15";
       serviceConfig = {
         ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs quarter_hourly";
-        User = config.services.httpd.user;
+        User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
     };
@@ -254,7 +262,7 @@ in {
       startAt = "hourly";
       serviceConfig = {
         ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs hourly";
-        User = config.services.httpd.user;
+        User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
     };
@@ -265,7 +273,7 @@ in {
       startAt = "daily";
       serviceConfig = {
         ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs daily";
-        User = config.services.httpd.user;
+        User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
     };
@@ -276,7 +284,7 @@ in {
       startAt = "weekly";
       serviceConfig = {
         ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs weekly";
-        User = config.services.httpd.user;
+        User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
     };
@@ -287,7 +295,7 @@ in {
       startAt = "yearly";
       serviceConfig = {
         ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs yearly";
-        User = config.services.httpd.user;
+        User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
     };
