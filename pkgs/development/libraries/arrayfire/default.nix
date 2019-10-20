@@ -7,6 +7,8 @@
 let
   version = "3.6.4";
 
+  cudaOnLinux = str: stdenv.lib.optionalString stdenv.isLinux str;
+
   clfftSource = fetchFromGitHub {
     owner = "arrayfire";
     repo = "clFFT";
@@ -41,7 +43,7 @@ in stdenv.mkDerivation {
     "-DAF_BUILD_OPENCL=OFF"
     "-DAF_BUILD_EXAMPLES=OFF"
     "-DBUILD_TESTING=OFF"
-    "-DCMAKE_LIBRARY_PATH=${cudatoolkit}/lib/stubs"
+    (cudaOnLinux "-DCMAKE_LIBRARY_PATH=${cudatoolkit}/lib/stubs")
   ];
 
   patches = [ ./no-download.patch ];
@@ -55,7 +57,7 @@ in stdenv.mkDerivation {
     cp -R --no-preserve=mode,ownership ${cl2hppSource} ./build/include/CL/cl2.hpp
   '';
 
-  preBuild = ''
+  preBuild = cudaOnLinux ''
     export CUDA_PATH="${cudatoolkit}"
   '';
 
