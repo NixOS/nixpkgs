@@ -1,35 +1,19 @@
 { stdenv, python, fetchPypi, makeWrapper, unzip, makeSetupHook
 , pipInstallHook
 , setuptoolsBuildHook
-
+, wheel, pip, setuptools
 }:
 
-let
-  wheel_source = fetchPypi {
-    pname = "wheel";
-    version = "0.33.6";
-    format = "wheel";
-    sha256 = "f4da1763d3becf2e2cd92a14a7c920f0f00eca30fdde9ea992c836685b9faf28";
-  };
-  setuptools_source = fetchPypi {
-    pname = "setuptools";
-    version = "41.4.0";
-    format = "wheel";
-    sha256 = "8d01f7ee4191d9fdcd9cc5796f75199deccb25b154eba82d44d6a042cf873670";
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pip";
-  version = "19.3.1";
+  inherit (pip) version;
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
-  src = fetchPypi {
-    inherit pname version;
-    format = "wheel";
-    sha256 = "6917c65fc3769ecdc61405d3dfd97afdedd75808d200b2838d7d961cebc0c2c7";
-  };
+  srcs = [ wheel.src pip.src setuptools.src ];
+  sourceRoot = ".";
 
   dontUseSetuptoolsBuild = true;
+  dontUsePipInstall = true;
 
   # Should be propagatedNativeBuildInputs
   propagatedBuildInputs = [
@@ -38,13 +22,6 @@ in stdenv.mkDerivation rec {
     (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
   ];
 
-  unpackPhase = ''
-    mkdir -p $out/${python.sitePackages}
-    unzip -d $out/${python.sitePackages} $src
-    unzip -d $out/${python.sitePackages} ${setuptools_source}
-    unzip -d $out/${python.sitePackages} ${wheel_source}
-  '';
-
   postPatch = ''
     mkdir -p $out/bin
   '';
@@ -52,18 +29,38 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ python ];
 
-  installPhase = ''
+  buildPhase = ":";
 
-    # install pip binary
-    echo '#!${python.interpreter}' > $out/bin/pip
-    echo 'import sys;from pip._internal import main' >> $out/bin/pip
-    echo 'sys.exit(main())' >> $out/bin/pip
-    chmod +x $out/bin/pip
+  installPhase = stdenv.lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+    export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
+  '' + ''
+    # Give folders a known name
+    mv pip* pip
+    mv setuptools* setuptools
+    mv wheel* wheel
+    # Set up PYTHONPATH. The above folders need to be on PYTHONPATH
+    # $out is where we are installing to and takes precedence
+    export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$(pwd)/wheel"
 
-    # wrap binaries with PYTHONPATH
-    for f in $out/bin/*; do
-      wrapProgram $f --prefix PYTHONPATH ":" $out/${python.sitePackages}/
-    done
+    echo "Building setuptools wheel..."
+    pushd setuptools
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    popd
+
+    echo "Building wheel wheel..."
+    pushd wheel
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    popd
+
+    echo "Building pip wheel..."
+    pushd pip
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    popd
   '';
 
+  meta = {
+    description = "Version of pip used for bootstrapping";
+    license = stdenv.lib.unique (pip.meta.license ++ setuptools.meta.license ++ wheel.meta.license);
+    homepage = pip.meta.homepage;
+  };
 }

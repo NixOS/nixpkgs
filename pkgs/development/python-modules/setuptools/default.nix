@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 , wrapPython
 , unzip
@@ -11,19 +11,40 @@
 , setuptoolsBuildHook
 }:
 
-buildPythonPackage rec {
+let
   pname = "setuptools";
   version = "41.4.0";
+
+  # Create an sdist of setuptools
+  sdist = stdenv.mkDerivation rec {
+    name = "${pname}-${version}-sdist.tar.gz";
+
+    src = fetchFromGitHub {
+      owner = "pypa";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "0asxfnsi56r81lm48ynqbfkmm3kvw2jwrlf2l9azn5w6xm30jvp5";
+      name = "${pname}-${version}-source";
+    };
+
+    buildPhase = ''
+      ${python.pythonForBuild.interpreter} bootstrap.py
+      ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
+    '';
+
+    installPhase = ''
+      echo "Moving sdist..."
+      mv dist/*.tar.gz $out
+    '';
+  };
+in buildPythonPackage rec {
+  inherit pname version;
   # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
   # Instead, we override it to remove setuptools to avoid a circular dependency.
   # The same is done for pip and the pipInstallHook.
   format = "other";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "7eae782ccf36b790c21bde7d86a4f303a441cd77036b25c559a602cf5186ce4d";
-  };
+  src = sdist;
 
   nativeBuildInputs = [
     bootstrapped-pip
