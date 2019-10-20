@@ -53,29 +53,41 @@ let
     etc_dir: /etc
     ext_dir: $etc_dir/mailman.d
     pid_file: /run/mailman/master.pid
-  '' + optionalString (cfg.hyperkittyApiKey != null) ''
+  '' + optionalString cfg.hyperkitty.enable ''
+
     [archiver.hyperkitty]
     class: mailman_hyperkitty.Archiver
     enable: yes
-    configuration: ${pkgs.writeText "mailman-hyperkitty.cfg" mailmanHyperkittyCfg}
+    configuration: /var/lib/mailman/mailman-hyperkitty.cfg
   '';
 
-  mailmanHyperkittyCfg = ''
+  mailmanHyperkittyCfg = pkgs.writeText "mailman-hyperkitty.cfg" ''
     [general]
     # This is your HyperKitty installation, preferably on the localhost. This
     # address will be used by Mailman to forward incoming emails to HyperKitty
     # for archiving. It does not need to be publicly available, in fact it's
     # better if it is not.
-    base_url: ${cfg.hyperkittyBaseUrl}
+    base_url: ${cfg.hyperkitty.baseUrl}
 
     # Shared API key, must be the identical to the value in HyperKitty's
     # settings.
-    api_key: ${cfg.hyperkittyApiKey}
+    api_key: @API_KEY@
   '';
 
 in {
 
   ###### interface
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "mailman" "hyperkittyBaseUrl" ]
+      [ "services" "mailman" "hyperkitty" "baseUrl" ])
+
+    (mkRemovedOptionModule [ "services" "mailman" "hyperkittyApiKey" ] ''
+      The Hyperkitty API key is now generated on first run, and not
+      stored in the world-readable Nix store.  To continue using
+      Hyperkitty, you must set services.mailman.hyperkitty.enable = true.
+    '')
+  ];
 
   options = {
 
@@ -128,24 +140,17 @@ in {
         '';
       };
 
-      hyperkittyBaseUrl = mkOption {
-        type = types.str;
-        default = "http://localhost/hyperkitty/";
-        description = ''
-          Where can Mailman connect to Hyperkitty's internal API, preferably on
-          localhost?
-        '';
-      };
+      hyperkitty = {
+        enable = mkEnableOption "the Hyperkitty archiver for Mailman";
 
-      hyperkittyApiKey = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          The shared secret used to authenticate Mailman's internal
-          communication with Hyperkitty. Must be set to enable support for the
-          Hyperkitty archiver. Note that this secret is going to be visible to
-          all local users in the Nix store.
-        '';
+        baseUrl = mkOption {
+          type = types.str;
+          default = "http://localhost/hyperkitty/";
+          description = ''
+            Where can Mailman connect to Hyperkitty's internal API, preferably on
+            localhost?
+          '';
+        };
       };
 
     };
@@ -187,10 +192,44 @@ in {
         ExecStop = "${mailmanExe}/bin/mailman stop";
         User = "mailman";
         Type = "forking";
-        StateDirectory = "mailman";
-        StateDirectoryMode = "0700";
         RuntimeDirectory = "mailman";
         PIDFile = "/run/mailman/master.pid";
+      };
+    };
+
+    systemd.services.mailman-secrets = {
+      description = "Generate Hyperkitty API key";
+      before = [ "mailman.service" "mailman-web.service" "hyperkitty.service" "httpd.service" "uwsgi.service" ];
+      requiredBy = [ "mailman.service" "mailman-web.service" "hyperkitty.service" "httpd.service" "uwsgi.service" ];
+      script = ''
+        mailmanDir=/var/lib/mailman
+        mailmanWebDir=/var/lib/mailman-web
+
+        mailmanCfg=$mailmanDir/mailman-hyperkitty.cfg
+        hyperkittyCfg=$mailmanWebDir/settings_local.py
+
+        [ -e $mailmanCfg -o -e $hyperkittyCfg ] && exit 0
+
+        install -m 0700 -o mailman -g nogroup -d $mailmanDir
+        install -m 0700 -o ${cfg.webUser} -g nogroup -d $mailmanWebDir
+
+        hyperkittyApiKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
+        secretKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
+
+        hyperkittyCfgTmp=$(mktemp)
+        echo "MAILMAN_ARCHIVER_KEY='$hyperkittyApiKey'" >>"$hyperkittyCfgTmp"
+        echo "SECRET_KEY='$secretKey'" >>"$hyperkittyCfgTmp"
+        chown ${cfg.webUser} "$hyperkittyCfgTmp"
+
+        mailmanCfgTmp=$(mktemp)
+        sed "s/@API_KEY@/$hyperkittyApiKey/g" ${mailmanHyperkittyCfg} >"$mailmanCfgTmp"
+        chown mailman "$mailmanCfgTmp"
+
+        mv -n "$hyperkittyCfgTmp" $hyperkittyCfg
+        mv -n "$mailmanCfgTmp" $mailmanCfg
+      '';
+      serviceConfig = {
+        Type = "oneshot";
       };
     };
 
@@ -207,8 +246,6 @@ in {
       serviceConfig = {
         User = cfg.webUser;
         Type = "oneshot";
-        StateDirectory = "mailman-web";
-        StateDirectoryMode = "0700";
         WorkingDirectory = "/var/lib/mailman-web";
       };
     };
@@ -223,7 +260,7 @@ in {
     };
 
     systemd.services.hyperkitty = {
-      enable = cfg.hyperkittyApiKey != null;
+      inherit (cfg.hyperkitty) enable;
       description = "GNU Hyperkitty QCluster Process";
       after = [ "network.target" ];
       wantedBy = [ "mailman.service" "multi-user.target" ];
@@ -235,7 +272,7 @@ in {
     };
 
     systemd.services.hyperkitty-minutely = {
-      enable = cfg.hyperkittyApiKey != null;
+      inherit (cfg.hyperkitty) enable;
       description = "Trigger minutely Hyperkitty events";
       startAt = "minutely";
       serviceConfig = {
@@ -246,7 +283,7 @@ in {
     };
 
     systemd.services.hyperkitty-quarter-hourly = {
-      enable = cfg.hyperkittyApiKey != null;
+      inherit (cfg.hyperkitty) enable;
       description = "Trigger quarter-hourly Hyperkitty events";
       startAt = "*:00/15";
       serviceConfig = {
@@ -257,7 +294,7 @@ in {
     };
 
     systemd.services.hyperkitty-hourly = {
-      enable = cfg.hyperkittyApiKey != null;
+      inherit (cfg.hyperkitty) enable;
       description = "Trigger hourly Hyperkitty events";
       startAt = "hourly";
       serviceConfig = {
@@ -268,7 +305,7 @@ in {
     };
 
     systemd.services.hyperkitty-daily = {
-      enable = cfg.hyperkittyApiKey != null;
+      inherit (cfg.hyperkitty) enable;
       description = "Trigger daily Hyperkitty events";
       startAt = "daily";
       serviceConfig = {
@@ -279,7 +316,7 @@ in {
     };
 
     systemd.services.hyperkitty-weekly = {
-      enable = cfg.hyperkittyApiKey != null;
+      inherit (cfg.hyperkitty) enable;
       description = "Trigger weekly Hyperkitty events";
       startAt = "weekly";
       serviceConfig = {
@@ -290,7 +327,7 @@ in {
     };
 
     systemd.services.hyperkitty-yearly = {
-      enable = cfg.hyperkittyApiKey != null;
+      inherit (cfg.hyperkitty) enable;
       description = "Trigger yearly Hyperkitty events";
       startAt = "yearly";
       serviceConfig = {
