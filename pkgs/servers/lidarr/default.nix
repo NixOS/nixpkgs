@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper }:
+{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "lidarr";
@@ -9,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vk1rlsb48ckdc4421a2qs0v5gy7kc4fad24dm3k14znh7llwypr";
   };
 
-  buildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -22,6 +20,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/Lidarr \
       --add-flags "$out/bin/Lidarr.exe" \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ chromaprint ]} \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
           curl sqlite libmediainfo ]}
   '';
