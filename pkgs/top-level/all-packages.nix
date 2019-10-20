@@ -6639,8 +6639,6 @@ in
 
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
-  transporter = callPackage ../applications/networking/transporter { };
-
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
   trickle = callPackage ../tools/networking/trickle {};
