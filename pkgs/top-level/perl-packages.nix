@@ -10921,6 +10921,22 @@ let
     buildInputs = [ ProcWaitStat ];
   };
 
+  MIMEEncWords = buildPerlPackage {
+    pname = "MIME-EncWords";
+    version = "1.014.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEZUMI/MIME-EncWords-1.014.3.tar.gz";
+      sha256 = "e9afb548611d4e7e6c50b7f06bbd2b1bb2808e37a810deefb537c67af5485238";
+    };
+    propagatedBuildInputs = [ MIMECharset ];
+    meta = {
+      homepage = "https://metacpan.org/pod/MIME::EncWords";
+      description = "Deal with RFC 2047 encoded words (improved)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MIMELite = buildPerlPackage {
     pname = "MIME-Lite";
     version = "3.030";
@@ -11457,6 +11473,22 @@ let
       description = "Real-time web framework";
       license = stdenv.lib.licenses.artistic2;
       maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
+  MojoliciousPluginMail = buildPerlModule {
+    pname = "Mojolicious-Plugin-Mail";
+    version = "1.5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHARIFULN/Mojolicious-Plugin-Mail-1.5.tar.gz";
+      sha256 = "56f0d341ebc3a7acf3919f5add43e98216ea1285aa0d87e7fb00c02bb0eff146";
+    };
+    propagatedBuildInputs = [ MIMEEncWords MIMELite Mojolicious ];
+    meta = {
+      homepage = "https://github.com/sharifulin/Mojolicious-Plugin-Mail";
+      description = "Mojolicious Plugin for send mail";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
