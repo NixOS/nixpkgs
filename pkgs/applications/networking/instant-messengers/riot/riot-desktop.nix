@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_5, riot-web, yarn2nix-moretea }:
+{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_5, riot-web, mkYarnPackage }:
 
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
@@ -14,7 +14,7 @@ let
     sha256 = "1xi5zg3602d7gdjxskpk2q3anpn2drrkxyirfvi9mzcfp2r05557";
   };
 
-in yarn2nix-moretea.mkYarnPackage rec {
+in mkYarnPackage rec {
   name = "riot-desktop-${version}";
   inherit version;
 
