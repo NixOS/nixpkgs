@@ -3451,6 +3451,23 @@ let
     };
   };
 
+  CryptScryptKDF = buildPerlModule {
+    pname = "Crypt-ScryptKDF";
+    version = "0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-ScryptKDF-0.010.tar.gz";
+      sha256 = "7d16ee95cce3eb54c174673a7299f4c086fba3ac85f847d0e134feed5f776017";
+    };
+    propagatedBuildInputs = [ CryptOpenSSLRandom ];
+    perlPreHook = "export LD=$CC";
+    meta = {
+      description = "Scrypt password based key derivation function";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/DCIT/perl-Crypt-ScryptKDF";
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptSmbHash = buildPerlPackage {
     pname = "Crypt-SmbHash";
     version = "0.12";
