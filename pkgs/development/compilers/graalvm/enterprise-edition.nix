@@ -3,26 +3,26 @@
 let
   graalvm8-ee = stdenv.mkDerivation rec {
     pname = "graalvm8-ee";
-    version = "19.2.0";
+    version = "19.2.1";
     srcs = [
       (requireFile {
          name   = "graalvm-ee-linux-amd64-${version}.tar.gz";
-         sha256 = "1j56lyids48zyjhxk8xl4niy8hk6qzi1aj7c55yfh62id8v6cpbw";
+         sha1   = "7b074a7f66c940d53d1e46063399dee0cd523012";
          url    = "https://www.oracle.com/technetwork/graalvm/downloads/index.html";
       })
       (requireFile {
          name   = "native-image-installable-svm-svmee-linux-amd64-${version}.jar";
-         sha256 = "07c25l27msxccqrbz4bknz0sxsl0z2k8990cdfkbrgxvhxspfnnm";
+         sha256 = "46356d73233bb0d03c9322bf4ad376f17598d20b";
          url    = "https://www.oracle.com/technetwork/graalvm/downloads/index.html";
       })
       (requireFile {
          name   = "python-installable-svm-svmee-linux-amd64-${version}.jar";
-         sha256 = "1c7kpz56w9p418li97ymixdwywscr85vhn7jkzxq71bj7ia7pxwz";
+         sha1   = "97bd21ffea9d06a02ccdd77ce7598ce9f3a38243";
          url    = "https://www.oracle.com/technetwork/graalvm/downloads/index.html";
       })
       (requireFile {
          name   = "ruby-installable-svm-svmee-linux-amd64-${version}.jar";
-         sha256 = "13jfm5qpxqxz7f5n9yyvqrv1vwigifrjwk3hssp23maski2ssys1";
+         sha1   = "3b755287536bc7986ba5a3f422d9bccbe6eeab94";
          url    = "https://www.oracle.com/technetwork/graalvm/downloads/index.html";
       })
     ];
