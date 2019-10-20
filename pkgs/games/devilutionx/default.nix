@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/diasurgical/devilutionX";
     description = "Diablo build for modern operating systems";
-    longDescription = "To make it work, it is necessary to put diabdat.mpq file in ~/.local/share/diasurgical/devilution";
+    longDescription = "In order to play this game a copy of diabdat.mpq is required. Place a copy of diabdat.mpq in ~/.local/share/diasurgical/devilution before executing the game.";
     license = licenses.unlicense;
     maintainers = [ maintainers.karolchmist ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
