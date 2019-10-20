@@ -6426,7 +6426,6 @@ in
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
-    pythonPackages = python3Packages;
    };
 
   stricat = callPackage ../tools/security/stricat { };
