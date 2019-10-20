@@ -1,10 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "exercism";
   version = "3.0.12";
-
-  goPackagePath = "github.com/exercism/cli";
 
   src = fetchFromGitHub {
     owner  = "exercism";
@@ -13,7 +11,9 @@ buildGoPackage rec {
     sha256 = "1xvxcl7j5izx5lgmjd97zd28lg2sydwgbgn2cnisz5r0d27pj3ra";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "0pg0hxrr6jjd03wbjn5y65x02md3h352mnm1gr6vyiv7hn4ws14m";
+
+  subPackages = [ "./exercism" ];
 
   meta = with stdenv.lib; {
    inherit (src.meta) homepage;

@@ -15,6 +15,11 @@ with haskellLib;
 
 self: super: {
 
+  # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
+  # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
+  # store. Testing is done upstream.
+  arion-compose = dontCheck super.arion-compose;
+
   # This used to be a core package provided by GHC, but then the compiler
   # dropped it. We define the name here to make sure that old packages which
   # depend on this library still evaluate (even though they won't compile
@@ -69,7 +74,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0v3wgx3qbillmnn3amnl568ls113y3qlyf3k7y5b9lmz22k93680";
+      sha256 = "1dawd7cxqgzv1irzgl9smzdw7b4v59k8xa5gbldkbww0ashyb8qv";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1137,11 +1142,6 @@ self: super: {
   # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
 
-  uri-bytestring = appendPatch super.uri-bytestring (pkgs.fetchpatch {
-    url = "https://github.com/Soostone/uri-bytestring/commit/e5c5602a97160a6a6304a24947e33e47c9155460.patch";
-    sha256 = "1qwy8bj6vywhp0075dza8j90zrzsm3144qz3c703s9c4n6pg3gw4";
-    });
-
   # Requires pg_ctl command during tests
   beam-postgres = overrideCabal super.beam-postgres (drv: {
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
@@ -1236,36 +1236,37 @@ self: super: {
   # The LTS-14.x version of optparse-applicative is too old.
   cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
 
-  # https://github.com/gtk2hs/gtk2hs/issues/276
-  glib = appendPatch super.glib (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/4bb428e144ef2de9390f0f2239dcc50b7fc9a259.patch;
-    sha256 = "1s72s683p2n5ri1a030zywciq0020ms64cmsy48axndp6dp9vri7";
-    stripLen = 1;
-  });
-  pango = appendPatch super.pango (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/0a6016e89ce98415bb395ca0cfafeaacf3b3fce6.patch;
-    sha256 = "1n9spriinyif4h1h9mfj9k87b80kcs39qlym5yxnxxg0yszqqcpc";
-    stripLen = 1;
-  });
-  gtk3 = appendPatch super.gtk3 (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/cc0d8e8ef9bdffc776182a1f92225750bfea8f57.patch;
-    sha256 = "175zs694d04d7jfj8xq33rizw38bc3ninr00n26jyrg39vgkmc5j";
-    stripLen = 1;
-  });
-  gio = appendPatch super.gio (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/f0f7cf524f1beaf227d8cce140abdf7c45efc8c6.patch;
-    sha256 = "1fadmibpk0q38fzp6a8ss6b1kh7v5d5mw3s9i45cd4dsg86hqb0i";
-    stripLen = 1;
-  });
-  gtk = appendPatch super.gtk (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/a09720ae8fdc2f9391ba88308312e42d091a4f88.patch;
-    sha256 = "12ja6sprzl9si51rng8s2xx66ihpm6d6p00qi5czkpkrhr0457n7";
-    stripLen = 1;
-    postFetch = "sed -i -e s,gtk.cabal-renamed,gtk.cabal, $out";
-  });
-
   # Version bounds for http-client are too strict:
   # https://github.com/bitnomial/prometheus/issues/34
   prometheus = doJailbreak super.prometheus;
+
+  # Tasty-tap tests are out-of-date with TAP format
+  # https://github.com/MichaelXavier/tasty-tap/issues/2
+  tasty-tap = appendPatch super.tasty-tap (pkgs.fetchpatch {
+    url = https://patch-diff.githubusercontent.com/raw/MichaelXavier/tasty-tap/pull/3.diff;
+    sha256 = "0l8zbc56dy8ilxl3k49aiknmfhgpcg3jhs72lh3dk51d0a09d9sv";
+  });
+
+  # The doctests in universum-1.5.0 are broken.  The doctests in versions of universum after
+  # 1.5.0 should be fixed, so this should be able to be removed.
+  universum = dontCheck super.universum;
+
+  # https://github.com/erikd/hjsmin/issues/32
+  hjsmin = dontCheck super.hjsmin;
+
+  # https://github.com/blamario/grampa/issues/19
+  rank2classes = dontCheck super.rank2classes;
+
+  nix-tools = super.nix-tools.overrideScope (self: super: {
+    # Needs https://github.com/peti/hackage-db/pull/9
+    hackage-db = super.hackage-db.overrideAttrs (old: {
+      src = pkgs.fetchFromGitHub {
+        owner = "ElvishJerricco";
+        repo = "hackage-db";
+        rev = "84ca9fc75ad45a71880e938e0d93ea4bde05f5bd";
+        sha256 = "0y3kw1hrxhsqmyx59sxba8npj4ya8dpgjljc21gkgdvdy9628q4c";
+      };
+    });
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -379,7 +379,11 @@ stdenv.mkDerivation rec {
     cp $desktopItem/share/applications"/"* $out/share/applications
     sed -i $out/share/applications/torbrowser.desktop \
         -e "s,Exec=.*,Exec=$out/bin/tor-browser," \
-        -e "s,Icon=.*,Icon=web-browser,"
+        -e "s,Icon=.*,Icon=tor-browser,"
+    for i in 16 32 48 64 128; do
+      mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps/
+      ln -s $out/share/tor-browser/browser/chrome/icons/default/default$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/tor-browser.png
+    done
 
     # Check installed apps
     echo "Checking bundled Tor ..."

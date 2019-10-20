@@ -662,6 +662,8 @@ in
     gsl = gsl_1;
   };
 
+  atheme = callPackage ../servers/irc/atheme { };
+
   atinout = callPackage ../tools/networking/atinout { };
 
   atomicparsley = callPackage ../tools/video/atomicparsley {
@@ -5486,6 +5488,8 @@ in
 
   jbig2enc = callPackage ../tools/graphics/jbig2enc { };
 
+  pdfarranger = callPackage ../applications/misc/pdfarranger { };
+
   pdfread = callPackage ../tools/graphics/pdfread {
     inherit (pythonPackages) pillow;
   };
@@ -6619,8 +6623,6 @@ in
   transifex-client = python3.pkgs.callPackage ../tools/text/transifex-client { };
 
   translate-shell = callPackage ../applications/misc/translate-shell { };
-
-  transporter = callPackage ../applications/networking/transporter { };
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
@@ -10103,6 +10105,8 @@ in
 
   sbt-extras = callPackage ../development/tools/build-managers/sbt-extras { };
 
+  scc = callPackage ../development/tools/misc/scc { };
+
   scss-lint = callPackage ../development/tools/scss-lint { };
 
   shadowenv = callPackage ../tools/misc/shadowenv {
@@ -10139,6 +10143,8 @@ in
   smc = callPackage ../tools/misc/smc { };
 
   snakemake = callPackage ../applications/science/misc/snakemake { python = python3Packages; };
+
+  snore = callPackage ../tools/misc/snore { };
 
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
@@ -10390,6 +10396,11 @@ in
   argp-standalone = callPackage ../development/libraries/argp-standalone {};
 
   armadillo = callPackage ../development/libraries/armadillo {};
+
+  arrayfire = callPackage ../development/libraries/arrayfire {
+    # fails to build with gcc >= 7
+    stdenv = gcc6Stdenv;
+  };
 
   arrow-cpp = callPackage ../development/libraries/arrow-cpp {
     gtest = gtest.override { static = true; };
@@ -13212,6 +13223,8 @@ in
 
   gnupth = callPackage ../development/libraries/pth { };
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
+
+  pstreams = callPackage ../development/libraries/pstreams {};
 
   ptlib = callPackage ../development/libraries/ptlib {};
 
@@ -19982,6 +19995,12 @@ in
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
 
+  ncspot = callPackage ../applications/audio/ncspot {
+    withALSA = stdenv.isLinux;
+    withPulseAudio = config.pulseaudio or stdenv.isLinux;
+    withPortAudio = stdenv.isDarwin;
+  };
+
   ncview = callPackage ../tools/X11/ncview { } ;
 
   ne = callPackage ../applications/editors/ne { };
@@ -22053,7 +22072,7 @@ in
 
   arena = callPackage ../games/arena {};
 
-  arx-libertatis = callPackage ../games/arx-libertatis {
+  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis {
     stdenv = gcc6Stdenv;
   };
 

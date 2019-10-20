@@ -14,15 +14,26 @@ let
 in
 with stdenv; mkDerivation rec {
   pname = "nextpnr";
-  version = "2019.09.28";
+  version = "2019.10.13";
 
-  src = fetchFromGitHub {
-    owner  = "yosyshq";
-    repo   = "nextpnr";
-    rev    = "7cd1e0495122847611b17a8d1f007d97a05b288c";
-    sha256 = "13y739l92plb22g73jf35pyh3y94b2vq0i65r9c31r2rb7fw4bbl";
-    fetchSubmodules = true;
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "nextpnr";
+      rev    = "c365dd1cabc3a4308ab9110534918623622c246b";
+      sha256 = "1344pyq9xb5y1vxsnfgr488drfjsa6ls1jck0z9hwam6vg55s10r";
+      name   = "nextpnr";
+    })
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "nextpnr-tests";
+      rev    = "8f93e7e0f897b1b5da469919c9a43ba28b623b2a";
+      sha256 = "0zpd0w49k9l7rs3wmi2v8z5s4l4lad5rprs5l83w13667himpzyc";
+      name   = "nextpnr-tests";
+    })
+  ];
+
+  sourceRoot = "nextpnr";
 
   nativeBuildInputs
      = [ cmake ]
@@ -51,11 +62,15 @@ with stdenv; mkDerivation rec {
   # but works ok. We should probably make this overrideable upstream.
   patchPhase = with builtins; ''
     substituteInPlace ./CMakeLists.txt \
-      --replace 'git log -1 --format=%h' 'echo ${substring 0 11 src.rev}'
+      --replace 'git log -1 --format=%h' 'echo ${substring 0 11 (elemAt srcs 0).rev}'
 
     # use PyPy for icestorm if enabled
     substituteInPlace ./ice40/family.cmake \
       --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
+  '';
+
+  preBuild = ''
+    ln -s ../nextpnr-tests tests
   '';
 
   doCheck = true;

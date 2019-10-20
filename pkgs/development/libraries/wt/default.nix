@@ -27,13 +27,16 @@ let
       ];
 
       cmakeFlags = [
-        "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DWT_CPP_11_MODE=-std=c++11"
-        "-DGM_PREFIX=${graphicsmagick}"
-        "-DMYSQL_PREFIX=${libmysqlclient}"
         "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
         "--no-warn-unused-cli"
-      ];
+      ]
+      ++ stdenv.lib.optionals (graphicsmagick != null) [
+        "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
+        "-DGM_PREFIX=${graphicsmagick}"
+      ]
+      ++ stdenv.lib.optional (libmysqlclient != null)
+        "-DMYSQL_PREFIX=${libmysqlclient}";
 
       meta = with stdenv.lib; {
         homepage = "https://www.webtoolkit.eu/wt";

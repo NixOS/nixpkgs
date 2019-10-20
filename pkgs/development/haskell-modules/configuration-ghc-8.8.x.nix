@@ -64,8 +64,11 @@ self: super: {
   tasty-hedgehog = doJailbreak super.tasty-hedgehog;
   test-framework = doJailbreak super.test-framework;
   th-expand-syns = doJailbreak super.th-expand-syns;
+  # TODO: remove when upstream accepts https://github.com/snapframework/io-streams-haproxy/pull/17
+  io-streams-haproxy = doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
 
   # use latest version to fix the build
+  generics-sop = self.generics-sop_0_5_0_0;
   hackage-db = self.hackage-db_2_1_0;
   lens = self.lens_4_18_1;
   memory = self.memory_0_15_0;
@@ -77,7 +80,8 @@ self: super: {
   regex-posix = self.regex-posix_0_96_0_0;
   regex-tdfa = self.regex-tdfa_1_3_0;
   shelly = self.shelly_1_9_0;
-  tls = self.tls_1_5_1;
+  sop-core = self.sop-core_0_5_0_0;
+  tls = self.tls_1_5_2;
   xmonad-contrib = self.xmonad-contrib_0_16;
 
   # These packages don't work and need patching and/or an update.
