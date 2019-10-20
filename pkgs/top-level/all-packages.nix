@@ -7904,6 +7904,9 @@ in
 
   gtk-server = callPackage ../development/interpreters/gtk-server {};
 
+  # Gleam
+  gleam = callPackage ../development/compilers/gleam {};
+
   # Haskell and GHC
 
   haskell = callPackage ./haskell-packages.nix { };
