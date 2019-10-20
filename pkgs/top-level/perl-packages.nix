@@ -15725,6 +15725,28 @@ let
     };
   };
 
+  SearchXapian = buildPerlPackage rec {
+    pname = "Search-Xapian";
+    version = "1.2.25.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-${version}.tar.gz";
+      sha256 = "0hpa8gi38j0ibq8af6dy69lm1bl5jnq76nsa69dbrzbr88l5m594";
+    };
+    patches = [
+      (fetchpatch {
+        url = "https://git.xapian.org/?p=xapian;a=patch;h=69ad652b7ad7912801e686db2da55d73f79fbf75";
+        name = "fix-automated-testing-false-negative";
+        sha256 = "1241mpyf8mgx7szyl5sxa6wl388rzph3q51mn9v4yjbm0k5l0sxr";
+        stripLen = 1;
+      })
+    ];
+    buildInputs = [ pkgs.xapian ExtUtilsMakeMaker DevelLeak ];
+    meta = {
+      description = "Perl XS frontend to the Xapian C++ search library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
     version = "4.007";
