@@ -1,4 +1,4 @@
-{ pkgs, rustPlatform, fetchFromGitHub }:
+{ pkgs, rustPlatform, fetchFromGitHub, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
@@ -12,4 +12,11 @@ rustPlatform.buildRustPackage rec {
   }}/gleam";
 
   cargoSha256 = "06dr5p5qin48d9bjai6l46xg14hvhzlwk7fykbjdv7il9z5lpc8v";
+
+  meta = with stdenv.lib; {
+    homepage = "https://gleam.run/";
+    description = "A statically typed language for the Erlang VM";
+    license = licenses.asl20;
+    maintainers = [ maintainers.nobbz ];
+  };
 }
