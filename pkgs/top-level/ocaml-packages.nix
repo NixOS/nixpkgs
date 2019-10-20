@@ -362,6 +362,8 @@ let
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+    ke = callPackage ../development/ocaml-modules/ke { };
+
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
     lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
