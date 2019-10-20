@@ -1,15 +1,25 @@
-{ stdenv, fetchurl, libusb, readline }:
+{ stdenv, fetchFromGitHub
+, cmake, pkgconfig
+, libusb, pcsclite, acsccid }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libnfc";
-  version = "1.7.1";
+  version = "2019-08-21";
 
-  src = fetchurl {
-    url = "http://dl.bintray.com/nfc-tools/sources/libnfc-1.7.1.tar.bz2";
-    sha256 = "0wj0iwwcpmpalyk61aa7yc6i4p9hgdajkrgnlswgk0vnwbc78pll";
+  src = fetchFromGitHub {
+    owner = "nfc-tools";
+    repo = "libnfc";
+    rev = "f8b28523d710c2354e1dc9094be5ebbaff494ea3";
+    sha256 = "0kpm436cw5f1344fbgni0ak89kk29z2n25d847wd84qxwqpak27q";
   };
 
-  buildInputs = [ libusb readline ];
+  buildInputs = [ libusb pcsclite acsccid ];
+
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  cmakeFlags = [
+    "-DLIBNFC_DRIVER_ACR122_PCSC=ON"
+  ];
 
   meta = with stdenv.lib; {
     description = "Open source library libnfc for Near Field Communication";
