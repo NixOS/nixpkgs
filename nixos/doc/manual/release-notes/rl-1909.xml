@@ -582,6 +582,15 @@
        change versions under the hood during the lifetime of a stable release and might include breaking changes.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       Because of the systemd upgrade,
+       some network interfaces might change their name. For details see
+       <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html#History">
+       upstream docs</link> or <link xlink:href="https://github.com/NixOS/nixpkgs/issues/71086">
+       our ticket</link>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
