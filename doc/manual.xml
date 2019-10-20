@@ -23,7 +23,6 @@
  <part>
   <title>Languages, frameworks and packages</title>
   <xi:include href="languages-frameworks/index.xml" />
-  <xi:include href="package-specific-user-notes.xml" />
   <xi:include href="package-notes.xml" />
  </part>
  <part>
