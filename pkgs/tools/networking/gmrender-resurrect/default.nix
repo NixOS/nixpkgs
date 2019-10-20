@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/hzeller/gmrender-resurrect;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.koral ];
+    maintainers = [ maintainers.koral maintainers.ashkitten ];
   };
 }
