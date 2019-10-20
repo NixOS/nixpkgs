@@ -3974,12 +3974,12 @@
     githubId = 34086;
     name = "Marc Weber";
   };
-	marenz = {
-		email = "marenz@arkom.men";
-		github = "marenz2569";
-		githubId = 12773269;
-		name = "Markus Schmidl";
-	};
+  marenz = {
+    email = "marenz@arkom.men";
+    github = "marenz2569";
+    githubId = 12773269;
+    name = "Markus Schmidl";
+  };
   markus1189 = {
     email = "markus1189@gmail.com";
     github = "markus1189";
@@ -4707,6 +4707,12 @@
     github = "nmattia";
     githubId = 6930756;
     name = "Nicolas Mattia";
+  };
+  nobbz = {
+    name = "Norbert Melzer";
+    email = "timmelzer@gmail.com";
+    github = "NobbZ";
+    githubId = 58951;
   };
   nocent = {
     email = "nocent@protonmail.ch";
