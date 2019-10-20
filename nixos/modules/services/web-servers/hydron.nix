@@ -1,22 +1,36 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (lib) generators literalExample mkEnableOption mkIf mkOption recursiveUpdate types;
   cfg = config.services.hydron;
+  dataDir = "/var/lib/hydron";
+  configFile = pkgs.writeText "db_conf.json" (generators.toJSON {} (recursiveUpdate defaultSettings cfg.settings));
+
+  defaultSettings = {
+    driver = cfg.sqlDriver;
+    connection = cfg.sqlConnection;
+  };
 in with lib; {
   options.services.hydron = {
     enable = mkEnableOption "hydron";
 
-    dataDir = mkOption {
-      type = types.path;
-      default = "/var/lib/hydron";
-      example = "/home/okina/hydron";
-      description = "Location where hydron runs and stores data.";
+    settings = mkOption {
+      type = with types; attrsOf (oneOf [ str ]);
+      default = {};
+      example = literalExample "driver = \"sqlite3\";";
+
+      description = ''
+        <filename>db_conf.json</filename> configuration. Refer to
+        <link xlink:href="https://github.com/bakape/hydron"/>
+        for details on supported values;
+      '';
     };
 
     interval = mkOption {
       type = types.str;
       default = "weekly";
       example = "06:00";
+
       description = ''
         How often we run hydron import and possibly fetch tags. Runs by default every week.
 
@@ -26,47 +40,29 @@ in with lib; {
       '';
     };
 
-    password = mkOption {
+    sqlDriver = mkOption {
       type = types.str;
-      default = "hydron";
-      example = "dumbpass";
-      description = "Password for the hydron database.";
+      default = "postgres";
+      example = "sqlite3";
+      description = "SQL program to connect to.";
     };
 
-    passwordFile = mkOption {
-      type = types.path;
-      default = "/run/keys/hydron-password-file";
-      example = "/home/okina/hydron/keys/pass";
-      description = "Password file for the hydron database.";
-    };
-
-    postgresArgs = mkOption {
+    sqlConnection = mkOption {
       type = types.str;
-      description = "Postgresql connection arguments.";
-      example = ''
-        {
-          "driver": "postgres",
-          "connection": "user=hydron password=dumbpass dbname=hydron sslmode=disable"
-        }
-      '';
-    };
-
-    postgresArgsFile = mkOption {
-      type = types.path;
-      default = "/run/keys/hydron-postgres-args";
-      example = "/home/okina/hydron/keys/postgres";
-      description = "Postgresql connection arguments file.";
+      default = "user=hydron password=hydron host=/run/postgresql dbname=hydron sslmode=disable";
+      example = "user=hydron password=dumbpass host=/run/postgresql dbname=hydron sslmode=disable";
+      description = "SQL connection line.";
     };
 
     listenAddress = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "127.0.0.1:8010";
+      type = types.str;
+      default = ":8010";
+      example = ":8020";
       description = "Listen on a specific IP address and port.";
     };
 
     importPaths = mkOption {
-      type = types.listOf types.path;
+      type = with types; listOf path;
       default = [];
       example = [ "/home/okina/Pictures" ];
       description = "Paths that hydron will recursively import.";
@@ -80,85 +76,76 @@ in with lib; {
   };
 
   config = mkIf cfg.enable {
-    services.hydron.passwordFile = mkDefault (pkgs.writeText "hydron-password-file" cfg.password);
-    services.hydron.postgresArgsFile = mkDefault (pkgs.writeText "hydron-postgres-args" cfg.postgresArgs);
-    services.hydron.postgresArgs = mkDefault ''
-      {
-        "driver": "postgres",
-        "connection": "user=hydron password=${cfg.password} host=/run/postgresql dbname=hydron sslmode=disable"
-      }
-    '';
-
     services.postgresql = {
       enable = true;
       ensureDatabases = [ "hydron" ];
-      ensureUsers = [
-        { name = "hydron";
-          ensurePermissions = { "DATABASE hydron" = "ALL PRIVILEGES"; };
-        }
-      ];
+
+      ensureUsers = [{
+        name = "hydron";
+        ensurePermissions = { "DATABASE hydron" = "ALL PRIVILEGES"; };
+      }];
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0750 hydron hydron - -"
-      "d '${cfg.dataDir}/.hydron' - hydron hydron - -"
-      "d '${cfg.dataDir}/images' - hydron hydron - -"
-      "Z '${cfg.dataDir}' - hydron hydron - -"
+    systemd = {
+      services = {
+        hydron = {
+          description = "hydron media tagger and organizer";
+          after = [ "network.target" "postgresql.service" ];
+          wantedBy = [ "multi-user.target" ];
+          environment.HOME = dataDir;
 
-      "L+ '${cfg.dataDir}/.hydron/db_conf.json' - - - - ${cfg.postgresArgsFile}"
-    ];
+          preStart = ''
+            mkdir -p $STATE_DIRECTORY/.hydron
+            mkdir -p $STATE_DIRECTORY/images
+            ln -sf ${configFile} $STATE_DIRECTORY/.hydron/db_conf.json
+          '';
 
-    systemd.services.hydron = {
-      description = "hydron";
-      after = [ "network.target" "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            User = "hydron";
+            DynamicUser = true;
+            StateDirectory = "hydron";
+            WorkingDirectory = dataDir;
+            ExecStart = "${pkgs.hydron}/bin/hydron serve -a ${cfg.listenAddress}";
+          };
+        };
 
-      serviceConfig = {
-        User = "hydron";
-        Group = "hydron";
-        ExecStart = "${pkgs.hydron}/bin/hydron serve"
-        + optionalString (cfg.listenAddress != null) " -a ${cfg.listenAddress}";
+        hydron-fetch = {
+          description = "Import paths into hydron and possibly fetch tags";
+          environment.HOME = dataDir;
+
+          serviceConfig = {
+            Type = "oneshot";
+            User = "hydron";
+            DynamicUser = true;
+            StateDirectory = "hydron";
+            WorkingDirectory = dataDir;
+            ExecStart = "${pkgs.hydron}/bin/hydron import "
+            + optionalString cfg.fetchTags "-f "
+            + "$STATE_DIRECTORY/images ${escapeShellArgs cfg.importPaths}";
+          };
+        };
       };
-    };
 
-    systemd.services.hydron-fetch = {
-      description = "Import paths into hydron and possibly fetch tags";
+      timers.hydron-fetch = {
+        description = "Automatically import paths into hydron and possibly fetch tags";
+        after = [ "network.target" "hydron.service" ];
+        wantedBy = [ "timers.target" ];
 
-      serviceConfig = {
-        Type = "oneshot";
-        User = "hydron";
-        Group = "hydron";
-        ExecStart = "${pkgs.hydron}/bin/hydron import "
-        + optionalString cfg.fetchTags "-f "
-        + (escapeShellArg cfg.dataDir) + "/images " + (escapeShellArgs cfg.importPaths);
-      };
-    };
-
-    systemd.timers.hydron-fetch = {
-      description = "Automatically import paths into hydron and possibly fetch tags";
-      after = [ "network.target" "hydron.service" ];
-      wantedBy = [ "timers.target" ];
-
-      timerConfig = {
-        Persistent = true;
-        OnCalendar = cfg.interval;
-      };
-    };
-
-    users = {
-      groups.hydron.gid = config.ids.gids.hydron;
-
-      users.hydron = {
-        description = "hydron server service user";
-        home = cfg.dataDir;
-        group = "hydron";
-        uid = config.ids.uids.hydron;
+        timerConfig = {
+          Persistent = true;
+          OnCalendar = cfg.interval;
+        };
       };
     };
   };
 
   imports = [
     (mkRenamedOptionModule [ "services" "hydron" "baseDir" ] [ "services" "hydron" "dataDir" ])
+    (mkRemovedOptionModule [ "services" "hydron" "dataDir" ] "Hydron will store data by default in /var/lib/hydron")
+    (mkRemovedOptionModule [ "services" "hydron" "password" ] "Use sqlConnection")
+    (mkRemovedOptionModule [ "services" "hydron" "passwordFile" ] "Use sqlConnection")
+    (mkRemovedOptionModule [ "services" "hydron" "postgresArgs" ] "Use sqlDrive and sqlConnection")
+    (mkRemovedOptionModule [ "services" "hydron" "postgresArgsFile" ] "Use sqlDrive and sqlConnection")
   ];
 
   meta.maintainers = with maintainers; [ chiiruno ];
