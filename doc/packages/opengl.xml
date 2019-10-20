@@ -1,0 +1,9 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-opengl">
+ <title>OpenGL</title>
+
+ <para>
+ Packages that use OpenGL have NixOS desktop as their primary target. The current solution for loading the GPU-specific drivers is based on <literal>libglvnd</literal> and looks for the driver implementation in <literal>LD_LIBRARY_PATH</literal>. If you are using a non-NixOS GNU/Linux/X11 desktop with free software video drivers, consider launching OpenGL-dependent programs from Nixpkgs with Nixpkgs versions of <literal>libglvnd</literal> and <literal>mesa_drivers</literal> in <literal>LD_LIBRARY_PATH</literal>. For proprietary video drivers you might have luck with also adding the corresponding video driver package.
+ </para>
+</section>

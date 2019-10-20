@@ -23,7 +23,7 @@
  <part>
   <title>Languages, frameworks and packages</title>
   <xi:include href="languages-frameworks/index.xml" />
-  <xi:include href="package-notes.xml" />
+  <xi:include href="packages/index.xml" />
  </part>
  <part>
   <title>Contributing to Nixpkgs</title>
