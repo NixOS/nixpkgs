@@ -8,7 +8,7 @@
 }:
 
 let # beware: updates often break cups-filters build
-  version = "0.81.0";
+  version = "0.79.0";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
@@ -16,10 +16,18 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "00pykc7nym3xg0wc60awv0i35zwdfyn0igb6jrnb6rsv0c5h4b91";
+    sha256 = "1j18jlv1q6h21azb939gqjsgcbsh5qcd8dwxdmad54p5ixha91gr";
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-9959.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/commit/68ef84e5968a4249c2162b839ca6d7975048a557.patch";
+      sha256 = "17a3qs74fnnrhjys23f4aw5y7yfsk5d507jcj4hh1bndqv6dpwg1";
+    })
+  ];
 
   buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;
 
