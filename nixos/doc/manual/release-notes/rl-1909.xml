@@ -190,6 +190,13 @@
      </listitem>
     </itemizedlist>
    </listitem>
+   <listitem>
+    <para>
+     <xref linkend="opt-services.blueman.enable"/> has been added.
+     If you previously had blueman installed via <option>environment.systemPackages</option> please
+     migrate to using the NixOS module, as this would result in an insufficiently configured blueman.
+    </para>
+   </listitem>
   </itemizedlist>
 
  </section>
