@@ -1,21 +1,22 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
+buildGoModule rec {
   pname = "easyjson";
-  version = "unstable-2019-06-26";
-  goPackagePath = "github.com/mailru/easyjson";
-  goDeps = ./deps.nix;
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mailru";
     repo = "easyjson";
-    rev = "b2ccc519800e761ac8000b95e5d57c80a897ff9e";
-    sha256 = "0q85h383mhbkcjm2vqm72bi8n2252fv3c56q3lclzb8n2crnjcdk";
+    rev = "v${version}";
+    sha256 = "13zv5fvjp3nr65lhqhiw6i6mlmqvyls882rlmcas0ab35alsxni8";
   };
 
+  modSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
   enableParallelBuilding = true;
+  # go: directory benchmark is outside main module
+  subPackages = [ "easyjson" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mailru/easyjson";
     description = "Fast JSON serializer for golang";
     license = licenses.mit;
