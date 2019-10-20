@@ -15771,6 +15771,7 @@ let
     };
     buildInputs = [ LWP TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ParallelPrefork Plack ServerStarter ];
+    doCheck = !stdenv.isDarwin;
     meta = {
       description = "A simple, high-performance PSGI/Plack HTTP server";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
