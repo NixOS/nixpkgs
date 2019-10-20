@@ -1,173 +1,196 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (lib) generators literalExample mkEnableOption mkIf mkOption recursiveUpdate types;
   cfg = config.services.meguca;
-  postgres = config.services.postgresql;
+  dataDir = "/var/lib/meguca";
+  configFile = pkgs.writeText "config.json" (generators.toJSON {} (recursiveUpdate defaultSettings cfg.settings));
+
+  defaultSettings = {
+    debug = cfg.debug;
+    imager_mode = cfg.imagerMode;
+    database = cfg.databaseURL;
+    cache_size = cfg.cacheSize;
+
+    server = {
+      address = cfg.listenAddress;
+      reverse_proxied = cfg.reverseProxy;
+    };
+
+    test = {
+      database = cfg.testDatabaseURL;
+    };
+  };
 in with lib; {
   options.services.meguca = {
     enable = mkEnableOption "meguca";
 
-    dataDir = mkOption {
-      type = types.path;
-      default = "/var/lib/meguca";
-      example = "/home/okina/meguca";
-      description = "Location where meguca stores it's database and links.";
+    settings = mkOption {
+      type = with types; attrsOf (oneOf [ str int float bool ]);
+      default = {};
+      example = literalExample "debug = true;";
+
+      description = ''
+        <filename>db_conf.json</filename> configuration. Refer to
+        <link xlink:href="https://github.com/bakape/meguca"/>
+        for details on supported values;
+      '';
     };
 
-    password = mkOption {
+    debug = mkOption {
+      type = types.bool;
+      default = false;
+
+      description = ''
+        Should the server be running in debug mode. Debug mode has more verbose
+        logging and prints all logs to stdout. If disabled, error logs will be
+        printed to the `errors.log` file.
+      '';
+    };
+
+    imagerMode = mkOption {
+      type = types.int;
+      default = 0;
+
+      description = ''
+        Sets what functionality this instance of the application server will
+		    handle. The functionality is divided around handling image-related
+		    processing.
+
+		    0: handle image processing and serving and all other functionality
+		    1: handle all functionality except for image processing and serving
+		    2: only handle image processing and serving
+      '';
+    };
+
+    databaseURL = mkOption {
       type = types.str;
-      default = "meguca";
-      example = "dumbpass";
-      description = "Password for the meguca database.";
+      default = "postgres:///meguca?user=meguca&password=meguca&host=/run/postgresql&sslmode=disable";
+      example = "postgres://meguca:meguca@localhost:5432/meguca?sslmode=disable";
+      description = "Database URL to connect to on server start.";
     };
 
-    passwordFile = mkOption {
-      type = types.path;
-      default = "/run/keys/meguca-password-file";
-      example = "/home/okina/meguca/keys/pass";
-      description = "Password file for the meguca database.";
-    };
+    testDatabaseURL = mkOption {
+      type = types.str;
+      default = "postgres:///meguca_test?user=meguca&password=meguca&host=/run/postgresql&sslmode=disable";
+      example = "postgres://meguca:meguca@localhost:5432/meguca_test?sslmode=disable";
 
-    reverseProxy = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "192.168.1.5";
-      description = "Reverse proxy IP.";
-    };
+      description = ''
+        Database URL to use during tests.
 
-    sslCertificate = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "/home/okina/meguca/ssl.cert";
-      description = "Path to the SSL certificate.";
-    };
+        This URL only serves as the base. The actual databases are created
+        and dropped during testing automatically with prefixes for each
+        database according to the submodule using this test database for
+        running unit tests. This division allows database-related for each
+        submodule to be run concurrently, overall reducing the runtime of
+        unit tests.
 
-    listenAddress = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "127.0.0.1:8000";
-      description = "Listen on a specific IP address and port.";
+        To allow database creation during tests the role used must have the
+        necessary PostgreSQL permissions. These can be granted by running
+
+          ALTER USER $user_name WITH CREATEDB;
+
+        as the administrator postgres user in the psql shell.
+      '';
     };
 
     cacheSize = mkOption {
-      type = types.nullOr types.int;
-      default = null;
-      example = 256;
-      description = "Cache size in MB.";
+      type = types.float;
+      default = 128.0;
+      example = 256.0;
+
+      description = ''
+        Size limit of internal cache in MB. Once limit is exceeded, the least
+		    recently used records from the cache will be evicted.
+      '';
     };
 
-    postgresArgs = mkOption {
+    listenAddress = mkOption {
       type = types.str;
-      example = "user=meguca password=dumbpass dbname=meguca sslmode=disable";
-      description = "Postgresql connection arguments.";
+      default = ":8000";
+      example = ":9001";
+      description = "Address to listen on for incoming connections.";
     };
 
-    postgresArgsFile = mkOption {
-      type = types.path;
-      default = "/run/keys/meguca-postgres-args";
-      example = "/home/okina/meguca/keys/postgres";
-      description = "Postgresql connection arguments file.";
-    };
-
-    compressTraffic = mkOption {
+    reverseProxy = mkOption {
       type = types.bool;
       default = false;
-      description = "Compress all traffic with gzip.";
-    };
 
-    assumeReverseProxy = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Assume the server is behind a reverse proxy, when resolving client IPs.";
-    };
-
-    httpsOnly = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Serve and listen only through HTTPS.";
+      description = ''
+        The server can only be accessed by clients through a reverse proxy
+        like NGINX and thus can safely honour "X-Forwarded-For" headers
+        for client IP resolution.
+      '';
     };
 
     videoPaths = mkOption {
-      type = types.listOf types.path;
-      default = [];
+      type = with types; listOf path;
+      default = [ ];
       example = [ "/home/okina/Videos/tehe_pero.webm" ];
       description = "Videos that will be symlinked into www/videos.";
     };
   };
 
   config = mkIf cfg.enable {
-    security.sudo.enable = cfg.enable;
-    services.postgresql.enable = cfg.enable;
-    services.postgresql.package = pkgs.postgresql_11;
-    services.meguca.passwordFile = mkDefault (pkgs.writeText "meguca-password-file" cfg.password);
-    services.meguca.postgresArgsFile = mkDefault (pkgs.writeText "meguca-postgres-args" cfg.postgresArgs);
-    services.meguca.postgresArgs = mkDefault "user=meguca password=${cfg.password} dbname=meguca sslmode=disable";
+    services.postgresql = {
+      enable = true;
+      extraConfig = "max_connections = 1024";
+      ensureDatabases = [ "meguca" "meguca_test" ];
 
-    systemd.services.meguca = {
-      description = "meguca";
-      after = [ "network.target" "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
+      ensureUsers = [{
+        name = "meguca";
 
-      preStart = ''
-        # Ensure folder exists or create it and links and permissions are correct
-        mkdir -p ${escapeShellArg cfg.dataDir}/www
-        rm -rf ${escapeShellArg cfg.dataDir}/www/videos
-        ln -sf ${pkgs.meguca}/share/meguca/www/* ${escapeShellArg cfg.dataDir}/www
-        unlink ${escapeShellArg cfg.dataDir}/www/videos
-        mkdir -p ${escapeShellArg cfg.dataDir}/www/videos
-
-        for vid in ${escapeShellArg cfg.videoPaths}; do
-          ln -sf $vid ${escapeShellArg cfg.dataDir}/www/videos
-        done
-
-        chmod 750 ${escapeShellArg cfg.dataDir}
-        chown -R meguca:meguca ${escapeShellArg cfg.dataDir}
-
-        # Ensure the database is correct or create it
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createuser \
-          -SDR meguca || true
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createdb \
-          -T template0 -E UTF8 -O meguca meguca || true
-        ${pkgs.sudo}/bin/sudo -u meguca ${postgres.package}/bin/psql \
-          -c "ALTER ROLE meguca WITH PASSWORD '$(cat ${escapeShellArg cfg.passwordFile})';" || true
-      '';
-
-    script = ''
-      cd ${escapeShellArg cfg.dataDir}
-
-      ${pkgs.meguca}/bin/meguca -d "$(cat ${escapeShellArg cfg.postgresArgsFile})"''
-      + optionalString (cfg.reverseProxy != null) " -R ${cfg.reverseProxy}"
-      + optionalString (cfg.sslCertificate != null) " -S ${cfg.sslCertificate}"
-      + optionalString (cfg.listenAddress != null) " -a ${cfg.listenAddress}"
-      + optionalString (cfg.cacheSize != null) " -c ${toString cfg.cacheSize}"
-      + optionalString (cfg.compressTraffic) " -g"
-      + optionalString (cfg.assumeReverseProxy) " -r"
-      + optionalString (cfg.httpsOnly) " -s" + " start";
-
-      serviceConfig = {
-        PermissionsStartOnly = true;
-        Type = "forking";
-        User = "meguca";
-        Group = "meguca";
-        ExecStop = "${pkgs.meguca}/bin/meguca stop";
-      };
+        ensurePermissions = {
+          "DATABASE meguca" = "ALL PRIVILEGES";
+          "DATABASE meguca_test" = "ALL PRIVILEGES";
+        };
+      }];
     };
 
-    users = {
-      groups.meguca.gid = config.ids.gids.meguca;
+    systemd.services.meguca = {
+      description = "meguca imageboard server";
+      after = [ "network-online.target" "postgresql.service" ];
+      wantedBy = [ "multi-user.target" ];
+      environment.HOME = dataDir;
 
-      users.meguca = {
-        description = "meguca server service user";
-        home = cfg.dataDir;
-        createHome = true;
-        group = "meguca";
-        uid = config.ids.uids.meguca;
+      preStart = ''
+        mkdir -p $STATE_DIRECTORY/www/videos
+        ln -sf ${configFile} $STATE_DIRECTORY/config.json
+        ln -sf ${pkgs.meguca}/share/www/* $STATE_DIRECTORY/www
+
+        for vid in ${escapeShellArg cfg.videoPaths}; do
+          ln -sf $vid $STATE_DIRECTORY/www/videos
+        done
+
+        find $STATE_DIRECTORY/www/videos -xtype l -delete
+      '';
+
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        RestartSec = 5;
+        StartLimitInterval = "6s";
+        StartLimitBurst = 1;
+        User = "meguca";
+        DynamicUser = true;
+        StateDirectory = "meguca";
+        WorkingDirectory = dataDir;
+        PIDFile = "${dataDir}/.pid";
+        ExecStart = "${pkgs.meguca}/bin/meguca";
+        ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+        ExecStop = "${pkgs.coreutils}/bin/kill -s TERM $MAINPID";
       };
     };
   };
 
   imports = [
     (mkRenamedOptionModule [ "services" "meguca" "baseDir" ] [ "services" "meguca" "dataDir" ])
+    (mkRenamedOptionModule [ "services" "meguca" "assumeReverseProxy" ] [ "services" "meguca" "reverseProxy" ])
+    (mkRemovedOptionModule [ "services" "meguca" "dataDir" ] "Meguca will store data by default in /var/lib/meguca")
+    (mkRemovedOptionModule [ "services" "meguca" "password" ] "Use databaseURL")
+    (mkRemovedOptionModule [ "services" "meguca" "passwordFile" ] "Use databaseURL")
+    (mkRemovedOptionModule [ "services" "meguca" "postgresArgs" ] "Use databaseURL")
+    (mkRemovedOptionModule [ "services" "meguca" "postgresArgsFile" ] "Use databaseURL")
   ];
 
   meta.maintainers = with maintainers; [ chiiruno ];
