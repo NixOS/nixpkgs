@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     requests
   ];
   buildInputs = [
-    pythonPackages.python pythonPackages.flake8
+    pythonPackages.python pythonPackages.flake8 pythonPackages.setuptools
     zip makeWrapper nix.out nix-prefetch-git nix-prefetch-hg
   ];
 

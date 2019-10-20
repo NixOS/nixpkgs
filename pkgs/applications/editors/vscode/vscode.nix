@@ -11,13 +11,13 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "06yrcn7857fw1dvwj0fhj6b2pb224i0r1m2diqg49a0jaj15mnak";
-    x86_64-darwin = "0gq2lazjlzf7wmmdlpg5zg60lmwlmq5rm65lb815r0dpqqj0dizn";
+    x86_64-linux = "0p4ah1bbz0njl2bk783gq5z1gxfzapa65qzhrkn216v07rba29jm";
+    x86_64-darwin = "162bqdhi2dx74q5f56bhs5phz9az66lb4lvfcj1sdygp51xsb93y";
   }.${system};
 in
   callPackage ./generic.nix rec {
 
-    version = "1.39.1";
+    version = "1.39.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";

@@ -35,13 +35,13 @@
 , libXmu
 }:
 
-stdenv.mkDerivation {
-  version = "10.4.1";
+stdenv.mkDerivation rec {
+  version = "10.5.1";
   pname = "geant4";
 
   src = fetchurl{
-    url = "http://cern.ch/geant4-data/releases/geant4.10.04.p01.tar.gz";
-    sha256 = "a3eb13e4f1217737b842d3869dc5b1fb978f761113e74bd4eaf6017307d234dd";
+    url = "http://cern.ch/geant4-data/releases/geant4.10.05.p01.tar.gz";
+    sha256 = "f4a292220500fad17e0167ce3153e96e3410ecbe96284e572dc707f63523bdff";
   };
 
   cmakeFlags = [
@@ -78,7 +78,10 @@ stdenv.mkDerivation {
   setupHook = ./geant4-hook.sh;
 
   passthru = {
-    data = import ./datasets.nix { inherit stdenv fetchurl; };
+    data = import ./datasets.nix {
+          inherit stdenv fetchurl;
+          geant_version = version;
+      };
   };
 
   # Set the myriad of envars required by Geant4 if we use a nix-shell.
@@ -95,7 +98,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://www.geant4.org;
     license = licenses.g4sl;
-    maintainers = with maintainers; [ tmplt ];
+    maintainers = with maintainers; [ tmplt omnipotententity ];
     platforms = platforms.linux;
   };
 }
