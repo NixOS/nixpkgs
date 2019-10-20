@@ -10413,6 +10413,11 @@ in
 
   armadillo = callPackage ../development/libraries/armadillo {};
 
+  arrayfire = callPackage ../development/libraries/arrayfire {
+    # fails to build with gcc >= 7
+    stdenv = gcc6Stdenv;
+  };
+
   arrow-cpp = callPackage ../development/libraries/arrow-cpp {
     gtest = gtest.override { static = true; };
   };
