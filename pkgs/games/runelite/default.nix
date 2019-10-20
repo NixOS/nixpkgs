@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jre, makeDesktopItem, lib }:
 
   stdenv.mkDerivation rec {
-  name = "runelite-${version}";
+  pname = "runelite";
   version = "1.6.0";
 
   src = fetchurl {
@@ -18,7 +18,7 @@
     name = "RuneLite";
     type = "Application";
     exec = "runelite";
-    icon = "${icon}";
+    icon = icon;
     comment = "Open source Old School RuneScape client";
     terminal = "false";
     desktopName = "RuneLite";
@@ -30,7 +30,7 @@
   buildInputs = [ makeWrapper ];
 
   # colon is bash form of no-op (do nothing)
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/share/runelite

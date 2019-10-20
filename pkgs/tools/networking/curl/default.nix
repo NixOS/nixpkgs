@@ -24,14 +24,14 @@ assert brotliSupport -> brotli != null;
 assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.65.0";
+  name = "curl-7.66.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${name}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
     ];
-    sha256 = "0p6z77iv6wlxq7skbnxn61rn8rangrp4g4spr09y920fcf7w0iza";
+    sha256 = "0hd1wwplw357hn876s4n2gk7dpmd1gfw5d2c3yi21i1m09726636";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -94,6 +94,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
+
+    # Install completions
+    make -C scripts install
   '' + stdenv.lib.optionalString scpSupport ''
     sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
   '' + stdenv.lib.optionalString gnutlsSupport ''

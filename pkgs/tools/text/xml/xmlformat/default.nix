@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl }:
 stdenv.mkDerivation rec {
-  name = "xmlformat-${version}";
+  pname = "xmlformat";
   version = "1.04";
 
   src = fetchurl {

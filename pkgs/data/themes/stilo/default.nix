@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, meson, ninja, sassc, gdk_pixbuf, librsvg, gtk_engines, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, meson, ninja, sassc, gdk-pixbuf, librsvg, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "stilo-themes";
-  version = "3.32-3";
+  version = "3.34-1";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xcndr5mfa91f0ln0az3m79pidjy882v65w5fi5w05kykrmvv81z";
+    sha256 = "1qwz7i32jk7wm7m9ah6g1pxldz0rnviancndsr2lqmg55x36rs01";
   };
 
   nativeBuildInputs = [ meson ninja sassc ];
 
-  buildInputs = [ gdk_pixbuf librsvg gtk_engines ];
+  buildInputs = [ gdk-pixbuf librsvg gtk_engines ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   meta = with stdenv.lib; {
-    description = "Minimalistic GTK themes";
+    description = "Minimalistic GTK, gnome shell and Xfce themes";
     homepage = https://github.com/lassekongo83/stilo-themes;
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -1,15 +1,15 @@
 { stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "amazon-ecs-cli-${version}";
-  version = "1.14.1";
+  pname = "amazon-ecs-cli";
+  version = "1.16.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-v${version}";
-    sha256 = "12q167pbpxw38p1bzcy9z4ix7yh9giwkyrc4vq2qln3pjn9d31rj";
+    sha256 = "0mj0y2hrl7yp8mfjgi68gvbravgwp5v58hhcclr49mdjnr4v6i9x";
   };
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase =
     ''

@@ -2,7 +2,7 @@
 
 let
   version = "4.47.0";
-in fetchzip rec {
+in fetchzip {
   name = "terminus-font-ttf-${version}";
 
   url = "http://files.ax86.net/terminus-ttf/files/${version}/terminus-ttf-${version}.zip";

@@ -8,11 +8,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gsm-${version}";
+  pname = "gsm";
   version = "1.0.18";
 
   src = fetchurl {
-    url = "http://www.quut.com/gsm/${name}.tar.gz";
+    url = "http://www.quut.com/gsm/${pname}-${version}.tar.gz";
     sha256 = "041amvpz8cvxykl3pwqldrzxligmmzcg8ncdnxbg32rlqf3q1xh4";
   };
 

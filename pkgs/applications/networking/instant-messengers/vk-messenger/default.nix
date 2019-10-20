@@ -4,7 +4,8 @@
 let
   version = "4.0.1";
 in stdenv.mkDerivation {
-  name = "vk-messenger-${version}";
+  pname = "vk-messenger";
+  inherit version;
   src = {
     i686-linux = fetchurl {
       url = "https://desktop.userapi.com/rpm/master/vk-${version}.i686.rpm";

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.3";
-  name = "libde265-${version}";
+  pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";

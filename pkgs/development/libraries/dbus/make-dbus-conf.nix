@@ -22,7 +22,7 @@ runCommand "dbus-1"
       <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
         <rewriteSystem
           systemIdStartString="http://www.freedesktop.org/standards/dbus/1.0/"
-          rewritePrefix="file://${dbus}/share/xml/dbus/"/>
+          rewritePrefix="file://${dbus}/share/xml/dbus-1/"/>
       </catalog>
     '';
     nativeBuildInputs = [ libxslt.bin ];

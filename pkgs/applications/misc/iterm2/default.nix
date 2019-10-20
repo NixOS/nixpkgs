@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "iterm2-${version}";
+  pname = "iterm2";
   version = "3.0.14";
 
   src = fetchFromGitHub {

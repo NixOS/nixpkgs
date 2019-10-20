@@ -3,7 +3,7 @@
   tree, hexRegistrySnapshot }:
 
 let
-  version = "3.11.1";
+  version = "3.12.0";
 
   bootstrapper = ./rebar3-nix-bootstrap;
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     owner = "erlang";
     repo = pname;
     rev = version;
-    sha256 = "124l1alf7wx4hqjpf63l0nx70q68lilmgh582c1d413fz5ip0byd";
+    sha256 = "0936ix7lfwsamssap58b265zid7x2m97azrr2qpjcln3xysd16lg";
   };
 
   inherit bootstrapper;

@@ -3,13 +3,13 @@
 }:
 buildPythonPackage rec {
   pname = "netCDF4";
-  version = "1.5.1.2";
+  version = "1.5.2";
 
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "161pqb7xc9nj0dlnp6ply8c6zv68y1frq619xqfrpmc9s1932jzk";
+    sha256 = "08l92yzg2cy1zrkxjvwya2kpnmfzgwnvgb925hlrgcp5ga9y2xg0";
   };
 
   checkInputs = [ pytest ];
@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   # Variables used to configure the build process
   USE_NCCONFIG="0";
-  HDF5_DIR="${hdf5}";
-  NETCDF4_DIR="${netcdf}";
-  CURL_DIR="${curl.dev}";
-  JPEG_DIR="${libjpeg.dev}";
+  HDF5_DIR=hdf5;
+  NETCDF4_DIR=netcdf;
+  CURL_DIR=curl.dev;
+  JPEG_DIR=libjpeg.dev;
 
   meta = with stdenv.lib; {
     description = "Interface to netCDF library (versions 3 and 4)";

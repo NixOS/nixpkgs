@@ -43,7 +43,9 @@ let
     patches =
       [
         # Do not look in /usr etc. for dependencies.
-        (if (versionOlder version "5.29.6") then ./no-sys-dirs-5.26.patch else ./no-sys-dirs-5.29.patch)
+        (if (versionOlder version "5.29.6") then ./no-sys-dirs-5.26.patch
+         else if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
+         else ./no-sys-dirs-5.31.patch)
       ]
       ++ optional (versionOlder version "5.29.6")
         # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
@@ -171,11 +173,11 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "2152db1ea241f796206ab309036be1a7d127b370"; # May 25, 2019
+    crossVersion = "980998f7d11baf97284426ca91f84681d49a08f5"; # Jul 20, 2019
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "1k08iqdkf9q00hbcq2b933w3vmds7xkfr90phhk0qf64l18wdrkf";
+      sha256 = "1hg3k2rhjs5gclrm05z87nvlh4j9pg7mkm9998h9gy6mzk8224q5";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -191,7 +193,7 @@ let
     setupHook = ./setup-hook-cross.sh;
   });
 in {
-  # the latest Maint version
+  # Maint version
   perl528 = common {
     perl = pkgs.perl528;
     buildPerl = buildPackages.perl528;
@@ -199,6 +201,7 @@ in {
     sha256 = "1iynpsxdym4h76kgndmn3ykvwxhqz444xvaz8z2irsxkvmnlb5da";
   };
 
+  # Maint version
   perl530 = common {
     perl = pkgs.perl530;
     buildPerl = buildPackages.perl530;
@@ -210,7 +213,7 @@ in {
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.30.0";
-    sha256 = "1wkmz6xn3fswpqhz29akiklcxclnlykhp96a8bqcz36rak3i64l5";
+    version = "5.31.2";
+    sha256 = "00bdh9lmjb0m7dhk8mj7kab7cg2zn9zgw82y4hgkwydzg6d1jis0";
   };
 }

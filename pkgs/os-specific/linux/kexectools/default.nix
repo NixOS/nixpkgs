@@ -1,15 +1,15 @@
-{ stdenv, buildPackages, fetchurl, zlib }:
+{ stdenv, buildPackages, fetchurl, zlib, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "kexec-tools-${version}";
-  version = "2.0.19";
+  pname = "kexec-tools";
+  version = "2.0.20";
 
   src = fetchurl {
     urls = [
-      "mirror://kernel/linux/utils/kernel/kexec/${name}.tar.xz"
-      "http://horms.net/projects/kexec/kexec-tools/${name}.tar.xz"
+      "mirror://kernel/linux/utils/kernel/kexec/${pname}-${version}.tar.xz"
+      "http://horms.net/projects/kexec/kexec-tools/${pname}-${version}.tar.xz"
     ];
-    sha256 = "03jyi4c47ywclycf3a253xpqs7p6ys8inz9q66b8m3xc6nrh307d";
+    sha256 = "1j7qlhxk1rbv9jbj8wd6hb7zl8p2mp29ymrmccgmsi0m0dzhgn6s";
   };
 
   hardeningDisable = [ "format" "pic" "relro" "pie" ];
@@ -17,6 +17,16 @@ stdenv.mkDerivation rec {
   configureFlags = [ "BUILD_CC=${buildPackages.stdenv.cc.targetPrefix}cc" ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
+
+  patches = [
+    # fix build on i686
+    # See: https://src.fedoraproject.org/rpms/kexec-tools/c/cb1e5463b5298b064e9b6c86ad6fe3505fec9298
+    (fetchpatch {
+      name = "kexec-tools-2.0.20-fix-broken-multiboot2-buliding-for-i386.patch";
+      url = "https://src.fedoraproject.org/rpms/kexec-tools/raw/cb1e5463b5298b064e9b6c86ad6fe3505fec9298/f/kexec-tools-2.0.20-fix-broken-multiboot2-buliding-for-i386.patch";
+      sha256 = "1kzmcsbhwfdgxlc5s88ir0n494phww1j16yk0z42x09qlkxxkg0l";
+    })
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://horms.net/projects/kexec/kexec-tools;

@@ -6,7 +6,7 @@
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
 , enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, enableQt ? false, pyqt4
+, enableQt ? false, pyqt5 ? null
 , libcxx
 , Cocoa
 , pythonOlder
@@ -19,17 +19,17 @@ assert enableTk -> (tcl != null)
                 && (tkinter != null)
                 && (libX11 != null)
                 ;
-assert enableQt -> pyqt4 != null;
+assert enableQt -> pyqt5 != null;
 
 buildPythonPackage rec {
-  version = "3.0.3";
+  version = "3.1.1";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dzpgpj34i6lv9wgacqdshai2d237m3vymqrgl52sj1gwf4kblz1";
+    sha256 = "1febd22afe1489b13c6749ea059d392c03261b2950d1d45c17e3aed812080c93";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
-    ++ stdenv.lib.optionals enableQt [ pyqt4 ];
+    ++ stdenv.lib.optionals enableQt [ pyqt5 ];
 
   patches =
     [ ./basedirlist.patch ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk_pixbuf, glib,
+{ stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk-pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
 libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev }:
@@ -12,7 +12,7 @@ let
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gtk3
@@ -37,19 +37,19 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "mattermost-desktop-${version}";
-    version = "4.2.0";
+    pname = "mattermost-desktop";
+    version = "4.2.3";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-x64.tar.gz";
-          sha256 = "0hka94gwpscjn61032c0grpjv5gjb0j8rkx6pgwci617n29xkyf6";
+          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
+          sha256 = "14xyn8dp0xxl4j9xdsjik9p6srqdxbirgcgym2sv64p01w3kc9wf";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-ia32.tar.gz";
-          sha256 = "1nx2sgbnr60h6kn56wv54m7cvyx27d64bfprpb94hqd5c2z21x80";
+          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
+          sha256 = "063rrxw76mjz71wp9xd3ppkq3s017vrzms879r2cilypmay7fhgs";
         }
       else
         throw "Mattermost-Desktop is not currently supported on ${stdenv.hostPlatform.system}";

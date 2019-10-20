@@ -62,9 +62,9 @@ let
       concatStringsSep "\n" (toLines cfg.config);
 
   semanticTypes = with types; rec {
-    zncAtom = nullOr (either (either int bool) str);
+    zncAtom = nullOr (oneOf [ int bool str ]);
     zncAttr = attrsOf (nullOr zncConf);
-    zncAll = either (either zncAtom (listOf zncAtom)) zncAttr;
+    zncAll = oneOf [ zncAtom (listOf zncAtom) zncAttr ];
     zncConf = attrsOf (zncAll // {
       # Since this is a recursive type and the description by default contains
       # the description of its subtypes, infinite recursion would occur without

@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "kona-${version}";
+  pname = "kona";
   version = "3.21";
   src = fetchurl {
     url = "https://github.com/kevinlawler/kona/archive/Win.${version}-64.tar.gz";

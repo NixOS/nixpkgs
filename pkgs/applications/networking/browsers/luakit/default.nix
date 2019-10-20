@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
     # TODO: why is not this the default? The test runner adds
     # ';./lib/?.lua;./lib/?/init.lua' to package.path, but the build-utils
     # scripts don't add an equivalent
-    export LUA_PATH="$NIX_LUA_PATH;./?.lua;./?/init.lua"
-    export LUA_CPATH="$NIX_LUA_CPATH"
+    export LUA_PATH="$LUA_PATH;./?.lua;./?/init.lua"
   '';
 
   makeFlags = [
@@ -49,8 +48,8 @@ stdenv.mkDerivation rec {
   in ''
     gappsWrapperArgs+=(
       --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
-      --prefix LUA_PATH ';' "${luaKitPath};$NIX_LUA_PATH"
-      --prefix LUA_CPATH ';' "$NIX_LUA_CPATH"
+      --prefix LUA_PATH ';' "${luaKitPath};$LUA_PATH"
+      --prefix LUA_CPATH ';' "$LUA_CPATH"
     )
   '';
 

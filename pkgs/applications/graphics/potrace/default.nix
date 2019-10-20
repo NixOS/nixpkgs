@@ -1,7 +1,7 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "potrace-${version}";
+  pname = "potrace";
   version = "1.15";
 
   src = fetchurl {

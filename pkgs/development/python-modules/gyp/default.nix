@@ -4,7 +4,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "gyp";
   version = "2015-06-11";
   disabled = isPy3k;

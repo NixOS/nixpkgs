@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, coverage
+, pytest, pytestcov, mock, coverage, setuptools
 , Mako, sqlalchemy, python-editor, dateutil
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest pytestcov mock coverage ];
-  propagatedBuildInputs = [ Mako sqlalchemy python-editor dateutil ];
+  propagatedBuildInputs = [ Mako sqlalchemy python-editor dateutil setuptools ];
 
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/zzzeek/alembic;

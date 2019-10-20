@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "time-${version}";
+  pname = "time";
   version = "1.9";
 
   src = fetchurl {
-    url = "mirror://gnu/time/${name}.tar.gz";
+    url = "mirror://gnu/time/${pname}-${version}.tar.gz";
     sha256 = "07jj7cz6lc13iqrpgn81ivqh8rkm73p4rnivwgrrshk23v4g1b7v";
   };
 

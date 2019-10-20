@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs, makeWrapper, lib }:
+{ stdenv, fetchurl, pkgs, lib }:
 
 stdenv.mkDerivation rec {
   pname    = "hopper";
@@ -16,22 +16,20 @@ stdenv.mkDerivation rec {
 libbsd.out libffi.out gmpxx.out python27Full.out python27Packages.libxml2 qt5.qtbase zlib  xlibs.libX11.out xorg_sys_opengl.out xlibs.libXrender.out gcc-unwrapped.lib
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ pkgs.qt5.wrapQtAppsHook ];
+
+  qtWrapperArgs = [ ''--suffix LD_LIBRARY_PATH : ${ldLibraryPath}'' ];
 
   installPhase = ''
-     mkdir -p $out/bin
-     mkdir -p $out/lib
-     mkdir -p $out/share
-     cp $sourceRoot/opt/hopper-${rev}/bin/Hopper $out/bin/hopper
-     cp -r $sourceRoot/opt/hopper-${rev}/lib $out
-     cp -r $sourceRoot/usr/share $out/share
+    mkdir -p $out/bin
+    mkdir -p $out/lib
+    mkdir -p $out/share
+    cp $sourceRoot/opt/hopper-${rev}/bin/Hopper $out/bin/hopper
+    cp -r $sourceRoot/opt/hopper-${rev}/lib $out
+    cp -r $sourceRoot/usr/share $out/share
     patchelf \
-    --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
-    $out/bin/hopper
-    # Details: https://nixos.wiki/wiki/Qt
-     wrapProgram $out/bin/hopper \
-    --suffix LD_LIBRARY_PATH : ${ldLibraryPath} \
-    --suffix QT_PLUGIN_PATH : ${pkgs.qt5.qtbase}/lib/qt-${pkgs.qt5.qtbase.qtCompatVersion}/plugins
+      --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
+      $out/bin/hopper
   '';
 
   meta = {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, nasm }:
 
 stdenv.mkDerivation rec {
-  name = "openh264-${version}";
+  pname = "openh264";
   version = "1.8.0";
 
   src = fetchFromGitHub {

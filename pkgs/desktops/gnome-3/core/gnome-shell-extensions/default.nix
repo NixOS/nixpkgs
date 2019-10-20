@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_52, glib
+{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_60, glib
 , gnome3, gnome-menus, substituteAll }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extensions-${version}";
-  version = "3.32.1";
+  pname = "gnome-shell-extensions";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell-extensions/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "07libf6z24n42hpdsq163w0j8xyrav0lxqrwxrvq5kbz8zxv5ch2";
+    url = "mirror://gnome/sources/gnome-shell-extensions/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0ny7mk82kpfac977j02860c75d7zn05gvy0h9bphvx0v7ca53bdh";
   };
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gnome-shell-extensions";
-      attrPath = "gnome3.gnome-shell-extensions";
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
     };
   };
 
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  # 52 is required for tests
-  # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/blob/3.30.1/meson.build#L25
-  checkInputs = [ spidermonkey_52 ];
+  # 60 is required for tests
+  # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/blob/3.34.0/meson.build#L23
+  checkInputs = [ spidermonkey_60 ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext glib ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     # Fixup adapted from export-zips.sh in the source.
 
     extensiondir=$out/share/gnome-shell/extensions
-    schemadir=$out/share/gsettings-schemas/${name}/glib-2.0/schemas/
+    schemadir=${glib.makeSchemaPath "$out" "${pname}-${version}"}
 
     glib-compile-schemas $schemadir
 

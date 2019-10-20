@@ -1,25 +1,57 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, libuuid, gobject-introspection, gtk-doc, shared-mime-info, python3, docbook_xsl, docbook_xml_dtd_43 }:
+{ stdenv
+, fetchFromGitHub
+, docbook_xml_dtd_43
+, docbook_xsl
+, glib
+, gobject-introspection
+, gtk-doc
+, libuuid
+, meson
+, ninja
+, pkgconfig
+, python3
+, shared-mime-info
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
-  name = "libxmlb-${version}";
-  version = "0.1.10";
+  pname = "libxmlb";
+  version = "0.1.13";
 
-  outputs = [ "out" "lib" "dev" "devdoc" ];
+  outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    sha256 = "1ismh3bdwd0l1fjlhwycam89faxjmpb0wxqlbv58m0z6cxykp6rd";
+    sha256 = "14bk7bk08mjbildak1l7jq7idcyask7384vigpq9zmwai1gax4s7";
   };
 
-  nativeBuildInputs = [ meson ninja python3 pkgconfig gobject-introspection gtk-doc shared-mime-info docbook_xsl docbook_xml_dtd_43 ];
+  patches = [
+    ./installed-tests-path.patch
+  ];
 
-  buildInputs = [ glib libuuid ];
+  nativeBuildInputs = [
+    docbook_xml_dtd_43
+    docbook_xsl
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkgconfig
+    (python3.withPackages (pkgs: with pkgs; [ setuptools ]))
+    shared-mime-info
+  ];
+
+  buildInputs = [
+    glib
+    libuuid
+  ];
 
   mesonFlags = [
     "--libexecdir=${placeholder "out"}/libexec"
     "-Dgtkdoc=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
   preCheck = ''
@@ -27,6 +59,12 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru = {
+    tests = {
+      installed-tests = nixosTests.libxmlb;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A library to help create and query binary XML blobs";

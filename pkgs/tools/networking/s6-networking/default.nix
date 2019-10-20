@@ -11,7 +11,7 @@ let
   inherit (stdenv) lib;
   sslSupportEnabled = sslSupport != false;
   sslLibs = {
-    "libressl" = libressl;
+    libressl = libressl;
   };
 
 in

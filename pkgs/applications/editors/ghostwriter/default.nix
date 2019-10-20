@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, qmake, pkgconfig, qttools, qtwebengine, hunspell }:
+{ stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, qttools, qtwebengine, hunspell }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "ghostwriter";
   version = "1.8.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "wereturtle";

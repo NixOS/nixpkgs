@@ -1,6 +1,6 @@
 {
   alsaLib, atk, cairo, cups, dbus, dpkg, expat, fetchurl, fontconfig, freetype,
-  gdk_pixbuf, glib, gnome2, libX11, libXScrnSaver, libXcomposite, libXcursor,
+  gdk-pixbuf, glib, gnome2, libX11, libXScrnSaver, libXcomposite, libXcursor,
   libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst,
   libxcb, nspr, nss, stdenv, udev
 }:
@@ -15,7 +15,7 @@
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gnome2.gtk
@@ -38,7 +38,7 @@
     udev
     ]);
   in stdenv.mkDerivation rec {
-    name = "webtorrent-desktop-${version}";
+    pname = "webtorrent-desktop";
     version = "0.20.0";
 
     src =

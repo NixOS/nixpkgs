@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "commandergenius-${version}";
+  pname = "commandergenius";
   version = "2.3.3";
 
   src = fetchFromGitLab {

@@ -22,7 +22,8 @@ let
 in
 
 buildGoPackage {
-  name = "aptly-${version}";
+  pname = "aptly";
+  inherit version;
 
   src = aptlySrc;
 

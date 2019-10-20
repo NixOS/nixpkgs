@@ -3,7 +3,7 @@
 , fetchurl
 , cmake
 , boost
-, google-gflags
+, gflags
 , glog
 , hdf5-cpp
 , opencv3
@@ -36,7 +36,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "caffe-${version}";
+  pname = "caffe";
   version = "1.0";
 
   src = fetchFromGitHub {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     # It's important that caffe is passed the major and minor version only because that's what
     # boost_python expects
-    [ (if pythonSupport then "-Dpython_version=3${python.pythonVersion}" else "-DBUILD_python=OFF")
+    [ (if pythonSupport then "-Dpython_version=${python.pythonVersion}" else "-DBUILD_python=OFF")
       "-DBLAS=open"
     ] ++ (if cudaSupport then [
            "-DCUDA_ARCH_NAME=All"
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
       ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
 
-  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp opencv3 openblas ]
+  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 openblas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
                 ++ lib.optional lmdbSupport lmdb
@@ -73,9 +73,17 @@ stdenv.mkDerivation rec {
                 ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ]
                 ;
 
-  propagatedBuildInputs = lib.optional pythonSupport python.pkgs.protobuf;
+  propagatedBuildInputs = lib.optionals pythonSupport (
+    # requirements.txt
+    let pp = python.pkgs; in ([
+      pp.numpy pp.scipy pp.scikitimage pp.h5py
+      pp.matplotlib pp.ipython pp.networkx pp.nose
+      pp.pandas pp.dateutil pp.protobuf pp.gflags
+      pp.pyyaml pp.pillow pp.six
+    ] ++ lib.optional leveldbSupport pp.leveldb)
+  );
 
-  outputs = [ "bin" "out"];
+  outputs = [ "bin" "out" ];
   propagatedBuildOutputs = []; # otherwise propagates out -> bin cycle
 
   patches = [

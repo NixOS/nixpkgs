@@ -30,6 +30,7 @@ import ./make-test.nix ({ pkgs, ...} :
       enable = true;
       user = "alice";
     };
+    hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     virtualisation.memorySize = 1024;
     environment.systemPackages = [ sddm_theme ];
   };
@@ -47,7 +48,7 @@ import ./make-test.nix ({ pkgs, ...} :
     $machine->waitForWindow("^Desktop ");
 
     # Check that logging in has given the user ownership of devices.
-    $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+    $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
 
     $machine->execute("su - alice -c 'DISPLAY=:0.0 dolphin &'");
     $machine->waitForWindow(" Dolphin");

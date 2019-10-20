@@ -19,7 +19,7 @@ import ./make-test.nix ({ pkgs, ...} : {
         services.mysql.initialScript = pkgs.writeText "mysql-init.sql" ''
           CREATE USER 'passworduser'@'localhost' IDENTIFIED BY 'password123';
         '';
-        services.mysql.package = pkgs.mysql;
+        services.mysql.package = pkgs.mysql57;
       };
 
     mariadb =
@@ -28,6 +28,12 @@ import ./make-test.nix ({ pkgs, ...} : {
       {
         users.users.testuser = { };
         services.mysql.enable = true;
+        services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
+          ALTER USER root@localhost IDENTIFIED WITH unix_socket;
+          DELETE FROM mysql.user WHERE password = ''' AND plugin = ''';
+          DELETE FROM mysql.user WHERE user = ''';
+          FLUSH PRIVILEGES;
+        '';
         services.mysql.ensureDatabases = [ "testdb" ];
         services.mysql.ensureUsers = [{
           name = "testuser";

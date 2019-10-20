@@ -2,7 +2,7 @@ import ./make-test.nix ({ lib, ... }:
 
 with lib;
 
-rec {
+{
   name = "lidarr";
   meta.maintainers = with maintainers; [ etu ];
 

@@ -5,7 +5,7 @@ stdenv, fetchFromGitHub, cmake, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
-  name = "paraview-${version}";
+  pname = "paraview";
   version = "5.6.0";
 
   # fetching from GitHub instead of taking an "official" source

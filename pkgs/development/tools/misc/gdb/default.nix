@@ -4,7 +4,7 @@
 , fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
@@ -13,7 +13,7 @@
 
 let
   basename = "gdb-${version}";
-  version = "8.3";
+  version = "8.3.1";
 in
 
 assert pythonSupport -> python3 != null;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "0bnpzz0rl672xg5547q5qck2sxi6cnyixmk8bbb4gifw17ipwbw0";
+    sha256 = "1i2pjwaafrlz7wqm40b4znr77ai32rjsxkpl2az38yyarpbv8m8y";
   };
 
   postPatch = if stdenv.isDarwin then ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat zlib guile ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile ]
     ++ stdenv.lib.optional pythonSupport python3
     ++ stdenv.lib.optional doCheck dejagnu;
 
@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = with platforms; linux ++ cygwin ++ darwin;
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with maintainers; [ pierron globin ];
   };
 }

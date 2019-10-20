@@ -1,11 +1,11 @@
 { stdenv, fetchurl, which, gnome3, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-common-${version}";
+  pname = "gnome-common";
   version = "3.18.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-common/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-common/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "22569e370ae755e04527b76328befc4c73b62bfd4a572499fde116b8318af8cf";
   };
 

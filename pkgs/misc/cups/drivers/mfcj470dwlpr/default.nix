@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cups, dpkg, ghostscript, a2ps, coreutils, gnused, gawk, file, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "mfcj470dw-cupswrapper-${version}";
+  pname = "mfcj470dw-cupswrapper";
   version = "3.0.0-1";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups ghostscript dpkg a2ps ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out

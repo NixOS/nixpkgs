@@ -1,19 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, pytest_xdist, flaky, tornado, pycurl }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v340wkq4sn9pvcpjh076l8mcqkn3nrn7if8p6iysk02bjxvknbv";
+    sha256 = "6276ed2a897a30ccd71bfd7cf9e6b7842f37f3d5a86d7a70fe46f437c62b1875";
   };
 
   propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
-  checkInputs = [ pytest pytest-asyncio pytest_xdist flaky ];
+  checkInputs = [ pytest pytest-asyncio flaky ];
 
-  # Disable tests for now, because our version of pytest seems to be too new
-  # https://github.com/lilydjwg/nvchecker/commit/42a02efec84824a073601e1c2de30339d251e4c7
+  # requires network access
   doCheck = false;
 
   checkPhase = ''

@@ -4,7 +4,7 @@
 , isIceCatLike ? false, icversion ? null
 , isTorBrowserLike ? false, tbversion ? null }:
 
-{ lib, stdenv, pkgconfig, pango, perl, python2, zip, libIDL
+{ lib, stdenv, pkgconfig, pango, perl, python2, python3, zip, libIDL
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
@@ -94,7 +94,14 @@ let
 
   browserPatches = [
     ./env_var_for_system_dir.patch
-  ] ++ lib.optionals (stdenv.isAarch64 && lib.versionAtLeast ffversion "66" && lib.versionOlder ffversion "67") [
+  ]
+  ++ lib.optional (lib.versionAtLeast ffversion "63" && lib.versionOlder ffversion "69")
+    (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
+      name = "write_error-parallel_make.diff";
+      url = "https://hg.mozilla.org/mozilla-central/raw-diff/562655fe/python/mozbuild/mozbuild/action/node.py";
+      sha256 = "11d7rgzinb4mwl7yzhidjkajynmxgmffr4l9isgskfapyax9p88y";
+    })
+  ++ lib.optionals (stdenv.isAarch64 && lib.versionAtLeast ffversion "66" && lib.versionOlder ffversion "67") [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/arm.patch";
       sha256 = "1vbpih23imhv5r3g21m3m541z08n9n9j1nvmqax76bmyhn7mxp32";
@@ -157,12 +164,15 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
     substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
+  '' + lib.optionalString (lib.versionAtLeast ffversion "68") ''
+    rm -rf obj-x86_64-pc-linux-gnu
   '';
 
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
+    ++ lib.optional  (lib.versionAtLeast ffversion "61.0") [ python3 ]
     ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ rust-cbindgen nodejs ]
     ++ lib.optionals (lib.versionAtLeast ffversion "67.0") [ llvmPackages.llvm ] # llvm-objdump is required in version >=67.0
     ++ extraNativeBuildInputs;
@@ -245,7 +255,7 @@ stdenv.mkDerivation rec {
     "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
-  ++ lib.optionals (lib.versionAtLeast ffversion "57") [
+  ++ lib.optionals (lib.versionAtLeast ffversion "57" && lib.versionOlder ffversion "69") [
     "--enable-webrender=build"
   ]
 
@@ -303,6 +313,9 @@ stdenv.mkDerivation rec {
     "BUILD_OFFICIAL=1"
   ]
   ++ extraMakeFlags;
+
+  RUSTFLAGS = if (lib.versionAtLeast ffversion "67"/*somewhere betwween ESRs*/)
+    then null else "--cap-lints warn";
 
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above

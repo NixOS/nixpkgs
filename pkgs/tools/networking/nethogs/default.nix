@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "nethogs-${version}";
+  pname = "nethogs";
   version = "0.8.5";
 
   src = fetchFromGitHub {

@@ -1,8 +1,8 @@
 { stdenv, buildPythonApplication, fetchFromGitHub
 , gtk3, wrapGAppsHook, gst_all_1, gobject-introspection
-, python3Packages, gnome3, hicolor-icon-theme }:
+, python3Packages, gnome3 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "gscrabble";
   version = "unstable-2019-03-11";
 
@@ -19,7 +19,7 @@ buildPythonApplication rec {
 
   buildInputs = with gst_all_1; [
     gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    hicolor-icon-theme gnome3.adwaita-icon-theme gtk3 gobject-introspection
+    gnome3.adwaita-icon-theme gtk3 gobject-introspection
   ];
 
   propagatedBuildInputs = with python3Packages; [ gst-python pygobject3 ];

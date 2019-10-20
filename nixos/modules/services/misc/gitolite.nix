@@ -143,21 +143,37 @@ in
     users.users.${cfg.user} = {
       description     = "Gitolite user";
       home            = cfg.dataDir;
-      createHome      = true;
       uid             = config.ids.uids.gitolite;
       group           = cfg.group;
       useDefaultShell = true;
     };
-    users.groups."${cfg.group}".gid = config.ids.gids.gitolite;
+    users.groups.${cfg.group}.gid = config.ids.gids.gitolite;
 
-    systemd.services."gitolite-init" = {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.dataDir}'/.gitolite - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.dataDir}'/.gitolite/logs - ${cfg.user} ${cfg.group} - -"
+
+      "Z ${cfg.dataDir} 0750 ${cfg.user} ${cfg.group} - -"
+    ];
+
+    systemd.services.gitolite-init = {
       description = "Gitolite initialization";
       wantedBy    = [ "multi-user.target" ];
       unitConfig.RequiresMountsFor = cfg.dataDir;
 
-      serviceConfig.User = "${cfg.user}";
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
+      environment = {
+        GITOLITE_RC = ".gitolite.rc";
+        GITOLITE_RC_DEFAULT = "${rcDir}/gitolite.rc.default";
+      };
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = cfg.user;
+        Group = cfg.group;
+        WorkingDirectory = "~";
+        RemainAfterExit = true;
+      };
 
       path = [ pkgs.gitolite pkgs.git pkgs.perl pkgs.bash pkgs.diffutils config.programs.ssh.package ];
       script =
@@ -187,11 +203,6 @@ in
           '';
       in
         ''
-          cd ${cfg.dataDir}
-          mkdir -p .gitolite/logs
-
-          GITOLITE_RC=.gitolite.rc
-          GITOLITE_RC_DEFAULT=${rcDir}/gitolite.rc.default
           if ( [[ ! -e "$GITOLITE_RC" ]] && [[ ! -L "$GITOLITE_RC" ]] ) ||
              ( [[ -f "$GITOLITE_RC" ]] && diff -q "$GITOLITE_RC" "$GITOLITE_RC_DEFAULT" >/dev/null ) ||
              ( [[ -L "$GITOLITE_RC" ]] && [[ "$(readlink "$GITOLITE_RC")" =~ ^/nix/store/ ]] )

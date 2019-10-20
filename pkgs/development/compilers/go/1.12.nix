@@ -17,24 +17,24 @@ let
   '';
 
   goarch = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
+    i686 = "386";
+    x86_64 = "amd64";
+    aarch64 = "arm64";
+    arm = "arm";
+    armv5tel = "arm";
+    armv6l = "arm";
+    armv7l = "arm";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
 in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.12.6";
+  version = "1.12.9";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1jmlj8pygg4hjpkziicihcf76lz61w1qljdpm3hqlqsmfk65qv69";
+    sha256 = "1z32imbwmpkzgyh5c3vi7rbvzbq94xjk5qi2xm9sccj7kknmc3mb";
   };
 
   # perl is used for testing go vet
@@ -95,6 +95,12 @@ stdenv.mkDerivation rec {
 
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
+
+    # Disable TestGcSys because it's flakey in our tests, but the failure is not
+    # reproducible by multiple people in other environments.
+    # See https://github.com/NixOS/nixpkgs/issues/68361#issuecomment-537849272 and following
+    # NOTE: Try re-enabling for releases newer than 1.12.9
+    sed -i '/TestGcSys/areturn' src/runtime/gc_test.go
 
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
@@ -233,7 +239,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej velovix mic92 ];
+    maintainers = with maintainers; [ cstrahan orivej velovix mic92 rvolosatovs ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

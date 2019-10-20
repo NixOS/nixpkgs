@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gammu-${version}";
+  pname = "gammu";
   version = "1.40.0";
 
   src = fetchFromGitHub {

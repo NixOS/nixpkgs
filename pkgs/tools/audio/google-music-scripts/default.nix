@@ -9,13 +9,15 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "5b2e9fdde8781a6d226984f0b61add2415a3804123ceeecb20fcc8527de9389d";
   };
 
+  patches = [ ./loguru.patch ];
+
   propagatedBuildInputs = with python3.pkgs; [
     appdirs
     audio-metadata
     google-music
     google-music-proto
     google-music-utils
-    #loguru
+    loguru
     pendulum
     natsort
     tomlkit
@@ -29,6 +31,5 @@ python3.pkgs.buildPythonApplication rec {
     description = "A CLI utility for interacting with Google Music";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
-    broken = true; # 2019-03-15, missing dependency loguru
   };
 }

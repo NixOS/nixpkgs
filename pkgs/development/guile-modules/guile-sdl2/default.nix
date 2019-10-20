@@ -5,13 +5,13 @@
 let
   name = "${pname}-${version}";
   pname = "guile-sdl2";
-  version = "0.3.1";
+  version = "0.4.0";
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "https://files.dthompson.us/${pname}/${name}.tar.gz";
-    sha256 = "0bw7x2lx90k4banc5k7yfkn3as93y25gr1xdr225ll7lmij21k64";
+    sha256 = "0zcxwgyadwpbhq6h5mv2569c3kalgra26zc186y9fqiyyzmh1v9s";
   };
 
   nativeBuildInputs = [ libtool pkgconfig ];

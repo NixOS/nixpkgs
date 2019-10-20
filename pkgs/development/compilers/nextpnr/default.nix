@@ -1,75 +1,91 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper
+{ stdenv, fetchFromGitHub, cmake
 , boost, python3, eigen
 , icestorm, trellis
+, llvmPackages
 
-# TODO(thoughtpolice) Currently the GUI build seems broken at runtime on my
-# laptop (and over a remote X server on my server...), so mark it broken for
-# now, with intent to fix later.
-, enableGui ? false
+, enableGui ? true
+, wrapQtAppsHook
 , qtbase
+, OpenGL ? null
 }:
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
-
-  # This is a massive hack. For now, Trellis doesn't really support
-  # installation through an already-built package; you have to build it once to
-  # get the tools, then reuse the build directory to build nextpnr -- the
-  # 'install' phase doesn't install everything it needs.  This will be fixed in
-  # the future but for now we can do this horrific thing.
-  trellisRoot = trellis.overrideAttrs (_: {
-    installPhase = ''
-      mkdir -p $out
-      cp *.so ..
-      cd ../../.. && cp -R trellis database $out/
-    '';
-  });
 in
-stdenv.mkDerivation rec {
-  name = "nextpnr-${version}";
-  version = "2019.04.19";
+with stdenv; mkDerivation rec {
+  pname = "nextpnr";
+  version = "2019.10.13";
 
-  src = fetchFromGitHub {
-    owner  = "yosyshq";
-    repo   = "nextpnr";
-    rev    = "5344bc3b65f4e06f983db781e9a82d30b3f1512b";
-    sha256 = "1y14jpa948cwk0i19bsfqh7yxsxkgskm4xym4z179sjcvcdvrn3a";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "nextpnr";
+      rev    = "c365dd1cabc3a4308ab9110534918623622c246b";
+      sha256 = "1344pyq9xb5y1vxsnfgr488drfjsa6ls1jck0z9hwam6vg55s10r";
+      name   = "nextpnr";
+    })
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "nextpnr-tests";
+      rev    = "8f93e7e0f897b1b5da469919c9a43ba28b623b2a";
+      sha256 = "0zpd0w49k9l7rs3wmi2v8z5s4l4lad5rprs5l83w13667himpzyc";
+      name   = "nextpnr-tests";
+    })
+  ];
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  sourceRoot = "nextpnr";
+
+  nativeBuildInputs
+     = [ cmake ]
+    ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs
      = [ boostPython python3 eigen ]
-    ++ (stdenv.lib.optional enableGui qtbase);
+    ++ (lib.optional enableGui qtbase)
+    ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
   enableParallelBuilding = true;
   cmakeFlags =
     [ "-DARCH=generic;ice40;ecp5"
+      "-DBUILD_TESTS=ON"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
-      "-DTRELLIS_ROOT=${trellisRoot}/trellis"
+      "-DTRELLIS_ROOT=${trellis}/share/trellis"
+      "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DUSE_OPENMP=ON"
-    ] ++ (stdenv.lib.optional (!enableGui) "-DBUILD_GUI=OFF");
+      # warning: high RAM usage
+      "-DSERIALIZE_CHIPDB=OFF"
+    ]
+    ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF")
+    ++ (lib.optional (enableGui && stdenv.isDarwin)
+        "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
   # Fix the version number. This is a bit stupid (and fragile) in practice
   # but works ok. We should probably make this overrideable upstream.
   patchPhase = with builtins; ''
     substituteInPlace ./CMakeLists.txt \
-      --replace 'git log -1 --format=%h' 'echo ${substring 0 11 src.rev}'
+      --replace 'git log -1 --format=%h' 'echo ${substring 0 11 (elemAt srcs 0).rev}'
+
+    # use PyPy for icestorm if enabled
+    substituteInPlace ./ice40/family.cmake \
+      --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
   '';
 
-  postInstall = stdenv.lib.optionalString enableGui ''
-    for x in generic ice40 ecp5; do
-      wrapProgram $out/bin/nextpnr-$x \
-        --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}"
-    done
+  preBuild = ''
+    ln -s ../nextpnr-tests tests
   '';
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+
+  postFixup = lib.optionalString enableGui ''
+    wrapQtApp $out/bin/nextpnr-generic
+    wrapQtApp $out/bin/nextpnr-ice40
+    wrapQtApp $out/bin/nextpnr-ecp5
+  '';
+
+  meta = with lib; {
     description = "Place and route tool for FPGAs";
     homepage    = https://github.com/yosyshq/nextpnr;
     license     = licenses.isc;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
-
-    broken = enableGui;
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice emily ];
   };
 }

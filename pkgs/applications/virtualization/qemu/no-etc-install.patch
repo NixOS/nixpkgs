@@ -1,25 +1,13 @@
-From 98b3e5993bbdb0013b6cc1814e0ad9555290c3af Mon Sep 17 00:00:00 2001
-From: Will Dietz <w@wdtz.org>
-Date: Tue, 23 Apr 2019 21:31:45 -0500
-Subject: [PATCH] no install localstatedir
-
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
 diff --git a/Makefile b/Makefile
-index 04a0d45050..5dc82d0eb7 100644
+index 85862fb8..ed52c5ec 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -786,7 +786,7 @@ endif
+@@ -841,7 +841,7 @@ endif
  
  ICON_SIZES=16x16 24x24 32x32 48x48 64x64 128x128 256x256 512x512
  
--install: all $(if $(BUILD_DOCS),install-doc) install-datadir install-localstatedir
-+install: all $(if $(BUILD_DOCS),install-doc) install-datadir
+-install: all $(if $(BUILD_DOCS),install-doc) install-datadir install-localstatedir \
++install: all $(if $(BUILD_DOCS),install-doc) install-datadir \
+ 	$(if $(INSTALL_BLOBS),$(edk2-decompressed)) \
+ 	recurse-install
  ifneq ($(TOOLS),)
- 	$(call install-prog,$(subst qemu-ga,qemu-ga$(EXESUF),$(TOOLS)),$(DESTDIR)$(bindir))
- endif
--- 
-2.21.GIT
-

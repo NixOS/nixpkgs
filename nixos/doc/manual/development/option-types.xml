@@ -348,6 +348,18 @@
    </varlistentry>
    <varlistentry>
     <term>
+     <varname>types.oneOf</varname> [ <replaceable>t1</replaceable> <replaceable>t2</replaceable> ... ]
+    </term>
+    <listitem>
+     <para>
+      Type <replaceable>t1</replaceable> or type <replaceable>t2</replaceable> and so forth,
+      e.g. <literal>with types; oneOf [ int str bool ]</literal>. Multiple definitions
+      cannot be merged.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <varname>types.coercedTo</varname> <replaceable>from</replaceable> <replaceable>f</replaceable> <replaceable>to</replaceable>
     </term>
     <listitem>

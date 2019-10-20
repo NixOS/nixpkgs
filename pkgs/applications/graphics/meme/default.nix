@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "meme-unstable-${version}";
+  pname = "meme-unstable";
   version = "2017-09-10";
 
   owner = "nomad-software";

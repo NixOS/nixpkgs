@@ -1,6 +1,8 @@
 { stdenv, lib, buildPackages, fetchurl
 , enableStatic ? false
 , enableMinimal ? false
+# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
 , useMusl ? stdenv.hostPlatform.libc == "musl", musl
 , extraConfig ? ""
 }:
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./busybox-in-store.patch
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.targetPlatform) ./clang-cross.patch;
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   postPatch = "patchShebangs .";
 
@@ -88,7 +90,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  postConfigure = lib.optionalString useMusl ''
+  postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
     makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
 

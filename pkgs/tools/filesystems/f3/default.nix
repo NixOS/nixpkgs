@@ -3,9 +3,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "f3";
-  version = "7.1";
+  version = "7.2";
 
   enableParallelBuilding = true;
 
@@ -13,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "AltraMayor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zglsmz683jg7f9wc6vmgljyg9w87pbnjw5x4w6x02w8233zvjqf";
+    sha256 = "1iwdg0r4wkgc8rynmw1qcqz62l0ldgc8lrazq33msxnk5a818jgy";
   };
 
   buildInputs = [ parted udev ];

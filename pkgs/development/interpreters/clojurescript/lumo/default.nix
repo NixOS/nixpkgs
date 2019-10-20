@@ -126,9 +126,9 @@ let # packageJSON=./package.json;
 
     getJarPath = jarName: (lib.findFirst (p: p.name == jarName) null cljdeps.packages).path.jar;
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version;
-  name = "lumo-${version}";
+  pname = "lumo";
 
   src = fetchurl {
     url    = "https://github.com/anmonteiro/lumo/archive/${version}.tar.gz";

@@ -1,29 +1,33 @@
 { fetchurl, stdenv, libGLU_combined, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, openscenegraph, expat,
-libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkgconfig, libvorbis, runtimeShell }:
+libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkgconfig, libvorbis, runtimeShell, curl }:
 
+let
+  version = "2.2.2-r6553";
+  shortVersion = builtins.substring 0 5 version;
+in
 stdenv.mkDerivation rec {
-  version = "2.2.1-r6404";
-  name = "speed-dreams-${version}";
+  inherit version;
+  pname = "speed-dreams";
 
   src = fetchurl {
-    url = "mirror://sourceforge/speed-dreams/2.2.1/speed-dreams-src-base-${version}.tar.xz";
-    sha256 = "0347sk8xbdsyvl48qybbycd7hvzsx5b37zzjx1yx73nzddhmlpbx";
+    url = "mirror://sourceforge/speed-dreams/${shortVersion}/speed-dreams-src-base-${version}.tar.xz";
+    sha256 = "1l47d2619kpfkvdwbkwr311qss6jjfwvgl5h9z2w3bwdgz0mbaij";
   };
 
   cars-and-tracks = fetchurl {
-    url = "mirror://sourceforge/speed-dreams/2.2.1/speed-dreams-src-hq-cars-and-tracks-${version}.tar.xz";
-    sha256 = "1h50l110n42nrq6j3kcyhi3swgmrjcg979vb6h0zsf46afwv0z3q";
+    url = "mirror://sourceforge/speed-dreams/${shortVersion}/speed-dreams-src-hq-cars-and-tracks-${version}.tar.xz";
+    sha256 = "0l8ba5pzqqcfy4inyxy2lrrhhgfs43xab7fy751xz2xqpqpfksyq";
   };
 
   more-cars-and-tracks = fetchurl {
-    url = "mirror://sourceforge/speed-dreams/2.2.1/speed-dreams-src-more-hq-cars-and-tracks-${version}.tar.xz";
-    sha256 = "03m3gwd03jqgsfjdglzmrv613cp4gh50i63fwmnwl282zhxydcwd";
+    url = "mirror://sourceforge/speed-dreams/${shortVersion}/speed-dreams-src-more-hq-cars-and-tracks-${version}.tar.xz";
+    sha256 = "10w180mhhk6dw4cza6mqa0hp5qgym9lcizfwykqbgcvs01yl2yqb";
   };
 
   wip-cars-and-tracks = fetchurl {
-    url = "mirror://sourceforge/speed-dreams/2.2.1/speed-dreams-src-wip-cars-and-tracks-${version}.tar.xz";
-    sha256 = "0ysk756rd294xzpwvmjh0mb229ngzrc4ry9lpyhyak98rbcp9hxm";
+    url = "mirror://sourceforge/speed-dreams/${shortVersion}/speed-dreams-src-wip-cars-and-tracks-${version}.tar.xz";
+    sha256 = "1wad9yaydaryhyi7ckyaii124h0z7kziqgcl475a5jr7ggbxc24q";
   };
 
   sourceRoot = ".";
@@ -33,12 +37,6 @@ stdenv.mkDerivation rec {
     tar -xf ${cars-and-tracks}
     tar -xf ${more-cars-and-tracks}
     tar -xf ${wip-cars-and-tracks}
-  '';
-
-  prePatch = ''
-    # https://sourceforge.net/p/speed-dreams/mailman/message/35665539/
-    sed -i "s|lastSlash = '\\\0'|lastSlash = NULL|" src/libs/tgf/params.cpp
-    sed -i "s|const char\* error = '\\\0'|const char\* error = NULL|" src/libs/tgfclient/openalmusicplayer.cpp
   '';
 
   preBuild = ''
@@ -62,11 +60,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng libGLU_combined freeglut libX11 plib openal freealut libXrandr xorgproto
     libXext libSM libICE libXi libXt libXrender libXxf86vm zlib bash expat
-    SDL2 enet libjpeg openscenegraph libvorbis ];
+    SDL2 enet libjpeg openscenegraph libvorbis curl ];
 
   meta = {
     description = "Car racing game - TORCS fork with more experimental approach";
-    homepage = http://speed-dreams.sourceforge.net/;
+    homepage = "http://speed-dreams.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = stdenv.lib.platforms.linux;

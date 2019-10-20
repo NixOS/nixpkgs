@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.2p1";
-  name = "libow-${version}";
+  pname = "libow";
 
   src = fetchFromGitHub {
     owner = "owfs";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "1-Wire File System full library";
-    homepage = http://owfs.org/;
+    homepage = https://owfs.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ disserman ];
     platforms = platforms.unix;

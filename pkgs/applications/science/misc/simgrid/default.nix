@@ -13,19 +13,19 @@
 with stdenv.lib;
 
 let
-  optionOnOff = option: "${if option then "on" else "off"}";
+  optionOnOff = option: if option then "on" else "off";
 in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.22.2";
+  version = "3.24";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "02zzivp3k7n2yvlr79p9kapzxpxq9x4x7jf2vrkpkwnssv4f9b4p";
+    sha256 = "1r9zgfx5npjw4mk0ywxx07jyi1m1b1i06j0m60n3dsrz75492x6m";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://simgrid.org/;
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ mickours ];
+    maintainers = with maintainers; [ mickours mpoquet ];
     platforms = ["x86_64-linux"];
   };
 }

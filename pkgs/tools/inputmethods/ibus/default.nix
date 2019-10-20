@@ -1,5 +1,5 @@
 { stdenv, substituteAll, fetchurl, fetchFromGitHub, autoreconfHook, gettext, makeWrapper, pkgconfig
-, vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobject-introspection, gtk2
+, vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk-pixbuf, gobject-introspection, gtk2
 , gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePython2Library ? false
 , enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null
 , buildPackages, runtimeShell }:
@@ -33,14 +33,14 @@ let
   };
   emojiData = stdenv.mkDerivation {
     name = "emoji-data-5.0";
-    unpackPhase = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir $out
       ${builtins.toString (flip mapAttrsToList emojiSrcs (k: v: "cp ${v} $out/emoji-${k}.txt;"))}
     '';
   };
   cldrEmojiAnnotation = stdenv.mkDerivation rec {
-    name = "cldr-emoji-annotation-${version}";
+    pname = "cldr-emoji-annotation";
     version = "31.90.0_1";
     src = fetchFromGitHub {
       owner = "fujiwarat";
@@ -50,19 +50,20 @@ let
     };
     nativeBuildInputs = [ autoreconfHook ];
   };
+  ucdVersion = "12.0.0";
   ucdSrcs = {
     NamesList = fetchurl {
-      url = "https://www.unicode.org/Public/UNIDATA/NamesList.txt";
+      url = "https://www.unicode.org/Public/${ucdVersion}/ucd/NamesList.txt";
       sha256 = "c17c7726f562bd9ef869096807f0297e1edef9a58fdae1fbae487378fa43586f";
     };
     Blocks = fetchurl {
-      url = "https://www.unicode.org/Public/UNIDATA/Blocks.txt";
+      url = "https://www.unicode.org/Public/${ucdVersion}/ucd/Blocks.txt";
       sha256 = "a1a3ca4381eb91f7b65afe7cb7df615cdcf67993fef4b486585f66b349993a10";
     };
   };
-  ucd = stdenv.mkDerivation rec {
-    name = "ucd-12.0.0";
-    unpackPhase = ":";
+  ucd = stdenv.mkDerivation {
+    name = "ucd-${ucdVersion}";
+    dontUnpack = true;
     installPhase = ''
       mkdir $out
       ${builtins.toString (flip mapAttrsToList ucdSrcs (k: v: "cp ${v} $out/${k}.txt;"))}
@@ -80,7 +81,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ibus-${version}";
+  pname = "ibus";
   version = "1.5.20";
 
   src = fetchFromGitHub {
@@ -97,6 +98,8 @@ stdenv.mkDerivation rec {
       pythonSitePackages = python3.sitePackages;
     })
   ];
+
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     echo \#!${runtimeShell} > data/dconf/make-dconf-override-db.sh
@@ -134,7 +137,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus
     dconf
-    gdk_pixbuf
+    gdk-pixbuf
     gobject-introspection
     python3.pkgs.pygobject3 # for pygobject overrides
     gtk2

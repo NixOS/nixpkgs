@@ -9,10 +9,10 @@ in
 
 stdenv.mkDerivation rec {
   version = "${majorVersion}.${minorVersion}";
-  name = "boinc-${version}";
+  pname = "boinc";
 
   src = fetchFromGitHub {
-    name = "${name}-src";
+    name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${majorVersion}/${version}";

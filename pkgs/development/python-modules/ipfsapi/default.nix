@@ -6,7 +6,7 @@
 , requests
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "ipfsapi";
   version = "0.4.2.post1";
   disabled = isPy27;

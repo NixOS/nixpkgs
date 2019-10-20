@@ -2,7 +2,7 @@
 , enablePlayer ? true, vlc ? null, qt5 }:
 
 stdenv.mkDerivation rec {
-  name = "tribler-${version}";
+  pname = "tribler";
   version = "7.1.2";
 
   src = fetchurl {

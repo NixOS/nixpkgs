@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   pname = "quickserve";
   version = "2018";
 
-  unpackPhase = ":";
+  dontUnpack = true;
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''

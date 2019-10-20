@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libsndfile }:
 
 stdenv.mkDerivation rec {
-  name = "accuraterip-checksum-${version}";
+  pname = "accuraterip-checksum";
   version = "1.5";
 
   src = fetchFromGitHub {

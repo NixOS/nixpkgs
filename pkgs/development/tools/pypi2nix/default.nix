@@ -24,14 +24,15 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "pypi2nix-${version}";
+  pname = "pypi2nix";
+  inherit version;
   srcs = [
     src
     click
     requests
   ];
   buildInputs = [
-    pythonPackages.python pythonPackages.flake8
+    pythonPackages.python pythonPackages.flake8 pythonPackages.setuptools
     zip makeWrapper nix.out nix-prefetch-git nix-prefetch-hg
   ];
 
@@ -101,6 +102,6 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = https://github.com/garbas/pypi2nix;
     description = "A tool that generates nix expressions for your python packages, so you don't have to.";
-    maintainers = with stdenv.lib.maintainers; [ garbas ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

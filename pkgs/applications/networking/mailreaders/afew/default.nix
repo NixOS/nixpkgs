@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = with pythonPackages; [ sphinx setuptools_scm ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pythonPackages.notmuch chardet dkimpy
+    pythonPackages.setuptools pythonPackages.notmuch chardet dkimpy
   ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) subprocess32;
 
   makeWrapperArgs = [
@@ -36,6 +36,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/afewmail/afew;
     description = "An initial tagging script for notmuch mail";
     license = licenses.isc;
-    maintainers = with maintainers; [ garbas andir flokli ];
+    maintainers = with maintainers; [ andir flokli ];
   };
 }

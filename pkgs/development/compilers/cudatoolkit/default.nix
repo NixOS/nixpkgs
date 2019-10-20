@@ -1,6 +1,6 @@
 { lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses5, expat, python27, zlib
 , gcc48, gcc49, gcc5, gcc6, gcc7
-, xorg, gtk2, gdk_pixbuf, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
+, xorg, gtk2, gdk-pixbuf, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 , addOpenGLRunpath
 }:
 
@@ -16,7 +16,7 @@ let
     }:
 
     stdenv.mkDerivation rec {
-      name = "cudatoolkit-${version}";
+      pname = "cudatoolkit";
       inherit version runPatches;
 
       dontPatchELF = true;
@@ -41,7 +41,7 @@ let
       outputs = [ "out" "lib" "doc" ];
 
       nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
-      buildInputs = [ gdk_pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
+      buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
       runtimeDependencies = [
         ncurses5 expat python zlib glibc
         xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
@@ -180,9 +180,7 @@ let
       '';
       passthru = {
         cc = gcc;
-        majorVersion =
-          let versionParts = lib.splitString "." version;
-          in "${lib.elemAt versionParts 0}.${lib.elemAt versionParts 1}";
+        majorVersion = lib.versions.majorMinor version;
       };
 
       meta = with stdenv.lib; {

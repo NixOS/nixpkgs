@@ -18,7 +18,7 @@
 let
   cups' = stdenv.lib.getLib cups;
 in stdenv.mkDerivation rec {
-  name = "samsung-UnifiedLinuxDriver-${version}";
+  pname = "samsung-UnifiedLinuxDriver";
   version = "4.00.39";
 
   src = fetchurl {

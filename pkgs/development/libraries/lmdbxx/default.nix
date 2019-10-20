@@ -3,13 +3,13 @@
 , lmdb }:
 
 stdenv.mkDerivation rec {
-  name = "lmdbxx-${version}";
+  pname = "lmdbxx";
   version = "0.9.14.0";
 
   src = fetchFromGitHub {
     owner = "drycpp";
     repo = "lmdbxx";
-    rev = "${version}";
+    rev = version;
     sha256 = "1jmb9wg2iqag6ps3z71bh72ymbcjrb6clwlkgrqf1sy80qwvlsn6";
   };
 

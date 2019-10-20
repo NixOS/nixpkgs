@@ -6,7 +6,8 @@ let
   version = "4.2.1";
 in
 stdenv.mkDerivation {
-  name = "gnumake-${version}";
+  pname = "gnumake";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.bz2";

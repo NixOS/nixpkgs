@@ -24,11 +24,11 @@ with python'.pkgs;
 
 buildPythonApplication rec {
   pname = "FlexGet";
-  version = "2.21.8";
+  version = "2.21.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a3dz013xxlwxz94i243bahw15k5y45mgk0z1zgkp1xrbiwglwvc";
+    sha256 = "1xkxd5p4ps0dnwns64zzlvs252wx0f9fy5b6000gyql7y5cma3kj";
   };
 
   postPatch = ''

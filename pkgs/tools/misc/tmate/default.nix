@@ -2,14 +2,14 @@
 , zlib, openssl, libevent, ncurses, ruby, msgpack, libssh }:
 
 stdenv.mkDerivation rec {
-  name = "tmate-${version}";
-  version = "2.2.1";
+  pname = "tmate";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner  = "tmate-io";
     repo   = "tmate";
     rev    = version;
-    sha256 = "0pfl9vrswzim9ydi1n652h3rax2zrmy6sqkp0r09yy3lw83h4y1r";
+    sha256 = "0fwqhmkp1jfp8qk7497ws3nzvly7p06mv04z8z0qicn6a961v1sa";
   };
 
   dontUseCmakeConfigure = true;

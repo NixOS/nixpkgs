@@ -1,15 +1,16 @@
 { stdenv, fetchFromGitHub, rustPlatform, nix, boost, graphviz, darwin }:
 rustPlatform.buildRustPackage rec {
-  name = "nix-du-${version}";
-  version = "0.3.0";
+  pname = "nix-du";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nix-du";
     rev = "v${version}";
-    sha256 = "1x6qpivxbn94034jfdxb97xi97fhcdv2z7llq2ccfc80mgd0gz8l";
+    sha256 = "149d60mid29s5alv5m3d7jrhyzc6cj7b6hpiq399gsdwzgxr00wq";
   };
-  cargoSha256 = "071gbhxbvnwi7n3zpy7bmlprzir0sl0f0pb191xg2ynw678prd7v";
+  cargoSha256 = "18kb4car5nzch3vpl6z1499silhs3fyn8c6xj3rzk94mm2m9srg4";
+  verifyCargoDeps = true;
 
   doCheck = true;
   checkInputs = [ graphviz ];

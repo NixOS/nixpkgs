@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mojoJavaBootClasspathDetector_1_11 = map (obj: fetchMaven {
     version = "1.11";
     artifactId = "java-boot-classpath-detector";

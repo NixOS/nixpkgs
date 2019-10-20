@@ -70,7 +70,7 @@ let
   }:
     stdenv.mkDerivation {
       name = "simutrans-${pakName}";
-      unpackPhase = "true";
+      dontUnpack = true;
       preferLocalBuild = true;
       installPhase = let src = fetchurl { inherit url sha256; };
       in ''
@@ -106,8 +106,9 @@ let
     passthru.binaries = binaries;
   };
 
-  binaries = stdenv.mkDerivation rec {
-    name = "simutrans-${version}";
+  binaries = stdenv.mkDerivation {
+    pname = "simutrans";
+    inherit version;
 
     src = binary_src;
 
@@ -163,6 +164,7 @@ let
       license = with licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ kkallio vcunat phile314 ];
       platforms = with platforms; linux; # TODO: ++ darwin;
+      broken = true;
     };
   };
 

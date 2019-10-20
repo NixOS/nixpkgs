@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "passlib";
   version = "1.7.1";
-  name    = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

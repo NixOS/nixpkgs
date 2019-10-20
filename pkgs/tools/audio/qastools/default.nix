@@ -5,7 +5,8 @@ let
 in
 
 mkDerivation {
-  name = "qastools-${version}";
+  pname = "qastools";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/qastools/${version}/qastools_${version}.tar.bz2";

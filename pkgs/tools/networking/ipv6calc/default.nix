@@ -2,12 +2,12 @@
 , geoip ? null, geolite-legacy ? null }:
 
 stdenv.mkDerivation rec {
-  name = "ipv6calc-${version}";
-  version = "1.1.0";
+  pname = "ipv6calc";
+  version = "2.1.1";
 
   src = fetchurl {
-    url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${name}.tar.gz";
-    sha256 = "1q74ikg780v5hllbq08wdfvxr2lf0fc7i41hclqrh1ajc6dqybbq";
+    url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${pname}-${version}.tar.gz";
+    sha256 = "01a4p2g31y6p1r3kacymbv2hhvkwnv00yskhphgcgjq5jpkmfjcn";
   };
 
   buildInputs = [ geoip geolite-legacy getopt ip2location-c openssl ];

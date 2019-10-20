@@ -2,7 +2,7 @@
 
 let inherit (buildPackages.buildPackages) gcc; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libiberty-${gcc.cc.version}";
 
   inherit (gcc.cc) src;

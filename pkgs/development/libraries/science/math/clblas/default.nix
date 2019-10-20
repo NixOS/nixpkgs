@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "clblas-${version}";
+  pname = "clblas";
   version = "2.12";
 
   src = fetchFromGitHub {

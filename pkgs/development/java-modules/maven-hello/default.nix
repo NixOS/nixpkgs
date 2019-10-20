@@ -5,7 +5,7 @@ with pkgs.javaPackages;
 let
   poms = import ../poms.nix { inherit fetchMaven; };
 in rec {
-  mavenHelloRec = { mavenDeps, sha512, version, skipTests ? true, quiet ? true }: mavenbuild rec {
+  mavenHelloRec = { mavenDeps, sha512, version, skipTests ? true, quiet ? true }: mavenbuild {
     inherit mavenDeps sha512 version skipTests quiet;
 
     name = "maven-hello-${version}";

@@ -2,7 +2,7 @@
 , gst-plugins-base, orc, bzip2, gettext
 , libv4l, libdv, libavc1394, libiec61883
 , libvpx, speex, flac, taglib, libshout
-, cairo, gdk_pixbuf, aalib, libcaca
+, cairo, gdk-pixbuf, aalib, libcaca
 , libsoup, libpulseaudio, libintl
 , darwin, lame, mpg123, twolame
 , gtkSupport ? false, gtk3 ? null
@@ -25,7 +25,7 @@ let
   inherit (stdenv.lib) optional optionals;
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-${version}";
+  pname = "gst-plugins-good";
   version = "1.16.0";
 
   meta = with stdenv.lib; {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
+    url = "${meta.homepage}/src/gst-plugins-good/${pname}-${version}.tar.xz";
     sha256 = "1zdhif1mhf0ihkjpjyrh65g2iz2cawkjjb3h5w8h9ml06grxwjk5";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base orc bzip2
     libdv libvpx speex flac taglib
-    cairo gdk_pixbuf aalib libcaca
+    cairo gdk-pixbuf aalib libcaca
     libsoup libshout lame mpg123 twolame libintl
     libXdamage
     libXext
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   ]
   ++ optional gtkSupport gtk3 # for gtksink
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
-  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 libgudev jack2 ]
+  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 libgudev ]
   ++ optionals (stdenv.isLinux && enableJack) [
     jack2
   ];

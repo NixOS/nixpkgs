@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, premake5 }:
 
 stdenv.mkDerivation rec {
-  name = "otfcc-${version}";
+  pname = "otfcc";
   version = "0.9.6";
 
   src = fetchFromGitHub {

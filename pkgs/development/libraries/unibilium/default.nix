@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, libtool, pkgconfig, perl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "unibilium-${version}";
+  pname = "unibilium";
 
   version = "2.0.0";
 

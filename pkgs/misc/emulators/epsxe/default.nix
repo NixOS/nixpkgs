@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, alsaLib, curl, gdk_pixbuf, glib, gtk3, libGLU_combined,
+{ stdenv, fetchurl, alsaLib, curl, gdk-pixbuf, glib, gtk3, libGLU_combined,
   libX11, openssl, ncurses5, SDL, SDL_ttf, unzip, zlib, wrapGAppsHook }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "epsxe-${version}";
+  pname = "epsxe";
   version = "2.0.5";
 
   src = let
-    version2 = concatStrings (splitString "." version);
+    version2 = replaceStrings ["."] [""] version;
     platform = "linux" + (optionalString stdenv.is64bit "_x64");
   in fetchurl {
     url = "https://www.epsxe.com/files/ePSXe${version2}${platform}.zip";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsaLib
     curl
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk3
     libX11

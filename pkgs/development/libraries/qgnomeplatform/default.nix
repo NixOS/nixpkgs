@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk3, qtbase, qmake }:
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig, gtk3, qtbase, qmake }:
 
-stdenv.mkDerivation rec {
-  name = "qgnomeplatform-${version}";
+mkDerivation rec {
+  pname = "qgnomeplatform";
   version = "0.5";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "QPlatformTheme for a better Qt application inclusion in GNOME";
     homepage = https://github.com/FedoraQt/QGnomePlatform;
     license = licenses.lgpl21Plus;

@@ -4,13 +4,13 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  version = "2019-06-15";
-  name = "oh-my-zsh-${version}";
-  rev = "c105c04b6b1ddb917c12eadacb26c252f44ddfad";
+  version = "2019-10-19";
+  pname = "oh-my-zsh";
+  rev = "05dfd0ae8520e58e852c574f55c83fe6f49fb189";
 
   src = fetchgit { inherit rev;
     url = "https://github.com/robbyrussell/oh-my-zsh";
-    sha256 = "0b3mdiygqvxgikaa95ixhnr6rib3wllls54hv7h50g4f86jhj62b";
+    sha256 = "1ky926ih9b56xgh8xp8dsnzjliwzd8rr0cqn4wjf74z42bg2cnw0";
   };
 
   pathsToLink = [ "/share/oh-my-zsh" ];

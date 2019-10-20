@@ -1,5 +1,5 @@
 { fetchurl, stdenv, libtool, gettext, zlib, bzip2, flac, libvorbis
-, exiv2, libgsf, rpm, pkgconfig
+, exiv2, libgsf, rpm, pkgconfig, fetchpatch
 , gtkSupport ? true, glib ? null, gtk3 ? null
 , videoSupport ? true, ffmpeg ? null, libmpeg2 ? null}:
 
@@ -13,6 +13,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/libextractor/${name}.tar.gz";
     sha256 = "1zz2zvikvfibxnk1va3kgzs7djsmiqy7bmk8y01vbsf54ryjb3zh";
   };
+
+  patches = [
+    ./fix-gcc8-build.patch
+    # Fixes build with exiv2 0.27
+    (fetchpatch {
+      name = "libextractor-exiv2-0.27.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/libextractor-exiv2-0.27.patch?h=packages/libextractor&id=4dc53f7fc69210ae571285dface108ed65d8ee53";
+      sha256 = "0w4gc1q1m1yxsd4hv105nblmif465nw3g5nxzldy0x2rl9mdncg6";
+    })
+  ];
 
   preConfigure =
     '' echo "patching installation directory in \`extractor.c'..."
