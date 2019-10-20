@@ -1269,4 +1269,7 @@ self: super: {
     });
   });
 
+  # upstream issue: https://github.com/vmchale/atspkg/issues/12
+  language-ats = dontCheck super.language-ats;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
