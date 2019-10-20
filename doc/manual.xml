@@ -21,7 +21,9 @@
   <xi:include href="platform-notes.xml" />
  </part>
  <part>
-  <title>Languages, frameworks and packages</title>
+  <title>Builders</title>
+  <xi:include href="builders/fetchers.xml" />
+  <xi:include href="builders/trivial-builders.xml" />
   <xi:include href="languages-frameworks/index.xml" />
   <xi:include href="packages/index.xml" />
  </part>
