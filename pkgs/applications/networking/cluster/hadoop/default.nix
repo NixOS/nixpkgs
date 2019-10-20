@@ -21,7 +21,7 @@ let
         # perform fake build to make a fixed-output derivation of dependencies downloaded from maven central (~100Mb in ~3000 files)
         fetched-maven-deps = stdenv.mkDerivation {
           name = "hadoop-${version}-maven-deps";
-          inherit src postUnpack nativeBuildInputs buildInputs;
+          inherit src postUnpack nativeBuildInputs buildInputs dontConfigure;
           buildPhase = ''
             while mvn package -Dmaven.repo.local=$out/.m2 ${mavenFlags} -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
               echo "timeout, restart maven to continue downloading"
