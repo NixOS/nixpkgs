@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "lxqt-globalkeys";
-  version = "0.14.1";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0q7hfbs4dhsgyzch2msq2hsfzzfgbc611ki9x1x132n7zqk76pmp";
+    sha256 = "1ij9abjnqbnkcb7qqk3x7y4amr6l7kkmwhdpc0x2qk4yikn5ijdg";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Daemon used to register global keyboard shortcuts";
+    description = "LXQt service for global keyboard shortcuts registration";
     homepage = https://github.com/lxqt/lxqt-globalkeys;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
