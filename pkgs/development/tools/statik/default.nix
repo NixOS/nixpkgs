@@ -1,21 +1,20 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
+buildGoModule rec {
   pname = "statik";
-  version = "unstable-2019-07-31";
-  goPackagePath = "github.com/rakyll/statik";
-  goDeps = ./deps.nix;
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "rakyll";
     repo = "statik";
-    rev = "925a23bda946b50bb0804894f340c5da2b95603b";
-    sha256 = "15wwgrprfq36pa13b9anp7097q1fqcad28hirvivybmc011p0fri";
+    rev = "v${version}";
+    sha256 = "1xrmzm8vl075ssp2x0wbmzs2wsp429q6yblww4nmbyg700wc5hah";
   };
 
+  modSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rakyll/statik";
     description = "Embed files into a Go executable ";
     license = licenses.asl20;
