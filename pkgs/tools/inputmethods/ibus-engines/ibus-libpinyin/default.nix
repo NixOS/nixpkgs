@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , autoreconfHook
-, intltool
+, gettext
 , pkgconfig
 , wrapGAppsHook
 , sqlite
@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
     rev = version;
-    sha256 = "0zkzz6ig74nws8phqxbsggnpf5g5f2hxi0mdyn2m3s4nm14q3ma6";
+    sha256 = "0b8rilk9zil9gvfhlk3rphcby6ph11dw66j175wp0na6h6hjlaf2";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    intltool
+    gettext
     pkgconfig
     wrapGAppsHook
   ];
@@ -43,10 +43,6 @@ stdenv.mkDerivation rec {
     gtk3
     db
   ];
-
-  postAutoreconf = ''
-    intltoolize
-  '';
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
