@@ -89,7 +89,7 @@ in {
 
       siteOwner = mkOption {
         type = types.str;
-        default = "postmaster@example.org";
+        example = "postmaster@example.org";
         description = ''
           Certain messages that must be delivered to a human, but which can't
           be delivered to a list owner (e.g. a bounce from a list owner), will
