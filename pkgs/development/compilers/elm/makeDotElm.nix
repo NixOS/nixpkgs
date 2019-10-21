@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, versionsDat}:
+{stdenv, lib, fetchurl, registryDat}:
 
 ver: deps:
   let cmds = lib.mapAttrsToList (name: info: let
@@ -20,11 +20,11 @@ ver: deps:
 
                };
              in ''
-               mkdir -p .elm/${ver}/package/${name}
-               cp -R ${pkg} .elm/${ver}/package/${name}/${info.version}
+               mkdir -p .elm/${ver}/packages/${name}
+               cp -R ${pkg} .elm/${ver}/packages/${name}/${info.version}
              '') deps;
   in (lib.concatStrings cmds) + ''
-    mkdir -p .elm/${ver}/package;
-    cp ${versionsDat} .elm/${ver}/package/versions.dat;
+    mkdir -p .elm/${ver}/packages;
+    cp ${registryDat} .elm/${ver}/packages/registry.dat;
     chmod -R +w .elm
   ''
