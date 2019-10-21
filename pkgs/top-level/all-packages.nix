@@ -10725,6 +10725,8 @@ in
     stdenv = gcc6Stdenv;
   };
 
+  arrayfire-ml = callPackage ../development/libraries/arrayfire-ml { };
+
   arrow-cpp = callPackage ../development/libraries/arrow-cpp ({
     gtest = gtest.override { static = true; };
   } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
