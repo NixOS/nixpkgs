@@ -11541,6 +11541,22 @@ let
     };
   };
 
+  MojoRedis = buildPerlPackage {
+    pname = "Mojo-Redis";
+    version = "3.24";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojo-Redis-3.24.tar.gz";
+      sha256 = "ca9ca1026bf7d658f23860d54cbc79605e4e5a8b1cc8e7b053b36a218cef566b";
+    };
+    propagatedBuildInputs = [ Mojolicious ProtocolRedisFaster ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/mojo-redis";
+      description = "Redis driver based on Mojo::IOLoop";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MojoSQLite = buildPerlModule {
     pname = "Mojo-SQLite";
     version = "3.002";
@@ -14522,6 +14538,37 @@ let
       sha256 = "1g3l8jzx06x4l4p0x7fyn4wvg6plfzl420irwwb9v447wzsn6xfh";
     };
     propagatedBuildInputs = [ IPCSignal ];
+  };
+
+  ProtocolRedis = buildPerlPackage {
+    pname = "Protocol-Redis";
+    version = "1.0010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/U/UN/UNDEF/Protocol-Redis-1.0010.tar.gz";
+      sha256 = "e787236e46b1f0738a98113ea0dfbee4c695723bb37dce8d6936fd9a519e5343";
+    };
+    meta = {
+      homepage = "https://github.com/und3f/protocol-redis";
+      description = "Redis protocol parser/encoder with asynchronous capabilities";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  ProtocolRedisFaster = buildPerlPackage {
+    pname = "Protocol-Redis-Faster";
+    version = "0.003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Protocol-Redis-Faster-0.003.tar.gz";
+      sha256 = "6b9afb3de94ec1ccd7db4f9e6a2eaba254a57790301c17bcb13bb3edfe1850b7";
+    };
+    propagatedBuildInputs = [ ProtocolRedis ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Protocol-Redis-Faster";
+      description = "Optimized pure-perl Redis protocol parser/encoder";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   ProtocolWebSocket = buildPerlModule {
