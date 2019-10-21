@@ -12,7 +12,7 @@ let
       })
       (requireFile {
          name   = "native-image-installable-svm-svmee-linux-amd64-${version}.jar";
-         sha256 = "46356d73233bb0d03c9322bf4ad376f17598d20b";
+         sha1   = "46356d73233bb0d03c9322bf4ad376f17598d20b";
          url    = "https://www.oracle.com/technetwork/graalvm/downloads/index.html";
       })
       (requireFile {
