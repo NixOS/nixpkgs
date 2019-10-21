@@ -37,7 +37,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "8.3.0";
+let version = "9.2.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -132,7 +132,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "0b3xv411xhlnjmin2979nxcbnidgvzqdf4nbhix99x60dkzavfk4";
+    sha256 = "01mj3yk7z49i49168hg2cg7qs4bsccrrnv7pjmbdlf8j2a7z0vpa";
   };
 
   inherit patches;
