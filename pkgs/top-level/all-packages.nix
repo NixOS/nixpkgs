@@ -25677,6 +25677,8 @@ in
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
+  csxcad = callPackage ../applications/science/electronics/csxcad { };
+
   fparser = callPackage ../applications/science/electronics/fparser { };
 
   geda = callPackage ../applications/science/electronics/geda {
