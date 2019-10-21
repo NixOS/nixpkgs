@@ -5707,7 +5707,7 @@ in
   padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
 
   page = callPackage ../tools/misc/page { };
-  
+
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
@@ -24820,6 +24820,8 @@ in
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
+
+  csxcad = callPackage ../applications/science/electronics/csxcad { };
 
   fparser = callPackage ../applications/science/electronics/fparser { };
 
