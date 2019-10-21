@@ -3707,7 +3707,7 @@ in {
 
   logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix {};
 
-  lxml = callPackage ../development/python-modules/lxml {inherit (pkgs) libxml2 libxslt;};
+  lxml = callPackage ../development/python-modules/lxml {inherit (pkgs) libxml2 libxslt zlib;};
 
   lxc = callPackage ../development/python-modules/lxc { };
 
