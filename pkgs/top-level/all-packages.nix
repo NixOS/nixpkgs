@@ -25770,6 +25770,10 @@ in
 
   pcb = callPackage ../applications/science/electronics/pcb { };
 
+  qcsxcad = libsForQt5.callPackage ../applications/science/electronics/qcsxcad {
+    inherit (qt5) wrapQtAppsHook qtbase;
+  };
+
   qucs = callPackage ../applications/science/electronics/qucs { };
 
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
