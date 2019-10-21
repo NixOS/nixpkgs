@@ -65,4 +65,8 @@ in rec {
     inherit callPackage;
   };
 
+  luajit_2_1_gc64 = import ../luajit/2.1-gc64.nix {
+    self = luajit_2_1_gc64;
+    inherit callPackage;
+  };
 }

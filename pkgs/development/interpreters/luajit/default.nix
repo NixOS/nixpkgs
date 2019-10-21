@@ -5,6 +5,7 @@
 , version
 , extraMeta ? {}
 , callPackage
+, withGC64 ? false
 , self
 , packageOverrides ? (self: super: {})
 }:
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     "CROSS=${stdenv.cc.targetPrefix}"
     # TODO: when pointer size differs, we would need e.g. -m32
     "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
+    (stdenv.lib.optionalString withGC64 "XCFLAGS=-DLUAJIT_ENABLE_GC64")
   ];
   buildFlags = [ "amalg" ]; # Build highly optimized version
   enableParallelBuilding = true;
