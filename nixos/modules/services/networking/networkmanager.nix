@@ -15,14 +15,15 @@ let
     networkmanager-openconnect
     networkmanager-openvpn
     networkmanager-vpnc
-    wpa_supplicant
-   ];
+  ] ++ optional (!enableIwd) wpa_supplicant;
 
   dynamicHostsEnabled =
     cfg.dynamicHosts.enable && cfg.dynamicHosts.hostsDirs != {};
 
+  enableIwd = cfg.wifi.backend == "iwd";
+
   # /var/lib/misc is for dnsmasq.leases.
-  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
+  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc /var/lib/NetworkManager-fortisslvpn";
 
   configFile = pkgs.writeText "NetworkManager.conf" ''
     [main]
@@ -48,6 +49,7 @@ let
 
     [device]
     wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
+    wifi.backend=${cfg.wifi.backend}
 
     ${cfg.extraConfig}
   '';
@@ -233,6 +235,15 @@ in {
 
       wifi = {
         macAddress = macAddressOpt;
+
+        backend = mkOption {
+          type = types.enum [ "wpa_supplicant" "iwd" ];
+          default = "wpa_supplicant";
+          description = ''
+            Specify the Wi-Fi backend used for the device.
+            Currently supported are <option>wpa_supplicant</option> or <option>iwd</option> (experimental).
+          '';
+        };
 
         powersave = mkOption {
           type = types.nullOr types.bool;
@@ -509,12 +520,13 @@ in {
       useDHCP = false;
       # use mkDefault to trigger the assertion about the conflict above
       wireless.enable = mkDefault false;
-    };
+    } // (mkIf cfg.enableStrongSwan {
+      networkmanager.packages = [ pkgs.networkmanager_strongswan ];
+    }) // (mkIf enableIwd {
+      wireless.iwd.enable = true;
+    });
 
     security.polkit.extraConfig = polkitConf;
-
-    networking.networkmanager.packages =
-      mkIf cfg.enableStrongSwan [ pkgs.networkmanager_strongswan ];
 
     services.dbus.packages =
       optional cfg.enableStrongSwan pkgs.strongswanNM ++ cfg.packages;

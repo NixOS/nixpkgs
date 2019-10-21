@@ -27,9 +27,13 @@ in stdenv.mkDerivation {
   configureFlags = [
     "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--localstatedir=/tmp"
+    "--localstatedir=/var"
     "--enable-absolute-paths"
   ];
+
+  # the installer only create an empty directory in localstatedir, so
+  # we can drop it
+  installFlags = [ "localstatedir=." ];
 
   passthru = {
     updateScript = gnome3.updateScript {
