@@ -49,8 +49,10 @@ let
     python2 = writePython2Bin "test_writers" { libraries = [ python2Packages.enum ]; } ''
       from enum import Enum
 
+
       class Test(Enum):
           a = "success"
+
 
       print Test.a
     '';
@@ -112,8 +114,10 @@ let
     python2 = writePython2 "test_python2" { libraries = [ python2Packages.enum ]; } ''
       from enum import Enum
 
+
       class Test(Enum):
           a = "success"
+
 
       print Test.a
     '';
