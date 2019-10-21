@@ -16020,6 +16020,8 @@ in
 
     intel-speed-select = if stdenv.lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
+    intel-sgx = callPackage ../os-specific/linux/intel-sgx { };
+
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
     it87 = callPackage ../os-specific/linux/it87 {};
