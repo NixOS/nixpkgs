@@ -13,7 +13,6 @@ buildPythonPackage rec {
     sha256 = "c0efb33f8052c04fd7a26c0a07f1678e8512e0faec19f4aa8f2473a8b81d5227";
   };
 
-  propagatedBuildInputs = [  ];
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
