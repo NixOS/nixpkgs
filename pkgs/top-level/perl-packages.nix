@@ -5,8 +5,7 @@
    for each package in a separate file: the call to the function would
    be almost as much code as the function itself. */
 
-{config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides,
-  buildPerl, shortenPerlShebang}:
+{config, pkgs, fetchurl, stdenv, perl, overrides, buildPerl, shortenPerlShebang}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
 assert stdenv.lib.versionAtLeast perl.version "5.28.2";
@@ -930,7 +929,20 @@ let
     };
   };
 
-  BerkeleyDB = callPackage ../development/perl-modules/BerkeleyDB { };
+  BerkeleyDB = buildPerlPackage {
+    pname = "BerkeleyDB";
+    version = "0.61";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.61.tar.gz";
+      sha256 = "0l65v301cz6a9dxcw6a4ps2mnr5zq358yn81favap6i092krggiz";
+    };
+
+    preConfigure = ''
+      echo "LIB = ${pkgs.db.out}/lib" > config.in
+      echo "INCLUDE = ${pkgs.db.dev}/include" >> config.in
+    '';
+  };
 
   BHooksEndOfScope = buildPerlPackage {
     pname = "B-Hooks-EndOfScope";
@@ -2724,7 +2736,31 @@ let
     };
   };
 
-  CompressRawZlib = callPackage ../development/perl-modules/Compress-Raw-Zlib { };
+  CompressRawZlib = buildPerlPackage {
+    pname = "Compress-Raw-Zlib";
+    version = "2.086";
+
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.086.tar.gz;
+      sha256 = "0va93wc968p4l2ql0k349bz189l2vbs09bpn865cvc36amqxwv9z";
+    };
+
+    preConfigure = ''
+      cat > config.in <<EOF
+        BUILD_ZLIB   = False
+        INCLUDE      = ${pkgs.zlib.dev}/include
+        LIB          = ${pkgs.zlib.out}/lib
+        OLD_ZLIB     = False
+        GZIP_OS_CODE = AUTO_DETECT
+      EOF
+    '';
+
+    doCheck = !stdenv.isDarwin;
+
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   CompressUnLZMA = buildPerlPackage {
     pname = "Compress-unLZMA";
@@ -4683,17 +4719,132 @@ let
     buildInputs = [ TestException ];
   };
 
-  DBDSQLite = callPackage ../development/perl-modules/DBD-SQLite { };
+  DBDSQLite = buildPerlPackage {
+    pname = "DBD-SQLite";
+    version = "1.62";
 
-  DBDmysql = callPackage ../development/perl-modules/DBD-mysql { };
+    src = fetchurl {
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.62.tar.gz;
+      sha256 = "0p78ri1q6xpc1i98i6mlriv8n66iz8r5r11dlsknjm4y58rfz0mx";
+    };
 
-  DBDOracle = callPackage ../development/perl-modules/DBD-Oracle { };
+    propagatedBuildInputs = [ DBI ];
+    buildInputs = [ pkgs.sqlite ];
 
-  DBDPg = callPackage ../development/perl-modules/DBD-Pg { };
+    patches = [
+      # Support building against our own sqlite.
+      ../development/perl-modules/DBD-SQLite/external-sqlite.patch
+    ];
 
-  DBDsybase = callPackage ../development/perl-modules/DBD-sybase { };
+    makeMakerFlags = "SQLITE_INC=${pkgs.sqlite.dev}/include SQLITE_LIB=${pkgs.sqlite.out}/lib";
 
-  DBFile = callPackage ../development/perl-modules/DB_File { };
+    postInstall = ''
+      # Get rid of a pointless copy of the SQLite sources.
+      rm -rf $out/${perl.libPrefix}/*/*/auto/share
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Self Contained SQLite RDBMS in a DBI Driver";
+      license = with licenses; [ artistic1 gpl1Plus ];
+      platforms = platforms.unix;
+    };
+  };
+
+  DBDmysql = buildPerlPackage {
+    pname = "DBD-mysql";
+    version = "4.050";
+
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DV/DVEEDEN/DBD-mysql-4.050.tar.gz;
+      sha256 = "0y4djb048i09dk19av7mzfb3khr72vw11p3ayw2p82jsy4gm8j2g";
+    };
+
+    buildInputs = [ pkgs.libmysqlclient DevelChecklib ] ;
+    propagatedBuildInputs = [ DBI ];
+
+    doCheck = false;
+
+  #  makeMakerFlags = "MYSQL_HOME=${mysql}";
+  };
+
+  DBDOracle = buildPerlPackage {
+    pname = "DBD-Oracle";
+    version = "1.80";
+
+    src = fetchurl {
+      url = mirror://cpan/authors/id/Z/ZA/ZARQUON/DBD-Oracle-1.76.tar.gz;
+      sha256 = "1wym2kc8b31qa1zb0dgyy3w4iqlk1faw36gy9hkpj895qr1pznxn";
+    };
+
+    ORACLE_HOME = "${pkgs.oracle-instantclient.lib}/lib";
+
+    buildInputs = [ TestNoWarnings pkgs.oracle-instantclient ] ;
+    propagatedBuildInputs = [ DBI ];
+
+    postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+      install_name_tool -add_rpath "${pkgs.oracle-instantclient.lib}/lib" blib/arch/auto/DBD/Oracle/Oracle.bundle
+    '';
+  };
+
+  DBDPg = buildPerlPackage {
+    pname = "DBD-Pg";
+    version = "3.7.4";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TU/TURNSTEP/DBD-Pg-3.7.4.tar.gz";
+      sha256 = "0gkqlvbmzbdm0g4k328nlkjdg3wrjm5i2n9jxj1i8sqxkm79rylz";
+    };
+
+    buildInputs = [ pkgs.postgresql ];
+    propagatedBuildInputs = [ DBI ];
+
+    makeMakerFlags = "POSTGRES_HOME=${pkgs.postgresql}";
+
+    # tests freeze in a sandbox
+    doCheck = false;
+
+    meta = {
+      description = "DBI PostgreSQL interface";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.unix;
+    };
+  };
+
+  DBDsybase = buildPerlPackage {
+    pname = "DBD-Sybase";
+    version = "1.16";
+
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/ME/MEWP/DBD-Sybase-1.16.tar.gz;
+      sha256 = "1k6n261nrrcll9wxn5xwi4ibpavqv1il96687k62mbpznzl2gx37";
+    };
+
+    SYBASE = pkgs.freetds;
+
+    buildInputs = [ pkgs.freetds ] ;
+    propagatedBuildInputs = [ DBI ];
+
+    doCheck = false;
+  };
+
+  DBFile = buildPerlPackage {
+    pname = "DB_File";
+    version = "1.851";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMQS/DB_File-1.851.tar.gz";
+      sha256 = "1j276mng1nwxxdxnb3my427s5lb6zlnssizcnxricnvaa170kdv8";
+    };
+
+    preConfigure = ''
+      cat > config.in <<EOF
+      PREFIX = size_t
+      HASH = u_int32_t
+      LIB = ${pkgs.db.out}/lib
+      INCLUDE = ${pkgs.db.dev}/include
+      EOF
+    '';
+  };
 
   DBI = buildPerlPackage {
     pname = "DBI";
@@ -7777,46 +7928,7 @@ let
     buildInputs = [ TestSimple13 ];
   };
 
-  ham = buildPerlPackage {
-    pname = "ham-unstable";
-    version = "2019-01-22";
-
-    src = fetchFromGitHub {
-      owner = "kernkonzept";
-      repo = "ham";
-      rev = "37c2e4e8b8bd779ba0f8c48a3c6ba34bad860b92";
-      sha256 = "0h5r5256niskypl4g1j2573wqi0nn0mai5p04zsa06xrgyjqcy2j";
-    };
-
-    outputs = [ "out" ];
-
-    buildInputs = [ pkgs.makeWrapper ];
-    propagatedBuildInputs = [ pkgs.openssh GitRepository URI XMLMini ];
-
-    preConfigure = ''
-      patchShebangs .
-      touch Makefile.PL
-      rm -f Makefile
-    '';
-
-    installPhase = ''
-      mkdir -p $out/lib $out/bin
-      cp -r . $out/lib/ham
-
-      makeWrapper $out/lib/ham/ham $out/bin/ham --argv0 ham \
-        --prefix PATH : ${pkgs.openssh}/bin
-    '';
-
-    doCheck = false;
-
-    meta = {
-      description = "A tool to manage big projects consisting of multiple loosely-coupled git repositories";
-      homepage = https://github.com/kernkonzept/ham;
-      license = "unknown"; # should be gpl2, but not quite sure
-      maintainers = with stdenv.lib.maintainers; [ aw ];
-      platforms = stdenv.lib.platforms.unix;
-    };
-  };
+  ham = callPackage ../development/perl-modules/ham { };
 
   HashFlatten = buildPerlPackage {
     pname = "Hash-Flatten";
@@ -9055,6 +9167,7 @@ let
     };
   };
 
+  # TODO: use CPAN version
   ImageExifTool = buildPerlPackage {
     pname = "Image-ExifTool";
     version = "11.70";
@@ -10874,6 +10987,7 @@ let
     };
   };
 
+  # TODO: use CPAN version
   MHonArc = buildPerlPackage rec {
     pname = "MHonArc";
     version = "2.6.19";
@@ -12489,21 +12603,7 @@ let
     };
   };
 
-  MozillaLdap = buildPerlPackage rec {
-    pname = "Mozilla-Ldap";
-    version = "1.5.3";
-    USE_OPENLDAP = 1;
-    LDAPSDKDIR = pkgs.openldap.dev;
-    LDAPSDKLIBDIR = "${pkgs.openldap.out}/lib";
-    src = fetchurl {
-      url = "https://ftp.mozilla.org/pub/directory/perldap/releases/${version}/src/perl-mozldap-${version}.tar.gz";
-      sha256 = "0s0albdw0zvg3w37s7is7gddr4mqwicjxxsy400n1p96l7ipnw4x";
-    };
-    meta = {
-      description = "Mozilla's ldap client library";
-      license = with stdenv.lib.licenses; [ mpl20 lgpl21Plus gpl2Plus ];
-    };
-  };
+  MozillaLdap = callPackage ../development/perl-modules/Mozilla-LDAP { };
 
   MROCompat = buildPerlPackage {
     pname = "MRO-Compat";
@@ -12629,25 +12729,17 @@ let
 
   NetAmazonEC2 = buildPerlPackage {
     pname = "Net-Amazon-EC2";
-    version = "0.14-stanaka-bc66577e13";
-    src = fetchFromGitHub {
-      owner = "stanaka";
-      repo = "net-amazon-ec2";
-      rev = "bc66577e1312e828e252937d95f9f5f637af6a0b";
-      sha256 = "0x7kac27vp60a0qmvf6zpr2ds7245hncpn2y1qbacmdp092x212k";
+    version = "0.36";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MALLEN/Net-Amazon-EC2-0.36.tar.gz;
+      sha256 = "1wbjgmxjzr8mjpwj3mglan9hyh327cz27sfsir0w4rphwy93ca2f";
     };
-    buildInputs = [ pkgs.unzip ];
-    patches =
-      [ # In DescribeInstance requests, say "InstanceId.1" instead of
-        # "InstanceId", as required by the Amazon spec.  EC2 tolerates
-        # "InstanceId", but Nova doesn't.
-        ../development/perl-modules/net-amazon-ec2-nova-compat.patch
-        # Support DescribeInstancesV6.
-        ../development/perl-modules/net-amazon-ec2-ipv6.patch
-      ];
-    propagatedBuildInputs =
-      [ DigestHMAC LWP LWPProtocolHttps Moose URI ParamsValidate XMLSimple ];
-    doCheck = false; # wants to create actual EC2 instances (for $$$)
+    propagatedBuildInputs = [ LWPProtocolHttps Moose ParamsValidate XMLSimple ];
+    buildInputs = [ TestException ];
+    meta = {
+      description = "Perl interface to the Amazon Elastic Compute Cloud (EC2) environment.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   NetAmazonMechanicalTurk = buildPerlModule {
@@ -13836,24 +13928,7 @@ let
     };
   };
 
-  PerconaToolkit = buildPerlPackage {
-    pname = "Percona-Toolkit";
-    version = "3.0.12";
-    src = fetchFromGitHub {
-      owner = "percona";
-      repo = "percona-toolkit";
-      rev = "3.0.12";
-      sha256 = "0xk4h4dzl80kf97lbx0nznx9ajrb6kkg7k3iwca3rj6f3rqggv9y";
-    };
-    outputs = [ "out" ];
-    buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey ];
-    meta = {
-      description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
-      homepage = http://www.percona.com/software/percona-toolkit;
-      license = with stdenv.lib.licenses; [ gpl2 ];
-      maintainers = with maintainers; [ izorkin ];
-    };
-  };
+  PerconaToolkit = callPackage ../development/perl-modules/Percona-Toolkit { };
 
   Perl5lib = buildPerlPackage {
     pname = "perl5lib";
@@ -14225,39 +14300,7 @@ let
     };
   };
 
-  Po4a = buildPerlPackage rec {
-    pname = "po4a";
-    version = "0.55";
-    src = fetchurl {
-      url = "https://github.com/mquinson/po4a/releases/download/v${version}/po4a-${version}.tar.gz";
-      sha256 = "1qss4q5df3nsydsbggb7gg50bn0kdxq5wn8riqm9zwkiq6a4bifg";
-    };
-    nativeBuildInputs = [ pkgs.docbook_xsl pkgs.docbook_xsl_ns ModuleBuild ];
-    propagatedBuildInputs = [ TextWrapI18N LocaleGettext TermReadKey SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
-    buildInputs = [ pkgs.gettext pkgs.libxslt pkgs.glibcLocales pkgs.docbook_xml_dtd_412 pkgs.docbook_sgml_dtd_41 pkgs.texlive.combined.scheme-basic pkgs.opensp ];
-    LC_ALL = "en_US.UTF-8";
-    SGML_CATALOG_FILES = "${pkgs.docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml";
-    preConfigure = ''
-      touch Makefile.PL
-      export PERL_MB_OPT="--install_base=$out --prefix=$out"
-    '';
-    buildPhase = "perl Build.PL --install_base=$out --install_path=\"lib=$out/${perl.libPrefix}\"; ./Build build";
-    checkPhase = ''
-      export SGML_CATALOG_FILES=${pkgs.docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat
-      ./Build test
-    '';
-    installPhase = ''
-      ./Build install
-      for f in $out/bin/*; do
-        substituteInPlace $f --replace "#! /usr/bin/env perl" "#!${perl}/bin/perl"
-      done
-    '';
-    meta = {
-      homepage = "https://po4a.org/";
-      description = "Tools for helping translation of documentation";
-      license = stdenv.lib.licenses.gpl2;
-    };
-  };
+  Po4a = callPackage ../development/perl-modules/Po4a { };
 
   POE = buildPerlPackage {
     pname = "POE";
@@ -16041,37 +16084,7 @@ let
     buildInputs = [ TestToolbox ];
   };
 
-  strip-nondeterminism = buildPerlPackage rec {
-    pname = "strip-nondeterminism";
-    version = "1.0.0";
-
-    outputs = [ "out" "dev" ]; # no "devdoc"
-
-    src = pkgs.fetchFromGitLab {
-      owner = "reproducible-builds";
-      repo = "strip-nondeterminism";
-      domain = "salsa.debian.org";
-      rev = version;
-      sha256 = "1pwar1fyadqxmvb7x4zyw2iawbi5lsfjcg0ps9n9rdjb6an7vv64";
-    };
-
-    # stray test failure
-    doCheck = false;
-
-    buildInputs = [ ArchiveZip ArchiveCpio pkgs.file ];
-
-    perlPostHook = ''
-      # we don’t need the debhelper script
-      rm $out/bin/dh_strip_nondeterminism
-      rm $out/share/man/man1/dh_strip_nondeterminism.1.gz
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A Perl module for stripping bits of non-deterministic information";
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ pSub ];
-    };
-  };
+  strip-nondeterminism = callPackage ../development/perl-modules/strip-nondeterminism { };
 
   StructDumb = buildPerlModule {
     pname = "Struct-Dumb";
@@ -19656,35 +19669,7 @@ let
     };
   };
 
-  WWWYoutubeViewer = buildPerlPackage rec {
-    pname = "WWW-YoutubeViewer";
-    version = "3.3.0";
-
-    src = fetchFromGitHub {
-      owner  = "trizen";
-      repo   = "youtube-viewer";
-      rev    = version;
-      sha256 = "15xyrwv08fw8jmpydwzks26ipxnzliwddgyjcfqiaj0p7lwlhmx1";
-    };
-
-    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
-    propagatedBuildInputs = [
-      LWP
-      LWPProtocolHttps
-      DataDump
-      JSON
-    ];
-    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      shortenPerlShebang $out/bin/youtube-viewer
-    '';
-
-    meta = {
-      description = "A lightweight application for searching and streaming videos from YouTube";
-      homepage = https://github.com/trizen/youtube-viewer;
-      maintainers = with maintainers; [ woffs ];
-      license = with stdenv.lib.licenses; [ artistic2 ];
-    };
-  };
+  WWWYoutubeViewer = callPackage ../development/perl-modules/WWW-YoutubeViewer { };
 
   Want = buildPerlPackage {
     pname = "Want";
