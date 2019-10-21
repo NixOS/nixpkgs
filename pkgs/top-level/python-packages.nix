@@ -5013,6 +5013,8 @@ in {
 
   sphinxcontrib-applehelp = callPackage ../development/python-modules/sphinxcontrib-applehelp {};
 
+  sphinxcontrib-devhelp = callPackage ../development/python-modules/sphinxcontrib-devhelp {};
+
   sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex {};
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree {};
