@@ -4544,6 +4544,8 @@ in {
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
+  python-csxcad = callPackage ../development/python-modules/python-csxcad { };
+
   python_openzwave = callPackage ../development/python-modules/python_openzwave {
     inherit (pkgs) pkgconfig;
   };
