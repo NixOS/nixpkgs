@@ -20307,7 +20307,7 @@ in
 
   plex-media-player = libsForQt59.callPackage ../applications/video/plex-media-player { };
 
-  plover = recurseIntoAttrs (callPackage ../applications/misc/plover { });
+  plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
