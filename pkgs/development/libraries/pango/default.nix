@@ -18,6 +18,15 @@ in stdenv.mkDerivation rec {
     sha256 = "0v7qq3fv1c0dl80d4qxsvd6cmhh4ngih3w0zc40f4dw7hfx427iy";
   };
 
+  # 1.44.6-2 is not available from the usual mirrors yet,
+  # so applying from gitlab
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/pango/commit/8a408d4f25ddb0e3d6020cdde0cd8f8a19ee8db2.patch";
+      sha256 = "0l0hxwbijqrfvka302ijgih9jafc2ffs3d6d4v7bwynpn54lmza7";
+    })
+  ];
+
   # FIXME: docs fail on darwin
   outputs = [ "bin" "dev" "out" ] ++ optional (!stdenv.isDarwin) "devdoc";
 
@@ -26,14 +35,14 @@ in stdenv.mkDerivation rec {
     pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [
-    harfbuzz fribidi
+    fribidi
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
     CoreGraphics
     CoreText
   ]);
-  propagatedBuildInputs = [ cairo glib libintl ] ++
+  propagatedBuildInputs = [ cairo glib libintl harfbuzz ] ++
     optional x11Support libXft;
 
   mesonFlags = [
