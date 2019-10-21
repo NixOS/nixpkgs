@@ -25,9 +25,15 @@ stdenv.mkDerivation {
       patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.x86_64"
       makeWrapper "${gameDir}/openarena.x86_64" "$out/bin/openarena" \
         --prefix LD_LIBRARY_PATH : "${libPath}"
+      patchelf --set-interpreter "${interpreter}" "${gameDir}/oa_ded.x86_64"
+      makeWrapper "${gameDir}/oa_ded.x86_64" "$out/bin/openarena-server" \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
     '' else ''
       patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.i386"
       makeWrapper "${gameDir}/openarena.i386" "$out/bin/openarena" \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
+      patchelf --set-interpreter "${interpreter}" "${gameDir}/oa_ded.i386"
+      makeWrapper "${gameDir}/oa_ded.i386" "$out/bin/openarena-server" \
         --prefix LD_LIBRARY_PATH : "${libPath}"
     ''}
   '';
