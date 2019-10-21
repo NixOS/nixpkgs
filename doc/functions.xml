@@ -7,7 +7,6 @@
   The nixpkgs repository has several utility functions to manipulate Nix expressions.
  </para>
  <xi:include href="functions/library.xml" />
- <xi:include href="functions/overrides.xml" />
  <xi:include href="functions/generators.xml" />
  <xi:include href="functions/debug.xml" />
  <xi:include href="functions/fhs-environments.xml" />
