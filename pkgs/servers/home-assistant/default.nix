@@ -145,6 +145,6 @@ in with py.pkgs; buildPythonApplication rec {
     homepage = https://home-assistant.io/;
     description = "Open-source home automation platform running on Python 3";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fleaz dotlambda globin ];
+    maintainers = with maintainers; [ dotlambda globin ];
   };
 }
