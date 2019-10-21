@@ -10169,6 +10169,8 @@ in
 
   snore = callPackage ../tools/misc/snore { };
 
+  snzip = callPackage ../tools/archivers/snzip { };
+
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
   sparse = callPackage ../development/tools/analysis/sparse { };
