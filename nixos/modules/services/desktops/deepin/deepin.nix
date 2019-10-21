@@ -30,6 +30,8 @@
   config = lib.mkMerge [
 
     (lib.mkIf config.services.deepin.core.enable {
+      programs.dconf.enable = true;
+
       environment.systemPackages = [
         pkgs.deepin.dde-api
         pkgs.deepin.dde-calendar
