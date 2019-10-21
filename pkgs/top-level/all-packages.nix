@@ -24821,6 +24821,8 @@ in
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
+  fparser = callPackage ../applications/science/electronics/fparser { };
+
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_0;
   };
