@@ -289,6 +289,8 @@ let
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
+    imagelib-unix = callPackage ../development/ocaml-modules/imagelib/unix.nix { };
+
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
     integers = callPackage ../development/ocaml-modules/integers { };
@@ -316,7 +318,7 @@ let
 
     gg = callPackage ../development/ocaml-modules/gg { };
 
-    git = callPackage ../development/ocaml-modules/git { };
+    git = callPackage ../development/ocaml-modules/git { inherit (pkgs) git; };
 
     git-http = callPackage ../development/ocaml-modules/git-http { };
 
