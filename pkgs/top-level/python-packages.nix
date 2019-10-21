@@ -5000,6 +5000,8 @@ in {
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
+  sphinxcontrib-htmlhelp = callPackage ../development/python-modules/sphinxcontrib-htmlhelp {};
+  
   sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex {};
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree {};
