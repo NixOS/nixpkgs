@@ -10,6 +10,7 @@
   <title>Using Nixpkgs</title>
   <xi:include href="configuration.xml" />
   <xi:include href="overlays.xml" />
+  <xi:include href="overrides.xml" />
   <xi:include href="functions.xml" />
  </part>
  <part>
