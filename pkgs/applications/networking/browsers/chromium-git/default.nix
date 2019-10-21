@@ -51,6 +51,9 @@ let
     use_pulseaudio = true;
     enable_widevine = false;
     enable_swiftshader = false;
+    
+    # explicit target_cpu prevents "nix-shell pkgsi686Linux.chromium-git" from building x86_64 version
+    target_cpu = { i686-linux = "x86"; x86_64-linux = "x64"; armv7l-linux = "arm"; aarch64-linux = "arm64"; }.${stdenv.hostPlatform.system};
   } // customGnFlags;
 
   common = { version }:
