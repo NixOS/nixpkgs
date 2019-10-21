@@ -25772,6 +25772,8 @@ in
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
+  openems = callPackage ../applications/science/electronics/openems { };
+
   pcb = callPackage ../applications/science/electronics/pcb { };
 
   qcsxcad = libsForQt5.callPackage ../applications/science/electronics/qcsxcad {
