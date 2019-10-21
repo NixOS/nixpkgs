@@ -10607,6 +10607,8 @@ in
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
 
+  clfft = callPackage ../development/libraries/clfft { };
+
   clipp  = callPackage ../development/libraries/clipp { };
 
   clipper = callPackage ../development/libraries/clipper { };
