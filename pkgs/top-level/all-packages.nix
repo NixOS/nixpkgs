@@ -1919,6 +1919,8 @@ in
 
   photon = callPackage ../tools/networking/photon { };
 
+  pifs = callPackage ../tools/filesystems/pifs { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
