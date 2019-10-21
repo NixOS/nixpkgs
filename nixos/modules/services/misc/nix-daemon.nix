@@ -152,8 +152,8 @@ in
         type = types.lines;
         default = "";
         example = ''
-          gc-keep-outputs = true
-          gc-keep-derivations = true
+          keep-outputs = true
+          keep-derivations = true
         '';
         description = "Additional text appended to <filename>nix.conf</filename>.";
       };
