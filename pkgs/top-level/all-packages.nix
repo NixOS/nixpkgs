@@ -13209,6 +13209,7 @@ in
   protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
   protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
+  protobuf3_0 = callPackage ../development/libraries/protobuf/3.0.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
@@ -15747,6 +15748,13 @@ in
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
   intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
+
+  intel-aesmd = callPackage ../os-specific/linux/intel-aesmd/2.7.0.nix { };
+  intel-aesmd2_3_1 = callPackage ../os-specific/linux/intel-aesmd/2.3.1.nix { };
+  intel-aesmd2_4_0 = callPackage ../os-specific/linux/intel-aesmd/2.4.0.nix { };
+  intel-aesmd2_5_0 = callPackage ../os-specific/linux/intel-aesmd/2.5.0.nix { };
+  intel-aesmd2_6_0 = callPackage ../os-specific/linux/intel-aesmd/2.6.0.nix { };
+  intel-aesmd2_7_0 = callPackage ../os-specific/linux/intel-aesmd/2.7.0.nix { };
 
   iomelt = callPackage ../os-specific/linux/iomelt { };
 
