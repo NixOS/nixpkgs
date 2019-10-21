@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # At least, we use -fPIC for other packages to be able to use this in shared
   # objects.
   cmakeFlags = [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" "-DVTK_USE_SYSTEM_TIFF=1" "-DOPENGL_INCLUDE_DIR=${libGL}/include" ]
-    ++ optional (qtLib != null) [ "-DVTK_Group_Qt:BOOL=ON" ]
+    ++ optional (qtLib != null) [ "-DVTK_Group_Qt:BOOL=ON" "-DModule_vtkGUISupportQt:BOOL=ON" ]
     ++ optional stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
     ++ optional enablePython [ "-DVTK_WRAP_PYTHON:BOOL=ON" ];
 
