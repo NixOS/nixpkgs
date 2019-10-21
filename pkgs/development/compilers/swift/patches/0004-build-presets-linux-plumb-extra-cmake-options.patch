@@ -2,7 +2,7 @@ plumb extra-cmake-options
 
 --- a/utils/build-presets.ini
 +++ b/utils/build-presets.ini
-@@ -743,6 +743,8 @@ install-destdir=%(install_destdir)s
+@@ -766,6 +766,8 @@ install-destdir=%(install_destdir)s
  # Path to the .tar.gz package we would create.
  installable-package=%(installable_package)s
  

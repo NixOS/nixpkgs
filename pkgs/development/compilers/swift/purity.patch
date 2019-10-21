@@ -2,7 +2,7 @@
 
 --- a/lib/Driver/ToolChains/Gnu.cpp
 +++ b/lib/Driver/ToolChains/Gnu.cpp
-@@ -380,13 +380,6 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -402,13 +402,6 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
    if (!Args.hasArg(options::OPT_static)) {
      if (Args.hasArg(options::OPT_rdynamic))
        CmdArgs.push_back("-export-dynamic");

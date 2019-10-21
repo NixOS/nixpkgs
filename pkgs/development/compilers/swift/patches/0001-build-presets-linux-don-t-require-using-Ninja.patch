@@ -2,7 +2,7 @@ Don't build Ninja, we use our own.
 
 --- a/utils/build-presets.ini
 +++ b/utils/build-presets.ini
-@@ -721,7 +721,7 @@ swiftpm
+@@ -745,7 +745,7 @@ swiftpm
  
  dash-dash
  
