@@ -98,7 +98,7 @@ rec {
         gcc \
             ${optionalString (libraries != [])
               "$(pkg-config --cflags --libs ${
-                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgsconfig -name \*.pc -exec basename {} \;)") libraries
+                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgsconfig -name \\*.pc -exec basename {} \\;)") libraries
               })"
             } \
             -O \
