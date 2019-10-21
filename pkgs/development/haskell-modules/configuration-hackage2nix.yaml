@@ -43,14 +43,14 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 14.10
+  # LTS Haskell 14.11
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
   - accuerr ==0.2.0.2
   - ace ==0.6
   - action-permutations ==0.0.0.1
-  - active ==0.2.0.13
+  - active ==0.2.0.14
   - ad ==4.3.6
   - adjunctions ==4.4
   - adler32 ==0.1.2.0
@@ -73,7 +73,7 @@ default-package-overrides:
   - alarmclock ==0.7.0.2
   - alerts ==0.1.2.0
   - alex ==3.2.4
-  - alg ==0.2.11.0
+  - alg ==0.2.12.0
   - algebraic-graphs ==0.4
   - Allure ==0.9.5.0
   - almost-fix ==0.0.2
@@ -283,7 +283,7 @@ default-package-overrides:
   - cassava-records ==0.1.0.4
   - cast ==0.1.0.2
   - caster ==0.0.3.0
-  - category ==0.2.4.1
+  - category ==0.2.4.2
   - cayley-client ==0.4.9
   - cborg ==0.2.2.0
   - cborg-json ==0.2.1.0
@@ -399,7 +399,6 @@ default-package-overrides:
   - convertible ==1.1.1.0
   - cookie ==0.4.4
   - core-data ==0.2.0.0
-  - core-program ==0.2.0.0
   - core-text ==0.2.0.0
   - countable ==1.0
   - country ==0.1.6
@@ -521,7 +520,7 @@ default-package-overrides:
   - dhall-json ==1.3.0
   - diagrams ==1.4
   - diagrams-contrib ==1.4.3
-  - diagrams-core ==1.4.1.1
+  - diagrams-core ==1.4.2
   - diagrams-lib ==1.4.2.3
   - diagrams-postscript ==1.4.1
   - diagrams-rasterific ==1.4.1.1
@@ -563,7 +562,8 @@ default-package-overrides:
   - download ==0.3.2.7
   - drinkery ==0.4
   - dsp ==0.2.5
-  - dual-tree ==0.2.2
+  - dual ==0.1.0.2
+  - dual-tree ==0.2.2.1
   - dublincore-xml-conduit ==0.1.0.2
   - dunai ==0.5.1
   - dunai-core ==0.5.1.0
@@ -915,7 +915,7 @@ default-package-overrides:
   - hinfo ==0.0.3.0
   - hinotify ==0.4
   - hint ==0.9.0.2
-  - hjsmin ==0.2.0.3
+  - hjsmin ==0.2.0.4
   - hkgr ==0.2.4
   - hlibgit2 ==0.18.0.16
   - hlibsass ==0.1.8.0
@@ -980,7 +980,7 @@ default-package-overrides:
   - hspec-discover ==2.7.1
   - hspec-expectations ==0.8.2
   - hspec-expectations-lifted ==0.10.0
-  - hspec-expectations-pretty-diff ==0.7.2.4
+  - hspec-expectations-pretty-diff ==0.7.2.5
   - hspec-golden-aeson ==0.7.0.0
   - hspec-leancheck ==0.0.3
   - hspec-megaparsec ==2.0.1
@@ -1179,7 +1179,7 @@ default-package-overrides:
   - LambdaHack ==0.9.5.0
   - lame ==0.2.0
   - language-c ==0.8.3
-  - language-c-quote ==0.12.2
+  - language-c-quote ==0.12.2.1
   - language-docker ==8.0.2
   - language-ecmascript ==0.19
   - language-haskell-extract ==0.2.4
@@ -1370,7 +1370,7 @@ default-package-overrides:
   - monad-unlift-ref ==0.2.1
   - mongoDB ==2.5.0.0
   - monoidal-containers ==0.4.0.0
-  - monoid-extras ==0.5
+  - monoid-extras ==0.5.1
   - monoid-subclasses ==0.4.6.1
   - monoid-transformer ==0.0.4
   - mono-traversable ==1.0.13.0
@@ -1403,7 +1403,7 @@ default-package-overrides:
   - mysql-simple ==0.4.5
   - n2o ==0.11.1
   - nagios-check ==0.3.2
-  - named ==0.3.0.0
+  - named ==0.3.0.1
   - names-th ==0.3.0.0
   - nano-erl ==0.1.0.1
   - nanospec ==0.2.2
@@ -1472,7 +1472,7 @@ default-package-overrides:
   - odbc ==0.2.2
   - oeis ==0.3.9
   - oeis2 ==1.0.3
-  - ofx ==0.4.2.0
+  - ofx ==0.4.4.0
   - old-locale ==1.0.0.7
   - old-time ==1.1.0.3
   - once ==0.4
@@ -1716,13 +1716,13 @@ default-package-overrides:
   - Ranged-sets ==0.4.0
   - range-set-list ==0.1.3.1
   - rank1dynamic ==0.4.0
-  - rank2classes ==1.3.1.1
+  - rank2classes ==1.3.1.2
   - Rasterific ==0.7.4.4
   - rasterific-svg ==0.3.3.2
   - ratel ==1.0.8
   - ratel-wai ==1.1.0
   - rattle ==0.1
-  - rattletrap ==9.0.2
+  - rattletrap ==9.0.6
   - rawfilepath ==0.2.4
   - rawstring-qm ==0.2.3.0
   - raw-strings-qq ==1.1
@@ -1769,6 +1769,8 @@ default-package-overrides:
   - repa ==3.4.1.4
   - repa-algorithms ==3.4.1.3
   - repa-io ==3.4.1.1
+  - replace-attoparsec ==1.0.2.0
+  - replace-megaparsec ==1.1.4.0
   - repline ==0.2.1.0
   - req ==2.1.0
   - req-conduit ==1.0.0
@@ -1881,6 +1883,7 @@ default-package-overrides:
   - servant-mock ==0.8.5
   - servant-multipart ==0.11.4
   - servant-pipes ==0.15.1
+  - servant-rawm ==0.3.2.0
   - servant-ruby ==0.9.0.0
   - servant-server ==0.16.2
   - servant-static-th ==0.2.2.1
@@ -1996,7 +1999,7 @@ default-package-overrides:
   - storable-tuple ==0.0.3.3
   - storablevector ==0.2.13
   - store ==0.5.1.2
-  - store-core ==0.4.4
+  - store-core ==0.4.4.1
   - Strafunski-StrategyLib ==5.0.1.0
   - stratosphere ==0.40.0
   - streaming ==0.2.3.0
@@ -2143,7 +2146,7 @@ default-package-overrides:
   - throwable-exceptions ==0.1.0.9
   - th-strict-compat ==0.1.0.1
   - th-test-utils ==1.0.1
-  - th-utilities ==0.2.3.0
+  - th-utilities ==0.2.3.1
   - thyme ==0.3.5.5
   - tile ==0.3.0.0
   - time-compat ==1.9.2.2
@@ -2225,7 +2228,7 @@ default-package-overrides:
   - ucam-webauth ==0.1.0.0
   - ucam-webauth-types ==0.1.0.0
   - uglymemo ==0.1.0.1
-  - unagi-chan ==0.4.1.2
+  - unagi-chan ==0.4.1.3
   - unbounded-delays ==0.1.1.0
   - unbound-generics ==0.4.0
   - unboxed-ref ==0.4.0.0
@@ -2275,7 +2278,7 @@ default-package-overrides:
   - users-test ==0.5.0.1
   - utf8-light ==0.4.2
   - utf8-string ==1.0.1.1
-  - util ==0.1.13.0
+  - util ==0.1.14.0
   - utility-ht ==0.0.14
   - uuid ==1.3.13
   - uuid-types ==1.0.3
@@ -2309,7 +2312,7 @@ default-package-overrides:
   - verbosity ==0.3.0.0
   - versions ==3.5.1.1
   - ViennaRNAParser ==1.3.3
-  - viewprof ==0.0.0.31
+  - viewprof ==0.0.0.32
   - vinyl ==0.11.0
   - vivid ==0.4.2.3
   - vivid-osc ==0.5.0.0
