@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, substituteAll }:
+{ stdenv, fetchFromGitHub, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "srt-to-vtt-cl";
@@ -11,14 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0qxysj08gjr6npyvg148llmwmjl2n9cyqjllfnf3gxb841dy370n";
   };
 
-  buildInputs = [
-    which
-  ];
-
   patches = [
     (substituteAll {
-      src = ./fix-which-command.patch;
-      inherit which;
+      src = ./fix-validation.patch;
     })
   ];
 

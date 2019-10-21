@@ -1,8 +1,0 @@
---- a/Makefile
-+++ b/Makefile
-@@ -1,4 +1,4 @@
--ERR = $(shell which clang++ >/dev/null; echo $$?)
-+ERR = $(shell @which@/bin/which clang++ >/dev/null; echo $$?)
- ifeq "$(ERR)" "0"
- 	CXX ?= clang++
- else
