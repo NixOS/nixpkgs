@@ -9220,6 +9220,8 @@ in
     alloy5
     alloy;
 
+  ameba = callPackage ../development/tools/ameba { };
+
   augeas = callPackage ../tools/system/augeas { };
 
   inherit (callPackage ../tools/admin/ansible { })
