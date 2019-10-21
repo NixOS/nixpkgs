@@ -20526,6 +20526,8 @@ in
 
   railcar = callPackage ../applications/virtualization/railcar {};
 
+  raiseorlaunch = callPackage ../applications/misc/raiseorlaunch {};
+
   rapcad = libsForQt5.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapid-photo-downloader = libsForQt5.callPackage ../applications/graphics/rapid-photo-downloader { };
