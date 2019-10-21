@@ -139,7 +139,35 @@ let
         echo 'EndSection' >> $out
 
         echo "$config" >> $out
-      ''; # */
+      '';
+
+  multipleDesktopManagersEnabled = let
+    cleanedDesktopManagers = filterAttrs
+      (n: v: hasAttrByPath ["enable"] v)
+      cfg.desktopManager;
+
+    desktopManagerEnabledValues = forEach
+      (attrNames cleanedDesktopManagers)
+      (x: cleanedDesktopManagers.${x}.enable);
+  in (count (x: x == true) desktopManagerEnabledValues) > 1;
+
+  displayManagerEnabled = let
+    displayManagerEnabledValues = with cfg.displayManager; [
+      auto.enable
+      gdm.enable
+      sddm.enable
+      slim.enable
+      xpra.enable
+      startx.enable
+      lightdm.enable
+    ];
+  in (count (x: x == true) displayManagerEnabledValues) > 0;
+
+  defaultDisplayManager =
+    if displayManagerEnabled then null
+    else if cfg.desktopManager.gnome3.enable == true && !(multipleDesktopManagersEnabled) then "gdm"
+    else if cfg.desktopManager.plasma5.enable == true && !(multipleDesktopManagersEnabled) then "sddm"
+    else "lightdm";
 
 in
 
@@ -552,14 +580,9 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.displayManager.lightdm.enable =
-      let dmconf = cfg.displayManager;
-          default = !( dmconf.auto.enable
-                    || dmconf.gdm.enable
-                    || dmconf.sddm.enable
-                    || dmconf.slim.enable
-                    || dmconf.xpra.enable );
-      in mkIf (default) true;
+    services.xserver.displayManager.gdm.enable = mkIf (defaultDisplayManager == "gdm") true;
+    services.xserver.displayManager.lightdm.enable = mkIf (defaultDisplayManager == "lightdm") true;
+    services.xserver.displayManager.sddm.enable = mkIf (defaultDisplayManager == "sddm") true;
 
     hardware.opengl.enable = mkDefault true;
 
