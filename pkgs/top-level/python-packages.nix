@@ -4498,6 +4498,8 @@ in {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
+  python-csxcad = callPackage ../development/python-modules/python-csxcad { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
