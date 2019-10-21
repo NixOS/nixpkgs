@@ -85,7 +85,19 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     The <literal>dynamicHosts</literal> option has been removed from the
+     <link linkend="opt-networking.networkmanager.enable">networkd</link>
+     module. Allowing (multiple) regular users to override host entries
+     affecting the whole system opens up a huge attack vector.
+     There seem to be very rare cases where this might be useful.
+     Consider setting system-wide host entries using
+     <link linkend="opt-networking.hosts">networking.hosts</link>, provide
+     them via the DNS server in your network, or use
+     <link linkend="opt-environment.etc">environment.etc</link>
+     to add a file into <literal>/etc/NetworkManager/dnsmasq.d</literal>
+     reconfiguring <literal>hostsdir</literal>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

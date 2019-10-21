@@ -1,14 +1,18 @@
 { stdenv
 , lib
 , fetchurl
+, clang
+, llvm
 , pkgconfig
 , makeWrapper
 , file
-, geoip
 , hyperscan
 , jansson
+, libbpf
 , libcap_ng
+, libelf
 , libevent
+, libmaxminddb
 , libnet
 , libnetfilter_log
 , libnetfilter_queue
@@ -30,24 +34,30 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "4.1.5";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    sha256 = "0jy738rs3ds1gbn8hv26ck23z9k6pjrjxdpavkyn7znpbi9zdrff";
+    sha256 = "0qwav4qpvx3i5khkyvdvx42n8b9mza8c4cpxvrf7m4lnf51cqgba";
   };
 
   nativeBuildInputs = [
+    clang
+    llvm
     makeWrapper
     pkgconfig
-  ];
+  ]
+  ++ lib.optionals rustSupport [ rustc cargo ]
+  ;
 
   buildInputs = [
-    geoip
     jansson
+    libbpf
     libcap_ng
+    libelf
     libevent
     libmagic
+    libmaxminddb
     libnet
     libnetfilter_log
     libnetfilter_queue
@@ -62,17 +72,29 @@ stdenv.mkDerivation rec {
     python
     zlib
   ]
-  ++ lib.optional hyperscanSupport [ hyperscan ]
-  ++ lib.optional redisSupport [ redis hiredis ]
-  ++ lib.optional rustSupport [ rustc cargo ]
+  ++ lib.optional hyperscanSupport hyperscan
+  ++ lib.optionals redisSupport [ redis hiredis ]
   ;
 
   enableParallelBuilding = true;
 
+  patches = lib.optional stdenv.is64bit ./bpf_stubs_workaround.patch;
+
+  postPatch = ''
+    substituteInPlace ./configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
+    substituteInPlace ./libhtp/configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
+
+    mkdir -p bpf_stubs_workaround/gnu
+    touch bpf_stubs_workaround/gnu/stubs-32.h
+  '';
+
   configureFlags = [
     "--disable-gccmarch-native"
-    "--enable-afl"
     "--enable-af-packet"
+    "--enable-ebpf"
+    "--enable-ebpf-build"
     "--enable-gccprotect"
     "--enable-geoip"
     "--enable-luajit"
@@ -97,6 +119,13 @@ stdenv.mkDerivation rec {
     "--enable-rust-experimental"
   ];
 
+  postConfigure = ''
+    # Avoid unintended clousure growth.
+    sed -i 's|/nix/store/\(.\{8\}\)[^-]*-|/nix/store/\1...-|g' ./src/build-info.h
+  '';
+
+  hardeningDisable = [ "stackprotector" ];
+
   installFlags = [
     "e_localstatedir=\${TMPDIR}"
     "e_logdir=\${TMPDIR}"
@@ -115,6 +144,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/bin/suricatasc" \
       --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out")
+    substituteInPlace "$out/etc/suricata/suricata.yaml" \
+      --replace "/etc/suricata" "$out/etc/suricata"
   '';
 
   meta = with stdenv.lib; {

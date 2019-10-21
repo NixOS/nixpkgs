@@ -5589,6 +5589,8 @@ in
   plex = callPackage ../servers/plex { };
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
+  tab = callPackage ../tools/text/tab { };
+
   tautulli = callPackage ../servers/tautulli { python = python2; };
 
   ploticus = callPackage ../tools/graphics/ploticus {
@@ -6250,7 +6252,9 @@ in
 
   sshguard = callPackage ../tools/security/sshguard {};
 
-  suricata = callPackage ../applications/networking/ids/suricata { };
+  suricata = callPackage ../applications/networking/ids/suricata {
+    python = python3;
+  };
 
   softhsm = callPackage ../tools/security/softhsm {
     inherit (darwin) libobjc;
@@ -6424,7 +6428,6 @@ in
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
-    pythonPackages = python3Packages;
    };
 
   stricat = callPackage ../tools/security/stricat { };
@@ -25203,5 +25206,7 @@ in
   coz = callPackage ../development/tools/analysis/coz {};
 
   keycard-cli = callPackage ../tools/security/keycard-cli {};
+
+  sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
 }
