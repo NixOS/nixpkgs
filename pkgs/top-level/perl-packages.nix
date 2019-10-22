@@ -2421,12 +2421,12 @@ let
 
   ClassMethodModifiers = buildPerlPackage {
     pname = "Class-Method-Modifiers";
-    version = "2.12";
+    version = "2.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Class-Method-Modifiers-2.12.tar.gz;
-      sha256 = "1j3swa212wh14dq5r6zjarm2lzpx6mrdfplpjy65px8b09ri0k74";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Class-Method-Modifiers-2.13.tar.gz;
+      sha256 = "0qzx83mgd71hlc2m1kpw15dqsjzjq7b2cj3sdgg45a0q23vhfn5b";
     };
-    buildInputs = [ TestFatal TestRequires ];
+    buildInputs = [ TestFatal TestNeeds ];
     meta = {
       homepage = https://github.com/sartak/Class-Method-Modifiers/tree;
       description = "Provides Moose-like method modifiers";
