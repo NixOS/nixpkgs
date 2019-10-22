@@ -12001,6 +12001,8 @@ in
 
   libiio = callPackage ../development/libraries/libiio { };
 
+  libinjection = callPackage ../development/libraries/libinjection { };
+
   liburing = callPackage ../development/libraries/liburing { };
 
   librseq = callPackage ../development/libraries/librseq { };
