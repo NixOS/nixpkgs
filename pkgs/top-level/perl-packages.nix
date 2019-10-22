@@ -7782,12 +7782,12 @@ let
 
   Gtk2 = buildPerlPackage {
     pname = "Gtk2";
-    version = "1.24992";
+    version = "1.24993";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XA/XAOC/Gtk2-1.24992.tar.gz;
-      sha256 = "1044rj3wbfmgaif2jb0k28m2aczli6ai2n5yvn6pr7zjyw16kvd2";
+      url = mirror://cpan/authors/id/X/XA/XAOC/Gtk2-1.24993.tar.gz;
+      sha256 = "0ry9jfvfgdwzalxcvwsgr7plhk3agx7p40l0fqdf3vrf7ds47i29";
     };
-    buildInputs = [ pkgs.gtk2 Cairo ExtUtilsDepends ExtUtilsPkgConfig Glib Pango ];
+    buildInputs = [ pkgs.gtk2 ];
     # https://rt.cpan.org/Public/Bug/Display.html?id=130742
     # doCheck = !stdenv.isDarwin;
     doCheck = false;
@@ -7796,6 +7796,7 @@ let
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
       license = stdenv.lib.licenses.lgpl21Plus;
     };
+    propagatedBuildInputs = [ Pango ];
   };
 
   Gtk2GladeXML = buildPerlPackage {
