@@ -16201,10 +16201,10 @@ let
 
   SubName = buildPerlPackage {
     pname = "Sub-Name";
-    version = "0.21";
+    version = "0.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Sub-Name-0.21.tar.gz;
-      sha256 = "bd32e9dee07047c10ae474c9f17d458b6e9885a6db69474c7a494ccc34c27117";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Sub-Name-0.26.tar.gz;
+      sha256 = "2d2f2d697d516c89547e7c4307f1e79441641cae2c7395e7319b306d390df105";
     };
     buildInputs = [ BC DevelCheckBin ];
     meta = {
