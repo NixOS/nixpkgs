@@ -27,7 +27,6 @@ let
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
     deepin-image-viewer = callPackage ./deepin-image-viewer { };
     deepin-menu = callPackage ./deepin-menu { };
-    deepin-metacity = callPackage ./deepin-metacity { };
     deepin-movie-reborn = callPackage ./deepin-movie-reborn { };
     deepin-mutter = callPackage ./deepin-mutter { };
     deepin-screenshot = callPackage ./deepin-screenshot { };
