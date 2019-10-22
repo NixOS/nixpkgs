@@ -8081,10 +8081,10 @@ let
 
   HTMLForm = buildPerlPackage {
     pname = "HTML-Form";
-    version = "6.04";
+    version = "6.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/HTML-Form-6.04.tar.gz;
-      sha256 = "100090bdsr5kapv8h0wxzwlzfbfqn57rq9gzrvg9i6hvnsl5gmcw";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/HTML-Form-6.05.tar.gz;
+      sha256 = "14i4ldyvdvhdhvfhh9kiq6z853q2f84biq8vcpv1k5w2r80wdiin";
     };
     propagatedBuildInputs = [ HTMLParser HTTPMessage ];
     meta = {
