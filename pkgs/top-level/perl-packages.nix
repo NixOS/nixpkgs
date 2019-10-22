@@ -8727,10 +8727,10 @@ let
 
   ImageSane = buildPerlPackage {
     pname = "Image-Sane";
-    version = "0.14";
+    version = "4";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RA/RATCLIFFE/Image-Sane-0.14.tar.gz;
-      sha256 = "a4b027c9b7650291f1acb0eb93861a7fc45aef4e08f6726843f174fa113c8ba5";
+      url = mirror://cpan/authors/id/R/RA/RATCLIFFE/Image-Sane-4.tar.gz;
+      sha256 = "f970a0314e554f6fe29dcc651aec5bd45b32d547801d304434ae80b4b806896b";
     };
     buildInputs = [ pkgs.sane-backends ExtUtilsDepends ExtUtilsPkgConfig TestRequires TryTiny ];
     propagatedBuildInputs = [ ExceptionClass Readonly ];
