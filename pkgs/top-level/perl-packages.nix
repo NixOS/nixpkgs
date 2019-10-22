@@ -17525,12 +17525,12 @@ let
 
   TestMockObject = buildPerlPackage {
     pname = "Test-MockObject";
-    version = "1.20180705";
+    version = "1.20191002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Test-MockObject-1.20180705.tar.gz;
-      sha256 = "4516058d5d511155c1c462dab4027d762d6a474b99f73bf7da20b5ffbd024518";
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Test-MockObject-1.20191002.tar.gz;
+      sha256 = "c76a4ccff1994a7668b4403df6c36d2539611076dac0afbc361c1e71a4191998";
     };
-    buildInputs = [ CGI TestException TestWarn ];
+    buildInputs = [ TestException TestWarn ];
     propagatedBuildInputs = [ UNIVERSALcan UNIVERSALisa ];
     meta = {
       description = "Perl extension for emulating troublesome interfaces";
