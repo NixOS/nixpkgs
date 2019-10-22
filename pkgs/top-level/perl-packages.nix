@@ -20243,10 +20243,10 @@ let
 
   WebServiceLinode = buildPerlModule {
     pname = "WebService-Linode";
-    version = "0.28";
+    version = "0.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIKEGRB/WebService-Linode-0.28.tar.gz;
-      sha256 = "66a315016999c0d2043caae86e664dad10c6613708f33a2f56aae8030326c509";
+      url = mirror://cpan/authors/id/M/MI/MIKEGRB/WebService-Linode-0.29.tar.gz;
+      sha256 = "103aab245304f08e9e87ac7bc884ddb44a630de6bac077dc921f716d71154922";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ JSON LWPProtocolHttps ];
