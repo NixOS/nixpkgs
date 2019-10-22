@@ -1,19 +1,18 @@
 { lib, buildPythonPackage, isPy3k, fetchPypi
-, urllib3, python-dateutil , pytz, faker, mock, nose }:
+, urllib3, python-dateutil , pytz, faker, mock, nose, future }:
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "4.0.21";
+  version = "5.0.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35643f056b4d12e053fa7d8f40d98394ed7cc4d5d44ba53c9971e7428fd58e60";
+    sha256 = "0dgpw21gb6q7d2i9nkzqbxsiqpxzj95b20yb08rwmpsh0z5a2ywg";
   };
 
-  disabled = !isPy3k;
-
+  propagatedBuildInputs = [ future urllib3 python-dateutil pytz ];
   checkInputs = [ faker mock nose ];
-  propagatedBuildInputs = [ urllib3 python-dateutil pytz ];
 
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
