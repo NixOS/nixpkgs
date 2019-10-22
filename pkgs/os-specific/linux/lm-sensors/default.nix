@@ -6,11 +6,11 @@ assert sensord -> rrdtool != null;
 
 stdenv.mkDerivation rec {
   pname = "lm-sensors";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchzip {
     url = "https://github.com/lm-sensors/lm-sensors/archive/V${stdenv.lib.replaceStrings ["."] ["-"] version}.tar.gz";
-    sha256 = "1mdrnb9r01z1xfdm6dpkywvf9yy9a4yzb59paih9sijwmigv19fj";
+    sha256 = "1ipf6wjx037sqyhy0r5jh4983h216anq9l68ckn2x5c3qc4wfmzn";
   };
 
   nativeBuildInputs = [ bison flex which ];
