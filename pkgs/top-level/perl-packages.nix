@@ -2949,10 +2949,10 @@ let
 
   ConfigSimple = buildPerlPackage {
     pname = "Config-Simple";
-    version = "4.59";
+    version = "4.58";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHERZODR/Config-Simple-4.59.tar.gz;
-      sha256 = "0m0hg29baarw5ds768q9r4rxb27im8kj4fazyf9gjqw4mmssjy6b";
+      url = mirror://cpan/authors/id/S/SH/SHERZODR/Config-Simple-4.58.tar.gz;
+      sha256 = "1d7dhvis1i03xlj8z3g5l8mz88kf7dn13zngbjhq94qgdxq9b6fx";
     };
     meta = {
       description = "Simple configuration file class";
