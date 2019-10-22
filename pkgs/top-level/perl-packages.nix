@@ -7806,7 +7806,7 @@ let
       url = mirror://cpan/authors/id/T/TS/TSCH/Gtk2-GladeXML-1.007.tar.gz;
       sha256 = "50240a2bddbda807c8f8070de941823b7bf3d288a13be6d0d6563320b42c445a";
     };
-    propagatedBuildInputs = [ pkgs.gnome2.libglade pkgs.gtk2 Gtk2 Pango ];
+    propagatedBuildInputs = [ pkgs.gnome2.libglade pkgs.gtk2 Gtk2 ];
     meta = {
       description = "Create user interfaces directly from Glade XML files";
       license = stdenv.lib.licenses.lgpl2Plus;
