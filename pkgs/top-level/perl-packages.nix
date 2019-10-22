@@ -235,10 +235,10 @@ let
 
   AnyEvent = buildPerlPackage {
     pname = "AnyEvent";
-    version = "7.16";
+    version = "7.17";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-7.16.tar.gz;
-      sha256 = "149fe8c3082dfb015fd15ad2b8fea5fb75e012238c790aa0398dcfaabfa0546c";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-7.17.tar.gz;
+      sha256 = "50beea689c098fe4aaeb83806c40b9fe7f946d5769acf99f849f099091a4b985";
     };
     buildInputs = [ CanaryStability ];
     meta = {
