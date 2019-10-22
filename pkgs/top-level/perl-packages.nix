@@ -15376,10 +15376,10 @@ let
 
   ServerStarter = buildPerlModule {
     pname = "Server-Starter";
-    version = "0.34";
+    version = "0.35";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KAZUHO/Server-Starter-0.34.tar.gz;
-      sha256 = "96a20d4a1f341655bd1b26df5795d57c5d7498d9bcf8ca9d0d6e2ed743608f78";
+      url = mirror://cpan/authors/id/K/KA/KAZUHO/Server-Starter-0.35.tar.gz;
+      sha256 = "676dc0d6cff4648538332c63c32fb88ad09ed868213ea9e62e3f19fad41b9c40";
     };
     buildInputs = [ TestRequires TestSharedFork TestTCP ];
     meta = {
