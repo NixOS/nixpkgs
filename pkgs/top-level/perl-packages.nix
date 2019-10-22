@@ -2090,10 +2090,10 @@ let
 
   CGISimple = buildPerlModule {
     pname = "CGI-Simple";
-    version = "1.21";
+    version = "1.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.21.tar.gz;
-      sha256 = "1wzc2igs4khmj7zfahvs87c24p9ks8hnqhhsyviyiix53xx2y6sg";
+      url = mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.22.tar.gz;
+      sha256 = "13c7iwnnavky10ab87pi8jc1kqph03s0rhvj7myn7szhbfisc4gn";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
