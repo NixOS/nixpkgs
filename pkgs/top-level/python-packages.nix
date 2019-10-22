@@ -1937,6 +1937,8 @@ in {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
+  jsonlines = callPackage ../development/python-modules/jsonlines { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
