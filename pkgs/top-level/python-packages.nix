@@ -3999,6 +3999,8 @@ in {
 
   nose-randomly = callPackage ../development/python-modules/nose-randomly { };
 
+  nose-show-skipped = callPackage ../development/python-modules/nose-show-skipped { };
+
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose-cover3 = callPackage ../development/python-modules/nose-cover3 { };
