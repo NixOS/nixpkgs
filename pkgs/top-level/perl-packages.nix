@@ -18742,12 +18742,12 @@ let
     };
   };
 
-  TextTrim = buildPerlModule {
+  TextTrim = buildPerlPackage {
     pname = "Text-Trim";
-    version = "1.02";
+    version = "1.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MATTLAW/Text-Trim-1.02.tar.gz;
-      sha256 = "1bnwjl5n04w8nnrzrm75ljn4pijqbijr9csfkjcs79h4gwn9lwqw";
+      url = mirror://cpan/authors/id/R/RJ/RJT/Text-Trim-1.03.tar.gz;
+      sha256 = "0ks9afvx9c1b6px98wwzhbyhd2y6hdg7884814fc9pnx8qfzrz50";
     };
     meta = {
       description = "Remove leading and/or trailing whitespace from strings";
