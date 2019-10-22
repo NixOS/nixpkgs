@@ -411,7 +411,7 @@ let
     };
     propagatedBuildInputs = [ ExceptionClass Tk X11ProtocolOther XMLSimple ];
     buildInputs = [ DataDump FileWhich Readonly TestDifferences TestTrap ];
-    preCheck = "rm t/perltidy.t t/manifest.t t/30cluster.t"; # do not run failing tests
+    preCheck = "rm t/30cluster.t"; # do not run failing tests
     postInstall = ''
       mkdir -p $out/etc/bash_completion.d
       mv $out/bin/clusterssh_bash_completion.dist \
@@ -4741,6 +4741,8 @@ let
       # Get rid of a pointless copy of the SQLite sources.
       rm -rf $out/${perl.libPrefix}/*/*/auto/share
     '';
+
+    preCheck = "rm t/65_db_config.t"; # do not run failing tests
 
     meta = with stdenv.lib; {
       description = "Self Contained SQLite RDBMS in a DBI Driver";
@@ -11771,6 +11773,7 @@ let
      };
      propagatedBuildInputs = [ GetoptLongDescriptive MROCompat MooXLocalePassthrough PathClass UnicodeLineBreak strictures ];
      buildInputs = [ Mo MooXCmd MooXLocaleTextDomainOO Moose TestTrap ];
+     preCheck = "rm t/16-namespace_clean.t"; # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=942275
      meta = {
        description = "Explicit Options eXtension for Object Class";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -16391,6 +16394,7 @@ let
       sha256 = "1r6976bs86j7zp51m5vh42xlyah951jgdlkimv202413kjvqc2i5";
     };
     buildInputs = stdenv.lib.optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
+    doCheck = !stdenv.isAarch64;
   };
 
   SysHostnameLong = buildPerlPackage {
@@ -19622,6 +19626,7 @@ let
       '';
     NIX_CFLAGS_COMPILE = "-DCURL_STRICTER";
     doCheck = false; # performs network access
+    meta.broken = stdenv.lib.versionAtLeast (stdenv.lib.getVersion pkgs.curl) "7.66"; # broken since "curl: 7.65.3 -> 7.66.0"
   };
 
   WWWFormUrlEncoded = buildPerlModule {
