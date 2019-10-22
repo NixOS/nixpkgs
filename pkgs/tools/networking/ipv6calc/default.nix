@@ -1,5 +1,5 @@
 { stdenv, fetchurl, getopt, ip2location-c, openssl, perl
-, geoip ? null, geolite-legacy ? null }:
+, libmaxminddb ? null, geolite-legacy ? null }:
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
@@ -14,25 +14,24 @@ stdenv.mkDerivation rec {
     sha256 = "18acy0sy3n6jcjjwpxskysinw06czyayx1q4rqc7zc3ic4pkad8r";
   };
 
-  buildInputs = [ geoip geolite-legacy getopt ip2location-c openssl ];
-  nativeBuildInputs = [ perl ];
+  buildInputs = [ libmaxminddb geolite-legacy getopt ip2location-c openssl perl ];
 
   postPatch = ''
+    patchShebangs *.sh */*.sh
     for i in {,databases/}lib/Makefile.in; do
-      substituteInPlace $i --replace /sbin/ldconfig true
-    done
-    for i in {{,databases/}lib,man}/Makefile.in; do
-      substituteInPlace $i --replace DESTDIR out
+      substituteInPlace $i --replace "/sbin/ldconfig" "ldconfig"
     done
   '';
 
   configureFlags = [
+    "--prefix=${placeholder "out"}"
+    "--libdir=${placeholder "out"}/lib"
     "--disable-bundled-getopt"
     "--disable-bundled-md5"
     "--disable-dynamic-load"
     "--enable-shared"
-  ] ++ stdenv.lib.optional (geoip != null ) [
-    "--enable-geoip"
+  ] ++ stdenv.lib.optional (libmaxminddb != null ) [
+    "--enable-mmdb"
   ] ++ stdenv.lib.optional (geolite-legacy != null) [
     "--with-geoip-db=${geolite-legacy}/share/GeoIP"
   ] ++ stdenv.lib.optional (ip2location-c != null ) [
