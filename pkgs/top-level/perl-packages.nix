@@ -3717,10 +3717,10 @@ let
 
   DataCompare = buildPerlPackage {
     pname = "Data-Compare";
-    version = "1.25";
+    version = "1.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Compare-1.25.tar.gz;
-      sha256 = "0wzasidg9yjcfsi2gdiaw6726ikqda7n24n0v2ngpaazakdkcjqx";
+      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Compare-1.26.tar.gz;
+      sha256 = "03g0z2w8hz7750x6wkl6zq7shk12fry44gkzrz7b904s5fmphl4p";
     };
     propagatedBuildInputs = [ FileFindRule ];
   };
