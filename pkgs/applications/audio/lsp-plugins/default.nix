@@ -154,6 +154,6 @@ stdenv.mkDerivation rec {
       homepage = https://lsp-plug.in;
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
-      platforms = platforms.linux;
+      platforms = [ "x86_64-linux" ];
     };
 }
