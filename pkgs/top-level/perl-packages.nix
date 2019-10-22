@@ -3568,7 +3568,7 @@ let
       sha256 = "97dfa79a309a086e184a4e61047f8a10ffb3db051025e7d222a25f19130ba417";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ DigestHMAC DigestSHA3 Moo TryTiny TypeTiny namespaceautoclean strictures ];
+    propagatedBuildInputs = [ DigestHMAC DigestSHA3 Moo TypeTiny namespaceautoclean strictures ];
     meta = {
       homepage = "https://metacpan.org/release/Crypt-PBKDF2";
       description = "The PBKDF2 password hash algorithm";
