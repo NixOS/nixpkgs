@@ -10454,11 +10454,11 @@ let
   };
 
   MailBox = buildPerlPackage {
-    version = "3.007";
+    version = "3.008";
     pname = "Mail-Box";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/Mail-Box-3.007.tar.gz;
-      sha256 = "1rqn9d6sjinbnl8a9ia4rqfmp899ad89y9h9hpzvmr8jxni7i19s";
+      url = mirror://cpan/authors/id/M/MA/MARKOV/Mail-Box-3.008.tar.gz;
+      sha256 = "15yjq3ap1ch0k0pqa1zag50rqrjfqzf7cka1w41macxibna506mm";
     };
 
     doCheck = false;
