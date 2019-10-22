@@ -16226,10 +16226,10 @@ let
 
   SubQuote = buildPerlPackage {
     pname = "Sub-Quote";
-    version = "2.006003";
+    version = "2.006006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/Sub-Quote-2.006003.tar.gz;
-      sha256 = "be1f3a6f773f351f203cdc8f614803ac492b77d15fd68d5b1f0cd3884be18176";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Sub-Quote-2.006006.tar.gz;
+      sha256 = "6e4e2af42388fa6d2609e0e82417de7cc6be47223f576592c656c73c7524d89d";
     };
     buildInputs = [ TestFatal ];
     meta = {
