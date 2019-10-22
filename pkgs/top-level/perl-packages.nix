@@ -14583,10 +14583,10 @@ let
 
   PerlPrereqScannerNotQuiteLite = buildPerlPackage {
     pname = "Perl-PrereqScanner-NotQuiteLite";
-    version = "0.9906";
+    version = "0.9908";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Perl-PrereqScanner-NotQuiteLite-0.9906.tar.gz;
-      sha256 = "19b59zf69ayabkacifz36b5z3kfh4kbv5kn1a1habk46f6v7g9pj";
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Perl-PrereqScanner-NotQuiteLite-0.9908.tar.gz;
+      sha256 = "1akcmk74j8j01594ax4fq38bf6f03mbma96blzhcyzndfvqbxksf";
     };
     propagatedBuildInputs = [ DataDump ModuleCPANfile ModuleFind RegexpTrie ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings TestUseAllModules ];
