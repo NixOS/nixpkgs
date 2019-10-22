@@ -3635,6 +3635,8 @@ in {
 
   le = callPackage ../development/python-modules/le { };
 
+  lepl = callPackage ../development/python-modules/lepl { };
+
   lektor = callPackage ../development/python-modules/lektor { };
 
   leveldb = callPackage ../development/python-modules/leveldb { };
