@@ -15605,10 +15605,10 @@ let
 
   Specio = buildPerlPackage {
      pname = "Specio";
-     version = "0.43";
+     version = "0.44";
      src = fetchurl {
-       url = mirror://cpan/authors/id/D/DR/DROLSKY/Specio-0.43.tar.gz;
-       sha256 = "07gsm4fssn9v27bnlgcxa7igb7ggrxwgpdqbbryi4134gfzxxl1w";
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Specio-0.44.tar.gz;
+       sha256 = "0vvdgcqkw4kxg9mxm683ykbyykkig1b6j7sfpkgx1cvp8my1fi5m";
      };
      propagatedBuildInputs = [ DevelStackTrace EvalClosure MROCompat ModuleRuntime RoleTiny SubQuote TryTiny ];
      buildInputs = [ TestFatal TestNeeds ];
