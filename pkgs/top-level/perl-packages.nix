@@ -1331,10 +1331,10 @@ let
 
   CarpClan = buildPerlPackage {
     pname = "Carp-Clan";
-    version = "6.07";
+    version = "6.08";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Carp-Clan-6.07.tar.gz;
-      sha256 = "0gaa4ygd9q8lp2fn5d9s7miiwxz92a2lqs7j6smwmifq6w3mc20a";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Carp-Clan-6.08.tar.gz;
+      sha256 = "0237xx3rqa72sr4vdvws9r1m453h5f25bl85mdjmmk128kir4py7";
     };
     meta = {
       description = "Report errors from perspective of caller of a \"clan\" of modules";
