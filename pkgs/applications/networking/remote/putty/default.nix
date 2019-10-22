@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, autoconf, automake, pkgconfig, libtool
-, gtk2, halibut, ncurses, perl
+{ stdenv, lib, fetchurl, fetchpatch, autoconf, automake, pkgconfig, libtool
+, gtk2, halibut, ncurses, perl, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "1f66iss0kqk982azmxbk4xfm2i1csby91vdvly6cr04pz3i1r4rg";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-17069.patch";
+      url = "https://git.tartarus.org/?p=simon/putty.git;a=patch;h=69201ad8936fe0ff1b8723b7a43accb5e9f1c888";
+      sha256 = "1gblwc2r26ikb26b22f2r61b2lkjf80pbclfb5dhhkkqal6kbvga";
+    })
+  ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
     perl mkfiles.pl
@@ -38,7 +46,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake halibut libtool perl pkgconfig ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
     gtk2 ncurses
-  ];
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
 
   meta = with lib; {
