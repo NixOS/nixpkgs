@@ -6169,10 +6169,10 @@ let
 
   Error = buildPerlModule {
     pname = "Error";
-    version = "0.17027";
+    version = "0.17028";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Error-0.17027.tar.gz;
-      sha256 = "1gnkxf12dq2w1jmjpllp5f30ya4nll01jv2sfi24386zfn1arch7";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Error-0.17028.tar.gz;
+      sha256 = "0q796nwwiarfc6pga97380c9z8xva5545632001qj75kb1g5rn1s";
     };
   };
 
