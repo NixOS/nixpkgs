@@ -8281,13 +8281,13 @@ let
 
   HTMLScrubber = buildPerlPackage {
     pname = "HTML-Scrubber";
-    version = "0.17";
+    version = "0.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NI/NIGELM/HTML-Scrubber-0.17.tar.gz;
-      sha256 = "06p7w4zd42b2yh541mlzyqj40lwmvvn3fyqi8big4mf34la7m2jm";
+      url = mirror://cpan/authors/id/N/NI/NIGELM/HTML-Scrubber-0.19.tar.gz;
+      sha256 = "1c9b4r9x96a8fbz2zy52fxgq7djp9dq38hiyqra92psnz1w5aa5f";
     };
     propagatedBuildInputs = [ HTMLParser ];
-    buildInputs = [ PodCoverageTrustPod TestCPANMeta TestDifferences TestEOL TestKwalitee TestMemoryCycle TestNoTabs TestPAUSEPermissions TestPod TestPodCoverage ];
+    buildInputs = [ TestDifferences TestMemoryCycle ];
   };
 
   HTMLTableExtract = buildPerlPackage {
