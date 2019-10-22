@@ -18075,10 +18075,10 @@ let
 
   TestTCP = buildPerlPackage {
     pname = "Test-TCP";
-    version = "2.19";
+    version = "2.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-TCP-2.19.tar.gz;
-      sha256 = "14ahzklq3xgmwj58p9vdcfgpggrmh3nigq5mzqk4wakbb6fjs0fx";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Test-TCP-2.22.tar.gz;
+      sha256 = "0mvv9rqwrwlcfh8qrs0s47p85rhlnw15d4gbpyi802bddp0c6lry";
     };
     meta = {
       description = "Testing TCP program";
