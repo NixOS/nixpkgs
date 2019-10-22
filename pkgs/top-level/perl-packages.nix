@@ -4326,10 +4326,10 @@ let
 
   DateTimeFormatFlexible = buildPerlPackage {
     pname = "DateTime-Format-Flexible";
-    version = "0.31";
+    version = "0.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.31.tar.gz;
-      sha256 = "0daf62fe4af0b336d45e367143a580b5a34912a679eef788d54c4d5ad685c2d1";
+      url = mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.32.tar.gz;
+      sha256 = "50a7b9feb287bb14b27323a53c2324486181a3ab6cb3f4c7662d42be901ad8ee";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ListMoreUtils ModulePluggable ];
     meta = {
