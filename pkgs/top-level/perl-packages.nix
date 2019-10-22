@@ -14377,10 +14377,10 @@ let
 
   PPIxQuoteLike = buildPerlModule {
     pname = "PPIx-QuoteLike";
-    version = "0.007";
+    version = "0.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/W/WY/WYANT/PPIx-QuoteLike-0.007.tar.gz;
-      sha256 = "040ma7763isxn9axsf9s8g00hm3ld6dajwp3nhq0nn4mz8cfaa3w";
+      url = mirror://cpan/authors/id/W/WY/WYANT/PPIx-QuoteLike-0.008.tar.gz;
+      sha256 = "0dzlcddvfzn7s8z1jj12ghsbzf9wm5dq84361v4vx5p6j8zhsaz4";
     };
     propagatedBuildInputs = [ PPI ];
     meta = {
