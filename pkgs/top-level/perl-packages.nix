@@ -10663,10 +10663,10 @@ let
 
   MathBigIntGMP = buildPerlPackage {
     pname = "Math-BigInt-GMP";
-    version = "1.6006";
+    version = "1.6007";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-GMP-1.6006.tar.gz;
-      sha256 = "10dg3h5jgc30pb2800x8brz2ijicrpash0rwjahp82xnvysi1hhf";
+      url = mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-GMP-1.6007.tar.gz;
+      sha256 = "07y0akadx2nm1bsp17v12785s3ni1l5qyqkk4q3pxcyc41nmwwjx";
     };
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
