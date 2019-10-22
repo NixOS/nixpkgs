@@ -1,22 +1,18 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
+{ lib, fetchzip, buildDunePackage }:
 
-stdenv.mkDerivation {
-	name = "ocaml${ocaml.version}-integers-0.2.2";
+buildDunePackage rec {
+	pname = "integers";
+	version = "0.3.0";
 
-	src = fetchurl {
-		url = https://github.com/ocamllabs/ocaml-integers/releases/download/v0.2.2/integers-0.2.2.tbz;
-		sha256 = "08b1ljw88ny3l0mdq6xmffjk8anfc77igryva5jz1p6f4f746ywk";
+	src = fetchzip {
+		url = "https://github.com/ocamllabs/ocaml-integers/archive/${version}.tar.gz";
+		sha256 = "1yhif5zh4srh63mhimfx3p5ljpb3lixjdd3i9pjnbj2qgpzlqj8p";
 	};
-
-	buildInputs = [ ocaml findlib ocamlbuild topkg ];
-
-	inherit (topkg) buildPhase installPhase;
 
 	meta = {
 		description = "Various signed and unsigned integer types for OCaml";
-		license = stdenv.lib.licenses.mit;
+		license = lib.licenses.mit;
 		homepage = https://github.com/ocamllabs/ocaml-integers;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
-		inherit (ocaml.meta) platforms;
+		maintainers = [ lib.maintainers.vbgl ];
 	};
 }
