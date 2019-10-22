@@ -7,7 +7,7 @@
 
 { stdenv, fetchFromGitHub, writeText, pkgconfig
 , ocamlPackages, ncurses
-, buildIde ? !stdenv.lib.versionAtLeast version "8.10" # lablgtk3 cannot be built with GTK3 at version 3.24.11
+, buildIde ? true
 , glib, gnome3, wrapGAppsHook
 , darwin
 , csdp ? null
