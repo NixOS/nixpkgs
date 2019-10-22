@@ -4758,7 +4758,7 @@ let
       sha256 = "0y4djb048i09dk19av7mzfb3khr72vw11p3ayw2p82jsy4gm8j2g";
     };
 
-    buildInputs = [ pkgs.libmysqlclient DevelChecklib ] ;
+    buildInputs = [ pkgs.libmysqlclient DevelChecklib TestDeep TestDistManifest TestPod ];
     propagatedBuildInputs = [ DBI ];
 
     doCheck = false;
