@@ -4904,7 +4904,7 @@ let
       url = "mirror://cpan/authors/id/J/JR/JROCKWAY/DBICx-TestDatabase-0.05.tar.gz";
       sha256 = "8e3bc2530b01216188c3aa65acdbd2f59c4e631f3ae085dfc439abd89f8f0acf";
     };
-    buildInputs = [ DBIxClass ];
+    buildInputs = [ DBIxClass TestSimple13 ];
     propagatedBuildInputs = [ DBDSQLite SQLTranslator ];
     meta = {
       homepage = "https://metacpan.org/pod/DBICx::TestDatabase";
