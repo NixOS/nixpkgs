@@ -386,6 +386,7 @@ mapAliases ({
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   usbguard-nox = usbguard; # added 2019-09-04
+  valadoc = throw "deprecated 2019-10-10: valadoc was merged into vala 0.38";
   v4l_utils = v4l-utils; # added 2019-08-07
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01

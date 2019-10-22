@@ -664,11 +664,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libICE = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xtrans }: stdenv.mkDerivation {
-    name = "libICE-1.0.9";
+    name = "libICE-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libICE-1.0.9.tar.bz2;
-      sha256 = "00p2b6bsg6kcdbb39bv46339qcywxfl4hsrz8asm4hy6q7r34w4g";
+      url = mirror://xorg/individual/lib/libICE-1.0.10.tar.bz2;
+      sha256 = "0j638yvmyna2k4mz465jywgdybgdchdqppfx6xfazg7l5khxr1kg";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1015,11 +1015,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXt = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, xorgproto, libSM, libX11 }: stdenv.mkDerivation {
-    name = "libXt-1.1.5";
+    name = "libXt-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXt-1.1.5.tar.bz2;
-      sha256 = "06lz6i7rbrp19kgikpaz4c97fw7n31k2h2aiikczs482g2zbdvj6";
+      url = mirror://xorg/individual/lib/libXt-1.2.0.tar.bz2;
+      sha256 = "0cbqlyssr8aia88c8i7z59z9d0kp3p2hp6683xhz9ndyv8qza7dk";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1392,11 +1392,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xbacklight = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb, xcbutil }: stdenv.mkDerivation {
-    name = "xbacklight-1.2.2";
+    name = "xbacklight-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xbacklight-1.2.2.tar.bz2;
-      sha256 = "0pmzaz4kp38qv2lqiw5rnqhwzmwrq65m1x5j001mmv99wh9isnk1";
+      url = mirror://xorg/individual/app/xbacklight-1.2.3.tar.bz2;
+      sha256 = "1plssg0s3pbslg6rfzxp9sx8ryvn8l32zyvc8zp9zsbsfwjg69rs";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1535,11 +1535,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
-    name = "xclock-1.0.8";
+    name = "xclock-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xclock-1.0.8.tar.bz2;
-      sha256 = "0m92zhamh15my9f2rqa14q41d6k2cn468azm3g7g3w9n7942024k";
+      url = mirror://xorg/individual/app/xclock-1.0.9.tar.bz2;
+      sha256 = "1fr3q4rszgx7x2zxy2ip592a3fgx20hfwac49p2l5b7jqsr1ying";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2679,11 +2679,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xorgproto = callPackage ({ stdenv, pkgconfig, fetchurl, libXt }: stdenv.mkDerivation {
-    name = "xorgproto-2018.4";
+    name = "xorgproto-2019.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/xorgproto-2018.4.tar.bz2;
-      sha256 = "180mqkp70i44rkmj430pmn9idssvffrgv4y5h19fm698a7h8bs7y";
+      url = mirror://xorg/individual/proto/xorgproto-2019.1.tar.bz2;
+      sha256 = "16yll1kaffnslik5sizlw3qrigj1gpsgfgyq6903g3mwdixamnm6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

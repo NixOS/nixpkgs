@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, python, buildPythonPackage
+{ stdenv, lib, fetchPypi, python, buildPythonPackage
 , cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
 
 with stdenv.lib;
@@ -23,7 +23,6 @@ buildPythonPackage rec {
     "--bzip2=${getDev bzip2}"
     "--blosc=${getDev c-blosc}"
   ];
-
   # Run the test suite.
   # It requires the build path to be in the python search path.
   # These tests take quite some time.

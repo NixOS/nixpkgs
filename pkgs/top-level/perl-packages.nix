@@ -20157,6 +20157,8 @@ let
        sha256 = "0gy8h2bvvvlxychwsb99ikdh5cqpk6sqc073jk2b4zffs09n40ac";
      };
      propagatedBuildInputs = [ XMLParser XMLSAX ];
+     # Avoid creating perllocal.pod, which contains a timestamp
+     installTargets = "pure_install";
      meta = {
        description = "SAX Driver for Expat";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

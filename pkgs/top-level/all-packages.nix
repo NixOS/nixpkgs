@@ -8595,8 +8595,6 @@ in
     vala_0_46
     vala;
 
-  valadoc = callPackage ../development/tools/valadoc { };
-
   wcc = callPackage ../development/compilers/wcc { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
@@ -11248,6 +11246,7 @@ in
 
   gnutls = callPackage ../development/libraries/gnutls/default.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
+    utillinux = utillinuxMinimal; # break the cyclic dependency
   };
 
   gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
@@ -12823,8 +12822,7 @@ in
   };
 
   mesa = callPackage ../development/libraries/mesa {
-    # 7 is the default, but only on Linux, so keep this for now
-    llvmPackages = llvmPackages_7;
+    llvmPackages = llvmPackages_9;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
@@ -15181,6 +15179,7 @@ in
     postgresql_9_6
     postgresql_10
     postgresql_11
+    postgresql_12
   ;
   postgresql = postgresql_11.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;

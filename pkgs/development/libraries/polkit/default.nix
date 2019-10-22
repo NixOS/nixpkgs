@@ -9,7 +9,7 @@
 let
 
   system = "/run/current-system/sw";
-  setuid = "/run/wrappers/bin"; #TODO: from <nixos> config.security.wrapperDir;
+  setuid = "/run/wrappers/bin";
 
 in
 
@@ -40,11 +40,13 @@ stdenv.mkDerivation rec {
     [ glib gtk-doc pkgconfig intltool perl ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
-    [ glib expat pam spidermonkey_60 ]
+    [ expat pam spidermonkey_60 ]
     ++ stdenv.lib.optional useSystemd systemd
     ++ stdenv.lib.optional withGnome gobject-introspection;
 
-  NIX_CFLAGS_COMPILE = " -Wno-deprecated-declarations "; # for polkit 0.114 and glib 2.56
+  propagatedBuildInputs = [
+    glib # in .pc Requires
+  ];
 
   preConfigure = ''
     chmod +x test/mocklibc/bin/mocklibc{,-test}.in
@@ -83,7 +85,7 @@ stdenv.mkDerivation rec {
   ];
 
   inherit doCheck;
-  checkInputs = [dbus];
+  checkInputs = [ dbus ];
   checkPhase = ''
     # tests need access to the system bus
     dbus-run-session --config-file=${./system_bus.conf} -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS make check'
