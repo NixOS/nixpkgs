@@ -126,7 +126,7 @@ let
 
     gpg-agent --daemon --scdaemon-program $out/bin/scdaemon > /dev/null 2> /dev/null
     ''}
-        
+
     # Disable all input echo for the whole stage. We could use read -s
     # instead but that would ocasionally leak characters between read
     # invocations.
@@ -231,9 +231,9 @@ let
         # to prevent their values being leaked
         local salt
         local iterations
-        local k_user
         local challenge
         local response
+        local k_user
         local k_luks
         local opened
         local new_salt
@@ -247,68 +247,115 @@ let
 
         salt="$(cat /crypt-storage${yubikey.storage.path} | sed -n 1p | tr -d '\n')"
         iterations="$(cat /crypt-storage${yubikey.storage.path} | sed -n 2p | tr -d '\n')"
-        challenge="$(echo -n $salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
-        response="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
+        challenge="$(printf $salt | openssl-wrapped dgst -binary -blake2b512 | rbtohex)"
 
         for try in $(seq 3); do
+            printf "Awaiting Yubikey response..."
+            response="$(printf $challenge | ykchalresp -${toString yubikey.slot} -x -i- | tr -d '\n')"
+            echo " - ok"
+
             ${optionalString yubikey.twoFactor ''
-            echo -n "Enter two-factor passphrase: "
-            read -r k_user
-            echo
+              printf "Enter two-factor passphrase: "
+              k_user=
+              while true; do
+                  if [ -e /crypt-ramfs/passphrase ]; then
+                      echo "reused"
+                      k_user=$(cat /crypt-ramfs/passphrase)
+                      break
+                  else
+                      # and try reading it from /dev/console with a timeout
+                      IFS= read -t 1 -r -s k_user
+                      if [ -n "$k_user" ]; then
+                        ${if luks.reusePassphrases then ''
+                          # remember it for the next device
+                          printf "$k_user" > /crypt-ramfs/passphrase
+                        '' else ''
+                          # Don't save it to ramfs. We are very paranoid
+                        ''}
+                        echo
+                        break
+                      fi
+                  fi
+              done
             ''}
 
             if [ ! -z "$k_user" ]; then
-                k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString yubikey.keyLength} $iterations $response | rbtohex)"
+                k_luks="$(printf $k_user | pbkdf2-sha512 ${toString yubikey.keyLength} $iterations $response | rbtohex)"
             else
                 k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $iterations $response | rbtohex)"
             fi
 
-            echo -n "$k_luks" | hextorb | ${csopen} --key-file=-
+            printf "Verifying passphrase for ${device}..."
+            printf "$k_luks" | hextorb | ${csopen} --key-file=-
 
             if [ $? == 0 ]; then
+                echo " - success"
                 opened=true
                 break
             else
                 opened=false
                 echo "Authentication failed!"
+                rm -f /crypt-ramfs/passphrase
             fi
         done
 
-        [ "$opened" == false ] && die "Maximum authentication errors reached"
-
-        echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
-        for i in $(seq ${toString yubikey.saltLength}); do
-            byte="$(dd if=/dev/random bs=1 count=1 2>/dev/null | rbtohex)";
-            new_salt="$new_salt$byte";
-            echo -n .
-        done;
-        echo "ok"
-
-        new_iterations="$iterations"
-        ${optionalString (yubikey.iterationStep > 0) ''
-        new_iterations="$(($new_iterations + ${toString yubikey.iterationStep}))"
-        ''}
-
-        new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
-
-        new_response="$(ykchalresp -${toString yubikey.slot} -x $new_challenge 2>/dev/null)"
-
-        if [ ! -z "$k_user" ]; then
-            new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+        if [ "$opened" == false ]; then
+            echo "Maximum authentication errors reached, falling back to non-yubikey open procedure"
+            open_normally
         else
-            new_k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+            printf "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
+            for i in $(seq ${toString yubikey.saltLength}); do
+                byte="$(dd if=/dev/urandom bs=1 count=1 2>/dev/null | rbtohex)";
+                new_salt="$new_salt$byte";
+                printf .
+            done;
+            echo " - ok"
+
+            new_iterations="$iterations"
+            ${optionalString (yubikey.iterationStep > 0) ''
+            new_iterations="$(($new_iterations + ${toString yubikey.iterationStep}))"
+            ''}
+
+            new_challenge="$(printf $new_salt | openssl-wrapped dgst -binary -blake2b512 | rbtohex)"
+
+            for try in $(seq 3); do
+                printf "Awaiting Yubikey response..."
+                new_response="$(printf $new_challenge | ykchalresp -${toString yubikey.slot} -x -i- | tr -d '\n')"
+
+                if [ ! -z "$new_response" ]; then
+                    echo " - ok"
+                    opened=true
+                    break
+                else
+                    opened=false
+                    echo " - failed"
+                fi
+            done
+
+            if [ "$opened" == false ]; then
+                echo "Warning: Failed to get Yubikey response, current challenge persists!"
+            else
+                if [ ! -z "$k_user" ]; then
+                    new_k_luks="$(printf $k_user | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+                else
+                    new_k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
+                fi
+
+                printf "$new_k_luks" | hextorb > /crypt-ramfs/new_key
+                printf "Attempting passphrase change for ${device}..."
+                printf "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
+
+                if [ $? == 0 ]; then
+                    echo " - success"
+                    printf "%s\n%s" "$new_salt" "$new_iterations" > /crypt-storage${yubikey.storage.path}
+                else
+                    echo "Warning: Could not update LUKS key, current challenge persists!"
+                fi
+
+                rm -f /crypt-ramfs/new_key
+            fi
         fi
 
-        echo -n "$new_k_luks" | hextorb > /crypt-ramfs/new_key
-        echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
-
-        if [ $? == 0 ]; then
-            echo -ne "$new_salt\n$new_iterations" > /crypt-storage${yubikey.storage.path}
-        else
-            echo "Warning: Could not update LUKS key, current challenge persists!"
-        fi
-
-        rm -f /crypt-ramfs/new_key
         umount /crypt-storage
     }
 
@@ -731,8 +778,8 @@ in
       sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
 
       ${optionalString luks.yubikeySupport ''
-        copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykchalresp
         copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykinfo
+        copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykchalresp
         copy_bin_and_libs ${pkgs.openssl.bin}/bin/openssl
 
         cc -O3 -I${pkgs.openssl.dev}/include -L${pkgs.openssl.out}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto
@@ -742,12 +789,12 @@ in
         mkdir -p $out/etc/ssl
         cp -pdv ${pkgs.openssl.out}/etc/ssl/openssl.cnf $out/etc/ssl
 
-        cat > $out/bin/openssl-wrap <<EOF
+        cat > $out/bin/openssl-wrapped <<EOF
         #!$out/bin/sh
         export OPENSSL_CONF=$out/etc/ssl/openssl.cnf
         $out/bin/openssl "\$@"
         EOF
-        chmod +x $out/bin/openssl-wrap
+        chmod +x $out/bin/openssl-wrapped
       ''}
 
       ${optionalString luks.gpgSupport ''
@@ -771,9 +818,9 @@ in
     boot.initrd.extraUtilsCommandsTest = ''
       $out/bin/cryptsetup --version
       ${optionalString luks.yubikeySupport ''
-        $out/bin/ykchalresp -V
         $out/bin/ykinfo -V
-        $out/bin/openssl-wrap version
+        $out/bin/ykchalresp -V
+        $out/bin/openssl-wrapped version
       ''}
       ${optionalString luks.gpgSupport ''
         $out/bin/gpg --version
