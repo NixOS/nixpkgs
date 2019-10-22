@@ -667,10 +667,10 @@ let
 
   ArchiveZip = buildPerlPackage {
     pname = "Archive-Zip";
-    version = "1.64";
+    version = "1.67";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.64.tar.gz;
-      sha256 = "0zfinh8nx3rxzscp57vq3w8hihpdb0zs67vvalykcf402kr88pyy";
+      url = mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.67.tar.gz;
+      sha256 = "0x17b7s5c3bqy9gx7psdqxbzkilylnwwd3c3i68vynbn9hs788my";
     };
     buildInputs = [ TestMockModule ];
     meta = {
