@@ -10,7 +10,7 @@ let
 
 common =
   { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline
+  , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns, jq
   , busybox-sandbox-shell
   , storeDir
@@ -39,7 +39,7 @@ common =
         ++ lib.optionals (!is20) [ curl perl ]
         ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq ];
 
-      buildInputs = [ curl openssl sqlite xz bzip2 ]
+      buildInputs = [ curl openssl sqlite xz bzip2 (nlohmann_json.override { multipleHeaders = true; }) ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is20 [ brotli boost editline ]
         ++ lib.optional withLibseccomp libseccomp
@@ -201,12 +201,12 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20190922_382aa05";
+    suffix = "pre20191022_9cac895";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "382aa05ff71b61379f5c2792eaf517bdf4a5c5bf";
-      hash = "sha256-k4vV3Q1YVmLd+49AETnsSGetpDjD6sdd9yBrnpi8Q3g=";
+      rev = "9cac895406724e0304dff140379783c4d786e855";
+      hash = "sha256-Y1cdnCNoJmjqyC/a+Nt2N+5L3Ttg7K7zOD7gmtg1QzA=";
     };
     fromGit = true;
 
