@@ -20234,10 +20234,10 @@ let
 
   YAMLLibYAML = buildPerlPackage {
     pname = "YAML-LibYAML";
-    version = "0.79";
+    version = "0.80";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.79.tar.gz;
-      sha256 = "0wwmk3f2q0qv229sjjl3vbypppa9wmaiqh2b0qlai33m476vl1c4";
+      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.80.tar.gz;
+      sha256 = "1nhn4w52kpq757rxl052f61h36rdzsy416k740m3fy5ih7axhq4x";
     };
   };
 
