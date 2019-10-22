@@ -4513,10 +4513,10 @@ let
 
   DateTimeTimeZone = buildPerlPackage {
     pname = "DateTime-TimeZone";
-    version = "2.36";
+    version = "2.37";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.36.tar.gz;
-      sha256 = "7e033a3cae17a62a0a4011b9e3dd900acf8b7614e05dc6595d1f55406ec6f6a7";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.37.tar.gz;
+      sha256 = "6c12dfa6ad190191d437a7661c644fc38aaf109001e1d958c95dbb0aa143c421";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassSingleton ParamsValidationCompiler Specio namespaceautoclean ];
