@@ -3,7 +3,7 @@ title: User's Guide for Vim in Nixpkgs
 author: Marc Weber
 date: 2016-06-25
 ---
-# User's Guide to Vim Plugins/Addons/Bundles/Scripts in Nixpkgs
+# Vim
 
 Both Neovim and Vim can be configured to include your favorite plugins
 and additional libraries.

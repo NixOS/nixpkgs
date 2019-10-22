@@ -1,0 +1,17 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-elm">
+ <title>Elm</title>
+
+ <para>
+ To start a development environment do <command>nix-shell -p elmPackages.elm elmPackages.elm-format</command>
+ </para>
+
+ <para>
+ To update Elm compiler, see <filename>nixpkgs/pkgs/development/compilers/elm/README.md</filename>.
+ </para>
+
+ <para>
+ To package Elm applications, <link xlink:href="https://github.com/hercules-ci/elm2nix#elm2nix">read about elm2nix</link>.
+ </para>
+</section>

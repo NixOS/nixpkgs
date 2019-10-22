@@ -1,27 +1,27 @@
-{ mkDerivation, aeson, async, base, binary, bytestring, containers
-, directory, filepath, hpack, optparse-applicative, safe-exceptions
-, stdenv, text, fetchgit
+{ mkDerivation, aeson, base, binary, bytestring, containers
+, directory, fetchgit, filepath, ghc-prim, hpack
+, optparse-applicative, stdenv, text, unliftio
+, unordered-containers
 }:
 mkDerivation {
   pname = "elmi-to-json";
-  version = "0.19.4";
+  version = "1.2.0";
   src = fetchgit {
     url = "https://github.com/stoeffel/elmi-to-json.git";
-    rev = "357ad96f05e4c68023b036f27f6f65c4377c7427";
-    sha256 = "0vj9fdqgg2zd1nxpll6v02fk6bcyhx00xhp3s8sd7ycvirwsim9n";
+    sha256 = "1kxai87h2g0749yq0fkxwk3xaavydraaivhnavbwr62q2hw4wrj7";
+    rev = "af08ceafe742a252f1f1f3c229b0ce3b3e00084d";
+    fetchSubmodules = true;
   };
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson async base binary bytestring containers directory filepath
-    optparse-applicative safe-exceptions text
+    aeson base binary bytestring containers directory filepath ghc-prim
+    optparse-applicative text unliftio unordered-containers
   ];
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [ base ];
   testHaskellDepends = [ base ];
-  preConfigure = "hpack";
+  prePatch = "hpack";
   homepage = "https://github.com/stoeffel/elmi-to-json#readme";
-  description = "Translates elmi binary files to JSON representation";
   license = stdenv.lib.licenses.bsd3;
-  maintainers = with stdenv.lib.maintainers; [ turbomack ];
 }

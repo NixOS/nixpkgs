@@ -27,6 +27,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";
+    homepage = "https://github.com/fsfe/reuse-tool";
     license = with licenses; [ asl20 cc-by-sa-40 cc0 gpl3 ];
     maintainers = [ maintainers.FlorianFranzen ];
   };

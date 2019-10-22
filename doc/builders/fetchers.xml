@@ -1,8 +1,8 @@
-<section xmlns="http://docbook.org/ns/docbook"
+<chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
-         xml:id="sec-pkgs-fetchers">
- <title>Fetcher functions</title>
+         xml:id="chap-pkgs-fetchers">
+ <title>Fetchers</title>
 
  <para>
   When using Nix, you will frequently need to download source code and other files from the internet. Nixpkgs comes with a few helper functions that allow you to fetch fixed-output derivations in a structured way.
@@ -145,4 +145,4 @@ stdenv.mkDerivation {
    </listitem>
   </varlistentry>
  </variablelist>
-</section>
+</chapter>

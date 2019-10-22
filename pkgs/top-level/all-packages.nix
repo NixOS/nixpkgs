@@ -10167,6 +10167,8 @@ in
 
   snore = callPackage ../tools/misc/snore { };
 
+  snzip = callPackage ../tools/archivers/snzip { };
+
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
   sparse = callPackage ../development/tools/analysis/sparse { };
@@ -10604,6 +10606,8 @@ in
   classads = callPackage ../development/libraries/classads { };
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
+
+  clfft = callPackage ../development/libraries/clfft { };
 
   clipp  = callPackage ../development/libraries/clipp { };
 
@@ -11995,6 +11999,8 @@ in
   libgxps = callPackage ../development/libraries/libgxps { };
 
   libiio = callPackage ../development/libraries/libiio { };
+
+  libinjection = callPackage ../development/libraries/libinjection { };
 
   liburing = callPackage ../development/libraries/liburing { };
 
@@ -15507,6 +15513,7 @@ in
     server = server-pgsql;
   };
 
+  zabbix44 = zabbixFor "v44";
   zabbix42 = zabbixFor "v42";
   zabbix40 = zabbixFor "v40";
   zabbix30 = zabbixFor "v30";
@@ -20306,7 +20313,7 @@ in
 
   plex-media-player = libsForQt59.callPackage ../applications/video/plex-media-player { };
 
-  plover = recurseIntoAttrs (callPackage ../applications/misc/plover { });
+  plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 

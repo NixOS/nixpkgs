@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, libmysqlclient, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, curl, libuuid, autoPatchelfHook }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, libmysqlclient, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, libuuid, patchelf }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -138,8 +138,7 @@
       sha256 = "0jb16irr7qlgd2zshg0vyia7zqipd0pcvwfcr6z807pss1mnzj8w";
     };
 
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ unixODBC dpkg kerberos libuuid stdenv.cc.cc ];
+    nativeBuildInputs = [ dpkg patchelf ];
 
     unpackPhase = "dpkg -x $src ./";
     buildPhase = "";
@@ -148,6 +147,11 @@
       mkdir -p $out
       mkdir -p $out/lib
       cp -r opt/microsoft/msodbcsql${versionMajor}/lib64 opt/microsoft/msodbcsql${versionMajor}/share $out/
+    '';
+
+    postFixup = ''
+      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl.out kerberos libuuid stdenv.cc.cc ]} \
+        $out/lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}
     '';
 
     passthru = {

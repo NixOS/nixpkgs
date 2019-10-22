@@ -1039,7 +1039,9 @@ in {
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
 
-  pyside = callPackage ../development/python-modules/pyside { };
+  pyside = callPackage ../development/python-modules/pyside {
+    inherit (pkgs) mesa;
+  };
 
   pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
     inherit (pkgs) libxml2 libxslt; # Do not need the Python bindings.
@@ -3797,6 +3799,8 @@ in {
   memcached = callPackage ../development/python-modules/memcached { };
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
+
+  mesa = callPackage ../development/python-modules/mesa { };
 
   metaphone = callPackage ../development/python-modules/metaphone { };
 
