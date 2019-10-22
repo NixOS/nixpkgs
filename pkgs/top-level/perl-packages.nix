@@ -404,13 +404,13 @@ let
 
   AppClusterSSH = buildPerlModule {
     pname = "App-ClusterSSH";
-    version = "4.13.2";
+    version = "4.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DU/DUNCS/App-ClusterSSH-v4.13.2.tar.gz;
-      sha256 = "0rmk2p3f2wz1h092anidjclh212rv3gxyk0c641qk3frlrjnw6mp";
+      url = mirror://cpan/authors/id/D/DU/DUNCS/App-ClusterSSH-4.14.tar.gz;
+      sha256 = "020p28xl9507blvr8lr7hdxk1cl8jjkz5rkrkh7g538g52sa2cmi";
     };
-    propagatedBuildInputs = [ ExceptionClass Tk TryTiny X11ProtocolOther ];
-    buildInputs = [ CPANChanges FileSlurp FileWhich PerlTidy Readonly TestDifferences TestDistManifest TestPerlTidy TestPod TestPodCoverage TestTrap ];
+    propagatedBuildInputs = [ ExceptionClass Tk X11ProtocolOther XMLSimple ];
+    buildInputs = [ DataDump FileWhich Readonly TestDifferences TestTrap ];
     preCheck = "rm t/perltidy.t t/manifest.t t/30cluster.t"; # do not run failing tests
     postInstall = ''
       mkdir -p $out/etc/bash_completion.d
