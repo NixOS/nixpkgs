@@ -4681,7 +4681,7 @@ let
       url = "mirror://cpan/authors/id/J/JA/JASONK/Device-MAC-1.00.tar.gz";
       sha256 = "c42182a9a8489a314cbfe6e1c8452f32b3b626aa6c89fee1d8925e6dfb64fad5";
     };
-    buildInputs = [ TestMost TestDifferences TestException TestWarn TestDeep ];
+    buildInputs = [ TestDeep TestDifferences TestException TestMost TestWarn ];
     propagatedBuildInputs = [ DeviceOUI Moose ];
     meta = {
       description = "Handle hardware MAC Addresses (EUI-48 and EUI-64)";
