@@ -15200,14 +15200,13 @@ let
     };
   };
 
-  RPCEPCService = buildPerlPackage {
+  RPCEPCService = buildPerlModule {
     pname = "RPC-EPC-Service";
     version = "0.0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KI/KIWANAMI/RPC-EPC-Service-v0.0.11.tar.gz";
       sha256 = "975f4134365258fb47fa921919053513adb9101f2bd420fcefe345f209128be3";
     };
-    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ AnyEvent DataSExpression ];
     meta = {
       description = "An Asynchronous Remote Procedure Stack";
