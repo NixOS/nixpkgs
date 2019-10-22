@@ -10776,13 +10776,13 @@ let
 
   MathPlanePath = buildPerlPackage {
     pname = "Math-PlanePath";
-    version = "126";
+    version = "127";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KR/KRYDE/Math-PlanePath-126.tar.gz;
-      sha256 = "014gr79gg992paas6v1glciyycqp2hg7pg4y03kgfbxz1slc6zhq";
+      url = mirror://cpan/authors/id/K/KR/KRYDE/Math-PlanePath-127.tar.gz;
+      sha256 = "1dzywpydigwyr38vz9f4yn7xkkk21vi6lyzjlyqv8iny0y0c7w20";
     };
     propagatedBuildInputs = [ MathLibm constant-defer ];
-    buildInputs = [ DataFloat MathBigIntLite ];
+    buildInputs = [ DataFloat MathBigIntLite NumberFraction ];
   };
 
   MathRandomISAAC = buildPerlPackage {
@@ -13306,6 +13306,20 @@ let
     };
     meta = {
       description = "Perl extension for formatting numbers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NumberFraction = buildPerlModule {
+    pname = "Number-Fraction";
+    version = "2.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAVECROSS/Number-Fraction-2.01.tar.gz;
+      sha256 = "1ysv5md4dmz95zc0gy8ivb21nhqxyv8vrc5lr2sgshsjrdqsi185";
+    };
+    propagatedBuildInputs = [ Moose ];
+    meta = {
+      description = "Perl extension to model fractions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
