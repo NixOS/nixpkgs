@@ -4710,13 +4710,13 @@ let
 
   DBDMock = buildPerlModule {
     pname = "DBD-Mock";
-    version = "1.45";
+    version = "1.49";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DI/DICHI/DBD-Mock/DBD-Mock-1.45.tar.gz;
-      sha256 = "40a80c37b31ef14536b58b4a8b483e65953b00b8fa7397817c7eb76d540bd00f";
+      url = mirror://cpan/authors/id/J/JL/JLCOOPER/DBD-Mock-1.49.tar.gz;
+      sha256 = "3c88bd9322d3d1a215b0c8dad8b27f06885a063f8f47fb8747f6e86f8b9d7116";
     };
     propagatedBuildInputs = [ DBI ];
-    buildInputs = [ TestException ];
+    buildInputs = [ ModuleBuildTiny TestException ];
   };
 
   DBDSQLite = buildPerlPackage {
