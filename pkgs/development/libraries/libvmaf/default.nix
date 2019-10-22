@@ -15,11 +15,16 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   doCheck = true;
 
+  postFixup = ''
+    substituteInPlace "$dev/lib/pkgconfig/libvmaf.pc" \
+      --replace "includedir=/usr/local/include" "includedir=$dev"
+  '';
+
   makeFlags = [ "INSTALL_PREFIX=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Netflix/vmaf";
-    description = "Perceptual video quality assessment based on multi-method fusion (VMAF).";
+    description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = [ maintainers.cfsmp3 ];
