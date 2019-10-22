@@ -653,16 +653,15 @@ let
 
   ArchiveTarWrapper = buildPerlPackage {
      pname = "Archive-Tar-Wrapper";
-     version = "0.36";
+     version = "0.37";
      src = fetchurl {
-       url = mirror://cpan/authors/id/A/AR/ARFREITAS/Archive-Tar-Wrapper-0.36.tar.gz;
-       sha256 = "1s7i93qbimwygv07x5963vv90m09g2iiacnl3986smw4rpi5apwg";
+       url = mirror://cpan/authors/id/A/AR/ARFREITAS/Archive-Tar-Wrapper-0.37.tar.gz;
+       sha256 = "0b1hi3zfnq487kfg514kr595j9w8x6wxddy3zlpqcxgiv90zlv3y";
      };
      propagatedBuildInputs = [ FileWhich IPCRun LogLog4perl ];
      meta = {
        description = "API wrapper around the 'tar' utility";
      };
-    buildInputs = [ Dumbbench ];
   };
 
   ArchiveZip = buildPerlPackage {
