@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/spook/sshping;
+    homepage = "https://github.com/spook/sshping";
     description = "Measure character-echo latency and bandwidth for an interactive ssh session";
     license = licenses.mit;
     platforms = platforms.unix;
