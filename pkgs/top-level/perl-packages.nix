@@ -12659,12 +12659,12 @@ let
 
   namespaceautoclean = buildPerlPackage {
     pname = "namespace-autoclean";
-    version = "0.28";
+    version = "0.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/namespace-autoclean-0.28.tar.gz;
-      sha256 = "cd410a1681add521a28805da2e138d44f0d542407b50999252a147e553c26c39";
+      url = mirror://cpan/authors/id/E/ET/ETHER/namespace-autoclean-0.29.tar.gz;
+      sha256 = "45ebd8e64a54a86f88d8e01ae55212967c8aa8fed57e814085def7608ac65804";
     };
-    buildInputs = [ TestRequires ];
+    buildInputs = [ TestNeeds ];
     propagatedBuildInputs = [ SubIdentify namespaceclean ];
     meta = {
       homepage = https://github.com/moose/namespace-autoclean;
