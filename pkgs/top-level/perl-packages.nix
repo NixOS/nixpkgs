@@ -4699,7 +4699,7 @@ let
     };
     buildInputs = [ TestException ];
     patches = [ ../development/perl-modules/Device-OUI-1.04-hash.patch ];
-    propagatedBuildInputs = [ ClassAccessorGrouped SubExporter LWP ];
+    propagatedBuildInputs = [ ClassAccessorGrouped LWP SubExporter ];
     meta = {
       description = "Resolve an Organizationally Unique Identifier";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
