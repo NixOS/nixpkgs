@@ -13,6 +13,7 @@ let
     dde-daemon = callPackage ./dde-daemon { };
     dde-dock = callPackage ./dde-dock { };
     dde-file-manager = callPackage ./dde-file-manager { };
+    dde-kwin = callPackage ./dde-kwin { };
     dde-launcher = callPackage ./dde-launcher { };
     dde-network-utils = callPackage ./dde-network-utils { };
     dde-polkit-agent = callPackage ./dde-polkit-agent { };
