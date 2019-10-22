@@ -7441,10 +7441,10 @@ let
 
   GetoptLong = buildPerlPackage {
     pname = "Getopt-Long";
-    version = "2.50";
+    version = "2.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JV/JV/Getopt-Long-2.50.tar.gz;
-      sha256 = "0rsb7ri8210xv09mnxykw5asbcqivd0v38x0z4jkis3k5gdim210";
+      url = mirror://cpan/authors/id/J/JV/JV/Getopt-Long-2.51.tar.gz;
+      sha256 = "0r659i6rkz8zkfgdccbn29zmd4bk9lcdc4y20ng6w2glqaa3pd10";
     };
   };
 
