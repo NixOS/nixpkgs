@@ -18287,10 +18287,10 @@ let
 
   TextAutoformat = buildPerlPackage {
     pname = "Text-Autoformat";
-    version = "1.74";
+    version = "1.75";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/Text-Autoformat-1.74.tar.gz;
-      sha256 = "07eb3c2b3515897340ca6e9377495bbe2e05ec80d7f3f146adab8e534a818d5e";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Text-Autoformat-1.75.tar.gz;
+      sha256 = "9dd4f4ce3daec4b4dbf5b59dac4568a8946aed12c28b4e5988c8e8c602c6b771";
     };
     propagatedBuildInputs = [ TextReform ];
     meta = {
