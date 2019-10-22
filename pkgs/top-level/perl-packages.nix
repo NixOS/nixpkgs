@@ -7820,7 +7820,7 @@ let
       url = mirror://cpan/authors/id/B/BO/BORUP/Gtk2-TrayIcon-0.06.tar.gz;
       sha256 = "cbb7632b75d7f41554dfe8ee9063dbfd1d8522291077c65d0d82e9ceb5e94ae2";
     };
-    propagatedBuildInputs = [ pkgs.gtk2 Gtk2 Pango ];
+    propagatedBuildInputs = [ pkgs.gtk2 Gtk2 ];
     meta = {
       license = stdenv.lib.licenses.gpl2;
     };
