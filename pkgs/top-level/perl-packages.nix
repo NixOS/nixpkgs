@@ -4260,10 +4260,10 @@ let
 
   DateTimeCalendarJulian = buildPerlPackage {
     pname = "DateTime-Calendar-Julian";
-    version = "0.100";
+    version = "0.101";
     src = fetchurl {
-      url = mirror://cpan/authors/id/W/WY/WYANT/DateTime-Calendar-Julian-0.100.tar.gz;
-      sha256 = "0gbw7rh706qk5jlmmz3yzsm0ilzp39kyar28g4j6d57my8cwaipx";
+      url = mirror://cpan/authors/id/W/WY/WYANT/DateTime-Calendar-Julian-0.101.tar.gz;
+      sha256 = "1q7zflwv44yybyz5nd01bc69zw5m540qg4fnh4xlj2icbm3sf7br";
     };
     meta = {
       description = "Dates in the Julian calendar";
