@@ -2602,6 +2602,8 @@ in {
 
   misaka = callPackage ../development/python-modules/misaka {};
 
+  missingno = callPackage ../development/python-modules/missingno { };
+
   mlrose = callPackage ../development/python-modules/mlrose { };
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
