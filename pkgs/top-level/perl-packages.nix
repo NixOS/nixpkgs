@@ -8031,10 +8031,10 @@ let
 
   HTMLClean = buildPerlPackage {
     pname = "HTML-Clean";
-    version = "0.8";
+    version = "1.4";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LI/LINDNER/HTML-Clean-0.8.tar.gz;
-      sha256 = "1h0dzxx034hpshxlpsxhxh051d1p79cjgp4q5kg68kgx7aian85c";
+      url = mirror://cpan/authors/id/A/AZ/AZJADFTRE/HTML-Clean-1.4.tar.gz;
+      sha256 = "01l7g2hr0kjbh1wk7cv03ijmpjlbm1vm661m99mkrz2ilyyllzd6";
     };
     meta = {
       description = "Cleans up HTML code for web browsers, not humans";
