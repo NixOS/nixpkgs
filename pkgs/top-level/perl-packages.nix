@@ -3451,6 +3451,23 @@ let
     };
   };
 
+  CryptScryptKDF = buildPerlModule {
+    pname = "Crypt-ScryptKDF";
+    version = "0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-ScryptKDF-0.010.tar.gz";
+      sha256 = "7d16ee95cce3eb54c174673a7299f4c086fba3ac85f847d0e134feed5f776017";
+    };
+    propagatedBuildInputs = [ CryptOpenSSLRandom ];
+    perlPreHook = "export LD=$CC";
+    meta = {
+      description = "Scrypt password based key derivation function";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/DCIT/perl-Crypt-ScryptKDF";
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptSmbHash = buildPerlPackage {
     pname = "Crypt-SmbHash";
     version = "0.12";
@@ -3582,7 +3599,7 @@ let
     propagatedBuildInputs = [ Clone ];
   };
 
-  CSSMinifierXP = buildPerlModule {
+  CSSMinifierXS = buildPerlModule {
     pname = "CSS-Minifier-XS";
     version = "0.09";
     src = fetchurl {
@@ -10921,6 +10938,22 @@ let
     buildInputs = [ ProcWaitStat ];
   };
 
+  MIMEEncWords = buildPerlPackage {
+    pname = "MIME-EncWords";
+    version = "1.014.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEZUMI/MIME-EncWords-1.014.3.tar.gz";
+      sha256 = "e9afb548611d4e7e6c50b7f06bbd2b1bb2808e37a810deefb537c67af5485238";
+    };
+    propagatedBuildInputs = [ MIMECharset ];
+    meta = {
+      homepage = "https://metacpan.org/pod/MIME::EncWords";
+      description = "Deal with RFC 2047 encoded words (improved)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MIMELite = buildPerlPackage {
     pname = "MIME-Lite";
     version = "3.030";
@@ -11457,6 +11490,38 @@ let
       description = "Real-time web framework";
       license = stdenv.lib.licenses.artistic2;
       maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
+  MojoliciousPluginMail = buildPerlModule {
+    pname = "Mojolicious-Plugin-Mail";
+    version = "1.5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHARIFULN/Mojolicious-Plugin-Mail-1.5.tar.gz";
+      sha256 = "56f0d341ebc3a7acf3919f5add43e98216ea1285aa0d87e7fb00c02bb0eff146";
+    };
+    propagatedBuildInputs = [ MIMEEncWords MIMELite Mojolicious ];
+    meta = {
+      homepage = "https://github.com/sharifulin/Mojolicious-Plugin-Mail";
+      description = "Mojolicious Plugin for send mail";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MojoliciousPluginOpenAPI = buildPerlPackage {
+    pname = "Mojolicious-Plugin-OpenAPI";
+    version = "2.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-2.17.tar.gz";
+      sha256 = "c20f8b07fb8582fdbf0b540f4cfc5fe95f262743522a160526024342a7f0a1f0";
+    };
+    propagatedBuildInputs = [ JSONValidator ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/mojolicious-plugin-openapi";
+      description = "OpenAPI / Swagger plugin for Mojolicious";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -12848,6 +12913,7 @@ let
       sha256 = "1aiy7adirk3wpwlczd8sldi9k1dray0jrg1lbcrcw97zwcrkciam";
     };
     buildInputs = [ TestNoWarnings ];
+    perlPreHook = "export LD=$CC";
     meta = {
       description = "Internationalizing Domain Names in Applications (IDNA)";
     };
@@ -15722,6 +15788,7 @@ let
     };
     buildInputs = [ LWP TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ParallelPrefork Plack ServerStarter ];
+    doCheck = !stdenv.isDarwin;
     meta = {
       description = "A simple, high-performance PSGI/Plack HTTP server";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

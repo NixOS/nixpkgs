@@ -1432,6 +1432,16 @@
       }
     ];
   };
+  dadada = {
+    name = "dadada";
+    email = "dadada@dadada.li";
+    github = "dadada";
+    githubId = 7216772;
+    keys = [{
+      longkeyid = "ed25519/0xEEB8D1CE62C4DFEA";
+      fingerprint = "D68C 8469 5C08 7E0F 733A  28D0 EEB8 D1CE 62C4 DFEA";
+    }];
+  };
   dalance = {
     email = "dalance@gmail.com";
     github = "dalance";

@@ -5572,6 +5572,8 @@ in
   plex = callPackage ../servers/plex { };
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
+  tab = callPackage ../tools/text/tab { };
+
   tautulli = callPackage ../servers/tautulli { python = python2; };
 
   ploticus = callPackage ../tools/graphics/ploticus {
@@ -6233,7 +6235,9 @@ in
 
   sshguard = callPackage ../tools/security/sshguard {};
 
-  suricata = callPackage ../applications/networking/ids/suricata { };
+  suricata = callPackage ../applications/networking/ids/suricata {
+    python = python3;
+  };
 
   softhsm = callPackage ../tools/security/softhsm {
     inherit (darwin) libobjc;
@@ -6407,7 +6411,6 @@ in
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
-    pythonPackages = python3Packages;
    };
 
   stricat = callPackage ../tools/security/stricat { };
@@ -10146,6 +10149,8 @@ in
 
   snore = callPackage ../tools/misc/snore { };
 
+  snzip = callPackage ../tools/archivers/snzip { };
+
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
   sparse = callPackage ../development/tools/analysis/sparse { };
@@ -10583,6 +10588,8 @@ in
   classads = callPackage ../development/libraries/classads { };
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
+
+  clfft = callPackage ../development/libraries/clfft { };
 
   clipp  = callPackage ../development/libraries/clipp { };
 
@@ -11974,6 +11981,8 @@ in
   libgxps = callPackage ../development/libraries/libgxps { };
 
   libiio = callPackage ../development/libraries/libiio { };
+
+  libinjection = callPackage ../development/libraries/libinjection { };
 
   liburing = callPackage ../development/libraries/liburing { };
 
@@ -15486,6 +15495,7 @@ in
     server = server-pgsql;
   };
 
+  zabbix44 = zabbixFor "v44";
   zabbix42 = zabbixFor "v42";
   zabbix40 = zabbixFor "v40";
   zabbix30 = zabbixFor "v30";
@@ -20285,7 +20295,7 @@ in
 
   plex-media-player = libsForQt59.callPackage ../applications/video/plex-media-player { };
 
-  plover = recurseIntoAttrs (callPackage ../applications/misc/plover { });
+  plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
@@ -25185,5 +25195,7 @@ in
   coz = callPackage ../development/tools/analysis/coz {};
 
   keycard-cli = callPackage ../tools/security/keycard-cli {};
+
+  sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
 }

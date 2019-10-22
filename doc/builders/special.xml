@@ -1,0 +1,12 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="chap-special">
+ <title>Special builders</title>
+ <para>
+  This chapter describes several special builders.
+ </para>
+ <xi:include href="special/fhs-environments.xml" />
+ <xi:include href="special/mkshell.xml" />
+</chapter>
+
+

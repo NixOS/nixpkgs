@@ -1,7 +1,7 @@
-<section xmlns="http://docbook.org/ns/docbook"
+<chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
-         xml:id="sec-overrides">
+         xml:id="chap-overrides">
  <title>Overriding</title>
 
  <para>
@@ -148,4 +148,4 @@ c = lib.makeOverridable f { a = 1; b = 2; };
    The variable <varname>c</varname> however also has some additional functions, like <link linkend="sec-pkg-override">c.override</link> which can be used to override the default arguments. In this example the value of <varname>(c.override { a = 4; }).result</varname> is 6.
   </para>
  </section>
-</section>
+</chapter>

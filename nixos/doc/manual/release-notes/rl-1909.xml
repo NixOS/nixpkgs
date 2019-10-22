@@ -190,6 +190,13 @@
      </listitem>
     </itemizedlist>
    </listitem>
+   <listitem>
+    <para>
+     <xref linkend="opt-services.blueman.enable"/> has been added.
+     If you previously had blueman installed via <option>environment.systemPackages</option> please
+     migrate to using the NixOS module, as this would result in an insufficiently configured blueman.
+    </para>
+   </listitem>
   </itemizedlist>
 
  </section>
@@ -561,6 +568,27 @@
        <option>system.stateVersion</option> is set to
        <literal>"19.03"</literal>, or lower if the installation dates back to an
        earlier version of NixOS.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Due to the short lifetime of non-LTS kernel releases package attributes like <literal>linux_5_1</literal>,
+       <literal>linux_5_2</literal> and <literal>linux_5_3</literal> have been removed to discourage dependence
+       on specific non-LTS kernel versions in stable NixOS releases.
+
+       Going forward, versioned attributes like <literal>linux_4_9</literal> will exist for LTS versions only.
+       Please use <literal>linux_latest</literal> or <literal>linux_testing</literal> if you depend on non-LTS
+       releases. Keep in mind that <literal>linux_latest</literal> and <literal>linux_testing</literal> will
+       change versions under the hood during the lifetime of a stable release and might include breaking changes.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Because of the systemd upgrade,
+       some network interfaces might change their name. For details see
+       <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html#History">
+       upstream docs</link> or <link xlink:href="https://github.com/NixOS/nixpkgs/issues/71086">
+       our ticket</link>.
      </para>
    </listitem>
   </itemizedlist>

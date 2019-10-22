@@ -1,6 +1,7 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
-, lsb-release, freetype, fontconfig, pangox_compat, polkit, polkit_gnome }:
+, lsb-release, freetype, fontconfig, pangox_compat, polkit, polkit_gnome
+, pulseaudio }:
 
 let
   sha256 = {
@@ -37,7 +38,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
     gnome2.gtkglext libGLU_combined freetype fontconfig
-    pangox_compat polkit polkit_gnome
+    pangox_compat polkit polkit_gnome pulseaudio
   ] ++ (with xorg; [
     libxcb libX11 libXdamage libXext libXfixes libXi libXmu
     libXrandr libXtst libXt libICE libSM libXrender

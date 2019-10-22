@@ -17,9 +17,6 @@ let
     networkmanager-vpnc
    ] ++ optional (!delegateWireless && !enableIwd) wpa_supplicant;
 
-  dynamicHostsEnabled =
-    cfg.dynamicHosts.enable && cfg.dynamicHosts.hostsDirs != {};
-
   delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
 
   enableIwd = cfg.wifi.backend == "iwd";
@@ -335,54 +332,19 @@ in {
           so you don't need to to that yourself.
         '';
       };
-
-      dynamicHosts = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Enabling this option requires the
-            <option>networking.networkmanager.dns</option> option to be
-            set to <literal>dnsmasq</literal>. If enabled, the directories
-            defined by the
-            <option>networking.networkmanager.dynamicHosts.hostsDirs</option>
-            option will be set up when the service starts. The dnsmasq instance
-            managed by NetworkManager will then watch those directories for
-            hosts files (see the <literal>--hostsdir</literal> option of
-            dnsmasq). This way a non-privileged user can add or override DNS
-            entries on the local system (depending on what hosts directories
-            that are configured)..
-          '';
-        };
-        hostsDirs = mkOption {
-          type = with types; attrsOf (submodule {
-            options = {
-              user = mkOption {
-                type = types.str;
-                default = "root";
-                description = ''
-                  The user that will own the hosts directory.
-                '';
-              };
-              group = mkOption {
-                type = types.str;
-                default = "root";
-                description = ''
-                  The group that will own the hosts directory.
-                '';
-              };
-            };
-          });
-          default = {};
-          description = ''
-            Defines a set of directories (relative to
-            <literal>/run/NetworkManager/hostdirs</literal>) that dnsmasq will
-            watch for hosts files.
-          '';
-        };
-      };
     };
   };
+
+  imports = [
+    (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
+      This option was removed because allowing (multiple) regular users to
+      override host entries affecting the whole system opens up a huge attack
+      vector. There seem to be very rare cases where this might be useful.
+      Consider setting system-wide host entries using networking.hosts, provide
+      them via the DNS server in your network, or use environment.etc
+      to add a file into /etc/NetworkManager/dnsmasq.d reconfiguring hostsdir.
+    '')
+  ];
 
 
   ###### implementation
@@ -394,12 +356,6 @@ in {
         message = ''
           You can not use networking.networkmanager with networking.wireless.
           Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
-        '';
-      }
-      { assertion = !dynamicHostsEnabled || (dynamicHostsEnabled && cfg.dns == "dnsmasq");
-        message = ''
-          To use networking.networkmanager.dynamicHosts you also need to set
-          `networking.networkmanager.dns = "dnsmasq"`
         '';
       }
     ];
@@ -435,12 +391,6 @@ in {
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
         mode = "0544";
       }) cfg.dispatcherScripts
-      ++ optional dynamicHostsEnabled
-           { target = "NetworkManager/dnsmasq.d/dyndns.conf";
-             text = concatMapStrings (n: ''
-               hostsdir=/run/NetworkManager/hostsdirs/${n}
-             '') (attrNames cfg.dynamicHosts.hostsDirs);
-           }
       ++ optional cfg.enableStrongSwan
            { source = "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
              target = "NetworkManager/VPN/nm-strongswan-service.name";
@@ -495,21 +445,6 @@ in {
     };
 
     systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
-
-    systemd.services.nm-setup-hostsdirs = mkIf dynamicHostsEnabled {
-      wantedBy = [ "NetworkManager.service" ];
-      before = [ "NetworkManager.service" ];
-      partOf = [ "NetworkManager.service" ];
-      script = concatStrings (mapAttrsToList (n: d: ''
-        mkdir -p "/run/NetworkManager/hostsdirs/${n}"
-        chown "${d.user}:${d.group}" "/run/NetworkManager/hostsdirs/${n}"
-        chmod 0775 "/run/NetworkManager/hostsdirs/${n}"
-      '') cfg.dynamicHosts.hostsDirs);
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-      };
-    };
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];

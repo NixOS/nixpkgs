@@ -66,6 +66,7 @@ self: super: {
   th-expand-syns = doJailbreak super.th-expand-syns;
   # TODO: remove when upstream accepts https://github.com/snapframework/io-streams-haproxy/pull/17
   io-streams-haproxy = doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
+  snap-server = doJailbreak super.snap-server;
 
   # use latest version to fix the build
   generics-sop = self.generics-sop_0_5_0_0;
@@ -106,6 +107,15 @@ self: super: {
     url = "https://github.com/simonmar/alex/commit/deaae6eddef5186bfd0e42e2c3ced39e26afa4d6.patch";
     sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
   });
+  # https://github.com/snapframework/snap-core/issues/288
+  snap-core = overrideCabal super.snap-core (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; });
+  # needs a release
+  json = overrideCabal super.json (drv: { prePatch = "substituteInPlace json.cabal --replace '4.13' '4.14'"; patches = [(
+    pkgs.fetchpatch {
+      url = "https://github.com/GaloisInc/json/commit/9d36ca5d865be7e4b2126b68a444b901941d2492.patch";
+      sha256 = "0vyi5nbivkqg6zngq7rb3wwcj9043m4hmyk155nrcddl8j2smfzv";
+    }
+  )]; });
 
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });

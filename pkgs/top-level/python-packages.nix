@@ -848,6 +848,8 @@ in {
 
   phonopy = callPackage ../development/python-modules/phonopy { };
 
+  phik = callPackage ../development/python-modules/phik {};
+
   piccata = callPackage ../development/python-modules/piccata {};
 
   pims = callPackage ../development/python-modules/pims { };
@@ -1037,7 +1039,9 @@ in {
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
 
-  pyside = callPackage ../development/python-modules/pyside { };
+  pyside = callPackage ../development/python-modules/pyside {
+    inherit (pkgs) mesa;
+  };
 
   pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
     inherit (pkgs) libxml2 libxslt; # Do not need the Python bindings.
@@ -3798,6 +3802,8 @@ in {
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
+  mesa = callPackage ../development/python-modules/mesa { };
+
   metaphone = callPackage ../development/python-modules/metaphone { };
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
@@ -4326,7 +4332,8 @@ in {
 
   ppft = callPackage ../development/python-modules/ppft { };
 
-  praw = callPackage ../development/python-modules/praw { };
+  praw = if isPy3k then callPackage ../development/python-modules/praw { }
+    else callPackage ../development/python-modules/praw/6.3.nix { };
 
   prawcore = callPackage ../development/python-modules/prawcore { };
 
@@ -6342,6 +6349,9 @@ in {
   pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
 
   hcloud = callPackage ../development/python-modules/hcloud { };
+
+  managesieve = callPackage ../development/python-modules/managesieve { };
+
 });
 
 in fix' (extends overrides packages)
