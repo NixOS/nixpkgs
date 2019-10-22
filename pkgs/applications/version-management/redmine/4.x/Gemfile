@@ -16,6 +16,9 @@ gem "nokogiri", (RUBY_VERSION >= "2.3" ? "~> 1.10.0" : "~> 1.9.1")
 gem "i18n", "~> 0.7.0"
 gem "xpath", "< 3.2.0" if RUBY_VERSION < "2.3"
 
+# TODO: Remove the following line when #32223 is fixed
+gem "sprockets", "~> 3.7.2"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :x64_mingw, :mswin]
 gem "rbpdf", "~> 1.19.6"
@@ -27,7 +30,7 @@ end
 
 # Optional gem for OpenID authentication
 group :openid do
-  gem "ruby-openid", "~> 2.3.0", :require => "openid"
+  gem "ruby-openid", "~> 2.9.2", :require => "openid"
   gem "rack-openid"
 end
 
