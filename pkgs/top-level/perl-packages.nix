@@ -4990,10 +4990,10 @@ let
 
   DBIxClassHelpers = buildPerlPackage {
     pname = "DBIx-Class-Helpers";
-    version = "2.033004";
+    version = "2.034000";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Helpers-2.033004.tar.gz;
-      sha256 = "14bc7adda3b30867311717faa11a4534bceda3061229dc2533647c1906d8784c";
+      url = mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Helpers-2.034000.tar.gz;
+      sha256 = "bf92b5495fddd50daa15126e015d5d210a44b6bb43baa8859b5adaa57cd96c59";
     };
     buildInputs = [ DBDSQLite DateTimeFormatSQLite TestDeep TestFatal TestRoo aliased ];
     propagatedBuildInputs = [ CarpClan DBIxClassCandy DBIxIntrospector SafeIsa TextBrew ];
