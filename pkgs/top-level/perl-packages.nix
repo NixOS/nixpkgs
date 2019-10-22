@@ -7878,10 +7878,10 @@ let
 
   Gtk3 = buildPerlPackage {
     pname = "Gtk3";
-    version = "0.035";
+    version = "0.036";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XA/XAOC/Gtk3-0.035.tar.gz;
-      sha256 = "1zhr4ixjb93rjnxsbrjc3fg86qkx1fj4w21yg5q4swjvm6fxdfcg";
+      url = mirror://cpan/authors/id/X/XA/XAOC/Gtk3-0.036.tar.gz;
+      sha256 = "1rxzhahrncv58z0n93bzlagxd8swqxiafq4qn4zv9i9jbfql8mwq";
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
     meta = {
