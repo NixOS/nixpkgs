@@ -12564,10 +12564,10 @@ let
 
   Mouse = buildPerlModule {
     pname = "Mouse";
-    version = "2.5.6";
+    version = "2.5.9";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.6.tar.gz;
-      sha256 = "1j3048ip691j91rdig6wrlg6i4jdzhszxmz5pi2g7n355rl2w00l";
+      url = mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.9.tar.gz;
+      sha256 = "0wqcnm6xl7fv9r8izc9c43kr83qsr60i7y53hkickcqhxx38vmxr";
     };
     buildInputs = [ DevelPPPort ModuleBuildXSUtil TestException TestFatal TestLeakTrace TestOutput TestRequires TryTiny ];
     perlPreHook = "export LD=$CC";
