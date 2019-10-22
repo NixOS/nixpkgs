@@ -3,6 +3,9 @@
 , fetchpatch
 , pkgconfig
 , gettext
+, docbook_xsl
+, docbook_xml_dtd_43
+, gtk-doc
 , meson
 , ninja
 , python3
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
   pname = "gtk+3";
   version = "3.24.11";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   setupHook = ./gtk3-setup-hook.sh;
@@ -74,6 +77,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    "-Dgtk_doc=true"
     "-Dtests=false"
   ];
 
@@ -101,7 +105,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
+    docbook_xml_dtd_43
+    docbook_xsl
     gettext
+    gtk-doc
     gobject-introspection
     hicolor-icon-theme # setup-hook
     makeWrapper
