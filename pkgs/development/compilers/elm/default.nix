@@ -78,9 +78,7 @@ let
       elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples;
       elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
 
-      # elm-analyse@0.16.4 build is not working
-      elm-analyse = nodePkgs."elm-analyse-0.16.3";
-      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref;
+      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
     };
 
   patchBinwrap = import ./packages/patch-binwrap.nix { inherit lib writeScriptBin stdenv; };
