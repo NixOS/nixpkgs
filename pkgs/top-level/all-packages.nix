@@ -21438,6 +21438,8 @@ in
 
   vym = qt5.callPackage ../applications/misc/vym { };
 
+  waon = callPackage ../applications/audio/waon { };
+
   w3m = callPackage ../applications/networking/browsers/w3m { };
 
   # Should always be the version with the most features
