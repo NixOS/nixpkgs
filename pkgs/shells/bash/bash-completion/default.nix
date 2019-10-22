@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     bashInteractive
   ];
 
+  patches = [
+    ./0001-Revert-build-Do-cmake-pc-and-profile-variable-replac.patch
+  ];
+
   # ignore ip_addresses because it tries to touch network
   # ignore test_ls because impure logic
   checkPhase = ''
