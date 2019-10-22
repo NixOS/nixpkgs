@@ -13,10 +13,11 @@ mkDerivation rec {
   nativeBuildInputs = [ pkgconfig poppler qmake ];
   NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags DESKTOPDIR=$out/share/applications ICONDIR=$out/share/pixmaps METAINFODIR=$out/share/metainfo"
-  '';
-
+  qmakeFlags = [
+    "DESKTOPDIR=${placeholder "out"}/share/applications"
+    "ICONDIR=${placeholder "out"}/share/pixmaps"
+    "METAINFODIR=${placeholder "out"}/share/metainfo"
+  ];
 
   enableParallelBuilding = true;
 
