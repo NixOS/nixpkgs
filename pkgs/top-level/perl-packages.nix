@@ -3184,10 +3184,10 @@ let
 
   CpanelJSONXS = buildPerlPackage {
     pname = "Cpanel-JSON-XS";
-    version = "4.12";
+    version = "4.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.12.tar.gz;
-      sha256 = "49417b118fb111607cc7d021443e5b32fd104c0bf59d1852c95923a4916ac658";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.14.tar.gz;
+      sha256 = "6e63bf65cd7e94f08fb8ae7ccd6f94fb3447852865882bba9aaa155c9eea5938";
     };
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
