@@ -4216,10 +4216,10 @@ let
 
   DateManip = buildPerlPackage {
     pname = "Date-Manip";
-    version = "6.77";
+    version = "6.78";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.77.tar.gz;
-      sha256 = "0sw36dc224km06jnzkyxgpi6l4cavdn8gfxd3zb11mnf0y12phsi";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.78.tar.gz;
+      sha256 = "1faxj6gafrqir9hvy9r8q57s93n57b412s04qycrks7r0520hdnb";
     };
     # for some reason, parsing /etc/localtime does not work anymore - make sure that the fallback "/bin/date +%Z" will work
     patchPhase = ''
@@ -4229,7 +4229,7 @@ let
     meta = {
       description = "Date manipulation routines";
     };
-    buildInputs = [ FileFindRule TestInter TestPod TestPodCoverage ];
+    buildInputs = [ TestInter ];
   };
 
   DateSimple = buildPerlPackage {
