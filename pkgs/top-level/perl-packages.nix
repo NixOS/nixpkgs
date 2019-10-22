@@ -7591,7 +7591,7 @@ let
     meta = {
       license = stdenv.lib.licenses.lgpl2Plus;
     };
-    propagatedBuildInputs = [ Gtk2 Pango ];
+    propagatedBuildInputs = [ Gtk2 ];
   };
 
   Gnome2VFS = buildPerlPackage {
