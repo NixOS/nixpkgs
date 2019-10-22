@@ -8,7 +8,7 @@ in py.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "tlecomte";
-    repo = "friture";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1ivy5qfd90w1s1icsphvvdnnqz563v3fhg5pws2zn4483cgnzc2y";
   };
@@ -37,8 +37,9 @@ in py.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A real-time audio analyzer";
-    homepage = http://friture.org/;
+    homepage = "http://friture.org/";
     license = licenses.gpl3;
+    platforms = platforms.linux; # fails on Darwin
     maintainers = [ maintainers.laikq ];
   };
 }
