@@ -1220,10 +1220,10 @@ let
 
   CairoGObject = buildPerlPackage {
     pname = "Cairo-GObject";
-    version = "1.004";
+    version = "1.005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XA/XAOC/Cairo-GObject-1.004.tar.gz;
-      sha256 = "1m896j0xdfhldsx8abf10cc16ll1fm9wbav42dpzal9fh07d9f9v";
+      url = mirror://cpan/authors/id/X/XA/XAOC/Cairo-GObject-1.005.tar.gz;
+      sha256 = "0l2wcz77ndmbgvxx34gdm919a3dxh9fixqr47p50n78ysx2692cd";
     };
     buildInputs = [ pkgs.cairo ];
     meta = {
