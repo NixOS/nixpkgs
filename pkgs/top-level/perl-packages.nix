@@ -16886,12 +16886,12 @@ let
 
   Test2PluginNoWarnings = buildPerlPackage {
      pname = "Test2-Plugin-NoWarnings";
-     version = "0.07";
+     version = "0.08";
      src = fetchurl {
-       url = mirror://cpan/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-0.07.tar.gz;
-       sha256 = "1sxqcbklmpxpkysq3wbivs77n3c8mvasvfa38dzmyqz04ifaf7gz";
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-0.08.tar.gz;
+       sha256 = "122rcksn4qg0f99ap9ppmkvk0fvxcqa9jlqmq7wlk3q0ajylr4cy";
      };
-     buildInputs = [ CaptureTiny IPCRun3 Test2Suite ];
+     buildInputs = [ IPCRun3 Test2Suite ];
      meta = {
        description = "Fail if tests warn";
        license = with stdenv.lib.licenses; [ artistic2 ];
