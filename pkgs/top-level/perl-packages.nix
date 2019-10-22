@@ -9907,16 +9907,16 @@ let
 
   LocaleCodes = buildPerlPackage {
     pname = "Locale-Codes";
-    version = "3.61";
+    version = "3.62";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.61.tar.gz;
-      sha256 = "9432c02674dd789da45fe5b778599b4c648f0a3433bf71cda203fc8a0cec501d";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.62.tar.gz;
+      sha256 = "11a6d343e9c321d8ee9eee4479954a4e9c1ff2145187e74fd64952092f9dfab7";
     };
     meta = {
       description = "A distribution of modules to handle locale codes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ FileFindRule TestInter TestPod TestPodCoverage ];
+    buildInputs = [ TestInter ];
   };
 
   LocaleGettext = buildPerlPackage {
