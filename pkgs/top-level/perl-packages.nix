@@ -6934,10 +6934,10 @@ let
 
   FileNext = buildPerlPackage {
     pname = "File-Next";
-    version = "1.16";
+    version = "1.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PETDANCE/File-Next-1.16.tar.gz;
-      sha256 = "0nfp84p63a5xm6iwlckh3f6cy9bdpjw5fazplskhnb8k5ifg4rb9";
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/File-Next-1.18.tar.gz;
+      sha256 = "1vy2dqpc1nbjrnga08xr2hcxxfzifc5s2lfam5lf3djya0wwn07r";
     };
   };
 
