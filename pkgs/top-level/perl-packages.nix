@@ -7505,10 +7505,10 @@ let
 
   GitRepository = buildPerlPackage {
     pname = "Git-Repository";
-    version = "1.323";
+    version = "1.324";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOOK/Git-Repository-1.323.tar.gz;
-      sha256 = "966575fcecc9f56ab8739ea451b3825e278bc9179d785a20a9ae52473f33683e";
+      url = mirror://cpan/authors/id/B/BO/BOOK/Git-Repository-1.324.tar.gz;
+      sha256 = "814dfad104a9546349f9e0fd492c86137de827ebc284017a91a5267c120ad4f6";
     };
     buildInputs = [ TestRequiresGit ];
     propagatedBuildInputs = [ GitVersionCompare SystemCommand namespaceclean ];
