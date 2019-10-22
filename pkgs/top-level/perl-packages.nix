@@ -4772,13 +4772,13 @@ let
     version = "1.80";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/Z/ZA/ZARQUON/DBD-Oracle-1.76.tar.gz;
-      sha256 = "1wym2kc8b31qa1zb0dgyy3w4iqlk1faw36gy9hkpj895qr1pznxn";
+      url = mirror://cpan/authors/id/M/MJ/MJEVANS/DBD-Oracle-1.80.tar.gz;
+      sha256 = "1rza36dywbsaync99ibscpqdp53m0yg2748bbib16gbf4cl2apph";
     };
 
     ORACLE_HOME = "${pkgs.oracle-instantclient.lib}/lib";
 
-    buildInputs = [ TestNoWarnings pkgs.oracle-instantclient ] ;
+    buildInputs = [ pkgs.oracle-instantclient TestNoWarnings ];
     propagatedBuildInputs = [ DBI ];
 
     postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
