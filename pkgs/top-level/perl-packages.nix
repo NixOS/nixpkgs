@@ -4821,7 +4821,7 @@ let
 
     SYBASE = pkgs.freetds;
 
-    buildInputs = [ pkgs.freetds ] ;
+    buildInputs = [ pkgs.freetds ];
     propagatedBuildInputs = [ DBI ];
 
     doCheck = false;
