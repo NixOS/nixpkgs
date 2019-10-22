@@ -9,23 +9,14 @@ with stdenv.lib;
 
 let
   pname = "pango";
-  version = "1.44.6";
+  version = "1.43.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0v7qq3fv1c0dl80d4qxsvd6cmhh4ngih3w0zc40f4dw7hfx427iy";
+    sha256 = "1lnxldmv1a12dq5h0dlq5jyzl4w75k76dp8cn360x2ijlm9w5h6j";
   };
-
-  # 1.44.6-2 is not available from the usual mirrors yet,
-  # so applying from gitlab
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/pango/commit/8a408d4f25ddb0e3d6020cdde0cd8f8a19ee8db2.patch";
-      sha256 = "0l0hxwbijqrfvka302ijgih9jafc2ffs3d6d4v7bwynpn54lmza7";
-    })
-  ];
 
   # FIXME: docs fail on darwin
   outputs = [ "bin" "dev" "out" ] ++ optional (!stdenv.isDarwin) "devdoc";
@@ -35,18 +26,26 @@ in stdenv.mkDerivation rec {
     pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [
-    fribidi
+    harfbuzz fribidi
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
     CoreGraphics
     CoreText
   ]);
-  propagatedBuildInputs = [ cairo glib libintl harfbuzz ] ++
+  propagatedBuildInputs = [ cairo glib libintl ] ++
     optional x11Support libXft;
 
+  patches = [
+    (fetchpatch {
+      # Add gobject-2 to .pc file
+      url = "https://gitlab.gnome.org/GNOME/pango/commit/546f4c242d6f4fe312de3b7c918a848e5172e18d.patch";
+      sha256 = "1cqhy4xbwx3ad7z5d1ks7smf038b9as8c6qy84rml44h0fgiq4m2";
+    })
+  ];
+
   mesonFlags = [
-    "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
+    "-Denable_docs=${if stdenv.isDarwin then "false" else "true"}"
   ];
 
   enableParallelBuilding = true;
