@@ -72,6 +72,8 @@ mkDerivation rec {
     qt5integration
   ];
 
+  # Need to add kwayland around:
+  # * https://github.com/linuxdeepin/dde-kwin/blob/5226bb984c844129f9fa589da56e77decb7b39a1/plugins/kwineffects/blur/CMakeLists.txt#L14
   NIX_CFLAGS_COMPILE = "-I${kwayland.dev}/include/KF5";
 
   cmakeFlags = [
@@ -79,7 +81,8 @@ mkDerivation rec {
   ];
 
   patches = [
-    ./plugin-paths.patch
+    ./0001-dde-kwin.pc-make-paths-relative.patch
+    ./fix-paths.patch
   ];
 
   postPatch = ''
@@ -94,7 +97,7 @@ mkDerivation rec {
 
     fixPath $out /etc/xdg configures/CMakeLists.txt deepin-wm-dbus/deepinwmfaker.cpp
 
-    # Need environmental patch
+    # TODO: Need environmental patch
     fixPath /run/current-system/sw /usr/lib plugins/kwin-xcb/plugin/main.cpp
 
     substituteInPlace configures/kwin-wm-multitaskingview.desktop \
@@ -102,12 +105,25 @@ mkDerivation rec {
 
     fixPath ${dde-session-ui} /usr/lib/deepin-daemon/dde-warning-dialog deepin-wm-dbus/deepinwmfaker.cpp
 
+    # Correct qt plugin installation path to be within dde-kwin prefix.
     substituteInPlace CMakeLists.txt \
       --subst-var-by plugin_path "$out/$qtPluginPrefix"
   '';
 
-  postFixup = ''
+  postInstall = ''
+    # Correct invalid path in .pc
+    substituteInPlace $out/lib/pkgconfig/dde-kwin.pc \
+      --replace "-L/usr/X11R6/lib64" ""
+
     chmod +x $out/bin/kwin_no_scale
+  '';
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
   '';
 
   enableParallelBuilding = true;
@@ -115,7 +131,7 @@ mkDerivation rec {
   passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
-    description = "KWin configures on DDE";
+    description = "KWin configuration for Deepin Desktop Environment";
     homepage = "https://github.com/linuxdeepin/dde-kwin";
     license = licenses.gpl3;
     platforms = platforms.linux;
