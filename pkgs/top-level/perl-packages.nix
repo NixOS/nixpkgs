@@ -11250,10 +11250,10 @@ let
 
   ModuleCPANTSAnalyse = buildPerlPackage {
      pname = "Module-CPANTS-Analyse";
-     version = "1.00";
+     version = "1.01";
      src = fetchurl {
-       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.00.tar.gz;
-       sha256 = "0r77g2h0d3p81scf294x5qkvi76hzwvbfji0m86abidjav5jk6a2";
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.01.tar.gz;
+       sha256 = "0jf83v9ylw7s9i2zv0l1v11gafp3k4389asc52r6s6q5s2j0p6dx";
      };
      propagatedBuildInputs = [ ArchiveAnyLite ArrayDiff CPANDistnameInfo DataBinary FileFindObject PerlPrereqScannerNotQuiteLite SoftwareLicense ];
      buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings ];
