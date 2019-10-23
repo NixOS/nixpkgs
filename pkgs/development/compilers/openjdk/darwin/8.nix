@@ -7,11 +7,11 @@ let
   };
 
   jdk = stdenv.mkDerivation {
-    name = "zulu1.8.0_121-8.20.0.5";
+    name = "zulu1.8.0_212-8.38.0.13";
 
     src = fetchurl {
-      url = "http://cdn.azul.com/zulu/bin/zulu8.20.0.5-jdk8.0.121-macosx_x64.zip";
-      sha256 = "2a58bd1d9b0cbf0b3d8d1bcdd117c407e3d5a0ec01e2f53565c9bec5cf9ea78b";
+      url = "http://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-macosx_x64.zip";
+      sha256 = "11i2j0cx3y1zrxdn9s4rnmq5iqvv2193b1g6rx7w46905141rdkk";
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-linux/";
     };
 
