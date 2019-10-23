@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "2.1.9";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "08vggm6wrn5cbf8brfprif0rjrkqz06wddsw0ir1skkk8q2sp1b2";
+    sha256 = "19bln9z25dmz1waqcxivlwg20dlm033c7f4z3h3mkhzkbk928y71";
   };
 
   postPatch = ''
