@@ -1,9 +1,11 @@
 { stdenv
 , fetchFromGitHub
+, autoconf
+, automake
+, bison
 , apple_sdk ? null
 , cacert
 , defaultCaFile ? "${cacert}/etc/ssl/certs/ca-bundle.crt"
-, fetchurl
 , libbsd
 , libressl
 , pkgconfig
@@ -22,12 +24,17 @@ stdenv.mkDerivation rec {
     sha256 = "0lncvpjhj7vfpfcjc2i0ccs0as1p2078g5sw4y4qwccvx2fgj2nc";
   };
 
-  buildInputs = [ libbsd libressl pkgconfig ]
+  # Required to build against LibreSSL. Submitted upstream at
+  # https://github.com/graywolf/acme-client-portable/pull/1
+  patches = [ ./compat.patch ];
+
+  buildInputs = [ autoconf automake bison libbsd libressl pkgconfig ]
     ++ optional stdenv.isDarwin apple_sdk.sdk;
 
   CFLAGS = "-DDEFAULT_CA_FILE='\"${defaultCaFile}\"'";
 
   preConfigure = ''
+    autoreconf --install
     export PREFIX="$out"
   '';
 

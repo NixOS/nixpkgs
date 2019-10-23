@@ -1,0 +1,29 @@
+From 99f1c9d28b85510050797e7226b773247bc8de47 Mon Sep 17 00:00:00 2001
+From: Ruud van Asseldonk <dev@veniogames.com>
+Date: Wed, 23 Oct 2019 21:07:08 +0200
+Subject: [PATCH] Make compat.h compatible with LibreSSL
+
+The portable version of LibreSSL shipped in Nixpkgs does not define
+RSA_get0_n, but it does define an OPENSSL_VERSION_NUMBER greater than
+0x10100000L. Try to work around this by avoiding the compatibility
+definitions when building against LibreSSL.
+---
+ compat.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/compat.h b/compat.h
+index caad671..c499df6 100644
+--- a/compat.h
++++ b/compat.h
+@@ -3,7 +3,7 @@
+ 
+ #include <openssl/rsa.h>
+ 
+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+ # define COMPAT_OPENSSL_get_n(r) (r->n)
+ # define COMPAT_OPENSSL_get_e(r) (r->e)
+ # define COMPAT_OPENSSL_pkey_type(pkey) (EVP_PKEY_type(pkey->type))
+-- 
+2.23.0
+
