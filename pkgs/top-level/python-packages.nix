@@ -429,6 +429,8 @@ in {
 
   azure-mgmt-sql = callPackage ../development/python-modules/azure-mgmt-sql { };
 
+  azure-mgmt-sqlvirtualmachine = callPackage ../development/python-modules/azure-mgmt-sqlvirtualmachine { };
+
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
 
   azure-mgmt-subscription = callPackage ../development/python-modules/azure-mgmt-subscription { };
