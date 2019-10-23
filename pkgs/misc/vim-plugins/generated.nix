@@ -1959,6 +1959,17 @@ let
     };
   };
 
+  nvim-terminal-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-terminal-lua";
+    version = "2019-10-17";
+    src = fetchFromGitHub {
+      owner = "norcalli";
+      repo = "nvim-terminal.lua";
+      rev = "095f98aaa7265628a72cd2706350c091544b5602";
+      sha256 = "09hass19v3wrqgxjcr3b59w462lp2nw533zwb1nnmiz99gx1znpx";
+    };
+  };
+
   nvim-yarp = buildVimPluginFrom2Nix {
     pname = "nvim-yarp";
     version = "2019-10-13";

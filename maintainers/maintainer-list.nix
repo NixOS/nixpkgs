@@ -1758,7 +1758,7 @@
     name = "Chris Double";
   };
   dpaetzel = {
-    email = "david.a.paetzel@gmail.com";
+    email = "david.paetzel@posteo.de";
     github = "dpaetzel";
     githubId = 974130;
     name = "David Pätzel";

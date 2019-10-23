@@ -8541,8 +8541,11 @@ in
 
   swift = callPackage ../development/compilers/swift { };
 
-  swiProlog = callPackage ../development/compilers/swi-prolog { };
-  swiPrologWithGui = callPackage ../development/compilers/swi-prolog { withGui = true; };
+  swiProlog = callPackage ../development/compilers/swi-prolog {
+    openssl = openssl_1_0_2;
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+  swiPrologWithGui = swiProlog.override { withGui = true; };
 
   tbb = callPackage ../development/libraries/tbb { };
 
@@ -21634,6 +21637,8 @@ in
   x11basic = callPackage ../development/compilers/x11basic { };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
+
+  x11spice = callPackage ../tools/X11/x11spice { };
 
   x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
 
