@@ -19083,6 +19083,19 @@ let
     };
   };
 
+  TieSimple = buildPerlPackage {
+    pname = "Tie-Simple";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HANENKAMP/Tie-Simple-1.04.tar.gz";
+      sha256 = "29e9e2133951046c78f205f1b3e8df62c90e114f0e08fa06b817766a0f808b12";
+    };
+    meta = {
+      description = "Variable ties made much easier: much, much, much easier..";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TieSub = buildPerlPackage {
      pname = "Tie-Sub";
      version = "1.001";
