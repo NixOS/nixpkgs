@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, isPy27
 , zope_interface
 , incremental
 , automat
@@ -18,7 +17,6 @@
 buildPythonPackage rec {
   pname = "Twisted";
   version = "19.7.0";
-  disabled = isPy27; # ruamel namespace now conflicts in python27
 
   src = fetchPypi {
     inherit pname version;
