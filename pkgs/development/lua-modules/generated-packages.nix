@@ -886,6 +886,24 @@ luadbi-sqlite3 = buildLuarocksPackage {
     };
   };
 };
+luadoc = buildLuarocksPackage {
+  pname = "luadoc";
+  version = "3.0.1-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/luadoc-3.0.1-1.src.rock;
+    sha256 = "112zqjbzkrhx3nvavrxx3vhpv2ix85pznzzbpa8fq4piyv5r781i";
+  };
+  propagatedBuildInputs = [ lualogging luafilesystem ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://luadoc.luaforge.net/";
+    description = "LuaDoc is a documentation tool for Lua source code";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luaevent = buildLuarocksPackage {
   pname = "luaevent";
   version = "0.4.6-1";
