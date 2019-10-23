@@ -419,6 +419,8 @@ in {
 
   azure-mgmt-search = callPackage ../development/python-modules/azure-mgmt-search { };
 
+  azure-mgmt-security = callPackage ../development/python-modules/azure-mgmt-security { };
+
   azure-mgmt-servicebus = callPackage ../development/python-modules/azure-mgmt-servicebus { };
 
   azure-mgmt-servicefabric = callPackage ../development/python-modules/azure-mgmt-servicefabric { };
