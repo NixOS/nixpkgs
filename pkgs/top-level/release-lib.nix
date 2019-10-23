@@ -3,6 +3,8 @@
 , scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+  # System used to evaluate the initial pkgs set.
+, system ? builtins.currentSystem
 }:
 
 let
@@ -11,7 +13,7 @@ in with lib;
 
 rec {
 
-  pkgs = packageSet (lib.recursiveUpdate { system = "x86_64-linux"; config.allowUnsupportedSystem = true; } nixpkgsArgs);
+  pkgs = packageSet (lib.recursiveUpdate { inherit system; config.allowUnsupportedSystem = true; } nixpkgsArgs);
   inherit lib;
 
 

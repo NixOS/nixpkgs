@@ -7,7 +7,10 @@
   scrubJobs ? true
 }:
 
-with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
+with import ./release-lib.nix {
+  inherit supportedSystems scrubJobs;
+  system = "x86_64-linux";
+};
 
 let
   nativePlatforms = all;
