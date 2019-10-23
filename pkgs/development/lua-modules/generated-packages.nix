@@ -964,6 +964,24 @@ luafilesystem = buildLuarocksPackage {
     };
   };
 };
+lualogging = buildLuarocksPackage {
+  pname = "lualogging";
+  version = "1.3.0-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lualogging-1.3.0-1.src.rock;
+    sha256 = "13fm1vlig3zmbfkmlq1vk3xfqhlvv5xf24b0p4k4d08395y858vc";
+  };
+  propagatedBuildInputs = [ luasocket ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/Neopallium/lualogging";
+    description = "A simple API to use logging features";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luaossl = buildLuarocksPackage {
   pname = "luaossl";
   version = "20190731-0";
