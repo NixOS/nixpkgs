@@ -5504,6 +5504,8 @@ in {
     then callPackage ../development/python-modules/secretstorage { }
     else callPackage ../development/python-modules/secretstorage/2.nix { };
 
+  secure = callPackage ../development/python-modules/secure { };
+
   semantic = callPackage ../development/python-modules/semantic { };
 
   sandboxlib = callPackage ../development/python-modules/sandboxlib { };
