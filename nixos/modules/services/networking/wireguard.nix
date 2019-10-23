@@ -122,6 +122,12 @@ let
 
     options = {
 
+      name = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        description = "An optional name for the peer.";
+      };
+
       publicKey = mkOption {
         example = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
         type = types.str;
@@ -231,17 +237,18 @@ let
 
   generatePeerUnit = { interfaceName, interfaceCfg, peer }:
     let
+      name = if peer.name != null then peer.name else peer.publicKey;
       keyToUnitName = replaceChars
         [ "/" "-"    " "     "+"     "="      ]
         [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
-      unitName = keyToUnitName peer.publicKey;
+      unitName = keyToUnitName name;
       psk =
         if peer.presharedKey != null
           then pkgs.writeText "wg-psk" peer.presharedKey
           else peer.presharedKeyFile;
     in nameValuePair "wireguard-${interfaceName}-peer-${unitName}"
       {
-        description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
+        description = "WireGuard Peer - ${interfaceName} - ${name}";
         requires = [ "wireguard-${interfaceName}.service" ];
         after = [ "wireguard-${interfaceName}.service" ];
         wantedBy = [ "multi-user.target" "wireguard-${interfaceName}.service" ];
