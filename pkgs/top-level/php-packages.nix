@@ -338,12 +338,12 @@ let
   };
 
   phpcbf = mkDerivation rec {
-    version = "3.5.0";
+    version = "3.5.1";
     pname = "phpcbf";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "15n3r3sc62ar1kq38idw22y7gasvy747bix99zs0l0paapcbxz6n";
+      sha256 = "1b68cmdvg356s2vk5q0jkk8sizza7r7pbcl9v5s0944wi0apsj0r";
     };
 
     phases = [ "installPhase" ];
@@ -365,12 +365,12 @@ let
   };
 
   phpcs = mkDerivation rec {
-    version = "3.5.0";
+    version = "3.5.1";
     pname = "phpcs";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "078anf2r6a3p8v575m65vryazipgfchs07yb92m9xh41lk5wlndf";
+      sha256 = "060jzgd99j16xjs0n75sgp79an6n7qp6zv5lrw6700jnw67zpmn7";
     };
 
     phases = [ "installPhase" ];

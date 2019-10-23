@@ -7,13 +7,13 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "mimalloc-${version}";
-  version = "1.0.8";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner  = "microsoft";
     repo   = "mimalloc";
     rev    = "refs/tags/v${version}";
-    sha256 = "04k2d3x84q2jfqdjxngy98hlw6czmigsqlf7gi3mhs6682n127r5";
+    sha256 = "1i8pwzpcmbf7dxncb984xrnczn1737xqhf1jaizlyw0k1hpiam4v";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -5,7 +5,7 @@
 , meson
 , ninja
 , gettext
-, vala
+, vala_0_44
 , python3
 , desktop-file-utils
 , libcanberra
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala
+    vala_0_44 # https://github.com/elementary/files/issues/1081
     wrapGAppsHook
   ];
 

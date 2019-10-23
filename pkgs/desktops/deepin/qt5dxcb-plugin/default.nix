@@ -34,7 +34,7 @@ mkDerivation rec {
     # The Qt5 platforms plugin is vendored in the package, however what's there is not always up-to-date with what's in nixpkgs.
     # We simply copy the headers from qtbase's source tarball.
     mkdir -p platformplugin/libqt5xcbqpa-dev/${qtbase.version}
-    cp -r ../qtbase-everywhere-src-5.12.4/src/plugins/platforms/xcb/*.h platformplugin/libqt5xcbqpa-dev/${qtbase.version}/
+    cp -r ../qtbase-everywhere-src-${qtbase.version}/src/plugins/platforms/xcb/*.h platformplugin/libqt5xcbqpa-dev/${qtbase.version}/
   '';
 
   qmakeFlags = [
