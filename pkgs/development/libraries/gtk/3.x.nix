@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
     ./patches/3.0-darwin-x11.patch
   ];
 
+  separateDebugInfo = stdenv.isLinux;
+
   mesonFlags = [
     "-Dtests=false"
   ];

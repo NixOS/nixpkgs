@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "0.4.1";
+  version = "0.4.5";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fvm1kdnnbf0pppv23mlfdqh220gcldmv72w2rdxp6ks1rcphzg3";
+    sha256 = "824e406f5628cfde927ac945acf4ff70bc712b8bd204d7b99fe127993254db70";
   };
 
   # no tests

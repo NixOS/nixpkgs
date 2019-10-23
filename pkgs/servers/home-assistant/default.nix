@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchFromGitHub, python3, protobuf3_6
+{ lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? []
@@ -9,7 +9,16 @@
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
-, packageOverrides ? self: super: { }
+, packageOverrides ? self: super: {
+  # TODO: Remove this override after updating to cryptography 2.8:
+  cryptography = super.cryptography.overridePythonAttrs (oldAttrs: {
+    propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ super.asn1crypto ];
+    patches = [ (fetchpatch {
+      url = "https://github.com/pyca/cryptography/commit/e575e3d482f976c4a1f3203d63ea0f5007a49a2a.patch";
+      sha256 = "0vg9prqsizd6gzh5j7lscsfxzxlhz7pacvzhgqmj1vhdhjwbblcp";
+    }) ];
+  });
+}
 
 # Skip pip install of required packages on startup
 , skipPip ? true }:
@@ -30,7 +39,7 @@ let
       "0b0069c752ec14172c5f78208f1863d7ad6755a6fae6fe76ec2c80d13be41e42")
     (mkOverride "pyjwt" "1.7.1"
       "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96")
-    (mkOverride "cryptography" "2.7"
+    (mkOverride "cryptography" "2.7" # TODO for 2.8: Remove the override above
       "e6347742ac8f35ded4a46ff835c60e68c22a536a8ae5c4422966d06946b6d4c6")
     (mkOverride "cryptography_vectors" "2.7" # required by cryptography==2.7
       "f12dfb9bd669a68004074cb5b26df6e93ed1a95ebd1a999dff0a840212ff68bc")
