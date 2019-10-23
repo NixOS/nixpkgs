@@ -6192,6 +6192,8 @@ in {
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 
+  javaproperties = callPackage ../development/python-modules/javaproperties { };
+
   tempora= callPackage ../development/python-modules/tempora { };
 
   hypchat = callPackage ../development/python-modules/hypchat { };
