@@ -4465,6 +4465,11 @@ in {
   }));
 
   libkeepass = callPackage ../development/python-modules/libkeepass { };
+  
+  libredwg = toPythonModule (pkgs.libredwg.override {
+    enablePython = true;
+    inherit (self) python libxml2;
+  });
 
   librepo = pipe pkgs.librepo [
     toPythonModule
