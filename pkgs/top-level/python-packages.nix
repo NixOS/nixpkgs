@@ -1301,6 +1301,8 @@ in {
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
+  sshtunnel = callPackage ../development/python-modules/sshtunnel { };
+
   sslib = callPackage ../development/python-modules/sslib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
