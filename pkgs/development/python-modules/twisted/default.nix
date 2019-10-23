@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , python
+, isPy27
 , zope_interface
 , incremental
 , automat
@@ -14,9 +15,11 @@
 , setuptools
 , idna
 }:
+
 buildPythonPackage rec {
   pname = "Twisted";
   version = "18.9.0";
+  disabled = isPy27; # zope_interface namespace collision
 
   src = fetchPypi {
     inherit pname version;
