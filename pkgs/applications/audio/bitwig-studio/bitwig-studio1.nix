@@ -6,7 +6,7 @@
 , xdg_utils, zenity, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "bitwig-studio-${version}";
+  pname = "bitwig-studio";
   version = "1.3.16";
 
   src = fetchurl {

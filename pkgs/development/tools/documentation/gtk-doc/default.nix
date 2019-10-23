@@ -15,20 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-doc";
-  version = "1.30";
+  version = "1.32";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
     rev = "GTK_DOC_${stdenv.lib.replaceStrings ["."] ["_"] version }";
-    sha256 = "05lr6apj3pd3s59a7k6p45k9ywwrp577ra4pvkhxvb5p7v90c2fi";
+    sha256 = "14fihxj662gg4ln1ngff6s52zzkpbcc58qa0nxysxypnhp0h4ypk";
   };
 
   patches = [
     passthru.respect_xml_catalog_files_var_patch
-    # https://gitlab.gnome.org/GNOME/gtk-doc/issues/84
-    ./0001-highlight-fix-permission-on-file-style.patch
   ];
 
   outputDevdoc = "out";
@@ -45,6 +43,7 @@ stdenv.mkDerivation rec {
     libxslt
     pkgconfig
     python3
+    python3.pkgs.pygments # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42
     libxml2Python
   ]
   ++ stdenv.lib.optional withDblatex dblatex
@@ -74,9 +73,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "Tools to extract documentation embedded in GTK+ and GNOME source code";
+    description = "Tools to extract documentation embedded in GTK and GNOME source code";
     homepage = "https://www.gtk.org/gtk-doc";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub worldofpeace ];
   };
 }

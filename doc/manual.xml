@@ -6,20 +6,36 @@
   </subtitle>
  </info>
  <xi:include href="introduction.chapter.xml" />
- <xi:include href="quick-start.xml" />
- <xi:include href="package-specific-user-notes.xml" />
- <xi:include href="stdenv.xml" />
- <xi:include href="multiple-output.xml" />
- <xi:include href="cross-compilation.xml" />
- <xi:include href="configuration.xml" />
- <xi:include href="functions.xml" />
- <xi:include href="meta.xml" />
- <xi:include href="languages-frameworks/index.xml" />
- <xi:include href="platform-notes.xml" />
- <xi:include href="package-notes.xml" />
- <xi:include href="overlays.xml" />
- <xi:include href="coding-conventions.xml" />
- <xi:include href="submitting-changes.xml" />
- <xi:include href="reviewing-contributions.xml" />
- <xi:include href="contributing.xml" />
+ <part>
+  <title>Using Nixpkgs</title>
+  <xi:include href="configuration.xml" />
+  <xi:include href="overlays.xml" />
+  <xi:include href="overrides.xml" />
+  <xi:include href="functions.xml" />
+ </part>
+ <part>
+  <title>Standard environment</title>
+  <xi:include href="stdenv.xml" />
+  <xi:include href="meta.xml" />
+  <xi:include href="multiple-output.xml" />
+  <xi:include href="cross-compilation.xml" />
+  <xi:include href="platform-notes.xml" />
+ </part>
+ <part>
+  <title>Builders</title>
+  <xi:include href="builders/fetchers.xml" />
+  <xi:include href="builders/trivial-builders.xml" />
+  <xi:include href="builders/special.xml" />
+  <xi:include href="builders/images.xml" />
+  <xi:include href="languages-frameworks/index.xml" />
+  <xi:include href="packages/index.xml" />
+ </part>
+ <part>
+  <title>Contributing to Nixpkgs</title>
+  <xi:include href="quick-start.xml" />
+  <xi:include href="coding-conventions.xml" />
+  <xi:include href="submitting-changes.xml" />
+  <xi:include href="reviewing-contributions.xml" />
+  <xi:include href="contributing-to-documentation.xml" />
+ </part>
 </book>

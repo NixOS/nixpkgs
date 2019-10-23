@@ -1,16 +1,20 @@
 { lib, mkXfceDerivation, gobject-introspection, gtk2, gtk3, libICE, libSM
-, libstartup_notification ? null, libxfce4util, xfconf }:
+, libstartup_notification, libxfce4util, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.14pre2";
-  rev = "xfce-4.14pre2";
+  version = "4.14.1";
 
-  sha256 = "0kvqzf91ygxxkcy4drjminby4c3c42c54a3if8jwx0zmgbml7l8q";
+  sha256 = "0fnncf30s51qhgixn57z4d021pjjhzgsg2x69w4dy68vff2347qy";
 
-  buildInputs =  [ gobject-introspection gtk2 gtk3 libstartup_notification xfconf ];
+  nativeBuildInputs = [ gobject-introspection ];
+  buildInputs =  [ gtk2 gtk3 libstartup_notification xfconf ];
   propagatedBuildInputs = [ libxfce4util libICE libSM ];
+
+  configureFlags = [
+    "--with-vendor-info='NixOS'"
+  ];
 
   meta = with lib; {
     description = "Widgets library for Xfce";

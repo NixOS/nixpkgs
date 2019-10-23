@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig, gettext, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk-pixbuf, gst_all_1, gnome3
-, meson, ninja, python3, hicolor-icon-theme, desktop-file-utils }:
+, meson, ninja, python3, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
-  version = "3.32.1";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0q83b6dabckmwj8mcw0wvhbxaszwdzzcf8ajx5bldll3lyl5yh2b";
+    sha256 = "1i442qas2dkp5d9j9j1z1jicb4cb7jkgbcl4c36bmhvaq3hddwa9";
   };
 
   nativeBuildInputs = [
     pkgconfig gettext meson ninja gobject-introspection
-    wrapGAppsHook python3 hicolor-icon-theme desktop-file-utils
+    wrapGAppsHook python3 desktop-file-utils
   ];
   buildInputs = [ gjs glib gtk3 gdk-pixbuf ] ++ (with gst_all_1; [ gstreamer.dev gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]);
 

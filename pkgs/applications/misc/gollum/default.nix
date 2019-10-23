@@ -2,7 +2,6 @@
 , git }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "gollum";
   # nix-shell -p bundix icu zlib
   version = (import ./gemset.nix).gollum.version;
@@ -10,7 +9,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   env = bundlerEnv {
-    name = "${name}-gems";
+    name = "${pname}-${version}-gems";
     inherit pname ruby;
     gemdir = ./.;
   };

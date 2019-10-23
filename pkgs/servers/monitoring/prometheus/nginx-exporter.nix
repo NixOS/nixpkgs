@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "nginx_exporter-${version}";
-  version = "0.4.1";
+  pname = "nginx_exporter";
+  version = "0.4.2";
 
   goPackagePath = "github.com/nginxinc/nginx-prometheus-exporter";
 
@@ -14,14 +14,16 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "nginxinc";
     repo = "nginx-prometheus-exporter";
-    sha256 = "0c5bxl9xrd4gh2w5wyrzghmbcy9k1khydzml5cm0rsyqhwsvs8m5";
+    sha256 = "023nl83w0fic7sj0yxxgj7jchyafqnmv6dq35amzz37ikx92mdcj";
   };
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz willibutz ];
+    maintainers = with maintainers; [ benley fpletz willibutz globin ];
     platforms = platforms.unix;
   };
 }

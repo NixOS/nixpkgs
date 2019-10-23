@@ -5,7 +5,7 @@
 , pyparsing
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   name = "mutag-0.0.2-2ffa0258ca";
   disabled = ! isPy3k;
 

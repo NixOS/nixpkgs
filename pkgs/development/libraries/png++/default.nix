@@ -4,12 +4,12 @@
 assert docSupport -> doxygen != null;
 
 stdenv.mkDerivation rec {
-  name = "pngpp-${version}";
-  version = "0.2.9";
+  pname = "pngpp";
+  version = "0.2.10";
 
   src = fetchurl {
     url = "mirror://savannah/pngpp/png++-${version}.tar.gz";
-    sha256 = "14c74fsc3q8iawf60m74xkkawkqbhd8k8x315m06qaqjcl2nmg5b";
+    sha256 = "1qgf8j25r57wjqlnzdkm8ya5x1bmj6xjvapv8f2visqnmcbg52lr";
   };
 
   doCheck = true;

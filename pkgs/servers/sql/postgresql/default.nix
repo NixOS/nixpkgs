@@ -3,7 +3,7 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
-      , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
+      , glibc, zlib, readline, openssl, openssl_1_0_2, icu, systemd, libossp_uuid
       , pkgconfig, libxml2, tzdata
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
@@ -20,11 +20,11 @@ let
     icuEnabled = atLeast "10";
 
   in stdenv.mkDerivation rec {
-    name = "postgresql-${version}";
+    pname = "postgresql";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
+      url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
 
@@ -32,9 +32,10 @@ let
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
-      [ zlib readline openssl libxml2 makeWrapper ]
+      [ zlib readline libxml2 makeWrapper ]
       ++ lib.optionals icuEnabled [ icu ]
       ++ lib.optionals enableSystemd [ systemd ]
+      ++ [ (if atLeast "9.5" then openssl else openssl_1_0_2) ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = lib.optionals icuEnabled [ pkgconfig ];
@@ -80,8 +81,8 @@ let
     postInstall =
       ''
         moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/libpgcommon.a" "$out"
-        moveToOutput "lib/libpgport.a" "$out"
+        moveToOutput "lib/libpgcommon*.a" "$out"
+        moveToOutput "lib/libpgport*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
@@ -133,7 +134,7 @@ let
       homepage    = https://www.postgresql.org;
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
-      maintainers = with maintainers; [ ocharles thoughtpolice danbst ];
+      maintainers = with maintainers; [ ocharles thoughtpolice danbst globin ];
       platforms   = platforms.unix;
       knownVulnerabilities = optional (!atLeast "9.4")
         "PostgreSQL versions older than 9.4 are not maintained anymore!";
@@ -167,43 +168,43 @@ let
 
 in self: {
 
-  postgresql_9_4 = self.callPackage generic {
-    version = "9.4.23";
-    psqlSchema = "9.4";
-    sha256 = "16qx4gfq7i2nnxm0i3zxpb3z1mmzx05a3fsh95414ay8n049q00d";
-    this = self.postgresql_9_4;
-    inherit self;
-  };
-
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.18";
+    version = "9.5.19";
     psqlSchema = "9.5";
-    sha256 = "1pgkz794wmp4f40843sbin49k5lgl59jvl6nazvdbb6mgr441jfz";
+    sha256 = "1cqvbsyfs9048wbvdv0vhhaksjyjqv2vvh6ij4vqmjibc4kal34n";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.14";
+    version = "9.6.15";
     psqlSchema = "9.6";
-    sha256 = "08hsqczy1ixkjyf2vr3s9x69agfz9yr8lh31fir4z0dfr5jw421z";
+    sha256 = "02hp69h2p02asfblkaahblzdz2zmawd2r11h6237y5j7yadgxn9w";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.9";
+    version = "10.10";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0m0gbf7nwgag6a1z5f9xszwzgf2xhx0ncakyxwxlzs87n1zk32wm";
+    sha256 = "0lzj46dwd9cw94gnqm36bxd7jlhfdyqjrfzr3c4xd3prfn2rnkxd";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.4";
+    version = "11.5";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "12ycjlqncijgmd5z078ybwda8ilas96lc7nxxmdq140mzpgjv002";
+    sha256 = "106ikalvrilihlvhq7xj7snq98hgbgq6qsgjrd252wgw1c327pvz";
     this = self.postgresql_11;
+    inherit self;
+  };
+
+  postgresql_12 = self.callPackage generic {
+    version = "12.0";
+    psqlSchema = "12";
+    sha256 = "1ijm13gx1d9ai09n26nbdc77n9b8akh6pj21yy9vfn7p2mr3k8nd";
+    this = self.postgresql_12;
     inherit self;
   };
 

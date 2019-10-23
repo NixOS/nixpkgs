@@ -214,7 +214,7 @@ in rec {
 
   jvmci8 = stdenv.mkDerivation rec {
     version = "19.2-b01";
-    name = "jvmci-${version}";
+    pname = "jvmci";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
@@ -273,14 +273,14 @@ in rec {
       if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
       EOF
     '';
+    postFixup = openjdk.postFixup or null;
     dontStrip = true; # stripped javac crashes with "segmentaion fault"
     inherit (openjdk) meta;
-    inherit (openjdk) postFixup;
   };
 
   graalvm8 = stdenv.mkDerivation rec {
     inherit version;
-    name = "graal-${version}";
+    pname = "graal";
     src = fetchFromGitHub {
       owner  = "oracle";
       repo   = "graal";

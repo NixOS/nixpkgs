@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bpftrace-${version}";
-  version = "0.9.1";
+  pname = "bpftrace";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "refs/tags/v${version}";
-    sha256 = "17qf1c3h99iyxkc0xzix4jnxwqvxbg9ki23zm7l04qw73lj01g1m";
+    sha256 = "19lblnhx3p0qk8s3qgxrx9wl0d6dgz5dfp4gw6a6cvhhyn78cldm";
   };
 
   enableParallelBuilding = true;

@@ -2,11 +2,11 @@
 , gtk2, libjack2, ladspaH , libglade, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "calf-${version}";
+  pname = "calf";
   version = "0.90.3";
 
   src = fetchurl {
-    url = "https://calf-studio-gear.org/files/${name}.tar.gz";
+    url = "https://calf-studio-gear.org/files/${pname}-${version}.tar.gz";
     sha256 = "17x4hylgq4dn9qycsdacfxy64f5cv57n2qgkvsdp524gnqzw4az3";
   };
 

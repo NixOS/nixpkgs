@@ -8,7 +8,7 @@ let param =
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "coq${coq.coq-version}-InfSeqExt-${param.version}";
 
   src = fetchFromGitHub {

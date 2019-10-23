@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libroxml, proj, libyamlcpp, boost } :
 
 stdenv.mkDerivation rec {
-  name = "osm2xmap-${version}";
+  pname = "osm2xmap";
   version = "2.0";
 
   src = fetchFromGitHub {

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.2";
-  name = "python-qt-${version}";
+  pname = "python-qt";
 
   src = fetchurl {
     url="mirror://sourceforge/pythonqt/PythonQt${version}.zip";

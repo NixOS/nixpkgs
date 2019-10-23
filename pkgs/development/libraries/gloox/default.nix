@@ -13,8 +13,9 @@ with stdenv.lib;
 let
   version = "1.0.22";
 in
-stdenv.mkDerivation rec {
-  name = "gloox-${version}";
+stdenv.mkDerivation {
+  pname = "gloox";
+  inherit version;
 
   src = fetchurl {
     url = "https://camaya.net/download/gloox-${version}.tar.bz2";

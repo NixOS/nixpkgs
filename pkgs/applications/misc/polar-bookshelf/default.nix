@@ -9,7 +9,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "polar-bookshelf-${version}";
+  pname = "polar-bookshelf";
   version = "1.13.10";
 
   # fetching a .deb because there's no easy way to package this Electron app

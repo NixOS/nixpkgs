@@ -1,6 +1,7 @@
 { lib
 , buildPythonApplication
-, flake8
+, certifi
+, setuptools
 , invoke
 , parver
 , pip
@@ -21,22 +22,17 @@ buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
+  nativeBuildInputs = [ invoke parver ];
+
   propagatedBuildInputs = [
-    flake8
-    invoke
-    parver
+    certifi
+    setuptools
     pip
-    requests
     virtualenv
     virtualenv-clone
   ];
 
   doCheck = false;
-
-  makeWrapperArgs = [
-    "--set PYTHONPATH \".:$PYTHONPATH\""
-    "--set PIP_IGNORE_INSTALLED 1"
-  ];
 
   meta = with lib; {
     description = "Python Development Workflow for Humans";

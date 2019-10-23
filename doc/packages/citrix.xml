@@ -1,0 +1,44 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-citrix">
+  <title>Citrix Workspace</title>
+
+  <para>
+   <note>
+    <para>
+     Please note that the <literal>citrix_receiver</literal> package has been deprecated since its development was <link xlink:href="https://docs.citrix.com/en-us/citrix-workspace-app.html">discontinued by upstream</link> and has been replaced by <link xlink:href="https://www.citrix.com/products/workspace-app/">the citrix workspace app</link>.
+    </para>
+   </note>
+   <link xlink:href="https://www.citrix.com/products/receiver/">Citrix Receiver</link> and <link xlink:href="https://www.citrix.com/products/workspace-app/">Citrix Workspace App</link> are a remote desktop viewers which provide access to <link xlink:href="https://www.citrix.com/products/xenapp-xendesktop/">XenDesktop</link> installations.
+  </para>
+
+  <section xml:id="sec-citrix-base">
+   <title>Basic usage</title>
+
+   <para>
+    The tarball archive needs to be downloaded manually as the license agreements of the vendor for <link xlink:href="https://www.citrix.com/downloads/citrix-receiver/">Citrix Receiver</link> or <link xlink:href="https://www.citrix.de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html">Citrix Workspace</link> need to be accepted first. Then run <command>nix-prefetch-url file://$PWD/linuxx64-$version.tar.gz</command>. With the archive available in the store the package can be built and installed with Nix.
+   </para>
+
+   <warning>
+    <title>Caution with <command>nix-shell</command> installs</title>
+    <para>
+     It's recommended to install <literal>Citrix Receiver</literal> and/or <literal>Citrix Workspace</literal> using <literal>nix-env -i</literal> or globally to ensure that the <literal>.desktop</literal> files are installed properly into <literal>$XDG_CONFIG_DIRS</literal>. Otherwise it won't be possible to open <literal>.ica</literal> files automatically from the browser to start a Citrix connection.
+    </para>
+   </warning>
+  </section>
+
+  <section xml:id="sec-citrix-custom-certs">
+   <title>Custom certificates</title>
+
+   <para>
+    The <literal>Citrix Workspace App</literal> in <literal>nixpkgs</literal> trust several certificates <link xlink:href="https://curl.haxx.se/docs/caextract.html">from the Mozilla database</link> by default. However several companies using Citrix might require their own corporate certificate. On distros with imperative packaging these certs can be stored easily in <link xlink:href="https://developer-docs.citrix.com/projects/receiver-for-linux-command-reference/en/13.7/"><literal>$ICAROOT</literal></link>, however this directory is a store path in <literal>nixpkgs</literal>. In order to work around this issue the package provides a simple mechanism to add custom certificates without rebuilding the entire package using <literal>symlinkJoin</literal>:
+<programlisting>
+<![CDATA[with import <nixpkgs> { config.allowUnfree = true; };
+let extraCerts = [ ./custom-cert-1.pem ./custom-cert-2.pem /* ... */ ]; in
+citrix_workspace.override {
+  inherit extraCerts;
+}]]>
+</programlisting>
+   </para>
+  </section>
+</section>

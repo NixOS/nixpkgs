@@ -28,6 +28,11 @@ let
       url = "https://github.com/clementine-player/Clementine/pull/5630.patch";
       sha256 = "0px7xp1m4nvrncx8sga1qlxppk562wrk2qqk19iiry84nxg20mk4";
     })
+    (fetchpatch {
+      # Fixes compilation with chromaprint >= 1.4
+      url = "https://github.com/clementine-player/Clementine/commit/d3ea0c8482dfd3f6264a30cfceb456076d76e6cd.patch";
+      sha256 = "1ifrs5aqdzw16jbnf0z1ilir20chdnr9k5n21r99miq9hzjpbh12";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -67,7 +72,8 @@ let
   '';
 
   free = stdenv.mkDerivation {
-    name = "clementine-free-${version}";
+    pname = "clementine-free";
+    inherit version;
     inherit src patches nativeBuildInputs postPatch;
 
     # gst_plugins needed for setup-hooks
@@ -95,7 +101,8 @@ let
 
   # Unfree Spotify blob for Clementine
   unfree = stdenv.mkDerivation {
-    name = "clementine-blob-${version}";
+    pname = "clementine-blob";
+    inherit version;
     # Use the same patches and sources as Clementine
     inherit src nativeBuildInputs postPatch;
 

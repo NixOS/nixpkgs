@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, glib
-, gtk3, libgee, desktop-file-utils, geoclue2, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, glib
+, gtk3
+, libgee
+, desktop-file-utils
+, geoclue2
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-geoclue2";

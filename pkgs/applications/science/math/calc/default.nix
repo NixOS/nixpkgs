@@ -2,20 +2,19 @@
 , enableReadline ? true, readline, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "calc-${version}";
+  pname = "calc";
   version = "2.12.7.2";
 
   src = fetchurl {
     urls = [
-      "https://github.com/lcn2/calc/releases/download/${version}/${name}.tar.bz2"
-      "http://www.isthe.com/chongo/src/calc/${name}.tar.bz2"
+      "https://github.com/lcn2/calc/releases/download/${version}/${pname}-${version}.tar.bz2"
+      "http://www.isthe.com/chongo/src/calc/${pname}-${version}.tar.bz2"
     ];
     sha256 = "147wmbajcxv6wp92j6pizq4plrr1sb7jirifr1477bx33hc49bsp";
   };
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace 'all: check_include' 'all:' \
       --replace '-install_name ''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' \
       --replace '-install_name ''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}'
   '';
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "T=$(out)"
-    "INCDIR=${lib.getDev stdenv.cc.libc}/include"
+    "INCDIR="
     "BINDIR=/bin"
     "LIBDIR=/lib"
     "CALC_SHAREDIR=/share/calc"

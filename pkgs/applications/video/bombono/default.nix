@@ -8,7 +8,7 @@ fetchpatch {
   url = "https://aur.archlinux.org/cgit/aur.git/plain/${name}?h=e6cc6bc80c672aaa1a2260abfe8823da299a192c";
 }; in
 stdenv.mkDerivation rec {
-  name = "bombono-${version}";
+  pname = "bombono";
   version = "1.2.4";
   src = fetchFromGitHub {
     owner = "muravjov";

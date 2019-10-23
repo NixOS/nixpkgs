@@ -1,11 +1,11 @@
 { stdenv, fetchurl, SDL2, eigen, epoxy, fftw, gtest, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "movit-${version}";
+  pname = "movit";
   version = "1.6.3";
 
   src = fetchurl {
-    url = "https://movit.sesse.net/${name}.tar.gz";
+    url = "https://movit.sesse.net/${pname}-${version}.tar.gz";
     sha256 = "164lm5sg95ca6k546zf775g3s79mgff0az96wl6hbmlrxh4z26gb";
   };
 

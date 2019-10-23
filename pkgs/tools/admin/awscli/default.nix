@@ -28,11 +28,11 @@ let
 
 in py.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.16.170"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.16.261"; # N.B: if you change this, change botocore to a matching version too
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "12kh62imdfy8whvqzdrmdq4zw70gj1g3smqldf4lqpjfzss7cy92";
+    sha256 = "1mg4xhz6cpc52hpflqvbhq7ldwvg8kzixv9aj9w6gv60xvarwnm5";
   };
 
   # No tests included
@@ -49,6 +49,10 @@ in py.pkgs.buildPythonApplication rec {
     pyyaml
     groff
     less
+    urllib3
+    dateutil
+    jmespath
+    futures
   ];
 
   postInstall = ''
@@ -58,6 +62,8 @@ in py.pkgs.buildPythonApplication rec {
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
     rm $out/bin/aws.cmd
   '';
+
+  passthru.python = py; # for aws_shell
 
   meta = with lib; {
     homepage = https://aws.amazon.com/cli/;

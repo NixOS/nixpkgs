@@ -6,7 +6,8 @@
 let version = "0.6.144";
 
 in stdenv.mkDerivation {
-  name = "qmk_firmware-${version}";
+  pname = "qmk_firmware";
+  inherit version;
   src = fetchFromGitHub {
     owner = "qmk";
     repo = "qmk_firmware";

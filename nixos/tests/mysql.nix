@@ -19,7 +19,7 @@ import ./make-test.nix ({ pkgs, ...} : {
         services.mysql.initialScript = pkgs.writeText "mysql-init.sql" ''
           CREATE USER 'passworduser'@'localhost' IDENTIFIED BY 'password123';
         '';
-        services.mysql.package = pkgs.mysql;
+        services.mysql.package = pkgs.mysql57;
       };
 
     mariadb =

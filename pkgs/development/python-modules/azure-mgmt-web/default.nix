@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-web";
-  version = "0.41.0";
+  version = "0.43.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "5f170f25c72119ff4b4e2f39d46ce21bdb2f399f786ea24eedc15c12cfba3054";
+    sha256 = "0yqxk2zr1ibm2vycyq4vy9hy0xhznma5x3kjl6qxhmb4kyyyljkh";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Web Apps Management Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/webapps?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

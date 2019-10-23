@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "heatseeker-${version}";
+  pname = "heatseeker";
   version = "1.5.1";
 
   src = fetchFromGitHub {

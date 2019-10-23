@@ -16,8 +16,8 @@ let
 
 in
 
-stdenv.mkDerivation rec {
-  name = "osmctools-${version}";
+stdenv.mkDerivation {
+  pname = "osmctools";
   version = "0.8.5plus1.4.0";
 
   buildInputs = [ zlib ];

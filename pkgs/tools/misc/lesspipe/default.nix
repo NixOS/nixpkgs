@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "1.83";
+  version = "1.84";
 
   buildInputs = [ perl ];
   preConfigure = "patchShebangs .";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "wofr06";
     repo = "lesspipe";
     rev = version;
-    sha256 = "1vqch6k4fz5pyf8szlnqm3qhlvgs9l4njd13yczjh4kpaxpn0rxb";
+    sha256 = "124ffhzrikr88ab14rk6753n8adxijpmg7q3zx7nmqc52wpkfd8q";
   };
 
   patches = [

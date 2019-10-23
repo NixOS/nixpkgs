@@ -28,7 +28,7 @@ open ANSWERS, "<$ENV{KERNEL_CONFIG}" or die "Could not open answer file";
 while (<ANSWERS>) {
     chomp;
     s/#.*//;
-    if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(\S+)\s*$/) {
+    if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(.*\S)\s*$/) {
         $answers{$1} = $3;
         $requiredAnswers{$1} = !(defined $2);
     } elsif (!/^\s*$/) {

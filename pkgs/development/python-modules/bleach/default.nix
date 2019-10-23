@@ -5,6 +5,7 @@
 , pytestrunner
 , six
 , html5lib
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,10 +18,16 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six html5lib ];
+  propagatedBuildInputs = [ six html5lib setuptools ];
 
   postPatch = ''
     substituteInPlace setup.py --replace ",<3dev" ""
+  '';
+
+  # Disable a test
+  # https://github.com/mozilla/bleach/issues/467
+  checkPhase = ''
+    pytest -k "not test_only_text_is_cleaned"
   '';
 
   meta = {

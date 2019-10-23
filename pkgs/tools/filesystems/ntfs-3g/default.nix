@@ -4,7 +4,6 @@
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
   version = "2017.3.23";
-  name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "man" "doc" ];
 
@@ -31,6 +30,7 @@ stdenv.mkDerivation rec {
     "--enable-posix-acls"
     "--enable-xattr-mappings"
     "--${if crypto then "enable" else "disable"}-crypto"
+    "--enable-extras"
   ];
 
   postInstall =

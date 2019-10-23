@@ -2,13 +2,13 @@
 , intltool, gettext, shared-mime-info, glib, gdk-pixbuf, perl}:
 
 stdenv.mkDerivation rec {
-  name = "viewnior-${version}";
+  pname = "viewnior";
   version = "1.6";
 
   src = fetchFromGitHub {
     owner = "xsisqox";
     repo = "Viewnior";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "06ppv3r85l3id4ij6h4y5fgm3nib2587fdrdv9fccyi75zk7fs0p";
   };
 
@@ -17,10 +17,6 @@ stdenv.mkDerivation rec {
     [ pkgconfig gtk2 libpng exiv2 lcms intltool gettext
       shared-mime-info glib gdk-pixbuf perl
     ];
-
-  preFixup = ''
-    rm $out/share/icons/*/icon-theme.cache
-  '';
 
   meta = {
     description = "Fast and simple image viewer";

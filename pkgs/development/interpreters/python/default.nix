@@ -28,6 +28,7 @@ with pkgs;
         isPy35 = pythonVersion == "3.5";
         isPy36 = pythonVersion == "3.6";
         isPy37 = pythonVersion == "3.7";
+        isPy38 = pythonVersion == "3.8";
         isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
         isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
         isPy3k = isPy3;
@@ -51,10 +52,10 @@ in {
     sourceVersion = {
       major = "2";
       minor = "7";
-      patch = "16";
+      patch = "17";
       suffix = "";
     };
-    sha256 = "1mqfcqp5y8r0bfyr7ppl74n0lig45p9mc4b8adlcpvj74rhfy8pj";
+    sha256 = "0hds28cg226m8j8sr394nm9yc4gxhvlv109w0avsf2mxrlrz0hsd";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -90,10 +91,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "4";
+      patch = "5";
       suffix = "";
     };
-    sha256 = "0gxiv5617zd7dnqm5k9r4q2188lk327nf9jznwq9j6b8p0s92ygv";
+    sha256 = "154xc6dxww21qkmphg66pfks8987a17cl3vqq5g4hv1xkzm7cnp8";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -104,36 +105,68 @@ in {
       major = "3";
       minor = "8";
       patch = "0";
-      suffix = "b2";
+      suffix = "";
     };
-    sha256 = "1rh9dz5vmc56y45d6j2wfjw4m7x25i6v8vyld4mrqh06s2gn1hbl";
+    sha256 = "110d0did9rxn7rg85kf2fwli5hqq44xv2d8bi7d92m7v2d728mmk";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
+
+  # Minimal versions of Python (built without optional dependencies)
+  python3Minimal = (callPackage ./cpython {
+    self = python3Minimal;
+    sourceVersion = {
+      major = "3";
+      minor = "7";
+      patch = "4";
+      suffix = "";
+    };
+    sha256 = "0gxiv5617zd7dnqm5k9r4q2188lk327nf9jznwq9j6b8p0s92ygv";
+    inherit (darwin) CF configd;
+    inherit passthruFun;
+
+    # strip down that python version as much as possible
+    openssl = null;
+    readline = null;
+    ncurses = null;
+    gdbm = null;
+    sqlite = null;
+    stripConfig = true;
+    stripIdlelib = true;
+    stripTests = true;
+    stripTkinter = true;
+    rebuildBytecode = false;
+    stripBytecode = true;
+  }).overrideAttrs(old: {
+    pname = "python3-minimal";
+    meta = old.meta // {
+      maintainers = [];
+    };
+  });
 
   pypy27 = callPackage ./pypy {
     self = pypy27;
     sourceVersion = {
       major = "7";
-      minor = "0";
-      patch = "0";
+      minor = "1";
+      patch = "1";
     };
-    sha256 = "1m6ja79sbkl38p1hs7c0n4kq5xzn01wp7wl5456hsw9q6cwg6894";
+    sha256 = "0yq6ln1ic476sasp8zs4mg5i9524l1p96qwanp486rr1yza1grlg";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = true; };
     python = python27;
     inherit passthruFun;
   };
 
-  pypy35 = callPackage ./pypy {
-    self = pypy35;
+  pypy36 = callPackage ./pypy {
+    self = pypy36;
     sourceVersion = {
       major = "7";
-      minor = "0";
-      patch = "0";
+      minor = "1";
+      patch = "1";
     };
-    sha256 = "0hbv9ziv8n9lqnr6cndrw70p6g40c00w1ds7lmzgrr153myxkp7w";
-    pythonVersion = "3.5";
+    sha256 = "1hqvnran7d2dzj5555n7q680dyzhmbklz04pvkxgb5j604v7kkx1";
+    pythonVersion = "3.6";
     db = db.override { dbmSupport = true; };
     python = python27;
     inherit passthruFun;
@@ -143,28 +176,33 @@ in {
     # Not included at top-level
     self = pythonInterpreters.pypy27_prebuilt;
     sourceVersion = {
-      major = "6";
-      minor = "0";
-      patch = "0";
+      major = "7";
+      minor = "1";
+      patch = "1";
     };
-    sha256 = "0rxgnp3fm18b87ln8bbjr13g2fsf4ka4abkaim6m03y9lwmr9gvc"; # linux64
+    sha256 = "0rlx4x9xy9h989w6sy4h7lknm00956r30c5gjxwsvf8fhvq9xc3k"; # linux64
     pythonVersion = "2.7";
     inherit passthruFun;
     ncurses = ncurses5;
   };
 
-  pypy35_prebuilt = callPackage ./pypy/prebuilt.nix {
-  # Not included at top-level
-    self = pythonInterpreters.pypy35_prebuilt;
+  pypy36_prebuilt = callPackage ./pypy/prebuilt.nix {
+    # Not included at top-level
+    self = pythonInterpreters.pypy36_prebuilt;
     sourceVersion = {
-      major = "6";
-      minor = "0";
-      patch = "0";
+      major = "7";
+      minor = "1";
+      patch = "1";
     };
-    sha256 = "0j3h08s7wpglghasmym3baycpif5jshvmk9rpav4pwwy5clzmzsc"; # linux64
-    pythonVersion = "3.5";
+    sha256 = "1c1xx6dm1n4xvh1vd3rcvyyixm5jm9rvzisji1a5bc9l38xzc540"; # linux64
+    pythonVersion = "3.6";
     inherit passthruFun;
     ncurses = ncurses5;
+  };
+
+  graalpython37 = callPackage ./graalpython/default.nix {
+    self = pythonInterpreters.graalpython37;
+    inherit passthruFun;
   };
 
 })

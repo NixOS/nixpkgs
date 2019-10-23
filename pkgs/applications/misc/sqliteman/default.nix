@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, qt4, qscintilla }:
 
 stdenv.mkDerivation rec {
-  name = "sqliteman-${version}";
+  pname = "sqliteman";
   version = "1.2.0";
 
   src = fetchFromGitHub {

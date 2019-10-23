@@ -1,5 +1,5 @@
 { lib, fetchpatch, mkXfceDerivation, dbus-glib, gtk2, libical, libnotify, tzdata
-, popt, libxfce4ui ? null, xfce4-panel ? null, withPanelPlugin ? true }:
+, popt, libxfce4ui, xfce4-panel, withPanelPlugin ? true }:
 
 assert withPanelPlugin -> libxfce4ui != null && xfce4-panel != null;
 
@@ -7,7 +7,7 @@ let
   inherit (lib) optionals;
 in
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "orage";
   version = "4.12.1";

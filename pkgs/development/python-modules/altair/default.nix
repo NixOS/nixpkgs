@@ -1,30 +1,52 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
-, entrypoints, jsonschema, numpy, pandas, six, toolz, typing
-, pythonOlder, recommonmark }:
+, entrypoints
+, glibcLocales
+, ipython
+, jinja2
+, jsonschema
+, numpy
+, pandas
+, pytest
+, pythonOlder
+, recommonmark
+, six
+, sphinx
+, toolz
+, typing
+, vega_datasets
+}:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zdznkybw3g8fd280h5j5cnnwcv30610gp8fl8vwqda1w2p6pgvp";
+    sha256 = "098macm0sw54xqijdy1c8cppcgw79wn52qdc71qqb51nibc17gls";
   };
 
-  postPatch = ''
-    # Tests require network
-    rm altair/examples/boxplot_max_min.py altair/examples/line_percent.py
-  '';
+  propagatedBuildInputs = [
+    entrypoints
+    jsonschema
+    numpy
+    pandas
+    six
+    toolz
+  ] ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
 
-  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
-
-  propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  checkInputs = [
+    glibcLocales
+    ipython
+    jinja2
+    pytest
+    recommonmark
+    sphinx
+    vega_datasets
+  ];
 
   checkPhase = ''
     export LANG=en_US.UTF-8
-    py.test altair --doctest-modules
+    pytest --doctest-modules altair
   '';
 
   meta = with stdenv.lib; {

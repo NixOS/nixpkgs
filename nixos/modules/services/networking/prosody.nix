@@ -297,7 +297,7 @@ in
       };
 
       dataDir = mkOption {
-        type = types.string;
+        type = types.path;
         description = "Directory where Prosody stores its data";
         default = "/var/lib/prosody";
       };
@@ -465,7 +465,7 @@ in
 
       modules_enabled = {
 
-        ${ lib.concatStringsSep "\n\ \ " (lib.mapAttrsToList
+        ${ lib.concatStringsSep "\n  " (lib.mapAttrsToList
           (name: val: optionalString val "${toLua name};")
         cfg.modules) }
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}

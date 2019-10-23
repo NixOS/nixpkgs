@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, gtkmm2, lv2, pkgconfig, python, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "lvtk-${version}";
+  pname = "lvtk";
   version = "1.2.0";
 
   src = fetchurl {

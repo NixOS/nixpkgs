@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "mblaze-${version}";
+  pname = "mblaze";
   version = "0.5.1";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv ];

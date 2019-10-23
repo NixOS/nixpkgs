@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "ruamel.ordereddict";
-  version = "0.4.13";
+  version = "0.4.14";
   disabled = isPy3k || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf0a198c8ce5d973c24e5dba12d3abc254996788ca6ad8448eabc6aa710db149";
+    sha256 = "281051d26eb2b18ef3d920e1e260716a52bd058a6b1a2f324102fc6a15cb8d4a";
   };
 
   meta = with stdenv.lib; {

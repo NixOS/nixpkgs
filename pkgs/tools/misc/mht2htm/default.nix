@@ -4,7 +4,7 @@ let
   date = "07.apr.2016";
 
 in stdenv.mkDerivation rec {
-  name = "mht2mht-${version}";
+  pname = "mht2mht";
   version = "1.8.1.35";
 
   src = fetchurl {

@@ -1,6 +1,6 @@
 { fetchFromBitbucket, stdenv, boost, cmake, libGLU_combined }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "coin";
   version = "unstable-2019-06-12";
 

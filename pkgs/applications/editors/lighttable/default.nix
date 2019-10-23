@@ -21,13 +21,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "lighttable-${version}";
+  pname = "lighttable";
   version = "0.8.1";
 
   src =
       fetchurl {
         name = "LightTableLinux64.tar.gz";
-        url = "https://github.com/LightTable/LightTable/releases/download/${version}/${name}-linux.tar.gz";
+        url = "https://github.com/LightTable/LightTable/releases/download/${version}/${pname}-${version}-linux.tar.gz";
         sha256 = "06fj725xfhf3fwrf7dya7ijmxq3v76kfmd4lr2067a92zhlwr5pv";
       };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     tar xf ${src}
     mkdir -p $out/{bin,share/LightTable}
-    mv ./${name}-linux/* $out/share/LightTable
+    mv ./${pname}-${version}-linux/* $out/share/LightTable
 
     patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

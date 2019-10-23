@@ -1,50 +1,149 @@
-{ stdenv, fetchurl, substituteAll, gtk-doc, pkgconfig, gobject-introspection, intltool
-, libgudev, polkit, libxmlb, gusb, sqlite, libarchive, glib-networking
-, libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, gnu-efi
-, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
-, ninja, gcab, gnutls, python3, wrapGAppsHook, json-glib, bash-completion
-, shared-mime-info, umockdev, vala, makeFontsConf, freefont_ttf
-, cairo, freetype, fontconfig, pango
-, bubblewrap, efibootmgr, flashrom, tpm2-tools
-}:
-
 # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
 
+{ stdenv
+, fetchurl
+, substituteAll
+, gtk-doc
+, pkgconfig
+, gobject-introspection
+, intltool
+, libgudev
+, polkit
+, libxmlb
+, gusb
+, sqlite
+, libarchive
+, glib-networking
+, libsoup
+, help2man
+, gpgme
+, libxslt
+, elfutils
+, libsmbios
+, efivar
+, gnu-efi
+, libyaml
+, valgrind
+, meson
+, libuuid
+, colord
+, docbook_xml_dtd_43
+, docbook_xsl
+, ninja
+, gcab
+, gnutls
+, python3
+, wrapGAppsHook
+, json-glib
+, bash-completion
+, shared-mime-info
+, umockdev
+, vala
+, makeFontsConf
+, freefont_ttf
+, cairo
+, freetype
+, fontconfig
+, pango
+, bubblewrap
+, efibootmgr
+, flashrom
+, tpm2-tools
+, nixosTests
+}:
+
 let
-  python = python3.withPackages (p: with p; [ pygobject3 pycairo pillow ]);
-  installedTestsPython = python3.withPackages (p: with p; [ pygobject3 requests ]);
+  python = python3.withPackages (p: with p; [
+    pygobject3
+    pycairo
+    pillow
+    setuptools
+  ]);
+
+  installedTestsPython = python3.withPackages (p: with p; [
+    pygobject3
+    requests
+  ]);
 
   fontsConf = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
-in stdenv.mkDerivation rec {
+
+  isx86 = stdenv.isx86_64 || stdenv.isi686;
+
+  # Dell isn't supported on Aarch64
+  haveDell = isx86;
+
+  # only redfish for x86_64
+  haveRedfish = stdenv.isx86_64;
+
+  # # Currently broken on Aarch64
+  # haveFlashrom = isx86;
+  # Experimental in 1.2.10
+  haveFlashrom = false;
+
+in
+
+stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.2.8";
+  version = "1.2.10";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "0qbvq52c0scn1h99i1rf2la6rrhckin6gb02k7l0v3g07mxs20wc";
+    sha256 = "0inngs7i48akm9c7fmdsf9zjif595rkaba69rl76jfwfv8r21vjb";
   };
 
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
-    meson ninja gtk-doc pkgconfig gobject-introspection intltool shared-mime-info
-    valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook vala
+    meson
+    ninja
+    gtk-doc
+    pkgconfig
+    gobject-introspection
+    intltool
+    shared-mime-info
+    valgrind
+    gcab
+    docbook_xml_dtd_43
+    docbook_xsl
+    help2man
+    libxslt
+    python
+    wrapGAppsHook
+    vala
   ];
+
   buildInputs = [
-    polkit libxmlb gusb sqlite libarchive libsoup elfutils libsmbios gnu-efi libyaml
-    libgudev colord gpgme libuuid gnutls glib-networking efivar json-glib umockdev
-    bash-completion cairo freetype fontconfig pango
+    polkit
+    libxmlb
+    gusb
+    sqlite
+    libarchive
+    libsoup
+    elfutils
+    gnu-efi
+    libyaml
+    libgudev
+    colord
+    gpgme
+    libuuid
+    gnutls
+    glib-networking
+    json-glib
+    umockdev
+    bash-completion
+    cairo
+    freetype
+    fontconfig
+    pango
+    efivar
+  ] ++ stdenv.lib.optionals haveDell [
+    libsmbios
   ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit flashrom efibootmgr bubblewrap;
-      tpm2_tools = "${tpm2-tools}";
-    })
-
+    ./fix-paths.patch
     ./add-option-for-installation-sysconfdir.patch
 
     # installed tests are installed to different output
@@ -57,7 +156,12 @@ in stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs \
+      libfwupd/generate-version-script.py \
+      meson_post_install.sh \
+      po/make-images \
+      po/make-images.sh \
+      po/test-deps
 
     # we cannot use placeholder in substituteAll
     # https://github.com/NixOS/nix/issues/1846
@@ -76,8 +180,18 @@ in stdenv.mkDerivation rec {
   # /etc/os-release not available in sandbox
   # doCheck = true;
 
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  preFixup = let
+    binPath = [
+      efibootmgr
+      bubblewrap
+      tpm2-tools
+    ] ++ stdenv.lib.optional haveFlashrom flashrom;
+  in ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      # See programs reached with fu_common_find_program_in_path in source
+      --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
+    )
   '';
 
   mesonFlags = [
@@ -90,6 +204,13 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+  ] ++ stdenv.lib.optionals (!haveDell) [
+    "-Dplugin_dell=false"
+    "-Dplugin_synaptics=false"
+  ] ++ stdenv.lib.optionals (!haveRedfish) [
+    "-Dplugin_redfish=false"
+  ] ++ stdenv.lib.optionals (!haveFlashrom) [
+    "-Dplugin_flashrom=false"
   ];
 
   # TODO: We need to be able to override the directory flags from meson setup hook
@@ -106,15 +227,19 @@ in stdenv.mkDerivation rec {
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
+  # error: “PolicyKit files are missing”
+  # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
+  PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
+
   # TODO: wrapGAppsHook wraps efi capsule even though it is not elf
   dontWrapGApps = true;
   # so we need to wrap the executables manually
   postFixup = ''
     find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
       | while IFS= read -r -d ''' file; do
-      if [[ "''${file}" != *.efi ]]; then
-        echo "Wrapping program ''${file}"
-        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+      if [[ "$file" != *.efi ]]; then
+        echo "Wrapping program $file"
+        wrapGApp "$file"
       fi
     done
   '';
@@ -135,11 +260,15 @@ in stdenv.mkDerivation rec {
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA.pem"
     ];
+
+    tests = {
+      installedTests = nixosTests.fwupd;
+    };
   };
 
   meta = with stdenv.lib; {
     homepage = https://fwupd.org/;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ jtojnar ];
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;
   };

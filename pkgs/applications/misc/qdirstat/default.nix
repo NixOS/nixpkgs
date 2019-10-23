@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub, qmake
 , coreutils, xdg_utils, bash
-, makeWrapper, perlPackages }:
+, makeWrapper, perlPackages, mkDerivation }:
 
 let
-  version = "1.5.90";
-in stdenv.mkDerivation rec {
-  name = "qdirstat-${version}";
+  version = "1.6";
+in mkDerivation rec {
+  pname = "qdirstat";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "shundhammer";
     repo = "qdirstat";
-    rev = "${version}";
-    sha256 = "161jzii5p0dflbpixibn3yhp13smjf6aw802rz1q4879s12gqdq6";
+    rev = version;
+    sha256 = "0q4ccjmlbqifg251kyxwys8wspdskr8scqhacyfrs9cmnjxcjqan";
   };
 
   nativeBuildInputs = [ qmake makeWrapper ];

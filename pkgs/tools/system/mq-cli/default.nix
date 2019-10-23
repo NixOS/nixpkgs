@@ -1,7 +1,7 @@
 { fetchFromGitHub, lib, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name    = "mq-cli-${version}";
+  pname = "mq-cli";
   version = "1.0.0";
 
   src = fetchFromGitHub {

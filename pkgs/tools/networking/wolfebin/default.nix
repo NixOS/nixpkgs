@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "5.4";
-  name = "wolfebin-${version}";
+  pname = "wolfebin";
   
   src = fetchFromGitHub {
     owner = "thejoshwolfe";
     repo = "wolfebin";
-    rev = "${version}";
+    rev = version;
     sha256 = "16xj6zz30sn9q05p211bmmsl0i6fknfxf8dssn6knm6nkiym8088";
   };
 

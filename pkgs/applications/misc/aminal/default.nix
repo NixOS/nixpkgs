@@ -10,7 +10,7 @@
 }:
 
 buildGoPackage rec {
-  name = "aminal-${version}";
+  pname = "aminal";
   version = "0.8.6";
 
   goPackagePath = "github.com/liamg/aminal";

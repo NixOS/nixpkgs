@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "shc-${version}";
+  pname = "shc";
   version = "4.0.3";
-  rev = "${version}";
+  rev = version;
 
   src = fetchFromGitHub {
     inherit rev;

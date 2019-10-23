@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
-  name = "vhba-${version}";
+  pname = "vhba";
   version = "20190410";
 
   src  = fetchurl {

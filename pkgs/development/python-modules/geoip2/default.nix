@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "MaxMind GeoIP2 API";
     homepage = "https://www.maxmind.com/en/home";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "riemann-${version}";
+  pname = "riemann";
   version = "0.3.3";
 
   src = fetchurl {
-    url = "https://github.com/riemann/riemann/releases/download/${version}/${name}.tar.bz2";
+    url = "https://github.com/riemann/riemann/releases/download/${version}/${pname}-${version}.tar.bz2";
     sha256 = "11xcmmp5k78vr5ch42zwx9ym84y6kf81z9zwawqybvx7wmlbpdiq";
   };
 
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "A network monitoring system";
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
   };
 }

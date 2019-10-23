@@ -1,12 +1,11 @@
 { mkXfceDerivation, gtk3, libxfce4ui, libxfce4util }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "garcon";
-  version = "4.14pre2";
-  rev = "xfce-4.14pre2";
+  version = "0.6.4";
 
-  sha256 = "0d2fir4vbfdmng9k70nf5zv3fjwgr6g0czrp458x6qswih2gv2ik";
+  sha256 = "0pamhp1wffiw638s66nws2mpzmwkhvhb6iwccfy8b0kyr57wipjv";
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util ];
 }

@@ -12,19 +12,20 @@
 , stdenv
 , jedi
 , pylint
+, astor
 }:
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.11.0";
+  version = "0.12.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3796774aedbf5be581c68f98c79b565654876de6e9a01c6a95e3ec6cd4e4b4c3";
+    sha256 = "0wnnrs36arvimrfgrlbpjw3nx7lppx43yvk2b380ivv69h52i6hl";
   };
 
-  checkInputs = [ pytest pyopenssl trustme jedi pylint ];
+  checkInputs = [ astor pytest pyopenssl trustme jedi pylint ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
   checkPhase = ''
     HOME="$(mktemp -d)" py.test -k 'not test_getnameinfo and not test_SocketType_resolve and not test_getprotobyname and not test_waitpid'

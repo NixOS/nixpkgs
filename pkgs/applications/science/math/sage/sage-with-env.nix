@@ -87,7 +87,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = src.version;
-  name = "sage-with-env-${version}";
+  pname = "sage-with-env";
   src = sage-env.lib.src;
 
   inherit buildInputs;

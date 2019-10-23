@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, guile, gtk2, flex, gawk, perl }:
 
-stdenv.mkDerivation rec {
-  name = "geda-${version}";
+stdenv.mkDerivation {
+  pname = "geda";
   version = "1.8.2-20130925";
 
   src = fetchurl {

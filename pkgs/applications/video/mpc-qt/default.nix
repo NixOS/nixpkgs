@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, qttools, mpv }:
 
 stdenv.mkDerivation rec {
-  name = "mpc-qt-${version}";
+  pname = "mpc-qt";
   version = "18.08";
 
   src = fetchFromGitHub {

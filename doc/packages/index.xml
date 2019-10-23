@@ -1,0 +1,23 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="chap-packages">
+ <title>Packages</title>
+ <para>
+  This chapter contains information about how to use and maintain the Nix expressions for a number of specific packages, such as the Linux kernel or X.org.
+ </para>
+ <xi:include href="citrix.xml" />
+ <xi:include href="dlib.xml" />
+ <xi:include href="eclipse.xml" />
+ <xi:include href="elm.xml" />
+ <xi:include href="emacs.xml" />
+ <xi:include href="ibus.xml" />
+ <xi:include href="kakoune.xml" />
+ <xi:include href="linux.xml" />
+ <xi:include href="locales.xml" />
+ <xi:include href="nginx.xml" />
+ <xi:include href="opengl.xml" />
+ <xi:include href="shell-helpers.xml" />
+ <xi:include href="steam.xml" />
+ <xi:include href="weechat.xml" />
+ <xi:include href="xorg.xml" />
+</chapter>

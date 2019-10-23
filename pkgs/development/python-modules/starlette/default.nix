@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , aiofiles
@@ -12,16 +13,17 @@
 , python
 , uvicorn
 , isPy27
+, darwin
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.12.4";
+  version = "0.12.10";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1m7qf4g5dn7n36406zbqsag71nmwp2dz91yxpplm7h7wiw2xxw93";
+    sha256 = "e41ef52e711a82ef95c195674e5d8d41c75c6b1d6f5a275637eedd4cc2150a7f";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +35,7 @@ buildPythonPackage rec {
     requests
     ujson
     uvicorn
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
 
   checkPhase = ''
     ${python.interpreter} -c """

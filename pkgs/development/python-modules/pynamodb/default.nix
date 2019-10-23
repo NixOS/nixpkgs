@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pynamodb";
-  version = "3.4.1";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cwgqvpqn59y3zq4wv35m1v4jrh3ih6zbyv30g5nxbw13vddxr92";
+    sha256 = "196pab5whswy3bgi2s842asjhyka2f9mw98m84bvqjmfw0m7x4y0";
   };
 
   propagatedBuildInputs = [ python-dateutil botocore ];

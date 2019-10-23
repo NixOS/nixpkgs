@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-authorization";
-  version = "0.51.1";
+  version = "0.60.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "d2789e21c6b85591b38d5d4e9b835b6546824c14e14aaa366da0ef50a95d2478";
+    sha256 = "19yn2ar2y8j4idzf8mxrxplxnawbk83sid3pzvzddif29aipbs1i";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Authorization Management Client Library";
-    homepage = https://github.com/Azure/sdk-for-python/tree/master/azure-mgmt-authorization;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

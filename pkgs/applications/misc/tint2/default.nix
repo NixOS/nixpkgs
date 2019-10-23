@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitLab, pkgconfig, cmake, gettext, cairo, pango, pcre
 , glib, imlib2, gtk2, libXinerama, libXrender, libXcomposite, libXdamage
 , libX11, libXrandr, librsvg, libpthreadstubs, libXdmcp
-, libstartup_notification, hicolor-icon-theme, wrapGAppsHook
+, libstartup_notification, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "tint2-${version}";
+  pname = "tint2";
   version = "16.7";
 
   src = fetchFromGitLab {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cairo pango pcre glib imlib2 gtk2 libXinerama libXrender
     libXcomposite libXdamage libX11 libXrandr librsvg libpthreadstubs
-    libXdmcp libstartup_notification hicolor-icon-theme ];
+    libXdmcp libstartup_notification ];
 
   postPatch = ''
     for f in ./src/launcher/apps-common.c \

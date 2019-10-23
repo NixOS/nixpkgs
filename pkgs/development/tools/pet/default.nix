@@ -1,14 +1,14 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
-  name = "pet-${version}";
-  version = "0.3.5";
+  pname = "pet";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "knqyf263";
     repo = "pet";
     rev = "v${version}";
-    sha256 = "03fzvvdmb06kf2zglaf8jkqxqv9h1kl7n586ww61z3n3mmp1x4rd";
+    sha256 = "1na3az7vicjq1rxd3ybid47yrblsdazgli0dchkbwh8zchwhqj33";
   };
 
   modSha256 = "06ham8lsx5c1vk5jkwp1aa9g4q4g7sfq7gxz2gkffa98x2vlawyf";

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "bazelisk";
-  version = "0.0.8";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16jiy71x8zr3x94p3qms3xbl8632avhwi66i82wv03n4ahkyb6qr";
+    sha256 = "1pv113sk7hfxp4m2rcriqqp6mbbzcfdr0yrx4g1yiam93rx34yb7";
   };
 
-  modSha256 = "1f73j6ryidzi3kfy3rhsqx047vzwvzaqcsl7ykhg87rn2l2s7fdl";
+  modSha256 = "0gs8y618izqi0gfa46jqh79yj8lzsmc6yj95fakhp2f5i8v1xrmx";
 
   meta = with stdenv.lib; {
     description = "A user-friendly launcher for Bazel";

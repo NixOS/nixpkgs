@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, fetchFromGitHub
+, fetchurl, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf
 , config
@@ -14,7 +14,8 @@
 , enableOpenblas  ? true, openblas
 , enableContrib   ? true
 
-, enableCuda      ? config.cudaSupport or false, cudatoolkit
+, enableCuda      ? (config.cudaSupport or false) &&
+                    stdenv.hostPlatform.isx86_64, cudatoolkit
 
 , enableUnfree    ? false
 , enableIpp       ? false
@@ -152,13 +153,21 @@ let
   printEnabled = enabled : if enabled then "ON" else "OFF";
 in
 
-stdenv.mkDerivation rec {
-  name = "opencv-${version}";
+stdenv.mkDerivation {
+  pname = "opencv";
   inherit version src;
 
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
   '';
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/opencv/opencv/commit/5691d998ead1d9b0542bcfced36c2dceb3a59023.patch";
+      name = "CVE-2019-14493.patch";
+      sha256 = "14qva9f5z10apz5q0skdyiclr9sgkhab4fzksy1w3b6j6hg4wm7m";
+    })
+  ];
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)

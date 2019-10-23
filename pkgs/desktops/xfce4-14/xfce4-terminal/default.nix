@@ -1,14 +1,13 @@
-{ mkXfceDerivation, gtk3, libxfce4ui, wrapGAppsHook, vte }:
+{ mkXfceDerivation, gtk3, libxfce4ui, vte, xfconf, pcre2 }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
-  version = "0.8.7.4";
+  version = "0.8.8";
 
-  sha256 = "1s1dq560icg602jjb2ja58x7hxg4ikp3jrrf74v3qgi0ir950k2y";
+  sha256 = "0sg9vwyvhh7pjp83biv7gvf42423a7ly4dc7q2gn28kp6bds2qcp";
 
-  buildInputs = [ gtk3 libxfce4ui vte ];
-  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ gtk3 libxfce4ui vte xfconf pcre2 ];
 
   meta = {
     description = "A modern terminal emulator";

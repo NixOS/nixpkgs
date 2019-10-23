@@ -75,8 +75,9 @@ let
         ${optionalString withRuby '' --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
       ''
       + optionalString (!stdenv.isDarwin) ''
-        # copy and patch the original neovim.desktop file
-        mkdir -p $out/share/applications
+        # copy icon and patch the original neovim.desktop file
+        mkdir -p $out/share/{applications,pixmaps}
+        ln -s ${neovim}/share/pixmaps/nvim.png $out/share/pixmaps/nvim.png
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
@@ -100,7 +101,7 @@ let
         # Only display the log on error since it will contain a few normally
         # irrelevant messages.
         if ! $out/bin/nvim \
-          -u ${vimUtils.vimrcFile (configure // { customRC = ""; })} \
+          -u ${vimUtils.vimrcFile (configure // { customRC = ""; beforePlugins = ''filetype indent plugin on | syn on''; })} \
           -i NONE -n \
           -E -V1rplugins.log -s \
           +UpdateRemotePlugins +quit! > outfile 2>&1; then

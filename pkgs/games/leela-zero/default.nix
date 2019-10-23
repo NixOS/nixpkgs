@@ -2,7 +2,7 @@
 , opencl-headers, ocl-icd, qtbase , zlib }:
 
 stdenv.mkDerivation rec {
-  name = "leela-zero-${version}";
+  pname = "leela-zero";
   version = "0.17";
 
   src = fetchFromGitHub {

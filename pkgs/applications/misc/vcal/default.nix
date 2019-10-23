@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "vcal-${version}";
+  pname = "vcal";
   version = "2.8";
 
   src = fetchurl {

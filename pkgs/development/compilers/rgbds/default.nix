@@ -5,7 +5,7 @@
 # in a published version.
 
 stdenv.mkDerivation rec {
-  name = "rgbds-${version}";
+  pname = "rgbds";
   version = "0.3.8";
   src = fetchFromGitHub {
     owner = "rednex";

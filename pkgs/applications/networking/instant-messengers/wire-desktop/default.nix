@@ -13,17 +13,19 @@ let
 
   inherit (stdenv.hostPlatform) system;
 
+  throwSystem = throw "Unsupported system: ${system}";
+
   pname = "wire-desktop";
 
   version = {
-    "x86_64-linux" = "3.9.2895";
-    "x86_64-darwin" = "3.9.2943";
-  }.${system};
+    x86_64-linux = "3.10.2904";
+    x86_64-darwin = "3.10.3215";
+  }.${system} or throwSystem;
 
   sha256 = {
-    "x86_64-linux" = "0wrn95m64j4b7ym44h9zawq13kg4m12aixlyyzp56bfyczmjq4a5";
-    "x86_64-darwin" = "1y1bzsjmjrj518q29xfx6gg1nhdbaz7y5hzaqrp241az6plp090k";
-  }.${system};
+    x86_64-linux = "1vrz4568mlhylx17jw4z452f0vrd8yd8qkbpkcvnsbhs6k066xcn";
+    x86_64-darwin = "0ygm3fgy9k1dp2kjfwsrrwq1i88wgxc6k8y80yz61ivdawgph9wa";
+  }.${system} or throwSystem;
 
   meta = with stdenv.lib; {
     description = "A modern, secure messenger for everyone";
@@ -100,7 +102,7 @@ let
     '';
   };
 
-  darwin = stdenv.mkDerivation rec {
+  darwin = stdenv.mkDerivation {
     inherit pname version meta;
 
     src = fetchurl {

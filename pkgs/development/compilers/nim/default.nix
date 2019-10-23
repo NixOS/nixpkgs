@@ -1,15 +1,15 @@
 # based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
 
-{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim-11_x, openssl, pcre, readline,
+{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim, openssl, pcre, readline,
   boehmgc, sfml, tzdata, coreutils, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "nim";
-  version = "0.20.2";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://nim-lang.org/download/${pname}-${version}.tar.xz";
-    sha256 = "0pibil10x0c181kw705phlwk8bn8dy5ghqd9h9fm6i9afrz5ryp1";
+    sha256 = "1pg0lxahis8zfk6rdzdj281bahl8wglpjgngkc4vg1pc9p61fj03";
   };
 
   doCheck = !stdenv.isDarwin;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   #    as part of building it, so it cannot be read-only
 
   checkInputs = [
-    nodejs-slim-11_x tzdata coreutils
+    nodejs-slim tzdata coreutils
   ];
 
   nativeBuildInputs = [
@@ -64,9 +64,6 @@ stdenv.mkDerivation rec {
       substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin" "${coreutils}/bin"
       substituteInPlace ./tests/stdlib/ttimes.nim --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
 
-      # reported upstream: https://github.com/nim-lang/Nim/issues/11435
-      ${disableTest} ./tests/misc/tstrace.nim
-
       # runs out of memory on a machine with 8GB RAM
       ${disableTest} ./tests/system/t7894.nim
 
@@ -80,11 +77,20 @@ stdenv.mkDerivation rec {
       ${disableCompile} ./lib/nimhcr.nim
       ${disableTest} ./tests/dll/nimhcr_unit.nim
       ${disableTest} ./tests/dll/nimhcr_integration.nim
+
+      # reported upstream: https://github.com/nim-lang/Nim/issues/12262
+      ${disableTest} ./tests/range/tcompiletime_range_checks.nim
+
+      # requires "immintrin.h" which is available only on x86
+      ${disableTest} ./tests/misc/tsizeof3.nim
     '';
 
   checkPhase = ''
     runHook preCheck
 
+    # Fortify hardening breaks tests
+    # https://github.com/nim-lang/Nim/issues/11435#issuecomment-534545696
+    NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/} \
     ./koch tests --nim:bin/nim all
 
     runHook postCheck
@@ -97,7 +103,10 @@ stdenv.mkDerivation rec {
     ./koch install $out
     mv $out/nim/bin/* $out/bin/ && rmdir $out/nim/bin
     mv $out/nim/*     $out/     && rmdir $out/nim
+
+    # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
     wrapProgram $out/bin/nim \
+      --run 'NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}' \
       --suffix PATH : ${lib.makeBinPath [ stdenv.cc ]}
 
     runHook postInstall
@@ -107,7 +116,7 @@ stdenv.mkDerivation rec {
     description = "Statically typed, imperative programming language";
     homepage = "https://nim-lang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ehmry peterhoeg ];
+    maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; linux ++ darwin; # arbitrary
   };
 }

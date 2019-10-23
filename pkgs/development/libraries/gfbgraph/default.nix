@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, librest
+{ stdenv, fetchurl, pkgconfig, glib, librest, gnome-online-accounts
 , gnome3, libsoup, json-glib, gobject-introspection }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig gobject-introspection ];
-  buildInputs = [ glib gnome3.gnome-online-accounts ];
+  buildInputs = [ glib gnome-online-accounts ];
   propagatedBuildInputs = [ libsoup json-glib librest ];
 
   configureFlags = [ "--enable-introspection" ];

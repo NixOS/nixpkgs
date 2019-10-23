@@ -1,7 +1,10 @@
 { lib
+, bokeh
 , buildPythonPackage
 , fetchPypi
+, fsspec
 , pytest
+, pythonOlder
 , cloudpickle
 , numpy
 , toolz
@@ -12,15 +15,18 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "1.2.2";
+  version = "2.6.0";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e7876bae2a01b355d1969b73aeafa23310febd8c353163910b73e93dc7e492c";
+    sha256 = "81c7891f0d2e7ac03d1f7fabf1f639360a1db52c03a7155ba9b08e9ee6280f2b";
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ cloudpickle  numpy toolz dill pandas partd ];
+  propagatedBuildInputs = [
+    bokeh cloudpickle dill fsspec numpy pandas partd toolz ];
 
   checkPhase = ''
     py.test dask

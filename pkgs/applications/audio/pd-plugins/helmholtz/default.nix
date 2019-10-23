@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, puredata }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "helmholtz";
 
   src = fetchurl {

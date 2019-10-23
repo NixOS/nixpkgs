@@ -4,8 +4,8 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "stabber-unstable-${version}";
+stdenv.mkDerivation {
+  pname = "stabber-unstable";
   version = "2016-11-09";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "c-blosc-${version}";
+  pname = "c-blosc";
   version = "1.17.0";
 
   src = fetchFromGitHub {

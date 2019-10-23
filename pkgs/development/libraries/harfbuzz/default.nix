@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "2.5.3";
+  version = "2.6.2";
   inherit (stdenv.lib) optional optionals optionalString;
 in
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.xz";
-    sha256 = "0p45xk5bblsw8lfs7y7z80b4rvda9f2hlpr28flkrfmpjz3hvl7y";
+    sha256 = "097ncrkaawdzpgwlrpp4kwciq4z5pqz2n4f3yra5vc7jyxr6lk1v";
   };
 
   postPatch = ''

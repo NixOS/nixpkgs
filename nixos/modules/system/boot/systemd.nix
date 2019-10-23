@@ -76,6 +76,10 @@ let
       "systemd-journald-dev-log.socket"
       "syslog.socket"
 
+      # Coredumps.
+      "systemd-coredump.socket"
+      "systemd-coredump@.service"
+
       # SysV init compatibility.
       "systemd-initctl.socket"
       "systemd-initctl.service"
@@ -108,11 +112,13 @@ let
       # Hibernate / suspend.
       "hibernate.target"
       "suspend.target"
+      "suspend-then-hibernate.target"
       "sleep.target"
       "hybrid-sleep.target"
       "systemd-hibernate.service"
       "systemd-hybrid-sleep.service"
       "systemd-suspend.service"
+      "systemd-suspend-then-hibernate.service"
 
       # Reboot stuff.
       "reboot.target"
@@ -322,7 +328,7 @@ let
           [Service]
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n:
-              let s = optionalString (env."${n}" != null)
+              let s = optionalString (env.${n} != null)
                 "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
               # systemd max line length is now 1MiB
               # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
@@ -427,7 +433,8 @@ in
     systemd.packages = mkOption {
       default = [];
       type = types.listOf types.package;
-      description = "Packages providing systemd units.";
+      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      description = "Packages providing systemd units and hooks.";
     };
 
     systemd.targets = mkOption {
@@ -489,7 +496,7 @@ in
     systemd.generators = mkOption {
       type = types.attrsOf types.path;
       default = {};
-      example = { "systemd-gpt-auto-generator" = "/dev/null"; };
+      example = { systemd-gpt-auto-generator = "/dev/null"; };
       description = ''
         Definition of systemd generators.
         For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
@@ -497,11 +504,14 @@ in
       '';
     };
 
-    systemd.generator-packages = mkOption {
-      default = [];
-      type = types.listOf types.package;
-      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
-      description = "Packages providing systemd generators.";
+    systemd.shutdown = mkOption {
+      type = types.attrsOf types.path;
+      default = {};
+      description = ''
+        Definition of systemd shutdown executables.
+        For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
+        <literal>/etc/systemd/system-shutdown/NAME</literal> to <literal>VALUE</literal>.
+      '';
     };
 
     systemd.defaultUnit = mkOption {
@@ -520,7 +530,7 @@ in
     };
 
     systemd.globalEnvironment = mkOption {
-      type = with types; attrsOf (nullOr (either str (either path package)));
+      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
       default = {};
       example = { TZ = "CET"; };
       description = ''
@@ -529,10 +539,30 @@ in
     };
 
     systemd.enableCgroupAccounting = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       description = ''
         Whether to enable cgroup accounting.
+      '';
+    };
+
+    systemd.coredump.enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether core dumps should be processed by
+        <command>systemd-coredump</command>. If disabled, core dumps
+        appear in the current directory of the crashing process.
+      '';
+    };
+
+    systemd.coredump.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "Storage=journal";
+      description = ''
+        Extra config options for systemd-coredump. See coredump.conf(5) man page
+        for available options.
       '';
     };
 
@@ -761,18 +791,21 @@ in
     environment.systemPackages = [ systemd ];
 
     environment.etc = let
-      # generate contents for /etc/systemd/system-generators from
-      # systemd.generators and systemd.generator-packages
-      generators = pkgs.runCommand "system-generators" {
+      # generate contents for /etc/systemd/system-${type} from attrset of links and packages
+      hooks = type: links: pkgs.runCommand "system-${type}" {
           preferLocalBuild = true;
-          packages = cfg.generator-packages;
-        } ''
+          packages = cfg.packages;
+      } ''
+        set -e
         mkdir -p $out
         for package in $packages
         do
-          ln -s $package/lib/systemd/system-generators/* $out/
-        done;
-        ${concatStrings (mapAttrsToList (generator: target: "ln -s ${target} $out/${generator};\n") cfg.generators)}
+          for hook in $package/lib/systemd/system-${type}/*
+          do
+            ln -s $hook $out/
+          done
+        done
+        ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
       '';
     in ({
       "systemd/system".source = generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
@@ -783,11 +816,12 @@ in
         [Manager]
         ${optionalString config.systemd.enableCgroupAccounting ''
           DefaultCPUAccounting=yes
+          DefaultBlockIOAccounting=yes
           DefaultIOAccounting=yes
           DefaultBlockIOAccounting=yes
-          DefaultMemoryAccounting=yes
-          DefaultTasksAccounting=yes
+          DefaultIPAccounting=yes
         ''}
+        DefaultLimitCORE=infinity
         ${config.systemd.extraConfig}
       '';
 
@@ -811,6 +845,12 @@ in
         ${config.services.journald.extraConfig}
       '';
 
+      "systemd/coredump.conf".text =
+        ''
+          [Coredump]
+          ${config.systemd.coredump.extraConfig}
+        '';
+
       "systemd/logind.conf".text = ''
         [Login]
         KillUserProcesses=${if config.services.logind.killUserProcesses then "yes" else "no"}
@@ -824,7 +864,16 @@ in
         [Sleep]
       '';
 
+      # install provided sysctl snippets
+      "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
+      "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
+
+      "tmpfiles.d/journal-nocow.conf".source = "${systemd}/example/tmpfiles.d/journal-nocow.conf";
+      "tmpfiles.d/static-nodes-permissions.conf".source = "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf";
       "tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
+      "tmpfiles.d/systemd-nspawn.conf".source = "${systemd}/example/tmpfiles.d/systemd-nspawn.conf";
+      "tmpfiles.d/systemd-tmp.conf".source = "${systemd}/example/tmpfiles.d/systemd-tmp.conf";
+      "tmpfiles.d/var.conf".source = "${systemd}/example/tmpfiles.d/var.conf";
       "tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
 
       "tmpfiles.d/nixos.conf".text = ''
@@ -834,7 +883,8 @@ in
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
 
-      "systemd/system-generators" = { source = generators; };
+      "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
+      "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
     });
 
     services.dbus.enable = true;
@@ -943,6 +993,10 @@ in
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
+
+    boot.kernel.sysctl = mkIf (!cfg.coredump.enable) {
+      "kernel.core_pattern" = "core";
+    };
   };
 
   # FIXME: Remove these eventually.

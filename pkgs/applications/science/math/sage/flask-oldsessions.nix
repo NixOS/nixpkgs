@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "flask-oldsessions";
-    rev = "${version}";
+    rev = version;
     sha256 = "04b5m8njjiwld9a0zw55iqwvyjgwcpdbhz1cic8nyhgcmypbicqn";
   };
 

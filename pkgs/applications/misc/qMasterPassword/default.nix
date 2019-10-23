@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, libX11, libXtst, openssl, libscrypt }:
+{ stdenv, mkDerivation, fetchFromGitHub, qtbase, qmake, libX11, libXtst, openssl, libscrypt }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "qMasterPassword";
   version = "1.2.2";
 

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.37";
-  name = "profile-cleaner-${version}";
+  pname = "profile-cleaner";
 
   src = fetchFromGitHub {
     owner = "graysky2";

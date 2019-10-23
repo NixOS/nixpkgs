@@ -25,6 +25,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
     license = licenses.mit;
+    broken = true;
   };
 
 }

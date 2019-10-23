@@ -1,9 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, google_auth, protobuf, googleapis_common_protos, requests, grpcio, futures, mock, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
+, google_auth, protobuf, googleapis_common_protos, requests, setuptools, grpcio, futures, mock, pytest }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
   version = "1.7.0";
+  disabled = isPy27; # google namespace no longer works on python2
 
   src = fetchPypi {
     inherit pname version;
@@ -12,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     googleapis_common_protos protobuf
-    google_auth requests grpcio
+    google_auth requests setuptools grpcio
   ] ++ lib.optional (pythonOlder "3.2") futures;
   checkInputs = [ mock pytest ];
 

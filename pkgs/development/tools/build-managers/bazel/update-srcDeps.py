@@ -40,6 +40,11 @@ def rules_sass_dependencies(**kw): pass
 def node_repositories(**kw): pass
 def sass_repositories(**kw): pass
 def register_execution_platforms(*args): pass
+def rbe_autoconfig(*args, **kw): pass
+def rules_pkg_dependencies(*args, **kw): pass
+def winsdk_configure(*args, **kw): pass
+def register_local_rc_exe_toolchains(*args, **kw): pass
+def register_toolchains(*args, **kw): pass
 
 # execute the WORKSPACE like it was python code in this module,
 # using all the function stubs from above.

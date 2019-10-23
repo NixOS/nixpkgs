@@ -15,12 +15,11 @@ buildGoPackage rec {
     sha256 = "0v3sx9hb03bdn4rvsv2r0jzif6p1rx47hrkpsbnwva31k396mck2";
   };
 
-  wrapperPath = with stdenv.lib; makeBinPath ([
+  wrapperPath = stdenv.lib.makeBinPath ([
     git
     gnupg
     xclip
-    wl-clipboard
-  ]);
+  ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard);
 
   postInstall = ''
     mkdir -p \

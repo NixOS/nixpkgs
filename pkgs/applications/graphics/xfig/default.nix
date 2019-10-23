@@ -6,7 +6,8 @@ let
   version = "3.2.7a";
 
 in stdenv.mkDerivation {
-  name = "xfig-${version}";
+  pname = "xfig";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/xfig-${version}.tar.xz";

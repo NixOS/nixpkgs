@@ -1,11 +1,11 @@
 { stdenv, fetchPypi, buildPythonPackage, isPy3k, setuptools_scm, pygccxml }:
 buildPythonPackage rec {
   pname = "PyBindGen";
-  version = "0.19.0";
+  version = "0.20.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23f2b760e352729208cd4fbadbc618bd00f95a0a24db21a4182833afcc3b5208";
+    sha256 = "5615f6b5d9b8aec86d69acedd050ecb5eb7d1338436c3667e345f800a2658f9f";
   };
 
   buildInputs = [ setuptools_scm ];

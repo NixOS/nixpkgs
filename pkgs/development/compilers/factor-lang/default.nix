@@ -4,7 +4,7 @@
   mesa, xorg, openssl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "factor-lang-${version}";
+  pname = "factor-lang";
   version = "0.98";
   rev = "7999e72aecc3c5bc4019d43dc4697f49678cc3b4";
 

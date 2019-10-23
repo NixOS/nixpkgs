@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vifm-${version}";
-  version = "0.10";
+  pname = "vifm";
+  version = "0.10.1";
 
   src = fetchurl {
     url = "https://github.com/vifm/vifm/releases/download/v${version}/vifm-${version}.tar.bz2";
-    sha256 = "1f380xcyjnm4xmcdazs6dj064bwddhywvn3mgm36k7r7b2gnjnp0";
+    sha256 = "0fyhxh7ndjn8fyjhj14ymkr3pjcs3k1xbs43g7xvvq85vdb6y04r";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -7,7 +7,7 @@ let binPath = stdenv.lib.makeBinPath [
 ];
 in
 buildGoPackage rec {
-  name = "distrobuilder-${version}";
+  pname = "distrobuilder";
   version = "2019_10_07";
   rev = "d686c88c21838f5505c3ec14711b2413604d7f5c";
 

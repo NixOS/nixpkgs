@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "tblib";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "436e4200e63d92316551179dc540906652878df4ff39b43db30fcf6400444fe7";
+    sha256 = "1k9vmw0kcbkij9lbz80imkwkhq24vgrqf1i95kv8y5aaarjda6mx";
   };
 
   meta = with stdenv.lib; {

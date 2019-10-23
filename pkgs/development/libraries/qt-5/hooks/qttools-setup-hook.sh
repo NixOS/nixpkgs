@@ -1,1 +1,1 @@
-qmakeFlags="$qmakeFlags${qmakeFlags:+ }QMAKE_LRELEASE=@dev@/bin/lrelease"
+qmakeFlags+=( "QMAKE_LRELEASE=@dev@/bin/lrelease" )

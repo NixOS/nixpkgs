@@ -1,4 +1,4 @@
-{ lib
+{ stdenv
 , buildPythonPackage
 , fetchPypi
 , param
@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "colorcet";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab1d16aba97f54af190631c7777c356b04b53de549672ff6b01c66d716eddff3";
+    sha256 = "1vkx00im4s6zhr2m1j9r0a5vmhkl488b4xpzxb1pidbl19wi6j2i";
   };
 
   propagatedBuildInputs = [
@@ -34,11 +34,12 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.config/matplotlib
     echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
+    ln -s $HOME/.config/matplotlib $HOME/.matplotlib
 
     pytest colorcet
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Collection of perceptually uniform colormaps";
     homepage = https://colorcet.pyviz.org;
     license = licenses.cc-by-40;

@@ -1,12 +1,12 @@
-{ mkXfceDerivation, exo, gtk3 }:
+{ mkXfceDerivation, exo, gtk3, gvfs, glib }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "gigolo";
-  version = "0.4.91";
+  version = "0.5.0";
 
-  sha256 = "1r075hw1jxbpv7jxzyqgfmd2rsw1lykd7snnx736gm55v84k15i7";
+  sha256 = "1lqsxb0d5i8p9vbzx8s4p3rga7va5h1q146xgmsa41j5v40wrlw6";
 
   nativeBuildInputs = [ exo ];
-  buildInputs = [ gtk3 ];
+  buildInputs = [ gtk3 glib gvfs ];
 }

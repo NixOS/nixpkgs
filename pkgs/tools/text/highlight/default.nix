@@ -3,14 +3,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "highlight-${version}";
-  version = "3.52";
+  pname = "highlight";
+  version = "3.53";
 
   src = fetchFromGitLab {
     owner = "saalen";
     repo = "highlight";
     rev = "v${version}";
-    sha256 = "0zhn1k70ck82ks7ckzsy1yiz686ym2ps7c28wjmkgxfpyjanilrq";
+    sha256 = "11szws4q6qyffq2fsvh1vksh1d0kcwg6smyyba9yr61hzx6zmzgr";
   };
 
   enableParallelBuilding = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Source code highlighting tool";
-    homepage = http://www.andre-simon.de/doku/highlight/en/highlight.php;
+    homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
     platforms = platforms.unix;
     maintainers = with maintainers; [ ndowens willibutz ];
   };

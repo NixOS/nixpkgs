@@ -7,13 +7,15 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, cffi, cryptography, pyopenssl,
-  crcmod, google-compute-engine, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python, with-gce ? false }:
 
 let
-  pythonInputs = [ cffi cryptography pyopenssl crcmod ]
-                 ++ lib.optional (with-gce) google-compute-engine;
-  pythonPath = lib.makeSearchPath python.sitePackages pythonInputs;
+  pythonEnv = python.withPackages (p: with p; [
+    cffi
+    cryptography
+    pyopenssl
+    crcmod
+  ] ++ lib.optional (with-gce) google-compute-engine);
 
   baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
   sources = name: system: {
@@ -29,14 +31,12 @@ let
   }.${system};
 
 in stdenv.mkDerivation rec {
-  name = "google-cloud-sdk-${version}";
+  pname = "google-cloud-sdk";
   version = "255.0.0";
 
-  src = fetchurl (sources name stdenv.hostPlatform.system);
+  src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
   buildInputs = [ python makeWrapper ];
-
-  doBuild = false;
 
   patches = [
     ./gcloud-path.patch
@@ -55,8 +55,8 @@ in stdenv.mkDerivation rec {
         programPath="$out/google-cloud-sdk/bin/$program"
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
-            --set CLOUDSDK_PYTHON "${python}/bin/python" \
-            --prefix PYTHONPATH : "${pythonPath}"
+            --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
+            --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}"
 
         mkdir -p $out/bin
         ln -s $programPath $binaryPath

@@ -20,8 +20,9 @@ let version = "3.4.10";
       "yaml"
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
 
-in stdenv.mkDerivation rec {
-  name = "mongodb-${version}";
+in stdenv.mkDerivation {
+  pname = "mongodb";
+  inherit version;
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";

@@ -1,23 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, python
+, pytest
+, cmake
+, numpy ? null
+, eigen ? null
+, scipy ? null
+}:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.2.4";
+  version = "2.4.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1kz1z2cg3q901q9spkdhksmcfiskaghzmbb9ivr5mva856yvnak4";
+  src = fetchFromGitHub {
+    owner = "pybind";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0k89w4bsfbpzw963ykg1cyszi3h3nk393qd31m6y46pcfxkqh4rd";
   };
 
-  patches = [
-    (fetchpatch {
-      url = https://github.com/pybind/pybind11/commit/44a40dd61e5178985cfb1150cf05e6bfcec73042.patch;
-      sha256 = "047nzyfsihswdva96hwchnp4gj2mlbiqvmkdnhxrfi9sji8x31ka";
-    })
-  ];
+  dontUseCmakeConfigure = true;
 
-  # Current PyPi version does not include test suite
-  doCheck = false;
+  nativeBuildInputs = [ cmake ];
+  checkInputs = [ pytest ]
+    ++ (lib.optional (numpy != null) numpy)
+    ++ (lib.optional (eigen != null) eigen)
+    ++ (lib.optional (scipy != null) scipy);
+  checkPhase = ''
+    cmake ${if eigen != null then "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3" else ""}
+    make -j $NIX_BUILD_CORES pytest
+  '';
+
+  # re-expose the headers to other packages
+  postInstall = ''
+    ln -s $out/include/python${python.pythonVersion}m/pybind11/ $out/include/pybind11
+  '';
 
   meta = {
     homepage = https://github.com/pybind/pybind11;

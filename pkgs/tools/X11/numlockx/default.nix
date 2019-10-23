@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, libX11, libXext, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   version = "1.2";
   pname = "numlockx";
 

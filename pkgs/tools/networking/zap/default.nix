@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, jdk, ant, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "zap-${version}";
+  pname = "zap";
   version = "2.7.0";
   src = fetchFromGitHub {
     owner = "zaproxy";
     repo = "zaproxy";
-    rev ="${version}";
+    rev =version;
     sha256 = "1bz4pgq66v6kxmgj99llacm1d85vj8z78jlgc2z9hv0ha5i57y32";
   };
 

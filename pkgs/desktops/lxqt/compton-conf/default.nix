@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, lxqt,
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, lxqt,
   libconfig }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "compton-conf";
   version = "0.14.1";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI configuration tool for compton X composite manager";
     homepage = https://github.com/lxqt/compton-conf;
     license = licenses.lgpl21;

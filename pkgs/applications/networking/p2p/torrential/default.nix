@@ -2,11 +2,11 @@
 , fetchFromGitHub
 , cmake
 , pkgconfig
+, vala_0_40
 , pantheon
 , curl
 , glib
 , gtk3
-, hicolor-icon-theme
 , libb64
 , libevent
 , libgee
@@ -14,7 +14,8 @@
 , libunity
 , miniupnpc
 , openssl
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "torrential";
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pantheon.vala
+    vala_0_40 # https://github.com/davidmhewitt/torrential/issues/135
     pkgconfig
     wrapGAppsHook
   ];
@@ -39,7 +40,6 @@ stdenv.mkDerivation rec {
     curl
     glib
     gtk3
-    hicolor-icon-theme
     libb64
     libevent
     libgee

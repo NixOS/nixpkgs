@@ -3,7 +3,7 @@
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.
 */
-stdenvNoCC.mkDerivation (rec {
+stdenvNoCC.mkDerivation rec {
   name = "mkl-${version}";
   version = "${date}.${rel}";
   date = "2019.3";
@@ -35,11 +35,25 @@ stdenvNoCC.mkDerivation (rec {
       done
   '' else ''
     rpmextract rpm/intel-mkl-common-c-${date}-${rel}-${date}-${rel}.noarch.rpm
+    rpmextract rpm/intel-mkl-core-${date}-${rel}-${date}-${rel}.x86_64.rpm
     rpmextract rpm/intel-mkl-core-rt-${date}-${rel}-${date}-${rel}.x86_64.rpm
     rpmextract rpm/intel-openmp-19.0.3-${rel}-19.0.3-${rel}.x86_64.rpm
   '';
 
-  installPhase = if stdenvNoCC.isDarwin then ''
+  installPhase = ''
+    for f in $(find . -name 'mkl*.pc') ; do
+      bn=$(basename $f)
+      substituteInPlace $f \
+        --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
+        --replace "lib/intel64_lin" "lib"
+    done
+
+    for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
+      substituteInPlace $f \
+        --replace "../compiler/lib" "lib"
+    done
+  '' +
+    (if stdenvNoCC.isDarwin then ''
       mkdir -p $out/lib
 
       cp -r compilers_and_libraries_${version}/mac/mkl/include $out/
@@ -48,6 +62,9 @@ stdenvNoCC.mkDerivation (rec {
       cp -r compilers_and_libraries_${version}/mac/compiler/lib/* $out/lib/
       cp -r compilers_and_libraries_${version}/mac/mkl/lib/* $out/lib/
       cp -r compilers_and_libraries_${version}/mac/tbb/lib/* $out/lib/
+
+      mkdir -p $out/lib/pkgconfig
+      cp -r compilers_and_libraries_${version}/mac/mkl/bin/pkgconfig/* $out/lib/pkgconfig
   '' else ''
       mkdir -p $out/lib
 
@@ -56,7 +73,10 @@ stdenvNoCC.mkDerivation (rec {
       cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/* $out/lib/
       cp license.txt $out/lib/
-  '';
+
+      mkdir -p $out/lib/pkgconfig
+      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/* $out/lib/pkgconfig
+  '');
 
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
   # larger updated load commands do not fit. Use install_name_tool
@@ -87,10 +107,4 @@ stdenvNoCC.mkDerivation (rec {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.bhipple ];
   };
- } // stdenvNoCC.lib.optionalAttrs stdenvNoCC.isLinux {
-  # Since on Linux binaries are unmodified, we can make them
-  # fixed-output derivations.
-	outputHashAlgo = "sha256";
-	outputHashMode = "recursive";
-	outputHash = "101krzh2mjbfx8kvxim2zphdvgg7iijhbf9xdz3ad3ncgybxbdvw";
- })
+}

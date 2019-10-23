@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.0.1";
+  version = "3.0.2";
   pname = "oauthlib";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ce32c5d989a1827e3f1148f98b9085ed2370fc939bf524c9c851d8714797298";
+    sha256 = "b4d99ae8ccfb7d33ba9591b59355c64eef5241534aa3da2e4c0435346b84bc8e";
   };
 
   checkInputs = [ mock pytest ];

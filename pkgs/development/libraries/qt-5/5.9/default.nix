@@ -9,9 +9,8 @@ top-level attribute to `top-level/all-packages.nix`.
 1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
 2. From the top of the Nixpkgs tree, run
    `./maintainers/scripts/fetch-kde-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
-3. Update `qtCompatVersion` below if the minor version number changes.
-4. Check that the new packages build correctly.
-5. Commit the changes and open a pull request.
+3. Check that the new packages build correctly.
+4. Commit the changes and open a pull request.
 
 */
 
@@ -31,20 +30,41 @@ with stdenv.lib;
 
 let
 
-  qtCompatVersion = "5.9";
+  qtCompatVersion = srcs.qtbase.version;
 
   mirror = "http://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ];
+    qtbase = [
+      ./qtbase.patch
+      ./qtbase-fixguicmake.patch
+      ./qtbase-openssl_1_1.patch
+    ];
     qtdeclarative = [ ./qtdeclarative.patch ];
-    qtscript = [ ./qtscript.patch ];
+    qtscript = [
+      ./qtscript.patch
+      # needed due to changes in gcc 8.3, see https://bugreports.qt.io/browse/QTBUG-74196
+      # fixed in qtscript 5.12.2
+      (fetchpatch {
+        url = "https://github.com/qt/qtscript/commit/97ec1d1882a83c23c91f0f7daea48e05858d8c32.diff";
+        sha256 = "0khrapq13xzvxckzc9l7gqyjwibyd98vyqy6gmyhvsbm2kq8n6wi";
+      })
+    ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
-      ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
+    qtwebengine = [
+      ./qtwebengine-no-build-skip.patch
+      # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/issues/707
+      # https://bugreports.qt.io/browse/QTBUG-77037
+      (fetchpatch {
+        name = "fix-build-with-pulseaudio-13.0.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
+        sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
+      })
+    ] ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
       ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
+  
     qtwebkit = [ ./qtwebkit.patch ];
     qtvirtualkeyboard = [
       (fetchpatch {
@@ -143,9 +163,7 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
-          inherit (stdenv) isDarwin;
-          qtbase_dev = self.qtbase.dev;
-          fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
+          fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;
 
