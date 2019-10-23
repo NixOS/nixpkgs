@@ -2179,12 +2179,6 @@
     githubId = 2817965;
     name = "f--t";
   };
-  fleaz = {
-    email = "mail@felixbreidenstein.de";
-    github = "fleaz";
-    githubId = 2489598;
-    name = "Felix Breidenstein";
-  };
   fadenb = {
     email = "tristan.helmich+nixos@gmail.com";
     github = "fadenb";

@@ -6233,6 +6233,8 @@ in {
 
   python-docx = callPackage ../development/python-modules/python-docx { };
 
+  python-doi = callPackage ../development/python-modules/python-doi { };
+
   aiohue = callPackage ../development/python-modules/aiohue { };
 
   PyMVGLive = callPackage ../development/python-modules/pymvglive { };

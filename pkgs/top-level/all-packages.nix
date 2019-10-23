@@ -215,6 +215,8 @@ in
 
   dotnet-sdk = callPackage ../development/compilers/dotnet/sdk { };
 
+  dumb-init = callPackage ../applications/virtualization/dumb-init {};
+
   dispad = callPackage ../tools/X11/dispad { };
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
@@ -2200,6 +2202,10 @@ in
   cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
+
+  cdrtools = callPackage ../tools/cd-dvd/cdrtools {
+    inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
+  };
 
   mdf2iso = callPackage ../tools/cd-dvd/mdf2iso { };
 
@@ -17820,10 +17826,6 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  cdrtools = callPackage ../applications/misc/cdrtools {
-    inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
-  };
-
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
   cgit = callPackage ../applications/version-management/git-and-tools/cgit {
@@ -21417,6 +21419,8 @@ in
   vwm = callPackage ../applications/window-managers/vwm { };
 
   vym = qt5.callPackage ../applications/misc/vym { };
+
+  waon = callPackage ../applications/audio/waon { };
 
   w3m = callPackage ../applications/networking/browsers/w3m { };
 
