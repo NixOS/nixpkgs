@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, boost, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "assimp-${version}";
-  version = "4.1.0";
+  pname = "assimp";
+  version = "5.0.0";
 
   src = fetchFromGitHub{
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
-    sha256 = "00g61g3ixmfszzjncpvm8x7gp2livaj4lmhbycjmrw4x3gfqlc4r";
+    sha256 = "17y5q5hbygmb0cgf96gd3v8sal5g69cp8hmh1cs3yz7v00kjysmz";
   };
 
   buildInputs = [ cmake boost zlib ];

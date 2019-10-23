@@ -1,31 +1,30 @@
-{ cargo, fetchFromGitHub, makeWrapper, pkgconfig, rustPlatform, stdenv, gcc, Security }:
+{ cargo, fetchFromGitHub, makeWrapper, pkgconfig, rustPlatform, stdenv, gcc, Security, cmake }:
 
 rustPlatform.buildRustPackage rec {
-  name = "evcxr-${version}";
-  version = "0.3.3";
+  pname = "evcxr";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
-    rev = "ae07ccf08723b7aec0de57d540822b89088ca036";
-    sha256 = "1apc93z9vvf6qks5x2pad45rnrj9kjl812rj78w5zmmizccp2fhf";
+    rev = "v${version}";
+    sha256 = "13fs9fgvdf8bh6vc8xs8qhil0a1qhm4gvv0ici37xh8a94ngsn7h";
   };
 
-  cargoSha256 = "153pxqj4jhlbacr7607q9yfw6h96ns5igbvssis8j3gn0xp6ssg6";
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "0g17g12isah4nkqp9i299qr1sz19k4czcc43rm1wbs0y9szaqvwc";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ cargo ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ pkgconfig makeWrapper cmake ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
   postInstall = ''
     wrapProgram $out/bin/evcxr --prefix PATH : ${stdenv.lib.makeBinPath [ cargo gcc ]}
     rm $out/bin/testing_runtime
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An evaluation context for Rust";
     homepage = "https://github.com/google/evcxr";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.protoben ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ protoben ma27 ];
+    platforms = platforms.all;
   };
 }

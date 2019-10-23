@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, cmake, boost, openssl, asio }:
+{ stdenv, fetchFromGitHub, cmake, boost, openssl, asio }:
 
 stdenv.mkDerivation rec {
-  name = "cpp-netlib-${version}";
-  version = "0.12.0";
+  pname = "cpp-netlib";
+  version = "0.13.0-final";
 
-  src = fetchurl {
-    url = "http://downloads.cpp-netlib.org/${version}/${name}-final.tar.bz2";
-    sha256 = "0h7gyrbr3madycnj8rl8k1jzk2hd8np2k5ad9mijlh0fizzzk3h8";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "18782sz7aggsl66b4mmi1i0ijwa76iww337fi9sygnplz2hs03a3";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ cmake boost openssl ];

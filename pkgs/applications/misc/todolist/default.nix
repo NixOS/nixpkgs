@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "todolist-${version}";
+  pname = "todolist";
   version = "v0.8.1";
 
   goPackagePath = "github.com/gammons/todolist";
@@ -9,7 +9,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "gammons";
     repo = "todolist";
-    rev = "${version}";
+    rev = version;
     sha256 = "0dazfymby5xm4482p9cyj23djmkz5q7g79cqm2d85mczvz7vks8p";
   };
 

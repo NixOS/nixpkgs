@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, lib, pkgconfig
+{ fetchurl, fetchpatch, stdenv, lib, pkgconfig, autoreconfHook
 , libgpgerror, libassuan
 , libcap ? null, libsecret ? null, ncurses ? null, gtk2 ? null, gcr ? null
 , qt4 ? null, qt5 ? null
@@ -23,7 +23,7 @@ mkDerivation rec {
     sha256 = "0w35ypl960pczg5kp6km3dyr000m1hf0vpwwlh72jjkjza36c1v8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs =
     [ libgpgerror libassuan libcap libsecret gtk2 gcr ncurses qt4 ]
     ++ stdenv.lib.optional (qt5 != null) qt5.qtbase;
@@ -32,7 +32,9 @@ mkDerivation rec {
     substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
   '';
 
-  patches = lib.optionals (gtk2 != null) [
+  patches = [
+    ./autoconf-ar.patch
+  ] ++ lib.optionals (gtk2 != null) [
     (fetchpatch {
       url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/"
           + "0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";
@@ -60,7 +62,7 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     longDescription = ''
-      Pinentry provides a console and (optional) GTK+ and Qt GUIs allowing users
+      Pinentry provides a console and (optional) GTK and Qt GUIs allowing users
       to enter a passphrase when `gpg' or `gpg2' is run and needs it.
     '';
     maintainers = [ maintainers.ttuegel ];

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "qr-filetransfer-unstable-${version}";
+buildGoPackage {
+  pname = "qr-filetransfer-unstable";
   version = "2018-10-22";
 
   goPackagePath = "github.com/claudiodangelis/qr-filetransfer";

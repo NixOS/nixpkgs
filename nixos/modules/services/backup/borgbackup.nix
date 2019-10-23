@@ -8,7 +8,7 @@ let
     builtins.substring 0 1 x == "/"      # absolute path
     || builtins.substring 0 1 x == "."   # relative path
     || builtins.match "[.*:.*]" == null; # not machine:path
- 
+
   mkExcludeFile = cfg:
     # Write each exclude pattern to a new line
     pkgs.writeText "excludefile" (concatStringsSep "\n" cfg.exclude);
@@ -104,12 +104,12 @@ let
       install = "install -o ${cfg.user} -g ${cfg.group}";
     in
       nameValuePair "borgbackup-job-${name}" (stringAfter [ "users" ] (''
-        # Eensure that the home directory already exists
+        # Ensure that the home directory already exists
         # We can't assert createHome == true because that's not the case for root
-        cd "${config.users.users.${cfg.user}.home}"                                                                                                         
+        cd "${config.users.users.${cfg.user}.home}"
         ${install} -d .config/borg
         ${install} -d .cache/borg
-      '' + optionalString (isLocalPath cfg.repo) ''
+      '' + optionalString (isLocalPath cfg.repo && !cfg.removableDevice) ''
         ${install} -d ${escapeShellArg cfg.repo}
       ''));
 
@@ -163,6 +163,13 @@ let
       + " without at least one public key";
   };
 
+  mkRemovableDeviceAssertions = name: cfg: {
+    assertion = !(isLocalPath cfg.repo) -> !cfg.removableDevice;
+    message = ''
+      borgbackup.repos.${name}: repo isn't a local path, thus it can't be a removable device!
+    '';
+  };
+
 in {
   meta.maintainers = with maintainers; [ dotlambda ];
 
@@ -200,6 +207,12 @@ in {
             type = types.str;
             description = "Remote or local repository to back up to.";
             example = "user@machine:/path/to/repo";
+          };
+
+          removableDevice = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether the repo (which must be local) is a removable device.";
           };
 
           archiveBaseName = mkOption {
@@ -511,7 +524,6 @@ in {
     type = types.attrsOf (types.submodule (
       { ... }: {
         options = {
-          
           path = mkOption {
             type = types.path;
             description = ''
@@ -598,7 +610,8 @@ in {
     (with config.services.borgbackup; {
       assertions =
         mapAttrsToList mkPassAssertion jobs
-        ++ mapAttrsToList mkKeysAssertion repos;
+        ++ mapAttrsToList mkKeysAssertion repos
+        ++ mapAttrsToList mkRemovableDeviceAssertions jobs;
 
       system.activationScripts = mapAttrs' mkActivationScript jobs;
 

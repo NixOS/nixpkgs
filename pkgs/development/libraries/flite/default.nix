@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, alsaLib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "flite-2.1.0";
 
   src = fetchFromGitHub {

@@ -1,13 +1,12 @@
 { mkXfceDerivation, automakeAddFlags, exo, gtk3, libnotify
 , libxfce4ui, libxfce4util, upower, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-power-manager";
-  version = "4.14pre2";
-  rev = "xfce-4.14pre2";
+  version = "1.6.5";
 
-  sha256 = "1x1ssji4v9qp64si38paz15bgsgs1w3hkx080qznnmcxqlg7zpj9";
+  sha256 = "0zazm2cgkz5xj7rvy9gbh4kaay2anfcmawg4gj38pnq3a8zcwwd5";
 
   nativeBuildInputs = [ automakeAddFlags exo ];
   buildInputs = [ gtk3 libnotify libxfce4ui libxfce4util upower xfconf ];

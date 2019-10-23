@@ -54,7 +54,7 @@ in
     };
 
     firmwarePartitionID = mkOption {
-      type = types.string;
+      type = types.str;
       default = "0x2178694e";
       description = ''
         Volume ID for the /boot/firmware partition on the SD card. This value
@@ -63,7 +63,7 @@ in
     };
 
     rootPartitionUUID = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
       description = ''
@@ -73,8 +73,8 @@ in
 
     firmwareSize = mkOption {
       type = types.int;
-      # As of 2019-05-31 the Raspberry pi firmware + u-bot takes ~13MiB
-      default = 20;
+      # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
+      default = 30;
       description = ''
         Size of the /boot/firmware partition, in megabytes.
       '';
@@ -98,6 +98,16 @@ in
         populate the ./files/boot (/boot) directory.
       '';
     };
+
+    compressImage = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether the SD image should be compressed using
+        <command>bzip2</command>.
+      '';
+    };
+
   };
 
   config = {
@@ -118,10 +128,12 @@ in
 
     sdImage.storePaths = [ config.system.build.toplevel ];
 
-    system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs, mtools, libfaketime, utillinux }: stdenv.mkDerivation {
+    system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs, mtools, libfaketime, utillinux, bzip2 }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux ];
+      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux bzip2 ];
+
+      inherit (config.sdImage) compressImage;
 
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image
@@ -168,14 +180,19 @@ in
         # Verify the FAT partition before copying it.
         fsck.vfat -vn firmware_part.img
         dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
+        if test -n "$compressImage"; then
+            bzip2 $img
+        fi
       '';
     }) {};
 
     boot.postBootCommands = ''
       # On the first boot do some maintenance tasks
       if [ -f /nix-path-registration ]; then
+        set -euo pipefail
+        set -x
         # Figure out device names for the boot device and root filesystem.
-        rootPart=$(readlink -f /dev/disk/by-label/NIXOS_SD)
+        rootPart=$(${pkgs.utillinux}/bin/findmnt -n -o SOURCE /)
         bootDevice=$(lsblk -npo PKNAME $rootPart)
 
         # Resize the root partition and the filesystem to fit the disk

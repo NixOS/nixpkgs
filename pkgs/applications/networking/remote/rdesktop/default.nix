@@ -5,7 +5,6 @@
 stdenv.mkDerivation (rec {
   pname = "rdesktop";
   version = "1.8.6";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = pname;

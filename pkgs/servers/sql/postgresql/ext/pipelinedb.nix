@@ -1,8 +1,5 @@
 { stdenv, fetchFromGitHub, postgresql, zeromq, openssl }:
 
-if stdenv.lib.versionOlder postgresql.version "10"
-then throw "PipelineDB not supported for PostgreSQL ${postgresql.version}"
-else
 stdenv.mkDerivation rec {
   pname = "pipelinedb";
   version = "1.0.0-13";
@@ -35,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = postgresql.meta.platforms;
     maintainers = [ maintainers.marsam ];
+    broken = versionOlder postgresql.version "10";
   };
 }

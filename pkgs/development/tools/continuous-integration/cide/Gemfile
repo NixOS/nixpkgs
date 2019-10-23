@@ -1,6 +1,0 @@
-source "https://rubygems.org"
-
-gem 'cide'
-
-# Optional dependency, only used by `cide upload`
-gem 'aws-sdk', '~> 2'

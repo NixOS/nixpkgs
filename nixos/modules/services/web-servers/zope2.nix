@@ -11,7 +11,7 @@ let
 
       name = mkOption {
         default = "${name}";
-        type = types.string;
+        type = types.str;
         description = "The name of the zope2 instance. If undefined, the name of the attribute set will be used.";
       };
 
@@ -23,19 +23,19 @@ let
 
       http_address = mkOption {
         default = "localhost:8080";
-        type = types.string;
+        type = types.str;
         description = "Give a port and address for the HTTP server.";
       };
 
       user = mkOption {
         default = "zope2";
-        type = types.string;
+        type = types.str;
         description = "The name of the effective user for the Zope process.";
       };
 
       clientHome = mkOption {
         default = "/var/lib/zope2/${name}";
-        type = types.string;
+        type = types.path;
         description = "Home directory of zope2 instance.";
       };
       extra = mkOption {
@@ -52,7 +52,7 @@ let
             </blobstorage>
           </zodb_db>
           '';
-        type = types.string;
+        type = types.lines;
         description = "Extra zope.conf";
       };
 

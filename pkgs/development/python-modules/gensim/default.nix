@@ -6,11 +6,13 @@
 , scipy
 , smart_open
 , scikitlearn, testfixtures, unittest2
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
   version = "3.8.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

@@ -148,7 +148,7 @@ in
 
     systemd.tmpfiles.rules = [
       "e '${stateDir}' 0700 unifi - - -"
-      "e '${stateDir}/data' 0700 unifi - - -"
+      "d '${stateDir}/data' 0700 unifi - - -"
     ];
 
     systemd.services.unifi = {
@@ -176,6 +176,7 @@ in
         Type = "simple";
         ExecStart = "${(removeSuffix "\n" cmd)} start";
         ExecStop = "${(removeSuffix "\n" cmd)} stop";
+        Restart = "on-failure";
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";

@@ -11,7 +11,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "acme-client-${version}";
+  pname = "acme-client";
   version = "0.1.16";
 
   src = fetchurl {

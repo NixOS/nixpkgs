@@ -4,7 +4,7 @@ let
 
   # Build Quake with coverage instrumentation.
   overrides = pkgs:
-    rec {
+    {
       quake3game = pkgs.quake3game.override (args: {
         stdenv = pkgs.stdenvAdapters.addCoverageInstrumentation args.stdenv;
       });
@@ -12,9 +12,9 @@ let
 
   # Only allow the demo data to be used (only if it's unfreeRedistributable).
   unfreePredicate = pkg: with pkgs.lib; let
-    allowDrvPredicates = [ "quake3-demo" "quake3-pointrelease" ];
+    allowPackageNames = [ "quake3-demodata" "quake3-pointrelease" ];
     allowLicenses = [ pkgs.lib.licenses.unfreeRedistributable ];
-  in any (flip hasPrefix pkg.name) allowDrvPredicates &&
+  in elem pkg.pname allowPackageNames &&
      elem (pkg.meta.license or null) allowLicenses;
 
 in
@@ -42,7 +42,7 @@ rec {
     { server =
         { pkgs, ... }:
 
-        { systemd.services."quake3-server" =
+        { systemd.services.quake3-server =
             { wantedBy = [ "multi-user.target" ];
               script =
                 "${pkgs.quake3demo}/bin/quake3-server +set g_gametype 0 " +

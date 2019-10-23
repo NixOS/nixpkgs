@@ -3,6 +3,7 @@
 , fetchPypi
 , nose
 , decorator
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ decorator ];
+  propagatedBuildInputs = [ decorator setuptools ];
 
   meta = {
     homepage = "https://networkx.github.io/";

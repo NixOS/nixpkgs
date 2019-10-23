@@ -24,7 +24,7 @@ in {
         Specifies Unix ODBC drivers to be registered in
         <filename>/etc/odbcinst.ini</filename>.  You may also want to
         add <literal>pkgs.unixODBC</literal> to the system path to get
-        a command line client to connnect to ODBC databases.
+        a command line client to connect to ODBC databases.
       '';
     };
   };

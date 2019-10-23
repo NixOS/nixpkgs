@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "swift-im-${version}";
+  pname = "swift-im";
   version = "4.0.2";
 
   src = fetchurl {

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "xtrace";
   version = "1.4.0";
 
-  src = fetchFromGitLab rec {
+  src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = pname;

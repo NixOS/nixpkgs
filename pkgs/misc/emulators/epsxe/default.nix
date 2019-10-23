@@ -4,11 +4,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "epsxe-${version}";
+  pname = "epsxe";
   version = "2.0.5";
 
   src = let
-    version2 = concatStrings (splitString "." version);
+    version2 = replaceStrings ["."] [""] version;
     platform = "linux" + (optionalString stdenv.is64bit "_x64");
   in fetchurl {
     url = "https://www.epsxe.com/files/ePSXe${version2}${platform}.zip";

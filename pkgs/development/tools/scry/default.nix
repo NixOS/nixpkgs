@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, crystal, shards, llvm, which }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "scry";
   version = "0.8.0";
 

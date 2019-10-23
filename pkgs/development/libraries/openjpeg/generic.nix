@@ -23,8 +23,9 @@ let
   mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
 in
 
-stdenv.mkDerivation rec {
-  name = "openjpeg-${version}";
+stdenv.mkDerivation {
+  pname = "openjpeg";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "uclouvain";
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libpng libtiff lcms2 ];
 
-  doCheck = testsSupport;
+  doCheck = (testsSupport && !stdenv.isAarch64); # tests fail on aarch64-linux
   checkPhase = ''
     substituteInPlace ../tools/ctest_scripts/travis-ci.cmake \
       --replace "JPYLYZER_EXECUTABLE=" "JPYLYZER_EXECUTABLE=\"${jpylyzer}/bin/jpylyzer\" # "

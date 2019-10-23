@@ -5,6 +5,7 @@
 , six, texttable, websocket_client, cached-property
 , enum34, functools32, paramiko
 }:
+
 buildPythonApplication rec {
   version = "1.24.1";
   pname = "docker-compose";
@@ -32,15 +33,17 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/bash-completion/completions/
-    cp contrib/completion/bash/docker-compose $out/share/bash-completion/completions/docker-compose
+    install -D -m 0444 contrib/completion/bash/docker-compose \
+      $out/share/bash-completion/completions/docker-compose
+
+    install -D -m 0444 contrib/completion/zsh/_docker-compose \
+      $out/share/zsh-completion/zsh/site-functions/_docker-compose
   '';
 
   meta = with stdenv.lib; {
     homepage = https://docs.docker.com/compose/;
     description = "Multi-container orchestration for Docker";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-    ];
+    maintainers = [ ];
   };
 }

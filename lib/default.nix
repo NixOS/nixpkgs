@@ -57,8 +57,8 @@ let
       hasAttr head isAttrs isBool isInt isList isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail;
-    inherit (trivial) id const concat or and bitAnd bitOr bitXor bitNot
-      boolToString mergeAttrs flip mapNullable inNixShell min max
+    inherit (trivial) id const pipe concat or and bitAnd bitOr bitXor
+      bitNot boolToString mergeAttrs flip mapNullable inNixShell min max
       importJSON warn info showWarnings nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction;
     inherit (fixedPoints) fix fix' converge extends composeExtensions
@@ -71,7 +71,7 @@ let
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting getOutput getBin
       getLib getDev chooseDevOutputs zipWithNames zip;
-    inherit (lists) singleton foldr fold foldl foldl' imap0 imap1
+    inherit (lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
@@ -134,5 +134,7 @@ let
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       fakeSha256 fakeSha512
       nixType imap;
+    inherit (versions)
+      splitVersion;
   });
 in lib

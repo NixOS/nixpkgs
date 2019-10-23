@@ -36,6 +36,7 @@ buildPythonPackage rec {
   NOSE_EXCLUDE = stdenv.lib.concatStringsSep "," [
     "tests.functional.test_httplib2.test_callback_response"
     "tests.functional.test_requests.test_streaming_responses"
+    "tests.functional.test_httplib2.test_callback_response"
   ];
 
   meta = with stdenv.lib; {

@@ -4,20 +4,20 @@ let
   inherit (stdenv.hostPlatform) system;
 
   plat = {
-    "x86_64-linux" = "linux-x64";
-    "x86_64-darwin" = "darwin";
+    x86_64-linux = "linux-x64";
+    x86_64-darwin = "darwin";
   }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    "x86_64-linux" = "1ck13xpnfklfc81jd8d5md09fcp0gjypacdqj276mzhr5mig29cd";
-    "x86_64-darwin" = "0xpzm372swv0by22saxib16fvvvfjr7d68aj3l5dsl5c9a8v23qj";
+    x86_64-linux = "0p4ah1bbz0njl2bk783gq5z1gxfzapa65qzhrkn216v07rba29jm";
+    x86_64-darwin = "162bqdhi2dx74q5f56bhs5phz9az66lb4lvfcj1sdygp51xsb93y";
   }.${system};
 in
   callPackage ./generic.nix rec {
 
-    version = "1.36.1";
+    version = "1.39.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";

@@ -79,7 +79,7 @@ in
   config = mkIf (config.fonts.fontconfig.enable && cfg.enable) {
 
     fonts.fontconfig.confPackages = [ confPkg ];
-    environment.variables."INFINALITY_FT" = cfg.preset;
+    environment.variables.INFINALITY_FT = cfg.preset;
 
   };
 

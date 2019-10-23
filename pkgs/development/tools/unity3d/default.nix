@@ -22,8 +22,8 @@ let
   ver = "2018.3.0";
   build = "f2";
 
-in stdenv.mkDerivation rec {
-  name = "unity-editor-${version}";
+in stdenv.mkDerivation {
+  pname = "unity-editor";
   version = "${ver}x${build}";
 
   src = fetchurl {

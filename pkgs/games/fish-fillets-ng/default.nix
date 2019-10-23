@@ -1,6 +1,6 @@
 {stdenv, fetchurl, SDL, lua5_1, pkgconfig, SDL_mixer, SDL_image, SDL_ttf}:
 stdenv.mkDerivation rec {
-  name = "fish-fillets-ng-${version}";
+  pname = "fish-fillets-ng";
   version = "1.0.1";
   src = fetchurl {
     url = "mirror://sourceforge/fillets/fillets-ng-${version}.tar.gz";

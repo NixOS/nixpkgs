@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.4";
-  name = "runzip-${version}";
+  pname = "runzip";
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libzip ];

@@ -4,13 +4,13 @@ assert (openssl != null) == (gnutls == null);
 
 stdenv.mkDerivation rec {
   pname = "openconnect";
-  version = "8.03";
+  version = "8.05";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.infradead.org/pub/openconnect/${pname}-${version}.tar.gz"
     ];
-    sha256 = "1wlypi68kqqg2mdck8wvf6aanhrmf9i7z6lngyxvcrp23jdzz34h";
+    sha256 = "14i9q727c2zc9xhzp1a9hz3gzb5lwgsslbhircm84dnbs192jp1k";
   };
 
   outputs = [ "out" "dev" ];

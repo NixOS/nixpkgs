@@ -4,7 +4,7 @@
 , python
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   name = "python-${pkgs.notmuch.name}";
 
   src = pkgs.notmuch.src;

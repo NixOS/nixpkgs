@@ -3,7 +3,7 @@
 , libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  name = "graphicsmagick-${version}";
+  pname = "graphicsmagick";
   version = "1.3.32";
 
   src = fetchurl {

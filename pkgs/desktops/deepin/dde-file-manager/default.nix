@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, avfs, dde-daemon, dde-dock,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, avfs, dde-daemon, dde-dock,
   dde-polkit-agent, dde-qt-dbus-factory, deepin, deepin-anything,
   deepin-desktop-schemas, deepin-gettext-tools, deepin-movie-reborn,
   deepin-shortcut-viewer, deepin-terminal, dtkcore, dtkwidget,
@@ -8,8 +8,7 @@
   qtx11extras, runtimeShell, samba, shadow, taglib, udisks2-qt5,
   xdg-user-dirs, xorg, zlib, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dde-file-manager";
   version = "4.8.6.4";
 
@@ -239,7 +238,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "File manager and desktop module for Deepin Desktop Environment";

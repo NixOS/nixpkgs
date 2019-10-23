@@ -1,4 +1,5 @@
-{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest, setuptools_scm, pytest-forked, filelock, six }:
+{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest
+, setuptools_scm, pytest-forked, filelock, six, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
@@ -12,6 +13,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools_scm pytest ];
   checkInputs = [ pytest filelock ];
   propagatedBuildInputs = [ execnet pytest-forked six ];
+
+  # Encountered a memory leak
+  # https://github.com/pytest-dev/pytest-xdist/issues/462
+  doCheck = !isPy3k;
 
   checkPhase = ''
     # Excluded tests access file system

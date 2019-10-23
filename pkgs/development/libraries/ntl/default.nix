@@ -13,12 +13,12 @@
 assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
-  name = "ntl-${version}";
-  version = "11.3.2";
+  pname = "ntl";
+  version = "11.3.4";
 
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "17bfsvn72zjqfibnxscyf4hbk3inndh4r89jd2zg7mgqmd2k3fl4";
+    sha256 = "0fdy63x6iglp20ypqhkpjj6wqjzpxlyl2wfw2dqlgiy6l6ibm4rd";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     perl # needed for ./configure
   ];
 
-  sourceRoot = "${name}/src";
+  sourceRoot = "${pname}-${version}/src";
 
   enableParallelBuilding = true;
 

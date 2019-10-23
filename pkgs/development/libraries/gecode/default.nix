@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, bison, flex, perl, gmp, mpfr, enableGist ? true, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "gecode-${version}";
+  pname = "gecode";
   version = "6.2.0";
 
   src = fetchFromGitHub {

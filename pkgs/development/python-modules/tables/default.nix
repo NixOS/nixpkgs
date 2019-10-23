@@ -1,5 +1,7 @@
-{ stdenv, fetchPypi, python, buildPythonPackage
+{ stdenv, lib, fetchPypi, python, buildPythonPackage
 , cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
+
+with stdenv.lib;
 
 buildPythonPackage rec {
   version = "3.5.2";
@@ -15,13 +17,12 @@ buildPythonPackage rec {
 
   # The setup script complains about missing run-paths, but they are
   # actually set.
-  setupPyBuildFlags =
-    [ "--hdf5=${hdf5}"
-      "--lzo=${lzo}"
-      "--bzip2=${bzip2.dev}"
-      "--blosc=${c-blosc}"
-    ];
-
+  setupPyBuildFlags = [
+    "--hdf5=${getDev hdf5}"
+    "--lzo=${getDev lzo}"
+    "--bzip2=${getDev bzip2}"
+    "--blosc=${getDev c-blosc}"
+  ];
   # Run the test suite.
   # It requires the build path to be in the python search path.
   # These tests take quite some time.

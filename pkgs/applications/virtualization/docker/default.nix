@@ -15,11 +15,11 @@ rec {
       , tiniRev, tiniSha256
     } :
   let
-    docker-runc = runc.overrideAttrs (oldAttrs: rec {
+    docker-runc = runc.overrideAttrs (oldAttrs: {
       name = "docker-runc-${version}";
       inherit version;
       src = fetchFromGitHub {
-        owner = "docker";
+        owner = "opencontainers";
         repo = "runc";
         rev = runcRev;
         sha256 = runcSha256;
@@ -28,7 +28,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
+    docker-containerd = containerd.overrideAttrs (oldAttrs: {
       name = "docker-containerd-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -41,7 +41,7 @@ rec {
       hardeningDisable = [ "fortify" ];
     });
 
-    docker-tini = tini.overrideAttrs  (oldAttrs: rec {
+    docker-tini = tini.overrideAttrs  (oldAttrs: {
       name = "docker-init-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -60,7 +60,7 @@ rec {
       ];
     });
   in
-    stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) rec {
+    stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) {
 
     inherit docker-runc docker-containerd docker-proxy docker-tini;
 
@@ -70,7 +70,7 @@ rec {
       ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
       ++ optional (libseccomp != null) "seccomp";
 
-   }) // rec {
+   }) // {
     inherit version rev;
 
     name = "docker-${version}";
@@ -198,14 +198,14 @@ rec {
   });
 
   # Get revisions from
-  # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
+  # https://github.com/docker/docker-ce/tree/${version}/components/engine/hack/dockerfile/install/*
 
   docker_18_09 = makeOverridable dockerGen {
-    version = "18.09.8";
-    rev = "0dd43dd87fd530113bf44c9bba9ad8b20ce4637f";
-    sha256 = "07ljxdqylbfbq1939hqyaav966ga7ds5b38dn7af1h0aks86y2s3";
-    runcRev = "425e105d5a03fabd737a126ad93d62a9eeede87f";
-    runcSha256 = "05s4p12mgmdcy7gjralh41wlgds6m69zdgwbpdn1xjj2487dmhxf";
+    version = "18.09.9";
+    rev = "039a7df9ba8097dd987370782fcdd6ea79b26016";
+    sha256 = "0wqhjx9qs96q2jd091wffn3cyv2aslqn2cvpdpgljk8yr9s0yg7h";
+    runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
+    runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
     containerdRev = "894b81a4b802e4eb2a91d1ce216b8817763c29fb";
     containerdSha256 = "0sp5mn5wd3xma4svm6hf67hyhiixzkzz6ijhyjkwdrc4alk81357";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";
@@ -213,11 +213,11 @@ rec {
   };
 
   docker_19_03 = makeOverridable dockerGen {
-    version = "19.03.1";
-    rev = "74b1e89e8ac68948be88fe0aa1e2767ae28659fe";
-    sha256 = "1m7bq7la29d8piwiq5whzcyrm7g3lv497wnri0lh6gxi10nwv06h";
-    runcRev = "425e105d5a03fabd737a126ad93d62a9eeede87f";
-    runcSha256 = "05s4p12mgmdcy7gjralh41wlgds6m69zdgwbpdn1xjj2487dmhxf";
+    version = "19.03.2";
+    rev = "6a30dfca03664a0b6bf0646a7d389ee7d0318e6e";
+    sha256 = "0bghqwxlx4v06bwcv3c2wizbihhf983gvypx5sjcbgmiyd3bgb47";
+    runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
+    runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
     containerdRev = "894b81a4b802e4eb2a91d1ce216b8817763c29fb";
     containerdSha256 = "0sp5mn5wd3xma4svm6hf67hyhiixzkzz6ijhyjkwdrc4alk81357";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";

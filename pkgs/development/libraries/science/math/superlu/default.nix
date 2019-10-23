@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.2.1";
-  name = "superlu-${version}";
+  pname = "superlu";
 
   src = fetchurl {
     url = "http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_${version}.tar.gz";

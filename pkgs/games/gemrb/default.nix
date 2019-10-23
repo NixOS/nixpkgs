@@ -3,7 +3,7 @@
 , libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "gemrb-${version}";
+  pname = "gemrb";
   version = "0.8.5";
 
   src = fetchFromGitHub {

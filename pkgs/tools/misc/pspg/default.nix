@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gnugrep, ncurses, pkgconfig, readline }:
 
 stdenv.mkDerivation rec {
-  name = "pspg-${version}";
-  version = "1.6.5";
+  pname = "pspg";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = "pspg";
-    rev = "${version}";
-    sha256 = "0zz924fl0b99a09gi5l3vxv9dmxnkv1v679w6k9zf365b44z91ki";
+    rev = version;
+    sha256 = "1xiyshz56qpx3bv0mzx73rqr7wmyamyj8jbqdv05wjb72npkjmzl";
   };
 
   nativeBuildInputs = [ pkgconfig ];

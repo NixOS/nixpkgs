@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/fwaeytens/dnsenum";
     description = "A tool to enumerate DNS information";
-    maintainers = with maintainers; [ c0bw3b globin ];
+    maintainers = with maintainers; [ c0bw3b ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

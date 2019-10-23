@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mlterm-${version}";
+  pname = "mlterm";
   version = "3.8.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/mlterm/01release/${name}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/mlterm/01release/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "1jq3fv2wqhszfipkzj8d0lykr6g0zzksn7xy4d3kwincmzfskv7k";
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/applications $desktopItem/share/applications/*
   '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "mlterm";
     exec = "mlterm %U";
     icon = "mlterm";

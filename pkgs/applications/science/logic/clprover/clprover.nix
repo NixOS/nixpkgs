@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "clprover-${version}";
+stdenv.mkDerivation {
+  pname = "clprover";
   version = "1.0.3";
 
   src = fetchzip {

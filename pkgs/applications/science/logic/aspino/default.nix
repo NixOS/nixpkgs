@@ -7,7 +7,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "aspino-unstable-2017-03-09";
 
   src = fetchFromGitHub {

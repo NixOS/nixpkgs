@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "debianutils";
-  version = "4.8.6.2";
+  version = "4.8.6.3";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/${pname}/${pname}_${version}.tar.xz";
-    sha256 = "1fhbn62v85ydcap4pjx6jb37bly42lf3l64ig4ppr7yiaax8i8xc";
+    sha256 = "08g2gdm6n66w5m8qwm4f48wzgs3ymkpki6dg01nwzwbdzhxdxirc";
   };
 
   meta = with stdenv.lib; {

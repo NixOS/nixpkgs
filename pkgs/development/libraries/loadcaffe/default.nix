@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, cmake, torch, protobuf, protobufc}:
 stdenv.mkDerivation rec {
-  name = "loadcaffe-${version}";
+  pname = "loadcaffe";
   version = "0.0pre2016.08.01";
   buildInputs = [cmake torch protobuf protobufc];
   src = fetchFromGitHub {

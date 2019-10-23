@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, fetchgit, fetchpatch, makeWrapper
+{ mkDerivation, lib, fetchurl, fetchgit, fetchpatch
 , qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8
 , withDocumentation ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   baseVersion = "4.9";
@@ -11,7 +11,7 @@ let
 
   # Fetch clang from qt vendor, this contains submodules like this:
   # clang<-clang-tools-extra<-clazy.
-  clang_qt_vendor = llvmPackages_8.clang-unwrapped.overrideAttrs (oldAttrs: rec {
+  clang_qt_vendor = llvmPackages_8.clang-unwrapped.overrideAttrs (oldAttrs: {
     src = fetchgit {
       url = "https://code.qt.io/clang/clang.git";
       rev = "c12b012bb7465299490cf93c2ae90499a5c417d5";
@@ -21,7 +21,7 @@ let
   });
 in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qtcreator";
   version = "${baseVersion}.${revision}";
 

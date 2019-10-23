@@ -19,8 +19,8 @@ in pythonPackages.buildPythonPackage rec {
   propagatedBuildInputs = with pythonPackages; [
     raven psutil jsonschema # tox for check
     # Runtime dependencies
-    sip (pyqt5.override { withWebSockets = true; })
-  ] ++ stdenv.lib.optional (!stable) pythonPackages.distro;
+    sip (pyqt5.override { withWebSockets = true; }) distro setuptools
+  ];
 
   doCheck = false; # Failing
 

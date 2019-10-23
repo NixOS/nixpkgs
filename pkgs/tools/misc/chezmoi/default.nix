@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "chezmoi-${version}";
-  version = "1.3.0";
+  pname = "chezmoi";
+  version = "1.5.5";
 
   goPackagePath = "github.com/twpayne/chezmoi";
 
@@ -10,13 +10,13 @@ buildGoPackage rec {
     owner = "twpayne";
     repo = "chezmoi";
     rev = "v${version}";
-    sha256 = "0dvdjx5khpw62lprn06k271xfc9fdrw4c1q74vd1vffaz60yfd8d";
+    sha256 = "18kc3b2ncjzxivycx3mhqw9kbqp0sxmlgc2ddvhgj2vpvlkayzkh";
   };
 
   goDeps = ./deps.nix;
 
   buildFlagsArray = [
-    "-ldflags=-s -w -X ${goPackagePath}/cmd.version=${version}"
+    "-ldflags=-s -w -X ${goPackagePath}/cmd.VersionStr=${version}"
   ];
 
   meta = with stdenv.lib; {

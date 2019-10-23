@@ -2,14 +2,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ffmpegthumbnailer-${version}";
-  version = "2.2.0";
+  pname = "ffmpegthumbnailer";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
     rev = version;
-    sha256 = "0kl8aa547icy9b05njps02a8sw4yn4f8fzs228kig247sn09s4cp";
+    sha256 = "1bakbr714j7yxdal1f5iq0gcl4cxggbbgj227ihdh5kvygqlwich";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

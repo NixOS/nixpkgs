@@ -59,12 +59,24 @@ installPhase() {
         mv $i/lib/libvdpau* $i/lib/vdpau
 
         # Install ICDs, make absolute paths.
+        # Be careful not to modify any original files because this runs twice.
+
+        # OpenCL
         sed -E "s#(libnvidia-opencl)#$i/lib/\\1#" nvidia.icd > nvidia.icd.fixed
         install -Dm644 nvidia.icd.fixed $i/etc/OpenCL/vendors/nvidia.icd
-        if [ -e nvidia_icd.json.template ]; then
-            sed "s#__NV_VK_ICD__#$i/lib/libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
-            install -Dm644 nvidia_icd.json $i/share/vulkan/icd.d/nvidia.json
+
+        # Vulkan
+        if [ -e nvidia_icd.json.template ] || [ -e nvidia_icd.json ]; then
+            if [ -e nvidia_icd.json.template ]; then
+                # template patching for version < 435
+                sed "s#__NV_VK_ICD__#$i/lib/libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json.fixed
+            else
+                sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_icd.json > nvidia_icd.json.fixed
+            fi
+            install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia.json
         fi
+
+        # EGL
         if [ "$useGLVND" = "1" ]; then
             sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
             install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json

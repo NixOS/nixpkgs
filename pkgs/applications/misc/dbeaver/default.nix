@@ -6,8 +6,8 @@
 # See `pkgs/applications/editors/eclipse/*.nix`
 
 stdenv.mkDerivation rec {
-  name = "dbeaver-ce-${version}";
-  version = "6.1.3";
+  pname = "dbeaver-ce";
+  version = "6.2.3";
 
   desktopItem = makeDesktopItem {
     name = "dbeaver";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dbeaver.io/files/${version}/dbeaver-ce-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "1ngfypx0wbq98rv791zls07h46rnj69qixpslw0xn9bb3ky4snbf";
+    sha256 = "1v4sllzvaz4fj8s14ddzw11wczlghbdppv8fl5jg6xglg687sgaj";
   };
 
   installPhase = ''
@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.samueldr ];
+    maintainers = [ maintainers.jojosch ];
   };
 }

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, kernel, libdrm }:
 
 stdenv.mkDerivation rec {
-  name = "evdi-${version}";
-  version = "1.6.1";
+  pname = "evdi";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
-    repo = "evdi";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1h98w1yfqsrjfhpnyfnggpkxs9yayw441nmfkllmzhzfnsd31fp7";
+    sha256 = "0ajjsh1fw7w0k28r6qq7kh3qcr87gzzjp8s890algbglynlafzfw";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ lgpl21 gpl2 ];
     homepage = https://www.displaylink.com/;
-    broken = versionOlder kernel.version "4.9" || versionAtLeast kernel.version "4.18" || stdenv.isAarch64;
+    broken = versionOlder kernel.version "4.9" || versionAtLeast kernel.version "5.3" || stdenv.isAarch64;
   };
 }

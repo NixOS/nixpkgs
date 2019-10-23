@@ -10,6 +10,7 @@
 , pkginfo
 , html5lib
 , shellingham
+, subprocess32
 , tomlkit
 , typing
 , pathlib2
@@ -43,7 +44,8 @@ in buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py --replace \
       "requests-toolbelt>=0.8.0,<0.9.0" \
-      "requests-toolbelt>=0.8.0,<0.10.0"
+      "requests-toolbelt>=0.8.0,<0.10.0" \
+      --replace 'pyrsistent>=0.14.2,<0.15.0' 'pyrsistent>=0.14.2,<0.16.0'
   '';
 
   format = "pyproject";
@@ -62,7 +64,7 @@ in buildPythonPackage rec {
     shellingham
     tomlkit
   ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
-    ++ lib.optionals isPy27 [ virtualenv functools32 ];
+    ++ lib.optionals isPy27 [ virtualenv functools32 subprocess32 ];
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"

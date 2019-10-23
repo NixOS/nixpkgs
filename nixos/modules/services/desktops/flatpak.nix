@@ -38,5 +38,16 @@ in {
       "$HOME/.local/share/flatpak/exports"
       "/var/lib/flatpak/exports"
     ];
+
+    # It has been possible since https://github.com/flatpak/flatpak/releases/tag/1.3.2
+    # to build a SELinux policy module.
+
+    users.users.flatpak = {
+      description = "Flatpak system helper";
+      group = "flatpak";
+      isSystemUser = true;
+    };
+
+    users.groups.flatpak = { };
   };
 }

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.11";
-  name = "rig-${version}";
+  pname = "rig";
 
   src = fetchurl {
     url = "https://ayera.dl.sourceforge.net/project/rig/rig/${version}/rig-${version}.tar.gz";

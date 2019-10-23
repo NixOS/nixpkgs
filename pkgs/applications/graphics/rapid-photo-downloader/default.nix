@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, python3Packages
+{ stdenv, mkDerivationWith, fetchurl, python3Packages
 , file, intltool, gobject-introspection, libgudev
 , udisks, gexiv2, gst_all_1, libnotify
 , exiftool, gdk-pixbuf, libmediainfo, vmtouch
 }:
 
-python3Packages.buildPythonApplication rec {
+mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.14";
+  version = "0.9.17";
 
   src = fetchurl {
     url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "1nywkkyxlpzq3s9anza9k67j5689pfclfha218frih36qdb0j258";
+    sha256 = "10vqbi9rcg8r0jxpx2kn8xmahwgdcal28wpix2fg6nkp5rfwxnr6";
   };
 
   # Disable version check and fix install tests
@@ -64,6 +64,7 @@ python3Packages.buildPythonApplication rec {
     requests
     colorlog
     pyprind
+    tenacity
   ];
 
   makeWrapperArgs = [
@@ -72,6 +73,7 @@ python3Packages.buildPythonApplication rec {
     "--prefix PATH : ${stdenv.lib.makeBinPath [ exiftool vmtouch ]}"
     "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libmediainfo ]}"
     "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : \"$GST_PLUGIN_SYSTEM_PATH_1_0\""
+    "\${qtWrapperArgs[@]}"
   ];
 
   meta = with stdenv.lib; {

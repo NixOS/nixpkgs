@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ijson";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "135rwh7izzmj4lwkrfb9xw4ik0gcwjz34ygnmx3vyvki2xbbp2xp";
+    sha256 = "08ppzz4my7dbs5bsdv3r1yn8bx8ijqmk5hjfdblrzrxhj184v4bs";
   };
 
   doCheck = false; # something about yajl

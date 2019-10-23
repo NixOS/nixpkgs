@@ -19,7 +19,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "opencv-${version}";
+  pname = "opencv";
   version = "2.4.13";
 
   src = fetchFromGitHub {

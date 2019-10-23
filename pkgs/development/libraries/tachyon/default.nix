@@ -12,10 +12,10 @@ assert withPngSupport -> libpng != null;
 assert stdenv.isDarwin -> Carbon != null;
 
 stdenv.mkDerivation rec {
-  name = "tachyon-${version}";
+  pname = "tachyon";
   version = "0.99b2";
   src = fetchurl {
-    url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${name}.tar.gz";
+    url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
     sha256 = "04m0bniszyg7ryknj8laj3rl5sspacw5nr45x59j2swcsxmdvn1v";
   };
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
          if stdenv.hostPlatform.system == "x86_64-freebsd" then "bsd"           else
          if stdenv.hostPlatform.system == "x686-freebsd"   then "bsd"           else
          throw "Don't know what arch to select for tachyon build";
-  makeFlags = "${arch}";
+  makeFlags = arch;
   patches = [
     # Remove absolute paths in Make-config (and unset variables so they can be set in preBuild)
     ./no-absolute-paths.patch

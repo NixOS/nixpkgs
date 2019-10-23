@@ -2,6 +2,7 @@
 , setuptools_scm
 , cheroot, portend, more-itertools, zc_lockfile, routes
 , objgraph, pytest, pytestcov, pathpy, requests_toolbelt, pytest-services
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -15,6 +16,22 @@ buildPythonPackage rec {
     inherit version;
     sha256 = "1w3hpsg7q8shdmscmbqk00w90lcw3brary7wl1a56k5h7nx33pj8";
   };
+
+  # Remove patches once 96b34df and 14c12d2
+  # become part of a release - they're currently only present in master.
+  # ref: https://github.com/cherrypy/cherrypy/pull/1791
+  patches = [
+    (fetchpatch {
+      name = "pytest5-1.patch";
+      url = "https://github.com/cherrypy/cherrypy/commit/96b34dfea7853b0189bc0a3878b6ddff0d4e505c.patch";
+      sha256 = "0zy53mahffgkpd844118b42lsk5lkjmig70d60x1i46w6gnr61mi";
+    })
+    (fetchpatch {
+      name = "pytest5-2.patch";
+      url = "https://github.com/cherrypy/cherrypy/commit/14c12d2420a4b3765bb241250bd186e93b2f25eb.patch";
+      sha256 = "0ihcz7b5myn923rq5665b98pz52hnf6fcys2y2inf23r3i07scyz";
+    })
+  ];
 
   propagatedBuildInputs = [
     # required

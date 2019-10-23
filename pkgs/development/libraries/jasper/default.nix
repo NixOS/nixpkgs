@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, libjpeg, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "jasper-${version}";
+  pname = "jasper";
   version = "2.0.16";
 
   src = fetchFromGitHub {

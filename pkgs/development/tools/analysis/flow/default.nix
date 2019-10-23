@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.104.0";
+  version = "0.110.0";
 
   src = fetchFromGitHub {
     owner  = "facebook";
     repo   = "flow";
     rev    = "refs/tags/v${version}";
-    sha256 = "189pibz5b9md6dhiadr7616xlmmrx5zwh7brbyrvgbapq80k9lak";
+    sha256 = "0w0z4pgwwvi12kvfg5xdjc83qw030a0c58cgr5rz3xzw2pgbdfm2";
   };
 
   installPhase = ''
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://flow.org/;
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainers = with maintainers; [ marsam puffnfresh globin ];
+    maintainers = with maintainers; [ marsam puffnfresh ];
   };
 }

@@ -43,6 +43,7 @@ with lib;
         pkgs.xorg.fontmiscmisc
         pkgs.xorg.fontcursormisc
         pkgs.unifont
+        pkgs.noto-fonts-emoji
       ];
 
   };

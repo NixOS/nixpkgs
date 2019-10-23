@@ -159,8 +159,8 @@ in runCommand "test-writers" {
   meta.platforms = stdenv.lib.platforms.all;
 } ''
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}/bin/test_writers") (lib.attrValues bin)}
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}") (lib.attrValues simple)}
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}") (lib.attrValues path)}
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test) (lib.attrValues simple)}
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test) (lib.attrValues path)}
 
   echo 'nix-writers successfully tested' >&2
   touch $out

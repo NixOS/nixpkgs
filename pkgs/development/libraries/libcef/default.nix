@@ -13,7 +13,7 @@ let
     ];
 in
 stdenv.mkDerivation rec {
-  name = "cef-binary-${version}";
+  pname = "cef-binary";
   version = "3.3497.1833.g13f506f";
   src = fetchurl {
     url = "http://opensource.spotify.com/cefbuilds/cef_binary_${version}_linux64.tar.bz2";
@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ puffnfresh ];
     license = licenses.bsd3;
     platforms = with platforms; linux;
+    broken = true;
   };
 }

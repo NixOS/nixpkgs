@@ -540,7 +540,8 @@ and the aliases
 #### `buildPythonPackage` function
 
 The `buildPythonPackage` function is implemented in
-`pkgs/development/interpreters/python/build-python-package.nix`
+`pkgs/development/interpreters/python/mk-python-derivation`
+using setup hooks.
 
 The following is an example:
 ```nix
@@ -797,6 +798,22 @@ such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to 
 Python 2 namespace packages may provide `__init__.py` that collide. In that case `python.buildEnv`
 should be used with `ignoreCollisions = true`.
 
+#### Setup hooks
+
+The following are setup hooks specifically for Python packages. Most of these are
+used in `buildPythonPackage`.
+
+- `flitBuildHook` to build a wheel using `flit`.
+- `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
+- `pipInstallHook` to install wheels.
+- `pytestCheckHook` to run tests with `pytest`.
+- `pythonCatchConflictsHook` to check whether a Python package is not already existing.
+- `pythonImportsCheckHook` to check whether importing the listed modules works.
+- `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
+- `setuptoolsBuildHook` to build a wheel using `setuptools`.
+- `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `wheelUnpackHook` to move a wheel to the correct folder so it can be installed with the `pipInstallHook`.
+
 ### Development mode
 
 Development or editable mode is supported. To develop Python packages
@@ -833,9 +850,8 @@ Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is in
 Packages inside nixpkgs are written by hand. However many tools exist in
 community to help save time. No tool is preferred at the moment.
 
-- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov
-- [pypi2nix](https://github.com/garbas/pypi2nix) by Rok Garbas
-- [pypi2nix](https://github.com/offlinehacker/pypi2nix) by Jaka Hudoklin
+- [pypi2nix](https://github.com/nix-community/pypi2nix): Generate Nix expressions for your Python project. Note that [sharing derivations from pypi2nix with nixpkgs is possible but not encouraged](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376).
+- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov.
 
 ### Deterministic builds
 

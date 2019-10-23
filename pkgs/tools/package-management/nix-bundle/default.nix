@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-bundle";
-  name = "${pname}-${version}";
   version = "0.2.0";
 
   src = fetchFromGitHub {

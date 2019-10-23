@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bluejeans-${version}";
+  pname = "bluejeans";
   version = "1.36.9";
 
   src =
@@ -36,14 +36,15 @@ stdenv.mkDerivation rec {
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/bluejeans/bluejeans-bin
     ln -s $out/opt/bluejeans/bluejeans $out/bin/bluejeans
-    substituteInPlace $out/bin/bluejeans \
-      --replace '#!/bin/bash' '#!${bash}/bin/bash'
     chmod +x $out/bin/bluejeans
+    patchShebangs $out
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day.";
-    license = stdenv.lib.licenses.unfree;
+    homepage = "https://www.bluejeans.com";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ veprbl ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -229,6 +229,40 @@ let
       '';
     };
 
+    nextcloud = {
+      exporterConfig = {
+        enable = true;
+        passwordFile = "/var/nextcloud-pwfile";
+        url = "http://localhost/negative-space.xml";
+      };
+      metricProvider = {
+        systemd.services.nc-pwfile = let
+          passfile = (pkgs.writeText "pwfile" "snakeoilpw");
+        in {
+          requiredBy = [ "prometheus-nextcloud-exporter.service" ];
+          before = [ "prometheus-nextcloud-exporter.service" ];
+          serviceConfig.ExecStart = ''
+            ${pkgs.coreutils}/bin/install -o nextcloud-exporter -m 0400 ${passfile} /var/nextcloud-pwfile
+          '';
+        };
+        services.nginx = {
+          enable = true;
+          virtualHosts."localhost" = {
+            basicAuth.nextcloud-exporter = "snakeoilpw";
+            locations."/" = {
+              root = "${pkgs.prometheus-nextcloud-exporter.src}/serverinfo/testdata";
+            };
+          };
+        };
+      };
+      exporterTest = ''
+        waitForUnit("nginx.service")
+        waitForUnit("prometheus-nextcloud-exporter.service")
+        waitForOpenPort(9205)
+        succeed("curl -sSf http://localhost:9205/metrics | grep -q 'nextcloud_up 1'")
+      '';
+    };
+
     nginx = {
       exporterConfig = {
         enable = true;
@@ -294,6 +328,22 @@ let
         waitForUnit("postgresql.service");
         succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_exporter_last_scrape_error 0'");
         succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 1'");
+      '';
+    };
+
+    rspamd = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.rspamd.enable = true;
+      };
+      exporterTest = ''
+        waitForUnit("rspamd.service");
+        waitForUnit("prometheus-rspamd-exporter.service");
+        waitForOpenPort(11334);
+        waitForOpenPort(7980);
+        waitUntilSucceeds("curl -sSf localhost:7980/metrics | grep -q 'rspamd_scanned{host=\"rspamd\"} 0'");
       '';
     };
 

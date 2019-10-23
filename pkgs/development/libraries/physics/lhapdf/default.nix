@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python2, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "lhapdf-${version}";
+  pname = "lhapdf";
   version = "6.2.3";
 
   src = fetchurl {

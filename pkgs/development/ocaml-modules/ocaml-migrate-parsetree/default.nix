@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
    pname = "ocaml-migrate-parsetree";
-   version = "1.2.0";
+   version = "1.4.0";
 
    src = fetchFromGitHub {
      owner = "ocaml-ppx";
      repo = pname;
      rev = "v${version}";
-     sha256 = "16kas19iwm4afijv3yxd250s08absabmdcb4yj57wc8r4fmzv5dm";
+     sha256 = "0sv1p4615l8gpbah4ya2c40yr6fbvahvv3ks7zhrsgcwcq2ljyr2";
    };
 
    propagatedBuildInputs = [ ppx_derivers result ];

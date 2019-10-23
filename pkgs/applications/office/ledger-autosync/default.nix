@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ledger-autosync";
-  version = "1.0.0";
+  version = "1.0.1";
 
 # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "egh";
     repo = "ledger-autosync";
     rev = "v${version}";
-    sha256 = "1fn32c02idccdmf9906pxn248qc9basjy2kr2g600806k3qvw84a";
+    sha256 = "1h5mjngdd3rmzwmy026xmas0491kxxi1vxkd5m1xii7y6j50z14q";
   };
 
   propagatedBuildInputs = with python3Packages; [

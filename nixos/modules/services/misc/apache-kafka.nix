@@ -46,7 +46,7 @@ in {
     hostname = mkOption {
       description = "Hostname the broker should bind to.";
       default = "localhost";
-      type = types.string;
+      type = types.str;
     };
 
     logDirs = mkOption {
@@ -54,13 +54,13 @@ in {
       default = [ "/tmp/kafka-logs" ];
       type = types.listOf types.path;
     };
-    
+
     zookeeper = mkOption {
       description = "Zookeeper connection string";
       default = "localhost:2181";
-      type = types.string;
+      type = types.str;
     };
- 
+
     extraProperties = mkOption {
       description = "Extra properties for server.properties.";
       type = types.nullOr types.lines;
@@ -79,8 +79,8 @@ in {
     log4jProperties = mkOption {
       description = "Kafka log4j property configuration.";
       default = ''
-        log4j.rootLogger=INFO, stdout 
-        
+        log4j.rootLogger=INFO, stdout
+
         log4j.appender.stdout=org.apache.log4j.ConsoleAppender
         log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
         log4j.appender.stdout.layout.ConversionPattern=[%d] %p %m (%c)%n

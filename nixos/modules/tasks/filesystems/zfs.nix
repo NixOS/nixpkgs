@@ -16,9 +16,7 @@ let
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
 
-  enableAutoSnapshots = cfgSnapshots.enable;
-  enableAutoScrub = cfgScrub.enable;
-  enableZfs = inInitrd || inSystem || enableAutoSnapshots || enableAutoScrub;
+  enableZfs = inInitrd || inSystem;
 
   kernel = config.boot.kernelPackages;
 
@@ -268,7 +266,12 @@ in
     };
 
     services.zfs.trim = {
-      enable = mkEnableOption "Enables periodic TRIM on all ZFS pools.";
+      enable = mkOption {
+        description = "Whether to enable periodic TRIM on all ZFS pools.";
+        default = true;
+        example = false;
+        type = types.bool;
+      };
 
       interval = mkOption {
         default = "weekly";
@@ -387,10 +390,11 @@ in
       };
 
       environment.etc."zfs/zed.d".source = "${packages.zfsUser}/etc/zfs/zed.d/";
+      environment.etc."zfs/zpool.d".source = "${packages.zfsUser}/etc/zfs/zpool.d/";
 
       system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ packages.zfsUser ]
-        ++ optional enableAutoSnapshots autosnapPkg; # so the user can run the command to see flags
+        ++ optional cfgSnapshots.enable autosnapPkg; # so the user can run the command to see flags
 
       services.udev.packages = [ packages.zfsUser ]; # to hook zvol naming, etc.
       systemd.packages = [ packages.zfsUser ];
@@ -469,7 +473,7 @@ in
                       map createSyncService allPools ++
                       map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
-      systemd.targets."zfs-import" =
+      systemd.targets.zfs-import =
         let
           services = map (pool: "zfs-import-${pool}.service") dataPools;
         in
@@ -479,10 +483,10 @@ in
             wantedBy = [ "zfs.target" ];
           };
 
-      systemd.targets."zfs".wantedBy = [ "multi-user.target" ];
+      systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })
 
-    (mkIf enableAutoSnapshots {
+    (mkIf (enableZfs && cfgSnapshots.enable) {
       systemd.services = let
                            descr = name: if name == "frequent" then "15 mins"
                                     else if name == "hourly" then "hour"
@@ -520,7 +524,7 @@ in
                             }) snapshotNames);
     })
 
-    (mkIf enableAutoScrub {
+    (mkIf (enableZfs && cfgScrub.enable) {
       systemd.services.zfs-scrub = {
         description = "ZFS pools scrubbing";
         after = [ "zfs-import.target" ];
@@ -547,15 +551,13 @@ in
       };
     })
 
-    (mkIf cfgTrim.enable {
+    (mkIf (enableZfs && cfgTrim.enable) {
       systemd.services.zpool-trim = {
         description = "ZFS pools trim";
         after = [ "zfs-import.target" ];
         path = [ packages.zfsUser ];
         startAt = cfgTrim.interval;
-        script = ''
-          zpool list -H -o name | xargs -n1 zpool trim
-        '';
+        serviceConfig.ExecStart = "${pkgs.runtimeShell} -c 'zpool list -H -o name | xargs --no-run-if-empty -n1 zpool trim'";
       };
     })
   ];

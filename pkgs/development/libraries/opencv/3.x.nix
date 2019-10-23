@@ -14,7 +14,8 @@
 , enableOpenblas  ? true, openblas
 , enableContrib   ? true
 
-, enableCuda      ? config.cudaSupport or false, cudatoolkit
+, enableCuda      ? (config.cudaSupport or false) &&
+                    stdenv.hostPlatform.isx86_64, cudatoolkit
 
 , enableUnfree    ? false
 , enableIpp       ? false
@@ -139,8 +140,8 @@ let
   printEnabled = enabled : if enabled then "ON" else "OFF";
 in
 
-stdenv.mkDerivation rec {
-  name = "opencv-${version}";
+stdenv.mkDerivation {
+  pname = "opencv";
   inherit version src;
 
   postUnpack = lib.optionalString buildContrib ''

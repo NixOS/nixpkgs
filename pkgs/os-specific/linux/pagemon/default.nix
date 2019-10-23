@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "pagemon-${version}";
-  version = "0.01.15";
+  pname = "pagemon";
+  version = "0.01.17";
 
   src = fetchFromGitHub {
-    sha256 = "0vbwpyik26zavpqsanmg8p7snk44nyz66flvkkqmhwx1ada9d181";
+    sha256 = "11r84nwjvnjyxc3jqhbvlgb89ajfj7v8212mz61dq5ilq5k7xa3d";
     rev = "V${version}";
     repo = "pagemon";
     owner = "ColinIanKing";

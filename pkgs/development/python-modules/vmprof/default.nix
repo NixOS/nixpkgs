@@ -23,6 +23,7 @@ buildPythonPackage rec {
     description = "A vmprof client";
     license = licenses.mit;
     homepage = https://vmprof.readthedocs.org/;
+    broken = true;
   };
 
 }

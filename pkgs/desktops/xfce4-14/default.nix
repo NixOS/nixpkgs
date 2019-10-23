@@ -58,8 +58,6 @@ makeScope newScope (self: with self; {
 
   xfce4-dict = callPackage ./xfce4-dict { };
 
-  xfce4-mixer = callPackage ./xfce4-mixer { };
-
   xfce4-netload-plugin = callPackage ./xfce4-netload-plugin { };
 
   xfce4-notifyd = callPackage ./xfce4-notifyd { };
@@ -83,6 +81,8 @@ makeScope newScope (self: with self; {
 
   xfce4-terminal = callPackage ./xfce4-terminal { };
 
+  xfdashboard = callPackage ./xfdashboard { };
+
   xfce4-volumed-pulse = callPackage ./xfce4-volumed-pulse { };
 
   xfce4-whiskermenu-plugin = callPackage ./xfce4-whiskermenu-plugin { };
@@ -92,8 +92,6 @@ makeScope newScope (self: with self; {
   xfwm4 = callPackage ./xfwm4 { };
 
   ## COMMON PARTS WITH XFCE 4.12
-
-  gtk-xfce-engine = callPackage ../xfce/core/gtk-xfce-engine.nix { withGtk3 = false; };
 
   xfce4-icon-theme = callPackage ../xfce/art/xfce4-icon-theme.nix { };
 
@@ -110,4 +108,9 @@ makeScope newScope (self: with self; {
   xfce4-namebar-plugin = callPackage ../xfce/panel-plugins/xfce4-namebar-plugin.nix { };
 
   xfce4-windowck-plugin = callPackage ../xfce/panel-plugins/xfce4-windowck-plugin.nix { };
+
+
+  ## ALIASES
+  xfce4-mixer = throw "deprecated 2019-08-18: obsoleted by xfce4-pulseaudio-plugin"; # added 2019-08-18
+  gtk-xfce-engine = throw "deprecated 2019-09-17: Xfce 4.14 deprecated gtk-xfce-engine"; # added 2019-09-17
 })

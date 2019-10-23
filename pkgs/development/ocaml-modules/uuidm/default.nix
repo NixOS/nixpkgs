@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.6";
-  name = "uuidm-${version}";
+  version = "0.9.7";
+  pname = "uuidm";
   src = fetchurl {
     url = "https://erratique.ch/software/uuidm/releases/uuidm-${version}.tbz";
-    sha256 = "0hz4fdx0x16k0pw9995vkz5d1hmzz6b16wck9li399rcbfnv5jlc";
+    sha256 = "1ivxb3hxn9bk62rmixx6px4fvn52s4yr1bpla7rgkcn8981v45r8";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg cmdliner ];

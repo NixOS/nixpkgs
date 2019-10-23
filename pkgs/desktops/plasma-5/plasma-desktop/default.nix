@@ -15,7 +15,7 @@
   plasma-workspace, xf86inputlibinput
 }:
 
-mkDerivation rec {
+mkDerivation {
   name = "plasma-desktop";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, pkgconfig, libsixel, yasm
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "ffmpeg-sixel-${version}";
+  pname = "ffmpeg-sixel";
   version = "nightly-2.3.x";
 
   src = fetchFromGitHub {

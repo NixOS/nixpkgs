@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "aerospike-server-${version}";
+  pname = "aerospike-server";
   version = "4.2.0.4";
 
   src = fetchFromGitHub {
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ openssl zlib ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
   preBuild = ''
     patchShebangs build/gen_version

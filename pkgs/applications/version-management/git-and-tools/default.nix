@@ -24,6 +24,8 @@ let
 
   darcsToGit = callPackage ./darcs-to-git { };
 
+  delta = callPackage ./delta { };
+
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
   ghq = callPackage ./ghq { };
@@ -71,6 +73,8 @@ let
   };
 
   git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
+
+  git-annex-utils = callPackage ./git-annex-utils { };
 
   git-bug = callPackage ./git-bug { };
 
@@ -121,6 +125,8 @@ let
 
   git-stree = callPackage ./git-stree { };
 
+  git-subrepo = callPackage ./git-subrepo { };
+
   git-sync = callPackage ./git-sync { };
 
   git-test = callPackage ./git-test { };
@@ -145,7 +151,9 @@ let
 
   lab = callPackage ./lab { };
 
-  pre-commit = callPackage ./pre-commit { };
+  lefthook = callPackage ./lefthook { };
+
+  pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 

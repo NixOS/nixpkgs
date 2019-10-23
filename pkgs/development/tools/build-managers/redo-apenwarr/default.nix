@@ -1,30 +1,80 @@
-{stdenv, fetchFromGitHub, python2, which}:
-stdenv.mkDerivation rec {
-  name = "redo-apenwarr-${version}";
+{ stdenv, lib, python27, fetchFromGitHub, mkdocs, which, findutils, coreutils
+, perl
+, doCheck ? true
+}: let
 
-  version = "unstable-2019-06-21";
-
-  src = fetchFromGitHub {
-    owner = "apenwarr";
-    repo = "redo";
-    rev = "8924fa35fa7363b531f8e6b48a1328d2407ad5cf";
-    sha256 = "1dj20w29najqjyvk0jh5kqbcd10k32rad986q5mzv4v49qcwdc1q";
+  # copy from 
+  # pkgs/applications/networking/pyload/beautifulsoup.nix
+  beautifulsoup = python27.pkgs.callPackage ./beautifulsoup.nix {
+    pythonPackages = python27.pkgs;
   };
 
-  DESTDIR="";
-  PREFIX = placeholder "out";
+  mkdocs-exclude = python27.pkgs.callPackage ./mkdocs-exclude.nix {
+    pythonPackages = python27.pkgs;
+  };
+in stdenv.mkDerivation rec {
 
-  patchPhase = ''
-    patchShebangs .
+  pname = "redo-apenwarr";
+  version = "0.42";
+
+  src = fetchFromGitHub rec {
+    owner = "apenwarr";
+    repo = "redo";
+    rev = "${repo}-${version}";
+    sha256 = "1060yb7hrxm8c7bfvb0y4j0acpxsj6hbykw1d9549zpkxxr9nsgm";
+  };
+
+  postPatch = ''
+
+    patchShebangs minimal/do
+
+  '' + lib.optionalString doCheck ''
+    unset CC CXX
+
+    substituteInPlace minimal/do.test \
+      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+
+    substituteInPlace t/105-sympath/all.do \
+      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+
+    substituteInPlace t/all.do \
+      --replace "/bin/ls" "ls"
+
+    substituteInPlace t/110-compile/hello.o.do \
+      --replace "/usr/include" "${stdenv.lib.getDev stdenv.cc.libc}/include"
+
+    substituteInPlace t/200-shell/nonshelltest.do \
+      --replace "/usr/bin/env perl" "${perl}/bin/perl"
+
   '';
 
-  buildInputs = [ python2 which ];
+  inherit doCheck;
 
-  meta = with stdenv.lib; {
-    description = "Apenwarr version of the redo build tool.";
-    homepage = https://github.com/apenwarr/redo/;
-    license = stdenv.lib.licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ andrewchambers ];
+  checkTarget = "test";
+
+  outputs = [ "out" "man" ];
+
+  installFlags = [
+    "PREFIX=$(out)"
+    "DESTDIR=/"
+  ];
+
+  nativeBuildInputs = [
+    python27
+    beautifulsoup
+    mkdocs
+    mkdocs-exclude
+    which
+    findutils
+  ];
+
+  meta = with lib; {
+    description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo.";
+    homepage = https://github.com/apenwarr/redo;
+    maintainers = with maintainers; [
+      andrewchambers
+      ck3d
+    ];
+    license = licenses.asl20;
   };
 }

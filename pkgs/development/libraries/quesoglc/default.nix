@@ -2,9 +2,8 @@
 stdenv.mkDerivation rec {
   pname = "quesoglc";
   version = "0.7.2";
-  name = "${pname}-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "0cf9ljdzii5d4i2m23gdmf3kn521ljcldzq69lsdywjid3pg5zjl";
   };
   buildInputs = [ libGLU_combined glew freetype fontconfig fribidi libX11 ];

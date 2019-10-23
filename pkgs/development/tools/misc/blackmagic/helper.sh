@@ -10,6 +10,8 @@ out=${out:-/tmp}
 
 ################################################################################
 export CFLAGS=$NIX_CFLAGS_COMPILE
+export MAKEFLAGS="\
+  ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}"
 
 ################################################################################
 PRODUCTS="blackmagic.bin blackmagic.hex blackmagic_dfu.bin blackmagic_dfu.hex"

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, asciidoc, enableDrafts ? false }:
 
 stdenv.mkDerivation rec {
-  name = "zeromq-${version}";
+  pname = "zeromq";
   version = "4.3.2";
 
   src = fetchFromGitHub {

@@ -3,7 +3,8 @@ let
   version = "0.3.1";
 in
 buildGoPackage {
-  name = "grv-${version}";
+  pname = "grv";
+  inherit version;
 
   buildInputs = [ ncurses readline curl libgit2 ];
   nativeBuildInputs = [ pkgconfig ];

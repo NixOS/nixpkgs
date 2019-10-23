@@ -2,7 +2,7 @@
 , isPy3k, isPyPy
 }:
 buildPythonPackage rec {
-  name = "pypillowfight-${version}";
+  pname = "pypillowfight";
   version = "0.2.4";
 
   src = fetchFromGitLab {

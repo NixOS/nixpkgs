@@ -3,7 +3,7 @@
 , snmpSupport ? true, net_snmp
 , sshSupport ? true, libssh2
 , sqliteSupport ? false, sqlite
-, mysqlSupport ? false, mysql
+, mysqlSupport ? false, libmysqlclient
 , postgresqlSupport ? false, postgresql
 }:
 
@@ -37,7 +37,7 @@ in
       ++ optional snmpSupport net_snmp
       ++ optional sqliteSupport sqlite
       ++ optional sshSupport libssh2
-      ++ optional mysqlSupport mysql.connector-c
+      ++ optional mysqlSupport libmysqlclient
       ++ optional postgresqlSupport postgresql;
 
       configureFlags = [
@@ -63,7 +63,10 @@ in
         mkdir -p $out/share/zabbix/database/
       '' + optionalString sqliteSupport ''
         mkdir -p $out/share/zabbix/database/sqlite3
-        cp -prvd database/sqlite3/*.sql $out/share/zabbix/database/sqlite3/
+        cp -prvd database/sqlite3/schema.sql $out/share/zabbix/database/sqlite3/
+      '' + optionalString mysqlSupport ''
+        mkdir -p $out/share/zabbix/database/mysql
+        cp -prvd database/mysql/schema.sql $out/share/zabbix/database/mysql/
       '' + optionalString postgresqlSupport ''
         mkdir -p $out/share/zabbix/database/postgresql
         cp -prvd database/postgresql/schema.sql $out/share/zabbix/database/postgresql/

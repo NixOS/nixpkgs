@@ -1,14 +1,15 @@
 { stdenv, fetchgit
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
-  name = "liburing-${version}";
-  version = "1.0.0pre156_${builtins.substring 0 7 src.rev}";
+  pname = "liburing";
+  version = "0.2pre252_${builtins.substring 0 8 src.rev}";
 
   src = fetchgit {
     url    = "http://git.kernel.dk/liburing";
-    rev    = "c31c7ec4bcd7bb0d7b28897d730431c02b9d4ea1";
-    sha256 = "17d6s03fyajcrijca9d2d6llbf8cl8dyalpxnl39az3452p04s11";
+    rev    = "a9bb08db3f8795eb58239d5dbb888e9c1d424011";
+    sha256 = "0gv06fcgqhfkqgiqzjb4qzpxh3h595ypw01a0kmhqnmsnvmb624n";
   };
 
   separateDebugInfo = true;
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ./examples/io_uring-cp examples/io_uring-test $out/bin
     cp ./examples/link-cp $out/bin/io_uring-link-cp
+    cp ./examples/ucontext-cp $out/bin/io_uring-ucontext-cp
   '';
 
   meta = with stdenv.lib; {

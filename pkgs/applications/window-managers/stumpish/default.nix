@@ -1,9 +1,8 @@
 { stdenv, substituteAll, fetchFromGitHub, gnused, ncurses, xorg, rlwrap }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stumpish";
   version = "0.0.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "stumpwm";

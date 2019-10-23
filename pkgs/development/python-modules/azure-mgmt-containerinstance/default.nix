@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerinstance";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "87919f3e618ec0a40fd163d763113eef908e78c50d8b76bf4dd795444cb069fd";
+    sha256 = "1kd8lxm5kzk0wxbw1f3vin10hlhb4sygrxqd5c8k715s0ipkhmdh";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Container Instance Client Library";
-    homepage = https://github.com/Azure/sdk-for-python/tree/master/azure-mgmt-containerinstance;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

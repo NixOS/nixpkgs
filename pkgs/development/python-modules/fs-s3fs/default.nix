@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fs-s3fs";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "49bfa4572bb11e37324dd43be935ab99376259eff652365aef0e4a747bb11418";
+    sha256 = "0v4pqyflkpz6sp1884jfsxsa68wnxai4rd5la6sgf3s6civ8qzxm";
   };
 
   propagatedBuildInputs = [ fs six boto3 ];

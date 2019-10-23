@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.22.4";
+  version = "1.22.6";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "1wgrrb9vb3myl8xgck8ik86876ycbg8crylybs3ssi21vrxqwnsc";
+    sha256 = "1pnma62kib6zbs4wr7h5g53v3p81jb8cvyvqcvaidb1hlfibwnvm";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   configureFlags = [
-    "--with-udev-base-dir=${placeholder ''out''}/lib/udev"
+    "--with-udev-base-dir=${placeholder "out"}/lib/udev"
   ];
 
   nativeBuildInputs = [

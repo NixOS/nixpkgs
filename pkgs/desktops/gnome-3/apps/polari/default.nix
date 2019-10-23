@@ -5,13 +5,13 @@
 
 let
   pname = "polari";
-  version = "3.32.2";
+  version = "3.34.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0h0w9j3y067l911gpj446b3a2w1i2vzr1w2a7cz7i5rhn6qkf2sp";
+    sha256 = "09g2ylx2fwm55h28w0c03fxkdvlwmr2yc033m93c4acz1h30rjns";
   };
 
   propagatedUserEnvPkgs = [ telepathy-idle telepathy-logger ];

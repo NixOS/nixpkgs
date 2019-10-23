@@ -7,7 +7,7 @@
 assert cudnnSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
-  name = "mxnet-${version}";
+  pname = "mxnet";
   version = "1.5.0";
 
   src = fetchurl {

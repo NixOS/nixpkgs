@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
 
   makeFlags = [
-    "DOC_DIR=${placeholder ''doc''}/share/doc/most"
+    "DOC_DIR=${placeholder "doc"}/share/doc/most"
   ];
 
   preConfigure = ''

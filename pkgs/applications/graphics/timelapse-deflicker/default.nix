@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "timelapse-deflicker-${version}";
+  pname = "timelapse-deflicker";
   version = "0.1.0";
 
   src = fetchFromGitHub {
