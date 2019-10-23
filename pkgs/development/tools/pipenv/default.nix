@@ -33,6 +33,10 @@ buildPythonApplication rec {
   ];
 
   doCheck = false;
+  makeWrapperArgs = [
+    "--set PYTHONPATH \".:$PYTHONPATH\""
+    "--set PIP_IGNORE_INSTALLED 1"
+  ];
 
   meta = with lib; {
     description = "Python Development Workflow for Humans";
