@@ -710,6 +710,8 @@ in
 
   iamy = callPackage ../tools/admin/iamy { };
 
+  azure-cli = callPackage ../tools/admin/azure-cli { python = python3; };
+
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
