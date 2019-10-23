@@ -399,6 +399,8 @@ in {
 
   azure-mgmt-powerbiembedded = callPackage ../development/python-modules/azure-mgmt-powerbiembedded { };
 
+  azure-mgmt-privatedns = callPackage ../development/python-modules/azure-mgmt-privatedns { };
+
   azure-mgmt-rdbms = callPackage ../development/python-modules/azure-mgmt-rdbms { };
 
   azure-mgmt-recoveryservices = callPackage ../development/python-modules/azure-mgmt-recoveryservices { };
