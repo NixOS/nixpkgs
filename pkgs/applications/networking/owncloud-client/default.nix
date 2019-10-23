@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, mkDerivation, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, sqlite }:
+{ stdenv, fetchurl, mkDerivation, cmake, libsecret, pkgconfig, qtbase, qtwebkit, qtkeychain, sqlite }:
+
+let
+  qtkeychainWithLibsecret = qtkeychain.override {
+    withLibsecret = true;
+  };
+in
 
 mkDerivation rec {
   pname = "owncloud-client";
@@ -10,7 +16,11 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ qtbase qtwebkit qtkeychain sqlite ];
+  buildInputs = [ qtbase qtwebkit qtkeychainWithLibsecret sqlite ];
+
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libsecret ]}"
+  ];
 
   cmakeFlags = [
     "-UCMAKE_INSTALL_LIBDIR"
