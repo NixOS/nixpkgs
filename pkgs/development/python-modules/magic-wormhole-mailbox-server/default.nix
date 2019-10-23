@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi, six, attrs, twisted, pyopenssl, service-identity, autobahn, treq, mock }:
 
 buildPythonPackage rec {
-  version = "0.3.1";
+  version = "0.4.1";
   pname = "magic-wormhole-mailbox-server";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q6zhbx8fcpk7rchclm7yqcxdsc1x97hki2ji61sa544r5xvxv55";
+    sha256 = "1yw8i8jv5iv1kkz1aqimskw7fpichjn6ww0fq0czbalwj290bw8s";
   };
 
   propagatedBuildInputs = [ six attrs twisted pyopenssl service-identity autobahn ];
