@@ -1,10 +1,8 @@
-{ stdenv, fetchurl, cmake
+{ stdenv, lib, fetchurl, cmake
 , curl, openssl, zlib
 , libiconv
 , version, sha256, ...
 }:
-
-with stdenv.lib;
 
 stdenv.mkDerivation {
   pname = "mariadb-connector-c";
@@ -26,13 +24,12 @@ stdenv.mkDerivation {
   ];
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
-  preConfigure = optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
   '';
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ curl openssl zlib ];
-  buildInputs = [ libiconv ];
+  buildInputs = [ libiconv curl openssl zlib ];
 
   enableParallelBuilding = true;
 
@@ -43,7 +40,7 @@ stdenv.mkDerivation {
     ln -sv mariadb_version.h $out/include/mariadb/mysql_version.h
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Client library that can be used to connect to MySQL or MariaDB";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ globin ];
