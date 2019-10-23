@@ -309,6 +309,8 @@ in {
 
   azure-mgmt-billing = callPackage ../development/python-modules/azure-mgmt-billing { };
 
+  azure-mgmt-botservice = callPackage ../development/python-modules/azure-mgmt-botservice { };
+
   azure-mgmt-cdn = callPackage ../development/python-modules/azure-mgmt-cdn { };
 
   azure-mgmt-cognitiveservices = callPackage ../development/python-modules/azure-mgmt-cognitiveservices { };
