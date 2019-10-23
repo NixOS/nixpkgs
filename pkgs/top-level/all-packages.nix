@@ -693,7 +693,7 @@ in
 
   iamy = callPackage ../tools/admin/iamy { };
 
-  azure-cli = nodePackages_10_x.azure-cli;
+  azure-cli = callPackage ../tools/admin/azure-cli { python = python3; };
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
