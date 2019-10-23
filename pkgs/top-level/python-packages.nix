@@ -381,6 +381,8 @@ in {
 
   azure-mgmt-machinelearningcompute = callPackage ../development/python-modules/azure-mgmt-machinelearningcompute { };
 
+  azure-mgmt-managedservices = callPackage ../development/python-modules/azure-mgmt-managedservices { };
+
   azure-mgmt-managementgroups = callPackage ../development/python-modules/azure-mgmt-managementgroups { };
 
   azure-mgmt-managementpartner = callPackage ../development/python-modules/azure-mgmt-managementpartner { };
