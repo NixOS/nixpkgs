@@ -8558,8 +8558,11 @@ in
 
   swift = callPackage ../development/compilers/swift { };
 
-  swiProlog = callPackage ../development/compilers/swi-prolog { };
-  swiPrologWithGui = callPackage ../development/compilers/swi-prolog { withGui = true; };
+  swiProlog = callPackage ../development/compilers/swi-prolog {
+    openssl = openssl_1_0_2;
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+  swiPrologWithGui = swiProlog.override { withGui = true; };
 
   tbb = callPackage ../development/libraries/tbb { };
 
