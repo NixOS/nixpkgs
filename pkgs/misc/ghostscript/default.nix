@@ -62,6 +62,20 @@ stdenv.mkDerivation rec {
       url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=db24f253409d5d085c2760c814c3e1d3fa2dac59";
       sha256 = "1h6kpwc6ryr6jlxjr6bfnvmmf8x0kqmyjlx3hggqjs23n0wsr9p9";
     })
+    ./9.26-CVE-2019-10216.patch
+    (fetchpatch {
+        name = "CVE-2019-14811.CVE-2019-14812.CVE-2019-14813.patch";
+        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=885444fcbe10dc42787ecb76686c8ee4dd33bf33";
+        sha256 = "19928sr7xpx7iibk9gn127g0r1yv2lcfpwgk2ipzz4wgrs3f5j70";
+    })
+    (fetchpatch {
+        name = "CVE-2019-14817-partial.patch";
+        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=cd1b1cacadac2479e291efe611979bdc1b3bdb19";
+        # patch doesn't apply cleanly to all files, but at least partially applying it fixes
+        # *some* of the problematic sites.
+        excludes = ["Resource/Init/pdf_font.ps" "Resource/Init/pdf_draw.ps"];
+        sha256 = "04sy05svm3d2hyyzq41x5aqg3cgg2shaq08ivdqsys95nlihccpn";
+    })
   ];
 
   outputs = [ "out" "man" "doc" ];
