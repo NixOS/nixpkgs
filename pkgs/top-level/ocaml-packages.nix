@@ -1103,11 +1103,6 @@ let
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-
-    monotoneViz = callPackage ../applications/version-management/monotone-viz {
-      inherit (pkgs.gnome2) libgnomecanvas glib;
-    };
-
     unison = callPackage ../applications/networking/sync/unison {
       enableX11 = config.unison.enableX11 or true;
     };

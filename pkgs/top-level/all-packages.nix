@@ -19700,7 +19700,9 @@ in
     lua = lua5;
   };
 
-  inherit (ocaml-ng.ocamlPackages_4_01_0) monotoneViz;
+  monotoneViz = callPackage ../applications/version-management/monotone-viz {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_01_0;
+  };
 
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
