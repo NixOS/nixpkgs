@@ -1,17 +1,18 @@
 { lib
-, buildPythonApplication
-, certifi
-, setuptools
-, invoke
-, parver
-, pip
-, requests
-, virtualenv
-, fetchPypi
-, virtualenv-clone
+, python3
 }:
 
-buildPythonApplication rec {
+with python3.pkgs;
+
+let
+  runtimeDeps = [
+    certifi
+    setuptools
+    pip
+    virtualenv
+    virtualenv-clone
+  ];
+in buildPythonApplication rec {
   pname = "pipenv";
   version = "2018.11.26";
 
@@ -24,17 +25,11 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ invoke parver ];
 
-  propagatedBuildInputs = [
-    certifi
-    setuptools
-    pip
-    virtualenv
-    virtualenv-clone
-  ];
+  propagatedBuildInputs = runtimeDeps;
 
   doCheck = false;
   makeWrapperArgs = [
-    "--set PYTHONPATH \".:$PYTHONPATH\""
+    "--set PYTHONPATH ${makePythonPath runtimeDeps}"
     "--set PIP_IGNORE_INSTALLED 1"
   ];
 
