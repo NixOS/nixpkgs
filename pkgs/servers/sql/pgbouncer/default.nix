@@ -9,10 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0gi7ggmyjqd4kxdwm5csmzmjmfrjx7q20dfzk3da1bvc6xj6ag0v";
   };
 
-  buildInputs = [ libevent openssl c-ares pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libevent openssl c-ares ];
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://pgbouncer.github.io;
+    homepage = "https://pgbouncer.github.io";
     description = "Lightweight connection pooler for PostgreSQL";
     license = licenses.isc;
     platforms = platforms.all;
