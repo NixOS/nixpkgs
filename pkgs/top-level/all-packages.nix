@@ -13103,7 +13103,7 @@ in
     libressl_2_9
     libressl_3_0;
 
-  libressl = libressl_2_9;
+  libressl = libressl_3_0;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
