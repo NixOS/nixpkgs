@@ -15355,6 +15355,24 @@ let
     };
   };
 
+  SDL = buildPerlModule {
+    pname = "SDL";
+    version = "2.548";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FROGGS/SDL-2.548.tar.gz";
+      sha256 = "252a192bfa9c2070a4883707d139c3a45d9c4518ccd66a1e699b5b7959bd4fb5";
+    };
+    perlPreHook = "export LD=$CC";
+    preCheck = "rm t/core_audiospec.t";
+    buildInputs = [ AlienSDL CaptureTiny TestDeep TestDifferences TestException TestMost TestWarn ]
+      ++ (with pkgs; [ SDL SDL_gfx SDL_mixer SDL_image SDL_ttf SDL_Pango SDL_net ] );
+    propagatedBuildInputs = [ FileShareDir TieSimple ];
+    meta = {
+      description = "SDL bindings to Perl";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  };
+
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
     version = "4.007";
