@@ -363,6 +363,8 @@ in {
 
   azure-mgmt-hdinsight = callPackage ../development/python-modules/azure-mgmt-hdinsight { };
 
+  azure-mgmt-imagebuilder = callPackage ../development/python-modules/azure-mgmt-imagebuilder { };
+
   azure-mgmt-iotcentral = callPackage ../development/python-modules/azure-mgmt-iotcentral { };
 
   azure-mgmt-iothub = callPackage ../development/python-modules/azure-mgmt-iothub { };
