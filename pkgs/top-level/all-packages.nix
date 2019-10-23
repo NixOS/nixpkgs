@@ -2207,6 +2207,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
   };
 
+  isomd5sum = callPackage ../tools/cd-dvd/isomd5sum { };
+
   mdf2iso = callPackage ../tools/cd-dvd/mdf2iso { };
 
   nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
