@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "azure-servicefabric";
-  version = "6.4.0.0";
+  version = "6.5.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "f049e8c4a179f1277f2ec60158f88caf14a50f7df491fc6841e360cd61746da1";
+    sha256 = "02q32rc3vmg3kpi92s2y2ic47s3mi9qjcvzvrpjdlzji8lhd9w45";
   };
 
   propagatedBuildInputs = [
