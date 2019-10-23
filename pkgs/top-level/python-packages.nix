@@ -263,6 +263,8 @@ in {
 
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
 
+  azure-functions-devops-build = callPackage ../development/python-modules/azure-functions-devops-build { };
+
   azure-graphrbac = callPackage ../development/python-modules/azure-graphrbac { };
 
   azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
