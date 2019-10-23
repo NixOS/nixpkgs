@@ -5092,6 +5092,8 @@ in {
 
   vsts = callPackage ../development/python-modules/vsts { };
 
+  vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
+
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
   webassets = callPackage ../development/python-modules/webassets { };
