@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
 
 stdenv.mkDerivation rec {
-  version = "1.23.0"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
+  version = "1.24.3"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "14svfy7lvz8lf6b7zg1fbypj2n46n9gq0ldgnv85jm0ikv72cgv6";
+    sha256 = "19g3fihds9rih2ciypkwi4jahjaymyqnjhd9id397fgj1qkw4w69";
+    fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags ];
