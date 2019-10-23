@@ -210,6 +210,27 @@ let
      };
   };
 
+  AlienSDL = buildPerlModule {
+    pname = "Alien-SDL";
+    version = "1.446";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FROGGS/Alien-SDL-1.446.tar.gz";
+      sha256 = "c9aa2c9dc3c63d89773c7d7203f2a46d1b924d0c72d9f801af147a3dc8bc512a";
+    };
+    patches = [ ../development/perl-modules/alien-sdl.patch ];
+
+    installPhase = "./Build install --prefix $out";
+
+    SDL_INST_DIR = pkgs.SDL.dev;
+    buildInputs = [ ArchiveExtract ArchiveZip TextPatch pkgs.SDL ];
+    propagatedBuildInputs = [ CaptureTiny FileShareDir FileWhich ];
+
+    meta = {
+      description = "Get, Build and Use SDL libraries";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AlienTidyp = buildPerlModule {
     pname = "Alien-Tidyp";
     version = "1.4.7";
