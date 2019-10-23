@@ -4507,10 +4507,18 @@ in
   nodejs-slim-12_x = callPackage ../development/web/nodejs/v12.nix {
     enableNpm = false;
   };
+  nodejs-13_x = callPackage ../development/web/nodejs/v13.nix { };
+  nodejs-slim-13_x = callPackage ../development/web/nodejs/v13.nix {
+    enableNpm = false;
+  };
 
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs-12_x;
-  nodejs-slim_latest = nodejs-slim-12_x;
+  nodejs_latest = nodejs-13_x;
+  nodejs-slim_latest = nodejs-slim-13_x;
+
+  nodePackages_13_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v13.nix {
+    nodejs = pkgs.nodejs-13_x;
+  });
 
   nodePackages_12_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v12.nix {
     nodejs = pkgs.nodejs-12_x;
