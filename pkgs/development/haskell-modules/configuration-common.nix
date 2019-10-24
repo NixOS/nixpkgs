@@ -1048,7 +1048,7 @@ self: super: {
     generateOptparseApplicativeCompletion "dhall" (
       dontCheck super.dhall
   );
-  dhall_1_26_1 = dontCheck super.dhall_1_26_1;
+  dhall_1_27_0 = dontCheck super.dhall_1_27_0;
 
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
@@ -1202,8 +1202,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_26_1; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_26_1; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_27_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_27_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
