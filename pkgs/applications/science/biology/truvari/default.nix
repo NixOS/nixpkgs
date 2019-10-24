@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, pythonPackages
+, buildPythonPackage
 , pyvcf
 , python-Levenshtein
 , progressbar2
@@ -9,7 +9,7 @@
 , intervaltree
 }:
 
-pythonPackages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "truvari";
   version = "1.3.2";
 
