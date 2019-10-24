@@ -3,8 +3,8 @@
 , fetchFromGitHub
 , pytest
 }:
-buildPythonPackage rec {
 
+buildPythonPackage rec {
   pname = "PyVCF";
   version = "0.6.8";
 
@@ -29,5 +29,4 @@ buildPythonPackage rec {
       types specified in the meta-information lines
     '';
   };
-
 }
