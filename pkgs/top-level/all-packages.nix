@@ -3402,6 +3402,10 @@ in
 
   gifski = callPackage ../tools/graphics/gifski { };
 
+  git-backup = callPackage ../applications/version-management/git-backup {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-big-picture = callPackage ../applications/version-management/git-and-tools/git-big-picture { };
 
   git-crecord = callPackage ../applications/version-management/git-crecord { };
