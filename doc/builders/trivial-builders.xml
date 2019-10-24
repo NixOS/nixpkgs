@@ -1,7 +1,7 @@
-<section xmlns="http://docbook.org/ns/docbook"
+<chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
-         xml:id="sec-trivial-builders">
+         xml:id="chap-trivial-builders">
  <title>Trivial builders</title>
 
  <para>
@@ -76,4 +76,4 @@
    </listitem>
   </varlistentry>
  </variablelist>
-</section>
+</chapter>

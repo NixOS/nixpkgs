@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
 
-  patches = lib.optional (stdenv.isDarwin && withQt5) [ xcodePatch ];
+  patches = (lib.optional (stdenv.isDarwin && withQt5) xcodePatch) ++
+            (lib.optional (!withQt5) ./fix-qt4-build.patch );
 
   enableParallelBuilding = true;
 

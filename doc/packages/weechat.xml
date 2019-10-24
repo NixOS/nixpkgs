@@ -1,0 +1,85 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-weechat">
+  <title>Weechat</title>
+
+  <para>
+   Weechat can be configured to include your choice of plugins, reducing its closure size from the default configuration which includes all available plugins. To make use of this functionality, install an expression that overrides its configuration such as
+<programlisting>weechat.override {configure = {availablePlugins, ...}: {
+    plugins = with availablePlugins; [ python perl ];
+  }
+}</programlisting>
+   If the <literal>configure</literal> function returns an attrset without the <literal>plugins</literal> attribute, <literal>availablePlugins</literal> will be used automatically.
+  </para>
+
+  <para>
+   The plugins currently available are <literal>python</literal>, <literal>perl</literal>, <literal>ruby</literal>, <literal>guile</literal>, <literal>tcl</literal> and <literal>lua</literal>.
+  </para>
+
+  <para>
+   The python and perl plugins allows the addition of extra libraries. For instance, the <literal>inotify.py</literal> script in weechat-scripts requires D-Bus or libnotify, and the <literal>fish.py</literal> script requires pycrypto. To use these scripts, use the plugin's <literal>withPackages</literal> attribute:
+<programlisting>weechat.override { configure = {availablePlugins, ...}: {
+    plugins = with availablePlugins; [
+            (python.withPackages (ps: with ps; [ pycrypto python-dbus ]))
+        ];
+    };
+}
+</programlisting>
+  </para>
+
+  <para>
+   In order to also keep all default plugins installed, it is possible to use the following method:
+<programlisting>weechat.override { configure = { availablePlugins, ... }: {
+  plugins = builtins.attrValues (availablePlugins // {
+    python = availablePlugins.python.withPackages (ps: with ps; [ pycrypto python-dbus ]);
+  });
+}; }
+</programlisting>
+  </para>
+
+  <para>
+   WeeChat allows to set defaults on startup using the <literal>--run-command</literal>. The <literal>configure</literal> method can be used to pass commands to the program:
+<programlisting>weechat.override {
+  configure = { availablePlugins, ... }: {
+    init = ''
+      /set foo bar
+      /server add freenode chat.freenode.org
+    '';
+  };
+}</programlisting>
+   Further values can be added to the list of commands when running <literal>weechat --run-command "your-commands"</literal>.
+  </para>
+
+  <para>
+   Additionally it's possible to specify scripts to be loaded when starting <literal>weechat</literal>. These will be loaded before the commands from <literal>init</literal>:
+<programlisting>weechat.override {
+  configure = { availablePlugins, ... }: {
+    scripts = with pkgs.weechatScripts; [
+      weechat-xmpp weechat-matrix-bridge wee-slack
+    ];
+    init = ''
+      /set plugins.var.python.jabber.key "val"
+    '':
+  };
+}</programlisting>
+  </para>
+
+  <para>
+   In <literal>nixpkgs</literal> there's a subpackage which contains derivations for WeeChat scripts. Such derivations expect a <literal>passthru.scripts</literal> attribute which contains a list of all scripts inside the store path. Furthermore all scripts have to live in <literal>$out/share</literal>. An exemplary derivation looks like this:
+<programlisting>{ stdenv, fetchurl }:
+
+stdenv.mkDerivation {
+  name = "exemplary-weechat-script";
+  src = fetchurl {
+    url = "https://scripts.tld/your-scripts.tar.gz";
+    sha256 = "...";
+  };
+  passthru.scripts = [ "foo.py" "bar.lua" ];
+  installPhase = ''
+    mkdir $out/share
+    cp foo.py $out/share
+    cp bar.lua $out/share
+  '';
+}</programlisting>
+  </para>
+</section>

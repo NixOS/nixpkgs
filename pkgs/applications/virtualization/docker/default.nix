@@ -19,7 +19,7 @@ rec {
       name = "docker-runc-${version}";
       inherit version;
       src = fetchFromGitHub {
-        owner = "docker";
+        owner = "opencontainers";
         repo = "runc";
         rev = runcRev;
         sha256 = runcSha256;
@@ -198,14 +198,14 @@ rec {
   });
 
   # Get revisions from
-  # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
+  # https://github.com/docker/docker-ce/tree/${version}/components/engine/hack/dockerfile/install/*
 
   docker_18_09 = makeOverridable dockerGen {
     version = "18.09.9";
     rev = "039a7df9ba8097dd987370782fcdd6ea79b26016";
     sha256 = "0wqhjx9qs96q2jd091wffn3cyv2aslqn2cvpdpgljk8yr9s0yg7h";
-    runcRev = "425e105d5a03fabd737a126ad93d62a9eeede87f";
-    runcSha256 = "05s4p12mgmdcy7gjralh41wlgds6m69zdgwbpdn1xjj2487dmhxf";
+    runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
+    runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
     containerdRev = "894b81a4b802e4eb2a91d1ce216b8817763c29fb";
     containerdSha256 = "0sp5mn5wd3xma4svm6hf67hyhiixzkzz6ijhyjkwdrc4alk81357";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";
@@ -216,8 +216,8 @@ rec {
     version = "19.03.2";
     rev = "6a30dfca03664a0b6bf0646a7d389ee7d0318e6e";
     sha256 = "0bghqwxlx4v06bwcv3c2wizbihhf983gvypx5sjcbgmiyd3bgb47";
-    runcRev = "425e105d5a03fabd737a126ad93d62a9eeede87f";
-    runcSha256 = "05s4p12mgmdcy7gjralh41wlgds6m69zdgwbpdn1xjj2487dmhxf";
+    runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
+    runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
     containerdRev = "894b81a4b802e4eb2a91d1ce216b8817763c29fb";
     containerdSha256 = "0sp5mn5wd3xma4svm6hf67hyhiixzkzz6ijhyjkwdrc4alk81357";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";

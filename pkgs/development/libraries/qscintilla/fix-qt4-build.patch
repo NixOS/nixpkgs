@@ -1,0 +1,11 @@
+diff -ur QScintilla_gpl-2.9.4/Qt4Qt5/Qsci/qsciscintillabase.h QScintilla_gpl-2.9.4-fix/Qt4Qt5/Qsci/qsciscintillabase.h
+--- QScintilla_gpl-2.9.4/Qt4Qt5/Qsci/qsciscintillabase.h	2016-12-25 23:01:54.000000000 +0100
++++ QScintilla_gpl-2.9.4-fix/Qt4Qt5/Qsci/qsciscintillabase.h	2019-10-22 09:07:55.429260135 +0200
+@@ -31,6 +31,7 @@
+ #include <QByteArray>
+ #include <QPoint>
+ #include <QTimer>
++#include <QUrl>
+ 
+ #include <Qsci/qsciglobal.h>
+ 
