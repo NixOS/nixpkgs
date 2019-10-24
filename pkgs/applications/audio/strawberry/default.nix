@@ -35,13 +35,13 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "01j5jzzicy895kg9sjy46lbcm5kvf3642d3q5wwb2fyvyq1fbcv0";
+    sha256 = "1kqx0q99n1p5pm6skvqjihz11byhxdid1qw6gqp67dh2na62z1lm";
   };
 
   buildInputs = [
@@ -91,7 +91,7 @@ mkDerivation rec {
     description = "Music player and music collection organizer";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
-    # upstream says darwin should work but they lack maintainers as of 0.6.3
+    # upstream says darwin should work but they lack maintainers as of 0.6.5
     platforms = platforms.linux;
   };
 }
