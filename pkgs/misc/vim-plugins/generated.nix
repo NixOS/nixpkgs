@@ -2708,6 +2708,17 @@ let
     };
   };
 
+  vader-vim = buildVimPluginFrom2Nix {
+    pname = "vader-vim";
+    version = "2019-05-18";
+    src = fetchFromGitHub {
+      owner = "junegunn";
+      repo = "vader.vim";
+      rev = "de8a976f1eae2c2b680604205c3e8b5c8882493c";
+      sha256 = "1pibls5s74fkzvj7spdpdn2s6zka0zxg4yr02s6jd0bcniq210b5";
+    };
+  };
+
   vCoolor-vim = buildVimPluginFrom2Nix {
     pname = "vCoolor-vim";
     version = "2018-10-06";
