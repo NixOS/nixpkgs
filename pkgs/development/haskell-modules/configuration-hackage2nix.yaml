@@ -7960,7 +7960,6 @@ broken-packages:
   - polydata
   - polydata-core
   - polynomial
-  - polysemy
   - polysemy-plugin
   - polysemy-RandomFu
   - polysemy-zoo
