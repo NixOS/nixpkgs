@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo ];
     homepage = https://github.com/nwoltman/srt-to-vtt-cl;
+    platforms = platforms.linux;
   };
 }
