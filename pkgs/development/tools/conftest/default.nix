@@ -4,15 +4,6 @@ buildGoModule rec {
   pname = "conftest";
   version = "0.14.0";
 
-  # Something subtle in the go sum db is causing every download to
-  # get a new sum (and thus breaking the hash). This disables the
-  # fetching of the sum from the go sum database.
-  modBuildPhase = ''
-    runHook preBuild
-    GONOSUMDB=* go mod download
-    runHook postBuild
-  '';
-
   src = fetchFromGitHub {
     owner = "instrumenta";
     repo = "conftest";

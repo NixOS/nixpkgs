@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.17";
+  version = "0.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15zw6i5z5p8vsa3lp20rjizhv4lzz935r73im0xm6zsl71bsgvj8";
+    sha256 = "0bf55mqnz3l3ii26dvx33d35fv7jn7p5kmfwnr0xbpj38sxvhfr4";
   };
 
   postPatch = ''
