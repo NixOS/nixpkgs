@@ -7,7 +7,7 @@ let
     {fullName, src, version ? "testing"}:
 
     stdenv. mkDerivation rec {
-      name = "${fullName}-${version}";
+      name = "${fullName}-slim-theme-${version}";
 
       inherit src;
 
@@ -16,12 +16,12 @@ let
       dontBuild = true;
 
       installPhase = ''
-        install -dm755 $out/share/slim/themes/${name}
-        install -m644 * $out/share/slim/themes/${name}
+        install -dm755 $out/share/slim/themes/${fullName}
+        install -m644 * $out/share/slim/themes/${fullName}
       '';
 
       meta = {
-        description = "Slim theme for ${fullName}";
+        description = "A theme for SLiM (Simple Login Manager)";
         platforms = stdenv.lib.platforms.linux;
       };
     };
@@ -174,7 +174,7 @@ in {
   };
 
   nixosSlim = buildTheme {
-    fullName = "nixos-slim";
+    fullName = "nixos";
     src = fetchurl {
       url = "https://github.com/jagajaga/nixos-slim-theme/archive/2.0.tar.gz";
       sha256 = "0lldizhigx7bjhxkipii87y432hlf5wdvamnfxrryf9z7zkfypc8";
