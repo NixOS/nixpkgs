@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "XStatic-Bootstrap";
-  version = "3.3.7.1";
+  version = "4.1.3.1";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0c949e78e8cd77983fd803a68a98df0124e0c3a872fddb9ac8e6e5b4a487f131";
+    sha256 = "1800e6bb5fc687604d8a893eee8c7882d800a6f3d6721799016f99a47d1dac0f";
   };
 
   # no tests implemented
