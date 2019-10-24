@@ -70,6 +70,16 @@ in rec {
       name = "python-remove-bin-bytecode-hook";
     } ./python-remove-bin-bytecode-hook.sh) {};
 
+  requirementsCheckHook = callPackage ({ pip, setuptools }:
+    makeSetupHook {
+      name = "check-requirements-hook";
+      deps = [ pip setuptools ];
+      substitutions = {
+        inherit pythonCheckInterpreter;
+        requirementsCheckScript = ../check-requirements/check-requirements.py;
+      };
+  } ./requirements-check-hook.sh) {};
+
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {
       name = "setuptools-setup-hook";
