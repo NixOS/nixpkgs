@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
     description = "A free messaging app that combines chat & messaging services into one application";
     homepage = https://meetfranz.com;
     license = licenses.free;
-    maintainers = with maintainers; [ davidtwco gnidorah ];
+    maintainers = [ maintainers.davidtwco ];
     platforms = ["x86_64-linux"];
     hydraPlatforms = [];
   };
