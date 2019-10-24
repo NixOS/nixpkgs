@@ -1167,6 +1167,8 @@ in {
 
   pyvcd = callPackage ../development/python-modules/pyvcd { };
 
+  pyvcf = callPackage ../development/python-modules/pyvcf { };
+
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
