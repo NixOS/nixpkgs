@@ -1,9 +1,9 @@
 { stdenv
-, fetchzip
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , makeWrapper
-, python
+, python2
 , db
 , fuse
 , asciidoc
@@ -15,25 +15,17 @@
 , pkgconfig
 , judy
 , pam
+, spdlog
 , zlib # optional
 }:
 
-let
-  # See https://github.com/lizardfs/lizardfs/blob/3.12/cmake/Libraries.cmake
-  # We have to download it ourselves, as the build script normally does a download
-  # on-build, which is not good
-  spdlog = fetchzip {
-    name = "spdlog-0.14.0";
-    url = "https://github.com/gabime/spdlog/archive/v0.14.0.zip";
-    sha256 = "13730429gwlabi432ilpnja3sfvy0nn2719vnhhmii34xcdyc57q";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lizardfs";
   version = "3.12.0";
 
   src = fetchFromGitHub {
-    owner = "lizardfs";
-    repo = "lizardfs";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
     sha256 = "0zk73wmx82ari3m2mv0zx04x1ggsdmwcwn7k6bkl5c0jnxffc4ax";
   };
@@ -42,26 +34,23 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ db fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
-      zlib boost judy pam
+      zlib boost judy pam spdlog python2
     ];
 
   patches = [
-    ./remove-download-external.patch
+    # Use system-provided spdlog instead of downloading an old one (next two patches)
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/lizardfs/raw/d003c371/debian/patches/system-spdlog.patch";
+      sha256 = "1znpqqzb0k5bb7s4d7abfxzn5ry1khz8r76sb808c95cpkw91a9i";
+    })
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/lizardfs/raw/bfcd5bcf/debian/patches/spdlog.patch";
+      sha256 = "0j44rb816i6kfh3y2qdha59c4ja6wmcnlrlq29il4ybxn42914md";
+    })
   ];
 
-  postUnpack = ''
-    mkdir $sourceRoot/external/spdlog-0.14.0
-    cp -R ${spdlog}/* $sourceRoot/external/spdlog-0.14.0/
-    chmod -R 755 $sourceRoot/external/spdlog-0.14.0/
-  '';
-
-  postInstall = ''
-    wrapProgram $out/sbin/lizardfs-cgiserver \
-        --prefix PATH ":" "${python}/bin"
-  '';
-
   meta = with stdenv.lib; {
-    homepage = https://lizardfs.com;
+    homepage = "https://lizardfs.com";
     description = "A highly reliable, scalable and efficient distributed file system";
     platforms = platforms.linux;
     license = licenses.gpl3;
