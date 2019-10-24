@@ -1,14 +1,14 @@
 { stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "bibata-cursors";
-  version = "0.4.1";
-
+  pname = "bibata-extra-cursors";
+  version = "unstable-2018-10-28";
+  
   src = fetchFromGitHub {
     owner = "KaizIqbal";
-    repo = "Bibata_Cursor";
-    rev = "v${version}";
-    sha256 = "14gvpjp4gv0m59qr8wls7xs5yjx5llldyzack5kg5cg2mzk2nsml";
+    repo = "Bibata_Extra_Cursor";
+    rev = "66fb64b8dbe830e3f7ba2c2bdc4dacae7c438789";
+    sha256 = "1xb7v06sbxbwzd7cnghv9c55lpbbkcaf1nswdrqy87gd0bnpdd2n";
   };
 
   postPatch = ''
@@ -32,10 +32,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with stdenvNoCC.lib; {
-    description = "Material Based Cursor";
-    homepage = https://github.com/KaizIqbal/Bibata_Cursor;
+    description = "Cursors Based on Bibata";
+    homepage = https://github.com/KaizIqbal/Bibata_Extra_Cursor;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rawkode ];
+    maintainers = with maintainers; [ dtzWill ];
   };
 }
