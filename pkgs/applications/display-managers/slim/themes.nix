@@ -4,7 +4,7 @@
 
 let
   buildTheme =
-    {fullName, src, version ? "testing"}:
+    {fullName, src, version ? "unstable"}:
 
     stdenv. mkDerivation rec {
       name = "${fullName}-${version}";
@@ -93,8 +93,8 @@ in {
   };
 
   lunar = buildTheme {
-    fullName = "lunar-0.4";
-    version = "";
+    fullName = "lunar";
+    version = "0.4";
     src = fetchurl {
       url = "mirror://sourceforge/slim.berlios/slim-lunar-0.4.tar.bz2";
       sha256 = "1543eb45e4d664377e0dd4f7f954aba005823034ba9692624398b3d58be87d76";
@@ -175,6 +175,7 @@ in {
 
   nixosSlim = buildTheme {
     fullName = "nixos-slim";
+    version = "2.0";
     src = fetchurl {
       url = "https://github.com/jagajaga/nixos-slim-theme/archive/2.0.tar.gz";
       sha256 = "0lldizhigx7bjhxkipii87y432hlf5wdvamnfxrryf9z7zkfypc8";
