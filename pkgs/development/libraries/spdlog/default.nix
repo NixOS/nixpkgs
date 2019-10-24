@@ -3,7 +3,7 @@
 let
   generic = { version, sha256 }:
     stdenv.mkDerivation {
-      name = "spdlog-${version}";
+      pname = "spdlog";
       inherit version;
 
       src = fetchFromGitHub {
@@ -15,7 +15,7 @@ let
 
       nativeBuildInputs = [ cmake ];
 
-      cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLES=OFF" "-DSPDLOG_BUILD_BENCH=OFF" ];
+      cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLE=OFF" "-DSPDLOG_BUILD_BENCH=OFF" ];
 
       outputs = [ "out" "doc" ];
 
@@ -25,8 +25,8 @@ let
       '';
 
       meta = with stdenv.lib; {
-        description    = "Very fast, header only, C++ logging library.";
-        homepage       = https://github.com/gabime/spdlog;
+        description    = "Very fast, header only, C++ logging library";
+        homepage       = "https://github.com/gabime/spdlog";
         license        = licenses.mit;
         maintainers    = with maintainers; [ obadz ];
         platforms      = platforms.all;
