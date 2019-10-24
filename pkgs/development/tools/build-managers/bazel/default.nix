@@ -222,8 +222,10 @@ stdenv.mkDerivation rec {
         sha256 = "03c1bwlq5bs3hg96v4g4pg2vqwhqq6w538h66rcpw02f83yy7fs8";
       };
 
-    in {
+    in (if !stdenv.hostPlatform.isDarwin then {
+      # `extracted` doesn’t work on darwin
       shebang = callPackage ./shebang-test.nix { inherit runLocal extracted bazelTest distDir; };
+    } else {}) // {
       bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; };
       cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
       java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
