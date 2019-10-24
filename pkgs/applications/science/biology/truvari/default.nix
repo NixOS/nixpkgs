@@ -1,15 +1,9 @@
 { lib
 , fetchFromGitHub
-, buildPythonPackage
-, pyvcf
-, python-Levenshtein
-, progressbar2
-, pysam
-, pyfaidx
-, intervaltree
+, python3Packages
 }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   pname = "truvari";
   version = "1.3.2";
 
@@ -20,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0wmjz8nzibvj0ixky1m0qi7iyd204prk7glbvig1cvaab33k19f1";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     pyvcf
     python-Levenshtein
     progressbar2
