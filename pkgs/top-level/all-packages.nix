@@ -23124,7 +23124,7 @@ in
 
   trimal = callPackage ../applications/science/biology/trimal { };
 
-  truvari = python3Packages.callPackage ../applications/science/biology/truvari { };
+  truvari = callPackage ../applications/science/biology/truvari { };
 
   varscan = callPackage ../applications/science/biology/varscan { };
 
