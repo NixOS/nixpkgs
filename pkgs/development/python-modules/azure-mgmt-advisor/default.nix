@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-advisor";
-  version = "2.0.1";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1929d6d5ba49d055fdc806e981b93cf75ea42ba35f78222aaf42d8dcf29d4ef3";
+    sha256 = "c52a4cf91d736c0ecdcb4d555e3b7713ff892343f610e7d65c63549edb98c221";
   };
 
   propagatedBuildInputs = [
