@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, python
 , pythonPackages
 , pyvcf
 , python-Levenshtein
@@ -9,8 +8,8 @@
 , pyfaidx
 , intervaltree
 }:
-pythonPackages.buildPythonPackage rec {
 
+pythonPackages.buildPythonPackage rec {
   pname = "truvari";
   version = "1.3.2";
 
@@ -32,8 +31,8 @@ pythonPackages.buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace ./setup.py \
-      --replace "pysam==0.15.2" "pysam==0.15.3" \
-      --replace "progressbar2==3.41.0" "progressbar2==3.42.0"
+      --replace '"progressbar2==3.41.0",' "" \
+      --replace '"pysam==0.15.2",' ""
   '';
 
   meta = with lib; {
@@ -47,5 +46,4 @@ pythonPackages.buildPythonPackage rec {
       is created by Spiral Genetics.
     '';
   };
-
 }
