@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "aioredis";
-  version = "1.2.0";
+  version = "1.3.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06i53xpz4x6qrmdxqwvkpd17lbgmwfq20v0jrwc73f5y57kjpml4";
+    sha256 = "86da2748fb0652625a8346f413167f078ec72bdc76e217db7e605a059cd56e86";
   };
 
   propagatedBuildInputs = [
