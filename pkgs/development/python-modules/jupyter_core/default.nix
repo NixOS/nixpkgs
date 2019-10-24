@@ -6,18 +6,19 @@
 , glibcLocales
 , mock
 , pytest
+, nose
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_core";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xr4pbghwk5hayn5wwnhb7z95380r45p79gf5if5pi1akwg7qvic";
+    sha256 = "85103cee6548992780912c1a0a9ec2583a4a18f1ef79a248ec0db4446500bce3";
   };
 
-  checkInputs = [ pytest mock glibcLocales ];
+  checkInputs = [ pytest mock glibcLocales nose ];
   propagatedBuildInputs = [ ipython traitlets ];
 
   patches = [ ./tests_respect_pythonpath.patch ];

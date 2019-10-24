@@ -86,6 +86,16 @@
   <itemizedlist>
    <listitem>
     <para>
+      GnuPG is now built without support for a graphical passphrase entry
+      by default. Please enable the <literal>gpg-agent</literal> user service
+      via the NixOS option <literal>programs.gnupg.agent.enable</literal>.
+      Note that upstream recommends using <literal>gpg-agent</literal> and
+      will spawn a <literal>gpg-agent</literal> on the first invocation of
+      GnuPG anyway.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The <literal>dynamicHosts</literal> option has been removed from the
      <link linkend="opt-networking.networkmanager.enable">networkd</link>
      module. Allowing (multiple) regular users to override host entries
@@ -128,6 +138,14 @@
   <itemizedlist>
    <listitem>
      <para>SD images are now compressed by default using <literal>bzip2</literal>.</para>
+   </listitem>
+   <listitem>
+    <para>
+     OpenSSH has been upgraded from 7.9 to 8.1, improving security and adding features
+     but with potential incompatibilities.  Consult the
+     <link xlink:href="https://www.openssh.com/txt/release-8.1">
+     release announcement</link> for more information.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

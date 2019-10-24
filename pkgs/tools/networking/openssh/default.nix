@@ -13,16 +13,16 @@ let
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
     url = "https://salsa.debian.org/ssh-team/openssh/raw/"
-      + "d80ebbf028196b2478beebf5a290b97f35e1eed9"
+      + "e50a98bda787a3b9f53ed67bdccbbac0bde1f9ae"
       + "/debian/patches/gssapi.patch";
-    sha256 = "14j9cabb3gkhkjc641zbiv29mbvsmgsvis3fbj8ywsd21zc7m2wv";
+    sha256 = "14j9cabb3gkhkjc641zbiv29mbvsmgsvis3fbj8ywsd21zc7m2hv";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "openssh";
-  version = if hpnSupport then "7.8p1" else "7.9p1";
+  version = if hpnSupport then "7.8p1" else "8.1p1";
 
   src = if hpnSupport then
       fetchurl {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${pname}-${version}.tar.gz";
-        sha256 = "1b8sy6v0b8v4ggmknwcqx3y1rjcpsll0f1f8f4vyv11x4ni3njvb";
+        sha256 = "1zwk3g57gb13br206k6jdhgnp6y1nibwswzraqspbl1m73pxpx82";
       };
 
   patches =
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
 
+      ./ssh-keysign.patch
+    ] ++ optional hpnSupport
       # CVE-2018-20685, can probably be dropped with next version bump
       # See https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt
       # for details
@@ -50,9 +52,6 @@ stdenv.mkDerivation rec {
         url = https://github.com/openssh/openssh-portable/commit/6010c0303a422a9c5fa8860c061bf7105eb7f8b2.patch;
         sha256 = "0q27i9ymr97yb628y44qi4m11hk5qikb1ji1vhvax8hp18lwskds";
       })
-
-      ./ssh-keysign.patch
-    ]
     ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 
   postPatch =
@@ -89,6 +88,8 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "--disable-libutil"
     ++ optional (!linkOpenssl) "--without-openssl";
 
+  buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
+
   enableParallelBuilding = true;
 
   hardeningEnable = [ "pie" ];
@@ -111,5 +112,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ eelco aneeshusa ];
+    broken = hpnSupport;
   };
 }

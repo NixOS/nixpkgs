@@ -47,5 +47,5 @@ which also builds binary packages from the Nix expressions in Nixpkgs for
 The binaries are made available via a [binary cache](https://cache.nixos.org).
 
 The current Nix expressions of the channels are available in the
-[`nixpkgs-channels`](https://github.com/NixOS/nixpkgs-channels) repository,
-which has branches corresponding to the available channels.
+[`nixpkgs`](https://github.com/NixOS/nixpkgs) repository in branches
+that correspond to the channel names (e.g. `nixos-19.09-small`).

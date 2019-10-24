@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "0.9.18";
+  version = "0.9.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05648f9b22aeeda9d32e61b46fa78c9ff28f217d69005b3b19ffb75d5992187e";
+    sha256 = "f622fd9d0f5a0df253f0e6773713c3df61306b64abdfb202d39a85dcba1d1f59";
   };
 
   buildInputs = [ pytest ];

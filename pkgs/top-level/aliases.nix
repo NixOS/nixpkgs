@@ -290,6 +290,11 @@ mapAliases ({
   pg_hll = postgresqlPackages.pg_hll;
   pg_cron = postgresqlPackages.pg_cron;
   pg_topn = postgresqlPackages.pg_topn;
+  pinentry_curses = pinentry-curses; # added 2019-10-14
+  pinentry_emacs = pinentry-emacs; # added 2019-10-14
+  pinentry_gtk2 = pinentry-gtk2; # added 2019-10-14
+  pinentry_qt = pinentry-qt; # added 2019-10-14
+  pinentry_gnome = pinentry-gnome; # added 2019-10-14
   postgis = postgresqlPackages.postgis;
   # end
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
@@ -344,6 +349,7 @@ mapAliases ({
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
+  spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_60 instead."; # added 2019-10-16
   sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   squid4 = squid;  # added 2019-08-22

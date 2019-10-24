@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "runway-python";
-  version = "0.4.0";
+  version = "0.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd23550211aa8542d9c06516e25c32de3963fff50d0793d94def271a4e2b4514";
+    sha256 = "25e68f371f89815b0b7b21a9b8eb0229cd9634c09aedc1c2c5a307bc62239eec";
   };
 
   propagatedBuildInputs = [ flask flask-cors numpy pillow gevent wget six colorcet ];
