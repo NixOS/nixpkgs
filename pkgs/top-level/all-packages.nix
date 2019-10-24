@@ -18611,9 +18611,9 @@ in
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
 
   inherit (callPackages ../applications/networking/browsers/chromium-git { })
-    chromium-git_77
     chromium-git_78
-    chromium-git_79;
+    chromium-git_79
+    chromium-git_80;
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
