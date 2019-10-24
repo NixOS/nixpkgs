@@ -89,7 +89,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Music player and music collection organizer";
-    license = licenses.gpl2;
+    homepage = "https://www.strawberrymusicplayer.org/";
+    changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${version}/Changelog";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.5
     platforms = platforms.linux;
