@@ -3,7 +3,7 @@
 , python3Packages
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "truvari";
   version = "1.3.2";
 
