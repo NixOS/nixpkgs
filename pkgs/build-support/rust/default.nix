@@ -18,6 +18,7 @@
   verifyCargoDeps ? false
 , buildType ? "release"
 , meta ? {}
+, target ? null
 
 , cargoVendorDir ? null
 , ... } @ args:
@@ -50,12 +51,13 @@ let
   rustHostConfig = {
     x86_64-pc-mingw32 = "x86_64-pc-windows-gnu";
   }.${hostConfig} or hostConfig;
+  rustTarget = if target == null then rustHostConfig else target;
 
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${rustHostConfig}/${buildType}";
+  releaseDir = "target/${rustTarget}/${buildType}";
 in
 
 stdenv.mkDerivation (args // {
@@ -88,7 +90,7 @@ stdenv.mkDerivation (args // {
     [target."${stdenv.buildPlatform.config}"]
     "linker" = "${ccForBuild}"
     ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${rustHostConfig}"]
+    [target."${rustTarget}"]
     "linker" = "${ccForHost}"
     ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
       stdenv.lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
@@ -133,7 +135,7 @@ stdenv.mkDerivation (args // {
       "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
       cargo build \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
-        --target ${rustHostConfig} \
+        --target ${rustTarget} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
