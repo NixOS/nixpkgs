@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.4.0";
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bce169cf2d1b3ff9ce607d1787f608758e72a498434eaa2bece31eea1f51963a";
+    sha256 = "408a7756b980df148d1f2fd59cd690ad4870d7e3c3c5e46c6b5c2e71fc6a097c";
   };
 
   checkInputs = [ pytest parameterized nbsmoke flake8 coveralls xarray networkx streamz ];
