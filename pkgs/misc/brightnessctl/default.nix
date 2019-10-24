@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils }:
+{ stdenv, fetchFromGitHub, coreutils, pkg-config, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "brightnessctl";
@@ -11,11 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "0immxc7almmpg80n3bdn834p3nrrz7bspl2syhb04s3lawa5y2lq";
   };
 
-  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
+  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" "ENABLE_SYSTEMD=1" ];
 
   postPatch = ''
     substituteInPlace 90-brightnessctl.rules --replace /bin/ ${coreutils}/bin/
+    # For backward compatibility with the NixOS module / udev approach:
+    substituteInPlace Makefile --replace "INSTALL_UDEV_RULES=0" "INSTALL_UDEV_RULES=1"
   '';
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ systemd ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Hummer12007/brightnessctl";
