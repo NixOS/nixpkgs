@@ -4347,7 +4347,7 @@ in {
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
-    doCheck = !isPy3k;
+    doCheck = false;
     protobuf = pkgs.protobuf;
   };
 

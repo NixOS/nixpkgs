@@ -6,6 +6,7 @@
 , markdown
 , futures
 , absl-py
+, wheel
 }:
 
 # tensorflow/tensorboard is built from a downloaded wheel, because
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "1.14.0";
+  version = "2.0.0";
   format = "wheel";
 
   src = fetchPypi ({
@@ -23,10 +24,10 @@ buildPythonPackage rec {
     format = "wheel";
   } // (if isPy3k then {
     python = "py3";
-    sha256 = "1z631614jk5zgasgmwfr33gz8bwv11p9f5llzlwvx3a8rnyv3q2h";
+    sha256 = "0hz9nn4bbr1k5iwdrsrcdvkg36qswqdzbgsrlbkp53ddrhb9cmfk";
   } else {
     python = "py2";
-    sha256 = "1clv29yy942l3mfar2z6wkkk6l18fz7j6mi2dfz24j9dln0scny3";
+    sha256 = "1r44xi5la0iawnnl1asak2j0x9zdgag17s96mp8vw4p84s18qghl";
   }));
 
   propagatedBuildInputs = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     protobuf
     markdown
     grpcio absl-py
+    wheel
   ] ++ lib.optional (!isPy3k) futures;
 
   meta = with stdenv.lib; {
