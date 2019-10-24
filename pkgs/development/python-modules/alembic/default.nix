@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.0.11";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cdb7d98bd5cbf65acd38d70b1c05573c432e6473a82f955cdea541b5c153b0cc";
+    sha256 = "9f907d7e8b286a1cfb22db9084f9ce4fde7ad7956bb496dc7c952e10ac90e36a";
   };
 
   buildInputs = [ pytest pytestcov mock coverage ];
