@@ -42,6 +42,7 @@ with python3.pkgs; buildPythonApplication rec {
     install -D misc/__khal $out/share/zsh/site-functions/__khal
 
     # man page
+    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib_newsfeed ])}/bin:$PATH" \
     make -C doc man
     install -Dm755 doc/build/man/khal.1 -t $out/share/man/man1
 

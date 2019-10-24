@@ -8541,8 +8541,11 @@ in
 
   swift = callPackage ../development/compilers/swift { };
 
-  swiProlog = callPackage ../development/compilers/swi-prolog { };
-  swiPrologWithGui = callPackage ../development/compilers/swi-prolog { withGui = true; };
+  swiProlog = callPackage ../development/compilers/swi-prolog {
+    openssl = openssl_1_0_2;
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+  swiPrologWithGui = swiProlog.override { withGui = true; };
 
   tbb = callPackage ../development/libraries/tbb { };
 
@@ -21635,6 +21638,8 @@ in
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
 
+  x11spice = callPackage ../tools/X11/x11spice { };
+
   x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
 
   x2goserver = callPackage ../applications/networking/remote/x2goserver { };
@@ -23666,7 +23671,9 @@ in
   # Since version 8 Eagle requires an Autodesk account and a subscription
   # in contrast to single payment for the charged editions.
   # This is the last version with the old model.
-  eagle7 = callPackage ../applications/science/electronics/eagle/eagle7.nix { };
+  eagle7 = callPackage ../applications/science/electronics/eagle/eagle7.nix {
+    openssl = openssl_1_0_2;
+  };
 
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 

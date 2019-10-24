@@ -1758,7 +1758,7 @@
     name = "Chris Double";
   };
   dpaetzel = {
-    email = "david.a.paetzel@gmail.com";
+    email = "david.paetzel@posteo.de";
     github = "dpaetzel";
     githubId = 974130;
     name = "David Pätzel";
@@ -6707,6 +6707,11 @@
     github = "troydm";
     githubId = 483735;
     name = "Dmitry Geurkov";
+  };
+  tscholak = {
+    email = "torsten.scholak@googlemail.com";
+    github = "tscholak";
+    name = "Torsten Scholak";
   };
   tstrobel = {
     email = "4ZKTUB6TEP74PYJOPWIR013S2AV29YUBW5F9ZH2F4D5UMJUJ6S@hash.domains";

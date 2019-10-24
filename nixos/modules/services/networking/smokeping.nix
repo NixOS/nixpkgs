@@ -299,7 +299,8 @@ in
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
         rm -f ${smokepingHome}/cropper
         ln -s ${cfg.package}/htdocs/cropper ${smokepingHome}/cropper
-        cp ${cgiHome} ${smokepingHome}/smokeping.fcgi
+        rm -f ${smokepingHome}/smokeping.fcgi
+        ln -s ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
@@ -314,5 +315,7 @@ in
       serviceConfig.Restart = "always";
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ erictapen ];
 }
 

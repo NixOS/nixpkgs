@@ -109,6 +109,22 @@
      reconfiguring <literal>hostsdir</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>99-main.network</literal> file was removed. Maching all
+      network interfaces caused many breakages, see
+      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18962">#18962</link>
+        and <link xlink:href="https://github.com/NixOS/nixpkgs/pull/71106">#71106</link>.
+    </para>
+    <para>
+      We already don't support the global <link linkend="opt-networking.useDHCP">networking.useDHCP</link>,
+      <link linkend="opt-networking.defaultGateway">networking.defaultGateway</link> and
+      <link linkend="opt-networking.defaultGateway6">networking.defaultGateway6</link> options
+      if <link linkend="opt-networking.useNetworkd">networking.useNetworkd</link> is enabled,
+      but direct users to configure the per-device
+      <link linkend="opt-networking.interfaces">networking.interfaces.&lt;name&gt;.…</link> options.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
