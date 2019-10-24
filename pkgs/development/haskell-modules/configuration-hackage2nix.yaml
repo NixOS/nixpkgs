@@ -2821,6 +2821,7 @@ broken-packages:
   - aeson-tiled
   - aeson-typescript
   - affection
+  - affine
   - affine-invariant-ensemble-mcmc
   - afv
   - ag-pictgen
@@ -2830,6 +2831,7 @@ broken-packages:
   - agda-snippets-hakyll
   - agentx
   - AGI
+  - agum
   - AhoCorasick
   - aig
   - aip
@@ -2844,6 +2846,7 @@ broken-packages:
   - alex-meta
   - alex-prelude
   - alfred
+  - alg
   - alga
   - algebra
   - algebra-sql
@@ -2956,6 +2959,7 @@ broken-packages:
   - ApproxFun-hs
   - arb-fft
   - arbb-vm
+  - arbor-monad-counter
   - arbor-monad-logger
   - arbor-monad-metric
   - arbor-monad-metric-datadog
@@ -3175,6 +3179,7 @@ broken-packages:
   - bidirectionalization-combined
   - bidispec
   - bidispec-extras
+  - bifunctor
   - BiGUL
   - billboard-parser
   - billeksah-forms
@@ -3415,6 +3420,7 @@ broken-packages:
   - c0parser
   - c2ats
   - c2hsc
+  - ca
   - cabal-audit
   - cabal-bundle-clib
   - cabal-cache
@@ -3525,6 +3531,7 @@ broken-packages:
   - Catana
   - catch-fd
   - categorical-algebra
+  - category
   - category-extras
   - category-traced
   - catnplus
@@ -3688,6 +3695,7 @@ broken-packages:
   - cmonad
   - cmph
   - cmt
+  - cmu
   - cmv
   - cnc-spec-compiler
   - co-log
@@ -3817,7 +3825,9 @@ broken-packages:
   - constrained-category
   - constrained-dynamic
   - constrained-monads
+  - constraint
   - constraint-manip
+  - constraint-reflection
   - ConstraintKinds
   - constraints-emerge
   - constructive-algebra
@@ -3862,6 +3872,7 @@ broken-packages:
   - COrdering
   - core
   - core-haskell
+  - core-program
   - corebot-bliki
   - CoreDump
   - CoreErlang
@@ -3936,6 +3947,7 @@ broken-packages:
   - cryptocompare
   - cryptoconditions
   - cryptol
+  - cryptostore
   - cryptsy-api
   - crystalfontz
   - csa
@@ -6419,6 +6431,7 @@ broken-packages:
   - iteratee-stm
   - iterIO
   - iterio-server
+  - ival
   - ivor
   - ivory
   - ivory-backend-c
@@ -7182,6 +7195,8 @@ broken-packages:
   - mlist
   - mltool
   - mm2
+  - mmsyn2
+  - mmsyn4
   - mmtf
   - mmtl
   - mmtl-base
@@ -7946,6 +7961,7 @@ broken-packages:
   - polydata
   - polydata-core
   - polynomial
+  - polysemy
   - polysemy-plugin
   - polysemy-RandomFu
   - polysemy-zoo
@@ -8018,6 +8034,7 @@ broken-packages:
   - precursor
   - pred-trie
   - predicate-class
+  - predicate-typed
   - prednote
   - prednote-test
   - prefork
@@ -8064,6 +8081,7 @@ broken-packages:
   - procrastinating-variable
   - procstat
   - producer
+  - product
   - prof2dot
   - prof2pretty
   - progress
@@ -8250,6 +8268,7 @@ broken-packages:
   - rasa-ext-vim
   - rascal
   - Rasenschach
+  - rational-list
   - rattle
   - rattletrap
   - raven-haskell-scotty
@@ -8280,6 +8299,7 @@ broken-packages:
   - read-io
   - reader-soup
   - readline-statevar
+  - readme-lhs
   - readpyc
   - readshp
   - really-simple-xml-parser
@@ -8657,6 +8677,8 @@ broken-packages:
   - Semantique
   - semdoc
   - semi-iso
+  - semialign-indexed
+  - semialign-optics
   - semibounded-lattices
   - Semigroup
   - semigroupoids-syntax
@@ -9018,6 +9040,7 @@ broken-packages:
   - SourceGraph
   - sousit
   - soyuz
+  - spacecookie
   - SpaceInvaders
   - spacepart
   - SpacePrivateers
@@ -9258,6 +9281,7 @@ broken-packages:
   - swearjure
   - swf
   - swift-lda
+  - sws
   - syb-extras
   - syb-with-class-instances-text
   - SybWidget
@@ -9728,6 +9752,7 @@ broken-packages:
   - unagi-bloomfilter
   - unagi-streams
   - unamb-custom
+  - unbeliever
   - unbound
   - unbound-kind-generics
   - unbounded-delays-units
