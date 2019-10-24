@@ -131,7 +131,7 @@ in {
           -jar ${pkgs.airsonic}/webapps/airsonic.war
         '';
         Restart = "always";
-        User = "airsonic";
+        User = cfg.user;
         UMask = "0022";
       };
     };
@@ -143,11 +143,12 @@ in {
       };
     };
 
-    users.users.airsonic = {
-      description = "Airsonic service user";
-      name = cfg.user;
-      home = cfg.home;
-      createHome = true;
+    users.users = optionalAttrs (cfg.user == "airsonic") {
+      airsonic = {
+        description = "Airsonic service user";
+        home = cfg.home;
+        createHome = true;
+      };
     };
   };
 }
