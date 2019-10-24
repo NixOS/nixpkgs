@@ -1272,4 +1272,8 @@ self: super: {
   # upstream issue: https://github.com/vmchale/atspkg/issues/12
   language-ats = dontCheck super.language-ats;
 
+  # polysemy has occasional test failures from what looks like buggy async tests.
+  # We think this will probably be fixed when updating to the polysemy version in LTS-15.
+  polysemy = dontCheck super.polysemy;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
