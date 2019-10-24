@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.4.1";
+    version = "2.5.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0sqsp7ikmg5v48n1sy7l4913g906hyi1g9sikxd07n8vysp0ncx8";
+      sha256 = "e4e6b2861c4f29ed5d84ca497ca7053ae1cc9b9a5387389c457ff9f7e651bf19";
     };
 
     propagatedBuildInputs = [
