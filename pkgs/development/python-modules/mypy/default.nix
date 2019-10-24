@@ -1,5 +1,7 @@
 { stdenv, fetchPypi, buildPythonPackage, typed-ast, psutil, isPy3k
-,mypy_extensions }:
+, mypy-extensions
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "mypy";
@@ -15,7 +17,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ typed-ast psutil mypy_extensions ];
+  propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];
 
   meta = with stdenv.lib; {
     description = "Optional static typing for Python";
