@@ -147,6 +147,8 @@ in
 
   buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
 
+  buildLazyBinaries = callPackage ../build-support/build-lazy-binaries.nix { };
+
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
