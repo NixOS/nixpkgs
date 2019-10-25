@@ -468,6 +468,7 @@ xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview
 Yggdroot/indentLine
+Yggdroot/LeaderF
 zah/nim.vim
 zchee/deoplete-clang
 zchee/deoplete-go

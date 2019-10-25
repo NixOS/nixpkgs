@@ -213,6 +213,30 @@ self: super: {
     meta.maintainers = with stdenv.lib.maintainers; [ minijackson ];
   };
 
+  LeaderF = super.LeaderF.overrideAttrs(old: {
+    buildInputs = [
+      python3
+      stdenv
+    ];
+    buildPhase = ''
+      patchShebangs .
+      export PY3=ON
+      ./install.sh
+    '';
+    # HACK: Installing this plugin triggers Vim/Neovim to reload along with
+    # this plugin, which triggers autoload/lfMru.vim to load, which in turn
+    # attempts to read the g:Lf_CacheDirectory setting. That setting is set to
+    # $HOME, which during the build points to the non-existent
+    # /homeless-shelter. lfMru.vim tries to create the directory but lacks
+    # sufficient permissions, so this code forces g:Lf_CacheDirectory to point
+    # to $TMPDIR only when $HOME == /homeless-shelter, i.e., only during builds.
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/LeaderF/autoload/lfMru.vim \
+        --replace "let g:Lf_CacheDirectory = substitute(g:Lf_CacheDirectory, '[\/]$', ''', ''')" \
+        "if g:Lf_CacheDirectory == '/homeless-shelter' ''\n  let g:Lf_CacheDirectory = '$TMPDIR' ''\nendif''\n''\nlet g:Lf_CacheDirectory = substitute(g:Lf_CacheDirectory, '[\/]$', ''', ''')"
+    '';
+  });
+
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";

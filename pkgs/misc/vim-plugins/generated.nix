@@ -1486,6 +1486,17 @@ let
     };
   };
 
+  LeaderF = buildVimPluginFrom2Nix {
+    pname = "LeaderF";
+    version = "2019-10-15";
+    src = fetchFromGitHub {
+      owner = "Yggdroot";
+      repo = "LeaderF";
+      rev = "00af3cd7d2648a0e11f7220f6df1a1d790d2fbe1";
+      sha256 = "11kfhpfzkcsm0df5rkmhbf22d8y1kq26x3gr84zb7pn4pail7nca";
+    };
+  };
+
   lean-vim = buildVimPluginFrom2Nix {
     pname = "lean-vim";
     version = "2017-05-03";
