@@ -23,10 +23,6 @@ mkDerivation {
     inherit (s) url sha256;
   };
 
-  preConfigure = ''
-    qmakeFlags+=(*.pro)
-  '';
-
   qmakeFlags = [
     "TARGET_INSTALL_PATH=${placeholder "out"}/bin"
     "PLUGIN_INSTALL_PATH=${placeholder "out"}/lib/qpdfview"
@@ -35,6 +31,7 @@ mkDerivation {
     "ICON_INSTALL_PATH=${placeholder "out"}/share/icons/hicolor/scalable/apps"
     "LAUNCHER_INSTALL_PATH=${placeholder "out"}/share/applications"
     "APPDATA_INSTALL_PATH=${placeholder "out"}/share/appdata"
+    "\*.pro" # escaping needed here
   ];
 
   meta = {
