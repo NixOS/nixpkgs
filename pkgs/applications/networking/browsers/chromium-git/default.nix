@@ -27,7 +27,6 @@ let
     is_debug = false;
     use_jumbo_build = false; # `true` gives at least 2X compilation speedup, but it does not work for some versions
 
-    proprietary_codecs = false;
     enable_nacl = false;
     is_component_build = false;
     is_clang = true;
@@ -49,9 +48,14 @@ let
     use_lld = false;
     use_gold = false;
     use_pulseaudio = true;
+    link_pulseaudio = gnFlags.use_pulseaudio;     
     enable_widevine = false;
     enable_swiftshader = false;
     
+    # enable support for the H.264 codec
+    proprietary_codecs = true;          
+    ffmpeg_branding = "Chrome";         
+
     # explicit host_cpu and target_cpu prevent "nix-shell pkgsi686Linux.chromium-git" from building x86_64 version
     # there is no problem with nix-build, but platform detection in nix-shell is not correct
     host_cpu   = { i686-linux = "x86"; x86_64-linux = "x64"; armv7l-linux = "arm"; aarch64-linux = "arm64"; }.${stdenv.buildPlatform.system};
