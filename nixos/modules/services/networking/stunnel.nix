@@ -223,6 +223,12 @@ in
       };
     };
 
+    meta.maintainers = with maintainers; [
+      # Server side
+      lschuermann
+      # Client side
+      das_j
+    ];
   };
 
 }
