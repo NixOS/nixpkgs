@@ -28,13 +28,14 @@ let
 
       cmakeFlags = [
         "-DWT_CPP_11_MODE=-std=c++11"
-        "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
         "--no-warn-unused-cli"
       ]
       ++ stdenv.lib.optionals (graphicsmagick != null) [
         "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DGM_PREFIX=${graphicsmagick}"
       ]
+      ++ stdenv.lib.optional (harfbuzz != null)
+        "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
       ++ stdenv.lib.optional (libmysqlclient != null)
         "-DMYSQL_PREFIX=${libmysqlclient}";
 
