@@ -326,6 +326,7 @@ posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
 python-mode/python-mode
+qnighy/lalrpop.vim
 qpkorr/vim-bufkill
 Quramy/tsuquyomi
 racer-rust/vim-racer
