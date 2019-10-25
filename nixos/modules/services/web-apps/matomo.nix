@@ -72,19 +72,16 @@ in {
       };
 
       phpfpmProcessManagerConfig = mkOption {
-        type = types.str;
-        default = ''
-          ; default phpfpm process manager settings
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 10
-          pm.min_spare_servers = 5
-          pm.max_spare_servers = 20
-          pm.max_requests = 500
-
-          ; log worker's stdout, but this has a performance hit
-          catch_workers_output = yes
-        '';
+        type = with types; attrsOf (oneOf [ str int bool ]);
+        default = {
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 10;
+          "pm.min_spare_servers" = 5;
+          "pm.max_spare_servers" = 20;
+          "pm.max_requests" = 500;
+          "catch_workers_output" = "yes";
+        };
         description = ''
           Settings for phpfpm's process manager. You might need to change this depending on the load for Matomo.
         '';
@@ -233,15 +230,14 @@ in {
       else if (cfg.webServerUser != null) then cfg.webServerUser else "";
     in {
       ${pool} = {
-        listen = phpSocket;
-        extraConfig = ''
-          listen.owner = ${socketOwner}
-          listen.group = root
-          listen.mode = 0600
-          user = ${user}
-          env[PIWIK_USER_PATH] = ${dataDir}
-          ${cfg.phpfpmProcessManagerConfig}
-        '';
+        settings = {
+          "listen" = "phpSocket;";
+          "listen.owner" = "${socketOwner}";
+          "listen.group" = "root";
+          "listen.mode" = "0600";
+          "user" = "${user}";
+          "env[PIWIK_USER_PATH]" = "${dataDir}";
+        } // cfg.phpfpmProcessManagerConfig;
       };
     };
 
