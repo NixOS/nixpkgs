@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi
 , nose, chai, simplejson, backports_functools_lru_cache
-, dateutil, pytz
+, dateutil, pytz, mock, dateparser
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ nose chai simplejson pytz ];
-  propagatedBuildInputs = [ dateutil backports_functools_lru_cache ];
+  propagatedBuildInputs = [ dateutil backports_functools_lru_cache mock dateparser];
 
   postPatch = ''
     substituteInPlace setup.py --replace "==1.2.1" ""
