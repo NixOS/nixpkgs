@@ -40,6 +40,7 @@ stdenv.mkDerivation {
     ln -sv mariadb_config $out/bin/mysql_config
     ln -sv mariadb $out/lib/mysql
     ln -sv mariadb $out/include/mysql
+    ln -sv mariadb_version.h $out/include/mariadb/mysql_version.h
   '';
 
   meta = {
