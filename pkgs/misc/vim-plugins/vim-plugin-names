@@ -57,6 +57,7 @@ dannyob/quickfixstatus
 darfink/starsearch.vim
 dart-lang/dart-vim-plugin
 davidhalter/jedi-vim
+dcharbon/vim-flatbuffers
 deoplete-plugins/deoplete-dictionary
 deoplete-plugins/deoplete-jedi
 derekelkins/agda-vim
