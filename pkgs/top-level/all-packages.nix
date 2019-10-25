@@ -23469,6 +23469,8 @@ in
 
   aliza = callPackage ../applications/science/medicine/aliza { };
 
+  dcmtk = callPackage ../applications/science/medicine/dcmtk { };
+
   ### PHYSICS
 
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
