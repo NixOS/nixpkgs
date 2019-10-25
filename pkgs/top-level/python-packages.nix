@@ -489,6 +489,8 @@ in {
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
+  cocotb = callPackage ../development/python-modules/cocotb { };
+
   connexion = callPackage ../development/python-modules/connexion { };
 
   cozy = callPackage ../development/python-modules/cozy { };
