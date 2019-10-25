@@ -1257,6 +1257,8 @@ in {
 
   stumpy = callPackage ../development/python-modules/stumpy { };
 
+  stytra = callPackage ../development/python-modules/stytra { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
