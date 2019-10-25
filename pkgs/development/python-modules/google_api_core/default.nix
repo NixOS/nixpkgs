@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
-, google_auth, protobuf, googleapis_common_protos, requests, setuptools, grpcio, futures, mock, pytest }:
+, google_auth, protobuf, googleapis_common_protos, requests, setuptools, grpcio, futures, mock }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
@@ -15,11 +15,16 @@ buildPythonPackage rec {
     googleapis_common_protos protobuf
     google_auth requests setuptools grpcio
   ] ++ lib.optional (pythonOlder "3.2") futures;
-  checkInputs = [ mock pytest ];
 
-  checkPhase = ''
-    py.test
-  '';
+  # requires nox
+  doCheck = false;
+  checkInputs = [ mock ];
+
+  pythonImportsCheck = [
+    "google.auth"
+    "google.protobuf"
+    "google.api"
+  ];
 
   meta = with lib; {
     description = "This library is not meant to stand-alone. Instead it defines common helpers used by all Google API clients.";
