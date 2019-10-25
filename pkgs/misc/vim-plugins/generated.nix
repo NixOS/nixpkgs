@@ -943,6 +943,17 @@ let
     };
   };
 
+  deoplete-tabnine = buildVimPluginFrom2Nix {
+    pname = "deoplete-tabnine";
+    version = "2019-10-16";
+    src = fetchFromGitHub {
+      owner = "tbodt";
+      repo = "deoplete-tabnine";
+      rev = "a05c97b966b78a9d5cb97b9c2d7e1ec2d6962160";
+      sha256 = "1ni16151rknkq66967bwy82xs4pr9xgl5zb7dv447lhl8m3f096g";
+    };
+  };
+
   deoplete-ternjs = buildVimPluginFrom2Nix {
     pname = "deoplete-ternjs";
     version = "2019-09-22";
