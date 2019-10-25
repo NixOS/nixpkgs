@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, python
 , google_api_core, grpcio, pytest, mock, setuptools }:
 
 buildPythonPackage rec {
@@ -14,7 +14,8 @@ buildPythonPackage rec {
   checkInputs = [ pytest mock ];
 
   checkPhase = ''
-    py.test
+    cd tests
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with stdenv.lib; {
