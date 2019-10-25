@@ -10880,6 +10880,7 @@ in
     frei0r = if stdenv.isDarwin then null else frei0r;
     game-music-emu = if stdenv.isDarwin then null else game-music-emu;
     libjack2 = if stdenv.isDarwin then null else libjack2;
+    libvmaf = if stdenv.isDarwin then null else libvmaf;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
     openal = if stdenv.isDarwin then null else openal;
     libmfx = if stdenv.isDarwin then null else intel-media-sdk;
@@ -12644,6 +12645,8 @@ in
   libvisio = callPackage ../development/libraries/libvisio { };
 
   libvisual = callPackage ../development/libraries/libvisual { };
+
+  libvmaf = callPackage ../development/libraries/libvmaf { };
 
   libvncserver = callPackage ../development/libraries/libvncserver {};
 
