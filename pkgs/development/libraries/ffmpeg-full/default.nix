@@ -365,7 +365,7 @@ stdenv.mkDerivation rec {
     (enableFeature ((isLinux || isFreeBSD) && libva != null) "vaapi")
     (enableFeature (libvdpau != null) "vdpau")
     (enableFeature (libvorbis != null) "libvorbis")
-    (enableFeature (libvmaf != null && version3Licensing) "libvmaf")
+    (enableFeature (!isAarch64 && libvmaf != null && version3Licensing) "libvmaf")
     (enableFeature (libvpx != null) "libvpx")
     (enableFeature (libwebp != null) "libwebp")
     (enableFeature (libX11 != null && libXv != null && libXext != null) "xlib")
@@ -427,7 +427,7 @@ stdenv.mkDerivation rec {
   ] ++ optional openglExtlib libGLU_combined
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
-    ++ optional (libvmaf != null  && version3Licensing ) libvmaf
+    ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional nvenc nv-codec-headers
