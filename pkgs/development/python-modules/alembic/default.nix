@@ -15,6 +15,9 @@ buildPythonPackage rec {
   buildInputs = [ pytest pytestcov mock coverage ];
   propagatedBuildInputs = [ Mako sqlalchemy python-editor dateutil setuptools ];
 
+  # no traditional test suite
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/zzzeek/alembic;
     description = "A database migration tool for SQLAlchemy";
