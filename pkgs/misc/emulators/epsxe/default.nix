@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, curl, gdk-pixbuf, glib, gtk3, libGLU_combined,
-  libX11, openssl, ncurses5, SDL, SDL_ttf, unzip, zlib, wrapGAppsHook }:
+  libX11, openssl_1_0_2, ncurses5, SDL, SDL_ttf, unzip, zlib, wrapGAppsHook, autoPatchelfHook }:
 
 with stdenv.lib;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
              else "1677lclam557kp8jwvchdrk27zfj50fqx2q9i3bcx26d9k61q3kl";
   };
 
-  nativeBuildInputs = [ unzip wrapGAppsHook ];
+  nativeBuildInputs = [ unzip wrapGAppsHook autoPatchelfHook ];
   sourceRoot = ".";
 
   buildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     gtk3
     libX11
     libGLU_combined
-    openssl
+    openssl_1_0_2
     ncurses5
     SDL
     SDL_ttf
@@ -40,10 +40,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D ${if stdenv.is64bit then "epsxe_x64" else "ePSXe"} $out/bin/epsxe
-    patchelf \
-      --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-      --set-rpath ${makeLibraryPath buildInputs} \
-      $out/bin/epsxe
   '';
 
   meta = {
