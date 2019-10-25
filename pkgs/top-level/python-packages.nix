@@ -678,6 +678,8 @@ in {
 
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
 
+  holidays = callPackage ../development/python-modules/holidays { };
+
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
