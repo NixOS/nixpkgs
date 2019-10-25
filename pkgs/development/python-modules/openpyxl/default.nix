@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , jdcal
 , et_xmlfile
@@ -10,6 +11,7 @@
 buildPythonPackage rec {
   pname = "openpyxl";
   version = "3.0.0";
+  disabled = isPy27; # 2.6.4 was final python2 release
 
   src = fetchPypi {
     inherit pname version;
