@@ -216,7 +216,6 @@ self: super: {
   LeaderF = super.LeaderF.overrideAttrs(old: {
     buildInputs = [
       python3
-      stdenv
     ];
     buildPhase = ''
       patchShebangs .
