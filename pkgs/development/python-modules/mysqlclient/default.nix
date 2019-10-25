@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, libmysqlclient }:
+{ stdenv, buildPythonPackage, fetchPypi, libmysqlclient, zlib, openssl }:
 
 buildPythonPackage rec {
   pname = "mysqlclient";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    libmysqlclient
+    libmysqlclient zlib openssl
   ];
 
   # Tests need a MySQL database
