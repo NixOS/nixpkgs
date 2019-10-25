@@ -16,7 +16,6 @@ buildPythonPackage rec {
 
   # Remove existing site.cfg, use the one we built for numpy.
   preBuild = ''
-    rm site.cfg
     ln -s ${numpy.cfg} site.cfg
   '';
 
