@@ -17833,6 +17833,8 @@ in
 
   catimg = callPackage ../tools/misc/catimg { };
 
+  catt = python3Packages.callPackage ../applications/video/catt { };
+
   cava = callPackage ../applications/audio/cava { };
 
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
