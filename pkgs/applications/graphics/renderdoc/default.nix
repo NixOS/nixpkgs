@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig
 , qtbase, qtx11extras, qtsvg, makeWrapper
 , vulkan-loader, xorg
 , python3, bison, pcre, automake, autoconf
@@ -11,7 +11,7 @@ let
     sha256 = "00ykqlzx1k9iwqjlc54kfch7cnzsj53hxn7ql70dj3rxqzrnadc0";
   };
 in
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "1.4";
   pname = "renderdoc";
 
