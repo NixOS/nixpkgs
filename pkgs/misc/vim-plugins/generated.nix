@@ -4524,6 +4524,17 @@ let
     };
   };
 
+  vim-protobuf = buildVimPluginFrom2Nix {
+    pname = "vim-protobuf";
+    version = "2017-12-26";
+    src = fetchFromGitHub {
+      owner = "uarun";
+      repo = "vim-protobuf";
+      rev = "0d0f4e4b4087e0e608066aa2ba295e396d039931";
+      sha256 = "1vh9f34rb7pg6dc64xhr102yig6y03is74777av464bhq651z7p5";
+    };
+  };
+
   vim-ps1 = buildVimPluginFrom2Nix {
     pname = "vim-ps1";
     version = "2017-10-20";

@@ -445,6 +445,7 @@ Twinside/vim-hoogle
 tyru/caw.vim
 tyru/open-browser-github.vim
 tyru/open-browser.vim
+uarun/vim-protobuf
 ujihisa/neco-look
 valloric/youcompleteme
 vhda/verilog_systemverilog.vim
