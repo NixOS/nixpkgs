@@ -13,6 +13,7 @@
 , jedi
 , pylint
 , astor
+, yapf
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "0wnnrs36arvimrfgrlbpjw3nx7lppx43yvk2b380ivv69h52i6hl";
   };
 
-  checkInputs = [ astor pytest pyopenssl trustme jedi pylint ];
+  checkInputs = [ astor pytest pyopenssl trustme jedi pylint yapf ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
   checkPhase = ''
     HOME="$(mktemp -d)" py.test -k 'not test_getnameinfo and not test_SocketType_resolve and not test_getprotobyname and not test_waitpid'
