@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "matejak";
     repo = "argbash";
     rev = "${version}";
-    sha256 = "0jzfr2w5pza33mvw6hq6rm1vjgrfy95dp4421403jnji3ziwgf0w";
+    sha256 = "0zara7v3pnwiwkpb0x0g37pxhmim4425q4gba712f6djj115r1mr";
   };
 
   sourceRoot = "${src}/resources";
