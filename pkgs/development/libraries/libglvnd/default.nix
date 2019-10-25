@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
       --replace "-Wl,-Bsymbolic " ""
     substituteInPlace src/EGL/Makefile.am \
       --replace "-Wl,-Bsymbolic " ""
+    substituteInPlace src/GLdispatch/Makefile.am \
+      --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
   '';
 
   NIX_CFLAGS_COMPILE = [
