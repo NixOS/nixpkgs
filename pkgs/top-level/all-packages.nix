@@ -9737,6 +9737,8 @@ in
 
   gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
 
+  gotify-server = callPackage ../servers/gotify { };
+
   gotty = callPackage ../servers/gotty { };
 
   gputils = callPackage ../development/tools/misc/gputils { };
