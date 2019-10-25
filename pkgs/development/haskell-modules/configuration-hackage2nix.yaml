@@ -3096,7 +3096,6 @@ broken-packages:
   - aws-sign4
   - aws-simple
   - aws-sns
-  - axel
   - axiom
   - azubi
   - azure-service-api
@@ -6606,7 +6605,6 @@ broken-packages:
   - kmp-dfa
   - knead
   - knead-arithmetic
-  - knit-haskell
   - knots
   - koellner-phonetic
   - kontra-config
@@ -7960,9 +7958,6 @@ broken-packages:
   - polydata
   - polydata-core
   - polynomial
-  - polysemy-plugin
-  - polysemy-RandomFu
-  - polysemy-zoo
   - polyseq
   - polysoup
   - polytypeable
