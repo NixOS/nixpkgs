@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
 , markupsafe
 , nose
 , mock
-, pytest
 , isPyPy
 }:
 
@@ -17,10 +17,13 @@ buildPythonPackage rec {
     sha256 = "a36919599a9b7dc5d86a7a8988f23a9a3a3d083070023bab23d64f7f1d1e0a4b";
   };
 
-  checkInputs = [ markupsafe nose mock pytest ];
+  checkInputs = [ markupsafe nose mock ];
   propagatedBuildInputs = [ markupsafe ];
 
   doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover
+  '';
 
   meta = {
     description = "Super-fast templating language";
