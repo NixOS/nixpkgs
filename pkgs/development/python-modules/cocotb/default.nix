@@ -24,6 +24,9 @@ buildPythonPackage rec {
       cocotb/share/makefiles/simulators/Makefile.*
     do
       substituteInPlace $f --replace 'shell which' 'shell command -v'
+      # replace hardcoded gcc. Remove once https://github.com/cocotb/cocotb/pull/1137 gets merged
+      substituteInPlace $f --replace 'gcc' '$(CC)'
+      substituteInPlace $f --replace 'g++' '$(CXX)'
     done
   '';
 
