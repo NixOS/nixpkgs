@@ -2,8 +2,6 @@ if [ -e .attrs.sh ]; then source .attrs.sh; fi
 
 source $stdenv/setup
 
-set -x
-
 oldOpts="$(shopt -po nounset)" || true
 set -euo pipefail
 

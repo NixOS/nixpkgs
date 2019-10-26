@@ -1,6 +1,7 @@
 set -eu
 set -o pipefail
 
+export NIX_DEBUG
 if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
