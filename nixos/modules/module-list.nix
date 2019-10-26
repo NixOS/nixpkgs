@@ -200,6 +200,7 @@
   ./security/wrappers/default.nix
   ./security/sudo.nix
   ./security/systemd-confinement.nix
+  ./security/tpm2.nix
   ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
