@@ -128,7 +128,9 @@ in rec {
       references = nativeBuildInputs ++ buildInputs
                 ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
 
-      dependencies = map (map lib.chooseDevOutputs) [
+      filterNull = ds: lib.filter (d: d != null) ds;
+
+      dependencies = map (map filterNull) (map (map lib.chooseDevOutputs) [
         [
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
           (map (drv: drv.nativeDrv or drv) nativeBuildInputs
@@ -145,8 +147,8 @@ in rec {
         [
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
         ]
-      ];
-      propagatedDependencies = map (map lib.chooseDevOutputs) [
+      ]);
+      propagatedDependencies = map (map filterNull) (map (map lib.chooseDevOutputs) [
         [
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuildPropagated)
           (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
@@ -159,7 +161,7 @@ in rec {
         [
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
         ]
-      ];
+      ]);
 
       computedSandboxProfile =
         lib.concatMap (input: input.__propagatedSandboxProfile or [])
