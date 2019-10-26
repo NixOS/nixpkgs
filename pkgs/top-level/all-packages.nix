@@ -18920,6 +18920,8 @@ in
 
   hexcurse = callPackage ../applications/editors/hexcurse { };
 
+  hexdino = callPackage ../applications/editors/hexdino { };
+
   hexedit = callPackage ../applications/editors/hexedit { };
 
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
