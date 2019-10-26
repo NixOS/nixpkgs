@@ -11,13 +11,13 @@
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "0.7.4c";
+  version = "0.7.5e";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon-gdx";
     rev = "v${version}";
-    sha256 = "0bsr8fnc4pips0dbpizzp347nr875b14vkh4jkgnsv03myq2nva4";
+    sha256 = "1wy5qlfsq7dqvn4g0glm1v60xildv44ww3p396wmgi390c9zg18d";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1xi0km54rhlfsis50j1v5pqs6fr36dqkmqgvk0j7qyij7i6qjrnj";
+    outputHash = "1k0v5scadw9ziq4dw2rckmh8x2xlmxslfsxmpw79zg78n3hvwhf1";
   };
 
 in stdenv.mkDerivation rec {
