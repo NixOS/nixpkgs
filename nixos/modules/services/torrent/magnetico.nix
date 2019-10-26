@@ -35,6 +35,7 @@ let
        (if (cfg.web.credentialsFile != null || cfg.web.credentials != { })
          then "--credentials=${toString credFile}"
          else "--no-auth")
+       "--addr=${address}:${toString port}"
      ] ++ extraOptions);
 
 in {
@@ -202,7 +203,7 @@ in {
     assertions =
     [
       {
-        assertion = cfg.web.credentialsFile != null || cfg.web.credentials != { };
+        assertion = cfg.web.credentialsFile == null || cfg.web.credentials == { };
         message = ''
           The options services.magnetico.web.credentialsFile and
           services.magnetico.web.credentials are mutually exclusives.
