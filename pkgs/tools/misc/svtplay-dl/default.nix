@@ -44,6 +44,5 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ maintainers.rycee ];
-    broken = true;
   };
 }

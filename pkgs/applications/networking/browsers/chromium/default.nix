@@ -60,7 +60,7 @@ in let
     unpackCmd = let
       soPath =
         if upstream-info.channel == "stable" then
-          "./opt/google/chrome/libwidevinecdm.so"
+          "./opt/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
         else if upstream-info.channel == "beta" then
           "./opt/google/chrome-beta/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
         else if upstream-info.channel == "dev" then
@@ -112,12 +112,8 @@ in let
         mkdir -p $out
         cp -a ${browser}/* $out/
         chmod u+w $out/libexec/chromium
-        if [[ ${channel} != "dev" ]]; then
-          cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/
-        else
-          mkdir -p $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64
-          cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64/
-        fi
+        mkdir -p $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64
+        cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64/
       ''
     else browser;
 in stdenv.mkDerivation {

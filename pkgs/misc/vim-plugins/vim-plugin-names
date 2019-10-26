@@ -15,6 +15,7 @@ andviro/flake8-vim
 ap/vim-css-color
 arcticicestudio/nord-vim
 artur-shaik/vim-javacomplete2
+ayu-theme/ayu-vim
 autozimu/LanguageClient-neovim
 bazelbuild/vim-bazel
 bbchung/clighter8
@@ -56,6 +57,7 @@ dannyob/quickfixstatus
 darfink/starsearch.vim
 dart-lang/dart-vim-plugin
 davidhalter/jedi-vim
+dcharbon/vim-flatbuffers
 deoplete-plugins/deoplete-dictionary
 deoplete-plugins/deoplete-jedi
 derekelkins/agda-vim
@@ -92,6 +94,7 @@ freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fsharp/vim-fsharp
 garbas/vim-snipmate
+gentoo/gentoo-syntax
 gibiansky/vim-textobj-haskell
 glts/vim-textobj-comment
 gmarik/vundle
@@ -151,6 +154,7 @@ junegunn/fzf.vim
 junegunn/goyo.vim
 junegunn/limelight.vim
 junegunn/seoul256.vim
+junegunn/vader.vim
 junegunn/vim-easy-align
 junegunn/vim-github-dashboard
 junegunn/vim-peekaboo
@@ -296,6 +300,7 @@ neovimhaskell/haskell-vim
 neovimhaskell/nvim-hs.vim
 neovim/nvimdev.nvim
 neutaaaaan/iosvkem
+nfnty/vim-nftables
 nixprime/cpsm
 NLKNguyen/papercolor-theme
 noc7c9/vim-iced-coffee-script
@@ -321,6 +326,7 @@ posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
 python-mode/python-mode
+qnighy/lalrpop.vim
 qpkorr/vim-bufkill
 Quramy/tsuquyomi
 racer-rust/vim-racer
@@ -385,6 +391,7 @@ stephpy/vim-yaml
 t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime
+tbodt/deoplete-tabnine
 ternjs/tern_for_vim
 terryma/vim-expand-region
 terryma/vim-multiple-cursors
@@ -438,6 +445,7 @@ Twinside/vim-hoogle
 tyru/caw.vim
 tyru/open-browser-github.vim
 tyru/open-browser.vim
+uarun/vim-protobuf
 ujihisa/neco-look
 valloric/youcompleteme
 vhda/verilog_systemverilog.vim

@@ -593,7 +593,7 @@ as the interpreter unless overridden otherwise.
 All parameters from `stdenv.mkDerivation` function are still supported. The following are specific to `buildPythonPackage`:
 
 * `catchConflicts ? true`: If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
-* `disabled` ? false: If `true`, package is not build for the particular Python interpreter version.
+* `disabled` ? false: If `true`, package is not built for the particular Python interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment variable in wrapped programs.
 * `installFlags ? []`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.

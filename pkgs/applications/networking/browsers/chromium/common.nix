@@ -140,15 +140,6 @@ let
       ./patches/widevine.patch
     ] ++ optionals (channel == "dev") [
       ./patches/widevine-79.patch
-    ] ++ optionals (channel == "stable") [
-      # Revert "Implement GetFallbackFont on Linux" to fix a performance regression
-      # Remove after https://bugs.chromium.org/p/chromium/issues/detail?id=1003997 is fixed
-      (fetchpatch {
-        url = "https://github.com/chromium/chromium/commit/5a32abe4247f80fdb55c55a289b906b0e42faa5f.patch";
-        sha256 = "1a4jqmki6cyi2dwvaszh01db2diqnz1d50mhpdpby3dd1cw0xmfy";
-        revert = true;
-      })
-
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:

@@ -22,8 +22,12 @@ mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+
+  preConfigure = ''
+    qmakeFlags+=(*.pro)
+  '';
+
   qmakeFlags = [
-    "*.pro"
     "TARGET_INSTALL_PATH=${placeholder "out"}/bin"
     "PLUGIN_INSTALL_PATH=${placeholder "out"}/lib/qpdfview"
     "DATA_INSTALL_PATH=${placeholder "out"}/share/qpdfview"

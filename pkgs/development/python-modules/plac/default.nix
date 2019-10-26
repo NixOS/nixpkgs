@@ -5,11 +5,11 @@
 }:
 buildPythonPackage rec {
   pname = "plac";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b03f967f535b3bf5a71b191fa5eb09872a5cfb1e3b377efc4138995e10ba36d7";
+    sha256 = "10f0blwxn7k2qvd0vs4300jxb8n9r7jhngf9bx9bfxia8akwy5kw";
   };
 
   checkPhase = ''
