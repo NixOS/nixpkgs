@@ -1942,7 +1942,9 @@
     name = "Eric Hegnes";
   };
   ehmry = {
-    email = "emery@vfemail.net";
+    email = "ehmry@posteo.net";
+    github= "ehmry";
+    githubId = 537775;
     name = "Emery Hemingway";
   };
   eikek = {
