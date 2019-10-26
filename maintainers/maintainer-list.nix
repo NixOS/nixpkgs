@@ -6448,6 +6448,16 @@
     githubId = 13026;
     name = "Jonathan Rudenberg";
   };
+  tkerber = {
+    email = "tk@drwx.org";
+    github = "tkerber";
+    githubId = 5722198;
+    name = "Thomas Kerber";
+    keys = [ {
+      longkeyid = "rsa4096/0x8489B911F9ED617B";
+      fingerprint = "556A 403F B0A2 D423 F656  3424 8489 B911 F9ED 617B";
+    } ];
+  };
   tmplt = {
     email = "tmplt@dragons.rocks";
     github = "tmplt";
