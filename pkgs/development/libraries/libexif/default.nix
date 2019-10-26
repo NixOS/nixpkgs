@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
      sha256 = "1qgk8hgnxr8d63jsc4vljxz9yg33mbml280dq4a6050rmk9wq4la";
    })
   ];
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   buildInputs = [ gettext ];
 

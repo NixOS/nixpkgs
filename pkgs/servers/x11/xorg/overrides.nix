@@ -121,9 +121,7 @@ self: super:
     outputs = [ "out" "dev" ];
     propagatedBuildInputs = [ freetype ]; # propagate link reqs. like bzip2
     # prevents "misaligned_stack_error_entering_dyld_stub_binder"
-    configureFlags = lib.optionals isDarwin [
-      "CFLAGS=-O0"
-    ];
+    configureFlags = lib.optional isDarwin "CFLAGS=-O0";
   });
 
   libXxf86vm = super.libXxf86vm.overrideAttrs (attrs: {
@@ -205,9 +203,8 @@ self: super:
   libXi = super.libXi.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = [ self.libXfixes ];
-    configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "xorg_cv_malloc0_returns_null=no"
-    ];
+    configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+      "xorg_cv_malloc0_returns_null=no";
   });
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
@@ -218,7 +215,7 @@ self: super:
 
   libXmu = super.libXmu.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
-    buildFlags = ''BITMAP_DEFINES=-DBITMAPDIR=\"/no-such-path\"'';
+    buildFlags = [ "BITMAP_DEFINES=-DBITMAPDIR=\"/no-such-path\"" ];
   });
 
   libXrandr = super.libXrandr.overrideAttrs (attrs: {
@@ -336,25 +333,25 @@ self: super:
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
-    installFlags = "sdkdir=\${out}/include/xorg";
+    installFlags = [ "sdkdir=\${out}/include/xorg" ];
   });
 
   xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
-    installFlags = "sdkdir=\${out}/include/xorg";
+    installFlags = [ "sdkdir=\${out}/include/xorg" ];
   });
 
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
-    installFlags = "sdkdir=\${out}/include/xorg";
+    installFlags = [ "sdkdir=\${out}/include/xorg" ];
   });
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    installFlags = "sdkdir=\${dev}/include/xorg";
+    installFlags = [ "sdkdir=\${dev}/include/xorg" ];
   });
 
   xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # *.pc pulls xorgserver.dev
-    installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
+    installFlags = [ "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d" ];
   });
 
   xf86inputvmmouse = super.xf86inputvmmouse.overrideAttrs (attrs: {

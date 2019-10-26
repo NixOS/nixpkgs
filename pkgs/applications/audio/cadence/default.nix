@@ -18,10 +18,7 @@
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ qtbase ];
 
-  makeFlags = ''
-    PREFIX=""
-    DESTDIR=$(out)
-  '';
+  makeFlags = [ "PREFIX=\"\"" "DESTDIR=$(out)" ];
 
   propagatedBuildInputs = with python3Packages; [ pyqt5_with_qtwebkit ];
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace "-Werror" ""
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   hardeningDisable = stdenv.lib.optional (stdenv.isi686) "stackprotector";
 
