@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib, expat, pam, perl, fetchpatch
 , intltool, spidermonkey_60 , gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
-, useSystemd ? stdenv.isLinux, systemd
+, useSystemd ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl), systemd
 , withGnome ? true
 , doCheck ? stdenv.isLinux
 }:
