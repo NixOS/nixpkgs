@@ -6904,6 +6904,8 @@ in
 
   whois = callPackage ../tools/networking/whois { };
 
+  wifite2 = callPackage ../tools/networking/wifite2 { };
+
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
   woff2 = callPackage ../development/web/woff2 { };
