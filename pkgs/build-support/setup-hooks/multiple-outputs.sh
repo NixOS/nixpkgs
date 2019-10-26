@@ -172,32 +172,8 @@ _multioutDevs() {
 _multioutPropagateDev() {
     if [ ${#outputs[@]} -eq 1 ]; then return; fi;
 
-    local outputFirst
-    for outputFirst in ${!outputs[@]}; do
-        break
-    done
-    local propagaterOutput="$outputDev"
-    if [ -z "$propagaterOutput" ]; then
-        propagaterOutput="$outputFirst"
-    fi
-
-    # Default value: propagate binaries, includes and libraries
-    if [ -z "${propagatedBuildOutputs[@]+1}" ]; then
-        local po_dirty="$outputBin $outputInclude $outputLib"
-        set +o pipefail
-        propagatedBuildOutputs=($(echo "$po_dirty" \
-            | tr -s ' ' '\n' | grep -v -F "$propagaterOutput" \
-            | sort -u | tr '\n' ' '))
-        set -o pipefail
-    fi
-
-    # The variable was explicitly set to empty or we resolved it so
-    if [ -z "${propagatedBuildOutputs[@]}" ]; then
-        return
-    fi
-
     mkdir -p "${!propagaterOutput}"/nix-support
     for output in "${propagatedBuildOutputs[@]}"; do
-        echo -n " ${!output}" >> "${!propagaterOutput}"/nix-support/propagated-build-inputs
+        echo -n " ${outputs[$output]}" >> "${!propagaterOutput}"/nix-support/propagated-build-inputs
     done
 }
