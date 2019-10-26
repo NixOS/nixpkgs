@@ -9030,9 +9030,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix {
-    pythonPackages = python3Packages;
-  };
+  pypi2nix = callPackage ../development/tools/pypi2nix {};
 
   setupcfg2nix = python3Packages.callPackage ../development/tools/setupcfg2nix {};
 
