@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
   ];
 
-  makeFlags = "AR=${stdenv.cc.targetPrefix}ar";
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   inherit doCheck;
 
