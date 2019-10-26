@@ -185,7 +185,7 @@ in rec {
 
       propagaterOutput = if lib.elem "dev" outputs then "dev" else lib.head outputs;
       propagatedBuildOutputs = attrs.propagatedBuildOutputs or
-        lib.filter (i: i != propagaterOutput && lib.elem i outputs) [ "out" "bin" "dev" "lib"];
+        (lib.filter (i: i != propagaterOutput && lib.elem i outputs) [ "out" "bin" "dev" "lib"]);
 
       derivationArg =
         (removeAttrs attrs
