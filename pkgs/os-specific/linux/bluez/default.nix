@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
       ++ optional enableSixaxis [ "--enable-sixaxis" ]);
 
   # Work around `make install' trying to create /var/lib/bluetooth.
-  installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
+  installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
 
-  makeFlags = "rulesdir=${placeholder "out"}/lib/udev/rules.d";
+  makeFlags = [ "rulesdir=${placeholder "out"}/lib/udev/rules.d" ];
 
   postInstall = ''
     mkdir -p $test/{bin,test}

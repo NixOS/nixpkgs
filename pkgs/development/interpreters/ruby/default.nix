@@ -112,7 +112,7 @@ let
         '';
 
         configureFlags = ["--enable-shared" "--enable-pthread"]
-          ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
+          ++ op useRailsExpress "--with-baseruby=${toString baseruby}/bin/ruby"
           ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects

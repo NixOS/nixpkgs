@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  patchFlags = "-p1 -F3";
+  patchFlags = [ "-p1" "-F3" ];
 
   patches = [
     ./CVE-2014-8139.diff
@@ -40,13 +40,13 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = [ "-lbz2" ] ++ stdenv.lib.optional enableNLS "-lnatspec";
 
-  buildFlags = "generic D_USE_BZ2=-DUSE_BZIP2 L_BZ2=-lbz2";
+  buildFlags = [ "generic" "D_USE_BZ2=-DUSE_BZIP2" "L_BZ2=-lbz2" ];
 
   preConfigure = ''
     sed -i -e 's@CF="-O3 -Wall -I. -DASM_CRC $(LOC)"@CF="-O3 -Wall -I. -DASM_CRC -DLARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(LOC)"@' unix/Makefile
   '';
 
-  installFlags = "prefix=$(out)";
+  installFlags = [ "prefix=$(out)" ];
 
   setupHook = ./setup-hook.sh;
 

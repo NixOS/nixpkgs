@@ -101,7 +101,7 @@ stdenv.mkDerivation {
 
   inherit src version;
 
-  patchFlags = "";
+  patchFlags = [];
 
   patches = patches
   ++ optional stdenv.isDarwin (

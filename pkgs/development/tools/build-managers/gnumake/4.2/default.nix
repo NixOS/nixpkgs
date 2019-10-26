@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "12f5zzyq2w56g95nni65hc0g5p7154033y2f3qmjvd016szn5qnn";
   };
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   patches = [
     # Purity: don't look for library dependencies (of the form `-lfoo') in /lib
     # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for

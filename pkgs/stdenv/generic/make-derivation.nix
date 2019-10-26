@@ -91,10 +91,12 @@ in rec {
 
     , ... } @ attrs:
 
+    assert lib.isList (attrs.buildFlags or []);
     assert lib.isList configureFlags;
     assert lib.isList cmakeFlags;
     assert lib.isList (attrs.makeFlags or []);
     assert lib.isList (attrs.checkFlags or []);
+    assert lib.isList (attrs.patchFlags or []);
 
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
@@ -241,10 +243,7 @@ in rec {
           depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
-          configureFlags = let inherit (lib) optional elem; in
-            (/**/ if lib.isString configureFlags then [configureFlags]
-             else if configureFlags == null      then []
-             else                                     configureFlags)
+          configureFlags = let inherit (lib) elem optional; in configureFlags
             ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
