@@ -37,6 +37,7 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
+    "-DCMAKE_C_FLAGS=-ffreestanding"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
   ] ++ lib.optionals (bareMetal) [
@@ -55,7 +56,7 @@ stdenv.mkDerivation {
     ../../common/compiler-rt/glibc.patch
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
   ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    ++ lib.optional (useLLVM) ./crtbegin-and-end.patch
+    ++ lib.optional (useLLVM && !stdenv.hostPlatform.isWindows) ./crtbegin-and-end.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

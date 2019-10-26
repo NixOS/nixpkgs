@@ -282,7 +282,11 @@ in rec {
           ++ lib.optional (stdenv.hostPlatform.isDarwin) "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
           ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
           ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-          ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}";
+          ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+          ++ lib.optional (stdenv.hostPlatform.parsed.kernel.name == "windows")
+            # TODO(@Ericson2314): probably bettter in the setup hook
+            "-DCMAKE_RC_COMPILER=${stdenv.hostPlatform.config}-llvm-rc"
+          ;
 
           mesonFlags = if mesonFlags == null then null else let
             # See https://mesonbuild.com/Reference-tables.html#cpu-families

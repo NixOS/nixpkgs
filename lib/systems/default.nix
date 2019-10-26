@@ -29,7 +29,7 @@ rec {
       # Derived meta-data
       libc =
         /**/ if final.isDarwin              then "libSystem"
-        else if final.isMinGW               then "msvcrt"
+        else if final.isWindows             then "msvcrt"
         else if final.isWasi                then "wasilibc"
         else if final.isRedox               then "relibc"
         else if final.isMusl                then "musl"
