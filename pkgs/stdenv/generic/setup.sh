@@ -929,7 +929,7 @@ patchPhase() {
         esac
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
-        $uncompress < "$i" 2>&1 | patch ${patchFlags:--p1}
+        $uncompress < "$i" 2>&1 | patch "${patchFlags[@]:--p1}"
     done
 
     runHook postPatch
