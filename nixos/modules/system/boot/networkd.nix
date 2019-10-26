@@ -890,6 +890,14 @@ in
       '';
     };
 
+    systemd.network.dhcpNetworks = mkOption {
+      default = [ "en*" "wl*" ];
+      type = types.listOf types.str;
+      description = ''
+        List of interface names (wildcards), for whit to enable DHCP.
+      '';
+    };
+
     systemd.network.links = mkOption {
       default = {};
       type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
@@ -959,5 +967,14 @@ in
     };
 
     services.resolved.enable = mkDefault true;
+
+    systemd.network.networks = listToAttrs
+      (map
+        (name: nameValuePair
+          "10-dhcp-${(replaceStrings ["*"] ["+"] name)}" {
+            matchConfig.Name = name;
+            DHCP = "yes";
+          })
+        config.systemd.network.dhcpNetworks);
   };
 }
