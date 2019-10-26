@@ -1599,6 +1599,8 @@ in
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
+  elogind = callPackage ../applications/misc/elogind { };
+
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
