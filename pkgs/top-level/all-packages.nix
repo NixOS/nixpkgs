@@ -15923,9 +15923,7 @@ in
 
   kmscube = callPackage ../os-specific/linux/kmscube { };
 
-  kmsxx = callPackage ../development/libraries/kmsxx {
-    stdenv = gcc6Stdenv;
-  };
+  kmsxx = callPackage ../development/libraries/kmsxx { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
