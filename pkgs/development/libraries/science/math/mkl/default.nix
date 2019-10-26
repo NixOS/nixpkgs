@@ -8,8 +8,12 @@ let
   # https://registrationcenter.intel.com/en/products/
   version = "${year}.${spot}.${rel}";
   year = "2019";
-  spot = "5";
-  rel = "281";
+
+  # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
+  # https://github.com/matthewbauer/undmg/issues/4
+  spot = if stdenvNoCC.isDarwin then "3" else "5";
+  rel = if stdenvNoCC.isDarwin then "199" else "281";
+
   rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
 
   # Intel openmp uses its own versioning, but shares the spot release patch.
@@ -22,8 +26,8 @@ in stdenvNoCC.mkDerivation {
   src = if stdenvNoCC.isDarwin
     then
       (fetchurl {
-        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15822/m_mkl_${version}.dmg";
-        sha256 = "014c91jzsvbhjpqafgzwvlzh7f8h2mbnmp4mk978xx838apsnxf9";
+        url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15235/m_mkl_${version}.dmg";
+        sha256 = "14b3ciz7995sqcd6jz7hc8g2x4zwvqxmgxgni46vrlb7n523l62f";
       })
     else
       (fetchurl {
