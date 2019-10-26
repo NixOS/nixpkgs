@@ -181,6 +181,10 @@ in rec {
         lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
           (lib.concatLists propagatedDependencies));
 
+      propagaterOutput = if lib.elem "dev" outputs then "dev" else lib.head outputs;
+      propagatedBuildOutputs = attrs.propagatedBuildOutputs or
+        lib.filter (i: i != propagaterOutput && lib.elem i outputs) [ "out" "bin" "dev" "lib"];
+
       derivationArg =
         (removeAttrs attrs
           ["meta" "passthru" "pos"
@@ -243,6 +247,9 @@ in rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
+
+          inherit propagaterOutput propagatedBuildOutputs;
+
         } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
