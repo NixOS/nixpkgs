@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   version = "3.0.4";
   pname = "GitPython";
+  disabled = isPy27; # no longer supported
 
   src = fetchPypi {
     inherit pname version;
