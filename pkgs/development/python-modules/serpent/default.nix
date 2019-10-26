@@ -6,6 +6,8 @@
 , isPy27
 , isPy33
 , enum34
+, attrs
+, pytz
 }:
 
 buildPythonPackage rec {
@@ -14,11 +16,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f306336ca09aa38e526f3b03cab58eb7e45af09981267233167bcf3bfd6436ab";
+    sha256 = "1arnckykpkvv2qrp49l1k7q5mr5pisswl0rvdx98x8wsl1n361pk";
   };
 
   propagatedBuildInputs = lib.optionals (isPy27 || isPy33) [ enum34 ];
 
+  checkInputs = [ attrs pytz ];
   checkPhase = ''
     ${python.interpreter} setup.py test
   '';
