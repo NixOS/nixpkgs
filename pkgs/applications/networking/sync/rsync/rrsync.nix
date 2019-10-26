@@ -17,6 +17,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace support/rrsync --replace /usr/bin/rsync ${rsync}/bin/rsync
+    substituteInPlace support/rrsync --replace /usr/bin/perl ${perl}/bin/perl
   '';
 
   installPhase = ''
