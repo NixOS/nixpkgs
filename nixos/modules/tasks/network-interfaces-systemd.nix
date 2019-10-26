@@ -31,7 +31,7 @@ in
       message = "networking.defaultGatewayWindowSize is not supported by networkd.";
     } {
       assertion = cfg.vswitches == {};
-      message = "networking.vswichtes are not supported by networkd.";
+      message = "networking.vswitches are not supported by networkd.";
     } {
       assertion = cfg.defaultGateway == null || cfg.defaultGateway.interface == null;
       message = "networking.defaultGateway.interface is not supported by networkd.";
