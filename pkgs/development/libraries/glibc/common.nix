@@ -176,6 +176,7 @@ stdenv.mkDerivation ({
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.
   preConfigure = ''
+    export BASH_SHELL
     export PWD_P=$(type -tP pwd)
     for i in configure io/ftwtest-sh; do
         # Can't use substituteInPlace here because replace hasn't been
