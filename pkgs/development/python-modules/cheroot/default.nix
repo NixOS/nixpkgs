@@ -15,8 +15,6 @@ buildPythonPackage rec {
     sha256 = "5b525b3e4a755adf78070ab54c1821fb860d4255a9317dba2b88eb2df2441cff";
   };
 
-  patches = [ ./tests.patch ];
-
   nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
 
   propagatedBuildInputs = [ more-itertools six backports_functools_lru_cache ];
