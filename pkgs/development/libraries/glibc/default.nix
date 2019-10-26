@@ -128,9 +128,7 @@ callPackage ./common.nix { inherit stdenv; } {
       mv $bin/bin/getconf_ $bin/bin/getconf
     '';
 
-    NIX_DEBUG=9;
     doInstallCheck = true;
-    installCheckPhase = "exit 1";
 
     separateDebugInfo = true;
 
