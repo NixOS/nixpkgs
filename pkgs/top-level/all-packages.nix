@@ -6621,6 +6621,8 @@ in
 
   tpm-luks = callPackage ../tools/security/tpm-luks { };
 
+  tpm2-abrmd = callPackage ../tools/security/tpm2-abrmd { };
+
   tpm2-tools = callPackage ../tools/security/tpm2-tools { };
 
   trezord = callPackage ../servers/trezord { };
