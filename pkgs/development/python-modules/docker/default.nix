@@ -30,8 +30,9 @@ buildPythonPackage rec {
   ];
 
   # Other tests touch network
+  # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
   checkPhase = ''
-    ${pytest}/bin/pytest tests/unit/
+    ${pytest}/bin/pytest tests/unit/ ${stdenv.lib.optionalString stdenv.isDarwin "--deselect=tests/unit/api_test.py::TCPSocketStreamTest"}
   '';
 
   meta = with stdenv.lib; {
