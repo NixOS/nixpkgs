@@ -91,6 +91,11 @@ in rec {
 
     , ... } @ attrs:
 
+    assert lib.isList configureFlags;
+    assert lib.isList cmakeFlags;
+    assert lib.isList (attrs.makeFlags or []);
+    assert lib.isList (attrs.checkFlags or []);
+
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
       # no package has `doCheck = true`.
