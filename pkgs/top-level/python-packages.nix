@@ -830,6 +830,8 @@ in {
 
   palettable = callPackage ../development/python-modules/palettable { };
 
+  parsley = callPackage ../development/python-modules/parsley { };
+
   pastel = callPackage ../development/python-modules/pastel { };
 
   pathlib = callPackage ../development/python-modules/pathlib { };
