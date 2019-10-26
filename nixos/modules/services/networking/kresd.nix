@@ -55,6 +55,11 @@ in
         For detailed syntax see ListenStream in man systemd.socket.
       '';
     };
+    threads = mkOption {
+      type = types.ints.unsigned;
+      default = 1;
+      description = "Amount of threads to start";
+    };
     # TODO: perhaps options for more common stuff like cache size or forwarding
   };
 
@@ -127,7 +132,7 @@ in
 
       # Trust anchor goes from dns-root-data by default.
       script = ''
-        exec '${package}/bin/kresd' --config '${configFile}' --forks=1
+        exec '${package}/bin/kresd' --config '${configFile}' --forks=${toString cfg.threads}
       '';
 
       requires = [ "kresd.socket" ];
