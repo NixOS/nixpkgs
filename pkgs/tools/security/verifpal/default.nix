@@ -23,8 +23,6 @@ buildGoPackage rec {
     sed -e 's|/bin/echo |echo |g' -i Makefile
   '';
 
-  buildFlags = [ "-C" "go/src/${goPackagePath}" "parser" "linux" ];
-
   buildPhase = ''
     make -C go/src/$goPackagePath parser linux
   '';
