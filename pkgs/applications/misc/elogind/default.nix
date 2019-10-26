@@ -12,7 +12,7 @@
 , udev
 , eudev
 , libxslt
-, python3Packages
+, python3
 , docbook5
 , docbook_xsl
 , docbook_xsl_ns
@@ -49,14 +49,22 @@ stdenv.mkDerivation rec {
     gettext
     libxslt.bin # xsltproc
     docbook5 docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 docbook_xml_dtd_45 # needed for docbook without Internet
-    python3Packages.lxml # fixes: man/meson.build:111:0: ERROR: Could not execute command "/build/source/tools/xml_helper.py".
+    (python3.withPackages (p: with p; [ lxml ]))  # fixes: man/meson.build:111:0: ERROR: Could not execute command "/build/source/tools/xml_helper.py".
   ];
 
   buildInputs =
-    if enableSystemd then [udev] else [eudev];
+    if enableSystemd then [ udev ] else [ eudev ];
 
+  # Inspired by the systemd `preConfigure`.
+  # Conceptually we should patch all files required during the build, but not scripts
+  # supposed to run at run-time of the software (important for cross-compilation).
+  # This package seems to have mostly scripts that run at build time.
   preConfigure = ''
-    patchShebangs .
+    for dir in tools src/test; do
+      patchShebangs $dir
+    done
+
+    patchShebangs src/basic/generate-*.{sh,py}
   '';
 
   mesonFlags = [
@@ -65,10 +73,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = https://github.com/elogind/elogind/releases;
+    homepage = https://github.com/elogind/elogind;
     description = ''The systemd project's "logind", extracted to a standalone package'';
     platforms = platforms.linux; # probably more
-    license = licenses.gpl2;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ nh2 ];
   };
 }
