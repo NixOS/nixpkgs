@@ -12,7 +12,7 @@ let
 
   generateHost = { pkgs, cephConfig, networkConfig, ... }: {
     virtualisation = {
-      memorySize = 1536;
+      memorySize = 512;
       emptyDiskImages = [ 20480 ];
       vlans = [ 1 ];
     };
@@ -153,14 +153,9 @@ in {
     $monA->waitUntilSucceeds("ceph -s | grep 'mgr: a(active,'");
 
     # Send the admin keyring to the OSD machines
-    $osd0->mustSucceed("nc -vlkN 6800 > /etc/ceph/ceph.client.admin.keyring &");
-    $osd1->mustSucceed("nc -vlkN 6800 > /etc/ceph/ceph.client.admin.keyring &");
-    $osd0->waitForOpenPort("6800");
-    $osd1->waitForOpenPort("6800");
-    $monA->mustSucceed(
-      "nc 192.168.1.2 6800 < /etc/ceph/ceph.client.admin.keyring",
-      "nc 192.168.1.3 6800 < /etc/ceph/ceph.client.admin.keyring"
-    );
+    $monA->mustSucceed("cp /etc/ceph/ceph.client.admin.keyring /tmp/shared");
+    $osd0->mustSucceed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph");
+    $osd1->mustSucceed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph");
 
     # Bootstrap both OSDs
     $osd0->mustSucceed(
