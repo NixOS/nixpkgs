@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yfmcx65aqd5l87scha6kmm2s38n85ci3gg0h6qfs16s3jfi6bw7";
   };
 
-  cmakeFlags = "-DLCB_NO_MOCK=ON";
+  cmakeFlags = [ "-DLCB_NO_MOCK=ON" ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libevent openssl ];

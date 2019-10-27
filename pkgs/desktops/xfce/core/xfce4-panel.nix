@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./xfce4-panel-datadir.patch ];
-  patchFlags = "-p1";
+  patchFlags = [ "-p1" ];
 
   postPatch = ''
     for f in $(find . -name \*.sh); do

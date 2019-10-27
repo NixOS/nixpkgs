@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   buildFlags = [ "CFLAGS=-fgnu89-inline" ];
 

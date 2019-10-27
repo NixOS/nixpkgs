@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   preBuild = "cd source";
 
-  makeFlags = "DESTDIR= PREFIX=$(out)";
+  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 
   meta = {
     description = "Synthetized (not sampled) pipe organ emulator";

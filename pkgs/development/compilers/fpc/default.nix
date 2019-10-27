@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
       sed -e "s@'/lib64/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
     '' else "";
 
-  makeFlags = "NOGDB=1 FPC=${startFPC}/bin/fpc";
+  makeFlags = [ "NOGDB=1" "FPC=${startFPC}/bin/fpc" ];
 
-  installFlags = "INSTALL_PREFIX=\${out}";
+  installFlags = [ "INSTALL_PREFIX=\${out}" ];
 
   postInstall = ''
     for i in $out/lib/fpc/*/ppc*; do

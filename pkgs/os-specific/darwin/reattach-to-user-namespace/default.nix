@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "00mjyj8yicrpnlm46rlbkvxgl5381l8xawh7rmjk10p3zrm56jbv";
   };
 
-  buildFlags = "ARCHES=x86_64";
+  buildFlags = [ "ARCHES=x86_64" ];
 
   installPhase = ''
     mkdir -p $out/bin

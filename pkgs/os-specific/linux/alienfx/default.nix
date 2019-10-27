@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   patches = [./unistd.patch];
   buildInputs = [ libusb1 ];
-  makeFlags = "build";
+  makeFlags = [ "build" ];
   preInstall = ''
     mkdir -p $out/bin
     mkdir -p $out/man/man1

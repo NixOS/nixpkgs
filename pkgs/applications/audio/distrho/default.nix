@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     libXinerama libXrender ladspa-sdk
   ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = http://distrho.sourceforge.net;

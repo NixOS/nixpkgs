@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       unzip -o ${messSrc}
     '';
 
-  makeFlags = "TARGET=mess BUILD_EXPAT= BUILD_ZLIB= NOWERROR=1";
+  makeFlags = [ "TARGET=mess" "BUILD_EXPAT=" "BUILD_ZLIB=" "NOWERROR=1" ];
 
   buildInputs =
     [ unzip pkgconfig SDL gtk2 GConf libGLU_combined expat zlib ];

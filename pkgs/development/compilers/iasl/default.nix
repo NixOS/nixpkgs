@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     "-O3"
   ];
 
-  buildFlags = "iasl";
+  buildFlags = [ "iasl" ];
 
   buildInputs = [ bison flex ];
 

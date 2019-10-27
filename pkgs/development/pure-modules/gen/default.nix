@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   hsEnv = haskellPackages.ghcWithPackages (hsPkgs : [hsPkgs.language-c]);
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ hsEnv pure ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
 
   meta = {
     description = "Pure interface generator";

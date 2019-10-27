@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0pmpgx91j984snrsxbq1dgf3ximks2dfh1sqqmic72lrls7wp4w1";
   };
 
-  makeFlags = "RM=rm LN=ln MV=mv";
+  makeFlags = [ "RM=rm" "LN=ln" "MV=mv" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libvorbis libmad libao ];

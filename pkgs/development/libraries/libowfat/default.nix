@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       'install -m 644 $(INCLUDES) $(DESTDIR)$(INCLUDEDIR)'
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {

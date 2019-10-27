@@ -509,7 +509,7 @@ in
     '';
   } // (if stdenv.isDarwin then {
     # https://github.com/NixOS/nixpkgs/issues/19098
-    buildFlags = "--disable-lto";
+    buildFlags = [ "--disable-lto" ];
   } else {});
 
   scrypt = attrs:

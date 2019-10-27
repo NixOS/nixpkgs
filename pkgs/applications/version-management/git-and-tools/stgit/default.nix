@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ python2 git ];
 
-  makeFlags = "prefix=$$out";
+  makeFlags = [ "prefix=$$out" ];
 
   postInstall = ''
     mkdir -p "$out/etc/bash_completion.d/"

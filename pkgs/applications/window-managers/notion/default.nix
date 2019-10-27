@@ -35,8 +35,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [makeWrapper xlibsWrapper lua gettext mandoc which libXinerama libXrandr libX11 ] ++ stdenv.lib.optional enableXft libXft;
 
-  buildFlags = "LUA_DIR=${lua} X11_PREFIX=/no-such-path PREFIX=\${out}";
-  installFlags = "PREFIX=\${out}";
+  buildFlags = [ "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" "PREFIX=\${out}" ];
+  installFlags = [ "PREFIX=\${out}" ];
 
   postInstall = ''
     wrapProgram $out/bin/notion \

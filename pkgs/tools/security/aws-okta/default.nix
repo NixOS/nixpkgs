@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildFlags = "--tags release";
+  buildFlags = [ "--tags" "release" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb1 ];

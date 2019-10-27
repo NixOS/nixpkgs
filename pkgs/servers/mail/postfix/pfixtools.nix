@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     "-Wno-error=format-truncation"
   ];
 
-  makeFlags = "DESTDIR=$(out) prefix=";
+  makeFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
   meta = {
     description = "A collection of postfix-related tools";

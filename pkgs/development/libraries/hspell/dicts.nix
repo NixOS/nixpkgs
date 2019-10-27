@@ -15,7 +15,7 @@ in
   aspell = dict {
     name = "aspell-dict-he-${hspell.version}";
 
-    buildFlags = "aspell";
+    buildFlags = [ "aspell" ];
 
     installPhase = ''
       mkdir -p $out/lib/aspell
@@ -25,7 +25,7 @@ in
   myspell = dict {
     name = "myspell-dict-he-${hspell.version}";
 
-    buildFlags = "myspell";
+    buildFlags = [ "myspell" ];
 
     installPhase = ''
       mkdir -p $out/lib/myspell
@@ -35,7 +35,7 @@ in
   hunspell = dict {
     name = "hunspell-dict-he-${hspell.version}";
 
-    buildFlags = "hunspell";
+    buildFlags = [ "hunspell" ];
 
     installPhase = ''
       mkdir -p $out/lib

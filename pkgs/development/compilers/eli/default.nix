@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   # skip interactive browser check
-  buildFlags = "nobrowsers";
+  buildFlags = [ "nobrowsers" ];
 
 
   preConfigure=''

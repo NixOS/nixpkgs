@@ -13,6 +13,6 @@ stdenv.mkDerivation {
     sha256 = "1nkks5a95986nyfkxvg2rik6zmwx0lh7szd5fji7yizccwzc9xns";
   };
   buildInputs = [ xlibsWrapper lua gettext groff ];
-  buildFlags = "LUA_DIR=${lua} X11_PREFIX=/no-such-path PREFIX=\${out}";
-  installFlags = "PREFIX=\${out}";
+  buildFlags = [ "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" "PREFIX=\${out}" ];
+  installFlags = [ "PREFIX=\${out}" ];
 }

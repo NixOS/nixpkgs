@@ -15,7 +15,7 @@ buildGoModule rec {
 
   modSha256 = "0hcc87mzacqwbw10l49kx0sxl4mivdr88c40wh6hdfvrbam2w86r";
 
-  buildFlags = "--tags release";
+  buildFlags = [ "--tags" "release" ];
 
   meta = with stdenv.lib; {
     description = ''

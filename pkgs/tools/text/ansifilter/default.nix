@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ boost lua ];
 
-  makeFlags = "PREFIX=$(out) conf_dir=/etc/ansifilter";
+  makeFlags = [ "PREFIX=$(out)" "conf_dir=/etc/ansifilter" ];
 
   meta = with stdenv.lib; {
     description = "Tool to convert ANSI to other formats";

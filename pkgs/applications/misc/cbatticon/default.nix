@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's/ -Wno-format//g' Makefile
   '';
 
-  makeFlags = "PREFIX=${placeholder "out"}";
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
     description = "Lightweight and fast battery icon that sits in the system tray";

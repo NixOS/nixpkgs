@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  buildFlags = "release";
+  buildFlags = [ "release" ];
 
   meta = with stdenv.lib;
     { description = "Collection of open-source audio plugins";
