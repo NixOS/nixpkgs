@@ -3911,6 +3911,11 @@
     githubId = 13791;
     name = "Luke Gorrie";
   };
+  lumi = {
+    email = "lumi@pew.im";
+    github = "lumi-me-not";
+    name = "lumi";
+  };
   luz = {
     email = "luz666@daum.net";
     github = "Luz";
