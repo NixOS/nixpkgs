@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, httplib2 }:
+{ stdenv, buildPythonPackage, fetchPypi, six, httplib2, requests }:
 
 buildPythonPackage rec {
   pname = "mailmanclient";
@@ -9,7 +9,11 @@ buildPythonPackage rec {
     sha256 = "c8736cbe152ae1bd58b46ccfbcafb6a1e301513530772e7fda89f91d1e5c1ae9";
   };
 
-  propagatedBuildInputs = [ six httplib2 ];
+  propagatedBuildInputs = [ six httplib2 requests ];
+
+  # no tests with Pypi tar ball, checkPhase removes setup.py which invalidates import check
+  doCheck = false;
+  pythonImportsCheck = [ "mailmanclient" ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.gnu.org/software/mailman/";
