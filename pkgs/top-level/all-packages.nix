@@ -16574,10 +16574,6 @@ in
 
   riscv-pk = callPackage ../misc/riscv-pk { };
 
-  riscv-pk-with-kernel = riscv-pk.override {
-    payload = "${linux_riscv}/vmlinux";
-  };
-
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
