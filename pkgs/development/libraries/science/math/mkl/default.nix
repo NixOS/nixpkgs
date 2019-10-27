@@ -3,11 +3,25 @@
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.
 */
-stdenvNoCC.mkDerivation rec {
-  name = "mkl-${version}";
-  version = "${date}.${rel}";
-  date = "2019.3";
-  rel = "199";
+let
+  # Release notes and download URLs are here:
+  # https://registrationcenter.intel.com/en/products/
+  version = "${year}.${spot}.${rel}";
+  year = "2019";
+
+  # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
+  # https://github.com/matthewbauer/undmg/issues/4
+  spot = if stdenvNoCC.isDarwin then "3" else "5";
+  rel = if stdenvNoCC.isDarwin then "199" else "281";
+
+  rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
+
+  # Intel openmp uses its own versioning, but shares the spot release patch.
+  openmp-ver = "19.0.${spot}-${rel}-19.0.${spot}-${rel}";
+
+in stdenvNoCC.mkDerivation {
+  pname = "mkl";
+  inherit version;
 
   src = if stdenvNoCC.isDarwin
     then
@@ -17,27 +31,25 @@ stdenvNoCC.mkDerivation rec {
       })
     else
       (fetchurl {
-        url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15275/l_mkl_${version}.tgz";
-        sha256 = "13rb2v2872jmvzcqm4fqsvhry0j2r5cn4lqql4wpqbl1yia2pph6";
+        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15816/l_mkl_${version}.tgz";
+        sha256 = "0zkk4rrq7g44acxaxhpd2053r66w169mww6917an0lxhd52fm5cr";
       });
 
   nativeBuildInputs = if stdenvNoCC.isDarwin
     then
-      [ undmg
-        darwin.cctools
-      ]
+      [ undmg darwin.cctools ]
     else
       [ rpmextract ];
 
   buildPhase = if stdenvNoCC.isDarwin then ''
-      for f in Contents/Resources/pkg/*.tgz; do
-          tar xzvf $f
-      done
+    for f in Contents/Resources/pkg/*.tgz; do
+      tar xzvf $f
+    done
   '' else ''
-    rpmextract rpm/intel-mkl-common-c-${date}-${rel}-${date}-${rel}.noarch.rpm
-    rpmextract rpm/intel-mkl-core-${date}-${rel}-${date}-${rel}.x86_64.rpm
-    rpmextract rpm/intel-mkl-core-rt-${date}-${rel}-${date}-${rel}.x86_64.rpm
-    rpmextract rpm/intel-openmp-19.0.3-${rel}-19.0.3-${rel}.x86_64.rpm
+    rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
+    rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-openmp-${openmp-ver}.x86_64.rpm
   '';
 
   installPhase = ''
@@ -82,12 +94,12 @@ stdenvNoCC.mkDerivation rec {
   # larger updated load commands do not fit. Use install_name_tool
   # explicitly and ignore the error.
   postFixup = stdenvNoCC.lib.optionalString stdenvNoCC.isDarwin ''
-      for f in $out/lib/*.dylib; do
-          install_name_tool -id $out/lib/$(basename $f) $f || true
-      done
-      install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libmkl_intel_thread.dylib
-      install_name_tool -change @rpath/libtbb.dylib $out/lib/libtbb.dylib $out/lib/libmkl_tbb_thread.dylib
-      install_name_tool -change @rpath/libtbbmalloc.dylib $out/lib/libtbbmalloc.dylib $out/lib/libtbbmalloc_proxy.dylib
+    for f in $out/lib/*.dylib; do
+      install_name_tool -id $out/lib/$(basename $f) $f || true
+    done
+    install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libmkl_intel_thread.dylib
+    install_name_tool -change @rpath/libtbb.dylib $out/lib/libtbb.dylib $out/lib/libmkl_tbb_thread.dylib
+    install_name_tool -change @rpath/libtbbmalloc.dylib $out/lib/libtbbmalloc.dylib $out/lib/libtbbmalloc_proxy.dylib
   '';
 
   # Per license agreement, do not modify the binary
@@ -105,6 +117,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = https://software.intel.com/en-us/mkl;
     license = licenses.issl;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.bhipple ];
+    maintainers = with maintainers; [ bhipple ];
   };
 }
