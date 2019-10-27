@@ -1,16 +1,16 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gotop-${version}";
-  version = "1.2.9";
+  pname = "gotop";
+  version = "3.0.0";
 
   goPackagePath = "github.com/cjbassi/gotop";
 
   src = fetchFromGitHub {
-    repo = "gotop";
     owner = "cjbassi";
+    repo = pname;
     rev = version;
-    sha256 = "07s2f04yhc79vqr1gdh2v974kpn7flp4slnp99mavpa331lv9q8a";
+    sha256 = "1kndj5qjaqgizjakh642fay2i0i1jmfjlk1p01gnjbh2b0yzvj1r";
   };
 
   meta = with stdenv.lib; {
@@ -18,6 +18,6 @@ buildGoPackage rec {
     homepage = https://github.com/cjbassi/gotop;
     license = licenses.agpl3;
     maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

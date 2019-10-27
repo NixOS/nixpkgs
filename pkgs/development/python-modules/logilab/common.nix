@@ -2,12 +2,11 @@
 
 buildPythonPackage rec {
   pname = "logilab-common";
-  version = "1.4.1";
-  name = "${pname}-${version}";
+  version = "1.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02in5555iak50gzn35bnnha9s85idmh0wwxaxz13v81z5krn077d";
+    sha256 = "1zw8bijlcmqrigsqvzj7gwh3qbd33dmpi9ij6h56b41x0dpm957d";
   };
 
   propagatedBuildInputs = [ unittest2 six ];

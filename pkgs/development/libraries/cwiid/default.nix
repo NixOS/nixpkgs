@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "--without-python";
+  configureFlags = [ "--without-python" ];
 
   prePatch = ''
     sed -i -e '/$(LDCONFIG)/d' common/include/lib.mak.in
@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison flex bluez gtk2 ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  NIX_LDFLAGS = [
+    "-lbluetooth"
+  ];
 
   postInstall = ''
     # Some programs (for example, cabal-install) have problems with the double 0

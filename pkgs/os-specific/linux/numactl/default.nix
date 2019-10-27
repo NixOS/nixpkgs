@@ -1,33 +1,31 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "numactl-${version}";
-  version = "2.0.11";
+  pname = "numactl";
+  version = "2.0.13";
 
   src = fetchFromGitHub {
-    owner = "numactl";
-    repo = "numactl";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0bcffqawwbyrnza8np0whii25mfd0dria35zal9v3l55xcrya3j9";
+    sha256 = "08xj0n27qh0ly8hjallnx774gicz15nfq0yyxz8zhgy6pq8l33vv";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  patches = [
-    (fetchpatch {
-      url = https://raw.githubusercontent.com/gentoo/gentoo/b64d15e731e3d6a7671f0ec6c34a20203cf2609d/sys-process/numactl/files/numactl-2.0.11-sysmacros.patch;
-      sha256 = "05277kv3x12n2xlh3fgnmxclxfc384mkwb0v9pd91046khj6h843";
-    })
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
-      url = https://git.alpinelinux.org/cgit/aports/plain/testing/numactl/musl.patch?id=0592b128c71c3e70d493bc7a13caed0d7fae91dd;
-      sha256 = "080b0sygmg7104qbbh1amh3b322yyiajwi2d3d0vayffgva0720v";
-    });
+  postPatch = ''
+    patchShebangs test
+  '';
+
+  # You probably shouldn't ever run these! They will reconfigure Linux
+  # NUMA settings, which on my build machine makes the rest of package
+  # building ~5% slower until reboot. Ugh!
+  doCheck = false; # never ever!
 
   meta = with stdenv.lib; {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
-    homepage = http://oss.sgi.com/projects/libnuma/;
-    license = licenses.gpl2;
+    homepage = https://github.com/numactl/numactl;
+    license = with licenses; [ gpl2 lgpl21 ]; # libnuma is lgpl21
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ wkennington ];
   };
 }

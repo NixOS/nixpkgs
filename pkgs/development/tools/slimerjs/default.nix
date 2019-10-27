@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchgit, fetchFromGitHub, zip, unzip, firefox, bash}:
+{stdenv, fetchFromGitHub, zip, unzip, firefox, bash}:
 let
   s = # Generated upstream information
   rec {
@@ -6,9 +6,9 @@ let
     version="1.0.0";
     name="${baseName}-${version}";
     owner = "laurentj";
-    repo = "${baseName}";
+    repo = baseName;
     sha256="1w4sfrv520isbs7r1rlzl5y3idrpad7znw9fc92yz40jlwz7sxs4";
-    rev = "${version}";
+    rev = version;
   };
   buildInputs = [
     unzip zip

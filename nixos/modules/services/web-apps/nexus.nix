@@ -13,6 +13,12 @@ in
     services.nexus = {
       enable = mkEnableOption "Sonatype Nexus3 OSS service";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.nexus;
+        description = "Package which runs Nexus3";
+      };
+
       user = mkOption {
         type = types.str;
         default = "nexus";
@@ -55,10 +61,10 @@ in
           -XX:LogFile=${cfg.home}/nexus3/log/jvm.log
           -XX:-OmitStackTraceInFastThrow
           -Djava.net.preferIPv4Stack=true
-          -Dkaraf.home=${pkgs.nexus}
-          -Dkaraf.base=${pkgs.nexus}
-          -Dkaraf.etc=${pkgs.nexus}/etc/karaf
-          -Djava.util.logging.config.file=${pkgs.nexus}/etc/karaf/java.util.logging.properties
+          -Dkaraf.home=${cfg.package}
+          -Dkaraf.base=${cfg.package}
+          -Dkaraf.etc=${cfg.package}/etc/karaf
+          -Djava.util.logging.config.file=${cfg.package}/etc/karaf/java.util.logging.properties
           -Dkaraf.data=${cfg.home}/nexus3
           -Djava.io.tmpdir=${cfg.home}/nexus3/tmp
           -Dkaraf.startLocalConsole=false
@@ -74,12 +80,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers."${cfg.user}" = {
+    users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
+      home = cfg.home;
+      createHome = true;
     };
 
-    users.extraGroups."${cfg.group}" = {};
+    users.groups.${cfg.group} = {};
 
     systemd.services.nexus = {
       description = "Sonatype Nexus3";
@@ -98,8 +106,6 @@ in
       preStart = ''
         mkdir -p ${cfg.home}/nexus3/etc
 
-        chown -R ${cfg.user}:${cfg.group} ${cfg.home}
-
         if [ ! -f ${cfg.home}/nexus3/etc/nexus.properties ]; then
           echo "# Jetty section" > ${cfg.home}/nexus3/etc/nexus.properties
           echo "application-port=${toString cfg.listenPort}" >> ${cfg.home}/nexus3/etc/nexus.properties
@@ -112,17 +118,16 @@ in
         fi
       '';
 
-      script = "${pkgs.nexus}/bin/nexus run";
+      script = "${cfg.package}/bin/nexus run";
 
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
-        PermissionsStartOnly = true;
         LimitNOFILE = 102642;
       };
     };
   };
 
-  meta.maintainers = with stdenv.lib.maintainers; [ ironpinguin ];
+  meta.maintainers = with lib.maintainers; [ ironpinguin ];
 }

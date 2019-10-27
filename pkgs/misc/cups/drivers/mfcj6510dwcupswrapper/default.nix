@@ -1,11 +1,11 @@
 { stdenv, fetchurl, mfcj6510dwlpr, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "mfcj6510dw-cupswrapper-${version}";
+  pname = "mfcj6510dw-cupswrapper";
   version = "3.0.0-1";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf006814/mfcj6510dw_cupswrapper_GPL_source_${version}.tar.gz";
+    url = "https://download.brother.com/welcome/dlf006814/mfcj6510dw_cupswrapper_GPL_source_${version}.tar.gz";
     sha256 = "0y5iffybxjin8injrdmc9n9hl4s6b8n6ck76m1z78bzi88vwmhai";
   };
 

@@ -1,33 +1,40 @@
 { stdenv, fetchFromGitHub, asciidoc-full, gettext
-, gobjectIntrospection, gtk3, hicolor-icon-theme, libnotify, librsvg
+, gobject-introspection, gtk3, libappindicator-gtk3, libnotify, librsvg
 , udisks2, wrapGAppsHook
-, buildPythonApplication
-, docopt
-, pygobject3
-, pyyaml
+, python3Packages
 }:
 
-buildPythonApplication rec {
-  name = "udiskie-${version}";
-  version = "1.7.4";
+python3Packages.buildPythonApplication rec {
+  pname = "udiskie";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = version;
-    sha256 = "0r3m8y6ppkl8p1lhr89sfk9v2la1zn0rbmr6hy860j7b22yvnkrn";
+    sha256 = "1j17z26vy44il2s9zgchvhq280vq8ag64ddi35f35b444wz2azlb";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
+    gettext
     asciidoc-full        # For building man page.
-    hicolor-icon-theme
+    gobject-introspection
     wrapGAppsHook
-    librsvg              # required for loading svg icons (udiskie uses svg icons)
   ];
 
-  propagatedBuildInputs = [
-    gettext gobjectIntrospection gtk3 libnotify docopt
-    pygobject3 pyyaml udisks2
+  buildInputs = [
+    librsvg              # required for loading svg icons (udiskie uses svg icons)
+    gobject-introspection
+    libnotify
+    gtk3
+    udisks2
+    libappindicator-gtk3
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    docopt
+    pygobject3
+    pyyaml
   ];
 
   postBuild = "make -C doc";
@@ -37,8 +44,14 @@ buildPythonApplication rec {
     cp -v doc/udiskie.8 $out/share/man/man8/
   '';
 
-  # tests require dbusmock
-  doCheck = false;
+  checkInputs = with python3Packages; [
+    nose
+    keyutils
+  ];
+
+  checkPhase = ''
+    nosetests
+  '';
 
   meta = with stdenv.lib; {
     description = "Removable disk automounter for udisks";

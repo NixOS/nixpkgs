@@ -4,7 +4,6 @@ let ext = if stdenv.isDarwin then "dylib" else "so";
 in buildPythonPackage rec {
   pname = "bitcoinlib";
   version = "0.9.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner  = "petertodd";

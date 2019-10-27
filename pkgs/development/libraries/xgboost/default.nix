@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchgit, cmake
-, avxSupport ? false
-, cudaSupport ? false, cudatoolkit
+{ config, stdenv, lib, fetchgit, cmake
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
 , ncclSupport ? false, nccl
 , llvmPackages
 }:
@@ -8,14 +7,14 @@
 assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
-  name = "xgboost-${version}";
-  version = "0.7";
+  pname = "xgboost";
+  version = "0.90";
 
   # needs submodules
   src = fetchgit {
     url = "https://github.com/dmlc/xgboost";
     rev = "refs/tags/v${version}";
-    sha256 = "1wxh020l4q037hc5z7vgxflb70l41a97anl8g6y4wxb74l5zv61l";
+    sha256 = "1zs15k9crkiq7bnr4gqq53mkn3w8z9dq4nwlavmfcr5xr5gw2pw4";
   };
 
   enableParallelBuilding = true;
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
                ++ lib.optional ncclSupport "-DUSE_NCCL=ON";
 
   installPhase = let
-    libname = if stdenv.isDarwin then "libxgboost.dylib" else "libxgboost.so";
+    libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
   in ''
     mkdir -p $out
     cp -r ../include $out

@@ -1,4 +1,9 @@
 { stdenv, fetchurl, perl, ocaml, findlib, ocamlbuild }:
+
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "cil is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
   name = "ocaml-cil-1.7.3";
   src = fetchurl {

@@ -1,35 +1,38 @@
-{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas, hostPlatform }:
+{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile, isPyPy }:
 
-buildPythonPackage rec {
+let
+  blasImplementation = lib.nameFromURL blas.name "-";
+  cfg = writeTextFile {
+    name = "site.cfg";
+    text = (lib.generators.toINI {} {
+      ${blasImplementation} = {
+        include_dirs = "${blas}/include";
+        library_dirs = "${blas}/lib";
+      } // lib.optionalAttrs (blasImplementation == "mkl") {
+        mkl_libs = "mkl_rt";
+        lapack_libs = "";
+      };
+    });
+  };
+in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.14.2";
+  version = "1.17.3";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "facc6f925c3099ac01a1f03758100772560a0b020fb9d70f210404be08006bcb";
+    sha256 = "a0678793096205a4d784bd99f32803ba8100f639cf3b932dc63b21621390ea7e";
   };
 
-  disabled = isPyPy;
-  buildInputs = [ gfortran nose blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
-  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
-    # See cpython 2.7 patches.
-    # numpy.distutils is used by cython during it's check phase
+  patches = lib.optionals python.hasDistutilsCxxPatch [
+    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+    # Patching of numpy.distutils is needed to prevent it from undoing the
+    # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
-
-  postPatch = lib.optionalString hostPlatform.isMusl ''
-    # Use fenv.h
-    sed -i \
-      numpy/core/src/npymath/ieee754.c.src \
-      numpy/core/include/numpy/ufuncobject.h \
-      -e 's/__GLIBC__/__linux__/'
-    # Don't use various complex trig functions
-    substituteInPlace numpy/core/src/private/npy_config.h \
-      --replace '#if defined(__GLIBC__)' "#if 1" \
-      --replace '#if !__GLIBC_PREREQ(2, 18)' "#if 1"
-  '';
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
@@ -37,15 +40,12 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    echo "Creating site.cfg file..."
-    cat << EOF > site.cfg
-    [openblas]
-    include_dirs = ${blas}/include
-    library_dirs = ${blas}/lib
-    EOF
+    ln -s ${cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
+
+  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
 
   checkPhase = ''
     runHook preCheck
@@ -55,18 +55,14 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  postInstall = ''
-    ln -s $out/bin/f2py* $out/bin/f2py
-  '';
-
   passthru = {
     blas = blas;
+    inherit blasImplementation cfg;
   };
 
-  # Disable two tests
-  # - test_f2py: f2py isn't yet on path.
+  # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_f2py,test_large_file_support";
+  NOSE_EXCLUDE="test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";

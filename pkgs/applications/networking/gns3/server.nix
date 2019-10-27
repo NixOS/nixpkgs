@@ -1,51 +1,31 @@
 { stable, branch, version, sha256Hash }:
 
-{ stdenv, python3Packages, fetchFromGitHub, fetchurl }:
+{ stdenv, python3, fetchFromGitHub }:
 
 let
-  pythonPackages = python3Packages;
-  aiohttp = (stdenv.lib.overrideDerivation pythonPackages.aiohttp
-    (oldAttrs:
-      rec {
-        pname = "aiohttp";
-        version = "2.3.10";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
-        };
-      }));
-  aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
-    (oldAttrs:
-      rec {
-        pname = "aiohttp-cors";
-        version = "0.5.3";
-        name = "${pname}-${version}";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
-        };
-        propagatedBuildInputs = [ aiohttp ]
-          ++ stdenv.lib.optional
-               (pythonPackages.pythonOlder "3.5")
-               pythonPackages.typing;
-      }));
-in pythonPackages.buildPythonPackage rec {
-  name = "${pname}-${version}";
+  python = python3;
+
+in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "GNS3";
-    repo = pname;
+    repo = "gns3-server";
     rev = "v${version}";
     sha256 = sha256Hash;
   };
 
-  propagatedBuildInputs = [ aiohttp-cors ]
-    ++ (with pythonPackages; [
-      yarl aiohttp multidict
-      jinja2 psutil zipstream raven jsonschema typing
-      prompt_toolkit
-    ]);
+  postPatch = ''
+    # Only 2.x is problematic:
+    sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
+  '';
+
+  propagatedBuildInputs = with python.pkgs; [
+    aiohttp-cors yarl aiohttp multidict setuptools
+    jinja2 psutil zipstream raven jsonschema distro async_generator aiofiles
+    (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
+  ];
 
   # Requires network access
   doCheck = false;
@@ -53,6 +33,7 @@ in pythonPackages.buildPythonPackage rec {
   postInstall = ''
     rm $out/bin/gns3loopback # For Windows only
   '';
+
   meta = with stdenv.lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";
     longDescription = ''

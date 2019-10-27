@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ebtables-${version}";
+  pname = "ebtables";
   version = "2.0.10-4";
 
   src = fetchurl {
@@ -24,9 +24,10 @@ stdenv.mkDerivation rec {
 
   preInstall = "mkdir -p $out/etc/sysconfig";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A filtering tool for Linux-based bridging firewalls";
     homepage = http://ebtables.sourceforge.net/;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

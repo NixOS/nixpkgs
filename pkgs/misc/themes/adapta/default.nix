@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, parallel, sassc, inkscape, libxml2, glib, gdk_pixbuf, librsvg, gtk-engine-murrine, gnome3 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, parallel, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "adapta-gtk-theme-${version}";
-  version = "3.93.1.16";
+  pname = "adapta-gtk-theme";
+  version = "3.95.0.11";
 
   src = fetchFromGitHub {
     owner = "adapta-project";
     repo = "adapta-gtk-theme";
     rev = version;
-    sha256 = "11jjzhqvx74iq12682ymsnms99izwl5hys1anb9l0fl6jy0dh2xx";
+    sha256 = "19skrhp10xx07hbd0lr3d619vj2im35d8p9rmb4v4zacci804q04";
   };
 
   preferLocalBuild = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     librsvg
   ];
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "An adaptive Gtk+ theme based on Material Design Guidelines";
+    description = "An adaptive GTK theme based on Material Design Guidelines";
     homepage = https://github.com/adapta-project/adapta-gtk-theme;
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;

@@ -1,13 +1,20 @@
 { stdenv, fetchurl, openssl, nettle, expat, libevent, dns-root-data }:
 
 stdenv.mkDerivation rec {
-  name = "unbound-${version}";
-  version = "1.7.0";
+  pname = "unbound";
+  version = "1.9.4";
 
   src = fetchurl {
-    url = "https://unbound.net/downloads/${name}.tar.gz";
-    sha256 = "18i6p6zqmbs9gj57mz3iwz828csaab26gb534b8wrn0kzdqr1pcl";
+    url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
+    sha256 = "1c2bjm13x8bkw0ds1mhn9ivd2gzmfrb0x5y76bkz09a04bxjagix";
   };
+
+  # https://github.com/NLnetLabs/unbound/pull/90
+  postPatch = ''
+    substituteInPlace validator/val_secalgo.c \
+      --replace '&nettle_secp_256r1' 'nettle_get_secp_256r1()' \
+      --replace '&nettle_secp_384r1' 'nettle_get_secp_384r1()'
+  '';
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
@@ -40,14 +47,14 @@ stdenv.mkDerivation rec {
     # get rid of runtime dependencies on $dev outputs
   + ''substituteInPlace "$lib/lib/libunbound.la" ''
     + stdenv.lib.concatMapStrings
-      (pkg: " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' ")
+      (pkg: " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
       buildInputs;
 
   meta = with stdenv.lib; {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = https://www.unbound.net;
-    maintainers = with maintainers; [ ehmry fpletz ];
+    maintainers = with maintainers; [ ehmry fpletz globin ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

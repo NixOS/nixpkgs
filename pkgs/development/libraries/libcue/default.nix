@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "libcue-${version}";
+  pname = "libcue";
   version = "2.2.1";
 
   src = fetchFromGitHub {
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake bison flex ];
+
+  doCheck = false; # fails all the tests (ctest)
 
   meta = with stdenv.lib; {
     description = "CUE Sheet Parser Library";

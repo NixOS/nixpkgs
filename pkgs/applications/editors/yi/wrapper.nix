@@ -9,9 +9,9 @@ let
     (self: [ self.yi ] ++ extraPackages self);
 in
 stdenv.mkDerivation {
-  name = "yi-custom";
+  pname = "yi-custom";
   version = "0.0.0.1";
-  unpackPhase = "true";
+  dontUnpack = true;
   nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''

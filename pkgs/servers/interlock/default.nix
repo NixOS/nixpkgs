@@ -1,9 +1,9 @@
-{ stdenv, lib, sudo, coreutils, systemd, cryptsetup
+{ sudo, coreutils, systemd, cryptsetup
 , mount, umount
 , buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "interlock-${version}";
+  pname = "interlock";
   version = "2016.04.13";
   rev = "v${version}";
 

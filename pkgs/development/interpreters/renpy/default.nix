@@ -6,19 +6,19 @@
 with pythonPackages;
 
 stdenv.mkDerivation rec {
-  name = "renpy-${version}";
-  version = "6.99.14.3";
+  pname = "renpy";
+  version = "7.3.3";
 
   meta = with stdenv.lib; {
     description = "Ren'Py Visual Novel Engine";
-    homepage = http://renpy.org/;
+    homepage = https://renpy.org/;
     license = licenses.mit;
     platforms = platforms.linux;
   };
 
   src = fetchurl {
     url = "https://www.renpy.org/dl/${version}/renpy-${version}-source.tar.bz2";
-    sha256 = "15n29ybblcpnfbmhc31gm5vj7cpqd8cwrcqxlwnxy0gjpbc50x73";
+    sha256 = "0wwsm0vg6zd07xmkqrqprymahdl4ifg7bc1lpbrh0qlfs1pvjlss";
   };
 
   patches = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ pygame_sdl2 tkinter ];
 
-  RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: "${path}") [
+  RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: path) [
     SDL2 SDL2.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out libGLU_combined fribidi zlib
   ]);
 

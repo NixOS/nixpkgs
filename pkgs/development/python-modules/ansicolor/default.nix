@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "ansicolor";
   version = "0.2.6";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,29 +1,29 @@
-{ stdenv, fetchurl, fetchgit, cmake
+{ stdenv, fetchFromGitHub, cmake
 , libsodium, mbedtls, libev, c-ares, pcre
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
 }:
 
 stdenv.mkDerivation rec {
-  name = "shadowsocks-libev-${version}";
-  version = "3.1.3";
+  pname = "shadowsocks-libev";
+  version = "3.3.1";
 
   # Git tag includes CMake build files which are much more convenient.
-  # fetchgit because submodules.
-  src = fetchgit {
-    url = "https://github.com/shadowsocks/shadowsocks-libev";
+  src = fetchFromGitHub {
+    owner = "shadowsocks";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "16q91xh6ixfv7b5rl31an11101irv08119klfx5qgj4i6h7c41s7";
+    sha256 = "0l15mbwlzx446rn5cix9f1726by62807bhnxkzknd41j7r937vyv";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ libsodium mbedtls libev c-ares pcre ];
-  nativeBuildInputs = [ cmake asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt ];
+  nativeBuildInputs = [ cmake asciidoc xmlto docbook_xml_dtd_45
+                        docbook_xsl libxslt ];
 
-  cmakeFlags = [ "-DWITH_STATIC=OFF" ];
+  cmakeFlags = [ "-DWITH_STATIC=OFF"  "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON" ];
 
   postInstall = ''
     cp lib/* $out/lib
-    chmod +x $out/bin/*
-    mv $out/pkgconfig $out/lib
   '';
 
   meta = with stdenv.lib; {
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/shadowsocks/shadowsocks-libev;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.nfjinjing ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

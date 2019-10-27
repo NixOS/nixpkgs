@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, dpkg, makeWrapper
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome3, gtk3, gdk_pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, wget, xorg }:
+{ theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
+cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk-pixbuf,
+libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
+at-spi2-atk, libuuid, nodePackages
+}:
 
 let
 
-  version = "3.2.0-beta25a7a50e";
+  version = "4.0.2";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
+    at-spi2-atk
     atk
     cairo
     cups
@@ -18,16 +20,18 @@ let
     fontconfig
     freetype
     glib
-    gnome3.gconf
-    gdk_pixbuf
+    gnome2.GConf
+    gdk-pixbuf
     gtk3
     pango
     libnotify
     libxcb
+    libappindicator-gtk3
     nspr
     nss
     stdenv.cc.cc
     systemd
+    libuuid
 
     xorg.libxkbfile
     xorg.libX11
@@ -44,16 +48,17 @@ let
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "0497794a7f0e5ac00a9421e6b1875dcc576ed93efc4a7d8c6465db641c234064";
+        sha256 = "053j5py16ilpwy868rhh5l2g93xj1fq4fwxrsi2bkfsnmq261hkm";
       }
     else
-      throw "Slack is not supported on ${stdenv.system}";
+      throw "Slack is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "slack-${version}";
+  pname = "slack";
+  inherit version;
 
   inherit src;
 
@@ -62,9 +67,9 @@ in stdenv.mkDerivation {
     gtk3  # needed for GSETTINGS_SCHEMAS_PATH
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper nodePackages.asar ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
   buildCommand = ''
     mkdir -p $out
     dpkg -x $src $out
@@ -88,12 +93,28 @@ in stdenv.mkDerivation {
     substituteInPlace $out/share/applications/slack.desktop \
       --replace /usr/bin/ $out/bin/ \
       --replace /usr/share/ $out/share/
+  '' + stdenv.lib.optionalString (theme != null) ''
+    asar extract $out/lib/slack/resources/app.asar $out/lib/slack/resources/app.asar.unpacked
+    cat <<EOF >> $out/lib/slack/resources/app.asar.unpacked/dist/ssb-interop.bundle.js
+
+    var fs = require('fs');
+    document.addEventListener('DOMContentLoaded', function() {
+      fs.readFile('${theme}/theme.css', 'utf8', function(err, css) {
+        let s = document.createElement('style');
+        s.type = 'text/css';
+        s.innerHTML = css;
+        document.head.appendChild(s);
+      });
+    });
+    EOF
+    asar pack $out/lib/slack/resources/app.asar.unpacked $out/lib/slack/resources/app.asar
   '';
 
   meta = with stdenv.lib; {
     description = "Desktop client for Slack";
     homepage = https://slack.com;
     license = licenses.unfree;
+    maintainers = [ maintainers.mmahut ];
     platforms = [ "x86_64-linux" ];
   };
 }

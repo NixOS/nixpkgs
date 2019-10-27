@@ -104,7 +104,7 @@ in
          systemPackages = [ pkgs.gale ];
        };
 
-       users.extraUsers = [{
+       users.users = [{
          name = cfg.user;
          description = "Gale daemon";
          uid = config.ids.uids.gale;
@@ -113,7 +113,7 @@ in
          createHome = true;
        }];
 
-       users.extraGroups = [{
+       users.groups = [{
          name = cfg.group;
          gid = config.ids.gids.gale;
        }];

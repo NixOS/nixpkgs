@@ -63,6 +63,17 @@ in
           Enable debugging messages.
         '';
       };
+
+      notificationsCommand = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "sudo -u example_user DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send";
+        description = ''
+          Command used to send notifications.
+
+          See <link xlink:href="https://github.com/rfjakob/earlyoom#notifications">README</link> for details.
+        '';
+      };
     };
   };
 
@@ -88,7 +99,9 @@ in
           -s ${toString ecfg.freeSwapThreshold} \
           ${optionalString ecfg.useKernelOOMKiller "-k"} \
           ${optionalString ecfg.ignoreOOMScoreAdjust "-i"} \
-          ${optionalString ecfg.enableDebugInfo "-d"}
+          ${optionalString ecfg.enableDebugInfo "-d"} \
+          ${optionalString (ecfg.notificationsCommand != null)
+            "-N ${escapeShellArg ecfg.notificationsCommand}"}
         '';
       };
     };

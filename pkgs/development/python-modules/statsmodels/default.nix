@@ -13,12 +13,11 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.8.0";
-  name = "${pname}-${version}";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "26431ab706fbae896db7870a0892743bfbb9f5c83231644692166a31d2d86048";
+    sha256 = "320659a80f916c2edf9dfbe83512d9004bb562b72eedb7d9374562038697fa10";
   };
 
   checkInputs = with self; [ nose ];

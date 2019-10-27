@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, cmake, sfml, libGLU_combined, bullet, glm, libmad, x11, openal
+{ stdenv, fetchgit, cmake, sfml, libGLU_combined, bullet, glm, libmad, xlibsWrapper, openal
 , SDL2, boost, ffmpeg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2017-09-17";
-  name = "openrw-${version}";
+  pname = "openrw";
 
   src = fetchgit {
     url = "https://github.com/rwengine/openrw";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake sfml libGLU_combined bullet glm libmad x11 openal SDL2 boost ffmpeg
+    cmake sfml libGLU_combined bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
   ];
 
   meta = with stdenv.lib; {

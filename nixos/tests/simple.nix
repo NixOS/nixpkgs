@@ -4,7 +4,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ eelco ];
   };
 
-  machine = { config, pkgs, ... }: {
+  machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
   };
 

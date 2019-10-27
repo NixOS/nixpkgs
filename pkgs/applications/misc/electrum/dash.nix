@@ -2,7 +2,7 @@
 
 python2Packages.buildPythonApplication rec {
   version = "2.9.3.1";
-  name = "electrum-dash-${version}";
+  pname = "electrum-dash";
 
   src = fetchurl {
     url = "https://github.com/akhavr/electrum-dash/releases/download/${version}/Electrum-DASH-${version}.tar.gz";
@@ -22,7 +22,7 @@ python2Packages.buildPythonApplication rec {
     qrcode
     requests
     pyaes
-    tlslite
+    tlslite-ng
     x11_hash
     mnemonic
     jsonrpclib

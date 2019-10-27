@@ -1,109 +1,116 @@
-{ stdenv, fetchurl, system, makeWrapper, makeDesktopItem,
-  alsaLib, dbus, glib, fontconfig, freetype, libpulseaudio,
-  utillinux, zlib, xorg, udev, sqlite, expat, libv4l, procps, libGL }:
+{ stdenv, fetchurl, mkDerivation, autoPatchelfHook
+, fetchFromGitHub
+# Dynamic libraries
+, dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
+, qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
+, qttools, qtwayland, qtwebchannel, qtwebengine
+# Runtime
+, coreutils, libjpeg_turbo, pciutils, procps, utillinux, libv4l
+, pulseaudioSupport ? true, libpulseaudio ? null
+}:
+
+assert pulseaudioSupport -> libpulseaudio != null;
 
 let
+  inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
-  version = "2.0.123200.0405";
+  version = "3.0.306796.1020";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "1ifwa2xf5mw1ll2j1f39qd7mpyxpc6xj3650dmlnxf525dsm573z";
+      sha256 = "0nh93pyincwfmx3z5x4s0ym3n0ff492nwd9wh3xkcl518pslxpxy";
     };
   };
 
-in stdenv.mkDerivation {
-  name = "zoom-us-${version}";
+  # Used for icons, appdata, and desktop file.
+  desktopIntegration = fetchFromGitHub {
+    owner = "flathub";
+    repo = "us.zoom.Zoom";
+    rev = "0d294e1fdd2a4ef4e05d414bc680511f24d835d7";
+    sha256 = "0rm188844a10v8d6zgl2pnwsliwknawj09b02iabrvjw5w1lp6wl";
+  };
 
-  src = srcs.${system};
+in mkDerivation {
+  pname = "zoom-us";
+  inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
+  src = srcs.${stdenv.hostPlatform.system};
 
-  libPath = stdenv.lib.makeLibraryPath [
-    alsaLib
-    expat
-    glib
-    freetype
-    libGL
-    libpulseaudio
-    zlib
-    dbus
-    fontconfig
-    sqlite
-    utillinux
-    udev
+  nativeBuildInputs = [ autoPatchelfHook ];
 
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
-    xorg.libxcb
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXdamage
-    xorg.libXtst
-    xorg.libxshmfence
-    xorg.libXi
-    xorg.libXrender
-    xorg.libXcomposite
-    xorg.libXScrnSaver
-    xorg.libXrandr
-
-    stdenv.cc.cc
+  buildInputs = [
+    dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo
+    qtbase qtdeclarative qtlocation qtquickcontrols qtquickcontrols2 qtscript
+    qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
   ];
 
-  installPhase = ''
-    runHook preInstall
+  runtimeDependencies = optional pulseaudioSupport libpulseaudio;
 
-    packagePath=$out/share/zoom-us
-    mkdir -p $packagePath
-    mkdir -p $out/bin
-    cp -ar * $packagePath
+  installPhase =
+    let
+      files = concatStringsSep " " [
+        "*.pcm"
+        "*.png"
+        "ZoomLauncher"
+        "config-dump.sh"
+        "timezones"
+        "translations"
+        "version.txt"
+        "zcacert.pem"
+        "zoom"
+        "zoom.sh"
+        "zoomlinux"
+        "zopen"
+      ];
+    in ''
+      runHook preInstall
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/zoom
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/QtWebEngineProcess
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/qtdiag
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/zopen
-    # included from https://github.com/NixOS/nixpkgs/commit/fc218766333a05c9352b386e0cbb16e1ae84bf53
-    # it works for me without it, but, well...
-    paxmark m $packagePath/zoom
-    #paxmark m $packagePath/QtWebEngineProcess # is this what dtzWill talked about?
+      mkdir -p $out/{bin,share/zoom-us}
 
-    # RUNPATH set via patchelf is used only for half of libraries (why?), so wrap it
-    makeWrapper $packagePath/zoom $out/bin/zoom-us \
-        --prefix LD_LIBRARY_PATH : "$packagePath:$libPath" \
-        --prefix LD_PRELOAD : "${libv4l}/lib/v4l1compat.so" \
-        --prefix PATH : "${procps}/bin" \
-        --set QT_PLUGIN_PATH "$packagePath/platforms" \
-        --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
-        --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
+      cp -ar ${files} $out/share/zoom-us
 
-    cat > $packagePath/qt.conf <<EOF
-    [Paths]
-    Prefix = $packagePath
-    EOF
+      # TODO Patch this somehow; tries to dlopen './libturbojpeg.so' from cwd
+      ln -s $(readlink -e "${libjpeg_turbo.out}/lib/libturbojpeg.so") $out/share/zoom-us/libturbojpeg.so
 
-    runHook postInstall
+      runHook postInstall
+    '';
+
+  postInstall = ''
+    mkdir -p $out/share/{applications,appdata,icons}
+
+    # Desktop File
+    cp ${desktopIntegration}/us.zoom.Zoom.desktop $out/share/applications
+    substituteInPlace $out/share/applications/us.zoom.Zoom.desktop \
+        --replace "Exec=zoom" "Exec=$out/bin/zoom-us"
+
+    # Appdata
+    cp ${desktopIntegration}/us.zoom.Zoom.appdata.xml $out/share/appdata
+
+    # Icons
+    for icon_size in 64 96 128 256; do
+        path=$icon_size'x'$icon_size
+        icon=${desktopIntegration}/us.zoom.Zoom.$icon_size.png
+
+        mkdir -p $out/share/icons/hicolor/$path/apps
+        cp $icon $out/share/icons/hicolor/$path/apps/us.zoom.Zoom.png
+    done
+
+    ln -s $out/share/zoom-us/zoom $out/bin/zoom-us
   '';
 
-  postInstall = (makeDesktopItem {
-    name = "zoom-us";
-    exec = "$out/bin/zoom-us %U";
-    icon = "$out/share/zoom-us/application-x-zoom.png";
-    desktopName = "Zoom";
-    genericName = "Video Conference";
-    categories = "Network;Application;";
-    mimeType = "x-scheme-handler/zoommtg;";
-  }).buildCommand;
+  qtWrapperArgs = [
+    ''--prefix PATH : ${makeBinPath [ coreutils glib.dev pciutils procps qttools.dev utillinux ]}''
+    ''--prefix LD_PRELOAD : ${libv4l}/lib/libv4l/v4l2convert.so''
+  ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = https://zoom.us/;
     description = "zoom.us video conferencing application";
     license = stdenv.lib.licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with stdenv.lib.maintainers; [ danbst ];
+    maintainers = with stdenv.lib.maintainers; [ danbst tadfisher ];
   };
 
 }

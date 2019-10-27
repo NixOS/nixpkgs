@@ -4,8 +4,9 @@
 , python3
 , gcc
 , cabal-install
-, gmp
 , runCommand
+, lib
+, stdenv
 
 , ghc
 , happy
@@ -20,15 +21,18 @@ runCommand "configured-ghcjs-src" {
     autoconf
     automake
     python3
-    gcc
     ghc
     happy
     alex
     cabal-install
+  ] ++ lib.optionals stdenv.isDarwin [
+    gcc # https://github.com/ghcjs/ghcjs/issues/663
   ];
   inherit ghcjsSrc;
 } ''
   export HOME=$(pwd)
+  mkdir $HOME/.cabal
+  touch $HOME/.cabal/config
   cp -r "$ghcjsSrc" "$out"
   chmod -R +w "$out"
   cd "$out"
@@ -39,6 +43,8 @@ runCommand "configured-ghcjs-src" {
   # TODO: How to actually fix this?
   # Seems to work fine and produce the right files.
   touch ghc/includes/ghcautoconf.h
+  mkdir -p ghc/compiler/vectorise
+  mkdir -p ghc/utils/haddock/haddock-library/vendor
 
   patchShebangs .
   ./utils/makePackages.sh copy

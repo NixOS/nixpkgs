@@ -1,20 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm }:
+
 buildPythonPackage rec {
   pname = "py";
-  version = "1.5.3";
-  name = "${pname}-${version}";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "29c9fab495d7528e80ba1e343b958684f4ace687327e6f789a94bf3d1915f881";
+    sha256 = "0lsy1gajva083pzc7csj1cvbmminb7b4l6a0prdzyb3fd829nqyw";
   };
 
   # Circular dependency on pytest
   doCheck = false;
 
+  nativeBuildInputs = [ setuptools_scm ];
+
+  pythonImportsCheck = [
+    "py"
+  ];
+
   meta = with stdenv.lib; {
     description = "Library with cross-python path, ini-parsing, io, code, log facilities";
-    homepage = http://pylib.readthedocs.org/;
+    homepage = https://pylib.readthedocs.org/;
     license = licenses.mit;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage, jdk, maven, javaPackages }:
+{ stdenv, fetchFromGitHub, jdk, maven, javaPackages }:
 
 let
   version = "0.9.2";
@@ -27,8 +27,9 @@ let
     outputHash = "1p7yf97dn0nvr005cbs6vdk3i341s8fya4kfccj8qqad2qgxflif";
   };
 in
-stdenv.mkDerivation rec {
-  name = "gephi-${version}";
+stdenv.mkDerivation {
+  pname = "gephi";
+  inherit version;
 
   inherit src;
 

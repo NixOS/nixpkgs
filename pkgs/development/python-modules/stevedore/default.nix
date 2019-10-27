@@ -1,18 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, pbr, six, argparse }:
+{ stdenv, buildPythonPackage, fetchPypi, pbr, setuptools, six }:
 
 buildPythonPackage rec {
   pname = "stevedore";
-  version = "1.28.0";
-  name = "${pname}-${version}";
+  version = "1.31.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f1c7518e7b160336040fee272174f1f7b29a46febb3632502a8f2055f973d60b";
+    sha256 = "054apq55yg7058pmbnyc8jhrcpi9clmi0sm7znhwg0d676brywz0";
   };
 
   doCheck = false;
 
-  propagatedBuildInputs = [ pbr six argparse ];
+  propagatedBuildInputs = [ pbr setuptools six ];
 
   meta = with stdenv.lib; {
     description = "Manage dynamic plugins for Python applications";

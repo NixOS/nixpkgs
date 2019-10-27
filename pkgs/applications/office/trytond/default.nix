@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, python2Packages
+{ stdenv, python2Packages
 , withPostgresql ? true }:
 
 with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   pname = "trytond";
-  version = "4.8.0";
+  version = "4.8.4";
   src = python2Packages.fetchPypi {
     inherit pname version;
-    sha256 = "114c0ea15b8395117bf8c669b7da8af4961001297fbd034c780a42a40e079e3a";
+    sha256 = "1935045b1b4674de602b4279a9cfd0a14431624a28ccb490234cffecb81fbca7";
   };
 
   # Tells the tests which database to use

@@ -1,7 +1,7 @@
 {stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation rec {
-  name = "tnt-${version}";
+stdenv.mkDerivation {
+  pname = "tnt";
   version = "3.0.12";
   
   src = fetchurl {
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://math.nist.gov/tnt/;
     description = "Template Numerical Toolkit: C++ headers for array and matrices";
+    license = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,6 +1,6 @@
 # Common configuration for Xen DomU NixOS virtual machines.
 
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   boot.loader.grub.version = 2;

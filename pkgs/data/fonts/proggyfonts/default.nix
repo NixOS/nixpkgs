@@ -2,11 +2,11 @@
 
 # adapted from https://aur.archlinux.org/packages/proggyfonts/
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "proggyfonts-0.1";
 
   src = fetchurl {
-    url = "http://web.archive.org/web/20150801042353/http://kaictl.net/software/proggyfonts-0.1.tar.gz";
+    url = "https://web.archive.org/web/20150801042353/http://kaictl.net/software/proggyfonts-0.1.tar.gz";
     sha256 = "1plcm1sjpa3hdqhhin48fq6zmz3ndm4md72916hd8ff0w6596q0n";
   };
 

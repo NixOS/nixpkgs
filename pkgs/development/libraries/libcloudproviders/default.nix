@@ -1,21 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, gtk-doc, docbook_xsl, glib }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, glib }:
 
-# TODO: Add installed tests once https://gitlab.gnome.org/Incubator/libcloudproviders/issues/4 is fixed
+# TODO: Add installed tests once https://gitlab.gnome.org/World/libcloudproviders/issues/4 is fixed
 
-let
+stdenv.mkDerivation rec {
   pname = "libcloudproviders";
-  version = "0.2.5";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.3.0";
 
   src = fetchurl {
-    url = "https://gitlab.gnome.org/Incubator/${pname}/repository/archive.tar.gz?ref=${version}";
-    sha256 = "1c3vfg8wlsv0fmi1lm9qhsqdvp4k33yvwn6j680rh49laayf7k3g";
+    url = "https://gitlab.gnome.org/World/${pname}/repository/archive.tar.gz?ref=${version}";
+    sha256 = "1hby7vhxn6fw4ih3xbx6ab9vqp3a3dmlhr0z7mrwr73b7ankly0l";
   };
-
-  patches = [
-    ./fix-include.patch
-  ];
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -23,13 +17,13 @@ in stdenv.mkDerivation rec {
     "-Denable-gtk-doc=true"
   ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gtk-doc docbook_xsl ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl ];
 
   buildInputs = [ glib ];
 
   meta = with stdenv.lib; {
     description = "DBus API that allows cloud storage sync clients to expose their services";
-    homepage = https://gitlab.gnome.org/Incubator/libcloudproviders;
+    homepage = https://gitlab.gnome.org/World/libcloudproviders;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

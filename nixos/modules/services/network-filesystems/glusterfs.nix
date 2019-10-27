@@ -156,7 +156,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       requires = lib.optional cfg.useRpcbind "rpcbind.service";
-      after = [ "network.target" "local-fs.target" ] ++ lib.optional cfg.useRpcbind "rpcbind.service";
+      after = [ "network.target" ] ++ lib.optional cfg.useRpcbind "rpcbind.service";
 
       preStart = ''
         install -m 0755 -d /var/log/glusterfs
@@ -176,10 +176,8 @@ in
       '';
 
       serviceConfig = {
-        Type="forking";
-        PIDFile="/run/glusterd.pid";
         LimitNOFILE=65536;
-        ExecStart="${glusterfs}/sbin/glusterd -p /run/glusterd.pid --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
+        ExecStart="${glusterfs}/sbin/glusterd --no-daemon --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
         KillMode=cfg.killMode;
         TimeoutStopSec=cfg.stopKillTimeout;
       };
@@ -198,9 +196,11 @@ in
         install -m 0755 -d /var/log/glusterfs
       '';
 
+      # glustereventsd uses the `gluster` executable
+      path = [ glusterfs ];
+
       serviceConfig = {
         Type="simple";
-        Environment="PYTHONPATH=${glusterfs}/usr/lib/python2.7/site-packages";
         PIDFile="/run/glustereventsd.pid";
         ExecStart="${glusterfs}/sbin/glustereventsd --pid-file /run/glustereventsd.pid";
         ExecReload="/bin/kill -SIGUSR2 $MAINPID";

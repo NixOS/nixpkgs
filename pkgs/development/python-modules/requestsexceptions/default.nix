@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "requestsexceptions";
   version = "1.4.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

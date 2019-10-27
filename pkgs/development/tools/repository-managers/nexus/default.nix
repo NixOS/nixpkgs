@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, jre, gawk }:
+{ stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "nexus-${version}";
-  version = "3.11.0-01";
+  pname = "nexus";
+  version = "3.18.1-01";
 
   src = fetchurl {
-    url = "https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${version}-mac.tgz";
-    sha256 = "1h5nfzb1sqhzb5j7w2dpmdi7vnnc9g6zx43a44f3zjvlxh1s0vim";
+    url = "https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${version}-unix.tar.gz";
+    sha256 = "0z3hb1ha0yvi09hrndrzzh95g3m42pfsi0gzw7hfx9r0n8r2qgkd";
   };
 
-  sourceRoot = name;
+  sourceRoot = "${pname}-${version}";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     rm -fv $out/bin/nexus.bat
 
     wrapProgram $out/bin/nexus \
-      --set JAVA_HOME ${jre} \
+      --set JAVA_HOME ${jre_headless} \
       --set ALTERNATIVE_NAME "nexus" \
       --prefix PATH "${stdenv.lib.makeBinPath [ gawk ]}"
 
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.sonatype.org/nexus;
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = with maintainers; [ aespinosa ironpinguin ma27 ];
+    maintainers = with maintainers; [ aespinosa ironpinguin ma27 zaninime ];
   };
 }

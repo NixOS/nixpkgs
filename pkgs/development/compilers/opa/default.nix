@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "opa";
   version = "4310";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "MLstate";
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
 
-  configureFlags = "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind ";
+  configureFlags = [ "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind" ];
 
   buildInputs = [ which perl jdk openssl coreutils zlib ncurses
     makeWrapper gcc binutils gnumake nodejs

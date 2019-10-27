@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "csfml-${version}";
+  pname = "csfml";
+  inherit version;
   src = fetchFromGitHub {
     owner = "SFML";
     repo  = "CSFML";
@@ -16,7 +17,7 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.sfml-dev.org/;
+    homepage = https://www.sfml-dev.org/;
     description = "Simple and fast multimedia library";
     longDescription = ''
       SFML is a simple, fast, cross-platform and object-oriented multimedia API.
@@ -25,7 +26,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.zlib;
     maintainers = [ maintainers.jpdoyle ];
-
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 }

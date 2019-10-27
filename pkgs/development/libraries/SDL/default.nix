@@ -1,26 +1,34 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
-, openglSupport ? false, libGL, libGLU
-, alsaSupport ? true, alsaLib
-, x11Support ? hostPlatform == buildPlatform, libXext, libICE, libXrandr
-, pulseaudioSupport ? true, libpulseaudio
+{ stdenv, config, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, openglSupport ? libGLSupported, libGL, libGLU
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, libXext, libICE, libXrandr
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
-, hostPlatform, buildPlatform
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
-with lib;
+with stdenv.lib;
 
-assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
-assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null && libGLU != null);
+let
+  extraPropagatedBuildInputs = [ ]
+    ++ optionals x11Support [ libXext libICE libXrandr ]
+    ++ optionals openglSupport [ libGL libGLU ]
+    ++ optional alsaSupport alsaLib
+    ++ optional pulseaudioSupport libpulseaudio
+    ++ optional stdenv.isDarwin Cocoa;
+  rpath = makeLibraryPath extraPropagatedBuildInputs;
+in
 
 stdenv.mkDerivation rec {
-  name    = "SDL-${version}";
+  pname = "SDL";
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "http://www.libsdl.org/release/${name}.tar.gz";
+    url    = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
@@ -30,18 +38,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optional stdenv.isLinux libcap;
 
-  propagatedBuildInputs = [ ]
-    ++ optionals x11Support [ libXext libICE libXrandr ]
-    ++ optional stdenv.isLinux libcap
-    ++ optionals openglSupport [ libGL libGLU ]
-    ++ optional alsaSupport alsaLib
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optional stdenv.isDarwin Cocoa;
+  propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
 
-  buildInputs = [ libiconv ]
-    ++ optional (!hostPlatform.isMinGW) audiofile
+  buildInputs = [ ]
+    ++ optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
     ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
   configureFlags = [
@@ -87,7 +90,7 @@ stdenv.mkDerivation rec {
     # Ticket: https://bugs.freedesktop.org/show_bug.cgi?id=27222
     (fetchpatch {
       name = "SDL_SetGamma.patch";
-      url = "http://src.fedoraproject.org/cgit/rpms/SDL.git/plain/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch?id=04a3a7b1bd88c2d5502292fad27e0e02d084698d";
+      url = "https://src.fedoraproject.org/cgit/rpms/SDL.git/plain/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch?id=04a3a7b1bd88c2d5502292fad27e0e02d084698d";
       sha256 = "0x52s4328kilyq43i7psqkqg7chsfwh0aawr50j566nzd7j51dlv";
     })
     # Fix a build failure on OS X Mavericks
@@ -110,7 +113,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for lib in $out/lib/*.so* ; do
       if [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
       fi
     done
   '';
@@ -118,6 +121,8 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru = { inherit openglSupport; };
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";

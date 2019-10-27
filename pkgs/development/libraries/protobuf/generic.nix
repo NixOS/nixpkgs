@@ -1,10 +1,11 @@
-{ stdenv, lib, version, src
+{ stdenv, version, src
 , autoreconfHook, zlib, gtest
 , ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "protobuf-${version}";
+stdenv.mkDerivation {
+  pname = "protobuf";
+  inherit version;
 
   inherit src;
 

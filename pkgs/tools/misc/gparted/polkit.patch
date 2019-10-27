@@ -1,0 +1,12 @@
+diff -ru old/gparted-1.0.0/configure gparted-1.0.0/configure
+--- old/gparted-1.0.0/configure	2019-05-29 12:02:13.000000000 -0400
++++ gparted-1.0.0/configure	2019-08-08 18:09:52.792795781 -0400
+@@ -16145,7 +16145,7 @@
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pkexec >= $PKEXEC_REQUIRED_VERSION" >&5
+ $as_echo_n "checking for pkexec >= $PKEXEC_REQUIRED_VERSION... " >&6; }
+ PKEXEC_REQUIRED_INT=`echo "$PKEXEC_REQUIRED_VERSION" | $AWK -F. '{print $1 * 10000 + $2}'`
+-PKEXEC_VERSION_OUTPUT=`pkexec --version 2> /dev/null` ||
++PKEXEC_VERSION_OUTPUT='pkexec version @polkit_version@' ||
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+ $as_echo "not found" >&6; }
+ if test "x$PKEXEC_VERSION_OUTPUT" != 'x'; then

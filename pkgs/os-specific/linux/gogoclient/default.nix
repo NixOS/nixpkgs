@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     #url = http://gogo6.com/downloads/gogoc-1_2-RELEASE.tar.gz;
-    url = http://src.fedoraproject.org/repo/pkgs/gogoc/gogoc-1_2-RELEASE.tar.gz/41177ed683cf511cc206c7782c37baa9/gogoc-1_2-RELEASE.tar.gz;
+    url = https://src.fedoraproject.org/repo/pkgs/gogoc/gogoc-1_2-RELEASE.tar.gz/41177ed683cf511cc206c7782c37baa9/gogoc-1_2-RELEASE.tar.gz;
     sha256 = "a0ef45c0bd1fc9964dc8ac059b7d78c12674bf67ef641740554e166fa99a2f49";
   };
   patches = [./gcc46-include-fix.patch ./config-paths.patch ];
@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
     sed -i -e 's/^.*Exec \$route -A.*$/& metric 128/' $out/template/linux.sh
   '';
 
-  meta = {
-    homepage = http://gogonet.gogo6.com;
+  meta = with stdenv.lib; {
+    homepage = https://ipv6.ernet.in/Tunnel_broker;
     description = "Client to connect to the Freenet6 IPv6 tunnel broker service";
-    maintainers = [stdenv.lib.maintainers.bluescreen303];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.bluescreen303 ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

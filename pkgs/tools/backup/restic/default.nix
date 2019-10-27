@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "restic-${version}";
-  version = "0.9.0";
+  pname = "restic";
+  version = "0.9.5";
 
   goPackagePath = "github.com/restic/restic";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "09520ggr98w7nn6kl3yx0nrx4f79q4vhg4q1hiv2nlwxd0jz1p6y";
+    sha256 = "1bhn3xwlycpnjg2qbqblwxn3apj43lr5cakgkmrblk13yfwfv5xv";
   };
 
   buildPhase = ''
@@ -27,7 +27,7 @@ buildGoPackage rec {
     cp restic $bin/bin/
     $bin/bin/restic generate \
       --bash-completion $bin/etc/bash_completion.d/restic.sh \
-      --zsh-completion $bin/share/zsh/vendor-completions/restic.sh \
+      --zsh-completion $bin/share/zsh/vendor-completions/_restic \
       --man $bin/share/man/man1
   '';
 

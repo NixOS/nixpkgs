@@ -1,15 +1,15 @@
 { pkgs, fetchFromGitHub, stdenv, gtk3, udev, desktop-file-utils
 , shared-mime-info, intltool, pkgconfig, wrapGAppsHook, ffmpegthumbnailer
-, jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks2, hicolor-icon-theme, adwaita-icon-theme }:
+, jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks2 }:
 
 stdenv.mkDerivation rec {
-  name = "spacefm-${version}";
+  pname = "spacefm";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "spacefm";
-    rev = "${version}";
+    rev = version;
     sha256 = "089r6i40lxcwzp60553b18f130asspnzqldlpii53smz52kvpirx";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libpng, netpbm }:
 
 stdenv.mkDerivation rec {
-  name = "sng-${version}";
+  pname = "sng";
   version = "1.1.0";
 
   src = fetchurl {
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://sng.sourceforge.net/;
     license = licenses.zlib;
     maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

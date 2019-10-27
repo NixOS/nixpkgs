@@ -82,14 +82,14 @@ in
       };
     };
 
-    users.extraUsers = mkIf (cfg.user == "sniproxy") {
+    users.users = mkIf (cfg.user == "sniproxy") {
       sniproxy = {
         group = cfg.group;
         uid = config.ids.uids.sniproxy;
       };
     };
 
-    users.extraGroups = mkIf (cfg.group == "sniproxy") {
+    users.groups = mkIf (cfg.group == "sniproxy") {
       sniproxy = {
         gid = config.ids.gids.sniproxy;
       };

@@ -45,7 +45,7 @@ in
     # get the command line client on system path to make some use of the service
     environment.systemPackages = [ pkgs.dict ];
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "dictd";
         group = "dictd";
         description = "DICT.org dictd server";
@@ -53,7 +53,7 @@ in
         uid = config.ids.uids.dictd;
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "dictd";
         gid = config.ids.gids.dictd;
       };

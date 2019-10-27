@@ -6,16 +6,16 @@
 
 let
   platform =
-    if stdenv.system == "x86_64-linux" then "64bit"
-    else if stdenv.system == "i686-linux" then "32bit"
-         else throw "Unsupported system: ${stdenv.system}";
+    if stdenv.hostPlatform.system == "x86_64-linux" then "64bit"
+    else if stdenv.hostPlatform.system == "i686-linux" then "32bit"
+         else throw "Unsupported system: ${stdenv.hostPlatform.system}";
   debPlatform =
     if platform == "64bit" then "amd64"
     else "i386";
   debRegion = if region == "EU" then "EU." else "";
 in
 stdenv.mkDerivation rec {
-  name = "cups-kyodialog3-${version}";
+  pname = "cups-kyodialog3";
   version = "8.1601";
 
   dontStrip = true;

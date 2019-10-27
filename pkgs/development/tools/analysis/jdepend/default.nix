@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, ant, jdk }:
+{ stdenv, fetchFromGitHub, ant, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "jdepend-${version}";
+  pname = "jdepend";
   version = "2.9.1";
 
   src = fetchFromGitHub {
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin $out/share
-    install dist/${name}.jar $out/share
+    install dist/${pname}-${version}.jar $out/share
 
     cat > "$out/bin/jdepend" <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     exec ${jdk.jre}/bin/java -classpath "$out/share/*" "\$@"
     EOF
     chmod a+x $out/bin/jdepend
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.clarkware.com/software/JDepend.html;
     license = licenses.bsd3;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

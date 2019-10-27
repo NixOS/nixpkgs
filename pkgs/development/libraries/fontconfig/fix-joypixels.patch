@@ -1,0 +1,23 @@
+--- a/conf.d/45-generic.conf
++++ b/conf.d/45-generic.conf
+@@ -5,6 +5,10 @@
+ 
+ <!-- Emoji -->
+ 
++	<alias binding="same">
++		<family>JoyPixels</family>
++		<default><family>emoji</family></default>
++	</alias>
+ 	<alias binding="same">
+ 		<family>Emoji Two</family>
+ 		<default><family>emoji</family></default>
+--- a/conf.d/60-generic.conf
++++ b/conf.d/60-generic.conf
+@@ -29,6 +29,7 @@
+ 	<alias binding="same">
+ 		<family>emoji</family>
+ 		<prefer>
++			<family>JoyPixels</family>
+ 			<family>Emoji Two</family>
+ 			<family>Emoji One</family>
+ 			<!-- System fonts -->

@@ -18,7 +18,7 @@ let
 
 in
 
-stdenv.mkDerivation { 
+stdenv.mkDerivation {
   name = "mess-0.${version}";
 
   unpackPhase =
@@ -37,11 +37,11 @@ stdenv.mkDerivation {
   installPhase =
     ''
       mkdir -p $out/bin
-      cp mess* $out/bin/mess 
+      cp mess* $out/bin/mess
     '';
 
   meta = {
-    homepage = http://www.mess.org/;
+    homepage = https://www.mess.org/;
     license = "non-commercial";
     description = "Multi Emulator Super System, an emulator of many game consoles and computer systems";
     broken = true;

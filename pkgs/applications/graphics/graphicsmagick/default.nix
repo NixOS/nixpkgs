@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, fetchpatch, bzip2, freetype, graphviz, ghostscript
+{ stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
 , libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  name = "graphicsmagick-${version}";
-  version = "1.3.29";
+  pname = "graphicsmagick";
+  version = "1.3.32";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "1m0cc6kpky06lpcipj7rfwc2jbw2igr0jk97zqmw3j1ld5mg93g1";
+    sha256 = "1qclp9i31idpcbbqswmnq2q11lmv0a7cvdb1y72xcky8sshaahmq";
   };
 
   patches = [
     ./disable-popen.patch
+    ./1.3.32-darwin-png-strlcat-fix.patch
   ];
 
   configureFlags = [

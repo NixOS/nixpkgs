@@ -17,7 +17,7 @@ config = {
   definitions in a <emphasis>property</emphasis> to achieve certain effects:
  </para>
 
- <simplesect>
+ <simplesect xml:id="sec-option-definitions-delaying-conditionals">
   <title>Delaying Conditionals</title>
   <para>
    If a set of option definitions is conditional on the value of another
@@ -59,7 +59,7 @@ config = {
   </para>
  </simplesect>
 
- <simplesect>
+ <simplesect xml:id="sec-option-definitions-setting-priorities">
   <title>Setting Priorities</title>
   <para>
    A module can override the definitions of an option in other modules by
@@ -76,7 +76,7 @@ services.openssh.enable = mkOverride 10 false;
   </para>
  </simplesect>
 
- <simplesect>
+ <simplesect xml:id="sec-option-definitions-merging">
   <title>Merging Configurations</title>
   <para>
    In conjunction with <literal>mkIf</literal>, it is sometimes useful for a

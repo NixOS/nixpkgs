@@ -1,20 +1,18 @@
-Index: freetype-2.7.1/modules.cfg
+Index: freetype-2.10.0/modules.cfg
 ===================================================================
---- freetype-2.7.1.orig/modules.cfg
-+++ freetype-2.7.1/modules.cfg
-@@ -120,7 +120,7 @@ AUX_MODULES += cache
+--- freetype-2.10.0.orig/modules.cfg
++++ freetype-2.10.0/modules.cfg
+@@ -120,6 +120,6 @@ AUX_MODULES += cache
  # TrueType GX/AAT table validation.  Needs ftgxval.c below.
  #
- # No FT_CONFIG_OPTION_PIC support.
 -# AUX_MODULES += gxvalid
 +AUX_MODULES += gxvalid
  
  # Support for streams compressed with gzip (files with suffix .gz).
  #
-@@ -143,7 +143,7 @@ AUX_MODULES += bzip2
+@@ -143,6 +143,6 @@ AUX_MODULES += bzip2
  # OpenType table validation.  Needs ftotval.c below.
  #
- # No FT_CONFIG_OPTION_PIC support.
 -# AUX_MODULES += otvalid
 +AUX_MODULES += otvalid
  

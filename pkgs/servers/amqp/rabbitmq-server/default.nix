@@ -1,47 +1,31 @@
-{ stdenv, fetchurl, runCommand
-, erlang, python, libxml2, libxslt, xmlto
-, docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync
-
+{ stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
+, docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat
 , AppKit, Carbon, Cocoa
 }:
 
-let
-  # we only need that one glibc binary (28k instead of 2.7M)
-  getconf = runCommand "getconf" {} ''
-    install -D ${stdenv.lib.getBin stdenv.cc.libc}/bin/getconf $out/bin/getconf
-  '';
+stdenv.mkDerivation rec {
+  pname = "rabbitmq-server";
 
-in stdenv.mkDerivation rec {
-  name = "rabbitmq-server-${version}";
-  version = "3.6.15";
+  version = "3.7.18";
 
+  # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
-    url = "https://www.rabbitmq.com/releases/rabbitmq-server/v${version}/${name}.tar.xz";
-    sha256 = "1zdmil657mhjmd20jv47s5dfpj2liqwvyg0zv2ky3akanfpgj98y";
+    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "1vzx9g2k7ynbv2gz450cwjyxcn3vcxsmlpnvq1r5wzcf25giy9ky";
   };
 
   buildInputs =
-    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip rsync ]
+    [ erlang elixir python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip rsync ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];
 
-  postPatch = with stdenv.lib; ''
-    # patch the path to getconf
-    substituteInPlace deps/rabbit_common/src/vm_memory_monitor.erl \
-      --replace "getconf PAGESIZE" "${getconf}/bin/getconf PAGESIZE"
-  '';
-
-  preBuild = ''
-    # Fix the "/usr/bin/env" in "calculate-relative".
-    patchShebangs .
-  '';
-
   installFlags = "PREFIX=$(out) RMQ_ERLAPP_DIR=$(out)";
   installTargets = "install install-man";
 
+  runtimePath = stdenv.lib.makeBinPath [getconf erlang socat];
   postInstall = ''
-    echo 'PATH=${erlang}/bin:''${PATH:+:}$PATH' >> $out/sbin/rabbitmq-env
+    echo 'PATH=${runtimePath}:''${PATH:+:}$PATH' >> $out/sbin/rabbitmq-env
 
     # we know exactly where rabbitmq is gonna be,
     # so we patch that into the env-script
@@ -55,13 +39,7 @@ in stdenv.mkDerivation rec {
 
     # and an unecessarily copied INSTALL file
     rm $out/INSTALL
-
-    # patched into a source file above;
-    # needs to be explicitely passed to not be stripped by fixup
-    mkdir -p $out/nix-support
-    echo "${getconf}" > $out/nix-support/dont-strip-getconf
-
-    '';
+  '';
 
   meta = {
     homepage = http://www.rabbitmq.com/;

@@ -1,0 +1,64 @@
+diff --git a/src/crypto/x509/root_cgo_darwin.go b/src/crypto/x509/root_cgo_darwin.go
+index 255a8d3525..a467255a54 100644
+--- a/src/crypto/x509/root_cgo_darwin.go
++++ b/src/crypto/x509/root_cgo_darwin.go
+@@ -280,6 +280,8 @@ int CopyPEMRoots(CFDataRef *pemRoots, CFDataRef *untrustedPemRoots, bool debugDa
+ import "C"
+ import (
+ 	"errors"
++	"io/ioutil"
++	"os"
+ 	"unsafe"
+ )
+ 
+@@ -295,6 +297,13 @@ func loadSystemRoots() (*CertPool, error) {
+ 	buf := C.GoBytes(unsafe.Pointer(C.CFDataGetBytePtr(data)), C.int(C.CFDataGetLength(data)))
+ 	roots := NewCertPool()
+ 	roots.AppendCertsFromPEM(buf)
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
++		data, err := ioutil.ReadFile(file)
++		if err == nil {
++			roots.AppendCertsFromPEM(data)
++			return roots, nil
++		}
++	}
+ 
+ 	if C.CFDataGetLength(untrustedData) == 0 {
+ 		return roots, nil
+diff --git a/src/crypto/x509/root_darwin.go b/src/crypto/x509/root_darwin.go
+index 2f6a8b8d60..b81889fe69 100644
+--- a/src/crypto/x509/root_darwin.go
++++ b/src/crypto/x509/root_darwin.go
+@@ -92,6 +92,14 @@ func execSecurityRoots() (*CertPool, error) {
+ 		verifyCh    = make(chan rootCandidate)
+ 	)
+ 
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
++		data, err := ioutil.ReadFile(file)
++		if err == nil {
++			roots.AppendCertsFromPEM(data)
++			return roots, nil
++		}
++	}
++
+ 	// Using 4 goroutines to pipe into verify-cert seems to be
+ 	// about the best we can do. The verify-cert binary seems to
+ 	// just RPC to another server with coarse locking anyway, so
+diff --git a/src/crypto/x509/root_unix.go b/src/crypto/x509/root_unix.go
+index 48de50b4ea..750e12c6b4 100644
+--- a/src/crypto/x509/root_unix.go
++++ b/src/crypto/x509/root_unix.go
+@@ -38,6 +38,13 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
+ 
+ func loadSystemRoots() (*CertPool, error) {
+ 	roots := NewCertPool()
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
++		data, err := ioutil.ReadFile(file)
++		if err == nil {
++			roots.AppendCertsFromPEM(data)
++			return roots, nil
++		}
++	}
+ 
+ 	files := certFiles
+ 	if f := os.Getenv(certFileEnv); f != "" {

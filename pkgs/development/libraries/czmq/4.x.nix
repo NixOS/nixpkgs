@@ -1,20 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, zeromq }:
+{ stdenv, fetchurl, zeromq }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.2";
-  name = "czmq-${version}";
+  version = "4.2.0";
+  pname = "czmq";
 
   src = fetchurl {
-    url = "https://github.com/zeromq/czmq/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "12gbh57xnz2v82x1g80gv4bwapmyzl00lbin5ix3swyac8i7m340";
+    url = "https://github.com/zeromq/czmq/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "1szciz62sk3fm4ga9qjpxz0n0lazvphm32km95bq92ncng12kayg";
   };
-
-  patches = [
-    (fetchpatch {
-      url = https://patch-diff.githubusercontent.com/raw/zeromq/czmq/pull/1618.patch;
-      sha256 = "1dssy7k0fni6djail8rz0lk8p777158jvrqhgn500i636gkxaxhp";
-    })
-  ];
 
   # Needs to be propagated for the .pc file to work
   propagatedBuildInputs = [ zeromq ];
@@ -24,6 +17,5 @@ stdenv.mkDerivation rec {
     description = "High-level C Binding for ZeroMQ";
     license = licenses.mpl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

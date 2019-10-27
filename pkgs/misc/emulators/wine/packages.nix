@@ -1,11 +1,11 @@
-{ system, stdenv, stdenv_32bit, lib, pkgs, pkgsi686Linux, callPackage, callPackage_i686,
+{ stdenv_32bit, lib, pkgs, pkgsi686Linux, callPackage,
   wineRelease ? "stable",
   supportFlags
 }:
 
 let src = lib.getAttr wineRelease (callPackage ./sources.nix {});
 in with src; {
-  wine32 = callPackage_i686 ./base.nix {
+  wine32 = pkgsi686Linux.callPackage ./base.nix {
     name = "wine-${version}";
     inherit src version supportFlags;
     pkgArches = [ pkgsi686Linux ];
@@ -33,4 +33,3 @@ in with src; {
     platforms = [ "x86_64-linux" ];
   };
 }
-

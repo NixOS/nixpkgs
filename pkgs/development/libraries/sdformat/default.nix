@@ -5,7 +5,7 @@
   , ...
   }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   src = fetchurl { 
       url = "http://osrf-distributions.s3.amazonaws.com/sdformat/releases/${name}.tar.bz2";
       sha256 = srchash-sha256;

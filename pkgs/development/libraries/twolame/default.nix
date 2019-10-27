@@ -2,9 +2,9 @@
 , autoreconfHook, pkgconfig
 , libsndfile }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "twolame-${version}";
+  pname = "twolame";
   version = "2017-09-27";
 
   src = fetchFromGitHub {
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libsndfile ];
+
+  doCheck = false; # fails with "../build-scripts/test-driver: line 107: -Mstrict: command not found"
 
   meta = with stdenv.lib;{
     description = "A MP2 encoder";

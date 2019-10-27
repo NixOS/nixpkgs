@@ -1,15 +1,13 @@
-{ stdenv, fetchurl, zlib
-, buildPlatform, hostPlatform
-}:
+{ stdenv, fetchurl, zlib }:
 
-assert hostPlatform == buildPlatform -> zlib != null;
+assert stdenv.hostPlatform == stdenv.buildPlatform -> zlib != null;
 
 stdenv.mkDerivation rec {
-  name = "libpng-1.2.57";
+  name = "libpng-1.2.59";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/${name}.tar.xz";
-    sha256 = "1n2lrzjkm5jhfg2bs10q398lkwbbx742fi27zgdgx0x23zhj0ihg";
+    sha256 = "1izw9ybm27llk8531w6h4jp4rk2rxy2s9vil16nwik5dp0amyqxl";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -18,7 +16,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit zlib; };
 
-  configureFlags = "--enable-static";
+  configureFlags = [ "--enable-static" ];
 
   postInstall = ''mv "$out/bin" "$dev/bin"'';
 

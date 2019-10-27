@@ -1,10 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
-, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
+{ stdenv, fetchFromGitHub, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
+, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf
-, qca2, pkgconfig, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
+, qca2, pkgconfig, sparsehash, config, makeWrapper, gst_plugins }:
 
 let
-  withSpotify = config.clementine.spotify or false;
   withIpod = config.clementine.ipod or false;
   withMTP = config.clementine.mtp or true;
   withCD = config.clementine.cd or true;
@@ -12,22 +11,27 @@ let
 
   version = "1.3.1";
 
-  exeName = "clementine";
-
-  src = fetchurl {
-    url = https://github.com/clementine-player/Clementine/archive/1.3.1.tar.gz;
-    sha256 = "0z7k73wyz54c3020lb6x2dgw0vz4ri7wcl3vs03qdj5pk8d971gq";
+  src = fetchFromGitHub {
+    owner = "clementine-player";
+    repo = "Clementine";
+    rev = version;
+    sha256 = "0i3jkfs8dbfkh47jq3cnx7pip47naqg7w66vmfszk4d8vj37j62j";
   };
 
   patches = [
     ./clementine-spotify-blob.patch
-    # Required so as to avoid adding libspotify as a build dependency (as it is 
+    # Required so as to avoid adding libspotify as a build dependency (as it is
     # unfree and thus would prevent us from having a free package).
     ./clementine-spotify-blob-remove-from-build.patch
     (fetchpatch {
       # Fix w/gcc7
       url = "https://github.com/clementine-player/Clementine/pull/5630.patch";
       sha256 = "0px7xp1m4nvrncx8sga1qlxppk562wrk2qqk19iiry84nxg20mk4";
+    })
+    (fetchpatch {
+      # Fixes compilation with chromaprint >= 1.4
+      url = "https://github.com/clementine-player/Clementine/commit/d3ea0c8482dfd3f6264a30cfceb456076d76e6cd.patch";
+      sha256 = "1ifrs5aqdzw16jbnf0z1ilir20chdnr9k5n21r99miq9hzjpbh12";
     })
   ];
 
@@ -50,7 +54,6 @@ let
     protobuf
     qca2
     qjson
-    qt4
     sqlite
     taglib
   ]
@@ -69,10 +72,12 @@ let
   '';
 
   free = stdenv.mkDerivation {
-    name = "clementine-free-${version}";
+    pname = "clementine-free";
+    inherit version;
     inherit src patches nativeBuildInputs postPatch;
 
-    buildInputs = buildInputs ++ [ makeWrapper ];
+    # gst_plugins needed for setup-hooks
+    buildInputs = buildInputs ++ [ makeWrapper gst_plugins ];
 
     cmakeFlags = [ "-DUSE_SYSTEM_PROJECTM=ON" ];
 
@@ -96,7 +101,8 @@ let
 
   # Unfree Spotify blob for Clementine
   unfree = stdenv.mkDerivation {
-    name = "clementine-blob-${version}";
+    pname = "clementine-blob";
+    inherit version;
     # Use the same patches and sources as Clementine
     inherit src nativeBuildInputs postPatch;
 
@@ -104,7 +110,7 @@ let
       ./clementine-spotify-blob.patch
     ];
 
-    buildInputs = buildInputs ++ [ libspotify makeWrapper gst_plugins ];
+    buildInputs = buildInputs ++ [ libspotify makeWrapper ];
     # Only build and install the Spotify blob
     preBuild = ''
       cd ext/clementine-spotifyblob

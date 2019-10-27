@@ -1,0 +1,12 @@
+--- mpack-1.6/unixpk.c	2003-07-21 22:50:41.000000000 +0200
++++ mpack-1.6/unixpk.c	2018-09-16 12:57:14.104026964 +0200
+@@ -254,8 +254,9 @@
+ #ifdef SCO
+     execv("/usr/lib/mail/execmail", addr+start);
+ #else
++    execvp("sendmail", addr+start);
+     execv("/usr/lib/sendmail", addr+start);
+     execv("/usr/sbin/sendmail", addr+start);
+ #endif
+     perror("execv");
+     _exit(1);

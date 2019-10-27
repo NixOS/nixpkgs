@@ -4,14 +4,14 @@ let
   makeSDLFlags = map (p: "-I${stdenv.lib.getDev p}/include/SDL");
 
 in stdenv.mkDerivation rec {
-  name = "jimtcl-${version}";
-  version = "0.77";
+  pname = "jimtcl";
+  version = "0.78";
 
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
     rev = version;
-    sha256 = "06d9gdgvi6cwd6pjg3xig0kkjqm6kgq3am8yq1xnksyz2n09f0kp";
+    sha256 = "1nrjxjfh69i35ig8sxdlal4ydd3cl0x68c05s6svnf1y2i1bl23j";
   };
 
   buildInputs = [

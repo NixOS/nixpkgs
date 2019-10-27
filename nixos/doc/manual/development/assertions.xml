@@ -20,7 +20,7 @@
   NixOS module system.
  </para>
 
- <section>
+ <section xml:id="sec-assertions-warnings">
   <title>Warnings</title>
 
   <para>
@@ -44,7 +44,7 @@
 </programlisting>
  </section>
 
- <section>
+ <section xml:id="sec-assertions-assertions">
   <title>Assertions</title>
 
   <para>

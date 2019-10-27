@@ -1,28 +1,34 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy27, pythonOlder
-, numpy, nose, enum34, futures }:
+{ lib, fetchPypi, buildPythonPackage, isPy27
+, numpy, enum34, futures, pathlib
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "0.14.0";
+  version = "2019.2.22";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eff44f71782dce38c604921a1b29ddad0d007ac9871d66e9c872fd6fc311334e";
+    sha256 = "ed49d75b3eff711dbe74b35324dfd79e0db598b6e772a9096001545e81e95437";
   };
 
-  checkInputs = [ nose ];
+  patches = lib.optional isPy27 ./python2-regex-compat.patch;
+
+  # Missing dependencies: imagecodecs, czifile, cmapfile, oiffile, lfdfiles
+  # and test data missing from PyPI tarball
+  doCheck = false;
+  checkInputs = [ pytest ];
   checkPhase = ''
-    nosetests --exe -v --exclude="test_extension"
+    pytest
   '';
 
   propagatedBuildInputs = [ numpy ]
-    ++ lib.optional isPy27 futures
-    ++ lib.optional (pythonOlder "3.0") enum34;
+    ++ lib.optional isPy27 [ futures enum34 pathlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Read and write image data from and to TIFF files.";
-    homepage = https://github.com/blink1073/tifffile;
+    homepage = https://www.lfd.uci.edu/~gohlke/;
     maintainers = [ maintainers.lebastr ];
-    license = licenses.bsd2;
+    license = licenses.bsd3;
   };
 }

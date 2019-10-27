@@ -1,60 +1,56 @@
-{ stdenv, fetchFromGitHub, ostree, rpm, which, autoconf, automake, libtool, pkgconfig,
-  libcap, glib, libgsystem, json-glib, libarchive, libsolv, librepo, gtk-doc, elfutils,
-  gperf, cmake, pcre, check, python, libxslt, docbook_xsl, docbook_xml_dtd_42, acl }:
+{ stdenv, fetchurl, ostree, rpm, which, autoconf, automake, libtool, pkgconfig, cargo, rustc,
+  gobject-introspection, gtk-doc, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gperf, cmake,
+  libcap, glib, systemd, json-glib, libarchive, libsolv, librepo, polkit,
+  bubblewrap, pcre, check, python, json_c, libmodulemd_1, utillinux, sqlite, cppunit, fetchpatch }:
 
-let
-  libglnx-src = fetchFromGitHub {
-    owner  = "GNOME";
-    repo   = "libglnx";
-    rev    = "4ae5e3beaaa674abfabf7404ab6fafcc4ec547db";
-    sha256 = "1npb9zbyb4bl0nxqf0pcqankcwzs3k1x8i2wkdwhgak4qcvxvfqn";
+stdenv.mkDerivation rec {
+  pname = "rpm-ostree";
+  version = "2019.5";
+
+  src = fetchurl {
+    url = "https://github.com/projectatomic/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "0innbrjj086mslbf55bcvs9a3rv9hg1y2nhzxdjy3nhpqxqlzdnn";
   };
 
-  libdnf-src = fetchFromGitHub {
-    owner  = "rpm-software-management";
-    repo   = "libhif";
-    rev    = "b69552b3b3a42fd41698a925d5f5f623667bac63";
-    sha256 = "0h6k09rb4imzbmsn7mspwl0js2awqdpb4ysdqq550vw2nr0dzszr";
-  };
+  patches = [
+    # gobject-introspection requires curl in cflags
+    # https://github.com/NixOS/nixpkgs/pull/50953#issuecomment-449777169
+    # https://github.com/NixOS/nixpkgs/pull/50953#issuecomment-452177080
+    ./fix-introspection-build.patch
 
-  version = "2016.10";
-in stdenv.mkDerivation {
-  name = "rpm-ostree-${version}";
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://github.com/coreos/rpm-ostree/commit/60053d0d3d2279d120ae7007c6048e499d2c4d14.patch";
+      sha256 = "0ig21zip09iy2da7ksg87jykaj3q8jyzh8r7yrpzyql85qxiwm0m";
+    })
+  ];
 
-  src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "projectatomic";
-    repo   = "rpm-ostree";
-    sha256 = "0a0wwklzk1kvk3bbxxfvxgk4ck5dn7a7v32shqidb674fr2d5pvb";
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
+  outputs = [ "out" "dev" "man" "devdoc" ];
+  nativeBuildInputs = [
+    pkgconfig which autoconf automake libtool cmake gperf cargo rustc
+    gobject-introspection gtk-doc libxml2 libxslt docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_43
+  ];
   buildInputs = [
-    which autoconf automake libtool libcap ostree rpm glib libgsystem gperf
-    json-glib libarchive libsolv librepo gtk-doc libxslt docbook_xsl docbook_xml_dtd_42
-    cmake pcre check python
-    # FIXME: get rid of this once libarchive properly propagates this
-    acl
+    libcap ostree rpm glib systemd polkit bubblewrap
+    json-glib libarchive libsolv librepo
+    pcre check python
+     # libdnf
+    json_c libmodulemd_1 utillinux sqlite cppunit
+  ];
+
+  configureFlags = [
+    "--enable-gtk-doc"
+    "--with-bubblewrap=${bubblewrap}/bin/bwrap"
   ];
 
   dontUseCmakeConfigure = true;
 
   prePatch = ''
-    rmdir libglnx libdnf
-    cp --no-preserve=mode -r ${libglnx-src} libglnx
-    cp --no-preserve=mode -r ${libdnf-src} libdnf
-
     # According to #cmake on freenode, libdnf should bundle the FindLibSolv.cmake module
     cp ${libsolv}/share/cmake/Modules/FindLibSolv.cmake libdnf/cmake/modules/
 
-    # See https://github.com/projectatomic/rpm-ostree/issues/480
-    substituteInPlace src/libpriv/rpmostree-unpacker.c --replace 'include <selinux/selinux.h>' ""
-
-    # libdnf normally wants sphinx to build its hawkey manpages, but we don't care about those manpages since we don't use hawkey
-    substituteInPlace configure.ac --replace 'cmake \' 'cmake -DWITH_MAN=off \'
-
     # Let's not hardcode the rpm-gpg path...
-    substituteInPlace libdnf/libdnf/dnf-keyring.c \
+    substituteInPlace libdnf/libdnf/dnf-keyring.cpp \
       --replace '"/etc/pki/rpm-gpg"' 'getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") ? getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") : "/etc/pki/rpm-gpg"'
   '';
 
@@ -64,10 +60,9 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
-    homepage    = "https://rpm-ostree.readthedocs.io/en/latest/";
-    license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    homepage = https://rpm-ostree.readthedocs.io/en/latest/;
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ copumpkin ];
+    platforms = platforms.linux;
   };
 }
-

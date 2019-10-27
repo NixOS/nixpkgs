@@ -1,13 +1,13 @@
-{ fetchurl, stdenv, pkgconfig, python, file, bc
+{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc, fetchpatch
 , qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "2.3.0";
-  name = "lyx-${version}";
+  pname = "lyx";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${name}.tar.xz";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
     sha256 = "0axri2h8xkna4mkfchfyyysbjl7s486vx80p5hzj9zgsvdm5a3ri";
   };
 
@@ -30,12 +30,18 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # python is run during runtime to do various tasks
-  postFixup = ''
-    wrapProgram "$out/bin/lyx" \
-      --prefix PATH : '${python}/bin'
-  '';
+  qtWrapperArgs = [
+    " --prefix PATH : ${python}/bin"
+  ];
 
-  meta = with stdenv.lib; {
+  patches = [
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-office/lyx/files/lyx-2.3.0-qt-5.11.patch?id=07e82fd1fc07bf055c78b81eaa128f8f837da80d";
+      sha256 = "1bnx0il2iv36lnrnyb370wyvww0rd8bphcy6z8d7zmvd3pwhyfql";
+    })
+  ];
+
+  meta = with lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = http://www.lyx.org;
     license = licenses.gpl2Plus;

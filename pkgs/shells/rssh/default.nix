@@ -5,11 +5,11 @@
 { stdenv, fetchurl, openssh, rsync, cvs }:
 
 stdenv.mkDerivation rec {
-  name = "rssh-${version}";
+  pname = "rssh";
   version = "2.3.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rssh/rssh/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/rssh/rssh/${version}/${pname}-${version}.tar.gz";
     sha256 = "f30c6a760918a0ed39cf9e49a49a76cb309d7ef1c25a66e77a41e2b1d0b40cd9";
   };
 
@@ -84,6 +84,11 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn ];
+    knownVulnerabilities = [
+      "CVE-2019-1000018"
+      "CVE-2019-3463"
+      "CVE-2019-3464"
+    ];
   };
 
   passthru = {

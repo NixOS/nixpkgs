@@ -1,13 +1,21 @@
-{ stdenv, appleDerivation }:
+{ stdenv, appleDerivation, lib
+, enableStatic ? stdenv.targetPlatform.isiOS
+, enableShared ? !stdenv.targetPlatform.isiOS
+}:
 
 appleDerivation {
-  preConfigure = "cd libiconv"
-    + stdenv.lib.optionalString stdenv.hostPlatform.isiOS ''
+  postUnpack = "sourceRoot=$sourceRoot/libiconv";
 
-      sed -i 's/darwin\*/ios\*/g' configure libcharset/configure
-    '';
+  preConfigure = lib.optionalString stdenv.hostPlatform.isiOS ''
+    sed -i 's/darwin\*/ios\*/g' configure libcharset/configure
+  '';
 
-  postInstall = ''
+  configureFlags = [
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+  ];
+
+  postInstall = lib.optionalString enableShared ''
     mv $out/lib/libiconv.dylib $out/lib/libiconv-nocharset.dylib
     ${stdenv.cc.bintools.targetPrefix}install_name_tool -id $out/lib/libiconv-nocharset.dylib $out/lib/libiconv-nocharset.dylib
 
@@ -18,9 +26,12 @@ appleDerivation {
       -Wl,-reexport_library -Wl,$out/lib/libcharset.dylib
   '';
 
-  setup-hook = ../../../../development/libraries/libiconv/setup-hook.sh;
+  setupHooks = [
+    ../../../../build-support/setup-hooks/role.bash
+    ../../../../development/libraries/libiconv/setup-hook.sh
+  ];
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }

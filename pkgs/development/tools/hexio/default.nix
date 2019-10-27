@@ -1,8 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchurl, python, pcsclite, pth }:
+{ stdenv, fetchFromGitHub, python, pcsclite, pth }:
 
 stdenv.mkDerivation rec {
   pname = "hexio";
-  name = "${pname}-${version}";
   version = "1.0-RC1";
 
   src = fetchFromGitHub {
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace '-I/usr/local/include/PCSC/' '-I${pcsclite}/include/PCSC/' \
+      --replace '-I/usr/local/include/PCSC/' '-I${stdenv.lib.getDev pcsclite}/include/PCSC/' \
       --replace '-L/usr/local/lib/pth' '-I${pth}/lib/'
     '';
 

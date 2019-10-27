@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "nbformat";
   version = "4.4.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,9 +29,12 @@ buildPythonPackage rec {
     export HOME=tmp
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "The Jupyter Notebook format";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh globin ];
   };

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, intltool, libsoup, gnome3, gtk3, gdk_pixbuf,
-  tag ? "", xvfb_run, dbus, glibcLocales, glib, gobjectIntrospection,
+{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome3, gtk3, gdk-pixbuf,
+  tag ? "", xvfb_run, dbus, glibcLocales, glib, glib-networking, gobject-introspection,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xineLib,
   withDbusPython ? false, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false,
@@ -8,23 +8,19 @@
 
 let optionals = stdenv.lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
-  name = "quodlibet${tag}-${version}";
-  version = "4.0.2";
-
-  # XXX, tests fail
-  # https://github.com/quodlibet/quodlibet/issues/2820
-  doCheck = false;
+  pname = "quodlibet${tag}";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
-    sha256 = "072s983p3n84yl807pbdxsy5vrgs8jzzfl648gsri6kpwsp6w5fz";
+    sha256 = "0b1rvr4hqs2bjmhayms7vxxkn3d92k9v7p1269rjhf11hpk122l7";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gettext intltool ];
+  nativeBuildInputs = [ wrapGAppsHook gettext ];
 
   checkInputs = with python3.pkgs; [ pytest pytest_xdist pyflakes pycodestyle polib xvfb_run dbus.daemon glibcLocales ];
 
-  buildInputs = [ gnome3.defaultIconTheme libsoup glib gtk3 webkitgtk gdk_pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobjectIntrospection ]
+  buildInputs = [ gnome3.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk-pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
     ++ (if xineBackend then [ xineLib ] else with gst_all_1;
     [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
 
@@ -39,24 +35,22 @@ python3.pkgs.buildPythonApplication rec {
 
   checkPhase = ''
     runHook preCheck
-    checkHomeDir=$(mktemp -d)
-    mkdir -p $checkHomeDir/.cache/thumbnails/normal # Required by TThumb.test_recreate_broken_cache_file
     env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS" \
-      HOME=$checkHomeDir \
+      HOME=$(mktemp -d) \
       xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
         --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-        py.test
+        py.test${stdenv.lib.optionalString (xineBackend || !withGstPlugins) " --ignore=tests/plugin/test_replaygain.py"}
     runHook postCheck
   '';
 
   preFixup = stdenv.lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
 
   meta = with stdenv.lib; {
-    description = "GTK+-based audio player written in Python, using the Mutagen tagging library";
+    description = "GTK-based audio player written in Python, using the Mutagen tagging library";
     license = licenses.gpl2Plus;
 
     longDescription = ''
-      Quod Libet is a GTK+-based audio player written in Python, using
+      Quod Libet is a GTK-based audio player written in Python, using
       the Mutagen tagging library. It's designed around the idea that
       you know how to organize your music better than we do. It lets
       you make playlists based on regular expressions (don't worry,
@@ -71,5 +65,6 @@ python3.pkgs.buildPythonApplication rec {
 
     maintainers = with maintainers; [ coroa sauyon ];
     homepage = https://quodlibet.readthedocs.io/en/latest/;
+    broken = true;
   };
 }

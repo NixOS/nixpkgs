@@ -61,8 +61,8 @@ in {
       description = "PCSC-Lite daemon";
       environment.PCSCLITE_HP_DROPDIR = pluginEnv;
       serviceConfig = {
-        ExecStart = "${pkgs.pcsclite}/sbin/pcscd -f -x -c ${cfgFile}";
-        ExecReload = "${pkgs.pcsclite}/sbin/pcscd -H";
+        ExecStart = "${getBin pkgs.pcsclite}/sbin/pcscd -f -x -c ${cfgFile}";
+        ExecReload = "${getBin pkgs.pcsclite}/sbin/pcscd -H";
       };
     };
   };

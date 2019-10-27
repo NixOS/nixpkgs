@@ -228,6 +228,7 @@ let
 
   createSSLOptsStr = o: ''
     ssl = {
+      cafile = "/etc/ssl/certs/ca-bundle.crt";
       key = "${o.key}";
       certificate = "${o.cert}";
       ${concatStringsSep "\n" (mapAttrsToList (name: value: "${name} = ${toLua value};") o.extraOptions)}
@@ -296,7 +297,7 @@ in
       };
 
       dataDir = mkOption {
-        type = types.string;
+        type = types.path;
         description = "Directory where Prosody stores its data";
         default = "/var/lib/prosody";
       };
@@ -421,6 +422,13 @@ in
         description = "List of administrators of the current host";
       };
 
+      authentication = mkOption {
+        type = types.enum [ "internal_plain" "internal_hashed" "cyrus" "anonymous" ];
+        default = "internal_hashed";
+        example = "internal_plain";
+        description = "Authentication mechanism used for logins.";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -457,7 +465,7 @@ in
 
       modules_enabled = {
 
-        ${ lib.concatStringsSep "\n\ \ " (lib.mapAttrsToList
+        ${ lib.concatStringsSep "\n  " (lib.mapAttrsToList
           (name: val: optionalString val "${toLua name};")
         cfg.modules) }
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
@@ -476,6 +484,7 @@ in
 
       s2s_secure_domains = ${toLua cfg.s2sSecureDomains}
 
+      authentication = ${toLua cfg.authentication}
 
       ${ cfg.extraConfig }
 
@@ -487,7 +496,7 @@ in
         '') cfg.virtualHosts) }
     '';
 
-    users.extraUsers.prosody = mkIf (cfg.user == "prosody") {
+    users.users.prosody = mkIf (cfg.user == "prosody") {
       uid = config.ids.uids.prosody;
       description = "Prosody user";
       createHome = true;
@@ -495,7 +504,7 @@ in
       home = "${cfg.dataDir}";
     };
 
-    users.extraGroups.prosody = mkIf (cfg.group == "prosody") {
+    users.groups.prosody = mkIf (cfg.group == "prosody") {
       gid = config.ids.gids.prosody;
     };
 
@@ -512,6 +521,7 @@ in
         RuntimeDirectory = [ "prosody" ];
         PIDFile = "/run/prosody/prosody.pid";
         ExecStart = "${cfg.package}/bin/prosodyctl start";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
 

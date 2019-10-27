@@ -1,26 +1,21 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, bottle, chardet, dateutil
-, google_api_python_client, lxml, ply, python_magic
-, nose }:
+, google_api_python_client, lxml, oauth2client
+, ply, python_magic, pytest, requests }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "2.2.3";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wxwf02d3raglwqsxdsgf89fniakv1m19q825w76k5z004g18y42";
+    sha256 = "0pcfl2rx2ng06i4f9izdpnlnb1k0rdzsckbzzn4cn4ixfzyssm0m";
   };
 
-  checkInputs = [ nose ];
-
-  # Automatic tests cannot be run because it needs to import some local modules for tests.
+  # Tests require files not included in the PyPI archive.
   doCheck = false;
-  checkPhase = ''
-    nosetests
-  '';
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -29,8 +24,13 @@ buildPythonPackage rec {
     dateutil
     google_api_python_client
     lxml
+    oauth2client
     ply
     python_magic
+    requests
+    # pytest really is a runtime dependency
+    # https://bitbucket.org/blais/beancount/commits/554e13057551951e113835196770847c788dd592
+    pytest
   ];
 
   meta = {

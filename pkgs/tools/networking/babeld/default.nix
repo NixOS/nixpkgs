@@ -1,16 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
-  name = "babeld-1.8.2";
+  pname = "babeld";
+  version = "1.9.1";
 
   src = fetchurl {
-    url = "http://www.pps.univ-paris-diderot.fr/~jch/software/files/${name}.tar.gz";
-    sha256 = "1p751zb7h75f8w7jz37432dj610f432jnj37lxhmav9q6aqyrv87";
+    url = "http://www.pps.univ-paris-diderot.fr/~jch/software/files/${pname}-${version}.tar.gz";
+    sha256 = "1d503igqv9s5pgrhvxp1czjy2xfsjhagyyh2iny7g4cjvl0kq6qy";
   };
 
   preBuild = ''
     makeFlags="PREFIX=$out ETCDIR=$out/etc"
   '';
+
+  passthru.tests.babeld = nixosTests.babeld;
 
   meta = {
     homepage = http://www.pps.univ-paris-diderot.fr/~jch/software/babel/;

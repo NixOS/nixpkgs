@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libcommuni-${version}";
+  pname = "libcommuni";
   version = "3.5.0";
 
   src = fetchFromGitHub {
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   # The tests fail on darwin because of install_name if they run
   # before the frameworks are installed.
+  doCheck = false;
   doInstallCheck = true;
   installCheckTarget = "check";
 

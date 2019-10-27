@@ -3,16 +3,17 @@
 let
   common = opts: callPackage (import ./common.nix opts);
 in
-  rec {
+  {
     sublime3-dev = common {
-      buildVersion = "3176";
-      x32sha256 = "08asz13888d4ddsz81cfk7k3319dabzz1kgbnshw0756pvyrvr23";
-      x64sha256 = "0cppkh5jx2g8f6jyy1bs81fpb90l0kn5m7y3skackpjdxhd7rwbl";
+      buildVersion = "3210";
+      dev = true;
+      x32sha256 = "1ngr4c8h2mafy96mi8dd3g8mg5r9ha1cpcd8p3gz7jwpbypvkkbv";
+      x64sha256 = "0j65a4ylgga1qzc74wf3k5craghahma8hwqg3zs1rgzz601nl693";
     } {};
 
     sublime3 = common {
-      buildVersion = "3176";
-      x32sha256 = "08asz13888d4ddsz81cfk7k3319dabzz1kgbnshw0756pvyrvr23";
-      x64sha256 = "0cppkh5jx2g8f6jyy1bs81fpb90l0kn5m7y3skackpjdxhd7rwbl";
+      buildVersion = "3211";
+      x32sha256 = "0w9hba1nl2hv1mri418n7v0m321b6wqphb1knll23ldv5fb0j1j8";
+      x64sha256 = "1vkldmimyjhbgplcd6r27gvk64rr7cparfd44hy6qdyzwsjqqg0b";
     } {};
   }

@@ -1,19 +1,19 @@
 { stdenv, darwin, fetchurl, SDL2 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "SDL2_gfx";
   version = "1.0.4";
 
   src = fetchurl {
-    url = "http://www.ferzkopp.net/Software/${pname}/${name}.tar.gz";
+    url = "http://www.ferzkopp.net/Software/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0qk2ax7f7grlxb13ba0ll3zlm8780s7j8fmrhlpxzjgdvldf1q33";
   };
 
   buildInputs = [ SDL2 ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
-  configureFlags = if stdenv.isi686 || stdenv.isx86_64 then "--enable-mmx" else "--disable-mmx";
+  configureFlags = [(if stdenv.isi686 || stdenv.isx86_64 then "--enable-mmx" else "--disable-mmx")]
+     ++ stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
 
   meta = with stdenv.lib; {
     description = "SDL graphics drawing primitives and support functions";

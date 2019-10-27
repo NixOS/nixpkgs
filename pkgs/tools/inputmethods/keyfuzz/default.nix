@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
-  name = "keyfuzz-${version}";
+stdenv.mkDerivation {
+  pname = "keyfuzz";
   version = "0.2";
 
   meta = with stdenv.lib; {
@@ -17,5 +17,5 @@ stdenv.mkDerivation rec {
     sha256 = "0xv9ymivp8fnyc5xcyh1vamxnx90bzw66wlld813fvm6q2gsiknk";
   };
 
-  configureFlags = "--without-initdir --disable-lynx";
+  configureFlags = [ "--without-initdir" "--disable-lynx" ];
 }

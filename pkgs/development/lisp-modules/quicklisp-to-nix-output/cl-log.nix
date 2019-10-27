@@ -1,5 +1,5 @@
-args @ { fetchurl, ... }:
-rec {
+{ fetchurl, ... }:
+{
   baseName = ''cl-log'';
   version = ''cl-log.1.0.1'';
 

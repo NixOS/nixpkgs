@@ -1,5 +1,5 @@
 # This old version of V8 is still needed for the R V8 module
-{ stdenv, callPackage, fetchFromGitHub, gyp, readline, python, which, icu, ... }:
+{ stdenv, fetchFromGitHub, gyp, readline, python, which, icu, ... }:
 
 assert readline != null;
 
@@ -11,14 +11,14 @@ let
   arch = if stdenv.is64bit then "x64" else "ia32";
 
 in
-stdenv.mkDerivation rec {
-  name = "v8-${version}";
+stdenv.mkDerivation {
+  pname = "v8";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "v8";
     repo = "v8";
-    rev = "${version}";
+    rev = version;
     inherit sha256;
   };
   patchPhase = ''
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -vD out/Release/d8 "$out/bin/d8"
-    ${if stdenv.system == "x86_64-darwin" then ''
+    ${if stdenv.hostPlatform.system == "x86_64-darwin" then ''
     install -vD out/Release/lib.target/libv8.dylib "$out/lib/libv8.dylib"
     '' else ''
     install -vD out/Release/lib.target/libv8.so "$out/lib/libv8.so"

@@ -1,27 +1,34 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
+{ stdenv, buildPythonPackage, fetchFromGitHub
+, cython
 , libxml2
 , libxslt
+, zlib
 }:
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "4.2.1";
+  version = "4.4.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e2629cdbcad82b83922a3488937632a4983ecc0fed3e5cfbf430d069382eeb9b";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "1hkl3bhbwiwwfb57nq9lr24rkp782ymfvqrdf9x1wifc79ivlbxw";
   };
 
-  buildInputs = [ libxml2 libxslt ];
+  # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
+  nativeBuildInputs = [ libxml2.dev libxslt.dev cython ];
+  buildInputs = [ libxml2 libxslt zlib ];
 
-  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
+  # tests are meant to be ran "in-place" in the same directory as src
+  doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "lxml" "lxml.etree" ];
+
+  meta = with stdenv.lib; {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
-    homepage = http://lxml.de;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ sjourdois ];
+    homepage = https://lxml.de;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jonringer sjourdois ];
   };
 }

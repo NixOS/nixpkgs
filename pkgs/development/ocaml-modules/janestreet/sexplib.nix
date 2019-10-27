@@ -1,6 +1,6 @@
 {stdenv, buildOcamlJane, type_conv}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   minimumSupportedOcamlVersion = "4.02";
   name = "sexplib";
   version = "113.33.03";

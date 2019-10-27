@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
 , pytest
 , tornado
-, zeromq3
+, zeromq
 , py
 , python
 }:
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "17.0.0";
+  version = "18.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0145ae59139b41f65e047a3a9ed11bbc36e37d5e96c64382fcdff911c4d8c3f0";
+    sha256 = "93f44739db69234c013a16990e43db1aa0af3cf5a4b8b377d028ff24515fbeb3";
   };
 
   checkInputs = [  pytest tornado ];
-  buildInputs = [ zeromq3];
+  buildInputs = [ zeromq ];
   propagatedBuildInputs = [ py ];
 
   # test_socket.py seems to be hanging
   # others fail
+  # for test_monitor: https://github.com/zeromq/pyzmq/issues/1272
   checkPhase = ''
     py.test $out/${python.sitePackages}/zmq/ -k "not test_socket \
       and not test_current \
       and not test_instance \
       and not test_callable_check \
       and not test_on_recv_basic \
-      and not test_on_recv_wake"
+      and not test_on_recv_wake \
+      and not test_monitor"
   '';
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 }

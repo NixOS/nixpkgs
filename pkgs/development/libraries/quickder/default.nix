@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, fetchurl, python2Packages, hexio
+{ stdenv, fetchFromGitHub, python2Packages, hexio
 , which, cmake, bash, arpa2cm, git, asn2quickder, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "quickder";
-  name = "${pname}-${version}";
   version = "1.2-6";
 
   src = fetchFromGitHub {

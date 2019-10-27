@@ -1,7 +1,7 @@
 { brotli, cmake, fetchFromGitHub, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "woff2-${version}";
+  pname = "woff2";
   version = "1.0.2";
 
   src = fetchFromGitHub {
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/google/woff2;
     license = licenses.mit;
     maintainers = [ maintainers.hrdinka ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchpatch, pkgconfig, libssh2
+{ stdenv, lib, fetchgit, pkgconfig, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
 , qtsvg, qttools, qtquick1, qtcharts
 , qmake
@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "redis-desktop-manager-${version}";
+  pname = "redis-desktop-manager";
   version = "0.9.1";
 
   src = fetchgit {

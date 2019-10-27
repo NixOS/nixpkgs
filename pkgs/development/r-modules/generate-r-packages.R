@@ -3,7 +3,7 @@ library(data.table)
 library(parallel)
 cl <- makeCluster(10)
 
-biocVersion <- 3.6
+biocVersion <- 3.8
 snapshotDate <- Sys.Date()-1
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")

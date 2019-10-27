@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, fetchFromGitHub, pkgconfig, cmake
 , eigen, opencv, ceres-solver, cgal, boost, vcg
-, gmp, mpfr, glog, google-gflags, libjpeg_turbo }:
+, gmp, mpfr, glog, gflags, libjpeg_turbo }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "openmvs-unstable-2018-05-26";
 
   src = fetchFromGitHub {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "12dgkwwfdp24581y3i41gsd1k9hq0aw917q0ja5s0if4qbmc8pni";
   };
 
-  buildInputs = [ eigen opencv ceres-solver cgal boost vcg gmp mpfr glog google-gflags libjpeg_turbo ];
+  buildInputs = [ eigen opencv ceres-solver cgal boost vcg gmp mpfr glog gflags libjpeg_turbo ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
@@ -24,8 +24,26 @@ stdenv.mkDerivation rec {
       "-DBUILD_STATIC_RUNTIME=ON"
       "-DINSTALL_BIN_DIR=$out/bin"
       "-DVCG_DIR=${vcg}"
+      "-DCGAL_ROOT=${cgal}/lib/cmake/CGAL"
       "-DCERES_DIR=${ceres-solver}/lib/cmake/Ceres/"
     )
+  '';
+
+  postFixup = ''
+    rp=$(patchelf --print-rpath $out/bin/DensifyPointCloud)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/DensifyPointCloud
+
+    rp=$(patchelf --print-rpath $out/bin/InterfaceVisualSFM)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/InterfaceVisualSFM
+
+    rp=$(patchelf --print-rpath $out/bin/ReconstructMesh)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/ReconstructMesh
+
+    rp=$(patchelf --print-rpath $out/bin/RefineMesh)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/RefineMesh
+
+    rp=$(patchelf --print-rpath $out/bin/TextureMesh)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/TextureMesh
   '';
 
   cmakeDir = "./";
@@ -40,5 +58,7 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mdaiter ];
+    # 20190414-174115: CMake cannot find CGAL which is passed as build input
+    broken = true;
   };
 }

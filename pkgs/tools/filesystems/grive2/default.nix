@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, fetchurl, yajl, cmake, libgcrypt, curl, expat, boost, libiberty }:
+{ stdenv, fetchFromGitHub, pkgconfig, yajl, cmake, libgcrypt, curl, expat, boost, libiberty }:
 
 stdenv.mkDerivation rec {
   version = "0.5.0";
-  name = "grive2-${version}";
+  pname = "grive2";
 
   src = fetchFromGitHub {
     owner = "vitalif";

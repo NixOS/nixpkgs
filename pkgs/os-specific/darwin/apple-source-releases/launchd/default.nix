@@ -1,8 +1,6 @@
-{ stdenv, appleDerivation }:
+{ appleDerivation }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
   # No clue why the same file has two different names. Ask Apple!
   installPhase = ''
     mkdir -p $out/include/ $out/include/servers

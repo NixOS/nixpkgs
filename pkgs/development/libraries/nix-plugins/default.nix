@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub, nix, cmake, pkgconfig, boost }:
-let version = "4.0.4"; in
+let version = "6.0.0"; in
 stdenv.mkDerivation {
-  name = "nix-plugins-${version}";
+  pname = "nix-plugins";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "shlevy";
     repo = "nix-plugins";
     rev = version;
-    sha256 = "02lz62n55pvqin4x44qlxb5knrapyckmj9k8ggk4qxgb36368ifn";
+    sha256 = "08kxdci0sijj1hfkn3dbr7nbpb9xck0xr3xa3a0j116n4kvwb6qv";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

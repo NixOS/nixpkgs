@@ -1,8 +1,8 @@
 { stdenv, fetchurl, bsdbuild, libagar, perl, libjpeg, libpng, openssl }:
 
 let srcs = import ./srcs.nix { inherit fetchurl; }; in
-stdenv.mkDerivation rec {
-  name = "libagar-test-${version}";
+stdenv.mkDerivation {
+  pname = "libagar-test";
   inherit (srcs) version src;
 
   sourceRoot = "agar-1.5.0/tests";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     cat configure.in | ${bsdbuild}/bin/mkconfigure > configure
   '';
 
-  configureFlags = "--with-agar=${libagar}";
+  configureFlags = [ "--with-agar=${libagar}" ];
 
   buildInputs = [ perl bsdbuild libagar libjpeg libpng openssl ];
 

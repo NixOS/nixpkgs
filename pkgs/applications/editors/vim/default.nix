@@ -7,25 +7,24 @@
   }
 # apple frameworks
 , Carbon, Cocoa
-, buildPlatform, hostPlatform
 }:
 
 let
   common = callPackage ./common.nix {};
 in
-stdenv.mkDerivation rec {
-  name = "vim-${version}";
+stdenv.mkDerivation {
+  pname = "vim";
 
   inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
 
   nativeBuildInputs = [ gettext pkgconfig ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optionals hostPlatform.isDarwin [ Carbon Cocoa ];
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
   configureFlags = [
     "--enable-multibyte"
     "--enable-nls"
-  ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "vim_cv_toupper_broken=no"
     "--with-tlib=ncurses"
     "vim_cv_terminfo=yes"

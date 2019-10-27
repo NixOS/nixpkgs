@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, libudev }:
+{ stdenv, fetchFromGitHub, udev }:
 
-stdenv.mkDerivation rec {
-  name = "moltengamepad-git-${version}";
+stdenv.mkDerivation {
+  pname = "moltengamepad-git";
   version = "2016-05-04";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ libudev ];
+  buildInputs = [ udev ];
 
   buildPhase = ''
     make

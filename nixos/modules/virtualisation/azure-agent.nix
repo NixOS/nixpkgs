@@ -77,7 +77,7 @@ in
   config = mkIf cfg.enable {
     assertions = [ {
       assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
-      message = "Azure not currently supported on ${pkgs.stdenv.system}";
+      message = "Azure not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } {
       assertion = config.networking.networkmanager.enable == false;
       message = "Windows Azure Linux Agent is not compatible with NetworkManager";
@@ -166,7 +166,6 @@ in
 
       wantedBy = [ "sshd.service" "waagent.service" ];
       before = [ "sshd.service" "waagent.service" ];
-      after = [ "local-fs.target" ];
 
       path  = [ pkgs.coreutils ];
       script =

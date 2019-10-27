@@ -2,32 +2,36 @@
 , fetchFromGitHub
 , buildPythonApplication
 , bash
-, shadow
+, bashInteractive
 , systemd
 , utillinux
 , boto
 , setuptools
+, distro
 }:
 
 buildPythonApplication rec {
-  name = "google-compute-engine-${version}";
-  version = "20180129";
+  pname = "google-compute-engine";
+  version = "20190124";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
     rev = version;
-    sha256 = "0380fnr64109hv8l1f3sgdg8a5mf020axj7jh8y25xq6wzkjm20c";
+    sha256 = "08cy0jd463kng6hwbd3nfldsp4dpd2lknlvdm88cq795wy0kh4wp";
   };
+
+  buildInputs = [ bash ];
+  propagatedBuildInputs = [ boto setuptools distro ];
+
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
-        --replace /bin/systemctl "${systemd}/bin/systemctl" \
-        --replace /bin/bash "${bash}/bin/bash" \
+        --replace /bin/systemctl "/run/current-system/sw/bin/systemctl" \
+        --replace /bin/bash "${bashInteractive}/bin/bash" \
         --replace /sbin/hwclock "${utillinux}/bin/hwclock"
-
       # SELinux tool ???  /sbin/restorecon
     done
 
@@ -41,9 +45,13 @@ buildPythonApplication rec {
     # allows to install the package in `services.udev.packages` in NixOS
     mkdir -p $out/lib/udev/rules.d
     cp -r google_config/udev/*.rules $out/lib/udev/rules.d
-  '';
 
-  propagatedBuildInputs = [ boto setuptools ];
+    # sysctl snippets will be used by google-compute-config.nix
+    mkdir -p $out/sysctl.d
+    cp google_config/sysctl/*.conf $out/sysctl.d
+
+    patchShebangs $out/bin/*
+  '';
 
   doCheck = false;
 

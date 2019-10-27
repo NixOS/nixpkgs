@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gobjectIntrospection, python, mate }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, gobject-introspection, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "mate-menus-${version}";
-  version = "1.20.0";
+  pname = "mate-menus";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1w1k6kdabmabhpqvkizk1si6ri4rmspsbj0252ki834ml0dxpnhg";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0kh6y76f1rhp3nr22rp93bx77wcgqnygag2ir076cqkppayjc3c0";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
 
-  buildInputs = [ glib gobjectIntrospection python ];
+  buildInputs = [ glib python3 ];
 
   makeFlags = [
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"

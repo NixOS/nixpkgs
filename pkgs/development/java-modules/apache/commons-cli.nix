@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   commonsCli_1_0 = map (obj: fetchMaven {
     version = "1.0";
     artifactId = "commons-cli";

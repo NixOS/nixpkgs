@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ... }: {
     # A client running the recommended setup: DNSCrypt proxy as a forwarder
     # for a caching DNS client.
     client =
-    { config, pkgs, ... }:
+    { ... }:
     let localProxyPort = 43; in
     {
       security.apparmor.enable = true;

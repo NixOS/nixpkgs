@@ -1,0 +1,42 @@
+diff --git a/go/internal/config/config.go b/go/internal/config/config.go
+index f951fe6..b422fe3 100644
+--- a/go/internal/config/config.go
++++ b/go/internal/config/config.go
+@@ -3,7 +3,6 @@ package config
+ import (
+ 	"io/ioutil"
+ 	"net/url"
+-	"os"
+ 	"path"
+ 	"strings"
+ 
+@@ -44,16 +43,13 @@ type Config struct {
+ }
+ 
+ func New() (*Config, error) {
+-	dir, err := os.Getwd()
+-	if err != nil {
+-		return nil, err
+-	}
++	dir := "/run/gitlab"
+ 
+ 	return NewFromDir(dir)
+ }
+ 
+ func NewFromDir(dir string) (*Config, error) {
+-	return newFromFile(path.Join(dir, configFile))
++	return newFromFile("/run/gitlab/shell-config.yml")
+ }
+ 
+ func (c *Config) FeatureEnabled(featureName string) bool {
+diff --git a/go/internal/command/fallback/fallback.go b/go/internal/command/fallback/fallback.go
+index 2cb76a8..f59ad5e 100644
+--- a/go/internal/command/fallback/fallback.go
++++ b/go/internal/command/fallback/fallback.go
+@@ -53,5 +53,5 @@
+ func (c *Command) fallbackProgram() string {
+ 	fileName := fmt.Sprintf("%s-ruby", c.Executable.Name)
+ 
+-	return filepath.Join(c.RootDir, "bin", fileName)
++	return filepath.Join("/run/current-system/sw/bin", fileName)
+ }

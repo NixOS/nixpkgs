@@ -1,30 +1,14 @@
-{ stdenv, lib, fetchurl, writeScript, writeText, php }:
+{ stdenv, lib, fetchurl, writeText, php, makeWrapper }:
 
 let
-  name = "wp-cli-${version}";
-  version = "1.5.1";
-
-  src = fetchurl {
-    url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "1lnjbl6rcv32g6akj4552ncyqmbsawmx1dnbmxr0rjj7wr8484f1";
-  };
+  version = "2.2.0";
 
   completion = fetchurl {
     url    = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
     sha256 = "15d330x6d3fizrm6ckzmdknqg6wjlx5fr87bmkbd5s6a1ihs0g24";
   };
 
-  bin = writeScript "wp" ''
-    #! ${stdenv.shell}
-
-    set -euo pipefail
-
-    exec ${lib.getBin php}/bin/php \
-      -c ${ini} \
-      -f ${src} -- "$@"
-  '';
-
-  ini = writeText "wp-cli.ini" ''
+  ini = writeText "php.ini" ''
     [PHP]
     memory_limit = -1 ; no limit as composer uses a lot of memory
 
@@ -33,19 +17,33 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  inherit name version;
+  pname = "wp-cli";
+  inherit version;
+
+  src = fetchurl {
+    url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${pname}-${version}.phar";
+    sha256 = "0s03jbsjwvkcbyss6rvpgw867hiwvk5p4n1qznkghyzi94j8mvki";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
-    mkdir -p $out/{bin,share/bash-completion/completions}
+    dir=$out/share/wp-cli
+    mkdir -p $out/bin $dir
 
-    ln      -s     ${bin}        $out/bin/wp
-    install -Dm644 ${completion} $out/share/bash-completion/completions/wp
+    install -Dm444 ${src}        $dir/wp-cli
+    install -Dm444 ${ini}        $dir/php.ini
+    install -Dm444 ${completion} $out/share/bash-completion/completions/wp
+
+    makeWrapper ${lib.getBin php}/bin/php $out/bin/wp \
+      --add-flags "-c $dir/php.ini" \
+      --add-flags "-f $dir/wp-cli"
 
     # this is a very basic run test
-    $out/bin/wp --info
+    $out/bin/wp --info >/dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line interface for WordPress";
     homepage    = https://wp-cli.org;
     license     = licenses.mit;

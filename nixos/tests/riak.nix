@@ -3,7 +3,7 @@ import ./make-test.nix {
 
   nodes = {
     master =
-      { pkgs, config, ... }:
+      { pkgs, ... }:
 
       {
         services.riak.enable = true;

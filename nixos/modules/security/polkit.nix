@@ -85,16 +85,16 @@ in
 
     security.wrappers = {
       pkexec.source = "${pkgs.polkit.bin}/bin/pkexec";
-      "polkit-agent-helper-1".source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
+      polkit-agent-helper-1.source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
     };
 
-    system.activationScripts.polkit =
-      ''
-        # Probably no more needed, clean up
-        rm -rf /var/lib/{polkit-1,PolicyKit}
-      '';
+    systemd.tmpfiles.rules = [
+      # Probably no more needed, clean up
+      "R /var/lib/polkit-1"
+      "R /var/lib/PolicyKit"
+    ];
 
-    users.extraUsers.polkituser = {
+    users.users.polkituser = {
       description = "PolKit daemon";
       uid = config.ids.uids.polkituser;
     };

@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "serpy";
-  name = "${pname}-${version}";
   version = "0.3.1";
 
   meta = {

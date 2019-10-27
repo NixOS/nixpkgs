@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "060102";
-  name = "fondu-${version}";
+  pname = "fondu";
 
   src = fetchurl {
     url = "http://fondu.sourceforge.net/fondu_src-${version}.tgz";
@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl3;
   };
 }

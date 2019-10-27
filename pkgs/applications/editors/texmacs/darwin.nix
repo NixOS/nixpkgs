@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, makeWrapper,
+{ stdenv, callPackage, fetchurl,
   guile_1_8, qt4, zlib, freetype, CoreFoundation, Cocoa, gettext, libiconv, ghostscript,
   tex ? null,
   aspell ? null,
@@ -15,7 +15,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "TeXmacs-${version}";
+  pname = "TeXmacs";
+  inherit version;
 
   src= fetchurl {
     url = "http://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.4";
-  name = "chunksync-${version}";
+  pname = "chunksync";
 
   src = fetchurl {
-    url = "http://chunksync.florz.de/chunksync_${version}.tar.gz";
+    url = "https://chunksync.florz.de/chunksync_${version}.tar.gz";
     sha256 = "1gwqp1kjwhcmwhynilakhzpzgc0c6kk8c9vkpi30gwwrwpz3cf00";
   };
 

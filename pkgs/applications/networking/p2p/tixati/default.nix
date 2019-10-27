@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, glib, zlib, dbus, dbus-glib, gtk2, gdk_pixbuf, cairo, pango }:
+{ stdenv, fetchurl, glib, zlib, dbus, dbus-glib, gtk2, gdk-pixbuf, cairo, pango }:
 
 stdenv.mkDerivation rec {
-  name = "tixati-${version}";
-  version = "2.57";
+  pname = "tixati";
+  version = "2.64";
 
   src = fetchurl {
     url = "https://download2.tixati.com/download/tixati-${version}-1.x86_64.manualinstall.tar.gz";
-    sha256 = "0z6znh62ry4fmc6c54zq79pk1b5bwkz93bxsfgvxpf6sajpyf9n7";
+    sha256 = "0xz2b2vasfc39wqv9lak2wdli7pr5b1vcm1lgpqx6kz7j5ba6jqp";
   };
 
   installPhase = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             --set-rpath ${stdenv.lib.makeLibraryPath [ glib zlib dbus dbus-glib gtk2 gdk_pixbuf cairo pango ]} \
+             --set-rpath ${stdenv.lib.makeLibraryPath [ glib zlib dbus dbus-glib gtk2 gdk-pixbuf cairo pango ]} \
              tixati
     install -D tixati         $out/bin/tixati
     install -D tixati.desktop $out/share/applications/tixati.desktop

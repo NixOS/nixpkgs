@@ -1,12 +1,12 @@
 { stdenv, fetchurl, unzip, libusb }:
 
 let
-  arch = if stdenv.system == "i686-linux" then "32"
-  else if stdenv.system == "x86_64-linux" then "64"
-  else throw "Unsupported system: ${stdenv.system}";
+  arch = if stdenv.hostPlatform.system == "i686-linux" then "32"
+  else if stdenv.hostPlatform.system == "x86_64-linux" then "64"
+  else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation rec {
-  name = "pcsc-scm-scl-${version}";
+  pname = "pcsc-scm-scl";
   version = "2.09";
 
   src = fetchurl {

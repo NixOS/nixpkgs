@@ -1,11 +1,14 @@
 { stdenv, python2Packages, fetchurl }:
   python2Packages.buildPythonApplication rec {
-    name = "labelImg-${version}";
+    pname = "labelImg";
     version = "1.6.0";
     src = fetchurl {
       url = "https://github.com/tzutalin/labelImg/archive/v${version}.tar.gz";
       sha256 = "126kc4r7xm9170kh7snqsfkkc868m5bcnswrv7b4cq9ivlrdwbm4";
     };
+    nativeBuildInputs = with python2Packages; [
+      pyqt4
+    ];
     propagatedBuildInputs = with python2Packages; [
       pyqt4
       lxml

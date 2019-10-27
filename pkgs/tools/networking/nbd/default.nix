@@ -1,18 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, glib }:
+{ stdenv, fetchurl, pkgconfig, glib, which }:
 
 stdenv.mkDerivation rec {
-  name = "nbd-3.14";
+  name = "nbd-3.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/${name}.tar.xz";
-    sha256 = "0cc6wznvkgjv0fxsj3diy92qfsjrsw92m7yq13f044qarh726gad";
+    sha256 = "1kfnyx52nna2mnw264njk1dl2zc8m78sz031yp65mbmpi99v7qg0";
   };
 
-  patches = [ ./dont-run-make-in-broken-systemd-subdir.patch ];
-
-  buildInputs =
-    [ pkgconfig glib ]
+  buildInputs = [ glib ]
     ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
+
+  nativeBuildInputs = [ pkgconfig which ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/${name}"

@@ -1,9 +1,9 @@
-{ stdenv, lib, buildGoPackage, go, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 with lib;
 
 buildGoPackage rec {
-  name = "go-md2man-${version}";
+  pname = "go-md2man";
   version = "1.0.6";
 
   goPackagePath = "github.com/cpuguy83/go-md2man";

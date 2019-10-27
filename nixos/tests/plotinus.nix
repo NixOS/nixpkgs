@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
       programs.plotinus.enable = true;

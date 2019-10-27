@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync
-, iptables, coreutils
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
 , components ? [
     "cmd/kubeadm"
     "cmd/kubectl"
@@ -15,24 +14,26 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "kubernetes-${version}";
-  version = "1.10.3";
+  pname = "kubernetes";
+  version = "1.15.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1la9cdf5a67kg72xn4bn5mib1caiv5vxsjmnxqsmx0m7vhbv5i4n";
+    sha256 = "18wpqrgb1ils4g8ggg217xq4jq30i4m7par2mdjk59pmz7ssm25p";
   };
 
-  # Build using golang v1.9 in accordance with https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.10.md#external-dependencies
-  buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
+  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
 
   postPatch = ''
-    substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
-    substituteInPlace "hack/generate-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
+    # go env breaks the sandbox
+    substituteInPlace "hack/lib/golang.sh" \
+      --replace 'echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"' 'echo "${go.GOOS}/${go.GOARCH}"'
+
+    substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
     # hack/update-munge-docs.sh only performs some tests on the documentation.
     # They broke building k8s; disabled for now.
     echo "true" > "hack/update-munge-docs.sh"
@@ -40,10 +41,10 @@ stdenv.mkDerivation rec {
     patchShebangs ./hack
   '';
 
-  WHAT="--use_go_build ${concatStringsSep " " components}";
+  WHAT=concatStringsSep " " components;
 
   postBuild = ''
-    ./hack/generate-docs.sh
+    ./hack/update-generated-docs.sh
     (cd build/pause && cc pause.c -o pause)
   '';
 
@@ -58,12 +59,14 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/kube-addons
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
 
+    cp ${./mk-docker-opts.sh} $out/bin/mk-docker-opts.sh
+
     $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
     $out/bin/kubectl completion zsh > $out/share/zsh/site-functions/_kubectl
   '';
 
   preFixup = ''
-    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go_1_9} '{}' +
+    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = {

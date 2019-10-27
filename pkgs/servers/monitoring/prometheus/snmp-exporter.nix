@@ -1,8 +1,8 @@
-{ stdenv, lib, go, buildGoPackage, fetchFromGitHub, net_snmp }:
+{ stdenv, buildGoPackage, fetchFromGitHub, net_snmp }:
 
 buildGoPackage rec {
-  name = "snmp_exporter-${version}";
-  version = "0.9.0";
+  pname = "snmp_exporter";
+  version = "0.15.0";
 
   goPackagePath = "github.com/prometheus/snmp_exporter";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "prometheus";
     repo = "snmp_exporter";
     rev = "v${version}";
-    sha256 = "081ah4zyy53plhm6znwrx55phm2ysxzyx7d4hm8zzrv5r967rgl1";
+    sha256 = "1cnz1wapxs3fkghzy6v90s56vd0ngynypyapcpbmx5y66rlpdxx6";
   };
 
   buildInputs = [ net_snmp ];

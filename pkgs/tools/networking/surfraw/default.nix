@@ -1,6 +1,6 @@
 {stdenv, fetchurl, perl}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "surfraw-2.3.0";
 
   src = fetchurl {
@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://surfraw.alioth.debian.org;
     maintainers = [];
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.publicDomain;
   };
 }

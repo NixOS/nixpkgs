@@ -1,28 +1,16 @@
-{ stdenv, buildOcaml, fetchurl, libev, ocaml, findlib, jbuilder, zed, lwt_react }:
+{ stdenv, fetchurl, libev, buildDunePackage, zed, lwt_log, lwt_react }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.02";
-
-buildOcaml rec {
-  version = "1.12.0";
-  name = "lambda-term";
+buildDunePackage rec {
+  pname = "lambda-term";
+  version = "2.0.2";
 
   src = fetchurl {
-    url = "https://github.com/diml/lambda-term/archive/${version}.tar.gz";
-    sha256 = "129m5jb015rqm6k3k25m1i2217vhz26n8sa7z113vjv4gs0bcd3d";
+    url = "https://github.com/ocaml-community/lambda-term/releases/download/${version}/lambda-term-${version}.tbz";
+    sha256 = "1p9yczrx78pf5hvhcg1qiqb2vdlmw6bmhhjsm4wiqjq2cc6piaqw";
   };
 
-  buildInputs = [ libev ocaml findlib jbuilder ];
-
-  propagatedBuildInputs = [ zed lwt_react ];
-
-  buildPhase = "jbuilder build -p lambda-term";
-
-  installPhase = ''
-    ${jbuilder.installPhase}
-    mv $out/lib/ocaml/${ocaml.version}/site-lib/{stubslibs,lambda-term}/dlllambda_term_stubs.so
-  '';
-
-  hasSharedObjects = true;
+  buildInputs = [ libev ];
+  propagatedBuildInputs = [ zed lwt_log lwt_react ];
 
   meta = { description = "Terminal manipulation library for OCaml";
     longDescription = ''
@@ -42,7 +30,6 @@ buildOcaml rec {
 
     homepage = https://github.com/diml/lambda-term;
     license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.gal_bolle
     ];

@@ -11,10 +11,12 @@ stdenv.mkDerivation {
     sed 's/-o root -g root//' -i Makefile.in
   '';
 
-  buildInputs = [pam openssl db];
-  meta = {
+  buildInputs = [ pam openssl db ];
+
+  meta = with stdenv.lib; {
     homepage = http://www.padl.com/OSS/pam_ccreds.html;
     description = "PAM module to locally authenticate using an enterprise identity when the network is unavailable";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

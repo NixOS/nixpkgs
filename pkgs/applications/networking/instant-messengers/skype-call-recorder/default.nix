@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "skype-call-recorder-0.8";
   src = fetchurl {
-    url = "http://atdot.ch/scr/files/0.8/skype-call-recorder-0.8.tar.gz";
+    url = "https://atdot.ch/scr/files/0.8/skype-call-recorder-0.8.tar.gz";
     sha256 = "1iijkhq3aj9gr3bx6zl8ryvzkqcdhsm9yisimakwq0lnw0lgf5di";
   };
 
@@ -16,6 +16,7 @@ stdenv.mkDerivation {
   patches = [ ./conference.patch ];
 
   buildInputs = [ cmake lame id3lib libvorbis qt4 libogg ];
+  NIX_LDFLAGS = [ "-lvorbis" ];
 
   meta = {
     homepage = http://atdot.ch/scr/;

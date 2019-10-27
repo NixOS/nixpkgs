@@ -62,13 +62,13 @@ in
   config = mkIf cfg.enable {
     environment.etc."kresd.conf".source = configFile; # not required
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "kresd";
         uid = config.ids.uids.kresd;
         group = "kresd";
         description = "Knot-resolver daemon user";
       };
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "kresd";
         gid = config.ids.gids.kresd;
       };
@@ -80,8 +80,11 @@ in
         # Syntax depends on being IPv6 or IPv4.
         (iface: if elem ":" (stringToCharacters iface) then "[${iface}]:53" else "${iface}:53")
         cfg.interfaces;
-      socketConfig.ListenDatagram = listenStreams;
-      socketConfig.FreeBind = true;
+      socketConfig = {
+        ListenDatagram = listenStreams;
+        FreeBind = true;
+        FileDescriptorName = "dns";
+      };
     };
 
     systemd.sockets.kresd-tls = mkIf (cfg.listenTLS != []) rec {

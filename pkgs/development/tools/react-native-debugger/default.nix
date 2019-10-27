@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, unzip, cairo, xorg, gdk_pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
-, freetype, dbus, nss, nspr, alsaLib, cups, expat, libudev, makeDesktopItem
+{ stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
+, freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
 }:
 
 let
   rpath = stdenv.lib.makeLibraryPath [
     cairo
     stdenv.cc.cc
-    gdk_pixbuf
+    gdk-pixbuf
     fontconfig
     pango
     atk
@@ -19,7 +19,7 @@ let
     alsaLib
     cups
     expat
-    libudev
+    udev
 
     gnome2.GConf
 
@@ -37,12 +37,12 @@ let
     xorg.libXScrnSaver
   ];
 in stdenv.mkDerivation rec {
-  name = "react-native-debugger-${version}";
-  version = "0.7.18";
+  pname = "react-native-debugger";
+  version = "0.9.10";
 
   src = fetchurl {
     url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${version}/rn-debugger-linux-x64.zip";
-    sha256 = "186n438sy9wzrx2zdw4qq4hsz89wiy01bpfa6fdjisvxgz6r8sgw";
+    sha256 = "158275sp37smc8lnrcbj56lp7aa6fj9gzb6fzjgz9r980qgzhia6";
   };
 
   buildInputs = [ unzip ];

@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "skim-${version}";
-  version = "0.3.2";
+  pname = "skim";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "lotabout";
-    repo = "skim";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0spkkgjjrch1grb0115rn0wxzsh8pzmm96a7j69zy5pc1il2m5lp";
+    sha256 = "1ygnjrljar4caybh8lqfjif4vhb33aam80ffnzgqxz6s6g85ifrb";
   };
 
   outputs = [ "out" "vim" ];
 
-  cargoSha256 = "0zbjnii8r41ih2m2vqhm3wdiwgi13kipvxx75sg4vm4maf4wpmhv";
+  cargoSha256 = "1vcxcyhhqncjii0pad775x10j1kp62y82q1mii65jclr1karml3p";
 
   patchPhase = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D -m 555 bin/sk-tmux -t $out/bin
+    install -D -m 644 man/man1/* -t $out/man/man1
     install -D -m 444 shell/* -t $out/share/skim
     install -D -m 444 plugin/skim.vim -t $vim/plugin
 
@@ -34,10 +35,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Fuzzy Finder in rust!";
+    description = "Command-line fuzzy finder written in Rust";
     homepage = https://github.com/lotabout/skim;
     license = licenses.mit;
-    maintainers = [];
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
   };
 }

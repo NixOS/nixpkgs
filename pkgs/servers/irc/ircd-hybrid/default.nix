@@ -10,8 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl zlib ];
 
-  configureFlags =
-    "--with-nicklen=100 --with-topiclen=360 --enable-openssl=${openssl.dev}";
+  configureFlags = [
+    "--with-nicklen=100"
+    "--with-topiclen=360"
+    "--enable-openssl=${openssl.dev}"
+  ];
 
   postInstall = "echo postinstall; mkdir -p \${out}/ ; rm -rf \${out}/logs ; ln -s /home/ircd \${out}/logs;";
 

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, qt4, pkgconfig, boost, expat, cairo, python2Packages,
   cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
-  poppler, imagemagick, glew, openexr, ffmpeg, opencolorio, openimageio,
+  poppler, imagemagick, openexr, ffmpeg, opencolorio, openimageio,
   qmake4Hook, libpng, libGL, lndir }:
 
 let
@@ -12,7 +12,7 @@ let
   };
   seexpr = stdenv.mkDerivation rec {
     version = "1.0.1";
-    name = "seexpr-${version}";
+    pname = "seexpr";
     src = fetchurl {
       url = "https://github.com/wdas/SeExpr/archive/rel-${version}.tar.gz";
       sha256 = "1ackh0xs4ip7mk34bam8zd4qdymkdk0dgv8x0f2mf6gbyzzyh7lp";
@@ -120,7 +120,7 @@ stdenv.mkDerivation {
       Node-graph based, open-source compositing software. Similar in
       functionalities to Adobe After Effects and Nuke by The Foundry.
     '';
-    homepage = https://natron.inria.fr/;
+    homepage = https://natron.fr/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;

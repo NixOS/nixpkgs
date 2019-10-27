@@ -1,17 +1,10 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , lib
-, idris
 }:
-build-idris-package  {
+build-idris-package {
   name = "array";
   version = "2016-10-14";
-
-  idrisDeps = [ prelude base ];
-
-  extraBuildInputs = [ idris ];
 
   src = fetchFromGitHub {
     owner = "idris-hackers";
@@ -25,6 +18,5 @@ build-idris-package  {
     homepage = https://github.com/idris-hackers/idris-array;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

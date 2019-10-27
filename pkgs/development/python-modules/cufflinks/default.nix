@@ -1,25 +1,59 @@
-{ buildPythonPackage, stdenv, fetchPypi, pandas, plotly, colorlover
+{ lib, buildPythonPackage, fetchPypi, fetchpatch
+, chart-studio
+, colorlover
+, ipython
+, ipywidgets
+, nose
+, numpy
+, pandas
+, six
+, statsmodels
 }:
 
 buildPythonPackage rec {
   pname = "cufflinks";
-  version = "0.12.1";
-  name = "${pname}-${version}";
+  version = "0.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f11e4b6326cc5b2a18011c09fb64f178ba21002f337fd305f64818012a6c679";
+    sha256 = "163lag5g4micpqm3m4qy9b5r06a7pw45nq80x4skxc7dcrly2ygd";
   };
 
-  propagatedBuildInputs = [ pandas plotly colorlover ];
+  propagatedBuildInputs = [
+    chart-studio
+    colorlover
+    ipython
+    ipywidgets
+    numpy
+    pandas
+    six
+    statsmodels
+  ];
 
-  # tests not included in archive
-  doCheck = false;
+  patches = [
+    # Plotly 4 compatibility. Remove with next release, assuming it gets merged.
+    (fetchpatch {
+      url = "https://github.com/santosjorge/cufflinks/pull/202/commits/e291dce14181858cb457404adfdaf2624b6d0594.patch";
+      sha256 = "1l0dahwqn3cxg49v3i3amwi80dmx2bi5zrazmgzpwsfargmk2kd1";
+    })
+  ];
 
-  meta = {
-    homepage = https://github.com/santosjorge/cufflinks;
+  # in plotly4+, the plotly.plotly module was moved to chart-studio.plotly
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "plotly>=3.0.0,<4.0.0a0" "chart-studio"
+  '';
+
+  checkInputs = [ nose ];
+
+  checkPhase = ''
+    nosetests -xv tests.py
+  '';
+
+  meta = with lib; {
     description = "Productivity Tools for Plotly + Pandas";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ globin ];
+    homepage = "https://github.com/santosjorge/cufflinks";
+    license = licenses.mit;
+    maintainers = with maintainers; [ globin ];
   };
 }

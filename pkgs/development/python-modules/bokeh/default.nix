@@ -1,74 +1,57 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
-, isPyPy
-, mock
-, pytest
-, flask
-, jinja2
-, markupsafe
-, werkzeug
-, itsdangerous
-, dateutil
-, requests
-, six
-, pygments
-, pystache
-, markdown
-, pyyaml
-, pyzmq
-, tornado
-, colorama
-, isPy3k
 , futures
-, websocket_client
+, isPy3k
+, isPyPy
+, jinja2
+, lib
+, mock
 , numpy
-, pandas
-, greenlet
-, python
-, bkcharts
+, nodejs
+, packaging
 , pillow
+, pytest
+, python
+, python-dateutil
+, pyyaml
 , selenium
+, six
+, substituteAll
+, tornado
 }:
 
 buildPythonPackage rec {
   pname = "bokeh";
-  name = "${pname}${version}";
-  version = "0.12.15";
+  version = "1.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2891b883b30107dc610a7e963a21222f1fd096844d157c09db115179cfab6513";
+    sha256 = "0m27j29jpi977y95k272xc24qkl5bkniy046cil116hrbgnppng2";
   };
 
-  disabled = isPyPy;
+  patches = [
+    (substituteAll {
+      src = ./hardcode-nodejs-npmjs-paths.patch;
+      node_bin = "${nodejs}/bin/node";
+      npm_bin = "${nodejs}/bin/npm";
+    })
+  ];
 
-  # Some test that uses tornado fails
-#   doCheck = false;
+  disabled = isPyPy;
 
   checkInputs = [ mock pytest pillow selenium ];
 
   propagatedBuildInputs = [
-    flask
+    pillow
     jinja2
-    markupsafe
-    werkzeug
-    itsdangerous
-    dateutil
-    requests
+    python-dateutil
     six
-    pygments
-    pystache
-    markdown
     pyyaml
-    pyzmq
     tornado
-    colorama
-    bkcharts
+    numpy
+    packaging
   ]
-  ++ lib.optionals ( !isPy3k ) [ futures ]
-  ++ lib.optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
-  ++ lib.optionals ( !isPyPy ) [ numpy pandas greenlet ];
+  ++ lib.optionals ( !isPy3k ) [ futures ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s bokeh/tests
@@ -76,7 +59,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Statistical and novel interactive HTML plots for Python";
-    homepage = "http://github.com/bokeh/bokeh";
+    homepage = https://github.com/bokeh/bokeh;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ orivej ];
   };

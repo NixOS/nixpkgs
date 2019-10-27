@@ -245,12 +245,12 @@ in
       serviceConfig.KillSignal = "SIGINT";
     };
 
-    users.extraUsers.lighttpd = {
+    users.users.lighttpd = {
       group = "lighttpd";
       description = "lighttpd web server privilege separation user";
       uid = config.ids.uids.lighttpd;
     };
 
-    users.extraGroups.lighttpd.gid = config.ids.gids.lighttpd;
+    users.groups.lighttpd.gid = config.ids.gids.lighttpd;
   };
 }

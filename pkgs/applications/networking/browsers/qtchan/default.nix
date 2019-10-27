@@ -1,20 +1,19 @@
-{ stdenv, fetchFromGitHub, qt, makeWrapper }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "qtchan-${version}";
-  version = "0.100";
+mkDerivation rec {
+  pname = "qtchan";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner  = "siavash119";
     repo   = "qtchan";
     rev    = "v${version}";
-    sha256 = "0n94jd6b1y8v6x5lkinr9rzm4bjg9xh9m7zj3j73pgq829gpmj3a";
+    sha256 = "1x11m1kwqindzc0dkpfifcglsb362impaxs85kgzx50p898sz9ll";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ qt.qmake makeWrapper ];
-  buildInputs = [ qt.qtbase ];
-
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase ];
   qmakeFlags = [ "CONFIG-=app_bundle" ];
 
   installPhase = ''
@@ -22,12 +21,7 @@ stdenv.mkDerivation rec {
     cp qtchan $out/bin
   '';
 
-  preFixup = ''
-    wrapProgram $out/bin/qtchan \
-      --suffix QT_PLUGIN_PATH : ${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "4chan browser in qt5";
     homepage    = "https://github.com/siavash119/qtchan";
     license     = licenses.mit;

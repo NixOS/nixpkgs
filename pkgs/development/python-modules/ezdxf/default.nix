@@ -1,19 +1,20 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pyparsing, pytest }:
+{ stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, pyparsing, pytest }:
 
 buildPythonPackage rec {
-  version = "0.8.1";
+  version = "0.9";
   pname = "ezdxf";
-  name = "${pname}-${version}";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "mozman";
     repo = "ezdxf";
     rev = "v${version}";
-    sha256 = "1c20j96n3rsgzaakfjl0wnydaj2qr69gbnnjs6mfa1hz2fjqri22";
+    sha256 = "1ggimjd9060b696sgzgxy9j9sl45wh9qbxnf0035qclafshprlzl";
   };
 
-  buildInputs = [ pytest ];
-  checkPhase = "python -m unittest discover -s tests";
+  checkInputs = [ pytest ];
+  checkPhase = "pytest tests integration_tests";
 
   propagatedBuildInputs = [ pyparsing ];
 

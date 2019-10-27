@@ -1,7 +1,7 @@
 { buildPythonPackage, fetchFromGitHub, isPy3k, lxml, html5lib, nose, stdenv }:
 
 buildPythonPackage rec {
-  version = "v0.1.2";
+  version = "0.1.2";
   pname = "htmltreediff";
 
   disabled = isPy3k;
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "christian-oudard";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "16mqp2jyznrw1mgd3qzybq28h2k5wz7vmmz1m6xpgscazyjhvvd1";
   };
 

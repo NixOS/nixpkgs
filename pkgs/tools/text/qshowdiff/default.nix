@@ -1,7 +1,7 @@
 {stdenv, fetchurl, qt4, perl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "qshowdiff-${version}";
+  pname = "qshowdiff";
   version = "1.2";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     mkdir -p $out/{bin,man/man1}
-    makeFlags="PREFIX=$out"
+    makeFlags="PREFIX=$out CC=$CXX"
   '';
 
   meta = {

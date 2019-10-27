@@ -1,7 +1,7 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "the_platinum_searcher-${version}";
+  pname = "the_platinum_searcher";
   version = "2.1.5";
   rev = "v${version}";
 
@@ -15,11 +15,6 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
-
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    # fixes cycle between $out and $bin
-    install_name_tool -delete_rpath $out/lib $bin/bin/pt
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/monochromegane/the_platinum_searcher;

@@ -1,10 +1,10 @@
-{ fetchgit, runCommand, makeWrapper, openssh, stdenv }: args: derivation ((fetchgit args).drvAttrs // {
+{ fetchgit, runCommand, makeWrapper, openssh }: args: derivation ((fetchgit args).drvAttrs // {
   SSH_AUTH_SOCK = if (builtins.tryEval <ssh-auth-sock>).success
     then builtins.toString <ssh-auth-sock>
     else null;
 
   GIT_SSH = let
-    config = ''${let
+    config = let
         sshConfigFile = if (builtins.tryEval <ssh-config-file>).success
           then <ssh-config-file>
           else builtins.trace ''
@@ -14,7 +14,7 @@
 
             You may need StrictHostKeyChecking=no in the config file. Since ssh will refuse to use a group-readable private key, if using build-users you will likely want to use something like IdentityFile /some/directory/%u/key and have a directory for each build user accessible to that user.
           '' "/var/lib/empty/config";
-      in builtins.toString sshConfigFile}'';
+      in builtins.toString sshConfigFile;
 
     ssh-wrapped = runCommand "fetchgit-ssh" {
       nativeBuildInputs = [ makeWrapper ];

@@ -1,25 +1,25 @@
-{ stdenv, fetchgit, cmake, qtbase }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "qgit-2.7";
+mkDerivation rec {
+  pname = "qgit";
+  version = "2.9";
 
-  src = fetchgit {
-    url = "http://repo.or.cz/qgit4/redivivus.git";
-    rev = name;
-    sha256 = "0c0zxykpgkxb8gpgzz5i6b8nrzg7cdxikvpg678x7gsnxhlwjv3a";
+  src = fetchFromGitHub {
+    owner = "tibirna";
+    repo = "qgit";
+    rev = "${pname}-${version}";
+    sha256 = "0n4dq9gffm9yd7n5p5qcdfgrmg2kwnfd51hfx10adgj9ibxlnc3z";
   };
 
   buildInputs = [ qtbase ];
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2;
-    homepage = http://libre.tibirna.org/projects/qgit/wiki/QGit;
+    homepage = https://github.com/tibirna/qgit;
     description = "Graphical front-end to Git";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg markuskowa ];
     inherit (qtbase.meta) platforms;
   };
 }

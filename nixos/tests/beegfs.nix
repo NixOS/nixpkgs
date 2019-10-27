@@ -1,9 +1,9 @@
-import ./make-test.nix ({ pkgs, ... } :
+import ./make-test.nix ({ ... } :
 
 let
   connAuthFile="beegfs/auth-def.key";
 
-  client = { config, pkgs, lib, ... } : {
+  client = { pkgs, ... } : {
     networking.firewall.enable = false;
     services.beegfsEnable = true;
     services.beegfs.default = {
@@ -23,7 +23,7 @@ let
         }
       ];
 
-    environment.etc."${connAuthFile}" = {
+    environment.etc.${connAuthFile} = {
       enable = true;
       text = "ThisIsALousySecret";
       mode = "0600";
@@ -31,7 +31,7 @@ let
   };
 
 
-  server = service : { config, pkgs, lib, ... } : {
+  server = service : { pkgs, ... } : {
     networking.firewall.enable = false;
     boot.initrd.postDeviceCommands = ''
       ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L data /dev/vdb
@@ -47,7 +47,7 @@ let
       ];
 
     environment.systemPackages = with pkgs; [ beegfs ];
-    environment.etc."${connAuthFile}" = {
+    environment.etc.${connAuthFile} = {
       enable = true;
       text = "ThisIsALousySecret";
       mode = "0600";
@@ -57,7 +57,7 @@ let
     services.beegfs.default = {
       mgmtdHost = "mgmt";
       connAuthFile = "/etc/${connAuthFile}";
-      "${service}" = {
+      ${service} = {
         enable = true;
         storeDir = "/data";
       };

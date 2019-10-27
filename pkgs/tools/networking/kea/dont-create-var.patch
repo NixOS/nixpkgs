@@ -1,8 +1,8 @@
 diff --git a/Makefile.am b/Makefile.am
-index 897be34..b146729 100644
+index 2c0733c..974bb5e 100644
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -103,11 +103,6 @@ cppcheck:
+@@ -135,11 +135,6 @@ cppcheck:
  		--template '{file}:{line}: check_fail: {message} ({severity},{id})' \
  		src
  
@@ -15,14 +15,12 @@ index 897be34..b146729 100644
  EXTRA_DIST += tools/mk_cfgrpt.sh
  
 diff --git a/src/lib/dhcpsrv/Makefile.am b/src/lib/dhcpsrv/Makefile.am
-index 066b410..16d3135 100755
+index 564f623..7cea9f2 100644
 --- a/src/lib/dhcpsrv/Makefile.am
 +++ b/src/lib/dhcpsrv/Makefile.am
-@@ -210,7 +210,3 @@ EXTRA_DIST += database_backends.dox libdhcpsrv.dox
- # Specification file
- EXTRA_DIST += logging.spec
+@@ -352,5 +352,3 @@ libkea_dhcpsrv_parsers_include_HEADERS = \
+ 	parsers/simple_parser6.h
+ 
  
 -install-data-local:
 -	$(mkinstalldirs) $(DESTDIR)$(dhcp_data_dir)
--
--

@@ -1,0 +1,22 @@
+diff --git a/src/Layout/Handler.vala b/src/Layout/Handler.vala
+index 297314b..b36509a 100644
+--- a/src/Layout/Handler.vala
++++ b/src/Layout/Handler.vala
+@@ -29,7 +29,7 @@ public class Pantheon.Keyboard.LayoutPage.LayoutHandler : GLib.Object {
+     }
+
+     private void parse_layouts () {
+-        Xml.Doc* doc = Xml.Parser.parse_file ("/usr/share/X11/xkb/rules/evdev.xml");
++        Xml.Doc* doc = Xml.Parser.parse_file ("@config@");
+         if (doc == null) {
+             critical ("'evdev.xml' not found or permissions missing\n");
+             return;
+@@ -76,7 +76,7 @@ public class Pantheon.Keyboard.LayoutPage.LayoutHandler : GLib.Object {
+     public HashTable<string, string> get_variants_for_language (string language) {
+         var returned_table = new HashTable<string, string> (str_hash, str_equal);
+         returned_table.set ("", _("Default"));
+-        Xml.Doc* doc = Xml.Parser.parse_file ("/usr/share/X11/xkb/rules/evdev.xml");
++        Xml.Doc* doc = Xml.Parser.parse_file ("@config@");
+         if (doc == null) {
+             critical ("'evdev.xml' not found or permissions incorrect\n");
+             return returned_table;

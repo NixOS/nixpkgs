@@ -1,32 +1,34 @@
 { stdenv, meson, ninja, gettext, fetchurl, evince, gjs
 , pkgconfig, gtk3, glib, tracker, tracker-miners
-, itstool, libxslt, webkitgtk, libgdata, gnome-online-accounts
+, itstool, libxslt, webkitgtk, libgdata
 , gnome-desktop, libzapojit, libgepub
-, gnome3, librsvg, gdk_pixbuf, libsoup, docbook_xsl
-, gobjectIntrospection, json-glib, inkscape, poppler_utils
-, gmp, desktop-file-utils, wrapGAppsHook }:
+, gnome3, gdk-pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
+, gobject-introspection, inkscape, poppler_utils
+, desktop-file-utils, wrapGAppsHook, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-documents-${version}";
-  version = "3.28.0";
+  pname = "gnome-documents";
+  version = "3.33.90";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-documents/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "174q59gk9j0083bvv8sd2k66xrd4lydy2rcqbwsbzsy22fbhwcha";
+    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0l9g10i380bnjp1y3pslsy8ph1hd5x1d57dadvq70p5ki4r3qjaw";
   };
 
   doCheck = true;
 
-  mesonFlags = [ "-Dgetting-started=true" ];
+  mesonFlags = [
+    "-Dgetting-started=true"
+  ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl wrapGAppsHook
+    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl docbook_xml_dtd_42 wrapGAppsHook python3
     inkscape poppler_utils # building getting started
   ];
   buildInputs = [
-    gtk3 glib gnome3.gsettings-desktop-schemas
-    gdk_pixbuf gnome3.defaultIconTheme evince
-    libsoup webkitgtk gjs gobjectIntrospection
+    gtk3 glib gsettings-desktop-schemas
+    gdk-pixbuf gnome3.adwaita-icon-theme evince
+    libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub
   ];
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.dev}/bin/gapplication"
+    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.bin}/bin/gapplication"
   '';
 
   passthru = {

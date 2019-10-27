@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, python, docutils, removeReferencesTo }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, docutils, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   version = "0.14.0";
@@ -11,8 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "17fkbr4i70qgdqsrx1x28ag20xkfyz1v3q3d3ywmv409aczqhm40";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook docutils removeReferencesTo ];
-  buildInputs = [ varnish python ];
+  nativeBuildInputs = [
+    autoreconfHook
+    docutils
+    pkgconfig
+    removeReferencesTo
+    varnish.python  # use same python version as varnish server
+  ];
+
+  buildInputs = [ varnish ];
 
   postPatch = ''
     substituteInPlace bootstrap   --replace "''${dataroot}/aclocal"                  "${varnish.dev}/share/aclocal"

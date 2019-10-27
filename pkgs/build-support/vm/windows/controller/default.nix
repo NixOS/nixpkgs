@@ -1,5 +1,6 @@
 { stdenv, writeScript, vmTools, makeInitrd
 , samba, vde2, openssh, socat, netcat-gnu, coreutils, gnugrep, gzip
+, runtimeShell
 }:
 
 { sshKey
@@ -74,7 +75,7 @@ let
   loopForever = "while :; do ${coreutils}/bin/sleep 1; done";
 
   initScript = writeScript "init.sh" (''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     ${coreutils}/bin/cp -L "${sshKey}" /ssh.key
     ${coreutils}/bin/chmod 600 /ssh.key
   '' + (if installMode then ''
@@ -157,7 +158,7 @@ let
     "-net vde,vlan=0,sock=$QEMU_VDE_SOCKET"
   ]);
 
-  maybeKvm64 = optional (stdenv.system == "x86_64-linux") "-cpu kvm64";
+  maybeKvm64 = optional (stdenv.hostPlatform.system == "x86_64-linux") "-cpu kvm64";
 
   cygwinQemuArgs = concatStringsSep " " (maybeKvm64 ++ [
     "-monitor unix:$MONITOR_SOCKET,server,nowait"

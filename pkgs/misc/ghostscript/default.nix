@@ -1,16 +1,17 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, zlib, expat, openssl, autoconf
-, libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
-, libiconv, ijs
-, x11Support ? false, xlibsWrapper ? null
-, cupsSupport ? false, cups ? null
+{ config, stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
+, libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
+, libiconv, ijs, lcms2, fetchpatch
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
+, x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
 }:
 
 assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
+
 let
   version = "9.${ver_min}";
-  ver_min = "22";
-  sha256 = "1fyi4yvdj39bjgs10klr31cda1fbx1ar7a7b7yz7v68gykk65y61";
+  ver_min = "27";
+  sha512 = "00m8pfvvg4dzvrzk66myr8kid76x44sgqk84m9562g4viv9zbw759l8q9qg64mgvbajzn78zpqfgdlgz9nwgcdb1vpwc08gm12ssrsy";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -35,12 +36,36 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "ghostscript-${version}";
+  pname = "ghostscript";
+  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${name}.tar.xz";
-    inherit sha256;
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${pname}-${version}.tar.xz";
+    inherit sha512;
   };
+
+  patches = [
+    ./urw-font-files.patch
+    ./doc-no-ref.diff
+    (fetchpatch {
+        name = "CVE-2019-10216.patch";
+        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=5b85ddd19a8420a1bd2d5529325be35d78e94234";
+        sha256 = "165svml4knq1xlysfvj7vc07h68bhv3rgvl83xrhxsxdzs1ign31";
+    })
+    (fetchpatch {
+        name = "CVE-2019-14811.CVE-2019-14812.CVE-2019-14813.patch";
+        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=885444fcbe10dc42787ecb76686c8ee4dd33bf33";
+        sha256 = "19928sr7xpx7iibk9gn127g0r1yv2lcfpwgk2ipzz4wgrs3f5j70";
+    })
+    (fetchpatch {
+        name = "CVE-2019-14817-partial.patch";
+        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=cd1b1cacadac2479e291efe611979bdc1b3bdb19";
+        # patch doesn't apply cleanly to all files, but at least partially applying it fixes
+        # *most* of the problematic sites.
+        excludes = ["Resource/Init/pdf_font.ps"];
+        sha256 = "0f8qgdqpv7bldc9akvjj10af2h2876cvnz4q3nvg4a00rk5i05wn";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ];
 
@@ -49,20 +74,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf ];
   buildInputs =
     [ zlib expat openssl
-      libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
-      libiconv ijs
+      libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
+      libiconv ijs lcms2
     ]
     ++ lib.optional x11Support xlibsWrapper
     ++ lib.optional cupsSupport cups
     ;
 
-  patches = [
-    ./urw-font-files.patch
-  ];
-
   preConfigure = ''
     # requires in-tree (heavily patched) openjpeg
-    rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec freetype cups/libs ijs
+    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
@@ -89,8 +110,8 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    mkdir -p "$doc/share/ghostscript/${version}"
-    mv "$out/share/ghostscript/${version}"/{doc,examples} "$doc/share/ghostscript/${version}/"
+    mkdir -p "$doc/share/doc/ghostscript"
+    mv "$doc/share/doc/${version}" "$doc/share/doc/ghostscript/"
 
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

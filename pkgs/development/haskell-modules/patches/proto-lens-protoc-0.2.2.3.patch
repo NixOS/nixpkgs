@@ -1,0 +1,51 @@
+diff -Naur proto-lens-protoc-0.2.2.3/proto-lens-protoc.cabal proto-lens-protoc-0.2.2.3-patched/proto-lens-protoc.cabal
+--- proto-lens-protoc-0.2.2.3/proto-lens-protoc.cabal	2018-07-21 22:55:12.041698876 +0200
++++ proto-lens-protoc-0.2.2.3-patched/proto-lens-protoc.cabal	2018-08-13 19:44:44.993147985 +0200
+@@ -37,8 +37,8 @@
+     default-language:  Haskell2010
+     hs-source-dirs:    src
+     build-depends:
+-          Cabal >= 1.22 && < 2.1
+-        , base >= 4.8 && < 4.11
++          Cabal >= 1.22
++        , base >= 4.8
+         , bytestring == 0.10.*
+         , containers == 0.5.*
+         , data-default-class >= 0.0 && < 0.2
+@@ -53,6 +53,7 @@
+         , proto-lens == 0.2.2.*
+         , proto-lens-descriptors == 0.2.2.*
+         , text == 1.2.*
++        , semigroups
+     reexported-modules:
+         -- Modules that are needed by the generated Haskell files.
+         -- For forwards compatibility, reexport them as new module names so that
+@@ -76,7 +77,7 @@
+   main-is:  protoc-gen-haskell.hs
+ 
+   build-depends:
+-        base >= 4.8 && < 4.11
++        base >= 4.8
+       , bytestring == 0.10.*
+       , containers == 0.5.*
+       , data-default-class >= 0.0 && < 0.2
+diff -Naur proto-lens-protoc-0.2.2.3/src/Data/ProtoLens/Compiler/Definitions.hs proto-lens-protoc-0.2.2.3-patched/src/Data/ProtoLens/Compiler/Definitions.hs
+--- proto-lens-protoc-0.2.2.3/src/Data/ProtoLens/Compiler/Definitions.hs	2017-08-07 06:52:21.000000000 +0200
++++ proto-lens-protoc-0.2.2.3-patched/src/Data/ProtoLens/Compiler/Definitions.hs	2018-08-13 19:14:07.240505220 +0200
+@@ -35,6 +35,7 @@
+ import qualified Data.Map as Map
+ import Data.Maybe (fromMaybe)
+ import Data.Monoid
++import qualified Data.Semigroup as Semigroup
+ import qualified Data.Set as Set
+ import Data.String (IsString(..))
+ import Data.Text (Text, cons, splitOn, toLower, uncons, unpack)
+@@ -139,7 +140,7 @@
+ -- a 'Symbol' is used to construct both the type-level argument to
+ -- @HasLens@ and the name of the function @foo@.
+ newtype Symbol = Symbol String
+-    deriving (Eq, Ord, IsString, Monoid)
++    deriving (Eq, Ord, IsString, Semigroup.Semigroup, Monoid)
+ 
+ nameFromSymbol :: Symbol -> Name
+ nameFromSymbol (Symbol s) = fromString s

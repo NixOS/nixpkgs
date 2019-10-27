@@ -13,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "3.0";
-    url = "https://dl.winehq.org/wine/source/3.0/wine-${version}.tar.xz";
-    sha256 = "1v7vq9iinkscbq6wg85fb0d2137660fg2nk5iabxkl2wr850asil";
+    version = "4.0.2";
+    url = "https://dl.winehq.org/wine/source/4.0/wine-${version}.tar.xz";
+    sha256 = "0x5x9pvhryzhq1m7i8gx5wwwj341zz05zymadlhfw5w45xlm0h4r";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -31,24 +31,24 @@ in rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "4.7.1";
+      version = "4.9.3";
       url = "http://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";
-      sha256 = "1ai9qsrgiwd371pyqr3mjaddaczly5d1z68r4lxl3hrkz2vmv39c";
+      sha256 = "0va7nbhvfb52g78s9k3zc6xxwsn5whfyn333s6fdxycp8rkvgxkw";
     };
   };
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "3.7";
-    url = "https://dl.winehq.org/wine/source/3.x/wine-${version}.tar.xz";
-    sha256 = "1drbzk3y0m14lkq3vzwwkvain5shykgcbmyzh6gcb5r4sxh3givn";
+    version = "4.17";
+    url = "https://dl.winehq.org/wine/source/4.x/wine-${version}.tar.xz";
+    sha256 = "1bmj4l84q29h4km5ab5zzypns3mpf7pizybcpab6jj47cr1s303l";
     inherit (stable) mono gecko32 gecko64;
   };
 
   staging = fetchFromGitHub rec {
-    # https://github.com/wine-compholio/wine-staging/releases
+    # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "0kam73jqhah7bzji5csxxhhfdp6byhzpcph6xnzjqz2aic5xk7xi";
+    sha256 = "0cb0w6jwqs70854g1ixfj8r53raln0spyy1l96qv72ymbhzc353h";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
@@ -56,8 +56,8 @@ in rec {
 
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
-    version = "20180217";
-    sha256 = "0k3vlsqjbzys5dfbxwgw76al8gh44jsjqkc06va103frkrgjxvc5";
+    version = "20190912";
+    sha256 = "08my9crgpj5ai77bm64v99x4kmdb9dl8fw14581n69id449v7gzv";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;

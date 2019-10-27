@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, shared-mime-info
 , autoconf, automake, intltool, libtool, pkgconfig, cmake
 , ruby, librsvg
 , ncurses, m17n_lib, m17n_db, expat
@@ -38,15 +38,15 @@ assert withFFI -> libffi != null;
 assert withMisc -> libeb != null;
 
 stdenv.mkDerivation rec {
-  version = "1.8.6-20180501-git";
-  name = "uim-${version}";
+  version = "1.8.8";
+  pname = "uim";
 
   src = fetchFromGitHub {
     owner = "uim";
     repo = "uim";
-    rev = "c79432cb5aba3a67fb7e7557f4817c749865cc8a";
+    rev = "2c0958c9c505a87e70e344c2192e2e5123c71ea5";
     fetchSubmodules = true;
-    sha256 = "12rznfwq1mh750i18bl1743c51akyyvy6la5rgrxmrnp0mha9ba5";
+    sha256 = "1hkjxi5r49gcna37m3jvykny5hz9ram4y8a3q7lw4qzr52mz9pdp";
   };
 
   nativeBuildInputs = [
@@ -126,6 +126,12 @@ stdenv.mkDerivation rec {
   #--with-prime            Build a plugin for PRIME [default=yes]
   #--with-sj3              Use SJ3 [default=no]
   #--with-osx-dcs          Build with OS X Dictionary Services [default=no]
+
+  # TODO: fix this in librsvg/glib later
+  # https://github.com/NixOS/nixpkgs/pull/57027#issuecomment-475461733
+  preBuild = ''
+    export XDG_DATA_DIRS="${shared-mime-info}/share"
+  '';
 
   dontUseCmakeConfigure = true;
 

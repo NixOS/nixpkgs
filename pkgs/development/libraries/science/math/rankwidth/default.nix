@@ -5,10 +5,9 @@
 stdenv.mkDerivation rec {
   pname = "rankwidth";
   version = "0.7";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://mirrors.mit.edu/sage/spkg/upstream/rw/rw-${version}.tar.gz";
+    url = "mirror://sageupstream/rw/rw-${version}.tar.gz";
     sha256 = "1rv2v42x2506x7f10349m1wpmmfxrv9l032bkminni2gbip9cjg0";
   };
 
@@ -23,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Calculates rank-width and rank-decompositions";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

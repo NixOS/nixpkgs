@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "PyMVGLive";

@@ -10,12 +10,12 @@ let
     ([ coreutils ncurses gnused gnugrep ] ++ stdenv.lib.optional (jdk != null) jdk);
 in
 stdenv.mkDerivation rec {
-  name = "grails-${version}";
-  version = "3.3.5";
+  pname = "grails";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "https://github.com/grails/grails-core/releases/download/v${version}/grails-${version}.zip";
-    sha256 = "0796jbcblr3vxdf6sngzcfs1m24d1ra1n8jc7cnfrfxpf8r0z15m";
+    sha256 = "0igkzxqfm6lvp4s8w6kavdvjriq59q42jmj9ynbc669dvy6y6725";
   };
 
   buildInputs = [ unzip ];

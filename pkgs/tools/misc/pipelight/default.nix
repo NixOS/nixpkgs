@@ -1,8 +1,7 @@
-{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU_combined, perl, wineStaging
- }:
+{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU_combined, wine-staging }:
 
 let
-  wine_custom = wineStaging;
+  wine_custom = wine-staging;
 
   mozillaPluginPath = "/lib/mozilla/plugins";
 
@@ -11,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   version = "0.2.8.2";
 
-  name = "pipelight-${version}";
+  pname = "pipelight";
 
   src = fetchurl {
     url = "https://bitbucket.org/mmueller2012/pipelight/get/v${version}.tar.gz";

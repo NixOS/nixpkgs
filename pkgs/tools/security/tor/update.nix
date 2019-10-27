@@ -1,6 +1,5 @@
 { lib
 , writeScript
-, runCommand
 , common-updater-scripts
 , bash
 , coreutils

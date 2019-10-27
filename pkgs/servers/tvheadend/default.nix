@@ -3,16 +3,17 @@
 , which, zlib }:
 
 let
-  version = "4.2.6";
+  version = "4.2.8";
 
-in stdenv.mkDerivation rec {
-  name = "tvheadend-${version}";
+in stdenv.mkDerivation {
+  pname = "tvheadend";
+  inherit version;
 
   src = fetchFromGitHub {
     owner  = "tvheadend";
     repo   = "tvheadend";
     rev    = "v${version}";
-    sha256 = "0rnhk0r34mfmz3cnf735nzkkyal7pnv16hfyrs0g4v5rk99rlab3";
+    sha256 = "1xq059r2bplaa0nd0wkhw80jfwd962x0h5hgd7fz2yp6largw34m";
   };
 
   buildInputs = [
@@ -23,6 +24,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
   enableParallelBuilding = true;
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
   # disable dvbscan, as having it enabled causes a network download which
   # cannot happen during build.

@@ -1,8 +1,8 @@
-{ fetchFromGitHub, stdenv, ncurses, autoreconfHook, SDL2, SDL2_mixer }:
+{ fetchFromGitHub, stdenv, autoreconfHook, libiconv, ncurses, SDL2, SDL2_mixer }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2016-07-06";
-  name = "liberal-crime-squad-${version}";
+  pname = "liberal-crime-squad";
 
   src = fetchFromGitHub {
     owner = "Kamal-Sadek";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ncurses SDL2 SDL2_mixer ];
+  buildInputs = [ libiconv ncurses SDL2 SDL2_mixer ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A humorous politically themed ncurses game";

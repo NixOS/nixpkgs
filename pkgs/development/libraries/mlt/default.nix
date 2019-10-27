@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper
+{ stdenv, fetchFromGitHub, makeWrapper
 , SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
 , libvorbis, libxml2, movit, pkgconfig, sox
 , gtk2
 }:
 
 stdenv.mkDerivation rec {
-  name = "mlt-${version}";
-  version = "6.8.0";
+  pname = "mlt";
+  version = "6.16.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0hmxlz3i9yasw5jdkrczak8shzlnpi1acaahn50lvgg9b14kg7b8";
+    sha256 = "1362fv63p34kza9v4b71b6wakgvsa2vdx9y0g28x3yh4cp4k97kx";
   };
 
   buildInputs = [

@@ -1,19 +1,21 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "utf8proc-${version}";
-  version = "2.1.1";
+  pname = "utf8proc";
+  version = "2.4.0";
 
-  src = fetchurl {
-    url = "https://github.com/JuliaLang/utf8proc/archive/v${version}.tar.gz";
-    sha256 = "1cnpigrazhslw65s4j1a56j7p6d7d61wsxxjf1218i9mkwv2yw17";
+  src = fetchFromGitHub {
+    owner = "JuliaStrings";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1i42hqwc8znqii9brangwkxk5cyc2lk95ip405fg88zr7z2ncr34";
   };
 
   makeFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A clean C library for processing UTF-8 Unicode data";
-    homepage = https://julialang.org/utf8proc;
+    homepage = "https://juliastrings.github.io/utf8proc/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.ftrvxmtrx ];

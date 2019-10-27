@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4panel_gtk3, xfconf
-, gtk3, libpulseaudio
+, gtk3, libpulseaudio, hicolor-icon-theme
 , withKeybinder ? true, keybinder3
 , withLibnotify ? true, libnotify
 }:
@@ -21,11 +21,9 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   nativeBuildInputs = [ pkgconfig intltool ];
-  buildInputs = [ libxfce4util xfce4panel_gtk3 xfconf gtk3 libpulseaudio ]
+  buildInputs = [ libxfce4util xfce4panel_gtk3 xfconf gtk3 libpulseaudio hicolor-icon-theme ]
     ++ optional withKeybinder keybinder3
     ++ optional withLibnotify libnotify;
-
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

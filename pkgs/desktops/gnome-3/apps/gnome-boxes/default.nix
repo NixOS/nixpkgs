@@ -1,44 +1,42 @@
 { stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, itstool, libvirt-glib
-, glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice-gtk
+, glib, gobject-introspection, libxml2, gtk3, gtk-vnc, freerdp, libvirt, spice-gtk, python3
 , spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
 , libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
-, mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
-, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk
+, mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, libsecret
+, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk, vte
 }:
 
-# TODO: ovirt (optional)
-
 let
-  version = "3.28.4";
+  version = "3.34.1";
 in stdenv.mkDerivation rec {
-  name = "gnome-boxes-${version}";
+  pname = "gnome-boxes";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-boxes/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1378zzqdwv0hnirg8k91s5vgkcl1brfild3hgach5jhg78nxdb4j";
+    url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1758k5b79kyywdg67b4byqhva9045i13lzg5r62my950c4c2p0pc";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils
+    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobject-introspection desktop-file-utils python3
   ];
 
+  # Required for USB redirection PolicyKit rules file
+  propagatedUserEnvPkgs = [ spice-gtk ];
+
   buildInputs = [
-    libvirt-glib glib gtk3 gtkvnc libxml2
+    libvirt-glib glib gtk3 gtk-vnc freerdp libxml2
     libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
     tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
-    gnome3.defaultIconTheme librsvg acl libgudev libsecret
-    libcap_ng numactl xen libapparmor
+    gnome3.adwaita-icon-theme librsvg acl libgudev libsecret
+    libcap_ng numactl xen libapparmor vte
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio ]}")
   '';
-
-  mesonFlags = [
-    "-Dovirt=false"
-  ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py # patchShebangs requires executable file
@@ -54,9 +52,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";
-    homepage = https://wiki.gnome.org/action/show/Apps/Boxes;
+    homepage = https://wiki.gnome.org/Apps/Boxes;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = gnome3.maintainers;
   };
 }

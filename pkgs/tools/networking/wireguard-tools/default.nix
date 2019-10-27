@@ -1,20 +1,29 @@
-{ stdenv, fetchzip, libmnl ? null, makeWrapper ? null, wireguard-go ? null }:
+{
+  stdenv, fetchzip,
+
+  iproute ? null,
+  libmnl ? null,
+  makeWrapper ? null,
+  openresolv ? null,
+  procps ? null,
+  wireguard-go ? null,
+}:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "wireguard-tools-${version}";
-  version = "0.0.20180519";
+  pname = "wireguard-tools";
+  version = "0.0.20191012";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "0pd04ia0wcm0f6di4gx5kflccc5j35d72j38l8jqpj8vinl6l070";
+    sha256 = "0nwcx7m5cpp4h1bclswiqq1jzj08xzpxmq5s4rcfqmrp59cmwgrs";
   };
 
   sourceRoot = "source/src/tools";
 
-  nativeBuildInputs = [ (optional stdenv.isDarwin makeWrapper) ];
-  buildInputs = [ (optional stdenv.isLinux libmnl) ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = optional stdenv.isLinux libmnl;
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -27,18 +36,24 @@ stdenv.mkDerivation rec {
   postFixup = ''
     substituteInPlace $out/lib/systemd/system/wg-quick@.service \
       --replace /usr/bin $out/bin
+  '' + optionalString stdenv.isLinux ''
+    for f in $out/bin/*; do
+      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute openresolv]}
+    done
   '' + optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
       wrapProgram $f --prefix PATH : ${wireguard-go}/bin
     done
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Tools for the WireGuard secure network tunnel";
-    downloadPage = https://git.zx2c4.com/WireGuard/refs/;
-    homepage = https://www.wireguard.com/;
+    downloadPage = "https://git.zx2c4.com/WireGuard/refs/";
+    homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ericsagnes mic92 zx2c4 ];
+    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ma27 ];
     platforms = platforms.unix;
   };
 }

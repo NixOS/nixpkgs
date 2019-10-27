@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, zlib, boost, glucose }:
+{ stdenv, fetchurl, fetchFromGitHub, zlib, boost }:
 
 let
   glucose' = fetchurl {
@@ -7,7 +7,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "aspino-unstable-2017-03-09";
 
   src = fetchFromGitHub {
@@ -44,5 +44,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.asl20;
     homepage = http://alviano.net/software/maxino/;
+    # See pkgs/applications/science/logic/glucose/default.nix
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

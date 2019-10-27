@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
-, enableDebugBuild ? false }:
+{ config, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
+, enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxcfs-3.0.0";
+  name = "lxcfs-3.1.2";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = name;
-    sha256 = "0fsy2h7b5dkzvfm6m8vqzhnji42cszdn0b3ndnaxiwv3402ccmvk";
+    sha256 = "195skz6wc2gfcf99f1fz1yaw29ngzg9lphnkag7yxnk3ffbhv40s";
   };
 
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];

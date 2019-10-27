@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   name = "kmscon-8";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/kmscon/releases/${name}.tar.xz";
+    url = "https://www.freedesktop.org/software/kmscon/releases/${name}.tar.xz";
     sha256 = "0axfwrp3c8f4gb67ap2sqnkn75idpiw09s35wwn6kgagvhf1rc0a";
   };
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev, avahi, freeipmi
-, libtool, makeWrapper }:
+, libtool, makeWrapper, nss }:
 
 stdenv.mkDerivation rec {
   name = "nut-2.7.4";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "19r5dm07sfz495ckcgbfy0pasx0zy3faa0q7bih69lsjij8q43lq";
   };
 
-  buildInputs = [ neon libusb openssl udev avahi freeipmi libtool ];
+  buildInputs = [ neon libusb openssl udev avahi freeipmi libtool nss ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       "$out/lib:${neon}/lib:${libusb.out}/lib:${avahi}/lib:${freeipmi}/lib"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Network UPS Tools";
     longDescription = ''
       Network UPS Tools is a collection of programs which provide a common
@@ -41,8 +41,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.networkupstools.org/;
     repositories.git = https://github.com/networkupstools/nut.git;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ pierron ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.pierron ];
+    license = with licenses; [ gpl1Plus gpl2Plus gpl3Plus ];
     priority = 10;
   };
 }

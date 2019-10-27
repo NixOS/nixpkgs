@@ -3,7 +3,6 @@
 , glee }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "electricsheep";
   version = "2.7b33-2017-10-20";
 
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
-    homepage = http://electricsheep.org/;
+    homepage = https://electricsheep.org/;
     maintainers = with maintainers; [ nand0p fpletz ];
     platforms = platforms.linux;
     license = licenses.gpl1;

@@ -1,8 +1,6 @@
-{ stdenv, appleDerivation, ed, unifdef, Libc_old, Libc_10-9 }:
+{ appleDerivation, ed, unifdef, Libc_old, Libc_10-9 }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
   nativeBuildInputs = [ ed unifdef ];
 
   # TODO: asl.h actually comes from syslog project now
@@ -12,6 +10,8 @@ appleDerivation {
     export PUBLIC_HEADERS_FOLDER_PATH=include
     export PRIVATE_HEADERS_FOLDER_PATH=include
     bash xcodescripts/headers.sh
+
+    cp ${./CrashReporterClient.h} $out/include/CrashReporterClient.h
 
     cp ${Libc_10-9}/include/NSSystemDirectories.h $out/include
 

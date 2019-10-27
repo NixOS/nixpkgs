@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, removeReferencesTo
+{ stdenv, fetchurl, pkgconfig, removeReferencesTo
 , zlib, libjpeg, libpng, libtiff, pam, dbus, systemd, acl, gmp, darwin
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
+, coreutils
 }:
 
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
@@ -8,27 +9,26 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cups-${version}";
-  version = "2.2.6";
+  pname = "cups";
+
+  # After 2.2.6, CUPS requires headers only available in macOS 10.12+
+  version = if stdenv.isDarwin then "2.2.6" else "2.2.12";
 
   passthru = { inherit version; };
 
   src = fetchurl {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
+    sha256 = if version == "2.2.6"
+             then "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20"
+             else "1a4sgx5y7z16flmpnchd2ix294bnzy0v8mdkd96a4j27kr2anq8g";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  patches = [
-    (fetchpatch {
-      name = "cups"; # weird name to avoid change (for now)
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/cups-systemd-socket.patch"
-          + "?h=packages/cups&id=41fefa22ac518";
-      sha256 = "1ddgdlg9s0l2ph6l8lx1m1lx6k50gyxqi3qiwr44ppq1rxs80ny5";
-    })
-    ./cups-clean-dirty.patch
-  ];
+  postPatch = ''
+    substituteInPlace cups/testfile.c \
+      --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
+  '';
 
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
 
@@ -48,13 +48,16 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     "--enable-dbus"
     "--enable-pam"
+    "--with-dbusdir=${placeholder "out"}/share/dbus-1"
   ] ++ optional (libusb != null) "--enable-libusb"
     ++ optional (gnutls != null) "--enable-ssl"
     ++ optional (avahi != null) "--enable-avahi"
     ++ optional (libpaper != null) "--enable-libpaper"
     ++ optional stdenv.isDarwin "--disable-launchd";
 
+  # AR has to be an absolute path
   preConfigure = ''
+    export AR="${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
     configureFlagsArray+=(
       # Put just lib/* and locale into $lib; this didn't work directly.
       # lib/cups is moved back to $out in postInstall.
@@ -79,7 +82,6 @@ stdenv.mkDerivation rec {
       "STATEDIR=$(TMPDIR)/dummy"
       # Idem for /etc.
       "PAMDIR=$(out)/etc/pam.d"
-      "DBUSDIR=$(out)/etc/dbus-1"
       "XINETD=$(out)/etc/xinetd.d"
       "SERVERROOT=$(out)/etc/cups"
       # Idem for /usr.
@@ -131,7 +133,7 @@ stdenv.mkDerivation rec {
     homepage = https://cups.org/;
     description = "A standards-based printing system for UNIX";
     license = licenses.gpl2; # actually LGPL for the library and GPL for the rest
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
   };
 }

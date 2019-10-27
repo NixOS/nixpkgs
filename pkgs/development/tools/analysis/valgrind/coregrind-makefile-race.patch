@@ -1,0 +1,41 @@
+From 7820fc268fae4353118b6355f1d4b9e1b7eeebec Mon Sep 17 00:00:00 2001
+From: Philippe Waroquiers <philippe.waroquiers@skynet.be>
+Date: Sun, 28 Oct 2018 18:35:11 +0100
+Subject: [PATCH 1/1] Fix dependencies between libcoregrind*.a and
+ *m_main.o/*m_libcsetjmp.o
+
+The primary and secondary coregrind libraries must be updated
+when m_main.c or m_libcsetjmp.c are changed.
+
+A dependency was missing between libcoregrind*.a and libnolto_coregrind*.a,
+and so tools were not relinked when m_main.c or m_libcsetjmp.c were
+changed.
+---
+ coregrind/Makefile.am | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/coregrind/Makefile.am b/coregrind/Makefile.am
+index 914a270..8de1996 100644
+--- a/coregrind/Makefile.am
++++ b/coregrind/Makefile.am
+@@ -511,6 +511,8 @@ libcoregrind_@VGCONF_ARCH_PRI@_@VGCONF_OS@_a_CFLAGS += \
+ endif
+ libcoregrind_@VGCONF_ARCH_PRI@_@VGCONF_OS@_a_LIBADD = \
+     $(libnolto_coregrind_@VGCONF_ARCH_PRI@_@VGCONF_OS@_a_OBJECTS)
++libcoregrind_@VGCONF_ARCH_PRI@_@VGCONF_OS@_a_DEPENDENCIES = \
++    libnolto_coregrind-@VGCONF_ARCH_PRI@-@VGCONF_OS@.a
+ 
+ if VGCONF_HAVE_PLATFORM_SEC
+ libcoregrind_@VGCONF_ARCH_SEC@_@VGCONF_OS@_a_SOURCES = \
+@@ -531,6 +533,8 @@ libcoregrind_@VGCONF_ARCH_SEC@_@VGCONF_OS@_a_CFLAGS += \
+ endif
+ libcoregrind_@VGCONF_ARCH_SEC@_@VGCONF_OS@_a_LIBADD = \
+     $(libnolto_coregrind_@VGCONF_ARCH_SEC@_@VGCONF_OS@_a_OBJECTS)
++libcoregrind_@VGCONF_ARCH_SEC@_@VGCONF_OS@_a_DEPENDENCIES = \
++    libnolto_coregrind-@VGCONF_ARCH_SEC@-@VGCONF_OS@.a
+ endif
+ 
+ #----------------------------------------------------------------------------
+-- 
+2.9.3
+

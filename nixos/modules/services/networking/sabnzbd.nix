@@ -41,7 +41,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.sabnzbd = {
+    users.users.sabnzbd = {
           uid = config.ids.uids.sabnzbd;
           group = "sabnzbd";
           description = "sabnzbd user";
@@ -49,7 +49,7 @@ in
           createHome = true;
     };
 
-    users.extraGroups.sabnzbd = {
+    users.groups.sabnzbd = {
       gid = config.ids.gids.sabnzbd;
     };
 

@@ -136,12 +136,18 @@ in
         "/.dns/127.0.0.1#${toString cfg.dns.port}"
       ];
 
-    services.pdns-recursor.forwardZones = mkIf cfgs.pdns-recursor.resolveDNSChainQueries
-      { bit = "127.0.0.1:${toString cfg.dns.port}";
-        dns = "127.0.0.1:${toString cfg.dns.port}";
-      };
+    services.pdns-recursor = mkIf cfgs.pdns-recursor.resolveDNSChainQueries {
+      forwardZones =
+        { bit = "127.0.0.1:${toString cfg.dns.port}";
+          dns = "127.0.0.1:${toString cfg.dns.port}";
+        };
+      luaConfig =''
+        addNTA("bit", "namecoin doesn't support DNSSEC")
+        addNTA("dns", "namecoin doesn't support DNSSEC")
+      '';
+    };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = username;
       description = "DNSChain daemon user";
       home = dataDir;

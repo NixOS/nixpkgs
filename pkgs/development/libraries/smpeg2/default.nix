@@ -1,4 +1,4 @@
-{ stdenv, darwin, fetchsvn, autoconf, automake, libtool, m4, pkgconfig, makeWrapper, SDL2 }:
+{ stdenv, darwin, fetchsvn, autoconf, automake, pkgconfig, makeWrapper, SDL2 }:
 
 stdenv.mkDerivation rec {
   name = "smpeg2-svn${version}";

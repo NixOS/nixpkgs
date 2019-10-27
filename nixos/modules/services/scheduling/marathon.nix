@@ -93,6 +93,6 @@ in {
       };
     };
 
-    users.extraUsers.${cfg.user} = { };
+    users.users.${cfg.user} = { };
   };
 }

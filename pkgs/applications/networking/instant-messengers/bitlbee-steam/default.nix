@@ -1,9 +1,9 @@
-{ fetchurl, fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkgconfig, glib, libgcrypt }:
+{ fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkgconfig, glib, libgcrypt }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   version = "1.4.2";
-  name = "bitlbee-steam-${version}";
+  pname = "bitlbee-steam";
 
   src = fetchFromGitHub {
     rev = "v${version}";

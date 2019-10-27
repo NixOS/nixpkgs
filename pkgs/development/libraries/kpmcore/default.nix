@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, extra-cmake-modules, pkgconfig
+{ stdenv, lib, fetchurl, extra-cmake-modules
 , qtbase, kdeFrameworks
 , libatasmart, parted
 , utillinux }:
@@ -28,6 +28,8 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-   maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    # The build requires at least Qt 5.12:
+    broken = lib.versionOlder qtbase.version "5.12.0";
   };
 }

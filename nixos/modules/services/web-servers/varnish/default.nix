@@ -103,11 +103,11 @@ in
       })
     ];
 
-    users.extraUsers.varnish = {
+    users.users.varnish = {
       group = "varnish";
       uid = config.ids.uids.varnish;
     };
 
-    users.extraGroups.varnish.gid = config.ids.uids.varnish;
+    users.groups.varnish.gid = config.ids.uids.varnish;
   };
 }

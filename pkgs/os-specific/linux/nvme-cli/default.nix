@@ -1,17 +1,21 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "nvme-cli-${version}";
-  version = "1.5";
+  pname = "nvme-cli";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    sha256 = "1nl5hl5am8djwmrw1xxnd9ahp7kyzyj0yh1nxgmx43pn3d61n0vz";
+    sha256 = "08x0x7nq8v7gr8a4lrrhclkz6n8fxlhhizxl2nz56w1xmfghcnfv";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+
+  # To omit the hostnqn and hostid files that are impure and should be unique
+  # for each target host:
+  installTargets = "install-spec";
 
   meta = with lib; {
     inherit (src.meta) homepage;

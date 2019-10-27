@@ -1,20 +1,23 @@
-{ fetchurl, stdenv, lib, precision ? "double" }:
+{ fetchurl, stdenv, lib, precision ? "double", perl }:
 
 with lib;
 
 assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
 let
-  version = "3.3.7";
+  version = "3.3.8";
   withDoc = stdenv.cc.isGNU;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "fftw-${precision}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
-    sha256 = "0wsms8narnbhfsa8chdflv2j9hzspvflblnqdn7hw8x5xdzrnq1v";
+    urls = [
+      "http://fftw.org/fftw-${version}.tar.gz"
+      "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz"
+    ];
+    sha256 = "00z3k8fq561wq2khssqg0kallk0504dzlx989x3vvicjdqpjc4v1";
   };
 
   outputs = [ "out" "dev" "man" ]
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev"; # fftw-wisdom
 
   configureFlags =
-    [ "--enable-shared" "--disable-static"
+    [ "--enable-shared"
       "--enable-threads"
     ]
     ++ optional (precision != "double") "--enable-${precision}"
@@ -34,6 +37,8 @@ stdenv.mkDerivation rec {
     ++ optional (!withDoc) "--disable-doc";
 
   enableParallelBuilding = true;
+
+  checkInputs = [ perl ];
 
   meta = with stdenv.lib; {
     description = "Fastest Fourier Transform in the West library";

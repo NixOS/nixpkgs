@@ -1,8 +1,8 @@
-{stdenv, buildOcamlJane, fetchurl, core_kernel,
+{stdenv, buildOcamlJane, core_kernel,
  bin_prot, fieldslib,
- sexplib, herelib, opam, js_build_tools, ocaml_oasis}:
+ sexplib, herelib}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "async_kernel";
   hash = "1n6ifbrq6q6hq8bxh6b9vhg11mv9r6jgp1b7vfw7mh5s2nrd4b60";
   propagatedBuildInputs = [ core_kernel bin_prot fieldslib herelib sexplib ];

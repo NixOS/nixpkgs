@@ -1,14 +1,14 @@
 {stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ...}:
 
 stdenv.mkDerivation rec {
-  name = "diff-so-fancy-${version}";
-  version = "1.2.0";
+  pname = "diff-so-fancy";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
-    sha256 = "0j8dxfl4js7agwdpcvxwigzpp0lik33h7s3vsjg0pd413h2j4mvz";
+    sha256 = "0y5cp236gi6h7llzai5d27086l4zz58mz1zs01r97xnnmjs9vw21";
   };
 
   # Perl is needed here for patchShebangs
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
       diff-so-fancy builds on the good-lookin' output of git contrib's
       diff-highlight to upgrade your diffs' appearances.
     '';
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }

@@ -1,5 +1,9 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, type_conv, ounit, camlp4 }:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "ocaml-data-notation is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
   name = "ocaml-data-notation-0.0.11";
 

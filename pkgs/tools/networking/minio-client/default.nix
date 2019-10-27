@@ -1,22 +1,21 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "minio-client-${version}";
-
-  version = "2018-04-28T00-08-20Z";
+  pname = "minio-client";
+  version = "2019-01-30T19-57-22Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "mc";
     rev = "RELEASE.${version}";
-    sha256 = "03c9ahphkpsy6z9i9z50jcsgj5ba6gba2sw2nz22b1ynqiz3ds37";
+    sha256 = "1w0ig0daf0zxpkz449xq2hm7ajhzn8hlnnmpac6ip82qy53xnbm4";
   };
 
   goPackagePath = "github.com/minio/mc";
 
-  buildFlagsArray = [''-ldflags=
-    -X github.com/minio/mc/cmd.Version=${version}
-  ''];
+  preBuild = ''
+    buildFlagsArray+=("-ldflags=-X github.com/minio/mc/cmd.Version=${version}")
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/minio/mc;

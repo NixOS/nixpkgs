@@ -1,26 +1,28 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, murmurhash
 , pytest
 , cython
 , cymem
 , python
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "preshed";
-  version = "1.0.0";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pdl4p2d32ficfh18xdkgsj6ajzdxc6mxhhf84z0wq1l8viskcx6";
+    sha256 = "1jrnci1pw9yv7j1a9b2q6c955l3gb8fv1q4d0id6s7bwr5l39mv1";
   };
 
   propagatedBuildInputs = [
    cython
    cymem
+   murmurhash
   ];
-  buildInputs = [
+
+  checkInputs = [
     pytest
   ];
 

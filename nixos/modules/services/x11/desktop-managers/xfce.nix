@@ -43,30 +43,21 @@ in
         default = true;
         description = "Enable the XFWM (default) window manager.";
       };
-
-      screenLock = mkOption {
-        type = types.enum [ "xscreensaver" "xlockmore" "slock" ];
-        default = "xlockmore";
-        description = "Application used by XFCE to lock the screen.";
-      };
     };
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs.xfce // pkgs; [
-      # Get GTK+ themes and gtk-update-icon-cache
+      # Get GTK themes and gtk-update-icon-cache
       gtk2.out
 
       # Supplies some abstract icons such as:
       # utilities-terminal, accessories-text-editor
-      gnome3.defaultIconTheme
+      gnome3.adwaita-icon-theme
 
       hicolor-icon-theme
       tango-icon-theme
       xfce4-icon-theme
-
-      desktop-file-utils
-      shared-mime-info
 
       # Needed by Xfce's xinitrc script
       # TODO: replace with command -v
@@ -75,7 +66,6 @@ in
       exo
       garcon
       gtk-xfce-engine
-      gvfs
       libxfce4ui
       tumbler
       xfconf
@@ -92,7 +82,7 @@ in
       thunar-volman # TODO: drop
     ] ++ (if config.hardware.pulseaudio.enable
           then [ xfce4-mixer-pulse xfce4-volumed-pulse ]
-	  else [ xfce4-mixer xfce4-volumed ])
+          else [ xfce4-mixer xfce4-volumed ])
       # TODO: NetworkManager doesn't belong here
       ++ optionals config.networking.networkmanager.enable [ networkmanagerapplet ]
       ++ optionals config.powerManagement.enable [ xfce4-power-manager ]
@@ -106,27 +96,16 @@ in
     environment.pathsToLink = [
       "/share/xfce4"
       "/share/themes"
-      "/share/mime"
-      "/share/desktop-directories"
       "/share/gtksourceview-2.0"
     ];
 
-    environment.variables = {
-      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-      GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
-    };
+    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     services.xserver.desktopManager.session = [{
       name = "xfce";
       bgSupport = true;
       start = ''
         ${cfg.extraSessionCommands}
-
-        # Set GTK_PATH so that GTK+ can find the theme engines.
-        export GTK_PATH="${config.system.path}/lib/gtk-2.0:${config.system.path}/lib/gtk-3.0"
-
-        # Set GTK_DATA_PREFIX so that GTK+ can find the Xfce themes.
-        export GTK_DATA_PREFIX=${config.system.path}
 
         ${pkgs.runtimeShell} ${pkgs.xfce.xinitrc} &
         waitPID=$!
@@ -138,5 +117,7 @@ in
     # Enable helpful DBus services.
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
+    services.gvfs.enable = true;
+    services.gvfs.package = pkgs.xfce.gvfs;
   };
 }

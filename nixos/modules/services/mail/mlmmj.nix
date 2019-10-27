@@ -94,7 +94,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = cfg.user;
       description = "mlmmj user";
       home = stateDir;
@@ -104,7 +104,7 @@ in
       useDefaultShell = true;
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = cfg.group;
       gid = config.ids.gids.mlmmj;
     };
@@ -137,7 +137,7 @@ in
           ${pkgs.postfix}/bin/postmap ${stateDir}/transports
       '';
 
-    systemd.services."mlmmj-maintd" = {
+    systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";
       serviceConfig = {
         User = cfg.user;
@@ -146,7 +146,7 @@ in
       };
     };
 
-    systemd.timers."mlmmj-maintd" = {
+    systemd.timers.mlmmj-maintd = {
       description = "mlmmj maintenance timer";
       timerConfig.OnUnitActiveSec = cfg.maintInterval;
       wantedBy = [ "timers.target" ];

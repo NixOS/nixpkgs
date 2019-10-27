@@ -55,7 +55,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "ReplayGain for AAC files";
-    homepage = https://github.com/mulx/aacgain;
+    homepage = https://aacgain.altosdesign.com;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.robbinch ];

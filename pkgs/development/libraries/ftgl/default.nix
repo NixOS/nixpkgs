@@ -1,4 +1,4 @@
-{stdenv, fetchurl, freetype, libGLU_combined}:
+{ stdenv, fetchurl, freetype, libGLU_combined, OpenGL }:
 
 let
   name = "ftgl-2.1.3-rc5";
@@ -11,7 +11,12 @@ stdenv.mkDerivation {
     sha256 = "0nsn4s6vnv5xcgxcw6q031amvh2zfj2smy1r5mbnjj2548hxcn2l";
   };
 
-  buildInputs = [ freetype libGLU_combined ];
+  buildInputs = [ freetype ]
+    ++ (if stdenv.isDarwin then
+      [ OpenGL ]
+    else
+      [ libGLU_combined ])
+    ;
 
   enableParallelBuilding = true;
 

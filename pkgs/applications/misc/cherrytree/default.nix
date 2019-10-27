@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pythonPackages, gettext, sqlite }:
+{ stdenv, fetchurl, pythonPackages, gettext }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "cherrytree-${version}";
-  version = "0.38.4";
+  pname = "cherrytree";
+  version = "0.38.9";
 
   src = fetchurl {
-    url = "http://www.giuspen.com/software/${name}.tar.xz";
-    sha256 = "1zazyxkrli77wahn4c1z24qyz5bwlayl335f2kdxb44dicrx58g2";
+    url = "https://www.giuspen.com/software/${pname}-${version}.tar.xz";
+    sha256 = "0xal09ijgxbzvp003s40xbrfnpq3ald1fw8nnpqq3yg7h6g6c5pw";
   };
 
   buildInputs = with pythonPackages;

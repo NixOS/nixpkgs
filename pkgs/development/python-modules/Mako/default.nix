@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "Mako";
-  version = "1.0.7";
+  version = "1.0.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e02fde57bd4abb5ec400181e4c314f56ac3e49ba4fb8b0d50bba18cb27d25ae";
+    sha256 = "f5a642d8c5699269ab62a68b296ff990767eb120f51e2e8f3d6afb16bdb57f4b";
   };
 
   checkInputs = [ markupsafe nose mock pytest ];

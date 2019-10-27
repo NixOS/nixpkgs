@@ -3,18 +3,18 @@
  libpulseaudio, libxml2, libxslt, libGLU_combined, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "viber-${version}";
+stdenv.mkDerivation {
+  pname = "viber";
   version = "7.0.0.1035";
 
   src = fetchurl {
-    url = "http://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
     sha256 = "06mp2wvqx4y6rd5gs2mh442qcykjrrvwnkhlpx0lara331i2p0lj";
   };
 
   buildInputs = [ dpkg makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   libPath = stdenv.lib.makeLibraryPath [
       alsaLib

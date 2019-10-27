@@ -1,0 +1,32 @@
+{ config, lib, pkgs, ... }:
+
+with lib;
+
+let
+  cfg = config.services.ratbagd;
+in
+{
+  ###### interface
+
+  options = {
+    services.ratbagd = {
+      enable = mkOption {
+        default = false;
+        description = ''
+          Whether to enable ratbagd for configuring gaming mice.
+        '';
+      };
+    };
+  };
+
+  ###### implementation
+
+  config = mkIf cfg.enable {
+    # Give users access to the "ratbagctl" tool
+    environment.systemPackages = [ pkgs.libratbag ];
+
+    services.dbus.packages = [ pkgs.libratbag ];
+
+    systemd.packages = [ pkgs.libratbag ];
+  };
+}

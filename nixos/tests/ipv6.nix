@@ -1,24 +1,26 @@
 # Test of IPv6 functionality in NixOS, including whether router
 # solicication/advertisement using radvd works.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix ({ pkgs, lib, ...} : {
   name = "ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   nodes =
-    { client = { config, pkgs, ... }: { };
+    # Remove the interface configuration provided by makeTest so that the
+    # interfaces are all configured implicitly
+    { client = { ... }: { networking.interfaces = lib.mkForce {}; };
 
       server =
-        { config, pkgs, ... }:
+        { ... }:
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.allowedTCPPorts = [ 80 ];
         };
 
       router =
-        { config, pkgs, ... }:
+        { ... }:
         { services.radvd.enable = true;
           services.radvd.config =
             ''
@@ -72,6 +74,11 @@ import ./make-test.nix ({ pkgs, ...} : {
           $client->succeed("ping -c 1 $serverIp >&2");
           $client->succeed("curl --fail -g http://[$serverIp]");
           $client->fail("curl --fail -g http://[$clientIp]");
+      };
+      subtest "privacy extensions", sub {
+          my $ip = waitForAddress $client, "eth1", "global temporary";
+          # Default route should have "src <temporary address>" in it
+          $client->succeed("ip r g ::2 | grep $ip");
       };
 
       # TODO: test reachability of a machine on another network.

@@ -1,0 +1,45 @@
+diff --git a/bindings/python/meson.build b/bindings/python/meson.build
+index 4358b79..61fd5a5 100644
+--- a/bindings/python/meson.build
++++ b/bindings/python/meson.build
+@@ -1,3 +1,5 @@
++pygobject_override_dir = get_option('pygobject_override_dir')
++
+ get_overridedir = '''
+ import os
+ import sysconfig
+@@ -21,7 +23,7 @@ print(overridedir)
+ '''
+ 
+ # Python 3
+-if (get_option('with_py3_overrides'))
++if (get_option('with_py3_overrides')) and pygobject_override_dir == ''
+   ret = run_command([python3, '-c', get_overridedir])
+ 
+   if ret.returncode() != 0
+@@ -34,7 +36,7 @@ if (get_option('with_py3_overrides'))
+ endif
+ 
+ # Python 2
+-if (get_option('with_py2_overrides'))
++if (get_option('with_py2_overrides')) and pygobject_override_dir == ''
+   ret2 = run_command([python2, '-c', get_overridedir])
+ 
+   if ret2.returncode() != 0
+@@ -45,3 +47,7 @@ if (get_option('with_py2_overrides'))
+ 
+   install_data('gi/overrides/Modulemd.py', install_dir: pygobject2_override_dir)
+ endif
++
++if pygobject_override_dir != ''
++    install_data('gi/overrides/Modulemd.py', install_dir: pygobject_override_dir)
++endif
+diff --git a/meson_options.txt b/meson_options.txt
+index 147419f..9071a04 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -18,3 +18,4 @@ option('skip_introspection', type : 'boolean', value : false)
+ option('python_name', type : 'string')
+ option('with_py2_overrides', type : 'boolean', value : false)
+ option('with_py3_overrides', type : 'boolean', value : true)
++option('pygobject_override_dir', type : 'string', value : '', description: 'Path to pygobject overrides directory')

@@ -1,9 +1,10 @@
-{ stdenv, lib, pkgs, fetchurl, fetchFromGitHub, buildEnv
-, coreutils, gnused, getopt, git, tree, gnupg, which, procps, qrencode
-, makeWrapper
+{ stdenv, lib, pkgs, fetchurl, buildEnv
+, coreutils, gnused, getopt, git, tree, gnupg, openssl, which, procps
+, qrencode , makeWrapper
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin
+, waylandSupport ? false, wl-clipboard ? null
 
 # For backwards-compatibility
 , tombPluginSupport ? false
@@ -14,6 +15,8 @@ with lib;
 assert x11Support -> xclip != null
                   && xdotool != null
                   && dmenu != null;
+
+assert waylandSupport -> wl-clipboard != null;
 
 let
   passExtensions = import ./extensions { inherit pkgs; };
@@ -29,16 +32,19 @@ let
     };
 
   generic = extensionsEnv: extraPassthru: stdenv.mkDerivation rec {
-    version = "1.7.1";
-    name    = "password-store-${version}";
+    version = "1.7.3";
+    pname = "password-store";
 
     src = fetchurl {
-      url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-      sha256 = "0scqkpll2q8jhzcgcsh9kqz0gwdpvynivqjmmbzax2irjfaiklpn";
+      url    = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
+      sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
     };
 
-    patches = [ ./set-correct-program-name-for-sleep.patch
-              ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
+    patches = [ ./set-correct-program-name-for-sleep.patch ]
+      ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch
+      # TODO (@Ma27) this patch adds support for wl-clipboard and can be removed during the next
+      # version bump.
+      ++ stdenv.lib.optional waylandSupport ./clip-wayland-support.patch;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -66,12 +72,17 @@ let
       which
       qrencode
       procps
-    ] ++ ifEnable x11Support [ dmenu xclip xdotool ]);
+    ] ++ optional stdenv.isDarwin openssl
+      ++ ifEnable x11Support [ dmenu xclip xdotool ]
+      ++ optional waylandSupport wl-clipboard);
 
     postFixup = ''
       # Link extensions env
       rmdir $out/lib/password-store/extensions
       ln -s ${extensionsEnv}/lib/password-store/extensions $out/lib/password-store/.
+      for f in ${extensionsEnv}/share/man/man1/*.1.gz; do
+          ln -s $f $out/share/man/man1/
+      done
 
       # Fix program name in --help
       substituteInPlace $out/bin/pass \
@@ -87,6 +98,27 @@ let
         --prefix PATH : "$out/bin:${wrapperPath}"
     '';
 
+    # Turn "check" into "installcheck", since we want to test our pass,
+    # not the one before the fixup.
+    postPatch = ''
+      patchShebangs tests
+
+      # the turning
+      sed -i -e 's@^PASS=.*''$@PASS=$out/bin/pass@' \
+             -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
+             -e '/which gpg/ d' \
+        tests/setup.sh
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      # 'pass edit' uses hdid, which is not available from the sandbox.
+      rm -f tests/t0200-edit-tests.sh
+    '';
+
+    doCheck = false;
+
+    doInstallCheck = true;
+    installCheckInputs = [ git ];
+    installCheckTarget = "test";
+
     passthru = {
       extensions = passExtensions;
     } // extraPassthru;
@@ -95,7 +127,7 @@ let
       description = "Stores, retrieves, generates, and synchronizes passwords securely";
       homepage    = https://www.passwordstore.org/;
       license     = licenses.gpl2Plus;
-      maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher ];
+      maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher globin ];
       platforms   = platforms.unix;
 
       longDescription = ''

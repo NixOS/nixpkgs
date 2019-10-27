@@ -1,15 +1,15 @@
 { stdenv, makeWrapper, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
-  name = "cfr-${version}";
-  version = "0.128";
+  pname = "cfr";
+  version = "0.147";
 
   src = fetchurl {
     url = "http://www.benf.org/other/cfr/cfr_${version}.jar";
-    sha256 = "09mx1f6d1p57q5r05nvgm1xrhqv34n7v7rwq875whb441h1dnsix";
+    sha256 = "1xafxvxil0k7rwvfia2a67sh18pk8xb2y6qz6cpr31i2i0pwl8ls";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     jar=$out/share/java/cfr_${version}.jar

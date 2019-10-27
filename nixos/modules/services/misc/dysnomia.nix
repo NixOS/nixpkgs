@@ -3,14 +3,14 @@
 with lib;
 
 let
-  cfg = config.services.dysnomia;
+  cfg = config.dysnomia;
 
   printProperties = properties:
     concatMapStrings (propertyName:
       let
-        property = properties."${propertyName}";
+        property = properties.${propertyName};
       in
-      if isList property then "${propertyName}=(${lib.concatMapStrings (elem: "\"${toString elem}\" ") (properties."${propertyName}")})\n"
+      if isList property then "${propertyName}=(${lib.concatMapStrings (elem: "\"${toString elem}\" ") (properties.${propertyName})})\n"
       else "${propertyName}=\"${toString property}\"\n"
     ) (builtins.attrNames properties);
 
@@ -31,7 +31,7 @@ let
 
       ${concatMapStrings (containerName:
         let
-          containerProperties = cfg.containers."${containerName}";
+          containerProperties = cfg.containers.${containerName};
         in
         ''
           cat > ${containerName} <<EOF
@@ -49,10 +49,10 @@ let
 
       ${concatMapStrings (componentName:
         let
-          component = cfg.components."${containerName}"."${componentName}";
+          component = cfg.components.${containerName}.${componentName};
         in
         "ln -s ${component} ${containerName}/${componentName}\n"
-      ) (builtins.attrNames (cfg.components."${containerName}" or {}))}
+      ) (builtins.attrNames (cfg.components.${containerName} or {}))}
     '';
 
   componentsDir = pkgs.stdenv.mkDerivation {
@@ -62,9 +62,6 @@ let
       cd $out
 
       ${concatMapStrings (containerName:
-        let
-          components = cfg.components."${containerName}";
-        in
         linkMutableComponents { inherit containerName; }
       ) (builtins.attrNames cfg.components)}
     '';
@@ -72,7 +69,7 @@ let
 in
 {
   options = {
-    services.dysnomia = {
+    dysnomia = {
 
       enable = mkOption {
         type = types.bool;
@@ -145,7 +142,7 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    services.dysnomia.package = pkgs.dysnomia.override (origArgs: {
+    dysnomia.package = pkgs.dysnomia.override (origArgs: {
       enableApacheWebApplication = config.services.httpd.enable;
       enableAxis2WebService = config.services.tomcat.axis2.enable;
       enableEjabberdDump = config.services.ejabberd.enable;
@@ -154,9 +151,10 @@ in
       enableSubversionRepository = config.services.svnserve.enable;
       enableTomcatWebApplication = config.services.tomcat.enable;
       enableMongoDatabase = config.services.mongodb.enable;
+      enableInfluxDatabase = config.services.influxdb.enable;
     });
 
-    services.dysnomia.properties = {
+    dysnomia.properties = {
       hostname = config.networking.hostName;
       inherit (config.nixpkgs.localSystem) system;
 
@@ -174,7 +172,7 @@ in
       }}");
     };
 
-    services.dysnomia.containers = lib.recursiveUpdate ({
+    dysnomia.containers = lib.recursiveUpdate ({
       process = {};
       wrapper = {};
     }

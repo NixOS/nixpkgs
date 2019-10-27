@@ -1,16 +1,15 @@
 { stdenv, fetchurl, python2Packages
 , wpa_supplicant, dhcp, dhcpcd, wirelesstools
-, nettools, openresolv, iproute, iputils
-, locale ? "C" }:
+, nettools, openresolv, iproute, iputils }:
 
 let
   inherit (python2Packages) python pygobject2 dbus-python pyGtkGlade pycairo;
 in stdenv.mkDerivation rec {
-  name = "wicd-${version}";
+  pname = "wicd";
   version = "1.7.2.4";
   
   src = fetchurl {
-    url = "https://launchpad.net/wicd/1.7/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/wicd/1.7/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "15ywgh60xzmp5z8l1kzics7yi95isrjg1paz42dvp7dlpdfzpzfw";
   };
 

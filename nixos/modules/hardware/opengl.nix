@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -11,9 +11,9 @@ let
   videoDrivers = config.services.xserver.videoDrivers;
 
   makePackage = p: pkgs.buildEnv {
-    name = "mesa-drivers+txc-${p.mesa_drivers.version}";
+    name = "mesa-drivers+txc-${p.mesa.version}";
     paths =
-      [ p.mesa_drivers
+      [ p.mesa.drivers
         (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
       ];
   };
@@ -118,37 +118,51 @@ in
           set. This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
         '';
       };
+
+      setLdLibraryPath = mkOption {
+        type = types.bool;
+        internal = true;
+        default = false;
+        description = ''
+          Whether the <literal>LD_LIBRARY_PATH</literal> environment variable
+          should be set to the locations of driver libraries. Drivers which
+          rely on overriding libraries should set this to true. Drivers which
+          support <literal>libglvnd</literal> and other dispatch libraries
+          instead of overriding libraries should not set this.
+        '';
+      };
     };
 
   };
 
   config = mkIf cfg.enable {
 
-    assertions = lib.singleton {
-      assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
-      message = "Option driSupport32Bit only makes sense on a 64-bit system.";
-    };
+    assertions = [
+      { assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
+        message = "Option driSupport32Bit only makes sense on a 64-bit system.";
+      }
+      { assertion = cfg.driSupport32Bit -> (config.boot.kernelPackages.kernel.features.ia32Emulation or false);
+        message = "Option driSupport32Bit requires a kernel that supports 32bit emulation";
+      }
+    ];
 
-    system.activationScripts.setup-opengl =
-      ''
-        ln -sfn ${package} /run/opengl-driver
-        ${if pkgs.stdenv.isi686 then ''
-          ln -sfn opengl-driver /run/opengl-driver-32
-        '' else if cfg.driSupport32Bit then ''
-          ln -sfn ${package32} /run/opengl-driver-32
-        '' else ''
-          rm -f /run/opengl-driver-32
-        ''}
-      '';
+    systemd.tmpfiles.rules = [
+      "L+ /run/opengl-driver - - - - ${package}"
+      (
+        if pkgs.stdenv.isi686 then
+          "L+ /run/opengl-driver-32 - - - - opengl-driver"
+        else if cfg.driSupport32Bit then
+          "L+ /run/opengl-driver-32 - - - - ${package32}"
+        else
+          "r /run/opengl-driver-32"
+      )
+    ];
 
-    environment.sessionVariables.LD_LIBRARY_PATH =
-      [ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib";
-
-    environment.variables.XDG_DATA_DIRS =
-      [ "/run/opengl-driver/share" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/share";
+    environment.sessionVariables.LD_LIBRARY_PATH = mkIf cfg.setLdLibraryPath
+      ([ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib");
 
     hardware.opengl.package = mkDefault (makePackage pkgs);
-    hardware.opengl.package32 = mkDefault (makePackage pkgs_i686);
+    hardware.opengl.package32 = mkDefault (makePackage pkgs.pkgsi686Linux);
 
     boot.extraModulePackages = optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions;
   };

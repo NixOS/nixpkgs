@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp -rv data resources credits.txt license.txt "$out/share/mars/"
     cp -v mars "$out/bin/mars.bin"
     cat << EOF > "$out/bin/mars"
-    #! /bin/sh
+    #! ${stdenv.shell}
     cd "$out/share/mars/"
     exec "$out/bin/mars.bin" "\$@"
     EOF

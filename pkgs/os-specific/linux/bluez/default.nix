@@ -1,21 +1,21 @@
 { stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  pythonPackages, readline, udev, libical,
-  systemd, enableWiimote ? false, enableMidi ? false }:
+  python3, readline, udev, libical, systemd, fetchpatch,
+  enableWiimote ? false, enableMidi ? false, enableSixaxis ? false }:
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.49";
+  name = "bluez-5.50";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "15ffsaz7l3fgdg03l7g1xx9jw7xgs6pc548zxqsxawsca5x1sc1k";
+    sha256 = "048r91vx9gs5nwwbah2s0xig04nwk14c5s0vb7qmaqdvighsmz2z";
   };
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python3.pkgs; [
     dbus-python pygobject2 pygobject3 recursivePthLoader
   ];
 
   buildInputs = [
-    dbus glib alsaLib pythonPackages.python pythonPackages.wrapPython
+    dbus glib alsaLib python3 python3.pkgs.wrapPython
     readline udev libical
   ];
 
@@ -23,7 +23,19 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "test" ];
 
-  patches = [ ./bluez-5.37-obexd_without_systemd-1.patch ];
+  patches = [
+    ./bluez-5.37-obexd_without_systemd-1.patch
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=1880b299086659844889cdaf687133aca5eaf102";
+      name = "CVE-2018-10910-1.patch";
+      sha256 = "17spsxza27gif8jpxk7360ynvwii1llfdfwg35rwywjjmvww0qj4";
+    })
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=9213ff7642a33aa481e3c61989ad60f7985b9984";
+      name = "CVE-2018-10910-2.patch";
+      sha256 = "0j7klbhym64yhn86dbsmybqmwx47bviyyhx931izl1p29z2mg8hn";
+    })
+  ];
 
   postConfigure = ''
     substituteInPlace tools/hid2hci.rules \
@@ -36,19 +48,20 @@ stdenv.mkDerivation rec {
     "--enable-library"
     "--enable-cups"
     "--enable-pie"
-    "--with-dbusconfdir=$(out)/etc"
-    "--with-dbussystembusdir=$(out)/share/dbus-1/system-services"
-    "--with-dbussessionbusdir=$(out)/share/dbus-1/services"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--with-systemduserunitdir=$(out)/etc/systemd/user"
-    "--with-udevdir=$(out)/lib/udev"
+    "--with-dbusconfdir=${placeholder "out"}/share"
+    "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
+    "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+    "--with-udevdir=${placeholder "out"}/lib/udev"
     ] ++ optional enableWiimote [ "--enable-wiimote" ]
-      ++ optional enableMidi    [ "--enable-midi" ]);
+      ++ optional enableMidi    [ "--enable-midi" ]
+      ++ optional enableSixaxis [ "--enable-sixaxis" ]);
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
 
-  makeFlags = "rulesdir=$(out)/lib/udev/rules.d";
+  makeFlags = "rulesdir=${placeholder "out"}/lib/udev/rules.d";
 
   postInstall = ''
     mkdir -p $test/{bin,test}

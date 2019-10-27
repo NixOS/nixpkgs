@@ -1,26 +1,29 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, boost, libevent
-, double-conversion, glog, google-gflags, python, libiberty, openssl }:
+{ stdenv, fetchFromGitHub, cmake, boost, libevent, double-conversion, glog
+, gflags, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "folly-${version}";
-  version = "2018.05.21.00";
+  pname = "folly";
+  version = "2019.10.14.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "0x8qa0g0rj4bmy5cra7f0ch0srq34d8d04f1c59q93xd6ggkr52w";
+    sha256 = "0d32cwwza3hqsr0z4kcrk1cj26ipbwkqm6nz5335rw4k9y5kyz16";
   };
 
-  nativeBuildInputs = [ autoreconfHook python pkgconfig ];
-  buildInputs = [ libiberty boost libevent double-conversion glog google-gflags openssl ];
+  nativeBuildInputs = [ cmake ];
 
-  postPatch = "cd folly";
-  preBuild = ''
-    patchShebangs build
-  '';
-
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
+  # See CMake/folly-deps.cmake in the Folly source tree.
+  buildInputs = [
+    boost
+    double-conversion
+    glog
+    gflags
+    libevent
+    libiberty
+    openssl
+  ];
 
   enableParallelBuilding = true;
 
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/facebook/folly;
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ abbradar ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ abbradar pierreis ];
   };
 }

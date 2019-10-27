@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchpatch, unzip, ftgl, glew, asciidoc
+{ stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
 , cmake, ninja, libGLU_combined, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
 , gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
 
 stdenv.mkDerivation rec {
   version = "0.8.0.6";
-  name = "k3d-${version}";
+  pname = "k3d";
   src = fetchFromGitHub {
     owner = "K-3D";
     repo = "k3d";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0vdjjg6h8mxm2n8mvkkg2mvd27jn2xx90hnmx23cbd35mpz9p4aa";
   };
 
@@ -39,12 +39,15 @@ stdenv.mkDerivation rec {
 
   #doCheck = false;
 
-  meta = {
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-deprecated-declarations"
+  ];
+
+  meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";
     homepage = http://www.k-3d.org/;
-    platforms = with stdenv.lib.platforms;
-      linux;
-    maintainers = with stdenv.lib.maintainers;
-      [raskin];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
   };
 }

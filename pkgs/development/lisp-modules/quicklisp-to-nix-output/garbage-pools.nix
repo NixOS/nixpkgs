@@ -1,5 +1,5 @@
-args @ { fetchurl, ... }:
-rec {
+{ fetchurl, ... }:
+{
   baseName = ''garbage-pools'';
   version = ''20130720-git'';
 

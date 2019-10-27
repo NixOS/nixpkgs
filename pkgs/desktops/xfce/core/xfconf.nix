@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool glib libxfce4util ];
   propagatedBuildInputs = [ dbus-glib ];
 
+  doCheck = false; # requires dbus daemon
+
   meta = with stdenv.lib; {
     homepage = http://docs.xfce.org/xfce/xfconf/start;
     description = "Simple client-server configuration storage and query system for Xfce";
@@ -26,4 +28,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c1c33e1..208a184 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -403,8 +403,8 @@ install(DIRECTORY res DESTINATION share/${PROJECT_NAME})
+ install(FILES icons/logo.png DESTINATION share/${PROJECT_NAME} RENAME logo.png)
+ install(FILES ../NEWS DESTINATION share/${PROJECT_NAME} RENAME NEWS)
+ install(FILES ../ug.pdf DESTINATION share/${PROJECT_NAME} RENAME ug.pdf)
+-install(FILES DreamSourceLab.rules DESTINATION /etc/udev/rules.d/)
+-install(FILES DSView.desktop DESTINATION /usr/share/applications/)
++install(FILES DreamSourceLab.rules DESTINATION etc/udev/rules.d/)
++install(FILES DSView.desktop DESTINATION share/applications/)
+ 
+ #===============================================================================
+ #= Packaging (handled by CPack)

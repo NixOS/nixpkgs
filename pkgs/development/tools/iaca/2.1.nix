@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, requireFile, patchelf, gcc, unzip }:
+{ stdenv, makeWrapper, requireFile, gcc, unzip }:
 with stdenv.lib;
 
 # v2.1: last version with NHM/WSM arch support

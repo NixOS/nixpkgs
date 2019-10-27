@@ -5,7 +5,7 @@ let
   rev = "8393e03089c0abde61bd5d72aba8f926c3d6eca4";
   date = "20160316";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "cpuminer-multi-${date}-${stdenv.lib.strings.substring 0 7 rev}";
 
   src = fetchgit {

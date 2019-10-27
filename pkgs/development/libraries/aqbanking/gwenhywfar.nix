@@ -13,14 +13,14 @@
 let
   inherit ((import ./sources.nix).gwenhywfar) sha256 releaseId version;
 in stdenv.mkDerivation rec {
-  name = "gwenhywfar-${version}";
+  pname = "gwenhywfar";
   inherit version;
 
   src = let
     qstring = "package=01&release=${releaseId}&file=02";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {
-    name = "${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
     urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
     inherit sha256;
   };

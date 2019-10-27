@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ofp-${version}";
+  pname = "ofp";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenFastPath";
     repo = "ofp";
-    rev = "${version}";
+    rev = version;
     sha256 = "05902593fycgkwzk5g7wzgk0k40nrrgybplkdka3rqnlj6aydhqf";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure.ac --replace m4_esyscmd m4_esyscmd_s
-    substituteInPlace scripts/git_hash.sh --replace /bin/bash /bin/sh
+    substituteInPlace scripts/git_hash.sh --replace /bin/bash ${stdenv.shell}
     echo ${version} > .scmversion
   '';
 

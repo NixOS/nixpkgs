@@ -1,10 +1,8 @@
 { stdenv
+, mkDerivation
 , fetchFromGitHub
 , cmake
-, makeWrapper
 , pkgconfig
-, wrapGAppsHook
-, gsettings-desktop-schemas
 
 , qtbase
 , qttools
@@ -17,16 +15,20 @@
 , quazip
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.8.1";
+mkDerivation rec {
+  pname = "nomacs";
+  version = "3.12";
+
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "1irms980d7acdqrfn8isw55vgc4d9n26ff86887vk7xfvxs0ayla";
+    sha256 = "12582i5v85da7vwjxj8grj99hxg34ij5cn3b1578wspdfw1xfy1i";
   };
 
-  name = "nomacs-${version}";
+  patches = [
+    ./nomacs-iostream.patch
+  ];
 
   enableParallelBuilding = true;
 
@@ -35,8 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [cmake
-                       pkgconfig
-                       wrapGAppsHook];
+                       pkgconfig];
 
   buildInputs = [qtbase
                  qttools
@@ -45,13 +46,13 @@ stdenv.mkDerivation rec {
                  opencv
                  libraw
                  libtiff
-                 quazip
-                 gsettings-desktop-schemas];
+                 quazip];
 
   cmakeFlags = ["-DENABLE_OPENCV=ON"
                 "-DENABLE_RAW=ON"
                 "-DENABLE_TIFF=ON"
                 "-DENABLE_QUAZIP=ON"
+                "-DENABLE_TRANSLATIONS=ON"
                 "-DUSE_SYSTEM_QUAZIP=ON"];
 
   meta = with stdenv.lib; {

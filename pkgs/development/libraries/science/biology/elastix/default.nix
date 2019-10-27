@@ -13,13 +13,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python ];
   buildInputs = [ itk ];
 
-  checkPhase = "ctest";
-
   meta = with stdenv.lib; {
     homepage = http://elastix.isi.uu.nl/;
     description = "Image registration toolkit based on ITK";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.linux;
     license = licenses.asl20;
+    broken = true;
   };
 }

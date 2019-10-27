@@ -1,9 +1,27 @@
-{ stdenv, fetchurl, buildFHSUserEnv, writeTextFile, alsaLib, atk, cairo, cups
-, dbus, expat, fontconfig, freetype, gcc, gdk_pixbuf, glib, gnome2, gtk2
-, libnotify, nspr, nss, pango, systemd, xorg, utillinuxMinimal }:
+{ stdenv, fetchurl, alsaLib, atk, cairo, cups, udev
+, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3
+, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
+, runtimeShell, gsettings-desktop-schemas }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [
+  versionSuffix = "20191010154240.134c2d892b";
+in
+
+stdenv.mkDerivation rec {
+  pname = "keybase-gui";
+  version = "4.6.0"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+
+  src = fetchurl {
+    url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
+    sha256 = "a25f0c676c00d306859d32e4dad7a23dd4955fa0b352be50c281081f2cf000ae";
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
     alsaLib
     atk
     cairo
@@ -12,18 +30,17 @@ let
     expat
     fontconfig
     freetype
-    gcc.cc
-    gdk_pixbuf
+    gdk-pixbuf
     glib
-    gnome2.GConf
-    gtk2
+    gsettings-desktop-schemas
+    gtk3
     libnotify
     nspr
     nss
     pango
     systemd
     xorg.libX11
-    xorg.libxcb
+    xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage
@@ -32,29 +49,30 @@ let
     xorg.libXi
     xorg.libXrandr
     xorg.libXrender
-    xorg.libXScrnSaver
     xorg.libXtst
+    xorg.libxcb
   ];
-in
-stdenv.mkDerivation rec {
-  name = "keybase-gui-${version}";
-  version = "1.0.44-20180223200436.9a9ccec79";
-  src = fetchurl {
-    url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version}_amd64.deb";
-    sha256 = "0dmi0fw39924kpahlsk853hbmpy8a6nj78lrh1wharayjpvj6jv3";
-  };
-  phases = ["unpackPhase" "installPhase" "fixupPhase"];
+
+  runtimeDependencies = [
+    udev.lib
+  ];
+
+  dontBuild = true;
+  dontConfigure = true;
+  dontPatchELF = true;
+
   unpackPhase = ''
     ar xf $src
     tar xf data.tar.xz
   '';
+
   installPhase = ''
     mkdir -p $out/bin
     mv usr/share $out/share
     mv opt/keybase $out/share/
 
     cat > $out/bin/keybase-gui <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     checkFailed() {
       if [ "\$NIX_SKIP_KEYBASE_CHECKS" = "1" ]; then
@@ -70,10 +88,9 @@ stdenv.mkDerivation rec {
       checkFailed
     fi
 
-    ${utillinuxMinimal}/bin/mountpoint /keybase &>/dev/null
-    if [ "\$?" -ne "0" ]; then
-      echo "Keybase is not mounted to /keybase." >&2
-      echo "You might need to run: kbfsfuse /keybase" >&2
+    if [ -z "\$(keybase status | grep kbfsfuse)" ]; then
+      echo "Could not find kbfsfuse client in keybase status." >&2
+      echo "You might need to run: kbfsfuse" >&2
       checkFailed
     fi
 
@@ -84,14 +101,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/keybase.desktop \
       --replace run_keybase $out/bin/keybase-gui
   '';
-  postFixup = ''
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "${libPath}:\$ORIGIN" "$out/share/keybase/Keybase"
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://www.keybase.io/;
-    description = "The Keybase official GUI.";
+    description = "The Keybase official GUI";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ puffnfresh np ];
+    maintainers = with maintainers; [ rvolosatovs puffnfresh np ];
+    license = licenses.bsd3;
   };
 }

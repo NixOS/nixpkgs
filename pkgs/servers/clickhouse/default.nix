@@ -1,33 +1,49 @@
-{ stdenv, fetchFromGitHub, cmake, libtool, boost, double-conversion, gperftools
-, icu, mysql, lz4, openssl, poco, re2, rdkafka, readline, sparsehash, unixODBC
-, zookeeper_mt, zstd }:
+{ stdenv, fetchFromGitHub, cmake, libtool, ninja
+, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion, gperftools
+, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl
+, poco, protobuf, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
+, xxHash, zstd
+}:
 
 stdenv.mkDerivation rec {
-  name = "clickhouse-${version}";
-
-  version = "1.1.54310";
+  pname = "clickhouse";
+  version = "19.13.5.44";
 
   src = fetchFromGitHub {
-    owner = "yandex";
-    repo = "ClickHouse";
-    rev = "v${version}-stable";
-    sha256 = "167pihqak8ip7bmlyrbzl9x3mpn381j8v7pl7nhrl9bfnzgrq69v";
+    owner  = "yandex";
+    repo   = "ClickHouse";
+    rev    = "v${version}-stable";
+    sha256 = "1h0jjpa1wrms5vcgx1vf8fmkc7jjrql1r70dvwr0nw8f7rfyi1l6";
   };
 
-  patches = [ ./termcap.patch ];
-
-  nativeBuildInputs = [ cmake libtool ];
-
+  nativeBuildInputs = [ cmake libtool ninja ];
   buildInputs = [
-    boost double-conversion gperftools icu mysql.connector-c lz4 openssl poco
-    re2 rdkafka readline sparsehash unixODBC zookeeper_mt zstd
+    boost brotli capnproto cctz clang-unwrapped double-conversion gperftools
+    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl
+    poco protobuf rapidjson re2 rdkafka readline sparsehash unixODBC
+    xxHash zstd
   ];
 
-  cmakeFlags = [ "-DENABLE_TESTS=OFF" "-DUNBUNDLED=ON" "-DUSE_STATIC_LIBRARIES=OFF" ];
+  cmakeFlags = [
+    "-DENABLE_TESTS=OFF"
+    "-DUNBUNDLED=ON"
+    "-DUSE_STATIC_LIBRARIES=OFF"
+  ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-function" ];
+  postPatch = ''
+    patchShebangs dbms/programs/clang/copy_headers.sh
+  '';
 
-  enableParallelBuilding = true;
+  postInstall = ''
+    rm -rf $out/share/clickhouse-test
+
+    sed -i -e '\!<log>/var/log/clickhouse-server/clickhouse-server\.log</log>!d' \
+      $out/etc/clickhouse-server/config.xml
+    substituteInPlace $out/etc/clickhouse-server/config.xml \
+      --replace "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
+  '';
+
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = https://clickhouse.yandex/;

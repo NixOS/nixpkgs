@@ -51,26 +51,28 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraGroups.riemanndash.gid = config.ids.gids.riemanndash;
+    users.groups.riemanndash.gid = config.ids.gids.riemanndash;
 
-    users.extraUsers.riemanndash = {
+    users.users.riemanndash = {
       description = "riemann-dash daemon user";
       uid = config.ids.uids.riemanndash;
       group = "riemanndash";
     };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - riemanndash riemanndash - -"
+    ];
 
     systemd.services.riemann-dash = {
       wantedBy = [ "multi-user.target" ];
       wants = [ "riemann.service" ];
       after = [ "riemann.service" ];
       preStart = ''
-        mkdir -p ${cfg.dataDir}/config
-        chown -R riemanndash:riemanndash ${cfg.dataDir}
+        mkdir -p '${cfg.dataDir}/config'
       '';
       serviceConfig = {
         User = "riemanndash";
         ExecStart = "${launcher}/bin/riemann-dash";
-        PermissionsStartOnly = true;
       };
     };
 

@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgs, makeWrapper
+{ stdenv, pkgs, makeWrapper
 , glib, gnome2, gnome3, gtk2-x11, gtkspell2, poppler
 , pkgconfig, intltool, autoreconfHook, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   version = "0.6.6";
-  name = "gummi-${version}";
+  pname = "gummi";
 
   src = pkgs.fetchFromGitHub {
     owner = "alexandervdm";
     repo = "gummi";
-    rev = "${version}";
+    rev = version;
     sha256 = "1vw8rhv8qj82l6l22kpysgm9mxilnki2kjmvxsnajbqcagr6s7cn";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib gnome2.gtksourceview gnome2.pango gtk2-x11 gtkspell2 poppler
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   preConfigure = ''

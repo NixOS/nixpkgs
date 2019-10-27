@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec
 {
   version = "3.1";
-  name = "libzdb-${version}";
+  pname = "libzdb";
 
   src = fetchurl
   {
-    url = "http://www.tildeslash.com/libzdb/dist/libzdb-${version}.tar.gz";
+    url = "https://www.tildeslash.com/libzdb/dist/libzdb-${version}.tar.gz";
     sha256 = "1596njvy518x7vsvsykmnk1ky82x8jxd6nmmp551y6hxn2qsn08g";
   };
 

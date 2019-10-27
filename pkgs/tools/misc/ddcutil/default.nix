@@ -2,14 +2,14 @@
 , glib, i2c-tools, udev, libgudev, libusb, libdrm, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "ddcutil-${version}";
-  version = "0.9.0";
+  pname = "ddcutil";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner  = "rockowitz";
     repo   = "ddcutil";
     rev    = "v${version}";
-    sha256 = "1lcn3jbhpcm6ixp24vsfnk1v0qi0fjkkf57f4grs1wg148s3jpvc";
+    sha256 = "1p99kxgg2893ppp56q5igpva39lzj4wvx37c993r4p6i4gq6bi3v";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage    = http://www.ddcutil.com/;
     description = "Query and change Linux monitor settings using DDC/CI and USB";
     license     = licenses.gpl2;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "nbmerge";
   version = "unstable-2017-10-23";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "jbn";
@@ -30,6 +29,6 @@ buildPythonPackage rec {
     description = "A tool to merge/concatenate Jupyter (IPython) notebooks";
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

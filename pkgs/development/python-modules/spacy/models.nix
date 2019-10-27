@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchurl, spacy }:
 let
   buildModelPackage = { pname, version, sha256, license }: buildPythonPackage {
-    name = "${pname}-${version}";
     inherit pname version;
 
     src = fetchurl {
@@ -14,7 +13,7 @@ let
     meta = with stdenv.lib; {
       description = "Models for the spaCy NLP library";
       homepage    = "https://github.com/explosion/spacy-models";
-      license     = licenses."${license}";
+      license     = licenses.${license};
       maintainers = with maintainers; [ rvl ];
     };
   };

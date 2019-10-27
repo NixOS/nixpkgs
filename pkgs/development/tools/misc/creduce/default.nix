@@ -2,33 +2,32 @@
 , llvm, clang-unwrapped
 , flex
 , zlib
-, perl, ExporterLite, FileWhich, GetoptTabular, RegexpCommon, TermReadKey
+, perlPackages
 , utillinux
 }:
 
 stdenv.mkDerivation rec {
-  name = "creduce-${version}";
-  version = "2.7.0";
+  pname = "creduce";
+  version = "2.9.0";
 
   src = fetchurl {
-    url = "http://embed.cs.utah.edu/creduce/${name}.tar.gz";
-    sha256 = "0h8s4d54q6cl6i45x3143l2xmr29b2yhr3m0n5qqx63sr5csip1n";
+    url = "https://embed.cs.utah.edu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1b833z0g1hich68kzbkpfc26xb8w2phfl5savy8c6ir9ihwy1a8w";
   };
 
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
     # Ensure stdenv's CC is on PATH before clang-unwrapped
     stdenv.cc
     # Actual deps:
-    cmake makeWrapper
     llvm clang-unwrapped
     flex zlib
-    perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey
-  ];
+  ] ++ (with perlPackages; [ perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey ]);
 
   # On Linux, c-reduce's preferred way to reason about
   # the cpu architecture/topology is to use 'lscpu',
   # so let's make sure it knows where to find it:
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     substituteInPlace creduce/creduce_utils.pm --replace \
       lscpu ${utillinux}/bin/lscpu
   '';

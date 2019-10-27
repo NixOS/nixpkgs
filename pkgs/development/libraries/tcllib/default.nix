@@ -1,7 +1,7 @@
 { stdenv, fetchurl, tcl }:
 
 stdenv.mkDerivation rec {
-  name = "tcllib-${version}";
+  pname = "tcllib";
   version = "1.19";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcl ];
 
   meta = {
-    homepage = http://tcl.activestate.com/software/tcllib/;
+    homepage = https://sourceforge.net/projects/tcllib/;
     description = "Tcl-only library of standard routines for Tcl";
     license = stdenv.lib.licenses.tcltk;
     platforms = stdenv.lib.platforms.unix;

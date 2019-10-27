@@ -1,25 +1,26 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qtscript, qtwebkit, libXfixes, libXtst, git
+{ lib, mkDerivation, fetchFromGitHub, cmake
+, qtbase, qtscript, qtwebkit, libXfixes, libXtst, qtx11extras, git
 , webkitSupport ? true
 }:
 
-stdenv.mkDerivation rec {
-  name = "CopyQ-${version}";
-  version = "3.3.1";
+mkDerivation rec {
+  pname = "CopyQ";
+  version = "3.9.2";
 
   src  = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "1jjb979dwdnkjca95yxzapbjpd6hr97hxz7sn614whvdv4vvpnyc";
+    sha256 = "02zs444i7hnqishs1i6vp8ffjxlxk3xkrw935pdwnwppv9s9v202";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    git qtbase qtscript libXfixes libXtst
-  ] ++ stdenv.lib.optional webkitSupport qtwebkit;
+    git qtbase qtscript libXfixes libXtst qtx11extras
+  ] ++ lib.optional webkitSupport qtwebkit;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = https://hluk.github.io/CopyQ;
     description = "Clipboard Manager with Advanced Features";
     license     = licenses.gpl3;

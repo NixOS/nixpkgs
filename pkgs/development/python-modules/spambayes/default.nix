@@ -1,15 +1,14 @@
 { buildPythonPackage, isPy3k, fetchPypi, bsddb3, pydns, lockfile }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "spambayes";
-  version = "1.1b2";
+  version = "1.1b3";
 
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1542dwdsmkav38cfjlbgf3bzz3z8nk7wzq173ya8ipk7g8g6s64d";
+    sha256 = "016r3g43ja73rls1nh1dl82d75lgsjdl4cv2r5s7zcihm47nb38q";
   };
 
   propagatedBuildInputs = [ bsddb3 pydns lockfile ];

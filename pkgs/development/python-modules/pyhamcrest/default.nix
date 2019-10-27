@@ -1,11 +1,10 @@
-{ stdenv, buildPythonApplication, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi
 , mock, pytest
 , six
 }:
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "PyHamcrest";
   version = "1.9.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

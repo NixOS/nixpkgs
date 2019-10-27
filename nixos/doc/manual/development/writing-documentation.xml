@@ -10,7 +10,7 @@
   sources and presenting it in an accessible style would be a worthy
   contribution to the project.
  </para>
- <section>
+ <section xml:id="sec-writing-docs-building-the-manual">
   <title>Building the Manual</title>
 
   <para>
@@ -42,7 +42,7 @@
    <filename>./result/share/doc/nixos/index.html</filename>.
   </para>
  </section>
- <section>
+ <section xml:id="sec-writing-docs-editing-docbook-xml">
   <title>Editing DocBook XML</title>
 
   <para>
@@ -76,7 +76,7 @@
    Issue</link> and someone will handle the conversion to XML for you.
   </para>
  </section>
- <section>
+ <section xml:id="sec-writing-docs-creating-a-topic">
   <title>Creating a Topic</title>
 
   <para>
@@ -128,7 +128,7 @@
    </itemizedlist>
   </para>
  </section>
- <section>
+ <section xml:id="sec-writing-docs-adding-a-topic">
   <title>Adding a Topic to the Book</title>
 
   <para>

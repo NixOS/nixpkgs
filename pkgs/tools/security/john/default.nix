@@ -1,19 +1,17 @@
 { stdenv, fetchurl, openssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2
-, writeText, gcc, pythonPackages, perl, perlPackages, makeWrapper
+, gcc, pythonPackages, perl, perlPackages, makeWrapper
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "john-${version}";
-  version = "1.8.0-jumbo-1";
+  pname = "john";
+  version = "1.9.0-jumbo-1";
 
   src = fetchurl {
-    url = "http://www.openwall.com/john/j/${name}.tar.xz";
-    sha256 = "08q92sfdvkz47rx6qjn7qv57cmlpy7i7rgddapq5384mb413vjds";
+    url = "http://www.openwall.com/john/k/${pname}-${version}.tar.xz";
+    sha256 = "0fvz3v41hnaiv1ggpxanfykyfjq79cwp9qcqqn63vic357w27lgm";
   };
-
-  patches = [ ./gcc5.patch ];
 
   postPatch = ''
     sed -ri -e '
@@ -37,8 +35,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 gcc pythonPackages.wrapPython perl makeWrapper ];
   propagatedBuildInputs = (with pythonPackages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
-                          (with perlPackages; [ DigestMD4 DigestMD5 DigestSHA1 GetoptLong MIMEBase64 # For pass_gen.pl
-                                                NetLDAP ]); # For sha-dump.pl
+                          (with perlPackages; [ DigestMD4 DigestSHA1 GetoptLong # For pass_gen.pl
+                                                perlldap ]); # For sha-dump.pl
                           # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
   # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john

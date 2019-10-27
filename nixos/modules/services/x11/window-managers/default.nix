@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -11,6 +11,7 @@ in
     ./2bwm.nix
     ./afterstep.nix
     ./bspwm.nix
+    ./cwm.nix
     ./dwm.nix
     ./evilwm.nix
     ./exwm.nix
@@ -19,6 +20,7 @@ in
     ./herbstluftwm.nix
     ./i3.nix
     ./jwm.nix
+    ./leftwm.nix
     ./metacity.nix
     ./mwm.nix
     ./openbox.nix

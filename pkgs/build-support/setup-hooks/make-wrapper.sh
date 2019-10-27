@@ -8,18 +8,18 @@ assertExecutable() {
 }
 
 # construct an executable file that wraps the actual executable
-# makeWrapper EXECUTABLE ARGS
+# makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
-# --argv0 NAME      : set name of executed process to NAME
-#                     (otherwise it’s called …-wrapped)
-# --set   VAR VAL   : add VAR with value VAL to the executable’s environment
-# --unset VAR       : remove VAR from the environment
-# --run   COMMAND   : run command before the executable
-#                     The command can push extra flags to a magic list variable
-#                     extraFlagsArray, which are then added to the invocation
-#                     of the executable
-# --add-flags FLAGS : add FLAGS to invocation of executable
+# --argv0       NAME    : set name of executed process to NAME
+#                         (otherwise it’s called …-wrapped)
+# --set         VAR VAL : add VAR with value VAL to the executable’s
+#                         environment
+# --set-default VAR VAL : like --set, but only adds VAR if not already set in
+#                         the environment
+# --unset       VAR     : remove VAR from the environment
+# --run         COMMAND : run command before the executable
+# --add-flags   FLAGS   : add FLAGS to invocation of executable
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -37,7 +37,7 @@ makeWrapper() {
 
     mkdir -p "$(dirname "$wrapper")"
 
-    echo "#! $SHELL -e" > "$wrapper"
+    echo "#! @shell@ -e" > "$wrapper"
 
     params=("$@")
     for ((n = 2; n < ${#params[*]}; n += 1)); do
@@ -106,12 +106,8 @@ makeWrapper() {
         fi
     done
 
-    # Note: extraFlagsArray is an array containing additional flags
-    # that may be set by --run actions.
-    # Silence warning about unexpanded extraFlagsArray:
-    # shellcheck disable=SC2016
     echo exec ${argv0:+-a \"$argv0\"} \""$original"\" \
-         "$flagsBefore" '"${extraFlagsArray[@]}"' '"$@"' >> "$wrapper"
+         "$flagsBefore" '"$@"' >> "$wrapper"
 
     chmod +x "$wrapper"
 }

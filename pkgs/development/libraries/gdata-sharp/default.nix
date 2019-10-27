@@ -2,8 +2,8 @@
 
 let
   newtonsoft-json = dotnetPackages.NewtonsoftJson;
-in stdenv.mkDerivation rec {
-  name = "gdata-sharp-${version}";
+in stdenv.mkDerivation {
+  pname = "gdata-sharp";
   version = "2.2.0.0";
 
   src = fetchsvn {
@@ -34,6 +34,9 @@ in stdenv.mkDerivation rec {
       The Google Data APIs provide a simple protocol for reading and writing
       data on the web.
     '';
+
+    license = licenses.asl20;
     platforms = platforms.linux;
+    broken = true;
   };
 }

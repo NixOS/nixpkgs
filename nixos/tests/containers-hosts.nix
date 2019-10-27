@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, pkgs, lib, ... }:
+    { lib, ... }:
     {
       virtualisation.memorySize = 256;
       virtualisation.vlans = [];

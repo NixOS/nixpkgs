@@ -3,23 +3,30 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "nnn-${version}";
-  version = "1.8";
+  pname = "nnn";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "jarun";
-    repo = "nnn";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0sd8djig56163k0b0y4a7kg3malxlg08gayjw4zmvqaihvbbkc6v";
+    sha256 = "19kiikjblkq3bx2j6h3f2d467p2v582albqr7nbrm9c1yg4qx38z";
   };
 
   configFile = optionalString (conf!=null) (builtins.toFile "nnn.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} nnn.h";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses readline ];
+  buildInputs = [ readline ncurses ];
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
+
+  # shell completions
+  postInstall = ''
+    install -Dm555 misc/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
+    install -Dm555 misc/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
+    install -Dm555 misc/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
+  '';
 
   meta = {
     description = "Small ncurses-based file browser forked from noice";

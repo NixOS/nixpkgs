@@ -1,19 +1,18 @@
-{ stdenv, fetchFromGitHub, openssl, curl, coreutils, gawk, bash, which }:
+{ stdenv, fetchgit, openssl, curl, coreutils, gawk, bash, which }:
 
-stdenv.mkDerivation rec {
-  name = "esniper-2.33.0.2017-11-06";
+stdenv.mkDerivation {
+  name = "esniper-2.35.0-18-g4a59da0";
 
-  src = fetchFromGitHub {
-    owner = "yhfudev";
-    repo = "esniper";
-    rev = "c95140d376db3c991300a7462e6c172b0ccf3eb5";
-    sha256 = "1dfb5hmcrvm3yg9ask362c6s5ylxs21szw23dm737a94br37j890";
+  src = fetchgit {
+    url    = "https://git.code.sf.net/p/esniper/git";
+    rev    = "4a59da032aa4536b9e5ea95633247650412511db";
+    sha256 = "0d3vazh5q7wymqahggbb2apl9hgrm037y4s3j91d24hjgk2pzzyd";
   };
 
   buildInputs = [ openssl curl ];
 
   # Add support for CURL_CA_BUNDLE variable.
-  # Fix <http://sourceforge.net/p/esniper/bugs/648/>.
+  # Fix <https://sourceforge.net/p/esniper/bugs/648/>.
   patches = [ ./find-ca-bundle.patch ];
 
   postInstall = ''

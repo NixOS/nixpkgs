@@ -119,7 +119,7 @@ in
 
     virtualisation.xen.domains = {
         extraConfig = mkOption {
-          type = types.string;
+          type = types.lines;
           default = "";
           description =
             ''
@@ -146,7 +146,7 @@ in
   config = mkIf cfg.enable {
     assertions = [ {
       assertion = pkgs.stdenv.isx86_64;
-      message = "Xen currently not supported on ${pkgs.stdenv.system}";
+      message = "Xen currently not supported on ${pkgs.stdenv.hostPlatform.system}";
     } {
       assertion = config.boot.loader.grub.enable && (config.boot.loader.grub.efiSupport == false);
       message = "Xen currently does not support EFI boot";

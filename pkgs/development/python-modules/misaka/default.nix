@@ -1,11 +1,11 @@
 { lib, fetchPypi, buildPythonPackage, cffi }:
 buildPythonPackage rec {
   pname = "misaka";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yqrq3a5rracirmvk52n28nn6ckdaz897gnigv89a9gmyn87sqw7";
+    sha256 = "1mzc29wwyhyardclj1vg2xsfdibg2lzb7f1azjcxi580ama55wv2";
   };
 
   propagatedBuildInputs = [ cffi ];
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A CFFI binding for Hoedown, a markdown parsing library";
-    homepage = "http://misaka.61924.nl/";
+    homepage = "https://misaka.61924.nl";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
   };

@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "getdns";
-  name = "${pname}-${version}";
-  version = "1.4.1";
+  version = "1.5.2";
+  versionRewrite = builtins.splitVersion version;
 
   src = fetchurl {
-    url = "https://getdnsapi.net/releases/${pname}-1-4-1/${pname}-${version}.tar.gz";
-    sha256 = "07n5n5m4dnnh2xkh7wrnlx8s8myrvjf2nbs7n5m5nq8gg3f36li4";
+    url = "https://getdnsapi.net/releases/${pname}-${builtins.concatStringsSep "-" versionRewrite}/${pname}-${version}.tar.gz";
+    sha256 = "1h4l0sbkpiahpx2pd5lby10yi22mdxgx5xf1y80r77pa46iac9hq";
   };
 
   nativeBuildInputs = [ libtool m4 autoreconfHook automake file ];

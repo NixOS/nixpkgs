@@ -7,7 +7,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   src = fetchFromGitHub {
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux;
     homepage = https://github.com/nicm/fdm;
     downloadPage = https://github.com/nicm/fdm/releases;
+    license = licenses.isc;
   };
 }

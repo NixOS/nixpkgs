@@ -9,7 +9,6 @@ use Getopt::Long qw(:config gnu_getopt);
 use Cwd 'abs_path';
 use Time::HiRes;
 
-my $nsenter = "@utillinux@/bin/nsenter";
 my $su = "@su@";
 
 # Ensure a consistent umask.
@@ -23,7 +22,7 @@ $ENV{"NIXOS_CONFIG"} = "";
 sub showHelp {
     print <<EOF;
 Usage: nixos-container list
-       nixos-container create <container-name> [--nixos-path <path>] [--system-path <path>] [--config-file <path>] [--config <string>] [--ensure-unique-name] [--auto-start] [--bridge <iface>] [--port <port>]
+       nixos-container create <container-name> [--nixos-path <path>] [--system-path <path>] [--config-file <path>] [--config <string>] [--ensure-unique-name] [--auto-start] [--bridge <iface>] [--port <port>] [--host-address <string>] [--local-address <string>]
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
@@ -48,6 +47,8 @@ my $port;
 my $extraConfig;
 my $signal;
 my $configFile;
+my $hostAddress;
+my $localAddress;
 
 GetOptions(
     "help" => sub { showHelp() },
@@ -59,8 +60,14 @@ GetOptions(
     "signal=s" => \$signal,
     "nixos-path=s" => \$nixosPath,
     "config=s" => \$extraConfig,
-    "config-file=s" => \$configFile
+    "config-file=s" => \$configFile,
+    "host-address=s" => \$hostAddress,
+    "local-address=s" => \$localAddress,
     ) or exit 1;
+
+if (defined $hostAddress and !defined $localAddress or defined $localAddress and !defined $hostAddress) {
+    die "With --host-address set, --local-address is required as well!";
+}
 
 my $action = $ARGV[0] or die "$0: no action specified\n";
 
@@ -149,16 +156,18 @@ if ($action eq "create") {
         $usedIPs{$1} = 1 if $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m;
     }
 
-    my ($ipPrefix, $hostAddress, $localAddress);
-    for (my $nr = 1; $nr < 255; $nr++) {
-        $ipPrefix = "10.233.$nr";
-        $hostAddress = "$ipPrefix.1";
-        $localAddress = "$ipPrefix.2";
-        last unless $usedIPs{$hostAddress} || $usedIPs{$localAddress};
-        $ipPrefix = undef;
-    }
+    unless (defined $hostAddress) {
+        my $ipPrefix;
+        for (my $nr = 1; $nr < 255; $nr++) {
+            $ipPrefix = "10.233.$nr";
+            $hostAddress = "$ipPrefix.1";
+            $localAddress = "$ipPrefix.2";
+            last unless $usedIPs{$hostAddress} || $usedIPs{$localAddress};
+            $ipPrefix = undef;
+        }
 
-    die "$0: out of IP addresses\n" unless defined $ipPrefix;
+        die "$0: out of IP addresses\n" unless defined $ipPrefix;
+    }
 
     my @conf;
     push @conf, "PRIVATE_NETWORK=1\n";
@@ -260,9 +269,10 @@ sub restartContainer {
 # Run a command in the container.
 sub runInContainer {
     my @args = @_;
-    my $leader = getLeader;
-    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
-    die "cannot run ‘nsenter’: $!\n";
+
+    exec("systemd-run", "--machine", $containerName, "--pty", "--quiet", "--", @args);
+
+    die "cannot run ‘systemd-run’: $!\n";
 }
 
 # Remove a directory while recursively unmounting all mounted filesystems within

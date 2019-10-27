@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, qttools, mpv }:
 
 stdenv.mkDerivation rec {
-  name = "mpc-qt-${version}";
-  version = "18.03";
+  pname = "mpc-qt";
+  version = "18.08";
 
   src = fetchFromGitHub {
     owner = "cmdrkotori";
     repo = "mpc-qt";
     rev = "v${version}";
-    sha256 = "0mhzdgjgv08cvnscbfndpr0s8ndbcf91b61zfqspa1qv4wlqd716";
+    sha256 = "1rxlkg3vsrapazdlb1i6c5a1vvf2114bsqwzcm3n2wc5c93yqsna";
   };
 
   nativeBuildInputs = [ pkgconfig qmake qttools ];

@@ -15,6 +15,7 @@ let
   ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
   sssd = canLoadExternalModules && config.services.sssd.enable;
   resolved = canLoadExternalModules && config.services.resolved.enable;
+  googleOsLogin = canLoadExternalModules && config.security.googleOsLogin.enable;
 
   hostArray = [ "files" ]
     ++ optional mymachines "mymachines"
@@ -29,6 +30,7 @@ let
     ++ optional sssd "sss"
     ++ optional ldap "ldap"
     ++ optional mymachines "mymachines"
+    ++ optional googleOsLogin "cache_oslogin oslogin"
     ++ [ "systemd" ];
 
   shadowArray = [ "files" ]
@@ -59,6 +61,15 @@ in {
         };
     };
 
+    system.nssHosts = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "mdns" ];
+      description = ''
+        List of host entries to configure in <filename>/etc/nsswitch.conf</filename>.
+      '';
+    };
+
   };
 
   config = {
@@ -83,7 +94,7 @@ in {
       group:     ${concatStringsSep " " passwdArray}
       shadow:    ${concatStringsSep " " shadowArray}
 
-      hosts:     ${concatStringsSep " " hostArray}
+      hosts:     ${concatStringsSep " " config.system.nssHosts}
       networks:  files
 
       ethers:    files
@@ -92,12 +103,14 @@ in {
       rpc:       files
     '';
 
+    system.nssHosts = hostArray;
+
     # Systemd provides nss-myhostname to ensure that our hostname
     # always resolves to a valid IP address.  It returns all locally
     # configured IP addresses, or ::1 and 127.0.0.2 as
     # fallbacks. Systemd also provides nss-mymachines to return IP
     # addresses of local containers.
-    system.nssModules = optionals canLoadExternalModules [ config.systemd.package.out ];
-
+    system.nssModules = (optionals canLoadExternalModules [ config.systemd.package.out ])
+      ++ optional googleOsLogin pkgs.google-compute-engine-oslogin.out;
   };
 }

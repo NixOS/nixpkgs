@@ -1,7 +1,7 @@
-{stdenv, fetchFromGitHub, pkgconfig, dbus, mono, autoreconfHook }:
+{stdenv, fetchFromGitHub, pkgconfig, mono4, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "dbus-sharp-${version}";
+  pname = "dbus-sharp";
   version = "0.8.1";
 
   src = fetchFromGitHub {
@@ -13,12 +13,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ mono ];
+
+  # Use msbuild when https://github.com/NixOS/nixpkgs/pull/43680 is merged
+  # See: https://github.com/NixOS/nixpkgs/pull/46060
+  buildInputs = [ mono4 ];
 
   dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "D-Bus for .NET";
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

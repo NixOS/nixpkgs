@@ -10,9 +10,15 @@ stdenv.mkDerivation rec {
 
   patches = [ ./pass-force.patch ];
 
-  buildInputs = [ flex perl ];
+  nativeBuildInputs = [ flex ];
+  buildInputs = [ perl ];
 
-  configureFlags = "--without-distro --without-pacemaker --localstatedir=/var --sysconfdir=/etc";
+  configureFlags = [
+    "--without-distro"
+    "--without-pacemaker"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
 
   preConfigure =
     ''
@@ -29,9 +35,10 @@ stdenv.mkDerivation rec {
 
   installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.drbd.org/;
     description = "Distributed Replicated Block Device, a distributed storage system for Linux";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

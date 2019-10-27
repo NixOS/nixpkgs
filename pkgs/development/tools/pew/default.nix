@@ -1,6 +1,5 @@
 { stdenv, python3Packages }:
 with python3Packages; buildPythonApplication rec {
-    name = "${pname}-${version}";
     pname = "pew";
     version = "1.1.2";
 
@@ -10,6 +9,8 @@ with python3Packages; buildPythonApplication rec {
     };
 
     propagatedBuildInputs = [ virtualenv virtualenv-clone setuptools ];
+
+    LC_ALL = "en_US.UTF-8";
 
     postFixup = ''
       set -euo pipefail
@@ -24,6 +25,7 @@ with python3Packages; buildPythonApplication rec {
     '';
 
     meta = with stdenv.lib; {
+      homepage = https://github.com/berdario/pew;
       description = "Tools to manage multiple virtualenvs written in pure python";
       license = licenses.mit;
       platforms = platforms.all;

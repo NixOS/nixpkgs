@@ -1,72 +1,121 @@
-{ stdenv, fetchurl, fetchbzr, cmake, libGLU_combined, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen }:
+{ wxGTK, lib, stdenv, fetchurl, fetchFromGitHub, cmake, libGLU_combined, zlib
+, libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
+, doxygen, pcre, libpthreadstubs, libXdmcp
+, wrapGAppsHook
+, oceSupport ? true, opencascade
+, ngspiceSupport ? true, libngspice
+, swig, python, pythonPackages
+, lndir
+}:
 
-stdenv.mkDerivation rec {
-  name = "kicad-${version}";
-  series = "4.0";
-  version = "4.0.7";
+assert ngspiceSupport -> libngspice != null;
 
-  srcs = [
-    (fetchurl {
-      url = "https://code.launchpad.net/kicad/${series}/${version}/+download/kicad-${version}.tar.xz";
-      sha256 = "1hgxan9321szgyqnkflb0q60yjf4yvbcc4cpwhm0yz89qrvlq1q9";
-    })
+with lib;
+let
+  mkLib = version: name: sha256: attrs: stdenv.mkDerivation ({
+    name = "kicad-${name}-${version}";
+    src = fetchFromGitHub {
+      owner = "KiCad";
+      repo = "kicad-${name}";
+      rev = version;
+      inherit sha256 name;
+    };
+    nativeBuildInputs = [
+      cmake
+    ];
+  } // attrs);
 
-    (fetchurl {
-      url = "http://downloads.kicad-pcb.org/libraries/kicad-library-${version}.tar.gz";
-      sha256 = "1azb7v1y3l6j329r9gg7f4zlg0wz8nh4s4i5i0l9s4yh9r6i9zmv";
-    })
+in stdenv.mkDerivation rec {
+  pname = "kicad";
+  series = "5.0";
+  version = "5.1.4";
 
-    (fetchurl {
-      url = "http://downloads.kicad-pcb.org/libraries/kicad-footprints-${version}.tar.gz";
-      sha256 = "08qrz5zzsb5127jlnv24j0sgiryd5nqwg3lfnwi8j9a25agqk13j";
-    })
+  src = fetchurl {
+    url = "https://launchpad.net/kicad/${series}/${version}/+download/kicad-${version}.tar.xz";
+    sha256 = "1r60dgh6aalbpq1wsmpyxkz0nn4ck8ydfdjcrblpl69k5rks5k2j";
+  };
+
+  postPatch = ''
+    substituteInPlace CMakeModules/KiCadVersion.cmake \
+      --replace no-vcs-found ${version}
+  '';
+
+  cmakeFlags = [
+    "-DKICAD_SCRIPTING=ON"
+    "-DKICAD_SCRIPTING_MODULES=ON"
+    "-DKICAD_SCRIPTING_WXPYTHON=ON"
+    # nix installs wxPython headers in wxPython package, not in wxwidget
+    # as assumed. We explicitely set the header location.
+    "-DCMAKE_CXX_FLAGS=-I${pythonPackages.wxPython}/include/wx-3.0"
+    "-DwxPYTHON_INCLUDE_DIRS=${pythonPackages.wxPython}/include/wx-3.0"
+  ] ++ optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
+    ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON";
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    pkgconfig
+    wrapGAppsHook
+    pythonPackages.wrapPython
+    lndir
   ];
+  pythonPath = [ pythonPackages.wxPython ];
+  propagatedBuildInputs = [ pythonPackages.wxPython ];
 
-  sourceRoot = "kicad-${version}";
+  buildInputs = [
+    libGLU_combined zlib libX11 wxGTK pcre libXdmcp glew glm libpthreadstubs
+    cairo curl openssl boost
+    swig (python.withPackages (ps: with ps; [ wxPython ]))
+  ] ++ optional (oceSupport) opencascade
+    ++ optional (ngspiceSupport) libngspice;
 
-  cmakeFlags = ''
-    -DKICAD_SKIP_BOOST=ON
-    -DKICAD_BUILD_VERSION=${version}
-    -DKICAD_REPO_NAME=stable
-  '';
+  # this breaks other applications in kicad
+  dontWrapGApps = true;
 
-  enableParallelBuilding = true; # often fails on Hydra: fatal error: pcb_plot_params_lexer.h: No such file or directory
+  passthru = {
+    i18n = mkLib version "i18n" "1dk7wis4cncmihl8fnic3jyhqcdzpifchzsp7hmf214h0vp199zr" {
+      buildInputs = [
+        gettext
+      ];
+      meta.license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
+    };
+    symbols = mkLib version "symbols" "1lna4xlvzrxif3569pkp6mrg7fj62z3a3ri5j97lnmnnzhiddnh3" {
+      meta.license = licenses.cc-by-sa-40;
+    };
+    footprints = mkLib version "footprints" "0c0kcywxlaihzzwp9bi0dsr2v9j46zcdr85xmfpivmrk19apss6a" {
+      meta.license = licenses.cc-by-sa-40;
+    };
+    templates = mkLib version "templates" "1bagb0b94cjh7zp9z0h23b60j45kwxbsbb7b2bdk98dmph8lmzbb" {
+      meta.license = licenses.cc-by-sa-40;
+    };
+    packages3d = mkLib version "packages3d" "0h2qjj8vf33jz6jhqdz90c80h5i1ydgfqnns7rn0fqphlnscb45g" {
+      hydraPlatforms = []; # this is a ~1 GiB download, occupies ~5 GiB in store
+      meta.license = licenses.cc-by-sa-40;
+    };
+  };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libGLU_combined wxGTK zlib libX11 gettext glew cairo curl openssl boost doxygen ];
-
-  # They say they only support installs to /usr or /usr/local,
-  # so we have to handle this.
-  patchPhase = ''
-    sed -i -e 's,/usr/local/kicad,'$out,g common/gestfich.cpp
-  '';
-
-  postUnpack = ''
-    pushd $(pwd)
-  '';
+  modules = with passthru; [ i18n symbols footprints templates ];
 
   postInstall = ''
-    popd
-
-    pushd kicad-library-*
-    cmake -DCMAKE_INSTALL_PREFIX=$out
-    make $MAKE_FLAGS
-    make install
-    popd
-
-    pushd kicad-footprints-*
-    mkdir -p $out/share/kicad/modules
-    cp -R *.pretty $out/share/kicad/modules/
-    popd
+    mkdir -p $out/share
+    for module in $modules; do
+      lndir $module/share $out/share
+    done
   '';
 
+  preFixup = ''
+    buildPythonPath "$out $pythonPath"
+    gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
+
+    wrapGApp "$out/bin/kicad" --prefix LD_LIBRARY_PATH : "${libngspice}/lib"
+  '';
 
   meta = {
     description = "Free Software EDA Suite";
     homepage = http://www.kicad-pcb.org/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
-    hydraPlatforms = []; # 'output limit exceeded' error on hydra
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ berce ];
+    platforms = with platforms; linux;
+    broken = stdenv.isAarch64;
   };
 }

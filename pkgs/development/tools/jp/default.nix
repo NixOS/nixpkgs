@@ -1,9 +1,9 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, jmespath }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "jp-${version}";
+  pname = "jp";
   version = "0.1.2";
-  rev = "${version}";
+  rev = version;
 
   goPackagePath = "github.com/jmespath/jp";
 

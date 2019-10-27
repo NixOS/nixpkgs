@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "07rs01zwr4bmjamplix5qz1c6mb6wdawb68vyn0w6wx68ppbpnxq";
   };
 
+  buildInputs = kernel.moduleBuildDependencies;
+
   hardeningDisable = [ "pic" ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-function-declaration" ];
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
     broken = builtins.compareVersions kernel.version "3.18" == -1
-      || builtins.compareVersions kernel.version "4.11" == 1;
+      || builtins.compareVersions kernel.version "4.16" == 1;
   };
 
 }

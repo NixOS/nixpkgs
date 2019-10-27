@@ -1,6 +1,6 @@
-{ luarocks, lib , stdenv,  writeText , readline,  makeWrapper,
-  less, ncurses, cmake, openblas, coreutils, fetchgit, libuuid, czmq, openssl,
-  gnuplot, fetchurl, lua, src, libjpeg, libpng
+{ luarocks, lib , stdenv,  readline,  makeWrapper,
+  less, ncurses, cmake, coreutils, fetchgit, libuuid, czmq, openssl,
+  gnuplot, lua, src, libjpeg, libpng
 } :
 
 let
@@ -57,6 +57,8 @@ let
       in
       stdenv.mkDerivation (args // {
 
+        name = "${args.name}-${lua.luaversion}";
+
         inherit preBuild postInstall;
 
         inherit luadeps runtimeDeps;
@@ -92,7 +94,7 @@ let
     #   rockspec = "lua-cjson-2.1devel-1.rockspec";
     # };
 
-    lua-cjson = stdenv.mkDerivation rec {
+    lua-cjson = stdenv.mkDerivation {
       name = "lua-cjson";
       src = "${distro_src}/extra/lua-cjson";
 
@@ -177,7 +179,7 @@ let
       rockspec = "rocks/${name}-scm-1.rockspec";
     };
 
-    sys = buildLuaRocks rec {
+    sys = buildLuaRocks {
       name = "sys";
       luadeps = [torch];
       buildInputs = [readline cmake];
@@ -188,14 +190,14 @@ let
       '';
     };
 
-    xlua = buildLuaRocks rec {
+    xlua = buildLuaRocks {
       name = "xlua";
       luadeps = [torch sys];
       src = "${distro_src}/pkg/xlua";
       rockspec = "xlua-1.0-0.rockspec";
     };
 
-    nn = buildLuaRocks rec {
+    nn = buildLuaRocks {
       name = "nn";
       luadeps = [torch luaffifb];
       buildInputs = [cmake];
@@ -206,7 +208,7 @@ let
       '';
     };
 
-    graph = buildLuaRocks rec {
+    graph = buildLuaRocks {
       name = "graph";
       luadeps = [ torch ];
       buildInputs = [cmake];
@@ -217,7 +219,7 @@ let
       '';
     };
 
-    nngraph = buildLuaRocks rec {
+    nngraph = buildLuaRocks {
       name = "nngraph";
       luadeps = [ torch nn graph ];
       buildInputs = [cmake];
@@ -227,7 +229,7 @@ let
       '';
     };
 
-    image = buildLuaRocks rec {
+    image = buildLuaRocks {
       name = "image";
       luadeps = [ torch dok sys xlua ];
       buildInputs = [cmake libjpeg libpng];
@@ -238,7 +240,7 @@ let
       '';
     };
 
-    optim = buildLuaRocks rec {
+    optim = buildLuaRocks {
       name = "optim";
       luadeps = [ torch ];
       buildInputs = [cmake];
@@ -249,7 +251,7 @@ let
       '';
     };
 
-    gnuplot = buildLuaRocks rec {
+    gnuplot = buildLuaRocks {
       name = "gnuplot";
       luadeps = [ torch paths ];
       runtimeDeps = [ pkgs_gnuplot less ];
@@ -257,7 +259,7 @@ let
       rockspec = "rocks/gnuplot-scm-1.rockspec";
     };
 
-    unsup = buildLuaRocks rec {
+    unsup = buildLuaRocks {
       name = "unsup";
       luadeps = [ torch xlua optim ];
       buildInputs = [ cmake ];
@@ -273,7 +275,7 @@ let
       meta.broken = true;
     };
 
-    trepl = buildLuaRocks rec {
+    trepl = buildLuaRocks {
       name = "trepl";
       luadeps = [torch gnuplot paths penlight graph nn nngraph image gnuplot optim sys dok unsup];
       runtimeDeps = [ ncurses readline ];
@@ -283,7 +285,7 @@ let
       };
     };
 
-    lbase64 = buildLuaRocks rec {
+    lbase64 = buildLuaRocks {
       name = "lbase64";
       src = fetchgit {
         url = "https://github.com/LuaDist2/lbase64";
@@ -293,7 +295,7 @@ let
       meta.broken = true; # 2018-04-11
     };
 
-    luuid = stdenv.mkDerivation rec {
+    luuid = stdenv.mkDerivation {
       name = "luuid";
       src = fetchgit {
         url = "https://github.com/LuaDist/luuid";
@@ -312,7 +314,7 @@ let
     };
 
     # Doesn't work due to missing deps (according to luarocs).
-    itorch = buildLuaRocks rec {
+    itorch = buildLuaRocks {
       name = "itorch";
       luadeps = [torch gnuplot paths penlight graph nn nngraph image gnuplot
                   optim sys dok lbase64 lua-cjson luuid];

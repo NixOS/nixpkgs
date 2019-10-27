@@ -41,13 +41,13 @@ in {
       };
 
       accelSpeed = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
 
       buttonMapping = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         description =
           ''
@@ -61,7 +61,7 @@ in {
       };
 
       calibrationMatrix = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         description =
           ''
@@ -116,7 +116,7 @@ in {
       };
 
       scrollMethod = mkOption {
-        type = types.enum [ "twofinger" "edge" "none" ];
+        type = types.enum [ "twofinger" "edge" "button" "none" ];
         default = "twofinger";
         example = "edge";
         description =
@@ -178,7 +178,7 @@ in {
       };
 
       additionalOptions = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         example =
         ''
@@ -205,7 +205,7 @@ in {
       })
     ];
 
-    services.udev.packages = [ pkgs.libinput ];
+    services.udev.packages = [ pkgs.libinput.out ];
 
     services.xserver.config =
       ''

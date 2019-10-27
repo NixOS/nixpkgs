@@ -3,12 +3,16 @@
 
 buildPythonPackage rec {
   pname = "portend";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc48d3d99e1eaf2e9406c729f8848bfdaf87876cd3560dc3ec6c16714f529586";
+    sha256 = "b7ce7d35ea262415297cbfea86226513e77b9ee5f631d3baa11992d663963719";
   };
+
+  postPatch = ''
+    substituteInPlace pytest.ini --replace "--flake8" ""
+  '';
 
   nativeBuildInputs = [ setuptools_scm ];
 
@@ -17,8 +21,11 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    py.test
+    py.test --deselect=test_portend.py::TestChecker::test_check_port_listening
   '';
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 
   meta = with stdenv.lib; {
     description = "Monitor TCP ports for bound or unbound states";

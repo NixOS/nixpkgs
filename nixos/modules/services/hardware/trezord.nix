@@ -4,6 +4,12 @@ with lib;
 let
   cfg = config.services.trezord;
 in {
+
+  ### docs
+
+  meta = {
+    doc = ./trezord.xml;
+  };
   
   ### interface
 
@@ -16,6 +22,22 @@ in {
           Enable Trezor bridge daemon, for use with Trezor hardware bitcoin wallets.
         '';
       };
+
+      emulator.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable Trezor emulator support.
+          '';
+       };
+
+      emulator.port = mkOption {
+        type = types.port;
+        default = 21324;
+        description = ''
+          Listening port for the Trezor emulator.
+          '';
+      };
     };
   };
   
@@ -26,15 +48,14 @@ in {
       name = "trezord-udev-rules";
       destination = "/etc/udev/rules.d/51-trezor.rules";
       text = ''
-        # Trezor 1
-        SUBSYSTEM=="usb",  ATTR{idVendor}=="534c",  ATTR{idProduct}=="0001",  MODE="0666", GROUP="dialout", SYMLINK+="trezor%n"
-        KERNEL=="hidraw*", ATTRS{idVendor}=="534c", ATTRS{idProduct}=="0001", MODE="0666", GROUP="dialout"
+        # TREZOR v1 (One)
+        SUBSYSTEM=="usb", ATTR{idVendor}=="534c", ATTR{idProduct}=="0001", MODE="0660", GROUP="trezord", TAG+="uaccess", SYMLINK+="trezor%n"
+        KERNEL=="hidraw*", ATTRS{idVendor}=="534c", ATTRS{idProduct}=="0001", MODE="0660", GROUP="trezord", TAG+="uaccess"
 
-        # Trezor 2 (Model-T)
-        SUBSYSTEM=="usb",  ATTR{idVendor}=="1209",  ATTR{idProduct}=="53c0",  MODE="0661", GROUP="dialout", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="trezor%n"
-        SUBSYSTEM=="usb",  ATTR{idVendor}=="1209",  ATTR{idProduct}=="53c1",  MODE="0660", GROUP="dialout", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="trezor%n"
-        KERNEL=="hidraw*", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="53c1", MODE="0660", GROUP="dialout", TAG+="uaccess", TAG+="udev-acl"
-  ];
+        # TREZOR v2 (T)
+        SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="53c0", MODE="0660", GROUP="trezord", TAG+="uaccess", SYMLINK+="trezor%n"
+        SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="53c1", MODE="0660", GROUP="trezord", TAG+="uaccess", SYMLINK+="trezor%n"
+        KERNEL=="hidraw*", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="53c1", MODE="0660", GROUP="trezord", TAG+="uaccess"
       '';
     });
 
@@ -45,7 +66,7 @@ in {
       path = [];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.trezord}/bin/trezord-go";
+        ExecStart = "${pkgs.trezord}/bin/trezord-go ${optionalString cfg.emulator.enable "-e ${builtins.toString cfg.emulator.port}"}";
         User = "trezord";
       };
     };

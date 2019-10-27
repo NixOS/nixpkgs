@@ -19,5 +19,6 @@ mkDerivation {
     kguiaddons ki18n kiconthemes kinit kio knotifications knotifyconfig kparts kpty
     kservice ktextwidgets kwidgetsaddons kwindowsystem kxmlgui qtscript knewstuff
   ];
+
   propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
 }

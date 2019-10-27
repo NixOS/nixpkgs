@@ -4,8 +4,6 @@
 , ghcjsSrcJson ? null
 , ghcjsSrc ? fetchgit (builtins.fromJSON (builtins.readFile ghcjsSrcJson))
 , bootPkgs
-, alex
-, happy
 , stage0
 , haskellLib
 , cabal-install
@@ -14,15 +12,18 @@
 , xorg
 , gmp
 , pkgconfig
+, gcc
 , lib
+, nodePackages
 , ghcjsDepOverrides ? (_:_:{})
+, haskell
 }:
 
 let
   passthru = {
     configuredSrc = callPackage ./configured-ghcjs-src.nix {
-      inherit ghcjsSrc alex happy;
-      inherit (bootPkgs) ghc;
+      inherit ghcjsSrc;
+      inherit (bootPkgs) ghc alex happy;
     };
     genStage0 = callPackage ./mk-stage0.nix { inherit (passthru) configuredSrc; };
     bootPkgs = bootPkgs.extend (lib.foldr lib.composeExtensions (_:_:{}) [
@@ -31,28 +32,38 @@ let
         inherit (self) callPackage;
       })
 
-      (callPackage ./common-overrides.nix { inherit haskellLib alex happy; })
+      (callPackage ./common-overrides.nix {
+        inherit haskellLib;
+      })
       ghcjsDepOverrides
     ]);
 
     targetPrefix = "";
     inherit bootGhcjs;
     inherit (bootGhcjs) version;
+    ghcVersion = bootPkgs.ghc.version;
     isGhcjs = true;
+
+    enableShared = true;
+
+    socket-io = nodePackages."socket.io";
 
     # Relics of the old GHCJS build system
     stage1Packages = [];
-    mkStage2 = _: {};
+    mkStage2 = { callPackage }: {
+      # https://github.com/ghcjs/ghcjs-base/issues/110
+      # https://github.com/ghcjs/ghcjs-base/pull/111
+      ghcjs-base = haskell.lib.dontCheck (haskell.lib.doJailbreak (callPackage ./ghcjs-base.nix {}));
+    };
+
+    haskellCompilerName = "ghcjs-${bootGhcjs.version}";
   };
 
   bootGhcjs = haskellLib.justStaticExecutables passthru.bootPkgs.ghcjs;
-  libexec =
-    if builtins.compareVersions bootGhcjs.version "8.3" <= 0
-      then "${bootGhcjs}/bin"
-      else "${bootGhcjs}/libexec/${stdenv.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
+  libexec = "${bootGhcjs}/libexec/${builtins.replaceStrings ["darwin" "i686"] ["osx" "i386"] stdenv.buildPlatform.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
 
 in stdenv.mkDerivation {
-    name = "ghcjs";
+    name = bootGhcjs.name;
     src = passthru.configuredSrc;
     nativeBuildInputs = [
       bootGhcjs
@@ -63,19 +74,24 @@ in stdenv.mkDerivation {
       xorg.lndir
       gmp
       pkgconfig
+    ] ++ lib.optionals stdenv.isDarwin [
+      gcc # https://github.com/ghcjs/ghcjs/issues/663
     ];
-    phases = ["unpackPhase" "buildPhase"];
+    dontConfigure = true;
+    dontInstall = true;
     buildPhase = ''
       export HOME=$TMP
+      mkdir $HOME/.cabal
+      touch $HOME/.cabal/config
       cd lib/boot
 
       mkdir -p $out/bin
-      mkdir -p $out/libexec
+      mkdir -p $out/lib/${bootGhcjs.name}
       lndir ${libexec} $out/bin
 
-      wrapProgram $out/bin/ghcjs --add-flags "-B$out/libexec"
-      wrapProgram $out/bin/haddock-ghcjs --add-flags "-B$out/libexec"
-      wrapProgram $out/bin/ghcjs-pkg --add-flags "--global-package-db=$out/libexec/package.conf.d"
+      wrapProgram $out/bin/ghcjs --add-flags "-B$out/lib/${bootGhcjs.name}"
+      wrapProgram $out/bin/haddock-ghcjs --add-flags "-B$out/lib/${bootGhcjs.name}"
+      wrapProgram $out/bin/ghcjs-pkg --add-flags "--global-package-db=$out/lib/${bootGhcjs.name}/package.conf.d"
 
       env PATH=$out/bin:$PATH $out/bin/ghcjs-boot -j1 --with-ghcjs-bin $out/bin
     '';
@@ -87,5 +103,5 @@ in stdenv.mkDerivation {
     inherit passthru;
 
     meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
+    meta.maintainers = [lib.maintainers.elvishjerricco];
   }
-

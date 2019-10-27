@@ -1,7 +1,7 @@
-{ fetchurl, makeWrapper, patchelf, pkgs, stdenv, SDL, libogg, libvorbis, curl }:
+{ fetchurl, makeWrapper, patchelf, pkgs, stdenv, SDL, libglvnd, libogg, libvorbis, curl, openal }:
 
-stdenv.mkDerivation rec {
-  name = "openarena-${version}";
+stdenv.mkDerivation {
+  pname = "openarena";
   version = "0.8.8";
 
   src = fetchurl {
@@ -10,24 +10,30 @@ stdenv.mkDerivation rec {
     sha256 = "0jmc1cmdz1rcvqc9ilzib1kilpwap6v0d331l6q53wsibdzsz3ss";
   };
 
-  buildInputs = [ pkgs.unzip patchelf makeWrapper];
+  nativeBuildInputs = [ pkgs.unzip patchelf makeWrapper];
 
   installPhase = let
     gameDir = "$out/openarena-$version";
     interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
-    libPath = stdenv.lib.makeLibraryPath [ SDL libogg libvorbis curl ];
+    libPath = stdenv.lib.makeLibraryPath [ SDL libglvnd libogg libvorbis curl openal ];
   in ''
     mkdir -pv $out/bin
     cd $out
     unzip $src
 
-    ${if stdenv.system == "x86_64-linux" then ''
+    ${if stdenv.hostPlatform.system == "x86_64-linux" then ''
       patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.x86_64"
       makeWrapper "${gameDir}/openarena.x86_64" "$out/bin/openarena" \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
+      patchelf --set-interpreter "${interpreter}" "${gameDir}/oa_ded.x86_64"
+      makeWrapper "${gameDir}/oa_ded.x86_64" "$out/bin/openarena-server" \
         --prefix LD_LIBRARY_PATH : "${libPath}"
     '' else ''
       patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.i386"
       makeWrapper "${gameDir}/openarena.i386" "$out/bin/openarena" \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
+      patchelf --set-interpreter "${interpreter}" "${gameDir}/oa_ded.i386"
+      makeWrapper "${gameDir}/oa_ded.i386" "$out/bin/openarena-server" \
         --prefix LD_LIBRARY_PATH : "${libPath}"
     ''}
   '';

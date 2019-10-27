@@ -1,6 +1,6 @@
 { pkgs
 , kernel ? pkgs.linux
-, img ? pkgs.stdenv.platform.kernelTarget
+, img ? pkgs.stdenv.hostPlatform.platform.kernelTarget
 , storeDir ? builtins.storeDir
 , rootModules ?
     [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
@@ -14,16 +14,6 @@ rec {
 
   qemu = pkgs.qemu_kvm;
 
-  qemu-220 = lib.overrideDerivation pkgs.qemu_kvm (attrs: rec {
-    version = "2.2.0";
-    src = fetchurl {
-      url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-      sha256 = "1703c3scl5n07gmpilg7g2xzyxnr7jczxgx6nn4m8kv9gin9p35n";
-    };
-    patches = [ ../../../nixos/modules/virtualisation/azure-qemu-220-no-etc-install.patch ];
-  });
-
-
   modulesClosure = makeModulesClosure {
     inherit kernel rootModules;
     firmware = kernel;
@@ -31,7 +21,6 @@ rec {
 
 
   hd = "vda"; # either "sda" or "vda"
-
 
   initrdUtils = runCommand "initrd-utils"
     { buildInputs = [ nukeReferences ];
@@ -45,6 +34,7 @@ rec {
       cp -p ${pkgs.stdenv.glibc.out}/lib/ld-linux*.so.? $out/lib
       cp -p ${pkgs.stdenv.glibc.out}/lib/libc.so.* $out/lib
       cp -p ${pkgs.stdenv.glibc.out}/lib/libm.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc.out}/lib/libresolv.so.* $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
@@ -172,9 +162,9 @@ rec {
     fi
 
     # Set up automatic kernel module loading.
-    export MODULE_DIR=${linux}/lib/modules/
+    export MODULE_DIR=${kernel}/lib/modules/
     ${coreutils}/bin/cat <<EOF > /run/modprobe
-    #! /bin/sh
+    #! ${bash}/bin/sh
     export MODULE_DIR=$MODULE_DIR
     exec ${kmod}/bin/modprobe "\$@"
     EOF
@@ -325,7 +315,7 @@ rec {
       name = "extract-file";
       buildInputs = [ utillinux ];
       buildCommand = ''
-        ln -s ${linux}/lib /lib
+        ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe loop
         ${kmod}/bin/modprobe ext4
         ${kmod}/bin/modprobe hfs
@@ -350,7 +340,7 @@ rec {
       name = "extract-file-mtd";
       buildInputs = [ utillinux mtdutils ];
       buildCommand = ''
-        ln -s ${linux}/lib /lib
+        ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe mtd
         ${kmod}/bin/modprobe mtdram total_size=131072
         ${kmod}/bin/modprobe mtdchar
@@ -729,7 +719,7 @@ rec {
     { name, fullName, size ? 4096, urlPrefix
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? [], postInstall ? ""
-    , extraDebs ? []
+    , extraDebs ? [], createRootFS ? defaultCreateRootFS
     , QEMU_OPTS ? "", memSize ? 512 }:
 
     let
@@ -739,7 +729,7 @@ rec {
       };
     in
       (fillDiskWithDebs {
-        inherit name fullName size postInstall QEMU_OPTS memSize;
+        inherit name fullName size postInstall createRootFS QEMU_OPTS memSize;
         debs = import expr {inherit fetchurl;} ++ extraDebs;
       }) // {inherit expr;};
 
@@ -751,7 +741,7 @@ rec {
     # Note: no i386 release for Fedora >= 26
     fedora26x86_64 =
       let version = "26";
-      in rec {
+      in {
         name = "fedora-${version}-x86_64";
         fullName = "Fedora ${version} (x86_64)";
         packagesList = fetchurl rec {
@@ -766,7 +756,7 @@ rec {
 
     fedora27x86_64 =
       let version = "27";
-      in rec {
+      in {
         name = "fedora-${version}-x86_64";
         fullName = "Fedora ${version} (x86_64)";
         packagesList = fetchurl rec {
@@ -784,9 +774,7 @@ rec {
       in rec {
         name = "centos-${version}-i386";
         fullName = "CentOS ${version} (i386)";
-        # N.B. Switch to vault.centos.org when the next release comes out
-        # urlPrefix = "http://vault.centos.org/${version}/os/i386";
-        urlPrefix = "http://mirror.centos.org/centos-6/${version}/os/i386";
+        urlPrefix = "mirror://centos/${version}/os/i386";
         packagesList = fetchurl rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
           sha256 = "b826a45082ef68340325c0855f3d2e5d5a4d0f77d28ba3b871791d6f14a97aeb";
@@ -800,9 +788,7 @@ rec {
       in rec {
         name = "centos-${version}-x86_64";
         fullName = "CentOS ${version} (x86_64)";
-        # N.B. Switch to vault.centos.org when the next release comes out
-        # urlPrefix = "http://vault.centos.org/${version}/os/x86_64";
-        urlPrefix = "http://mirror.centos.org/centos-6/${version}/os/x86_64";
+        urlPrefix = "mirror://centos/${version}/os/x86_64";
         packagesList = fetchurl rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
           sha256 = "ed2b2d4ac98d774d4cd3e91467e1532f7e8b0275cfc91a0d214b532dcaf1e979";
@@ -817,9 +803,7 @@ rec {
       in rec {
         name = "centos-${version}-x86_64";
         fullName = "CentOS ${version} (x86_64)";
-        # N.B. Switch to vault.centos.org when the next release comes out
-        # urlPrefix = "http://vault.centos.org/${version}/os/x86_64";
-        urlPrefix = "http://mirror.centos.org/centos-7/${version}/os/x86_64";
+        urlPrefix = "mirror://centos/${version}/os/x86_64";
         packagesList = fetchurl rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
           sha256 = "b686d3a0f337323e656d9387b9a76ce6808b26255fc3a138b1a87d3b1cb95ed5";
@@ -832,7 +816,7 @@ rec {
 
   /* The set of supported Dpkg-based distributions. */
 
-  debDistros = rec {
+  debDistros = {
 
     # Interestingly, the SHA-256 hashes provided by Ubuntu in
     # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
@@ -974,45 +958,79 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1804i386 = {
+      name = "ubuntu-18.04-bionic-i386";
+      fullName = "Ubuntu 18.04 Bionic (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/bionic/main/binary-i386/Packages.xz;
+            sha256 = "0f0v4131kwf7m7f8j3288rlqdxk1k3vqy74b7fcfd6jz9j8d840i";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/bionic/universe/binary-i386/Packages.xz;
+            sha256 = "1v75c0dqr0wp0dqd4hnci92qqs4hll8frqdbpswadgxm5chn91bw";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1804x86_64 = {
+      name = "ubuntu-18.04-bionic-amd64";
+      fullName = "Ubuntu 18.04 Bionic (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/bionic/main/binary-amd64/Packages.xz;
+            sha256 = "1ls81bjyvmfz6i919kszl7xks1ibrh1xqhsk6698ackndkm0wp39";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/bionic/universe/binary-amd64/Packages.xz;
+            sha256 = "1832nqpn4ap95b3sj870xqayrza9in4kih9jkmjax27pq6x15v1r";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian8i386 = {
-      name = "debian-8.10-jessie-i386";
-      fullName = "Debian 8.10 Jessie (i386)";
+      name = "debian-8.11-jessie-i386";
+      fullName = "Debian 8.11 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "1w1gm195dcrndy5486kcv0h9l3br9dqnqyyhmavp4vr5w2zk7amk";
+        sha256 = "0adblarhx50yga900il6m25ng0csa81i3wid1dxxmydbdmri7v7d";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.10-jessie-amd64";
-      fullName = "Debian 8.10 Jessie (amd64)";
+      name = "debian-8.11-jessie-amd64";
+      fullName = "Debian 8.11 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "045700qsrmd3lng2rw8nfs5ci7pf660lwl6alpzkyjikyp6pg7k8";
+        sha256 = "09y1mv4kqllhxpk1ibjsyl5jig5bp0qxw6pp4sn56rglrpygmn5x";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian9i386 = {
-      name = "debian-9.4-stretch-i386";
-      fullName = "Debian 9.4 Stretch (i386)";
+      name = "debian-9.8-stretch-i386";
+      fullName = "Debian 9.8 Stretch (i386)";
       packagesList = fetchurl {
-        url = mirror://debian/dists/stretch/main/binary-i386/Packages.xz;
-        sha256 = "05z5ccg4ysbrgallhai53sh83i0364w7a3fdq84dpv1li059jf10";
+        url = http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-i386/Packages.xz;
+        sha256 = "1dr3skl35iyj85qlc33lq4whippbqf327vnbcyfqqrv6h86k68mw";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian9x86_64 = {
-      name = "debian-9.4-stretch-amd64";
-      fullName = "Debian 9.4 Stretch (amd64)";
+      name = "debian-9.8-stretch-amd64";
+      fullName = "Debian 9.8 Stretch (amd64)";
       packagesList = fetchurl {
-        url = mirror://debian/dists/stretch/main/binary-amd64/Packages.xz;
-        sha256 = "19j0c54b1b9lbk9fv2c2aswdh0s2c3klf97zrlmsz4hs8wm9jylq";
+        url = http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-amd64/Packages.xz;
+        sha256 = "01q00nl47p12n7wx0xclx59wf3zlkzrgj3zxpshyvb91xdnw5sh6";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

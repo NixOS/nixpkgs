@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = name + "-" + version;
 
   src = fetchurl {
-    url = "http://www.zlib.net/${name}/${name}-${version}.tar.gz";
+    url = "https://www.zlib.net/${name}/${name}-${version}.tar.gz";
     sha256 = "0wsgw5vwl23jrnpsvd8v3xcp5k4waw5mk0164fynjhkv58i1dy54";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [zlib] ++ stdenv.lib.optional stdenv.isLinux utillinux;
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
 
   doCheck = stdenv.isLinux;
   checkTarget = "tests";
@@ -28,9 +28,10 @@ stdenv.mkDerivation {
       install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.zlib.net/pigz/;
     description = "A parallel implementation of gzip for multi-core machines";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.zlib;
+    platforms = platforms.unix;
   };
 }

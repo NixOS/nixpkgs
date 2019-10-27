@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "errbot-${version}";
-  version = "5.1.3";
+  pname = "errbot";
+  version = "5.2.0";
 
   src = fetchurl {
-    url = "mirror://pypi/e/errbot/${name}.tar.gz";
-    sha256 = "0nkfq6fx87g7kvxrb5lp8gkb75658cmyffnacpy8jq3a16py3jrr";
+    url = "mirror://pypi/e/errbot/${pname}-${version}.tar.gz";
+    sha256 = "0q5fg113s3gnym38d4y5mlnxw6vrm388zw5mlapf7b2zgx34r053";
   };
 
   disabled = !pythonPackages.isPy3k;

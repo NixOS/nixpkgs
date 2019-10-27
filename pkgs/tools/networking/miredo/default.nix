@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.6";
-  name = "miredo-${version}";
+  pname = "miredo";
 
   buildInputs = [ judy ];
 
   src = fetchurl {
-    url = "http://www.remlab.net/files/miredo/miredo-${version}.tar.xz";
+    url = "https://www.remlab.net/files/miredo/miredo-${version}.tar.xz";
     sha256 = "0j9ilig570snbmj48230hf7ms8kvcwi2wblycqrmhh85lksd49ps";
   };
 

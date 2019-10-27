@@ -1,5 +1,5 @@
 { stdenv, callPackage, fetchurl, fetchpatch, fetchgit
-, ocamlPackages_4_02
+, ocaml-ng
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
 , withInternalSeabios ? true
@@ -50,7 +50,7 @@ callPackage (import ./generic.nix (rec {
 
   # Sources needed to build tools and firmwares.
   xenfiles = optionalAttrs withInternalQemu {
-    "qemu-xen" = {
+    qemu-xen = {
       src = fetchgit {
         url = https://xenbits.xen.org/git-http/qemu-xen.git;
         rev = "refs/tags/qemu-xen-${version}";
@@ -86,7 +86,7 @@ callPackage (import ./generic.nix (rec {
       meta.description = "Xen's fork of upstream Qemu";
     };
   } // optionalAttrs withInternalTraditionalQemu {
-    "qemu-xen-traditional" = {
+    qemu-xen-traditional = {
       src = fetchgit {
         url = https://xenbits.xen.org/git-http/qemu-xen-traditional.git;
         rev = "refs/tags/xen-${version}";
@@ -152,7 +152,7 @@ callPackage (import ./generic.nix (rec {
       meta.description = "Xen's fork of iPXE";
     };
   } // optionalAttrs withLibHVM {
-    "xen-libhvm-dir-remote" = {
+    xen-libhvm-dir-remote = {
       src = fetchgit {
         name = "xen-libhvm";
         url = https://github.com/ts468/xen-libhvm;
@@ -258,4 +258,4 @@ callPackage (import ./generic.nix (rec {
       else throw "this xen has no qemu builtin";
   };
 
-})) ({ ocamlPackages = ocamlPackages_4_02; } // args)
+})) ({ ocamlPackages = ocaml-ng.ocamlPackages_4_02; } // args)

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zeromq3, jdk }:
 
 stdenv.mkDerivation rec {
-  name = "jzmq-${version}";
+  pname = "jzmq";
   version = "3.1.0";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zeromq3 jdk ];
 
   preConfigure = ''
-    ${if stdenv.system == "x86_64-darwin" then
+    ${if stdenv.hostPlatform.system == "x86_64-darwin" then
       '' sed -i -e 's~/Headers~/include~' -e 's~_JNI_INC_SUBDIRS=\".*\"~_JNI_INC_SUBDIRS=\"darwin\"~' configure
       '' else ""}
   '';

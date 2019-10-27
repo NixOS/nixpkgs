@@ -1,29 +1,25 @@
-{ stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ stdenv, fetchFromGitHub, rustPlatform, CoreServices, darwin }:
 
 rustPlatform.buildRustPackage rec {
-  name = "mdbook-${version}";
-  version = "0.1.7";
+  pname = "mdbook";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "mdBook";
-    rev = "ea0b835b38aba9566c1cc50ad119fbbf2c56f59d";
-    sha256 = "0jkyys8dg5mchbj8b73mmzsgv0k0zp7knima9s69s5ybplmd2n8s";
+    rev = "v${version}";
+    sha256 = "0py69267jbs6b7zw191hcs011cm1v58jz8mglqx3ajkffdfl3ghw";
   };
 
-  cargoSha256 = "0w3slfzm29pkyr6zhr7k9rx9mddh42asyb46bzy57j0a2qvan3k4";
+  cargoSha256 = "0qwhc42a86jpvjcaysmfcw8kmwa150lmz01flmlg74g6qnimff5m";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with stdenv.lib; {
     description = "Create books from MarkDown";
     homepage = https://github.com/rust-lang-nursery/mdbook;
-    license = [ licenses.asl20 licenses.mit ];
+    license = [ licenses.mpl20 ];
     maintainers = [ maintainers.havvy ];
     platforms = platforms.all;
-
-    # Because CoreServices needs to be updated,
-    # but Apple won't release the source.
-    broken = stdenv.isDarwin;
   };
 }

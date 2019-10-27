@@ -1,50 +1,48 @@
-{ stdenv, fetchurl, kubectl }:
-let
-  isLinux = stdenv.isLinux;
-  arch = if isLinux
-         then "linux-amd64"
-         else "darwin-amd64";
-  checksum = if isLinux
-             then "0bnjpiivhsxhl45ab32vzf6crv4z8nbq5kcjkvlbcbswdbgp0pq6"
-             else "0smwhj4pmd4k7csz82akbkrkb0j2jxnmb33ifhkqw7n33jhl3aqp";
-  pname = "helm";
-  version = "2.9.0";
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-  src = fetchurl {
-    url = "https://kubernetes-helm.storage.googleapis.com/helm-v${version}-${arch}.tar.gz";
-    sha256 = checksum;
+buildGoPackage rec {
+  version = "2.15.1";
+  pname = "helm";
+
+  src = fetchFromGitHub {
+    owner = "helm";
+    repo = "helm";
+    rev = "v${version}";
+    sha256 = "1afbymgpax7kgjjv1c9xb4dm7gcrhn2g69piamdq1k0ng348k5w0";
   };
 
-  preferLocalBuild = true;
+  goPackagePath = "k8s.io/helm";
+  subPackages = [ "cmd/helm" "cmd/tiller" "cmd/rudder" ];
 
-  buildInputs = [ ];
+  goDeps = ./deps.nix;
 
-  propagatedBuildInputs = [ kubectl ];
-
-  phases = [ "buildPhase" "installPhase" ];
-
-  buildPhase = ''
-    mkdir -p $out/bin
+  # Thsese are the original flags from the helm makefile
+  buildFlagsArray = ''
+    -ldflags=-X k8s.io/helm/pkg/version.Version=v${version} -X k8s.io/helm/pkg/version.GitTreeState=clean -X k8s.io/helm/pkg/version.BuildMetadata=
+    -w
+    -s
   '';
 
-  installPhase = ''
-    tar -xvzf $src
-    cp ${arch}/helm $out/bin/${pname}
-    chmod +x $out/bin/${pname}
-    mkdir -p $out/share/bash-completion/completions
-    mkdir -p $out/share/zsh/site-functions
-    $out/bin/helm completion bash > $out/share/bash-completion/completions/helm
-    $out/bin/helm completion zsh > $out/share/zsh/site-functions/_helm
+  preBuild = ''
+    # This is a hack(?) to flatten the dependency tree the same way glide or dep would
+    # Otherwise you'll get errors like
+    # have DeepCopyObject() "k8s.io/kubernetes/vendor/k8s.io/apimachinery/pkg/runtime".Object
+    # want DeepCopyObject() "k8s.io/apimachinery/pkg/runtime".Object
+    rm -rf $NIX_BUILD_TOP/go/src/k8s.io/kubernetes/vendor
+    rm -rf $NIX_BUILD_TOP/go/src/k8s.io/apiextensions-apiserver/vendor
+  '';
+
+  postInstall = ''
+    mkdir -p $bin/share/bash-completion/completions
+    mkdir -p $bin/share/zsh/site-functions
+    $bin/bin/helm completion bash > $bin/share/bash-completion/completions/helm
+    $bin/bin/helm completion zsh > $bin/share/zsh/site-functions/_helm
   '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/kubernetes/helm;
     description = "A package manager for kubernetes";
     license = licenses.asl20;
-    maintainers = [ maintainers.rlupton20 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ maintainers.rlupton20 maintainers.edude03 ];
   };
 }

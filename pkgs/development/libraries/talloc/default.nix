@@ -1,39 +1,41 @@
 { stdenv, fetchurl, python, pkgconfig, readline, libxslt
-, docbook_xsl, docbook_xml_dtd_42
+, docbook_xsl, docbook_xml_dtd_42, fixDarwinDylibNames
+, wafHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "talloc-2.1.12";
+  name = "talloc-2.1.14";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${name}.tar.gz";
-    sha256 = "0jv0ri9vj93fczzgl7rn7xvnfgl2kfx4x85cr8h8v52yh7v0qz4q";
+    sha256 = "1kk76dyav41ip7ddbbf04yfydb4jvywzi2ps0z2vla56aqkn11di";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    python readline libxslt docbook_xsl docbook_xml_dtd_42
-  ];
+  nativeBuildInputs = [ pkgconfig fixDarwinDylibNames python wafHook
+                        docbook_xsl docbook_xml_dtd_42 ];
+  buildInputs = [ readline libxslt ];
 
-  preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
-  '';
+  wafPath = "buildtools/bin/waf";
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--enable-talloc-compat1"
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
   ];
 
+  # this must not be exported before the ConfigurePhase otherwise waf whines
+  preBuild = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    export NIX_CFLAGS_LINK="-no-pie -shared";
+  '';
+
   postInstall = ''
-    ar q $out/lib/libtalloc.a bin/default/talloc_[0-9]*.o
+    ${stdenv.cc.targetPrefix}ar q $out/lib/libtalloc.a bin/default/talloc_[0-9]*.o
   '';
 
   meta = with stdenv.lib; {
     description = "Hierarchical pool based memory allocator with destructors";
-    homepage = http://tdb.samba.org/;
+    homepage = https://tdb.samba.org/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

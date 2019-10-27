@@ -1,23 +1,33 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, libxml2, intltool, itstool }:
+, libxml2, gettext, itstool, meson, ninja, python3
+, vala, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-tetravex-${version}";
-  version = "3.22.0";
+  pname = "gnome-tetravex";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-tetravex/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0a6d7ff5ffcd6c05454a919d46a2e389d6b5f87bc80e82c52c2f20d9d914e18d";
+    url = "mirror://gnome/sources/gnome-tetravex/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "05i9y6x9ai7fay0khr4zb4ji92qs49v88p3lqx9lac8hz04dnvg0";
   };
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "gnome-tetravex"; attrPath = "gnome3.gnome-tetravex"; };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    gtk3 wrapGAppsHook intltool itstool libxml2 gnome3.defaultIconTheme
+  nativeBuildInputs = [
+    wrapGAppsHook itstool libxml2 gnome3.adwaita-icon-theme
+    pkgconfig gettext meson ninja python3 vala desktop-file-utils
   ];
+  buildInputs = [
+    gtk3
+  ];
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Tetravex;

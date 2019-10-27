@@ -9,7 +9,7 @@ let
   confFile = pkgs.writeText "radicale.conf" cfg.config;
 
   # This enables us to default to version 2 while still not breaking configurations of people with version 1
-  defaultPackage = if versionAtLeast config.system.nixos.stateVersion "17.09" then {
+  defaultPackage = if versionAtLeast config.system.stateVersion "17.09" then {
     pkg = pkgs.radicale2;
     text = "pkgs.radicale2";
   } else {
@@ -35,13 +35,13 @@ in
       defaultText = defaultPackage.text;
       description = ''
         Radicale package to use. This defaults to version 1.x if
-        <literal>system.nixos.stateVersion &lt; 17.09</literal> and version 2.x
+        <literal>system.stateVersion &lt; 17.09</literal> and version 2.x
         otherwise.
       '';
     };
 
     services.radicale.config = mkOption {
-      type = types.string;
+      type = types.str;
       default = "";
       description = ''
         Radicale configuration, this will set the service
@@ -50,7 +50,7 @@ in
     };
 
     services.radicale.extraArgs = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       description = "Extra arguments passed to the Radicale daemon.";
     };
@@ -59,7 +59,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "radicale";
         uid = config.ids.uids.radicale;
         description = "radicale user";
@@ -67,7 +67,7 @@ in
         createHome = true;
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "radicale";
         gid = config.ids.gids.radicale;
       };

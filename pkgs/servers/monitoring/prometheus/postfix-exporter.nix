@@ -4,7 +4,7 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "postfix_exporter-${version}";
+  pname = "postfix_exporter";
   version = "0.1.2";
 
   goPackagePath = "github.com/kumina/postfix_exporter";
@@ -51,6 +51,6 @@ buildGoPackage rec {
     inherit (src.meta) homepage;
     description = "A Prometheus exporter for Postfix";
     license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with maintainers; [ willibutz globin ];
   };
 }

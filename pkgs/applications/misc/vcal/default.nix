@@ -1,17 +1,17 @@
 { stdenv, lib, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "vcal-${version}";
-  version = "2.7";
+  pname = "vcal";
+  version = "2.8";
 
   src = fetchurl {
-    url    = "http://waynemorrison.com/software/vcal";
-    sha256 = "0fknrlad7vb84ngh242xjaq96vkids85ksnxaflk2cr9wcwxfmix";
+    url    = "https://waynemorrison.com/software/vcal";
+    sha256 = "0jrm0jzqxb1xjp24hwbzlxsh22gjssay9gj4zszljzdm68r5afvc";
   };
 
   nativeBuildInputs = [ perl ]; # for pod2man
 
-  unpackPhase = ":";
+  dontUnpack = true;
   dontBuild = true;
   installPhase = ''
     runHook preInstall
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substitute ${src} $out/bin/vcal \
       --replace /usr/bin/perl ${perl}/bin/perl
     chmod 0755 $out/bin/*
-    pod2man -n vcal ${src} > $out/share/man/man1/vcal.1
+    pod2man --name=vcal --release=${version} ${src} > $out/share/man/man1/vcal.1
 
     runHook postInstall
   '';
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Parser for VCalendar and ICalendar files, usable from the command line";
-    homepage = http://waynemorrison.com/software/;
-    license = licenses.unfree; # "These are made publicly available for personal use."
+    homepage = https://waynemorrison.com/software/;
+    license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

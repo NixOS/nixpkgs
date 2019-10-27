@@ -5,11 +5,11 @@
 let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation  rec {
-  name = "rockbox-utility-${version}";
+  pname = "rockbox-utility";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "http://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
+    url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
     sha256 = "0k3ycga3b0jnj13whwiip2l0gx32l50pnbh7kfima87nq65aaa5w";
   };
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation  rec {
 
   meta = with stdenv.lib; {
     description = "Open source firmware for mp3 players";
-    homepage = http://www.rockbox.org;
+    homepage = https://www.rockbox.org;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu jgeerds ];
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

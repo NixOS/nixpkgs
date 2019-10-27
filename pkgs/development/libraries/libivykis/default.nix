@@ -1,13 +1,13 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, file, protobufc }:
 
 stdenv.mkDerivation rec {
-  name = "libivykis-${version}";
+  pname = "libivykis";
 
-  version = "0.42.1";
+  version = "0.42.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/libivykis/${version}/ivykis-${version}.tar.gz";
-    sha256 = "0c90cfpxipw2m8i3ajr7vy7lb8gvcz2kh5n8sd542zphr4na8whq";
+    sha256 = "0abi0rc3wnncvr68hy6rmzp96x6napd7fs1mff20dr8lb0jyvy3f";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       notification facilities
     '';
     license = licenses.zlib;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

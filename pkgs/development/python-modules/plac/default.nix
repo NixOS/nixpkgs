@@ -4,13 +4,12 @@
 , python
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "plac";
-  version = "0.9.6";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16zqpalx4i1n1hrcvaj8sdixapy2g76fc13bbahz0xc106d72gxs";
+    sha256 = "10f0blwxn7k2qvd0vs4300jxb8n9r7jhngf9bx9bfxia8akwy5kw";
   };
 
   checkPhase = ''

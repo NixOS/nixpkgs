@@ -1,26 +1,30 @@
-{ stdenv, fetchFromGitHub,
-  gettext, glib, json-glib, libelf, pkgconfig, scons, sphinx, utillinux }:
+{ stdenv, fetchFromGitHub
+, gettext, pkgconfig, scons
+, glib, json-glib, libelf, sphinx, utillinux }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "rmlint-${version}";
-  version = "2.6.1";
+  pname = "rmlint";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "rmlint";
     rev = "v${version}";
-    sha256 = "1j09qk3zypw4my713q9g36kq37ggqd5v9vrs3h821p6p3qmmkdn8";
+    sha256 = "1b5cziam14h80xrfb285fmfrzz2rligxcpsq1xsig14xf4l2875i";
   };
 
-  configurePhase = "scons config";
+  CFLAGS="-I${stdenv.lib.getDev utillinux}/include";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gettext glib json-glib libelf scons sphinx utillinux ];
+  nativeBuildInputs = [
+    pkgconfig sphinx gettext scons
+  ];
 
-  buildPhase = "scons";
+  buildInputs = [
+    glib json-glib libelf utillinux
+  ];
 
-  installPhase = "scons --prefix=$out install";
+  prefixKey = "--prefix=";
 
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";

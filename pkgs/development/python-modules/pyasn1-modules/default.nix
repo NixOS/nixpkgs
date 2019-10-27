@@ -1,17 +1,30 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyasn1, isPyPy }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pyasn1
+, pytest
+}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyasn1-modules";
-  version = "0.2.1";
-  disabled = isPyPy;
+  version = "0.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "af00ea8f2022b6287dc375b2c70f31ab5af83989fc6fe9eacd4976ce26cd7ccc";
+    sha256 = "0c35a52e00b672f832e5846826f1fb7507907f7d52fba6faa9e3c4cbe874fe4b";
   };
 
   propagatedBuildInputs = [ pyasn1 ];
+
+  checkInputs = [
+    pytest
+  ];
+
+  # running tests through setup.py fails only for python2 for some reason:
+  # AttributeError: 'module' object has no attribute 'suitetests'
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with stdenv.lib; {
     description = "A collection of ASN.1-based protocols modules";

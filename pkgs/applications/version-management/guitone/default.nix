@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, fetchmtn, qt4, qmake4Hook, pkgconfig, graphviz }:
+{ stdenv, fetchmtn, qt4, qmake4Hook, pkgconfig, graphviz }:
 
 let version = "1.0-mtn-head"; in
-stdenv.mkDerivation rec {
-  name = "guitone-${version}";
+stdenv.mkDerivation {
+  pname = "guitone";
+  inherit version;
 
   #src = fetchurl {
   #  url = "${meta.homepage}/count.php/from=default/${version}/${name}.tgz";
@@ -25,8 +26,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Qt4 based GUI for monotone";
-    homepage = http://guitone.thomaskeller.biz;
+    homepage = https://guitone.thomaskeller.biz;
     downloadPage = https://code.monotone.ca/p/guitone/;
+    license = stdenv.lib.licenses.gpl3;
     inherit (qt4.meta) platforms;
   };
 }

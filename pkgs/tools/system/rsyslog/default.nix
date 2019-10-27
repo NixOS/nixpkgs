@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
-, libkrb5 ? null, systemd ? null, jemalloc ? null, mysql ? null, postgresql ? null
+, libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
 , libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
-, libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null
+, libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null, mongoc ? null
 }:
 
 with stdenv.lib;
@@ -11,22 +11,23 @@ let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
-  name = "rsyslog-8.21.0";
+  pname = "rsyslog";
+  version = "8.1910.0";
 
   src = fetchurl {
-    url = "http://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
-    sha256 = "1arrhc9fw79sp7dxkf7gyfwibyr2i1000pfds5c7n43mgglgvcdx";
+    url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
+    sha256 = "14qczsj12spx0m3dz1pkxnacwi5njr0syamnmi1rg8ri5xlyw682";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc 
+    fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
     postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
-    rabbitmq-c hiredis
-  ] ++ stdenv.lib.optional (mysql != null) mysql.connector-c
+    rabbitmq-c hiredis mongoc
+  ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
     ++ stdenv.lib.optional stdenv.isLinux systemd;
 
   hardeningDisable = [ "format" ];
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     (mkFlag false                     "valgrind")
     (mkFlag false                     "diagtools")
     (mkFlag true                      "usertools")
-    (mkFlag (mysql != null)           "mysql")
+    (mkFlag (libmysqlclient != null)  "mysql")
     (mkFlag (postgresql != null)      "pgsql")
     (mkFlag (libdbi != null)          "libdbi")
     (mkFlag (net_snmp != null)        "snmp")
@@ -106,10 +107,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://www.rsyslog.com/;
+    homepage = https://www.rsyslog.com/;
     description = "Enhanced syslog implementation";
+    changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${version}/ChangeLog";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

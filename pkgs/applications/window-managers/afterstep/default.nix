@@ -2,12 +2,12 @@
 , libjpeg, libtiff, libpng, freetype
 , fltk, gtk
 , libX11, libXext, libICE
-, dbus, dbus_libs
+, dbus
 }:
 
 stdenv.mkDerivation rec {
 
-  name = "afterstep-${version}";
+  pname = "afterstep";
   version = "2.2.12";
   sourceName = "AfterStep-${version}";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libjpeg libtiff libpng freetype fltk gtk libX11 libXext libICE dbus dbus_libs ];
+  buildInputs = [ libjpeg libtiff libpng freetype fltk gtk libX11 libXext libICE dbus dbus ];
 
   # A strange type of bug: dbus is not immediately found by pkgconfig
   preConfigure = ''

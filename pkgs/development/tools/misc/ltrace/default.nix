@@ -1,6 +1,6 @@
 { stdenv, fetchurl, elfutils, libunwind }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ltrace-0.7.3";
 
   src = fetchurl {
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Library call tracer";
     homepage = https://www.ltrace.org/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.gpl2;
   };
 }

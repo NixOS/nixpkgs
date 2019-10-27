@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, ace
+{ stdenv, fetchFromGitHub, cmake, ace
 }:
 
 stdenv.mkDerivation rec {
-  name = "yarp-${version}";
+  pname = "yarp";
   version = "2.3.70.2";
   src = fetchFromGitHub {
     owner = "robotology";

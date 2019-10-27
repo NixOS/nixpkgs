@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wget, buildPythonPackage, isPy3k }:
+{ stdenv, fetchurl, buildPythonPackage, isPy3k }:
 
 with stdenv.lib;
 

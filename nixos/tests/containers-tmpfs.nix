@@ -3,11 +3,11 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "containers-tmpfs";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ ckampka ];
+    maintainers = [ kampka ];
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;

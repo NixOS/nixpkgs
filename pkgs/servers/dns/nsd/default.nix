@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, libevent, openssl
+{ stdenv, fetchurl, libevent, openssl
 , bind8Stats       ? false
 , checking         ? false
 , ipv6             ? true
@@ -15,11 +15,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nsd-4.1.21";
+  pname = "nsd";
+  version = "4.2.2";
 
   src = fetchurl {
-    url = "http://www.nlnetlabs.nl/downloads/nsd/${name}.tar.gz";
-    sha256 = "1gfjdgb5nc0nrbpdm36ngxml302khl2lnwkykl3q45byl0sbjn3q";
+    url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1ys608jyp5scc957q4brm094c97sxlwymina7d2nvzi51aa37cw3";
   };
 
   prePatch = ''

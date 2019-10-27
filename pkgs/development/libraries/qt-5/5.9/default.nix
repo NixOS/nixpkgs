@@ -9,15 +9,14 @@ top-level attribute to `top-level/all-packages.nix`.
 1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
 2. From the top of the Nixpkgs tree, run
    `./maintainers/scripts/fetch-kde-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
-3. Update `qtCompatVersion` below if the minor version number changes.
-4. Check that the new packages build correctly.
-5. Commit the changes and open a pull request.
+3. Check that the new packages build correctly.
+4. Commit the changes and open a pull request.
 
 */
 
 {
   newScope,
-  stdenv, fetchurl, makeSetupHook, makeWrapper,
+  stdenv, fetchurl, fetchpatch, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
 
@@ -31,29 +30,75 @@ with stdenv.lib;
 
 let
 
-  qtCompatVersion = "5.9";
+  qtCompatVersion = srcs.qtbase.version;
 
   mirror = "http://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
+    qtbase = [
+      ./qtbase.patch
+      ./qtbase-fixguicmake.patch
+      ./qtbase-openssl_1_1.patch
+    ];
     qtdeclarative = [ ./qtdeclarative.patch ];
-    qtscript = [ ./qtscript.patch ];
+    qtscript = [
+      ./qtscript.patch
+      # needed due to changes in gcc 8.3, see https://bugreports.qt.io/browse/QTBUG-74196
+      # fixed in qtscript 5.12.2
+      (fetchpatch {
+        url = "https://github.com/qt/qtscript/commit/97ec1d1882a83c23c91f0f7daea48e05858d8c32.diff";
+        sha256 = "0khrapq13xzvxckzc9l7gqyjwibyd98vyqy6gmyhvsbm2kq8n6wi";
+      })
+    ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+    qtwebengine = [
+      ./qtwebengine-no-build-skip.patch
+      # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/issues/707
+      # https://bugreports.qt.io/browse/QTBUG-77037
+      (fetchpatch {
+        name = "fix-build-with-pulseaudio-13.0.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
+        sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
+      })
+    ] ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
+      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
+  
     qtwebkit = [ ./qtwebkit.patch ];
-  };
+    qtvirtualkeyboard = [
+      (fetchpatch {
+        name = "CVE-2018-19865-A.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtvirtualkeyboard.git;a=patch;h=61780a113f02b3c62fb14516fe8ea47d91f9ed9a";
+        sha256 = "0jd4nzaz9ndm9ryvrkav7kjs437l661288diklhbmgh249f8gki0";
+      })
+      (fetchpatch {
+        name = "CVE-2018-19865-B.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtvirtualkeyboard.git;a=patch;h=c0ac7a4c684e2fed60a72ceee53da89eea3f95a7";
+        sha256 = "0yvxrx5vx6845vgnq8ml3q93y61py5j0bvhqj7nqvpbmyj1wy1p3";
 
-  mkDerivation =
-    import ../mkDerivation.nix
-    { inherit stdenv; inherit (stdenv) lib; }
-    { inherit debug; };
+      })
+      (fetchpatch {
+        name = "CVE-2018-19865-C.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtvirtualkeyboard.git;a=patch;h=a2e7b8412f56841e12ed20a39f4a38e32d3c1e30";
+        sha256 = "1yijysa9gy5xbxndx5ri0dkfrjqja0d1bsx52qz4mhzi4pkbib02";
+      })
+    ];
+
+  };
 
   qtModule =
     import ../qtModule.nix
-    { inherit mkDerivation perl; inherit (stdenv) lib; }
+    {
+      inherit perl;
+      inherit (stdenv) lib;
+      # Use a variant of mkDerivation that does not include wrapQtApplications
+      # to avoid cyclic dependencies between Qt modules.
+      mkDerivation =
+        import ../mkDerivation.nix
+        { inherit (stdenv) lib; inherit debug; wrapQtAppsHook = null; }
+        stdenv.mkDerivation;
+    }
     { inherit self srcs patches; };
 
   addPackages = self: with self;
@@ -61,7 +106,11 @@ let
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
     in {
 
-      inherit mkDerivation;
+      mkDerivationWith =
+        import ../mkDerivation.nix
+        { inherit (stdenv) lib; inherit debug; inherit (self) wrapQtAppsHook; };
+
+      mkDerivation = mkDerivationWith stdenv.mkDerivation;
 
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
@@ -82,6 +131,7 @@ let
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
+      qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
@@ -113,11 +163,15 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
-          inherit (stdenv) isDarwin;
-          qtbase_dev = self.qtbase.dev;
-          fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
+          fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;
+
+      wrapQtAppsHook = makeSetupHook {
+        deps =
+          [ self.qtbase.dev makeWrapper ]
+          ++ optional stdenv.isLinux self.qtwayland.dev;
+      } ../hooks/wrap-qt-apps-hook.sh;
     };
 
    self = makeScope newScope addPackages;

@@ -1,4 +1,4 @@
-{ stdenv, pkgs, cores }:
+{ stdenv, pkgs, cores, runtimeShell }:
 
 assert cores != [];
 
@@ -7,7 +7,7 @@ with pkgs.lib;
 let
 
   script = exec: ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     nohup sh -c "pkill -SIGTSTP kodi" &
     # https://forum.kodi.tv/showthread.php?tid=185074&pid=1622750#pid1622750
     nohup sh -c "sleep 10 && ${exec} '$@' -f;pkill -SIGCONT kodi"
@@ -17,8 +17,8 @@ let
 
 in
 
-stdenv.mkDerivation rec {
-  name = "kodi-retroarch-advanced-launchers-${version}";
+stdenv.mkDerivation {
+  pname = "kodi-retroarch-advanced-launchers";
   version = "0.2";
 
   dontBuild = true;

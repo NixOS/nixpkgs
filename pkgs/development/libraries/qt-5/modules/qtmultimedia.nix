@@ -1,6 +1,5 @@
 { qtModule, stdenv, qtbase, qtdeclarative, pkgconfig
 , alsaLib, gstreamer, gst-plugins-base, libpulseaudio
-, darwin
 }:
 
 with stdenv.lib;

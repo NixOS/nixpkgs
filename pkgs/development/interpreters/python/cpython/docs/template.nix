@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl, lib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pythonMAJORMINOR-docs-TYPE-VERSION";
   src = fetchurl {
     url = URL;
@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
     cp -R ./ $out/share/doc/pythonMAJORMINOR/TYPE
   '';
   meta = {
-    maintainers = [ lib.maintainers.chaoflow ];
+    maintainers = [ ];
   };
 }

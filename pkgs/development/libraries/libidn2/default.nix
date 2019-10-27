@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, libiconv, libunistring, help2man, ronn, buildPackages }:
+{ fetchurl, stdenv, libiconv, libunistring, help2man, buildPackages }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libidn2-${version}";
-  version = "2.0.4";
+  pname = "libidn2";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gnu/libidn/${name}.tar.gz";
-    sha256 = "1w6jycr5bbawimhb72wxf9ic92yrhfadahfj0b70myw5n81nnjv4";
+    url = "mirror://gnu/gnu/libidn/${pname}-${version}.tar.gz";
+    sha256 = "1zl1cc2xgxw31pdhvhr5ij36x4vvpy16jq667rspin06nlr4fwzw";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];

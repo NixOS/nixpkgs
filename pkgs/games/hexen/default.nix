@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "hexen-0.2.3";
   src = fetchurl {
-    url = http://www.libsdl.org/projects/hexen/src/hexen-0.2.3.tar.gz;
+    url = https://www.libsdl.org/projects/hexen/src/hexen-0.2.3.tar.gz;
     sha256 = "c1433e930f2003c5f817f935406bb28ba15298a15b1c11f83f42df3e9f1f3bc4";
   };
 

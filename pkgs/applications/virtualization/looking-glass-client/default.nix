@@ -1,24 +1,26 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
-, libX11, freefont_ttf
+{ stdenv, fetchFromGitHub, fetchpatch
+, cmake, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
+, libX11, freefont_ttf, nettle, libconfig, wayland, libpthreadstubs, libXdmcp
+, libXfixes, libbfd
 }:
 
 stdenv.mkDerivation rec {
-  name = "looking-glass-client-${version}";
-  version = "a10";
+  pname = "looking-glass-client";
+  version = "B1";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "10jxnkrvskjzkg86iz3hnb5v91ykzx6pvcnpy1v4436g5f2d62wn";
+    sha256 = "0vykv7yjz4fima9d82m83acd8ab72nq4wyzyfs1c499i27wz91ia";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
     SDL SDL2 SDL2_ttf openssl spice-protocol fontconfig
-    libX11 freefont_ttf
+    libX11 freefont_ttf nettle libconfig wayland libpthreadstubs
+    libXdmcp libXfixes libbfd cmake
   ];
 
   enableParallelBuilding = true;
@@ -26,8 +28,8 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/client";
 
   installPhase = ''
-    mkdir -p $out
-    mv bin $out/
+    mkdir -p $out/bin
+    mv looking-glass-client $out/bin
   '';
 
   meta = with stdenv.lib; {
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://looking-glass.hostfission.com/;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pneumaticat ];
+    maintainers = [ maintainers.alexbakker ];
     platforms = [ "x86_64-linux" ];
   };
 }

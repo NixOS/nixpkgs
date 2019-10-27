@@ -1,31 +1,37 @@
-{ stdenv, fetchFromGitHub, qtbase, qttools, qmake, libGLU_combined, openssl, zlib }:
+{ stdenv, fetchFromGitHub, qtbase, qttools, qmake, wrapQtAppsHook }:
 
-stdenv.mkDerivation rec {
-  name = "librepcb-${version}";
-  version = "20171229";
+stdenv.mkDerivation {
+  pname = "librepcb";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "LibrePCB";
     repo = "LibrePCB";
     fetchSubmodules = true;
-    rev = "4efb06fa42755abc5e606da4669cc17e8de2f8c6";
-    sha256 = "0r33fm1djqpy0dzvnf5gv2dfh5nj2acaxb7w4cn8yxdgrazjf7ak";
+    rev = "acdd94d9d2310f79215125b999153e9da88a9376";
+    sha256 = "1bbl01rp75sl6k1cmch7x90v00lck578xvqmb856s9fx75bdgnv5";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
   buildInputs = [ qtbase ];
 
-	# LibrePCB still supports QT below 5.9. But some code lines break the build, so they are removed by this patch so that the software builds.
-  patches = [ ./fix-2017-12.patch ];
-
   qmakeFlags = ["-r"];
+
+  postInstall = ''
+      mkdir -p $out/share/librepcb/fontobene
+      cp share/librepcb/fontobene/newstroke.bene $out/share/librepcb/fontobene/
+    '';
+
+  preFixup = ''
+    wrapQtApp $out/bin/librepcb
+  '';
 
   meta = with stdenv.lib; {
     description = "A free EDA software to develop printed circuit boards";
-    homepage = http://librepcb.org/;
+    homepage = https://librepcb.org/;
     maintainers = with maintainers; [ luz ];
     license = licenses.gpl3;
     platforms = platforms.linux;

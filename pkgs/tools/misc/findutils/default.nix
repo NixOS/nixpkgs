@@ -1,28 +1,28 @@
 { stdenv, fetchurl
 , coreutils
-, buildPlatform, hostPlatform
 }:
 
-let inherit (stdenv.lib) optionals; in
-
 stdenv.mkDerivation rec {
-  name = "findutils-4.6.0";
+  pname = "findutils";
+  version = "4.7.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/${name}.tar.gz";
-    sha256 = "178nn4dl7wbcw499czikirnkniwnx36argdnqgz4ik9i6zvwkm6y";
+    url = "mirror://gnu/findutils/${pname}-${version}.tar.xz";
+    sha256 = "16kqz9yz98dasmj70jwf5py7jk558w96w0vgp3zf9xsqk3gzpzn5";
   };
 
-  patches = [ ./memory-leak.patch ./no-install-statedir.patch ];
+  patches = [
+    ./no-install-statedir.patch
+  ];
 
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
   doCheck
-    =  !hostPlatform.isDarwin
-    && !(hostPlatform.libc == "glibc" && hostPlatform.isi686)
-    && (hostPlatform.libc != "musl")
-    && hostPlatform == buildPlatform;
+    =  !stdenv.hostPlatform.isDarwin
+    && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
+    && (stdenv.hostPlatform.libc != "musl")
+    && stdenv.hostPlatform == stdenv.buildPlatform;
 
   outputs = [ "out" "info" ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.gnu.org/software/findutils/;
+    homepage = https://www.gnu.org/software/findutils/;
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
 
     longDescription = ''

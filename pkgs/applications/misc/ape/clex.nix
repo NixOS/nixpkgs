@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "attempto-clex-${version}";
+  pname = "attempto-clex";
   version = "5133afe";
 
   src = fetchFromGitHub {

@@ -34,21 +34,11 @@ with lib;
 
     services.dbus.packages = [ pkgs.udisks2 ];
 
-    system.activationScripts.udisks2 =
-      ''
-        mkdir -m 0755 -p /var/lib/udisks2
-      '';
+    systemd.tmpfiles.rules = [ "d /var/lib/udisks2 0755 root root -" ];
 
     services.udev.packages = [ pkgs.udisks2 ];
-    
-    systemd.services.udisks2 = {
-      description = "Udisks2 service";
-      serviceConfig = {
-        Type = "dbus";
-        BusName = "org.freedesktop.UDisks2";
-        ExecStart = "${pkgs.udisks2}/libexec/udisks2/udisksd --no-debug";
-      };
-    };
+
+    systemd.packages = [ pkgs.udisks2 ];
   };
 
 }

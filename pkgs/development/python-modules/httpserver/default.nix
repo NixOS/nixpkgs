@@ -1,7 +1,6 @@
 { lib, fetchPypi, buildPythonPackage, docopt, pythonOlder }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "httpserver";
   version = "1.1.0";
 

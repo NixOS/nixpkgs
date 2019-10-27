@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   baseName = "gyre-fonts";
@@ -25,8 +25,8 @@ in fetchzip {
       covering all modern European languages and then some
     '';
     homepage = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html#Readings";
-    license = stdenv.lib.licenses.lppl13c;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ bergey ];
+    license = lib.licenses.lppl13c;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bergey ];
   };
 }

@@ -30,9 +30,9 @@ with lib;
 
   config = mkIf config.services.gnome3.gnome-online-accounts.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gnome-online-accounts ];
+    environment.systemPackages = [ pkgs.gnome-online-accounts ];
 
-    services.dbus.packages = [ pkgs.gnome3.gnome-online-accounts ];
+    services.dbus.packages = [ pkgs.gnome-online-accounts ];
 
   };
 

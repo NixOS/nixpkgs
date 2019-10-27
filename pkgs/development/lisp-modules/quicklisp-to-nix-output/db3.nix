@@ -1,5 +1,5 @@
-args @ { fetchurl, ... }:
-rec {
+{ fetchurl, ... }:
+{
   baseName = ''db3'';
   version = ''cl-20150302-git'';
 

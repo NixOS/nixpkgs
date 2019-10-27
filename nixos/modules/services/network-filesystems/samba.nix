@@ -45,6 +45,7 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
+      after = [ "network.target" ];
       requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
@@ -86,10 +87,10 @@ in
 
           <note>
             <para>If you use the firewall consider adding the following:</para>
-            <programlisting>
-              networking.firewall.allowedTCPPorts = [ 139 445 ];
-              networking.firewall.allowedUDPPorts = [ 137 138 ];
-            </programlisting>
+          <programlisting>
+            networking.firewall.allowedTCPPorts = [ 139 445 ];
+            networking.firewall.allowedUDPPorts = [ 137 138 ];
+          </programlisting>
           </note>
         '';
       };
@@ -214,12 +215,10 @@ in
             }
           ];
         # Always provide a smb.conf to shut up programs like smbclient and smbspool.
-        environment.etc = singleton
-          { source =
-              if cfg.enable then configFile
-              else pkgs.writeText "smb-dummy.conf" "# Samba is disabled.";
-            target = "samba/smb.conf";
-          };
+        environment.etc."samba/smb.conf".source = mkOptionDefault (
+          if cfg.enable then configFile
+          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
+        );
       }
 
       (mkIf cfg.enable {
@@ -236,10 +235,10 @@ in
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
           # for correct use with systemd
           services = {
-            "samba-smbd" = daemonService "smbd" "";
-            "samba-nmbd" = mkIf cfg.enableNmbd (daemonService "nmbd" "");
-            "samba-winbindd" = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
-            "samba-setup" = {
+            samba-smbd = daemonService "smbd" "";
+            samba-nmbd = mkIf cfg.enableNmbd (daemonService "nmbd" "");
+            samba-winbindd = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
+            samba-setup = {
               description = "Samba Setup Task";
               script = setupScript;
               unitConfig.RequiresMountsFor = "/var/lib/samba";

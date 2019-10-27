@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''trivial-mimes'';
-  version = ''20180131-git'';
+  version = ''20190710-git'';
 
   description = ''Tiny library to detect mime types in files.'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-mimes/2018-01-31/trivial-mimes-20180131-git.tgz'';
-    sha256 = ''0wmnfiphrzr5br4mzds7lny36rqrdxv707r4frzygx7j0llrvs1b'';
+    url = ''http://beta.quicklisp.org/archive/trivial-mimes/2019-07-10/trivial-mimes-20190710-git.tgz'';
+    sha256 = ''0z6m26gs0ilqs183xb4a5acpka9md10szbbdpm5xzjrhl15nb4jn'';
   };
 
   packageName = "trivial-mimes";
@@ -19,8 +19,8 @@ rec {
 }
 /* (SYSTEM trivial-mimes DESCRIPTION
     Tiny library to detect mime types in files. SHA256
-    0wmnfiphrzr5br4mzds7lny36rqrdxv707r4frzygx7j0llrvs1b URL
-    http://beta.quicklisp.org/archive/trivial-mimes/2018-01-31/trivial-mimes-20180131-git.tgz
-    MD5 9c91e72a8ee2455f9c5cbba1f7d2fcef NAME trivial-mimes FILENAME
-    trivial-mimes DEPS NIL DEPENDENCIES NIL VERSION 20180131-git SIBLINGS NIL
+    0z6m26gs0ilqs183xb4a5acpka9md10szbbdpm5xzjrhl15nb4jn URL
+    http://beta.quicklisp.org/archive/trivial-mimes/2019-07-10/trivial-mimes-20190710-git.tgz
+    MD5 b7fa1cb9382a2a562343c6ca87b1b4ac NAME trivial-mimes FILENAME
+    trivial-mimes DEPS NIL DEPENDENCIES NIL VERSION 20190710-git SIBLINGS NIL
     PARASITES NIL) */

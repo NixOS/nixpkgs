@@ -1,24 +1,25 @@
 { stdenv, fetchFromGitHub, cmake
-, qt5, libidn, qca2-qt5, libXScrnSaver, hunspell
-, libgcrypt, libotr, html-tidy, libgpgerror
+, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
+, libidn, qca2-qt5, qtkeychain, libXScrnSaver, hunspell
+, libgcrypt, libotr, html-tidy, libgpgerror, libsignal-protocol-c
 }:
 
 stdenv.mkDerivation rec {
-  name = "psi-plus-${version}";
-  version = "1.2.235";
+  pname = "psi-plus";
+  version = "1.4.904";
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
-    rev = "${version}";
-    sha256 = "0rc65gs6m3jxg407r99kikdylvrar5mq7x5m66ma604yk5igwg47";
+    rev = version;
+    sha256 = "1bs7yk3qp91sm8nb9gna8vm59381afn1wfs7aii9yi29bhx6fw9h";
   };
 
   resources = fetchFromGitHub {
     owner = "psi-plus";
     repo = "resources";
-    rev = "8f5038380e1be884b04b5a1ad3cc3385e793f668";
-    sha256 = "1b8a2aixg966fzjwp9hz51rc31imyvpx014mp2fsm47k8na4470d";
+    rev = "182c92ca0bcc055579d8c91bccba9efe157e77a9";
+    sha256 = "06k7q63cxpifpzjnlw1snclkr2mwf9fh71cgfd40n7jgzswzwhpb";
   };
 
   postUnpack = ''
@@ -32,9 +33,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    qt5.qtbase qt5.qtmultimedia qt5.qtx11extras qt5.qttools qt5.qtwebkit
-    libidn qca2-qt5 libXScrnSaver hunspell
-    libgcrypt libotr html-tidy libgpgerror
+    qtbase qtmultimedia qtx11extras qttools qtwebengine
+    libidn qca2-qt5 qtkeychain libXScrnSaver hunspell
+    libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
   ];
 
   enableParallelBuilding = true;
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "XMPP (Jabber) client";
     maintainers = with maintainers; [ orivej ];
+    license = licenses.gpl2;
     platforms = platforms.linux;
   };
 }

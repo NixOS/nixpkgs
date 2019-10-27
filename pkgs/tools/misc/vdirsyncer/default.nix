@@ -1,71 +1,66 @@
-{ stdenv, python3Packages, glibcLocales, rustPlatform }:
+{ stdenv, python3Packages, fetchFromGitHub, fetchpatch, rustPlatform, pkgconfig, openssl, Security }:
 
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
-let
-  pythonPackages = python3Packages;
-  version = "0.17.0a2";
+python3Packages.buildPythonApplication rec {
+  version = "unstable-2018-08-05";
   pname = "vdirsyncer";
-  name = pname + "-" + version;
-  src = pythonPackages.fetchPypi {
-    inherit pname version;
-    sha256 = "0y464rsx5la6bp94z2g0nnkbl4nwfya08abynvifw4c84vs1gr4q";
-  };
-  native = rustPlatform.buildRustPackage {
-    name = name + "-native";
-    inherit src;
-    sourceRoot = name + "/rust";
-    cargoSha256 = "1cr7xs11gbsc3x5slga9qahchwc22qq49amf28g4jgs9lzf57qis";
-    postInstall = ''
-      mkdir $out/include $out/lib
-      cp $out/bin/libvdirsyncer_rustext* $out/lib
-      rm -r $out/bin
-      cp target/vdirsyncer_rustext.h $out/include
-    '';
-  };
-in pythonPackages.buildPythonApplication rec {
-  inherit version pname src;
+  name = "${pname}-${version}";
 
-  propagatedBuildInputs = with pythonPackages; [
+  src = fetchFromGitHub {
+    owner = "spk";
+    repo = pname;
+    # fix-build-style branch, see https://github.com/pimutils/vdirsyncer/pull/798
+    rev = "2c62d03bd73f8b44a47c2e769ade046697896ae9";
+    sha256 = "1q6xvzz5rf5sqdaj3mdvhpgwy5b16isavgg7vardgjwqwv1yal28";
+  };
+
+  native = rustPlatform.buildRustPackage {
+    name = "${name}-native";
+    inherit src;
+    sourceRoot = "source/rust";
+    cargoSha256 = "1n1dxq3klsry5mmbfff2jv7ih8mr5zvpncrdgba6qs93wi77qi0y";
+    buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  };
+
+  propagatedBuildInputs = with python3Packages; [
     click click-log click-threading
     requests_toolbelt
     requests
     requests_oauthlib # required for google oauth sync
     atomicwrites
     milksnake
+    shippai
   ];
 
-  buildInputs = with pythonPackages; [ setuptools_scm ];
+  nativeBuildInputs = with python3Packages; [ setuptools_scm ];
 
-  checkInputs = with pythonPackages; [ hypothesis pytest pytest-localserver pytest-subtesthack ] ++ [ glibcLocales ];
+  checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ];
 
   postPatch = ''
-    sed -i "/cargo build/d" Makefile
+    # see https://github.com/pimutils/vdirsyncer/pull/805
+    substituteInPlace setup.cfg --replace --duration --durations
+
+    # for setuptools_scm:
+    echo 'Version: ${version}' >PKG-INFO
+
+    sed -i 's/spec.add_external_build(cmd=cmd/spec.add_external_build(cmd="true"/g' setup.py
   '';
 
   preBuild = ''
     mkdir -p rust/target/release
     ln -s ${native}/lib/libvdirsyncer_rustext* rust/target/release/
-    ln -s ${native}/include/vdirsyncer_rustext.h rust/target/
-  '';
-
-  LC_ALL = "en_US.utf8";
-
-  preCheck = ''
-    ln -sf ../dist/tmpbuild/vdirsyncer/vdirsyncer/_native__lib.so vdirsyncer
   '';
 
   checkPhase = ''
-    runHook preCheck
+    rm -rf vdirsyncer
     make DETERMINISTIC_TESTS=true test
-    runHook postCheck
   '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/pimutils/vdirsyncer;
     description = "Synchronize calendars and contacts";
-    maintainers = with maintainers; [ jgeerds ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ matthiasbeyer gebner ];
     license = licenses.mit;
   };
 }

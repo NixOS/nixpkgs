@@ -1,35 +1,39 @@
 { stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
-, meson, ninja, gtk, glib, wrapGAppsHook, libnotify
-, itstool, gnome3, libxml2
-, libcanberra-gtk3, libxslt, docbook_xsl, libpwquality }:
+, meson, ninja, gtk3, glib, wrapGAppsHook, python3, libnotify
+, itstool, gnome3, libxml2, gsettings-desktop-schemas
+, libcanberra-gtk3, libxslt, docbook_xsl, libpwquality, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-disk-utility-${version}";
-  version = "3.28.2";
+  pname = "gnome-disk-utility";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-disk-utility/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1j3l4b1prbnixzy6srvcsjfg1dx5nqys2lmygm31ygfdq7svp3m6";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-disk-utility"; attrPath = "gnome3.gnome-disk-utility"; };
+    url = "mirror://gnome/sources/gnome-disk-utility/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1mb7q90lnlp97dhxhnadhjagcfd12dfqzp0vj9h6b1r61pzhy97y";
   };
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext itstool libxslt docbook_xsl
-    wrapGAppsHook libxml2
+    wrapGAppsHook python3 libxml2
   ];
+
   buildInputs = [
-    gtk glib libsecret libpwquality libnotify libdvdread libcanberra-gtk3
-    udisks2 gnome3.defaultIconTheme
-    gnome3.gnome-settings-daemon gnome3.gsettings-desktop-schemas
+    gtk3 glib libsecret libpwquality libnotify libdvdread libcanberra-gtk3
+    udisks2 gnome3.adwaita-icon-theme systemd
+    gnome3.gnome-settings-daemon gsettings-desktop-schemas
   ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-disk-utility";
+      attrPath = "gnome3.gnome-disk-utility";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://en.wikipedia.org/wiki/GNOME_Disks;

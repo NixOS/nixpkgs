@@ -1,11 +1,16 @@
-{ stdenv, nix, perlPackages, buildEnv, releaseTools, fetchFromGitHub
+{ stdenv, nix, perlPackages, buildEnv, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
-, guile, perl, postgresql, aws-sdk-cpp, nukeReferences, git, boehmgc
+, guile, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
-, rpm, dpkg, cdrkit, fetchpatch, pixz }:
+, rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook
+}:
 
 with stdenv;
+
+if lib.versions.major nix.version == "1"
+  then throw "This Hydra version doesn't support Nix 1.x"
+else
 
 let
   perlDeps = buildEnv {
@@ -22,13 +27,13 @@ let
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginStackTrace
-        CatalystPluginUnicodeEncoding
+        CatalystRuntime
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
         CatalystViewTT
-        CatalystXRoleApplicator
         CatalystXScriptServerStarman
+        CatalystXRoleApplicator
         CryptRandPasswd
         DBDPg
         DBDSQLite
@@ -40,6 +45,7 @@ let
         FileSlurp
         IOCompress
         IPCRun
+        JSON
         JSONAny
         JSONXS
         LWP
@@ -52,7 +58,6 @@ let
         SetScalar
         Starman
         SysHostnameLong
-        TestMore
         TextDiff
         TextTable
         XMLSimple
@@ -62,25 +67,27 @@ let
         boehmgc
       ];
   };
-in releaseTools.nixBuild rec {
-  name = "hydra-${version}";
-  version = "2017-11-21";
+in stdenv.mkDerivation rec {
+  pname = "hydra";
+  version = "2019-08-30";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
-    repo = "hydra";
-    rev = "b7bc4384b7b471d1ddf892cb03f16189a66d5a0d";
-    sha256 = "05g37z3ilazzqa5rqj5zljndwxjbvpc18xibh6jlwjwpvg3kpbbh";
+    repo = pname;
+    rev = "242b8b7a314759ed33f69205d26a1b7c337511e0";
+    sha256 = "167ijcf9qdm10kjvqax3hcvs5mpa4mx2y2i9idwwc6xfvn8fhs84";
   };
 
   buildInputs =
-    [ makeWrapper autoconf automake libtool unzip nukeReferences pkgconfig sqlite libpqxx
+    [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx
       gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2 libxslt
       guile # optional, for Guile + Guix support
       perlDeps perl nix
       postgresql # for running the tests
+      nlohmann_json
+      boost
     ];
 
   hydraPath = lib.makeBinPath (
@@ -88,19 +95,16 @@ in releaseTools.nixBuild rec {
       gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused bazaar
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
-  postUnpack = ''
-    # Clean up when building from a working tree.
-    (cd $sourceRoot && (git ls-files -o --directory | xargs -r rm -rfv)) || true
-  '';
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
+
+  NIX_CFLAGS_COMPILE = [ "-pthread" ];
 
   shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
-
-  preConfigure = "autoreconf -vfi";
 
   enableParallelBuilding = true;
 
@@ -131,6 +135,6 @@ in releaseTools.nixBuild rec {
     description = "Nix-based continuous build system";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ma27 ];
   };
- }
+}

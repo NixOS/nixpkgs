@@ -5,9 +5,9 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
-  name    = "syscall_limiter-${version}";
-  version = "20170123";
+stdenv.mkDerivation {
+  pname = "syscall_limiter";
+  version = "2017-01-23";
 
   src = fetchFromGitHub {
     owner  = "vi";
@@ -16,11 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0z5arj1kq1xczgrbw1b8m9kicbv3vs9bd32wvgfr4r6ndingsp5m";
   };
 
-  configurePhase = "";
-
-  buildPhase = ''
-    make CC="gcc -I${libseccomp}/include -L${libseccomp}/lib"
-  '';
+  buildInputs = [ libseccomp ];
 
   installPhase = ''
     mkdir -p $out/bin

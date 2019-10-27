@@ -1,13 +1,12 @@
 { stdenv
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , chardet
 , nose
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "pysrt";
-  name = "${pname}-${version}";
   version = "1.1.1";
 
   src = fetchFromGitHub {
@@ -17,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "0rwjaf26885vxhxnas5d8zwasvj7x88y4y2pdivjd4vdcpqrqdjn";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
   checkPhase = ''
     nosetests -v
   '';

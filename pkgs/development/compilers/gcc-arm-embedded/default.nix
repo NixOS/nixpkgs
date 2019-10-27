@@ -14,14 +14,15 @@ let
     else "${majorVersion}-${year}-q${quarter}-${releaseType}"; # 4.7-2013-q3-update
 in
 stdenv.mkDerivation {
-  name = "gcc-arm-embedded-${version}";
+  pname = "gcc-arm-embedded";
+  inherit version;
 
   src = fetchurl {
     url = "https://launchpad.net/gcc-arm-embedded/${dirName_}/${subdirName_}/+download/gcc-arm-none-eabi-${underscoreVersion}-linux.tar.bz2";
     sha256 = sha256;
   };
 
-  buildInputs = [ bzip2 patchelf ];
+  nativeBuildInputs = [ bzip2 patchelf ];
 
   dontPatchELF = true;
 
@@ -30,6 +31,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -pv $out
     cp -r ./* $out
+    ln -s $out/share/doc/gcc-arm-none-eabi/man $out/man
 
     for f in $(find $out); do
       if [ -f "$f" ] && patchelf "$f" 2> /dev/null; then

@@ -1,6 +1,6 @@
 {stdenv, fetchurl, openssl, ncurses}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "imapproxy-1.2.7";
   src = fetchurl {
     url = mirror://sourceforge/squirrelmail/squirrelmail-imap_proxy-1.2.7.tar.bz2;

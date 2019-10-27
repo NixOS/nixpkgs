@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
 
   name = "netsurf-${libname}-${version}";
   libname = "libwapcaplet";
-  version = "0.3.0";
+  version = "0.4.2";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "0cs1dd2afjgc3wf5gqg434hv6jdabrp9qvlpl4dp53nhkyfywna3";
+    sha256 = "1fjwzbn7j8bi1b9bvwxsy3i2cr6byq2s2d29866801pjnf528g86";
   };
 
   buildInputs = [ buildsystem ];
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
   meta = with stdenv.lib; {
     homepage = http://www.netsurf-browser.org/;

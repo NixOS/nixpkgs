@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, python2Packages, ansible2 }:
+{ stdenv, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   version = "0.4.6";
-  name = "kargo-${version}";
+  pname = "kargo";
 
   src = fetchurl {
-    url = "mirror://pypi/k/kargo/${name}.tar.gz";
+    url = "mirror://pypi/k/kargo/${pname}-${version}.tar.gz";
     sha256 = "1sm721c3d4scpc1gj2j3qwssr6jjvw6aq3p7ipvhbd9ywmm9dd7b";
   };
 
   doCheck = false;
 
   propagatedBuildInputs = with python2Packages; [
-    ansible2
+    ansible
     boto
     cffi
     cryptography
@@ -30,7 +30,6 @@ python2Packages.buildPythonApplication rec {
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [
-      jgeerds
     ];
   };
 }

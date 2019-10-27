@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchurl }:
+{ lib, python, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "scandir-${version}";
-  version = "1.7";
+  pname = "scandir";
+  version = "1.10.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/scandir/${name}.tar.gz";
-    sha256 ="0gbnhjzg42rj87ljv9kb648rfxph69ly3c8r9841dxy4d7l5pmdj";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 ="1bkqwmf056pkchf05ywbnf659wqlp6lljcdb0y88wr9f0vv32ijd";
   };
+
+  checkPhase = "${python.interpreter} test/run_tests.py";
 
   meta = with lib; {
     description = "A better directory iterator and faster os.walk()";

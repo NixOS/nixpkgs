@@ -19,13 +19,13 @@ in import ./make-test.nix ({ pkgs, ...} : {
   nodes = {
     # no proxy
     machine =
-      { config, pkgs, ... }:
+      { ... }:
 
       default-config;
 
     # proxy default
     machine2 =
-      { config, pkgs, ... }:
+      { ... }:
 
       default-config // {
         networking.proxy.default = "http://user:pass@host:port";
@@ -33,7 +33,7 @@ in import ./make-test.nix ({ pkgs, ...} : {
 
     # specific proxy options
     machine3 =
-      { config, pkgs, ... }:
+      { ... }:
 
       default-config //
       {
@@ -51,7 +51,7 @@ in import ./make-test.nix ({ pkgs, ...} : {
 
     # mix default + proxy options
     machine4 =
-      { config, pkgs, ... }:
+      { ... }:
 
       default-config // {
         networking.proxy = {

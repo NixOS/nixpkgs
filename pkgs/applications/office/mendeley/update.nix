@@ -1,6 +1,7 @@
-{ writeScript }:
+{ writeScript, runtimeShell }:
 
 writeScript "update-mendeley" ''
+  #!${runtimeShell}
   function follow() {
     local URL=$1
     while true; do

@@ -1,34 +1,38 @@
-{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
+{ stdenv, fetchFromGitHub, pkgconfig, gdk-pixbuf, optipng, librsvg, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "elementary-xfce-icon-theme-${version}";
-  version = "0.11";
+  pname = "elementary-xfce-icon-theme";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
-    rev = "elementary-xfce-${version}";
-    sha256 = "1hgbw9wwsgrbrs8lgdhba2m8m1cvqbcy27b87kjws6jsa00f5hx6";
+    rev = "v${version}";
+    sha256 = "00sk6sv0kkfb3q0jqwcllzawi30rw8nfkkfn5l1qwqha48izw3r4";
   };
 
-  nativeBuildInputs = [ gtk3 hicolor-icon-theme ];
+  nativeBuildInputs = [ pkgconfig gdk-pixbuf librsvg optipng gtk3 ];
 
-  installPhase = ''
-    mkdir -p $out/share/icons
-    mv elementary-xfce* $out/share/icons
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
+
+  postPatch = ''
+    substituteInPlace svgtopng/Makefile --replace "-O0" "-O"
   '';
 
-  postFixup = ''
-    for theme in $out/share/icons/*; do
-      gtk-update-icon-cache $theme
-    done
+  postInstall = ''
+    make icon-caches
   '';
 
   meta = with stdenv.lib; {
-    description = "Elementary icons for Xfce and other GTK+ desktops like GNOME";
+    description = "Elementary icons for Xfce and other GTK desktops like GNOME";
     homepage = https://github.com/shimmerproject/elementary-xfce;
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    # darwin cannot deal with file names differing only in case
+    platforms = platforms.linux;
     maintainers = with maintainers; [ davidak ];
   };
 }

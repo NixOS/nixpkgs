@@ -1,7 +1,7 @@
-{ stdenv, pkgs, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "workcraft-${version}";
+  pname = "workcraft";
   version = "3.1.9";
 
   src = fetchurl {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://workcraft.org/;
+    homepage = https://workcraft.org/;
     description = "Framework for interpreted graph modeling, verification and synthesis";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;

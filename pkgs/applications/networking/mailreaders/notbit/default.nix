@@ -4,8 +4,8 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "notbit-${version}";
+stdenv.mkDerivation {
+  pname = "notbit";
   version = "2018-01-09";
 
   src = fetchFromGitHub {
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mog ];
+    broken = true;
   };
 }

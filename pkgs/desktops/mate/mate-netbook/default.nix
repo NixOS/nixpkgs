@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-netbook-${version}";
-  version = "1.20.0";
+  pname = "mate-netbook";
+  version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1w92kny1fnlwbq4b8y50n5s1vsvvl4xrvspsp9lqfxyz3jxiwbrz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0m38v2276s2d3zs7smxyf70nyl7bcwp5665zgva28lvs8ip3gijx";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Installing these utilities is recommended for netbooks and similar
       devices with low resolution displays.
     '';
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = with licenses; [ gpl3 lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

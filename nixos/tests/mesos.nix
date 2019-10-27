@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : rec {
   };
 
   nodes = {
-    master = { config, pkgs, ... }: {
+    master = { ... }: {
       networking.firewall.enable = false;
       services.zookeeper.enable = true;
       services.mesos.master = {
@@ -14,7 +14,7 @@ import ./make-test.nix ({ pkgs, ...} : rec {
       };
     };
 
-    slave = { config, pkgs, ... }: {
+    slave = { ... }: {
       networking.firewall.enable = false;
       networking.nat.enable = true;
       virtualisation.docker.enable = true;
@@ -33,6 +33,7 @@ import ./make-test.nix ({ pkgs, ...} : rec {
 
   simpleDocker = pkgs.dockerTools.buildImage {
     name = "echo";
+    tag = "latest";
     contents = [ pkgs.stdenv.shellPackage pkgs.coreutils ];
     config = {
       Env = [

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
+{ lib, fetchPypi, buildPythonPackage
 , nose
 , parameterized
 , mock
@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "940828183c937bcec530753211b70f673c0a9aab831e43273489b310538dff86";
+    sha256 = "e1eac8ef28de69a554d5fcdb60b172d526d61924b1a40afbbb08df459a36006b";
   };
 
   checkInputs = [ nose mock parameterized six glibcLocales ];

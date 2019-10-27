@@ -104,18 +104,18 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = if cfg.user != "git" then {} else singleton
+    users.users = if cfg.user != "git" then {} else singleton
       { name = "git";
         uid = config.ids.uids.git;
         description = "Git daemon user";
       };
 
-    users.extraGroups = if cfg.group != "git" then {} else singleton
+    users.groups = if cfg.group != "git" then {} else singleton
       { name = "git";
         gid = config.ids.gids.git;
       };
 
-    systemd.services."git-daemon" = {
+    systemd.services.git-daemon = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${pkgs.git}/bin/git daemon --reuseaddr "

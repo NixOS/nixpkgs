@@ -3,7 +3,7 @@
 , wxGTK30, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "pcsx2-${version}";
+  pname = "pcsx2";
   version = "1.4.0";
 
   src = fetchFromGitHub {
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       -DPACKAGE_MODE=TRUE \
       -DPLUGIN_DIR="$out/lib/pcsx2" \
       -DREBUILD_SHADER=TRUE \
+      -DXDG_STD=TRUE \
       ..
   '';
 
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
       states and PS2 system memory. This allows you to play PS2 games on your
       PC, with many additional features and benefits.
     '';
-    homepage = http://pcsx2.net;
+    homepage = https://pcsx2.net;
     maintainers = with maintainers; [ hrdinka ];
 
     # PCSX2's source code is released under LGPLv3+. It However ships

@@ -20,15 +20,17 @@
 , requests
 , send2trash
 , pexpect
+, prometheus_client
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.4.1";
+  version = "6.0.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01l6yp78sp27vns4cxh8ybr7x0pixxn97cp0i3w6s0lv1v8l6qbx";
+    sha256 = "660976fe4fe45c7aa55e04bf4bccb9f9566749ff637e9020af3422f9921f9a5d";
   };
 
   LC_ALL = "en_US.utf8";
@@ -39,11 +41,18 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
+    prometheus_client
   ];
 
   # disable warning_filters
   preCheck = lib.optionalString (!isPy3k) ''
     echo "" > setup.cfg
+  '';
+
+  postPatch = ''
+    # Remove selenium tests
+    rm -rf notebook/tests/selenium
+
   '';
 
   checkPhase = ''
@@ -56,10 +65,13 @@ buildPythonPackage rec {
     else ""}
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh globin ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }

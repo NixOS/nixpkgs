@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, openssh,
-makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon }:
+{ stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
+, mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
 
-stdenv.mkDerivation rec {
-  name = "x2goclient-${version}";
-  version = "4.1.1.1";
+mkDerivation {
+  pname = "x2goclient";
+  version = "unstable-2019-07-24";
 
-  src = fetchurl {
-    url = "http://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
-    sha256 = "0jzlwn0v8b123h5l7hrhs35x2z6mb98zg1s0shqb4yfp2g641yp3";
+  src = fetchgit {
+   url = "git://code.x2go.org/x2goclient.git";
+   rev = "704c4ab92d20070dd160824c9b66a6d1c56dcc49";
+   sha256 = "1pndp3lfzwifyxqq0gps3p1bwakw06clbk6n8viv020l4bsfmq5f";
   };
 
-  buildInputs = [ cups libssh libXpm nxproxy openldap openssh
-                  qtbase qtsvg qtx11extras qttools phonon ];
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ cups libssh libXpm nx-libs openldap openssh
+                  qtbase qtsvg qtx11extras qttools phonon pkgconfig ];
 
-  patchPhase = ''
+  postPatch = ''
      substituteInPlace Makefile \
        --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
        --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
@@ -27,9 +27,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installTargets = [ "install_client" "install_man" ];
-  postInstall = ''
-    wrapProgram "$out/bin/x2goclient" --suffix PATH : "${nxproxy}/bin:${openssh}/libexec";
-  '';
+
+  qtWrapperArgs = [ ''--suffix PATH : ${nx-libs}/bin:${openssh}/libexec'' ];
 
   meta = with stdenv.lib; {
     description = "Graphical NoMachine NX3 remote desktop client";

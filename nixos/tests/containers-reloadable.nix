@@ -1,11 +1,11 @@
 import ./make-test.nix ({ pkgs, lib, ...} :
 let
-  client_base = rec {
+  client_base = {
     
     containers.test1 = {
       autoStart = true;
       config = {
-        environment.etc."check".text = "client_base";
+        environment.etc.check.text = "client_base";
       };
     };
 
@@ -21,31 +21,30 @@ in {
   };
 
   nodes = {
-    client = { lib, pkgs, ... }: {
+    client = { ... }: {
       imports = [ client_base ];
     };
 
-    client_c1 = { lib, pkgs, ... }: {
+    client_c1 = { lib, ... }: {
       imports = [ client_base ];
 
       containers.test1.config = {
-        environment.etc."check".text = lib.mkForce "client_c1";
+        environment.etc.check.text = lib.mkForce "client_c1";
         services.httpd.enable = true;
         services.httpd.adminAddr = "nixos@example.com";
       };
     };
-    client_c2 = { lib, pkgs, ... }: {
+    client_c2 = { lib, ... }: {
       imports = [ client_base ];
 
       containers.test1.config = {
-        environment.etc."check".text = lib.mkForce "client_c2";
+        environment.etc.check.text = lib.mkForce "client_c2";
         services.nginx.enable = true;
       };
     };
   };
 
   testScript = {nodes, ...}: let
-    originalSystem = nodes.client.config.system.build.toplevel;
     c1System = nodes.client_c1.config.system.build.toplevel;
     c2System = nodes.client_c2.config.system.build.toplevel;
   in ''

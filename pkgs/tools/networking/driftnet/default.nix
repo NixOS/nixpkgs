@@ -1,17 +1,17 @@
 { stdenv, lib, fetchFromGitHub, libpcap, libjpeg , libungif, libpng
-, giflib, glib, gtk2, cairo, pango, gdk_pixbuf, atk
+, giflib, glib, gtk2, cairo, pango, gdk-pixbuf, atk
 , pkgconfig, autoreconfHook }:
 
 with lib;
 
-stdenv.mkDerivation rec {
-  name = "driftnet-${version}";
+stdenv.mkDerivation {
+  pname = "driftnet";
   version = "1.1.5";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     libpcap libjpeg libungif libpng giflib
-    glib gtk2 glib cairo pango gdk_pixbuf atk autoreconfHook
+    glib gtk2 glib cairo pango gdk-pixbuf atk autoreconfHook
   ];
 
   src = fetchFromGitHub {
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/deiv/driftnet;
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

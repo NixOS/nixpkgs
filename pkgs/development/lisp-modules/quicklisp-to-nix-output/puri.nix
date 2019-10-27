@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''puri'';
-  version = ''20150923-git'';
+  version = ''20180228-git'';
 
   parasites = [ "puri-tests" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."ptester" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/puri/2015-09-23/puri-20150923-git.tgz'';
-    sha256 = ''099ay2zji5ablj2jj56sb49hk2l9x5s11vpx6893qwwjsp2881qa'';
+    url = ''http://beta.quicklisp.org/archive/puri/2018-02-28/puri-20180228-git.tgz'';
+    sha256 = ''1s4r5adrjy5asry45xbcbklxhdjydvf6n55z897nvyw33bigrnbz'';
   };
 
   packageName = "puri";
@@ -20,8 +20,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM puri DESCRIPTION Portable Universal Resource Indentifier Library
-    SHA256 099ay2zji5ablj2jj56sb49hk2l9x5s11vpx6893qwwjsp2881qa URL
-    http://beta.quicklisp.org/archive/puri/2015-09-23/puri-20150923-git.tgz MD5
-    3bd4e30aa6b6baf6f26753b5fc357e0f NAME puri FILENAME puri DEPS
+    SHA256 1s4r5adrjy5asry45xbcbklxhdjydvf6n55z897nvyw33bigrnbz URL
+    http://beta.quicklisp.org/archive/puri/2018-02-28/puri-20180228-git.tgz MD5
+    0c43ad5d862ed0d18ef84d8e2a42f67f NAME puri FILENAME puri DEPS
     ((NAME ptester FILENAME ptester)) DEPENDENCIES (ptester) VERSION
-    20150923-git SIBLINGS NIL PARASITES (puri-tests)) */
+    20180228-git SIBLINGS NIL PARASITES (puri-tests)) */

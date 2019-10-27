@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild ounit ];
 
-  configureFlags = "--enable-tests";
+  configureFlags = [ "--enable-tests" ];
 
   doCheck = true;
   checkPhase = "ocaml setup.ml -test";

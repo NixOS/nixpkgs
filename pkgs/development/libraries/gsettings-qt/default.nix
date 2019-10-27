@@ -1,7 +1,10 @@
-{ stdenv, fetchbzr, pkgconfig, qmake, qtbase, qtdeclarative, glib, gobjectIntrospection }:
+{ stdenv, fetchbzr, pkgconfig
+, qmake, qtbase, qtdeclarative, wrapQtAppsHook
+, glib, gobject-introspection
+}:
 
-stdenv.mkDerivation rec {
-  name = "gsettings-qt-${version}";
+stdenv.mkDerivation {
+  pname = "gsettings-qt";
   version = "0.1.20170824";
 
   src = fetchbzr {
@@ -13,7 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     qmake
-    gobjectIntrospection
+    gobject-introspection
+    wrapQtAppsHook
   ];
 
   buildInputs = [

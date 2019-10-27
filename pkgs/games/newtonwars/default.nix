@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, freeglut, libGLU_combined }:
 
-stdenv.mkDerivation rec {
-  name = "newtonwars-${version}";
+stdenv.mkDerivation {
+  pname = "newtonwars";
   version = "20150609";
 
   src = fetchFromGitHub {
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     description = "A space battle game with gravity as the main theme";
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

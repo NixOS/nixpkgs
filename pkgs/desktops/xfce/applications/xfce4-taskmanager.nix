@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool gtk libwnck ];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/applications/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/applications/${p_name}";
     description = "Easy to use task manager for Xfce";
     platforms = stdenv.lib.platforms.linux;
   };

@@ -1,8 +1,7 @@
-{ stdenv, pkgs, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
-, makeWrapper , rlwrap, gnused, gnugrep, coreutils, xprop
-, extraModulePaths ? [] }:
+{ stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
+, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "clfswm";
 
   src = fetchgit {

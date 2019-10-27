@@ -8,12 +8,12 @@ in
 {
   name = "mysql-replication";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow shlevy ];
+    maintainers = [ eelco shlevy ];
   };
 
   nodes = {
     master =
-      { pkgs, config, ... }:
+      { pkgs, ... }:
 
       {
         services.mysql.enable = true;
@@ -27,7 +27,7 @@ in
       };
 
     slave1 =
-      { pkgs, config, nodes, ... }:
+      { pkgs, nodes, ... }:
 
       {
         services.mysql.enable = true;
@@ -40,7 +40,7 @@ in
       };
 
     slave2 =
-      { pkgs, config, nodes, ... }:
+      { pkgs, nodes, ... }:
 
       {
         services.mysql.enable = true;

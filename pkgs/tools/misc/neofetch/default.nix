@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "neofetch-${version}";
-  version = "4.0.2";
+  pname = "neofetch";
+  version = "6.1.0";
+
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "neofetch";
     rev = version;
-    sha256 = "0c0x05ca8lp74928nix4pvd243l95lav35r21mpkbagf72z284d2";
+    sha256 = "022xzn9jk18k2f4b6011d8jk5nbl84i3mw3inlz4q52p2hvk8fch";
   };
 
   dontBuild = true;
 
-
   makeFlags = [
-    "PREFIX=$(out)"
-    "SYSCONFDIR=$(out)/etc"
+    "PREFIX=${placeholder "out"}"
+    "SYSCONFDIR=${placeholder "out"}/etc"
   ];
 
   meta = with stdenv.lib; {

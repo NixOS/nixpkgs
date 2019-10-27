@@ -1,10 +1,10 @@
 { stdenv, fetchgit, makeWrapper, pkgconfig,
-  gnome2, glib, pango, cairo, gdk_pixbuf, atk, freetype, xorg,
-  configH
+  gnome2, glib, pango, cairo, gdk-pixbuf, atk, freetype, xorg,
+  configH ? ""
 }:
 
-stdenv.mkDerivation rec {
-  name = "evilvte-${version}";
+stdenv.mkDerivation {
+  pname = "evilvte";
   version = "0.5.2-20140827";
 
   src = fetchgit {
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gnome2.vte glib pango gnome2.gtk cairo gdk_pixbuf atk freetype xorg.libX11
-    xorg.xproto xorg.kbproto xorg.libXext xorg.xextproto makeWrapper pkgconfig
+    gnome2.vte glib pango gnome2.gtk cairo gdk-pixbuf atk freetype xorg.libX11
+    xorg.xorgproto xorg.libXext makeWrapper pkgconfig
   ];
 
   buildPhase = ''
@@ -31,5 +31,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.bodil ];
     platforms = platforms.linux;
+    knownVulnerabilities = [
+      "https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=854585"
+    ];
   };
 }

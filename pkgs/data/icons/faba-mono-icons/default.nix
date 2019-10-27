@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "faba-mono-icons";
   version = "2016-04-30";
 
@@ -14,6 +13,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook gtk3 moka-icon-theme ];
 
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
+
   postFixup = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
@@ -24,7 +29,8 @@ stdenv.mkDerivation rec {
     description = "The full set of Faba monochrome panel icons";
     homepage = https://snwh.org/moka;
     license = licenses.gpl3;
-    platforms = platforms.all;
+    # moka-icon-theme dependency is restricted to linux
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

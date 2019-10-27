@@ -1,22 +1,25 @@
-{stdenv, fetchurl, libjpeg, lcms2, gettext, jasper }:
+{stdenv, fetchurl, libjpeg, lcms2, gettext, jasper, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "dcraw-9.27.0";
+  name = "dcraw-9.28.0";
 
   src = fetchurl {
-    url = "http://www.cybercom.net/~dcoffin/dcraw/archive/${name}.tar.gz";
-    sha256 = "16bhk3pl5kb9ikv367szl8m92nx85rqypz5im8x3sakm357wrn61";
+    url = "https://www.cybercom.net/~dcoffin/dcraw/archive/${name}.tar.gz";
+    sha256 = "1fdl3xa1fbm71xzc3760rsjkvf0x5jdjrvdzyg2l9ka24vdc7418";
   };
 
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
   buildInputs = [ libjpeg lcms2 gettext jasper ];
 
   patchPhase = ''
-    sed -i -e s@/usr/local@$out@ install
+    substituteInPlace install \
+      --replace 'prefix=/usr/local' 'prefix=$out' \
+      --replace gcc '$CC'
   '';
 
   buildPhase = ''
     mkdir -p $out/bin
-    sh install
+    sh -e install
   '';
 
   meta = {

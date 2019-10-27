@@ -2,7 +2,7 @@
 , python2Packages
 , pkgconfig
 , librsvg
-, gobjectIntrospection
+, gobject-introspection
 , atk
 , gtk3
 , gtkspell3
@@ -14,12 +14,12 @@ with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "4.8.0";
+  version = "4.8.5";
   src = python2Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1ywgna4hhmji8pfrwhdfj1ns49vs9nwppqb7iy7jr27wrxk4bm6b";
+    sha256 = "43759d22b061a7a392a534d19a045fafd442ce98a0e390ee830127367dcaf4b4";
   };
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection ];
   propagatedBuildInputs = with python2Packages; [
     chardet
     dateutil
@@ -32,7 +32,7 @@ python2Packages.buildPythonApplication rec {
   buildInputs = [
     atk
     gtk3
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     gtkspell3
     goocanvas2
   ];

@@ -1,41 +1,85 @@
-{ stdenv, fetchgit, skalibs }:
+{ lib, skawarePackages
+# for execlineb-with-builtins
+, coreutils, gnugrep, writeScriptBin, runCommand, runCommandCC
+# Whether to wrap bin/execlineb to have the execline tools on its PATH.
+, execlineb-with-builtins ? true
+}:
+
+with skawarePackages;
 
 let
+  outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
-  version = "2.3.0.3";
+  execline =
+    buildPackage {
+      pname = "execline";
+      version = "2.5.1.0";
+      sha256 = "0xr6yb50wm6amj1wc7jmxyv7hvlx2ypbnww1vc288j275625d9xi";
 
-in stdenv.mkDerivation rec {
+      description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 
-  name = "execline-${version}";
+      inherit outputs;
 
-  src = fetchgit {
-    url = "git://git.skarnet.org/execline";
-    rev = "refs/tags/v${version}";
-    sha256 = "1q0izb8ajzxl36fjpy4rn63sz01055r9s33fga99jprdmkkfzz6x";
-  };
+      # TODO: nsss support
+      configureFlags = [
+        "--libdir=\${lib}/lib"
+        "--dynlibdir=\${lib}/lib"
+        "--bindir=\${bin}/bin"
+        "--includedir=\${dev}/include"
+        "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+        "--with-include=${skalibs.dev}/include"
+        "--with-lib=${skalibs.lib}/lib"
+        "--with-dynlib=${skalibs.lib}/lib"
+      ];
 
-  dontDisableStatic = true;
+      postInstall = ''
+        # remove all execline executables from build directory
+        rm $(find -type f -mindepth 1 -maxdepth 1 -executable)
+        rm libexecline.*
 
-  enableParallelBuilding = true;
+        mv doc $doc/share/doc/execline/html
+        mv examples $doc/share/doc/execline/examples
+      '';
 
-  configureFlags = [
-    "--enable-absolute-paths"
-    "--libdir=\${prefix}/lib"
-    "--includedir=\${prefix}/include"
-    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs}/include"
-    "--with-lib=${skalibs}/lib"
-    "--with-dynlib=${skalibs}/lib"
-  ]
-  ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
-  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+    };
 
-  meta = {
-    homepage = http://skarnet.org/software/execline/;
-    description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
-  };
+  # A wrapper around execlineb, which provides all execline
+  # tools on `execlineb`’s PATH.
+  # It is implemented as a C script, because on non-Linux,
+  # nested shebang lines are not supported.
+  execlineb-with-builtins-drv = runCommandCC "execlineb" {} ''
+    mkdir -p $out/bin
+    cc \
+      -O \
+      -Wall -Wpedantic \
+      -D 'EXECLINEB_PATH()="${execline}/bin/execlineb"' \
+      -D 'EXECLINE_BIN_PATH()="${execline}/bin"' \
+      -I "${skalibs.dev}/include" \
+      -L "${skalibs.lib}/lib" \
+      -l"skarnet" \
+      -o "$out/bin/execlineb" \
+      ${./execlineb-wrapper.c}
+  '';
 
-}
+
+  # the original execline package, with bin/execlineb overwritten
+  execline-with-builtins = runCommand "my-execline"
+    (execline.drvAttrs // {
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    })
+    # copy every output and just overwrite the execlineb binary in $bin
+    ''
+      ${lib.concatMapStringsSep "\n"
+        (output: ''
+          cp -r ${execline.${output}} "''$${output}"
+          chmod --recursive +w "''$${output}"
+        '')
+        outputs}
+      install ${execlineb-with-builtins-drv}/bin/execlineb $bin/bin/execlineb
+    '';
+
+in
+  if execlineb-with-builtins
+  then execline-with-builtins
+  else execline

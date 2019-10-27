@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name          = "kontemplate-${version}";
-  version       = "1.5.0";
+  pname = "kontemplate";
+  version       = "1.8.0";
   goPackagePath = "github.com/tazjin/kontemplate";
   goDeps        = ./deps.nix;
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "tazjin";
     repo   = "kontemplate";
     rev    = "v${version}";
-    sha256 = "0k3yr0ypw6brj1lxqs041zsyi0r09113i0x3xfj48zv4ralq74b6";
+    sha256 = "123mjmmm4hynraq1fpn3j5i0a1i87l265kkjraxxxbl0zacv74i1";
   };
 
   meta = with lib; {

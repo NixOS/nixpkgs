@@ -1,20 +1,22 @@
-{ stdenv, buildGo110Package, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGo110Package rec {
-  name = "gomuks-${version}";
-  version = "2018-05-16";
+buildGoModule rec {
+  pname = "gomuks";
+  version = "2019-06-28";
 
   goPackagePath = "maunium.net/go/gomuks";
 
   src = fetchFromGitHub {
     owner = "tulir";
-    repo = "gomuks";
-    rev = "512ca88804268bf58a754e8a02be556f953db317";
-    sha256 = "1bpgjkpvqqks3ljw9s0hm5pgscjs4rjy8rfpl2444m4rbpz1xvmr";
+    repo = pname;
+    rev = "37df8eb454088e61db7a14f382851205bc1806ad";
+    sha256 = "1hr15d9sbq6mddaxv3pwz86qp1hhzssgrvakfpc49xl4h04dq33g";
   };
 
+  modSha256 = "1qrqgzzsxqvmy4m9shypa94bzw34mc941jhmyccip9grk9fzsxws";
+
   meta = with stdenv.lib; {
-    homepage = https://maunium.net/go/gomuks/;
+    homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
     license = licenses.gpl3;
     maintainers = with maintainers; [ tilpner ];

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  name = "bmap-tools-${version}";
+  pname = "bmap-tools";
   version = "3.4";
 
   src = fetchFromGitHub {

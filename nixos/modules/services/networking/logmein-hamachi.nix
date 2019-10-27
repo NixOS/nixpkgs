@@ -35,7 +35,7 @@ in
       description = "LogMeIn Hamachi Daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "local-fs.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         Type = "forking";

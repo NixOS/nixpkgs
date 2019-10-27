@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "thrift-${version}";
-  version = "0.11.0";
+  pname = "thrift";
+  version = "0.13.0";
 
   src = fetchurl {
-    url = "http://archive.apache.org/dist/thrift/${version}/${name}.tar.gz";
-    sha256 = "1hk0zb9289gf920rdl0clmwqx6kvygz92nj01lqrhd2arfv3ibf4";
+    url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0yai9c3bdsrkkjshgim7zk0i7malwfprg00l9774dbrkh2w4ilvs";
   };
 
   #enableParallelBuilding = true; problems on hydra
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # TODO: package boost-test, so we can run the test suite. (Currently it fails
   # to find libboost_unit_test_framework.a.)
-  configureFlags = "--enable-tests=no";
+  configureFlags = [ "--enable-tests=no" ];
   doCheck = false;
 
   meta = with stdenv.lib; {

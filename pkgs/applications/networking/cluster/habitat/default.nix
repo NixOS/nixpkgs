@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkgconfig
+{ lib, fetchFromGitHub, rustPlatform, pkgconfig
 , libsodium, libarchive, openssl }:
 
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "habitat-${version}";
+  pname = "habitat";
   version = "0.30.2";
 
   src = fetchFromGitHub {

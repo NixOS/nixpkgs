@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, fetchFromGitHub, xcbuild, libiconv, Cocoa, ncurses }:
+{ stdenv, fetchFromGitHub, xcbuildHook, libiconv, ncurses, Cocoa }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pinentry-mac-0.9.4";
 
   src = fetchFromGitHub {
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0g75302697gqcxyf2hyqzvcbd5pyss1bl2xvfd40wqav7dlyvj83";
   };
 
-  buildInputs = [ xcbuild libiconv Cocoa ncurses ];
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ libiconv ncurses Cocoa ];
 
   installPhase = ''
     mkdir -p $out/Applications

@@ -3,8 +3,8 @@
 # Don't use this for anything important yet!
 
 buildGoPackage rec {
-  name = "fscrypt-${version}";
-  version = "0.2.3";
+  pname = "fscrypt";
+  version = "0.2.5";
 
   goPackagePath = "github.com/google/fscrypt";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "google";
     repo = "fscrypt";
     rev = "v${version}";
-    sha256 = "126bbxim4nj56kplvyv528i88mfray50r2rc6ysblkmaw6x0fd9c";
+    sha256 = "1jf6363kc9id3ar93znlcglx3llgv01ccp3nlbamm98rm9dps4qk";
   };
 
   buildInputs = [ pam ];

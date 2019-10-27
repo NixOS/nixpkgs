@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = "--with-ssl";
+  configureFlags = [ "--with-ssl" ];
 
   buildInputs = [ openssl ];
 

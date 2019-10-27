@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "libsvm-${version}";
-  version = "3.22";
+  pname = "libsvm";
+  version = "3.24";
 
   src = fetchurl {
     url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
-    sha256 = "0zd7s19y5vb7agczl6456bn45cj1y64739sslaskw1qk7dywd0bd";
+    sha256 = "15l69y23fxslrap415dvqb383x5fxvbffp9giszjfqjf38h1m26m";
   };
 
   buildPhase = ''

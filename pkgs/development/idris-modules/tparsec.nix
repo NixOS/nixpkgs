@@ -1,21 +1,18 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , lib
-, idris
 }:
-
 build-idris-package  {
   name = "tparsec";
-  version = "2017-12-12";
+  version = "2019-06-18";
 
-  idrisDeps = [ prelude ];
+  ipkgName = "TParsec";
 
   src = fetchFromGitHub {
     owner = "gallais";
     repo = "idris-tparsec";
-    rev = "fb87d08f8f58c934f37d8324b43b0979abcf2183";
-    sha256 = "0362076bfs976gqki4b4pxblhnk4xglgx5v2aycjpxsxlpxh6cfd";
+    rev = "3809afd8735b0054e5db788f18a7fa8ed71d8278";
+    sha256 = "0wmgg1zg9p8gqlfvcsnww17jsifx9987cxqdq6kbdgasn26w2rqx";
   };
 
   meta = {
@@ -23,6 +20,5 @@ build-idris-package  {
     homepage = https://github.com/gallais/idris-tparsec;
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

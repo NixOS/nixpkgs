@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools, makeWrapper,
+  mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools, makeWrapper,
   boost, qtwebkit, qtx11extras, shared-mime-info,
   breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets,
   kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n,
@@ -16,12 +16,13 @@
 mkDerivation rec {
   pname = "calligra";
   version = "3.1.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${name}.tar.xz";
+    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
     sha256 = "0w782k0hprpb6viixnqz34sp0z5csv3prdby46z22qqkcipcs638";
   };
+
+  patches = [ ./qt5_11.patch ];
 
   enableParallelBuilding = true;
 
@@ -63,5 +64,7 @@ mkDerivation rec {
     maintainers = with maintainers; [ phreedom ebzzry zraexy ];
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2 ];
+    hydraPlatforms = [];
+    broken = true; # fails to start, kde home not found
   };
 }

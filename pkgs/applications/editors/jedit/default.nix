@@ -13,7 +13,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "jedit-${version}";
+  pname = "jedit";
+  inherit version;
   src = fetchurl {
     url = "mirror://sourceforge/jedit/jedit${version}source.tar.bz2";
     sha256 = "03wmbh90rl5lsc35d7jwcp9j5qyyzq1nccxf4fal8bmnx8n4si0x";

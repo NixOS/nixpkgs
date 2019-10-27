@@ -7,7 +7,6 @@
 , contextlib2
 , wrapt
 , pytest
-, httpbin
 , pytest-httpbin
 , yarl
 , pythonOlder
@@ -16,12 +15,11 @@
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "1.11.1";
-  name = "${pname}-${version}";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f434fe7e05d940d576ac850709ae57a738ba40e7f317076ea8d359ced5b32320";
+    sha256 = "0kws7l3hci1dvjv01nxw3805q9v2mwldw58bgl8s90wqism69gjp";
   };
 
   checkInputs = [

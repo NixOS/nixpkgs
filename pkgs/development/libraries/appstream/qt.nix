@@ -1,23 +1,16 @@
 { stdenv, appstream, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
-  name = "appstream-qt-${version}";
-  inherit (appstream) version src patches prePatch;
+# TODO: look into using the libraries from the regular appstream derivation as we keep duplicates here
+
+stdenv.mkDerivation {
+  pname = "appstream-qt";
+  inherit (appstream) version src prePatch;
 
   buildInputs = appstream.buildInputs ++ [ appstream qtbase ];
 
   nativeBuildInputs = appstream.nativeBuildInputs ++ [ qttools ];
 
   mesonFlags = appstream.mesonFlags ++ [ "-Dqt=true" ];
-
-  postInstall = ''
-    rm -rf $out/{bin,etc,include/appstream,lib/pkgconfig,lib/libappstream.so*,share}
-  '';
-
-  preFixup = ''
-    patchelf --add-needed ${appstream}/lib/libappstream.so.4 \
-      $out/lib/libAppStreamQt.so
-  '';
 
   meta = appstream.meta // {
     description = "Software metadata handling library - Qt";

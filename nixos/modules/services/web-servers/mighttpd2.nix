@@ -22,7 +22,7 @@ in {
         User: root
         # If available, "nobody" is much more secure for Group:.
         Group: root
-        Pid_File: /var/run/mighty.pid
+        Pid_File: /run/mighty.pid
         Logging: Yes # Yes or No
         Log_File: /var/log/mighty # The directory must be writable by User:
         Log_File_Size: 16777216 # bytes
@@ -119,13 +119,13 @@ in {
       };
     };
 
-    users.extraUsers.mighttpd2 = {
+    users.users.mighttpd2 = {
       group = "mighttpd2";
       uid = config.ids.uids.mighttpd2;
       isSystemUser = true;
     };
 
-    users.extraGroups.mighttpd2.gid = config.ids.gids.mighttpd2;
+    users.groups.mighttpd2.gid = config.ids.gids.mighttpd2;
   };
 
   meta.maintainers = with lib.maintainers; [ fgaz ];

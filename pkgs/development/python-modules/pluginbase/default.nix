@@ -1,16 +1,20 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, tox }:
+{ stdenv, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "0.5";
+  version = "1.0.0";
   pname = "pluginbase";
-
-  buildInputs = [ pytest tox ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1palagrlszs4f4f5j6npzl4d195vclrlza3qr524z2h758j31y5l";
+    sha256 = "497894df38d0db71e1a4fbbfaceb10c3ef49a3f95a0582e11b75f8adaa030005";
   };
+
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    cd tests
+    PYTHONPATH=.. pytest
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mitsuhiko/pluginbase;

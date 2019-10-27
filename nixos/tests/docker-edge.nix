@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     docker =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
         {
           virtualisation.docker.enable = true;
           virtualisation.docker.package = pkgs.docker-edge;

@@ -6,16 +6,16 @@ let
   arch = if stdenv.isAarch32
     then (if stdenv.is64bit then "arm64" else "arm")
     else (if stdenv.is64bit then "x64" else "ia32");
-  armHardFloat = stdenv.isAarch32 && (stdenv.platform.gcc.float or null) == "hard";
+  armHardFloat = stdenv.isAarch32 && (stdenv.hostPlatform.platform.gcc.float or null) == "hard";
 in
 
 stdenv.mkDerivation rec {
-  name = "v8-${version}";
+  pname = "v8";
   version = "3.16.14.11";
 
   src = fetchurl {
     url = "https://commondatastorage.googleapis.com/chromium-browser-official/"
-        + "${name}.tar.bz2";
+        + "${pname}-${version}.tar.bz2";
     sha256 = "1gpf2xvhxfs5ll3m2jlslsx9jfjbmrbz55iq362plflrvf8mbxhj";
   };
 

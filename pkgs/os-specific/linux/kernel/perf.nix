@@ -1,6 +1,6 @@
 { lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto, makeWrapper
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
-, libiberty, libaudit, libbfd, openssl, systemtap, numactl
+, libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
 , zlib, withGtk ? false, gtk2 ? null
 }:
 
@@ -31,13 +31,16 @@ stdenv.mkDerivation {
 
   makeFlags = ["prefix=$(out)" "WERROR=0"] ++ kernel.makeFlags;
 
+  hardeningDisable = [ "format" ];
+
   # perf refers both to newt and slang
   nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-    flex bison libiberty libaudit makeWrapper pkgconfig python perl
+    flex bison libiberty audit makeWrapper pkgconfig python perl
   ];
   buildInputs = [
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
+    libopcodes
   ] ++ stdenv.lib.optional withGtk gtk2;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
@@ -52,6 +55,9 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
       "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
     ];
+
+  doCheck = false; # requires "sparse"
+  doInstallCheck = false; # same
 
   separateDebugInfo = true;
   installFlags = "install install-man ASCIIDOC8=1 prefix=$(out)";

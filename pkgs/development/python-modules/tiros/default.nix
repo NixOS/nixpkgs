@@ -1,10 +1,9 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ fetchPypi, buildPythonPackage
 , semantic-version, boto3, flask, docutils, requests
 }:
 
 buildPythonPackage rec {
   pname = "tiros";
-  name = "${pname}-${version}";
   version = "1.0.44";
 
   src = fetchPypi {

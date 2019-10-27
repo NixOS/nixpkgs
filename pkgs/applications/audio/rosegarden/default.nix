@@ -3,12 +3,12 @@
 , liblo, liblrdf, libsamplerate, libsndfile, lirc ? null, qtbase }:
 
 stdenv.mkDerivation (rec {
-  version = "17.12.1";
-  name = "rosegarden-${version}";
+  version = "19.06";
+  pname = "rosegarden";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rosegarden/${name}.tar.bz2";
-    sha256 = "155kqbxg85wqv0w97cmmx8wq0r4xb3qpnk20lfma04vj8k6hc1mg";
+    url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.bz2";
+    sha256 = "169qb58v2s8va59hzkih8nqb2aipsqlrbfs8q39ywqa8w5d60gcc";
   };
 
   patchPhase = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation (rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.rosegardenmusic.com/;
+    homepage = https://www.rosegardenmusic.com/;
     description = "Music composition and editing environment";
     longDescription = ''
       Rosegarden is a music composition and editing environment based around

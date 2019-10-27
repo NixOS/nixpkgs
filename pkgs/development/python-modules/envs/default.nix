@@ -1,19 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click, jinja2, terminaltables }:
+{ lib, buildPythonPackage, fetchPypi
+, mock, jinja2, click, terminaltables
+}:
 
 buildPythonPackage rec {
   pname = "envs";
-  version = "1.2.4";
+  version = "1.3";
 
-  # move to fetchPyPi when https://github.com/capless/envs/issues/8 is fixed
-  src = fetchFromGitHub {
-    owner  = "capless";
-    repo   = "envs";
-    rev    = "e1f6cbad7f20316fc44324d2c50826d57c2817a8";
-    sha256 = "0p88a79amj0jxll3ssq1dzg78y7zwgc8yqyr7cf53nv2i7kmpakv";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "ccf5cd85ddb8ed335e39ed8a22e0d23658f5a6d7da430f225e6f750c6f50ae42";
   };
 
-  checkInputs = [ click jinja2 terminaltables ];
+  checkInputs = [ mock jinja2 click terminaltables ];
 
   meta = with lib; {
     description = "Easy access to environment variables from Python";

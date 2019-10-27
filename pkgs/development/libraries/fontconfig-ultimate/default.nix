@@ -2,7 +2,8 @@
 
 let version = "2016-04-23"; in
 stdenv.mkDerivation {
-  name = "fontconfig-ultimate-${version}";
+  pname = "fontconfig-ultimate";
+  inherit version;
 
   src = fetchFromGitHub {
     sha256 = "1rd2n60l8bamx84q3l91pd9a0wz9h7p6ajvx1dw22qn8rah4h498";
@@ -38,4 +39,11 @@ stdenv.mkDerivation {
     cp fontconfig_patches/free/*.conf $out/etc/fonts/presets/free
     cp fontconfig_patches/ms/*.conf $out/etc/fonts/presets/ms
   '';
+
+  meta = with stdenv.lib; {
+    description = "Font configuration files, patches, scripts and source packages (Infinality & friends)";
+    homepage = https://github.com/bohoomil/fontconfig-ultimate;
+    license = licenses.mit;
+    platforms = platforms.all;
+  };
 }

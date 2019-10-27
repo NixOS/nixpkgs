@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, patchelf, libredirect, coreutils, pcsclite
-, zlib, glib, gdk_pixbuf, gtk2, cairo, pango, libX11, atk, openssl }:
+{ stdenv, fetchurl, patchelf, coreutils, pcsclite
+, zlib, glib, gdk-pixbuf, gtk2, cairo, pango, libX11, atk, openssl
+, runtimeShell }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc zlib glib gdk_pixbuf gtk2 cairo pango libX11 atk openssl
+    stdenv.cc.cc zlib glib gdk-pixbuf gtk2 cairo pango libX11 atk openssl
   ];
 
   src_i686 = {
@@ -17,12 +18,12 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
-  name = "moneyplex-${version}";
+stdenv.mkDerivation {
+  pname = "moneyplex";
   version = "16.0.22424";
 
-  src = fetchurl (if stdenv.system == "i686-linux" then src_i686
-                  else if stdenv.system == "x86_64-linux" then src_x86_64
+  src = fetchurl (if stdenv.hostPlatform.system == "i686-linux" then src_i686
+                  else if stdenv.hostPlatform.system == "x86_64-linux" then src_x86_64
                   else throw "moneyplex requires i686-linux or x86_64-linux");
 
 
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     mkdir "$out/bin"
 
     cat > $out/bin/moneyplex <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     if [ -z "\$XDG_DATA_HOME" ]; then
         MDIR=\$HOME/.local/share/moneyplex
@@ -62,14 +63,14 @@ stdenv.mkDerivation rec {
     if [ ! -d "\$MDIR/pcsc" ]; then
         ${coreutils}/bin/mkdir -p \$MDIR/pcsc
     fi
-    if [ ! -e "\$MDIR/pcsc/libpcsclite.so.1" ] || [ ! \`${coreutils}/bin/readlink -f "\$MDIR/pcsc/libpcsclite.so.1"\` -ef "${pcsclite}/lib/libpcsclite.so.1" ]; then
-        ${coreutils}/bin/ln -sf "${pcsclite}/lib/libpcsclite.so.1" "\$MDIR/pcsc/libpcsclite.so.1"
+    if [ ! -e "\$MDIR/pcsc/libpcsclite.so.1" ] || [ ! \`${coreutils}/bin/readlink -f "\$MDIR/pcsc/libpcsclite.so.1"\` -ef "${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so.1" ]; then
+        ${coreutils}/bin/ln -sf "${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so.1" "\$MDIR/pcsc/libpcsclite.so.1"
     fi
 
 
     if [ -e "\$MDIR/rup/rupremote.lst" ]; then
       for i in \`${coreutils}/bin/cat "\$MDIR/rup/rupremote.lst"\`; do
-        ${coreutils}/bin/mv "\$MDIR/rup/"\`${coreutils}/bin/basename \$i\` "\$MDIR/\$i" 
+        ${coreutils}/bin/mv "\$MDIR/rup/"\`${coreutils}/bin/basename \$i\` "\$MDIR/\$i"
       done
       rm -r "\$MDIR/rup/rupremote.lst"
     fi

@@ -1,8 +1,8 @@
 { spellChecking ? true
 , stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
-, perl, pcre, gmime2, gettext, intltool, itstool, libxml2, dbus-glib, libnotify, gnutls
+, gmime2, gettext, intltool, itstool, libxml2, libnotify, gnutls
 , makeWrapper, gnupg
-, gnomeSupport ? true, libgnome-keyring3
+, gnomeSupport ? true, libsecret, gcr
 }:
 
 assert spellChecking -> gtkspell3 != null;
@@ -10,17 +10,18 @@ assert spellChecking -> gtkspell3 != null;
 let version = "0.145"; in
 
 stdenv.mkDerivation {
-  name = "pan-${version}";
+  pname = "pan";
+  inherit version;
 
   src = fetchurl {
     url = "http://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
     sha256 = "1b4wamv33hprghcjk903bpvnd233yxyrm18qnh13alc8h1553nk8";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ gtk3 perl gmime2 gettext intltool itstool libxml2 dbus-glib libnotify gnutls ]
+  nativeBuildInputs = [ pkgconfig gettext intltool itstool libxml2 makeWrapper ];
+  buildInputs = [ gtk3 gmime2 libnotify gnutls ]
     ++ stdenv.lib.optional spellChecking gtkspell3
-    ++ stdenv.lib.optional gnomeSupport libgnome-keyring3;
+    ++ stdenv.lib.optionals gnomeSupport [ libsecret gcr ];
 
   configureFlags = [
     "--with-dbus"
@@ -37,7 +38,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "A GTK+-based Usenet newsreader good at both text and binaries";
+    description = "A GTK-based Usenet newsreader good at both text and binaries";
     homepage = http://pan.rebelbase.com/;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;

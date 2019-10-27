@@ -9,33 +9,29 @@ let
 
   # OpenJPEG version is hardcoded in package source
   openJpegVersion = with stdenv;
-    lib.concatStringsSep "." (lib.lists.take 2
-      (lib.splitString "." (lib.getVersion openjpeg)));
+    lib.versions.majorMinor (lib.getVersion openjpeg);
 
 
 in stdenv.mkDerivation rec {
-  version = "1.13.0";
-  name = "mupdf-${version}";
+  version = "1.16.1";
+  pname = "mupdf";
 
   src = fetchurl {
-    url = "https://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "02faww5bnjw76k6igrjzwf0lnw4xd9ckc8d6ilc3c4gfrdi6j707";
+    url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
+    sha256 = "0iz4ickj52fxjp8crg573kjrl4viq279g589isdpgpckslysf7g7";
   };
 
-  patches = [
-  ]
-
-  # Use shared libraries to decrease size
-  ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.13-shared_libs-1.patch
-
-  ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+  patches =
+    # Use shared libraries to decrease size
+    stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
   ;
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
   '';
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
@@ -63,11 +59,12 @@ in stdenv.mkDerivation rec {
     Name: mupdf
     Description: Library for rendering PDF documents
     Version: ${version}
-    Libs: -L$out/lib -lmupdf -lmupdfthird
+    Libs: -L$out/lib -lmupdf -lmupdf-third
     Cflags: -I$dev/include
     EOF
 
     moveToOutput "bin" "$bin"
+    ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
     mkdir -p $bin/share/applications
     cat > $bin/share/applications/mupdf.desktop <<EOF
     [Desktop Entry]
@@ -83,11 +80,11 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://mupdf.com;
+    homepage = https://mupdf.com;
     repositories.git = git://git.ghostscript.com/mupdf.git;
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ viric vrthra fpletz ];
+    maintainers = with maintainers; [ vrthra fpletz ];
     platforms = platforms.unix;
   };
 }

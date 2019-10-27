@@ -1,23 +1,24 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "caddy-${version}";
-  version = "0.10.12";
+buildGoModule rec {
+  pname = "caddy";
+  version = "1.0.3";
 
-  goPackagePath = "github.com/mholt/caddy";
+  goPackagePath = "github.com/caddyserver/caddy";
 
   subPackages = [ "caddy" ];
 
   src = fetchFromGitHub {
-    owner = "mholt";
-    repo = "caddy";
+    owner = "caddyserver";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0vmgswln72qqay73z39qn135sl5k71zlybr2jdrcjlmp4i7hrf88";
+    sha256 = "1n7i9w4vva5x5wry7gzkyfylk39x40ykv7ypf1ca3zbbk7w5x6mw";
   };
+  modSha256 = "0np0mbs0mrn8scqa0dgvi7ya1707b3883prdaf1whsqrcr71ig8q";
 
   buildFlagsArray = ''
     -ldflags=
-      -X github.com/mholt/caddy/caddy/caddymain.gitTag=v${version}
+      -s -w -X github.com/caddyserver/caddy/caddy/caddymain.gitTag=v${version}
   '';
 
   meta = with stdenv.lib; {

@@ -10,11 +10,11 @@ in
 import ./make-test.nix ({ pkgs, ...} : {
   name = "containers-bridge";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco chaoflow kampfschlaefer ];
+    maintainers = [ aristid aszlig eelco kampfschlaefer ];
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
@@ -42,9 +42,21 @@ import ./make-test.nix ({ pkgs, ...} : {
             { services.httpd.enable = true;
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
-              networking.firewall.allowPing = true;
             };
         };
+
+      containers.web-noip =
+        {
+          autoStart = true;
+          privateNetwork = true;
+          hostBridge = "br0";
+          config =
+            { services.httpd.enable = true;
+              services.httpd.adminAddr = "foo@example.org";
+              networking.firewall.allowedTCPPorts = [ 80 ];
+            };
+        };
+
 
       virtualisation.pathsInNixDB = [ pkgs.stdenv ];
     };
@@ -56,6 +68,10 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # Start the webserver container.
       $machine->succeed("nixos-container status webserver") =~ /up/ or die;
+
+      # Check if bridges exist inside containers
+      $machine->succeed("nixos-container run webserver -- ip link show eth0");
+      $machine->succeed("nixos-container run web-noip -- ip link show eth0");
 
       "${containerIp}" =~ /([^\/]+)\/([0-9+])/;
       my $ip = $1;

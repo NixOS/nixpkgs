@@ -142,6 +142,10 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 etcd - - -"
+    ];
+
     systemd.services.etcd = {
       description = "etcd key-value store";
       wantedBy = [ "multi-user.target" ];
@@ -176,19 +180,13 @@ in {
         Type = "notify";
         ExecStart = "${pkgs.etcd.bin}/bin/etcd";
         User = "etcd";
-        PermissionsStartOnly = true;
         LimitNOFILE = 40000;
       };
-
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}
-        if [ "$(id -u)" = 0 ]; then chown etcd ${cfg.dataDir}; fi
-      '';
     };
 
     environment.systemPackages = [ pkgs.etcdctl ];
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "etcd";
       uid = config.ids.uids.etcd;
       description = "Etcd daemon user";

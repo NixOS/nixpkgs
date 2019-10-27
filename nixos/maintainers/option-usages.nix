@@ -102,7 +102,7 @@ let
       # builtins multiply by 4 the memory usage and the time used to compute
       # each options.
       tryCollectOptions = moduleResult:
-        flip map (excludeOptions (collect isOption moduleResult)) (opt:
+        forEach (excludeOptions (collect isOption moduleResult)) (opt:
           { name = showOption opt.loc; } // builtins.tryEval (strict opt.value));
      in
        keepNames (
@@ -145,11 +145,11 @@ let
   displayOptionsGraph =
      let
        checkList =
-         if !(isNull testOption) then [ testOption ]
+         if testOption != null then [ testOption ]
          else testOptions;
        checkAll = checkList == [];
      in
-       flip filter graph ({option, usedBy}:
+       flip filter graph ({option, ...}:
          (checkAll || elem option checkList)
          && !(elem option excludedTestOptions)
        );
@@ -165,7 +165,7 @@ let
   '';
 
   graphToText = graph:
-    concatMapStrings ({option, usedBy}:
+    concatMapStrings ({usedBy, ...}:
         concatMapStrings (user: ''
           ${user}
         '') usedBy

@@ -1,9 +1,9 @@
 { lib, fetchzip, makeWrapper, makeDesktopItem, stdenv
-, jre, swt, gtk, libXtst, glib
+, gtk, libXtst, glib, zlib
 }:
 
 let
-  version = "1.5.6";
+  version = "1.6.0";
   arch = "x86_64";
 
   desktopItem = makeDesktopItem rec {
@@ -21,10 +21,11 @@ let
 
 
 in stdenv.mkDerivation {
-  name = "tla-toolbox-${version}";
+  pname = "tla-toolbox";
+  inherit version;
   src = fetchzip {
     url = "https://tla.msr-inria.inria.fr/tlatoolbox/products/TLAToolbox-${version}-linux.gtk.${arch}.zip";
-    sha256 = "1h63mcbrkf4jcg6qncpqffdi0x665z0wlfdq43d67p411xcqmbw9";
+    sha256 = "1mgx4p5qykf9q0p4cp6kcpc7fx8g5f2w1g40kdgas24hqwrgs3cm";
   };
 
   buildInputs = [ makeWrapper  ];
@@ -34,17 +35,20 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p "$out/bin"
     cp -r "$src" "$out/toolbox"
-    chmod +w "$out/toolbox" "$out/toolbox/toolbox"
+    chmod -R +w "$out/toolbox"
 
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       "$out/toolbox/toolbox"
 
+    patchelf \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      "$(find "$out/toolbox" -name java)"
+
     makeWrapper $out/toolbox/toolbox $out/bin/tla-toolbox \
       --run "set -x; cd $out/toolbox" \
       --add-flags "-data ~/.tla-toolbox" \
-      --prefix PATH : "${jre}/bin" \
-      --prefix LD_LIBRARY_PATH : "${swt}/lib:${gtk}/lib:${libXtst}/lib:${glib}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk libXtst glib zlib ]}"
 
     echo -e "\nCreating TLA Toolbox icons..."
     pushd "$src"

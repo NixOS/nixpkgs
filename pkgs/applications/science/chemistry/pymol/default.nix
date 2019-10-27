@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem
 , python3, python3Packages
-, glew, freeglut, libpng, libxml2, tk, freetype, libmsgpack }:
+, glew, freeglut, libpng, libxml2, tk, freetype, msgpack }:
 
 
 with stdenv.lib;
@@ -13,8 +13,8 @@ let
   description = "A Python-enhanced molecular graphics tool";
 
   desktopItem = makeDesktopItem {
-    name = "${pname}";
-    exec = "${pname}";
+    name = pname;
+    exec = pname;
     desktopName = "PyMol Molecular Graphics System";
     genericName = "Molecular Modeler";
     comment = description;
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication {
     sha256 = "1qpacd5w4r9a0nm5iqmkd92ym3ai00dp7v61cwd6jgakk6wfps3s";
   };
 
-  buildInputs = [ python3Packages.numpy glew freeglut libpng libxml2 tk freetype libmsgpack ];
+  buildInputs = [ python3Packages.numpy glew freeglut libpng libxml2 tk freetype msgpack ];
   NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
 
   installPhase = ''
@@ -47,5 +47,6 @@ python3Packages.buildPythonApplication {
     description = description;
     homepage = https://www.pymol.org/;
     license = licenses.psfl;
+    broken = true;
   };
 }

@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchurl, pydns }:
+{ lib, buildPythonPackage, fetchPypi, pydns }:
 
 buildPythonPackage rec {
-  name = "pyspf-${version}";
-  version = "2.0.12";
+  pname = "pyspf";
+  version = "2.0.13";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pymilter/pyspf/${name}/${name}.tar.gz";
-    sha256 = "18j1rmbmhih7q6y12grcj169q7sx1986qn4gmpla9y5gwfh1p8la";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "16wjj99d2pikz6z1gwnl1jjvad6qjgpsf3a85lh47qqrjpiipp32";
   };
 
   propagatedBuildInputs = [ pydns ];

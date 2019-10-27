@@ -1,27 +1,30 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
+, fetchPypi
 , python
 , zope_interface
 , incremental
 , automat
 , constantly
 , hyperlink
+, pyhamcrest
+, attrs
 , pyopenssl
 , service-identity
+, setuptools
 , idna
 }:
 buildPythonPackage rec {
   pname = "Twisted";
-  name = "${pname}-${version}";
-  version = "17.9.0";
+  version = "19.7.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-    sha256 = "0da1a7e35d5fcae37bc9c7978970b5feb3bc82822155b8654ec63925c05af75c";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "tar.bz2";
+    sha256 = "d5db93026568f60cacdc0615fcd21d46f694a6bfad0ef3ff53cde2b4bb85a39d";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink ];
+  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools ];
 
   passthru.extras.tls = [ pyopenssl service-identity idna ];
 
@@ -36,7 +39,9 @@ buildPythonPackage rec {
   # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
   # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
   # details.
-  postInstall = "$out/bin/twistd --help > /dev/null";
+  postFixup = ''
+    $out/bin/twistd --help > /dev/null
+  '';
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s twisted/test
@@ -45,7 +50,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://twistedmatrix.com/;
+    homepage = https://twistedmatrix.com/;
     description = "Twisted, an event-driven networking engine written in Python";
     longDescription = ''
       Twisted is an event-driven networking engine written in Python

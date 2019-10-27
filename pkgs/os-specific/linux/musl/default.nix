@@ -1,5 +1,4 @@
 { stdenv, lib, fetchurl
-, buildPackages
 , linuxHeaders ? null
 , useBSDCompatHeaders ? true
 }:
@@ -29,12 +28,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name    = "musl-${version}";
-  version = "1.1.19";
+  pname = "musl";
+  version = "1.1.24";
 
   src = fetchurl {
-    url    = "http://www.musl-libc.org/releases/musl-${version}.tar.gz";
-    sha256 = "1nf1wh44bhm8gdcfr75ayib29b99vpq62zmjymrq7f96h9bshnfv";
+    url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
+    sha256 = "18r2a00k82hz0mqdvgm7crzc7305l36109c0j9yjmkxj2alcjw0k";
   };
 
   enableParallelBuilding = true;
@@ -58,16 +57,15 @@ stdenv.mkDerivation rec {
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
   ];
-  preConfigure = ''
-    configureFlagsArray+=("--syslibdir=$out/lib")
-  '';
+  CFLAGS = [ "-fstack-protector-strong" ]
+    ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
 
   configureFlags = [
     "--enable-shared"
     "--enable-static"
     "--enable-debug"
-    "CFLAGS=-fstack-protector-strong"
     "--enable-wrapper=all"
+    "--syslibdir=${placeholder "out"}/lib"
   ];
 
   outputs = [ "out" "dev" ];
@@ -112,11 +110,11 @@ stdenv.mkDerivation rec {
 
   passthru.linuxHeaders = linuxHeaders;
 
-  meta = {
+  meta = with lib; {
     description = "An efficient, small, quality libc implementation";
     homepage    = "http://www.musl-libc.org";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }

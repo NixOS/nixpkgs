@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, clang, curl, libzip, pkgconfig }:
+{ stdenv, fetchFromGitHub, curl, libzip, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "tldr-${version}";
+  pname = "tldr";
   version = "1.3.0";
 
   src = fetchFromGitHub {
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "10ylpiqc06p0qpma72vwksd7hd107s0vlx9c6s9rz4vc3i274lb6";
   };
 
-  buildInputs = [ curl clang libzip ];
+  buildInputs = [ curl libzip ];
   nativeBuildInputs = [ pkgconfig ];
+
+  makeFlags = ["CC=cc" "LD=cc" "CFLAGS="];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://tldr-pages.github.io;
     license = licenses.mit;
-    maintainers = with maintainers; [ taeer ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ taeer carlosdagos ];
+    platforms = platforms.all;
   };
 }

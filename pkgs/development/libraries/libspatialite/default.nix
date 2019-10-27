@@ -6,16 +6,19 @@ stdenv.mkDerivation rec {
   name = "libspatialite-4.3.0a";
 
   src = fetchurl {
-    url = "http://www.gaia-gis.it/gaia-sins/libspatialite-sources/${name}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/${name}.tar.gz";
     sha256 = "16d4lpl7xrm9zy4gphy6nwanpjp8wn9g4wq2i2kh8abnlhq01448";
   };
 
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ libxml2 sqlite zlib proj geos libiconv ];
 
-  configureFlags = "--disable-freexl";
+  configureFlags = [ "--disable-freexl" ];
 
   enableParallelBuilding = true;
+
+  CFLAGS = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
 
   postInstall = "" + optionalString stdenv.isDarwin ''
     ln -s $out/lib/mod_spatialite.{so,dylib}

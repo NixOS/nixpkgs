@@ -15,7 +15,7 @@ let
       '';
     };
     emscriptenfastcomp = symlinkJoin {
-      name = "emscriptenfastcomp";
+      name = "emscriptenfastcomp-${stdenv.lib.getVersion self.emscriptenfastcomp-unwrapped}";
       paths = [ self.emscriptenfastcomp-wrapped self.emscriptenfastcomp-unwrapped ];
       preferLocalBuild = false;
       allowSubstitutes = true;

@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages, mopidy, mopidy-spotify }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-spotify-tunigo-${version}";
-
+  pname = "mopidy-spotify-tunigo";
   version = "1.0.0";
 
   src = fetchFromGitHub {

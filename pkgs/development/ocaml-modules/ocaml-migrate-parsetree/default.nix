@@ -1,35 +1,22 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, jbuilder, result }:
+{ stdenv, fetchFromGitHub, buildDunePackage, result, ppx_derivers }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "ocaml-migrate-parsetree is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
-   name = "ocaml${ocaml.version}-ocaml-migrate-parsetree-${version}";
-   version = "1.0.7";
+buildDunePackage rec {
+   pname = "ocaml-migrate-parsetree";
+   version = "1.4.0";
 
    src = fetchFromGitHub {
-     owner = "let-def";
-     repo = "ocaml-migrate-parsetree";
+     owner = "ocaml-ppx";
+     repo = pname;
      rev = "v${version}";
-     sha256 = "0v1h943xv5bd8qy5mr8pvyjbgamhs59nkgr94j3vznabrcfqzkh7";
+     sha256 = "0sv1p4615l8gpbah4ya2c40yr6fbvahvv3ks7zhrsgcwcq2ljyr2";
    };
 
-   buildInputs = [ ocaml findlib ocamlbuild jbuilder ];
-   propagatedBuildInputs = [ result ];
-
-   installPhase = ''
-     for p in *.install
-     do
-       ${jbuilder.installPhase} $p
-     done
-   '';
+   propagatedBuildInputs = [ ppx_derivers result ];
 
    meta = {
      description = "Convert OCaml parsetrees between different major versions";
      license = stdenv.lib.licenses.lgpl21;
      maintainers = [ stdenv.lib.maintainers.vbgl ];
      inherit (src.meta) homepage;
-     inherit (ocaml.meta) platforms;
    };
 }

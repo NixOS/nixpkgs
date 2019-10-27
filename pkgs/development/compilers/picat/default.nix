@@ -8,8 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0wvl95gf4pjs93632g4wi0mw1glzzhjp9g4xg93ll2zxggbxibli";
   };
 
-  ARCH = if stdenv.system == "i686-linux" then "linux32"
-         else if stdenv.system == "x86_64-linux" then "linux64"
+  ARCH = if stdenv.hostPlatform.system == "i686-linux" then "linux32"
+         else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
          else throw "Unsupported system";
 
   hardeningDisable = [ "format" ];

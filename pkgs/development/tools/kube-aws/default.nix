@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 with lib;
 
 buildGoPackage rec {
-  name = "kube-aws-${version}";
+  pname = "kube-aws";
   version = "0.9.4";
 
   goPackagePath = "github.com/coreos/kube-aws";

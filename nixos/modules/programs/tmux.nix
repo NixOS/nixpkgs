@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types;
+  inherit (lib) mkOption mkIf types;
 
   cfg = config.programs.tmux;
 
@@ -177,7 +177,7 @@ in {
       systemPackages = [ pkgs.tmux ];
 
       variables = {
-        TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}'';
+        TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/$(id -u)"}'';
       };
     };
   };

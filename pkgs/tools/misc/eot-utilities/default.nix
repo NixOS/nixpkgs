@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "eot_utilities";
   version = "1.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://www.w3.org/Tools/eot-utils/eot-utilities-${version}.tar.gz";
@@ -17,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "Create Embedded Open Type from OpenType or TrueType font";
     license = stdenv.lib.licenses.w3c;
     maintainers = with stdenv.lib.maintainers; [ leenaars ];
-    platforms = with stdenv.lib.platforms; linux; 
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

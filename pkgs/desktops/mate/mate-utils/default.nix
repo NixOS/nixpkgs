@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, libgtop, libcanberra-gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, libgtop, libcanberra-gtk3, inkscape, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-utils-${version}";
-  version = "1.20.0";
+  pname = "mate-utils";
+  version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "10a6k8gi7cajlkbj1jbvk3s633hw58lan3rc85v8jlrkwm7wmhpl";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1i6fnm3y1hj8r57x4jpc4ixqs77zln8f7477d0haypflxm3s4kjr";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
     itstool
+    inkscape
     wrapGAppsHook
   ];
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utilities for the MATE desktop";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

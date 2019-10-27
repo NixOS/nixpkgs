@@ -10,7 +10,7 @@
   allows querying and manipulating user sessions. For instance, to list all
   user sessions:
 <screen>
-$ loginctl
+<prompt>$ </prompt>loginctl
    SESSION        UID USER             SEAT
         c1        500 eelco            seat0
         c3          0 root             seat0
@@ -21,7 +21,7 @@ $ loginctl
   devices attached to the system; usually, there is only one seat.) To get
   information about a session:
 <screen>
-$ loginctl session-status c3
+<prompt>$ </prompt>loginctl session-status c3
 c3 - root (0)
            Since: Tue, 2013-01-08 01:17:56 CET; 4min 42s ago
           Leader: 2536 (login)

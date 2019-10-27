@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, wineUnstable, libtxc_dxtn_Name }:
+{ stdenv, callPackage, wineUnstable, libtxc_dxtn_Name }:
 
 with callPackage ./util.nix {};
 

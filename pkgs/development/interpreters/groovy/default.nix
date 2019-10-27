@@ -3,12 +3,12 @@
 # at runtime, need jdk
 
 stdenv.mkDerivation rec {
-  name = "groovy-${version}";
-  version = "2.4.15";
+  pname = "groovy";
+  version = "2.5.8";
 
   src = fetchurl {
     url = "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
-    sha256 = "1vaa1wjnaza04hvp1n4kh10hvxx8370liz2ndm908dqv9mxa6k5x";
+    sha256 = "0hl7m9fpmrn9ppxbb3pm68048xpzig7q6hqyg121gvcziywi9ys9";
   };
 
   buildInputs = [ unzip makeWrapper ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     mkdir -p $out/share/doc/groovy
     rm bin/*.bat
-    mv {bin,conf,embeddable,grooid,indy,lib} $out
+    mv {bin,conf,grooid,indy,lib} $out
     mv {licenses,LICENSE,NOTICE} $out/share/doc/groovy
 
     sed -i 's#which#${which}/bin/which#g' $out/bin/startGroovy

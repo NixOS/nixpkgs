@@ -2,9 +2,9 @@
 
 rec {
   major = "6";
-  minor = "0";
-  patch = "3";
-  tweak = "2";
+  minor = "3";
+  patch = "0";
+  tweak = "4";
 
   subdir = "${major}.${minor}.${patch}";
 
@@ -12,6 +12,6 @@ rec {
 
   src = fetchurl {
     url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "16w5f8jbicby9jgsrpaj7g9c0wzymcmk1qk1fqdxaykrgpss5f0j";
+    sha256 = "1mxflzrcm04djkj8ifyy4rwgl8bxirrvzrn864w6rgvzn43h30w7";
   };
 }

@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "rq-${version}";
+  pname = "rq";
   version = "0.10.4";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "066f6sdy0vrp113wlg18q9p0clyrg9iqbj17ly0yn8dxr5iar002";
   };
 
-  cargoSha256 = "0c4awm1d87b396d3g3mp1md5p92i5a64a9jdawpr8mwjd0bly05m";
+  cargoSha256 = "1n92d82l9wqrpsbkqiir6zsgf12xp4xb6bxq2nywg4lmwrnyapbh";
 
   buildInputs = [ llvmPackages.clang-unwrapped v8 ];
 

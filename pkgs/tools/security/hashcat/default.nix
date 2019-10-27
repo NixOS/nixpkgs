@@ -1,29 +1,24 @@
-{ stdenv, fetchurl, makeWrapper, opencl-headers, ocl-icd }:
+{ stdenv, fetchurl, makeWrapper, opencl-headers, ocl-icd, xxHash }:
 
 stdenv.mkDerivation rec {
-  name    = "hashcat-${version}";
-  version = "4.1.0";
+  pname   = "hashcat";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "170i2y32ykgzb1qf1wz3klwn31c09bviz4x3bnrwia65adqrj8xx";
+    sha256 = "0f73y4cg8c7a6q7x34qvpfi4g3lw6j9bnn0a13g43aqyiskflfr8";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ opencl-headers ];
+  buildInputs = [ opencl-headers xxHash ];
 
   makeFlags = [
-    "OPENCL_HEADERS_KHRONOS=${opencl-headers}/include"
+    "PREFIX=${placeholder "out"}"
     "COMPTIME=1337"
     "VERSION_TAG=${version}"
+    "USE_SYSTEM_OPENCL=1"
+    "USE_SYSTEM_XXHASH=1"
   ];
-
-  # $out is not known until the build has started.
-  configurePhase = ''
-    runHook preConfigure
-    makeFlags="$makeFlags PREFIX=$out"
-    runHook postConfigure
-  '';
 
   postFixup = ''
     wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib

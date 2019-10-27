@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libnfnetlink, libmnl }:
 
 stdenv.mkDerivation rec {
-  name = "libnetfilter_conntrack-${version}";
-  version = "1.0.6";
+  pname = "libnetfilter_conntrack";
+  version = "1.0.7";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnetfilter_conntrack/files/${name}.tar.bz2";
-    sha256 = "1svzyf3rq9nbrcw1jsricgyhh7x1am8iqn6kjr6mzrw42810ik7g";
+    url = "https://netfilter.org/projects/libnetfilter_conntrack/files/${pname}-${version}.tar.bz2";
+    sha256 = "1dl9z50yny04xi5pymlykwmy6hcfc9p4nd7m47697zwxw98m6s1k";
   };
 
   buildInputs = [ libmnl ];

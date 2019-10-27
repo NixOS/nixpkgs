@@ -1,32 +1,46 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, cmake, extra-cmake-modules
+{ mkDerivation, lib, stdenv, makeWrapper, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash
-, boost, libraw, fftw, eigen, exiv2, lcms2, gsl, openexr
-, openjpeg, opencolorio, vc, poppler_qt5, curl, ilmbase
-, qtmultimedia, qtx11extras
+, boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
+, openjpeg, opencolorio, vc, poppler, curl, ilmbase
+, qtmultimedia, qtx11extras, quazip
+, python3Packages
 }:
 
 mkDerivation rec {
-  name = "krita-${version}";
-  version = "4.0.3";
+  pname = "krita";
+  version = "4.2.7.1";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/krita/${version}/${name}.tar.gz";
-    sha256 = "0zmn29dzqncc80pvy9ymgyzqw8x1ryq8b4x5mr4sz15iyj7xgspr";
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "1sx4j4brk71bas3cpqzk4bd8bknyl3x4fdg5pv4r7pcfd3vpq2vy";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash
-    boost libraw fftw eigen exiv2 lcms2 gsl openexr
-    openjpeg opencolorio vc poppler_qt5 curl ilmbase
-    qtmultimedia qtx11extras
-  ];
+    boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
+    openjpeg opencolorio poppler curl ilmbase
+    qtmultimedia qtx11extras quazip
+    python3Packages.pyqt5
+  ] ++ lib.optional (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) vc;
 
   NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];
+
+  cmakeFlags = [
+    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
+    "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/share/sip/PyQt5"
+    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+  ];
+
+  postInstall = ''
+    for i in $out/bin/*; do
+      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
+    done
+  '';
 
   meta = with lib; {
     description = "A free and open source painting application";

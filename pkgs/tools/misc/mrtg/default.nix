@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
 
-  version = "2.17.4";
-  name = "mrtg-${version}";
+  version = "2.17.7";
+  pname = "mrtg";
 
   src = fetchurl {
-    url = "https://oss.oetiker.ch/mrtg/pub/${name}.tar.gz";
-    sha256 = "0r93ipscfp7py0b1dcx65s58q7dlwndqhprf8w4945a0h2p7zyjy";
+    url = "https://oss.oetiker.ch/mrtg/pub/${pname}-${version}.tar.gz";
+    sha256 = "1hrjqfi290i936nblwpfzjn6v8d8p69frcrvml206nxiiwkcp54v";
   };
 
   buildInputs = [

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, openssl, popt, xmlto }:
 
 stdenv.mkDerivation rec {
-  name = "rabbitmq-c-${version}";
+  pname = "rabbitmq-c";
   version = "0.9.0";
 
   src = fetchFromGitHub {
@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/alanxz/rabbitmq-c;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

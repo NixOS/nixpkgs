@@ -46,12 +46,12 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "fusion-inventory";
       description = "FusionInventory user";
     };
 
-    systemd.services."fusion-inventory" = {
+    systemd.services.fusion-inventory = {
       description = "Fusion Inventory Agent";
       wantedBy = [ "multi-user.target" ];
 

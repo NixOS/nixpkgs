@@ -6,12 +6,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-websupport";
-  version = "1.0.1";
-  name = "${pname}-${version}";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a85961326aa3a400cd4ad3c816d70ed6f7c740acd7ce5d78cd0a67825072eb9";
+    sha256 = "1501befb0fdf1d1c29a800fdbf4ef5dc5369377300ddbdd16d2cd40e54c6eefc";
   };
 
   propagatedBuildInputs = [ six ];

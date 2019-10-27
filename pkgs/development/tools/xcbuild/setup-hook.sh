@@ -19,11 +19,9 @@ xcbuildInstallPhase () {
     runHook postInstall
 }
 
-if [ -z "$dontUseXcbuild" ]; then
-    buildPhase=xcbuildBuildPhase
-    if [ -z "$installPhase" ]; then
-        installPhase=xcbuildInstallPhase
-    fi
+buildPhase=xcbuildBuildPhase
+if [ -z "$installPhase" ]; then
+    installPhase=xcbuildInstallPhase
 fi
 
 # if [ -d "*.xcodeproj" ]; then

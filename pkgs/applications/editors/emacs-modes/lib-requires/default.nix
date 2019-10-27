@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, melpaBuild }:
+{ fetchurl, lib, melpaBuild }:
 
 melpaBuild {
   pname = "lib-requires";
@@ -10,7 +10,7 @@ melpaBuild {
     name = "lib-requires.el";
   };
 
-  recipeFile = fetchurl {
+  recipe = fetchurl {
     url = "https://raw.githubusercontent.com/milkypostman/melpa/a5d15f875b0080b12ce45cf696c581f6bbf061ba/recipes/lib-requires";
     sha256 = "1g22jh56z8rnq0h80wj10gs38yig1rk9xmk3kmhmm5mm6b14iwdx";
     name = "lib-requires";

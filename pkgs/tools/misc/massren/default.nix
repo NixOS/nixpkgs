@@ -1,7 +1,7 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "massren-${version}";
+  pname = "massren";
   version = "1.5.4";
 
   src = fetchFromGitHub {

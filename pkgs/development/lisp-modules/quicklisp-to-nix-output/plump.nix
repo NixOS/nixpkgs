@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''plump'';
-  version = ''20180131-git'';
+  version = ''20190710-git'';
 
   description = ''An XML / XHTML / HTML parser that aims to be as lenient as possible.'';
 
   deps = [ args."array-utils" args."documentation-utils" args."trivial-indent" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/plump/2018-01-31/plump-20180131-git.tgz'';
-    sha256 = ''12kawjp88kh7cl2f3s2rg3fp3m09pr477nl9nxcfhmfkbrprslis'';
+    url = ''http://beta.quicklisp.org/archive/plump/2019-07-10/plump-20190710-git.tgz'';
+    sha256 = ''1in8c86a1ss8h02bsr3yb0clqgbvqh0bh5gy4y01yfckixbxh5fi'';
   };
 
   packageName = "plump";
@@ -19,11 +19,11 @@ rec {
 }
 /* (SYSTEM plump DESCRIPTION
     An XML / XHTML / HTML parser that aims to be as lenient as possible. SHA256
-    12kawjp88kh7cl2f3s2rg3fp3m09pr477nl9nxcfhmfkbrprslis URL
-    http://beta.quicklisp.org/archive/plump/2018-01-31/plump-20180131-git.tgz
-    MD5 b9e7e174b2322b6547bca7beddda6f3b NAME plump FILENAME plump DEPS
+    1in8c86a1ss8h02bsr3yb0clqgbvqh0bh5gy4y01yfckixbxh5fi URL
+    http://beta.quicklisp.org/archive/plump/2019-07-10/plump-20190710-git.tgz
+    MD5 e3276779e368758274156c9477f0b22a NAME plump FILENAME plump DEPS
     ((NAME array-utils FILENAME array-utils)
      (NAME documentation-utils FILENAME documentation-utils)
      (NAME trivial-indent FILENAME trivial-indent))
     DEPENDENCIES (array-utils documentation-utils trivial-indent) VERSION
-    20180131-git SIBLINGS (plump-dom plump-lexer plump-parser) PARASITES NIL) */
+    20190710-git SIBLINGS (plump-dom plump-lexer plump-parser) PARASITES NIL) */

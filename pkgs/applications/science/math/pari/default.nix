@@ -1,18 +1,22 @@
-{ stdenv, fetchurl
-, gmp, readline, libX11, tex, perl
+{ stdenv
+, fetchurl
+, gmp
+, readline
+, libX11
+, tex
+, perl
 , withThread ? true, libpthreadstubs
 }:
 
 assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
-
-  name = "pari-${version}";
-  version = "2.9.5";
+  pname = "pari";
+  version = "2.11.2";
 
   src = fetchurl {
-    url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "05z6y5iwdzcdggbrkic9cy9vy9wmk5qxc21cb4lqnbqxnhjihibb";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
+    sha256 = "0fck8ssmirl8fy7s4mspgrxjs5sag76xbshqlqzkcl3kqyrk4raa";
   };
 
   buildInputs = [
@@ -67,10 +71,10 @@ stdenv.mkDerivation rec {
           run 3 or 4 times faster.) gp2c currently only understands a subset
            of the GP language.
     '';
-    homepage    = "http://pari.math.u-bordeaux.fr/";
-    downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
+    homepage    = http://pari.math.u-bordeaux.fr;
+    downloadPage = http://pari.math.u-bordeaux.fr/download.html;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes raskin AndersonTorres ];
+    maintainers = with maintainers; [ ertes raskin AndersonTorres timokau ];
     platforms   = platforms.linux ++ platforms.darwin;
     updateWalker = true;
   };

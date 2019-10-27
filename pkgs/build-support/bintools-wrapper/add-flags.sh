@@ -5,28 +5,20 @@ var_templates_list=(
     NIX+LDFLAGS_BEFORE
     NIX+LDFLAGS_AFTER
     NIX+LDFLAGS_HARDEN
+    NIX+HARDENING_ENABLE
 )
 var_templates_bool=(
     NIX+SET_BUILD_ID
     NIX+DONT_SET_RPATH
 )
 
-declare -a role_infixes=()
-if [ "${NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_BUILD:-}" ]; then
-    role_infixes+=(_BUILD_)
-fi
-if [ "${NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_HOST:-}" ]; then
-    role_infixes+=(_)
-fi
-if [ "${NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_TARGET:-}" ]; then
-    role_infixes+=(_TARGET_)
-fi
+accumulateRoles
 
 for var in "${var_templates_list[@]}"; do
-    mangleVarList "$var" "${role_infixes[@]}"
+    mangleVarList "$var" ${role_infixes[@]+"${role_infixes[@]}"}
 done
 for var in "${var_templates_bool[@]}"; do
-    mangleVarBool "$var" "${role_infixes[@]}"
+    mangleVarBool "$var" ${role_infixes[@]+"${role_infixes[@]}"}
 done
 
 if [ -e @out@/nix-support/libc-ldflags ]; then

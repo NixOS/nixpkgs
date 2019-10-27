@@ -1,6 +1,6 @@
 {stdenv, fetchurl, perl, bash}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "atool-0.39.0";
   src = fetchurl {
     url = mirror://savannah/atool/atool-0.39.0.tar.gz;
@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
   configureScript = "${bash}/bin/bash configure";
 
   meta = {
-    homepage = http://www.nongnu.org/atool;
+    homepage = https://www.nongnu.org/atool;
     description = "Archive command line helper";
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl3;
   };
 }

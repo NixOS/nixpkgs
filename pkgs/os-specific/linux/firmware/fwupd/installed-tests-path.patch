@@ -1,0 +1,25 @@
+--- a/data/installed-tests/hardware.py
++++ b/data/installed-tests/hardware.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python3
++#!@installedTestsPython@/bin/python3
+ # pylint: disable=wrong-import-position,too-many-locals,unused-argument,wrong-import-order
+ #
+ # Copyright (C) 2017 Richard Hughes <richard@hughsie.com>
+--- a/data/installed-tests/meson.build
++++ b/data/installed-tests/meson.build
+@@ -1,6 +1,6 @@
+ con2 = configuration_data()
+ con2.set('installedtestsdir',
+-         join_paths(datadir, 'installed-tests', 'fwupd'))
++         join_paths('@installedTests@', 'share', 'installed-tests', 'fwupd'))
+ con2.set('bindir', bindir)
+ 
+ configure_file(
+@@ -52,5 +52,5 @@
+   output : 'fwupd-tests.conf',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++  install_dir: join_paths('@installedTests@', 'etc', 'fwupd', 'remotes.d'),
+ )

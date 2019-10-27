@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ config, stdenv, fetchurl
 , libX11, wxGTK
 , libiconv, fontconfig, freetype
 , libGLU_combined
@@ -8,8 +8,8 @@
 , spellcheckSupport ? true, hunspell ? null
 , automationSupport ? true, lua ? null
 , openalSupport ? false, openal ? null
-, alsaSupport ? true, alsaLib ? null
-, pulseaudioSupport ? true, libpulseaudio ? null
+, alsaSupport ? stdenv.isLinux, alsaLib ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , portaudioSupport ? false, portaudio ? null }:
 
 assert spellcheckSupport -> (hunspell != null);
@@ -21,11 +21,11 @@ assert portaudioSupport -> (portaudio != null);
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "aegisub-${version}";
+  pname = "aegisub";
   version = "3.2.2";
 
   src = fetchurl {
-    url = "http://ftp.aegisub.org/pub/releases/${name}.tar.xz";
+    url = "http://ftp.aegisub.org/pub/releases/${pname}-${version}.tar.xz";
     sha256 = "11b83qazc8h0iidyj1rprnnjdivj1lpphvpa08y53n42bfa36pn5";
   };
 
@@ -47,6 +47,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   hardeningDisable = [ "bindnow" "relro" ];
+
+  # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
+  CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
+
+  # this is fixed upstream though not yet in an officially released version,
+  # should be fine remove on next release (if one ever happens)
+  NIX_LDFLAGS = [
+    "-lpthread"
+  ];
 
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 

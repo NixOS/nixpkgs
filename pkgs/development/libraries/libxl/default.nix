@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libxl";
-  version = "3.8.1";
+  pname = "libxl";
+  version = "3.8.5";
 
   src = fetchurl {
-    url = "http://www.libxl.com/download/${name}-lin-${version}.tar.gz";
-    sha256 = "1zdbahhyhr70s8hygwp43j9z4zmglyrr782hkcm1078yvkr2f2fm";
+    url = "http://www.libxl.com/download/${pname}-lin-${version}.tar.gz";
+    sha256 = "15n8gxyznk1nm2kgp86hd36rnivjsby9ccl12lyabv6q3fab6fsx";
   };
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];

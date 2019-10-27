@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-spotify-${version}";
+  pname = "mopidy-spotify";
   version = "3.1.0";
 
   src = fetchurl {
@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://www.mopidy.com/;
     description = "Mopidy extension for playing music from Spotify";
     license = licenses.asl20;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
     hydraPlatforms = [];
   };
 }

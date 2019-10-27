@@ -14,11 +14,12 @@ let
     log.fields.service = "registry";
     storage = {
       cache.blobdescriptor = blobCache;
-      filesystem.rootdirectory = cfg.storagePath;
       delete.enabled = cfg.enableDelete;
-    };
+    } // (if cfg.storagePath != null
+          then { filesystem.rootdirectory = cfg.storagePath; }
+          else {});
     http = {
-      addr = ":${builtins.toString cfg.port}";
+      addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
     };
     health.storagedriver = {
@@ -42,7 +43,7 @@ let
     };
   };
 
-  configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (registryConfig // cfg.extraConfig));
+  configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
 
 in {
   options.services.dockerRegistry = {
@@ -61,9 +62,12 @@ in {
     };
 
     storagePath = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
       default = "/var/lib/docker-registry";
-      description = "Docker registry storage path.";
+      description = ''
+        Docker registry storage path for the filesystem storage backend. Set to
+        null to configure another backend via extraConfig.
+      '';
     };
 
     enableDelete = mkOption {
@@ -91,7 +95,7 @@ in {
         Docker extra registry configuration via environment variables.
       '';
       default = {};
-      type = types.attrsOf types.str;
+      type = types.attrs;
     };
 
     enableGarbageCollect = mkEnableOption "garbage collect";
@@ -120,6 +124,7 @@ in {
       serviceConfig = {
         User = "docker-registry";
         WorkingDirectory = cfg.storagePath;
+        AmbientCapabilities = mkIf (cfg.port < 1024) "cap_net_bind_service";
       };
     };
 
@@ -139,9 +144,12 @@ in {
       startAt = optional cfg.enableGarbageCollect cfg.garbageCollectDates;
     };
 
-    users.extraUsers.docker-registry = {
-      createHome = true;
-      home = cfg.storagePath;
-    };
+    users.users.docker-registry =
+      if cfg.storagePath != null
+      then {
+        createHome = true;
+        home = cfg.storagePath;
+      }
+      else {};
   };
 }

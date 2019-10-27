@@ -3,10 +3,9 @@
 stdenv.mkDerivation rec {
   pname = "telepathy-idle";
   version = "0.2.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
+    url = "http://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1argdzbif1vdmwp5vqbgkadq9ancjmgdm2ncp0qfckni715ss4rh";
   };
 

@@ -150,12 +150,12 @@ in {
       pkgs.dejavu_fonts
     ];
 
-    users.extraGroups = optional (cfg.group == "jenkins") {
+    users.groups = optional (cfg.group == "jenkins") {
       name = "jenkins";
       gid = config.ids.gids.jenkins;
     };
 
-    users.extraUsers = optional (cfg.user == "jenkins") {
+    users.users = optional (cfg.user == "jenkins") {
       name = "jenkins";
       description = "jenkins user";
       createHome = true;
@@ -189,11 +189,11 @@ in {
 
       preStart =
         let replacePlugins =
-              if isNull cfg.plugins
+              if cfg.plugins == null
               then ""
               else
                 let pluginCmds = lib.attrsets.mapAttrsToList
-                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.hpi")
+                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
                       cfg.plugins;
                 in ''
                   rm -r ${cfg.home}/plugins || true
