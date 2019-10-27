@@ -1028,6 +1028,7 @@ buildPhase() {
             SHELL=$SHELL
             ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
             ${buildFlags+"${buildFlags[@]}"} ${buildFlagsArray+"${buildFlagsArray[@]}"}
+            ${buildTargets+"${buildTargets[@]}"}
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
