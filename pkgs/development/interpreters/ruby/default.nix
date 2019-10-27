@@ -25,6 +25,7 @@ let
 
   generic = { version, sha256 }: let
     ver = version;
+    versionString = version.__toString version;
     tag = ver.gitTag;
     atLeast25 = lib.versionAtLeast ver.majMin "2.5";
     baseruby = self.override {
@@ -51,7 +52,7 @@ let
       }:
       stdenv.mkDerivation rec {
         pname = "ruby";
-        inherit version;
+        version = versionString;
 
         src = if useRailsExpress then fetchFromGitHub {
           owner  = "ruby";
