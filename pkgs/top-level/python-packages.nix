@@ -906,6 +906,8 @@ in {
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
+  py3buddy = callPackage ../development/python-modules/py3buddy { };
+
   pybullet = callPackage ../development/python-modules/pybullet { };
 
   pycairo = callPackage ../development/python-modules/pycairo {
