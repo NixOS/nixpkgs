@@ -5837,6 +5837,8 @@ in {
 
   pyregion = callPackage ../development/python-modules/pyregion {};
 
+  python-nomad = callPackage ../development/python-modules/python-nomad { };
+
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
