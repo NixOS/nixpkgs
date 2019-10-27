@@ -13,7 +13,7 @@
     efi.canTouchEfiVariables = lib.mkDefault true;
     systemd-boot.enable = lib.mkDefault true;
   };
-  
+
   hardware.firmware = lib.mkBefore [ pkgs.qca6174-firmware ];
 
   # TODO: move to general HiDPI profile
@@ -23,4 +23,7 @@
   nixpkgs.overlays = [(final: previous: {
     qca6174-firmware = final.callPackage ./qca6174-firmware.nix {};
   })];
+
+  # This will save you money and possibly your life!
+  services.thermald.enable = true;
 }

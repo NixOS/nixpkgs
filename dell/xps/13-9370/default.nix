@@ -14,4 +14,7 @@
   boot.blacklistedKernelModules = [ "psmouse" ];
 
   services.throttled.enable = lib.mkDefault true;
+
+  # This will save you money and possibly your life!
+  services.thermald.enable = true;
 }
