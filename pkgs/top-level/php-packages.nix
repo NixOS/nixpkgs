@@ -245,6 +245,15 @@ let
     '';
   };
 
+  pcov = buildPecl {
+    version = "1.0.6";
+    pname = "pcov";
+
+    sha256 = "1psfwscrc025z8mziq69pcx60k4fbkqa5g2ia8lplb94mmarj0v1";
+
+    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
+  };
+
   pcs = buildPecl {
     version = "1.3.3";
     pname = "pcs";
