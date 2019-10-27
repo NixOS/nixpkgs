@@ -423,7 +423,7 @@ in
 
     system.maxClosureSize = mkOption {
       default = null;
-      example = "-dev$";
+      example = 512 * 1024 * 1024;
       type = types.nullOr types.int;
       description = ''
         The maximum size of the system closure in bytes (computed as the sum of
