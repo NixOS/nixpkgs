@@ -5054,6 +5054,8 @@ in {
 
   tasklib = callPackage ../development/python-modules/tasklib { };
 
+  tatsu = callPackage ../development/python-modules/tatsu { };
+
   tempita = callPackage ../development/python-modules/tempita { };
 
   terminado = callPackage ../development/python-modules/terminado { };
