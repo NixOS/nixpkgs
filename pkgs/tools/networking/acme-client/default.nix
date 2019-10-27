@@ -15,18 +15,14 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "acme-client";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "graywolf";
     repo = "acme-client-portable";
     rev = "v${version}";
-    sha256 = "0lncvpjhj7vfpfcjc2i0ccs0as1p2078g5sw4y4qwccvx2fgj2nc";
+    sha256 = "1yq2lkrnjwjs0h9mijqysnjmr7kp4zcq1f4cxr9n1db7pw8446xb";
   };
-
-  # Required to build against LibreSSL. Submitted upstream at
-  # https://github.com/graywolf/acme-client-portable/pull/1
-  patches = [ ./compat.patch ];
 
   buildInputs = [ autoconf automake bison libbsd libressl pkgconfig ]
     ++ optional stdenv.isDarwin apple_sdk.sdk;
