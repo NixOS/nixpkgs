@@ -103,7 +103,7 @@ let
           If set, the filesystem is grown to its maximum size before
           being mounted. (This is typically the size of the containing
           partition.) This is currently only supported for ext2/3/4
-          filesystems that are mounted during early boot.
+          and btrfs filesystems that are mounted during early boot.
         '';
       };
 
@@ -209,7 +209,7 @@ in
 
     assertions = let
       ls = sep: concatMapStringsSep sep (x: x.mountPoint);
-      notAutoResizable = fs: fs.autoResize && !(hasPrefix "ext" fs.fsType || fs.fsType == "f2fs");
+      notAutoResizable = fs: fs.autoResize && !(hasPrefix "ext" fs.fsType || fs.fsType == "f2fs" || fs.fsType == "btrfs");
     in [
       { assertion = ! (fileSystems' ? cycle);
         message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
@@ -218,7 +218,7 @@ in
         message = let
           fs = head (filter notAutoResizable fileSystems);
         in
-          "Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = \"${fs.fsType}\"':${if fs.fsType == "auto" then " fsType has to be explicitly set and" else ""} only the ext filesystems and f2fs support it.";
+          "Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = \"${fs.fsType}\"':${if fs.fsType == "auto" then " fsType has to be explicitly set and" else ""} only the ext filesystems, btrfs and f2fs support it.";
       }
     ];
 

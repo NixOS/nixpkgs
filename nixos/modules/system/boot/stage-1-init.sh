@@ -349,7 +349,12 @@ mountFS() {
             elif [ "$fsType" = f2fs ]; then
                 echo "resizing $device..."
                 fsck.f2fs -fp "$device"
-                resize.f2fs "$device" 
+                resize.f2fs "$device"
+            elif [ "$fsType" = btrfs ]; then
+                echo "resizing $device..."
+                local dev="$(basename "$device")"
+                local part="$(cat /sys/class/block/$dev/partition)"
+                growpart "$dev" "$part"
             fi
             ;;
     esac
@@ -377,6 +382,17 @@ mountFS() {
     [ "$mountPoint" == "/" ] &&
         [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&
         lustrateRoot "/mnt-root"
+
+    # Grow the btrfs file system.
+    # btrfs file systems must be resized after the file system is mounted
+    case $options in
+        *x-nixos-autoresize*)
+            if [ "$fsType" = btrfs ]; then
+                btrfs filesystem resize max "/mnt-root$mountPoint"
+            fi
+            ;;
+     esac
+
 
     true
 }
