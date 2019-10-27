@@ -399,6 +399,14 @@ in
         '';
 
         serviceConfig = {
+          # znapzendzetup --import apparently tries to connect to the backup
+          # host 3 times with a timeout of 30 seconds, leading to a startup
+          # delay of >90s when the host is down, which is just above the default
+          # service timeout of 90 seconds. Increase the timeout so it doesn't
+          # make the service fail in that case.
+          TimeoutStartSec = 180;
+          # Needs to have write access to ZFS
+          User = "root";
           ExecStart = let
             args = concatStringsSep " " [
               "--logto=${cfg.logTo}"
