@@ -3008,6 +3008,8 @@ in
 
   evtest-qt = libsForQt5.callPackage ../applications/misc/evtest-qt { };
 
+  eva = callPackage ../tools/misc/eva { };
+
   exa = callPackage ../tools/misc/exa { };
 
   exempi = callPackage ../development/libraries/exempi {
@@ -7284,6 +7286,8 @@ in
   zerotierone = callPackage ../tools/networking/zerotierone { };
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
+
+  zfsbackup = callPackage ../tools/backup/zfsbackup { };
 
   zfstools = callPackage ../tools/filesystems/zfstools { };
 
@@ -13948,7 +13952,6 @@ in
   };
 
   taglib = callPackage ../development/libraries/taglib { };
-  taglib_1_9 = callPackage ../development/libraries/taglib/1.9.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
@@ -16584,10 +16587,6 @@ in
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
   riscv-pk = callPackage ../misc/riscv-pk { };
-
-  riscv-pk-with-kernel = riscv-pk.override {
-    payload = "${linux_riscv}/vmlinux";
-  };
 
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
 
@@ -20021,7 +20020,9 @@ in
 
   mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
 
-  mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
+  mythtv = libsForQt5.callPackage ../applications/video/mythtv {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
 
   micro = callPackage ../applications/editors/micro { };
 
@@ -21164,12 +21165,6 @@ in
   todoman = callPackage ../applications/office/todoman { };
 
   toggldesktop = libsForQt5.callPackage ../applications/misc/toggldesktop { };
-
-  tomahawk = callPackage ../applications/audio/tomahawk ({
-    taglib = taglib_1_9;
-    quazip = quazip_qt4;
-    boost = boost155;
-  } // (config.tomahawk or {}));
 
   topydo = callPackage ../applications/misc/topydo {};
 
