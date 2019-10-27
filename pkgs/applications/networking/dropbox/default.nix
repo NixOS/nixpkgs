@@ -30,7 +30,7 @@ let
 in
 
 buildFHSUserEnv {
-  name = "dropbox";
+  name = "dropbox-${version}";
 
   targetPkgs = pkgs: with pkgs; with xorg; [
     libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
