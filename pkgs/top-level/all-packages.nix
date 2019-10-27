@@ -13952,7 +13952,6 @@ in
   };
 
   taglib = callPackage ../development/libraries/taglib { };
-  taglib_1_9 = callPackage ../development/libraries/taglib/1.9.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
