@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://keeperrl.com/;
+    homepage = "http://keeperrl.com/";
     description = "Ambitious dungeon builder with roguelike elements";
     maintainers = with maintainers; [ rardiol ];
     license = licenses.gpl2;
