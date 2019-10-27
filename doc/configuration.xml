@@ -171,6 +171,11 @@
 </programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+      One further option is to use <literal>licenseCheckPredicate</literal> for arbitrary checks.  It should be set to a function which accepts derivation attributes and returns a boolean to indicate whether the check succeeded.
+    </para>
+   </listitem>
   </itemizedlist>
 
   <para>
