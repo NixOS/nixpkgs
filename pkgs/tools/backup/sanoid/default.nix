@@ -25,6 +25,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/jimsalterjrs/sanoid/commit/44bcd21f269e17765acd1ad0d45161902a205c7b.patch";
       sha256 = "0zqyl8q5sfscqcc07acw68ysnlnh3nb57cigjfwbccsm0zwlwham";
     })
+    # Add --cache-dir option
+    (fetchpatch {
+      url = "https://github.com/jimsalterjrs/sanoid/commit/a1f5e4c0c006e16a5047a16fc65c9b3663adb81e.patch";
+      sha256 = "1bb4g2zxrbvf7fvcgzzxsr1cvxzrxg5dzh89sx3h7qlrd6grqhdy";
+    })
+    # Add --run-dir option
+    (fetchpatch {
+      url = "https://github.com/jimsalterjrs/sanoid/commit/59a07f92b4920952cc9137b03c1533656f48b121.patch";
+      sha256 = "11v4jhc36v839gppzvhvzp5jd22904k8xqdhhpx6ghl75yyh4f4s";
+    })
   ];
 
   nativeBuildInputs = [ makeWrapper ];

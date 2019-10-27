@@ -226,6 +226,8 @@
   ./services/backup/restic.nix
   ./services/backup/restic-rest-server.nix
   ./services/backup/rsnapshot.nix
+  ./services/backup/sanoid.nix
+  ./services/backup/syncoid.nix
   ./services/backup/tarsnap.nix
   ./services/backup/tsm.nix
   ./services/backup/zfs-replication.nix
