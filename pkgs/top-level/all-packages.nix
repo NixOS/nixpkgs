@@ -6871,6 +6871,8 @@ in
 
   tpm2-abrmd = callPackage ../tools/security/tpm2-abrmd { };
 
+  tpm2-pkcs11 = callPackage ../misc/tpm2-pkcs11 { };
+
   tpm2-tools = callPackage ../tools/security/tpm2-tools { };
 
   trezor-udev-rules = callPackage ../os-specific/linux/trezor-udev-rules {};
