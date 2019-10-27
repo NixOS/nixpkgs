@@ -745,7 +745,7 @@ self: super: {
           substituteInPlace conf.py --replace "'.md': CommonMarkParser," ""
         '';
         nativeBuildInputs = with pkgs.buildPackages.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
-        makeFlags = "html";
+        makeFlags = [ "html" ];
         installPhase = ''
           mv _build/html $out
         '';

@@ -60,7 +60,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ glfw-git alsaLib curl glew gtk2-x11 jansson libjack2 libzip rtaudio rtmidi speex libsamplerate ];
 
-  buildFlags = "Rack";
+  buildFlags = [ "Rack" ];
 
   installPhase = ''
     install -D -m755 -t $out/bin Rack

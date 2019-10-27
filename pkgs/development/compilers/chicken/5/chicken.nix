@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
 
-  buildFlags = "PLATFORM=${platform} PREFIX=$(out)";
-  installFlags = "PLATFORM=${platform} PREFIX=$(out)";
+  buildFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" ];
+  installFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" ];
 
   buildInputs = [
     makeWrapper

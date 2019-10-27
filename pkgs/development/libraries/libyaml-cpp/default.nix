@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = "-DBUILD_SHARED_LIBS=ON -DYAML_CPP_BUILD_TESTS=OFF";
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DYAML_CPP_BUILD_TESTS=OFF" ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

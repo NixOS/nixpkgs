@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   ];
 
 
-  makeFlags = "VERBOSE=1";
+  makeFlags = [ "VERBOSE=1" ];
 
   preBuild = ''
     export LD_LIBRARY_PATH=`pwd`/lib

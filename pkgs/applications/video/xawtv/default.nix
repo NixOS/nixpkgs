@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  makeFlags = "SUID_ROOT= DESTDIR=\$(out) PREFIX=";
+  makeFlags = [ "SUID_ROOT=" "DESTDIR=\$(out)" "PREFIX=" ];
 
   buildInputs = [ncurses libjpeg libX11 libXt libXft xorgproto libFS perl alsaLib aalib
                  libXaw libXpm libXext libSM libICE libv4l];

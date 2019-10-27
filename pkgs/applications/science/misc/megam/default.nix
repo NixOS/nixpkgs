@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = "CAML_INCLUDES=${ocaml}/lib/ocaml/caml";
+  makeFlags = [ "CAML_INCLUDES=${ocaml}/lib/ocaml/caml" ];
 
   # see https://bugzilla.redhat.com/show_bug.cgi?id=435559
   dontStrip = true;

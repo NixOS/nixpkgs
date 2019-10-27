@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mpaqn0zfhxdf9wzs1wgdd29bjcyl3rgfdlqbwhiwcy2h3vy2h8s";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/chneukirchen/lr;

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ./switch.patch
   ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = "-C src prefix=$(out)";
+  makeFlags = [ "-C" "src" "prefix=$(out)" ];
 
   src = fetchFromGitHub {
     owner = "CMB";

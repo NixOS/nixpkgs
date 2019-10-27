@@ -141,7 +141,7 @@ self = stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  buildFlags = "revision coq coqide bin/votour";
+  buildFlags = [ "revision" "coq" "coqide" "bin/votour" ];
 
   createFindlibDestdir = true;
 

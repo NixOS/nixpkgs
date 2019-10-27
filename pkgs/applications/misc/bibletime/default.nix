@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake sword qt4 boost clucene_core ];
 
-  cmakeFlags = "-DUSE_QT_WEBKIT=ON -DCMAKE_BUILD_TYPE=Debug";
+  cmakeFlags = [ "-DUSE_QT_WEBKIT=ON" "-DCMAKE_BUILD_TYPE=Debug" ];
 
   meta = {
     description = "A Qt4 Bible study tool";

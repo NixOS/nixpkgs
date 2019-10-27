@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # `cnee' is linked without `-lXi' and as a consequence has a RUNPATH that
   # lacks libXi.
-  makeFlags = "LDFLAGS=-lXi";
+  makeFlags = [ "LDFLAGS=-lXi" ];
 
   # XXX: Actually tests require an X server.
   doCheck = true;

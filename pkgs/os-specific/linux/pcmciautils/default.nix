@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ln -sf ${configOpts} ./config/config.opts'')
   ;
 
-  makeFlags = "LEX=flex";
+  makeFlags = [ "LEX=flex" ];
   installFlags = ''INSTALL=install DESTDIR=''${out}'';
   postInstall =
     lib.concatMapStrings (path: ''

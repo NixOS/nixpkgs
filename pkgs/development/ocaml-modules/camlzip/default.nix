@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       --subst-var-by ZLIB_INCLUDE "${zlib.dev}/include"
   '';
 
-  buildFlags = "all allopt";
+  buildFlags = [ "all" "allopt" ];
 
   inherit (param) installTargets;
 

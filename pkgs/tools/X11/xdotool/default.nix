@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     homepage = https://www.semicomplete.com/projects/xdotool/;

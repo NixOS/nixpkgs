@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   buildInputs = [ zlib ocaml findlib ocamlbuild ncurses ];
   propagatedBuildInputs = [ param.zarith ];
 
-  buildFlags = "setup.data build";
+  buildFlags = [ "setup.data" "build" ];
 
   preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 

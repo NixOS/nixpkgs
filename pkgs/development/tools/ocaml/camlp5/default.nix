@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   preConfigure = "configureFlagsArray=(--strict" +
                   " --libdir $out/lib/ocaml/${ocaml.version}/site-lib)";
 
-  buildFlags = "world.opt";
+  buildFlags = [ "world.opt" ];
 
   dontStrip = true;
 

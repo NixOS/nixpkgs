@@ -106,5 +106,5 @@ stdenv.mkDerivation rec {
 }
 
 // stdenv.lib.optionalAttrs stdenv.isDarwin {
-  makeFlags = "CFLAGS=-D_FORTIFY_SOURCE=0";
+  makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 }

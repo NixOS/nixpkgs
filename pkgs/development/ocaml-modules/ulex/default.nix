@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ camlp4 ];
 
-  buildFlags = "all all.opt";
+  buildFlags = [ "all" "all.opt" ];
 
   meta = {
     inherit (src.meta) homepage;

@@ -15,7 +15,7 @@ buildGoModule rec {
 
   modSha256 = "0d6zc7hxb246zsvwsjz4ds6gdd2m95x6l3djh3mmciwfg9cd7prx";
 
-  buildFlags = "-tags extended";
+  buildFlags = [ "-tags" "extended" ];
 
   subPackages = [ "." ];
 

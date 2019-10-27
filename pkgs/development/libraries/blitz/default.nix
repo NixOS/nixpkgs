@@ -55,7 +55,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildFlags = "lib info pdf html";
+  buildFlags = [ "lib" "info" "pdf" "html" ];
   installTargets = [ "install" "install-info" "install-pdf" "install-html" ];
 
   inherit doCheck;

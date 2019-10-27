@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     url = http://libslack.org/daemon/download/daemon-0.6.4.tar.gz;
     sha256 = "18aw0f8k3j30xqwv4z03962kdpqd10nf1w9liihylmadlx5fmff4";
   };
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
   buildInputs = [ perl ];
 
   meta = {

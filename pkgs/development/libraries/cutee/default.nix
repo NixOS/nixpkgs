@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "18bzvhzx8k24mpcim5669n3wg9hd0sfsxj8zjpbr24hywrlppgc2";
   };
 
-  buildFlags = "cutee";
+  buildFlags = [ "cutee" ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ncurses];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   upstreamPatches =
     (let

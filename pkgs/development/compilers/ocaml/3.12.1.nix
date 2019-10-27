@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
-  buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
+  buildFlags = [ "world" + optionalString useNativeCompilers " bootstrap world.opt" ];
   buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   patches = optionals stdenv.isDarwin [ ./3.12.1-darwin-fix-configure.patch ];

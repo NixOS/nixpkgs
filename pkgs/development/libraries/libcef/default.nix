@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "02v22yx1ga2yxagjblzkfw0ax7zkrdpc959l1a15m8nah3y7xf9p";
   };
   nativeBuildInputs = [ cmake ];
-  makeFlags = "libcef_dll_wrapper";
+  makeFlags = [ "libcef_dll_wrapper" ];
   dontStrip = true;
   dontPatchELF = true;
   installPhase = ''
