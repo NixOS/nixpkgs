@@ -9,11 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
   };
 
-  NIX_CFLAGS_COMPILE = [
-    "-O3"
-  ];
+  NIX_CFLAGS_COMPILE = "-O3";
 
-  buildFlags = "iasl";
+  buildFlags = [ "iasl" ];
 
   buildInputs = [ bison flex ];
 

@@ -42,7 +42,8 @@ with super;
     ];
 
     # https://github.com/wahern/cqueues/issues/227
-    NIX_CFLAGS_COMPILE = if pkgs.stdenv.hostPlatform.isDarwin then [ "-DCLOCK_MONOTONIC" "-DCLOCK_REALTIME" ] else null;
+    NIX_CFLAGS_COMPILE = with pkgs.stdenv; lib.optionalString hostPlatform.isDarwin
+      "-DCLOCK_MONOTONIC -DCLOCK_REALTIME";
 
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
@@ -253,7 +254,7 @@ with super;
     # Upstreams:
     # 5.1: http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1/luuid.tar.gz
     # 5.2: http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/5.2/luuid.tar.gz
-    patchFlags = "-p2";
+    patchFlags = [ "-p2" ];
     patches = [
       ./luuid.patch
     ];

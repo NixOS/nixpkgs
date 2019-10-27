@@ -141,7 +141,7 @@ in
         });
 
         xkbcomp = super.xorg.xkbcomp.overrideAttrs (old: {
-          configureFlags = "--with-xkb-config-root=${self.xkb_patched}/share/X11/xkb";
+          configureFlags = [ "--with-xkb-config-root=${self.xkb_patched}/share/X11/xkb" ];
         });
 
       };

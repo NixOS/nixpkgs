@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     ./gcc.patch
   ];
 
-  makeFlags = "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
+  makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 
   unpackPhase = ''
     sourceRoot=broadcom-sta

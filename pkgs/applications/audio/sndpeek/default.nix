@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libXext
     libXi
   ];
-  buildFlags = "linux-alsa";
+  buildFlags = [ "linux-alsa" ];
 
   installPhase = ''
     mkdir -p $out/bin

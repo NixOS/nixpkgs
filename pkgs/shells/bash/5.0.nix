@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     -DSSH_SOURCE_BASHRC
   '';
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   patches = upstreamPatches;
 

@@ -94,7 +94,7 @@ stdenv.mkDerivation
     ''--localstatedir=/var''
     ];
 
-  makeFlags = "DESTDIR=$(out)";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   enableParallelBuilding = true;
 

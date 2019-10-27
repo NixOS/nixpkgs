@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  cmakeFlags = "-DWITH_VTK=ON -DBUILD_ALL_MODULES=ON";
+  cmakeFlags = [ "-DWITH_VTK=ON" "-DBUILD_ALL_MODULES=ON" ];
 
   doCheck = true;
 
