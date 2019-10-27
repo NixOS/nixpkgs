@@ -8,11 +8,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-timeout";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1117fc0536e1638862917efbdc0895e6b62fa61e6cf4f39bb655686af7af9627";
+    sha256 = "1cczcjhw4xx5sjkhxlhc5c1bkr7x6fcyx12wrnvwfckshdvblc2a";
+  };
+
+  patches = fetchpatch {
+    url = https://bitbucket.org/pytest-dev/pytest-timeout/commits/36998c891573d8ec1db1acd4f9438cb3cf2aee2e/raw;
+    sha256 = "05zc2w7mjgv8rm8i1cbxp7k09vlscmay5iy78jlzgjqkrx3wkf46";
   };
 
   checkInputs = [ pytest pexpect ];

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mysqltuner-${version}";
-  version = "1.6.18";
+  pname = "mysqltuner";
+  version = "1.7.17";
 
   src = fetchFromGitHub {
     owner  = "major";
     repo   = "MySQLTuner-perl";
     rev    = version;
-    sha256 = "14dblrjqciyx6k7yczfzbaflc7hdxnj0kyy6q0lqfz8imszdkpi2";
+    sha256 = "0wjdqraa6r6kd6rsgrn177dq6xsnnr1sgnbs9whknjbs4fn3wwl5";
   };
 
   buildInputs = [ perl ];

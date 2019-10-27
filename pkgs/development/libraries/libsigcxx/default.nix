@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, gnum4 }:
-let
-  ver_maj = "2.10"; # odd major numbers are unstable
-  ver_min = "0";
-in
+{ stdenv, fetchurl, pkgconfig, gnum4, gnome3 }:
+
 stdenv.mkDerivation rec {
-  name = "libsigc++-${ver_maj}.${ver_min}";
+  pname = "libsigc++";
+  version = "2.10.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libsigc++/${ver_maj}/${name}.tar.xz";
-    sha256 = "f843d6346260bfcb4426259e314512b99e296e8ca241d771d21ac64f28298d81";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "00v08km4wwzbh6vjxb21388wb9dm6g2xh14rgwabnv4c2wk5z8n9";
   };
 
   nativeBuildInputs = [ pkgconfig gnum4 ];
 
   doCheck = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "libsigcxx";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://libsigcplusplus.github.io/libsigcplusplus/;

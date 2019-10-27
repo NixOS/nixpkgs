@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , pkgs, makeWrapper, buildEnv
-, nodejs
+, nodejs, runtimeShell
 }:
 
 let
@@ -49,7 +49,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cat >$out/bin/airfield <<EOF
-      #!${stdenv.shell}/bin/sh
+      #!${runtimeShell}
       ${nodejs}/bin/node ${src}/airfield.js
     EOF
   '';

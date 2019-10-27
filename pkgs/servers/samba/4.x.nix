@@ -1,12 +1,10 @@
-{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
-, fetchpatch
-, docbook_xml_dtd_42, readline, talloc
+{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
+, fixDarwinDylibNames
+, docbook_xml_dtd_42, readline
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
 , krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls
-, ncurses, libunwind, libibverbs, librdmacm, systemd
+, gnutls, ncurses, libunwind, systemd, jansson, lmdb, gpgme, libuuid
 
-, enableInfiniband ? false
 , enableLDAP ? false
 , enablePrinting ? false
 , enableMDNS ? false
@@ -21,40 +19,37 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "samba-${version}";
-  version = "4.7.9";
+  pname = "samba";
+  version = "4.10.8";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "1v0pd2k4rfdzcqbzb3g5gjiy8rwqamppwzwy5swz4x5rxyr5567c";
+    url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
+    sha256 = "1x0hlhb674fndfkmimjicnzs543n3i8465a5ifcmjwvzavxha7y4";
   };
 
   outputs = [ "out" "dev" "man" ];
 
-  patches =
-    [ ./4.x-no-persistent-install.patch
-      ./patch-source3__libads__kerberos_keytab.c.patch
-      ./4.x-no-persistent-install-dynconfig.patch
-      (fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/samba-team/samba/pull/107.patch";
-        sha256 = "0r6q34vjj0bdzmcbnrkad9rww58k4krbwicv4gs1g3dj49skpvd6";
-      })
-    ];
+  patches = [
+    ./4.x-no-persistent-install.patch
+    ./patch-source3__libads__kerberos_keytab.c.patch
+    ./4.x-no-persistent-install-dynconfig.patch
+    ./4.x-fix-makeflags-parsing.patch
+  ];
 
-  buildInputs =
-    [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-      docbook_xml_dtd_45 */ readline talloc popt iniparser
-      libbsd libarchive zlib fam libiconv gettext libunwind krb5Full
-    ]
-    ++ optionals stdenv.isLinux [ libaio systemd ]
-    ++ optionals (enableInfiniband && stdenv.isLinux) [ libibverbs librdmacm ]
+  nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
+
+  buildInputs = [
+    python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
+    docbook_xml_dtd_45 */ readline popt iniparser jansson
+    libbsd libarchive zlib fam libiconv gettext libunwind krb5Full
+  ] ++ optionals stdenv.isLinux [ libaio systemd ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
-    ++ optional enableDomainController gnutls
+    ++ optionals enableDomainController [ gnutls gpgme lmdb ]
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
-    ++ optional (enableGlusterFS && stdenv.isLinux) glusterfs
+    ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enablePam pam;
 
@@ -64,24 +59,32 @@ stdenv.mkDerivation rec {
 
     # Fix the XML Catalog Paths
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
+
+    patchShebangs ./buildtools/bin
+  '' + optionalString stdenv.isDarwin ''
+     substituteInPlace libcli/dns/wscript_build \
+       --replace "bld.SAMBA_BINARY('resolvconftest'" "True or bld.SAMBA_BINARY('resolvconftest'"
   '';
 
-  configureFlags =
-    [ "--with-static-modules=NONE"
-      "--with-shared-modules=ALL"
-      "--with-system-mitkrb5"
-      "--with-system-mitkdc" "${krb5Full}"
-      "--enable-fhs"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-    ]
-    ++ optional (!enableDomainController) "--without-ad-dc"
+  configureFlags = [
+    "--with-static-modules=NONE"
+    "--with-shared-modules=ALL"
+    "--with-system-mitkrb5"
+    "--with-system-mitkdc" krb5Full
+    "--enable-fhs"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--disable-rpath"
+  ] ++ singleton (if enableDomainController
+         then "--with-experimental-mit-ad-dc"
+         else "--without-ad-dc")
     ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ]
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam";
 
-  # To build in parallel.
-  buildPhase = "python buildtools/bin/waf build -j $NIX_BUILD_CORES";
+  preBuild = ''
+    export MAKEFLAGS="-j $NIX_BUILD_CORES"
+  '';
 
   # Some libraries don't have /lib/samba in RPATH but need it.
   # Use find -type f -executable -exec echo {} \; -exec sh -c 'ldd {} | grep "not found"' \;
@@ -100,10 +103,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.samba.org/;
+    homepage = "https://www.samba.org";
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.unix;
+    maintainers = with maintainers; [ aneeshusa ];
   };
 }

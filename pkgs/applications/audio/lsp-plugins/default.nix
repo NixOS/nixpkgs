@@ -5,14 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.1.4";
-  name = "${pname}-${version}";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
-    repo = "${pname}";
-    rev = "${name}";
-    sha256 = "0vb8ax0w4d2a153wxrhkpi21fxsv7c24k57vhfgmm1lqwv6pbl69";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "09gmwzh1gq1q2lxn8fc1bpdh02h8vr7r0i040c1nx256wgfsarqb";
   };
 
   nativeBuildInputs = [ pkgconfig php expat ];
@@ -152,9 +151,9 @@ stdenv.mkDerivation rec {
         - Delay Compensator Stereo - Verzögerungsausgleicher Stereo
         - Delay Compensator x2 Stereo - Verzögerungsausgleicher x2 Stereo
       '';
-      homepage = http://lsp-plug.in;
+      homepage = https://lsp-plug.in;
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
-      platforms = platforms.linux;
+      platforms = [ "x86_64-linux" ];
     };
 }

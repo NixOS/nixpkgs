@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.7";
-  name = "hydrogen-${version}";
+  pname = "hydrogen";
 
   src = fetchurl {
     url = "https://github.com/hydrogen-music/hydrogen/archive/${version}.tar.gz";

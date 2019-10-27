@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "earlyoom-${VERSION}";
   # This environment variable is read by make to set the build version.
-  VERSION = "1.1";
+  VERSION = "1.3";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "earlyoom";
     rev = "v${VERSION}";
-    sha256 = "1hczn59mmx287hnlhcmpxrf3jy3arllif165dq7b2ha6w3ywngww";
+    sha256 = "0fwbx0y80nqgkxrc9kf9j3iwa0wbps2jmqir3pgqbc2cj0wjh0lr";
   };
 
   installPhase = ''

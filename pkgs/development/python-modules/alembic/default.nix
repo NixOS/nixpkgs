@@ -1,19 +1,19 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, coverage
+, pytest, pytestcov, mock, coverage, setuptools
 , Mako, sqlalchemy, python-editor, dateutil
 }:
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.0.0";
+  version = "1.0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52d73b1d750f1414fa90c25a08da47b87de1e4ad883935718a8f36396e19e78e";
+    sha256 = "cdb7d98bd5cbf65acd38d70b1c05573c432e6473a82f955cdea541b5c153b0cc";
   };
 
   buildInputs = [ pytest pytestcov mock coverage ];
-  propagatedBuildInputs = [ Mako sqlalchemy python-editor dateutil ];
+  propagatedBuildInputs = [ Mako sqlalchemy python-editor dateutil setuptools ];
 
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/zzzeek/alembic;

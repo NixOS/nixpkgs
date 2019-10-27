@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper,
-  perl, GetoptTabular, MNI-Perllib,
+  perlPackages,
   libminc, EBTKS }:
 
 stdenv.mkDerivation rec {
@@ -17,11 +17,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc EBTKS ];
-  propagatedBuildInputs = [ perl GetoptTabular MNI-Perllib ];
+  propagatedBuildInputs = with perlPackages; [ perl GetoptTabular MNI-Perllib ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DEBTKS_DIR=${EBTKS}/lib/" ];
-
-  checkPhase = "ctest --output-on-failure";  # but no tests
 
   postFixup = ''
     for p in $out/bin/*; do

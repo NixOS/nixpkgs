@@ -1,15 +1,19 @@
-{ stdenv, zlib, fetchFromGitHub, python3Packages }:
+{ stdenv, zlib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "manuskript";
-  version = "0.3.0";
+  version = "0.10.0";
+
+  format = "other";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "olivierkes";
     rev = version;
-    sha256 = "0bqxc4a8kyi6xz1zs0dp85wxl9h4v8lzc6073bbcsn1zg4y59ys7";
+    sha256 = "0q413vym7hzjpyg3krj5y63hwpncdifjkyswqmr76zg5yqnklnh3";
   };
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     python3Packages.pyqt5
@@ -28,6 +32,10 @@ python3Packages.buildPythonApplication rec {
     mkdir -p $out/share/${pname}
     cp -av  bin/ i18n/ libs/ manuskript/ resources/ icons/ $out
     cp -r sample-projects/ $out/share/${pname}
+  '';
+
+  postFixup = ''
+    wrapQtApp $out/bin/manuskript
   '';
 
   doCheck = false;

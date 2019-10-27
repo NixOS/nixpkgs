@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.2";
-  name = "dirac-${version}";
+  pname = "dirac";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dirac/${name}.tar.gz";
+    url = "mirror://sourceforge/dirac/${pname}-${version}.tar.gz";
     sha256 = "1z803yzp17cj69wn11iyb13swqdd9xdzr58dsk6ghpr3ipqicsw1";
   };
 

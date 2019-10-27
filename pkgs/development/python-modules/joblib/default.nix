@@ -1,30 +1,31 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, sphinx
+, fetchPypi
+, stdenv
 , numpydoc
 , pytest
 , python-lz4
+, setuptools
+, sphinx
 }:
 
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "0.12.4";
+  version = "0.14.0";
 
-  # get full repository inorder to run tests
-  src = fetchFromGitHub {
-    owner = "joblib";
-    repo = pname;
-    rev = version;
-    sha256 = "06zszgp7wpa4jr554wkk6kkigp4k9n5ad5h08i6w9qih963rlimb";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1zwkl6hgi8wbygcc6ql6yk1if665hwk43sa9shglb2afrfm5gk3g";
   };
 
   checkInputs = [ sphinx numpydoc pytest ];
-  propagatedBuildInputs = [ python-lz4 ];
+  propagatedBuildInputs = [ python-lz4 setuptools ];
 
+  # test_disk_used is broken: https://github.com/joblib/joblib/issues/57
+  # test_dispatch_multiprocessing is broken only on Darwin.
   checkPhase = ''
-    py.test joblib
+    py.test -k 'not test_disk_used${lib.optionalString (stdenv.isDarwin) " and not test_dispatch_multiprocessing"}' joblib/test
   '';
 
   meta = {

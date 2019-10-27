@@ -1,29 +1,21 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "oldstandard-${version}";
+let
   version = "2.2";
+in fetchzip rec {
+  name = "oldstandard-${version}";
 
-  src = fetchzip {
-    stripRoot = false;
-    url = "https://github.com/akryukov/oldstand/releases/download/v${version}/${name}.otf.zip";
-    sha256 = "1hl78jw5szdjq9dhbcv2ln75wpp2lzcxrnfc36z35v5wk4l7jc3h";
-  };
+  url = "https://github.com/akryukov/oldstand/releases/download/v${version}/${name}.otf.zip";
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    cp -v *.otf $out/share/fonts/opentype/
-    cp -v FONTLOG.txt $out/share/doc/${name}
+  postFetch = ''
+    unzip $downloadedFile
+    install -m444 -Dt $out/share/fonts/opentype *.otf
+    install -m444 -Dt $out/share/doc/${name}    FONTLOG.txt
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1qwfsyp51grr56jcnkkmnrnl3r20pmhp9zh9g88kp64m026cah6n";
+  sha256 = "1qwfsyp51grr56jcnkkmnrnl3r20pmhp9zh9g88kp64m026cah6n";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/akryukov/oldstand;
     description = "An attempt to revive a specific type of Modern style of serif typefaces";
     maintainers = with maintainers; [ raskin rycee ];

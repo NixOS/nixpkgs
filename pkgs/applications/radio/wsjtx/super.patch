@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3bf97a4..2c9dce5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,7 +23,6 @@ source tarball." )
+ #
+ # Find_library (USB_LIBRARY NAMES libusb.a usb)
+ Find_program (PATCH_EXECUTABLE patch REQUIRED)
+-Find_package (Git REQUIRED)
+ 
+ #
+ # extra C flags to minimize hamlib excutable sizes

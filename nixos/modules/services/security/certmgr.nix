@@ -30,12 +30,19 @@ let
 
   preStart = ''
     ${concatStringsSep " \\\n" (["mkdir -p"] ++ map escapeShellArg specPaths)}
-    ${pkgs.certmgr}/bin/certmgr -f ${certmgrYaml} check
+    ${cfg.package}/bin/certmgr -f ${certmgrYaml} check
   '';
 in
 {
   options.services.certmgr = {
     enable = mkEnableOption "certmgr";
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.certmgr;
+      defaultText = "pkgs.certmgr";
+      description = "Which certmgr package to use in the service.";
+    };
 
     defaultRemote = mkOption {
       type = types.str;
@@ -187,7 +194,7 @@ in
       serviceConfig = {
         Restart = "always";
         RestartSec = "10s";
-        ExecStart = "${pkgs.certmgr}/bin/certmgr -f ${certmgrYaml}";
+        ExecStart = "${cfg.package}/bin/certmgr -f ${certmgrYaml}";
       };
     };
   };

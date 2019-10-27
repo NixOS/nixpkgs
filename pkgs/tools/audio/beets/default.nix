@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
-, pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
+, pythonPackages, imagemagick, gobject-introspection, gst_all_1
+, runtimeShell
+, fetchpatch
 
 # Attributes needed for tests of the external plugins
 , callPackage, beets
@@ -15,9 +17,12 @@
 , enableKeyfinder      ? true, keyfinder-cli ? null
 , enableKodiupdate     ? true
 , enableLastfm         ? true
+, enableLoadext        ? true
 , enableMpd            ? true
+, enablePlaylist       ? true
 , enableReplaygain     ? true, bs1770gain ? null
 , enableSonosUpdate    ? true
+, enableSubsonicupdate ? true
 , enableThumbnails     ? true
 , enableWeb            ? true
 
@@ -58,10 +63,13 @@ let
     kodiupdate = enableKodiupdate;
     lastgenre = enableLastfm;
     lastimport = enableLastfm;
+    loadext = enableLoadext;
     mpdstats = enableMpd;
     mpdupdate = enableMpd;
+    playlist = enablePlaylist;
     replaygain = enableReplaygain;
     sonosupdate = enableSonosUpdate;
+    subsonicupdate = enableSubsonicupdate;
     thumbnails = enableThumbnails;
     web = enableWeb;
   };
@@ -100,13 +108,13 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   pname = "beets";
-  version = "1.4.7";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "17gfz0g7pqm6wha8zf63zpw07zgi787w1bjwdcxdh1l3z4m7jc9l";
+    sha256 = "1qxdqbzvz97zgykzdwn78g2xyxmg0q2jdb12dnjnrwvhmjv67vi8";
   };
 
   propagatedBuildInputs = [
@@ -120,11 +128,14 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.unidecode
     pythonPackages.gst-python
     pythonPackages.pygobject3
-    gobjectIntrospection
+    gobject-introspection
   ] ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
               || enableKodiupdate
+              || enableLoadext
+              || enablePlaylist
+              || enableSubsonicupdate
               || enableAcousticbrainz)
                                     pythonPackages.requests
     ++ optional enableConvert       ffmpeg
@@ -139,18 +150,21 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableAlternatives  plugins.alternatives
     ++ optional enableCopyArtifacts plugins.copyartifacts;
 
-  buildInputs = with pythonPackages; [
-    beautifulsoup4
+  buildInputs = [
     imagemagick
-    mock
-    nose
-    rarfile
-    responses
   ] ++ (with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
   ]);
+
+  checkInputs = with pythonPackages; [
+    beautifulsoup4
+    mock
+    nose
+    rarfile
+    responses
+  ];
 
   patches = [
     ./replaygain-default-bs1770gain.patch
@@ -203,9 +217,7 @@ in pythonPackages.buildPythonApplication rec {
     LOCALE_ARCHIVE=${assert stdenv.isLinux; glibcLocales}/lib/locale/locale-archive \
     BEETS_TEST_SHELL="${testShell}" \
     BASH_COMPLETION_SCRIPT="${completion}" \
-    HOME="$(mktemp -d)" \
-      # Exclude failing test https://github.com/beetbox/beets/issues/2652
-      nosetests -v --exclude=test_single_month_nonmatch_ --exclude=test_asciify_variable --exclude=test_asciify_character_expanding_to_slash
+    HOME="$(mktemp -d)" nosetests -v
 
     runHook postCheck
   '';
@@ -218,7 +230,7 @@ in pythonPackages.buildPythonApplication rec {
     tmphome="$(mktemp -d)"
 
     EDITOR="${writeScript "beetconfig.sh" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cat > "$1" <<CFG
       plugins: ${concatStringsSep " " allEnabledPlugins}
       CFG

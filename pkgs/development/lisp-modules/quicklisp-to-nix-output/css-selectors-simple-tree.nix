@@ -5,7 +5,7 @@ rec {
 
   description = ''An implementation of css selectors that interacts with cl-html5-parser's simple-tree'';
 
-  deps = [ args."alexandria" args."babel" args."buildnode" args."cl-html5-parser" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."css-selectors" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-test" args."cxml-xml" args."flexi-streams" args."iterate" args."named-readtables" args."puri" args."split-sequence" args."string-case" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" args."yacc" ];
+  deps = [ args."alexandria" args."babel" args."buildnode" args."cl-html5-parser" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."css-selectors" args."cxml" args."flexi-streams" args."iterate" args."named-readtables" args."puri" args."split-sequence" args."string-case" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" args."yacc" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/css-selectors/2016-06-28/css-selectors-20160628-git.tgz'';
@@ -33,8 +33,6 @@ rec {
      (NAME closure-html FILENAME closure-html)
      (NAME collectors FILENAME collectors)
      (NAME css-selectors FILENAME css-selectors) (NAME cxml FILENAME cxml)
-     (NAME cxml-dom FILENAME cxml-dom) (NAME cxml-klacks FILENAME cxml-klacks)
-     (NAME cxml-test FILENAME cxml-test) (NAME cxml-xml FILENAME cxml-xml)
      (NAME flexi-streams FILENAME flexi-streams)
      (NAME iterate FILENAME iterate)
      (NAME named-readtables FILENAME named-readtables)
@@ -47,8 +45,7 @@ rec {
     DEPENDENCIES
     (alexandria babel buildnode cl-html5-parser cl-interpol cl-ppcre cl-unicode
      closer-mop closure-common closure-html collectors css-selectors cxml
-     cxml-dom cxml-klacks cxml-test cxml-xml flexi-streams iterate
-     named-readtables puri split-sequence string-case swank symbol-munger
-     trivial-features trivial-gray-streams yacc)
+     flexi-streams iterate named-readtables puri split-sequence string-case
+     swank symbol-munger trivial-features trivial-gray-streams yacc)
     VERSION css-selectors-20160628-git SIBLINGS
     (css-selectors-stp css-selectors) PARASITES NIL) */

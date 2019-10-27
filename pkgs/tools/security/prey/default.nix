@@ -13,7 +13,7 @@ let
     sha256 = "9cb1ad813d052a0a3e3bbdd329a8711ae3272e340379489511f7dd578d911e30";
   };
 in stdenv.mkDerivation rec {
-  name = "prey-bash-client-${version}";
+  pname = "prey-bash-client";
   version = "0.6.0";
 
   src = fetchurl {
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://preyproject.com;
+    homepage = https://preyproject.com;
     description = "Proven tracking software that helps you find, lock and recover your devices when stolen or missing";
     maintainers = with maintainers; [ domenkozar ];
     license = licenses.gpl3;

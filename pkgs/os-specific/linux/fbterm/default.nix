@@ -1,7 +1,7 @@
 {stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkgconfig, ncurses, libx86}:
 let
   s = # Generated upstream information
-  rec {
+  {
     baseName="fbterm";
     version="1.7.0";
     name="fbterm-1.7.0";

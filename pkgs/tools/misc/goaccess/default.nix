@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, geoipWithDatabase, ncurses, glib }:
+{ stdenv, fetchurl, pkgconfig, ncurses, glib, libmaxminddb }:
 
 stdenv.mkDerivation rec {
-  version = "1.2";
-  name = "goaccess-${version}";
+  version = "1.3";
+  pname = "goaccess";
 
   src = fetchurl {
     url = "https://tar.goaccess.io/goaccess-${version}.tar.gz";
-    sha256 = "051lrprg9svl5ccc3sif8fl78vfpkrgjcxgi2wngqn7a81jzdabb";
+    sha256 = "16vv3pj7pbraq173wlxa89jjsd279004j4kgzlrsk1dz4if5qxwc";
   };
 
   configureFlags = [
-    "--enable-geoip"
+    "--enable-geoip=mmdb"
     "--enable-utf8"
   ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    geoipWithDatabase
+    libmaxminddb
     ncurses
     glib
   ];
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage    = https://goaccess.io;
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ ederoyd46 garbas ];
+    maintainers = with stdenv.lib.maintainers; [ ederoyd46 ];
   };
 }

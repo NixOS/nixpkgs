@@ -59,6 +59,7 @@ let
 
     libcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
+      libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
         targetLlvmLibraries.libcxx
         targetLlvmLibraries.libcxxabi

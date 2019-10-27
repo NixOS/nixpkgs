@@ -7,15 +7,15 @@
 stdenv.mkDerivation rec {
   version = "5.9.4.5";
   revision = "8010a90f6e246b32364e3fb46ef2c9d1be9c9a2b";
-  name = "monodevelop-${version}";
+  pname = "monodevelop";
 
   src = fetchurl {
-    url = "https://download.mono-project.com/sources/monodevelop/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/monodevelop/${pname}-${version}.tar.bz2";
     sha256 = "0bim4bfv3zwijafl9g0cx3159zq43dlcv74mnyrda41j4p52w5ji";
   };
 
   nunit2510 = fetchurl {
-    url = "http://launchpad.net/nunitv2/2.5/2.5.10/+download/NUnit-2.5.10.11092.zip";
+    url = "https://launchpad.net/nunitv2/2.5/2.5.10/+download/NUnit-2.5.10.11092.zip";
     sha256 = "0k5h5bz1p2v3d0w0hpkpbpvdkcszgp8sr9ik498r1bs72w5qlwnc";
   };
 

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "imgaug";
-  version = "0.2.6";
+  version = "0.2.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wy8ydkqq0jrwxwdv04q89n3gwsr9pjaspsbw26ipg5a5lnhb9c2";
+    sha256 = "42b0c4c8cbe197d4f5dbd33960a1140f8a0d9c22c0a8851306ecbbc032092de8";
   };
 
   propagatedBuildInputs = [
@@ -25,5 +25,6 @@ buildPythonPackage rec {
     description = "Image augmentation for machine learning experiments";
     license = licenses.mit;
     maintainers = with maintainers; [ cmcdragonkai ];
+    broken = true; # opencv-python bindings aren't available yet, and look non-trivial
   };
 }

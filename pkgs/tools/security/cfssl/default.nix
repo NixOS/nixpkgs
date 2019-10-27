@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
-  name = "cfssl-${version}";
+  pname = "cfssl";
   version = "1.3.2";
 
   goPackagePath = "github.com/cloudflare/cfssl";
@@ -27,8 +27,8 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://cfssl.org/;
     description = "Cloudflare's PKI and TLS toolkit";
-    platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ mbrgm ];
+    platforms = platforms.all;
   };
 }

@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg, gobjectIntrospection, hicolor-icon-theme
-, gdk_pixbuf, pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg, gobject-introspection
+, gdk-pixbuf, pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
 
 let
   inherit (python2Packages) python pycairo pygobject3 numpy;
-in stdenv.mkDerivation rec {
-  name = "mypaint-${version}";
+in stdenv.mkDerivation {
+  pname = "mypaint";
   version = "1.2.1";
 
   src = fetchFromGitHub {
@@ -17,19 +17,16 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     intltool pkgconfig scons swig wrapGAppsHook
-    gobjectIntrospection # for setup hook
+    gobject-introspection # for setup hook
   ];
 
   buildInputs = [
-    gtk3 gdk_pixbuf json_c lcms2 libpng librsvg pycairo pygobject3 python hicolor-icon-theme
+    gtk3 gdk-pixbuf json_c lcms2 libpng librsvg pycairo pygobject3 python
   ];
 
   propagatedBuildInputs = [ numpy ];
 
-  buildPhase = "scons prefix=$out";
-
-  installPhase = ''
-    scons prefix=$out install
+  postInstall = ''
     sed -i -e 's|/usr/bin/env python2.7|${python}/bin/python|' $out/bin/mypaint
   '';
 

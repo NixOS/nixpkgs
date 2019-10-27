@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg, sudo }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg, sudo }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1gpn3dhmzabx0jrqxq63549sah03kf6bmdc9d9kmg6hyr5xg3i1h";
+    sha256 = "1my0wpic20493rdlabp9ghag1g3nhwafk2yklkgczlajmarakgpc";
   };
 
   nativeBuildInputs = [
@@ -28,9 +27,7 @@ stdenv.mkDerivation rec {
     sudo
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI frontend for sudo/su";
     homepage = https://github.com/lxqt/lxqt-sudo;
     license = licenses.lgpl21;

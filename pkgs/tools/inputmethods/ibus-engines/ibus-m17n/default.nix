@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-m17n-${version}";
-  version = "1.3.4";
+  pname = "ibus-m17n";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner  = "ibus";
     repo   = "ibus-m17n";
     rev    = version;
-    sha256 = "1n0bvgc4jyksgvzrw5zs2pxcpxcn3gcc0j2kasbznm34fpv3frsr";
+    sha256 = "1xl7swqn46nhi43rka0zx666mpk667ykag3sz07x0zqrwi41frps";
   };
 
   buildInputs = [

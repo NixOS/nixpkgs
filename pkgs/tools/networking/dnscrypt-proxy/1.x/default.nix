@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "dnscrypt-proxy-${version}";
+  pname = "dnscrypt-proxy";
   version = "1.9.5";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${name}.orig.tar.gz";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}-${version}.orig.tar.gz";
     sha256 = "1dhvklr4dg2vlw108n11xbamacaryyg3dbrg629b76lp7685p7z8";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "A tool for securing communications between a client and a DNS resolver";
     homepage = https://dnscrypt.info/;
     license = licenses.isc;
-    maintainers = with maintainers; [ joachifm jgeerds ];
+    maintainers = with maintainers; [ joachifm ];
     # upstream claims OSX support, but Hydra fails
     platforms = platforms.linux; # Maybe other non-darwin Unix
   };

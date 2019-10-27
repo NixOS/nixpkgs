@@ -1,24 +1,25 @@
 { stdenv, fetchFromGitHub, cmake
-, qt5, libidn, qca2-qt5, libXScrnSaver, hunspell
+, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
+, libidn, qca2-qt5, qtkeychain, libXScrnSaver, hunspell
 , libgcrypt, libotr, html-tidy, libgpgerror, libsignal-protocol-c
 }:
 
 stdenv.mkDerivation rec {
-  name = "psi-plus-${version}";
-  version = "1.3.422";
+  pname = "psi-plus";
+  version = "1.4.904";
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
-    rev = "${version}";
-    sha256 = "193n3yvhp9m14irb49kg2rc4h7ypdmvidrgvv1i2n373iq751z05";
+    rev = version;
+    sha256 = "1bs7yk3qp91sm8nb9gna8vm59381afn1wfs7aii9yi29bhx6fw9h";
   };
 
   resources = fetchFromGitHub {
     owner = "psi-plus";
     repo = "resources";
-    rev = "c0bfb8a025eeec82cd0a23a559e0aa3da15c3ec3";
-    sha256 = "1q7v01w085vk7ml6gwis7j409w6f5cplpm7c0ajs4i93c4j53xdf";
+    rev = "182c92ca0bcc055579d8c91bccba9efe157e77a9";
+    sha256 = "06k7q63cxpifpzjnlw1snclkr2mwf9fh71cgfd40n7jgzswzwhpb";
   };
 
   postUnpack = ''
@@ -32,8 +33,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    qt5.qtbase qt5.qtmultimedia qt5.qtx11extras qt5.qttools qt5.qtwebkit
-    libidn qca2-qt5 libXScrnSaver hunspell
+    qtbase qtmultimedia qtx11extras qttools qtwebengine
+    libidn qca2-qt5 qtkeychain libXScrnSaver hunspell
     libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
   ];
 

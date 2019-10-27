@@ -1,38 +1,45 @@
-{ stdenv, fetchFromGitHub, perl, python, sqlite, gpsbabel
-, withWebKit ? false }:
+{ stdenv
+, fetchFromGitHub
+, perl
+, python3
+, sqlite
+, gpsbabel
+, gnome3
+, gobject-introspection
+, wrapGAppsHook
+, gtk3
+, xvfb_run
+, webkitgtk
+, glib-networking
+, glibcLocales
+, tzdata
+, substituteAll
+}:
 
 let
-
-  # Pytrainer needs a matplotlib with GTK backend. Also ensure we are
-  # using the pygtk with glade support as needed by pytrainer.
-  matplotlibGtk = python.pkgs.matplotlib.override {
-    enableGtk2 = true;
-    pygtk = python.pkgs.pyGtkGlade;
+  # Pytrainer needs a matplotlib with GTK backend.
+  matplotlibGtk = python3.pkgs.matplotlib.override {
+    enableGtk3 = true;
   };
 
 in
 
-python.pkgs.buildPythonApplication rec {
-  name = "pytrainer-${version}";
-  version = "1.12.1";
+python3.pkgs.buildPythonApplication rec {
+  pname = "pytrainer";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
     rev = "v${version}";
-    sha256 = "0rzf8kks96qzlknh6g3b9pjq04j7qk6rmz58scp7sck8xz9rjbwx";
+    sha256 = "1w5z1xwb2g6j2izm89b7lv9n92r1zhsr8bglxcn7jc5gwbvwysvd";
   };
 
-  namePrefix = "";
-
   patches = [
-    # The test fails in the UTC timezone and C locale.
-    ./fix-test-tz.patch
-
-    # The existing use of pywebkitgtk shows raw HTML text instead of
-    # map. This patch solves the problems by showing the file from a
-    # string, which allows setting an explicit MIME type.
-    ./pytrainer-webkit.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      perl = "${perl}/bin/perl";
+    })
   ];
 
   postPatch = ''
@@ -40,18 +47,40 @@ python.pkgs.buildPythonApplication rec {
       --replace "'mysqlclient'," ""
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
-    dateutil lxml matplotlibGtk pyGtkGlade sqlalchemy sqlalchemy_migrate psycopg2
-  ] ++ stdenv.lib.optional withWebKit [ pywebkitgtk ];
+  propagatedBuildInputs = with python3.pkgs; [
+    dateutil
+    lxml
+    matplotlibGtk
+    pygobject3
+    sqlalchemy
+    sqlalchemy_migrate
+    psycopg2
+    requests
+    certifi
+  ];
 
-  buildInputs = [ perl gpsbabel sqlite ];
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+    xvfb_run
+  ];
 
-  # This package contains no binaries to patch or strip.
-  dontPatchELF = true;
-  dontStrip = true;
+  buildInputs = [
+    gpsbabel
+    sqlite
+    gtk3
+    webkitgtk
+    glib-networking
+    glibcLocales
+    gnome3.adwaita-icon-theme
+  ];
 
   checkPhase = ''
-    ${python.interpreter} -m unittest discover
+    env HOME=$TEMPDIR TZDIR=${tzdata}/share/zoneinfo \
+      TZ=Europe/Kaliningrad \
+      LC_ALL=en_US.UTF-8 \
+      xvfb-run -s '-screen 0 800x600x24' \
+      ${python3.interpreter} setup.py test
   '';
 
   meta = with stdenv.lib; {

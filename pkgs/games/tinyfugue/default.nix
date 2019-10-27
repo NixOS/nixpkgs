@@ -8,7 +8,7 @@ with stdenv.lib;
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "tinyfugue-${version}";
+  pname = "tinyfugue";
   version = "50b8";
   verUrl = "5.0%20beta%208";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       with any type of text MUD.
     '';
     license = licenses.gpl2;
-    platforms = ncurses.meta.platforms;
+    platforms = platforms.linux;
     maintainers = [ maintainers.KibaFox ];
   };
 }

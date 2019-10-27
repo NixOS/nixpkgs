@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "keyutils";
-  version = "0.5";
+  version = "0.6";
 
   # github version comes bundled with tests
   src = fetchFromGitHub {
     owner = "sassoftware";
     repo = "python-keyutils";
-    rev = "v${version}";
-    sha256 = "1gga60w8sb3r5bxa0bfp7d7wzg6s3db5y7aizr14p2pvp92d8bdi";
+    rev = version;
+    sha256 = "0pfqfr5xqgsqkxzrmj8xl2glyl4nbq0irs0k6ik7iy3gd3mxf5g1";
   };
 
   buildInputs = [ keyutils ];

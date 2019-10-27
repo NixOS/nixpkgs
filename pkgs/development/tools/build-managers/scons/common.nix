@@ -14,6 +14,8 @@ in python2Packages.buildPythonApplication {
   # Fix a regression in 3.0.0 (causes build errors for some packages)
   patches = stdenv.lib.optional (version == "3.0.0") ./print-statements.patch;
 
+  setupHook = ./setup-hook.sh;
+
   meta = with stdenv.lib; {
     homepage = http://scons.org/;
     description = "An improved, cross-platform substitute for Make";

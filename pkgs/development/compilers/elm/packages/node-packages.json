@@ -1,0 +1,10 @@
+[
+    "elm-test",
+    "elm-verify-examples",
+    "elm-doc-preview",
+    "elm-upgrade",
+    { "elm-analyse": "0.16.3" },
+    "elm-live",
+    "elm-xref",
+    "@elm-tooling/elm-language-server"
+]

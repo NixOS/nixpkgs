@@ -5,24 +5,24 @@
   fetchFromGitHub,
   kconfigwidgets,
   ki18n,
+  kio,
   kitemmodels,
   kitemviews,
+  kwindowsystem,
   libelf,
   qtbase,
   threadweaver,
 }:
 
 stdenv.mkDerivation rec {
-  name = "hotspot-${version}";
-  version = "1.0.0"; # don't forget to bump `rev` below when you change this
+  pname = "hotspot";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
-    # TODO: For some reason, `fetchSubmodules` doesn't work when using `rev = "v${version}";`,
-    #       so using an explicit commit instead. See #15559
-    rev = "352687bf620529e9887616651f123f922cb421a4";
-    sha256 = "09ly15yafpk31p3w7h2xixf1xdmx803w9fyb2aq7mhmc7pcxqjsx";
+    rev = "v${version}";
+    sha256 = "05rkzrvak93z8mzcpm4mcjxb933l8pjsxr9a595wfn1gn2ihmada";
     fetchSubmodules = true;
   };
 
@@ -32,8 +32,10 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     kconfigwidgets
     ki18n
+    kio
     kitemmodels
     kitemviews
+    kwindowsystem
     libelf
     qtbase
     threadweaver

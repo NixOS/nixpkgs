@@ -10,7 +10,8 @@ buildPythonPackage rec {
     sha256 = "341964bf5760ebbdde9619f68a17d5632c674c3f6903ef66daa0a4f540b3d143";
   };
 
-  buildInputs = [ pytestpep8 pytest ];
+  checkInputs = [ pytestpep8 pytest ];
+  nativeBuildInputs = [ pytest ];
   propagatedBuildInputs = [ pyflakes ];
 
   # disable one test case that looks broken

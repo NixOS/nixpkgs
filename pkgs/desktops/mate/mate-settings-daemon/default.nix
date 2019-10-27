@@ -1,19 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, intltool, dbus-glib, libxklavier, libcanberra-gtk3, libnotify, nss, polkit, gnome3, mate, wrapGAppsHook
-, pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio
-}:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, dbus-glib, libxklavier,
+  libcanberra-gtk3, libnotify, nss, polkit, gnome3, gtk3, mate,
+  pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
+  wrapGAppsHook, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-settings-daemon-${version}";
-  version = "1.21.0";
+  pname = "mate-settings-daemon";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1k0xbwxpv3wfl7z3hgaf2ylzaz3aky4j7awdy8cfgxr0d6nqhp3w";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0idw02z0iig0pfxvlhc4dq4sr7kl1w50xscvg0jzzswnxid2l4ip";
   };
 
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/mate-desktop/mate-settings-daemon/pull/296.patch";
+      sha256 = "00dfn8h47zw3wr7yya82vvp19wsw51whn8jwgayn4hkjd161s9nm";
+    })
+  ];
+
   nativeBuildInputs = [
-    pkgconfig
+    autoreconfHook # drop with the above patch
     intltool
+    pkgconfig
     wrapGAppsHook
   ];
 
@@ -24,7 +34,7 @@ stdenv.mkDerivation rec {
     libnotify
     nss
     polkit
-    gnome3.gtk
+    gtk3
     gnome3.dconf
     mate.mate-desktop
     mate.libmatekbd
@@ -32,6 +42,8 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = stdenv.lib.optional pulseaudioSupport "--enable-pulse";
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = with stdenv.lib; {
     description = "MATE settings daemon";

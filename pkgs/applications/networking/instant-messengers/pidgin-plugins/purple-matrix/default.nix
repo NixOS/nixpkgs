@@ -3,8 +3,9 @@
 let
   version = "2018-08-03";
 in
-stdenv.mkDerivation rec {
-  name = "purple-matrix-unstable-${version}";
+stdenv.mkDerivation {
+  pname = "purple-matrix-unstable";
+  inherit version;
 
   src = fetchgit {
     url = "https://github.com/matrix-org/purple-matrix";
@@ -12,15 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "0ph0s24b37d1c50p8zbzgf4q2xns43a8v6vk85iz633wdd72zsa0";
   };
 
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pidgin json-glib glib http-parser sqlite olm libgcrypt ];
 
   hardeningDisable = [ "fortify" ]; # upstream compiles with -O0
 
   makeFlags = [
-    "DESTDIR=$(out)"
-    "PLUGIN_DIR_PURPLE=/lib/pidgin/"
-    "DATA_ROOT_DIR_PURPLE=/share"
+    "PLUGIN_DIR_PURPLE=${placeholder "out"}/lib/purple-2"
+    "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
   ];
 
   meta = with stdenv.lib; {

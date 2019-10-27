@@ -1,16 +1,17 @@
-{ stdenv, fetchzip, findlib, dune, ocaml, configurator, cppo, lablgtk }:
-stdenv.mkDerivation rec {
-  name = "camlimages-${version}";
-  version = "5.0.0";
+{ lib, fetchzip, buildDunePackage, configurator, cppo, lablgtk }:
+
+buildDunePackage rec {
+  pname = "camlimages";
+  version = "5.0.1";
+
   src = fetchzip {
-    url = "https://bitbucket.org/camlspotter/camlimages/get/${version}.tar.gz";
-    sha256 = "00qvwxkfnhv93yi1iq7vy3p5lxyi9xigxcq464s4ii6bmp32d998";
+    url = "https://bitbucket.org/camlspotter/${pname}/get/${version}.tar.gz";
+    sha256 = "1figrgzsdrrxzfza0bhz0225g1rwawdf5x2m9lw2kzrdb815khs5";
   };
-  buildInputs = [ findlib dune ocaml configurator cppo lablgtk ];
-  buildPhase = "dune build -p camlimages";
-  inherit (dune) installPhase;
-  
-  meta = with stdenv.lib; {
+
+  buildInputs = [ configurator cppo lablgtk ];
+
+  meta = with lib; {
     branch = "5.0";
     homepage = https://bitbucket.org/camlspotter/camlimages;
     description = "OCaml image processing library";

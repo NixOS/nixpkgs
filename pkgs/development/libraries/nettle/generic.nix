@@ -4,7 +4,7 @@
 , version, src
 , ...}:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   name = "nettle-${version}";
 
   inherit src;
@@ -53,7 +53,6 @@ stdenv.mkDerivation (rec {
 
      homepage = http://www.lysator.liu.se/~nisse/nettle/;
 
-     maintainers = with maintainers; [ wkennington ];
      platforms = platforms.all;
   };
 }

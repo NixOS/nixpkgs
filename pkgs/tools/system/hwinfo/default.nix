@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, libx86emu, flex, perl }:
+{ stdenv, fetchFromGitHub, libx86emu, flex, perl, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "hwinfo-${version}";
-  version = "21.57";
+  pname = "hwinfo";
+  version = "21.67";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
-    rev = "${version}";
-    sha256 = "1zxc26bljhj04mqzpwnqd6zfnz4dd2syapzn8xcakj882v4a8gnz";
+    rev = version;
+    sha256 = "1fvlrqx1wgl79a9j3xhhhdihj4lkpbrchfsc27il0p52fynn4dji";
   };
 
   patchPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ flex ];
-  buildInputs = [ libx86emu perl ];
+  buildInputs = [ libx86emu perl libuuid ];
 
   makeFlags = [ "LIBDIR=/lib" ];
   #enableParallelBuilding = true;

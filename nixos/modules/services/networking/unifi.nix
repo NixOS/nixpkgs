@@ -121,11 +121,12 @@ in
     };
 
     networking.firewall = mkIf cfg.openPorts {
-      # https://help.ubnt.com/hc/en-us/articles/204910084-UniFi-Change-Default-Ports-for-Controller-and-UAPs
+      # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
         8080  # Port for UAP to inform controller.
         8880  # Port for HTTP portal redirect, if guest portal is enabled.
         8843  # Port for HTTPS portal redirect, ditto.
+        6789  # Port for UniFi mobile speed test.
       ];
       allowedUDPPorts = [
         3478  # UDP port used for STUN.
@@ -145,6 +146,11 @@ in
         where = where;
       }) mountPoints;
 
+    systemd.tmpfiles.rules = [
+      "e '${stateDir}' 0700 unifi - - -"
+      "d '${stateDir}/data' 0700 unifi - - -"
+    ];
+
     systemd.services.unifi = {
       description = "UniFi controller daemon";
       wantedBy = [ "multi-user.target" ];
@@ -156,14 +162,9 @@ in
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
 
       preStart = ''
-        # Ensure privacy of state and data.
-        chown unifi "${stateDir}" "${stateDir}/data"
-        chmod 0700 "${stateDir}" "${stateDir}/data"
-
         # Create the volatile webapps
         rm -rf "${stateDir}/webapps"
         mkdir -p "${stateDir}/webapps"
-        chown unifi "${stateDir}/webapps"
         ln -s "${cfg.unifiPackage}/webapps/ROOT" "${stateDir}/webapps/ROOT"
       '';
 
@@ -175,8 +176,8 @@ in
         Type = "simple";
         ExecStart = "${(removeSuffix "\n" cmd)} start";
         ExecStop = "${(removeSuffix "\n" cmd)} stop";
+        Restart = "on-failure";
         User = "unifi";
-        PermissionsStartOnly = true;
         UMask = "0077";
         WorkingDirectory = "${stateDir}";
       };
@@ -184,4 +185,5 @@ in
 
   };
 
+  meta.maintainers = with lib.maintainers; [ erictapen ];
 }

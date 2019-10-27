@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   commonsLang3_3_1 = map (obj: fetchMaven {
     version = "3.1";
     artifactId = "commons-lang3";

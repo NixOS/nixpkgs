@@ -72,7 +72,7 @@ let
           let
             inherit (args) name;
             sname = args.sname or name;
-            inherit (srcs."${sname}") src version;
+            inherit (srcs.${sname}) src version;
 
             outputs = args.outputs or [ "out" ];
             hasBin = lib.elem "bin" outputs;
@@ -86,7 +86,7 @@ let
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];
               platforms = lib.platforms.linux;
-              maintainers = with lib.maintainers; [ ttuegel ];
+              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
               homepage = http://www.kde.org;
             } // (args.meta or {});
           in
@@ -102,6 +102,7 @@ let
       breeze-qt5 = callPackage ./breeze-qt5.nix {};
       breeze-grub = callPackage ./breeze-grub.nix {};
       breeze-plymouth = callPackage ./breeze-plymouth {};
+      discover = callPackage ./discover.nix {};
       kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
       kde-cli-tools = callPackage ./kde-cli-tools.nix {};
       kde-gtk-config = callPackage ./kde-gtk-config { inherit gsettings-desktop-schemas; };

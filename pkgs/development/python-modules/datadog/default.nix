@@ -1,28 +1,23 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchPypi
 , decorator, requests, simplejson
 , nose, mock }:
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.20.0";
+  version = "0.29.3";
 
-  # no tests in PyPI tarball
-  # https://github.com/DataDog/datadogpy/pull/259
-  src = fetchFromGitHub {
-    owner = "DataDog";
-    repo = "datadogpy";
-    rev = "v${version}";
-    sha256 = "1p4p14853yrsl8py4ca7za7a12qzw0xwgz64f5kzx8a6vpv3p3md";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0p47hy1p2hf233blalyz0yr6nf13iwk9ndkqdk428dmf8b8m2plr";
   };
+
+  postPatch = ''
+    find . -name '*.pyc' -exec rm {} \;
+  '';
 
   propagatedBuildInputs = [ decorator requests simplejson ];
 
   checkInputs = [ nose mock ];
-
-  # v0.20.0 tests are nondeterministic:
-  # test_send_batch_metrics: https://hydra.nixos.org/build/74920933
-  # test_timed_decorator_threaded: https://hydra.nixos.org/build/74328993
-  doCheck = false;
 
   meta = with lib; {
     description = "The Datadog Python library";

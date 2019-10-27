@@ -1,15 +1,15 @@
 { stdenv, fetchurl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libatomic_ops-${version}";
-  version = "7.6.6";
+  pname = "libatomic_ops";
+  version = "7.6.10";
 
   src = fetchurl {
     urls = [
       "http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-${version}.tar.gz"
       "https://github.com/ivmai/libatomic_ops/releases/download/v${version}/libatomic_ops-${version}.tar.gz"
     ];
-    sha256 = "0x7071z707msvyrv9dmgahd1sghbkw8fpbagvcag6xs8yp2spzlr";
+    sha256 = "1bwry043f62pc4mgdd37zx3fif19qyrs8f5bw7qxlmkzh5hdyzjq";
   };
 
   outputs = [ "out" "dev" "doc" ];

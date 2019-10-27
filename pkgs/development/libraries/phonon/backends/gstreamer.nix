@@ -14,7 +14,7 @@ in
 assert withQt5 -> qtbase != null;
 assert withQt5 -> qtx11extras != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${if withQt5 then "qt5" else "qt4"}-${v}";
 
   meta = with stdenv.lib; {
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ttuegel ];
+    license = licenses.lgpl21;
   };
 
   src = fetchurl {

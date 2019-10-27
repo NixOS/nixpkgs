@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
-, cmake, gcc-arm-embedded, python
-, qt5, SDL, gmock
+, cmake, gcc-arm-embedded, binutils-arm-embedded, python
+, qt5, SDL, gtest
 , dfu-util, avrdude
 }:
 
@@ -10,7 +10,8 @@ let
 
 in stdenv.mkDerivation {
 
-  name = "opentx-${version}";
+  pname = "opentx";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "opentx";
@@ -21,13 +22,15 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    gcc-arm-embedded binutils-arm-embedded
+  ];
 
   buildInputs = with qt5; [
-    gcc-arm-embedded
     python python.pkgs.pyqt4
     qtbase qtmultimedia qttranslations
-    SDL gmock
+    SDL
   ];
 
   postPatch = ''
@@ -36,10 +39,12 @@ in stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
+    "-DGTEST_ROOT=${gtest.src}/googletest"
     "-DQT_TRANSLATIONS_DIR=${qt5.qttranslations}/translations"
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
+    "-DNANO=NO"
   ];
 
   meta = with stdenv.lib; {
@@ -53,6 +58,7 @@ in stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ elitak ];
+    broken = true;
   };
 
 }

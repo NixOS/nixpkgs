@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgs, pythonPackages, wrapGAppsHook}:
 
-pythonPackages.buildPythonApplication rec {
-  name = "pdf-quench-${version}";
+pythonPackages.buildPythonApplication {
+  pname = "pdf-quench";
   version = "1.0.5";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = with pkgs; [
     gtk3
-    gobjectIntrospection
+    gobject-introspection
     goocanvas2
     poppler_gi
   ];

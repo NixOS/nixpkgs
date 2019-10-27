@@ -1,16 +1,16 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "quicktemplate-unstable-${version}";
-  version = "2018-09-06";
+buildGoPackage {
+  pname = "quicktemplate";
+  version = "unstable-2019-07-08";
   goPackagePath = "github.com/valyala/quicktemplate";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
     owner = "valyala";
     repo = "quicktemplate";
-    rev = "dc50ff9977a68a543145ce34e0e0030bebcc89be";
-    sha256 = "1980q2c5w4jhrlhf1pimc8yrkz005x3jbsi7hk4hnx6d5iy5lmb6";
+    rev = "840e9171940bbc80bb1b925c880664cababae022";
+    sha256 = "1pimf5bwivklsr438if6l8by34gr48a05gl6hq07cvc8z6wl01m2";
   };
 
   enableParallelBuilding = true;

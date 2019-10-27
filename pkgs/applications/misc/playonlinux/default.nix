@@ -4,7 +4,7 @@
 , cabextract
 , gettext
 , glxinfo
-, gnupg1compat
+, gnupg
 , icoutils
 , imagemagick
 , netcat-gnu
@@ -19,17 +19,20 @@
 , pkgsi686Linux
 , which
 , curl
+, jq
+, xorg
+, libGL
 }:
 
 let
-  version = "4.2.12";
+  version = "4.3.4";
 
   binpath = stdenv.lib.makeBinPath
     [ cabextract
       python2Packages.python
       gettext
       glxinfo
-      gnupg1compat
+      gnupg
       icoutils
       imagemagick
       netcat-gnu
@@ -41,6 +44,7 @@ let
       xterm
       which
       curl
+      jq
     ];
 
   ld32 =
@@ -48,14 +52,15 @@ let
     else if stdenv.hostPlatform.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
     else throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-  libs = pkgs: stdenv.lib.makeLibraryPath [ pkgs.xorg.libX11 ];
+  libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 libGL ];
 
 in stdenv.mkDerivation {
-  name = "playonlinux-${version}";
+  pname = "playonlinux";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.playonlinux.com/script_files/PlayOnLinux/${version}/PlayOnLinux_${version}.tar.gz";
-    sha256 = "03k8v9dknc5hfrfzqw1nkpifz7wkixv3mvjl1vnp4fx8rj2xrjrq";
+    sha256 = "019dvb55zqrhlbx73p6913807ql866rm0j011ix5mkk2g79dzhqp";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -64,6 +69,8 @@ in stdenv.mkDerivation {
     [ python2Packages.python
       python2Packages.wxPython
       python2Packages.setuptools
+      xorg.libX11
+      libGL
     ];
 
   patchPhase = ''

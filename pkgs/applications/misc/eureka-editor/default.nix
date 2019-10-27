@@ -1,7 +1,7 @@
 { stdenv, fetchzip, fltk, zlib, xdg_utils, xorg, libjpeg, libGL }:
 
 stdenv.mkDerivation rec {
-  name = "eureka-editor-${version}";
+  pname = "eureka-editor";
   version = "1.21";
   shortver = "121";
 

@@ -66,7 +66,6 @@ import ./make-test.nix ({ pkgs, ... }:
             virtualisation.vlans = [ 3 ];
             networking.defaultGateway = ifAddr nodes.router2 "eth1";
             networking.firewall.allowedTCPPorts = [ 80 ];
-            networking.firewall.allowPing = true;
             services.httpd.enable = true;
             services.httpd.adminAddr = "foo@example.com";
           };

@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "airsonic-${version}";
-  version = "10.1.2";
+  pname = "airsonic";
+  version = "10.4.1";
 
   src = fetchurl {
     url = "https://github.com/airsonic/airsonic/releases/download/v${version}/airsonic.war";
-    sha256 = "0hpk801dipmzsswgx0y6m0xhwn5iz97agnb2bzbr5xhkl4a0d33k";
+    sha256 = "18vm59x8pcgsyf3kl8ndvdszwf62df9vsqzv5jgbzayb3s0yjghx";
   };
 
   buildCommand = ''

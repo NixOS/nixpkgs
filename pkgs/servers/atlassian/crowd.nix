@@ -2,12 +2,12 @@
 , port ? 8092, proxyUrl ? null, openidPassword ? "WILL_NEVER_BE_SET" }:
 
 stdenv.mkDerivation rec {
-  name = "atlassian-crowd-${version}";
-  version = "3.2.5";
+  pname = "atlassian-crowd";
+  version = "3.4.5";
 
   src = fetchurl {
-    url = "https://www.atlassian.com/software/crowd/downloads/binary/${name}.tar.gz";
-    sha256 = "1h8kxh89d2wm0hkgrzx5dnnfy8sbhpgisgdwn3srhb4js8h4qil6";
+    url = "https://www.atlassian.com/software/crowd/downloads/binary/${pname}-${version}.tar.gz";
+    sha256 = "1k72aar68iqiaf0l75i6pp81dpsllqkp69f70hja754hrzvhz8j3";
   };
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     mv apache-tomcat/conf/server.xml apache-tomcat/conf/server.xml.dist
     ln -s /run/atlassian-crowd/server.xml apache-tomcat/conf/server.xml
 
-    rm -rf apache-tomcat/work
+    rm -rf apache-tomcat/{logs,work}
+    ln -s /run/atlassian-crowd/logs apache-tomcat/logs
     ln -s /run/atlassian-crowd/work apache-tomcat/work
 
     ln -s /run/atlassian-crowd/database database

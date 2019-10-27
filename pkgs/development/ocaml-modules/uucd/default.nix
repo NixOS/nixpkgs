@@ -2,7 +2,7 @@
 
 let
   pname = "uucd";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";
@@ -15,15 +15,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
-  unpackCmd = "tar xjf $src";
-
   inherit (topkg) buildPhase installPhase;
 
   propagatedBuildInputs = [ xmlm ];
 
   meta = with stdenv.lib; {
     description = "An OCaml module to decode the data of the Unicode character database from its XML representation";
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;

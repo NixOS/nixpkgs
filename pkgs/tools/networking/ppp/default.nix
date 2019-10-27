@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, substituteAll, libpcap }:
+{ stdenv, fetchurl, substituteAll, libpcap, openssl }:
 
 stdenv.mkDerivation rec {
   version = "2.4.7";
-  name = "ppp-${version}";
+  pname = "ppp";
 
   src = fetchurl {
-    url = "mirror://samba/ppp/${name}.tar.gz";
+    url = "mirror://samba/ppp/${pname}-${version}.tar.gz";
     sha256 = "0c7vrjxl52pdwi4ckrvfjr08b31lfpgwf3pp0cqy76a77vfs7q02";
   };
 
@@ -20,17 +20,21 @@ stdenv.mkDerivation rec {
       ./nonpriv.patch
       (fetchurl {
         name = "CVE-2015-3310.patch";
-        url = "https://anonscm.debian.org/git/collab-maint/pkg-ppp.git/plain/debian/patches/rc_mksid-no-buffer-overflow?h=debian/2.4.7-1%2b4";
+        url = "https://salsa.debian.org/roam/ppp/raw/ef5d585aca6b1200a52c7109caa66ef97964d76e/debian/patches/rc_mksid-no-buffer-overflow";
         sha256 = "1dk00j7bg9nfgskw39fagnwv1xgsmyv0xnkd6n1v5gy0psw0lvqh";
       })
       (fetchurl {
-        url = "https://anonscm.debian.org/git/collab-maint/pkg-ppp.git/plain/debian/patches/0016-pppoe-include-netinet-in.h-before-linux-in.h.patch";
+        url = "https://salsa.debian.org/roam/ppp/raw/ef5d585aca6b1200a52c7109caa66ef97964d76e/debian/patches/0016-pppoe-include-netinet-in.h-before-linux-in.h.patch";
         sha256 = "1xnmqn02kc6g5y84xynjwnpv9cvrfn3nyv7h7r8j8xi7qf2aj4q8";
+      })
+      (fetchurl {
+        url = https://www.nikhef.nl/~janjust/ppp/ppp-2.4.7-eaptls-mppe-1.102.patch;
+        sha256 = "04war8l5szql53l36043hvzgfwqp3v76kj8brbz7wlf7vs2mlkia";
       })
       ./musl-fix-headers.patch
     ];
 
-  buildInputs = [ libpcap ];
+  buildInputs = [ libpcap openssl ];
 
   postPatch = ''
     # strip is not found when cross compiling with seemingly no way to point

@@ -1,4 +1,4 @@
-{ stdenv, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
+{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -11,17 +11,20 @@
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk2, gtk3, dbus-glib
-, libXScrnSaver, libXcursor, libXtst, libGLU_combined
+, glib, gtk3, dbus-glib
+, glibc
+, libXScrnSaver, libXcursor, libXtst, libGLU_combined, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2
+, ffmpeg, libxslt, libxml2, at-spi2-core
+, jdk
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
+, libva ? null # useVaapi
 
 # package customization
 , enableNaCl ? false
-, enableWideVine ? false
+, useVaapi ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -63,7 +66,8 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng"
+    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
@@ -92,11 +96,6 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
-  freetype_source = fetchurl {
-    url = http://anduin.linuxfromscratch.org/BLFS/other/chromium-freetype.tar.xz;
-    sha256 = "1vhslc4xg0d6wzlsi99zpah2xzjziglccrxn55k7qna634wyxg77";
-  };
-
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
         result = versionAtLeast version min-version && versionOlder version upto-version;
@@ -107,8 +106,8 @@ let
        else result;
 
   base = rec {
-    name = "${packageName}-${version}";
-    inherit (upstream-info) version;
+    name = "${packageName}-unwrapped-${version}";
+    inherit (upstream-info) channel version;
     inherit packageName buildType buildPath;
 
     src = upstream-info.main;
@@ -123,24 +122,41 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 gtk3 dbus-glib
+      glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU_combined
-      pciutils protobuf speechd libXdamage
+      pciutils protobuf speechd libXdamage at-spi2-core
+      jdk.jre
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
+      ++ optional useVaapi libva
       ++ optional pulseSupport libpulseaudio;
 
     patches = [
-      # As major versions are added, you can trawl the gentoo and arch repos at
-      # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
-      # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
-      # for updated patches and hints about build flags
-    # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-      ./patches/fix-freetype.patch
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
-    ] ++ optional enableWideVine ./patches/widevine.patch;
+      ./patches/no-build-timestamps.patch
+    ] ++ optionals (channel == "stable" || channel == "beta") [
+      ./patches/widevine.patch
+    ] ++ optionals (channel == "dev") [
+      ./patches/widevine-79.patch
+      # Unfortunately, chromium regularly breaks on major updates and
+      # then needs various patches backported in order to be compiled with GCC.
+      # Good sources for such patches and other hints:
+      # - https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
+      # - https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
+      # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
+      #
+      # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
+      # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
+    ] ++ optionals (useVaapi) [
+      # source: https://aur.archlinux.org/cgit/aur.git/plain/chromium-vaapi.patch?h=chromium-vaapi
+      ./patches/chromium-vaapi.patch
+    ] ++ optional stdenv.isAarch64 (fetchpatch {
+      url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
+      postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
+      sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
+    });
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -148,6 +164,17 @@ let
         --replace \
           'return sandbox_binary;' \
           'return base::FilePath(GetDevelSandboxPath());'
+
+      substituteInPlace services/audio/audio_sandbox_hook_linux.cc \
+        --replace \
+          '/usr/share/alsa/' \
+          '${alsaLib}/share/alsa/' \
+        --replace \
+          '/usr/lib/x86_64-linux-gnu/gconv/' \
+          '${glibc}/lib/gconv/' \
+        --replace \
+          '/usr/share/locale/' \
+          '${glibc}/share/locale/'
 
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
@@ -174,11 +201,6 @@ let
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
 
-      # use patched freetype
-      # FIXME https://bugs.chromium.org/p/pdfium/issues/detail?id=733
-      # FIXME http://savannah.nongnu.org/bugs/?51156
-      tar -xJf ${freetype_source}
-
       # remove unused third-party
       # in third_party/crashpad third_party/zlib contains just a header-adapter
       for lib in ${toString gnSystemLibraries}; do
@@ -194,10 +216,16 @@ let
     '' + optionalString stdenv.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+    '' + optionalString stdenv.cc.isClang ''
+      mkdir -p third_party/llvm-build/Release+Asserts/bin
+      ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
+      ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
+      ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
     '';
 
     gnFlags = mkGnFlags ({
       linux_use_bundled_binutils = false;
+      use_lld = false;
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
@@ -207,14 +235,13 @@ let
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;
-      enable_widevine = enableWideVine;
+      enable_widevine = true;
       use_cups = cupsSupport;
 
       treat_warnings_as_errors = false;
-      is_clang = false;
+      is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
-      remove_webcore_debug_symbols = true;
-      use_gtk3 = true;
+      blink_symbol_level = 0;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
@@ -230,6 +257,8 @@ let
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
+    } // optionalAttrs useVaapi {
+      use_vaapi = true;
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
@@ -266,12 +295,17 @@ let
           MENUNAME="Chromium"
           process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
         )
-      '' + optionalString (target == "mksnapshot" || target == "chrome") ''
-        paxmark m "${buildPath}/${target}"
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
     in concatStringsSep "\n" commands;
+
+    postFixup = ''
+      # Make sure that libGLESv2 is found by dlopen (if using EGL).
+      chromiumBinary="$libExecPath/$packageName"
+      origRpath="$(patchelf --print-rpath "$chromiumBinary")"
+      patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
+    '';
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.

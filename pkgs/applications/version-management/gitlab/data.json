@@ -1,0 +1,13 @@
+{
+  "version": "12.3.5",
+  "repo_hash": "12ywspgnbwm232vmzbqhkqmwmcrb9pvihsayzmw0cxvhlfwq6995",
+  "owner": "gitlab-org",
+  "repo": "gitlab",
+  "rev": "v12.3.5-ee",
+  "passthru": {
+    "GITALY_SERVER_VERSION": "1.65.1",
+    "GITLAB_PAGES_VERSION": "1.9.0",
+    "GITLAB_SHELL_VERSION": "10.0.0",
+    "GITLAB_WORKHORSE_VERSION": "8.10.0"
+  }
+}

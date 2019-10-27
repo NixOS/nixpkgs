@@ -7,7 +7,7 @@ rec {
 
   description = ''An implementation of css selectors'';
 
-  deps = [ args."alexandria" args."babel" args."buildnode" args."buildnode-xhtml" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-test" args."cxml-xml" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" args."yacc" ];
+  deps = [ args."alexandria" args."babel" args."buildnode" args."buildnode-xhtml" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."cxml" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" args."yacc" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/css-selectors/2016-06-28/css-selectors-20160628-git.tgz'';
@@ -33,8 +33,6 @@ rec {
      (NAME closure-common FILENAME closure-common)
      (NAME closure-html FILENAME closure-html)
      (NAME collectors FILENAME collectors) (NAME cxml FILENAME cxml)
-     (NAME cxml-dom FILENAME cxml-dom) (NAME cxml-klacks FILENAME cxml-klacks)
-     (NAME cxml-test FILENAME cxml-test) (NAME cxml-xml FILENAME cxml-xml)
      (NAME flexi-streams FILENAME flexi-streams)
      (NAME iterate FILENAME iterate) (NAME lisp-unit2 FILENAME lisp-unit2)
      (NAME named-readtables FILENAME named-readtables)
@@ -45,9 +43,8 @@ rec {
      (NAME yacc FILENAME yacc))
     DEPENDENCIES
     (alexandria babel buildnode buildnode-xhtml cl-interpol cl-ppcre cl-unicode
-     closer-mop closure-common closure-html collectors cxml cxml-dom
-     cxml-klacks cxml-test cxml-xml flexi-streams iterate lisp-unit2
-     named-readtables puri split-sequence swank symbol-munger trivial-features
-     trivial-gray-streams yacc)
+     closer-mop closure-common closure-html collectors cxml flexi-streams
+     iterate lisp-unit2 named-readtables puri split-sequence swank
+     symbol-munger trivial-features trivial-gray-streams yacc)
     VERSION 20160628-git SIBLINGS (css-selectors-simple-tree css-selectors-stp)
     PARASITES (css-selectors-test)) */

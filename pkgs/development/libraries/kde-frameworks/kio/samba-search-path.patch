@@ -14,7 +14,7 @@ Index: kio-5.17.0/src/core/ksambashare.cpp
 +        QLatin1Char pathSep(':');
 +        QStringList paths = QFile::decodeName(pathEnv).split(pathSep, QString::SkipEmptyParts);
 +        for (QStringList::iterator it = paths.begin(); it != paths.end(); ++it) {
-+            it->append("/smbd");
++            it->append(QStringLiteral("/smbd"));
 +            if (QFile::exists(*it)) {
 +                return true;
 +            }

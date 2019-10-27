@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, unzip, re2, openfx, zlib, ilmbase, libGLU_combined, openexr }:
 
-stdenv.mkDerivation rec
-{
-  name = "openexrid-unstable-${version}";
+stdenv.mkDerivation {
+  pname = "openexrid-unstable";
   version = "2017-09-17";
 
   src = fetchFromGitHub {

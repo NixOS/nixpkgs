@@ -7,11 +7,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.17.0";
+  version = "1.20.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11d3ssjifms6bid77jk06zl5wl3srihijmv5kggxa0w2l59y8h9m";
+    sha256 = "0vhwaqkx4njarm0wy8zg2hvzr2yl92y8gnwipcn7p59sazw4whfl";
   };
 
   propagatedBuildInputs = [
@@ -36,5 +36,6 @@ buildPythonApplication rec {
     '';
     homepage = http://mycli.net;
     license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.jojosch ];
   };
 }

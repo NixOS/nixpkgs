@@ -5,16 +5,16 @@
 
 let
   pname = "love";
-  version = "11.1";
+  version = "11.2";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchFromBitbucket {
     owner = "rude";
     repo = "love";
-    rev = "${version}";
-    sha256 = "16jn6klbsz8qi2wn3llbr7ri5arlc0b19la19ypzk6p7v20z4sfr";
+    rev = version;
+    sha256 = "0q1lsgc1621czrg49nmabq6am9sgxa9syxrwzlksqqr4dyzw4nmf";
   };
 
   nativeBuildInputs = [ pkgconfig ];

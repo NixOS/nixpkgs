@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xproto, libxcb
+{ stdenv, fetchFromGitHub, pkgconfig, xorgproto, libxcb
 , autoreconfHook, json-glib, gtk-doc, which
-, gobjectIntrospection
+, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
 
-  name = "i3ipc-glib-${version}";
+  pname = "i3ipc-glib";
   version = "0.6.0";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook which pkgconfig ];
 
-  buildInputs = [ libxcb json-glib gtk-doc xproto gobjectIntrospection ];
+  buildInputs = [ libxcb json-glib gtk-doc xorgproto gobject-introspection ];
 
 
   preAutoreconf = ''

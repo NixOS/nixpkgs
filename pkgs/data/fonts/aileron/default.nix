@@ -1,4 +1,4 @@
-{ stdenv,  fetchzip }:
+{ lib, fetchzip }:
 
 let
   majorVersion = "0";
@@ -6,7 +6,7 @@ let
   pname = "aileron";
 in
 
-fetchzip rec {
+fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
   url = "http://dotcolon.net/DL/font/${pname}.zip";
@@ -17,7 +17,7 @@ fetchzip rec {
     unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";
     description = "A helvetica font in nine weights";
     platforms = platforms.all;

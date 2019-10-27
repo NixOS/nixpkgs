@@ -2,20 +2,20 @@
 , ncurses
 , withXaw3d ? false
 #, withPVMlib ? false
-, tcl, tk, withTk ? false
+, tcl, tk, withTk ? true
 , gtk2, withGtk ? false # working ?
 #, withF2c ? false
-, ocaml, withOCaml ? false
+, ocaml, withOCaml ? true
 #, withJava ? false
 #, atlasMath, withAtlas ? false
-, xlibsWrapper, withX ? false
+, xlibsWrapper, withX ? true
 }:
 
 stdenv.mkDerivation rec {
   version = "4.1.2";
-  name = "scilab-${version}";
+  pname = "scilab";
   src = fetchurl {
-    url = "https://www.scilab.org/download/${version}/${name}-src.tar.gz";
+    url = "https://www.scilab.org/download/${version}/${pname}-${version}-src.tar.gz";
     sha256 = "1adk6jqlj7i3gjklvlf1j3il1nb22axnp4rvwl314an62siih0sc";
   };
 

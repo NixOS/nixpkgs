@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk3, libgee, intltool, gnome3
+{ stdenv, fetchurl, pkgconfig, glib, gtk3, libgee, gettext, gnome3
 , libintl }:
 
 let
   pname = "libgnome-games-support";
-  version = "1.4.2";
+  version = "1.4.4";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "02hirpk885jndwarbl3cl5fk7w2z5ziv677csyv1wi2n6rmpn088";
+    sha256 = "1zkbmnrn161p74qg6jhsn9f66yjjzxfm13pl1klv9av8k1bax9pq";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [ libintl ];
   propagatedBuildInputs = [
     # Required by libgnome-games-support-1.pc

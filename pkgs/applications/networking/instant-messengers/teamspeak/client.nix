@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
 , xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, xkeyboard_config, alsaLib
-, libpulseaudio ? null, libredirect, quazip, less, which, unzip, llvmPackages
+, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
 }:
 
 let
@@ -26,21 +26,20 @@ let
     categories = "Network";
   };
 
+  fakeLess = writeShellScriptBin "less" "cat";
+
 in
 
 stdenv.mkDerivation rec {
-  name = "teamspeak-client-${version}";
+  pname = "teamspeak-client";
 
-  version = "3.1.10";
+  version = "3.3.2";
 
   src = fetchurl {
-    urls = [
-      "http://dl.4players.de/ts/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
-      "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
-    ];
+    url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
     sha256 = if stdenv.is64bit
-                then "17gylj5pxba14c1c98b5rdyyb87c58z8l8yrd1iw5k293wf7iwv3"
-                else "1bkn3ykrc73wr02qaqwpr4garlqm3424y3dm2fjx6lqcfzm3ms2k";
+                then "1n916ds67dxj5bfgc5zm9nz2xh2914k85pzzspzvfyr7njcw7hpi"
+                else "0csl5xklcb4v8bzwvby5m2n38zjrnaw8dcvha7qvfbjllxr75yn2";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -49,11 +48,11 @@ stdenv.mkDerivation rec {
     sha256 = "1bywmdj54glzd0kffvr27r84n4dsd0pskkbmh59mllbxvj0qwy7f";
   };
 
-  buildInputs = [ makeWrapper less which unzip ];
+  nativeBuildInputs = [ makeWrapper fakeLess which unzip ];
 
   unpackPhase =
     ''
-      echo -e 'q\ny' | sh -xe $src
+      echo -e '\ny' | sh -xe $src
       cd TeamSpeak*
     '';
 
@@ -61,6 +60,7 @@ stdenv.mkDerivation rec {
     ''
       mv ts3client_linux_${arch} ts3client
       echo "patching ts3client..."
+      patchelf --replace-needed libquazip.so ${quazip}/lib/libquazip5.so ts3client
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \

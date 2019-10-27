@@ -4,22 +4,35 @@
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.7.0";
+  version = "0.11.0";
   name = "bcc-${version}";
 
-  src = fetchFromGitHub {
-    owner  = "iovisor";
-    repo   = "bcc";
-    rev    = "v${version}";
-    sha256 = "1ww7l0chx2ivw9d2ahxjyhxmh6hz3w5z69r4lz02f0361rnrvk7f";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner  = "iovisor";
+      repo   = "bcc";
+      rev    = "v${version}";
+      sha256 = "1v2gzdd4k58f3yxmq4z97a7xh5vyd84flzzfr9k2cm29i93cwcam";
+      name   = "bcc";
+    })
 
+    # note: keep this in sync with the version that was used at the time of the
+    # tagged release!
+    (fetchFromGitHub {
+      owner  = "libbpf";
+      repo   = "libbpf";
+      rev    = "a30df5c09fb3941fc42c4570ed2545e7057bf82a";
+      sha256 = "088vb9sfs1zazlqi6abb3ia1xgpmwiz5pmz6y3a6gbh0zdrgh6px";
+      name   = "libbpf";
+    })
+  ];
+  sourceRoot = "bcc";
   format = "other";
 
-  buildInputs = [
-    llvmPackages.llvm llvmPackages.clang-unwrapped kernel
+  buildInputs = with llvmPackages; [
+    llvm clang-unwrapped kernel
     elfutils luajit netperf iperf
-    systemtap.stapBuild
+    systemtap.stapBuild flex
   ];
 
   patches = [
@@ -28,6 +41,7 @@ python.pkgs.buildPythonApplication rec {
     ./fix-deadlock-detector-import.patch
   ];
 
+  propagatedBuildInputs = [ python.pkgs.netaddr ];
   nativeBuildInputs = [ makeWrapper cmake flex bison ]
     # libelf is incompatible with elfutils-libelf
     ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
@@ -44,9 +58,11 @@ python.pkgs.buildPythonApplication rec {
     patch -p1 < libbcc-path.patch
   '';
 
-  propagatedBuildInputs = [
-    python.pkgs.netaddr
-  ];
+  preConfigure = ''
+    chmod -R u+w ../libbpf/
+    rmdir src/cc/libbpf
+    (cd src/cc && ln -svf ../../../libbpf/ libbpf)
+  '';
 
   postInstall = ''
     mkdir -p $out/bin $out/share
@@ -71,8 +87,8 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage = https://iovisor.github.io/bcc/;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 ];
+    homepage    = https://iovisor.github.io/bcc/;
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
   };
 }

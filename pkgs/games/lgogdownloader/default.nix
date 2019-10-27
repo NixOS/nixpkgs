@@ -2,14 +2,14 @@
 , htmlcxx, rhash, tinyxml-2, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "lgogdownloader-${version}";
-  version = "3.4";
+  pname = "lgogdownloader";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "Sude-";
     repo = "lgogdownloader";
     rev = "v${version}";
-    sha256 = "155vnz4w2v5d3yihwzq8yi406g19kc7banzlarhlcp3j11riwd24";
+    sha256 = "0a3rrkgqwdqxx3ghzw182jx88gzzw6ldp3jasmgnr4l7gpxkmwws";
   };
 
   nativeBuildInputs = [ cmake pkgconfig help2man ];

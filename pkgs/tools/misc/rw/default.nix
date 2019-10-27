@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "rw-${version}";
+  pname = "rw";
   version = "1.0";
 
   src = fetchurl {

@@ -1,4 +1,4 @@
-{ stdenv
+{ config, stdenv
 , fetchFromGitHub
 , fetchpatch
 , which
@@ -14,11 +14,11 @@
 , liburcu
 , libuuid
 , libkrb5
-, debug ? false
+, debug ? config.coreclr.debug or false
 }:
 
 stdenv.mkDerivation rec {
-  name = "coreclr-${version}";
+  pname = "coreclr";
   version = "2.0.7";
 
   src = fetchFromGitHub {

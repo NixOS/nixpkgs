@@ -2,17 +2,17 @@
 , darwin, fontconfig, harfbuzz, openssl, pkgconfig }:
 
 rustPlatform.buildRustPackage rec {
-  name = "tectonic-${version}";
-  version = "0.1.9";
+  pname = "tectonic";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "v${version}";
-    sha256 = "1prrw1npmmqjx966dxrr4jll16scf0cv24nnc70zlbwwb15zhgiq";
+    sha256 = "1j98qxlq74vs8nf2jsn2xw9iyrf8kih4v0hrvznkhcab6bpibp2x";
   };
 
-  cargoSha256 = "00hcs9k9x23xy1pgf8skgb6i5kjwgipy8c0d27nniaxa3dpy5daq";
+  cargoSha256 = "0hsm5a40lc3gy1zrfrchp7zby17xjv5a4llqr4xmka07y7sk08fn";
 
   nativeBuildInputs = [ pkgconfig ];
 

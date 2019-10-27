@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, bison, flex, intltool, gtk, libical, dbus-glib, tzdata
-, libnotify, popt, xfce, hicolor-icon-theme }:
+, libnotify, popt, xfce }:
 
 stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     xfce.xfce4-panel ];
 
   meta = {
-    homepage = http://www.xfce.org/projects/;
+    homepage = https://www.xfce.org/projects/;
     description = "A simple calendar application with reminders";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

@@ -3,7 +3,7 @@
 , SDL_ttf, lua5, ode, libxdg_basedir, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "xmoto-${version}";
+  pname = "xmoto";
   version = "0.5.11";
 
   src = fetchurl {

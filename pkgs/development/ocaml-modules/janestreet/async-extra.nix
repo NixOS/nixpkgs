@@ -2,7 +2,7 @@
  bin_prot, core, ppx_custom_printf, fieldslib, herelib,
  pipebang, sexplib, async_rpc_kernel}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "async_extra";
   hash = "1xdwab19fycr4cdm3dh9vmx42f8lvf9s4f9pjgdydxfrm7yzyrfh";
   propagatedBuildInputs = [ async_kernel async_unix core bin_prot ppx_custom_printf

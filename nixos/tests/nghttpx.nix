@@ -1,5 +1,5 @@
 let
-  nginxRoot = "/var/run/nginx";
+  nginxRoot = "/run/nginx";
 in
   import ./make-test.nix ({...}: {
     name  = "nghttpx";
@@ -15,7 +15,7 @@ in
 
         services.nginx = {
           enable = true;
-          virtualHosts."server" = {
+          virtualHosts.server = {
             locations."/".root = nginxRoot;
           };
         };

@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "dftfit";
-  version = "0.4.22";
+  version = "0.5.1";
   disabled = (!isPy3k);
 
   src = fetchPypi {
      inherit pname version;
-     sha256 = "06dbdc21cf9ed199bfceae5301172bee2164a3b9ef6f0814a089530c320ebb3a";
+     sha256 = "4dcbde48948835dcf2d49d6628c9df5747a8ec505d517e374b8d6c7fe95892df";
   };
 
   buildInputs = [ pytestrunner ];

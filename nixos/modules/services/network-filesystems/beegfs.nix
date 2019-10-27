@@ -69,7 +69,7 @@ let
   # functions to generate systemd.service entries
 
   systemdEntry = service: cfgFile: (mapAttrs' ( name: cfg:
-    (nameValuePair "beegfs-${service}-${name}" (mkIf cfg."${service}".enable {
+    (nameValuePair "beegfs-${service}-${name}" (mkIf cfg.${service}.enable {
     wantedBy = [ "multi-user.target" ];
     requires = [ "network-online.target" ];
     after = [ "network-online.target" ];
@@ -102,7 +102,10 @@ let
 
   # wrappers to beegfs tools. Avoid typing path of config files
   utilWrappers = mapAttrsToList ( name: cfg:
-      ( pkgs.runCommand "beegfs-utils-${name}" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+    ( pkgs.runCommand "beegfs-utils-${name}" {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        preferLocalBuild = true;
+        } ''
         mkdir -p $out/bin
 
         makeWrapper ${pkgs.beegfs}/bin/beegfs-check-servers \

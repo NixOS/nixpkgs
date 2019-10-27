@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , which
 , buildPackages
 , toolset ? /**/ if stdenv.cc.isClang  then "clang"
@@ -97,26 +97,26 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "boost-${version}";
+  pname = "boost";
 
-  inherit src;
+  inherit src version;
 
-  patchFlags = optionalString (stdenv.hostPlatform.libc == "msvcrt") "-p0";
+  patchFlags = "";
+
   patches = patches
-    ++ optional stdenv.isDarwin ./darwin-no-system-python.patch
-    ++ optional (stdenv.hostPlatform.libc == "msvcrt") (fetchurl {
-      url = "https://svn.boost.org/trac/boost/raw-attachment/tickaet/7262/"
-          + "boost-mingw.patch";
-      sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
-    });
+  ++ optional stdenv.isDarwin (
+    if version == "1.55.0"
+    then ./darwin-1.55-no-system-python.patch
+    else ./darwin-no-system-python.patch);
 
   meta = {
     homepage = http://boost.org/;
     description = "Collection of C++ libraries";
-    license = stdenv.lib.licenses.boost;
-
-    platforms = (if versionOlder version "1.59" then remove "aarch64-linux" else id) platforms.unix;
-    maintainers = with maintainers; [ peti wkennington ];
+    license = licenses.boost;
+    platforms = platforms.unix ++ platforms.windows;
+    badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
+                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
+    maintainers = with maintainers; [ peti ];
   };
 
   preConfigure = ''
@@ -139,7 +139,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ which ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
     ++ optional stdenv.isDarwin fixDarwinDylibNames
@@ -156,22 +157,28 @@ stdenv.mkDerivation {
     ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = ''
+    runHook preBuild
     ./b2 ${b2Args}
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # boostbook is needed by some applications
     mkdir -p $dev/share/boostbook
     cp -a tools/boostbook/{xsl,dtd} $dev/share/boostbook/
 
     # Let boost install everything else
     ./b2 ${b2Args} install
+
+    runHook postInstall
   '';
 
   postFixup = ''
     # Make boost header paths relative so that they are not runtime dependencies
     cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
-      -exec sed '1i#line 1 "{}"' -i '{}' \;
+      -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
   '' + optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
     $RANLIB "$out/lib/"*.a
   '';

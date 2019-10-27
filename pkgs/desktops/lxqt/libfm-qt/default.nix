@@ -1,19 +1,18 @@
 {
-  stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools,
+  lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools,
   pcre, libexif, xorg, libfm, menu-cache,
   qtx11extras, qttools
 }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  pname = "libfm-qt";
-  version = "0.13.1";
+mkDerivation rec {
+  pname = "libfm-qt-unstable";
+  version = "2019-09-22";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    sha256 = "1g8j1lw74qvagqhqsx45b290fjwh3jfl3i0366m0w4la03v0rw5j";
+    repo = "libfm-qt";
+    rev = "7c94e9efb996df0602f1f2b34b0216ba9b6df498";
+    sha256 = "1fnli2kh7n4hxmqwcb1n06lyk67d9a2fx6z70gas5jzym7r2h5vw";
   };
 
   nativeBuildInputs = [
@@ -34,9 +33,7 @@ stdenv.mkDerivation rec {
     menu-cache
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";
     homepage = https://github.com/lxqt/libfm-qt;
     license = licenses.lgpl21;

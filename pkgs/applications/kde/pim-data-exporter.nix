@@ -1,10 +1,10 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  akonadi, kcmutils, kcrash, kdbusaddons, kidentitymanagement, kldap,
-  kmailtransport, knewstuff, knotifications, knotifyconfig, kparts, kross, ktexteditor,
-  kwallet, libkdepim, libkleo, pimcommon, qttools,
-  karchive, mailcommon, messagelib
+  akonadi, akonadi-notes, kcalcore, kcmutils, kcrash, kdbusaddons,
+  kidentitymanagement, kldap, kmailtransport, knewstuff, knotifications,
+  knotifyconfig, kparts, kross, ktexteditor, kwallet, libkdepim, libkleo,
+  pimcommon, qttools, karchive, mailcommon, messagelib
 }:
 
 mkDerivation {
@@ -15,8 +15,9 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    akonadi kcmutils kcrash kdbusaddons kidentitymanagement kldap kmailtransport
-    knewstuff knotifications knotifyconfig kparts kross ktexteditor kwallet libkdepim
-    libkleo pimcommon qttools karchive mailcommon messagelib
+    akonadi akonadi-notes kcalcore kcmutils kcrash kdbusaddons
+    kidentitymanagement kldap kmailtransport knewstuff knotifications
+    knotifyconfig kparts kross ktexteditor kwallet libkdepim libkleo pimcommon
+    qttools karchive mailcommon messagelib
   ];
 }

@@ -1,20 +1,25 @@
-{ stdenv, fetchurl, pkgconfig
-, bison, openssl, readline
+{ stdenv, fetchurl, pkgconfig, file
+, bison, openssl, readline, bzip2
 }:
 
 let
-  version = "11.29.7";
-in stdenv.mkDerivation rec {
+  version = "11.33.11";
+in stdenv.mkDerivation {
 
-  name = "monetdb-${version}";
+  pname = "monetdb";
+  inherit version;
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "19f9zfg94k8hr9qc7jp1iwl8av08mibzgmid0gbqplyhf6x1j0r7";
+    sha256 = "1fzgf1hplwlki6l6yvrk8an9y4jj40xzl4m5x1d8vi3xr526bzc9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bison openssl readline ];
+  postPatch = ''
+    sed -i "s,/usr/bin/file,${file}/bin/file," configure
+  '';
+
+  nativeBuildInputs = [ pkgconfig file ];
+  buildInputs = [ bison openssl readline bzip2 ];
 
   meta = with stdenv.lib; {
     description = "An open source database system";

@@ -4,35 +4,44 @@
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
 { lib
-, localSystem, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays, crossOverlays ? []
 
 , bootstrapFiles ?
   let table = {
-    "glibc" = {
-      "i686-linux" = import ./bootstrap-files/i686.nix;
-      "x86_64-linux" = import ./bootstrap-files/x86_64.nix;
-      "armv5tel-linux" = import ./bootstrap-files/armv5tel.nix;
-      "armv6l-linux" = import ./bootstrap-files/armv6l.nix;
-      "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
-      "aarch64-linux" = import ./bootstrap-files/aarch64.nix;
-      "mipsel-linux" = import ./bootstrap-files/loongson2f.nix;
-      "powerpc64le-linux" = import ./bootstrap-files/ppc64le.nix;
+    glibc = {
+      i686-linux = import ./bootstrap-files/i686.nix;
+      x86_64-linux = import ./bootstrap-files/x86_64.nix;
+      armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
+      armv6l-linux = import ./bootstrap-files/armv6l.nix;
+      armv7l-linux = import ./bootstrap-files/armv7l.nix;
+      aarch64-linux = import ./bootstrap-files/aarch64.nix;
+      mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+      powerpc64le-linux = import ./bootstrap-files/ppc64le.nix;
     };
-    "musl" = {
-      "aarch64-linux" = import ./bootstrap-files/aarch64-musl.nix;
-      "armv6l-linux"  = import ./bootstrap-files/armv6l-musl.nix;
-      "x86_64-linux"  = import ./bootstrap-files/x86_64-musl.nix;
-      "powerpc64le-linux" = import ./bootstrap-files/ppc64le-musl.nix;
+    musl = {
+      aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
+      armv6l-linux  = import ./bootstrap-files/armv6l-musl.nix;
+      x86_64-linux  = import ./bootstrap-files/x86_64-musl.nix;
+      powerpc64le-linux = import ./bootstrap-files/ppc64le-musl.nix;
     };
   };
+
+  # Try to find an architecture compatible with our current system. We
+  # just try every bootstrap we’ve got and test to see if it is
+  # compatible with or current architecture.
+  getCompatibleTools = lib.foldl (v: system:
+    if v != null then v
+    else if localSystem.isCompatible (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
+    else null) null (lib.attrNames archLookupTable);
+
   archLookupTable = table.${localSystem.libc}
     or (abort "unsupported libc for the pure Linux stdenv");
-  files = archLookupTable.${localSystem.system}
-    or (abort "unsupported platform for the pure Linux stdenv");
+  files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
+    else (abort "unsupported platform for the pure Linux stdenv"));
   in files
 }:
 
-assert crossSystem == null;
+assert crossSystem == localSystem;
 
 let
   inherit (localSystem) system platform;
@@ -87,7 +96,7 @@ let
           inherit system;
         };
 
-        cc = if isNull prevStage.gcc-unwrapped
+        cc = if prevStage.gcc-unwrapped == null
              then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           name = "${name}-gcc-wrapper";
@@ -188,7 +197,9 @@ in
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
-      binutils = super.binutils_nogold;
+      binutils-unwrapped = super.binutils-unwrapped.override {
+        gold = false;
+      };
       inherit (prevStage)
         ccWrapperStdenv
         gcc-unwrapped coreutils gnugrep;
@@ -214,7 +225,7 @@ in
       inherit (prevStage)
         ccWrapperStdenv
         gcc-unwrapped coreutils gnugrep
-        perl paxctl gnum4 bison;
+        perl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
       binutils = prevStage.binutils.override {
         # Rewrap the binutils with the new glibc, so both the next
@@ -248,7 +259,7 @@ in
         isl = isl_0_17;
       };
     };
-    extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+    extraNativeBuildInputs = [ prevStage.patchelf ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
       lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
                    prevStage.updateAutotoolsGnuConfigScriptsHook;
@@ -323,7 +334,7 @@ in
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});
 
-      extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+      extraNativeBuildInputs = [ prevStage.patchelf ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
         lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
         prevStage.updateAutotoolsGnuConfigScriptsHook;
@@ -347,7 +358,7 @@ in
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ]) [
             gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
-            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
+            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed
           ]
         # Library dependencies
         ++ map getLib (
@@ -366,7 +377,7 @@ in
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf
-          attr acl paxctl zlib pcre;
+          attr acl zlib pcre;
         ${localSystem.libc} = getLibc prevStage;
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.

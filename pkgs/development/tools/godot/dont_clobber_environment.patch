@@ -1,7 +1,7 @@
 +++ build/SConstruct
-@@ -69,10 +69,10 @@
-         custom_tools = ['mingw']
- 
+@@ -63,10 +63,10 @@ elif platform_arg == 'javascript':
+     custom_tools = ['cc', 'c++', 'ar', 'link', 'textfile', 'zip']
+
  env_base = Environment(tools=custom_tools)
 -if 'TERM' in os.environ:
 -    env_base['ENV']['TERM'] = os.environ['TERM']
@@ -11,6 +11,7 @@
 +    if (k in os.environ):
 +        env_base["ENV"][k] = os.environ[k]
 +
- env_base.global_defaults = global_defaults
  env_base.android_maven_repos = []
  env_base.android_flat_dirs = []
+ env_base.android_dependencies = []
+

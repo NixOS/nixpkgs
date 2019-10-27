@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, pruneLibtoolFiles, libde265, x265, libpng, libjpeg }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libde265, x265, libpng, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.2";
-  name = "libheif-${version}";
+  pname = "libheif";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    sha256 = "0hk8mzig2kp5f94j4jwqxzjrm7ffk16ffvxl92rf0afsh6vgnz7w";
+    sha256 = "0x6207hiy15k2696476qx9jcbzs90fq8cfv4jw6hi14w4wzq89kr";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig pruneLibtoolFiles ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libde265 x265 libpng libjpeg ];
 
   enableParallelBuilding = true;

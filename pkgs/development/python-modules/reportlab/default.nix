@@ -11,11 +11,11 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.5.6";
+  version = "3.5.28";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3836a49e7ea7bce458f437cbc094633c7fd4ac027180565875c18ecc726f261e";
+    sha256 = "7195c6ea096d10c91cc470f9f0ced3ad74470d9c0fd97923b5e764597dd13671";
   };
 
   checkInputs = [ glibcLocales ];
@@ -26,6 +26,7 @@ in buildPythonPackage rec {
     # Remove all the test files that require access to the internet to pass.
     rm tests/test_lib_utils.py
     rm tests/test_platypus_general.py
+    rm tests/test_platypus_images.py
 
     # Remove the tests that require Vera fonts installed
     rm tests/test_graphics_render.py

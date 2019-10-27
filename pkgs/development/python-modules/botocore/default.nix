@@ -7,16 +7,19 @@
 , simplejson
 , mock
 , nose
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.10.84";
+  version = "1.12.251"; # N.B: if you change this, change boto3 and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3e4b5a2c903ea30d19d41ea2f65d0e51dce54f4f4c4dfd6ecd7b04f240844a8";
+    sha256 = "887a57b3dcfb1d29ae11e504a486cd8dbe1af4f5678980a804dbf02b36d1c4f8";
   };
+
+  outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [
     dateutil
@@ -24,6 +27,7 @@ buildPythonPackage rec {
     docutils
     ordereddict
     simplejson
+    urllib3
   ];
 
   checkInputs = [ mock nose ];

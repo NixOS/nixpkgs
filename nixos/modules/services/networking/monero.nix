@@ -51,7 +51,7 @@ in
 
     services.monero = {
 
-      enable = mkEnableOption "Monero node daemon.";
+      enable = mkEnableOption "Monero node daemon";
 
       mining.enable = mkOption {
         type = types.bool;

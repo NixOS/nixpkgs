@@ -1,7 +1,7 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchzip, gnugrep }:
 
 stdenv.mkDerivation rec {
-  name = "bats-${version}";
+  pname = "bats";
   version = "1.1.0";
 
   src = fetchzip {
@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1kkh0j2alql3xiyhw9wsvcc3xclv52g0ivgyk8h85q9fn3qdqakz";
   };
 
-  patchPhase = "patchShebangs ./install.sh";
+  patchPhase = ''
+    patchShebangs ./install.sh
+    substituteInPlace ./libexec/bats-core/bats-format-tap-stream --replace grep ${gnugrep}/bin/grep
+  '';
 
   installPhase = "./install.sh $out";
 

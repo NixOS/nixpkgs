@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 let
-  version = "1.7.0";
+  version = "1.8.0";
 
   # These settings are found in the Makefile, but there seems to be no
   # way to select one ore the other setting other than editing the file
@@ -24,11 +24,12 @@ let
     ""; # use linux flags by default
 in
 stdenv.mkDerivation {
-  name = "tree-${version}";
+  pname = "tree";
+  inherit version;
 
   src = fetchurl {
     url = "http://mama.indstate.edu/users/ice/tree/src/tree-${version}.tgz";
-    sha256 = "04kviw799qxly08zb8n5mgxfd96gyis6x69q2qiw86jnh87c4mv9";
+    sha256 = "1hmpz6k0mr6salv0nprvm1g0rdjva1kx03bdf1scw8a38d5mspbi";
   };
 
   configurePhase = ''
@@ -37,7 +38,7 @@ stdenv.mkDerivation {
       prefix=$out
       MANDIR=$out/share/man/man1
       ${systemFlags}
-      CC="cc"
+      CC="$CC"
     )
   '';
 

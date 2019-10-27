@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, dpkg, wrapGAppsHook
-, gnome2, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
+, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, udev
+, cups, expat, udev, libnotify, libuuid, at-spi2-core
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -24,17 +24,21 @@ let
   rpath = lib.makeLibraryPath [
     alsaLib
     atk
+    at-spi2-atk
+    at-spi2-core
     cairo
     cups
     dbus
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gtk3
     pango
+    libnotify
+    libuuid
     libX11
     libXScrnSaver
     libXcomposite
@@ -48,18 +52,23 @@ let
     libXtst
     nspr
     nss
-    stdenv.cc.cc
     udev
     xorg.libxcb
   ];
 
 in stdenv.mkDerivation rec {
-  name = "signal-desktop-${version}";
-  version = "1.16.2";
+  pname = "signal-desktop";
+  version = "1.27.4"; # Please backport all updates to the stable channel.
+  # All releases have a limited lifetime and "expire" 90 days after the release.
+  # When releases "expire" the application becomes unusable until an update is
+  # applied. The expiration date for the current release can be extracted with:
+  # $ grep -a "^{\"buildExpiration" "${signal-desktop}/libexec/resources/app.asar"
+  # (Alternatively we could try to patch the asar archive, but that requires a
+  # few additional steps and might not be the best idea.)
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "1j1785sc8pmrhi8yhlv4brxn7zrd33skgkkvzfl60nqkh2nybh3y";
+    sha256 = "1aza1s70xzx9qkv7b5mpfi4zgdn5dq3rl03lx3jixij3x3pxg5sj";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -83,6 +92,7 @@ in stdenv.mkDerivation rec {
              --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
     wrapProgram $out/libexec/signal-desktop \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc.lib}/lib" \
       ${customLanguageWrapperArgs} \
       "''${gappsWrapperArgs[@]}"
 

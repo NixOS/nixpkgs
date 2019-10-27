@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
-    rev = "${version}";
+    rev = version;
     sha256 = "1bqazna223ibqjwbc1wfvfnspfyrvjy8347qlrgv4cpng72n7gfi";
   };
 
@@ -28,8 +28,10 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  buildInputs = with python3Packages; [ nose mock ];
-
+  checkInputs = with python3Packages; [
+    nose
+    mock
+  ];
   checkPhase = "nosetests";
 
   meta = with stdenv.lib; {

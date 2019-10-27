@@ -1,22 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "numactl-${version}";
-  version = "2.0.12";
+  pname = "numactl";
+  version = "2.0.13";
 
   src = fetchFromGitHub {
-    owner = "numactl";
-    repo = "numactl";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0crhpxwakp0gvd7wwpbkfd3brnrdf89lkbf03axnbrs0b6kaygg2";
+    sha256 = "08xj0n27qh0ly8hjallnx774gicz15nfq0yyxz8zhgy6pq8l33vv";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
-      url = https://git.alpinelinux.org/cgit/aports/plain/testing/numactl/musl.patch?id=0592b128c71c3e70d493bc7a13caed0d7fae91dd;
-      sha256 = "080b0sygmg7104qbbh1amh3b322yyiajwi2d3d0vayffgva0720v";
-    });
 
   postPatch = ''
     patchShebangs test
@@ -32,6 +27,5 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/numactl/numactl;
     license = with licenses; [ gpl2 lgpl21 ]; # libnuma is lgpl21
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ wkennington ];
   };
 }

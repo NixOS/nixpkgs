@@ -1,8 +1,8 @@
 { stdenv, fetchgit, pkgconfig, ninja, libevdev, libev }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.4";
-  name = "illum-${version}";
+  pname = "illum";
 
   src = fetchgit {
     url = "https://github.com/jmesmon/illum.git";

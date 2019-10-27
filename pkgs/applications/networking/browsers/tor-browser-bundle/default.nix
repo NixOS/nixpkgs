@@ -19,11 +19,6 @@
 
 # Media support (implies audio support)
 , mediaSupport ? false
-, gstreamer
-, gst-plugins-base
-, gst-plugins-good
-, gst-ffmpeg
-, gmp
 , ffmpeg
 
 # Extensions, common
@@ -37,7 +32,7 @@
 , rsync
 
 # Pluggable transports
-, obfsproxy
+, obfs4
 
 # Customization
 , extraPrefs ? ""
@@ -72,28 +67,17 @@ let
 
   fontsDir = "${fontsEnv}/share/fonts";
 
-  gstPluginsPath = concatMapStringsSep ":" (x:
-    "${x}/lib/gstreamer-0.10") [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-ffmpeg
-    ];
-
-  gstLibPath = makeLibraryPath [
-    gstreamer
-    gst-plugins-base
-    gmp
+  mediaLibPath = makeLibraryPath [
     ffmpeg
   ];
 in
-stdenv.mkDerivation rec {
-  name = "tor-browser-bundle-${version}";
+stdenv.mkDerivation {
+  pname = "tor-browser-bundle";
   version = tor-browser-unwrapped.version;
 
   buildInputs = [ tor-browser-unwrapped tor ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   buildPhase = ":";
 
@@ -185,9 +169,9 @@ stdenv.mkDerivation rec {
     EOF
 
     # Configure pluggable transports
-    cat >>$TBDATA_PATH/torrc-defaults <<EOF
-    ClientTransportPlugin obfs2,obfs3 exec ${obfsproxy}/bin/obfsproxy managed
-    EOF
+    substituteInPlace $TBDATA_PATH/torrc-defaults \
+      --replace "./TorBrowser/Tor/PluggableTransports/obfs4proxy" \
+                "${obfs4}/bin/obfs4proxy"
 
     # Hard-code path to TBB fonts; xref: FONTCONFIG_FILE in the wrapper below
     sed $bundleData/$bundlePlatform/Data/fontconfig/fonts.conf \
@@ -207,7 +191,7 @@ stdenv.mkDerivation rec {
     ''}
 
     ${optionalString mediaSupport ''
-      wrapper_LD_LIBRARY_PATH=${gstLibPath}''${wrapper_LD_LIBRARY_PATH:+:$wrapper_LD_LIBRARY_PATH}
+      wrapper_LD_LIBRARY_PATH=${mediaLibPath}''${wrapper_LD_LIBRARY_PATH:+:$wrapper_LD_LIBRARY_PATH}
     ''}
 
     mkdir -p $out/bin
@@ -284,10 +268,6 @@ stdenv.mkDerivation rec {
     #
     # APULSE_PLAYBACK_DEVICE is for audio playback w/o pulseaudio (no capture yet)
     #
-    # GST_PLUGIN_SYSTEM_PATH is for HD video playback
-    #
-    # GST_REGISTRY is set to devnull to minimize disk writes
-    #
     # TOR_* is for using an external tor instance
     #
     # Parameters lacking a default value below are *required* (enforced by
@@ -298,7 +278,7 @@ stdenv.mkDerivation rec {
       TZ=":" \
       \
       DISPLAY="\$DISPLAY" \
-      XAUTHORITY="\$XAUTHORITY" \
+      XAUTHORITY="\''${XAUTHORITY:-}" \
       DBUS_SESSION_BUS_ADDRESS="\$DBUS_SESSION_BUS_ADDRESS" \
       \
       HOME="\$HOME" \
@@ -313,10 +293,6 @@ stdenv.mkDerivation rec {
       FONTCONFIG_FILE="$TBDATA_IN_STORE/fonts.conf" \
       \
       APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
-      \
-      GST_PLUGIN_SYSTEM_PATH="${optionalString mediaSupport gstPluginsPath}" \
-      GST_REGISTRY="/dev/null" \
-      GST_REGISTRY_UPDATE="no" \
       \
       TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
       TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \
@@ -362,9 +338,7 @@ stdenv.mkDerivation rec {
       `tor-browser-bundle` needs for the bundling using a much simpler patch. See the
       longDescription and expression of the `firefoxPackages.tor-browser` package for more info.
     '';
-    homepage = https://torproject.org/;
-    license = licenses.free;
-    platforms = [ "x86_64-linux" ];
+    inherit (tor-browser-unwrapped.meta) homepage platforms license;
     hydraPlatforms = [ ];
     maintainers = with maintainers; [ joachifm ];
   };

@@ -1,10 +1,9 @@
 { stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
-, file, which
-, autoreconfHook
-, git
+, file, which, ncurses
 , texinfo
+, buildPackages
 , qtbase ? null
-, withPython ? false, swig2 ? null, python ? null
+, pythonSupport ? false, swig2 ? null, python ? null
 }:
 
 let
@@ -13,12 +12,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gpgme-${version}";
-  version = "1.11.1";
+  pname = "gpgme";
+  version = "1.13.1";
 
   src = fetchurl {
-    url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "0vxx5xaag3rhp4g2arp5qm77gvz4kj0m3hnpvhkdvqyjfhbi26rd";
+    url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
+    sha256 = "0imyjfryvvjdbai454p70zcr95m94j9xnzywrlilqdw2fqi0pqy4";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -28,8 +27,10 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
-  ++ lib.optionals withPython [ python swig2 which ];
+  nativeBuildInputs = [ file pkgconfig gnupg texinfo ]
+  ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   postPatch =''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
@@ -38,7 +39,13 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
     "--with-libgpg-error-prefix=${libgpgerror.dev}"
-  ] ++ lib.optional withPython "--enable-languages=python";
+    "--with-libassuan-prefix=${libassuan.dev}"
+  ] ++ lib.optional pythonSupport "--enable-languages=python"
+  # Tests will try to communicate with gpg-agent instance via a UNIX socket
+  # which has a path length limit. Nix on darwin is using a build directory
+  # that already has quite a long path and the resulting socket path doesn't
+  # fit in the limit. https://github.com/NixOS/nix/pull/1085
+    ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
 
   NIX_CFLAGS_COMPILE =
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
@@ -49,7 +56,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ which ];
 
-  doCheck = false; # fails 8 out of 26 tests with "GPGME: Decryption failed". Spooky!
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://gnupg.org/software/gpgme/index.html;

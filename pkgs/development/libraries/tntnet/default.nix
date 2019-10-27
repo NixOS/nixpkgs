@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cxxtools, zlib, openssl, zip }:
 
 stdenv.mkDerivation rec {
-  name = "tntnet-${version}";
+  pname = "tntnet";
   version = "2.2.1";
 
   src = fetchurl {
-    url = "http://www.tntnet.org/download/${name}.tar.gz";
+    url = "http://www.tntnet.org/download/${pname}-${version}.tar.gz";
     sha256 = "08bmak9mpbamwwl3h9p8x5qzwqlm9g3jh70y0ml5hk7hiv870cf8";
   };
 

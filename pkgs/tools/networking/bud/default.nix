@@ -1,7 +1,7 @@
 { stdenv, lib, fetchgit, python, gyp, utillinux }:
 
-stdenv.mkDerivation rec {
-  name = "bud-${version}";
+stdenv.mkDerivation {
+  pname = "bud";
 
   version = "0.34.1";
 
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     description = "A TLS terminating proxy";
     license     = licenses.mit;
     platforms   = platforms.linux;
+    # Does not build on aarch64-linux.
+    badPlatforms = [ "aarch64-linux" ];
     maintainers = with maintainers; [ cstrahan ];
   };
 }

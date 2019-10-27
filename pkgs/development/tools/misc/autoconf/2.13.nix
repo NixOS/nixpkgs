@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   postInstall = ''ln -s autoconf "$out"/bin/autoconf-2.13'';
 
   meta = {
-    homepage = http://www.gnu.org/software/autoconf/;
+    homepage = https://www.gnu.org/software/autoconf/;
     description = "Part of the GNU Build System";
     branch = "2.13";
 

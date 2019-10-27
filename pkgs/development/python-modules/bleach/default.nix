@@ -5,22 +5,29 @@
 , pytestrunner
 , six
 , html5lib
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "bleach";
-  version = "2.1.4";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ee95f6167129859c5dce9b1ca291ebdb5d8cd7e382ca0e237dfd0dad63f63d8";
+    sha256 = "3fdf7f77adcf649c9911387df51254b813185e32b2c6619f690b593a617e19fa";
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six html5lib ];
+  propagatedBuildInputs = [ six html5lib setuptools ];
 
   postPatch = ''
     substituteInPlace setup.py --replace ",<3dev" ""
+  '';
+
+  # Disable a test
+  # https://github.com/mozilla/bleach/issues/467
+  checkPhase = ''
+    pytest -k "not test_only_text_is_cleaned"
   '';
 
   meta = {

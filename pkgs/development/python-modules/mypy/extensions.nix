@@ -1,18 +1,18 @@
-{ stdenv, fetchPypi, buildPythonPackage, typing, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, typing, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "mypy_extensions";
-  version = "0.4.1";
+  version = "0.4.2";
 
   # Tests not included in pip package.
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04h8brrbbx151dfa2cvvlnxgmb5wa00mhd2z7nd20s8kyibfkq1p";
+    sha256 = "a161e3b917053de87dbe469987e173e49fb454eca10ef28b48b384538cc11458";
   };
 
-  propagatedBuildInputs = [ typing ];
+  propagatedBuildInputs = if pythonOlder "3.5" then [ typing ] else [ ];
 
   meta = with stdenv.lib; {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";

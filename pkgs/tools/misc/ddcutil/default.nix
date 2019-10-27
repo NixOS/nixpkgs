@@ -2,14 +2,14 @@
 , glib, i2c-tools, udev, libgudev, libusb, libdrm, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "ddcutil-${version}";
-  version = "0.9.2";
+  pname = "ddcutil";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner  = "rockowitz";
     repo   = "ddcutil";
     rev    = "v${version}";
-    sha256 = "0mpd3j570yyfm9ki5in9i92nzg25ahmdfp2f7yby7xnqiy53zd8w";
+    sha256 = "1p99kxgg2893ppp56q5igpva39lzj4wvx37c993r4p6i4gq6bi3v";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

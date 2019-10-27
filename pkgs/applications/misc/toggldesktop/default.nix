@@ -1,6 +1,6 @@
 { stdenv, fetchzip, buildEnv, makeDesktopItem, runCommand, writeText, pkgconfig
 , cmake, qmake, cacert, jsoncpp, libX11, libXScrnSaver, lua, openssl, poco
-, qtbase, qtwebkit, qtx11extras, sqlite }:
+, qtbase, qtwebengine, qtx11extras, sqlite }:
 
 let
   name = "toggldesktop-${version}";
@@ -12,7 +12,7 @@ let
   };
 
   bugsnag-qt = stdenv.mkDerivation rec {
-    name = "bugsnag-qt-${version}";
+    pname = "bugsnag-qt";
     version = "20180522.005732";
 
     src = fetchzip {
@@ -25,7 +25,7 @@ let
   };
 
   qxtglobalshortcut = stdenv.mkDerivation rec {
-    name = "qxtglobalshortcut-${version}";
+    pname = "qxtglobalshortcut";
     version = "f584471dada2099ba06c574bdfdd8b078c2e3550";
 
     src = fetchzip {
@@ -38,16 +38,16 @@ let
   };
 
   qt-oauth-lib = stdenv.mkDerivation rec {
-    name = "qt-oauth-lib-${version}";
-    version = "20180521.233208";
+    pname = "qt-oauth-lib";
+    version = "20190125.190943";
 
     src = fetchzip {
       url = "https://github.com/yegortimoshenko/qt-oauth-lib/archive/${version}.tar.gz";
-      sha256 = "0f46d44slzvzaqx0lksvv14lsc1jp8vd2mragxd61r820hybf5z3";
+      sha256 = "0zmfgvdf6n79mgfvbda7lkdxxlzjmy86436gqi2r5x05vq04sfrj";
     };
 
     nativeBuildInputs = [ qmake ];
-    buildInputs = [ qtbase qtwebkit ];
+    buildInputs = [ qtbase qtwebengine ];
   };
 
   poco-pc = writeText "poco.pc" ''
@@ -100,7 +100,7 @@ let
       libtoggl
       qxtglobalshortcut
       qtbase
-      qtwebkit
+      qtwebengine
       qt-oauth-lib
       qtx11extras
       libX11

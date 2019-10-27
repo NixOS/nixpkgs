@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.4.2";
+  version = "1.5.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5878d542a4b3f237e359926384f1dde4e099c9f5525d236b1840cf704fa8d474";
+    sha256 = "7424f2c8511c186cd5424bbf31045b77435b37a8d604990b79d4e70d741148bb";
   };
 
   doCheck = false; # I don't know why, but with doCheck = true it fails.

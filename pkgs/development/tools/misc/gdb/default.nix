@@ -1,22 +1,22 @@
 { stdenv
 
 # Build time
-, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs
+, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
 
-, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python ? null
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
 
 }:
 
 let
   basename = "gdb-${version}";
-  version = "8.1.1";
+  version = "8.3.1";
 in
 
-assert pythonSupport -> python != null;
+assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   name =
@@ -26,19 +26,29 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "0g6hv9xk12aa58w77fydaldqr9a6b0a6bnwsq87jfc6lkcbc7p4p";
+    sha256 = "1i2pjwaafrlz7wqm40b4znr77ai32rjsxkpl2az38yyarpbv8m8y";
   };
 
-  patches = [ ./debug-info-from-env.patch ]
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-target-match.patch;
+  postPatch = if stdenv.isDarwin then ''
+    substituteInPlace gdb/darwin-nat.c \
+      --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+  '' else null;
+
+  patches = [
+    ./debug-info-from-env.patch
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    ./darwin-target-match.patch
+  ];
 
   nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat zlib guile ]
-    ++ stdenv.lib.optional pythonSupport python
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile ]
+    ++ stdenv.lib.optional pythonSupport python3
     ++ stdenv.lib.optional doCheck dejagnu;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   enableParallelBuilding = true;
 
@@ -79,11 +89,11 @@ stdenv.mkDerivation rec {
       program was doing at the moment it crashed.
     '';
 
-    homepage = http://www.gnu.org/software/gdb/;
+    homepage = https://www.gnu.org/software/gdb/;
 
     license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = with platforms; linux ++ cygwin ++ darwin;
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with maintainers; [ pierron globin ];
   };
 }

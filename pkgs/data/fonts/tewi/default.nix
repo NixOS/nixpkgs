@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
       url = "https://www.gnu.org/licenses/gpl-faq.html#FontException";
     };
     maintainers = [ maintainers.fro_ozen ];
-    platforms = platforms.unix;
   };
 }

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "crackxls-${version}";
+  pname = "crackxls";
   version = "0.4";
 
   src = fetchgit {

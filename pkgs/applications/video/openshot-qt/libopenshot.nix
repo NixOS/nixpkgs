@@ -7,14 +7,14 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libopenshot-${version}";
-  version = "0.2.1";
+  pname = "libopenshot";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${version}";
-    sha256 = "0n8ksnv6y2qh9iz352zqibfhnfvyjq7pkvy51prl47620ac40pc3";
+    sha256 = "0r1qmr8ar5n72603xkj9h065vbpznrqsq88kxxmn9n8djyyvk03k";
   };
 
   patchPhase = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   [ imagemagick ffmpeg swig python3 unittest-cpp
     cppzmq czmqpp qtbase qtmultimedia ];
 
-  LIBOPENSHOT_AUDIO_DIR = "${libopenshot-audio}";
+  LIBOPENSHOT_AUDIO_DIR = libopenshot-audio;
   "UNITTEST++_INCLUDE_DIR" = "${unittest-cpp}/include/UnitTest++";
 
   doCheck = false;

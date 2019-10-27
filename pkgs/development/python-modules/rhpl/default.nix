@@ -1,6 +1,6 @@
 {buildPythonPackage, fetchurl, rpmextract, python, wirelesstools, gettext}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rhpl";
   version = "0.218";
   format = "other";
@@ -14,5 +14,6 @@ buildPythonPackage rec {
 
   builder = ./builder.sh;
 
-  buildInputs = [ rpmextract python wirelesstools gettext ];
+  nativeBuildInputs = [ rpmextract  gettext ];
+  buildInputs = [ wirelesstools ];
 }

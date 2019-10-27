@@ -28,8 +28,8 @@ python2Packages.buildPythonApplication rec {
   dontStrip = true;  # we are not generating any binaries
 
   meta = with stdenv.lib; {
-    homepage    = https://puddletag.net;
     description = "An audio tag editor similar to the Windows program, Mp3tag";
+    homepage    = https://docs.puddletag.net;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.linux;

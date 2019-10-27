@@ -13,9 +13,6 @@ let
 
       # CJDNS output is incompatible with the XML log.
       systemd.services.cjdns.serviceConfig.StandardOutput = "null";
-      #networking.firewall.enable = true;
-      networking.firewall.allowPing = true;
-      #networking.firewall.rejectPackets = true;
     };
 
 in
@@ -26,8 +23,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ ehmry ];
   };
 
-  nodes = rec
-    { # Alice finds peers over over ETHInterface.
+  nodes = { # Alice finds peers over over ETHInterface.
       alice =
         { ... }:
         { imports = [ basicConfig ];

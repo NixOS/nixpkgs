@@ -14,11 +14,11 @@ let sha256 = {
   "3.0.0" = "0wwhnl9hppixcsdisinj1wmffx0nv6hkpm01z9qvkngkrazi3i88";
   "2.7.1" = "0w7f59havrl2fsnvs84lm7wlqpsrldg80gy5afpnpr21zkw22g8w";
   "2.6.0" = "0f1h83zh60rspm4fxd96z9h5bkhq1n1q968hgq92sq4a6bfi1c2w";
-}."${version}"; in
+}.${version}; in
 
 let optionals = stdenv.lib.optionals (!stdenv.lib.versionAtLeast version "3"); in
 
-buildOcaml rec {
+buildOcaml {
   name = "lwt";
   inherit version;
 

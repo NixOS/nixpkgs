@@ -67,7 +67,7 @@ in {
 
     services.cron.systemCronJobs = [ "*/${toString cfg.updater.frequency} * * * * root start fprot-updater" ];
 
-    systemd.services."fprot-updater" = {
+    systemd.services.fprot-updater = {
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = false;

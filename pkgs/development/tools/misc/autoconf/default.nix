@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = false; # fails
 
   meta = {
-    homepage = http://www.gnu.org/software/autoconf/;
+    homepage = https://www.gnu.org/software/autoconf/;
     description = "Part of the GNU Build System";
 
     longDescription = ''

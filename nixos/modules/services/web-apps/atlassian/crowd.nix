@@ -6,7 +6,7 @@ let
 
   cfg = config.services.crowd;
 
-  pkg = pkgs.atlassian-crowd.override {
+  pkg = cfg.package.override {
     home = cfg.home;
     port = cfg.listenPort;
     openidPassword = cfg.openidPassword;
@@ -93,6 +93,13 @@ in
         };
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.atlassian-crowd;
+        defaultText = "pkgs.atlassian-crowd";
+        description = "Atlassian Crowd package to use.";
+      };
+
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.oraclejre8;
@@ -103,12 +110,22 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users."${cfg.user}" = {
+    users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.groups."${cfg.group}" = {};
+    users.groups.${cfg.group} = {};
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.home}' - ${cfg.user} ${cfg.group} - -"
+      "d /run/atlassian-crowd - - - - -"
+
+      "L+ /run/atlassian-crowd/database - - - - ${cfg.home}/database"
+      "L+ /run/atlassian-crowd/logs - - - - ${cfg.home}/logs"
+      "L+ /run/atlassian-crowd/work - - - - ${cfg.home}/work"
+      "L+ /run/atlassian-crowd/server.xml - - - - ${cfg.home}/server.xml"
+    ];
 
     systemd.services.atlassian-crowd = {
       description = "Atlassian Crowd";
@@ -129,11 +146,6 @@ in
         rm -rf ${cfg.home}/work
         mkdir -p ${cfg.home}/{logs,database,work}
 
-        mkdir -p /run/atlassian-crowd
-        ln -sf ${cfg.home}/{database,work,server.xml} /run/atlassian-crowd
-
-        chown -R ${cfg.user}:${cfg.group} ${cfg.home}
-
         sed -e 's,port="8095",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''
           -e 's,compression="on",compression="off" protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${boolToString cfg.proxy.secure}",' \
@@ -145,7 +157,6 @@ in
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
-        PermissionsStartOnly = true;
         ExecStart = "${pkg}/start_crowd.sh -fg";
       };
     };

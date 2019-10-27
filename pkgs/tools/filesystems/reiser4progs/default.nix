@@ -2,10 +2,11 @@
 
 let version = "1.2.1"; in
 stdenv.mkDerivation rec {
-  name = "reiser4progs-${version}";
+  pname = "reiser4progs";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/reiser4/reiser4-utils/${name}.tar.gz";
+    url = "mirror://sourceforge/reiser4/reiser4-utils/${pname}-${version}.tar.gz";
     sha256 = "03vdqvpyd48wxrpqpb9kg76giaffw9b8k334kr4wc0zxgybknhl7";
   };
 

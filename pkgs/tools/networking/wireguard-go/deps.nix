@@ -1,30 +1,48 @@
-# file generated from Gopkg.lock using dep2nix (https://github.com/nixcloud/dep2nix)
+# file generated from go.mod using vgo2nix (https://github.com/adisbladis/vgo2nix)
 [
   {
-    goPackagePath  = "golang.org/x/crypto";
+    goPackagePath = "golang.org/x/crypto";
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev =  "8ac0e0d97ce45cd83d1d7243c060cb8461dda5e9";
-      sha256 = "0vg0dfpv1wgj5imlakpma763yfd67aqbiy0fcklq3cw46qmfbzf1";
+      rev = "9756ffdc2472";
+      sha256 = "0q7hxaaq6lp0v8qqzifvysl47z5rfdlrxkh3d29vsl3wyby3dxl8";
     };
   }
   {
-    goPackagePath  = "golang.org/x/net";
+    goPackagePath = "golang.org/x/net";
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev =  "1e491301e022f8f977054da4c2d852decd59571f";
-      sha256 = "1wc18flnz99bip2j1gpnvr3qdp1y7wgyvawlvvc8rmd6ggf5f2yq";
+      rev = "ba9fcec4b297";
+      sha256 = "1hbqvy6r0s5h0dpdqw8fynl3cq0acin3iyqki9xvl5r8h33yb9bx";
     };
   }
   {
-    goPackagePath  = "golang.org/x/sys";
+    goPackagePath = "golang.org/x/sys";
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev =  "9527bec2660bd847c050fda93a0f0c6dee0800bb";
-      sha256 = "02kd2lnw7dnyqs0vvcpzwkv5brpgkwagqly2xs7dwmsi1vvf400p";
+      rev = "19e00faab6ad";
+      sha256 = "0znjx9xbyjdvk8cafdc1jl22gg29asxl5yl7mi3yz6zx3h39rm8y";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/text";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/text";
+      rev = "v0.3.2";
+      sha256 = "0flv9idw0jm5nm8lx25xqanbkqgfiym6619w575p7nrdh0riqwqh";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/tools";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/tools";
+      rev = "90fa682c2a6e";
+      sha256 = "03ic2xsy51jw9749wl7gszdbz99iijbd2bckgygl6cm9w5m364ak";
     };
   }
 ]

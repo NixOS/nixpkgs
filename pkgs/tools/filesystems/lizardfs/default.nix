@@ -1,8 +1,10 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , makeWrapper
-, python
+, python2
+, db
 , fuse
 , asciidoc
 , libxml2
@@ -13,35 +15,42 @@
 , pkgconfig
 , judy
 , pam
+, spdlog
 , zlib # optional
 }:
 
 stdenv.mkDerivation rec {
-  name = "lizardfs-${version}";
-  version = "3.11.3";
+  pname = "lizardfs";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
-    owner = "lizardfs";
-    repo = "lizardfs";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1njgj242vgpdqb1di321jfqk4al5lk72x2iyp0nldy7h6r98l2ww";
+    sha256 = "0zk73wmx82ari3m2mv0zx04x1ggsdmwcwn7k6bkl5c0jnxffc4ax";
   };
 
-  buildInputs = 
-    [ cmake fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
-      zlib boost pkgconfig judy pam makeWrapper
+  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+
+  buildInputs =
+    [ db fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
+      zlib boost judy pam spdlog python2
     ];
 
-  postInstall = ''
-    wrapProgram $out/sbin/lizardfs-cgiserver \
-        --prefix PATH ":" "${python}/bin"
-
-    # mfssnapshot and mfscgiserv are deprecated
-    rm $out/bin/mfssnapshot $out/sbin/mfscgiserv
-  '';
+  patches = [
+    # Use system-provided spdlog instead of downloading an old one (next two patches)
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/lizardfs/raw/d003c371/debian/patches/system-spdlog.patch";
+      sha256 = "1znpqqzb0k5bb7s4d7abfxzn5ry1khz8r76sb808c95cpkw91a9i";
+    })
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/lizardfs/raw/bfcd5bcf/debian/patches/spdlog.patch";
+      sha256 = "0j44rb816i6kfh3y2qdha59c4ja6wmcnlrlq29il4ybxn42914md";
+    })
+  ];
 
   meta = with stdenv.lib; {
-    homepage = https://lizardfs.com;
+    homepage = "https://lizardfs.com";
     description = "A highly reliable, scalable and efficient distributed file system";
     platforms = platforms.linux;
     license = licenses.gpl3;

@@ -1,18 +1,20 @@
-{ stdenv, fetchurl, cpptest, pkgconfig, doxygen, graphviz }:
+{ lib, stdenv, fetchurl, gtest, pkgconfig, doxygen, graphviz }:
 
 stdenv.mkDerivation rec {
-  name = "uriparser-${version}";
-  version = "0.8.6";
+  pname = "uriparser";
+  version = "0.9.1";
 
   # Release tarball differs from source tarball
   src = fetchurl {
-    url = "https://github.com/uriparser/uriparser/releases/download/${name}/${name}.tar.bz2";
-    sha256 = "0m2a5bf5b00ybagxmsa8mdj9mhc62vcm0qimy1ivfza1fbjsf287";
+    url = "https://github.com/uriparser/uriparser/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
+    sha256 = "1gisi7h8hd6mswbiaaa3s25bnb77xf37pzrmjy63rcdpwcyqy93m";
   };
 
-  nativeBuildInputs = [ pkgconfig cpptest doxygen graphviz ];
+  nativeBuildInputs = [ pkgconfig doxygen graphviz ];
+  buildInputs = lib.optional doCheck gtest;
+  configureFlags = lib.optional (!doCheck) "--disable-tests";
 
-  doCheck = true;
+  doCheck = stdenv.targetPlatform.system == stdenv.hostPlatform.system;
 
   meta = with stdenv.lib; {
     homepage = https://uriparser.github.io/;
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
       API documentation is available on uriparser website.
     '';
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ bosu ];
   };
 }

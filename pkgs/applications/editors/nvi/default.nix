@@ -1,6 +1,6 @@
 { fetchurl, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nvi-1.79";
 
   src = fetchurl {

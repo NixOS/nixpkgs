@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, pkgconfig, mono, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "dbus-sharp-${version}";
+  pname = "dbus-sharp";
   version = "0.7";
 
   src = fetchFromGitHub {
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "D-Bus for .NET";
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

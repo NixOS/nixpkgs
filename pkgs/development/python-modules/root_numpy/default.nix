@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "root_numpy";
-  version = "4.7.3";
+  version = "4.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vy6mqmkddfv46yc4hp43fvaisn3yw92ryaw031k841hhj73q0xg";
+    sha256 = "5842bbcde92133f60a61f56e9f0a875a0dbc2a567cc65a9ac141ecd72e416878";
   };
 
   disabled = isPy3k; # blocked by #27649

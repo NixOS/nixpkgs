@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, propagateBin,
   extra-cmake-modules,
-  qtbase, wayland
+  qtbase, wayland, wayland-protocols
 }:
 
 mkDerivation {
@@ -11,7 +11,7 @@ mkDerivation {
     broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ wayland ];
+  buildInputs = [ wayland wayland-protocols ];
   propagatedBuildInputs = [ qtbase ];
   setupHook = propagateBin; # XDG_CONFIG_DIRS
 }

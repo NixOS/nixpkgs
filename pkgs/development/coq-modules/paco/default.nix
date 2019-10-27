@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lcmdr0y2d7gzyvr8dal3pi7fibbd60bpi1l32fw89xiyrgqhsqy";
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 unzip ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 unzip ];
   propagatedBuildInputs = [ coq ];
 
   preBuild = "cd src";

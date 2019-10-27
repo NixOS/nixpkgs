@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchgit, fetchzip, fetchpatch, darwin, writeText
-, git, ninja, python }:
+{ stdenv, lib, fetchgit, darwin, writeText
+, git, ninja, python2 }:
 
 let
-  rev = "106b823805adcc043b2bfe5bc21d58f160a28a7b";
-  sha256 = "1a5s6i07s8l4f1bakh3fyaym00xz7zgd49sp6awm10xb7yjh95ba";
+  rev = "64b846c96daeb3eaf08e26d8a84d8451c6cb712b";
+  sha256 = "1v2kzsshhxn0ck6gd5w16gi2m3higwd9vkyylmsczxfxnw8skgpy";
 
   shortRev = builtins.substring 0 7 rev;
   lastCommitPosition = writeText "last_commit_position.h" ''
@@ -16,22 +16,16 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
-  name = "gn-${version}";
-  version = "20180830";
+stdenv.mkDerivation {
+  pname = "gn";
+  version = "20190403";
 
   src = fetchgit {
     url = "https://gn.googlesource.com/gn";
     inherit rev sha256;
   };
 
-  postPatch = ''
-    # FIXME Needed with old Apple SDKs
-    substituteInPlace base/mac/foundation_util.mm \
-      --replace "NSArray<NSString*>*" "NSArray*"
-  '';
-
-  nativeBuildInputs = [ ninja python git ];
+  nativeBuildInputs = [ ninja python2 git ];
   buildInputs = lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
     libobjc
     cctools
@@ -43,7 +37,7 @@ stdenv.mkDerivation rec {
   ]);
 
   buildPhase = ''
-    python build/gen.py --no-sysroot --no-last-commit-position
+    python build/gen.py --no-last-commit-position
     ln -s ${lastCommitPosition} out/last_commit_position.h
     ninja -j $NIX_BUILD_CORES -C out gn
   '';
@@ -51,6 +45,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -vD out/gn "$out/bin/gn"
   '';
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "A meta-build system that generates NinjaBuild files";

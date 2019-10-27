@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, luajit, openssl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "wrk-${version}";
+  pname = "wrk";
   version = "4.1.0";
 
   src = fetchFromGitHub {

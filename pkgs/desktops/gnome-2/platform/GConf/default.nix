@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2, polkit, python2, intltool }:
 
 stdenv.mkDerivation rec {
-  name = "gconf-${version}";
+  pname = "gconf";
   version = "3.2.6";
 
   src = fetchurl {
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://projects.gnome.org/gconf/;
     description = "Deprecated system for storing application preferences";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,0 +1,78 @@
+diff --git a/build.bash b/build.bash
+index 7c278b6..41494c5 100755
+--- a/build.bash
++++ b/build.bash
+@@ -29,7 +29,6 @@ srcd="$(dirname $0)"
+ mudir=$outd/mupdf
+ muinc="-I $mudir/include -I $mudir/thirdparty/freetype/include"
+ 
+-test -d "$mudir" || die muPDF not found, consult $(dirname $0)/BUILDING
+ 
+ mkdir -p $outd/{$wsid,lablGL}
+ :>$outd/ordered
+@@ -39,12 +38,6 @@ isfresh() { test -r "$1.past" && . "$1.past" && test "$k" = "$2"; }
+ mbt=${mbt:-native}
+ mulibs="$mudir/build/$mbt/libmupdf.a" # $mudir/build/$mbt/libmupdf-third.a
+ 
+-keycmd="(cd $mudir && make -q build=$mbt libs && echo); digest $mulibs"
+-isfresh "$mulibs" "$(eval $keycmd)" || (
+-    make -C "$mudir" build=$mbt -j $mjobs libs
+-    echo "k='$(eval $keycmd)'" >$mudir/build/$mbt/libmupdf.a.past
+-) && vecho "fresh mupdf"
+-
+ oincs() {
+     local i=
+     local incs1=
+@@ -90,34 +83,6 @@ mflags() {
+ }
+ 
+ overs="$(ocamlc -vnum 2>/dev/null)" || overs=""
+-test "$overs" = "4.08" || {
+-    url=https://caml.inria.fr/pub/distrib/ocaml-4.08/ocaml-4.08.0.tar.xz
+-    txz=$outd/$(basename $url)
+-    isfresh $txz $url || {
+-        executable_p() { command -v "$1" >/dev/null 2>&1; }
+-        if executable_p wget; then dl() { wget -q "$1" -O "$2"; }
+-        elif executable_p curl; then dl() { curl -L "$1" -o "$2"; }
+-        else die "no program to fetch remote urls found"
+-        fi
+-        dl $url $txz
+-        echo "k=$url" >$txz.past
+-    } && vecho "fresh $txz"
+-    absprefix=$(cd $outd &>/dev/null; pwd -P)
+-    export PATH=$absprefix/bin:$PATH
+-    isfresh $absprefix/bin/ocamlc "$url" || (
+-        tar xf $txz -C $outd
+-        bn=$(basename $url)
+-        cd $outd/${bn%.tar.xz}
+-        ./configure --disable-vmthreads --disable-graph-lib \
+-                    --disable-ocamldoc --enable-debugger=no \
+-                    --disable-flat-float-array              \
+-                    --prefix=$absprefix
+-        make -j $mjobs world
+-        make install
+-        echo "k='$url'" >$absprefix/bin/ocamlc.past
+-    ) && vecho "fresh ocamlc"
+-    overs=$(ocamlc -vnum 2>/dev/null)
+-}
+ 
+ bocaml1() {
+     grep -q "$3" $outd/ordered || {
+@@ -227,7 +192,7 @@ bobjc() {
+     } && vecho "fresh $o"
+ }
+ 
+-ver=$(cd $srcd && git describe --tags --dirty) || ver=unknown
++ver=@version@
+ 
+ cmd="(. $srcd/genconfstr.sh >$outd/confstruct.ml)"
+ keycmd="digest $srcd/genconfstr.sh $outd/confstruct.ml"
+@@ -281,7 +246,7 @@ for m in ml_gl ml_glarray ml_raw; do
+ done
+ 
+ libs="str.cma unix.cma"
+-clibs="-L$mudir/build/$mbt -lmupdf -lmupdf-third -lpthread"
++clibs="-lmupdf -lfreetype -lpthread"
+ if $darwin; then
+     mcomp=$(ocamlc -config | grep bytecomp_c_co | { read _ c; echo $c; })
+     clibs="$clibs -framework Cocoa -framework OpenGL"

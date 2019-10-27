@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchurl, pkgconfig, gtk2, libX11, libXtst, libXi, libxkbfile, xextproto, xproto }:
+{ lib, buildPythonPackage, fetchurl, pkgconfig, gtk2, libX11, libXtst, libXi, libxkbfile, xorgproto }:
 
 let
   majorVersion = "0.63";
@@ -14,7 +14,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ gtk2 libX11 libXtst libXi libxkbfile xextproto xproto ];
+  buildInputs = [ gtk2 libX11 libXtst libXi libxkbfile xorgproto ];
 
   meta = with lib; {
     description = "Extension to emulate keypresses and to get the layout information from the X server";

@@ -8,33 +8,53 @@
 , async-timeout
 , yarl
 , idna-ssl
+, typing-extensions
+, pytestrunner
 , pytest
 , gunicorn
-, pytest-mock
-, async_generator
-, pytestrunner
 , pytest-timeout
+, async_generator
+, pytest_xdist
+, pytestcov
+, pytest-mock
+, trustme
+, brotlipy
+, freezegun
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.3.2";
+  version = "3.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f20deec7a3fbaec7b5eb7ad99878427ad2ee4cc16a46732b705e8121cbb3cc12";
+    sha256 = "09pkw6f1790prnrq0k8cqgnf1qy57ll8lpmc6kld09q7zw4vi6i5";
   };
 
   disabled = pythonOlder "3.5";
 
-  checkInputs = [ pytest gunicorn pytest-mock async_generator pytestrunner pytest-timeout ];
+  checkInputs = [
+    pytestrunner pytest gunicorn pytest-timeout async_generator pytest_xdist
+    pytest-mock pytestcov trustme brotlipy freezegun
+  ];
 
   propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
-    ++ lib.optional (pythonOlder "3.7") idna-ssl;
+    ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
 
-
-  # Several test failures. Need to be looked into.
-  doCheck = false;
+  # disable tests which attempt to do loopback connections
+  checkPhase = ''
+    cd tests
+    pytest -k "not get_valid_log_format_exc \
+               and not test_access_logger_atoms \
+               and not aiohttp_request_coroutine \
+               and not server_close_keepalive_connection \
+               and not connector \
+               and not client_disconnect \
+               and not handle_keepalive_on_closed_connection \
+               and not partially_applied_handler \
+               and not middleware" \
+      --ignore=test_connector.py
+  '';
 
   meta = with lib; {
     description = "Asynchronous HTTP Client/Server for Python and asyncio";

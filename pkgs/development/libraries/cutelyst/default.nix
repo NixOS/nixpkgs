@@ -1,19 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, makeWrapper
-, qtbase, libuuid, libcap, uwsgi, grantlee }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, wrapQtAppsHook
+, qtbase, libuuid, libcap, uwsgi, grantlee, pcre
+}:
 
 stdenv.mkDerivation rec {
-  name = "cutelyst-${version}";
-  version = "2.5.1";
+  pname = "cutelyst";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "cutelyst";
     repo = "cutelyst";
     rev = "v${version}";
-    sha256 = "0iamavr5gj213c8knrh2mynhn8wcrv83x6s46jq93x93kc5127ks";
+    sha256 = "13h2sj131s31qdzdwa3hx7ildmvlk8mv9s0j99kvx1ijaq49z79f";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
-  buildInputs = [ qtbase libuuid libcap uwsgi grantlee ];
+  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  buildInputs = [ qtbase libuuid libcap uwsgi grantlee pcre ];
 
   cmakeFlags = [
     "-DPLUGIN_UWSGI=ON"
@@ -28,12 +29,6 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     unset LD_LIBRARY_PATH
-  '';
-
-  postInstall = ''
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" --set QT_PLUGIN_PATH '${qtbase}/${qtbase.qtPluginPrefix}'
-    done
   '';
 
   meta = with lib; {

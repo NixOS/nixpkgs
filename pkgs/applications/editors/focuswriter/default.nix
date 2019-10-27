@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, qmake, qttools, hunspell, qtbase, qtmultimedia }:
+{ stdenv, fetchurl, pkgconfig, qmake, qttools, hunspell, qtbase, qtmultimedia, mkDerivation }:
 
-stdenv.mkDerivation rec {
-  name = "focuswriter-${version}";
-  version = "1.6.16";
+mkDerivation rec {
+  pname = "focuswriter";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "https://gottcode.org/focuswriter/focuswriter-${version}-src.tar.bz2";
-    sha256 = "1warfv9d485a7ysmjazxw4zvi9l0ih1021s6c5adkc86m88k296m";
+    sha256 = "155wf7z1g2yx6fb41w29kcb0m2rhnk9ci5yw882yy86s4x20b1jq";
   };
 
   nativeBuildInputs = [ pkgconfig qmake qttools ];

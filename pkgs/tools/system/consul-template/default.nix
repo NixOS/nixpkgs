@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "consul-template-${version}";
+  pname = "consul-template";
   version = "0.19.4";
   rev = "v${version}";
 

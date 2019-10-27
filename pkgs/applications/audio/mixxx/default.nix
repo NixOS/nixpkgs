@@ -1,55 +1,41 @@
-{ stdenv, fetchFromGitHub, makeWrapper, chromaprint, fetchpatch
+{ stdenv, mkDerivation, fetchFromGitHub, chromaprint
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
-, pkgconfig, portaudio, portmidi, protobuf, qt4, rubberband, scons, sqlite
-, taglib, upower, vampSDK
+, libGLU, libxcb, lilv, lv2, opusfile
+, pkgconfig, portaudio, portmidi, protobuf, qtbase, qtscript, qtsvg
+, qtx11extras, rubberband, scons, sqlite, taglib, upower, vampSDK
 }:
 
-stdenv.mkDerivation rec {
-  name = "mixxx-${version}";
-  version = "2.1.4";
+mkDerivation rec {
+  pname = "mixxx";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = "release-${version}";
-    sha256 = "1q1px4033marraprvgr5yq9jlz943kcc10fdkn7py2ma8cfgnipq";
+    sha256 = "0dmkvcsgq7abxqd4wms8c4w0mr5c53z7n5r8jgzp4swz9nmfjpfg";
   };
-
-  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout libsndfile
-    libusb1 libvorbis pkgconfig portaudio portmidi protobuf qt4
-    rubberband scons sqlite taglib upower vampSDK
+    libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkgconfig portaudio portmidi protobuf qtbase qtscript qtsvg
+    qtx11extras rubberband scons sqlite taglib upower vampSDK
   ];
+
+  enableParallelBuilding = true;
 
   sconsFlags = [
     "build=release"
-    "qtdir=${qt4}"
+    "qtdir=${qtbase}"
     "faad=1"
+    "opus=1"
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    mkdir -p "$out"
-    scons \
-      -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
-      $sconsFlags "prefix=$out"
-    runHook postBuild
-  '';
+  qtWrapperArgs = [
+    "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    scons $sconsFlags "prefix=$out" install
-    runHook postInstall
-  '';
-
-  fixupPhase = ''
-    wrapProgram $out/bin/mixxx \
-      --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
-  '';
-    
   meta = with stdenv.lib; {
     homepage = https://mixxx.org;
     description = "Digital DJ mixing software";

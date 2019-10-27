@@ -4,17 +4,17 @@
 
 let
   pname = "baobab";
-  version = "3.28.0";
+  version = "3.34.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0qsx7vx5c3n4yxlxbr11sppw7qwcv9z3g45b5xb9y7wxw5lv42sk";
+    sha256 = "01w6m5ylyqs4wslpjn1hg6n6ynwh3rghksak0qs8r9m6dm3dkss6";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gettext itstool libxml2 desktop-file-utils wrapGAppsHook ];
-  buildInputs = [ gtk3 glib gnome3.defaultIconTheme ];
+  buildInputs = [ gtk3 glib gnome3.adwaita-icon-theme ];
 
   doCheck = true;
 

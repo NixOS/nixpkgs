@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "6.4.2";
-  name = "multitail-${version}";
+  pname = "multitail";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/multitail/${name}.tgz";
+    url = "https://www.vanheusden.com/multitail/${pname}-${version}.tgz";
     sha256 = "1zd1r89xkxngl1pdrvsc877838nwkfqkbcgfqm3vglwalxc587dg";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.vanheusden.com/multitail/;
     description = "tail on Steroids";
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl2Plus;
   };

@@ -1,18 +1,23 @@
-{ config, lib, pkgs, ... }@args:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.nextcloud;
+  fpm = config.services.phpfpm.pools.nextcloud;
+
+  phpPackage = pkgs.php73;
+  phpPackages = pkgs.php73Packages;
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
   };
 
   phpOptionsExtensions = ''
-    ${optionalString cfg.caching.apcu "extension=${cfg.phpPackages.apcu}/lib/php/extensions/apcu.so"}
-    ${optionalString cfg.caching.redis "extension=${cfg.phpPackages.redis}/lib/php/extensions/redis.so"}
-    ${optionalString cfg.caching.memcached "extension=${cfg.phpPackages.memcached}/lib/php/extensions/memcached.so"}
+    ${optionalString cfg.caching.apcu "extension=${phpPackages.apcu}/lib/php/extensions/apcu.so"}
+    ${optionalString cfg.caching.redis "extension=${phpPackages.redis}/lib/php/extensions/redis.so"}
+    ${optionalString cfg.caching.memcached "extension=${phpPackages.memcached}/lib/php/extensions/memcached.so"}
+    extension=${phpPackages.imagick}/lib/php/extensions/imagick.so
     zend_extension = opcache.so
     opcache.enable = 1
   '';
@@ -28,7 +33,7 @@ let
     cd ${pkgs.nextcloud}
     exec /run/wrappers/bin/sudo -u nextcloud \
       NEXTCLOUD_CONFIG_DIR="${cfg.home}/config" \
-      ${config.services.phpfpm.phpPackage}/bin/php \
+      ${phpPackage}/bin/php \
       -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
   '';
@@ -44,6 +49,11 @@ in {
       type = types.str;
       default = "/var/lib/nextcloud";
       description = "Storage path of nextcloud.";
+    };
+    logLevel = mkOption {
+      type = types.ints.between 0 4;
+      default = 2;
+      description = "Log level value between 0 (DEBUG) and 4 (FATAL).";
     };
     https = mkOption {
       type = types.bool;
@@ -70,7 +80,15 @@ in {
       '';
     };
 
-    nginx.enable = mkEnableOption "nginx vhost management";
+    nginx.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable nginx virtual host management.
+        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+      '';
+    };
 
     webfinger = mkOption {
       type = types.bool;
@@ -81,25 +99,13 @@ in {
       '';
     };
 
-    phpPackages = mkOption {
-      type = types.attrs;
-      default = pkgs.php71Packages;
-      defaultText = "pkgs.php71Packages";
-      description = ''
-        Overridable attribute of the PHP packages set to use.  If any caching
-        module is enabled, it will be taken from here.  Therefore it should
-        match the version of PHP given to
-        <literal>services.phpfpm.phpPackage</literal>.
-      '';
-    };
-
     phpOptions = mkOption {
       type = types.attrsOf types.str;
       default = {
-        "short_open_tag" = "Off";
-        "expose_php" = "Off";
-        "error_reporting" = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
-        "display_errors" = "stderr";
+        short_open_tag = "Off";
+        expose_php = "Off";
+        error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
+        display_errors = "stderr";
         "opcache.enable_cli" = "1";
         "opcache.interned_strings_buffer" = "8";
         "opcache.max_accelerated_files" = "10000";
@@ -107,10 +113,33 @@ in {
         "opcache.revalidate_freq" = "1";
         "opcache.fast_shutdown" = "1";
         "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
-        "catch_workers_output" = "yes";
+        catch_workers_output = "yes";
       };
       description = ''
         Options for PHP's php.ini file for nextcloud.
+      '';
+    };
+
+    poolSettings = mkOption {
+      type = with types; attrsOf (oneOf [ str int bool ]);
+      default = {
+        "pm" = "dynamic";
+        "pm.max_children" = "32";
+        "pm.start_servers" = "2";
+        "pm.min_spare_servers" = "2";
+        "pm.max_spare_servers" = "4";
+        "pm.max_requests" = "500";
+      };
+      description = ''
+        Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+      '';
+    };
+
+    poolConfig = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      description = ''
+        Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
       '';
     };
 
@@ -148,7 +177,12 @@ in {
       dbhost = mkOption {
         type = types.nullOr types.str;
         default = "localhost";
-        description = "Database host.";
+        description = ''
+          Database host.
+
+          Note: for using Unix authentication with PostgreSQL, this should be
+          set to <literal>/run/postgresql</literal>.
+        '';
       };
       dbport = mkOption {
         type = with types; nullOr (either int str);
@@ -169,7 +203,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         description = ''
-          Database password.  Use <literal>adminpassFile</literal> to avoid this
+          Admin password.  Use <literal>adminpassFile</literal> to avoid this
           being world-readable in the <literal>/nix/store</literal>.
         '';
       };
@@ -188,6 +222,19 @@ in {
           Trusted domains, from which the nextcloud installation will be
           acessible.  You don't need to add
           <literal>services.nextcloud.hostname</literal> here.
+        '';
+      };
+
+      overwriteProtocol = mkOption {
+        type = types.nullOr (types.enum [ "http" "https" ]);
+        default = null;
+        example = "https";
+
+        description = ''
+          Force Nextcloud to always use HTTPS i.e. for link generation. Nextcloud
+          uses the currently used protocol by default, but when behind a reverse-proxy,
+          it may use <literal>http</literal> for everything although Nextcloud
+          may be served via HTTPS.
         '';
       };
     };
@@ -219,6 +266,23 @@ in {
         '';
       };
     };
+    autoUpdateApps = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Run regular auto update of all apps installed from the nextcloud app store.
+        '';
+      };
+      startAt = mkOption {
+        type = with types; either str (listOf str);
+        default = "05:00:00";
+        example = "Sun 14:00:00";
+        description = ''
+          When to run the update. See `systemd.services.&lt;name&gt;.startAt`.
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -231,9 +295,14 @@ in {
           message = "Please specify exactly one of adminpass or adminpassFile";
         }
       ];
+
+      warnings = optional (cfg.poolConfig != null) ''
+        Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
+        Please migrate your configuration to config.services.nextcloud.poolSettings.
+      '';
     }
 
-    { systemd.timers."nextcloud-cron" = {
+    { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         timerConfig.OnBootSec = "5m";
         timerConfig.OnUnitActiveSec = "15m";
@@ -241,9 +310,24 @@ in {
       };
 
       systemd.services = {
-        "nextcloud-setup" = let
+        nextcloud-setup = let
+          c = cfg.config;
+          writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
+            ${optionalString (c.dbpassFile != null) ''
+              function nix_read_pwd() {
+                $file = "${c.dbpassFile}";
+                if (!file_exists($file)) {
+                  throw new \RuntimeException(sprintf(
+                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't exist!",
+                    $file
+                  ));
+                }
+
+                return trim(file_get_contents($file));
+              }
+            ''}
             $CONFIG = [
               'apps_paths' => [
                 [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
@@ -253,18 +337,28 @@ in {
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
+              'log_level' => '${builtins.toString cfg.logLevel}',
+              ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
+              ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
+              ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
+              ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
+              ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
+              ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
+              ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
+              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
+              'dbtype' => '${c.dbtype}',
+              'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
             ];
           '';
           occInstallCmd = let
-            c = cfg.config;
-            adminpass = if c.adminpassFile != null
-              then ''"$(<"${toString c.adminpassFile}")"''
-              else ''"${toString c.adminpass}"'';
             dbpass = if c.dbpassFile != null
               then ''"$(<"${toString c.dbpassFile}")"''
               else if c.dbpass != null
               then ''"${toString c.dbpass}"''
               else null;
+            adminpass = if c.adminpassFile != null
+              then ''"$(<"${toString c.adminpassFile}")"''
+              else ''"${toString c.adminpass}"'';
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--database" = ''"${c.dbtype}"'';
@@ -316,38 +410,34 @@ in {
           '';
           serviceConfig.Type = "oneshot";
         };
-        "nextcloud-cron" = {
+        nextcloud-cron = {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${pkgs.php}/bin/php -f ${pkgs.nextcloud}/cron.php";
+          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${pkgs.nextcloud}/cron.php";
+        };
+        nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
+          serviceConfig.Type = "oneshot";
+          serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+          startAt = cfg.autoUpdateApps.startAt;
         };
       };
 
       services.phpfpm = {
-        phpOptions = phpOptionsExtensions;
-        phpPackage = pkgs.php71;
-        pools.nextcloud = let
-          phpAdminValues = (toKeyValue
-            (foldr (a: b: a // b) {}
-              (mapAttrsToList (k: v: { "php_admin_value[${k}]" = v; })
-                phpOptions)));
-        in {
-          listen = "/run/phpfpm/nextcloud";
-          extraConfig = ''
-            listen.owner = nginx
-            listen.group = nginx
-            user = nextcloud
-            group = nginx
-            pm = dynamic
-            pm.max_children = 32
-            pm.start_servers = 2
-            pm.min_spare_servers = 2
-            pm.max_spare_servers = 4
-            env[NEXTCLOUD_CONFIG_DIR] = ${cfg.home}/config
-            env[PATH] = /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin
-            ${phpAdminValues}
-          '';
+        pools.nextcloud = {
+          user = "nextcloud";
+          group = "nginx";
+          phpOptions = phpOptionsExtensions + phpOptionsStr;
+          phpPackage = phpPackage;
+          phpEnv = {
+            NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
+            PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
+          };
+          settings = mapAttrs (name: mkDefault) {
+            "listen.owner" = "nginx";
+            "listen.group" = "nginx";
+          } // cfg.poolSettings;
+          extraConfig = cfg.poolConfig;
         };
       };
 
@@ -364,7 +454,7 @@ in {
       services.nginx = {
         enable = true;
         virtualHosts = {
-          "${cfg.hostName}" = {
+          ${cfg.hostName} = {
             root = pkgs.nextcloud;
             locations = {
               "= /robots.txt" = {
@@ -377,7 +467,7 @@ in {
               };
               "/" = {
                 priority = 200;
-                extraConfig = "rewrite ^ /index.php$uri;";
+                extraConfig = "rewrite ^ /index.php;";
               };
               "~ ^/store-apps" = {
                 priority = 201;
@@ -391,45 +481,47 @@ in {
                 priority = 210;
                 extraConfig = "return 301 $scheme://$host/remote.php/dav;";
               };
-              "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/" = {
+              "~ ^\\/(?:build|tests|config|lib|3rdparty|templates|data)\\/" = {
                 priority = 300;
                 extraConfig = "deny all;";
               };
-              "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
+              "~ ^\\/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
                 priority = 300;
                 extraConfig = "deny all;";
               };
-              "~ ^/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|ocs-provider/.+)\\.php(?:$|/)" = {
+              "~ ^\\/(?:index|remote|public|cron|core/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|ocs-provider\\/.+|ocm-provider\\/.+)\\.php(?:$|\\/)" = {
                 priority = 500;
                 extraConfig = ''
-                  include ${pkgs.nginxMainline}/conf/fastcgi.conf;
-                  fastcgi_split_path_info ^(.+\.php)(/.*)$;
+                  include ${config.services.nginx.package}/conf/fastcgi.conf;
+                  fastcgi_split_path_info ^(.+\.php)(\\/.*)$;
+                  try_files $fastcgi_script_name =404;
                   fastcgi_param PATH_INFO $fastcgi_path_info;
                   fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
                   fastcgi_param modHeadersAvailable true;
                   fastcgi_param front_controller_active true;
-                  fastcgi_pass unix:/run/phpfpm/nextcloud;
+                  fastcgi_pass unix:${fpm.socket};
                   fastcgi_intercept_errors on;
                   fastcgi_request_buffering off;
                   fastcgi_read_timeout 120s;
                 '';
               };
-              "~ ^/(?:updater|ocs-provider)(?:$|/)".extraConfig = ''
+              "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
                 try_files $uri/ =404;
                 index index.php;
               '';
-              "~ \\.(?:css|js|woff|svg|gif)$".extraConfig = ''
-                try_files $uri /index.php$uri$is_args$args;
+              "~ \\.(?:css|js|woff2?|svg|gif)$".extraConfig = ''
+                try_files $uri /index.php$request_uri;
                 add_header Cache-Control "public, max-age=15778463";
                 add_header X-Content-Type-Options nosniff;
                 add_header X-XSS-Protection "1; mode=block";
                 add_header X-Robots-Tag none;
                 add_header X-Download-Options noopen;
                 add_header X-Permitted-Cross-Domain-Policies none;
+                add_header Referrer-Policy no-referrer;
                 access_log off;
               '';
               "~ \\.(?:png|html|ttf|ico|jpg|jpeg)$".extraConfig = ''
-                try_files $uri /index.php$uri$is_args$args;
+                try_files $uri /index.php$request_uri;
                 access_log off;
               '';
             };
@@ -439,10 +531,13 @@ in {
               add_header X-Robots-Tag none;
               add_header X-Download-Options noopen;
               add_header X-Permitted-Cross-Domain-Policies none;
+              add_header Referrer-Policy no-referrer;
+              add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
               error_page 403 /core/templates/403.php;
               error_page 404 /core/templates/404.php;
               client_max_body_size ${cfg.maxUploadSize};
               fastcgi_buffers 64 4K;
+              fastcgi_hide_header X-Powered-By;
               gzip on;
               gzip_vary on;
               gzip_comp_level 4;
@@ -460,4 +555,6 @@ in {
       };
     })
   ]);
+
+  meta.doc = ./nextcloud.xml;
 }

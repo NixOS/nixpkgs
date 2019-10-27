@@ -1,11 +1,11 @@
 { lib, fetchPypi, buildPythonPackage, isPy3k, keyring, pbkdf2, pyaes}:
 buildPythonPackage rec {
   pname = "browser-cookie3";
-  version = "0.6.4";
+  version = "0.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16nghwsrv08gz4iiyxsy5lgg5ljgrwkp471m7xnsvhhpb3axmnsc";
+    sha256 = "1f24hsclg1wz2i8aiam91l06qqy0plxhwl615l4qkg35mbw4ry7h";
   };
 
   disabled = !isPy3k;

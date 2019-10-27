@@ -1,15 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt, libqtxdg, xorg }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase,
+  qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt,
+  libqtxdg, xorg }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-config";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0r5vwkyz0c9b9py3wni4yzkmsvgs6psk9dp1fhfzvbjbknb21bfa";
+    sha256 = "0x1k08587i2pakxlrj2n0l82r179sfywnzn2cphxiy89r5zpn7vi";
   };
 
   nativeBuildInputs = [
@@ -32,16 +33,15 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libxcb
     xorg.libXcursor
+    xorg.xf86inputlibinput
+    xorg.xf86inputlibinput.dev
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
   postPatch = ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+    sed -i "/\''${XORG_LIBINPUT_INCLUDE_DIRS}/a ${xorg.xf86inputlibinput.dev}/include/xorg" lxqt-config-input/CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to configure LXQt and the underlying operating system";
     homepage = https://github.com/lxqt/lxqt-config;
     license = licenses.lgpl21;

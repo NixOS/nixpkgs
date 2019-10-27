@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, isPy33, isPy27, isPyPy, python, pycares, asyncio, trollius }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+, isPy27, isPyPy, python, pycares, typing, trollius }:
 
 buildPythonPackage rec {
   pname = "aiodns";
-  version = "1.1.1";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d8677adc679ce8d0ef706c14d9c3d2f27a0e0cc11d59730cdbaf218ad52dd9ea";
+    sha256 = "815fdef4607474295d68da46978a54481dd1e7be153c7d60f9e72773cd38d77d";
   };
 
   propagatedBuildInputs = with stdenv.lib; [ pycares ]
-    ++ optional isPy33 asyncio
+    ++ optional (pythonOlder "3.7") typing
     ++ optional (isPy27 || isPyPy) trollius;
 
   checkPhase = ''

@@ -26,31 +26,21 @@ import ./make-test.nix ({ pkgs, ...} :
     services.xserver.displayManager.sddm.theme = "breeze-ocr-theme";
     services.xserver.desktopManager.plasma5.enable = true;
     services.xserver.desktopManager.default = "plasma5";
+    services.xserver.displayManager.sddm.autoLogin = {
+      enable = true;
+      user = "alice";
+    };
+    hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     virtualisation.memorySize = 1024;
     environment.systemPackages = [ sddm_theme ];
-
-    # fontconfig-penultimate-0.3.3 -> 0.3.4 broke OCR apparently, but no idea why.
-    nixpkgs.config.packageOverrides = superPkgs: {
-      fontconfig-penultimate = superPkgs.fontconfig-penultimate.override {
-        version = "0.3.3";
-        sha256 = "1z76jbkb0nhf4w7fy647yyayqr4q02fgk6w58k0yi700p0m3h4c9";
-      };
-    };
   };
-
-  enableOCR = true;
 
   testScript = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
     xdo = "${pkgs.xdotool}/bin/xdotool";
   in ''
     startAll;
-    # Wait for display manager to start
-    $machine->waitForText(qr/${user.description}/);
-    $machine->screenshot("sddm");
-
-    # Log in
-    $machine->sendChars("${user.password}\n");
+    # wait for log in
     $machine->waitForFile("/home/alice/.Xauthority");
     $machine->succeed("xauth merge ~alice/.Xauthority");
 
@@ -58,7 +48,7 @@ import ./make-test.nix ({ pkgs, ...} :
     $machine->waitForWindow("^Desktop ");
 
     # Check that logging in has given the user ownership of devices.
-    $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+    $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
 
     $machine->execute("su - alice -c 'DISPLAY=:0.0 dolphin &'");
     $machine->waitForWindow(" Dolphin");

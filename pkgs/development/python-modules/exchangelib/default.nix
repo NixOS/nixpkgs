@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "1.11.4";
+  version = "1.12.2";
 
   # tests are not present in the PyPI version
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fpbnjnmqm62vll3m2ys1naikch70kqm26hz86f1cl0r2l2afbab";
+    sha256 = "1p24fq6f46j0qd0ccb64mncxbnm2n9w0sqpl4zk113caaaxkpjil";
   };
 
   # one test is failing due to it trying to send a request to example.com
@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage    = "https://github.com/ecederstrand/exchangelib";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ catern ];
+    broken = true;
   };
 }

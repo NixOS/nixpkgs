@@ -1,6 +1,6 @@
 { stdenv, appleDerivation, xcbuildHook }:
 
-appleDerivation rec {
+appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
 
   # These PBXcp calls should be patched in xcbuild to allow them to
@@ -13,8 +13,11 @@ appleDerivation rec {
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
-    mkdir -p $out/bin/
-    install Products/Release/* $out/bin/
+    for f in Products/Release/*; do
+      if [ -f $f ]; then
+        install -D $f $out/bin/$(basename $f)
+      fi
+    done
 
     for n in 1; do
       mkdir -p $out/share/man/man$n

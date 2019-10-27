@@ -1,7 +1,6 @@
 {stdenv, fetchgit, cmake, libGLU_combined, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "glee";
   rev = "f727ec7463d514b6279981d12833f2e11d62b33d";
   version = "20170205-${stdenv.lib.strings.substring 0 7 rev}";

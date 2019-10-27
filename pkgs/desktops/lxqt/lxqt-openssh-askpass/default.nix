@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtsvg, qtx11extras, kwindowsystem, liblxqt, libqtxdg }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtsvg, qtx11extras, kwindowsystem, liblxqt, libqtxdg }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-openssh-askpass";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "19djmqwk4kj3rxs4h7a471ydcz87j5z4yv8a6pgblvqdkkn0ylk9";
+    sha256 = "04jmvhhlhhspwzj4hfq7fnaa3h7h02z3rlq8p55hzlzkvshqqh1q";
   };
 
   nativeBuildInputs = [
@@ -27,9 +26,7 @@ stdenv.mkDerivation rec {
     libqtxdg
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI to query passwords on behalf of SSH agents";
     homepage = https://github.com/lxqt/lxqt-openssh-askpass;
     license = licenses.lgpl21;

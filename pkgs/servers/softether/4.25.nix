@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "softether-${version}";
+  pname = "softether";
   version = "4.25";
   build = "9656";
   compiledDate = "2018.01.15";
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.softether.org/;
     license = licenses.gpl2;
     maintainers = [ maintainers.rick68 ];
-    platforms = filter (p: p != "aarch64-linux") platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

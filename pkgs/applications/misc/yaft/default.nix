@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.2.9";
-  name = "yaft-${version}";
+  pname = "yaft";
 
   src = fetchFromGitHub {
     owner = "uobikiemukot";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/uobikiemukot/yaft;
     description = "Yet another framebuffer terminal";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

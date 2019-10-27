@@ -1,23 +1,25 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ stdenv, rustPlatform, fetchFromGitHub, CoreServices, darwin }:
 
 rustPlatform.buildRustPackage rec {
-  name = "watchexec-${version}";
-  version = "1.9.0";
+  pname = "watchexec";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
-    owner = "watchexec";
-    repo = "watchexec";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "0zp5s2dy5zbar0virvy1izjpvvgwbz7rvjmcy6bph6rb5c4bhm70";
+    sha256 = "0iaxicghvfy85hrxn151hz8frgfknk3s1z0ngjn7cv5x5zvfxspf";
   };
 
-  cargoSha256 = "1li84kq9myaw0zwx69y72f3lx01s7i9p8yays4rwvl1ymr614y1l";
+  cargoSha256 = "1sqwplvpg0n9j0h9j94m7a6ylgqi4y4wyx489y09z9gm7aqgrsjc";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with stdenv.lib; {
     description = "Executes commands in response to file modifications";
     homepage = https://github.com/watchexec/watchexec;
     license = with licenses; [ asl20 ];
     maintainers = [ maintainers.michalrus ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

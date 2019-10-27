@@ -19,8 +19,8 @@
   ".bp.blogspot.com"
 ] }:
 
-stdenv.mkDerivation rec {
-  name = "hostsblock-${version}";
+stdenv.mkDerivation {
+  pname = "hostsblock";
   version = "20161213";
 
   src = fetchFromGitHub {

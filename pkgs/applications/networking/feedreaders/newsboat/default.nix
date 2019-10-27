@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
-, asciidoc, docbook_xml_dtd_45, libxslt, docbook_xsl, libiconv, makeWrapper }:
+{ stdenv, rustPlatform, fetchurl, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
+, asciidoc, docbook_xml_dtd_45, libxslt, docbook_xsl, libiconv, Security, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "newsboat-${version}";
-  version = "2.13";
+rustPlatform.buildRustPackage rec {
+  pname = "newsboat";
+  version = "2.17.1";
 
   src = fetchurl {
-    url = "https://newsboat.org/releases/${version}/${name}.tar.xz";
-    sha256 = "0pik1d98ydzqi6055vdbkjg5krwifbk2hy2f5jp5p1wcy2s16dn7";
+    url = "https://newsboat.org/releases/${version}/${pname}-${version}.tar.xz";
+    sha256 = "15qr2y35yvl0hzsf34d863n8v042v78ks6ksh5p1awvi055x5sy1";
   };
 
-  prePatch = ''
+  cargoSha256 = "0db4j6y43gacazrvcmq823fzl5pdfdlg8mkjpysrw6h9fxisq83f";
+
+  postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
     # Allow other ncurses versions on Darwin
     substituteInPlace config.sh \
@@ -18,18 +20,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig asciidoc docbook_xml_dtd_45 libxslt docbook_xsl ]
-                      ++ stdenv.lib.optional stdenv.isDarwin [ makeWrapper libiconv ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper libiconv ];
 
-  buildInputs = [ stfl sqlite curl gettext libxml2 json_c ncurses ];
+  buildInputs = [ stfl sqlite curl gettext libxml2 json_c ncurses ]
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-  makeFlags = [ "prefix=$(out)" ];
+  postBuild = ''
+    make
+  '';
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=sign-compare" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "-Wno-error=format-security";
 
   doCheck = true;
-  checkTarget = "test";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
+  checkPhase = ''
+    make test
+  '';
 
   postInstall = ''
+    make prefix="$out" install
     cp -r contrib $out
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
@@ -39,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage    = https://newsboat.org/;
-    description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console.";
+    description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with maintainers; [ dotlambda nicknovitski ];
     license     = licenses.mit;
     platforms   = platforms.unix;

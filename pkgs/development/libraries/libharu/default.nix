@@ -15,6 +15,6 @@ stdenv.mkDerivation {
     homepage = http://libharu.org/;
     license = stdenv.lib.licenses.zlib;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

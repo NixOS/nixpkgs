@@ -1,7 +1,6 @@
 {stdenv, fetchurl, glib, neon, fuse, pkgconfig}:
 
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation {
   name = "wdfs-fuse-1.4.2";
   src = fetchurl {
     url = "http://noedler.de/projekte/wdfs/wdfs-1.4.2.tar.gz";

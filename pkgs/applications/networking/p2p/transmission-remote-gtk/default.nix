@@ -1,17 +1,16 @@
 { stdenv, autoconf, automake, libtool, wrapGAppsHook, fetchFromGitHub, pkgconfig
-, intltool, gtk3, json-glib, curl, glib, autoconf-archive, appstream-glib
-, hicolor-icon-theme }:
+, intltool, gtk3, json-glib, curl, glib, autoconf-archive, appstream-glib }:
 
 
 stdenv.mkDerivation rec {
-  name = "transmission-remote-gtk-${version}";
-  version = "1.3.1";
+  pname = "transmission-remote-gtk";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
-    rev = "${version}";
-    sha256 = "02q0vl7achx9rpd0iv0347h838bwzm7aj4k04y88g3bh8fi3cddh";
+    rev = version;
+    sha256 = "1pipc1f94jdppv597mqmcj2kw2rdvaqcbl512v7z8vir76p1a7gk";
   };
 
   preConfigure = "./autogen.sh";
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
     appstream-glib
   ];
 
-  buildInputs = [ gtk3 json-glib curl glib hicolor-icon-theme ];
+  buildInputs = [ gtk3 json-glib curl glib ];
 
   doCheck = false; # fails with style validation error
 

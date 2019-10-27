@@ -13,6 +13,5 @@ stdenv.mkDerivation rec {
     description = "A C library for Linux/Unix for executing name service queries asynchronously";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

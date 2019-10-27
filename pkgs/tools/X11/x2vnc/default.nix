@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xorg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "x2vnc-1.7.2";
 
   src = fetchurl {
@@ -8,9 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "00bh9j3m6snyd2fgnzhj5vlkj9ibh69gfny9bfzlxbnivb06s1yw";
   };
 
-  buildInputs =
-    [ xorg.libX11 xorg.xproto xorg.xextproto xorg.libXext
-      xorg.libXrandr xorg.randrproto
+  buildInputs = with xorg; [
+      libX11 xorgproto libXext libXrandr
     ];
 
   hardeningDisable = [ "format" ];

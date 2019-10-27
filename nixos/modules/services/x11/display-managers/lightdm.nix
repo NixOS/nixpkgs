@@ -6,7 +6,7 @@ let
 
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
-  xEnv = config.systemd.services."display-manager".environment;
+  xEnv = config.systemd.services.display-manager.environment;
   cfg = dmcfg.lightdm;
 
   dmDefault = xcfg.desktopManager.default;
@@ -80,6 +80,8 @@ in
   imports = [
     ./lightdm-greeters/gtk.nix
     ./lightdm-greeters/mini.nix
+    ./lightdm-greeters/enso-os.nix
+    ./lightdm-greeters/pantheon.nix
   ];
 
   options = {
@@ -112,7 +114,7 @@ in
 
         };
         name = mkOption {
-          type = types.string;
+          type = types.str;
           description = ''
             The name of a .desktop file in the directory specified
             in the 'package' option.
@@ -187,6 +189,11 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
+      { assertion = xcfg.enable;
+        message = ''
+          LightDM requires services.xserver.enable to be true
+        '';
+      }
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
@@ -195,7 +202,7 @@ in
       { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
+          services.xserver.windowManager.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
         '';
       }
@@ -207,14 +214,47 @@ in
       }
     ];
 
-    services.xserver.displayManager.job = {
-      logToFile = true;
+    # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
+    services.xserver.displayManager.job.execCmd = ''
+      export PATH=${lightdm}/sbin:$PATH
+      exec ${lightdm}/sbin/lightdm
+    '';
 
-      # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-      execCmd = ''
-        export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm
-      '';
+    # Replaces getty
+    systemd.services.display-manager.conflicts = [
+      "getty@tty7.service"
+      # TODO: Add "plymouth-quit.service" so LightDM can control when plymouth
+      # quits. Currently this breaks switching to configurations with plymouth.
+     ];
+
+    # Pull in dependencies of services we replace.
+    systemd.services.display-manager.after = [
+      "rc-local.service"
+      "systemd-machined.service"
+      "systemd-user-sessions.service"
+      "getty@tty7.service"
+      "user.slice"
+    ];
+
+    # user.slice needs to be present
+    systemd.services.display-manager.requires = [
+      "user.slice"
+    ];
+
+    # lightdm stops plymouth so when it fails make sure plymouth stops.
+    systemd.services.display-manager.onFailure = [
+      "plymouth-quit.service"
+    ];
+
+    systemd.services.display-manager.serviceConfig = {
+      BusName = "org.freedesktop.DisplayManager";
+      IgnoreSIGPIPE = "no";
+      # This allows lightdm to pass the LUKS password through to PAM.
+      # login keyring is unlocked automatic when autologin is used.
+      KeyringMode = "shared";
+      KillMode = "mixed";
+      StandardError = "inherit";
+      StandardOutput = "syslog";
     };
 
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
@@ -229,36 +269,41 @@ in
     # Enable the accounts daemon to find lightdm's dbus interface
     environment.systemPackages = [ lightdm ];
 
-    security.pam.services.lightdm = {
-      allowNullPassword = true;
-      startSession = true;
-    };
-    security.pam.services.lightdm-greeter = {
-      allowNullPassword = true;
-      startSession = true;
-      text = ''
-        auth     required pam_env.so envfile=${config.system.build.pamEnvironment}
-        auth     required pam_permit.so
+    security.pam.services.lightdm.text = ''
+        auth      substack      login
+        account   include       login
+        password  substack      login
+        session   include       login
+    '';
 
-        account  required pam_permit.so
+    security.pam.services.lightdm-greeter.text = ''
+        auth     required       pam_succeed_if.so audit quiet_success user = lightdm
+        auth     optional       pam_permit.so
 
-        password required pam_deny.so
+        account  required       pam_succeed_if.so audit quiet_success user = lightdm
+        account  sufficient     pam_unix.so
 
-        session  required pam_env.so envfile=${config.system.build.pamEnvironment}
-        session  required pam_unix.so
-        session  optional ${pkgs.systemd}/lib/security/pam_systemd.so
-      '';
-    };
+        password required       pam_deny.so
+
+        session  required       pam_succeed_if.so audit quiet_success user = lightdm
+        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
+        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  optional       pam_keyinit.so force revoke
+        session  optional       pam_permit.so
+    '';
+
     security.pam.services.lightdm-autologin.text = ''
-        auth     requisite pam_nologin.so
-        auth     required  pam_succeed_if.so uid >= 1000 quiet
-        auth     required  pam_permit.so
+        auth      requisite     pam_nologin.so
 
-        account  include   lightdm
+        auth      required      pam_succeed_if.so uid >= 1000 quiet
+        auth      required      pam_permit.so
 
-        password include   lightdm
+        account   sufficient    pam_unix.so
 
-        session  include   lightdm
+        password  requisite     pam_unix.so nullok sha512
+
+        session   optional      pam_keyinit.so revoke
+        session   include       login
     '';
 
     users.users.lightdm = {

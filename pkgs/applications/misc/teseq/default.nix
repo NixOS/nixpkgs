@@ -4,7 +4,8 @@ let
   version = "1.1.1";
 in
 stdenv.mkDerivation {
-  name = "teseq-${version}";
+  pname = "teseq";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://gnu/teseq/teseq-${version}.tar.gz";

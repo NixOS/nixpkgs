@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, cimg, imagemagick }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "pHash";
   version = "0.9.4";
 

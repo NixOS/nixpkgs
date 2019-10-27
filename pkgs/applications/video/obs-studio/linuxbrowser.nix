@@ -9,13 +9,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "obs-linuxbrowser-${version}";
-  version = "0.5.2";
+  pname = "obs-linuxbrowser";
+  version = "0.6.1";
   src = fetchFromGitHub {
     owner = "bazukas";
     repo = "obs-linuxbrowser";
     rev = version;
-    sha256 = "1vwgdgcmab5442wh2rjww6lzij9g2c5ccnv79rs7vx3rdl8wqg4f";
+    sha256 = "1mi9pchy07ipnx1m2767n29d53v822yajcf6c3705dhz882z21zq";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ puffnfresh ];
     license = licenses.gpl2;
     platforms = with platforms; linux;
+    broken = true;
   };
 }

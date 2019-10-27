@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, buildGoPackage }:
   
 buildGoPackage rec {
-  name = "govc-${version}";
-  version = "0.16.0";
+  pname = "govc";
+  version = "0.21.0";
 
   goPackagePath = "github.com/vmware/govmomi";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "vmware";
     repo = "govmomi";
-    sha256 = "09fllx7l2hsjrv1jl7g06xngjy0xwn5n5zng6x8dspgsl6kblyqp";
+    sha256 = "0mig8w0szxqcii3gihrsm8n8hzziq9l6axc5z32nw9kiy9bi4130";
   };
 
   meta = {

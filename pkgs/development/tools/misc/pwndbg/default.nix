@@ -1,19 +1,12 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper, gdb }:
+{ stdenv
+, python3
+, fetchFromGitHub
+, makeWrapper
+, gdb
+}:
 
-stdenv.mkDerivation rec {
-  name = "pwndbg-${version}";
-  version = "2018.07.29";
-
-  src = fetchFromGitHub {
-    owner = "pwndbg";
-    repo = "pwndbg";
-    rev = version;
-    sha256 = "1illk1smknaaa0ck8mwvig15c8al5w7fdp42a748xvm8wvxqxdsc";
-  };
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  propagatedBuildInputs = with pythonPackages; [
+let
+  pythonPath = with python3.pkgs; makePythonPath [
     future
     isort
     psutil
@@ -24,19 +17,29 @@ stdenv.mkDerivation rec {
     six
     unicorn
     pygments
-    enum34
   ];
+
+in stdenv.mkDerivation rec {
+  pname = "pwndbg";
+  version = "2019.01.25";
+  format = "other";
+
+  src = fetchFromGitHub {
+    owner = "pwndbg";
+    repo = "pwndbg";
+    rev = version;
+    sha256 = "0k7n6pcrj62ccag801yzf04a9mj9znghpkbnqwrzz0qn3rs42vgs";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/share/pwndbg
     cp -r *.py pwndbg $out/share/pwndbg
+    chmod +x $out/share/pwndbg/gdbinit.py
     makeWrapper ${gdb}/bin/gdb $out/bin/pwndbg \
-      --add-flags "-q -x $out/share/pwndbg/gdbinit.py"
-  '';
-
-  preFixup = ''
-    sed -i "/import sys/a import sys; sys.path[0:0] = '$PYTHONPATH'.split(':')" \
-      $out/share/pwndbg/gdbinit.py
+      --add-flags "-q -x $out/share/pwndbg/gdbinit.py" \
+      --set NIX_PYTHONPATH ${pythonPath}
   '';
 
   meta = with stdenv.lib; {

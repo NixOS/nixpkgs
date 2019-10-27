@@ -17,13 +17,13 @@ let
   };
 
 in with python.pkgs; buildPythonApplication rec {
-  version = "0.12.2";
-  name = "khard-${version}";
+  version = "0.14.0";
+  pname = "khard";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/scheibler/khard/archive/v${version}.tar.gz";
-    sha256 = "0lxcvzmafpvqcifgq2xjh1ca07z0vhihn5jnw8zrpmsqdc9p6b4j";
+    sha256 = "0m1pc67jz663yfc0xzfpknymn8jj2bpfxaph3pl0mjd3h1zjfyaq";
   };
 
   # setup.py reads the UTF-8 encoded readme.
@@ -34,7 +34,6 @@ in with python.pkgs; buildPythonApplication rec {
     atomicwrites
     configobj
     vobject
-    argparse
     ruamel_yaml
     ruamel_base
     unidecode
@@ -51,6 +50,6 @@ in with python.pkgs; buildPythonApplication rec {
     homepage = https://github.com/scheibler/khard;
     description = "Console carddav client";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
   };
 }

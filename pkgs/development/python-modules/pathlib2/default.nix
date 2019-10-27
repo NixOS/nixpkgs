@@ -8,13 +8,13 @@
 , mock
 }:
 
-if !(pythonOlder "3.4") then null else buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pathlib2";
-  version = "2.3.2";
+  version = "2.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8eb170f8d0d61825e09a95b38be068299ddeda82f35e96c3301a8a5e7604cb83";
+    sha256 = "6cd9a47b597b37cc57de1c05e56fb1a1c9cc9fab04fe78c29acd090418529868";
   };
 
   propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") scandir;

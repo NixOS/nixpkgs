@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
 
-  name = "gp2c-${version}";
-  version = "0.0.11";
+  pname = "gp2c";
+  version = "0.0.11pl2";
 
   src = fetchurl {
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/${name}.tar.gz";
-    sha256 = "1z69xj2dpd8yyi8108rz26c50xpv0k2j8qnk0bzy1c5lw3pd1adm";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/${pname}-${version}.tar.gz";
+    sha256 = "0wqsf05wgkqvmmsx7jinvzdqav6rl56sr8haibgs31nzz4x9xz9g";
   };
 
   buildInputs = [ pari perl ];

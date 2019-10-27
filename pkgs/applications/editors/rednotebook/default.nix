@@ -1,26 +1,26 @@
 { lib, buildPythonApplication, fetchFromGitHub
-, gdk_pixbuf, glib, gobjectIntrospection, gtk3, pango, webkitgtk
+, gdk-pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
 , pygobject3, pyyaml
 }:
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.6.1";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
     rev = "v${version}";
-    sha256 = "1x6acx0hagsawx84cv55qz17p8qjpq1v1zaf8rmm6ifsslsxw91h";
+    sha256 = "04c7a0wgmdl88v9386y1052c38ajbkryiwhqps5lx34d4g7r6hm1";
   };
 
   # We have not packaged tests.
   doCheck = false;
 
-  nativeBuildInputs = [ gobjectIntrospection ];
+  nativeBuildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
-    gdk_pixbuf glib gtk3 pango webkitgtk
+    gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk
     pygobject3 pyyaml
   ];
 
@@ -29,6 +29,10 @@ buildPythonApplication rec {
     "--prefix XDG_DATA_DIRS : $out/share"
     "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   ];
+
+  # Until gobject-introspection in nativeBuildInputs is supported.
+  # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-472568643
+  strictDeps = false;
 
   meta = with lib; {
     homepage = http://rednotebook.sourceforge.net/;

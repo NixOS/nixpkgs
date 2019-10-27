@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , cmake
 , python
 , libffi
@@ -9,23 +10,25 @@
 , version
 , release_version
 , zlib
-, libcxxabi
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !enableManpages
 }:
 
 let
-  src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
+  # Used when creating a versioned symlinks of libLLVM.dylib
+  versionSuffixes = with stdenv.lib;
+    let parts = splitVersion release_version; in
+    imap (i: _: concatStringsSep "." (take i parts)) parts;
+in
 
-  # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with stdenv.lib;
-    concatStringsSep "." (take 2 (splitString "." release_version));
-in stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   name = "llvm-${version}";
 
+  src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
+
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
   '';
@@ -36,15 +39,20 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ]
-    # TODO(@Ericson2314): Remove next mass rebuild
-    ++ stdenv.lib.optionals (stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [ libcxxabi ];
+  buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://bugzilla.redhat.com/attachment.cgi?id=1389687";
+      name = "llvm-gcc8-type-mismatch.patch";
+      sha256 = "0ga2123aclq3x9w72d0rm0az12m8c1i4r1106vh701hf4cghgbch";
+    })
+  ];
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
-      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir INSTALL_NAME_DIR "$lib/lib")" \
+      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../lib" ''${extra_libdir})' ""
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
@@ -100,12 +108,6 @@ in stdenv.mkDerivation (rec {
 
   postBuild = ''
     rm -fR $out
-
-    paxmark m bin/{lli,llvm-rtdyld}
-    paxmark m unittests/ExecutionEngine/MCJIT/MCJITTests
-    paxmark m unittests/ExecutionEngine/Orc/OrcJITTests
-    paxmark m unittests/Support/SupportTests
-    paxmark m bin/lli-child-target
   '';
 
   preCheck = ''
@@ -127,8 +129,9 @@ in stdenv.mkDerivation (rec {
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLTO.dylib" "$lib/lib/libLTO.dylib"
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+    ${stdenv.lib.concatMapStringsSep "\n" (v: ''
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
+    '') versionSuffixes}
   '';
 
   doCheck = stdenv.isLinux && (!stdenv.isi686);
@@ -137,8 +140,7 @@ in stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  passthru.src = src;
-
+  requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;

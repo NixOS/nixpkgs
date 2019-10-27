@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libusb, libusb1, autoconf, automake, confuse, pkgconfig
+{ stdenv, fetchgit, libusb, libusb1, autoconf, automake, libconfuse, pkgconfig
 , gccCross ? null
 }:
 
@@ -6,7 +6,8 @@ let
   version = "2011-12-26";
 in
 stdenv.mkDerivation {
-  name = "xburst-tools-${version}";
+  pname = "xburst-tools";
+  inherit version;
 
   src = fetchgit {
     url = git://projects.qi-hardware.com/xburst-tools.git;
@@ -28,8 +29,8 @@ stdenv.mkDerivation {
   # Not to strip cross build binaries (this is for the gcc-cross-wrapper)
   dontCrossStrip = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb libusb1 autoconf automake confuse ] ++
+  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  buildInputs = [ libusb libusb1 libconfuse ] ++
     stdenv.lib.optional (gccCross != null) gccCross;
 
   meta = {

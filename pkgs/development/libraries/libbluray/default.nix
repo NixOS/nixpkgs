@@ -18,12 +18,12 @@ assert withFonts -> freetype != null;
 # https://wiki.archlinux.org/index.php/BluRay
 
 stdenv.mkDerivation rec {
-  name = "libbluray-${version}";
-  version  = "1.0.2";
+  pname = "libbluray";
+  version  = "1.1.2";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libbluray/${version}/${name}.tar.bz2";
-    sha256 = "1zxfnw1xbghcj7b3zz5djndv6gwssxda19cz1lrlqrkg8577r7kd";
+    url = "http://get.videolan.org/libbluray/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0hhbgkm11fw4pwbrklm76aiy54r6d7hk06yhl2fxq05i74i4bpd3";
   };
 
   patches = optional withJava ./BDJ-JARFILE-path.patch;

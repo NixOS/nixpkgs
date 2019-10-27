@@ -13,7 +13,7 @@ with stdenv;
 mkDerivation rec {
 
   version = "0.6.1";
-  name = "mapmap-${version}";
+  pname = "mapmap";
 
   src = fetchFromGitHub {
     owner = "mapmapteam";
@@ -57,6 +57,8 @@ mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.erictapen ];
     platforms = platforms.linux;
+    # binary segfaults at the moment
+    broken = true;
   };
 
 }

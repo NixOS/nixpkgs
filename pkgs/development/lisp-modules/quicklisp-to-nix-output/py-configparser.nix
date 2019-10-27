@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''py-configparser'';
   version = ''20170830-svn'';
 

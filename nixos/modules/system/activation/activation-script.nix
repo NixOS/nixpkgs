@@ -21,7 +21,8 @@ let
     [ coreutils
       gnugrep
       findutils
-      glibc # needed for getent
+      getent
+      stdenv.cc.libc # nscd in update-users-groups.pl
       shadow
       nettools # needed for hostname
       utillinux # needed for mount and mountpoint
@@ -217,7 +218,7 @@ in
 
     systemd.user = {
       services.nixos-activation = {
-        description = "Run user specific NixOS activation";
+        description = "Run user-specific NixOS activation";
         script = config.system.userActivationScripts.script;
         unitConfig.ConditionUser = "!@system";
         serviceConfig.Type = "oneshot";

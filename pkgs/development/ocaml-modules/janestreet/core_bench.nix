@@ -5,7 +5,7 @@
 , textutils
 }:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "core_bench";
   hash = "1d1ainpakgsf5rg8dvar12ksgilqcc4465jr8gf7fz5mmn0mlifj";
   propagatedBuildInputs =

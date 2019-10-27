@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "ttylog-${version}";
+  pname = "ttylog";
   version = "0.31";
 
   src = fetchFromGitHub {
@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

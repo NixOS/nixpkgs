@@ -2,10 +2,10 @@
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
-, perl, pkgconfig, autoreconfHook
+, perl, perlPackages, pkgconfig, autoreconfHook
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , cairo, pixman, xorg, clisp, biber
-, makeWrapper
+, makeWrapper, shortenPerlShebang
 }:
 
 # Useful resource covering build options:
@@ -17,7 +17,7 @@ let
   year = "2018";
   version = year; # keep names simple for now
 
-  common = rec {
+  common = {
     src = fetchurl {
       urls = [
         "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0414-source.tar.xz"
@@ -28,9 +28,19 @@ let
 
     patches = [
       (fetchurl {
-        name = "texlive-poppler-0.64.patch";
-        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.64.patch?h=packages/texlive-bin;
-        sha256 = "0443d074zl3c5raba8jyhavish706arjcd80ibb84zwnwck4ai0w";
+        name = "poppler-compat-fixes-up-to-0.70.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/poppler-compat-fixes-up-to-0.70.patch?h=packages/texlive-bin&id=85ee0539525d8012f134b76c18dfb10d0837a7e2;
+        sha256 = "0a8bvyl7v6zlyyg3ycl0dmg2g2qahxlq3qmc1nv33r24anzb8xhs";
+      })
+      (fetchurl {
+        name = "luatex-poppler-0.70-const-fixes.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/luatex-poppler-0.70-const-fixes.patch?h=packages/texlive-bin&id=85ee0539525d8012f134b76c18dfb10d0837a7e2;
+        sha256 = "0yiw2x97whdi23dc10xnqpxqj3aja15alir1byp1y03j60zv5n7i";
+      })
+      (fetchurl {
+        name = "texlive-poppler-0.71.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.71.patch?h=packages/texlive-bin&id=85ee0539525d8012f134b76c18dfb10d0837a7e2;
+        sha256 = "164wibyf786gdcb0ij4svsmyi13wvcx0cpdr4flki0lpy3igvlnq";
       })
       (fetchurl {
         name = "synctex-missing-header.patch";
@@ -38,6 +48,17 @@ let
         sha256 = "1c4aq8lk8g3mlfq3mdjnxvmhss3qs7nni5rmw0k054dmj6q1xj5n";
       })
     ];
+
+    postPatch = ''
+      for i in texk/kpathsea/mktex*; do
+        sed -i '/^mydir=/d' "$i"
+      done
+      cp -pv texk/web2c/pdftexdir/pdftoepdf{-poppler0.70.0,}.cc
+      cp -pv texk/web2c/pdftexdir/pdftosrc{-newpoppler,}.cc
+      # fix build with poppler 0.71
+      find texk/web2c/{lua,pdf}texdir -type f | xargs sed -e 's|gTrue|true|g' -e 's|gFalse|false|g' -e 's|GBool|bool|g' -e 's|getCString|c_str|g' -e 's|Gulong|unsigned long|g' -e 's|Guint|unsigned int|g' -e 's|Gushort|unsigned short|g' -e 's|Guchar|unsigned char|g' -i
+    '';
+
     # remove when removing synctex-missing-header.patch
     preAutoreconf = "pushd texk/web2c";
     postAutoreconf = "popd";
@@ -70,9 +91,10 @@ texliveYear = year;
 
 
 core = stdenv.mkDerivation rec {
-  name = "texlive-bin-${version}";
+  pname = "texlive-bin";
+  inherit version;
 
-  inherit (common) src patches preAutoreconf postAutoreconf;
+  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
 
   outputs = [ "out" "doc" ];
 
@@ -84,14 +106,6 @@ core = stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
-
-  postPatch = ''
-    for i in texk/kpathsea/mktex*; do
-      sed -i '/^mydir=/d' "$i"
-    done
-    cp -pv texk/web2c/pdftexdir/pdftoepdf{-newpoppler.cc,.cc}
-    cp -pv texk/web2c/pdftexdir/pdftosrc{-newpoppler.cc,.cc}
-  '';
 
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
@@ -162,7 +176,7 @@ core = stdenv.mkDerivation rec {
     description = "Basic binaries for TeX Live";
     homepage    = http://www.tug.org/texlive;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = with maintainers; [ vcunat lovek323 raskin jwiegley ];
+    maintainers = with maintainers; [ vcunat veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
   };
 };
@@ -170,14 +184,15 @@ core = stdenv.mkDerivation rec {
 
 inherit (core-big) metafont metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
-  name = "texlive-core-big.bin-${version}";
+  pname = "texlive-core-big.bin";
+  inherit version;
 
-  inherit (common) src patches preAutoreconf postAutoreconf;
+  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
 
   hardeningDisable = [ "format" ];
 
   inherit (core) nativeBuildInputs;
-  buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 ];
+  buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 libX11 ];
 
   configureFlags = common.configureFlags
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
@@ -233,7 +248,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
 
 dvisvgm = stdenv.mkDerivation {
-  name = "texlive-dvisvgm.bin-${version}";
+  pname = "texlive-dvisvgm.bin";
+  inherit version;
 
   inherit (common) src;
 
@@ -250,7 +266,8 @@ dvisvgm = stdenv.mkDerivation {
 
 
 dvipng = stdenv.mkDerivation {
-  name = "texlive-dvipng.bin-${version}";
+  pname = "texlive-dvipng.bin";
+  inherit version;
 
   inherit (common) src;
 
@@ -271,10 +288,42 @@ dvipng = stdenv.mkDerivation {
 };
 
 
+latexindent = perlPackages.buildPerlPackage rec {
+  pname = "latexindent";
+  inherit (src) version;
+
+  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs);
+
+  outputs = [ "out" ];
+
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+  propagatedBuildInputs = with perlPackages; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ];
+
+  postPatch = ''
+    substituteInPlace scripts/latexindent/LatexIndent/GetYamlSettings.pm \
+      --replace '$FindBin::RealBin/defaultSettings.yaml' ${src}/scripts/latexindent/defaultSettings.yaml
+  '';
+
+  # Dirty hack to apply perlFlags, but do no build
+  preConfigure = ''
+    touch Makefile.PL
+  '';
+  buildPhase = ":";
+  installPhase = ''
+    install -D ./scripts/latexindent/latexindent.pl "$out"/bin/latexindent
+    mkdir -p "$out"/${perl.libPrefix}
+    cp -r ./scripts/latexindent/LatexIndent "$out"/${perl.libPrefix}/
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang "$out"/bin/latexindent
+  '';
+};
+
+
 inherit biber;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {
-  name = "texlive-bibtex-x.bin-${version}";
+  pname = "texlive-bibtex-x.bin";
+  inherit version;
 
   inherit (common) src;
 
@@ -291,7 +340,8 @@ bibtex8 = stdenv.mkDerivation {
 
 
 xdvi = stdenv.mkDerivation {
-  name = "texlive-xdvi.bin-${version}";
+  pname = "texlive-xdvi.bin";
+  inherit version;
 
   inherit (common) src;
 
@@ -319,7 +369,8 @@ xdvi = stdenv.mkDerivation {
 {
 
 xindy = stdenv.mkDerivation {
-  name = "texlive-xindy.bin-${version}";
+  pname = "texlive-xindy.bin";
+  inherit version;
 
   inherit (common) src;
 

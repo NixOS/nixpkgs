@@ -1,15 +1,16 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, gtk-doc, xkeyboard_config, libxml2, xorg, docbook_xsl
-, glib, isocodes, gobjectIntrospection }:
+, glib, isocodes, gobject-introspection }:
 
 let
   version = "5.4";
 in
 stdenv.mkDerivation rec {
-  name = "libxklavier-${version}";
+  pname = "libxklavier";
+  inherit version;
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/git/libxklavier";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1w1x5mrgly2ldiw3q2r6y620zgd89gk7n90ja46775lhaswxzv7a";
   };
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig gtk-doc docbook_xsl ];
 
-  buildInputs = [ gobjectIntrospection ];
+  buildInputs = [ gobject-introspection ];
 
   preAutoreconf = ''
     export NOCONFIGURE=1

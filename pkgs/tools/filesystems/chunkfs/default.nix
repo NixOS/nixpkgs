@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.7";
-  name = "chunkfs-${version}";
+  pname = "chunkfs";
 
   src = fetchurl {
     url = "https://chunkfs.florz.de/chunkfs_${version}.tar.gz";

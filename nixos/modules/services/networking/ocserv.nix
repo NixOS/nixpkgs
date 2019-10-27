@@ -31,7 +31,7 @@ in
         udp-port = 443
         run-as-user = nobody
         run-as-group = nogroup
-        socket-file = /var/run/ocserv-socket
+        socket-file = /run/ocserv-socket
         server-cert = certs/server-cert.pem
         server-key = certs/server-key.pem
         keepalive = 32400
@@ -50,7 +50,7 @@ in
         rekey-time = 172800
         rekey-method = ssl
         use-occtl = true
-        pid-file = /var/run/ocserv.pid
+        pid-file = /run/ocserv.pid
         device = vpns
         predictable-ips = true
         default-domain = example.com
@@ -90,8 +90,8 @@ in
 
       serviceConfig = {
         PrivateTmp = true;
-        PIDFile = "/var/run/ocserv.pid";
-        ExecStart = "${pkgs.ocserv}/bin/ocserv --foreground --pid-file /var/run/ocesrv.pid --config /etc/ocserv/ocserv.conf";
+        PIDFile = "/run/ocserv.pid";
+        ExecStart = "${pkgs.ocserv}/bin/ocserv --foreground --pid-file /run/ocesrv.pid --config /etc/ocserv/ocserv.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };

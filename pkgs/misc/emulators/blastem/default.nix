@@ -2,8 +2,8 @@
 
 let
   vasm =
-    stdenv.mkDerivation rec {
-      name = "vasm-${version}";
+    stdenv.mkDerivation {
+      pname = "vasm";
       version = "1.8c";
       src = fetchFromGitHub {
         owner = "mbitsnbites";
@@ -18,8 +18,8 @@ let
       '';
     };
 in
-stdenv.mkDerivation rec {
-  name = "blastem-${version}";
+stdenv.mkDerivation {
+  pname = "blastem";
   version = "0.5.1";
   src = fetchurl {
     url = "https://www.retrodev.com/repos/blastem/archive/3d48cb0c28be.tar.gz";
@@ -44,5 +44,7 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
+    # Makefile:140: *** aarch64 is not a supported architecture.  Stop.
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

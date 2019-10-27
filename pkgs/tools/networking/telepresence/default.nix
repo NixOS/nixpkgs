@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, makeWrapper, git
-, python3, sshfs-fuse, torsocks, sshuttle, conntrack-tools
-, openssh, which, coreutils, iptables, bash }:
+{ lib, pythonPackages, fetchgit, fetchFromGitHub, makeWrapper, git
+, sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
+, iptables, bash }:
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
@@ -8,53 +8,41 @@ let
       url = "https://github.com/datawire/sshuttle.git";
       rev = "32226ff14d98d58ccad2a699e10cdfa5d86d6269";
       sha256 = "1q20lnljndwcpgqv2qrf1k0lbvxppxf98a4g5r9zd566znhcdhx3";
-      leaveDotGit = true;
     };
 
-    buildInputs = p.buildInputs ++ [ git ];
+    nativeBuildInputs = p.nativeBuildInputs ++ [ git ];
+
     postPatch = "rm sshuttle/tests/client/test_methods_nat.py";
     postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
   });
-in stdenv.mkDerivation rec {
+in pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
-  version = "0.85";
-  name = "${pname}-${version}";
+  version = "0.101";
 
   src = fetchFromGitHub {
     owner = "datawire";
     repo = "telepresence";
     rev = version;
-    sha256 = "1iypqrx9pnhaz3p5bvl6g0c0c3d1799dv0xdjrzc1z5wa8diawvj";
+    sha256 = "1rxq22vcrw29682g7pdcwcjyifcg61z8y4my1di7yw731aldk274";
   };
 
-  buildInputs = [ makeWrapper python3 ];
+  buildInputs = [ makeWrapper ];
 
-  phases = ["unpackPhase" "installPhase"];
-
-  installPhase = ''
-    mkdir -p $out/libexec $out/bin
-
-    export PREFIX=$out
-    substituteInPlace ./install.sh \
-      --replace "#!/bin/bash" "#!${stdenv.shell}" \
-      --replace '"''${VENVDIR}/bin/pip" -q install "git+https://github.com/datawire/sshuttle.git@telepresence"' "" \
-      --replace '"''${VENVDIR}/bin/sshuttle-telepresence"' '"${sshuttle-telepresence}/bin/sshuttle-telepresence"'
-    ./install.sh
-
+  postInstall = ''
     wrapProgram $out/bin/telepresence \
       --prefix PATH : ${lib.makeBinPath [
-        python3
         sshfs-fuse
         torsocks
         conntrack-tools
         sshuttle-telepresence
         openssh
-        which
         coreutils
         iptables
         bash
       ]}
   '';
+
+  doCheck = false;
 
   meta = {
     homepage = https://www.telepresence.io/;

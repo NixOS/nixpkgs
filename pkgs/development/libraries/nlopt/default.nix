@@ -1,13 +1,17 @@
-{ fetchurl, stdenv, octave ? null }:
+{ stdenv, fetchFromGitHub, cmake, octave ? null }:
 
 stdenv.mkDerivation rec {
-  name = "nlopt-2.4.2";
+  pname = "nlopt";
+  version = "2.6.1";
 
-  src = fetchurl {
-    url = "http://ab-initio.mit.edu/nlopt/${name}.tar.gz";
-    sha256 = "12cfkkhcdf4zmb6h7y6qvvdvqjs2xf9sjpa3rl3bq76px4yn76c0";
+  src = fetchFromGitHub {
+    owner = "stevengj";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1k6x14lgyfhfqpbs7xx8mrgklp8l6jkkcs39zgi2sj3kg6n0hdc9";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ octave ];
 
   configureFlags = [
@@ -24,11 +28,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://ab-initio.mit.edu/nlopt/;
+    homepage = "https://nlopt.readthedocs.io/en/latest/";
     description = "Free open-source library for nonlinear optimization";
     license = stdenv.lib.licenses.lgpl21Plus;
     hydraPlatforms = stdenv.lib.platforms.linux;
-    broken = (octave != null);              # cannot cope with Octave 4.x
   };
 
 }

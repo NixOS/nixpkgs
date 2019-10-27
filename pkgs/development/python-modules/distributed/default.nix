@@ -19,27 +19,28 @@
 , tornado
 , zict
 , pyyaml
-, pythonOlder
+, isPy3k
 , futures
 , singledispatch
+, mpi4py
+, bokeh
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "1.23.1";
+  version = "2.4.0";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d4693442efe40e05e4304fe6d8174989c6eb4bad1afe70480c98263ef8e1cdb";
+    sha256 = "1cz7n84g8dgx3cs28qnrh1sd6lka9lx8llysxa6mxyz6wf3ngl9h";
   };
 
   checkInputs = [ pytest pytest-repeat pytest-faulthandler pytest-timeout mock joblib ];
   propagatedBuildInputs = [
       click cloudpickle dask msgpack psutil six
-      sortedcontainers tblib toolz tornado zict pyyaml
-  ] ++ lib.optional (pythonOlder "3.2") [ futures ]
-    ++ lib.optional (pythonOlder "3.4") [ singledispatch ];
+      sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
+  ] ++ lib.optionals (!isPy3k) [ futures singledispatch ];
 
   # tests take about 10-15 minutes
   # ignore 5 cli tests out of 1000 total tests that fail due to subprocesses
@@ -53,8 +54,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Distributed computation in Python.";
-    homepage = http://distributed.readthedocs.io/en/latest/;
+    homepage = https://distributed.readthedocs.io/en/latest/;
     license = lib.licenses.bsd3;
+    platforms = lib.platforms.x86; # fails on aarch64
     maintainers = with lib.maintainers; [ teh costrouc ];
   };
 }

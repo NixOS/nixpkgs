@@ -1,30 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, terminaltables
-, tabulate
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , backports_csv
-, wcwidth
+, configobj
+, mock
 , pytest
-, isPy27
+, tabulate
+, terminaltables
+, wcwidth
 }:
 
 buildPythonPackage rec {
   pname = "cli_helpers";
-  version = "1.0.2";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z5rqm8pznj6bvivm2al8rsxm82rai8hc9bqrgh3ksnbzg2kfy7p";
+    sha256 = "0rd194l06aw4612j09b44pgh8b8l4cwmz7xgwsgdj9v8m3m25nwq";
   };
 
   propagatedBuildInputs = [
+    configobj
     terminaltables
     tabulate
     wcwidth
   ] ++ (lib.optionals isPy27 [ backports_csv ]);
 
-  checkInputs = [ pytest ];
+  # namespace collision between backport.csv and backports.configparser
+  doCheck = !isPy27;
+
+  checkInputs = [ pytest mock ];
 
   checkPhase = ''
     py.test

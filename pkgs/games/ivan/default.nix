@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
 
-  name = "ivan-${version}";
-  version = "053";
+  pname = "ivan";
+  version = "057";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
     rev = "v${version}";
-    sha256 = "1r3fcccgpjmzzkg0lfmq76igjapr01kh97vz671z60jg7gyh301b";
+    sha256 = "0mavmwikfsyr5sp65sl8dqknl1yz7c7ds53y1qkma24vsikz3k64";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -17,9 +17,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL2 SDL2_mixer alsaLib libpng pcre ];
 
   hardeningDisable = ["all"];
-
-  # To store bone and high score files in ~/.ivan of the current user
-  patches = [./homedir.patch];
 
   # Enable wizard mode
   cmakeFlags = ["-DCMAKE_CXX_FLAGS=-DWIZARD"];

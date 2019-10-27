@@ -1,23 +1,22 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, gtk3, gmime, gnutls,
-  webkitgtk, libesmtp, openssl, libnotify, enchant, gpgme,
-  libcanberra-gtk3, libsecret, gtksourceview, gobjectIntrospection,
-  hicolor-icon-theme, wrapGAppsHook
+  webkitgtk, libesmtp, openssl, libnotify, gtkspell3, gpgme,
+  libcanberra-gtk3, libsecret, gtksourceview, gobject-introspection,
+  wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "balsa-${version}";
-  version = "2.5.6";
+  pname = "balsa";
+  version = "2.5.7";
 
   src = fetchurl {
-    url = "https://pawsa.fedorapeople.org/balsa/${name}.tar.bz2";
-    sha256 = "17k6wcsl8gki7cskr3hhmfj6n54rha8ca3b6fzd8blsl5shsankx";
+    url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.bz2";
+    sha256 = "0yfqhfpwm1qnwmbpr6dfn2f5w8a8xxq51pn8ypgg0fw973l1c1nx";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
-    gobjectIntrospection
-    hicolor-icon-theme
+    gobject-introspection
     wrapGAppsHook
   ];
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     webkitgtk
     openssl
     libnotify
-    enchant
+    gtkspell3
     gpgme
     libcanberra-gtk3
     gtksourceview
@@ -45,6 +44,7 @@ stdenv.mkDerivation rec {
     "--with-ssl"
     "--with-unique"
     "--without-gnome"
+    "--with-spell-checker=gtkspell"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

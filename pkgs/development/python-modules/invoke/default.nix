@@ -1,16 +1,21 @@
 { lib
+, bash
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "invoke";
-  version = "1.1.1";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c2cf54c9b9af973ad9704d8ba81b225117cab612568cacbfb3fc42958cc20a9";
+    sha256 = "1nn7gad0rvy492acpyhkrp01zsk86acf34qhsvq4xmm6x39788n5";
   };
+
+  patchPhase = ''
+    sed -e 's|/bin/bash|${bash}/bin/bash|g' -i invoke/config.py
+  '';
 
   # errors with vendored libs
   doCheck = false;

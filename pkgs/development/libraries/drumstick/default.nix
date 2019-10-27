@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "drumstick-${version}";
-  version = "1.1.1";
+  pname = "drumstick";
+  version = "1.1.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/drumstick/${version}/${name}.tar.bz2";
-    sha256 = "0avwxr6n9ra7narxc5lmkhdqi8ix10gmif8rpd06wp4g9iv46xrn";
+    url = "mirror://sourceforge/drumstick/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "1n9wvg79yvkygrkc8xd8pgrd3d7hqmr7gh24dccf0px23lla9b3m";
   };
 
   outputs = [ "out" "dev" "man" ];

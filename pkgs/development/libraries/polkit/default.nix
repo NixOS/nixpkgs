@@ -1,25 +1,34 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, glib, expat, pam, perl
-, intltool, spidermonkey_52 , gobjectIntrospection, libxslt, docbook_xsl, dbus
+{ stdenv, fetchurl, pkgconfig, glib, expat, pam, perl, fetchpatch
+, intltool, spidermonkey_60 , gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
 , useSystemd ? stdenv.isLinux, systemd
+, withGnome ? true
 , doCheck ? stdenv.isLinux
 }:
 
 let
 
   system = "/run/current-system/sw";
-  setuid = "/run/wrappers/bin"; #TODO: from <nixos> config.security.wrapperDir;
+  setuid = "/run/wrappers/bin";
 
 in
 
 stdenv.mkDerivation rec {
-  name = "polkit-0.115";
+  pname = "polkit";
+  version = "0.116";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/polkit/releases/${name}.tar.gz";
-    sha256 = "0c91y61y4gy6p91cwbzg32dhavw4b7fflg370rimqhdxpzdfr1rg";
+    url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.gz";
+    sha256 = "1c9lbpndh5zis22f154vjrhnqw65z8s85nrgl42v738yf6g0q5w8";
   };
 
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/polkit/polkit/merge_requests/11.patch";
+      sha256 = "17lv7xj5ksa27iv4zpm4zwd4iy8zbwjj4ximslfq3sasiz9kxhlp";
+    })
+  ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i -e "s/-Wl,--as-needed//" configure.ac
@@ -28,13 +37,16 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   nativeBuildInputs =
-    [ gtk-doc pkgconfig autoreconfHook intltool gobjectIntrospection perl ]
+    [ glib gtk-doc pkgconfig intltool perl ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
-    [ glib expat pam spidermonkey_52 gobjectIntrospection ]
-    ++ stdenv.lib.optional useSystemd systemd;
+    [ expat pam spidermonkey_60 ]
+    ++ stdenv.lib.optional useSystemd systemd
+    ++ stdenv.lib.optional withGnome gobject-introspection;
 
-  NIX_CFLAGS_COMPILE = " -Wno-deprecated-declarations "; # for polkit 0.114 and glib 2.56
+  propagatedBuildInputs = [
+    glib # in .pc Requires
+  ];
 
   preConfigure = ''
     chmod +x test/mocklibc/bin/mocklibc{,-test}.in
@@ -56,25 +68,24 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--datadir=${system}/share"
     "--sysconfdir=/etc"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-polkitd-user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "--with-os-type=NixOS" # not recognized but prevents impurities on non-NixOS
-    "--enable-introspection"
+    (if withGnome then "--enable-introspection" else "--disable-introspection")
   ] ++ stdenv.lib.optional (!doCheck) "--disable-test";
 
-  makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0 INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
+  makeFlags = [
+    "INTROSPECTION_GIRDIR=${placeholder "out"}/share/gir-1.0"
+    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
+  ];
 
-  # The following is required on grsecurity/PaX due to spidermonkey's JIT
-  postBuild = stdenv.lib.optionalString stdenv.isLinux ''
-    paxmark mr src/polkitbackend/.libs/polkitd
-  '' + stdenv.lib.optionalString (stdenv.isLinux && doCheck) ''
-    paxmark mr test/polkitbackend/.libs/polkitbackendjsauthoritytest
-  '';
-
-  installFlags=["datadir=$(out)/share" "sysconfdir=$(out)/etc"];
+  installFlags = [
+    "datadir=${placeholder "out"}/share"
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   inherit doCheck;
-  checkInputs = [dbus];
+  checkInputs = [ dbus ];
   checkPhase = ''
     # tests need access to the system bus
     dbus-run-session --config-file=${./system_bus.conf} -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS make check'

@@ -1,21 +1,11 @@
-{ buildRubyGem, lib, ruby, makeWrapper }:
+{ buildRubyGem, lib, ruby }:
 
 buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "gist";
-  version = "4.6.2";
-  source.sha256 = "0zrw84k2982aiansmv2aj3101d3giwa58221n6aisvg5jq5kmiib";
-
-  buildInputs = [ makeWrapper ];
-
-  postInstall = ''
-    # Fix the default ruby wrapper
-    makeWrapper $out/${ruby.gemPath}/bin/gist $out/bin/gist \
-      --set GEM_PATH $out/${ruby.gemPath}:${ruby}/${ruby.gemPath}
-  '';
-
-  dontStrip = true;
+  version = "5.0.0";
+  source.sha256 = "1i0a73mzcjv4mj5vjqwkrx815ydsppx3v812lxxd9mk2s7cj1vyd";
 
   meta = with lib; {
     description = "Upload code to https://gist.github.com (or github enterprise)";

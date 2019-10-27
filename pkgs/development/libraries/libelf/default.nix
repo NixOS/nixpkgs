@@ -6,12 +6,15 @@ stdenv.mkDerivation rec {
   name = "libelf-0.8.13";
 
   src = fetchurl {
-    url = "http://www.mr511.de/software/${name}.tar.gz";
+    url = "https://fossies.org/linux/misc/old/${name}.tar.gz";
     sha256 = "0vf7s9dwk2xkmhb79aigqm0x0yfbw1j0b9ksm51207qwr179n6jr";
   };
 
   patches = [
     ./dont-hardcode-ar.patch
+    # Fix warnings from preprocessor instructions.
+    # https://github.com/NixOS/nixpkgs/issues/59929
+    ./preprocessor-warnings.patch
   ];
 
   doCheck = true;
@@ -34,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ELF object file access library";
 
-    homepage = http://www.mr511.de/software/english.html;
+    homepage = https://github.com/Distrotech/libelf;
 
     license = stdenv.lib.licenses.lgpl2Plus;
 

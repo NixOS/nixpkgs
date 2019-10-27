@@ -1,11 +1,16 @@
-{ stdenv, lib, fetchurl, makeWrapper, perl, unrar, unzip, gzip, file, extraBackends ? [] }:
+{ stdenv, lib, fetchurl, makeWrapper, perl
+, unzip, gzip, file
+# extractors which are added to unp’s PATH
+, extraBackends ? []
+}:
 
-stdenv.mkDerivation rec {
-  name = "unp-${version}";
+let
+  runtime_bins =  [ file unzip gzip ] ++ extraBackends;
+
+in stdenv.mkDerivation {
+  pname = "unp";
   version = "2.0-pre7";
-
-  runtime_bins =  [ file unrar unzip gzip ] ++ extraBackends;
-  buildInputs = [ perl makeWrapper ] ++ runtime_bins;
+  buildInputs = [ perl makeWrapper ];
 
   src = fetchurl {
     # url = "http://http.debian.net/debian/pool/main/u/unp/unp_2.0~pre7+nmu1.tar.bz2";
@@ -14,14 +19,14 @@ stdenv.mkDerivation rec {
     name = "unp_2.0_pre7+nmu1.tar.bz2";
   };
 
-  configurePhase = "true";
+  dontConfigure = true;
   buildPhase = "true";
   installPhase = ''
   mkdir -p $out/bin
-  mkdir -p $out/share/man
-  cp unp $out/bin/
-  cp ucat $out/bin/
-  cp debian/unp.1 $out/share/man
+  mkdir -p $out/share/man/man1
+  install ./unp $out/bin/unp
+  install ./ucat $out/bin/ucat
+  cp debian/unp.1 $out/share/man/man1
 
   wrapProgram $out/bin/unp \
     --prefix PATH : ${lib.makeBinPath runtime_bins}

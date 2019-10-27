@@ -3,11 +3,11 @@
 }:
 buildPythonPackage rec {
   pname = "parse";
-  version = "1.8.4";
+  version = "1.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c3cdf6206f22aeebfa00e5b954fcfea13d1b2dc271c75806b6025b94fb490939";
+    sha256 = "a5fca7000c6588d77bc65c28f3f21bfce03b5e44daa8f9f07c17fe364990d717";
   };
 
   checkPhase = ''

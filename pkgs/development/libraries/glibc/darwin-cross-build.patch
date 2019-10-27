@@ -1,0 +1,103 @@
+enable cross-compilation of glibc on Darwin (build=Darwin, host=Linux)
+* increase ulimit for open files: macOS default of 256 is too low for glibc build system
+* use host version of ar, which is given by environment variable
+* build system uses stamp.os and stamp.oS files, which only differ in case;
+  this fails on macOS, so replace .oS with .o_S
+* libintl.h does not exist (and is not needed) on macOS
+
+--- glibc-2.27/Makefile.in	2018-02-01 17:17:18.000000000 +0100
++++ glibc-2.27/Makefile.in	2019-02-15 17:38:27.022965553 +0100
+@@ -6,9 +6,11 @@
+ .PHONY: all install bench
+ 
+ all .DEFAULT:
+-	$(MAKE) -r PARALLELMFLAGS="$(PARALLELMFLAGS)" -C $(srcdir) objdir=`pwd` $@
++	ulimit -n 1024; \
++	$(MAKE) -r AR=$$AR PARALLELMFLAGS="$(PARALLELMFLAGS)" -C $(srcdir) objdir=`pwd` $@
+ 
+ install:
++	ulimit -n 1024; \
+ 	LC_ALL=C; export LC_ALL; \
+ 	$(MAKE) -r PARALLELMFLAGS="$(PARALLELMFLAGS)" -C $(srcdir) objdir=`pwd` $@
+ 
+--- glibc-2.27/Makerules	2018-02-01 17:17:18.000000000 +0100
++++ glibc-2.27/Makerules	2019-02-15 17:43:11.196039000 +0100
+@@ -915,8 +915,8 @@
+ ifndef objects
+ 
+ # Create the stamp$o files to keep the parent makefile happy.
+-subdir_lib: $(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$o)
+-$(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$o):
++subdir_lib: $(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$(subst .oS,.o_S,$o))
++$(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$(subst .oS,.o_S,$o)):
+ 	$(make-target-directory)
+ 	rm -f $@; > $@
+ else
+@@ -927,7 +927,7 @@
+ # The parent will then actually add them all to the archive in the
+ # archive rule, below.
+ define o-iterator-doit
+-$(objpfx)stamp$o: $(o-objects); $$(do-stamp)
++$(objpfx)stamp$(subst .oS,.o_S,$o): $(o-objects); $$(do-stamp)
+ endef
+ define do-stamp
+ $(make-target-directory)
+@@ -943,14 +943,14 @@
+ # on the stamp files built above.
+ define o-iterator-doit
+ $(common-objpfx)$(patsubst %,$(libtype$o),c): \
+-		$(subdirs-stamp-o) $(common-objpfx)stamp$o; $$(do-makelib)
++		$(subdirs-stamp-o) $(common-objpfx)stamp$(subst .oS,.o_S,$o); $$(do-makelib)
+ endef
+ define do-makelib
+ cd $(common-objdir) && \
+ $(AR) $(CREATE_ARFLAGS) $(@F) `cat $(patsubst $(common-objpfx)%,%,$^)`
+ endef
+ subdirs-stamps := $(foreach d,$(subdirs),$(common-objpfx)$d/stamp%)
+-subdirs-stamp-o = $(subst %,$o,$(subdirs-stamps))
++subdirs-stamp-o = $(subst %,$(subst .oS,.o_S,$o),$(subdirs-stamps))
+ ifndef subdir
+ $(subdirs-stamps): subdir_lib;
+ endif
+@@ -961,7 +961,7 @@
+ # This makes all the object files.
+ .PHONY: objects objs libobjs extra-objs
+ objects objs: libobjs extra-objs
+-libobjs: $(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$o)
++libobjs: $(foreach o,$(object-suffixes-for-libc),$(objpfx)stamp$(subst .oS,.o_S,$o))
+ extra-objs: $(addprefix $(objpfx),$(extra-objs))
+ 
+ # Canned sequence for building an extra library archive.
+@@ -1615,7 +1615,7 @@
+ 	$(rmobjs)
+ define rmobjs
+ $(foreach o,$(object-suffixes-for-libc),
+--rm -f $(objpfx)stamp$o $(o-objects))
++-rm -f $(objpfx)stamp$(subst .oS,.o_S,$o) $(o-objects))
+ endef
+ 
+ # Also remove the dependencies and generated source files.
+--- glibc-2.27/sunrpc/rpc_main.c	2019-02-15 17:32:43.710244513 +0100
++++ glibc-2.27/sunrpc/rpc_main.c	2019-02-15 17:23:57.139617796 +0100
+@@ -38,7 +38,9 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <unistd.h>
++#ifndef __APPLE__
+ #include <libintl.h>
++#endif
+ #include <locale.h>
+ #include <ctype.h>
+ #include <sys/types.h>
+--- glibc-2.27/sunrpc/rpc_scan.c	2019-02-15 17:32:54.845490606 +0100
++++ glibc-2.27/sunrpc/rpc_scan.c	2019-02-15 17:24:54.288066644 +0100
+@@ -37,7 +37,9 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <string.h>
++#ifndef __APPLE__
+ #include <libintl.h>
++#endif
+ #include "rpc_scan.h"
+ #include "rpc_parse.h"
+ #include "rpc_util.h"

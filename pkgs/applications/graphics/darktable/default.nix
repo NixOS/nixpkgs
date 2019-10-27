@@ -3,16 +3,16 @@
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
 , openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
-, ocl-icd, pcre, gtk-mac-integration
+, ocl-icd, pcre, gtk-mac-integration, isocodes
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.4";
-  name = "darktable-${version}";
+  version = "2.6.3";
+  pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "0kdhmiw4wxk2w9v2hms9yk8nl4ymdshnqyj0l07nivzzr6w20hwn";
+    sha256 = "a518999c8458472edfc04577026ce5047d74553052af0f52d10ba8ce601b78f0";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libexif
     libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
     libsoup graphicsmagick json-glib openjpeg lua pugixml
-    libwebp libsecret gnome3.adwaita-icon-theme osm-gps-map pcre
+    libwebp libsecret gnome3.adwaita-icon-theme osm-gps-map pcre isocodes
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     colord colord-gtk libX11 ocl-icd
   ] ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration;
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.darktable.org;
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ goibhniu rickynils flosse mrVanDalo ];
+    maintainers = with maintainers; [ goibhniu flosse mrVanDalo ];
   };
 }

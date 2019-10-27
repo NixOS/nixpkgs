@@ -1,12 +1,12 @@
 { stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gtk2, gawk }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.2";
-  name = "visualvm-${version}";
+  version = "1.4.4";
+  pname = "visualvm";
 
   src = fetchzip {
     url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""]  version}.zip";
-    sha256 = "0kic1rqxaj2rpnflj1wklsy3gjz50gcb0wak4qi3hjkz5rv6gp1y";
+    sha256 = "04x4z1013nzjgz9nhs743sphjgg7d3yjn0phxfmxdjzqpff9l133";
   };
 
   desktopItem = makeDesktopItem {
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       capability of monitoring and performance analysis for the Java
       SE platform.
     '';
-    homepage = https://visualvm.java.net/;
+    homepage = "https://visualvm.github.io";
     license = licenses.gpl2ClasspathPlus;
     platforms = platforms.all;
     maintainers = with maintainers; [ michalrus moaxcp ];

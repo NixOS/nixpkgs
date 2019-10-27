@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "bumps";
-  version = "0.7.10";
+  version = "0.7.13";
 
   propagatedBuildInputs = [six];
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07917abf7e598f2a42456ca4f704c6da2a5489eaea0b9a7c61ed8a26506737c8";
+    sha256 = "fdcf335b800d892edfdbc87fdd539cb45166d8667edbec3dfbb1a3b5c3a35547";
   };
 
   meta = with stdenv.lib; {

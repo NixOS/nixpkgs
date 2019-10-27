@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl
-, cmake, cmark, lmdb, qt5, qtmacextras, mtxclient
-, boost, spdlog, olm, pkgconfig
+{ lib, stdenv, fetchFromGitHub
+, cmake, cmark, lmdb, mkDerivation, qtbase, qtmacextras
+, qtmultimedia, qttools, mtxclient, boost, spdlog, olm, pkgconfig
+, nlohmann_json
 }:
 
+# These hashes and revisions are based on those from here:
+# https://github.com/Nheko-Reborn/nheko/blob/v0.6.4/deps/CMakeLists.txt#L52
 let
   tweeny = fetchFromGitHub {
     owner = "mobius3";
@@ -18,15 +21,15 @@ let
     sha256 = "1whsc5cybf9rmgyaj6qjji03fv5jbgcgygp956s3835b9f9cjg1n";
   };
 in
-stdenv.mkDerivation rec {
-  name = "nheko-${version}";
-  version = "0.6.1";
+mkDerivation rec {
+  pname = "nheko";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
-    owner = "mujx";
+    owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "00jigca7kcqwm57qalz7ifz9p6v7p3pnamjvpkxjjix2rm9wmg2q";
+    sha256 = "19dkc98l1q4070v6mli4ybqn0ip0za607w39hjf0x8rqdxq45iwm";
   };
 
   # If, on Darwin, you encounter the error
@@ -54,19 +57,21 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DTWEENY_INCLUDE_DIR=.deps/include"
     "-DLMDBXX_INCLUDE_DIR=${lmdbxx}"
+    "-Dnlohmann_json_DIR=${nlohmann_json}/lib/cmake/nlohmann_json"
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
     mtxclient olm boost lmdb spdlog cmark
-    qt5.qtbase qt5.qtmultimedia qt5.qttools
+    qtbase qtmultimedia qttools
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Desktop client for the Matrix protocol";
+    homepage = https://github.com/Nheko-Reborn/nheko;
     maintainers = with maintainers; [ ekleog fpletz ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;

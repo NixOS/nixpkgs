@@ -2,7 +2,7 @@
 , zimlib, cxxtools, tntnet
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "zimreader-0.92";
 
   src = fetchFromGitHub {
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A tool to serve ZIM files using HTTP";
     homepage = http://git.wikimedia.org/log/openzim;
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ robbinch juliendehos ];
     platforms = [ "x86_64-linux" ];
   };

@@ -9,7 +9,7 @@ in
 {
   name = "mumble";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ thoughtpolice eelco chaoflow ];
+    maintainers = [ thoughtpolice eelco ];
   };
 
   nodes = {
@@ -63,8 +63,8 @@ in
     $client2->sendChars("y");
 
     # Find clients in logs
-    $server->waitUntilSucceeds("grep -q 'client1' /var/log/murmur/murmurd.log");
-    $server->waitUntilSucceeds("grep -q 'client2' /var/log/murmur/murmurd.log");
+    $server->waitUntilSucceeds("journalctl -eu murmur -o cat | grep -q client1");
+    $server->waitUntilSucceeds("journalctl -eu murmur -o cat | grep -q client2");
 
     $server->sleep(5); # wait to get screenshot
     $client1->screenshot("screen1");

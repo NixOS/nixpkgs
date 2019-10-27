@@ -1,6 +1,6 @@
-{ stdenv, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
+{ stdenv, mkDerivation, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
 
-stdenv.mkDerivation {
+mkDerivation {
   name = "wpa_gui-${wpa_supplicant.version}";
 
   inherit (wpa_supplicant) src;

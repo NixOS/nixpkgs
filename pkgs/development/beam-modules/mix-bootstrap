@@ -40,7 +40,7 @@ main(Args) ->
 -spec fixup_app_name(file:name()) -> string().
 fixup_app_name(Path) ->
     BaseName = filename:basename(Path),
-    case string:tokens(BaseName, "-") of
+    case string:split(BaseName, "-") of
         [Name, _Version] -> Name;
         Name -> Name
     end.

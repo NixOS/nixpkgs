@@ -108,14 +108,14 @@ in
     };
 
     environment.shellAliases = mkOption {
-      default = {};
-      example = { ll = "ls -l"; };
+      example = { l = null; ll = "ls -l"; };
       description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
+        Aliases mapped to <code>null</code> are ignored.
       '';
-      type = types.attrs; # types.attrsOf types.stringOrPath;
+      type = with types; attrsOf (nullOr (either str path));
     };
 
     environment.binsh = mkOption {
@@ -157,7 +157,15 @@ in
     # terminal instead of logging out of X11).
     environment.variables = config.environment.sessionVariables;
 
-    environment.etc."shells".text =
+    environment.profileRelativeEnvVars = config.environment.profileRelativeSessionVariables;
+
+    environment.shellAliases = mapAttrs (name: mkDefault) {
+      ls = "ls --color=tty";
+      ll = "ls -l";
+      l  = "ls -alh";
+    };
+
+    environment.etc.shells.text =
       ''
         ${concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
         /bin/sh
@@ -165,7 +173,7 @@ in
 
     # For resetting environment with `. /etc/set-environment` when needed
     # and discoverability (see motivation of #30418).
-    environment.etc."set-environment".source = config.system.build.setEnvironment;
+    environment.etc.set-environment.source = config.system.build.setEnvironment;
 
     system.build.setEnvironment = pkgs.writeText "set-environment"
       ''

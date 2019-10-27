@@ -1,6 +1,7 @@
 { stdenv, config, callPackage, wineBuild }:
 
 rec {
+  fonts = callPackage ../misc/emulators/wine/fonts.nix {};
   minimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
     inherit wineBuild;
@@ -25,6 +26,7 @@ rec {
     udevSupport = true;
     xineramaSupport = true;
     xmlSupport = true;
+    sdlSupport = true;
   };
 
   full = base.override {
@@ -42,6 +44,8 @@ rec {
     gsmSupport = true;
     gphoto2Support = true;
     ldapSupport = true;
+    faudioSupport = true;
+    vkd3dSupport = true;
   };
 
   stable = base.override { wineRelease = "stable"; };

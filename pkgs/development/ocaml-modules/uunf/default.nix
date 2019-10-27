@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner }:
 let
   pname = "uunf";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01";
@@ -19,13 +19,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ uchar ];
 
-  unpackCmd = "tar xjf $src";
-
   inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
     description = "An OCaml module for normalizing Unicode text";
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

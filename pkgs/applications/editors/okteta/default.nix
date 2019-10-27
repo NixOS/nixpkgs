@@ -3,12 +3,12 @@
 , qca-qt5, shared-mime-info }:
 
 stdenv.mkDerivation rec {
-  name = "okteta-${version}";
-  version = "0.25.3";
+  pname = "okteta";
+  version = "0.26.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/okteta/${version}/src/${name}.tar.xz";
-    sha256 = "0mm6pmk7k9c581b12a3wl0ayhadvyymfzmscy9x32b391qy9inai";
+    url = "mirror://kde/stable/okteta/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "0k38hd9wq6jvzy0225y61rzr7lgwbac1haalhsrfpmyjy6d833dv";
   };
 
   nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.gpl2;
+    description = "A hex editor";
     maintainers = with maintainers; [ peterhoeg bkchr ];
     platforms = platforms.linux;
   };

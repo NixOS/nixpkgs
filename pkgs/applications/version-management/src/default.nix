@@ -1,21 +1,22 @@
 { stdenv, fetchurl, python, rcs, git, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "src-${version}";
-  version = "1.18";
+  pname = "src";
+  version = "1.27";
 
   src = fetchurl {
-    url = "http://www.catb.org/~esr/src/${name}.tar.gz";
-    sha256 = "0n0skhvya8w2az45h2gsafxy8m2mvqas64nrgxifcmrzfv0rf26c";
+    url = "http://www.catb.org/~esr/src/${pname}-${version}.tar.gz";
+    sha256 = "0764kcyh54plzmvfyhh086wpszh67nv1nsxgk95n9bxxinr7sn3x";
   };
 
-  buildInputs = [ python rcs git makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python rcs git ];
 
   preConfigure = ''
     patchShebangs .
   '';
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/src \
@@ -32,8 +33,9 @@ stdenv.mkDerivation rec {
       will seem familiar to Subversion/Git/hg users, and no binary blobs
       anywhere.
     '';
-    homepage = http://www.catb.org/esr/src/;
-    license = licenses.bsd3;
+    homepage = "http://www.catb.org/esr/src/";
+    changelog = "https://gitlab.com/esr/src/raw/${version}/NEWS";
+    license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ calvertvl AndersonTorres ];
   };

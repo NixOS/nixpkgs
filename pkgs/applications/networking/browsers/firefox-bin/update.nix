@@ -7,6 +7,7 @@
 , gnugrep
 , curl
 , gnupg
+, runtimeShell
 , baseName ? "firefox"
 , basePath ? "pkgs/applications/networking/browsers/firefox-bin"
 , baseUrl
@@ -17,12 +18,13 @@ let
     channel != "release";
 
 in writeScript "update-${name}" ''
+  #!${runtimeShell}
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux
   pushd ${basePath}
 
-  HOME=`mktemp -d`
-  cat ${./firefox.key} | gpg --import
+  export GNUPGHOME=`mktemp -d`
+  gpg --keyserver hkps://gpg.mozilla.org --recv-keys 14F26682D0916CDD81E37B6D61B7B526D98F0353
 
   tmpfile=`mktemp`
   url=${baseUrl}
@@ -47,7 +49,7 @@ in writeScript "update-${name}" ''
 
   curl --silent -o $HOME/shasums "$url$version/SHA512SUMS"
   curl --silent -o $HOME/shasums.asc "$url$version/SHA512SUMS.asc"
-  gpgv --keyring=$HOME/.gnupg/pubring.kbx $HOME/shasums.asc $HOME/shasums
+  gpgv --keyring=$GNUPGHOME/pubring.kbx $HOME/shasums.asc $HOME/shasums
 
   # this is a list of sha512 and tarballs for both arches
   shasums=`cat $HOME/shasums`

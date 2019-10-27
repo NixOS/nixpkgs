@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "enum-compat";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14j1i963jic2vncbf9k5nq1vvv8pw2zsg7yvwhm7d9c6h7qyz74k";
+    sha256 = "3677daabed56a6f724451d585662253d8fb4e5569845aafa8bb0da36b1a8751e";
   };
 
   propagatedBuildInputs = [ enum34 ];

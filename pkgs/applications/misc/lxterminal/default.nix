@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk3, vte
+{ stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk3, vte, wrapGAppsHook
 , libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
 }:
 
 let version = "0.3.2"; in
 
-stdenv.mkDerivation rec {
-  name = "lxterminal-${version}";
+stdenv.mkDerivation {
+  pname = "lxterminal";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/lxde/lxterminal/archive/${version}.tar.gz";
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    automake autoconf intltool pkgconfig
+    automake autoconf intltool pkgconfig wrapGAppsHook
     libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
   ];
 

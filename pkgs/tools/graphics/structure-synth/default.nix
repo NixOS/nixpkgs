@@ -1,8 +1,8 @@
 { stdenv, fetchurl, qt4, qmake4Hook, unzip, libGLU, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "structure-synth-${version}";
+  pname = "structure-synth";
   version = "v1.5";
 
   src = fetchurl {

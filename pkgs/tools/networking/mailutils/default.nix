@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
-, python, gss, mysql, sendmailPath ? "/run/wrappers/bin/sendmail" }:
+, python, gss, libmysqlclient, system-sendmail }:
 
 stdenv.mkDerivation rec {
   name = "${project}-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/chown root:mail/d' \
            -e 's/chmod [24]755/chmod 0755/' \
       */Makefile{.in,.am}
-    sed -i 's:/usr/lib/mysql:${mysql.connector-c}/lib/mysql:' configure.ac
+    sed -i 's:/usr/lib/mysql:${libmysqlclient}/lib/mysql:' configure.ac
     sed -i 's/0\.18/0.19/' configure.ac
     sed -i -e 's:mysql/mysql.h:mysql.h:' \
            -e 's:mysql/errmsg.h:errmsg.h:' \
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
-    gss mysql.connector-c python
+    gss libmysqlclient python
   ];
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "--with-gssapi"
     "--with-gsasl"
     "--with-mysql"
-    "--with-path-sendmail=${sendmailPath}"
+    "--with-path-sendmail=${system-sendmail}/bin/sendmail"
   ];
 
   readmsg-tests = let
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     (fetchurl { url = "${p}/weed.at"; sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh"; })
   ];
 
-  NIX_CFLAGS_COMPILE = "-L${mysql.connector-c}/lib/mysql -I${mysql.connector-c}/include/mysql";
+  NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
 
   checkInputs = [ dejagnu ];
   doCheck = false; # fails 1 out of a bunch of tests, looks like a bug
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ orivej vrthra ];
 
-    homepage = http://www.gnu.org/software/mailutils/;
+    homepage = https://www.gnu.org/software/mailutils/;
 
     # Some of the dependencies fail to build on {cyg,dar}win.
     platforms = platforms.gnu ++ platforms.linux;

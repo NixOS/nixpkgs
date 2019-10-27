@@ -1,23 +1,31 @@
-{ stdenv, fetchurl, fetchpatch, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
+{ stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib
+, postgresql, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
-, libiconv
+, libiconv, libxml2, autoreconfHook
 , netcdfSupport ? true, netcdf, hdf5, curl
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gdal-${version}";
-  version = "2.3.2";
+  pname = "gdal";
+  version = "3.0.1";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/gdal/${version}/${name}.tar.xz";
-    sha256 = "191jknma0vricrgdcdmwh8588rwly6a77lmynypxdl87i3z7hv9z";
+  src = fetchFromGitHub {
+    owner = "OSGeo";
+    repo = "gdal";
+    rev = "v${version}";
+    sha256 = "04rraqhygv8b8fy87qvdhkgx87whby9n98p3gxqr7kdrfymwnh8l";
   };
 
+  sourceRoot = "source/gdal";
+
+  patches = [ ./001.3_0_1.darwin.patch ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
-    libspatialite poppler hdf4 qhull giflib expat ]
+    libspatialite libgeotiff poppler hdf4 qhull giflib expat libxml2 ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ stdenv.lib.optional stdenv.isDarwin libiconv
   ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
@@ -30,14 +38,15 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.connector-c or mysql}/bin/mysql_config"
+    "--with-mysql=${libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"
     "--with-python"               # optional
-    "--with-proj=${proj}" # optional
+    "--with-proj=${proj.dev}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
     "--with-hdf4=${hdf4.dev}" # optional
+    "--with-xml2=${libxml2.dev}/bin/xml2-config" # optional
     (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
   ];
 
@@ -45,17 +54,9 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = "-fpermissive";
 
-  postPatch = ''
-    sed -i '/ifdef bool/i\
-      #ifdef swap\
-      #undef swap\
-      #endif' ogr/ogrsf_frmts/mysql/ogr_mysql.h
-  '';
-
   # - Unset CC and CXX as they confuse libtool.
   # - teach gdal that libdf is the legacy name for libhdf
   preConfigure = ''
-      unset CC CXX
       substituteInPlace configure \
       --replace "-lmfhdf -ldf" "-lmfhdf -lhdf"
     '';
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Translator library for raster geospatial data formats";
-    homepage = http://www.gdal.org/;
+    homepage = https://www.gdal.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

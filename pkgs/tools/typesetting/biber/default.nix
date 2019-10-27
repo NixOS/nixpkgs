@@ -1,18 +1,28 @@
-{ stdenv, fetchFromGitHub, perlPackages }:
+{ stdenv, fetchpatch, perlPackages, shortenPerlShebang, texlive }:
 
-# builds but doesn't work with perl 5.24, see discussion in #40826
-# TODO: build with perl >=5.26 and try to enable tests
+let
+  biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
+in
 
-perlPackages.buildPerlModule rec {
-  name = "biber-${version}";
-  version = "2.11";
+perlPackages.buildPerlModule {
+  pname = "biber";
+  inherit (biberSource) version;
 
-  src = fetchFromGitHub {
-    owner = "plk";
-    repo = "biber";
-    rev = "v${version}";
-    sha256 = "0qgkc1k9n36yfmndwz879pak6mjphld0p85lzn9g2ng0vhxsifzz";
-  };
+  src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
+
+  patches = stdenv.lib.optionals (stdenv.lib.versionAtLeast perlPackages.perl.version "5.30") [
+    (fetchpatch {
+      name = "biber-fix-tests.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/biber-fix-tests.patch?h=5d0fffd493550e28b2fb81ad114d62a7c9403812";
+      sha256 = "1ninf46bxf4hm0p5arqbxqyv8r98xdwab34vvp467q1v23kfbhya";
+    })
+
+    (fetchpatch {
+      name = "biber-fix-tests-2.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/biber-fix-tests-2.patch?h=5d0fffd493550e28b2fb81ad114d62a7c9403812";
+      sha256 = "1l8pk454kkm0szxrv9rv9m2a0llw1jm7ffhgpyg4zfiw246n62x0";
+    })
+  ];
 
   buildInputs = with perlPackages; [
     autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
@@ -20,13 +30,16 @@ perlPackages.buildPerlModule rec {
     DateTime DateTimeFormatBuilder DateTimeCalendarJulian
     ExtUtilsLibBuilder FileSlurper FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
     ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-    UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
+    UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit SortKey
     TestDifferences
+    PerlIOutf8_strict
   ];
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
 
-  # Tests depend on the precise Unicode-Collate version (expects 1.19, but we have 1.25)
-  doCheck = false;
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/biber
+  '';
 
   meta = with stdenv.lib; {
     description = "Backend for BibLaTeX";

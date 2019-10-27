@@ -13,12 +13,11 @@ let
   inherit (python2.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.12";
-  name = "${pname}-${version}";
+  version = "8.0.15";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "0d6k1kw0bi3q5dlilzlgds1gcrlf7pis4asm3d6pssh2jmn5hh82";
+    sha256 = "0ca93azasya5xiw6j2map8drmxf445qqydpvrb512kjfqdiv67x6";
   };
 
   patches = [
@@ -37,6 +36,12 @@ in stdenv.mkDerivation rec {
       sudo = "${sudo}/bin/sudo";
     })
   ];
+
+  # have it look for 4.7.2 instead of 4.7.1
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "antlr-4.7.1-complete.jar" "antlr-4.7.2-complete.jar"
+  '';
 
   nativeBuildInputs = [
     cmake ninja pkgconfig jre swig wrapGAppsHook
@@ -86,8 +91,8 @@ in stdenv.mkDerivation rec {
     find -L "$out/bin" -type f -executable -print0 \
       | while IFS= read -r -d ''' file; do
       if [[ "''${file}" != *-bin ]]; then
-        echo "Wrapping program ''${file}"
-        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+        echo "Wrapping program $file"
+        wrapGApp "$file"
       fi
     done
   '';

@@ -118,24 +118,26 @@ let
     inherit packages;
   };
 
+  # Use cabal2nix to create a default.nix for the package sources found at 'src'.
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
-      sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
-    in pkgs.buildPackages.stdenv.mkDerivation {
+      sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
+    in buildPackages.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      nativeBuildInputs = [ pkgs.buildPackages.cabal2nix ];
+      nativeBuildInputs = [ buildPackages.cabal2nix ];
       preferLocalBuild = true;
+      allowSubstitutes = false;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = pkgs.lib.optionalString (buildPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.system} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
+        cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
       '';
   };
 
-  all-cabal-hashes-component = name: version: pkgs.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
+  all-cabal-hashes-component = name: version: buildPackages.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
     tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
     mkdir -p $out
     mv */${name}/${version}/${name}.{json,cabal} $out
@@ -173,7 +175,24 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
     inherit (haskellLib) packageSourceOverrides;
 
+    # callHackage :: Text -> Text -> AttrSet -> HaskellPackage
+    #
+    # e.g., while overriding a package set:
+    #    '... foo = self.callHackage "foo" "1.5.3" {}; ...'
     callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
+
+    # callHackageDirect :: Text -> Text -> AttrSet -> HaskellPackage
+    #
+    # This function does not depend on all-cabal-hashes and therefore will work
+    # for any version that has been released on hackage as opposed to only
+    # versions released before whatever version of all-cabal-hashes you happen
+    # to be currently using.
+    callHackageDirect = {pkg, ver, sha256}:
+      let pkgver = "${pkg}-${ver}";
+      in self.callCabal2nix pkg (pkgs.fetchzip {
+           url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
+           inherit sha256;
+         });
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
@@ -194,19 +213,21 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     callCabal2nix = name: src: args: self.callCabal2nixWithOptions name src "" args;
 
     # : { root : Path
+    #   , name : Defaulted String
     #   , source-overrides : Defaulted (Either Path VersionNumber)
     #   , overrides : Defaulted (HaskellPackageOverrideSet)
     #   , modifier : Defaulted
     #   , returnShellEnv : Defaulted
     #   } -> NixShellAwareDerivation
-    # Given a path to a haskell package directory whose cabal file is
-    # named the same as the directory name, an optional set of
-    # source overrides as appropriate for the 'packageSourceOverrides'
-    # function, an optional set of arbitrary overrides, and an optional
-    # haskell package modifier,  return a derivation appropriate
-    # for nix-build or nix-shell to build that package.
+    # Given a path to a haskell package directory, an optional package name
+    # which defaults to the base name of the path, an optional set of source
+    # overrides as appropriate for the 'packageSourceOverrides' function, an
+    # optional set of arbitrary overrides, and an optional haskell package
+    # modifier, return a derivation appropriate for nix-build or nix-shell to
+    # build that package.
     developPackage =
       { root
+      , name ? builtins.baseNameOf root
       , source-overrides ? {}
       , overrides ? self: super: {}
       , modifier ? drv: drv
@@ -216,7 +237,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
            (pkgs.lib.composeExtensions
               (self.packageSourceOverrides source-overrides)
               overrides))
-        .callCabal2nix (builtins.baseNameOf root) root {};
+        .callCabal2nix name root {};
       in if returnShellEnv then (modifier drv).env else modifier drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);

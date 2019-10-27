@@ -1,20 +1,22 @@
 { stdenv, fetchurl
 , xftSupport ? true, libXft ? null
 , xrenderSupport ? true, libXrender ? null
-, xrandrSupport ? true, libXrandr ? null, randrproto ? null
+, xrandrSupport ? true, libXrandr ? null
 , xineramaSupport ? true, libXinerama ? null
 , cursorSupport ? true, libXcursor ? null
 , threadSupport ? true
-, mysqlSupport ? false, mysql ? null
-, openglSupport ? false, libGLU_combined ? null, libXmu ? null
-, xlibsWrapper, xextproto, zlib, libjpeg, libpng, which
+, mysqlSupport ? false, libmysqlclient ? null
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, openglSupport ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLU_combined ? null, libXmu ? null
+, xlibsWrapper, xorgproto, zlib, libjpeg, libpng, which
 }:
 
 assert xftSupport -> libXft != null;
 assert xrenderSupport -> xftSupport && libXrender != null;
-assert xrandrSupport -> libXrandr != null && randrproto != null;
+assert xrandrSupport -> libXrandr != null;
 assert cursorSupport -> libXcursor != null;
-assert mysqlSupport -> mysql != null;
+assert mysqlSupport -> libmysqlclient != null;
 assert openglSupport -> libGLU_combined != null && libXmu != null;
 
 stdenv.mkDerivation {
@@ -40,7 +42,7 @@ stdenv.mkDerivation {
     "-v"
     "-system-zlib" "-system-libpng" "-system-libjpeg"
     "-qt-gif"
-    "-I${xextproto}/include"
+    "-I${xorgproto}/include"
     (mk threadSupport "thread")
     (mk xrenderSupport "xrender")
     (mk xrandrSupport "xrandr")
@@ -55,13 +57,12 @@ stdenv.mkDerivation {
     "-L${libXrender.out}/lib" "-I${libXrender.dev}/include"
   ] ++ stdenv.lib.optionals xrandrSupport [
     "-L${libXrandr.out}/lib" "-I${libXrandr.dev}/include"
-    "-I${randrproto}/include"
   ] ++ stdenv.lib.optionals xineramaSupport [
     "-L${libXinerama.out}/lib" "-I${libXinerama.dev}/include"
   ] ++ stdenv.lib.optionals cursorSupport [
     "-L${libXcursor.out}/lib -I${libXcursor.dev}/include"
   ] ++ stdenv.lib.optionals mysqlSupport [
-    "-qt-sql-mysql" "-L${mysql.connector-c}/lib/mysql" "-I${mysql.connector-c}/include/mysql"
+    "-qt-sql-mysql" "-L${libmysqlclient}/lib/mysql" "-I${libmysqlclient}/include/mysql"
   ] ++ stdenv.lib.optionals xftSupport [
     "-L${libXft.out}/lib" "-I${libXft.dev}/include"
     "-L${libXft.freetype.out}/lib" "-I${libXft.freetype.dev}/include"
@@ -84,7 +85,8 @@ stdenv.mkDerivation {
 
   passthru = {inherit mysqlSupport;};
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    license = with licenses; [ gpl2 qpl ];
+    platforms = platforms.linux;
   };
 }

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, gettext, perl, perlXMLParser }:
+{ stdenv, fetchurl, fetchpatch, gettext, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "intltool-${version}";
+  pname = "intltool";
   version = "0.51.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/intltool/trunk/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/intltool/trunk/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "1karx4sb7bnm2j67q0q74hspkfn6lqprpy5r99vkn5bb36a4viv7";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "12q2140867r5d0dysly72khi7b0mm2gd7nlm1k81iyg7fxgnyz45";
   })];
 
-  propagatedBuildInputs = [ gettext perl perlXMLParser ];
+  propagatedBuildInputs = [ gettext ] ++ (with perlPackages; [ perl XMLParser ]);
 
   meta = with stdenv.lib; {
     description = "Translation helper tool";

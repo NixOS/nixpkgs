@@ -1,19 +1,22 @@
-{ stdenv, fetchFromRepoOrCz, perl, texinfo }:
-with stdenv.lib;
+{ stdenv, lib, fetchFromRepoOrCz, perl, texinfo }:
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "tcc-${version}";
+  pname = "tcc";
   version = "0.9.27";
+  upstreamVersion = "release_${concatStringsSep "_" (builtins.splitVersion version)}";
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
-    rev = "release_0_9_27";
+    rev = upstreamVersion;
     sha256 = "12mm1lqywz0akr2yb2axjfbw8lwv57nh395vzsk534riz03ml977";
   };
 
   nativeBuildInputs = [ perl texinfo ];
 
   hardeningDisable = [ "fortify" ];
+
+  enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace "texi2pod.pl" \
@@ -30,12 +33,19 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--libpaths=${getLib stdenv.cc.libc}/lib")
   '';
 
+  postFixup = ''
+    cat >libtcc.pc <<EOF
+    Name: libtcc
+    Description: Tiny C compiler backend
+    Version: ${version}
+    Libs: -L$out/lib -Wl,--rpath $out/lib -ltcc -ldl
+    Cflags: -I$out/include
+    EOF
+    install -Dt $out/lib/pkgconfig libtcc.pc -m 444
+  '';
+
   doCheck = true;
   checkTarget = "test";
-
-  postFixup = ''
-    paxmark m $out/bin/tcc
-  '';
 
   meta = {
     description = "Small, fast, and embeddable C compiler and interpreter";
@@ -64,7 +74,7 @@ stdenv.mkDerivation rec {
       generation.
     '';
 
-    homepage = http://www.tinycc.org/;
+    homepage = "http://www.tinycc.org/";
     license = licenses.mit;
 
     platforms = [ "x86_64-linux" ];

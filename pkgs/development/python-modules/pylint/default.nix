@@ -1,41 +1,45 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, pythonOlder, astroid, isort,
-  pytest, pytestrunner,  mccabe, pytest_xdist, pyenchant }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, astroid,
+  isort, mccabe, pytestCheckHook, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.1.1";
+  version = "2.4.2";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31142f764d2a7cd41df5196f9933b12b7ee55e73ef12204b648ad7e556c119fb";
+    sha256 = "7edbae11476c2182708063ac387a8f97c760d9cfe36a5ede0ca996f90cf346c8";
   };
 
-  checkInputs = [ pytest pytestrunner pytest_xdist pyenchant ];
+  nativeBuildInputs = [ pytestrunner ];
+
+  checkInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [ astroid isort mccabe ];
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     # Remove broken darwin test
     rm -vf pylint/test/test_functional.py
   '';
 
-  checkPhase = ''
-    cat pylint/test/test_self.py
-    # Disable broken darwin tests
-    pytest pylint/test -k "not test_parallel_execution \
-                       and not test_py3k_jobs_option \
-                       and not test_good_comprehension_checks"
-  '';
+  disabledTests = [
+    # https://github.com/PyCQA/pylint/issues/3198
+    "test_by_module_statement_value"
+   ] ++ lib.optionals stdenv.isDarwin [
+      "test_parallel_execution"
+      "test_py3k_jobs_option"
+   ];
+
+  dontUseSetuptoolsCheck = true;
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
     cp "elisp/"*.el $out/share/emacs/site-lisp/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.logilab.org/project/pylint;
+  meta = with lib; {
+    homepage = https://github.com/PyCQA/pylint;
     description = "A bug and style checker for Python";
     platforms = platforms.all;
     license = licenses.gpl1Plus;

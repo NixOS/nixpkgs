@@ -22,12 +22,12 @@ let
     name = "libstracciatella-${version}";
     inherit version;
     src = libstracciatellaSrc;
-    cargoSha256 = "0gxp5ps1lzmrg19h6k31fgxjdnjl6amry2vmb612scxcwklxryhm";
+    cargoSha256 = "0a1pc8wyvgmna0a5cbpv3mh0h4nzjxlm887ymcq00cy1ciq5nmj4";
     doCheck = false;
   };
 in
-stdenv.mkDerivation rec {
-  name = "ja2-stracciatella-${version}";
+stdenv.mkDerivation {
+  pname = "ja2-stracciatella";
   inherit src;
   inherit version;
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ./remove-rust-buildstep.patch
   ];
   preConfigure = ''
-    sed -i -e 's|rust-stracciatella|${libstracciatella}/bin/libstracciatella.so|g' CMakeLists.txt
+    sed -i -e 's|rust-stracciatella|${libstracciatella}/lib/libstracciatella.so|g' CMakeLists.txt
     cmakeFlagsArray+=("-DEXTRA_DATA_DIR=$out/share/ja2")
   '';
 

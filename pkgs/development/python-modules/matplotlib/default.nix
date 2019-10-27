@@ -1,11 +1,12 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, pycairo, backports_functools_lru_cache
+{ stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3, functools32, subprocess32
-, enableGhostscript ? false, ghostscript ? null, gtk3
-, enableGtk2 ? false, pygtk ? null, gobjectIntrospection
+, freetype, libpng, pkgconfig, mock, pytz, pygobject3
+, enableGhostscript ? true, ghostscript ? null, gtk3
+, enableGtk2 ? false, pygtk ? null, gobject-introspection
 , enableGtk3 ? false, cairo
-, enableTk ? false, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, enableQt ? false, pyqt4
+# darwin has its own "MacOSX" backend
+, enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
+, enableQt ? false, pyqt5 ? null
 , libcxx
 , Cocoa
 , pythonOlder
@@ -18,20 +19,24 @@ assert enableTk -> (tcl != null)
                 && (tkinter != null)
                 && (libX11 != null)
                 ;
-assert enableQt -> pyqt4 != null;
+assert enableQt -> pyqt5 != null;
 
 buildPythonPackage rec {
-  version = "2.2.3";
+  version = "3.1.1";
   pname = "matplotlib";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7355bf757ecacd5f0ac9dd9523c8e1a1103faadf8d33c22664178e17533f8ce5";
+    sha256 = "1febd22afe1489b13c6749ea059d392c03261b2950d1d45c17e3aed812080c93";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   XDG_RUNTIME_DIR = "/tmp";
+
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ python which sphinx stdenv ]
     ++ stdenv.lib.optional enableGhostscript ghostscript
@@ -39,17 +44,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [ cycler dateutil nose numpy pyparsing tornado freetype kiwisolver
-      libpng pkgconfig mock pytz ]
+      libpng mock pytz ]
     ++ stdenv.lib.optional (pythonOlder "3.3") backports_functools_lru_cache
     ++ stdenv.lib.optional enableGtk2 pygtk
-    ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ]
+    ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
-    ++ stdenv.lib.optionals enableQt [ pyqt4 ]
-    ++ stdenv.lib.optionals (builtins.hasAttr "isPy2" python) [ functools32 subprocess32 ];
+    ++ stdenv.lib.optionals enableQt [ pyqt5 ];
 
   patches =
-    [ ./basedirlist.patch ] ++
-    stdenv.lib.optionals stdenv.isDarwin [ ./darwin-stdenv.patch ];
+    [ ./basedirlist.patch ];
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
   # corresponding interpreter object for its library paths. This fails if
@@ -84,9 +87,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python plotting library, making publication quality plots";
-    homepage    = "http://matplotlib.sourceforge.net/";
+    homepage    = "https://matplotlib.org/";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
   };
 
 }

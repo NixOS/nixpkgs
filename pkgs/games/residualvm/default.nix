@@ -1,5 +1,6 @@
 { stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib
-, openglSupport ? false, libGLU_combined ? null
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, openglSupport ? libGLSupported, libGLU_combined ? null
 }:
 
 assert openglSupport -> libGLU_combined != null;
@@ -8,7 +9,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "0.1.1";
-  name = "residualvm-${version}";
+  pname = "residualvm";
 
   src = fetchurl {
     url = "mirror://sourceforge/residualvm/residualvm-${version}-sources.tar.bz2";

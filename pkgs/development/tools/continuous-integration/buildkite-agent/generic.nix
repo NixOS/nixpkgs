@@ -1,19 +1,16 @@
 { stdenv, buildGoPackage, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep
-, src, version, hasBootstrapScript
+, src, version, hasBootstrapScript, postPatch ? ""
 , ... }:
 let
   goPackagePath = "github.com/buildkite/agent";
 in
 buildGoPackage {
-  name = "buildkite-agent-${version}";
+  pname = "buildkite-agent";
+  inherit version;
 
-  inherit goPackagePath src;
+  inherit goPackagePath src postPatch;
 
   nativeBuildInputs = [ makeWrapper ];
-
-  # on Linux, the TMPDIR is /build which is the same prefix as this package
-  # remove once #35068 is merged
-  noAuditTmpdir = stdenv.isLinux;
 
   postInstall = ''
     ${stdenv.lib.optionalString hasBootstrapScript ''

@@ -1,7 +1,7 @@
 { stdenv, fetchgit, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "libmkv-${version}";
+  pname = "libmkv";
   version = "0.6.5.1";
 
   src = fetchgit {
@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
   preConfigure = "sh bootstrap.sh";
 
   meta = {
+    description = "Abandoned library. Alternative lightweight Matroska muxer written for HandBrake";
+    longDescription = ''
+      Library was meant to be an alternative to the official libmatroska library.
+      It is written in plain C, and intended to be very portable.
+    '';
     homepage = https://github.com/saintdev/libmkv;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.wmertens ];

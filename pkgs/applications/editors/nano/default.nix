@@ -19,12 +19,12 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "nano-${version}";
-  version = "3.0";
+  pname = "nano";
+  version = "4.5";
 
   src = fetchurl {
-    url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "1868hg9s584fwjrh0fzdrixmxc2qhw520z4q5iv68kjiajivr9g0";
+    url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
+    sha256 = "0czmz1yq8s5qcxcmfjdxzg9nkhbmlc9q1nz04jvf57fdbs7w7mfy";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -49,7 +49,6 @@ in stdenv.mkDerivation rec {
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      jgeerds
       joachifm
     ];
     platforms = platforms.all;

@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/cpio/;
+    homepage = https://www.gnu.org/software/cpio/;
     description = "A program to create or extract from cpio archives";
     license = licenses.gpl3;
     platforms = platforms.all;

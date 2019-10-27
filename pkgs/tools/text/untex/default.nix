@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "untex-${version}";
+  pname = "untex";
   version = "1.3";
 
   src = fetchurl {
-    url = "ftp://ftp.thp.uni-duisburg.de/pub/source/${name}.tar.gz";
+    url = "ftp://ftp.thp.uni-duisburg.de/pub/source/${pname}-${version}.tar.gz";
     sha256 = "1jww43pl9qvg6kwh4h8imp966fzd62dk99pb4s93786lmp3kgdjv";
   };
 

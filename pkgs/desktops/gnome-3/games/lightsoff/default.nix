@@ -1,19 +1,26 @@
-{ stdenv, fetchurl, vala, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
-, gettext, itstool, clutter, clutter-gtk, libxml2, appstream-glib }:
+{ stdenv, fetchurl, vala, pkgconfig, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook
+, gettext, itstool, clutter, clutter-gtk, libxml2, appstream-glib
+, meson, ninja, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "lightsoff-${version}";
-  version = "3.28.0";
+  pname = "lightsoff";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0rwh9kz6aphglp79cyrfjab6vy02vclq68f646zjgb9xgg6ar73g";
+    url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1yyq0962fv16rab3alq5saf4gpii9xvcfy5vbq85hhhgjpbqrfns";
   };
 
-  nativeBuildInputs = [ vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg clutter clutter-gtk ];
+  nativeBuildInputs = [
+    vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2
+    meson ninja python3
+  ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk-pixbuf librsvg clutter clutter-gtk ];
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

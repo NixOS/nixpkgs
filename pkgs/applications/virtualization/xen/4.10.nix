@@ -38,26 +38,23 @@ let
 in
 
 callPackage (import ./generic.nix (rec {
-  version = "4.10.0";
+  version = "4.10.4";
 
   src = fetchurl {
     url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
-    sha256 = "0i38ap5b5m1kix6xb0vn9ya1yab35adyc98bzfnbq4lb7w1afqh2";
+    sha256 = "0ipkr7b3v3y183n6nfmz7q3gnzxa20011df4jpvxi6pmr8cpnkwh";
   };
 
   # Sources needed to build tools and firmwares.
   xenfiles = optionalAttrs withInternalQemu {
-    "qemu-xen" = {
+    qemu-xen = {
       src = fetchgit {
         url = https://xenbits.xen.org/git-http/qemu-xen.git;
         # rev = "refs/tags/qemu-xen-${version}";
         # use revision hash - reproducible but must be updated with each new version
-        rev = "b79708a8ed1b3d18bee67baeaf33b3fa529493e2";
-        sha256 = "1yxxad6nvlfmrbgyc8ix19qmrsn1rx4zpyiqnfi4x4kg94acwa5w";
+        rev = "qemu-xen-${version}";
+        sha256 = "0laxvhdjz1njxjvq3jzw2yqvdr9gdn188kqjf2gcrfzgih7xv2ym";
       };
-      patches = [
-        qemuMemfdBuildFix
-      ];
       buildInputs = qemuDeps;
       postPatch = ''
         # needed in build but /usr/bin/env is not available in sandbox
@@ -67,7 +64,7 @@ callPackage (import ./generic.nix (rec {
       meta.description = "Xen's fork of upstream Qemu";
     };
   } // optionalAttrs withInternalTraditionalQemu {
-    "qemu-xen-traditional" = {
+    qemu-xen-traditional = {
       src = fetchgit {
         url = https://xenbits.xen.org/git-http/qemu-xen-traditional.git;
         # rev = "refs/tags/xen-${version}";
@@ -114,7 +111,7 @@ callPackage (import ./generic.nix (rec {
       meta.description = "Xen's fork of iPXE";
     };
   } // optionalAttrs withLibHVM {
-    "xen-libhvm-dir-remote" = {
+    xen-libhvm-dir-remote = {
       src = fetchgit {
         name = "xen-libhvm";
         url = https://github.com/michalpalka/xen-libhvm;
@@ -151,16 +148,15 @@ callPackage (import ./generic.nix (rec {
     ++ optional (withOVMF) "--with-system-ovmf=${OVMF.fd}/FV/OVMF.fd"
     ++ optional (withInternalOVMF) "--enable-ovmf";
 
-  patches = with xsa; flatten [
-    XSA_252
-    XSA_253
-    XSA_255_1
-    XSA_255_2
-    XSA_256
+  NIX_CFLAGS_COMPILE = [
+    # Fix build on Glibc 2.24.
+    "-Wno-error=deprecated-declarations"
+    # Fix build with GCC 8
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=format-truncation"
+    "-Wno-error=array-bounds"
   ];
-
-  # Fix build on Glibc 2.24.
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postPatch = ''
     # Avoid a glibc >= 2.25 deprecation warnings that get fatal via -Werror.

@@ -1,19 +1,23 @@
 { stdenv, fetchFromGitHub, python3, python3Packages, intltool
 , glibcLocales, gnome3, gtk3, wrapGAppsHook
-, ipodSupport ? false, libgpod, gobjectIntrospection
+, ipodSupport ? false, libgpod, gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.5";
+  version = "3.10.9";
   format = "other";
 
   src = fetchFromGitHub {
-    owner = "gpodder";
-    repo = "gpodder";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "00lvma40d62h4haybabh15x1y7rnmd84whbjgjv773igwagkn9vw";
+    sha256 = "1sdmr1sq1d4p492zp9kq3npl7p56yr0pr470z9r6xxcylax5mhfq";
   };
+
+  patches = [
+    ./disable-autoupdate.patch
+  ];
 
   postPatch = with stdenv.lib; ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
@@ -27,8 +31,8 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     python3
-    gobjectIntrospection
-    gnome3.defaultIconTheme
+    gobject-introspection
+    gnome3.adwaita-icon-theme
   ];
 
   checkInputs = with python3Packages; [

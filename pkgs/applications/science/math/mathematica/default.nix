@@ -1,6 +1,7 @@
 { stdenv
 , coreutils
 , patchelf
+, requireFile
 , callPackage
 , alsaLib
 , dbus
@@ -24,10 +25,10 @@
 
 let
   l10n =
-    with stdenv.lib;
-    with callPackage ./l10ns.nix {};
-    flip (findFirst (l: l.lang == lang)) l10ns
-      (throw "Language '${lang}' not supported");
+    import ./l10ns.nix {
+      lib = stdenv.lib;
+      inherit requireFile lang;
+    };
 in
 stdenv.mkDerivation rec {
   inherit (l10n) version name src;
@@ -72,8 +73,6 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
-  phases = "unpackPhase installPhase fixupPhase";
-
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="
     # find offset from file
@@ -99,8 +98,7 @@ stdenv.mkDerivation rec {
 
     # Fix xkeyboard config path for Qt
     for path in mathematica Mathematica; do
-      line=$(grep -n QT_PLUGIN_PATH $path | sed 's/:.*//')
-      sed -i -e "$line iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"" $path
+      sed -i -e "2iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"\n" $path
     done
   '';
 
@@ -134,15 +132,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  dontBuild = true;
+
   # all binaries are already stripped
   dontStrip = true;
 
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Wolfram Mathematica computational software system";
     homepage = http://www.wolfram.com/mathematica/;
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ herberteuler ];
+    platforms = [ "x86_64-linux" ];
   };
 }

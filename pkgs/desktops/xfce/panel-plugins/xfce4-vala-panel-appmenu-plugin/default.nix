@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, substituteAll, callPackage, pkgconfig, cmake, vala, libxml2,
   glib, pcre, gtk2, gtk3, xorg, libxkbcommon, epoxy, at-spi2-core, dbus-glib, bamf,
-  xfce, libwnck3, libdbusmenu, gobjectIntrospection }:
+  xfce, libwnck3, libdbusmenu, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "xfce4-vala-panel-appmenu-plugin-${version}";
+  pname = "xfce4-vala-panel-appmenu-plugin";
   version = "0.6.94";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ (callPackage ./appmenu-gtk-module.nix {})
                   glib pcre gtk2 gtk3 xorg.libpthreadstubs xorg.libXdmcp libxkbcommon epoxy
                   at-spi2-core dbus-glib bamf xfce.xfce4panel_gtk3 xfce.libxfce4util xfce.xfconf
-                  libwnck3 libdbusmenu gobjectIntrospection ];
+                  libwnck3 libdbusmenu gobject-introspection ];
 
   patches = [
     (substituteAll {
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "Global Menu applet for XFCE4";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jD91mZM2 ];
+    broken = true;
   };
 }

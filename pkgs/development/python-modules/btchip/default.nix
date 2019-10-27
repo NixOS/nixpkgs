@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "btchip-python";
   version = "0.1.28";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

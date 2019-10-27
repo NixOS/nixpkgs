@@ -4,7 +4,7 @@
 , sonicSupport ? true, sonic }:
 
 stdenv.mkDerivation rec {
-  name = "espeak-ng-${version}";
+  pname = "espeak-ng";
   version = "1.49.2";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source speech synthesizer that supports over 70 languages, based on eSpeak";
-    homepage = https://github.com/espeak-ng/espeak-ng;
+    homepage = src.meta.homepage;
     license = licenses.gpl3;
     maintainers = with maintainers; [ aske ];
     platforms = platforms.linux;

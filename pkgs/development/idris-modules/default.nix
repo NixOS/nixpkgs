@@ -75,8 +75,6 @@
 
     cube = callPackage ./cube.nix {};
 
-    curses = callPackage ./curses.nix {};
-
     data = callPackage ./data.nix {};
 
     derive = callPackage ./derive.nix {};
@@ -104,8 +102,6 @@
     hamt = callPackage ./hamt.nix {};
 
     html = callPackage ./html.nix {};
-
-    heyting-algebra = callPackage ./heyting-algebra.nix {};
 
     hezarfen = callPackage ./hezarfen.nix {};
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libiconv, recode }:
 
 stdenv.mkDerivation rec {
-  name = "enca-${version}";
+  pname = "enca";
   version = "1.19";
 
   src = fetchurl {
-    url = "https://dl.cihar.com/enca/${name}.tar.xz";
+    url = "https://dl.cihar.com/enca/${pname}-${version}.tar.xz";
     sha256 = "1f78jmrggv3jymql8imm5m9yc8nqjw5l99mpwki2245l8357wj1s";
   };
 

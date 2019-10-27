@@ -7,7 +7,7 @@ let
 
   ddConf = {
     dd_url              = "https://app.datadoghq.com";
-    skip_ssl_validation = "no";
+    skip_ssl_validation = false;
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
     use_dogstatsd       = true;
@@ -16,6 +16,7 @@ let
   // optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
   // optionalAttrs (cfg.tags != null ) { tags = concatStringsSep ", " cfg.tags; }
   // optionalAttrs (cfg.enableLiveProcessCollection) { process_config = { enabled = "true"; }; }
+  // optionalAttrs (cfg.enableTraceAgent) { apm_config = { enabled = true; }; }
   // cfg.extraConfig;
 
   # Generate Datadog configuration files for each configured checks.
@@ -41,9 +42,9 @@ let
   # Apply the configured extraIntegrations to the provided agent
   # package. See the documentation of `dd-agent/integrations-core.nix`
   # for detailed information on this.
-  datadogPkg = cfg.package.overrideAttrs(_: {
-    python = (pkgs.datadog-integrations-core cfg.extraIntegrations).python;
-  });
+  datadogPkg = cfg.package.override {
+    pythonPackages = pkgs.datadog-integrations-core cfg.extraIntegrations;
+  };
 in {
   options.services.datadog-agent = {
     enable = mkOption {
@@ -59,7 +60,7 @@ in {
       defaultText = "pkgs.datadog-agent";
       description = ''
         Which DataDog v6 agent package to use. Note that the provided
-        package is expected to have an overridable `python`-attribute
+        package is expected to have an overridable `pythonPackages`-attribute
         which configures the Python environment with the Datadog
         checks.
       '';
@@ -86,7 +87,7 @@ in {
       description = "The hostname to show in the Datadog dashboard (optional)";
       default = null;
       example = "mymachine.mydomain";
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.str;
     };
 
     logLevel = mkOption {
@@ -132,6 +133,15 @@ in {
       default = false;
       type = types.bool;
     };
+
+    enableTraceAgent = mkOption {
+      description = ''
+        Whether to enable the trace agent.
+      '';
+      default = false;
+      type = types.bool;
+    };
+
     checks = mkOption {
       description = ''
         Configuration for all Datadog checks. Keys of this attribute
@@ -176,7 +186,7 @@ in {
       type = types.attrs;
       default = {
         init_config = {};
-        instances = [ { use-mount = "no"; } ];
+        instances = [ { use_mount = "false"; } ];
       };
     };
 
@@ -192,7 +202,7 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps ];
+    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute ];
 
     users.extraUsers.datadog = {
       description = "Datadog Agent User";
@@ -206,7 +216,7 @@ in {
 
     systemd.services = let
       makeService = attrs: recursiveUpdate {
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps ];
+        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "datadog";
@@ -225,7 +235,7 @@ in {
         '';
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          exec ${datadogPkg}/bin/agent start -c /etc/datadog-agent/datadog.yaml
+          exec ${datadogPkg}/bin/agent run -c /etc/datadog-agent/datadog.yaml
         '';
         serviceConfig.PermissionsStartOnly = true;
       };
@@ -244,6 +254,16 @@ in {
           ${pkgs.datadog-process-agent}/bin/agent --config /etc/datadog-agent/datadog.yaml
         '';
       });
+
+      datadog-trace-agent = lib.mkIf cfg.enableTraceAgent (makeService {
+        description = "Datadog Trace Agent";
+        path = [ ];
+        script = ''
+          export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
+          ${datadogPkg}/bin/trace-agent -config /etc/datadog-agent/datadog.yaml
+        '';
+      });
+
     };
 
     environment.etc = etcfiles;

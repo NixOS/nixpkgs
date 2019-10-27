@@ -4,11 +4,11 @@
 , legacySupport ? false }:
 
 stdenv.mkDerivation rec {
-  name = "zstd-${version}";
-  version = "1.3.5";
+  pname = "zstd";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
-    sha256 = "0fpv8k16s14g0r552mhbh0mkr716cqy41d2znyrvks6qfphkgir4";
+    sha256 = "0mmgs98cfh92gcbjyv37vz8nq7x4x7fbzymlxyqd9awwpv9v0i5n";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
@@ -21,8 +21,11 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [ file ];
-  doCheck = false; # fails with "zstd: --list does not support reading from standard input"
-                   # probably a bug
+  doCheck = true;
+  preCheck = ''
+    substituteInPlace tests/playTests.sh \
+      --replace 'MD5SUM="md5 -r"' 'MD5SUM="md5sum"'
+  '';
 
   installFlags = [
     "PREFIX=$(out)"
@@ -30,12 +33,14 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace programs/zstdgrep \
-      --replace "=grep" "=${gnugrep}/bin/grep" \
-      --replace "=zstdcat" "=$out/bin/zstdcat"
+      --replace ":-grep" ":-${gnugrep}/bin/grep" \
+      --replace ":-zstdcat" ":-$out/bin/zstdcat"
 
     substituteInPlace programs/zstdless \
       --replace "zstdcat" "$out/bin/zstdcat"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Zstandard real-time compression algorithm";
@@ -49,8 +54,7 @@ stdenv.mkDerivation rec {
       property shared by most LZ compression algorithms, such as zlib.
     '';
     homepage = https://facebook.github.io/zstd/;
-    # The licence of the CLI programme is GPLv2+, that of the library BSD-2.
-    license = with licenses; [ gpl2Plus bsd2 ];
+    license = with licenses; [ bsd3 ]; # Or, at your opinion, GPL-2.0-only.
 
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej ];

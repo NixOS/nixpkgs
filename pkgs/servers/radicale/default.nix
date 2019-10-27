@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "Radicale";
-  version = "2.1.10";
+  version = "2.1.11";
 
   # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = version;
-    sha256 = "0ik9gvljxhmykkzzcv9kmkp4qjwgdrl9f7hp6300flx5kmqlcjb1";
+    sha256 = "1k32iy55lnyyp1r75clarhwdqvw6w8mxb5v0l5aysga07fg2mix4";
   };
 
   # We only want functional tests
@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     vobject
     python-dateutil
     passlib
+    setuptools
   ];
 
   checkInputs = with python3.pkgs; [

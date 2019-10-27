@@ -71,7 +71,7 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation. This also
           # applies to openntpd.
-          ${config.systemd.package}/bin/systemctl try-reload-or-restart ntpd.service openntpd.service || true
+          ${config.systemd.package}/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
       fi
 
       ${cfg.runHook}
@@ -162,7 +162,7 @@ in
 
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
         wants = [ "network.target" "systemd-udev-settle.service" ];
-        before = [ "network.target" ];
+        before = [ "network-online.target" ];
         after = [ "systemd-udev-settle.service" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable

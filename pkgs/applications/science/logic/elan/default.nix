@@ -1,16 +1,16 @@
 { stdenv, pkgconfig, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "elan-${version}";
-  version = "0.7.1";
+  pname = "elan";
+  version = "0.7.5";
 
-  cargoSha256 = "0vv7kr7rc3lvas7ngp5dp99ajjd5v8k5937ish7zqz1k4970q2f1";
+  cargoSha256 = "0lc320m3vw76d6pa5wp6c9jblac6lmyf9qqnxmsnkn4ixdhnghsd";
 
   src = fetchFromGitHub {
     owner = "kha";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "0x5s1wm78yx5ci63wrmlkzm6k3281p33gn4dzw25k5s4vx0p9n24";
+    sha256 = "1147f3lzr6lgvf580ppspn20bdwnf6l8idh1h5ana0p0lf5a0dn1";
   };
 
   nativeBuildInputs = [ pkgconfig ];

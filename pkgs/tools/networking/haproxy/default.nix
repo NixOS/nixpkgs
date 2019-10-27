@@ -9,12 +9,11 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "1.8.14";
-  name = "${pname}-${version}";
+  version = "1.9.8";
 
   src = fetchurl {
-    url = "https://www.haproxy.org/download/${stdenv.lib.versions.majorMinor version}/src/${name}.tar.gz";
-    sha256 = "1przpp8xp2ygcklz4ypnm6z56nb73ydwksm3yy5fb1dyg0jl0zmi";
+    url = "https://www.haproxy.org/download/${stdenv.lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
+    sha256 = "1via9k84ycrdr8qh4qchcbqgpv0gynm3ra23nwsvqwfqvc0376id";
   };
 
   buildInputs = [ openssl zlib ]
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
       hardware.
     '';
     homepage = http://haproxy.1wt.eu;
-    maintainers = with stdenv.lib.maintainers; [ fuzzy-id garbas ];
+    maintainers = with stdenv.lib.maintainers; [ fuzzy-id ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     license = stdenv.lib.licenses.gpl2;
   };

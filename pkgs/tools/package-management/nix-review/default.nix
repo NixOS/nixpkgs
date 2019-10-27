@@ -8,17 +8,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-review";
-  version = "0.5.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-review";
     rev = version;
-    sha256 = "0csd7dkdv0csc63dz1h08c8xifxwv5fdz5dyk37sr6vh1ccjdapi";
+    sha256 = "19x0wbb8annmzi67r79112j9kjzz99n3qd6adh80iqx2dh47pk5g";
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ nix git ]}"
+    "--prefix" "PATH" ":" (lib.makeBinPath [ nix git ])
   ];
 
   meta = with stdenv.lib; {

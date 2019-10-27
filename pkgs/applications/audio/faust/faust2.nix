@@ -20,14 +20,14 @@ let
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = "${version}";
+    rev = version;
     sha256 = "1pci8ac6sqrm3mb3yikmmr3iy35g3nj4iihazif1amqkbdz719rc";
     fetchSubmodules = true;
   };
 
   meta = with stdenv.lib; {
     homepage = http://faust.grame.fr/;
-    downloadPage = http://sourceforge.net/projects/faudiostream/files/;
+    downloadPage = https://sourceforge.net/projects/faudiostream/files/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ magnetophon pmahoney ];
@@ -35,7 +35,8 @@ let
 
   faust = stdenv.mkDerivation {
 
-    name = "faust-${version}";
+    pname = "faust";
+    inherit version;
 
     inherit src;
 

@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_LDFLAGS = [ "-lX11" ];
+
   meta = {
     description = "Mascot Constructive Pilot for X";
     homepage = http://rosegray.sakura.ne.jp/macopix/index-e.html;

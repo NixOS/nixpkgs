@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "deprecation";
-  version = "2.0.5";
+  version = "2.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbe7d15006bc339709be5e02b14884ecc479639c1a3714a908de3a8ca13b5ca9";
+    sha256 = "1vcjy6flqbzgjh4zhcs0sl83b946wxrlsx5miliz0ik1d9kjyff0";
   };
 
   propagatedBuildInputs = [ packaging ];

@@ -1,16 +1,15 @@
 { stdenv, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
-  name = "sbt-${version}";
-  version = "1.2.3";
+  pname = "sbt";
+  version = "1.3.3";
 
   src = fetchurl {
     urls = [
-      "https://dl.bintray.com/sbt/native-packages/sbt/${version}/${name}.tgz"
+      "https://piccolo.link/sbt-${version}.tgz"
       "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz"
-      "https://cocl.us/sbt-${version}.tgz"
     ];
-    sha256 = "1szyp9hgrvr3r5rhr98cn5mkhca1mr0qfs6cd8fiihm6hzjzn0nm";
+    sha256 = "0v27i8pd9ss53ipi1cs40426mnyppdjgcdjk8nn05bi6rm7a4r7y";
   };
 
   patchPhase = ''
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.scala-sbt.org/;
     license = licenses.bsd3;
     description = "A build tool for Scala, Java and more";
-    maintainers = with maintainers; [ nequissimus rickynils ];
+    maintainers = with maintainers; [ nequissimus ];
     platforms = platforms.unix;
   };
 }

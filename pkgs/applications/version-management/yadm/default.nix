@@ -2,21 +2,26 @@
 
 let version = "1.12.0"; in
 stdenv.mkDerivation {
-  name = "yadm-${version}";
+  pname = "yadm";
+  inherit version;
 
   src = fetchFromGitHub {
     owner  = "TheLocehiliosan";
     repo   = "yadm";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0873jgks7dpfkj5km1jchxdrhf7lia70p0f8zsrh9p4crj5f4pc6";
   };
 
   buildCommand = ''
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
+    mkdir -p $out/share/zsh/site-functions
+    mkdir -p $out/share/bash-completion/completions
     sed -e 's:/bin/bash:/usr/bin/env bash:' $src/yadm > $out/bin/yadm
     chmod 755 $out/bin/yadm
     install -m 644 $src/yadm.1 $out/share/man/man1/yadm.1
+    install -m644 $src/completion/yadm.zsh_completion $out/share/zsh/site-functions/_yadm
+    install -m644 $src/completion/yadm.bash_completion $out/share/bash-completion/completions/yadm.bash
   '';
 
   meta = {

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, python34Packages, readline, ncurses, canto-daemon }:
+{ stdenv, fetchFromGitHub, python3Packages, readline, ncurses, canto-daemon }:
 
-python34Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   version = "0.9.9";
-  name = "canto-curses-${version}";
+  pname = "canto-curses";
 
   src = fetchFromGitHub {
     owner = "themoken";

@@ -1,6 +1,6 @@
-{stdenv, fetchurl
+{stdenv, fetchurl, fetchpatch
   , freeglut, ghostscriptX, imagemagick, fftw
-  , boehmgc, libGLU, libGL, mesa_noglu, ncurses, readline, gsl, libsigsegv
+  , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
   , python, zlib, perl, texLive, texinfo, xz
 , darwin
 }:
@@ -20,7 +20,7 @@ let
    boehmgc ncurses readline gsl libsigsegv
    python zlib perl texLive texinfo xz ]
    ++ stdenv.lib.optionals stdenv.isLinux
-     [ freeglut libGLU libGL mesa_noglu.osmesa ]
+     [ freeglut libGLU libGL mesa.osmesa ]
    ++ stdenv.lib.optionals stdenv.isDarwin
      (with darwin.apple_sdk.frameworks; [ OpenGL GLUT Cocoa ])
    ;
@@ -32,6 +32,15 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+
+  patches = [
+    # Remove when updating from 2.47 to 2.48
+    # Compatibility with BoehmGC 7.6.8
+    (fetchpatch {
+      url = "https://github.com/vectorgraphics/asymptote/commit/38a59370dc5ac720c29e1424614a10f7384b943f.patch";
+      sha256 = "0c3d11hzxxaqh24kfw9y8zvlid54kk40rx2zajx7jwl12gga05s1";
+    })
+  ];
 
   preConfigure = ''
     export HOME="$PWD"

@@ -1,10 +1,10 @@
 { stdenv, fetchurl, rpmextract, patchelf, libnotify, libcap, cairo, pango, fontconfig, udev, dbus
-, gtk2, atk, expat, gdk_pixbuf, freetype, nspr, glib, nss, gconf, libX11, libXrender, libXtst, libXdamage
+, gtk2, atk, expat, gdk-pixbuf, freetype, nspr, glib, nss, gconf, libX11, libXrender, libXtst, libXdamage
 , libXi, libXext, libXfixes, libXcomposite, alsaLib, bash
 }:
 
 stdenv.mkDerivation rec {
-  name = "bluejeans-${version}";
+  pname = "bluejeans";
   version = "1.36.9";
 
   src =
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   libPath =
     stdenv.lib.makeLibraryPath
-       [ libnotify libcap cairo pango fontconfig gtk2 atk expat gdk_pixbuf dbus udev.lib
+       [ libnotify libcap cairo pango fontconfig gtk2 atk expat gdk-pixbuf dbus udev.lib
          freetype nspr glib stdenv.cc stdenv.cc.cc.lib nss gconf libX11 libXrender libXtst libXdamage
          libXi libXext libXfixes libXcomposite alsaLib
        ];
@@ -36,14 +36,15 @@ stdenv.mkDerivation rec {
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/bluejeans/bluejeans-bin
     ln -s $out/opt/bluejeans/bluejeans $out/bin/bluejeans
-    substituteInPlace $out/bin/bluejeans \
-      --replace '#!/bin/bash' '#!${bash}/bin/bash'
     chmod +x $out/bin/bluejeans
+    patchShebangs $out
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day.";
-    license = stdenv.lib.licenses.unfree;
+    homepage = "https://www.bluejeans.com";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ veprbl ];
     platforms = [ "x86_64-linux" ];
   };
 }

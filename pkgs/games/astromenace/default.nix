@@ -1,8 +1,8 @@
-{ fetchurl, stdenv, cmake, xlibsWrapper, libGLU_combined, SDL, openal, freealut, libogg, libvorbis }:
+{ fetchurl, stdenv, cmake, xlibsWrapper, libGLU_combined, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
-  name = "astromenace-${version}";
+  pname = "astromenace";
 
   src = fetchurl {
     url = "mirror://sourceforge/openastromenace/astromenace-src-${version}.tar.bz2";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp AstroMenace $out
     cp gamedata.vfs $out
     cat > $out/bin/AstroMenace << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     $out/AstroMenace --dir=$out
     EOF
     chmod 755 $out/bin/AstroMenace

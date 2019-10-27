@@ -1,6 +1,6 @@
 { stdenv, callPackage, fetchurl, ... } @ args:
 
-callPackage ./generic.nix (args // rec {
+callPackage ./generic.nix (args // {
   version = "1.62.0";
 
   src = fetchurl {

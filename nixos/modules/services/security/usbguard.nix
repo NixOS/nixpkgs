@@ -39,6 +39,16 @@ in {
     services.usbguard = {
       enable = mkEnableOption "USBGuard daemon";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.usbguard;
+        defaultText = "pkgs.usbguard";
+        description = ''
+          The usbguard package to use. If you do not need the Qt GUI, use
+          <literal>pkgs.usbguard-nox</literal> to save disk space.
+        '';
+      };
+
       ruleFile = mkOption {
         type = types.path;
         default = "/var/lib/usbguard/rules.conf";
@@ -179,13 +189,13 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.usbguard ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.usbguard = {
       description = "USBGuard daemon";
 
       wantedBy = [ "basic.target" ];
-      wants = [ "systemd-udevd.service" "local-fs.target" ];
+      wants = [ "systemd-udevd.service" ];
 
       # make sure an empty rule file and required directories exist
       preStart = ''
@@ -195,7 +205,7 @@ in {
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = ''${pkgs.usbguard}/bin/usbguard-daemon -P -k -c ${daemonConfFile}'';
+        ExecStart = ''${cfg.package}/bin/usbguard-daemon -P -k -c ${daemonConfFile}'';
         Restart = "on-failure";
       };
     };

@@ -1,29 +1,29 @@
-{ stdenv, lib, fetchgit, cmake, pkgconfig, git                                                                      
-, qt5, openal, glew, vulkan-loader, libpng, ffmpeg, libevdev, python27                                              
-, pulseaudioSupport ? true, libpulseaudio                                                                           
-, waylandSupport ? true, wayland                                                                                    
-, alsaSupport ? true, alsaLib                                                                                       
-}:                                                                                                                  
-                                                                                                                    
-let                                                                                                                 
-  majorVersion = "0.0.5";                                                                                           
-  gitVersion = "6980-81e5f3b7f"; # echo $(git rev-list HEAD --count)-$(git rev-parse --short HEAD)                  
-in                                                                                                                  
-stdenv.mkDerivation rec {                                                                                           
-  name = "rpcs3-${version}";                                                                                        
-  version = "${majorVersion}-${gitVersion}";                                                                        
-                                                                                                                    
-  src = fetchgit {                                                                                                  
-    url = "https://github.com/RPCS3/rpcs3";                                                                         
-    rev = "81e5f3b7f299942f56bcfdde54edd09c722b32d8";                                                               
-    sha256 = "0czj6ga1nccqgcvi58sjnv1cc4k7qvwijp4warml463hpsmbd9r0";                                                
-  };                                                                                                                
-                                                                                                                    
-  preConfigure = ''                                                                                                 
-    cat > ./rpcs3/git-version.h <<EOF                                                                               
-    #define RPCS3_GIT_VERSION "${gitVersion}"                                                                       
-    #define RPCS3_GIT_BRANCH "HEAD"                                                                                 
-    #define RPCS3_GIT_VERSION_NO_UPDATE 1                                                                           
+{ stdenv, lib, fetchgit, cmake, pkgconfig, git
+, qt5, openal, glew, vulkan-loader, libpng, ffmpeg, libevdev, python27
+, pulseaudioSupport ? true, libpulseaudio
+, waylandSupport ? true, wayland
+, alsaSupport ? true, alsaLib
+}:
+
+let
+  majorVersion = "0.0.6";
+  gitVersion = "8187-790962425"; # echo $(git rev-list HEAD --count)-$(git rev-parse --short HEAD)
+in
+stdenv.mkDerivation {
+  pname = "rpcs3";
+  version = "${majorVersion}-${gitVersion}";
+
+  src = fetchgit {
+    url = "https://github.com/RPCS3/rpcs3";
+    rev = "790962425cfb893529f72b3ef0dd1424fcc42973";
+    sha256 = "154ys29b9xdws3bp4b7rb3kc0h9hd49g2yf3z9268cdq8aclahaa";
+  };
+
+  preConfigure = ''
+    cat > ./rpcs3/git-version.h <<EOF
+    #define RPCS3_GIT_VERSION "${gitVersion}"
+    #define RPCS3_GIT_BRANCH "HEAD"
+    #define RPCS3_GIT_VERSION_NO_UPDATE 1
     EOF
   '';
 

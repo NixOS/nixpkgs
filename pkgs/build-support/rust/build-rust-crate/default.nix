@@ -4,7 +4,7 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, stdenv, defaultCrateOverrides, fetchCrate, ncurses, rustc  }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc }:
 
 let
     # This doesn't appear to be officially documented anywhere yet.
@@ -13,13 +13,18 @@ let
       then "macos"
       else stdenv.hostPlatform.parsed.kernel.name;
 
-    makeDeps = dependencies:
+    makeDeps = dependencies: crateRenames:
       (lib.concatMapStringsSep " " (dep:
-        let extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName; in
-        (if dep.crateType == "lib" then
-           " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}.rlib"
+        let
+          extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName;
+          name = if builtins.hasAttr dep.crateName crateRenames then
+            lib.strings.replaceStrings ["-"] ["_"] crateRenames.${dep.crateName}
+          else
+            extern;
+        in (if lib.lists.any (x: x == "lib") dep.crateType then
+           " --extern ${name}=${dep.out}/lib/lib${extern}-${dep.metadata}.rlib"
          else
-           " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
+           " --extern ${name}=${dep.out}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies);
 
     echo_build_heading = colors: ''
@@ -60,7 +65,7 @@ let
     in
 
 crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides,
-  dependencies, buildDependencies,
+  dependencies, buildDependencies, crateRenames,
   extraRustcOpts,
   preUnpack, postUnpack, prePatch, patches, postPatch,
   preConfigure, postConfigure, preBuild, postBuild, preInstall, postInstall }:
@@ -70,11 +75,12 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     buildDependencies_ = buildDependencies;
     processedAttrs = [
       "src" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
-      "buildDependencies" "dependencies" "features"
-      "crateName" "version" "build" "authors" "colors"
+      "buildDependencies" "dependencies" "features" "crateRenames"
+      "crateName" "version" "build" "authors" "colors" "edition"
     ];
     extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
     buildInputs_ = buildInputs;
+    extraRustcOpts_ = extraRustcOpts;
 in
 stdenv.mkDerivation (rec {
 
@@ -86,7 +92,8 @@ stdenv.mkDerivation (rec {
       else
         fetchCrate { inherit (crate) crateName version sha256; };
     name = "rust_${crate.crateName}-${crate.version}";
-    buildInputs = [ rust ncurses ] ++ (crate.buildInputs or []) ++ buildInputs_;
+    depsBuildBuild = [ rust stdenv.cc ];
+    buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies =
       builtins.map
         (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
@@ -122,28 +129,33 @@ stdenv.mkDerivation (rec {
 
        ) "" crate.crateBin
     else "";
+    hasCrateBin = crate ? crateBin;
 
     build = crate.build or "";
     workspace_member = crate.workspace_member or ".";
     crateVersion = crate.version;
+    crateDescription = crate.description or "";
     crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [];
+    crateHomepage = crate.homepage or "";
     crateType =
-      if lib.attrByPath ["procMacro"] false crate then "proc-macro" else
-      if lib.attrByPath ["plugin"] false crate then "dylib" else
-      (crate.type or "lib");
+      if lib.attrByPath ["procMacro"] false crate then ["proc-macro"] else
+      if lib.attrByPath ["plugin"] false crate then ["dylib"] else
+        (crate.type or ["lib"]);
     colors = lib.attrByPath [ "colors" ] "always" crate;
     extraLinkFlags = builtins.concatStringsSep " " (crate.extraLinkFlags or []);
+    edition = crate.edition or null;
+    extraRustcOpts = (if crate ? extraRustcOpts then crate.extraRustcOpts else []) ++ extraRustcOpts_ ++ (lib.optional (edition != null) "--edition ${edition}");
+
     configurePhase = configureCrate {
-      inherit crateName buildDependencies completeDeps completeBuildDeps
-              crateFeatures libName build workspace_member release libPath crateVersion
-              extraLinkFlags
-              crateAuthors verbose colors target_os;
+      inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
+              crateFeatures crateRenames libName build workspace_member release libPath crateVersion
+              extraLinkFlags extraRustcOpts
+              crateAuthors crateHomepage verbose colors target_os;
     };
-    extraRustcOpts = if crate ? extraRustcOpts then crate.extraRustcOpts else [];
     buildPhase = buildCrate {
       inherit crateName dependencies
-              crateFeatures libName release libPath crateType
-              metadata crateBin verbose colors
+              crateFeatures crateRenames libName release libPath crateType
+              metadata crateBin hasCrateBin verbose colors
               extraRustcOpts;
     };
     installPhase = installCrate crateName metadata;
@@ -170,4 +182,5 @@ stdenv.mkDerivation (rec {
   postInstall = crate_.postInstall or "";
   dependencies = crate_.dependencies or [];
   buildDependencies = crate_.buildDependencies or [];
+  crateRenames = crate_.crateRenames or {};
 }

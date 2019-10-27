@@ -7,7 +7,7 @@ let
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
   cfg = dmcfg.sddm;
-  xEnv = config.systemd.services."display-manager".environment;
+  xEnv = config.systemd.services.display-manager.environment;
 
   inherit (pkgs) sddm;
 
@@ -59,6 +59,7 @@ let
 
     [Wayland]
     EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+    SessionDir=${dmcfg.session.desktops}/share/wayland-sessions
 
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
@@ -194,6 +195,11 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
+      { assertion = xcfg.enable;
+        message = ''
+          SDDM requires services.xserver.enable to be true
+        '';
+      }
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
@@ -202,21 +208,17 @@ in
       { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
         message = ''
           SDDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
+          services.xserver.windowManager.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
         '';
       }
     ];
 
     services.xserver.displayManager.job = {
-      logToFile = true;
-
       environment = {
         # Load themes from system environment
         QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
         QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
-
-        XDG_DATA_DIRS = "/run/current-system/sw/share";
       };
 
       execCmd = "exec /run/current-system/sw/bin/sddm";
@@ -238,7 +240,7 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = sddm
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
@@ -265,8 +267,8 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
-    environment.pathsToLink = [ 
-      "/share/sddm" 
+    environment.pathsToLink = [
+      "/share/sddm"
     ];
 
     users.groups.sddm.gid = config.ids.gids.sddm;

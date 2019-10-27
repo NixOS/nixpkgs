@@ -18,7 +18,6 @@ assert cudaSupport -> nvidia_x11 != null
 buildPythonPackage rec {
   pname = "libgpuarray";
   version = "0.7.5";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "Theano";
@@ -66,8 +65,9 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ cmake ];
+
   buildInputs = [
-    cmake
     cython
     nose
   ];

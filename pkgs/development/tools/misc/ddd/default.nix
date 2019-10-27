@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./gcc44.patch ];
 
   meta = {
-    homepage = http://www.gnu.org/software/ddd;
+    homepage = https://www.gnu.org/software/ddd;
     description = "Graphical front-end for command-line debuggers";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

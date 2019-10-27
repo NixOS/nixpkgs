@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.2.0";
-  name = "rr-${version}";
+  pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";
@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sed '7i#include <math.h>' -i src/Scheduler.cc
     patchShebangs .
   '';
+
+  # TODO: remove this preConfigure hook after 5.2.0 since it is fixed upstream
+  # see https://github.com/mozilla/rr/issues/2269
+  preConfigure = ''substituteInPlace CMakeLists.txt --replace "std=c++11" "std=c++14"'';
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
@@ -49,7 +53,7 @@ stdenv.mkDerivation rec {
       time the same execution is replayed.
     '';
 
-    license = "custom";
+    license = with stdenv.lib.licenses; [ mit bsd2 ];
     maintainers = with stdenv.lib.maintainers; [ pierron thoughtpolice ];
     platforms = stdenv.lib.platforms.x86;
   };

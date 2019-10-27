@@ -1,7 +1,7 @@
 { stdenv, fetchurl, which, bison, flex, libmaa, zlib, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "dictd-${version}";
+  pname = "dictd";
   version = "1.12.1";
 
   src = fetchurl {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   patchPhase = "patch -p0 < ${./buildfix.diff}";
   configureFlags = [
     "--enable-dictorg"
-    "--datadir=/run/current-systems/sw/share/dictd"
+    "--datadir=/run/current-system/sw/share/dictd"
   ];
 
   meta = with stdenv.lib; {

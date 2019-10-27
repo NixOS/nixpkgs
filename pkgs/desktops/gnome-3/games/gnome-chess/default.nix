@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, meson, ninja, vala, pkgconfig, wrapGAppsHook, gobjectIntrospection
+{ stdenv, fetchurl, meson, ninja, vala, pkgconfig, wrapGAppsHook, gobject-introspection
 , gettext, itstool, libxml2, python3, gnome3, glib, gtk3, librsvg }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-chess-${version}";
-  version = "3.28.1";
+  pname = "gnome-chess";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-chess/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1q8gc0mq8k2b7pjy363g0yjd80czqknw6ssqzbvgqx5b8nkfvmv1";
+    url = "mirror://gnome/sources/gnome-chess/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1n1vjg6xhwppmddrmqmkk6b3jkgphshp06rjbv5h3270k520a135";
   };
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig gettext itstool libxml2 python3 wrapGAppsHook gobjectIntrospection ];
-  buildInputs = [ glib gtk3 librsvg gnome3.defaultIconTheme ];
+  nativeBuildInputs = [ meson ninja vala pkgconfig gettext itstool libxml2 python3 wrapGAppsHook gobject-introspection ];
+  buildInputs = [ glib gtk3 librsvg gnome3.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py

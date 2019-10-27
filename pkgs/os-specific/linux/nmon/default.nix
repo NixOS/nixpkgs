@@ -1,16 +1,16 @@
 { fetchurl, stdenv, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "nmon-${version}";
-  version = "16g";
+  pname = "nmon";
+  version = "16m";
 
   src = fetchurl {
     url = "mirror://sourceforge/nmon/lmon${version}.c";
-    sha256 = "127n8xvmg7byp42sm924mdr7hd3bsfsxpryzahl0cfsh7dlxv0ns";
+    sha256 = "1hazgrq3m01dzv05639yis1mypcp0jf167n9gqwd3wgxzm2lvv9b";
   };
 
   buildInputs = [ ncurses ];
-  unpackPhase = ":";
+  dontUnpack = true;
   buildPhase = "cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D X86";
   installPhase = ''
     mkdir -p $out/bin

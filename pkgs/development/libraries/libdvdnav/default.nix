@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pkgconfig, libdvdread}:
 
 stdenv.mkDerivation rec {
-  name = "libdvdnav-${version}";
+  pname = "libdvdnav";
   version = "6.0.0";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvdnav/${version}/${name}.tar.bz2";
+    url = "http://get.videolan.org/libdvdnav/${version}/${pname}-${version}.tar.bz2";
     sha256 = "062njcksmpgw9yv3737qkf93r2pzhaxi9szqjabpa8d010dp38ph";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   NIX_CFLAGS_COMPILE="-I ${subversion.dev}/include/subversion-1";
-  NIX_LDFLAGS="-lsvn_client-1";
+  NIX_LDFLAGS="-lsvn_client-1 -lsvn_subr-1";
 
   meta = {
     description = "FUSE filesystem for accessing Subversion repositories";

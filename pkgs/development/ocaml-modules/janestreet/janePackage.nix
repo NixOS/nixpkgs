@@ -1,28 +1,19 @@
-{ stdenv, fetchFromGitHub, ocaml, dune, findlib, defaultVersion ? "0.11.0" }:
+{ stdenv, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.11.0" }:
 
-{ name, version ? defaultVersion, buildInputs ? [], hash, meta, ...}@args:
+{ pname, version ? defaultVersion, hash, ...}@args:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.04"
-then throw "${name}-${version} is not available for OCaml ${ocaml.version}" else
-
-stdenv.mkDerivation (args // {
-  name = "ocaml${ocaml.version}-${name}-${version}";
+buildDunePackage (args // {
   inherit version;
+
+  minimumOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
     owner = "janestreet";
-    repo = name;
+    repo = pname;
     rev = "v${version}";
     sha256 = hash;
   };
 
-  buildInputs = [ ocaml dune findlib ] ++ buildInputs;
-
-  inherit (dune) installPhase;
-
-  meta = {
-    license = stdenv.lib.licenses.asl20;
-    inherit (ocaml.meta) platforms;
-    homepage = "https://github.com/janestreet/${name}";
-  } // meta;
+  meta.license = stdenv.lib.licenses.asl20;
+  meta.homepage = "https://github.com/janestreet/${pname}";
 })

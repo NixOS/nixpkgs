@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0z5d9vwf211v54bybrhm3qpxclys4dfdfsp7lk2hvf57yzhn7xa0";
+    sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
   };
 
   # needs networking for some tests

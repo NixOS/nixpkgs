@@ -1,21 +1,22 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, lib, isPyPy, buildPythonPackage, fetchPypi
 , pytest, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
 , contextlib2, termcolor }:
 
 buildPythonPackage rec {
   pname = "pytest-shutil";
-  version = "1.3.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2cfe4d3f5f25ad2b19e64847d62563f5494b2e0450ca1cfc5940974029b2cbd1";
+    sha256 = "0q8j0ayzmnvlraml6i977ybdq4xi096djhf30n2m1rvnvrhm45nq";
   };
 
-  buildInputs = [ cmdline pytest ];
+  checkInputs = [ cmdline pytest ];
   propagatedBuildInputs = [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
+  nativeBuildInputs = [ pytest ];
 
   checkPhase = ''
-    py.test
+    py.test ${lib.optionalString isPyPy "-k'not (test_run or test_run_integration)'"}
   '';
 
   meta = with stdenv.lib; {

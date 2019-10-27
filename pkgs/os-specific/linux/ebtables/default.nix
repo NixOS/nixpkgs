@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ebtables-${version}";
+  pname = "ebtables";
   version = "2.0.10-4";
 
   src = fetchurl {

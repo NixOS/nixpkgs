@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.72";
+  version = "1.74";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab6b492443adb90c66267b3d24d602ae69a93c68f4b9f135ba01cb06d36ce5a2";
+    sha256 = "1h4hcpx1vqrcddpcznyxy14zzvy2yanlkz0117w5n869w8djq595";
   };
 
   propagatedBuildInputs = [ numpy ];

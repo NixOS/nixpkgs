@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "libkeepass";
-  version = "0.3.0";
+  version = "0.3.1.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3ed79ea786f7020b14b83c082612ed8fbcc6f8edf65e1697705837ab9e40e9d7";
+    sha256 = "0pwg7n9xqcjia1qmz6g48h5s31slh3mxmcqag73gq4zhl4xb6bai";
   };
 
   propagatedBuildInputs = [ lxml pycryptodome colorama ];

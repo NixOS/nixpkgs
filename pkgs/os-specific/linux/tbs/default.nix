@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
   name = "tbs-2018.04.18-${kernel.version}";
 
   srcs = [ media build ];
-  sourceRoot = "${build.name}";
+  sourceRoot = build.name;
 
   preConfigure = ''
     make dir DIR=../${media.name}
@@ -49,8 +49,7 @@ in stdenv.mkDerivation {
   ++ kernel.moduleBuildDependencies;
 
    postInstall = ''
-    xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/media/dvb-core/dvb-core.ko
-    xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/media/v4l2-core/videodev.ko
+    find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
   '';
 
   meta = with lib; {

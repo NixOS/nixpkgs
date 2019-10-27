@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.1.0";
-  name = "libsearpc-${version}";
+  pname = "libsearpc";
 
   src = fetchFromGitHub {
     owner = "haiwen";
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "A simple and easy-to-use C language RPC framework (including both server side & client side) based on GObject System";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ ];
   };
 }

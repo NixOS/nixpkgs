@@ -6,8 +6,8 @@
 with stdenv.lib;
 let
   pcSystems = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "i386";
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386";
   };
 
   inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
@@ -21,7 +21,7 @@ let
 
   po_src = fetchurl {
     name = "grub-2.02-beta2.tar.gz";
-    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
+    url = "https://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
     sha256 = "1lr9h3xcx0wwrnkxdnkfjwy08j7g7mdlmmbdip2db4zfgi69h0rm";
 
   };
@@ -29,7 +29,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "trustedGRUB2-${version}";
+  pname = "trustedGRUB2";
+  inherit version;
 
   src = if for_HP_laptop
         then fetchgit {
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     '' for i in "tests/util/"*.in
        do
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
        done
 
        # Apparently, the QEMU executable is no longer called
@@ -89,10 +90,6 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
   enableParallelBuilding = true;
-
-  postInstall = ''
-    paxmark pms $out/sbin/grub-{probe,bios-setup}
-  '';
 
   meta = with stdenv.lib; {
     description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";

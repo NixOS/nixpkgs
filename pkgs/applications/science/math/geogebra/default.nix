@@ -1,8 +1,8 @@
 { stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, language ? "en_US" }:
 
 stdenv.mkDerivation rec {
-  name = "geogebra-${version}";
-  version = "5-0-472-0";
+  pname = "geogebra";
+  version = "5-0-560-0";
 
   preferLocalBuild = true;
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
       "http://web.archive.org/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
     ];
-    sha256 = "1f56k5r5wf2l27sgp2vjpvx7wl72gizwxs0a6hngk15nzzka87v9";
+    sha256 = "16w6z3axzb9g51w4cbyf5zj6gpm9qab65xbw1184v5wym5llf4iw";
   };
 
   srcIcon = fetchurl {

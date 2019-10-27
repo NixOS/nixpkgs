@@ -1,0 +1,27 @@
+diff --git i/Makefile w/Makefile
+index 47919ca..408fd68 100644
+--- i/Makefile
++++ w/Makefile
+@@ -33,8 +33,9 @@ datadir  = $(prefix)/share
+ mandir   = $(datadir)/man
+ docdir   = $(datadir)/doc/gpscorrelate
+ applicationsdir = $(datadir)/applications
++localedir = ${datadir}/locale
+ 
+-DEFS = -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\"
++DEFS = -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -DPACKAGE_LOCALE_DIR=\"$(localedir)\"
+ 
+ TARGETS = gpscorrelate-gui$(EXEEXT) gpscorrelate$(EXEEXT) doc/gpscorrelate.1 doc/gpscorrelate.html
+ 
+diff --git i/main-gui.c w/main-gui.c
+index fdace6f..8a6197b 100644
+--- i/main-gui.c
++++ w/main-gui.c
+@@ -40,6 +40,7 @@
+ int main(int argc, char* argv[])
+ {
+ 	/* Initialize gettext (gtk_init initializes the locale) */
++	(void) bindtextdomain(TEXTDOMAIN, PACKAGE_LOCALE_DIR);
+ 	(void) textdomain(TEXTDOMAIN);
+ 	(void) bind_textdomain_codeset(TEXTDOMAIN, "UTF-8");
+ 

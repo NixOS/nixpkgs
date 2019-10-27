@@ -3,14 +3,15 @@
 
 , data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
-    rev = 1386;
+    rev = "1386";
     sha256 = "0ka6zir9hg0md5p03dl461jkvbk05ywyw233hnc3ka6shz3vazi1";
   }
 }:
 let
   version = "git";
   bin = stdenv.mkDerivation {
-    name = "vdrift-${version}";
+    pname = "vdrift";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "vdrift";

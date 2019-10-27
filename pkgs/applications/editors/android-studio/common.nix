@@ -1,8 +1,11 @@
 { channel, pname, version, build, sha256Hash }:
 
-{ bash
+{ alsaLib
+, bash
 , buildFHSUserEnv
 , coreutils
+, dbus
+, expat
 , fetchurl
 , findutils
 , file
@@ -19,16 +22,24 @@
 , libpulseaudio
 , libGL
 , libX11
+, libxcb
+, libXcomposite
+, libXcursor
+, libXdamage
 , libXext
+, libXfixes
 , libXi
 , libXrandr
 , libXrender
 , libXtst
 , makeWrapper
+, nspr
+, nss
 , pciutils
 , pkgsi686Linux
 , setxkbmap
 , stdenv
+, systemd
 , unzip
 , which
 , runCommand
@@ -40,10 +51,10 @@
 let
   drvName = "android-studio-${channel}-${version}";
   androidStudio = stdenv.mkDerivation {
-    name = drvName;
+    name = "${drvName}-unwrapped";
 
     src = fetchurl {
-      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
+      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.tar.gz";
       sha256 = sha256Hash;
     };
 
@@ -55,7 +66,7 @@ let
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-        --set PATH "${stdenv.lib.makeBinPath [
+        --prefix PATH : "${stdenv.lib.makeBinPath [
 
           # Checked in studio.sh
           coreutils
@@ -99,9 +110,20 @@ let
           libXrandr
 
           # For Android emulator
+          alsaLib
+          dbus
+          expat
           libpulseaudio
           libX11
+          libxcb
+          libXcomposite
+          libXcursor
+          libXdamage
+          libXfixes
           libGL
+          nspr
+          nss
+          systemd
 
           # For GTKLookAndFeel
           gtk2
@@ -133,7 +155,7 @@ let
     multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
 in runCommand
-  "${drvName}-wrapper"
+  drvName
   {
     startScript = ''
       #!${bash}/bin/bash
@@ -141,6 +163,9 @@ in runCommand
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
+    passthru = {
+      unwrapped = androidStudio;
+    };
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (${channel} channel)";
       longDescription = ''
@@ -158,9 +183,9 @@ in runCommand
   ''
     mkdir -p $out/{bin,share/pixmaps}
 
-    # TODO: Rename preview -> beta (and add -stable suffix?):
     echo -n "$startScript" > $out/bin/${pname}
     chmod +x $out/bin/${pname}
+
     ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${drvName}.png
     ln -s ${desktopItem}/share/applications $out/share/applications
   ''

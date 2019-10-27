@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, pkgconfig, openssl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "pkcs11-helper-${version}";
+  pname = "pkcs11-helper";
   version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "pkcs11-helper";
-    rev = "${name}";
+    rev = "${pname}-${version}";
     sha256 = "1nvj6kdbps860kw64m2rz3v2slyn7jkagfdmskrl6966n99iy2ns";
   };
 

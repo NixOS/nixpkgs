@@ -5,14 +5,18 @@
 
 buildPythonPackage rec {
   pname = "python-jsonrpc-server";
-  version = "0.0.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-jsonrpc-server";
     rev = version;
-    sha256 = "0p5dj1hxx3yz8vjk59dcp3h6ci1hrjkbzf9lr3vviy0xw327409k";
+    sha256 = "054b0xm5z3f82jwp7zj21pkh7gwj9jd933jhymdx49n1n1iynfn0";
   };
+
+  postPatch = ''
+    sed -i 's/version=versioneer.get_version(),/version="${version}",/g' setup.py
+  '';
 
   checkInputs = [
     pytest mock pytestcov coverage

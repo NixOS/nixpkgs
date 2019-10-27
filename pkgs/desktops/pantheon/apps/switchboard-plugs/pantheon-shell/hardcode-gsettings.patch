@@ -1,0 +1,23 @@
+diff --git a/src/Views/Appearance.vala b/src/Views/Appearance.vala
+index 721d458..17e1c58 100644
+--- a/src/Views/Appearance.vala
++++ b/src/Views/Appearance.vala
+@@ -66,10 +66,16 @@ public class Appearance : Gtk.Grid {
+         attach (text_size_label, 0, 2);
+         attach (text_size_modebutton, 1, 2);
+ 
+-        var animations_settings = new Settings (ANIMATIONS_SCHEMA);
++        SettingsSchemaSource gala_schema_source = new SettingsSchemaSource.from_directory ("@GALA_GSETTINGS_PATH@", SettingsSchemaSource.get_default (), true);
++        SettingsSchema animations_schema = gala_schema_source.lookup (ANIMATIONS_SCHEMA, false);
++
++        var animations_settings = new Settings.full (animations_schema, null, null);
+         animations_settings.bind (ANIMATIONS_KEY, animations_switch, "active", SettingsBindFlags.DEFAULT);
+ 
+-        var panel_settings = new Settings (PANEL_SCHEMA);
++        SettingsSchemaSource panel_schema_source = new SettingsSchemaSource.from_directory ("@WINGPANEL_GSETTINGS_PATH@", SettingsSchemaSource.get_default (), true);
++        SettingsSchema panel_schema = panel_schema_source.lookup (PANEL_SCHEMA, false);
++
++        var panel_settings = new Settings.full (panel_schema, null, null);
+         panel_settings.bind (TRANSLUCENCY_KEY, translucency_switch, "active", SettingsBindFlags.DEFAULT);
+ 
+         var interface_settings = new Settings (INTERFACE_SCHEMA);

@@ -1,27 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, xz }:
+{ stdenv
+, fetchurl
 
-let
-  version = "4.0.9";
-in
+, pkgconfig
+
+, zlib
+, libjpeg
+, xz
+}:
+
 stdenv.mkDerivation rec {
-  name = "libtiff-${version}";
+  version = "4.0.10";
+  pname = "libtiff";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1kfg4q01r4mqn7dj63ifhi6pmqzbf4xax6ni6kkk81ri5kndwyvf";
+    sha256 = "1r4np635gr6zlc0bic38dzvxia6iqzcrary4n1ylarzpr8fd2lic";
   };
 
-  prePatch = let
-      debian = fetchurl {
-        # When the URL disappears, it typically means that Debian has new patches
-        # (probably security) and updating to new tarball will apply them as well.
-        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.9-6.debian.tar.xz;
-        sha256 = "10yk5npchxscgsnd7ihd3bbbw2fxkl7ni0plm43c9q4nwp6ms52f";
-      };
-    in ''
-      tar xf ${debian}
-      patches="$patches $(sed 's|^|debian/patches/|' < debian/patches/series)"
-    '';
+  patches = [
+    (fetchurl {
+      url = "https://gitlab.com/libtiff/libtiff/commit/0c74a9f49b8d7a36b17b54a7428b3526d20f88a8.patch";
+      name = "CVE-2019-6128.patch";
+      sha256 = "03yvsfq6dxjd3v8ypfwz6cpz2iymqwcbawqqlmkh40dayi7fgizr";
+    })
+    # Manual backport of https://gitlab.com/libtiff/libtiff/commit/1b5e3b6a23827c33acf19ad50ce5ce78f12b3773.patch
+    ./CVE-2019-14973.patch
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 

@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, buildPythonPackage, cython, slurm }:
+{ lib, fetchFromGitHub, fetchpatch, buildPythonPackage, cython, slurm }:
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "20180908";
+  version = "19-05-0";
 
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    rev = "50dc113e99d82e70e84fc2e812333733708be4ed";
-    sha256 = "1j2i4rvhmk2ihhcvsjdlqlxqb5a05jg8k9bqkv3zrvdj71yn4z9k";
+    rev = version;
+    sha256 = "1lfb4q81y96syz5an1lzscfcvmfvlkf4cfl3i5zllw9r3gbarl2r";
   };
 
   buildInputs = [ cython slurm ];

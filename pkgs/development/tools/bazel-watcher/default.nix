@@ -1,45 +1,47 @@
 { buildBazelPackage
-, cacert
 , fetchFromGitHub
 , fetchpatch
 , git
 , go
+, python
 , stdenv
 }:
 
+let
+  patches = [
+    ./use-go-in-path.patch
+
+    # update rules_go to fix the build. Remove these when updating past 0.10.3
+    (fetchpatch {
+      url = "https://github.com/bazelbuild/bazel-watcher/commit/686130f50cea274f7453f6abc8c5249654047462.patch";
+      sha256 = "0rzs01sfiinl5d3dq9sx1bhl8kkzppdwh964fr7bzafqcxv5llmb";
+    })
+    (fetchpatch {
+      url = "https://github.com/bazelbuild/bazel-watcher/commit/18bdb44832ccc533e0ab3923ef80060eeb24582d.patch";
+      sha256 = "0k5hvlxlg4n092d53cbfxqqhzc6f1jv4licdhhi1dhckkhb4sdk6";
+    })
+  ];
+in
 buildBazelPackage rec {
   name = "bazel-watcher-${version}";
-  version = "0.5.0";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "1sis723hwax4dg0c28x20yj0hjli66q1ykcvjirgy57znz4iwlq9";
+    sha256 = "17z4nqqsdrainbh8fmhf6sgrxwf7aknadmn94z1yqpxa7kb9x33v";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/bazelbuild/bazel-watcher/commit/4d5928eee3dd5843a1b55136d914b78fef7f25d0.patch";
-      sha256 = "0gxzcdqgifrmvznfy0p5nd11b39n2pwxcvpmhc6hxf85mwlxz7dg";
-    })
-
-    ./update-gazelle-fix-ssl.patch
-  ];
-
-  nativeBuildInputs = [ go git ];
+  nativeBuildInputs = [ go git python ];
 
   bazelTarget = "//ibazel";
 
   fetchAttrs = {
+    inherit patches;
+
     preBuild = ''
       patchShebangs .
-
-      # tell rules_go to use the Go binary found in the PATH
-      sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
-
-      # tell rules_go to invoke GIT with custom CAINFO path
-      export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
     preInstall = ''
@@ -52,17 +54,22 @@ buildBazelPackage rec {
       # a different sha256 for the fetch phase.
       rm -rf $bazelOut/external/{go_sdk,\@go_sdk.marker}
       sed -e '/^FILE:@go_sdk.*/d' -i $bazelOut/external/\@*.marker
+
+      # Remove the gazelle tools, they contain go binaries that are built
+      # non-deterministically. As long as the gazelle version matches the tools
+      # should be equivalent.
+      rm -rf $bazelOut/external/{bazel_gazelle_go_repository_tools,\@bazel_gazelle_go_repository_tools.marker}
+      sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "1iyjvibvlwg980p7nizr6x5v31dyp4a344f0xn839x393583k59d";
+    sha256 = "0g2y283glx2ykxxqc3vsg520a6s2w5d937wndhgpfajc5yjgiz43";
   };
 
   buildAttrs = {
+    inherit patches;
+
     preBuild = ''
       patchShebangs .
-
-      # tell rules_go to use the Go binary found in the PATH
-      sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
     '';
 
     installPhase = ''

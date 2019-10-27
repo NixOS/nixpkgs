@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv
+{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
 , proxySupport ? true
 , sslSupport ? true, openssl
 , http2Support ? true, nghttp2
@@ -8,7 +8,7 @@
 , luaSupport ? false, lua5
 }:
 
-let inherit (stdenv.lib) optional optionalString;
+let inherit (stdenv.lib) optional;
 in
 
 assert sslSupport -> aprutil.sslSupport && openssl != null;
@@ -16,12 +16,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.35";
-  name = "apache-httpd-${version}";
+  version = "2.4.41";
+  pname = "apache-httpd";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "0mlvwsm7hmpc7db6lfc2nx3v4cll3qljjxhjhgsw6aniskywc1r6";
+    sha256 = "0h7a31yxwyh7h521frnmlppl0h7sh9icc3ka6vlmlcg5iwllhg8k";
   };
 
   # FIXME: -dev depends on -doc
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
+    sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
   '';
 
   # Required for ‘pthread_cancel’.

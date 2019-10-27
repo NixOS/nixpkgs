@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   version = "0.8.0.6";
-  name = "k3d-${version}";
+  pname = "k3d";
   src = fetchFromGitHub {
     owner = "K-3D";
     repo = "k3d";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0vdjjg6h8mxm2n8mvkkg2mvd27jn2xx90hnmx23cbd35mpz9p4aa";
   };
 
@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
     ];
 
   #doCheck = false;
+
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-deprecated-declarations"
+  ];
 
   meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";

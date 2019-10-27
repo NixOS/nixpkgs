@@ -7,11 +7,11 @@ let
     else throw "Unsupported architecture";
 
 in stdenv.mkDerivation rec {
-  name = "ut2004-demo-${version}";
+  pname = "ut2004-demo";
   version = "3334";
 
   src = fetchurl {
-    url = "http://treefort.icculus.org/ut2004/UT2004-LNX-Demo${version}.run.gz";
+    url = "http://vlaai.snt.utwente.nl/pub/games/UT2004/demo/UT2004-LNX-Demo${version}.run.gz";
     sha256 = "0d5f84qz8l1rg16yzx2k4ikr46n9iwj68na1bqi87wrww7ck6jh7";
   };
 

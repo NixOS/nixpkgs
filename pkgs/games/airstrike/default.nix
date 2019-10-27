@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, SDL, SDL_image }:
 
 stdenv.mkDerivation rec {
-  name = "airstrike-pre-${version}";
+  pname = "airstrike-pre";
   version = "6a";
 
   src = fetchurl {
@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper SDL SDL_image ];
+
+  NIX_LDFLAGS = [
+    "-lm"
+  ];
 
   installPhase = ''
     ls -l

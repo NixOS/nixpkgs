@@ -1,27 +1,25 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, setuptools_scm, entrypoints, secretstorage
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
+, dbus-python, setuptools_scm, entrypoints, secretstorage
 , pytest, pytest-flake8 }:
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "13.2.1";
+  version = "19.2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6364bb8c233f28538df4928576f4e051229e0451651073ab20b315488da16a58";
+    sha256 = "1cvlm48fggl12m19j9vcnrlplidr2sjf8h3pdyki58f9y357q0wi";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
 
   checkInputs = [ pytest pytest-flake8 ];
 
-  propagatedBuildInputs = [ entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
+  propagatedBuildInputs = [ dbus-python entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
 
-  doCheck = !stdenv.isDarwin;
-
-  checkPhase = ''
-    py.test
-  '';
+  # checks try to access a darwin path on linux
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Store and access your passwords safely";

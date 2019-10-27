@@ -1,15 +1,15 @@
 { stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkgconfig, file, networkmanager, libsecret
-, withGnome ? true, gnome3, kmod }:
+, gtk3, withGnome ? true, gnome3, kmod, fetchpatch }:
 
 let
   pname = "NetworkManager-openvpn";
-  version = "1.8.6";
-in stdenv.mkDerivation rec {
+  version = "1.8.10";
+in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ksij9438f2lrwkg287qjlfaxja6jgmqxqap96585r3nf5zj69ch";
+    sha256 = "1vri49yff4lj13dnzkpq9nx3a4z1bmbrv807r151plj8m1mwhg5g";
   };
 
   patches = [
@@ -17,10 +17,15 @@ in stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit kmod openvpn;
     })
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/merge_requests/13.patch";
+      sha256 = "06cvqi28v72dd53fw8ix95mqj885xhwi8qcs2q7hvm5bvnhwn704";
+    })
   ];
 
   buildInputs = [ openvpn networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret gnome3.networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig file libxml2 ];
 

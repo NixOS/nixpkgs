@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "pyls-mypy";
-  version = "0.1.3";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "tomv564";
     repo = "pyls-mypy";
     rev = version;
-    sha256 = "0v7ghcd1715lxlfq304b7xhchp31ahdd89lf6za4n0l59dz74swh";
+    sha256 = "0c1111m9h6f05frkyj6i757q9y2lijpbv8nxmwgp3nqbpkvfnmrk";
   };
 
   disabled = !isPy3k;

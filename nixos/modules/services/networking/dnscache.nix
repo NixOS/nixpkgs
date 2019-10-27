@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.dnscache;
 
-  dnscache-root = pkgs.runCommand "dnscache-root" {} ''
+  dnscache-root = pkgs.runCommand "dnscache-root" { preferLocalBuild = true; } ''
     mkdir -p $out/{servers,ip}
 
     ${concatMapStrings (ip: ''

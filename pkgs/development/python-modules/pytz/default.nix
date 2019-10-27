@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2018.5";
+  version = "2019.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ffb9ef1de172603304d9d2819af6f5ece76f2e85ec10692a524dd876e72bf277";
+    sha256 = "b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be";
   };
 
   checkPhase = ''
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "World timezone definitions, modern and historical";
-    homepage = "http://pythonhosted.org/pytz";
+    homepage = "https://pythonhosted.org/pytz";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

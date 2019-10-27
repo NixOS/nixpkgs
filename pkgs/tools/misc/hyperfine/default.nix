@@ -3,17 +3,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "hyperfine-${version}";
-  version = "1.3.0";
+  pname = "hyperfine";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
-    repo   = "hyperfine";
+    repo   = pname;
     rev    = "refs/tags/v${version}";
-    sha256 = "06kghk3gmi47c8g28n8srpb578yym104fa30s4m33ajb60fvwlld";
+    sha256 = "12bj5xifnpj5yni563b6b33lzmkgm7j1wk0c9859zw59b33ifd1l";
   };
 
-  cargoSha256 = "1rwh8kyrkk5jza4lx7sf1pln68ljwsv4ccyfvzcvc140y7ya8ps0";
+  cargoSha256 = "1ias944wg55njjnap7w02b87bvb502vzkpjvsb704q5i9sr8hjry";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

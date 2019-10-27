@@ -1,18 +1,21 @@
 { stdenv, fetchFromGitHub, lib, ... }:
 
 stdenv.mkDerivation rec {
-  name = "kubetail-${version}";
-  version = "1.6.4";
+  pname = "kubetail";
+  version = "1.6.10";
 
   src = fetchFromGitHub {
     owner = "johanhaleby";
     repo = "kubetail";
-    rev = "${version}";
-    sha256 = "13y3g27z2v4jx1cvphcwl0a5xshm6vcqcxasid5sbg6cpwc2xc66";
+    rev = version;
+    sha256 = "0bg872n9fs6pl03rmjny9sgby718yznx9jwi5rx3hi4km3ha9j0b";
   };
 
   installPhase = ''
-    install -Dm755 kubetail $out/bin/kubetail
+    install -Dm755 kubetail                 "$out/bin/kubetail"
+    install -Dm755 completion/kubetail.bash "$out/share/bash-completion/completions/kubetail"
+    install -Dm755 completion/kubetail.fish "$out/share/fish/vendor_completions.d/kubetail.fish"
+    install -Dm755 completion/kubetail.zsh  "$out/share/zsh/site-functions/_kubetail"
   '';
 
   meta = with lib; {

@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname   = "elasticsearch-curator";
-  version = "5.5.4";
+  version = "5.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e75abeb7f7be939b1c64c071898760dc10ab5f08307c253fc074abf8a41a76f0";
+    sha256 = "0a6q7jcqwcqf8cv76lzldf90hnj2x8gha754x515dq10zsi9sjms";
   };
 
   # The test hangs so we disable it.
@@ -45,6 +45,10 @@ buildPythonPackage rec {
     funcsigs
   ];
 
+  postPatch = ''
+    sed -i s/pyyaml==3.12/pyyaml==${pyyaml.version}/ setup.cfg setup.py
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/elastic/curator;
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
@@ -62,5 +66,8 @@ buildPythonPackage rec {
       * Perform various actions on the items which remain in the actionable list.
     '';
     maintainers = with maintainers; [ basvandijk ];
+
+    # https://github.com/elastic/curator/pull/1280
+    broken = versionAtLeast click.version "7.0";
   };
 }

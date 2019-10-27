@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libpcap, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "arp-scan-${version}";
+  pname = "arp-scan";
   version = "1.9.5";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for name in get-{oui,iab}; do
-      wrapProgram "$out/bin/$name" --set PERL5LIB "${stdenv.lib.makePerlPath perlModules }"
+      wrapProgram "$out/bin/$name" --set PERL5LIB "${perlPackages.makePerlPath perlModules }"
     done;
   '';
 

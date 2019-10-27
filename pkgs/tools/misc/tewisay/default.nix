@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper }:
 
 buildGoPackage rec {
-  name = "tewisay-unstable-${version}";
+  pname = "tewisay-unstable";
   version = "2017-04-14";
 
   goPackagePath = "github.com/lucy/tewisay";

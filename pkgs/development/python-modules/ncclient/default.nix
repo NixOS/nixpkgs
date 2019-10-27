@@ -4,25 +4,23 @@
 , paramiko
 , selectors2
 , lxml
-, libxml2
-, libxslt
 , nose
 , rednose
 }:
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.2";
+  version = "0.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6616828f9c5d318906dae22378a78342bbfa5983f1775c1af8bfecc779434c38";
+    sha256 = "2b367354d1cd25b79b8798a0b4c1949590d890057f2a252e6e970a9ab744e009";
   };
 
   checkInputs = [ nose rednose ];
 
   propagatedBuildInputs = [
-    paramiko lxml libxml2 libxslt selectors2
+    paramiko lxml selectors2
   ];
 
   checkPhase = ''

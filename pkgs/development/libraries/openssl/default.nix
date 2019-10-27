@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPackages, perl, coreutils
-, withCryptodev ? false, cryptodevHeaders
+, withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , static ? false
 }:
@@ -7,21 +7,16 @@
 with stdenv.lib;
 
 let
-  common = args@{ version, sha256, patches ? [] }: stdenv.mkDerivation rec {
-    name = "openssl-${version}";
+  common = { version, sha256, patches ? [], withDocs ? false }: stdenv.mkDerivation rec {
+    pname = "openssl";
+    inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${name}.tar.gz";
+      url = "https://www.openssl.org/source/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 
-    patches =
-      (args.patches or [])
-      ++ [ ./nix-ssl-cert-file.patch ]
-      ++ optional (versionOlder version "1.1.0")
-          (if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch)
-      ++ optional (versionOlder version "1.0.2" && stdenv.hostPlatform.isDarwin)
-           ./darwin-arch.patch;
+    inherit patches;
 
     postPatch = ''
       patchShebangs Configure
@@ -39,18 +34,21 @@ let
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
     '';
 
-    outputs = [ "bin" "dev" "out" "man" ];
+    outputs = [ "bin" "dev" "out" "man" ] ++ optional withDocs "doc";
     setOutputFlags = false;
     separateDebugInfo = stdenv.hostPlatform.isLinux;
 
     nativeBuildInputs = [ perl ];
-    buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
+    buildInputs = stdenv.lib.optional withCryptodev cryptodev;
 
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
     configureScript = {
-        "x86_64-darwin"  = "./Configure darwin64-x86_64-cc";
-        "x86_64-solaris" = "./Configure solaris64-x86_64-gcc";
+        armv6l-linux = "./Configure linux-armv4 -march=armv6";
+        armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
+        x86_64-darwin  = "./Configure darwin64-x86_64-cc";
+        x86_64-linux = "./Configure linux-x86_64";
+        x86_64-solaris = "./Configure solaris64-x86_64-gcc";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
@@ -76,7 +74,14 @@ let
     ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
       ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng";
 
-    makeFlags = [ "MANDIR=$(man)/share/man" ];
+    makeFlags = [
+      "MANDIR=$(man)/share/man"
+      # This avoids conflicts between man pages of openssl subcommands (for
+      # example 'ts' and 'err') man pages and their equivalent top-level
+      # command in other packages (respectively man-pages and moreutils).
+      # This is done in ubuntu and archlinux, and possiibly many other distros.
+      "MANSUFFIX=ssl"
+    ];
 
     enableParallelBuilding = true;
 
@@ -91,6 +96,11 @@ let
     '' +
     ''
       mkdir -p $bin
+    '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    ''
+      substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
+    '' +
+    ''
       mv $out/bin $bin/
 
       mkdir $dev
@@ -102,7 +112,7 @@ let
       rmdir $out/etc/ssl/{certs,private}
     '';
 
-    postFixup = ''
+    postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows) ''
       # Check to make sure the main output doesn't depend on perl
       if grep -r '${buildPackages.perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2
@@ -116,20 +126,34 @@ let
       license = licenses.openssl;
       platforms = platforms.all;
       maintainers = [ maintainers.peti ];
-      priority = 10; # resolves collision with ‘man-pages’
     };
   };
 
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2p";
-    sha256 = "003xh9f898i56344vpvpxxxzmikivxig4xwlm7vbi7m8n43qxaah";
+    version = "1.0.2t";
+    sha256 = "1g67ra0ph7gpz6fgvv1i96d792jmd6ymci5kk53vbikszr74djql";
+    patches = [
+      ./1.0.2/nix-ssl-cert-file.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./1.0.2/use-etc-ssl-certs-darwin.patch
+       else ./1.0.2/use-etc-ssl-certs.patch)
+    ];
   };
 
   openssl_1_1 = common {
-    version = "1.1.1";
-    sha256 = "0gbab2fjgms1kx5xjvqx8bxhr98k4r8l2fa8vw7kvh491xd8fdi8";
+    version = "1.1.1d";
+    sha256 = "1whinyw402z3b9xlb3qaxv4b9sk4w1bgh9k0y8df1z4x3yy92fhy";
+    patches = [
+      ./1.1/nix-ssl-cert-file.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./1.1/use-etc-ssl-certs-darwin.patch
+       else ./1.1/use-etc-ssl-certs.patch)
+    ];
+    withDocs = true;
   };
 
 }

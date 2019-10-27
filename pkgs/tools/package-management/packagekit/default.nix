@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, lib
 , intltool, glib, pkgconfig, polkit, python, sqlite
-, gobjectIntrospection, vala_0_38, gtk-doc, autoreconfHook, autoconf-archive
+, gobject-introspection, vala, gtk-doc, autoreconfHook, autoconf-archive
 # TODO: set enableNixBackend to true, as soon as it builds
 , nix, enableNixBackend ? false, boost
 , enableCommandNotFound ? false
@@ -8,8 +8,8 @@
 , enableSystemd ? stdenv.isLinux, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "packagekit-${version}";
-  version = "1.1.10";
+  pname = "packagekit";
+  version = "1.1.12";
 
   outputs = [ "out" "dev" ];
 
@@ -17,14 +17,14 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "PackageKit";
     rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "11drd6ixx75q3w12am3z1npwllq1kxnhbxv0npng92c69kn291zs";
+    sha256 = "02wq3jw3mkdld90irh5vdfd5bri2g1p89mhrmj56kvif1fqak46x";
   };
 
-  buildInputs = [ glib polkit python gobjectIntrospection vala_0_38 ]
+  buildInputs = [ glib polkit python gobject-introspection ]
                   ++ lib.optional enableSystemd systemd
                   ++ lib.optional enableBashCompletion bash-completion;
   propagatedBuildInputs = [ sqlite nix boost ];
-  nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
+  nativeBuildInputs = [ vala intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
 
   preAutoreconf = ''
     gtkdocize
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     "--disable-offline-update"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--with-dbus-sys=$(out)/etc/dbus-1/system.d"
-    "--with-systemdsystemunitdir=$(out)/lib/systemd/system/"
+    "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system/"
   ]
   ++ lib.optional enableNixBackend "--enable-nix"
   ++ lib.optional (!enableBashCompletion) "--disable-bash-completion"

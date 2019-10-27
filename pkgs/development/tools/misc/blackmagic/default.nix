@@ -1,25 +1,30 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, libftdi
+, gcc-arm-embedded, libftdi1
 , python, pythonPackages
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blackmagic-${version}";
-  version = "1.6.1";
+  pname = "blackmagic";
+  version = "unstable-2019-08-13";
+  # `git describe --always`
+  firmwareVersion = "v1.6.1-317-gc9c8b08";
 
   src = fetchFromGitHub {
     owner = "blacksphere";
     repo = "blackmagic";
-    rev = "29386aee140e5e99a958727358f60980418b4c88";
-    sha256 = "05x19y80mixk6blpnfpfngy5d41jpjvdqgjzkmhv1qc03bhyhc82";
+    rev = "c9c8b089f716c31433432f5ee54c5c206e4945cf";
+    sha256 = "0175plba7h3r1p584ygkjlvg2clvxa2m0xfdcb2v8jza2vzc8ywd";
     fetchSubmodules = true;
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     gcc-arm-embedded
-    libftdi
+  ];
+
+  buildInputs = [
+    libftdi1
     python
     pythonPackages.intelhex
   ];
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Prevent calling out to `git' to generate a version number:
     substituteInPlace src/Makefile \
-      --replace '`git describe --always --dirty`' '${version}'
+      --replace '$(shell git describe --always --dirty)' '${firmwareVersion}'
 
     # Fix scripts that generate headers:
     for f in $(find scripts libopencm3/scripts -type f); do
@@ -37,6 +42,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = "${stdenv.shell} ${./helper.sh}";
   installPhase = ":"; # buildPhase does this.
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "In-application debugger for ARM Cortex microcontrollers";
@@ -53,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/blacksphere/blackmagic;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pjones ];
+    maintainers = with maintainers; [ pjones emily ];
     platforms = platforms.unix;
   };
 }

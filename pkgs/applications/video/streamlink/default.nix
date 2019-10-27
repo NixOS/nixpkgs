@@ -1,14 +1,14 @@
 { stdenv, pythonPackages, fetchFromGitHub, rtmpdump, ffmpeg }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.14.2";
-  name = "streamlink-${version}";
+  version = "1.2.0";
+  pname = "streamlink";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
-    rev = "${version}";
-    sha256 = "1njwfy1h8a9n5z6crrfnknlw4ys0bap2jam6ga6njgkd10aly9qr";
+    rev = version;
+    sha256 = "0l8b9ipfmd6dic07ajqqml26jdydz0k046hvx32mqp64jl5jpznh";
   };
 
   checkInputs = with pythonPackages; [ pytest mock requests-mock freezegun ];

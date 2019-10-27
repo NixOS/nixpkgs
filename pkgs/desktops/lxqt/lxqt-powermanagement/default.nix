@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, solid, kidletime, liblxqt, libqtxdg }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, solid, kidletime, liblxqt, libqtxdg }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "04mx1nxqqqjg3wsql4ch4j1a4cbqfvpq0iwi6b9yhaf04n0dwrvn";
+    sha256 = "1nhp4a28bpczhwz8b8da355zsxr1qwmkrm3bwllwp39liw947clx";
   };
 
   nativeBuildInputs = [
@@ -29,14 +28,7 @@ stdenv.mkDerivation rec {
     libqtxdg
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
-  postPatch = ''
-    substituteInPlace autostart/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Power management module for LXQt";
     homepage = https://github.com/lxqt/lxqt-powermanagement;
     license = licenses.lgpl21;

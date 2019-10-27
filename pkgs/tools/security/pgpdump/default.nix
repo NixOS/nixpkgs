@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pgpdump-${version}";
+  pname = "pgpdump";
   version = "0.33";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.mew.org/~kazu/proj/pgpdump/en/;
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }

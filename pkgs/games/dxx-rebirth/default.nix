@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, scons, pkgconfig
+{ gcc6Stdenv, fetchurl, fetchpatch, scons, pkgconfig
 , SDL, SDL_mixer, libGLU_combined, physfs
 }:
 
@@ -8,8 +8,8 @@ let
     sha256 = "05mz77vml396mff43dbs50524rlm4fyds6widypagfbh5hc55qdc";
   };
 
-in stdenv.mkDerivation rec {
-  name = "dxx-rebirth-${version}";
+in gcc6Stdenv.mkDerivation rec {
+  pname = "dxx-rebirth";
   version = "0.59.100";
 
   src = fetchurl {
@@ -39,27 +39,14 @@ in stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
-  buildPhase = ''
-    runHook preBuild
-
-    scons prefix=$out
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    scons prefix=$out install
+  postInstall = ''
     install -Dm644 ${music} $out/share/games/dxx-rebirth/d2xr-sc55-music.dxa
     install -Dm644 -t $out/share/doc/dxx-rebirth *.txt
-
-    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with gcc6Stdenv.lib; {
     description = "Source Port of the Descent 1 and 2 engines";
-    homepage = https://www.dxx-rebirth.com/;
+    homepage = "https://www.dxx-rebirth.com/";
     license = licenses.free;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = with platforms; linux;

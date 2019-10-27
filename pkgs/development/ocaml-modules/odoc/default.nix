@@ -1,30 +1,24 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune
-, bos, cmdliner, doc-ock-html, doc-ock-xml
+{ lib, fetchFromGitHub, buildDunePackage
+, astring, cmdliner, cppo, fpath, result, tyxml
 }:
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-odoc-${version}";
-  version = "1.2.0";
+buildDunePackage rec {
+  pname = "odoc";
+  version = "1.4.2";
+
   src = fetchFromGitHub {
     owner = "ocaml";
-    repo = "odoc";
-    rev = "v${version}";
-    sha256 = "0ixnhfpm1nw4bvjj8qhcyy283pdr5acqpg5wxwq3n1l4mad79cgh";
+    repo = pname;
+    rev = version;
+    sha256 = "0rvhx139jx6wmlfz355mja6mk03x4swq1xxvk5ky6jzhalq3cf5i";
   };
 
-  buildInputs = [ ocaml findlib dune cmdliner ];
-
-  propagatedBuildInputs = [ bos doc-ock-html doc-ock-xml ];
-
-  configurePhase = "ocaml bin/set-etc bin/odoc_etc.ml $out/etc/odoc";
-
-  inherit (dune) installPhase;
+  buildInputs = [ astring cmdliner cppo fpath result tyxml ];
 
   meta = {
     description = "A documentation generator for OCaml";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 }

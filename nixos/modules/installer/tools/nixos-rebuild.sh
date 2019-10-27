@@ -22,6 +22,7 @@ repair=
 profile=/nix/var/nix/profiles/system
 buildHost=
 targetHost=
+maybeSudo=
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -29,7 +30,7 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
+      switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         action="$i"
         ;;
@@ -53,11 +54,11 @@ while [ "$#" -gt 0 ]; do
         repair=1
         extraBuildFlags+=("$i")
         ;;
-      --max-jobs|-j|--cores|-I)
+      --max-jobs|-j|--cores|-I|--builders)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*)
+      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*)
         extraBuildFlags+=("$i")
         ;;
       --option)
@@ -96,6 +97,9 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
+if [ -n "$SUDO_USER" ]; then
+    maybeSudo="sudo "
+fi
 
 if [ -z "$buildHost" -a -n "$targetHost" ]; then
     buildHost="$targetHost"
@@ -111,9 +115,9 @@ buildHostCmd() {
     if [ -z "$buildHost" ]; then
         "$@"
     elif [ -n "$remoteNix" ]; then
-        ssh $SSHOPTS "$buildHost" PATH="$remoteNix:$PATH" "$@"
+        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix:$PATH" "$maybeSudo$@"
     else
-        ssh $SSHOPTS "$buildHost" "$@"
+        ssh $SSHOPTS "$buildHost" "$maybeSudo$@"
     fi
 }
 
@@ -121,7 +125,7 @@ targetHostCmd() {
     if [ -z "$targetHost" ]; then
         "$@"
     else
-        ssh $SSHOPTS "$targetHost" "$@"
+        ssh $SSHOPTS "$targetHost" "$maybeSudo$@"
     fi
 }
 
@@ -227,6 +231,13 @@ if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" -a -z "$fast" ]; then
     fi
 fi
 
+# Find configuration.nix and open editor instead of building.
+if [ "$action" = edit ]; then
+    NIXOS_CONFIG=${NIXOS_CONFIG:-$(nix-instantiate --find-file nixos-config)}
+    exec "${EDITOR:-nano}" "$NIXOS_CONFIG"
+    exit 1
+fi
+
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
@@ -260,6 +271,14 @@ if [ -n "$rollback" -o "$action" = dry-build ]; then
     buildNix=
 fi
 
+nixSystem() {
+    machine="$(uname -m)"
+    if [[ "$machine" =~ i.86 ]]; then
+        machine=i686
+    fi
+    echo $machine-linux
+}
+
 prebuiltNix() {
     machine="$1"
     if [ "$machine" = x86_64 ]; then
@@ -279,7 +298,9 @@ if [ -n "$buildNix" ]; then
     nixDrv=
     if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nix.drv --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
         if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root $tmpDir/nix.drv --indirect -A nix "${extraBuildFlags[@]}")"; then
-            nixStorePath="$(prebuiltNix "$(uname -m)")"
+            if ! nixStorePath="$(nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A $(nixSystem) | sed -e 's/^"//' -e 's/"$//')"; then
+                nixStorePath="$(prebuiltNix "$(uname -m)")"
+            fi
             if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
                 --option extra-binary-caches https://cache.nixos.org/; then
                 echo "warning: don't know how to get latest Nix" >&2

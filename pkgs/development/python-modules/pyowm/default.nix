@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, requests, geojson }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, requests, geojson }:
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "2.9.0";
+  version = "2.10.0";
+
+  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed175873823a2fedb48e453505c974ca39f3f75006ef1af54fdbcf72e6796849";
+    sha256 = "8fd41a18536f4d6c432bc6d9ea69994efb1ea9b43688cf19523659b6f4d86cf7";
   };
 
   propagatedBuildInputs = [ requests geojson ];
@@ -14,8 +16,7 @@ buildPythonPackage rec {
   # This may actually break the package.
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "requests>=2.18.2,<2.19" "requests"  \
-      --replace "geojson>=2.3.0,<2.4" "geojson<2.5,>=2.3.0"
+      --replace "requests>=2.18.2,<2.19" "requests"
   '';
 
   # No tests in archive

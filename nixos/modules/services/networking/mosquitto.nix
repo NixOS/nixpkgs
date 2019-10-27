@@ -17,7 +17,6 @@ let
   '';
 
   mosquittoConf = pkgs.writeText "mosquitto.conf" ''
-    pid_file /run/mosquitto/pid
     acl_file ${aclFile}
     persistence true
     allow_anonymous ${boolToString cfg.allowAnonymous}
@@ -45,12 +44,12 @@ in
 
   options = {
     services.mosquitto = {
-      enable = mkEnableOption "Enable the MQTT Mosquitto broker.";
+      enable = mkEnableOption "the MQTT Mosquitto broker";
 
       host = mkOption {
         default = "127.0.0.1";
         example = "0.0.0.0";
-        type = types.string;
+        type = types.str;
         description = ''
           Host to listen on without SSL.
         '';
@@ -66,7 +65,7 @@ in
       };
 
       ssl = {
-        enable = mkEnableOption "Enable SSL listener.";
+        enable = mkEnableOption "SSL listener";
 
         cafile = mkOption {
           type = types.nullOr types.path;
@@ -89,7 +88,7 @@ in
         host = mkOption {
           default = "0.0.0.0";
           example = "localhost";
-          type = types.string;
+          type = types.str;
           description = ''
             Host to listen on with SSL.
           '';
@@ -136,7 +135,7 @@ in
             };
 
             acl = mkOption {
-              type = types.listOf types.string;
+              type = types.listOf types.str;
               example = [ "topic read A/B" "topic A/#" ];
               description = ''
                 Control client access to topics on the broker.
@@ -196,15 +195,15 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        Type = "forking";
+        Type = "notify";
+        NotifyAccess = "main";
         User = "mosquitto";
         Group = "mosquitto";
         RuntimeDirectory = "mosquitto";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
-        ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c ${mosquittoConf} -d";
+        ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c ${mosquittoConf}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        PIDFile = "/run/mosquitto/pid";
       };
       preStart = ''
         rm -f ${cfg.dataDir}/passwd
@@ -214,7 +213,7 @@ in
           if c.hashedPassword != null then
             "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
           else optionalString (c.password != null)
-            "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} ${c.password}"
+            "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} '${c.password}'"
         ) cfg.users);
     };
 

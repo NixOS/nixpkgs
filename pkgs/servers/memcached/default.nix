@@ -1,13 +1,17 @@
 {stdenv, fetchurl, cyrus_sasl, libevent}:
 
 stdenv.mkDerivation rec {
-  version = "1.5.10";
-  name = "memcached-${version}";
+  version = "1.5.19";
+  pname = "memcached";
 
   src = fetchurl {
-    url = "https://memcached.org/files/${name}.tar.gz";
-    sha256 = "0jqw3z0408yx0lzc6ykn4d29n02dk31kqnmq9b3ldmcnpl6hck29";
+    url = "https://memcached.org/files/${pname}-${version}.tar.gz";
+    sha256 = "1q2bb858iwc1jncav5vfl8c7dic9r1wqni5724qmy8ads6idmp1x";
   };
+
+  configureFlags = [
+     "ac_cv_c_endian=${if stdenv.hostPlatform.isBigEndian then "big" else "little"}"
+  ];
 
   buildInputs = [cyrus_sasl libevent];
 

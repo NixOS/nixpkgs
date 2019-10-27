@@ -1,0 +1,131 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-emacs">
+  <title>Emacs</title>
+
+  <section xml:id="sec-emacs-config">
+   <title>Configuring Emacs</title>
+
+   <para>
+    The Emacs package comes with some extra helpers to make it easier to configure. <varname>emacsWithPackages</varname> allows you to manage packages from ELPA. This means that you will not have to install that packages from within Emacs. For instance, if you wanted to use <literal>company</literal>, <literal>counsel</literal>, <literal>flycheck</literal>, <literal>ivy</literal>, <literal>magit</literal>, <literal>projectile</literal>, and <literal>use-package</literal> you could use this as a <filename>~/.config/nixpkgs/config.nix</filename> override:
+   </para>
+
+<screen>
+{
+  packageOverrides = pkgs: with pkgs; {
+    myEmacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+      company
+      counsel
+      flycheck
+      ivy
+      magit
+      projectile
+      use-package
+    ]));
+  }
+}
+</screen>
+
+   <para>
+    You can install it like any other packages via <command>nix-env -iA myEmacs</command>. However, this will only install those packages. It will not <literal>configure</literal> them for us. To do this, we need to provide a configuration file. Luckily, it is possible to do this from within Nix! By modifying the above example, we can make Emacs load a custom config file. The key is to create a package that provide a <filename>default.el</filename> file in <filename>/share/emacs/site-start/</filename>. Emacs knows to load this file automatically when it starts.
+   </para>
+
+<screen>
+{
+  packageOverrides = pkgs: with pkgs; rec {
+    myEmacsConfig = writeText "default.el" ''
+;; initialize package
+
+(require 'package)
+(package-initialize 'noactivate)
+(eval-when-compile
+  (require 'use-package))
+
+;; load some packages
+
+(use-package company
+  :bind ("&lt;C-tab&gt;" . company-complete)
+  :diminish company-mode
+  :commands (company-mode global-company-mode)
+  :defer 1
+  :config
+  (global-company-mode))
+
+(use-package counsel
+  :commands (counsel-descbinds)
+  :bind (([remap execute-extended-command] . counsel-M-x)
+         ("C-x C-f" . counsel-find-file)
+         ("C-c g" . counsel-git)
+         ("C-c j" . counsel-git-grep)
+         ("C-c k" . counsel-ag)
+         ("C-x l" . counsel-locate)
+         ("M-y" . counsel-yank-pop)))
+
+(use-package flycheck
+  :defer 2
+  :config (global-flycheck-mode))
+
+(use-package ivy
+  :defer 1
+  :bind (("C-c C-r" . ivy-resume)
+         ("C-x C-b" . ivy-switch-buffer)
+         :map ivy-minibuffer-map
+         ("C-j" . ivy-call))
+  :diminish ivy-mode
+  :commands ivy-mode
+  :config
+  (ivy-mode 1))
+
+(use-package magit
+  :defer
+  :if (executable-find "git")
+  :bind (("C-x g" . magit-status)
+         ("C-x G" . magit-dispatch-popup))
+  :init
+  (setq magit-completing-read-function 'ivy-completing-read))
+
+(use-package projectile
+  :commands projectile-mode
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :defer 5
+  :config
+  (projectile-global-mode))
+    '';
+    myEmacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+      (runCommand "default.el" {} ''
+mkdir -p $out/share/emacs/site-lisp
+cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
+'')
+      company
+      counsel
+      flycheck
+      ivy
+      magit
+      projectile
+      use-package
+    ]));
+  };
+}
+</screen>
+
+   <para>
+    This provides a fairly full Emacs start file. It will load in addition to the user's presonal config. You can always disable it by passing <command>-q</command> to the Emacs command.
+   </para>
+
+   <para>
+    Sometimes <varname>emacsWithPackages</varname> is not enough, as this package set has some priorities imposed on packages (with the lowest priority assigned to Melpa Unstable, and the highest for packages manually defined in <filename>pkgs/top-level/emacs-packages.nix</filename>). But you can't control this priorities when some package is installed as a dependency. You can override it on per-package-basis, providing all the required dependencies manually - but it's tedious and there is always a possibility that an unwanted dependency will sneak in through some other package. To completely override such a package you can use <varname>overrideScope'</varname>.
+   </para>
+
+<screen>
+overrides = self: super: rec {
+  haskell-mode = self.melpaPackages.haskell-mode;
+  ...
+};
+((emacsPackagesGen emacs).overrideScope' overrides).emacsWithPackages (p: with p; [
+  # here both these package will use haskell-mode of our own choice
+  ghc-mod
+  dante
+])
+</screen>
+  </section>
+</section>

@@ -1,15 +1,25 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation rec {
-  name = "wee-slack-${version}";
-  version = "2.1.1";
+  pname = "wee-slack";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
-    sha256 = "05caackz645aw6kljmiihiy7xz9jld8b9blwpmh0cnaihavgj1wc";
+    sha256 = "0544j6vqbvb2xshq7ma2a3apx2vvpgfg3jh5prg265wnh4991nsw";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./libpath.patch;
+      env = "${buildEnv {
+        name = "wee-slack-env";
+        paths = with python3Packages; [ websocket_client six ];
+      }}/${python3Packages.python.sitePackages}";
+    })
+  ];
 
   passthru.scripts = [ "wee_slack.py" ];
 
@@ -21,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/wee-slack/wee-slack;
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ willibutz ];
     description = ''
       A WeeChat plugin for Slack.com. Synchronizes read markers, provides typing notification, search, etc..
     '';

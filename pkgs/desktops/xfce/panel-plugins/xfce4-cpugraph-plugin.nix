@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, exo, libXtst, xproto, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk, hicolor-icon-theme }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, exo, libXtst, xorgproto, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk, hicolor-icon-theme }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool glib exo libXtst xproto libxfce4util libxfce4ui xfce4-panel xfconf gtk hicolor-icon-theme ];
+  buildInputs = [ intltool glib exo libXtst xorgproto libxfce4util libxfce4ui xfce4-panel xfconf gtk hicolor-icon-theme ];
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

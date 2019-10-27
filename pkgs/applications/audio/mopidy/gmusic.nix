@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
     mopidy
     pythonPackages.requests
     pythonPackages.gmusicapi
-    pythonPackages.cachetools_1
+    pythonPackages.cachetools
   ];
 
   doCheck = false;

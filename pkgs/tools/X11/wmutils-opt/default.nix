@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libxcb }:
 
 stdenv.mkDerivation rec {
-  name = "wmutils-opt-${version}";
+  pname = "wmutils-opt";
   version = "1.0";
 
   src = fetchFromGitHub {

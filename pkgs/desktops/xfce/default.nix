@@ -3,7 +3,7 @@
 lib.makeScope pkgs.newScope (self: with self; {
   #### NixOS support
 
-  inherit (pkgs.gnome2) libglade libwnck vte gtksourceview;
+  inherit (pkgs.gnome2) libglade vte gtksourceview;
   inherit (pkgs.gnome3) dconf;
   inherit (pkgs.perlPackages) URI;
 
@@ -20,7 +20,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   garcon = callPackage ./core/garcon.nix { };
 
-  # When built with GTK+3, it was breaking GTK+3 app layout
+  # When built with GTK 3, it was breaking GTK 3 app layout
   gtk-xfce-engine = callPackage ./core/gtk-xfce-engine.nix { withGtk3 = false; };
 
   libxfce4ui = callPackage ./core/libxfce4ui.nix { };
@@ -151,7 +151,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-pulseaudio-plugin = callPackage ./panel-plugins/xfce4-pulseaudio-plugin.nix { };
 
-  #### GTK+3 (deprecated, see NixOS/nixpkgs#32763)
+  #### GTK3 (deprecated, see NixOS/nixpkgs#32763)
 
   libxfce4ui_gtk3 = libxfce4ui.override { withGtk3 = true; };
 

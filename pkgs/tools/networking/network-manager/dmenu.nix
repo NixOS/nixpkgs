@@ -1,9 +1,9 @@
 { stdenv, glib, fetchFromGitHub, networkmanager, python3Packages
-, gobjectIntrospection }:
+, gobject-introspection }:
 
 let inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
-  name = "networkmanager_dmenu-${version}";
+  pname = "networkmanager_dmenu";
   version = "1.1";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1z6151z7c4jv5k2i50zr7ld4k3m07dgpmss9f3hsav95cv55dcnb";
   };
 
-  buildInputs = [ glib python pygobject3 gobjectIntrospection networkmanager python3Packages.wrapPython ];
+  buildInputs = [ glib python pygobject3 gobject-introspection networkmanager python3Packages.wrapPython ];
 
   dontBuild = true;
 

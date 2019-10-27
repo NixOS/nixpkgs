@@ -1,17 +1,19 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "rclone-${version}";
-  version = "1.43.1";
-
-  goPackagePath = "github.com/ncw/rclone";
+  pname = "rclone";
+  version = "1.50.0";
 
   src = fetchFromGitHub {
-    owner = "ncw";
-    repo = "rclone";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0iz427gdm8cxx3kbjmhw7jsvi9j0ppb5aqcq4alwf72fvpvql3mx";
+    sha256 = "0k4fybz4670cqg1rpx0c1ximf1x6yl1f788hx9raxkwp5wv703kw";
   };
+
+  goPackagePath = "github.com/rclone/rclone";
+
+  subPackages = [ "." ];
 
   outputs = [ "bin" "out" "man" ];
 

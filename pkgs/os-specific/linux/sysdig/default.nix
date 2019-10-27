@@ -1,19 +1,22 @@
-{stdenv, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils}:
+{ stdenv, fetchFromGitHub, cmake, kernel
+, luajit, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, c-ares, protobuf, grpc
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "sysdig-${version}";
-  version = "0.23.1";
+  pname = "sysdig";
+  version = "0.26.4";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "0q52yfag97n6cvrnzgx7inx11zdg7bgwkvqn2idsg9874fd2wkzh";
+    sha256 = "1v2j1ns17wyj7xl91p6wy1iwfx2fnn8af9nm939skc6229m87zzn";
   };
 
+  nativeBuildInputs = [ cmake perl ];
   buildInputs = [
-    cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc elfutils
+    zlib luajit ncurses jsoncpp libb64 openssl curl jq gcc elfutils tbb c-ares protobuf grpc
   ] ++ optional (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
@@ -30,6 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
+    cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl")
+
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -51,9 +56,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
-    license = licenses.gpl2;
+    license = with licenses; [ asl20 gpl2 mit ];
     maintainers = [maintainers.raskin];
     platforms = ["x86_64-linux"] ++ platforms.darwin;
+    broken = kernel != null && versionOlder kernel.version "4.14";
+    homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";
   };
 }

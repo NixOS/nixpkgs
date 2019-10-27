@@ -2,7 +2,7 @@
 , qtbase, qtwebkit, poppler, qmake, hunspell, html-tidy}:
 
 mkDerivation rec {
-  name = "nixnote2-${version}";
+  pname = "nixnote2";
   version = "2.0.2";
 
   src = fetchFromGitHub {
@@ -30,8 +30,9 @@ mkDerivation rec {
     substituteInPlace nixnote.cpp --replace 'tidyProcess.start("tidy' 'tidyProcess.start("${html-tidy}/bin/tidy'
   '';
 
-  postInstal = ''
+  postInstall = ''
     cp images/windowIcon.png $out/share/pixmaps/nixnote2.png
+    cp theme.ini $out/share/nixnote2/theme.ini
   '';
 
   meta = with stdenv.lib; {

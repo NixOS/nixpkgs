@@ -27,6 +27,9 @@
 , # The root file system type.
   fsType ? "ext4"
 
+, # Filesystem label
+  label ? "nixos"
+
 , # The initial NixOS configuration file to be copied to
   # /etc/nixos/configuration.nix.
   configFile ? null
@@ -84,7 +87,7 @@ let format' = format; in let
   # FIXME: merge with channel.nix / make-channel.nix.
   channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
     mkdir -p $out
-    cp -prd ${nixpkgs} $out/nixos
+    cp -prd ${nixpkgs.outPath} $out/nixos
     chmod -R u+w $out/nixos
     if [ ! -e $out/nixos/nixpkgs ]; then
       ln -s . $out/nixos/nixpkgs
@@ -134,9 +137,9 @@ let format' = format; in let
       # Get start & length of the root partition in sectors to $START and $SECTORS.
       eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-      mkfs.${fsType} -F -L nixos $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
     '' else ''
-      mkfs.${fsType} -F -L nixos $diskImage
+      mkfs.${fsType} -F -L ${label} $diskImage
     ''}
 
     root="$PWD/root"

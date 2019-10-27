@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "transaction";
-  version = "2.2.1";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2242070e437e5d555ea3df809cb517860513254c828f33847df1c5e4b776c7a";
+    sha256 = "17wz1y524ca07vr03yddy8dv0gbscs06dbdywmllxv5rc725jq3j";
   };
 
   propagatedBuildInputs = [ zope_interface mock ];

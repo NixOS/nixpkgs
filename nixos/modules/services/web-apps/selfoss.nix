@@ -4,7 +4,6 @@ let
   cfg = config.services.selfoss;
 
   poolName = "selfoss_pool";
-  phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
 
   dataDir = "/var/lib/selfoss";
 
@@ -21,8 +20,8 @@ let
       db_database=${cfg.database.name}
       db_username=${cfg.database.user}
       db_password=${cfg.database.password}
-      db_port=${if (cfg.database.port != null) then cfg.database.port
-                    else default_port}
+      db_port=${toString (if (cfg.database.port != null) then cfg.database.port
+                    else default_port)}
     ''
     }
     ${cfg.extraConfig}
@@ -115,22 +114,22 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = ''
-        listen = "${phpfpmSocketName}";
-        listen.owner = nginx
-        listen.group = nginx
-        listen.mode = 0600
-        user = nginx
-        pm = dynamic
-        pm.max_children = 75
-        pm.start_servers = 10
-        pm.min_spare_servers = 5
-        pm.max_spare_servers = 20
-        pm.max_requests = 500
-        catch_workers_output = 1
-      '';
+    services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
+      ${poolName} = {
+        user = "nginx";
+        settings = mapAttrs (name: mkDefault) {
+          "listen.owner" = "nginx";
+          "listen.group" = "nginx";
+          "listen.mode" = "0600";
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 10;
+          "pm.min_spare_servers" = 5;
+          "pm.max_spare_servers" = 20;
+          "pm.max_requests" = 500;
+          "catch_workers_output" = 1;
+        };
+      };
     };
 
     systemd.services.selfoss-config = {

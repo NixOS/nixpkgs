@@ -1,12 +1,12 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, libusb1, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, libusb1, pytest }:
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "1.6.6";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a49917a2262cf7134396f6720c8be011f14aabfc5cdc53f880cc672c0f39d271";
+    sha256 = "adf64a4f3f5c94643a1286f8153bcf4bc787c348b38934aacd7fe17fbeebc571";
   };
 
   postPatch = ''

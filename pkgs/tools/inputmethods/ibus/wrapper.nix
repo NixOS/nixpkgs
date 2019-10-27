@@ -1,5 +1,5 @@
 { stdenv, runCommand, makeWrapper, lndir
-, dconf, hicolor-icon-theme, ibus, librsvg, plugins
+, dconf, hicolor-icon-theme, ibus, librsvg, plugins ? []
 }:
 
 let

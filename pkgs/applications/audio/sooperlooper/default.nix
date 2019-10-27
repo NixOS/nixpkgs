@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sooperlooper-git-${version}";
+  pname = "sooperlooper-git";
   version = "2016-07-19";
 
   src = fetchFromGitHub {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       and the engine can be run standalone on a computer without a monitor.
     '';
 
-    version = "${version}";
+    version = version;
     homepage = http://essej.net/sooperlooper/index.html;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];

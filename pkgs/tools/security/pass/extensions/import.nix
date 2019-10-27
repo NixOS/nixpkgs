@@ -4,7 +4,7 @@ let
   pythonEnv = pythonPackages.python.withPackages (p: [ p.defusedxml ]);
 
 in stdenv.mkDerivation rec {
-  name = "pass-import-${version}";
+  pname = "pass-import";
   version = "2.3";
 
   src = fetchFromGitHub {

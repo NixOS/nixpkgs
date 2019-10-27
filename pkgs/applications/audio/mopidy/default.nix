@@ -1,27 +1,27 @@
 { stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
-, gst_all_1, glib-networking, gobjectIntrospection
+, gst_all_1, glib-networking, gobject-introspection
 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy";
-  version = "2.1.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     rev = "v${version}";
-    sha256 = "0krq5fbscqxayyc4vxai7iwxm2kdbgs5jicrdb013v04phw2za06";
+    sha256 = "1qdflxr0an6l2m3j90h55bzyj7rjlkkwmxx945hwv8xi472rcgdj";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
     gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    glib-networking gobjectIntrospection
+    glib-networking gobject-introspection
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    gst-python pygobject3 pykka tornado requests
+    gst-python pygobject3 pykka tornado_4 requests setuptools
   ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python;
 
   # There are no tests
@@ -38,7 +38,7 @@ pythonPackages.buildPythonApplication rec {
       SoundCloud, Google Play Music, and more
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ rickynils fpletz ];
+    maintainers = [ maintainers.fpletz ];
     hydraPlatforms = [];
   };
 }

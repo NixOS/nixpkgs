@@ -1,5 +1,5 @@
 {
-  stdenv, fetchFromGitHub,
+  lib, mkDerivation, fetchFromGitHub,
   cmake, pkgconfig, lxqt-build-tools,
   qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
   kguiaddons, liblxqt, libqtxdg, lxqt-globalkeys, libsysstat,
@@ -7,16 +7,15 @@
   lxmenu-data, pcre, libXdamage
 }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-panel";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "056khr3smyrdi26zpclwv1qrmk0zxr9cnk65ad9c0xavzk6ya3xz";
+    sha256 = "1py3i7qgm6h2iwjwqfjml1rp06s7ls1d7z5i9iizsmfshdzkaq86";
   };
 
   nativeBuildInputs = [
@@ -50,18 +49,7 @@ stdenv.mkDerivation rec {
     libXdamage
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
-  postPatch = ''
-    for dir in  autostart menu; do
-      substituteInPlace $dir/CMakeLists.txt \
-        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-    done
-    substituteInPlace panel/CMakeLists.txt \
-      --replace "DESTINATION \''${LXQT_ETC_XDG_DIR}" "DESTINATION etc/xdg"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The LXQt desktop panel";
     homepage = https://github.com/lxqt/lxqt-panel;
     license = licenses.lgpl21;

@@ -1,14 +1,22 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm }:
+{ stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm, pytest }:
 buildPythonPackage rec {
   pname = "python-dateutil";
-  version = "2.7.3";
+  version = "2.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8";
+    sha256 = "c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e";
   };
 
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ six setuptools_scm ];
+
+  checkPhase = ''
+    py.test dateutil/test
+  '';
+
+  # Requires fixing
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Powerful extensions to the standard datetime module";

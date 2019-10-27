@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, gtk3, atk, gobjectIntrospection
-, spidermonkey_52, pango, readline, glib, libxml2, dbus, gdk_pixbuf
+{ fetchurl, stdenv, pkgconfig, gnome3, gtk3, atk, gobject-introspection
+, spidermonkey_60, pango, readline, glib, libxml2, dbus, gdk-pixbuf
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gjs-${version}";
-  version = "1.52.3";
+  pname = "gjs";
+  version = "1.58.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1z4n15wdz6pbqd2hfzrqc8mmprhv50v4jk43p08v0xv07yldh8ff";
+    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1xf68rbagkflb9yi3visfw8cbxqlzd717y8jakgw0y6whzm1dpxl";
   };
 
   passthru = {
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "installedTests" ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ libxml2 gobjectIntrospection gtk3 glib pango readline dbus ];
+  buildInputs = [ libxml2 gobject-introspection glib pango readline dbus ];
 
-  propagatedBuildInputs = [ spidermonkey_52 ];
+  propagatedBuildInputs = [ spidermonkey_60 ];
 
   configureFlags = [
     "--enable-installed-tests"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     moveToOutput "libexec/gjs/installed-tests" "$installedTests"
 
     wrapProgram "$installedTests/libexec/gjs/installed-tests/minijasmine" \
-      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gtk3 atk pango.out gdk_pixbuf ]}:$installedTests/libexec/gjs/installed-tests"
+      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gtk3 atk pango.out gdk-pixbuf ]}:$installedTests/libexec/gjs/installed-tests"
   '';
 
   meta = with stdenv.lib; {

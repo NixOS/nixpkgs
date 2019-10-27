@@ -189,11 +189,11 @@ in {
 
       preStart =
         let replacePlugins =
-              if isNull cfg.plugins
+              if cfg.plugins == null
               then ""
               else
                 let pluginCmds = lib.attrsets.mapAttrsToList
-                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.hpi")
+                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
                       cfg.plugins;
                 in ''
                   rm -r ${cfg.home}/plugins || true

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, xercesc }:
 
 stdenv.mkDerivation rec {
-  name    = "xqilla-${version}";
+  pname = "xqilla";
   version = "2.3.4";
 
   src = fetchurl {

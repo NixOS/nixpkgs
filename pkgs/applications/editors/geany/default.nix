@@ -3,15 +3,16 @@
 with stdenv.lib;
 
 let
-  version = "1.33";
+  version = "1.36";
 in
 
 stdenv.mkDerivation rec {
-  name = "geany-${version}";
+  pname = "geany";
+  inherit version;
 
   src = fetchurl {
-    url = "https://download.geany.org/${name}.tar.bz2";
-    sha256 = "66baaff43f12caebcf0efec9a5533044dc52837f799c73a1fd7312caa86099c2";
+    url = "https://download.geany.org/${pname}-${version}.tar.bz2";
+    sha256 = "0gnm17cr4rf3pmkf0axz4a0fxwnvp55ji0q0lzy88yqbshyxv14i";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.geany.org/;
     license = licenses.gpl2;
-    maintainers = [];
+    maintainers = with maintainers; [ frlan ];
     platforms = platforms.all;
   };
 }

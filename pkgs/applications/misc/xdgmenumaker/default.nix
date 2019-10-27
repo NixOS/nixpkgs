@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, txt2tags, python2Packages }:
 
 stdenv.mkDerivation rec {
-  name = "xdgmenumaker-${version}";
-  version = "1.4";
+  pname = "xdgmenumaker";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "gapan";
     repo = "xdgmenumaker";
     rev = version;
-    sha256 = "0i909dk9chdsc7njp5llgm5xlag4lr0nkxkwl1g5lf8cvdjrawh2";
+    sha256 = "1vrsp5c1ah7p4dpwd6aqvinpwzd8crdimvyyr3lbm3c6cwpyjmif";
   };
 
   nativeBuildInputs = [

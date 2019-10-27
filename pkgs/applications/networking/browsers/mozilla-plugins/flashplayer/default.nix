@@ -9,7 +9,7 @@
 , expat
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , graphite2
@@ -33,6 +33,7 @@
 , libXxf86vm
 , libdrm
 , libffi
+, libglvnd
 , libpng
 , libvdpau
 , libxcb
@@ -72,26 +73,26 @@ let
       "";
 in
 stdenv.mkDerivation rec {
-  name = "flashplayer-${version}";
-  version = "31.0.0.108";
+  pname = "flashplayer";
+  version = "32.0.0.270";
 
   src = fetchurl {
     url =
       if debug then
-        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flash_player_npapi_linux_debug.${arch}.tar.gz"
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_npapi_linux_debug.${arch}.tar.gz"
       else
         "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "1mn29ahxjf6pdy2zp2na14cz46jrl88f54kp3bs3cz75syyizyb6"
+          "1c3dn4gkl40i5sjkvpbkn9fl82vjhy1v7dhrayk3ncfsxcyvbcm0"
         else
-          "0inpj6bcsn5lh8gdv1wxpgipzrmpc553nhr68a55b2wff9fkv1ci"
+          "1g7i9mihn5g9i71xyf805k19yk41vsr85gzk87gm426m0hcgg89i"
       else
         if arch == "x86_64" then
-          "1dfgsl5jf8ja9f7wwkzj5bfz1v5rdsyf4qhg1shqqldadmyyha7p"
+          "16lxgkbr2hg49vhc7414zkh1kblhysf779854faay308ml3i5kdw"
         else
-          "0yiqwwqs3z9zzkfgqzjwqqdr2vaj1ia5xychs9fgxix3y4j934da";
+          "0jrdzm8pw7aq32w7m4rvkhj7mmqyddh5yxpj7q3d9hxrwshkikvj";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -129,18 +130,18 @@ stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk_pixbuf glib
+      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk-pixbuf glib
       glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
-      libXrandr libXrender libXt libXxf86vm libdrm libffi libpng libvdpau
-      libxcb libxshmfence nspr nss pango pcre pixman zlib
+      libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
+      libvdpau libxcb libxshmfence nspr nss pango pcre pixman zlib
     ];
 
   meta = {
     description = "Adobe Flash Player browser plugin";
     homepage = http://www.adobe.com/products/flashplayer/;
     license = stdenv.lib.licenses.unfree;
-    maintainers = [];
+    maintainers = with stdenv.lib.maintainers; [ taku0 ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

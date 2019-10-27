@@ -1,0 +1,85 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-linux-kernel">
+  <title>Linux kernel</title>
+
+  <para>
+   The Nix expressions to build the Linux kernel are in <link
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel"><filename>pkgs/os-specific/linux/kernel</filename></link>.
+  </para>
+
+  <para>
+   The function that builds the kernel has an argument <varname>kernelPatches</varname> which should be a list of <literal>{name, patch, extraConfig}</literal> attribute sets, where <varname>name</varname> is the name of the patch (which is included in the kernel’s <varname>meta.description</varname> attribute), <varname>patch</varname> is the patch itself (possibly compressed), and <varname>extraConfig</varname> (optional) is a string specifying extra options to be concatenated to the kernel configuration file (<filename>.config</filename>).
+  </para>
+
+  <para>
+   The kernel derivation exports an attribute <varname>features</varname> specifying whether optional functionality is or isn’t enabled. This is used in NixOS to implement kernel-specific behaviour. For instance, if the kernel has the <varname>iwlwifi</varname> feature (i.e. has built-in support for Intel wireless chipsets), then NixOS doesn’t have to build the external <varname>iwlwifi</varname> package:
+<programlisting>
+modulesTree = [kernel]
+  ++ pkgs.lib.optional (!kernel.features ? iwlwifi) kernelPackages.iwlwifi
+  ++ ...;
+</programlisting>
+  </para>
+
+  <para>
+   How to add a new (major) version of the Linux kernel to Nixpkgs:
+   <orderedlist>
+    <listitem>
+     <para>
+      Copy the old Nix expression (e.g. <filename>linux-2.6.21.nix</filename>) to the new one (e.g. <filename>linux-2.6.22.nix</filename>) and update it.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add the new kernel to <filename>all-packages.nix</filename> (e.g., create an attribute <varname>kernel_2_6_22</varname>).
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Now we’re going to update the kernel configuration. First unpack the kernel. Then for each supported platform (<literal>i686</literal>, <literal>x86_64</literal>, <literal>uml</literal>) do the following:
+      <orderedlist>
+       <listitem>
+        <para>
+         Make an copy from the old config (e.g. <filename>config-2.6.21-i686-smp</filename>) to the new one (e.g. <filename>config-2.6.22-i686-smp</filename>).
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         Copy the config file for this platform (e.g. <filename>config-2.6.22-i686-smp</filename>) to <filename>.config</filename> in the kernel source tree.
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         Run <literal>make oldconfig ARCH=<replaceable>{i386,x86_64,um}</replaceable></literal> and answer all questions. (For the uml configuration, also add <literal>SHELL=bash</literal>.) Make sure to keep the configuration consistent between platforms (i.e. don’t enable some feature on <literal>i686</literal> and disable it on <literal>x86_64</literal>).
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         If needed you can also run <literal>make menuconfig</literal>:
+<screen>
+<prompt>$ </prompt>nix-env -i ncurses
+<prompt>$ </prompt>export NIX_CFLAGS_LINK=-lncurses
+<prompt>$ </prompt>make menuconfig ARCH=<replaceable>arch</replaceable></screen>
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         Copy <filename>.config</filename> over the new config file (e.g. <filename>config-2.6.22-i686-smp</filename>).
+        </para>
+       </listitem>
+      </orderedlist>
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Test building the kernel: <literal>nix-build -A kernel_2_6_22</literal>. If it compiles, ship it! For extra credit, try booting NixOS with it.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      It may be that the new kernel requires updating the external kernel modules and kernel-dependent packages listed in the <varname>linuxPackagesFor</varname> function in <filename>all-packages.nix</filename> (such as the NVIDIA drivers, AUFS, etc.). If the updated packages aren’t backwards compatible with older kernels, you may need to keep the older versions around.
+     </para>
+    </listitem>
+   </orderedlist>
+  </para>
+ </section>

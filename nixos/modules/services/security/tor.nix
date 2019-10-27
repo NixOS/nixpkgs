@@ -57,6 +57,11 @@ let
     AutomapHostsSuffixes ${concatStringsSep "," cfg.client.dns.automapHostsSuffixes}
     ''}
   ''
+  # Explicitly disable the SOCKS server if the client is disabled.  In
+  # particular, this makes non-anonymous hidden services possible.
+  + optionalString (! cfg.client.enable) ''
+  SOCKSPort 0
+  ''
   # Relay config
   + optionalString cfg.relay.enable ''
     ORPort ${toString cfg.relay.port}
@@ -76,7 +81,7 @@ let
 
     ${optionalString (elem cfg.relay.role ["bridge" "private-bridge"]) ''
       BridgeRelay 1
-      ServerTransportPlugin obfs2,obfs3 exec ${pkgs.pythonPackages.obfsproxy}/bin/obfsproxy managed
+      ServerTransportPlugin ${concatStringsSep "," cfg.relay.bridgeTransports} exec ${pkgs.obfs4}/bin/obfs4proxy managed
       ExtORPort auto
       ${optionalString (cfg.relay.role == "private-bridge") ''
         ExtraInfoStatistics 0
@@ -87,6 +92,7 @@ let
   # Hidden services
   + concatStrings (flip mapAttrsToList cfg.hiddenServices (n: v: ''
     HiddenServiceDir ${torDirectory}/onion/${v.name}
+    ${optionalString (v.version != null) "HiddenServiceVersion ${toString v.version}"}
     ${flip concatMapStrings v.map (p: ''
       HiddenServicePort ${toString p.port} ${p.destination}
     '')}
@@ -349,7 +355,7 @@ in
                 <para>
                   Regular bridge. Works like a regular relay, but
                   doesn't list you in the public relay directory and
-                  hides your Tor node behind obfsproxy.
+                  hides your Tor node behind obfs4proxy.
                 </para>
 
                 <para>
@@ -416,6 +422,13 @@ in
             </varlistentry>
             </variablelist>
           '';
+        };
+
+        bridgeTransports = mkOption {
+          type = types.listOf types.str;
+          default = ["obfs4"];
+          example = ["obfs2" "obfs3" "obfs4" "scramblesuit"];
+          description = "List of pluggable transports";
         };
 
         nickname = mkOption {
@@ -662,6 +675,12 @@ in
                  };
                }));
              };
+
+             version = mkOption {
+               default = null;
+               description = "Rendezvous service descriptor version to publish for the hidden service. Currently, versions 2 and 3 are supported. (Default: 2)";
+               type = types.nullOr (types.enum [ 2 3 ]);
+             };
           };
 
           config = {
@@ -703,7 +722,6 @@ in
     systemd.services.tor-init =
       { description = "Tor Daemon Init";
         wantedBy = [ "tor.service" ];
-        after = [ "local-fs.target" ];
         script = ''
           install -m 0700 -o tor -g tor -d ${torDirectory} ${torDirectory}/onion
           install -m 0750 -o tor -g tor -d ${torRunDirectory}

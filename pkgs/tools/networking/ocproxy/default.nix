@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.60";
-  name = "ocproxy-${version}";
+  pname = "ocproxy";
 
   src = fetchFromGitHub {
     owner = "cernekee";

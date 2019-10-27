@@ -1,40 +1,59 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, vala, gtk3, libxml2, granite, webkitgtk, clutter-gtk
-, clutter-gst, libunity, libnotify, sqlite, gst_all_1, libsoup, json-glib, gnome3, gobjectIntrospection, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, vala
+, pkgconfig
+, pantheon
+, gtk3
+, glib
+, libxml2
+, webkitgtk
+, clutter-gtk
+, clutter-gst
+, libunity
+, libnotify
+, sqlite
+, gst_all_1
+, json-glib
+, libgee
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "vocal";
-  version = "2.2.0";
-
-  name = "${pname}-${version}";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "needle-and-thread";
     repo = pname;
     rev = version;
-    sha256 = "09cm4azyaa9fmfymygf25gf0klpm5p04k6bc1i90jhw0f1im8sgl";
+    sha256 = "1c4n89rdl9r13kmmh2qymmy9sa6shjwai7df48k2kfn0pnzq5mad";
   };
 
   nativeBuildInputs = [
     cmake
-    gobjectIntrospection
     libxml2
     ninja
-    pkgconfig
     vala
+    pkgconfig
     wrapGAppsHook
   ];
 
   buildInputs = with gst_all_1; [
     clutter-gst
     clutter-gtk
-    gnome3.libgee
-    granite
+    glib
     gst-plugins-base
     gst-plugins-good
     gstreamer
+    gtk3
     json-glib
+    libgee
     libnotify
     libunity
+    pantheon.elementary-icon-theme
+    pantheon.granite
     sqlite
     webkitgtk
   ];

@@ -1,18 +1,18 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, setuptools-git, pytest-shutil, pytest-fixture-config, psutil
-, requests, future }:
+, pytest, pytest-shutil, pytest-fixture-config, psutil
+, requests, future, retry }:
 
 buildPythonPackage rec {
   pname = "pytest-server-fixtures";
-  version = "1.3.1";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "902607675ce2ee09bdc72381b4470f79504fc131afdc15174e49a84d031760df";
+    sha256 = "07vdv3y89qzv89ws0y48h92yplqsx208b9cizx80w644dazb398g";
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ setuptools-git pytest-shutil pytest-fixture-config psutil requests future ];
+  propagatedBuildInputs = [ pytest-shutil pytest-fixture-config psutil requests future retry ];
 
   # RuntimeError: Unable to find a free server number to start Xvfb
   doCheck = false;

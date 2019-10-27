@@ -1,0 +1,88 @@
+diff --git a/diesel/src/lib.rs b/diesel/src/lib.rs
+index 4e743eb4..97c53ed8 100644
+--- a/diesel/src/lib.rs
++++ b/diesel/src/lib.rs
+@@ -131,7 +131,6 @@
+ #![cfg_attr(feature = "unstable", feature(specialization, try_from))]
+ // Built-in Lints
+ #![deny(
+-    warnings,
+     missing_debug_implementations,
+     missing_copy_implementations,
+     missing_docs
+diff --git a/diesel_cli/src/main.rs b/diesel_cli/src/main.rs
+index 741ca003..cf93bb8f 100644
+--- a/diesel_cli/src/main.rs
++++ b/diesel_cli/src/main.rs
+@@ -1,5 +1,5 @@
+ // Built-in Lints
+-#![deny(warnings, missing_copy_implementations)]
++#![deny(missing_copy_implementations)]
+ // Clippy lints
+ #![allow(clippy::option_map_unwrap_or_else, clippy::option_map_unwrap_or)]
+ #![warn(
+diff --git a/diesel_cli/tests/tests.rs b/diesel_cli/tests/tests.rs
+index 2edee846..c96917c4 100644
+--- a/diesel_cli/tests/tests.rs
++++ b/diesel_cli/tests/tests.rs
+@@ -1,5 +1,3 @@
+-#![deny(warnings)]
+-
+ extern crate chrono;
+ extern crate diesel;
+ #[macro_use]
+diff --git a/diesel_derives/src/lib.rs b/diesel_derives/src/lib.rs
+index 2c43b2a3..44dcf3f9 100644
+--- a/diesel_derives/src/lib.rs
++++ b/diesel_derives/src/lib.rs
+@@ -1,6 +1,6 @@
+ #![recursion_limit = "1024"]
+ // Built-in Lints
+-#![deny(warnings, missing_copy_implementations)]
++#![deny(missing_copy_implementations)]
+ // Clippy lints
+ #![allow(
+     clippy::needless_pass_by_value,
+diff --git a/diesel_derives/tests/tests.rs b/diesel_derives/tests/tests.rs
+index 636fea66..f86f3dcc 100644
+--- a/diesel_derives/tests/tests.rs
++++ b/diesel_derives/tests/tests.rs
+@@ -1,5 +1,3 @@
+-#![deny(warnings)]
+-
+ #[macro_use]
+ extern crate cfg_if;
+ #[macro_use]
+diff --git a/diesel_migrations/migrations_internals/src/lib.rs b/diesel_migrations/migrations_internals/src/lib.rs
+index 933e21a8..7c4d0222 100644
+--- a/diesel_migrations/migrations_internals/src/lib.rs
++++ b/diesel_migrations/migrations_internals/src/lib.rs
+@@ -1,5 +1,5 @@
+ // Built-in Lints
+-#![deny(warnings, missing_debug_implementations, missing_copy_implementations)]
++#![deny(missing_debug_implementations, missing_copy_implementations)]
+ // Clippy lints
+ #![allow(
+     clippy::option_map_unwrap_or_else,
+diff --git a/diesel_migrations/migrations_macros/src/lib.rs b/diesel_migrations/migrations_macros/src/lib.rs
+index 0a83234e..2f509c04 100644
+--- a/diesel_migrations/migrations_macros/src/lib.rs
++++ b/diesel_migrations/migrations_macros/src/lib.rs
+@@ -1,5 +1,5 @@
+ // Built-in Lints
+-#![deny(warnings, missing_debug_implementations, missing_copy_implementations)]
++#![deny(missing_debug_implementations, missing_copy_implementations)]
+ // Clippy lints
+ #![allow(
+     clippy::option_map_unwrap_or_else,
+diff --git a/diesel_migrations/src/lib.rs b/diesel_migrations/src/lib.rs
+index c85414e5..f025f237 100644
+--- a/diesel_migrations/src/lib.rs
++++ b/diesel_migrations/src/lib.rs
+@@ -1,5 +1,5 @@
+ // Built-in Lints
+-#![deny(warnings, missing_copy_implementations)]
++#![deny(missing_copy_implementations)]
+ // Clippy lints
+ #![allow(
+     clippy::needless_pass_by_value,

@@ -1,0 +1,14 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-kakoune">
+  <title>Kakoune</title>
+
+  <para>
+   Kakoune can be built to autoload plugins:
+<programlisting>(kakoune.override {
+  configure = {
+    plugins = with pkgs.kakounePlugins; [ parinfer-rust ];
+  };
+})</programlisting>
+  </para>
+</section>

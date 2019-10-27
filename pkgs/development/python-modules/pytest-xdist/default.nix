@@ -1,17 +1,22 @@
-{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest, setuptools_scm, pytest-forked }:
+{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest
+, setuptools_scm, pytest-forked, filelock, six, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "1.23.0";
+  version = "1.28.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28e25e79698b2662b648319d3971c0f9ae0e6500f88258ccb9b153c31110ba9b";
+    sha256 = "f83a485293e81fd57c8a5a85a3f12473a532c5ca7dec518857cbb72766bb526c";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
-  buildInputs = [ pytest pytest-forked ];
-  propagatedBuildInputs = [ execnet ];
+  nativeBuildInputs = [ setuptools_scm pytest ];
+  checkInputs = [ pytest filelock ];
+  propagatedBuildInputs = [ execnet pytest-forked six ];
+
+  # Encountered a memory leak
+  # https://github.com/pytest-dev/pytest-xdist/issues/462
+  doCheck = !isPy3k;
 
   checkPhase = ''
     # Excluded tests access file system
@@ -26,5 +31,6 @@ buildPythonPackage rec {
     description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
     homepage = https://github.com/pytest-dev/pytest-xdist;
     license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

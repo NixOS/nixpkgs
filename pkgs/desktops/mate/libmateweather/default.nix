@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libsoup, tzdata, mate }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libsoup, tzdata }:
 
 stdenv.mkDerivation rec {
-  name = "libmateweather-${version}";
-  version = "1.21.0";
+  pname = "libmateweather";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1vj2pgry6wdscdcpwwagqlsjf8rkh4id67iw7d9qk1pfbhb2sznl";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1y3z82ymc7q6z8ly9f6nys0hbs373fjnvr6j7zwlgf6zc88f71h3";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

@@ -1,17 +1,19 @@
-{ stdenv, fetchPypi, buildPythonPackage, unidecode, regex, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, python, text-unidecode }:
 
 buildPythonPackage rec {
     pname = "python-slugify";
-    version = "1.2.5";
+    version = "3.0.6";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "5dbb360b882b2dabe0471a1a92f604504d83c2a73c71f2098d004ab62e695534";
+      sha256 = "8653d589308c91c67fe5c97a2afda0cfac9492061e69c0db90d1aef68fcd2332";
     };
-    doCheck = !isPy3k;
-    # (only) on python3 unittest loader (loadTestsFromModule) fails
 
-    propagatedBuildInputs = [ unidecode regex ];
+    propagatedBuildInputs = [ text-unidecode ];
+
+    checkPhase = ''
+      ${python.interpreter} test.py
+    '';
 
     meta = with stdenv.lib; {
       homepage = https://github.com/un33k/python-slugify;

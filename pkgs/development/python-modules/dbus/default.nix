@@ -1,17 +1,23 @@
-{ lib, fetchurl, buildPythonPackage, python, pkgconfig, dbus, dbus-glib, isPyPy
+{ lib, fetchPypi, buildPythonPackage, python, pkgconfig, dbus, dbus-glib, isPyPy
 , ncurses, pygobject3 }:
 
-if isPyPy then throw "dbus-python not supported for interpreter ${python.executable}" else buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "dbus-python";
-  version = "1.2.4";
+  version = "1.2.12";
   format = "other";
 
-  src = fetchurl {
-    url = "http://dbus.freedesktop.org/releases/dbus-python/${pname}-${version}.tar.gz";
-    sha256 = "1k7rnaqrk7mdkg0k6n2jn3d1mxsl7s3i07g5a8va5yvl3y3xdwg2";
+  outputs = [ "out" "dev" ];
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0q7jmldv0bxxqnbj63cd7i81vs6y85xys4r0n63z4n2y9wndxm6d";
   };
 
-  postPatch = "patchShebangs .";
+  patches = [
+    ./fix-includedir.patch
+  ];
+
+  disabled = isPyPy;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ dbus dbus-glib ]

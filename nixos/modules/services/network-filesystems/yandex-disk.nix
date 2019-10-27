@@ -29,7 +29,7 @@ in
 
       username = mkOption {
         default = "";
-        type = types.string;
+        type = types.str;
         description = ''
           Your yandex.com login name.
         '';
@@ -37,7 +37,7 @@ in
 
       password = mkOption {
         default = "";
-        type = types.string;
+        type = types.str;
         description = ''
           Your yandex.com password. Warning: it will be world-readable in /nix/store.
         '';
@@ -57,7 +57,7 @@ in
 
       excludes = mkOption {
         default = "";
-        type = types.string;
+        type = types.commas;
         example = "data,backup";
         description = ''
           Comma-separated list of directories which are excluded from synchronization.

@@ -1,19 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchpatch, z3, zlib, git }:
+{ stdenv, fetchFromGitHub, fetchpatch, z3, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "4.2.2";
-  name = "vampire-${version}";
+  pname = "vampire";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "vprover";
     repo = "vampire";
     rev = version;
-    sha256 = "1n0kf0g15yjw3v7z60l51h7fdn880mmvqsbb2szh48vzy20l92il";
-    fetchSubmodules = true;
-    leaveDotGit = true;
+    sha256 = "0v2fdfnk7l5xr5c4y54r25g1nbp4vi85zv29nbklh3r7aws3w9q1";
   };
 
-  nativeBuildInputs = [ git ];
   buildInputs = [ z3 zlib ];
 
   makeFlags = [ "vampire_z3_rel" "CC:=$(CC)" "CXX:=$(CXX)" ];

@@ -6,7 +6,8 @@
 
 let version = "2018SP2"; in
 stdenv.mkDerivation {
-  name = "draftsight-${version}";
+  pname = "draftsight";
+  inherit version;
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 

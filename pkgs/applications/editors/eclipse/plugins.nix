@@ -141,7 +141,7 @@ rec {
     name = "antlr-runtime-4.5.3";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
     };
 
@@ -153,7 +153,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = https://www.antlr.org/;
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -164,7 +164,7 @@ rec {
     name = "antlr-runtime-4.7.1";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "07f91mjclacrvkl8a307w2abq5wcqp0gcsnh0jg90ddfpqcnsla3";
     };
 
@@ -176,7 +176,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = https://www.antlr.org/;
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -254,12 +254,12 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    version = "9.0.1";
+    version = "9.9.0";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.0/${name}.zip";
-      sha256 = "0vdx0j9ci533wnk7y17qjvjyqx38hlrdw67z6pi05vfv3r6ys39x";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.9/${name}/${name}.zip";
+      sha256 = "1vgx7ggilfwmx0bjrhk7mwlwg1c8lb141ilj3vzwxivlffihy054";
     };
 
     meta = with stdenv.lib; {
@@ -282,7 +282,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://eclipse-cs.sourceforge.net/;
+      homepage = https://eclipse-cs.sourceforge.net/;
       description = "Checkstyle integration into the Eclipse IDE";
       license = licenses.lgpl21;
       platforms = platforms.all;
@@ -346,6 +346,33 @@ rec {
     };
   };
 
+  drools = buildEclipseUpdateSite rec {
+    name = "drools-${version}";
+    version = "7.17.0.Final";
+
+    src = fetchzip {
+      url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
+      sha512 = "2qzc1iszqfrfnw8xip78n3kp6hlwrvrr708vlmdk7nv525xhs0ssjaxriqdhcr0s6jripmmazxivv3763rnk2bfkh31hmbnckpx4r3m";
+      extraPostFetch = ''
+        # work around https://github.com/NixOS/nixpkgs/issues/38649
+        chmod go-w $out;
+
+        # update site is a couple levels deep, alongside some other irrelevant stuff
+        cd $out;
+        find . -type f -not -path ./binaries/org.drools.updatesite/\* -exec rm {} \;
+        rmdir sources;
+        mv binaries/org.drools.updatesite/* .;
+        rmdir binaries/org.drools.updatesite binaries;
+      '';
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://www.drools.org/;
+      description = "Drools is a Business Rules Management System (BRMS) solution";
+      license = licenses.asl20;
+    };
+  };
+
   eclemma = buildEclipseUpdateSite rec {
     name = "eclemma-${version}";
     version = "2.3.2.201409141915";
@@ -357,31 +384,8 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://www.eclemma.org/;
+      homepage = https://www.eclemma.org/;
       description = "EclEmma is a free Java code coverage tool for Eclipse";
-      license = licenses.epl10;
-      platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
-    };
-  };
-
-  emacsplus = buildEclipsePlugin rec {
-    name = "emacsplus-${version}";
-    version = "4.2.0";
-
-    srcFeature = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/features/com.mulgasoft.emacsplus.feature_${version}.jar";
-      sha256 = "0wja3cd7gq8w25797fxnafvcncjnmlv8qkl5iwqj7zja2f45vka8";
-    };
-
-    srcPlugin = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/plugins/com.mulgasoft.emacsplus_${version}.jar";
-      sha256 = "08yw45nr90mlpdzim74vsvdaxj41sgpxcrqk5ia6l2dzvrqlsjs1";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = http://www.mulgasoft.com/emacsplus/;
-      description = "Provides a more Emacs-like experience in the Eclipse text editors";
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -470,12 +474,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.9";
+    version = "4.13";
 
     src = fetchzip {
       stripRoot = false;
-      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/org.eclipse.jdt-4.9.zip;
-      sha256 = "144rqrw0crxd2v862dqxm2p5y60n4pbzdryv709xnhcw54rycm7n";
+      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.13-201909161045/org.eclipse.jdt-4.13.zip;
+      sha256 = "0sfpxph0cszcx1cihzzjn60qid8sxgl2xyr9x46fld4ian5a7vbr";
     };
 
     meta = with stdenv.lib; {
@@ -555,12 +559,12 @@ rec {
 
   spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
-    version = "3.1.6";
+    version = "3.1.11";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
-      sha256 = "1qsams12n64slp00nfc9v943sy9bzffzm7anqqaz2hjw64iia7fh";
+      sha256 = "0aanqwx3gy1arpbkqd846381hiy6272lzwhfjl94x8jhfykpqqbj";
     };
 
     meta = with stdenv.lib; {
@@ -587,7 +591,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://testng.org/;
+      homepage = https://testng.org/doc/;
       description = "Eclipse plugin for the TestNG testing framework";
       license = licenses.asl20;
       platforms = platforms.all;

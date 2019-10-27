@@ -17,8 +17,9 @@
 , postBuild ? null
 , document ? []
 , meta ? {}
-, groups ? ["default"]
+, groups ? null
 , ignoreCollisions ? false
+, buildInputs ? []
 , ...
 }@args:
 
@@ -51,7 +52,7 @@ let
     name
   else
     let
-      gem = gems."${pname}";
+      gem = gems.${pname};
       version = gem.version;
     in
       "${pname}-${version}";
@@ -69,7 +70,7 @@ let
 
   maybeCopyAll = pkgname: if pkgname == null then "" else
   let
-    mainGem = gems."${pkgname}" or (throw "bundlerEnv: gem ${pkgname} not found");
+    mainGem = gems.${pkgname} or (throw "bundlerEnv: gem ${pkgname} not found");
   in
     copyIfBundledByPath mainGem;
 
@@ -88,7 +89,7 @@ let
       gemAttrs = composeGemAttrs ruby gems name attrs;
     in
     if gemAttrs.type == "path" then
-      pathDerivation gemAttrs
+      pathDerivation (gemAttrs.source // gemAttrs)
     else
       buildRubyGem gemAttrs
   );
@@ -96,7 +97,7 @@ let
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
   basicEnv = buildEnv {
-    inherit  ignoreCollisions;
+    inherit buildInputs ignoreCollisions;
 
     name = name';
 

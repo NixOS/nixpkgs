@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "logrotate-${version}";
-  version = "3.14.0";
+  pname = "logrotate";
+  version = "3.15.1";
 
   src = fetchFromGitHub {
     owner = "logrotate";
     repo = "logrotate";
     rev = version;
-    sha256 = "1wdjqbly97y1i11nl6cmlfpld3yqak270ixf29wixjgrjn8p4xzh";
+    sha256 = "0l92zarygp34qnw3p5rcwqsvgz7zmmhi7lgh00vj2jb9zkjbldc0";
   };
 
   # Logrotate wants to access the 'mail' program; to be done.

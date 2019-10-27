@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "httplab-${version}";
+  pname = "httplab";
   version = "0.3.0";
   rev = "v${version}";
 

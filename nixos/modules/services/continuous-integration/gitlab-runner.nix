@@ -8,6 +8,7 @@ let
     if (cfg.configFile == null) then
       (pkgs.runCommand "config.toml" {
         buildInputs = [ pkgs.remarshal ];
+        preferLocalBuild = true;
       } ''
         remarshal -if json -of toml \
           < ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
@@ -110,7 +111,10 @@ in
   config = mkIf cfg.enable {
     systemd.services.gitlab-runner = {
       path = cfg.packages;
-      environment = config.networking.proxy.envVars;
+      environment = config.networking.proxy.envVars // {
+        # Gitlab runner will not start if the HOME variable is not set
+        HOME = cfg.workDir;
+      };
       description = "Gitlab Runner";
       after = [ "network.target" ]
         ++ optional hasDocker "docker.service";

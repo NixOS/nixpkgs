@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-gssapi-impl=mit" ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "GNU SASL, Simple Authentication and Security Layer library";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
          (e.g. IMAP, SMTP, etc.) to authenticate peers. 
        '';
 
-    homepage = http://www.gnu.org/software/gsasl/;
+    homepage = https://www.gnu.org/software/gsasl/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ shlevy ];

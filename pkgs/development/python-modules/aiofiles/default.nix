@@ -1,10 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy33
 , pythonOlder
-, asyncio
-, singledispatch
 }:
 
 buildPythonPackage rec {
@@ -17,8 +14,6 @@ buildPythonPackage rec {
   };
 
   disabled = pythonOlder "3.3";
-
-  propagatedBuildInputs = lib.optionals isPy33 [ asyncio singledispatch ];
 
   # No tests in archive
   doCheck = false;

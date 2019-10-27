@@ -14,12 +14,15 @@ stdenv.mkDerivation rec {
   # in Debian, so we assume they have been sent upstream.
   #
   patches = [
-    ./c-missing_xm_h.patch        
-    ./c-render_table_crash.patch 
+    ./c-missing_xm_h.patch
+    ./c-render_table_crash.patch
     ./c-xpmpipethrough.patch
     ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "An open source clone of the Motif widget set";
+    homepage = http://lesstif.sourceforge.net;
+    platforms = platforms.unix;
+    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

@@ -8,7 +8,7 @@
 , libusb1
 , libzip
 , glib
-, gobjectIntrospection
+, gobject-introspection
 , gst_all_1
 , libwebcam
 }:
@@ -16,12 +16,11 @@
 stdenv.mkDerivation rec {
   pname = "tiscamera";
   version = "0.9.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
     repo = pname;
-    rev = "v-${name}";
+    rev = "v-${pname}-${version}";
     sha256 = "143yp6bpzj3rqfnrcnlrcwggay37fg6rkphh4w9y9v7v4wllzf87";
   };
 
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
     libusb1
     libzip
     glib
-    gobjectIntrospection
+    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     libwebcam

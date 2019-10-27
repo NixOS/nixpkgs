@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "txtorcon";
-  version = "18.0.2";
+  version = "19.1.0";
 
   checkInputs = [ pytest mock lsof GeoIP ];
   propagatedBuildInputs = [
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce50fdd00abb8b490b72809a2c664684f67f3c9467f392642d36f58309395a87";
+    sha256 = "19ayn5w9ayxbb1m84l1s9qlb6kv7sz6sg34mzy8bnidc7qnfbn15";
   };
 
   # Skip a failing test until fixed upstream:

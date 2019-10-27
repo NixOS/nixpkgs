@@ -10,8 +10,9 @@ stdenv.mkDerivation {
   PREFIX=''''${out}'';
   buildInputs = [ jdk ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.sander ];
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sander ];
+    license = licenses.mit;
   };
 }

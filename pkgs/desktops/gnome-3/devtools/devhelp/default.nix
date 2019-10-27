@@ -1,20 +1,20 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, glib, amtk, appstream-glib, gobjectIntrospection, python3
+, glib, amtk, appstream-glib, gobject-introspection, python3
 , webkitgtk, gettext, itstool, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "devhelp-${version}";
-  version = "3.30.0";
+  pname = "devhelp";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/devhelp/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1rzilsn0v8dj86djankllc5f10d58f6rwg4w1fffh5zly10nlli5";
+    url = "mirror://gnome/sources/devhelp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0zpmn6fgkgiayvn4diia5df0s6s7dqrdnp3nrvpavsmgn0vhb4pg";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook appstream-glib gobjectIntrospection python3 ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook appstream-glib gobject-introspection python3 ];
   buildInputs = [
     glib gtk3 webkitgtk amtk
-    gnome3.defaultIconTheme gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
   ];
 
   doCheck = true;

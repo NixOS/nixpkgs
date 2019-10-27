@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, fetchpatch
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python2, python3, nodejs
 , libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, libGLU_combined, sqlite, unzip
-, hunspell, libevent, libstartup_notification
+, yasm, libGLU_combined, sqlite, zip, unzip
+, libevent, libstartup_notification
 , icu, libpng, jemalloc
-, autoconf213, which, m4
+, autoconf213, which, m4, fetchpatch
 , writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
-, cargo, rustc, llvmPackages
+, runtimeShell
+, cargo, rustc, rust-cbindgen, llvmPackages, nasm
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
 , debugBuild ? false
@@ -23,12 +24,12 @@ let
   wrapperTool = if enableGTK3 then wrapGAppsHook else makeWrapper;
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
-  name = "thunderbird-${version}";
-  version = "60.2.1";
+  pname = "thunderbird";
+  version = "68.1.1";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "018l9pq03nzlirpaf285qpwvb8s4msam8n91d15lzc1bc1caq9zcy2dnrnvn5av3jlapm9ckz028iar66nhqxi2kkqbmiaq0v4s6kfp";
+    sha512 = "2ng5wwd7fn9247ggzlxx96scc2nalaahzvxkzvb87mp9fbfcsi3v9dh370cm42px8hrknnsp2lrfk9hqx4287zyn9pl3k9vr6a9cswl";
   };
 
   # from firefox, but without sound libraries
@@ -37,25 +38,32 @@ in stdenv.mkDerivation rec {
       dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       nspr nss libnotify xorg.pixman yasm libGLU_combined
-      xorg.libXScrnSaver xorg.scrnsaverproto
-      xorg.libXext xorg.xextproto sqlite unzip
-      hunspell libevent libstartup_notification /* cairo */
-      icu libpng jemalloc
+      xorg.libXScrnSaver xorg.xorgproto
+      xorg.libXext sqlite unzip
+      libevent libstartup_notification /* cairo */
+      icu libpng jemalloc nasm
     ]
-    ++ lib.optionals enableGTK3 [ gtk3 gnome3.defaultIconTheme ];
+    ++ lib.optionals enableGTK3 [ gtk3 gnome3.adwaita-icon-theme ];
 
   # from firefox + m4 + wrapperTool
-  nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
+  # llvm is for llvm-objdump
+  nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python2 python3 nodejs wrapperTool cargo rustc rust-cbindgen llvmPackages.llvm ];
 
-  # https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1479540
-  # https://hg.mozilla.org/releases/mozilla-release/rev/bc651d3d910c
   patches = [
+    # Remove buildconfig.html to prevent a dependency on clang etc.
+    ./no-buildconfig.patch
     (fetchpatch {
-      name = "bc651d3d910c.patch";
-      url = "https://hg.mozilla.org/releases/mozilla-release/raw-rev/bc651d3d910c";
-      sha256 = "0iybkadsgsf6a3pq3jh8z1p110vmpkih8i35jfj8micdkhxzi89g";
+      # https://phabricator.services.mozilla.com/D47796
+      url = "https://d3kxowhw4s8amj.cloudfront.net/file/data/a54c6fszaol23yh5aa27/PHID-FILE-sql3i57neyrztfdngrwe/D47796.diff";
+      sha256 = "18i1bk6rz875dly2vnkrdgbah8kx0lv4akjzl0i9gxc58hi5q3nq";
     })
-  ];
+  ]
+  ++ lib.optional (lib.versionOlder version "69")
+    (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
+      name = "write_error-parallel_make.diff";
+      url = "https://hg.mozilla.org/mozilla-central/raw-diff/562655fe/python/mozbuild/mozbuild/action/node.py";
+      sha256 = "11d7rgzinb4mwl7yzhidjkajynmxgmffr4l9isgskfapyax9p88y";
+    });
 
   configureFlags =
     [ # from firefox, but without sound libraries (alsa, libvpx, pulseaudio)
@@ -71,9 +79,8 @@ in stdenv.mkDerivation rec {
       "--with-system-libevent"
       "--with-system-png" # needs APNG support
       "--with-system-icu"
-      "--enable-rust-simd"
+      #"--enable-rust-simd" # not supported since rustc 1.32.0 -> 1.33.0; TODO: probably OK since 68.0.0
       "--enable-system-ffi"
-      "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
       #"--enable-system-cairo"
@@ -105,26 +112,20 @@ in stdenv.mkDerivation rec {
     ''
       cxxLib=$( echo -n ${gcc}/include/c++/* )
       archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
-  
+
       test -f layout/style/ServoBindings.toml && sed -i -e '/"-DRUST_BINDGEN"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
 
       configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
-    '';
 
-  preInstall =
-    ''
-      # The following is needed for startup cache creation on grsecurity kernels.
-      paxmark m ../objdir/dist/bin/xpcshell
+      # AS=as in the environment causes build failure https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
+      unset AS
     '';
 
   dontWrapGApps = true; # we do it ourselves
   postInstall =
     ''
-      # For grsecurity kernels
-      paxmark m $out/lib/thunderbird/thunderbird
-
       # TODO: Move to a dev output?
       rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
 
@@ -140,6 +141,8 @@ in stdenv.mkDerivation rec {
       gappsWrapperArgs+=(
         --argv0 "$target"
         --set MOZ_APP_LAUNCHER thunderbird
+        # https://github.com/NixOS/nixpkgs/pull/61980
+        --set SNAP_NAME "thunderbird"
       )
       ${
         # We wrap manually because wrapGAppsHook does not detect the symlink
@@ -191,6 +194,8 @@ in stdenv.mkDerivation rec {
       "$out/bin/thunderbird" --version
     '';
 
+  disallowedRequisites = [ stdenv.cc ];
+
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";
     homepage = http://www.mozilla.org/thunderbird/;
@@ -205,6 +210,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl runtimeShell;
   };
 }

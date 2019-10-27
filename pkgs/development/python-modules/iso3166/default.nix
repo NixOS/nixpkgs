@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "iso3166";
   version = "0.8";
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0zs9za9dr2nl5srxir08yibmp6nffcapmzala0fgh8ny7y6rafrx";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     py.test

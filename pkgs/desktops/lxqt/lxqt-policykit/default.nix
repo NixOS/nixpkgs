@@ -1,19 +1,18 @@
 {
-  stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools,
+  lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools,
   qtbase, qttools, qtx11extras, qtsvg, polkit-qt, kwindowsystem, liblxqt,
   libqtxdg, pcre
 }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-policykit";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1m9v4hl1hyd8rmlh6z2zy6287qfnavsm9khl526jf8f7bjgpifvd";
+    sha256 = "0mh9jw09r0mk8xmgvmzk3yyfix0pzqya28rcx71fqjpbdv1sc44l";
   };
 
   nativeBuildInputs = [
@@ -34,14 +33,7 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
-  postPatch = ''
-    substituteInPlace autostart/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The LXQt PolicyKit agent";
     homepage = https://github.com/lxqt/lxqt-policykit;
     license = licenses.lgpl21;

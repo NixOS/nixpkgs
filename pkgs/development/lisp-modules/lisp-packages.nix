@@ -24,8 +24,8 @@ let lispPackages = rec {
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "http://beta.quicklisp.org/dist/quicklisp/2018-08-31/distinfo.txt";
-        sha256 = "1im4p6vcxkp5hrim28cdf5isyw8a1v9aqsz2xfsfp3z3qd49dixd";
+        url = "https://beta.quicklisp.org/dist/quicklisp/2019-07-11/distinfo.txt";
+        sha256 = "0r7ga5gkiy6va1v7a01fnj1yp97pifl9v8fnqpvbiv33dwdvbx2w";
       };
       buildPhase = '' true; '';
       postInstall = ''
@@ -36,8 +36,8 @@ let lispPackages = rec {
     };
   };
 
-  quicklisp-to-nix-system-info = stdenv.mkDerivation rec {
-    name = "quicklisp-to-nix-system-info-${version}";
+  quicklisp-to-nix-system-info = stdenv.mkDerivation {
+    pname = "quicklisp-to-nix-system-info";
     version = "1.0.0";
     src = ./quicklisp-to-nix;
     nativeBuildInputs = [sbcl];
@@ -57,8 +57,8 @@ let lispPackages = rec {
     dontStrip = true;
   };
 
-  quicklisp-to-nix = stdenv.mkDerivation rec {
-    name = "quicklisp-to-nix-${version}";
+  quicklisp-to-nix = stdenv.mkDerivation {
+    pname = "quicklisp-to-nix";
     version = "1.0.0";
     src = ./quicklisp-to-nix;
     buildDependencies = [sbcl quicklisp-to-nix-system-info];

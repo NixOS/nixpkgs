@@ -7,12 +7,18 @@
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.16";
+  version = "0.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7bed4475e3f134283af1f520a9b2e6ce2a8e69bdc1b58ee68528b3d093972424";
+    sha256 = "0bf55mqnz3l3ii26dvx33d35fv7jn7p5kmfwnr0xbpj38sxvhfr4";
   };
+
+  postPatch = ''
+    # https://github.com/SoCo/SoCo/pull/670
+    substituteInPlace requirements-dev.txt \
+      --replace "pytest-cov>=2.4.0,<2.6" "pytest-cov>=2.4.0"
+  '';
 
   propagatedBuildInputs = [ xmltodict requests ];
   checkInputs = [

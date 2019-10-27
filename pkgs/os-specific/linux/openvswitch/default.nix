@@ -8,10 +8,10 @@ let
   _kernel = kernel;
 in stdenv.mkDerivation rec {
   version = "2.5.4";
-  name = "openvswitch-${version}";
+  pname = "openvswitch";
 
   src = fetchurl {
-    url = "http://openvswitch.org/releases/${name}.tar.gz";
+    url = "http://openvswitch.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1lji87wg953lqcdf02f1zv2m54vhd2x9jd03bb91lnlb4qlhifiv";
   };
 

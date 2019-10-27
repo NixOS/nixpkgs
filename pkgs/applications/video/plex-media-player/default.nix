@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeDesktopItem, pkgconfig, cmake, python3
+{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, cmake, python3, mkDerivation
 , libX11, libXrandr, qtbase, qtwebchannel, qtwebengine, qtx11extras
 , libvdpau, SDL2, mpv, libGL }:
 let
@@ -9,56 +9,46 @@ let
   # plex-media-player is updated, the versions for these files are changed,
   # so the build IDs (and SHAs) below will need to be updated!
   depSrcs = rec {
-    webClientBuildId = "56-23317d81e49651";
-    webClientDesktopBuildId = "3.57.1-1e49651";
-    webClientTvBuildId = "3.60.1-23317d8";
+    webClientBuildId = "141-4af71961b12c68";
+    webClientDesktopBuildId = "3.104.2-1b12c68";
+    webClientTvBuildId = "4.3.0-4af7196";
 
     webClient = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/buildid.cmake";
-      sha256 = "1a48a65zzdx347kfnxriwkb0yjlhvn2g8jkda5pz10r3lwja0gbi";
+      sha256 = "0fpkd1s49dbiqqlijxbillqd71a78p8y2sc23mwp0lvcmxrg265p";
     };
     webClientDesktopHash = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-desktop-${webClientDesktopBuildId}.tar.xz.sha1";
-      sha256 = "04wdgpsh33y8hyjhjrfw6ymf9g002jny7hvhld4xp33lwxhd2j5w";
+      sha256 = "0sb0j44lwqz9zbm98nba4x6c1jxdzvs36ynwfg527avkxxna0f8f";
     };
     webClientDesktop = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-desktop-${webClientDesktopBuildId}.tar.xz";
-      sha256 = "1asw9f84z9sm3w7ifnc7j631j84rgx23c6msmn2dnw48ckv3bj2z";
+      sha256 = "0dxa0ka0igfsryzda4r5clwdl47ah78nmlmgj9d5pgsvyvzjp87z";
     };
     webClientTvHash = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-tv-${webClientTvBuildId}.tar.xz.sha1";
-      sha256 = "0d1hsvmpwczwx442f8qdvfr8c3w84630j9qwpg2y4qm423sgdvja";
+      sha256 = "086w1bavk2aqsyhv9zi5fynk31zf61sl91r6gjrdrz656wfk5bxa";
     };
     webClientTv = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-tv-${webClientTvBuildId}.tar.xz";
-      sha256 = "1ih3l5paf1jl68b1xq3iqqmvs3m07fybz57hcz4f78v0gwq2kryq";
+      sha256 = "12vbgsfnj0j2y5jd73dpi08hqsr9888sma41nvd4ydsd7qblm455";
     };
   };
-in stdenv.mkDerivation rec {
-  name = "plex-media-player-${version}";
-  version = "2.14.1.880";
-  vsnHash = "301a4b6c";
+in mkDerivation rec {
+  pname = "plex-media-player";
+  version = "2.40.0.1007";
+  vsnHash = "5482132c";
 
   src = fetchFromGitHub {
     owner = "plexinc";
     repo = "plex-media-player";
     rev = "v${version}-${vsnHash}";
-    sha256 = "0xz41r697vl6s3qvy6jwriv3pb9cfy61j6sydvdq121x5a0jnh9a";
+    sha256 = "0ibdh5g8x32iy74q97jfsmxd08wnyrzs3gfiwjfgc10vaa1qdhli";
   };
 
   nativeBuildInputs = [ pkgconfig cmake python3 ];
   buildInputs = [ libX11 libXrandr qtbase qtwebchannel qtwebengine qtx11extras
                   libvdpau SDL2 mpv libGL ];
-
-  desktopItem = makeDesktopItem {
-    name = "plex-media-player";
-    exec = "plexmediaplayer";
-    icon = "plex-media-player";
-    comment = "View your media";
-    desktopName = "Plex Media Player";
-    genericName = "Media Player";
-    categories = "AudioVideo;Video;Player;TV;";
-  };
 
   preConfigure = with depSrcs; ''
     mkdir -p build/dependencies
@@ -67,12 +57,6 @@ in stdenv.mkDerivation rec {
     ln -s ${webClientDesktop} build/dependencies/web-client-desktop-${webClientDesktopBuildId}.tar.xz
     ln -s ${webClientTvHash} build/dependencies/web-client-tv-${webClientTvBuildId}.tar.xz.sha1
     ln -s ${webClientTv} build/dependencies/web-client-tv-${webClientTvBuildId}.tar.xz
-  '';
-
-  postInstall = ''
-    mkdir -p $out/share/{applications,pixmaps}
-    cp ${src}/resources/images/icon.png $out/share/pixmaps/plex-media-player.png
-    cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DQTROOT=${qtbase}" ];

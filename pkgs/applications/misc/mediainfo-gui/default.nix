@@ -2,11 +2,11 @@
 , desktop-file-utils, libSM, imagemagick }:
 
 stdenv.mkDerivation rec {
-  version = "18.08.1";
-  name = "mediainfo-gui-${version}";
+  version = "19.09";
+  pname = "mediainfo-gui";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "0rq2dczjq26g5i0ac8px7xmxjvqq4h0rzd97fy5824yb2c5ksxs9";
+    sha256 = "1a2ssklg12sjsw09y8my9kf35mizi3zj7w002nspcmw28apb1x82";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

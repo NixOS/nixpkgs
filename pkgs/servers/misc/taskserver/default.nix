@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, libuuid, gnutls, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "taskserver-${version}";
+  pname = "taskserver";
   version = "1.1.0";
 
   enableParallelBuilding = true;
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = https://taskwarrior.org;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ makefu ];
+    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer makefu ];
   };
 }

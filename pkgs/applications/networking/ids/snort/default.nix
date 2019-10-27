@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   version = "2.9.11.1";
-  name = "snort-${version}";
+  pname = "snort";
   
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://snort.org/downloads/archive/snort/${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
+    url = "https://snort.org/downloads/archive/snort/${pname}-${version}.tar.gz";
     sha256 = "1ka67zrrhs32c729v4h76mvv2723mij0adxx0iaza2d1qpm3lswz";
   };
   

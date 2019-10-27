@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchpatch,
+  mkDerivation, lib,
 
   extra-cmake-modules, kdoctools,
 
@@ -34,7 +34,8 @@ mkDerivation {
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
   ];
-  outputs = [ "bin" "dev" "out" ];
+  propagatedUserEnvPkgs = [ qtgraphicaleffects ];
+  outputs = [ "out" "dev" ];
 
   cmakeFlags = [
     "-DNIXPKGS_XMESSAGE=${getBin xmessage}/bin/xmessage"
@@ -45,7 +46,7 @@ mkDerivation {
     "-DNIXPKGS_XPROP=${getBin xprop}/bin/xprop"
     "-DNIXPKGS_ID=${getBin coreutils}/bin/id"
     "-DNIXPKGS_DBUS_UPDATE_ACTIVATION_ENVIRONMENT=${getBin dbus}/bin/dbus-update-activation-environment"
-    "-DNIXPKGS_START_KDEINIT_WRAPPER=${getLib kinit}/lib/libexec/kf5/start_kdeinit_wrapper"
+    "-DNIXPKGS_START_KDEINIT_WRAPPER=${getLib kinit}/libexec/kf5/start_kdeinit_wrapper"
     "-DNIXPKGS_QDBUS=${getBin qttools}/bin/qdbus"
     "-DNIXPKGS_KWRAPPER5=${getBin kinit}/bin/kwrapper5"
     "-DNIXPKGS_KREADCONFIG5=${getBin kconfig}/bin/kreadconfig5"
@@ -68,18 +69,10 @@ mkDerivation {
   # ./plasma-workspace.patch.
   patches = [
     ./plasma-workspace.patch
-    (fetchpatch {
-      url = "https://github.com/KDE/plasma-workspace/commit/11e570d861858f3b3e2694e5f9ec242d7f9f12b9.patch";
-      sha256 = "1vk9yacb59k0v5mgbpgmciflca9r0ll4wh1d83ffx2y2v8sqwiv2";
-    })
   ];
 
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_KDOSTARTUPCONFIG5=\"''${!outputBin}/bin/kdostartupconfig5\""
-    cmakeFlags+=" -DNIXPKGS_STARTPLASMA=''${!outputBin}/lib/libexec/startplasma"
-  '';
-
-  postInstall = ''
-    moveToOutput lib/libexec/startplasma ''${!outputBin}
+    cmakeFlags+=" -DNIXPKGS_STARTPLASMA=''${!outputBin}/libexec/startplasma"
   '';
 }

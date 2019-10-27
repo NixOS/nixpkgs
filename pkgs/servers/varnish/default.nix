@@ -1,20 +1,22 @@
 { stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
-, python2, makeWrapper }:
+, python2, python3, makeWrapper }:
 
 let
-  common = { version, sha256 }:
+  common = { version, sha256, python, extraNativeBuildInputs ? [] }:
     stdenv.mkDerivation rec {
-      name = "varnish-${version}";
+      pname = "varnish";
+      inherit version;
 
       src = fetchurl {
-        url = "https://varnish-cache.org/_downloads/${name}.tgz";
+        url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
         inherit sha256;
       };
 
-      nativeBuildInputs = [ pkgconfig ];
+      passthru.python = python;
+
+      nativeBuildInputs = with python.pkgs; [ pkgconfig docutils ] ++ extraNativeBuildInputs;
       buildInputs = [
-        pcre libxslt groff ncurses readline python2 libedit
-        python2.pkgs.docutils makeWrapper
+        pcre libxslt groff ncurses readline libedit makeWrapper python
       ];
 
       buildFlags = "localstatedir=/var/spool";
@@ -32,22 +34,26 @@ let
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = https://www.varnish-cache.org;
         license = licenses.bsd2;
-        maintainers = with maintainers; [ garbas fpletz ];
+        maintainers = with maintainers; [ fpletz ];
         platforms = platforms.unix;
       };
     };
 in
 {
   varnish4 = common {
-    version = "4.1.9";
-    sha256 = "11zwyasz2fn9qxc87r175wb5ba7388sd79mlygjmqn3yv2m89n12";
+    version = "4.1.10";
+    sha256 = "08kwx0il6cqxsx3897042plh1yxjaanbaqjbspfl0xgvyvxk6j1n";
+    python = python2;
   };
   varnish5 = common {
     version = "5.2.1";
     sha256 = "1cqlj12m426c1lak1hr1fx5zcfsjjvka3hfirz47hvy1g2fjqidq";
+    python = python2;
   };
   varnish6 = common {
-    version = "6.0.1";
-    sha256 = "1f7k751r31sgfvr1ns6s3h48c5x06kkps1p6zd40wvylm56qxwj7";
+    version = "6.3.0";
+    sha256 = "0zwlffdd1m0ih33nq40xf2wwdyvr4czmns2fs90qpfnwy72xxk4m";
+    python = python3;
+    extraNativeBuildInputs = [ python3.pkgs.sphinx ];
   };
 }

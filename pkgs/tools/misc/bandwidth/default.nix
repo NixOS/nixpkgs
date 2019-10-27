@@ -10,11 +10,11 @@ let
     else throw "Unknown architecture";
 in
 stdenv.mkDerivation rec {
-  name = "bandwidth-${version}";
+  pname = "bandwidth";
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://zsmith.co/archives/${name}.tar.gz";
+    url = "https://zsmith.co/archives/${pname}-${version}.tar.gz";
     sha256 = "1v9k1a2ilkbhc3viyacgq88c9if60kwsd1fy6rn84317qap4i7ib";
   };
 
@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

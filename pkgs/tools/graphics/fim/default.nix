@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fim-${version}";
+  pname = "fim";
   version = "0.6";
 
   src = fetchurl {
-    url = "mirror://savannah/fbi-improved/${name}-trunk.tar.gz";
+    url = "mirror://savannah/fbi-improved/${pname}-${version}-trunk.tar.gz";
     sha256 = "124b7c4flx5ygmy5sqq0gpvxqzafnknbcj6f45ddnbdxik9lazzp";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       to be a highly customizable and scriptable for users who are comfortable
       with software like the VIM text editor or the Mutt mail user agent.
     '';
-    homepage = http://www.nongnu.org/fbi-improved/;
+    homepage = https://www.nongnu.org/fbi-improved/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

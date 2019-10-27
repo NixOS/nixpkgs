@@ -1,0 +1,23 @@
+diff --git a/homeserver b/homeserver
+new file mode 120000
+index 000000000..2f1d41351
+--- /dev/null
++++ b/homeserver
+@@ -0,0 +1 @@
++synapse/app/homeserver.py
+\ No newline at end of file
+diff --git a/setup.py b/setup.py
+index 5ce06c898..f1ccd95bc 100755
+--- a/setup.py
++++ b/setup.py
+@@ -115,6 +115,6 @@ setup(
+         "Programming Language :: Python :: 3.6",
+         "Programming Language :: Python :: 3.7",
+     ],
+-    scripts=["synctl"] + glob.glob("scripts/*"),
++    scripts=["synctl", "homeserver"] + glob.glob("scripts/*"),
+     cmdclass={"test": TestCommand},
+ )
+-- 
+2.22.0
+

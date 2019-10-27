@@ -1,29 +1,29 @@
-{ stdenv, fetchFromGitHub, cmake, qt5 }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qtsvg, lxqt-build-tools }:
 
-stdenv.mkDerivation rec {
-  name = "libqtxdg-${version}";
-  version = "3.2.0";
+mkDerivation rec {
+  pname = "libqtxdg";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = "libqtxdg";
+    repo = pname;
     rev = version;
-    sha256 = "0lkmwnqk314mlr811rdb96p6i7zg67slxdvd4cdkiwakgbzzaa4m";
+    sha256 = "0y3s0hva64m64j9lqgnja1li8zhlywqzv8xwjg8pyd2nr9h918db";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake lxqt-build-tools ];
 
-  buildInputs = [ qt5.qtbase qt5.qtsvg ];
+  buildInputs = [ qtbase qtsvg ];
 
   preConfigure = ''
     cmakeFlagsArray+=(
-    "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt implementation of freedesktop.org xdg specs";
     homepage = https://github.com/lxqt/libqtxdg;
     license = licenses.lgpl21;

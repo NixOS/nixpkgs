@@ -1,22 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, fetchpatch, staticOnly ? false }:
 
 # ?TODO: there's also python lib in there
 
 stdenv.mkDerivation rec {
-  name = "brotli-${version}";
-  version = "1.0.6";
+  pname = "brotli";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
     rev = "v" + version;
-    sha256 = "1hng7v7n6asli9v8gnshrqjnia5cvrwzgnx7irmk7r98nnjzlqda";
+    sha256 = "1811b55wdfg4kbsjcgh1kc938g118jpvif97ilgrmbls25dfpvvw";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = stdenv.lib.optional
-    (stdenv.hostPlatform.libc == "msvcrt") "-DCMAKE_SYSTEM_NAME=Windows";
+  patches = stdenv.lib.optional staticOnly (fetchpatch {
+    url = "https://github.com/google/brotli/pull/655/commits/7289e5a378ba13801996a84d89d8fe95c3fc4c11.patch";
+    sha256 = "1bghbdvj24jrvb0sqfdif9vwg7wx6pn8dvl6flkrcjkhpj0gi0jg";
+  });
+
+  cmakeFlags = []
+    ++ stdenv.lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
   outputs = [ "out" "dev" "lib" ];
 
@@ -59,4 +64,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

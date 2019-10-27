@@ -3,11 +3,11 @@
   wpa_supplicant, readline6, pptp, ppp }:
 
 stdenv.mkDerivation rec {
-  name = "connman-${version}";
-  version = "1.36";
+  pname = "connman";
+  version = "1.37";
   src = fetchurl {
-    url = "mirror://kernel/linux/network/connman/${name}.tar.xz";
-    sha256 = "0x00dq5c2frz06md3g5y0jh5kbcj2hrfl5qjcqga8gs4ri0xp2f7";
+    url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
+    sha256 = "05kfjiqhqfmbbwc4snnyvi5hc4zxanac62f6gcwaf5mvn0z9pqkc";
   };
 
   buildInputs = [ openconnect polkit
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=\${out}/etc"
     "--localstatedir=/var"
-    "--with-dbusconfdir=\${out}/etc"
-    "--with-dbusdatadir=\${out}/usr/share"
+    "--with-dbusconfdir=${placeholder "out"}/share"
+    "--with-dbusdatadir=${placeholder "out"}/share"
     "--disable-maintainer-mode"
     "--enable-openconnect=builtin"
     "--with-openconnect=${openconnect}/sbin/openconnect"
