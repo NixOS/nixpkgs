@@ -453,16 +453,17 @@ rec {
    *   sha256 = "ffffffffffffffffffffffffffffffffffffffffffffffffffff";
    * }
    */
-  requireFile = { name ? null
+  requireFile = { name ? throw "unreachable"
+                , pname ? throw "unreachable"
+                , version ? throw "unreachable"
                 , sha256 ? null
                 , sha1 ? null
                 , url ? null
                 , message ? null
                 , hashMode ? "flat"
-                } :
+                } @ args:
     assert (message != null) || (url != null);
     assert (sha256 != null) || (sha1 != null);
-    assert (name != null) || (url != null);
     let msg =
       if message != null then message
       else ''
@@ -477,8 +478,11 @@ rec {
       hash = if sha256 != null then sha256 else sha1;
       name_ = if name == null then baseNameOf (toString url) else name;
     in
-    stdenvNoCC.mkDerivation {
-      name = name_;
+    stdenvNoCC.mkDerivation (builtins.intersectAttrs {
+      name = throw "unreachable";
+      pname = throw "unreachable";
+      version = throw "unreachable";
+    } args // {
       outputHashMode = hashMode;
       outputHashAlgo = hashAlgo;
       outputHash = hash;
@@ -495,7 +499,7 @@ rec {
         _EOF_
         exit 1
       '';
-    };
+    });
 
 
   # Copy a path to the Nix store.
