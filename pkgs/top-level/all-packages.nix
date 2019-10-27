@@ -19221,6 +19221,8 @@ in
 
   gv = callPackage ../applications/misc/gv { };
 
+  gvisor = callPackage ../applications/virtualization/gvisor { };
+
   guvcview = callPackage ../os-specific/linux/guvcview { };
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
