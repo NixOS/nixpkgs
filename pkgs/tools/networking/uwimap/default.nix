@@ -8,12 +8,12 @@ stdenv.mkDerivation ({
     sha256 = "0a2a00hbakh0640r2wdpnwr8789z59wnk7rfsihh3j0vbhmmmqak";
   };
 
-  makeFlags = if stdenv.isDarwin
+  makeFlags = [ (if stdenv.isDarwin
     then "osx"
-    else "lnp" # Linux with PAM modules;
+    else "lnp") ]  # Linux with PAM modules;
     # -fPIC is required to compile php with imap on x86_64 systems
-    + stdenv.lib.optionalString stdenv.isx86_64 " EXTRACFLAGS=-fPIC"
-    + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " CC=${stdenv.hostPlatform.config}-gcc RANLIB=${stdenv.hostPlatform.config}-ranlib";
+    ++ stdenv.lib.optional stdenv.isx86_64 "EXTRACFLAGS=-fPIC"
+    ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "CC=${stdenv.hostPlatform.config}-gcc" "RANLIB=${stdenv.hostPlatform.config}-ranlib" ];
 
   hardeningDisable = [ "format" ];
 
