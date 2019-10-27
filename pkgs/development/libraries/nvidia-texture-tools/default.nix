@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/castano/nvidia-texture-tools;
     license = licenses.mit;
     platforms = platforms.unix;
+    broken = stdenv.isAarch64;
   };
 }
