@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
+  configureFlags = stdenv.lib.optionalString stdenv.cc.isClang "--host=${stdenv.hostPlatform.system}";
+
   buildInputs =
     [ glib cairo fontconfig libtiff giflib
       libjpeg libpng libXrender libexif
