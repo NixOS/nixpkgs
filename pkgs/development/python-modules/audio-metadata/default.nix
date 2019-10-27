@@ -4,6 +4,7 @@
 , bitstruct
 , more-itertools
 , pprintpp
+, tbm-utils
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     bitstruct
     more-itertools
     pprintpp
+    tbm-utils
   ];
 
   # No tests
