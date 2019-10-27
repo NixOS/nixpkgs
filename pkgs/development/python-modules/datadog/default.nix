@@ -1,8 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
-, decorator, requests, simplejson
-, nose, mock
-, pillow
- }:
+, decorator, requests, simplejson, pillow
+, nose, mock, pytest }:
 
 buildPythonPackage rec {
   pname = "datadog";
@@ -17,9 +15,12 @@ buildPythonPackage rec {
     find . -name '*.pyc' -exec rm {} \;
   '';
 
-  propagatedBuildInputs = [ decorator requests simplejson ];
+  propagatedBuildInputs = [ decorator requests simplejson pillow ];
 
-  checkInputs = [ nose mock pillow ];
+  checkInputs = [ nose mock pytest ];
+  checkPhase = ''
+    pytest tests/unit
+  '';
 
   meta = with lib; {
     description = "The Datadog Python library";
