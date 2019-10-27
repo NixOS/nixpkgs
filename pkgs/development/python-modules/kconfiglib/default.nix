@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "kconfiglib";
-  version = "12.12.1";
+  version = "13.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0afc0gidh0pjb0ll99xifzs5z14g365crfj935614zp9w8fcchp0";
+    sha256 = "b44af5a6dc0c716926c926ba4c1f301ce286b3a3f292ae359a866eb01dc5260e";
   };
 
   # doesnt work out of the box but might be possible

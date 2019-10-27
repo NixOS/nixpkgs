@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-queue";
-  version = "1.4.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bafe9e61c0ce7b3f3ecadea21e931dab3248bd4989dc327a8666c5deae7f7ed";
+    sha256 = "14e82d3691f1bbd23f2aff143a6c17af3c297164f6e597d223b65a67051ba278";
   };
 
   propagatedBuildInputs = [

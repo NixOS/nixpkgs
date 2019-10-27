@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "flake8-debugger";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "103d86d2ecb95f8aab90f90603446f4e2bb60e01f1593e4fec410074dedabac6";
+    sha256 = "6e662f7e75a3ed729d3be7c92e72bde385ab08ec26e7808bf3dfc63445c87857";
   };
 
   nativeBuildInputs = [ pytestrunner ];

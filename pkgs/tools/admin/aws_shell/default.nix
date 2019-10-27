@@ -6,11 +6,11 @@ with awscli.python.pkgs;
 
 buildPythonPackage rec {
   pname = "aws-shell";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b46a673b81254e5e014297e08c9ecab535773aa651ca33dc3786a1fd612f9810";
+    sha256 = "2044b0ef78c7542c392f2cee4b74a4439545c63dda0a3e28b712fff53e8e5823";
   };
 
   # Why does it propagate packages that are used for testing?

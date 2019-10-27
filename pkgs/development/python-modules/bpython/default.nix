@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.17.1";
+  version = "0.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8907c510bca3c4d9bc0a157279bdc5e3b739cc68c0f247167279b6fe4becb02f";
+    sha256 = "56cc20dbe568c98c81de4990fddf5862c0d8d3ab0ad1cf7057988abc5f7686c2";
   };
 
   propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];

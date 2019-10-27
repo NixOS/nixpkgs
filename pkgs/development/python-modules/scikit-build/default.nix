@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hh275lj98wgwi53mr9fqk8wh1dajjksch52xjax6a79gld4391a";
+    sha256 = "7342017cc82dd6178e3b19377389b8a8d1f8b429d9cdb315cfb1094e34a0f526";
   };
 
   # Fixes incorrect specified requirement (part of next release)

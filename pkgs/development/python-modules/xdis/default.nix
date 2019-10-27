@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , click
 , pytest
 , six
@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "xdis";
   version = "4.0.4";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rocky";
