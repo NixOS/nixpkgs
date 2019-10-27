@@ -170,6 +170,9 @@
 }
 </programlisting>
     </para>
+    <para>
+      Note that <literal>whitelistedLicenses</literal> only applies to unfree licenses when <literal>allowUnfree</literal> is not enabled, it is not a generic whitelist for all types of license.  <literal>blacklistedLicenses</literal> applies to all licenses.
+    </para>
    </listitem>
   </itemizedlist>
 
