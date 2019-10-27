@@ -30,9 +30,12 @@ rec {
     meta = {
       description = "A web browser built from Firefox source tree";
       homepage = http://www.mozilla.com/en-US/firefox/;
-      maintainers = with lib.maintainers; [ eelco andir ];
+      maintainers = with lib.maintainers; [ eelco ];
       platforms = lib.platforms.unix;
       license = lib.licenses.mpl20;
+      knownVulnerabilities = [
+        "only esr releases are supported on stable branches - see https://github.com/NixOS/nixpkgs/pull/71714"
+      ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
