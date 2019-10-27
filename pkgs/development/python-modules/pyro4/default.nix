@@ -8,8 +8,8 @@
 , cloudpickle
 , msgpack
 , isPy27
-, isPy33
 , selectors34
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     serpent
-  ] ++ lib.optionals (isPy27 || isPy33) [ selectors34 ];
+  ] ++ lib.optionals isPy27 [ selectors34 ];
 
   buildInputs = [
     dill
@@ -31,8 +31,15 @@ buildPythonPackage rec {
     msgpack
   ];
 
+  checkInputs = [ pytest ];
+  # add testsupport.py to PATH
+  # ignore network related tests, which fail in sandbox
   checkPhase = ''
-    ${python.interpreter} setup.py test
+    PYTHONPATH=tests/PyroTests:$PYTHONPATH
+    pytest -k 'not StartNSfunc \
+               and not Broadcast \
+               and not GetIP' \
+           --ignore=tests/PyroTests/test_naming.py
   '';
 
   meta = with stdenv.lib; {
