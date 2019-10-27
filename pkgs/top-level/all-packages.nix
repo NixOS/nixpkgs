@@ -16750,6 +16750,8 @@ in
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
+  gomplate = callPackage ../development/tools/gomplate { };
+
   go-langserver = callPackage ../development/tools/go-langserver { };
 
   gotests = callPackage ../development/tools/gotests { };
