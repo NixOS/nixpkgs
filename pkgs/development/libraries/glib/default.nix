@@ -188,6 +188,8 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
+  separateDebugInfo = stdenv.isLinux;
+
   passthru = rec {
     gioModuleDir = "lib/gio/modules";
     makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
