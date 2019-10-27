@@ -22,17 +22,17 @@ stdenv.mkDerivation rec {
   dontCheck = true;
 
   installPhase = ''
-    install -D py3buddy.py $out/lib/${python.libPrefix}/site-packages/py3buddy.py
+    install -D py3buddy.py $out/${python.sitePackages}/py3buddy.py
   '';
 
   postInstall = ''
     install -D 99-ibuddy.rules $out/lib/udev/rules.d/99-ibuddy.rules
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Code to work with the iBuddy MSN figurine";
     homepage = "https://github.com/armijnhemel/py3buddy";
-    license = with stdenv.lib.licenses; [ mit ];
-    maintainers = with stdenv.lib.maintainers; [ prusnak ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ prusnak ];
   };
 }

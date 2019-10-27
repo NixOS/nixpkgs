@@ -906,7 +906,7 @@ in {
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
-  py3buddy = callPackage ../development/python-modules/py3buddy { };
+  py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
 
   pybullet = callPackage ../development/python-modules/pybullet { };
 
