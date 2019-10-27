@@ -6,11 +6,6 @@ buildPythonPackage rec {
   version = "4.6.5";
   pname = "pytest";
 
-  preCheck = ''
-    # don't test bash builtins
-    rm testing/test_argcomplete.py
-  '';
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "8fc39199bdda3d9d025d3b1f4eb99a192c20828030ea7c9a0d2840721de7d347";
@@ -25,7 +20,14 @@ buildPythonPackage rec {
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
   checkPhase = ''
     runHook preCheck
-    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths"
+
+    # don't test bash builtins
+    rm testing/test_argcomplete.py
+
+    # determinism - this test writes non deterministic bytecode
+    rm -rf testing/test_assertrewrite.py
+
+    PYTHONDONTWRITEBYTECODE=1 $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths"
     runHook postCheck
   '';
 
