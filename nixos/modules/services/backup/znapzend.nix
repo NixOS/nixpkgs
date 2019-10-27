@@ -34,6 +34,8 @@ let
     description = "string of the form number{b|k|M|G}";
   };
 
+  enabledFeatures = concatLists (mapAttrsToList (name: enabled: optional enabled name) cfg.features);
+
   # Type for a string that must contain certain other strings (the list parameter).
   # Note that these would need regex escaping.
   stringContainingStrings = list: let
@@ -354,6 +356,22 @@ in
         '';
         default = false;
       };
+
+      features.recvu = mkEnableOption ''
+        recvu feature which uses <literal>-u</literal> on the receiving end to keep the destination
+        filesystem unmounted.
+      '';
+      features.compressed = mkEnableOption ''
+        compressed feature which adds the options <literal>-Lce</literal> to
+        the <command>zfs send</command> command. When this is enabled, make
+        sure that both the sending and receiving pool have the same relevant
+        features enabled. Using <literal>-c</literal> will skip unneccessary
+        decompress-compress stages, <literal>-L</literal> is for large block
+        support and -e is for embedded data support. see
+        <citerefentry><refentrytitle>znapzend</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+        and <citerefentry><refentrytitle>zfs</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+        for more info.
+      '';
     };
   };
 
@@ -387,6 +405,8 @@ in
               "--loglevel=${cfg.logLevel}"
               (optionalString cfg.noDestroy "--nodestroy")
               (optionalString cfg.autoCreation "--autoCreation")
+              (optionalString (enabledFeatures != [])
+                "--features=${concatStringsSep "," enabledFeatures}")
             ]; in "${pkgs.znapzend}/bin/znapzend ${args}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-failure";
