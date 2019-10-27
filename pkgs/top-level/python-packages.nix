@@ -5015,7 +5015,7 @@ in {
   sphinxcontrib-devhelp = callPackage ../development/python-modules/sphinxcontrib-devhelp {};
 
   sphinxcontrib-htmlhelp = callPackage ../development/python-modules/sphinxcontrib-htmlhelp {};
-  
+
   sphinxcontrib-jsmath = callPackage ../development/python-modules/sphinxcontrib-jsmath {};
 
   sphinxcontrib-qthelp = callPackage ../development/python-modules/sphinxcontrib-qthelp {};
@@ -5064,6 +5064,8 @@ in {
   tadasets = callPackage ../development/python-modules/tadasets { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
+
+  tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
   tempita = callPackage ../development/python-modules/tempita { };
 
