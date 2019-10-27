@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
   checkInputs = [
     python3Packages.pexpect
     python3Packages.pytest
