@@ -69,7 +69,6 @@ let
     "--param chunk.section.depth 0"
     "--param chunk.first.sections 1"
     "--param use.id.as.filename 1"
-    "--stringparam generate.toc 'book toc appendix toc'"
     "--stringparam chunk.toc ${toc}"
   ];
 
