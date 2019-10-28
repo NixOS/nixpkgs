@@ -20,6 +20,8 @@ let
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
+    angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
+
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
     apron = callPackage ../development/ocaml-modules/apron { };
