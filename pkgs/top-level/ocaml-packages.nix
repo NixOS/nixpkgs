@@ -231,6 +231,8 @@ let
 
     earley = callPackage ../development/ocaml-modules/earley { };
 
+    earlybird = callPackage ../development/ocaml-modules/earlybird { };
+
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
     elina = callPackage ../development/ocaml-modules/elina { };
