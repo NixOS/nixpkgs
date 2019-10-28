@@ -21,7 +21,7 @@
 # User-agent info
 , lsb-release
 # rt2rtng
-, python2
+, python3
 # Testing
 , gtest
 # Fixup
@@ -36,7 +36,7 @@ let
     gst-libav
   ];
   # For the rt2rtng utility for converting bookmark file to -ng format
-  pythonInputs = with python2.pkgs; [ python2 lxml ];
+  pythonInputs = with python3.pkgs; [ python lxml ];
 in
 stdenv.mkDerivation rec {
   pname = "radiotray-ng";
