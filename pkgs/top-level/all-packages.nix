@@ -12025,6 +12025,10 @@ in
 
   libinjection = callPackage ../development/libraries/libinjection { };
 
+  libnats-c = callPackage ../development/libraries/libnats-c {
+    openssl = openssl_1_0_2;
+  };
+
   liburing = callPackage ../development/libraries/liburing { };
 
   librseq = callPackage ../development/libraries/librseq { };
