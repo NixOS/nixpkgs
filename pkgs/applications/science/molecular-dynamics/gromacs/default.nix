@@ -19,14 +19,13 @@ stdenv.mkDerivation {
   buildInputs = [ fftw perl ]
   ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
 
-  cmakeFlags = ''
-    ${if singlePrec then "-DGMX_DOUBLE=OFF" else "-DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF"}
-    ${if mpiEnabled then "-DGMX_MPI:BOOL=TRUE
-                          -DGMX_CPU_ACCELERATION:STRING=SSE4.1
-                          -DGMX_OPENMP:BOOL=TRUE
-                          -DGMX_THREAD_MPI:BOOL=FALSE"
-                     else "-DGMX_MPI:BOOL=FALSE" }
-  '';
+  cmakeFlags = [
+    (if singlePrec then "-DGMX_DOUBLE=OFF" else "-DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF")
+  ] ++ (if mpiEnabled then [ "-DGMX_MPI:BOOL=TRUE"
+                             "-DGMX_CPU_ACCELERATION:STRING=SSE4.1"
+                             "-DGMX_OPENMP:BOOL=TRUE"
+                             "-DGMX_THREAD_MPI:BOOL=FALSE" ]
+                      else [ "-DGMX_MPI:BOOL=FALSE"]);
 
   meta = with stdenv.lib; {
     homepage    = "http://www.gromacs.org";

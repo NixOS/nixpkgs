@@ -22,14 +22,14 @@ buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ go-md2man libseccomp libapparmor apparmor-parser which ];
 
-  makeFlags = ''BUILDTAGS+=seccomp BUILDTAGS+=apparmor'';
+  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" ];
 
   buildPhase = ''
     cd go/src/${goPackagePath}
     patchShebangs .
     substituteInPlace libcontainer/apparmor/apparmor.go \
       --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser
-    make ${makeFlags} runc
+    make ${toString makeFlags} runc
   '';
 
   installPhase = ''

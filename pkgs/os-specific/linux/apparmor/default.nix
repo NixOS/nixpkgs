@@ -124,8 +124,8 @@ let
     prePatch = prePatchCommon;
     inherit patches;
     postPatch = "cd ./utils";
-    makeFlags = ''LANGS='';
-    installFlags = ''DESTDIR=$(out) BINDIR=$(out)/bin VIM_INSTALL_PATH=$(out)/share PYPREFIX='';
+    makeFlags = [ "LANGS=" ];
+    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "VIM_INSTALL_PATH=$(out)/share" "PYPREFIX=" ];
 
     postInstall = ''
       for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-status aa-unconfined ; do
@@ -162,8 +162,8 @@ let
 
     prePatch = prePatchCommon;
     postPatch = "cd ./binutils";
-    makeFlags = ''LANGS= USE_SYSTEM=1'';
-    installFlags = ''DESTDIR=$(out) BINDIR=$(out)/bin'';
+    makeFlags = [ "LANGS=" "USE_SYSTEM=1" ];
+    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" ];
 
     inherit doCheck;
 
@@ -187,8 +187,11 @@ let
     '';
     inherit patches;
     postPatch = "cd ./parser";
-    makeFlags = ''LANGS= USE_SYSTEM=1 INCLUDEDIR=${libapparmor}/include AR=${stdenv.cc.bintools.targetPrefix}ar'';
-    installFlags = ''DESTDIR=$(out) DISTRO=unknown'';
+    makeFlags = [
+      "LANGS=" "USE_SYSTEM=1" "INCLUDEDIR=${libapparmor}/include"
+      "AR=${stdenv.cc.bintools.targetPrefix}ar"
+    ];
+    installFlags = [ "DESTDIR=$(out)" "DISTRO=unknown" ];
 
     inherit doCheck;
 
@@ -204,8 +207,8 @@ let
     buildInputs = [ libapparmor pam ];
 
     postPatch = "cd ./changehat/pam_apparmor";
-    makeFlags = ''USE_SYSTEM=1'';
-    installFlags = ''DESTDIR=$(out)'';
+    makeFlags = [ "USE_SYSTEM=1" ];
+    installFlags = [ "DESTDIR=$(out)" ];
 
     inherit doCheck;
 
@@ -219,7 +222,7 @@ let
     nativeBuildInputs = [ which ];
 
     postPatch = "cd ./profiles";
-    installFlags = ''DESTDIR=$(out) EXTRAS_DEST=$(out)/share/apparmor/extra-profiles'';
+    installFlags = [ "DESTDIR=$(out)" "EXTRAS_DEST=$(out)/share/apparmor/extra-profiles" ];
 
     inherit doCheck;
 

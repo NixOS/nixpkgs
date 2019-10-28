@@ -75,20 +75,20 @@ stdenv.mkDerivation rec {
     libxkbcommon libxml2 dbus cairo gtk2 gtk3 pango qt4 libuuid
   ];
 
-  cmakeFlags = ''
-    -DENABLE_QT_IM_MODULE=ON
-    -DENABLE_GTK2_IM_MODULE=ON
-    -DENABLE_GTK3_IM_MODULE=ON
-    -DENABLE_GIR=OFF
-    -DENABLE_OPENCC=OFF
-    -DENABLE_PRESAGE=OFF
-    -DENABLE_XDGAUTOSTART=OFF
-    -DENABLE_PINYIN=${if withPinyin then "ON" else "OFF"}
-    -DENABLE_TABLE=ON
-    -DENABLE_SPELL=ON
-    -DENABLE_QT_GUI=ON
-    -DXKB_RULES_XML_FILE='${xkeyboard_config}/share/X11/xkb/rules/evdev.xml'
-    '';
+  cmakeFlags = [
+    "-DENABLE_QT_IM_MODULE=ON"
+    "-DENABLE_GTK2_IM_MODULE=ON"
+    "-DENABLE_GTK3_IM_MODULE=ON"
+    "-DENABLE_GIR=OFF"
+    "-DENABLE_OPENCC=OFF"
+    "-DENABLE_PRESAGE=OFF"
+    "-DENABLE_XDGAUTOSTART=OFF"
+    "-DENABLE_PINYIN=${if withPinyin then "ON" else "OFF"}"
+    "-DENABLE_TABLE=ON"
+    "-DENABLE_SPELL=ON"
+    "-DENABLE_QT_GUI=ON"
+    "-DXKB_RULES_XML_FILE='${xkeyboard_config}/share/X11/xkb/rules/evdev.xml'"
+  ];
 
   meta = with stdenv.lib; {
     homepage    = https://github.com/fcitx/fcitx;
