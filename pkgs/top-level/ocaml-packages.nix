@@ -22,6 +22,8 @@ let
 
     angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
 
+    angstrom-lwt-unix = callPackage ../development/ocaml-modules/angstrom-lwt-unix { };
+
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
     apron = callPackage ../development/ocaml-modules/apron { };
