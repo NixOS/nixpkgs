@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "mapsplotlib";
-  version = "1.1.3";
+  version = "1.2.0";
 
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9214a2ddc5157fc6fef7659db7c1fa1c096b4d79f543cc2eeb2c5fc706b89c98";
+    sha256 = "e0a18aa0d134407aab6130c314596732d129ff98f9a6084640a07a5b8656f836";
   };
 
   propagatedBuildInputs = [ matplotlib scipy pandas requests pillow ];

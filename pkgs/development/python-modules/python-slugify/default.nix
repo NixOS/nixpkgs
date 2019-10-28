@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
     pname = "python-slugify";
-    version = "3.0.6";
+    version = "4.0.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "8653d589308c91c67fe5c97a2afda0cfac9492061e69c0db90d1aef68fcd2332";
+      sha256 = "a8fc3433821140e8f409a9831d13ae5deccd0b033d4744d94b31fea141bdd84c";
     };
 
     propagatedBuildInputs = [ text-unidecode ];

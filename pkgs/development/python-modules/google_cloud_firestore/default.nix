@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "0.31.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5349d1a112dc8ff1b96d400a04ab18949503b542c72f526847e2066eef6cbc25";
+    sha256 = "201fa86bbc76cf7ccbfac293bb7ed2dfba9bb9e5244b2785f619d083a8b2b51d";
   };
 
   checkInputs = [ pytest ];

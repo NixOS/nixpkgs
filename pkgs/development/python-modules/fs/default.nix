@@ -15,6 +15,7 @@
 , mock
 , pythonAtLeast
 , isPy3k
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ glibcLocales ];
-  checkInputs = [ nose pyftpdlib mock psutil ];
+  checkInputs = [ nose pyftpdlib mock psutil pytest ];
   propagatedBuildInputs = [ six appdirs pytz ]
     ++ lib.optionals (!isPy3k) [ backports_os ]
     ++ lib.optionals (!pythonAtLeast "3.6") [ typing ]
@@ -37,7 +38,7 @@ buildPythonPackage rec {
   LC_ALL="en_US.utf-8";
 
   checkPhase = ''
-    HOME=$(mktemp -d) nosetests tests []
+    HOME=$(mktemp -d) pytest -k 'not user_data_repr' --ignore=tests/test_opener.py
   '';
 
   meta = with lib; {

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
-  version = "1.5.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f187a878e7a191f4e098159904f72b4146cf70e1aabaf6484ab4ba72fc6f252c";
+    sha256 = "b90323aad60f207f9f90a0c4cf94c10acc313c20b39403398dfba51f25f7b454";
   };
 
   propagatedBuildInputs = [

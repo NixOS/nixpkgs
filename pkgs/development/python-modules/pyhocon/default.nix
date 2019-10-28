@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 # Runtime inputs:
 , pyparsing
 # Check inputs:
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   pname = "pyhocon";
   version = "0.3.53";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "29d9b64d0141d202b77c18665dc4fcafc05fd4c1a4b0fd95ca57c8b58c0e6c2d";
+  src = fetchFromGitHub {
+    owner = "chimpler";
+    repo = "pyhocon";
+    rev = version;
+    sha256 = "1lr56piiasnq1aiwli8ldw2wc3xjfck8az991mr5rdbqqsrh9vkv";
   };
 
   propagatedBuildInputs = [ pyparsing ];
