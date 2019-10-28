@@ -3,22 +3,23 @@
 , pkgconfig
 , gnome3
 , telepathy-glib
+, python3
 , libxslt
 , makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-mission-control";
-  version = "5.16.4";
+  version = "5.16.5";
 
   src = fetchurl {
     url = "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1jz6wwgsfxixha6ys2hbzbk5faqnj9kh2m5qdlgx5anqgandsscp";
+    sha256 = "00xxv38cfdirnfvgyd56m60j0nkmsv5fz6p2ydyzsychicxl6ssc";
   };
 
   buildInputs = [
     telepathy-glib
-    telepathy-glib.python
+    python3
   ]; # ToDo: optional stuff missing
 
   nativeBuildInputs = [
