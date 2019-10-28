@@ -12658,6 +12658,8 @@ in
 
   libb2 = callPackage ../development/libraries/libb2 { };
 
+  libbacktrace = callPackage ../development/libraries/libbacktrace { };
+
   libbap = callPackage ../development/libraries/libbap {
     inherit (ocaml-ng.ocamlPackages_4_06) bap ocaml findlib ctypes;
   };
