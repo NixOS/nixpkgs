@@ -4,7 +4,7 @@
   libjpeg, libpng, libpulseaudio, libraw, librsvg, libsndfile,
   libspectre, libtiff, libwebp, libxkbcommon, luajit, lz4, mesa,
   openjpeg, openssl, poppler, python27Packages, systemd, udev,
-  utillinux, writeText, xineLib, xorg, zlib
+  utillinux, writeText, xorg, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
     poppler
     python27Packages.dbus-python
     utillinux
-    xineLib
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXdamage
