@@ -22492,6 +22492,9 @@ in
 
   minetest = minetestclient_5;
 
+  mindustry = mindustry-bin;
+  mindustry-bin = callPackage ../games/mindustry-bin { };
+
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
   };
