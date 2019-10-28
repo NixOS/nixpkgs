@@ -62,7 +62,7 @@ let
     "--stringparam html.stylesheet 'style.css overrides.css highlightjs/mono-blue.css'"
     "--stringparam html.script './highlightjs/highlight.pack.js ./highlightjs/loader.js'"
     "--param xref.with.number.and.title 1"
-    "--param toc.section.depth 3"
+    "--param toc.section.depth 0"
     "--stringparam admon.style ''"
     "--stringparam callout.graphics.extension .svg"
     "--stringparam current.docid manual"
