@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    telepathy-glib
     python3
   ]; # ToDo: optional stuff missing
 
@@ -26,6 +25,10 @@ stdenv.mkDerivation rec {
     pkgconfig
     libxslt
     makeWrapper
+  ];
+
+  propagatedBuildInputs = [
+    telepathy-glib
   ];
 
   doCheck = true;
