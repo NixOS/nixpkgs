@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   pname = "telepathy-mission-control";
   version = "5.16.5";
 
+  outputs = [ "out" "lib" "dev" ];
+
   src = fetchurl {
     url = "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
     sha256 = "00xxv38cfdirnfvgyd56m60j0nkmsv5fz6p2ydyzsychicxl6ssc";
@@ -33,8 +35,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  enableParallelBuilding = true;
+
   preFixup = ''
-    wrapProgram "$out/libexec/mission-control-5" \
+    wrapProgram "$lib/libexec/mission-control-5" \
       --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
