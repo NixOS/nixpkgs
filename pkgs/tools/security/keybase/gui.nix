@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, atk, cairo, cups, udev
-, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3
+, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
 , runtimeShell, gsettings-desktop-schemas }:
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     glib
     gsettings-desktop-schemas
     gtk3
+    libappindicator-gtk3
     libnotify
     nspr
     nss
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     udev.lib
+    libappindicator-gtk3
   ];
 
   dontBuild = true;
