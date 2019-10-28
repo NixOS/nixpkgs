@@ -18,6 +18,10 @@ buildGoModule rec {
     python3.pkgs.wrapPython
   ];
 
+  patches = [
+    ./runtime-sharedir.patch
+  ];
+
   pythonPath = [
     python3.pkgs.colorama
   ];
