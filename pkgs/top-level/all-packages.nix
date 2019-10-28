@@ -24201,6 +24201,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  vector = callPackage ../tools/misc/vector {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   utsushi = callPackage ../misc/drivers/utsushi { };
