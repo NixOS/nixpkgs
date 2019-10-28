@@ -378,6 +378,7 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
+            set -eu
             PSQL="${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql --port=${toString cfg.port}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
@@ -396,25 +397,41 @@ in
               $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user}'" | grep -q 1 || $PSQL -tAc "CREATE USER ${user}"
             '') (unique (concatMap (a: if a ? owner then if a.owner != null then [a.owner] else [] else [a.name]) (cfg.ensureUsers ++ cfg.ensureDatabases)))
           + concatMapStrings (db: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database.name}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database.name}" ${optionalString (database.owner != null) ''OWNER "${database.owner}"''}'
-              ${optionalString (database.owner != null) ''
-                  current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${database.name}'")
-                  if [[ "$current_owner" != "${database.owner}" ]]; then
-                      $PSQL -tAc 'ALTER DATABASE "${database.name}" OWNER TO "${database.owner}"'
-                      if [[ -e "${cfg.dataDir}/.reassigning_${database.name}" ]]; then
-                          echo "Reassigning ownership of ${database.name} to ${database.owner} failed on last boot. Failing..."
+              database_exists=$($PSQL -tAc "SELECT 'true' FROM pg_database WHERE datname = '${db.name}'")
+              if [[ "$database_exists" != "true" ]]; then
+                  $PSQL -tAc 'CREATE DATABASE "${db.name}" ${optionalString (db.owner != null) ''OWNER "${db.owner}"''}'
+              fi
+
+              echo "${db.name}" >> "${cfg.dataDir}/databases"
+
+              ${optionalString (db.owner != null) ''
+                  current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${db.name}'")
+                  if [[ "$current_owner" != "${db.owner}" ]]; then
+                      $PSQL -tAc 'ALTER DATABASE "${db.name}" OWNER TO "${db.owner}"'
+                      if [[ -e "${cfg.dataDir}/.reassigning_${db.name}" ]]; then
+                          echo "Reassigning ownership of ${db.name} to ${db.owner} failed on last boot. Failing..."
                           exit 1
                       fi
-                      touch "${cfg.dataDir}/.reassigning_${database.name}"
-                      $PSQL "${database.name}" -tAc "REASSIGN OWNED BY \"$current_owner\" TO \"${database.owner}\""
-                      rm "${cfg.dataDir}/.reassigning_${database.name}"
+                      touch "${cfg.dataDir}/.reassigning_${db.name}"
+                      $PSQL "${db.name}" -tAc "REASSIGN OWNED BY \"$current_owner\" TO \"${db.owner}\""
+                      rm "${cfg.dataDir}/.reassigning_${db.name}"
                   fi
                 ''}
-            ''
-            + concatMapStrings (extension: ''
-                $PSQL '${database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS ${extension}"
-              '') database.extensions
-            ) cfg.ensureDatabases
+              ''
+              + concatMapStrings (extension: ''
+                  $PSQL '${db.name}' -tAc "CREATE EXTENSION IF NOT EXISTS ${extension}"
+                '') db.extensions
+              ) cfg.ensureDatabases
+          + ''
+            touch "${cfg.dataDir}/databases"
+            if [[ -f "${cfg.dataDir}/existing_databases" ]]; then
+                for db in $(grep -vFxf "${cfg.dataDir}/databases" "${cfg.dataDir}/existing_databases" || echo ""); do
+                    echo "Dropping database $db!"
+                    $PSQL -tAc "DROP DATABASE \"$db\""
+                done
+            fi
+            mv "${cfg.dataDir}/databases" "${cfg.dataDir}/existing_databases"
+          ''
           + concatMapStrings (user: ''
               ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
                 $PSQL -tAc 'GRANT ${permission} ON ${database} TO ${user.name}'
