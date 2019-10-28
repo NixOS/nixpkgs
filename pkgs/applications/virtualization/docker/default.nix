@@ -37,8 +37,6 @@ rec {
         rev = containerdRev;
         sha256 = containerdSha256;
       };
-
-      hardeningDisable = [ "fortify" ];
     });
 
     docker-tini = tini.overrideAttrs  (oldAttrs: {
@@ -81,9 +79,6 @@ rec {
       rev = "v${version}";
       sha256 = sha256;
     };
-
-    # Optimizations break compilation of libseccomp c bindings
-    hardeningDisable = [ "fortify" ];
 
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [

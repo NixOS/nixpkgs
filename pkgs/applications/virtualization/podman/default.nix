@@ -18,8 +18,6 @@ buildGoPackage rec {
 
   outputs = [ "bin" "out" "man" ];
 
-  # Optimizations break compilation of libseccomp c bindings
-  hardeningDisable = [ "fortify" ];
   nativeBuildInputs = [ pkgconfig go-md2man ];
 
   buildInputs = [ btrfs-progs libseccomp gpgme lvm2 systemd ];
