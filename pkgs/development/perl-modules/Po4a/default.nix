@@ -9,7 +9,8 @@ buildPerlPackage rec {
     sha256 = "1qss4q5df3nsydsbggb7gg50bn0kdxq5wn8riqm9zwkiq6a4bifg";
   };
   nativeBuildInputs = [ docbook_xsl docbook_xsl_ns ModuleBuild ];
-  propagatedBuildInputs = [ TextWrapI18N LocaleGettext TermReadKey SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
+  propagatedBuildInputs = [ TextWrapI18N LocaleGettext SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
+  # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build
   buildInputs = [ gettext libxslt glibcLocales docbook_xml_dtd_412 docbook_sgml_dtd_41 texlive.combined.scheme-basic opensp ];
   LC_ALL = "en_US.UTF-8";
   SGML_CATALOG_FILES = "${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml";
