@@ -47,6 +47,13 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  # darktable installs for some reason it's documentation on /share/doc/, move it to it's own directory
+  postFixup = ''
+    mv $out/share/doc $out/share/doc_darktable/
+    mkdir $out/share/doc
+    mv $out/share/doc_darktable/ $out/share/doc/darktable
+  '';
+
   meta = with stdenv.lib; {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = https://www.darktable.org;
