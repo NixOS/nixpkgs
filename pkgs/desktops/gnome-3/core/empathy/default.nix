@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
     cheese libgudev
   ];
 
+  enableParallelBuilding = true;
+
   LC_ALL = "en_US.UTF-8";
 
   passthru = {
