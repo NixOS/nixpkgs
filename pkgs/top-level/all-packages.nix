@@ -12958,6 +12958,8 @@ in
 
   nettle = callPackage ../development/libraries/nettle { };
 
+  nettle_3_4 = callPackage ../development/libraries/nettle/3.4.nix { };
+
   newt = callPackage ../development/libraries/newt { };
 
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
