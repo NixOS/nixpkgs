@@ -9710,6 +9710,8 @@ in
     inherit (xorg) libX11 libXext libXi libXtst;
   };
 
+  git-subcopy = callPackage ../development/tools/git-subcopy { };
+
   github-release = callPackage ../development/tools/github/github-release { };
 
   global = callPackage ../development/tools/misc/global { };
