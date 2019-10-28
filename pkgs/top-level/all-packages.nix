@@ -11267,6 +11267,7 @@ in
 
   gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
     gperf = gperf_3_0;
+    nettle = nettle_3_4; # https://github.com/arpa2/gnutls-kdh/issues/2
   };
 
   gpac = callPackage ../applications/video/gpac { };
