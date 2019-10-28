@@ -18,7 +18,7 @@ with python3.pkgs; buildPythonApplication rec {
     pylint
     flake8
     pyyaml
-    mypy_extensions
+    mypy-extensions
   ];
 
   propagatedBuildInputs = [

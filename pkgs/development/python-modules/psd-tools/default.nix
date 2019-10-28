@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.4";
+  version = "1.8.30";
 
   meta = {
     description = "Python package for reading Adobe Photoshop PSD files";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g2vss5hwlk96w0yj42n7ia56mly51n92f2rlbrifhn8hfbxd38s";
+    sha256 = "101d7df09f9a745f7729c25a1621428e501910ed6436d639e1aded4b03c14e02";
   };
 
   propagatedBuildInputs = [ docopt pillow ];

@@ -608,6 +608,8 @@ in {
     # objects owners and extensions; for now we tack on what's needed
     # here.
     systemd.services.postgresql.postStart = mkAfter (optionalString databaseActuallyCreateLocally ''
+      set -eu
+
       $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
       current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.databaseName}'")
       if [[ "$current_owner" != "${cfg.databaseUsername}" ]]; then
@@ -739,7 +741,6 @@ in {
         gitlab-workhorse
       ];
       serviceConfig = {
-        PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
@@ -781,13 +782,18 @@ in {
         ExecStartPre = let
           preStartFullPrivileges = ''
             shopt -s dotglob nullglob
+            set -eu
+
             chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
             chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/config/*
           '';
           preStart = ''
+            set -eu
+
             cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
             rm -rf ${cfg.statePath}/db/*
             rm -rf ${cfg.statePath}/config/initializers/*
+            rm -f ${cfg.statePath}/lib
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
 

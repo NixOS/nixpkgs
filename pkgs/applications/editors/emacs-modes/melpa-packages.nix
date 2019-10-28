@@ -394,52 +394,22 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
-        vterm = let
-          emacsSources = pkgs.stdenv.mkDerivation {
-            name = self.emacs.name + "-sources";
-            src = self.emacs.src;
-
-            dontConfigure = true;
-            dontBuild = true;
-            doCheck = false;
-            fixupPhase = ":";
-
-            installPhase = ''
-              mkdir -p $out
-              cp -a * $out
-            '';
-
-          };
-
-          libvterm = pkgs.libvterm-neovim.overrideAttrs(old: rec {
-            pname = "libvterm-neovim";
-            version = "2019-04-27";
-            name = pname + "-" + version;
-            src = pkgs.fetchFromGitHub {
-              owner = "neovim";
-              repo = "libvterm";
-              rev = "89675ffdda615ffc3f29d1c47a933f4f44183364";
-              sha256 = "0l9ixbj516vl41v78fi302ws655xawl7s94gmx1kb3fmfgamqisy";
-            };
-          });
-
-        in pkgs.stdenv.mkDerivation {
-          inherit (super.vterm) name version src;
-
-          nativeBuildInputs = [ pkgs.cmake ];
-          buildInputs = [ self.emacs libvterm ];
-
+        vterm = super.vterm.overrideAttrs(old: {
+          buildInputs = old.buildInputs ++ [ self.emacs pkgs.cmake pkgs.libvterm-neovim ];
           cmakeFlags = [
-            "-DEMACS_SOURCE=${emacsSources}"
-            "-DUSE_SYSTEM_LIBVTERM=True"
+            "-DEMACS_SOURCE=${self.emacs.src}"
+            "-DUSE_SYSTEM_LIBVTERM=ON"
           ];
-
-          installPhase = ''
-            install -d $out/share/emacs/site-lisp
-            install ../*.el $out/share/emacs/site-lisp
-            install ../*.so $out/share/emacs/site-lisp
+          # we need the proper out directory to exist, so we do this in the
+          # postInstall instead of postBuild
+          postInstall = ''
+            pushd source/build >/dev/null
+            make
+            install -m444 -t $out/share/emacs/site-lisp/elpa/vterm-** ../*.so
+            popd > /dev/null
+            rm -rf $out/share/emacs/site-lisp/elpa/vterm-**/{CMake*,build,*.c,*.h}
           '';
-        };
+        });
         # Legacy alias
         emacs-libvterm = unstable.vterm;
 

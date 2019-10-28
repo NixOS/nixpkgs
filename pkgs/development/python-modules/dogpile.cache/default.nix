@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "dogpile.cache";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "691b7f199561c4bd6e7e96f164a43cc3781b0c87bea29b7d59d859f873fd4a31";
+    sha256 = "70f5eae4aec908f76188a2c287e07105f60c05d879bb9a4efcc5ba44563d8de6";
   };
 
   # Disable concurrency tests that often fail,

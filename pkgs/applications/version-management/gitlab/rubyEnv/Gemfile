@@ -87,9 +87,9 @@ gem 'rack-cors', '~> 1.0.0', require: 'rack/cors'
 
 # GraphQL API
 gem 'graphql', '~> 1.9.11'
-# NOTE: graphiql-rails v1.5+ doesn't work: https://gitlab.com/gitlab-org/gitlab-ce/issues/67293
+# NOTE: graphiql-rails v1.5+ doesn't work: https://gitlab.com/gitlab-org/gitlab/issues/31771
 # TODO: remove app/views/graphiql/rails/editors/show.html.erb when https://github.com/rmosolgo/graphiql-rails/pull/71 is released:
-# https://gitlab.com/gitlab-org/gitlab-ce/issues/67263
+# https://gitlab.com/gitlab-org/gitlab/issues/31747
 gem 'graphiql-rails', '~> 1.4.10'
 gem 'apollo_upload_server', '~> 2.0.0.beta3'
 gem 'graphql-docs', '~> 1.6.0', group: [:development, :test]
@@ -148,7 +148,7 @@ gem 'wikicloth', '0.8.1'
 gem 'asciidoctor', '~> 2.0.10'
 gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
 gem 'asciidoctor-plantuml', '0.0.9'
-gem 'rouge', '~> 3.7'
+gem 'rouge', '~> 3.11.0'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
 gem 'nokogiri', '~> 1.10.4'
@@ -311,7 +311,7 @@ gem 'gettext', '~> 3.2.2', require: false, group: :development
 gem 'batch-loader', '~> 1.4.0'
 
 # Perf bar
-# https://gitlab.com/gitlab-org/gitlab-ee/issues/13996
+# https://gitlab.com/gitlab-org/gitlab/issues/13996
 gem 'gitlab-peek', '~> 0.0.1', require: 'peek'
 
 # Snowplow events tracking
@@ -355,7 +355,7 @@ group :development, :test do
   gem 'fuubar', '~> 2.2.0'
 
   gem 'database_cleaner', '~> 1.7.0'
-  gem 'factory_bot_rails', '~> 4.8.2'
+  gem 'factory_bot_rails', '~> 5.1.0'
   gem 'rspec-rails', '~> 3.8.0'
   gem 'rspec-retry', '~> 0.6.1'
   gem 'rspec_profiling', '~> 0.0.5'
@@ -405,7 +405,7 @@ group :test do
   gem 'webmock', '~> 3.5.1'
   gem 'rails-controller-testing'
   gem 'concurrent-ruby', '~> 1.1'
-  gem 'test-prof', '~> 0.2.5'
+  gem 'test-prof', '~> 0.10.0'
   gem 'rspec_junit_formatter'
 end
 
@@ -446,7 +446,7 @@ group :ed25519 do
 end
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 1.58.0'
+gem 'gitaly', '~> 1.65.0'
 
 gem 'grpc', '~> 1.19.0'
 
@@ -465,7 +465,7 @@ gem 'lograge', '~> 0.5'
 gem 'grape_logging', '~> 1.7'
 
 # DNS Lookup
-gem 'net-dns', '~> 0.9.0'
+gem 'gitlab-net-dns', '~> 0.9.1'
 
 # Countries list
 gem 'countries', '~> 3.0'

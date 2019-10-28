@@ -906,6 +906,8 @@ in {
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
+  py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
+
   pybullet = callPackage ../development/python-modules/pybullet { };
 
   pycairo = callPackage ../development/python-modules/pycairo {
@@ -1080,6 +1082,8 @@ in {
   pystache = callPackage ../development/python-modules/pystache { };
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
+
+  pytest-black = callPackage ../development/python-modules/pytest-black { };
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
 
@@ -3490,6 +3494,8 @@ in {
 
   icalendar = callPackage ../development/python-modules/icalendar { };
 
+  ics = callPackage ../development/python-modules/ics { };
+
   ifaddr = callPackage ../development/python-modules/ifaddr { };
 
   imageio = callPackage ../development/python-modules/imageio { };
@@ -3521,10 +3527,7 @@ in {
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
-  ipython = if pythonOlder "3.5" then
-      callPackage ../development/python-modules/ipython/5.nix { }
-    else
-      callPackage ../development/python-modules/ipython { };
+  ipython = callPackage ../development/python-modules/ipython { };
 
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
@@ -3911,7 +3914,7 @@ in {
 
   mypy = callPackage ../development/python-modules/mypy { };
 
-  mypy_extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
+  mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
 
@@ -5009,6 +5012,18 @@ in {
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
+  sphinxcontrib-applehelp = callPackage ../development/python-modules/sphinxcontrib-applehelp {};
+
+  sphinxcontrib-devhelp = callPackage ../development/python-modules/sphinxcontrib-devhelp {};
+
+  sphinxcontrib-htmlhelp = callPackage ../development/python-modules/sphinxcontrib-htmlhelp {};
+
+  sphinxcontrib-jsmath = callPackage ../development/python-modules/sphinxcontrib-jsmath {};
+
+  sphinxcontrib-qthelp = callPackage ../development/python-modules/sphinxcontrib-qthelp {};
+
+  sphinxcontrib-serializinghtml = callPackage ../development/python-modules/sphinxcontrib-serializinghtml {};
+
   sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex {};
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree {};
@@ -5051,6 +5066,10 @@ in {
   tadasets = callPackage ../development/python-modules/tadasets { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
+
+  tatsu = callPackage ../development/python-modules/tatsu { };
+
+  tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
   tempita = callPackage ../development/python-modules/tempita { };
 
@@ -5244,6 +5263,8 @@ in {
   ruamel_ordereddict = callPackage ../development/python-modules/ruamel_ordereddict { };
 
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
+
+  ruamel_yaml_clib = callPackage ../development/python-modules/ruamel_yaml_clib { };
 
   ruffus = callPackage ../development/python-modules/ruffus { };
 
@@ -5613,6 +5634,8 @@ in {
 
   python-libarchive = callPackage ../development/python-modules/python-libarchive { };
 
+  python-logstash = callPackage ../development/python-modules/python-logstash { };
+
   libarchive-c = callPackage ../development/python-modules/libarchive-c {
     inherit (pkgs) libarchive;
   };
@@ -5836,6 +5859,8 @@ in {
   potr = callPackage ../development/python-modules/potr {};
 
   pyregion = callPackage ../development/python-modules/pyregion {};
+
+  python-nomad = callPackage ../development/python-modules/python-nomad { };
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
 

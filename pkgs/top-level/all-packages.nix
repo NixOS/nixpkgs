@@ -1655,6 +1655,8 @@ in
 
   firecracker = callPackage ../applications/virtualization/firecracker { };
 
+  firectl = callPackage ../applications/virtualization/firectl { };
+
   firestarter = callPackage ../applications/misc/firestarter { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -3008,6 +3010,8 @@ in
 
   evtest-qt = libsForQt5.callPackage ../applications/misc/evtest-qt { };
 
+  eva = callPackage ../tools/misc/eva { };
+
   exa = callPackage ../tools/misc/exa { };
 
   exempi = callPackage ../development/libraries/exempi {
@@ -3824,7 +3828,6 @@ in
   };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
-    stdenv = gcc7Stdenv;
     gfortran = null;
     szip = null;
     mpi = null;
@@ -13950,7 +13953,6 @@ in
   };
 
   taglib = callPackage ../development/libraries/taglib { };
-  taglib_1_9 = callPackage ../development/libraries/taglib/1.9.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
@@ -16586,10 +16588,6 @@ in
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
   riscv-pk = callPackage ../misc/riscv-pk { };
-
-  riscv-pk-with-kernel = riscv-pk.override {
-    payload = "${linux_riscv}/vmlinux";
-  };
 
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
 
@@ -19823,6 +19821,8 @@ in
 
   mtpaint = callPackage ../applications/graphics/mtpaint { };
 
+  mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
+
   mucommander = callPackage ../applications/misc/mucommander { };
 
   multimarkdown = callPackage ../tools/typesetting/multimarkdown { };
@@ -20023,7 +20023,9 @@ in
 
   mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
 
-  mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
+  mythtv = libsForQt5.callPackage ../applications/video/mythtv {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
 
   micro = callPackage ../applications/editors/micro { };
 
@@ -20712,6 +20714,8 @@ in
 
   shfmt = callPackage ../tools/text/shfmt { };
 
+  shotgun = callPackage ../tools/graphics/shotgun {};
+
   shutter = callPackage ../applications/graphics/shutter { };
 
   simple-scan = gnome3.simple-scan;
@@ -21106,6 +21110,8 @@ in
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
 
+  tev = callPackage ../applications/graphics/tev { };
+
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
   thonny = callPackage ../applications/editors/thonny { };
@@ -21166,12 +21172,6 @@ in
   todoman = callPackage ../applications/office/todoman { };
 
   toggldesktop = libsForQt5.callPackage ../applications/misc/toggldesktop { };
-
-  tomahawk = callPackage ../applications/audio/tomahawk ({
-    taglib = taglib_1_9;
-    quazip = quazip_qt4;
-    boost = boost155;
-  } // (config.tomahawk or {}));
 
   topydo = callPackage ../applications/misc/topydo {};
 

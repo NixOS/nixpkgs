@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "discord.py";
-  version = "0.16.12";
+  version = "1.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17fb8814100fbaf7a79468baa432184db6cef3bbea4ad194fe297c7407d50108";
+    sha256 = "3e044d84f0bb275d173e2d958cb4a579e525707f90e3e8a15c59901f79e80663";
   };
 
   propagatedBuildInputs = [ aiohttp websockets pynacl ];
