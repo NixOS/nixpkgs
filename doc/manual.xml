@@ -5,7 +5,7 @@
   <subtitle>Version <xi:include href=".version" parse="text" />
   </subtitle>
  </info>
- <xi:include href="introduction.chapter.xml" />
+ <xi:include href="preface.chapter.xml" />
  <part>
   <title>Using Nixpkgs</title>
   <xi:include href="configuration.xml" />
