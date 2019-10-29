@@ -1,4 +1,4 @@
-{ stdenv, stdenv49, gcc9Stdenv, llvmPackages_8
+{ stdenv, stdenv49, gccStdenv, llvmPackages
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , cmake, ninja, which, findutils, m4, gawk
@@ -8,8 +8,8 @@
 let
   vsmakeBuild = import ./vsmake.nix args;
   cmakeBuild = import ./cmake.nix (args // {
-    gccStdenv    = gcc9Stdenv;
-    llvmPackages = llvmPackages_8;
+    gccStdenv    = gccStdenv;
+    llvmPackages = llvmPackages;
   });
 
   python3-six-patch = fetchpatch {
