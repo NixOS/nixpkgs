@@ -437,6 +437,7 @@ tpope/vim-rsi
 tpope/vim-salve
 tpope/vim-scriptease
 tpope/vim-sensible
+tpope/vim-sexp-mappings-for-regular-people
 tpope/vim-sleuth
 tpope/vim-speeddating
 tpope/vim-surround
