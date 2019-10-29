@@ -3225,6 +3225,17 @@ let
     };
   };
 
+  vim-clojure-static = buildVimPluginFrom2Nix {
+    pname = "vim-clojure-static";
+    version = "2017-10-23";
+    src = fetchFromGitHub {
+      owner = "guns";
+      repo = "vim-clojure-static";
+      rev = "fae5710a0b79555fe3296145be4f85148266771a";
+      sha256 = "0s98qrhv7xh7bvh8bm1vaxpw3n2mcxayay3k90ibgjrv1jpyvzx7";
+    };
+  };
+
   vim-closetag = buildVimPluginFrom2Nix {
     pname = "vim-closetag";
     version = "2019-02-14";
