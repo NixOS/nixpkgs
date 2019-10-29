@@ -131,8 +131,8 @@ in
     mktplcRef = {
       name = "vim";
       publisher = "vscodevim";
-      version = "1.3.0";
-      sha256 = "18z24w7smjjnv945f8qyy6dl95xckyqa6gg3gijfcigvq5sgyawc";
+      version = "1.11.3";
+      sha256 = "1smzsgcrkhghbnpy51gp28kh74l7y4s2m8pfxabb4ffb751254j0";
     };
     meta = {
       license = stdenv.lib.licenses.mit;
