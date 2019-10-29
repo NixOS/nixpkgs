@@ -20,6 +20,12 @@ let
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
+    angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
+
+    angstrom-lwt-unix = callPackage ../development/ocaml-modules/angstrom-lwt-unix { };
+
+    angstrom-unix = callPackage ../development/ocaml-modules/angstrom-unix { };
+
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
     apron = callPackage ../development/ocaml-modules/apron { };
@@ -224,6 +230,8 @@ let
     dune = callPackage ../development/tools/ocaml/dune { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
+
+    earlybird = callPackage ../development/ocaml-modules/earlybird { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
