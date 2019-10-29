@@ -12,7 +12,6 @@
 , python3
 , telepathy-glib
 , telepathy-farstream
-, glibcLocales
 , clutter-gtk
 , clutter-gst
 , gst_all_1
@@ -60,11 +59,6 @@ stdenv.mkDerivation rec {
     sha256 = "0sn10fcymc6lyrabk7vx8lpvlaxxkqnmcwj9zdkfa8qf3388k4nc";
   };
 
-  propagatedUserEnvPkgs = [
-    gnome-online-accounts
-    shared-mime-info
-  ];
-
   propagatedBuildInputs = [
     folks
     telepathy-logger
@@ -83,7 +77,6 @@ stdenv.mkDerivation rec {
     libxslt
     yelp-xsl
     python3
-    glibcLocales
   ];
 
   buildInputs = [
@@ -131,7 +124,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  LC_ALL = "en_US.UTF-8";
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
