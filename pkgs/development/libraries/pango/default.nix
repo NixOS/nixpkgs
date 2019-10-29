@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     (fetchpatch {
       # Fixes CVE-2019-1010238
       url = "https://gitlab.gnome.org/GNOME/pango/commit/490f8979a260c16b1df055eab386345da18a2d54.diff";
-      sha256 = "001g3anvwghdrn3yfgi8cp64j0n3l0zwgiphc1izqg7zr76s87fk";
+      sha256 = "1s0qclbaknkx3dkc3n6mlmx3fnhlr2pkncqjkywprpvahmmypr7k";
     })
   ];
 
