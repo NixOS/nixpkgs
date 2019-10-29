@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, fetchpatch
-, pytest, pytestrunner, hypothesis }:
+, pytest_4, pytestrunner, hypothesis }:
 
 buildPythonPackage rec {
   pname = "chardet";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytest pytestrunner hypothesis ];
+  checkInputs = [ pytest_4 pytestrunner hypothesis ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/chardet/chardet;
