@@ -7123,6 +7123,8 @@ in
 
   wdiff = callPackage ../tools/text/wdiff { };
 
+  wdisplays = callPackage ../tools/graphics/wdisplays { };
+
   webalizer = callPackage ../tools/networking/webalizer { };
 
   weighttp = callPackage ../tools/networking/weighttp { };
