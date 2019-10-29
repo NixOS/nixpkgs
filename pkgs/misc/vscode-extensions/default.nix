@@ -64,7 +64,7 @@ in
     mktplcRef = {
       name = "latex-workshop";
       publisher = "James-Yu";
-      version = "8.2.0"; 
+      version = "8.2.0";
       sha256 = "1ai16aam4v5jzhxgms589q0l24kyk1a9in6z4i7g05b3sahyxab2";
     };
     meta = with stdenv.lib; {
@@ -81,6 +81,18 @@ in
     };
     meta = {
       license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+  ms-azuretools.vscode-docker = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vscode-docker";
+      publisher = "ms-azuretools";
+      version = "0.8.1";
+      sha256 = "0n59whmcrx8946xix6skvc50f2vsc85ckvn8cs06w9mqmymm1q0s";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
     };
   };
 
