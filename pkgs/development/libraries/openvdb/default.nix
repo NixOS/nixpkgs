@@ -24,17 +24,18 @@ stdenv.mkDerivation rec
 
   enableParallelBuilding = true;
 
-  buildFlags = ''lib
-    DESTDIR=$(out)
-    HALF_LIB=-lHalf
-    TBB_LIB=-ltbb
-    BLOSC_LIB=-lblosc
-    LOG4CPLUS_LIB=
-    BLOSC_INCLUDE_DIR=${c-blosc}/include/
-    BLOSC_LIB_DIR=${c-blosc}/lib/
-  '';
+  buildFlags = [
+    "lib"
+    "DESTDIR=$(out)"
+    "HALF_LIB=-lHalf"
+    "TBB_LIB=-ltbb"
+    "BLOSC_LIB=-lblosc"
+    "LOG4CPLUS_LIB="
+    "BLOSC_INCLUDE_DIR=${c-blosc}/include/"
+    "BLOSC_LIB_DIR=${c-blosc}/lib/"
+  ];
 
-  installFlags = ''DESTDIR=$(out)'';
+  installFlags = [ "DESTDIR=$(out)" ];
 
   NIX_CFLAGS_COMPILE="-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR/";
   NIX_LDFLAGS="-lboost_iostreams";

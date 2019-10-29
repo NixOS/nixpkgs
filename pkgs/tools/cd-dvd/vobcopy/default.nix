@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [libdvdread libdvdcss];
-  makeFlags   = "DESTDIR=$(out) PREFIX=/";
+  makeFlags   = [ "DESTDIR=$(out)" "PREFIX=/" ];
 
   meta = {
     description = "Copies DVD .vob files to harddisk, decrypting them on the way";
