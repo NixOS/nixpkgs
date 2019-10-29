@@ -24326,6 +24326,10 @@ in
 
   nixopsUnstable = lowPrio (callPackage ../tools/package-management/nixops/unstable.nix { });
 
+  nixopsPlugins = recurseIntoAttrs (callPackage ../tools/package-management/nixops/plugins.nix {});
+
+  inherit (callPackage ../tools/package-management/nixops/core.nix {}) nixopsCore nixopsWithPlugins;
+
   nixops-dns = callPackage ../tools/package-management/nixops/nixops-dns.nix { };
 
   /* Evaluate a NixOS configuration using this evaluation of Nixpkgs.
