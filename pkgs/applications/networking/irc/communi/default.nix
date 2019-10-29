@@ -19,15 +19,17 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export QMAKEFEATURES=${libcommuni}/features
-    qmakeFlags="$qmakeFlags \
-      COMMUNI_INSTALL_PREFIX=$out \
-      COMMUNI_INSTALL_BINS=$out/bin \
-      COMMUNI_INSTALL_PLUGINS=$out/lib/communi/plugins \
-      COMMUNI_INSTALL_ICONS=$out/share/icons/hicolor \
-      COMMUNI_INSTALL_DESKTOP=$out/share/applications \
-      COMMUNI_INSTALL_THEMES=$out/share/communi/themes
-    "
   '';
+
+  qmakeFlags = [
+    "COMMUNI_INSTALL_PREFIX=$out"
+    "COMMUNI_INSTALL_BINS=$out/bin"
+    "COMMUNI_INSTALL_PLUGINS=$out/lib/communi/plugins"
+    "COMMUNI_INSTALL_ICONS=$out/share/icons/hicolor"
+    "COMMUNI_INSTALL_DESKTOP=$out/share/applications"
+    "COMMUNI_INSTALL_THEMES=$out/share/communi/themes"
+  ];
+
 
   postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     substituteInPlace "$out/share/applications/communi.desktop" \
