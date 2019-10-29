@@ -4678,6 +4678,17 @@ let
     };
   };
 
+  vim-salve = buildVimPluginFrom2Nix {
+    pname = "vim-salve";
+    version = "2019-08-02";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-salve";
+      rev = "7a3d9e7aa674bb72b46e75372320363b962f4457";
+      sha256 = "0793zirb9bi81rwmp6cls5c57yn8cv9qf265nyqc51j40hhw7kcw";
+    };
+  };
+
   vim-sayonara = buildVimPluginFrom2Nix {
     pname = "vim-sayonara";
     version = "2017-03-13";
