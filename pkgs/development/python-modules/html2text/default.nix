@@ -1,21 +1,28 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "html2text";
   version = "2019.9.26";
+  disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6f56057c5c2993b5cc5b347cb099bdf6d095828fef1b53ef4e2a2bf2a1be9b4f";
+  src = fetchFromGitHub {
+    owner = "Alir3z4";
+    repo = pname;
+    rev = version;
+    sha256 = "1gzcx4n6q71plq4zvb1z0fy3brrln0qqrd6jc89iiqn7r1ix8h87";
   };
 
-  meta = with stdenv.lib; {
+  # python setup.py test is broken, use pytest
+  checkInputs = [ pytest ];
+  checkPhase = ''
+    pytest
+  '';
+
+  meta = with lib; {
     description = "Turn HTML into equivalent Markdown-structured text";
     homepage = https://github.com/Alir3z4/html2text/;
     license = licenses.gpl3;
   };
-
 }

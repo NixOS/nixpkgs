@@ -4,13 +4,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "reuse";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "v${version}";
-    sha256 = "1w17g6jvs715rjc93nnnqnfdphijq4ymj9jjkr3ccc286ywvn3ih";
+    sha256 = "17qvsa2qnm767yv7x0v626np0kiyqpb0al7sjqmccarq2wnw8w90";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";
     homepage = "https://github.com/fsfe/reuse-tool";
-    license = with licenses; [ asl20 cc-by-sa-40 cc0 gpl3 ];
+    license = with licenses; [ asl20 cc-by-sa-40 cc0 gpl3Plus ];
     maintainers = [ maintainers.FlorianFranzen ];
   };
 }

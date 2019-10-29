@@ -463,4 +463,8 @@ mapAliases ({
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
   ocaml_4_02   = ocamlPackages_4_02.ocaml;
   ocaml_4_03   = ocamlPackages_4_03.ocaml;
-}))
+}) // {
+
+  # added 2019-10-28
+  gnatsd = nats-server;
+})

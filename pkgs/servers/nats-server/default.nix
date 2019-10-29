@@ -3,17 +3,16 @@
 with lib;
 
 buildGoPackage rec {
-  pname = "gnatsd";
-  version = "1.4.0";
-  rev = "v${version}";
+  pname   = "nats-server";
+  version = "2.1.0";
 
-  goPackagePath = "github.com/nats-io/gnatsd";
+  goPackagePath = "github.com/nats-io/${pname}";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner = "nats-io";
-    repo = "gnatsd";
-    sha256 = "0wxdvaxl273kd3wcas634hx1wx5piljgbfr6vhf669b1frkgrh2b";
+    rev    = "v${version}";
+    owner  = "nats-io";
+    repo   = pname;
+    sha256 = "1zp43v69cawbp6bpby1vx51z6nyv8gxnnl2qkhwr9zrgnhlcflnl";
   };
 
   meta = {
