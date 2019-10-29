@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, sfml, libGLU_combined, bullet, glm, libmad, xlibsWrapper, openal
-, SDL2, boost, ffmpeg }:
+, SDL2, boost, ffmpeg, Cocoa, OpenAL }:
 
 stdenv.mkDerivation {
   version = "2019-10-26";
@@ -12,9 +12,11 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ cmake ];
+
   buildInputs = [
-    cmake sfml libGLU_combined bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
-  ];
+    sfml libGLU_combined bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
 
   meta = with stdenv.lib; {
     description = "Unofficial open source recreation of the classic Grand Theft Auto III game executable";
