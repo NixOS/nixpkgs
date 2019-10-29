@@ -18,6 +18,7 @@
 , pcre2
 , fribidi
 , zlib
+, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -88,7 +89,7 @@ stdenv.mkDerivation rec {
       the system's terminfo database.
     '';
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ astsmtl antono lethalman ];
+    maintainers = with maintainers; [ astsmtl antono lethalman ] ++ gnome3.maintainers;
     platforms = platforms.unix;
   };
 }
