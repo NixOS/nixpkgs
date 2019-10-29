@@ -48,13 +48,14 @@ let
     src = ./builder.pl;
     inherit (builtins) storeDir;
   };
+  perlPkgs = buildPackages.perlPackages;
 in
 
 runCommand name
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
             meta pathsToLink extraPrefix postBuild buildInputs;
-    pkgs = builtins.toJSON (map (drv: {
+    pkgs = map (drv: {
       paths =
         # First add the usual output(s): respect if user has chosen explicitly,
         # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
@@ -68,13 +69,14 @@ runCommand name
         ++ lib.filter (p: p!=null)
           (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
       priority = drv.meta.priority or 5;
-    }) paths);
+    }) paths;
     preferLocalBuild = true;
     allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary
-    passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else null;
   }
   ''
+    source .attrs.sh
+    export PERL5LIB=${perlPkgs.makePerlPath (with perlPkgs; [ FileSlurp ])}
     ${buildPackages.perl}/bin/perl -w ${builder}
     eval "$postBuild"
   '')

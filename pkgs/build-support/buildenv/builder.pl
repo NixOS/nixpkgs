@@ -6,13 +6,15 @@ use IO::Handle;
 use File::Path;
 use File::Basename;
 use File::Compare;
+use File::Slurp qw(read_file);
 use JSON::PP;
 
 STDOUT->autoflush(1);
 
-my $out = $ENV{"out"};
+my $nixAttrs = decode_json(read_file(".attrs.json"));
+my $out = $nixAttrs->{outputs}->{out};
 
-my @pathsToLink = split ' ', $ENV{"pathsToLink"};
+my @pathsToLink = @{$nixAttrs->{pathsToLink}};
 
 sub isInPathsToLink {
     my $path = shift;
@@ -176,24 +178,13 @@ sub addPkg {
     }
 }
 
-# Read packages list.
-my $pkgs;
-
-if (exists $ENV{"pkgsPath"}) {
-    open FILE, $ENV{"pkgsPath"};
-    $pkgs = <FILE>;
-    close FILE;
-} else {
-    $pkgs = $ENV{"pkgs"}
-}
-
 # Symlink to the packages that have been installed explicitly by the
 # user.
-for my $pkg (@{decode_json $pkgs}) {
+for my $pkg (@{$nixAttrs->{pkgs}}) {
     for my $path (@{$pkg->{paths}}) {
         addPkg($path,
-               $ENV{"ignoreCollisions"} eq "1",
-               $ENV{"checkCollisionContents"} eq "1",
+               $nixAttrs->{ignoreCollisions},
+               $nixAttrs->{checkCollisionContents},
                $pkg->{priority})
            if -e $path;
     }
@@ -209,13 +200,12 @@ while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 2, $ENV{"checkCollisionContents"} eq "1", $priorityCounter++);
+        addPkg($pkgDir, 2, $nixAttrs->{"checkCollisionContents"}, $priorityCounter++);
     }
 }
 
-
 # Create the symlinks.
-my $extraPrefix = $ENV{"extraPrefix"};
+my $extraPrefix = $nixAttrs->{extraPrefix};
 my $nrLinks = 0;
 foreach my $relName (sort keys %symlinks) {
     my ($target, $priority) = @{$symlinks{$relName}};
@@ -236,7 +226,7 @@ foreach my $relName (sort keys %symlinks) {
 print STDERR "created $nrLinks symlinks in user environment\n";
 
 
-my $manifest = $ENV{"manifest"};
+my $manifest = $nixAttrs->{manifest};
 if ($manifest) {
     symlink($manifest, "$out/manifest") or die "cannot create manifest";
 }
