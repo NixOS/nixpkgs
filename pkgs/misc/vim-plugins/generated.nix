@@ -1640,6 +1640,17 @@ let
     };
   };
 
+  mattn-calendar-vim = buildVimPluginFrom2Nix {
+    pname = "mattn-calendar-vim";
+    version = "2018-08-24";
+    src = fetchFromGitHub {
+      owner = "mattn";
+      repo = "calendar-vim";
+      rev = "867d0cd2d9388e7f1a88f5fe4da23461422fa8fb";
+      sha256 = "0f13wkvnjcv3awmahrkqw9f9hjdj8fq8wm10rs8jfmzad7w16dvk";
+    };
+  };
+
   mayansmoke = buildVimPluginFrom2Nix {
     pname = "mayansmoke";
     version = "2010-10-18";
