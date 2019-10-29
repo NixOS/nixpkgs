@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags = [
     "PREFIX=$(out)"

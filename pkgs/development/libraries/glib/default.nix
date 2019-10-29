@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     "-Ddevbindir=${placeholder ''dev''}/bin"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=nonnull"
     # Default for release buildtype but passed manually because
     # we're using plain

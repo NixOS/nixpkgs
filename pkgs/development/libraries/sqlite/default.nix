@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
