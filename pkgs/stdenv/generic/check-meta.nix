@@ -18,6 +18,7 @@ let
 
   whitelist = config.whitelistedLicenses or [];
   blacklist = config.blacklistedLicenses or [];
+  licenseCheckPredicate = config.licenseCheckPredicate or (x: true);
 
   onlyLicenses = list:
     lib.lists.all (license:
@@ -230,6 +231,8 @@ let
       { valid = false; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
     else if hasBlacklistedLicense attrs then
       { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
+    else if hasLicense attrs && !(licenseCheckPredicate attrs) then
+      { valid = false; reason = "blacklisted"; errormsg = "failed licenseCheckPredicate (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem &&
