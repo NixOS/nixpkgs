@@ -17843,6 +17843,8 @@ in
 
   bslizr = callPackage ../applications/audio/bslizr { };
 
+  bshapr = callPackage ../applications/audio/bshapr { };
+
   bspwm = callPackage ../applications/window-managers/bspwm { };
 
   btops = callPackage ../applications/window-managers/btops { };
