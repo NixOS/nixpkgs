@@ -17839,6 +17839,8 @@ in
 
   bs1770gain = callPackage ../applications/audio/bs1770gain { };
 
+  bsequencer = callPackage ../applications/audio/bsequencer { };
+
   bslizr = callPackage ../applications/audio/bslizr { };
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
