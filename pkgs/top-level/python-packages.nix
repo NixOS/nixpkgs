@@ -3691,7 +3691,7 @@ in {
 
   libxml2 = (toPythonModule (pkgs.libxml2.override{pythonSupport=true; inherit python;})).py;
 
-  libxslt = toPythonModule (pkgs.libxslt.override{pythonSupport=true; inherit python; inherit (self) libxml2;}).py;
+  libxslt = (toPythonModule (pkgs.libxslt.override{pythonSupport=true; inherit python; inherit (self) libxml2;})).py;
 
   limits = callPackage ../development/python-modules/limits { };
 
