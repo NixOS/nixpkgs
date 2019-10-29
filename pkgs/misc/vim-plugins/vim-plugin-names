@@ -153,6 +153,7 @@ JuliaEditorSupport/julia-vim
 Julian/vim-textobj-variable-segment
 junegunn/fzf.vim
 junegunn/goyo.vim
+junegunn/gv.vim
 junegunn/limelight.vim
 junegunn/seoul256.vim
 junegunn/vader.vim
