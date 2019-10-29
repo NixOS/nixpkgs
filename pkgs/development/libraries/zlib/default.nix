@@ -108,8 +108,17 @@ stdenv.mkDerivation (rec {
 
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
+  ] ++ lib.optionals (stdenv.hostPlatform.isWindows) [
     "-f" "win32/Makefile.gcc"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "RC=${stdenv.cc.targetPrefix}windres"
+  ] ++ lib.optionals (stdenv.hostPlatform.isWindows && (! stdenv.hostPlatform.isMinGW) && stdenv.hostPlatform.useLLVM or false) [
+    "LDFLAGS=-loldnames" # so POSIX names work
+  ] ++ lib.optionals (false /* stdenv.hostPlatform.isWindows && stdenv.hostPlatform.useLLVM */) [
+    "-f" "win32/Makefile.msc"
+    "CC=${stdenv.cc.targetPrefix}clang-cl"
+    "AR=${stdenv.cc.bintools.targetPrefix}llvm-lib"
+    "RC=${stdenv.cc.bintools.targetPrefix}llvm-rc"
   ] ++ lib.optionals shared [
     # Note that as of writing (zlib 1.2.11), this flag only has an effect
     # for Windows as it is specific to `win32/Makefile.gcc`.
