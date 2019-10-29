@@ -49,6 +49,15 @@ let
     else if platform.isAarch64 then "ARM64"
     else throw "missing platform";
 
+  # TODO(@Ericson2314): Need a better solution for case-insensativity.
+  forceLower = dir: ''
+    for file in "${dir}"/*; do
+      if [[ "''${file}" != "''${file,,}" ]]; then
+        mv "''${file}" "''${file,,}"
+      fi
+    done
+  '';
+
   mkCrt = variant: let
     versionShort = "14.16";
     version = "${versionShort}.27023";
@@ -122,6 +131,10 @@ in lib.makeExtensible (self: {
       mv Contents/VC/Auxiliary "$aux"
       mv Contents/Common7 "$common7"
     '';
+    preFixup = ''
+      ${forceLower "$out/lib"}
+      ${forceLower "$dev/include"}
+    '';
   };
 
   inherit manifest manifestFile;
@@ -154,6 +167,9 @@ in lib.makeExtensible (self: {
       ${extractMsi "$msi" "$srcs" "$msiTemp"}
       mkdir "$out"
       mv "$msiTemp/Program Files/Windows Kits/10/Lib/${version}/um/${convArchLower stdenvNoCC.hostPlatform}" "$out/lib"
+    '';
+    preFixup = ''
+      ${forceLower "$out/lib"}
     '';
   };
 
@@ -196,6 +212,10 @@ in lib.makeExtensible (self: {
       mkdir "$dev"
       mv "$msiTempHeaders/Program Files/Windows Kits/10/Include/${version}/${shortName}" "$dev/include"
     '';
+    preFixup = ''
+      ${forceLower "$out/lib"}
+      ${forceLower "$dev/include"}
+    '';
   };
 
   ucrt = let
@@ -233,6 +253,10 @@ in lib.makeExtensible (self: {
       mv "$msiTemp/Program Files/Windows Kits/10/Lib/${version}/${shortName}/${convArchLower stdenvNoCC.hostPlatform}" "$out/lib"
     '' + lib.optionalString (!static) ''
       mv "$msiTemp/Program Files/Windows Kits/10/bin/${version}/${convArchLower stdenvNoCC.hostPlatform}/${shortName}"/* "$out/lib/"
+    '';
+    preFixup = ''
+      ${forceLower "$out/lib"}
+      ${forceLower "$dev/include"}
     '';
   };
 })
