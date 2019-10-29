@@ -118,5 +118,6 @@ stdenv.mkDerivation rec {
     ## Non-artwork is MIT
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
     maintainers = with maintainers; [ jtojnar ];
+    broken = true; # Can't be build using the current Python 3 version of nototools
   };
 }
