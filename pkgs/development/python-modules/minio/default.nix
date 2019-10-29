@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, isPy3k, fetchPypi
-, urllib3, python-dateutil , pytz, faker, mock, nose }:
+, urllib3, future, python-dateutil , pytz, faker, mock, nose }:
 
 buildPythonPackage rec {
   pname = "minio";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   checkInputs = [ faker mock nose ];
-  propagatedBuildInputs = [ urllib3 python-dateutil pytz ];
+  propagatedBuildInputs = [ urllib3 python-dateutil pytz future ];
 
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
