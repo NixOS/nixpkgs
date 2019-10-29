@@ -3484,6 +3484,16 @@
     github = "klntsky";
     githubId = 18447310;
   };
+  kloenk = {
+    email = "kloenk@kloenk.de";
+    name = "Kloenk";
+    github = "Kloenk";
+    githubId = 12898828;
+    keys = [{
+      longkeyid = "ed25519/0xB92445CFC9546F9D";
+      fingerprint = "6881 5A95 D715 D429 659B  48A4 B924 45CF C954 6F9D";
+    }];
+  };
   kmeakin = {
     email = "karlwfmeakin@gmail.com";
     name = "Karl Meakin";

@@ -5022,6 +5022,8 @@ in
 
   neofetch = callPackage ../tools/misc/neofetch { };
 
+  onefetch = callPackage ../tools/misc/onefetch { };
+
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
   nestopia = callPackage ../misc/emulators/nestopia { };
