@@ -4,12 +4,13 @@
 { stdenv
 , fetchFromGitHub
 , cairo
-, imagemagick
+, graphicsmagick
 , pkg-config
 , pngquant
 , python3
 , which
 , zopfli
+, fetchpatch
 }:
 
 let
@@ -55,12 +56,28 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cairo
-    imagemagick
+    graphicsmagick
     pkg-config
     pngquant
     python
     which
     zopfli
+  ];
+
+  patches = [
+    # Port to python3
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/3bc176c10ced2824fe03da5ff561e22a36bf8ccd/f/noto-emoji-port-to-python3.patch";
+      sha256 = "1b91abd050phxlxq7322i74nkx16fkhpw14yh97r2j4c7fqarr2q";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/3bc176c10ced2824fe03da5ff561e22a36bf8ccd/f/noto-emoji-python3.patch";
+      sha256 = "0mw2c748izb6h9a19jwc0qxlb6l1kj6k8gc345lpf7lfcxfl7l59";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/3bc176c10ced2824fe03da5ff561e22a36bf8ccd/f/noto-emoji-use-gm.patch";
+      sha256 = "0yfmfzaaiq5163c06172g4r734aysiqyv1s28siv642vqzsqh4i2";
+    })
   ];
 
   postPatch = let
@@ -118,6 +135,5 @@ stdenv.mkDerivation rec {
     ## Non-artwork is MIT
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
     maintainers = with maintainers; [ jtojnar ];
-    broken = true; # Can't be build using the current Python 3 version of nototools
   };
 }
