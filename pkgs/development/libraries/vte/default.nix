@@ -18,7 +18,6 @@
 , pcre2
 , fribidi
 , zlib
-, gnome3
 }:
 
 stdenv.mkDerivation rec {
