@@ -35,7 +35,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
+  version = "4.0.1";
   name = "qemu-"
     + stdenv.lib.optionalString xenSupport "xen-"
     + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "085g6f75si8hbn94mnnjn1r7ysixn5bqj4bhqwvadj00fhzp2zvd";
+    sha256 = "11mv5sh9qb5mp6rcr527hbg1r2mi64qjbrr2w65wgdwrb6a1rg8h";
   };
 
   nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ];
@@ -82,12 +82,6 @@ stdenv.mkDerivation rec {
       url = "https://git.qemu.org/?p=qemu.git;a=patch;h=d52680fc932efb8a2f334cc6993e705ed1e31e99";
       name = "CVE-2019-12155.patch";
       sha256 = "0h2q71mcz3gvlrbfkqcgla74jdg73hvzcrwr4max2ckpxx8x9207";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/q/qemu/1:3.1+dfsg-8+deb10u2/debian/patches/slirp-fix-heap-overflow-in-ip_reass-on-big-packet-input-CVE-2019-14378.patch";
-      sha256 = "0f3jabl6x6slpnz5pg6fv1k9vfmrkd482z9vqm3adn6mka8lfimb";
-      extraPrefix = "slirp/src/";
-      stripLen = 2;
     })
     (fetchpatch {
       url = "https://sources.debian.org/data/main/q/qemu/1:3.1+dfsg-8+deb10u2/debian/patches/qemu-bridge-helper-restrict-interface-name-to-IFNAMSIZ-CVE-2019-13164.patch";
