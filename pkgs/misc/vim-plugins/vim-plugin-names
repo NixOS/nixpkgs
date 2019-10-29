@@ -106,6 +106,7 @@ google/vim-jsonnet
 google/vim-maktaba
 gregsexton/gitv
 guns/vim-clojure-highlight
+guns/vim-clojure-static
 guns/xterm-color-table.vim
 hashivim/vim-terraform
 haya14busa/incsearch-easymotion.vim
