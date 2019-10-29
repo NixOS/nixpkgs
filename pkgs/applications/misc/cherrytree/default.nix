@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, pythonPackages, gettext }:
+{ lib, fetchurl, pythonPackages, gettext }:
 
-with stdenv.lib;
 pythonPackages.buildPythonApplication rec {
   pname = "cherrytree";
   version = "0.38.9";
@@ -18,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "An hierarchical note taking application";
     longDescription = ''
       Cherrytree is an hierarchical note taking application,
@@ -32,7 +31,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     homepage = "http://www.giuspen.com/cherrytree";
     license = licenses.gpl3;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }
