@@ -4598,6 +4598,8 @@ in
 
   libevdev = callPackage ../development/libraries/libevdev { };
 
+  libevdevplus = callPackage ../development/libraries/libevdevplus { };
+
   libfann = callPackage ../development/libraries/libfann { };
 
   libfsm = callPackage ../development/libraries/libfsm { };
@@ -12611,6 +12613,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  libuinputplus = callPackage ../development/libraries/libuinputplus { };
+
   libunistring = callPackage ../development/libraries/libunistring { };
 
   libupnp = callPackage ../development/libraries/pupnp { };
@@ -14371,6 +14375,8 @@ in
   yajl = callPackage ../development/libraries/yajl { };
 
   yder = callPackage ../development/libraries/yder { };
+
+  ydotool = callPackage ../tools/wayland/ydotool { };
 
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
