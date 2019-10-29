@@ -38,7 +38,6 @@ in{
 
       serviceConfig = {
         Type = "simple";
-        PIDFile = "/run/fancontrol.pid";
         ExecStart = "${pkgs.lm_sensors}/sbin/fancontrol ${configFile}";
       };
     };
