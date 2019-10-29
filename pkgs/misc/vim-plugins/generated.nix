@@ -5382,6 +5382,17 @@ let
     };
   };
 
+  VimOrganizer = buildVimPluginFrom2Nix {
+    pname = "VimOrganizer";
+    version = "2014-04-10";
+    src = fetchFromGitHub {
+      owner = "hsitz";
+      repo = "VimOrganizer";
+      rev = "cab0baf635eb9470e62d57d42f2d470180b06c8d";
+      sha256 = "0qncr00xn7lj1i469fzjaaghhqrlyg5s2wj4v6625dhg98y0irix";
+    };
+  };
+
   vimoutliner = buildVimPluginFrom2Nix {
     pname = "vimoutliner";
     version = "2018-07-04";
