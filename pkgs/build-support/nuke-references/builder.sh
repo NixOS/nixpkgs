@@ -1,3 +1,5 @@
+source .attrs.sh
+
 source $stdenv/setup
 
 mkdir -p $out/bin
