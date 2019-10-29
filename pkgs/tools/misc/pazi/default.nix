@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pazi";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "euank";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gnh6047hacavcb9bhps9d1zjns66rdbd158fw20kjp1lln5srrn";
+    sha256 = "1bbci7bvrwl7lsslf302jham1pcw32fi7nwgqyjpfjyzvnpfgndz";
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoSha256 = "15s03vwgl6562n5h9r4d5kp2r168jakn5nwnyibmrs8r5q0idmjs";
+  cargoSha256 = "0nqcp54nwv4ic5jc3cgg15rh8dgkixfgkwb5q47rv8ding4cd0j5";
 
   cargoPatches = [ ./cargo-lock.patch ];
 

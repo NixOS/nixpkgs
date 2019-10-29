@@ -21371,12 +21371,12 @@ in
 
   virt-what = callPackage ../applications/virtualization/virt-what { };
 
-  virtmanager = callPackage ../applications/virtualization/virt-manager {
+  virt-manager = callPackage ../applications/virtualization/virt-manager {
     dconf = gnome3.dconf;
     system-libvirt = libvirt;
   };
 
-  virtmanager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
+  virt-manager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
     qtermwidget = lxqt.qtermwidget;
   };
 
