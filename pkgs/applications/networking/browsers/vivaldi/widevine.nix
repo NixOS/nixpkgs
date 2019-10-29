@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "widevine";
-  version = "4.10.1196.0";
+  version = "4.10.1582.1";
 
   src = fetchurl {
     url = "https://dl.google.com/widevine-cdm/${version}-linux-x64.zip";
-    sha256 = "01c7nr7d2xs718jymicbk4ipzfx6q253109qv3lk4lryrrhvw14y";
+    sha256 = "0l743f2yyaq1vvc3iicajgnfpjxjsfvjcqvanndbxs23skgjcv6r";
   };
 
   buildInputs = [ unzip ];
@@ -17,12 +17,10 @@ stdenv.mkDerivation rec {
     unzip $src
   '';
 
-  installPhase = let
-    installDir = "$out/share/google/chrome/WidevineCdm/_platform_specific/linux_x64";
-  in ''
-    install -vD libwidevinecdm.so ${installDir}/libwidevinecdm.so
-    install -vD manifest.json ${installDir}/manifest.json
-    install -vD LICENSE.txt ${installDir}/LICENSE.txt
+  installPhase = ''
+    install -vD manifest.json $out/share/google/chrome/WidevineCdm/manifest.json
+    install -vD LICENSE.txt $out/share/google/chrome/WidevineCdm/LICENSE.txt
+    install -vD libwidevinecdm.so $out/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
   '';
 
   meta = with stdenv.lib; {
