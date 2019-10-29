@@ -274,4 +274,12 @@ rec {
   # Fake hashes. Can be used as hash placeholders, when computing hash ahead isn't trivial
   fakeSha256 = "0000000000000000000000000000000000000000000000000000000000000000";
   fakeSha512 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+
+  # deprecated in favor for 'lib.version'. See 9274ea390348e17f766732e7fbd335e3bc164954
+  nixpkgsVersion = lib.trivial.version;
+
+  zipWithNames = zipAttrsWithNames;
+  zip = x: builtins.trace
+    "'lib.zip' is deprecated, use 'lib.zipAttrsWith' instead" zipAttrsWith x;
+
 }

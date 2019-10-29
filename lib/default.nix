@@ -59,7 +59,7 @@ let
       stringLength sub substring tail;
     inherit (trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell min max
-      importJSON warn info showWarnings nixpkgsVersion version mod compare
+      importJSON warn info showWarnings version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction;
     inherit (fixedPoints) fix fix' converge extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
@@ -70,7 +70,7 @@ let
       genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting getOutput getBin
-      getLib getDev chooseDevOutputs zipWithNames zip;
+      getLib getDev chooseDevOutputs;
     inherit (lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
@@ -133,7 +133,7 @@ let
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       fakeSha256 fakeSha512
-      nixType imap;
+      nixType imap nixpkgsVersion zipWithNames zip;
     inherit (versions)
       splitVersion;
   });
