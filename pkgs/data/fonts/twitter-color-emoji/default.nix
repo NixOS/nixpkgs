@@ -7,7 +7,7 @@
 , imagemagick
 , pkg-config
 , pngquant
-, python2
+, python3
 , which
 , zopfli
 }:
@@ -33,7 +33,7 @@ let
     sha256 = "0vzmlp83vnk4njcfkn03jcc1vkg2rf12zf5kj3p3a373xr4ds1zn";
   };
 
-  python = python2.withPackages (pp: with pp; [
+  python = python3.withPackages (pp: with pp; [
     nototools
   ]);
 in
