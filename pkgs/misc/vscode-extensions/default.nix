@@ -90,6 +90,19 @@ in
     extractNuGet = callPackage ./python/extract-nuget.nix { };
   };
 
+  redhat.vscode-yaml = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vscode-yaml";
+      publisher = "redhat";
+      version = "0.5.3";
+      sha256 = "03swlsp906rqlrx6jf3ibh7pk36sm0zdr8jfy6sr3w5lqjg27gka";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+
   skyapps.fish-vscode = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "fish-vscode";
