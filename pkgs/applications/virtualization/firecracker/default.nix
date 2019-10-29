@@ -1,7 +1,7 @@
 { fetchurl, stdenv }:
 
 let
-  version = "0.18.0";
+  version = "0.19.0";
   baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
 
   fetchbin = name: sha256: fetchurl {
@@ -9,20 +9,33 @@ let
     inherit sha256;
   };
 
-  firecracker-bin = fetchbin "firecracker" "140g93z0k8yd9lr049ps4dj0psb9ac1v7g5zs7lzpws9rj8shmgh";
-  jailer-bin      = fetchbin "jailer"      "0sk1zm1fx0zdy5il8vyygzads72ni2lcil42wv59j8b2bg8p7fwd";
+  firecracker-bin = fetchbin "firecracker" "0yjhw77xc2nc96p36jhf0va95gf6hwi9n270g4iiwakycdy048mx";
+  jailer-bin      = fetchbin "jailer"      "1q792b4bl1q3ach8nc8l0fbcil44knv3wa542xrskndzdz28lhsp";
 in
 stdenv.mkDerivation {
-  name = "firecracker-${version}";
+  pname = "firecracker";
   inherit version;
-
   srcs = [ firecracker-bin jailer-bin ];
-  phases = [ "installPhase" ];
+
+  unpackPhase    = ":";
+  configurePhase = ":";
+
+  buildPhase     = ''
+    cp ${firecracker-bin} firecracker
+    cp ${jailer-bin}      jailer
+    chmod +x firecracker jailer
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    ./firecracker --version
+    ./jailer --version
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
-    install -D ${firecracker-bin} $out/bin/firecracker
-    install -D ${jailer-bin}      $out/bin/jailer
+    install -D firecracker $out/bin/firecracker
+    install -D jailer      $out/bin/jailer
   '';
 
   meta = with stdenv.lib; {
