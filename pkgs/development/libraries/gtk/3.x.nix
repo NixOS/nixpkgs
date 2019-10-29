@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.gtk.org/;
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin vcunat lethalman ];
+    maintainers = with maintainers; [ raskin vcunat lethalman worldofpeace ];
     platforms = platforms.all;
   };
 }

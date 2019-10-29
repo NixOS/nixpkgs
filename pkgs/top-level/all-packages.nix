@@ -1575,6 +1575,15 @@ in
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
+  dvc = callPackage ../applications/version-management/dvc { };
+
+  dvc-with-remotes = callPackage ../applications/version-management/dvc {
+    enableGoogle = true;
+    enableAWS = true;
+    enableAzure = true;
+    enableSSH = true;
+  };
+
   dylibbundler = callPackage ../tools/misc/dylibbundler { };
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
@@ -1655,6 +1664,8 @@ in
 
   firecracker = callPackage ../applications/virtualization/firecracker { };
 
+  firectl = callPackage ../applications/virtualization/firectl { };
+
   firestarter = callPackage ../applications/misc/firestarter { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -1702,6 +1713,8 @@ in
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
   gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
+
+  gir-rs = callPackage ../development/tools/gir { };
 
   gist = callPackage ../tools/text/gist { };
 
@@ -2878,6 +2891,10 @@ in
 
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
+  wob = callPackage ../tools/misc/wob { };
+
+  xob = callPackage ../tools/X11/xob { };
+
   z-lua = callPackage ../tools/misc/z-lua { };
 
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
@@ -3826,7 +3843,6 @@ in
   };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
-    stdenv = gcc7Stdenv;
     gfortran = null;
     szip = null;
     mpi = null;
@@ -12020,6 +12036,10 @@ in
 
   libinjection = callPackage ../development/libraries/libinjection { };
 
+  libnats-c = callPackage ../development/libraries/libnats-c {
+    openssl = openssl_1_0_2;
+  };
+
   liburing = callPackage ../development/libraries/liburing { };
 
   librseq = callPackage ../development/libraries/librseq { };
@@ -14834,7 +14854,7 @@ in
 
   glabels = callPackage ../applications/graphics/glabels { };
 
-  gnatsd = callPackage ../servers/gnatsd { };
+  nats-server = callPackage ../servers/nats-server { };
 
   gofish = callPackage ../servers/gopher/gofish { };
 
@@ -19820,6 +19840,8 @@ in
 
   mtpaint = callPackage ../applications/graphics/mtpaint { };
 
+  mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
+
   mucommander = callPackage ../applications/misc/mucommander { };
 
   multimarkdown = callPackage ../tools/typesetting/multimarkdown { };
@@ -20711,6 +20733,8 @@ in
 
   shfmt = callPackage ../tools/text/shfmt { };
 
+  shotgun = callPackage ../tools/graphics/shotgun {};
+
   shutter = callPackage ../applications/graphics/shutter { };
 
   simple-scan = gnome3.simple-scan;
@@ -21104,6 +21128,8 @@ in
   tesseract = tesseract3;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
+
+  tev = callPackage ../applications/graphics/tev { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
@@ -24187,6 +24213,10 @@ in
   };
 
   websocat = callPackage ../tools/misc/websocat {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  vector = callPackage ../tools/misc/vector {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 

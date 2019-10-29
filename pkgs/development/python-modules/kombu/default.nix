@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, case, pytz, Pyro4, amqp }:
+{ lib, buildPythonPackage, fetchPypi
+, amqp
+, case
+, Pyro4
+, pytest
+, pytz
+, sqlalchemy
+}:
 
 buildPythonPackage rec {
   pname = "kombu";
@@ -10,12 +17,19 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace requirements/test.txt --replace "pytest-sugar" ""
+    substituteInPlace requirements/test.txt \
+      --replace "pytest-sugar" ""
+    substituteInPlace requirements/default.txt \
+      --replace "amqp==2.5.1" "amqp~=2.5"
   '';
 
-  checkInputs = [ pytest case pytz Pyro4 ];
-
   propagatedBuildInputs = [ amqp ];
+
+  checkInputs = [ pytest case pytz Pyro4 sqlalchemy ];
+  # test_redis requires fakeredis, which isn't trivial to package
+  checkPhase = ''
+    pytest --ignore t/unit/transport/test_redis.py
+  '';
 
   meta = with lib; {
     description = "Messaging library for Python";

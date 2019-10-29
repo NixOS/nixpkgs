@@ -198,7 +198,7 @@ in
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains)
-                          ++ optionals (!cfg.production) ["--server" "https://acme-staging.api.letsencrypt.org/directory"];
+                          ++ optionals (!cfg.production) ["--server" "https://acme-staging-v02.api.letsencrypt.org/directory"];
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];

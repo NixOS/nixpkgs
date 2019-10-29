@@ -906,7 +906,7 @@ in {
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
-  py3buddy = callPackage ../development/python-modules/py3buddy { };
+  py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
 
   pybullet = callPackage ../development/python-modules/pybullet { };
 
@@ -3494,6 +3494,8 @@ in {
 
   icalendar = callPackage ../development/python-modules/icalendar { };
 
+  ics = callPackage ../development/python-modules/ics { };
+
   ifaddr = callPackage ../development/python-modules/ifaddr { };
 
   imageio = callPackage ../development/python-modules/imageio { };
@@ -5065,6 +5067,8 @@ in {
 
   tasklib = callPackage ../development/python-modules/tasklib { };
 
+  tatsu = callPackage ../development/python-modules/tatsu { };
+
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
   tempita = callPackage ../development/python-modules/tempita { };
@@ -5630,6 +5634,8 @@ in {
 
   python-libarchive = callPackage ../development/python-modules/python-libarchive { };
 
+  python-logstash = callPackage ../development/python-modules/python-logstash { };
+
   libarchive-c = callPackage ../development/python-modules/libarchive-c {
     inherit (pkgs) libarchive;
   };
@@ -5794,7 +5800,8 @@ in {
 
   termcolor = callPackage ../development/python-modules/termcolor { };
 
-  html2text = callPackage ../development/python-modules/html2text { };
+  html2text = if isPy3k then callPackage ../development/python-modules/html2text { }
+                        else callPackage ../development/python-modules/html2text/2018.nix { };
 
   pychart = callPackage ../development/python-modules/pychart {};
 
@@ -5853,6 +5860,8 @@ in {
   potr = callPackage ../development/python-modules/potr {};
 
   pyregion = callPackage ../development/python-modules/pyregion {};
+
+  python-nomad = callPackage ../development/python-modules/python-nomad { };
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
 

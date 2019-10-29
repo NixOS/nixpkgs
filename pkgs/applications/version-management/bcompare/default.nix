@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bcompare";
-  version = "4.3.0.24364";
+  version = "4.3.1.24438";
 
   src = fetchurl {
     url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
-    sha256 = "14ff250nyqfqgm9qazg4la7ajci3bhqm376wy2j3za1vf09774kc";
+    sha256 = "19rbcl0l49qbzn4bisdl9ibj0qm83kjkclva4qcy7jaqna9g7qrh";
   };
 
   unpackPhase = ''
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     ki18n
     kcoreaddons
     gdk-pixbuf
-    qt4
     bzip2
   ];
 
