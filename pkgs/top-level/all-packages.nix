@@ -12613,6 +12613,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  libuinputplus = callPackage ../development/libraries/libuinputplus { };
+
   libunistring = callPackage ../development/libraries/libunistring { };
 
   libupnp = callPackage ../development/libraries/pupnp { };
