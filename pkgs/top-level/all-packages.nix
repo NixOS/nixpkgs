@@ -17813,6 +17813,8 @@ in
 
   bs1770gain = callPackage ../applications/audio/bs1770gain { };
 
+  bslizr = callPackage ../applications/audio/bslizr { };
+
   bspwm = callPackage ../applications/window-managers/bspwm { };
 
   btops = callPackage ../applications/window-managers/btops { };
