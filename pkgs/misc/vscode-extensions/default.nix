@@ -96,6 +96,18 @@ in
     };
   };
 
+  ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vscode-kubernetes-tools";
+      publisher = "ms-kubernetes-tools";
+      version = "1.0.6";
+      sha256 = "12a4phl1pddsajy3n0ld6rp607iy0pif6pqrs6ljbg2x97fyra28";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   ms-vscode.cpptools = callPackage ./cpptools {};
 
   ms-python.python = callPackage ./python {
