@@ -19110,6 +19110,8 @@ in
 
   gnome_mplayer = callPackage ../applications/video/gnome-mplayer { };
 
+  gnome-twitch = callPackage ../applications/video/gnome-twitch { };
+
   gnumeric = callPackage ../applications/office/gnumeric { };
 
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
