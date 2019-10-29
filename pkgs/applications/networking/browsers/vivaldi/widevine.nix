@@ -14,12 +14,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip ];
 
   unpackPhase = ''
-    unzip $src libwidevinecdm.so
-    find .
+    unzip $src
   '';
 
-  installPhase = ''
-    install -vD libwidevinecdm.so $out/lib/libwidevinecdm.so
+  installPhase = let
+    installDir = "$out/share/google/chrome/WidevineCdm/_platform_specific/linux_x64";
+  in ''
+    install -vD libwidevinecdm.so ${installDir}/libwidevinecdm.so
+    install -vD manifest.json ${installDir}/manifest.json
+    install -vD LICENSE.txt ${installDir}/LICENSE.txt
   '';
 
   meta = with stdenv.lib; {
