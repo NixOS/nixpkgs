@@ -226,6 +226,7 @@ MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
 markonm/traces.vim
 martinda/Jenkinsfile-vim-syntax
+mattn/calendar-vim as mattn-calendar-vim
 mattn/emmet-vim
 mattn/gist-vim
 mattn/webapi-vim
