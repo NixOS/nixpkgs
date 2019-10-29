@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , lib
+, fetchpatch
 , sphinx
 , flake8
 , pytest
@@ -25,6 +26,13 @@ buildPythonPackage rec {
     pytestcov
     pytest-flakes
     pytestpep8
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/WoLpH/portalocker/commit/7741925738c7e66ae9c4a0944a04b6a3088037d5.patch";
+      sha256 = "1g95rnfbnagkkk9qfzzd5346dl3clbgjnzr2wk09m0wphds7zd8z";
+    })
   ];
 
   meta = with lib; {
