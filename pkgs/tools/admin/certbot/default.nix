@@ -14,6 +14,7 @@ python37Packages.buildPythonApplication rec {
 
   patches = [
     ./0001-pebble_artifacts-hardcode-pebble-location.patch
+    ./0001-Don-t-use-distutils.StrictVersion-that-cannot-handle.patch
   ];
 
   propagatedBuildInputs = with python37Packages; [

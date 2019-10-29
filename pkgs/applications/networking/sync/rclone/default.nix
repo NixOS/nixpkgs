@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "rclone";
-  version = "1.50.0";
+  version = "1.49.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0k4fybz4670cqg1rpx0c1ximf1x6yl1f788hx9raxkwp5wv703kw";
+    sha256 = "0firfb2300grfp5fnqaifhp346m4d0x8r1xshs9d8r6jxb160n03";
   };
 
   goPackagePath = "github.com/rclone/rclone";
