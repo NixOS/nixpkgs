@@ -3689,7 +3689,7 @@ in {
   libplist = disabledIf isPy3k
     (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
 
-  libxml2 = toPythonModule (pkgs.libxml2.override{pythonSupport=true; inherit python;}).py;
+  libxml2 = (toPythonModule (pkgs.libxml2.override{pythonSupport=true; inherit python;})).py;
 
   libxslt = toPythonModule (pkgs.libxslt.override{pythonSupport=true; inherit python; inherit (self) libxml2;}).py;
 
