@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   makefile = "unix/Makefile";
 
-  NIX_LDFLAGS = [ "-lbz2" ] ++ stdenv.lib.optional enableNLS "-lnatspec";
+  NIX_LDFLAGS = "-lbz2" + stdenv.lib.optionalString enableNLS " -lnatspec";
 
   buildFlags = [ "generic" "D_USE_BZ2=-DUSE_BZIP2" "L_BZ2=-lbz2" ];
 
