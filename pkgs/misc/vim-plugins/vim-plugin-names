@@ -431,6 +431,7 @@ tpope/vim-projectionist
 tpope/vim-repeat
 tpope/vim-rhubarb
 tpope/vim-rsi
+tpope/vim-salve
 tpope/vim-scriptease
 tpope/vim-sensible
 tpope/vim-sleuth
