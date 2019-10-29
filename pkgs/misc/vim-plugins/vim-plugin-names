@@ -120,6 +120,7 @@ HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hotwatermorning/auto-git-diff
 hsanson/vim-android
+hsitz/VimOrganizer
 ianks/vim-tsx
 icymind/NeoSolarized
 idris-hackers/idris-vim
