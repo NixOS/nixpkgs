@@ -18,6 +18,7 @@ let
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
     ignorePerms = folder.ignorePerms;
+    versioning = folder.versioning;
   }) (filterAttrs (
     _: folder:
     folder.enable
@@ -218,6 +219,59 @@ in {
                   The devices this folder should be shared with. Must be defined
                   in the <literal>declarative.devices</literal> attribute.
                 '';
+              };
+
+              versioning = mkOption {
+                default = null;
+                description = ''
+                  how to keep changed/deleted files with syncthing.
+                  there are 4 different types of versioning with different parameters
+                  see https://docs.syncthing.net/users/versioning.html#simple-file-versioning
+                '';
+                example = [
+                  {
+                    versioning = {
+                      type = "simple";
+                      params.keep = "10";
+                    };
+                  }
+                  {
+                    versioning = {
+                      type = "trashcan";
+                      params.cleanoutDays = "1000";
+                    };
+                  }
+                  {
+                    versioning = {
+                      type = "staggered";
+                      params = {
+                        cleanInterval = "3600";
+                        maxAge = "31536000";
+                        versionsPath = "/syncthing/backup";
+                      };
+                    };
+                  }
+                  {
+                    versioning = {
+                      type = "external";
+                      params.versionsPath = pkgs.writers.writeBash "backup" ''
+                        folderpath="$1"
+                        filepath="$2"
+                        rm -rf "$folderpath/$filepath"
+                      '';
+                    };
+                  }
+                ];
+                type = with types; nullOr (submodule {
+                  options = {
+                    type = mkOption {
+                      type = enum [ "external" "simple" "staggered" "trashcan" ];
+                    };
+                    params = mkOption {
+                      type = attrsOf (either str path);
+                    };
+                  };
+                });
               };
 
               rescanInterval = mkOption {
