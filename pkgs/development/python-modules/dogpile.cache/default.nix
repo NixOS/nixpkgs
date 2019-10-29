@@ -19,6 +19,11 @@ buildPythonPackage rec {
     rm tests/cache/test_memcached_backend.py
   '';
 
+  dontUseSetuptoolsCheck = true;
+  checkPhase = ''
+    pytest
+  '';
+
   checkInputs = [ pytest pytestcov mock Mako ];
 
   propagatedBuildInputs = [ decorator ];
