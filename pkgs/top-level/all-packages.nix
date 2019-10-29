@@ -217,6 +217,8 @@ in
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
+  umoci = callPackage ../applications/virtualization/umoci {};
+
   dispad = callPackage ../tools/X11/dispad { };
 
   dump1090 = callPackage ../applications/radio/dump1090 { };

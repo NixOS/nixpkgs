@@ -7397,4 +7397,10 @@
     githubId = 1986844;
     name = "Daniel Wheeler";
   };
+  zokrezyl = {
+    email = "zokrezyl@gmail.com";
+    github = "zokrezyl";
+    githubId = 51886259;
+    name = "Zokre Zyl";
+  };
 }
