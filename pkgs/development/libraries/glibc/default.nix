@@ -44,7 +44,7 @@ callPackage ./common.nix { inherit stdenv; } {
     #      limit rebuilds by only disabling pie w/musl
       ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "pie";
 
-    NIX_CFLAGS_COMPILE = if withGd then "-Wno-error=stringop-truncation" else null;
+    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString withGd "-Wno-error=stringop-truncation";
 
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new
