@@ -24311,6 +24311,8 @@ in
     icu = icu58;
   };
 
+  mame = libsForQt5.callPackage ../misc/emulators/mame { };
+
   martyr = callPackage ../development/libraries/martyr { };
 
   mess = callPackage ../misc/emulators/mess {
