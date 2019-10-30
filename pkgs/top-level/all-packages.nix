@@ -16310,17 +16310,25 @@ in
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
 
   # Derive one of the default .config files
-  linuxConfig = { src, makeTarget ? "defconfig", name ? "kernel.config" }:
-    stdenv.mkDerivation {
-      inherit name src;
-      buildPhase = ''
-        set -x
-        make ${makeTarget}
-      '';
-      installPhase = ''
-        cp .config $out
-      '';
-    };
+  linuxConfig = let
+    kernelArch = stdenv.hostPlatform.kernelArch;
+  in buildPackages.callPackage ({
+    src,
+    version ? (builtins.parseDrvName src.name).version,
+    makeTarget ? "defconfig",
+    name ? "kernel.config",
+    lib, stdenv, bison, flex
+  }: stdenv.mkDerivation {
+    inherit name src;
+    nativeBuildInputs = lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ];
+    buildPhase = ''
+      set -x
+      make ${makeTarget} ARCH=${kernelArch}
+    '';
+    installPhase = ''
+      cp .config $out
+    '';
+  });
 
   buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
 
