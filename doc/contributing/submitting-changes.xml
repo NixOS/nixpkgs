@@ -375,31 +375,32 @@ Additional information.
 
   <section xml:id="submitting-changes-master-branch">
    <title>Master branch</title>
-
-   <itemizedlist>
-    <listitem>
-     <para>
-      It should only see non-breaking commits that do not cause mass rebuilds.
-     </para>
-    </listitem>
-   </itemizedlist>
+   <para>
+    The <literal>master</literal> branch is the main development branch. 
+    It should only see non-breaking commits that do not cause mass rebuilds.
+   </para>
   </section>
 
   <section xml:id="submitting-changes-staging-branch">
    <title>Staging branch</title>
+   <para>
+    The <literal>staging</literal> branch is a development branch where mass-rebuilds go. 
+    It should only see non-breaking mass-rebuild commits. 
+    That means it is not to be used for testing, and changes must have been well tested already.
+    If the branch is already in a broken state, please refrain from adding extra new breakages.
+   </para>
+  </section>
 
-   <itemizedlist>
-    <listitem>
-     <para>
-      It's only for non-breaking mass-rebuild commits. That means it's not to be used for testing, and changes must have been well tested already. <link xlink:href="https://web.archive.org/web/20160528180406/http://comments.gmane.org/gmane.linux.distributions.nixos/13447">Read policy here</link>.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days, merge into master, then resume development on staging. <link xlink:href="http://hydra.nixos.org/jobset/nixpkgs/staging#tabs-evaluations">Keep an eye on the staging evaluations here</link>. If any fixes for staging happen to be already in master, then master can be merged into staging.
-     </para>
-    </listitem>
-   </itemizedlist>
+  <section xml:id="submitting-changes-staging-next-branch">
+   <title>Staging-next branch</title>
+   <para>
+    The <literal>staging-next</literal> branch is for stabilizing mass-rebuilds submitted to the <literal>staging</literal> branch prior to merging them into <literal>master</literal>. 
+    Mass-rebuilds should go via the <literal>staging</literal> branch. 
+    It should only see non-breaking commits that are fixing issues blocking it from being merged into the <literal>master </literal> branch.
+   </para>  
+   <para>
+    If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days and then merge into master.
+   </para>
   </section>
 
   <section xml:id="submitting-changes-stable-release-branches">
