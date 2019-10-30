@@ -3,7 +3,7 @@
 let
    useX11 = !stdenv.isAarch32 && !stdenv.isMips;
    useNativeCompilers = !stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+   inherit (stdenv.lib) optional optionals optionalString;
 in
 
 stdenv.mkDerivation rec {
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
-  buildFlags = [ "world" ] + optionals useNativeCompilers [ "bootstrap" "world.opt" ];
-  buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
+  configureFlags = [ "-no-tk" ] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
+  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
+  buildInputs = [ ncurses ] ++ optional useX11 xlibsWrapper;
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = ''
     CAT=$(type -tp cat)
