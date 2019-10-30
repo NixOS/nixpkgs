@@ -6,7 +6,10 @@
 , libhandy
 , modemmanager
 , gtk3
+, gom
 , gsound
+, evolution-data-server
+, desktop-file-utils
 , libpeas
 , dbus
 , xorg
@@ -15,26 +18,29 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "calls";
-  version = "0.0.1";
+  pname = "calls-unstable";
+  version = "2019-10-09";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0qjgajrq3kbml3zrwwzl23jbj6y62ccjakp667jq57jbs8af77pq";
+    rev = "4b4cfa04266ebbe2f3da5abd9624ea07aa159fea";
+    sha256 = "0qvnddjpkh6gsywzdi24lmjlbwi0q54m1xa6hiaf1ch1j7kcv8fr";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkgconfig
+    desktop-file-utils
   ];
 
   buildInputs = [
     modemmanager
     libhandy
+    evolution-data-server
+    gom
     gsound
     gtk3
     libhandy
