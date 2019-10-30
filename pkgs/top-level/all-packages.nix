@@ -13251,6 +13251,8 @@ in
 
   pkcs11helper = callPackage ../development/libraries/pkcs11helper { };
 
+  pkgdiff = callPackage ../tools/misc/pkgdiff { };
+
   plib = callPackage ../development/libraries/plib { };
 
   pocketsphinx = callPackage ../development/libraries/pocketsphinx { };
