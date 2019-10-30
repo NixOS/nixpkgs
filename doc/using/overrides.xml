@@ -3,15 +3,12 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xml:id="chap-overrides">
  <title>Overriding</title>
-
  <para>
   Sometimes one wants to override parts of <literal>nixpkgs</literal>, e.g. derivation attributes, the results of derivations.
  </para>
-
  <para>
   These functions are used to make changes to packages, returning only single packages. <link xlink:href="#chap-overlays">Overlays</link>, on the other hand, can be used to combine the overridden packages across the entire package set of Nixpkgs.
  </para>
-
  <section xml:id="sec-pkg-override">
   <title>&lt;pkg&gt;.override</title>
 
@@ -45,7 +42,6 @@ mypkg = pkgs.callPackage ./mypkg.nix {
    In the first example, <varname>pkgs.foo</varname> is the result of a function call with some default arguments, usually a derivation. Using <varname>pkgs.foo.override</varname> will call the same function with the given new arguments.
   </para>
  </section>
-
  <section xml:id="sec-pkg-overrideAttrs">
   <title>&lt;pkg&gt;.overrideAttrs</title>
 
@@ -76,7 +72,6 @@ helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
    </para>
   </note>
  </section>
-
  <section xml:id="sec-pkg-overrideDerivation">
   <title>&lt;pkg&gt;.overrideDerivation</title>
 
@@ -124,7 +119,6 @@ mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
    </para>
   </note>
  </section>
-
  <section xml:id="sec-lib-makeOverridable">
   <title>lib.makeOverridable</title>
 
