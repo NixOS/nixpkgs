@@ -92,6 +92,17 @@ let
     };
   };
 
+  antonys-macro-repeater = buildVimPluginFrom2Nix {
+    pname = "antonys-macro-repeater";
+    version = "2017-09-10";
+    src = fetchFromGitHub {
+      owner = "ckarnell";
+      repo = "antonys-macro-repeater";
+      rev = "61784d86b2654f3e261b9cc33360c5197704e266";
+      sha256 = "1cq5r091qbxjs9s12f7bb2fdm43gxwpnnh2l8nhj0n69jfk7gblw";
+    };
+  };
+
   argtextobj-vim = buildVimPluginFrom2Nix {
     pname = "argtextobj-vim";
     version = "2010-10-18";
