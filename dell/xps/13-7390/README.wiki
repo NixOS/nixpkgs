@@ -1,0 +1,12 @@
+= Dell XPS 13 7390 =
+
+== Firmware upgrades ==
+
+Note that this device is supported by [https://fwupd.org/ fwupd].
+To perform firmware upgrades just activate the service
+
+<code>
+services.fwupd.enable = true;
+</code>
+
+Then use <code>fwupdmgr</code> to perform updates.
