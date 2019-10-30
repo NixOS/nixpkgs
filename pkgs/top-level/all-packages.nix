@@ -6575,6 +6575,8 @@ in
 
   tinyemu = callPackage ../applications/virtualization/tinyemu { };
 
+  tinyfecvpn = callPackage ../tools/networking/tinyfecvpn {};
+
   tinyprog = callPackage ../development/tools/misc/tinyprog { };
 
   tinyproxy = callPackage ../tools/networking/tinyproxy {};
