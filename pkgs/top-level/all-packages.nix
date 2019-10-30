@@ -2627,6 +2627,10 @@ in
 
   deer = callPackage ../shells/zsh/zsh-deer { };
 
+  delta = callPackage ../tools/text/delta {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   detox = callPackage ../tools/misc/detox { };
 
   devilspie2 = callPackage ../applications/misc/devilspie2 {
