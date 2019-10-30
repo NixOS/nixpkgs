@@ -53,9 +53,7 @@ rec {
       patchPhase = ''
       '';
 
-      NIX_CFLAGS_COMPILE = [
-        "-DMINIMAL=ON"
-      ];
+      NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
   in
     stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) {

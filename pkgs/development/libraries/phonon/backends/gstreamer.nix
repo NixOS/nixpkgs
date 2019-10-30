@@ -45,7 +45,7 @@ stdenv.mkDerivation {
             gst-plugins-bad
             gst-libav
           ]);
-    in [
+    in toString [
       # This flag should be picked up through pkgconfig, but it isn't.
       "-I${gst_all_1.gstreamer.dev}/lib/gstreamer-1.0/include"
 

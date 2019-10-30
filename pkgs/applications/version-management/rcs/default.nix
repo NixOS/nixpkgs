@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     make $checkFlags check || print_logs_and_fail
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-std=c99" ];
+  NIX_CFLAGS_COMPILE = "-std=c99";
 
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "format";
 

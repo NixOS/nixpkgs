@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=ignored-qualifiers" "-Wno-error=class-memaccess" "-Wno-error=catch-value" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=ignored-qualifiers -Wno-error=class-memaccess -Wno-error=catch-value";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost curl ruby ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/puppetlabs/leatherman/;  
+    homepage = https://github.com/puppetlabs/leatherman/;
     description = "A collection of C++ and CMake utility libraries";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];

@@ -9,10 +9,11 @@ buildPythonPackage {
   inherit disabled;
   doCheck = doCheck && !isPy27; # setuptools>=41.4 no longer collects correctly on python2
 
-  NIX_CFLAGS_COMPILE =
+  NIX_CFLAGS_COMPILE = toString (
     # work around python distutils compiling C++ with $CC
     optional stdenv.isDarwin "-I${libcxx}/include/c++/v1"
-    ++ optional (versionOlder protobuf.version "2.7.0") "-std=c++98";
+    ++ optional (versionOlder protobuf.version "2.7.0") "-std=c++98"
+  );
 
   propagatedBuildInputs = [ google_apputils ];
   propagatedNativeBuildInputs = [ protobuf ];  # For protoc.

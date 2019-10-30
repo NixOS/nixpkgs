@@ -21,7 +21,7 @@ buildPythonPackage rec {
     libXi libXext libSM libICE libX11
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-I${pkgs.qt5.qtbase.dev}/include/QtCore"
     "-I${pkgs.qt5.qtbase.dev}/include/QtGui"
     "-I${pkgs.qt5.qtbase.dev}/include/QtOpenGL"

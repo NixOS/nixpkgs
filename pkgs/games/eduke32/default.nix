@@ -41,10 +41,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2.dev}/include/SDL2"
-    "-I${SDL2_mixer}/include/SDL2"
-  ];
+  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
 
   makeFlags = [
     "SDLCONFIG=${SDL2}/bin/sdl2-config"

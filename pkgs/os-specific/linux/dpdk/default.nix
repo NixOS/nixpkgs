@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
 
   # we need sse3 instructions to build
-  NIX_CFLAGS_COMPILE = [ "-msse3" ];
+  NIX_CFLAGS_COMPILE = "-msse3";
   hardeningDisable = [ "pic" ];
 
   postPatch = ''
