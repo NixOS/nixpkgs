@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3 }:
+{ stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   # 2.0.3+ breaks the build of gnome3.gnome-desktop
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "bf909fb59b11a646681a8534d5700fec99be83bb2c57badf8c1844512227033a";
   };
 
-  buildInputs = [ (python3.withPackages(ps: with ps; [ libxml2 ])) ];
+  buildInputs = [ (python2.withPackages(ps: with ps; [ libxml2 ])) ];
 
   meta = {
     homepage = http://itstool.org/;
