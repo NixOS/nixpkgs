@@ -1276,4 +1276,7 @@ self: super: {
   # We think this will probably be fixed when updating to the polysemy version in LTS-15.
   polysemy = dontCheck super.polysemy;
 
+  # https://github.com/Happstack/web-routes-th/pull/3
+  web-routes-th = doJailbreak super.web-routes-th;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
