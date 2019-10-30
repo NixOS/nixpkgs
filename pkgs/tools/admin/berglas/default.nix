@@ -3,16 +3,16 @@
 buildGoModule rec {
 
   name = "berglas-${version}";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "berglas";
-    rev = "v0.2.0";
-    sha256 = "1d75x0n1d1ry2xmy6h64qqc0dlnivipycv3p0aihyp3l810gpdbk";
+    rev = "v0.2.1";
+    sha256 = "1m34rxiynmgsris1avjn7am50b8sds77515zlnna9qvsrywbzljc";
   };
 
-  modSha256 = "0fvgvrvdpdwjx51wmbf0rdwnr9l1l212qbvznvif3xsi5nnlkx6r";
+  modSha256 = "0lfcrsb4r5hxxd652cxff23fnbrphp3lgwp5anpaddzcjcd2qyj8";
 
   meta = with stdenv.lib; {
     description = "A tool for managing secrets on Google Cloud";
