@@ -13,7 +13,7 @@ let
 in
   stdenv.mkDerivation rec {
     version = "3.0.100";
-    netCoreVersion = "3.0.100";
+    netCoreVersion = "3.0.0";
     pname = "dotnet-sdk";
 
     src = fetchurl {
@@ -45,7 +45,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://dotnet.github.io/;
+      homepage = https://dotnet.microsoft.com/;
       description = ".NET Core SDK ${version} with .NET Core ${netCoreVersion}";
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ kuznero ];
