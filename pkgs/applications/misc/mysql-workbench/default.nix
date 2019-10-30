@@ -62,10 +62,8 @@ in stdenv.mkDerivation rec {
     patchShebangs tools/get_wb_version.sh
   '';
 
-  NIX_CFLAGS_COMPILE = [
     # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
-    "-Wno-error=deprecated-declarations"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"

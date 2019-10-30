@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   # igrone glib-2.62 deprecations
   # Drop in next stable release.
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \

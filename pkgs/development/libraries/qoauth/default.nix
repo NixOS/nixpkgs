@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   buildInputs = [ qt5.qtbase qca2-qt5 ];
   nativeBuildInputs = [ qt5.qmake ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${qca2-qt5}/include/Qca-qt5/QtCrypto" ];
-  NIX_LDFLAGS = [ "-lqca-qt5" ];
+  NIX_CFLAGS_COMPILE = "-I${qca2-qt5}/include/Qca-qt5/QtCrypto";
+  NIX_LDFLAGS = "-lqca-qt5";
 
   meta = with stdenv.lib; {
     description = "Qt library for OAuth authentication";

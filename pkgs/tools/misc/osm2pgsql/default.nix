@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expat proj bzip2 zlib boost postgresql lua ];
 
-  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
+  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
 
   meta = with stdenv.lib; {
     description = "OpenStreetMap data to PostgreSQL converter";

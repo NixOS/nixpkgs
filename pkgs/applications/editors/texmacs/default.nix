@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ guile_1_8 qt4 makeWrapper ghostscriptX freetype ];
-  NIX_LDFLAGS = [ "-lz" ];
+  NIX_LDFLAGS = "-lz";
 
   postInstall = "wrapProgram $out/bin/texmacs --suffix PATH : " +
         (if ghostscriptX == null then "" else "${ghostscriptX}/bin:") +

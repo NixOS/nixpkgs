@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     "--enable-remote-bitbang"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-implicit-fallthrough"
     "-Wno-format-truncation"
     "-Wno-format-overflow"
     "-Wno-error=tautological-compare"
-  ];
+  ]);
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d"

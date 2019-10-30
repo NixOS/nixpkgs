@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  NIX_LDFLAGS =  [
-    "-lm"
-  ];
+  NIX_LDFLAGS = "-lm";
 
   meta = {
     description = "JACK audio recorder";

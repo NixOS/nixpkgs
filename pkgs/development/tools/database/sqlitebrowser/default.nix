@@ -16,9 +16,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools ];
 
-  NIX_LDFLAGS = [
-    "-lQt5PrintSupport"
-  ];
+  NIX_LDFLAGS = "-lQt5PrintSupport";
 
   enableParallelBuilding = true;
 

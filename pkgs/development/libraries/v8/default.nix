@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   # with gcc8, -Wclass-memaccess became part of -Wall and causes logging limit
   # to be exceeded
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isGNU "-Wno-class-memaccess";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-class-memaccess";
 
   nativeBuildInputs = [ gn ninja pkgconfig python ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];

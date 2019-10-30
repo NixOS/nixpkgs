@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = [ "-lX11" ];
+  NIX_LDFLAGS = "-lX11";
 
   meta = {
     description = "Mascot Constructive Pilot for X";

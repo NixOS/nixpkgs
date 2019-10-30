@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
   '';
 
-  NIX_LDFLAGS = lib.optional withLDAP "-llber";
+  NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
 
   installTargets = [ "non-interactive-package" ];
 

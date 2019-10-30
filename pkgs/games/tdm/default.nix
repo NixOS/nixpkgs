@@ -91,7 +91,7 @@ EOF
 
   enableParallelBuilding = true;
   sconsFlags = [ "BUILD=release" "TARGET_ARCH=x64" ];
-  NIX_CFLAGS_COMPILE = ["-Wno-error=format-security"];
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   meta = with stdenv.lib; {
     description = "The Dark Mod - stealth FPS inspired by the Thief series";
     homepage = "http://www.thedarkmod.com";

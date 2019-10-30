@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison flex makeWrapper ];
   propagatedBuildInputs = [ llvm gmp mpfr readline ];
-  NIX_LDFLAGS = [ "-lLLVMJIT" ];
+  NIX_LDFLAGS = "-lLLVMJIT";
 
   postPatch = ''
     for f in expr.cc matcher.cc printer.cc symtable.cc parserdefs.hh; do

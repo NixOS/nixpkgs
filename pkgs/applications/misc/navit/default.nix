@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./CMakeLists.txt.patch ];
 
-  NIX_CFLAGS_COMPILE = optional sdlSupport "-I${SDL.dev}/include/SDL"
-    ++ optional speechdSupport "-I${speechd}/include/speech-dispatcher";
+  NIX_CFLAGS_COMPILE = toString (optional sdlSupport "-I${SDL.dev}/include/SDL"
+    ++ optional speechdSupport "-I${speechd}/include/speech-dispatcher");
 
   # we choose only cmdline and speech-dispatcher speech options.
   # espeak builtins is made for non-cmdline OS as winCE

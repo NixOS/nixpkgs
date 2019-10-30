@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "/usr" ""
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.hostPlatform.isMusl "-D_LINUX_SYSINFO_H=1";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.hostPlatform.isMusl "-D_LINUX_SYSINFO_H=1";
 
   # Won't build on i686 because the binary will be linked again in the
   # install phase without checking the dependencies. This will prevent

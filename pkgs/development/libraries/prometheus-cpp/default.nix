@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "-DCIVETWEB_CXX_LIBRARY=${civetweb}/lib/libcivetweb${stdenv.targetPlatform.extensions.sharedLibrary}"
   ];
 
-  NIX_LDFLAGS = [ "-ldl" ];
+  NIX_LDFLAGS = "-ldl";
 
   meta = {
     description = "Prometheus Client Library for Modern C++";

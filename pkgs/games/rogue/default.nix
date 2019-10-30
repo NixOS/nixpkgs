@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
 
   # Fix build for recent ncurses versions
-  NIX_CFLAGS_COMPILE = [ "-DNCURSES_INTERNALS=1" ];
+  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
 
   meta = with stdenv.lib; {
     homepage = http://rogue.rogueforge.net/rogue-5-4/;
