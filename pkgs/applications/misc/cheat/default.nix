@@ -16,9 +16,9 @@ buildGoModule rec {
   modSha256 = "189cqnfl403f4lk7g9v68mwk93ciglqli639dk4x9091lvn5gq5q";
 
   meta = with stdenv.lib; {
-    description = "cheat allows you to create and view interactive cheatsheets on the command-line";
+    description = "Create and view interactive cheatsheets on the command-line";
     maintainers = with maintainers; [ mic92 ];
     license = with licenses; [ gpl3 mit ];
-    homepage = https://github.com/chrisallenlane/cheat;
+    homepage = "https://github.com/chrisallenlane/cheat";
   };
 }
