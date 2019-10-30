@@ -80,7 +80,7 @@ let
           then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
         else if stdenv.hostPlatform.isBSD
           then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
-        else if stdenv.hostPlatform.isMinGW
+        else if with stdenv.hostPlatform; isMinGW || (isWindows && stdenv.hostPlatform.useLLVM or false)
           then "./Configure mingw${optionalString
                                      (stdenv.hostPlatform.parsed.cpu.bits != 32)
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
