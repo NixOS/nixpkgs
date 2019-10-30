@@ -23687,6 +23687,8 @@ in
 
   SPAdes = callPackage ../applications/science/biology/spades { };
 
+  svaba = callPackage ../applications/science/biology/svaba { };
+
   trimal = callPackage ../applications/science/biology/trimal { };
 
   truvari = callPackage ../applications/science/biology/truvari { };
