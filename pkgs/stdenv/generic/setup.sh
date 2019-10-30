@@ -1,7 +1,7 @@
 set -eu
 set -o pipefail
 
-export NIX_DEBUG
+export NIX_DEBUG NIX_LDFLAGS NIX_CFLAGS_COMPILE NIX_CFLAGS_LINK
 if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
