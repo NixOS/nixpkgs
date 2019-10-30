@@ -9918,7 +9918,6 @@ broken-packages:
   - usb-id-database
   - usb-iteratee
   - usb-safe
-  - userid
   - users-mysql-haskell
   - users-persistent
   - utc
@@ -10111,7 +10110,6 @@ broken-packages:
   - web-routes-happstack
   - web-routes-quasi
   - web-routes-regular
-  - web-routes-th
   - web-routes-transformers
   - web-routing
   - web3
