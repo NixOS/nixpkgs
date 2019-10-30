@@ -20,17 +20,17 @@ cmakeConfigurePhase() {
         export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
     fi
 
-    if [ -z "$dontFixCmake" ]; then
+    if [ -z "${dontFixCmake-}" ]; then
         fixCmakeFiles .
     fi
 
-    if [ -z "$dontUseCmakeBuildDir" ]; then
+    if [ -z "${dontUseCmakeBuildDir-}" ]; then
         mkdir -p build
         cd build
         cmakeDir=${cmakeDir:-..}
     fi
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -z "${dontAddPrefix-}" ]; then
         cmakeFlags="-DCMAKE_INSTALL_PREFIX=$prefix $cmakeFlags"
     fi
 
@@ -84,7 +84,7 @@ cmakeConfigurePhase() {
     cmakeFlags="-DCMAKE_INSTALL_LOCALEDIR=${!outputLib}/share/locale $cmakeFlags"
 
     # Don’t build tests when doCheck = false
-    if [ -z "$doCheck" ]; then
+    if [ -z "${doCheck-}" ]; then
         cmakeFlags="-DBUILD_TESTING=OFF $cmakeFlags"
     fi
 
@@ -115,7 +115,7 @@ cmakeConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseCmakeConfigure-}" -a -z "$configurePhase" ]; then
     setOutputFlags=
     configurePhase=cmakeConfigurePhase
 fi
