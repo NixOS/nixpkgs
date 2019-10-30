@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder ''out''}"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-DLSP_NO_EXPERIMENTAL" ];
+  NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
   doCheck = true;
 

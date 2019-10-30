@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   buildInputs = [ udev ];
 
-  NIX_CFLAGS_LINK = [ "-ludev" ];
+  NIX_CFLAGS_LINK = "-ludev";
 
   meta = with stdenv.lib; {
     description = "Pythonic API to Linux uinput kernel module";

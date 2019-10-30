@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake ogre cegui boost sfml openal ois ];
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
   meta = with stdenv.lib; {
     description = "An open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius.";

@@ -76,11 +76,10 @@ stdenv.mkDerivation rec {
     "--with-table-redis"
   ];
 
-  NIX_CFLAGS_COMPILE =
-    stdenv.lib.optional enableRedis
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString enableRedis
       "-I${hiredis}/include/hiredis -lhiredis"
-    ++ stdenv.lib.optional enableMysql
-      "-L${libmysqlclient}/lib/mysql";
+    + stdenv.lib.optionalString enableMysql
+      " -L${libmysqlclient}/lib/mysql";
 
   meta = with stdenv.lib; {
     homepage = https://www.opensmtpd.org/;

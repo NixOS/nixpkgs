@@ -9,7 +9,7 @@ mkXfceDerivation {
 
   nativeBuildInputs = [ automakeAddFlags ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${dbus-glib.dev}/include/dbus-1.0" "-I${dbus.dev}/include/dbus-1.0" ];
+  NIX_CFLAGS_COMPILE = "-I${dbus-glib.dev}/include/dbus-1.0 -I${dbus.dev}/include/dbus-1.0";
 
   postPatch = ''
     substituteInPlace configure.ac.in --replace gio-2.0 gio-unix-2.0
