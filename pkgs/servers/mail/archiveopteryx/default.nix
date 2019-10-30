@@ -21,10 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   # fix build on gcc7
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=builtin-declaration-mismatch"
-    "-Wno-error=implicit-fallthrough"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=builtin-declaration-mismatch -Wno-error=implicit-fallthrough";
 
   buildPhase = ''jam "-j$NIX_BUILD_CORES" '';
   installPhase = ''

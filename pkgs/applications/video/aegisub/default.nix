@@ -53,9 +53,7 @@ stdenv.mkDerivation rec {
 
   # this is fixed upstream though not yet in an officially released version,
   # should be fine remove on next release (if one ever happens)
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 

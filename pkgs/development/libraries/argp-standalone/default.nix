@@ -31,7 +31,7 @@ stdenv.mkDerivation {
        stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ patch-argp-fmtstream ]
     ++ stdenv.lib.optionals stdenv.hostPlatform.isLinux [ patch-throw-in-funcdef patch-shared ];
 
-  patchFlags = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "-p0";
+  patchFlags = stdenv.lib.optional stdenv.hostPlatform.isDarwin "-p0";
 
   preConfigure = stdenv.lib.optionalString stdenv.hostPlatform.isLinux "export CFLAGS='-fgnu89-inline'";
 
