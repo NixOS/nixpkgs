@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "C99 implementation of the vnd.amazon.eventstream content-type";
     homepage = "https://github.com/awslabs/aws-c-event-stream";
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.all;
     maintainers = with maintainers; [ orivej eelco ];
   };
 }

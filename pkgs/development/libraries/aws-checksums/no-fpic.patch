@@ -1,0 +1,15 @@
+diff --git a/nix/store/z3yg9mxc3dhnqrkbz3vwk36b9n52wixz-source/CMakeLists.txt b/CMakeLists.txt
+index 32e11f5c1d7..a7b6f0ed5b6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -83,10 +83,6 @@ if(BUILD_SHARED_LIBS AND WIN32)
+     target_compile_definitions(aws-checksums PRIVATE "-DAWS_CHECKSUMS_EXPORTS")    
+ endif()
+ 
+-if(NOT MSVC)
+-    target_compile_options(aws-checksums PRIVATE -fPIC)
+-endif()
+-
+ if(BUILD_JNI_BINDINGS)
+     find_package(JNI)
+     include_directories(${JNI_INCLUDE_DIRS})
