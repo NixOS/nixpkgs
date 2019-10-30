@@ -314,12 +314,12 @@ let
 
   coc-git = buildVimPluginFrom2Nix {
     pname = "coc-git";
-    version = "2019-10-29";
+    version = "2019-10-30";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc-git";
-      rev = "0201d54ce81d31922553bfc289a77579648bb82c";
-      sha256 = "0in3k9dhf5sy9d2qawy31k91gljs2nd0gi2qzi1dh67acfbx3czx";
+      rev = "56d45aaef20356e750530f9f80c99cd2f9184ac1";
+      sha256 = "17rbrjp35jd6rw66js88qaki2hk0cm1bvylfzjngdbzbgjc1qz1h";
     };
   };
 
@@ -369,12 +369,12 @@ let
 
   coc-java = buildVimPluginFrom2Nix {
     pname = "coc-java";
-    version = "2019-09-17";
+    version = "2019-10-30";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc-java";
-      rev = "7e3bdee15b28f5d7f3b1654429c89cb0d93436e5";
-      sha256 = "0r17w00mbs1gshshm8c56cqi37z5i5vdk2sifs2clazlyn9rl6zm";
+      rev = "3195dd594389247e4bdb19d129e48846d9215f54";
+      sha256 = "1k354jh521fjm2xz05x1653g31bgmx3s0bpsraj516172k605qfr";
     };
   };
 
@@ -4097,12 +4097,12 @@ let
 
   vim-ledger = buildVimPluginFrom2Nix {
     pname = "vim-ledger";
-    version = "2019-10-26";
+    version = "2019-10-30";
     src = fetchFromGitHub {
       owner = "ledger";
       repo = "vim-ledger";
-      rev = "e113a30ccca416fb8ae3f307e5f0d43a55e03597";
-      sha256 = "1sqgna0qnrqkll33x1waaaazqn2rwklccksm91zsd9k6p3q2hcgv";
+      rev = "66718caab97f13d25813f91b8352c9ac75b3771e";
+      sha256 = "0ia9r212019d8jqrbs3nrn36mpc09gc81gf4dnv3hksn6knpdr8b";
     };
   };
 
