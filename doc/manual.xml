@@ -28,7 +28,7 @@
   <xi:include href="builders/special.xml" />
   <xi:include href="builders/images.xml" />
   <xi:include href="languages-frameworks/index.xml" />
-  <xi:include href="packages/index.xml" />
+  <xi:include href="builders/packages/index.xml" />
  </part>
  <part>
   <title>Contributing to Nixpkgs</title>
