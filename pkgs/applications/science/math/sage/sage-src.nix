@@ -104,6 +104,9 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch?id=d27dc479a5772d59e4bc85d805b6ffd595284f1d";
       sha256 = "1nf1s9y7n30lhlbdnam7sghgaq9nasmv96415gl5jlcf7a3hlxk3";
     })
+
+    # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
+    ./patches/ignore-cmp-deprecation.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
