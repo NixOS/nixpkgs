@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=format-truncation"
     "-Wno-error=cast-function-type"

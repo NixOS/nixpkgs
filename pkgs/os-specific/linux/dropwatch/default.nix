@@ -16,10 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libbfd libnl ncurses readline zlib ];
 
   # To avoid running into https://sourceware.org/bugzilla/show_bug.cgi?id=14243 we need to define:
-  NIX_CFLAGS_COMPILE = [
-    "-DPACKAGE=${pname}"
-    "-DPACKAGE_VERSION=${version}"
-  ];
+  NIX_CFLAGS_COMPILE = "-DPACKAGE=${pname} -DPACKAGE_VERSION=${version}";
 
   enableParallelBuilding = true;
 
