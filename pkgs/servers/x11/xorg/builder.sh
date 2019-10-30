@@ -1,4 +1,5 @@
 # This is the builder for all X.org components.
+source .attrs.sh
 source $stdenv/setup
 
 
@@ -27,7 +28,7 @@ postInstall() {
 }
 
 
-installFlags="appdefaultdir=$out/share/X11/app-defaults $installFlags"
+installFlags+=("appdefaultdir=$out/share/X11/app-defaults")
 
 
 if test -n "$x11BuildHook"; then
