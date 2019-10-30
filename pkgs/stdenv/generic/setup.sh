@@ -839,13 +839,13 @@ unpackFile() {
 unpackPhase() {
     runHook preUnpack
 
-    if [ -z "${srcs:-}" ]; then
+    if [ -z ${srcs+"${srcs[@]}"} ]; then
         if [ -z "${src:-}" ]; then
             # shellcheck disable=SC2016
             echo 'variable $src or $srcs should point to the source'
             exit 1
         fi
-        srcs="$src"
+        srcs=("$src")
     fi
 
     # To determine the source directory created by unpacking the
@@ -860,7 +860,7 @@ unpackPhase() {
     done
 
     # Unpack all source archives.
-    for i in $srcs; do
+    for i in "${srcs[@]}"; do
         unpackFile "$i"
     done
 
