@@ -1,12 +1,30 @@
 { stdenv, fetchurl, makeWrapper, php }:
 
+let
+  versions = {
+    matomo = {
+      version = "3.11.0";
+      sha256 = "1fbnmmzzsi3dfm9qm30wypxjcazl37mryaik9mlrb19hnp2md40q";
+    };
+
+    matomo-beta = {
+      version = "3.12.0";
+      beta = 3;
+      sha256 = "1n7b8cag7rpi6y4145cll2irz3in4668jkiicy06wm5nq6lb4bdf";
+    };
+  };
+  common = pname: {version, sha256, beta ? null}:
+    let fullVersion = version + stdenv.lib.optionalString (beta != null) "-b${toString beta}";
+  name = "${pname}-${fullVersion}";
+in
+
 stdenv.mkDerivation rec {
-  pname = "matomo";
-  version = "3.11.0";
+  inherit name;
+  version = fullVersion;
 
   src = fetchurl {
     url = "https://builds.matomo.org/matomo-${version}.tar.gz";
-    sha256 = "1fbnmmzzsi3dfm9qm30wypxjcazl37mryaik9mlrb19hnp2md40q";
+    inherit sha256;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -53,6 +71,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = https://matomo.org/;
     platforms = platforms.all;
-    maintainers = [ maintainers.florianjacob ];
+    maintainers = with maintainers; [ florianjacob kiwi ];
   };
-}
+};
+in stdenv.lib.mapAttrs common versions
