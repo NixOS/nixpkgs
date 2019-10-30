@@ -140,7 +140,7 @@ let
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = [
+    NIX_CFLAGS_COMPILE = toString ([
       # glibc 2.24 deprecated readdir_r so we need this
       # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
       "-Wno-error=deprecated-declarations"
@@ -151,13 +151,13 @@ let
       "-fno-delete-null-pointer-checks"
       "-std=gnu++98"
       "-Wno-error"
-    ];
+    ]);
 
-    NIX_LDFLAGS= lib.optionals (!headless) [
+    NIX_LDFLAGS= toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
     ] ++ lib.optionals (!headless && enableGnome2) [
       "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
-    ];
+    ]);
 
     buildFlags = [ "all" ];
 
