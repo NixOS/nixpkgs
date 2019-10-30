@@ -15,11 +15,11 @@
  </part>
  <part>
   <title>Standard environment</title>
-  <xi:include href="stdenv.xml" />
-  <xi:include href="meta.xml" />
-  <xi:include href="multiple-output.xml" />
-  <xi:include href="cross-compilation.xml" />
-  <xi:include href="platform-notes.xml" />
+  <xi:include href="stdenv/stdenv.xml" />
+  <xi:include href="stdenv/meta.xml" />
+  <xi:include href="stdenv/multiple-output.xml" />
+  <xi:include href="stdenv/cross-compilation.xml" />
+  <xi:include href="stdenv/platform-notes.xml" />
  </part>
  <part>
   <title>Builders</title>
