@@ -12,8 +12,11 @@ in import ./make-test.nix {
       networking.extraHosts = ''
         ${config.networking.primaryIPAddress} standalone.com
       '';
-      security.acme.certs."standalone.com" = {
-        webroot = "/var/lib/acme/acme-challenges";
+      security.acme = {
+        server = "https://acme-v02.api.letsencrypt.org/dir";
+        certs."standalone.com" = {
+            webroot = "/var/lib/acme/acme-challenges";
+        };
       };
       systemd.targets."acme-finished-standalone.com" = {};
       systemd.services."acme-standalone.com" = {
@@ -53,6 +56,8 @@ in import ./make-test.nix {
           echo hello world > "$out/index.html"
         '';
       };
+
+      security.acme.server = "https://acme-v02.api.letsencrypt.org/dir";
 
       nesting.clone = [
         ({pkgs, ...}: {
