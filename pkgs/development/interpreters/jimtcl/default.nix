@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     sqlite readline asciidoc SDL SDL_gfx
   ];
 
-  NIX_CFLAGS_COMPILE = makeSDLFlags [ SDL SDL_gfx ];
+  NIX_CFLAGS_COMPILE = toString (makeSDLFlags [ SDL SDL_gfx ]);
 
   configureFlags = [
     "--with-ext=oo"

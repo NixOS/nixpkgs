@@ -42,7 +42,7 @@ with super;
     ];
 
     # https://github.com/wahern/cqueues/issues/227
-    NIX_CFLAGS_COMPILE = if pkgs.stdenv.hostPlatform.isDarwin then [ "-DCLOCK_MONOTONIC" "-DCLOCK_REALTIME" ] else null;
+    NIX_CFLAGS_COMPILE = with pkgs.stdenv; lib.optionalString hostPlatform.isDarwin "-DCLOCK_MONOTONIC -DCLOCK_REALTIME";
 
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua

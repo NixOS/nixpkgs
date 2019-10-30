@@ -115,18 +115,18 @@ self: super: builtins.intersectAttrs super {
 
   hzk = overrideCabal super.hzk (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
-    configureFlags =  "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper";
+    configureFlags = [ "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" ];
   });
 
   haskakafka = overrideCabal super.haskakafka (drv: {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
-    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+    configureFlags = [ "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka" ];
   });
 
   # library has hard coded directories that need to be removed. Reported upstream here https://github.com/haskell-works/hw-kafka-client/issues/32
   hw-kafka-client = dontCheck (overrideCabal super.hw-kafka-client (drv: {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d -e /librdkafka/d hw-kafka-client.cabal";
-    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+    configureFlags = [ "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka" ];
   }));
 
   # Foreign dependency name clashes with another Haskell package.

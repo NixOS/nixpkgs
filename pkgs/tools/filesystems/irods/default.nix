@@ -30,11 +30,8 @@ in rec {
     #                         but we don't use /usr with nix, so remove only 2 items.
     patches = [ ./irods_root_path.patch ];
 
-    NIX_CFLAGS_COMPILE = [
-      # fix build with recent llvm versions
-      "-Wno-deprecated-register"
-      "-Wno-deprecated-declarations"
-    ];
+    # fix build with recent llvm versions
+    NIX_CFLAGS_COMPILE = "-Wno-deprecated-register -Wno-deprecated-declarations";
 
     preConfigure = common.preConfigure + ''
       patchShebangs ./test

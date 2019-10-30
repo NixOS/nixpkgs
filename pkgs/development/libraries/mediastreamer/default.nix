@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-DGIT_VERSION=\"v2.14.0\""
     "-Wno-error=deprecated-declarations"
     "-Wno-error=cast-function-type"

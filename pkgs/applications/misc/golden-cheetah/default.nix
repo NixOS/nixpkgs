@@ -31,7 +31,7 @@ in mkDerivation rec {
   ];
   nativeBuildInputs = [ flex makeWrapper qmake yacc ];
 
-  NIX_LDFLAGS = [ "-lz" ];
+  NIX_LDFLAGS = "-lz";
 
   qtWrapperArgs = [ "--set LD_LIBRARY_PATH ${zlib.out}/lib" ];
 
