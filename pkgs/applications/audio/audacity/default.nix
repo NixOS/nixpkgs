@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   # audacity only looks for lame and ffmpeg at runtime, so we need to link them in manually
-  NIX_LDFLAGS = [
+  NIX_LDFLAGS = toString [
     # LAME
     "-lmp3lame"
     # ffmpeg

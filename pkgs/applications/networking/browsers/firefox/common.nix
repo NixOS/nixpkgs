@@ -156,7 +156,7 @@ stdenv.mkDerivation rec {
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString ([
     "-I${glib.dev}/include/gio-unix-2.0"
   ]
   ++ lib.optionals (!isTorBrowserLike) [
@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (pname == "firefox-esr" && lib.versionAtLeast ffversion "68"
                                           && lib.versionOlder ffversion "69")
-    "-Wno-error=format-security";
+    "-Wno-error=format-security");
 
   postPatch = lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
     substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'

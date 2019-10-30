@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
   ] ++ stdenv.lib.optional useUnrar unrar;
 
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
   postPatch = ''patchShebangs version.sh'';
 

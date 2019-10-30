@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "--with-context=$out/share/texmf/tex/context/third"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${boehmgc.dev}/include/gc" ];
+  NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
   postInstall = ''
     mv $out/share/info/asymptote/*.info $out/share/info/

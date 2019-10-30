@@ -200,20 +200,17 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE =
-    [
-      "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
-      ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
-      ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''
-      ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
-    ]
-
-    ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
+  NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
+    ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
+    ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''
+    ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
+  ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
     ++ lib.optionals withGtk3 [
          ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
          ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
        ]
-    ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC";
+    ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
 
   prefixKey = "-prefix ";
 
