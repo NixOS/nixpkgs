@@ -19245,7 +19245,7 @@ let
       sha256 = "0avk50kia78kxryh2whmaj5l18q2wvmkdyqyjsf6kwr4kgy6x3i7";
     };
     # https://rt.cpan.org/Public/Bug/Display.html?id=124815
-    NIX_CFLAGS_COMPILE = [ "-DHAS_VPRINTF" ];
+    NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
   };
 
   TextUnidecode = buildPerlPackage {
@@ -20332,7 +20332,7 @@ let
     AUTOMATED_TESTING = false;
     buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
     propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];
-    NIX_CFLAGS_LINK = [ "-lxcb" "-lxcb-util" "-lxcb-xinerama" "-lxcb-icccm" ];
+    NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm";
     doCheck = false; # requires an X server
     meta = {
       description = "XCB bindings for X";

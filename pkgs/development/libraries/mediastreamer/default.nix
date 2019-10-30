@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ortp libv4l libpcap srtp bctoolbox libXext libmatroska
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-DGIT_VERSION=\"v${version}\""
     "-Wno-error=deprecated-declarations"
     "-Wno-error=cast-function-type"

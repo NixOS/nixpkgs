@@ -100,9 +100,9 @@ stdenv.mkDerivation rec {
   ];
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
-  NIX_LDFLAGS = [
+  NIX_LDFLAGS = toString [
     "-lx265"
-    # NOTE: The -ldl flag was fixed upstream for a release after 1.3.0    
+    # NOTE: The -ldl flag was fixed upstream for a release after 1.3.0
     "-ldl"
   ];
 

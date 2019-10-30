@@ -28,10 +28,7 @@ stdenv.mkDerivation rec {
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   # needed since luajit-2.1.0-beta3
-  NIX_CFLAGS_COMPILE = [
-    "-DluaL_reg=luaL_Reg"
-    "-DluaL_getn(L,i)=((int)lua_objlen(L,i))"
-  ];
+  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
 
   preConfigure = ''
     cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl")

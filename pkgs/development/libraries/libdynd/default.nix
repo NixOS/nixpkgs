@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   ];
 
   # added to fix build with gcc7+
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=nonnull"
     "-Wno-error=tautological-compare"
