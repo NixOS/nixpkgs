@@ -32,10 +32,10 @@
  </part>
  <part>
   <title>Contributing to Nixpkgs</title>
-  <xi:include href="quick-start.xml" />
-  <xi:include href="coding-conventions.xml" />
-  <xi:include href="submitting-changes.xml" />
-  <xi:include href="reviewing-contributions.xml" />
-  <xi:include href="contributing-to-documentation.xml" />
+  <xi:include href="contributing/quick-start.xml" />
+  <xi:include href="contributing/coding-conventions.xml" />
+  <xi:include href="contributing/submitting-changes.xml" />
+  <xi:include href="contributing/reviewing-contributions.xml" />
+  <xi:include href="contributing/contributing-to-documentation.xml" />
  </part>
 </book>
