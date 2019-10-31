@@ -6117,7 +6117,7 @@ in
     qtbase = qt4;
   };
 
-  scfbuild = python2.pkgs.callPackage ../tools/misc/scfbuild { };
+  scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
 
   scriptaculous = callPackage ../development/libraries/scriptaculous { };
 
