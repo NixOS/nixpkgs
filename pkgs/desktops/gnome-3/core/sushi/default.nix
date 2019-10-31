@@ -22,15 +22,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
 
-  # See https://github.com/NixOS/nixpkgs/issues/31168
-  postInstall = ''
-    for file in $out/libexec/org.gnome.NautilusPreviewer
-    do
-      sed -e $"2iimports.package._findEffectiveEntryPointName = () => \'$(basename $file)\' " \
-        -i $file
-    done
-  '';
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "sushi";
