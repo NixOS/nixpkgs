@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 buildGoPackage rec {
-  name = "terraform-provider-ansible-${version}";
+  pname = "terraform-provider-ansible";
   version = "1.0.3";
 
   goPackagePath = "github.com/nbering/terraform-provider-ansible";

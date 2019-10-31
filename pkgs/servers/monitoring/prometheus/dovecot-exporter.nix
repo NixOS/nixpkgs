@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "dovecot_exporter-${version}";
+  pname = "dovecot_exporter";
   version = "0.1.3";
 
   goPackagePath = "github.com/kumina/dovecot_exporter";

@@ -1,21 +1,21 @@
 { lib, buildPythonPackage, fetchPypi
-, Babel, decorator, requests, requests_oauthlib, six, click, markdown, pyyaml
+, Babel, requests, requests_oauthlib, six, click, markdown, pyyaml
 , pytestrunner, coverage, flake8, mock, pytest, pytestcov, tox
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.7.9";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zqnk255d311ibird08sv0c21fw1r1xhldhyx5lnl3ji1xkv9173";
+    sha256 = "7a26fa03c4b83f03f17e8f8fc0b94d5502a12dc2e39b48e93a0ab0fd93151a95";
   };
 
   nativeBuildInputs = [ Babel ];
 
   propagatedBuildInputs = [
-    decorator requests requests_oauthlib six click markdown pyyaml
+    requests requests_oauthlib six click markdown pyyaml
   ];
 
   checkInputs = [

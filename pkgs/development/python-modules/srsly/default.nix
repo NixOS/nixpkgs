@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "0.0.7";
+  version = "0.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1v9nn17q2lshnvnc8ff6nk53rggz2hgnmx4fj4czfr40125r98pk";
+    sha256 = "1l9yjp1w2vrkrynxrlrc0v47i2iq9059k4ni44nz23573xbdrh2w";
   };
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.4") pathlib;

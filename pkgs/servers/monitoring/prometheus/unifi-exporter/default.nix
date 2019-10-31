@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "unifi-exporter-${version}";
+  pname = "unifi-exporter";
   version = "0.4.0+git1";
   rev = "9a4e69fdea91dd0033bda4842998d751b40a6130";
 

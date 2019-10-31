@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   version = "1.11";
-  name = "beanstalkd-${version}";
+  pname = "beanstalkd";
 
   installPhase=''make install "PREFIX=$out"'';
 

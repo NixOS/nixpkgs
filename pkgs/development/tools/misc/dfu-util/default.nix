@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
-  name="dfu-util-${version}";
+  pname = "dfu-util";
   version = "0.9";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb1 ];
 
   src = fetchurl {
-    url = "http://dfu-util.sourceforge.net/releases/${name}.tar.gz";
+    url = "http://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
     sha256 = "0czq73m92ngf30asdzrfkzraag95hlrr74imbanqq25kdim8qhin";
   };
 

@@ -29,7 +29,7 @@ with super;
     # Parse out a version number without the Lua version inserted
     version = with pkgs.lib; let
       version' = super.cqueues.version;
-      rel = splitString "." version';
+      rel = splitVersion version';
       date = head rel;
       rev = last (splitString "-" (last rel));
     in "${date}-${rev}";
@@ -78,6 +78,25 @@ with super;
     nativeBuildInputs = [ pandoc ];
     makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
     */
+  });
+
+  ljsyscall = super.ljsyscall.override(rec {
+    version = "unstable-20180515";
+    # package hasn't seen any release for a long time
+    src = pkgs.fetchFromGitHub {
+      owner = "justincormack";
+      repo = "ljsyscall";
+      rev = "e587f8c55aad3955dddab3a4fa6c1968037b5c6e";
+      sha256 = "06v52agqyziwnbp2my3r7liv245ddmb217zmyqakh0ldjdsr8lz4";
+    };
+    knownRockspec = "rockspec/ljsyscall-scm-1.rockspec";
+    # actually library works fine with lua 5.2
+    preConfigure = ''
+      sed -i 's/lua == 5.1/lua >= 5.1, < 5.3/' ${knownRockspec}
+    '';
+    disabled = luaOlder "5.1" || luaAtLeast "5.3";
+
+    propagatedBuildInputs = with pkgs.lib; optional (!isLuaJIT) luaffi;
   });
 
   lgi = super.lgi.override({
@@ -135,12 +154,12 @@ with super;
   luadbi-mysql = super.luadbi-mysql.override({
     extraVariables = ''
       -- Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR='${pkgs.mysql.connector-c}/include/mysql';
-      MYSQL_LIBDIR='${pkgs.mysql.connector-c}/lib/mysql';
+      MYSQL_INCDIR='${pkgs.libmysqlclient}/include/mysql';
+      MYSQL_LIBDIR='${pkgs.libmysqlclient}/lib/mysql';
     '';
     buildInputs = [
       pkgs.mysql.client
-      pkgs.mysql.connector-c
+      pkgs.libmysqlclient
     ];
   });
 
@@ -216,6 +235,12 @@ with super;
     ];
   });
 
+  lua-yajl = super.lua-yajl.override({
+    buildInputs = [
+      pkgs.yajl
+    ];
+  });
+
   luuid = super.luuid.override(old: {
     externalDeps = [
       { name = "LIBUUID"; dep = pkgs.libuuid; }
@@ -248,10 +273,26 @@ with super;
      sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
      rm -rf deps/libuv
     '';
-    propagatedBuildInputs = [
-      pkgs.libuv
-    ];
+
+    buildInputs = [ pkgs.libuv ];
+
+    passthru = {
+      libluv = self.luv.override ({
+        preBuild = self.luv.preBuild + ''
+          sed -i 's,\(option(BUILD_MODULE.*\)ON,\1OFF,' CMakeLists.txt
+          sed -i 's,\(option(BUILD_SHARED_LIBS.*\)OFF,\1ON,' CMakeLists.txt
+          sed -i 's,${"\${INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
+        '';
+
+        nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
+
+        # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
+        NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+          (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
+      });
+    };
   });
+
 
   rapidjson = super.rapidjson.override({
     preBuild = ''

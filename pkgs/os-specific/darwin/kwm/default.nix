@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "kwm-${version}";
+  pname = "kwm";
   version = "4.0.5";
 
   src = fetchzip {

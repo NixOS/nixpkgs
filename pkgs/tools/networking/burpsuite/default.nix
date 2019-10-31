@@ -12,7 +12,8 @@ let
     exec ${jre}/bin/java -jar ${jar} "$@"
   '';
 in stdenv.mkDerivation {
-  name = "burpsuite-${version}";
+  pname = "burpsuite";
+  inherit version;
   buildCommand = ''
     mkdir -p $out/bin
     echo "${launcher}" > $out/bin/burpsuite

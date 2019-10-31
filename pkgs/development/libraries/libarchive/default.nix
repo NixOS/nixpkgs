@@ -9,7 +9,7 @@
 assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
-  name = "libarchive-${version}";
+  pname = "libarchive";
   version = "3.4.0";
 
   src = fetchFromGitHub {

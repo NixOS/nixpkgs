@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, crystal, pcre, libyaml, which }:
 
 stdenv.mkDerivation rec {
-  name = "shards-${version}";
+  pname = "shards";
   version = "0.9.0";
 
   src = fetchFromGitHub {

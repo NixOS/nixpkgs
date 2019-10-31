@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "7.0.2";
-  name = "seafile-shared-${version}";
+  pname = "seafile-shared";
 
   src = fetchFromGitHub {
     owner = "haiwen";

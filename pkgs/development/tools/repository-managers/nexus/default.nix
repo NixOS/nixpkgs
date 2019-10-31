@@ -1,15 +1,15 @@
 { stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "nexus-${version}";
-  version = "3.16.1-02";
+  pname = "nexus";
+  version = "3.18.1-01";
 
   src = fetchurl {
     url = "https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${version}-unix.tar.gz";
-    sha256 = "0nfcpsb7byykiwrdz01c99a6hr5ww2d4471spzpgs9i64kbjj7ln";
+    sha256 = "0z3hb1ha0yvi09hrndrzzh95g3m42pfsi0gzw7hfx9r0n8r2qgkd";
   };
 
-  sourceRoot = name;
+  sourceRoot = "${pname}-${version}";
 
   nativeBuildInputs = [ makeWrapper ];
 

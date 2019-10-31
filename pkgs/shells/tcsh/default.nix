@@ -2,14 +2,14 @@
 , ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "tcsh-${version}";
+  pname = "tcsh";
   version = "6.21.00";
 
   src = fetchurl {
     urls = [
-      "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/${name}.tar.gz"
-      "ftp://ftp.astron.com/pub/tcsh/${name}.tar.gz"
-      "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${name}.tar.gz"
+      "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
+      "ftp://ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
+      "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${pname}-${version}.tar.gz"
     ];
     sha256 = "0wp9cqkzdj5ahfyg9bn5z1wnyblqyv9vz4sc5aqmj7rp91a34f64";
   };

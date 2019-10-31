@@ -4,7 +4,8 @@ let
   version = "1.40.41";
 in
 stdenv.mkDerivation {
-  name = "qtbitcointrader-${version}";
+  pname = "qtbitcointrader";
+  inherit version;
 
   src = fetchzip {
     url = "https://github.com/JulyIGHOR/QtBitcoinTrader/archive/v${version}.tar.gz";

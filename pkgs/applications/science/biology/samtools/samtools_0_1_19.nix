@@ -1,12 +1,11 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "samtools";
   version = "0.1.19";
 
   src = fetchurl {
-    url = "mirror://sourceforge/samtools/${name}.tar.bz2";
+    url = "mirror://sourceforge/samtools/${pname}-${version}.tar.bz2";
     sha256 = "d080c9d356e5f0ad334007e4461cbcee3c4ca97b8a7a5a48c44883cf9dee63d4";
   };
 

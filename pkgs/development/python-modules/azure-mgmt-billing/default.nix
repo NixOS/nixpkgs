@@ -8,7 +8,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "azure-mgmt-billing";
   version = "0.2.0"; #pypi's 0.2.0 doesn't build ootb
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Billing Client Library";
-    homepage = https://github.com/Azure/sdk-for-python/tree/master/azure-mgmt-billing;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

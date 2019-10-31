@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "ion-${version}";
+  pname = "ion";
   version = "1.0.5";
 
   src = fetchFromGitHub {

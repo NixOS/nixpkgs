@@ -234,7 +234,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra configuration to put into mumur.ini.";
+        description = "Extra configuration to put into murmur.ini.";
       };
     };
   };

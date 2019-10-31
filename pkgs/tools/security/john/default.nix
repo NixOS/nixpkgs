@@ -5,11 +5,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "john-${version}";
+  pname = "john";
   version = "1.9.0-jumbo-1";
 
   src = fetchurl {
-    url = "http://www.openwall.com/john/k/${name}.tar.xz";
+    url = "http://www.openwall.com/john/k/${pname}-${version}.tar.xz";
     sha256 = "0fvz3v41hnaiv1ggpxanfykyfjq79cwp9qcqqn63vic357w27lgm";
   };
 

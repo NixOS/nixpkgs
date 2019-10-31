@@ -3,7 +3,7 @@
 let
 
   pname = "lvmsync";
-  version = (import ./gemset.nix)."${pname}".version;
+  version = (import ./gemset.nix).${pname}.version;
 
 in stdenv.mkDerivation rec {
 

@@ -3,7 +3,8 @@
 let version = "5.100.138"; in
 
 stdenv.mkDerivation {
-  name = "b43-firmware-${version}";
+  pname = "b43-firmware";
+  inherit version;
 
   src = fetchurl {
     url = "http://www.lwfinger.com/b43-firmware/broadcom-wl-${version}.tar.bz2";

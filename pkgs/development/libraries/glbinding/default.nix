@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, libGLU, xlibsWrapper }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "glbinding";
   version = "3.1.0";
 

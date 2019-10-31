@@ -3,7 +3,7 @@
 , pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "mediatomb-${version}";
+  pname = "mediatomb";
   version = "0.12.1";
 
   src = fetchgit {

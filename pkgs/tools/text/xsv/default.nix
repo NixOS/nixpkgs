@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "xsv-${version}";
+  pname = "xsv";
   version = "0.13.0";
 
   src = fetchFromGitHub {

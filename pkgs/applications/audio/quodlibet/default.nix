@@ -46,11 +46,11 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = stdenv.lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
 
   meta = with stdenv.lib; {
-    description = "GTK+-based audio player written in Python, using the Mutagen tagging library";
+    description = "GTK-based audio player written in Python, using the Mutagen tagging library";
     license = licenses.gpl2Plus;
 
     longDescription = ''
-      Quod Libet is a GTK+-based audio player written in Python, using
+      Quod Libet is a GTK-based audio player written in Python, using
       the Mutagen tagging library. It's designed around the idea that
       you know how to organize your music better than we do. It lets
       you make playlists based on regular expressions (don't worry,
@@ -65,5 +65,6 @@ python3.pkgs.buildPythonApplication rec {
 
     maintainers = with maintainers; [ coroa sauyon ];
     homepage = https://quodlibet.readthedocs.io/en/latest/;
+    broken = true;
   };
 }

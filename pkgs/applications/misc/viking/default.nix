@@ -1,10 +1,10 @@
 { fetchurl, stdenv, makeWrapper, pkgconfig, intltool, gettext, gtk2, expat, curl
 , gpsd, bc, file, gnome-doc-utils, libexif, libxml2, libxslt, scrollkeeper
-, docbook_xml_dtd_412, gexiv2, sqlite, gpsbabel, expect, hicolor-icon-theme
-, geoclue2, liboauth }:
+, docbook_xml_dtd_412, gexiv2, sqlite, gpsbabel, expect
+, geoclue2, liboauth, nettle }:
 
 stdenv.mkDerivation rec {
-  name = "viking-${version}";
+  pname = "viking";
   version = "1.7";
 
   src = fetchurl {
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ makeWrapper intltool gettext gtk2 expat curl gpsd bc file gnome-doc-utils
-    libexif libxml2 libxslt scrollkeeper docbook_xml_dtd_412 gexiv2 sqlite hicolor-icon-theme
-    geoclue2 liboauth
+    libexif libxml2 libxslt scrollkeeper docbook_xml_dtd_412 gexiv2 sqlite
+    geoclue2 liboauth nettle
   ];
 
   configureFlags = [ "--disable-scrollkeeper --disable-mapnik" ];

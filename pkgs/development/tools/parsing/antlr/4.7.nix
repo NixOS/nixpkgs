@@ -2,17 +2,18 @@
 , fetchFromGitHub, cmake, ninja, pkgconfig, libuuid, darwin }:
 
 let
-  version = "4.7.1";
+  version = "4.7.2";
   source = fetchFromGitHub {
     owner = "antlr";
     repo = "antlr4";
     rev = version;
-    sha256 = "1xb4d9bd4hw406v85s64gg8gwcrrsrw171vhga1gz4xj6pzfwxz7";
+    sha256 = "1pl0zs6c6wx9nmq30s7ccpc3dl72az55i8vfp574fw9sywmvxmlj";
   };
 
   runtime = {
     cpp = stdenv.mkDerivation {
-      name = "antlr-runtime-cpp-${version}";
+      pname = "antlr-runtime-cpp";
+      inherit version;
       src = source;
 
       outputs = [ "out" "dev" "doc" ];
@@ -35,10 +36,12 @@ let
   };
 
   antlr = stdenv.mkDerivation {
-    name = "antlr-${version}";
+    pname = "antlr";
+    inherit version;
+
     src = fetchurl {
       url ="https://www.antlr.org/download/antlr-${version}-complete.jar";
-      sha256 = "1236gwnzchama92apb2swmklnypj01m7bdwwfvwvl8ym85scw7gl";
+      sha256 = "1d40nfkq3ws8g4ksx4gj6l6m2l9j4b605q6sf68z5vvmg5nkhlk8";
     };
 
     dontUnpack = true;

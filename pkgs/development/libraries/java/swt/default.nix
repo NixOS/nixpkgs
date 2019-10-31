@@ -5,13 +5,13 @@
 
 let
   platformMap = {
-    "x86_64-linux" =
+    x86_64-linux =
       { platform = "gtk-linux-x86_64";
         sha256 = "1qq0pjll6030v4ml0hifcaaik7sx3fl7ghybfdw95vsvxafwp2ff"; };
-    "i686-linux" =
+    i686-linux =
       { platform = "gtk-linux-x86";
         sha256 = "03mhzraikcs4fsz7d3h5af9pw1bbcfd6dglsvbk2ciwimy9zj30q"; };
-    "x86_64-darwin" =
+    x86_64-darwin =
       { platform = "cocoa-macosx-x86_64";
         sha256 = "00k1mfbncvyh8klgmk0891w8jwnd5niqb16j1j8yacrm2smmlb05"; };
   };
@@ -21,7 +21,7 @@ let
 in stdenv.mkDerivation rec {
   version = "4.5";
   fullVersion = "${version}-201506032000";
-  name = "swt-${version}";
+  pname = "swt";
 
   hardeningDisable = [ "format" ];
 
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   # releases of SWT.  So we just grab a binary release and extract
   # "src.zip" from that.
   src = fetchurl {
-    url = "http://archive.eclipse.org/eclipse/downloads/drops4/R-${fullVersion}/${name}-${metadata.platform}.zip";
+    url = "http://archive.eclipse.org/eclipse/downloads/drops4/R-${fullVersion}/${pname}-${version}-${metadata.platform}.zip";
     sha256 = metadata.sha256;
   };
 

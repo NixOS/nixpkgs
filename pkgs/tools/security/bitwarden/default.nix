@@ -16,11 +16,11 @@ let
   pname = "bitwarden";
 
   version = {
-    "x86_64-linux" = "1.15.2";
+    x86_64-linux = "1.16.6";
   }.${system} or "";
 
   sha256 = {
-    "x86_64-linux" = "0yz4hkqqwq2zrdjfxk5kybhs90n80k6bkn0625m47b09lwl2di4f";
+    x86_64-linux = "074hqm4gjljc82nhn7h6wsd74567390018fi3v38g7jh7aph10jj";
   }.${system} or "";
 
   meta = with stdenv.lib; {
@@ -51,7 +51,7 @@ let
 
     dontBuild = true;
     dontConfigure = true;
-    dontPatchElf = true;
+    dontPatchELF = true;
     dontWrapGApps = true;
 
     buildInputs = [ libsecret ] ++ atomEnv.packages;

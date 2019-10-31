@@ -253,7 +253,7 @@ let
         # TODO: proper quoting
         toNix = x:
           if (builtins.isString x) then "'${x}'"
-          else if builtins.isAttrs x && builtins ? out then toNix "${x}" # a derivation
+          else if builtins.isAttrs x && builtins ? out then toNix x # a derivation
           else if builtins.isAttrs x then "{${lib.concatStringsSep ", " (lib.mapAttrsToList (n: v: "${toNix n}: ${toNix v}") x)}}"
           else if builtins.isList x then "[${lib.concatMapStringsSep ", " toNix x}]"
           else throw "turning ${lib.generators.toPretty {} x} into a VimL thing not implemented yet";
@@ -264,7 +264,7 @@ let
         ${lib.concatMapStrings (plugin: ''
           let g:nix_plugin_locations['${plugin.pname}'] = "${plugin.rtp}"
         '') plugins}
-        let g:nix_plugin_locations['vim-addon-manager'] = "${knownPlugins."vim-addon-manager".rtp}"
+        let g:nix_plugin_locations['vim-addon-manager'] = "${knownPlugins.vim-addon-manager.rtp}"
 
         let g:vim_addon_manager = {}
 
@@ -316,7 +316,7 @@ let
           ++ (builtins.map (link packageName "opt") opt)
         );
         packDir = (packages:
-          stdenv.mkDerivation rec {
+          stdenv.mkDerivation {
             name = "vim-pack-dir";
             src = ./.;
             installPhase = lib.concatStringsSep
@@ -513,7 +513,7 @@ rec {
     name = "vim_with_custom_plugin";
     vimrcConfig.vam.knownPlugins =
       vimPlugins // ({
-        "vim-trailing-whitespace" = buildVimPluginFrom2Nix {
+        vim-trailing-whitespace = buildVimPluginFrom2Nix {
           name = "vim-trailing-whitespace";
           src = fetchFromGitHub {
             owner = "bronson";

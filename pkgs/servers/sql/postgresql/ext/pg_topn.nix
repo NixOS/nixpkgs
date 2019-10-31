@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
-  name = "pg_topn-${version}";
+  pname = "pg_topn";
   version = "2.2.2";
 
   buildInputs = [ postgresql ];

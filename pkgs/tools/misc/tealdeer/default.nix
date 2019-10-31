@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, cacert, curl }:
 
 rustPlatform.buildRustPackage rec {
-  name = "tealdeer-${version}";
+  pname = "tealdeer";
   version = "1.1.0";
 
   src = fetchFromGitHub {

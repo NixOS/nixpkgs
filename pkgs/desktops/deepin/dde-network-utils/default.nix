@@ -2,7 +2,6 @@
   dde-qt-dbus-factory, proxychains, which, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-network-utils";
   version = "0.1.4";
 
@@ -42,7 +41,7 @@ mkDerivation rec {
     searchHardCodedPaths $out  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin network utils";

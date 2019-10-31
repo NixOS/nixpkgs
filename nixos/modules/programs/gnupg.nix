@@ -6,6 +6,19 @@ let
 
   cfg = config.programs.gnupg;
 
+  xserverCfg = config.services.xserver;
+
+  defaultPinentryFlavor =
+    if xserverCfg.desktopManager.lxqt.enable
+    || xserverCfg.desktopManager.plasma5.enable then
+      "qt"
+    else if xserverCfg.desktopManager.xfce.enable then
+      "gtk2"
+    else if xserverCfg.enable || config.programs.sway.enable then
+      "gnome3"
+    else
+      null;
+
 in
 
 {
@@ -54,6 +67,20 @@ in
       '';
     };
 
+    agent.pinentryFlavor = mkOption {
+      type = types.nullOr (types.enum pkgs.pinentry.flavors);
+      example = "gnome3";
+      description = ''
+        Which pinentry interface to use. If not null, the path to the
+        pinentry binary will be passed to gpg-agent via commandline and
+        thus overrides the pinentry option in gpg-agent.conf in the user's
+        home directory.
+        If not set at all, it'll pick an appropriate flavor depending on the
+        system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce
+        4.12, gnome3 on all other systems with X enabled, ncurses otherwise).
+      '';
+    };
+
     dirmngr.enable = mkOption {
       type = types.bool;
       default = false;
@@ -64,6 +91,16 @@ in
   };
 
   config = mkIf cfg.agent.enable {
+    programs.gnupg.agent.pinentryFlavor = mkDefault defaultPinentryFlavor;
+
+    # This overrides the systemd user unit shipped with the gnupg package
+    systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavor != null) {
+      serviceConfig.ExecStart = [ "" ''
+        ${pkgs.gnupg}/bin/gpg-agent --supervised \
+          --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
+      '' ];
+    };
+
     systemd.user.sockets.gpg-agent = {
       wantedBy = [ "sockets.target" ];
     };
@@ -83,7 +120,7 @@ in
     systemd.user.sockets.dirmngr = mkIf cfg.dirmngr.enable {
       wantedBy = [ "sockets.target" ];
     };
-    
+
     environment.systemPackages = with pkgs; [ cfg.package ];
     systemd.packages = [ cfg.package ];
 

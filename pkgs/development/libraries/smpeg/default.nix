@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./format.patch
     ./gcc6.patch
+    ./libx11.patch
   ];
 
   enableParallelBuilding = true;

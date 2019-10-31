@@ -1,6 +1,6 @@
 { buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   name = "kexpand-unstable-2017-05-12";
 
   goPackagePath = "github.com/kopeio/kexpand";

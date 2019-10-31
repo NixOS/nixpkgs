@@ -1,6 +1,6 @@
 { mkXfceDerivation, exo, glib, gtk3, gtksourceview3, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
   version = "0.4.2";

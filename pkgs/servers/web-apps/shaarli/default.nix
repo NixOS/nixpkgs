@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "shaarli-${version}";
+  pname = "shaarli";
   version = "0.11.1";
 
   src = fetchurl {

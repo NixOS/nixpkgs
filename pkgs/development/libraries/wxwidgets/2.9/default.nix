@@ -15,7 +15,8 @@ let
   version = "2.9.4";
 in
 stdenv.mkDerivation {
-  name = "wxwidgets-${version}";
+  pname = "wxwidgets";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/wxwindows/wxWidgets-${version}.tar.bz2";

@@ -6,7 +6,8 @@
 let
   version = "2.1";
 in stdenv.mkDerivation rec {
-  name = "libbytesize-${version}";
+  pname = "libbytesize";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "storaged-project";

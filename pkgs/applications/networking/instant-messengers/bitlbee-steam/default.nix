@@ -3,7 +3,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   version = "1.4.2";
-  name = "bitlbee-steam-${version}";
+  pname = "bitlbee-steam";
 
   src = fetchFromGitHub {
     rev = "v${version}";

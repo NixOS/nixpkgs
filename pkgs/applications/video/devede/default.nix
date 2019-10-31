@@ -4,7 +4,7 @@
 let
   inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3;
 
-in buildPythonApplication rec {
+in buildPythonApplication {
   name = "devede-4.8.8";
   namePrefix = "";
 

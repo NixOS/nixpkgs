@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "graphene";
-  version = "1.9.6";
+  version = "1.10.0";
 
   outputs = [ "out" "devdoc" "installedTests" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "ebassi";
     repo = pname;
     rev = version;
-    sha256 = "0hb7s6g00l7zlf4hlfda55krn0pls9ajz0hcqrh8m656zr18ddwa";
+    sha256 = "16vqwih5bfxv7r3mm7iiha804rpsxzxjfrs4kx76d9q5yg2hayxr";
   };
 
   patches = [
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-    "-Dinstalled_test_datadir=${placeholder ''installedTests''}/share"
-    "-Dinstalled_test_bindir=${placeholder ''installedTests''}/libexec"
+    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
+    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
   ];
 
   nativeBuildInputs = [

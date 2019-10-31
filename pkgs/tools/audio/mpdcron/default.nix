@@ -6,9 +6,9 @@ let
     name = "mpdcron-bundle";
     gemdir = ./.;
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   version = "20161228";
-  name    = "mpdcron-${version}";
+  pname = "mpdcron";
 
   src = fetchFromGitHub {
     owner = "alip";

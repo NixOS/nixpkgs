@@ -1,4 +1,5 @@
 { stdenv, pkgs, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+, addOpenGLRunpath
 # Python deps
 , buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast, python
 # Python libraries
@@ -58,10 +59,25 @@ let
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
-  # TODO: remove after there's support for setupPyDistFlags
-  setuppy = ../../../development/interpreters/python/run_setup.py;
+  pythonEnv = python.withPackages (_:
+    [ # python deps needed during wheel build time
+      numpy
+      keras-preprocessing
+      protobuf
+      wrapt
+      gast
+      astor
+      absl-py
+      termcolor
+      keras-applications
+      setuptools
+      wheel
+  ] ++ lib.optionals (!isPy3k)
+  [ future
+    mock
+  ]);
 
-  bazel-build = buildBazelPackage rec {
+  bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
 
     src = fetchFromGitHub {
@@ -96,29 +112,17 @@ let
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
 
     nativeBuildInputs = [
-      swig which cython
-    ];
+      swig which pythonEnv
+    ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
     buildInputs = [
-      python
       jemalloc
       openmpi
       glibcLocales
       git
 
-      # python deps needed during wheel build time
-      numpy
-      keras-preprocessing
-      protobuf
-      wrapt
-      gast
-      astor
-      absl-py
-      termcolor
-      keras-applications
-
       # libs taken from system through the TF_SYS_LIBS mechanism
-      grpc
+      # grpc
       sqlite
       openssl
       jsoncpp
@@ -133,19 +137,11 @@ let
       giflib
       re2
       pkgs.lmdb
-
-      # for building the wheel
-      setuptools
-      wheel
-    ] ++ lib.optionals (!isPy3k) [
-      future
-      mock
     ] ++ lib.optionals cudaSupport [
       cudatoolkit
       cudnn
       nvidia_x11
     ];
-
 
     # arbitrarily set to the current latest bazel version, overly careful
     TF_IGNORE_MAX_BAZEL_VERSION = true;
@@ -169,7 +165,8 @@ let
       "flatbuffers"
       "gast_archive"
       "gif_archive"
-      "grpc"
+      # Lots of errors, requires an older version
+      # "grpc"
       "hwloc"
       "icu"
       "jpeg"
@@ -193,8 +190,8 @@ let
 
     INCLUDEDIR = "${includes_joined}/include";
 
-    PYTHON_BIN_PATH = python.interpreter;
- 
+    PYTHON_BIN_PATH = pythonEnv.interpreter;
+
     TF_NEED_GCP = true;
     TF_NEED_HDFS = true;
     TF_ENABLE_XLA = tfFeature xlaSupport;
@@ -207,6 +204,7 @@ let
     TF_NEED_CUDA = tfFeature cudaSupport;
     TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
     GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
+    GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
     TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
 
     postPatch = ''
@@ -236,6 +234,9 @@ let
       export PYTHON_LIB_PATH="$NIX_BUILD_TOP/site-packages"
       export CC_OPT_FLAGS="${lib.concatStringsSep " " opt_flags}"
       mkdir -p "$PYTHON_LIB_PATH"
+
+      # To avoid mixing Python 2 and Python 3
+      unset PYTHONPATH
     '';
 
     configurePhase = ''
@@ -245,8 +246,7 @@ let
     '';
 
     # FIXME: Tensorflow uses dlopen() for CUDA libraries.
-    # No idea why gpr isn't linked properly; perhaps Tensorflow expects a static library?
-    NIX_LDFLAGS = [ "-lgpr" ] ++ lib.optionals cudaSupport [ "-lcudart" "-lcublas" "-lcufft" "-lcurand" "-lcusolver" "-lcusparse" "-lcudnn" ];
+    NIX_LDFLAGS = lib.optionals cudaSupport [ "-lcudart" "-lcublas" "-lcufft" "-lcurand" "-lcusolver" "-lcusparse" "-lcudnn" ];
 
     hardeningDisable = [ "format" ];
 
@@ -261,15 +261,14 @@ let
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
 
     fetchAttrs = {
-      preInstall = ''
-        rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker,local_*,\@local_*}
-      '';
+      # So that checksums don't depend on these.
+      TF_SYSTEM_LIBS = null;
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "19ll3f1i5qzd7ngz3m2jbxzgcrdjx5sv6kv2j5mcb8g3xsws8j5x"
+        "196pm3ynfafqlcxah07hkvphf536hpix1ydgsynr1yg08aynlvvx"
       else
-        "0y9kw3k4yvrxwdy7zry7nip9mdiwyv35r6mx65g4w7qajiypfc7i";
+        "138r85n27ijzwxfwb5pcfyb79v14368jpckw0vmciz6pwf11bd9g";
     };
 
     buildAttrs = {
@@ -298,10 +297,25 @@ let
         bazel-bin/tensorflow/tools/pip_package/build_pip_package --src "$PWD/dist"
         cp -Lr "$PWD/dist" "$python"
       '';
+
+      postFixup = lib.optionalString cudaSupport ''
+        find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+          addOpenGLRunpath "$lib"
+        done
+      '';
+    };
+
+    meta = with stdenv.lib; {
+      description = "Computation using data flow graphs for scalable machine learning";
+      homepage = http://tensorflow.org;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ jyp abbradar ];
+      platforms = platforms.linux;
+      broken = !(xlaSupport -> cudaSupport);
     };
   };
 
-in buildPythonPackage rec {
+in buildPythonPackage {
   inherit version pname;
 
   src = bazel-build.python;
@@ -314,13 +328,7 @@ in buildPythonPackage rec {
     rm $out/bin/tensorboard
   '';
 
-  # TODO: remove after there's support for setupPyDistFlags
-  buildPhase = ''
-    runHook preBuild
-    cp ${setuppy} nix_run_setup
-    ${python.interpreter} nix_run_setup --project_name ${pname} bdist_wheel
-    runHook postBuild
-  '';
+  setupPyGlobalFlags = [ "--project_name ${pname}" ];
 
   # tensorflow/tools/pip_package/setup.py
   propagatedBuildInputs = [
@@ -346,6 +354,14 @@ in buildPythonPackage rec {
     tensorflow-tensorboard
   ];
 
+  nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
+
+  postFixup = lib.optionalString cudaSupport ''
+    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      addOpenGLRunpath "$lib"
+    done
+  '';
+
   # Actual tests are slow and impure.
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
@@ -355,12 +371,5 @@ in buildPythonPackage rec {
 
   passthru.libtensorflow = bazel-build.out;
 
-  meta = with stdenv.lib; {
-    description = "Computation using data flow graphs for scalable machine learning";
-    homepage = http://tensorflow.org;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jyp abbradar ];
-    platforms = platforms.linux;
-    broken = !(xlaSupport -> cudaSupport);
-  };
+  inherit (bazel-build) meta;
 }

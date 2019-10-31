@@ -1,11 +1,14 @@
 {
   mkDerivation, lib, copyPathsToStore, propagate,
   extra-cmake-modules,
-  kwayland, libXrandr, qtx11extras
+  kwayland, libXrandr, qtbase, qtx11extras
 }:
 
 mkDerivation {
   name = "libkscreen";
+  meta = {
+    broken = builtins.compareVersions qtbase.version "5.12.0" < 0;
+  };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kwayland libXrandr qtx11extras ];
   outputs = [ "out" "dev" ];

@@ -3,7 +3,6 @@
 pythonPackages.buildPythonApplication rec {
   pname = "http-prompt";
   version = "1.0.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -31,5 +30,6 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.linux ++ platforms.darwin;
+    broken = true;
   };
 }

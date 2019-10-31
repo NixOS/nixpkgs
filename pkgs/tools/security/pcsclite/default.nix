@@ -2,7 +2,7 @@
 , IOKit ? null }:
 
 stdenv.mkDerivation rec {
-  name = "pcsclite-${version}";
+  pname = "pcsclite";
   version = "1.8.25";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];

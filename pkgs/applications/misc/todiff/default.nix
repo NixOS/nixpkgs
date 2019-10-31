@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  name = "todiff-${version}";
+  pname = "todiff";
   version = "0.6.1";
 
   src = fetchFromGitHub {

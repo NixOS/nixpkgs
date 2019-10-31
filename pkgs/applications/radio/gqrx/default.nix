@@ -8,7 +8,7 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 mkDerivation rec {
-  name = "gqrx-${version}";
+  pname = "gqrx";
   version = "2.11.5";
 
   src = fetchFromGitHub {

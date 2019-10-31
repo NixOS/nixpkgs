@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.22";
-  name = "tuxpaint-${version}";
+  pname = "tuxpaint";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tuxpaint/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/tuxpaint/${version}/${pname}-${version}.tar.gz";
     sha256 = "1qrbrdck9yxpcg3si6jb9i11w8lw9h4hqad0pfaxgyiniqpr7gca";
   };
 

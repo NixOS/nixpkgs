@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   patches = [ add-apocrypha add-install-target ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
   ];
 
   meta = with stdenv.lib; {

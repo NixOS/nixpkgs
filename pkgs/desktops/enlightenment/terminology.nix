@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    (pkgconfig.override { vanilla = true; })
+    pkgconfig
     makeWrapper
   ];
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Powerful terminal emulator based on EFL";
     homepage = https://www.enlightenment.org/about-terminology;
-    platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

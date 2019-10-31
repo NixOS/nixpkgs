@@ -6,7 +6,7 @@ assert enableXinerama -> libXinerama != null;
 
 stdenv.mkDerivation rec {
   version = "2.0.2";
-  name = "setroot-${version}";
+  pname = "setroot";
 
   src = fetchFromGitHub {
     owner = "ttzhou";

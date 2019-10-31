@@ -39,6 +39,11 @@ buildPythonPackage rec {
     pomegranate
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pandas >= 0.20.1, < 0.25.0" "pandas"
+  '';
+
   meta = with lib; {
     homepage = "https://cnvkit.readthedocs.io";
     description = "A Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";

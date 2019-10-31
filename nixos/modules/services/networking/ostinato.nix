@@ -50,7 +50,7 @@ in
 
       rpcServer = {
         address = mkOption {
-          type = types.string;
+          type = types.str;
           default = "0.0.0.0";
           description = ''
             By default, the Drone RPC server will listen on all interfaces and
@@ -63,7 +63,7 @@ in
 
       portList = {
         include = mkOption {
-          type = types.listOf types.string;
+          type = types.listOf types.str;
           default = [];
           example = ''[ "eth*" "lo*" ]'';
           description = ''

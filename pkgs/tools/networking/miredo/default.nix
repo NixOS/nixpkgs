@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.6";
-  name = "miredo-${version}";
+  pname = "miredo";
 
   buildInputs = [ judy ];
 

@@ -9,7 +9,7 @@ let
       sha256 = "0hmqwsry8ldg4g4hhwg4b84dgzibpdrg1wwsajhlyqfx3fb3n3b5";
     };
   };
-  param = params."${coq.coq-version}";
+  param = params.${coq.coq-version};
 in
 
 stdenv.mkDerivation rec {

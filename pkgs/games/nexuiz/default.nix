@@ -11,9 +11,10 @@
 let
   version = "2.5.2";
 
-  version_short = stdenv.lib.replaceChars [ "." ] [ "" ] "${version}";
+  version_short = stdenv.lib.replaceChars [ "." ] [ "" ] version;
 in stdenv.mkDerivation {
-  name = "nexuiz-${version}";
+  pname = "nexuiz";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/nexuiz/nexuiz-${version_short}.zip";

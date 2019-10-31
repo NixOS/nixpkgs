@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "hexcurse-${version}";
+  pname = "hexcurse";
   version = "1.60.0";
 
   src = fetchFromGitHub {

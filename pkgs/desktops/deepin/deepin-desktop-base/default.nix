@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-desktop-base";
   version = "2019.06.19";
 
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     ln -s ../lib/deepin/desktop-version $out/etc/deepin-version
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";

@@ -100,7 +100,7 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals isPy35 [
     # Backports support for LD_LIBRARY_PATH from 3.6
     ./3.5/ld_library_path.patch
-  ] ++ optionals isPy37 [
+  ] ++ optionals (isPy37 || isPy38) [
     # Fix darwin build https://bugs.python.org/issue34027
     (fetchpatch {
       url = https://bugs.python.org/file47666/darwin-libutil.patch;
@@ -114,7 +114,7 @@ in with passthru; stdenv.mkDerivation {
     (
       if isPy35 then
         ./3.5/python-3.x-distutils-C++.patch
-      else if isPy37 then
+      else if isPy37 || isPy38 then
         ./3.7/python-3.x-distutils-C++.patch
       else
         fetchpatch {
@@ -129,8 +129,8 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
-  CPPFLAGS = "${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}";
-  LDFLAGS = "${concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs)}";
+  CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+  LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
   LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
   # Determinism: We fix the hashes of str, bytes and datetime objects.
@@ -142,6 +142,8 @@ in with passthru; stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (sqlite != null && isPy3k) [
+    "--enable-loadable-sqlite-extensions"
   ] ++ optionals (openssl != null) [
     "--with-openssl=${openssl.dev}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

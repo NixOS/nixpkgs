@@ -23,18 +23,25 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "SDL2-${version}";
-  version = "2.0.9";
+  pname = "SDL2";
+  version = "2.0.10";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "1c94ndagzkdfqaa838yqg589p1nnqln8mv0hpwfhrkbfczf8cl95";
+    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
+    sha256 = "0mqxp6w5jhbq6y1j690g9r3gpzwjxh4czaglw8x05l7hl49nqrdl";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
   patches = [ ./find-headers.patch ];
+
+  # Fix with mesa 19.2: https://bugzilla.libsdl.org/show_bug.cgi?id=4797
+  postPatch = ''
+    substituteInPlace include/SDL_opengl_glext.h \
+      --replace "typedef ptrdiff_t GLsizeiptr;" "typedef signed long int khronos_ssize_t; typedef khronos_ssize_t GLsizeiptr;" \
+      --replace "typedef ptrdiff_t GLintptr;" "typedef signed long int khronos_intptr_t; typedef khronos_intptr_t GLintptr;"
+  '';
 
   nativeBuildInputs = [ pkgconfig ];
 

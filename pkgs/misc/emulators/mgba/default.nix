@@ -14,14 +14,14 @@ let
     startupNotify = "false";
   };
 in stdenv.mkDerivation rec {
-  name = "mgba-${version}";
-  version = "0.7.2";
+  pname = "mgba";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "0g0xa1mzvan0sl1p5c784j2g5mcw9kd2b7wiahy06gy0c1nmbcnp";
+    sha256 = "1wrmwh50rv8bd328r8cisrihq6h90kx2bfb0vmjfbsd3l1jvgrgm";
   };
 
   enableParallelBuilding = true;

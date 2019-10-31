@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, openssl, libpcap, python2 }:
+{ stdenv, fetchurl, fetchpatch, openssl, libpcap, python2, withPython ? false }:
 
 stdenv.mkDerivation rec {
   name = "vde2-2.3.2";
@@ -15,8 +15,10 @@ stdenv.mkDerivation rec {
     }
   );
 
+  configureFlags = stdenv.lib.optional (!withPython) [ "--disable-python" ];
 
-  buildInputs = [ openssl libpcap python2 ];
+  buildInputs = [ openssl libpcap ]
+    ++ stdenv.lib.optional withPython python2;
 
   hardeningDisable = [ "format" ];
 

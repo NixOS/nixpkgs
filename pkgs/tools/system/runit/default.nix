@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "runit-${version}";
+  pname = "runit";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "http://smarden.org/runit/${name}.tar.gz";
+    url = "http://smarden.org/runit/${pname}-${version}.tar.gz";
     sha256 = "065s8w62r6chjjs6m9hapcagy33m75nlnxb69vg0f4ngn061dl3g";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  sourceRoot = "admin/${name}";
+  sourceRoot = "admin/${pname}-${version}";
 
   doCheck = true;
 

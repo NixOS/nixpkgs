@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub, cmake }:
+
 stdenv.mkDerivation rec {
-  name = "spirv-headers-${version}";
-  version = "2019.1"; # spirv-tools version whose DEPS file calls for this commit
+  pname = "spirv-headers";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "79b6681aadcb53c27d1052e5f8a0e82a981dbf2f"; # from spirv-tools' DEPS
-    sha256 = "0flng2rdmc4ndq3j71h6wk1ibcjvhjrg2rzd6rv445vcsf0jh2pj";
+    rev = version;
+    sha256 = "1zfmvg3x0q9w652s8g5m5rcckzm6jiiw8rif2qck4vlsryl55akp";
   };
 
   nativeBuildInputs = [ cmake ];

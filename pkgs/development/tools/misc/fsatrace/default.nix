@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "fsatrace-${version}";
+  pname = "fsatrace";
   version = "0.0.1-160";
 
   src = fetchFromGitHub {
@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    mkdir -p $out/libexec/${name}
-    export makeFlags=INSTALLDIR=$out/libexec/${name}
+    mkdir -p $out/libexec/${pname}-${version}
+    export makeFlags=INSTALLDIR=$out/libexec/${pname}-${version}
   '';
 
   postInstall = ''
     mkdir -p $out/bin
-    ln -s $out/libexec/${name}/fsatrace $out/bin/
+    ln -s $out/libexec/${pname}-${version}/fsatrace $out/bin/
   '';
 
   meta = with stdenv.lib; {

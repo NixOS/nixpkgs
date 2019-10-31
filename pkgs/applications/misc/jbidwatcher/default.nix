@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "jbidwatcher";
   version = "2.5.6";
 
-  name = "${pname}-${version}";
-
   src = fetchurl {
     url = "http://www.jbidwatcher.com/download/JBidwatcher-${version}.jar";
     sha256 = "1cw59wh72w1zzibs8x64dma3jc4hry64wjksqs52nc3vpnf0fzfr";

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python2Packages, root, makeWrapper, zlib, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
-  name = "yoda-${version}";
+  pname = "yoda";
   version = "1.7.7";
 
   src = fetchurl {

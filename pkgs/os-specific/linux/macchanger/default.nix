@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "macchanger-${version}";
+  pname = "macchanger";
   version = "1.7.0";
 
   src = fetchFromGitHub {

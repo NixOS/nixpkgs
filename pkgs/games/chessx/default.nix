@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "chessx-${version}";
+  pname = "chessx";
   version = "1.5.0";
 
   src = fetchurl {

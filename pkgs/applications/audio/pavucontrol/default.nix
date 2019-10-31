@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "PulseAudio Volume Control";
 
     longDescription = ''
-      PulseAudio Volume Control (pavucontrol) provides a GTK+
+      PulseAudio Volume Control (pavucontrol) provides a GTK
       graphical user interface to connect to a PulseAudio server and
       easily control the volume of all clients, sinks, etc.
     '';

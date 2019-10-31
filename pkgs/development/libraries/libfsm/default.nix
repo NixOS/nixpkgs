@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "libfsm-${version}";
-  version = "0.1pre1869_${builtins.substring 0 7 src.rev}";
+  pname = "libfsm";
+  version = "0.1pre1905_${builtins.substring 0 8 src.rev}";
 
   src = fetchFromGitHub {
     owner  = "katef";
-    repo   = "libfsm";
-    rev    = "f70c3c5778a79eeecb52f9fd35c7cbc241db0ed6";
-    sha256 = "1hgv272jdv6dwnsdjajyky537z84q0cwzspw9br46qj51h8gkwvx";
+    repo   = pname;
+    rev    = "bd5937fad42b26a86bac1fe3ec49eff73581bd1d";
+    sha256 = "1q3grbmvjnnvc2sshswbd40cc2j2hnwibmljcqx9jqgda0wd6pgv";
     fetchSubmodules = true;
   };
 
@@ -22,12 +22,16 @@ stdenv.mkDerivation rec {
   # if we use stdenv vs clangStdenv, we don't know which, and CC=cc in all
   # cases.) it's unclear exactly what should be done if we want those flags,
   # but the defaults work fine.
-  buildPhase = "PREFIX=$out bmake -r install";
+  buildPhase = "PREFIX=$out bmake -r -j$NIX_BUILD_CORES";
+  installPhase = ''
+    PREFIX=$out bmake -r install
+    runHook postInstall
+  '';
 
   # fix up multi-output install. we also have to fix the pkgconfig libdir
   # file; it uses prefix=$out; libdir=${prefix}/lib, which is wrong in
   # our case; libdir should really be set to the $lib output.
-  installPhase = ''
+  postInstall = ''
     mkdir -p $lib $dev/lib
 
     mv $out/lib             $lib/lib

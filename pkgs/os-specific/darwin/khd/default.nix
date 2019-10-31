@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, Carbon, Cocoa }:
 
 stdenv.mkDerivation rec {
-  name = "khd-${version}";
+  pname = "khd";
   version = "3.0.0";
 
   src = fetchFromGitHub {

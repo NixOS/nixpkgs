@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
-  name    = pname + "-" + version;
   pname   = "smugpy";
   version = "20131218";
 

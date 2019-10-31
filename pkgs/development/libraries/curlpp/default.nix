@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, curl }:
 
 stdenv.mkDerivation rec {
-  name = "curlpp-${version}";
+  pname = "curlpp";
   version = "0.8.1";
   src = fetchFromGitHub {
     owner = "jpbarrette";

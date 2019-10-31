@@ -26,8 +26,9 @@ let
     "upgrade/beegfs_mirror_md/build"
   ];
 
-in stdenv.mkDerivation rec {
-  name = "beegfs-${version}";
+in stdenv.mkDerivation {
+  pname = "beegfs";
+  inherit version;
 
   src = fetchurl {
     url = "https://git.beegfs.com/pub/v7/repository/archive.tar.bz2?ref=${version}";

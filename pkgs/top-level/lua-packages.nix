@@ -64,17 +64,18 @@ in
 with self; {
 
   getLuaPathList = majorVersion: [
-     "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
-    "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
+    "share/lua/${majorVersion}/?.lua"
+    "share/lua/${majorVersion}/?/init.lua"
   ];
   getLuaCPathList = majorVersion: [
-     "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
+    "lib/lua/${majorVersion}/?.so"
   ];
 
   # helper functions for dealing with LUA_PATH and LUA_CPATH
-  getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
-  getLuaPath    = lib : getPath lib "lua";
-  getLuaCPath   = lib : getPath lib "so";
+  getPath = drv: pathListForVersion:
+    lib.concatMapStringsSep ";" (path: "${drv}/${path}") (pathListForVersion lua.luaversion);
+  getLuaPath = drv: getPath drv getLuaPathList;
+  getLuaCPath = drv: getPath drv getLuaCPathList;
 
   #define build lua package function
   buildLuaPackage = callPackage ../development/lua-modules/generic {
@@ -131,8 +132,41 @@ with self; {
     };
   };
 
+  pulseaudio = buildLuaPackage rec {
+    pname = "pulseaudio";
+    version = "0.1";
+    name = "pulseaudio-${version}";
+
+    src = fetchFromGitHub {
+      owner = "doronbehar";
+      repo = "lua-pulseaudio";
+      rev = "v${version}";
+      sha256 = "0vldm34m3ysgn8gvwfdglpw4jl5680fvfay7pzs14gzkzcvgv25b";
+    };
+    disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+    buildInputs = [ pkgs.libpulseaudio ];
+    propagatedBuildInputs = [ lua ];
+    nativeBuildInputs = [ pkgs.pulseaudio pkgconfig ];
+
+    makeFlags = [
+      "INST_LIBDIR=${placeholder "out"}/lib/lua/${lua.luaversion}"
+      "INST_LUADIR=${placeholder "out"}/share/lua/${lua.luaversion}"
+      "LUA_BINDIR=${placeholder "out"}/bin"
+    ];
+    preBuild = ''
+      mkdir -p ${placeholder "out"}/lib/lua/${lua.luaversion}
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/doronbehar/lua-pulseaudio";
+      description = "Libpulse Lua bindings";
+      maintainers = with maintainers; [ doronbehar ];
+      license = licenses.lgpl21;
+    };
+  };
+
   vicious = toLuaModule(stdenv.mkDerivation rec {
-    name = "vicious-${version}";
+    pname = "vicious";
     version = "2.3.1";
 
     src = fetchFromGitHub {

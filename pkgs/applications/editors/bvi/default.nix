@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "bvi-${version}";
-  version = "1.4.0";
+  pname = "bvi";
+  version = "1.4.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bvi/${name}.src.tar.gz";
-    sha256 = "00pq9rv7s8inqxq2m3xshxi58691i3pxw9smibcrgh6768l3qnh1";
+    url = "mirror://sourceforge/bvi/${pname}-${version}.src.tar.gz";
+    sha256 = "0a0yl0dcyff31k3dr4dpgqmlwygp8iaslnr5gmb6814ylxf2ad9h";
   };
 
   buildInputs = [ ncurses ];

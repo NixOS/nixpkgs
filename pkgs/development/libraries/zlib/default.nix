@@ -96,6 +96,9 @@ stdenv.mkDerivation (rec {
     "LIBRARY_PATH=$(out)/lib"
   ];
 
+  enableParallelBuilding = true;
+  doCheck = true;
+
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [

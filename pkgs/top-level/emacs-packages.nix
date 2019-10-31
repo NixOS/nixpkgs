@@ -60,7 +60,7 @@ let
   };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit lib lndir makeWrapper stdenv runCommand;
+    inherit lib lndir makeWrapper runCommand;
   };
 
   mkManualPackages = import ../applications/editors/emacs-modes/manual-packages.nix {

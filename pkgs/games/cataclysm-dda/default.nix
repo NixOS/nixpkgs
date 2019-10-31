@@ -13,7 +13,7 @@ stdenv.mkDerivation (common // rec {
   name = "cataclysm-dda-${version}";
 
   src = fetchFromCleverRaven {
-    rev = "${version}";
+    rev = version;
     sha256 = "00zzhx1mh1qjq668cga5nbrxp2qk6b82j5ak65skhgnlr6ii4ysc";
   };
 

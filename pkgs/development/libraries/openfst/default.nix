@@ -1,12 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "openfst";
   version = "1.7.2";
 
   src = fetchurl {
-    url = "http://www.openfst.org/twiki/pub/FST/FstDownload/${name}.tar.gz";
+    url = "http://www.openfst.org/twiki/pub/FST/FstDownload/${pname}-${version}.tar.gz";
     sha256 = "0fqgk8195kz21is09gwzwnrg7fr9526bi9mh4apyskapz27pbhr1";
   };
   meta = {

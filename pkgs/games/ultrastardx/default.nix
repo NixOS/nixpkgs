@@ -11,7 +11,7 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "ultrastardx-${version}";
+  pname = "ultrastardx";
   version = "2017.8.0";
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";

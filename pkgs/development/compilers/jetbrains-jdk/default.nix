@@ -7,13 +7,17 @@
 
 let drv = stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
-  version = "164";
-  name = pname + "-" + version;
+  version = "485.1";
 
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchurl {
-      url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbrsdk-11_0_2-linux-x64-b${version}.tar.gz";
-      sha256 = "121yzgvkfx7lq0k9s8wjnhz09a564br5y7zlkxgh191sbm2i7zdi";
+      url = "https://bintray.com/jetbrains/intellij-jbr/download_file?file_path=jbrsdk-11_0_4-linux-x64-b${version}.tar.gz";
+      sha256 = "18jnn0dra9nsnyllwq0ljxzr58k2pg8d0kg10y39vnxwccic4f76";
+    }
+  else if stdenv.hostPlatform.system == "x86_64-darwin" then
+    fetchurl {
+      url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbrsdk-11_0_2-osx-x64-b${version}.tar.gz";
+      sha256 = "1ly6kf59knvzbr2pjkc9fqyzfs28pdvnqg5pfffr8zp14xm44zmd";
     }
   else
     throw "unsupported system: ${stdenv.hostPlatform.system}";
@@ -25,24 +29,23 @@ let drv = stdenv.mkDerivation rec {
   installPhase = ''
     cd ..
 
-    mv $sourceRoot $out
-    jrePath=$out/jre
+    mv $sourceRoot/jbrsdk $out
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     find $out -type f -perm -0100 \
         -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "$rpath" {} \;
     find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
   '';
 
-  rpath = lib.makeLibraryPath ([
+  rpath = lib.optionalString (!stdenv.isDarwin) (lib.makeLibraryPath ([
     stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
     alsaLib fontconfig freetype pango gtk2 cairo gdk-pixbuf atk zlib
     (placeholder "out")
   ] ++ (with xorg; [
     libX11 libXext libXtst libXi libXp libXt libXrender libXxf86vm
-  ])) + ":${placeholder "out"}/lib/jli";
+  ])) + ":${placeholder "out"}/lib/jli");
 
   passthru.home = drv;
 
@@ -62,6 +65,6 @@ let drv = stdenv.mkDerivation rec {
     homepage = "https://bintray.com/jetbrains/intellij-jdk/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
-    platforms = with platforms; [ "x86_64-linux" ];
+    platforms = with platforms; [ "x86_64-linux" "x86_64-darwin" ];
   };
 }; in drv

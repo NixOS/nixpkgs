@@ -41,6 +41,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Needs Cabal 3.0.x.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_0_0_0; });
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_0_0_0; };
+
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
 
@@ -67,25 +71,14 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
 
-  # Needs a recent version from the "develop" branch of the upstream git
-  # repository to compile with ghc 8.6.4.
-  liquid-fixpoint = assert super.liquid-fixpoint.version == "0.7.0.7"; overrideSrc super.liquid-fixpoint {
-    src = pkgs.fetchFromGitHub {
-      owner = "ucsd-progsys";
-      repo = "liquid-fixpoint";
-      rev = "42c027ab9ae47907c588a2f1f9c05a5e0aa881e9";
-      sha256 = "17qmzq1vx7h04yd38drr6sh6hys3q2rz62qh3pna9kbxlcnikkqf";
-    };
-    version = "0.8.0.2-pre-release";
-  };
-  liquidhaskell = assert super.liquidhaskell.version == "0.8.2.4"; overrideSrc super.liquidhaskell {
-    src = pkgs.fetchFromGitHub {
-      owner = "ucsd-progsys";
-      repo = "liquidhaskell";
-      rev = "46f11e8faef006e70d39572d08419283b1280b88";
-      sha256 = "10z5r6g5acd43bsak762kwhy33ff262zmhs0wga545nbg29q1fyp";
-    };
-    version = "0.8.6.0-pre-release";
-  };
+  # Newer versions don't compile.
+  resolv = self.resolv_0_1_1_2;
+
+  # cabal2nix needs the latest version of Cabal, and the one
+  # hackage-db uses must match, so take the latest
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    Cabal = self.Cabal_3_0_0_0;
+    hackage-db = self.hackage-db_2_1_0;
+  });
 
 }

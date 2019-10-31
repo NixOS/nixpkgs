@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xbps";
-  version = "0.56";
+  version = "0.57";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "xbps";
     rev = version;
-    sha256 = "0hqvq6fq62l5sgm4fy3zb0ks889d21mqz4f4my3iifs6c9f50na2";
+    sha256 = "1aaa0h265lx85hmcvg7zpg7iiq6dzzlyxqazn1s387ss709i5gxn";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib openssl libarchive ];
 
   patches = [ ./cert-paths.patch ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" ];
 
   postPatch = ''
     # fix unprefixed ranlib (needed on cross)

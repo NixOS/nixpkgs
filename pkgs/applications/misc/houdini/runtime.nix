@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "17.0.352";
-  name = "houdini-runtime-${version}";
+  pname = "houdini-runtime";
   src = requireFile rec {
     name = "houdini-${version}-linux_x86_64_gcc6.3.tar.gz";
     sha256 = "0cl5fkgaplb0cvv7mli06ffc9j4ngpy8hl5zqabj3d645gcgafjg";

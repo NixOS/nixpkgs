@@ -224,6 +224,7 @@ in {
         KillSignal = "SIGINT";
         PrivateTmp = true;
         RemoveIPC = true;
+        AmbientCapabilities = "cap_net_raw,cap_net_admin+eip";
       };
       path = [
         "/run/wrappers" # needed for ping

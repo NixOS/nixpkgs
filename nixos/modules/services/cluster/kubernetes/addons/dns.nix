@@ -73,7 +73,7 @@ in {
         metadata = {
           labels = {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/bootstrapping" = "rbac-defaults";
           };
@@ -102,7 +102,7 @@ in {
           };
           labels = {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/bootstrapping" = "rbac-defaults";
           };
@@ -130,7 +130,7 @@ in {
         metadata = {
           labels = {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
           };
           name = "coredns";
@@ -144,7 +144,7 @@ in {
         metadata = {
           labels = {
             "addonmanager.kubernetes.io/mode" = cfg.reconcileMode;
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
           };
           name = "coredns";
@@ -175,7 +175,7 @@ in {
         metadata = {
           labels = {
             "addonmanager.kubernetes.io/mode" = cfg.reconcileMode;
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/name" = "CoreDNS";
           };
@@ -301,7 +301,7 @@ in {
           };
           labels = {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/name" = "CoreDNS";
           };

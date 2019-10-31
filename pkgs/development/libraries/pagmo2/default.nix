@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pagmo2-${version}";
+  pname = "pagmo2";
   version = "2.9";
 
   src = fetchFromGitHub {

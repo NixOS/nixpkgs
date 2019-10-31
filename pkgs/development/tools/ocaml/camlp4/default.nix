@@ -1,5 +1,9 @@
 { stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.09"
+then throw "camlp4 is not available for OCaml ${ocaml.version}"
+else
+
 let param = {
   "4.02" = {
      version = "4.02+6";
@@ -22,11 +26,11 @@ let param = {
   "4.08" = {
      version = "4.08+1";
      sha256 = "0qplawvxwai25bi27niw2cgz2al01kcnkj8wxwhxslpi21z6pyx1"; };
-  }."${ocaml.meta.branch}";
+  }.${ocaml.meta.branch};
 in
 
 stdenv.mkDerivation rec {
-  name = "camlp4-${version}";
+  pname = "camlp4";
   inherit (param) version;
 
   src = fetchzip {

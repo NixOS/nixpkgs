@@ -3,13 +3,13 @@
 , usbutils, which, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "umockdev-${version}";
+  pname = "umockdev";
   version = "0.13.1";
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
   src = fetchurl {
-    url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${name}.tar.xz";
+    url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "197a169imiirgm73d9fn9234cx56agyw9d2f47h7f1d8s2d51lla";
   };
 

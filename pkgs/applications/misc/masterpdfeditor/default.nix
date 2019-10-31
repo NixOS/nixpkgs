@@ -4,7 +4,8 @@ let
   version = "5.4.10";
 
 in stdenv.mkDerivation {
-  name = "masterpdfeditor-${version}";
+  pname = "masterpdfeditor";
+  inherit version;
 
   src = fetchurl {
     url = "https://code-industry.net/public/master-pdf-editor-${version}_qt5.amd64.tar.gz";

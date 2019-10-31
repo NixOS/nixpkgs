@@ -2,7 +2,7 @@
 , darwin}:
 
 stdenv.mkDerivation rec {
-  name = "opencollada-${version}";
+  pname = "opencollada";
 
   version = "1.6.68";
 

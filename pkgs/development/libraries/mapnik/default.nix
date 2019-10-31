@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mapnik-${version}";
+  pname = "mapnik";
   version = "3.0.22";
 
   src = fetchzip {

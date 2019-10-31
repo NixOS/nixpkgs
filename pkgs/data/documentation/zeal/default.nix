@@ -3,7 +3,7 @@
 , libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
 
 mkDerivation rec {
-  name = "zeal-${version}";
+  pname = "zeal";
   version = "0.6.1";
 
   src = fetchFromGitHub {

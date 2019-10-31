@@ -1,6 +1,6 @@
 { mkXfceDerivation, docbook_xsl, exo, gtk2, libburn, libisofs, libxfce4ui, libxslt }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "xfburn";
   version = "0.5.5";
@@ -9,4 +9,5 @@ mkXfceDerivation rec {
 
   nativeBuildInputs = [ libxslt docbook_xsl ];
   buildInputs = [ exo gtk2 libburn libisofs libxfce4ui ];
+  meta.broken = true;
 }

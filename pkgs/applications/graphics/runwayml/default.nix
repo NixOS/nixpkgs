@@ -16,7 +16,7 @@ let
   };
 
   binary = appimageTools.wrapType2 {
-    name = "${pname}";
+    name = pname;
     inherit src;
   };
   # we only use this to extract the icon

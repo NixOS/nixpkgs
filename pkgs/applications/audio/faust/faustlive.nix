@@ -3,8 +3,8 @@
 , bc, coreutils, which
 }:
 
-stdenv.mkDerivation rec {
-  name = "faustlive-${version}";
+stdenv.mkDerivation {
+  pname = "faustlive";
   version = "2017-12-05";
   src = fetchFromGitHub {
     owner = "grame-cncm";

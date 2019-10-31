@@ -14,10 +14,10 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
 
-  name = "sencha-bare-${version}";
+  pname = "sencha-bare";
   src = srcs.${stdenv.hostPlatform.system};
 
   nativeBuildInputs = [ gzip which unzip ];

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
 rec {
-  gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation rec {
+  gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation {
     inherit name src nativeVersion;
 
     dontBuild = true;
@@ -51,15 +51,15 @@ rec {
     };
   };
 
-  gradle_latest = gradle_5_3;
+  gradle_latest = gradle_5_6;
 
-  gradle_5_3 = gradleGen rec {
-    name = "gradle-5.3.1";
-    nativeVersion = "0.17";
+  gradle_5_6 = gradleGen rec {
+    name = "gradle-5.6.1";
+    nativeVersion = "0.18";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0dkl6f17zl9pc6y2xm8xqz23x53fck4p2648vpq8572f0mxa2n8w";
+      sha256 = "04pccfcry5c59xwm6rr4r3baanwbfr5yrwhxv4r5v8z4414291h9";
     };
   };
 

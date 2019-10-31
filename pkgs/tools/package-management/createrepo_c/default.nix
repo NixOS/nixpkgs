@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python3, rpm, openssl, sqlite, file, xz, pcre, bash-completion }:
 
 stdenv.mkDerivation rec {
-  name = "createrepo_c-${version}";
+  pname = "createrepo_c";
   version = "0.11.1";
 
   src = fetchFromGitHub {

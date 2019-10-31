@@ -8,7 +8,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rsteca";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "1yqnmy8h08i2y6bb2s0a5nx9cwvyg45293whqh420c195gpzg1x3";
   };
 

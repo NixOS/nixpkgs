@@ -3,9 +3,9 @@
 , pkgconfig, pcsclite, hicolor-icon-theme 
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2018-08-21";
-  name = "qesteidutil-${version}";
+  pname = "qesteidutil";
 
   src = fetchFromGitHub {
     owner = "open-eid";

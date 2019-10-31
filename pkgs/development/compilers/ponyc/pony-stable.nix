@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, ponyc }:
 
 stdenv.mkDerivation rec {
-  name = "pony-stable-${version}";
+  pname = "pony-stable";
   version = "0.2.1";
 
   src = fetchFromGitHub {

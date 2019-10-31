@@ -4,7 +4,7 @@
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, guiSupport ? true
+, pinentry ? null, guiSupport ? false
 , adns ? null, gnutls ? null, libusb ? null, openldap ? null
 , readline ? null, zlib ? null, bzip2 ? null
 }:
@@ -14,19 +14,19 @@ with stdenv.lib;
 assert guiSupport -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-${version}";
+  pname = "gnupg";
 
   version = "2.2.17";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${name}.tar.bz2";
+    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
     sha256 = "056mgy09lvsi03531a437qj58la1j2x1y1scvfi53diris3658mg";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [
-    libgcrypt libassuan libksba libiconv npth gettext texinfo
+    libgcrypt libassuan libksba libiconv npth gettext
     readline libusb gnutls adns openldap zlib bzip2 sqlite
   ];
 

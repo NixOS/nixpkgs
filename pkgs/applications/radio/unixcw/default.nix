@@ -1,6 +1,6 @@
 {stdenv, fetchurl, libpulseaudio, alsaLib , pkgconfig, qt5}:
 stdenv.mkDerivation rec {
-  name = "unixcw-${version}";
+  pname = "unixcw";
   version = "3.5.1";
   src = fetchurl {
     url = "mirror://sourceforge/unixcw/unixcw_${version}.orig.tar.gz";

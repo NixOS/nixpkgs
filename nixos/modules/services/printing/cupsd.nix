@@ -31,7 +31,7 @@ let
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
   # we can't update ${cups.out}/lib/cups itself, we create a symlink tree
   # here and add the additional programs.  The ServerBin directive in
-  # cupsd.conf tells cupsd to use this tree.
+  # cups-files.conf tells cupsd to use this tree.
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
@@ -287,9 +287,19 @@ in
       };
 
     environment.systemPackages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
-    environment.etc."cups".source = "/var/lib/cups";
+    environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
+
+    # Allow asswordless printer admin for members of wheel group
+    security.polkit.extraConfig = mkIf polkitEnabled ''
+      polkit.addRule(function(action, subject) {
+          if (action.id == "org.opensuse.cupspkhelper.mechanism.all-edit" &&
+              subject.isInGroup("wheel")){
+              return polkit.Result.YES;
+          }
+      });
+    '';
 
     # Cups uses libusb to talk to printers, and does not use the
     # linux kernel driver. If the driver is not in a black list, it

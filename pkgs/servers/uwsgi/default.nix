@@ -4,7 +4,7 @@
 , pam, withPAM ? stdenv.isLinux
 , systemd, withSystemd ? stdenv.isLinux
 , python2, python3, ncurses
-, ruby, php-embed, mysql
+, ruby, php-embed, libmysqlclient
 }:
 
 let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
@@ -34,7 +34,7 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "
                     # usage: https://uwsgi-docs.readthedocs.io/en/latest/PHP.html#running-php-apps-with-nginx
                     path = "plugins/php";
                     inputs = [ php-embed ] ++ php-embed.buildInputs;
-                    NIX_CFLAGS_LINK = [ "-L${mysql.connector-c}/lib/mysql" ];
+                    NIX_CFLAGS_LINK = [ "-L${libmysqlclient}/lib/mysql" ];
                   })
                 ];
 
@@ -48,11 +48,11 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "
 in
 
 stdenv.mkDerivation rec {
-  name = "uwsgi-${version}";
+  pname = "uwsgi";
   version = "2.0.18";
 
   src = fetchurl {
-    url = "https://projects.unbit.it/downloads/${name}.tar.gz";
+    url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
     sha256 = "10zmk4npknigmbqcq1wmhd461dk93159px172112vyq0i19sqwj9";
   };
 

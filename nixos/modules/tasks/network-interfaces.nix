@@ -305,7 +305,7 @@ let
             optional (defined ipv6Address && defined ipv6PrefixLength)
             { address = ipv6Address; prefixLength = ipv6PrefixLength; }))
 
-        ({ options.warnings = options.warnings; })
+        ({ options.warnings = options.warnings; options.assertions = options.assertions; })
       ];
 
   };
@@ -799,19 +799,19 @@ in
     networking.wlanInterfaces = mkOption {
       default = { };
       example = literalExample {
-        "wlan-station0" = {
+        wlan-station0 = {
             device = "wlp6s0";
         };
-        "wlan-adhoc0" = {
+        wlan-adhoc0 = {
             type = "ibss";
             device = "wlp6s0";
             mac = "02:00:00:00:00:01";
         };
-        "wlan-p2p0" = {
+        wlan-p2p0 = {
             device = "wlp6s0";
             mac = "02:00:00:00:00:02";
         };
-        "wlan-ap0" = {
+        wlan-ap0 = {
             device = "wlp6s0";
             mac = "02:00:00:00:00:03";
         };
@@ -836,7 +836,7 @@ in
         options = {
 
           device = mkOption {
-            type = types.string;
+            type = types.str;
             example = "wlp6s0";
             description = "The name of the underlying hardware WLAN device as assigned by <literal>udev</literal>.";
           };
@@ -852,7 +852,7 @@ in
           };
 
           meshID = mkOption {
-            type = types.nullOr types.string;
+            type = types.nullOr types.str;
             default = null;
             description = "MeshID of interface with type <literal>mesh</literal>.";
           };
@@ -903,6 +903,11 @@ in
         Whether to use DHCP to obtain an IP address and other
         configuration for all network interfaces that are not manually
         configured.
+
+        Using this option is highly discouraged and also incompatible with
+        <option>networking.useNetworkd</option>. Please use
+        <option>networking.interfaces.&lt;name&gt;.useDHCP</option> instead
+        and set this to false.
       '';
     };
 
@@ -967,9 +972,9 @@ in
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
-        (i: forEach [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true)))
+        (i: forEach [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)))
       // listToAttrs (forEach (filter (i: i.preferTempAddress) interfaces)
-        (i: nameValuePair "net.ipv6.conf.${i.name}.use_tempaddr" 2));
+        (i: nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" 2));
 
     # Capabilities won't work unless we have at-least a 4.3 Linux
     # kernel because we need the ambient capability
@@ -994,7 +999,7 @@ in
         domainname "${cfg.domain}"
       '';
 
-    environment.etc."hostid" = mkIf (cfg.hostId != null)
+    environment.etc.hostid = mkIf (cfg.hostId != null)
       { source = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
           hi="${cfg.hostId}"
           ${if pkgs.stdenv.isBigEndian then ''
@@ -1007,7 +1012,7 @@ in
 
     # static hostname configuration needed for hostnamectl and the
     # org.freedesktop.hostname1 dbus service (both provided by systemd)
-    environment.etc."hostname" = mkIf (cfg.hostName != "")
+    environment.etc.hostname = mkIf (cfg.hostName != "")
       {
         text = cfg.hostName + "\n";
       };
@@ -1027,7 +1032,7 @@ in
 
     # The network-interfaces target is kept for backwards compatibility.
     # New modules must NOT use it.
-    systemd.targets."network-interfaces" =
+    systemd.targets.network-interfaces =
       { description = "All Network Interfaces (deprecated)";
         wantedBy = [ "network.target" ];
         before = [ "network.target" ];
@@ -1092,7 +1097,7 @@ in
         destination = "/etc/udev/rules.d/98-${name}";
         text = ''
           # enable and prefer IPv6 privacy addresses by default
-          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.%k.use_tempaddr=2"
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo 2 > /proc/sys/net/ipv6/conf/%k/use_tempaddr'"
         '';
       })
       (pkgs.writeTextFile rec {
@@ -1100,7 +1105,7 @@ in
         destination = "/etc/udev/rules.d/99-${name}";
         text = concatMapStrings (i: ''
           # enable IPv6 privacy addresses but prefer EUI-64 addresses for ${i.name}
-          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${i.name}.use_tempaddr=1"
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=1"
         '') (filter (i: !i.preferTempAddress) interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})
@@ -1162,13 +1167,13 @@ in
           in
           flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (device:
             let
-              interfaces = wlanListDeviceFirst device wlanDeviceInterfaces."${device}";
+              interfaces = wlanListDeviceFirst device wlanDeviceInterfaces.${device};
               curInterface = elemAt interfaces 0;
               newInterfaces = drop 1 interfaces;
             in ''
             # It is important to have that rule first as overwriting the NAME attribute also prevents the
             # next rules from matching.
-            ${flip (concatMapStringsSep "\n") (wlanListDeviceFirst device wlanDeviceInterfaces."${device}") (interface:
+            ${flip (concatMapStringsSep "\n") (wlanListDeviceFirst device wlanDeviceInterfaces.${device}) (interface:
             ''ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", ENV{INTERFACE}=="${interface._iName}", ${systemdAttrs interface._iName}, RUN+="${newInterfaceScript device interface}"'')}
 
             # Add the required, new WLAN interfaces to the default WLAN interface with the

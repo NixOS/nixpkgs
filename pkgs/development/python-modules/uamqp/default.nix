@@ -1,24 +1,21 @@
-{ CFNetwork
-, Security
-, buildPythonPackage
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , certifi
+, CFNetwork
 , cmake
 , enum34
-, fetchPypi
-, isPy3k
-, lib
 , openssl
-, stdenv
+, Security
 , six
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.1.0";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3d4ff94bf290adb82fe8c19af709a21294bac9b27c821b9110165a34b922015";
+    sha256 = "9d15cb12d61a6481f7de412c2d53a99f87650e0d1e5394b047aeee5514964fb8";
   };
 
   buildInputs = [
@@ -30,6 +27,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     CFNetwork Security
   ];
+
+  dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
     cmake

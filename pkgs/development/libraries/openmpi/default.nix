@@ -1,5 +1,8 @@
 { stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
-, rdma-core, zlib, numactl, libevent, hwloc
+, rdma-core, zlib, numactl, libevent, hwloc, pkgsTargetTarget, symlinkJoin
+
+# Enable CUDA support
+, cudaSupport ? false, cudatoolkit ? null
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -8,40 +11,51 @@
 , enablePrefix ? false
 }:
 
-let
-  version = "4.0.1";
+assert !cudaSupport || cudatoolkit != null;
 
+let
+  version = "4.0.2";
+
+  cudatoolkit_joined = symlinkJoin {
+    name = "${cudatoolkit.name}-unsplit";
+    paths = [ cudatoolkit.out cudatoolkit.lib ];
+  };
 in stdenv.mkDerivation rec {
-  name = "openmpi-${version}";
+  pname = "openmpi";
+  inherit version;
 
   src = with stdenv.lib.versions; fetchurl {
-    url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${name}.tar.bz2";
-    sha256 = "02cpzcp113gj5hb0j2xc0cqma2fn04i2i0bzf80r71120p9bdryc";
+    url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "0ms0zvyxyy3pnx9qwib6zaljyp2b3ixny64xvq3czv3jpr8zf2wh";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "openmpi-mca_btl_vader_component_close-segfault.patch";
-      url = "https://github.com/open-mpi/ompi/pull/6526.patch";
-      sha256 = "0s7ac9rkcj3fi6ampkvy76njlj478yyr4zvypjc7licy6dgr595x";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./
+
+    # Ensure build is reproducible
+    ts=`date -d @$SOURCE_DATE_EPOCH`
+    sed -i 's/OPAL_CONFIGURE_USER=.*/OPAL_CONFIGURE_USER="nixbld"/' configure
+    sed -i 's/OPAL_CONFIGURE_HOST=.*/OPAL_CONFIGURE_HOST="localhost"/' configure
+    sed -i "s/OPAL_CONFIGURE_DATE=.*/OPAL_CONFIGURE_DATE=\"$ts\"/" configure
+    find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
   '';
 
   buildInputs = with stdenv; [ gfortran zlib ]
     ++ lib.optionals isLinux [ libnl numactl ]
+    ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (isLinux || isFreeBSD) rdma-core;
 
   nativeBuildInputs = [ perl ];
 
-  configureFlags = with stdenv; [ "--disable-mca-dso" ]
+  configureFlags = with stdenv; lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional isLinux  "--with-libnl=${libnl.dev}"
     ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
+    # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
+    # https://github.com/openucx/ucx
+    # https://www.open-mpi.org/faq/?category=buildcuda
+    ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
     ;
 
   enableParallelBuilding = true;
@@ -50,7 +64,28 @@ in stdenv.mkDerivation rec {
     rm -f $out/lib/*.la
    '';
 
+  postFixup = ''
+    # default compilers should be indentical to the
+    # compilers at build time
+
+    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc:' \
+      $out/share/openmpi/mpicc-wrapper-data.txt
+
+    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc:' \
+       $out/share/openmpi/ortecc-wrapper-data.txt
+
+    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++:' \
+       $out/share/openmpi/mpic++-wrapper-data.txt
+
+    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.gfortran}/bin/${pkgsTargetTarget.gfortran.targetPrefix}gfortran:'  \
+       $out/share/openmpi/mpifort-wrapper-data.txt
+  '';
+
   doCheck = true;
+
+  passthru = {
+    inherit cudaSupport cudatoolkit;
+  };
 
   meta = with stdenv.lib; {
     homepage = https://www.open-mpi.org/;

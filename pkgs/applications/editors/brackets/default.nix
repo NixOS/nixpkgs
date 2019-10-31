@@ -8,13 +8,13 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  name = "brackets-${version}";
+  pname = "brackets";
   version = "1.9";
 
   src = fetchurl {
     url = "https://github.com/adobe/brackets/releases/download/release-${version}/Brackets.Release.${version}.64-bit.deb";
     sha256 = "0c4l2rr0853xd21kw8hhxlmrx8mqwb7iqa2k24zvwyjp4nnwkgbp";
-    name = "${name}.deb";
+    name = "${pname}-${version}.deb";
   };
 
   phases = [ "installPhase" "fixupPhase" ];

@@ -14,11 +14,11 @@ let
   boost_python = boost.override { enablePython = true; inherit python; };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (geant4_nomt) version src;
-  name = "g4py-${version}";
+  pname = "g4py";
 
-  sourceRoot = "geant4.10.04.p01/environments/g4py";
+  sourceRoot = "geant4.10.05.p01/environments/g4py";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ geant4_nomt xercesc boost_python python ];

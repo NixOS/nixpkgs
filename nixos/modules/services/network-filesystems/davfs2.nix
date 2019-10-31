@@ -21,7 +21,7 @@ in
     };
 
     davUser = mkOption {
-      type = types.string;
+      type = types.str;
       default = "davfs2";
       description = ''
         When invoked by root the mount.davfs daemon will run as this user.
@@ -30,7 +30,7 @@ in
     };
 
     davGroup = mkOption {
-      type = types.string;
+      type = types.str;
       default = "davfs2";
       description = ''
         The group of the running mount.davfs daemon. Ordinary users must be

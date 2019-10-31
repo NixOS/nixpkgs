@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "QuadProgpp-${version}";
+  pname = "QuadProgpp";
   version = "4b6bd65f09fbff99c172a86d6e96ca74449b323f";
 
   src = fetchFromGitHub {

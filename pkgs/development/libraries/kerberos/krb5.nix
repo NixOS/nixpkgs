@@ -15,7 +15,7 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
   majorVersion = "1.17";
-  version = "${majorVersion}";
+  version = majorVersion;
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${majorVersion}/krb5-${version}.tar.gz";

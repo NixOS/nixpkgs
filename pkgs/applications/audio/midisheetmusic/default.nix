@@ -5,7 +5,8 @@
 let
   version = "2.6";
 in stdenv.mkDerivation {
-  name = "midisheetmusic-${version}";
+  pname = "midisheetmusic";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/midisheetmusic/MidiSheetMusic-${version}-linux-src.tar.gz";

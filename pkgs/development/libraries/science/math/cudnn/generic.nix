@@ -10,7 +10,7 @@
 , addOpenGLRunpath
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "cudatoolkit-${cudatoolkit.majorVersion}-cudnn-${version}";
 
   inherit version;
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit cudatoolkit;
-    majorVersion = lib.head (lib.splitString "." version);
+    majorVersion = lib.versions.major version;
   };
 
   meta = with stdenv.lib; {

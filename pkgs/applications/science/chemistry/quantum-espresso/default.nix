@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "6.4.1";
-  name = "quantum-espresso-${version}";
+  pname = "quantum-espresso";
 
   src = fetchurl {
     url = "https://gitlab.com/QEF/q-e/-/archive/qe-${version}/q-e-qe-${version}.tar.gz";

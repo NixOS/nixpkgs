@@ -373,7 +373,7 @@ in {
     systemd.packages = [ pkgs.syncthing ];
 
     users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
-      "${defaultUser}" =
+      ${defaultUser} =
         { group = cfg.group;
           home  = cfg.dataDir;
           createHome = true;
@@ -383,7 +383,7 @@ in {
     };
 
     users.groups = mkIf (cfg.systemService && cfg.group == defaultUser) {
-      "${defaultUser}".gid =
+      ${defaultUser}.gid =
         config.ids.gids.syncthing;
     };
 

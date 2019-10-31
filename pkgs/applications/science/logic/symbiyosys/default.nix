@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, yosys, bash, python3 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "symbiyosys";
-  version = "2019.08.13";
+  version = "2019.10.11";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "symbiyosys";
-    rev    = "9cb542ac7a310b3dfa626349db53bed6236b670c";
-    sha256 = "0c7nz740738ybk33zzlfl00cq86n31wvra8pqqkpl4ygxnwca1d6";
+    rev    = "23f89011b678daa9da406d4f45f790e45f8f68ca";
+    sha256 = "01596yvfj79iywwczjwlb2l9qnh7bsj7jff66jdk1ybjnxf841f0";
   };
 
   buildInputs = [ python3 yosys ];
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/sby \
       --replace "##yosys-sys-path##" \
                 "sys.path += [p + \"/share/yosys/python3/\" for p in [\"$out\", \"${yosys}\"]]"
+    substituteInPlace $out/share/yosys/python3/sby_core.py \
+      --replace '"/usr/bin/env", "bash"' '"${bash}/bin/bash"'
   '';
   meta = {
     description = "Tooling for Yosys-based verification flows";

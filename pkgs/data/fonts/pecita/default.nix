@@ -4,7 +4,7 @@ let
   version = "5.4";
 in
 
-fetchurl rec {
+fetchurl {
   name = "pecita-${version}";
 
   url = "http://pecita.eu/b/Pecita.otf";

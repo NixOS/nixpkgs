@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gmp, libffi }:
 
 stdenv.mkDerivation rec {
-  name = "polyml-${version}";
+  pname = "polyml";
   version = "5.7.1";
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''

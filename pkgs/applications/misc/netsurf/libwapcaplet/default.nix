@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
+
   meta = with stdenv.lib; {
     homepage = http://www.netsurf-browser.org/;
     description = "String internment library for netsurf browser";

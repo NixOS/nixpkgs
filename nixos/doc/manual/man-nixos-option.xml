@@ -8,8 +8,8 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-option</command>
-  </refname><refpurpose>inspect a NixOS configuration</refpurpose>
+  <refname><command>nixos-option</command></refname>
+  <refpurpose>inspect a NixOS configuration</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>

@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     ++ optional imwriSupport imagemagick7;
 
   configureFlags = [
-    "--disable-static"
     (optionalString (!ocrSupport)   "--disable-ocr")
     (optionalString (!imwriSupport) "--disable-imwri")
   ];

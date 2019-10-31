@@ -7,7 +7,7 @@ let
 
   all = [
     "aarch64-linux"
-    "armv5tel-linux" "armv6l-linux" "armv7l-linux"
+    "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux"
 
     "mipsel-linux"
 
@@ -33,7 +33,7 @@ let
 
   filterDoubles = f: map parse.doubleFromSystem (lists.filter f allParsed);
 
-in rec {
+in {
   inherit all;
 
   none = [];

@@ -8,7 +8,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "uvccapture-0.5";
 
   src = fetchurl {

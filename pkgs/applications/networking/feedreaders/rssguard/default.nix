@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "rssguard";
   version = "3.5.9";
 

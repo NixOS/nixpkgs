@@ -1,7 +1,7 @@
 { stdenv, fetchurl, systemd, fcgi, autoreconfHook, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "fcgiwrap-${version}";
+  pname = "fcgiwrap";
   version = "1.1.0";
 
   src = fetchurl {

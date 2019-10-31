@@ -1,10 +1,10 @@
 { stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkgconfig, perlPackages,
 libxml2, gettext, python, libxml2Python, docbook5, docbook_xsl,
-libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui, hicolor-icon-theme,
+libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui,
 gtk-mac-integration-gtk2 }:
 
-stdenv.mkDerivation rec {
-  name = "dia-${version}";
+stdenv.mkDerivation {
+  pname = "dia";
   version = "0.97.3.20170622";
 
   src = fetchgit {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ gtk2 libxml2 gettext python libxml2Python docbook5
-      libxslt docbook_xsl libart_lgpl hicolor-icon-theme ]
+      libxslt docbook_xsl libart_lgpl ]
       ++ stdenv.lib.optional withGNOME libgnomeui
       ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration-gtk2;
 

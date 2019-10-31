@@ -5,7 +5,7 @@
 }:
 
 mkDerivation rec {
-  name = "sigil-${version}";
+  pname = "sigil";
   version = "0.9.14";
 
   src = fetchFromGitHub {

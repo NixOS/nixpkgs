@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "azure-batch";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1q8mdjdbz408z2j0y1zxqg9zg8j1v84p0dnh621vq73a2x1g298j";
+    sha256 = "1j8nibnics9vakhqiwnjv7bwril7mfyz1svcvvsrb9a4wbdd12wi";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Batch Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/batch?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

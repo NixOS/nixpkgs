@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  name = "dstat-${version}";
+  pname = "dstat";
   format = "other";
   version = "0.7.3";
 

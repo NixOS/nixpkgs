@@ -1,7 +1,7 @@
 { stdenv, autoreconfHook, libtool, pkgconfig, gnutls, fetchFromGitHub, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "iksemel-${version}";
+  pname = "iksemel";
   version = "1.4.2";
 
   src = fetchFromGitHub {

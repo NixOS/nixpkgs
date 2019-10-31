@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Opendigitalradio";
     repo = "dablin";
-    rev = "${version}";
+    rev = version;
     sha256 = "04ir7yg7psnnb48s1qfppvvx6lak4s8f6fqdg721y2kd9129jm82";
   };
 

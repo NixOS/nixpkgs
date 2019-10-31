@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "duply-${version}";
+  pname = "duply";
   version = "2.2";
 
   src = fetchurl {

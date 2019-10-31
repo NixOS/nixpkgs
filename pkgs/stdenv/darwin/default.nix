@@ -39,7 +39,7 @@ in rec {
     export gl_cv_func_getcwd_abort_bug=no
   '';
 
-  bootstrapTools = derivation rec {
+  bootstrapTools = derivation {
     inherit system;
 
     name    = "bootstrap-tools";
@@ -142,7 +142,7 @@ in rec {
     };
 
   stage0 = stageFun 0 null {
-    overrides = self: super: with stage0; rec {
+    overrides = self: super: with stage0; {
       darwin = super.darwin // {
         Libsystem = stdenv.mkDerivation {
           name = "bootstrap-stage0-Libsystem";

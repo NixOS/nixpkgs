@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "rpl";
   version = "1.5.7";
 

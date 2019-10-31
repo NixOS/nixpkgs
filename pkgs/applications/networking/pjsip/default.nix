@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openssl, libsamplerate, alsaLib }:
 
 stdenv.mkDerivation rec {
-  name = "pjsip-${version}";
+  pname = "pjsip";
   version = "2.9";
 
   src = fetchurl {
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin
     cp pjsip-apps/bin/pjsua-* $out/bin/pjsua
-    mkdir -p $out/share/${name}/samples
-    cp pjsip-apps/bin/samples/*/* $out/share/${name}/samples
+    mkdir -p $out/share/${pname}-${version}/samples
+    cp pjsip-apps/bin/samples/*/* $out/share/${pname}-${version}/samples
   '';
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)

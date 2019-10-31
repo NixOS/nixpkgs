@@ -4,7 +4,7 @@ let startFPC = import ./binary.nix { inherit stdenv fetchurl; }; in
 
 stdenv.mkDerivation rec {
   version = "3.0.0";
-  name = "fpc-${version}";
+  pname = "fpc";
 
   src = fetchurl {
     url = "mirror://sourceforge/freepascal/fpcbuild-${version}.tar.gz";

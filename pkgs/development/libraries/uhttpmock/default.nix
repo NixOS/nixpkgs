@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version="0.5.0";
-  name = "uhttpmock-${version}";
+  pname = "uhttpmock";
 
   src = fetchFromGitLab {
     repo = "uhttpmock";

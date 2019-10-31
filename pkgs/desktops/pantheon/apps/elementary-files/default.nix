@@ -10,6 +10,7 @@
 , desktop-file-utils
 , libcanberra
 , gtk3
+, glib
 , libgee
 , granite
 , libnotify
@@ -22,6 +23,7 @@
 , zeitgeist
 , glib-networking
 , elementary-icon-theme
+, fetchpatch
 , wrapGAppsHook
 }:
 
@@ -75,14 +77,21 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  patches = [ ./hardcode-gsettings.patch ];
+  patches = [
+    ./hardcode-gsettings.patch
+    # Fixes https://github.com/elementary/files/issues/1081
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/76b5cc95466733c2c100a99127ecd4fbd4d2a5ec.patch";
+      sha256 = "0dn8a9l7i2rdgia1rsc50332fsw0yrbfvpb5z8ba4iiki3lxy2nn";
+    })
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
 
     substituteInPlace filechooser-module/FileChooserDialog.vala \
-      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
+      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   meta = with stdenv.lib; {

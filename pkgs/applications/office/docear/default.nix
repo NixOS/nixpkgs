@@ -3,7 +3,7 @@
 , antialiasFont ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "docear";
   version = "1.2";
 

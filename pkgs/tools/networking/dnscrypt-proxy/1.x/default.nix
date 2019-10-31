@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "dnscrypt-proxy-${version}";
+  pname = "dnscrypt-proxy";
   version = "1.9.5";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${name}.orig.tar.gz";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}-${version}.orig.tar.gz";
     sha256 = "1dhvklr4dg2vlw108n11xbamacaryyg3dbrg629b76lp7685p7z8";
   };
 

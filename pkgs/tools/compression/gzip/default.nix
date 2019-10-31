@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xz }:
 
 stdenv.mkDerivation rec {
-  name = "gzip-${version}";
+  pname = "gzip";
   version = "1.10";
 
   src = fetchurl {
-    url = "mirror://gnu/gzip/${name}.tar.xz";
+    url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
     sha256 = "1h6p374d3j8d4cdfydzls021xa2yby8myc0h8d6m8bc7k6ncq9c4";
   };
 

@@ -1,7 +1,7 @@
 let
   pkgs = import ../../../.. {};
 
-  emacsEnv = (pkgs.emacsPackagesNgFor pkgs.emacs26).emacsWithPackages (epkgs: let
+  emacsEnv = (pkgs.emacsPackagesFor pkgs.emacs26).emacsWithPackages (epkgs: let
 
     promise = epkgs.trivialBuild {
       pname = "promise";

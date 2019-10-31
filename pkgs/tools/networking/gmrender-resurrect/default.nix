@@ -4,12 +4,13 @@
 let version = "4f221e6b85abf85957b547436e982d7a501a1718"; in
 
 stdenv.mkDerivation {
-  name = "gmrender-resurrect-${version}";
+  pname = "gmrender-resurrect";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "gmrender-resurrect";
-    rev = "${version}";
+    rev = version;
     sha256 = "1dmdhyz27bh74qmvncfd3kw7zqwnd05bhxcfjjav98z5qrxdygj4";
   };
 

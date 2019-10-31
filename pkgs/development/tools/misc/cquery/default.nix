@@ -14,8 +14,8 @@ let
   stdenv = llvmPackages.stdenv;
 
 in
-stdenv.mkDerivation rec {
-  name    = "cquery-${version}";
+stdenv.mkDerivation {
+  pname = "cquery";
   version = "2018-10-14";
 
   inherit src;

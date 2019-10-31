@@ -9,32 +9,33 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mlton-${version}";
+  pname = "mlton";
+  inherit version;
 
   binSrc =
     if stdenv.hostPlatform.system == "i686-linux" then (fetchurl {
-      url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.x86-linux.tgz";
+      url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.x86-linux.tgz";
       sha256 = "1kxjjmnw4xk2d9hpvz43w9dvyhb3025k4zvjx785c33nrwkrdn4j";
     })
     else if stdenv.hostPlatform.system == "x86_64-linux" then (fetchurl {
-        url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.amd64-linux.tgz";
+        url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-linux.tgz";
         sha256 = "0fyhwxb4nmpirjbjcvk9f6w67gmn2gkz7xcgz0xbfih9kc015ygn";
     })
     else if stdenv.hostPlatform.system == "x86_64-darwin" then (fetchurl {
-        url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.amd64-darwin.gmp-macports.tgz";
+        url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-darwin.gmp-macports.tgz";
         sha256 = "044wnh9hhg6if886xy805683k0as347xd37r0r1yi4x7qlxzzgx9";
     })
     else throw "Architecture not supported";
 
   codeSrc =
     fetchurl {
-      url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}.src.tgz";
+      url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}.src.tgz";
       sha256 = "0v1x2hrh9hiqkvnbq11kf34v4i5a2x0ffxbzqaa8skyl26nmfn11";
     };
 
   srcs = [ binSrc codeSrc ];
 
-  sourceRoot = name;
+  sourceRoot = "${pname}-${version}";
 
   buildInputs = [ gmp ];
   nativeBuildInputs = stdenv.lib.optional stdenv.isLinux patchelf;

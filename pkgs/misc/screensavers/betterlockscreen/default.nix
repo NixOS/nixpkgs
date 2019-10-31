@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "betterlockscreen-${version}";
+  pname = "betterlockscreen";
   version = "3.0.1";
 
   src = fetchFromGitHub {

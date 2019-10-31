@@ -16,7 +16,7 @@ let components = {
 in
 stdenv.mkDerivation rec {
   version = "2.3.4";
-  name = "hoomd-blue-${version}";
+  pname = "hoomd-blue";
 
   src = fetchgit {
     url = "https://bitbucket.org/glotzer/hoomd-blue";

@@ -10,7 +10,8 @@ let
     };
 in
 stdenv.mkDerivation {
-  name = "mod_fastcgi-${version}";
+  pname = "mod_fastcgi";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/FastCGI-Archives/mod_fastcgi/archive/${version}.tar.gz";

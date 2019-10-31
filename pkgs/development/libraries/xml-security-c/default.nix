@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xalanc, xercesc, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "xml-security-c-${version}";
+  pname = "xml-security-c";
   version = "2.0.2";
 
   src = fetchurl {
-    url = "https://www.apache.org/dist/santuario/c-library/${name}.tar.gz";
+    url = "https://www.apache.org/dist/santuario/c-library/${pname}-${version}.tar.gz";
     sha256 = "1prh5sxzipkqglpsh53iblbr7rxi54wbijxdjiahzjmrijqa40y3";
   };
 
@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
     "--with-openssl"
     "--with-xerces"
     "--with-xalan"
-    "--disable-static"
   ];
 
   nativeBuildInputs = [ pkgconfig ];

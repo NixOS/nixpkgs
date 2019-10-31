@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "double-conversion-${version}";
+  pname = "double-conversion";
   version = "3.1.5";
 
   src = fetchFromGitHub {

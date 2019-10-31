@@ -4,7 +4,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "scalapack-${version}";
+  pname = "scalapack";
   version = "2.0.2";
 
   src = fetchurl {

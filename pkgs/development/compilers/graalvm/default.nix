@@ -214,7 +214,7 @@ in rec {
 
   jvmci8 = stdenv.mkDerivation rec {
     version = "19.2-b01";
-    name = "jvmci-${version}";
+    pname = "jvmci";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
@@ -280,7 +280,7 @@ in rec {
 
   graalvm8 = stdenv.mkDerivation rec {
     inherit version;
-    name = "graal-${version}";
+    pname = "graal";
     src = fetchFromGitHub {
       owner  = "oracle";
       repo   = "graal";

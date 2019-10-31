@@ -40,7 +40,7 @@ let
 
 in stdenv.mkDerivation rec {
   version = "5.11.2";
-  name = "dd-agent-${version}";
+  pname = "dd-agent";
 
   src = fetchFromGitHub {
     owner  = "datadog";

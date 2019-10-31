@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libbsd, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "signify-${version}";
+  pname = "signify";
   version = "25";
 
   src = fetchFromGitHub {

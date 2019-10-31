@@ -2,7 +2,7 @@
 
 let
   pythonEnv = python2.withPackages(ps: with ps; [ cheetah ]);
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "sickbeard";
   version = "2016-03-21";
 

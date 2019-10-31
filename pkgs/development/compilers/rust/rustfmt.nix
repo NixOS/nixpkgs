@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rustfmt-${version}";
+  pname = "rustfmt";
   inherit (rustPlatform.rust.rustc) version src;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again

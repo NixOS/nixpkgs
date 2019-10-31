@@ -3,7 +3,7 @@
 , CoreFoundation, Security
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   name = "cargo-${rustc.version}";
   inherit (rustc) version src;
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   meta = with stdenv.lib; {
     homepage = https://crates.io;
     description = "Downloads your Rust project's dependencies and builds your project";
-    maintainers = with maintainers; [ wizeman retrry ];
+    maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
   };

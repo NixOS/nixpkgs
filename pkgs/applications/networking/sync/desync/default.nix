@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "desync-${version}";
+  pname = "desync";
   version = "0.4.0";
   rev = "v${version}";
 

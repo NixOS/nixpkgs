@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # as only the `idevicerestore` binary was tested so far (which worked
   # without further configuration).
   configureFlags = [
-    "--with-udevrulesdir=${placeholder ''out''}/lib/udev/rules.d"
+    "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
     ''--with-udevrule="OWNER=\"root\", GROUP=\"myusergroup\", MODE=\"0660\""''
   ];
 

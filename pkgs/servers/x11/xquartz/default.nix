@@ -137,7 +137,7 @@ in stdenv.mkDerivation {
     ruby ${./patch_plist.rb} \
       ${stdenv.lib.escapeShellArg (builtins.toXML {
         XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
-        XQUARTZ_DEFAULT_SHELL  = "${shell}";
+        XQUARTZ_DEFAULT_SHELL  = shell;
         XQUARTZ_DEFAULT_STARTX = "@STARTX@";
         FONTCONFIG_FILE        = "@FONTCONFIG_FILE@";
       })} \

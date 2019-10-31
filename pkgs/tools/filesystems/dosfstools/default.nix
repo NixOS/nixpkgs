@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "dosfstools-${version}";
+  pname = "dosfstools";
   version = "4.1";
 
   src = fetchFromGitHub {

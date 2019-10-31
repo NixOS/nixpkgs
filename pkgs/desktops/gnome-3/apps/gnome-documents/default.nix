@@ -7,12 +7,12 @@
 , desktop-file-utils, wrapGAppsHook, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-documents-${version}";
-  version = "3.32.0";
+  pname = "gnome-documents";
+  version = "3.33.90";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1gqddzbr4d8s0asmrhy0sfmwggzhbmpm61mqf8rxpdjk7s26086c";
+    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0l9g10i380bnjp1y3pslsy8ph1hd5x1d57dadvq70p5ki4r3qjaw";
   };
 
   doCheck = true;

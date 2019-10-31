@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, zlib, ffmpeg, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "ffms-${version}";
+  pname = "ffms";
   version = "2.23";
 
   src = fetchFromGitHub {

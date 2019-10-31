@@ -2,14 +2,14 @@
 , gflags, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "folly-${version}";
-  version = "2019.08.05.00";
+  pname = "folly";
+  version = "2019.10.14.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "03arl9hg06rzbyaf3fzyk7q8d5mfbzfwmhqnfnvqcgzlqdj0gaa5";
+    sha256 = "0d32cwwza3hqsr0z4kcrk1cj26ipbwkqm6nz5335rw4k9y5kyz16";
   };
 
   nativeBuildInputs = [ cmake ];

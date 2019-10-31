@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.8.0";
-  name = "gpac-${version}";
+  pname = "gpac";
 
   src = fetchFromGitHub {
     owner = "gpac";

@@ -2,13 +2,13 @@
 , zlib, expat, dbus, openssl, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "sourcetrail-${version}";
-  version = "2019.2.39";
+  pname = "sourcetrail";
+  version = "2019.3.46";
 
   src = fetchurl {
     name = "sourtrail.tar.gz";
     url = "https://www.sourcetrail.com/downloads/${version}/linux/64bit";
-    sha256 = "13kzfnsb5lf9v6bqw41qljp5bgz2rd3w163r6xg59hzd3dv8f90q";
+    sha256 = "0dnkxr3fijcsbn6pd20lyxhr9ns6ji1c4dffly9s16yq4x9ad5r4";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

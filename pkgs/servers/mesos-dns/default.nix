@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mesos-dns-${version}";
+  pname = "mesos-dns";
   version = "0.1.2";
   rev = "v${version}";
   

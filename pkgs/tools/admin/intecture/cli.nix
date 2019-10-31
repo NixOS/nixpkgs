@@ -4,7 +4,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "intecture-cli-${version}";
+  pname = "intecture-cli";
   version = "0.3.4";
 
   src = fetchFromGitHub {

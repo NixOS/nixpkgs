@@ -1,6 +1,6 @@
 { lib, fetchzip }:
 
-fetchzip rec {
+fetchzip {
   name = "kawkab-mono-20151015";
 
   url = "http://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";

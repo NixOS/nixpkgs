@@ -6,16 +6,15 @@
 , libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk, vte
 }:
 
-# TODO: ovirt (optional)
-
 let
-  version = "3.32.1";
+  version = "3.34.1";
 in stdenv.mkDerivation rec {
-  name = "gnome-boxes-${version}";
+  pname = "gnome-boxes";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "159sxii3g4s5pjb4s4i3kc4q162w5vicp4g6wvk1y2yv68bgmcl4";
+    url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1758k5b79kyywdg67b4byqhva9045i13lzg5r62my950c4c2p0pc";
   };
 
   doCheck = true;
@@ -39,10 +38,6 @@ in stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio ]}")
   '';
 
-  mesonFlags = [
-    "-Dovirt=false"
-  ];
-
   postPatch = ''
     chmod +x build-aux/post_install.py # patchShebangs requires executable file
     patchShebangs build-aux/post_install.py
@@ -60,6 +55,6 @@ in stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Apps/Boxes;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = gnome3.maintainers;
   };
 }

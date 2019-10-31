@@ -103,8 +103,6 @@
 
     html = callPackage ./html.nix {};
 
-    heyting-algebra = callPackage ./heyting-algebra.nix {};
-
     hezarfen = callPackage ./hezarfen.nix {};
 
     hrtime = callPackage ./hrtime.nix {};

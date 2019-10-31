@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, eliom, ocaml_pcre, pgocaml, macaque, safepass, yojson, ocsigen_deriving, ocsigen_server
-, js_of_ocaml-camlp4
+, js_of_ocaml-camlp4, lwt_camlp4
 , resource-pooling
 }:
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ocsigen-start-${version}";
   version = "1.8.0";
 
-  buildInputs = [ ocaml findlib eliom js_of_ocaml-camlp4 ];
+  buildInputs = [ ocaml findlib eliom js_of_ocaml-camlp4 lwt_camlp4 ];
   propagatedBuildInputs = [ pgocaml macaque safepass ocaml_pcre ocsigen-toolkit yojson ocsigen_deriving ocsigen_server resource-pooling ];
 
   patches = [ ./templates-dir.patch ];

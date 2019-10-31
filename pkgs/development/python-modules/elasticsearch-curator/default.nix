@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname   = "elasticsearch-curator";
-  version = "5.7.6";
+  version = "5.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a6q7jcqwcqf8cv76lzldf90hnj2x8gha754x515dq10zsi9sjms";
+    sha256 = "f0eec9ad043a30bc2e2232637111960139a1bda38232241bdd2f0c253a3584df";
   };
 
   # The test hangs so we disable it.
@@ -44,6 +44,10 @@ buildPythonPackage rec {
     mock
     funcsigs
   ];
+
+  postPatch = ''
+    sed -i s/pyyaml==3.12/pyyaml==${pyyaml.version}/ setup.cfg setup.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/elastic/curator;

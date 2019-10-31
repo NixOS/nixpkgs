@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, openssl, popt, xmlto }:
 
 stdenv.mkDerivation rec {
-  name = "rabbitmq-c-${version}";
+  pname = "rabbitmq-c";
   version = "0.9.0";
 
   src = fetchFromGitHub {

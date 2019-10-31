@@ -7,7 +7,6 @@
   deepin, makeWrapper, xkeyboard_config, wrapGAppsHook }:
 
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "dde-daemon";
   version = "3.27.2.6";
 
@@ -116,13 +115,13 @@ buildGoPackage rec {
   postFixup = ''
     # wrapGAppsHook does not work with binaries outside of $out/bin or $out/libexec
     for binary in $out/lib/deepin-daemon/*; do
-      wrapProgram $binary "''${gappsWrapperArgs[@]}"
+      wrapGApp "$binary"
     done
 
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Daemon for handling Deepin Desktop Environment session settings";

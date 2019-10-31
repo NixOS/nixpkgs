@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "softether-${version}";
+  pname = "softether";
   version = "4.25";
   build = "9656";
   compiledDate = "2018.01.15";

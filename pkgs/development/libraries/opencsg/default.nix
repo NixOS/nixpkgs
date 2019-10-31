@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
-  name = "opencsg-${version}";
+  pname = "opencsg";
   src = fetchurl {
     url = "http://www.opencsg.org/OpenCSG-${version}.tar.gz";
     sha256 = "1ysazynm759gnw1rdhn9xw9nixnzrlzrc462340a6iif79fyqlnr";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm example/Makefile src/Makefile
-    qmakeFlags="$qmakeFlags INSTALLDIR=$out"
+    qmakeFlags=("''${qmakeFlags[@]}" "INSTALLDIR=$out")
   '';
 
   postInstall = ''

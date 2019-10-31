@@ -1,7 +1,7 @@
 { mkXfceDerivation, autoreconfHook, autoconf, automake
 , glib, gtk-doc, intltool, libtool }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-dev-tools";
   version = "4.14.0";

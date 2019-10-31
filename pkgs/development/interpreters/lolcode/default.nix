@@ -3,7 +3,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "lolcode-${version}";
+  pname = "lolcode";
   version = "0.11.2";
 
   src = fetchurl {

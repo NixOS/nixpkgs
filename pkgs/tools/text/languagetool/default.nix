@@ -1,12 +1,12 @@
 { stdenv, fetchzip, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "LanguageTool-${version}";
-  version = "4.6";
+  pname = "LanguageTool";
+  version = "4.7";
 
   src = fetchzip {
-    url = "https://www.languagetool.org/download/${name}.zip";
-    sha256 = "1z3i6kz1dz7dw2ykyk1yamrv8h5h330sfyl037hhyy9hw6p30rhg";
+    url = "https://www.languagetool.org/download/${pname}-${version}.zip";
+    sha256 = "08200f9vk157jv27lmm89rsf9r05sb6jxcmnphrpz1hxykixd294";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];

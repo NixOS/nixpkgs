@@ -1,23 +1,21 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "dbmate-${version}";
-  version = "1.4.1";
-
-  goPackagePath = "github.com/amacneil/dbmate";
+buildGoModule rec {
+  pname = "dbmate";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "amacneil";
     repo = "dbmate";
     rev = "v${version}";
-    sha256 = "0s3l51kmpsaikixq1yxryrgglzk4kfrjagcpf1i2bkq4wc5gyv5d";
+    sha256 = "0jvizj616rsh3aw9z3bijk7ixpbnqmm3xqmdxznjzqd46avr54c3";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "12x3m5bjyx3blh5i51pd99phv73m96pmm6i3ir4vf2kms3viif9i";
 
   meta = with stdenv.lib; {
     description = "Database migration tool";
-    homepage = https://dbmate.readthedocs.io;
+    homepage = https://github.com/amacneil/dbmate;
     license = licenses.mit;
     maintainers = [ maintainers.manveru ];
     platforms = platforms.unix;

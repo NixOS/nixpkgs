@@ -20,11 +20,11 @@ let
     icuEnabled = atLeast "10";
 
   in stdenv.mkDerivation rec {
-    name = "postgresql-${version}";
+    pname = "postgresql";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
+      url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
 
@@ -81,8 +81,8 @@ let
     postInstall =
       ''
         moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/libpgcommon.a" "$out"
-        moveToOutput "lib/libpgport.a" "$out"
+        moveToOutput "lib/libpgcommon*.a" "$out"
+        moveToOutput "lib/libpgport*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
@@ -109,6 +109,17 @@ let
     doCheck = !stdenv.isDarwin;
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check";
+
+    preCheck =
+      # On musl, comment skip the following tests, because they break due to
+      #     ! ERROR:  could not load library "/build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so": Error loading shared library libpq.so.5: No such file or directory (needed by /build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so)
+      # See also here:
+      #     https://git.alpinelinux.org/aports/tree/main/postgresql/disable-broken-tests.patch?id=6d7d32c12e073a57a9e5946e55f4c1fbb68bd442
+      if stdenv.hostPlatform.isMusl then ''
+        substituteInPlace src/test/regress/parallel_schedule \
+          --replace "subscription" "" \
+          --replace "object_address" ""
+      '' else null;
 
     doInstallCheck = false; # needs a running daemon?
 
@@ -168,14 +179,6 @@ let
 
 in self: {
 
-  postgresql_9_4 = self.callPackage generic {
-    version = "9.4.24";
-    psqlSchema = "9.4";
-    sha256 = "0acl1wmah3r1a0qjjmpc256glccrjnzq4pkwklx4d9s6vmkks9aj";
-    this = self.postgresql_9_4;
-    inherit self;
-  };
-
   postgresql_9_5 = self.callPackage generic {
     version = "9.5.19";
     psqlSchema = "9.5";
@@ -205,6 +208,14 @@ in self: {
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
     sha256 = "106ikalvrilihlvhq7xj7snq98hgbgq6qsgjrd252wgw1c327pvz";
     this = self.postgresql_11;
+    inherit self;
+  };
+
+  postgresql_12 = self.callPackage generic {
+    version = "12.0";
+    psqlSchema = "12";
+    sha256 = "1ijm13gx1d9ai09n26nbdc77n9b8akh6pj21yy9vfn7p2mr3k8nd";
+    this = self.postgresql_12;
     inherit self;
   };
 

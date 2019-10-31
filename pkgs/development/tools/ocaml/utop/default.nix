@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, dune
+{ stdenv, fetchurl, ocaml, findlib, dune
 , lambdaTerm, cppo, makeWrapper
 }:
 
@@ -7,16 +7,16 @@ then throw "utop is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "2.3.0";
-  name = "utop-${version}";
+  pname = "utop";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "1g1xf19fhzwsikp33pv1wf6wb2qdc5y7dzqi46h8c4l850cwscjh";
+    sha256 = "0fl8524vmxb9yxjwrh5varvfp0ff3sgfp627knwbxxr69w45ad8h";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml findlib ocamlbuild cppo dune ];
+  buildInputs = [ ocaml findlib cppo dune ];
 
   propagatedBuildInputs = [ lambdaTerm ];
 
@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
 
      # derivation of just runtime deps so env vars created by
      # setup-hooks can be saved for use at runtime
-     runtime = stdenv.mkDerivation rec {
-       name = "utop-runtime-env-${version}";
+     runtime = stdenv.mkDerivation {
+       pname = "utop-runtime-env";
+       inherit version;
 
        buildInputs = [ findlib ] ++ propagatedBuildInputs;
 

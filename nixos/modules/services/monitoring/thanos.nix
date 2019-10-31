@@ -70,14 +70,14 @@ let
   } ''json2yaml -i $json -o $out'';
 
   thanos = cmd: "${cfg.package}/bin/thanos ${cmd}" +
-    (let args = cfg."${cmd}".arguments;
+    (let args = cfg.${cmd}.arguments;
      in optionalString (length args != 0) (" \\\n  " +
          concatStringsSep " \\\n  " args));
 
   argumentsOf = cmd: concatLists (collect isList
-    (flip mapParamsRecursive params."${cmd}" (path: param:
+    (flip mapParamsRecursive params.${cmd} (path: param:
       let opt = concatStringsSep "." path;
-          v = getAttrFromPath path cfg."${cmd}";
+          v = getAttrFromPath path cfg.${cmd};
       in param.toArgs opt v)));
 
   mkArgumentsOption = cmd: mkOption {
@@ -95,7 +95,7 @@ let
   };
 
   mapParamsRecursive =
-    let noParam = attr: !(attr ? "toArgs" && attr ? "option");
+    let noParam = attr: !(attr ? toArgs && attr ? option);
     in mapAttrsRecursiveCond noParam;
 
   paramsToOptions = mapParamsRecursive (_path: param: param.option);
@@ -126,6 +126,8 @@ let
           '';
           description = ''
             Path to YAML file that contains tracing configuration.
+
+            See format details: <link xlink:href="https://thanos.io/tracing.md/#configuration"/>
           '';
         };
       };
@@ -141,6 +143,8 @@ let
             <option>tracing.config-file</option> will default to its path.
 
             If <option>tracing.config-file</option> is set this option has no effect.
+
+            See format details: <link xlink:href="https://thanos.io/tracing.md/#configuration"/>
           '';
         };
     };
@@ -187,6 +191,8 @@ let
           '';
           description = ''
             Path to YAML file that contains object store configuration.
+
+            See format details: <link xlink:href="https://thanos.io/storage.md/#configuration"/>
           '';
         };
       };
@@ -202,6 +208,8 @@ let
             <option>objstore.config-file</option> will default to its path.
 
             If <option>objstore.config-file</option> is set this option has no effect.
+
+            See format details: <link xlink:href="https://thanos.io/storage.md/#configuration"/>
           '';
         };
     };
@@ -218,8 +226,8 @@ let
         toArgs = optionToArgs;
         option = mkOption {
           type = types.str;
-          default = "/var/lib/${config.services.prometheus2.stateDir}/data";
-          defaultText = "/var/lib/\${config.services.prometheus2.stateDir}/data";
+          default = "/var/lib/${config.services.prometheus.stateDir}/data";
+          defaultText = "/var/lib/\${config.services.prometheus.stateDir}/data";
           description = ''
             Data directory of TSDB.
           '';
@@ -275,6 +283,24 @@ let
 
       block-sync-concurrency = mkParamDef types.int 20 ''
         Number of goroutines to use when syncing blocks from object storage.
+      '';
+
+      min-time = mkParamDef types.str "0000-01-01T00:00:00Z" ''
+        Start of time range limit to serve.
+
+        Thanos Store serves only metrics, which happened later than this
+        value. Option can be a constant time in RFC3339 format or time duration
+        relative to current time, such as -1d or 2h45m. Valid duration units are
+        ms, s, m, h, d, w, y.
+      '';
+
+      max-time = mkParamDef types.str "9999-12-31T23:59:59Z" ''
+        End of time range limit to serve.
+
+        Thanos Store serves only blocks, which happened eariler than this
+        value. Option can be a constant time in RFC3339 format or time duration
+        relative to current time, such as -1d or 2h45m. Valid duration units are
+        ms, s, m, h, d, w, y.
       '';
     };
 
@@ -560,6 +586,14 @@ let
         '';
       };
 
+      downsampling.disable = mkFlagParam ''
+        Disables downsampling.
+
+        This is not recommended as querying long time ranges without
+        non-downsampled data is not efficient and useful e.g it is not possible
+        to render all samples for a human eye anyway
+      '';
+
       block-sync-concurrency = mkParamDef types.int 20 ''
         Number of goroutines to use when syncing block metadata from object storage.
       '';
@@ -607,7 +641,7 @@ let
   assertRelativeStateDir = cmd: {
     assertions = [
       {
-        assertion = !hasPrefix "/" cfg."${cmd}".stateDir;
+        assertion = !hasPrefix "/" cfg.${cmd}.stateDir;
         message =
           "The option services.thanos.${cmd}.stateDir should not be an absolute directory." +
           " It should be a directory relative to /var/lib.";
@@ -679,22 +713,22 @@ in {
     (mkIf cfg.sidecar.enable {
       assertions = [
         {
-          assertion = config.services.prometheus2.enable;
+          assertion = config.services.prometheus.enable;
           message =
-            "Please enable services.prometheus2 when enabling services.thanos.sidecar.";
+            "Please enable services.prometheus when enabling services.thanos.sidecar.";
         }
         {
-          assertion = !(config.services.prometheus2.globalConfig.external_labels == null ||
-                        config.services.prometheus2.globalConfig.external_labels == {});
+          assertion = !(config.services.prometheus.globalConfig.external_labels == null ||
+                        config.services.prometheus.globalConfig.external_labels == {});
           message =
             "services.thanos.sidecar requires uniquely identifying external labels " +
             "to be configured in the Prometheus server. " +
-            "Please set services.prometheus2.globalConfig.external_labels.";
+            "Please set services.prometheus.globalConfig.external_labels.";
         }
       ];
       systemd.services.thanos-sidecar = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" "prometheus2.service" ];
+        after    = [ "network.target" "prometheus.service" ];
         serviceConfig = {
           User = "prometheus";
           Restart = "always";

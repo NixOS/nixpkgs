@@ -56,7 +56,7 @@ in {
 
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "couchdb";
         description = ''
           User account under which couchdb runs.
@@ -64,7 +64,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "couchdb";
         description = ''
           Group account under which couchdb runs.
@@ -106,7 +106,7 @@ in {
       };
 
       bindAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "127.0.0.1";
         description = ''
           Defines the IP address by which CouchDB will be accessible.
@@ -138,7 +138,7 @@ in {
       };
 
       configFile = mkOption {
-        type = types.string;
+        type = types.path;
         description = ''
           Configuration file for persisting runtime changes. File
           needs to be readable and writable from couchdb user/group.

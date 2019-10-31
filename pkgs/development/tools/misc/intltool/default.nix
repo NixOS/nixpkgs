@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, gettext, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "intltool-${version}";
+  pname = "intltool";
   version = "0.51.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/intltool/trunk/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/intltool/trunk/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "1karx4sb7bnm2j67q0q74hspkfn6lqprpy5r99vkn5bb36a4viv7";
   };
 

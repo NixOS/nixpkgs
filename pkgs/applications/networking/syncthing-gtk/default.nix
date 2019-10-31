@@ -6,7 +6,7 @@
 
 buildPythonApplication rec {
   version = "0.9.4";
-  name = "syncthing-gtk-${version}";
+  pname = "syncthing-gtk";
 
   src = fetchFromGitHub {
     owner = "syncthing";

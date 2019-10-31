@@ -1,7 +1,7 @@
 { stdenv, requireFile, unzip }:
 
-stdenv.mkDerivation rec {
-  name = "input-fonts-${version}";
+stdenv.mkDerivation {
+  pname = "input-fonts";
   version = "2017-08-10"; # date of the download and checksum
 
   src = requireFile {

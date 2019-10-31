@@ -11,10 +11,11 @@ let
   };
 in
   stdenv.mkDerivation rec {
-    name = "redmine-${version}";
+    pname = "redmine";
+    inherit version;
 
     src = fetchurl {
-      url = "https://www.redmine.org/releases/${name}.tar.gz";
+      url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
       sha256 = "14987sd9ff2n3982qlfwd4m0g1m10w8jyv791nica3wppvnrxh0r";
     };
 

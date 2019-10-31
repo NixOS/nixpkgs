@@ -4,6 +4,7 @@
 , llvmPackages
 }:
 
+with stdenv.lib;
 let
   verMajor = "1";
   verMinor = "2";
@@ -13,7 +14,8 @@ let
   gwtVer = "2.8.1";
 in
 stdenv.mkDerivation rec {
-  name = "RStudio-${version}";
+  pname = "RStudio";
+  inherit version;
 
   nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
 
@@ -46,7 +48,13 @@ stdenv.mkDerivation rec {
     sha256 = "19x000m3jwnkqgi6ic81lkzyjvvxcfacw2j0vcfcaknvvagzhyhb";
   };
 
-  hunspellDictionaries = with stdenv.lib; filter isDerivation (unique (attrValues hunspellDicts));
+  hunspellDictionaries = filter isDerivation (unique (attrValues hunspellDicts));
+  # These dicts contain identically-named dict files, so we only keep the
+  # -large versions in case of clashes
+  largeDicts = filter (d: hasInfix "-large-wordlist" d) hunspellDictionaries;
+  otherDicts = filter (d: !(hasAttr "dictFileName" d &&
+                            elem d.dictFileName (map (d: d.dictFileName) largeDicts))) hunspellDictionaries;
+  dictionaries = largeDicts ++ otherDicts;
 
   mathJaxSrc = fetchurl {
     url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;
@@ -76,7 +84,7 @@ stdenv.mkDerivation rec {
       mv gwt-${gwtVer} $GWT_LIB_DIR/gwt/${gwtVer}
 
       mkdir dependencies/common/dictionaries
-      for dict in ${builtins.concatStringsSep " " hunspellDictionaries}; do
+      for dict in ${builtins.concatStringsSep " " dictionaries}; do
         for i in "$dict/share/hunspell/"*; do
           ln -sv $i dependencies/common/dictionaries/
         done
@@ -98,7 +106,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=$NIX_QT5_TMP/bin/qmake" ];
 
   desktopItem = makeDesktopItem {
-    name = name;
+    name = "${pname}-${version}";
     exec = "rstudio %F";
     icon = "rstudio";
     desktopName = "RStudio";

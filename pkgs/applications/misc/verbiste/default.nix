@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libgnomeui, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "verbiste-${version}";
+  pname = "verbiste";
 
   version = "0.1.46";
 
   src = fetchurl {
-    url = "https://perso.b2b2c.ca/~sarrazip/dev/${name}.tar.gz";
+    url = "https://perso.b2b2c.ca/~sarrazip/dev/${pname}-${version}.tar.gz";
     sha256 = "13l8b8mbkdds955sn42hzrjzj48lg1drpd7vhpcjxadckbvlh1p0";
   };
 

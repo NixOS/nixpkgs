@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, zlib, which, IOKit, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "gpsbabel-${version}";
+  pname = "gpsbabel";
   version = "1.6.0";
 
   src = fetchFromGitHub {

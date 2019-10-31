@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "RhythmDelay-${version}";
+  pname = "RhythmDelay";
   version = "2.1";
 
   src = fetchFromGitHub {

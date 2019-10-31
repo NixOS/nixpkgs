@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, expat, libaio, boost }:
 
 stdenv.mkDerivation rec {
-  name = "thin-provisioning-tools-${version}";
+  pname = "thin-provisioning-tools";
   version = "0.7.6";
 
   src = fetchFromGitHub {

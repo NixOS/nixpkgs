@@ -2,8 +2,8 @@
 , ghostscript, graphicsmagick, quicktemplate, go-bindata, easyjson
 , nodePackages, emscripten, opencv, statik }:
 
-buildGoPackage rec {
-  name = "meguca-unstable-${version}";
+buildGoPackage {
+  pname = "meguca-unstable";
   version = "2019-03-12";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;

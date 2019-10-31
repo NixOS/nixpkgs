@@ -1,6 +1,6 @@
 { lib, mkXfceDerivation, gobject-introspection }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4util";
   version = "4.14.0";

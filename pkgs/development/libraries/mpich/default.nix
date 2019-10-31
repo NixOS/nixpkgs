@@ -3,7 +3,7 @@
 } :
 
 stdenv.mkDerivation  rec {
-  name = "mpich-${version}";
+  pname = "mpich";
   version = "3.3.1";
 
   src = fetchurl {

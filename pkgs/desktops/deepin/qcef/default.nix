@@ -39,7 +39,6 @@ let
 in
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "qcef";
   version = "1.1.6";
 
@@ -91,7 +90,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Qt5 binding of Chromium Embedded Framework";

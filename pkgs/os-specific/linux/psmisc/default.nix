@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "psmisc";
   version = "23.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitLab {
     owner = pname;

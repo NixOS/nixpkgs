@@ -20,8 +20,8 @@ let
       startupNotify = "true";
     };
 
-  in stdenv.mkDerivation rec {
-      name = "charles-${version}";
+  in stdenv.mkDerivation {
+      pname = "charles";
       inherit version;
 
       src = fetchurl {
@@ -54,7 +54,7 @@ let
       };
     };
 
-in rec {
+in {
   charles4 = (generic {
     version = "4.2.8";
     sha256 = "1jzjdhzxgrq7pdfryfkg0hsjpyni14ma4x8jbdk1rqll78ccr080";

@@ -6,7 +6,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "tcpcrypt-${version}";
+  pname = "tcpcrypt";
   version = "0.5";
 
   src = fetchFromGitHub {

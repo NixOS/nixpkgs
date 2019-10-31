@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.14.1";
-  name    = "bindfs-${version}";
+  pname = "bindfs";
 
   src = fetchurl {
-    url    = "https://bindfs.org/downloads/${name}.tar.gz";
+    url    = "https://bindfs.org/downloads/${pname}-${version}.tar.gz";
     sha256 = "111i4ba4px3idmrr5qhgq01926fas1rs2yx2shnwgdk3ziqcszxl";
   };
 

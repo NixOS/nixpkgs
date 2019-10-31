@@ -60,7 +60,7 @@
 buildPythonPackage rec {
   format = "other";
   version = src.version;
-  name = "sagelib-${version}";
+  pname = "sagelib";
   src = sage-src;
 
   nativeBuildInputs = [
@@ -138,8 +138,8 @@ buildPythonPackage rec {
     mkdir -p "$SAGE_SHARE/sage/ext/notebook-ipython"
     mkdir -p "var/lib/sage/installed"
 
+    source build/bin/sage-dist-helpers
     cd src
-    source bin/sage-dist-helpers
 
     ${python.interpreter} -u setup.py --no-user-cfg build
   '';

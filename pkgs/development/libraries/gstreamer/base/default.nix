@@ -6,6 +6,7 @@
 , libjpeg
 , libvisual
 , tremor # provides 'virbisidec'
+, libGL
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412
 , enableX11 ? stdenv.isLinux, libXv
 , enableWayland ? stdenv.isLinux, wayland
@@ -14,7 +15,7 @@
 , enableCdparanoia ? (!stdenv.isDarwin), cdparanoia }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-base-${version}";
+  pname = "gst-plugins-base";
   version = "1.16.0";
 
   meta = with lib; {
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
+    url = "${meta.homepage}/src/gst-plugins-base/${pname}-${version}.tar.xz";
     sha256 = "1bmmdwbyy89ayb85xc48y217f6wdmpz96f30zm6v53z2a5xsm4s0";
   };
 
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
   ;
 
-  buildInputs = [ orc libtheora libintl libopus isocodes libjpeg tremor ]
+  buildInputs = [ orc libtheora libintl libopus isocodes libjpeg tremor libGL ]
     ++ lib.optional (!stdenv.isDarwin) libvisual
     ++ lib.optional enableAlsa alsaLib
     ++ lib.optionals enableX11 [ libXv pango ]

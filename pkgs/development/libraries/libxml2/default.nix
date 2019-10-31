@@ -10,11 +10,11 @@ let
   python = python2;
 
 in stdenv.mkDerivation rec {
-  name = "libxml2-${version}";
+  pname = "libxml2";
   version = "2.9.9";
 
   src = fetchurl {
-    url = "http://xmlsoft.org/sources/${name}.tar.gz";
+    url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
     sha256 = "0wd881jzvqayx0ihzba29jl80k06xj9ywp16kxacdqs3064p1ywl";
   };
 

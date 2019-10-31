@@ -3,7 +3,6 @@
 
 stdenv.mkDerivation rec {
   pname = "pdftag";
-  name = "${pname}-${version}";
   version = "1.0.5";
 
   src = fetchFromGitHub {

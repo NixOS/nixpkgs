@@ -11,7 +11,7 @@
 assert runTests -> gflags != null;
 
 stdenv.mkDerivation rec {
-  name = "ceres-solver-${version}";
+  pname = "ceres-solver";
   version = "1.14.0";
 
   src = fetchurl {

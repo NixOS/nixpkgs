@@ -18,7 +18,8 @@ let
   wrapper = "eduke32-wrapper";
 
 in stdenv.mkDerivation {
-  name = "eduke32-${version}";
+  pname = "eduke32";
+  inherit version;
 
   src = fetchurl {
     url = "http://dukeworld.duke4.net/eduke32/synthesis/latest/eduke32_src_${version}-${rev}.tar.xz";

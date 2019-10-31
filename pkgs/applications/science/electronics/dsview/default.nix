@@ -4,7 +4,7 @@ libusb, wrapQtAppsHook, libsigrok4dsl, libsigrokdecode4dsl
 }:
 
 stdenv.mkDerivation rec {
-  name = "dsview-${version}";
+  pname = "dsview";
 
   version = "0.99";
 

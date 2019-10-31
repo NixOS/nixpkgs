@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "libxls-${version}";
+  pname = "libxls";
   version = "1.5.1";
 
   src = fetchurl {

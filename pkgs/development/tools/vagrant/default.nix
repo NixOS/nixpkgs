@@ -55,7 +55,7 @@ in buildRubyGem rec {
   postInstall =
     let
       pathAdditions = lib.makeSearchPath "bin"
-        (map (x: "${lib.getBin x}") ([
+        (map (x: lib.getBin x) ([
           libarchive
         ] ++ lib.optionals withLibvirt [
           libguestfs

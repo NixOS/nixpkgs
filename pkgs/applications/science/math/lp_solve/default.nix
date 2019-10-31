@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "lp_solve-${version}";
+  pname = "lp_solve";
   version = "5.5.2.5";
 
   src = fetchurl {

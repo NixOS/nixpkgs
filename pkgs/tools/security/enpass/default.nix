@@ -39,10 +39,10 @@ let
     libuuid
     cups
   ]);
-  package = stdenv.mkDerivation rec {
+  package = stdenv.mkDerivation {
 
     inherit (data) version;
-    name = "enpass-${version}";
+    pname = "enpass";
 
     src = fetchurl {
       inherit (data) sha256;
@@ -80,7 +80,7 @@ let
     '';
   };
   updater = {
-    update = stdenv.mkDerivation rec {
+    update = stdenv.mkDerivation {
       name = "enpass-update-script";
       SCRIPT =./update_script.py;
 

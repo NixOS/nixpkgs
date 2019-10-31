@@ -31,7 +31,7 @@ in
       e.efl e.enlightenment
       e.terminology e.econnman
       pkgs.xorg.xauth # used by kdesu
-      pkgs.gtk2 # To get GTK+'s themes.
+      pkgs.gtk2 # To get GTK's themes.
       pkgs.tango-icon-theme
 
       pkgs.gnome2.gnome_icon_theme
@@ -48,10 +48,6 @@ in
     services.xserver.desktopManager.session = [
     { name = "Enlightenment";
       start = ''
-        # Set GTK_DATA_PREFIX so that GTK+ can find the themes
-        export GTK_DATA_PREFIX=${config.system.path}
-        # find theme engines
-        export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
         export XDG_MENU_PREFIX=e-
 
         export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}"

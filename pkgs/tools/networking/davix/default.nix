@@ -1,17 +1,17 @@
 { stdenv, fetchurl, cmake, pkgconfig, openssl, libxml2, boost, python3, libuuid }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.4";
-  name = "davix-${version}";
+  version = "0.7.5";
+  pname = "davix";
   nativeBuildInputs = [ cmake pkgconfig python3 ];
   buildInputs = [ openssl libxml2 boost libuuid ];
 
-  # using the url below since the 0.7.4 release did carry a broken CMake file,
+  # using the url below since the 0.7.5 release did carry a broken CMake file,
   # supposedly fixed in the next release
   # https://github.com/cern-fts/davix/issues/40
   src = fetchurl {
     url = "http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/davix/${version}/davix-${version}.tar.gz";
-    sha256 = "1k407ckvsw1w212k3lp2867i0sscnrbigsx79l1sp5ymj3n62aih";
+    sha256 = "1j3gzsjhzrsk6irxalc3rwgp9cqb52chriadmy1mv1s6d2bwl86r";
   };
 
 

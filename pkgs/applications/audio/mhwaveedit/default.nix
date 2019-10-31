@@ -3,7 +3,7 @@
 , vorbis-tools }:
 
 stdenv.mkDerivation rec {
-  name = "mhwaveedit-${version}";
+  pname = "mhwaveedit";
   version = "1.4.24";
 
   src = fetchFromGitHub {

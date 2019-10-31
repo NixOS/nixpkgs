@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, pango, cairo, libGLU, lv2 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "avldrums.lv2";
   version = "0.3.5";
 

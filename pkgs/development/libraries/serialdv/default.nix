@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "serialdv";
-  version ="1.1.1";
+  version ="1.1.2";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "serialdv";
     rev = "v${version}";
-    sha256 = "0swalyp8cbs7if6gxbcl7wf83ml8ch3k7ww4hws89rzpjvf070fr";
+    sha256 = "0d2lnvfzf31i3f2klm46s87gby3yz3hc46cap0yqifzml0ff1qbm";
   };
 
   nativeBuildInputs = [ cmake ];

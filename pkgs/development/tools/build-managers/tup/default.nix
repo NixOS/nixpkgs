@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fuse, pkgconfig, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "tup-${version}";
+  pname = "tup";
   version = "0.7.8";
 
   src = fetchFromGitHub {

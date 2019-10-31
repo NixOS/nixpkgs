@@ -1,8 +1,8 @@
 { stdenv, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "alertmanager-${version}";
-  version = "0.18.0";
+  pname = "alertmanager";
+  version = "0.19.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/alertmanager";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    sha256 = "17f3a4fiwycpd031k1d9irhd96cklbh2ygs35j5r6hgw2130sy4p";
+    sha256 = "08k898x9ks5rzcmb7ps1rnxv36ynv64x8yq2ahpwmfkmv6nw1ylh";
   };
 
   buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''

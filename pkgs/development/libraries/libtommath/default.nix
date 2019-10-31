@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libtommath-${version}";
+  pname = "libtommath";
   version = "1.1.0";
 
   src = fetchurl {

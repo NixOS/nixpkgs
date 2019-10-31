@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     lcms2
   ];
 
-  doCheck = !stdenv.isDarwin;
-
   meta = with stdenv.lib; {
     description = "Image pixel format conversion library";
     homepage = http://gegl.org/babl/;

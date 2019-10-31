@@ -4,7 +4,8 @@ with stdenv.lib;
 
 let version = "2.48"; in
 stdenv.mkDerivation {
-  name = "gwyddion-${version}";
+  pname = "gwyddion";
+  inherit version;
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/files/gwyddion/${version}/gwyddion-${version}.tar.xz";
     sha256 = "119iw58ac2wn4cas6js8m7r1n4gmmkga6b1y711xzcyjp9hshgwx";

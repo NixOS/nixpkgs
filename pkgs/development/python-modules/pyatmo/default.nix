@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "1.10";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13ca794416707b8cefcb7584bbfff65a4640fcc2510ad73e818fef94d424fca6";
+    sha256 = "2c76740e5adbf8b14d8f41d4f84ce23c0e8e738b18b926dc60858c35bf2fa8f2";
   };
 
   # Upstream provides no unit tests.

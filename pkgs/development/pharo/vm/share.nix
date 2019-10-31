@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0";
-  name = "pharo-share-${version}";
+  pname = "pharo-share";
 
   dontUnpack = true;
 

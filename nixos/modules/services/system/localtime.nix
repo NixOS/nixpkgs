@@ -22,7 +22,7 @@ in {
   config = mkIf cfg.enable {
     services.geoclue2 = {
       enable = true;
-      appConfig."localtime" = {
+      appConfig.localtime = {
         isAllowed = true;
         isSystem = true;
       };

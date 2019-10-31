@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses, zlib, bzip2, sqlite, pkgconfig, glib, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "ncdc-${version}";
+  pname = "ncdc";
   version = "1.22.1";
 
   src = fetchurl {

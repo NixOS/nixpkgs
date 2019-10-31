@@ -14,7 +14,7 @@ in pkgs.mkShell {
     pkgs.bash
   ];
 
-  EMACS2NIX = "${src}";
+  EMACS2NIX = src;
 
   shellHook = ''
     export PATH=$PATH:${src}

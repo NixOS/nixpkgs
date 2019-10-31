@@ -1,6 +1,6 @@
 { mkDerivation, haskellPackages, fetchFromGitHub, lib }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "fffuu";
   version = "unstable-2018-05-26";
 

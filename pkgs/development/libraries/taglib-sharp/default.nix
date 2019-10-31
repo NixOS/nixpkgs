@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, which, pkgconfig, mono }:
 
 stdenv.mkDerivation rec {
-  name = "taglib-sharp-${version}";
+  pname = "taglib-sharp";
   version = "2.1.0.0";
 
   src = fetchFromGitHub {

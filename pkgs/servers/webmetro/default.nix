@@ -2,7 +2,6 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "webmetro";
-  name = "${pname}-${version}";
   version = "unstable-20180426";
 
   src = fetchFromGitHub {

@@ -3,7 +3,7 @@
   enablePython ? false, pythonPackages }:
 
 stdenv.mkDerivation rec{
-  name = "grib-api-${version}";
+  pname = "grib-api";
   version = "1.28.0";
 
   src = fetchurl {

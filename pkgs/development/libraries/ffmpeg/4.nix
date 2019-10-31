@@ -5,8 +5,8 @@
 }@args:
 
 callPackage ./generic.nix (args // rec {
-  version = "${branch}";
+  version = "4.2.1";
   branch = "4.2";
-  sha256 = "1f3glany3p2j832a9wia5vj8ds9xpm0xxlyia91y17hy85gxwsrh";
+  sha256 = "090naa6rj46pzkgh03bf51hbqdz356qqckr2pw6pykc6ysiryak8";
   darwinFrameworks = [ Cocoa CoreMedia VideoToolbox ];
 })

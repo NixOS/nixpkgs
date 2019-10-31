@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "migmix-${version}";
+  pname = "migmix";
   version = "20150712";
 
   srcs = [

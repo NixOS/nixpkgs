@@ -38,7 +38,7 @@ let
   '';
 
   cub = {
-    src = fetchFromGitHub rec {
+    src = fetchFromGitHub {
       owner  = "NVlabs";
       repo   = "cub";
       rev    = "v1.7.4";
@@ -61,7 +61,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "caffe2-${version}";
+  pname = "caffe2";
   version = "0.8.1";
   src = fetchFromGitHub {
     owner = "caffe2";

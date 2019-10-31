@@ -1,11 +1,11 @@
 { stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "xmind-${version}";
+  pname = "xmind";
   version = "8-update8";
 
   src = fetchzip {
-    url = "https://xmind.net/xmind/downloads/${name}-linux.zip";
+    url = "https://xmind.net/xmind/downloads/${pname}-${version}-linux.zip";
     stripRoot = false;
     sha256 = "1p68z0b4brgiyybz190alqv716ncql49vsksm41y90mcjd8s4jhn";
   };
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     url = "https://aur.archlinux.org/cgit/aur.git/plain/xmind.png?h=xmind";
     sha256 = "0jxq2fiq69q9ly0m6hx2qfybqad22sl42ciw636071khpqgc885f";
   };
+
+  preferLocalBuild = true;
 
   patches = [ ./java-env-config-fixes.patch ];
 
@@ -61,7 +63,7 @@ stdenv.mkDerivation rec {
         cp -r $out/libexec/configuration/ \$HOME/.xmind/configuration-cathy/
       fi
 
-      exec "$out/libexec/XMind" "$@"
+      exec "$out/libexec/XMind" "\$@"
     EOF
     chmod +x $out/bin/XMind
 

@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   version = "0.4.4";
-  name = "rink-${version}";
+  pname = "rink";
 
   src = fetchFromGitHub {
     owner = "tiffany352";

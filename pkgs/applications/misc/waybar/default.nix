@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, pkgconfig, ninja
-, wayland, wlroots, gtkmm3, libinput, libsigcxx, jsoncpp, fmt, spdlog
+, wayland, wlroots, gtkmm3, libinput, libsigcxx, jsoncpp, fmt, scdoc, spdlog
 , traySupport  ? true,  libdbusmenu-gtk3
 , pulseSupport ? false, libpulseaudio
 , nlSupport    ? true,  libnl
@@ -9,17 +9,17 @@
 }:
   stdenv.mkDerivation rec {
     pname = "waybar";
-    version = "0.7.2";
+    version = "0.8.0";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "15biyr422s5f2csw395fz9cikir9wffdwqq8y0i6ayzpymzsqbzs";
+      sha256 = "0s8ck7qxka0l91ayma6amp9sc8cidi43byqgzcavi3a6id983r1z";
     };
 
     nativeBuildInputs = [
-      meson ninja pkgconfig
+      meson ninja pkgconfig scdoc
     ];
 
     buildInputs = with stdenv.lib;

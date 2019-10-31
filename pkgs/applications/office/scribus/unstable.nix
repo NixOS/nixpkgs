@@ -1,6 +1,6 @@
 { stdenv, fetchurl, mkDerivation, pkgconfig, cmake, qtbase, cairo, pixman,
 boost, cups, fontconfig, freetype, hunspell, libjpeg, libtiff, libxml2, lcms2,
-podofo, poppler, poppler_data, python2, harfbuzz, qtimageformats, qttools }:
+podofo, poppler, poppler_data, python2, qtimageformats, qttools, harfbuzzFull }:
 
 let
   pythonEnv = python2.withPackages(ps: [ps.tkinter ps.pillow]);
@@ -20,7 +20,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase cairo pixman boost cups fontconfig
     freetype hunspell libjpeg libtiff libxml2 lcms2 podofo poppler
-    poppler_data pythonEnv harfbuzz qtimageformats qttools
+    poppler_data pythonEnv qtimageformats qttools harfbuzzFull
   ];
 
   meta = {

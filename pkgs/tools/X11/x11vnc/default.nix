@@ -3,7 +3,7 @@
   autoreconfHook, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "x11vnc-${version}";
+  pname = "x11vnc";
   version = "0.9.16";
 
   src = fetchFromGitHub {

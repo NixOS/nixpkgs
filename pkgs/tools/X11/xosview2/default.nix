@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "xosview2-${version}";
+  pname = "xosview2";
   version = "2.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xosview/${name}.tar.gz";
+    url = "mirror://sourceforge/xosview/${pname}-${version}.tar.gz";
     sha256 = "1drp0n6qjbxyc0104a3aw2g94rh5p218wmrqwxh3kwwm7pmr9xip";
   };
 

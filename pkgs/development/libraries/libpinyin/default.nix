@@ -12,7 +12,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "libpinyin-${version}";
+  pname = "libpinyin";
   version = "2.3.0";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 , withGui ? false, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "i7z-${version}";
+  pname = "i7z";
   version = "0.27.3";
 
   src = fetchFromGitHub {

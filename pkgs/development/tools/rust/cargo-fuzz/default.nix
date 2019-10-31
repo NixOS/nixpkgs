@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, runCommand, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cargo-fuzz-${version}";
+  pname = "cargo-fuzz";
   version = "0.5.3"; # Note to self: on 0.5.4, remove the hand-added Cargo.lock
 
   src =

@@ -16,7 +16,6 @@ assert opencvSupport -> opencv != null;
 stdenv.mkDerivation rec {
   pname = "shogun";
   version = "6.0.0";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = pname + "-toolbox";

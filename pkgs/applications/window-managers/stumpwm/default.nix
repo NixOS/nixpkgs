@@ -10,7 +10,7 @@ let
     sha256 = "1ml6mjk2fsfv4sf65fdbji3q5x0qiq99g1k8w7a99gsl2i8h60gc";
   });
   versionSpec = {
-    "latest" = {
+    latest = {
       name = "1.0.0";
       rev = "refs/tags/1.0.0";
       sha256 = "16r0lwhxl8g71masmfbjr7s7m7fah4ii4smi1g8zpbpiqjz48ryb";
@@ -22,7 +22,7 @@ let
       sha256 = "0hmvbdk2yr5wrkiwn9dfzf65s4xc2qifj0sn6w2mghzp96cph79k";
       patches = [ ./fix-module-path.patch ];
     };
-    "git" = {
+    git = {
         name = "git-20170203";
         rev = "d20f24e58ab62afceae2afb6262ffef3cc318b97";
         sha256 = "1gi29ds1x6dq7lz8lamnhcvcrr3cvvrg5yappfkggyhyvib1ii70";
@@ -30,13 +30,13 @@ let
     };
   }.${version};
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "stumpwm-${versionSpec.name}";
 
   src = fetchgit {
     url = "https://github.com/stumpwm/stumpwm";
-    rev = "${versionSpec.rev}";
-    sha256 = "${versionSpec.sha256}";
+    rev = versionSpec.rev;
+    sha256 = versionSpec.sha256;
   };
 
   # NOTE: The patch needs an update for the next release.

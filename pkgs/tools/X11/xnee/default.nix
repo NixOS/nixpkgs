@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.19";
-  name = "xnee-${version}";
+  pname = "xnee";
 
   src = fetchurl {
-    url = "mirror://gnu/xnee/${name}.tar.gz";
+    url = "mirror://gnu/xnee/${pname}-${version}.tar.gz";
     sha256 = "04n2lac0vgpv8zsn7nmb50hf3qb56pmj90dmwnivg09gyrf1x92j";
   };
 

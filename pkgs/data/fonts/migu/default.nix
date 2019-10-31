@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "migu-${version}";
+  pname = "migu";
   version = "20150712";
 
   srcs = [

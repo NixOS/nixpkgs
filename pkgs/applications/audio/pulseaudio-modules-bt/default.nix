@@ -23,7 +23,7 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "pulseaudio-modules-bt-${version}";
+  pname = "pulseaudio-modules-bt";
   version = "1.3";
 
   src = fetchFromGitHub {

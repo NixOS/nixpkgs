@@ -16,7 +16,7 @@ let
       };
     };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   inherit name;
   inherit version;

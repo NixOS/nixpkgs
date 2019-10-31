@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ois-${version}";
+  pname = "ois";
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchurl {

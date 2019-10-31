@@ -45,6 +45,7 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
+      after = [ "network.target" ];
       requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
@@ -234,10 +235,10 @@ in
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
           # for correct use with systemd
           services = {
-            "samba-smbd" = daemonService "smbd" "";
-            "samba-nmbd" = mkIf cfg.enableNmbd (daemonService "nmbd" "");
-            "samba-winbindd" = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
-            "samba-setup" = {
+            samba-smbd = daemonService "smbd" "";
+            samba-nmbd = mkIf cfg.enableNmbd (daemonService "nmbd" "");
+            samba-winbindd = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
+            samba-setup = {
               description = "Samba Setup Task";
               script = setupScript;
               unitConfig.RequiresMountsFor = "/var/lib/samba";

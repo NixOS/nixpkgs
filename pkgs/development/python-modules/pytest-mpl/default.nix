@@ -26,13 +26,11 @@ buildPythonPackage rec {
     pytest
   ];
 
-  # disable tests on darwin, because it requires a framework build of Python
-  doCheck = !stdenv.isDarwin;
-
   checkPhase = ''
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.config/matplotlib
     echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
+    ln -s $HOME/.config/matplotlib $HOME/.matplotlib
 
     pytest
   '';

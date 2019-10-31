@@ -3,7 +3,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "f3";
   version = "7.2";
 

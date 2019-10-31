@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.8.1";
-  name = "jabref-${version}";
+  pname = "jabref";
 
   src = fetchurl {
     url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}.jar";

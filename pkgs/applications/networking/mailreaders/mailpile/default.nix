@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, python2Packages, gnupg1orig, openssl, git }:
 
 python2Packages.buildPythonApplication rec {
-  name = "mailpile-${version}";
+  pname = "mailpile";
   version = "1.0.0rc2";
 
   src = fetchFromGitHub {
     owner = "mailpile";
     repo = "Mailpile";
-    rev = "${version}";
+    rev = version;
     sha256 = "1z5psh00fjr8gnl4yjcl4m9ywfj24y1ffa2rfb5q8hq4ksjblbdj";
   };
 

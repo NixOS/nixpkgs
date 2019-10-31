@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gtk2 ];
 
   meta = {
-    description = "Gtk+ widget for displaying large amounts of numerical data";
+    description = "GTK widget for displaying large amounts of numerical data";
 
     license = stdenv.lib.licenses.lgpl2;
 

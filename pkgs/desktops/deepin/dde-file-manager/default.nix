@@ -9,7 +9,6 @@
   xdg-user-dirs, xorg, zlib, wrapGAppsHook }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-file-manager";
   version = "4.8.6.4";
 
@@ -239,7 +238,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "File manager and desktop module for Deepin Desktop Environment";

@@ -6,7 +6,8 @@ let
   generic = { version, sha256, ...}@attrs:
     let attrs' = builtins.removeAttrs attrs ["version" "sha256"] ; in
       buildGoPackage {
-        name = "kops-${version}";
+        pname = "kops";
+        inherit version;
 
         inherit goPackagePath;
 
@@ -42,7 +43,7 @@ let
           description = "Easiest way to get a production Kubernetes up and running";
           homepage = https://github.com/kubernetes/kops;
           license = licenses.asl20;
-          maintainers = with maintainers; [offline zimbatm];
+          maintainers = with maintainers; [offline zimbatm kampka];
           platforms = platforms.unix;
         };
       } // attrs';
@@ -56,7 +57,12 @@ in rec {
   };
 
   kops_1_13 = mkKops {
-    version = "1.13.0";
-    sha256 = "04kbbg3gqzwzzzq1lmnpw2gqky3pfwfk7pc0laxv2yssk9wac5k1";
+    version = "1.13.2";
+    sha256 = "0lkkg34vn020r62ga8vg5d3a8jwvq00xlv3p1s01nkz33f6salng";
+  };
+  
+  kops_1_14 = mkKops {
+    version = "1.14.0";
+    sha256 = "0zd2plsdn45wf73qspv9yaxa0crwfy5h6ws3lvw96vxvrkhl96l2";
   };
 }

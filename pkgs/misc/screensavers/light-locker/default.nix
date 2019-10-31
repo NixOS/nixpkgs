@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -45,7 +46,6 @@ stdenv.mkDerivation rec {
     libXext
     libXxf86vm
     systemd
-    wrapGAppsHook
   ];
 
   mesonFlags = [

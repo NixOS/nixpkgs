@@ -1,6 +1,6 @@
 { stdenv, fetchgit, asciidoc, docbook_xsl, libxslt }:
-stdenv.mkDerivation rec {
-  name    = "trace-cmd-${version}";
+stdenv.mkDerivation {
+  pname = "trace-cmd";
   version = "2.8.3";
 
   src = fetchgit (import ./src.nix);

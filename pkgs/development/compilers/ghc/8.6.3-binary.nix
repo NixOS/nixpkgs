@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
   name = "ghc-${version}-binary";
 
   src = fetchurl ({
-    "i686-linux" = {
+    i686-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb8-linux.tar.xz";
       sha256 = "0bw8a7fxcbskf93rb4m542ff66vrmx5i5kj77qx37cbhijx70w5m";
     };
-    "x86_64-linux" = {
+    x86_64-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb8-linux.tar.xz";
       sha256 = "1m9gaga2pzi2cx5gvasg0rx1dlvr68gmi20l67652kag6xjsa719";
     };
-    "x86_64-darwin" = {
+    x86_64-darwin = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "1hbzk57v45176kxcx848p5jn5p1xbp2129ramkbzsk6plyhnkl3r";
     };

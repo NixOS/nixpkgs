@@ -24,7 +24,7 @@ assert default != "qt5" -> default == "cli";
 assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
-  name = "avidemux-${version}";
+  pname = "avidemux";
   version = "2.7.4";
 
   src = fetchurl {

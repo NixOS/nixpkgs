@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "20170810";
-  name = "numix-solarized-gtk-theme-${version}";
+  pname = "numix-solarized-gtk-theme";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";

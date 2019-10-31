@@ -7,6 +7,7 @@
 , libtirpc
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
+, smartmontools, sysstat, sudo
 
 # Kernel dependencies
 , kernel ? null
@@ -19,7 +20,7 @@ let
 
   common = { version
     , sha256
-    , extraPatches
+    , extraPatches ? []
     , rev ? "zfs-${version}"
     , isUnstable ? false
     , incompatibleKernelVersion ? null }:
@@ -30,7 +31,7 @@ let
          Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
          ${stdenv.lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
        ''
-    else stdenv.mkDerivation rec {
+    else stdenv.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
       src = fetchFromGitHub {
@@ -103,6 +104,7 @@ let
       installFlags = [
         "sysconfdir=\${out}/etc"
         "DEFAULT_INITCONF_DIR=\${out}/default"
+        "INSTALL_MOD_PATH=\${out}"
       ];
 
       postInstall = optionalString buildKernel ''
@@ -130,6 +132,13 @@ let
         (cd $out/share/bash-completion/completions; ln -s zfs zpool)
       '';
 
+      postFixup = ''
+        path="PATH=${makeBinPath [ coreutils gawk gnused gnugrep utillinux smartmontools sysstat sudo ]}"
+        for i in $out/libexec/zfs/zpool.d/*; do
+          sed -i "2i$path" $i
+        done
+      '';
+
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
 
       meta = {
@@ -139,7 +148,7 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        homepage = http://zfsonlinux.org/;
+        homepage = https://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
@@ -154,27 +163,19 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.8.1";
+    version = "0.8.2";
 
-    sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
-
-    extraPatches = [
-      ./build-fixes-unstable.patch
-    ];
+    sha256 = "0miax0h2wg4b2kn8n93804faajy2n1sh25knyy2hg3k77nlr4pni";
   };
 
-  zfsUnstable = common rec {
+  zfsUnstable = common {
     # comment/uncomment if breaking kernel versions are known
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.1";
+    version = "0.8.2";
 
-    sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
+    sha256 = "0miax0h2wg4b2kn8n93804faajy2n1sh25knyy2hg3k77nlr4pni";
     isUnstable = true;
-
-    extraPatches = [
-      ./build-fixes-unstable.patch
-    ];
   };
 }

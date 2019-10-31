@@ -62,9 +62,8 @@ in  {
     systemd.services.strongswan-swanctl = {
       description = "strongSwan IPsec IKEv1/IKEv2 daemon using swanctl";
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network-online.target" "keys.target" ];
-      wants    = [ "keys.target" ];
-      path = with pkgs; [ kmod iproute iptables utillinux ];
+      after    = [ "network-online.target" ];
+      path     = with pkgs; [ kmod iproute iptables utillinux ];
       environment = {
         STRONGSWAN_CONF = pkgs.writeTextFile {
           name = "strongswan.conf";

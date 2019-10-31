@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, SDL, libGLU_combined, openal, curl, libXxf86vm }:
 
 stdenv.mkDerivation rec {
-  name = "urbanterror-${version}";
+  pname = "urbanterror";
   version = "4.3.4";
 
   srcs =

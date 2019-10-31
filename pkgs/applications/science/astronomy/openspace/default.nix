@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.11.1";
-  name    = "openspace-${version}";
+  pname = "openspace";
 
   src = fetchFromGitHub {
     owner  = "OpenSpace";

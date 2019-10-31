@@ -5,7 +5,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cliapp";
   version = "1.20150305";
   disabled = isPy3k;

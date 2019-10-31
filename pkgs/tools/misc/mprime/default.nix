@@ -15,7 +15,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mprime-${version}";
+  pname = "mprime";
   version = "29.4b7";
 
   src = fetchurl {

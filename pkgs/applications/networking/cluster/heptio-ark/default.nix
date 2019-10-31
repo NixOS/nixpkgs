@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "heptio-ark-${version}";
+  pname = "heptio-ark";
   version = "0.10.0";
 
   goPackagePath = "github.com/heptio/ark";

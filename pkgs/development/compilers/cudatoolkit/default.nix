@@ -16,7 +16,7 @@ let
     }:
 
     stdenv.mkDerivation rec {
-      name = "cudatoolkit-${version}";
+      pname = "cudatoolkit";
       inherit version runPatches;
 
       dontPatchELF = true;
@@ -180,9 +180,7 @@ let
       '';
       passthru = {
         cc = gcc;
-        majorVersion =
-          let versionParts = lib.splitString "." version;
-          in "${lib.elemAt versionParts 0}.${lib.elemAt versionParts 1}";
+        majorVersion = lib.versions.majorMinor version;
       };
 
       meta = with stdenv.lib; {

@@ -102,7 +102,6 @@ in
 
     systemd.services.triggerhappy = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "local-fs.target" ];
       description = "Global hotkey daemon";
       serviceConfig = {
         ExecStart = "${pkgs.triggerhappy}/bin/thd ${optionalString (cfg.user != "root") "--user ${cfg.user}"} --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";

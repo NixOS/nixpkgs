@@ -2,7 +2,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "websocat-${version}";
+  pname = "websocat";
   version = "1.3.0";
 
   src = fetchFromGitHub {

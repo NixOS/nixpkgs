@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "jython-${version}";
+  pname = "jython";
 
   version = "2.7.1";
 

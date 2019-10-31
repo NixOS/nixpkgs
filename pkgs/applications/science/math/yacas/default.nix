@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "yacas-${version}";
+  pname = "yacas";
   version = "1.6.1";
 
   src = fetchFromGitHub {

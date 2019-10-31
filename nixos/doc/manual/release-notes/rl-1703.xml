@@ -730,7 +730,7 @@ in
    </listitem>
    <listitem>
     <para>
-     <literal>jre</literal> now defaults to GTK+ UI by default. This improves
+     <literal>jre</literal> now defaults to GTK UI by default. This improves
      visual consistency and makes Java follow system font style, improving the
      situation on HighDPI displays. This has a cost of increased closure size;
      for server and other headless workloads it's recommended to use

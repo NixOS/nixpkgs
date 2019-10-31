@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-${version}";
+  pname = "gstreamer";
   version = "1.16.0";
 
   meta = with lib ;{
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
+    url = "${meta.homepage}/src/gstreamer/${pname}-${version}.tar.xz";
     sha256 = "003wy1p1in85p9sr5jsyhbnwqaiwz069flwkhyx7qhxy31qjz3hf";
   };
 

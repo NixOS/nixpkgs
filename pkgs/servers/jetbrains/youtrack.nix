@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, jre, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "youtrack-${version}";
+  pname = "youtrack";
   version = "2018.2.44329";
 
   jar = fetchurl {
-    url = "https://download.jetbrains.com/charisma/${name}.jar";
+    url = "https://download.jetbrains.com/charisma/${pname}-${version}.jar";
     sha256 = "1fnnpyikr1x443vxy6f7vlv550sbahpps8awyn13jpg7kpgfm7lk";
   };
 

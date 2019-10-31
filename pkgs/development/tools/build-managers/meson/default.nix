@@ -3,20 +3,20 @@
 let
   # See https://mesonbuild.com/Reference-tables.html#cpu-families
   cpuFamilies = {
-    "aarch64" = "aarch64";
-    "armv6l"  = "arm";
-    "armv7l"  = "arm";
-    "i686"    = "x86";
-    "x86_64"  = "x86_64";
+    aarch64 = "aarch64";
+    armv6l  = "arm";
+    armv7l  = "arm";
+    i686    = "x86";
+    x86_64  = "x86_64";
   };
 in
 python3Packages.buildPythonApplication rec {
   pname = "meson";
-  version = "0.50.1";
+  version = "0.51.2";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "05k3wsxjcnnq7a8n5kzxh2cdh5jdkh13xagigz5axs48j36zfai4";
+    sha256 = "0cqhkjbab1mbvxmbjvyfrbjfkm7bh436svqpjapca36c2k9h1vwr";
   };
 
   postFixup = ''
@@ -60,6 +60,7 @@ python3Packages.buildPythonApplication rec {
     # pass it `-Wl,-O1` flag but optimizations are not recognized by
     # Mac linker.
     # https://github.com/mesonbuild/meson/issues/4784
+    # Should be fixed in 0.52
     ./fix-objc-linking.patch
   ];
 

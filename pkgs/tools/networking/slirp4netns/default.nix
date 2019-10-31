@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
-  name = "slirp4netns-${version}";
+  pname = "slirp4netns";
   version = "0.3.0";
 
   src = fetchFromGitHub {

@@ -32,7 +32,7 @@ in
     };
 
     updateAt = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       example = "hourly";
       description = ''
@@ -50,7 +50,7 @@ in
         description = ''Enable the awstats web service. This switches on httpd.'';
       };
       urlPrefix = mkOption {
-        type = types.string;
+        type = types.str;
         default = "/awstats";
         description = "The URL prefix under which the awstats service appears.";
       };

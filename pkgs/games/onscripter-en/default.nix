@@ -3,7 +3,7 @@
 , SDL, SDL_image, SDL_mixer, SDL_ttf }:
 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "onscripter-en-20110930";
 
   src = fetchurl {

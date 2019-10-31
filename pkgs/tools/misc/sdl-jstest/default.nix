@@ -1,7 +1,7 @@
 { stdenv, fetchgit, cmake, pkgconfig, SDL, SDL2, ncurses, docbook_xsl, git }:
 
-stdenv.mkDerivation rec {
-  name = "sdl-jstest-${version}";
+stdenv.mkDerivation {
+  pname = "sdl-jstest";
   version = "2018-06-15";
 
   # Submodules

@@ -12,7 +12,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "trilium-${version}";
+  pname = "trilium";
   version = "0.33.6";
 
   src = fetchurl {

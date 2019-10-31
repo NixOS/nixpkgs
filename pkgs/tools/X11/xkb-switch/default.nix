@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, libX11, libxkbfile }:
 
 stdenv.mkDerivation rec {
-  name = "xkb-switch-${version}";
+  pname = "xkb-switch";
   version = "1.6.0";
 
   src = fetchFromGitHub {

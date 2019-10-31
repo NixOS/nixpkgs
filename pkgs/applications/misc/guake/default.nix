@@ -3,7 +3,7 @@
 
 let
   version = "3.6.3";
-in python3.pkgs.buildPythonApplication rec {
+in python3.pkgs.buildPythonApplication {
   name = "guake-${version}";
   format = "other";
 

@@ -8,7 +8,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "texinfo-${optionalString interactive "interactive-"}${version}";
   inherit version;
 

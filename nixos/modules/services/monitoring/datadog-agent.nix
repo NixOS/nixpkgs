@@ -87,7 +87,7 @@ in {
       description = "The hostname to show in the Datadog dashboard (optional)";
       default = null;
       example = "mymachine.mydomain";
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.str;
     };
 
     logLevel = mkOption {

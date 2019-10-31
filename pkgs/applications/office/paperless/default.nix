@@ -33,7 +33,7 @@
 
 let
   paperless = stdenv.mkDerivation rec {
-    name = "paperless-${version}";
+    pname = "paperless";
     version = "2.7.0";
 
     src = fetchFromGitHub {
@@ -55,6 +55,12 @@ let
       srcDir=$out/share/paperless
       mkdir -p $srcDir
       cp -r --no-preserve=mode $src/src/* $src/LICENSE $srcDir
+    '';
+
+    postPatch = ''
+      # django-cors-headers 3.x requires a scheme for allowed hosts
+      substituteInPlace $out/share/paperless/paperless/settings.py \
+        --replace "localhost:8080" "http://localhost:8080"
     '';
 
     buildPhase = let

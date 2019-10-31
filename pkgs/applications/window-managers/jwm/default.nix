@@ -4,7 +4,7 @@
   librsvg, freetype, fontconfig }:
 
 stdenv.mkDerivation rec {
-  name = "jwm-${version}";
+  pname = "jwm";
   version = "1685";
   
   src = fetchFromGitHub {

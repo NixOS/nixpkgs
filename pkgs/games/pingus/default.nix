@@ -2,7 +2,7 @@
 , pkgconfig, libGLU_combined}:
 let
   s = # Generated upstream information
-  rec {
+  {
     baseName="pingus";
     version="0.7.6";
     name="pingus-0.7.6";
@@ -11,7 +11,7 @@ let
     sha256="0q34d2k6anzqvb0mf67x85q92lfx9jr71ry13dlp47jx0x9i573m";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (s) name version;
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [scons SDL SDL_image boost libpng SDL_mixer libGLU_combined];

@@ -2,12 +2,12 @@
 , librsvg, gettext, itstool, python3, libxml2, libgnome-games-support, libgee, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-mines-${version}";
-  version = "3.32.2";
+  pname = "gnome-mines";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mines/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1nv966wkp2rqxzcdb76bwlbzpjqadcaqzrnkxpzwnvjjr167yx8g";
+    url = "mirror://gnome/sources/gnome-mines/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1spxa6qr1y8s5rrsvpciywpvhk812ngn95s1apaxaigwy2g1iw54";
   };
 
   # gobject-introspection for finding vapi files

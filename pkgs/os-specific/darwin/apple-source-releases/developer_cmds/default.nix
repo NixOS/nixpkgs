@@ -1,6 +1,6 @@
 { stdenv, appleDerivation, xcbuildHook }:
 
-appleDerivation rec {
+appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
 
   patchPhase = ''

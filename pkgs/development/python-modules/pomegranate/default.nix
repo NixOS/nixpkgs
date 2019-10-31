@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "jmschrei";
     rev = "v${version}";
-    sha256 = "0gf7z343ag4g7pfccn1sdap3ihkaxrc9ca75awjhmsa2cyqs66df";
+    sha256 = "19kdzqyj86aldsls68a6ymrs8sasv3a8r4wjmfdmcif1xsg6zb4q";
   };
 
   propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, bison, flex, autoconf, automake, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "bip-${version}";
+  pname = "bip";
   version = "0.8.9";
 
   # fetch sources from debian, because the creator's website provides
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" "-Wno-error=duplicate-decl-specifier" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" "-Wno-error=duplicate-decl-specifier" "-Wno-error=format-truncation" ];
 
   meta = {
     description = "An IRC proxy (bouncer)";

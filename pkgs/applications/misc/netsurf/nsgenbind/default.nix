@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "netsurf-nsgenbind-${version}";
+  pname = "netsurf-nsgenbind";
   version = "0.7";
 
   src = fetchurl {

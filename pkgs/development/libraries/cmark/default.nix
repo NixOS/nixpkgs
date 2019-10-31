@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.29.0";
-  name = "cmark-${version}";
+  pname = "cmark";
 
   src = fetchFromGitHub {
     owner = "jgm";

@@ -2,12 +2,12 @@
   libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec{
-  name = "tinyproxy-${version}";
+  pname = "tinyproxy";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     sha256 = "0gzapnllzyc005l3rs6iarjk1p5fc8mf9ysbck1mbzbd8xg6w35s";
-    rev = "${version}";
+    rev = version;
     repo = "tinyproxy";
     owner = "tinyproxy";
   };

@@ -1,6 +1,6 @@
 { stdenv, kernel, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "anbox-modules";
   version = "2019-07-13-" + kernel.version;
 

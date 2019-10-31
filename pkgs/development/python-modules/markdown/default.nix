@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , nose
 , pyyaml
 }:
@@ -13,6 +14,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a";
   };
+
+  propagatedBuildInputs = [ setuptools ];
 
   checkInputs = [ nose pyyaml ];
 

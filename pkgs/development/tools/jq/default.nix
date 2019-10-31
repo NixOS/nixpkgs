@@ -1,7 +1,7 @@
 { stdenv, fetchurl, oniguruma }:
 
 stdenv.mkDerivation rec {
-  name = "jq-${version}";
+  pname = "jq";
   version="1.6";
 
   src = fetchurl {

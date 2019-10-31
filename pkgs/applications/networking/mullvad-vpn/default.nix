@@ -71,13 +71,9 @@ stdenv.mkDerivation rec {
     mv opt/Mullvad\ VPN/* $out/share/mullvad
 
     sed -i 's|\/opt\/Mullvad.*VPN|'$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
-    sed -i 's|\/opt\/Mullvad.*VPN/resources|'$out'/bin|g' $out/share/mullvad/resources/mullvad-daemon.service
 
     ln -s $out/share/mullvad/mullvad-vpn $out/bin/mullvad-vpn
     ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
-
-    mkdir -p $out/etc/systemd/system
-    ln -s $out/share/mullvad/resources/mullvad-daemon.service $out/etc/systemd/system/mullvad-daemon.service
 
     runHook postInstall
   '';
@@ -88,6 +84,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
+    maintainers = [ maintainers.xfix ];
   };
 
 }

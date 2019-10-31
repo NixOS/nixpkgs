@@ -1,7 +1,7 @@
 { stdenv, fetchurl, zlib, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "odt2txt-${version}";
+  pname = "odt2txt";
   version = "0.5";
 
   src = fetchurl {

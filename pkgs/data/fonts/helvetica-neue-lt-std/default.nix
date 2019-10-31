@@ -2,7 +2,7 @@
 
 let
   version = "2013.06.07"; # date of most recent file in distribution
-in fetchzip rec {
+in fetchzip {
   name = "helvetica-neue-lt-std-${version}";
 
   url = "http://www.ephifonts.com/downloads/helvetica-neue-lt-std.zip";

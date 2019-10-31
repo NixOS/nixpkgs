@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, glib }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-workspace-grid-${version}";
+  pname = "gnome-shell-workspace-grid";
   version = "0f3a430e7d04bb5465a17c1225aab0f574426d6b";
 
   src = fetchFromGitHub {

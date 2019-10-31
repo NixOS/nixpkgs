@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.3";
-  name = "kpcli-${version}";
+  pname = "kpcli";
 
   src = fetchurl {
-    url = "mirror://sourceforge/kpcli/${name}.pl";
+    url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
     sha256 = "1z6dy70d3ag16vgzzafcnxb8gap3wahfmy4vd22fpgbrdd6riph4";
   };
 

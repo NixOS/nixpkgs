@@ -1,10 +1,8 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, astring, cmdliner, cppo, fmt, logs, ocaml-migrate-parsetree, ocaml_lwt, pandoc, re }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, astring, cmdliner, cppo, fmt, logs, ocaml-migrate-parsetree, ocaml_lwt, pandoc, re }:
 
 buildDunePackage rec {
   pname = "mdx";
   version = "1.4.0";
-
-  minimumOCamlVersion = "4.05";
 
   src = fetchFromGitHub {
     owner = "realworldocaml";
@@ -15,14 +13,16 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ astring cmdliner fmt logs ocaml-migrate-parsetree re ];
-  checkInputs = [ ocaml_lwt pandoc ];
+  checkInputs = lib.optionals doCheck [ ocaml_lwt pandoc ];
 
-  doCheck = true;
+  doCheck = !lib.versionAtLeast ocaml.version "4.08";
+
+  dontStrip = lib.versions.majorMinor ocaml.version == "4.04";
 
   meta = {
     homepage = https://github.com/realworldocaml/mdx;
     description = "Executable OCaml code blocks inside markdown files";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

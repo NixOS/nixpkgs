@@ -2,7 +2,7 @@
 , openssh, openssl, pkgconfig, cmake, zlib, curl, libiconv
 , CoreFoundation, Security }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "rls";
   inherit (rustPlatform.rust.rustc) src version;
 

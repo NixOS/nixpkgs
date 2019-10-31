@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, SDL, SDL_image, SDL_mixer, zlib }:
 
-stdenv.mkDerivation rec {
-  name = "meritous-${version}";
+stdenv.mkDerivation {
+  pname = "meritous";
   version = "1.4";
 
   src = fetchFromGitLab {

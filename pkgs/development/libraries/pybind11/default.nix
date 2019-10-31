@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, catch, python, eigen }:
 
 stdenv.mkDerivation rec {
-  name = "pybind-${version}";
+  pname = "pybind";
   version = "2.2.4";
 
   src = fetchFromGitHub {

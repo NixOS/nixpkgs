@@ -31,6 +31,6 @@ let
 
   throwFlag = throw "${versionPolicy} is not a valid versionPolicy - Options are either 'release' or 'master' (defaults to release).";
 
-  versionFlag = { "release" = "-r"; "master" = "-m"; }.${versionPolicy} or throwFlag;
+  versionFlag = { release = "-r"; master = "-m"; }.${versionPolicy} or throwFlag;
 
 in [ updateScript versionFlag repoName attrPath ]

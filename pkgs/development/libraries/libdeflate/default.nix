@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "libdeflate-${version}";
+  pname = "libdeflate";
   version = "1.3";
 
   src = fetchFromGitHub {

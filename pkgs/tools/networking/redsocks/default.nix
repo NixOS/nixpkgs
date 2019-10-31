@@ -4,7 +4,7 @@ let
   pkg = "redsocks";
   version = "0.5";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pkg}-${version}";
 
   src = fetchFromGitHub {

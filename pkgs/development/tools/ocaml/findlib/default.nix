@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-findlib-${version}";
+  pname = "ocaml-findlib";
   version = "1.8.1";
 
   src = fetchurl {

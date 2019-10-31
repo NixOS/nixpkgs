@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , glib
 , gtk3
-, hicolor-icon-theme
+, vala
 , json-glib
 , libgee
 , meson
@@ -16,20 +16,20 @@
 
 stdenv.mkDerivation rec {
   pname = "timetable";
-  version = "1.0.6";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "080xgp917v6j40qxy0y1iycz01yylbcr8pahx6zd6mpi022ccfv0";
+    sha256 = "1n02y7vpi4lb888iic06xifc86n2xirk50s1ssf84vlc5md1kq9f";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkgconfig
-    pantheon.vala
+    vala
     python3
     wrapGAppsHook
   ];
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    hicolor-icon-theme
     json-glib
     libgee
     pantheon.granite

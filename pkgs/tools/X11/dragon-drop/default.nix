@@ -1,7 +1,7 @@
 { stdenv, gtk, pkgconfig, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "dragon-drop-${version}";
+  pname = "dragon-drop";
   version = "1.1.0";
 
   src = fetchFromGitHub {

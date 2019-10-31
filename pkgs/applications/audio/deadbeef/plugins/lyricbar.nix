@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, deadbeef, gtkmm3, libxmlxx3 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "deadbeef-lyricbar-plugin";
   version = "unstable-2019-01-29";
 

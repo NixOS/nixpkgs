@@ -36,8 +36,8 @@ let lispPackages = rec {
     };
   };
 
-  quicklisp-to-nix-system-info = stdenv.mkDerivation rec {
-    name = "quicklisp-to-nix-system-info-${version}";
+  quicklisp-to-nix-system-info = stdenv.mkDerivation {
+    pname = "quicklisp-to-nix-system-info";
     version = "1.0.0";
     src = ./quicklisp-to-nix;
     nativeBuildInputs = [sbcl];
@@ -57,8 +57,8 @@ let lispPackages = rec {
     dontStrip = true;
   };
 
-  quicklisp-to-nix = stdenv.mkDerivation rec {
-    name = "quicklisp-to-nix-${version}";
+  quicklisp-to-nix = stdenv.mkDerivation {
+    pname = "quicklisp-to-nix";
     version = "1.0.0";
     src = ./quicklisp-to-nix;
     buildDependencies = [sbcl quicklisp-to-nix-system-info];

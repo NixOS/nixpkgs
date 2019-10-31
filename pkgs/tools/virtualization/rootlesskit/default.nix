@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "rootlesskit-${version}";
+  pname = "rootlesskit";
   version = "0.3.0-alpha.2";
   goPackagePath = "github.com/rootless-containers/rootlesskit";
 

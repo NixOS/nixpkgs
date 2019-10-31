@@ -1,12 +1,17 @@
 generic: {
+  v44 = generic {
+    version = "4.4.0";
+    sha256 = "1a4csx1i21lcavfvj5djalcnxnlyh4mhk4dddzm895ipl87afzf4";
+  };
+
   v42 = generic {
-    version = "4.2.5";
-    sha256 = "135bfafydmd66q97za84micymgf38s9zydp6jssrf7azik699fjd";
+    version = "4.2.7";
+    sha256 = "09znh8x1sass5mw6wjrfmizjbfls8ad2c16y24ldfj40hlfxz6wx";
   };
 
   v40 = generic {
-    version = "4.0.11";
-    sha256 = "02c4c82vbc27v09rci7flvwvjyb5sx0mknw0fz5i8bb23k1jbbxh";
+    version = "4.0.13";
+    sha256 = "1hz4sdj4nw8fh124dqd41ag2wv4rcp4snpxgk80nx76rssw6c9ny";
   };
 
   v30 = generic {

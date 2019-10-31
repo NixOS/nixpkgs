@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "calcurse-${version}";
-  version = "4.5.0";
+  pname = "calcurse";
+  version = "4.5.1";
 
   src = fetchurl {
-    url = "https://calcurse.org/files/${name}.tar.gz";
-    sha256 = "1vjwcmp51h7dsvwn0qx93w9chp3wp970v7d9mjhk7jyamcbfywn3";
+    url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
+    sha256 = "0cgkd285x5pk62lmdx9fjxl46c5lj8wj2cqbxq7d99yb4il5fdjk";
   };
 
   buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];

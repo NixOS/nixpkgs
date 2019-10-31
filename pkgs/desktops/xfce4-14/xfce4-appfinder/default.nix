@@ -1,6 +1,6 @@
 { mkXfceDerivation, exo, garcon, gtk3, libxfce4util, libxfce4ui, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-appfinder";
   version = "4.14.0";

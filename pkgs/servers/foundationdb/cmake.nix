@@ -21,8 +21,8 @@ let
     , rev ? "refs/tags/${version}"
     , officialRelease ? true
     , patches ? []
-    }: stdenv.mkDerivation rec {
-        name = "foundationdb-${version}";
+    }: stdenv.mkDerivation {
+        pname = "foundationdb";
         inherit version;
 
         src = fetchFromGitHub {

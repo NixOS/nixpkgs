@@ -19,9 +19,9 @@ in
 
 stdenv.mkDerivation rec {
   version = "5.1.0";
-  name = "octave-${version}";
+  pname = "octave";
   src = fetchurl {
-    url = "mirror://gnu/octave/${name}.tar.gz";
+    url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
     sha256 = "15blrldzwyxma16rnd4n01gnsrriii0dwmyca6m7qz62r8j12sz3";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care
   postInstall = ''
-    cp test/fntests.log $out/share/octave/${name}-fntests.log || true
+    cp test/fntests.log $out/share/octave/${pname}-${version}-fntests.log || true
   '';
 
   passthru = {

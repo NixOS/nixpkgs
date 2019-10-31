@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libosip, openssl, pkgconfig, fetchpatch }:
 
 stdenv.mkDerivation rec {
- name = "libexosip2-${version}";
+ pname = "libexosip2";
  version = "4.1.0";
 
  src = fetchurl {

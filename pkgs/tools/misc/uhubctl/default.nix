@@ -5,19 +5,18 @@
 
 stdenv.mkDerivation rec {
   pname = "uhubctl";
-  version = "unstable-2019-07-31";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "mvp";
     repo = "uhubctl";
-    rev = "1961aa02e9924a54a6219d16c61a0beb0d626e46";
-    sha256 = "15mvqp1xh079nqp0mynh3l1wmw4maa320pn4jr8bz7nh3knmk0n1";
+    rev = "refs/tags/v${version}";
+    sha256 = "1cgmwsf68g49k6q4jvz073bpjhg5p73kk1a4kbgkxmvx01gmbcmq";
   };
 
   buildInputs = [ libusb ];
 
-  installFlags = [ "prefix=$(out)" ];
-
+  installFlags = [ "prefix=${placeholder "out"}" ];
   meta = with stdenv.lib; {
     homepage = "https://github.com/mvp/uhubctl";
     description = "Utility to control USB power per-port on smart USB hubs";

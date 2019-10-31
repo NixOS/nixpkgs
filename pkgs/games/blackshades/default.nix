@@ -1,6 +1,6 @@
 {stdenv, fetchsvn, SDL, libGLU_combined, openal, libvorbis, freealut, SDL_image}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "blackshades-svn-110";
   src = fetchsvn {
     url = svn://svn.icculus.org/blackshades/trunk;

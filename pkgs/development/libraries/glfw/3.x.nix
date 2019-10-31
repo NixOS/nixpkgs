@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   version = "3.2.1";
-  name = "glfw-${version}";
+  pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
-    rev = "${version}";
+    rev = version;
     sha256 = "0gq6ad38b3azk0w2yy298yz2vmg2jmf9g0ydidqbmiswpk25ills";
   };
 

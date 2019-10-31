@@ -2,19 +2,15 @@
 
 buildDunePackage rec {
   pname = "lambda-term";
-  version = "1.13";
-
-  minimumOCamlVersion = "4.02";
+  version = "2.0.2";
 
   src = fetchurl {
-    url = "https://github.com/diml/${pname}/archive/${version}.tar.gz";
-    sha256 = "1hy5ryagqclgdm9lzh1qil5mrynlypv7mn6qm858hdcnmz9zzn0l";
+    url = "https://github.com/ocaml-community/lambda-term/releases/download/${version}/lambda-term-${version}.tbz";
+    sha256 = "1p9yczrx78pf5hvhcg1qiqb2vdlmw6bmhhjsm4wiqjq2cc6piaqw";
   };
 
   buildInputs = [ libev ];
   propagatedBuildInputs = [ zed lwt_log lwt_react ];
-
-  hasSharedObjects = true;
 
   meta = { description = "Terminal manipulation library for OCaml";
     longDescription = ''

@@ -4,13 +4,13 @@
 }:
 
 mkDerivation rec {
-  name = "clipgrab-${version}";
-  version = "3.8.4";
+  pname = "clipgrab";
+  version = "3.8.5";
 
   src = fetchurl {
-    sha256 = "0pyrg3rrsd538vnrv6x2frhbq9k2638nzffjsar1p76wxp8fm42s";
+    sha256 = "0jfjnzwvz4ynlld0ih7f7d575s5w2dag0hvb02c6qan7xm5jdhv9";
     # The .tar.bz2 "Download" link is a binary blob, the source is the .tar.gz!
-    url = "https://download.clipgrab.org/${name}.tar.gz";
+    url = "https://download.clipgrab.org/${pname}-${version}.tar.gz";
   };
 
   buildInputs = [ ffmpeg qtbase qtdeclarative qtlocation qtquickcontrols2 qtwebchannel qtwebengine ];

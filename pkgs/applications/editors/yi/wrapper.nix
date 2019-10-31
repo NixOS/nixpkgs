@@ -8,8 +8,8 @@ let
   yiEnv = haskellPackages.ghcWithPackages
     (self: [ self.yi ] ++ extraPackages self);
 in
-stdenv.mkDerivation rec {
-  name = "yi-custom-${version}";
+stdenv.mkDerivation {
+  pname = "yi-custom";
   version = "0.0.0.1";
   dontUnpack = true;
   nativeBuildInputs = [ makeWrapper ];

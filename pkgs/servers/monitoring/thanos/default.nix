@@ -1,16 +1,16 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "thanos";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    owner = "improbable-eng";
+    owner = "thanos-io";
     repo = "thanos";
-    sha256 = "0vcp7m8fsk4jyk49jh9wmbvkx5k03xw10f4lbsxfmwib1y5pz2x0";
+    sha256 = "0yxa1wipab1n9bh95n237c9l1sx1nx7r8snsk4nzpmwr3y1b4nn8";
   };
 
-  modSha256 = "139b66jdryqv4s1hjbn9fzkyzn1160wr4z6a6wmmvm3f6p6wgjxp";
+  modSha256 = "0iz16yj41gahsyb6mxbmjs8mjhp5c96dmw75rg9bh5xdh8qh767m";
 
   subPackages = "cmd/thanos";
 
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Highly available Prometheus setup with long term storage capabilities";
-    homepage = "https://github.com/improbable-eng/thanos";
+    homepage = "https://github.com/thanos-io/thanos";
     license = licenses.asl20;
     maintainers = with maintainers; [ basvandijk ];
     platforms = platforms.unix;

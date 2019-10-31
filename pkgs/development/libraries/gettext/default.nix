@@ -2,11 +2,11 @@
 
 let allowBisonDependency = !stdenv.isDarwin; in
 stdenv.mkDerivation rec {
-  name = "gettext-${version}";
+  pname = "gettext";
   version = "0.19.8.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gettext/${name}.tar.gz";
+    url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
     sha256 = "0hsw28f9q9xaggjlsdp2qmbp2rbd1mp0njzan2ld9kiqwkq2m57z";
   };
   patches = [
