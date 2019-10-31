@@ -2476,6 +2476,8 @@ in {
 
   filetype = callPackage ../development/python-modules/filetype { };
 
+  flammkuchen = callPackage ../development/python-modules/flammkuchen { };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flit = callPackage ../development/python-modules/flit { };
