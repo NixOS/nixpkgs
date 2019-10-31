@@ -35,13 +35,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.1.3";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1y7a4xjwl3bpls56ys6g3s6mh5b3qbjm2vw7b6n2i4x7a63c4cbh";
+    sha256 = "1whdx0vgm0qbbzsw8dg2liz3cbh3ad5ybkriy4lmx5ynyhpbz0sx";
   };
 
   passthru = {
@@ -68,16 +68,6 @@ stdenv.mkDerivation rec {
     libsoup
     wingpanel
   ];
-
-  patches = [
-    # See: https://github.com/elementary/wingpanel-indicator-datetime/pull/117
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-datetime/commit/4859e72a52d8dac5cad87b192fc912fb013b0ecd.patch";
-      sha256 = "0jfhb5sax4sivdfx7il1rc1dvhy0yfv27qhvwbdy0hza9wf8q9k0";
-    })
-  ];
-
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py
