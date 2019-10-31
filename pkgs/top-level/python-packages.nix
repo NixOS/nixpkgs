@@ -521,6 +521,8 @@ in {
 
   deap = callPackage ../development/python-modules/deap { };
 
+  deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
+
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
   dictionaries = callPackage ../development/python-modules/dictionaries { };
