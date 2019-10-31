@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, dbus, dbus-glib
+{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, fetchpatch, dbus, dbus-glib
 , gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
 , libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
@@ -62,6 +62,13 @@ in stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Fixes https://github.com/NixOS/nixpkgs/issues/72330
+    # Upstream MR: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/merge_requests/323
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/ed03fcbd17a7f73faad2adf7bf21ae77ad93740d.patch";
+      sha256 = "1vv9c1i499900kjnisirby3jz9b99nwcm87r9x20xp4p73zpq2ry";
+    })
   ];
 
   buildInputs = [
