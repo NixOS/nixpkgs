@@ -8543,6 +8543,9 @@ in
 
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
+  sapmachine = callPackage ../development/compilers/sapmachine { };
+  sapmachine_11 = callPackage ../development/compilers/sapmachine/11.nix { };
+
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
 
