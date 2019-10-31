@@ -6661,6 +6661,8 @@ in
 
   tpm2-tools = callPackage ../tools/security/tpm2-tools { };
 
+  trezor-udev-rules = callPackage ../os-specific/linux/trezor-udev-rules {};
+
   trezord = callPackage ../servers/trezord { };
 
   tthsum = callPackage ../applications/misc/tthsum { };
