@@ -1304,7 +1304,13 @@ in
 
   cardpeek = callPackage ../applications/misc/cardpeek { };
 
-  cawbird = callPackage ../applications/networking/cawbird { };
+  cawbird = callPackage ../applications/networking/cawbird {
+    glib-networking = glib-networking.override { 
+      gnutls = callPackage ../applications/networking/cawbird/gnutls-twitter.nix {
+        inherit (darwin.apple_sdk.frameworks) Security;
+      };
+    };
+  };
 
   cde = callPackage ../tools/package-management/cde { };
 

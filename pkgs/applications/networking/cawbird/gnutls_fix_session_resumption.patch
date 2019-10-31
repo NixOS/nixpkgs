@@ -1,0 +1,609 @@
+From afa6e340c084542ef416afc9aaaa6dd0329f5507 Mon Sep 17 00:00:00 2001
+From: Nikos Mavrogiannopoulos <nmav@gnutls.org>
+Date: Tue, 8 Oct 2019 07:23:31 +0200
+Subject: [PATCH] session tickets: parse extension during session resumption on
+ client side
+
+It is possible for a server to send a new session ticket during
+TLS1.2 resumption. To be able to parse it as client we need to
+check the extension during resumption as well.
+
+Resolves: #841
+
+Signed-off-by: Nikos Mavrogiannopoulos <nmav@gnutls.org>
+---
+ NEWS                            |  3 +++
+ lib/ext/alpn.c                  |  3 ++-
+ lib/ext/client_cert_type.c      |  3 ++-
+ lib/ext/cookie.c                |  3 ++-
+ lib/ext/dumbfw.c                |  3 ++-
+ lib/ext/early_data.c            |  3 ++-
+ lib/ext/ec_point_formats.c      |  3 ++-
+ lib/ext/etm.c                   |  3 ++-
+ lib/ext/ext_master_secret.c     |  3 ++-
+ lib/ext/heartbeat.c             |  3 ++-
+ lib/ext/key_share.c             |  3 ++-
+ lib/ext/max_record.c            |  3 ++-
+ lib/ext/post_handshake.c        |  3 ++-
+ lib/ext/pre_shared_key.c        |  3 ++-
+ lib/ext/psk_ke_modes.c          |  3 ++-
+ lib/ext/record_size_limit.c     |  3 ++-
+ lib/ext/safe_renegotiation.c    |  3 ++-
+ lib/ext/server_cert_type.c      |  3 ++-
+ lib/ext/server_name.c           |  3 ++-
+ lib/ext/session_ticket.c        |  7 ++++++-
+ lib/ext/signature.c             |  3 ++-
+ lib/ext/srp.c                   |  3 ++-
+ lib/ext/srtp.c                  |  3 ++-
+ lib/ext/status_request.c        |  3 ++-
+ lib/ext/supported_groups.c      |  3 ++-
+ lib/ext/supported_versions.c    |  3 ++-
+ lib/hello_ext.c                 | 36 ++++++++++++++++++---------------
+ lib/hello_ext.h                 |  3 ++-
+ lib/includes/gnutls/gnutls.h.in |  4 ++--
+ tests/gnutls-cli-resume.sh      | 17 ++++++++++++++++
+ 30 files changed, 98 insertions(+), 44 deletions(-)
+
+diff --git a/lib/ext/alpn.c b/lib/ext/alpn.c
+index b9991f0a1a..7cc7997560 100644
+--- a/lib/ext/alpn.c
++++ b/lib/ext/alpn.c
+@@ -39,7 +39,8 @@ const hello_ext_entry_st ext_mod_alpn = {
+ 	.tls_id = 16,
+ 	.gid = GNUTLS_EXTENSION_ALPN,
+ 	/* this extension must be parsed even on resumption */
+-	.parse_type = GNUTLS_EXT_MANDATORY,
++	.client_parse_point = GNUTLS_EXT_MANDATORY,
++	.server_parse_point = GNUTLS_EXT_MANDATORY,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS |
+ 		    GNUTLS_EXT_FLAG_CLIENT_HELLO | GNUTLS_EXT_FLAG_EE |
+ 		    GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+diff --git a/lib/ext/client_cert_type.c b/lib/ext/client_cert_type.c
+index b627b71f94..34f4dcfa42 100644
+--- a/lib/ext/client_cert_type.c
++++ b/lib/ext/client_cert_type.c
+@@ -48,7 +48,8 @@ const hello_ext_entry_st ext_mod_client_cert_type = {
+ 	.name = "Client Certificate Type",
+ 	.tls_id = 19,
+ 	.gid = GNUTLS_EXTENSION_CLIENT_CERT_TYPE,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS |
+ 		GNUTLS_EXT_FLAG_DTLS |
+ 		GNUTLS_EXT_FLAG_CLIENT_HELLO |
+diff --git a/lib/ext/cookie.c b/lib/ext/cookie.c
+index 0feb2f0e5a..b4608f3a91 100644
+--- a/lib/ext/cookie.c
++++ b/lib/ext/cookie.c
+@@ -41,7 +41,8 @@ const hello_ext_entry_st ext_mod_cookie = {
+ 	.gid = GNUTLS_EXTENSION_COOKIE,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_HRR | GNUTLS_EXT_FLAG_IGNORE_CLIENT_REQUEST,
+-	.parse_type = GNUTLS_EXT_MANDATORY, /* force parsing prior to EXT_TLS extensions */
++	.client_parse_point = GNUTLS_EXT_MANDATORY, /* force parsing prior to EXT_TLS extensions */
++	.server_parse_point = GNUTLS_EXT_MANDATORY, /* force parsing prior to EXT_TLS extensions */
+ 	.recv_func = cookie_recv_params,
+ 	.send_func = cookie_send_params,
+ 	.pack_func = NULL,
+diff --git a/lib/ext/dumbfw.c b/lib/ext/dumbfw.c
+index 7ff013e8d1..dfd2ee0181 100644
+--- a/lib/ext/dumbfw.c
++++ b/lib/ext/dumbfw.c
+@@ -40,7 +40,8 @@ const hello_ext_entry_st ext_mod_dumbfw = {
+ 	.name = "ClientHello Padding",
+ 	.tls_id = 21,
+ 	.gid = GNUTLS_EXTENSION_DUMBFW,
+-	.parse_type = GNUTLS_EXT_APPLICATION,
++	.client_parse_point = GNUTLS_EXT_APPLICATION,
++	.server_parse_point = GNUTLS_EXT_APPLICATION,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_CLIENT_HELLO,
+ 	.recv_func = NULL,
+ 	.send_func = _gnutls_dumbfw_send_params,
+diff --git a/lib/ext/early_data.c b/lib/ext/early_data.c
+index 4644f296ab..8bb2c012cb 100644
+--- a/lib/ext/early_data.c
++++ b/lib/ext/early_data.c
+@@ -40,7 +40,8 @@ const hello_ext_entry_st ext_mod_early_data = {
+ 	.tls_id = 42,
+ 	.gid = GNUTLS_EXTENSION_EARLY_DATA,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_CLIENT_HELLO | GNUTLS_EXT_FLAG_EE,
+-	.parse_type = GNUTLS_EXT_MANDATORY, /* force parsing prior to EXT_TLS extensions */
++	.client_parse_point = GNUTLS_EXT_MANDATORY, /* force parsing prior to EXT_TLS extensions */
++	.server_parse_point = GNUTLS_EXT_MANDATORY, /* force parsing prior to EXT_TLS extensions */
+ 	.recv_func = early_data_recv_params,
+ 	.send_func = early_data_send_params,
+ 	.pack_func = NULL,
+diff --git a/lib/ext/ec_point_formats.c b/lib/ext/ec_point_formats.c
+index c702d434c0..d426580b19 100644
+--- a/lib/ext/ec_point_formats.c
++++ b/lib/ext/ec_point_formats.c
+@@ -41,7 +41,8 @@ const hello_ext_entry_st ext_mod_supported_ec_point_formats = {
+ 	.name = "Supported EC Point Formats",
+ 	.tls_id = 11,
+ 	.gid = GNUTLS_EXTENSION_SUPPORTED_EC_POINT_FORMATS,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS |
+ 		    GNUTLS_EXT_FLAG_CLIENT_HELLO | GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+ 	.recv_func = _gnutls_supported_ec_point_formats_recv_params,
+diff --git a/lib/ext/etm.c b/lib/ext/etm.c
+index ad335afd59..273a31a8b6 100644
+--- a/lib/ext/etm.c
++++ b/lib/ext/etm.c
+@@ -39,7 +39,8 @@ const hello_ext_entry_st ext_mod_etm = {
+ 	.name = "Encrypt-then-MAC",
+ 	.tls_id = 22,
+ 	.gid = GNUTLS_EXTENSION_ETM,
+-	.parse_type = GNUTLS_EXT_MANDATORY,
++	.client_parse_point = GNUTLS_EXT_MANDATORY,
++	.server_parse_point = GNUTLS_EXT_MANDATORY,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+ 	.recv_func = _gnutls_ext_etm_recv_params,
+diff --git a/lib/ext/ext_master_secret.c b/lib/ext/ext_master_secret.c
+index ad040bccdd..bc704e6b6a 100644
+--- a/lib/ext/ext_master_secret.c
++++ b/lib/ext/ext_master_secret.c
+@@ -39,7 +39,8 @@ const hello_ext_entry_st ext_mod_ext_master_secret = {
+ 	.name = "Extended Master Secret",
+ 	.tls_id = 23,
+ 	.gid = GNUTLS_EXTENSION_EXT_MASTER_SECRET,
+-	.parse_type = GNUTLS_EXT_MANDATORY,
++	.client_parse_point = GNUTLS_EXT_MANDATORY,
++	.server_parse_point = GNUTLS_EXT_MANDATORY,
+ 	.validity = GNUTLS_EXT_FLAG_TLS|GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+ 	.recv_func = _gnutls_ext_master_secret_recv_params,
+diff --git a/lib/ext/heartbeat.c b/lib/ext/heartbeat.c
+index e3fa602bf2..5d9e9f4f8e 100644
+--- a/lib/ext/heartbeat.c
++++ b/lib/ext/heartbeat.c
+@@ -526,7 +526,8 @@ const hello_ext_entry_st ext_mod_heartbeat = {
+ 	.name = "Heartbeat",
+ 	.tls_id = 15,
+ 	.gid = GNUTLS_EXTENSION_HEARTBEAT,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_EE | GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+ 	.recv_func = _gnutls_heartbeat_recv_params,
+diff --git a/lib/ext/key_share.c b/lib/ext/key_share.c
+index 8f0912e694..4ae12c96b5 100644
+--- a/lib/ext/key_share.c
++++ b/lib/ext/key_share.c
+@@ -47,7 +47,8 @@ const hello_ext_entry_st ext_mod_key_share = {
+ 	.name = "Key Share",
+ 	.tls_id = 51,
+ 	.gid = GNUTLS_EXTENSION_KEY_SHARE,
+-	.parse_type = _GNUTLS_EXT_TLS_POST_CS,
++	.client_parse_point = _GNUTLS_EXT_TLS_POST_CS,
++	.server_parse_point = _GNUTLS_EXT_TLS_POST_CS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_CLIENT_HELLO | GNUTLS_EXT_FLAG_TLS13_SERVER_HELLO |
+ 		    GNUTLS_EXT_FLAG_HRR,
+ 	.recv_func = key_share_recv_params,
+diff --git a/lib/ext/max_record.c b/lib/ext/max_record.c
+index 3cada69bee..87302cbd4d 100644
+--- a/lib/ext/max_record.c
++++ b/lib/ext/max_record.c
+@@ -46,7 +46,8 @@ const hello_ext_entry_st ext_mod_max_record_size = {
+ 	.name = "Maximum Record Size",
+ 	.tls_id = 1,
+ 	.gid = GNUTLS_EXTENSION_MAX_RECORD_SIZE,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_EE | GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+ 	.recv_func = _gnutls_max_record_recv_params,
+diff --git a/lib/ext/post_handshake.c b/lib/ext/post_handshake.c
+index 73846db114..27fe1e7343 100644
+--- a/lib/ext/post_handshake.c
++++ b/lib/ext/post_handshake.c
+@@ -40,7 +40,8 @@ const hello_ext_entry_st ext_mod_post_handshake = {
+ 	.name = "Post Handshake Auth",
+ 	.tls_id = 49,
+ 	.gid = GNUTLS_EXTENSION_POST_HANDSHAKE,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_CLIENT_HELLO,
+ 	.recv_func = _gnutls_post_handshake_recv_params,
+ 	.send_func = _gnutls_post_handshake_send_params,
+diff --git a/lib/ext/pre_shared_key.c b/lib/ext/pre_shared_key.c
+index 436a426a87..d344922910 100644
+--- a/lib/ext/pre_shared_key.c
++++ b/lib/ext/pre_shared_key.c
+@@ -874,7 +874,8 @@ const hello_ext_entry_st ext_mod_pre_shared_key = {
+ 	.name = "Pre Shared Key",
+ 	.tls_id = PRE_SHARED_KEY_TLS_ID,
+ 	.gid = GNUTLS_EXTENSION_PRE_SHARED_KEY,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_CLIENT_HELLO | GNUTLS_EXT_FLAG_TLS13_SERVER_HELLO,
+ 	.send_func = _gnutls_psk_send_params,
+ 	.recv_func = _gnutls_psk_recv_params
+diff --git a/lib/ext/psk_ke_modes.c b/lib/ext/psk_ke_modes.c
+index 8d8effb433..b3d979cdf8 100644
+--- a/lib/ext/psk_ke_modes.c
++++ b/lib/ext/psk_ke_modes.c
+@@ -197,7 +197,8 @@ const hello_ext_entry_st ext_mod_psk_ke_modes = {
+ 	.name = "PSK Key Exchange Modes",
+ 	.tls_id = 45,
+ 	.gid = GNUTLS_EXTENSION_PSK_KE_MODES,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_CLIENT_HELLO | GNUTLS_EXT_FLAG_TLS13_SERVER_HELLO,
+ 	.send_func = psk_ke_modes_send_params,
+ 	.recv_func = psk_ke_modes_recv_params
+diff --git a/lib/ext/record_size_limit.c b/lib/ext/record_size_limit.c
+index 0e94fece35..9398b18882 100644
+--- a/lib/ext/record_size_limit.c
++++ b/lib/ext/record_size_limit.c
+@@ -39,7 +39,8 @@ const hello_ext_entry_st ext_mod_record_size_limit = {
+ 	.name = "Record Size Limit",
+ 	.tls_id = 28,
+ 	.gid = GNUTLS_EXTENSION_RECORD_SIZE_LIMIT,
+-	.parse_type = GNUTLS_EXT_MANDATORY,
++	.client_parse_point = GNUTLS_EXT_MANDATORY,
++	.server_parse_point = GNUTLS_EXT_MANDATORY,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_EE | GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+ 	.recv_func = _gnutls_record_size_limit_recv_params,
+diff --git a/lib/ext/safe_renegotiation.c b/lib/ext/safe_renegotiation.c
+index bb4a57e456..0b3d797bbd 100644
+--- a/lib/ext/safe_renegotiation.c
++++ b/lib/ext/safe_renegotiation.c
+@@ -37,7 +37,8 @@ const hello_ext_entry_st ext_mod_sr = {
+ 	.gid = GNUTLS_EXTENSION_SAFE_RENEGOTIATION,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+-	.parse_type = GNUTLS_EXT_MANDATORY,
++	.client_parse_point = GNUTLS_EXT_MANDATORY,
++	.server_parse_point = GNUTLS_EXT_MANDATORY,
+ 	.recv_func = _gnutls_sr_recv_params,
+ 	.send_func = _gnutls_sr_send_params,
+ 	.pack_func = NULL,
+diff --git a/lib/ext/server_cert_type.c b/lib/ext/server_cert_type.c
+index 864a44bbc7..81294961e3 100644
+--- a/lib/ext/server_cert_type.c
++++ b/lib/ext/server_cert_type.c
+@@ -48,7 +48,8 @@ const hello_ext_entry_st ext_mod_server_cert_type = {
+ 	.name = "Server Certificate Type",
+ 	.tls_id = 20,
+ 	.gid = GNUTLS_EXTENSION_SERVER_CERT_TYPE,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS |
+ 		GNUTLS_EXT_FLAG_DTLS |
+ 		GNUTLS_EXT_FLAG_CLIENT_HELLO |
+diff --git a/lib/ext/server_name.c b/lib/ext/server_name.c
+index 0c63315690..d52c8d074d 100644
+--- a/lib/ext/server_name.c
++++ b/lib/ext/server_name.c
+@@ -46,7 +46,8 @@ const hello_ext_entry_st ext_mod_server_name = {
+ 	.gid = GNUTLS_EXTENSION_SERVER_NAME,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_EE | GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+-	.parse_type = GNUTLS_EXT_MANDATORY,
++	.client_parse_point = GNUTLS_EXT_MANDATORY,
++	.server_parse_point = GNUTLS_EXT_MANDATORY,
+ 	.recv_func = _gnutls_server_name_recv_params,
+ 	.send_func = _gnutls_server_name_send_params,
+ 	.pack_func = _gnutls_hello_ext_default_pack,
+diff --git a/lib/ext/session_ticket.c b/lib/ext/session_ticket.c
+index 263273fa2b..c854d9c2a9 100644
+--- a/lib/ext/session_ticket.c
++++ b/lib/ext/session_ticket.c
+@@ -54,7 +54,12 @@ const hello_ext_entry_st ext_mod_session_ticket = {
+ 	.gid = GNUTLS_EXTENSION_SESSION_TICKET,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+-	.parse_type = GNUTLS_EXT_TLS,
++	/* This extension must be parsed on session resumption as well; see
++	 * https://gitlab.com/gnutls/gnutls/issues/841 */
++	.client_parse_point = GNUTLS_EXT_MANDATORY,
++	/* on server side we want this parsed after normal handshake resumption
++	 * actions are complete */
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.recv_func = session_ticket_recv_params,
+ 	.send_func = session_ticket_send_params,
+ 	.pack_func = session_ticket_pack,
+diff --git a/lib/ext/signature.c b/lib/ext/signature.c
+index a90f58d538..28d88c5bfc 100644
+--- a/lib/ext/signature.c
++++ b/lib/ext/signature.c
+@@ -53,7 +53,8 @@ const hello_ext_entry_st ext_mod_sig = {
+ 	.tls_id = 13,
+ 	.gid = GNUTLS_EXTENSION_SIGNATURE_ALGORITHMS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.recv_func = _gnutls_signature_algorithm_recv_params,
+ 	.send_func = _gnutls_signature_algorithm_send_params,
+ 	.pack_func = signature_algorithms_pack,
+diff --git a/lib/ext/srp.c b/lib/ext/srp.c
+index 07f6e68835..26fa56e3aa 100644
+--- a/lib/ext/srp.c
++++ b/lib/ext/srp.c
+@@ -46,7 +46,8 @@ const hello_ext_entry_st ext_mod_srp = {
+ 	.name = "SRP",
+ 	.tls_id = 12,
+ 	.gid = GNUTLS_EXTENSION_SRP,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO,
+ 	.recv_func = _gnutls_srp_recv_params,
+ 	.send_func = _gnutls_srp_send_params,
+diff --git a/lib/ext/srtp.c b/lib/ext/srtp.c
+index 412e26d45d..b2e36b3a06 100644
+--- a/lib/ext/srtp.c
++++ b/lib/ext/srtp.c
+@@ -45,7 +45,8 @@ const hello_ext_entry_st ext_mod_srtp = {
+ 	.gid = GNUTLS_EXTENSION_SRTP,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_EE | GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+-	.parse_type = GNUTLS_EXT_APPLICATION,
++	.client_parse_point = GNUTLS_EXT_APPLICATION,
++	.server_parse_point = GNUTLS_EXT_APPLICATION,
+ 	.recv_func = _gnutls_srtp_recv_params,
+ 	.send_func = _gnutls_srtp_send_params,
+ 	.pack_func = _gnutls_srtp_pack,
+diff --git a/lib/ext/status_request.c b/lib/ext/status_request.c
+index cf9d5bd03a..2b36308b71 100644
+--- a/lib/ext/status_request.c
++++ b/lib/ext/status_request.c
+@@ -327,7 +327,8 @@ const hello_ext_entry_st ext_mod_status_request = {
+ 	.gid = GNUTLS_EXTENSION_STATUS_REQUEST,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+-	.parse_type = _GNUTLS_EXT_TLS_POST_CS,
++	.client_parse_point = _GNUTLS_EXT_TLS_POST_CS,
++	.server_parse_point = _GNUTLS_EXT_TLS_POST_CS,
+ 	.recv_func = _gnutls_status_request_recv_params,
+ 	.send_func = _gnutls_status_request_send_params,
+ 	.deinit_func = _gnutls_status_request_deinit_data,
+diff --git a/lib/ext/supported_groups.c b/lib/ext/supported_groups.c
+index ef7859f731..6e7e86bbe1 100644
+--- a/lib/ext/supported_groups.c
++++ b/lib/ext/supported_groups.c
+@@ -46,7 +46,8 @@ const hello_ext_entry_st ext_mod_supported_groups = {
+ 	.name = "Supported Groups",
+ 	.tls_id = 10,
+ 	.gid = GNUTLS_EXTENSION_SUPPORTED_GROUPS,
+-	.parse_type = GNUTLS_EXT_TLS,
++	.client_parse_point = GNUTLS_EXT_TLS,
++	.server_parse_point = GNUTLS_EXT_TLS,
+ 	.validity = GNUTLS_EXT_FLAG_TLS | GNUTLS_EXT_FLAG_DTLS | GNUTLS_EXT_FLAG_CLIENT_HELLO |
+ 		    GNUTLS_EXT_FLAG_EE | GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO,
+ 	.recv_func = _gnutls_supported_groups_recv_params,
+diff --git a/lib/ext/supported_versions.c b/lib/ext/supported_versions.c
+index 1b9c295795..69193b60a3 100644
+--- a/lib/ext/supported_versions.c
++++ b/lib/ext/supported_versions.c
+@@ -43,7 +43,8 @@ const hello_ext_entry_st ext_mod_supported_versions = {
+ 	.gid = GNUTLS_EXTENSION_SUPPORTED_VERSIONS,
+ 	.validity = GNUTLS_EXT_FLAG_CLIENT_HELLO | GNUTLS_EXT_FLAG_TLS12_SERVER_HELLO |
+ 		    GNUTLS_EXT_FLAG_TLS13_SERVER_HELLO | GNUTLS_EXT_FLAG_HRR|GNUTLS_EXT_FLAG_TLS,
+-	.parse_type = GNUTLS_EXT_VERSION_NEG, /* force parsing prior to EXT_TLS extensions */
++	.client_parse_point = GNUTLS_EXT_VERSION_NEG, /* force parsing prior to EXT_TLS extensions */
++	.server_parse_point = GNUTLS_EXT_VERSION_NEG,
+ 	.recv_func = supported_versions_recv_params,
+ 	.send_func = supported_versions_send_params,
+ 	.pack_func = NULL,
+diff --git a/lib/hello_ext.c b/lib/hello_ext.c
+index 491b3c3eba..33eaa27b10 100644
+--- a/lib/hello_ext.c
++++ b/lib/hello_ext.c
+@@ -120,7 +120,7 @@ gid_to_ext_entry(gnutls_session_t session, extensions_t id)
+ }
+ 
+ static const hello_ext_entry_st *
+-tls_id_to_ext_entry(gnutls_session_t session, uint16_t tls_id, gnutls_ext_parse_type_t parse_type)
++tls_id_to_ext_entry(gnutls_session_t session, uint16_t tls_id, gnutls_ext_parse_type_t parse_point)
+ {
+ 	unsigned i;
+ 	const hello_ext_entry_st *e;
+@@ -144,7 +144,8 @@ tls_id_to_ext_entry(gnutls_session_t session, uint16_t tls_id, gnutls_ext_parse_
+ 
+ 	return NULL;
+ done:
+-	if (parse_type == GNUTLS_EXT_ANY || e->parse_type == parse_type) {
++	if (parse_point == GNUTLS_EXT_ANY || (IS_SERVER(session) && e->server_parse_point == parse_point) ||
++	    (!IS_SERVER(session) && e->client_parse_point == parse_point)) {
+ 		return e;
+ 	} else {
+ 		return NULL;
+@@ -201,7 +202,7 @@ static unsigned tls_id_to_gid(gnutls_session_t session, unsigned tls_id)
+ typedef struct hello_ext_ctx_st {
+ 	gnutls_session_t session;
+ 	gnutls_ext_flags_t msg;
+-	gnutls_ext_parse_type_t parse_type;
++	gnutls_ext_parse_type_t parse_point;
+ 	const hello_ext_entry_st *ext; /* used during send */
+ 	unsigned seen_pre_shared_key;
+ } hello_ext_ctx_st;
+@@ -222,7 +223,7 @@ int hello_ext_parse(void *_ctx, unsigned tls_id, const uint8_t *data, unsigned d
+ 		return gnutls_assert_val(GNUTLS_E_RECEIVED_ILLEGAL_PARAMETER);
+ 	}
+ 
+-	ext = tls_id_to_ext_entry(session, tls_id, ctx->parse_type);
++	ext = tls_id_to_ext_entry(session, tls_id, ctx->parse_point);
+ 	if (ext == NULL || ext->recv_func == NULL) {
+ 		goto ignore;
+ 	}
+@@ -288,7 +289,7 @@ int hello_ext_parse(void *_ctx, unsigned tls_id, const uint8_t *data, unsigned d
+ int
+ _gnutls_parse_hello_extensions(gnutls_session_t session,
+ 			       gnutls_ext_flags_t msg,
+-			       gnutls_ext_parse_type_t parse_type,
++			       gnutls_ext_parse_type_t parse_point,
+ 			       const uint8_t * data, int data_size)
+ {
+ 	int ret;
+@@ -298,7 +299,7 @@ _gnutls_parse_hello_extensions(gnutls_session_t session,
+ 
+ 	ctx.session = session;
+ 	ctx.msg = msg;
+-	ctx.parse_type = parse_type;
++	ctx.parse_point = parse_point;
+ 	ctx.seen_pre_shared_key = 0;
+ 
+ 	ret = _gnutls_extv_parse(&ctx, hello_ext_parse, data, data_size);
+@@ -321,8 +322,9 @@ int hello_ext_send(void *_ctx, gnutls_buffer_st *buf)
+ 	if (unlikely(p->send_func == NULL))
+ 		return 0;
+ 
+-	if (ctx->parse_type != GNUTLS_EXT_ANY
+-	    && p->parse_type != ctx->parse_type) {
++	if (ctx->parse_point != GNUTLS_EXT_ANY &&
++	    ((IS_SERVER(session) && p->server_parse_point != ctx->parse_point) ||
++	     (!IS_SERVER(session) && p->client_parse_point != ctx->parse_point))) {
+ 		return 0;
+ 	}
+ 
+@@ -392,7 +394,7 @@ int
+ _gnutls_gen_hello_extensions(gnutls_session_t session,
+ 			     gnutls_buffer_st * buf,
+ 			     gnutls_ext_flags_t msg,
+-			     gnutls_ext_parse_type_t parse_type)
++			     gnutls_ext_parse_type_t parse_point)
+ {
+ 	int pos, ret;
+ 	size_t i;
+@@ -402,7 +404,7 @@ _gnutls_gen_hello_extensions(gnutls_session_t session,
+ 
+ 	ctx.session = session;
+ 	ctx.msg = msg;
+-	ctx.parse_type = parse_type;
++	ctx.parse_point = parse_point;
+ 
+ 	ret = _gnutls_extv_append_init(buf);
+ 	if (ret < 0)
+@@ -742,7 +744,7 @@ _gnutls_hello_ext_get_resumed_priv(gnutls_session_t session,
+  * gnutls_ext_register:
+  * @name: the name of the extension to register
+  * @id: the numeric TLS id of the extension
+- * @parse_type: the parse type of the extension (see gnutls_ext_parse_type_t)
++ * @parse_point: the parse type of the extension (see gnutls_ext_parse_type_t)
+  * @recv_func: a function to receive the data
+  * @send_func: a function to send the data
+  * @deinit_func: a function deinitialize any private data
+@@ -767,7 +769,7 @@ _gnutls_hello_ext_get_resumed_priv(gnutls_session_t session,
+  * Since: 3.4.0
+  **/
+ int
+-gnutls_ext_register(const char *name, int id, gnutls_ext_parse_type_t parse_type,
++gnutls_ext_register(const char *name, int id, gnutls_ext_parse_type_t parse_point,
+ 		    gnutls_ext_recv_func recv_func, gnutls_ext_send_func send_func,
+ 		    gnutls_ext_deinit_data_func deinit_func, gnutls_ext_pack_func pack_func,
+ 		    gnutls_ext_unpack_func unpack_func)
+@@ -798,7 +800,8 @@ gnutls_ext_register(const char *name, int id, gnutls_ext_parse_type_t parse_type
+ 	tmp_mod->free_struct = 1;
+ 	tmp_mod->tls_id = id;
+ 	tmp_mod->gid = gid;
+-	tmp_mod->parse_type = parse_type;
++	tmp_mod->client_parse_point = parse_point;
++	tmp_mod->server_parse_point = parse_point;
+ 	tmp_mod->recv_func = recv_func;
+ 	tmp_mod->send_func = send_func;
+ 	tmp_mod->deinit_func = deinit_func;
+@@ -822,7 +825,7 @@ gnutls_ext_register(const char *name, int id, gnutls_ext_parse_type_t parse_type
+  * @session: the session for which this extension will be set
+  * @name: the name of the extension to register
+  * @id: the numeric id of the extension
+- * @parse_type: the parse type of the extension (see gnutls_ext_parse_type_t)
++ * @parse_point: the parse type of the extension (see gnutls_ext_parse_type_t)
+  * @recv_func: a function to receive the data
+  * @send_func: a function to send the data
+  * @deinit_func: a function deinitialize any private data
+@@ -853,7 +856,7 @@ gnutls_ext_register(const char *name, int id, gnutls_ext_parse_type_t parse_type
+  **/
+ int
+ gnutls_session_ext_register(gnutls_session_t session,
+-			    const char *name, int id, gnutls_ext_parse_type_t parse_type,
++			    const char *name, int id, gnutls_ext_parse_type_t parse_point,
+ 			    gnutls_ext_recv_func recv_func, gnutls_ext_send_func send_func,
+ 			    gnutls_ext_deinit_data_func deinit_func, gnutls_ext_pack_func pack_func,
+ 			    gnutls_ext_unpack_func unpack_func, unsigned flags)
+@@ -898,7 +901,8 @@ gnutls_session_ext_register(gnutls_session_t session,
+ 	tmp_mod.free_struct = 1;
+ 	tmp_mod.tls_id = id;
+ 	tmp_mod.gid = gid;
+-	tmp_mod.parse_type = parse_type;
++	tmp_mod.client_parse_point = parse_point;
++	tmp_mod.server_parse_point = parse_point;
+ 	tmp_mod.recv_func = recv_func;
+ 	tmp_mod.send_func = send_func;
+ 	tmp_mod.deinit_func = deinit_func;
+diff --git a/lib/hello_ext.h b/lib/hello_ext.h
+index f8570bb34e..f2dfd7ff6a 100644
+--- a/lib/hello_ext.h
++++ b/lib/hello_ext.h
+@@ -121,7 +121,8 @@ typedef struct hello_ext_entry_st {
+ 	uint16_t tls_id;
+ 	unsigned gid; /* gnutls internal ID */
+ 
+-	gnutls_ext_parse_type_t parse_type;
++	gnutls_ext_parse_type_t client_parse_point;
++	gnutls_ext_parse_type_t server_parse_point;
+ 	unsigned validity; /* multiple items of gnutls_ext_flags_t */
+ 
+ 	/* this function must return 0 when Not Applicable
+diff --git a/lib/includes/gnutls/gnutls.h.in b/lib/includes/gnutls/gnutls.h.in
+index 6b35c44342..b4830cc8d3 100644
+--- a/lib/includes/gnutls/gnutls.h.in
++++ b/lib/includes/gnutls/gnutls.h.in
+@@ -3023,12 +3023,12 @@ typedef enum {
+ 
+ /* Register a custom tls extension
+  */
+-int gnutls_ext_register(const char *name, int type, gnutls_ext_parse_type_t parse_type,
++int gnutls_ext_register(const char *name, int type, gnutls_ext_parse_type_t parse_point,
+ 				gnutls_ext_recv_func recv_func, gnutls_ext_send_func send_func, 
+ 				gnutls_ext_deinit_data_func deinit_func, gnutls_ext_pack_func pack_func,
+ 				gnutls_ext_unpack_func unpack_func);
+ 
+-int gnutls_session_ext_register(gnutls_session_t, const char *name, int type, gnutls_ext_parse_type_t parse_type,
++int gnutls_session_ext_register(gnutls_session_t, const char *name, int type, gnutls_ext_parse_type_t parse_point,
+ 				gnutls_ext_recv_func recv_func, gnutls_ext_send_func send_func, 
+ 				gnutls_ext_deinit_data_func deinit_func, gnutls_ext_pack_func pack_func,
+ 				gnutls_ext_unpack_func unpack_func, unsigned flags);
+diff --git a/tests/gnutls-cli-resume.sh b/tests/gnutls-cli-resume.sh
+index fe7ed1e029..38ac076efa 100755
+--- a/tests/gnutls-cli-resume.sh
++++ b/tests/gnutls-cli-resume.sh
+@@ -98,6 +98,23 @@ for i in "$WAITPID";do
+ 	test $? != 0 && exit 1
+ done
+ 
++echo "Checking whether session resumption works reliably under TLS1.2 (no tickets)"
++PRIORITY="NORMAL:-VERS-ALL:+VERS-TLS1.2:%NO_TICKETS"
++WAITPID=""
++
++i=0
++while [ $i -lt 10 ]
++do
++	run_server_test "${PRIORITY}" $i &
++	WAITPID="$WAITPID $!"
++	i=`expr $i + 1`
++done
++
++for i in "$WAITPID";do
++	wait $i
++	test $? != 0 && exit 1
++done
++
+ kill ${PID}
+ wait
+ 
+-- 
+2.22.0
+
