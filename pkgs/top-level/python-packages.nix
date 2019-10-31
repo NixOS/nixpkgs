@@ -1982,6 +1982,8 @@ in {
     pythonPackages = self;
   });
 
+  opentracing = callPackage ../development/python-modules/opentracing { };
+
   openidc-client = callPackage ../development/python-modules/openidc-client {};
 
   optuna = callPackage ../development/python-modules/optuna { };
