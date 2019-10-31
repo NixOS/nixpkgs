@@ -2707,6 +2707,8 @@ in {
 
   lightning = callPackage ../development/python-modules/lightning { };
 
+  lightparam = callPackage ../development/python-modules/lightparam { };
+
   jupyter = callPackage ../development/python-modules/jupyter { };
 
   jupyter_console = if pythonOlder "3.5" then
