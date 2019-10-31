@@ -111,7 +111,7 @@ in stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/NetworkManager;
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom domenkozar obadz ];
+    maintainers = with maintainers; [ phreedom domenkozar obadz worldofpeace ];
     platforms = platforms.linux;
   };
 }
