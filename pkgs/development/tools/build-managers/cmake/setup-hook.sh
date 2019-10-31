@@ -99,7 +99,7 @@ cmakeConfigurePhase() {
     cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON $cmakeFlags"
     cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON $cmakeFlags"
 
-    if [ "$buildPhase" = ninjaBuildPhase ]; then
+    if [ "${buildPhase-}" = ninjaBuildPhase ]; then
         cmakeFlags="-GNinja $cmakeFlags"
     fi
 
@@ -115,7 +115,7 @@ cmakeConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "${dontUseCmakeConfigure-}" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseCmakeConfigure-}" -a -z "${configurePhase-}" ]; then
     setOutputFlags=
     configurePhase=cmakeConfigurePhase
 fi

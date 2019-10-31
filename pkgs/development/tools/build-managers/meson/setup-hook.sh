@@ -36,7 +36,7 @@ mesonConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "${dontUseMesonConfigure-}" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseMesonConfigure-}" -a -z "${configurePhase-}" ]; then
     setOutputFlags=
     configurePhase=mesonConfigurePhase
 fi
