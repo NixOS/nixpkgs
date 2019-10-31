@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ocb-stubblr }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg, ocb-stubblr, buildDunePackage }:
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-cpuid-0.1.0";
+buildDunePackage rec {
+  pname = "cpuid";
+  version = "0.1.2";
 
-  src = fetchurl {
-    url = https://github.com/pqwy/cpuid/releases/download/v0.1.0/cpuid-0.1.0.tbz;
-    sha256 = "08k2558a3dnxn8msgpz8c93sfn0y027ganfdi2yvql0fp1ixv97p";
+  src = fetchFromGitHub {
+    owner = "pqwy";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "04zqlvy608kj9pn48q5zybz62rlwzyfmadpwjhcxwcx28km528r4";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ocb-stubblr ];
-
-  inherit (topkg) buildPhase installPhase;
+  #buildInputs = [ ocb-stubblr ];
 
   meta = {
     homepage = https://github.com/pqwy/cpuid;
