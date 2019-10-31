@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];
 
   postInstall = ''
-    substituteInPlace "$out/share/applications/bpython.desktop" \
+    substituteInPlace "$out/share/applications/org.bpython-interpreter.bpython.desktop" \
       --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
   '';
 
