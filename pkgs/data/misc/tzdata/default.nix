@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     ];
 
   sourceRoot = ".";
+  dontMakeSourcesWritable = true;
 
   outputs = [ "out" "bin" "man" "dev" ];
   propagatedBuildOutputs = [];
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
      mv zic.o zic.o.orig
      mv zic zic.orig
-     make $makeFlags cc=cc AR=ar zic
+     make "''${makeFlags[@]}" cc=cc AR=ar zic
      mv zic zic-native
      mv zic.o.orig zic.o
      mv zic.orig zic
