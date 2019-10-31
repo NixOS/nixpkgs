@@ -1,14 +1,14 @@
-From 8fa184fb70a62cbe9ee160bceddaf5d7c21cb85c Mon Sep 17 00:00:00 2001
+From 5bf1785809baf6be7fb5904ce6cefdb761f2c278 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:35:33 -0500
-Subject: [PATCH 06/11] qtbase-gtk3
+Subject: [PATCH 06/12] qtbase-gtk3
 
 ---
  src/plugins/platformthemes/gtk3/main.cpp | 17 ++++++++++++++++-
  1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/src/plugins/platformthemes/gtk3/main.cpp b/src/plugins/platformthemes/gtk3/main.cpp
-index fb1c425d..bb8bab97 100644
+index fb1c425d8e..bb8bab9795 100644
 --- a/src/plugins/platformthemes/gtk3/main.cpp
 +++ b/src/plugins/platformthemes/gtk3/main.cpp
 @@ -39,6 +39,7 @@
@@ -44,5 +44,5 @@ index fb1c425d..bb8bab97 100644
      return 0;
  }
 -- 
-2.22.1
+2.23.GIT
 

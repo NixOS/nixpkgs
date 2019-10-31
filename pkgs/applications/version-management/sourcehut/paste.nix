@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "pastesrht";
-  version = "0.5.2";
+  version = "0.7.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/paste.sr.ht";
     rev = version;
-    sha256 = "16d0qviw3qifyqn94fj03mwxd65abf8bhrvn1fn6ramaq8zpx794";
+    sha256 = "19y9ghhi4llyg7kd3a888gbjc698vdamin4hb8dk1j6pd2f0qmjp";
   };
 
   patches = [

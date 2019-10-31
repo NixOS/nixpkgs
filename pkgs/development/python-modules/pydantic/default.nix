@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "0.32.2";
+  version = "1.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q565m7d2rapjy6ylbdpd00z9zk99pkqg110191racp1d34kb4va";
+    sha256 = "bf474cebe007701806f5f8b076fb8508116606e5c721734bb855bfec4185263c";
   };
 
   propagatedBuildInputs = [

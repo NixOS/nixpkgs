@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, dbus-glib, libxklavier,
   libcanberra-gtk3, libnotify, nss, polkit, gnome3, gtk3, mate,
   pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
-  wrapGAppsHook, fetchpatch }:
+  wrapGAppsHook, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";
@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    autoreconfHook # drop with the above patch
     intltool
+    pkgconfig
     wrapGAppsHook
   ];
 

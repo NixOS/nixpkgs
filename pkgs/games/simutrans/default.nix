@@ -97,7 +97,7 @@ let
       cat > "$out/bin/simutrans" <<EOF
       #!${runtimeShell}
       cd "$out"/share/simutrans
-      exec "${binaries}/bin/simutrans" -use_workdir "\''${extraFlagsArray[@]}" "\$@"
+      exec "${binaries}/bin/simutrans" -use_workdir "\$@"
       EOF
       chmod +x "$out/bin/simutrans"
     '';

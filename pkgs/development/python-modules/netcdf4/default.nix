@@ -1,15 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, pytest
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, pytest
 , numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
 }:
 buildPythonPackage rec {
   pname = "netCDF4";
-  version = "1.5.2";
+  version = "1.5.3";
 
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08l92yzg2cy1zrkxjvwya2kpnmfzgwnvgb925hlrgcp5ga9y2xg0";
+    sha256 = "2a3ca855848f4bbf07fac366da77a681fcead18c0a8813d91d46302f562dc3be";
   };
 
   checkInputs = [ pytest ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   # Variables used to configure the build process
   USE_NCCONFIG="0";
-  HDF5_DIR=hdf5;
+  HDF5_DIR = lib.getDev hdf5;
   NETCDF4_DIR=netcdf;
   CURL_DIR=curl.dev;
   JPEG_DIR=libjpeg.dev;

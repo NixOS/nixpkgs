@@ -1,7 +1,7 @@
-From d126db8f5c2c1f6d6738de1a53040c93fdf6ff73 Mon Sep 17 00:00:00 2001
+From 492f6555bb09f207c83387441f0f23ba4602dfff Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Wed, 18 Sep 2019 05:39:50 -0500
-Subject: [PATCH 04/11] qtbase-replace-libdir
+Subject: [PATCH 04/12] qtbase-replace-libdir
 
 ---
  mkspecs/features/qt_common.prf | 20 ++------------------
@@ -9,7 +9,7 @@ Subject: [PATCH 04/11] qtbase-replace-libdir
  2 files changed, 3 insertions(+), 22 deletions(-)
 
 diff --git a/mkspecs/features/qt_common.prf b/mkspecs/features/qt_common.prf
-index caecb68a..d3aa3ba5 100644
+index caecb68a84..d3aa3ba570 100644
 --- a/mkspecs/features/qt_common.prf
 +++ b/mkspecs/features/qt_common.prf
 @@ -30,32 +30,16 @@ contains(TEMPLATE, .*lib) {
@@ -48,10 +48,10 @@ index caecb68a..d3aa3ba5 100644
  
  # The remainder of this file must not apply to host tools/libraries,
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 51b5bde6..82e2907c 100644
+index ee7de22059..9015b30d73 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
-@@ -292,10 +292,7 @@ load(qt_targets)
+@@ -303,10 +303,7 @@ load(qt_targets)
  }
  !lib_bundle:unix {
      CONFIG += create_libtool
@@ -60,9 +60,9 @@ index 51b5bde6..82e2907c 100644
 -    else: \
 -        QMAKE_LIBTOOL_LIBDIR = "=$$[QT_INSTALL_LIBS/raw]"
 +    QMAKE_LIBTOOL_LIBDIR = $$NIX_OUTPUT_OUT/lib
-     ltlib_replace.match = $$lib_replace.match
-     !isEmpty(lib_replace.replace): \
-         ltlib_replace.replace = $$QMAKE_LIBTOOL_LIBDIR
+     !isEmpty(lib_replace0.match) {
+         ltlib_replace0.match = $$lib_replace0.match
+         ltlib_replace0.replace = $$QMAKE_LIBTOOL_LIBDIR/
 -- 
-2.22.1
+2.23.GIT
 

@@ -85,7 +85,45 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+      GnuPG is now built without support for a graphical passphrase entry
+      by default. Please enable the <literal>gpg-agent</literal> user service
+      via the NixOS option <literal>programs.gnupg.agent.enable</literal>.
+      Note that upstream recommends using <literal>gpg-agent</literal> and
+      will spawn a <literal>gpg-agent</literal> on the first invocation of
+      GnuPG anyway.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>dynamicHosts</literal> option has been removed from the
+     <link linkend="opt-networking.networkmanager.enable">networkd</link>
+     module. Allowing (multiple) regular users to override host entries
+     affecting the whole system opens up a huge attack vector.
+     There seem to be very rare cases where this might be useful.
+     Consider setting system-wide host entries using
+     <link linkend="opt-networking.hosts">networking.hosts</link>, provide
+     them via the DNS server in your network, or use
+     <link linkend="opt-environment.etc">environment.etc</link>
+     to add a file into <literal>/etc/NetworkManager/dnsmasq.d</literal>
+     reconfiguring <literal>hostsdir</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>99-main.network</literal> file was removed. Maching all
+      network interfaces caused many breakages, see
+      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18962">#18962</link>
+        and <link xlink:href="https://github.com/NixOS/nixpkgs/pull/71106">#71106</link>.
+    </para>
+    <para>
+      We already don't support the global <link linkend="opt-networking.useDHCP">networking.useDHCP</link>,
+      <link linkend="opt-networking.defaultGateway">networking.defaultGateway</link> and
+      <link linkend="opt-networking.defaultGateway6">networking.defaultGateway6</link> options
+      if <link linkend="opt-networking.useNetworkd">networking.useNetworkd</link> is enabled,
+      but direct users to configure the per-device
+      <link linkend="opt-networking.interfaces">networking.interfaces.&lt;name&gt;.…</link> options.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -100,6 +138,14 @@
   <itemizedlist>
    <listitem>
      <para>SD images are now compressed by default using <literal>bzip2</literal>.</para>
+   </listitem>
+   <listitem>
+    <para>
+     OpenSSH has been upgraded from 7.9 to 8.1, improving security and adding features
+     but with potential incompatibilities.  Consult the
+     <link xlink:href="https://www.openssh.com/txt/release-8.1">
+     release announcement</link> for more information.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

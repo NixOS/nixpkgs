@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "golangci-lint";
-  version = "1.20.0";
+  version = "1.21.0";
   goPackagePath = "github.com/golangci/golangci-lint";
 
   subPackages = [ "cmd/golangci-lint" ];
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "1ca7l8smi1hx2sk6sq1cac9bvij4wnxxmwldbk8r1ih8ja5i6vdk";
+    sha256 = "0knvb59mg9jrzmfs5nzglz4nv047ayq1xz6dkis74wl1g9xi6yr5";
   };
 
   meta = with lib; {

@@ -7,17 +7,8 @@
   The nixpkgs repository has several utility functions to manipulate Nix expressions.
  </para>
  <xi:include href="functions/library.xml" />
- <xi:include href="functions/overrides.xml" />
  <xi:include href="functions/generators.xml" />
  <xi:include href="functions/debug.xml" />
- <xi:include href="functions/fetchers.xml" />
- <xi:include href="functions/trivial-builders.xml" />
- <xi:include href="functions/fhs-environments.xml" />
- <xi:include href="functions/shell.xml" />
- <xi:include href="functions/dockertools.xml" />
- <xi:include href="functions/snaptools.xml" />
- <xi:include href="functions/appimagetools.xml" />
  <xi:include href="functions/prefer-remote-fetch.xml" />
  <xi:include href="functions/nix-gitignore.xml" />
- <xi:include href="functions/ocitools.xml" />
 </chapter>

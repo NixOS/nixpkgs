@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "leatherman";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
-    sha256 = "1k70fx9i4prw0vp5680ijs1ldbwd7gmvpav7jfqvpbcm3zblkc23";
+    sha256 = "0iizy20pdkbnsfj6bzrkkj7faizc85lcpkpandvnxfybiq7j60iw";
     rev = version;
     repo = "leatherman";
     owner = "puppetlabs";

@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.6";
+  version = "4.7";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     rev = version;
-    sha256 = "1llcv77lvpc4h3rgww9ms736kbdisiylcr2z02863f41afxbwl82";
+    sha256 = "0a7g9k83igfid8pybqpk6fracmz2q021isn2by3994p4hhh3s327";
   };
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
@@ -38,13 +38,6 @@ stdenv.mkDerivation rec {
       # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
       ./respect-xml-catalog-files-var.patch
       dots_in_usernames
-
-      # Check for correct DocBook version during configure
-      # https://github.com/shadow-maint/shadow/pull/162
-      (fetchpatch {
-        url = "https://github.com/shadow-maint/shadow/commit/47797ca6654f79e3de854a6c69db2bdb0516db08.patch";
-        sha256 = "1zn8f6fd26gj5sh60099xqc7mjwgbbkkic5xfigvxa4b90vm8fd7";
-      })
     ];
 
   # The nix daemon often forbids even creating set[ug]id files.

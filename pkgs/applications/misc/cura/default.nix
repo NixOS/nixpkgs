@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "1qnai8vmgy5lx3lapw96j41i8mw9p6r99i3qzs709l9yzrix6l86";
+    sha256 = "1wf60qr0wqsci5skp55qr8h56s3x5s2icxbn58ia9s4a5hhvnsmf";
   };
 
   materials = fetchFromGitHub {

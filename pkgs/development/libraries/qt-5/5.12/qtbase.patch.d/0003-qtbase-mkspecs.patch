@@ -1,7 +1,7 @@
-From 5ff996d9028c0f54939ca7c54d358cd7503ab1ae Mon Sep 17 00:00:00 2001
+From 8bdbddc2e5fef1553b1ba0297d3c03b38e9b947b Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Wed, 18 Sep 2019 05:39:39 -0500
-Subject: [PATCH 03/11] qtbase-mkspecs
+Subject: [PATCH 03/12] qtbase-mkspecs
 
 ---
  mkspecs/features/create_cmake.prf             | 53 ++++--------
@@ -18,7 +18,7 @@ Subject: [PATCH 03/11] qtbase-mkspecs
  11 files changed, 39 insertions(+), 142 deletions(-)
 
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
-index c9910dda..e9bc8076 100644
+index 00da9bd33f..bd166fbfea 100644
 --- a/mkspecs/features/create_cmake.prf
 +++ b/mkspecs/features/create_cmake.prf
 @@ -21,7 +21,7 @@ load(cmake_functions)
@@ -30,7 +30,7 @@ index c9910dda..e9bc8076 100644
  contains(CMAKE_INSTALL_LIBS_DIR, ^(/usr)?/lib(64)?.*): CMAKE_USR_MOVE_WORKAROUND = $$CMAKE_INSTALL_LIBS_DIR
  
  CMAKE_OUT_DIR = $$MODULE_BASE_OUTDIR/lib/cmake
-@@ -60,45 +60,20 @@ split_incpath {
+@@ -70,45 +70,20 @@ split_incpath {
          $$cmake_extra_source_includes.output
  }
  
@@ -87,7 +87,7 @@ index c9910dda..e9bc8076 100644
  
  static|staticlib:CMAKE_STATIC_TYPE = true
  
-@@ -178,7 +153,7 @@ contains(CONFIG, plugin) {
+@@ -188,7 +163,7 @@ contains(CONFIG, plugin) {
        cmake_target_file
  
      cmake_qt5_plugin_file.files = $$cmake_target_file.output
@@ -96,7 +96,7 @@ index c9910dda..e9bc8076 100644
      INSTALLS += cmake_qt5_plugin_file
  
      return()
-@@ -323,7 +298,7 @@ exists($$cmake_macros_file.input) {
+@@ -333,7 +308,7 @@ exists($$cmake_macros_file.input) {
      cmake_qt5_module_files.files += $$cmake_macros_file.output
  }
  
@@ -106,7 +106,7 @@ index c9910dda..e9bc8076 100644
  # We are generating cmake files. Most developers of Qt are not aware of cmake,
  # so we require automatic tests to be available. The only module which should
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index c7298928..c60ef16e 100644
+index c729892889..c60ef16e64 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -3,30 +3,6 @@ if (CMAKE_VERSION VERSION_LESS 3.1.0)
@@ -266,7 +266,7 @@ index c7298928..c60ef16e 100644
          set_target_properties(Qt5::${Plugin} PROPERTIES
              \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
 diff --git a/mkspecs/features/qml_module.prf b/mkspecs/features/qml_module.prf
-index 57cfec78..5cbd7c52 100644
+index 57cfec78b3..5cbd7c52ef 100644
 --- a/mkspecs/features/qml_module.prf
 +++ b/mkspecs/features/qml_module.prf
 @@ -51,7 +51,7 @@ builtin_resources {
@@ -279,7 +279,7 @@ index 57cfec78..5cbd7c52 100644
  
  qmlfiles.base = $$_PRO_FILE_PWD_
 diff --git a/mkspecs/features/qml_plugin.prf b/mkspecs/features/qml_plugin.prf
-index ad8ecdf5..804634b2 100644
+index ad8ecdf5f1..804634b22e 100644
 --- a/mkspecs/features/qml_plugin.prf
 +++ b/mkspecs/features/qml_plugin.prf
 @@ -50,7 +50,7 @@ load(qt_build_paths)
@@ -292,7 +292,7 @@ index ad8ecdf5..804634b2 100644
  
  # Some final setup
 diff --git a/mkspecs/features/qt_app.prf b/mkspecs/features/qt_app.prf
-index 8354f30e..62028fef 100644
+index 8354f30eea..62028fef8e 100644
 --- a/mkspecs/features/qt_app.prf
 +++ b/mkspecs/features/qt_app.prf
 @@ -30,7 +30,7 @@ host_build:force_bootstrap {
@@ -305,7 +305,7 @@ index 8354f30e..62028fef 100644
  }
  INSTALLS += target
 diff --git a/mkspecs/features/qt_build_paths.prf b/mkspecs/features/qt_build_paths.prf
-index 3bb3823a..655b7b7d 100644
+index 3bb3823a8e..655b7b7db8 100644
 --- a/mkspecs/features/qt_build_paths.prf
 +++ b/mkspecs/features/qt_build_paths.prf
 @@ -24,6 +24,6 @@ exists($$MODULE_BASE_INDIR/.git): \
@@ -318,7 +318,7 @@ index 3bb3823a..655b7b7d 100644
 +    MODULE_QMAKE_OUTDIR = $$NIX_OUTPUT_OUT
  }
 diff --git a/mkspecs/features/qt_docs.prf b/mkspecs/features/qt_docs.prf
-index 3b74cd4d..6bfbbe6e 100644
+index 3b74cd4dd5..6bfbbe6e2d 100644
 --- a/mkspecs/features/qt_docs.prf
 +++ b/mkspecs/features/qt_docs.prf
 @@ -45,7 +45,7 @@ QMAKE_DOCS_OUTPUTDIR = $$QMAKE_DOCS_BASE_OUTDIR/$$QMAKE_DOCS_TARGETDIR
@@ -357,7 +357,7 @@ index 3b74cd4d..6bfbbe6e 100644
      INSTALLS += inst_qch_docs
  
 diff --git a/mkspecs/features/qt_example_installs.prf b/mkspecs/features/qt_example_installs.prf
-index 43b58817..e635b8f6 100644
+index 43b58817fe..e635b8f67a 100644
 --- a/mkspecs/features/qt_example_installs.prf
 +++ b/mkspecs/features/qt_example_installs.prf
 @@ -88,7 +88,7 @@ sourcefiles += \
@@ -370,7 +370,7 @@ index 43b58817..e635b8f6 100644
  
  check_examples {
 diff --git a/mkspecs/features/qt_functions.prf b/mkspecs/features/qt_functions.prf
-index 1903e509..ae7b5859 100644
+index 1903e509c8..ae7b585989 100644
 --- a/mkspecs/features/qt_functions.prf
 +++ b/mkspecs/features/qt_functions.prf
 @@ -69,7 +69,7 @@ defineTest(qtHaveModule) {
@@ -383,7 +383,7 @@ index 1903e509..ae7b5859 100644
              $${1}_EXE = $${cmd}.pl
              cmd = perl -w $$system_path($${cmd}.pl)
 diff --git a/mkspecs/features/qt_installs.prf b/mkspecs/features/qt_installs.prf
-index 1ebca173..b784441d 100644
+index 1ebca17366..b784441da0 100644
 --- a/mkspecs/features/qt_installs.prf
 +++ b/mkspecs/features/qt_installs.prf
 @@ -12,16 +12,10 @@
@@ -448,7 +448,7 @@ index 1ebca173..b784441d 100644
          INSTALLS += privpritarget
      }
 diff --git a/mkspecs/features/qt_plugin.prf b/mkspecs/features/qt_plugin.prf
-index 40528a65..903f7952 100644
+index 40528a65e2..903f795284 100644
 --- a/mkspecs/features/qt_plugin.prf
 +++ b/mkspecs/features/qt_plugin.prf
 @@ -88,7 +88,7 @@ CONFIG(static, static|shared)|prefix_build {
@@ -461,5 +461,5 @@ index 40528a65..903f7952 100644
  
  TARGET = $$qt5LibraryTarget($$TARGET)
 -- 
-2.22.1
+2.23.GIT
 

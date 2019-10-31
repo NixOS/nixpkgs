@@ -27,6 +27,8 @@ buildPythonPackage {
     lndir ${pyqt5} $out
     rm -rf "$out/nix-support"
     cd Python
+    substituteInPlace configure.py \
+      --replace "qmake = {'CONFIG': 'qscintilla2'}" "qmake = {'CONFIG': 'qscintilla2', 'QT': 'widgets printsupport'}"
     ${python.executable} ./configure.py \
       --pyqt=PyQt5 \
       --destdir=$out/${python.sitePackages}/PyQt5 \
@@ -45,6 +47,5 @@ buildPythonPackage {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lsix ];
     homepage = https://www.riverbankcomputing.com/software/qscintilla/;
-    broken = true;
   };
 }

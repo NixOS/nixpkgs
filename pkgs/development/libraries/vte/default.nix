@@ -1,5 +1,7 @@
 { stdenv
+, lib
 , fetchurl
+, fetchpatch
 , gettext
 , pkgconfig
 , meson
@@ -20,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.58.1";
+  version = "0.58.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1njq88a8956xpmakkd1ph992jmpaimk8zjlh5ywh5psr33x8mi94";
+    sha256 = "1h1bljr090cgnzim00q4pnsmjqblzn1sig3d87wv1hzjn796dj9k";
   };
 
   passthru = {
@@ -58,6 +60,17 @@ stdenv.mkDerivation rec {
     pango
   ];
 
+  patches =
+    # VTE needs a small patch to work with musl:
+    # https://gitlab.gnome.org/GNOME/vte/issues/72
+    lib.optional
+      stdenv.hostPlatform.isMusl
+      (fetchpatch {
+            name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
+            url = "https://gitlab.gnome.org/GNOME/vte/uploads/c334f767f5d605e0f30ecaa2a0e4d226/0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
+            sha256 = "1ii9db9i5l3fy2alxz7bjfsgjs3lappnlx339dvxbi2141zknf5r";
+      });
+
   postPatch = ''
     patchShebangs perf/*
     patchShebangs src/box_drawing_generate.sh
@@ -75,7 +88,7 @@ stdenv.mkDerivation rec {
       the system's terminfo database.
     '';
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ astsmtl antono lethalman ];
+    maintainers = with maintainers; [ astsmtl antono lethalman ] ++ gnome3.maintainers;
     platforms = platforms.unix;
   };
 }

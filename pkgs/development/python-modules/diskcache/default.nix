@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "diskcache";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7c20b58ed07d03bbfba793f823d1fc27a61e590371fe6011fa1319a25c028cd1";
+    sha256 = "bcee5a59f9c264e2809e58d01be6569a3bbb1e36a1e0fb83f7ef9b2075f95ce0";
   };
 
   checkInputs = [

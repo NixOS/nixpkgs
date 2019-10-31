@@ -50,18 +50,19 @@ let
     };
     nativeBuildInputs = [ autoreconfHook ];
   };
+  ucdVersion = "12.0.0";
   ucdSrcs = {
     NamesList = fetchurl {
-      url = "https://www.unicode.org/Public/UNIDATA/NamesList.txt";
+      url = "https://www.unicode.org/Public/${ucdVersion}/ucd/NamesList.txt";
       sha256 = "c17c7726f562bd9ef869096807f0297e1edef9a58fdae1fbae487378fa43586f";
     };
     Blocks = fetchurl {
-      url = "https://www.unicode.org/Public/UNIDATA/Blocks.txt";
+      url = "https://www.unicode.org/Public/${ucdVersion}/ucd/Blocks.txt";
       sha256 = "a1a3ca4381eb91f7b65afe7cb7df615cdcf67993fef4b486585f66b349993a10";
     };
   };
   ucd = stdenv.mkDerivation {
-    name = "ucd-12.0.0";
+    name = "ucd-${ucdVersion}";
     dontUnpack = true;
     installPhase = ''
       mkdir $out

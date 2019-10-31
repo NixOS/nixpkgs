@@ -1,14 +1,14 @@
-From 47b2bed58224bda2267480604707a580dc17dd1f Mon Sep 17 00:00:00 2001
+From b7c1c103ba04e76ae498f87ca9ef2c4e09e36d7e Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:36:10 -0500
-Subject: [PATCH 08/11] qtbase-xcompose
+Subject: [PATCH 08/12] qtbase-xcompose
 
 ---
  .../compose/generator/qtablegenerator.cpp                    | 5 +----
  1 file changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
-index b5a0a5bb..6c20305f 100644
+index b5a0a5bbeb..6c20305f4d 100644
 --- a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 +++ b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 @@ -265,12 +265,9 @@ void TableGenerator::initPossibleLocations()
@@ -26,5 +26,5 @@ index b5a0a5bb..6c20305f 100644
  
  QString TableGenerator::findComposeFile()
 -- 
-2.22.1
+2.23.GIT
 

@@ -1,8 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, removeReferencesTo
-, zlib, libjpeg, libpng, libtiff, pam, dbus, systemd, acl, gmp, darwin
-, libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, removeReferencesTo
+, zlib
+, libjpeg
+, libpng
+, libtiff
+, pam
+, dbus
+, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, systemd ? null
+, acl
+, gmp
+, darwin
+, libusb ? null
+, gnutls ? null
+, avahi ? null
+, libpaper ? null
 , coreutils
 }:
+
+assert enableSystemd -> systemd != null;
 
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.
@@ -33,7 +51,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb gnutls libpaper ]
-    ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]
+    ++ optionals stdenv.isLinux [ avahi pam dbus ]
+    ++ optional enableSystemd systemd
+    # Separate from above only to not modify order, to avoid mass rebuilds; merge this with the above at next big change.
+    ++ optionals stdenv.isLinux [ acl ]
     ++ optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);

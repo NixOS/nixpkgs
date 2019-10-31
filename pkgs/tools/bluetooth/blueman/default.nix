@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
 , obex_data_server, xdg_utils, dnsmasq, dhcp, libappindicator, iproute
-, gnome3, librsvg, wrapGAppsHook, gobject-introspection
+, gnome3, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
 
 let
@@ -19,6 +19,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gobject-introspection intltool pkgconfig pythonPackages.cython
     pythonPackages.wrapPython wrapGAppsHook
+    autoreconfHook # drop when below patch is removed
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
@@ -29,8 +30,12 @@ in stdenv.mkDerivation rec {
   patches = [
     # Don't use etc/dbus-1/system.d
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/blueman-project/blueman/pull/1103.patch";
-      sha256 = "0zqdi6ya97jljwinn10n9q6bixl23ww55c0pkhskn140qnrj42wf";
+      url = "https://github.com/blueman-project/blueman/commit/ae2be5a70cdea1d1aa0e3ab1c85c1d3a0c4affc6.patch";
+      sha256 = "0nb6jzlxhgjvac52cjwi0pi40b8v4h6z6pwz5vkyfmaj86spygg3";
+      excludes = [
+        "meson.build"
+        "Dependencies.md"
+      ];
     })
   ];
 

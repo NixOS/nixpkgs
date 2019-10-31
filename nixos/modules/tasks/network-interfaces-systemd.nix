@@ -31,7 +31,7 @@ in
       message = "networking.defaultGatewayWindowSize is not supported by networkd.";
     } {
       assertion = cfg.vswitches == {};
-      message = "networking.vswichtes are not supported by networkd.";
+      message = "networking.vswitches are not supported by networkd.";
     } {
       assertion = cfg.defaultGateway == null || cfg.defaultGateway.interface == null;
       message = "networking.defaultGateway.interface is not supported by networkd.";
@@ -76,15 +76,6 @@ in
           };
       in mkMerge [ {
         enable = true;
-        networks."99-main" = (genericNetwork mkDefault) // {
-          # We keep the "broken" behaviour of applying this to all interfaces.
-          # In general we want to get rid of this workaround but there hasn't
-          # been any work on that.
-          # See the following issues for details:
-          # - https://github.com/NixOS/nixpkgs/issues/18962
-          # - https://github.com/NixOS/nixpkgs/issues/61629
-          matchConfig = mkDefault { Name = "*"; };
-        };
       }
       (mkMerge (forEach interfaces (i: {
         netdevs = mkIf i.virtual ({

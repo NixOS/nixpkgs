@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "qtpass";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner  = "IJHack";
     repo   = "QtPass";
     rev    = "v${version}";
-    sha256 = "025sdk4fq71jgfs54zj7ssgvlci8vvjkqdckgbwz0nqrynlljy08";
+    sha256 = "0748hjvhjrybi33ci3c8hcr74k9pdrf5jv8npf9hrsrmdyy1kr9x";
   };
 
   buildInputs = [ git gnupg pass qtbase qtsvg ];

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs
 , gitlabEnterprise ? false, callPackage, yarn
-, yarn2nix-moretea
+, yarn2nix-moretea, replace
 }:
 
 let
@@ -118,6 +118,13 @@ stdenv.mkDerivation {
 
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
     sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
+
+    # Always require lib-files and application.rb through their store
+    # path, not their relative state directory path. This gets rid of
+    # warnings and means we don't have to link back to lib from the
+    # state directory.
+    ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
+    ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
   '';
 
   buildPhase = ''

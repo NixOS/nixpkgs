@@ -39,11 +39,33 @@ index 2f442bf23..c3e797bf4 100644
  #ExecReload=/bin/kill -HUP $MAINPID
  ExecStart=@sbindir@/NetworkManager --no-daemon
  Restart=on-failure
+diff --git a/libnm/meson.build b/libnm/meson.build
+index 710ef181d..3aa182dd4 100644
+--- a/libnm/meson.build
++++ b/libnm/meson.build
+@@ -280,7 +280,7 @@ if enable_introspection
+     name,
+     input: libnm_gir[0],
+     output: name,
+-    command: [generate_setting_docs_env, python.path(), generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--output', '@OUTPUT@'],
++    command: [generate_setting_docs_env, generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--output', '@OUTPUT@'],
+     depends: libnm_gir,
+   )
+ 
+@@ -289,7 +289,7 @@ if enable_introspection
+     name,
+     input: libnm_gir[0],
+     output: name,
+-    command: [generate_setting_docs_env, python.path(), generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--overrides', nm_settings_docs_overrides, '--output', '@OUTPUT@'],
++    command: [generate_setting_docs_env, generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--overrides', nm_settings_docs_overrides, '--output', '@OUTPUT@'],
+     depends: libnm_gir,
+   )
+ endif
 diff --git a/src/devices/nm-device.c b/src/devices/nm-device.c
-index 823cf48a5..cda16e48d 100644
+index 67e23b8f9..b0ce52711 100644
 --- a/src/devices/nm-device.c
 +++ b/src/devices/nm-device.c
-@@ -12822,14 +12822,14 @@ nm_device_start_ip_check (NMDevice *self)
+@@ -12840,14 +12840,14 @@ nm_device_start_ip_check (NMDevice *self)
  			gw = nm_ip4_config_best_default_route_get (priv->ip_config_4);
  			if (gw) {
  				nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);

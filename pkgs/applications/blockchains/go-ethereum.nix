@@ -10,9 +10,6 @@ buildGoPackage rec {
   propagatedBuildInputs =
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
-  # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
-  hardeningDisable = [ "fortify" ];
-
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;

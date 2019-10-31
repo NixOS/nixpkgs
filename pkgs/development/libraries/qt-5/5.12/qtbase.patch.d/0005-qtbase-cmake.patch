@@ -1,7 +1,7 @@
-From 0ea804da2eb1d0cfbbfc15fbc33a3d7dd5de36ed Mon Sep 17 00:00:00 2001
+From 6f53835deae80b28ec5c1c9a5c0294bbcc87f91b Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:34:28 -0500
-Subject: [PATCH 05/11] qtbase-cmake
+Subject: [PATCH 05/12] qtbase-cmake
 
 ---
  mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in  |  2 +-
@@ -15,7 +15,7 @@ Subject: [PATCH 05/11] qtbase-cmake
  8 files changed, 16 insertions(+), 24 deletions(-)
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index c60ef16e..e354ab91 100644
+index c60ef16e64..e354ab9156 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -278,7 +278,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -28,7 +28,7 @@ index c60ef16e..e354ab91 100644
          set_target_properties(Qt5::${Plugin} PROPERTIES
              \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
 diff --git a/mkspecs/features/data/cmake/Qt5PluginTarget.cmake.in b/mkspecs/features/data/cmake/Qt5PluginTarget.cmake.in
-index 5baf0fdb..3583745a 100644
+index 5baf0fdb10..3583745aea 100644
 --- a/mkspecs/features/data/cmake/Qt5PluginTarget.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5PluginTarget.cmake.in
 @@ -2,10 +2,10 @@
@@ -45,7 +45,7 @@ index 5baf0fdb..3583745a 100644
  
  list(APPEND Qt5$${CMAKE_MODULE_NAME}_PLUGINS Qt5::$$CMAKE_PLUGIN_NAME)
 diff --git a/src/corelib/Qt5CoreConfigExtras.cmake.in b/src/corelib/Qt5CoreConfigExtras.cmake.in
-index e0652fdc..450b2a2d 100644
+index e0652fdcf9..450b2a2d28 100644
 --- a/src/corelib/Qt5CoreConfigExtras.cmake.in
 +++ b/src/corelib/Qt5CoreConfigExtras.cmake.in
 @@ -3,7 +3,7 @@ if (NOT TARGET Qt5::qmake)
@@ -94,7 +94,7 @@ index e0652fdc..450b2a2d 100644
      set(imported_location \"$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
  !!ENDIF
 diff --git a/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in b/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
-index c357237d..6f0c75de 100644
+index c357237d0e..6f0c75de3c 100644
 --- a/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
 +++ b/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
 @@ -1,6 +1,6 @@
@@ -106,7 +106,7 @@ index c357237d..6f0c75de 100644
  set(_qt5_corelib_extra_includes \"$${CMAKE_HOST_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
  !!ENDIF
 diff --git a/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in b/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
-index 706304cf..546420f6 100644
+index 706304cf34..546420f6ad 100644
 --- a/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
 +++ b/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
 @@ -1,6 +1,6 @@
@@ -118,7 +118,7 @@ index 706304cf..546420f6 100644
  set(_qt5_corelib_extra_includes \"$${CMAKE_INSTALL_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
  !!ENDIF
 diff --git a/src/dbus/Qt5DBusConfigExtras.cmake.in b/src/dbus/Qt5DBusConfigExtras.cmake.in
-index 1d947159..b36865fc 100644
+index 1d947159e2..b36865fc48 100644
 --- a/src/dbus/Qt5DBusConfigExtras.cmake.in
 +++ b/src/dbus/Qt5DBusConfigExtras.cmake.in
 @@ -2,11 +2,7 @@
@@ -148,7 +148,7 @@ index 1d947159..b36865fc 100644
  
      set_target_properties(Qt5::qdbusxml2cpp PROPERTIES
 diff --git a/src/gui/Qt5GuiConfigExtras.cmake.in b/src/gui/Qt5GuiConfigExtras.cmake.in
-index 84dbbfeb..8ad0720c 100644
+index 84dbbfebd4..8ad0720c5c 100644
 --- a/src/gui/Qt5GuiConfigExtras.cmake.in
 +++ b/src/gui/Qt5GuiConfigExtras.cmake.in
 @@ -2,7 +2,7 @@
@@ -177,7 +177,7 @@ index 84dbbfeb..8ad0720c 100644
      set(imported_implib \"$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
  !!ENDIF
 diff --git a/src/widgets/Qt5WidgetsConfigExtras.cmake.in b/src/widgets/Qt5WidgetsConfigExtras.cmake.in
-index 99d87e2e..a4eab2aa 100644
+index 99d87e2e46..a4eab2aa72 100644
 --- a/src/widgets/Qt5WidgetsConfigExtras.cmake.in
 +++ b/src/widgets/Qt5WidgetsConfigExtras.cmake.in
 @@ -3,7 +3,7 @@ if (NOT TARGET Qt5::uic)
@@ -190,5 +190,5 @@ index 99d87e2e..a4eab2aa 100644
      set(imported_location \"$${CMAKE_BIN_DIR}uic$$CMAKE_BIN_SUFFIX\")
  !!ENDIF
 -- 
-2.22.1
+2.23.GIT
 

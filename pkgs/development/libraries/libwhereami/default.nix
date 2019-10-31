@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "libwhereami";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
-    sha256 = "084n153jaq8fmhjififk0xlx1d1i3lclnw2j3ly8bixvc392vzly";
+    sha256 = "0yq6m4kh06idp3l8cp7kswn5k8vcaip1zqhypbhszybqa0afb5az";
     rev = version;
     repo = "libwhereami";
     owner = "puppetlabs";
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
     description = "Library to report hypervisor information from inside a VM";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
-    platforms = platforms.linux;
-    badPlatforms = platforms.arm;
+    platforms = with platforms; [ "i686-linux" "x86_64-linux" ]; # fails on aarch64
   };
 
 }

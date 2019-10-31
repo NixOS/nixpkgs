@@ -28,12 +28,12 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "0.13.0";
+  version = "0.17.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "915b9d7b28f7f7cdf015d8617c689ca90eda7a5bbd59c5fc232c9eccc9a91585";
+    sha256 = "3d1d3547340c47f34f3a416a2e0761a0ff887ae8ce06474e84ebcc8600afd438";
   };
 
   checkInputs = [

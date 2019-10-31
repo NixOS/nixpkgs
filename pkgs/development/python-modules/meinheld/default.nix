@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "meinheld";
-  version = "0.6.1";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rg5878njn66cc0x2fwrakikz24946r0cxxl6j8vvz5phd4zygi9";
+    sha256 = "447de7189e4dc9c1f425aa1b9c8210aab492fda4d86f73a24059264e7d8b0134";
   };
 
   propagatedBuildInputs = [ greenlet ];
