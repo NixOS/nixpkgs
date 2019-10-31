@@ -106,6 +106,11 @@ mapAliases ({
   firefoxWrapper = firefox;           # 2015-09
   flameGraph = flamegraph; # added 2018-04-25
   font-awesome-ttf = font-awesome; # 2018-02-25
+  # 2019-10-31
+  fontconfig-ultimate = throw ''
+    fontconfig-ultimate has been removed. The repository has been archived upstream and activity has ceased for several years.
+    https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+  '';
   font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11

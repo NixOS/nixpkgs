@@ -11028,8 +11028,6 @@ in
 
   fontconfig-penultimate = callPackage ../data/fonts/fontconfig-penultimate {};
 
-  fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
-
   folly = callPackage ../development/libraries/folly { };
 
   folks = callPackage ../development/libraries/folks { };
