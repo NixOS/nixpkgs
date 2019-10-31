@@ -11750,6 +11750,8 @@ in
 
   libaal = callPackage ../development/libraries/libaal { };
 
+  libabigail = callPackage ../development/libraries/libabigail { };
+
   libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
 
   libacr38u = callPackage ../tools/security/libacr38u { };
