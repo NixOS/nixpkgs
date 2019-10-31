@@ -23,7 +23,8 @@ stdenv.mkDerivation {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ]
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ findlib topkg ]
   ++ stdenv.lib.optional jsooSupport js_of_ocaml;
 
   buildPhase = "${topkg.buildPhase} --with-js_of_ocaml ${boolToString jsooSupport}";

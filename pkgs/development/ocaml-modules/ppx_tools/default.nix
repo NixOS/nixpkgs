@@ -37,7 +37,8 @@ in
       inherit (param) sha256;
     };
 
-    buildInputs = [ ocaml findlib ];
+    nativeBuildInputs = [ ocaml findlib ];
+    buildInputs = [ findlib ];
 
     createFindlibDestdir = true;
 
