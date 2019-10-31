@@ -1,4 +1,4 @@
-{ pkgs, lib, gnome3 }:
+{ config, pkgs, lib, gnome3 }:
 
 
 lib.makeScope pkgs.newScope (self: with self; {
@@ -227,8 +227,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
 
+} // lib.optionalAttrs (config.allowAliases or true) {
+
   ### ALIASES
 
-  vala = pkgs.vala; # added 2019-10-10
+  inherit (pkgs) vala; # added 2019-10-10
 
 })
