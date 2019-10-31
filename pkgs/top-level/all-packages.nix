@@ -4596,6 +4596,8 @@ in
 
   lftp = callPackage ../tools/networking/lftp { };
 
+  libck = callPackage ../development/libraries/libck { };
+
   libconfig = callPackage ../development/libraries/libconfig { };
 
   libcmis = callPackage ../development/libraries/libcmis { };
