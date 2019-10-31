@@ -29,6 +29,10 @@ buildPythonPackage rec {
 
   prePatch = ''
     sed -i "s,/usr/,$out," lib/ansible/constants.py
+
+    # ansible-connection is wrapped, so make sure it's not passed
+    # through the python interpreter.
+    sed -i "s/\[python, /[/" lib/ansible/executor/task_executor.py
   '';
 
   postInstall = ''
