@@ -10901,6 +10901,8 @@ in
     blas = if stdenv.isDarwin then blas else openblas;
   };
 
+  forge = callPackage ../development/libraries/forge { };
+
   linbox = callPackage ../development/libraries/linbox {
     # We need to use blas instead of openblas on darwin, see
     # https://github.com/NixOS/nixpkgs/pull/45013 and
