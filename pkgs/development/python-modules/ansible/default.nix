@@ -12,6 +12,7 @@
 , dnspython
 , jmespath
 , dopy
+, ncclient
 , windowsSupport ? false
 , pywinrm
 }:
@@ -43,7 +44,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pycrypto paramiko jinja2 pyyaml httplib2
-    six netaddr dnspython jmespath dopy
+    six netaddr dnspython jmespath dopy ncclient
   ] ++ lib.optional windowsSupport pywinrm;
 
   # dificult to test
