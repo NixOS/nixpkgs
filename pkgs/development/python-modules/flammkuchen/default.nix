@@ -1,9 +1,10 @@
-{ lib, pkgs, buildPythonPackage, fetchPypi, isPy3k
+{ lib, pkgs, buildPythonPackage, fetchPypi, isPy27
 , numpy
 , scipy
 , tables
 , pandas
 , nose
+, configparser
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     scipy
     tables
     pandas
-  ];
+  ] ++ lib.optionals isPy27 [ configparser ];
 
   meta = {
     homepage = "https://github.com/portugueslab/flammkuchen";
