@@ -43,8 +43,8 @@ buildPythonPackage rec {
   '';
 
   preConfigure = ''
-    [ -z "$dontPlacateNuget" ] && placate-nuget.sh
-    [ -z "$dontPlacatePaket" ] && placate-paket.sh
+    [ -z "''${dontPlacateNuget-}" ] && placate-nuget.sh
+    [ -z "''${dontPlacatePaket-}" ] && placate-paket.sh
   '';
 
   nativeBuildInputs = [
