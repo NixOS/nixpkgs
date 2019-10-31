@@ -12,6 +12,7 @@
 , dask
 , cloudpickle
 , pytest
+, imageio
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython ];
 
-  propagatedBuildInputs = [ numpy scipy matplotlib networkx six pillow pywavelets dask cloudpickle ];
+  propagatedBuildInputs = [ numpy scipy matplotlib networkx six pillow pywavelets dask cloudpickle imageio ];
 
   checkInputs = [ pytest ];
 
