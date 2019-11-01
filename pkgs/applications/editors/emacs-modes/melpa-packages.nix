@@ -26,6 +26,17 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
     });
   }) else null;
 
+  externalSrc = pkg : epkg : if pkg != null then pkg.override (args : {
+    melpaBuild = drv : args.melpaBuild (drv // {
+      inherit (epkg) src version;
+
+      propagatedUserEnvPkgs = [ epkg ];
+    });
+  }) else null;
+
+  fix-rtags = pkg : if pkg != null then dontConfigure (externalSrc pkg external.rtags)
+                    else null;
+
   generateMelpa = lib.makeOverridable ({
     archiveJson ? ./recipes-archive-melpa.json
   }: let
@@ -36,7 +47,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
     overrides = rec {
       shared = rec {
         # Expects bash to be at /bin/bash
-        ac-rtags = markBroken super.ac-rtags;
+        ac-rtags = fix-rtags super.ac-rtags;
 
         airline-themes = super.airline-themes.override {
           inherit (self.melpaPackages) powerline;
@@ -61,8 +72,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           ];
         });
 
-        # Expects bash to be at /bin/bash
-        company-rtags = markBroken super.company-rtags;
+        company-rtags = fix-rtags super.company-rtags;
 
         easy-kill-extras = super.easy-kill-extras.override {
           inherit (self.melpaPackages) easy-kill;
@@ -104,8 +114,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           inherit (self.melpaPackages) ess ctable popup;
         };
 
-        # Expects bash to be at /bin/bash
-        flycheck-rtags = markBroken super.flycheck-rtags;
+        flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         pdf-tools = super.pdf-tools.overrideAttrs(old: {
           nativeBuildInputs = [ external.pkgconfig ];
@@ -119,11 +128,8 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         });
 
         # Build same version as Haskell package
-        hindent = super.hindent.overrideAttrs (attrs: {
-          version = external.hindent.version;
-          src = external.hindent.src;
+        hindent = (externalSrc super.hindent external.hindent).overrideAttrs (attrs: {
           packageRequires = [ self.haskell-mode ];
-          propagatedUserEnvPkgs = [ external.hindent ];
         });
 
         irony = super.irony.overrideAttrs (old: {
@@ -156,8 +162,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           HOME = "/tmp";
         });
 
-        # Expects bash to be at /bin/bash
-        ivy-rtags = markBroken super.ivy-rtags;
+        ivy-rtags = fix-rtags super.ivy-rtags;
 
         magit = super.magit.overrideAttrs (attrs: {
           # searches for Git at build time
@@ -217,6 +222,8 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
+
+        rtags = dontConfigure (externalSrc super.rtags external.rtags);
 
         shm = super.shm.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
@@ -317,8 +324,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: doesn't build
         eterm-256color = markBroken super.eterm-256color;
 
-        # Expects bash to be at /bin/bash
-        helm-rtags = markBroken super.helm-rtags;
+        helm-rtags = fix-rtags super.helm-rtags;
 
         # upstream issue: missing file header
         qiita = markBroken super.qiita;
@@ -362,8 +368,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
-        # Expects bash to be at /bin/bash
-        helm-rtags = markBroken super.helm-rtags;
+        helm-rtags = fix-rtags super.helm-rtags;
 
         orgit =
           (super.orgit.overrideAttrs (attrs: {
