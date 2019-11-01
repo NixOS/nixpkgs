@@ -16,7 +16,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
   dontConfigure = pkg: if pkg != null then pkg.override (args: {
     melpaBuild = drv: args.melpaBuild (drv // {
-      configureScript = "true";
+      dontConfigure = true;
     });
   }) else null;
 
@@ -63,14 +63,9 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # part of a larger package
         caml = dontConfigure super.caml;
 
-        cmake-mode = super.cmake-mode.overrideAttrs (attrs: {
-          buildInputs = (attrs.buildInputs or []) ++ [
-            external.openssl
-          ];
-          nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [
-            external.pkgconfig
-          ];
-        });
+        # part of a larger package
+        # upstream issue: missing package version
+        cmake-mode = dontConfigure super.cmake-mode;
 
         company-rtags = fix-rtags super.company-rtags;
 
@@ -292,10 +287,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # upstream issue: missing file header
         bufshow = markBroken super.bufshow;
-
-        # part of a larger package
-        # upstream issue: missing package version
-        cmake-mode = dontConfigure super.cmake-mode;
 
         # upstream issue: missing file header
         connection = markBroken super.connection;
