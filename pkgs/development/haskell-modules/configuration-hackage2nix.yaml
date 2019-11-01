@@ -2892,6 +2892,7 @@ broken-packages:
   - ADPfusionSet
   - adtrees
   - Advgame
+  - Advise-me
   - AERN-Basics
   - AERN-Net
   - AERN-Real
@@ -5073,6 +5074,7 @@ broken-packages:
   - ghci-history-parser
   - ghci-lib
   - ghci-ng
+  - ghci-pretty
   - ghcide
   - ghcjs-base-stub
   - ghcjs-dom-jsffi
@@ -6491,6 +6493,7 @@ broken-packages:
   - ipc
   - ipld-cid
   - ipopt-hs
+  - ipprint
   - iptables-helpers
   - iptadmin
   - IPv6DB
@@ -7739,6 +7742,7 @@ broken-packages:
   - opml-conduit
   - opn
   - optima
+  - optima-for-hasql
   - optimal-blocks
   - optimization
   - optimusprime
@@ -8425,6 +8429,7 @@ broken-packages:
   - reflection-extras
   - reflex
   - reflex-animation
+  - reflex-backend-socket
   - reflex-backend-wai
   - reflex-basic-host
   - reflex-dom-retractable
@@ -9195,6 +9200,7 @@ broken-packages:
   - sqlvalue-list
   - sqsd-local
   - squeal-postgresql
+  - sr-extra
   - srcinst
   - sscan
   - sscgi
