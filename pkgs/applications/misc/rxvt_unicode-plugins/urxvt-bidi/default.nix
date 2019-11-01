@@ -1,13 +1,6 @@
-{
-  buildPerlPackage,
-  stdenv,
-  fetchurl,
-  perl,
-  pkgconfig,
-  fribidi
-}:
+{ lib, fetchurl, perlPackages, pkgconfig, fribidi }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   pname = "urxvt-bidi";
   version = "2.15";
 
@@ -16,18 +9,14 @@ buildPerlPackage rec {
     sha256 = "1w65xbi4mw5acsrpv3phyzv82ghb29kpbb3b1b1gcinlfxl6f61m";
   };
 
-  nativeBuildInputs = [
-    perl
-    pkgconfig
-    perl.pkgs.ExtUtilsPkgConfig
-    fribidi
-  ];
+  nativeBuildInputs = [ pkgconfig perlPackages.ExtUtilsPkgConfig ];
+  buildInputs = [ fribidi ];
+
   postInstall = ''
-    mkdir -p "$out/lib/urxvt/perl"
-    cp misc/bidi "$out/lib/urxvt/perl"
+    install -Dm555 misc/bidi "$out/lib/urxvt/perl/bidi"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text::Bidi Perl package using fribidi, providing a urxvt plugin";
     homepage = "https://github.com/mkamensky/Text-Bidi";
     maintainers = with maintainers; [ doronbehar ];
