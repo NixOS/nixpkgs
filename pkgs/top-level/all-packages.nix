@@ -20124,6 +20124,8 @@ in
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
+  notekit = callPackage ../applications/editors/notekit { };
+
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
   notbit = callPackage ../applications/networking/mailreaders/notbit { };
