@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "devpi-server";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "254fceee846532a5fec4e6bf52a59eb8f236efc657678a542b5200da4bb3abbc";
+    sha256 = "1dapd0bis7pb4fzq5yva7spby5amcsgl1970z5nq1rlprf6qbydg";
   };
 
   propagatedBuildInputs = with python3Packages; [
