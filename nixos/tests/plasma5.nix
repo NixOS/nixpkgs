@@ -25,7 +25,7 @@ import ./make-test.nix ({ pkgs, ...} :
     services.xserver.displayManager.sddm.enable = true;
     services.xserver.displayManager.sddm.theme = "breeze-ocr-theme";
     services.xserver.desktopManager.plasma5.enable = true;
-    services.xserver.desktopManager.default = "plasma5";
+    services.xserver.desktopManager.default = "plasma";
     services.xserver.displayManager.sddm.autoLogin = {
       enable = true;
       user = "alice";
