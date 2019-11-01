@@ -18,6 +18,7 @@
 , "browserify"
 , "castnow"
 , "clean-css"
+, "coc-prettier"
 , "coffee-script"
 , "coinmon"
 , "configurable-http-proxy"
