@@ -1273,7 +1273,7 @@ self: super: {
   language-ats = dontCheck super.language-ats;
 
   # polysemy-plugin requires polysemy >= 1.2.0.0
-  polysemy = self.polysemy_1_2_2_0;
+  polysemy = self.polysemy_1_2_3_0;
 
   # The polysemy-plugin tests failed because it couldn't find
   # the polysemy-plugin package in the doctests:
