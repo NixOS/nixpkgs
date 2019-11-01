@@ -5,23 +5,23 @@
 , toolz
 , zict
 , six
-, pytest
+, pytest_4
 , networkx
 , distributed
 , confluent-kafka
 , graphviz
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "streamz";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfdd42aa62df299f550768de5002ec83112136a34b44441db9d633b2df802fb4";
+    sha256 = "127rpdjgkcyjifmkqbhmqfbzlgi32n54rybrdxja610qr906y40c";
   };
 
-  checkInputs = [ pytest networkx distributed confluent-kafka graphviz ];
   propagatedBuildInputs = [
     tornado
     toolz
@@ -29,13 +29,24 @@ buildPythonPackage rec {
     six
   ];
 
+  checkInputs = [
+    confluent-kafka
+    distributed
+    graphviz
+    networkx
+    pytest_4
+    requests
+  ];
+
+  # Disable test_tcp_async because fails on sandbox build
   checkPhase = ''
-    pytest
+    pytest --deselect=streamz/tests/test_sources.py::test_tcp_async \
+      --deselect=streamz/tests/test_sources.py::test_tcp
   '';
 
   meta = with lib; {
     description = "Pipelines to manage continuous streams of data";
-    homepage = https://github.com/mrocklin/streamz/;
+    homepage = "https://github.com/mrocklin/streamz";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

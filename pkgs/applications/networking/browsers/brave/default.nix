@@ -10,11 +10,13 @@
 , expat
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gnome2
 , gnome3
+, gsettings-desktop-schemas
 , gtk3
+, libpulseaudio
 , libuuid
 , libX11
 , libXcomposite
@@ -37,114 +39,119 @@
 , wrapGAppsHook
 }:
 
-let rpath = lib.makeLibraryPath [
-    alsaLib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk_pixbuf
-    glib
-    gnome2.GConf
-    gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libuuid
-    nspr
-    nss
-    pango
-    udev
-    xdg_utils
-    xorg.libxcb
-    zlib
+let
+
+rpath = lib.makeLibraryPath [
+  alsaLib
+  at-spi2-atk
+  at-spi2-core
+  atk
+  cairo
+  cups
+  dbus
+  expat
+  fontconfig
+  freetype
+  gdk-pixbuf
+  glib
+  gnome2.GConf
+  gtk3
+  libpulseaudio
+  libX11
+  libXScrnSaver
+  libXcomposite
+  libXcursor
+  libXdamage
+  libXext
+  libXfixes
+  libXi
+  libXrandr
+  libXrender
+  libXtst
+  libuuid
+  nspr
+  nss
+  pango
+  udev
+  xdg_utils
+  xorg.libxcb
+  zlib
 ];
 
+in
 
-in stdenv.mkDerivation rec {
-    pname = "brave";
-    version = "0.61.50";
+stdenv.mkDerivation rec {
+  pname = "brave";
+  version = "0.69.128";
 
-    src = fetchurl {
-        url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-        sha256 = "1lbajxnxqkd422rckfjm65pwwzl66v7anq4jrzxi29d5x7abl3c1";
-    };
+  src = fetchurl {
+    url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
+    sha256 = "1w5p2hbn14k239fbqrbxkw9h3p8wm7cdyjcyvrsss57fj00j8s4r";
+  };
 
-    dontConfigure = true;
-    dontBuild = true;
-    dontPatchELF = true;
+  dontConfigure = true;
+  dontBuild = true;
+  dontPatchELF = true;
 
-    nativeBuildInputs = [ dpkg wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
-    buildInputs = [ glib gnome3.gsettings_desktop_schemas gnome3.adwaita-icon-theme ];
+  buildInputs = [ glib gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
 
-    unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
+  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
-    installPhase = ''
-        mkdir -p $out $out/bin
+  installPhase = ''
+      mkdir -p $out $out/bin
 
-        cp -R usr/share $out
-        cp -R opt/ $out/opt
+      cp -R usr/share $out
+      cp -R opt/ $out/opt
 
-        export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
+      export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
 
-        # Fix path to bash in $BINARYWRAPPER
-        substituteInPlace $BINARYWRAPPER \
-            --replace /bin/bash ${stdenv.shell}
+      # Fix path to bash in $BINARYWRAPPER
+      substituteInPlace $BINARYWRAPPER \
+          --replace /bin/bash ${stdenv.shell}
 
-        ln -sf $BINARYWRAPPER $out/bin/brave
+      ln -sf $BINARYWRAPPER $out/bin/brave
 
-        patchelf \
-            --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-            --set-rpath "${rpath}" $out/opt/brave.com/brave/brave
+      patchelf \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+          --set-rpath "${rpath}" $out/opt/brave.com/brave/brave
 
-        # Fix paths
-        substituteInPlace $out/share/applications/brave-browser.desktop \
-            --replace /usr/bin/brave-browser $out/bin/brave
-        substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
-            --replace /opt/brave.com $out/opt/brave.com
-        substituteInPlace $out/share/menu/brave-browser.menu \
-            --replace /opt/brave.com $out/opt/brave.com
-        substituteInPlace $out/opt/brave.com/brave/default-app-block \
-            --replace /opt/brave.com $out/opt/brave.com
+      # Fix paths
+      substituteInPlace $out/share/applications/brave-browser.desktop \
+          --replace /usr/bin/brave-browser-stable $out/bin/brave
+      substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
+          --replace /opt/brave.com $out/opt/brave.com
+      substituteInPlace $out/share/menu/brave-browser.menu \
+          --replace /opt/brave.com $out/opt/brave.com
+      substituteInPlace $out/opt/brave.com/brave/default-app-block \
+          --replace /opt/brave.com $out/opt/brave.com
 
-        # Correct icons location
-        icon_sizes=("16" "22" "24" "32" "48" "64" "128" "256")
+      # Correct icons location
+      icon_sizes=("16" "22" "24" "32" "48" "64" "128" "256")
 
-        for icon in ''${icon_sizes[*]}
-        do
-            mkdir -p $out/share/icons/hicolor/$icon\x$icon/apps
-            ln -s $out/opt/brave.com/brave/product_logo_$icon.png $out/share/icons/hicolor/$icon\x$icon/apps/brave-browser.png
-        done
+      for icon in ''${icon_sizes[*]}
+      do
+          mkdir -p $out/share/icons/hicolor/$icon\x$icon/apps
+          ln -s $out/opt/brave.com/brave/product_logo_$icon.png $out/share/icons/hicolor/$icon\x$icon/apps/brave-browser.png
+      done
 
-        # Replace xdg-settings and xdg-mime
-        ln -sf ${xdg_utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
-        ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+      # Replace xdg-settings and xdg-mime
+      ln -sf ${xdg_utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
+      ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://brave.com/";
+    description = "Privacy-oriented browser for Desktop and Laptop computers";
+    changelog = "https://github.com/brave/brave-browser/blob/v${version}/CHANGELOG.md";
+    longDescription = ''
+      Brave browser blocks the ads and trackers that slow you down,
+      chew up your bandwidth, and invade your privacy. Brave lets you
+      contribute to your favorite creators automatically.
     '';
-
-    meta = with stdenv.lib; {
-        homepage = "https://brave.com/";
-        description = "Privacy-oriented browser for Desktop and Laptop computers";
-        longDescription = ''
-          Brave browser blocks the ads and trackers that slow you down,
-          chew up your bandwidth, and invade your privacy. Brave lets you
-          contribute to your favorite creators automatically.
-        '';
-        license = licenses.mpl20;
-        maintainers = [ maintainers.uskudnik ];
-        platforms = [ "x86_64-linux" ];
-    };
+    license = licenses.mpl20;
+    maintainers = [ maintainers.uskudnik ];
+    platforms = [ "x86_64-linux" ];
+  };
 }

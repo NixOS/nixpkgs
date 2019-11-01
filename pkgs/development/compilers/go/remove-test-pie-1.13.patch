@@ -1,0 +1,34 @@
+diff --git a/src/cmd/dist/test.go b/src/cmd/dist/test.go
+index f63c94697c..f02eff7064 100644
+--- a/src/cmd/dist/test.go
++++ b/src/cmd/dist/test.go
+@@ -574,29 +574,6 @@ func (t *tester) registerTests() {
+ 		})
+ 	}
+ 
+-	// Test internal linking of PIE binaries where it is supported.
+-	if goos == "linux" && (goarch == "amd64" || goarch == "arm64") {
+-		t.tests = append(t.tests, distTest{
+-			name:    "pie_internal",
+-			heading: "internal linking of -buildmode=pie",
+-			fn: func(dt *distTest) error {
+-				t.addCmd(dt, "src", t.goTest(), "reflect", "-buildmode=pie", "-ldflags=-linkmode=internal", t.timeout(60))
+-				return nil
+-			},
+-		})
+-		// Also test a cgo package.
+-		if t.cgoEnabled {
+-			t.tests = append(t.tests, distTest{
+-				name:    "pie_internal_cgo",
+-				heading: "internal linking of -buildmode=pie",
+-				fn: func(dt *distTest) error {
+-					t.addCmd(dt, "src", t.goTest(), "os/user", "-buildmode=pie", "-ldflags=-linkmode=internal", t.timeout(60))
+-					return nil
+-				},
+-			})
+-		}
+-	}
+-
+ 	// sync tests
+ 	if goos != "js" { // js doesn't support -cpu=10
+ 		t.tests = append(t.tests, distTest{

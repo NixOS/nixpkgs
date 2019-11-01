@@ -1,7 +1,39 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pantheon, pkgconfig, meson, python3
-, ninja, substituteAll, vala, gtk3, granite, wingpanel, evolution-data-server
-, libical, libgee, libxml2, libsoup, gobject-introspection
-, elementary-calendar, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, evolution-data-server
+, libical
+, libgee
+, libxml2
+, libsoup
+, elementary-calendar
+, elementary-icon-theme
+, wrapGAppsHook
+, fetchurl
+}:
+
+let
+
+  # Terrible workaround https://github.com/elementary/wingpanel-indicator-datetime/issues/122
+  # Evolution Data Server functionality will be broken (events from calendar in indicator)
+  # but at least we don't fail to build.
+  old-evolution-data-server = evolution-data-server.overrideAttrs(old: {
+    src = fetchurl {
+      url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor "3.32.4"}/${old.pname}-3.32.4.tar.xz";
+      sha256 = "0zsc9xwy6ixk3x0dx69ax5isrdw8qxjdxg2i5fr95s40nss7rxl3";
+    };
+  });
+
+in
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
@@ -21,7 +53,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     libxml2
     meson
     ninja
@@ -33,7 +64,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     elementary-icon-theme
-    evolution-data-server
+    old-evolution-data-server
     granite
     gtk3
     libgee
@@ -55,7 +86,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py

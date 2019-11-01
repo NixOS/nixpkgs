@@ -12,7 +12,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "python-boot-${version}";
+  pname = "python-boot";
   version = "2.7.12";
   libPrefix = "python2.7";
 

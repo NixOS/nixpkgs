@@ -19,12 +19,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.11.0";
+  version = "1.0.0";
   pname = "dask-ml";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a9e8e69494560dc23534adb236e88b3b21dc30a156648453c9c6e4b27ff2df96";
+    sha256 = "dde926478653bd03a3fbc501d3873a1534836608217b94d04320d1e1c07e59dc";
   };
 
   checkInputs = [ pytest xgboost tensorflow joblib distributed ];

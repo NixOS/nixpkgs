@@ -3,7 +3,7 @@
 }:
 
 perlPackages.buildPerlPackage rec {
-  name = "FusionInventory-Agent-${version}";
+  pname = "FusionInventory-Agent";
   version = "2.3.21";
 
   src = fetchFromGitHub {

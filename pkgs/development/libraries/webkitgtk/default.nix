@@ -6,6 +6,7 @@
 , enableGeoLocation ? true, geoclue2, sqlite
 , enableGtk2Plugins ? false, gtk2 ? null
 , gst-plugins-base, gst-plugins-bad, woff2
+, bubblewrap, libseccomp, xdg-dbus-proxy, substituteAll
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -14,11 +15,11 @@ assert stdenv.isDarwin -> !enableGtk2Plugins;
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "webkitgtk-${version}";
-  version = "2.24.1";
+  pname = "webkitgtk";
+  version = "2.26.1";
 
   meta = {
-    description = "Web content rendering engine, GTK+ port";
+    description = "Web content rendering engine, GTK port";
     homepage = https://webkitgtk.org/;
     license = licenses.bsd2;
     platforms = platforms.linux;
@@ -27,12 +28,15 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "https://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "0v9riwrmwi9wxbb8hlvcbyyxa9zxhcdk6s1xcspalk6asam8xjsk";
+    url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "0mfikjfjhwcnrxbzdyh3fl9bbs2azgbdnx8h5910h41b3n022jvb";
   };
 
-  patches = optionals stdenv.isDarwin [
-    ## TODO add necessary patches for Darwin
+  patches = optionals stdenv.isLinux [
+    (substituteAll {
+      src = ./fix-bubblewrap-paths.patch;
+      inherit (builtins) storeDir;
+    })
   ];
 
   postPatch = ''
@@ -41,8 +45,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
   "-DPORT=GTK"
-  "-DUSE_LIBHYPHEN=0"
+  "-DUSE_LIBHYPHEN=OFF"
   "-DENABLE_INTROSPECTION=ON"
+  "-DUSE_WPE_RENDERER=OFF"
   ]
   ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
   ++ optional stdenv.isLinux "-DENABLE_GLES2=ON"
@@ -73,11 +78,14 @@ stdenv.mkDerivation rec {
     ++ optional enableGtk2Plugins gtk2
     ++ (with xorg; [ libXdmcp libXt libXtst libXdamage ])
     ++ optionals stdenv.isDarwin [ libedit readline libGLU_combined ]
-    ++ optional stdenv.isLinux wayland;
+    ++ optionals stdenv.isLinux [
+      wayland bubblewrap libseccomp xdg-dbus-proxy
+  ];
 
   propagatedBuildInputs = [
     libsoup gtk3
   ];
 
   outputs = [ "out" "dev" ];
+
 }

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, which, gfortran, libGLU, xorg } :
 
 stdenv.mkDerivation rec {
-  version = "5.9.5";
-  name = "molden-${version}";
+  version = "6.2";
+  pname = "molden";
 
   src = fetchurl {
     url = "ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden${version}.tar.gz";
-    sha256 = "0va5g03kvnzydx0b77y1p536iy7swzvnx6yknp87qgpw1bgrzdj9";
+    sha256 = "01m5p7v5pz1fi77var50sp1bzlvdckwr6kn4wanvic2jmvgp9q5n";
   };
 
   nativeBuildInputs = [ which ];

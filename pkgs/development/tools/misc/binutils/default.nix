@@ -1,9 +1,11 @@
 { stdenv, lib, buildPackages
-, fetchurl, zlib, autoreconfHook
+, fetchurl, zlib, autoreconfHook, gettext
 # Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
 , enableShared ? true
-, noSysDirs, gold ? true, bison ? null
+, noSysDirs
+, gold ? !stdenv.buildPlatform.isDarwin || stdenv.hostPlatform == stdenv.targetPlatform
+, bison ? null
 }:
 
 let
@@ -20,7 +22,7 @@ let
                   "${stdenv.targetPlatform.config}-";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = targetPrefix + basename;
 
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
@@ -70,7 +72,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.targetPlatform.isiOS [
     autoreconfHook
   ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;
 

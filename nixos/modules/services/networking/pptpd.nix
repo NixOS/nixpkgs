@@ -8,13 +8,13 @@ with lib;
       enable = mkEnableOption "pptpd, the Point-to-Point Tunneling Protocol daemon";
 
       serverIp = mkOption {
-        type        = types.string;
+        type        = types.str;
         description = "The server-side IP address.";
         default     = "10.124.124.1";
       };
 
       clientIpRange = mkOption {
-        type        = types.string;
+        type        = types.str;
         description = "The range from which client IPs are drawn.";
         default     = "10.124.124.2-11";
       };

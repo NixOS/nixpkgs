@@ -13,7 +13,6 @@
 
 stdenv.mkDerivation rec {
   pname = "ssl-cert-check";
-  name = "${pname}-${version}";
   version = "3.31";
 
   src = fetchFromGitHub {

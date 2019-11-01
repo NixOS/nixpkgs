@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "simpleproxy-${version}";
+  pname = "simpleproxy";
   version = "3.5";
   rev = "v.${version}";
 

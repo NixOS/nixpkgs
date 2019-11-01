@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, pkgconfig, libftdi, pciutils }:
 
 stdenv.mkDerivation rec {
-  name = "flashrom-${version}";
-  version = "1.0.1";
+  pname = "flashrom";
+  version = "1.1";
 
   src = fetchurl {
     url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
-    sha256 = "0i6yrrl69hrqmwd7azj7x3j46m0qpvzmk3b5basym7mnlpfzhyfm";
+    sha256 = "06afq680n9p34hi3vrkn12vd1pfyq2062db9qqbi4hi21k3skbdf";
   };
 
   # Newer versions of libusb deprecate some API flashrom uses.

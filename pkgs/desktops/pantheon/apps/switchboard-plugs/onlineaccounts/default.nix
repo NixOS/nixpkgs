@@ -1,6 +1,22 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala
-, libgee, granite, gtk3, libaccounts-glib, libsignon-glib, json-glib
-, librest, webkitgtk, libsoup, switchboard, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, libaccounts-glib
+, libsignon-glib
+, json-glib
+, librest
+, webkitgtk
+, libsoup
+, switchboard
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
@@ -20,7 +36,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -38,6 +53,14 @@ stdenv.mkDerivation rec {
     librest
     switchboard
     webkitgtk
+  ];
+
+  patches = [
+    # Fix build with latest vala
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/5fa2882f765076d20c6ef4886198a34a05159f8a.patch";
+      sha256 = "1szryyy7shdmbvx9yhpi0bhzaayg7hl6pq2c456j1qf9kfv0m4hf";
+    })
   ];
 
   PKG_CONFIG_LIBACCOUNTS_GLIB_PROVIDERFILESDIR = "${placeholder "out"}/share/accounts/providers";

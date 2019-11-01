@@ -7,13 +7,13 @@ python27Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eggnogdb";
     repo = "eggnog-mapper";
-    rev = "${version}";
+    rev = version;
     sha256 = "1aaaflppy84bhkh2hb5gnzm4xgrz0rz0cgfpadr9w8cva8p0sqdv";
   };
 
   patches = (fetchpatch {
-    url = https://github.com/eggnogdb/eggnog-mapper/pull/125/commits/b7828e4c8c1c453e391aef050f06ff3f84ff9faf.patch;
-    sha256 = "0nz1a7ybm4j5c7vdm3annnxz9036iam2044hia341a0am9wydmzk";
+    url = "https://github.com/eggnogdb/eggnog-mapper/commit/6972f601ade85b65090efca747d2302acb58507f.patch";
+    sha256 = "0abnmn0bh11jihf5d3cggiild1ykawzv5f5fhb4cyyi8fvy4hcxf";
   });
 
   buildInputs = [ makeWrapper ];

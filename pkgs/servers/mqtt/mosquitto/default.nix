@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, docbook_xsl, libxslt
-, openssl, libuuid, libwebsockets, c-ares, libuv
+{ stdenv, lib, fetchFromGitHub, cmake, docbook_xsl, libxslt
+, openssl, libuuid, libwebsockets_3_1, c-ares, libuv
 , systemd ? null, withSystemd ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
-  name = "mosquitto-${version}";
-  version = "1.6.1";
+  pname = "mosquitto";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner  = "eclipse";
     repo   = "mosquitto";
     rev    = "v${version}";
-    sha256 = "0mpllj719cmirynbcgiankdzyg7bn6vpvxxhg8zr18lic5dvgm3p";
+    sha256 = "1g9g9c95ypfa9dv53ga3hjqxrrlqmcf1lmpxgrifl2l34q4zzfln";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    openssl libuuid libwebsockets c-ares libuv
+    openssl libuuid libwebsockets_3_1 c-ares libuv
   ] ++ lib.optional withSystemd systemd;
 
   nativeBuildInputs = [ cmake docbook_xsl libxslt ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open source MQTT v3.1/3.1.1 broker";
-    homepage = http://mosquitto.org/;
+    homepage = "https://mosquitto.org/";
     license = licenses.epl10;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

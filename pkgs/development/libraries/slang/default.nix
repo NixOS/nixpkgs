@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "doc" ];
 
+  patches = [ ./terminfo-dirs.patch ];
+
   # Fix some wrong hardcoded paths
   preConfigure = ''
     sed -i -e "s|/usr/lib/terminfo|${ncurses.out}/lib/terminfo|" configure

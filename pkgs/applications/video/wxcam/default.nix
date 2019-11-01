@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "wxcam-${version}";
+  pname = "wxcam";
   version = "1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/wxcam/wxcam/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/wxcam/wxcam/${version}/${pname}-${version}.tar.gz";
     sha256 = "1765bvc65fpzn9ycnnj5hais9xkx9v0sm6a878d35x54bpanr859";
   };
 

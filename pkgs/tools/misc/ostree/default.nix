@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2019.1";
+  version = "2019.2";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "08y7nsxl305dnlfak4kyj88lld848y4kg6bvjqngcxaqqvkk9xqm";
+    sha256 = "0nbbrz3p4ms6vpl272q6fimqvizryw2a8mnfqcn69xf03sz5204y";
   };
 
   patches = [
@@ -22,10 +22,7 @@ stdenv.mkDerivation rec {
     ./disable-test-gpg-verify-result.patch
     # Tests access the helper using relative path
     # https://github.com/ostreedev/ostree/issues/1593
-    (fetchpatch {
-      url = https://github.com/ostreedev/ostree/pull/1633.patch;
-      sha256 = "07xiw1dr7j4yw3w92qhw37f9crlglibflcqj2kf0v5gfrl9i6g4j";
-    })
+    ./01-Drop-ostree-trivial-httpd-CLI-move-to-tests-director.patch
   ];
 
   nativeBuildInputs = [

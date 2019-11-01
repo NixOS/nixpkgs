@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.0.2";
-  name = "czmq-${version}";
+  pname = "czmq";
 
   src = fetchurl {
-    url = "http://download.zeromq.org/${name}.tar.gz";
+    url = "http://download.zeromq.org/${pname}-${version}.tar.gz";
     sha256 = "16k9awrhdsymx7dnmvqcnkaq8lz8x8zppy6sh7ls8prpd6mkkjlb";
   };
 

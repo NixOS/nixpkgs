@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "miniflux";
-  version = "2.0.15";
+  version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1k53dkmd41x5h81arb2fs5s9yb6sy6113nbbzls6dc179slfg9zj";
+    sha256 = "0480f4481qf47l3l79f4gxhgfzzhfapjvl18kw9qjj3rzqn9xyj4";
   };
 
-  modSha256 = "0n5j4rns2w1klgrf5jz0bng9cih9aifjx55hhkf4dfj1x4wsxjdj";
+  goPackagePath = "miniflux.app";
 
   doCheck = true;
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    mv $out/bin/miniflux.app $out/bin/miniflux
+    mv $bin/bin/miniflux.app $bin/bin/miniflux
   '';
 
   meta = with stdenv.lib; {

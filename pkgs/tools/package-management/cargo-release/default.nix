@@ -1,17 +1,17 @@
 { stdenv, rustPlatform, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cargo-release-${version}";
-  version = "0.10.5";
+  pname = "cargo-release";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "sunng87";
     repo = "cargo-release";
-    rev = "${version}";
-    sha256 = "14l5znr1nl69v2v3mdrlas85krq9jn280ssflmd0dz7i4fxiaflc";
+    rev = "v${version}";
+    sha256 = "02rx25dd3klprwr1qmn5vn4vz4244amk2ky4nqfmi4vq3ygrhd1c";
   };
 
-  cargoSha256 = "1f0wgggsjpmcijq07abm3yw06z2ahsdr9iwn4izljvkc1nkqk6jq";
+  cargoSha256 = "18nbmq8j58jlka1lsrx2y0bhb9l5f3wyvcr1zmmda3hvc3vm7kla";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

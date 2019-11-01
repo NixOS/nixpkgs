@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, boost, mysql }:
 
 stdenv.mkDerivation rec {
-  name = "libmysqlconnectorcpp-${version}";
+  pname = "libmysqlconnectorcpp";
   version = "1.1.9";
 
   src = fetchurl {

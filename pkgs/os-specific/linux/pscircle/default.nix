@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitLab, meson, pkgconfig, ninja, cairo }:
 
 stdenv.mkDerivation rec {
-  name = "pscircle-${version}";
-  version = "1.3.0";
+  pname = "pscircle";
+  version = "1.3.1";
 
   src = fetchFromGitLab {
     owner = "mildlyparallel";
     repo = "pscircle";
     rev = "v${version}";
-    sha256 = "0qsif00dkqa8ky3vl2ycx5anx2yk62nrv47f5lrlqzclz91f00fx";
+    sha256 = "1sm99423hh90kr4wdjqi9sdrrpk65j2vz2hzj65zcxfxyr6khjci";
   };
 
   buildInputs = [

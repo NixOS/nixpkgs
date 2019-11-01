@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gdm-${version}";
+  pname = "gdm";
   version = "1.4";
 
   goPackagePath = "github.com/sparrc/gdm";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
 
-  name = "camlp5-7.07";
+  name = "camlp5-7.10";
 
   src = fetchzip {
-    url = "https://github.com/camlp5/camlp5/archive/rel707.tar.gz";
-    sha256 = "1c8v45553ccbqha2ypfranqlgw06rr5wjr2hlnrx5bf9jfq0h0dn";
+    url = "https://github.com/camlp5/camlp5/archive/rel710.tar.gz";
+    sha256 = "1a1lgsc8350afdwmsznsys7m0c0cks4nw6irqz2f92g8g4vkk9b7";
   };
 
   buildInputs = [ ocaml ];

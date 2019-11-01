@@ -1,4 +1,4 @@
-{ self, callPackage, lib }:
+{ self, callPackage }:
 callPackage ./default.nix {
   inherit self;
   version = "2.1.0-beta3";

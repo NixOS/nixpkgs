@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "azure-storage-azcopy-${version}";
+  pname = "azure-storage-azcopy";
   version = "10.0.1-pre";
   revision = "10.0.1";
   goPackagePath = "github.com/Azure/azure-storage-azcopy";

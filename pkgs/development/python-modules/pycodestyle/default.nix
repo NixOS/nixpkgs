@@ -13,6 +13,6 @@ buildPythonPackage rec {
     description = "Python style guide checker (formerly called pep8)";
     homepage = https://pycodestyle.readthedocs.io;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

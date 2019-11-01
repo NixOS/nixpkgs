@@ -8,15 +8,15 @@
   Building, burning, and booting from an installation CD is rather tedious, so
   here is a quick way to see if the installer works properly:
 <screen>
-# mount -t tmpfs none /mnt
-# nixos-generate-config --root /mnt
-$ nix-build '&lt;nixpkgs/nixos>' -A config.system.build.nixos-install
-# ./result/bin/nixos-install</screen>
+<prompt># </prompt>mount -t tmpfs none /mnt
+<prompt># </prompt>nixos-generate-config --root /mnt
+<prompt>$ </prompt>nix-build '&lt;nixpkgs/nixos>' -A config.system.build.nixos-install
+<prompt># </prompt>./result/bin/nixos-install</screen>
   To start a login shell in the new NixOS installation in
   <filename>/mnt</filename>:
 <screen>
-$ nix-build '&lt;nixpkgs/nixos>' -A config.system.build.nixos-enter
-# ./result/bin/nixos-enter
+<prompt>$ </prompt>nix-build '&lt;nixpkgs/nixos>' -A config.system.build.nixos-enter
+<prompt># </prompt>./result/bin/nixos-enter
 </screen>
  </para>
 </chapter>

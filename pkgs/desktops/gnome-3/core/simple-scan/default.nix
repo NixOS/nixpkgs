@@ -1,18 +1,18 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, python3, wrapGAppsHook
-, cairo, gdk_pixbuf, colord, glib, gtk3, gusb, packagekit, libwebp
+, cairo, gdk-pixbuf, colord, glib, gtk3, gusb, packagekit, libwebp
 , libxml2, sane-backends, vala, gnome3, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "simple-scan-${version}";
-  version = "3.32.2";
+  pname = "simple-scan";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/simple-scan/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "12r5hacwpf0gzca3p73xpmx3dksa1kx50nlj6w4nw8jfqzjlkq1k";
+    url = "mirror://gnome/sources/simple-scan/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0glzskxdc7p9z7nwcakqc7qzij4l79adlvvb2cj5fmis731zw9yq";
   };
 
   buildInputs = [
-    cairo gdk_pixbuf colord glib gnome3.adwaita-icon-theme gusb
+    cairo gdk-pixbuf colord glib gnome3.adwaita-icon-theme gusb
     gtk3 libwebp packagekit sane-backends vala
   ];
   nativeBuildInputs = [

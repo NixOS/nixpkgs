@@ -1,12 +1,12 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-backgrounds-${version}";
-  version = "3.32.0";
+  pname = "gnome-backgrounds";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-backgrounds/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1s5krdmd3md44p1fgr2lqm5ifxb8s1vzx6hm11sb4cgzr4dw6lrz";
+    url = "mirror://gnome/sources/gnome-backgrounds/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0zxlwy55fz7i582hch2wnj8zy1kzikssgaix0l2y41ccp5nzpdy2";
   };
 
   passthru = {

@@ -1,20 +1,36 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  requests, mt-940, sepaxml, bleach, isPy3k }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+, bleach
+, mt-940
+, pytest
+, requests
+, sepaxml
+}:
 
 buildPythonPackage rec {
-  version = "2.1.1";
+  version = "2.2.0";
   pname = "fints";
-  disabled = !isPy3k;
+  disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06p6p0xxw0n10hmf7z4k1l29fya0sja433s6lasjr1bal5asdhaq";
+  src = fetchFromGitHub {
+    owner = "raphaelm";
+    repo = "python-fints";
+    rev = "v${version}";
+    sha256 = "1gx173dzdprf3jsc7dss0xax8s6l2hr02qg9m5c4rksb3dl5fl8w";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'sepaxml==2.0.*' 'sepaxml~=2.0'
+  '';
 
   propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
 
-  # no tests included in PyPI package
-  doCheck = false;
+  checkInputs = [ pytest ];
+
+  # ignore network calls and broken fixture
+  checkPhase = ''
+    pytest . --ignore=tests/test_client.py -k 'not robust_mode'
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/raphaelm/python-fints/;

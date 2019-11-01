@@ -1,7 +1,7 @@
 { stdenv, libgit2, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "stagit-${version}";
+  pname = "stagit";
   version = "0.9.1";
 
   src = fetchgit {

@@ -1,14 +1,22 @@
-{ stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk-pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobject-introspection
 , which, dbus, nettools, git, doxygen
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 , libxkbcommon, xcbutilxrm, hicolor-icon-theme
 , asciidoctor
+, fontsConf
+, gtk3Support ? false, gtk3 ? null
 }:
 
-with luaPackages; stdenv.mkDerivation rec {
-  name = "awesome-${version}";
+# needed for beautiful.gtk to work
+assert gtk3Support -> gtk3 != null;
+
+stdenv.mkDerivation rec {
+  lgi = luaPackages.lgi;
+  lua = luaPackages.lua;
+  ldoc = luaPackages.ldoc;
+  pname = "awesome";
   version = "4.3";
 
   src = fetchFromGitHub {
@@ -27,19 +35,28 @@ with luaPackages; stdenv.mkDerivation rec {
     xmlto docbook_xml_dtd_45
     docbook_xsl findXMLCatalogs
     asciidoctor
+    ldoc
   ];
 
+  outputs = [ "out" "doc" ];
+
+  FONTCONFIG_FILE = toString fontsConf;
+
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
-  buildInputs = [ cairo librsvg dbus gdk_pixbuf gobject-introspection
+  buildInputs = [ cairo librsvg dbus gdk-pixbuf gobject-introspection
                   git lgi libpthreadstubs libstartup_notification
                   libxdg_basedir lua nettools pango xcb-util-cursor
                   xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
-                  xcbutilxrm ];
+                  xcbutilxrm ]
+                  ++ stdenv.lib.optional gtk3Support gtk3;
 
-  #cmakeFlags = "-DGENERATE_MANPAGES=ON";
-  cmakeFlags = "-DOVERRIDE_VERSION=${version}";
+  cmakeFlags = [
+    #"-DGENERATE_MANPAGES=ON"
+    "-DOVERRIDE_VERSION=${version}"
+  ] ++ stdenv.lib.optional luaPackages.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so"
+  ;
 
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
   # LUA_CPATH and LUA_PATH are used only for *building*, see the --search flags
@@ -48,7 +65,10 @@ with luaPackages; stdenv.mkDerivation rec {
   LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;;";
 
   postInstall = ''
-    wrapProgram $out/bin/awesome \
+    # Don't use wrapProgram or the wrapper will duplicate the --search
+    # arguments every restart
+    mv "$out/bin/awesome" "$out/bin/.awesome-wrapped"
+    makeWrapper "$out/bin/.awesome-wrapped" "$out/bin/awesome" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
       --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \

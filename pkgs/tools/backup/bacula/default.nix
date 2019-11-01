@@ -1,11 +1,11 @@
 { stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "bacula-9.4.2";
+  name = "bacula-9.4.4";
 
   src = fetchurl {
     url    = "mirror://sourceforge/bacula/${name}.tar.gz";
-    sha256 = "1878jk541b8gvqbh15f0k3bvki1mx02q8mxnxhn9fdc1qk9083d4";
+    sha256 = "1gi0zkkzh6a87xk4sm051hwz5bv4qc4kbl6hk40752knr817mqqg";
   };
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--with-logdir=/var/log/bacula"
     "--with-working-dir=/var/lib/bacula"
     "--mandir=\${out}/share/man"
-  ];
+  ] ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
 
   installFlags = [
     "logdir=\${out}/logdir"

@@ -1,25 +1,21 @@
 { stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "calcurse-${version}";
-  version = "4.4.0";
+  pname = "calcurse";
+  version = "4.5.1";
 
   src = fetchurl {
-    url = "https://calcurse.org/files/${name}.tar.gz";
-    sha256 = "0vw2xi6a2lrhrb8n55zq9lv4mzxhby4xdf3hmi1vlfpyrpdwkjzd";
+    url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
+    sha256 = "0cgkd285x5pk62lmdx9fjxl46c5lj8wj2cqbxq7d99yb4il5fdjk";
   };
 
-  buildInputs = [ ncurses gettext python3 ];
+  buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];
   nativeBuildInputs = [ makeWrapper ];
 
-  # Build Python environment with httplib2 for calcurse-caldav
-  pythonEnv = python3Packages.python.buildEnv.override {
-    extraLibs = [ python3Packages.httplib2 ];
-  };
-  propagatedBuildInputs = [ pythonEnv ];
-
   postInstall = ''
-    substituteInPlace $out/bin/calcurse-caldav --replace /usr/bin/python3 ${pythonEnv}/bin/python3
+    patchShebangs .
+    buildPythonPath ${python3Packages.httplib2}
+    patchPythonScript $out/bin/calcurse-caldav
   '';
 
   meta = with stdenv.lib; {

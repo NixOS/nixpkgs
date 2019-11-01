@@ -4,8 +4,9 @@
 let
   version = "1.3.1";
 in
-stdenv.mkDerivation rec {
-  name = "libopus-${version}";
+stdenv.mkDerivation {
+  pname = "libopus";
+  inherit version;
 
   src = fetchurl {
     url = "https://archive.mozilla.org/pub/opus/opus-${version}.tar.gz";

@@ -5,13 +5,13 @@
 with stdenv.lib;
 
 let
-  version = "0.1.35";
+  version = "0.1.39";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "0lp1w8w0jr6x1gnx8lcrc7cqkv3xirrfvan51b7mrzckr9bc45bf";
+    sha256 = "1jkxmvh079pd9j4aa39ilmclwafnjs0yqdiigwh8cj7yf97x4vsi";
   };
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
@@ -19,8 +19,9 @@ let
   goPackagePath = "github.com/containers/skopeo";
 
 in
-buildGoPackage rec {
-  name = "skopeo-${version}";
+buildGoPackage {
+  pname = "skopeo";
+  inherit version;
   inherit src goPackagePath;
 
   outputs = [ "bin" "man" "out" ];
@@ -44,7 +45,7 @@ buildGoPackage rec {
   postBuild = ''
     # depends on buildGoPackage not changing …
     pushd ./go/src/${goPackagePath}
-    make install-docs MANINSTALLDIR="$man"
+    make install-docs MANINSTALLDIR="$man/share/man"
     popd
   '';
 

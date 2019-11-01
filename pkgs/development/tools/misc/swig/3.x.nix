@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre, buildPackages }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "swig-${version}";
+  pname = "swig";
   version = "3.0.12";
 
   src = fetchFromGitHub {
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-tcl" ];
 
+  # Disable ccache documentation as it needs yodl
   postPatch = ''
-    # Disable ccache documentation as it need yodl
     sed -i '/man1/d' CCache/Makefile.in
   '';
 

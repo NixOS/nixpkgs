@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation rec {
-  name = "openpam-${version}";
+  pname = "openpam";
   version = "20170430";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openpam/openpam/Resedacea/${name}.tar.gz";
+    url = "mirror://sourceforge/openpam/openpam/Resedacea/${pname}-${version}.tar.gz";
     sha256 = "0pz8kf9mxj0k8yp8jgmhahddz58zv2b7gnyjwng75xgsx4i55xi2";
   };
 

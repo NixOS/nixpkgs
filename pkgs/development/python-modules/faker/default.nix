@@ -1,36 +1,48 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder,
   # Build inputs
-  dateutil, six, text-unidecode, ipaddress ? null,
+  dateutil, six, text-unidecode, ipaddress ? null
   # Test inputs
-  email_validator, mock, ukpostcodeparser, pytestrunner, pytest}:
+  , email_validator
+  , freezegun
+  , mock
+  , more-itertools
+  , pytest
+  , pytestrunner
+  , random2
+  , ukpostcodeparser
+  , validators
+}:
 
 assert pythonOlder "3.3" -> ipaddress != null;
 
 buildPythonPackage rec {
   pname = "Faker";
-  version = "1.0.5";
+  version = "2.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3f2f4570df28df2eb8f39b00520eb610081d6552975e926c6a2cbc64fd89c4c1";
+    sha256 = "19zdcdmc11syjbmnbq98yny3dwb5jqw8cxcbq9g2scwzc5f7b32y";
   };
 
-  buildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytestrunner ];
   checkInputs = [
     email_validator
-    mock
-    ukpostcodeparser
+    freezegun
     pytest
-  ];
+    random2
+    ukpostcodeparser
+    validators
+  ]
+  ++ lib.optionals (pythonOlder "3.3") [ mock ]
+  ++ lib.optionals (pythonOlder "3.0") [ more-itertools ];
 
   propagatedBuildInputs = [
     dateutil
     six
     text-unidecode
-  ] ++ lib.optional (pythonOlder "3.3") ipaddress;
+  ];
 
   postPatch = ''
-    find tests -type d -name "__pycache__" | xargs rm -r
     substituteInPlace setup.py --replace "pytest>=3.8.0,<3.9" "pytest"
   '';
 

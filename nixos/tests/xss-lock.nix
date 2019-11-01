@@ -6,19 +6,35 @@ with lib;
   name = "xss-lock";
   meta.maintainers = with pkgs.stdenv.lib.maintainers; [ ma27 ];
 
-  machine = {
-    imports = [ ./common/x11.nix ./common/user-account.nix ];
-    programs.xss-lock.enable = true;
-    services.xserver.displayManager.auto.user = "alice";
+  nodes = {
+    simple = {
+      imports = [ ./common/x11.nix ./common/user-account.nix ];
+      programs.xss-lock.enable = true;
+      services.xserver.displayManager.auto.user = "alice";
+    };
+
+    custom_lockcmd = { pkgs, ... }: {
+      imports = [ ./common/x11.nix ./common/user-account.nix ];
+      services.xserver.displayManager.auto.user = "alice";
+
+      programs.xss-lock = {
+        enable = true;
+        extraOptions = [ "-n" "${pkgs.libnotify}/bin/notify-send 'About to sleep!'"];
+        lockerCommand = "${pkgs.xlockmore}/bin/xlock -mode ant";
+      };
+    };
   };
 
   testScript = ''
-    $machine->start;
-    $machine->waitForX;
-    $machine->waitForUnit("xss-lock.service", "alice");
+    startAll;
 
-    $machine->fail("pgrep xlock");
-    $machine->succeed("su -l alice -c 'xset dpms force standby'");
-    $machine->waitUntilSucceeds("pgrep i3lock");
+    ${concatStringsSep "\n" (mapAttrsToList (name: lockCmd: ''
+      ${"$"+name}->start;
+      ${"$"+name}->waitForX;
+      ${"$"+name}->waitForUnit("xss-lock.service", "alice");
+      ${"$"+name}->fail("pgrep ${lockCmd}");
+      ${"$"+name}->succeed("su -l alice -c 'xset dpms force standby'");
+      ${"$"+name}->waitUntilSucceeds("pgrep ${lockCmd}");
+    '') { simple = "i3lock"; custom_lockcmd = "xlock"; })}
   '';
 })

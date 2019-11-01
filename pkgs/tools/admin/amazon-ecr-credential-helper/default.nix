@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub, lib, ... }:
 
 buildGoPackage rec {
-  name = "amazon-ecr-credential-helper-${version}";
+  pname = "amazon-ecr-credential-helper";
   version = "0.3.0";
 
   goPackagePath = "github.com/awslabs/amazon-ecr-credential-helper";

@@ -4,7 +4,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "xsuspender-${version}";
+  pname = "xsuspender";
   version = "1.1";
 
   src = fetchFromGitHub {

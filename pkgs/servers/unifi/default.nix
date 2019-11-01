@@ -2,8 +2,9 @@
 
 let
   generic = { version, sha256, suffix ? "" }:
-  stdenv.mkDerivation rec {
-    name = "unifi-controller-${version}";
+  stdenv.mkDerivation {
+    pname = "unifi-controller";
+    inherit version;
 
     src = fetchurl {
       url = "https://dl.ubnt.com/unifi/${version}${suffix}/unifi_sysvinit_all.deb";
@@ -17,8 +18,6 @@ let
       dpkg-deb -x $src ./
       runHook postUnpack
     '';
-
-    doConfigure = false;
 
     installPhase = ''
       runHook preInstall
@@ -35,23 +34,22 @@ let
       description = "Controller for Ubiquiti UniFi access points";
       license = licenses.unfree;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ erictapen ];
+      maintainers = with maintainers; [ erictapen globin ];
     };
   };
 
-in rec {
+in {
 
-  # https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
+  # https://community.ui.com/releases / https://www.ui.com/download/unifi
+  # Outdated FAQ: https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
 
   unifiLTS = generic {
-    version = "5.6.39";
-    sha256  = "025qq517j32r1pnabg2q8lhy65c6qsk17kzw3aijhrc2gpgj2pa7";
+    version = "5.6.42";
+    sha256 = "0wxkv774pw43c15jk0sg534l5za4j067nr85r5fw58iar3w2l84x";
   };
 
   unifiStable = generic {
-    version = "5.10.19";
-    sha256  = "01ylf11z4f86qrw9x0fn1mnxkb8iw0p2kslp7vgxgjp0i3mg3f2q";
+    version = "5.11.39";
+    sha256 = "0v1gnvdazxa3bcbq8hl6796yw0mxzki2xn4s5im5k5ngmfmnswyj";
   };
-
-  unifiTesting = unifiStable;
 }

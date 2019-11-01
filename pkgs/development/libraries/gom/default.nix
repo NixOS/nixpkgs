@@ -7,7 +7,7 @@
 , glib
 , python3
 , sqlite
-, gdk_pixbuf
+, gdk-pixbuf
 , gnome3
 , gobject-introspection
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     sqlite
     python3.pkgs.pygobject3

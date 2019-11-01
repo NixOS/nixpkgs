@@ -1,12 +1,18 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
+let
+  zshCompletion = version: fetchurl {
+    url = "https://raw.githubusercontent.com/coursier/coursier/v${version}/modules/cli/src/main/resources/completions/zsh";
+    sha256 = "0gfr1q66crh6si4682xbxnj41igws83qj710npgm2bvq90xa8m49";
+  };
+in
 stdenv.mkDerivation rec {
-  name = "coursier-${version}";
-  version = "1.1.0-M14-1";
+  pname = "coursier";
+  version = "2.0.0-RC3-3";
 
   src = fetchurl {
     url = "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    sha256 = "0km9bxhch2bh7v6yi5jzyvq95fwdmccwqmbiznzhz4iqij8y066w";
+    sha256 = "1qrybajwk46h6d1yp6n4zxdvrfl19lqhjsqxbm48vk3wbvj31vyl";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -15,6 +21,9 @@ stdenv.mkDerivation rec {
     install -Dm555 $src $out/bin/coursier
     patchShebangs $out/bin/coursier
     wrapProgram $out/bin/coursier --prefix PATH ":" ${jre}/bin
+
+    # copy zsh completion
+    install -Dm755 ${zshCompletion version} $out/share/zsh/site-functions/_coursier
   '';
 
   meta = with stdenv.lib; {

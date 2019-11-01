@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libsrs2-${version}";
+  pname = "libsrs2";
   version = "1.0.18";
 
   src = fetchurl {

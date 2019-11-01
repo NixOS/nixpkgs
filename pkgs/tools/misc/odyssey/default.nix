@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "odyssey";
-  version = "unstable-2019-03-12";
+  version = "1.0rc1";
 
   src = fetchFromGitHub {
     owner = "yandex";
     repo = pname;
-    rev = "af015839b03f30260c75d8f565521910c0694ed6";
-    sha256 = "1cnnypvk78wp1qmqfriky40ls0grkp4v46mypyaq5kl8ppknvnvs";
+    rev = version;
+    sha256 = "0p9zzazx3bhwz7sz8l757lwdj8qx0ij2k3g0d12prs0xfi1qhcmz";
   };
 
   nativeBuildInputs = [ cmake ];

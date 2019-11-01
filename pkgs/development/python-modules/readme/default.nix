@@ -2,11 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, six
-, docutils
-, pygments
-, bleach
-, html5lib
+, readme_renderer
 }:
 
 buildPythonPackage rec {
@@ -18,20 +14,27 @@ buildPythonPackage rec {
     sha256 = "32fbe1538a437da160fa4e4477270bfdcd8876e2e364d0d12898302644496231";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ six docutils pygments bleach html5lib ];
+  checkInputs = [
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    readme_renderer
+  ];
 
   checkPhase = ''
-    py.test
+    pytest
   '';
 
-  # Tests fail, possibly broken.
+  # tests are not included with pypi release
+  # package is not readme_renderer
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Readme is a library for rendering readme descriptions for Warehouse";
     homepage = "https://github.com/pypa/readme";
     license = licenses.asl20;
+    maintainers = [ maintainers.costrouc ];
   };
 
 }

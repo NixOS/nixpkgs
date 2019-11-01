@@ -1,7 +1,7 @@
 { stdenv, fetchurl, getopt, makeWrapper, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "libseccomp-${version}";
+  pname = "libseccomp";
   version = "2.4.1";
 
   src = fetchurl {
@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/seccomp/libseccomp";
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
-    badPlatforms = platforms.riscv;
+    badPlatforms = [
+      "alpha-linux"
+      "riscv64-linux" "riscv32-linux"
+      "sparc-linux" "sparc64-linux"
+    ];
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

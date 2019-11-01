@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pkgconfig, fcitx, librime, brise, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-rime-${version}";
+  pname = "fcitx-rime";
   version = "0.3.2";
 
   src = fetchurl {
-    url = "https://download.fcitx-im.org/fcitx-rime/${name}.tar.xz";
+    url = "https://download.fcitx-im.org/fcitx-rime/${pname}-${version}.tar.xz";
     sha256 = "0bd8snfa6jr8dhnm0s0z021iryh5pbaf7p15rhkgbigw2pssczpr";
   };
 

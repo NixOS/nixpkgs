@@ -162,7 +162,7 @@ let version = "4.8.5";
 
 in
 
-# We need all these X libraries when building AWT with GTK+.
+# We need all these X libraries when building AWT with GTK.
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
@@ -341,7 +341,7 @@ stdenv.mkDerivation ({
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
   # library headers and binaries, regarless of the language being compiled.
   #
-  # Note: When building the Java AWT GTK+ peer, the build system doesn't honor
+  # Note: When building the Java AWT GTK peer, the build system doesn't honor
   # `--with-gmp' et al., e.g., when building
   # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
   # them to $CPATH and $LIBRARY_PATH in this case.
@@ -411,13 +411,14 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ peti ];
+    maintainers = with stdenv.lib.maintainers; [ peti veprbl ];
 
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
       stdenv.lib.platforms.illumos ++
       stdenv.lib.platforms.darwin;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }
 

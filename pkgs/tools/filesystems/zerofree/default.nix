@@ -1,11 +1,11 @@
 { stdenv, fetchurl, e2fsprogs }:
 
 stdenv.mkDerivation rec {
-  name = "zerofree-${version}";
+  pname = "zerofree";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://frippery.org/uml/${name}.tgz";
+    url = "https://frippery.org/uml/${pname}-${version}.tgz";
     sha256 = "0rrqfa5z103ws89vi8kfvbks1cfs74ix6n1wb6vs582vnmhwhswm";
   };
 

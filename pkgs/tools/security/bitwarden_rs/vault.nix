@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwarden_rs-vault";
-  version = "2.9.0";
+  version = "2.12.0";
 
   src = fetchurl {
     url = "https://github.com/dani-garcia/bw_web_builds/releases/download/v${version}/bw_web_v${version}.tar.gz";
-    sha256 = "0kh7nqd688ilw73n4pw3s6fahghwbhiql548js6cdwsp4car3vbb";
+    sha256 = "064dxfplqn67grpx03ryzshwmr7s00w4mll0hk0anddviwvd8r1n";
   };
 
   buildCommand = ''

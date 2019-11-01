@@ -8,4 +8,6 @@ patch: [
 (patch "005" "0xl2kyzm84nlyklrqzkn73ixabhzfhn9x91lzcmis89cppclvxav")
 (patch "006" "0844749ixk1z60437nkznzms1f0nzh9an62kj7sny6r0zyk2k1fn")
 (patch "007" "16xg37gp1b8zlj5969w8mcrparwqlcbj9695vn3qhgb7wdz1xd0p")
+(patch "008" "1qyp19krjh8zxvb0jgwmyjz40djslwcf4xi7kc1ab0iaca44bipf")
+(patch "009" "00yrjjqd95s81b21qq3ba1y7h879q8jaajlkjggc6grhcwbs4g7d")
 ]

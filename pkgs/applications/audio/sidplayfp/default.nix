@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.4.4";
-  name = "sidplayfp-${version}";
+  pname = "sidplayfp";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sidplay-residfp/sidplayfp/1.4/${name}.tar.gz";
+    url = "mirror://sourceforge/sidplay-residfp/sidplayfp/1.4/${pname}-${version}.tar.gz";
     sha256 = "0arsrg3f0fsinal22qjmj3r6500bcbgqnx26fsz049ldl716kz1m";
   };
 

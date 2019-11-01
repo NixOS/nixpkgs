@@ -1,7 +1,7 @@
 { stdenv, fetchzip, libtool, ghostscript, groff }:
 
 stdenv.mkDerivation rec {
-  name = "fstrcmp-${version}";
+  pname = "fstrcmp";
   version = "0.7";
 
   src = fetchzip {

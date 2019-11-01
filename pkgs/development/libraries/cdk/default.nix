@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "cdk-${version}";
+  pname = "cdk";
   version ="5.0-20190224";
 
   buildInputs = [

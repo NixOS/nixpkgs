@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig, python3
+{ stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig
 , wafHook }:
 
 stdenv.mkDerivation  rec {
-  name = "ams-lv2-${version}";
+  pname = "ams-lv2";
   version = "1.2.2";
 
   src = fetchFromGitHub {

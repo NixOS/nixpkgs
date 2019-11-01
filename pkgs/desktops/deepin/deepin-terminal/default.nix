@@ -1,29 +1,29 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, cmake, ninja, vala,
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, ninja, vala_0_44,
   gettext, at-spi2-core, dbus, epoxy, expect, gtk3, json-glib,
   libXdmcp, libgee, libpthreadstubs, librsvg, libsecret, libtasn1,
-  libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux,
-  libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin }:
+  libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux, gnutls, pcre2,
+  libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-terminal";
-  version = "3.2.1.2";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-terminal";
     rev = version;
-    sha256 = "0dj386csbiw0yqz9nj6ij0s4d0ak9lpq2bmsfs17bjkgdp0ayp90";
+    sha256 = "09s5gvzfxfb353kb61x1b6z3h2aqgln3s3mah3f3zkf5y8hrp2pj";
   };
 
   nativeBuildInputs = [
     pkgconfig
     cmake
     ninja
-    vala
+    vala_0_44 # xcb.vapi:411.3-411.48: error: missing return statement at end of subroutine body
     gettext
     libselinux libsepol utillinux # required by gio
     deepin.setupHook
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     pcre
     vte
     wnck
+    gnutls
+    pcre2
   ];
 
   postPatch = ''
@@ -59,7 +61,7 @@ stdenv.mkDerivation rec {
     "-DVERSION=${version}"
   ];
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Default terminal emulator for Deepin";

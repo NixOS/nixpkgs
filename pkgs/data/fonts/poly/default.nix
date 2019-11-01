@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.fontsquirrel.com/fonts/poly;
     license = stdenv.lib.licenses.ofl;
     maintainers = with stdenv.lib.maintainers; [ relrod ];
-    platforms = with stdenv.lib.platforms; linux;
   };
 }

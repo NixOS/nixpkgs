@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
-  name = "arora-${version}";
+  pname = "arora";
   version = "0.11.0";
 
   src = fetchFromGitHub {

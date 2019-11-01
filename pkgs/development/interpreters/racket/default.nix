@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeFontsConf, makeWrapper
+{ stdenv, fetchurl, makeFontsConf
 , cacert
 , cairo, coreutils, fontconfig, freefont_ttf
 , glib, gmp
@@ -45,17 +45,17 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "racket-${version}";
-  version = "7.2"; # always change at once with ./minimal.nix
+  pname = "racket";
+  version = "7.4"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
-    fetchurl rec {
+    fetchurl {
       url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
       inherit sha256;
     }
   )) {
-    inherit name;
-    sha256 = "12cq0kiigmf9bxb4rcgxdhwc2fcdwvlyb1q3f8x4hswcpgq1ybg4";
+    inherit ;name = "${pname}-${version}";
+    sha256 = "07rf8sakwssl0gn9g4d3ls2cr10zlhghz0pscrh0jc6mnprrb10i";
   };
 
   FONTCONFIG_FILE = fontsConf;

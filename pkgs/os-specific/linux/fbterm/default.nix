@@ -1,7 +1,7 @@
 {stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkgconfig, ncurses, libx86}:
 let
   s = # Generated upstream information
-  rec {
+  {
     baseName="fbterm";
     version="1.7.0";
     name="fbterm-1.7.0";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ncurses ];
   inherit buildInputs;
 
   preConfigure = ''
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   preBuild = ''
     mkdir -p "$out/share/terminfo"
     tic -a -v2 -o"$out/share/terminfo" terminfo/fbterm
+    makeFlagsArray+=("AR=$AR")
   '';
 
   patches = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation {
       url = "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/miscoloring-fix.patch";
       sha256 = "1mjszji0jgs2jsagjp671fv0d1983wmxv009ff1jfhi9pbay6jd0";
     })
+    ./select.patch
   ];
 
   meta = with stdenv.lib; {

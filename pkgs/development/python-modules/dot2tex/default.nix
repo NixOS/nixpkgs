@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "dot2tex";
-  version = "2.9.0";
+  version = "2.11.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d3e54add7dccdaeb6cc9e61ceaf7b587914cf8ebd6821cfea008acdc1e50d4a";
+    sha256 = "1kp77wiv7b5qib82i3y3sn9r49rym43aaqm5aw1bwnzfbbq2m6i9";
   };
 
   # Tests fail with 3.x. Furthermore, package is no longer maintained.

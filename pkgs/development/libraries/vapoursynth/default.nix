@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, makeWrapper
 , zimg, libass, python3, libiconv
 , ApplicationServices, nasm
 , ocrSupport ?  false, tesseract ? null
@@ -11,17 +11,17 @@ assert imwriSupport -> imagemagick7 != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "vapoursynth-${version}";
-  version = "R45.1";
+  pname = "vapoursynth";
+  version = "R47.2";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "09fj4k75cksx1imivqfyr945swlr8k392kkdgzldwc4404qv82s6";
+    sha256 = "004h0vvih7dlhkcz6l2786pf7s04qhiv0bii4gjx23cxyklglh9i";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook nasm ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook nasm makeWrapper ];
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
@@ -30,19 +30,23 @@ stdenv.mkDerivation rec {
     ++ optional imwriSupport imagemagick7;
 
   configureFlags = [
-    "--disable-static"
     (optionalString (!ocrSupport)   "--disable-ocr")
     (optionalString (!imwriSupport) "--disable-imwri")
   ];
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    wrapProgram $out/bin/vspipe \
+        --prefix PYTHONPATH : $out/${python3.sitePackages}
+  '';
+
   meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";
     homepage    = http://www.vapoursynth.com/;
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj tadeokondrak ];
   };
 
 }

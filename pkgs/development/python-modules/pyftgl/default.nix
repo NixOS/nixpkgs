@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub
 , boost, freetype, ftgl, libGLU_combined
 , python
 }:
@@ -12,11 +12,10 @@ in
 buildPythonPackage rec {
   pname = "pyftgl";
   version = "0.4b";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "umlaeute";
-    repo = name;
+    repo = "${pname}-${version}";
     rev = version;
     sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
   };

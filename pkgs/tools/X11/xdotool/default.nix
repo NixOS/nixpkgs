@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libX11, perl, libXtst, xorgproto, libXi, libXinerama, libxkbcommon }:
 
 stdenv.mkDerivation rec {
-  name = "xdotool-${version}";
+  pname = "xdotool";
   version = "3.20160805.1";
 
   src = fetchurl {

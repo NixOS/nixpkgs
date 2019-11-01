@@ -3,7 +3,7 @@
 , wxGTK30, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "pcsx2-${version}";
+  pname = "pcsx2";
   version = "1.4.0";
 
   src = fetchFromGitHub {
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       -DPACKAGE_MODE=TRUE \
       -DPLUGIN_DIR="$out/lib/pcsx2" \
       -DREBUILD_SHADER=TRUE \
+      -DXDG_STD=TRUE \
       ..
   '';
 

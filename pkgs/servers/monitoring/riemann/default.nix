@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "riemann-${version}";
-  version = "0.3.1";
+  pname = "riemann";
+  version = "0.3.4";
 
   src = fetchurl {
-    url = "https://github.com/riemann/riemann/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "0lc3qmwb33jjw2g64j8inqpr7krjmpjwfdmypdssvjy84acpkyal";
+    url = "https://github.com/riemann/riemann/releases/download/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "1c31higrsmpkvl956rrw1hpwjyvypgrjzl6vky0gn55zgvisasn4";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "A network monitoring system";
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
   };
 }

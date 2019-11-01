@@ -236,7 +236,7 @@ in
       };
 
     assertions = [
-      { assertion = cfg.hooksPath == hooksDir || all isNull (attrValues cfg.hooks);
+      { assertion = cfg.hooksPath == hooksDir || all (v: v == null) (attrValues cfg.hooks);
         message = ''
           Options `services.buildkite-agent.hooksPath' and
           `services.buildkite-agent.hooks.<name>' are mutually exclusive.

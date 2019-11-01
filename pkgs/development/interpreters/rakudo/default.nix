@@ -2,11 +2,11 @@
 , CoreServices, ApplicationServices }:
 
 stdenv.mkDerivation rec {
-  name = "rakudo-star-${version}";
+  pname = "rakudo-star";
   version = "2017.01";
 
   src = fetchurl {
-    url    = "http://rakudo.org/downloads/star/${name}.tar.gz";
+    url    = "http://rakudo.org/downloads/star/${pname}-${version}.tar.gz";
     sha256 = "07zjqdzxm30pmjqwlnr669d75bsbimy09sk0dvgm0pnn3zr92fjq";
   };
 

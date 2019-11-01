@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jre, build-tools }:
 
 stdenv.mkDerivation rec {
-  name = "apktool-${version}";
+  pname = "apktool";
   version = "2.4.0";
 
   src = fetchurl {

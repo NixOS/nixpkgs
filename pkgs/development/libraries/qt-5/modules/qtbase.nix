@@ -2,7 +2,7 @@
   stdenv, lib,
   src, patches, version, qtCompatVersion,
 
-  coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
+  coreutils, bison, flex, gdb, gperf, lndir, perl, pkgconfig, python2,
   which,
   # darwin support
   darwin, libiconv,
@@ -14,7 +14,7 @@
   zlib,
 
   # optional dependencies
-  cups ? null, mysql ? null, postgresql ? null,
+  cups ? null, libmysqlclient ? null, postgresql ? null,
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
@@ -31,6 +31,8 @@ assert withGtk3 -> gtk3 != null;
 
 let
   compareVersion = v: builtins.compareVersions version v;
+  qmakeCacheName =
+    if compareVersion "5.12.4" < 0 then ".qmake.cache" else ".qmake.stash";
 in
 
 stdenv.mkDerivation {
@@ -47,7 +49,7 @@ stdenv.mkDerivation {
 
       # Image formats
       libjpeg libpng libtiff
-      (if compareVersion "5.9.0" >= 0 then pcre2 else pcre16)
+      (if compareVersion "5.9.0" < 0 then pcre16 else pcre2)
     ]
     ++ (
       if stdenv.isDarwin
@@ -56,7 +58,7 @@ stdenv.mkDerivation {
           # TODO: move to buildInputs, this should not be propagated.
           AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL
-          darwin.libobjc libiconv
+          darwin.libobjc libiconv MetalKit
         ]
       else
         [
@@ -78,17 +80,13 @@ stdenv.mkDerivation {
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
-    ++ lib.optional stdenv.isDarwin
-      # Needed for OBJC_CLASS_$_NSDate symbols.
-      [ darwin.cf-private ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.connector-c
+    ++ lib.optional (libmysqlclient != null) libmysqlclient
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig python2 which ]
-    ++ lib.optional (!stdenv.isDarwin) patchelf;
+    [ bison flex gperf lndir perl pkgconfig python2 which ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -102,6 +100,7 @@ stdenv.mkDerivation {
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
     . ${../hooks/move-qt-dev-tools.sh}
+    . ${../hooks/fix-qmake-libtool.sh}
   '';
 
   postPatch =
@@ -150,6 +149,11 @@ stdenv.mkDerivation {
             sed -i mkspecs/common/linux.conf \
                 -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
                 -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
+          '' +
+        lib.optionalString (stdenv.hostPlatform.isx86_32 && stdenv.cc.isGNU)
+          ''
+            sed -i mkspecs/common/gcc-base-unix.conf \
+                -e "/^QMAKE_LFLAGS_SHLIB/ s/-shared/-shared -static-libgcc/"
           ''
     );
 
@@ -170,8 +174,17 @@ stdenv.mkDerivation {
         -qmldir $out/$qtQmlPrefix \
         -docdir $out/$qtDocPrefix"
 
-    createQmakeCache() {
-        cat >>"$1" <<EOF
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+  '';
+
+  postConfigure = ''
+    qmakeCacheInjectNixOutputs() {
+        local cache="$1/${qmakeCacheName}"
+        echo "qmakeCacheInjectNixOutputs: $cache"
+        if ! [ -f "$cache" ]; then
+            echo >&2 "qmakeCacheInjectNixOutputs: WARNING: $cache does not exist"
+        fi
+        cat >>"$cache" <<EOF
     NIX_OUTPUT_BIN = $bin
     NIX_OUTPUT_DEV = $dev
     NIX_OUTPUT_OUT = $out
@@ -182,14 +195,9 @@ stdenv.mkDerivation {
     }
 
     find . -name '.qmake.conf' | while read conf; do
-        cache=$(dirname $conf)/.qmake.cache
-        echo "Creating \`$cache'"
-        createQmakeCache "$cache"
+        qmakeCacheInjectNixOutputs "$(dirname $conf)"
     done
-
-    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
   '';
-
 
   NIX_CFLAGS_COMPILE =
     [
@@ -199,26 +207,11 @@ stdenv.mkDerivation {
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ]
 
-    ++ (
-      if stdenv.isDarwin
-      then
-        [
-          "-Wno-missing-sysroot"
-          "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
-          "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
-          # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
-          # 10.9 which necessitates the above macro definition that mentions
-          # 10.10
-        ]
-      else
-        lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
-        ++ lib.optionals withGtk3
-          [
-            ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-            ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-          ]
-    )
-
+    ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
+    ++ lib.optionals withGtk3 [
+         ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+         ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+       ]
     ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC";
 
   prefixKey = "-prefix ";
@@ -228,7 +221,6 @@ stdenv.mkDerivation {
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
-  # -no-eglfs, -no-directfb, -no-linuxfb and -no-kms because of the current minimalist mesa
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags =
     [
@@ -248,6 +240,8 @@ stdenv.mkDerivation {
       "-widgets"
       "-opengl desktop"
       "-icu"
+      "-L" "${icu.out}/lib"
+      "-I" "${icu.dev}/include"
       "-pch"
     ]
     ++ lib.optionals (compareVersion "5.11.0" < 0)
@@ -266,27 +260,38 @@ stdenv.mkDerivation {
     ++ (
       if (!stdenv.hostPlatform.isx86_64)
       then [ "-no-sse2" ]
-      else lib.optional (compareVersion "5.9.0" >= 0) [ "-sse2" ]
+      else lib.optionals (compareVersion "5.9.0" >= 0) {
+        default        = [ "-sse2" "-no-sse3" "-no-ssse3" "-no-sse4.1" "-no-sse4.2" "-no-avx" "-no-avx2" ];
+        westmere       = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2" "-no-avx" "-no-avx2" ];
+        sandybridge    = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        ivybridge      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        haswell        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        broadwell      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        skylake        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        skylake-avx512 = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+      }.${stdenv.hostPlatform.platform.gcc.arch or "default"}
     )
     ++ [
-      "-no-sse3"
-      "-no-ssse3"
-      "-no-sse4.1"
-      "-no-sse4.2"
-      "-no-avx"
-      "-no-avx2"
       "-no-mips_dsp"
       "-no-mips_dspr2"
     ]
 
     ++ [
       "-system-zlib"
+      "-L" "${zlib.out}/lib"
+      "-I" "${zlib.dev}/include"
       "-system-libjpeg"
+      "-L" "${libjpeg.out}/lib"
+      "-I" "${libjpeg.dev}/include"
       "-system-harfbuzz"
+      "-L" "${harfbuzz.out}/lib"
+      "-I" "${harfbuzz.dev}/include"
       "-system-pcre"
       "-openssl-linked"
+      "-L" "${openssl.out}/lib"
+      "-I" "${openssl.dev}/include"
       "-system-sqlite"
-      ''-${if mysql != null then "plugin" else "no"}-sql-mysql''
+      ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
       ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
       "-make libs"
@@ -313,15 +318,14 @@ stdenv.mkDerivation {
           "-system-xcb"
           "-xcb"
           "-qpa xcb"
+          "-L" "${libX11.out}/lib"
+          "-I" "${libX11.out}/include"
+          "-L" "${libXext.out}/lib"
+          "-I" "${libXext.out}/include"
+          "-L" "${libXrender.out}/lib"
+          "-I" "${libXrender.out}/include"
 
-          "-system-xkbcommon"
           "-libinput"
-          "-xkbcommon-evdev"
-
-          "-no-eglfs"
-          "-no-gbm"
-          "-no-kms"
-          "-no-linuxfb"
 
           ''-${lib.optionalString (cups == null) "no-"}cups''
           "-dbus-linked"
@@ -336,6 +340,19 @@ stdenv.mkDerivation {
           # https://github.com/NixOS/nixpkgs/issues/38832
           "-no-feature-renameat2"
           "-no-feature-getentropy"
+        ]
+        ++ lib.optionals (compareVersion "5.12.1" < 0) [
+          # use -xkbcommon and -xkbcommon-evdev for versions before 5.12.1
+          "-system-xkbcommon"
+          "-xkbcommon-evdev"
+        ]
+        ++ lib.optionals (cups != null) [
+          "-L" "${cups.lib}/lib"
+          "-I" "${cups.dev}/include"
+        ]
+        ++ lib.optionals (libmysqlclient != null) [
+          "-L" "${libmysqlclient}/lib"
+          "-I" "${libmysqlclient}/include"
         ]
     );
 
@@ -376,13 +393,11 @@ stdenv.mkDerivation {
       moveToOutput bin "$dev"
     ''
 
-    + (
-        # fixup .pc file (where to find 'moc' etc.)
-        ''
-          sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
-              -e "/^host_bins=/ c host_bins=$dev/bin"
-        ''
-    );
+    # fixup .pc file (where to find 'moc' etc.)
+    + ''
+      sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
+          -e "/^host_bins=/ c host_bins=$dev/bin"
+    '';
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
@@ -392,6 +407,7 @@ stdenv.mkDerivation {
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
   };
 
 }

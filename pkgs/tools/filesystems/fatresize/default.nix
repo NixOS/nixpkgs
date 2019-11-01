@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
 
   version = "1.0.2";
-  name = "fatresize-${version}";
+  pname = "fatresize";
 
   src = fetchurl {
     url = "mirror://sourceforge/fatresize/fatresize-${version}.tar.bz2";

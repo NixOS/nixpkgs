@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib
+{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib, fetchpatch
 , aws-c-common, aws-c-event-stream, aws-checksums
 , CoreAudio, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
@@ -8,20 +8,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aws-sdk-cpp-${version}";
-  version = "1.7.56";
+  pname = "aws-sdk-cpp";
+  version = "1.7.90";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "0vfw5bqlwm5r0ikziz3jx6yb5v24lwig0m62979zy3ndx36kpb9b";
+    sha256 = "0zpqi612qmm0n53crxiisv0vdif43ymg13kafy6vv43j2wmh66ga";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
   # (e.g. libaws-cpp-sdk-s3.so in output "s3").
   outputs = [ "out" "dev" ];
-  separateDebugInfo = stdenv.isLinux;
 
   nativeBuildInputs = [ cmake curl ];
 
@@ -37,9 +36,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_DEPS=OFF"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ] ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DENABLE_TESTING=OFF"
-    ++ lib.optional (apis != ["*"])
-      "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-DENABLE_TESTING=OFF"
+    "-DCURL_HAS_H2=0"
+  ] ++ lib.optional (apis != ["*"])
+    "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
   preConfigure =
     ''
@@ -47,6 +48,13 @@ stdenv.mkDerivation rec {
     '';
 
   __darwinAllowLocalNetworking = true;
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/aws/aws-sdk-cpp/commit/42991ab549087c81cb630e5d3d2413e8a9cf8a97.patch";
+      sha256 = "0myq5cm3lvl5r56hg0sc0zyn1clbkd9ys0wr95ghw6bhwpvfv8gr";
+    })
+  ];
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";

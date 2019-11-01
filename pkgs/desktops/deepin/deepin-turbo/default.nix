@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "deepin-turbo";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "13vbj18pclv7c25pb1y5x6dd7wmcgisa40mb13qyixnzpq2ssjg5";
+    sha256 = "15l0pgszmbirlaxj04ishj43kyvigsl1yaf58kxlbdb3lkmcp5f3";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "A daemon that helps to launch applications faster";

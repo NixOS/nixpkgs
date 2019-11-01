@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, gtk2, fontconfig, freetype, imlib2
 , SDL_image, libGLU_combined, libXmu, freeglut, pcre, dbus, dbus-glib, glib
-, librsvg, freeimage, libxslt, cairo, gdk_pixbuf, pango
+, librsvg, freeimage, libxslt, cairo, gdk-pixbuf, pango
 , atk, patchelf, fetchurl, bzip2, python, gettext, quesoglc
 , gd, cmake, shapelib, SDL_ttf, fribidi, makeWrapper
 , qtquickcontrols, qtmultimedia, qtspeech, qtsensors
@@ -17,7 +17,7 @@ assert speechdSupport -> speechd != null;
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "navit-${version}";
+  pname = "navit";
   version = "0.5.3";
 
   src = fetchFromGitHub {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     gtk2 fontconfig freetype imlib2 libGLU_combined freeimage
     libxslt libXmu freeglut python gettext quesoglc gd
     fribidi pcre  dbus dbus-glib librsvg shapelib glib
-    cairo gdk_pixbuf pango atk
+    cairo gdk-pixbuf pango atk
   ] ++ optionals sdlSupport [ SDL SDL_ttf SDL_image ]
     ++ optional postgresqlSupport postgresql
     ++ optional speechdSupport speechd

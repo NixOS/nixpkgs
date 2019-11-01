@@ -1,7 +1,7 @@
 { fetchurl, stdenv, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "bigloo-${version}";
+  pname = "bigloo";
   version = "4.1a-2";
 
   src = fetchurl {

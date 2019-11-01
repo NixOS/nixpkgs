@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'oxidized', '0.26.2'
+gem 'oxidized', '0.26.3'
 gem 'oxidized-web', '0.13.1'
 gem 'oxidized-script', '0.6.0'

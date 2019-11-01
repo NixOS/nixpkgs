@@ -1,33 +1,52 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, ninja, vala, desktop-file-utils, gtk3, granite, libgee
-, geoclue2, libchamplain, clutter, folks, geocode-glib, python3
-, libnotify, libical, evolution-data-server, appstream-glib
-, elementary-icon-theme, gobject-introspection, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, geoclue2
+, libchamplain
+, clutter
+, folks
+, geocode-glib
+, python3
+, libnotify
+, libical
+, evolution-data-server
+, appstream-glib
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "calendar";
-  version = "5.0";
+  pname = "elementary-calendar";
+  version = "unstable-2019-09-17";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "calendar";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "0yiis5ig98gjw4s2qh8lppkdmv1cgi6qchxqncsjdki7yxyyni35";
+    repo = repoName;
+    rev = "46346e48b53e9d3d59d9f567b622532338f50f32"; # needed for libical 2.0 compat
+    sha256 = "04xzczcj5rbzqlhmf175d8p0wzw01s4658v5jllrp8nchmndb986";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
+      versionPolicy = "master";
     };
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig

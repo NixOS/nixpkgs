@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coq, mathcomp }:
+{ stdenv, fetchFromGitHub, coq }:
 
 let param =
   {
@@ -8,7 +8,7 @@ let param =
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "coq${coq.coq-version}-StructTact-${param.version}";
 
   src = fetchFromGitHub {

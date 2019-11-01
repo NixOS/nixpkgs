@@ -3,6 +3,10 @@
 with lib;
 let
   cfg = config.services.resolved;
+
+  dnsmasqResolve = config.services.dnsmasq.enable &&
+                   config.services.dnsmasq.resolveLocalQueries;
+
 in
 {
 
@@ -35,7 +39,7 @@ in
         when resolving single-label host names (domain names which
         contain no dot), in order to qualify them into fully-qualified
         domain names (FQDNs).
-        </para><para>
+
         For compatibility reasons, if this setting is not specified,
         the search domains listed in
         <filename>/etc/resolv.conf</filename> are used instead, if
@@ -50,8 +54,9 @@ in
       description = ''
         Controls Link-Local Multicast Name Resolution support
         (RFC 4795) on the local host.
-        </para><para>
+
         If set to
+
         <variablelist>
         <varlistentry>
           <term><literal>"true"</literal></term>
@@ -125,6 +130,12 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      { assertion = !config.networking.useHostResolvConf;
+        message = "Using host resolv.conf is not supported with systemd-resolved";
+      }
+    ];
+
     systemd.additionalUpstreamSystemUnits = [
       "systemd-resolved.service"
     ];
@@ -134,21 +145,30 @@ in
       restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
     };
 
-    environment.etc."systemd/resolved.conf".text = ''
-      [Resolve]
-      ${optionalString (config.networking.nameservers != [])
-        "DNS=${concatStringsSep " " config.networking.nameservers}"}
-      ${optionalString (cfg.fallbackDns != [])
-        "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
-      ${optionalString (cfg.domains != [])
-        "Domains=${concatStringsSep " " cfg.domains}"}
-      LLMNR=${cfg.llmnr}
-      DNSSEC=${cfg.dnssec}
-      ${config.services.resolved.extraConfig}
-    '';
+    environment.etc = {
+      "systemd/resolved.conf".text = ''
+        [Resolve]
+        ${optionalString (config.networking.nameservers != [])
+          "DNS=${concatStringsSep " " config.networking.nameservers}"}
+        ${optionalString (cfg.fallbackDns != [])
+          "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
+        ${optionalString (cfg.domains != [])
+          "Domains=${concatStringsSep " " cfg.domains}"}
+        LLMNR=${cfg.llmnr}
+        DNSSEC=${cfg.dnssec}
+        ${config.services.resolved.extraConfig}
+      '';
+
+      # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
+      # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
+      "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
+    } // optionalAttrs dnsmasqResolve {
+      "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+    };
 
     # If networkmanager is enabled, ask it to interface with resolved.
     networking.networkmanager.dns = "systemd-resolved";
+
   };
 
 }

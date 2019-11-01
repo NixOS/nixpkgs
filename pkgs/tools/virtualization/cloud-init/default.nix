@@ -2,8 +2,9 @@
 
 let version = "0.7.9";
 
-in pythonPackages.buildPythonApplication rec {
-  name = "cloud-init-${version}";
+in pythonPackages.buildPythonApplication {
+  pname = "cloud-init";
+  inherit version;
   namePrefix = "";
 
   src = fetchurl {

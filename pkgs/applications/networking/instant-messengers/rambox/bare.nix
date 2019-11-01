@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, fetchNodeModules, nodejs-8_x, ruby, sencha
+{ stdenv, fetchFromGitHub, fetchNodeModules, nodejs-10_x, ruby, sencha
 , auth0ClientID, auth0Domain }:
 
 stdenv.mkDerivation rec {
-  name = "rambox-bare-${version}";
-  version = "0.6.6";
+  pname = "rambox-bare";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "ramboxapp";
     repo = "community-edition";
     rev = version;
-    sha256 = "15cy8krzl66b6sfazhff41adq4kf2857sj4h0qvzmadv85dy301v";
+    sha256 = "1h44srl2gzkhjaazpwz1pwy4dp5x776fc685kahlvjlsfls0fvy9";
   };
 
-  nativeBuildInputs = [ nodejs-8_x ruby sencha ];
+  nativeBuildInputs = [ nodejs-10_x ruby sencha ];
 
   node_modules = fetchNodeModules {
     inherit src;
 
-    nodejs = nodejs-8_x;
-    sha256 = "0ifk0fzw4zhi4195jlmiq5k57bdmf912372r4bwa4z500wipikq3";
+    nodejs = nodejs-10_x;
+    sha256 = "0qsgr8cq81yismal5sqr02skakqpynwwzk5s98dr5bg91y361fgy";
   };
 
   patches = [ ./isDev.patch ];

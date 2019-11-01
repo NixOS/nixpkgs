@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "chelf-${version}";
+  pname = "chelf";
   version = "0.2.2";
 
   src = fetchFromGitHub {

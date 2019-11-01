@@ -1,12 +1,15 @@
 { stdenv, fetchurl, pkgconfig, xlibsWrapper, xorgproto, libXi
 , freeglut, libGLU_combined, libjpeg, zlib, libXft, libpng
-, libtiff, freetype, cf-private, Cocoa, AGL, GLUT
+, libtiff, freetype, Cocoa, AGL, GLUT
 }:
 
 let
   version = "1.3.5";
-in stdenv.mkDerivation {
-  name = "fltk-${version}";
+in
+
+stdenv.mkDerivation {
+  pname = "fltk";
+  inherit version;
 
   src = fetchurl {
     url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
@@ -16,14 +19,13 @@ in stdenv.mkDerivation {
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libGLU_combined libjpeg zlib libpng libXft ]
+    ++ stdenv.lib.optional stdenv.isDarwin [ AGL Cocoa GLUT ];
 
-  buildInputs = [
-    libGLU_combined
-    libjpeg
-    zlib
-    libpng
-    libXft
-  ];
+  propagatedBuildInputs = [ xorgproto ]
+    ++ (if stdenv.isDarwin
+        then [ freetype libtiff ]
+        else [ xlibsWrapper libXi freeglut ]);
 
   configureFlags = [
     "--enable-gl"
@@ -33,18 +35,12 @@ in stdenv.mkDerivation {
     "--enable-xft"
   ];
 
-  propagatedBuildInputs = [ xorgproto ]
-    ++ (if stdenv.isDarwin
-        then [ Cocoa AGL GLUT freetype libtiff cf-private  /* Needed for NSDefaultRunLoopMode */ ]
-        else [ xlibsWrapper libXi freeglut ]);
-
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A C++ cross-platform lightweight GUI library";
     homepage = http://www.fltk.org;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.gpl2;
   };
-
 }

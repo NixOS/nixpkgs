@@ -2,7 +2,6 @@
 
 buildGoPackage rec {
   pname = "git-sizer";
-  name = "${pname}-${version}";
   version = "1.0.0";
 
   goPackagePath = "github.com/github/git-sizer";

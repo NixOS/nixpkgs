@@ -3,7 +3,7 @@
 
 let inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
-  name = "networkmanager_dmenu-${version}";
+  pname = "networkmanager_dmenu";
   version = "1.1";
 
   src = fetchFromGitHub {

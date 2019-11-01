@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, pytestrunner, pytest, mock }:
+, stdenv, pytestrunner, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "paho-mqtt";
@@ -19,6 +19,8 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytestrunner pytest ] ++ lib.optional (!isPy3k) mock;
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     homepage = https://eclipse.org/paho;

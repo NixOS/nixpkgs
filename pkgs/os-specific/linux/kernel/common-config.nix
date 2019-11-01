@@ -33,7 +33,6 @@ let
       DYNAMIC_DEBUG             = yes;
       TIMER_STATS               = whenOlder "4.11" yes;
       DEBUG_NX_TEST             = whenOlder "4.11" no;
-      CPU_NOTIFIER_ERROR_INJECT = whenOlder "4.4" (option no);
       DEBUG_STACK_USAGE         = no;
       DEBUG_STACKOVERFLOW       = mkIf (!features.grsecurity) no;
       RCU_TORTURE_TEST          = no;
@@ -42,6 +41,8 @@ let
       CRASH_DUMP                = option no;
       # Easier debugging of NFS issues.
       SUNRPC_DEBUG              = yes;
+      # Provide access to tunables like sched_migration_cost_ns
+      SCHED_DEBUG               = yes;
     };
 
     power-management = {
@@ -52,6 +53,9 @@ let
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
       CPU_FREQ_GOV_SCHEDUTIL           = whenAtLeast "4.9" yes;
       PM_WAKELOCKS                     = yes;
+      # Power-capping framework and support for INTEL RAPL
+      POWERCAP                         = yes;
+      INTEL_RAPL                       = module;
     };
 
     external-firmware = {
@@ -94,12 +98,11 @@ let
     networking = {
       NET                = yes;
       IP_PNP             = no;
-      NETFILTER          = yes;
-      NETFILTER_ADVANCED = yes;
       IP_VS_PROTO_TCP    = yes;
       IP_VS_PROTO_UDP    = yes;
       IP_VS_PROTO_ESP    = yes;
       IP_VS_PROTO_AH     = yes;
+      IP_VS_IPV6         = yes;
       IP_DCCP_CCID3      = no; # experimental
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;
@@ -122,6 +125,7 @@ let
       IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
       NET_CLS_BPF                 = whenAtLeast "4.4" module;
       NET_ACT_BPF                 = whenAtLeast "4.4" module;
+      NET_SCHED                   = yes;
       L2TP_V3                     = yes;
       L2TP_IP                     = module;
       L2TP_ETH                    = module;
@@ -138,12 +142,32 @@ let
       KEY_DH_OPERATIONS = whenAtLeast "4.7" yes;
 
       # needed for nftables
-      NF_TABLES_INET              = whenAtLeast "4.17" yes;
-      NF_TABLES_NETDEV            = whenAtLeast "4.17" yes;
-      NF_TABLES_IPV4              = whenAtLeast "4.17" yes;
-      NF_TABLES_ARP               = whenAtLeast "4.17" yes;
-      NF_TABLES_IPV6              = whenAtLeast "4.17" yes;
-      NF_TABLES_BRIDGE            = whenAtLeast "4.17" yes;
+      # Networking Options
+      NETFILTER                   = yes;
+      NETFILTER_ADVANCED          = yes;
+      # Core Netfilter Configuration
+      NF_CONNTRACK_ZONES          = yes;
+      NF_CONNTRACK_EVENTS         = yes;
+      NF_CONNTRACK_TIMEOUT        = yes;
+      NF_CONNTRACK_TIMESTAMP      = yes;
+      NETFILTER_NETLINK_GLUE_CT   = yes;
+      NF_TABLES_INET              = whenAtLeast "4.19" yes;
+      NF_TABLES_NETDEV            = whenAtLeast "4.19" yes;
+      # IP: Netfilter Configuration
+      NF_TABLES_IPV4              = yes;
+      NF_TABLES_ARP               = whenAtLeast "4.19" yes;
+      # IPv6: Netfilter Configuration
+      NF_TABLES_IPV6              = yes;
+      # Bridge Netfilter Configuration
+      NF_TABLES_BRIDGE            = mkMerge [ (whenBetween "4.19" "5.3" yes)
+                                              (whenAtLeast "5.3" module) ];
+
+      # needed for ss
+      INET_DIAG         = yes;
+      INET_TCP_DIAG     = module;
+      INET_UDP_DIAG     = module;
+      INET_RAW_DIAG     = whenAtLeast "4.14" module;
+      INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
     };
 
     wireless = {
@@ -156,6 +180,9 @@ let
       ATH9K_AHB             = option yes; # Ditto, AHB bus
       B43_PHY_HT            = option yes;
       BCMA_HOST_PCI         = option yes;
+      RTW88                 = whenAtLeast "5.2" module;
+      RTW88_8822BE          = whenAtLeast "5.2" yes;
+      RTW88_8822CE          = whenAtLeast "5.2" yes;
     };
 
     fb = {
@@ -177,13 +204,12 @@ let
     };
 
     video = {
-      # Enable KMS for devices whose X.org driver supports it
-      DRM_I915_KMS           = whenOlder "4.3" yes;
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
       DRM_GMA600             = yes;
       DRM_GMA3600            = yes;
+      DRM_VMWGFX_FBCON       = yes;
       # necessary for amdgpu polaris support
       DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
       # (experimental) amdgpu support for verde and newer chipsets
@@ -232,6 +258,7 @@ let
       USB_DEBUG = { optional = true; tristate = whenOlder "4.18" "n";};
       USB_EHCI_ROOT_HUB_TT = yes; # Root Hub Transaction Translators
       USB_EHCI_TT_NEWSCHED = yes; # Improved transaction translator scheduling
+      USB_HIDDEV = yes; # USB Raw HID Devices (like monitor controls and Uninterruptable Power Supplies)
     };
 
     # Filesystem options - in particular, enable extended attributes and
@@ -245,7 +272,6 @@ let
       EXT2_FS_XATTR     = yes;
       EXT2_FS_POSIX_ACL = yes;
       EXT2_FS_SECURITY  = yes;
-      EXT2_FS_XIP       = whenOlder "4.0" yes; # Ext2 execute in place support
 
       EXT3_FS_POSIX_ACL = yes;
       EXT3_FS_SECURITY  = yes;
@@ -347,10 +373,6 @@ let
       MICROCODE       = yes;
       MICROCODE_INTEL = yes;
       MICROCODE_AMD   = yes;
-
-      MICROCODE_EARLY       = whenOlder "4.4" yes;
-      MICROCODE_INTEL_EARLY = whenOlder "4.4" yes;
-      MICROCODE_AMD_EARLY   = whenOlder "4.4" yes;
     } // optionalAttrs (versionAtLeast version "4.10") {
       # Write Back Throttling
       # https://lwn.net/Articles/682582/
@@ -425,6 +447,12 @@ let
       HIGHMEM64G = { optional = true; tristate = mkIf (!stdenv.is64bit) "y";};
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
+
+      # VirtualBox guest drivers in the kernel conflict with the ones in the
+      # official additions package and prevent the vboxsf module from loading,
+      # so disable them for now.
+      VBOXGUEST = option no;
+      DRM_VBOXVIDEO = option no;
 
     } // optionalAttrs (stdenv.isx86_64 || stdenv.isi686) ({
       XEN = option yes;
@@ -542,7 +570,9 @@ let
       TEST_ASYNC_DRIVER_PROBE  = option no;
       WW_MUTEX_SELFTEST        = option no;
       XZ_DEC_TEST              = option no;
-    } // optionalAttrs (features.criu or false) ({
+    };
+
+    criu = optionalAttrs (features.criu or false) ({
       EXPERT              = yes;
       CHECKPOINT_RESTORE  = yes;
     } // optionalAttrs (features.criu_revert_expert or true) {
@@ -556,6 +586,7 @@ let
     });
 
     misc = {
+      HID_BATTERY_STRENGTH = yes;
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
@@ -618,10 +649,12 @@ let
       IDLE_PAGE_TRACKING  = yes;
       IRDA_ULTRA          = whenOlder "4.17" yes; # Ultra (connectionless) protocol
 
-      JOYSTICK_IFORCE_232 = option yes; # I-Force Serial joysticks and wheels
-      JOYSTICK_IFORCE_USB = option yes; # I-Force USB joysticks and wheels
+      JOYSTICK_IFORCE_232 = { optional = true; tristate = whenOlder "5.3" "y"; }; # I-Force Serial joysticks and wheels
+      JOYSTICK_IFORCE_USB = { optional = true; tristate = whenOlder "5.3" "y"; }; # I-Force USB joysticks and wheels
       JOYSTICK_XPAD_FF    = option yes; # X-Box gamepad rumble support
       JOYSTICK_XPAD_LEDS  = option yes; # LED Support for Xbox360 controller 'BigX' LED
+
+      KEYBOARD_APPLESPI = whenAtLeast "5.3" module;
 
       KEXEC_FILE      = option yes;
       KEXEC_JUMP      = option yes;
@@ -684,18 +717,28 @@ let
       # Enable AMD's ROCm GPU compute stack
       HSA_AMD = whenAtLeast "4.20" yes;
 
+      PREEMPT = no;
+      PREEMPT_VOLUNTARY = yes;
+
+      X86_AMD_PLATFORM_DEVICE = yes;
+
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
-      # Enable memory hotplug support
-      # Allows you to dynamically add & remove memory to a VM client running NixOS without requiring a reboot
+      # Enable CPU/memory hotplug support
+      # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
+      ACPI_HOTPLUG_CPU = yes;
       ACPI_HOTPLUG_MEMORY = yes;
       MEMORY_HOTPLUG = yes;
       MEMORY_HOTREMOVE = yes;
+      HOTPLUG_CPU = yes;
       MIGRATION = yes;
       SPARSEMEM = yes;
 
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # Enables support for the Allwinner Display Engine 2.0
+      SUN8I_DE2_CCU = whenAtLeast "4.13" yes;
     };
   };
 in

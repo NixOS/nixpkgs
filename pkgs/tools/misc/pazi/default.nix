@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pazi";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "euank";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12z2vyzmyxfq1krbbrjar7c2gvyq1969v16pb2pm7f4g4k24g0c8";
+    sha256 = "1bbci7bvrwl7lsslf302jham1pcw32fi7nwgqyjpfjyzvnpfgndz";
   };
 
-  cargoSha256 = "0mgjl5vazk5z1859lb2va9af9yivz47jw4b01rjr4mq67v9jfld1";
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
+  cargoSha256 = "0nqcp54nwv4ic5jc3cgg15rh8dgkixfgkwb5q47rv8ding4cd0j5";
 
   cargoPatches = [ ./cargo-lock.patch ];
 

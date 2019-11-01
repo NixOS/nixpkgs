@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
-  name = "bashmount-${version}";
+  pname = "bashmount";
   version = "3.2.0";
 
   src = fetchFromGitHub {

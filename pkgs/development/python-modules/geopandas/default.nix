@@ -4,14 +4,13 @@
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.4.1";
-  name = pname + "-" + version;
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     rev = "v${version}";
-    sha256 = "02v3lszxvhpsb0qrqk0kcnf9jss9gdj8az2r97aqx7ya8cwaccxa";
+    sha256 = "0bdgphw43m2nrgcp83j1pnxknnzahm2zmdr55hyz3jjkva7m6dpk";
   };
 
   checkInputs = [ pytest Rtree ];

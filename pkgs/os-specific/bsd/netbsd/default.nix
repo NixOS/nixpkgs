@@ -1,4 +1,4 @@
-{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, yacc, flex, bash
+{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, yacc, flex
 , writeText, buildPackages, splicePackages, symlinkJoin }:
 
 let
@@ -38,14 +38,14 @@ let
     HOST_SH = "${buildPackages.bash}/bin/sh";
 
     MACHINE_ARCH = {
-      "i686" = "i386";
+      i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
 
     MACHINE = {
-      "x86_64" = "amd64";
-      "aarch64" = "evbarm64";
-      "i686" = "i386";
+      x86_64 = "amd64";
+      aarch64 = "evbarm64";
+      i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
 
@@ -68,9 +68,9 @@ let
   } // lib.optionalAttrs stdenv'.isDarwin {
     MKRELRO = "no";
   } // lib.optionalAttrs (stdenv'.cc.isClang or false) {
-    HAVE_LLVM = lib.head (lib.splitString "." (lib.getVersion stdenv'.cc.cc));
+    HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
   } // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
-    HAVE_GCC = lib.head (lib.splitString "." (lib.getVersion stdenv'.cc.cc));
+    HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
   } // lib.optionalAttrs (attrs.headersOnly or false) {
     installPhase = "includesPhase";
     dontBuild = true;
@@ -79,7 +79,7 @@ let
   ##
   ## START BOOTSTRAPPING
   ##
-  makeMinimal = mkDerivation rec {
+  makeMinimal = mkDerivation {
     path = "tools/make";
     sha256 = "1xbzfd4i7allrkk1if74a8ymgpizyj0gkvdigzzj37qar7la7nc1";
     version = "8.0";

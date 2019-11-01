@@ -1,8 +1,8 @@
 { config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
-, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor-icon-theme
+, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
-, glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical 
+, glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
 # Build options
 # TODO: A flag to build the manual.
 # TODO: Plugins that complain about their missing dependencies, even when
@@ -30,12 +30,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "claws-mail-${version}";
-  version = "3.17.3";
+  pname = "claws-mail";
+  version = "3.17.4";
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "1wnj6c9cbmhphs2l6wfvndkk2g08rmxw0sl2c8k1k008dxd1ykjh";
+    sha256 = "00mfhaac16sv67rwiq98hr4nl5zmd1h2afswwwksdcsi3q9x23jr";
   };
 
   outputs = [ "out" "dev" ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =
-    [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas hicolor-icon-theme
+    [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas
       libetpan perl glib-networking libSM libytnef
     ]
     ++ optional enableSpellcheck enchant

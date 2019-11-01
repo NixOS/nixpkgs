@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "ctmg-${version}";
+  pname = "ctmg";
   version = "1.2";
 
   src = fetchzip {

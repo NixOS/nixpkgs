@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d97d8babf650abca25a096825aa6d88573d340481a0b0793afcdac4a7bee09d3";
+    sha256 = "c0f853cdad12256ae8c33a80ff6c31a3ce867c481f805b085d554fbb5b5b084f";
   };
 
 

@@ -2,12 +2,12 @@
 , gnutls, libgcrypt, zlib, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "nzbget-${version}";
-  version = "20.0";
+  pname = "nzbget";
+  version = "21.0";
 
   src = fetchurl {
     url = "https://github.com/nzbget/nzbget/releases/download/v${version}/nzbget-${version}-src.tar.gz";
-    sha256 = "0vyhmjg3ipjlv41il6kklys3m6rhqifdkv25a7ak772l6ba3dp04";
+    sha256 = "0lwd0pfrs4a5ms193hgz2qiyf7grrc925dw6y0nfc0gkp27db9b5";
   };
 
   nativeBuildInputs = [ pkgconfig ];

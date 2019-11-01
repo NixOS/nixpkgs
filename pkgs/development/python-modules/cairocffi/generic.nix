@@ -31,13 +31,13 @@ buildPythonPackage rec {
   '';
 
   patches = [
-    # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
+    # OSError: dlopen() failed to load a library: gdk-pixbuf-2.0 / gdk-pixbuf-2.0-0
     (substituteAll {
       src = dlopen_patch;
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
       cairo = cairo.out;
       glib = glib.out;
-      gdk_pixbuf = gdk_pixbuf.out;
+      gdk_pixbuf = gdk-pixbuf.out;
     })
     ./fix_test_scaled_font.patch
   ];

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, qmake, qttools, qtsvg }:
+{ stdenv, fetchurl, qmake, qttools, qtsvg, mkDerivation }:
 
-stdenv.mkDerivation rec {
-  name = "cutemaze-${version}";
-  version = "1.2.4";
+mkDerivation rec {
+  pname = "cutemaze";
+  version = "1.2.5";
 
   src = fetchurl {
-    url = "https://gottcode.org/cutemaze/${name}-src.tar.bz2";
-    sha256 = "0l727j28igs7cx6gvxs43vvzhp3hk0z61df7sprp1vdxzpzzfifl";
+    url = "https://gottcode.org/cutemaze/${pname}-${version}-src.tar.bz2";
+    sha256 = "1xrjv3h1bpbji1dl9hkcvmp6qk4j618saffl41455vhrzn170lrj";
   };
 
   nativeBuildInputs = [ qmake qttools ];

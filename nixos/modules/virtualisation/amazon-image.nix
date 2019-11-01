@@ -25,6 +25,9 @@ in
       { assertion = cfg.hvm;
         message = "Paravirtualized EC2 instances are no longer supported.";
       }
+      { assertion = cfg.efi -> cfg.hvm;
+        message = "EC2 instances using EFI must be HVM instances.";
+      }
     ];
 
     boot.growPartition = cfg.hvm;
@@ -35,10 +38,14 @@ in
       autoResize = true;
     };
 
-    boot.extraModulePackages =
-      [ config.boot.kernelPackages.ixgbevf
-        config.boot.kernelPackages.ena
-      ];
+    fileSystems."/boot" = mkIf cfg.efi {
+      device = "/dev/disk/by-label/ESP";
+      fsType = "vfat";
+    };
+
+    boot.extraModulePackages = [
+      config.boot.kernelPackages.ena
+    ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
@@ -51,8 +58,10 @@ in
 
     # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
     boot.loader.grub.version = if cfg.hvm then 2 else 1;
-    boot.loader.grub.device = if cfg.hvm then "/dev/xvda" else "nodev";
+    boot.loader.grub.device = if (cfg.hvm && !cfg.efi) then "/dev/xvda" else "nodev";
     boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
+    boot.loader.grub.efiSupport = cfg.efi;
+    boot.loader.grub.efiInstallAsRemovable = cfg.efi;
     boot.loader.timeout = 0;
 
     boot.initrd.network.enable = true;
@@ -138,7 +147,7 @@ in
     networking.timeServers = [ "169.254.169.123" ];
 
     # udisks has become too bloated to have in a headless system
-    # (e.g. it depends on GTK+).
+    # (e.g. it depends on GTK).
     services.udisks2.enable = false;
   };
 }

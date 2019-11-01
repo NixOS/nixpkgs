@@ -1,12 +1,19 @@
+# shellcheck shell=bash
 gappsWrapperArgs=()
 
 find_gio_modules() {
-    if [ -d "$1"/lib/gio/modules ] && [ -n "$(ls -A $1/lib/gio/modules)" ] ; then
+    if [ -d "$1/lib/gio/modules" ] && [ -n "$(ls -A "$1/lib/gio/modules")" ] ; then
         gappsWrapperArgs+=(--prefix GIO_EXTRA_MODULES : "$1/lib/gio/modules")
     fi
 }
 
-addEnvHooks "$targetOffset" find_gio_modules
+addEnvHooks "${targetOffset:?}" find_gio_modules
+
+wrapGApp() {
+    local program="$1"
+    shift 1
+    wrapProgram "$program" "${gappsWrapperArgs[@]}" "$@"
+}
 
 # Note: $gappsWrapperArgs still gets defined even if $dontWrapGApps is set.
 wrapGAppsHook() {
@@ -26,20 +33,19 @@ wrapGAppsHook() {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH")
   fi
 
-  if [ -d "$prefix/share" ]; then
+  if [ -d "${prefix:?}/share" ]; then
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$prefix/share")
   fi
 
-  if [ -d "$prefix/lib/gio/modules" ] && [ -n "$(ls -A $prefix/lib/gio/modules)" ] ; then
+  if [ -d "$prefix/lib/gio/modules" ] && [ -n "$(ls -A "$prefix/lib/gio/modules")" ] ; then
     gappsWrapperArgs+=(--prefix GIO_EXTRA_MODULES : "$prefix/lib/gio/modules")
   fi
 
-  for v in $wrapPrefixVariables GST_PLUGIN_SYSTEM_PATH_1_0 GI_TYPELIB_PATH GRL_PLUGIN_PATH; do
-    eval local dummy="\$$v"
-    gappsWrapperArgs+=(--prefix $v : "$dummy")
+  for v in ${wrapPrefixVariables:-} GST_PLUGIN_SYSTEM_PATH_1_0 GI_TYPELIB_PATH GRL_PLUGIN_PATH; do
+    gappsWrapperArgs+=(--prefix "$v" : "${!v}")
   done
 
-  if [[ -z "$dontWrapGApps" ]]; then
+  if [[ -z "${dontWrapGApps:-}" ]]; then
     targetDirsThatExist=()
     targetDirsRealPath=()
 
@@ -52,7 +58,7 @@ wrapGAppsHook() {
         find "${targetDir}" -type f -executable -print0 \
           | while IFS= read -r -d '' file; do
           echo "Wrapping program '${file}'"
-          wrapProgram "${file}" "${gappsWrapperArgs[@]}"
+          wrapGApp "${file}"
         done
       fi
     done
@@ -71,7 +77,7 @@ wrapGAppsHook() {
           fi
         done
         echo "Wrapping link: '$linkPath'"
-        wrapProgram "${linkPath}" "${gappsWrapperArgs[@]}"
+        wrapGApp "${linkPath}"
       done
     fi
   fi

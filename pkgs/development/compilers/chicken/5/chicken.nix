@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, bootstrap-chicken ? null }:
 
 let
-  version = "5.0.0";
+  version = "5.1.0";
   platform = with stdenv;
     if isDarwin then "macosx"
     else if isCygwin then "cygwin"
@@ -11,19 +11,20 @@ let
   lib = stdenv.lib;
 in
 stdenv.mkDerivation {
-  name = "chicken-${version}";
+  pname = "chicken";
+  inherit version;
 
-  binaryVersion = 9;
+  binaryVersion = 11;
 
   src = fetchurl {
     url = "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
-    sha256 = "15b5yrzfa8aimzba79x7v6y282f898rxqxfxrr446sjx9jwlpfd8";
+    sha256 = "0jsbp3kp0134f318j3wpd1n85gf8qzh034fn198gvazsv2l024aw";
   };
 
   setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
 
-  buildFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
-  installFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
+  buildFlags = "PLATFORM=${platform} PREFIX=$(out)";
+  installFlags = "PLATFORM=${platform} PREFIX=$(out)";
 
   buildInputs = [
     makeWrapper
@@ -37,10 +38,6 @@ stdenv.mkDerivation {
       wrapProgram $f \
         --prefix PATH : ${stdenv.cc}/bin
     done
-
-    mv $out/var/lib/chicken $out/lib
-    rmdir $out/var/lib
-    rmdir $out/var
   '';
 
   # TODO: Assert csi -R files -p '(pathname-file (repository-path))' == binaryVersion

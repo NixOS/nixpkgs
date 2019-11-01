@@ -109,7 +109,7 @@ let
 
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
-          exec ~/.xsession
+          eval exec ~/.xsession "$@"
       fi
 
       if test "$1"; then

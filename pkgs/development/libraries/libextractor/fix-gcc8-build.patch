@@ -1,0 +1,16 @@
+diff --git a/src/plugins/ole2_extractor.c b/src/plugins/ole2_extractor.c
+index 072ffc5..a105840 100644
+--- a/src/plugins/ole2_extractor.c
++++ b/src/plugins/ole2_extractor.c
+@@ -345,9 +345,8 @@ process_star_office (GsfInput *src,
+     gsf_input_read (src, size, (unsigned char*) buf);
+     if ( (buf[0] != 0x0F) ||
+ 	 (buf[1] != 0x0) ||
+-	 (0 != strncmp (&buf[2],
+-			"SfxDocumentInfo",
+-			strlen ("SfxDocumentInfo"))) ||
++	 (0 != strcmp (&buf[2],
++			"SfxDocumentInfo")) ||
+ 	 (buf[0x11] != 0x0B) ||
+ 	 (buf[0x13] != 0x00) || /* pw protected! */
+ 	 (buf[0x12] != 0x00) )

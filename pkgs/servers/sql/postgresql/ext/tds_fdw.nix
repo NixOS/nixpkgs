@@ -15,15 +15,16 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D tds_fdw.so                  -t $out/lib
-    install -D sql/tds_fdw--${version}.sql -t $out/share/extension
-    install -D tds_fdw.control             -t $out/share/extension
+    install -D sql/tds_fdw--${version}.sql -t $out/share/postgresql/extension
+    install -D tds_fdw.control             -t $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {
     description = "A PostgreSQL foreign data wrapper to connect to TDS databases (Sybase and Microsoft SQL Server)";
     homepage    = https://github.com/tds-fdw/tds_fdw;
     maintainers = [ maintainers.steve-chavez ];
-    platforms   = platforms.linux;
+    platforms   = postgresql.meta.platforms;
     license     = licenses.postgresql;
+    broken = versionAtLeast postgresql.version "11.0";
   };
 }

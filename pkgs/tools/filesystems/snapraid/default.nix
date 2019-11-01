@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "snapraid-${version}";
+  pname = "snapraid";
   version = "11.3";
 
   src = fetchFromGitHub {

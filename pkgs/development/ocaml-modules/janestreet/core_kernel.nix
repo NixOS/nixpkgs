@@ -2,7 +2,7 @@
  bin_prot, fieldslib, sexplib, typerep, variantslib,
  ppx_assert, ppx_bench, ppx_driver, ppx_expect, ppx_inline_test, ppx_jane}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "core_kernel";
   hash = "13gamj056nlib04l7yh80lqpdx0pnswzlb52fkqa01awwp5nf3z6";
   propagatedBuildInputs =

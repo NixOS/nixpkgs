@@ -1,29 +1,42 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, vala
-, desktop-file-utils, gtk3, granite, libgee, gcr, webkitgtk, gobject-introspection, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, gcr
+, webkitgtk
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "capnet-assist";
+  pname = "elementary-capnet-assist";
   version = "2.2.3";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "capnet-assist";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "15cnwimkmmsb4rwvgm8bizcsn1krsj6k3qc88izn79is75y6wwji";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -41,7 +54,9 @@ stdenv.mkDerivation rec {
   ];
 
   # Not useful here or in elementary - See: https://github.com/elementary/capnet-assist/issues/3
-  patches = [ ./remove-capnet-test.patch ];
+  patches = [
+    ./remove-capnet-test.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

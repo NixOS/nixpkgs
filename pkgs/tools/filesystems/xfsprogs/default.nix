@@ -10,7 +10,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "xfsprogs-${version}";
+  pname = "xfsprogs";
   version = "4.19.0";
 
   src = fetchgit {

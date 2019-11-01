@@ -11,6 +11,8 @@ appleDerivation {
     export PRIVATE_HEADERS_FOLDER_PATH=include
     bash xcodescripts/headers.sh
 
+    cp ${./CrashReporterClient.h} $out/include/CrashReporterClient.h
+
     cp ${Libc_10-9}/include/NSSystemDirectories.h $out/include
 
     # Ugh Apple stopped releasing this stuff so we need an older one...

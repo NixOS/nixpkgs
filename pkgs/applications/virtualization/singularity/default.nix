@@ -1,12 +1,10 @@
 {stdenv
 , removeReferencesTo
 , lib
-, fetchgit
 , fetchFromGitHub
 , utillinux
 , openssl
 , coreutils
-, gawk
 , go
 , which
 , makeWrapper
@@ -16,14 +14,14 @@
 with lib;
 
 buildGoPackage rec {
-  name = "singularity-${version}";
-  version = "3.0.1";
+  pname = "singularity";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "sylabs";
     repo = "singularity";
     rev = "v${version}";
-    sha256 = "1wpsd0il2ipa2n5cnbj8dzs095jycdryq2rx62kikbq7ahzz4fsi";
+    sha256 = "14lhxwy21s7q081x7kbnvkjsbxgsg2f181qlzmlxcn6n7gfav3kj";
   };
 
   goPackagePath = "github.com/sylabs/singularity";
@@ -33,23 +31,22 @@ buildGoPackage rec {
   nativeBuildInputs = [ removeReferencesTo utillinux which makeWrapper ];
   propagatedBuildInputs = [ coreutils squashfsTools ];
 
-  postConfigure = ''
-    find . -name vendor -type d -print0 | xargs -0 rm -rf
+  prePatch = ''
+    substituteInPlace internal/pkg/build/copy/copy.go \
+      --replace /bin/cp ${coreutils}/bin/cp
+  '';
 
+  postConfigure = ''
     cd go/src/github.com/sylabs/singularity
 
     patchShebangs .
-    sed -i 's|defaultEnv := "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin"|defaultEnv := "${stdenv.lib.makeBinPath propagatedBuildInputs}"|' src/cmd/singularity/cli/singularity.go
+    sed -i 's|defaultPath := "[^"]*"|defaultPath := "${stdenv.lib.makeBinPath propagatedBuildInputs}"|' cmd/internal/cli/actions.go
 
     ./mconfig -V ${version} -p $bin --localstatedir=/var
-    touch builddir/.dep-done
-    touch builddir/vendors-done
 
     # Don't install SUID binaries
     sed -i 's/-m 4755/-m 755/g' builddir/Makefile
 
-    # Point to base gopath
-    sed -i "s|^cni_vendor_GOPATH :=.*\$|cni_vendor_GOPATH := $NIX_BUILD_TOP/go/src/github.com/containernetworking/plugins/plugins|" builddir/Makefile
   '';
 
   buildPhase = ''
@@ -59,6 +56,7 @@ buildGoPackage rec {
   installPhase = ''
     make -C builddir install LOCALSTATEDIR=$bin/var
     chmod 755 $bin/libexec/singularity/bin/starter-suid
+    wrapProgram $bin/bin/singularity --prefix PATH : ${stdenv.lib.makeBinPath propagatedBuildInputs}
   '';
 
   postFixup = ''

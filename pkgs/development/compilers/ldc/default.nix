@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, cmake, ninja, llvm, llvm_8, curl, tzdata
+{ stdenv, fetchurl, cmake, ninja, llvm_5, llvm_8, curl, tzdata
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, targetPackages
 , bootstrapVersion ? false
-, version ? "1.15.0"
-, ldcSha256 ? "1qnfy2q8zkywvby7wa8jm20mlpghn28x6w357cpc8hi56g7y1q6p"
+, version ? "1.17.0"
+, ldcSha256 ? "1aag5jfrng6p4ms0fs90hjbv9bcj3hj8h52r68c3cm6racdajbva"
 }:
 
 let
@@ -21,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ldc-${version}";
+  pname = "ldc";
+  inherit version;
 
   enableParallelBuilding = true;
 
@@ -83,7 +84,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional (!bootstrapVersion && stdenv.hostPlatform.isDarwin) [
     # https://github.com/NixOS/nixpkgs/issues/57120
     # https://github.com/NixOS/nixpkgs/pull/59197#issuecomment-481972515
-    llvm
+    llvm_5
   ]
 
   ++ stdenv.lib.optional (!bootstrapVersion && !stdenv.hostPlatform.isDarwin) [
@@ -96,7 +97,7 @@ stdenv.mkDerivation rec {
   ]
 
   ++ stdenv.lib.optional (bootstrapVersion) [
-    libconfig llvm
+    libconfig llvm_5
   ]
 
   ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [

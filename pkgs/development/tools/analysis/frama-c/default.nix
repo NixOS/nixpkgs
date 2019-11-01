@@ -1,86 +1,76 @@
-{ stdenv, fetchurl, makeWrapper, ncurses, ocamlPackages, graphviz
-, ltl2ba, coq, why3, autoconf
+{ lib, stdenv, fetchurl, makeWrapper, writeText
+, autoconf, ncurses, graphviz, doxygen
+, ocamlPackages, ltl2ba, coq, why3,
 }:
 
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
-  ocamlpath = "${mkocamlpath ocamlPackages.apron}:${mkocamlpath ocamlPackages.mlgmpidl}";
+  runtimeDeps = with ocamlPackages; [
+    apron
+    biniou
+    camlzip
+    easy-format
+    menhir
+    mlgmpidl
+    num
+    ocamlgraph
+    why3
+    yojson
+    zarith
+  ];
+  ocamlpath = lib.concatMapStringsSep ":" mkocamlpath runtimeDeps;
 in
 
 stdenv.mkDerivation rec {
-  name    = "frama-c-${version}";
-  version = "18.0";
-  slang   = "Argon";
+  pname = "frama-c";
+  version = "19.0";
+  slang   = "Potassium";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "0a88k2mhafj7pz3dzgsqkrc9digkxpnvr9jqq9nbzwq8qr02bca2";
+    sha256 = "190n1n4k0xbycz25bn0d2gnfxd8w6scz3nlixl7w2k2jvpqlcs3n";
+
   };
 
-  why2 = fetchurl {
-    url    = "http://why.lri.fr/download/why-2.40.tar.gz";
-    sha256 = "0h1mbpxsgwvf3pbl0qbg22j6f4v1ffka24ap1ajbjk9b1yb3ali8";
-  };
+  preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
 
   nativeBuildInputs = [ autoconf makeWrapper ];
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph
-    lablgtk coq graphviz zarith why3 apron
+    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhir camlzip
+    lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
   ];
 
+  enableParallelBuilding = true;
 
-  # Experimentally, the build segfaults with high core counts
-  enableParallelBuilding = false;
-
-  unpackPhase = ''
-    tar xf $src
-    tar xf $why2
-  '';
-
-  buildPhase = ''
-    cd frama*
-    ./configure --prefix=$out
-    # It is not parallel safe
-    make
-    make install
-    cd ../why*
-    FRAMAC=$out/bin/frama-c ./configure --prefix=$out
-    make
-    make install
+  fixupPhase = ''
     for p in $out/bin/frama-c{,-gui};
     do
       wrapProgram $p --prefix OCAMLPATH ':' ${ocamlpath}
     done
   '';
 
-  # Enter frama-c directory before patching
-  prePatch = ''cd frama*'';
-  patches = [ ./dynamic.diff ];
-  postPatch = ''
-    # strip absolute paths to /usr/bin
-    for file in ./configure ./share/Makefile.common ./src/*/configure; do #*/
-      substituteInPlace $file  --replace '/usr/bin/' ""
-    done
+  # Allow loading of external Frama-C plugins
+  setupHook = writeText "setupHook.sh" ''
+    addFramaCPath () {
+      if test -d "''$1/lib/frama-c/plugins"; then
+        export FRAMAC_PLUGIN="''${FRAMAC_PLUGIN}''${FRAMAC_PLUGIN:+:}''$1/lib/frama-c/plugins"
+        export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/frama-c/plugins"
+      fi
 
-    substituteInPlace ./src/plugins/aorai/aorai_register.ml --replace '"ltl2ba' '"${ltl2ba}/bin/ltl2ba'
+      if test -d "''$1/lib/frama-c"; then
+        export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/frama-c"
+      fi
 
-    cd ../why*
+      if test -d "''$1/share/frama-c/"; then
+        export FRAMAC_EXTRA_SHARE="''${FRAMAC_EXTRA_SHARE}''${FRAMAC_EXTRA_SHARE:+:}''$1/share/frama-c"
+      fi
 
-    substituteInPlace ./Makefile.in --replace '-warn-error A' '-warn-error A-3'    
-    substituteInPlace ./frama-c-plugin/Makefile --replace 'shell frama-c' "shell $out/bin/frama-c"
-    substituteInPlace ./jc/jc_make.ml --replace ' why-dp '       " $out/bin/why-dp "
-    substituteInPlace ./jc/jc_make.ml --replace "?= why@\n"      "?= $out/bin/why@\n"
-    substituteInPlace ./jc/jc_make.ml --replace ' gwhy-bin@'     " $out/bin/gwhy-bin@"
-    substituteInPlace ./jc/jc_make.ml --replace ' why3 '         " ${why3}/bin/why3 "
-    substituteInPlace ./jc/jc_make.ml --replace ' why3ide '      " ${why3}/bin/why3ide "
-    substituteInPlace ./jc/jc_make.ml --replace ' why3replayer ' " ${why3}/bin/why3replayer "
-    substituteInPlace ./jc/jc_make.ml --replace ' why3ml '       " ${why3}/bin/why3ml "
-    substituteInPlace ./jc/jc_make.ml --replace ' coqdep@'       " ${coq}/bin/coqdep@"
-    substituteInPlace ./jc/jc_make.ml --replace 'coqc'           " ${coq}/bin/coqc"
-    substituteInPlace ./frama-c-plugin/register.ml --replace ' jessie ' " $out/bin/jessie "
-    cd ..
+    }
+
+    addEnvHooks "$targetOffset" addFramaCPath
   '';
+
 
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";

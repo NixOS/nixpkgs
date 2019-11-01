@@ -3,7 +3,7 @@
 , qtbase, qttools }:
 
 stdenv.mkDerivation rec {
-  name = "scantailor-advanced-${version}";
+  pname = "scantailor-advanced";
   version = "1.0.16";
 
   src = fetchFromGitHub {

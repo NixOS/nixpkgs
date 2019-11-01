@@ -2,12 +2,12 @@
   m2r, setuptools_scm, six, attrs }:
 
 buildPythonPackage rec {
-  version = "0.7.0";
+  version = "0.8.0";
   pname = "Automat";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbd78b83fa2d81fe2a4d23d258e1661dd7493c9a50ee2f1a5b2cac61c1793b0e";
+    sha256 = "269a09dfb063a3b078983f4976d83f0a0d3e6e7aaf8e27d8df1095e09dc4a484";
   };
 
   buildInputs = [ m2r setuptools_scm ];

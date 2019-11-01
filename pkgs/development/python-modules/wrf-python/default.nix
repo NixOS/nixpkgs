@@ -1,4 +1,4 @@
-{lib, fetchFromGitHub, python, pythonOlder, buildPythonPackage, gfortran, mock, xarray, wrapt, numpy, netcdf4}:
+{lib, fetchFromGitHub, pythonOlder, buildPythonPackage, gfortran, mock, xarray, wrapt, numpy, netcdf4}:
 
 buildPythonPackage rec {
   pname = "wrf-python";

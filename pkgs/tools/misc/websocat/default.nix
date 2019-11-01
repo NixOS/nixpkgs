@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security
+{ stdenv, fetchFromGitHub, pkgconfig, openssl, rustPlatform, Security
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "websocat-${version}";
+  pname = "websocat";
   version = "1.3.0";
 
   src = fetchFromGitHub {
@@ -12,9 +12,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1gf2snr12vnx2mhsrwkb5274r1pvdrf8m3bybrqbh8s9wd83nrh6";
   };
 
-  cargoSha256 = "0vkb3jmyb3zg3xiig5vlxhh74m27rvqbkgrwdqzprifn9vcj17ir";
+  cargoBuildFlags = [ "--features=ssl" ];
+  cargoSha256 = "1zqfvbihf8xwgh092n9wzm3mdgbv0n99gjsfk9przqj2vh7wfvh2";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   meta = with stdenv.lib; {
     description = "Command-line client for WebSockets (like netcat/socat)";

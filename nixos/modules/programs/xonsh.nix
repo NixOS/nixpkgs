@@ -26,6 +26,7 @@ in
 
       package = mkOption {
         type = types.package;
+        default = pkgs.xonsh;
         example = literalExample "pkgs.xonsh.override { configFile = \"/path/to/xonshrc\"; }";
         description = ''
           xonsh package to use.
@@ -44,13 +45,13 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc."xonshrc".text = cfg.config;
+    environment.etc.xonshrc.text = cfg.config;
 
-    environment.systemPackages = [ pkgs.xonsh ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.shells =
       [ "/run/current-system/sw/bin/xonsh"
-        "${pkgs.xonsh}/bin/xonsh"
+        "${cfg.package}/bin/xonsh"
       ];
 
   };

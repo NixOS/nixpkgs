@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "freewheeling-${version}";
+  pname = "freewheeling";
   version = "0.6.5";
 
   src = fetchFromGitHub {

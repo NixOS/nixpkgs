@@ -4,10 +4,9 @@
 stdenv.mkDerivation rec {
   pname = "argus";
   version = "3.0.8.2";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://qosient.com/argus/src/${name}.tar.gz";
+    url = "http://qosient.com/argus/src/${pname}-${version}.tar.gz";
     sha256 = "1zzf688dbbcb5z2r9v1p28rddns6znzx35nc05ygza6lp7aknkna";
   };
 

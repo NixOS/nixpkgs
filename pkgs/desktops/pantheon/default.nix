@@ -18,6 +18,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   ];
 
   desktop = [
+    elementary-default-settings
     elementary-session-settings
     elementary-shortcut-overlay
     gala
@@ -58,7 +59,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   maintainers = with pkgs.stdenv.lib.maintainers; [ worldofpeace ];
 
   mutter = pkgs.gnome3.mutter328;
-  vala = pkgs.vala_0_40;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
@@ -90,9 +90,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-default-settings = callPackage ./desktop/elementary-default-settings { };
 
-  elementary-greeter = callPackage ./desktop/elementary-greeter {
-    inherit (gnome3) gnome-desktop;
-  };
+  elementary-greeter = callPackage ./desktop/elementary-greeter { };
 
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
@@ -220,5 +218,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-sound-theme = callPackage ./artwork/elementary-sound-theme { };
 
   elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
+
+  ### ALIASES
+
+  vala = pkgs.vala; # added 2019-10-10
 
 })

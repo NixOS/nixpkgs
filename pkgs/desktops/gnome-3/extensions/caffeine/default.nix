@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, glib, gettext, bash }:
+{ stdenv, fetchFromGitHub, glib, gettext, bash, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-caffeine-${version}";
+  pname = "gnome-shell-extension-caffeine";
   version = "unstable-2019-04-02";
 
   src = fetchFromGitHub {
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];
     homepage = https://github.com/eonpatapon/gnome-shell-extension-caffeine;
+    broken = versionAtLeast gnome3.gnome-shell.version "3.32"; # Doesn't support 3.34
   };
 }

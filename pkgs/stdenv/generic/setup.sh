@@ -17,7 +17,8 @@ fi
 # code). The hooks for <hookName> are the shell function or variable
 # <hookName>, and the values of the shell array ‘<hookName>Hooks’.
 runHook() {
-    local oldOpts="$(shopt -po nounset)"
+    local oldOpts="-u"
+    shopt -qo nounset || oldOpts="+u"
     set -u # May be called from elsewhere, so do `set -u`.
 
     local hookName="$1"
@@ -32,7 +33,7 @@ runHook() {
         set -u # To balance `_eval`
     done
 
-    eval "${oldOpts}"
+    set "$oldOpts"
     return 0
 }
 
@@ -40,7 +41,8 @@ runHook() {
 # Run all hooks with the specified name, until one succeeds (returns a
 # zero exit code). If none succeed, return a non-zero exit code.
 runOneHook() {
-    local oldOpts="$(shopt -po nounset)"
+    local oldOpts="-u"
+    shopt -qo nounset || oldOpts="+u"
     set -u # May be called from elsewhere, so do `set -u`.
 
     local hookName="$1"
@@ -57,7 +59,7 @@ runOneHook() {
         set -u # To balance `_eval`
     done
 
-    eval "${oldOpts}"
+    set "$oldOpts"
     return "$ret"
 }
 
@@ -71,21 +73,18 @@ _callImplicitHook() {
     set -u
     local def="$1"
     local hookName="$2"
-    case "$(type -t "$hookName")" in
-        (function|alias|builtin)
-            set +u
-            "$hookName";;
-        (file)
-            set +u
-            source "$hookName";;
-        (keyword) :;;
-        (*) if [ -z "${!hookName:-}" ]; then
-                return "$def";
-            else
-                set +u
-                eval "${!hookName}"
-            fi;;
-    esac
+    if declare -F "$hookName" > /dev/null; then
+        set +u
+        "$hookName"
+    elif type -p "$hookName" > /dev/null; then
+        set +u
+        source "$hookName"
+    elif [ -n "${!hookName:-}" ]; then
+        set +u
+        eval "${!hookName}"
+    else
+        return "$def"
+    fi
     # `_eval` expects hook to need nounset disable and leave it
     # disabled anyways, so Ok to to delegate. The alternative of a
     # return trap is no good because it would affect nested returns.
@@ -96,7 +95,7 @@ _callImplicitHook() {
 # hooks exits the hook, not the caller. Also will only pass args if
 # command can take them
 _eval() {
-    if [ "$(type -t "$1")" = function ]; then
+    if declare -F "$1" > /dev/null 2>&1; then
         set +u
         "$@" # including args
     else
@@ -182,10 +181,8 @@ addToSearchPathWithCustomDelimiter() {
     fi
 }
 
-PATH_DELIMITER=':'
-
 addToSearchPath() {
-    addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+    addToSearchPathWithCustomDelimiter ":" "$@"
 }
 
 # Add $1/lib* into rpaths.
@@ -391,6 +388,7 @@ findInputs() {
     # The current package's host and target offset together
     # provide a <=-preserving homomorphism from the relative
     # offsets to current offset
+    local -i mapOffsetResult
     function mapOffset() {
         local -ri inputOffset="$1"
         if (( "$inputOffset" <= 0 )); then
@@ -398,7 +396,7 @@ findInputs() {
         else
             local -ri outputOffset="$inputOffset - 1 + $targetOffset"
         fi
-        echo "$outputOffset"
+        mapOffsetResult="$outputOffset"
     }
 
     # Host offset relative to that of the package whose immediate
@@ -410,8 +408,8 @@ findInputs() {
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
-        local -i hostOffsetNext
-        hostOffsetNext="$(mapOffset relHostOffset)"
+        mapOffset relHostOffset
+        local -i hostOffsetNext="$mapOffsetResult"
 
         # Ensure we're in bounds relative to the package currently
         # being built.
@@ -429,8 +427,8 @@ findInputs() {
 
             # Target offset relative to the package currently being
             # built.
-            local -i targetOffsetNext
-            targetOffsetNext="$(mapOffset relTargetOffset)"
+            mapOffset relTargetOffset
+            local -i targetOffsetNext="$mapOffsetResult"
 
             # Once again, ensure we're in bounds relative to the
             # package currently being built.
@@ -439,7 +437,8 @@ findInputs() {
             [[ -f "$pkg/nix-support/$file" ]] || continue
 
             local pkgNext
-            for pkgNext in $(< "$pkg/nix-support/$file"); do
+            read -r -d '' pkgNext < "$pkg/nix-support/$file" || true
+            for pkgNext in $pkgNext; do
                 findInputs "$pkgNext" "$hostOffsetNext" "$targetOffsetNext"
             done
         done
@@ -490,10 +489,11 @@ activatePackage() {
     (( "$hostOffset" <= "$targetOffset" )) || exit -1
 
     if [ -f "$pkg" ]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         source "$pkg"
-        eval "$oldOpts"
+        set "$oldOpts"
     fi
 
     # Only dependencies whose host platform is guaranteed to match the
@@ -508,14 +508,15 @@ activatePackage() {
     fi
 
     if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
-        addToSearchPath HOST_PATH "$pkg/bin"
+        addToSearchPath _HOST_PATH "$pkg/bin"
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         source "$pkg/nix-support/setup-hook"
-        eval "$oldOpts"
+        set "$oldOpts"
     fi
 }
 
@@ -617,9 +618,14 @@ fi
 
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
+HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
+    echo "final host path: $HOST_PATH"
 fi
+
+unset _PATH
+unset _HOST_PATH
 
 
 # Make GNU Make produce nested output.
@@ -643,10 +649,13 @@ fi
 export NIX_BUILD_CORES
 
 
-# Prevent OpenSSL-based applications from using certificates in
-# /etc/ssl.
-# Leave it in shells for convenience.
-if [ -z "${SSL_CERT_FILE:-}" ] && [ -z "${IN_NIX_SHELL:-}" ]; then
+# Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
+# Leave it in impure shells for convenience.
+if [ -z "${NIX_SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+  export NIX_SSL_CERT_FILE=/no-cert-file.crt
+fi
+# Another variant left for compatibility.
+if [ -z "${SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
   export SSL_CERT_FILE=/no-cert-file.crt
 fi
 
@@ -1255,17 +1264,19 @@ showPhaseHeader() {
 
 genericBuild() {
     if [ -f "${buildCommandPath:-}" ]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         source "$buildCommandPath"
-        eval "$oldOpts"
+        set "$oldOpts"
         return
     fi
     if [ -n "${buildCommand:-}" ]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         eval "$buildCommand"
-        eval "$oldOpts"
+        set "$oldOpts"
         return
     fi
 
@@ -1277,6 +1288,8 @@ genericBuild() {
     fi
 
     for curPhase in $phases; do
+        if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
+        if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
         if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
         if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
         if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then continue; fi
@@ -1293,10 +1306,11 @@ genericBuild() {
 
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         eval "${!curPhase:-$curPhase}"
-        eval "$oldOpts"
+        set "$oldOpts"
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"

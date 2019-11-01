@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "rubiks";
   version = "20070912";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sageupstream/rubiks/rubiks-${version}.tar.bz2";
@@ -77,6 +76,6 @@ stdenv.mkDerivation rec {
       mit # Dik T. Winter's software
     ];
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "go-repo-root-${version}";
+  pname = "go-repo-root";
   version = "20140911-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "90041e5c7dc634651549f96814a452f4e0e680f9";
   

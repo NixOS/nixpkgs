@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./utils.patch
     ++ [./fix_private_keyword.patch];
 
-  buildInputs = stdenv.lib.optional stdenv.isAarch64 autoreconfHook;
+  nativeBuildInputs = stdenv.lib.optional stdenv.isAarch64 autoreconfHook;
 
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [
     Carbon
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  preConfigure = "unset CC" + stdenv.lib.optionalString stdenv.isAarch64 ''\n
+  preConfigure = "unset CC" + stdenv.lib.optionalString stdenv.isAarch64 '';
     cp ${gnu-config}/config.sub configure.sub
     cp ${gnu-config}/config.guess configure.guess
   '';

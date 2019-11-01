@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tlaps-${version}";
+  pname = "tlaps";
   version = "1.4.3";
   src = fetchurl {
     url = "https://tla.msr-inria.inria.fr/tlaps/dist/current/tlaps-${version}.tar.gz";

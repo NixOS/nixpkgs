@@ -79,7 +79,6 @@ rec {
         (test -n "$executable" && chmod +x "$n") || true
       '';
 
-
   /*
    * Writes a text file to nix store with no optional parameters available.
    *
@@ -92,24 +91,35 @@ rec {
    *
   */
   writeText = name: text: writeTextFile {inherit name text;};
+
   /*
    * Writes a text file to nix store in a specific directory with no
-   * optional parameters available. Name passed is the destination.
+   * optional parameters available.
    *
    * Example:
-   * # Writes contents of file to /nix/store/<store path>/<name>
+   * # Writes contents of file to /nix/store/<store path>/share/my-file
    * writeTextDir "share/my-file"
    *   ''
    *   Contents of File
    *   '';
    *
   */
-  writeTextDir = name: text: writeTextFile {inherit name text; destination = "/${name}";};
+  writeTextDir = path: text: writeTextFile {
+    inherit text;
+    name = builtins.baseNameOf path;
+    destination = "/${path}";
+  };
+
   /*
-   * Writes a text file to /nix/store/<store path> and marks the file as executable.
+   * Writes a text file to /nix/store/<store path> and marks the file as
+   * executable.
+   *
+   * If passed as a build input, will be used as a setup hook. This makes setup
+   * hooks more efficient to create: you don't need a derivation that copies
+   * them to $out/nix-support/setup-hook, instead you can use the file as is.
    *
    * Example:
-   * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable
+   * # Writes my-file to /nix/store/<store path> and makes executable
    * writeScript "my-file"
    *   ''
    *   Contents of File
@@ -117,13 +127,14 @@ rec {
    *
   */
   writeScript = name: text: writeTextFile {inherit name text; executable = true;};
+
   /*
    * Writes a text file to /nix/store/<store path>/bin/<name> and
    * marks the file as executable.
    *
    * Example:
    * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-   * writeScript "my-file"
+   * writeScriptBin "my-file"
    *   ''
    *   Contents of File
    *   '';
@@ -132,12 +143,38 @@ rec {
   writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
 
   /*
-   * Writes a Shell script and check its syntax. Automatically includes interpreter
-   * above the contents passed.
+   * Similar to writeScript. Writes a Shell script and checks its syntax.
+   * Automatically includes interpreter above the contents passed.
+   *
+   * Example:
+   * # Writes my-file to /nix/store/<store path> and makes executable.
+   * writeShellScript "my-file"
+   *   ''
+   *   Contents of File
+   *   '';
+   *
+  */
+  writeShellScript = name: text:
+    writeTextFile {
+      inherit name;
+      executable = true;
+      text = ''
+        #!${runtimeShell}
+        ${text}
+        '';
+      checkPhase = ''
+        ${stdenv.shell} -n $out
+      '';
+    };
+
+  /*
+   * Similar to writeShellScript and writeScriptBin.
+   * Writes an executable Shell script to /nix/store/<store path>/bin/<name> and checks its syntax.
+   * Automatically includes interpreter above the contents passed.
    *
    * Example:
    * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-   * writeScript "my-file"
+   * writeShellScriptBin "my-file"
    *   ''
    *   Contents of File
    *   '';
@@ -344,4 +381,37 @@ rec {
   # Copy a list of paths to the Nix store.
   copyPathsToStore = builtins.map copyPathToStore;
 
+  /* Applies a list of patches to a source directory.
+   *
+   * Examples:
+   *
+   * # Patching nixpkgs:
+   * applyPatches {
+   *   src = pkgs.path;
+   *   patches = [
+   *     (pkgs.fetchpatch {
+   *       url = "https://github.com/NixOS/nixpkgs/commit/1f770d20550a413e508e081ddc08464e9d08ba3d.patch";
+   *       sha256 = "1nlzx171y3r3jbk0qhvnl711kmdk57jlq4na8f8bs8wz2pbffymr";
+   *     })
+   *   ];
+   * }
+   */
+  applyPatches =
+    { src
+    , name ? (if builtins.typeOf src == "path"
+              then builtins.baseNameOf src
+              else
+                if builtins.isAttrs src && builtins.hasAttr "name" src
+                then src.name
+                else throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
+             ) + "-patched"
+    , patches   ? []
+    , postPatch ? ""
+    }: stdenvNoCC.mkDerivation {
+      inherit name src patches postPatch;
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+      phases = "unpackPhase patchPhase installPhase";
+      installPhase = "cp -R ./ $out";
+    };
 }

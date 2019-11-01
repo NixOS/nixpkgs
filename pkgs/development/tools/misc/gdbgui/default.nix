@@ -2,15 +2,12 @@
 , buildPythonApplication
 , fetchPypi
 , gdb
-, iana-etc
-, libredirect
 , flask
 , flask-socketio
 , flask-compress
 , pygdbmi
 , pygments
 , gevent
-, breakpointHook
 , }:
 
 buildPythonApplication rec {

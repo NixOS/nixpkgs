@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   # https://github.com/erroneousboat/slack-term
-  name = "slack-term-${version}";
+  pname = "slack-term";
   version = "0.4.1";
 
   goPackagePath = "github.com/erroneousboat/slack-term";

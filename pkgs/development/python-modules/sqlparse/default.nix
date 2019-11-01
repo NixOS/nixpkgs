@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.2.4";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce028444cfab83be538752a2ffdb56bc417b7784ff35bb9a3062413717807dec";
+    sha256 = "0wxqrm9fpn4phz6rqm7kfd1wwkwzx376gs27nnalwx12q0lwlgbw";
   };
 
   checkInputs = [ pytest ];

@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "snapcast";
-  version = "2.0.9";
+  version = "2.0.10";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hlfcg0qdfavjzhxz4v2spjkj6440a1254wrncfkfkyff6rv9x3s";
+    sha256 = "2a862a57ca65aa11cf010a19cdfee37e5728d486ee92684b00233442613b5120";
   };
 
   checkInputs = [ pytest ];

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pymongo";
-  version = "3.7.2";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c74e2a9b594f7962c62cef7680a4cb92a96b4e6e3c2f970790da67cc0213a7e";
+    sha256 = "4249c6ba45587b959292a727532826c5032d59171f923f7f823788f413c2a5a3";
   };
 
   # Tests call a running mongodb instance

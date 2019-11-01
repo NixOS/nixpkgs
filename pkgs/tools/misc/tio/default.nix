@@ -1,7 +1,7 @@
 { stdenv, fetchzip, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "tio-${version}";
+  pname = "tio";
   version = "1.32";
 
   src = fetchzip {

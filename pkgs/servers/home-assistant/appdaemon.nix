@@ -24,10 +24,10 @@ let
       });
 
       jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
-        version = "2.10";
+        version = "2.10.1";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4";
+          sha256 = "065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013";
         };
       });
 
@@ -38,25 +38,16 @@ let
           sha256 = "0f390693f46173d8ffb95669acbb0e2a3ec54ecce676703510ad47f1a6d9dc83";
         };
       });
-
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95";
-        };
-      });
-
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "e2393b5e0bb34e94e61f5debc95ad74c1c6929635b74bf8ba15c22b40cbdec69";
+    sha256 = "623897ce08dc2efe24d04380df36e4b7fb35c0e4007e882857d4047f0b60349d";
   };
 
   propagatedBuildInputs = with python.pkgs; [
@@ -66,6 +57,10 @@ in python.pkgs.buildPythonApplication rec {
 
   # no tests implemented
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "pyyaml==5.1" "pyyaml"
+  '';
 
   meta = with lib; {
     description = "Sandboxed python execution environment for writing automation apps for Home Assistant";

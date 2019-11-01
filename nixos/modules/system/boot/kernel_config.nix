@@ -9,7 +9,6 @@ let
   mergeAnswer = winners: locs: defs:
     let
       values = map (x: x.value) defs;
-      freeformAnswer = intersectLists values winners;
       inter = intersectLists values winners;
       winner = head winners;
     in

@@ -1,7 +1,7 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub, terraform, makeWrapper }:
 
 buildGoPackage rec {
-  name = "terragrunt-${version}";
+  pname = "terragrunt";
   version = "0.17.4";
 
   goPackagePath = "github.com/gruntwork-io/terragrunt";

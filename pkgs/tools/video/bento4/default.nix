@@ -2,7 +2,7 @@
 , cmake
 }:
 stdenv.mkDerivation rec {
-  name = "bento4-${version}";
+  pname = "bento4";
   version = "1.5.1-628";
 
   src = fetchFromGitHub {

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libjack2, alsaLib, liblo, libsndfile, lv2, qt5 }:
 
 stdenv.mkDerivation rec {
-  name = "samplv1-${version}";
-  version = "0.9.7";
+  pname = "samplv1";
+  version = "0.9.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/samplv1/${name}.tar.gz";
-    sha256 = "1vgmcjccpgqqlmmwfg6m91nph81p2xaxydjx82n4l1yrr9lidn9h";
+    url = "mirror://sourceforge/samplv1/${pname}-${version}.tar.gz";
+    sha256 = "04p5jkighmc8rf7fzzy8ch6knqbxv03vhjzdfh9dva2mlzw9rvjj";
   };
 
   buildInputs = [ libjack2 alsaLib liblo libsndfile lv2 qt5.qtbase qt5.qttools];

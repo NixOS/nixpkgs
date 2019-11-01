@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "bully-${version}";
+  pname = "bully";
   version = "1.1";
 
   src = fetchFromGitHub {

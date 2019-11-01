@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, catch, python, eigen }:
+{ stdenv, fetchurl, fetchFromGitHub, cmake, catch, python, eigen }:
 
 stdenv.mkDerivation rec {
-  name = "pybind-${version}";
+  pname = "pybind";
   version = "2.2.4";
 
   src = fetchFromGitHub {
@@ -16,7 +16,14 @@ stdenv.mkDerivation rec {
 
   # Disable test_cmake_build test, as it fails in sandbox
   # https://github.com/pybind/pybind11/issues/1355
-  patches = [ ./no_test_cmake_build.patch ];
+  patches = [
+    ./no_test_cmake_build.patch
+    (fetchurl { # Remove on bump to v2.2.5
+      name = "pytest_namespace_to_configure.patch";
+      url = "https://github.com/pybind/pybind11/commit/e7ef34f23f194cfa40bdbf967c6d34712261a4ee.patch";
+      sha256 = "1dhv6p0b5fxzxc8j3sfy8kvfmdshczk22xfxh6bk0cfnfdy9iqrq";
+    })
+  ];
 
   doCheck = true;
 

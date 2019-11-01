@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "pingtcp-${version}";
+  pname = "pingtcp";
   version = "0.0.3";
 
   src = fetchFromGitHub {

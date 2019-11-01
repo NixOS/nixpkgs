@@ -1,10 +1,17 @@
-{ bundlerEnv, ruby }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerEnv rec {
-  name = "hue-cli-${version}";
-
-  version = (import gemset).hue-cli.version;
-  inherit ruby;
+bundlerApp {
+  pname = "hue-cli";
   gemdir = ./.;
-  gemset = ./gemset.nix;
+  exes = [ "hue" ];
+
+  passthru.updateScript = bundlerUpdateScript "hue-cli";
+
+  meta = with lib; {
+    description = "Command line interface for controlling Philips Hue system's lights and bridge";
+    homepage =  https://github.com/birkirb/hue-cli;
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ manveru nicknovitski ];
+  };
 }

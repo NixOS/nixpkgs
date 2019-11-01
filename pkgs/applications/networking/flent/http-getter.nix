@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake
 , curl, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "http-getter";
   version = "unstable-2018-06-06";
 

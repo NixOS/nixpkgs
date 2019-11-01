@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   date = "2016-05-13";
@@ -19,8 +19,8 @@ in fetchzip {
   meta = {
     homepage = https://github.com/stark/siji;
     description = "An iconic bitmap font based on Stlarch with additional glyphs";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.asymmetric ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.asymmetric ];
   };
 }

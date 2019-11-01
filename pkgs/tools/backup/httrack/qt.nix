@@ -2,11 +2,11 @@
 , httrack, qtbase, qtmultimedia }:
 
 stdenv.mkDerivation rec {
-  name = "httraqt-${version}";
+  pname = "httraqt";
   version = "1.4.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/httraqt/${name}.tar.gz";
+    url = "mirror://sourceforge/httraqt/${pname}-${version}.tar.gz";
     sha256 = "0pjxqnqchpbla4xiq4rklc06484n46cpahnjy03n9rghwwcad25b";
   };
 

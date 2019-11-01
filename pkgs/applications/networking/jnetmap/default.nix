@@ -1,9 +1,9 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "jnetmap-${version}";
+  pname = "jnetmap";
   version = "0.5.4";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/project/jnetmap/jNetMap%20${version}/jNetMap-${version}.jar";
     sha256 = "0nxsfa600jhazwbabxmr9j37mhwysp0fyrvczhv3f1smiy8rjanl";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jre makeWrapper ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"

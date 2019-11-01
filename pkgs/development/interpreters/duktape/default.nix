@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "duktape-${version}";
-  version = "2.3.0";
+  pname = "duktape";
+  version = "2.4.0";
   src = fetchurl {
     url = "http://duktape.org/duktape-${version}.tar.xz";
-    sha256 = "1s5g8lg0dga6x3rcq328a6hsd2sk2vzwq9zfmskjh5h6n8x2yvpd";
+    sha256 = "1z3i0ymnkk6q48bmbgh59g1ryrwjdv46vrf6nbnmqfv3s43r7a46";
   };
 
   buildPhase = ''

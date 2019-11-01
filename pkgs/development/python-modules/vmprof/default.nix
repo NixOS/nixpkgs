@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.12";
+  version = "0.4.15";
   pname = "vmprof";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6fa566512de1e17c9b585feae6e6997119e0d43c41c8461a9a2e8a8276618a4";
+    sha256 = "a2d872a40196404386d1e0d960e97b37c86c3f72a4f9d5a2b5f9ca1adaff5b62";
   };
 
   propagatedBuildInputs = [ requests six];
@@ -23,6 +23,7 @@ buildPythonPackage rec {
     description = "A vmprof client";
     license = licenses.mit;
     homepage = https://vmprof.readthedocs.org/;
+    broken = true;
   };
 
 }

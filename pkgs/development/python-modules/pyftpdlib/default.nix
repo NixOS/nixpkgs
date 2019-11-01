@@ -5,7 +5,6 @@
 , psutil
 , pyopenssl
 , pysendfile
-, python
 }:
 
 buildPythonPackage rec {

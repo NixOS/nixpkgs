@@ -5,11 +5,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "moe-${version}";
+  pname = "moe";
   version = "1.10";
 
   src = fetchurl {
-    url = "mirror://gnu/moe/${name}.tar.lz";
+    url = "mirror://gnu/moe/${pname}-${version}.tar.lz";
     sha256 = "0fymywdiy9xqppcmvgs7mf7d3gfrky3jp5jkxs2l3v93asml9zcc";
   };
 

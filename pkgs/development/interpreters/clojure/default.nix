@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, jdk, rlwrap, makeWrapper }:
+{ stdenv, fetchurl, jdk11, rlwrap, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "clojure-${version}";
-  version = "1.10.0.442";
+  pname = "clojure";
+  version = "1.10.1.469";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "147pkid3pvw60gq8vansid3x6wwfy9pqdbla3wfd5qaxqbcrhclw";
+    sha256 = "0hpb6rixmgllss69vl9zlpb41svm4mx4xmfbq1q7y12jsxckzgpq";
   };
 
   buildInputs = [ makeWrapper ];
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "prefix" ];
 
   installPhase = let
-    binPath = stdenv.lib.makeBinPath [ rlwrap jdk ];
+    binPath = stdenv.lib.makeBinPath [ rlwrap jdk11 ];
   in ''
     mkdir -p $prefix/libexec
     cp clojure-tools-${version}.jar $prefix/libexec
-    cp {,example-}deps.edn $prefix
+    cp example-deps.edn $prefix
 
     substituteInPlace clojure --replace PREFIX $prefix
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ jlesquembre ];
     platforms = platforms.unix;
   };
 }

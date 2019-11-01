@@ -13,12 +13,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.2.5";
+  version = "1.2.8";
   pname = "atomman";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10eca8c6fc890f2ee2e30f65178c618175529e9998be449e276f7c3d1dce0e95";
+    sha256 = "0ed099fdceca2d733e81afb08d777e8e852a6e53660d6d268f3739b8d323ced9";
   };
 
   checkInputs = [ pytest ];

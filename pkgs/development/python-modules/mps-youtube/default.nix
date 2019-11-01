@@ -1,20 +1,17 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
 , pafy
 }:
 
 buildPythonPackage rec {
-  name = "mps-youtube-${version}";
-  version = "0.2.7.1";
+  pname = "mps-youtube";
+  version = "0.2.8";
   disabled = (!isPy3k);
 
   src = fetchFromGitHub {
     owner = "mps-youtube";
     repo = "mps-youtube";
     rev = "v${version}";
-    sha256 = "16zn5gwb3568w95lr21b88zkqlay61p1541sa9c3x69zpi8v0pys";
+    sha256 = "1w1jhw9rg3dx7vp97cwrk5fymipkcy2wrbl1jaa38ivcjhqg596y";
   };
 
   propagatedBuildInputs = [ pafy ];
@@ -29,11 +26,10 @@ buildPythonPackage rec {
     export XDG_CONFIG_HOME=$(pwd)/check-phase
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terminal based YouTube player and downloader";
     homepage = https://github.com/np1/mps-youtube;
     license = licenses.gpl3;
     maintainers = with maintainers; [ odi ];
   };
-
 }

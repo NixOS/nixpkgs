@@ -1,18 +1,24 @@
 { stdenv, fetchFromGitHub, cmake, zeromq }:
 
 stdenv.mkDerivation rec {
-  name = "cppzmq-${version}";
-  version = "4.2.3";
+  pname = "cppzmq";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "cppzmq";
     rev = "v${version}";
-    sha256 = "1yjs25ra5s8zs0rhk50w3f1rrrl80hhq784lwdhh1m3risk740sa";
+    sha256 = "15dgkv51csfkafplf0n0vqbjdr4pxqxq44dln0dcizhsn1p0a57q";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zeromq ];
+
+  cmakeFlags = [
+    # Tests try to download googletest at compile time; there is no option
+    # to use a system one and no simple way to download it beforehand.
+    "-DCPPZMQ_BUILD_TESTS=OFF"
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/zeromq/cppzmq;

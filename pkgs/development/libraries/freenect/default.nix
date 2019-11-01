@@ -3,7 +3,7 @@
  }:
 
 stdenv.mkDerivation rec {
-  name = "freenect-${version}";
+  pname = "freenect";
   version = "0.5.7";
 
   src = fetchFromGitHub {

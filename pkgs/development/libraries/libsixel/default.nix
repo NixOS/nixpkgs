@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub}:
 stdenv.mkDerivation rec {
   version = "1.8.2";
-  name = "libsixel-${version}";
+  pname = "libsixel";
 
   src = fetchFromGitHub {
     repo = "libsixel";

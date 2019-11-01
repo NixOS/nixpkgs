@@ -1,26 +1,30 @@
-{ stdenv, fetchFromGitHub, pantheon }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+}:
 
 stdenv.mkDerivation rec {
-  pname = "wallpapers";
-  version = "5.3";
+  pname = "elementary-wallpapers";
+  version = "5.4";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "wallpapers";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "1i0zf9gzhwm8hgq5cp1xnxipqjvgzd9wfiicz612hgp6ivc0z0ag";
+    sha256 = "1ihvv9v8m5f2n2v3bgg769l52wbg241zgp3d45q6phk7p8s1gz3s";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
   dontBuild = true;
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/share/backgrounds/elementary

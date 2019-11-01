@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
-  name = "keyfuzz-${version}";
+stdenv.mkDerivation {
+  pname = "keyfuzz";
   version = "0.2";
 
   meta = with stdenv.lib; {

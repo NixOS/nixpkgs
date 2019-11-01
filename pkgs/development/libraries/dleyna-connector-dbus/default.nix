@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "dleyna-connector-dbus";
-  name = "${pname}-${version}";
   version = "0.3.0";
 
   src = fetchFromGitHub {

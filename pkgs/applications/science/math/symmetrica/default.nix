@@ -3,7 +3,7 @@
 , fetchpatch
 }:
 stdenv.mkDerivation rec {
-  name = "symmetrica-${version}";
+  pname = "symmetrica";
   version = "2.0";
 
   src = fetchurl {

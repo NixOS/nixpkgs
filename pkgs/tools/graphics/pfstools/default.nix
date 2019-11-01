@@ -4,12 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "pfstools";
   version = "2.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${version}/${name}.tgz";
+    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tgz";
     sha256 = "04rlb705gmdiphcybf9dyr0d5lla2cfs3c308zz37x0vwi445six";
   };
 

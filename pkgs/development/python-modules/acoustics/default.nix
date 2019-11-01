@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "acoustics";
-  version = "0.2.0.post2";
+  version = "0.2.2";
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ numpy scipy matplotlib pandas tabulate ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0ca4d7ca67fd867c3a7e34232a98a1fc210ee7ff845f3d2eed445a01737b2ff";
+    sha256 = "00981908c7cf54be58c0bfe902d7743225554ecf3432b30723e9300d9f3a0b0e";
   };
 
   checkPhase = ''

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, alsaLib, cmake, libGLU_combined, makeWrapper, qt4 }:
 
-stdenv.mkDerivation  rec {
-  name = "pianobooster-${version}";
+stdenv.mkDerivation  {
+  pname = "pianobooster";
   version = "0.6.4b";
 
   src = fetchurl {

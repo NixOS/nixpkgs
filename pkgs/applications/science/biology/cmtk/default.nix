@@ -1,6 +1,6 @@
 {stdenv, fetchurl, cmake}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "cmtk-3.3.1";
 
   src = fetchurl {
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [cmake];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = with stdenv.lib; {
     description     = "Computational Morphometry Toolkit ";

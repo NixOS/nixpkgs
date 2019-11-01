@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "vdmfec-${version}";
+  pname = "vdmfec";
   version = "1.0";
 
   src = fetchurl {
-    url = "http://members.tripod.com/professor_tom/archives/${name}.tgz";
+    url = "http://members.tripod.com/professor_tom/archives/${pname}-${version}.tgz";
     sha256 = "0i7q4ylx2xmzzq778anpkj4nqir5gf573n1lbpxnbc10ymsjq2rm";
   };
 

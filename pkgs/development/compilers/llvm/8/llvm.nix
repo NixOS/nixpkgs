@@ -1,6 +1,5 @@
 { stdenv
 , fetch
-, fetchpatch
 , cmake
 , python
 , libffi
@@ -15,29 +14,31 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-, enablePFM ? !stdenv.isDarwin
+, enablePFM ? !(stdenv.isDarwin
+  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+)
 , enablePolly ? false
 }:
 
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
-  src = fetch "llvm" "0k124sxkfhfi1rca6kzkdraf4axhx99x3cw2rk55056628dvwwl8";
-  polly_src = fetch "polly" "1x4xv3j226rqdddp7b61d71wsx2b8vmmri02ycx27y2fg7ba7xg3";
-
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
-    concatStringsSep "." (take 1 (splitString "." release_version));
+    concatStringsSep "." (take 1 (splitVersion release_version));
 
-in stdenv.mkDerivation (rec {
+in stdenv.mkDerivation ({
   name = "llvm-${version}";
 
+  src = fetch "llvm" "1rvm5gqp5v8hfn17kqws3zhk94w4kxndal12bqa0y57p09nply24";
+  polly_src = fetch "polly" "1lfjdz3ilj5xmjxvicd8f5ykybks67ry2pdb777352r3mzlgg8g8";
+
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
   '' + optionalString enablePolly ''
-    unpackFile ${polly_src}
+    unpackFile $polly_src
     mv polly-* $sourceRoot/tools/polly
   '';
 
@@ -140,8 +141,6 @@ in stdenv.mkDerivation (rec {
   checkTarget = "check-all";
 
   enableParallelBuilding = true;
-
-  passthru.src = src;
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";

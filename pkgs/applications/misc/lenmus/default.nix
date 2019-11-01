@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "lenmus-${version}";
+  pname = "lenmus";
   version = "5.4.2";
 
   src = fetchFromGitHub {

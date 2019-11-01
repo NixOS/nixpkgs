@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, SDL, SDL_image, SDL_mixer }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig
+, alsaLib, libpulseaudio, SDL2, SDL2_image, SDL2_mixer }:
 
 # - set the opendune configuration at ~/.config/opendune/opendune.ini:
 #     [opendune]
@@ -6,7 +7,7 @@
 # - download dune2 into [datadir] http://www.bestoldgames.net/eng/old-games/dune-2.php
 
 stdenv.mkDerivation rec {
-  name = "opendune-${version}";
+  pname = "opendune";
   version = "0.9";
 
   src = fetchFromGitHub {
@@ -16,17 +17,30 @@ stdenv.mkDerivation rec {
     sha256 = "15rvrnszdy3db8s0dmb696l4isb3x2cpj7wcl4j09pdi59pc8p37";
   };
 
-  buildInputs = [ SDL SDL_image SDL_mixer ];
+  configureFlags = [
+    "--with-alsa=${lib.getLib alsaLib}/lib/libasound.so"
+    "--with-pulse=${lib.getLib libpulseaudio}/lib/libpulse.so"
+  ];
+
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ alsaLib libpulseaudio SDL2 SDL2_image SDL2_mixer ];
+
+  enableParallelBuilding = true;
 
   installPhase = ''
-    install -m 555 -D bin/opendune $out/bin/opendune
+    runHook preInstall
+
+    install -Dm555 -t $out/bin bin/opendune
+    install -Dm444 -t $out/share/doc/opendune enhancement.txt README.txt
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "Dune, Reinvented";
     homepage = https://github.com/OpenDUNE/OpenDUNE;
     license = licenses.gpl2;
-    maintainers = [ maintainers.nand0p ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ nand0p ];
   };
 }

@@ -2,12 +2,13 @@
 , gst-plugins-base, orc, gettext
 , a52dec, libcdio, libdvdread
 , libmad, libmpeg2, x264, libintl, lib
+, opencore-amr
 , darwin
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-ugly-${version}";
-  version = "1.14.4";
+  pname = "gst-plugins-ugly";
+  version = "1.16.0";
 
   meta = with lib; {
     description = "Gstreamer Ugly Plugins";
@@ -24,8 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-ugly/${name}.tar.xz";
-    sha256 = "08vd1xgwmapnviah47zv5h2r02qdd20y4f07rvv5zhv6y4vxh0mc";
+    url = "${meta.homepage}/src/gst-plugins-ugly/${pname}-${version}.tar.xz";
+    sha256 = "1hm46c1fy9vl1wfwipsj41zp79cm7in1fpmjw24j5hriy32n82g3";
   };
 
   outputs = [ "out" "dev" ];
@@ -37,8 +38,16 @@ stdenv.mkDerivation rec {
     a52dec libcdio libdvdread
     libmad libmpeg2 x264
     libintl
+    opencore-amr
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks;
     [ IOKit CoreFoundation DiskArbitration ]);
+
+  mesonFlags = [
+    # Enables all features, so that we know when new dependencies are necessary.
+    "-Dauto_features=enabled"
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
+  ];
 
   NIX_LDFLAGS = [ "-lm" ];
 }

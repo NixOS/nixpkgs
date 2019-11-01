@@ -9,12 +9,18 @@ let
     dbus-factory = callPackage ./dbus-factory { };
     dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
+    dde-control-center = callPackage ./dde-control-center { };
     dde-daemon = callPackage ./dde-daemon { };
     dde-dock = callPackage ./dde-dock { };
+    dde-file-manager = callPackage ./dde-file-manager { };
+    dde-kwin = callPackage ./dde-kwin { };
+    dde-launcher = callPackage ./dde-launcher { };
     dde-network-utils = callPackage ./dde-network-utils { };
     dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     dde-session-ui = callPackage ./dde-session-ui { };
+    deepin-anything = callPackage ./deepin-anything { };
+    deepin-calculator = callPackage ./deepin-calculator { };
     deepin-desktop-base = callPackage ./deepin-desktop-base { };
     deepin-desktop-schemas = callPackage ./deepin-desktop-schemas { };
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
@@ -22,9 +28,7 @@ let
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
     deepin-image-viewer = callPackage ./deepin-image-viewer { };
     deepin-menu = callPackage ./deepin-menu { };
-    deepin-metacity = callPackage ./deepin-metacity { };
     deepin-movie-reborn = callPackage ./deepin-movie-reborn { };
-    deepin-mutter = callPackage ./deepin-mutter { };
     deepin-screenshot = callPackage ./deepin-screenshot { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
@@ -33,7 +37,6 @@ let
     };
     deepin-turbo = callPackage ./deepin-turbo { };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
-    deepin-wm = callPackage ./deepin-wm { };
     dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
     dtkwidget = callPackage ./dtkwidget { };

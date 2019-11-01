@@ -3,27 +3,15 @@
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell
 }:
 
-let
-  muttWrapper = writeScript "mutt" ''
-    #!${runtimeShell} -eu
-
-    echo 'The neomutt project has renamed the main binary from `mutt` to `neomutt`.'
-    echo ""
-    echo 'This wrapper is provided for compatibility purposes only. You should start calling `neomutt` instead.'
-    echo ""
-    read -p 'Press any key to launch NeoMutt...' -n1 -s
-    exec neomutt "$@"
-  '';
-
-in stdenv.mkDerivation rec {
-  version = "20180716";
-  name = "neomutt-${version}";
+stdenv.mkDerivation rec {
+  version = "2019-10-25";
+  pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
-    rev    = "neomutt-${version}";
-    sha256 = "0im2kkahkr04q04irvcimfawxi531ld6wrsa92r2m7l10gmijkl8";
+    rev    = version;
+    sha256 = "0hy6rxgm3acjqxpf4ss7391kps4g06fbjhbpgv1jdrj1y9kv0rm1";
   };
 
   buildInputs = [
@@ -80,7 +68,6 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lidn";
 
   postInstall = ''
-    cp ${muttWrapper} $out/bin/mutt
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
   '';
 

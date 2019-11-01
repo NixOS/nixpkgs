@@ -9,7 +9,6 @@
 , six
 , pathlib
 , python_magic
-, isPy3k
 , lib
 }:
 

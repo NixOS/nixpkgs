@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "git-recent-${version}";
-  version = "1.1.0";
+  pname = "git-recent";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-recent";
     rev = "v${version}";
-    sha256 = "06r1jzmzdv3d4vxdh5qyf5g5rgavxfmh2rpbs7a7byg3k7d77hpn";
+    sha256 = "1g8i6vpjnnfh7vc1269c91bap267w4bxdqqwnzb8x18vqgn2fx8i";
   };
 
   buildInputs = [ makeWrapper ];

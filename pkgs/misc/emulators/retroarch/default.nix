@@ -26,13 +26,13 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "retroarch-bare-${version}";
-  version = "1.7.5";
+  pname = "retroarch-bare";
+  version = "1.7.8.4";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "1jfpgl34jjxn3dvxd1kd564swkw7v98hnn562v998b7vllz3dxdm";
+    sha256 = "1i3i23xwvmck8k2fpalr49np7xjzfg507243mybqrljawlnbxvph";
     rev = "v${version}";
   };
 

@@ -1,33 +1,26 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
-, libX11, freefont_ttf, nettle, libconfig
+, libX11, freefont_ttf, nettle, libconfig, wayland, libpthreadstubs, libXdmcp
+, libXfixes, libbfd
 }:
 
 stdenv.mkDerivation rec {
-  name = "looking-glass-client-${version}";
-  version = "a12";
+  pname = "looking-glass-client";
+  version = "B1";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "0r6bvl9q94039r6ff4f2bg8si95axx9w8bf1h1qr5730d2kv5yxq";
+    sha256 = "0vykv7yjz4fima9d82m83acd8ab72nq4wyzyfs1c499i27wz91ia";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
     SDL SDL2 SDL2_ttf openssl spice-protocol fontconfig
-    libX11 freefont_ttf nettle libconfig cmake
-  ];
-
-  patches = [
-    # Fix obsolete spice header usage. Remove with the next release. See https://github.com/gnif/LookingGlass/pull/126
-    (fetchpatch {
-      url = "https://github.com/gnif/LookingGlass/commit/2567447b24b28458ba0f09c766a643ad8d753255.patch";
-      sha256 = "04j2h75rpxd71szry15f31r6s0kgk96i8q9khdv9q3i2fvkf242n";
-      stripLen = 1;
-    })
+    libX11 freefont_ttf nettle libconfig wayland libpthreadstubs
+    libXdmcp libXfixes libbfd cmake
   ];
 
   enableParallelBuilding = true;
@@ -50,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://looking-glass.hostfission.com/;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pneumaticat ];
+    maintainers = [ maintainers.alexbakker ];
     platforms = [ "x86_64-linux" ];
   };
 }

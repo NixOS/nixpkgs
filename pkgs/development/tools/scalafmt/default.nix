@@ -2,7 +2,7 @@
 
 let
   baseName = "scalafmt";
-  version = "2.0.0-RC5";
+  version = "2.2.1";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -13,13 +13,14 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "0y2nja4dj3l7f7m9dxr8xwda8vv27dwj090gfsa78a20vq1d3xxw";
+    outputHash     = "0wk43kmzwr49i3fl4vc0lhxcxc62ssaw1yap9g856vg33m95azl1";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
-  buildInputs = [ jdk makeWrapper deps ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk deps ];
 
   doCheck = true;
 

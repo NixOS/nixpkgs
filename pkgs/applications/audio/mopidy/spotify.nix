@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://www.mopidy.com/;
     description = "Mopidy extension for playing music from Spotify";
     license = licenses.asl20;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
     hydraPlatforms = [];
   };
 }

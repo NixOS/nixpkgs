@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, hdf5 }:
 
 stdenv.mkDerivation rec {
-  name = "medfile-${version}";
+  pname = "medfile";
   version = "4.0.0";
 
   src = fetchurl {

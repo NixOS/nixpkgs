@@ -4,8 +4,8 @@
 , Cocoa
 }:
 
-stdenv.mkDerivation rec {
-  name = "glslviewer-${version}";
+stdenv.mkDerivation {
+  pname = "glslviewer";
   version = "2019-04-22";
 
   src = fetchFromGitHub {

@@ -23,9 +23,9 @@ let
   flags = "-r ${rulesDir} -c ${configFile} -L ${logFiles} -${levelFlag} -m ${cfg.mailTo}";
 
   levelFlag = getAttrFromPath [cfg.level]
-    { "paranoid"    = "p";
-      "server"      = "s";
-      "workstation" = "w";
+    { paranoid    = "p";
+      server      = "s";
+      workstation = "w";
     };
 
   cronJob = ''
@@ -155,7 +155,7 @@ in
 
       config = mkOption {
         default = "FQDN=1";
-        type = types.string;
+        type = types.lines;
         description = ''
           Config options that you would like in logcheck.conf.
         '';
@@ -227,7 +227,7 @@ in
     '';
 
     services.cron.systemCronJobs =
-        let withTime = name: {timeArgs, ...}: ! (builtins.isNull timeArgs);
+        let withTime = name: {timeArgs, ...}: timeArgs != null;
             mkCron = name: {user, cmdline, timeArgs, ...}: ''
               ${timeArgs} ${user} ${cmdline}
             '';

@@ -26,6 +26,19 @@ sub isInPathsToLink {
     return 0;
 }
 
+# Returns whether a path in one of the linked packages may contain
+# files in one of the elements of pathsToLink.
+sub hasPathsToLink {
+    my $path = shift;
+    foreach my $elem (@pathsToLink) {
+        return 1 if
+            $path eq "" ||
+            (substr($elem, 0, length($path)) eq $path
+             && (($path eq $elem) || (substr($elem, length($path), 1) eq "/")));
+    }
+    return 0;
+}
+
 # Similar to `lib.isStorePath`
 sub isStorePath {
     my $path = shift;
@@ -103,7 +116,8 @@ sub findFiles {
         $relName =~ /info\/dir/ ||
         ( $relName =~ /^\/share\/mime\// && !( $relName =~ /^\/share\/mime\/packages/ ) ) ||
         $baseName eq "perllocal.pod" ||
-        $baseName eq "log";
+        $baseName eq "log" ||
+        ! (hasPathsToLink($relName) || isInPathsToLink($relName));
 
     my ($oldTarget, $oldPriority) = @{$symlinks{$relName} // [undef, undef]};
 

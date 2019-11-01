@@ -5,7 +5,6 @@ with lib;
 let
 
   cfg = config.services.rspamd;
-  opts = options.services.rspamd;
   postfixCfg = config.services.postfix;
 
   bindSocketOpts = {options, config, ... }: {
@@ -69,7 +68,7 @@ let
           replaced with <literal>rspamd_proxy</literal>.
         '';
         apply = let
-            from = "services.rspamd.workers.\”${name}\".type";
+            from = "services.rspamd.workers.\"${name}\".type";
             files = options.type.files;
             warning = "The option `${from}` defined in ${showFiles files} has enum value `proxy` which has been renamed to `rspamd_proxy`";
           in x: if x == "proxy" then traceWarning warning "rspamd_proxy" else x;
@@ -309,7 +308,7 @@ in
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "rspamd";
         description = ''
           User to use when no root privileges are required.
@@ -317,7 +316,7 @@ in
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "rspamd";
         description = ''
           Group to use when no root privileges are required.
@@ -332,7 +331,7 @@ in
         };
 
         config = mkOption {
-          type = with types; attrsOf (either bool (either str (listOf str)));
+          type = with types; attrsOf (oneOf [ bool str (listOf str) ]);
           description = ''
             Addon to postfix configuration
           '';
@@ -388,7 +387,7 @@ in
       gid = config.ids.gids.rspamd;
     };
 
-    environment.etc."rspamd".source = rspamdDir;
+    environment.etc.rspamd.source = rspamdDir;
 
     systemd.services.rspamd = {
       description = "Rspamd Service";

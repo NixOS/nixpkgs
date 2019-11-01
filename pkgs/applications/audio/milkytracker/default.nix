@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.02.00";
-  name = "milkytracker-${version}";
+  pname = "milkytracker";
 
   src = fetchFromGitHub {
     owner  = "milkytracker";

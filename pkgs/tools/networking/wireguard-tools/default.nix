@@ -1,14 +1,23 @@
-{ stdenv, fetchzip, openresolv ? null, libmnl ? null, procps ? null, iproute ? null, makeWrapper ? null, wireguard-go ? null }:
+{
+  stdenv, fetchzip,
+
+  iproute ? null,
+  libmnl ? null,
+  makeWrapper ? null,
+  openresolv ? null,
+  procps ? null,
+  wireguard-go ? null,
+}:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "wireguard-tools-${version}";
-  version = "0.0.20190406";
+  pname = "wireguard-tools";
+  version = "0.0.20191012";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "1rqyyyx7j41vpp4jigagqs2qdyfngh15y48ghdqfrkv7v93vwdak";
+    sha256 = "0nwcx7m5cpp4h1bclswiqq1jzj08xzpxmq5s4rcfqmrp59cmwgrs";
   };
 
   sourceRoot = "source/src/tools";
@@ -37,12 +46,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Tools for the WireGuard secure network tunnel";
-    downloadPage = https://git.zx2c4.com/WireGuard/refs/;
-    homepage = https://www.wireguard.com/;
+    downloadPage = "https://git.zx2c4.com/WireGuard/refs/";
+    homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 ];
+    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ma27 ];
     platforms = platforms.unix;
   };
 }

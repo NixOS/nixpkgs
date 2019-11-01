@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "vcal-${version}";
+  pname = "vcal";
   version = "2.8";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ]; # for pod2man
 
-  unpackPhase = ":";
+  dontUnpack = true;
   dontBuild = true;
   installPhase = ''
     runHook preInstall

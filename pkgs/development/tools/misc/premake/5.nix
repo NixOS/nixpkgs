@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "premake5-${version}";
+  pname = "premake5";
   version = "5.0.0-alpha12";
 
   src = fetchFromGitHub {

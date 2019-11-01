@@ -9,6 +9,8 @@
 , wrapGAppsHook
 , libxml2
 , libgda
+, libsoup
+, json-glib
 , gspell
 , glib
 , gtk3
@@ -19,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "3.32.0";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1dqigah7x6h3afw5jcs3lw3h9y0acj72arcgxr89l6galvknr2xa";
+    sha256 = "05zvpx330h9k7b12p07bhcy47vq66260fmiph2b6h97xpl15rwmj";
   };
 
   nativeBuildInputs = [
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
     gtk3
     gtksourceview4
     libgda
+    libsoup
+    json-glib
     gettext
     gspell
     gsettings-desktop-schemas

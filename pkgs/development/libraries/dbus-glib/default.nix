@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, expat, gettext, libiconv, dbus, glib }:
+{ stdenv, fetchurl, buildPackages
+, pkgconfig, expat, gettext, libiconv, dbus, glib
+}:
 
 stdenv.mkDerivation rec {
   name = "dbus-glib-0.110";
@@ -11,15 +13,15 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkgconfig gettext glib ];
 
   buildInputs = [ expat libiconv ];
 
   propagatedBuildInputs = [ dbus glib ];
 
-  preConfigure = ''
-    configureFlagsArray+=("--exec-prefix=$dev")
-  '';
+  configureFlags = [ "--exec-prefix=${placeholder "dev"}" ] ++
+    stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
+      "--with-dbus-binding-tool=${buildPackages.dbus-glib.dev}/bin/dbus-binding-tool";
 
   doCheck = false;
 

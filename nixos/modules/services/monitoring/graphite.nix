@@ -11,7 +11,7 @@ let
 
   graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings" {
       inherit graphiteLocalSettings;
-      preferLocalBuild = true; 
+      preferLocalBuild = true;
     } ''
     mkdir -p $out
     ln -s $graphiteLocalSettings $out/graphite_local_settings.py
@@ -19,13 +19,13 @@ let
 
   graphiteLocalSettings = pkgs.writeText "graphite_local_settings.py" (
     "STATIC_ROOT = '${staticDir}'\n" +
-    optionalString (! isNull config.time.timeZone) "TIME_ZONE = '${config.time.timeZone}'\n"
+    optionalString (config.time.timeZone != null) "TIME_ZONE = '${config.time.timeZone}'\n"
     + cfg.web.extraConfig
   );
 
   graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
     search_index: ${dataDir}/index
-    ${optionalString (!isNull config.time.timeZone) ''time_zone: ${config.time.timeZone}''}
+    ${optionalString (config.time.timeZone != null) ''time_zone: ${config.time.timeZone}''}
     ${optionalString (cfg.api.finders != []) ''finders:''}
     ${concatMapStringsSep "\n" (f: "  - " + f.moduleName) cfg.api.finders}
     ${optionalString (cfg.api.functions != []) ''functions:''}
@@ -215,7 +215,7 @@ in {
       storageAggregation = mkOption {
         description = "Defines how to aggregate data to lower-precision retentions.";
         default = null;
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         example = ''
           [all_min]
           pattern = \.min$
@@ -227,7 +227,7 @@ in {
       storageSchemas = mkOption {
         description = "Defines retention rates for storing metrics.";
         default = "";
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         example = ''
           [apache_busyWorkers]
           pattern = ^servers\.www.*\.workers\.busyWorkers$
@@ -238,14 +238,14 @@ in {
       blacklist = mkOption {
         description = "Any metrics received which match one of the experssions will be dropped.";
         default = null;
-        type = types.uniq (types.nullOr types.string);
-        example = "^some\.noisy\.metric\.prefix\..*";
+        type = types.nullOr types.str;
+        example = "^some\\.noisy\\.metric\\.prefix\\..*";
       };
 
       whitelist = mkOption {
         description = "Only metrics received which match one of the experssions will be persisted.";
         default = null;
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         example = ".*";
       };
 
@@ -255,7 +255,7 @@ in {
           in a search and replace fashion.
         '';
         default = null;
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         example = ''
           [post]
           _sum$ =
@@ -272,7 +272,7 @@ in {
       relayRules = mkOption {
         description = "Relay rules are used to send certain metrics to a certain backend.";
         default = null;
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         example = ''
           [example]
           pattern = ^mydata\.foo\..+
@@ -289,7 +289,7 @@ in {
       aggregationRules = mkOption {
         description = "Defines if and how received metrics will be aggregated.";
         default = null;
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         example = ''
           <env>.applications.<app>.all.requests (60) = sum <env>.applications.<app>.*.requests
           <env>.applications.<app>.all.latency (60) = avg <env>.applications.<app>.*.latency

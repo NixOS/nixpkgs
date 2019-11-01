@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "1kpwqsnz7jisi622halzl4s5q42d76nbq6ra800gscnfx48hqw9r";
+    sha256 = "0zn21j15vd1z7s40s45zr5wri3r770yvazxqmm60fqpzc5sg552y";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -27,6 +27,7 @@ pythonPackages.buildPythonApplication rec {
     lxml
     pyyaml
     requests
+    setuptools
     toml
     zodb
   ]);

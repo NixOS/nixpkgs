@@ -8,21 +8,21 @@
 
 , bootstrapFiles ?
   let table = {
-    "glibc" = {
-      "i686-linux" = import ./bootstrap-files/i686.nix;
-      "x86_64-linux" = import ./bootstrap-files/x86_64.nix;
-      "armv5tel-linux" = import ./bootstrap-files/armv5tel.nix;
-      "armv6l-linux" = import ./bootstrap-files/armv6l.nix;
-      "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
-      "aarch64-linux" = import ./bootstrap-files/aarch64.nix;
-      "mipsel-linux" = import ./bootstrap-files/loongson2f.nix;
-      "powerpc64le-linux" = import ./bootstrap-files/ppc64le.nix;
+    glibc = {
+      i686-linux = import ./bootstrap-files/i686.nix;
+      x86_64-linux = import ./bootstrap-files/x86_64.nix;
+      armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
+      armv6l-linux = import ./bootstrap-files/armv6l.nix;
+      armv7l-linux = import ./bootstrap-files/armv7l.nix;
+      aarch64-linux = import ./bootstrap-files/aarch64.nix;
+      mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+      powerpc64le-linux = import ./bootstrap-files/ppc64le.nix;
     };
-    "musl" = {
-      "aarch64-linux" = import ./bootstrap-files/aarch64-musl.nix;
-      "armv6l-linux"  = import ./bootstrap-files/armv6l-musl.nix;
-      "x86_64-linux"  = import ./bootstrap-files/x86_64-musl.nix;
-      "powerpc64le-linux" = import ./bootstrap-files/ppc64le-musl.nix;
+    musl = {
+      aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
+      armv6l-linux  = import ./bootstrap-files/armv6l-musl.nix;
+      x86_64-linux  = import ./bootstrap-files/x86_64-musl.nix;
+      powerpc64le-linux = import ./bootstrap-files/ppc64le-musl.nix;
     };
   };
 
@@ -96,7 +96,7 @@ let
           inherit system;
         };
 
-        cc = if isNull prevStage.gcc-unwrapped
+        cc = if prevStage.gcc-unwrapped == null
              then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           name = "${name}-gcc-wrapper";

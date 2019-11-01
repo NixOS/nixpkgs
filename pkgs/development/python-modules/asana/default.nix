@@ -1,16 +1,20 @@
-{ buildPythonPackage, pytest, requests, requests_oauthlib, six
+{ buildPythonPackage, pythonAtLeast, pytest, requests, requests_oauthlib, six
 , fetchFromGitHub, responses, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.7.1";
+  version = "0.8.2";
+
+  # upstream reportedly doesn't support 3.7 yet, blocked on
+  # https://bugs.python.org/issue34226
+  disabled = pythonAtLeast "3.7";
 
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
     rev = "v${version}";
-    sha256 = "0vmpy4j1n54gkkg0l8bhw0xf4yby5kqzxnsv07cjc2w38snj5vy1";
+    sha256 = "113zwnrpim1pdw8dzid2wpp5gzr2zk26jjl4wrwhgj0xk1cw94yi";
   };
 
   checkInputs = [ pytest responses ];

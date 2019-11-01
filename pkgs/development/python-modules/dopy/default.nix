@@ -4,7 +4,7 @@
 , six
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "2016-01-04";
   pname = "dopy";
 

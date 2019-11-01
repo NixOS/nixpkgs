@@ -1,29 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestrunner
-, pytest
-, psutil
-, setuptools_scm
-, pkgconfig
-, isPy3k
 , future
+, isPy3k
+, pkgconfig
+, psutil
+, pytest
+, pytestcov
+, pytestrunner
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "python-lz4";
-  version = "2.1.2";
+  version = "2.1.10";
 
   # get full repository inorder to run tests
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kzzdfkrq9nnlh0wssa6ccncvv0sk4wmhivhgyndjxz6d6przl5d";
+    sha256 = "02cadqfdmw4vc94px18dh4hcybpsa2lr6jz6j5phwc0jjaavh3wr";
   };
 
   buildInputs = [ setuptools_scm pkgconfig pytestrunner ];
-  checkInputs = [ pytest psutil ];
+  checkInputs = [ pytest pytestcov psutil ];
   propagatedBuildInputs = lib.optionals (!isPy3k) [ future ];
 
   # give a hint to setuptools_scm on package version

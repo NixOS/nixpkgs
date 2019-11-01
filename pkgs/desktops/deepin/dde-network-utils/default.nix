@@ -1,16 +1,15 @@
-{ stdenv, fetchFromGitHub, substituteAll, qmake, pkgconfig, qttools,
+{ stdenv, mkDerivation, fetchFromGitHub, substituteAll, qmake, pkgconfig, qttools,
   dde-qt-dbus-factory, proxychains, which, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dde-network-utils";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1m6njld06yphppyyhygz8mv4gvq2zw0676pbls9m3fs7b3dl56sv";
+    sha256 = "0nj9lf455lf2hyqv6xwhm4vrr825ldbl83azzrrzqs6p781x65i1";
   };
 
   nativeBuildInputs = [
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin network utils";

@@ -3,7 +3,7 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-19.03">
- <title>Release 19.03 (“Koi”, 2019/03/??)</title>
+ <title>Release 19.03 (“Koi”, 2019/04/11)</title>
 
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -18,6 +18,11 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     End of support is planned for end of October 2019, handing over to 19.09.
+    </para>
+   </listitem>
    <listitem>
     <para>
      The default Python 3 interpreter is now CPython 3.7 instead of CPython

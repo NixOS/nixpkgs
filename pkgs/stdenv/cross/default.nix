@@ -55,6 +55,8 @@ in lib.init bootStages ++ [
              then buildPackages.darwin.iosSdkPkgs.clang
            else if crossSystem.useAndroidPrebuilt or false
              then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".clang
+           else if targetPlatform.isGhcjs
+             then null
            else if crossSystem.useLLVM or false
              then buildPackages.llvmPackages_8.lldClang
            else buildPackages.gcc;
@@ -64,7 +66,7 @@ in lib.init bootStages ++ [
              (hostPlatform.isLinux && !buildPlatform.isLinux)
              [ buildPackages.patchelf ]
         ++ lib.optional
-             (let f = p: !p.isx86 || p.libc == "musl" || p.libc == "wasilibc"; in f hostPlatform && !(f buildPlatform))
+             (let f = p: !p.isx86 || p.libc == "musl" || p.libc == "wasilibc" || p.isiOS; in f hostPlatform && !(f buildPlatform))
              buildPackages.updateAutotoolsGnuConfigScriptsHook
            # without proper `file` command, libtool sometimes fails
            # to recognize 64-bit DLLs

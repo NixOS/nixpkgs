@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libX11, libXext, libpng, libXft, libICE, pango, libjpeg}:
 
 stdenv.mkDerivation rec {
-  name = "libmatchbox-${version}";
+  pname = "libmatchbox";
   version = "1.11";
 
   buildInputs = [ libXft libICE pango libjpeg ];

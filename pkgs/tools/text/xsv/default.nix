@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "xsv-${version}";
+  pname = "xsv";
   version = "0.13.0";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "17v1nw36mrarrd5yv4xd3mpc1d7lvhd5786mqkzyyraf78pjg045";
   };
 
-  cargoSha256 = "1qk5wkjm3d4dz5fldlq7rjlm602v0l04hxrbar2j6vhcz9w2r4n6";
+  cargoSha256 = "1xlbszr9ccv924ww45lnc0qqb7nxj2cnc41480xbpvsdqsdrgbhs";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

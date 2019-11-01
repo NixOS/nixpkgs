@@ -5,15 +5,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "openspades-${version}";
-  version = "0.1.2";
+  pname = "openspades";
+  version = "0.1.3";
   devPakVersion = "33";
 
   src = fetchFromGitHub {
     owner = "yvt";
     repo = "openspades";
     rev = "v${version}";
-    sha256 = "1mfj46c3pnn1f6awy3b6faxs26i93a5jsrvkdlr12ndsykvi6ng6";
+    sha256 = "1fvmqbif9fbipd0vphp57pk6blb4yp8xvqlc2ppipk5pjv6a3d2h";
   };
 
   nativeBuildInputs = [ cmake imagemagick unzip zip file ];
@@ -41,9 +41,18 @@ stdenv.mkDerivation rec {
     sha256 = "1bd2fyn7mlxa3xnsvzj08xjzw02baimqvmnix07blfhb78rdq9q9";
   };
 
+  notoFont = fetchurl {
+    url = "https://github.com/yvt/openspades/releases/download/v0.1.1b/NotoFonts.pak";
+    sha256 = "0kaz8j85wjjnf18z0lz69xr1z8makg30jn2dzdyicd1asrj0q1jm";
+  };
+
   postPatch = ''
     sed -i 's,^wget .*,cp $devPak "$PAK_NAME",' Resources/downloadpak.sh
     patchShebangs Resources
+  '';
+
+  postInstall = ''
+    cp $notoFont $out/share/games/openspades/Resources/
   '';
 
   enableParallelBuilding = true;
@@ -55,5 +64,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;
     platforms   = platforms.all;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|' i3lock-fancy
     sed -i -e "s|getopt |${getopt}/bin/getopt |" i3lock-fancy
     sed -i -e "s|fc-match |${fontconfig.bin}/bin/fc-match |" i3lock-fancy
-    sed -i -e "s|shot=(import -window root)|shot=(${scrot}/bin/scrot -z)|" i3lock-fancy
+    sed -i -e "s|shot=(import -window root)|shot=(${scrot}/bin/scrot -z -o)|" i3lock-fancy
     rm Makefile
   '';
   installPhase = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "i3lock is a bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text.";
     homepage = https://github.com/meskarune/i3lock-fancy;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

@@ -24,16 +24,20 @@ with python'.pkgs;
 
 buildPythonApplication rec {
   pname = "FlexGet";
-  version = "2.20.22";
+  version = "2.21.25";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bk1ab7ivb6fikqw4v1f9df6brplgg4ybbn8d3vzgjabm5ic21nd";
+    sha256 = "0l77fgg0w5dca1bwk4fcc1yz1g7njb0x07yx4bazyg821gl15rc9";
   };
 
   postPatch = ''
     # remove dependency constraints
     sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
+
+    # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
+    # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
+    substituteInPlace requirements.txt --replace "zxcvbn-python" "zxcvbn"
   '';
 
   # ~400 failures
@@ -50,7 +54,7 @@ buildPythonApplication rec {
     cherrypy flask flask-restful
     flask-restplus flask-compress
     flask_login flask-cors
-    pyparsing zxcvbn-python future
+    pyparsing zxcvbn future
     progressbar
     # Optional requirements
     deluge-client

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python3, texinfo, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ponysay-3.0.3";
 
   src = fetchurl {

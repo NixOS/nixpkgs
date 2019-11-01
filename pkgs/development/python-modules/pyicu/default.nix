@@ -9,16 +9,17 @@
 
 buildPythonPackage rec {
   pname = "PyICU";
-  version = "2.0.3";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pzss3l0b0vcsyr7wlqdd6pkcqldspajfgd9k2iijf6r152d2ln4";
+    sha256 = "ddb2b453853b4c25db382bc5e8c4cde09b3f4696ef1e1494f8294e174f459cf4";
   };
 
   patches = [
     (fetchpatch {
-      url = https://sources.debian.org/data/main/p/pyicu/2.0.3-1/debian/patches/icu_test.patch;
+      url = "https://salsa.debian.org/python-team/modules/pyicu/raw/debian/2.2-2/"
+            + "debian/patches/icu_test.patch";
       sha256 = "1iavdkyqixm9i753svl17barla93b7jzgkw09dn3hnggamx7zwx9";
     })
   ];

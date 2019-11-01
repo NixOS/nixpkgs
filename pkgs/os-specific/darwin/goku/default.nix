@@ -1,7 +1,7 @@
 {stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "goku-${version}";
+  pname = "goku";
   version = "0.1.11";
 
   src = fetchurl {

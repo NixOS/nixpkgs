@@ -36,7 +36,7 @@ in {
     };
 
     config = mkOption {
-      type = attrsOf (nullOr (either (either bool int) str));
+      type = attrsOf (nullOr (oneOf [ bool int str ]));
       default = {};
       example = literalExample ''
         {

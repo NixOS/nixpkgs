@@ -1,9 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, unittest2, mock, requests, simplejson }:
+{ lib, buildPythonPackage, fetchPypi, requests, pytest, pytestcov, pytest-mock, pytest_xdist }:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "2.21.0";
+  version = "2.37.2";
 
   # Tests require network connectivity and there's no easy way to disable
   # them. ~ C.
@@ -11,12 +10,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "170f76f2502888debf02da580138c840497b9359876ca3838f4692f2f02c9110";
+    sha256 = "7ad8ee6d9bdca86d6ed38c4eb48b1b67b9529ac4fee6c26d3f9aa4d5e98b50d6";
   };
 
-  checkInputs = [ unittest2 mock ];
+  propagatedBuildInputs = [ requests ];
 
-  propagatedBuildInputs = [ requests ] ++ lib.optional (!isPy3k) simplejson;
+  checkInputs = [ pytest pytestcov pytest-mock pytest_xdist ];
 
   meta = with lib; {
     description = "Stripe Python bindings";

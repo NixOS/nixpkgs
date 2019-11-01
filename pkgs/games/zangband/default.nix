@@ -1,12 +1,11 @@
 { stdenv, fetchurl, ncurses, flex, bison, autoconf, automake, m4, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = pname + "-" + version;
   pname = "zangband";
   version = "2.7.4b";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}-src/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/${pname}/${pname}-src/${version}/${pname}-${version}.tar.gz";
     sha256 = "0kkz6f9myhjnr3308sdab8q186rd55lapvcp38w8qmakdbhc828j";
   };
 

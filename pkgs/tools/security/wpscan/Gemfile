@@ -1,2 +1,2 @@
 source 'https://rubygems.org'
-gem 'wpscan', '= 3.4.3'
+gem 'wpscan'

@@ -67,14 +67,14 @@ assert journalSupport      -> systemd != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "conky-${version}";
-  version = "1.11.3";
+  pname = "conky";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "0pdl31xvmy8niagzqx9sd2b6hc6lzwfiaz66m4djf1gz9bksc8qv";
+    sha256 = "1a75ss48mn9pknrxy33dh5rdgm67a5kpddsyqfhlcn1761kfzzyp";
   };
 
   postPatch = ''

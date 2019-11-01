@@ -3,11 +3,11 @@
 }:
 buildPythonPackage rec {
   pname = "channels";
-  version = "2.1.7";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e13ba874d854ac493ece329dcd9947e82357c15437ac1a90ed1040d0e5b87aad";
+    sha256 = "6b8ebd93fe0041a23e31c9f4130d92fadb9c0040c0eb377a004540631325a31d";
   };
 
   # Files are missing in the distribution

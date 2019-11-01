@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, boost, lua }:
 
 stdenv.mkDerivation rec {
-  name = "ansifilter-${version}";
+  pname = "ansifilter";
   version = "2.14";
 
   src = fetchurl {

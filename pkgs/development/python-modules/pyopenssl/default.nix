@@ -9,6 +9,7 @@
 , pretend
 , flaky
 , glibcLocales
+, six
 }:
 
 with stdenv.lib;
@@ -32,12 +33,27 @@ let
     "test_set_notBefore"
   ];
 
+  # these tests are extremely tightly wed to the exact output of the openssl cli tool,
+  # including exact punctuation.
+  failingOpenSSL_1_1Tests = [
+    "test_dump_certificate"
+    "test_dump_privatekey_text"
+    "test_dump_certificate_request"
+    "test_export_text"
+  ];
+
   disabledTests = [
     # https://github.com/pyca/pyopenssl/issues/692
     # These tests, we disable always.
     "test_set_default_verify_paths"
     "test_fallback_default_verify_paths"
-  ] ++ (optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests);
+    # https://github.com/pyca/pyopenssl/issues/768
+    "test_wantWriteError"
+  ] ++ (
+    optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests
+  ) ++ (
+    optionals (versionAtLeast (getVersion openssl.name) "1.1") failingOpenSSL_1_1Tests
+  );
 
   # Compose the final string expression, including the "-k" and the single quotes.
   testExpression = optionalString (disabledTests != [])
@@ -69,7 +85,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   nativeBuildInputs = [ openssl ];
-  propagatedBuildInputs = [ cryptography pyasn1 idna ];
+  propagatedBuildInputs = [ cryptography pyasn1 idna six ];
 
   checkInputs = [ pytest pretend flaky glibcLocales ];
 }

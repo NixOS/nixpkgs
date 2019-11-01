@@ -8,7 +8,7 @@ let
 
   efi = config.boot.loader.efi;
 
-  grubPkgs = 
+  grubPkgs =
     # Package set of targeted architecture
     if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
@@ -72,7 +72,7 @@ let
              else "${convertedFont}");
     });
 
-  bootDeviceCounters = fold (device: attr: attr // { "${device}" = (attr."${device}" or 0) + 1; }) {}
+  bootDeviceCounters = fold (device: attr: attr // { ${device} = (attr.${device} or 0) + 1; }) {}
     (concatMap (args: args.devices) cfg.mirroredBoots);
 
   convertedFont = (pkgs.runCommand "grub-font-converted.pf2" {}
@@ -333,7 +333,7 @@ in
       };
 
       backgroundColor = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         example = "#7EBAE4";
         default = null;
         description = ''
@@ -360,6 +360,7 @@ in
       font = mkOption {
         type = types.nullOr types.path;
         default = "${realGrub}/share/grub/unicode.pf2";
+        defaultText = ''"''${pkgs.grub2}/share/grub/unicode.pf2"'';
         description = ''
           Path to a TrueType, OpenType, or pf2 font to be used by Grub.
         '';
@@ -398,7 +399,7 @@ in
         example = "text";
         type = types.str;
         description = ''
-          The gfxpayload to pass to GRUB when loading a graphical boot interface under EFI. 
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under EFI.
         '';
       };
 
@@ -407,7 +408,7 @@ in
         example = "keep";
         type = types.str;
         description = ''
-          The gfxpayload to pass to GRUB when loading a graphical boot interface under BIOS. 
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under BIOS.
         '';
       };
 
@@ -534,7 +535,7 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Whether to force the use of a ia32 boot loader on x64 systems. Required 
+          Whether to force the use of a ia32 boot loader on x64 systems. Required
           to install and run NixOS on 64bit x86 systems with 32bit (U)EFI.
         '';
       };
@@ -553,7 +554,7 @@ in
         systemHasTPM = mkOption {
           default = "";
           example = "YES_TPM_is_activated";
-          type = types.string;
+          type = types.str;
           description = ''
             Assertion that the target system has an activated TPM. It is a safety
             check before allowing the activation of 'trustedBoot.enable'. TrustedBoot
@@ -683,7 +684,7 @@ in
           assertion = if args.efiSysMountPoint == null then true else hasPrefix "/" args.efiSysMountPoint;
           message = "EFI paths must be absolute, not ${args.efiSysMountPoint}";
         }
-      ] ++ flip map args.devices (device: {
+      ] ++ forEach args.devices (device: {
         assertion = device == "nodev" || hasPrefix "/" device;
         message = "GRUB devices must be absolute paths, not ${device} in ${args.path}";
       }));

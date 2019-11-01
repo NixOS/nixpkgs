@@ -5,37 +5,26 @@
 let
   py = python.override {
     packageOverrides = self: super: {
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "6.7";
+
+      aws-sam-translator = super.aws-sam-translator.overridePythonAttrs (oldAttrs: rec {
+        version = "1.14.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
+          sha256 = "1cghn1m7ana9s8kyg61dwp9mrism5l04vy5rj1wnmksz8vzmnq9w";
         };
       });
 
-      requests = super.requests.overridePythonAttrs (oldAttrs: rec {
-        version = "2.20.1";
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.1.1";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "ea881206e59f41dbd0bd445437d792e43906703fff75ca8ff43ccdb11f33f263";
+          sha256 = "0grwi50v3vahvcijlw6g6q55yc5jyj0p1cmiq3rkycxnfr16i81g";
         };
+        nativeBuildInputs = [ super.setuptools_scm ];
+        propagatedBuildInputs = with super; oldAttrs.propagatedBuildInputs ++ [ pyrsistent attrs importlib-metadata ];
+        doCheck = false;
       });
 
-      idna = super.idna.overridePythonAttrs (oldAttrs: rec {
-        version = "2.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16";
-        };
-      });
-
-      six = super.six.overridePythonAttrs (oldAttrs: rec {
-        version = "1.11";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9";
-        };
-      });
     };
   };
 
@@ -45,11 +34,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.14.2";
+  version = "0.22.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7f80838d57c1096a9a03ed703a91a8a5775a6ead33df8f31765ecf39b3a956f";
+    sha256 = "1flbvqlj5llz7nrszmcf00v2a1pa36alv90r1l8lwn8zid5aabkn";
   };
 
   # Tests are not included in the PyPI package
@@ -70,6 +59,14 @@ buildPythonApplication rec {
     serverlessrepo
     six
   ];
+
+  # fix over-restrictive version bounds
+  postPatch = ''
+    substituteInPlace requirements/base.txt --replace "requests==2.20.1" "requests==2.22.0"
+    substituteInPlace requirements/base.txt --replace "serverlessrepo==0.1.9" "serverlessrepo~=0.1.9"
+    substituteInPlace requirements/base.txt --replace "six~=1.11.0" "six~=1.12.0"
+    substituteInPlace requirements/base.txt --replace "PyYAML~=3.12" "PyYAML~=5.1"
+  '';
 
   meta = with lib; {
     homepage = https://github.com/awslabs/aws-sam-cli;

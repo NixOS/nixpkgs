@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libwhich";
-  version = "2019-03-20";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "vtjnash";
     repo = pname;
-    rev = "b348872107c77cba50b60475aa8ce2ddba86aac0";
-    sha256 = "0fd8hsdc9b9v83j89mxvisgrz77q9rlxnbzd6j63wq66h95r02r9";
+    rev = "v${version}";
+    sha256 = "0s0pqai61jszmi495k621rdlf288ij67adkz72hwqqarqp54idhb";
   };
 
   installPhase = ''

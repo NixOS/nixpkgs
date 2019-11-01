@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "vndr-unstable-${version}";
+  pname = "vndr-unstable";
   version = "2018-06-23";
   rev = "81cb8916aad3c8d06193f008dba3e16f82851f52";
 

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "delve-${version}";
+  pname = "delve";
   version = "1.2.0";
 
   goPackagePath = "github.com/go-delve/delve";

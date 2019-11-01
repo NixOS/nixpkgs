@@ -1,5 +1,5 @@
-{ clangStdenv, fetchFromGitHub, which, ninja, python, gyp, pkgconfig, protobuf
-, ibus, gtk2, zinnia, qt5, libxcb }:
+{ clangStdenv, fetchFromGitHub, fetchpatch, which, ninja, python, gyp, pkgconfig
+, protobuf, ibus, gtk2, zinnia, qt5, libxcb }:
 
 let
   japanese_usage_dictionary = fetchFromGitHub {
@@ -30,6 +30,14 @@ in clangStdenv.mkDerivation rec {
     rev    = "afb03ddfe72dde4cf2409863a3bfea160f7a66d8";
     sha256 = "0w2dy2j9x5nc7x3g95j17r3m60vbfyn5j617h7js9xryv33yzpgx";
   };
+
+  patches = [
+    # https://github.com/google/mozc/pull/444 - fix for gcc8 STL
+    (fetchpatch {
+      url = "https://github.com/google/mozc/commit/82d38f929882a9c62289b179c6fe41efed249987.patch";
+      sha256 = "07cja1b7qfsd3i76nscf1zwiav74h7d6h2g9g2w4bs3h1mc9jwla";
+    })
+  ];
 
   postUnpack = ''
     rmdir $sourceRoot/src/third_party/japanese_usage_dictionary/

@@ -60,10 +60,10 @@ let
   };
 
 in stdenv.mkDerivation rec {
-    name = "kippo-${version}";
+    pname = "kippo";
     version = "0.8";
     src = fetchurl {
-      url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/kippo/${name}.tar.gz";
+      url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/kippo/${pname}-${version}.tar.gz";
       sha256 = "0rd2mk36d02qd24z8s4xyy64fy54rzpar4379iq4dcjwg7l7f63d";
     };
     buildInputs = with pythonPackages; [ pycrypto pyasn1 twisted_13 ];

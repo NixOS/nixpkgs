@@ -4,15 +4,18 @@
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
+# R as of writing does not support outputting both .so and .a files; it outputs:
+#     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
+, static ? false
 , javaSupport ? (!stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64)
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.6.0";
+  name = "R-3.6.1";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "02bmylmzrm9sdidirmwy233lghmd2346z725ca71ari68lzarz1n";
+    sha256 = "128kifbq0w25y8aq77w289ddax5i5w2djcfsqgffrb3i7syrxajv";
   };
 
   dontUseImakeConfigure = true;
@@ -27,15 +30,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-usr-local-search-paths.patch
-    (fetchpatch {
-      url = "https://github.com/wch/r-source/commit/aeb75e12863019be06fe6c762ab705bf5ed8b38c.patch";
-      sha256 = "03xv1g1yw1dbhx4paw6pn6hkawj8sny86km3748l1vnasbham82g";
-      })
   ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
   '';
+
+  dontDisableStatic = static;
 
   preConfigure = ''
     configureFlagsArray=(
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
       --with-libtiff
       --with-ICU
       ${stdenv.lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
-      --enable-R-shlib
+      ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
       AR=$(type -p ar)
       AWK=$(type -p gawk)
       CC=$(type -p cc)

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, intltool }:
 
 stdenv.mkDerivation rec {
-  name = "sound-theme-freedesktop-${version}";
+  pname = "sound-theme-freedesktop";
   version = "0.8";
 
   src = fetchurl {
     sha256 = "054abv4gmfk9maw93fis0bf605rc56dah7ys5plc4pphxqh8nlfb";
-    url = "https://people.freedesktop.org/~mccann/dist/${name}.tar.bz2";
+    url = "https://people.freedesktop.org/~mccann/dist/${pname}-${version}.tar.bz2";
   };
 
   nativeBuildInputs = [ intltool ];

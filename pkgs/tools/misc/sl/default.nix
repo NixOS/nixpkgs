@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "sl-${version}";
-  version = "5.04";
+  pname = "sl";
+  version = "5.05";
 
   src = fetchFromGitHub {
     owner = "eyJhb";
     repo = "sl";
     rev = version;
-    sha256 = "029lv6vw39c7gj8bkfyqs8q4g32174vbmghhhgfk8wrhnxq60qn7";
+    sha256 = "11a1rdgb8wagikhxgm81g80g5qsl59mv4qgsval3isykqh8729bj";
   };
 
   buildInputs = [ ncurses ];

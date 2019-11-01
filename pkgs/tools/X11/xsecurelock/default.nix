@@ -3,14 +3,14 @@
 , pam, apacheHttpd, imagemagick, pamtester, xscreensaver, xset }:
 
 stdenv.mkDerivation rec {
-  name = "xsecurelock-${version}";
-  version = "1.2";
+  pname = "xsecurelock";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "xsecurelock";
     rev = "v${version}";
-    sha256 = "1vaw2m3yyfazj1x7xdwppmm0ch075q399g5vzrmhhrkzdrs53r1x";
+    sha256 = "1if8byaby18ydkrk4k5yy8n0981x1dfqikq59gfpb7c2rv0vgi7i";
   };
 
   nativeBuildInputs = [

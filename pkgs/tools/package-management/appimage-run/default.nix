@@ -1,4 +1,4 @@
-{ stdenv, writeScript, buildFHSUserEnv, coreutils, file, libarchive, runtimeShell
+{ writeScript, buildFHSUserEnv, coreutils, file, libarchive, runtimeShell
 , extraPkgs ? pkgs: [], appimageTools }:
 
 let

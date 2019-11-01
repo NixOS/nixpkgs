@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pyparsing, six }:
+{ stdenv, fetchFromGitHub, buildPythonPackage, pyparsing, six, urwid }:
 
 buildPythonPackage rec {
   pname = "configshell";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0zpr2n4105qqsklyfyr9lzl1rhxjcv0mnsl57hgk0m763w6na90h";
   };
 
-  propagatedBuildInputs = [ pyparsing six ];
+  propagatedBuildInputs = [ pyparsing six urwid ];
 
   meta = with stdenv.lib; {
     description = "A Python library for building configuration shells";

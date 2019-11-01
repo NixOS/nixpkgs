@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "deco";
   version = "0.0.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ebzzry";

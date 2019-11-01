@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , cmake
 , ninja
+, vala
 , pkgconfig
 , pantheon
 , gtk3
@@ -14,7 +15,6 @@
 , libnotify
 , sqlite
 , gst_all_1
-, libsoup
 , json-glib
 , libgee
 , wrapGAppsHook
@@ -22,20 +22,20 @@
 
 stdenv.mkDerivation rec {
   pname = "vocal";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "needle-and-thread";
     repo = pname;
     rev = version;
-    sha256 = "09g9692rckdwh1i5krqgfwdx4p67b1q5834cnxahxzpq4p08rf5w";
+    sha256 = "1c4n89rdl9r13kmmh2qymmy9sa6shjwai7df48k2kfn0pnzq5mad";
   };
 
   nativeBuildInputs = [
     cmake
     libxml2
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     wrapGAppsHook
   ];
