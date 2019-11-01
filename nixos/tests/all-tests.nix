@@ -276,6 +276,7 @@ in
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
   trezord = handleTest ./trezord.nix {};
+  trickster = handleTest ./trickster.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   upnp = handleTest ./upnp.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
