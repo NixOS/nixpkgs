@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus publicDomain smail ];
     maintainers = [];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }
