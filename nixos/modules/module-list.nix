@@ -46,10 +46,9 @@
   ./hardware/brightnessctl.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
-  ./hardware/cpu/intel-microcode.nix
+  ./hardware/cpu/intel.nix
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
-  ./hardware/intel-sgx.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
   ./hardware/ledger.nix
@@ -333,7 +332,6 @@
   ./services/hardware/fwupd.nix
   ./services/hardware/illum.nix
   ./services/hardware/interception-tools.nix
-  ./services/hardware/intel-aesmd.nix
   ./services/hardware/irqbalance.nix
   ./services/hardware/lcd.nix
   ./services/hardware/lirc.nix
