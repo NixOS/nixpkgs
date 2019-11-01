@@ -1132,7 +1132,7 @@ fixupPhase() {
         local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
         local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
 
-        [[ "${!propagatedInputsSlice}" ]] || continue
+        [[ "${!propagatedInputsSlice-}" ]] || continue
 
         mkdir -p "${!outputDev}/nix-support"
         # shellcheck disable=SC2086
