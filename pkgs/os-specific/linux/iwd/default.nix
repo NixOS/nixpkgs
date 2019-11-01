@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "0.22";
+  version = "1.0";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "0mjc08ayq2k7sinqanrlm97dn88dxkqkyk2vqqcx1nqjvwvbpbsp";
+    sha256 = "0z3cpy2847grl659d1w4whnasnpdmb5rjkwgx1ciqb18l5figgdf";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     "--with-dbus-datadir=${placeholder "out"}/share/"
     "--with-systemd-modloaddir=${placeholder "out"}/etc/modules-load.d/" # maybe
     "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
+    "--with-systemd-networkdir=${placeholder "out"}/lib/systemd/network/"
   ];
 
   postUnpack = ''
