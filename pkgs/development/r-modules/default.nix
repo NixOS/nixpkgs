@@ -325,6 +325,7 @@ let
     rmatio = [ pkgs.zlib.dev ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
     Rmpi = [ pkgs.openmpi ];
+    RMariaDB = [ pkgs.mariadb.connector-c.dev ];
     RMySQL = [ pkgs.zlib pkgs.mysql.connector-c.dev pkgs.openssl.dev ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBCext = [ pkgs.libiodbc ];
@@ -810,6 +811,12 @@ let
     RAppArmor = old.RAppArmor.overrideDerivation (attrs: {
       patches = [ ./patches/RAppArmor.patch ];
       LIBAPPARMOR_HOME = pkgs.libapparmor;
+    });
+
+    RMariaDB = old.RMariaDB.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
