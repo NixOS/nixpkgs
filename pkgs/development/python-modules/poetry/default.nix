@@ -1,23 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage
+{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub, callPackage
 , isPy27, isPy34
-, cleo
-, requests
-, cachy
-, requests-toolbelt
-, pyrsistent
-, pyparsing
 , cachecontrol
-, pkginfo
+, cachy
+, cleo
+, functools32
+, glob2
 , html5lib
+, httpretty
+, jsonschema
+, lockfile
+, pathlib2
+, pkginfo
+, pyparsing
+, pyrsistent
+, pytest
+, pytest-mock
+, requests
+, requests-toolbelt
 , shellingham
 , subprocess32
 , tomlkit
 , typing
-, pathlib2
 , virtualenv
-, functools32
-, pytest
-, jsonschema
 }:
 
 let
@@ -29,11 +33,20 @@ let
       sha256 = "06zp695hq835rkaq6irr1ds1dp2qfzyf32v60vxpd8rcnxv319l5";
     };
   });
-  glob2 = callPackage ./glob2.nix { };
 
+  # used for tests, can't be used directly for install because
+  # it's missing a setup.py
+  githubSrc = fetchFromGitHub {
+    owner = "sdispater";
+    repo = "poetry";
+    rev = version;
+    sha256 = "004s747wkil5f00r0vjff73r6vhlrrcnfan2k7pl7gyf62wfp02a";
+  };
+
+  version = "0.12.17";
 in buildPythonPackage rec {
   pname = "poetry";
-  version = "0.12.17";
+  inherit version;
 
   src = fetchPypi {
     inherit pname version;
@@ -44,10 +57,10 @@ in buildPythonPackage rec {
     substituteInPlace setup.py --replace \
       "requests-toolbelt>=0.8.0,<0.9.0" \
       "requests-toolbelt>=0.8.0,<0.10.0" \
-      --replace 'pyrsistent>=0.14.2,<0.15.0' 'pyrsistent>=0.14.2,<0.16.0'
+      --replace 'pyrsistent>=0.14.2,<0.15.0' 'pyrsistent>=0.14.2,<0.16.0' \
+      --replace 'glob2>=0.6,<0.7' 'glob2' \
+      --replace 'cachy<0.3,>=0.2' 'cachy'
   '';
-
-  format = "pyproject";
 
   propagatedBuildInputs = [
     cachy
@@ -55,6 +68,7 @@ in buildPythonPackage rec {
     requests
     cachy
     requests-toolbelt
+    lockfile
     jsonschema
     pyrsistent
     pyparsing
@@ -75,11 +89,12 @@ in buildPythonPackage rec {
     "$out/bin/poetry" completions fish > "$out/share/fish/vendor_completions.d/poetry.fish"
   '';
 
-  # No tests in Pypi tarball
-  doCheck = false;
-  checkInputs = [ pytest ];
+  # copy the tests to a directory where we have write permissions
+  # only do tests on test suites which are pure
+  checkInputs = [ pytest httpretty pytest-mock ];
   checkPhase = ''
-    pytest tests
+    cp -r ${githubSrc}/tests ./tests
+    HOME=$TMPDIR pytest tests/{mixology,packages,repositories,semver}
   '';
 
   meta = with lib; {
