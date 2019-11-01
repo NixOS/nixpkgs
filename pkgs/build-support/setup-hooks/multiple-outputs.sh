@@ -173,7 +173,7 @@ _multioutPropagateDev() {
     if [ ${#outputs[@]} -eq 1 ]; then return; fi;
 
     mkdir -p "${!propagaterOutput}"/nix-support
-    for output in "${propagatedBuildOutputs[@]}"; do
+    for output in "${propagatedBuildOutputs[@]+${propagatedBuildOutputs[@]}}"; do
         echo -n " ${outputs[$output]}" >> "${!propagaterOutput}"/nix-support/propagated-build-inputs
     done
 }
