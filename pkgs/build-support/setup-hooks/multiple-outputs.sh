@@ -8,7 +8,7 @@ postFixupHooks+=(_multioutPropagateDev)
 _assignFirst() {
     local varName="$1"
     shift
-    while [ $# -ge 1 ]; do
+	while (( $# )); do
         if [ "$1" = REMOVE ]; then eval "${varName}"=REMOVE; return; fi
         if [ ${outputs[$1]+isset} ]; then eval "${varName}"="$1"; return; fi
         shift
@@ -19,7 +19,7 @@ _assignFirst() {
 
 # Same as _assignFirst, but only if "$1" = ""
 _overrideFirst() {
-    if [ -z "${!1}" ]; then
+    if [ -z "${!1-}" ]; then
         _assignFirst "$@"
     fi
 }

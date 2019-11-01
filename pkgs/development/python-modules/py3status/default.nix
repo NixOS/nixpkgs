@@ -9,6 +9,7 @@
 , pygobject3
 , pyserial
 , setuptools
+, dbus-python
 
 , file
 , acpi
@@ -32,7 +33,7 @@ buildPythonPackage rec {
 
   doCheck = false;
   propagatedBuildInputs = [
-    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools
+    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python
   ];
   buildInputs = [ file ];
   prePatch = ''

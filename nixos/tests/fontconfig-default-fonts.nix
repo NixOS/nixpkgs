@@ -7,7 +7,7 @@ import ./make-test.nix ({ lib, ... }:
     fonts.fonts = with pkgs; [
       noto-fonts-emoji
       cantarell-fonts
-      #twitter-color-emoji # Can't be generated with Python 3 version of nototools
+      twitter-color-emoji
       source-code-pro
       gentium
     ];

@@ -217,6 +217,8 @@ in
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
+  umoci = callPackage ../applications/virtualization/umoci {};
+
   dispad = callPackage ../tools/X11/dispad { };
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
@@ -1425,6 +1427,8 @@ in
 
   clipster = callPackage ../tools/misc/clipster { };
 
+  contrast = callPackage ../applications/accessibility/contrast { };
+
   coprthr = callPackage ../development/libraries/coprthr { };
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or {});
@@ -1608,6 +1612,8 @@ in
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
+  elogind = callPackage ../applications/misc/elogind { };
+
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
@@ -1685,6 +1691,8 @@ in
   fwup = callPackage ../tools/misc/fwup { };
 
   fzf = callPackage ../tools/misc/fzf { };
+
+  fzf-zsh = callPackage ../shells/zsh/fzf-zsh { };
 
   fzy = callPackage ../tools/misc/fzy { };
 
@@ -4537,10 +4545,18 @@ in
   nodejs-slim-12_x = callPackage ../development/web/nodejs/v12.nix {
     enableNpm = false;
   };
+  nodejs-13_x = callPackage ../development/web/nodejs/v13.nix { };
+  nodejs-slim-13_x = callPackage ../development/web/nodejs/v13.nix {
+    enableNpm = false;
+  };
 
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs-12_x;
-  nodejs-slim_latest = nodejs-slim-12_x;
+  nodejs_latest = nodejs-13_x;
+  nodejs-slim_latest = nodejs-slim-13_x;
+
+  nodePackages_13_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v13.nix {
+    nodejs = pkgs.nodejs-13_x;
+  });
 
   nodePackages_12_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v12.nix {
     nodejs = pkgs.nodejs-12_x;
@@ -4585,6 +4601,8 @@ in
   leela = callPackage ../tools/graphics/leela { };
 
   lftp = callPackage ../tools/networking/lftp { };
+
+  libck = callPackage ../development/libraries/libck { };
 
   libconfig = callPackage ../development/libraries/libconfig { };
 
@@ -5377,6 +5395,8 @@ in
 
   opn2bankeditor = callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
 
+  orangefs = callPackage ../tools/filesystems/orangefs { };
+
   os-prober = callPackage ../tools/misc/os-prober {};
 
   osl = callPackage ../development/compilers/osl { };
@@ -5748,6 +5768,8 @@ in
 
   pygmentex = callPackage ../tools/typesetting/pygmentex { };
 
+  pympress = callPackage ../applications/office/pympress { };
+
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pythonSexy = pythonPackages.libsexy;
@@ -6099,7 +6121,7 @@ in
     qtbase = qt4;
   };
 
-  scfbuild = python2.pkgs.callPackage ../tools/misc/scfbuild { };
+  scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
 
   scriptaculous = callPackage ../development/libraries/scriptaculous { };
 
@@ -6646,6 +6668,8 @@ in
   tpm2-abrmd = callPackage ../tools/security/tpm2-abrmd { };
 
   tpm2-tools = callPackage ../tools/security/tpm2-tools { };
+
+  trezor-udev-rules = callPackage ../os-specific/linux/trezor-udev-rules {};
 
   trezord = callPackage ../servers/trezord { };
 
@@ -7974,7 +7998,9 @@ in
       graphviz = graphviz-nox;
     });
 
-  inherit (ocaml-ng.ocamlPackages_4_05.haxe) haxe_3_2 haxe_3_4;
+  inherit (callPackage ../development/compilers/haxe {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  }) haxe_3_2 haxe_3_4;
   haxe = haxe_3_4;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
@@ -9018,9 +9044,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix {
-    pythonPackages = python3Packages;
-  };
+  pypi2nix = callPackage ../development/tools/pypi2nix {};
 
   setupcfg2nix = python3Packages.callPackage ../development/tools/setupcfg2nix {};
 
@@ -10885,6 +10909,8 @@ in
     blas = if stdenv.isDarwin then blas else openblas;
   };
 
+  forge = callPackage ../development/libraries/forge { };
+
   linbox = callPackage ../development/libraries/linbox {
     # We need to use blas instead of openblas on darwin, see
     # https://github.com/NixOS/nixpkgs/pull/45013 and
@@ -11725,6 +11751,8 @@ in
   libaacs = callPackage ../development/libraries/libaacs { };
 
   libaal = callPackage ../development/libraries/libaal { };
+
+  libabigail = callPackage ../development/libraries/libabigail { };
 
   libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
 
@@ -15481,7 +15509,9 @@ in
 
   shiori = callPackage ../servers/web-apps/shiori { };
 
-  matomo = callPackage ../servers/web-apps/matomo { };
+  inherit (callPackages ../servers/web-apps/matomo {})
+    matomo
+    matomo-beta;
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
@@ -15905,6 +15935,8 @@ in
   openisns = callPackage ../os-specific/linux/open-isns { };
 
   osxfuse = callPackage ../os-specific/darwin/osxfuse { };
+
+  osxsnarf = callPackage ../os-specific/darwin/osxsnarf { };
 
   power-calibrate = callPackage ../os-specific/linux/power-calibrate { };
 
@@ -17823,6 +17855,12 @@ in
   bristol = callPackage ../applications/audio/bristol { };
 
   bs1770gain = callPackage ../applications/audio/bs1770gain { };
+
+  bsequencer = callPackage ../applications/audio/bsequencer { };
+
+  bslizr = callPackage ../applications/audio/bslizr { };
+
+  bshapr = callPackage ../applications/audio/bshapr { };
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
 
@@ -19743,7 +19781,9 @@ in
     lua = lua5;
   };
 
-  inherit (ocaml-ng.ocamlPackages_4_01_0) monotoneViz;
+  monotoneViz = callPackage ../applications/version-management/monotone-viz {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_01_0;
+  };
 
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
@@ -21587,6 +21627,8 @@ in
   wmctrl = callPackage ../tools/X11/wmctrl { };
 
   wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
+
+  wofi = callPackage ../applications/misc/wofi { };
 
   wordnet = callPackage ../applications/misc/wordnet { };
 

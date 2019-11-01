@@ -123,6 +123,16 @@ in rec {
     };
   };
 
+  gruvbox = mkDerivation {
+    pluginName = "gruvbox";
+    rtpFilePath = "gruvbox-tpm.tmux";
+    src = fetchgit {
+      url = "https://github.com/egel/tmux-gruvbox";
+      rev = "6149fd8b5d6924925b4d5aa6935039780e94f3d6";
+      sha256 = "1ykr4yardavd0x7yfrnshd4b0gi8p31pji7i79ib0nss134zncpb";
+    };
+  };
+
   logging = mkDerivation {
     pluginName = "logging";
     src = fetchgit {
