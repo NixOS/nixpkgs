@@ -1,0 +1,13 @@
+diff --git a/src/sage/tests/cmdline.py b/src/sage/tests/cmdline.py
+index bd6b76ab82..f8340a8c66 100644
+--- a/src/sage/tests/cmdline.py
++++ b/src/sage/tests/cmdline.py
+@@ -872,7 +872,7 @@ def test_executable(args, input="", timeout=100.0, **kwds):
+         sage: with open(input, 'w') as F:
+         ....:     _ = F.write(s)
+         sage: test_executable(["sage", "--rst2sws", input, output]) # py2
+-        ('', '', 0)
++        ('', '...', 0)
+         sage: import tarfile # py2
+         sage: f = tarfile.open(output, 'r') # py2
+         sage: print(f.extractfile('sage_worksheet/worksheet.html').read()) # py2

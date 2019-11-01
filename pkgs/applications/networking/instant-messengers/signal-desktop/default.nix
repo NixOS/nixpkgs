@@ -2,7 +2,7 @@
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, udev, libnotify, libuuid, at-spi2-core
+, cups, expat, udev, libnotify, libuuid, at-spi2-core, libappindicator-gtk3
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -37,6 +37,7 @@ let
     gnome2.GConf
     gtk3
     pango
+    libappindicator-gtk3
     libnotify
     libuuid
     libX11

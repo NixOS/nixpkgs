@@ -715,6 +715,8 @@ in {
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
+  
+  labelbox = callPackage ../development/python-modules/labelbox { };
 
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
     mpi = pkgs.openmpi;
@@ -797,6 +799,8 @@ in {
     inherit python;
   };
 
+  nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
+
   nixpart = callPackage ../tools/filesystems/nixpart { };
 
   # This is used for NixOps to make sure we won't break it with the next major
@@ -831,6 +835,8 @@ in {
     });
 
   palettable = callPackage ../development/python-modules/palettable { };
+
+  parsley = callPackage ../development/python-modules/parsley { };
 
   pastel = callPackage ../development/python-modules/pastel { };
 
@@ -1978,6 +1984,8 @@ in {
     pythonPackages = self;
   });
 
+  opentracing = callPackage ../development/python-modules/opentracing { };
+
   openidc-client = callPackage ../development/python-modules/openidc-client {};
 
   optuna = callPackage ../development/python-modules/optuna { };
@@ -2564,6 +2572,23 @@ in {
   libsexy = callPackage ../development/python-modules/libsexy {
     inherit (pkgs) libsexy pkgconfig;
   };
+
+  libselinux = pipe pkgs.libselinux [
+    toPythonModule
+
+    (p: p.overrideAttrs (super: {
+      meta = super.meta // {
+        outputsToInstall = [ "py" ];
+      };
+    }))
+
+    (p: p.override {
+      enablePython = true;
+      inherit python;
+    })
+
+    (p: p.py)
+  ];
 
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
 
@@ -3963,6 +3988,8 @@ in {
 
   nbmerge = callPackage ../development/python-modules/nbmerge { };
 
+  nbdime = callPackage ../development/python-modules/nbdime { };
+
   nbxmpp = callPackage ../development/python-modules/nbxmpp { };
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
@@ -5169,6 +5196,8 @@ in {
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
   vsts = callPackage ../development/python-modules/vsts { };
+
+  python-vlc = callPackage ../development/python-modules/python-vlc { };
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
