@@ -1,9 +1,9 @@
-{ stdenv, fetchzip, qt5 }:
+{ stdenv, fetchzip, qt5, mkDerivation }:
 
 let
   version = "1.40.43";
 in
-stdenv.mkDerivation {
+mkDerivation {
   pname = "qtbitcointrader";
   inherit version;
 
