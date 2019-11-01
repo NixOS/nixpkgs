@@ -11,23 +11,14 @@ let
       src = fetchFromGitHub {
         owner = "fieldOfView";
         repo = pname;
-        rev = "0702f3a52887ea4ab6736c990bbe9628d677688e";
-        sha256 = "0cm4kciw3izqk51pfbznawk80k7n7pyvrlzd9ccjgdl994ljcqi5";
+        rev = "a82a42a87bbeb390b80b991afb1a6741c46a3432";
+        sha256 = "0q5yd7pw626qls2ks2y39hb9czd6lgh71jalzl2drwdi6a8mwsfz";
       };
 
       nativeBuildInputs = [ cmake ];
 
       propagatedBuildInputs = with python3Packages; [
         netifaces
-      ];
-
-      patches = [
-        # Fix incorrect paths in CMakeLists.txt
-        # https://github.com/fieldOfView/Cura-OctoPrintPlugin/pull/131
-        (fetchpatch {
-          url = "https://github.com/gebner/Cura-OctoPrintPlugin/commit/fce8c21b3a584559da7942cb239fbf6673153454.patch";
-          sha256 = "06d82jpqvcpz90svhhlk2g3pvxm3psfnd2j30m6cl9441qp5nvcp";
-        })
       ];
 
       meta = with stdenv.lib; {
