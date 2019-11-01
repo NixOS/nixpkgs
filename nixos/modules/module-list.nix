@@ -550,6 +550,8 @@
   ./services/network-filesystems/nfsd.nix
   ./services/network-filesystems/openafs/client.nix
   ./services/network-filesystems/openafs/server.nix
+  ./services/network-filesystems/orangefs/server.nix
+  ./services/network-filesystems/orangefs/client.nix
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
   ./services/network-filesystems/tahoe.nix
@@ -603,6 +605,7 @@
   ./services/networking/gdomap.nix
   ./services/networking/git-daemon.nix
   ./services/networking/gnunet.nix
+  ./services/networking/go-shadowsocks2.nix
   ./services/networking/gogoclient.nix
   ./services/networking/gvpe.nix
   ./services/networking/hans.nix

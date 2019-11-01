@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  patches = [
+  patches = stdenv.lib.optionals stdenv.isDarwin [
     (fetchpatch {
       url = "https://github.com/MariaDB/mariadb-connector-c/commit/ee91b2c98a63acb787114dee4f2694e154630928.patch";
       sha256 = "05mlyv20kzn9bax4byv2ph1cf42541fcl1zcqzbfwqmynnisvdah";

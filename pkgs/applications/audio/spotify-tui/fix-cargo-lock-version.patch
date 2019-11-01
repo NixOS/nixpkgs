@@ -1,0 +1,13 @@
+diff --git i/Cargo.lock w/Cargo.lock
+index e1eae72..e004898 100644
+--- i/Cargo.lock
++++ w/Cargo.lock
+@@ -1310,7 +1310,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ 
+ [[package]]
+ name = "spotify-tui"
+-version = "0.7.5"
++version = "0.8.0"
+ dependencies = [
+  "backtrace 0.3.40 (registry+https://github.com/rust-lang/crates.io-index)",
+  "clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)",

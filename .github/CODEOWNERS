@@ -157,6 +157,12 @@
 /pkgs/applications/editors/emacs       @adisbladis
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
+# VimPlugins
+/pkgs/misc/vim-plugins         @jonringer
+
+# VsCode Extensions
+/pkgs/misc/vscode-extensions   @jonringer
+
 # Prometheus exporter modules and tests
 /nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz
 /nixos/modules/services/monitoring/prometheus/exporters.xml  @WilliButz

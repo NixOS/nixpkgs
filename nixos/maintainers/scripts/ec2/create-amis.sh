@@ -14,7 +14,7 @@
 set -euo pipefail
 
 # configuration
-state_dir=/home/deploy/amis/ec2-images
+state_dir=$HOME/amis/ec2-images
 home_region=eu-west-1
 bucket=nixos-amis
 
