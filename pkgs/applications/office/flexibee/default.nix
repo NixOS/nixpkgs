@@ -16,11 +16,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  prePatch = ''
+    substituteInPlace usr/sbin/flexibee-server \
+      --replace "/usr/share/flexibee" $out \
+      --replace "/var/run" "/run"
+  '';
+
+
   installPhase = ''
     runHook preInstall
     cp -R usr/share/flexibee/ $out/
     install -Dm755 usr/bin/flexibee $out/bin/flexibee
+    install -Dm755 usr/sbin/flexibee-server $out/bin/flexibee-server
     wrapProgram  $out/bin/flexibee --set JAVA_HOME "${jre}"
+    wrapProgram $out/bin/flexibee-server --set JAVA_HOME "${jre}"
     runHook postInstall
   '';
 
