@@ -11,13 +11,23 @@
 , llvmPackages_5
 , pkgsBuildTarget, pkgsBuildBuild
 }: rec {
-  makeRustPlatform = { rustc, cargo, ... }: {
+  toRustTarget = platform: {
+        "x86_64-pc-mingw32" = "x86_64-pc-windows-gnu";
+      }.${platform.config} or (with platform.parsed; let
+        cpu_ = {
+          "armv7a" = "armv7";
+          "armv7l" = "armv7";
+          "armv6l" = "arm";
+        }.${cpu.name} or cpu.name;
+      in "${cpu_}-${vendor.name}-${kernel.name}-${abi.name}");
+
+  makeRustPlatform = { rustc, cargo, ... }: rec {
     rust = {
-      inherit rustc cargo;
+      inherit rustc cargo toRustTarget;
     };
 
     buildRustPackage = callPackage ../../../build-support/rust {
-      inherit rustc cargo;
+      inherit rustc cargo rust;
 
       fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
         inherit cargo;
