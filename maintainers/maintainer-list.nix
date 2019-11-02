@@ -1194,6 +1194,12 @@
     githubId = 30435868;
     name = "Okina Matara";
   };
+  choas = {
+    email = "github@larsgregori.de";
+    github = "choas";
+    githubId = 138015;
+    name = "Lars Gregori";
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
