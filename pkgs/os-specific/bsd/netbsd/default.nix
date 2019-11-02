@@ -127,6 +127,10 @@ let
     nativeBuildInputs = [ makeMinimal ];
     buildInputs = [ zlib ];
 
+    # for some reason the build system re-runs configure with HOST_CC
+    depsBuildBuild = [ buildPackages.stdenv.cc ] ++ buildInputs;
+    HOST_CC = "${buildPackages.stdenv.cc}/bin/cc";
+
     # temporarily use gnuinstall for bootstrapping
     # bsdinstall will be built later
     makeFlags = [
@@ -211,6 +215,7 @@ let
     version = "8.0";
     nativeBuildInputs = [ ];
     propagatedBuildInputs = [ compat ];
+    buildInputs = [ stdenv.cc ];
     extraPaths = [
       (fetchNetBSD "lib/libc/gen/fts.c" "8.0" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
       (fetchNetBSD "lib/libc/include/namespace.h" "8.0" "1sjvh9nw3prnk4rmdwrfsxh6gdb9lmilkn46jcfh3q5c8glqzrd7")
@@ -218,9 +223,9 @@ let
     ];
     skipIncludesPhase = true;
     buildPhase = ''
-      cc  -c -Iinclude -Ilib/libc/include lib/libc/gen/fts.c \
+      "$CC" -c -Iinclude -Ilib/libc/include lib/libc/gen/fts.c \
           -o lib/libc/gen/fts.o
-      ar -rsc libfts.a lib/libc/gen/fts.o
+      "$AR" -rsc libfts.a lib/libc/gen/fts.o
     '';
     installPhase = ''
       runHook preInstall
