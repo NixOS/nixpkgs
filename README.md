@@ -43,6 +43,7 @@ See code for all available configurations.
 | Lenovo IdeaPad Z510               | `<nixos-hardware/lenovo/ideapad/z510>`             |
 | Lenovo ThinkPad P53               | `<nixos-hardware/lenovo/thinkpad/p53>`             |
 | Lenovo ThinkPad T410              | `<nixos-hardware/lenovo/thinkpad/t410>`            |
+| Lenovo ThinkPad T420              | `<nixos-hardware/lenovo/thinkpad/t420>`            |
 | Lenovo ThinkPad T430              | `<nixos-hardware/lenovo/thinkpad/t430>`            |
 | Lenovo ThinkPad T440s             | `<nixos-hardware/lenovo/thinkpad/t440s>`           |
 | Lenovo ThinkPad T440p             | `<nixos-hardware/lenovo/thinkpad/t440p>`           |
