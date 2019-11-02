@@ -2035,7 +2035,6 @@ in
     liblognorm = null;
     openssl = null;
     librelp = null;
-    libgt = null;
     libksi = null;
     liblogging = null;
     libnet = null;
