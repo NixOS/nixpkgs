@@ -77,14 +77,6 @@ let
 
     $monA->waitForUnit("network.target");
 
-    # Create the ceph-related directories
-    $monA->mustSucceed(
-      "mkdir -p /var/lib/ceph/mgr/ceph-${cfg.monA.name}",
-      "mkdir -p /var/lib/ceph/mon/ceph-${cfg.monA.name}",
-      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
-      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
-    );
-
     # Bootstrap ceph-mon daemon
     $monA->mustSucceed(
       "sudo -u ceph ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'",
@@ -101,8 +93,9 @@ let
     # Can't check ceph status until a mon is up
     $monA->succeed("ceph -s | grep 'mon: 1 daemons'");
 
-    # Start the ceph-mgr daemon, it has no deps and hardly any setup
+    # Start the ceph-mgr daemon, after copying in the keyring
     $monA->mustSucceed(
+      "sudo -u ceph mkdir -p /var/lib/ceph/mgr/ceph-${cfg.monA.name}/",
       "ceph auth get-or-create mgr.${cfg.monA.name} mon 'allow profile mgr' osd 'allow *' mds 'allow *' > /var/lib/ceph/mgr/ceph-${cfg.monA.name}/keyring",
       "systemctl start ceph-mgr-${cfg.monA.name}"
     );
@@ -114,7 +107,9 @@ let
     $monA->mustSucceed(
       "mkfs.xfs /dev/vdb",
       "mkfs.xfs /dev/vdc",
+      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
       "mount /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
+      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
       "mount /dev/vdc /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
       "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --add-key ${cfg.osd0.key}",
       "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",

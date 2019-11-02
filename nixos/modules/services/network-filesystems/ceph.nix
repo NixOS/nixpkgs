@@ -9,18 +9,20 @@ let
   expandCamelCase = replaceStrings upperChars (map (s: " ${s}") lowerChars);
   expandCamelCaseAttrs = mapAttrs' (name: value: nameValuePair (expandCamelCase name) value);
 
-  makeServices = (daemonType: daemonIds: extraServiceConfig:
+  makeServices = (daemonType: daemonIds:
     mkMerge (map (daemonId:
-      { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName pkgs.ceph extraServiceConfig; })
+      { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName pkgs.ceph; })
       daemonIds));
 
-  makeService = (daemonType: daemonId: clusterName: ceph: extraServiceConfig: {
+  makeService = (daemonType: daemonId: clusterName: ceph: {
     enable = true;
     description = "Ceph ${builtins.replaceStrings lowerChars upperChars daemonType} daemon ${daemonId}";
     after = [ "network-online.target" "time-sync.target" ] ++ optional (daemonType == "osd") "ceph-mon.target";
     wants = [ "network-online.target" "time-sync.target" ];
     partOf = [ "ceph-${daemonType}.target" ];
     wantedBy = [ "ceph-${daemonType}.target" ];
+
+    path = [ pkgs.getopt ];
 
     serviceConfig = {
       LimitNOFILE = 1048576;
@@ -34,22 +36,22 @@ let
       Restart = "on-failure";
       StartLimitBurst = "5";
       StartLimitInterval = "30min";
+      StateDirectory = "ceph/${if daemonType == "rgw" then "radosgw" else daemonType}/${clusterName}-${daemonId}";
+      User = "ceph";
+      Group = if daemonType == "osd" then "disk" else "ceph";
       ExecStart = ''${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} \
-                    -f --cluster ${clusterName} --id ${daemonId} --setuser ceph \
-                    --setgroup ${if daemonType == "osd" then "disk" else "ceph"}'';
-    } // extraServiceConfig
-      // optionalAttrs (daemonType == "osd") { ExecStartPre = ''${ceph.lib}/libexec/ceph/ceph-osd-prestart.sh \
-                                                              --id ${daemonId} --cluster ${clusterName}''; };
-    } // optionalAttrs (builtins.elem daemonType [ "mds" "mon" "rgw" "mgr" ]) {
-      preStart = ''
-        daemonPath="/var/lib/ceph/${if daemonType == "rgw" then "radosgw" else daemonType}/${clusterName}-${daemonId}"
-        if [ ! -d $daemonPath ]; then
-          mkdir -m 755 -p $daemonPath
-          chown -R ceph:ceph $daemonPath
-        fi
-      '';
-    } // optionalAttrs (daemonType == "osd") { path = [ pkgs.getopt ]; }
-  );
+                    -f --cluster ${clusterName} --id ${daemonId}'';
+    } // optionalAttrs (daemonType == "osd") {
+      ExecStartPre = ''${ceph.lib}/libexec/ceph/ceph-osd-prestart.sh --id ${daemonId} --cluster ${clusterName}'';
+      StartLimitBurst = "30";
+      RestartSec = "20s";
+      PrivateDevices = "no"; # osd needs disk access
+    } // optionalAttrs ( daemonType == "mon") {
+      RestartSec = "10";
+    } // optionalAttrs (lib.elem daemonType ["mgr" "mds"]) {
+      StartLimitBurst = "3";
+    };
+  });
 
   makeTarget = (daemonType:
     {
@@ -377,14 +379,11 @@ in
 
     systemd.services = let
       services = []
-        ++ optional cfg.mon.enable (makeServices "mon" cfg.mon.daemons { RestartSec = "10"; })
-        ++ optional cfg.mds.enable (makeServices "mds" cfg.mds.daemons { StartLimitBurst = "3"; })
-        ++ optional cfg.osd.enable (makeServices "osd" cfg.osd.daemons { StartLimitBurst = "30";
-                                                                         RestartSec = "20s";
-                                                                         PrivateDevices = "no"; # osd needs disk access
-                                                                       })
-        ++ optional cfg.rgw.enable (makeServices "rgw" cfg.rgw.daemons { })
-        ++ optional cfg.mgr.enable (makeServices "mgr" cfg.mgr.daemons { StartLimitBurst = "3"; });
+        ++ optional cfg.mon.enable (makeServices "mon" cfg.mon.daemons)
+        ++ optional cfg.mds.enable (makeServices "mds" cfg.mds.daemons)
+        ++ optional cfg.osd.enable (makeServices "osd" cfg.osd.daemons)
+        ++ optional cfg.rgw.enable (makeServices "rgw" cfg.rgw.daemons)
+        ++ optional cfg.mgr.enable (makeServices "mgr" cfg.mgr.daemons);
       in
         mkMerge services;
 
@@ -403,7 +402,9 @@ in
     systemd.tmpfiles.rules = [
       "d /etc/ceph - ceph ceph - -"
       "d /run/ceph 0770 ceph ceph -"
-      "d /var/lib/ceph - ceph ceph - -"
-    ];
+      "d /var/lib/ceph - ceph ceph - -"]
+    ++ optionals cfg.mgr.enable [ "d /var/lib/ceph/mgr - ceph ceph - -"]
+    ++ optionals cfg.mon.enable [ "d /var/lib/ceph/mon - ceph ceph - -"]
+    ++ optionals cfg.osd.enable [ "d /var/lib/ceph/osd - ceph ceph - -"];
   };
 }

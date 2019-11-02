@@ -114,18 +114,6 @@ let
     $osd0->waitForUnit("network.target");
     $osd1->waitForUnit("network.target");
 
-    # Create the ceph-related directories
-    $monA->mustSucceed(
-      "mkdir -p /var/lib/ceph/mgr/ceph-${cfg.monA.name}",
-      "mkdir -p /var/lib/ceph/mon/ceph-${cfg.monA.name}",
-    );
-    $osd0->mustSucceed(
-      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
-    );
-    $osd1->mustSucceed(
-      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
-    );
-
     # Bootstrap ceph-mon daemon
     $monA->mustSucceed(
       "sudo -u ceph ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'",
@@ -133,6 +121,7 @@ let
       "sudo -u ceph ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
       "monmaptool --create --add ${cfg.monA.name} ${cfg.monA.ip} --fsid ${cfg.clusterId} /tmp/monmap",
       "sudo -u ceph ceph-mon --mkfs -i ${cfg.monA.name} --monmap /tmp/monmap --keyring /tmp/ceph.mon.keyring",
+      "sudo -u ceph mkdir -p /var/lib/ceph/mgr/ceph-${cfg.monA.name}/",
       "sudo -u ceph touch /var/lib/ceph/mon/ceph-${cfg.monA.name}/done",
       "systemctl start ceph-mon-${cfg.monA.name}"
     );
@@ -159,12 +148,14 @@ let
     # Bootstrap both OSDs
     $osd0->mustSucceed(
       "mkfs.xfs /dev/vdb",
+      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
       "mount /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
       "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --add-key ${cfg.osd0.key}",
       "echo '{\"cephx_secret\": \"${cfg.osd0.key}\"}' | ceph osd new ${cfg.osd0.uuid} -i -",
     );
     $osd1->mustSucceed(
       "mkfs.xfs /dev/vdb",
+      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
       "mount /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
       "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",
       "echo '{\"cephx_secret\": \"${cfg.osd1.key}\"}' | ceph osd new ${cfg.osd1.uuid} -i -"
