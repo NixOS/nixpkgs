@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, fetchFromGitHub, python3Packages, glfw, libunistring,
+{ stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
@@ -45,7 +45,7 @@ buildPythonApplication rec {
     python3
     zlib
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    fontconfig glfw libunistring libcanberra libX11
+    fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus
   ];
