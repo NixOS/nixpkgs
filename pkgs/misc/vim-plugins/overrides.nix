@@ -10,6 +10,7 @@
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
+, nodePackages
 
 # coc-go dependency
 , go
@@ -136,6 +137,12 @@ self: super: {
       rev = "984779f2f825626aa9d441746d8b4ee079137c65";
       sha256 = "0w7qnhi7wikr789h3w5p59l8wd81czpvbzbdanf8klf9ap4ma3yg";
     };
+  };
+
+  coc-prettier = buildVimPluginFrom2Nix {
+    pname = "coc-prettier";
+    version = nodePackages.coc-prettier.version;
+    src = "${nodePackages.coc-prettier}/lib/node_modules/coc-prettier";
   };
 
   command-t = super.command-t.overrideAttrs(old: {
