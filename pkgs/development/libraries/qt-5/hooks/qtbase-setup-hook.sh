@@ -62,5 +62,5 @@ postPatchMkspecs() {
     fi
 }
 if [ -z "${dontPatchMkspecs-}" ]; then
-    postPhases="${postPhases}${postPhases:+ }postPatchMkspecs"
+    postPhases="${postPhases-}${postPhases:+ }postPatchMkspecs"
 fi
