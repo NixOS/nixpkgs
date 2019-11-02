@@ -145,7 +145,7 @@ in stdenv.mkDerivation rec {
     # used for determining plug-in installation paths
     majorVersion = "${lib.versions.major version}.0";
     targetPluginDir = "lib/gimp/${majorVersion}/plug-ins";
-    targetScriptDir = "lib/gimp/${majorVersion}/scripts";
+    targetScriptDir = "share/gimp/${majorVersion}/scripts";
 
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk2;
