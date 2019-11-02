@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "theme-jade1";
-  version = "3.3";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = "theme-jade-1";
     rev = "v${version}";
-    sha256 = "06w06dvzs1llmzpyz3c5yycsw3gslsgikalfcq5l92d72z4kzfw7";
+    sha256 = "1m3150iyk8421mkwj4x2pv29wjzqdcnvvnp3bsg11k5kszsm27a8";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A fork of the original Linux Mint theme with dark menus, more intensive green and some other modifications";
+    description = "Fork of the original Linux Mint theme with dark menus, more intensive green and some other modifications";
     homepage = https://github.com/madmaxms/theme-jade-1;
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;
