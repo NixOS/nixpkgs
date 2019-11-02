@@ -27,7 +27,7 @@ mkDerivation rec {
     description = "Qt implementation of freedesktop.org xdg specs";
     homepage = https://github.com/lxqt/libqtxdg;
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }
