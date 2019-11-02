@@ -2883,6 +2883,8 @@ in
   tsm-client = callPackage ../tools/backup/tsm-client { jdk8 = null; };
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { };
 
+  trac = pythonPackages.callPackage ../tools/misc/trac { };
+
   tracker = callPackage ../development/libraries/tracker { };
 
   tracker-miners = callPackage ../development/libraries/tracker-miners { };
