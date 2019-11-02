@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (apis != ["*"])
     "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
+  # fix build with gcc9, can be removed after bumping to current version
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+
   preConfigure =
     ''
       rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
