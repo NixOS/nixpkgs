@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, darwin
 , openexr, zlib, imagemagick, libGLU_combined, freeglut, fftwFloat
-, fftw, gsl, libexif, perl, opencv, qt5
+, fftw, gsl, libexif, perl, opencv, qt5, netpbm
 }:
 
 stdenv.mkDerivation rec {
@@ -18,10 +18,19 @@ stdenv.mkDerivation rec {
     -DWITH_MATLAB=false 
   '';
 
+  preConfigure = ''
+    rm cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_LIBRARY `find ${netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_LIBRARIES `find ${netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_INCLUDE_DIR ${netpbm}/include/netpbm)" >> cmake/FindNETPBM.cmake
+    echo "INCLUDE(FindPackageHandleStandardArgs)" >> cmake/FindNETPBM.cmake
+    echo "FIND_PACKAGE_HANDLE_STANDARD_ARGS(NETPBM DEFAULT_MSG NETPBM_LIBRARY NETPBM_INCLUDE_DIR)" >> cmake/FindNETPBM.cmake
+  '';
+
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
     openexr zlib imagemagick fftwFloat
-    fftw gsl libexif perl opencv qt5.qtbase
+    fftw gsl libexif perl opencv qt5.qtbase netpbm
   ] ++ (if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT
   ]) else [
