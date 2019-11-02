@@ -401,7 +401,9 @@ in
         mkMerge targets;
 
     systemd.tmpfiles.rules = [
+      "d /etc/ceph - ceph ceph - -"
       "d /run/ceph 0770 ceph ceph -"
+      "d /var/lib/ceph - ceph ceph - -"
     ];
   };
 }

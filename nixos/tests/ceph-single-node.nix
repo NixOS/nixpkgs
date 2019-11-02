@@ -83,9 +83,6 @@ let
       "mkdir -p /var/lib/ceph/mon/ceph-${cfg.monA.name}",
       "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
       "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
-      "mkdir -p /etc/ceph",
-      "chown ceph:ceph -R /etc/ceph",
-      "chown ceph:ceph -R /var/lib/ceph/",
     );
 
     # Bootstrap ceph-mon daemon
@@ -166,13 +163,13 @@ let
       "systemctl stop ceph-mgr-${cfg.monA.name}",
       "systemctl stop ceph-mon-${cfg.monA.name}"
     );
-    
+
     $monA->succeed("systemctl start ceph.target");
     $monA->waitForUnit("ceph-mon-${cfg.monA.name}");
     $monA->waitForUnit("ceph-mgr-${cfg.monA.name}");
     $monA->waitForUnit("ceph-osd-${cfg.osd0.name}");
     $monA->waitForUnit("ceph-osd-${cfg.osd1.name}");
-    
+
     $monA->succeed("ceph -s | grep 'mon: 1 daemons'");
     $monA->waitUntilSucceeds("ceph -s | grep 'quorum ${cfg.monA.name}'");
     $monA->waitUntilSucceeds("ceph osd stat | grep -e '2 osds: 2 up[^,]*, 2 in'");
