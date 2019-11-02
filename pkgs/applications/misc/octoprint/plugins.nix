@@ -87,13 +87,13 @@ let
 
     stlviewer = buildPlugin rec {
       pname = "STLViewer";
-      version = "0.4.1";
+      version = "0.4.2";
 
       src = fetchFromGitHub {
         owner = "jneilliii";
         repo = "OctoPrint-STLViewer";
-        rev = "v${version}";
-        sha256 = "1f64s37g2d79g76v0vjnjrc2jp2gwrsnfgx7w3n0hkf1lz1pjkm0";
+        rev = version;
+        sha256 = "0mkvh44fn2ch4z2avsdjwi1rp353ylmk9j5fln4x7rx8ph8y7g2b";
       };
 
       meta = with stdenv.lib; {
