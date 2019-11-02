@@ -10816,8 +10816,6 @@ in
     fltk = fltk13;
   };
 
-  dirac = callPackage ../development/libraries/dirac { };
-
   directfb = callPackage ../development/libraries/directfb { };
 
   discord-rpc = callPackage ../development/libraries/discord-rpc {
