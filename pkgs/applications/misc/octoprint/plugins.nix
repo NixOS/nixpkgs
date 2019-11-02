@@ -168,13 +168,13 @@ let
 
     printtimegenius = buildPlugin rec {
       pname = "PrintTimeGenius";
-      version = "1.3.1";
+      version = "2.0.2";
 
       src = fetchFromGitHub {
         owner = "eyal0";
         repo = "OctoPrint-${pname}";
         rev = version;
-        sha256 = "0ijv1nxmikv06a00hqqkqri6wnydqh6lwcx07pmvw6jy706jhy28";
+        sha256 = "1w4jm42434x87sbih45brkb9krik851vxkz153w3w5c8p74kgg6f";
       };
 
       preConfigure = ''
