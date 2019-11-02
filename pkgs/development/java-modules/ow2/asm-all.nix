@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   ow2AsmAll_4_0 = map (obj: fetchMaven {
     version = "4.0";
     artifactId = "asm-all";

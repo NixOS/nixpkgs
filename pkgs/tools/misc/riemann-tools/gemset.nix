@@ -29,6 +29,16 @@
     };
     version = "0.0.4";
   };
+  optimist = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "05jxrp3nbn5iilc1k7ir90mfnwc5abc9h78s5rpm3qafwqxvcj4j";
+      type = "gem";
+    };
+    version = "3.0.0";
+  };
   riemann-client = {
     dependencies = ["beefcake" "mtrc" "trollop"];
     groups = ["default"];
@@ -41,15 +51,15 @@
     version = "0.2.6";
   };
   riemann-tools = {
-    dependencies = ["json" "riemann-client" "trollop"];
+    dependencies = ["json" "optimist" "riemann-client"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0brf44cq4xz0nqhs189zlg76527bfv3jr453yc00410qdzz8fpxa";
+      sha256 = "07w9x3iw32zwpzsm9l63vn0nv1778qls1blqysr45m7l7x6n5wjx";
       type = "gem";
     };
-    version = "0.2.13";
+    version = "0.2.14";
   };
   trollop = {
     groups = ["default"];

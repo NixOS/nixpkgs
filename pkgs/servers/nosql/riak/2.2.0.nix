@@ -25,7 +25,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "riak-2.2.0";
 
   buildInputs = [

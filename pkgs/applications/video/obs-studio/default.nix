@@ -1,6 +1,6 @@
 { config, stdenv
+, mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , fdk_aac
 , ffmpeg
@@ -35,15 +35,15 @@
 
 let
   optional = stdenv.lib.optional;
-in stdenv.mkDerivation rec {
-  name = "obs-studio-${version}";
-  version = "23.1.0";
+in mkDerivation rec {
+  pname = "obs-studio";
+  version = "24.0.3";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
-    rev = "${version}";
-    sha256 = "1iavrkjp7vgg0blm4lmj4mc4hrfx8yjaiwx55wmc5ynw80v37ybc";
+    rev = version;
+    sha256 = "0g8nzs696f3myz4hvygav85b0jgjmn6dicy50axmapdv8miff9xa";
   };
 
   nativeBuildInputs = [ cmake

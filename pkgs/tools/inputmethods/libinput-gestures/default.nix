@@ -6,7 +6,6 @@
 stdenv.mkDerivation rec {
   pname = "libinput-gestures";
   version = "2.39";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "bulletmark";

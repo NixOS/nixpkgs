@@ -73,4 +73,5 @@ in with pkgs; {
   kafka_2_0  = makeKafkaTest "kafka_2_0"  apacheKafka_2_0;
   kafka_2_1  = makeKafkaTest "kafka_2_1"  apacheKafka_2_1;
   kafka_2_2  = makeKafkaTest "kafka_2_2"  apacheKafka_2_2;
+  kafka_2_3  = makeKafkaTest "kafka_2_3"  apacheKafka_2_3;
 }

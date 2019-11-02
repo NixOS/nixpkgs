@@ -59,7 +59,7 @@ in rec {
 
   luajit_2_1 = import ../luajit/2.1.nix {
     self = luajit_2_1;
-    inherit callPackage lib;
+    inherit callPackage;
   };
 
 }

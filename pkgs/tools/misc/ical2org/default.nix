@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage}:
 
 buildGoPackage rec {
-  name = "ical2org-${version}";
+  pname = "ical2org";
   version="1.1.5";
 
   goPackagePath = "github.com/rjhorniii/ical2org";

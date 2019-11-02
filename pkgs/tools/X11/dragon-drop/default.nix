@@ -1,15 +1,14 @@
-
 { stdenv, gtk, pkgconfig, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "dragon-drop-${version}";
-  version = "git-2014-08-14";
+  pname = "dragon-drop";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "mwh";
     repo = "dragon";
-    rev = "a49d775dd9d43bd22cee4c1fd3e32ede0dc2e9c2";
-    sha256 = "03vdbmqlbmk3j2ay1wy6snrm2y27faxz7qv81vyzjzngj345095a";
+    rev = "v${version}";
+    sha256 = "0iwlrcqvbjshpwvg0gsqdqcjv48q1ary59pm74zzjnr8v9470smr";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Simple drag-and-drop source/sink for X";
     homepage = https://github.com/mwh/dragon;
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 markus1189 ];
     license = licenses.gpl3;
     platforms = with platforms; unix;
   };

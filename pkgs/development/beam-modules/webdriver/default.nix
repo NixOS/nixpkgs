@@ -6,7 +6,7 @@ let
     buildInputs = [ drv ];
   };
 
-  pkg = self: stdenv.mkDerivation rec {
+  pkg = self: stdenv.mkDerivation {
     name = "webdriver";
     version = "0.0.0+build.18.7ceaf1f";
 

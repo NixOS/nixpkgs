@@ -11,13 +11,8 @@ stdenv.mkDerivation {
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-  makeFlags = [
-    "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=$(out)"
-  ];
-  preBuild = "makeFlagsArray+=(\"M=$(pwd)\")";
-  buildFlags = [ "modules" ];
-  installTargets = [ "modules_install" ];
+  makeFlags = [ "INSTALL_MOD_PATH=$(out)" ];
+  installTargets = [ "install" ];
 
   enableParallelBuilding = true;
 

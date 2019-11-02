@@ -36,7 +36,7 @@ rec {
     example ? null,
     # String describing the option.
     description ? null,
-    # Related packages used in the manual (see `genRelatedPackages` in ../nixos/doc/manual/default.nix).
+    # Related packages used in the manual (see `genRelatedPackages` in ../nixos/lib/make-options-doc/default.nix).
     relatedPackages ? null,
     # Option type, providing type-checking and value merging.
     type ? null,
@@ -101,7 +101,7 @@ rec {
   mergeOneOption = loc: defs:
     if defs == [] then abort "This case should never happen."
     else if length defs != 1 then
-      throw "The unique option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
+      throw "The unique option `${showOption loc}' is defined multiple times, in:\n - ${concatStringsSep "\n - " (getFiles defs)}."
     else (head defs).value;
 
   /* "Merge" option definitions by checking that they all have the same value. */

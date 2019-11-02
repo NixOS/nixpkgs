@@ -2,7 +2,8 @@
 let
   version = "6M62";
 in stdenv.mkDerivation {
-  name = "inform7-${version}";
+  pname = "inform7";
+  inherit version;
   buildInputs = [ perl coreutils gnutar gzip ];
   src = fetchzip {
     url = "http://inform7.com/download/content/6M62/I7_6M62_Linux_all.tar.gz";

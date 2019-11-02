@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openmp ? null }:
 
 stdenv.mkDerivation rec {
-  name = "bsc-${version}";
+  pname = "bsc";
   version = "3.1.0";
 
   src = fetchurl {

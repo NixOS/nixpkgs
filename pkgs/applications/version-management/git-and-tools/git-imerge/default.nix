@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "git-imerge-${version}";
+  pname = "git-imerge";
   version = "1.1.0";
 
   src = fetchFromGitHub {

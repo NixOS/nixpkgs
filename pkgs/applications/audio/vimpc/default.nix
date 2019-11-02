@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.09.2";
-  name = "vimpc-${version}";
+  pname = "vimpc";
 
   src = fetchFromGitHub {
     owner = "boysetsfrog";

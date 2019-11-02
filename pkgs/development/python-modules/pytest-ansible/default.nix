@@ -1,19 +1,20 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ansible
 , pytest
 , mock
-, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "2.0.2";
+  version = "2.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d69d89cbcf29e587cbe6ec4b229346edbf027d3c04944dd7bcbf3d7bba46348f";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "pytest-ansible";
+    rev = "v${version}";
+    sha256 = "0v97sqk3q2vkmwnjlnncz8ss8086x9jg3cz0g2nzlngs4ql1gdb0";
   };
 
   patchPhase = ''
@@ -25,11 +26,11 @@ buildPythonPackage rec {
   checkInputs =  [ mock ];
   propagatedBuildInputs = [ ansible pytest ];
 
-  # tests not included with release
+  # tests not included with release, even on github
   doCheck = false;
 
   checkPhase = ''
-    pytest
+    HOME=$TMPDIR pytest tests/
   '';
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gccmakedep, xorg, imake, libXt, libXaw, libXpm, libXext }:
+{ stdenv, fetchurl, gccmakedep, imake, libXt, libXaw, libXpm, libXext }:
 
 stdenv.mkDerivation {
   name = "xcruiser-0.30";

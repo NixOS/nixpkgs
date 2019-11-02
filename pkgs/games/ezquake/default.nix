@@ -3,7 +3,6 @@
 , pkgconfig, SDL2, vim }:
 
 stdenv.mkDerivation rec {
-  name = pname + "-" + version;
   pname = "ezquake";
   version = "3.0.1";
 

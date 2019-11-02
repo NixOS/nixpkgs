@@ -1,12 +1,12 @@
-{ stdenv, binutils , fetchurl, glibc, ncurses5 }:
+{ stdenv, binutils , fetchurl, ncurses5 }:
 
 stdenv.mkDerivation rec {
-  version = "0.0.28";
-  name = "kythe-${version}";
+  version = "0.0.30";
+  pname = "kythe";
 
   src = fetchurl {
-    url = "https://github.com/google/kythe/releases/download/v0.0.28/kythe-v0.0.28.tar.gz";
-    sha256 = "1qc7cngpxw66m3krpr5x50ns7gb3bpv2bdfzpb5afl12qp0mi6zm";
+    url = "https://github.com/kythe/kythe/releases/download/v${version}/${pname}-v${version}.tar.gz";
+    sha256 = "12bwhqkxfbkh3mm4wfvqflwhmbzpmlhlfykdpy6h7p9ih9ky8w6r";
   };
 
   buildInputs =
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
                 write_entries write_tables entrystream; do
       echo "Patching:" $exe
       patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $exe
-      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64:${ncurses5}/lib" $exe
+      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ]}" $exe
     done
     cd ../
     cp -R ./ $out

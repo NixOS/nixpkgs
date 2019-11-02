@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl, lib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "python37-docs-pdf-letter-3.7.2";
   src = fetchurl {
     url = http://docs.python.org/ftp/python/doc/3.7.2/python-3.7.2-docs-pdf-letter.tar.bz2;

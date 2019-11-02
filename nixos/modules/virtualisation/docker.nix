@@ -46,8 +46,8 @@ in
         description =
           ''
             When enabled dockerd is started on boot. This is required for
-            container, which are created with the
-            <literal>--restart=always</literal> flag, to work. If this option is
+            containers which are created with the
+            <literal>--restart=always</literal> flag to work. If this option is
             disabled, docker might be started on demand by socket activation.
           '';
       };

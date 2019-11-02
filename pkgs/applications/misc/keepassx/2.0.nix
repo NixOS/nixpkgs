@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, libgcrypt, qt4, xorg, ... }:
 
 stdenv.mkDerivation rec {
-  name = "keepassx2-${version}";
+  pname = "keepassx2";
   version = "2.0.3";
 
   src = fetchurl {

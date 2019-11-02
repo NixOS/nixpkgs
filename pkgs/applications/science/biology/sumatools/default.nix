@@ -23,6 +23,7 @@ in rec {
       sha256 = "0hwkrxzfz7m5wdjvmrhkjg8kis378iaqr5n4nhdhkwwhn8x1jn5a";
     };
     makeFlags = "PREFIX=$(out)";
+    inherit meta;
   };
 
   # Sumatra
@@ -42,6 +43,7 @@ in rec {
       "LIBSUMAPATH=-L${sumalibs}"
       "PREFIX=$(out)"
     ];
+    inherit meta;
   };
 
   # Sumaclust
@@ -61,5 +63,6 @@ in rec {
       "LIBSUMAPATH=-L${sumalibs}"
       "PREFIX=$(out)"
     ];
+    inherit meta;
   };
 }

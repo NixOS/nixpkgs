@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchFromGitHub
 , cmake
 , pkgconfig
 , clang-unwrapped
@@ -18,12 +18,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "beignet-${version}";
-  version = "1.3.2";
+  pname = "beignet";
+  version = "unstable-2018.08.20";
 
-  src = fetchurl {
-    url = "https://01.org/sites/default/files/${name}-source.tar.gz"; 
-    sha256 = "0hqb04jhjjslnmi3fnpzphanz84zywwkyw2sjr1k5qlx2jxfsmf5";
+  src = fetchFromGitHub {
+    owner  = "intel";
+    repo   = "beignet";
+    rev    = "fc5f430cb7b7a8f694d86acbb038bd5b38ec389c";
+    sha256 = "1z64v69w7f52jrskh1jfyh1x46mzfhjrqxj9hhgzh3xxv9yla32h";
   };
 
   patches = [ ./clang_llvm.patch ];
@@ -31,6 +33,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
+    substituteInPlace CMakeLists.txt --replace /etc/OpenCL/vendors "\''${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors"
     patchShebangs src/git_sha1.sh
   '';
 
@@ -55,8 +58,8 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  passthru.utests = stdenv.mkDerivation rec {
-    name = "beignet-utests-${version}";
+  passthru.utests = stdenv.mkDerivation {
+    pname = "beignet-utests";
     inherit version src;
 
     preConfigure = ''
@@ -101,8 +104,8 @@ stdenv.mkDerivation rec {
     homepage = https://cgit.freedesktop.org/beignet/;
     description = "OpenCL Library for Intel Ivy Bridge and newer GPUs";
     longDescription = ''
-      The package provides an open source implementation of the OpenCL specification for Intel GPUs. 
-      It supports the Intel OpenCL runtime library and compiler. 
+      The package provides an open source implementation of the OpenCL specification for Intel GPUs.
+      It supports the Intel OpenCL runtime library and compiler.
     '';
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ artuuge zimbatm ];

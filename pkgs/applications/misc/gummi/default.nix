@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   version = "0.6.6";
-  name = "gummi-${version}";
+  pname = "gummi";
 
   src = pkgs.fetchFromGitHub {
     owner = "alexandervdm";
     repo = "gummi";
-    rev = "${version}";
+    rev = version;
     sha256 = "1vw8rhv8qj82l6l22kpysgm9mxilnki2kjmvxsnajbqcagr6s7cn";
   };
 

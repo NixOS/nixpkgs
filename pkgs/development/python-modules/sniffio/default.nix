@@ -1,26 +1,27 @@
 { buildPythonPackage, lib, fetchPypi, glibcLocales, isPy3k, contextvars
-, pythonOlder
+, pythonOlder, pytest, curio
 }:
 
 buildPythonPackage rec {
   pname = "sniffio";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dzb0nx3m1hpjgsv6s6w5ac2jcmywcz6gqnfkw8rwz1vkr1836rf";
+    sha256 = "8e3810100f69fe0edd463d02ad407112542a11ffdc29f67db2bf3771afb87a21";
   };
 
-  # breaks with the following error:
-  # > TypeError: 'encoding' is an invalid keyword argument for this function
   disabled = !isPy3k;
 
   buildInputs = [ glibcLocales ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ contextvars ];
 
-  # no tests distributed with PyPI
-  doCheck = false;
+  checkInputs = [ pytest curio ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
     homepage = https://github.com/python-trio/sniffio;

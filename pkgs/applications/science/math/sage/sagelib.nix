@@ -1,4 +1,5 @@
 { sage-src
+, env-locations
 , perl
 , buildPythonPackage
 , arb
@@ -59,7 +60,7 @@
 buildPythonPackage rec {
   format = "other";
   version = src.version;
-  name = "sagelib-${version}";
+  pname = "sagelib";
   src = sage-src;
 
   nativeBuildInputs = [
@@ -125,8 +126,11 @@ buildPythonPackage rec {
     export SAGE_ROOT="$PWD"
     export SAGE_LOCAL="$SAGE_ROOT"
     export SAGE_SHARE="$SAGE_LOCAL/share"
-    export JUPYTER_PATH="$SAGE_LOCAL/jupyter"
 
+    # set locations of dependencies (needed for nbextensions like threejs)
+    . ${env-locations}/sage-env-locations
+
+    export JUPYTER_PATH="$SAGE_LOCAL/jupyter"
     export PATH="$SAGE_ROOT/build/bin:$SAGE_ROOT/src/bin:$PATH"
 
     export SAGE_NUM_THREADS="$NIX_BUILD_CORES"
@@ -134,8 +138,8 @@ buildPythonPackage rec {
     mkdir -p "$SAGE_SHARE/sage/ext/notebook-ipython"
     mkdir -p "var/lib/sage/installed"
 
+    source build/bin/sage-dist-helpers
     cd src
-    source bin/sage-dist-helpers
 
     ${python.interpreter} -u setup.py --no-user-cfg build
   '';

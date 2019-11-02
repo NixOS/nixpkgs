@@ -3,7 +3,7 @@
 */
 { stdenv, makeSetupHook, curl, unzip, dos2unix, pkgconfig, makeWrapper
 , lua, mono, dotnetPackages, python
-, libGL, openal, SDL2
+, libGL, freetype, openal, SDL2
 , zenity
 }:
 
@@ -11,7 +11,7 @@ with stdenv.lib;
 
 let
   path = makeBinPath ([ mono python ] ++ optional (zenity != null) zenity);
-  rpath = makeLibraryPath [ lua openal SDL2 ];
+  rpath = makeLibraryPath [ lua freetype openal SDL2 ];
   mkdirp = makeSetupHook { } ./mkdirp.sh;
 
 in {
@@ -54,10 +54,7 @@ in {
       StyleCopMSBuild
       StyleCopPlusMSBuild
     ] ++ [
-      lua
       libGL
-      openal
-      SDL2
     ];
 
     # TODO: Test if this is correct.

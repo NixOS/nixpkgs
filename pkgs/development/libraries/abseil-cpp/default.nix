@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "abseil-cpp-${version}";
+  pname = "abseil-cpp";
   date = "20190322";
   rev = "eab2078b53c9e3d9d240135c09d27e3393acb50a";
   version = "${date}-${rev}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
-    rev = "${rev}";
+    rev = rev;
     sha256 = "1bpz44hxq5fpkv6jlgphzk7mxjiiah526jgb63ih5pd1hd2cfw1r";
   };
 

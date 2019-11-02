@@ -3,13 +3,12 @@
   deepin-gettext-tools, dde-api, deepin-desktop-schemas,
   deepin-wallpapers, deepin-desktop-base, alsaLib, glib, gtk3,
   libgudev, libinput, libnl, librsvg, linux-pam, networkmanager,
-  pulseaudio, xorg, python3, hicolor-icon-theme, glibc, tzdata, go,
-  deepin, makeWrapper, wrapGAppsHook }:
+  pulseaudio, python3, hicolor-icon-theme, glibc, tzdata, go,
+  deepin, makeWrapper, xkeyboard_config, wrapGAppsHook }:
 
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "dde-daemon";
-  version = "3.27.1";
+  version = "3.27.2.6";
 
   goPackagePath = "pkg.deepin.io/dde/daemon";
 
@@ -17,7 +16,7 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1rbv7fals2bwhalw1hh3swmrdzclqbhny782shnrwqv53235xda3";
+    sha256 = "14g138h23f1lh1y98pdrfhnph1m7pw8lq8ypiwv9qf3fmdyn35d4";
   };
 
   patches = [
@@ -63,6 +62,7 @@ buildGoPackage rec {
     librsvg
     pulseaudio
     tzdata
+    xkeyboard_config
   ];
 
   postPatch = ''
@@ -70,12 +70,16 @@ buildGoPackage rec {
     patchShebangs network/nm_generator/gen_nm_consts.py
 
     fixPath $out /usr/share/dde/data launcher/manager.go dock/dock_manager_init.go
+    fixPath $out /usr/share/dde-daemon launcher/manager.go gesture/config.go
     fixPath ${networkmanager.dev} /usr/share/gir-1.0/NM-1.0.gir network/nm_generator/Makefile
     fixPath ${glibc.bin} /usr/bin/getconf systeminfo/utils.go
     fixPath ${deepin-desktop-base} /etc/deepin-version systeminfo/version.go accounts/deepinversion.go
     fixPath ${tzdata} /usr/share/zoneinfo timedate/zoneinfo/zone.go
     fixPath ${dde-api} /usr/lib/deepin-api grub2/modify_manger.go accounts/image_blur.go
     fixPath ${deepin-wallpapers} /usr/share/wallpapers appearance/background/list.go accounts/user.go
+    fixPath ${xkeyboard_config} /usr/share/X11/xkb inputdevices/layout_list.go
+
+    # TODO: deepin-system-monitor comes from dde-extra
 
     sed -i -e "s|{DESTDIR}/etc|{DESTDIR}$out/etc|" Makefile
     sed -i -e "s|{DESTDIR}/lib|{DESTDIR}$out/lib|" Makefile
@@ -111,13 +115,13 @@ buildGoPackage rec {
   postFixup = ''
     # wrapGAppsHook does not work with binaries outside of $out/bin or $out/libexec
     for binary in $out/lib/deepin-daemon/*; do
-      wrapProgram $binary "''${gappsWrapperArgs[@]}"
+      wrapGApp "$binary"
     done
 
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Daemon for handling Deepin Desktop Environment session settings";

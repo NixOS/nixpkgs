@@ -1,0 +1,16 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 0954ae6..a8299f7 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -162,11 +162,6 @@ int main(int argc, char* argv[]) {
+ 	INFO("Initializing app");
+ 	appInit();
+ 
+-	const char* openedFilename = glfwGetOpenedFilename();
+-	if (openedFilename) {
+-		patchPath = openedFilename;
+-	}
+-
+ 	if (!settings::headless) {
+ 		APP->patch->init(patchPath);
+ 	}

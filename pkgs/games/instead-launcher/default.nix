@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, instead, qmake4Hook, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "instead-launcher-${version}";
+  pname = "instead-launcher";
 
   version = "0.7.0";
 

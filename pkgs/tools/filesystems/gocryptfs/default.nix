@@ -2,13 +2,13 @@
 { stdenv, buildGoPackage, fetchFromGitHub, openssl, pandoc, pkgconfig }:
 
 let
-  version = "v1.6.1";
   goFuseVersion = with stdenv.lib; substring 0 7 (head (filter (
     d: d.goPackagePath == "github.com/hanwen/go-fuse"
   ) (import ./deps.nix))).fetch.rev;
 in
 buildGoPackage rec {
-  name = "gocryptfs-${version}";
+  pname = "gocryptfs";
+  version = "1.7.1";
 
   goPackagePath = "github.com/rfjakob/gocryptfs";
 
@@ -17,9 +17,9 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     owner = "rfjakob";
-    repo = "gocryptfs";
-    rev = version;
-    sha256 = "0aqbl25g48b4jp6l09k6kic6w3p0q7d9ip2wvrcvh8lhnrbdkhzd";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1zhzhvjhvi6xzib985bsnj9yzp4zsnm91m1679nbab6vm3kanq06";
   };
 
   postPatch = "rm -r tests";

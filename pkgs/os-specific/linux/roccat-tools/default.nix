@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "roccat-tools-${version}";
-  version = "5.8.0";
+  pname = "roccat-tools";
+  version = "5.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/roccat/${name}.tar.bz2";
-    sha256 = "0fr1ibgsyx756fz43hxq0cik51rkq1ymgimw8mz2d0jy63d7h48q";
+    url = "mirror://sourceforge/roccat/${pname}-${version}.tar.bz2";
+    sha256 = "12j02rzbz3iqxprz8cj4kcfcdgnqlva142ci177axqmckcq6crvg";
   };
 
   postPatch = ''

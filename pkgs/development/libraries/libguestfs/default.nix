@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
-, gmp, readline, file, numactl, xen, libapparmor
+, gmp, readline, file, numactl, xen, libapparmor, jansson
 , getopt, perlPackages, ocamlPackages
 , appliance ? null
 , javaSupport ? false, jdk ? null }:
@@ -10,17 +10,17 @@ assert appliance == null || stdenv.lib.isDerivation appliance;
 assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
-  name = "libguestfs-${version}";
-  version = "1.38.6";
+  pname = "libguestfs";
+  version = "1.40.2";
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/1.38-stable/libguestfs-${version}.tar.gz";
-    sha256 = "1v2mggx2jlaq4m3p5shc46gzf7vmaayha6r0nwdnyzd7x6q0is7p";
+    url = "http://libguestfs.org/download/1.40-stable/${pname}-${version}.tar.gz";
+    sha256 = "ad6562c48c38e922a314cb45a90996843d81045595c4917f66b02a6c2dfe8058";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
   buildInputs = [
-    makeWrapper autoreconfHook ncurses cpio gperf
+    ncurses cpio gperf jansson
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex
     numactl xen libapparmor getopt perlPackages.ModuleBuild
@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = appliance != null;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     export HOME=$(mktemp -d) # avoid access to /homeless-shelter/.guestfish
 
     ${qemu}/bin/qemu-img create -f qcow2 disk1.img 10G
@@ -77,12 +79,14 @@ stdenv.mkDerivation rec {
     mkfs ext2 /dev/sda1
     list-filesystems
     EOF
+
+    runHook postInstallCheck
   '';
 
   meta = with stdenv.lib; {
     description = "Tools for accessing and modifying virtual machine disk images";
-    license = licenses.gpl2;
-    homepage = http://libguestfs.org/;
+    license = with licenses; [ gpl2 lgpl21 ];
+    homepage = "http://libguestfs.org/";
     maintainers = with maintainers; [offline];
     platforms = platforms.linux;
   };

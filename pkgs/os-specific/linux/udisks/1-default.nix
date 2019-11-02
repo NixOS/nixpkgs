@@ -40,5 +40,7 @@ stdenv.mkDerivation rec {
     description = "A daemon and command-line utility for querying and manipulating storage devices";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2Plus ];
+    broken = true;
+    hydraPlatforms = [];
   };
 }

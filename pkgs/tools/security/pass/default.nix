@@ -4,6 +4,7 @@
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin
+, waylandSupport ? false, wl-clipboard ? null
 
 # For backwards-compatibility
 , tombPluginSupport ? false
@@ -14,6 +15,8 @@ with lib;
 assert x11Support -> xclip != null
                   && xdotool != null
                   && dmenu != null;
+
+assert waylandSupport -> wl-clipboard != null;
 
 let
   passExtensions = import ./extensions { inherit pkgs; };
@@ -30,15 +33,18 @@ let
 
   generic = extensionsEnv: extraPassthru: stdenv.mkDerivation rec {
     version = "1.7.3";
-    name    = "password-store-${version}";
+    pname = "password-store";
 
     src = fetchurl {
-      url    = "https://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
+      url    = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
       sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
     };
 
-    patches = [ ./set-correct-program-name-for-sleep.patch
-              ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
+    patches = [ ./set-correct-program-name-for-sleep.patch ]
+      ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch
+      # TODO (@Ma27) this patch adds support for wl-clipboard and can be removed during the next
+      # version bump.
+      ++ stdenv.lib.optional waylandSupport ./clip-wayland-support.patch;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -67,7 +73,8 @@ let
       qrencode
       procps
     ] ++ optional stdenv.isDarwin openssl
-      ++ ifEnable x11Support [ dmenu xclip xdotool ]);
+      ++ ifEnable x11Support [ dmenu xclip xdotool ]
+      ++ optional waylandSupport wl-clipboard);
 
     postFixup = ''
       # Link extensions env
@@ -120,7 +127,7 @@ let
       description = "Stores, retrieves, generates, and synchronizes passwords securely";
       homepage    = https://www.passwordstore.org/;
       license     = licenses.gpl2Plus;
-      maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher ];
+      maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher globin ];
       platforms   = platforms.unix;
 
       longDescription = ''

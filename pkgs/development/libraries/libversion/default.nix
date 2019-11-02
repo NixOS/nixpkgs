@@ -1,10 +1,8 @@
 { stdenv, fetchFromGitHub, cmake }:
 
-let
-  version = "2.8.1";
-in
-stdenv.mkDerivation {
-  name = "libversion-${version}";
+stdenv.mkDerivation rec {
+  pname = "libversion";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "repology";

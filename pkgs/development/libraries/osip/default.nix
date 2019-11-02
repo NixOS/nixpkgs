@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/osip/libosip2-${version}.tar.gz";
     sha256 = "0igic785fh458ck33kxb6i34l7bzdp9zpfjy5dxrcvv5gacklms0";
   };
-  name = "libosip2-${version}";
+  pname = "libosip2";
 
   meta = {
     license = stdenv.lib.licenses.lgpl21Plus;

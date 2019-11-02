@@ -134,7 +134,7 @@ rec {
   zlib = (pkgs.zlib.override {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideDerivation
-    (old: rec { 
+    (old: { 
       buildInputs = old.buildInputs ++ [ pkgconfig ];
       # we need to reset this setting!
       NIX_CFLAGS_COMPILE="";

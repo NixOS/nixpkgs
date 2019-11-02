@@ -4,7 +4,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "scalapack-${version}";
+  pname = "scalapack";
   version = "2.0.2";
 
   src = fetchurl {
@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
       -DBLAS_LIBRARIES="-lopenblas"
       )
   '';
+
+  # Increase individual test timeout from 1500s to 10000s because hydra's builds
+  # sometimes fail due to this
+  checkFlagsArray = [ "ARGS=--timeout 10000" ];
 
   preCheck = ''
     # make sure the test starts even if we have less than 4 cores

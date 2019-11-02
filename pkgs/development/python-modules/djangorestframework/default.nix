@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi, django }:
 buildPythonPackage rec {
-  version = "3.9.3";
+  version = "3.10.3";
   pname = "djangorestframework";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w1rc8cpw89sll5wsg1aj1w3klk91a1bsdz9y4zhg5xrc0qpd118";
+    sha256 = "140hwz52rlqqc10gbw5bhyyi4zbpqj3z7wgnh2jrhs2wfzwwp0fw";
   };
 
   # Test settings are missing

@@ -25,6 +25,7 @@ in
 
   config = mkIf cfg.enable {
     services.udev.packages = with pkgs; [ brightnessctl ];
+    environment.systemPackages = with pkgs; [ brightnessctl ];
   };
 
 }

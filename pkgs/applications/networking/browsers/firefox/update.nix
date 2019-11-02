@@ -1,5 +1,4 @@
 { writeScript
-, stdenv
 , lib
 , xidel
 , common-updater-scripts

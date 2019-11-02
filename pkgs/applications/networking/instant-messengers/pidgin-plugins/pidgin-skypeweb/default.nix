@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, pidgin, json-glib }:
 
 stdenv.mkDerivation rec {
-  name = "pidgin-skypeweb-${version}";
+  pname = "pidgin-skypeweb";
   version = "1.5";
 
   src = fetchFromGitHub {

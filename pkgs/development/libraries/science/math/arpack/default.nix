@@ -7,7 +7,8 @@ let
   version = "3.7.0";
 in
 stdenv.mkDerivation {
-  name = "arpack-${version}";
+  pname = "arpack";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "opencollab";

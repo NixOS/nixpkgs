@@ -9,6 +9,7 @@
 , pretend
 , flaky
 , glibcLocales
+, six
 }:
 
 with stdenv.lib;
@@ -46,6 +47,8 @@ let
     # These tests, we disable always.
     "test_set_default_verify_paths"
     "test_fallback_default_verify_paths"
+    # https://github.com/pyca/pyopenssl/issues/768
+    "test_wantWriteError"
   ] ++ (
     optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests
   ) ++ (
@@ -82,7 +85,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   nativeBuildInputs = [ openssl ];
-  propagatedBuildInputs = [ cryptography pyasn1 idna ];
+  propagatedBuildInputs = [ cryptography pyasn1 idna six ];
 
   checkInputs = [ pytest pretend flaky glibcLocales ];
 }

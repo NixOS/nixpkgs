@@ -1,12 +1,13 @@
 diff --git a/src/translations.cpp b/src/translations.cpp
-index 3a86291..e6c5f84 100644
+index 0068a35785..c8034cbeac 100644
 --- a/src/translations.cpp
 +++ b/src/translations.cpp
-@@ -176,15 +176,11 @@ void set_language()
- 
-     // Step 2. Bind to gettext domain.
-     std::string locale_dir;
--#if (defined __linux__ || (defined MACOSX && !defined TILES))
+@@ -202,14 +202,12 @@ void set_language()
+     auto env = getenv( "LANGUAGE" );
+     locale_dir = std::string( FILENAMES["base_path"] + "lang/mo/" + ( env ? env : "none" ) +
+                               "/LC_MESSAGES/cataclysm-dda.mo" );
+-#elif (defined(__linux__) || (defined(MACOSX) && !defined(TILES)))
++#else
      if( !FILENAMES["base_path"].empty() ) {
          locale_dir = FILENAMES["base_path"] + "share/locale";
      } else {
@@ -14,7 +15,6 @@ index 3a86291..e6c5f84 100644
      }
 -#else
 -    locale_dir = "lang/mo";
--#endif // __linux__
+ #endif
  
      const char *locale_dir_char = locale_dir.c_str();
-     bindtextdomain( "cataclysm-dda", locale_dir_char );

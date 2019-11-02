@@ -4,10 +4,11 @@
 let
   version = "2.2";
 in stdenv.mkDerivation rec {
-  name = "phodav-${version}";
+  pname = "phodav";
+  inherit version;
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/phodav/${version}/${name}.tar.xz";
+    url = "http://ftp.gnome.org/pub/GNOME/sources/phodav/${version}/${pname}-${version}.tar.xz";
     sha256 = "1hap0lncbcmivnflh0fbx7y58ry78p9wgj7z03r64ic0kvf0a0q8";
   };
 

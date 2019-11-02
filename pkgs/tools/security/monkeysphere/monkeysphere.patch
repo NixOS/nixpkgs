@@ -10,15 +10,6 @@ diff --git a/Makefile b/Makefile
  	-e 's:__SYSCONFDIR_PREFIX__:$(ETCPREFIX):' \
  	-e 's:__SYSDATADIR_PREFIX__:$(LOCALSTATEDIR):'
  
-diff --git a/src/share/checkperms b/src/share/checkperms
---- a/src/share/checkperms
-+++ b/src/share/checkperms
-@@ -1,4 +1,4 @@
--#!/usr/bin/perl -T
-+#!/usr/bin/perl
- 
- # checkperms: ensure as best we can that a given file can only be
- # modified by the given user (or the superuser, naturally).  This
 diff --git a/src/share/keytrans b/src/share/keytrans
 --- a/src/share/keytrans
 +++ b/src/share/keytrans
@@ -28,17 +19,5 @@ diff --git a/src/share/keytrans b/src/share/keytrans
  
  # keytrans: this is an RSA key translation utility; it is capable of
  # transforming RSA keys (both public keys and secret keys) between
-diff --git a/tests/basic b/tests/basic
---- a/tests/basic
-+++ b/tests/basic
-@@ -343,7 +340,7 @@ if [ "$MONKEYSPHERE_TEST_USE_ED25519" = true ]; then
-     echo "### generating ed25519 key for testuser..."
-     # from the imported secret key
-     USER_FPR=8A4B353B4CBA6F30625498BAE00B5EEEBA79B482
--    gpg --quick-add-key "$USER_FPR" ed25519 auth 2d
-+    gpg --no-tty --quick-add-key "$USER_FPR" ed25519 auth 2d
- else
-     echo "### generating standard monkeysphere key for testuser..."
-     monkeysphere gen-subkey
 -- 
 2.16.3

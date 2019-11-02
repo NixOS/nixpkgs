@@ -5,7 +5,7 @@ let
   pythonEnv = python2.withPackages(ps: with ps; [ sphinx ]);
   pname = "pyside-generatorrunner";
   version = "0.6.16";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {

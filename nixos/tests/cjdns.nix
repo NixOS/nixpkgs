@@ -23,8 +23,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ ehmry ];
   };
 
-  nodes = rec
-    { # Alice finds peers over over ETHInterface.
+  nodes = { # Alice finds peers over over ETHInterface.
       alice =
         { ... }:
         { imports = [ basicConfig ];

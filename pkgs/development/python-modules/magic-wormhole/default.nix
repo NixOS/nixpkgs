@@ -37,6 +37,10 @@ buildPythonPackage rec {
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
   '';
 
+  postInstall = ''
+    install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
+  '';
+
   preCheck = ''
     export PATH=$out/bin:$PATH
     export LANG="en_US.UTF-8"

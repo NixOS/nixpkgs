@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-desktop-base";
-  version = "2019.04.24";
+  version = "2019.06.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0mdfjkyjrccxlsg05mf80qcw8v5srlp80rvjkpnnbhfscq1fnpgn";
+    sha256 = "1r158x4z4qalv4q1ni3aln05krdzblvr7y6wyciwl7cr5ag1i1jy";
   };
 
   nativeBuildInputs = [ deepin.setupHook ];
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     ln -s ../lib/deepin/desktop-version $out/etc/deepin-version
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";

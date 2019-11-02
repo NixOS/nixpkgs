@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412
+{ stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412
 , libxslt, docbook_xsl, autoconf, automake, gettext, libiconv, libtool}:
 
 stdenv.mkDerivation {

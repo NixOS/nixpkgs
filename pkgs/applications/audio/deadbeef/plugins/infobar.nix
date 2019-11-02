@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, deadbeef, gtk3, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "deadbeef-infobar-plugin-${version}";
+  pname = "deadbeef-infobar-plugin";
   version = "1.4";
 
   src = fetchurl {
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "DeadBeeF Infobar Plugin";
+    broken = true; # crashes DeaDBeeF and is abandoned (https://bitbucket.org/dsimbiriatin/deadbeef-infobar/issues/38/infobar-causes-deadbeef-180-to-crash)
+    description = "DeaDBeeF Infobar Plugin";
     homepage = https://bitbucket.org/dsimbiriatin/deadbeef-infobar;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.jtojnar ];

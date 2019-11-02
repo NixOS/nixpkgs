@@ -1,22 +1,21 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, qttools,
   deepin-gettext-tools, dtkcore, dtkwidget, deepin
 }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dde-calendar";
-  version = "1.2.6";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0k973rv0prvr7cg1xwg7kr14fkx13aslhiqc3q7vpakfk53qsw4n";
+    sha256 = "00aqx24jccf88vvkpb9svyjz8knrqyjgd0152psf9dxc9q13f61h";
   };
 
   nativeBuildInputs = [
+    cmake
     pkgconfig
-    qmake
     qttools
     deepin-gettext-tools
     deepin.setupHook
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
       -e "s,/usr/bin/deepin-desktop-ts-convert,deepin-desktop-ts-convert,"
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Calendar for Deepin Desktop Environment";

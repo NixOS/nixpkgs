@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pymaging";
   version = "unstable-2016-11-16";
 

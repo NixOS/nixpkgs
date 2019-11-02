@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , pkgconfig, which, autoreconfHook
-, rep-gtk, pango, gdk_pixbuf
+, rep-gtk, pango, gdk-pixbuf
 , imlib, gettext, texinfo
 , libXinerama, libXrandr, libXtst, libICE, libSM
 , makeWrapper
@@ -10,7 +10,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
 
-  name = "sawfish-${version}";
+  pname = "sawfish";
   version = "1.12.90";
   sourceName = "sawfish_${version}";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ which
-    rep-gtk pango gdk_pixbuf imlib gettext texinfo
+    rep-gtk pango gdk-pixbuf imlib gettext texinfo
     libXinerama libXrandr libXtst libICE libSM
     makeWrapper ];
 

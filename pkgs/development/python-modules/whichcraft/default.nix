@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "whichcraft";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fecddd531f237ffc5db8b215409afb18fa30300699064cca4817521b4fc81815";
+    sha256 = "11yfkzyplizdgndy34vyd5qlmr1n5mxis3a3svxmx8fnccdvknxc";
   };
 
   LC_ALL="en_US.utf-8";

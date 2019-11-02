@@ -32,7 +32,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "snapcast-${version}";
+  pname = "snapcast";
   version = "0.15.0";
 
   src = fetchFromGitHub {

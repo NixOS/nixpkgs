@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libconfuse, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "genimage-${version}";
+  pname = "genimage";
   version = "9";
 
   src = fetchurl {

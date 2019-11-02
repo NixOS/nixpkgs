@@ -8,8 +8,8 @@ let
   pyEnv = python.withPackages(ps: [ ps.setuptools ]);
 in
 stdenv.mkDerivation rec {
-  name = "mininet-${version}";
-  version = "2.3.0d4";
+  pname = "mininet";
+  version = "2.3.0d6";
 
   outputs = [ "out" "py" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "mininet";
     repo = "mininet";
     rev = version;
-    sha256 = "02hsqa7r5ykj8m1ycl32xwn1agjrw78wkq87xif0dl2vkzln41i4";
+    sha256 = "0wc6gni9dxj9jjnw66a28jdvcfm8bxv1i776m5dh002bn5wjcl6x";
   };
 
   buildFlags = [ "mnexec" ];
@@ -40,8 +40,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Emulator for rapid prototyping of Software Defined Networks";
     license = {
-      fullName = "Mininet 2.3.0d4 License";
+      fullName = "Mininet 2.3.0d6 License";
     };
+    platforms = platforms.linux;
     homepage = https://github.com/mininet/mininet;
     maintainers = with maintainers; [ teto ];
   };

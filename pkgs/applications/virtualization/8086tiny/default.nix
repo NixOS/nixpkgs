@@ -4,9 +4,9 @@
 
 assert sdlSupport -> (SDL != null);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "8086tiny-${version}";
+  pname = "8086tiny";
   version = "1.25";
 
   src = fetchurl {

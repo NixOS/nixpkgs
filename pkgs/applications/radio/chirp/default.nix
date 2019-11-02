@@ -3,16 +3,16 @@
 
 stdenv.mkDerivation rec {
   pname = "chirp-daily";
-  version = "20190304";
+  version = "20190925";
 
   src = fetchurl {
     url = "https://trac.chirp.danplanet.com/chirp_daily/daily-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1m18f7j0bdimp0fvs5ms02amd5pzis581hqn38y8qffny4y9f6ij";
+    sha256 = "0immgss7nj7395r3csiypksnbn1r2f3j45c5v8qpybz65lpbplps";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    pyserial pygtk libxml2Python libxslt pyserial
+    pyserial pygtk libxml2Python libxslt
   ];
 
   installPhase = ''

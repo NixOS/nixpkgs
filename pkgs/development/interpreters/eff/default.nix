@@ -4,7 +4,8 @@ let version = "5.0"; in
 
 stdenv.mkDerivation {
 
-  name = "eff-${version}";
+  pname = "eff";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "matijapretnar";

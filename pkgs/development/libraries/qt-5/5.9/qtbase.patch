@@ -994,28 +994,6 @@ index 9a24938284..74962b4ae2 100644
          if (!lib.load())
              return false;
      }
-diff --git a/src/network/ssl/qsslcontext_openssl.cpp b/src/network/ssl/qsslcontext_openssl.cpp
-index c92d8fc3f8..6008063bcf 100644
---- a/src/network/ssl/qsslcontext_openssl.cpp
-+++ b/src/network/ssl/qsslcontext_openssl.cpp
-@@ -351,7 +351,7 @@ init_context:
- 
-     const QVector<QSslEllipticCurve> qcurves = sslContext->sslConfiguration.ellipticCurves();
-     if (!qcurves.isEmpty()) {
--#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(OPENSSL_NO_EC)
-+#if OPENSSL_VERSION_NUMBER >= 0x10002000L && defined(SSL_CTRL_SET_CURVES) && !defined(OPENSSL_NO_EC)
-         // Set the curves to be used
-         if (q_SSLeay() >= 0x10002000L) {
-             // SSL_CTX_ctrl wants a non-const pointer as last argument,
-@@ -364,7 +364,7 @@ init_context:
-                 sslContext->errorCode = QSslError::UnspecifiedError;
-             }
-         } else
--#endif // OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(OPENSSL_NO_EC)
-+#endif // OPENSSL_VERSION_NUMBER >= 0x10002000L && defined(SSL_CTRL_SET_CURVES) && !defined(OPENSSL_NO_EC)
-         {
-             // specific curves requested, but not possible to set -> error
-             sslContext->errorStr = msgErrorSettingEllipticCurves(QSslSocket::tr("OpenSSL version too old, need at least v1.0.2"));
 diff --git a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 index b5a0a5bbeb..6c20305f4d 100644
 --- a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp

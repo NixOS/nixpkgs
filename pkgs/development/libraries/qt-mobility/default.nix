@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
-  name = "qt-mobility-${version}";
+  pname = "qt-mobility";
   src = fetchFromGitHub {
     owner = "qtproject";
     repo = "qt-mobility";

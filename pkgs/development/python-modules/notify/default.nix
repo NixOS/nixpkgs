@@ -6,8 +6,8 @@
 , pkgs
 }:
 
-stdenv.mkDerivation rec {
-  name = "python-notify-${version}";
+stdenv.mkDerivation {
+  pname = "python-notify";
   version = "0.1.1";
 
   src = fetchurl {

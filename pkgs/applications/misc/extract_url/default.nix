@@ -10,7 +10,7 @@ let
     ++ lib.optional uriFindSupport perlPackages.URIFind;
 
 in stdenv.mkDerivation rec {
-  name = "extract_url-${version}";
+  pname = "extract_url";
   version = "1.6.2";
 
   src = fetchFromGitHub {

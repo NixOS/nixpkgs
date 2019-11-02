@@ -3,7 +3,8 @@
 let
   version = "2.9.2";
 in stdenv.mkDerivation {
-  name = "http-parser-${version}";
+  pname = "http-parser";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "nodejs";

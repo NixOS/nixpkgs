@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libxcb, xcbutil, xcbutilwm, git }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
    name = "xtitle-0.4.4";
 
    src = fetchurl {

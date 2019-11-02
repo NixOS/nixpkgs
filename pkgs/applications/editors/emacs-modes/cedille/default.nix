@@ -1,7 +1,7 @@
 { stdenv, cedille, emacs }:
 
-stdenv.mkDerivation rec {
-  name    = "cedille-mode-${version}";
+stdenv.mkDerivation {
+  pname = "cedille-mode";
   version = cedille.version;
 
   src = cedille.src;

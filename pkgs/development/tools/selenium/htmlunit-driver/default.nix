@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "htmlunit-driver-standalone-${version}";
+  pname = "htmlunit-driver-standalone";
   version = "2.27";
 
   src = fetchurl {
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1sd3cwpamcbq9pv0mvcm8x6minqrlb4i0r12q3jg91girqswm2dp";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
-  installPhase = "install -D $src $out/share/lib/${name}/${name}.jar";
+  installPhase = "install -D $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar";
 
   meta = {
     homepage = https://github.com/SeleniumHQ/htmlunit-driver;

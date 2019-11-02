@@ -5,10 +5,9 @@
 buildPythonPackage rec {
   pname = "seqdiag";
   version = "0.9.6";
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "mirror://pypi/s/seqdiag/${name}.tar.gz";
+    url = "mirror://pypi/s/seqdiag/${pname}-${version}.tar.gz";
     sha256 = "78104e7644c1a4d3a5cacb68de6a7f720793f08dd78561ef0e9e80bed63702bf";
   };
 

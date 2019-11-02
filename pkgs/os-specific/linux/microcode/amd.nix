@@ -1,6 +1,6 @@
 { stdenv, firmwareLinuxNonfree, libarchive }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "amd-ucode-${firmwareLinuxNonfree.version}";
 
   src = firmwareLinuxNonfree;

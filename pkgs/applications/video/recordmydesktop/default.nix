@@ -2,7 +2,7 @@
 , libICE, libSM, libX11, libXext, libXfixes, libXdamage }:
 
 stdenv.mkDerivation rec {
-  name = "recordmydesktop-${version}";
+  pname = "recordmydesktop";
   version = "0.3.8.1-svn${rev}";
   rev = "602";
 

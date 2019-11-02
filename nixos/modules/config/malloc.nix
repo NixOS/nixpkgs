@@ -6,7 +6,7 @@ let
 
   # The set of alternative malloc(3) providers.
   providers = {
-    "graphene-hardened" = rec {
+    graphene-hardened = {
       libPath = "${pkgs.graphene-hardened-malloc}/lib/libhardened_malloc.so";
       description = ''
         An allocator designed to mitigate memory corruption attacks, such as
@@ -14,16 +14,25 @@ let
       '';
     };
 
-    "jemalloc" = {
+    jemalloc = {
       libPath = "${pkgs.jemalloc}/lib/libjemalloc.so";
       description = ''
         A general purpose allocator that emphasizes fragmentation avoidance
         and scalable concurrency support.
       '';
     };
+
+    scudo = {
+      libPath = "${pkgs.llvmPackages.compiler-rt}/lib/linux/libclang_rt.scudo-x86_64.so";
+      description = ''
+        A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
+        which aims at providing additional mitigations against heap based
+        vulnerabilities, while maintaining good performance.
+      '';
+    };
   };
 
-  providerConf = providers."${cfg.provider}";
+  providerConf = providers.${cfg.provider};
 
   # An output that contains only the shared library, to avoid
   # needlessly bloating the system closure
@@ -54,9 +63,7 @@ in
       default = "libc";
       description = ''
         The system-wide memory allocator.
-        </para>
 
-        <para>
         Briefly, the system-wide memory allocator providers are:
         <itemizedlist>
         <listitem><para><literal>libc</literal>: the standard allocator provided by libc</para></listitem>
@@ -64,7 +71,6 @@ in
             (name: value: "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
             providers)}
         </itemizedlist>
-        </para>
 
         <warning>
         <para>
@@ -73,19 +79,13 @@ in
         and/or service failure.
         </para>
         </warning>
-
-        <note>
-        <para>
-        Changing this option does not affect the current session.
-        </para>
-        </note>
-
-        <para>
       '';
     };
   };
 
   config = mkIf (cfg.provider != "libc") {
-    environment.variables.LD_PRELOAD = providerLibPath;
+    environment.etc."ld-nix.so.preload".text = ''
+      ${providerLibPath}
+    '';
   };
 }

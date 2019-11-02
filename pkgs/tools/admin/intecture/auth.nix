@@ -4,7 +4,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "intecture-auth-${version}";
+  pname = "intecture-auth";
   version = "0.1.2";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ buildRustPackage rec {
     sha256 = "0c7ar3pc7n59lzfy74lwz51p09s2bglc870rfr4c0vmc91jl0pj2";
   };
 
-  cargoSha256 = "0q3mrcvl1yyrx4a88kanjlfcx6slf7r79i0dh4w81sj6gp07sssm";
+  cargoSha256 = "1rnhhb4mpf1j7c7a2pz4741hzbf2s2wb0bm25j049n64j49j3jq8";
 
   buildInputs = [ openssl zeromq czmq zlib ];
 

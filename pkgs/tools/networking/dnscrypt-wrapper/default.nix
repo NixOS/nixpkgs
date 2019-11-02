@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libsodium, libevent }:
 
 stdenv.mkDerivation rec {
-  name = "dnscrypt-wrapper-${version}";
+  pname = "dnscrypt-wrapper";
   version = "0.4.2";
 
   src = fetchFromGitHub {

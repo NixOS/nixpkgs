@@ -3,7 +3,8 @@
 let
   version = "0.10.1";
   drv = stdenv.mkDerivation {
-    name = "keeagent-${version}";
+    pname = "keeagent";
+    inherit version;
 
     src = fetchzip {
       url = "https://lechnology.com/wp-content/uploads/2018/04/KeeAgent_v0.10.1.zip";

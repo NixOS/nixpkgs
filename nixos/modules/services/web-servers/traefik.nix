@@ -67,7 +67,7 @@ in {
 
     group = mkOption {
       default = "traefik";
-      type = types.string;
+      type = types.str;
       example = "docker";
       description = ''
         Set the group that traefik runs under.
@@ -117,6 +117,7 @@ in {
       group = "traefik";
       home = cfg.dataDir;
       createHome = true;
+      isSystemUser = true;
     };
 
     users.groups.traefik = {};

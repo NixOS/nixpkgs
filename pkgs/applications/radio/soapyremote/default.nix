@@ -4,7 +4,8 @@ let
   version = "0.5.1";
 
 in stdenv.mkDerivation {
-  name = "soapyremote-${version}";
+  pname = "soapyremote";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";

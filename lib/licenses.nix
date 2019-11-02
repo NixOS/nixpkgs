@@ -7,7 +7,7 @@ let
 
 in
 
-lib.mapAttrs (n: v: v // { shortName = n; }) rec {
+lib.mapAttrs (n: v: v // { shortName = n; }) {
   /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.
@@ -218,9 +218,9 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Common Public License 1.0";
   };
 
-  curl = {
-    fullName = "MIT/X11 derivate";
-    url = "https://curl.haxx.se/docs/copyright.html";
+  curl = spdx {
+    spdxId = "curl";
+    fullName = "curl License";
   };
 
   doc = spdx {
@@ -434,12 +434,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   lgpl21 = spdx {
     spdxId = "LGPL-2.1-only";
-    fullName = "GNU Library General Public License v2.1 only";
+    fullName = "GNU Lesser General Public License v2.1 only";
   };
 
   lgpl21Plus = spdx {
     spdxId = "LGPL-2.1-or-later";
-    fullName = "GNU Library General Public License v2.1 or later";
+    fullName = "GNU Lesser General Public License v2.1 or later";
   };
 
   lgpl3 = spdx {
@@ -457,9 +457,9 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "libpng License";
   };
 
-  libpng2 = {
-    fullName = "libpng License v2"; # 1.6.36+
-    url = "http://www.libpng.org/pub/png/src/libpng-LICENSE.txt";
+  libpng2 = spdx {
+    spdxId = "libpng-2.0"; # Used since libpng 1.6.36.
+    fullName = "PNG Reference Library version 2";
   };
 
   libtiff = spdx {
@@ -611,6 +611,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   purdueBsd = {
     fullName = " Purdue BSD-Style License"; # also know as lsof license
     url = https://enterprise.dejacode.com/licenses/public/purdue-bsd;
+  };
+
+  qhull = spdx {
+    spdxId = "Qhull";
+    fullName = "Qhull License";
   };
 
   qpl = spdx {

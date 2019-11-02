@@ -1,9 +1,9 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, zlib, xorg, dbus, virtualbox }:
+, zlib, xorg, dbus, virtualbox, dos2unix }:
 
 let
   version = virtualbox.version;
-  xserverVListFunc = builtins.elemAt (stdenv.lib.splitString "." xorg.xorgserver.version);
+  xserverVListFunc = builtins.elemAt (stdenv.lib.splitVersion xorg.xorgserver.version);
 
   # Forced to 1.18 in <nixpkgs/nixos/modules/services/x11/xserver.nix>
   # as it even fails to build otherwise.  Still, override this even here,
@@ -12,21 +12,25 @@ let
   # It's likely to work again in some future update.
   xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
     in if abi == "119" || abi == "120" then "118" else abi;
-in
 
-stdenv.mkDerivation {
+  # Specifies how to patch binaries to make sure that libraries loaded using
+  # dlopen are found. We grep binaries for specific library names and patch
+  # RUNPATH in matching binaries to contain the needed library paths.
+  dlopenLibs = [
+    { name = "libdbus-1.so"; pkg = dbus; }
+    { name = "libXfixes.so"; pkg = xorg.libXfixes; }
+  ];
+
+in stdenv.mkDerivation {
   name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "1srcsf9264l5yxbq2x83z66j38blbfrywq5lkzwb5kih6sv548c3";
+    sha256 = "0hflsbx70dli34mpx94vd33p55ycfs3ahzwcdzqxdiwiiskjpykq";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
-
-  # If you add a patch you probably need this.
-  #patchFlags = [ "-p1" "-d" "install/src/vboxguest-${version}" ];
 
   hardeningDisable = [ "pic" ];
 
@@ -35,10 +39,24 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [ cdrkit ] ++ kernel.moduleBuildDependencies;
 
+
+  prePatch = ''
+    substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
+      --replace "<ttm/" "<drm/ttm/"
+    ${dos2unix}/bin/dos2unix src/vboxguest-${version}/vboxguest/r0drv/linux/mp-r0drv-linux.c
+  '';
+
+  patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
+  # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
+  # https://www.virtualbox.org/ticket/18911
+  patches = [ ./kernel-5.3-fix.patch ];
+
   unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
         isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
         chmod 755 ./VBoxLinuxAdditions.run
+        # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
+        sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
         ./VBoxLinuxAdditions.run --noexec --keep
       ''
       else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
@@ -55,8 +73,6 @@ stdenv.mkDerivation {
       else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
     }
   '';
-
-  doConfigure = false;
 
   buildPhase = ''
     # Build kernel modules.
@@ -107,11 +123,17 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/VBoxClient-all \
             --prefix PATH : "${which}/bin"
 
-    # Install OpenGL libraries
-    mkdir -p $out/lib
-    cp -v lib/VBoxOGL*.so $out/lib
-    mkdir -p $out/lib/dri
-    ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
+    # Don't install VBoxOGL for now
+    # It seems to be broken upstream too, and fixing it is far down the priority list:
+    # https://www.virtualbox.org/pipermail/vbox-dev/2017-June/014561.html
+    # Additionally, 3d support seems to rely on VBoxOGL.so being symlinked from
+    # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
+    # either. (#18457)
+    ## Install OpenGL libraries
+    #mkdir -p $out/lib
+    #cp -v lib/VBoxOGL*.so $out/lib
+    #mkdir -p $out/lib/dri
+    #ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
 
     # Install desktop file
     mkdir -p $out/share/autostart
@@ -125,13 +147,13 @@ stdenv.mkDerivation {
   # Stripping breaks these binaries for some reason.
   dontStrip = true;
 
-  # Some code dlopen() libdbus, patch RUNPATH in fixupPhase so it isn't stripped.
-  postFixup = ''
-    for i in $(grep -F libdbus-1.so -l -r $out/{lib,bin}); do
+  # Patch RUNPATH according to dlopenLibs (see the comment there).
+  postFixup = lib.concatMapStrings (library: ''
+    for i in $(grep -F ${lib.escapeShellArg library.name} -l -r $out/{lib,bin}); do
       origRpath=$(patchelf --print-rpath "$i")
-      patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ dbus ]}" "$i"
+      patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ library.pkg ]}" "$i"
     done
-  '';
+  '') dlopenLibs;
 
   meta = {
     description = "Guest additions for VirtualBox";

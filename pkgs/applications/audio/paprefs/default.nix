@@ -1,4 +1,14 @@
-{ fetchurl, stdenv, meson, ninja, gettext, pkgconfig, pulseaudioFull, gtkmm3, dbus-glib, wrapGAppsHook }:
+{ fetchurl
+, stdenv
+, meson
+, ninja
+, gettext
+, pkgconfig
+, pulseaudioFull
+, glibmm
+, gtkmm3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   name = "paprefs-1.1";
@@ -8,9 +18,19 @@ stdenv.mkDerivation rec {
     sha256 = "189z5p20hk0xv9vwvym293503j4pwl03xqk9hl7cl6dwgv0l7wkf";
   };
 
-  nativeBuildInputs = [ meson ninja gettext pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    pkgconfig
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ pulseaudioFull gtkmm3 dbus-glib ];
+  buildInputs = [
+    pulseaudioFull
+    glibmm
+    gtkmm3
+  ];
 
   meta = with stdenv.lib; {
     description = "PulseAudio Preferences";

@@ -3,8 +3,9 @@
 , ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "msgpack-${version}";
+stdenv.mkDerivation {
+  pname = "msgpack";
+  inherit version;
 
   inherit src patches;
 

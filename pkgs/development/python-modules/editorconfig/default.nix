@@ -5,17 +5,20 @@
 }:
 
 buildPythonPackage rec {
-  pname = "EditorConfig";
-  version = "0.12.1";
+  pname = "editorconfig";
+  version = "0.12.2";
 
   # fetchgit used to ensure test submodule is available
   src = fetchgit {
     url = "https://github.com/editorconfig/editorconfig-core-py";
-    rev = "refs/tags/v${version}";
-    sha256 = "0svk7id7ncygj2rnxhm7602xizljyidk4xgrl6i0xgq3829cz4bl";
+    rev = "596da5e06ebee05bdbdc6224203c79c4d3c6486a"; # Not tagged
+    sha256 = "05cbp971b0zix7kfxkk7ndxb4ax1l21frwc00d4g78mk4sdz6dig";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  dontUseCmakeConfigure = true;
+
   checkPhase = ''
     cmake .
     # utf_8_char fails with python3

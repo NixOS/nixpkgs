@@ -1,30 +1,26 @@
 { stdenv, fetchFromGitHub, pkgconfig
-, buildGoPackage, gpgme, lvm2, btrfs-progs, libseccomp
+, buildGoPackage, gpgme, lvm2, btrfs-progs, libseccomp, systemd
 , go-md2man
 }:
 
 buildGoPackage rec {
-  name = "podman-${version}";
-  version = "1.2.0";
+  pname = "podman";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
-    owner = "containers";
-    repo = "libpod";
-    rev = "v${version}";
-    sha256 = "1nlll4q62w3i897wraj18pdi5cc91b8gmp360pzyqzzjdm9ag7v6";
+    owner  = "containers";
+    repo   = "libpod";
+    rev    = "v${version}";
+    sha256 = "0cwyrzjjgxclnzc1yx6vm2bvq73mldwxfwalkprzlg8vpqbxji8y";
   };
 
   goPackagePath = "github.com/containers/libpod";
 
   outputs = [ "bin" "out" "man" ];
 
-  # Optimizations break compilation of libseccomp c bindings
-  hardeningDisable = [ "fortify" ];
   nativeBuildInputs = [ pkgconfig go-md2man ];
 
-  buildInputs = [
-    btrfs-progs libseccomp gpgme lvm2
-  ];
+  buildInputs = [ btrfs-progs libseccomp gpgme lvm2 systemd ];
 
   buildPhase = ''
     pushd $NIX_BUILD_TOP/go/src/${goPackagePath}
@@ -41,7 +37,7 @@ buildGoPackage rec {
     homepage = https://podman.io/;
     description = "A program for managing pods, containers and container images";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [ vdemeester saschagrunert ];
     platforms = platforms.linux;
   };
 }

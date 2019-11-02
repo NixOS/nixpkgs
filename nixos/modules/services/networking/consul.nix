@@ -15,7 +15,7 @@ let
     ++ cfg.extraConfigFiles;
 
   devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
-  systemdDevices = flip map devices
+  systemdDevices = forEach devices
     (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
 in
 {
@@ -156,7 +156,7 @@ in
   config = mkIf cfg.enable (
     mkMerge [{
 
-      users.users."consul" = {
+      users.users.consul = {
         description = "Consul agent daemon user";
         uid = config.ids.uids.consul;
         # The shell is needed for health checks

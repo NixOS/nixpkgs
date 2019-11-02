@@ -11,7 +11,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "frab-2016-12-28";
 
   src = fetchFromGitHub {

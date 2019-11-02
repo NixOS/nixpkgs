@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "herwig-${version}";
+  pname = "herwig";
   version = "7.1.5";
 
   src = fetchurl {

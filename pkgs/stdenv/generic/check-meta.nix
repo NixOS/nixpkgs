@@ -7,6 +7,7 @@ let
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
+  getName = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
 
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
@@ -107,23 +108,23 @@ let
         You can install it anyway by whitelisting this package, using the
         following methods:
 
-        a) for `nixos-rebuild` you can add ‘${attrs.name or "«name-missing»"}’ to
+        a) for `nixos-rebuild` you can add ‘${getName attrs}’ to
            `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
            like so:
 
              {
                nixpkgs.config.permittedInsecurePackages = [
-                 "${attrs.name or "«name-missing»"}"
+                 "${getName attrs}"
                ];
              }
 
         b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-        ‘${attrs.name or "«name-missing»"}’ to `permittedInsecurePackages` in
+        ‘${getName attrs}’ to `permittedInsecurePackages` in
         ~/.config/nixpkgs/config.nix, like so:
 
              {
                permittedInsecurePackages = [
-                 "${attrs.name or "«name-missing»"}"
+                 "${getName attrs}"
                ];
              }
 
@@ -134,9 +135,9 @@ let
       actualOutputs = attrs.outputs or [ "out" ];
       missingOutputs = builtins.filter (output: ! builtins.elem output actualOutputs) expectedOutputs;
     in ''
-      The package ${attrs.name} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
+      The package ${getName attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
 
-      however ${attrs.name} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
+      however ${getName attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
 
       and is missing the following ouputs:
 
@@ -146,13 +147,13 @@ let
   handleEvalIssue = { meta, attrs }: { reason , errormsg ? "" }:
     let
       msg = if inHydra
-        then "Failed to evaluate ${attrs.name or "«name-missing»"}: «${reason}»: ${errormsg}"
+        then "Failed to evaluate ${getName attrs}: «${reason}»: ${errormsg}"
         else ''
-          Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
+          Package ‘${getName attrs}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
 
         '' + (builtins.getAttr reason remediation) attrs;
 
-      handler = if config ? "handleEvalIssue"
+      handler = if config ? handleEvalIssue
         then config.handleEvalIssue reason
         else throw;
     in handler msg;
@@ -169,7 +170,7 @@ let
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
     maintainers = listOf (attrsOf str);
     priority = int;
-    platforms = listOf (either str lib.systems.parsedPlatform.types.system);
+    platforms = listOf str;
     hydraPlatforms = listOf str;
     broken = bool;
     # TODO: refactor once something like Profpatsch's types-simple will land
@@ -210,11 +211,6 @@ let
     else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
   checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
-  checkPlatform = attrs: let
-      anyMatch = lib.any (lib.meta.platformMatch hostPlatform);
-    in  anyMatch (attrs.meta.platforms or lib.platforms.all) &&
-      ! anyMatch (attrs.meta.badPlatforms or []);
-
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
       actualOutputs = attrs.outputs or [ "out" ];
@@ -236,8 +232,10 @@ let
       { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
-    else if !allowUnsupportedSystem && !(checkPlatform attrs) then
-      { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.config}’"; }
+    else if !allowUnsupportedSystem &&
+            (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
+              lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or [])) then
+      { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
     else if checkOutputsToInstall attrs then

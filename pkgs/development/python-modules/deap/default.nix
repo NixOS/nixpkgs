@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "deap";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95c63e66d755ec206c80fdb2908851c0bef420ee8651ad7be4f0578e9e909bcf";
+    sha256 = "102r11pxb36xkq5bjv1lpkss77v278f5xdv6lvkbjdvqryydf3yd";
   };
 
   propagatedBuildInputs = [ numpy matplotlib ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "DEAP is a novel evolutionary computation framework for rapid prototyping and testing of ideas.";
-    homepage = https://github.com/DEAP/deap;
+    homepage = "https://github.com/DEAP/deap";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ psyanticy ];
   };

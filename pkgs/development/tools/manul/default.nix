@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   name = "manul-unstable-2016-09-30";
 
   goPackagePath = "github.com/kovetskiy/manul";

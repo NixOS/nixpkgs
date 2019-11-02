@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "moderngl";
-  version = "5.5.0";
+  version = "5.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x8xblc3zybp7jw9cscpm4r5pmmilj9l4yi1rkxyf0y80kchlxq4";
+    sha256 = "1k2yf2yglzx65gcv2bqql6w6lmgyp3f1jz4ddq9vylf09a8j7fga";
   };
 
   disabled = !isPy3k;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/cprogrammer1994/ModernGL;
+    homepage = https://github.com/moderngl/moderngl;
     description = "High performance rendering for Python 3";
     license = licenses.mit;
     platforms = platforms.linux; # should be mesaPlatforms, darwin build breaks.

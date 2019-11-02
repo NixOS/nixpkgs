@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "libamqpcpp-${version}";
+  pname = "libamqpcpp";
   version = "4.1.3";
 
   src = fetchFromGitHub {

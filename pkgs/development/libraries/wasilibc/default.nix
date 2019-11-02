@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation {
-  name = "wasilibc-20190413";
+  name = "wasilibc-20190712";
   src = fetchFromGitHub {
     owner = "CraneStation";
-    repo = "wasi-sysroot";
-    rev = "079d7bda78bc0ad8f69c1594444b54786545ce57";
-    sha256 = "09s906bc9485wzkgibnpfh0mii7jkldzr1a6g8k7ch0si8rshi5r";
+    repo = "wasi-libc";
+    rev = "8df0d4cd6a559b58d4a34b738a5a766b567448cf";
+    sha256 = "1n4gvgzacpagar2mx8g9950q0brnhwz7jg2q44sa5mnjmlnkiqhh";
   };
   makeFlags = [
     "WASM_CC=${stdenv.cc.targetPrefix}cc"

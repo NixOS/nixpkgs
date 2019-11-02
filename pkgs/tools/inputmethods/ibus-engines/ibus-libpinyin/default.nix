@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-libpinyin-${version}";
+  pname = "ibus-libpinyin";
   version = "1.10.0";
 
   src = fetchFromGitHub {

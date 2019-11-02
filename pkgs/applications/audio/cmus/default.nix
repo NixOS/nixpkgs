@@ -101,7 +101,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "cmus-${version}";
+  pname = "cmus";
   version = "2.8.0";
 
   src = fetchFromGitHub {

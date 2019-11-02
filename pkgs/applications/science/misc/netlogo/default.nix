@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "netlogo-${version}";
+  pname = "netlogo";
   version = "6.0.4";
 
   src = fetchurl {

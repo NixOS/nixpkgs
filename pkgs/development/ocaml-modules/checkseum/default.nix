@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   inherit (dune) installPhase;
 
+  passthru = { inherit hasC; };
+
   meta = {
     homepage = "https://github.com/mirage/checkseum";
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";

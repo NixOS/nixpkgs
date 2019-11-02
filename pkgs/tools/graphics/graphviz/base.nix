@@ -24,8 +24,9 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
-  name = "graphviz-${version}";
+stdenv.mkDerivation {
+  pname = "graphviz";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "graphviz";

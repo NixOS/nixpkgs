@@ -35,7 +35,7 @@ python2.pkgs.buildPythonApplication rec {
     '';
     homepage = https://gnometerminator.blogspot.no/p/introduction.html;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ bjornfor globin ];
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;
   };
 }

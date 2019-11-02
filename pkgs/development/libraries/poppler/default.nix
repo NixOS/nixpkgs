@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
+{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkgconfig, libiconv, libintl
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -20,6 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-9959.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/commit/68ef84e5968a4249c2162b839ca6d7975048a557.patch";
+      sha256 = "17a3qs74fnnrhjys23f4aw5y7yfsk5d507jcj4hh1bndqv6dpwg1";
+    })
+  ];
 
   buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;
 

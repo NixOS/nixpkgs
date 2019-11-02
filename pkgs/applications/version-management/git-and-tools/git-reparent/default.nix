@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, git, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "git-reparent-${version}";
+  pname = "git-reparent";
   version = "unstable-2017-09-03";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl, lib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "python27-docs-html-2.7.16";
   src = fetchurl {
     url = http://docs.python.org/ftp/python/doc/2.7.16/python-2.7.16-docs-html.tar.bz2;

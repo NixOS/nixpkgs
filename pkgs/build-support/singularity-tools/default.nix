@@ -37,8 +37,7 @@ rec {
     contents ? [],
     diskSize ? 1024,
     runScript ? "#!${stdenv.shell}\nexec /bin/sh",
-    runAsRoot ? null,
-    extraSpace ? 0
+    runAsRoot ? null
   }:
     let layer = mkLayer {
           inherit name;

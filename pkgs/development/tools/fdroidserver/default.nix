@@ -4,14 +4,14 @@
 , lib }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.1.1";
+  version = "1.1.5";
   pname = "fdroidserver";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = version;
-    sha256 = "0m618rvjh8h8hnbafrxsdkw8m5r2wnkz7whqnh60jh91h3yr0kzs";
+    sha256 = "1wpwv5gbwrjs03fmr6d81268k6gzjgr86swzgb8nfj48955iw193";
   };
 
   patchPhase = ''

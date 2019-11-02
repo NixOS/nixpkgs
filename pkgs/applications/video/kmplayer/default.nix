@@ -10,7 +10,7 @@ mkDerivation rec {
   majorMinorVersion = "0.12";
   patchVersion = "0b";
   version = "${majorMinorVersion}.${patchVersion}";
-  name = "kmplayer-${version}";
+  pname = "kmplayer";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmplayer/${majorMinorVersion}/kmplayer-${version}.tar.bz2";

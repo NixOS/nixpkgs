@@ -1,4 +1,4 @@
-{ lib, bundlerApp, fetchurl, ruby }:
+{ lib, bundlerApp, fetchurl, bundlerUpdateScript }:
 
 let
   LIB_PG_QUERY_TAG = "10-1.0.1";
@@ -10,7 +10,6 @@ let
 in bundlerApp {
   pname = "sqlint";
   gemdir = ./.;
-  inherit ruby;
 
   exes = [ "sqlint" ];
 
@@ -24,11 +23,13 @@ in bundlerApp {
     };
   };
 
+  passthru.updateScript = bundlerUpdateScript "sqlint";
+
   meta = with lib; {
     description = "Simple SQL linter";
     homepage    = https://github.com/purcell/sqlint;
     license     = licenses.mit;
-    maintainers = with maintainers; [ ariutta ];
+    maintainers = with maintainers; [ ariutta nicknovitski ];
     platforms   = with platforms; [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

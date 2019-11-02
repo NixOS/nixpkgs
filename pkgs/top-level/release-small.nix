@@ -14,7 +14,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
     officialRelease = false;
   };
 
-} // (mapTestOn (rec {
+} // (mapTestOn ({
 
   aspell = all;
   at = linux;

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
-, gd, geoip
+{ stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
+, gd, geoip, gperftools, jemalloc
 , withDebug ? false
 , withMail ? false
-, withIPv6 ? true
+, withStream ? false
 , modules ? []
 , ...
 }:
@@ -10,17 +10,23 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.2.3";
-  name = "tengine-${version}";
+  version = "2.3.2";
+  pname = "tengine";
 
-  src = fetchurl {
-    url = "https://github.com/alibaba/tengine/archive/${version}.tar.gz";
-    sha256 = "0x12mfs0q7lihpl335ad222a1a2sdkqzj5q8zbybzr20frixjs42";
+  src = fetchFromGitHub {
+    owner = "alibaba";
+    repo = pname;
+    rev = version;
+    sha256 = "04xfnbc0qlk8vi6bb8sl38nxnx9naxh550xsgrb4hql6jdi0wv7l";
   };
 
   buildInputs =
-    [ openssl zlib pcre libxml2 libxslt gd geoip ]
+    [ openssl zlib pcre libxml2 libxslt gd geoip gperftools jemalloc ]
     ++ concatMap (mod: mod.inputs or []) modules;
+
+  patches = [
+    ./check-resolv-conf.patch
+  ];
 
   configureFlags = [
     "--with-http_ssl_module"
@@ -36,26 +42,44 @@ stdenv.mkDerivation rec {
     "--with-http_gunzip_module"
     "--with-http_gzip_static_module"
     "--with-http_auth_request_module"
-    "--with-http_concat_module"
     "--with-http_random_index_module"
     "--with-http_secure_link_module"
     "--with-http_degradation_module"
     "--with-http_stub_status_module"
-    "--with-http_sysguard_module"
     "--with-threads"
     "--with-pcre-jit"
     "--with-http_slice_module"
+    "--with-select_module"
+    "--with-poll_module"
+    "--with-google_perftools_module"
+    "--with-jemalloc"
   ] ++ optional withDebug [
     "--with-debug"
   ] ++ optional withMail [
     "--with-mail"
     "--with-mail_ssl_module"
-  ] ++ optional (withMail != true) [
+  ] ++ optional (!withMail) [
     "--without-mail_pop3_module"
     "--without-mail_imap_module"
     "--without-mail_smtp_module"
-  ] ++ optional withIPv6 [
-    "--with-ipv6"
+  ] ++ optional withStream [
+    "--with-stream"
+    "--with-stream_ssl_module"
+    "--with-stream_realip_module"
+    "--with-stream_geoip_module"
+    "--with-stream_ssl_preread_module"
+    "--with-stream_sni"
+  ] ++ optional (!withStream) [
+    "--without-stream_limit_conn_module"
+    "--without-stream_access_module"
+    "--without-stream_geo_module"
+    "--without-stream_map_module"
+    "--without-stream_split_clients_module"
+    "--without-stream_return_module"
+    "--without-stream_upstream_hash_module"
+    "--without-stream_upstream_least_conn_module"
+    "--without-stream_upstream_random_module"
+    "--without-stream_upstream_zone_module"
   ] ++ optional (gd != null) "--with-http_image_filter_module"
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;

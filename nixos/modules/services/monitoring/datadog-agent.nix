@@ -42,9 +42,9 @@ let
   # Apply the configured extraIntegrations to the provided agent
   # package. See the documentation of `dd-agent/integrations-core.nix`
   # for detailed information on this.
-  datadogPkg = cfg.package.overrideAttrs(_: {
-    python = (pkgs.datadog-integrations-core cfg.extraIntegrations).python;
-  });
+  datadogPkg = cfg.package.override {
+    pythonPackages = pkgs.datadog-integrations-core cfg.extraIntegrations;
+  };
 in {
   options.services.datadog-agent = {
     enable = mkOption {
@@ -60,7 +60,7 @@ in {
       defaultText = "pkgs.datadog-agent";
       description = ''
         Which DataDog v6 agent package to use. Note that the provided
-        package is expected to have an overridable `python`-attribute
+        package is expected to have an overridable `pythonPackages`-attribute
         which configures the Python environment with the Datadog
         checks.
       '';
@@ -87,7 +87,7 @@ in {
       description = "The hostname to show in the Datadog dashboard (optional)";
       default = null;
       example = "mymachine.mydomain";
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.str;
     };
 
     logLevel = mkOption {

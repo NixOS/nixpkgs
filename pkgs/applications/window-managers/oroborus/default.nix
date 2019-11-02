@@ -7,7 +7,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "oroborus-${version}";
+  pname = "oroborus";
   version = "2.0.20";
 
   nativeBuildInputs = [ pkgconfig ];

@@ -1,12 +1,12 @@
 { fetchurl, stdenv, which, dune, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "alt-ergo-${version}";
+  pname = "alt-ergo";
   version = "2.3.0";
 
   src = fetchurl {
-    url    = "https://alt-ergo.ocamlpro.com/download_manager.php?target=${name}.tar.gz";
-    name   = "${name}.tar.gz";
+    url    = "https://alt-ergo.ocamlpro.com/download_manager.php?target=${pname}-${version}.tar.gz";
+    name   = "${pname}-${version}.tar.gz";
     sha256 = "1ycr3ff0gacq1aqzs16n6swgfniwpim0m7rvhcam64kj0a80c6bz";
   };
 

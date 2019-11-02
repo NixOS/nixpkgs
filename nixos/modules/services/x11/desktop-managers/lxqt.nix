@@ -26,7 +26,7 @@ in
 
   };
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf cfg.enable {
 
     services.xserver.desktopManager.session = singleton {
       name = "lxqt";
@@ -58,7 +58,8 @@ in
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
+    services.gvfs.enable = true;
+    services.gvfs.package = pkgs.gvfs;
 
     services.upower.enable = config.powerManagement.enable;
   };

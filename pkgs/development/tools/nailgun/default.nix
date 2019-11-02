@@ -9,8 +9,9 @@ let
     sha256 = "1mk8pv0g2xg9m0gsb96plbh6mc24xrlyrmnqac5mlbl4637l4q95";
   };
 in
-stdenv.mkDerivation rec {
-  name = "nailgun-${version}";
+stdenv.mkDerivation {
+  pname = "nailgun";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "facebook";

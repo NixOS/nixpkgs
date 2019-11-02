@@ -14,7 +14,7 @@ let
   optCelt = shouldUsePkg celt;
 in
 stdenv.mkDerivation rec {
-  name = "jack1-${version}";
+  pname = "jack1";
   version = "0.125.0";
 
   src = fetchurl {

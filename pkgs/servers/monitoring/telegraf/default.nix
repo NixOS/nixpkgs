@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "telegraf-${version}";
-  version = "1.10.2";
+  pname = "telegraf";
+  version = "1.12.1";
 
   goPackagePath = "github.com/influxdata/telegraf";
 
@@ -13,21 +13,20 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "telegraf";
-    rev = "${version}";
-    sha256 = "0g27yczb49xf8nbhkzx7lv8378613afq9qx1gr5yhlpfrl4sgb69";
+    rev = version;
+    sha256 = "00cd4kskdswcinv5bhwimggi0vbznq3sb2dllkhidx0bird3wdiw";
   };
 
   buildFlagsArray = [ ''-ldflags=
-    -X main.version=${version}
+    -w -s -X main.version=${version}
   '' ];
 
-  goDeps = ./. + "/deps-${version}.nix";
+  goDeps = ./deps.nix;
 
   meta = with lib; {
     description = "The plugin-driven server agent for collecting & reporting metrics.";
     license = licenses.mit;
     homepage = https://www.influxdata.com/time-series-platform/telegraf/;
     maintainers = with maintainers; [ mic92 roblabla ];
-    platforms = platforms.unix;
   };
 }

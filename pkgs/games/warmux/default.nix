@@ -4,8 +4,8 @@
 , gettext, intltool, libtool, perl
 }:
 
-stdenv.mkDerivation rec {
-  name = "warmux-${version}";
+stdenv.mkDerivation {
+  pname = "warmux";
   version = "unstable-2017-10-20";
 
   src = fetchFromGitHub {

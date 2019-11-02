@@ -1,10 +1,11 @@
 { stdenv, fetchFromGitHub
 , cmake, flex, bison
 , libxml2, python
+, libusb1, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
-  name = "libiio-${version}";
+  pname = "libiio";
   version = "0.18";
 
   src = fetchFromGitHub {
@@ -17,7 +18,17 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "python" ];
 
   nativeBuildInputs = [ cmake flex bison ];
-  buildInputs = [ libxml2 ];
+  buildInputs = [ libxml2 libusb1 ];
+
+  postPatch = ''
+    substituteInPlace libiio.rules.cmakein \
+      --replace /bin/sh ${runtimeShell}
+  '';
+
+  # since we can't expand $out in cmakeFlags
+  preConfigure = ''
+    cmakeFlags="$cmakeFlags -DUDEV_RULES_INSTALL_DIR=$out/etc/udev/rules.d"
+  '';
 
   postInstall = ''
     mkdir -p $python/lib/${python.libPrefix}/site-packages/

@@ -8,7 +8,7 @@ in {
     sha256 = "0wzid419mlwqw9llrg8gsx4nkzhqy16m4m40r0xnh6cwscw5wir4";
   };
   scons_latest = mkScons {
-    version = "3.0.5";
-    sha256 = "0gn7fgxvx94bjm4cim29cdz91ar1rmfxk2f39wwgljvdvhinyryz";
+    version = "3.1.1";
+    sha256 = "19a3j6x7xkmr2srk2yzxx3wv003h9cxx08vr81ps76blvmzl3sjc";
   };
 }

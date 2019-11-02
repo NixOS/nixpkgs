@@ -5,6 +5,7 @@
 , betamax
 , mock
 , pytest
+, pyopenssl
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0";
   };
 
-  checkInputs = [ betamax mock pytest ];
+  checkInputs = [ pyopenssl betamax mock pytest ];
   propagatedBuildInputs = [ requests ];
 
   checkPhase = ''

@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub }:
 
-buildPythonPackage rec {
+buildPythonPackage {
     pname = "pyext";
     version = "0.8";
 

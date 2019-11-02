@@ -17,10 +17,11 @@ mesonConfigurePhase() {
         --includedir=${!outputInclude}/include \
         --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
         --localedir=${!outputLib}/share/locale \
-        -Dauto_features=disabled \
+        -Dauto_features=${mesonAutoFeatures:-enabled} \
+        -Dwrap_mode=${mesonWrapMode:-nodownload} \
         $mesonFlags"
 
-    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-release} $mesonFlags"
+    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-plain} $mesonFlags"
 
     echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
 

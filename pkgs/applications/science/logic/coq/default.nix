@@ -8,6 +8,8 @@
 { stdenv, fetchFromGitHub, writeText, pkgconfig
 , ocamlPackages, ncurses
 , buildIde ? true
+, glib, gnome3, wrapGAppsHook
+, darwin
 , csdp ? null
 , version
 }:
@@ -26,15 +28,21 @@ let
    "8.8.1" = "1hlf58gwazywbmfa48219amid38vqdl94yz21i11b4map6jfwhbk";
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
-  }."${version}";
-  coq-version = builtins.substring 0 3 version;
-  ideFlags = if buildIde then "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
+   "8.9.1" = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
+   "8.10.0" = "138jw94wp4mg5dgjc2asn8ng09ayz1mxdznq342n0m469j803gzg";
+   "8.10.1" = "072v2zkjzf7gj48137wpr3c9j0hg9pdhlr5l8jrgrwynld8fp7i4";
+  }.${version};
+  coq-version = stdenv.lib.versions.majorMinor version;
+  versionAtLeast = stdenv.lib.versionAtLeast coq-version;
+  ideFlags = stdenv.lib.optionalString (buildIde && !versionAtLeast "8.10")
+    "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
 self = stdenv.mkDerivation {
-  name = "coq-${version}";
+  pname = "coq";
+  inherit version;
 
   passthru = {
     inherit coq-version;
@@ -95,8 +103,14 @@ self = stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [ ocaml findlib camlp5 num ])
-  ++ stdenv.lib.optional buildIde ocamlPackages.lablgtk;
+  buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
+  ++ [ ocamlPackages.num ]
+  ++ stdenv.lib.optionals buildIde
+    (if versionAtLeast "8.10"
+     then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
+     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
+     else [ ocamlPackages.lablgtk ]);
 
   postPatch = ''
     UNAME=$(type -tp uname)
@@ -117,7 +131,9 @@ self = stdenv.mkDerivation {
     addEnvHooks "$targetOffset" addCoqPath
   '';
 
-  preConfigure = ''
+  preConfigure = if versionAtLeast "8.10" then ''
+    patchShebangs dev/tools/
+  '' else ''
     configureFlagsArray=(
       ${ideFlags}
     )

@@ -2,15 +2,15 @@
 
 buildPythonPackage rec {
   pname = "pylru";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e03a3d354eb8fdfa11638698e8a1f06cd3b3a214ebc0a120c603a79290d9ebec";
+    sha256 = "492f934bb98dc6c8b2370c02c95c65516ddc08c8f64d27f70087eb038621d297";
   };
 
   meta = with lib; {
-    homepage = https://github.com/jlhutch/pylru;
+    homepage = "https://github.com/jlhutch/pylru";
     description = "A least recently used (LRU) cache implementation";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];

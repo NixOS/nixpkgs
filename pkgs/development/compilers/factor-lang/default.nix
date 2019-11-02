@@ -1,13 +1,10 @@
-{ stdenv, fetchurl, glib, glibc, git,
+{ stdenv, fetchurl, glib, git,
   rlwrap, curl, pkgconfig, perl, makeWrapper, tzdata, ncurses,
-  pango, cairo, gtk2, gdk_pixbuf, gtkglext,
+  pango, cairo, gtk2, gdk-pixbuf, gtkglext,
   mesa, xorg, openssl, unzip }:
 
-let
-  inherit (stdenv.lib) optional;
-
-in stdenv.mkDerivation rec {
-  name = "factor-lang-${version}";
+stdenv.mkDerivation rec {
+  pname = "factor-lang";
   version = "0.98";
   rev = "7999e72aecc3c5bc4019d43dc4697f49678cc3b4";
 
@@ -23,7 +20,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = with xorg; [ git rlwrap curl pkgconfig perl makeWrapper
-    libX11 pango cairo gtk2 gdk_pixbuf gtkglext
+    libX11 pango cairo gtk2 gdk-pixbuf gtkglext
     mesa libXmu libXt libICE libSM openssl unzip ];
 
   buildPhase = ''
@@ -51,7 +48,7 @@ in stdenv.mkDerivation rec {
     # will work only on the known libraries. There does not seem
     # to be a generic solution here.
     find $(echo ${stdenv.lib.makeLibraryPath (with xorg; [
-        glib libX11 pango cairo gtk2 gdk_pixbuf gtkglext
+        glib libX11 pango cairo gtk2 gdk-pixbuf gtkglext
         mesa libXmu libXt libICE libSM ])} | sed -e 's#:# #g') -name \*.so.\* > $TMPDIR/so.lst
 
     (echo $(cat $TMPDIR/so.lst | wc -l) "libs found in cache \`/etc/ld.so.cache'";
@@ -72,7 +69,7 @@ in stdenv.mkDerivation rec {
     cp ./factor $out/bin
     wrapProgram $out/bin/factor --prefix LD_LIBRARY_PATH : \
       "${stdenv.lib.makeLibraryPath (with xorg; [ glib
-        libX11 pango cairo gtk2 gdk_pixbuf gtkglext
+        libX11 pango cairo gtk2 gdk-pixbuf gtkglext
         mesa libXmu libXt libICE libSM openssl])}"
 
     sed -ie 's#/bin/.factor-wrapped#/lib/factor/factor#g' $out/bin/factor

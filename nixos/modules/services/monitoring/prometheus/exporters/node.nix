@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -9,7 +9,7 @@ in
   port = 9100;
   extraOpts = {
     enabledCollectors = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       example = ''[ "systemd" ]'';
       description = ''
@@ -27,13 +27,13 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = false;
       RuntimeDirectory = "prometheus-node-exporter";
       ExecStart = ''
         ${pkgs.prometheus-node-exporter}/bin/node_exporter \
           ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
           ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
-          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} ${concatStringsSep " " cfg.extraFlags}
       '';
     };
   };

@@ -3,14 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "liblangtag";
   version = "0.6.1";
 
   src = fetchFromBitbucket {
     owner = "tagoh";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "19dk2qsg7f3ig9xz8d73jvikmf5kvrwi008wrz2psxinbdml442g";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mksh-${version}";
+  pname = "mksh";
   version = "57";
 
   src = fetchurl {

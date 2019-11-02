@@ -1,11 +1,11 @@
 { stdenv, fetchurl, picosat }:
 
 stdenv.mkDerivation rec {
-  name = "aiger-${version}";
+  pname = "aiger";
   version = "1.9.9";
 
   src = fetchurl {
-    url    = "http://fmv.jku.at/aiger/${name}.tar.gz";
+    url    = "http://fmv.jku.at/aiger/${pname}-${version}.tar.gz";
     sha256 = "1ish0dw0nf9gyghxsdhpy1jjiy5wp54c993swp85xp7m6vdx6l0y";
   };
 

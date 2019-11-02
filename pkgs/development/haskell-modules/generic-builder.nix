@@ -25,7 +25,7 @@ in
 , doBenchmark ? false
 , doHoogle ? true
 , editedCabalFile ? null
-, enableLibraryProfiling ? true
+, enableLibraryProfiling ? !(ghc.isGhcjs or false)
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
@@ -96,7 +96,7 @@ assert stdenv.hostPlatform.isWindows -> enableStaticLibraries == false;
 let
 
   inherit (stdenv.lib) optional optionals optionalString versionOlder versionAtLeast
-                       concatStringsSep enableFeature optionalAttrs toUpper;
+                       concatStringsSep enableFeature optionalAttrs;
 
   isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;

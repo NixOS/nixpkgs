@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "unarj-${version}";
+  pname = "unarj";
   version = "2.65";
 
   src = fetchurl {
     sha256 = "0r027z7a0azrd5k885xvwhrxicpd0ah57jzmaqlypxha2qjw7p6p";
-    url = "https://src.fedoraproject.org/repo/pkgs/unarj/${name}.tar.gz/c6fe45db1741f97155c7def322aa74aa/${name}.tar.gz";
+    url = "https://src.fedoraproject.org/repo/pkgs/unarj/${pname}-${version}.tar.gz/c6fe45db1741f97155c7def322aa74aa/${pname}-${version}.tar.gz";
   };
 
   preInstall = ''

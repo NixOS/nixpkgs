@@ -3,16 +3,16 @@
 let
   # Note: the version MUST be one version prior to the version we're
   # building
-  version = "1.33.0";
+  version = "1.37.0";
 
-  # fetch hashes by running `print-hashes.sh 1.33.0`
+  # fetch hashes by running `print-hashes.sh 1.37.0`
   hashes = {
-    i686-unknown-linux-gnu = "c379203687d98e60623aa88c4df4992dd5a9548bc30674b9fc8e671a979e9f3a";
-    x86_64-unknown-linux-gnu = "6623168b9ee9de79deb0d9274c577d741ea92003768660aca184e04fe774393f";
-    armv7-unknown-linux-gnueabihf = "f6f0ec0a98d922c4bfd79703bc9e9eef439ba347453f33608a87cd63c47e7245";
-    aarch64-unknown-linux-gnu = "a308044e4076b62f637313ea803fa0a8f340b0f1b53136856f2c43afcabe5387";
-    i686-apple-darwin = "ed20809d56bbaea041721ce6fc9f10f7ae7a720c5821587f01a537d07a5454b1";
-    x86_64-apple-darwin = "864e7c074a0b88e38883c87c169513d072300bb52e1d320a067bd34cf14f66bd";
+    i686-unknown-linux-gnu = "74510e0e52a55e65a9f716673c2cda4d2bd427e2453541c6993c77c3ec04acf9";
+    x86_64-unknown-linux-gnu = "cb573229bfd32928177c3835fdeb62d52da64806b844bc1095c6225b0665a1cb";
+    armv7-unknown-linux-gnueabihf = "5b87b877f0ed20c6a09ce26e7a15d8c61b26b62484b97e78a51099d0efefec98";
+    aarch64-unknown-linux-gnu = "263ef98fa3a6b2911b56f89c06615cdebf6ef676eb9b2493ad1539602f79b6ba";
+    i686-apple-darwin = "e45d0c4d882fc6c404ffa6fe790294f4ea96384a2b48804adbf723f3635477a8";
+    x86_64-apple-darwin = "b2310c97ffb964f253c4088c8d29865f876a49da2a45305493af5b5c7a3ca73d";
   };
 
   platform =
@@ -32,10 +32,10 @@ let
 
   src = fetchurl {
      url = "https://static.rust-lang.org/dist/rust-${version}-${platform}.tar.gz";
-     sha256 = hashes."${platform}";
+     sha256 = hashes.${platform};
   };
 
-in callPackage ./binaryBuild.nix
+in callPackage ./binary.nix
   { inherit version src platform;
     versionType = "bootstrap";
   }

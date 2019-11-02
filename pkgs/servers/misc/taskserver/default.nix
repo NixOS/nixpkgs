@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, libuuid, gnutls, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "taskserver-${version}";
+  pname = "taskserver";
   version = "1.1.0";
 
   enableParallelBuilding = true;

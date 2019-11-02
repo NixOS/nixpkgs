@@ -3,11 +3,11 @@
 # some use gtk2, some gtk3 (and some even fltk13).
 
 stdenv.mkDerivation rec {
-  name = "alsa-tools-${version}";
+  pname = "alsa-tools";
   version = "1.1.7";
 
   src = fetchurl {
-    url = "mirror://alsa/tools/${name}.tar.bz2";
+    url = "mirror://alsa/tools/${pname}-${version}.tar.bz2";
     sha256 = "1xjfghr9s0j6n91kgs95cc4r6qrjsgc4yj2w0nir3xpnm0l36950";
   };
 

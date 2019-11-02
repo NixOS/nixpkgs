@@ -2,14 +2,21 @@
 , gst-plugins-base, orc, bzip2, gettext
 , libv4l, libdv, libavc1394, libiec61883
 , libvpx, speex, flac, taglib, libshout
-, cairo, gdk_pixbuf, aalib, libcaca
+, cairo, gdk-pixbuf, aalib, libcaca
 , libsoup, libpulseaudio, libintl
 , darwin, lame, mpg123, twolame
 , gtkSupport ? false, gtk3 ? null
+# As of writing, jack2 incurs a Qt dependency (big!) via `ffado`.
+# In the fuure we should probably split `ffado`.
+, enableJack ? false
 , libXdamage
 , libXext
 , libXfixes
 , ncurses
+, xorg
+, libgudev
+, wavpack
+, jack2
 }:
 
 assert gtkSupport -> gtk3 != null;
@@ -18,8 +25,8 @@ let
   inherit (stdenv.lib) optional optionals;
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-${version}";
-  version = "1.14.4";
+  pname = "gst-plugins-good";
+  version = "1.16.0";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Good Plugins";
@@ -35,8 +42,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
-    sha256 = "0y89qynb4b6fry3h43z1r99qslmi3m8xhlq0i5baq2nbc0r5b2sz";
+    url = "${meta.homepage}/src/gst-plugins-good/${pname}-${version}.tar.xz";
+    sha256 = "1zdhif1mhf0ihkjpjyrh65g2iz2cawkjjb3h5w8h9ml06grxwjk5";
   };
 
   outputs = [ "out" "dev" ];
@@ -50,18 +57,36 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base orc bzip2
     libdv libvpx speex flac taglib
-    cairo gdk_pixbuf aalib libcaca
+    cairo gdk-pixbuf aalib libcaca
     libsoup libshout lame mpg123 twolame libintl
-    # TODO: Remove the comments once https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/commit/e234932dc703e51a0e1aa3b9c408f12758b12335
-    # is merged and available in nixpkgs.
-    libXdamage # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
-    libXext # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
-    libXfixes # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
+    libXdamage
+    libXext
+    libXfixes
     ncurses
+    xorg.libXfixes
+    xorg.libXdamage
+    wavpack
   ]
   ++ optional gtkSupport gtk3 # for gtksink
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
-  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
+  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 libgudev ]
+  ++ optionals (stdenv.isLinux && enableJack) [
+    jack2
+  ];
+
+  mesonFlags = [
+    # Enables all features, so that we know when new dependencies are necessary.
+    "-Dauto_features=enabled"
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Dqt5=disabled" # not clear as of writing how to correctly pass in the required qt5 deps
+  ]
+  ++ optional (!gtkSupport) "-Dgtk3=disabled"
+  ++ optionals (!stdenv.isLinux || !enableJack) [
+    "-Djack=disabled" # unclear whether Jack works on Darwin
+  ]
+  ++ optionals (!stdenv.isLinux) [
+    "-Dv4l2-gudev=disabled"
+  ];
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;

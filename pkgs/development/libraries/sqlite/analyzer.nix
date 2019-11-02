@@ -5,12 +5,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sqlite-analyzer-${version}";
-  version = "3.28.0";
+  pname = "sqlite-analyzer";
+  version = "3.30.0";
 
   src = assert version == sqlite.version; fetchurl {
     url = "https://sqlite.org/2019/sqlite-src-${archiveVersion version}.zip";
-    sha256 = "15v57b113bpgcshfsx5jw93szar3da94rr03i053xhl15la7jllh";
+    sha256 = "0d4i87q0f618pmrgax0mr5x7m8bywikrwjvixag3biyhgl5rx7fd";
   };
 
   nativeBuildInputs = [ unzip ];

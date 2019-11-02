@@ -5,12 +5,12 @@
 , portaudio, portmidi, fftw, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "denemo-${version}";
-  version = "2.2.0";
+  pname = "denemo";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://ftp.gnu.org/gnu/denemo/denemo-${version}.tar.gz";
-    sha256 = "18zcs4xmfj4vpzi15dj7k5bjzzzlr3sjf9xhrrgy4samrrdpqzfh";
+    sha256 = "1blkcl3slbsq9jlhwcf2m9v9g38a0sjfhh9advgi2qr1gxri08by";
   };
 
   buildInputs = [

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "6.3.3";
-  name = "yap-${version}";
+  pname = "yap";
 
   src = fetchurl {
-    url = "https://www.dcc.fc.up.pt/~vsc/Yap/${name}.tar.gz";
+    url = "https://www.dcc.fc.up.pt/~vsc/Yap/${pname}-${version}.tar.gz";
     sha256 = "0y7sjwimadqsvgx9daz28c9mxcx9n1znxklih9xg16k6n54v9qxf";
   };
 

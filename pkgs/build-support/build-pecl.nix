@@ -1,4 +1,4 @@
-{ stdenv, php, autoreconfHook, fetchurl }:
+{ stdenv, php, autoreconfHook, fetchurl, re2c }:
 
 { pname
 , version
@@ -17,7 +17,7 @@ stdenv.mkDerivation (args // {
 
   inherit src;
 
-  nativeBuildInputs = [ autoreconfHook ] ++ nativeBuildInputs;
+  nativeBuildInputs = [ autoreconfHook re2c ] ++ nativeBuildInputs;
   buildInputs = [ php ] ++ buildInputs;
 
   makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;

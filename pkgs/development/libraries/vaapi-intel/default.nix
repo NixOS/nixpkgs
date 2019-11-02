@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "intel-vaapi-driver-${version}";
+  pname = "intel-vaapi-driver";
   # TODO: go back to stable releases with the next stable release after 2.3.0.
   #       see: https://github.com/NixOS/nixpkgs/issues/55975 (and the libva comment v)
   rev = "329975c63123610fc750241654a3bd18add75beb"; # generally try to match libva version, but not required
@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "Intel driver for the VAAPI library";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

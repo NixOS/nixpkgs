@@ -2,7 +2,7 @@
 
 let
   xorgxrdp = stdenv.mkDerivation rec {
-    name = "xorgxrdp-${version}";
+    pname = "xorgxrdp";
     version = "0.2.9";
 
     src = fetchFromGitHub {
@@ -35,7 +35,7 @@ let
 
   xrdp = stdenv.mkDerivation rec {
     version = "0.9.9";
-    name = "xrdp-${version}";
+    pname = "xrdp";
 
     src = fetchFromGitHub {
       owner = "volth";

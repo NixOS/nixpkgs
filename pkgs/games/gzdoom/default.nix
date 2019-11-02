@@ -1,21 +1,21 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper
-, openal, fluidsynth, soundfont-fluid, libGL, SDL2
+, openal, fluidsynth_1, soundfont-fluid, libGL, SDL2
 , bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
 stdenv.mkDerivation rec {
-  name = "gzdoom-${version}";
-  version = "4.0.0";
+  pname = "gzdoom";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "1054g9n5rdnkkfrxvaybki4clfvr9fbhza4jbg53h4vwxahmjmbx";
+    sha256 = "06fy4ksn1n745y86s6rlnamkfyqi0894aznf6s56ff6hz2pngsfc";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    SDL2 libGL openal fluidsynth bzip2 zlib libjpeg libsndfile mpg123
+    SDL2 libGL openal fluidsynth_1 bzip2 zlib libjpeg libsndfile mpg123
     game-music-emu
   ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -i \
       -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
       -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
-      src/sound/mididevices/music_fluidsynth_mididevice.cpp
+      libraries/zmusic/mididevices/music_fluidsynth_mididevice.cpp
   '';
 
   installPhase = ''

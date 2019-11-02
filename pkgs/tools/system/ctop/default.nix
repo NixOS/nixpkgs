@@ -1,25 +1,28 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "ctop-unstable-${version}";
-  version = "2017-05-28";
-  rev = "b4e1fbf29073625ec803025158636bdbcf2357f4";
-
-  goPackagePath = "github.com/bcicen/ctop";
+buildGoModule rec {
+  pname = "ctop";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "bcicen";
-    repo = "ctop";
-    sha256 = "162pc7gds66cgznqlq9gywr0qij5pymn7xszlq9rn4w2fm64qgg3";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0mm6hl5qklfv0yffj6cgypsgcrk4fq6p60djycfgj20yhz9cmf9x";
   };
 
-  goDeps = ./deps.nix;
+  patches = [
+    # Version 0.7.2 does not build with go 1.13.
+    # TODO: Remove once(and if) https://github.com/bcicen/ctop/pull/178 is merged and lands in a release.
+    ./go-1.13-deps.patch
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Concise commandline monitoring for containers";
-    homepage = https://ctop.sh/;
+  modSha256 = "0ad1gvamckg94r7f68cnjdbq9nyz6c3hh339hy4hghxd3rd1qskn";
+
+  meta = with lib; {
+    description = "Top-like interface for container metrics";
+    homepage = "https://ctop.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ apeyroux ];
+    maintainers = with maintainers; [ apeyroux marsam ];
   };
 }

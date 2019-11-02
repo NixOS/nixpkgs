@@ -1,5 +1,5 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
+, glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
 , at-spi2-atk
 }:
@@ -32,7 +32,7 @@ let
     ffmpeg_3
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk2
     libgcrypt
@@ -60,7 +60,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "spotify-${version}";
+  pname = "spotify";
+  inherit version;
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
@@ -77,8 +78,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ squashfsTools makeWrapper ];
 
-  doConfigure = false;
-  doBuild = false;
   dontStrip = true;
   dontPatchELF = true;
 

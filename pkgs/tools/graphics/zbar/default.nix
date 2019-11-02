@@ -1,36 +1,83 @@
-{ stdenv, fetchFromGitHub, imagemagickBig, pkgconfig, python2Packages, perl
-, libX11, libv4l, qt5, lzma, gtk2, xmlto, docbook_xsl, autoreconfHook
+{ stdenv
+, lib
+, fetchFromGitHub
+, imagemagickBig
+, pkgconfig
+, libX11
+, libv4l
+, qtbase
+, qtx11extras
+, wrapQtAppsHook
+, wrapGAppsHook
+, gtk3
+, xmlto
+, docbook_xsl
+, autoreconfHook
+, dbus
 , enableVideo ? stdenv.isLinux
+, enableDbus ? stdenv.isLinux
 }:
 
-let
-  inherit (python2Packages) pygtk python;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "zbar";
-  version = "0.22";
+  version = "0.23";
+
+  outputs = [ "out" "lib" "dev" "doc" "man" ];
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "0pz0vq6a97vnc3lcjw9k12dk2awgmws46cjfh16zin0jiz18d1xq";
+    sha256 = "0hlxakpyjg4q9hp7yp3har1n78341b4knwyll28hn48vykg28pza";
   };
 
-  nativeBuildInputs = [ pkgconfig xmlto autoreconfHook docbook_xsl ];
+  nativeBuildInputs = [
+    pkgconfig
+    xmlto
+    autoreconfHook
+    docbook_xsl
+    wrapQtAppsHook
+    wrapGAppsHook
+  ];
 
   buildInputs = [
-    imagemagickBig python pygtk perl libX11
-  ] ++ stdenv.lib.optionals enableVideo [
-    libv4l gtk2 qt5.qtbase qt5.qtx11extras
+    imagemagickBig
+    libX11
+  ] ++ lib.optionals enableDbus [
+    dbus
+  ] ++ lib.optionals enableVideo [
+    libv4l
+    gtk3
+    qtbase
+    qtx11extras
   ];
+
+  # Disable assertions which include -dev QtBase file paths.
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
   configureFlags = [
-    "--with-dbusconfdir=$out/etc/dbus-1/system.d"
-  ] ++ stdenv.lib.optionals (!enableVideo) [
-    "--disable-video" "--without-gtk" "--without-qt"
-  ];
+    "--without-python"
+  ] ++ (if enableDbus then [
+    "--with-dbusconfdir=${placeholder "out"}/share"
+  ] else [
+    "--without-dbus"
+  ]) ++ (if enableVideo then [
+    "--with-gtk=gtk3"
+  ] else [
+    "--disable-video"
+    "--without-gtk"
+    "--without-qt"
+  ]);
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+
+  postFixup = lib.optionalString enableVideo ''
+    wrapGApp "$out/bin/zbarcam-gtk"
+    wrapQtApp "$out/bin/zbarcam-qt"
+  '';
+
+  meta = with lib; {
     description = "Bar code reader";
     longDescription = ''
       ZBar is an open source software suite for reading bar codes from various

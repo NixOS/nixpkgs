@@ -1,13 +1,13 @@
 { lib, stdenv, echo_build_heading, noisily, makeDeps }:
 { crateName,
   dependencies,
-  crateFeatures, libName, release, libPath,
+  crateFeatures, crateRenames, libName, release, libPath,
   crateType, metadata, crateBin, hasCrateBin,
   extraRustcOpts, verbose, colors }:
 
   let
 
-    deps = makeDeps dependencies;
+    deps = makeDeps dependencies crateRenames;
     rustcOpts =
       lib.lists.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")

@@ -1,6 +1,7 @@
 { lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses5, expat, python27, zlib
 , gcc48, gcc49, gcc5, gcc6, gcc7
-, xorg, gtk2, gdk_pixbuf, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
+, xorg, gtk2, gdk-pixbuf, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
+, addOpenGLRunpath
 }:
 
 let
@@ -15,7 +16,7 @@ let
     }:
 
     stdenv.mkDerivation rec {
-      name = "cudatoolkit-${version}";
+      pname = "cudatoolkit";
       inherit version runPatches;
 
       dontPatchELF = true;
@@ -39,8 +40,8 @@ let
 
       outputs = [ "out" "lib" "doc" ];
 
-      nativeBuildInputs = [ perl makeWrapper ];
-      buildInputs = [ gdk_pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
+      nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
+      buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
       runtimeDependencies = [
         ncurses5 expat python zlib glibc
         xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
@@ -143,8 +144,17 @@ let
           else
             rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
           fi
-          patchelf --set-rpath $rpath2 --force-rpath $i
+          patchelf --set-rpath "$rpath2" --force-rpath $i
         done < <(find $out $lib $doc -type f -print0)
+      '';
+
+      # Set RPATH so that libcuda and other libraries in
+      # /run/opengl-driver(-32)/lib can be found. See the explanation in
+      # addOpenGLRunpath.  Don't try to figure out which libraries really need
+      # it, just patch all (but not the stubs libraries). Note that
+      # --force-rpath prevents changing RPATH (set above) to RUNPATH.
+      postFixup = ''
+        addOpenGLRunpath --force-rpath {$out,$lib}/lib/lib*.so
       '';
 
       # cuda-gdb doesn't run correctly when not using sandboxing, so
@@ -170,9 +180,7 @@ let
       '';
       passthru = {
         cc = gcc;
-        majorVersion =
-          let versionParts = lib.splitString "." version;
-          in "${lib.elemAt versionParts 0}.${lib.elemAt versionParts 1}";
+        majorVersion = lib.versions.majorMinor version;
       };
 
       meta = with stdenv.lib; {

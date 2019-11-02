@@ -5,7 +5,7 @@ rec {
 
   parasites = [ "trivial-utf-8-tests" ];
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ ];
 
@@ -19,7 +19,7 @@ rec {
   asdFilesToKeep = ["trivial-utf-8.asd"];
   overrides = x: x;
 }
-/* (SYSTEM trivial-utf-8 DESCRIPTION NIL SHA256
+/* (SYSTEM trivial-utf-8 DESCRIPTION System lacks description SHA256
     1lmg185s6w3rzsz3xa41k5w9xw32bi288ifhrxincy8iv92w65wb URL
     http://beta.quicklisp.org/archive/trivial-utf-8/2011-10-01/trivial-utf-8-20111001-darcs.tgz
     MD5 0206c4ba7a6c0b9b23762f244aca6614 NAME trivial-utf-8 FILENAME

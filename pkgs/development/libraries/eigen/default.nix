@@ -1,10 +1,11 @@
-{stdenv, fetchurl, fetchpatch, cmake}:
+{stdenv, fetchurl, cmake}:
 
 let
   version = "3.3.7";
 in
 stdenv.mkDerivation {
-  name = "eigen-${version}";
+  pname = "eigen";
+  inherit version;
 
   src = fetchurl {
     url = "https://bitbucket.org/eigen/eigen/get/${version}.tar.gz";

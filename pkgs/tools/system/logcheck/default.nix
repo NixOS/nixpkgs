@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lockfileProgs, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "logcheck-${version}";
+  pname = "logcheck";
   version = "1.3.20";
   _name    = "logcheck_${version}";
 

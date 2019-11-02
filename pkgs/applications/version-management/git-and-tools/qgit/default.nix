@@ -1,22 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "qgit-2.8";
+mkDerivation rec {
+  pname = "qgit";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner = "tibirna";
     repo = "qgit";
-    rev = name;
-    sha256 = "01l6mz2f333x3zbfr68mizwpsh6sdsnadcavpasidiych1m5ry8f";
+    rev = "${pname}-${version}";
+    sha256 = "0n4dq9gffm9yd7n5p5qcdfgrmg2kwnfd51hfx10adgj9ibxlnc3z";
   };
 
   buildInputs = [ qtbase ];
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2;
     homepage = https://github.com/tibirna/qgit;
     description = "Graphical front-end to Git";

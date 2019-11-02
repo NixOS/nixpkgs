@@ -1,18 +1,18 @@
 { stdenv, fetchurl, autoPatchelfHook
-, icu, zlib, expat, dbus, libheimdal, openssl}:
+, zlib, expat, dbus, openssl, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "sourcetrail-${version}";
-  version = "2019.1.11";
+  pname = "sourcetrail";
+  version = "2019.3.46";
 
   src = fetchurl {
     name = "sourtrail.tar.gz";
     url = "https://www.sourcetrail.com/downloads/${version}/linux/64bit";
-    sha256 = "09f3qdgdqg6dlai43050qh4iv1d4j43isk81q68swalpnvjn72w0";
+    sha256 = "0dnkxr3fijcsbn6pd20lyxhr9ns6ji1c4dffly9s16yq4x9ad5r4";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ zlib expat dbus stdenv.cc.cc openssl ];
+  buildInputs = [ zlib expat dbus stdenv.cc.cc openssl python3 ];
 
   installPhase = ''
     runHook preInstall
@@ -38,28 +38,30 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/ $out/bin/
 
     cat <<EOF > $out/bin/sourcetrail
-      #! ${stdenv.shell} -e
+    #! ${stdenv.shell} -e
 
-      # XXX: Sourcetrail somehow copies the initial config files into the home
-      # directory without write permissions. We currently just copy them
-      # ourselves to work around this problem.
-      setup_config() {
-        local src dst
+    # XXX: Sourcetrail somehow copies the initial config files into the home
+    # directory without write permissions. We currently just copy them
+    # ourselves to work around this problem.
+    setup_config() {
+      local src dst
 
-        [ ! -d ~/.config/sourcetrail ] && mkdir -p ~/.config/sourcetrail
-        for src in $out/opt/data/fallback/*; do
-          dst=~/.config/sourcetrail/"\$(basename "\$src")"
-          if [ ! -e "\$dst" ]; then
-            cp -r "\$src" "\$dst"
-          fi
-        done
+      [ ! -d ~/.config/sourcetrail ] && mkdir -p ~/.config/sourcetrail
+      for src in $out/opt/data/fallback/*; do
+        dst=~/.config/sourcetrail/"\$(basename "\$src")"
+        if [ ! -e "\$dst" ]; then
+          cp -r "\$src" "\$dst"
+        fi
+      done
 
-        chmod -R u+w ~/.config/sourcetrail
-      }
+      chmod -R u+w ~/.config/sourcetrail
+    }
 
-      [ -d "\$HOME" ] && setup_config
-      exec "$out/opt/Sourcetrail.sh" "\$@"
+    [ -d "\$HOME" ] && setup_config
+    export PATH="\$PATH:${python3}/bin"
+    exec "$out/opt/Sourcetrail.sh" "\$@"
     EOF
+
     chmod +x $out/bin/sourcetrail
 
     runHook postInstall

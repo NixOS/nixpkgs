@@ -1,31 +1,37 @@
 { stdenv, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
+, gsettings-desktop-schemas, glib, libosinfo, gnome3
+, gtksourceview4
 , spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
 }:
 
 with stdenv.lib;
 
+# TODO: remove after there's support for setupPyDistFlags
+let
+  setuppy = ../../../development/interpreters/python/run_setup.py;
+in
 python3Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "2.1.0";
+  version = "2.2.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "1m038kyngmxlgz91c7z8g73lb2wy0ajyah871a3g3wb5cnd0dsil";
+    sha256 = "06ws0agxlip6p6n3n43knsnjyd91gqhh2dadgc33wl9lx1k8vn6g";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool file
+    intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
   ];
 
   buildInputs = [
+    wrapGAppsHook
     libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
-    gsettings-desktop-schemas libosinfo gtk3
+    gsettings-desktop-schemas libosinfo gtksourceview4
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ optional spiceSupport spice-gtk;
 
@@ -43,8 +49,12 @@ python3Packages.buildPythonApplication rec {
     ${python3Packages.python.interpreter} setup.py configure --prefix=$out
   '';
 
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
+  # TODO: remove after there's support for setupPyDistFlags
+  buildPhase = ''
+    runHook preBuild
+    cp ${setuppy} nix_run_setup
+    ${python3Packages.python.pythonForBuild.interpreter} nix_run_setup --no-update-icon-cache build_ext bdist_wheel
+    runHook postBuild
   '';
 
   preFixup = ''
@@ -67,6 +77,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     # exclude Darwin since libvirt-glib currently doesn't build there
     platforms = platforms.linux;
-    maintainers = with maintainers; [ qknight offline fpletz ];
+    maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

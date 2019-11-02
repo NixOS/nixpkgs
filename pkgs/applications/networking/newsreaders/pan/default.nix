@@ -1,6 +1,6 @@
 { spellChecking ? true
 , stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
-, perl, gmime2, gettext, intltool, itstool, libxml2, dbus-glib, libnotify, gnutls
+, gmime2, gettext, intltool, itstool, libxml2, libnotify, gnutls
 , makeWrapper, gnupg
 , gnomeSupport ? true, libsecret, gcr
 }:
@@ -10,7 +10,8 @@ assert spellChecking -> gtkspell3 != null;
 let version = "0.145"; in
 
 stdenv.mkDerivation {
-  name = "pan-${version}";
+  pname = "pan";
+  inherit version;
 
   src = fetchurl {
     url = "http://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
@@ -37,7 +38,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "A GTK+-based Usenet newsreader good at both text and binaries";
+    description = "A GTK-based Usenet newsreader good at both text and binaries";
     homepage = http://pan.rebelbase.com/;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;

@@ -1,11 +1,9 @@
 { buildVersion, sha256, dev ? false }:
 
-{ fetchurl, stdenv, xorg, glib, glibcLocales, gtk2, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
-, pkexecPath ? "/run/wrappers/bin/pkexec", gksuSupport ? false, gksu
-, writeScript, common-updater-scripts, curl, gnugrep
+{ fetchurl, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+, pkexecPath ? "/run/wrappers/bin/pkexec"
+, writeScript, common-updater-scripts, curl, gnugrep, coreutils
 }:
-
-assert gksuSupport -> gksu != null;
 
 let
   pname = "sublime-merge";
@@ -14,31 +12,27 @@ let
   primaryBinary = "sublime_merge";
   primaryBinaryAliases = [ "smerge" ];
   downloadUrl = "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
-  downloadArchiveType = "tar.xz";
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
-  versionFile = "pkgs/applications/version-management/sublime-merge/default.nix";
-  usesGtk2 = false;
+  versionFile = builtins.toString ./default.nix;
   archSha256 = sha256;
   arch = "x64";
 
-  libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib (if usesGtk2 then gtk2 else gtk3) cairo pango ];
-  redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
-    ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
+  libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango ];
+  redirects = [ "/usr/bin/pkexec=${pkexecPath}" "/bin/true=${coreutils}/bin/true" ];
 in let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";
     version = buildVersion;
 
     src = fetchurl {
-      name = "${pname}-bin-${buildVersion}.${downloadArchiveType}";
       url = downloadUrl;
       sha256 = archSha256;
     };
 
     dontStrip = true;
     dontPatchELF = true;
-    buildInputs = stdenv.lib.optionals (!usesGtk2) [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
-    nativeBuildInputs = [ makeWrapper ] ++ stdenv.lib.optional (!usesGtk2) wrapGAppsHook;
+    buildInputs = [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
+    nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
 
     buildPhase = ''
       runHook preBuild
@@ -50,7 +44,7 @@ in let
           $binary
       done
 
-      # Rewrite pkexec|gksudo argument. Note that we can't delete bytes in binary.
+      # Rewrite pkexec argument. Note that we cannot delete bytes in binary.
       sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' ${primaryBinary}
 
       runHook postBuild
@@ -72,7 +66,7 @@ in let
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
-        ${stdenv.lib.optionalString (!usesGtk2) ''"''${gappsWrapperArgs[@]}"''}
+        "''${gappsWrapperArgs[@]}"
     '';
   };
 in stdenv.mkDerivation (rec {

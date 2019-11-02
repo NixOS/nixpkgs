@@ -1,18 +1,18 @@
 { rustPlatform, fetchFromGitHub, lib, python, cmake, llvmPackages, clang }:
 
-rustPlatform.buildRustPackage rec {
-  name = "wasmtime-${version}";
-  version = "0.1.0";
+rustPlatform.buildRustPackage {
+  pname = "wasmtime";
+  version = "20190521";
 
   src = fetchFromGitHub {
     owner = "CraneStation";
     repo = "wasmtime";
-    rev = "07a6ca8f4e1136ecd9f4af8d1f03a01aade60407";
-    sha256 = "1cq6nz90kaf023mcyblca90bpvbzhq8xjq01laa28v7r50lagcn5";
+    rev = "e530a582afe6a2b5735fd7cdf5e2e88391e58669";
+    sha256 = "13lqf9dp1cnw7ms7hcgirmlfkr0v7nrn3p5g7yacfasrqgnwsyl8";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0xy8vazb4nc4q1098ws92j1yfwp9w7q30z0yk2gindkn898603bc";
+  cargoSha256 = "1jbpq09czm295316gdv3y0pfapqs0ynj3qbarwlnrv7valq5ak13";
 
   cargoPatches = [ ./cargo-lock.patch ];
 

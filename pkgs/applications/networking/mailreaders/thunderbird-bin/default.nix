@@ -10,7 +10,7 @@
 , dbus
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , gst-plugins-base
@@ -21,12 +21,15 @@
 , libX11
 , libXScrnSaver
 , libXcomposite
+, libXcursor
 , libXdamage
 , libXext
 , libXfixes
+, libXi
 , libXinerama
 , libXrender
 , libXt
+, libxcb
 , libcanberra-gtk2
 , libgnome
 , libgnomeui
@@ -90,7 +93,7 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
       gst-plugins-base
@@ -101,12 +104,15 @@ stdenv.mkDerivation {
       libX11
       libXScrnSaver
       libXcomposite
+      libXcursor
       libXdamage
       libXext
       libXfixes
+      libXi
       libXinerama
       libXrender
       libXt
+      libxcb
       libcanberra-gtk2
       libgnome
       libgnomeui
@@ -153,14 +159,16 @@ stdenv.mkDerivation {
       Categories=Application;Network;
       EOF
 
+      # SNAP_NAME: https://github.com/NixOS/nixpkgs/pull/61980
       wrapProgram "$out/bin/thunderbird" \
         --argv0 "$out/bin/.thunderbird-wrapped" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
-        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS" \
+        --set SNAP_NAME "thunderbird"
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit name stdenv writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
+    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";

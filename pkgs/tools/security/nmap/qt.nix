@@ -3,7 +3,7 @@
 , qtbase, qtscript, qtwebengine }:
 
 stdenv.mkDerivation rec {
-  name = "nmapsi4-${version}";
+  pname = "nmapsi4";
   version = "0.4.80-20180430";
 
   src = fetchFromGitHub {

@@ -1,25 +1,26 @@
-{ stdenv, fetchurl, makeWrapper, autoPatchelfHook, dpkg
-, xorg, atk, glib, pango, gdk_pixbuf, cairo, freetype, fontconfig, gtk3
+{ stdenv, fetchurl, makeWrapper, wrapGAppsHook, autoPatchelfHook, dpkg
+, xorg, atk, glib, pango, gdk-pixbuf, cairo, freetype, fontconfig, gtk3
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
 
 let
-  version = "5.0.0-beta.19";
-in stdenv.mkDerivation rec {
-  name = "franz-${version}";
+  version = "5.3.3";
+in stdenv.mkDerivation {
+  pname = "franz";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/meetfranz/franz/releases/download/v${version}/franz_${version}_amd64.deb";
-    sha256 = "1b9b8y19iqx8bnax7hbh9rkjfxk8a9gqb1akrcxwwfi46l816gyy";
+    sha256 = "03ii1gpc2wijy917565pqig1ihd4zhal12i2f5k916i7fp8912m1";
   };
 
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper dpkg ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapGAppsHook dpkg ];
   buildInputs = (with xorg; [
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
     libXrender libX11 libXtst libXScrnSaver
   ]) ++ [
-    gtk3 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
+    gtk3 atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
     gnome2.GConf nss nspr alsaLib cups expat stdenv.cc.cc
   ];
   runtimeDependencies = [ udev.lib libnotify ];
@@ -37,8 +38,12 @@ in stdenv.mkDerivation rec {
       --replace Exec=\"/opt/Franz/franz\" Exec=franz
   '';
 
+  dontWrapGApps = true;
+
   postFixup = ''
-    wrapProgram $out/opt/Franz/franz --prefix PATH : ${xdg_utils}/bin
+    wrapProgram $out/opt/Franz/franz \
+      --prefix PATH : ${xdg_utils}/bin \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   meta = with stdenv.lib; {

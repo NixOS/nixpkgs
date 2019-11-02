@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
 
 stdenv.mkDerivation rec {
-  name = "edbrowse-${version}";
+  pname = "edbrowse";
   version = "3.7.4";
 
   buildInputs = [ curl pcre readline openssl duktape perl html-tidy ];

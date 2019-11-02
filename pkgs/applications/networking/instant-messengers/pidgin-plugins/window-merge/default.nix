@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pidgin } :
 
 stdenv.mkDerivation rec {
-  name = "pidgin-window-merge-${version}";
+  pname = "pidgin-window-merge";
   version = "0.3";
 
   src = fetchurl {

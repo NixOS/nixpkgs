@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, glib, gtk, lua, libwnck3 }:
 
 stdenv.mkDerivation rec {
-  name = "devilspie2-${version}";
+  pname = "devilspie2";
   version = "0.43";
 
   src = fetchurl {

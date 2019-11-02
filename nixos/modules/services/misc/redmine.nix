@@ -1,8 +1,10 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkDefault mkEnableOption mkIf mkOption types;
+  inherit (lib) concatStringsSep literalExample mapAttrsToList;
+  inherit (lib) optional optionalAttrs optionalString singleton versionAtLeast;
+
   cfg = config.services.redmine;
 
   bundle = "${cfg.package}/share/redmine/bin/bundle";
@@ -11,11 +13,11 @@ let
     production:
       adapter: ${cfg.database.type}
       database: ${cfg.database.name}
-      host: ${cfg.database.host}
+      host: ${if (cfg.database.type == "postgresql" && cfg.database.socket != null) then cfg.database.socket else cfg.database.host}
       port: ${toString cfg.database.port}
       username: ${cfg.database.user}
       password: #dbpass#
-      ${optionalString (cfg.database.socket != null) "socket: ${cfg.database.socket}"}
+      ${optionalString (cfg.database.type == "mysql2" && cfg.database.socket != null) "socket: ${cfg.database.socket}"}
   '';
 
   configurationYml = pkgs.writeText "configuration.yml" ''
@@ -50,16 +52,15 @@ let
       '';
   });
 
+  mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql2";
+  pgsqlLocal = cfg.database.createLocally && cfg.database.type == "postgresql";
+
 in
 
 {
   options = {
     services.redmine = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the Redmine service.";
-      };
+      enable = mkEnableOption "Redmine";
 
       # default to the 4.x series not forcing major version upgrade of those on the 3.x series
       package = mkOption {
@@ -107,7 +108,8 @@ in
         description = ''
           Extra configuration in configuration.yml.
 
-          See https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+          See <link xlink:href="https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration"/>
+          for details.
         '';
         example = literalExample ''
           email_delivery:
@@ -124,7 +126,8 @@ in
         description = ''
           Extra configuration in additional_environment.rb.
 
-          See https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example
+          See <link xlink:href="https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example"/>
+          for details.
         '';
         example = literalExample ''
           config.logger.level = Logger::DEBUG
@@ -169,13 +172,14 @@ in
 
         host = mkOption {
           type = types.str;
-          default = (if cfg.database.socket != null then "localhost" else "127.0.0.1");
+          default = "localhost";
           description = "Database host address.";
         };
 
         port = mkOption {
           type = types.int;
-          default = 3306;
+          default = if cfg.database.type == "postgresql" then 5432 else 3306;
+          defaultText = "3306";
           description = "Database host port.";
         };
 
@@ -213,9 +217,19 @@ in
 
         socket = mkOption {
           type = types.nullOr types.path;
-          default = null;
+          default =
+            if mysqlLocal then "/run/mysqld/mysqld.sock"
+            else if pgsqlLocal then "/run/postgresql"
+            else null;
+          defaultText = "/run/mysqld/mysqld.sock";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
+        };
+
+        createLocally = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Create the database and database user locally.";
         };
       };
     };
@@ -227,12 +241,37 @@ in
       { assertion = cfg.database.passwordFile != null || cfg.database.password != "" || cfg.database.socket != null;
         message = "one of services.redmine.database.socket, services.redmine.database.passwordFile, or services.redmine.database.password must be set";
       }
-      { assertion = cfg.database.socket != null -> (cfg.database.type == "mysql2");
-        message = "Socket authentication is only available for the mysql2 database type";
+      { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
+        message = "services.redmine.database.user must be set to ${cfg.user} if services.redmine.database.createLocally is set true";
+      }
+      { assertion = cfg.database.createLocally -> cfg.database.socket != null;
+        message = "services.redmine.database.socket must be set if services.redmine.database.createLocally is set to true";
+      }
+      { assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
+        message = "services.redmine.database.host must be set to localhost if services.redmine.database.createLocally is set to true";
       }
     ];
 
-    environment.systemPackages = [ cfg.package ];
+    services.mysql = mkIf mysqlLocal {
+      enable = true;
+      package = mkDefault pkgs.mariadb;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        { name = cfg.database.user;
+          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+        }
+      ];
+    };
+
+    services.postgresql = mkIf pgsqlLocal {
+      enable = true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        { name = cfg.database.user;
+          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        }
+      ];
+    };
 
     # create symlinks for the basic directory layout the redmine package expects
     systemd.tmpfiles.rules = [
@@ -259,7 +298,7 @@ in
     ];
 
     systemd.services.redmine = {
-      after = [ "network.target" (if cfg.database.type == "mysql2" then "mysql.service" else "postgresql.service") ];
+      after = [ "network.target" ] ++ optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";

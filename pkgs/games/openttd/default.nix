@@ -28,12 +28,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "openttd-${version}";
-  version = "1.9.1";
+  pname = "openttd";
+  version = "1.9.3";
 
   src = fetchurl {
-    url = "https://proxy.binaries.openttd.org/openttd-releases/${version}/${name}-source.tar.xz";
-    sha256 = "1r8i6yzgww7aw8iibqagahg1gqgw7305g07agy0dpszzvp0mi0gz";
+    url = "https://proxy.binaries.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
+    sha256 = "0ijq72kgx997ggw40i5f4a3nf7y2g72z37l47i18yjvgbdzy320r";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];

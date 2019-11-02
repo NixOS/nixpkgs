@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pythonPackages }:
 
 with pythonPackages; buildPythonApplication rec {
-  name = "reno-${version}";
+  pname = "reno";
   version = "2.3.2";
 
   src = fetchurl {
-    url = "mirror://pypi/r/reno/${name}.tar.gz";
+    url = "mirror://pypi/r/reno/${pname}-${version}.tar.gz";
     sha256 = "018vl9fj706jjf07xdx8q6761s53mrihjn69yjq09gp0vmp1g7i4";
   };
 

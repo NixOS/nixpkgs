@@ -14,11 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ fontforge pythonPackages.fonttools python ];
 
   installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp -v $(find . -name '*Narrow*.ttf') $out/share/fonts/truetype
-
-    mkdir -p "$out/doc/${pname}-${version}"
-    cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${pname}-${version}" || true
+    find . -name '*Narrow*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
+    install -m444 -Dt $out/doc/${pname}-${version} AUTHORS ChangeLog COPYING License.txt README.rst
   '';
 
   meta = with stdenv.lib; {

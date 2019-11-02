@@ -91,7 +91,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "mendeley-${version}";
+  pname = "mendeley";
+  inherit version;
 
   src = fetchurl {
     url = url;
@@ -103,7 +104,7 @@ stdenv.mkDerivation {
 
   propagatedUserEnvPkgs = [ gconf ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -129,9 +130,9 @@ stdenv.mkDerivation {
   '';
 
   dontStrip = true;
-  dontPatchElf = true;
+  dontPatchELF = true;
 
-  updateScript = import ./update.nix { inherit stdenv writeScript runtimeShell; };
+  updateScript = import ./update.nix { inherit writeScript runtimeShell; };
 
   meta = with stdenv.lib; {
     homepage = https://www.mendeley.com;

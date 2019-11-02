@@ -626,17 +626,17 @@
     xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
      overlays</link>. For example, the following code:
 <programlisting>
-  let
-    pkgs = import &lt;nixpkgs&gt; {};
-  in
-    pkgs.overridePackages (self: super: ...)
+let
+  pkgs = import &lt;nixpkgs&gt; {};
+in
+  pkgs.overridePackages (self: super: ...)
 </programlisting>
      should be replaced by:
 <programlisting>
-  let
-    pkgs = import &lt;nixpkgs&gt; {};
-  in
-    import pkgs.path { overlays = [(self: super: ...)]; }
+let
+  pkgs = import &lt;nixpkgs&gt; {};
+in
+  import pkgs.path { overlays = [(self: super: ...)]; }
 </programlisting>
     </para>
    </listitem>
@@ -730,7 +730,7 @@
    </listitem>
    <listitem>
     <para>
-     <literal>jre</literal> now defaults to GTK+ UI by default. This improves
+     <literal>jre</literal> now defaults to GTK UI by default. This improves
      visual consistency and makes Java follow system font style, improving the
      situation on HighDPI displays. This has a cost of increased closure size;
      for server and other headless workloads it's recommended to use

@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-mahjongg-${version}";
-  version = "3.32.0";
+  pname = "gnome-mahjongg";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mahjongg/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "12kamxnxbh26k4iykhbs873mx25a2wrjnhr013lfkwbyl52kg12j";
+    url = "mirror://gnome/sources/gnome-mahjongg/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0qyi3jkg112jysrsy5p330b7b92sl09mr8zsimq06q68kj1wzkz5";
   };
 
   passthru = {

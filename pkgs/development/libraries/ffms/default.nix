@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, zlib, ffmpeg, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "ffms-${version}";
+  pname = "ffms";
   version = "2.23";
 
   src = fetchFromGitHub {
@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib ffmpeg ];
+
+  # ffms includes a built-in vapoursynth plugin, see:
+  # https://github.com/FFMS/ffms2#avisynth-and-vapoursynth-plugin
+  postInstall = ''
+    mkdir $out/lib/vapoursynth
+    ln -s $out/lib/libffms2.so $out/lib/vapoursynth/libffms2.so
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/FFMS/ffms2/;

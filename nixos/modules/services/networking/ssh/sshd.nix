@@ -4,6 +4,23 @@ with lib;
 
 let
 
+  # The splicing information needed for nativeBuildInputs isn't available
+  # on the derivations likely to be used as `cfgc.package`.
+  # This middle-ground solution ensures *an* sshd can do their basic validation
+  # on the configuration.
+  validationPackage = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
+    then [ cfgc.package ]
+    else [ pkgs.buildPackages.openssh ];
+
+  sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ validationPackage ]; } ''
+    cat >$out <<EOL
+    ${cfg.extraConfig}
+    EOL
+
+    ssh-keygen -f mock-hostkey -N ""
+    sshd -t -f $out -h mock-hostkey
+  '';
+
   cfg  = config.services.openssh;
   cfgc = config.programs.ssh;
 
@@ -339,7 +356,7 @@ in
 
     environment.etc = authKeysFiles //
       { "ssh/moduli".source = cfg.moduliFile;
-        "ssh/sshd_config".text = cfg.extraConfig;
+        "ssh/sshd_config".source = sshconf;
       };
 
     systemd =
@@ -485,7 +502,7 @@ in
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}]
-      ++ flip map cfg.listenAddresses ({ addr, ... }: {
+      ++ forEach cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
       });

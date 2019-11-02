@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.30";
-  name = "ccid-${version}";
+  pname = "ccid";
+  version = "1.4.31";
 
   src = fetchurl {
-    url = "https://ccid.apdu.fr/files/${name}.tar.bz2";
-    sha256 = "0z7zafdg75fr1adlv2x0zz34s07gljcjg2lsz76s1048w1xhh5xc";
+    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
+    sha256 = "1xz8ikr6vk73w3xnwb931yq8lqc1zrj8c3v34n6h63irwjvdfj3b";
   };
 
   postPatch = ''

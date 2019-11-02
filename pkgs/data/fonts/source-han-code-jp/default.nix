@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   pname = "source-han-code-jp";
@@ -17,9 +17,9 @@ in fetchzip {
 
   meta = {
     description = "A monospaced Latin font suitable for coding";
-    maintainers = with stdenv.lib.maintainers; [ mt-caret ];
-    platforms = with stdenv.lib.platforms; all;
+    maintainers = with lib.maintainers; [ mt-caret ];
+    platforms = with lib.platforms; all;
     homepage = https://blogs.adobe.com/CCJKType/2015/06/source-han-code-jp.html;
-    license = stdenv.lib.licenses.ofl;
+    license = lib.licenses.ofl;
   };
 }

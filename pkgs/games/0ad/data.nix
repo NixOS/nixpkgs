@@ -1,7 +1,7 @@
 { stdenv, fetchurl, zeroad-unwrapped }:
 
 stdenv.mkDerivation rec {
-  name = "0ad-data-${version}";
+  pname = "0ad-data";
   inherit (zeroad-unwrapped) version;
 
   src = fetchurl {

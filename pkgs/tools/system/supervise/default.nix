@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "supervise-${version}";
+  pname = "supervise";
   version = "1.4.0";
 
   src = fetchzip {

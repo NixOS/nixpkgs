@@ -19,7 +19,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
-    rev = "${version}";
+    rev = version;
     owner = "ludios";
     repo = "wpull";
     sha256 = "1j96avm0ynbazypzp766wh26n4qc73y7wgsiqfrdfl6x7rx20wgf";

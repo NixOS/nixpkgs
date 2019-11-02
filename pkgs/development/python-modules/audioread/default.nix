@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytestrunner
 }:
 
 buildPythonPackage rec {
   pname = "audioread";
-  version = "2.1.6";
+  version = "2.1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b0b9270c20833a75ce0d167fb2fdad52ddcd8e8f300be8afad3ac9715850bc50";
+    sha256 = "073904fabc842881e07bd3e4a5776623535562f70b1655b635d22886168dd168";
   };
+
+  nativeBuildInputs = [ pytestrunner ];
 
   # No tests, need to disable or py3k breaks
   doCheck = false;

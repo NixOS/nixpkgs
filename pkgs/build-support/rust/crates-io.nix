@@ -19,7 +19,7 @@ rec {
       (crates."memchr"."${deps."aho_corasick"."0.6.10"."memchr"}" deps)
     ]);
   };
-  features_.aho_corasick."0.6.10" = deps: f: updateFeatures f (rec {
+  features_.aho_corasick."0.6.10" = deps: f: updateFeatures f ({
     aho_corasick."0.6.10".default = (f.aho_corasick."0.6.10".default or true);
     memchr."${deps.aho_corasick."0.6.10".memchr}".default = true;
   }) [
@@ -42,7 +42,7 @@ rec {
       (crates."memchr"."${deps."aho_corasick"."0.6.8"."memchr"}" deps)
     ]);
   };
-  features_.aho_corasick."0.6.8" = deps: f: updateFeatures f (rec {
+  features_.aho_corasick."0.6.8" = deps: f: updateFeatures f ({
     aho_corasick."0.6.8".default = (f.aho_corasick."0.6.8".default or true);
     memchr."${deps.aho_corasick."0.6.8".memchr}".default = true;
   }) [
@@ -62,7 +62,7 @@ rec {
       (crates."winapi"."${deps."ansi_term"."0.11.0"."winapi"}" deps)
     ]) else []);
   };
-  features_.ansi_term."0.11.0" = deps: f: updateFeatures f (rec {
+  features_.ansi_term."0.11.0" = deps: f: updateFeatures f ({
     ansi_term."0.11.0".default = (f.ansi_term."0.11.0".default or true);
     winapi = fold recursiveUpdate {} [
       { "${deps.ansi_term."0.11.0".winapi}"."consoleapi" = true; }
@@ -186,7 +186,7 @@ rec {
       (crates."winapi"."${deps."atty"."0.2.11"."winapi"}" deps)
     ]) else []);
   };
-  features_.atty."0.2.11" = deps: f: updateFeatures f (rec {
+  features_.atty."0.2.11" = deps: f: updateFeatures f ({
     atty."0.2.11".default = (f.atty."0.2.11".default or true);
     libc."${deps.atty."0.2.11".libc}".default = (f.libc."${deps.atty."0.2.11".libc}".default or false);
     termion."${deps.atty."0.2.11".termion}".default = true;
@@ -215,7 +215,7 @@ rec {
     authors = [ "Josh Stone <cuviper@gmail.com>" ];
     sha256 = "0dv81dwnp1al3j4ffz007yrjv4w1c7hw09gnf0xs3icxiw6qqfs3";
   };
-  features_.autocfg."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.autocfg."0.1.2" = deps: f: updateFeatures f ({
     autocfg."0.1.2".default = (f.autocfg."0.1.2".default or true);
   }) [];
 
@@ -461,7 +461,7 @@ rec {
       (crates."cc"."${deps."backtrace_sys"."0.1.24"."cc"}" deps)
     ]);
   };
-  features_.backtrace_sys."0.1.24" = deps: f: updateFeatures f (rec {
+  features_.backtrace_sys."0.1.24" = deps: f: updateFeatures f ({
     backtrace_sys."0.1.24".default = (f.backtrace_sys."0.1.24".default or true);
     cc."${deps.backtrace_sys."0.1.24".cc}".default = true;
     libc."${deps.backtrace_sys."0.1.24".libc}".default = true;
@@ -489,7 +489,7 @@ rec {
       (crates."cc"."${deps."backtrace_sys"."0.1.28"."cc"}" deps)
     ]);
   };
-  features_.backtrace_sys."0.1.28" = deps: f: updateFeatures f (rec {
+  features_.backtrace_sys."0.1.28" = deps: f: updateFeatures f ({
     backtrace_sys."0.1.28".default = (f.backtrace_sys."0.1.28".default or true);
     cc."${deps.backtrace_sys."0.1.28".cc}".default = true;
     libc."${deps.backtrace_sys."0.1.28".libc}".default = (f.libc."${deps.backtrace_sys."0.1.28".libc}".default or false);
@@ -509,7 +509,7 @@ rec {
     sha256 = "1g1wmz2001qmfrd37dnd5qiss5njrw26aywmg6yhkmkbyrhjxb08";
     features = mkFeatures (features."bitflags"."1.0.4" or {});
   };
-  features_.bitflags."1.0.4" = deps: f: updateFeatures f (rec {
+  features_.bitflags."1.0.4" = deps: f: updateFeatures f ({
     bitflags."1.0.4".default = (f.bitflags."1.0.4".default or true);
   }) [];
 
@@ -582,7 +582,7 @@ rec {
       (crates."url"."${deps."carnix"."0.10.0"."url"}" deps)
     ]);
   };
-  features_.carnix."0.10.0" = deps: f: updateFeatures f (rec {
+  features_.carnix."0.10.0" = deps: f: updateFeatures f ({
     carnix."0.10.0".default = (f.carnix."0.10.0".default or true);
     clap."${deps.carnix."0.10.0".clap}".default = true;
     dirs."${deps.carnix."0.10.0".dirs}".default = true;
@@ -645,7 +645,7 @@ rec {
       (crates."toml"."${deps."carnix"."0.9.1"."toml"}" deps)
     ]);
   };
-  features_.carnix."0.9.1" = deps: f: updateFeatures f (rec {
+  features_.carnix."0.9.1" = deps: f: updateFeatures f ({
     carnix."0.9.1".default = (f.carnix."0.9.1".default or true);
     clap."${deps.carnix."0.9.1".clap}".default = true;
     dirs."${deps.carnix."0.9.1".dirs}".default = true;
@@ -704,7 +704,7 @@ rec {
       (crates."toml"."${deps."carnix"."0.9.2"."toml"}" deps)
     ]);
   };
-  features_.carnix."0.9.2" = deps: f: updateFeatures f (rec {
+  features_.carnix."0.9.2" = deps: f: updateFeatures f ({
     carnix."0.9.2".default = (f.carnix."0.9.2".default or true);
     clap."${deps.carnix."0.9.2".clap}".default = true;
     dirs."${deps.carnix."0.9.2".dirs}".default = true;
@@ -764,7 +764,7 @@ rec {
       (crates."url"."${deps."carnix"."0.9.8"."url"}" deps)
     ]);
   };
-  features_.carnix."0.9.8" = deps: f: updateFeatures f (rec {
+  features_.carnix."0.9.8" = deps: f: updateFeatures f ({
     carnix."0.9.8".default = (f.carnix."0.9.8".default or true);
     clap."${deps.carnix."0.9.8".clap}".default = true;
     dirs."${deps.carnix."0.9.8".dirs}".default = true;
@@ -854,7 +854,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "11qrix06wagkplyk908i3423ps9m9np6c4vbcq81s9fyl244xv3n";
   };
-  features_.cfg_if."0.1.6" = deps: f: updateFeatures f (rec {
+  features_.cfg_if."0.1.6" = deps: f: updateFeatures f ({
     cfg_if."0.1.6".default = (f.cfg_if."0.1.6".default or true);
   }) [];
 
@@ -869,7 +869,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "13gvcx1dxjq4mpmpj26hpg3yc97qffkx2zi58ykr1dwr8q2biiig";
   };
-  features_.cfg_if."0.1.7" = deps: f: updateFeatures f (rec {
+  features_.cfg_if."0.1.7" = deps: f: updateFeatures f ({
     cfg_if."0.1.7".default = (f.cfg_if."0.1.7".default or true);
   }) [];
 
@@ -1001,7 +1001,7 @@ rec {
     authors = [ "Cesar Eduardo Barros <cesarb@cesarb.eti.br>" ];
     sha256 = "03qri9hjf049gwqg9q527lybpg918q6y5q4g9a5lma753nff49wd";
   };
-  features_.constant_time_eq."0.1.3" = deps: f: updateFeatures f (rec {
+  features_.constant_time_eq."0.1.3" = deps: f: updateFeatures f ({
     constant_time_eq."0.1.3".default = (f.constant_time_eq."0.1.3".default or true);
   }) [];
 
@@ -1024,7 +1024,7 @@ rec {
       (crates."winapi"."${deps."dirs"."1.0.4"."winapi"}" deps)
     ]) else []);
   };
-  features_.dirs."1.0.4" = deps: f: updateFeatures f (rec {
+  features_.dirs."1.0.4" = deps: f: updateFeatures f ({
     dirs."1.0.4".default = (f.dirs."1.0.4".default or true);
     libc."${deps.dirs."1.0.4".libc}".default = true;
     redox_users."${deps.dirs."1.0.4".redox_users}".default = true;
@@ -1062,7 +1062,7 @@ rec {
       (crates."winapi"."${deps."dirs"."1.0.5"."winapi"}" deps)
     ]) else []);
   };
-  features_.dirs."1.0.5" = deps: f: updateFeatures f (rec {
+  features_.dirs."1.0.5" = deps: f: updateFeatures f ({
     dirs."1.0.5".default = (f.dirs."1.0.5".default or true);
     libc."${deps.dirs."1.0.5".libc}".default = true;
     redox_users."${deps.dirs."1.0.5".redox_users}".default = true;
@@ -1359,7 +1359,7 @@ rec {
     ]);
     features = mkFeatures (features."failure_derive"."0.1.3" or {});
   };
-  features_.failure_derive."0.1.3" = deps: f: updateFeatures f (rec {
+  features_.failure_derive."0.1.3" = deps: f: updateFeatures f ({
     failure_derive."0.1.3".default = (f.failure_derive."0.1.3".default or true);
     proc_macro2."${deps.failure_derive."0.1.3".proc_macro2}".default = true;
     quote."${deps.failure_derive."0.1.3".quote}".default = true;
@@ -1392,7 +1392,7 @@ rec {
     ]);
     features = mkFeatures (features."failure_derive"."0.1.5" or {});
   };
-  features_.failure_derive."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.failure_derive."0.1.5" = deps: f: updateFeatures f ({
     failure_derive."0.1.5".default = (f.failure_derive."0.1.5".default or true);
     proc_macro2."${deps.failure_derive."0.1.5".proc_macro2}".default = true;
     quote."${deps.failure_derive."0.1.5".quote}".default = true;
@@ -1417,7 +1417,7 @@ rec {
     edition = "2018";
     sha256 = "07apwv9dj716yjlcj29p94vkqn5zmfh7hlrqvrjx3wzshphc95h9";
   };
-  features_.fuchsia_cprng."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.fuchsia_cprng."0.1.1" = deps: f: updateFeatures f ({
     fuchsia_cprng."0.1.1".default = (f.fuchsia_cprng."0.1.1".default or true);
   }) [];
 
@@ -1435,7 +1435,7 @@ rec {
       (crates."fuchsia_zircon_sys"."${deps."fuchsia_zircon"."0.3.3"."fuchsia_zircon_sys"}" deps)
     ]);
   };
-  features_.fuchsia_zircon."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.fuchsia_zircon."0.3.3" = deps: f: updateFeatures f ({
     bitflags."${deps.fuchsia_zircon."0.3.3".bitflags}".default = true;
     fuchsia_zircon."0.3.3".default = (f.fuchsia_zircon."0.3.3".default or true);
     fuchsia_zircon_sys."${deps.fuchsia_zircon."0.3.3".fuchsia_zircon_sys}".default = true;
@@ -1454,7 +1454,7 @@ rec {
     authors = [ "Raph Levien <raph@google.com>" ];
     sha256 = "08jp1zxrm9jbrr6l26bjal4dbm8bxfy57ickdgibsqxr1n9j3hf5";
   };
-  features_.fuchsia_zircon_sys."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.fuchsia_zircon_sys."0.3.3" = deps: f: updateFeatures f ({
     fuchsia_zircon_sys."0.3.3".default = (f.fuchsia_zircon_sys."0.3.3".default or true);
   }) [];
 
@@ -1472,7 +1472,7 @@ rec {
       (crates."quick_error"."${deps."humantime"."1.1.1"."quick_error"}" deps)
     ]);
   };
-  features_.humantime."1.1.1" = deps: f: updateFeatures f (rec {
+  features_.humantime."1.1.1" = deps: f: updateFeatures f ({
     humantime."1.1.1".default = (f.humantime."1.1.1".default or true);
     quick_error."${deps.humantime."1.1.1".quick_error}".default = true;
   }) [
@@ -1494,7 +1494,7 @@ rec {
       (crates."quick_error"."${deps."humantime"."1.2.0"."quick_error"}" deps)
     ]);
   };
-  features_.humantime."1.2.0" = deps: f: updateFeatures f (rec {
+  features_.humantime."1.2.0" = deps: f: updateFeatures f ({
     humantime."1.2.0".default = (f.humantime."1.2.0".default or true);
     quick_error."${deps.humantime."1.2.0".quick_error}".default = true;
   }) [
@@ -1516,7 +1516,7 @@ rec {
       (crates."unicode_normalization"."${deps."idna"."0.1.5"."unicode_normalization"}" deps)
     ]);
   };
-  features_.idna."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.idna."0.1.5" = deps: f: updateFeatures f ({
     idna."0.1.5".default = (f.idna."0.1.5".default or true);
     matches."${deps.idna."0.1.5".matches}".default = true;
     unicode_bidi."${deps.idna."0.1.5".unicode_bidi}".default = true;
@@ -1730,7 +1730,7 @@ rec {
     ]);
     features = mkFeatures (features."log"."0.4.5" or {});
   };
-  features_.log."0.4.5" = deps: f: updateFeatures f (rec {
+  features_.log."0.4.5" = deps: f: updateFeatures f ({
     cfg_if."${deps.log."0.4.5".cfg_if}".default = true;
     log."0.4.5".default = (f.log."0.4.5".default or true);
   }) [
@@ -1752,7 +1752,7 @@ rec {
     ]);
     features = mkFeatures (features."log"."0.4.6" or {});
   };
-  features_.log."0.4.6" = deps: f: updateFeatures f (rec {
+  features_.log."0.4.6" = deps: f: updateFeatures f ({
     cfg_if."${deps.log."0.4.6".cfg_if}".default = true;
     log."0.4.6".default = (f.log."0.4.6".default or true);
   }) [
@@ -1770,7 +1770,7 @@ rec {
     sha256 = "03hl636fg6xggy0a26200xs74amk3k9n0908rga2szn68agyz3cv";
     libPath = "lib.rs";
   };
-  features_.matches."0.1.8" = deps: f: updateFeatures f (rec {
+  features_.matches."0.1.8" = deps: f: updateFeatures f ({
     matches."0.1.8".default = (f.matches."0.1.8".default or true);
   }) [];
 
@@ -2004,7 +2004,7 @@ rec {
     sha256 = "04ahrp7aw4ip7fmadb0bknybmkfav0kk0gw4ps3ydq5w6hr0ib5i";
     libPath = "lib.rs";
   };
-  features_.percent_encoding."1.0.1" = deps: f: updateFeatures f (rec {
+  features_.percent_encoding."1.0.1" = deps: f: updateFeatures f ({
     percent_encoding."1.0.1".default = (f.percent_encoding."1.0.1".default or true);
   }) [];
 
@@ -2077,7 +2077,7 @@ rec {
     authors = [ "Paul Colomiets <paul@colomiets.name>" "Colin Kiegel <kiegel@gmx.de>" ];
     sha256 = "192a3adc5phgpibgqblsdx1b421l5yg9bjbmv552qqq9f37h60k5";
   };
-  features_.quick_error."1.2.2" = deps: f: updateFeatures f (rec {
+  features_.quick_error."1.2.2" = deps: f: updateFeatures f ({
     quick_error."1.2.2".default = (f.quick_error."1.2.2".default or true);
   }) [];
 
@@ -2362,7 +2362,7 @@ rec {
       ++ (if kernel == "wasm32-unknown-unknown" then mapFeatures features ([
 ]) else []);
   };
-  features_.rand_os."0.1.3" = deps: f: updateFeatures f (rec {
+  features_.rand_os."0.1.3" = deps: f: updateFeatures f ({
     cloudabi."${deps.rand_os."0.1.3".cloudabi}".default = true;
     fuchsia_cprng."${deps.rand_os."0.1.3".fuchsia_cprng}".default = true;
     libc."${deps.rand_os."0.1.3".libc}".default = true;
@@ -2426,7 +2426,7 @@ rec {
     sha256 = "132rnhrq49l3z7gjrwj2zfadgw6q0355s6a7id7x7c0d7sk72611";
     libName = "syscall";
   };
-  features_.redox_syscall."0.1.40" = deps: f: updateFeatures f (rec {
+  features_.redox_syscall."0.1.40" = deps: f: updateFeatures f ({
     redox_syscall."0.1.40".default = (f.redox_syscall."0.1.40".default or true);
   }) [];
 
@@ -2442,7 +2442,7 @@ rec {
     sha256 = "1a61cv7yydx64vpyvzr0z0hwzdvy4gcvcnfc6k70zpkngj5sz3ip";
     libName = "syscall";
   };
-  features_.redox_syscall."0.1.51" = deps: f: updateFeatures f (rec {
+  features_.redox_syscall."0.1.51" = deps: f: updateFeatures f ({
     redox_syscall."0.1.51".default = (f.redox_syscall."0.1.51".default or true);
   }) [];
 
@@ -2460,7 +2460,7 @@ rec {
       (crates."redox_syscall"."${deps."redox_termios"."0.1.1"."redox_syscall"}" deps)
     ]);
   };
-  features_.redox_termios."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.redox_termios."0.1.1" = deps: f: updateFeatures f ({
     redox_syscall."${deps.redox_termios."0.1.1".redox_syscall}".default = true;
     redox_termios."0.1.1".default = (f.redox_termios."0.1.1".default or true);
   }) [
@@ -2483,7 +2483,7 @@ rec {
       (crates."redox_syscall"."${deps."redox_users"."0.2.0"."redox_syscall"}" deps)
     ]);
   };
-  features_.redox_users."0.2.0" = deps: f: updateFeatures f (rec {
+  features_.redox_users."0.2.0" = deps: f: updateFeatures f ({
     argon2rs."${deps.redox_users."0.2.0".argon2rs}".default = (f.argon2rs."${deps.redox_users."0.2.0".argon2rs}".default or false);
     failure."${deps.redox_users."0.2.0".failure}".default = true;
     rand."${deps.redox_users."0.2.0".rand}".default = true;
@@ -2513,7 +2513,7 @@ rec {
       (crates."redox_syscall"."${deps."redox_users"."0.3.0"."redox_syscall"}" deps)
     ]);
   };
-  features_.redox_users."0.3.0" = deps: f: updateFeatures f (rec {
+  features_.redox_users."0.3.0" = deps: f: updateFeatures f ({
     argon2rs."${deps.redox_users."0.3.0".argon2rs}".default = (f.argon2rs."${deps.redox_users."0.3.0".argon2rs}".default or false);
     failure."${deps.redox_users."0.3.0".failure}".default = true;
     rand_os."${deps.redox_users."0.3.0".rand_os}".default = true;
@@ -2626,7 +2626,7 @@ rec {
       (crates."ucd_util"."${deps."regex_syntax"."0.6.2"."ucd_util"}" deps)
     ]);
   };
-  features_.regex_syntax."0.6.2" = deps: f: updateFeatures f (rec {
+  features_.regex_syntax."0.6.2" = deps: f: updateFeatures f ({
     regex_syntax."0.6.2".default = (f.regex_syntax."0.6.2".default or true);
     ucd_util."${deps.regex_syntax."0.6.2".ucd_util}".default = true;
   }) [
@@ -2647,7 +2647,7 @@ rec {
       (crates."ucd_util"."${deps."regex_syntax"."0.6.5"."ucd_util"}" deps)
     ]);
   };
-  features_.regex_syntax."0.6.5" = deps: f: updateFeatures f (rec {
+  features_.regex_syntax."0.6.5" = deps: f: updateFeatures f ({
     regex_syntax."0.6.5".default = (f.regex_syntax."0.6.5".default or true);
     ucd_util."${deps.regex_syntax."0.6.5".ucd_util}".default = true;
   }) [
@@ -2667,7 +2667,7 @@ rec {
       (crates."winapi"."${deps."remove_dir_all"."0.5.1"."winapi"}" deps)
     ]) else []);
   };
-  features_.remove_dir_all."0.5.1" = deps: f: updateFeatures f (rec {
+  features_.remove_dir_all."0.5.1" = deps: f: updateFeatures f ({
     remove_dir_all."0.5.1".default = (f.remove_dir_all."0.5.1".default or true);
     winapi = fold recursiveUpdate {} [
       { "${deps.remove_dir_all."0.5.1".winapi}"."errhandlingapi" = true; }
@@ -2692,7 +2692,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "0sr6cr02araqnlqwc5ghvnafjmkw11vzjswqaz757lvyrcl8xcy6";
   };
-  features_.rustc_demangle."0.1.13" = deps: f: updateFeatures f (rec {
+  features_.rustc_demangle."0.1.13" = deps: f: updateFeatures f ({
     rustc_demangle."0.1.13".default = (f.rustc_demangle."0.1.13".default or true);
   }) [];
 
@@ -2706,7 +2706,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "00ma4r9haq0zv5krps617mym6y74056pfcivyld0kpci156vfaax";
   };
-  features_.rustc_demangle."0.1.9" = deps: f: updateFeatures f (rec {
+  features_.rustc_demangle."0.1.9" = deps: f: updateFeatures f ({
     rustc_demangle."0.1.9".default = (f.rustc_demangle."0.1.9".default or true);
   }) [];
 
@@ -2724,7 +2724,7 @@ rec {
 ]);
     features = mkFeatures (features."ryu"."0.2.6" or {});
   };
-  features_.ryu."0.2.6" = deps: f: updateFeatures f (rec {
+  features_.ryu."0.2.6" = deps: f: updateFeatures f ({
     ryu."0.2.6".default = (f.ryu."0.2.6".default or true);
   }) [];
 
@@ -2743,7 +2743,7 @@ rec {
 ]);
     features = mkFeatures (features."ryu"."0.2.7" or {});
   };
-  features_.ryu."0.2.7" = deps: f: updateFeatures f (rec {
+  features_.ryu."0.2.7" = deps: f: updateFeatures f ({
     ryu."0.2.7".default = (f.ryu."0.2.7".default or true);
   }) [];
 
@@ -2758,7 +2758,7 @@ rec {
     sha256 = "1arqj2skcfr46s1lcyvnlmfr5456kg5nhn8k90xyfjnxkp5yga2v";
     features = mkFeatures (features."scoped_threadpool"."0.1.9" or {});
   };
-  features_.scoped_threadpool."0.1.9" = deps: f: updateFeatures f (rec {
+  features_.scoped_threadpool."0.1.9" = deps: f: updateFeatures f ({
     scoped_threadpool."0.1.9".default = (f.scoped_threadpool."0.1.9".default or true);
   }) [];
 
@@ -2876,7 +2876,7 @@ rec {
     ]);
     features = mkFeatures (features."serde_derive"."1.0.80" or {});
   };
-  features_.serde_derive."1.0.80" = deps: f: updateFeatures f (rec {
+  features_.serde_derive."1.0.80" = deps: f: updateFeatures f ({
     proc_macro2."${deps.serde_derive."1.0.80".proc_macro2}".default = true;
     quote."${deps.serde_derive."1.0.80".quote}".default = true;
     serde_derive."1.0.80".default = (f.serde_derive."1.0.80".default or true);
@@ -2908,7 +2908,7 @@ rec {
     ]);
     features = mkFeatures (features."serde_derive"."1.0.89" or {});
   };
-  features_.serde_derive."1.0.89" = deps: f: updateFeatures f (rec {
+  features_.serde_derive."1.0.89" = deps: f: updateFeatures f ({
     proc_macro2."${deps.serde_derive."1.0.89".proc_macro2}".default = true;
     quote."${deps.serde_derive."1.0.89".quote}".default = true;
     serde_derive."1.0.89".default = (f.serde_derive."1.0.89".default or true);
@@ -3024,7 +3024,7 @@ rec {
     authors = [ "Danny Guo <dannyguo91@gmail.com>" ];
     sha256 = "0fy0k5f2705z73mb3x9459bpcvrx4ky8jpr4zikcbiwan4bnm0iv";
   };
-  features_.strsim."0.7.0" = deps: f: updateFeatures f (rec {
+  features_.strsim."0.7.0" = deps: f: updateFeatures f ({
     strsim."0.7.0".default = (f.strsim."0.7.0".default or true);
   }) [];
 
@@ -3176,7 +3176,7 @@ rec {
     ]);
     features = mkFeatures (features."synstructure"."0.10.0" or {});
   };
-  features_.synstructure."0.10.0" = deps: f: updateFeatures f (rec {
+  features_.synstructure."0.10.0" = deps: f: updateFeatures f ({
     proc_macro2."${deps.synstructure."0.10.0".proc_macro2}".default = true;
     quote."${deps.synstructure."0.10.0".quote}".default = true;
     syn = fold recursiveUpdate {} [
@@ -3211,7 +3211,7 @@ rec {
     ]);
     features = mkFeatures (features."synstructure"."0.10.1" or {});
   };
-  features_.synstructure."0.10.1" = deps: f: updateFeatures f (rec {
+  features_.synstructure."0.10.1" = deps: f: updateFeatures f ({
     proc_macro2."${deps.synstructure."0.10.1".proc_macro2}".default = true;
     quote."${deps.synstructure."0.10.1".quote}".default = true;
     syn = fold recursiveUpdate {} [
@@ -3242,7 +3242,7 @@ rec {
       (crates."remove_dir_all"."${deps."tempdir"."0.3.7"."remove_dir_all"}" deps)
     ]);
   };
-  features_.tempdir."0.3.7" = deps: f: updateFeatures f (rec {
+  features_.tempdir."0.3.7" = deps: f: updateFeatures f ({
     rand."${deps.tempdir."0.3.7".rand}".default = true;
     remove_dir_all."${deps.tempdir."0.3.7".remove_dir_all}".default = true;
     tempdir."0.3.7".default = (f.tempdir."0.3.7".default or true);
@@ -3264,7 +3264,7 @@ rec {
       (crates."wincolor"."${deps."termcolor"."1.0.4"."wincolor"}" deps)
     ]) else []);
   };
-  features_.termcolor."1.0.4" = deps: f: updateFeatures f (rec {
+  features_.termcolor."1.0.4" = deps: f: updateFeatures f ({
     termcolor."1.0.4".default = (f.termcolor."1.0.4".default or true);
     wincolor."${deps.termcolor."1.0.4".wincolor}".default = true;
   }) [
@@ -3288,7 +3288,7 @@ rec {
       (crates."redox_termios"."${deps."termion"."1.5.1"."redox_termios"}" deps)
     ]) else []);
   };
-  features_.termion."1.5.1" = deps: f: updateFeatures f (rec {
+  features_.termion."1.5.1" = deps: f: updateFeatures f ({
     libc."${deps.termion."1.5.1".libc}".default = true;
     redox_syscall."${deps.termion."1.5.1".redox_syscall}".default = true;
     redox_termios."${deps.termion."1.5.1".redox_termios}".default = true;
@@ -3312,7 +3312,7 @@ rec {
       (crates."unicode_width"."${deps."textwrap"."0.10.0"."unicode_width"}" deps)
     ]);
   };
-  features_.textwrap."0.10.0" = deps: f: updateFeatures f (rec {
+  features_.textwrap."0.10.0" = deps: f: updateFeatures f ({
     textwrap."0.10.0".default = (f.textwrap."0.10.0".default or true);
     unicode_width."${deps.textwrap."0.10.0".unicode_width}".default = true;
   }) [
@@ -3332,7 +3332,7 @@ rec {
       (crates."lazy_static"."${deps."thread_local"."0.3.6"."lazy_static"}" deps)
     ]);
   };
-  features_.thread_local."0.3.6" = deps: f: updateFeatures f (rec {
+  features_.thread_local."0.3.6" = deps: f: updateFeatures f ({
     lazy_static."${deps.thread_local."0.3.6".lazy_static}".default = true;
     thread_local."0.3.6".default = (f.thread_local."0.3.6".default or true);
   }) [
@@ -3352,7 +3352,7 @@ rec {
       (crates."serde"."${deps."toml"."0.4.10"."serde"}" deps)
     ]);
   };
-  features_.toml."0.4.10" = deps: f: updateFeatures f (rec {
+  features_.toml."0.4.10" = deps: f: updateFeatures f ({
     serde."${deps.toml."0.4.10".serde}".default = true;
     toml."0.4.10".default = (f.toml."0.4.10".default or true);
   }) [
@@ -3372,7 +3372,7 @@ rec {
       (crates."serde"."${deps."toml"."0.4.8"."serde"}" deps)
     ]);
   };
-  features_.toml."0.4.8" = deps: f: updateFeatures f (rec {
+  features_.toml."0.4.8" = deps: f: updateFeatures f ({
     serde."${deps.toml."0.4.8".serde}".default = true;
     toml."0.4.8".default = (f.toml."0.4.8".default or true);
   }) [
@@ -3420,7 +3420,7 @@ rec {
       (crates."toml"."${deps."toml2nix"."0.1.1"."toml"}" deps)
     ]);
   };
-  features_.toml2nix."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.toml2nix."0.1.1" = deps: f: updateFeatures f ({
     toml."${deps.toml2nix."0.1.1".toml}".default = true;
     toml2nix."0.1.1".default = (f.toml2nix."0.1.1".default or true);
   }) [
@@ -3437,7 +3437,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "02a8h3siipx52b832xc8m8rwasj6nx9jpiwfldw8hp6k205hgkn0";
   };
-  features_.ucd_util."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.ucd_util."0.1.1" = deps: f: updateFeatures f ({
     ucd_util."0.1.1".default = (f.ucd_util."0.1.1".default or true);
   }) [];
 
@@ -3452,7 +3452,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1n1qi3jywq5syq90z9qd8qzbn58pcjgv1sx4sdmipm4jf9zanz15";
   };
-  features_.ucd_util."0.1.3" = deps: f: updateFeatures f (rec {
+  features_.ucd_util."0.1.3" = deps: f: updateFeatures f ({
     ucd_util."0.1.3".default = (f.ucd_util."0.1.3".default or true);
   }) [];
 
@@ -3502,7 +3502,7 @@ rec {
     authors = [ "kwantam <kwantam@gmail.com>" ];
     sha256 = "1da2hv800pd0wilmn4idwpgv5p510hjxizjcfv6xzb40xcsjd8gs";
   };
-  features_.unicode_normalization."0.1.7" = deps: f: updateFeatures f (rec {
+  features_.unicode_normalization."0.1.7" = deps: f: updateFeatures f ({
     unicode_normalization."0.1.7".default = (f.unicode_normalization."0.1.7".default or true);
   }) [];
 
@@ -3520,7 +3520,7 @@ rec {
       (crates."smallvec"."${deps."unicode_normalization"."0.1.8"."smallvec"}" deps)
     ]);
   };
-  features_.unicode_normalization."0.1.8" = deps: f: updateFeatures f (rec {
+  features_.unicode_normalization."0.1.8" = deps: f: updateFeatures f ({
     smallvec."${deps.unicode_normalization."0.1.8".smallvec}".default = true;
     unicode_normalization."0.1.8".default = (f.unicode_normalization."0.1.8".default or true);
   }) [
@@ -3538,7 +3538,7 @@ rec {
     sha256 = "0886lc2aymwgy0lhavwn6s48ik3c61ykzzd3za6prgnw51j7bi4w";
     features = mkFeatures (features."unicode_width"."0.1.5" or {});
   };
-  features_.unicode_width."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.unicode_width."0.1.5" = deps: f: updateFeatures f ({
     unicode_width."0.1.5".default = (f.unicode_width."0.1.5".default or true);
   }) [];
 
@@ -3553,7 +3553,7 @@ rec {
     sha256 = "05wdmwlfzxhq3nhsxn6wx4q8dhxzzfb9szsz6wiw092m1rjj01zj";
     features = mkFeatures (features."unicode_xid"."0.1.0" or {});
   };
-  features_.unicode_xid."0.1.0" = deps: f: updateFeatures f (rec {
+  features_.unicode_xid."0.1.0" = deps: f: updateFeatures f ({
     unicode_xid."0.1.0".default = (f.unicode_xid."0.1.0".default or true);
   }) [];
 
@@ -3604,7 +3604,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1s56ihd2c8ba6191078wivvv59247szaiszrh8x2rxqfsxlfrnpp";
   };
-  features_.utf8_ranges."1.0.1" = deps: f: updateFeatures f (rec {
+  features_.utf8_ranges."1.0.1" = deps: f: updateFeatures f ({
     utf8_ranges."1.0.1".default = (f.utf8_ranges."1.0.1".default or true);
   }) [];
 
@@ -3619,7 +3619,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1my02laqsgnd8ib4dvjgd4rilprqjad6pb9jj9vi67csi5qs2281";
   };
-  features_.utf8_ranges."1.0.2" = deps: f: updateFeatures f (rec {
+  features_.utf8_ranges."1.0.2" = deps: f: updateFeatures f ({
     utf8_ranges."1.0.2".default = (f.utf8_ranges."1.0.2".default or true);
   }) [];
 
@@ -3656,7 +3656,7 @@ rec {
     authors = [ "Sergio Benitez <sb@sergio.bz>" ];
     sha256 = "1yrx9xblmwbafw2firxyqbj8f771kkzfd24n3q7xgwiqyhi0y8qd";
   };
-  features_.version_check."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.version_check."0.1.5" = deps: f: updateFeatures f ({
     version_check."0.1.5".default = (f.version_check."0.1.5".default or true);
   }) [];
 
@@ -3678,7 +3678,7 @@ rec {
     ]) else []);
     features = mkFeatures (features."winapi"."0.3.6" or {});
   };
-  features_.winapi."0.3.6" = deps: f: updateFeatures f (rec {
+  features_.winapi."0.3.6" = deps: f: updateFeatures f ({
     winapi."0.3.6".default = (f.winapi."0.3.6".default or true);
     winapi_i686_pc_windows_gnu."${deps.winapi."0.3.6".winapi_i686_pc_windows_gnu}".default = true;
     winapi_x86_64_pc_windows_gnu."${deps.winapi."0.3.6".winapi_x86_64_pc_windows_gnu}".default = true;
@@ -3698,7 +3698,7 @@ rec {
     sha256 = "05ihkij18r4gamjpxj4gra24514can762imjzlmak5wlzidplzrp";
     build = "build.rs";
   };
-  features_.winapi_i686_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.winapi_i686_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f ({
     winapi_i686_pc_windows_gnu."0.4.0".default = (f.winapi_i686_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
@@ -3715,7 +3715,7 @@ rec {
       (crates."winapi"."${deps."winapi_util"."0.1.1"."winapi"}" deps)
     ]) else []);
   };
-  features_.winapi_util."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.winapi_util."0.1.1" = deps: f: updateFeatures f ({
     winapi = fold recursiveUpdate {} [
       { "${deps.winapi_util."0.1.1".winapi}"."consoleapi" = true; }
       { "${deps.winapi_util."0.1.1".winapi}"."errhandlingapi" = true; }
@@ -3747,7 +3747,7 @@ rec {
       (crates."winapi"."${deps."winapi_util"."0.1.2"."winapi"}" deps)
     ]) else []);
   };
-  features_.winapi_util."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.winapi_util."0.1.2" = deps: f: updateFeatures f ({
     winapi = fold recursiveUpdate {} [
       { "${deps.winapi_util."0.1.2".winapi}"."consoleapi" = true; }
       { "${deps.winapi_util."0.1.2".winapi}"."errhandlingapi" = true; }
@@ -3777,7 +3777,7 @@ rec {
     sha256 = "0n1ylmlsb8yg1v583i4xy0qmqg42275flvbc51hdqjjfjcl9vlbj";
     build = "build.rs";
   };
-  features_.winapi_x86_64_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.winapi_x86_64_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f ({
     winapi_x86_64_pc_windows_gnu."0.4.0".default = (f.winapi_x86_64_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
@@ -3795,7 +3795,7 @@ rec {
       (crates."winapi_util"."${deps."wincolor"."1.0.1"."winapi_util"}" deps)
     ]);
   };
-  features_.wincolor."1.0.1" = deps: f: updateFeatures f (rec {
+  features_.wincolor."1.0.1" = deps: f: updateFeatures f ({
     winapi = fold recursiveUpdate {} [
       { "${deps.wincolor."1.0.1".winapi}"."minwindef" = true; }
       { "${deps.wincolor."1.0.1".winapi}"."wincon" = true; }
@@ -4104,7 +4104,7 @@ rec {
     dependencies = mapFeatures features ([
 ]);
   };
-  features_.bytesize."1.0.0" = deps: f: updateFeatures f (rec {
+  features_.bytesize."1.0.0" = deps: f: updateFeatures f ({
     bytesize."1.0.0".default = (f.bytesize."1.0.0".default or true);
   }) [];
 
@@ -4549,7 +4549,7 @@ rec {
     build = "build.rs";
     features = mkFeatures (features."core_foundation_sys"."0.6.2" or {});
   };
-  features_.core_foundation_sys."0.6.2" = deps: f: updateFeatures f (rec {
+  features_.core_foundation_sys."0.6.2" = deps: f: updateFeatures f ({
     core_foundation_sys."0.6.2".default = (f.core_foundation_sys."0.6.2".default or true);
   }) [];
 
@@ -4576,7 +4576,7 @@ rec {
       (crates."url"."${deps."crates_io"."0.23.0"."url"}" deps)
     ]);
   };
-  features_.crates_io."0.23.0" = deps: f: updateFeatures f (rec {
+  features_.crates_io."0.23.0" = deps: f: updateFeatures f ({
     crates_io."0.23.0".default = (f.crates_io."0.23.0".default or true);
     curl."${deps.crates_io."0.23.0".curl}".default = true;
     failure."${deps.crates_io."0.23.0".failure}".default = true;
@@ -4670,7 +4670,7 @@ rec {
       (crates."smallvec"."${deps."crossbeam_channel"."0.3.8"."smallvec"}" deps)
     ]);
   };
-  features_.crossbeam_channel."0.3.8" = deps: f: updateFeatures f (rec {
+  features_.crossbeam_channel."0.3.8" = deps: f: updateFeatures f ({
     crossbeam_channel."0.3.8".default = (f.crossbeam_channel."0.3.8".default or true);
     crossbeam_utils."${deps.crossbeam_channel."0.3.8".crossbeam_utils}".default = true;
     smallvec."${deps.crossbeam_channel."0.3.8".smallvec}".default = true;
@@ -4737,7 +4737,7 @@ rec {
       (crates."winapi"."${deps."crypto_hash"."0.3.3"."winapi"}" deps)
     ]) else []);
   };
-  features_.crypto_hash."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.crypto_hash."0.3.3" = deps: f: updateFeatures f ({
     commoncrypto."${deps.crypto_hash."0.3.3".commoncrypto}".default = true;
     crypto_hash."0.3.3".default = (f.crypto_hash."0.3.3".default or true);
     hex."${deps.crypto_hash."0.3.3".hex}".default = true;
@@ -4929,7 +4929,7 @@ rec {
       (crates."strsim"."${deps."docopt"."1.1.0"."strsim"}" deps)
     ]);
   };
-  features_.docopt."1.1.0" = deps: f: updateFeatures f (rec {
+  features_.docopt."1.1.0" = deps: f: updateFeatures f ({
     docopt."1.1.0".default = (f.docopt."1.1.0".default or true);
     lazy_static."${deps.docopt."1.1.0".lazy_static}".default = true;
     regex."${deps.docopt."1.1.0".regex}".default = true;
@@ -4989,7 +4989,7 @@ rec {
       (crates."libc"."${deps."filetime"."0.2.4"."libc"}" deps)
     ]) else []);
   };
-  features_.filetime."0.2.4" = deps: f: updateFeatures f (rec {
+  features_.filetime."0.2.4" = deps: f: updateFeatures f ({
     cfg_if."${deps.filetime."0.2.4".cfg_if}".default = true;
     filetime."0.2.4".default = (f.filetime."0.2.4".default or true);
     libc."${deps.filetime."0.2.4".libc}".default = true;
@@ -5078,7 +5078,7 @@ rec {
     sha256 = "128mlh23y3gg6ag5h8iiqlcbl59smisdzraqy88ldrf75kbw27ip";
     libPath = "lib.rs";
   };
-  features_.fnv."1.0.6" = deps: f: updateFeatures f (rec {
+  features_.fnv."1.0.6" = deps: f: updateFeatures f ({
     fnv."1.0.6".default = (f.fnv."1.0.6".default or true);
   }) [];
 
@@ -5096,7 +5096,7 @@ rec {
       (crates."foreign_types_shared"."${deps."foreign_types"."0.3.2"."foreign_types_shared"}" deps)
     ]);
   };
-  features_.foreign_types."0.3.2" = deps: f: updateFeatures f (rec {
+  features_.foreign_types."0.3.2" = deps: f: updateFeatures f ({
     foreign_types."0.3.2".default = (f.foreign_types."0.3.2".default or true);
     foreign_types_shared."${deps.foreign_types."0.3.2".foreign_types_shared}".default = true;
   }) [
@@ -5114,7 +5114,7 @@ rec {
     authors = [ "Steven Fackler <sfackler@gmail.com>" ];
     sha256 = "0b6cnvqbflws8dxywk4589vgbz80049lz4x1g9dfy4s1ppd3g4z5";
   };
-  features_.foreign_types_shared."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.foreign_types_shared."0.1.1" = deps: f: updateFeatures f ({
     foreign_types_shared."0.1.1".default = (f.foreign_types_shared."0.1.1".default or true);
   }) [];
 
@@ -5135,7 +5135,7 @@ rec {
       (crates."winapi"."${deps."fs2"."0.4.3"."winapi"}" deps)
     ]) else []);
   };
-  features_.fs2."0.4.3" = deps: f: updateFeatures f (rec {
+  features_.fs2."0.4.3" = deps: f: updateFeatures f ({
     fs2."0.4.3".default = (f.fs2."0.4.3".default or true);
     libc."${deps.fs2."0.4.3".libc}".default = true;
     winapi = fold recursiveUpdate {} [
@@ -5167,7 +5167,7 @@ rec {
       (crates."termcolor"."${deps."fwdansi"."1.0.1"."termcolor"}" deps)
     ]);
   };
-  features_.fwdansi."1.0.1" = deps: f: updateFeatures f (rec {
+  features_.fwdansi."1.0.1" = deps: f: updateFeatures f ({
     fwdansi."1.0.1".default = (f.fwdansi."1.0.1".default or true);
     memchr."${deps.fwdansi."1.0.1".memchr}".default = true;
     termcolor."${deps.fwdansi."1.0.1".termcolor}".default = true;
@@ -5279,7 +5279,7 @@ rec {
       (crates."url"."${deps."git2_curl"."0.9.0"."url"}" deps)
     ]);
   };
-  features_.git2_curl."0.9.0" = deps: f: updateFeatures f (rec {
+  features_.git2_curl."0.9.0" = deps: f: updateFeatures f ({
     curl."${deps.git2_curl."0.9.0".curl}".default = true;
     git2."${deps.git2_curl."0.9.0".git2}".default = (f.git2."${deps.git2_curl."0.9.0".git2}".default or false);
     git2_curl."0.9.0".default = (f.git2_curl."0.9.0".default or true);
@@ -5303,7 +5303,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "104389jjxs8r2f5cc9p0axhjmndgln60ih5x4f00ccgg9d3zarlf";
   };
-  features_.glob."0.2.11" = deps: f: updateFeatures f (rec {
+  features_.glob."0.2.11" = deps: f: updateFeatures f ({
     glob."0.2.11".default = (f.glob."0.2.11".default or true);
   }) [];
 
@@ -5326,7 +5326,7 @@ rec {
     ]);
     features = mkFeatures (features."globset"."0.4.3" or {});
   };
-  features_.globset."0.4.3" = deps: f: updateFeatures f (rec {
+  features_.globset."0.4.3" = deps: f: updateFeatures f ({
     aho_corasick."${deps.globset."0.4.3".aho_corasick}".default = true;
     bstr = fold recursiveUpdate {} [
       { "${deps.globset."0.4.3".bstr}"."std" = true; }
@@ -5360,7 +5360,7 @@ rec {
     ]);
     features = mkFeatures (features."hashbrown"."0.1.8" or {});
   };
-  features_.hashbrown."0.1.8" = deps: f: updateFeatures f (rec {
+  features_.hashbrown."0.1.8" = deps: f: updateFeatures f ({
     byteorder."${deps.hashbrown."0.1.8".byteorder}".default = (f.byteorder."${deps.hashbrown."0.1.8".byteorder}".default or false);
     hashbrown."0.1.8".default = (f.hashbrown."0.1.8".default or true);
     scopeguard."${deps.hashbrown."0.1.8".scopeguard}".default = (f.scopeguard."${deps.hashbrown."0.1.8".scopeguard}".default or false);
@@ -5381,7 +5381,7 @@ rec {
     sha256 = "0hs0xfb4x67y4ss9mmbjmibkwakbn3xf23i21m409bw2zqk9b6kz";
     features = mkFeatures (features."hex"."0.3.2" or {});
   };
-  features_.hex."0.3.2" = deps: f: updateFeatures f (rec {
+  features_.hex."0.3.2" = deps: f: updateFeatures f ({
     hex."0.3.2".default = (f.hex."0.3.2".default or true);
   }) [];
 
@@ -5400,7 +5400,7 @@ rec {
       (crates."winapi"."${deps."home"."0.3.4"."winapi"}" deps)
     ]) else []);
   };
-  features_.home."0.3.4" = deps: f: updateFeatures f (rec {
+  features_.home."0.3.4" = deps: f: updateFeatures f ({
     home."0.3.4".default = (f.home."0.3.4".default or true);
     scopeguard."${deps.home."0.3.4".scopeguard}".default = true;
     winapi = fold recursiveUpdate {} [
@@ -5434,7 +5434,7 @@ rec {
       (crates."itoa"."${deps."http"."0.1.17"."itoa"}" deps)
     ]);
   };
-  features_.http."0.1.17" = deps: f: updateFeatures f (rec {
+  features_.http."0.1.17" = deps: f: updateFeatures f ({
     bytes."${deps.http."0.1.17".bytes}".default = true;
     fnv."${deps.http."0.1.17".fnv}".default = true;
     http."0.1.17".default = (f.http."0.1.17".default or true);
@@ -5524,7 +5524,7 @@ rec {
       (crates."rustc_version"."${deps."im_rc"."12.3.4"."rustc_version"}" deps)
     ]);
   };
-  features_.im_rc."12.3.4" = deps: f: updateFeatures f (rec {
+  features_.im_rc."12.3.4" = deps: f: updateFeatures f ({
     im_rc."12.3.4".default = (f.im_rc."12.3.4".default or true);
     rustc_version."${deps.im_rc."12.3.4".rustc_version}".default = true;
     sized_chunks."${deps.im_rc."12.3.4".sized_chunks}".default = true;
@@ -5552,7 +5552,7 @@ rec {
       (crates."winapi"."${deps."iovec"."0.1.2"."winapi"}" deps)
     ]) else []);
   };
-  features_.iovec."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.iovec."0.1.2" = deps: f: updateFeatures f ({
     iovec."0.1.2".default = (f.iovec."0.1.2".default or true);
     libc."${deps.iovec."0.1.2".libc}".default = true;
     winapi."${deps.iovec."0.1.2".winapi}".default = true;
@@ -5609,7 +5609,7 @@ rec {
       (crates."rand"."${deps."jobserver"."0.1.13"."rand"}" deps)
     ]) else []);
   };
-  features_.jobserver."0.1.13" = deps: f: updateFeatures f (rec {
+  features_.jobserver."0.1.13" = deps: f: updateFeatures f ({
     jobserver."0.1.13".default = (f.jobserver."0.1.13".default or true);
     libc."${deps.jobserver."0.1.13".libc}".default = true;
     log."${deps.jobserver."0.1.13".log}".default = true;
@@ -5640,7 +5640,7 @@ rec {
       (crates."winapi_build"."${deps."kernel32_sys"."0.2.2"."winapi_build"}" deps)
     ]);
   };
-  features_.kernel32_sys."0.2.2" = deps: f: updateFeatures f (rec {
+  features_.kernel32_sys."0.2.2" = deps: f: updateFeatures f ({
     kernel32_sys."0.2.2".default = (f.kernel32_sys."0.2.2".default or true);
     winapi."${deps.kernel32_sys."0.2.2".winapi}".default = true;
     winapi_build."${deps.kernel32_sys."0.2.2".winapi_build}".default = true;
@@ -5790,7 +5790,7 @@ rec {
       (crates."cc"."${deps."libnghttp2_sys"."0.1.1"."cc"}" deps)
     ]);
   };
-  features_.libnghttp2_sys."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.libnghttp2_sys."0.1.1" = deps: f: updateFeatures f ({
     cc."${deps.libnghttp2_sys."0.1.1".cc}".default = true;
     libc."${deps.libnghttp2_sys."0.1.1".libc}".default = true;
     libnghttp2_sys."0.1.1".default = (f.libnghttp2_sys."0.1.1".default or true);
@@ -5827,7 +5827,7 @@ rec {
       (crates."pkg_config"."${deps."libssh2_sys"."0.2.11"."pkg_config"}" deps)
     ]);
   };
-  features_.libssh2_sys."0.2.11" = deps: f: updateFeatures f (rec {
+  features_.libssh2_sys."0.2.11" = deps: f: updateFeatures f ({
     cc."${deps.libssh2_sys."0.2.11".cc}".default = true;
     libc."${deps.libssh2_sys."0.2.11".libc}".default = true;
     libssh2_sys."0.2.11".default = (f.libssh2_sys."0.2.11".default or true);
@@ -5865,7 +5865,7 @@ rec {
     ]);
     features = mkFeatures (features."libz_sys"."1.0.25" or {});
   };
-  features_.libz_sys."1.0.25" = deps: f: updateFeatures f (rec {
+  features_.libz_sys."1.0.25" = deps: f: updateFeatures f ({
     cc."${deps.libz_sys."1.0.25".cc}".default = true;
     libc."${deps.libz_sys."1.0.25".libc}".default = true;
     libz_sys."1.0.25".default = (f.libz_sys."1.0.25".default or true);
@@ -5891,7 +5891,7 @@ rec {
     ]);
     features = mkFeatures (features."lock_api"."0.1.5" or {});
   };
-  features_.lock_api."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.lock_api."0.1.5" = deps: f: updateFeatures f ({
     lock_api."0.1.5".default = (f.lock_api."0.1.5".default or true);
     scopeguard."${deps.lock_api."0.1.5".scopeguard}".default = (f.scopeguard."${deps.lock_api."0.1.5".scopeguard}".default or false);
   }) [
@@ -5913,7 +5913,7 @@ rec {
       (crates."rawpointer"."${deps."matrixmultiply"."0.1.15"."rawpointer"}" deps)
     ]);
   };
-  features_.matrixmultiply."0.1.15" = deps: f: updateFeatures f (rec {
+  features_.matrixmultiply."0.1.15" = deps: f: updateFeatures f ({
     matrixmultiply."0.1.15".default = (f.matrixmultiply."0.1.15".default or true);
     rawpointer."${deps.matrixmultiply."0.1.15".rawpointer}".default = true;
   }) [
@@ -5941,7 +5941,7 @@ rec {
       (crates."cc"."${deps."miniz_sys"."0.1.11"."cc"}" deps)
     ]);
   };
-  features_.miniz_sys."0.1.11" = deps: f: updateFeatures f (rec {
+  features_.miniz_sys."0.1.11" = deps: f: updateFeatures f ({
     cc."${deps.miniz_sys."0.1.11".cc}".default = true;
     libc."${deps.miniz_sys."0.1.11".libc}".default = true;
     miniz_sys."0.1.11".default = (f.miniz_sys."0.1.11".default or true);
@@ -5964,7 +5964,7 @@ rec {
       (crates."adler32"."${deps."miniz_oxide"."0.2.1"."adler32"}" deps)
     ]);
   };
-  features_.miniz_oxide."0.2.1" = deps: f: updateFeatures f (rec {
+  features_.miniz_oxide."0.2.1" = deps: f: updateFeatures f ({
     adler32."${deps.miniz_oxide."0.2.1".adler32}".default = true;
     miniz_oxide."0.2.1".default = (f.miniz_oxide."0.2.1".default or true);
   }) [
@@ -6039,7 +6039,7 @@ rec {
       (crates."winapi"."${deps."miow"."0.3.3"."winapi"}" deps)
     ]);
   };
-  features_.miow."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.miow."0.3.3" = deps: f: updateFeatures f ({
     miow."0.3.3".default = (f.miow."0.3.3".default or true);
     socket2."${deps.miow."0.3.3".socket2}".default = true;
     winapi = fold recursiveUpdate {} [
@@ -6200,7 +6200,7 @@ rec {
       (crates."libc"."${deps."num_cpus"."1.10.0"."libc"}" deps)
     ]);
   };
-  features_.num_cpus."1.10.0" = deps: f: updateFeatures f (rec {
+  features_.num_cpus."1.10.0" = deps: f: updateFeatures f ({
     libc."${deps.num_cpus."1.10.0".libc}".default = true;
     num_cpus."1.10.0".default = (f.num_cpus."1.10.0".default or true);
   }) [
@@ -6253,7 +6253,7 @@ rec {
       (crates."winapi"."${deps."opener"."0.3.2"."winapi"}" deps)
     ]) else []);
   };
-  features_.opener."0.3.2" = deps: f: updateFeatures f (rec {
+  features_.opener."0.3.2" = deps: f: updateFeatures f ({
     failure."${deps.opener."0.3.2".failure}".default = true;
     failure_derive."${deps.opener."0.3.2".failure_derive}".default = true;
     opener."0.3.2".default = (f.opener."0.3.2".default or true);
@@ -6321,7 +6321,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "1a89fznx26vvaxyrxdvgf6iwai5xvs6xjvpjin68fgvrslv6n15a";
   };
-  features_.openssl_probe."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.openssl_probe."0.1.2" = deps: f: updateFeatures f ({
     openssl_probe."0.1.2".default = (f.openssl_probe."0.1.2".default or true);
   }) [];
 
@@ -6339,7 +6339,7 @@ rec {
       (crates."cc"."${deps."openssl_src"."111.2.1+1.1.1b"."cc"}" deps)
     ]);
   };
-  features_.openssl_src."111.2.1+1.1.1b" = deps: f: updateFeatures f (rec {
+  features_.openssl_src."111.2.1+1.1.1b" = deps: f: updateFeatures f ({
     cc."${deps.openssl_src."111.2.1+1.1.1b".cc}".default = true;
     openssl_src."111.2.1+1.1.1b".default = (f.openssl_src."111.2.1+1.1.1b".default or true);
   }) [
@@ -6518,7 +6518,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "0207fsarrm412j0dh87lfcas72n8mxar7q3mgflsbsrqnb140sv6";
   };
-  features_.pkg_config."0.3.14" = deps: f: updateFeatures f (rec {
+  features_.pkg_config."0.3.14" = deps: f: updateFeatures f ({
     pkg_config."0.3.14".default = (f.pkg_config."0.3.14".default or true);
   }) [];
 
@@ -6705,7 +6705,7 @@ rec {
       (crates."autocfg"."${deps."rand_chacha"."0.1.1"."autocfg"}" deps)
     ]);
   };
-  features_.rand_chacha."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.rand_chacha."0.1.1" = deps: f: updateFeatures f ({
     autocfg."${deps.rand_chacha."0.1.1".autocfg}".default = true;
     rand_chacha."0.1.1".default = (f.rand_chacha."0.1.1".default or true);
     rand_core."${deps.rand_chacha."0.1.1".rand_core}".default = (f.rand_core."${deps.rand_chacha."0.1.1".rand_core}".default or false);
@@ -6728,7 +6728,7 @@ rec {
       (crates."rand_core"."${deps."rand_hc"."0.1.0"."rand_core"}" deps)
     ]);
   };
-  features_.rand_hc."0.1.0" = deps: f: updateFeatures f (rec {
+  features_.rand_hc."0.1.0" = deps: f: updateFeatures f ({
     rand_core."${deps.rand_hc."0.1.0".rand_core}".default = (f.rand_core."${deps.rand_hc."0.1.0".rand_core}".default or false);
     rand_hc."0.1.0".default = (f.rand_hc."0.1.0".default or true);
   }) [
@@ -6896,7 +6896,7 @@ rec {
     authors = [ "bluss" ];
     sha256 = "0hblv2cv310ixf5f1jw4nk9w5pb95wh4dwqyjv07g2xrshbw6j04";
   };
-  features_.rawpointer."0.1.0" = deps: f: updateFeatures f (rec {
+  features_.rawpointer."0.1.0" = deps: f: updateFeatures f ({
     rawpointer."0.1.0".default = (f.rawpointer."0.1.0".default or true);
   }) [];
 
@@ -6912,7 +6912,7 @@ rec {
     sha256 = "1ndcp7brnvii87ndcd34fk846498r07iznphkslcy0shic9cp4rr";
     libName = "syscall";
   };
-  features_.redox_syscall."0.1.54" = deps: f: updateFeatures f (rec {
+  features_.redox_syscall."0.1.54" = deps: f: updateFeatures f ({
     redox_syscall."0.1.54".default = (f.redox_syscall."0.1.54".default or true);
   }) [];
 
@@ -6974,7 +6974,7 @@ rec {
       (crates."ucd_util"."${deps."regex_syntax"."0.6.6"."ucd_util"}" deps)
     ]);
   };
-  features_.regex_syntax."0.6.6" = deps: f: updateFeatures f (rec {
+  features_.regex_syntax."0.6.6" = deps: f: updateFeatures f ({
     regex_syntax."0.6.6".default = (f.regex_syntax."0.6.6".default or true);
     ucd_util."${deps.regex_syntax."0.6.6".ucd_util}".default = true;
   }) [
@@ -7020,7 +7020,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "0arpdp472j4lrwxbmf4z21d8kh95rbbphnzccf605pqq2rvczv3p";
   };
-  features_.rustc_workspace_hack."1.0.0" = deps: f: updateFeatures f (rec {
+  features_.rustc_workspace_hack."1.0.0" = deps: f: updateFeatures f ({
     rustc_workspace_hack."1.0.0".default = (f.rustc_workspace_hack."1.0.0".default or true);
   }) [];
 
@@ -7038,7 +7038,7 @@ rec {
       (crates."semver"."${deps."rustc_version"."0.2.3"."semver"}" deps)
     ]);
   };
-  features_.rustc_version."0.2.3" = deps: f: updateFeatures f (rec {
+  features_.rustc_version."0.2.3" = deps: f: updateFeatures f ({
     rustc_version."0.2.3".default = (f.rustc_version."0.2.3".default or true);
     semver."${deps.rustc_version."0.2.3".semver}".default = true;
   }) [
@@ -7063,7 +7063,7 @@ rec {
       (crates."serde_json"."${deps."rustfix"."0.4.5"."serde_json"}" deps)
     ]);
   };
-  features_.rustfix."0.4.5" = deps: f: updateFeatures f (rec {
+  features_.rustfix."0.4.5" = deps: f: updateFeatures f ({
     failure."${deps.rustfix."0.4.5".failure}".default = true;
     log."${deps.rustfix."0.4.5".log}".default = true;
     rustfix."0.4.5".default = (f.rustfix."0.4.5".default or true);
@@ -7092,7 +7092,7 @@ rec {
       (crates."winapi_util"."${deps."same_file"."1.0.4"."winapi_util"}" deps)
     ]) else []);
   };
-  features_.same_file."1.0.4" = deps: f: updateFeatures f (rec {
+  features_.same_file."1.0.4" = deps: f: updateFeatures f ({
     same_file."1.0.4".default = (f.same_file."1.0.4".default or true);
     winapi_util."${deps.same_file."1.0.4".winapi_util}".default = true;
   }) [
@@ -7114,7 +7114,7 @@ rec {
       (crates."winapi"."${deps."schannel"."0.1.15"."winapi"}" deps)
     ]);
   };
-  features_.schannel."0.1.15" = deps: f: updateFeatures f (rec {
+  features_.schannel."0.1.15" = deps: f: updateFeatures f ({
     lazy_static."${deps.schannel."0.1.15".lazy_static}".default = true;
     schannel."0.1.15".default = (f.schannel."0.1.15".default or true);
     winapi = fold recursiveUpdate {} [
@@ -7199,7 +7199,7 @@ rec {
     authors = [ "Steve Klabnik <steve@steveklabnik.com>" ];
     sha256 = "1da66c8413yakx0y15k8c055yna5lyb6fr0fw9318kdwkrk5k12h";
   };
-  features_.semver_parser."0.7.0" = deps: f: updateFeatures f (rec {
+  features_.semver_parser."0.7.0" = deps: f: updateFeatures f ({
     semver_parser."0.7.0".default = (f.semver_parser."0.7.0".default or true);
   }) [];
 
@@ -7258,7 +7258,7 @@ rec {
     ]);
     features = mkFeatures (features."serde_derive"."1.0.90" or {});
   };
-  features_.serde_derive."1.0.90" = deps: f: updateFeatures f (rec {
+  features_.serde_derive."1.0.90" = deps: f: updateFeatures f ({
     proc_macro2."${deps.serde_derive."1.0.90".proc_macro2}".default = true;
     quote."${deps.serde_derive."1.0.90".quote}".default = true;
     serde_derive."1.0.90".default = (f.serde_derive."1.0.90".default or true);
@@ -7286,7 +7286,7 @@ rec {
       (crates."serde"."${deps."serde_ignored"."0.0.4"."serde"}" deps)
     ]);
   };
-  features_.serde_ignored."0.0.4" = deps: f: updateFeatures f (rec {
+  features_.serde_ignored."0.0.4" = deps: f: updateFeatures f ({
     serde."${deps.serde_ignored."0.0.4".serde}".default = true;
     serde_ignored."0.0.4".default = (f.serde_ignored."0.0.4".default or true);
   }) [
@@ -7304,7 +7304,7 @@ rec {
     authors = [ "Steven Fackler <sfackler@gmail.com>" ];
     sha256 = "02ik28la039b8anx0sx8mbdp2yx66m64mjrjyy6x0dgpbmfxmc24";
   };
-  features_.shell_escape."0.1.4" = deps: f: updateFeatures f (rec {
+  features_.shell_escape."0.1.4" = deps: f: updateFeatures f ({
     shell_escape."0.1.4".default = (f.shell_escape."0.1.4".default or true);
   }) [];
 
@@ -7323,7 +7323,7 @@ rec {
       (crates."typenum"."${deps."sized_chunks"."0.1.3"."typenum"}" deps)
     ]);
   };
-  features_.sized_chunks."0.1.3" = deps: f: updateFeatures f (rec {
+  features_.sized_chunks."0.1.3" = deps: f: updateFeatures f ({
     sized_chunks."0.1.3".default = (f.sized_chunks."0.1.3".default or true);
     typenum."${deps.sized_chunks."0.1.3".typenum}".default = true;
   }) [
@@ -7352,7 +7352,7 @@ rec {
     ]) else []);
     features = mkFeatures (features."socket2"."0.3.8" or {});
   };
-  features_.socket2."0.3.8" = deps: f: updateFeatures f (rec {
+  features_.socket2."0.3.8" = deps: f: updateFeatures f ({
     cfg_if."${deps.socket2."0.3.8".cfg_if}".default = true;
     libc."${deps.socket2."0.3.8".libc}".default = true;
     redox_syscall."${deps.socket2."0.3.8".redox_syscall}".default = true;
@@ -7383,7 +7383,7 @@ rec {
     authors = [ "Danny Guo <dannyguo91@gmail.com>" ];
     sha256 = "0d3jsdz22wgjyxdakqnvdgmwjdvkximz50d9zfk4qlalw635qcvy";
   };
-  features_.strsim."0.8.0" = deps: f: updateFeatures f (rec {
+  features_.strsim."0.8.0" = deps: f: updateFeatures f ({
     strsim."0.8.0".default = (f.strsim."0.8.0".default or true);
   }) [];
 
@@ -7402,7 +7402,7 @@ rec {
       (crates."ndarray"."${deps."strsim"."0.9.1"."ndarray"}" deps)
     ]);
   };
-  features_.strsim."0.9.1" = deps: f: updateFeatures f (rec {
+  features_.strsim."0.9.1" = deps: f: updateFeatures f ({
     hashbrown."${deps.strsim."0.9.1".hashbrown}".default = true;
     ndarray."${deps.strsim."0.9.1".ndarray}".default = true;
     strsim."0.9.1".default = (f.strsim."0.9.1".default or true);
@@ -7539,7 +7539,7 @@ rec {
       (crates."winapi"."${deps."tempfile"."3.0.7"."winapi"}" deps)
     ]) else []);
   };
-  features_.tempfile."3.0.7" = deps: f: updateFeatures f (rec {
+  features_.tempfile."3.0.7" = deps: f: updateFeatures f ({
     cfg_if."${deps.tempfile."3.0.7".cfg_if}".default = true;
     libc."${deps.tempfile."3.0.7".libc}".default = true;
     rand."${deps.tempfile."3.0.7".rand}".default = true;
@@ -7575,7 +7575,7 @@ rec {
       (crates."unicode_width"."${deps."textwrap"."0.11.0"."unicode_width"}" deps)
     ]);
   };
-  features_.textwrap."0.11.0" = deps: f: updateFeatures f (rec {
+  features_.textwrap."0.11.0" = deps: f: updateFeatures f ({
     textwrap."0.11.0".default = (f.textwrap."0.11.0".default or true);
     unicode_width."${deps.textwrap."0.11.0".unicode_width}".default = true;
   }) [
@@ -7595,7 +7595,7 @@ rec {
     build = "build/main.rs";
     features = mkFeatures (features."typenum"."1.10.0" or {});
   };
-  features_.typenum."1.10.0" = deps: f: updateFeatures f (rec {
+  features_.typenum."1.10.0" = deps: f: updateFeatures f ({
     typenum."1.10.0".default = (f.typenum."1.10.0".default or true);
   }) [];
 
@@ -7614,7 +7614,7 @@ rec {
       (crates."url"."${deps."url_serde"."0.2.0"."url"}" deps)
     ]);
   };
-  features_.url_serde."0.2.0" = deps: f: updateFeatures f (rec {
+  features_.url_serde."0.2.0" = deps: f: updateFeatures f ({
     serde."${deps.url_serde."0.2.0".serde}".default = true;
     url."${deps.url_serde."0.2.0".url}".default = true;
     url_serde."0.2.0".default = (f.url_serde."0.2.0".default or true);
@@ -7634,7 +7634,7 @@ rec {
     authors = [ "Jim McGrath <jimmc2@gmail.com>" ];
     sha256 = "1ig6jqpzzl1z9vk4qywgpfr4hfbd8ny8frqsgm3r449wkc4n1i5x";
   };
-  features_.vcpkg."0.2.6" = deps: f: updateFeatures f (rec {
+  features_.vcpkg."0.2.6" = deps: f: updateFeatures f ({
     vcpkg."0.2.6".default = (f.vcpkg."0.2.6".default or true);
   }) [];
 
@@ -7656,7 +7656,7 @@ rec {
       (crates."winapi_util"."${deps."walkdir"."2.2.7"."winapi_util"}" deps)
     ]) else []);
   };
-  features_.walkdir."2.2.7" = deps: f: updateFeatures f (rec {
+  features_.walkdir."2.2.7" = deps: f: updateFeatures f ({
     same_file."${deps.walkdir."2.2.7".same_file}".default = true;
     walkdir."2.2.7".default = (f.walkdir."2.2.7".default or true);
     winapi = fold recursiveUpdate {} [
@@ -7682,7 +7682,7 @@ rec {
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "0a45b58ywf12vb7gvj6h3j264nydynmzyqz8d8rqxsj6icqv82as";
   };
-  features_.winapi."0.2.8" = deps: f: updateFeatures f (rec {
+  features_.winapi."0.2.8" = deps: f: updateFeatures f ({
     winapi."0.2.8".default = (f.winapi."0.2.8".default or true);
   }) [];
 
@@ -7732,7 +7732,7 @@ rec {
     sha256 = "1lxlpi87rkhxcwp2ykf1ldw3p108hwm24nywf3jfrvmff4rjhqga";
     libName = "build";
   };
-  features_.winapi_build."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.winapi_build."0.1.1" = deps: f: updateFeatures f ({
     winapi_build."0.1.1".default = (f.winapi_build."0.1.1".default or true);
   }) [];
 
@@ -7747,7 +7747,7 @@ rec {
     authors = [ "Remi Rampin <remirampin@gmail.com>" ];
     sha256 = "1z3mvjgw02mbqk98kizzibrca01d5wfkpazsrp3vkkv3i56pn6fb";
   };
-  features_.adler32."1.0.3" = deps: f: updateFeatures f (rec {
+  features_.adler32."1.0.3" = deps: f: updateFeatures f ({
     adler32."1.0.3".default = (f.adler32."1.0.3".default or true);
   }) [];
 

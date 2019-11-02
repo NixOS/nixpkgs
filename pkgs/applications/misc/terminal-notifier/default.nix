@@ -1,7 +1,7 @@
 { stdenv, runtimeShell, lib, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "terminal-notifier-${version}";
+  pname = "terminal-notifier";
 
   version = "2.0.0";
 

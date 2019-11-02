@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
 , fetchpatch
 , bash, libsamplerate, libsndfile, readline, eigen, celt
-, wafHook, aften
+, wafHook
 # Darwin Dependencies
-, AudioUnit, CoreAudio, cf-private, libobjc, Accelerate
+, aften, AudioUnit, CoreAudio, libobjc, Accelerate
 
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsaLib ? null
@@ -40,9 +40,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
-    aften
   ] ++ optionals stdenv.isDarwin [
-    AudioUnit CoreAudio Accelerate cf-private libobjc
+    aften AudioUnit CoreAudio Accelerate libobjc
   ];
 
   prePatch = ''

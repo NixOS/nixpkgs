@@ -1,10 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake
-, zlib, libusb1
-, enableGUI ? false, qtbase ? null }:
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, zlib, libusb1
+, enableGUI ? false, qtbase ? null
+}:
 
-stdenv.mkDerivation rec {
+let version = "1.4.2"; in
+
+mkDerivation {
   name = "heimdall-${if enableGUI then "gui-" else ""}${version}";
-  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner  = "Benjamin-Dobell";

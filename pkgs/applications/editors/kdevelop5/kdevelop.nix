@@ -7,17 +7,13 @@
 , libksysguard, konsole, llvmPackages, makeWrapper, kpurpose, boost
 }:
 
-let
-  pname = "kdevelop";
-  version = "5.3.2";
-  qtVersion = "5.${lib.versions.minor qtbase.version}";
-in
 mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "kdevelop";
+  version = "5.4.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "0akgdnvrab6mbwnmvgzsplk0qh83k1hnm5xc06yxr1s1a5sxbk08";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "1i665m4jd1r5bl77pcfybpn9szxzccrajs4m0prqwhlj93d57qjj";
   };
 
   nativeBuildInputs = [
@@ -43,20 +39,14 @@ mkDerivation rec {
     "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${(builtins.parseDrvName llvmPackages.clang.name).version}/include"
   ];
 
-  postPatch = ''
-    # FIXME: temporary until https://invent.kde.org/kde/kdevelop/merge_requests/8 is merged
-    substituteInPlace kdevplatform/language/backgroundparser/parsejob.cpp --replace \
-      'if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev"))) {' \
-      'if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev")) || localFile.startsWith(path + QStringLiteral("/kdev"))) {'
-  '';
+  dontWrapQtApps = true;
 
   postInstall = ''
     # The kdevelop! script (shell environment) needs qdbus and kioclient5 in PATH.
     wrapProgram "$out/bin/kdevelop!" \
       --prefix PATH ":" "${lib.makeBinPath [ qttools kde-cli-tools ]}"
 
-    wrapProgram "$out/bin/kdevelop" \
-      --prefix QT_PLUGIN_PATH : $out/lib/qt-${qtVersion}/plugins
+    wrapQtApp "$out/bin/kdevelop"
 
     # Fix the (now wrapped) kdevelop! to find things in right places:
     # - Fixup the one use where KDEV_BASEDIR is assumed to contain kdevelop.
@@ -76,7 +66,7 @@ mkDerivation rec {
         programing languages. It is based on KDevPlatform, KDE and Qt
         libraries and is under development since 1998.
       '';
-    homepage = https://www.kdevelop.org;
+    homepage = "https://www.kdevelop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
   };
 }

@@ -3,21 +3,19 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "kind-${version}";
-  version = "0.2.1";
+  pname = "kind";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
-    rev    = "${version}";
+    rev    = "v${version}";
     owner  = "kubernetes-sigs";
     repo   = "kind";
-    sha256 = "14ddhml9rh7x4j315fb332206xbn1rzx3i0ngj3220vb6d5dv8if";
+    sha256 = "12bjvma98dlxybqs43dggnd6cihxm18xz68a5jw8dzf0cg738gs8";
   };
 
-  # move dev tool package that confuses the go compiler
-  patchPhase = "rm -r hack";
-
+  goDeps = ./deps.nix;
   goPackagePath = "sigs.k8s.io/kind";
-  excludedPackages = "images/base/entrypoint";
+  subPackages = [ "." ];
 
   meta = {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";

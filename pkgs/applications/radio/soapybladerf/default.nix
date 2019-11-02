@@ -6,7 +6,8 @@ let
   version = "0.4.1";
 
 in stdenv.mkDerivation {
-  name = "soapybladerf-${version}";
+  pname = "soapybladerf";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";

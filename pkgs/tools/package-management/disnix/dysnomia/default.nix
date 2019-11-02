@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, ejabberd ? null, mysql ? null, postgresql ? null, subversion ? null, mongodb ? null, mongodb-tools ? null
+, ejabberd ? null, mysql ? null, postgresql ? null, subversion ? null, mongodb ? null, mongodb-tools ? null, influxdb ? null
 , enableApacheWebApplication ? false
 , enableAxis2WebService ? false
 , enableEjabberdDump ? false
@@ -8,6 +8,7 @@
 , enableSubversionRepository ? false
 , enableTomcatWebApplication ? false
 , enableMongoDatabase ? false
+, enableInfluxDatabase ? false
 , catalinaBaseDir ? "/var/tomcat"
 , jobTemplate ? "systemd"
 , getopt
@@ -18,12 +19,13 @@ assert enablePostgreSQLDatabase -> postgresql != null;
 assert enableSubversionRepository -> subversion != null;
 assert enableEjabberdDump -> ejabberd != null;
 assert enableMongoDatabase -> (mongodb != null && mongodb-tools != null);
+assert enableInfluxDatabase -> influxdb != null;
 
 stdenv.mkDerivation {
-  name = "dysnomia-0.8";
+  name = "dysnomia-0.9";
   src = fetchurl {
-    url = https://github.com/svanderburg/dysnomia/files/1756700/dysnomia-0.8.tar.gz;
-    sha256 = "0pc4zwmmlsz02a6a4srpwdwhqrfvn3wkn22sz3fg7lwxbdbd5k0z";
+    url = https://github.com/svanderburg/dysnomia/releases/download/dysnomia-0.9/dysnomia-0.9.tar.gz;
+    sha256 = "09pk2l3pss48kvm5wvskh842vakbzmjzxzfzyw1nkqnvni130ikl";
   };
 
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";
@@ -37,6 +39,7 @@ stdenv.mkDerivation {
      (if enableSubversionRepository then "--with-subversion" else "--without-subversion")
      (if enableTomcatWebApplication then "--with-tomcat=${catalinaBaseDir}" else "--without-tomcat")
      (if enableMongoDatabase then "--with-mongodb" else "--without-mongodb")
+     (if enableInfluxDatabase then "--with-influxdb" else "--without-influxdb")
      "--with-job-template=${jobTemplate}"
    ];
 
@@ -46,7 +49,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional enablePostgreSQLDatabase postgresql
     ++ stdenv.lib.optional enableSubversionRepository subversion
     ++ stdenv.lib.optional enableMongoDatabase mongodb
-    ++ stdenv.lib.optional enableMongoDatabase mongodb-tools;
+    ++ stdenv.lib.optional enableMongoDatabase mongodb-tools
+    ++ stdenv.lib.optional enableInfluxDatabase influxdb;
 
   meta = {
     description = "Automated deployment of mutable components and services for Disnix";

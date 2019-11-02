@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxslt docbook_xsl makeWrapper ];
 
   preFixup = ''
+    # fallback values need to be last
     wrapProgram "$out/bin/xdg-user-dirs-update" \
-      --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
+      --suffix XDG_CONFIG_DIRS : "$out/etc/xdg"
   '';
 
   meta = with stdenv.lib; {

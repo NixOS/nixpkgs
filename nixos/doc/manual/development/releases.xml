@@ -100,6 +100,16 @@
     </listitem>
     <listitem>
      <para>
+      Remove attributes that we know we will not be able to support,
+      especially if there is a stable alternative. E.g. Check that our
+      Linux kernels'
+      <link xlink:href="https://www.kernel.org/category/releases.html">
+      projected end-of-life</link> are after our release projected
+      end-of-life
+     </para>
+    </listitem>
+    <listitem>
+     <para>
       Edit changelog at
       <literal>nixos/doc/manual/release-notes/rl-1709.xml</literal> (double
       check desktop versions are noted)
@@ -209,6 +219,30 @@
     </listitem>
    </itemizedlist>
   </section>
+ </section>
+ <section xml:id="release-managers">
+  <title>Release Management Team</title>
+  <para>
+   For each release there are two release managers. After each release the
+   release manager having managed two releases steps down and the release
+   management team of the last release appoints a new release manager.
+  </para>
+  <para>
+   This makes sure a release management team always consists of one release
+   manager who already has managed one release and one release manager being
+   introduced to their role, making it easier to pass on knowledge and
+   experience.
+  </para>
+  <para>
+   A release manager's role and responsibilities are:
+  </para>
+  <itemizedlist>
+   <listitem><para>manage the release process</para></listitem>
+   <listitem><para>start discussions about features and changes for a given release</para></listitem>
+   <listitem><para>create a roadmap</para></listitem>
+   <listitem><para>release in cooperation with Eelco Dolstra</para></listitem>
+   <listitem><para>decide which bug fixes, features, etc... get backported after a release</para></listitem>
+  </itemizedlist>
  </section>
  <section xml:id="release-schedule">
   <title>Release schedule</title>

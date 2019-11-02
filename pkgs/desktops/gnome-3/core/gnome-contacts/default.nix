@@ -1,17 +1,18 @@
-{ stdenv, gettext, fetchurl, evolution-data-server
+{ stdenv, gettext, fetchurl, evolution-data-server, fetchpatch
 , pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, python3, gtk3, glib, cheese
 , libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
 , wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
 , vala, meson, ninja, libhandy, gsettings-desktop-schemas }:
 
 let
-  version = "3.32.1";
+  version = "3.34";
 in stdenv.mkDerivation rec {
-  name = "gnome-contacts-${version}";
+  pname = "gnome-contacts";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "17g1gh8yj58cfpdx69h2szivlbjgvv982kmhnkkh0i5bwj0zs2yy";
+    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "04igc9xvyc4kb5xf5g2missnvyvj9zv5cqxf5k4z7hb0sv42wq4r";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];
@@ -29,6 +30,9 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dtelepathy=true"
+  ];
+
+  patches = [
   ];
 
   postPatch = ''

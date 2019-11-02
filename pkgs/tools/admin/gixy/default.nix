@@ -25,6 +25,7 @@ python.pkgs.buildPythonApplication rec {
     pyparsing
     jinja2
     nose
+    setuptools
     six
   ];
 

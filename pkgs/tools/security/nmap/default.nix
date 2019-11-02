@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, pkgconfig, openssl, lua5_3
+{ stdenv, fetchurl, fetchpatch, libpcap, pkgconfig, openssl, lua5_3
 , graphicalSupport ? false
 , libX11 ? null
 , gtk2 ? null
@@ -20,14 +20,24 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
-  version = "7.70";
+  version = "7.80";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "063fg8adx23l4irrh5kn57hsmi1xvjkar4vm4k6g94ppan4hcyw4";
+    sha256 = "1aizfys6l9f9grm82bk878w56mg0zpkfns3spzj157h98875mypw";
   };
 
-  patches = ./zenmap.patch;
+  patches = [ ./zenmap.patch ]
+    ++ optionals stdenv.cc.isClang [(
+      # Fixes a compile error due an ambiguous reference to bind(2) in
+      # nping/EchoServer.cc, which is otherwise resolved to std::bind.
+      # https://github.com/nmap/nmap/pull/1363
+      fetchpatch {
+        url = "https://github.com/nmap/nmap/commit/5bbe66f1bd8cbd3718f5805139e2e8139e6849bb.diff";
+        includes = [ "nping/EchoServer.cc" ];
+        sha256 = "0xcph9mycy57yryjg253frxyz87c4135rrbndlqw1400c8jxq70c";
+      }
+    )];
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace libz/configure \

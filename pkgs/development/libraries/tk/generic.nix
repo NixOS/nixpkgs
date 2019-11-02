@@ -1,4 +1,4 @@
-{ stdenv, lib, src, pkgconfig, tcl, libXft, fontconfig, patches ? []
+{ stdenv, lib, src, pkgconfig, tcl, libXft, patches ? []
 , enableAqua ? stdenv.isDarwin, darwin
 , ... }:
 
@@ -20,6 +20,9 @@ stdenv.mkDerivation {
     ln -s $out/bin/wish* $out/bin/wish
     cp ../{unix,generic}/*.h $out/include
     ln -s $out/lib/libtk${tcl.release}.so $out/lib/libtk.so
+  ''
+  + stdenv.lib.optionalString (stdenv.isDarwin) ''
+    cp ../macosx/*.h $out/include
   '';
 
   configureFlags = [
@@ -29,11 +32,9 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkgconfig ];
+  buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
-  propagatedBuildInputs = [ tcl libXft ]
-    ++ lib.optional enableAqua (with darwin; with apple_sdk.frameworks; [
-      Cocoa cf-private
-    ]);
+  propagatedBuildInputs = [ tcl libXft ];
 
   doCheck = false; # fails. can't find itself
 

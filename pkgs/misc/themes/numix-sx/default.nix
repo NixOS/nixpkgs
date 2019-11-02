@@ -1,8 +1,8 @@
 { stdenv, fetchurl, gtk-engine-murrine }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2017-04-24";
-  name = "numix-sx-gtk-theme-${version}";
+  pname = "numix-sx-gtk-theme";
 
   src = fetchurl {
     url = "https://dl.opendesktop.org/api/files/download/id/1493077417/Numix-SX.tar.xz";

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "remake-${version}";
+  pname = "remake";
   remakeVersion = "4.1";
   dbgVersion = "1.1";
   version = "${remakeVersion}+dbg-${dbgVersion}";

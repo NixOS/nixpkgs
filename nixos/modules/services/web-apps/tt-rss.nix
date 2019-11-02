@@ -15,7 +15,9 @@ let
     else cfg.database.port;
 
   poolName = "tt-rss";
-  phpfpmSocketName = "/run/phpfpm/${poolName}.sock";
+
+  mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
+  pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
 
   tt-rss-config = pkgs.writeText "config.php" ''
     <?php
@@ -200,6 +202,12 @@ let
             The database's port. If not set, the default ports will be provided (5432
             and 3306 for pgsql and mysql respectively).
           '';
+        };
+
+        createLocally = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Create the database and database user locally.";
         };
       };
 
@@ -512,21 +520,20 @@ let
     ];
 
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = {
-        listen = "/var/run/phpfpm/${poolName}.sock";
-        extraConfig = ''
-          listen.owner = nginx
-          listen.group = nginx
-          listen.mode = 0600
-          user = ${cfg.user}
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 10
-          pm.min_spare_servers = 5
-          pm.max_spare_servers = 20
-          pm.max_requests = 500
-          catch_workers_output = 1
-        '';
+      ${poolName} = {
+        inherit (cfg) user;
+        settings = mapAttrs (name: mkDefault) {
+          "listen.owner" = "nginx";
+          "listen.group" = "nginx";
+          "listen.mode" = "0600";
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 10;
+          "pm.min_spare_servers" = 5;
+          "pm.max_spare_servers" = 20;
+          "pm.max_requests" = 500;
+          "catch_workers_output" = 1;
+        };
       };
     };
 
@@ -534,17 +541,17 @@ let
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
       virtualHosts = {
-        "${cfg.virtualHost}" = {
+        ${cfg.virtualHost} = {
           root = "${cfg.root}";
 
           locations."/" = {
             index = "index.php";
           };
 
-          locations."~ \.php$" = {
+          locations."~ \\.php$" = {
             extraConfig = ''
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
-              fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.listen};
+              fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_index index.php;
             '';
           };
@@ -552,9 +559,13 @@ let
       };
     };
 
-    systemd.services.tt-rss = let
-      dbService = if cfg.database.type == "pgsql" then "postgresql.service" else "mysql.service";
-    in {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.root}' 0755 ${cfg.user} tt_rss - -"
+      "Z '${cfg.root}' 0755 ${cfg.user} tt_rss - -"
+    ];
+
+    systemd.services.tt-rss =
+      {
 
         description = "Tiny Tiny RSS feeds update daemon";
 
@@ -563,14 +574,14 @@ let
               if cfg.database.type == "pgsql" then ''
                   ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
                   ${optionalString (cfg.database.passwordFile != null) "PGPASSWORD=$(cat ${cfg.database.passwordFile})"} \
-                  ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${config.services.postgresql.package}/bin/psql \
+                  ${config.services.postgresql.package}/bin/psql \
                     -U ${cfg.database.user} \
                     ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \
                     -c '${e}' \
                     ${cfg.database.name}''
 
               else if cfg.database.type == "mysql" then ''
-                  echo '${e}' | ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${config.services.mysql.package}/bin/mysql \
+                  echo '${e}' | ${config.services.mysql.package}/bin/mysql \
                     -u ${cfg.database.user} \
                     ${optionalString (cfg.database.password != null) "-p${cfg.database.password}"} \
                     ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} -P ${toString dbPort}"} \
@@ -580,7 +591,6 @@ let
 
         in ''
           rm -rf "${cfg.root}/*"
-          mkdir -m 755 -p "${cfg.root}"
           cp -r "${pkgs.tt-rss}/"* "${cfg.root}"
           ${optionalString (cfg.pluginPackages != []) ''
             for plugin in ${concatStringsSep " " cfg.pluginPackages}; do
@@ -593,19 +603,10 @@ let
             done
           ''}
           ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
-          chown -R "${cfg.user}" "${cfg.root}"
           chmod -R 755 "${cfg.root}"
         ''
 
         + (optionalString (cfg.database.type == "pgsql") ''
-          ${optionalString (cfg.database.host == null && cfg.database.password == null) ''
-            if ! [ -e ${cfg.root}/.db-created ]; then
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser ${cfg.database.user}
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O ${cfg.database.user} ${cfg.database.name}
-              touch ${cfg.root}/.db-created
-            fi
-          ''}
-
           exists=$(${callSql "select count(*) > 0 from pg_tables where tableowner = user"} \
           | tail -n+3 | head -n-2 | sed -e 's/[ \n\t]*//')
 
@@ -629,18 +630,18 @@ let
 
         serviceConfig = {
           User = "${cfg.user}";
+          Group = "tt_rss";
           ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon";
           StandardOutput = "syslog";
           StandardError = "syslog";
-          PermissionsStartOnly = true;
         };
 
         wantedBy = [ "multi-user.target" ];
-        requires = ["${dbService}"];
-        after = ["network.target" "${dbService}"];
+        requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+        after = [ "network.target" ] ++ optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
     };
 
-    services.mysql = optionalAttrs (cfg.database.type == "mysql") {
+    services.mysql = mkIf mysqlLocal {
       enable = true;
       package = mkDefault pkgs.mysql;
       ensureDatabases = [ cfg.database.name ];
@@ -654,17 +655,22 @@ let
       ];
     };
 
-    services.postgresql = optionalAttrs (cfg.database.type == "pgsql") {
+    services.postgresql = mkIf pgsqlLocal {
       enable = mkDefault true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        { name = cfg.user;
+          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        }
+      ];
     };
 
-    users = optionalAttrs (cfg.user == "tt_rss") {
-      users.tt_rss = {
-        description = "tt-rss service user";
-        isSystemUser = true;
-        group = "tt_rss";
-      };
-      groups.tt_rss = {};
+    users.users.tt_rss = optionalAttrs (cfg.user == "tt_rss") {
+      description = "tt-rss service user";
+      isSystemUser = true;
+      group = "tt_rss";
     };
+
+    users.groups.tt_rss = {};
   };
 }

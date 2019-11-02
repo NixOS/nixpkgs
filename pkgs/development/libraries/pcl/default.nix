@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake
+{ stdenv, fetchFromGitHub, cmake
 , qhull, flann, boost, vtk, eigen, pkgconfig, qtbase
-, libusb1, libpcap, libXt, libpng, Cocoa, AGL, cf-private, OpenGL
+, libusb1, libpcap, libXt, libpng, Cocoa, AGL, OpenGL
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ qhull flann boost eigen libusb1 libpcap
                   libpng vtk qtbase libXt ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa AGL ];
 
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa AGL cf-private ];
   cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
   ];

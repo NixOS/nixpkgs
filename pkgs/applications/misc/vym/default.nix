@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, qmake, qtsvg }:
 
 stdenv.mkDerivation rec {
-  name = "vym-${version}";
+  pname = "vym";
   version = "2.6.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/vym/2.6.0/${name}.tar.bz2";
+    url = "mirror://sourceforge/project/vym/2.6.0/${pname}-${version}.tar.bz2";
     sha256 = "1yznlb47jahd662a2blgh1ccwpl5dp5rjz9chsxjzhj3vbkzx3nl";
   };
 

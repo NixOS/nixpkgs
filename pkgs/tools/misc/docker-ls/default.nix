@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub, stdenv, docker }:
 
 buildGoPackage rec {
-  name = "docker-ls-${version}";
+  pname = "docker-ls";
   version = "0.3.2";
 
   src = fetchFromGitHub {

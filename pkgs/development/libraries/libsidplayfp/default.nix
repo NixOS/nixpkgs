@@ -9,10 +9,9 @@ stdenv.mkDerivation rec {
   minor = "8";
   level = "7";
   version = "${major}.${minor}.${level}";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sidplay-residfp/${pname}/${major}.${minor}/${name}.tar.gz";
+    url = "mirror://sourceforge/sidplay-residfp/${pname}/${major}.${minor}/${pname}-${version}.tar.gz";
     sha256 = "14k1sbdcbhykwfcadq5lbpnm9xp2r7vs7fyi84h72g89y8pjg0da";
   };
 

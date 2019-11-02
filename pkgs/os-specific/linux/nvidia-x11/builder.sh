@@ -58,14 +58,28 @@ installPhase() {
         mkdir $i/lib/vdpau
         mv $i/lib/libvdpau* $i/lib/vdpau
 
-        # Install ICDs.
-        install -Dm644 nvidia.icd $i/etc/OpenCL/vendors/nvidia.icd
-        if [ -e nvidia_icd.json.template ]; then
-            sed "s#__NV_VK_ICD__#libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
-            install -Dm644 nvidia_icd.json $i/share/vulkan/icd.d/nvidia.json
+        # Install ICDs, make absolute paths.
+        # Be careful not to modify any original files because this runs twice.
+
+        # OpenCL
+        sed -E "s#(libnvidia-opencl)#$i/lib/\\1#" nvidia.icd > nvidia.icd.fixed
+        install -Dm644 nvidia.icd.fixed $i/etc/OpenCL/vendors/nvidia.icd
+
+        # Vulkan
+        if [ -e nvidia_icd.json.template ] || [ -e nvidia_icd.json ]; then
+            if [ -e nvidia_icd.json.template ]; then
+                # template patching for version < 435
+                sed "s#__NV_VK_ICD__#$i/lib/libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json.fixed
+            else
+                sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_icd.json > nvidia_icd.json.fixed
+            fi
+            install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia.json
         fi
+
+        # EGL
         if [ "$useGLVND" = "1" ]; then
-            install -Dm644 10_nvidia.json $i/share/glvnd/egl_vendor.d/nvidia.json
+            sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
+            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
         fi
 
     done
@@ -102,7 +116,11 @@ installPhase() {
     do
       # I'm lazy to differentiate needed libs per-library, as the closure is the same.
       # Unfortunately --shrink-rpath would strip too much.
-      patchelf --set-rpath "$out/lib:$libPath" "$libname"
+      if [[ -n $lib32 && $libname == "$lib32/lib/"* ]]; then
+        patchelf --set-rpath "$lib32/lib:$libPath32" "$libname"
+      else
+        patchelf --set-rpath "$out/lib:$libPath" "$libname"
+      fi
 
       libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
 

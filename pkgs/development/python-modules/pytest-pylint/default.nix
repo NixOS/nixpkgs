@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-pylint";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7bfbb66fc6dc160193a9e813a7c55e5ae32028f18660deeb90e1cb7e980cbbac";
+    sha256 = "1v6jqxbvzaw6v3xxwd689agy01k0j06q5c3q8gn2f3jlkrvylf4c";
   };
 
   buildInputs = [ pytestrunner ];

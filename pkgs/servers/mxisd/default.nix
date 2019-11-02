@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub, jdk, jre, git, gradle_2_5, perl, makeWrapper, writeText }:
+{ stdenv, fetchFromGitHub, jre, git, gradle_4, perl, makeWrapper }:
 
 let
   name = "mxisd-${version}";
-  version = "1.2.0";
-  rev = "8c4ddd2e6526c1d2b284ba88cce3c2b926d99c62";
+  version = "1.4.6";
+  rev = "6e9601cb3a18281857c3cefd20ec773023b577d2";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "kamax-matrix";
     repo = "mxisd";
-    sha256 = "083plqg0rxsqwzyskin78wkmylhb7cqz37lpsa1zy56sxpdw1a3l";
+    sha256 = "07gpdgbz281506p2431qn92bvdza6ap3jfq5b7xdm7nwrry80pzd";
   };
 
 
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
     inherit src;
-    nativeBuildInputs = [ gradle_2_5 perl git ];
+    nativeBuildInputs = [ gradle_4 perl git ];
 
     buildPhase = ''
       export MXISD_BUILD_VERSION=${rev}
@@ -35,13 +35,13 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0shshn05nzv23shry1xpcgvqg59gx929n0qngpfjhbq0kp7px68m";
+    outputHash = "0z9f3w7lfdvbk26kyckpbgas7mi98rjghck9w0kvx3r7k48p5vnv";
   };
 
 in
 stdenv.mkDerivation {
   inherit name src version;
-  nativeBuildInputs = [ gradle_2_5 perl makeWrapper ];
+  nativeBuildInputs = [ gradle_4 perl makeWrapper ];
   buildInputs = [ jre ];
 
   patches = [ ./0001-gradle.patch ];

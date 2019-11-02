@@ -4,13 +4,13 @@
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
 , enablePerl         ? (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
-, enableSpidermonkey ? (stdenv.hostPlatform == stdenv.buildPlatform), spidermonkey_1_8_5 ? null
+, enableSpidermonkey ? (stdenv.hostPlatform == stdenv.buildPlatform), spidermonkey ? null
 }:
 
 assert enableGuile -> guile != null;
 assert enablePython -> python != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "elinks-0.12pre6";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gc-init.patch ];
 
-  buildInputs = [ ncurses xlibsWrapper bzip2 zlib openssl spidermonkey_1_8_5 gpm ]
+  buildInputs = [ ncurses xlibsWrapper bzip2 zlib openssl spidermonkey gpm ]
     ++ stdenv.lib.optional enableGuile guile
     ++ stdenv.lib.optional enablePython python
     ++ stdenv.lib.optional enablePerl perl
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional enableGuile        "--with-guile"
     ++ stdenv.lib.optional enablePython       "--with-python"
     ++ stdenv.lib.optional enablePerl         "--with-perl"
-    ++ stdenv.lib.optional enableSpidermonkey "--with-spidermonkey=${spidermonkey_1_8_5}"
+    ++ stdenv.lib.optional enableSpidermonkey "--with-spidermonkey=${spidermonkey}"
     ;
 
   meta = {

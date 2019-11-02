@@ -1,25 +1,24 @@
-{ stdenv, meson, ninja, gettext, fetchurl, fetchpatch, evince, gjs
+{ stdenv, meson, ninja, gettext, fetchurl, evince, gjs
 , pkgconfig, gtk3, glib, tracker, tracker-miners
 , itstool, libxslt, webkitgtk, libgdata
 , gnome-desktop, libzapojit, libgepub
-, gnome3, gdk_pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
+, gnome3, gdk-pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
 , gobject-introspection, inkscape, poppler_utils
 , desktop-file-utils, wrapGAppsHook, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-documents-${version}";
-  version = "3.32.0";
+  pname = "gnome-documents";
+  version = "3.33.90";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1gqddzbr4d8s0asmrhy0sfmwggzhbmpm61mqf8rxpdjk7s26086c";
+    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0l9g10i380bnjp1y3pslsy8ph1hd5x1d57dadvq70p5ki4r3qjaw";
   };
 
   doCheck = true;
 
   mesonFlags = [
     "-Dgetting-started=true"
-    "--buildtype=plain"
   ];
 
   nativeBuildInputs = [
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 glib gsettings-desktop-schemas
-    gdk_pixbuf gnome3.adwaita-icon-theme evince
+    gdk-pixbuf gnome3.adwaita-icon-theme evince
     libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub

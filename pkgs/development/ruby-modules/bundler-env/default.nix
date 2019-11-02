@@ -13,6 +13,7 @@
 , document ? []
 , meta ? {}
 , ignoreCollisions ? false
+, passthru ? {}
 , ...
 }@args:
 
@@ -48,12 +49,12 @@ in
       postBuild = genStubsScript {
         inherit lib ruby bundler groups;
         confFiles = basicEnv.confFiles;
-        binPaths = [ basicEnv.gems."${pname}" ];
+        binPaths = [ basicEnv.gems.${pname} ];
       } + lib.optionalString (postBuild != null) postBuild;
 
       meta = { platforms = ruby.meta.platforms; } // meta;
       passthru = basicEnv.passthru // {
         inherit basicEnv;
         inherit (basicEnv) env;
-      };
+      } // passthru;
     })

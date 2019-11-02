@@ -7,8 +7,8 @@
 
 with (import ./srcs.nix { inherit fetchurl; });
 
-stdenv.mkDerivation rec {
-  name = "openafs-${version}";
+stdenv.mkDerivation {
+  pname = "openafs";
   inherit version srcs;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

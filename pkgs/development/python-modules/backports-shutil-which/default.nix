@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchFromGitHub, buildPythonPackage, pytest }:
+{ stdenv, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   pname = "backports.shutil_which";

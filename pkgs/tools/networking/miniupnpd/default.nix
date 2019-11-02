@@ -6,11 +6,11 @@ let
   scriptBinEnv = lib.makeBinPath [ which iproute iptables gnused coreutils gawk ];
 in
 stdenv.mkDerivation rec {
-  name = "miniupnpd-2.1";
+  name = "miniupnpd-2.1.20190502";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "1hg0zzvvzfgpnmngmd3ffnsk9x18lwlxlpw5jgh7y6b1jrvr824m";
+    sha256 = "1m8d0g9b0bjwsnqccw1yapp6n0jghmgzwixwjflwmvi2fi6hdp4b";
     name = "${name}.tar.gz";
   };
 
