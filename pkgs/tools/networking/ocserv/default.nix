@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ocserv";
-  version = "0.12.4";
+  version = "0.12.5";
 
   src = fetchFromGitLab {
     owner = "openconnect";
     repo = "ocserv";
     rev = "ocserv_${stdenv.lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "0lybz93ah6n5b82ywshhmsmf65im8rk6gkxnzxfbxpqxra79j517";
+    sha256 = "01md7r7myaxp614bm2bmbpraxjjjhs0zr5h6k3az3y3ix0r7zi69";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
