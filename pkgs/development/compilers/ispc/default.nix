@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # there are missing dependencies in the Makefile, causing sporadic build failures
   enableParallelBuilding = false;
 
-  doCheck = true;
+  doCheck = stdenv.isLinux;
 
   buildInputs = with llvmPackages; [
     which
