@@ -328,12 +328,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2019.2.3"; /* updated by script */
+    version = "2019.2.4"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "02fynwi54libibgigwggh6xaf5p4046n0kjsqsck1kjbnrlghp10"; /* updated by script */
+      sha256 = "00dl3yx13lw8qyc23dirw96vm2d8c6zsx73ds1ha8zycfh6hkxf8"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
