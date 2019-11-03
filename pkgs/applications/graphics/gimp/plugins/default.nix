@@ -199,6 +199,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
       url = http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm;
       sha256 = "1b6c9wzpklqras4wwsyw3y3jp6fjmhnnskqiwm5sabs8djknfxla";
     };
+    meta.broken = true;
   };
 
   lightning = scriptDerivation {
