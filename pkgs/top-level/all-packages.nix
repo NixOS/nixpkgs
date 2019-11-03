@@ -11631,7 +11631,9 @@ in
 
   itk4 = callPackage ../development/libraries/itk/4.x.nix { };
 
-  itk = callPackage ../development/libraries/itk { };
+  itk = callPackage ../development/libraries/itk {
+    stdenv = gcc8Stdenv;
+  };
 
   jasper = callPackage ../development/libraries/jasper { };
 
