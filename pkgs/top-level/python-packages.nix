@@ -3717,10 +3717,9 @@ in {
   libplist = disabledIf isPy3k
     (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
 
-  libxml2 = toPythonModule (pkgs.libxml2.override{pythonSupport=true; python2=python;}).py;
+  libxml2 = (toPythonModule (pkgs.libxml2.override{pythonSupport=true; inherit python;})).py;
 
-  libxslt = disabledIf isPy3k
-    (toPythonModule (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;})).py;
+  libxslt = (toPythonModule (pkgs.libxslt.override{pythonSupport=true; inherit python; inherit (self) libxml2;})).py;
 
   limits = callPackage ../development/python-modules/limits { };
 
@@ -5019,9 +5018,13 @@ in {
 
   spark_parser = callPackage ../development/python-modules/spark_parser { };
 
-  sphinx = callPackage ../development/python-modules/sphinx { };
+  sphinx = if isPy3k then
+    callPackage ../development/python-modules/sphinx { }
+  else
+    callPackage ../development/python-modules/sphinx/2.nix { };
 
-  sphinx_1_7_9 = (callPackage ../development/python-modules/sphinx { })
+  # Only exists for a Haskell package.
+  sphinx_1_7_9 = (callPackage ../development/python-modules/sphinx/2.nix { })
     .overridePythonAttrs (oldAttrs: rec {
       version = "1.7.9";
       src = oldAttrs.src.override {

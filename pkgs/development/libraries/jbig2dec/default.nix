@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "jbig2dec-0.16";
+  name = "jbig2dec-0.17";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/${name}.tar.gz";
-    sha256 = "00h61y7bh3z6mqfzxyb318gyh0f8jwarg4hvlrm83rqps8avzxm4";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs950/${name}.tar.gz";
+    sha256 = "0wpvslmwazia3z8gyk343kbq6yj47pxr4x5yjvx332v309qssazp";
   };
 
   postPatch = ''

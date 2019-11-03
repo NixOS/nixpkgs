@@ -1,15 +1,12 @@
 { stdenv, lib, fetchurl
-, zlib, xz, python2, ncurses, findXMLCatalogs
+, zlib, xz, python, ncurses, findXMLCatalogs
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
 , enableStatic ? !enableShared,
 }:
 
-let
-  python = python2;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libxml2";
   version = "2.9.9";
 
@@ -17,6 +14,20 @@ in stdenv.mkDerivation rec {
     url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
     sha256 = "0wd881jzvqayx0ihzba29jl80k06xj9ywp16kxacdqs3064p1ywl";
   };
+  patches = [
+    # Upstream bugs:
+    #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
+    #   https://gitlab.gnome.org/GNOME/libxml2/issues/64
+    # Patch from https://bugzilla.opensuse.org/show_bug.cgi?id=1065270 ,
+    # but only the UTF-8 part.
+    # Can also be mitigated by fixing malformed XML inputs, such as in
+    # https://gitlab.gnome.org/GNOME/gnumeric/merge_requests/3 .
+    # Other discussion:
+    #   https://github.com/itstool/itstool/issues/22
+    #   https://github.com/NixOS/nixpkgs/pull/63174
+    #   https://github.com/NixOS/nixpkgs/pull/72342
+    ./utf8-xmlErrorFuncHandler.patch
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
