@@ -2030,6 +2030,12 @@
       github = "ericnorris";
       githubId = 1906605;
   };
+  Enteee = {
+    email = "nix@duckpond.ch";
+    github = "Enteee";
+    githubid = 5493775;
+    name = "Ente";
+  };
   enzime = {
     email = "enzime@users.noreply.github.com";
     github = "enzime";

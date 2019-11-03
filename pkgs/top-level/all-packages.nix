@@ -2035,7 +2035,6 @@ in
     liblognorm = null;
     openssl = null;
     librelp = null;
-    libgt = null;
     libksi = null;
     liblogging = null;
     libnet = null;
@@ -9540,6 +9539,8 @@ in
   cmakeWithGui = cmakeCurses.override { withQt5 = true; };
   cmakeWithQt4Gui = cmakeCurses.override { useQt4 = true; };
 
+  cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
+
   # Does not actually depend on Qt 5
   inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
 
@@ -14170,12 +14171,6 @@ in
     stdenv = gcc5Stdenv;
   };
 
-  v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
-    inherit (python2Packages) python gyp;
-    cctools = darwin.cctools;
-    stdenv = if stdenv.isDarwin then stdenv else gcc5Stdenv;
-  };
-
   v8_5_x = callPackage ../development/libraries/v8/5_x.nix ({
     inherit (python2Packages) python gyp;
     icu = icu58; # v8-5.4.232 fails against icu4c-59.1
@@ -15670,6 +15665,8 @@ in
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
 
   bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
+
+  brillo = callPackage ../os-specific/linux/brillo { };
 
   broadcom-bt-firmware = callPackage ../os-specific/linux/firmware/broadcom-bt-firmware { };
 
@@ -18424,6 +18421,8 @@ in
   keepass-keepasshttp = callPackage ../applications/misc/keepass-plugins/keepasshttp { };
 
   keepass-keepassrpc = callPackage ../applications/misc/keepass-plugins/keepassrpc { };
+
+  keepass-otpkeyprov = callPackage ../applications/misc/keepass-plugins/otpkeyprov { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
@@ -23091,6 +23090,7 @@ in
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
     mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
+    night-theme-switcher = callPackage ../desktops/gnome-3/extensions/night-theme-switcher { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
     pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
