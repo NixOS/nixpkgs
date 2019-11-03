@@ -1563,6 +1563,12 @@
     githubId = 14032;
     name = "Daniel Brockman";
   };
+  dduan = {
+    email = "daniel@duan.ca";
+    github = "dduan";
+    githubId = 75067;
+    name = "Daniel Duan";
+  };
   deepfire = {
     email = "_deepfire@feelingofgreen.ru";
     github = "deepfire";
