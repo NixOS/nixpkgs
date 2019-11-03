@@ -1,37 +1,38 @@
 { stdenv
 , fetchFromGitHub
 , pantheon
-, wrapGAppsHook
 , pkgconfig
 , meson
 , ninja
 , vala
-, gala
-, gtk3
-, libgee
-, granite
-, gettext
-, mutter
-, json-glib
 , python3
-, elementary-gtk-theme
+, gtk3
+, glib
+, granite
+, libgee
 , elementary-icon-theme
+, elementary-gtk-theme
+, gettext
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  pname = "wingpanel";
-  version = "2.2.6";
+  pname = "elementary-feedback";
+  version = "1.0";
+
+  repoName = "feedback";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "0q5jhg3gpcjfzfi7g33fv8pb916cqsgk6543b82yy97c20902ap9";
+    sha256 = "0rc4ifs4hd4cj0v028bzc45v64pwx21xylwrhb20jpw61ainfi8s";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
@@ -46,18 +47,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-gtk-theme
     elementary-icon-theme
-    gala
     granite
     gtk3
-    json-glib
+    elementary-gtk-theme
     libgee
-    mutter
-  ];
-
-  patches = [
-    ./indicators.patch
+    glib
   ];
 
   postPatch = ''
@@ -66,13 +61,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "The extensible top panel for Pantheon";
-    longDescription = ''
-      Wingpanel is an empty container that accepts indicators as extensions,
-      including the applications menu.
-    '';
-    homepage = https://github.com/elementary/wingpanel;
-    license = licenses.gpl2Plus;
+    description = "GitHub Issue Reporter designed for elementary OS";
+    homepage = https://github.com/elementary/feedback;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
   };

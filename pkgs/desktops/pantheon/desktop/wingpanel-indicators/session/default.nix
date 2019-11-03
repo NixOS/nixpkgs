@@ -10,8 +10,6 @@
 , wingpanel
 , accountsservice
 , libgee
-, elementary-icon-theme
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -36,12 +34,10 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
     accountsservice
-    elementary-icon-theme
     granite
     gtk3
     libgee

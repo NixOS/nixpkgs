@@ -1,32 +1,33 @@
 { stdenv
-, fetchFromGitHub
-, pantheon
-, wrapGAppsHook
-, pkgconfig
-, meson
-, ninja
-, vala
-, gala
-, gtk3
-, libgee
-, granite
-, gettext
-, mutter
-, json-glib
-, python3
+, desktop-file-utils
 , elementary-gtk-theme
 , elementary-icon-theme
+, fetchFromGitHub
+, flatpak
+, gettext
+, glib
+, granite
+, gtk3
+, libgee
+, meson
+, ninja
+, pantheon
+, pkgconfig
+, python3
+, vala
+, libxml2
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  pname = "wingpanel";
-  version = "2.2.6";
+  pname = "sideload";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0q5jhg3gpcjfzfi7g33fv8pb916cqsgk6543b82yy97c20902ap9";
+    sha256 = "1qi4wm773bf1szi5a77g9lxjn305v1m85j4nb6il9q4qlh9b1cs5";
   };
 
   passthru = {
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     gettext
     meson
     ninja
@@ -48,16 +50,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     elementary-gtk-theme
     elementary-icon-theme
-    gala
+    flatpak
+    glib
     granite
     gtk3
-    json-glib
     libgee
-    mutter
-  ];
-
-  patches = [
-    ./indicators.patch
+    libxml2
   ];
 
   postPatch = ''
@@ -66,13 +64,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "The extensible top panel for Pantheon";
-    longDescription = ''
-      Wingpanel is an empty container that accepts indicators as extensions,
-      including the applications menu.
-    '';
-    homepage = https://github.com/elementary/wingpanel;
-    license = licenses.gpl2Plus;
+    homepage = https://github.com/elementary/sideload;
+    description = "Flatpak installer, designed for elementary OS";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
   };
