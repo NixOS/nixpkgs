@@ -1079,7 +1079,7 @@ installPhase() {
         SHELL=$SHELL
         ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
         ${installFlags+"${installFlags[@]}"} ${installFlagsArray+"${installFlagsArray[@]}"}
-        ${installTargets:-install}
+        "${installTargets[@]:-install}"
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
