@@ -5670,6 +5670,8 @@ in
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
 
+  poly2tri-c = callPackage ../development/libraries/poly2tri-c { };
+
   polysh = callPackage ../tools/networking/polysh { };
 
   ponysay = callPackage ../tools/misc/ponysay { };
