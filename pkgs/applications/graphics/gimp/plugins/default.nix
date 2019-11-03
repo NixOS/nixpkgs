@@ -133,6 +133,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
       Filters/Enhance/Wavelet sharpen
     */
     name = "wavelet-sharpen-0.1.2";
+    NIX_LDFLAGS = [ "-lm" ];
     src = fetchurl {
       url = http://registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz;
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
