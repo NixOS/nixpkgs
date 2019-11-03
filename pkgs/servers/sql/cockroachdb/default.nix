@@ -13,13 +13,13 @@ let
 in
 buildGoPackage rec {
   pname = "cockroach";
-  version = "19.1.4";
+  version = "19.1.5";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "1bqzs844ildvyh4332vapsqhfkwcvjmgkkmn3i8ndd89q5yic6fq";
+    sha256 = "1pnzzmxxb7qxiiy8qpl2sifk4qrijjbhmzy47bnjj5ssdsjjjcqy";
   };
 
   inherit nativeBuildInputs buildInputs;
