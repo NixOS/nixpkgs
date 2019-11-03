@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Library for validating Python data structures";
     homepage = https://github.com/keleshev/schema;
     license = licenses.mit;
+    maintainers = [ maintainers.tobim ];
   };
 }
