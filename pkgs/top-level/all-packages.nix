@@ -1557,6 +1557,8 @@ in
 
   doitlive = callPackage ../tools/misc/doitlive { };
 
+  dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
+
   dosage = callPackage ../applications/graphics/dosage {
     pythonPackages = python3Packages;
   };
