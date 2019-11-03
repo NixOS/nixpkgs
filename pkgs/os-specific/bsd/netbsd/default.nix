@@ -127,9 +127,10 @@ let
     nativeBuildInputs = [ makeMinimal ];
     buildInputs = [ zlib ];
 
-    # for some reason the build system re-runs configure with HOST_CC
+    # the build system re-runs `./configure` with `HOST_CC` (which is their
+    # name for Build CC) as a compiler to make `defs.mk`, which is installed
     depsBuildBuild = [ buildPackages.stdenv.cc ] ++ buildInputs;
-    HOST_CC = "${buildPackages.stdenv.cc}/bin/cc";
+    HOST_CC = "${buildPackages.stdenv.cc.targetPrefix}cc";
 
     # temporarily use gnuinstall for bootstrapping
     # bsdinstall will be built later
@@ -215,7 +216,6 @@ let
     version = "8.0";
     nativeBuildInputs = [ ];
     propagatedBuildInputs = [ compat ];
-    buildInputs = [ stdenv.cc ];
     extraPaths = [
       (fetchNetBSD "lib/libc/gen/fts.c" "8.0" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
       (fetchNetBSD "lib/libc/include/namespace.h" "8.0" "1sjvh9nw3prnk4rmdwrfsxh6gdb9lmilkn46jcfh3q5c8glqzrd7")
