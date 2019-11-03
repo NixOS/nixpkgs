@@ -28,6 +28,7 @@
 , libwebp
 , luajit
 , openexr
+, OpenCL
 }:
 
 stdenv.mkDerivation rec {
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
     gexiv2
     luajit
     openexr
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin OpenCL;
 
   # for gegl-4.0.pc
   propagatedBuildInputs = [
@@ -115,7 +116,8 @@ stdenv.mkDerivation rec {
     patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tests/buffer/buffer-tests-run.sh tools/xml_insert.sh
   '';
 
-  doCheck = true;
+  # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     description = "Graph-based image processing framework";

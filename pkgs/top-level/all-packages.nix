@@ -11063,7 +11063,9 @@ in
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
-  gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix { };
+  gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
+    inherit (darwin.apple_sdk.frameworks) OpenCL;
+  };
 
   geoclue2 = callPackage ../development/libraries/geoclue {};
 
