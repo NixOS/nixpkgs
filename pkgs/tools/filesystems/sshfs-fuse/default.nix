@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patches = [ (fetchpatch {
     url = "https://github.com/libfuse/sshfs/commit/a548abd1f33a8423bec72724a5f48eb96fa55dd2.patch";
-    sha256 = "03rmks4bz06m9v8s5xjybvmcdw3d09x721jp4i6v0w8pfwsn98w1";
+    sha256 = "19p94aw7nvydd7p2bd1f5cqhlhhamjhda31k22sg06xaqyl893jm";
   }) ];
 
   nativeBuildInputs = [ meson pkgconfig ninja docutils makeWrapper ];
