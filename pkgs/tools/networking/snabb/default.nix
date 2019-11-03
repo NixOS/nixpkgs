@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+
   patchPhase = ''
     patchShebangs .
 
