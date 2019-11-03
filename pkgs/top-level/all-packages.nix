@@ -17480,6 +17480,8 @@ in
 
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
 
+  kvmtool = callPackage ../os-specific/linux/kvmtool {};
+
   # See `xenPackages` source for explanations.
   # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
   qemu_xen = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen-slim; });
