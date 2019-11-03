@@ -3524,7 +3524,7 @@ in
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos {
-    gegl = gnome3.gegl_0_4;
+    gegl = gegl_0_4;
   };
 
   gnokii = callPackage ../tools/misc/gnokii { };
@@ -5680,6 +5680,8 @@ in
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
+
+  poly2tri-c = callPackage ../development/libraries/poly2tri-c { };
 
   polysh = callPackage ../tools/networking/polysh { };
 
@@ -11077,7 +11079,7 @@ in
   };
 
   gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
-    gtk = res.gtk2;
+    inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
   geoclue2 = callPackage ../development/libraries/geoclue {};

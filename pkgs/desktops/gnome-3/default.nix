@@ -24,7 +24,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   gnome3 = self // { recurseForDerivations = false; };
-  gegl_0_4 = pkgs.gegl_0_4.override { gtk = pkgs.gtk3; };
 
 # ISO installer
 # installerIso = callPackage ./installer.nix {};
@@ -359,4 +358,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   nautilus-sendto = throw "deprecated 2019-09-17: abandoned";
 
   inherit (pkgs) vala; # added 2019-10-10
+
+  inherit (pkgs) gegl_0_4; # added 2019-10-31
 })
