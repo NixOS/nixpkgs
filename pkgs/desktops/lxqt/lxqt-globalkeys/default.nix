@@ -30,7 +30,7 @@ mkDerivation rec {
     description = "LXQt service for global keyboard shortcuts registration";
     homepage = https://github.com/lxqt/lxqt-globalkeys;
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

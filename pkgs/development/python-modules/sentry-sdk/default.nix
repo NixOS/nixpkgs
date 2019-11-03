@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, urllib3, certifi, django, flask, tornado, sanic, aiohttp, bottle, rq, falcon, pyramid, celery }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, urllib3, certifi, django, flask, tornado, bottle, rq, falcon, celery, pyramid, sanic, aiohttp }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
@@ -9,7 +9,8 @@ buildPythonPackage rec {
     sha256 = "ff14935cc3053de0650128f124c36f34a4be120b8cc522c149f5cba342c1fd05";
   };
 
-  checkInputs = [ django flask tornado sanic aiohttp bottle rq falcon pyramid celery ];
+  checkInputs = [ django flask tornado bottle rq falcon ]
+  ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 
   propagatedBuildInputs = [ urllib3 certifi ];
 

@@ -53,7 +53,7 @@ mkDerivation rec {
     description = "The LXQt desktop panel";
     homepage = https://github.com/lxqt/lxqt-panel;
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }
