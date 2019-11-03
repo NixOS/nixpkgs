@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
   # $out/etc was also missed: pam_env(login:session): Unable to open config file
 
   preConfigure = ''
-    configureFlags="$configureFlags --includedir=$out/include/security"
+    configureFlags+=("--includedir=$out/include/security")
   '' + stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-      # export ac_cv_search_crypt=no
-      # (taken from Alpine linux, apparently insecure but also doesn't build O:))
-      # disable insecure modules
-      # sed -e 's/pam_rhosts//g' -i modules/Makefile.am
-      sed -e 's/pam_rhosts//g' -i modules/Makefile.in
+    # export ac_cv_search_crypt=no
+    # (taken from Alpine linux, apparently insecure but also doesn't build O:))
+    # disable insecure modules
+    # sed -e 's/pam_rhosts//g' -i modules/Makefile.am
+    sed -e 's/pam_rhosts//g' -i modules/Makefile.in
   '';
 
   doCheck = false; # fails
