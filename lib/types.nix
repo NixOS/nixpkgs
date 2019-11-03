@@ -484,6 +484,12 @@ rec {
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
+    # Break documentation recursion in infinitely nested submodules.
+    hideSubTree = elemType: elemType // {
+      getSubOptions = prefix: {};
+      getSubModules = null;
+    };
+
   };
 };
 

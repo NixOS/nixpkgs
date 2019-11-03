@@ -7,6 +7,7 @@
 
 with lib;
 
+let self =
 {
   options = {
     proxyPass = mkOption {
@@ -73,6 +74,19 @@ with lib;
       '';
     };
 
+    locations = mkOption {
+      type = types.attrsOf (types.hideSubTree (types.submodule self));
+      default = {};
+      example = literalExample ''
+        {
+          "/" = {
+            proxyPass = "http://localhost:3000";
+          };
+        };
+      '';
+      description = "Declarative location config";
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -91,5 +105,6 @@ with lib;
       '';
     };
   };
-}
+};
 
+in self
