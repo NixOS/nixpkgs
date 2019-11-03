@@ -41,7 +41,7 @@ let
     # for darwin cross. @Ericson2314 has no idea why.
     buildFlags = [ "headers_install" ];
     checkTarget = [ "headers_check" ];
-    installTargets = "headers_install";
+    installTargets = [ "headers_install" ];
     installFlags = [ "INSTALL_HDR_PATH=${placeholder "out"}" ];
 
     # Skip clean on darwin, case-sensitivity issues.
