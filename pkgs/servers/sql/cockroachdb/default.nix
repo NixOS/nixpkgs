@@ -22,6 +22,8 @@ buildGoPackage rec {
     sha256 = "1pnzzmxxb7qxiiy8qpl2sifk4qrijjbhmzy47bnjj5ssdsjjjcqy";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];
+
   inherit nativeBuildInputs buildInputs;
 
   buildPhase = ''
