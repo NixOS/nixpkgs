@@ -18281,6 +18281,7 @@ in
 
   emacs = emacs26;
   emacsPackages = emacs26Packages;
+  emacs-nox = emacs26-nox;
 
   emacs26 = callPackage ../applications/editors/emacs {
     # use override to enable additional features
