@@ -241,7 +241,7 @@ let
 
     DefaultRuntimeDir ${mainCfg.stateDir}/runtime
 
-    PidFile ${mainCfg.stateDir}/httpd.pid
+    PidFile /run/httpd/httpd.pid
 
     ${optionalString (mainCfg.multiProcessingModule != "prefork") ''
       # mod_cgid requires this.
@@ -259,9 +259,6 @@ let
         uniqueListen = uniqList {inputList = map toStr listen;};
       in concatStrings uniqueListen
     }
-
-    User ${mainCfg.user}
-    Group ${mainCfg.group}
 
     ${let
         load = {name, path}: "LoadModule ${name}_module ${path}\n";
@@ -433,7 +430,7 @@ in
 
       stateDir = mkOption {
         type = types.path;
-        default = "/run/httpd";
+        default = "/var/spool/httpd";
         description = ''
           Directory for Apache's transient runtime state (such as PID
           files).  It is created automatically.  Note that the default,
@@ -595,6 +592,12 @@ in
         date.timezone = "${config.time.timeZone}"
       '';
 
+    systemd.tmpfiles.rules = [
+      "d '${mainCfg.stateDir}' 0750 ${mainCfg.user} ${mainCfg.group} - -"
+      "d '${mainCfg.stateDir}/runtime' 0750 ${mainCfg.user} ${mainCfg.group} - -"
+      "d '${mainCfg.logDir}' 0750 ${mainCfg.user} ${mainCfg.group} - -"
+     ];
+
     systemd.services.httpd =
       { description = "Apache HTTPD";
 
@@ -609,32 +612,32 @@ in
           optionalAttrs mainCfg.enablePHP { PHPRC = phpIni; }
           // optionalAttrs mainCfg.enableMellon { LD_LIBRARY_PATH  = "${pkgs.xmlsec}/lib"; };
 
-        preStart =
-          ''
-            mkdir -m 0750 -p ${mainCfg.stateDir}
-            [ $(id -u) != 0 ] || chown root.${mainCfg.group} ${mainCfg.stateDir}
+        preStart = ''
+          # Get rid of old semaphores.  These tend to accumulate across
+          # server restarts, eventually preventing it from restarting
+          # successfully.
+          for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
+              ${pkgs.utillinux}/bin/ipcrm -s $i
+          done
+        '';
 
-            mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
-            [ $(id -u) != 0 ] || chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
-
-            mkdir -m 0700 -p ${mainCfg.logDir}
-
-            # Get rid of old semaphores.  These tend to accumulate across
-            # server restarts, eventually preventing it from restarting
-            # successfully.
-            for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
-                ${pkgs.utillinux}/bin/ipcrm -s $i
-            done
-          '';
-
-        serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf}";
-        serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
-        serviceConfig.ExecReload = "${httpd}/bin/httpd -f ${httpdConf} -k graceful";
-        serviceConfig.Type = "forking";
-        serviceConfig.PIDFile = "${mainCfg.stateDir}/httpd.pid";
-        serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "5s";
+        serviceConfig = {
+          ExecStart = "${httpd}/bin/httpd -f '${httpdConf}'";
+          ExecStop = "${httpd}/bin/httpd -f '${httpdConf}' -k graceful-stop";
+          ExecReload = "${httpd}/bin/httpd -f '${httpdConf}' -k graceful";
+          Type = "forking";
+          Restart = "always";
+          RestartSec = "5s";
+          # User and group
+          User = mainCfg.user;
+          Group = mainCfg.group;
+          # Runtime directory and mode
+          RuntimeDirectory = "httpd";
+          RuntimeDirectoryMode = "0750";
+          # Capabilities
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID CAP_SETUID" ];
+          CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID CAP_SETUID" ];
+        };
       };
-
   };
 }
