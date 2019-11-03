@@ -200,7 +200,7 @@ in
 
     services.certmgr = {
       enable = true;
-      package = pkgs.certmgr-selfsigned;
+      package = pkgs.certmgr;
       svcManager = "command";
       specs =
         let
@@ -209,14 +209,14 @@ in
             authority = {
               inherit remote;
               file.path = cert.caCert;
-              root_ca = cert.caCert;
+              rootCA = cert.caCert;
               profile = "default";
-              auth_key_file = certmgrAPITokenPath;
+              authKeyFile = certmgrAPITokenPath;
             };
             certificate = {
               path = cert.cert;
             };
-            private_key = cert.privateKeyOptions;
+            privateKey = cert.privateKeyOptions;
             request = {
               inherit (cert) CN hosts;
               key = {
