@@ -839,7 +839,7 @@ unpackFile() {
 unpackPhase() {
     runHook preUnpack
 
-    if [ -z ${srcs+"${srcs[@]}"} ]; then
+    if [ -z ${srcs-"${srcs[@]}"} ]; then
         if [ -z "${src:-}" ]; then
             # shellcheck disable=SC2016
             echo 'variable $src or $srcs should point to the source'
