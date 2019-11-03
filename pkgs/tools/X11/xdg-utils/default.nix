@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     sort()  { ${coreutils}/bin/sort "$@"; }\
     xset()  { ${xset}/bin/xset      "$@"; }\
     perl()  { PERL5LIB=${perlPath} ${perlPackages.perl}/bin/perl "$@"; }\
+    mimetype() { ${perlPackages.FileMimeInfo}/bin/mimetype "$@"; }\
     &#' -i "$out"/bin/*
 
     substituteInPlace $out/bin/xdg-open \

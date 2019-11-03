@@ -5117,6 +5117,16 @@
     githubId = 1179566;
     name = "Nicolas B. Pierron";
   };
+  pingiun = {
+    email = "nixos@pingiun.com";
+    github = "pingiun";
+    githubId = 1576660;
+    name = "Jelle Besseling";
+    keys = [{
+      longkeyid = "rsa4096/0x9712452E8BE3372E";
+      fingerprint = "A3A3 65AE 16ED A7A0 C29C  88F1 9712 452E 8BE3 372E";
+    }];
+  };
   piotr = {
     email = "ppietrasa@gmail.com";
     name = "Piotr Pietraszkiewicz";
@@ -6339,6 +6349,12 @@
     github = "swdunlop";
     githubId = 120188;
     name = "Scott W. Dunlop";
+  };
+  sweber = {
+    email = "sweber2342+nixpkgs@gmail.com";
+    github = "sweber83";
+    githubId = 19905904;
+    name = "Simon Weber";
   };
   swflint = {
     email = "swflint@flintfam.org";

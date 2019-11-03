@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 14.11
+  # LTS Haskell 14.12
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -61,7 +61,7 @@ default-package-overrides:
   - aeson-casing ==0.2.0.0
   - aeson-compat ==0.3.9
   - aeson-diff ==1.1.0.7
-  - aeson-extra ==0.4.1.2
+  - aeson-extra ==0.4.1.3
   - aeson-generic-compat ==0.0.1.3
   - aeson-iproute ==0.2
   - aeson-picker ==0.1.0.5
@@ -84,6 +84,95 @@ default-package-overrides:
   - alternative-vector ==0.0.0
   - alternators ==1.0.0.0
   - ALUT ==2.4.0.3
+  - amazonka ==1.6.1
+  - amazonka-apigateway ==1.6.1
+  - amazonka-application-autoscaling ==1.6.1
+  - amazonka-appstream ==1.6.1
+  - amazonka-athena ==1.6.1
+  - amazonka-autoscaling ==1.6.1
+  - amazonka-budgets ==1.6.1
+  - amazonka-certificatemanager ==1.6.1
+  - amazonka-cloudformation ==1.6.1
+  - amazonka-cloudfront ==1.6.1
+  - amazonka-cloudhsm ==1.6.1
+  - amazonka-cloudsearch ==1.6.1
+  - amazonka-cloudsearch-domains ==1.6.1
+  - amazonka-cloudtrail ==1.6.1
+  - amazonka-cloudwatch ==1.6.1
+  - amazonka-cloudwatch-events ==1.6.1
+  - amazonka-cloudwatch-logs ==1.6.1
+  - amazonka-codebuild ==1.6.1
+  - amazonka-codecommit ==1.6.1
+  - amazonka-codedeploy ==1.6.1
+  - amazonka-codepipeline ==1.6.1
+  - amazonka-cognito-identity ==1.6.1
+  - amazonka-cognito-idp ==1.6.1
+  - amazonka-cognito-sync ==1.6.1
+  - amazonka-config ==1.6.1
+  - amazonka-core ==1.6.1
+  - amazonka-datapipeline ==1.6.1
+  - amazonka-devicefarm ==1.6.1
+  - amazonka-discovery ==1.6.1
+  - amazonka-dms ==1.6.1
+  - amazonka-ds ==1.6.1
+  - amazonka-dynamodb ==1.6.1
+  - amazonka-dynamodb-streams ==1.6.1
+  - amazonka-ecr ==1.6.1
+  - amazonka-ecs ==1.6.1
+  - amazonka-efs ==1.6.1
+  - amazonka-elasticache ==1.6.1
+  - amazonka-elasticbeanstalk ==1.6.1
+  - amazonka-elasticsearch ==1.6.1
+  - amazonka-elastictranscoder ==1.6.1
+  - amazonka-elb ==1.6.1
+  - amazonka-elbv2 ==1.6.1
+  - amazonka-emr ==1.6.1
+  - amazonka-gamelift ==1.6.1
+  - amazonka-glacier ==1.6.1
+  - amazonka-glue ==1.6.1
+  - amazonka-health ==1.6.1
+  - amazonka-iam ==1.6.1
+  - amazonka-importexport ==1.6.1
+  - amazonka-inspector ==1.6.1
+  - amazonka-iot ==1.6.1
+  - amazonka-iot-dataplane ==1.6.1
+  - amazonka-kinesis ==1.6.1
+  - amazonka-kinesis-analytics ==1.6.1
+  - amazonka-kinesis-firehose ==1.6.1
+  - amazonka-kms ==1.6.1
+  - amazonka-lambda ==1.6.1
+  - amazonka-lightsail ==1.6.1
+  - amazonka-marketplace-analytics ==1.6.1
+  - amazonka-marketplace-metering ==1.6.1
+  - amazonka-ml ==1.6.1
+  - amazonka-opsworks ==1.6.1
+  - amazonka-opsworks-cm ==1.6.1
+  - amazonka-pinpoint ==1.6.1
+  - amazonka-polly ==1.6.1
+  - amazonka-rds ==1.6.1
+  - amazonka-redshift ==1.6.1
+  - amazonka-rekognition ==1.6.1
+  - amazonka-route53 ==1.6.1
+  - amazonka-route53-domains ==1.6.1
+  - amazonka-s3 ==1.6.1
+  - amazonka-sdb ==1.6.1
+  - amazonka-servicecatalog ==1.6.1
+  - amazonka-ses ==1.6.1
+  - amazonka-shield ==1.6.1
+  - amazonka-sms ==1.6.1
+  - amazonka-snowball ==1.6.1
+  - amazonka-sns ==1.6.1
+  - amazonka-sqs ==1.6.1
+  - amazonka-ssm ==1.6.1
+  - amazonka-stepfunctions ==1.6.1
+  - amazonka-storagegateway ==1.6.1
+  - amazonka-sts ==1.6.1
+  - amazonka-support ==1.6.1
+  - amazonka-swf ==1.6.1
+  - amazonka-test ==1.6.1
+  - amazonka-waf ==1.6.1
+  - amazonka-workspaces ==1.6.1
+  - amazonka-xray ==1.6.1
   - amqp ==0.18.3
   - annotated-wl-pprint ==0.7.0
   - ansi-terminal ==0.9.1
@@ -132,7 +221,7 @@ default-package-overrides:
   - audacity ==0.0.2
   - aur ==6.2.0.1
   - authenticate ==1.3.4
-  - authenticate-oauth ==1.6
+  - authenticate-oauth ==1.6.0.1
   - auto ==0.4.3.1
   - autoexporter ==1.1.14
   - auto-update ==0.1.6
@@ -203,7 +292,7 @@ default-package-overrides:
   - bits ==0.5.2
   - bitset-word8 ==0.1.1.1
   - bits-extra ==0.0.1.4
-  - bitvec ==1.0.1.2
+  - bitvec ==1.0.2.0
   - bitx-bitcoin ==0.12.0.0
   - blake2 ==0.3.0
   - blas-carray ==0.1.0.1
@@ -875,7 +964,7 @@ default-package-overrides:
   - haskell-src-meta ==0.8.3
   - haskey-btree ==0.3.0.1
   - haskintex ==0.8.0.0
-  - haskoin-core ==0.9.2
+  - haskoin-core ==0.9.5
   - hasql ==1.4
   - hasql-optparse-applicative ==0.3.0.5
   - hasql-pool ==0.5.1
@@ -1009,6 +1098,7 @@ default-package-overrides:
   - HTTP ==4000.3.14
   - http-api-data ==0.4.1
   - http-client ==0.6.4
+  - http-client-openssl ==0.3.0.0
   - http-client-tls ==0.3.5.3
   - http-common ==0.8.2.0
   - http-conduit ==2.3.7.3
@@ -1086,16 +1176,17 @@ default-package-overrides:
   - indents ==0.5.0.1
   - indexed ==0.1.3
   - indexed-list-literals ==0.2.1.2
+  - indexed-profunctors ==0.1
   - infer-license ==0.2.0
   - inflections ==0.4.0.4
   - influxdb ==1.7.1.1
   - ini ==0.4.1
   - inj ==1.0
   - inline-c ==0.7.0.1
-  - inline-c-cpp ==0.3.0.2
+  - inline-c-cpp ==0.3.0.3
   - inline-r ==0.10.2
   - inliterate ==0.1.0
-  - insert-ordered-containers ==0.2.2
+  - insert-ordered-containers ==0.2.3
   - inspection-testing ==0.4.2.2
   - instance-control ==0.1.2.0
   - int-cast ==0.2.0.0
@@ -1185,7 +1276,7 @@ default-package-overrides:
   - language-haskell-extract ==0.2.4
   - language-java ==0.2.9
   - language-javascript ==0.6.0.14
-  - language-puppet ==1.4.5
+  - language-puppet ==1.4.6
   - lapack ==0.3.1
   - lapack-carray ==0.0.3
   - lapack-comfort-array ==0.0.0.1
@@ -1252,7 +1343,7 @@ default-package-overrides:
   - log-domain ==0.12
   - logfloat ==0.13.3.3
   - logger-thread ==0.1.0.2
-  - logging-effect ==1.3.6
+  - logging-effect ==1.3.7
   - logging-facade ==0.3.0
   - logging-facade-syslog ==1
   - logict ==0.7.0.2
@@ -1278,7 +1369,7 @@ default-package-overrides:
   - markdown ==0.1.17.4
   - markdown-unlit ==0.5.0
   - markov-chain ==0.0.3.4
-  - massiv ==0.4.2.0
+  - massiv ==0.4.3.0
   - massiv-io ==0.1.7.0
   - massiv-test ==0.1.1
   - mathexpr ==0.3.0.0
@@ -1447,9 +1538,10 @@ default-package-overrides:
   - nonce ==1.0.7
   - nondeterminism ==1.4
   - non-empty ==0.3.2
-  - nonempty-containers ==0.3.1.0
+  - nonempty-containers ==0.3.2.0
   - nonemptymap ==0.0.6.0
   - non-empty-sequence ==0.2.0.2
+  - nonempty-vector ==0.1.0.0
   - non-negative ==0.1.2
   - not-gloss ==0.7.7.0
   - no-value ==1.0.0.0
@@ -1493,6 +1585,8 @@ default-package-overrides:
   - open-witness ==0.4.0.1
   - operational ==0.2.3.5
   - operational-class ==0.3.0.0
+  - optics-core ==0.2
+  - optics-extra ==0.2
   - optional-args ==1.0.2
   - options ==1.2.1.1
   - optparse-applicative ==0.14.3.0
@@ -1681,6 +1775,7 @@ default-package-overrides:
   - pure-zlib ==0.6.6
   - pushbullet-types ==0.4.1.0
   - pusher-http-haskell ==1.5.1.11
+  - PyF ==0.8.1.1
   - qchas ==1.1.0.1
   - qm-interpolated-string ==0.3.0.0
   - qnap-decrypt ==0.3.5
@@ -1769,8 +1864,8 @@ default-package-overrides:
   - repa ==3.4.1.4
   - repa-algorithms ==3.4.1.3
   - repa-io ==3.4.1.1
-  - replace-attoparsec ==1.0.2.0
-  - replace-megaparsec ==1.1.4.0
+  - replace-attoparsec ==1.0.3.0
+  - replace-megaparsec ==1.1.5.0
   - repline ==0.2.1.0
   - req ==2.1.0
   - req-conduit ==1.0.0
@@ -1927,7 +2022,7 @@ default-package-overrides:
   - simple-cmd-args ==0.1.3
   - simple-log ==0.9.12
   - simple-reflect ==0.3.3
-  - simple-sendfile ==0.2.28
+  - simple-sendfile ==0.2.30
   - simple-session ==0.10.1.1
   - simple-templates ==0.9.0.0
   - simple-vec3 ==0.6
@@ -1999,7 +2094,7 @@ default-package-overrides:
   - storable-tuple ==0.0.3.3
   - storablevector ==0.2.13
   - store ==0.5.1.2
-  - store-core ==0.4.4.1
+  - store-core ==0.4.4.2
   - Strafunski-StrategyLib ==5.0.1.0
   - stratosphere ==0.40.0
   - streaming ==0.2.3.0
@@ -2107,7 +2202,7 @@ default-package-overrides:
   - testing-type-modifiers ==0.1.0.1
   - texmath ==0.11.3
   - text-binary ==0.2.1.1
-  - text-builder ==0.6.5.1
+  - text-builder ==0.6.6.1
   - text-conversions ==0.3.0
   - text-format ==0.3.2
   - text-icu ==0.7.0.1
@@ -2797,6 +2892,7 @@ broken-packages:
   - ADPfusionSet
   - adtrees
   - Advgame
+  - Advise-me
   - AERN-Basics
   - AERN-Net
   - AERN-Real
@@ -3096,7 +3192,6 @@ broken-packages:
   - aws-sign4
   - aws-simple
   - aws-sns
-  - axel
   - axiom
   - azubi
   - azure-service-api
@@ -4978,6 +5073,7 @@ broken-packages:
   - ghci-history-parser
   - ghci-lib
   - ghci-ng
+  - ghci-pretty
   - ghcide
   - ghcjs-base-stub
   - ghcjs-dom-jsffi
@@ -6396,6 +6492,7 @@ broken-packages:
   - ipc
   - ipld-cid
   - ipopt-hs
+  - ipprint
   - iptables-helpers
   - iptadmin
   - IPv6DB
@@ -6606,7 +6703,6 @@ broken-packages:
   - kmp-dfa
   - knead
   - knead-arithmetic
-  - knit-haskell
   - knots
   - koellner-phonetic
   - kontra-config
@@ -7644,6 +7740,7 @@ broken-packages:
   - opml-conduit
   - opn
   - optima
+  - optima-for-hasql
   - optimal-blocks
   - optimization
   - optimusprime
@@ -7700,7 +7797,6 @@ broken-packages:
   - pairing
   - pam
   - panda
-  - pandoc-emphasize-code
   - pandoc-include
   - pandoc-include-code
   - pandoc-japanese-filters
@@ -7960,9 +8056,6 @@ broken-packages:
   - polydata
   - polydata-core
   - polynomial
-  - polysemy-plugin
-  - polysemy-RandomFu
-  - polysemy-zoo
   - polyseq
   - polysoup
   - polytypeable
@@ -8331,6 +8424,7 @@ broken-packages:
   - reflection-extras
   - reflex
   - reflex-animation
+  - reflex-backend-socket
   - reflex-backend-wai
   - reflex-basic-host
   - reflex-dom-retractable
@@ -9101,6 +9195,7 @@ broken-packages:
   - sqlvalue-list
   - sqsd-local
   - squeal-postgresql
+  - sr-extra
   - srcinst
   - sscan
   - sscgi
@@ -9824,7 +9919,6 @@ broken-packages:
   - usb-id-database
   - usb-iteratee
   - usb-safe
-  - userid
   - users-mysql-haskell
   - users-persistent
   - utc
@@ -10017,7 +10111,6 @@ broken-packages:
   - web-routes-happstack
   - web-routes-quasi
   - web-routes-regular
-  - web-routes-th
   - web-routes-transformers
   - web-routing
   - web3

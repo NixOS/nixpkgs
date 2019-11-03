@@ -1,18 +1,16 @@
 # based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
 
-{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim, openssl, pcre, readline,
-  boehmgc, sfml, tzdata, coreutils, sqlite }:
+{ stdenv, lib, fetchurl, makeWrapper, openssl, pcre, readline,
+  boehmgc, sfml, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "nim";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "https://nim-lang.org/download/${pname}-${version}.tar.xz";
-    sha256 = "1pg0lxahis8zfk6rdzdj281bahl8wglpjgngkc4vg1pc9p61fj03";
+    sha256 = "1rjinrs119c8i6wzz5fzjfml7n7kbd5hb9642g4rr8qxkq4sx83k";
   };
-
-  doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
 
@@ -24,14 +22,9 @@ stdenv.mkDerivation rec {
     "-lsqlite3"
   ];
 
-  # 1. nodejs is only needed for tests
-  # 2. we could create a separate derivation for the "written in c" version of nim
-  #    used for bootstrapping, but koch insists on moving the nim compiler around
-  #    as part of building it, so it cannot be read-only
-
-  checkInputs = [
-    nodejs-slim tzdata coreutils
-  ];
+  # we could create a separate derivation for the "written in c" version of nim
+  # used for bootstrapping, but koch insists on moving the nim compiler around
+  # as part of building it, so it cannot be read-only
 
   nativeBuildInputs = [
     makeWrapper
@@ -54,46 +47,6 @@ stdenv.mkDerivation rec {
     ./koch tools -d:release
 
     runHook postBuild
-  '';
-
-  prePatch =
-    let disableTest = ''sed -i '1i discard \"\"\"\n  disabled: true\n\"\"\"\n\n' '';
-        disableStdLibTest = ''sed -i -e '/^when isMainModule/,/^END$/{s/^/#/}' '';
-        disableCompile = ''sed -i -e 's/^/#/' '';
-    in ''
-      substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin" "${coreutils}/bin"
-      substituteInPlace ./tests/stdlib/ttimes.nim --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-
-      # runs out of memory on a machine with 8GB RAM
-      ${disableTest} ./tests/system/t7894.nim
-
-      # requires network access (not available in the build container)
-      ${disableTest} ./tests/stdlib/thttpclient.nim
-    '' + lib.optionalString stdenv.isAarch64 ''
-      # supposedly broken on aarch64
-      ${disableStdLibTest} ./lib/pure/stats.nim
-
-      # reported upstream: https://github.com/nim-lang/Nim/issues/11463
-      ${disableCompile} ./lib/nimhcr.nim
-      ${disableTest} ./tests/dll/nimhcr_unit.nim
-      ${disableTest} ./tests/dll/nimhcr_integration.nim
-
-      # reported upstream: https://github.com/nim-lang/Nim/issues/12262
-      ${disableTest} ./tests/range/tcompiletime_range_checks.nim
-
-      # requires "immintrin.h" which is available only on x86
-      ${disableTest} ./tests/misc/tsizeof3.nim
-    '';
-
-  checkPhase = ''
-    runHook preCheck
-
-    # Fortify hardening breaks tests
-    # https://github.com/nim-lang/Nim/issues/11435#issuecomment-534545696
-    NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/} \
-    ./koch tests --nim:bin/nim all
-
-    runHook postCheck
   '';
 
   installPhase = ''
