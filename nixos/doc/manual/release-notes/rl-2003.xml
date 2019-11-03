@@ -264,6 +264,57 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
      in container config.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Virtual console options have been reorganized and can be found under
+     a single top-level attribute: <literal>console</literal>.
+     The full set of changes is as follows:
+    </para>
+    <itemizedlist>
+      <listitem>
+       <para>
+         <literal>i18n.consoleFont</literal> renamed to
+         <link linkend="opt-console.font">console.font</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>i18n.consoleKeyMap</literal> renamed to
+         <link linkend="opt-console.keyMap">console.keyMap</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>i18n.consoleColors</literal> renamed to
+         <link linkend="opt-console.colors">console.colors</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>i18n.consolePackages</literal> renamed to
+         <link linkend="opt-console.packages">console.packages</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>i18n.consoleUseXkbConfig</literal> renamed to
+         <link linkend="opt-console.useXkbConfig">console.useXkbConfig</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>boot.earlyVconsoleSetup</literal> renamed to
+         <link linkend="opt-console.earlySetup">console.earlySetup</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>boot.extraTTYs</literal> renamed to
+         <link linkend="opt-console.extraTTYs">console.extraTTYs</link>
+       </para>
+      </listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
  </section>
 
