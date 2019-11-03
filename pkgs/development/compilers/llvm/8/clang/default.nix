@@ -53,6 +53,8 @@ let
       ./compiler-rt-baremetal.patch
       # make clang -xhip use $PATH to find executables
       ./HIP-use-PATH-8.patch
+      # https://reviews.llvm.org/D69769
+      ./msvc-lld.patch
     ];
 
     postPatch = ''
