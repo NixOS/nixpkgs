@@ -8,10 +8,14 @@ stdenv.mkDerivation {
   patches = [
     # fixes build with gcc8
     ./fix-snprintf-truncation.patch
+    # fixes build with gcc9
+    ./fix-strncpy-truncation.patch
   ];
 
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ udev ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
 
   preConfigure = ''
     cd tools/usb/usbip
