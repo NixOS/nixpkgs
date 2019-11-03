@@ -26,13 +26,13 @@ in
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
     rev = "v${version}";
-    sha256 = "1w5z1xwb2g6j2izm89b7lv9n92r1zhsr8bglxcn7jc5gwbvwysvd";
+    sha256 = "0m2sy3f5pyc4wv1ns31r7vlafqkzp0a2jasaskwrkl6273agbbk9";
   };
 
   patches = [
