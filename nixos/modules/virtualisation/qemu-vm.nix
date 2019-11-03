@@ -30,17 +30,20 @@ let
   # XXX: This is very ugly and in the future we really should use attribute
   # sets to build ALL of the QEMU flags instead of this mixed mess of Nix
   # expressions and shell script stuff.
-  mkDiskIfaceDriveFlag = idx: driveArgs: let
+  mkDiskIfaceDriveFlag = idx: driveArgs: deviceArgs: let
     inherit (cfg.qemu) diskInterface;
     # The drive identifier created by incrementing the index by one using the
     # shell.
     drvId = "drive$((${idx} + 1))";
     # NOTE: DO NOT shell escape, because this may contain shell variables.
     commonArgs = "index=${idx},id=${drvId},${driveArgs}";
-    isSCSI = diskInterface == "scsi";
-    devArgs = "${diskInterface}-hd,drive=${drvId}";
-    args = "-drive ${commonArgs},if=none -device lsi53c895a -device ${devArgs}";
-  in if isSCSI then args else "-drive ${commonArgs},if=${diskInterface}";
+    devArgs = [ "drive=${drvId}" ] ++ deviceArgs;
+    cfgMap = {
+      scsi = "-device lsi53c895a -device scsi-hd,${lib.concatStringsSep "," devArgs}";
+      virtio = "-device virtio-blk-pci,${lib.concatStringsSep "," devArgs}";
+      ide = "-device ide-hd,${lib.concatStringsSep "," devArgs}";
+    };
+  in "-drive ${commonArgs},if=none ${cfgMap.${diskInterface}}";
 
   # Shell script to start the VM.
   startVM =
@@ -83,7 +86,7 @@ let
         if ! test -e "empty$idx.qcow2"; then
             ${qemu}/bin/qemu-img create -f qcow2 "empty$idx.qcow2" "${toString size}M"
         fi
-        extraDisks="$extraDisks ${mkDiskIfaceDriveFlag "$idx" "file=$(pwd)/empty$idx.qcow2,werror=report"}"
+        extraDisks="$extraDisks ${mkDiskIfaceDriveFlag "$idx" "file=$(pwd)/empty$idx.qcow2,werror=report" []}"
         idx=$((idx + 1))
       '')}
 
@@ -98,14 +101,14 @@ let
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
           -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
           ${if cfg.useBootLoader then ''
-            ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report"} \
-            ${mkDiskIfaceDriveFlag "1" "file=$TMPDIR/disk.img,media=disk"} \
+            ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report" []} \
+            ${mkDiskIfaceDriveFlag "1" "file=$TMPDIR/disk.img,media=disk" [ "bootindex=1" ]} \
             ${if cfg.useEFIBoot then ''
               -pflash $TMPDIR/bios.bin \
             '' else ''
             ''}
           '' else ''
-            ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report"} \
+            ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report" []} \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
             -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS" \
@@ -142,7 +145,7 @@ let
           buildInputs = [ pkgs.utillinux ];
           QEMU_OPTS = if cfg.useEFIBoot
                       then "-pflash $out/bios.bin -nographic -serial pty"
-                      else "-nographic -serial pty";
+                      else "-nographic -serial mon:stdio";
         }
         ''
           # Create a /boot EFI partition with 40M and arbitrary but fixed GUIDs for reproducibility
@@ -172,6 +175,7 @@ let
           # This is needed for GRUB 0.97, which doesn't know about virtio devices.
           mkdir /boot/grub
           echo '(hd0) /dev/vda' > /boot/grub/device.map
+          ln -sv /dev/vda /dev/sda
 
           # Install GRUB and generate the GRUB boot menu.
           touch /etc/NIXOS
@@ -470,7 +474,7 @@ in
       ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
 
     virtualisation.bootDevice =
-      mkDefault (if cfg.qemu.diskInterface == "scsi" then "/dev/sda" else "/dev/vda");
+      mkDefault (if cfg.qemu.diskInterface != "virtio" then "/dev/sda" else "/dev/vda");
 
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
@@ -521,7 +525,7 @@ in
           };
       } // optionalAttrs cfg.useBootLoader
       { "/boot" =
-          { device = "/dev/vdb2";
+          { device = if (cfg.qemu.diskInterface == "virtio") then "/dev/vdb2" else "/dev/sdb2";
             fsType = "vfat";
             options = [ "ro" ];
             noCheck = true; # fsck fails on a r/o filesystem
