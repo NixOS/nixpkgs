@@ -16366,6 +16366,8 @@ in
 
   buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
 
+  zmalllinugz = callPackage ../os-specific/linux/zmalllinugz {};
+
   cryptodev = linuxPackages_4_9.cryptodev;
 
   dpdk = callPackage ../os-specific/linux/dpdk {
