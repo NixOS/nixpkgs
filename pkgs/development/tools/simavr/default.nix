@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     "AVR=avr-"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+
   nativeBuildInputs = [ which pkgconfig avrgcc ];
   buildInputs = [ libelf freeglut libGLU_combined ]
     ++ stdenv.lib.optional stdenv.isDarwin GLUT;
