@@ -21312,6 +21312,8 @@ in
 
   tdrop = callPackage ../applications/misc/tdrop { };
 
+  tre-command = callPackage ../tools/system/tre-command {};
+
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
