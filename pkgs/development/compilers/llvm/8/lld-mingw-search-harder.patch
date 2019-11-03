@@ -1,0 +1,76 @@
+commit 447022647c36a64e710165a41a19443b10f74327
+Author: Martin Storsjo <martin@martin.st>
+Date:   Thu Oct 10 08:52:39 2019 +0000
+
+    [LLD] [MinGW] Look for other library patterns with -l
+    
+    GNU ld looks for a number of other patterns than just lib<name>.dll.a
+    and lib<name>.a.
+    
+    GNU ld does support linking directly against a DLL without using an
+    import library. If that's the only match for a -l argument, point out
+    that the user needs to use an import library, instead of leaving the
+    user with a puzzling message about the -l argument not being found
+    at all.
+    
+    Also convert an existing case of fatal() into error().
+    
+    Differential Revision: https://reviews.llvm.org/D68689
+    
+    git-svn-id: https://llvm.org/svn/llvm-project/lld/trunk@374292 91177308-0d34-0410-b5e6-96231b3b80d8
+    
+    (cherry-pick of 5cd168d52a1de34c2a08ba8b58d1e6002e72885b)
+
+diff --git a/MinGW/Driver.cpp b/MinGW/Driver.cpp
+index 2b2af1839..866ef2084 100644
+--- a/MinGW/Driver.cpp
++++ b/MinGW/Driver.cpp
+@@ -115,11 +115,26 @@ searchLibrary(StringRef Name, ArrayRef<StringRef> SearchPaths, bool BStatic) {
+   }
+ 
+   for (StringRef Dir : SearchPaths) {
+-    if (!BStatic)
++    if (!BStatic) {
+       if (Optional<std::string> S = findFile(Dir, "lib" + Name + ".dll.a"))
+         return *S;
++      if (Optional<std::string> S = findFile(Dir, Name + ".dll.a"))
++        return *S;
++    }
+     if (Optional<std::string> S = findFile(Dir, "lib" + Name + ".a"))
+       return *S;
++    if (!BStatic) {
++      if (Optional<std::string> S = findFile(Dir, Name + ".lib"))
++        return *S;
++      if (Optional<std::string> S = findFile(Dir, "lib" + Name + ".dll")) {
++        fatal("lld doesn't support linking directly against " + *S +
++              ", use an import library");
++      }
++      if (Optional<std::string> S = findFile(Dir, Name + ".dll")) {
++        fatal("lld doesn't support linking directly against " + *S +
++              ", use an import library");
++      }
++    }
+   }
+   fatal("unable to find library -l" + Name);
+ }
+diff --git a/test/MinGW/lib.test b/test/MinGW/lib.test
+index 56104d6d9..7342aa3a1 100644
+--- a/test/MinGW/lib.test
++++ b/test/MinGW/lib.test
+@@ -19,3 +19,16 @@ RUN: echo > %t/lib/libbar.a
+ RUN: ld.lld -### -m i386pep -Bstatic -lfoo -Bdynamic -lbar -L%t/lib | FileCheck -check-prefix=LIB5 %s
+ LIB5:      libfoo.a
+ LIB5-SAME: libbar.dll.a
++
++RUN: echo > %t/lib/noprefix.dll.a
++RUN: echo > %t/lib/msvcstyle.lib
++RUN: ld.lld -### -m i386pep -L%t/lib -lnoprefix -lmsvcstyle | FileCheck -check-prefix=OTHERSTYLES %s
++OTHERSTYLES: noprefix.dll.a
++OTHERSTYLES-SAME: msvcstyle.lib
++
++RUN: echo > %t/lib/libnoimplib.dll
++RUN: echo > %t/lib/noprefix_noimplib.dll
++RUN: not ld.lld -### -m i386pep -L%t/lib -lnoimplib 2>&1 | FileCheck -check-prefix=UNSUPPORTED-DLL1 %s
++RUN: not ld.lld -### -m i386pep -L%t/lib -lnoprefix_noimplib 2>&1 | FileCheck -check-prefix=UNSUPPORTED-DLL2 %s
++UNSUPPORTED-DLL1: lld doesn't support linking directly against {{.*}}libnoimplib.dll, use an import library
++UNSUPPORTED-DLL2: lld doesn't support linking directly against {{.*}}noprefix_noimplib.dll, use an import library
