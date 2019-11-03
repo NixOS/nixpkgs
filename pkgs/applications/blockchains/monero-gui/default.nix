@@ -33,6 +33,8 @@ mkDerivation rec {
     cppzmq hidapi
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
+
   patches = [ ./move-log-file.patch ];
 
   postPatch = ''
