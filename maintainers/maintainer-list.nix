@@ -1194,6 +1194,11 @@
     githubId = 30435868;
     name = "Okina Matara";
   };
+  chloekek = {
+    email = "rightfold+ck@gmail.com";
+    github = "chloekek";
+    name = "Chloé Kekoa";
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
