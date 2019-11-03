@@ -79,6 +79,7 @@ rec {
         else if final.isAarch64 then "arm64"
         else if final.isx86_32 then "x86"
         else if final.isx86_64 then "ia64"
+        else if final.isMips then "mips"
         else final.parsed.cpu.name;
 
       qemuArch =
@@ -90,6 +91,10 @@ rec {
           powerpcle = "ppc";
           powerpc64 = "ppc64";
           powerpc64le = "ppc64le";
+          mips = "mips";
+          mipsel = "mipsel";
+          mips64 = "mips64";
+          mips64el = "mips64el";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
       emulator = pkgs: let
