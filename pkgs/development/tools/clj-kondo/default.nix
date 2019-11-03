@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec{
   pname = "clj-kondo";
-  version = "2019.07.31-alpha";
+  version = "2019.10.26";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec{
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "03ipl7br9pgx2hdbiaxv9ip0ibafkyzkc8qlx8xyi528bcfi54bf";
+    sha256 = "1pq03g4bkslpa3jv7vrnw3sy6wnqdgnavl8qyb4lb1y96pmk9hd1";
   };
 
   dontUnpack = true;
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec{
     homepage = https://github.com/borkdude/clj-kondo;
     license = licenses.epl10;
     platforms = graalvm8.meta.platforms;
-    maintainers = with maintainers; [ jlesquembre ];
+    maintainers = with maintainers; [ jlesquembre bandresen ];
   };
 }
