@@ -7,11 +7,11 @@
 , libarchive, libxml2
 # extra support
 , pythonSupport ? true, pythonPackages ? null
-, opencvSupport ? false, opencv ? null
+, opencvSupport ? false, opencv3 ? null
 }:
 
 assert pythonSupport -> pythonPackages != null;
-assert opencvSupport -> opencv != null;
+assert opencvSupport -> opencv3 != null;
 
 stdenv.mkDerivation rec {
   pname = "shogun";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       protobuf nlopt snappy swig (libarchive.dev) libxml2
     ]
     ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])
-    ++ optional  (opencvSupport) opencv;
+    ++ optional  (opencvSupport) opencv3;
 
   cmakeFlags = with lib; []
     ++ (optional (pythonSupport) "-DPythonModular=ON")
