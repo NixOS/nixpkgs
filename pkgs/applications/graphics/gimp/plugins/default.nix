@@ -31,10 +31,10 @@ let
     }
   );
 
-  scriptDerivation = {name, src} : pluginDerivation {
-    inherit name; phases = "extraLib installPhase";
+  scriptDerivation = {src, ...}@attrs : pluginDerivation ({
+    phases = [ "extraLib" "installPhase" ];
     installPhase = "installScripts ${src}";
-  };
+  } // attrs);
 
 in
 
