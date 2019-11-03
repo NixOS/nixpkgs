@@ -3,6 +3,9 @@
 , fetchpatch
 , pkgconfig
 , gettext
+, docbook_xsl
+, docbook_xml_dtd_43
+, gtk-doc
 , meson
 , ninja
 , python3
@@ -33,6 +36,7 @@
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
+, withGtkDoc ? stdenv.isLinux
 , cups ? null
 , AppKit
 , Cocoa
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
   pname = "gtk+3";
   version = "3.24.12";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" ] ++ optional withGtkDoc "devdoc";
   outputBin = "dev";
 
   setupHooks = [
@@ -78,6 +82,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   mesonFlags = [
+    "-Dgtk_doc=${boolToString withGtkDoc}"
     "-Dtests=false"
   ];
 
@@ -114,6 +119,10 @@ stdenv.mkDerivation rec {
     python3
     sassc
     setupHooks
+  ] ++ optionals withGtkDoc [
+    docbook_xml_dtd_43
+    docbook_xsl
+    gtk-doc
   ];
 
   buildInputs = [

@@ -30,7 +30,7 @@ mkDerivation rec {
     description = "GUI to query passwords on behalf of SSH agents";
     homepage = https://github.com/lxqt/lxqt-openssh-askpass;
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }
