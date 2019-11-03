@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "17ckkxfzbqvvfdnh10if4aqdcq98q3vl6dn1v6f4lhr4ifnyjdlk";
   };
   buildInputs = [ ncurses ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=stringop-truncation" ];
   patches = [
     # gcc7 compat
     (fetchpatch {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
       sha256 = "0v6gbp6pjpmnzswlf6d97aywiy015g3kcmfrrkspsbb7lh1y3nix";
     })
   ];
-  
+
   meta = with lib; {
     description = "ncurses-based console hexeditor written in C";
     homepage = https://github.com/LonnyGomes/hexcurse;
