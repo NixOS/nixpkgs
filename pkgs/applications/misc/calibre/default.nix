@@ -41,7 +41,7 @@ mkDerivation rec {
     poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
   ] ++ (with python2Packages; [
-    apsw cssselect css-parser dateutil dnspython html5-parser lxml mechanize netifaces pillow
+    apsw cssselect css-parser dateutil dnspython html5-parser lxml markdown mechanize netifaces pillow
     python pyqt5_with_qtwebkit sip
     regex msgpack beautifulsoup4
     # the following are distributed with calibre, but we use upstream instead
