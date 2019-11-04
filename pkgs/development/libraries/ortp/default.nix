@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "12cwv593bsdnxs0zfcp07vwyk7ghlz2wv7vdbs1ksv293w3vj2rv";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
+
   buildInputs = [ bctoolbox ];
   nativeBuildInputs = [ cmake ];
 
