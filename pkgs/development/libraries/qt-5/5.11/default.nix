@@ -53,6 +53,10 @@ let
     qtbase = [
       ./qtbase.patch
       ./qtbase-fixguicmake.patch
+      (fetchpatch {
+        url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=a52d7861edfb5956";
+        sha256 = "0as047qybh6w9xz2wd569kixwsibj3qid5nkd3l5w5v3lk80af3v";
+      })
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [
