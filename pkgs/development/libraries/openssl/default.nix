@@ -95,7 +95,11 @@ let
     '' +
     ''
       mkdir -p $bin
+    '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    ''
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
+    '' +
+    ''
       mv $out/bin $bin/
 
       mkdir $dev
@@ -107,7 +111,7 @@ let
       rmdir $out/etc/ssl/{certs,private}
     '';
 
-    postFixup = ''
+    postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows) ''
       # Check to make sure the main output doesn't depend on perl
       if grep -r '${buildPackages.perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2

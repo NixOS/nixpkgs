@@ -75,7 +75,7 @@ let
             '' else ''
               echo "Checking that Nix can read nix.conf..."
               ln -s $out ./nix.conf
-              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net"} >/dev/null
+              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net --option experimental-features nix-command"} >/dev/null
             '')
       );
 

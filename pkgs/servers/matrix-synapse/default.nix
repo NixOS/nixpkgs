@@ -23,11 +23,11 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y8yhzsf2lk2d7v4l61rpy4918c0qz276j79q88l9yazb6gw5pkk";
+    sha256 = "0skhzbwzq2985frnd86fn2hxhsmy0q1l5p9aich8l2gyg1dd3wb8";
   };
 
   patches = [
@@ -71,9 +71,12 @@ in buildPythonApplication rec {
     treq
     twisted
     unpaddedbase64
+    typing-extensions
   ] ++ lib.optional enableSystemd systemd;
 
   checkInputs = [ mock parameterized openssl ];
+
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests

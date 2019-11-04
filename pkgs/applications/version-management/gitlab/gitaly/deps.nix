@@ -271,33 +271,6 @@
     };
   }
   {
-    goPackagePath = "github.com/kr/pretty";
-    fetch = {
-      type = "git";
-      url = "https://github.com/kr/pretty";
-      rev = "v0.1.0";
-      sha256 = "18m4pwg2abd0j9cn5v3k2ksk9ig4vlwxmlw9rrglanziv9l967qp";
-    };
-  }
-  {
-    goPackagePath = "github.com/kr/pty";
-    fetch = {
-      type = "git";
-      url = "https://github.com/kr/pty";
-      rev = "v1.1.1";
-      sha256 = "0383f0mb9kqjvncqrfpidsf8y6ns5zlrc91c6a74xpyxjwvzl2y6";
-    };
-  }
-  {
-    goPackagePath = "github.com/kr/text";
-    fetch = {
-      type = "git";
-      url = "https://github.com/kr/text";
-      rev = "v0.1.0";
-      sha256 = "1gm5bsl01apvc84bw06hasawyqm4q84vx1pm32wr9jnd7a8vjgj1";
-    };
-  }
-  {
     goPackagePath = "github.com/libgit2/git2go";
     fetch = {
       type = "git";
@@ -644,8 +617,8 @@
     fetch = {
       type = "git";
       url = "https://gopkg.in/check.v1";
-      rev = "788fd7840127";
-      sha256 = "0v3bim0j375z81zrpr5qv42knqs0y2qv2vkjiqi5axvb78slki1a";
+      rev = "20d25e280405";
+      sha256 = "0k1m83ji9l1a7ng8a7v40psbymxasmssbrrhpdv2wl4rhs0nc3np";
     };
   }
   {

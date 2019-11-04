@@ -7790,7 +7790,6 @@ broken-packages:
   - pairing
   - pam
   - panda
-  - pandoc-emphasize-code
   - pandoc-include
   - pandoc-include-code
   - pandoc-japanese-filters

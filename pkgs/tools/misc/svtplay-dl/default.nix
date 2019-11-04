@@ -2,20 +2,23 @@
 , gitMinimal }:
 
 let
-  inherit (python3Packages) python nose pycrypto pyyaml requests mock;
+
+  inherit (python3Packages)
+    python nose pycrypto pyyaml requests mock python-dateutil setuptools;
+
 in stdenv.mkDerivation rec {
   pname = "svtplay-dl";
-  version = "2.2";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "02yjz17x8dl5spn7mcbj1ji7vsyx0qwwa60zqyrdxpr03g1rnhdz";
+    sha256 = "146ss7pzh61yw84crk6hzfxkfdnf6bq07m11b6lgsw4hsn71g59w";
   };
 
   pythonPaths = [ pycrypto pyyaml requests ];
-  buildInputs = [ python perl nose mock makeWrapper ] ++ pythonPaths;
+  buildInputs = [ python perl nose mock makeWrapper python-dateutil setuptools ] ++ pythonPaths;
   nativeBuildInputs = [ gitMinimal zip ];
 
   postPatch = ''
@@ -32,9 +35,6 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-    sed -i "/def test_parse_m3u8/i\\
-        @unittest.skip('requires internet')" lib/svtplay_dl/tests/hls.py
-
     sh scripts/run-tests.sh -2
   '';
 
@@ -44,6 +44,5 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ maintainers.rycee ];
-    broken = true;
   };
 }

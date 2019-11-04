@@ -15,6 +15,7 @@
 , cups
 , dbus
 , atk
+, gtk3-x11
 , gtk2-x11
 , gdk-pixbuf
 , glib
@@ -58,6 +59,7 @@ let
     glib
     gnome2.GConf
     gnome2.pango
+    gtk3-x11
     gtk2-x11
     nspr
     nss
@@ -82,11 +84,11 @@ in
  stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
-  version = "2.1.5965";
+  version = "2.1.7658";
 
   src = fetchurl {
     url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "0wlc49s541li4cbxdmlw8fp34hp1q9m6ngr7l5hfdhv1i13s5845";
+    sha256 = "10sng7l0q9r98zwifjmy50nyh65ny4djmacz8158hffcsfcx93px";
   };
 
   icon = fetchurl {

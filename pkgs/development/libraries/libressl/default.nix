@@ -57,18 +57,13 @@ let
 
 in {
 
-  libressl_2_8 = generic {
-    version = "2.8.3";
-    sha256 = "0xw4z4z6m7lyf1r4m2w2w1k7as791c04ygnfk4d7d0ki0h9hnr4v";
-  };
-
   libressl_2_9 = generic {
     version = "2.9.2";
     sha256 = "1m6mz515dcbrbnyz8hrpdfjzdmj1c15vbgnqxdxb89g3z9kq3iy4";
   };
 
   libressl_3_0 = generic {
-    version = "3.0.1";
-    sha256 = "1js3fddxwzafiyspif0bwmvpp1fz98mkv10q5xaagqzvjw8xnsk4";
+    version = "3.0.2";
+    sha256 = "13ir2lpxz8y1m151k7lrx306498nzfhwlvgkgv97v5cvywmifyyz";
   };
 }
