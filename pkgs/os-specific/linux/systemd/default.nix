@@ -1,18 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap
-, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, utillinux, libffi
-, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, libmicrohttpd, pcre2
-, linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, iptables, gnu-efi, bashInteractive
-, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
-, ninja, meson, python3Packages, glibcLocales
-, patchelf
-, getent
+{ stdenv, lib, fetchFromGitHub, fetchpatch
 , buildPackages
-, perl
-, withSelinux ? false, libselinux
+, ninja, meson, m4, pkgconfig, coreutils, gperf, getent
+, patchelf, perl, glibcLocales
+
+, intltool
+, gettext
+
+# Mandatory dependencies
+, libcap
+, utillinux
+, kbd
+, kmod
+
+# Optional dependencies
+, pam, /*cryptsetup,*/ audit, acl, libselinux
+, lz4, libgcrypt, libgpgerror, libmicrohttpd, libidn2
+, curl, gnutar, gnupg
+, xz, libuuid, libffi
+, libapparmor
+, bzip2, pcre2
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, gnu-efi
+, iptables
+
 , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
+
+, bashInteractive
+
+, libxslt, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 }:
 
 let gnupg-minimal = gnupg.override {
@@ -45,60 +61,82 @@ in stdenv.mkDerivation {
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
-    [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
+    [ pkgconfig gperf
       ninja meson
       coreutils # meson calls date, stat etc.
       glibcLocales
       patchelf getent m4
       perl # to patch the libsystemd.so and remove dependencies on aarch64
 
-      (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
-    ];
+      gettext
+      intltool
+
+      libxslt docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
+    ] ++ [
+      (buildPackages.python3Packages.python.withPackages
+        (ps: [ ps.lxml ])
+      )
+    ]
+    ;
   buildInputs =
     [ linuxHeaders libcap curl.dev kmod xz pam acl
-      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd pcre2 ] ++
-      stdenv.lib.optional withKexectools kexectools ++
-      stdenv.lib.optional withLibseccomp libseccomp ++
-    [ libffi audit lz4 bzip2 libapparmor
-      iptables gnu-efi
-    ] ++ stdenv.lib.optional withSelinux libselinux;
+      /* cryptsetup */ libuuid stdenv.cc.libc libgcrypt libgpgerror libidn2
+      utillinux libmicrohttpd pcre2 ] ++
+      lib.optional withKexectools kexectools ++
+      lib.optional withLibseccomp libseccomp ++
+    [ libffi audit lz4 bzip2 libapparmor libselinux iptables
+      gnu-efi
+    ];
 
   #dontAddPrefix = true;
 
   mesonFlags = [
-    "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
-    "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
-    "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
-    "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
+    "-Db_pie=true"
+
     "-Drootprefix=${placeholder "out"}"
     "-Drootlibdir=${placeholder "lib"}/lib"
-    "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
-    "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
+    "-Dsplit-usr=false"
+
+    "-Dsysvinit-path="
+    "-Dsysvrcnd-path="
+    "-Drc-local="
+
+    "-Dkmod-path=${kmod}/bin/kmod"
+    "-Dsulogin-path=${utillinux}/bin/sulogin"
+    "-Dmount-path=${utillinux}/bin/mount"
+    "-Dumount-path=${utillinux}/bin/umount"
+
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
     "-Ddebug-shell=${bashInteractive}/bin/bash"
+
+    "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
+    "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
+    "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
+    "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
+    "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
-    "-Dimportd=true"
-    "-Dlz4=true"
+
+    "-Dresolve=true"
     "-Dhostnamed=true"
+    "-Dlocaled=true"
     "-Dnetworkd=true"
-    "-Dsysusers=false"
     "-Dtimedated=true"
     "-Dtimesyncd=true"
     "-Dfirstboot=false"
-    "-Dlocaled=true"
-    "-Dresolve=true"
-    "-Dsplit-usr=false"
+    "-Dquotacheck=false"
+    "-Dsysusers=false"
+    "-Dldconfig=false"
+    "-Dsmack=true"
+
+    "-Dimportd=true"
+
     "-Dlibcurl=true"
     "-Dlibidn=false"
     "-Dlibidn2=true"
-    "-Dquotacheck=false"
-    "-Dldconfig=false"
-    "-Dsmack=true"
-    "-Db_pie=true"
     /*
     As of now, systemd doesn't allow runtime configuration of these values. So
     the settings in /etc/login.defs have no effect on it. Many people think this
@@ -118,15 +156,9 @@ in stdenv.mkDerivation {
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"
 
-    "-Dsysvinit-path="
-    "-Dsysvrcnd-path="
-
-    "-Dkill-path=${coreutils}/bin/kill"
-    "-Dkmod-path=${kmod}/bin/kmod"
-    "-Dsulogin-path=${utillinux}/bin/sulogin"
-    "-Dmount-path=${utillinux}/bin/mount"
-    "-Dumount-path=${utillinux}/bin/umount"
+  ] ++ [
     "-Dcreate-log-dirs=false"
+
     # Upstream uses cgroupsv2 by default. To support docker and other
     # container managers we still need v1.
     "-Ddefault-hierarchy=hybrid"
