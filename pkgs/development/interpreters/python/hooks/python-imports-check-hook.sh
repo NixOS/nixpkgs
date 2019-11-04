@@ -4,9 +4,10 @@ echo "Sourcing python-imports-check-hook.sh"
 pythonImportsCheckPhase () {
     echo "Executing pythonImportsCheckPhase"
 
-    if [ -n "$pythonImportsCheck" ]; then
-        echo "Check whether the following modules can be imported: $pythonImportsCheck"
-        cd $out && eval "@pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ[\"pythonImportsCheck\"].split()))'"
+    if [ -n "${pythonImportsCheck[@]-}" ]; then
+        echo "Check whether the following modules can be imported: ${pythonImportsCheck[@]}"
+        export PYTHON_IMPORTS_CHECK="${pythonImportsCheck[@]}"
+        cd $out && eval "@pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ[\"PYTHON_IMPORTS_CHECK\"].split()))'"
     fi
 }
 
