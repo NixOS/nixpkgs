@@ -24730,6 +24730,8 @@ in
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
+  dcpj1100dw = callPackage ../misc/cups/drivers/dcpj1100dw { };
+
   hll2390dw-cups = callPackage ../misc/cups/drivers/hll2390dw-cups { };
 
   mfcj470dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj470dwcupswrapper { };
