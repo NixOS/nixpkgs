@@ -1,6 +1,8 @@
 { stdenv, fetchurl, autoreconfHook,
   gzip, bzip2, pkgconfig, flex, check,
-  pam, coreutils
+  pam, coreutils,
+
+  withVlock ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +18,8 @@ stdenv.mkDerivation rec {
     "--enable-optional-progs"
     "--enable-libkeymap"
     "--disable-nls"
+  ] ++ stdenv.lib.optional (!withVlock) [
+    "--disable-vlock"
   ];
 
   patches = [ ./search-paths.patch ];
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
 
-  buildInputs = [ check pam ];
+  buildInputs = [ check ] ++ stdenv.lib.optional withVlock pam;
   nativeBuildInputs = [ autoreconfHook pkgconfig flex ];
 
   makeFlags = [ "setowner=" ];
