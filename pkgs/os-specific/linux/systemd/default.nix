@@ -25,26 +25,42 @@
 , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 
+, withResolved ? true
+, withLogind ? true
+, withHostnamed ? true
+, withLocaled ? true
+, withNetworkd ? true
+, withTimedated ? true
+, withTimesyncd ? true
+, withHwdb ? true
+
 , bashInteractive
 
 , libxslt, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 }:
 
-let gnupg-minimal = gnupg.override {
-  enableMinimal = true;
-  guiSupport = false;
-  pcsclite = null;
-  sqlite = null;
-  pinentry = null;
-  adns = null;
-  gnutls = null;
-  libusb = null;
-  openldap = null;
-  readline = null;
-  zlib = null;
-  bzip2 = null;
-};
-in stdenv.mkDerivation {
+assert withResolved -> (libgcrypt != null && libgpgerror != null);
+
+let
+  trueFalse = cond: if cond then "true" else "false";
+
+  gnupg-minimal = gnupg.override {
+    enableMinimal = true;
+    guiSupport = false;
+    pcsclite = null;
+    sqlite = null;
+    pinentry = null;
+    adns = null;
+    gnutls = null;
+    libusb = null;
+    openldap = null;
+    readline = null;
+    zlib = null;
+    bzip2 = null;
+  };
+in
+
+stdenv.mkDerivation {
   version = "243";
   pname = "systemd";
 
@@ -118,15 +134,17 @@ in stdenv.mkDerivation {
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
 
-    "-Dresolve=true"
-    "-Dhostnamed=true"
-    "-Dlocaled=true"
-    "-Dnetworkd=true"
-    "-Dtimedated=true"
-    "-Dtimesyncd=true"
+    "-Dresolve=${trueFalse withResolved}"
+    "-Dlogind=${trueFalse withLogind}"
+    "-Dhostnamed=${trueFalse withHostnamed}"
+    "-Dlocaled=${trueFalse withLocaled}"
+    "-Dnetworkd=${trueFalse withNetworkd}"
+    "-Dtimedated=${trueFalse withTimedated}"
+    "-Dtimesyncd=${trueFalse withTimesyncd}"
     "-Dfirstboot=false"
     "-Dquotacheck=false"
     "-Dsysusers=false"
+    "-Dhwdb=${trueFalse withHwdb}"
     "-Dldconfig=false"
     "-Dsmack=true"
 
