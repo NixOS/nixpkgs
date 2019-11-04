@@ -37,6 +37,7 @@
 , withImportd ? true
 
 , bashInteractive
+, debugShell ? "${bashInteractive}/bin/bash"
 
 , libxslt, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 }:
@@ -127,7 +128,7 @@ stdenv.mkDerivation {
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
-    "-Ddebug-shell=${bashInteractive}/bin/bash"
+    "-Ddebug-shell=${debugShell}"
 
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
