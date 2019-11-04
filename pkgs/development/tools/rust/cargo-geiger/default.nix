@@ -13,9 +13,18 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1lm8dx19svdpg99zbpfcm1272n18y63sq756hf6k99zi51av17xc";
   };
 
-  doCheck = false;
-
   cargoSha256 = "16zvm2y0j7ywv6fx0piq99g8q1sayf3qipd6adrwyqyg8rbf4cw6";
+
+  # Multiple tests require internet connectivity, so they are disabled here.
+  # If we ever get cargo-insta (https://crates.io/crates/insta) in tree,
+  # we might be able to run these with something like
+  # `cargo insta review` in the `preCheck` phase.
+  checkPhase = ''
+    cargo test -- \
+    --skip test_package::case_2 \
+    --skip test_package::case_3 \
+    --skip test_package::case_6
+  '';
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [ pkgconfig ];
