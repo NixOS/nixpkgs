@@ -10,14 +10,6 @@ let
   # Return ‘x’ if it evaluates, or ‘def’ if it throws an exception.
   try = x: def: let res = tryEval x; in if res.success then res.value else def;
 
-  defaultConfig = {
-    # These attributes are used in pkgs/stdenv/generic/check-meta.nix
-    allowBroken = builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
-    allowInsecure = builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
-    allowUnfree = builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
-    allowUnsupportedSystem = builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
-  };
-
 in
 
 { # We combine legacy `system` and `platform` into `localSystem`, if
@@ -90,10 +82,7 @@ in
 assert args ? localSystem -> !(args ? system || args ? platform);
 
 import ./. (builtins.removeAttrs args [ "system" "platform" ] // {
-  inherit overlays crossSystem crossOverlays;
-
-  config = defaultConfig // config;
-
+  inherit config overlays crossSystem crossOverlays;
   # Fallback: Assume we are building packages on the current (build, in GNU
   # Autotools parlance) system.
   localSystem = if builtins.isString localSystem then localSystem

@@ -13,7 +13,8 @@ let
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
   shouldCheckMeta = config.checkMeta or false;
 
-  allowUnfree = config.allowUnfree or false;
+  allowUnfree = config.allowUnfree or false
+    || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   whitelist = config.whitelistedLicenses or [];
   blacklist = config.blacklistedLicenses or [];
@@ -40,9 +41,11 @@ let
   hasBlacklistedLicense = assert areLicenseListsValid; attrs:
     hasLicense attrs && lib.lists.any (l: builtins.elem l blacklist) (lib.lists.toList attrs.meta.license);
 
-  allowBroken = config.allowBroken or false;
+  allowBroken = config.allowBroken or false
+    || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
-  allowUnsupportedSystem = config.allowUnsupportedSystem or false;
+  allowUnsupportedSystem = config.allowUnsupportedSystem or false
+    || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
   isUnfree = licenses: lib.lists.any (l: !l.free or true) licenses;
 
@@ -70,7 +73,7 @@ let
   hasAllowedInsecure = attrs:
     (attrs.meta.knownVulnerabilities or []) == [] ||
     allowInsecurePredicate attrs ||
-    config.allowInsecure or false;
+    builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
   showLicense = license: toString (map (l: l.shortName or "unknown") (lib.lists.toList license));
 
