@@ -53,7 +53,7 @@ perlPackages.buildPerlPackage {
 
   enableParallelBuilding = false;
 
-  installTargets = "install";
+  installTargets = [ "install" ];
 
   meta = with stdenv.lib; {
     homepage = http://thewml.org/;

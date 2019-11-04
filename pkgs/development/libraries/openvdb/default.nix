@@ -20,7 +20,7 @@ stdenv.mkDerivation rec
     sourceRoot=$(echo */openvdb)
   '';
 
-  installTargets = "install_lib";
+  installTargets = [ "install_lib" ];
 
   enableParallelBuilding = true;
 

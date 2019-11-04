@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
   ];
 
-  installTargets = "install install-conf";
+  installTargets = [ "install" "install-conf" ];
 
   postInstall = ''
     wrapProgram "$out/bin/suricatasc" \

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
     "MANPATH=$(out)/share/man"
   ];
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     inherit version;

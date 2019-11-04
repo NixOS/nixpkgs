@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   inherit (next) src version;
 
   makeFlags = [ "gtk-webkit" "PREFIX=$(out)" ];
-  installTargets = "install-gtk-webkit";
+  installTargets = [ "install-gtk-webkit" ];
 
   nativeBuildInputs = [ gcc7 pkg-config ];
   buildInputs = [

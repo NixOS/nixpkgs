@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     substituteInPlace Makefile --replace '$(MAKE) install-basic' ""
   '';
-  installTargets = "install install-config";
+  installTargets = [ "install" "install-config" ];
 
   meta = {
     description = "A host, service and network monitoring program";

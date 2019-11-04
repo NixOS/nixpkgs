@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   # luckily, they're not really needed so we don't build it.
   makeFlags = [ "DATA=" ];
 
-  installTargets = "install-exec";
+  installTargets = [ "install-exec" ];
 
   meta = with stdenv.lib; {
     description = "Interpreter for the metamath proof language";

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installTargets = "globalinstall";
+  installTargets = [ "globalinstall" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

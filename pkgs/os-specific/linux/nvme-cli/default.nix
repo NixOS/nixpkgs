@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   # To omit the hostnqn and hostid files that are impure and should be unique
   # for each target host:
-  installTargets = "install-spec";
+  installTargets = [ "install-spec" ];
 
   meta = with lib; {
     inherit (src.meta) homepage;
