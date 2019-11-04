@@ -9,7 +9,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       services.roundcube = {
         enable = true;
         hostName = "roundcube";
-        database.password = "notproduction";
+        database.password = "not production";
         package = pkgs.roundcube.withPlugins (plugins: [ plugins.persistent_login ]);
         plugins = [ "persistent_login" ];
       };
@@ -23,6 +23,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   testScript = ''
     $roundcube->start;
     $roundcube->waitForUnit("postgresql.service");
+    $roundcube->waitForUnit("roundcube-setup.service");
     $roundcube->waitForUnit("phpfpm-roundcube.service");
     $roundcube->waitForUnit("nginx.service");
     $roundcube->succeed("curl -sSfL http://roundcube/ | grep 'Keep me logged in'");
