@@ -97,6 +97,7 @@ in rec {
     assert lib.isList (attrs.makeFlags or []);
     assert lib.isList (attrs.checkFlags or []);
     assert lib.isList (attrs.patchFlags or []);
+    assert lib.isList (attrs.installFlags or []);
     assert lib.isList (attrs.installTargets or []);
     assert lib.isString (attrs.NIX_LDFLAGS or "");
     assert lib.isString (attrs.NIX_CFLAGS_COMPILE or "");
