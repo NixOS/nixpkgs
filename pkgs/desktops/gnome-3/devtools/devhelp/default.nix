@@ -1,6 +1,21 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, glib, amtk, appstream-glib, gobject-introspection, python3
-, webkitgtk, gettext, itstool, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gnome3
+, gtk3
+, wrapGAppsHook
+, glib
+, amtk
+, appstream-glib
+, gobject-introspection
+, python3
+, webkitgtk
+, gettext
+, itstool
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
   pname = "devhelp";
@@ -11,10 +26,25 @@ stdenv.mkDerivation rec {
     sha256 = "0zpmn6fgkgiayvn4diia5df0s6s7dqrdnp3nrvpavsmgn0vhb4pg";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook appstream-glib gobject-introspection python3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    itstool
+    wrapGAppsHook
+    appstream-glib
+    gobject-introspection
+    python3
+  ];
+
   buildInputs = [
-    glib gtk3 webkitgtk amtk
-    gnome3.adwaita-icon-theme gsettings-desktop-schemas
+    glib
+    gtk3
+    webkitgtk
+    amtk
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
   ];
 
   doCheck = true;
@@ -33,8 +63,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "API documentation browser for GNOME";
-    homepage = https://wiki.gnome.org/Apps/Devhelp;
-    license = licenses.gpl2;
+    homepage = "https://wiki.gnome.org/Apps/Devhelp";
+    license = licenses.gpl3Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
