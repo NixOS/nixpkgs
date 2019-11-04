@@ -20194,9 +20194,7 @@ in
 
   openfx = callPackage ../development/libraries/openfx {};
 
-  openimageio = callPackage ../applications/graphics/openimageio {
-    stdenv = gcc6Stdenv;
-  };
+  openimageio = callPackage ../applications/graphics/openimageio { };
 
   openimageio2 = callPackage ../applications/graphics/openimageio/2.x.nix { };
 
