@@ -124,6 +124,7 @@ let
       for i in /usr /sw /opt /pkg; do
         substituteInPlace ./setup.py --replace $i /no-such-path
       done
+      export LDFLAGS DETERMINISTIC_BUILD C_INCLUDE_PATH LIBRARY_PATH;
     '' + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
