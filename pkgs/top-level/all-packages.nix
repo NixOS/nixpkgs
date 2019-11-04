@@ -16857,7 +16857,9 @@ in
   utillinuxMinimal = if stdenv.isLinux then appendToName "minimal" (utillinux.override {
     minimal = true;
     ncurses = null;
+    pam = null;
     perl = null;
+    shadow = shadow.override { pam = null; };
     systemd = null;
   }) else utillinux;
 
