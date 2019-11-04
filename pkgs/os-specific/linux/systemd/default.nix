@@ -3,7 +3,6 @@
 , ninja, meson, m4, pkgconfig, coreutils, gperf, getent
 , patchelf, perl, glibcLocales
 
-, intltool
 , gettext
 
 # Mandatory dependencies
@@ -69,7 +68,6 @@ in stdenv.mkDerivation {
       perl # to patch the libsystemd.so and remove dependencies on aarch64
 
       gettext
-      intltool
 
       libxslt docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
     ] ++ [
