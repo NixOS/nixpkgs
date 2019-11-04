@@ -327,6 +327,28 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
      module.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The httpd module no longer provides options to support serving web content without defining a virtual host. As a
+      result of this the <link linkend="opt-services.httpd.logPerVirtualHost">services.httpd.logPerVirtualHost</link>
+      option now defaults to <literal>true</literal> instead of <literal>false</literal>. Please update your
+      configuration to make use of <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts</link>.
+    </para>
+    <para>
+      The <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;</link>
+      option has changed type from a list of submodules to an attribute set of submodules, better matching
+      <link linkend="opt-services.nginx.virtualHosts">services.nginx.virtualHosts.&lt;name&gt;</link>.
+    </para>
+    <para>
+      This change comes with the addition of the following options which mimic the functionality of their <literal>nginx</literal> counterparts:
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.addSSL</link>,
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.forceSSL</link>,
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.onlySSL</link>,
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.enableACME</link>,
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.acmeRoot</link>, and
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.useACMEHost</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
