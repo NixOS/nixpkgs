@@ -24,15 +24,14 @@ in
         description = "Enable the Xfce desktop environment.";
       };
 
-    # TODO: support thunar plugins
-    #   thunarPlugins = mkOption {
-    #     default = [];
-    #     type = types.listOf types.package;
-    #     example = literalExample "[ pkgs.xfce4-14.thunar-archive-plugin ]";
-    #     description = ''
-    #       A list of plugin that should be installed with Thunar.
-    #     '';
-    #  };
+      thunarPlugins = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        example = literalExample "[ pkgs.xfce4-14.thunar-archive-plugin ]";
+        description = ''
+          A list of plugin that should be installed with Thunar.
+        '';
+      };
 
       noDesktop = mkOption {
         type = types.bool;
@@ -83,9 +82,7 @@ in
       xfce4-taskmanager
       xfce4-terminal
 
-      # TODO: resync patch for plugins
-      #(thunar.override { thunarPlugins = cfg.thunarPlugins; })
-      thunar
+      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
       ++ optional config.powerManagement.enable xfce4-power-manager
@@ -145,7 +142,7 @@ in
 
     # Systemd services
     systemd.packages = with pkgs.xfce4-14; [
-      thunar
+      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
     ] ++ optional (!cfg.noDesktop) xfce4-notifyd;
 
   };
