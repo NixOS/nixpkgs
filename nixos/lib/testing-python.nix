@@ -25,7 +25,7 @@ in rec {
     name = "nixos-test-driver";
 
     nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ python3 ];
+    buildInputs = [ (python3.withPackages (p: [ p.ptpython ])) ];
     checkInputs = with python3Packages; [ pylint black ];
 
     dontUnpack = true;
