@@ -409,6 +409,7 @@ in
         home = cfg.stateDir;
         useDefaultShell = true;
         group = "gitea";
+        isSystemUser = true;
       };
     };
 

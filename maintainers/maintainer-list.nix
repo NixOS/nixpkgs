@@ -1194,6 +1194,12 @@
     githubId = 30435868;
     name = "Okina Matara";
   };
+  chkno = {
+    email = "chuck@intelligence.org";
+    github = "chkno";
+    githubId = 1118859;
+    name = "Scott Worley";
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
@@ -1562,6 +1568,12 @@
     github = "dbrock";
     githubId = 14032;
     name = "Daniel Brockman";
+  };
+  dduan = {
+    email = "daniel@duan.ca";
+    github = "dduan";
+    githubId = 75067;
+    name = "Daniel Duan";
   };
   deepfire = {
     email = "_deepfire@feelingofgreen.ru";
@@ -2029,6 +2041,12 @@
       email = "erictnorris@gmail.com";
       github = "ericnorris";
       githubId = 1906605;
+  };
+  Enteee = {
+    email = "nix@duckpond.ch";
+    github = "Enteee";
+    githubid = 5493775;
+    name = "Ente";
   };
   enzime = {
     email = "enzime@users.noreply.github.com";
@@ -5117,6 +5135,16 @@
     githubId = 1179566;
     name = "Nicolas B. Pierron";
   };
+  pingiun = {
+    email = "nixos@pingiun.com";
+    github = "pingiun";
+    githubId = 1576660;
+    name = "Jelle Besseling";
+    keys = [{
+      longkeyid = "rsa4096/0x9712452E8BE3372E";
+      fingerprint = "A3A3 65AE 16ED A7A0 C29C  88F1 9712 452E 8BE3 372E";
+    }];
+  };
   piotr = {
     email = "ppietrasa@gmail.com";
     name = "Piotr Pietraszkiewicz";
@@ -6339,6 +6367,12 @@
     github = "swdunlop";
     githubId = 120188;
     name = "Scott W. Dunlop";
+  };
+  sweber = {
+    email = "sweber2342+nixpkgs@gmail.com";
+    github = "sweber83";
+    githubId = 19905904;
+    name = "Simon Weber";
   };
   swflint = {
     email = "swflint@flintfam.org";

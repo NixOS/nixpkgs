@@ -142,6 +142,7 @@ in {
       description = "dnscrypt-wrapper daemon user";
       home = "${dataDir}";
       createHome = true;
+      isSystemUser = true;
     };
     users.groups.dnscrypt-wrapper = { };
 

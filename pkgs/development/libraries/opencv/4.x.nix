@@ -36,20 +36,20 @@
 }:
 
 let
-  version = "4.1.0";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0m1f51m11iz4vxfrmnhawksd669ld247rlfdq5fhkvfk3r7aidw6";
+    sha256 = "0c98ziwvfrzdzwn52a36d37n5rac8zmxq2jn479bzfaii1bib8xx";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1phmmba96m5znjf3wxwhxavgzgp3bs5qqsjk9ay1i63rdacz4vlf";
+    sha256 = "10ryyxhggin5dk5glf4ycyrfryqf50f4bs10biv6nxlrrinm2di4";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -130,10 +130,10 @@ let
   ade = rec {
     src = fetchurl {
       url = "https://github.com/opencv/ade/archive/${name}";
-      sha256 = "1r85vdkvcka7bcxk69pd0ai4hld4iakpj4xl0xbinx3p9pv5a4l8";
+      sha256 = "04n9na2bph706bdxnnqfcbga4cyj8kd9s9ni7qyvnpj5v98jwvlm";
     };
-    name = "v0.1.1d.zip";
-    md5 = "37479d90e3a5d47f132f512b22cbe206";
+    name = "v0.1.1f.zip";
+    md5 = "b624b995ec9c439cbc2e9e6ee940d3a2";
     dst = ".cache/ade";
   };
 
@@ -160,14 +160,6 @@ stdenv.mkDerivation {
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
   '';
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/opencv/opencv/commit/5691d998ead1d9b0542bcfced36c2dceb3a59023.patch";
-      name = "CVE-2019-14493.patch";
-      sha256 = "14qva9f5z10apz5q0skdyiclr9sgkhab4fzksy1w3b6j6hg4wm7m";
-    })
-  ];
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
