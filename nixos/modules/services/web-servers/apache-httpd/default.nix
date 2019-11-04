@@ -6,6 +6,8 @@ let
 
   mainCfg = config.services.httpd;
 
+  runtimeDir = "/run/httpd";
+
   httpd = mainCfg.package.out;
 
   httpdConf = mainCfg.configFile;
@@ -98,7 +100,7 @@ let
 
 
   sslConf = ''
-    SSLSessionCache shmcb:${mainCfg.stateDir}/ssl_scache(512000)
+    SSLSessionCache shmcb:${runtimeDir}/ssl_scache(512000)
 
     Mutex posixsem
 
@@ -239,13 +241,13 @@ let
 
     ServerRoot ${httpd}
 
-    DefaultRuntimeDir ${mainCfg.stateDir}/runtime
+    DefaultRuntimeDir ${runtimeDir}/runtime
 
-    PidFile ${mainCfg.stateDir}/httpd.pid
+    PidFile ${runtimeDir}/httpd.pid
 
     ${optionalString (mainCfg.multiProcessingModule != "prefork") ''
       # mod_cgid requires this.
-      ScriptSock ${mainCfg.stateDir}/cgisock
+      ScriptSock ${runtimeDir}/cgisock
     ''}
 
     <IfModule prefork.c>
@@ -337,6 +339,7 @@ in
 
   imports = [
     (mkRemovedOptionModule [ "services" "httpd" "extraSubservices" ] "Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.")
+    (mkRemovedOptionModule [ "services" "httpd" "stateDir" ] "The httpd module now uses /run/httpd as a runtime directory.")
   ];
 
   ###### interface
@@ -428,16 +431,6 @@ in
         default = "/var/log/httpd";
         description = ''
           Directory for Apache's log files.  It is created automatically.
-        '';
-      };
-
-      stateDir = mkOption {
-        type = types.path;
-        default = "/run/httpd";
-        description = ''
-          Directory for Apache's transient runtime state (such as PID
-          files).  It is created automatically.  Note that the default,
-          <filename>/run/httpd</filename>, is deleted at boot time.
         '';
       };
 
@@ -611,12 +604,6 @@ in
 
         preStart =
           ''
-            mkdir -m 0750 -p ${mainCfg.stateDir}
-            [ $(id -u) != 0 ] || chown root.${mainCfg.group} ${mainCfg.stateDir}
-
-            mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
-            [ $(id -u) != 0 ] || chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
-
             mkdir -m 0700 -p ${mainCfg.logDir}
 
             # Get rid of old semaphores.  These tend to accumulate across
@@ -630,10 +617,13 @@ in
         serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf}";
         serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
         serviceConfig.ExecReload = "${httpd}/bin/httpd -f ${httpdConf} -k graceful";
+        serviceConfig.Group = mainCfg.group;
         serviceConfig.Type = "forking";
-        serviceConfig.PIDFile = "${mainCfg.stateDir}/httpd.pid";
+        serviceConfig.PIDFile = "${runtimeDir}/httpd.pid";
         serviceConfig.Restart = "always";
         serviceConfig.RestartSec = "5s";
+        serviceConfig.RuntimeDirectory = "httpd httpd/runtime";
+        serviceConfig.RuntimeDirectoryMode = "0750";
       };
 
   };
