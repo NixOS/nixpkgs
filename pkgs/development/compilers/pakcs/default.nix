@@ -4,13 +4,13 @@
 , curl, git, unzip, gnutar, coreutils, sqlite }:
 
 let
-  name = "pakcs-2.1.2";
+  name = "pakcs-2.2.0";
 
   # Don't switch to development release without a reason, because its
   # source updates without version bump. Prefer current release instead.
   src = fetchurl {
     url = "https://www.informatik.uni-kiel.de/~pakcs/download/${name}-src.tar.gz";
-    sha256 = "0i0nprli3knc7zlp5qkqkpiq3ny36v52hnvgph376l3ajjds7wf6";
+    sha256 = "0c0a6cp9lwha5i90kv9ya2zi1ggnvkf4gwjfzbffgwwa77s2wz2l";
   };
 
   curry-frontend = (haskellPackages.override {
