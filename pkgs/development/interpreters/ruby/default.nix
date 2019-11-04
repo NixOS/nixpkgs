@@ -151,7 +151,7 @@ let
           export GEM_HOME="$out/${passthru.gemPath}"
         '';
 
-        installFlags = stdenv.lib.optionalString docSupport "install-doc";
+        installFlags = stdenv.lib.optional docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
           # Remove unnecessary groff reference from runtime closure, since it's big
