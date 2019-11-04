@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gjs"; attrPath = "gnome3.gjs"; };
+    updateScript = gnome3.updateScript { packageName = "gjs"; };
   };
 
   outputs = [ "out" "installedTests" ];
