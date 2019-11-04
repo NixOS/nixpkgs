@@ -744,11 +744,6 @@ in
 
   apg = callPackage ../tools/security/apg { };
 
-  apt = callPackage ../tools/package-management/apt {
-    # include/c++/6.4.0/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
-    stdenv = gcc5Stdenv;
-  };
-
   apt-dater = callPackage ../tools/package-management/apt-dater { };
 
   autorevision = callPackage ../tools/misc/autorevision { };
