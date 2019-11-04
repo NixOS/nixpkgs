@@ -14929,7 +14929,9 @@ in
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
-  hydron = callPackage ../servers/hydron { };
+  hydron = callPackage ../servers/hydron {
+    buildGoModule = buildGo112Module;
+  };
 
   icingaweb2 = callPackage ../servers/icingaweb2 { };
   icingaweb2Modules = {
