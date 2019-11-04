@@ -26,7 +26,6 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     mkdir -p $out/man/man1
   '';
-  installTargets = "install";
   postInstall = ''cp alienfx.1 $out/man/man1'';
 
   meta = {

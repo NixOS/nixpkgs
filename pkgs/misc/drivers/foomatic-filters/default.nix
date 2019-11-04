@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       substituteInPlace foomaticrip.c --replace /bin/bash ${stdenv.shell}
     '';
 
-  installTargets = "install-cups";
+  installTargets = [ "install-cups" ];
 
   installFlags =
     ''

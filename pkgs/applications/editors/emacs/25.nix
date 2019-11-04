@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  installTargets = "tags install";
+  installTargets = [ "tags" "install" ];
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp

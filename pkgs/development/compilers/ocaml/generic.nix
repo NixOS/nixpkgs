@@ -51,7 +51,7 @@ stdenv.mkDerivation (args // {
   buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = optional (!stdenv.lib.versionAtLeast version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];
-  installTargets = "install" + optionalString useNativeCompilers " installopt";
+  installTargets = [ "install" ] ++ optional useNativeCompilers "installopt";
   preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang

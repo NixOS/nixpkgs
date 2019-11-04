@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "all" ];
 
-  installTargets = "install install-META";
+  installTargets = [ "install" "install-META" ];
 
   dontStrip = true;
 
