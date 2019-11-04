@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   srcs = [ wheel.src pip.src setuptools.src ];
   sourceRoot = ".";
+  dontMakeSourcesWritable = true;
 
   dontUseSetuptoolsBuild = true;
   dontUsePipInstall = true;
@@ -21,15 +22,16 @@ stdenv.mkDerivation rec {
     (pipInstallHook.override{pip=null;})
     (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
   ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ python ];
+
+  postUnpack = ''
+    chmod -R u+w *
+  '';
 
   postPatch = ''
     mkdir -p $out/bin
   '';
-
-  nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ python ];
-
-  buildPhase = ":";
 
   installPhase = stdenv.lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
