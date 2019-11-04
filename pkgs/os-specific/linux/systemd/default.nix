@@ -14,7 +14,7 @@
 # Optional dependencies
 , pam, /*cryptsetup,*/ audit, acl, libselinux
 , lz4, libgcrypt, libgpgerror, libmicrohttpd, libidn2
-, curl, gnutar, gnupg
+, curl, gnutar, gnupg, zlib
 , xz, libuuid, libffi
 , libapparmor
 , bzip2, pcre2
@@ -33,6 +33,8 @@
 , withTimedated ? true
 , withTimesyncd ? true
 , withHwdb ? true
+, withEfi ? stdenv.hostPlatform.isEfi
+, withImportd ? true
 
 , bashInteractive
 
@@ -40,6 +42,9 @@
 }:
 
 assert withResolved -> (libgcrypt != null && libgpgerror != null);
+assert withImportd ->
+  ( curl.dev != null && zlib != null && xz != null && libgcrypt != null
+ && gnutar != null && gnupg != null);
 
 let
   trueFalse = cond: if cond then "true" else "false";
@@ -99,8 +104,7 @@ stdenv.mkDerivation {
       lib.optional withKexectools kexectools ++
       lib.optional withLibseccomp libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor libselinux iptables
-      gnu-efi
-    ];
+    ] ++ lib.optional withEfi gnu-efi;
 
   #dontAddPrefix = true;
 
@@ -128,7 +132,7 @@ stdenv.mkDerivation {
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
-    "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
+    "-Dpamconfdir=no"
     "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
     "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
     # while we do not run tests we should also not build them. Removes about 600 targets
@@ -148,11 +152,11 @@ stdenv.mkDerivation {
     "-Dldconfig=false"
     "-Dsmack=true"
 
-    "-Dimportd=true"
+    "-Dimportd=${trueFalse withImportd}"
 
-    "-Dlibcurl=true"
+    "-Dlibcurl=${trueFalse (curl.dev != null)}"
     "-Dlibidn=false"
-    "-Dlibidn2=true"
+    "-Dlibidn2=${trueFalse (libidn2 != null)}"
     /*
     As of now, systemd doesn't allow runtime configuration of these values. So
     the settings in /etc/login.defs have no effect on it. Many people think this
@@ -167,10 +171,12 @@ stdenv.mkDerivation {
     "-Dsystem-gid-max=999"
     # "-Dtime-epoch=1"
 
-    (if !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
-    "-Defi-ldsdir=${toString gnu-efi}/lib"
+    "-Defi=${trueFalse withEfi}"
+    "-Dgnu-efi=${trueFalse (withEfi && gnu-efi != null)}"
+  ] ++ lib.optionals (withEfi && gnu-efi != null) [
+    "-Defi-libdir=${gnu-efi}/lib"
+    "-Defi-includedir=${gnu-efi}/include/efi"
+    "-Defi-ldsdir=${gnu-efi}/lib"
 
   ] ++ [
     "-Dcreate-log-dirs=false"
@@ -207,6 +213,7 @@ stdenv.mkDerivation {
       patchShebangs $dir
     done
 
+  '' + lib.optionalString withImportd ''
     # absolute paths to gpg & tar
     substituteInPlace src/import/pull-common.c \
       --replace '"gpg"' '"${gnupg-minimal}/bin/gpg"'
@@ -215,6 +222,7 @@ stdenv.mkDerivation {
         --replace '"tar"' '"${gnutar}/bin/tar"'
     done
 
+  '' + ''
     substituteInPlace src/journal/catalog.c \
       --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
@@ -268,8 +276,10 @@ stdenv.mkDerivation {
 
     # Keep only libudev and libsystemd in the lib output.
     mkdir -p $out/lib
-    mv $lib/lib/security $lib/lib/libnss* $out/lib/
-  ''; # */
+    mv $lib/lib/libnss* $out/lib/
+  '' + lib.optionalString (pam != null) ''
+    mv $lib/lib/security $out/lib/
+  '';
 
   enableParallelBuilding = true;
 
