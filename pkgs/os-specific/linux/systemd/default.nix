@@ -36,6 +36,9 @@
 , withEfi ? stdenv.hostPlatform.isEfi
 , withImportd ? true
 
+# systemd-analyze is quite fat, so it is useful to drop it for minimal build
+, withAnalyze ? true
+
 , bashInteractive
 , debugShell ? "${bashInteractive}/bin/bash"
 
@@ -274,6 +277,10 @@ stdenv.mkDerivation {
 
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
+
+  '' + lib.optionalString (!withAnalyze) ''
+    rm "$out"/bin/systemd-analyze
+  '' + ''
 
     # Keep only libudev and libsystemd in the lib output.
     mkdir -p $out/lib
