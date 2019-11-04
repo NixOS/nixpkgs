@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fontforge, pythonFull }:
+{ stdenv, fetchgit, fontforge, python3Full }:
 
 stdenv.mkDerivation rec {
   pname = "rictydiminished-with-firacode";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     fontforge
-    (pythonFull.withPackages (ps: [
+    (python3Full.withPackages (ps: [
       ps.jinja2
       ps.py3to2
       ps.fonttools
