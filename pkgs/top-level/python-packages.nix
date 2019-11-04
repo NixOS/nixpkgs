@@ -1062,6 +1062,8 @@ in {
 
   pystache = callPackage ../development/python-modules/pystache { };
 
+  pyswip = callPackage ../development/python-modules/pyswip { };
+
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
