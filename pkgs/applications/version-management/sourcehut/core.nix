@@ -1,6 +1,7 @@
 { stdenv, fetchgit, fetchNodeModules, buildPythonPackage
 , pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
 , sqlalchemy, flask_login, beautifulsoup4, sqlalchemy-utils, celery, alembic
+, importlib-metadata
 , sassc, nodejs
 , writeText }:
 
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     # Unofficial runtime dependencies?
     celery
     alembic
+    importlib-metadata
   ];
 
   PKGVER = version;
