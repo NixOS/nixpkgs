@@ -178,6 +178,7 @@ in with passthru; stdenv.mkDerivation {
     for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
+    export LIBS LDFLAGS CPPFLAGS PYTHONHASHSEED
   '' + optionalString stdenv.isDarwin ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
     export MACOSX_DEPLOYMENT_TARGET=10.6
