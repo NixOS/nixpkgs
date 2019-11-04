@@ -41,6 +41,7 @@
 , "git-run"
 , "git-ssb"
 , "git-standup"
+, "gitmoji-cli"
 , "graphql-cli"
 , "grunt-cli"
 , "gtop"
