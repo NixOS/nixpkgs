@@ -281,6 +281,7 @@ in
   tinydns = handleTest ./tinydns.nix {};
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
+  trac = handleTest ./trac.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   udisks2 = handleTest ./udisks2.nix {};
