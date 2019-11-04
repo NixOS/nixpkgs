@@ -15,6 +15,7 @@
 , gettext
 , itstool
 , gsettings-desktop-schemas
+, shared-mime-info
 }:
 
 stdenv.mkDerivation rec {
@@ -52,6 +53,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Fix pages being blank
+      # https://gitlab.gnome.org/GNOME/devhelp/issues/14
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
   '';
 
   passthru = {
