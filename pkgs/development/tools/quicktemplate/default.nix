@@ -1,21 +1,20 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
+buildGoModule rec {
   pname = "quicktemplate";
-  version = "unstable-2019-07-08";
-  goPackagePath = "github.com/valyala/quicktemplate";
-  goDeps = ./deps.nix;
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "valyala";
     repo = "quicktemplate";
-    rev = "840e9171940bbc80bb1b925c880664cababae022";
-    sha256 = "1pimf5bwivklsr438if6l8by34gr48a05gl6hq07cvc8z6wl01m2";
+    rev = "v${version}";
+    sha256 = "08gmaqhb5dcv04i6x5yv0apj72v35ljzpfq5placsw05ji0wlnks";
   };
 
+  modSha256 = "00l0cppi94h7g3ial1xix2qbx2iif6sq5iyby9v0r4mngd1kd9yn";
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/valyala/quicktemplate";
     description = "Fast, powerful, yet easy to use template engine for Go";
     license = licenses.mit;
