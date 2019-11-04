@@ -39,7 +39,7 @@ let noweb = stdenv.mkDerivation rec {
     mkdir -p "$tex/tex/latex/noweb"
   '';
 
-  installTargets = "install-code install-tex install-elisp";
+  installTargets = [ "install-code" "install-tex" "install-elisp" ];
 
   postInstall = ''
     substituteInPlace "$out/bin/cpif" --replace "PATH=/bin:/usr/bin" ""

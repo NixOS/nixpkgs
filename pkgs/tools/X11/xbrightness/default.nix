@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ libX11 libXaw libXext libXmu libXpm libXxf86vm ];
 
   makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     description = "X11 brigthness and gamma software control";
