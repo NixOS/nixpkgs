@@ -7852,7 +7852,7 @@ in
   }));
 
   # Version 8.x is marked broken on Darwin: https://gist.github.com/GrahamcOfBorg/bef0231b7129681950f03c4ac06781c8.
-  gfortran = if stdenv.isDarwin then gfortran7 else gfortran8;
+  gfortran = if stdenv.isDarwin then gfortran7 else gfortran9;
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
@@ -7895,6 +7895,14 @@ in
   });
 
   gfortran8 = wrapCC (gcc8.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran9 = wrapCC (gcc9.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
