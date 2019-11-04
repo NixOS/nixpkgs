@@ -3558,6 +3558,8 @@ in
   };
   gnupg = gnupg22;
 
+  gnupg-pkcs11-scd = callPackage ../tools/security/gnupg-pkcs11-scd { };
+
   gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot { };
 
   gnuplot_qt = gnuplot.override { withQt = true; };
