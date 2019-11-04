@@ -14,10 +14,12 @@ stdenv.mkDerivation rec {
   CXXFLAGS = "-fpermissive -Wno-error=catch-value";
   NIX_LDFLAGS = "-lblkid";
 
-  cmakeFlags = [ 
+  cmakeFlags = [
     "-DFACTER_RUBY=${ruby}/lib/libruby.so"
     "-DRUBY_LIB_INSTALL=${placeholder "out"}/lib/ruby"
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-copy";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby utillinux ];
