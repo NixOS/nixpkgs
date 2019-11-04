@@ -11242,7 +11242,7 @@ let
 
     outputs = [ "out" "dev" ]; # no "devdoc"
 
-    installTargets = "install";
+    installTargets = [ "install" ];
 
     meta = with stdenv.lib; {
       homepage = "https://www.mhonarc.org/";
@@ -20609,7 +20609,7 @@ let
      };
      propagatedBuildInputs = [ XMLParser XMLSAX ];
      # Avoid creating perllocal.pod, which contains a timestamp
-     installTargets = "pure_install";
+     installTargets = [ "pure_install" ];
      meta = {
        description = "SAX Driver for Expat";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

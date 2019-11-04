@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--with-libtool-opts=${stdenv.lib.optionalString enableShared "-shared"}"
   ];
 
-  installTargets = "install${stdenv.lib.optionalString withLibrary "-full"}";
+  installTargets = [ "install${stdenv.lib.optionalString withLibrary "-full"}" ];
 
   meta = {
     homepage = https://invisible-island.net/dialog/dialog.html;
