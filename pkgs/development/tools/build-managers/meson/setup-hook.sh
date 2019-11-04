@@ -2,7 +2,7 @@ mesonConfigurePhase() {
     runHook preConfigure
 
     if [ -z "${dontAddPrefix-}" ]; then
-        mesonFlags="--prefix=$prefix $mesonFlags"
+        mesonFlags=("--prefix=$prefix" ${mesonFlags[@]+"${mesonFlags[@]}"})
     fi
 
     # Build release by default.
@@ -11,21 +11,22 @@ mesonConfigurePhase() {
     fi
 
     # See multiple-outputs.sh and meson’s coredata.py
-    mesonFlags="\
-        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
-        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
-        --includedir=${!outputInclude}/include \
-        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --localedir=${!outputLib}/share/locale \
-        -Dauto_features=${mesonAutoFeatures:-enabled} \
-        -Dwrap_mode=${mesonWrapMode:-nodownload} \
-        $mesonFlags"
+    mesonFlags=(
+      "--libdir=${!outputLib}/lib" "--libexecdir=${!outputLib}/libexec"
+      "--bindir=${!outputBin}/bin" "--sbindir=${!outputBin}/sbin"
+      "--includedir=${!outputInclude}/include"
+      "--mandir=${!outputMan}/share/man" "--infodir=${!outputInfo}/share/info"
+      "--localedir=${!outputLib}/share/locale"
+      "-Dauto_features=${mesonAutoFeatures:-enabled}"
+      "-Dwrap_mode=${mesonWrapMode:-nodownload}"
+      ${mesonFlags[@]+"${mesonFlags[@]}"}
+    )
 
-    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-plain} $mesonFlags"
+    mesonFlags=(${crossMesonFlags+"$crossMesonFlags"} "--buildtype=${mesonBuildType:-plain}" "${mesonFlags[@]}")
 
-    echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
+    echo "meson flags: ${mesonFlags[@]}"
 
-    CC=@cc@/bin/cc CXX=@cc@/bin/c++ meson build $mesonFlags "${mesonFlagsArray[@]}"
+    CC=@cc@/bin/cc CXX=@cc@/bin/c++ meson build "${mesonFlags[@]}"
     cd build
 
     if ! [[ -v enableParallelBuilding ]]; then

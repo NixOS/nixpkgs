@@ -204,6 +204,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+    "--libexecdir=${placeholder "out"}/libexec"
   ] ++ stdenv.lib.optionals (!haveDell) [
     "-Dplugin_dell=false"
     "-Dplugin_synaptics=false"
@@ -212,12 +213,6 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (!haveFlashrom) [
     "-Dplugin_flashrom=false"
   ];
-
-  # TODO: We need to be able to override the directory flags from meson setup hook
-  # better – declaring them multiple times might become an error.
-  preConfigure = ''
-    mesonFlagsArray+=("--libexecdir=$out/libexec")
-  '';
 
   postInstall = ''
     moveToOutput share/installed-tests "$installedTests"
