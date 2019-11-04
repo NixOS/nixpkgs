@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     [ ./darwin.patch ]
     ++ stdenv.lib.optionals stdenv.cc.isClang [ ./clang.diff ];
 
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
   buildInputs = [ zlib ];
 
   preBuild = "cd simp";
