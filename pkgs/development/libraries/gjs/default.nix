@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
       --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gtk3 atk pango.out gdk-pixbuf ]}:$installedTests/libexec/gjs/installed-tests"
   '';
 
+  separateDebugInfo = stdenv.isLinux;
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gjs";
