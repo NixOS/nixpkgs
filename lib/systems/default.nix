@@ -91,10 +91,6 @@ rec {
           powerpcle = "ppc";
           powerpc64 = "ppc64";
           powerpc64le = "ppc64le";
-          mips = "mips";
-          mipsel = "mipsel";
-          mips64 = "mips64";
-          mips64el = "mips64el";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
       emulator = pkgs: let
