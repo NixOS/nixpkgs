@@ -6,9 +6,17 @@
 let
   version = "0.35.6";
 
+  buildShell = src: buildGoModule {
+    inherit src version;
+    pname = "git-srht-shell";
+    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-shell";
+
+    modSha256 = "1v4npijqgv09ssrxf1y1b3syb2fs7smy7k9rcj3ynsfrn9xgfd9y";
+  };
+
   buildDispatcher = src: buildGoModule {
     inherit src version;
-    pname = "git-sr-ht-dispatcher";
+    pname = "git-srht-dispatcher";
     goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-dispatch";
 
     modSha256 = "1lmgmlin460g09dph2hw6yz25d4agqwjhrjv0qqsis7df9qpf3i1";
@@ -42,6 +50,7 @@ in buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/bin
+    cp ${buildShell "${src}/gitsrht-shell"}/bin/gitsrht-shell $out/bin/gitsrht-shell
     cp ${buildDispatcher "${src}/gitsrht-dispatch"}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
   '';
 
