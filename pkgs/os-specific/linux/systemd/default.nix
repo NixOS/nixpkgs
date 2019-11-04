@@ -113,6 +113,8 @@ stdenv.mkDerivation {
   #dontAddPrefix = true;
 
   mesonFlags = [
+    "-Db_ndebug=true"
+    "-Db_lto=true"
     "-Db_pie=true"
 
     "-Drootprefix=${placeholder "out"}"
@@ -195,6 +197,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
+    export AR="gcc-ar"  # For LTO
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
