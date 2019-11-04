@@ -16140,6 +16140,8 @@ in
 
     deepin-anything = callPackage ../os-specific/linux/deepin-anything { };
 
+    digimend = callPackage ../os-specific/linux/digimend { };
+
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
