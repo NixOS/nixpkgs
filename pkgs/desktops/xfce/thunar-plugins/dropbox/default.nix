@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
-, gtk
-, thunar-bare, python2, hicolor-icon-theme
+, gtk2
+, thunar, python2, hicolor-icon-theme
 , wafHook
 }:
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    gtk
-    thunar-bare python2 hicolor-icon-theme
+    gtk2
+    thunar python2 hicolor-icon-theme
   ];
 
   enableParallelBuilding = true;

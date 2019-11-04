@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxfce4util, libxfcegui4, xfce4-panel
-, gtk }:
+, gtk2 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool libxfce4util libxfcegui4 xfce4-panel gtk ];
+  buildInputs = [ intltool libxfce4util libxfcegui4 xfce4-panel gtk2 ];
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, xfce4-dev-tools
-, gtk
-, thunar-bare
+, gtk2
+, thunar
 , exo, libxfce4util, libxfce4ui
 , xfconf, udev, libnotify, hicolor-icon-theme
 }:
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     xfce4-dev-tools
-    thunar-bare
-    exo gtk libxfce4util libxfce4ui
+    thunar
+    exo gtk2 libxfce4util libxfce4ui
     xfconf udev libnotify hicolor-icon-theme
   ];
 

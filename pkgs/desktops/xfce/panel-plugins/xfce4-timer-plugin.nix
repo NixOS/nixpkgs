@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel
-, libxfce4ui, libxfcegui4, xfconf, gtk, hicolor-icon-theme }:
+, libxfce4ui, xfconf, gtk2, hicolor-icon-theme }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel libxfcegui4 xfconf
-    gtk hicolor-icon-theme ];
+  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel xfconf
+    gtk2 hicolor-icon-theme ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = [ ];
+    broken = true;
   };
 }
