@@ -1,0 +1,16 @@
+https://nixos.org
+News for NixOS, the purely functional Linux distribution.
+https://nixos.org/logo/nixos-logo-only-hires.png
+https://nixos.org/
+https://nixos.org/news.html
+NixOS 18.09 “Jellyfish” has been released, the tenth stable release
+branch. See the
+release notes
+for details. You can get NixOS 18.09 ISOs and VirtualBox appliances from
+the
+download page
+. For information on how to upgrade from older release branches to
+18.09, check out the
+manual section on upgrading
+.
+Sat Oct 06 2018 00:00:00 GMT
