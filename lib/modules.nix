@@ -326,6 +326,8 @@ rec {
 
       # The value with a check that it is defined
       valueDefined = if res.isDefined then res.mergedValue else
+        # (nixos-option detects this specific error message and gives it special
+        # handling.  If changed here, please change it there too.)
         throw "The option `${showOption loc}' is used but not defined.";
 
       # Apply the 'apply' function to the merged value. This allows options to

@@ -209,6 +209,7 @@ mapAliases ({
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
   mariadb-client = hiPrio mariadb.client; #added 2019.07.28
+  mess = mame; # added 2019-10-30
   mysql-client = hiPrio mariadb.client;
   memtest86 = memtest86plus; # added 2019-05-08
   mesa_noglu = mesa; # added 2019-05-28
@@ -335,6 +336,7 @@ mapAliases ({
   sapic = throw "deprecated 2019-1-19: sapic is bundled with 'tamarin-prover' now";
   scim = sc-im; # added 2016-01-22
   scollector = bosun; # added 2018-04-25
+  sdlmame = mame; # added 2019-10-30
   shared_mime_info = shared-mime-info; # added 2018-02-25
   skrooge2 = skrooge; # added 2017-02-18
   skype = skypeforlinux; # added 2017-07-27
@@ -392,8 +394,9 @@ mapAliases ({
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   usbguard-nox = usbguard; # added 2019-09-04
-  valadoc = throw "deprecated 2019-10-10: valadoc was merged into vala 0.38";
   v4l_utils = v4l-utils; # added 2019-08-07
+  v8_3_16_14 = throw "removed 2019-11-01: no longer referenced by other packages";
+  valadoc = throw "deprecated 2019-10-10: valadoc was merged into vala 0.38";
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24

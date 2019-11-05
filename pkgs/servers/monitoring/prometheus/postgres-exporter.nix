@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "postgres_exporter";
-  version = "0.6.0";
+  version = "0.7.0";
 
   goPackagePath = "github.com/wrouesnel/postgres_exporter";
 
@@ -10,8 +10,10 @@ buildGoPackage rec {
     owner = "wrouesnel";
     repo = "postgres_exporter";
     rev = "v${version}";
-    sha256 = "0a903mklp3aardlbz5fkslisav9khd1w3akcf9xkc5nfinr6xnqb";
+    sha256 = "0xi61090kmkp1cid3hx00csfa4w8nvaw8ky0w004czwqlyids6jg";
   };
+
+  doCheck = true;
 
   meta = with lib; {
     inherit (src.meta) homepage;

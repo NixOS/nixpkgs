@@ -209,6 +209,27 @@ let
      };
   };
 
+  AlienSDL = buildPerlModule {
+    pname = "Alien-SDL";
+    version = "1.446";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FROGGS/Alien-SDL-1.446.tar.gz";
+      sha256 = "c9aa2c9dc3c63d89773c7d7203f2a46d1b924d0c72d9f801af147a3dc8bc512a";
+    };
+    patches = [ ../development/perl-modules/alien-sdl.patch ];
+
+    installPhase = "./Build install --prefix $out";
+
+    SDL_INST_DIR = pkgs.SDL.dev;
+    buildInputs = [ ArchiveExtract ArchiveZip TextPatch pkgs.SDL ];
+    propagatedBuildInputs = [ CaptureTiny FileShareDir FileWhich ];
+
+    meta = {
+      description = "Get, Build and Use SDL libraries";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AlienTidyp = buildPerlModule {
     pname = "Alien-Tidyp";
     version = "1.4.7";
@@ -3578,6 +3599,23 @@ let
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
+  };
+
+  CryptOpenSSLX509 = buildPerlPackage rec {
+    pname = "Crypt-OpenSSL-X509";
+    version = "1.813";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.813.tar.gz";
+      sha256 = "684bd888d2ed4c748f8f6dd8e87c14afa2974b12ee01faa082ad9cfa1e321e62";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    meta = {
+      homepage = "https://github.com/dsully/perl-crypt-openssl-x509";
+      description = "Perl extension to OpenSSL's X509 API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   CryptPBKDF2 = buildPerlPackage {
@@ -11678,10 +11716,10 @@ let
 
   MojoSQLite = buildPerlModule {
     pname = "Mojo-SQLite";
-    version = "3.002";
+    version = "3.003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.002.tar.gz";
-      sha256 = "16dn0p14i6r4c8aspvkp7rfry3zy7kr2ffcmncj0pqygk62miinp";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.003.tar.gz";
+      sha256 = "d96c00dcf45e2becc8e8181df074853d42616f2a660703455d0e0a2741478092";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstract URIdb ];
@@ -15415,6 +15453,24 @@ let
     };
   };
 
+  SDL = buildPerlModule {
+    pname = "SDL";
+    version = "2.548";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FROGGS/SDL-2.548.tar.gz";
+      sha256 = "252a192bfa9c2070a4883707d139c3a45d9c4518ccd66a1e699b5b7959bd4fb5";
+    };
+    perlPreHook = "export LD=$CC";
+    preCheck = "rm t/core_audiospec.t";
+    buildInputs = [ AlienSDL CaptureTiny TestDeep TestDifferences TestException TestMost TestWarn ]
+      ++ (with pkgs; [ SDL SDL_gfx SDL_mixer SDL_image SDL_ttf SDL_Pango SDL_net ] );
+    propagatedBuildInputs = [ FileShareDir TieSimple ];
+    meta = {
+      description = "SDL bindings to Perl";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  };
+
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
     version = "4.007";
@@ -18667,6 +18723,20 @@ let
     };
   };
 
+  TextPatch = buildPerlPackage {
+    pname = "Text-Patch";
+    version = "1.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CA/CADE/Text-Patch-1.8.tar.gz";
+      sha256 = "eaf18e61ba6a3e143846a7cc66f08ce58a0c4fbda92acb31aede25cb3b5c3dcc";
+    };
+    propagatedBuildInputs = [ TextDiff ];
+    meta = {
+      description = "Patches text with given patch";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   TextPDF = buildPerlPackage {
     pname = "Text-PDF";
     version = "0.31";
@@ -19119,6 +19189,19 @@ let
     };
     meta = {
       license = stdenv.lib.licenses.artistic1;
+    };
+  };
+
+  TieSimple = buildPerlPackage {
+    pname = "Tie-Simple";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HANENKAMP/Tie-Simple-1.04.tar.gz";
+      sha256 = "29e9e2133951046c78f205f1b3e8df62c90e114f0e08fa06b817766a0f808b12";
+    };
+    meta = {
+      description = "Variable ties made much easier: much, much, much easier..";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

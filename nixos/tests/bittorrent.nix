@@ -6,7 +6,7 @@
 # which only works if the first client successfully uses the UPnP-IGD
 # protocol to poke a hole in the NAT.
 
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
 
@@ -108,42 +108,56 @@ in
   testScript =
     { nodes, ... }:
     ''
-      startAll;
+      start_all()
 
       # Wait for network and miniupnpd.
-      $router->waitForUnit("network-online.target");
-      $router->waitForUnit("miniupnpd");
+      router.wait_for_unit("network-online.target")
+      router.wait_for_unit("miniupnpd")
 
       # Create the torrent.
-      $tracker->succeed("mkdir /tmp/data");
-      $tracker->succeed("cp ${file} /tmp/data/test.tar.bz2");
-      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 --private --tracker http://${externalTrackerAddress}:6969/announce --outfile /tmp/test.torrent");
-      $tracker->succeed("chmod 644 /tmp/test.torrent");
+      tracker.succeed("mkdir /tmp/data")
+      tracker.succeed(
+          "cp ${file} /tmp/data/test.tar.bz2"
+      )
+      tracker.succeed(
+          "transmission-create /tmp/data/test.tar.bz2 --private --tracker http://${externalTrackerAddress}:6969/announce --outfile /tmp/test.torrent"
+      )
+      tracker.succeed("chmod 644 /tmp/test.torrent")
 
       # Start the tracker.  !!! use a less crappy tracker
-      $tracker->waitForUnit("network-online.target");
-      $tracker->waitForUnit("opentracker.service");
-      $tracker->waitForOpenPort(6969);
+      tracker.wait_for_unit("network-online.target")
+      tracker.wait_for_unit("opentracker.service")
+      tracker.wait_for_open_port(6969)
 
       # Start the initial seeder.
-      $tracker->succeed("transmission-remote --add /tmp/test.torrent --no-portmap --no-dht --download-dir /tmp/data");
+      tracker.succeed(
+          "transmission-remote --add /tmp/test.torrent --no-portmap --no-dht --download-dir /tmp/data"
+      )
 
       # Now we should be able to download from the client behind the NAT.
-      $tracker->waitForUnit("httpd");
-      $client1->waitForUnit("network-online.target");
-      $client1->succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent --download-dir /tmp >&2 &");
-      $client1->waitForFile("/tmp/test.tar.bz2");
-      $client1->succeed("cmp /tmp/test.tar.bz2 ${file}");
+      tracker.wait_for_unit("httpd")
+      client1.wait_for_unit("network-online.target")
+      client1.succeed(
+          "transmission-remote --add http://${externalTrackerAddress}/test.torrent --download-dir /tmp >&2 &"
+      )
+      client1.wait_for_file("/tmp/test.tar.bz2")
+      client1.succeed(
+          "cmp /tmp/test.tar.bz2 ${file}"
+      )
 
       # Bring down the initial seeder.
-      # $tracker->stopJob("transmission");
+      # tracker.stop_job("transmission")
 
       # Now download from the second client.  This can only succeed if
       # the first client created a NAT hole in the router.
-      $client2->waitForUnit("network-online.target");
-      $client2->succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht --download-dir /tmp >&2 &");
-      $client2->waitForFile("/tmp/test.tar.bz2");
-      $client2->succeed("cmp /tmp/test.tar.bz2 ${file}");
+      client2.wait_for_unit("network-online.target")
+      client2.succeed(
+          "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht --download-dir /tmp >&2 &"
+      )
+      client2.wait_for_file("/tmp/test.tar.bz2")
+      client2.succeed(
+          "cmp /tmp/test.tar.bz2 ${file}"
+      )
     '';
 
 })

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cfr";
-  version = "0.147";
+  version = "0.148";
 
   src = fetchurl {
     url = "http://www.benf.org/other/cfr/cfr_${version}.jar";
-    sha256 = "1xafxvxil0k7rwvfia2a67sh18pk8xb2y6qz6cpr31i2i0pwl8ls";
+    sha256 = "04nhbzcb0n5xckkbl1rz4xa2bz53hrlm938wrh0gfkzrwwgzj1ql";
   };
 
   nativeBuildInputs = [ makeWrapper ];

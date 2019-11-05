@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-sdk";
-  version = "19.2.1";
+  version = "19.3.0";
 
   src = fetchurl {
     url = "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-${version}.tar.gz";
-    sha256 = "0w3r6lr2q3kch0vz9sxld1nz6iff129xr8wzg0p2j7mng41imh83";
+    sha256 = "0pgg16a4gsh8yjyz64r28bmkg9xxcy8m0dkvrdz03svkll9v7v3n";
   };
 
   # patchelf is needed for binaries in $out/share/samples

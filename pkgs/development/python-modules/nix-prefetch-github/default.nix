@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jkvmj33xinff0sb47yg33n131yi93pyq86skqc78xd38j6c8q9s";
+    sha256 = "18xj618zjs13ib7f996fnl0xiqig0w48yns45nvy3xab55wximdx";
   };
 
   propagatedBuildInputs = [
