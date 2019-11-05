@@ -1,0 +1,15 @@
+configuration.nix
+5
+NixOS
+configuration.nix
+NixOS system configuration specification
+* Description
+
+The file =/etc/nixos/configuration.nix= contains the declarative
+specification of your NixOS system configuration. The command
+=nixos-rebuild= takes this file and realises the system configuration
+specified therein.
+
+* Options
+
+You can use the following options in =configuration.nix=.
