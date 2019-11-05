@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig python meson ninja gettext ];
 
-  NIX_LDFLAGS = "-lncurses";
+  env.NIX_LDFLAGS = "-lncurses";
 
   buildInputs = [
     gst-plugins-base orc bzip2

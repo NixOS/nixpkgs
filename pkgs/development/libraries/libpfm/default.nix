@@ -1,6 +1,6 @@
 { stdenv, fetchurl, enableShared ? true }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (stdenv.lib.recursiveUpdate rec {
   version = "4.10.1";
   pname = "libpfm";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation (rec {
     "SYS=${stdenv.hostPlatform.uname.system}"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with stdenv.lib; {
     description = "Helper library to program the performance monitoring events";
@@ -30,8 +30,6 @@ stdenv.mkDerivation (rec {
     maintainers = [ maintainers.pierron ];
     platforms = platforms.linux;
   };
-} // stdenv.lib.optionalAttrs ( ! enableShared )
-{
-  CONFIG_PFMLIB_SHARED = "n";
-}
-)
+} (stdenv.lib.optionalAttrs (!enableShared) {
+  env.CONFIG_PFMLIB_SHARED = "n";
+}))

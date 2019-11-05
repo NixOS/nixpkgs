@@ -101,9 +101,11 @@ in rec {
     assert lib.isList (attrs.patchFlags or []);
     assert lib.isList (attrs.installFlags or []);
     assert lib.isList (attrs.installTargets or []);
-    assert lib.isString (attrs.NIX_LDFLAGS or "");
-    assert lib.isString (attrs.NIX_CFLAGS_COMPILE or "");
-    assert lib.isString (attrs.NIX_CFLAGS_LINK or "");
+    assert !(attrs ? NIX_LDFLAGS);
+    assert !(attrs ? NIX_CFLAGS_COMPILE);
+    assert !(attrs ? NIX_CFLAGS_LINK);
+    assert !(attrs ? NIX_NO_SELF_RPATH);
+    assert !(attrs ? NIX_DONT_SET_RPATH);
     assert lib.all (v: lib.isString v || lib.isBool v || lib.isInt v) (lib.attrValues env);
 
     let

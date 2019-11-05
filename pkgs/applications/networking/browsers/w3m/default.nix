@@ -35,12 +35,16 @@ in stdenv.mkDerivation rec {
     sha256 = "1fbg2p8qh2gvi3g4iz4q6vc0k70pf248r4yndi5lcn2m3mzvjx0i";
   };
 
-  NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";
-
-  # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
-  # the correct paths.
-  PERL = "${perl}/bin/perl";
-  MAN = "${man}/bin/man";
+  env = {
+    NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";
+    # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
+    # the correct paths.
+    PERL = "${perl}/bin/perl";
+    MAN = "${man}/bin/man";
+    # for w3mimgdisplay
+    # see: https://bbs.archlinux.org/viewtopic.php?id=196093
+    LIBS = optionalString x11Support "-lX11";
+  };
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
@@ -85,10 +89,6 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = false;
-
-  # for w3mimgdisplay
-  # see: https://bbs.archlinux.org/viewtopic.php?id=196093
-  LIBS = optionalString x11Support "-lX11";
 
   meta = {
     homepage = http://w3m.sourceforge.net/;

@@ -74,8 +74,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals withLibsecret [ pkgconfig glib libsecret ];
 
   # required to support pthread_cancel()
-  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
-              + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
+  env.NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
+              + stdenv.lib.optionalString (stdenv.isFreeBSD) " -lthr";
 
   configureFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_fread_reads_directories=yes"

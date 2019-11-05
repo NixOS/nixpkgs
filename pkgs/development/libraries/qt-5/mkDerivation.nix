@@ -12,9 +12,9 @@ let
     qmakeFlags = [ ("CONFIG+=" + (if debug then "debug" else "release")) ]
               ++ (args.qmakeFlags or []);
 
-    NIX_CFLAGS_COMPILE = toString (
+    env.NIX_CFLAGS_COMPILE = toString (
       optional (!debug) "-DQT_NO_DEBUG"
-      ++ lib.toList (args.NIX_CFLAGS_COMPILE or []));
+      ++ lib.toList (args.env.NIX_CFLAGS_COMPILE or ""));
 
     cmakeFlags =
       (args.cmakeFlags or [])
@@ -29,4 +29,4 @@ let
   };
 in
 
-mkDerivation (args // args_)
+mkDerivation (lib.recursiveUpdate args args_)

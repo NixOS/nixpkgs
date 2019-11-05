@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (if x11Support then "--enable-x11" else "--disable-x11")
-    ];
+  ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
 
   enableParallelBuilding = true;
 

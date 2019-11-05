@@ -26,7 +26,7 @@ stdenv.mkDerivation (rec {
     stdenv.lib.optional enableSystemd systemd ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  env.NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   configureFlags =
     # We use `isLinux` here only to avoid mass rebuilds for Darwin, where

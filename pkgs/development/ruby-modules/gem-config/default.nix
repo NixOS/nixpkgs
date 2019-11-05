@@ -72,7 +72,7 @@ in
 
   capybara-webkit = attrs: {
     buildInputs = [ qt59.qtbase qt59.qtwebkit ] ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
-    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+    env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
   };
 
   charlock_holmes = attrs: {
@@ -125,7 +125,7 @@ in
   };
 
   dep-selector-libgecode = attrs: {
-    USE_SYSTEM_GECODE = true;
+    env.USE_SYSTEM_GECODE = true;
     postInstall = ''
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
@@ -241,7 +241,7 @@ in
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
-    NIX_CFLAGS_COMPILE = toString [
+    env.NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=stringop-overflow"
       "-Wno-error=implicit-fallthrough"
       "-Wno-error=sizeof-pointer-memaccess"
@@ -500,23 +500,22 @@ in
   sassc = attrs: {
     nativeBuildInputs = [ rake ];
     dontBuild = false;
-    SASS_LIBSASS_PATH = libsass;
+    env.SASS_LIBSASS_PATH = toString libsass;
     postPatch = ''
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
     '';
-  } // (if stdenv.isDarwin then {
+  } // (lib.optionalAttrs stdenv.isDarwin {
     # https://github.com/NixOS/nixpkgs/issues/19098
     buildFlags = [ "--disable-lto" ];
-  } else {});
+  });
 
-  scrypt = attrs:
-    if stdenv.isDarwin then {
-      dontBuild = false;
-      postPatch = ''
-        sed -i -e "s/-arch i386//" Rakefile ext/scrypt/Rakefile
-      '';
-    } else {};
+  scrypt = attrs: lib.optionalAttrs stdenv.isDarwin {
+    dontBuild = false;
+    postPatch = ''
+      sed -i -e "s/-arch i386//" Rakefile ext/scrypt/Rakefile
+    '';
+  };
 
   semian = attrs: {
     buildInputs = [ openssl ];

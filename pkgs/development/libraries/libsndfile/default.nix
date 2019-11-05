@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     '';
 
   # Needed on Darwin.
-  NIX_CFLAGS_LINK = "-logg -lvorbis";
+  env.NIX_CFLAGS_LINK = "-logg -lvorbis";
 
   meta = with stdenv.lib; {
     description = "A C library for reading and writing files containing sampled sound";
