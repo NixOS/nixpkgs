@@ -1,0 +1,11 @@
+* QEMU Guest
+  :PROPERTIES:
+  :CUSTOM_ID: sec-profile-qemu-guest
+  :END:
+
+This profile contains common configuration for virtual machines running
+under QEMU (using virtio).
+
+It makes virtio modules available on the initrd, sets the system time
+from the hardware clock to work around a bug in qemu-kvm, and
+[[#opt-security.rngd.enable][enables rngd]].
