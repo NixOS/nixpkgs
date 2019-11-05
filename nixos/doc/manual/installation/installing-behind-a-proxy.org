@@ -1,0 +1,34 @@
+* Installing behind a proxy
+  :PROPERTIES:
+  :CUSTOM_ID: sec-installing-behind-proxy
+  :END:
+
+To install NixOS behind a proxy, do the following before running
+=nixos-install=.
+
+1. Update proxy configuration in =/mnt/etc/nixos/configuration.nix= to
+   keep the internet accessible after reboot.
+
+   #+BEGIN_EXAMPLE
+     networking.proxy.default = "http://user:password@proxy:port/";
+     networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+   #+END_EXAMPLE
+
+2. Setup the proxy environment variables in the shell where you are
+   running =nixos-install=.
+
+   #+BEGIN_EXAMPLE
+     # proxy_url="http://user:password@proxy:port/"
+     # export http_proxy="$proxy_url"
+     # export HTTP_PROXY="$proxy_url"
+     # export https_proxy="$proxy_url"
+     # export HTTPS_PROXY="$proxy_url"
+   #+END_EXAMPLE
+
+#+BEGIN_QUOTE
+  *Note*
+
+  If you are switching networks with different proxy configurations, use
+  the =nesting.clone= option in =configuration.nix= to switch proxies at
+  runtime. Refer to [[#ch-options][???]] for more information.
+#+END_QUOTE
