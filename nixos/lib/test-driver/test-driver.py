@@ -4,7 +4,9 @@ from contextlib import contextmanager
 from xml.sax.saxutils import XMLGenerator
 import _thread
 import atexit
+import json
 import os
+import ptpython.repl
 import pty
 import queue
 import re
@@ -15,7 +17,6 @@ import sys
 import tempfile
 import time
 import unicodedata
-import ptpython.repl
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -343,6 +344,18 @@ class Machine:
                 ).format(user, q)
             )
         return self.execute("systemctl {}".format(q))
+
+    def require_unit_state(self, unit, require_state="active"):
+        with self.nested(
+            "checking if unit ‘{}’ has reached state '{}'".format(unit, require_state)
+        ):
+            info = self.get_unit_info(unit)
+            state = info["ActiveState"]
+            if state != require_state:
+                raise Exception(
+                    "Expected unit ‘{}’ to to be in state ".format(unit)
+                    + "'active' but it is in state ‘{}’".format(state)
+                )
 
     def execute(self, command):
         self.connect()
