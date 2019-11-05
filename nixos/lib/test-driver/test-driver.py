@@ -655,6 +655,27 @@ class Machine:
                 if status == 0:
                     return
 
+    def get_window_names(self):
+        return self.succeed(
+            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
+        ).splitlines()
+
+    def wait_for_window(self, regexp):
+        pattern = re.compile(regexp)
+
+        def window_is_visible(last_try):
+            names = self.get_window_names()
+            if last_try:
+                self.log(
+                    "Last chance to match {} on the window list,".format(regexp)
+                    + " which currently contains: "
+                    + ", ".join(names)
+                )
+            return any(pattern.search(name) for name in names)
+
+        with self.nested("Waiting for a window to appear"):
+            retry(window_is_visible)
+
     def sleep(self, secs):
         time.sleep(secs)
 
