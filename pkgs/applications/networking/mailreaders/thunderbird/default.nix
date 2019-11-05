@@ -108,6 +108,8 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   preConfigure =
     ''
       cxxLib=$( echo -n ${gcc}/include/c++/* )
