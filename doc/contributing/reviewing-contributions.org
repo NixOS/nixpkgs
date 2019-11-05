@@ -1,0 +1,342 @@
+* Reviewing contributions
+  :PROPERTIES:
+  :CUSTOM_ID: chap-reviewing-contributions
+  :END:
+
+#+BEGIN_QUOTE
+  *Warning*
+
+  The following section is a draft, and the policy for reviewing is
+  still being discussed in issues such as
+  [[https://github.com/NixOS/nixpkgs/issues/11166][#11166]] and
+  [[https://github.com/NixOS/nixpkgs/issues/20836][#20836]].
+#+END_QUOTE
+
+The Nixpkgs project receives a fairly high number of contributions via
+GitHub pull requests. Reviewing and approving these is an important task
+and a way to contribute to the project.
+
+The high change rate of Nixpkgs makes any pull request that remains open
+for too long subject to conflicts that will require extra work from the
+submitter or the merger. Reviewing pull requests in a timely manner and
+being responsive to the comments is the key to avoid this issue. GitHub
+provides sort filters that can be used to see the
+[[https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc][most
+recently]] and the
+[[https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc][least
+recently]] updated pull requests. We highly encourage looking at
+[[https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+review%3Anone+status%3Asuccess+-label%3A%222.status%3A+work-in-progress%22+no%3Aproject+no%3Aassignee+no%3Amilestone][this
+list of ready to merge, unreviewed pull requests]].
+
+When reviewing a pull request, please always be nice and polite.
+Controversial changes can lead to controversial opinions, but it is
+important to respect every community member and their work.
+
+GitHub provides reactions as a simple and quick way to provide feedback
+to pull requests or any comments. The thumb-down reaction should be used
+with care and if possible accompanied with some explanation so the
+submitter has directions to improve their contribution.
+
+pull request reviews should include a list of what has been reviewed in
+a comment, so other reviewers and mergers can know the state of the
+review.
+
+All the review template samples provided in this section are generic and
+meant as examples. Their usage is optional and the reviewer is free to
+adapt them to their liking.
+
+* Package updates
+  :PROPERTIES:
+  :CUSTOM_ID: reviewing-contributions-package-updates
+  :END:
+
+A package update is the most trivial and common type of pull request.
+These pull requests mainly consist of updating the version part of the
+package name and the source hash.
+
+It can happen that non-trivial updates include patches or more complex
+changes.
+
+Reviewing process:
+
+- Add labels to the pull request. (Requires commit rights)
+
+  - =8.has: package (update)= and any topic label that fit the updated
+    package.
+
+- Ensure that the package versioning fits the guidelines.
+
+- Ensure that the commit text fits the guidelines.
+
+- Ensure that the package maintainers are notified.
+
+  - [[https://help.github.com/articles/about-codeowners/][CODEOWNERS]]
+    will make GitHub notify users based on the submitted changes, but it
+    can happen that it misses some of the package maintainers.
+
+- Ensure that the meta field information is correct.
+
+  - License can change with version updates, so it should be checked to
+    match the upstream license.
+
+  - If the package has no maintainer, a maintainer must be set. This can
+    be the update submitter or a community member that accepts to take
+    maintainership of the package.
+
+- Ensure that the code contains no typos.
+
+- Building the package locally.
+
+  - pull requests are often targeted to the master or staging branch,
+    and building the pull request locally when it is submitted can
+    trigger many source builds.
+
+    It is possible to rebase the changes on nixos-unstable or
+    nixpkgs-unstable for easier review by running the following commands
+    from a nixpkgs clone.
+
+    #+BEGIN_EXAMPLE
+      $ git fetch origin nixos-unstable 
+      $ git fetch origin pull/PRNUMBER/head 
+      $ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD 
+    #+END_EXAMPLE
+
+    - Fetching the nixos-unstable branch.
+
+    - Fetching the pull request changes, =PRNUMBER= is the number at the
+      end of the pull request title and =BASEBRANCH= the base branch of
+      the pull request.
+
+    - Rebasing the pull request changes to the nixos-unstable branch.
+
+  - The [[https://github.com/Mic92/nix-review][nix-review]] tool can be
+    used to review a pull request content in a single command.
+    =PRNUMBER= should be replaced by the number at the end of the pull
+    request title. You can also provide the full github pull request
+    url.
+
+    #+BEGIN_EXAMPLE
+      $ nix-shell -p nix-review --run "nix-review pr PRNUMBER"
+    #+END_EXAMPLE
+
+- Running every binary.
+
+#+BEGIN_EXAMPLE
+  ##### Reviewed points
+
+  - [ ] package name fits guidelines
+  - [ ] package version fits guidelines
+  - [ ] package build on ARCHITECTURE
+  - [ ] executables tested on ARCHITECTURE
+  - [ ] all depending packages build
+
+  ##### Possible improvements
+
+  ##### Comments
+#+END_EXAMPLE
+
+* New packages
+  :PROPERTIES:
+  :CUSTOM_ID: reviewing-contributions-new-packages
+  :END:
+
+New packages are a common type of pull requests. These pull requests
+consists in adding a new nix-expression for a package.
+
+Reviewing process:
+
+- Add labels to the pull request. (Requires commit rights)
+
+  - =8.has: package (new)= and any topic label that fit the new package.
+
+- Ensure that the package versioning is fitting the guidelines.
+
+- Ensure that the commit name is fitting the guidelines.
+
+- Ensure that the meta field contains correct information.
+
+  - License must be checked to be fitting upstream license.
+
+  - Platforms should be set or the package will not get binary
+    substitutes.
+
+  - A maintainer must be set. This can be the package submitter or a
+    community member that accepts to take maintainership of the package.
+
+- Ensure that the code contains no typos.
+
+- Ensure the package source.
+
+  - Mirrors urls should be used when available.
+
+  - The most appropriate function should be used (e.g. packages from
+    GitHub should use =fetchFromGitHub=).
+
+- Building the package locally.
+
+- Running every binary.
+
+#+BEGIN_EXAMPLE
+  ##### Reviewed points
+
+  - [ ] package path fits guidelines
+  - [ ] package name fits guidelines
+  - [ ] package version fits guidelines
+  - [ ] package build on ARCHITECTURE
+  - [ ] executables tested on ARCHITECTURE
+  - [ ] `meta.description` is set and fits guidelines
+  - [ ] `meta.license` fits upstream license
+  - [ ] `meta.platforms` is set
+  - [ ] `meta.maintainers` is set
+  - [ ] build time only dependencies are declared in `nativeBuildInputs`
+  - [ ] source is fetched using the appropriate function
+  - [ ] phases are respected
+  - [ ] patches that are remotely available are fetched with `fetchpatch`
+
+  ##### Possible improvements
+
+  ##### Comments
+#+END_EXAMPLE
+
+* Module updates
+  :PROPERTIES:
+  :CUSTOM_ID: reviewing-contributions-module-updates
+  :END:
+
+Module updates are submissions changing modules in some ways. These
+often contains changes to the options or introduce new options.
+
+Reviewing process
+
+- Add labels to the pull request. (Requires commit rights)
+
+  - =8.has: module (update)= and any topic label that fit the module.
+
+- Ensure that the module maintainers are notified.
+
+  - [[https://help.github.com/articles/about-codeowners/][CODEOWNERS]]
+    will make GitHub notify users based on the submitted changes, but it
+    can happen that it misses some of the package maintainers.
+
+- Ensure that the module tests, if any, are succeeding.
+
+- Ensure that the introduced options are correct.
+
+  - Type should be appropriate (string related types differs in their
+    merging capabilities, =optionSet= and =string= types are
+    deprecated).
+
+  - Description, default and example should be provided.
+
+- Ensure that option changes are backward compatible.
+
+  - =mkRenamedOptionModule= and =mkAliasOptionModule= functions provide
+    way to make option changes backward compatible.
+
+- Ensure that removed options are declared with =mkRemovedOptionModule=
+
+- Ensure that changes that are not backward compatible are mentioned in
+  release notes.
+
+- Ensure that documentations affected by the change is updated.
+
+#+BEGIN_EXAMPLE
+  ##### Reviewed points
+
+  - [ ] changes are backward compatible
+  - [ ] removed options are declared with `mkRemovedOptionModule`
+  - [ ] changes that are not backward compatible are documented in release notes
+  - [ ] module tests succeed on ARCHITECTURE
+  - [ ] options types are appropriate
+  - [ ] options description is set
+  - [ ] options example is provided
+  - [ ] documentation affected by the changes is updated
+
+  ##### Possible improvements
+
+  ##### Comments
+#+END_EXAMPLE
+
+* New modules
+  :PROPERTIES:
+  :CUSTOM_ID: reviewing-contributions-new-modules
+  :END:
+
+New modules submissions introduce a new module to NixOS.
+
+- Add labels to the pull request. (Requires commit rights)
+
+  - =8.has: module (new)= and any topic label that fit the module.
+
+- Ensure that the module tests, if any, are succeeding.
+
+- Ensure that the introduced options are correct.
+
+  - Type should be appropriate (string related types differs in their
+    merging capabilities, =optionSet= and =string= types are
+    deprecated).
+
+  - Description, default and example should be provided.
+
+- Ensure that module =meta= field is present
+
+  - Maintainers should be declared in =meta.maintainers=.
+
+  - Module documentation should be declared with =meta.doc=.
+
+- Ensure that the module respect other modules functionality.
+
+  - For example, enabling a module should not open firewall ports by
+    default.
+
+#+BEGIN_EXAMPLE
+  ##### Reviewed points
+
+  - [ ] module path fits the guidelines
+  - [ ] module tests succeed on ARCHITECTURE
+  - [ ] options have appropriate types
+  - [ ] options have default
+  - [ ] options have example
+  - [ ] options have descriptions
+  - [ ] No unneeded package is added to environment.systemPackages
+  - [ ] meta.maintainers is set
+  - [ ] module documentation is declared in meta.doc
+
+  ##### Possible improvements
+
+  ##### Comments
+#+END_EXAMPLE
+
+* Other submissions
+  :PROPERTIES:
+  :CUSTOM_ID: reviewing-contributions-other-submissions
+  :END:
+
+Other type of submissions requires different reviewing steps.
+
+If you consider having enough knowledge and experience in a topic and
+would like to be a long-term reviewer for related submissions, please
+contact the current reviewers for that topic. They will give you
+information about the reviewing process. The main reviewers for a topic
+can be hard to find as there is no list, but checking past pull requests
+to see who reviewed or git-blaming the code to see who committed to that
+topic can give some hints.
+
+Container system, boot system and library changes are some examples of
+the pull requests fitting this category.
+
+* Merging pull requests
+  :PROPERTIES:
+  :CUSTOM_ID: reviewing-contributions--merging-pull-requests
+  :END:
+
+It is possible for community members that have enough knowledge and
+experience on a special topic to contribute by merging pull requests.
+
+TODO: add the procedure to request merging rights.
+
+In a case a contributor definitively leaves the Nix community, they
+should create an issue or post on
+[[https://discourse.nixos.org][Discourse]] with references of packages
+and modules they maintain so the maintainership can be taken over by
+other contributors.
