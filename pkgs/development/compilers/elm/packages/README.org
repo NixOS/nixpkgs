@@ -1,0 +1,34 @@
+* Elm packages
+
+Mixtures of useful Elm lang tooling containing both Haskell and Node.js
+based utilities.
+
+** Upgrades
+
+Haskell parts of the ecosystem are using
+[[https://github.com/NixOS/cabal2nix][cabal2nix]]. Please refer to
+[[https://nixos.org/nixpkgs/manual/#how-to-create-nix-builds-for-your-own-private-haskell-packages][nix
+documentation]] and
+[[https://github.com/NixOS/cabal2nix#readme][cabal2nix readme]] for more
+information. Elm-format
+[[https://github.com/avh4/elm-format/tree/master/package/nix][update
+scripts]] is part of its repository.
+
+Node dependencies are defined in [[file:node-packages.json]].
+[[https://github.com/svanderburg/node2nix][Node2nix]] is used for
+generating nix expression from this file. Use
+[[file:generate-node-packages.sh]] for updates of nix expressions.
+
+** Binwrap Patch
+
+Some node packages might use
+[[https://github.com/avh4/binwrap][binwrap]] typically for installing
+[[https://github.com/stoeffel/elmi-to-json][elmi-to-json]]. Binwrap is
+not compatible with nix. To overcome issues with those packages apply
+[[file:patch-binwrap.nix]] which essentially does 2 things.
+
+1. It replaces binwrap scripts with noop shell scripts
+2. It uses nix for installing the binaries to expected location in
+   =node_modules=
+
+Example usage be found in =elm/default.nix=.
