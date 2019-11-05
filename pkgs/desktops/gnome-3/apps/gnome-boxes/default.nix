@@ -3,7 +3,7 @@
 , spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
 , libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
 , mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, libsecret
-, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk, vte
+, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk, vte, glib-networking
 }:
 
 let
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
     tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
     gnome3.adwaita-icon-theme librsvg acl libgudev libsecret
-    libcap_ng numactl xen libapparmor vte
+    libcap_ng numactl xen libapparmor vte glib-networking
   ];
 
   preFixup = ''
