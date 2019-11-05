@@ -17,6 +17,7 @@ in symlinkJoin {
     for each in gimp-${versionBranch} gimp-console-${versionBranch}; do
       wrapProgram $out/bin/$each \
         --set GIMP2_PLUGINDIR "$out/lib/gimp/2.0" \
+        --set GIMP2_DATADIR "$out/share/gimp/2.0" \
         --prefix GTK_PATH : "${gnome3.gnome-themes-extra}/lib/gtk-2.0" \
         ${toString extraArgs}
     done

@@ -13,8 +13,6 @@
 , libgee
 , xorg
 , libgnomekbd
-, elementary-icon-theme
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -40,11 +38,9 @@ stdenv.mkDerivation rec {
     libxml2
     pkgconfig
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
