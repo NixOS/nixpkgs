@@ -1,0 +1,47 @@
+* Assert functions
+  :PROPERTIES:
+  :CUSTOM_ID: sec-functions-library-asserts
+  :END:
+
+** =lib.asserts.assertMsg=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.asserts.assertMsg
+   :END:
+
+Print a trace message if =pred= is false.
+
+Intended to be used to augment asserts with helpful error messages.
+
+- =pred= :: Condition under which the =msg= should /not/ be printed.
+
+- =msg= :: Message to print.
+
+#+BEGIN_EXAMPLE
+  assert lib.asserts.assertMsg ("foo" == "bar") "foo is not bar, silly"
+  stderr> trace: foo is not bar, silly
+  stderr> assert failed
+#+END_EXAMPLE
+
+** =lib.asserts.assertOneOf=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.asserts.assertOneOf
+   :END:
+
+Specialized =asserts.assertMsg= for checking if =val= is one of the
+elements of =xs=. Useful for checking enums.
+
+- =name= :: The name of the variable the user entered =val= into, for
+  inclusion in the error message.
+
+- =val= :: The value of what the user provided, to be compared against
+  the values in =xs=.
+
+- =xs= :: The list of valid values.
+
+#+BEGIN_EXAMPLE
+  let sslLibrary = "bearssl";
+  in lib.asserts.assertOneOf "sslLibrary" sslLibrary [ "openssl" "bearssl" ];
+  => false
+  stderr> trace: sslLibrary must be one of "openssl", "libressl", but is: "bearssl"
+          
+#+END_EXAMPLE
