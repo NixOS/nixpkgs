@@ -1,0 +1,7 @@
+* Nixpkgs Library Functions
+  :PROPERTIES:
+  :CUSTOM_ID: sec-functions-library
+  :END:
+
+Nixpkgs provides a standard library at =pkgs.lib=, or through
+=import <nixpkgs/lib>=.
