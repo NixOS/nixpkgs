@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, qt5, libjack2, alsaLib, liblo, lv2 }:
+{ mkDerivation, stdenv, fetchurl, pkgconfig, qtbase, qttools, libjack2, alsaLib, liblo, lv2 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "synthv1";
   version = "0.9.9";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cvamqzg74qfr7kzk3skimskmv0j3d1rmmpbpsmfcrg8srvyx9r2";
   };
 
-  buildInputs = [ qt5.qtbase qt5.qttools libjack2 alsaLib liblo lv2 ];
+  buildInputs = [ qtbase qttools libjack2 alsaLib liblo lv2 ];
 
   nativeBuildInputs = [ pkgconfig ];
 
