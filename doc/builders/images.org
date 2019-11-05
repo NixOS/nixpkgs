@@ -1,0 +1,6 @@
+* Images
+  :PROPERTIES:
+  :CUSTOM_ID: chap-images
+  :END:
+
+This chapter describes tools for creating various types of images.
