@@ -1,0 +1,2 @@
+Instructions for adding Vim plugins to =nixpkgs= can be found
+[[/doc/languages-frameworks/vim.section.md][here]].
