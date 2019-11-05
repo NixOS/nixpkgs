@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   # darwin build fails with format hardening since v7.12
   hardeningDisable = stdenv.lib.optionals stdenv.isDarwin [ "format" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
+  env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";

@@ -37,12 +37,13 @@ let
   version = "2.27";
   patchSuffix = "";
   sha256 = "0wpwq7gsm7sd6ysidv0z575ckqdg13cr2njyfgrbgh4f65adwwji";
+  inherit (lib) foldl recursiveUpdate;
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation (foldl recursiveUpdate {} [ {
   inherit version;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
 
@@ -164,7 +165,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
+(removeAttrs args [ "withLinuxHeaders" "withGd" ])
 
 {
   name = name + "-${version}${patchSuffix}";
@@ -227,11 +228,11 @@ stdenv.mkDerivation ({
   } // meta;
 }
 
-// lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+(lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
 
   # To avoid a dependency on the build system 'bash'.
   preFixup = ''
     rm -f $bin/bin/{ldd,tzselect,catchsegv,xtrace}
   '';
-})
+}) ])

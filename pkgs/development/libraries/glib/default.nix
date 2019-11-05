@@ -118,12 +118,13 @@ stdenv.mkDerivation rec {
     "-Ddevbindir=${placeholder ''dev''}/bin"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=nonnull"
-    # Default for release buildtype but passed manually because
-    # we're using plain
-    "-DG_DISABLE_CAST_CHECKS"
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=nonnull" +
+      # Default for release buildtype but passed manually because
+      # we're using plain
+      " -DG_DISABLE_CAST_CHECKS";
+    DETERMINISTIC_BUILD = 1;
+  };
 
   postPatch = ''
     # substitute fix-gio-launch-desktop-path.patch
@@ -137,8 +138,6 @@ stdenv.mkDerivation rec {
     patchShebangs tests/gen-casefold-txt.py
     patchShebangs tests/gen-casemap-txt.py
   '';
-
-  DETERMINISTIC_BUILD = 1;
 
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"
