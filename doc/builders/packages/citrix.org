@@ -1,0 +1,69 @@
+* Citrix Workspace
+  :PROPERTIES:
+  :CUSTOM_ID: sec-citrix
+  :END:
+
+#+BEGIN_QUOTE
+  *Note*
+
+  Please note that the =citrix_receiver= package has been deprecated
+  since its development was
+  [[https://docs.citrix.com/en-us/citrix-workspace-app.html][discontinued
+  by upstream]] and has been replaced by
+  [[https://www.citrix.com/products/workspace-app/][the citrix workspace
+  app]].
+#+END_QUOTE
+
+[[https://www.citrix.com/products/receiver/][Citrix Receiver]] and
+[[https://www.citrix.com/products/workspace-app/][Citrix Workspace App]]
+are a remote desktop viewers which provide access to
+[[https://www.citrix.com/products/xenapp-xendesktop/][XenDesktop]]
+installations.
+
+** Basic usage
+   :PROPERTIES:
+   :CUSTOM_ID: sec-citrix-base
+   :END:
+
+The tarball archive needs to be downloaded manually as the license
+agreements of the vendor for
+[[https://www.citrix.com/downloads/citrix-receiver/][Citrix Receiver]]
+or
+[[https://www.citrix.de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html][Citrix
+Workspace]] need to be accepted first. Then run
+=nix-prefetch-url file://$PWD/linuxx64-$version.tar.gz=. With the
+archive available in the store the package can be built and installed
+with Nix.
+
+#+BEGIN_QUOTE
+  *Warning*
+
+  It's recommended to install =Citrix Receiver= and/or
+  =Citrix Workspace= using =nix-env -i= or globally to ensure that the
+  =.desktop= files are installed properly into =$XDG_CONFIG_DIRS=.
+  Otherwise it won't be possible to open =.ica= files automatically from
+  the browser to start a Citrix connection.
+#+END_QUOTE
+
+** Custom certificates
+   :PROPERTIES:
+   :CUSTOM_ID: sec-citrix-custom-certs
+   :END:
+
+The =Citrix Workspace App= in =nixpkgs= trust several certificates
+[[https://curl.haxx.se/docs/caextract.html][from the Mozilla database]]
+by default. However several companies using Citrix might require their
+own corporate certificate. On distros with imperative packaging these
+certs can be stored easily in
+[[https://developer-docs.citrix.com/projects/receiver-for-linux-command-reference/en/13.7/][=$ICAROOT=]],
+however this directory is a store path in =nixpkgs=. In order to work
+around this issue the package provides a simple mechanism to add custom
+certificates without rebuilding the entire package using =symlinkJoin=:
+
+#+BEGIN_EXAMPLE
+  with import <nixpkgs> { config.allowUnfree = true; };
+  let extraCerts = [ ./custom-cert-1.pem ./custom-cert-2.pem /* ... */ ]; in
+  citrix_workspace.override {
+    inherit extraCerts;
+  }
+#+END_EXAMPLE
