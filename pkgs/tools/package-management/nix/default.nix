@@ -30,8 +30,6 @@ common =
 
       is20 = lib.versionAtLeast version "2.0pre";
 
-      VERSION_SUFFIX = lib.optionalString fromGit suffix;
-
       outputs = [ "out" "dev" "man" "doc" ];
 
       nativeBuildInputs =
@@ -57,7 +55,10 @@ common =
       propagatedBuildInputs = [ boehmgc ];
 
       # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+      env = {
+        NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+        VERSION_SUFFIX = lib.optionalString fromGit suffix;
+      };
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.

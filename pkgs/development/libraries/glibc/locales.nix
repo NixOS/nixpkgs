@@ -15,7 +15,7 @@ callPackage ./common.nix { inherit stdenv; } {
 
   outputs = [ "out" ];
 
-  NIX_NO_SELF_RPATH = 1;
+  env.NIX_NO_SELF_RPATH = 1;
 
   # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
   # This has to be done *after* `configure' because it builds some

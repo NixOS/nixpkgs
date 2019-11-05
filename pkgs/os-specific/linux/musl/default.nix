@@ -57,8 +57,6 @@ stdenv.mkDerivation rec {
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
   ];
-  CFLAGS = [ "-fstack-protector-strong" ]
-    ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
 
   configureFlags = [
     "--enable-shared"
@@ -73,7 +71,11 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
   separateDebugInfo = true;
 
-  NIX_DONT_SET_RPATH = true;
+  env = {
+    NIX_DONT_SET_RPATH = true;
+    CFLAGS = "-fstack-protector-strong"
+      + lib.optionalString stdenv.hostPlatform.isPower "-mlong-double-64";
+  };
 
   postInstall = ''
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.

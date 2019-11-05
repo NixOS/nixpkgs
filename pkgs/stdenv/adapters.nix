@@ -43,7 +43,9 @@ rec {
       if stdenv'.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
       else stdenv'.mkDerivation (args // {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+        env = (args.env or {}) // {
+          NIX_CFLAGS_LINK = (args.env.NIX_CFLAGS_LINK or "") + " -static";
+        };
         configureFlags = (args.configureFlags or []) ++ [
             "--disable-shared" # brrr...
           ];
@@ -182,7 +184,9 @@ rec {
   keepDebugInfo = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontStrip = true;
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+        env = (args.env or {}) // {
+          NIX_CFLAGS_COMPILE = (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+        };
       });
     };
 
@@ -190,7 +194,9 @@ rec {
   /* Modify a stdenv so that it uses the Gold linker. */
   useGoldLinker = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
+        env = (args.env or {}) // {
+          NIX_CFLAGS_LINK = (args.env.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
+        };
       });
     };
 
@@ -201,8 +207,10 @@ rec {
      WARNING: this breaks purity! */
   impureUseNativeOptimizations = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
-        NIX_ENFORCE_NO_NATIVE = false;
+        env = (args.env or {}) // {
+          NIX_CFLAGS_COMPILE = (args.env.NIX_CFLAGS_COMPILE or "") + " -march=native";
+          NIX_ENFORCE_NO_NATIVE = false;
+        };
 
         preferLocalBuild = true;
         allowSubstitutes = false;

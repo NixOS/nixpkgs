@@ -136,7 +136,7 @@ stdenv.mkDerivation {
     EOF
   '';
 
-  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
                       "-headerpad_max_install_names";
 
   enableParallelBuilding = true;
