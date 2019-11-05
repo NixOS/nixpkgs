@@ -1,0 +1,23 @@
+* Profiles
+  :PROPERTIES:
+  :CUSTOM_ID: ch-profiles
+  :END:
+
+In some cases, it may be desirable to take advantage of commonly-used,
+predefined configurations provided by nixpkgs, but different from those
+that come as default. This is a role fulfilled by NixOS's Profiles,
+which come as files living in =<nixpkgs/nixos/modules/profiles>=. That
+is to say, expected usage is to add them to the imports list of your
+=/etc/configuration.nix= as such:
+
+#+BEGIN_EXAMPLE
+    imports = [
+     <nixpkgs/nixos/modules/profiles/profile-name.nix>
+    ];
+#+END_EXAMPLE
+
+Even if some of these profiles seem only useful in the context of
+install media, many are actually intended to be used in real installs.
+
+What follows is a brief explanation on the purpose and use-case for each
+profile. Detailing each option configured by each one is out of scope.
