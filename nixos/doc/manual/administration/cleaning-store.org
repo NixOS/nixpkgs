@@ -1,0 +1,68 @@
+* Cleaning the Nix Store
+  :PROPERTIES:
+  :CUSTOM_ID: sec-nix-gc
+  :END:
+
+Nix has a purely functional model, meaning that packages are never
+upgraded in place. Instead new versions of packages end up in a
+different location in the Nix store (=/nix/store=). You should
+periodically run Nix's /garbage collector/ to remove old, unreferenced
+packages. This is easy:
+
+#+BEGIN_EXAMPLE
+  $ nix-collect-garbage
+#+END_EXAMPLE
+
+Alternatively, you can use a systemd unit that does the same in the
+background:
+
+#+BEGIN_EXAMPLE
+  # systemctl start nix-gc.service
+#+END_EXAMPLE
+
+You can tell NixOS in =configuration.nix= to run this unit automatically
+at certain points in time, for instance, every night at 03:15:
+
+#+BEGIN_EXAMPLE
+   = true;
+   = "03:15";
+#+END_EXAMPLE
+
+The commands above do not remove garbage collector roots, such as old
+system configurations. Thus they do not remove the ability to roll back
+to previous configurations. The following command deletes old roots,
+removing the ability to roll back to them:
+
+#+BEGIN_EXAMPLE
+  $ nix-collect-garbage -d
+#+END_EXAMPLE
+
+You can also do this for specific profiles, e.g.
+
+#+BEGIN_EXAMPLE
+  $ nix-env -p /nix/var/nix/profiles/per-user/eelco/profile --delete-generations old
+#+END_EXAMPLE
+
+Note that NixOS system configurations are stored in the profile
+=/nix/var/nix/profiles/system=.
+
+Another way to reclaim disk space (often as much as 40% of the size of
+the Nix store) is to run Nix's store optimiser, which seeks out
+identical files in the store and replaces them with hard links to a
+single copy.
+
+#+BEGIN_EXAMPLE
+  $ nix-store --optimise
+#+END_EXAMPLE
+
+Since this command needs to read the entire Nix store, it can take quite
+a while to finish.
+
+* NixOS Boot Entries
+  :PROPERTIES:
+  :CUSTOM_ID: sect-nixos-gc-boot-entries
+  :END:
+
+If your =/boot= partition runs out of space, after clearing old profiles
+you must rebuild your system with =nixos-rebuild= to update the =/boot=
+partition and clear space.
