@@ -1,0 +1,730 @@
+* Attribute-Set Functions
+  :PROPERTIES:
+  :CUSTOM_ID: sec-functions-library-attrset
+  :END:
+
+** =lib.attrset.attrByPath=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.attrByPath
+   :END:
+
+Return an attribute from within nested attribute sets.
+
+- =attrPath= :: A list of strings representing the path through the
+  nested attribute set =set=.
+
+- =default= :: Default value if =attrPath= does not resolve to an
+  existing value.
+
+- =set= :: The nested attributeset to select values from.
+
+#+BEGIN_EXAMPLE
+  let set = { a = { b = 3; }; };
+  in lib.attrsets.attrByPath [ "a" "b" ] 0 set
+  => 3
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.attrByPath [ "a" "b" ] 0 {}
+  => 0
+#+END_EXAMPLE
+
+** =lib.attrsets.hasAttrByPath=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.hasAttrByPath
+   :END:
+
+Determine if an attribute exists within a nested attribute set.
+
+- =attrPath= :: A list of strings representing the path through the
+  nested attribute set =set=.
+
+- =set= :: The nested attributeset to check.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.hasAttrByPath
+    [ "a" "b" "c" "d" ]
+    { a = { b = { c = { d = 123; }; }; }; }
+  => true
+#+END_EXAMPLE
+
+** =lib.attrsets.setAttrByPath=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.setAttrByPath
+   :END:
+
+Create a new attribute set with =value= set at the nested attribute
+location specified in =attrPath=.
+
+- =attrPath= :: A list of strings representing the path through the
+  nested attribute set.
+
+- =value= :: The value to set at the location described by =attrPath=.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.setAttrByPath [ "a" "b" ] 3
+  => { a = { b = 3; }; }
+#+END_EXAMPLE
+
+** =lib.attrsets.getAttrFromPath=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.getAttrFromPath
+   :END:
+
+Like [[#function-library-lib.attrsets.attrByPath][]] except without a
+default, and it will throw if the value doesn't exist.
+
+- =attrPath= :: A list of strings representing the path through the
+  nested attribute set =set=.
+
+- =set= :: The nested attribute set to find the value in.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.getAttrFromPath [ "a" "b" ] { a = { b = 3; }; }
+  => 3
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.getAttrFromPath [ "x" "y" ] { }
+  => error: cannot find attribute `x.y'
+#+END_EXAMPLE
+
+** =lib.attrsets.attrVals=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.attrVals
+   :END:
+
+Return the specified attributes from a set. All values must exist.
+
+- =nameList= :: The list of attributes to fetch from =set=. Each
+  attribute name must exist on the attrbitue set.
+
+- =set= :: The set to get attribute values from.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.attrVals [ "a" "b" "c" ] { a = 1; b = 2; c = 3; }
+  => [ 1 2 3 ]
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.attrVals [ "d" ] { }
+  error: attribute 'd' missing
+#+END_EXAMPLE
+
+** =lib.attrsets.attrValues=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.attrValues
+   :END:
+
+Get all the attribute values from an attribute set.
+
+Provides a backwards-compatible interface of =builtins.attrValues= for
+Nix version older than 1.8.
+
+- =attrs= :: The attribute set.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.attrValues { a = 1; b = 2; c = 3; }
+  => [ 1 2 3 ]
+#+END_EXAMPLE
+
+** =lib.attrsets.catAttrs=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.catAttrs
+   :END:
+
+Collect each attribute named `attr' from the list of attribute sets,
+=sets=. Sets that don't contain the named attribute are ignored.
+
+Provides a backwards-compatible interface of =builtins.catAttrs= for Nix
+version older than 1.9.
+
+- =attr= :: Attribute name to select from each attribute set in =sets=.
+
+- =sets= :: The list of attribute sets to select =attr= from.
+
+Attribute sets which don't have the attribute are ignored.
+
+#+BEGIN_EXAMPLE
+  catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
+  => [ 1 2 ]
+        
+#+END_EXAMPLE
+
+** =lib.attrsets.filterAttrs=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.filterAttrs
+   :END:
+
+Filter an attribute set by removing all attributes for which the given
+predicate return false.
+
+- =pred= :: =String -> Any -> Bool=
+
+  Predicate which returns true to include an attribute, or returns false
+  to exclude it.
+
+  - =name= :: The attribute's name
+
+  - =value= :: The attribute's value
+
+  Returns =true= to include the attribute, =false= to exclude the
+  attribute.
+
+- =set= :: The attribute set to filter
+
+#+BEGIN_EXAMPLE
+  filterAttrs (n: v: n == "foo") { foo = 1; bar = 2; }
+  => { foo = 1; }
+#+END_EXAMPLE
+
+** =lib.attrsets.filterAttrsRecursive=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.filterAttrsRecursive
+   :END:
+
+Filter an attribute set recursively by removing all attributes for which
+the given predicate return false.
+
+- =pred= :: =String -> Any -> Bool=
+
+  Predicate which returns true to include an attribute, or returns false
+  to exclude it.
+
+  - =name= :: The attribute's name
+
+  - =value= :: The attribute's value
+
+  Returns =true= to include the attribute, =false= to exclude the
+  attribute.
+
+- =set= :: The attribute set to filter
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.filterAttrsRecursive
+    (n: v: v != null)
+    {
+      levelA = {
+        example = "hi";
+        levelB = {
+          hello = "there";
+          this-one-is-present = {
+            this-is-excluded = null;
+          };
+        };
+        this-one-is-also-excluded = null;
+      };
+      also-excluded = null;
+    }
+  => {
+       levelA = {
+         example = "hi";
+         levelB = {
+           hello = "there";
+           this-one-is-present = { };
+         };
+       };
+     }
+       
+#+END_EXAMPLE
+
+** =lib.attrsets.foldAttrs=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.foldAttrs
+   :END:
+
+Apply fold function to values grouped by key.
+
+- =op= :: =Any -> Any -> Any=
+
+  Given a value =val= and a collector =col=, combine the two.
+
+  - =val= :: An attribute's value
+
+  - =col= :: The result of previous =op= calls with other values and
+    =nul=.
+
+- =nul= :: The null-value, the starting value.
+
+- =list_of_attrs= :: A list of attribute sets to fold together by key.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.foldAttrs
+    (n: a: [n] ++ a) []
+    [
+      { a = 2; b = 7; }
+      { a = 3; }
+      { b = 6; }
+    ]
+  => { a = [ 2 3 ]; b = [ 7 6 ]; }
+#+END_EXAMPLE
+
+** =lib.attrsets.collect=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.collect
+   :END:
+
+Recursively collect sets that verify a given predicate named =pred= from
+the set =attrs=. The recursion stops when =pred= returns =true=.
+
+- =pred= :: =Any -> Bool=
+
+  Given an attribute's value, determine if recursion should stop.
+
+  - =value= :: The attribute set value.
+
+- =attrs= :: The attribute set to recursively collect.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.collect isList { a = { b = ["b"]; }; c = [1]; }
+  => [["b"] [1]]
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  collect (x: x ? outPath)
+    { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
+  => [{ outPath = "a/"; } { outPath = "b/"; }]
+#+END_EXAMPLE
+
+** =lib.attrsets.nameValuePair=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.nameValuePair
+   :END:
+
+Utility function that creates a ={name, value}= pair as expected by
+=builtins.listToAttrs=.
+
+- =name= :: The attribute name.
+
+- =value= :: The attribute value.
+
+#+BEGIN_EXAMPLE
+  nameValuePair "some" 6
+  => { name = "some"; value = 6; }
+#+END_EXAMPLE
+
+** =lib.attrsets.mapAttrs=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.mapAttrs
+   :END:
+
+Apply a function to each element in an attribute set, creating a new
+attribute set.
+
+Provides a backwards-compatible interface of =builtins.mapAttrs= for Nix
+version older than 2.1.
+
+- =fn= :: =String -> Any -> Any=
+
+  Given an attribute's name and value, return a new value.
+
+  - =name= :: The name of the attribute.
+
+  - =value= :: The attribute's value.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.mapAttrs
+    (name: value: name + "-" value)
+    { x = "foo"; y = "bar"; }
+  => { x = "x-foo"; y = "y-bar"; }
+#+END_EXAMPLE
+
+** =lib.attrsets.mapAttrs'=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.mapAttrs-prime
+   :END:
+
+Like =mapAttrs=, but allows the name of each attribute to be changed in
+addition to the value. The applied function should return both the new
+name and value as a =nameValuePair=.
+
+- =fn= :: =String -> Any -> { name = String; value = Any }=
+
+  Given an attribute's name and value, return a new
+  [[#function-library-lib.attrsets.nameValuePair][name value pair]].
+
+  - =name= :: The name of the attribute.
+
+  - =value= :: The attribute's value.
+
+- =set= :: The attribute set to map over.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair ("foo_" + name) ("bar-" + value))
+     { x = "a"; y = "b"; }
+  => { foo_x = "bar-a"; foo_y = "bar-b"; }
+
+      
+#+END_EXAMPLE
+
+** =lib.attrsets.mapAttrsToList=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.mapAttrsToList
+   :END:
+
+Call =fn= for each attribute in the given =set= and return the result in
+a list.
+
+- =fn= :: =String -> Any -> Any=
+
+  Given an attribute's name and value, return a new value.
+
+  - =name= :: The name of the attribute.
+
+  - =value= :: The attribute's value.
+
+- =set= :: The attribute set to map over.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.mapAttrsToList (name: value: "${name}=${value}")
+     { x = "a"; y = "b"; }
+  => [ "x=a" "y=b" ]
+#+END_EXAMPLE
+
+** =lib.attrsets.mapAttrsRecursive=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.mapAttrsRecursive
+   :END:
+
+Like =mapAttrs=, except that it recursively applies itself to attribute
+sets. Also, the first argument of the argument function is a /list/ of
+the names of the containing attributes.
+
+- =f= :: =[ String ] -> Any -> Any=
+
+  Given a list of attribute names and value, return a new value.
+
+  - =name_path= :: The list of attribute names to this value.
+
+    For example, the =name_path= for the =example= string in the
+    attribute set ={ foo = { bar = "example"; }; }= is
+    =[ "foo" "bar" ]=.
+
+  - =value= :: The attribute's value.
+
+- =set= :: The attribute set to recursively map over.
+
+#+BEGIN_EXAMPLE
+  mapAttrsRecursive
+    (path: value: concatStringsSep "-" (path ++ [value]))
+    {
+      n = {
+        a = "A";
+        m = {
+          b = "B";
+          c = "C";
+        };
+      };
+      d = "D";
+    }
+  => {
+       n = {
+         a = "n-a-A";
+         m = {
+           b = "n-m-b-B";
+           c = "n-m-c-C";
+         };
+       };
+       d = "d-D";
+     }
+      
+#+END_EXAMPLE
+
+** =lib.attrsets.mapAttrsRecursiveCond=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.mapAttrsRecursiveCond
+   :END:
+
+Like =mapAttrsRecursive=, but it takes an additional predicate function
+that tells it whether to recursive into an attribute set. If it returns
+false, =mapAttrsRecursiveCond= does not recurse, but does apply the map
+function. It is returns true, it does recurse, and does not apply the
+map function.
+
+- =cond= :: =(AttrSet -> Bool)=
+
+  Determine if =mapAttrsRecursive= should recurse deeper in to the
+  attribute set.
+
+  - =attributeset= :: An attribute set.
+
+- =f= :: =[ String ] -> Any -> Any=
+
+  Given a list of attribute names and value, return a new value.
+
+  - =name_path= :: The list of attribute names to this value.
+
+    For example, the =name_path= for the =example= string in the
+    attribute set ={ foo = { bar = "example"; }; }= is
+    =[ "foo" "bar" ]=.
+
+  - =value= :: The attribute's value.
+
+- =set= :: The attribute set to recursively map over.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.mapAttrsRecursiveCond
+    ({ recurse ? false, ... }: recurse)
+    (name: value: builtins.toJSON value)
+    {
+      dorecur = {
+        recurse = true;
+        hello = "there";
+      };
+      dontrecur = {
+        converted-to- = "json";
+      };
+    }
+  => {
+       dorecur = {
+         hello = "\"there\"";
+         recurse = "true";
+       };
+       dontrecur = "{\"converted-to\":\"json\"}";
+     }
+      
+#+END_EXAMPLE
+
+** =lib.attrsets.genAttrs=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.genAttrs
+   :END:
+
+Generate an attribute set by mapping a function over a list of attribute
+names.
+
+- =names= :: Names of values in the resulting attribute set.
+
+- =f= :: =String -> Any=
+
+  Takes the name of the attribute and return the attribute's value.
+
+  - =name= :: The name of the attribute to generate a value for.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.genAttrs [ "foo" "bar" ] (name: "x_${name}")
+  => { foo = "x_foo"; bar = "x_bar"; }
+       
+#+END_EXAMPLE
+
+** =lib.attrsets.isDerivation=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.isDerivation
+   :END:
+
+Check whether the argument is a derivation. Any set with
+={ type = "derivation"; }= counts as a derivation.
+
+- =value= :: The value which is possibly a derivation.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.isDerivation (import <nixpkgs> {}).ruby
+  => true
+       
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.isDerivation "foobar"
+  => false
+       
+#+END_EXAMPLE
+
+** =lib.attrsets.toDerivation=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.toDerivation
+   :END:
+
+Converts a store path to a fake derivation.
+
+- =path= :: A store path to convert to a derivation.
+
+** =lib.attrsets.optionalAttrs=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.optionalAttrs
+   :END:
+
+Conditionally return an attribute set or an empty attribute set.
+
+- =cond= :: Condition under which the =as= attribute set is returned.
+
+- =as= :: The attribute set to return if =cond= is true.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.optionalAttrs true { my = "set"; }
+  => { my = "set"; }
+       
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.optionalAttrs false { my = "set"; }
+  => { }
+       
+#+END_EXAMPLE
+
+** =lib.attrsets.zipAttrsWithNames=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.zipAttrsWithNames
+   :END:
+
+Merge sets of attributes and use the function =f= to merge attribute
+values where the attribute name is in =names=.
+
+- =names= :: A list of attribute names to zip.
+
+- =f= :: =(String -> [ Any ] -> Any=
+
+  Accepts an attribute name, all the values, and returns a combined
+  value.
+
+  - =name= :: The name of the attribute each value came from.
+
+  - =vs= :: A list of values collected from the list of attribute sets.
+
+- =sets= :: A list of attribute sets to zip together.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.zipAttrsWithNames
+    [ "a" "b" ]
+    (name: vals: "${name} ${toString (builtins.foldl' (a: b: a + b) 0 vals)}")
+    [
+      { a = 1; b = 1; c = 1; }
+      { a = 10; }
+      { b = 100; }
+      { c = 1000; }
+    ]
+  => { a = "a 11"; b = "b 101"; }
+       
+#+END_EXAMPLE
+
+** =lib.attrsets.zipAttrsWith=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.zipAttrsWith
+   :END:
+
+Merge sets of attributes and use the function =f= to merge attribute
+values. Similar to
+[[#function-library-lib.attrsets.zipAttrsWithNames][]] where all key
+names are passed for =names=.
+
+- =f= :: =(String -> [ Any ] -> Any=
+
+  Accepts an attribute name, all the values, and returns a combined
+  value.
+
+  - =name= :: The name of the attribute each value came from.
+
+  - =vs= :: A list of values collected from the list of attribute sets.
+
+- =sets= :: A list of attribute sets to zip together.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.zipAttrsWith
+    (name: vals: "${name} ${toString (builtins.foldl' (a: b: a + b) 0 vals)}")
+    [
+      { a = 1; b = 1; c = 1; }
+      { a = 10; }
+      { b = 100; }
+      { c = 1000; }
+    ]
+  => { a = "a 11"; b = "b 101"; c = "c 1001"; }
+       
+#+END_EXAMPLE
+
+** =lib.attrsets.zipAttrs=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.zipAttrs
+   :END:
+
+Merge sets of attributes and combine each attribute value in to a list.
+Similar to [[#function-library-lib.attrsets.zipAttrsWith][]] where the
+merge function returns a list of all values.
+
+- =sets= :: A list of attribute sets to zip together.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.zipAttrs
+    [
+      { a = 1; b = 1; c = 1; }
+      { a = 10; }
+      { b = 100; }
+      { c = 1000; }
+    ]
+  => { a = [ 1 10 ]; b = [ 1 100 ]; c = [ 1 1000 ]; }
+       
+#+END_EXAMPLE
+
+** =lib.attrsets.recursiveUpdateUntil=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.recursiveUpdateUntil
+   :END:
+
+Does the same as the update operator =//= except that attributes are
+merged until the given predicate is verified. The predicate should
+accept 3 arguments which are the path to reach the attribute, a part of
+the first attribute set and a part of the second attribute set. When the
+predicate is verified, the value of the first attribute set is replaced
+by the value of the second attribute set.
+
+- =pred= :: =[ String ] -> AttrSet -> AttrSet -> Bool=
+
+  - =path= :: The path to the values in the left and right hand sides.
+
+  - =l= :: The left hand side value.
+
+  - =r= :: The right hand side value.
+
+- =lhs= :: The left hand attribute set of the merge.
+
+- =rhs= :: The right hand attribute set of the merge.
+
+#+BEGIN_EXAMPLE
+  lib.attrsets.recursiveUpdateUntil (path: l: r: path == ["foo"])
+    {
+      # first attribute set
+      foo.bar = 1;
+      foo.baz = 2;
+      bar = 3;
+    }
+    {
+      #second attribute set
+      foo.bar = 1;
+      foo.quz = 2;
+      baz = 4;
+    }
+  => {
+    foo.bar = 1; # 'foo.*' from the second set
+    foo.quz = 2; #
+    bar = 3;     # 'bar' from the first set
+    baz = 4;     # 'baz' from the second set
+  }
+       
+#+END_EXAMPLE
+
+** =lib.attrsets.recursiveUpdate=
+   :PROPERTIES:
+   :CUSTOM_ID: function-library-lib.attrsets.recursiveUpdate
+   :END:
+
+A recursive variant of the update operator =//=. The recursion stops
+when one of the attribute values is not an attribute set, in which case
+the right hand side value takes precedence over the left hand side
+value.
+
+- =lhs= :: The left hand attribute set of the merge.
+
+- =rhs= :: The right hand attribute set of the merge.
+
+#+BEGIN_EXAMPLE
+  recursiveUpdate
+    {
+      boot.loader.grub.enable = true;
+      boot.loader.grub.device = "/dev/hda";
+    }
+    {
+      boot.loader.grub.device = "";
+    }
+  => {
+    boot.loader.grub.enable = true;
+    boot.loader.grub.device = "";
+  }
+#+END_EXAMPLE
