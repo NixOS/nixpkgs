@@ -1,0 +1,85 @@
+* SSL/TLS Certificates with ACME
+  :PROPERTIES:
+  :CUSTOM_ID: module-security-acme
+  :END:
+
+NixOS supports automatic domain validation & certificate retrieval and
+renewal using the ACME protocol. This is currently only implemented by
+and for Let's Encrypt. The alternative ACME client =simp_le= is used
+under the hood.
+
+* Prerequisites
+  :PROPERTIES:
+  :CUSTOM_ID: module-security-acme-prerequisites
+  :END:
+
+You need to have a running HTTP server for verification. The server must
+have a webroot defined that can serve =.well-known/acme-challenge=. This
+directory must be writeable by the user that will run the ACME client.
+
+For instance, this generic snippet could be used for Nginx:
+
+#+BEGIN_EXAMPLE
+  http {
+    server {
+      server_name _;
+      listen 80;
+      listen [::]:80;
+
+      location /.well-known/acme-challenge {
+        root /var/www/challenges;
+      }
+
+      location / {
+        return 301 https://$host$request_uri;
+      }
+    }
+  }
+#+END_EXAMPLE
+
+* Configuring
+  :PROPERTIES:
+  :CUSTOM_ID: module-security-acme-configuring
+  :END:
+
+To enable ACME certificate retrieval & renewal for a certificate for
+=foo.example.com=, add the following in your =configuration.nix=:
+
+#+BEGIN_EXAMPLE
+  ."foo.example.com" = {
+    webroot = "/var/www/challenges";
+    email = "foo@example.com";
+  };
+#+END_EXAMPLE
+
+The private key =key.pem= and certificate =fullchain.pem= will be put
+into =/var/lib/acme/foo.example.com=.
+
+Refer to [[#ch-options][???]] for all available configuration options
+for the [[#opt-security.acme.certs][security.acme]] module.
+
+* Using ACME certificates in Nginx
+  :PROPERTIES:
+  :CUSTOM_ID: module-security-acme-nginx
+  :END:
+
+NixOS supports fetching ACME certificates for you by setting =enableACME
+   = true;= in a virtualHost config. We first create self-signed
+placeholder certificates in place of the real ACME certs. The
+placeholder certs are overwritten when the ACME certs arrive. For
+=foo.example.com= the config would look like.
+
+#+BEGIN_EXAMPLE
+  services.nginx = {
+    enable = true;
+    virtualHosts = {
+      "foo.example.com" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          root = "/var/www";
+        };
+      };
+    };
+  }
+#+END_EXAMPLE
