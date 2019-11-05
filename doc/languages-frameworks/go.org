@@ -1,0 +1,167 @@
+* Go
+  :PROPERTIES:
+  :CUSTOM_ID: sec-language-go
+  :END:
+
+** Go modules
+   :PROPERTIES:
+   :CUSTOM_ID: ssec-go-modules
+   :END:
+
+The function = buildGoModule = builds Go programs managed with Go
+modules. It builds a [[https://github.com/golang/go/wiki/Modules][Go
+modules]] through a two phase build:
+
+- An intermediate fetcher derivation. This derivation will be used to
+  fetch all of the dependencies of the Go module.
+
+- A final derivation will use the output of the intermediate derivation
+  to build the binaries and produce the final output.
+
+#+BEGIN_EXAMPLE
+  pet = buildGoModule rec {
+    name = "pet-${version}";
+    version = "0.3.4";
+
+    src = fetchFromGitHub {
+      owner = "knqyf263";
+      repo = "pet";
+      rev = "v${version}";
+      sha256 = "0m2fzpqxk7hrbxsgqplkg7h2p7gv6s1miymv3gvw0cz039skag0s";
+    };
+
+    modSha256 = "1879j77k96684wi554rkjxydrj8g3hpp0kvxz03sd8dmwr3lh83j"; 
+
+    subPackages = [ "." ]; 
+
+    meta = with lib; {
+      description = "Simple command-line snippet manager, written in Go";
+      homepage = https://github.com/knqyf263/pet;
+      license = licenses.mit;
+      maintainers = with maintainers; [ kalbasit ];
+      platforms = platforms.linux ++ platforms.darwin;
+    };
+  }
+#+END_EXAMPLE
+
+[[#ex-buildGoModule][example_title]] is an example expression using
+buildGoModule, the following arguments are of special significance to
+the function:
+
+- =modSha256= is the hash of the output of the intermediate fetcher
+  derivation.
+
+- =subPackages= limits the builder from building child packages that
+  have not been listed. If =subPackages= is not specified, all child
+  packages will be built.
+
+** Go legacy
+   :PROPERTIES:
+   :CUSTOM_ID: ssec-go-legacy
+   :END:
+
+The function = buildGoPackage = builds legacy Go programs, not
+supporting Go modules.
+
+#+BEGIN_EXAMPLE
+  deis = buildGoPackage rec {
+    name = "deis-${version}";
+    version = "1.13.0";
+
+    goPackagePath = "github.com/deis/deis"; 
+    subPackages = [ "client" ]; 
+
+    src = fetchFromGitHub {
+      owner = "deis";
+      repo = "deis";
+      rev = "v${version}";
+      sha256 = "1qv9lxqx7m18029lj8cw3k7jngvxs4iciwrypdy0gd2nnghc68sw";
+    };
+
+    goDeps = ./deps.nix; 
+
+    buildFlags = "--tags release"; 
+  }
+#+END_EXAMPLE
+
+[[#ex-buildGoPackage][example_title]] is an example expression using
+buildGoPackage, the following arguments are of special significance to
+the function:
+
+- =goPackagePath= specifies the package's canonical Go import path.
+
+- =subPackages= limits the builder from building child packages that
+  have not been listed. If =subPackages= is not specified, all child
+  packages will be built.
+
+  In this example only =github.com/deis/deis/client= will be built.
+
+- =goDeps= is where the Go dependencies of a Go program are listed as a
+  list of package source identified by Go import path. It could be
+  imported as a separate =deps.nix= file for readability. The dependency
+  data structure is described below.
+
+- =buildFlags= is a list of flags passed to the go build command.
+
+The =goDeps= attribute can be imported from a separate =nix= file that
+defines which Go libraries are needed and should be included in =GOPATH=
+for =buildPhase=.
+
+#+BEGIN_EXAMPLE
+  [ 
+    {
+      goPackagePath = "gopkg.in/yaml.v2"; 
+      fetch = {
+        type = "git"; 
+        url = "https://gopkg.in/yaml.v2";
+        rev = "a83829b6f1293c91addabc89d0571c246397bbf4";
+        sha256 = "1m4dsmk90sbi17571h6pld44zxz7jc4lrnl4f27dpd1l8g5xvjhh";
+      };
+    }
+    {
+      goPackagePath = "github.com/docopt/docopt-go";
+      fetch = {
+        type = "git";
+        url = "https://github.com/docopt/docopt-go";
+        rev = "784ddc588536785e7299f7272f39101f7faccc3f";
+        sha256 = "0wwz48jl9fvl1iknvn9dqr4gfy1qs03gxaikrxxp9gry6773v3sj";
+      };
+    }
+  ]
+#+END_EXAMPLE
+
+- =goDeps= is a list of Go dependencies.
+
+- =goPackagePath= specifies Go package import path.
+
+- =fetch type= that needs to be used to get package source. If =git= is
+  used there should be =url=, =rev= and =sha256= defined next to it.
+
+To extract dependency information from a Go package in automated way use
+[[https://github.com/kamilchm/go2nix][go2nix]]. It can produce complete
+derivation and =goDeps= file for Go programs.
+
+=buildGoPackage= produces [[#chap-multiple-output][???]] where =bin=
+includes program binaries. You can test build a Go binary as follows:
+
+#+BEGIN_EXAMPLE
+  $ nix-build -A deis.bin
+#+END_EXAMPLE
+
+or build all outputs with:
+
+#+BEGIN_EXAMPLE
+  $ nix-build -A deis.all
+#+END_EXAMPLE
+
+=bin= output will be installed by default with =nix-env -i= or
+=systemPackages=.
+
+You may use Go packages installed into the active Nix profiles by adding
+the following to your ~/.bashrc:
+
+#+BEGIN_EXAMPLE
+  for p in $NIX_PROFILES; do
+      GOPATH="$p/share/go:$GOPATH"
+  done
+#+END_EXAMPLE
