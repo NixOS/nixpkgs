@@ -107,7 +107,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin.nix { };
 
-  xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin.nix { };
+  xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
 
   xfce4-dict-plugin = callPackage ./panel-plugins/xfce4-dict-plugin.nix { };
 
