@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.33.4";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1hf06p4qfyywnb6334ysnr6aqxik3srb37glclvr4yhb3wzrjqnm";
+    sha256 = "0925snsixzkwh49xiayqmj6fcrmklqk8kyy0jkv7m64h9abm1pr9";
   };
 
   postPatch = ''
