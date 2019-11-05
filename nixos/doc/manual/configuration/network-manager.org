@@ -1,0 +1,38 @@
+* NetworkManager
+  :PROPERTIES:
+  :CUSTOM_ID: sec-networkmanager
+  :END:
+
+To facilitate network configuration, some desktop environments use
+NetworkManager. You can enable NetworkManager by setting:
+
+#+BEGIN_EXAMPLE
+   = true;
+#+END_EXAMPLE
+
+some desktop managers (e.g., GNOME) enable NetworkManager automatically
+for you.
+
+All users that should have permission to change network settings must
+belong to the =networkmanager= group:
+
+#+BEGIN_EXAMPLE
+  users.users.alice.extraGroups = [ "networkmanager" ];
+#+END_EXAMPLE
+
+NetworkManager is controlled using either =nmcli= or =nmtui=
+(curses-based terminal user interface). See their manual pages for
+details on their usage. Some desktop environments (GNOME, KDE) have
+their own configuration tools for NetworkManager. On XFCE, there is no
+configuration tool for NetworkManager by default: by adding
+=networkmanagerapplet= to the list of system packages, the graphical
+applet will be installed and will launch automatically when XFCE is
+starting (and will show in the status tray).
+
+#+BEGIN_QUOTE
+  *Note*
+
+  =networking.networkmanager= and =networking.wireless= (WPA Supplicant)
+  cannot be enabled at the same time: you can still connect to the
+  wireless networks using NetworkManager.
+#+END_QUOTE
