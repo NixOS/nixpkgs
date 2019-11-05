@@ -193,6 +193,11 @@ let
       mkdir $out/lib/openjdk/jre
       lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
+      # Make sure cmm/*.pf are not symlinks:
+      # https://youtrack.jetbrains.com/issue/IDEA-147272
+      rm -rf $out/lib/openjdk/jre/lib/cmm
+      ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
+
       # Setup fallback fonts
       ${lib.optionalString (!headless) ''
         mkdir -p $jre/lib/openjdk/jre/lib/fonts
