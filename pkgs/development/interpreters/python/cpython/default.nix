@@ -130,12 +130,14 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
-  CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
-  LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-  LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
-  NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
-  # Determinism: We fix the hashes of str, bytes and datetime objects.
-  PYTHONHASHSEED=0;
+  env = {
+    CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+    LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
+    LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
+    NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
+    # Determinism: We fix the hashes of str, bytes and datetime objects.
+    PYTHONHASHSEED = 0;
+  };
 
   configureFlags = [
     "--enable-shared"
@@ -178,7 +180,6 @@ in with passthru; stdenv.mkDerivation {
     for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
-    export LIBS LDFLAGS CPPFLAGS PYTHONHASHSEED
   '' + optionalString stdenv.isDarwin ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
     export MACOSX_DEPLOYMENT_TARGET=10.6

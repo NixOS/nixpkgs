@@ -1,7 +1,6 @@
 set -eu
 set -o pipefail
 
-export NIX_DEBUG NIX_LDFLAGS NIX_CFLAGS_COMPILE NIX_CFLAGS_LINK
 if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
@@ -216,6 +215,10 @@ printWords() {
 ######################################################################
 # Initialisation.
 
+# export all vars that should be in the ENV
+for envVar in "${!env[@]}"; do
+    export $envVar="${env[$envVar]}"
+done
 
 # Set a fallback default value for SOURCE_DATE_EPOCH, used by some
 # build tools to provide a deterministic substitute for the "current"

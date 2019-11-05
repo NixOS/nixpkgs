@@ -159,7 +159,7 @@ stdenv.mkDerivation ({
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
-  BASH_SHELL = "/bin/sh";
+  env.BASH_SHELL = "/bin/sh";
 
   passthru = { inherit version; };
 }
@@ -176,7 +176,6 @@ stdenv.mkDerivation ({
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.
   preConfigure = ''
-    export BASH_SHELL
     export PWD_P=$(type -tP pwd)
     for i in configure io/ftwtest-sh; do
         # Can't use substituteInPlace here because replace hasn't been

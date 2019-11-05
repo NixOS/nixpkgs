@@ -89,6 +89,8 @@ in rec {
     , patches ? []
     , __structuredAttrs ? true
 
+    , env ? {}
+
     , ... } @ attrs:
 
     assert lib.isList (attrs.buildFlags or []);
@@ -102,6 +104,7 @@ in rec {
     assert lib.isString (attrs.NIX_LDFLAGS or "");
     assert lib.isString (attrs.NIX_CFLAGS_COMPILE or "");
     assert lib.isString (attrs.NIX_CFLAGS_LINK or "");
+    assert lib.all (v: lib.isString v || lib.isBool v || lib.isInt) (lib.attrValues env);
 
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
@@ -218,6 +221,8 @@ in rec {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
+
+          inherit env;
 
           # The `system` attribute of a derivation has special meaning to Nix.
           # Derivations set it to choose what sort of machine could be used to
