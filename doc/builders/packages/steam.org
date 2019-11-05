@@ -1,0 +1,129 @@
+* Steam
+  :PROPERTIES:
+  :CUSTOM_ID: sec-steam
+  :END:
+
+** Steam in Nix
+   :PROPERTIES:
+   :CUSTOM_ID: sec-steam-nix
+   :END:
+
+Steam is distributed as a =.deb= file, for now only as an i686 package
+(the amd64 package only has documentation). When unpacked, it has a
+script called =steam= that in Ubuntu (their target distro) would go to
+=/usr/bin =. When run for the first time, this script copies some files
+to the user's home, which include another script that is the ultimate
+responsible for launching the steam binary, which is also in $HOME.
+
+Nix problems and constraints:
+
+- We don't have =/bin/bash= and many scripts point there. Similarly for
+  =/usr/bin/python= .
+
+- We don't have the dynamic loader in =/lib =.
+
+- The =steam.sh= script in $HOME can not be patched, as it is checked
+  and rewritten by steam.
+
+- The steam binary cannot be patched, it's also checked.
+
+The current approach to deploy Steam in NixOS is composing a
+FHS-compatible chroot environment, as documented
+[[http://sandervanderburg.blogspot.nl/2013/09/composing-fhs-compatible-chroot.html][here]].
+This allows us to have binaries in the expected paths without disrupting
+the system, and to avoid patching them to work in a non FHS environment.
+
+** How to play
+   :PROPERTIES:
+   :CUSTOM_ID: sec-steam-play
+   :END:
+
+For 64-bit systems it's important to have
+
+#+BEGIN_EXAMPLE
+  hardware.opengl.driSupport32Bit = true;
+#+END_EXAMPLE
+
+in your =/etc/nixos/configuration.nix=. You'll also need
+
+#+BEGIN_EXAMPLE
+  hardware.pulseaudio.support32Bit = true;
+#+END_EXAMPLE
+
+if you are using PulseAudio - this will enable 32bit ALSA apps
+integration. To use the Steam controller or other Steam supported
+controllers such as the DualShock 4 or Nintendo Switch Pro, you need to
+add
+
+#+BEGIN_EXAMPLE
+  hardware.steam-hardware.enable = true;
+#+END_EXAMPLE
+
+to your configuration.
+
+** Troubleshooting
+   :PROPERTIES:
+   :CUSTOM_ID: sec-steam-troub
+   :END:
+
+- Steam fails to start. What do I do? :: Try to run
+
+  #+BEGIN_EXAMPLE
+    strace steam
+  #+END_EXAMPLE
+
+  to see what is causing steam to fail.
+
+- Using the FOSS Radeon or nouveau (nvidia) drivers :: 
+
+  - The =newStdcpp= parameter was removed since NixOS 17.09 and should
+    not be needed anymore.
+
+  - Steam ships statically linked with a version of libcrypto that
+    conflics with the one dynamically loaded by radeonsi_dri.so. If you
+    get the error
+
+    #+BEGIN_EXAMPLE
+      steam.sh: line 713: 7842 Segmentation fault (core dumped)
+    #+END_EXAMPLE
+
+    have a look at [[https://github.com/NixOS/nixpkgs/pull/20269][this
+    pull request]].
+
+- Java :: 
+
+  1. There is no java in steam chrootenv by default. If you get a
+     message like
+
+     #+BEGIN_EXAMPLE
+       /home/foo/.local/share/Steam/SteamApps/common/towns/towns.sh: line 1: java: command not found
+     #+END_EXAMPLE
+
+     You need to add
+
+     #+BEGIN_EXAMPLE
+        steam.override { withJava = true; };
+     #+END_EXAMPLE
+
+     to your configuration.
+
+** steam-run
+   :PROPERTIES:
+   :CUSTOM_ID: sec-steam-run
+   :END:
+
+The FHS-compatible chroot used for steam can also be used to run other
+linux games that expect a FHS environment. To do it, add
+
+#+BEGIN_EXAMPLE
+  pkgs.(steam.override {
+            nativeOnly = true;
+            newStdcpp = true;
+          }).run
+#+END_EXAMPLE
+
+to your configuration, rebuild, and run the game with
+
+#+BEGIN_EXAMPLE
+  steam-run ./foo
+#+END_EXAMPLE
