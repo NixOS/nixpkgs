@@ -134,8 +134,6 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      set -u
-
       mkdir -p $out/bin $out/nix-support
 
       wrap() {
@@ -224,8 +222,6 @@ stdenv.mkDerivation {
 
   postFixup =
     ''
-      set -u
-
       # Backwards compatability for packages expecting this file, e.g. with
       # `$NIX_CC/nix-support/dynamic-linker`.
       #

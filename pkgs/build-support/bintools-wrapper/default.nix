@@ -199,11 +199,7 @@ stdenv.mkDerivation {
   ];
 
   postFixup =
-    ''
-      set -u
-    ''
-
-    + optionalString (libc != null) (''
+    optionalString (libc != null) (''
       ##
       ## General libc support
       ##
