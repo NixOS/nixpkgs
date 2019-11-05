@@ -1,0 +1,24 @@
+* Installation Device
+  :PROPERTIES:
+  :CUSTOM_ID: sec-profile-installation-device
+  :END:
+
+Provides a basic configuration for installation devices like CDs. This
+enables redistributable firmware, includes the
+[[#sec-profile-clone-config][Clone Config profile]] and a copy of the
+Nixpkgs channel, so =nixos-install= works out of the box.
+
+Documentation for [[#opt-documentation.enable][Nixpkgs]] and
+[[#opt-documentation.nixos.enable][NixOS]] are forcefully enabled (to
+override the [[#sec-profile-minimal][Minimal profile]] preference); the
+NixOS manual is shown automatically on TTY 8, udisks is disabled.
+Autologin is enabled as =nixos= user, while passwordless login as both
+=root= and =nixos= is possible. Passwordless =sudo= is enabled too.
+[[#opt-networking.wireless.enable][wpa_supplicant]] is enabled, but
+configured to not autostart.
+
+It is explained how to login, start the ssh server, and if available,
+how to start the display manager.
+
+Several settings are tweaked so that the installer has a better chance
+of succeeding under low-memory environments.
