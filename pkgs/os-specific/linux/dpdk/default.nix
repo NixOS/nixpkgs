@@ -21,8 +21,12 @@ in stdenv.mkDerivation rec {
   RTE_KERNELDIR = if mod then "${kernel.dev}/lib/modules/${kver}/build" else "/var/empty";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
 
-  # we need sse3 instructions to build
-  NIX_CFLAGS_COMPILE = [ "-msse3" ];
+  NIX_CFLAGS_COMPILE = [
+    # we need sse3 instructions to build
+    "-msse3"
+    # gcc9 compatibility
+    "-Wno-error=address-of-packed-member"
+  ];
   hardeningDisable = [ "pic" ];
 
   postPatch = ''
