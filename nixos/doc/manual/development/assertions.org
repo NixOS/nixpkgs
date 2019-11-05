@@ -1,0 +1,61 @@
+* Warnings and Assertions
+  :PROPERTIES:
+  :CUSTOM_ID: sec-assertions
+  :END:
+
+When configuration problems are detectable in a module, it is a good
+idea to write an assertion or warning. Doing so provides clear feedback
+to the user and prevents errors after the build.
+
+Although Nix has the =abort= and =builtins.trace=
+[[https://nixos.org/nix/manual/#ssec-builtins][functions]] to perform
+such tasks, they are not ideally suited for NixOS modules. Instead of
+these functions, you can declare your warnings and assertions using the
+NixOS module system.
+
+** Warnings
+   :PROPERTIES:
+   :CUSTOM_ID: sec-assertions-warnings
+   :END:
+
+This is an example of using =warnings=.
+
+#+BEGIN_EXAMPLE
+
+  { config, lib, ... }:
+  {
+    config = lib.mkIf config.services.foo.enable {
+      warnings =
+        if config.services.foo.bar
+        then [ ''You have enabled the bar feature of the foo service.
+                 This is known to cause some specific problems in certain situations.
+                 '' ]
+        else [];
+    }
+  }
+#+END_EXAMPLE
+
+** Assertions
+   :PROPERTIES:
+   :CUSTOM_ID: sec-assertions-assertions
+   :END:
+
+This example, extracted from the
+[[https://github.com/NixOS/nixpkgs/blob/release-17.09/nixos/modules/services/logging/syslogd.nix][=syslogd=
+module]] shows how to use =assertions=. Since there can only be one
+active syslog daemon at a time, an assertion is useful to prevent such a
+broken system from being built.
+
+#+BEGIN_EXAMPLE
+
+  { config, lib, ... }:
+  {
+    config = lib.mkIf config.services.syslogd.enable {
+      assertions =
+        [ { assertion = !config.services.rsyslogd.enable;
+            message = "rsyslogd conflicts with syslogd";
+          }
+        ];
+    }
+  }
+#+END_EXAMPLE
