@@ -1,0 +1,28 @@
+* Preface
+  :PROPERTIES:
+  :CUSTOM_ID: preface
+  :END:
+
+This manual describes how to install, use and extend NixOS, a Linux
+distribution based on the purely functional package management system
+[[https://nixos.org/nix][Nix]], that is composed using modules and
+packages defined in the [[https://nixos.org/nixpkgs][Nixpkgs]] project.
+
+Additional information regarding the Nix package manager and the Nixpkgs
+project can be found in respectively the
+[[https://nixos.org/nix/manual][Nix manual]] and the
+[[https://nixos.org/nixpkgs/manual][Nixpkgs manual]].
+
+If you encounter problems, please report them on the =Discourse= or on
+the [[irc://irc.freenode.net/#nixos][=#nixos= channel on Freenode]].
+Bugs should be reported in
+[[https://github.com/NixOS/nixpkgs/issues][NixOS' GitHub issue
+tracker]].
+
+#+BEGIN_QUOTE
+  *Note*
+
+  Commands prefixed with =#= have to be run as root, either requiring to
+  login as root user or temporarily switching to it using =sudo= for
+  example.
+#+END_QUOTE
