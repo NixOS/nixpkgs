@@ -1,0 +1,348 @@
+* Options Types
+  :PROPERTIES:
+  :CUSTOM_ID: sec-option-types
+  :END:
+
+Option types are a way to put constraints on the values a module option
+can take. Types are also responsible of how values are merged in case of
+multiple value definitions.
+
+** Basic Types
+   :PROPERTIES:
+   :CUSTOM_ID: sec-option-types-basic
+   :END:
+
+Basic types are the simplest available types in the module system. Basic
+types include multiple string types that mainly differ in how definition
+merging is handled.
+
+- =types.attrs= :: A free-form attribute set.
+
+- =types.bool= :: A boolean, its values can be =true= or =false=.
+
+- =types.path= :: A filesystem path, defined as anything that when
+  coerced to a string starts with a slash. Even if derivations can be
+  considered as path, the more specific =types.package= should be
+  preferred.
+
+- =types.package= :: A derivation or a store path.
+
+Integer-related types:
+
+- =types.int= :: A signed integer.
+
+- =types.ints.{s8, s16, s32}= :: Signed integers with a fixed length (8,
+  16 or 32 bits). They go from $−2<superscript>n</superscript>/2$ to
+  $2<superscript>n</superscript>/2−1$ respectively (e.g. =−128= to =127=
+  for 8 bits).
+
+- =types.ints.unsigned= :: An unsigned integer (that is >= 0).
+
+- =types.ints.{u8, u16, u32}= :: Unsigned integers with a fixed length
+  (8, 16 or 32 bits). They go from $0$ to
+  $2<superscript>n</superscript>−1$ respectively (e.g. =0= to =255= for
+  8 bits).
+
+- =types.ints.positive= :: A positive integer (that is > 0).
+
+- =types.port= :: A port number. This type is an alias to
+  [[#types.ints.ux][=types.ints.u16=]].
+
+String-related types:
+
+- =types.str= :: A string. Multiple definitions cannot be merged.
+
+- =types.lines= :: A string. Multiple definitions are concatenated with
+  a new line ="\n"=.
+
+- =types.commas= :: A string. Multiple definitions are concatenated with
+  a comma =","=.
+
+- =types.envVar= :: A string. Multiple definitions are concatenated with
+  a collon =":"=.
+
+- =types.strMatching= :: A string matching a specific regular
+  expression. Multiple definitions cannot be merged. The regular
+  expression is processed using =builtins.match=.
+
+** Value Types
+   :PROPERTIES:
+   :CUSTOM_ID: sec-option-types-value
+   :END:
+
+Value types are types that take a value parameter.
+
+- =types.enum= l :: One element of the list l, e.g.
+  =types.enum [ "left" "right" ]=. Multiple definitions cannot be
+  merged.
+
+- =types.separatedString= sep :: A string with a custom separator sep,
+  e.g. =types.separatedString "|"=.
+
+- =types.ints.between= lowest highest :: An integer between lowest and
+  highest (both inclusive). Useful for creating types like =types.port=.
+
+- =types.submodule= o :: A set of sub options o. o can be an attribute
+  set or a function returning an attribute set. Submodules are used in
+  composed types to create modular options. Submodule are detailed in
+  [[#section-option-types-submodule][Submodule]].
+
+** Composed Types
+   :PROPERTIES:
+   :CUSTOM_ID: sec-option-types-composed
+   :END:
+
+Composed types are types that take a type as parameter. =listOf
+   int= and =either int str= are examples of composed types.
+
+- =types.listOf= t :: A list of t type, e.g. =types.listOf
+        int=. Multiple definitions are merged with list concatenation.
+
+- =types.attrsOf= t :: An attribute set of where all the values are of t
+  type. Multiple definitions result in the joined attribute set.
+
+- =types.loaOf= t :: An attribute set or a list of t type. Multiple
+  definitions are merged according to the value.
+
+- =types.nullOr= t :: =null= or type t. Multiple definitions are merged
+  according to type t.
+
+- =types.uniq= t :: Ensures that type t cannot be merged. It is used to
+  ensure option definitions are declared only once.
+
+- =types.either= t1 t2 :: Type t1 or type t2, e.g.
+  =with types; either int str=. Multiple definitions cannot be merged.
+
+- =types.oneOf= [ t1 t2 ... ] :: Type t1 or type t2 and so forth, e.g.
+  =with types; oneOf [ int str bool ]=. Multiple definitions cannot be
+  merged.
+
+- =types.coercedTo= from f to :: Type to or type from which will be
+  coerced to type to using function f which takes an argument of type
+  from and return a value of type to. Can be used to preserve backwards
+  compatibility of an option if its type was changed.
+
+** Submodule
+   :PROPERTIES:
+   :CUSTOM_ID: section-option-types-submodule
+   :END:
+
+=submodule= is a very powerful type that defines a set of sub-options
+that are handled like a separate module.
+
+It takes a parameter o, that should be a set, or a function returning a
+set with an =options= key defining the sub-options. Submodule option
+definitions are type-checked accordingly to the =options= declarations.
+Of course, you can nest submodule option definitons for even higher
+modularity.
+
+The option set can be defined directly
+([[#ex-submodule-direct][example_title]]) or as reference
+([[#ex-submodule-reference][example_title]]).
+
+#+BEGIN_EXAMPLE
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; submodule {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = str;
+        };
+      };
+    };
+  };
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  let
+    modOptions = {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = int;
+        };
+      };
+    };
+  in
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; submodule modOptions;
+  };
+#+END_EXAMPLE
+
+The =submodule= type is especially interesting when used with composed
+types like =attrsOf= or =listOf=. When composed with =listOf=
+([[#ex-submodule-listof-declaration][example_title]]), =submodule=
+allows multiple definitions of the submodule option set
+([[#ex-submodule-listof-definition][example_title]]).
+
+#+BEGIN_EXAMPLE
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; listOf (submodule {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = str;
+        };
+      };
+    });
+  };
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  config.mod = [
+    { foo = 1; bar = "one"; }
+    { foo = 2; bar = "two"; }
+  ];
+#+END_EXAMPLE
+
+When composed with =attrsOf=
+([[#ex-submodule-attrsof-declaration][example_title]]), =submodule=
+allows multiple named definitions of the submodule option set
+([[#ex-submodule-attrsof-definition][example_title]]).
+
+#+BEGIN_EXAMPLE
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; attrsOf (submodule {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = str;
+        };
+      };
+    });
+  };
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  config.mod.one = { foo = 1; bar = "one"; };
+  config.mod.two = { foo = 2; bar = "two"; };
+#+END_EXAMPLE
+
+** Extending types
+   :PROPERTIES:
+   :CUSTOM_ID: sec-option-types-extending
+   :END:
+
+Types are mainly characterized by their =check= and =merge= functions.
+
+- =check= :: The function to type check the value. Takes a value as
+  parameter and return a boolean. It is possible to extend a type check
+  with the =addCheck= function
+  ([[#ex-extending-type-check-1][example_title]]), or to fully override
+  the check function ([[#ex-extending-type-check-2][example_title]]).
+
+  #+BEGIN_EXAMPLE
+    byte = mkOption {
+      description = "An integer between 0 and 255.";
+      type = types.addCheck types.int (x: x >= 0 && x <= 255);
+    };
+  #+END_EXAMPLE
+
+  #+BEGIN_EXAMPLE
+    nixThings = mkOption {
+      description = "words that start with 'nix'";
+      type = types.str // {
+        check = (x: lib.hasPrefix "nix" x)
+      };
+    };
+  #+END_EXAMPLE
+
+- =merge= :: Function to merge the options values when multiple values
+  are set. The function takes two parameters, =loc= the option path as a
+  list of strings, and =defs= the list of defined values as a list. It
+  is possible to override a type merge function for custom needs.
+
+** Custom Types
+   :PROPERTIES:
+   :CUSTOM_ID: sec-option-types-custom
+   :END:
+
+Custom types can be created with the =mkOptionType= function. As type
+creation includes some more complex topics such as submodule handling,
+it is recommended to get familiar with =types.nix= code before creating
+a new type.
+
+The only required parameter is =name=.
+
+- =name= :: A string representation of the type function name.
+
+- =definition= :: Description of the type used in documentation. Give
+  information of the type and any of its arguments.
+
+- =check= :: A function to type check the definition value. Takes the
+  definition value as a parameter and returns a boolean indicating the
+  type check result, =true= for success and =false= for failure.
+
+- =merge= :: A function to merge multiple definitions values. Takes two
+  parameters:
+
+  - loc :: The option path as a list of strings, e.g. =["boot" "loader
+             "grub" "enable"]=.
+
+  - defs :: The list of sets of defined =value= and =file= where the
+    value was defined, e.g. =[ {
+             file = "/foo.nix"; value = 1; } { file = "/bar.nix"; value = 2 }
+             ]=. The =merge= function should return the merged value or
+    throw an error in case the values are impossible or not meant to be
+    merged.
+
+- =getSubOptions= :: For composed types that can take a submodule as
+  type parameter, this function generate sub-options documentation. It
+  takes the current option prefix as a list and return the set of
+  sub-options. Usually defined in a recursive manner by adding a term to
+  the prefix, e.g. =prefix:
+        elemType.getSubOptions (prefix ++
+        ["prefix"])= where "prefix" is the newly added prefix.
+
+- =getSubModules= :: For composed types that can take a submodule as
+  type parameter, this function should return the type parameters
+  submodules. If the type parameter is called =elemType=, the function
+  should just recursively look into submodules by returning
+  =elemType.getSubModules;=.
+
+- =substSubModules= :: For composed types that can take a submodule as
+  type parameter, this function can be used to substitute the parameter
+  of a submodule type. It takes a module as parameter and return the
+  type with the submodule options substituted. It is usually defined as
+  a type function call with a recursive call to =substSubModules=, e.g
+  for a type =composedType= that take an =elemtype= type parameter, this
+  function should be defined as =m:
+        composedType (elemType.substSubModules m)=.
+
+- =typeMerge= :: A function to merge multiple type declarations. Takes
+  the type to merge =functor= as parameter. A =null= return value means
+  that type cannot be merged.
+
+  - f :: The type to merge =functor=.
+
+  Note: There is a generic =defaultTypeMerge= that work with most of
+  value and composed types.
+
+- =functor= :: An attribute set representing the type. It is used for
+  type operations and has the following keys:
+
+  - =type= :: The type function.
+
+  - =wrapped= :: Holds the type parameter for composed types.
+
+  - =payload= :: Holds the value parameter for value types. The types
+    that have a =payload= are the =enum=, =separatedString= and
+    =submodule= types.
+
+  - =binOp= :: A binary operation that can merge the payloads of two
+    same types. Defined as a function that take two payloads as
+    parameters and return the payloads merged.
+
+
