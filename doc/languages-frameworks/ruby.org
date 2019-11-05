@@ -1,0 +1,113 @@
+* Ruby
+  :PROPERTIES:
+  :CUSTOM_ID: sec-language-ruby
+  :END:
+
+There currently is support to bundle applications that are packaged as
+Ruby gems. The utility "bundix" allows you to write a =Gemfile=, let
+bundler create a =Gemfile.lock=, and then convert this into a nix
+expression that contains all Gem dependencies automatically.
+
+For example, to package sensu, we did:
+
+#+BEGIN_EXAMPLE
+  $ cd pkgs/servers/monitoring
+  $ mkdir sensu
+  $ cd sensu
+  $ cat > Gemfile
+  source 'https://rubygems.org'
+  gem 'sensu'
+  $ $(nix-build '<nixpkgs>' -A bundix --no-out-link)/bin/bundix --magic
+  $ cat > default.nix
+  { lib, bundlerEnv, ruby }:
+
+  bundlerEnv rec {
+    name = "sensu-${version}";
+
+    version = (import gemset).sensu.version;
+    inherit ruby;
+    # expects Gemfile, Gemfile.lock and gemset.nix in the same directory
+    gemdir = ./.;
+
+    meta = with lib; {
+      description = "A monitoring framework that aims to be simple, malleable, and scalable";
+      homepage    = http://sensuapp.org/;
+      license     = with licenses; mit;
+      maintainers = with maintainers; [ theuni ];
+      platforms   = platforms.unix;
+    };
+  }
+#+END_EXAMPLE
+
+Please check in the =Gemfile=, =Gemfile.lock= and the =gemset.nix= so
+future updates can be run easily.
+
+Updating Ruby packages can then be done like this:
+
+#+BEGIN_EXAMPLE
+  $ cd pkgs/servers/monitoring/sensu
+  $ nix-shell -p bundler --run 'bundle lock --update'
+  $ nix-shell -p bundix --run 'bundix'
+#+END_EXAMPLE
+
+For tools written in Ruby - i.e. where the desire is to install a
+package and then execute e.g. =rake= at the command line, there is an
+alternative builder called =bundlerApp=. Set up the =gemset.nix= the
+same way, and then, for example:
+
+#+BEGIN_EXAMPLE
+  { lib, bundlerApp }:
+
+  bundlerApp {
+    pname = "corundum";
+    gemdir = ./.;
+    exes = [ "corundum-skel" ];
+
+    meta = with lib; {
+      description = "Tool and libraries for maintaining Ruby gems.";
+      homepage    = https://github.com/nyarly/corundum;
+      license     = licenses.mit;
+      maintainers = [ maintainers.nyarly ];
+      platforms   = platforms.unix;
+    };
+  }
+#+END_EXAMPLE
+
+The chief advantage of =bundlerApp= over =bundlerEnv= is the executables
+introduced in the environment are precisely those selected in the =exes=
+list, as opposed to =bundlerEnv= which adds all the executables made
+available by gems in the gemset, which can mean e.g. =rspec= or =rake=
+in unpredictable versions available from various packages.
+
+Resulting derivations for both builders also have two helpful
+attributes, =env= and =wrappedRuby=. The first one allows one to quickly
+drop into =nix-shell= with the specified environment present. E.g.
+=nix-shell -A sensu.env= would give you an environment with Ruby preset
+so it has all the libraries necessary for =sensu= in its paths. The
+second one can be used to make derivations from custom Ruby scripts
+which have =Gemfile=s with their dependencies specified. It is a
+derivation with =ruby= wrapped so it can find all the needed
+dependencies. For example, to make a derivation =my-script= for a
+=my-script.rb= (which should be placed in =bin=) you should run =bundix=
+as specified above and then use =bundlerEnv= like this:
+
+#+BEGIN_EXAMPLE
+  let env = bundlerEnv {
+    name = "my-script-env";
+
+    inherit ruby;
+    gemfile = ./Gemfile;
+    lockfile = ./Gemfile.lock;
+    gemset = ./gemset.nix;
+  };
+
+  in stdenv.mkDerivation {
+    name = "my-script";
+    buildInputs = [ env.wrappedRuby ];
+    script = ./my-script.rb;
+    buildCommand = ''
+      install -D -m755 $script $out/bin/my-script
+      patchShebangs $out/bin/my-script
+    '';
+  }
+#+END_EXAMPLE
