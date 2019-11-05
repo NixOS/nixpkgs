@@ -1,0 +1,49 @@
+* Flatpak
+  :PROPERTIES:
+  :CUSTOM_ID: module-services-flatpak
+  :END:
+
+/Source:/ =modules/services/desktop/flatpak.nix=
+
+/Upstream documentation:/ [[https://github.com/flatpak/flatpak/wiki]]
+
+Flatpak is a system for building, distributing, and running sandboxed
+desktop applications on Linux.
+
+To enable Flatpak, add the following to your =configuration.nix=:
+
+#+BEGIN_EXAMPLE
+     = true;
+#+END_EXAMPLE
+
+For the sandboxed apps to work correctly, desktop integration portals
+need to be installed. If you run GNOME, this will be handled
+automatically for you; in other cases, you will need to add something
+like the following to your =configuration.nix=:
+
+#+BEGIN_EXAMPLE
+     = [ pkgs.xdg-desktop-portal-gtk ];
+#+END_EXAMPLE
+
+Then, you will need to add a repository, for example,
+[[https://github.com/flatpak/flatpak/wiki][Flathub]], either using the
+following commands:
+
+#+BEGIN_EXAMPLE
+  $ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  $ flatpak update
+#+END_EXAMPLE
+
+or by opening the
+[[https://flathub.org/repo/flathub.flatpakrepo][repository file]] in
+GNOME Software.
+
+Finally, you can search and install programs:
+
+#+BEGIN_EXAMPLE
+  $ flatpak search bustle
+  $ flatpak install flathub org.freedesktop.Bustle
+  $ flatpak run org.freedesktop.Bustle
+#+END_EXAMPLE
+
+Again, GNOME Software offers graphical interface for these tasks.
