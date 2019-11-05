@@ -22175,8 +22175,6 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
-  jormungandr = callPackage ../applications/blockchains/jormungandr { };
-
   ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
 
   litecoin  = callPackage ../applications/blockchains/litecoin.nix {
