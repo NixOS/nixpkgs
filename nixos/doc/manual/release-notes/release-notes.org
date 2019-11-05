@@ -1,0 +1,7 @@
+* Release Notes
+  :PROPERTIES:
+  :CUSTOM_ID: ch-release-notes
+  :END:
+
+This section lists the release notes for each stable version of NixOS
+and current unstable revision.
