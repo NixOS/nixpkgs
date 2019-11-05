@@ -1703,6 +1703,11 @@ in {
 
   dugong = callPackage ../development/python-modules/dugong {};
 
+  easysnmp = callPackage ../development/python-modules/easysnmp {
+    openssl = pkgs.openssl;
+    net_snmp = pkgs.net_snmp;
+  };
+
   iowait = callPackage ../development/python-modules/iowait {};
 
   responses = callPackage ../development/python-modules/responses {};
@@ -1710,6 +1715,8 @@ in {
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
   proboscis = callPackage ../development/python-modules/proboscis {};
+
+  poster3 = callPackage ../development/python-modules/poster3 { };
 
   py4j = callPackage ../development/python-modules/py4j { };
 
