@@ -1,0 +1,154 @@
+This file was generated with
+pkgs/misc/documentation-highlighter/update.sh
+
+* Highlight.js
+
+[[https://travis-ci.org/isagalaev/highlight.js][[[https://travis-ci.org/isagalaev/highlight.js.svg?branch=master]]]]
+
+Highlight.js is a syntax highlighter written in JavaScript. It works in
+the browser as well as on the server. It works with pretty much any
+markup, doesn't depend on any framework and has automatic language
+detection.
+
+** Getting Started
+
+The bare minimum for using highlight.js on a web page is linking to the
+library along with one of the styles and calling
+[[http://highlightjs.readthedocs.io/en/latest/api.html#inithighlightingonload][=initHighlightingOnLoad=]]:
+
+#+BEGIN_EXAMPLE
+  <link rel="stylesheet" href="/path/to/styles/default.css">
+  <script src="/path/to/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+#+END_EXAMPLE
+
+This will find and highlight code inside of =<pre><code>= tags; it tries
+to detect the language automatically. If automatic detection doesn't
+work for you, you can specify the language in the =class= attribute:
+
+#+BEGIN_EXAMPLE
+  <pre><code class="html">...</code></pre>
+#+END_EXAMPLE
+
+The list of supported language classes is available in the
+[[http://highlightjs.readthedocs.io/en/latest/css-classes-reference.html][class
+reference]]. Classes can also be prefixed with either =language-= or
+=lang-=.
+
+To disable highlighting altogether use the =nohighlight= class:
+
+#+BEGIN_EXAMPLE
+  <pre><code class="nohighlight">...</code></pre>
+#+END_EXAMPLE
+
+** Custom Initialization
+
+When you need a bit more control over the initialization of
+highlight.js, you can use the
+[[http://highlightjs.readthedocs.io/en/latest/api.html#highlightblock-block][=highlightBlock=]]
+and
+[[http://highlightjs.readthedocs.io/en/latest/api.html#configure-options][=configure=]]
+functions. This allows you to control /what/ to highlight and /when/.
+
+Here's an equivalent way to calling
+[[http://highlightjs.readthedocs.io/en/latest/api.html#inithighlightingonload][=initHighlightingOnLoad=]]
+using jQuery:
+
+#+BEGIN_EXAMPLE
+  $(document).ready(function() {
+    $('pre code').each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
+  });
+#+END_EXAMPLE
+
+You can use any tags instead of =<pre><code>= to mark up your code. If
+you don't use a container that preserve line breaks you will need to
+configure highlight.js to use the =<br>= tag:
+
+#+BEGIN_EXAMPLE
+  hljs.configure({useBR: true});
+
+  $('div.code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+#+END_EXAMPLE
+
+For other options refer to the documentation for
+[[http://highlightjs.readthedocs.io/en/latest/api.html#configure-options][=configure=]].
+
+** Web Workers
+
+You can run highlighting inside a web worker to avoid freezing the
+browser window while dealing with very big chunks of code.
+
+In your main script:
+
+#+BEGIN_EXAMPLE
+  addEventListener('load', function() {
+    var code = document.querySelector('#code');
+    var worker = new Worker('worker.js');
+    worker.onmessage = function(event) { code.innerHTML = event.data; }
+    worker.postMessage(code.textContent);
+  })
+#+END_EXAMPLE
+
+In worker.js:
+
+#+BEGIN_EXAMPLE
+  onmessage = function(event) {
+    importScripts('<path>/highlight.pack.js');
+    var result = self.hljs.highlightAuto(event.data);
+    postMessage(result.value);
+  }
+#+END_EXAMPLE
+
+** Getting the Library
+
+You can get highlight.js as a hosted, or custom-build, browser script or
+as a server module. Right out of the box the browser script supports
+both AMD and CommonJS, so if you wish you can use RequireJS or
+Browserify without having to build from source. The server module also
+works perfectly fine with Browserify, but there is the option to use a
+build specific to browsers rather than something meant for a server.
+Head over to the [[https://highlightjs.org/download/][download page]]
+for all the options.
+
+*Don't link to GitHub directly.* The library is not supposed to work
+straight from the source, it requires building. If none of the
+pre-packaged options work for you refer to the
+[[http://highlightjs.readthedocs.io/en/latest/building-testing.html][building
+documentation]].
+
+*The CDN-hosted package doesn't have all the languages.* Otherwise it'd
+be too big. If you don't see the language you need in the
+[[https://highlightjs.org/download/]["Common" section]], it can be added
+manually:
+
+#+BEGIN_EXAMPLE
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/go.min.js"></script>
+#+END_EXAMPLE
+
+*On Almond.* You need to use the optimizer to give the module a name.
+For example:
+
+#+BEGIN_EXAMPLE
+  r.js -o name=hljs paths.hljs=/path/to/highlight out=highlight.js
+#+END_EXAMPLE
+
+** License
+
+Highlight.js is released under the BSD License. See
+[[https://github.com/isagalaev/highlight.js/blob/master/LICENSE][LICENSE]]
+file for details.
+
+** Links
+
+The official site for the library is at [[https://highlightjs.org/]].
+
+Further in-depth documentation for the API and other topics is at
+[[http://highlightjs.readthedocs.io/]].
+
+Authors and contributors are listed in the
+[[https://github.com/isagalaev/highlight.js/blob/master/AUTHORS.en.txt][AUTHORS.en.txt]]
+file.
