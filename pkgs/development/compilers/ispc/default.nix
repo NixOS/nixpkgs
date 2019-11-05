@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # there are missing dependencies in the Makefile, causing sporadic build failures
   enableParallelBuilding = false;
 
-  doCheck = true;
+  doCheck = stdenv.isLinux;
 
   buildInputs = with llvmPackages; [
     which
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     homepage = https://ispc.github.io/ ;
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     license = licenses.bsd3;
-    platforms = ["x86_64-linux"]; # TODO: buildable on more platforms?
+    platforms = ["x86_64-linux" "x86_64-darwin"]; # TODO: buildable on more platforms?
     maintainers = [ maintainers.aristid ];
   };
 }

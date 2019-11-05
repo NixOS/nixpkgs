@@ -1554,6 +1554,8 @@ in
 
   doitlive = callPackage ../tools/misc/doitlive { };
 
+  dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
+
   dosage = callPackage ../applications/graphics/dosage {
     pythonPackages = python3Packages;
   };
@@ -3515,7 +3517,7 @@ in
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos {
-    gegl = gnome3.gegl_0_4;
+    gegl = gegl_0_4;
   };
 
   gnokii = callPackage ../tools/misc/gnokii { };
@@ -3548,6 +3550,8 @@ in
     pinentry = if stdenv.isDarwin then pinentry_mac else pinentry_gtk2;
   };
   gnupg = gnupg22;
+
+  gnupg-pkcs11-scd = callPackage ../tools/security/gnupg-pkcs11-scd { };
 
   gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot { };
 
@@ -5671,6 +5675,8 @@ in
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
+
+  poly2tri-c = callPackage ../development/libraries/poly2tri-c { };
 
   polysh = callPackage ../tools/networking/polysh { };
 
@@ -8523,6 +8529,9 @@ in
   cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
+  cargo-geiger = callPackage ../development/tools/rust/cargo-geiger {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-inspect = callPackage ../development/tools/rust/cargo-inspect {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -8655,6 +8664,8 @@ in
   urweb = callPackage ../development/compilers/urweb { };
 
   vlang = callPackage ../development/compilers/vlang { };
+
+  vala-lint = callPackage ../development/tools/vala-lint { };
 
   inherit (callPackage ../development/compilers/vala { })
     vala_0_36
@@ -11072,7 +11083,7 @@ in
   };
 
   gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
-    gtk = res.gtk2;
+    inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
   geoclue2 = callPackage ../development/libraries/geoclue {};
@@ -13729,6 +13740,8 @@ in
 
   SDL_net = callPackage ../development/libraries/SDL_net { };
 
+  SDL_Pango = callPackage ../development/libraries/SDL_Pango {};
+
   SDL_sound = callPackage ../development/libraries/SDL_sound { };
 
   SDL_stretch= callPackage ../development/libraries/SDL_stretch { };
@@ -15661,6 +15674,8 @@ in
 
   bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
 
+  brillo = callPackage ../os-specific/linux/brillo { };
+
   broadcom-bt-firmware = callPackage ../os-specific/linux/firmware/broadcom-bt-firmware { };
 
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
@@ -15905,9 +15920,7 @@ in
 
   kmscube = callPackage ../os-specific/linux/kmscube { };
 
-  kmsxx = callPackage ../development/libraries/kmsxx {
-    stdenv = gcc6Stdenv;
-  };
+  kmsxx = callPackage ../development/libraries/kmsxx { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
@@ -16123,6 +16136,8 @@ in
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
     deepin-anything = callPackage ../os-specific/linux/deepin-anything { };
+
+    digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
@@ -18274,6 +18289,7 @@ in
 
   emacs = emacs26;
   emacsPackages = emacs26Packages;
+  emacs-nox = emacs26-nox;
 
   emacs26 = callPackage ../applications/editors/emacs {
     # use override to enable additional features
@@ -18412,6 +18428,8 @@ in
   keepass-keepasshttp = callPackage ../applications/misc/keepass-plugins/keepasshttp { };
 
   keepass-keepassrpc = callPackage ../applications/misc/keepass-plugins/keepassrpc { };
+
+  keepass-otpkeyprov = callPackage ../applications/misc/keepass-plugins/otpkeyprov { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
@@ -21296,6 +21314,8 @@ in
 
   tdrop = callPackage ../applications/misc/tdrop { };
 
+  tre-command = callPackage ../tools/system/tre-command {};
+
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
@@ -21662,34 +21682,64 @@ in
     in with libretro;
       ([ ]
       ++ optional (cfg.enable4do or false) _4do
+      ++ optional (cfg.enableAtari800 or false) atari800
+      ++ optional (cfg.enableBeetleGBA or false) beetle-gba
+      ++ optional (cfg.enableBeetleLynx or false) beetle-lynx
+      ++ optional (cfg.enableBeetleNGP or false) beetle-ngp
       ++ optional (cfg.enableBeetlePCEFast or false) beetle-pce-fast
+      ++ optional (cfg.enableBeetlePCFX or false) beetle-pcfx
       ++ optional (cfg.enableBeetlePSX or false) beetle-psx
       ++ optional (cfg.enableBeetleSaturn or false) beetle-saturn
+      ++ optional (cfg.enableBeetleSNES or false) beetle-snes
+      ++ optional (cfg.enableBeetleSuperGrafx or false) beetle-supergrafx
+      ++ optional (cfg.enableBeetleWswan or false) beetle-wswan
+      ++ optional (cfg.enableBeetleVB or false) beetle-vb
+      ++ optional (cfg.enableBlueMSX or false) bluemsx
       ++ optional (cfg.enableBsnesMercury or false) bsnes-mercury
+      ++ optional (cfg.enableDOSBox or false) dosbox
       ++ optional (cfg.enableDesmume or false) desmume
+      ++ optional (cfg.enableDesmume2015 or false) desmume2015
       ++ optional (cfg.enableDolphin or false) dolphin
       ++ optional (cfg.enableFBA or false) fba
       ++ optional (cfg.enableFceumm or false) fceumm
+      ++ optional (cfg.enableFlycast or false) flycast
       ++ optional (cfg.enableGambatte or false) gambatte
       ++ optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
+      ++ optional (cfg.enableGpsp or false) gpsp
+      ++ optional (cfg.enableHandy or false) handy
+      ++ optional (cfg.enableHatari or false) hatari
       ++ optional (cfg.enableHiganSFC or false) higan-sfc
       ++ optional (cfg.enableMAME or false) mame
+      ++ optional (cfg.enableMAME2000 or false) mame2000
+      ++ optional (cfg.enableMAME2003 or false) mame2003
+      ++ optional (cfg.enableMAME2003Plus or false) mame2003-plus
+      ++ optional (cfg.enableMAME2010 or false) mame2010
+      ++ optional (cfg.enableMAME2015 or false) mame2015
+      ++ optional (cfg.enableMAME2016 or false) mame2016
+      ++ optional (cfg.enableMesen or false) mesen
       ++ optional (cfg.enableMGBA or false) mgba
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
       ++ optional (cfg.enableNestopia or false) nestopia
+      ++ optional (cfg.enableO2EM or false) o2em
       ++ optional (cfg.enableParallelN64 or false) parallel-n64
+      ++ optional (cfg.enablePCSXRearmed or false) pcsx_rearmed
       ++ optional (cfg.enablePicodrive or false) picodrive
-      ++ optional (cfg.enablePrboom or false) prboom
+      ++ optional (cfg.enablePlay or false) play
       ++ optional (cfg.enablePPSSPP or false) ppsspp
+      ++ optional (cfg.enablePrboom or false) prboom
+      ++ optional (cfg.enableProSystem or false) prosystem
       ++ optional (cfg.enableQuickNES or false) quicknes
-      ++ optional (cfg.enableReicast or false) reicast
       ++ optional (cfg.enableScummVM or false) scummvm
       ++ optional (cfg.enableSnes9x or false) snes9x
-      ++ optional (cfg.enableSnes9xNext or false) snes9x-next
+      ++ optional (cfg.enableSnes9x2002 or false) snes9x2002
+      ++ optional (cfg.enableSnes9x2005 or false) snes9x2005
+      ++ optional (cfg.enableSnes9x2010 or false) snes9x2010
       ++ optional (cfg.enableStella or false) stella
       ++ optional (cfg.enableVbaNext or false) vba-next
       ++ optional (cfg.enableVbaM or false) vba-m
-
+      ++ optional (cfg.enableVecx or false) vecx
+      ++ optional (cfg.enableVirtualJaguar or false) virtualjaguar
+      ++ optional (cfg.enableYabause or false) yabause
       # added on 2017-02-25 due #23163
       ++ optional (cfg.enableMednafenPCEFast or false)
           (throw "nix config option enableMednafenPCEFast has been renamed to enableBeetlePCEFast")
@@ -22430,6 +22480,8 @@ in
 
   frogatto = callPackage ../games/frogatto { };
 
+  frozen-bubble = callPackage ../games/frozen-bubble { };
+
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override { unicode = false; };
   };
@@ -22768,8 +22820,6 @@ in
 
   scrolls = callPackage ../games/scrolls { };
 
-  sdlmame = callPackage ../games/sdlmame { };
-
   service-wrapper = callPackage ../os-specific/linux/service-wrapper { };
 
   sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
@@ -23079,6 +23129,7 @@ in
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
     mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
+    night-theme-switcher = callPackage ../desktops/gnome-3/extensions/night-theme-switcher { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
     pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
@@ -23263,6 +23314,8 @@ in
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
+
+  deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 
   delly = callPackage ../applications/science/biology/delly { };
 
@@ -24338,11 +24391,9 @@ in
     icu = icu58;
   };
 
-  martyr = callPackage ../development/libraries/martyr { };
+  mame = libsForQt5.callPackage ../misc/emulators/mame { };
 
-  mess = callPackage ../misc/emulators/mess {
-    inherit (pkgs.gnome2) GConf;
-  };
+  martyr = callPackage ../development/libraries/martyr { };
 
   moltengamepad = callPackage ../misc/drivers/moltengamepad { };
 
@@ -24532,7 +24583,8 @@ in
 
   nix-prefetch = callPackage ../tools/package-management/nix-prefetch { };
 
-  nix-prefetch-github = callPackage ../build-support/nix-prefetch-github {};
+  nix-prefetch-github = with python3Packages;
+    toPythonApplication nix-prefetch-github;
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
