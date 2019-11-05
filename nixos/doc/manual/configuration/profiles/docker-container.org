@@ -1,0 +1,11 @@
+* Docker Container
+  :PROPERTIES:
+  :CUSTOM_ID: sec-profile-docker-container
+  :END:
+
+This is the profile from which the Docker images are generated. It
+prepares a working system by importing the
+[[#sec-profile-minimal][Minimal]] and [[#sec-profile-clone-config][Clone
+Config]] profiles, and setting appropriate configuration options that
+are useful inside a container context, like
+[[#opt-boot.isContainer][???]].
