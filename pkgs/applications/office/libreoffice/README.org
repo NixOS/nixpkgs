@@ -1,0 +1,13 @@
+* LibreOffice
+
+To generate =libreoffice-srcs.nix=:
+
+#+BEGIN_EXAMPLE
+  nix-shell default-gen-shell.nix --run generate
+#+END_EXAMPLE
+
+To generate =libreoffice-srcs-still.nix=:
+
+#+BEGIN_EXAMPLE
+  nix-shell still-gen-shell.nix --run generate
+#+END_EXAMPLE
