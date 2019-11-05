@@ -1,0 +1,279 @@
+* X Window System
+  :PROPERTIES:
+  :CUSTOM_ID: sec-x11
+  :END:
+
+The X Window System (X11) provides the basis of NixOS' graphical user
+interface. It can be enabled as follows:
+
+#+BEGIN_EXAMPLE
+   = true;
+#+END_EXAMPLE
+
+The X server will automatically detect and use the appropriate video
+driver from a set of X.org drivers (such as =vesa= and =intel=). You can
+also specify a driver manually, e.g.
+
+#+BEGIN_EXAMPLE
+   = [ "r128" ];
+#+END_EXAMPLE
+
+to enable X.org's =xf86-video-r128= driver.
+
+You also need to enable at least one desktop or window manager.
+Otherwise, you can only log into a plain undecorated =xterm= window.
+Thus you should pick one or more of the following lines:
+
+#+BEGIN_EXAMPLE
+   = true;
+   = true;
+   = true;
+   = true;
+   = true;
+   = true;
+   = true;
+   = true;
+#+END_EXAMPLE
+
+NixOS's default /display manager/ (the program that provides a graphical
+login prompt and manages the X server) is LightDM. You can select an
+alternative one by picking one of the following lines:
+
+#+BEGIN_EXAMPLE
+   = true;
+   = true;
+#+END_EXAMPLE
+
+You can set the keyboard layout (and optionally the layout variant):
+
+#+BEGIN_EXAMPLE
+   = "de";
+   = "neo";
+#+END_EXAMPLE
+
+The X server is started automatically at boot time. If you don't want
+this to happen, you can set:
+
+#+BEGIN_EXAMPLE
+   = false;
+#+END_EXAMPLE
+
+The X server can then be started manually:
+
+#+BEGIN_EXAMPLE
+  # systemctl start display-manager.service
+#+END_EXAMPLE
+
+On 64-bit systems, if you want OpenGL for 32-bit programs such as in
+Wine, you should also set the following:
+
+#+BEGIN_EXAMPLE
+   = true;
+#+END_EXAMPLE
+
+The x11 login screen can be skipped entirely, automatically logging you
+into your window manager and desktop environment when you boot your
+computer.
+
+This is especially helpful if you have disk encryption enabled. Since
+you already have to provide a password to decrypt your disk, entering a
+second password to login can be redundant.
+
+To enable auto-login, you need to define your default window manager and
+desktop environment. If you wanted no desktop environment and i3 as your
+your window manager, you'd define:
+
+#+BEGIN_EXAMPLE
+   = "none";
+   = "i3";
+#+END_EXAMPLE
+
+And, finally, to enable auto-login for a user =johndoe=:
+
+#+BEGIN_EXAMPLE
+   = true;
+   = "johndoe";
+#+END_EXAMPLE
+
+NVIDIA provides a proprietary driver for its graphics cards that has
+better 3D performance than the X.org drivers. It is not enabled by
+default because it's not free software. You can enable it as follows:
+
+#+BEGIN_EXAMPLE
+   = [ "nvidia" ];
+#+END_EXAMPLE
+
+Or if you have an older card, you may have to use one of the legacy
+drivers:
+
+#+BEGIN_EXAMPLE
+   = [ "nvidiaLegacy390" ];
+   = [ "nvidiaLegacy340" ];
+   = [ "nvidiaLegacy304" ];
+   = [ "nvidiaLegacy173" ];
+#+END_EXAMPLE
+
+You may need to reboot after enabling this driver to prevent a clash
+with other kernel modules.
+
+AMD provides a proprietary driver for its graphics cards that has better
+3D performance than the X.org drivers. It is not enabled by default
+because it's not free software. You can enable it as follows:
+
+#+BEGIN_EXAMPLE
+   = [ "ati_unfree" ];
+#+END_EXAMPLE
+
+You will need to reboot after enabling this driver to prevent a clash
+with other kernel modules.
+
+#+BEGIN_QUOTE
+  *Note*
+
+  For recent AMD GPUs you most likely want to keep either the defaults
+  or ="amdgpu"= (both free).
+#+END_QUOTE
+
+Support for Synaptics touchpads (found in many laptops such as the Dell
+Latitude series) can be enabled as follows:
+
+#+BEGIN_EXAMPLE
+   = true;
+#+END_EXAMPLE
+
+The driver has many options (see [[#ch-options][???]]). For instance,
+the following disables tap-to-click behavior:
+
+#+BEGIN_EXAMPLE
+   = false;
+#+END_EXAMPLE
+
+Note: the use of =services.xserver.synaptics= is deprecated since NixOS
+17.09.
+
+GTK themes can be installed either to user profile or system-wide (via
+=environment.systemPackages=). To make Qt 5 applications look similar to
+GTK2 ones, you can install =qt5.qtbase.gtk= package into your system
+environment. It should work for all Qt 5 library versions.
+
+It is possible to install custom
+[[https://en.wikipedia.org/wiki/X_keyboard_extension][XKB]] keyboard
+layouts using the option =
+    
+     services.xserver.extraLayouts
+    
+   =. As a first example, we are going to create a layout based on the
+basic US layout, with an additional layer to type some greek symbols by
+pressing the right-alt key.
+
+To do this we are going to create a =us-greek= file with a =xkb_symbols=
+section.
+
+#+BEGIN_EXAMPLE
+  xkb_symbols "us-greek"
+  {
+    include "us(basic)"            // includes the base US keys
+    include "level3(ralt_switch)"  // configures right alt as a third level switch
+
+    key <LatA> { [ a, A, Greek_alpha ] };
+    key <LatB> { [ b, B, Greek_beta  ] };
+    key <LatG> { [ g, G, Greek_gamma ] };
+    key <LatD> { [ d, D, Greek_delta ] };
+    key <LatZ> { [ z, Z, Greek_zeta  ] };
+  };
+#+END_EXAMPLE
+
+To install the layout, the filepath, a description and the list of
+languages must be given:
+
+#+BEGIN_EXAMPLE
+  .us-greek = {
+    description = "US layout with alt-gr greek";
+    languages   = [ "eng" ];
+    symbolsFile = /path/to/us-greek;
+  }
+#+END_EXAMPLE
+
+#+BEGIN_QUOTE
+  *Note*
+
+  The name should match the one given to the =xkb_symbols= block.
+#+END_QUOTE
+
+The layout should now be installed and ready to use: try it by running
+=setxkbmap us-greek= and type =<alt>+a=. To change the default the usual
+=
+    
+     services.xserver.layout
+    
+   = option can still be used.
+
+A layout can have several other components besides =xkb_symbols=, for
+example we will define new keycodes for some multimedia key and bind
+these to some symbol.
+
+Use the /xev/ utility from =pkgs.xorg.xev= to find the codes of the keys
+of interest, then create a =media-key= file to hold the keycodes
+definitions
+
+#+BEGIN_EXAMPLE
+  xkb_keycodes "media"
+  {
+   <volUp>   = 123;
+   <volDown> = 456;
+  }
+#+END_EXAMPLE
+
+Now use the newly define keycodes in =media-sym=:
+
+#+BEGIN_EXAMPLE
+  xkb_symbols "media"
+  {
+   key.type = "ONE_LEVEL";
+   key <volUp>   { [ XF86AudioLowerVolume ] };
+   key <volDown> { [ XF86AudioRaiseVolume ] };
+  }
+#+END_EXAMPLE
+
+As before, to install the layout do
+
+#+BEGIN_EXAMPLE
+  .media = {
+    description  = "Multimedia keys remapping";
+    languages    = [ "eng" ];
+    symbolsFile  = /path/to/media-key;
+    keycodesFile = /path/to/media-sym;
+  };
+#+END_EXAMPLE
+
+#+BEGIN_QUOTE
+  *Note*
+
+  The function =pkgs.writeText <filename> <content>
+     = can be useful if you prefer to keep the layout definitions inside
+  the NixOS configuration.
+#+END_QUOTE
+
+Unfortunately, the Xorg server does not (currently) support setting a
+keymap directly but relies instead on XKB rules to select the matching
+components (keycodes, types, ...) of a layout. This means that
+components other than symbols won't be loaded by default. As a
+workaround, you can set the keymap using =setxkbmap= at the start of the
+session with:
+
+#+BEGIN_EXAMPLE
+   = "setxkbmap -keycodes media";
+#+END_EXAMPLE
+
+If you are manually starting the X server, you should set the argument
+=-xkbdir /etc/X11/xkb=, otherwise X won't find your layout files. For
+example with =xinit= run
+
+#+BEGIN_EXAMPLE
+  $ xinit -- -xkbdir /etc/X11/xkb
+#+END_EXAMPLE
+
+To learn how to write layouts take a look at the XKB
+[[https://www.x.org/releases/current/doc/xorg-docs/input/XKB-Enhancing.html#Defining_New_Layouts][documentation]].
+More example layouts can also be found
+[[https://wiki.archlinux.org/index.php/X_KeyBoard_extension#Basic_examples][here]].
