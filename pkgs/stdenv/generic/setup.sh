@@ -17,10 +17,6 @@ fi
 # code). The hooks for <hookName> are the shell function or variable
 # <hookName>, and the values of the shell array ‘<hookName>Hooks’.
 runHook() {
-    local oldOpts="-u"
-    shopt -qo nounset || oldOpts="+u"
-    set -u # May be called from elsewhere, so do `set -u`.
-
     local hookName="$1"
     shift
     local hooksSlice="${hookName%Hook}Hooks[@]"
@@ -30,10 +26,8 @@ runHook() {
     # undefined.
     for hook in "_callImplicitHook 0 $hookName" ${!hooksSlice+"${!hooksSlice}"}; do
         _eval "$hook" "$@"
-        set -u # To balance `_eval`
     done
 
-    set "$oldOpts"
     return 0
 }
 
@@ -41,10 +35,6 @@ runHook() {
 # Run all hooks with the specified name, until one succeeds (returns a
 # zero exit code). If none succeed, return a non-zero exit code.
 runOneHook() {
-    local oldOpts="-u"
-    shopt -qo nounset || oldOpts="+u"
-    set -u # May be called from elsewhere, so do `set -u`.
-
     local hookName="$1"
     shift
     local hooksSlice="${hookName%Hook}Hooks[@]"
@@ -56,10 +46,8 @@ runOneHook() {
             ret=0
             break
         fi
-        set -u # To balance `_eval`
     done
 
-    set "$oldOpts"
     return "$ret"
 }
 
@@ -70,17 +58,13 @@ runOneHook() {
 # environment variables) and from shell scripts (as functions). If you
 # want to allow multiple hooks, use runHook instead.
 _callImplicitHook() {
-    set -u
     local def="$1"
     local hookName="$2"
     if declare -F "$hookName" > /dev/null; then
-        set +u
         "$hookName"
     elif type -p "$hookName" > /dev/null; then
-        set +u
         source "$hookName"
     elif [ -n "${!hookName:-}" ]; then
-        set +u
         eval "${!hookName}"
     else
         return "$def"
@@ -96,13 +80,10 @@ _callImplicitHook() {
 # command can take them
 _eval() {
     if declare -F "$1" > /dev/null 2>&1; then
-        set +u
         "$@" # including args
     else
-        set +u
         eval "$1"
     fi
-    # `run*Hook` reenables `set -u`
 }
 
 
@@ -190,12 +171,12 @@ addToSearchPath() {
 # so it is defined here but tried after the hook.
 _addRpathPrefix() {
     if [ "${NIX_NO_SELF_RPATH:-0}" != 1 ]; then
-        export NIX_LDFLAGS="-rpath $1/lib $NIX_LDFLAGS"
+        export NIX_LDFLAGS="-rpath $1/lib ${NIX_LDFLAGS-}"
         if [ -n "${NIX_LIB64_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib64 $NIX_LDFLAGS"
+            export NIX_LDFLAGS="-rpath $1/lib64 ${NIX_LDFLAGS-}"
         fi
         if [ -n "${NIX_LIB32_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib32 $NIX_LDFLAGS"
+            export NIX_LDFLAGS="-rpath $1/lib32 ${NIX_LDFLAGS-}"
         fi
     fi
 }
@@ -489,11 +470,7 @@ activatePackage() {
     (( "$hostOffset" <= "$targetOffset" )) || exit -1
 
     if [ -f "$pkg" ]; then
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         source "$pkg"
-        set "$oldOpts"
     fi
 
     # Only dependencies whose host platform is guaranteed to match the
@@ -512,11 +489,7 @@ activatePackage() {
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         source "$pkg/nix-support/setup-hook"
-        set "$oldOpts"
     fi
 }
 
@@ -1264,19 +1237,11 @@ showPhaseHeader() {
 
 genericBuild() {
     if [ -f "${buildCommandPath:-}" ]; then
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         source "$buildCommandPath"
-        set "$oldOpts"
         return
     fi
     if [ -n "${buildCommand:-}" ]; then
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         eval "$buildCommand"
-        set "$oldOpts"
         return
     fi
 
@@ -1306,11 +1271,7 @@ genericBuild() {
 
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         eval "${!curPhase:-$curPhase}"
-        set "$oldOpts"
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
