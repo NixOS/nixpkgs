@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "091hf3qkm197s5r7xcr3m07xsdwyz2rqk1hc9kj0hn13imz09irq";
   };
 
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
   buildInputs = [ zlib ];
   nativeBuildInputs =  [ cmake ];
 
