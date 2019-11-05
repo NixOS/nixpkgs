@@ -68,6 +68,17 @@ build-time.
 When `verifyCargoDeps` is set to `true`, the build will also verify that the
 `cargoSha256` is not out of date by comparing the `Cargo.lock` file in both the `cargoDeps` and `src`. Note that this option changes the value of `cargoSha256` since it also copies the `Cargo.lock` in it. To avoid breaking backward-compatibility this option is not enabled by default but hopefully will be in the future.
 
+### Building a crate for a different target
+
+To build your crate with a different cargo `--target` simply specify the `target` attribute:
+
+```nix
+pkgs.rustPlatform.buildRustPackage {
+  (...)
+  target = "x86_64-fortanix-unknown-sgx";
+}
+```
+
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation

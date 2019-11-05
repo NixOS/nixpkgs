@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    (pkgconfig.override { vanilla = true; })
+    pkgconfig
     mesa.dev # otherwise pkg-config does not find gbm
     makeWrapper
   ];

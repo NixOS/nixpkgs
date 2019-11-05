@@ -156,7 +156,11 @@ in stdenv.mkDerivation {
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
 
-    export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:${libPath}"
+  '' + lib.optionalString (libPath != "") ''
+    # To avoid loading .so files from cwd, LD_LIBRARY_PATH here must not
+    # contain an empty section before or after a colon.
+    export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}${libPath}"
+  '' + ''
 
     # libredirect causes chromium to deadlock on startup
     export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"

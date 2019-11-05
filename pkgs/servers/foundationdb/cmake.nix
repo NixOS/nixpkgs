@@ -4,7 +4,7 @@
 , cmake, ninja, boost, python3, openjdk, mono, libressl
 
 , gccStdenv, llvmPackages
-, useClang ? true
+, useClang ? false
 , ...
 }:
 

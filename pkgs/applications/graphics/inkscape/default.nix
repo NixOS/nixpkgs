@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perlPackages, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
-, gsl, python2, poppler, imagemagick, libwpg, librevenge
+, gsl, gtkspell2, cairo, python2, poppler, imagemagick, libwpg, librevenge
 , libvisio, libcdr, libexif, potrace, cmake
 , librsvg, wrapGAppsHook
 }:
@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
     librsvg # for loading icons
 
     python2Env perlPackages.perl
-  ];
+  ] ++ stdenv.lib.optional (!stdenv.isDarwin) gtkspell2
+    ++ stdenv.lib.optional stdenv.isDarwin cairo;
 
   enableParallelBuilding = true;
 
@@ -61,9 +62,6 @@ stdenv.mkDerivation rec {
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
-
-  # 0.92.3 complains about an invalid conversion from const char * to char *
-  NIX_CFLAGS_COMPILE = " -fpermissive ";
 
   meta = with stdenv.lib; {
     license = "GPL";

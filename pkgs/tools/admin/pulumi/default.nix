@@ -4,17 +4,17 @@ with lib;
 
 let
 
-  version = "1.3.4";
+  version = "1.4.0";
 
   # switch the dropdown to “manual” on https://pulumi.io/quickstart/install.html # TODO: update script
   pulumiArchPackage = {
     x86_64-linux = {
       url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-linux-x64.tar.gz";
-      sha256 = "1scs2msmg6ba91ri9al3299xnq8gq63clbqq1n03karf6ys2jnvi";
+      sha256 = "00ywy2ba4xha6gwd42i3fdrk1myivkd1r6ijdr2vkianmg524k6f";
     };
     x86_64-darwin = {
       url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-darwin-x64.tar.gz";
-      sha256 = "0k3hfrcwa5sgg8mgmxp2xfykrshyp4bv77d3y8758zm7xqmmjg69";
+      sha256 = "02vqw9gn17dy3rfh0j00k9f827l42g3nl3rhlcbc8jbgx3n9c9qy";
     };
   };
 

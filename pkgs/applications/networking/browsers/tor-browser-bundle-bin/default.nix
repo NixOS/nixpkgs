@@ -93,19 +93,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "8.5.5";
+  version = "9.0";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "00r5k9bbfpv3s6shxqypl13psr1zz51xiyz3vmm4flhr2qa4ycsz";
+      sha256 = "0aajbk65lpcazn8mdk7ngaqp0sykql8zjlkhznphxxw9v59mq3b7";
     };
 
     i686-linux = fetchurl {
-      url = "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "1nxvw5kiggfr4n5an436ass84cvwjviaa894kfm72yf2ls149f29";
+      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
+      sha256 = "08ahs9985ndcq1ywz06q4znai6a3ivibjk473kymzl6k40q1c9y2";
     };
   };
 in
@@ -165,15 +165,12 @@ stdenv.mkDerivation rec {
     # interpreter for pre-compiled Go binaries by invoking the interpreter
     # directly.
     sed -i TorBrowser/Data/Tor/torrc-defaults \
-        -e "s|\(ClientTransportPlugin obfs2,obfs3,obfs4,scramblesuit\) exec|\1 exec $interp|" \
+        -e "s|\(ClientTransportPlugin meek_lite,obfs2,obfs3,obfs4,scramblesuit\) exec|\1 exec $interp|"
 
-    # Fixup fte transport
-    #
-    # Note: the script adds its dirname to search path automatically
-    sed -i TorBrowser/Tor/PluggableTransports/fteproxy.bin \
-        -e "s,/usr/bin/env python,${python27.interpreter},"
+    # Similarly fixup snowflake
+    sed -i TorBrowser/Data/Tor/torrc-defaults \
+        -e "s|\(ClientTransportPlugin snowflake\) exec|\1 exec $interp|"
 
-    patchelf --set-rpath "${fteLibPath}" TorBrowser/Tor/PluggableTransports/fte/cDFA.so
 
     # Prepare for autoconfig.
     #
@@ -237,6 +234,7 @@ stdenv.mkDerivation rec {
 
     # Preload extensions by moving into the runtime instead of storing under the
     # user's profile directory.
+    mkdir -p "$TBB_IN_STORE/browser/extensions"
     mv "$TBB_IN_STORE/TorBrowser/Data/Browser/profile.default/extensions/"* \
       "$TBB_IN_STORE/browser/extensions"
 

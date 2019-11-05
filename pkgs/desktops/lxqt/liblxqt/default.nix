@@ -35,7 +35,7 @@ mkDerivation rec {
     description = "Core utility library for all LXQt components";
     homepage = https://github.com/lxqt/liblxqt;
     license = licenses.lgpl21Plus;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

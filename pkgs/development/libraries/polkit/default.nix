@@ -1,9 +1,13 @@
 { stdenv, fetchurl, pkgconfig, glib, expat, pam, perl, fetchpatch
 , intltool, spidermonkey_60 , gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
-, useSystemd ? stdenv.isLinux, systemd
+, useSystemd ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl), systemd, elogind
 , withGnome ? true
-, doCheck ? stdenv.isLinux
+# A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
+# Not yet investigated; it may be due to the "Make netgroup support optional"
+# patch not updating the tests correctly yet, or doing something wrong,
+# or being unrelated to that.
+, doCheck ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
 }:
 
 let
@@ -28,6 +32,15 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/polkit/polkit/merge_requests/11.patch";
       sha256 = "17lv7xj5ksa27iv4zpm4zwd4iy8zbwjj4ximslfq3sasiz9kxhlp";
     })
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    # Make netgroup support optional (musl does not have it)
+    # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
+    # We use the version of the patch that Alpine uses successfully.
+    (fetchpatch {
+      name = "make-innetgr-optional.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/polkit/make-innetgr-optional.patch?id=391e7de6ced1a96c2dac812e0b12f1d7e0ea705e";
+      sha256 = "1p9qqqhnrfyjvvd50qh6vpl256kyfblm1qnhz5pm09klrl1bh1n4";
+    })
   ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -41,7 +54,7 @@ stdenv.mkDerivation rec {
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
     [ expat pam spidermonkey_60 ]
-    ++ stdenv.lib.optional useSystemd systemd
+    ++ (if useSystemd then [systemd] else [elogind])
     ++ stdenv.lib.optional withGnome gobject-introspection;
 
   propagatedBuildInputs = [
