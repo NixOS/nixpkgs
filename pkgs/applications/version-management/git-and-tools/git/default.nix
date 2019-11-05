@@ -114,7 +114,7 @@ stdenv.mkDerivation {
   # WARNING: Do not `rm` or `mv` files from the source tree; use `cp` instead.
   #          We need many of these files during the installCheckPhase.
 
-  installFlags = "NO_INSTALL_HARDLINKS=1";
+  installFlags = [ "NO_INSTALL_HARDLINKS=1" ];
 
   preInstall = (stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin

@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   doInstallCheck = false; # same
 
   separateDebugInfo = true;
-  installFlags = "install install-man ASCIIDOC8=1 prefix=$(out)";
+  installFlags = [ "install" "install-man" "ASCIIDOC8=1" "prefix=$(out)" ];
 
   preFixup = ''
     wrapProgram $out/bin/perf \

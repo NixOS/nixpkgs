@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  installFlags = "PREFIX=$(out) RMQ_ERLAPP_DIR=$(out)";
+  installFlags = [ "PREFIX=$(out)" "RMQ_ERLAPP_DIR=$(out)" ];
   installTargets = [ "install" "install-man" ];
 
   runtimePath = stdenv.lib.makeBinPath [getconf erlang socat];

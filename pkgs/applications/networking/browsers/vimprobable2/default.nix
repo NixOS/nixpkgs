@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  installFlags = "PREFIX=/ DESTDIR=$(out)";
+  installFlags = [ "PREFIX=/" "DESTDIR=$(out)" ];
 
   preFixup = ''
     wrapProgram "$out/bin/vimprobable2" \

@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isi686 " USE_LARGE_FILES=1"
     ++ stdenv.lib.optional stdenv.isLinux "CFLAGS=-lgcc_s";
 
-  preInstall = ''
-    installFlags=PREFIX=$out
-  '';
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   buildInputs = [ openssl ];
 

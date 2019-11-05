@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional (stdenv.cc.libc != null) "--with-libiconv=${stdenv.cc.libc}");
 
   # Need to use a DESTDIR because `make install' tries to write in /var and /etc.
-  installFlags = "DESTDIR=$(TMPDIR)/inst";
+  installFlags = [ "DESTDIR=$(TMPDIR)/inst" ];
 
   stripAllList = [ "bin" "sbin" ];
 

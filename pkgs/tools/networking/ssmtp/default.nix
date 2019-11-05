@@ -30,7 +30,7 @@ stdenv.mkDerivation {
         --replace '$(INSTALL) -s' '$(INSTALL) -s --strip-program $(STRIP)'
     '';
 
-  installFlags = "etcdir=$(out)/etc";
+  installFlags = [ "etcdir=$(out)/etc" ];
 
   installTargets = [ "install" "install-sendmail" ];
 

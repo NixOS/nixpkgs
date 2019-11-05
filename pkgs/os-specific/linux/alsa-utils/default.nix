@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 
-  installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
+  installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.alsa-project.org/;

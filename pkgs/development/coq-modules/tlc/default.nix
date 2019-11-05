@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ coq ];
 
-  installFlags = "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib";
+  installFlags = [ "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib" ];
 
   meta = {
     homepage = "http://www.chargueraud.org/softs/tlc/";

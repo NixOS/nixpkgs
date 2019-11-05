@@ -41,10 +41,10 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
   '';
 
-  installFlags = ''
-    COQLIB=$(out)/lib/coq/${coq.coq-version}/
-    BINDIR=$(out)/bin
-  '';
+  installFlags = [
+    "COQLIB=$(out)/lib/coq/${coq.coq-version}/"
+    "BINDIR=$(out)/bin"
+  ];
 
   meta = {
     description = "Build dependency graphs between Coq objects";

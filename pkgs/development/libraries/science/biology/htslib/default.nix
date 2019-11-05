@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-libcurl" ]; # optional but strongly recommended
 
-  installFlags = "prefix=$(out)";
+  installFlags = [ "prefix=$(out)" ];
 
   preCheck = ''
     patchShebangs test/

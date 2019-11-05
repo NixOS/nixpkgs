@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ;
 
   makeFlags = [ "LEX=flex" ];
-  installFlags = ''INSTALL=install DESTDIR=''${out}'';
+  installFlags = [ "INSTALL=install" "DESTDIR=${placeholder "out"}" ];
   postInstall =
     lib.concatMapStrings (path: ''
       for f in : $(find ${path} -type f); do

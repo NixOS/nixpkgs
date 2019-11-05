@@ -31,10 +31,8 @@ stdenv.mkDerivation rec {
     "-fpermissive"
   ];
 
-  preInstall = ''
-    installTargets="$out"
-    installFlags+=" SWIFT_INSTALLDIR=$out"
-  '';
+  installTargets = [ (placeholder "out") ];
+  installFlags = [ "SWIFT_INSTALLDIR=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
     homepage = https://swift.im/;

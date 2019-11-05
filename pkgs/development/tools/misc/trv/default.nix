@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
   dontStrip = true;
 
-  installFlags = "SEMVER=${version} PREFIX=$(out)";
+  installFlags = [ "SEMVER=${version}" "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/afiniate/trv;

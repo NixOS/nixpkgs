@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  installFlags = "HOME=\${out} install-doc";
+  installFlags = [ "HOME=\${out}" "install-doc" ];
 
   postInstall = ''
     wrapProgram $out/bin/git-remote-hg \

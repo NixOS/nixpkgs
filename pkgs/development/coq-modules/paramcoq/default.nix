@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ++ (with coq.ocamlPackages; [ ocaml findlib camlp5 ])
   ;
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   passthru = {
     compatibleCoqVersions = v: builtins.hasAttr v params;

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
-  installFlags = "REALLY_INSTALL=yes";
+  installFlags = [ "REALLY_INSTALL=yes" ];
   enableParallelBuilding = true;
 
   postInstall = ''

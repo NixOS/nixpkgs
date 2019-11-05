@@ -13,9 +13,6 @@ stdenv.mkDerivation rec {
     sha256 = "0lnsl85cp2vpzgp8pkf6l6yd2i3lp02jdvga1icfa78j2smr8fll";
   };
 
-  patches = [
-  ];
-
   postPatch = ''
     chmod +x meson_post_install.py tests/test-dconf.py
     patchShebangs meson_post_install.py
