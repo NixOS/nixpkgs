@@ -1,0 +1,9 @@
+* Demo
+  :PROPERTIES:
+  :CUSTOM_ID: sec-profile-demo
+  :END:
+
+This profile just enables a demo user, with password =demo=, uid =1000=,
+wheel group and
+[[#opt-services.xserver.displayManager.sddm.autoLogin][autologin in the
+SDDM display manager]].
