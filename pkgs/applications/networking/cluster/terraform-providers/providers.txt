@@ -11,6 +11,7 @@ terraform-providers terraform-provider- terraform-provider-\\(azure-classic\\|sc
 
 # include providers from individual repos
 ajbosco/terraform-provider-segment
+camptocamp/terraform-provider-pass
 poseidon/terraform-provider-matchbox
 spaceapegames/terraform-provider-wavefront
 tweag/terraform-provider-nixos

@@ -792,6 +792,14 @@
       version = "0.2.0";
       sha256  = "0ic5b9djhnb1bs2bz3zdprgy3r55dng09xgc4d9l9fyp85g2amaz";
     };
+  pass =
+    {
+      owner   = "camptocamp";
+      repo    = "terraform-provider-pass";
+      rev     = "1.2.1";
+      version = "1.2.1";
+      sha256  = "1hf5mvgz5ycp7shiy8px205d9kwswfjmclg7mlh9a55bkraffahk";
+    };
   matchbox =
     {
       owner   = "poseidon";
