@@ -9,7 +9,7 @@ _assignFirst() {
     local varName="$1"
     local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
-	while (( $# )); do
+    while (( $# )); do
         if [ -n "${!1-}" ]; then eval "${varName}"="$1"; return; fi
         shift
     done
