@@ -1,0 +1,14 @@
+* Kakoune
+  :PROPERTIES:
+  :CUSTOM_ID: sec-kakoune
+  :END:
+
+Kakoune can be built to autoload plugins:
+
+#+BEGIN_EXAMPLE
+  (kakoune.override {
+    configure = {
+      plugins = with pkgs.kakounePlugins; [ parinfer-rust ];
+    };
+  })
+#+END_EXAMPLE
