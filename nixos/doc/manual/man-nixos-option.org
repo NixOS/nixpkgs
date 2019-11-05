@@ -1,0 +1,65 @@
+nixos-option
+8
+NixOS
+nixos-option
+inspect a NixOS configuration
+nixos-option
+-I
+path
+--all
+option.name
+* Description
+
+This command evaluates the configuration specified in
+=/etc/nixos/configuration.nix= and returns the properties of the option
+name given as argument.
+
+When the option name is not an option, the command prints the list of
+attributes contained in the attribute set.
+
+* Options
+
+This command accepts the following options:
+
+- =-I= path :: This option is passed to the underlying =nix-instantiate=
+  invocation.
+
+- =--all= :: Print the values of all options.
+
+* Environment
+
+- NIXOS_CONFIG :: Path to the main NixOS configuration module. Defaults
+  to =/etc/nixos/configuration.nix=.
+
+* Examples
+
+Investigate option values:
+
+#+BEGIN_EXAMPLE
+  $ nixos-option boot.loader
+  This attribute set contains:
+  generationsDir
+  grub
+  initScript
+
+  $ nixos-option boot.loader.grub.enable
+  Value:
+  true
+
+  Default:
+  true
+
+  Description:
+  Whether to enable the GNU GRUB boot loader.
+
+  Declared by:
+    "/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
+
+  Defined by:
+    "/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
+#+END_EXAMPLE
+
+* Bugs
+
+The author listed in the following section is wrong. If there is any
+other bug, please report to Nicolas Pierron.
