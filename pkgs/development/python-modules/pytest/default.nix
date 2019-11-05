@@ -2,8 +2,9 @@
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
 , atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy, python
 }:
+
 buildPythonPackage rec {
-  version = "5.2.2";
+  version = "5.3.0";
   pname = "pytest";
 
   disabled = !isPy3k;
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "27abc3fef618a01bebb1f0d6d303d2816a99aa87a5968ebc32fe971be91eb1e6";
+    sha256 = "1sq1q97lf56zivb6n1kpwwpdli94px0qnw3dw01bxn55c17xg5qq";
   };
 
   checkInputs = [ hypothesis mock ];
