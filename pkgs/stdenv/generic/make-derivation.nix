@@ -104,7 +104,7 @@ in rec {
     assert lib.isString (attrs.NIX_LDFLAGS or "");
     assert lib.isString (attrs.NIX_CFLAGS_COMPILE or "");
     assert lib.isString (attrs.NIX_CFLAGS_LINK or "");
-    assert lib.all (v: lib.isString v || lib.isBool v || lib.isInt) (lib.attrValues env);
+    assert lib.all (v: lib.isString v || lib.isBool v || lib.isInt v) (lib.attrValues env);
 
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
