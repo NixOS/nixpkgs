@@ -1,7 +1,7 @@
 { stdenv, buildGoModule, fetchFromGitHub, fetchgx, gx-go }:
 
 buildGoModule rec {
-  name = "ipfs-cluster";
+  pname = "ipfs-cluster";
   version = "0.11.0";
   rev = "v${version}";
 
