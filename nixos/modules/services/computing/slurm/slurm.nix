@@ -18,7 +18,7 @@ let
       ${optionalString (cfg.controlAddr != null) ''controlAddr=${cfg.controlAddr}''}
       ${toString (map (x: "NodeName=${x}\n") cfg.nodeName)}
       ${toString (map (x: "PartitionName=${x}\n") cfg.partitionName)}
-      PlugStackConfig=${plugStackConfig}
+      PlugStackConfig=${plugStackConfig}/plugstack.conf
       ProctrackType=${cfg.procTrackType}
       ${cfg.extraConfig}
     '';
@@ -48,7 +48,6 @@ let
     name = "etc-slurm";
     paths = [ configFile cgroupConfig plugStackConfig ] ++ cfg.extraConfigPaths;
   };
-
 in
 
 {
@@ -112,7 +111,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.slurm;
+        default = pkgs.slurm.override { enableX11 = ! cfg.enableSrunX11; };
         defaultText = "pkgs.slurm";
         example = literalExample "pkgs.slurm-full";
         description = ''
@@ -178,9 +177,14 @@ in
           If enabled srun will accept the option "--x11" to allow for X11 forwarding
           from within an interactive session or a batch job. This activates the
           slurm-spank-x11 module. Note that this option also enables
-          'services.openssh.forwardX11' on the client.
+          <option>services.openssh.forwardX11</option> on the client.
 
           This option requires slurm to be compiled without native X11 support.
+          The default behavior is to re-compile the slurm package with native X11
+          support disabled if this option is set to true.
+
+          To use the native X11 support add <literal>PrologFlags=X11</literal> in <option>extraConfig</option>.
+          Note that this method will only work RSA SSH host keys.
         '';
       };
 
