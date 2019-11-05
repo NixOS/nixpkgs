@@ -1,0 +1,78 @@
+* Adding Custom Packages
+  :PROPERTIES:
+  :CUSTOM_ID: sec-custom-packages
+  :END:
+
+It's possible that a package you need is not available in NixOS. In that
+case, you can do two things. First, you can clone the Nixpkgs
+repository, add the package to your clone, and (optionally) submit a
+patch or pull request to have it accepted into the main Nixpkgs
+repository. This is described in detail in the
+[[http://nixos.org/nixpkgs/manual][Nixpkgs manual]]. In short, you clone
+Nixpkgs:
+
+#+BEGIN_EXAMPLE
+  $ git clone https://github.com/NixOS/nixpkgs
+  $ cd nixpkgs
+#+END_EXAMPLE
+
+Then you write and test the package as described in the Nixpkgs manual.
+Finally, you add it to =environment.systemPackages=, e.g.
+
+#+BEGIN_EXAMPLE
+   = [ pkgs.my-package ];
+#+END_EXAMPLE
+
+and you run =nixos-rebuild=, specifying your own Nixpkgs tree:
+
+#+BEGIN_EXAMPLE
+  # nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs
+#+END_EXAMPLE
+
+The second possibility is to add the package outside of the Nixpkgs
+tree. For instance, here is how you specify a build of the
+[[https://www.gnu.org/software/hello/][GNU Hello]] package directly in
+=configuration.nix=:
+
+#+BEGIN_EXAMPLE
+   =
+    let
+      my-hello = with pkgs; stdenv.mkDerivation rec {
+        name = "hello-2.8";
+        src = fetchurl {
+          url = "mirror://gnu/hello/${name}.tar.gz";
+          sha256 = "0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6";
+        };
+      };
+    in
+    [ my-hello ];
+#+END_EXAMPLE
+
+Of course, you can also move the definition of =my-hello= into a
+separate Nix expression, e.g.
+
+#+BEGIN_EXAMPLE
+   = [ (import ./my-hello.nix) ];
+#+END_EXAMPLE
+
+where =my-hello.nix= contains:
+
+#+BEGIN_EXAMPLE
+  with import <nixpkgs> {}; # bring all of Nixpkgs into scope
+
+  stdenv.mkDerivation rec {
+    name = "hello-2.8";
+    src = fetchurl {
+      url = "mirror://gnu/hello/${name}.tar.gz";
+      sha256 = "0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6";
+    };
+  }
+#+END_EXAMPLE
+
+This allows testing the package easily:
+
+#+BEGIN_EXAMPLE
+  $ nix-build my-hello.nix
+  $ ./result/bin/hello
+  Hello, world!
+#+END_EXAMPLE
