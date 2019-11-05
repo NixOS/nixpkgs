@@ -29,15 +29,10 @@ let
                , pkgsHostHost, pkgsHostTarget
                , pkgsTargetTarget
                }: let
-    mash =
-      # Other pkgs sets
-      pkgsBuildBuild // pkgsBuildTarget // pkgsHostHost // pkgsTargetTarget
-      # The same pkgs sets one probably intends
-      // pkgsBuildHost // pkgsHostTarget;
     merge = name: {
       inherit name;
       value = let
-        defaultValue = mash.${name};
+        defaultValue = pkgsHostTarget.${name};
         # `or {}` is for the non-derivation attsert splicing case, where `{}` is the identity.
         valueBuildBuild = pkgsBuildBuild.${name} or {};
         valueBuildHost = pkgsBuildHost.${name} or {};
@@ -88,7 +83,7 @@ let
         # `__functor__` for functions instead.
         } else defaultValue;
     };
-  in lib.listToAttrs (map merge (lib.attrNames mash));
+  in lib.listToAttrs (map merge (lib.attrNames pkgsHostTarget));
 
   splicePackages = { pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
                    , pkgsHostHost, pkgsHostTarget
