@@ -1,0 +1,105 @@
+nixos-install
+8
+NixOS
+nixos-install
+install bootloader and NixOS
+nixos-install
+-I
+path
+--root
+root
+--system
+path
+--no-channel-copy
+--no-root-passwd
+--no-bootloader
+--max-jobs
+-j
+number
+--cores
+number
+--option
+name
+value
+--show-trace
+--help
+* Description
+
+This command installs NixOS in the file system mounted on =/mnt=, based
+on the NixOS configuration specified in
+=/mnt/etc/nixos/configuration.nix=. It performs the following steps:
+
+- It copies Nix and its dependencies to =/mnt/nix/store=.
+
+- It runs Nix in =/mnt= to build the NixOS configuration specified in
+  =/mnt/etc/nixos/configuration.nix=.
+
+- It installs the GRUB boot loader on the device specified in the option
+  =boot.loader.grub.device= (unless =--no-bootloader= is specified), and
+  generates a GRUB configuration file that boots into the NixOS
+  configuration just installed.
+
+- It prompts you for a password for the root account (unless
+  =--no-root-passwd= is specified).
+
+This command is idempotent: if it is interrupted or fails due to a
+temporary problem (e.g. a network issue), you can safely re-run it.
+
+* Options
+
+This command accepts the following options:
+
+- =--root= :: Defaults to =/mnt=. If this option is given, treat the
+  directory root as the root of the NixOS installation.
+
+- =--system= :: If this option is provided, =nixos-install= will install
+  the specified closure rather than attempt to build one from
+  =/mnt/etc/nixos/configuration.nix=.
+
+  The closure must be an appropriately configured NixOS system, with
+  boot loader and partition configuration that fits the target host.
+  Such a closure is typically obtained with a command such as =nix-build
+        -I nixos-config=./configuration.nix '<nixos>' -A system
+        --no-out-link=
+
+- =-I= :: Add a path to the Nix expression search path. This option may
+  be given multiple times. See the NIX_PATH environment variable for
+  information on the semantics of the Nix search path. Paths added
+  through -I take precedence over NIX_PATH.
+
+- =--max-jobs=; =-j= :: Sets the maximum number of build jobs that Nix
+  will perform in parallel to the specified number. The default is =1=.
+  A higher value is useful on SMP systems or to exploit I/O latency.
+
+- =--cores= :: Sets the value of the NIX_BUILD_CORES environment
+  variable in the invocation of builders. Builders can use this variable
+  at their discretion to control the maximum amount of parallelism. For
+  instance, in Nixpkgs, if the derivation attribute
+  =enableParallelBuilding= is set to =true=, the builder passes the
+  =-jN= flag to GNU Make. The value =0= means that the builder should
+  use all available CPU cores in the system.
+
+- =--option= name value :: Set the Nix configuration option name to
+  value.
+
+- =--show-trace= :: Causes Nix to print out a stack trace in case of Nix
+  expression evaluation errors.
+
+- =--help= :: Synonym for =man nixos-install=.
+
+* Examples
+
+A typical NixOS installation is done by creating and mounting a file
+system on =/mnt=, generating a NixOS configuration in
+=/mnt/etc/nixos/configuration.nix=, and running =nixos-install=. For
+instance, if we want to install NixOS on an =ext4= file system created
+in =/dev/sda1=:
+
+#+BEGIN_EXAMPLE
+  $ mkfs.ext4 /dev/sda1
+  $ mount /dev/sda1 /mnt
+  $ nixos-generate-config --root /mnt
+  $ # edit /mnt/etc/nixos/configuration.nix
+  $ nixos-install
+  $ reboot
+#+END_EXAMPLE
