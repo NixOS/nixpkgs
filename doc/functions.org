@@ -1,0 +1,7 @@
+* Functions reference
+  :PROPERTIES:
+  :CUSTOM_ID: chap-functions
+  :END:
+
+The nixpkgs repository has several utility functions to manipulate Nix
+expressions.
