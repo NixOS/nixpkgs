@@ -1,0 +1,156 @@
+* Abstractions
+  :PROPERTIES:
+  :CUSTOM_ID: sec-module-abstractions
+  :END:
+
+If you find yourself repeating yourself over and over, it's time to
+abstract. Take, for instance, this Apache HTTP Server configuration:
+
+#+BEGIN_EXAMPLE
+  {
+     =
+      [ { hostName = "example.org";
+          documentRoot = "/webroot";
+          adminAddr = "alice@example.org";
+          enableUserDir = true;
+        }
+        { hostName = "example.org";
+          documentRoot = "/webroot";
+          adminAddr = "alice@example.org";
+          enableUserDir = true;
+          enableSSL = true;
+          sslServerCert = "/root/ssl-example-org.crt";
+          sslServerKey = "/root/ssl-example-org.key";
+        }
+      ];
+  }
+#+END_EXAMPLE
+
+It defines two virtual hosts with nearly identical configuration; the
+only difference is that the second one has SSL enabled. To prevent this
+duplication, we can use a =let=:
+
+#+BEGIN_EXAMPLE
+  let
+    exampleOrgCommon =
+      { hostName = "example.org";
+        documentRoot = "/webroot";
+        adminAddr = "alice@example.org";
+        enableUserDir = true;
+      };
+  in
+  {
+     =
+      [ exampleOrgCommon
+        (exampleOrgCommon // {
+          enableSSL = true;
+          sslServerCert = "/root/ssl-example-org.crt";
+          sslServerKey = "/root/ssl-example-org.key";
+        })
+      ];
+  }
+#+END_EXAMPLE
+
+The =let exampleOrgCommon = ...= defines a variable named
+=exampleOrgCommon=. The =//= operator merges two attribute sets, so the
+configuration of the second virtual host is the set =exampleOrgCommon=
+extended with the SSL options.
+
+You can write a =let= wherever an expression is allowed. Thus, you also
+could have written:
+
+#+BEGIN_EXAMPLE
+  {
+     =
+      let exampleOrgCommon = ...; in
+      [ exampleOrgCommon
+        (exampleOrgCommon // { ... })
+      ];
+  }
+#+END_EXAMPLE
+
+but not ={ let exampleOrgCommon = ...; in
+  ...; }= since attributes (as opposed to attribute values) are not
+expressions.
+
+/Functions/ provide another method of abstraction. For instance, suppose
+that we want to generate lots of different virtual hosts, all with
+identical configuration except for the host name. This can be done as
+follows:
+
+#+BEGIN_EXAMPLE
+  {
+     =
+      let
+        makeVirtualHost = name:
+          { hostName = name;
+            documentRoot = "/webroot";
+            adminAddr = "alice@example.org";
+          };
+      in
+        [ (makeVirtualHost "example.org")
+          (makeVirtualHost "example.com")
+          (makeVirtualHost "example.gov")
+          (makeVirtualHost "example.nl")
+        ];
+  }
+#+END_EXAMPLE
+
+Here, =makeVirtualHost= is a function that takes a single argument
+=name= and returns the configuration for a virtual host. That function
+is then called for several names to produce the list of virtual host
+configurations.
+
+We can further improve on this by using the function =map=, which
+applies another function to every element in a list:
+
+#+BEGIN_EXAMPLE
+  {
+     =
+      let
+        makeVirtualHost = ...;
+      in map makeVirtualHost
+        [ "example.org" "example.com" "example.gov" "example.nl" ];
+  }
+#+END_EXAMPLE
+
+(The function =map= is called a /higher-order function/ because it takes
+another function as an argument.)
+
+What if you need more than one argument, for instance, if we want to use
+a different =documentRoot= for each virtual host? Then we can make
+=makeVirtualHost= a function that takes a /set/ as its argument, like
+this:
+
+#+BEGIN_EXAMPLE
+  {
+     =
+      let
+        makeVirtualHost = { name, root }:
+          { hostName = name;
+            documentRoot = root;
+            adminAddr = "alice@example.org";
+          };
+      in map makeVirtualHost
+        [ { name = "example.org"; root = "/sites/example.org"; }
+          { name = "example.com"; root = "/sites/example.com"; }
+          { name = "example.gov"; root = "/sites/example.gov"; }
+          { name = "example.nl"; root = "/sites/example.nl"; }
+        ];
+  }
+#+END_EXAMPLE
+
+But in this case (where every root is a subdirectory of =/sites= named
+after the virtual host), it would have been shorter to define
+=makeVirtualHost= as
+
+#+BEGIN_EXAMPLE
+  makeVirtualHost = name:
+    { hostName = name;
+      documentRoot = "/sites/${name}";
+      adminAddr = "alice@example.org";
+    };
+#+END_EXAMPLE
+
+Here, the construct =${...}= allows the result of an expression to be
+spliced into a string.
