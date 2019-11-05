@@ -1,0 +1,24 @@
+* Hiding process information
+  :PROPERTIES:
+  :CUSTOM_ID: sec-hidepid
+  :END:
+
+Setting
+
+#+BEGIN_EXAMPLE
+   = true;
+#+END_EXAMPLE
+
+ensures that access to process information is restricted to the owning
+user. This implies, among other things, that command-line arguments
+remain private. Unless your deployment relies on unprivileged users
+being able to inspect the process information of other users, this
+option should be safe to enable.
+
+Members of the =proc= group are exempt from process information hiding.
+
+To allow a service foo to run without process information hiding, set
+
+#+BEGIN_EXAMPLE
+  systemd.services.foo.serviceConfig.SupplementaryGroups = [ "proc" ];
+#+END_EXAMPLE
