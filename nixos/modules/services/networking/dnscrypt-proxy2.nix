@@ -12,7 +12,7 @@ in
 
 {
   options.services.dnscrypt-proxy2 = {
-    enable = mkEnableOption "dnscrypt-proxy";
+    enable = mkEnableOption "dnscrypt-proxy2";
 
     config = mkOption {
       description = ''
@@ -30,27 +30,46 @@ in
         }
       '';
       type = types.attrs;
+      default = {};
     };
 
-    package = mkOption {
-      default = pkgs.dnscrypt-proxy2;
+    configFile = mkOption {
       description = ''
-        dnscrypt-proxy2 package to use.
+        Path to TOML config file. See: https://git.io/fxBne
       '';
-      type = types.package;
+      example = literalExample "/etc/dnscrypt-proxy/dnscrypt-proxy.toml";
+      type = types.nullOr types.path;
+      default = null;
     };
   };
 
   config = mkIf cfg.enable {
+    assertions = [{
+      assertion = (
+        (cfg.config == {} -> cfg.configFile != null) &&
+        (cfg.configFile != null -> cfg.config == {})
+      );
+      message  = ''
+        Please specify either
+        'services.dnscrypt-proxy2.config' or
+        'services.dnscrypt-proxy2.configFile'.
+      '';
+    }];
+
     networking.nameservers = lib.mkDefault [ "127.0.0.1" ];
 
-    systemd.services.dnscrypt-proxy2 = {
+    systemd.services.dnscrypt-proxy2 = let
+      configuration = if cfg.configFile == null
+                      then toml
+                      else cfg.configFile;
+    in
+    {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         DynamicUser = true;
-        ExecStart = "${cfg.package}/bin/dnscrypt-proxy -config ${toml}";
+        ExecStart = "${pkgs.dnscrypt-proxy2}/bin/dnscrypt-proxy -config ${configuration}";
       };
     };
   };
