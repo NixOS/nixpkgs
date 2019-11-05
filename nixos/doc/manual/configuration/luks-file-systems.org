@@ -1,0 +1,41 @@
+* LUKS-Encrypted File Systems
+  :PROPERTIES:
+  :CUSTOM_ID: sec-luks-file-systems
+  :END:
+
+NixOS supports file systems that are encrypted using /LUKS/ (Linux
+Unified Key Setup). For example, here is how you create an encrypted
+Ext4 file system on the device
+=/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d=:
+
+#+BEGIN_EXAMPLE
+  # cryptsetup luksFormat /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d
+
+  WARNING!
+  ========
+  This will overwrite data on /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d irrevocably.
+
+  Are you sure? (Type uppercase yes): YES
+  Enter LUKS passphrase: ***
+  Verify passphrase: ***
+
+  # cryptsetup luksOpen /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d crypted
+  Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
+
+  # mkfs.ext4 /dev/mapper/crypted
+#+END_EXAMPLE
+
+To ensure that this file system is automatically mounted at boot time as
+=/=, add the following to =configuration.nix=:
+
+#+BEGIN_EXAMPLE
+  boot.initrd.luks.devices.crypted.device = "/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d";
+  ."/".device = "/dev/mapper/crypted";
+#+END_EXAMPLE
+
+Should grub be used as bootloader, and =/boot= is located on an
+encrypted partition, it is necessary to add the following grub option:
+
+#+BEGIN_EXAMPLE
+   = true;
+#+END_EXAMPLE
