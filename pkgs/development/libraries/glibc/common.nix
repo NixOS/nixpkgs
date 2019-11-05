@@ -159,7 +159,7 @@ stdenv.mkDerivation ({
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
-  BASH_SHELL = "/bin/sh";
+  env.BASH_SHELL = "/bin/sh";
 
   passthru = { inherit version; };
 }
