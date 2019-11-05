@@ -41,10 +41,7 @@ let
     inherit (config.system.nixos-generate-config) configuration;
   };
 
-  nixos-option = makeProg {
-    name = "nixos-option";
-    src = ./nixos-option.sh;
-  };
+  nixos-option = pkgs.callPackage ./nixos-option { };
 
   nixos-version = makeProg {
     name = "nixos-version";

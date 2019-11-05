@@ -1194,6 +1194,12 @@
     githubId = 30435868;
     name = "Okina Matara";
   };
+  chkno = {
+    email = "chuck@intelligence.org";
+    github = "chkno";
+    githubId = 1118859;
+    name = "Scott Worley";
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
@@ -1562,6 +1568,12 @@
     github = "dbrock";
     githubId = 14032;
     name = "Daniel Brockman";
+  };
+  dduan = {
+    email = "daniel@duan.ca";
+    github = "dduan";
+    githubId = 75067;
+    name = "Daniel Duan";
   };
   deepfire = {
     email = "_deepfire@feelingofgreen.ru";
@@ -2029,6 +2041,12 @@
       email = "erictnorris@gmail.com";
       github = "ericnorris";
       githubId = 1906605;
+  };
+  Enteee = {
+    email = "nix@duckpond.ch";
+    github = "Enteee";
+    githubid = 5493775;
+    name = "Ente";
   };
   enzime = {
     email = "enzime@users.noreply.github.com";
@@ -7074,6 +7092,12 @@
   wedens = {
     email = "kirill.wedens@gmail.com";
     name = "wedens";
+  };
+  WhittlesJr = {
+    email = "alex.joseph.whitt@gmail.com";
+    github = "WhittlesJr";
+    githubId = 19174984;
+    name = "Alex Whitt";
   };
   willibutz = {
     email = "willibutz@posteo.de";
