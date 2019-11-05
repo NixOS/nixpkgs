@@ -1,0 +1,7 @@
+* Networking
+  :PROPERTIES:
+  :CUSTOM_ID: sec-networking
+  :END:
+
+This section describes how to configure networking components on your
+NixOS machine.
