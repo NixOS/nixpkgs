@@ -1,0 +1,38 @@
+* Lua
+  :PROPERTIES:
+  :CUSTOM_ID: sec-language-lua
+  :END:
+
+Lua packages are built by the =buildLuaPackage= function. This function
+is implemented in
+[[https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/lua-modules/generic/default.nix][=pkgs/development/lua-modules/generic/default.nix=]]
+and works similarly to =buildPerlPackage=. (See
+[[#sec-language-perl][???]] for details.)
+
+Lua packages are defined in
+[[https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/lua-packages.nix][=pkgs/top-level/lua-packages.nix=]].
+Most of them are simple. For example:
+
+#+BEGIN_EXAMPLE
+  fileSystem = buildLuaPackage {
+    name = "filesystem-1.6.2";
+    src = fetchurl {
+      url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
+      sha256 = "1n8qdwa20ypbrny99vhkmx8q04zd2jjycdb5196xdhgvqzk10abz";
+    };
+    meta = {
+      homepage = "https://github.com/keplerproject/luafilesystem";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      maintainers = with maintainers; [ flosse ];
+    };
+  };
+#+END_EXAMPLE
+
+Though, more complicated package should be placed in a seperate file in
+[[https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/lua-modules][=pkgs/development/lua-modules=]].
+
+Lua packages accept additional parameter =disabled=, which defines the
+condition of disabling package from luaPackages. For example, if package
+has =disabled= assigned to =lua.luaversion != "5.1"=, it will not be
+included in any luaPackages except lua51Packages, making it only be
+built for lua 5.1.
