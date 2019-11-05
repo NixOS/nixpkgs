@@ -877,6 +877,8 @@ in
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
+  gjs = callPackage ../development/libraries/gjs { };
+
   glasgow = with python3Packages; toPythonApplication glasgow;
 
   gucci = callPackage ../tools/text/gucci { };
