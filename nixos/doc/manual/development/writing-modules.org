@@ -1,0 +1,148 @@
+* Writing NixOS Modules
+  :PROPERTIES:
+  :CUSTOM_ID: sec-writing-modules
+  :END:
+
+NixOS has a modular system for declarative configuration. This system
+combines multiple /modules/ to produce the full system configuration.
+One of the modules that constitute the configuration is
+=/etc/nixos/configuration.nix=. Most of the others live in the
+[[https://github.com/NixOS/nixpkgs/tree/master/nixos/modules][=nixos/modules=]]
+subdirectory of the Nixpkgs tree.
+
+Each NixOS module is a file that handles one logical aspect of the
+configuration, such as a specific kind of hardware, a service, or
+network settings. A module configuration does not have to handle
+everything from scratch; it can use the functionality provided by other
+modules for its implementation. Thus a module can /declare/ options that
+can be used by other modules, and conversely can /define/ options
+provided by other modules in its own implementation. For example, the
+module
+[[https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/security/pam.nix][=pam.nix=]]
+declares the option =security.pam.services= that allows other modules
+(e.g.
+[[https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/networking/ssh/sshd.nix][=sshd.nix=]])
+to define PAM services; and it defines the option =environment.etc=
+(declared by
+[[https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/system/etc/etc.nix][=etc.nix=]])
+to cause files to be created in =/etc/pam.d=.
+
+In [[#sec-configuration-syntax][???]], we saw the following structure of
+NixOS modules:
+
+#+BEGIN_EXAMPLE
+  { config, pkgs, ... }:
+
+  { option definitions
+  }
+#+END_EXAMPLE
+
+This is actually an /abbreviated/ form of module that only defines
+options, but does not declare any. The structure of full NixOS modules
+is shown in [[#ex-module-syntax][example_title]].
+
+#+BEGIN_EXAMPLE
+  { config, pkgs, ... }: 
+
+  {
+    imports =
+      [ paths of other modules 
+      ];
+
+    options = {
+      option declarations 
+    };
+
+    config = {
+      option definitions 
+    };
+  }
+#+END_EXAMPLE
+
+The meaning of each part is as follows.
+
+- This line makes the current Nix expression a function. The variable
+  =pkgs= contains Nixpkgs, while =config= contains the full system
+  configuration. This line can be omitted if there is no reference to
+  =pkgs= and =config= inside the module.
+
+- This list enumerates the paths to other NixOS modules that should be
+  included in the evaluation of the system configuration. A default set
+  of modules is defined in the file =modules/module-list.nix=. These
+  don't need to be added in the import list.
+
+- The attribute =options= is a nested set of /option declarations/
+  (described below).
+
+- The attribute =config= is a nested set of /option definitions/ (also
+  described below).
+
+[[#locate-example][example_title]] shows a module that handles the
+regular update of the “locate” database, an index of all files in the
+file system. This module declares two options that can be defined by
+other modules (typically the user's =configuration.nix=):
+=services.locate.enable= (whether the database should be updated) and
+=services.locate.interval= (when the update should be done). It
+implements its functionality by defining two options declared by other
+modules: =systemd.services= (the set of all systemd services) and
+=systemd.timers= (the list of commands to be executed periodically by
+=systemd=).
+
+#+BEGIN_EXAMPLE
+  { config, lib, pkgs, ... }:
+
+  with lib;
+
+  let
+    cfg = config.services.locate;
+  in {
+    options.services.locate = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If enabled, NixOS will periodically update the database of
+          files used by the locate command.
+        '';
+      };
+
+      interval = mkOption {
+        type = types.str;
+        default = "02:15";
+        example = "hourly";
+        description = ''
+          Update the locate database at this interval. Updates by
+          default at 2:15 AM every day.
+
+          The format is described in
+          systemd.time
+          7.
+        '';
+      };
+
+      # Other options omitted for documentation
+    };
+
+    config = {
+      systemd.services.update-locatedb =
+        { description = "Update Locate Database";
+          path  = [ pkgs.su ];
+          script =
+            ''
+              mkdir -m 0755 -p $(dirname ${toString cfg.output})
+              exec updatedb \
+                --localuser=${cfg.localuser} \
+                ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
+                --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
+            '';
+        };
+
+      systemd.timers.update-locatedb = mkIf cfg.enable
+        { description = "Update timer for locate database";
+          partOf      = [ "update-locatedb.service" ];
+          wantedBy    = [ "timers.target" ];
+          timerConfig.OnCalendar = cfg.interval;
+        };
+    };
+  }
+#+END_EXAMPLE
