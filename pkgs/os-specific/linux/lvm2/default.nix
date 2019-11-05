@@ -40,6 +40,7 @@ stdenv.mkDerivation {
         --replace /usr/bin/udevadm ${systemd}/bin/udevadm
     '';
 
+  # https://github.com/NixOS/nixpkgs/pull/52597
   # gcc: error: ../../device_mapper/libdevice-mapper.a: No such file or directory
   enableParallelBuilding = false;
 
