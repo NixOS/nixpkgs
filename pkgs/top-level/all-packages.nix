@@ -20031,7 +20031,9 @@ in
     libmlt = mlt;
   };
 
-  shogun = callPackage ../applications/science/machine-learning/shogun { };
+  shogun = callPackage ../applications/science/machine-learning/shogun {
+    stdenv = gcc8Stdenv;
+  };
 
   sky = callPackage ../applications/networking/instant-messengers/sky {};
 
