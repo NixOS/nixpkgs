@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pzd9ig3ahpgq7jbj82grllxx1v01d620insr2m8h0c6jj25n5hv";
   };
   nativeBuildInputs = [ bison flex pkg-config libpng ];
-  installFlags = "PREFIX=\${out}";
+  installFlags = [ "PREFIX=\${out}" ];
 
   meta = with stdenv.lib; {
     homepage = https://rednex.github.io/rgbds/;
