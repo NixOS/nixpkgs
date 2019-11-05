@@ -575,7 +575,7 @@ _addToEnv
 unset allPlatOffsets
 unset pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars pkgAccumVarVars
 unset pkgBuildHookVars pkgHostHookVars pkgTargetHookVars pkgHookVarVars
-unset propagatedBuildDepFiles propagatedHostDepFiles propagatedTargetDepFiles propagatedDepFilesVars
+unset propagatedDepFilesVars
 
 
 _addRpathPrefix "$out"
