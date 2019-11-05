@@ -1,0 +1,31 @@
+* Contributing to this documentation
+  :PROPERTIES:
+  :CUSTOM_ID: chap-contributing
+  :END:
+
+The DocBook sources of the Nixpkgs manual are in the =doc= subdirectory
+of the Nixpkgs repository.
+
+You can quickly check your edits with =make=:
+
+#+BEGIN_EXAMPLE
+  $ cd /path/to/nixpkgs/doc
+  $ nix-shell
+  [nix-shell]$ make
+#+END_EXAMPLE
+
+If you experience problems, run =make debug= to help understand the
+docbook errors.
+
+After making modifications to the manual, it's important to build it
+before committing. You can do that as follows:
+
+#+BEGIN_EXAMPLE
+  $ cd /path/to/nixpkgs/doc
+  $ nix-shell
+  [nix-shell]$ make clean
+  [nix-shell]$ nix-build .
+#+END_EXAMPLE
+
+If the build succeeds, the manual will be in
+=./result/share/doc/nixpkgs/manual.html=.
