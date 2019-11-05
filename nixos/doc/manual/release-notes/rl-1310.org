@@ -1,0 +1,6 @@
+* Release 13.10 (“Aardvark”, 2013/10/31)
+  :PROPERTIES:
+  :CUSTOM_ID: sec-release-13.10
+  :END:
+
+This is the first stable release branch of NixOS.
