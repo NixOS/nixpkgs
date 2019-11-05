@@ -1,0 +1,61 @@
+* DNSCrypt client proxy
+  :PROPERTIES:
+  :CUSTOM_ID: sec-dnscrypt-proxy
+  :END:
+
+The DNSCrypt client proxy relays DNS queries to a DNSCrypt enabled
+upstream resolver. The traffic between the client and the upstream
+resolver is encrypted and authenticated, mitigating the risk of MITM
+attacks, DNS poisoning attacks, and third-party snooping (assuming the
+upstream is trustworthy).
+
+* Basic configuration
+  :PROPERTIES:
+  :CUSTOM_ID: sec-dnscrypt-proxy-configuration
+  :END:
+
+To enable the client proxy, set
+
+#+BEGIN_EXAMPLE
+   = true;
+#+END_EXAMPLE
+
+Enabling the client proxy does not alter the system nameserver; to relay
+local queries, prepend =127.0.0.1= to =networking.nameservers=.
+
+* As a forwarder for another DNS client
+  :PROPERTIES:
+  :CUSTOM_ID: sec-dnscrypt-proxy-forwarder
+  :END:
+
+To run the DNSCrypt proxy client as a forwarder for another DNS client,
+change the default proxy listening port to a non-standard value and
+point the other client to it:
+
+#+BEGIN_EXAMPLE
+   = 43;
+#+END_EXAMPLE
+
+** dnsmasq
+   :PROPERTIES:
+   :CUSTOM_ID: sec-dnscrypt-proxy-forwarder-dsnmasq
+   :END:
+
+#+BEGIN_EXAMPLE
+  {
+     = true;
+     = [ "127.0.0.1#43" ];
+  }
+#+END_EXAMPLE
+
+** unbound
+   :PROPERTIES:
+   :CUSTOM_ID: sec-dnscrypt-proxy-forwarder-unbound
+   :END:
+
+#+BEGIN_EXAMPLE
+  {
+     = true;
+     = [ "127.0.0.1@43" ];
+  }
+#+END_EXAMPLE
