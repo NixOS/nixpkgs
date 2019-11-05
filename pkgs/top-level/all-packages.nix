@@ -17209,6 +17209,8 @@ in
   # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
   lohit-fonts = recurseIntoAttrs ( callPackages ../data/fonts/lohit-fonts { } );
 
+  lounge-gtk-theme = callPackage ../data/themes/lounge { };
+
   luculent = callPackage ../data/fonts/luculent { };
 
   maia-icon-theme = callPackage ../data/icons/maia-icon-theme { };
