@@ -1,0 +1,20 @@
+* Interactive shell helpers
+  :PROPERTIES:
+  :CUSTOM_ID: sec-shell-helpers
+  :END:
+
+Some packages provide the shell integration to be more useful. But
+unlike other systems, nix doesn't have a standard share directory
+location. This is why a bunch =PACKAGE-share= scripts are shipped that
+print the location of the corresponding shared folder. Current list of
+such packages is as following:
+
+- =autojump=: =autojump-share=
+
+- =fzf=: =fzf-share=
+
+E.g. =autojump= can then used in the .bashrc like this:
+
+#+BEGIN_EXAMPLE
+    source "$(autojump-share)/autojump.bash"
+#+END_EXAMPLE
