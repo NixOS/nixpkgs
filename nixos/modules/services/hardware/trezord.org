@@ -1,0 +1,22 @@
+* Trezor
+  :PROPERTIES:
+  :CUSTOM_ID: trezor
+  :END:
+
+Trezor is an open-source cryptocurrency hardware wallet and security
+token allowing secure storage of private keys.
+
+It offers advanced features such U2F two-factor authorization, SSH login
+through [[https://wiki.trezor.io/Apps:SSH_agent][Trezor SSH agent]],
+[[https://wiki.trezor.io/GPG][GPG]] and a
+[[https://wiki.trezor.io/Trezor_Password_Manager][password manager]].
+For more information, guides and documentation, see
+[[https://wiki.trezor.io]].
+
+To enable Trezor support, add the following to your =configuration.nix=:
+
+#+BEGIN_EXAMPLE
+   = true;
+#+END_EXAMPLE
+
+This will add all necessary udev rules and start Trezor Bridge.
