@@ -1,0 +1,13 @@
+* Elm
+  :PROPERTIES:
+  :CUSTOM_ID: sec-elm
+  :END:
+
+To start a development environment do
+=nix-shell -p elmPackages.elm elmPackages.elm-format=
+
+To update Elm compiler, see
+=nixpkgs/pkgs/development/compilers/elm/README.md=.
+
+To package Elm applications,
+[[https://github.com/hercules-ci/elm2nix#elm2nix][read about elm2nix]].
