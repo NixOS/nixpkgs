@@ -175,6 +175,10 @@ callPackage (import ./generic.nix (rec {
     "-Wno-error=stringop-truncation"
     "-Wno-error=format-truncation"
     "-Wno-error=array-bounds"
+    # Fix build with GCC9
+    "-Wno-error=address-of-packed-member"
+    "-Wno-error=format-overflow"
+    "-Wno-error=absolute-value"
   ];
 
   postPatch = ''
