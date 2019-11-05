@@ -10006,6 +10006,8 @@ in
     nodejs = nodejs-10_x;
   };
 
+  ccloud-cli = callPackage ../development/tools/ccloud-cli { };
+
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
   hyenae = callPackage ../tools/networking/hyenae { };
