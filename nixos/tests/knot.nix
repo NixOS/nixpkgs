@@ -30,6 +30,10 @@ let
   };
 in {
   name = "knot";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ hexa ];
+  };
+
 
   nodes = {
     master = { lib, ... }: {
