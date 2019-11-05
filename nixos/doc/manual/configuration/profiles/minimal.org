@@ -1,0 +1,11 @@
+* Minimal
+  :PROPERTIES:
+  :CUSTOM_ID: sec-profile-minimal
+  :END:
+
+This profile defines a small NixOS configuration. It does not contain
+any graphical stuff. It's a very short file that enables
+[[#opt-environment.noXlibs][noXlibs]], sets
+[[#opt-i18n.supportedLocales][i18n.supportedLocales]] to only support
+the user-selected locale, [[#opt-documentation.enable][disables
+packages' documentation]], and [[#opt-sound.enable][disables sound]].
