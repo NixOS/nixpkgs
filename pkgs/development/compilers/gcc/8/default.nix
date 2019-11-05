@@ -140,7 +140,6 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
-  NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
 
@@ -218,8 +217,6 @@ stdenv.mkDerivation ({
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
     ;
-
-  NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
   preConfigure = stdenv.lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
     export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
@@ -307,42 +304,38 @@ stdenv.mkDerivation ({
 
   installTargets = optional stripped "install-strip";
 
-  # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
-  ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
-
-  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-  # library headers and binaries, regarless of the language being compiled.
-  #
-  # Likewise, the LTO code doesn't find zlib.
-  #
-  # Cross-compiling, we need gcc not to read ./specs in order to build the g++
-  # compiler (after the specs for the cross-gcc are created). Having
-  # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
-
-  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
-    ++ optional (zlib != null) zlib
-  ));
-
-  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
-
-  EXTRA_TARGET_FLAGS = optionals
-    (targetPlatform != hostPlatform && libcCross != null)
-    ([
+  env = {
+    NIX_NO_SELF_RPATH = true;
+  } // optionalAttrs (targetPlatform == hostPlatform) {
+    # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+    # library headers and binaries, regarless of the language being compiled.
+    #
+    # Likewise, the LTO code doesn't find zlib.
+    #
+    # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+    # compiler (after the specs for the cross-gcc are created). Having
+    # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
+    CPATH =  makeSearchPathOutput "dev" "include" (optional (zlib != null) zlib);
+    LIBRARY_PATH = makeLibraryPath (optional (zlib != null) zlib);
+  } // optionalAttrs (targetPlatform != hostPlatform && libcCross != null) {
+    EXTRA_TARGET_FLAGS =
       "-idirafter ${getDev libcCross}${libcCross.incdir or "/include"}"
-    ] ++ optionals (! crossStageStatic) [
-      "-B${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]);
-
-  EXTRA_TARGET_LDFLAGS = optionals
-    (targetPlatform != hostPlatform && libcCross != null)
-    ([
+      + optionalString (!crossStageStatic)
+        " -B${libcCross.out}${libcCross.libdir or "/lib"}";
+    EXTRA_TARGET_LDFLAGS =
       "-Wl,-L${libcCross.out}${libcCross.libdir or "/lib"}"
-    ] ++ (if crossStageStatic then [
-        "-B${libcCross.out}${libcCross.libdir or "/lib"}"
-      ] else [
-        "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}"
-        "-Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]));
+      + (if crossStageStatic then
+          "-B${libcCross.out}${libcCross.libdir or "/lib"}"
+        else
+          "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}" +
+          " -Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
+      );
+  } // optionalAttrs (hostPlatform.system == "x86_64-solaris") {
+    # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+    CC = "gcc -m64";
+  } // optionalAttrs hostPlatform.isSunOS {
+    NIX_LDFLAGS = "-lm -ldl";
+  };
 
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;

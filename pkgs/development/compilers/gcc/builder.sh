@@ -18,8 +18,6 @@ fi
 
 
 # GCC interprets empty paths as ".", which we don't want.
-if test -z "${CPATH-}"; then unset CPATH; else export CPATH; fi
-if test -z "${LIBRARY_PATH-}"; then unset LIBRARY_PATH; else export LIBRARY_PATH; fi
 echo "\$CPATH is \`${CPATH-}'"
 echo "\$LIBRARY_PATH is \`${LIBRARY_PATH-}'"
 

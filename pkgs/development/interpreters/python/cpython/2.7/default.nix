@@ -124,7 +124,6 @@ let
       for i in /usr /sw /opt /pkg; do
         substituteInPlace ./setup.py --replace $i /no-such-path
       done
-      export LDFLAGS DETERMINISTIC_BUILD C_INCLUDE_PATH LIBRARY_PATH;
     '' + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
@@ -204,12 +203,13 @@ in with passthru; stdenv.mkDerivation ({
 
     inherit src patches buildInputs nativeBuildInputs preConfigure configureFlags;
 
-    LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
-    inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
-
-    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
-      + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
-    DETERMINISTIC_BUILD = 1;
+    env = {
+      LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+      inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
+      NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
+        + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
+      DETERMINISTIC_BUILD = 1;
+    };
 
     setupHook = python-setup-hook sitePackages;
 
