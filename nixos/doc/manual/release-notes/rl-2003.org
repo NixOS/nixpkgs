@@ -1,0 +1,99 @@
+* Release 20.03 (“Markhor”, 2020.03/??)
+  :PROPERTIES:
+  :CUSTOM_ID: sec-release-20.03
+  :END:
+
+** Highlights
+   :PROPERTIES:
+   :CUSTOM_ID: sec-release-20.03-highlights
+   :END:
+
+In addition to numerous new and upgraded packages, this release has the
+following highlights:
+
+- Support is planned until the end of October 2020, handing over to
+  20.09.
+
+- Postgresql for NixOS service now defaults to v11.
+
+- The graphical installer image starts the graphical session
+  automatically. Before you'd be greeted by a tty and asked to enter
+  =systemctl start display-manager=. It is now possible to disable the
+  display-manager from running by selecting the
+  =Disable display-manager= quirk in the boot menu.
+
+- By default zfs pools will now be trimmed on a weekly basis. Trimming
+  is only done on supported devices (i.e. NVME or SSDs) and should
+  improve throughput and lifetime of these devices. It is controlled by
+  the =services.zfs.trim.enable= varname. The zfs scrub service
+  (=services.zfs.autoScrub.enable=) and the zfs autosnapshot service
+  (=services.zfs.autoSnapshot.enable=) are now only enabled if zfs is
+  set in =config.boot.initrd.supportedFilesystems= or
+  =config.boot.supportedFilesystems=. These lists will automatically
+  contain zfs as soon as any zfs mountpoint is configured in
+  =fileSystems=.
+
+- =nixos-option= has been rewritten in C++, speeding it up, improving
+  correctness, and adding a =--all= option which prints all options and
+  their values.
+
+** New Services
+   :PROPERTIES:
+   :CUSTOM_ID: sec-release-20.03-new-services
+   :END:
+
+The following new services were added since the last release:
+
+- 
+
+** Backward Incompatibilities
+   :PROPERTIES:
+   :CUSTOM_ID: sec-release-20.03-incompatibilities
+   :END:
+
+When upgrading from a previous release, please be aware of the following
+incompatible changes:
+
+- GnuPG is now built without support for a graphical passphrase entry by
+  default. Please enable the =gpg-agent= user service via the NixOS
+  option =programs.gnupg.agent.enable=. Note that upstream recommends
+  using =gpg-agent= and will spawn a =gpg-agent= on the first invocation
+  of GnuPG anyway.
+
+- The =dynamicHosts= option has been removed from the
+  [[#opt-networking.networkmanager.enable][networkd]] module. Allowing
+  (multiple) regular users to override host entries affecting the whole
+  system opens up a huge attack vector. There seem to be very rare cases
+  where this might be useful. Consider setting system-wide host entries
+  using [[#opt-networking.hosts][networking.hosts]], provide them via
+  the DNS server in your network, or use
+  [[#opt-environment.etc][environment.etc]] to add a file into
+  =/etc/NetworkManager/dnsmasq.d= reconfiguring =hostsdir=.
+
+- The =99-main.network= file was removed. Maching all network interfaces
+  caused many breakages, see
+  [[https://github.com/NixOS/nixpkgs/pull/18962][#18962]] and
+  [[https://github.com/NixOS/nixpkgs/pull/71106][#71106]].
+
+  We already don't support the global
+  [[#opt-networking.useDHCP][networking.useDHCP]],
+  [[#opt-networking.defaultGateway][networking.defaultGateway]] and
+  [[#opt-networking.defaultGateway6][networking.defaultGateway6]]
+  options if [[#opt-networking.useNetworkd][networking.useNetworkd]] is
+  enabled, but direct users to configure the per-device
+  [[#opt-networking.interfaces][networking.interfaces.<name>....]]
+  options.
+
+** Other Notable Changes
+   :PROPERTIES:
+   :CUSTOM_ID: sec-release-20.03-notable-changes
+   :END:
+
+- SD images are now compressed by default using =bzip2=.
+
+- OpenSSH has been upgraded from 7.9 to 8.1, improving security and
+  adding features but with potential incompatibilities. Consult the
+  [[https://www.openssh.com/txt/release-8.1][release announcement]] for
+  more information.
+
+
