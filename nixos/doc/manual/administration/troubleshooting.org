@@ -1,0 +1,7 @@
+* Troubleshooting
+  :PROPERTIES:
+  :CUSTOM_ID: ch-troubleshooting
+  :END:
+
+This chapter describes solutions to common problems you might encounter
+when you manage your NixOS system.
