@@ -2,16 +2,16 @@
 
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
 
   baseConfig = {
-    imports = [ ./common/user-account.nix ];
+    imports = [ ../common/user-account.nix ];
 
     services.xserver.enable = true;
 

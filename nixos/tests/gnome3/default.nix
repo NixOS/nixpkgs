@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ../make-test.nix ({ pkgs, ...} : {
   name = "gnome3";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = pkgs.gnome3.maintainers;
@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine =
     { ... }:
 
-    { imports = [ ./common/user-account.nix ];
+    { imports = [ ../common/user-account.nix ];
 
       services.xserver.enable = true;
 
