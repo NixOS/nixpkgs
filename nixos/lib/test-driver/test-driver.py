@@ -611,14 +611,14 @@ class Machine:
         self.log("QEMU running (pid {})".format(self.pid))
 
     def shutdown(self):
-        if self.booted:
+        if not self.booted:
             return
 
         self.shell.send("poweroff\n".encode())
         self.wait_for_shutdown()
 
     def crash(self):
-        if self.booted:
+        if not self.booted:
             return
 
         self.log("forced crash")
