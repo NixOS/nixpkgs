@@ -12,7 +12,10 @@ with lib;
       description = "Waybar as systemd service";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
-      script = "${pkgs.waybar}/bin/waybar";
+      serviceConfig = {
+        ExecStart = "${pkgs.waybar}/bin/waybar";
+        Restart = "always";
+      };
     };
   };
 
