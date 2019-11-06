@@ -6000,6 +6000,8 @@ in
 
   rng-tools = callPackage ../tools/security/rng-tools { };
 
+  rnnoise = callPackage ../development/libraries/rnnoise { };
+
   rnv = callPackage ../tools/text/xml/rnv { };
 
   rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
