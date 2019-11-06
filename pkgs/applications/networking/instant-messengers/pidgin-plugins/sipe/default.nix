@@ -13,10 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pidgin gmime libxml2 nss ];
   enableParallelBuilding = true;
 
-  # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
-
-  postInstall = "find $out -ls; ln -s \$out/lib/purple-2 \$out/share/pidgin-sipe";
+  postInstall = "ln -s \$out/lib/purple-2 \$out/share/pidgin-sipe";
 
   meta = with stdenv.lib; {
     description = "SIPE plugin for Pidgin IM";
