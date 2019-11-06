@@ -650,6 +650,14 @@ class Machine:
     def sleep(self, secs):
         time.sleep(secs)
 
+    def forward_port(self, host_port=8080, guest_port=80):
+        """Forward a TCP port on the host to a TCP port on the guest.
+        Useful during interactive testing.
+        """
+        self.send_monitor_command(
+            "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
+        )
+
     def block(self):
         """Make the machine unreachable by shutting down eth1 (the multicast
         interface used to talk to the other VMs).  We keep eth0 up so that
