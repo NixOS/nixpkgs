@@ -1,9 +1,19 @@
 { python3Packages, fetchurl }:
 
-{
-  ansible = with python3Packages; toPythonApplication ansible;
+rec {
+  ansible = ansible_2_8;
 
-  ansible_2_8 = with python3Packages; toPythonApplication ansible;
+  ansible_2_9 = python3Packages.toPythonApplication python3Packages.ansible;
+
+  ansible_2_8 = with python3Packages; toPythonApplication (python3Packages.ansible.overrideAttrs(old: rec {
+    pname = "ansible";
+    version = "2.8.6";
+
+    src = fetchurl {
+      url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
+      sha256 = "0mg3pj9bs9xg3sks2mbdyba9x191d88vavkbr3l264fnr4kkn81i";
+    };
+  }));
 
   ansible_2_7 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
     pname = "ansible";
