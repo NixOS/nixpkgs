@@ -75,6 +75,12 @@ in stdenv.mkDerivation (rec {
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
     # valgrind unhappy with musl or glibc, but fails w/musl only
     rm test/CodeGen/AArch64/wineh4.mir
+  '' + optionalString stdenv.hostPlatform.isAarch32 ''
+    # skip failing X86 test cases on 32-bit ARM
+    rm test/DebugInfo/X86/convert-debugloc.ll
+    rm test/DebugInfo/X86/convert-inlined.ll
+    rm test/DebugInfo/X86/convert-linked.ll
+    rm test/tools/dsymutil/X86/op-convert.test
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
 
