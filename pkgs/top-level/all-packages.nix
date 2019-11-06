@@ -20994,7 +20994,7 @@ in
 
   vndr = callPackage ../development/tools/vndr { };
 
-  windows = callPackages ../os-specific/windows {};
+  windows = callPackage ../os-specific/windows {};
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
