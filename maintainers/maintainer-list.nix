@@ -6491,6 +6491,12 @@
     githubId = 506181;
     name = "Peter Marheine";
   };
+  tasmo = {
+    email = "tasmo@tasmo.de";
+    github = "tasmo";
+    githubId = 102685;
+    name = "Thomas Friese";
+  };
   tavyc = {
     email = "octavian.cerna@gmail.com";
     github = "tavyc";
