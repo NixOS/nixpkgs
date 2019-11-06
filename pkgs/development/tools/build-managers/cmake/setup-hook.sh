@@ -125,7 +125,7 @@ addEnvHooks "$targetOffset" addCMakeParams
 makeCmakeFindLibs(){
   isystem_seen=
   iframework_seen=
-  for flag in $NIX_CFLAGS_COMPILE $NIX_LDFLAGS; do
+  for flag in ${NIX_CFLAGS_COMPILE-} ${NIX_LDFLAGS-}; do
     if test -n "$isystem_seen" && test -d "$flag"; then
       isystem_seen=
       export CMAKE_INCLUDE_PATH="${CMAKE_INCLUDE_PATH-}${CMAKE_INCLUDE_PATH:+:}${flag}"
