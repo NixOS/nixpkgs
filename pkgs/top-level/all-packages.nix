@@ -3961,7 +3961,9 @@ in
 
   hwinfo = callPackage ../tools/system/hwinfo { };
 
-  hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
+  hybridreverb2 = callPackage ../applications/audio/hybridreverb2 {
+    stdenv = gcc8Stdenv;
+  };
 
   hylafaxplus = callPackage ../servers/hylafaxplus { };
 
