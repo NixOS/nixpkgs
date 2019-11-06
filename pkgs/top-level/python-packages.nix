@@ -811,6 +811,8 @@ in {
 
   nltk = callPackage ../development/python-modules/nltk { };
 
+  npyscreen = callPackage ../development/python-modules/npyscreen { };
+
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
