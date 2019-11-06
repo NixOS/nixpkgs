@@ -2499,6 +2499,7 @@ extra-packages:
   - haddock == 2.22.*                   # required on GHC 8.0.x
   - haddock-api == 2.22.*               # required on GHC 7.8.x
   - happy <1.19.6                       # newer versions break Agda
+  - happy == 1.19.9                     # for purescript
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
