@@ -11,6 +11,7 @@ import ../make-test.nix ({ pkgs, ...} : {
 
       services.xserver.enable = true;
 
+      # See: https://github.com/NixOS/nixpkgs/issues/66443
       services.xserver.displayManager.gdm.enable = false;
       services.xserver.displayManager.lightdm.enable = true;
       services.xserver.displayManager.lightdm.autoLogin.enable = true;
