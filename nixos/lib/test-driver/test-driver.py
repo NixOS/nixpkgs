@@ -494,6 +494,11 @@ class Machine:
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
 
+    def dump_tty_contents(self, tty):
+        """Debugging: Dump the contents of the TTY<n>
+        """
+        self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
+
     def get_screen_text(self):
         if shutil.which("tesseract") is None:
             raise Exception("get_screen_text used but enableOCR is false")
