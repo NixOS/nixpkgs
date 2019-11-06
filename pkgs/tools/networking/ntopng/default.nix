@@ -13,7 +13,7 @@ let
   };
 in stdenv.mkDerivation rec {
   version = "3.8";
-  name = "ntopng-${version}";
+  pname = "ntopng";
 
   src = fetchFromGitHub {
     owner = "ntop";
