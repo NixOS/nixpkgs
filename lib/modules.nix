@@ -497,6 +497,30 @@ rec {
 
   /* Properties. */
 
+  /*
+  These functions wrap/unwrap some value into/from an opaque container that
+  only has a very minimal way of possible interactions. Specifically the
+  container is a function, meaning it's not possible to use // on it or get
+  values from it with .<attrname>
+
+  opaqueWrap :: Any -> OpaqueWrapper
+  opaqueUnwrap :: OpaqueWrapper -> Any
+
+  Examples:
+    > opaqueWrap { x = true; }
+    «lambda @ (string):1:5»
+
+    > opaqueWrap { x = true; } // opaqueWrap { x = false; }
+    error: value is a function while a set was expected
+
+    > opaqueUnwrap (opaqueWrap { x = true; })
+    { x = true; }
+
+  */
+  opaqueWrap = value: { _opaqueWrapper }: value;
+  isOpaqueWrapper = x: builtins.isFunction x && builtins.functionArgs x ? _opaqueWrapper;
+  opaqueUnwrap = wrapper: wrapper { _opaqueWrapper = null; };
+
   mkIf = condition: content:
     { _type = "if";
       inherit condition content;
