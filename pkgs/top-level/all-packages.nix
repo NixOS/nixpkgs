@@ -1774,6 +1774,8 @@ in
 
   gringo = callPackage ../tools/misc/gringo { };
 
+  gripgen = callPackage ../tools/text/gripgen { };
+
   grobi = callPackage ../tools/X11/grobi { };
 
   gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
