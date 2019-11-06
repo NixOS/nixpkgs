@@ -3,6 +3,8 @@
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
 , openglSupport ? false, libGLU_combined ? null
+, libmfxSupport ? false, intel-media-sdk ? null
+, libaomSupport ? false, libaom ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
@@ -62,6 +64,8 @@ let
 in
 
 assert openglSupport -> libGLU_combined != null;
+assert libmfxSupport -> intel-media-sdk != null;
+assert libaomSupport -> libaom != null;
 
 stdenv.mkDerivation rec {
 
@@ -135,6 +139,8 @@ stdenv.mkDerivation rec {
       (ifMinVer "0.6" (enableFeature vpxSupport "libvpx"))
       (ifMinVer "2.4" "--enable-lzma")
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
+      (ifMinVer "4.2" (enableFeature libmfxSupport "libmfx"))
+      (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
       (disDarwinOrArmFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
       (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else if sdlSupport then "--enable-sdl" else null)) # autodetected before 2.5, SDL1 support removed in 3.2 for SDL2
       (ifMinVer "1.2" "--enable-libsoxr")
@@ -163,6 +169,8 @@ stdenv.mkDerivation rec {
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
     libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
   ] ++ optional openglSupport libGLU_combined
+    ++ optional libmfxSupport intel-media-sdk
+    ++ optional vpxSupport libaom
     ++ optional vpxSupport libvpx
     ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
