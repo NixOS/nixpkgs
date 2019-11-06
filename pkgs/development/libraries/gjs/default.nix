@@ -1,6 +1,19 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, gtk3, atk, gobject-introspection
-, spidermonkey_60, pango, readline, glib, libxml2, dbus, gdk-pixbuf
-, makeWrapper }:
+{ fetchurl
+, stdenv
+, pkgconfig
+, gnome3
+, gtk3
+, atk
+, gobject-introspection
+, spidermonkey_60
+, pango
+, readline
+, glib
+, libxml2
+, dbus
+, gdk-pixbuf
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "gjs";
@@ -11,16 +24,25 @@ stdenv.mkDerivation rec {
     sha256 = "1xf68rbagkflb9yi3visfw8cbxqlzd717y8jakgw0y6whzm1dpxl";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gjs"; attrPath = "gnome3.gjs"; };
-  };
-
   outputs = [ "out" "installedTests" ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ libxml2 gobject-introspection glib pango readline dbus ];
+  nativeBuildInputs = [
+    pkgconfig
+    makeWrapper
+  ];
 
-  propagatedBuildInputs = [ spidermonkey_60 ];
+  buildInputs = [
+    libxml2
+    gobject-introspection
+    glib
+    pango
+    readline
+    dbus
+  ];
+
+  propagatedBuildInputs = [
+    spidermonkey_60
+  ];
 
   configureFlags = [
     "--enable-installed-tests"
@@ -42,10 +64,19 @@ stdenv.mkDerivation rec {
       --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gtk3 atk pango.out gdk-pixbuf ]}:$installedTests/libexec/gjs/installed-tests"
   '';
 
+  separateDebugInfo = stdenv.isLinux;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gjs";
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "JavaScript bindings for GNOME";
+    homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
+    license = licenses.lgpl2Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;
-    license = licenses.lgpl2Plus;
   };
 }

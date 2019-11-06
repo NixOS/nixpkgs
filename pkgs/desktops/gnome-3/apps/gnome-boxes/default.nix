@@ -1,16 +1,57 @@
-{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, itstool, libvirt-glib
-, glib, gobject-introspection, libxml2, gtk3, gtk-vnc, freerdp, libvirt, spice-gtk, python3
-, spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
-, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
-, mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, libsecret
-, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk, vte
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, wrapGAppsHook
+, pkgconfig
+, gettext
+, itstool
+, libvirt-glib
+, glib
+, gobject-introspection
+, libxml2
+, gtk3
+, gtk-vnc
+, freerdp
+, libvirt
+, spice-gtk
+, python3
+, spice-protocol
+, libsoup
+, libosinfo
+, systemd
+, tracker
+, tracker-miners
+, vala
+, libcap
+, yajl
+, gmp
+, gdbm
+, cyrus_sasl
+, gnome3
+, librsvg
+, desktop-file-utils
+, mtools
+, cdrkit
+, libcdio
+, libusb
+, libarchive
+, acl
+, libgudev
+, libsecret
+, libcap_ng
+, numactl
+, xen
+, libapparmor
+, json-glib
+, webkitgtk
+, vte
+, glib-networking
 }:
 
-let
-  version = "3.34.1";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  inherit version;
+  version = "3.34.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -20,18 +61,58 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobject-introspection desktop-file-utils python3
+    desktop-file-utils
+    gettext
+    gobject-introspection
+    itstool
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
   ];
 
   # Required for USB redirection PolicyKit rules file
-  propagatedUserEnvPkgs = [ spice-gtk ];
+  propagatedUserEnvPkgs = [
+    spice-gtk
+  ];
 
   buildInputs = [
-    libvirt-glib glib gtk3 gtk-vnc freerdp libxml2
-    libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
-    tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
-    gnome3.adwaita-icon-theme librsvg acl libgudev libsecret
-    libcap_ng numactl xen libapparmor vte
+    acl
+    cyrus_sasl
+    freerdp
+    gdbm
+    glib
+    glib-networking
+    gmp
+    gnome3.adwaita-icon-theme
+    gtk-vnc
+    gtk3
+    json-glib
+    libapparmor
+    libarchive
+    libcap
+    libcap_ng
+    libgudev
+    libosinfo
+    librsvg
+    libsecret
+    libsoup
+    libusb
+    libvirt
+    libvirt-glib
+    libxml2
+    numactl
+    spice-gtk
+    spice-protocol
+    systemd
+    tracker
+    tracker-miners
+    vte
+    webkitgtk
+    xen
+    yajl
   ];
 
   preFixup = ''
@@ -45,8 +126,8 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gnome-boxes";
-      attrPath = "gnome3.gnome-boxes";
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
     };
   };
 

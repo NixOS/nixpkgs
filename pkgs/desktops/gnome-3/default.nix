@@ -49,8 +49,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gdm = callPackage ./core/gdm { };
 
-  gjs = callPackage ./core/gjs { };
-
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
@@ -360,4 +358,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) vala; # added 2019-10-10
 
   inherit (pkgs) gegl_0_4; # added 2019-10-31
+
+  inherit (pkgs) gjs; # added 2019-01-05
 })
