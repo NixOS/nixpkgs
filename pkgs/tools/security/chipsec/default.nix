@@ -2,13 +2,13 @@
 , kernel ? null, withDriver ? false }:
 pythonPackages.buildPythonApplication rec {
   name = "chipsec-${version}";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    rev = version;
-    sha256 = "043gf21zygvrzvvkwv5xxpcv3ryj5m8klkgyhq0lnh6k594qrg77";
+    rev = "${version}";
+    sha256 = "0k4lsg848v9b2vcz9hgvs22mapcym72xr8wiha60dk8dczlb2in5";
   };
 
   nativeBuildInputs = [
