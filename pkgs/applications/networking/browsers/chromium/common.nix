@@ -1,7 +1,7 @@
-{ stdenv, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, gnutar
+{ stdenv, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, fetchurl
 
 # default dependencies
-, bzip2, flac, speex, libopus
+, gnutar, bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
 , xdg_utils, yasm, nasm, minizip, libwebp
@@ -38,6 +38,7 @@
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
 
+, channel
 , upstream-info
 }:
 
@@ -107,7 +108,7 @@ let
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
         result = versionAtLeast version min-version && versionOlder version upto-version;
-        stable-version = (import ./upstream-info.nix).stable.version;
+        stable-version = (importJSON ./upstream-info.json).stable.version;
     in if versionAtLeast stable-version upto-version
        then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
             result
@@ -115,10 +116,13 @@ let
 
   base = rec {
     name = "${packageName}-unwrapped-${version}";
-    inherit (upstream-info) channel version;
-    inherit packageName buildType buildPath;
+    inherit (upstream-info) version;
+    inherit channel packageName buildType buildPath;
 
-    src = upstream-info.main;
+    src = fetchurl {
+      url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
+      inherit (upstream-info) sha256;
+    };
 
     nativeBuildInputs = [
       ninja which python2Packages.python perl pkgconfig
@@ -333,9 +337,11 @@ let
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
       patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
     '';
+
+    passthru.updateScript = ./update.py;
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.
 in stdenv.mkDerivation (base // removeAttrs extraAttrs [
   "name" "gnFlags" "buildTargets"
-])
+] // { passthru = base.passthru // (extraAttrs.passthru or {}); })
