@@ -1,7 +1,9 @@
 { stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk-pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
-libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev }:
+libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev, wrapGAppsHook,
+hicolor-icon-theme }:
+
 let
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -57,6 +59,8 @@ in
     dontBuild = true;
     dontConfigure = true;
     dontPatchELF = true;
+
+    buildInputs = [ wrapGAppsHook gtk3 hicolor-icon-theme ];
 
     installPhase = ''
       mkdir -p $out/share/mattermost-desktop
