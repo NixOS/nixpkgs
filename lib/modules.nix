@@ -115,7 +115,10 @@ rec {
 
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
-  unifyModuleSyntax = file: key: m:
+  unifyModuleSyntax = file: key: m':
+    # Unwrap any potential opaque wrappers created with mkIf and co.
+    # This is to allow things like `modules = [ (mkIf ...) ]`
+    let m = if isOpaqueWrapper m' then opaqueUnwrap m' else m'; in
     let metaSet = if m ? meta
       then { meta = m.meta; }
       else {};
@@ -141,7 +144,11 @@ rec {
         config = mkMerge [ (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]) metaSet ];
       };
 
-  applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
+
+  applyIfFunction = key: f: args@{ config, options, lib, ... }:
+    # We only want to apply module arguments if we're actually dealing with a
+    # module function, an opaque wrapper isn't one
+    if isFunction f && ! isOpaqueWrapper f then
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
@@ -394,7 +401,9 @@ rec {
      to refer to the full configuration without creating an infinite
      recursion.
   */
-  pushDownProperties = cfg:
+  pushDownProperties = cfg':
+    # Unwrap any potential opaque wrappers created with mkIf and co.
+    let cfg = if isOpaqueWrapper cfg' then opaqueUnwrap cfg' else cfg'; in
     if cfg._type or "" == "merge" then
       concatMap pushDownProperties cfg.contents
     else if cfg._type or "" == "if" then
@@ -414,7 +423,9 @@ rec {
 
      yields ‘[ 1 2 ]’.
   */
-  dischargeProperties = def:
+  dischargeProperties = def':
+    # Unwrap any potential opaque wrappers created with mkIf and co.
+    let def = if isOpaqueWrapper def' then opaqueUnwrap def' else def'; in
     if def._type or "" == "merge" then
       concatMap dischargeProperties def.contents
     else if def._type or "" == "if" then
@@ -521,7 +532,24 @@ rec {
   isOpaqueWrapper = x: builtins.isFunction x && builtins.functionArgs x ? _opaqueWrapper;
   opaqueUnwrap = wrapper: wrapper { _opaqueWrapper = null; };
 
-  mkIf = condition: content:
+  /*
+  We wrap all these property types into an opaque wrapper such that they can't
+  be treated as sets. Without doing this, it would be possible to write
+
+    some.option = {
+      foo = "foo";
+    } // mkIf cond {
+      bar = "bar";
+    }
+
+  Which would not throw an error but ignore the assignment of foo completely
+  because it results in
+
+    { _type = "if"; condition = true; content = { bar = "bar"; }; foo = "foo"; }
+
+  By wrapping this such errors can be caught early
+  */
+  mkIf = condition: content: opaqueWrap
     { _type = "if";
       inherit condition content;
     };
@@ -531,12 +559,12 @@ rec {
       (if assertion then true else throw "\nFailed assertion: ${message}")
       content;
 
-  mkMerge = contents:
+  mkMerge = contents: opaqueWrap
     { _type = "merge";
       inherit contents;
     };
 
-  mkOverride = priority: content:
+  mkOverride = priority: content: opaqueWrap
     { _type = "override";
       inherit priority content;
     };
@@ -550,7 +578,7 @@ rec {
 
   mkFixStrictness = id; # obsolete, no-op
 
-  mkOrder = priority: content:
+  mkOrder = priority: content: opaqueWrap
     { _type = "order";
       inherit priority content;
     };
