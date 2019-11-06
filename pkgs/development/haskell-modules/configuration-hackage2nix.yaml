@@ -2591,6 +2591,10 @@ package-maintainers:
     - Agda
   roberth:
     - arion-compose
+  cdepillabout:
+    - pretty-simple
+    - purescript
+    - termonad
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
