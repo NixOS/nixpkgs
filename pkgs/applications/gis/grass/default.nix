@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
   # directory
   patches = [ ./no_symbolic_links.patch ];
 
+  # Correct mysql_config query
+  patchPhase = ''
+      substituteInPlace configure --replace "--libmysqld-libs" "--libs"
+  '';
+
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
     "--with-proj-includes=${proj.dev}/include"
