@@ -29,7 +29,7 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
     rm -rf $out/Home/man/ja*
 
     # for backward compatibility
-    ln -s $out/Contents/Home $out/jre
+    [ ! -d "$out/Contents/Home/jre" ] && ln -s $out/Contents/Home $out/jre
 
     ln -s $out/Contents/Home/* $out/
 
