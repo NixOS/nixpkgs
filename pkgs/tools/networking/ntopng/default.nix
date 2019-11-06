@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
-, geoip, geolite-legacy, sqlite, which, autoreconfHook, git, mariadb, readline80
+, geoip, geolite-legacy, sqlite, which, autoreconfHook, mariadb, readline80
 , pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool, libmaxminddb
 }:
 
@@ -27,8 +27,9 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 libmaxminddb glib geoip geolite-legacy
-    sqlite which autoreconfHook git pkgconfig groff curl json_c luajit zeromq mariadb readline80
-    rrdtool ];
+    sqlite curl json_c luajit zeromq mariadb readline80 rrdtool ];
+
+  nativeBuildInputs = [ autoreconfHook groff pkgconfig which ];
 
   autoreconfPhase = ''
     substituteInPlace autogen.sh --replace "/bin/rm" "rm"
