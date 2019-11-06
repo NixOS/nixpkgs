@@ -597,7 +597,7 @@ class Machine:
 
         def process_serial_output():
             for line in self.process.stdout:
-                line = line.decode().replace("\r", "").rstrip()
+                line = line.decode("unicode_escape").replace("\r", "").rstrip()
                 eprint("{} # {}".format(self.name, line))
                 self.logger.enqueue({"msg": line, "machine": self.name})
 
