@@ -184,6 +184,13 @@ in
         enableGnomeKeyring = true;
       };
 
+      systemd.packages = with pkgs.gnome3; [
+        gnome-flashback
+      ] ++ (map
+        (wm: gnome-flashback.mkSystemdTargetForWm {
+          inherit (wm) wmName;
+        }) cfg.flashback.customSessions);
+
       services.dbus.packages = [
         pkgs.gnome3.gnome-screensaver
       ];
