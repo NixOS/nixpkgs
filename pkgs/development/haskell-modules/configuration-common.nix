@@ -1292,4 +1292,22 @@ self: super: {
   # https://github.com/Happstack/web-routes-th/pull/3
   web-routes-th = doJailbreak super.web-routes-th;
 
+  # Remove for hail > 0.2.0.0
+  hail = overrideCabal super.hail (drv: {
+    patches = [
+      (pkgs.fetchpatch {
+        # Relax dependency constraints,
+        # upstream PR: https://github.com/james-preston/hail/pull/13
+        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/13.patch";
+        sha256 = "039p5mqgicbhld2z44cbvsmam3pz0py3ybaifwrjsn1y69ldsmkx";
+      })
+      (pkgs.fetchpatch {
+        # Relax dependency constraints,
+        # upstream PR: https://github.com/james-preston/hail/pull/15
+        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/15.patch";
+        sha256 = "03kdvr8hxi6isb8yxp5rgcmz855n19m1yacn3d56a4i58j2mldjw";
+      })
+    ];
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
