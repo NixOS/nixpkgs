@@ -8146,7 +8146,6 @@ broken-packages:
   - pure-priority-queue
   - pure-priority-queue-tests
   - purebred-email
-  - purescript
   - purescript-iso
   - purescript-tsd-gen
   - push-notify
