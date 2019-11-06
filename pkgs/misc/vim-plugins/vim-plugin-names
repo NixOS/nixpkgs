@@ -143,6 +143,7 @@ jeffkreeftmeijer/neovim-sensible
 jelera/vim-javascript-syntax
 jgdavey/tslime.vim
 jhradilek/vim-docbk
+jhradilek/vim-snippets as vim-docbk-snippets
 jiangmiao/auto-pairs
 jistr/vim-nerdtree-tabs
 jlanzarotta/bufexplorer

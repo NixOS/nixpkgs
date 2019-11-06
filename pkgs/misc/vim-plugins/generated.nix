@@ -3445,6 +3445,17 @@ let
     };
   };
 
+  vim-docbk-snippets = buildVimPluginFrom2Nix {
+    pname = "vim-docbk-snippets";
+    version = "2019-09-13";
+    src = fetchFromGitHub {
+      owner = "jhradilek";
+      repo = "vim-snippets";
+      rev = "b8604893f46f6c570a55efff733f0371ac8a805d";
+      sha256 = "1qz3azgzv9718s2a6h8xw5nrvs4j776csmzsn9chvykdpx8rwim1";
+    };
+  };
+
   vim-easy-align = buildVimPluginFrom2Nix {
     pname = "vim-easy-align";
     version = "2019-04-29";
