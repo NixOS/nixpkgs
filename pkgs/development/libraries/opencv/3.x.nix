@@ -36,20 +36,20 @@
 }:
 
 let
-  version = "3.4.7";
+  version = "3.4.8";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0r5rrcnqx2lsnr1ja5ij2chb7yk9kkamr4p0ik52sqxydwkv3z50";
+    sha256 = "1dnz3gfj70lm1gbrk8pz28apinlqi2x6nvd6xcy5hs08505nqnjp";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1ik6acsmgrx66awf19r2y3ijqvv9xg43gaphwszbiyi0jq3r43yw";
+    sha256 = "0psaa1yx36n34l09zd1y8jxgf8q4jzxd3vn06fqmzwzy85hcqn8i";
   };
 
   # Contrib must be built in order to enable Tesseract support:

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gnome3
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gjs
 , glib, systemd, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse, utillinuxMinimal, libselinux
 , libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42, python3
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     glib systemd e2fsprogs libsoup gpgme fuse libselinux libcap
     libarchive bzip2 xz
     utillinuxMinimal # for libmount
-    (python3.withPackages (p: with p; [ pyyaml ])) gnome3.gjs # for tests
+    (python3.withPackages (p: with p; [ pyyaml ])) gjs # for tests
   ];
 
   preConfigure = ''
