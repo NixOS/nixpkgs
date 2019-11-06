@@ -588,7 +588,7 @@ class Machine:
             stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            shell=False,
+            shell=True,
             cwd=self.state_dir,
             env=environment,
         )
