@@ -201,7 +201,7 @@ let
     (assertValueOneOf "IPv6AcceptRA" boolValues)
     (assertValueOneOf "IPv4ProxyARP" boolValues)
     (assertValueOneOf "IPv6ProxyNDP" boolValues)
-    (assertValueOneOf "IPv6PrefixDelegation" boolValues)
+    (assertValueOneOf "IPv6PrefixDelegation" boolValues ++ ["static" "dhcpv6"])
     (assertValueOneOf "ActiveSlave" boolValues)
     (assertValueOneOf "PrimarySlave" boolValues)
     (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
