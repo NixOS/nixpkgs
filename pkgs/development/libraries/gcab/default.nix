@@ -2,6 +2,9 @@
 , fetchurl
 , gettext
 , gobject-introspection
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
 , pkgconfig
 , meson
 , ninja
@@ -16,7 +19,7 @@ stdenv.mkDerivation rec {
   pname = "gcab";
   version = "1.2";
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -31,6 +34,9 @@ stdenv.mkDerivation rec {
     vala
     gettext
     gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
   ];
 
   buildInputs = [
@@ -39,7 +45,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddocs=false"
     "-Dtests=false"
   ];
 
