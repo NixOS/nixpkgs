@@ -1,6 +1,8 @@
-{ lib, callPackage, fetchurl, fetchFromGitHub, overrideCC, gccStdenv, gcc6 }:
+{ lib, callPackage, fetchurl, fetchFromGitHub, overrideCC, gccStdenv, gcc6, config }:
 
 let
+
+  inHydra = config.inHydra or false;
 
   common = opts: callPackage (import ./common.nix opts) {};
 
@@ -62,6 +64,7 @@ rec {
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
+    } // lib.optionalAttrs (!inHydra) {
       knownVulnerabilities = [ "Support ended in August 2018." ];
     };
   }).override {
