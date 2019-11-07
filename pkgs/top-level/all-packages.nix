@@ -17126,6 +17126,8 @@ in
 
   cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
 
+  cldr-emoji-annotation = callPackage ../data/misc/cldr-emoji-annotation { };
+
   clearlooks-phenix = callPackage ../data/themes/clearlooks-phenix { };
 
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder {};
