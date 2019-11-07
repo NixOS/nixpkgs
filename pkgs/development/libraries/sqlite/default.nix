@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   patches = [
     # CVE-2019-16168: backported patch for a division by zero caused crash
     # Once we can upgrade to >= 3.30 this should be removed.
-    ./cve_2019_16168.patch
+    ./CVE-2019-16168.patch
   ];
 
   configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
