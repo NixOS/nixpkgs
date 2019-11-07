@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rycee";
     repo = "home-manager";
-    rev = "149c0593abac5879631f63e55ef5b68277020b66";
-    sha256 = "1a39mj238mxd5b6zglmsb1iclqpzs7av38g6gc1dfjxhnb731rvc";
+    rev = "450571056552c9311fcb2894328696b535265593";
+    sha256 = "1rlv234m0bqj9x2y9wnl8z3yq8mixzq8332nqlb8fw9k8mazis6s";
   };
 
   nativeBuildInputs = [ makeWrapper ];
