@@ -416,6 +416,22 @@ in
     ];
   };
 
+  pg_query = attrs:
+    let
+      libpg_query = fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/10-1.0.1";
+        sha256 = "0m5jv134hgw2vcfkqlnw80fr3wmrdvgrvk1ndcx9s44bzi5nsp47";
+      };
+    in {
+
+      dontBuild = false;
+      postPatch = ''
+        substituteInPlace ext/pg_query/extconf.rb \
+          --replace "'https://codeload.github.com/lfittl/libpg_query/tar.gz/' + LIB_PG_QUERY_TAG" \
+                    "'${libpg_query}'"
+      '';
+    };
+
   puma = attrs: {
     buildInputs = [ openssl ];
   };
