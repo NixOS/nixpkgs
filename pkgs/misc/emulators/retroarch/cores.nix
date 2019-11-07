@@ -1,5 +1,5 @@
 { stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
-, alsaLib, fluidsynth, curl, hidapi, libGLU_combined, gettext, glib, gtk2, portaudio, SDL
+, alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, libGL
 , ffmpeg, pcre, libevdev, libpng, libjpeg, udev, libvorbis
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost }:
 
@@ -152,7 +152,7 @@ in with stdenv.lib.licenses;
     buildPhase = "make";
     name = "beetle-pce-fast-${der.version}";
   };
-  
+
   beetle-pcfx = (mkLibRetroCore rec {
     core = "mednafen-pcfx";
     src = fetchRetro {
@@ -197,7 +197,7 @@ in with stdenv.lib.licenses;
     name = "beetle-saturn-${der.version}";
     meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
-  
+
   beetle-supergrafx = (mkLibRetroCore rec {
     core = "mednafen-supergrafx";
     src = fetchRetro {
@@ -323,7 +323,7 @@ in with stdenv.lib.licenses;
       "-DENABLE_QT=OFF"
       "-DENABLE_LTO=OFF"
       "-DUSE_UPNP=OFF"
-      "-DUSE_DISCORD_PRESENCE=OFF" 
+      "-DUSE_DISCORD_PRESENCE=OFF"
     ];
     dontUseCmakeBuildDir = "yes";
     buildPhase = "make";
@@ -380,7 +380,7 @@ in with stdenv.lib.licenses;
     };
     description = "Flycast libretro port";
     license = gpl2;
-    extraBuildInputs = [ libGLU_combined ];
+    extraBuildInputs = [ libGL libGLU ];
   }).override {
     makefile = "Makefile";
     buildPhase = "make";
@@ -633,7 +633,7 @@ in with stdenv.lib.licenses;
     makefile = "libretro/Makefile";
     buildPhase = "cd libretro && make";
   };
- 
+
   o2em = (mkLibRetroCore rec {
     core = "o2em";
     src = fetchRetro {
@@ -647,7 +647,7 @@ in with stdenv.lib.licenses;
     makefile = "Makefile";
     buildPhase = "make";
   };
- 
+
   parallel-n64 = (mkLibRetroCore rec {
     core = "parallel-n64";
     src = fetchRetro {
@@ -677,7 +677,7 @@ in with stdenv.lib.licenses;
     configurePhase = "rm configure";
     buildPhase = "make -f Makefile.libretro";
   };
-  
+
   picodrive = (mkLibRetroCore rec {
     core = "picodrive";
     src = fetchRetro {
