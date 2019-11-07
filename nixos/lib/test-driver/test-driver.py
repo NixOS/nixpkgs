@@ -4,7 +4,9 @@ from contextlib import contextmanager
 from xml.sax.saxutils import XMLGenerator
 import _thread
 import atexit
+import json
 import os
+import ptpython.repl
 import pty
 import queue
 import re
@@ -15,7 +17,6 @@ import sys
 import tempfile
 import time
 import unicodedata
-import ptpython.repl
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -344,6 +345,18 @@ class Machine:
             )
         return self.execute("systemctl {}".format(q))
 
+    def require_unit_state(self, unit, require_state="active"):
+        with self.nested(
+            "checking if unit ‘{}’ has reached state '{}'".format(unit, require_state)
+        ):
+            info = self.get_unit_info(unit)
+            state = info["ActiveState"]
+            if state != require_state:
+                raise Exception(
+                    "Expected unit ‘{}’ to to be in state ".format(unit)
+                    + "'active' but it is in state ‘{}’".format(state)
+                )
+
     def execute(self, command):
         self.connect()
 
@@ -641,6 +654,27 @@ class Machine:
                 status, _ = self.execute("[ -e /tmp/.X11-unix/X0 ]")
                 if status == 0:
                     return
+
+    def get_window_names(self):
+        return self.succeed(
+            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
+        ).splitlines()
+
+    def wait_for_window(self, regexp):
+        pattern = re.compile(regexp)
+
+        def window_is_visible(last_try):
+            names = self.get_window_names()
+            if last_try:
+                self.log(
+                    "Last chance to match {} on the window list,".format(regexp)
+                    + " which currently contains: "
+                    + ", ".join(names)
+                )
+            return any(pattern.search(name) for name in names)
+
+        with self.nested("Waiting for a window to appear"):
+            retry(window_is_visible)
 
     def sleep(self, secs):
         time.sleep(secs)
