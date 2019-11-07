@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 {
   name = "plasma5";
@@ -7,23 +7,11 @@ import ./make-test.nix ({ pkgs, ...} :
   };
 
   machine = { ... }:
-  let
-    sddm_theme = pkgs.stdenv.mkDerivation {
-      name = "breeze-ocr-theme";
-      phases = "buildPhase";
-      buildCommand = ''
-        mkdir -p $out/share/sddm/themes/
-        cp -r ${pkgs.plasma-workspace}/share/sddm/themes/breeze $out/share/sddm/themes/breeze-ocr-theme
-        chmod -R +w $out/share/sddm/themes/breeze-ocr-theme
-        printf "[General]\ntype=color\ncolor=#1d99f3\nbackground=\n" > $out/share/sddm/themes/breeze-ocr-theme/theme.conf
-      '';
-    };
-  in
+
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
-    services.xserver.displayManager.sddm.theme = "breeze-ocr-theme";
     services.xserver.desktopManager.plasma5.enable = true;
     services.xserver.desktopManager.default = "plasma5";
     services.xserver.displayManager.sddm.autoLogin = {
@@ -32,7 +20,6 @@ import ./make-test.nix ({ pkgs, ...} :
     };
     hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     virtualisation.memorySize = 1024;
-    environment.systemPackages = [ sddm_theme ];
   };
 
   testScript = { nodes, ... }: let
