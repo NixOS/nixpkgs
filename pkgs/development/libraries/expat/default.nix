@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "expat-2.2.7";
@@ -9,12 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch {
-      name = "CVE-2019-15903.patch";
-      url = "https://sources.debian.org/data/main/e/expat/2.2.7-2/debian/patches/CVE-2019-15903_Deny_internal_entities_closing_the_doctype.patch";
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/vcunat/patch-mirror/master/CVE-2019-15903.patch";
       sha256 = "0lv4392ihpk71fgaf1fz03gandqkaqisal8xrzvcqnvnq4mnmwxp";
-      stripLen = 1;
-      excludes = [ "tests/runtests.c" "Changes" ];
     })
   ];
 
