@@ -2646,6 +2646,8 @@ in {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik { };
 
+  measurement = callPackage ../development/python-modules/measurement {};
+
   midiutil = callPackage ../development/python-modules/midiutil {};
 
   misaka = callPackage ../development/python-modules/misaka {};
@@ -2659,6 +2661,8 @@ in {
   mwlib-ext = callPackage ../development/python-modules/mwlib-ext { };
 
   mwlib-rl = callPackage ../development/python-modules/mwlib-rl { };
+
+  myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
   natsort = callPackage ../development/python-modules/natsort { };
 
