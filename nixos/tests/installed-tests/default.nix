@@ -67,6 +67,7 @@ in
   flatpak = callInstalledTest ./flatpak.nix {};
   flatpak-builder = callInstalledTest ./flatpak-builder.nix {};
   fwupd = callInstalledTest ./fwupd.nix {};
+  gcab = callInstalledTest ./gcab.nix {};
   gdk-pixbuf = callInstalledTest ./gdk-pixbuf.nix {};
   gjs = callInstalledTest ./gjs.nix {};
   glib-networking = callInstalledTest ./glib-networking.nix {};
