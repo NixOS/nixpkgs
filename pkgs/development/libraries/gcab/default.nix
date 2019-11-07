@@ -50,6 +50,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  # required by libgcab-1.0.pc
+  propagatedBuildInputs = [
+    glib
+  ];
+
   mesonFlags = [
     "-Dinstalled_tests=true"
     "-Dinstalled_test_prefix=${placeholder ''installedTests''}"
