@@ -4659,6 +4659,8 @@ in
 
   libr3 = callPackage ../development/libraries/libr3 { };
 
+  libraspberrypi = callPackage ../development/libraries/libraspberrypi { };
+
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
 
   libspf2 = callPackage ../development/libraries/libspf2 { };
@@ -11875,7 +11877,10 @@ in
 
   libcbor = callPackage ../development/libraries/libcbor { };
 
-  libcec = callPackage ../development/libraries/libcec { };
+  libcec = callPackage ../development/libraries/libcec {
+    libraspberrypi = null;
+  };
+
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
   libcef = callPackage ../development/libraries/libcef { inherit (gnome2) GConf; };
