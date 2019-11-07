@@ -26109,13 +26109,10 @@ in
 
   steamcmd = steamPackages.steamcmd;
 
-  protontricks = callPackage ../tools/package-management/protontricks {
-    inherit (python3Packages) buildPythonApplication pytest setuptools_scm vdf;
+  protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
+    inherit steam-run;
+    inherit winetricks;
     inherit (gnome3) zenity;
-    wine = wineWowPackages.minimal;
-    winetricks = winetricks.override {
-      wine = wineWowPackages.minimal;
-    };
   };
 
   stepmania = callPackage ../games/stepmania {
