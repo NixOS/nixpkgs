@@ -10008,6 +10008,8 @@ in
 
   pgcli = pkgs.python3Packages.pgcli;
 
+  pghero = callPackage ../development/tools/database/pghero { };
+
   phantomjs = callPackage ../development/tools/phantomjs { };
 
   phantomjs2 = libsForQt5.callPackage ../development/tools/phantomjs2 { };
