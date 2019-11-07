@@ -1,8 +1,33 @@
-{ stdenv, substituteAll, fetchurl, fetchFromGitHub, autoreconfHook, gettext, makeWrapper, pkgconfig
-, vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk-pixbuf, gobject-introspection, gtk2
-, gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePython2Library ? false
-, enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null
-, buildPackages, runtimeShell }:
+{ stdenv
+, substituteAll
+, fetchurl
+, fetchFromGitHub
+, autoreconfHook
+, gettext
+, makeWrapper
+, pkgconfig
+, vala
+, wrapGAppsHook
+, dbus
+, dconf ? null
+, glib
+, gdk-pixbuf
+, gobject-introspection
+, gtk2
+, gtk3
+, gtk-doc
+, isocodes
+, python3
+, json-glib
+, libnotify ? null
+, enablePython2Library ? false
+, enableUI ? true
+, withWayland ? false
+, libxkbcommon ? null
+, wayland ? null
+, buildPackages
+, runtimeShell
+}:
 
 assert withWayland -> wayland != null && libxkbcommon != null;
 
@@ -132,7 +157,9 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = [ glib ];
+  propagatedBuildInputs = [
+    glib
+  ];
 
   buildInputs = [
     dbus
@@ -154,10 +181,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # requires X11 daemon
   doInstallCheck = true;
-  installCheckPhase = "$out/bin/ibus version";
+  installCheckPhase = ''
+    $out/bin/ibus version
+  '';
 
   meta = {
-    homepage = https://github.com/ibus/ibus;
+    homepage = "https://github.com/ibus/ibus";
     description = "Intelligent Input Bus, input method framework";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
