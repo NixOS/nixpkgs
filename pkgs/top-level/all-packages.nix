@@ -15362,6 +15362,8 @@ in
     inherit (pythonPackages) buildPythonPackage qpid-python;
   };
 
+  qremotecontrol-server = callPackage ../servers/misc/qremotecontrol-server { };
+
   quagga = callPackage ../servers/quagga { };
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
