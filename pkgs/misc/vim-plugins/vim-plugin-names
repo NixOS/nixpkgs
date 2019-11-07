@@ -57,6 +57,7 @@ dag/vim-fish
 dannyob/quickfixstatus
 darfink/starsearch.vim
 dart-lang/dart-vim-plugin
+david-a-wheeler/vim-metamath
 davidhalter/jedi-vim
 dcharbon/vim-flatbuffers
 deoplete-plugins/deoplete-dictionary
