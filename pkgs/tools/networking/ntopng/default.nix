@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
 , geoip, geolite-legacy, sqlite, which, autoreconfHook, mariadb, readline80
-, pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool, libmaxminddb
+, pkgconfig, groff, curl, json_c, zeromq, rrdtool, libmaxminddb
 }:
 
 # ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
-# directory, but we use luajit, zeromq, and rrdtool from nixpkgs
+# directory, but we use zeromq, and rrdtool from nixpkgs
 
 let
   ndpi = fetchFromGitHub {
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 libmaxminddb glib geoip geolite-legacy
-    sqlite curl json_c luajit zeromq mariadb readline80 rrdtool ];
+    sqlite curl json_c zeromq mariadb readline80 rrdtool ];
 
   nativeBuildInputs = [ autoreconfHook groff pkgconfig which ];
 
