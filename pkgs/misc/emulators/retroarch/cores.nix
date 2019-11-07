@@ -276,7 +276,7 @@ in with stdenv.lib.licenses;
     };
     description = "libretro wrapper for desmume NDS emulator";
     license = gpl2;
-    extraBuildInputs = [ libpcap libGLU_combined xorg.libX11 ];
+    extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
   }).override {
     makefile = "desmume/src/frontend/libretro/Makefile.libretro";
     configurePhase = "cd desmume/src/frontend/libretro";
@@ -292,7 +292,7 @@ in with stdenv.lib.licenses;
     };
     description = "libretro wrapper for desmume NDS emulator from 2015";
     license = gpl2;
-    extraBuildInputs = [ libpcap libGLU_combined xorg.libX11 ];
+    extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
   }).override {
     makefile = "desmume/Makefile.libretro";
     configurePhase = "cd desmume";
@@ -311,7 +311,7 @@ in with stdenv.lib.licenses;
     broken = true;
 
     extraBuildInputs = [
-      cmake curl libGLU_combined pcre pkgconfig sfml
+      cmake curl libGLU libGL pcre pkgconfig sfml
       gettext hidapi
       libevdev udev
     ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ]);
@@ -478,7 +478,7 @@ in with stdenv.lib.licenses;
     description = "Port of MAME to libretro";
     license = gpl2Plus;
 
-    extraBuildInputs = [ alsaLib libGLU_combined portaudio python27 xorg.libX11 ];
+    extraBuildInputs = [ alsaLib libGLU libGL portaudio python27 xorg.libX11 ];
   }).override {
     postPatch = ''
       # Prevent the failure during the parallel building of:
@@ -614,7 +614,7 @@ in with stdenv.lib.licenses;
     description = "Libretro port of Mupen64 Plus, GL only";
     license = gpl2;
 
-    extraBuildInputs = [ libGLU_combined libpng nasm xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
   }).override {
     makefile = "Makefile";
     buildPhase = "make";
@@ -658,7 +658,7 @@ in with stdenv.lib.licenses;
     description = "Parallel Mupen64plus rewrite for libretro.";
     license = gpl2;
 
-    extraBuildInputs = [ libGLU_combined libpng ];
+    extraBuildInputs = [ libGLU libGL libpng ];
   }).override {
     makefile = "Makefile";
     buildPhase = "make";
@@ -718,7 +718,7 @@ in with stdenv.lib.licenses;
     };
     description = "ppsspp libretro port";
     license = gpl2;
-    extraBuildInputs = [ cmake libGLU_combined ffmpeg python37 xorg.libX11 ];
+    extraBuildInputs = [ cmake libGLU libGL ffmpeg python37 xorg.libX11 ];
   }).override {
     cmakeFlags = "-DLIBRETRO=ON";
     makefile = "Makefile";
@@ -778,7 +778,7 @@ in with stdenv.lib.licenses;
     };
     description = "Libretro port of ScummVM";
     license = gpl2;
-    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU_combined SDL ];
+    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL SDL ];
   }).override {
     makefile = "backends/platform/libretro/build/Makefile";
     buildPhase = "cd backends/platform/libretro/build && make";
