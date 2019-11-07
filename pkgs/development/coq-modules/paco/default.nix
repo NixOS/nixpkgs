@@ -1,26 +1,39 @@
-{stdenv, fetchFromGitHub, coq, unzip}:
+{ stdenv, fetchFromGitHub, coq, unzip, version ? null }:
 
 let
-  versions = {
-    pre_8_6 = rec {
+  paco-versions = {
+    "1_2_8" = rec {
       rev = "v${version}";
       version = "1.2.8";
       sha256 = "05fskx5x1qgaf9qv626m38y5izichzzqc7g2rglzrkygbskrrwsb";
     };
-    post_8_6 = rec {
+    "2_1_0" = rec {
+      rev = "v${version}";
+      version = "2.1.0";
+      sha256 = "0dra0wigdrr6sdy1c76b0v8pvkd447ri5r59vrvab1ww9rk7y2da";
+    };
+    "3_0_0" = rec {
+      rev = "v${version}";
+      version = "3.0.0";
+      sha256 = "1riqycr4wkzsgybn143066vk71w1n2i889ffc3a9j9y5f9bbn2pd";
+    };
+    "4_0_0" = rec {
       rev = "v${version}";
       version = "4.0.0";
       sha256 = "1ncrdyijkgf0s2q4rg1s9r2nrcb17gq3jz63iqdlyjq3ylv8gyx0";
     };
   };
-  params = {
-    "8.5" = versions.pre_8_6;
-    "8.6" = versions.post_8_6;
-    "8.7" = versions.post_8_6;
-    "8.8" = versions.post_8_6;
-    "8.9" = versions.post_8_6;
+  default-versions = {
+    "8.5" = paco-versions."1_2_8";
+    "8.6" = paco-versions."4_0_0";
+    "8.7" = paco-versions."4_0_0";
+    "8.8" = paco-versions."4_0_0";
+    "8.9" = paco-versions."4_0_0";
   };
-  param = params.${coq.coq-version};
+  param =
+    if version == null
+    then default-versions.${coq.coq-version}
+    else paco-versions.${version};
 in
 
 stdenv.mkDerivation rec {
@@ -52,7 +65,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" ];
+    compatibleCoqVersions = v: builtins.hasAttr v default-versions;
   };
 
 }
