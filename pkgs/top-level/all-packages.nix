@@ -6633,6 +6633,8 @@ in
 
   tmate = callPackage ../tools/misc/tmate { };
 
+  tmate-ssh-server = callPackage ../servers/tmate-ssh-server { };
+
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
   tmux = callPackage ../tools/misc/tmux { };
