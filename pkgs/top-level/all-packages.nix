@@ -9938,6 +9938,8 @@ in
 
   kind = callPackage ../development/tools/kind {  };
 
+  khronos-ocl-icd-loader = callPackage ../development/libraries/khronos-ocl-icd-loader {  };
+
   kube-aws = callPackage ../development/tools/kube-aws { };
 
   kubectx = callPackage ../development/tools/kubectx { };
