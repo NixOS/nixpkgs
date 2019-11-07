@@ -91,10 +91,18 @@ in {
 
     forwardZones = mkOption {
       type = types.attrs;
+      default = {};
+      description = ''
+        DNS zones to be forwarded to other authoritative servers.
+      '';
+    };
+
+    forwardZonesRecurse = mkOption {
+      type = types.attrs;
       example = { eth = "127.0.0.1:5353"; };
       default = {};
       description = ''
-        DNS zones to be forwarded to other servers.
+        DNS zones to be forwarded to other recursive servers.
       '';
     };
 
@@ -158,7 +166,8 @@ in {
       webserver-port       = cfg.api.port;
       webserver-allow-from = cfg.api.allowFrom;
 
-      forward-zones    = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
+      forward-zones         = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
+      forward-zones-recurse = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZonesRecurse;
       export-etc-hosts = cfg.exportHosts;
       dnssec           = cfg.dnssecValidation;
       serve-rfc1918    = cfg.serveRFC1918;
