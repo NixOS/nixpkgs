@@ -21,6 +21,6 @@ stdenv.mkDerivation {
     description = "Support library for OCaml preprocessor type conversions";
     license = stdenv.lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
-    maintainers = with stdenv.lib.maintainers; [ z77z ];
+    maintainers = with stdenv.lib.maintainers; [ maggesi ];
   };
 }
