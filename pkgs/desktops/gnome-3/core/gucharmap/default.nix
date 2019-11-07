@@ -1,6 +1,7 @@
 { stdenv
 , intltool
 , fetchFromGitLab
+, fetchpatch
 , pkgconfig
 , gtk3
 , adwaita-icon-theme
@@ -20,13 +21,29 @@
 , gsettings-desktop-schemas
 , callPackage
 , unzip
+, unicode-character-database
+, unihan-database
+, runCommand
+, symlinkJoin
 , gobject-introspection
 }:
 
 let
-  unicode-data = callPackage ./unicode-data.nix {};
-in
-stdenv.mkDerivation rec {
+  # TODO: make upstream patch allowing to use the uncompressed file,
+  # preferably from XDG_DATA_DIRS.
+  # https://gitlab.gnome.org/GNOME/gucharmap/issues/13
+  unihanZip = runCommand "unihan" {} ''
+    mkdir -p $out/share/unicode
+    ln -s ${unihan-database.src} $out/share/unicode/Unihan.zip
+  '';
+  ucd = symlinkJoin {
+    name = "ucd+unihan";
+    paths = [
+      unihanZip
+      unicode-character-database
+    ];
+  };
+in stdenv.mkDerivation rec {
   pname = "gucharmap";
   version = "12.0.1";
 
@@ -39,6 +56,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0si3ymyfzc5v7ly0dmcs3qgw2wp8cyasycq5hmcr8frl09lr6gkw";
   };
+
+  patches = [
+    # fix build with Unicode 12.1
+    (fetchpatch {
+      url = "https://salsa.debian.org/gnome-team/gucharmap/raw/de079ad494a15f662416257fca2f2b8db757f4ea/debian/patches/update-to-unicode-12.1.patch";
+      sha256 = "093gqsxfpp3s0b88p1dgkskr4ng3hv8irmxc60l3fdrkl8am00xh";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -66,7 +91,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-unicode-data=${unicode-data}"
+    "--with-unicode-data=${ucd}/share/unicode"
     "--enable-gtk-doc"
   ];
 
