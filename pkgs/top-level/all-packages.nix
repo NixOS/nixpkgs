@@ -17529,6 +17529,8 @@ in
 
   grepm = callPackage ../applications/search/grepm { };
 
+  grip-search = callPackage ../tools/text/grip-search { };
+
   grip = callPackage ../applications/misc/grip {
     inherit (gnome2) libgnome libgnomeui vte;
   };
