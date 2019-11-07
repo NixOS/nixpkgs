@@ -31,6 +31,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Undo-weird-modification-of-data_dir.patch
+    ./0002-fix-cookie-match-issue.patch
   ];
 
   buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 libmaxminddb glib geoip geolite-legacy
