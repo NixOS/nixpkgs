@@ -30,6 +30,7 @@
 , wayland ? null
 , buildPackages
 , runtimeShell
+, nixosTests
 }:
 
 assert withWayland -> wayland != null && libxkbcommon != null;
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "installedTests" ];
 
   postPatch = ''
     echo \#!${runtimeShell} > data/dconf/make-dconf-override-db.sh
@@ -84,9 +85,15 @@ stdenv.mkDerivation rec {
     (enableFeature enablePython2Library "python-library")
     (enableFeature enablePython2Library "python2") # XXX: python2 library does not work anyway
     (enableFeature enableUI "ui")
+    "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
     "--with-emoji-annotation-dir=${cldr-emoji-annotation}/share/unicode/cldr/common/annotations"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
+  ];
+
+  makeFlags = [
+    "test_execsdir=${placeholder ''installedTests''}/libexec/installed-tests/ibus"
+    "test_sourcesdir=${placeholder ''installedTests''}/share/installed-tests/ibus"
   ];
 
   nativeBuildInputs = [
@@ -127,6 +134,25 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     $out/bin/ibus version
   '';
+
+  postInstall = ''
+    # It has some hardcoded FHS paths and also we do not use it
+    # since we set up the environment in NixOS tests anyway.
+    moveToOutput "bin/ibus-desktop-testing-runner" "$installedTests"
+  '';
+
+  postFixup = ''
+    # set necessary environment also for tests
+    for f in $installedTests/libexec/installed-tests/ibus/*; do
+        wrapGApp $f
+    done
+  '';
+
+  passthru = {
+    tests = {
+      installed-tests = nixosTests.installed-tests.ibus;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/ibus/ibus";

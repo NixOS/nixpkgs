@@ -88,6 +88,7 @@ in
   glib-networking = callInstalledTest ./glib-networking.nix {};
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
   graphene = callInstalledTest ./graphene.nix {};
+  ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
   libxmlb = callInstalledTest ./libxmlb.nix {};
   ostree = callInstalledTest ./ostree.nix {};
