@@ -6270,6 +6270,8 @@ in {
 
   urwid = callPackage ../development/python-modules/urwid {};
 
+  urwid_readline = callPackage ../development/python-modules/urwid_readline {};
+
   user-agents = callPackage ../development/python-modules/user-agents { };
 
   variants = callPackage ../development/python-modules/variants { };
