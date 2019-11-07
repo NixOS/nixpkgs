@@ -131,6 +131,11 @@
       <link linkend="opt-networking.interfaces">networking.interfaces.&lt;name&gt;.…</link> options.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The <option>services.awstats</option> module has been removed from nixpkgs due to lack of maintainer.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

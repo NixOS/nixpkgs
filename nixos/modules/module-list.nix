@@ -358,7 +358,6 @@
   ./services/hardware/undervolt.nix
   ./services/hardware/vdr.nix
   ./services/logging/SystemdJournal2Gelf.nix
-  ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix
   ./services/logging/heartbeat.nix
