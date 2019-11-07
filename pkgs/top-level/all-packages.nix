@@ -24306,7 +24306,9 @@ in
 
   hatari = callPackage ../misc/emulators/hatari { };
 
-  helm = callPackage ../applications/audio/helm { };
+  helm = callPackage ../applications/audio/helm {
+    stdenv = gcc8Stdenv;
+  };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
