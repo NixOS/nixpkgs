@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
+{ stdenv, fetchFromGitHub, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
 , geoip, geolite-legacy, sqlite, which, autoreconfHook, mariadb, readline80
 , pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool, libmaxminddb
 }:
@@ -7,9 +7,11 @@
 # directory, but we use luajit, zeromq, and rrdtool from nixpkgs
 
 let
-  ndpi = fetchurl {
-    url = "https://github.com/ntop/nDPI/archive/2.6.tar.gz";
-    sha256 = "07prvgdbs09kyq83s5n8j0mdqrc7jwl0acr0k43ihnrq824vdpzg";
+  ndpi = fetchFromGitHub {
+    owner = "ntop";
+    repo = "nDPI";
+    rev = "2.6";
+    sha256 = "1rivxbia4cqn8n3lp9ijrhj4ppclnici0ixnara9bh97sf5gpk9z";
   };
 in stdenv.mkDerivation rec {
   version = "3.8";
@@ -21,6 +23,11 @@ in stdenv.mkDerivation rec {
     rev = version;
     sha256 = "170cqggrja4am34cwwb4h92hyb38jpsb81rqwncqd0lydqx114f0";
   };
+
+  postUnpack = ''
+    cp    --recursive ${ndpi} $sourceRoot/nDPI
+    chmod --recursive +w $sourceRoot/nDPI
+  '';
 
   patches = [
     ./0001-Undo-weird-modification-of-data_dir.patch
@@ -38,8 +45,6 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace Makefile.in --replace "/bin/rm" "rm"
-    mkdir nDPI
-    tar --extract --gzip --file=${ndpi} --strip-components=1 --directory=nDPI
   '';
 
   preBuild = ''
