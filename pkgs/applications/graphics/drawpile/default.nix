@@ -60,11 +60,11 @@ let
 
 in mkDerivation rec {
   pname = "drawpile";
-  version = "2.1.12";
+  version = "2.1.13";
 
   src = fetchurl {
     url = "https://drawpile.net/files/src/drawpile-${version}.tar.gz";
-    sha256 = "0jvy21xmlidyfkk1p47rgyf4c1ksizcpm8s17n8mwdbnjrf6m55n";
+    sha256 = "0r56hkzjdlg4615zvrjv60i3f06pv7ssh6bs6jb46qs8wbsawsxf";
   };
 
   nativeBuildInputs = [

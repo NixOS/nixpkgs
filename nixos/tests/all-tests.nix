@@ -48,7 +48,6 @@ in
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
   codimd = handleTest ./codimd.nix {};
-  colord = handleTest ./colord.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
   containers-ephemeral = handleTest ./containers-ephemeral.nix {};
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
@@ -88,27 +87,20 @@ in
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
-  flatpak = handleTest ./flatpak.nix {};
-  flatpak-builder = handleTest ./flatpak-builder.nix {};
   fluentd = handleTest ./fluentd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   fsck = handleTest ./fsck.nix {};
-  fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64
-  gdk-pixbuf = handleTest ./gdk-pixbuf.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   gitea = handleTest ./gitea.nix {};
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
-  gjs = handleTest ./gjs.nix {};
-  glib-networking = handleTest ./glib-networking.nix {};
   glusterfs = handleTest ./glusterfs.nix {};
   gnome3-xorg = handleTest ./gnome3-xorg.nix {};
   gnome3 = handleTest ./gnome3.nix {};
-  gnome-photos = handleTest ./gnome-photos.nix {};
+  installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
   google-oslogin = handleTest ./google-oslogin {};
-  graphene = handleTest ./graphene.nix {};
   grafana = handleTest ./grafana.nix {};
   graphite = handleTest ./graphite.nix {};
   graylog = handleTest ./graylog.nix {};
@@ -135,7 +127,6 @@ in
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
-  jormungandr = handleTest ./jormungandr.nix {};
   kafka = handleTest ./kafka.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-latest = handleTest ./kernel-latest.nix {};
@@ -150,8 +141,6 @@ in
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
-  libgdata = handleTest ./libgdata.nix {};
-  libxmlb = handleTest ./libxmlb.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
@@ -170,6 +159,7 @@ in
   minio = handleTest ./minio.nix {};
   minidlna = handleTest ./minidlna.nix {};
   misc = handleTest ./misc.nix {};
+  moinmoin = handleTest ./moinmoin.nix {};
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
   morty = handleTest ./morty.nix {};
@@ -216,7 +206,6 @@ in
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
   osquery = handleTest ./osquery.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
-  ostree = handleTest ./ostree.nix {};
   overlayfs = handleTest ./overlayfs.nix {};
   packagekit = handleTest ./packagekit.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
@@ -242,7 +231,6 @@ in
   prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
   quagga = handleTest ./quagga.nix {};
-  quake3 = handleTest ./quake3.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
@@ -280,6 +268,7 @@ in
   tinydns = handleTest ./tinydns.nix {};
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
+  trac = handleTest ./trac.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   udisks2 = handleTest ./udisks2.nix {};
@@ -291,7 +280,6 @@ in
   wireguard-generated = handleTest ./wireguard/generated.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xautolock = handleTest ./xautolock.nix {};
-  xdg-desktop-portal = handleTest ./xdg-desktop-portal.nix {};
   xfce = handleTest ./xfce.nix {};
   xfce4-14 = handleTest ./xfce4-14.nix {};
   xmonad = handleTest ./xmonad.nix {};

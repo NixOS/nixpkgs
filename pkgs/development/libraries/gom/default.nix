@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
     "-Dpygobject-override-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
-  doCheck = true;
+  # Success is more likely on x86_64
+  doCheck = stdenv.isx86_64;
 
   passthru = {
     updateScript = gnome3.updateScript {

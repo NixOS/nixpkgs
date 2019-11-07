@@ -3,7 +3,7 @@
 }:
 mkDerivation {
   pname = "curry-base";
-  version = "1.0.0";
+  version = "1.1.0";
   src = ./.;
   libraryHaskellDepends = [
     base containers directory extra filepath mtl parsec pretty time

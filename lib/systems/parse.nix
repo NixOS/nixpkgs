@@ -327,6 +327,7 @@ rec {
         }
       ];
     };
+    gnuabi64     = { abi = "64"; };
 
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };

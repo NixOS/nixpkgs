@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "dispatchsrht";
-  version = "0.11.1";
+  version = "0.12.3";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/dispatch.sr.ht";
     rev = version;
-    sha256 = "1bi7vn0yr326mf2c63f2fahdlrx2c6a8d6p6bzy2ym2835qfcc0v";
+    sha256 = "0lpc8jpyz1rg3g98546wlhr27b15g32lds77hl42aixv5f5b8lc9";
   };
 
   patches = [

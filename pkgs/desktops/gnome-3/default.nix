@@ -24,7 +24,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   gnome3 = self // { recurseForDerivations = false; };
-  gegl_0_4 = pkgs.gegl_0_4.override { gtk = pkgs.gtk3; };
 
 # ISO installer
 # installerIso = callPackage ./installer.nix {};
@@ -49,8 +48,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   evolution-data-server = callPackage ./core/evolution-data-server { };
 
   gdm = callPackage ./core/gdm { };
-
-  gjs = callPackage ./core/gjs { };
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
@@ -359,4 +356,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   nautilus-sendto = throw "deprecated 2019-09-17: abandoned";
 
   inherit (pkgs) vala; # added 2019-10-10
+
+  inherit (pkgs) gegl_0_4; # added 2019-10-31
+
+  inherit (pkgs) gjs; # added 2019-01-05
 })

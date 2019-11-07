@@ -521,6 +521,8 @@ in {
 
   deap = callPackage ../development/python-modules/deap { };
 
+  deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
+
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
   dictionaries = callPackage ../development/python-modules/dictionaries { };
@@ -715,7 +717,7 @@ in {
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
-  
+
   labelbox = callPackage ../development/python-modules/labelbox { };
 
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
@@ -917,7 +919,7 @@ in {
   pybullet = callPackage ../development/python-modules/pybullet { };
 
   pycairo = callPackage ../development/python-modules/pycairo {
-    inherit (pkgs) pkgconfig;
+    inherit (pkgs) meson pkgconfig;
   };
 
   pycategories = callPackage ../development/python-modules/pycategories { };
@@ -977,7 +979,7 @@ in {
   };
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix {
-    inherit (pkgs) pkgconfig;
+    inherit (pkgs) meson pkgconfig;
   };
 
   pygtail = callPackage ../development/python-modules/pygtail { };
@@ -1701,6 +1703,11 @@ in {
 
   dugong = callPackage ../development/python-modules/dugong {};
 
+  easysnmp = callPackage ../development/python-modules/easysnmp {
+    openssl = pkgs.openssl;
+    net_snmp = pkgs.net_snmp;
+  };
+
   iowait = callPackage ../development/python-modules/iowait {};
 
   responses = callPackage ../development/python-modules/responses {};
@@ -1708,6 +1715,8 @@ in {
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
   proboscis = callPackage ../development/python-modules/proboscis {};
+
+  poster3 = callPackage ../development/python-modules/poster3 { };
 
   py4j = callPackage ../development/python-modules/py4j { };
 
@@ -2461,7 +2470,7 @@ in {
   grip = callPackage ../development/python-modules/grip { };
 
   gst-python = callPackage ../development/python-modules/gst-python {
-    inherit (pkgs) pkgconfig;
+    inherit (pkgs) meson pkgconfig;
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
 
@@ -2530,6 +2539,8 @@ in {
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
   iniparse = callPackage ../development/python-modules/iniparse { };
+
+  intreehooks = callPackage ../development/python-modules/intreehooks { };
 
   i3-py = callPackage ../development/python-modules/i3-py { };
 
@@ -2784,7 +2795,7 @@ in {
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
 
   pythonix = callPackage ../development/python-modules/pythonix {
-    inherit (pkgs) pkgconfig;
+    inherit (pkgs) meson pkgconfig;
   };
 
   pyramid = callPackage ../development/python-modules/pyramid { };
@@ -3252,6 +3263,8 @@ in {
   pytorchWithoutCuda = self.pytorch.override {
     cudaSupport = false;
   };
+
+  pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
 
@@ -3841,6 +3854,16 @@ in {
 
   mesa = callPackage ../development/python-modules/mesa { };
 
+  meson = disabledIf (pythonOlder "3.5") (toPythonModule ((pkgs.meson.override {
+    python3Packages = self;
+  }).overrideAttrs(oldAttrs: {
+     # We do not want the setup hook in Python packages
+     # because the build is performed differently.
+    setupHook = null;
+  })));
+
+  mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
+
   metaphone = callPackage ../development/python-modules/metaphone { };
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
@@ -3892,6 +3915,8 @@ in {
   modeled = callPackage ../development/python-modules/modeled { };
 
   moderngl = callPackage ../development/python-modules/moderngl { };
+
+  moderngl-window = callPackage ../development/python-modules/moderngl_window { };
 
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
@@ -4318,12 +4343,13 @@ in {
 
   kmapper = callPackage ../development/python-modules/kmapper { };
 
-  kmsxx = (callPackage ../development/libraries/kmsxx {
+  kmsxx = toPythonModule ((callPackage ../development/libraries/kmsxx {
     inherit (pkgs.kmsxx) stdenv;
     inherit (pkgs) pkgconfig;
+    withPython = true;
   }).overrideAttrs (oldAttrs: {
     name = "${python.libPrefix}-${pkgs.kmsxx.name}";
-  });
+  }));
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
 
@@ -4444,6 +4470,10 @@ in {
   Babel = callPackage ../development/python-modules/Babel { };
 
   pybfd = callPackage ../development/python-modules/pybfd { };
+
+  pybigwig = callPackage ../development/python-modules/pybigwig { };
+
+  py2bit = callPackage ../development/python-modules/py2bit { };
 
   pyblock = callPackage ../development/python-modules/pyblock { };
 

@@ -877,6 +877,8 @@ in
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
+  gjs = callPackage ../development/libraries/gjs { };
+
   glasgow = with python3Packages; toPythonApplication glasgow;
 
   gucci = callPackage ../tools/text/gucci { };
@@ -1906,6 +1908,8 @@ in
 
   nfdump = callPackage ../tools/networking/nfdump { };
 
+  nfstrace = callPackage ../tools/networking/nfstrace { };
+
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
@@ -2552,9 +2556,10 @@ in
     cudatoolkit_9_1
     cudatoolkit_9_2
     cudatoolkit_10
-    cudatoolkit_10_0;
+    cudatoolkit_10_0
+    cudatoolkit_10_1;
 
-  cudatoolkit = cudatoolkit_9;
+  cudatoolkit = cudatoolkit_10;
 
   inherit (callPackages ../development/libraries/science/math/cudnn { })
     cudnn_cudatoolkit_7
@@ -2566,9 +2571,10 @@ in
     cudnn_cudatoolkit_9_1
     cudnn_cudatoolkit_9_2
     cudnn_cudatoolkit_10
-    cudnn_cudatoolkit_10_0;
+    cudnn_cudatoolkit_10_0
+    cudnn_cudatoolkit_10_1;
 
-  cudnn = cudnn_cudatoolkit_9;
+  cudnn = cudnn_cudatoolkit_10;
 
   curlFull = curl.override {
     idnSupport = true;
@@ -3524,7 +3530,7 @@ in
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos {
-    gegl = gnome3.gegl_0_4;
+    gegl = gegl_0_4;
   };
 
   gnokii = callPackage ../tools/misc/gnokii { };
@@ -3557,6 +3563,8 @@ in
     pinentry = if stdenv.isDarwin then pinentry_mac else pinentry_gtk2;
   };
   gnupg = gnupg22;
+
+  gnupg-pkcs11-scd = callPackage ../tools/security/gnupg-pkcs11-scd { };
 
   gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot { };
 
@@ -5681,6 +5689,8 @@ in
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
 
+  poly2tri-c = callPackage ../development/libraries/poly2tri-c { };
+
   polysh = callPackage ../tools/networking/polysh { };
 
   ponysay = callPackage ../tools/misc/ponysay { };
@@ -5892,9 +5902,8 @@ in
 
   redir = callPackage ../tools/networking/redir { };
 
-  redmine = callPackage ../applications/version-management/redmine { ruby = pkgs.ruby_2_4; };
   # failed to build websocket-driver gem with ruby 2.6, so sticking to 2.5 for now
-  redmine_4 = callPackage ../applications/version-management/redmine/4.x { ruby = pkgs.ruby_2_5; };
+  redmine = callPackage ../applications/version-management/redmine { ruby = pkgs.ruby_2_5; };
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
@@ -5991,6 +6000,8 @@ in
   };
 
   rng-tools = callPackage ../tools/security/rng-tools { };
+
+  rnnoise = callPackage ../development/libraries/rnnoise { };
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
@@ -8524,6 +8535,10 @@ in
   cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
+  cargo-geiger = callPackage ../development/tools/rust/cargo-geiger {
+    inherit (darwin) libiconv;
+    inherit (darwin.apple_sdk.frameworks) Security CoreFoundation;
+  };
   cargo-inspect = callPackage ../development/tools/rust/cargo-inspect {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -11017,8 +11032,6 @@ in
 
   fontconfig-penultimate = callPackage ../data/fonts/fontconfig-penultimate {};
 
-  fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
-
   folly = callPackage ../development/libraries/folly { };
 
   folks = callPackage ../development/libraries/folks { };
@@ -11077,7 +11090,7 @@ in
   };
 
   gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
-    gtk = res.gtk2;
+    inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
   geoclue2 = callPackage ../development/libraries/geoclue {};
@@ -12978,7 +12991,9 @@ in
 
   mumlib = callPackage ../development/libraries/mumlib { };
 
-  muparser = callPackage ../development/libraries/muparser { };
+  muparser = callPackage ../development/libraries/muparser {
+    inherit (darwin.stubs) setfile;
+  };
 
   mutest = callPackage ../development/libraries/mutest { };
 
@@ -13731,6 +13746,8 @@ in
   SDL_mixer = callPackage ../development/libraries/SDL_mixer { };
 
   SDL_net = callPackage ../development/libraries/SDL_net { };
+
+  SDL_Pango = callPackage ../development/libraries/SDL_Pango {};
 
   SDL_sound = callPackage ../development/libraries/SDL_sound { };
 
@@ -14735,6 +14752,8 @@ in
     mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
 
     mod_python = callPackage ../servers/http/apache-modules/mod_python { };
+
+    mod_tile = callPackage ../servers/http/apache-modules/mod_tile { };
 
     mod_wsgi  = self.mod_wsgi2;
     mod_wsgi2 = callPackage ../servers/http/apache-modules/mod_wsgi { python = python2; ncurses = null; };
@@ -15916,9 +15935,7 @@ in
 
   kmscube = callPackage ../os-specific/linux/kmscube { };
 
-  kmsxx = callPackage ../development/libraries/kmsxx {
-    stdenv = gcc6Stdenv;
-  };
+  kmsxx = callPackage ../development/libraries/kmsxx { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
@@ -16134,6 +16151,8 @@ in
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
     deepin-anything = callPackage ../os-specific/linux/deepin-anything { };
+
+    digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
@@ -17197,6 +17216,8 @@ in
   # lohit-fonts.tamil-classical lohit-fonts.tamil lohit-fonts.telugu
   # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
   lohit-fonts = recurseIntoAttrs ( callPackages ../data/fonts/lohit-fonts { } );
+
+  lounge-gtk-theme = callPackage ../data/themes/lounge { };
 
   luculent = callPackage ../data/fonts/luculent { };
 
@@ -21310,6 +21331,8 @@ in
 
   tdrop = callPackage ../applications/misc/tdrop { };
 
+  tre-command = callPackage ../tools/system/tre-command {};
+
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
@@ -21676,34 +21699,64 @@ in
     in with libretro;
       ([ ]
       ++ optional (cfg.enable4do or false) _4do
+      ++ optional (cfg.enableAtari800 or false) atari800
+      ++ optional (cfg.enableBeetleGBA or false) beetle-gba
+      ++ optional (cfg.enableBeetleLynx or false) beetle-lynx
+      ++ optional (cfg.enableBeetleNGP or false) beetle-ngp
       ++ optional (cfg.enableBeetlePCEFast or false) beetle-pce-fast
+      ++ optional (cfg.enableBeetlePCFX or false) beetle-pcfx
       ++ optional (cfg.enableBeetlePSX or false) beetle-psx
       ++ optional (cfg.enableBeetleSaturn or false) beetle-saturn
+      ++ optional (cfg.enableBeetleSNES or false) beetle-snes
+      ++ optional (cfg.enableBeetleSuperGrafx or false) beetle-supergrafx
+      ++ optional (cfg.enableBeetleWswan or false) beetle-wswan
+      ++ optional (cfg.enableBeetleVB or false) beetle-vb
+      ++ optional (cfg.enableBlueMSX or false) bluemsx
       ++ optional (cfg.enableBsnesMercury or false) bsnes-mercury
+      ++ optional (cfg.enableDOSBox or false) dosbox
       ++ optional (cfg.enableDesmume or false) desmume
+      ++ optional (cfg.enableDesmume2015 or false) desmume2015
       ++ optional (cfg.enableDolphin or false) dolphin
       ++ optional (cfg.enableFBA or false) fba
       ++ optional (cfg.enableFceumm or false) fceumm
+      ++ optional (cfg.enableFlycast or false) flycast
       ++ optional (cfg.enableGambatte or false) gambatte
       ++ optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
+      ++ optional (cfg.enableGpsp or false) gpsp
+      ++ optional (cfg.enableHandy or false) handy
+      ++ optional (cfg.enableHatari or false) hatari
       ++ optional (cfg.enableHiganSFC or false) higan-sfc
       ++ optional (cfg.enableMAME or false) mame
+      ++ optional (cfg.enableMAME2000 or false) mame2000
+      ++ optional (cfg.enableMAME2003 or false) mame2003
+      ++ optional (cfg.enableMAME2003Plus or false) mame2003-plus
+      ++ optional (cfg.enableMAME2010 or false) mame2010
+      ++ optional (cfg.enableMAME2015 or false) mame2015
+      ++ optional (cfg.enableMAME2016 or false) mame2016
+      ++ optional (cfg.enableMesen or false) mesen
       ++ optional (cfg.enableMGBA or false) mgba
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
       ++ optional (cfg.enableNestopia or false) nestopia
+      ++ optional (cfg.enableO2EM or false) o2em
       ++ optional (cfg.enableParallelN64 or false) parallel-n64
+      ++ optional (cfg.enablePCSXRearmed or false) pcsx_rearmed
       ++ optional (cfg.enablePicodrive or false) picodrive
-      ++ optional (cfg.enablePrboom or false) prboom
+      ++ optional (cfg.enablePlay or false) play
       ++ optional (cfg.enablePPSSPP or false) ppsspp
+      ++ optional (cfg.enablePrboom or false) prboom
+      ++ optional (cfg.enableProSystem or false) prosystem
       ++ optional (cfg.enableQuickNES or false) quicknes
-      ++ optional (cfg.enableReicast or false) reicast
       ++ optional (cfg.enableScummVM or false) scummvm
       ++ optional (cfg.enableSnes9x or false) snes9x
-      ++ optional (cfg.enableSnes9xNext or false) snes9x-next
+      ++ optional (cfg.enableSnes9x2002 or false) snes9x2002
+      ++ optional (cfg.enableSnes9x2005 or false) snes9x2005
+      ++ optional (cfg.enableSnes9x2010 or false) snes9x2010
       ++ optional (cfg.enableStella or false) stella
       ++ optional (cfg.enableVbaNext or false) vba-next
       ++ optional (cfg.enableVbaM or false) vba-m
-
+      ++ optional (cfg.enableVecx or false) vecx
+      ++ optional (cfg.enableVirtualJaguar or false) virtualjaguar
+      ++ optional (cfg.enableYabause or false) yabause
       # added on 2017-02-25 due #23163
       ++ optional (cfg.enableMednafenPCEFast or false)
           (throw "nix config option enableMednafenPCEFast has been renamed to enableBeetlePCEFast")
@@ -22130,8 +22183,6 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
-  jormungandr = callPackage ../applications/blockchains/jormungandr { };
-
   ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
 
   litecoin  = callPackage ../applications/blockchains/litecoin.nix {
@@ -22443,6 +22494,8 @@ in
   frotz = callPackage ../games/frotz { };
 
   frogatto = callPackage ../games/frogatto { };
+
+  frozen-bubble = callPackage ../games/frozen-bubble { };
 
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override { unicode = false; };
@@ -22847,6 +22900,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  streamlit = python3Packages.callPackage ../applications/science/machine-learning/streamlit { };
+
   stuntrally = callPackage ../games/stuntrally {
     ogre = ogre1_9;
     mygui = mygui.override {
@@ -22858,7 +22913,7 @@ in
 
   superTuxKart = callPackage ../games/super-tux-kart { };
 
-  synthv1 = callPackage ../applications/audio/synthv1 { };
+  synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };
 
   system-syzygy = callPackage ../games/system-syzygy { };
 
@@ -23276,6 +23331,8 @@ in
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
+
+  deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 
   delly = callPackage ../applications/science/biology/delly { };
 
@@ -24543,7 +24600,8 @@ in
 
   nix-prefetch = callPackage ../tools/package-management/nix-prefetch { };
 
-  nix-prefetch-github = callPackage ../build-support/nix-prefetch-github {};
+  nix-prefetch-github = with python3Packages;
+    toPythonApplication nix-prefetch-github;
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
