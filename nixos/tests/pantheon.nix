@@ -22,16 +22,18 @@ import ./make-test.nix ({ pkgs, ...} :
   testScript = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
   in ''
-    startAll;
-
     # Wait for display manager to start
+    $machine->waitForUnit("display-manager.service");
+
+    # Test we can see username in elementary-greeter
     $machine->waitForText(qr/${user.description}/);
-    $machine->screenshot("lightdm");
+    $machine->screenshot("elementary_greeter_lightdm");
 
     # Log in
     $machine->sendChars("${user.password}\n");
-    $machine->waitForFile("/home/alice/.Xauthority");
-    $machine->succeed("xauth merge ~alice/.Xauthority");
+    $machine->waitForUnit("default.target","alice");
+    $machine->waitForFile("${user.home}/.Xauthority");
+    $machine->succeed("xauth merge ${user.home}/.Xauthority");
 
     # Check if "pantheon-shell" components actually start
     $machine->waitUntilSucceeds("pgrep gala");
