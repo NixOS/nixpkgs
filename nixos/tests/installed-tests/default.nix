@@ -72,6 +72,7 @@ in
   glib-networking = callInstalledTest ./glib-networking.nix {};
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
   graphene = callInstalledTest ./graphene.nix {};
+  libgdata = callInstalledTest ./libgdata.nix {};
   libxmlb = callInstalledTest ./libxmlb.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
