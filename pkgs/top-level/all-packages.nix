@@ -17741,6 +17741,8 @@ in
 
   unicode-character-database = callPackage ../data/misc/unicode-character-database { };
 
+  unicode-emoji = callPackage ../data/misc/unicode-emoji { };
+
   unihan-database = callPackage ../data/misc/unihan-database { };
 
   unifont = callPackage ../data/fonts/unifont { };
