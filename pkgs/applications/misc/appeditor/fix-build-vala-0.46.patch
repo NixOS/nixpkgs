@@ -1,0 +1,22 @@
+diff --git a/src/DesktopApp.vala b/src/DesktopApp.vala
+index 0e6fa47..ebcde0c 100644
+--- a/src/DesktopApp.vala
++++ b/src/DesktopApp.vala
+@@ -130,7 +130,7 @@ public class AppEditor.DesktopApp : Object {
+ 
+     public unowned string get_path () {
+         if (path == null) {
+-            unowned string _path = info.get_string (KeyFileDesktop.KEY_PATH);
++            string _path = info.get_string (KeyFileDesktop.KEY_PATH);
+             if (_path == null) {
+                 _path = "";
+             }
+@@ -150,7 +150,7 @@ public class AppEditor.DesktopApp : Object {
+     }
+ 
+     public bool get_should_show () {
+-        return info.should_show () && !get_terminal (); 
++        return info.should_show () && !get_terminal ();
+     }
+ 
+     public string[] get_categories () {
