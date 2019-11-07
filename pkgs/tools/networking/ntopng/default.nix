@@ -40,7 +40,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook groff pkgconfig which ];
 
   autoreconfPhase = ''
-    substituteInPlace autogen.sh --replace "/bin/rm" "rm"
     $shell autogen.sh
   '';
 
@@ -49,8 +48,6 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    substituteInPlace src/Ntop.cpp --replace "/usr/local" "$out"
-
     sed -e "s|\(#define CONST_DEFAULT_DATA_DIR\).*|\1 \"/var/lib/ntopng\"|g" \
         -e "s|\(#define CONST_DEFAULT_DOCS_DIR\).*|\1 \"$out/share/ntopng/httpdocs\"|g" \
         -e "s|\(#define CONST_DEFAULT_SCRIPTS_DIR\).*|\1 \"$out/share/ntopng/scripts\"|g" \
