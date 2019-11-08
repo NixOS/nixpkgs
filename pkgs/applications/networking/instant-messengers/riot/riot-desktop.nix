@@ -31,6 +31,7 @@ in yarn2nix-moretea.mkYarnPackage rec {
     ln -s '${riot-web}' "$out/share/riot/webapp"
     cp -r '${riot-web-src}/origin_migrator' "$out/share/riot/origin_migrator"
     cp -r './deps/riot-web' "$out/share/riot/electron"
+    cp -r './deps/riot-web/img' "$out/share/riot"
     rm "$out/share/riot/electron/node_modules"
     cp -r './node_modules' "$out/share/riot/electron"
 
