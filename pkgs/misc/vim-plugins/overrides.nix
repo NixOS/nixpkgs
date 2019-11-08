@@ -430,8 +430,8 @@ self: super: {
   youcompleteme = super.youcompleteme.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
-        --replace "'ycm_python_interpreter_path', '''" \
-        "'ycm_python_interpreter_path', '${python3}/bin/python'"
+        --replace "'ycm_path_to_python_interpreter', '''" \
+        "'ycm_path_to_python_interpreter', '${python3}/bin/python3'"
 
       rm -r third_party/ycmd
       ln -s ${ycmd}/lib/ycmd third_party
