@@ -507,6 +507,11 @@ class Machine:
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
 
+    def dump_tty_contents(self, tty):
+        """Debugging: Dump the contents of the TTY<n>
+        """
+        self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
+
     def get_screen_text(self):
         if shutil.which("tesseract") is None:
             raise Exception("get_screen_text used but enableOCR is false")
@@ -601,7 +606,7 @@ class Machine:
             stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            shell=False,
+            shell=True,
             cwd=self.state_dir,
             env=environment,
         )
@@ -610,7 +615,7 @@ class Machine:
 
         def process_serial_output():
             for line in self.process.stdout:
-                line = line.decode().replace("\r", "").rstrip()
+                line = line.decode("unicode_escape").replace("\r", "").rstrip()
                 eprint("{} # {}".format(self.name, line))
                 self.logger.enqueue({"msg": line, "machine": self.name})
 
@@ -678,6 +683,14 @@ class Machine:
 
     def sleep(self, secs):
         time.sleep(secs)
+
+    def forward_port(self, host_port=8080, guest_port=80):
+        """Forward a TCP port on the host to a TCP port on the guest.
+        Useful during interactive testing.
+        """
+        self.send_monitor_command(
+            "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
+        )
 
     def block(self):
         """Make the machine unreachable by shutting down eth1 (the multicast

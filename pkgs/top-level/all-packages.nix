@@ -793,6 +793,8 @@ in
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
+  cloudflare-wrangler = callPackage ../development/tools/cloudflare-wrangler { };
+
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   ccextractor = callPackage ../applications/video/ccextractor { };
@@ -856,6 +858,8 @@ in
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
+
+  gaia = callPackage ../development/libraries/gaia { };
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
@@ -1989,6 +1993,8 @@ in
   staccato = callPackage ../tools/text/staccato { };
 
   stagit = callPackage ../development/tools/stagit { };
+
+  step-cli = callPackage ../tools/security/step-cli { };
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
@@ -4659,6 +4665,8 @@ in
 
   libr3 = callPackage ../development/libraries/libr3 { };
 
+  libraspberrypi = callPackage ../development/libraries/libraspberrypi { };
+
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
 
   libspf2 = callPackage ../development/libraries/libspf2 { };
@@ -5392,6 +5400,8 @@ in
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
+  update-systemd-resolved = callPackage ../tools/networking/openvpn/update-systemd-resolved.nix { };
+
   opae = callPackage ../development/libraries/opae { };
 
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
@@ -5924,6 +5934,8 @@ in
 
   recordmydesktop = callPackage ../applications/video/recordmydesktop { };
 
+  rx = callPackage ../applications/graphics/rx { };
+
   gtk-recordmydesktop = callPackage ../applications/video/recordmydesktop/gtk.nix {
     jack2 = jack2Full;
   };
@@ -6000,6 +6012,8 @@ in
   };
 
   rng-tools = callPackage ../tools/security/rng-tools { };
+
+  rnnoise = callPackage ../development/libraries/rnnoise { };
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
@@ -6313,6 +6327,8 @@ in
 
   sshguard = callPackage ../tools/security/sshguard {};
 
+  sshping = callPackage ../tools/networking/sshping {};
+
   suricata = callPackage ../applications/networking/ids/suricata {
     python = python3;
   };
@@ -6376,6 +6392,8 @@ in
 
   srcml = callPackage ../applications/version-management/srcml { };
 
+  srt-to-vtt-cl = callPackage ../tools/cd-dvd/srt-to-vtt-cl { };
+
   sourcehut = callPackage ../applications/version-management/sourcehut { };
 
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
@@ -6432,6 +6450,8 @@ in
   };
 
   sslmate = callPackage ../development/tools/sslmate { };
+
+  sshoogr = callPackage ../tools/networking/sshoogr { };
 
   ssmtp = callPackage ../tools/networking/ssmtp { };
 
@@ -6627,6 +6647,8 @@ in
 
   tmate = callPackage ../tools/misc/tmate { };
 
+  tmate-ssh-server = callPackage ../servers/tmate-ssh-server { };
+
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
   tmux = callPackage ../tools/misc/tmux { };
@@ -6710,6 +6732,8 @@ in
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
+
+  trebleshot = libsForQt5.callPackage ../applications/networking/trebleshot { };
 
   trickle = callPackage ../tools/networking/trickle {};
 
@@ -6827,6 +6851,8 @@ in
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
   vampire = callPackage ../applications/science/logic/vampire {};
+
+  variety = callPackage ../applications/misc/variety {};
 
   vdmfec = callPackage ../applications/backup/vdmfec {};
 
@@ -7068,7 +7094,10 @@ in
 
   unbound = callPackage ../tools/networking/unbound { };
 
-  units = callPackage ../tools/misc/units { };
+  units = callPackage ../tools/misc/units {
+    enableCurrenciesUpdater = true;
+    pythonPackages = python3Packages;
+  };
 
   unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
 
@@ -7572,6 +7601,12 @@ in
   chez = callPackage ../development/compilers/chez {
     inherit (darwin) cctools;
   };
+
+  chez-srfi = callPackage ../development/chez-modules/chez-srfi { };
+
+  chez-mit = callPackage ../development/chez-modules/chez-mit { };
+
+  chez-scmutils = callPackage ../development/chez-modules/chez-scmutils { };
 
   clang = llvmPackages.clang;
   clang-manpages = llvmPackages.clang-manpages;
@@ -9334,6 +9369,8 @@ in
 
   kt = callPackage ../tools/misc/kt {};
 
+  argbash = callPackage ../development/tools/misc/argbash {};
+
   arpa2cm = callPackage ../development/tools/build-managers/arpa2cm { };
 
   asn2quickder = python2Packages.callPackage ../development/tools/asn2quickder {};
@@ -9932,6 +9969,8 @@ in
 
   kind = callPackage ../development/tools/kind {  };
 
+  khronos-ocl-icd-loader = callPackage ../development/libraries/khronos-ocl-icd-loader {  };
+
   kube-aws = callPackage ../development/tools/kube-aws { };
 
   kubectx = callPackage ../development/tools/kubectx { };
@@ -10283,6 +10322,8 @@ in
 
   sselp = callPackage ../tools/X11/sselp{ };
 
+  stm32cubemx = callPackage ../development/tools/misc/stm32cubemx { };
+
   stm32flash = callPackage ../development/tools/misc/stm32flash { };
 
   strace = callPackage ../development/tools/misc/strace { };
@@ -10619,6 +10660,8 @@ in
 
   box2d = callPackage ../development/libraries/box2d { };
 
+  boxfort = callPackage ../development/libraries/boxfort { };
+
   buddy = callPackage ../development/libraries/buddy { };
 
   bulletml = callPackage ../development/libraries/bulletml { };
@@ -10765,6 +10808,8 @@ in
   cracklib = callPackage ../development/libraries/cracklib { };
 
   cre2 = callPackage ../development/libraries/cre2 { };
+
+  criterion = callPackage ../development/libraries/criterion { };
 
   croaring = callPackage ../development/libraries/croaring { };
 
@@ -11873,7 +11918,10 @@ in
 
   libcbor = callPackage ../development/libraries/libcbor { };
 
-  libcec = callPackage ../development/libraries/libcec { };
+  libcec = callPackage ../development/libraries/libcec {
+    libraspberrypi = null;
+  };
+
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
   libcef = callPackage ../development/libraries/libcef { inherit (gnome2) GConf; };
@@ -15352,6 +15400,8 @@ in
     boost = boost155;
     inherit (pythonPackages) buildPythonPackage qpid-python;
   };
+
+  qremotecontrol-server = callPackage ../servers/misc/qremotecontrol-server { };
 
   quagga = callPackage ../servers/quagga { };
 
@@ -19608,6 +19658,8 @@ in
 
   loxodo = callPackage ../applications/misc/loxodo { };
 
+  lsd2dsl = libsForQt5.callPackage ../applications/misc/lsd2dsl { };
+
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
   lsp-plugins = callPackage ../applications/audio/lsp-plugins { };
@@ -20131,6 +20183,8 @@ in
   };
 
   micro = callPackage ../applications/editors/micro { };
+
+  mle = callPackage ../applications/editors/mle { };
 
   nano = callPackage ../applications/editors/nano { };
 
@@ -20883,7 +20937,9 @@ in
 
   wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
 
-  sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
+  sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi {
+    ruby = ruby_2_4;  # sonic-pi build breaks with ruby 2.5 and 2.6
+  };
 
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
@@ -22424,6 +22480,8 @@ in
   eduke32 = callPackage ../games/eduke32 { };
 
   egoboo = callPackage ../games/egoboo { };
+
+  eidolon = callPackage ../games/eidolon { };
 
   EmptyEpsilon = callPackage ../games/empty-epsilon { };
 
