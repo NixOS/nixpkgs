@@ -2933,6 +2933,7 @@ broken-packages:
   - apecs-stm
   - apelsin
   - api-builder
+  - api-rpc-pegnet
   - api-tools
   - api-yoti
   - apiary
@@ -6193,6 +6194,7 @@ broken-packages:
   - huttons-razor
   - huzzy
   - hVOIDP
+  - hw-all
   - hw-balancedparens
   - hw-bits
   - hw-ci-assist
@@ -8329,6 +8331,7 @@ broken-packages:
   - Referees
   - refh
   - refined
+  - refined-http-api-data
   - reflection-extras
   - reflex
   - reflex-animation
@@ -10016,6 +10019,7 @@ broken-packages:
   - web-output
   - web-page
   - web-push
+  - web-rep
   - web-routes-happstack
   - web-routes-quasi
   - web-routes-regular
