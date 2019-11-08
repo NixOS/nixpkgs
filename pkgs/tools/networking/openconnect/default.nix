@@ -30,7 +30,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [ openssl gnutls gmp libxml2 stoken zlib ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC;
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ vpnc ];
 
   meta = with stdenv.lib; {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
