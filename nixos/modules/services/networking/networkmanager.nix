@@ -515,16 +515,20 @@ in {
       aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
     };
 
-    # Turn off NixOS' network management
-    networking = {
-      useDHCP = false;
-      # use mkDefault to trigger the assertion about the conflict above
-      wireless.enable = mkDefault false;
-    } // (mkIf cfg.enableStrongSwan {
-      networkmanager.packages = [ pkgs.networkmanager_strongswan ];
-    }) // (mkIf enableIwd {
-      wireless.iwd.enable = true;
-    });
+    # Turn off NixOS' network management when networking is managed entirely by NetworkManager
+    networking = mkMerge [
+      {
+        useDHCP = false;
+      }
+
+      (mkIf cfg.enableStrongSwan {
+        networkmanager.packages = [ pkgs.networkmanager_strongswan ];
+      })
+
+      (mkIf enableIwd {
+        wireless.iwd.enable = true;
+      })
+    ];
 
     security.polkit.extraConfig = polkitConf;
 

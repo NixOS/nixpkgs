@@ -325,7 +325,8 @@ let
     rmatio = [ pkgs.zlib.dev ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
     Rmpi = [ pkgs.openmpi ];
-    RMySQL = [ pkgs.zlib pkgs.mysql.connector-c pkgs.openssl.dev ];
+    RMariaDB = [ pkgs.mariadb.connector-c.dev ];
+    RMySQL = [ pkgs.zlib pkgs.mysql.connector-c.dev pkgs.openssl.dev ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBCext = [ pkgs.libiodbc ];
     RODBC = [ pkgs.libiodbc ];
@@ -812,8 +813,13 @@ let
       LIBAPPARMOR_HOME = pkgs.libapparmor;
     });
 
+    RMariaDB = old.RMariaDB.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      MYSQL_DIR=pkgs.mysql.connector-c;
       preConfigure = ''
         patchShebangs configure
       '';
