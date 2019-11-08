@@ -1249,8 +1249,9 @@ self: super: {
     '';
   });
 
-  # The LTS-14.x version of optparse-applicative is too old.
+  # The LTS-14.x version of their dependencies are too old.
   cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
 
   # Version bounds for http-client are too strict:
   # https://github.com/bitnomial/prometheus/issues/34
