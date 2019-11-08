@@ -105,6 +105,7 @@ godlygeek/tabular
 google/vim-codefmt
 google/vim-jsonnet
 google/vim-maktaba
+gotcha/vimelette
 gregsexton/gitv
 guns/vim-clojure-highlight
 guns/vim-clojure-static
