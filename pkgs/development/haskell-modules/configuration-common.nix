@@ -1291,19 +1291,6 @@ self: super: {
 
   # polysemy-plugin requires polysemy >= 1.2.0.0
   polysemy = self.polysemy_1_2_3_0;
-
-  # The polysemy-plugin tests failed because it couldn't find
-  # the polysemy-plugin package in the doctests:
-  # https://github.com/NixOS/nixpkgs/issues/71164
-  # I've addressed this with a PR upstream:
-  # https://github.com/polysemy-research/polysemy/pull/265
-  # the patch of which is applied here.
-  polysemy-plugin = appendPatch (addSetupDepend super.polysemy-plugin self.cabal-doctest) (pkgs.fetchpatch {
-    url = "https://github.com/polysemy-research/polysemy/pull/265.patch";
-    sha256 = "19237js70chq84w7vqgvj49n6bs9lp95k13ia3xzbr1r9yyrfkhq";
-    stripLen = 1;
-  });
-
   polysemy-zoo = self.polysemy-zoo_0_6_0_1;
 
   # https://github.com/Happstack/web-routes-th/pull/3
