@@ -2,19 +2,20 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "targetcli";
-  version = "2.1.50";
+  version = "2.1.51";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
     rev = "v${version}";
-    sha256 = "0xrvby63i39rvi778bnvnxacghaix63q72vzxdc3i87ji1ki58hc";
+    sha256 = "07i9kyr525hlk32amzgycirwgwykdbjy5fmw6ji0nnhvk2jh4arn";
   };
 
   propagatedBuildInputs = with python.pkgs; [ configshell rtslib ];
 
   postInstall = ''
     install -D targetcli.8 -t $out/share/man/man8/
+    install -D targetclid.8 -t $out/share/man/man8/
   '';
 
   meta = with stdenv.lib; {
