@@ -3,7 +3,7 @@ require 'rubygems'
 require 'rubygems/specification'
 require 'fileutils'
 
-ruby = File.join(ENV["ruby"], "bin", RbConfig::CONFIG['ruby_install_name'])
+ruby = File.join(ENV["RUBY"], "bin", RbConfig::CONFIG['ruby_install_name'])
 out = ENV["out"]
 bin_path = File.join(ENV["out"], "bin")
 gem_home = ENV["GEM_HOME"]
