@@ -5404,6 +5404,17 @@ let
     };
   };
 
+  vimelette = buildVimPluginFrom2Nix {
+    pname = "vimelette";
+    version = "2019-05-02";
+    src = fetchFromGitHub {
+      owner = "gotcha";
+      repo = "vimelette";
+      rev = "662f47fe0da2625dc743532832fa39f490388fa7";
+      sha256 = "094xyqba64dndgr5gfcqp6hy3siw90niyrrwz0avs924abss6adg";
+    };
+  };
+
   vimfiler-vim = buildVimPluginFrom2Nix {
     pname = "vimfiler-vim";
     version = "2019-07-30";
