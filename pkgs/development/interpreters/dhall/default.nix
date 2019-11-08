@@ -1,7 +1,7 @@
 { haskell, haskellPackages, stdenvNoCC }:
 
 let
-  static = haskell.lib.justStaticExecutables haskellPackages.dhall;
+  static = haskell.lib.justStaticExecutables haskellPackages.dhall_1_27_0;
 
 in static.overrideAttrs (old: {
   passthru = old.passthru or {} // {
