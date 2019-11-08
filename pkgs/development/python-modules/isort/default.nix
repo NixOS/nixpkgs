@@ -2,10 +2,7 @@
 , backports_functools_lru_cache, mock, pytest
 }:
 
-let
-  skipTests = [ "test_requirements_finder" "test_pipfile_finder" ] ++ lib.optional isPy27 "test_standard_library_deprecates_user_issue_778";
-  testOpts = lib.concatMapStringsSep " " (t: "--deselect test_isort.py::${t}") skipTests;
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "isort";
   version = "4.3.21"; # Note 4.x is the last version that supports Python2
 
@@ -23,15 +20,8 @@ in buildPythonPackage rec {
   checkPhase = ''
     # isort excludes paths that contain /build/, so test fixtures don't work
     # with TMPDIR=/build/
-    PATH=$out/bin:$PATH TMPDIR=/tmp/ pytest ${testOpts}
-
-    # Confirm that the produced executable script is wrapped correctly and runs
-    # OK, by launching it in a subshell without PYTHONPATH
-    (
-      unset PYTHONPATH
-      echo "Testing that `isort --version-number` returns OK..."
-      $out/bin/isort --version-number
-    )
+    PATH=$out/bin:$PATH TMPDIR=/tmp/ pytest \
+      -k 'not requirements_finder and not pipfile_finder and not user_issue_778'
   '';
 
   meta = with lib; {
