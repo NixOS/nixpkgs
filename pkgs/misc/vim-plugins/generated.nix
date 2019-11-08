@@ -611,12 +611,12 @@ let
 
   coc-yaml = buildVimPluginFrom2Nix {
     pname = "coc-yaml";
-    version = "2019-06-20";
+    version = "2019-11-08";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc-yaml";
-      rev = "aca9aae69ecd7f0953ab3353361b4ce9f089dbd8";
-      sha256 = "1f7d4hbily073pdf3cmmb2vfhb65nxljpin2dhlh57f0l1jiipdn";
+      rev = "916db4bca79c85c68e175534f733b41a79fb06bd";
+      sha256 = "016ix4jwq5c7zdvk9h2z64rwyzv39wxjr2675xrdv240f5zw0fmw";
     };
   };
 
@@ -1862,12 +1862,12 @@ let
 
   neomake = buildVimPluginFrom2Nix {
     pname = "neomake";
-    version = "2019-10-19";
+    version = "2019-11-08";
     src = fetchFromGitHub {
       owner = "neomake";
       repo = "neomake";
-      rev = "75b50f8ab8dbf57c193cfe5f8ca4edd975ccd314";
-      sha256 = "16c6zjqskfdcrdk08cxjpbc1kyixnbmzy7d4mz0xrkxh3bczqgff";
+      rev = "4e5ee03c61fbabf3eb90b6b30d9acd4f3d4b3fdb";
+      sha256 = "13z45hsk99lcdfbinvbbwr1036fsakhp4dhlqd6dmq6fn3fw5y9w";
     };
   };
 
@@ -3755,12 +3755,12 @@ let
 
   vim-go = buildVimPluginFrom2Nix {
     pname = "vim-go";
-    version = "2019-11-04";
+    version = "2019-11-08";
     src = fetchFromGitHub {
       owner = "fatih";
       repo = "vim-go";
-      rev = "dfa71c91286d796c3f775efe3c8c797289382413";
-      sha256 = "1w0brsmh56d5j3mkglyvc4gbi9lpcfl8s09wz1d89q907fanf2va";
+      rev = "21d2e8e0b4ad4feea12c9b9e1404fc979bad6bf8";
+      sha256 = "1ygqwan4pacqk5z0q6ajaicxf2z4hqnkqnbr8llqbb4lg13a4d5b";
     };
   };
 
