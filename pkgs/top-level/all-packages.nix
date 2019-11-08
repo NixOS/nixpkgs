@@ -7666,6 +7666,7 @@ in
     crystal_0_27
     crystal_0_29
     crystal_0_30
+    crystal_0_31
     crystal
     crystal2nix;
 
