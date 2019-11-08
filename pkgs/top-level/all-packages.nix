@@ -10676,6 +10676,8 @@ in
 
   cgui = callPackage ../development/libraries/cgui {};
 
+  cglm = callPackage ../development/libraries/cglm { };
+
   check = callPackage ../development/libraries/check {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
