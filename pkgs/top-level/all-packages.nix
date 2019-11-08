@@ -19223,6 +19223,8 @@ in
 
   gvisor = callPackage ../applications/virtualization/gvisor { };
 
+  gvisor-containerd-shim = callPackage ../applications/virtualization/gvisor/containerd-shim.nix { };
+
   guvcview = callPackage ../os-specific/linux/guvcview { };
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
