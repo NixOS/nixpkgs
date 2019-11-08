@@ -2,8 +2,6 @@
 #
 # See comments in cc-wrapper's setup hook. This works exactly the same way.
 
-set -u
-
 # Skip setup hook if we're neither a build-time dep, nor, temporarily, doing a
 # native compile.
 #
@@ -73,4 +71,3 @@ export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
 unset -v role_pre role_post cmd upper_case
-set +u
