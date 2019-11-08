@@ -497,6 +497,8 @@ in {
 
   codespell = callPackage ../development/python-modules/codespell { };
 
+  crypto-commons = callPackage ../development/python-modules/crypto-commons { };
+
   curio = callPackage ../development/python-modules/curio { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };
