@@ -148,6 +148,7 @@ in {
       name = cfg.user;
       home = cfg.home;
       createHome = true;
+      isSystemUser = true;
     };
   };
 }

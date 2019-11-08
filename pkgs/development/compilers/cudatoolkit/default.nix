@@ -53,22 +53,25 @@ let
       unpackPhase = ''
         sh $src --keep --noexec
 
-        cd pkg/run_files
-        sh cuda-linux*.run --keep --noexec
-        sh cuda-samples*.run --keep --noexec
-        mv pkg ../../$(basename $src)
-        cd ../..
-        rm -rf pkg
+        ${lib.optionalString (lib.versionOlder version "10.1") ''
+          cd pkg/run_files
+          sh cuda-linux*.run --keep --noexec
+          sh cuda-samples*.run --keep --noexec
+          mv pkg ../../$(basename $src)
+          cd ../..
+          rm -rf pkg
 
-        for patch in $runPatches; do
-          sh $patch --keep --noexec
-          mv pkg $(basename $patch)
-        done
+          for patch in $runPatches; do
+            sh $patch --keep --noexec
+            mv pkg $(basename $patch)
+          done
+        ''}
       '';
 
       installPhase = ''
         runHook preInstall
         mkdir $out
+        ${lib.optionalString (lib.versionOlder version "10.1") ''
         cd $(basename $src)
         export PERL5LIB=.
         perl ./install-linux.pl --prefix="$out"
@@ -78,14 +81,22 @@ let
           perl ./install_patch.pl --silent --accept-eula --installdir="$out"
           cd ..
         done
+        ''}
+        ${lib.optionalString (lib.versionAtLeast version "10.1") ''
+          cd pkg/builds/cuda-toolkit
+          mv * $out/
+        ''}
 
         rm $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
+        ${lib.optionalString (lib.versionOlder version "10.1") ''
         # let's remove the 32-bit libraries, they confuse the lib64->lib mover
         rm -rf $out/lib
+        ''}
 
         # Remove some cruft.
-        ${lib.optionalString (lib.versionAtLeast version "7.0") "rm $out/bin/uninstall*"}
+        ${lib.optionalString ((lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1"))
+          "rm $out/bin/uninstall*"}
 
         # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
         if [ -d "$out"/cuda-samples ]; then
@@ -109,6 +120,9 @@ let
 
         # Remove OpenCL libraries as they are provided by ocl-icd and driver.
         rm -f $out/lib64/libOpenCL*
+        ${lib.optionalString (lib.versionAtLeast version "10.1") ''
+          mv $out/lib64 $out/lib
+        ''}
 
         # Set compiler for NVCC.
         wrapProgram $out/bin/nvcc \
@@ -302,5 +316,13 @@ in rec {
     gcc = gcc7;
   };
 
-  cudatoolkit_10 = cudatoolkit_10_0;
+  cudatoolkit_10_1 = common {
+    version = "10.1.243";
+    url = "https://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run";
+    sha256 = "0caxhlv2bdq863dfp6wj7nad66ml81vasq2ayf11psvq2b12vhp7";
+
+    gcc = gcc7;
+  };
+
+  cudatoolkit_10 = cudatoolkit_10_1;
 }

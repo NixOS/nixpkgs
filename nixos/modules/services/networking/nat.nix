@@ -29,7 +29,7 @@ let
     iptables -w -t nat -N nixos-nat-post
 
     # We can't match on incoming interface in POSTROUTING, so
-    # mark packets coming from the external interfaces.
+    # mark packets coming from the internal interfaces.
     ${concatMapStrings (iface: ''
       iptables -w -t nat -A nixos-nat-pre \
         -i '${iface}' -j MARK --set-mark 1
