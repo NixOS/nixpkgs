@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
+{ stdenv, fetchurl, fetchpatch, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
 , python2, makeWrapper }:
 
 let
-  common = { version, sha256, extraBuildInputs ? [] }:
+  common = { version, sha256, extraBuildInputs ? [], patches ? null }:
     stdenv.mkDerivation rec {
+      inherit patches;
       name = "varnish-${version}";
 
       src = fetchurl {
@@ -50,5 +51,11 @@ in
     version = "6.1.1";
     sha256 = "0gf9hzzrr1lndbbqi8cwlfasi7l517cy3nbgna88i78lm247rvp0";
     extraBuildInputs = [ python2.pkgs.sphinx ];
+    patches = [
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/v/varnish/6.1.1-1+deb10u1/debian/patches/CVE-2019-15892.patch";
+        sha256 = "03jlflgry4j9f34kxni64j6583jqr828zgy68ywdmglpxkgpyma7";
+      })
+    ];
   };
 }
