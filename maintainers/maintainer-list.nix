@@ -569,6 +569,12 @@
     githubId = 718812;
     name = "Antoine R. Dumont";
   };
+  arianvp = {
+    email = "arian.vanputten@gmail.com";
+    github = "arianvp";
+    githubId = 628387;
+    name = "Arian van Putten";
+  };
   aristid = {
     email = "aristidb@gmail.com";
     github = "aristidb";
