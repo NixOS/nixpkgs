@@ -525,6 +525,8 @@ in {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
+  dictances = callPackage ../development/python-modules/dictances { };
+
   dictionaries = callPackage ../development/python-modules/dictionaries { };
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
