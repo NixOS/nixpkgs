@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "dnscrypt-proxy";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ joachifm ];
@@ -23,11 +23,13 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
-    $client->waitForUnit("dnsmasq");
+    client.wait_for_unit("dnsmasq")
 
     # The daemon is socket activated; sending a single ping should activate it.
-    $client->fail("systemctl is-active dnscrypt-proxy");
-    $client->execute("${pkgs.iputils}/bin/ping -c1 example.com");
-    $client->waitUntilSucceeds("systemctl is-active dnscrypt-proxy");
+    client.fail("systemctl is-active dnscrypt-proxy")
+    client.execute(
+        "${pkgs.iputils}/bin/ping -c1 example.com"
+    )
+    client.wait_until_succeeds("systemctl is-active dnscrypt-proxy")
   '';
 })
