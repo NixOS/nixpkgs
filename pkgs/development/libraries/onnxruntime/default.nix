@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "v${version}";
-    sha256 = "0s8ylc5xr55490hbz7zn3hnp9dnyp92d320ln8xw5hqkw3mgyr3p";
+    sha256 = "1d28lzrjnq69yl8j9ncxlsxl0bniacn3hnsr9van10zgp527436v";
     # TODO: use nix-versions of grpc, onnx, eigen, googletest, etc.
     # submodules increase src size and compile times significantly
     # not currently feasible due to how integrated cmake build is with git
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     rm -r $out/bin   # ctest runner
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Cross-platform, high performance scoring engine for ML models";
     longDescription = ''
@@ -55,6 +57,9 @@ stdenv.mkDerivation rec {
       compatibility.
     '';
     homepage = "https://github.com/microsoft/onnxruntime";
+    changelog = "https://github.com/microsoft/onnxruntime/releases";
+    # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
+    platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };
