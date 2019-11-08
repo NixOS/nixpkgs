@@ -441,6 +441,15 @@ in {
       '';
     };
 
+    users.allowLoginless = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to allow being locked out of your system by not allowing
+        login to any administrator user.
+      '';
+    };
+
     users.users = mkOption {
       default = {};
       type = with types; loaOf (submodule userOpts);
@@ -473,14 +482,6 @@ in {
       '';
     };
 
-    # FIXME: obsolete - will remove.
-    security.initialRootPassword = mkOption {
-      type = types.str;
-      default = "!";
-      example = "";
-      visible = false;
-    };
-
   };
 
 
@@ -495,7 +496,7 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
-        initialHashedPassword = mkDefault config.security.initialRootPassword;
+        initialHashedPassword = mkDefault "!";
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -578,7 +579,7 @@ in {
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        assertion = !cfg.mutableUsers ->
+        assertion = (!cfg.mutableUsers && cfg.allowLoginless)->
           any id (mapAttrsToList (name: cfg:
             (name == "root"
              || cfg.group == "wheel"
@@ -592,7 +593,9 @@ in {
           ) cfg.users);
         message = ''
           Neither the root account nor any wheel user has a password or SSH authorized key.
-          You must set one to prevent being locked out of your system.'';
+          You must set one to prevent being locked out of your system.
+          Otherwise set users.allowLoginless = true to allow being locked out of your system.
+          '';
       }
     ];
 
