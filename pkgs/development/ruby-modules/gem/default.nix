@@ -77,7 +77,6 @@ let
 in
 
 stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
-  inherit ruby;
   inherit dontBuild;
   inherit dontStrip;
   inherit type;
@@ -94,6 +93,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   inherit src;
 
+  env.RUBY = toString ruby;
 
   unpackPhase = attrs.unpackPhase or ''
     runHook preUnpack
