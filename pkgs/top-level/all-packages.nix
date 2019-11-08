@@ -20033,6 +20033,8 @@ in
 
   notion = callPackage ../applications/window-managers/notion { };
 
+  open-policy-agent = callPackage ../development/tools/open-policy-agent { };
+
   openshift = callPackage ../applications/networking/cluster/openshift {
     buildGoPackage = buildGo112Package;
   };
