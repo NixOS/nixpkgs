@@ -18732,6 +18732,7 @@ in
                                             Kerberos AVFoundation MediaToolbox
                                             CoreLocation Foundation AddressBook;
       inherit (darwin) libobjc;
+      inherit (rustPackages_1_38_0) cargo rustc;
     };
   });
 
