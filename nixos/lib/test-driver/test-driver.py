@@ -306,7 +306,7 @@ class Machine:
             if state == "inactive":
                 status, jobs = self.systemctl("list-jobs --full 2>&1", user)
                 if "No jobs" in jobs:
-                    info = self.get_unit_info(unit)
+                    info = self.get_unit_info(unit, user)
                     if info["ActiveState"] == state:
                         raise Exception(
                             (
