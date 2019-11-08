@@ -160,11 +160,15 @@ stdenv.mkDerivation {
       EOF
 
       # SNAP_NAME: https://github.com/NixOS/nixpkgs/pull/61980
+      # MOZ_LEGACY_PROFILES and MOZ_ALLOW_DOWNGRADE:
+      #   commit 87e261843c4236c541ee0113988286f77d2fa1ee
       wrapProgram "$out/bin/thunderbird" \
         --argv0 "$out/bin/.thunderbird-wrapped" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
         --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS" \
-        --set SNAP_NAME "thunderbird"
+        --set SNAP_NAME "thunderbird" \
+        --set MOZ_LEGACY_PROFILES 1 \
+        --set MOZ_ALLOW_DOWNGRADE 1
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
