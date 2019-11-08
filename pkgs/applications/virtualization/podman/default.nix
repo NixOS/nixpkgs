@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/containers/libpod";
 
-  outputs = [ "bin" "out" "man" ];
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ pkgconfig go-md2man ];
 
@@ -29,7 +29,7 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -Dm555 bin/podman $bin/bin/podman
+    install -Dm555 -t $out/bin bin/podman
     MANDIR=$man/share/man make install.man
   '';
 
