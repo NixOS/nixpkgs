@@ -18460,6 +18460,8 @@ in
 
   epic5 = callPackage ../applications/networking/irc/epic5 { };
 
+  epr = callPackage ../applications/misc/epr { };
+
   eq10q = callPackage ../applications/audio/eq10q { };
 
   errbot = callPackage ../applications/networking/errbot {
