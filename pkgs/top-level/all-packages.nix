@@ -8523,10 +8523,18 @@ in
     inherit (darwin) apple_sdk;
   };
 
-  rust = callPackage ../development/compilers/rust {
+  rust_1_39_0 = callPackage ../development/compilers/rust/1_39_0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rustPackages = rust.packages.stable;
+  rust_1_38_0 = callPackage ../development/compilers/rust/1_38_0.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust = rust_1_39_0;
+
+  rustPackages_1_39_0 = rust_1_39_0.packages.stable;
+  rustPackages_1_38_0 = rust_1_38_0.packages.stable;
+  rustPackages = rustPackages_1_39_0;
+
   inherit (rustPackages) cargo rustc rustPlatform;
   inherit (rust) makeRustPlatform;
 
@@ -21283,6 +21291,7 @@ in
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
+    inherit (rustPackages_1_38_0) cargo rustc;
     libpng = libpng_apng;
     enableGTK3 = true;
   };

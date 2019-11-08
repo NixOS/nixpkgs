@@ -4,6 +4,8 @@
 , pkgconfig, openssl
 , which, libffi
 , withBundledLLVM ? false
+, version
+, sha256
 }:
 
 let
@@ -18,11 +20,11 @@ let
   llvmShared = llvm_7.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.39.0";
+  inherit version;
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "0mwkc1bnil2cfyf6nglpvbn2y0zfbv44zfhsd5qg4c9rm6vgd8dl";
+    inherit sha256;
   };
 
   __darwinAllowLocalNetworking = true;
