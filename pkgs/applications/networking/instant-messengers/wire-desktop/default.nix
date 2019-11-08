@@ -43,7 +43,7 @@ let
     homepage = https://wire.com/;
     downloadPage = https://wire.com/download/;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ toonn worldofpeace ];
+    maintainers = with maintainers; [ arianvp toonn worldofpeace ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
   };
 
