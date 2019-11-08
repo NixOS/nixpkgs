@@ -19,6 +19,17 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
+  patchPhase = ''
+    # upstream project assumes all build products will go into single directory
+    # `$prefix` but we need `includedir` to point to "dev", not "out"
+    #
+    # pkgs/build-support/setup-hooks/multiple-outputs.sh would normally patch
+    # this automatically, but it fails here due to use of absolute paths
+
+    substituteInPlace Makefile \
+      --replace "@includedir@|\$(PREFIX)" "@includedir@|${placeholder "dev"}"
+  '';
+
   meta = {
     description = "A cooperative multithreading library written in C89";
     homepage = "https://github.com/canonical/libco";
