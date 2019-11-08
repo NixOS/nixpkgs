@@ -319,7 +319,11 @@ class Machine:
     def get_unit_info(self, unit, user=None):
         status, lines = self.systemctl('--no-pager show "{}"'.format(unit), user)
         if status != 0:
-            return None
+            raise Exception(
+                'retrieving systemctl info for unit "{}" {} failed with exit code {}'.format(
+                    unit, "" if user is None else 'under user "{}"'.format(user), status
+                )
+            )
 
         line_pattern = re.compile(r"^([^=]+)=(.*)$")
 
