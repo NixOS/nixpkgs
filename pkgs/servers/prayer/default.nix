@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl db zlib uwimap html-tidy pam ];
   nativeBuildInputs = [ perl ];
 
-  NIX_LDFLAGS = "-lpam";
+  env.NIX_LDFLAGS = "-lpam";
 
   meta = {
     homepage = http://www-uxsup.csx.cam.ac.uk/~dpc22/prayer/;

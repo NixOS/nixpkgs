@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
+  env.NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
 
   preConfigure = ''
     sed -i \

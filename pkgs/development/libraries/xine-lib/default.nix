@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_LDFLAGS = "-lxcb-shm";
+  env.NIX_LDFLAGS = "-lxcb-shm";
 
   propagatedBuildInputs = [zlib];
 

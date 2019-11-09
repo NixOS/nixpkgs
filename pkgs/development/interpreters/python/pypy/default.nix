@@ -51,9 +51,11 @@ in with passthru; stdenv.mkDerivation rec {
 
   hardeningDisable = optional stdenv.isi686 "pic";
 
-  C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" buildInputs;
-  LIBRARY_PATH = makeLibraryPath buildInputs;
-  LD_LIBRARY_PATH = makeLibraryPath (filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
+  env = {
+    C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" buildInputs;
+    LIBRARY_PATH = makeLibraryPath buildInputs;
+    LD_LIBRARY_PATH = makeLibraryPath (filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
+  };
 
   patches = [
     (substituteAll {

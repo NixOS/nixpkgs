@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ optional jpegSupport libjpeg
     ++ optional pngSupport libpng;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString x11Support "-lSDL";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString x11Support "-lSDL";
 
   meta = with stdenv.lib; {
     description = "A lightweight, highly customizable and scriptable image viewer";

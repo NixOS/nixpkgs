@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = [
     "--std=gnu99"
     "-Wno-error"
   ];

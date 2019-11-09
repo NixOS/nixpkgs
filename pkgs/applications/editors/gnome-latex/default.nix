@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     sha256 = "1jdca9yhm7mm1aijd1a5amphgn15142kngky3id2am379ixrq1hg";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
   configureFlags = ["--disable-dconf-migration"];
 
   nativeBuildInputs = [

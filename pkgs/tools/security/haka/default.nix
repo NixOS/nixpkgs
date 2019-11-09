@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0dm39g3k77sa70zrjsqadidg27a6iqq61jzfdxazpllnrw4mjy4w";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preConfigure = ''
     sed -i 's,/etc,'$out'/etc,' src/haka/haka.c

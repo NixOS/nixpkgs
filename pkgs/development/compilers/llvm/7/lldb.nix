@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
 
   enableParallelBuilding = true;
 

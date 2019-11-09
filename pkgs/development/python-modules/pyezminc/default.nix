@@ -20,7 +20,7 @@ buildPythonPackage rec {
   buildInputs = [ netcdf hdf5 libminc ezminc ];
   propagatedBuildInputs = [ numpy scipy ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   doCheck = false;  # e.g., expects test data in /opt
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [libdvdcss];
 
-  NIX_LDFLAGS = "-ldvdcss";
+  env.NIX_LDFLAGS = "-ldvdcss";
 
   postInstall = ''
     ln -s dvdread $out/include/libdvdread

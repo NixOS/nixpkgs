@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper SDL SDL_image ];
 
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
 
   installPhase = ''
     ls -l

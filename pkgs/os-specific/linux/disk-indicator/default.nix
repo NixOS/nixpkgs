@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   buildPhase = "make -f makefile";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
   hardeningDisable = [ "fortify" ];
 

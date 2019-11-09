@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "REG_BIN=${wireless-regdb}/lib/crda/regulatory.bin"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-const-variable";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-const-variable";
 
   buildFlags = [ "all_noverify" ];
   enableParallelBuilding = true;

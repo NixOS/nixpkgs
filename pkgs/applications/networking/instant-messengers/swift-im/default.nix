@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ GConf ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${libxml2.dev}/include/libxml2"
     "-I${miniupnpc}/include/miniupnpc"
     "-I${qtwebkit.dev}/include/QtWebKit"

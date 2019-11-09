@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./libgl-path.patch ];
 
-  NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
+  env.NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
 
   doCheck = false; # needs X11
 

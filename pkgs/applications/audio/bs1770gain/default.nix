@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ffmpeg sox ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with stdenv.lib; {
     description = "A audio/video loudness scanner implementing ITU-R BS.1770";

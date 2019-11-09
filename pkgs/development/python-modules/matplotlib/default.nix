@@ -30,7 +30,7 @@ buildPythonPackage rec {
     sha256 = "8e8e2c2fe3d873108735c6ee9884e6f36f467df4a143136209cff303b183bada";
   };
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   XDG_RUNTIME_DIR = "/tmp";
 

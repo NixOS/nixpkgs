@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ gtk2 gettext ]
     ++ stdenv.lib.optional withLibgladeConvert python2;
 
-  NIX_LDFLAGS = "-lgmodule-2.0";
+  env.NIX_LDFLAGS = "-lgmodule-2.0";
 
   propagatedBuildInputs = [ libxml2 ];
 }

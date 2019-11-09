@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = "-lsqlite3";
+  env.NIX_LDFLAGS = "-lsqlite3";
 
   meta = {
     description = "A complete sqlite3-compatible CLI front-end for libspatialite";

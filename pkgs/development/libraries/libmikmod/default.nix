@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs =
     optional stdenv.isLinux libpulseaudio;
 
-  NIX_LDFLAGS = optionalString stdenv.isLinux "-lasound";
+  env.NIX_LDFLAGS = optionalString stdenv.isLinux "-lasound";
 
   meta = with stdenv.lib; {
     description = "A library for playing tracker music module files";

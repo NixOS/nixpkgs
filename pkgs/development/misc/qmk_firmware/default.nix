@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir $out
   '';
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
   nativeBuildInputs = [
     avrgcc
     avrbinutils

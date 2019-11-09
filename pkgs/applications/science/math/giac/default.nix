@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   configure:16230: g++ -o conftest -g -O2   conftest.cpp -lntl  -llapack -lblas -lgfortran -ldl -lpng16 -lm -lmpfi -lmpfr -lgmp  >&5
   /nix/store/y9c1v4x7y39j2rfbg17agjwqdzxpsn18-ntl-11.3.2/lib/libntl.so: undefined reference to `pthread_key_create'
   */
-  NIX_CFLAGS_LINK="-lpthread";
+  env.NIX_CFLAGS_LINK="-lpthread";
 
   # xcas Phys and Turtle menus are broken with split outputs
   # and interactive use is likely to need docs

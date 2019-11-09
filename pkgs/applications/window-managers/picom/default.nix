@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     libxdg_basedir
   ];
 
-  NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";
+  env.NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";
 
   mesonFlags = [
     "-Dbuild_docs=true"

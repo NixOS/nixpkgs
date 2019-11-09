@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   # include/OGRE/OgreException.h:265:126: error: invalid conversion from
   # 'int' to 'Ogre::Exception::ExceptionCodes' [-fpermissive]
-  NIX_CFLAGS_COMPILE="-fpermissive";
+  env.NIX_CFLAGS_COMPILE="-fpermissive";
 
   preConfigure = ''
     pushd data

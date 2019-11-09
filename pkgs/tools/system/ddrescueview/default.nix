@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source";
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
     lazbuild --lazarusdir=${lazarus}/share/lazarus ddrescueview.lpi

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   setOutputFlags = false;
   enableParallelBuilding = true;
-  NIX_QT_SUBMODULE = true;
+  env.NIX_QT_SUBMODULE = true;
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/qt-installer-framework}

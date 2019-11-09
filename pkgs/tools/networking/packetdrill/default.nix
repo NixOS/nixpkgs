@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   setSourceRoot = ''
     export sourceRoot=$(realpath */gtests/net/packetdrill)
   '';
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=unused-result"
     "-Wno-error=stringop-truncation"
     "-Wno-error=address-of-packed-member"

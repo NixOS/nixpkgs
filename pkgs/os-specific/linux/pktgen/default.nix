@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   RTE_SDK = dpdk;
   GUI = stdenv.lib.optionalString withGtk "true";
 
-  NIX_CFLAGS_COMPILE = "-msse3";
+  env.NIX_CFLAGS_COMPILE = "-msse3";
 
   patches = [ ./configure.patch ];
 

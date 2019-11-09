@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
 
   # Work around a bug in the generated flex lexer (upstream flex bug?)
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preConfigure =
     '' for i in "tests/util/"*.in

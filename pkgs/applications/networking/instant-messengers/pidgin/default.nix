@@ -26,7 +26,7 @@ let unwrapped = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
+  env.NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
   buildInputs = [
     gtkspell2 aspell startupnotification

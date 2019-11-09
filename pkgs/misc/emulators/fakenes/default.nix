@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     cp fakenes $out/bin
   '';
 
-  NIX_LDFLAGS = "-lX11 -lXxf86vm -lXcursor -lXpm";
+  env.NIX_LDFLAGS = "-lX11 -lXxf86vm -lXcursor -lXpm";
 
   patches = [ ./build.patch ];
 

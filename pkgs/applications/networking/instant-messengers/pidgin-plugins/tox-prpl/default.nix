@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ms367l2f7x83k407c93bmhpyc820f1css61fh2gx4jq13cxqq3p";
   };
 
-  NIX_LDFLAGS = "-lssp -lsodium";
+  env.NIX_LDFLAGS = "-lssp -lsodium";
 
   postInstall = "mv $out/lib/purple-2 $out/lib/pidgin";
 
