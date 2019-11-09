@@ -106,7 +106,6 @@ in rec {
     assert !(attrs ? NIX_CFLAGS_LINK);
     assert !(attrs ? NIX_NO_SELF_RPATH);
     assert !(attrs ? NIX_DONT_SET_RPATH);
-    assert lib.all (v: lib.isString v || lib.isBool v || lib.isInt v) (lib.attrValues env);
 
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
@@ -224,7 +223,9 @@ in rec {
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
 
-          inherit env;
+          env =
+            assert lib.all (v: lib.isString v || lib.isBool v || lib.isInt v) (lib.attrValues env);
+            env;
 
           # The `system` attribute of a derivation has special meaning to Nix.
           # Derivations set it to choose what sort of machine could be used to
