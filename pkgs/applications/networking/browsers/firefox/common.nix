@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
     [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
-    ++ lib.optional  (lib.versionAtLeast ffversion "61.0") [ python3 ]
+    ++ lib.optional  (lib.versionAtLeast ffversion "61.0") python3
     ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ rust-cbindgen nodejs ]
     ++ lib.optionals (lib.versionAtLeast ffversion "67.0") [ llvmPackages.llvm ] # llvm-objdump is required in version >=67.0
     ++ extraNativeBuildInputs;
