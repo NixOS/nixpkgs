@@ -707,8 +707,8 @@ let
       sha256 = "0jk3djnk6yf0jsjh8qk3mj8bkx4avp6i4czcpr5xrbf7f41744l3";
     };
     buildInputs = [ pkgs.zlib TestWarn ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
       description = "Fast C metadata and tag reader for all common audio file formats";
       license = stdenv.lib.licenses.gpl2;
@@ -3416,8 +3416,8 @@ let
       sha256 = "0f5gdprcql4kwzgxl2s6ngcfg1jl45lzcqh7dkv5bkwlwmxa9rsi";
     };
     buildInputs = [ pkgs.gmp DevelChecklib TestRequires ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
   };
 
   CryptECB = buildPerlPackage {
@@ -3585,8 +3585,8 @@ let
       url = mirror://cpan/authors/id/T/TT/TTAR/Crypt-OpenSSL-AES-0.02.tar.gz;
       sha256 = "b66fab514edf97fc32f58da257582704a210c2b35e297d5c31b7fa2ffd08e908";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
     meta = with stdenv.lib; {
       description = "Perl wrapper around OpenSSL's AES library";
       license = with licenses; [ artistic1 gpl1Plus ];
@@ -3600,8 +3600,8 @@ let
       url = mirror://cpan/authors/id/K/KM/KMX/Crypt-OpenSSL-Bignum-0.09.tar.gz;
       sha256 = "1p22znbajq91lbk2k3yg12ig7hy5b4vy8igxwqkmbm4nhgxp4ki3";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
   };
 
   CryptOpenSSLGuess = buildPerlPackage {
@@ -3625,8 +3625,8 @@ let
       url = mirror://cpan/authors/id/R/RU/RURBAN/Crypt-OpenSSL-Random-0.15.tar.gz;
       sha256 = "1x6ffps8q7mnawmcfq740llzy7i10g3319vap0wiw4d33fm6z1zh";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
@@ -3638,8 +3638,8 @@ let
       sha256 = "4173403ad4cf76732192099f833fbfbf3cd8104e0246b3844187ae384d2c5436";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
@@ -3650,8 +3650,8 @@ let
       url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.813.tar.gz";
       sha256 = "684bd888d2ed4c748f8f6dd8e87c14afa2974b12ee01faa082ad9cfa1e321e62";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
     meta = {
       homepage = "https://github.com/dsully/perl-crypt-openssl-x509";
       description = "Perl extension to OpenSSL's X509 API";
@@ -3753,7 +3753,7 @@ let
       sha256 = "0r6xd9wr0c25rr28zixhqipak575zqsfb7r7f2693i9il1dpj554";
     };
     propagatedBuildInputs = [ pkgs.ncurses ];
-    NIX_CFLAGS_LINK = "-lncurses";
+    env.NIX_CFLAGS_LINK = "-lncurses";
     meta = {
       description = "Perl bindings to ncurses";
       license = stdenv.lib.licenses.artistic1;
@@ -9938,7 +9938,7 @@ let
       sha256 = "312940c1f60f47c4fc93fa0a9d2a626425faa837040c8c2f1ad58ee09f62f371";
     };
     buildInputs = [ pkgs.acl ];
-    NIX_CFLAGS_LINK = "-L${pkgs.acl.out}/lib -lacl";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.acl.out}/lib -lacl";
     meta = {
       maintainers = [ maintainers.limeytexan ];
       description = "Perl extension for reading and setting Access Control Lists for files by libacl linux library";
@@ -10910,8 +10910,8 @@ let
     };
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     propagatedBuildInputs = [ MathBigInt ];
   };
 
@@ -10969,8 +10969,8 @@ let
       sha256 = "1c07521m4d38hy2yx21hkwz22n2672bvrc4i21ldc68h85qy1q8i";
     };
     buildInputs = [ pkgs.gmp AlienGMP ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "High speed arbitrary size integer math";
       license = with stdenv.lib.licenses; [ lgpl21Plus ];
@@ -12892,7 +12892,7 @@ let
     };
     buildInputs = [ DevelPPPort ModuleBuildXSUtil TestException TestFatal TestLeakTrace TestOutput TestRequires TryTiny ];
     perlPreHook = "export LD=$CC";
-    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fno-stack-protector";
+    env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fno-stack-protector";
     hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
   };
 
@@ -13840,8 +13840,8 @@ let
     buildInputs = [ pkgs.zookeeper_mt ];
     # fix "error: format not a string literal and no format arguments [-Werror=format-security]"
     hardeningDisable = [ "format" ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.zookeeper_mt}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.zookeeper_mt}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
     meta = {
       maintainers = [ maintainers.limeytexan ];
       homepage = https://github.com/mark-5/p5-net-zookeeper;
@@ -14241,7 +14241,7 @@ let
     };
     buildInputs = [ pkgs.pcsclite ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    NIX_CFLAGS_LINK = "-L${stdenv.lib.getLib pkgs.pcsclite}/lib -lpcsclite";
+    env.NIX_CFLAGS_LINK = "-L${stdenv.lib.getLib pkgs.pcsclite}/lib -lpcsclite";
     # tests fail; look unfinished
     doCheck = false;
     meta = {
@@ -17182,7 +17182,7 @@ let
       sha256 = "9a08f7a4013c9b865541c10dbba1210779eb9128b961250b746d26702bab6925";
     };
     buildInputs = [ pkgs.readline pkgs.ncurses ];
-    NIX_CFLAGS_LINK = "-lreadline -lncursesw";
+    env.NIX_CFLAGS_LINK = "-lreadline -lncursesw";
 
     # For some crazy reason Makefile.PL doesn't generate a Makefile if
     # AUTOMATED_TESTING is set.
@@ -18749,8 +18749,8 @@ let
     };
     propagatedBuildInputs = [ pkgs.aspell ];
     ASPELL_CONF = "dict-dir ${pkgs.aspellDicts.en}/lib/aspell";
-    NIX_CFLAGS_COMPILE = "-I${pkgs.aspell}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.aspell}/lib -laspell";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.aspell}/include";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.aspell}/lib -laspell";
   };
 
   TextAutoformat = buildPerlPackage {
@@ -19245,7 +19245,7 @@ let
       sha256 = "0avk50kia78kxryh2whmaj5l18q2wvmkdyqyjsf6kwr4kgy6x3i7";
     };
     # https://rt.cpan.org/Public/Bug/Display.html?id=124815
-    NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
+    env.NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
   };
 
   TextUnidecode = buildPerlPackage {
@@ -20138,7 +20138,7 @@ let
         substituteInPlace Makefile.PL --replace '"cpp"' '"gcc -E"'
         substituteInPlace Makefile.PL --replace '_LASTENTRY\z' '_LASTENTRY\z|CURL_DID_MEMORY_FUNC_TYPEDEFS\z'
       '';
-    NIX_CFLAGS_COMPILE = "-DCURL_STRICTER";
+    env.NIX_CFLAGS_COMPILE = "-DCURL_STRICTER";
     doCheck = false; # performs network access
     meta.broken = stdenv.lib.versionAtLeast (stdenv.lib.getVersion pkgs.curl) "7.66"; # broken since "curl: 7.65.3 -> 7.66.0"
   };
@@ -20290,7 +20290,7 @@ let
       sha256 = "1dq89bh6fqv7l5mbffqcismcljpq5f869bx7g8lg698zgindv5ny";
     };
     buildInputs = [ pkgs.xlibsWrapper ];
-    NIX_CFLAGS_LINK = "-lX11";
+    env.NIX_CFLAGS_LINK = "-lX11";
     doCheck = false; # requires an X server
   };
 
@@ -20318,7 +20318,7 @@ let
       sha256 = "0jznws68skdzkhgkgcgjlj40qdyh9i75r7fw8bqzy406f19xxvnw";
     };
     buildInputs = [ pkgs.xlibsWrapper pkgs.xorg.libXtst pkgs.xorg.libXi ];
-    NIX_CFLAGS_LINK = "-lX11 -lXext -lXtst";
+    env.NIX_CFLAGS_LINK = "-lX11 -lXext -lXtst";
     doCheck = false; # requires an X server
   };
 
@@ -20332,7 +20332,7 @@ let
     AUTOMATED_TESTING = false;
     buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
     propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];
-    NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm";
+    env.NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm";
     doCheck = false; # requires an X server
     meta = {
       description = "XCB bindings for X";
