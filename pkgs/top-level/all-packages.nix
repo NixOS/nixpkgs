@@ -6105,8 +6105,6 @@ in
 
   s6-portable-utils = skawarePackages.s6-portable-utils;
 
-  sablotron = callPackage ../tools/text/xml/sablotron { };
-
   safecopy = callPackage ../tools/system/safecopy { };
 
   safe-rm = callPackage ../tools/system/safe-rm { };
