@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  env.NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
     "--std=gnu99"
     "-Wno-error"
   ];
