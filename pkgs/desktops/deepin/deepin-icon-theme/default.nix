@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildTargets = "all hicolor-links";
-  installTargets = "install-icons install-cursors";
+  installTargets = [ "install-icons" "install-cursors" ];
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''

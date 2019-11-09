@@ -17,7 +17,6 @@ let
 
     # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
     dontFixCmake       =                     lib.versionAtLeast version "3.5";
-    NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast version "3.5") "-Wno-error";
     preConfigure       = lib.optionalString (lib.versionAtLeast version "3.5") "patchShebangs utils";
 
     postPatch = ''
@@ -43,6 +42,8 @@ let
     }.${stdenv.hostPlatform.platform.gcc.arch or ""} or [ "-DHAVE_SSE42=OFF" "-DASM_OPTIMIZATIONS=OFF" ];
 
     enableParallelBuilding = true;
+
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast version "3.5") "-Wno-error";
 
     meta = with lib; {
       homepage = https://www.arangodb.com;

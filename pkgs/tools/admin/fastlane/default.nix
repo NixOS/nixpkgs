@@ -1,16 +1,17 @@
 { stdenv, bundlerEnv, ruby, bundlerUpdateScript, makeWrapper }:
 
-stdenv.mkDerivation rec {
+let
   pname = "fastlane";
   version = (import ./gemset.nix).fastlane.version;
-
-  nativeBuildInputs = [ makeWrapper ];
-
   env = bundlerEnv {
     name = "${pname}-${version}-gems";
     inherit pname ruby;
     gemdir = ./.;
   };
+in stdenv.mkDerivation rec {
+  inherit pname version;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   phases = [ "installPhase" ];
 
