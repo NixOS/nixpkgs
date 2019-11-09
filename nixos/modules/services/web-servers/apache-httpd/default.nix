@@ -6,6 +6,8 @@ let
 
   mainCfg = config.services.httpd;
 
+  runtimeDir = "/run/httpd";
+
   httpd = mainCfg.package.out;
 
   httpdConf = mainCfg.configFile;
@@ -27,41 +29,29 @@ let
 
   listenToString = l: "${l.ip}:${toString l.port}";
 
-  extraModules = attrByPath ["extraModules"] [] mainCfg;
-  extraForeignModules = filter isAttrs extraModules;
-  extraApacheModules = filter isString extraModules;
-
   allHosts = [mainCfg] ++ mainCfg.virtualHosts;
 
   enableSSL = any (vhost: vhost.enableSSL) allHosts;
 
+  enableUserDir = any (vhost: vhost.enableUserDir) allHosts;
 
-  # Names of modules from ${httpd}/modules that we want to load.
-  apacheModules =
-    [ # HTTP authentication mechanisms: basic and digest.
-      "auth_basic" "auth_digest"
-
-      # Authentication: is the user who he claims to be?
-      "authn_file" "authn_dbm" "authn_anon" "authn_core"
-
-      # Authorization: is the user allowed access?
-      "authz_user" "authz_groupfile" "authz_host" "authz_core"
-
-      # Other modules.
-      "ext_filter" "include" "log_config" "env" "mime_magic"
-      "cern_meta" "expires" "headers" "usertrack" /* "unique_id" */ "setenvif"
-      "mime" "dav" "status" "autoindex" "asis" "info" "dav_fs"
-      "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
-      "userdir" "alias" "rewrite" "proxy" "proxy_http"
-      "unixd" "cache" "cache_disk" "slotmem_shm" "socache_shmcb"
+  # NOTE: generally speaking order of modules is very important
+  modules =
+    [ # required apache modules our httpd service cannot run without
+      "authn_core" "authz_core"
+      "log_config"
+      "mime" "autoindex" "negotiation" "dir"
+      "alias" "rewrite"
+      "unixd" "slotmem_shm" "socache_shmcb"
       "mpm_${mainCfg.multiProcessingModule}"
-
-      # For compatibility with old configurations, the new module mod_access_compat is provided.
-      "access_compat"
     ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
-    ++ extraApacheModules;
+    ++ optional enableUserDir "userdir"
+    ++ optional mainCfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
+    ++ optional mainCfg.enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
+    ++ optional mainCfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
+    ++ mainCfg.extraModules;
 
 
   allDenied = "Require all denied";
@@ -85,20 +75,22 @@ let
 
 
   browserHacks = ''
-    BrowserMatch "Mozilla/2" nokeepalive
-    BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
-    BrowserMatch "RealPlayer 4\.0" force-response-1.0
-    BrowserMatch "Java/1\.0" force-response-1.0
-    BrowserMatch "JDK/1\.0" force-response-1.0
-    BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully
-    BrowserMatch "^WebDrive" redirect-carefully
-    BrowserMatch "^WebDAVFS/1.[012]" redirect-carefully
-    BrowserMatch "^gnome-vfs" redirect-carefully
+    <IfModule mod_setenvif.c>
+        BrowserMatch "Mozilla/2" nokeepalive
+        BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
+        BrowserMatch "RealPlayer 4\.0" force-response-1.0
+        BrowserMatch "Java/1\.0" force-response-1.0
+        BrowserMatch "JDK/1\.0" force-response-1.0
+        BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully
+        BrowserMatch "^WebDrive" redirect-carefully
+        BrowserMatch "^WebDAVFS/1.[012]" redirect-carefully
+        BrowserMatch "^gnome-vfs" redirect-carefully
+    </IfModule>
   '';
 
 
   sslConf = ''
-    SSLSessionCache shmcb:${mainCfg.stateDir}/ssl_scache(512000)
+    SSLSessionCache shmcb:${runtimeDir}/ssl_scache(512000)
 
     Mutex posixsem
 
@@ -239,13 +231,13 @@ let
 
     ServerRoot ${httpd}
 
-    DefaultRuntimeDir ${mainCfg.stateDir}/runtime
+    DefaultRuntimeDir ${runtimeDir}/runtime
 
-    PidFile ${mainCfg.stateDir}/httpd.pid
+    PidFile ${runtimeDir}/httpd.pid
 
     ${optionalString (mainCfg.multiProcessingModule != "prefork") ''
       # mod_cgid requires this.
-      ScriptSock ${mainCfg.stateDir}/cgisock
+      ScriptSock ${runtimeDir}/cgisock
     ''}
 
     <IfModule prefork.c>
@@ -264,13 +256,12 @@ let
     Group ${mainCfg.group}
 
     ${let
-        load = {name, path}: "LoadModule ${name}_module ${path}\n";
-        allModules = map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
-          ++ optional mainCfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
-          ++ optional mainCfg.enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
-          ++ optional mainCfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
-          ++ extraForeignModules;
-      in concatMapStrings load (unique allModules)
+        mkModule = module:
+          if isString module then { name = module; path = "${httpd}/modules/mod_${module}.so"; }
+          else if isAttrs module then { inherit (module) name path; }
+          else throw "Expecting either a string or attribute set including a name and path.";
+      in
+        concatMapStringsSep "\n" (module: "LoadModule ${module.name}_module ${module.path}") (unique (map mkModule modules))
     }
 
     AddHandler type-map var
@@ -337,6 +328,7 @@ in
 
   imports = [
     (mkRemovedOptionModule [ "services" "httpd" "extraSubservices" ] "Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.")
+    (mkRemovedOptionModule [ "services" "httpd" "stateDir" ] "The httpd module now uses /run/httpd as a runtime directory.")
   ];
 
   ###### interface
@@ -384,7 +376,12 @@ in
       extraModules = mkOption {
         type = types.listOf types.unspecified;
         default = [];
-        example = literalExample ''[ "proxy_connect" { name = "php5"; path = "''${pkgs.php}/modules/libphp5.so"; } ]'';
+        example = literalExample ''
+          [
+            "proxy_connect"
+            { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
+          ]
+        '';
         description = ''
           Additional Apache modules to be used.  These can be
           specified as a string in the case of modules distributed
@@ -428,16 +425,6 @@ in
         default = "/var/log/httpd";
         description = ''
           Directory for Apache's log files.  It is created automatically.
-        '';
-      };
-
-      stateDir = mkOption {
-        type = types.path;
-        default = "/run/httpd";
-        description = ''
-          Directory for Apache's transient runtime state (such as PID
-          files).  It is created automatically.  Note that the default,
-          <filename>/run/httpd</filename>, is deleted at boot time.
         '';
       };
 
@@ -595,6 +582,28 @@ in
         date.timezone = "${config.time.timeZone}"
       '';
 
+    services.httpd.extraModules = mkBefore [
+      # HTTP authentication mechanisms: basic and digest.
+      "auth_basic" "auth_digest"
+
+      # Authentication: is the user who he claims to be?
+      "authn_file" "authn_dbm" "authn_anon"
+
+      # Authorization: is the user allowed access?
+      "authz_user" "authz_groupfile" "authz_host"
+
+      # Other modules.
+      "ext_filter" "include" "env" "mime_magic"
+      "cern_meta" "expires" "headers" "usertrack" "setenvif"
+      "dav" "status" "asis" "info" "dav_fs"
+      "vhost_alias" "imagemap" "actions" "speling"
+      "proxy" "proxy_http"
+      "cache" "cache_disk"
+
+      # For compatibility with old configurations, the new module mod_access_compat is provided.
+      "access_compat"
+    ];
+
     systemd.services.httpd =
       { description = "Apache HTTPD";
 
@@ -611,12 +620,6 @@ in
 
         preStart =
           ''
-            mkdir -m 0750 -p ${mainCfg.stateDir}
-            [ $(id -u) != 0 ] || chown root.${mainCfg.group} ${mainCfg.stateDir}
-
-            mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
-            [ $(id -u) != 0 ] || chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
-
             mkdir -m 0700 -p ${mainCfg.logDir}
 
             # Get rid of old semaphores.  These tend to accumulate across
@@ -630,10 +633,13 @@ in
         serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf}";
         serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
         serviceConfig.ExecReload = "${httpd}/bin/httpd -f ${httpdConf} -k graceful";
+        serviceConfig.Group = mainCfg.group;
         serviceConfig.Type = "forking";
-        serviceConfig.PIDFile = "${mainCfg.stateDir}/httpd.pid";
+        serviceConfig.PIDFile = "${runtimeDir}/httpd.pid";
         serviceConfig.Restart = "always";
         serviceConfig.RestartSec = "5s";
+        serviceConfig.RuntimeDirectory = "httpd httpd/runtime";
+        serviceConfig.RuntimeDirectoryMode = "0750";
       };
 
   };

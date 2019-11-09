@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     platforms = with stdenv.lib.platforms; all;
     maintainers = [ #Add your name here!
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
       stdenv.lib.maintainers.viric
     ];
   };

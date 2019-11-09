@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.polyml.org/;
     license = licenses.lgpl21;
     platforms = with platforms; (linux ++ darwin);
-    maintainers = with maintainers; [ z77z yurrriq ];
+    maintainers = with maintainers; [ maggesi yurrriq ];
   };
 }
