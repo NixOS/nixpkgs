@@ -27,13 +27,6 @@ stdenv.mkDerivation rec {
     sha256 = "0nx14vlp7p69m2vw0s6kbiyymsfq0r2jd4nm0v5c4xb9avkpgc8g";
   };
 
-  env = bundlerEnv {
-    name = "mikutter-${version}-gems";
-    gemdir = ./.;
-
-    inherit ruby;
-  };
-
   buildInputs = [ alsaUtils libnotify which gtk2 ruby atk gobject-introspection ];
   nativeBuildInputs = [ wrapGAppsHook ];
 
@@ -44,7 +37,14 @@ stdenv.mkDerivation rec {
     rm -rf vendor
   '';
 
-  installPhase = ''
+  installPhase = let
+    env = bundlerEnv {
+      name = "mikutter-${version}-gems";
+      gemdir = ./.;
+
+      inherit ruby;
+    };
+  in ''
     install -v -D -m644 README $out/share/doc/mikutter/README
     install -v -D -m644 LICENSE $out/share/doc/mikutter/LICENSE
     rm -v README LICENSE

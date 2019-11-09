@@ -38,8 +38,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip pkgconfig ];
   buildInputs = [ jdk gtk2 libXt libXtst libXi libGLU libGL webkitgtk libsoup ];
 
-  NIX_LFLAGS = (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) ++
-    [ "-lX11" "-lpango-1.0" "-lgdk_pixbuf-2.0" "-lglib-2.0" ];
+  NIX_LFLAGS = toString (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) +
+    " -lX11 -lpango-1.0 -lgdk_pixbuf-2.0 -lglib-2.0";
 
   buildPhase = ''
     unzip src.zip -d src
