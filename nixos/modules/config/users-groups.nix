@@ -580,7 +580,8 @@ in {
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        assertion = !(cfg.mutableUsers && cfg.allowLoginless) ->
+        # Both allowLoginless and mutableUsers should be false to trigger the check
+        assertion = !(cfg.mutableUsers || cfg.allowLoginless) ->
           any id (mapAttrsToList (name: cfg:
             (name == "root"
              || cfg.group == "wheel"
