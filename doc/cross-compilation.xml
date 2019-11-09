@@ -348,12 +348,12 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
       </para>
      </listitem>
     </orderedlist>
-    In each stage, <varname>pkgsBuildHost</varname> refers the the previous stage, <varname>pkgsBuildBuild</varname> refers to the one before that, and <varname>pkgsHostTarget</varname> refers to the current one, and <varname>pkgsTargetTarget</varname> refers to the next one. When there is no previous or next stage, they instead refer to the current stage. Note how all the invariants regarding the mapping between dependency and depending packages' build host and target platforms are preserved. <varname>pkgsBuildTarget</varname> and <varname>pkgsHostHost</varname> are more complex in that the stage fitting the requirements isn't always a fixed chain of "prevs" and "nexts" away (modulo the "saturating" self-references at the ends). We just special case each instead. All the primary edges are implemented is in <filename>pkgs/stdenv/booter.nix</filename>, and secondarily aliases in <filename>pkgs/top-level/stage.nix</filename>.
+    In each stage, <varname>pkgsBuildHost</varname> refers to the previous stage, <varname>pkgsBuildBuild</varname> refers to the one before that, and <varname>pkgsHostTarget</varname> refers to the current one, and <varname>pkgsTargetTarget</varname> refers to the next one. When there is no previous or next stage, they instead refer to the current stage. Note how all the invariants regarding the mapping between dependency and depending packages' build host and target platforms are preserved. <varname>pkgsBuildTarget</varname> and <varname>pkgsHostHost</varname> are more complex in that the stage fitting the requirements isn't always a fixed chain of "prevs" and "nexts" away (modulo the "saturating" self-references at the ends). We just special case each instead. All the primary edges are implemented is in <filename>pkgs/stdenv/booter.nix</filename>, and secondarily aliases in <filename>pkgs/top-level/stage.nix</filename>.
    </para>
 
    <note>
     <para>
-     Note the native stages are bootstrapped in legacy ways that predate the current cross implementation. This is why the the bootstrapping stages leading up to the final stages are ignored inthe previous paragraph.
+     Note the native stages are bootstrapped in legacy ways that predate the current cross implementation. This is why the bootstrapping stages leading up to the final stages are ignored inthe previous paragraph.
     </para>
    </note>
 
