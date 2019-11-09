@@ -46,9 +46,6 @@ let
     boot.kernelModules = [ "xfs" ];
 
     services.ceph = cephConfig;
-
-    # So that we don't have to battle systemd when bootstraping
-    systemd.targets.ceph.wantedBy = lib.mkForce [];
   };
 
   networkMonA = {
@@ -151,20 +148,17 @@ let
       "ceph osd pool delete single-node-other-test single-node-other-test --yes-i-really-really-mean-it"
     );
 
-    # As we disable the target in the config, we still want to test that it works as intended
-    $monA->mustSucceed(
-      "systemctl stop ceph-osd-${cfg.osd0.name}",
-      "systemctl stop ceph-osd-${cfg.osd1.name}",
-      "systemctl stop ceph-mgr-${cfg.monA.name}",
-      "systemctl stop ceph-mon-${cfg.monA.name}"
-    );
+    # Shut down ceph by stopping ceph.target.
+    $monA->mustSucceed("systemctl stop ceph.target");
 
+    # Start it up
     $monA->succeed("systemctl start ceph.target");
     $monA->waitForUnit("ceph-mon-${cfg.monA.name}");
     $monA->waitForUnit("ceph-mgr-${cfg.monA.name}");
     $monA->waitForUnit("ceph-osd-${cfg.osd0.name}");
     $monA->waitForUnit("ceph-osd-${cfg.osd1.name}");
 
+    # Ensure the cluster comes back up again
     $monA->succeed("ceph -s | grep 'mon: 1 daemons'");
     $monA->waitUntilSucceeds("ceph -s | grep 'quorum ${cfg.monA.name}'");
     $monA->waitUntilSucceeds("ceph osd stat | grep -e '2 osds: 2 up[^,]*, 2 in'");

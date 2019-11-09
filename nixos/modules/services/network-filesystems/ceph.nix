@@ -14,7 +14,9 @@ let
       { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName pkgs.ceph; })
       daemonIds));
 
-  makeService = (daemonType: daemonId: clusterName: ceph: {
+  makeService = (daemonType: daemonId: clusterName: ceph:
+    let
+      stateDirectory = "ceph/${if daemonType == "rgw" then "radosgw" else daemonType}/${clusterName}-${daemonId}"; in {
     enable = true;
     description = "Ceph ${builtins.replaceStrings lowerChars upperChars daemonType} daemon ${daemonId}";
     after = [ "network-online.target" "time-sync.target" ] ++ optional (daemonType == "osd") "ceph-mon.target";
@@ -23,6 +25,9 @@ let
     wantedBy = [ "ceph-${daemonType}.target" ];
 
     path = [ pkgs.getopt ];
+
+    # Don't start services that are not yet initialized
+    unitConfig.ConditionPathExists = "/var/lib/${stateDirectory}/keyring";
 
     serviceConfig = {
       LimitNOFILE = 1048576;
@@ -36,7 +41,7 @@ let
       Restart = "on-failure";
       StartLimitBurst = "5";
       StartLimitInterval = "30min";
-      StateDirectory = "ceph/${if daemonType == "rgw" then "radosgw" else daemonType}/${clusterName}-${daemonId}";
+      StateDirectory = stateDirectory;
       User = "ceph";
       Group = if daemonType == "osd" then "disk" else "ceph";
       ExecStart = ''${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} \
@@ -60,6 +65,7 @@ let
         partOf = [ "ceph.target" ];
         wantedBy = [ "ceph.target" ];
         before = [ "ceph.target" ];
+        unitConfig.StopWhenUnneeded = true;
       };
     }
   );
@@ -389,9 +395,12 @@ in
 
     systemd.targets = let
       targets = [
-        { ceph = { description = "Ceph target allowing to start/stop all ceph service instances at once";
-                     wantedBy = [ "multi-user.target" ]; }; }
-      ] ++ optional cfg.mon.enable (makeTarget "mon")
+        { ceph = {
+          description = "Ceph target allowing to start/stop all ceph service instances at once";
+          wantedBy = [ "multi-user.target" ];
+          unitConfig.StopWhenUnneeded = true;
+        }; } ]
+        ++ optional cfg.mon.enable (makeTarget "mon")
         ++ optional cfg.mds.enable (makeTarget "mds")
         ++ optional cfg.osd.enable (makeTarget "osd")
         ++ optional cfg.rgw.enable (makeTarget "rgw")
