@@ -241,19 +241,55 @@ in rec {
 
           inherit strictDeps;
 
-          depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
-          nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
-          depsBuildTarget             = lib.elemAt (lib.elemAt dependencies 0) 2;
-          depsHostHost                = lib.elemAt (lib.elemAt dependencies 1) 0;
-          buildInputs                 = lib.elemAt (lib.elemAt dependencies 1) 1;
-          depsTargetTarget            = lib.elemAt (lib.elemAt dependencies 2) 0;
+          depsBuildBuild =
+            let deps = lib.elemAt (lib.elemAt dependencies 0) 0; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          nativeBuildInputs =
+            let deps = lib.elemAt (lib.elemAt dependencies 0) 1; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          depsBuildTarget =
+            let deps = lib.elemAt (lib.elemAt dependencies 0) 2; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          depsHostHost =
+            let deps = lib.elemAt (lib.elemAt dependencies 1) 0; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          buildInputs =
+            let deps = lib.elemAt (lib.elemAt dependencies 1) 1; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          depsTargetTarget =
+            let deps = lib.elemAt (lib.elemAt dependencies 2) 0; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
 
-          depsBuildBuildPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 0) 0;
-          propagatedNativeBuildInputs = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
-          depsBuildTargetPropagated   = lib.elemAt (lib.elemAt propagatedDependencies 0) 2;
-          depsHostHostPropagated      = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
-          propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
-          depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
+          depsBuildBuildPropagated =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 0) 0; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          propagatedNativeBuildInputs =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 0) 1; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          depsBuildTargetPropagated =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 0) 2; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          depsHostHostPropagated =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 1) 0; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          propagatedBuildInputs =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 1) 1; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
+          depsTargetTargetPropagated =
+            let deps = lib.elemAt (lib.elemAt propagatedDependencies 2) 0; in
+            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            deps;
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags = let inherit (lib) elem optional; in configureFlags
