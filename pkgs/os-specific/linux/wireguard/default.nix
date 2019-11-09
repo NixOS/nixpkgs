@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  INSTALL_MOD_PATH = "\${out}";
-
-  env.NIX_CFLAGS = ["-Wno-error=cpp"];
+  env = {
+    NIX_CFLAGS = "-Wno-error=cpp";
+    KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    INSTALL_MOD_PATH = "\${out}";
+  };
 
   nativeBuildInputs = [ perl ] ++ kernel.moduleBuildDependencies;
 
