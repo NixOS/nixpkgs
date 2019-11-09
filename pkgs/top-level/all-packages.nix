@@ -1456,7 +1456,9 @@ in
 
   colorls = callPackage ../tools/system/colorls { };
 
-  coloursum = callPackage ../tools/text/coloursum { };
+  coloursum = callPackage ../tools/text/coloursum {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   compsize = callPackage ../os-specific/linux/compsize { };
 
