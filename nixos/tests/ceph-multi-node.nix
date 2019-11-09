@@ -50,7 +50,11 @@ let
 
     services.ceph = cephConfig;
 
-    # So that we don't have to battle systemd when bootstraping
+    # This is only set to stop systemd from trying to start the daemons before 
+    # any of them are initialized. This is purely cosmetic and is used to 
+    # minimize the noise generated in the testlog. (Each daemon sends several 
+    # error messages if you try to start them before they are initialized, 
+    # which clutters the testlog but are otherwise completely harmless.)
     systemd.targets.ceph.wantedBy = lib.mkForce [];
   };
 
@@ -107,6 +111,10 @@ let
     };
   }; };
 
+  # Following deployment is based on the manual deployment described here:
+  # https://docs.ceph.com/docs/master/install/manual-deployment/
+  # For other ways to deploy a ceph cluster, look at the documentation at
+  # https://docs.ceph.com/docs/master/
   testscript = { ... }: ''
     startAll;
 
