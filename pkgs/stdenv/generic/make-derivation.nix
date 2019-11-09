@@ -243,52 +243,52 @@ in rec {
 
           depsBuildBuild =
             let deps = lib.elemAt (lib.elemAt dependencies 0) 0; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           nativeBuildInputs =
             let deps = lib.elemAt (lib.elemAt dependencies 0) 1; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           depsBuildTarget =
             let deps = lib.elemAt (lib.elemAt dependencies 0) 2; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           depsHostHost =
             let deps = lib.elemAt (lib.elemAt dependencies 1) 0; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           buildInputs =
             let deps = lib.elemAt (lib.elemAt dependencies 1) 1; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           depsTargetTarget =
             let deps = lib.elemAt (lib.elemAt dependencies 2) 0; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
 
           depsBuildBuildPropagated =
             let deps = lib.elemAt (lib.elemAt propagatedDependencies 0) 0; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           propagatedNativeBuildInputs =
             let deps = lib.elemAt (lib.elemAt propagatedDependencies 0) 1; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           depsBuildTargetPropagated =
             let deps = lib.elemAt (lib.elemAt propagatedDependencies 0) 2; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           depsHostHostPropagated =
             let deps = lib.elemAt (lib.elemAt propagatedDependencies 1) 0; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           propagatedBuildInputs =
             let deps = lib.elemAt (lib.elemAt propagatedDependencies 1) 1; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
           depsTargetTargetPropagated =
             let deps = lib.elemAt (lib.elemAt propagatedDependencies 2) 0; in
-            assert lib.all (v: lib.isDerivation v) (lib.attrValues deps);
+            assert lib.all (v: lib.isDerivation v || builtins.isPath v) deps;
             deps;
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
