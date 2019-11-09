@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0f8mr0yzj78q1dx7v6ggbgfir2wv0n5z2shfbbvfdq7910xbgvf2";
   };
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
   checkInputs =  [ pytest glibcLocales ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
