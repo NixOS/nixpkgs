@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     '';
   */
 
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
 
   meta = {
     description = "3D dungeon crawling adventure";

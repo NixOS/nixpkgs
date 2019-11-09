@@ -40,7 +40,7 @@ mkDerivation rec {
     "-DNOSERVER=${if withServer then "OFF" else "ON"}"
   ];
 
-  NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
+  env.NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
     SDL2_image
     SDL2_mixer

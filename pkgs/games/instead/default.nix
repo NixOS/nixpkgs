@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     sha256 = "0kskwrq2gy1gpp97134sjrw08ip1h6i5dc64zrbl9yv7jaz4by69";
   };
 
-  NIX_LDFLAGS = "-llua -lgcc_s";
+  env.NIX_LDFLAGS = "-llua -lgcc_s";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ SDL SDL_ttf SDL_image SDL_mixer lua zlib unzip ];

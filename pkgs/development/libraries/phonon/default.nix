@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  NIX_CFLAGS_COMPILE = "-fPIC";
+  env.NIX_CFLAGS_COMPILE = "-fPIC";
 
   cmakeFlags =
     [ "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}" ]

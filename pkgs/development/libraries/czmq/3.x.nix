@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./czmq3-gcc7.patch ];
 
   # Fix build on Glibc 2.24.
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # Needs to be propagated for the .pc file to work
   propagatedBuildInputs = [ zeromq ];

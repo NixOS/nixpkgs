@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "DOC_PATH=$(out)/share/doc"
   ];
 
-  NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
+  env.NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
   patchPhase = ''
     runHook prePatch

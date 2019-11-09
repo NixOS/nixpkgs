@@ -133,7 +133,7 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
-  NIX_NO_SELF_RPATH = true;
+  env.NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
 
@@ -182,7 +182,7 @@ stdenv.mkDerivation ({
     ++ (optional hostPlatform.isDarwin gnused)
     ;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
+  env.NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
   preConfigure = stdenv.lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
     export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
@@ -262,7 +262,7 @@ stdenv.mkDerivation ({
     else "";
 
   dontStrip = !stripped;
-  NIX_STRIP_DEBUG = !stripped;
+  env.NIX_STRIP_DEBUG = !stripped;
 
   installTargets =
     if stripped

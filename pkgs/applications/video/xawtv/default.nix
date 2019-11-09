@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags= [ "--prefix=" ];
 
-  NIX_LDFLAGS = "-lgcc_s";
+  env.NIX_LDFLAGS = "-lgcc_s";
 
   makeFlags = [ "SUID_ROOT=" "DESTDIR=\$(out)" "PREFIX=" ];
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = with stdenv.lib; {
     description = "Notification daemon for MATE";

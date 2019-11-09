@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [cmake];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = with stdenv.lib; {
     description     = "Computational Morphometry Toolkit ";

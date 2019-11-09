@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   ];
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
-  NIX_LDFLAGS = "-lx265";
+  env.NIX_LDFLAGS = "-lx265";
 
   preBuild = ''
     cd build

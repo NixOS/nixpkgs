@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  NIX_LDFLAGS = "-lpcre";
+  env.NIX_LDFLAGS = "-lpcre";
 
   buildPhase = ''
     HOME=$TMPDIR

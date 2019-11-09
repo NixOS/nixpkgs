@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dirac-1.0.2.patch ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postInstall = ''
     # keep only necessary binaries

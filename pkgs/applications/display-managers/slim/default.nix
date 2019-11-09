@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_PAM=1" ];
 
-  NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype -std=c++11";
+  env.NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype -std=c++11";
 
   enableParallelBuilding = true;
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft makeWrapper
     ];
 
-  NIX_CFLAGS_LINK = "-lXmu";
+  env.NIX_CFLAGS_LINK = "-lXmu";
 
   meta = {
     homepage = https://sourceforge.net/projects/slim.berlios/; # berlios shut down; I found no replacement yet

@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   DESTDIR = "$(out)";
 
-  NIX_LDFLAGS = "-lkmod -lsystemd";
-  NIX_CFLAGS_COMPILE = "-DUSE_KMOD";
+  env.NIX_LDFLAGS = "-lkmod -lsystemd";
+  env.NIX_CFLAGS_COMPILE = "-DUSE_KMOD";
 
   preConfigure = ''
     sed -i 's|/usr|/|' Makefile

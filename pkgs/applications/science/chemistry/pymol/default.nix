@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication {
   };
 
   buildInputs = [ python3Packages.numpy glew freeglut libpng libxml2 tk freetype msgpack ];
-  NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
 
   installPhase = ''
     python setup.py install --home=$out

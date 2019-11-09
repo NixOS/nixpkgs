@@ -21,7 +21,7 @@ stdenv'.mkDerivation rec {
     sha256 = "1p8hx8gwnv7a49pffq1xmzmrfi3gs6dyra9dn2xi7cl75yn9kfhm";
   };
 
-  NIX_CFLAGS_COMPILE = "-O3";
+  env.NIX_CFLAGS_COMPILE = "-O3";
 
   cmakeFlags = lib.optional (!cudaSupport) "-DCUDA_ENABLE=OFF"
     ++ lib.optional (!openclSupport) "-DOpenCL_ENABLE=OFF";

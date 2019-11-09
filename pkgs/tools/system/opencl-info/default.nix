@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ opencl-clhpp ocl-icd ];
 
-  NIX_LDFLAGS = "-lOpenCL";
+  env.NIX_LDFLAGS = "-lOpenCL";
 
   installPhase = ''
     install -Dm755 opencl-info $out/bin/opencl-info

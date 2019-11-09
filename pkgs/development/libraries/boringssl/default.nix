@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake perl go ];
   enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
 

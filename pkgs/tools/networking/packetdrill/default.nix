@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   setSourceRoot = ''
     export sourceRoot=$(realpath */gtests/net/packetdrill)
   '';
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
   nativeBuildInputs = [ bison flex ];
   patches = [ ./nix.patch ];
   enableParallelBuilding = true;

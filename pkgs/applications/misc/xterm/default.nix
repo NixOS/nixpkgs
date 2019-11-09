@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional enableDecLocator "--enable-dec-locator";
 
   # Work around broken "plink.sh".
-  NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
+  env.NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
 
   # Hack to get xterm built with the feature of releasing a possible setgid of 'utmp',
   # decided by the sysadmin to allow the xterm reporting to /var/run/utmp

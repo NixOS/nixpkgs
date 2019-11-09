@@ -10,5 +10,5 @@ qtModule {
     darwin.apple_sdk.frameworks.WebKit
   ];
   outputs = [ "out" "dev" "bin" ];
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation -framework WebKit";
+  env.NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation -framework WebKit";
 }

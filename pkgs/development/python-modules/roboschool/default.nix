@@ -44,7 +44,7 @@ buildPythonPackage rec {
     boost
   ];
 
-  NIX_CFLAGS_COMPILE="-I ${python}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE="-I ${python}/include/${python.libPrefix}";
 
   patches = [
     # Remove kwarg that was removed in upstream gym

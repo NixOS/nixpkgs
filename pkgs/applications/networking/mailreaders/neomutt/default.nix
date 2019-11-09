@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   # Fix missing libidn in mutt;
   # this fix is ugly since it links all binaries in mutt against libidn
   # like pgpring, pgpewrap, ...
-  NIX_LDFLAGS = "-lidn";
+  env.NIX_LDFLAGS = "-lidn";
 
   postInstall = ''
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"

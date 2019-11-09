@@ -9,7 +9,7 @@ buildGoPackage rec {
   buildInputs = [ go git dep cacert ];
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   src = fetchgit {
     inherit rev;

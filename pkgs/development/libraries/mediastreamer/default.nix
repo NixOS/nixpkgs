@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DGIT_VERSION=\"v2.14.0\""
     "-Wno-error=deprecated-declarations"
     "-Wno-error=cast-function-type"
   ];
-  NIX_LDFLAGS = "-lXext -lssl";
+  env.NIX_LDFLAGS = "-lXext -lssl";
 
   meta = with stdenv.lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";

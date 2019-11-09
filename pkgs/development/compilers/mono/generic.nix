@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [glib];
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
+  env.NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
 
   # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
   dontDisableStatic = true;

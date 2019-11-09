@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/unit-utils-io.c --replace "| O_DIRECT" ""
   '';
 
-  NIX_LDFLAGS = "-lgcc_s";
+  env.NIX_LDFLAGS = "-lgcc_s";
 
   configureFlags = [
     "--enable-cryptsetup-reencrypt"

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   # Needed on gcc >= 6.
-  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   meta = with stdenv.lib; {
     description = "A tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";

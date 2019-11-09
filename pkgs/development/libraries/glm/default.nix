@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cp ${gcc7PlatformPatch} glm/simd/platform.h
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-DGLM_COMPILER=0";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-DGLM_COMPILER=0";
 
   postInstall = ''
     mkdir -p $doc/share/doc/glm

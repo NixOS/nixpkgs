@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   '';
 
   # for gcc5; c11 inline semantics breaks the build
-  NIX_CFLAGS_COMPILE = "-fgnu89-inline";
+  env.NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 
   meta = with stdenv.lib; {
     description = "Io programming language";

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ cmake zlib boost.out boost.dev ];
-  NIX_CFLAGS_COMPILE = toString ([ "-Wno-narrowing" ]
+  env.NIX_CFLAGS_COMPILE = toString ([ "-Wno-narrowing" ]
     # Squelch endless stream of warnings on same few things
     ++ stdenv.lib.optionals stdenv.cc.isClang [
       "-Wno-empty-body"

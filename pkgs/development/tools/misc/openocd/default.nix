@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "--enable-remote-bitbang"
   ];
 
-  NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-implicit-fallthrough"
     "-Wno-format-truncation"
     "-Wno-format-overflow"

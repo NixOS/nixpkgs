@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     ./autogen.sh --prefix=$out
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ which gnome3.gnome-common glib intltool libtool cairo gtk3 xorg.xwininfo ]

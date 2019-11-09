@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dkz5b3gxq5p4xz0qqg6l2sigszrlsinz3skyf0ln4wf3zrvf8m5";
   };
 
-  NIX_CFLAGS_COMPILE = "-fPIC";
+  env.NIX_CFLAGS_COMPILE = "-fPIC";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib ffmpeg ];

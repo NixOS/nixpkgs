@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  NIX_LDFLAGS = "-lm -llcms -ljpeg -lpng -lX11";
+  env.NIX_LDFLAGS = "-lm -llcms -ljpeg -lpng -lX11";
 
   meta = {
     homepage = http://www.cinepaint.org/;

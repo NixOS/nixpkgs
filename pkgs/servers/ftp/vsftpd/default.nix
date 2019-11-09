@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/sbin $out/man/man{5,8}
   '';
 
-  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
+  env.NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
 
   enableParallelBuilding = true;
 

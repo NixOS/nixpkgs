@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jf27mjz8vqnclhrhrpn7niz4c177kcjbd1hc7vn65ihcqfz05rs";
   };
 
-  NIX_CFLAGS_COMPILE = "-std=gnu++98";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu++98";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ bison flex unixODBC openssl openldap

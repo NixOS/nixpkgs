@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "03i5wfscv83jb8vnwwhfmm8yfiniwkvk13myzhr1kbwbs9884wdj";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   # Fixes compilation with clang (on darwin) see https://github.com/ukoethe/vigra/issues/414
   patches =

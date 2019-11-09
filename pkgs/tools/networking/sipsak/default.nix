@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     c-ares
   ];
 
-  NIX_CFLAGS_COMPILE = "--std=gnu89";
+  env.NIX_CFLAGS_COMPILE = "--std=gnu89";
 
   src = fetchurl {
     url = "https://github.com/sipwise/sipsak/archive/mr${version}.tar.gz";

@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "INSTALLDIR=$(out)" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
 
   meta = with stdenv.lib; {
     description = "An e-book reader for Linux";

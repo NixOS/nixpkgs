@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-D__STDC_CONSTANT_MACROS=1 -std=gnu++98";
+  env.NIX_CFLAGS_COMPILE = "-D__STDC_CONSTANT_MACROS=1 -std=gnu++98";
 
   patches = [ ./disable-samples-ftbfs.diff ./libav9.patch ./libav10.patch ];
 

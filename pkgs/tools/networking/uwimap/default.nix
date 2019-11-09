@@ -31,7 +31,7 @@ stdenv.mkDerivation ({
     sed -i src/osdep/unix/Makefile -e 's,^SSLLIB=.*,SSLLIB=${openssl.out}/lib,'
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
     "-I${openssl.dev}/include/openssl";
 
   installPhase = ''

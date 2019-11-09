@@ -49,5 +49,5 @@ stdenv.mkDerivation rec {
     "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
   ];
 
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
 }

@@ -24,7 +24,7 @@ buildGoPackage rec {
     PATH="$(pwd):$PATH" go generate ${goPackagePath}
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = [
     # go-qml needs private Qt headers.
     "-I${qtbase.dev}/include/QtCore/${qtbase.version}"
   ];

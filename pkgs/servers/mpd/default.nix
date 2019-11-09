@@ -128,7 +128,7 @@ in stdenv.mkDerivation rec {
     ++ opt stdenv.isLinux
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system";
 
-  NIX_LDFLAGS = ''
+  env.NIX_LDFLAGS = ''
     ${if shoutSupport then "-lshout" else ""}
   '';
 

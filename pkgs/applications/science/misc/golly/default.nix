@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags=[
     "AM_LDFLAGS="
   ];
-  NIX_LDFLAGS="-l${python2.libPrefix} -lperl";
+  env.NIX_LDFLAGS="-l${python2.libPrefix} -lperl";
   preConfigure=''
     export NIX_LDFLAGS="$NIX_LDFLAGS -L$(dirname "$(find ${perl} -name libperl.so)")"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE

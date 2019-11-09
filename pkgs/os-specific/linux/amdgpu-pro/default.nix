@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
   postBuild = optionalString (!libsOnly)
     (concatMapStrings (m: "xz usr/src/amdgpu-${build}/${m}\n") modules);
 
-  NIX_CFLAGS_COMPILE = "-Werror";
+  env.NIX_CFLAGS_COMPILE = "-Werror";
 
   makeFlags = optional (!libsOnly)
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build modules";

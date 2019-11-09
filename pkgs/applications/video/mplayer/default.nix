@@ -195,7 +195,7 @@ stdenv.mkDerivation rec {
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
-  NIX_LDFLAGS = with stdenv.lib; toString (
+  env.NIX_LDFLAGS = with stdenv.lib; toString (
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]

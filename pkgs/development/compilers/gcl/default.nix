@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" "bindnow" ];
 
-  NIX_CFLAGS_COMPILE = "-fgnu89-inline";
+  env.NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 
   meta = with stdenv.lib; {
     description = "GNU Common Lisp compiler working via GCC";

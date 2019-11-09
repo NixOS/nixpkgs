@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   buildPhase = "buildPhase";
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-ObjC";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-ObjC";
 
   installPhase = "installPhase";
 

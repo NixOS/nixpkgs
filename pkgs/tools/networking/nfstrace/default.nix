@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # To build with GCC 8+ it needs:
   CXXFLAGS = [ "-Wno-class-memaccess" "-Wno-ignored-qualifiers" ];
   # CMake can't find json_c without:
-  NIX_CFLAGS_COMPILE = [ "-I${json_c.dev}/include/json-c" ];
+  env.NIX_CFLAGS_COMPILE = [ "-I${json_c.dev}/include/json-c" ];
 
   doCheck = false; # requires network access
 

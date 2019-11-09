@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=ignored-qualifiers -Wno-error=class-memaccess -Wno-error=catch-value";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=ignored-qualifiers -Wno-error=class-memaccess -Wno-error=catch-value";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost curl ruby ];

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ optionals withPkcs11        [ libp11 openssl ];
 
   # This shouldn't be necessary but is as of 6.7
-  NIX_LDFLAGS = optionalString withPkcs11 "-lcrypto";
+  env.NIX_LDFLAGS = optionalString withPkcs11 "-lcrypto";
 
   enableParallelBuilding = true;
 

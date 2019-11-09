@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-Fix-CMake-configuration-for-Nix.patch ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = [
     "-I${libxml2.dev}/include/libxml2"
   ];
 

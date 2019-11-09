@@ -37,7 +37,7 @@ mkDerivation rec {
     xorg.xcbproto
   ];
 
-  NIX_LDFLAGS = "-ldvdnav";
+  env.NIX_LDFLAGS = "-ldvdnav";
 
   postPatch = ''
     sed -i src/CMakeLists.txt -e "s,/usr/lib/dtk2,${dtkcore}/lib/dtk2,"

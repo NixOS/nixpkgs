@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile --replace '-o root -g root' ""
     '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preInstall = "mkdir -p $out/etc/sysconfig";
 

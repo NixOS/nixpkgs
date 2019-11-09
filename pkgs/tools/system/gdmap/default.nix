@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
 
   meta = with stdenv.lib; {
     homepage = http://gdmap.sourceforge.net;

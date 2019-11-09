@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ./gcc6.patch
   ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = {
     description = "Renders an image of the earth or other planets into the X root window";

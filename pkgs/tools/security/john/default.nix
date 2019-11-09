@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   # gcc: error: memdbg.o: No such file or directory
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = "-DJOHN_SYSTEMWIDE=1";
+  env.NIX_CFLAGS_COMPILE = "-DJOHN_SYSTEMWIDE=1";
 
   postInstall = ''
     mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john"

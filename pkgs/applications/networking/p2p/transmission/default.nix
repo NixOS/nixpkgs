@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ++ optional enableSystemd "--with-systemd-daemon"
     ++ optional enableGTK3 "--with-gtk";
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
+  env.NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   meta = with stdenv.lib; {
     description = "A fast, easy and free BitTorrent client";

@@ -41,7 +41,7 @@ mkDerivation rec {
 
   propagatedUserEnvPkgs = [ kproperty ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   postInstall = ''
     for i in $out/bin/*; do

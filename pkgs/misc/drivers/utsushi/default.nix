@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libusb.dev
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=parentheses -Wno-error=unused-variable";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=parentheses -Wno-error=unused-variable";
 
   postPatch = ''
     # remove vendored dependencies

@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     pythonProtobuf
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow -Wno-error=class-memaccess";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow -Wno-error=class-memaccess";
 
   preConfigure = ''
     # https://issues.apache.org/jira/browse/MESOS-6616

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-tabling=yes" ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = {
     homepage = http://www.dcc.fc.up.pt/~vsc/Yap/;

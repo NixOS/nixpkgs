@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = ["-DCMAKE_CXX_FLAGS=-DWIZARD"];
 
   # Help CMake find SDL_mixer.h
-  NIX_CFLAGS_COMPILE = "-I${SDL2_mixer}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = "-I${SDL2_mixer}/include/SDL2";
 
   meta = with stdenv.lib; {
     description = "Graphical roguelike game";

@@ -26,7 +26,7 @@ edk2 = stdenv.mkDerivation {
   buildInputs = [ libuuid pythonEnv ];
 
   makeFlags = [ "-C BaseTools" ];
-  NIX_CFLAGS_COMPILE = "-Wno-return-type -Wno-error=stringop-truncation";
+  env.NIX_CFLAGS_COMPILE = "-Wno-return-type -Wno-error=stringop-truncation";
 
   hardeningDisable = [ "format" "fortify" ];
 

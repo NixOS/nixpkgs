@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ pcre2 ];
-  NIX_CFLAGS_LINK = "-lpcre2-8";
+  env.NIX_CFLAGS_LINK = "-lpcre2-8";
 
   buildPhase = ''
     $CC -O2 hardlink.c -o hardlink $NIX_CFLAGS_LINK

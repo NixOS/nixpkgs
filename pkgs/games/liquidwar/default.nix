@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE =
+  env.NIX_CFLAGS_COMPILE =
     "-Wno-error=deprecated-declarations" +
     # Avoid GL_GLEXT_VERSION double definition
     " -DNO_SDL_GLEXT"

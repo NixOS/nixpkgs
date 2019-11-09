@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   INSTALL_MOD_PATH = "\${out}";
 
-  NIX_CFLAGS = ["-Wno-error=cpp"];
+  env.NIX_CFLAGS = ["-Wno-error=cpp"];
 
   nativeBuildInputs = [ perl ] ++ kernel.moduleBuildDependencies;
 
