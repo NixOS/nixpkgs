@@ -24199,8 +24199,10 @@ in
   fped = callPackage ../applications/science/electronics/fped { };
 
   kicad = callPackage ../applications/science/electronics/kicad {
-    wxGTK = wxGTK30;
-    boost = boost160;
+    wxGTK = wxGTK30.override { withGtk2 = false; };
+    pythonPackages = python3Packages;
+    python = python3;
+    wxPython = python3Packages.wxPython_4_0;
   };
   kicad-with-packages3d = kicad.overrideAttrs (old: { modules = old.modules ++ [ old.passthru.packages3d ]; });
 
