@@ -56,7 +56,7 @@ let
         ++ concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
-      NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
+      env.NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
         # Fix '_res_9_init: undefined symbol' error
         + (stdenv.lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
