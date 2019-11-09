@@ -33,6 +33,8 @@ let
 
   enableSSL = any (vhost: vhost.enableSSL) allHosts;
 
+  enableUserDir = any (vhost: vhost.enableUserDir) allHosts;
+
   # NOTE: generally speaking order of modules is very important
   modules =
     [ # required apache modules our httpd service cannot run without
@@ -45,6 +47,7 @@ let
     ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
+    ++ optional enableUserDir "userdir"
     ++ optional mainCfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
     ++ optional mainCfg.enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
     ++ optional mainCfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
