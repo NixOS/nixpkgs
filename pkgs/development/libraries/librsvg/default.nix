@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     "installed_testdir=$(installedTests)/libexec/installed-tests/RSVG"
   ];
 
-  NIX_CFLAGS_COMPILE
+  env.NIX_CFLAGS_COMPILE
     = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf

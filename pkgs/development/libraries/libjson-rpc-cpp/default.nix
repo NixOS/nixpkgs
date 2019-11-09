@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${catch}/include/catch";
+  env.NIX_CFLAGS_COMPILE = "-I${catch}/include/catch";
 
   postPatch = ''
     for f in cmake/FindArgtable.cmake \

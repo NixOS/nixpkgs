@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
       qca2 pkgconfig which glib libXScrnSaver
     ];
 
-  NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";
+  env.NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";
 
-  NIX_LDFLAGS="-lqca";
+  env.NIX_LDFLAGS="-lqca";
 
   enableParallelBuilding = true;
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ sconsPackages.scons_3_0_1 pkgconfig ];
   buildInputs = [ libsamplerate libsndfile liblo libjack2 boost ];
   prefixKey = "PREFIX=";
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = {
     homepage = http://das.nasophon.de/klick/;

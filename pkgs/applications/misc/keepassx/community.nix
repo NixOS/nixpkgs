@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dkya9smx81c5cgcwk2gi2m1pabfff1v9gd3ngl42sdvyb63wgdq";
   };
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
     "-Wno-old-style-cast"
     "-Wno-error"
     "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/local/bin" "../bin" \
       --replace "/usr/local/share/man" "../share/man"
   '';
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
+  env.NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
 
   patches = [
     ./darwin.patch

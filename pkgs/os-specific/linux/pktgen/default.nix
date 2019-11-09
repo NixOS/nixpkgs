@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
   GUI = stdenv.lib.optionalString withGtk "true";
 
-  NIX_CFLAGS_COMPILE = "-msse3";
+  env.NIX_CFLAGS_COMPILE = "-msse3";
 
   postPatch = let dpdkMajor = lib.versions.major dpdk.version; in ''
     substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${utillinux}/bin/lscpu

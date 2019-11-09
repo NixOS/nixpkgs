@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
     "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 
   meta = with stdenv.lib; {

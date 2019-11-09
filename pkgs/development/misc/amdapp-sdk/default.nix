@@ -49,7 +49,7 @@ in stdenv.mkDerivation {
   patchFlags = [ "-p0" ];
   buildInputs = [ makeWrapper perl libGLU libGL xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
   propagatedBuildInputs = [ stdenv.cc ];
-  NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";
+  env.NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";
   doCheck = false;
 
   unpackPhase = ''

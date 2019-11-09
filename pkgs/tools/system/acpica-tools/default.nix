@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pz95fb1zvsj9238bg7a4vxl1svn5mnjg10sn5qvgr008q0v9782";
   };
 
-  NIX_CFLAGS_COMPILE = "-O3";
+  env.NIX_CFLAGS_COMPILE = "-O3";
 
   enableParallelBuilding = true;
 

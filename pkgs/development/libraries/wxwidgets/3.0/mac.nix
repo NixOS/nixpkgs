@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     ./wx-config --libs
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-undef";
+  env.NIX_CFLAGS_COMPILE = "-Wno-undef";
 
   doCheck = true;
 

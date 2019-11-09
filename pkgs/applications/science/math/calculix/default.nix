@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ arpack spooles openblas ];
 
-  NIX_CFLAGS_COMPILE = "-I${spooles}/include/spooles";
+  env.NIX_CFLAGS_COMPILE = "-I${spooles}/include/spooles";
 
   patches = [
     ./calculix.patch

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ freetype libXft pango fontconfig];
 
-  NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
+  env.NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
 
   meta = {
     description = "An advanced font engine";

@@ -54,9 +54,11 @@ self = stdenv.mkDerivation rec {
     "-DINSTALL_DOCDIR=share/mysql/docs"
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
-
-  CXXFLAGS = "-fpermissive -std=c++11";
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  
+  env = {
+    CXXFLAGS = "-fpermissive -std=c++11";
+    NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  };
 
   prePatch = ''
     sed -i -e "s|/usr/bin/libtool|libtool|" cmake/merge_archives.cmake.in

@@ -57,12 +57,15 @@ stdenv.mkDerivation {
       --replace '#if U_ICU_VERSION_MAJOR_NUM' '#if 0 //'
   '';
 
-  BUILD_DIR = "./Build";
-  CFLAGS = "-DINCLUDE_OBJC -I${libxml2.dev}/include/libxml2"; # They seem to assume we include objc in some places and not in others, make a PR; also not sure why but libxml2 include path isn't getting picked up from buildInputs
+  env = {
+    BUILD_DIR = "./Build";
+    # They seem to assume we include objc in some places and not in others, make a PR; also not sure why but libxml2 include path isn't getting picked up from buildInputs
+    CFLAGS = "-DINCLUDE_OBJC -I${libxml2.dev}/include/libxml2";
 
-  # I'm guessing at the version here. https://github.com/apple/swift-corelibs-foundation/commit/df3ec55fe6c162d590a7653d89ad669c2b9716b1 imported "high sierra"
-  # and this version is a version from there. No idea how accurate it is.
-  LDFLAGS = "-current_version 1454.90.0 -compatibility_version 150.0.0 -init ___CFInitialize";
+    # I'm guessing at the version here. https://github.com/apple/swift-corelibs-foundation/commit/df3ec55fe6c162d590a7653d89ad669c2b9716b1 imported "high sierra"
+    # and this version is a version from there. No idea how accurate it is.
+    LDFLAGS = "-current_version 1454.90.0 -compatibility_version 150.0.0 -init ___CFInitialize";
+  };
 
   configurePhase = ''
     ../configure release --sysroot UNUSED

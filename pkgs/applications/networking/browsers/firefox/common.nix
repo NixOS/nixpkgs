@@ -156,7 +156,7 @@ stdenv.mkDerivation rec {
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-I${glib.dev}/include/gio-unix-2.0"
   ]
   ++ lib.optionals (!isTorBrowserLike) [

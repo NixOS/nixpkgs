@@ -118,7 +118,7 @@ in stdenv.mkDerivation rec {
     patchShebangs ./TOOLS/
   '';
 
-  NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext "
+  env.NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext "
               + optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   configureFlags = [

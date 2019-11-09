@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.

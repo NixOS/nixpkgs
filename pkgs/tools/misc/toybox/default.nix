@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ which ]; # used for tests with checkFlags = [ "DEBUG=true" ];
   checkTarget = "tests";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with stdenv.lib; {
     description = "Lightweight implementation of some Unix command line utilities";

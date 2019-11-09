@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional stdenv.isDarwin Carbon
   ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   configureFlags = [
     "--enable-zlib"

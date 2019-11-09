@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   # Needed to avoid a SIGBUS on the final executable on mips
-  NIX_CFLAGS_COMPILE = if stdenv.isMips then "-fPIC" else "";
+  env.NIX_CFLAGS_COMPILE = if stdenv.isMips then "-fPIC" else "";
 
   patches = optionals stdenv.isDarwin [ ./gnused-on-osx-fix.patch ] ++
     [ (fetchurl {

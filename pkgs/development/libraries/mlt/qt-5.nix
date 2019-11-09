@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   # mlt is unable to cope with our multi-prefix Qt build
   # because it does not use CMake or qmake.
-  NIX_CFLAGS_COMPILE = "-I${getDev qtsvg}/include/QtSvg";
+  env.NIX_CFLAGS_COMPILE = "-I${getDev qtsvg}/include/QtSvg";
 
   CXXFLAGS = "-std=c++11";
 

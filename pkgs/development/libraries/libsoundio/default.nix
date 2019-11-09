@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isLinux alsaLib
     ++ stdenv.lib.optional stdenv.isDarwin AudioUnit;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-Wno-strict-prototypes";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-Wno-strict-prototypes";
 
   meta = with stdenv.lib; {
     description = "Cross platform audio input and output";

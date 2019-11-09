@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     (python.withPackages (ps: [ ps.pystache ps.six ]))
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = [
     "-Wno-error"
     "-I${glib.dev}/include/glib-2.0"
     "-I${glib.out}/lib/glib-2.0/include"

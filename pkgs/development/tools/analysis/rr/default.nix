@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   # we turn on additional warnings due to hardening
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "fortify" ];
 

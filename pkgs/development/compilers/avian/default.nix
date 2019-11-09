@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib jdk ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Foundation ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   postPatch = ''
     substituteInPlace makefile \

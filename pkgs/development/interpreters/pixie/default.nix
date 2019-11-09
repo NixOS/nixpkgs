@@ -58,19 +58,21 @@ let
       $PYTHON $RPYTHON ${common-flags} ${target}
       find pixie -name "*.pxi" -exec ./pixie-vm -c {} \;
     )'';
-    LD_LIBRARY_PATH = library-path;
-    C_INCLUDE_PATH = include-path;
-    LIBRARY_PATH = library-path;
-    PATH = bin-path;
+    env = {
+      LD_LIBRARY_PATH = library-path;
+      C_INCLUDE_PATH = include-path;
+      LIBRARY_PATH = library-path;
+      PATH = bin-path;
+    };
     installPhase = ''
       mkdir -p $out/share $out/bin
       cp pixie-src/pixie-vm $out/share/pixie-vm
       cp -R pixie-src/pixie $out/share/pixie
       makeWrapper $out/share/pixie-vm $out/bin/pixie \
-        --prefix LD_LIBRARY_PATH : ${LD_LIBRARY_PATH} \
-        --prefix C_INCLUDE_PATH : ${C_INCLUDE_PATH} \
-        --prefix LIBRARY_PATH : ${LIBRARY_PATH} \
-        --prefix PATH : ${PATH}
+        --prefix LD_LIBRARY_PATH : ${env.LD_LIBRARY_PATH} \
+        --prefix C_INCLUDE_PATH : ${env.C_INCLUDE_PATH} \
+        --prefix LIBRARY_PATH : ${env.LIBRARY_PATH} \
+        --prefix PATH : ${env.PATH}
     '';
     doCheck = true;
     checkPhase = ''

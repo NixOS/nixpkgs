@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enablePostgres [ postgresql ]
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "format" ];
 

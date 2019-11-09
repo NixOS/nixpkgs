@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   # !!! don't know why this is necessary
-  NIX_LDFLAGS = "-lXext -lX11 -lz -lgcc_s";
+  env.NIX_LDFLAGS = "-lXext -lX11 -lz -lgcc_s";
 
   meta = with stdenv.lib; {
     description = "Screencast video catpuring tool";

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
+  env.NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \

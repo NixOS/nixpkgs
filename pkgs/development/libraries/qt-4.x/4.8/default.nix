@@ -206,7 +206,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = toString (
+  env.NIX_CFLAGS_COMPILE = toString (
     # with gcc7 the warnings blow the log over Hydra's limit
     [ "-Wno-expansion-to-defined" "-Wno-unused-local-typedefs" ]
     ++ lib.optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
@@ -214,13 +214,13 @@ stdenv.mkDerivation rec {
       [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
     ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1");
 
-  NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
+  env.NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     # resolve "extra qualification on member" error
     sed -i 's/struct ::TabletProximityRec;/struct TabletProximityRec;/' \
       src/gui/kernel/qt_cocoa_helpers_mac_p.h
-    find . -name "Makefile*" | xargs sed -i 's/^\(LINK[[:space:]]* = clang++\)/\1 ${NIX_LDFLAGS}/'
+    find . -name "Makefile*" | xargs sed -i 's/^\(LINK[[:space:]]* = clang++\)/\1 ${env.NIX_LDFLAGS}/'
     sed -i 's/^\(LIBS[[:space:]]*=.*$\)/\1 -lobjc/' ./src/corelib/Makefile.Release
   '';
 
