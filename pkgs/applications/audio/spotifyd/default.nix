@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "--no-default-features"
     "--features"
-    "${stdenv.lib.optionalString withALSA "alsa_backend,"}${stdenv.lib.optionalString withPulseAudio "pulseaudio_backend,"}${stdenv.lib.optionalString withPortAudio "portaudio_backend,"}${stdenv.lib.optionalString withDBUS "dbus_mpris, dbus_keyring,"}"
+    "${stdenv.lib.optionalString withALSA "alsa_backend,"}${stdenv.lib.optionalString withPulseAudio "pulseaudio_backend,"}${stdenv.lib.optionalString withPortAudio "portaudio_backend,"}${stdenv.lib.optionalString withDBUS "dbus_mpris,dbus_keyring,"}"
   ];
 
   nativeBuildInputs = [ pkgconfig ];
