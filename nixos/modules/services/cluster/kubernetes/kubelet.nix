@@ -6,6 +6,12 @@ let
   top = config.services.kubernetes;
   cfg = top.kubelet;
 
+  kubeletRbacUser =
+    if top.kubelet.hostname == "" then
+      throw "kubelet.hostname must be set. This is probably caused by networking.hostName being empty."
+    else
+      "system:node:${top.kubelet.hostname}";
+
   cniConfig =
     if cfg.cni.config != [] && cfg.cni.configDir != null then
       throw "Verbatim CNI-config and CNI configDir cannot both be set."
@@ -313,7 +319,7 @@ in
         };
         kubeletClient = mkCert {
           name = "kubelet-client";
-          CN = "system:node:${top.kubelet.hostname}";
+          CN = kubeletRbacUser;
           fields = {
             O = "system:nodes";
           };
