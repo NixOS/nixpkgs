@@ -70,22 +70,24 @@ mkDerivation rec {
     "TDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
   ];
 
-  env.NIX_CFLAGS_COMPILE = [
-    "-DTDESKTOP_DISABLE_CRASH_REPORTS"
-    "-DTDESKTOP_DISABLE_AUTOUPDATE"
-    "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
-    "-I${minizip}/include/minizip"
-    # See Telegram/gyp/qt.gypi
-    "-I${getDev qtbase}/mkspecs/linux-g++"
-  ] ++ concatMap (x: [
-    "-I${getDev qtbase}/include/${x}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}/${x}"
-    "-I${getDev libopus}/include/opus"
-    "-I${getDev alsaLib}/include/alsa"
-    "-I${getDev libpulseaudio}/include/pulse"
-    ]) [ "QtCore" "QtGui" "QtDBus" ];
-  CPPFLAGS = NIX_CFLAGS_COMPILE;
+  env = rec {
+    NIX_CFLAGS_COMPILE = builtins.toString ([
+      "-DTDESKTOP_DISABLE_CRASH_REPORTS"
+      "-DTDESKTOP_DISABLE_AUTOUPDATE"
+      "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
+      "-I${minizip}/include/minizip"
+      # See Telegram/gyp/qt.gypi
+      "-I${getDev qtbase}/mkspecs/linux-g++"
+    ] ++ concatMap (x: [
+      "-I${getDev qtbase}/include/${x}"
+      "-I${getDev qtbase}/include/${x}/${qtbase.version}"
+      "-I${getDev qtbase}/include/${x}/${qtbase.version}/${x}"
+      "-I${getDev libopus}/include/opus"
+      "-I${getDev alsaLib}/include/alsa"
+      "-I${getDev libpulseaudio}/include/pulse"
+      ]) [ "QtCore" "QtGui" "QtDBus" ]);
+    CPPFLAGS = NIX_CFLAGS_COMPILE;
+  };
 
   preConfigure = ''
     # Patches to revert:
