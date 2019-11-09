@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages, fontforge }:
+{ stdenv, fetchFromGitHub, python3Packages}:
 
 stdenv.mkDerivation rec {
   pname = "xits-math";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "043g0gnjc7wn1szvrs0rc1vvrq1qmhqh45b0y2kwrlxsgprpv8ll";
   };
 
-  nativeBuildInputs = [ fontforge ] ++ (with python2Packages; [ python fonttools ]);
+  nativeBuildInputs = (with python3Packages; [ python fonttools fontforge ]);
 
   postPatch = ''
     rm *.otf
