@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, meson, ninja, cmake, pkgconfig, glib, systemd, boost, darwin
+, libgcrypt
 , alsaSupport ? true, alsaLib
 , avahiSupport ? true, avahi, dbus
 , flacSupport ? true, flac
@@ -25,18 +26,34 @@
 , icuSupport ? true, icu
 , clientSupport ? true, mpd_clientlib
 , opusSupport ? true, libopus
+, yamlSupport ? false
 , soundcloudSupport ? true, yajl
 , nfsSupport ? true, libnfs
 , smbSupport ? true, samba
+, pcreSupport ? false, pcre
+, sndioSupport ? false, sndio
+, upnpSupport ? false, miniupnpc
+, chromaprintSupport ? false, chromaprint
+, soxrSupport ? false, soxr
+, cdparanoiaSupport ? false, cdparanoia
+, aoSupport ? false, libao
+, openalSupport ? false, openal
+, modplugSupport ? false, libmodplug
+, mpcdecSupport ? false, libmpcdec
+, sndfileSupport ? false, libsndfile
+, wavpackSupport ? false, wavpack
+, wildmidiSupport ? false, wildmidi
+, sidplaySupport ? false, libsidplayfp
+, twolameSupport ? false, twolame
 }:
 
 assert avahiSupport -> avahi != null && dbus != null;
 
 let
   opt = stdenv.lib.optional;
-  mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
-  major = "0.20";
-  minor = "23";
+  mkFlag = c: f: if c then "-D${f}=enabled" else "-D${f}=disabled";
+  major = "0.21";
+  minor = "16";
 
 in stdenv.mkDerivation rec {
   pname = "mpd";
@@ -46,12 +63,10 @@ in stdenv.mkDerivation rec {
     owner  = "MusicPlayerDaemon";
     repo   = "MPD";
     rev    = "v${version}";
-    sha256 = "1z1pdgiddimnmck0ardrpxkvgk1wn9zxri5wfv5ppasbb7kfm350";
+    sha256 = "0yfzn1hcyww8z5pp70n7iinycz097vjc6q9fzmfrc6ikvz3db8f4";
   };
 
-  patches = [ ./x86.patch ];
-
-  buildInputs = [ glib boost ]
+  buildInputs = [ glib boost libgcrypt ]
     ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
     ++ opt stdenv.isLinux systemd
     ++ opt (stdenv.isLinux && alsaSupport) alsaLib
@@ -83,22 +98,38 @@ in stdenv.mkDerivation rec {
     ++ opt icuSupport icu
     ++ opt clientSupport mpd_clientlib
     ++ opt opusSupport libopus
-    ++ opt soundcloudSupport yajl
+    ++ opt (yamlSupport || soundcloudSupport) yajl
     ++ opt (!stdenv.isDarwin && nfsSupport) libnfs
-    ++ opt (!stdenv.isDarwin && smbSupport) samba;
+    ++ opt (!stdenv.isDarwin && smbSupport) samba
+    ++ opt pcreSupport pcre
+    ++ opt sndioSupport sndio
+    ++ opt upnpSupport miniupnpc
+    ++ opt chromaprintSupport chromaprint
+    ++ opt soxrSupport soxr
+    ++ opt cdparanoiaSupport cdparanoia
+    ++ opt aoSupport libao
+    ++ opt openalSupport openal
+    ++ opt modplugSupport libmodplug
+    ++ opt mpcdecSupport libmpcdec
+    ++ opt sndfileSupport libsndfile
+    ++ opt wavpackSupport wavpack
+    ++ opt wildmidiSupport wildmidi
+    ++ opt sidplaySupport libsidplayfp
+    ++ opt twolameSupport twolame
+    ;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ meson ninja cmake pkgconfig ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
+  mesonFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
       (mkFlag flacSupport "flac")
       (mkFlag vorbisSupport "vorbis")
-      (mkFlag vorbisSupport "vorbis-encoder")
+      (mkFlag vorbisSupport "vorbisenc")
       (mkFlag (!stdenv.isDarwin && madSupport) "mad")
       (mkFlag mikmodSupport "mikmod")
-      (mkFlag id3tagSupport "id3")
+      (mkFlag id3tagSupport "id3tag")
       (mkFlag shoutSupport "shout")
       (mkFlag sqliteSupport "sqlite")
       (mkFlag curlSupport "curl")
@@ -107,26 +138,48 @@ in stdenv.mkDerivation rec {
       (mkFlag ffmpegSupport "ffmpeg")
       (mkFlag fluidsynthSupport "fluidsynth")
       (mkFlag zipSupport "zzip")
-      (mkFlag samplerateSupport "lsr")
+      (mkFlag samplerateSupport "libsamplerate")
       (mkFlag mmsSupport "mms")
       (mkFlag mpg123Support "mpg123")
-      (mkFlag aacSupport "aac")
-      (mkFlag lameSupport "lame-encoder")
+      (mkFlag aacSupport "faad")
+      (mkFlag lameSupport "lame")
       (mkFlag (!stdenv.isDarwin && pulseaudioSupport) "pulse")
       (mkFlag (!stdenv.isDarwin && jackSupport) "jack")
-      (mkFlag stdenv.isDarwin "osx")
+      #(mkFlag stdenv.isDarwin "osx")
       (mkFlag icuSupport "icu")
       (mkFlag gmeSupport "gme")
       (mkFlag clientSupport "libmpdclient")
       (mkFlag opusSupport "opus")
+      (mkFlag yamlSupport "yajl")
       (mkFlag soundcloudSupport "soundcloud")
-      (mkFlag (!stdenv.isDarwin && nfsSupport) "libnfs")
+      (mkFlag (!stdenv.isDarwin && nfsSupport) "nfs")
       (mkFlag (!stdenv.isDarwin && smbSupport) "smbclient")
-      "--enable-debug"
-      "--with-zeroconf=avahi"
+      (mkFlag pcreSupport "pcre")
+      (mkFlag sndioSupport "sndio")
+      (mkFlag upnpSupport "upnp")
+      (mkFlag chromaprintSupport "chromaprint")
+      (mkFlag soxrSupport "soxr")
+      (mkFlag cdparanoiaSupport "cdio_paranoia")
+      (mkFlag aoSupport "ao")
+      (mkFlag openalSupport "openal")
+      (mkFlag modplugSupport "modplug")
+      (mkFlag mpcdecSupport "mpcdec")
+      (mkFlag sndfileSupport "sndfile")
+      (mkFlag wavpackSupport "wavpack")
+      (mkFlag wildmidiSupport "wildmidi")
+      (mkFlag sidplaySupport "sidplay")
+      (mkFlag twolameSupport "twolame")
+      (mkFlag false "iso9660")
+      (mkFlag false "qobuz")
+      (mkFlag false "tidal")
+      (mkFlag false "tremor") # conflicts with vorbis
+      (mkFlag false "adplug")
+      (mkFlag false "shine")
+      "-Ddebug=true"
+      "-Dzeroconf=avahi"
     ]
     ++ opt stdenv.isLinux
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system";
+      "-Dsystemd_system_unit_dir=etc/systemd/system";
 
   NIX_LDFLAGS = ''
     ${if shoutSupport then "-lshout" else ""}
