@@ -1,13 +1,14 @@
 { stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, groff }:
 
-stdenv.mkDerivation rec {
-  pname = "ronn";
-  version = env.gems.ronn.version;
-
+let
   env = bundlerEnv {
     name = "ronn-gems";
     gemdir = ./.;
   };
+in
+stdenv.mkDerivation rec {
+  pname = "ronn";
+  version = env.gems.ronn.version;
 
   phases = ["installPhase"];
 
