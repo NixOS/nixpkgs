@@ -8,6 +8,7 @@ stdenv.mkDerivation ({
   name = package.name + "-" + package.revision;
   src = if os != null && builtins.hasAttr os package.archives then package.archives.${os} else package.archives.all;
   buildInputs = [ unzip ] ++ buildInputs;
+  preferLocalBuild = true;
 
   # Most Android Zip packages have a root folder, but some don't. We unpack
   # the zip file in a folder and we try to discover whether it has a single root
