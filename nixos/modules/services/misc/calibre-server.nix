@@ -13,20 +13,34 @@ in
   ###### interface
 
   options = {
-
     services.calibre-server = {
-
       enable = mkEnableOption "calibre-server";
 
       libraryDir = mkOption {
         description = ''
           The directory where the Calibre library to serve is.
-          '';
-          type = types.path;
+        '';
+        type = types.path;
       };
 
-    };
+      listenAddress = mkOption {
+        default = "::";
+        example = "127.0.0.1";
+        description = ''
+          The interface on which to listen for connections. The value "::" will
+          listen on all available IPv4 and IPv6 addresses.
+        '';
+        type = types.str;
+      };
 
+      port = mkOption {
+        default = 8080;
+        description = ''
+          The port the Calibre server should listen on.
+        '';
+        type = types.int;
+      };
+    };
   };
 
 
@@ -42,9 +56,8 @@ in
         serviceConfig = {
           User = "calibre-server";
           Restart = "always";
-          ExecStart = "${pkgs.calibre}/bin/calibre-server ${cfg.libraryDir}";
+          ExecStart = "${pkgs.calibre}/bin/calibre-server --listen-on ${cfg.listenAddress} --port ${toString cfg.port} ${cfg.libraryDir}";
         };
-
       };
 
     environment.systemPackages = [ pkgs.calibre ];
@@ -59,5 +72,4 @@ in
       };
 
   };
-
 }
