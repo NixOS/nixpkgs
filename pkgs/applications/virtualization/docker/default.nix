@@ -39,7 +39,7 @@ rec {
       };
     });
 
-    docker-tini = tini.overrideAttrs  (oldAttrs: {
+    docker-tini = tini.overrideAttrs (oldAttrs: {
       name = "docker-init-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -53,7 +53,7 @@ rec {
       patchPhase = ''
       '';
 
-      NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
+      env = oldAttrs.env // { NIX_CFLAGS_COMPILE = "-DMINIMAL=ON"; };
     });
   in
     stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) {

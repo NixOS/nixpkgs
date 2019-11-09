@@ -242,7 +242,7 @@ in rec {
                   'method->name_and_sig_as_C_string(), p2i(method->native_function()), p2i(entry)' || exit -1
     '';
     hardeningDisable = [ "fortify" ];
-    NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow -Wno-error=nonnull";
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow -Wno-error=nonnull";
     buildPhase = ''
       export MX_ALT_OUTPUT_ROOT=$NIX_BUILD_TOP/mxbuild
       export MX_CACHE_DIR=${makeMxCache jvmci8-mxcache}
