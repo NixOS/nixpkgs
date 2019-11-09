@@ -104,6 +104,10 @@ let
     };
   }; };
 
+  # Following deployment is based on the manual deployment described here:
+  # https://docs.ceph.com/docs/master/install/manual-deployment/
+  # For other ways to deploy a ceph cluster, look at the documentation at
+  # https://docs.ceph.com/docs/master/
   testscript = { ... }: ''
     startAll;
 
