@@ -22,18 +22,19 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   testScript = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
+    bob = nodes.machine.config.users.users.bob;
   in ''
     # Wait for display manager to start
     machine.wait_for_unit("display-manager.service")
 
-    # Test we can see username in elementary-greeter
+    # Test we can see usernames in elementary-greeter
     machine.wait_for_text("${user.description}")
+    machine.wait_for_text("${bob.description}")
     machine.screenshot("elementary_greeter_lightdm")
 
     # Log in with elementary-greeter
     machine.send_chars("${user.password}\n")
-    machine.wait_for_unit("default.target", "${user.name}")
-    machine_wait_for_x()
+    machine.wait_for_x()
     machine.wait_for_file("${user.home}/.Xauthority")
     machine.succeed("xauth merge ${user.home}/.Xauthority")
 
