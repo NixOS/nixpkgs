@@ -144,6 +144,24 @@ What's happening here?
 2. Then we create a Python 3.5 environment with the `withPackages` function.
 3. The `withPackages` function expects us to provide a function as an argument that takes the set of all python packages and returns a list of packages to include in the environment. Here, we select the packages `numpy` and `toolz` from the package set.
 
+To combine this with `mkShell` you can:
+
+```nix
+with import <nixpkgs> {};
+
+let
+  pythonEnv = python35.withPackages (ps: [
+    ps.numpy
+    ps.toolz
+  ]);
+in mkShell {
+  buildInputs = [
+    pythonEnv
+    hello
+  ];
+}
+```
+
 ##### Execute command with `--run`
 A convenient option with `nix-shell` is the `--run`
 option, with which you can execute a command in the `nix-shell`. We can
