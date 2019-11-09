@@ -1,11 +1,11 @@
-{ wxGTK, lib, stdenv, fetchurl, fetchFromGitHub, cmake, libGLU_combined, zlib
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, libGLU_combined, zlib
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
-, wrapGAppsHook
+, makeWrapper, hicolor-icon-theme, gsettings-desktop-schemas
+, swig, lndir
 , oceSupport ? true, opencascade
 , ngspiceSupport ? true, libngspice
-, swig, python3, python3Packages
-, lndir
+, wxGTK, python, pythonPackages, wxPython # defined in all-packages.nix
 }:
 
 assert ngspiceSupport -> libngspice != null;
@@ -39,7 +39,6 @@ in stdenv.mkDerivation rec {
     "-DKICAD_SCRIPTING=ON"
     "-DKICAD_SCRIPTING_PYTHON3=ON"
     "-DKICAD_SCRIPTING_MODULES=ON"
-    "-DKICAD_SCRIPTING_WXPYTHON=ON"
     "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
   ] ++ optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON";
@@ -48,23 +47,18 @@ in stdenv.mkDerivation rec {
     cmake
     doxygen
     pkgconfig
-    wrapGAppsHook
-    python3Packages.wrapPython
+    pythonPackages.wrapPython
     lndir
   ];
-  pythonPath = [ python3Packages.wxPython_4_0 ];
-  propagatedBuildInputs = [ python3Packages.wxPython_4_0 ];
+
+  pythonPath = [ wxPython ];
+  propagatedBuildInputs = [ wxPython ];
 
   buildInputs = [
     libGLU_combined zlib libX11 pcre libXdmcp glew glm libpthreadstubs
-    cairo curl openssl boost
-    swig (python3.withPackages (ps: with ps; [ wxPython_4_0 ]))
-    (wxGTK.override { withGtk2 = false; })
+    cairo curl openssl boost wxGTK swig wxPython
   ] ++ optional (oceSupport) opencascade
     ++ optional (ngspiceSupport) libngspice;
-
-  # this breaks other applications in kicad
-  dontWrapGApps = true;
 
   passthru = {
     i18n = mkLib version "i18n" "1dk7wis4cncmihl8fnic3jyhqcdzpifchzsp7hmf214h0vp199zr" {
@@ -97,11 +91,18 @@ in stdenv.mkDerivation rec {
     done
   '';
 
+# GSETTINGS_SCHEMAS_PATH includes gtk twice, so wrapProgram with ${wxGTK.gtk} is used instead of wrapGApp
+# since wrapGApp needs most of these set explicitly anyway (with dontWrapGApps = true;), lets not depend on it
   preFixup = ''
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
 
-    wrapGApp "$out/bin/kicad" --prefix LD_LIBRARY_PATH : "${libngspice}/lib"
+    wrapProgram "$out/bin/kicad" \
+      --prefix LD_LIBRARY_PATH : "${libngspice}/lib" \
+      --prefix XDG_DATA_DIRS : "${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}" \
+      --prefix XDG_DATA_DIRS : ""${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
+      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
+      --prefix XDG_DATA_DIRS : "$out/share"
   '';
 
   meta = {
