@@ -2,7 +2,7 @@
 , cmake, pkgconfig
 , boost, miniupnpc, openssl, unbound, cppzmq
 , zeromq, pcsclite, readline, libsodium, hidapi
-, python3Packages
+, python3Packages, randomx, rapidjson
 , CoreData, IOKit, PCSC
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost miniupnpc openssl unbound
     cppzmq zeromq pcsclite readline
-    libsodium hidapi
+    libsodium hidapi randomx rapidjson
     python3Packages.protobuf
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 
