@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   };
 
   sourceRoot = ".";
+  dontMakeSourcesWritable = true;
 
   nativeBuildInputs = [ bison flex ];
 
