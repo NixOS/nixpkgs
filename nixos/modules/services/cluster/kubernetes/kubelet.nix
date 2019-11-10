@@ -7,10 +7,10 @@ let
   cfg = top.kubelet;
 
   kubeletRbacUser =
-    if top.kubelet.hostname == "" then
+    if cfg.hostname == "" then
       throw "kubelet.hostname must be set. This is probably caused by networking.hostName being empty."
     else
-      "system:node:${top.kubelet.hostname}";
+      "system:node:${cfg.hostname}";
 
   cniConfig =
     if cfg.cni.config != [] && cfg.cni.configDir != null then
