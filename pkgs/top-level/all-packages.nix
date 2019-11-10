@@ -17511,6 +17511,8 @@ in
 
   raleway = callPackage ../data/fonts/raleway { };
 
+  recursive = callPackage ../data/fonts/recursive { };
+
   rictydiminished-with-firacode = callPackage ../data/fonts/rictydiminished-with-firacode { };
 
   roboto = callPackage ../data/fonts/roboto { };
