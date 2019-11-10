@@ -42,7 +42,7 @@ with super;
     ];
 
     # https://github.com/wahern/cqueues/issues/227
-    NIX_CFLAGS_COMPILE = with pkgs.stdenv; lib.optionalString hostPlatform.isDarwin
+    env.NIX_CFLAGS_COMPILE = with pkgs.stdenv; lib.optionalString hostPlatform.isDarwin
       "-DCLOCK_MONOTONIC -DCLOCK_REALTIME";
 
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
@@ -288,7 +288,7 @@ with super;
         nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
 
         # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
-        NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+        env.NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
           (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
       });
     };
