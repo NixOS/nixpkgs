@@ -5843,7 +5843,9 @@ in
 
   q-text-as-data = callPackage ../tools/misc/q-text-as-data { };
 
-  qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
+  qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk {
+    inherit (gnome3) adwaita-icon-theme;
+   };
 
   qastools = libsForQt5.callPackage ../tools/audio/qastools { };
 

@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, intltool, autoreconfHook, pkgconfig, libqalculate, gtk3, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, intltool, autoreconfHook, pkgconfig, libqalculate, gtk3, wrapGAppsHook
+, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "qalculate-gtk";
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook wrapGAppsHook ];
-  buildInputs = [ libqalculate gtk3 ];
+  buildInputs = [ libqalculate gtk3 adwaita-icon-theme ];
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
