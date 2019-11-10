@@ -13761,6 +13761,8 @@ in
 
   qgnomeplatform =  libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
 
+  randomx = callPackage ../development/libraries/randomx { };
+
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
   rhino = callPackage ../development/libraries/java/rhino {
