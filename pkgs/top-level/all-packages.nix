@@ -1500,6 +1500,8 @@ in
 
   dateutils = callPackage ../tools/misc/dateutils { };
 
+  datovka = libsForQt5.callPackage ../applications/networking/datovka { };
+
   ddar = callPackage ../tools/backup/ddar { };
 
   ddate = callPackage ../tools/misc/ddate { };
@@ -4656,6 +4658,8 @@ in
   libipfix = callPackage ../development/libraries/libipfix { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
+
+  libisds = callPackage ../development/libraries/libisds { };
 
   libite = callPackage ../development/libraries/libite { };
 
