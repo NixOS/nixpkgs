@@ -483,7 +483,8 @@ in {
         Whether to allow being locked out of your system by not allowing
         login to any administrator user.
       '';
-    };  };
+    };  
+  };
 
 
   ###### implementation
