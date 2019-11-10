@@ -37,11 +37,11 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ]
-                      ++ optional withVulkan [ makeWrapper ];
+                      ++ optionals withVulkan [ makeWrapper ];
 
   buildInputs = [ ffmpeg freetype libxml2 libGLU_combined python3 SDL2 which ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
-                ++ optional withVulkan [ vulkan-loader ]
+                ++ optionals withVulkan [ vulkan-loader ]
                 ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
                 ++ optionals stdenv.isLinux [ alsaLib libpulseaudio libv4l libX11
                                               libXdmcp libXext libXxf86vm udev ];

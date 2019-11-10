@@ -129,7 +129,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
-          NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
+          env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
             cd server
           '';

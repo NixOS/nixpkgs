@@ -720,7 +720,7 @@ in with stdenv.lib.licenses;
     license = gpl2;
     extraBuildInputs = [ cmake libGLU_combined ffmpeg python37 xorg.libX11 ];
   }).override {
-    cmakeFlags = "-DLIBRETRO=ON";
+    cmakeFlags = [ "-DLIBRETRO=ON" ];
     makefile = "Makefile";
     buildPhase = ''
       make \

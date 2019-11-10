@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
 
   # TODO: Fix missing math symbols in gegl seamless clone.
   # It only appears when we use packaged poly2tri-c instead of vendored one.
-  env.NIX_CFLAGS_COMPILE = [ "-lm" ];
+  env.NIX_CFLAGS_COMPILE = "-lm";
 
   postPatch = ''
     chmod +x tests/opencl/opencl_test.sh tests/buffer/buffer-tests-run.sh
