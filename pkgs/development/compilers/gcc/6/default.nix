@@ -225,7 +225,7 @@ stdenv.mkDerivation ({
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
   buildFlags = optional
-    (hostPlatform == buildPlatform)
+    (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   dontStrip = !stripped;
