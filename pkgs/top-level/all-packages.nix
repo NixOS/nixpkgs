@@ -20942,6 +20942,8 @@ in
 
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
+  spike = callPackage ../applications/virtualization/spike { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   split2flac = callPackage ../applications/audio/split2flac { };
