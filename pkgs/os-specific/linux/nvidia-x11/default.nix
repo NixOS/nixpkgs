@@ -34,11 +34,11 @@ rec {
 
   # Last one supporting x86
   legacy_390 = generic {
-    version = "390.129";
-    sha256_32bit = "0dkgkp0zx40hf1fsq5xnvbschp7r3c1x1pnpdxna24pi4s62cm2q";
-    sha256_64bit = "0h0jcckqpd63vaj95lvdgj2sbbn9y1ri1xx7r2snxfx0plhwz46n";
-    settingsSha256 = "1w5nkxs7a40mq0qf97nhfazdqhfn1bvr54v50s8p0ggixb6vdm3l";
-    persistencedSha256 = "02v76202qcnh8hvg4y9wmk9swdlv7z39ppfd1c850nlv158vn5nf";
+    version = "390.132";
+    sha256_32bit = "0xgjywzkmmm6a5gby67l2kx0gn7bcxksv4wam0sqym6l1s7v5bai";
+    sha256_64bit = "0qgzsajrc3xkf2jjkwip3la0f2ixp45f76nmz5cphvzrb7k2slxn";
+    settingsSha256 = "07nylqzhldq1gr40q7x5424p2aml3qqnvl2zvnpzc65x2way34v6";
+    persistencedSha256 = "0vab5rj9b1n9yl9674q7i88w1i5p8nhvrwsayn7i1vh4wp3m840r";
   };
 
   legacy_340 = generic {
