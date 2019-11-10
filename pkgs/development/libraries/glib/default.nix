@@ -149,8 +149,6 @@ stdenv.mkDerivation rec {
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
     sed '1i#line 1 "${pname}-${version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
-
-    patchShebangs "$dev/bin/gdbus-codegen"
   '' + optionalString (!stdenv.isDarwin) ''
     # Add gio-launch-desktop to $out so we can refer to it from $lib
     mkdir $out/bin
