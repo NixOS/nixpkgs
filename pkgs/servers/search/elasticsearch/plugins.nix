@@ -116,6 +116,7 @@ in {
   in esPlugin rec {
     pluginName = "search-guard";
     version =
+      # https://docs.search-guard.com/latest/search-guard-versions
       if esVersion == "7.3.1" then "${esVersion}-37.0.0"
       else if esVersion == "6.8.3" then "${esVersion}-25.5"
       else throw "unsupported version ${esVersion} for plugin ${pluginName}";
@@ -127,7 +128,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/floragunncom/search-guard;
+      homepage = https://search-guard.com;
       description = "Elasticsearch plugin that offers encryption, authentication, and authorisation. ";
       license = licenses.asl20;
     };
