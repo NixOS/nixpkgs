@@ -5,10 +5,6 @@ let
   pname = "lvmsync";
   version = (import ./gemset.nix).${pname}.version;
 
-in stdenv.mkDerivation rec {
-
-  name = "${pname}-${version}";
-
   env = bundlerEnv {
     name = "${pname}-${version}-gems";
     ruby = ruby;
@@ -16,6 +12,9 @@ in stdenv.mkDerivation rec {
     lockfile = ./Gemfile.lock;
     gemset   = ./gemset.nix;
   };
+
+in stdenv.mkDerivation rec {
+  inherit pname version;
 
   buildInputs = [ makeWrapper ];
 

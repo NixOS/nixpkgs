@@ -43,7 +43,7 @@
       "-DWITH_OPENSSL=ON"
     ];
 
-   NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
+    env.NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 
     passthru = {
       fancyName = "MariaDB";

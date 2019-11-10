@@ -1168,7 +1168,7 @@ self: super: {
 
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
-    (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
+    (addBuildDepends (overrideSrc (dontCheck super.haskell-ci) {
       version = "20190814-git";
       src = pkgs.fetchFromGitHub {
         owner = "haskell-CI";

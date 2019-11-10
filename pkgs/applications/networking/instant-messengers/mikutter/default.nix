@@ -16,21 +16,21 @@
 # mv mikutter/* .
 # rm mikutter.3.8.7.tar.gz
 # rm gemset.nix Gemfile.lock; nix-shell -p bundler bundix --run 'bundle lock && bundix'
-
-stdenv.mkDerivation rec {
-  pname = "mikutter";
+let
   version = "3.8.7";
-
-  src = fetchurl {
-    url = "https://mikutter.hachune.net/bin/mikutter.${version}.tar.gz";
-    sha256 = "1griypcd1xgyfd9wc3ls32grpw4ig0xxdiygpdinzr3bigfmd7iv";
-  };
-
   env = bundlerEnv {
     name = "mikutter-${version}-gems";
     gemdir = ./.;
 
     inherit ruby;
+  };
+in stdenv.mkDerivation rec {
+  pname = "mikutter";
+  inherit version;
+
+  src = fetchurl {
+    url = "https://mikutter.hachune.net/bin/mikutter.${version}.tar.gz";
+    sha256 = "1griypcd1xgyfd9wc3ls32grpw4ig0xxdiygpdinzr3bigfmd7iv";
   };
 
   buildInputs = [ alsaUtils libnotify which gtk2 ruby atk gobject-introspection ];

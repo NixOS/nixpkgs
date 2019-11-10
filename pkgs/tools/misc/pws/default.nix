@@ -1,8 +1,6 @@
 { stdenv, lib, bundlerEnv, ruby, bundlerUpdateScript, xsel, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "pws-${(import ./gemset.nix).pws.version}";
-
+let
   env = bundlerEnv {
     name = "${name}-gems";
 
@@ -10,6 +8,9 @@ stdenv.mkDerivation rec {
 
     gemdir = ./.;
   };
+  name = "pws-${(import ./gemset.nix).pws.version}";
+in stdenv.mkDerivation rec {
+  inherit name;
 
   buildInputs = [ makeWrapper ];
 

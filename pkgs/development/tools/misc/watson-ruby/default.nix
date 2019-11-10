@@ -1,16 +1,17 @@
 { stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
 
 
-stdenv.mkDerivation rec {
-  pname = "watson-ruby";
+let
   version = (import ./gemset.nix).watson-ruby.version;
-
   env = bundlerEnv {
     name = "watson-ruby-gems-${version}";
     inherit ruby;
     # expects Gemfile, Gemfile.lock and gemset.nix in the same directory
     gemdir = ./.;
   };
+in stdenv.mkDerivation rec {
+  pname = "watson-ruby";
+  inherit version;
 
   phases = [ "installPhase" ];
 

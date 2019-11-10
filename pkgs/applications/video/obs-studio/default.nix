@@ -34,7 +34,7 @@
 }:
 
 let
-  optional = stdenv.lib.optional;
+  inherit (stdenv.lib) optional optionals;
 in mkDerivation rec {
   pname = "obs-studio";
   version = "24.0.3";
@@ -46,9 +46,7 @@ in mkDerivation rec {
     sha256 = "0g8nzs696f3myz4hvygav85b0jgjmn6dicy50axmapdv8miff9xa";
   };
 
-  nativeBuildInputs = [ cmake
-                        pkgconfig
-                      ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ curl
                   fdk_aac
@@ -68,7 +66,7 @@ in mkDerivation rec {
                   makeWrapper
                   mbedtls
                 ]
-                ++ optional scriptingSupport [ luajit swig python3 ]
+                ++ optionals scriptingSupport [ luajit swig python3 ]
                 ++ optional alsaSupport alsaLib
                 ++ optional pulseaudioSupport libpulseaudio;
 

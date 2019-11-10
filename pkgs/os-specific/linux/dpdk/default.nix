@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ numactl ] ++ lib.optional mod kernel.moduleBuildDependencies;
+  buildInputs = [ numactl ] ++ lib.optionals mod kernel.moduleBuildDependencies;
 
   RTE_KERNELDIR = if mod then "${kernel.dev}/lib/modules/${kver}/build" else "/var/empty";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";

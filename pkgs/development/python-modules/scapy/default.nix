@@ -34,13 +34,13 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ pycrypto ecdsa ]
-    ++ lib.optional withOptionalDeps [ tcpdump ipython ]
-    ++ lib.optional withCryptography [ cryptography ]
-    ++ lib.optional withVoipSupport [ sox ]
-    ++ lib.optional withPlottingSupport [ matplotlib ]
-    ++ lib.optional withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ]
-    ++ lib.optional (isPy3k && pythonOlder "3.4") [ enum34 ]
-    ++ lib.optional doCheck [ mock ];
+    ++ lib.optionals withOptionalDeps [ tcpdump ipython ]
+    ++ lib.optional withCryptography cryptography
+    ++ lib.optional withVoipSupport sox
+    ++ lib.optional withPlottingSupport matplotlib
+    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ]
+    ++ lib.optional (isPy3k && pythonOlder "3.4") enum34
+    ++ lib.optional doCheck mock;
 
   # Tests fail with Python 3.6 (seems to be an upstream bug, I'll investigate)
   doCheck = if isPy3k then false else true;

@@ -384,7 +384,7 @@ self: super:
   });
 
   xf86videoati = super.xf86videoati.overrideAttrs (attrs: {
-    NIX_CFLAGS_COMPILE = "-I${self.xorgserver.dev or self.xorgserver}/include/xorg";
+    env.NIX_CFLAGS_COMPILE = "-I${self.xorgserver.dev or self.xorgserver}/include/xorg";
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {

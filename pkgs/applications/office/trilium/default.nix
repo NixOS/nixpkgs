@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [ atomEnv.packages gtk3 ];
+  buildInputs = atomEnv.packages ++ [ gtk3 ];
 
   installPhase = ''
     mkdir -p $out/bin

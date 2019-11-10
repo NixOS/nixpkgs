@@ -1,14 +1,15 @@
 { stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper }:
 
-stdenv.mkDerivation rec {
+let
   pname = "reckon";
   version = (import ./gemset.nix).reckon.version;
-
   env = bundlerEnv {
     name = "${pname}-${version}-gems";
 
     gemdir = ./.;
   };
+in stdenv.mkDerivation rec {
+  inherit pname version;
 
   phases = [ "installPhase" ];
 
