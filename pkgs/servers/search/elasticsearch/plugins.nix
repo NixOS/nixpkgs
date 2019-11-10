@@ -16,6 +16,7 @@ let
   }:
     stdenv.mkDerivation (a // {
       inherit installPhase;
+      pname = "elasticsearch-${pluginName}";
       dontUnpack = true;
       buildInputs = [ unzip ];
       meta = a.meta // {
@@ -26,11 +27,10 @@ let
 in {
 
   analysis-lemmagen = esPlugin rec {
-    name = "elasticsearch-analysis-lemmagen-${version}";
-    pluginName = "elasticsearch-analysis-lemmagen";
+    pluginName = "analysis-lemmagen";
     version = esVersion;
     src = fetchurl {
-      url = "https://github.com/vhyza/${pluginName}/releases/download/v${version}/${name}-plugin.zip";
+      url = "https://github.com/vhyza/${pluginName}/releases/download/v${version}/${pluginName}-${version}-plugin.zip";
       sha256 =
         if version == "7.3.1" then "1nb82z6s94mzdx1srb1pwj7cpzs8w74njap0xiqn7sg5ylk6adm8"
         else if version == "6.8.3" then "12bshvp01pp2lgwd0cn9l58axg8gdimsh4g9wfllxi1bdpv4cy53"
@@ -44,7 +44,6 @@ in {
   };
 
   discovery-ec2 = esPlugin rec {
-    name = "elasticsearch-discovery-ec2-${version}";
     pluginName = "discovery-ec2";
     version = esVersion;
     src = fetchurl {
@@ -62,7 +61,6 @@ in {
   };
 
   ingest-attachment = esPlugin rec {
-    name = "elasticsearch-ingest-attachment-${version}";
     pluginName = "ingest-attachment";
     version = esVersion;
     src = fetchurl {
@@ -80,7 +78,6 @@ in {
   };
 
   repository-s3 = esPlugin rec {
-    name = "elasticsearch-repository-s3-${version}";
     pluginName = "repository-s3";
     version = esVersion;
     src = fetchurl {
@@ -98,7 +95,6 @@ in {
   };
 
   repository-gcs = esPlugin rec {
-    name = "elasticsearch-repository-gcs-${version}";
     pluginName = "repository-gcs";
     version = esVersion;
     src = fetchurl {
@@ -118,7 +114,6 @@ in {
   search-guard = let
     majorVersion = lib.head (builtins.splitVersion esVersion);
   in esPlugin rec {
-    name = "elasticsearch-search-guard-${version}";
     pluginName = "search-guard";
     version =
       if esVersion == "7.3.1" then "${esVersion}-37.0.0"
