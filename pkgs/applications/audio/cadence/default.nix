@@ -66,7 +66,7 @@
     homepage = https://github.com/falkTX/Cadence/;
     description = "Collection of tools useful for audio production";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ genesis ];
+    maintainers = with stdenv.lib.maintainers; [ genesis worldofpeace ];
     platforms = [ "x86_64-linux" ];
   };
 }
