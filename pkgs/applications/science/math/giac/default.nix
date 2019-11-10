@@ -1,10 +1,10 @@
 { stdenv, fetchurl, fetchpatch, texlive, bison, flex, liblapack
 , gmp, mpfr, pari, ntl, gsl, blas, mpfi, ecm, glpk, nauty
 , readline, gettext, libpng, libao, gfortran, perl
-, enableGUI ? false, libGLU_combined ? null, xorg ? null, fltk ? null
+, enableGUI ? false, libGL ? null, libGLU ? null, xorg ? null, fltk ? null
 }:
 
-assert enableGUI -> libGLU_combined != null && xorg != null && fltk != null;
+assert enableGUI -> libGLU != null && libGL != null && xorg != null && fltk != null;
 
 stdenv.mkDerivation rec {
   name = "${attr}-${version}";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     (stdenv.lib.getLib gfortran.cc)
     liblapack
   ] ++ stdenv.lib.optionals enableGUI [
-    libGLU_combined fltk xorg.libX11
+    libGL libGLU fltk xorg.libX11
   ];
 
   /* fixes:

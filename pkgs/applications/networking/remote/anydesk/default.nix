@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem
-, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
+, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg
 , lsb-release, freetype, fontconfig, pangox_compat, polkit, polkit_gnome
 , pulseaudio }:
 
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
-    gnome2.gtkglext libGLU_combined freetype fontconfig
+    gnome2.gtkglext libGLU libGL freetype fontconfig
     pangox_compat polkit polkit_gnome pulseaudio
   ] ++ (with xorg; [
     libxcb libxkbfile libX11 libXdamage libXext libXfixes libXi libXmu

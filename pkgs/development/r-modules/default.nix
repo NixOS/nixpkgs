@@ -311,7 +311,7 @@ let
     rgdal = [ pkgs.proj.dev pkgs.gdal ];
     rgeos = [ pkgs.geos ];
     rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
-    rgl = [ pkgs.libGLU_combined pkgs.xlibsWrapper ];
+    rgl = [ pkgs.libGLU pkgs.libGL pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];

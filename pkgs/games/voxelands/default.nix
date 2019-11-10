@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, irrlicht, libpng, bzip2, sqlite
-, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, xlibsWrapper, pkgconfig }:
+, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, xlibsWrapper, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "voxelands";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake irrlicht libpng bzip2 libjpeg sqlite
-    libXxf86vm libGLU_combined openal libvorbis xlibsWrapper pkgconfig
+    libXxf86vm libGLU libGL openal libvorbis xlibsWrapper pkgconfig
   ];
 
   meta = with stdenv.lib; {

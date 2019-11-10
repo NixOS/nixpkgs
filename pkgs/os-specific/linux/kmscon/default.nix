@@ -4,7 +4,7 @@
 , systemd
 , libxkbcommon
 , libdrm
-, libGLU_combined
+, libGLU, libGL
 , pango
 , pixman
 , pkgconfig
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     systemd
     libxkbcommon
     libdrm
-    libGLU_combined
+    libGLU libGL
     pango
     pixman
     pkgconfig

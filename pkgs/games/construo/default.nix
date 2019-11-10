@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, zlib, xorgproto, libGL ? null, freeglut ? null }:
+{ stdenv, fetchurl, libX11, zlib, xorgproto, libGL, libGLU, freeglut ? null }:
 
 stdenv.mkDerivation rec {
   pname = "construo";
@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wmj527hbj1qv44cdsj6ahfjrnrjwg2dp8gdick8nd07vm062qxa";
   };
 
-  buildInputs = [ libX11 zlib xorgproto ]
-    ++ stdenv.lib.optional (libGL != null) libGL
+  buildInputs = [ libX11 zlib xorgproto libGL libGLU ]
     ++ stdenv.lib.optional (freeglut != null) freeglut;
 
   preConfigure = ''

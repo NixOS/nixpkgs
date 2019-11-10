@@ -7,7 +7,7 @@
 { lib, stdenv, pkgconfig, pango, perl, python2, python3, zip, libIDL
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, libGLU_combined, sqlite, unzip, makeWrapper
+, yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libXdamage, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
     gtk2 perl zip libIDL libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    libnotify xorg.pixman yasm libGLU_combined
+    libnotify xorg.pixman yasm libGLU libGL
     xorg.libXScrnSaver xorg.xorgproto
     xorg.libXext sqlite unzip makeWrapper
     libevent libstartup_notification libvpx /* cairo */

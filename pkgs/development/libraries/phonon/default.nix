@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, libGLU_combined, pkgconfig, libpulseaudio
+{ stdenv, lib, fetchurl, cmake, libGLU, libGL, pkgconfig, libpulseaudio
 , qt4 ? null, extra-cmake-modules ? null, qtbase ? null, qttools ? null
 , withQt5 ? false
 , debug ? false }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ libGLU_combined libpulseaudio ]
+    [ libGLU libGL libpulseaudio ]
     ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ]);
 
   nativeBuildInputs =
