@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, zlib, wxGTK
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU_combined, zlib, wxGTK
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp, makeWrapper, gnome3
 , gsettings-desktop-schemas, librsvg, hicolor-icon-theme, lndir, cups
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   ;
 
   buildInputs = [
-    libGLU libGL zlib libX11 wxGTK pcre libXdmcp gettext
+    libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext
     glew glm libpthreadstubs cairo curl openssl boost
   ]
   ++ optionals (scriptingSupport) [ swig python wxPython ]
