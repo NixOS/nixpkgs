@@ -58,7 +58,7 @@ let
     libclang = tools.clang-unwrapped.lib;
 
     clang = if stdenv.cc.isGNU then tools.libstdcxxClang
-      else  if stdenv.targetPlatform.isWindows then tools.msvcxxrtClang
+      else  if (with stdenv.targetPlatform; isWindows && !isMinGW) then tools.msvcxxrtClang
       else tools.libcxxClang;
 
     libstdcxxClang = wrapCCWith rec {
@@ -102,23 +102,25 @@ let
 
     bintools = callPackage ./bintools.nix {};
 
-    lldClang = wrapCCWith rec {
+    lldClang = let
+      enableCxx = with stdenv.targetPlatform; !isWindows || isMinGW;
+      enableCxxExceptions = enableCxx && !stdenv.targetPlatform.isWasm;
+    in if !enableCxx then tools.lldClangNoLibcxx else wrapCCWith rec {
       cc = tools.clang-unwrapped;
-      libcxx = if stdenv.targetPlatform.isWindows then null else targetLlvmLibraries.libcxx;
+      libcxx = targetLlvmLibraries.libcxx;
       bintools = wrapBintoolsWith {
         inherit (tools) bintools;
       };
-      extraPackages = stdenv.lib.optionals (!stdenv.targetPlatform.isWindows) [
+      extraPackages = [
         targetLlvmLibraries.libcxxabi
-      ] ++ [
         targetLlvmLibraries.compiler-rt
-      ] ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isWindows) [
+      ] ++ lib.optionals enableCxxExceptions [
         targetLlvmLibraries.libunwind
       ];
       extraBuildCommands = ''
         echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-      '' + lib.optionalString (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isWindows) ''
+      '' + lib.optionalString enableCxxExceptions ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
         echo "-fno-exceptions" >> $out/nix-support/cc-cflags
