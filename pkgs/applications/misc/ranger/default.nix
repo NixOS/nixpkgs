@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = [ file ]
-    ++ lib.optional (imagePreviewSupport) [ python3Packages.pillow ];
+    ++ lib.optionals (imagePreviewSupport) [ python3Packages.pillow ];
 
   checkPhase = ''
     py.test tests
