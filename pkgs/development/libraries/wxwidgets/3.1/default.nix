@@ -4,7 +4,7 @@
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported, libGLU ? null, libGL ? null
 , compat28 ? false, compat30 ? true, unicode ? true
-, withGtk2 ? true
+, withGtk2 ? false
 , withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
 }:
