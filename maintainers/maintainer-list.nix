@@ -2878,6 +2878,15 @@
     githubId = 137306;
     name = "Michele Catalano";
   };
+  isgy = {
+    email = "isgy@teiyg.com";
+    github = "isgy";
+    githubId = 13622947;
+    keys = [{
+      longkeyid = "rsa4096/0xD3E1B013B4631293";
+      fingerprint = "1412 816B A9FA F62F D051 1975 D3E1 B013 B463 1293";
+    }];
+  };
   ivan = {
     email = "ivan@ludios.org";
     github = "ivan";
