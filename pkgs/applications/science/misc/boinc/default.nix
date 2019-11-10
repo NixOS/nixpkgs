@@ -1,6 +1,6 @@
 { fetchFromGitHub, stdenv, autoconf, automake, pkgconfig, m4, curl,
 libGLU_combined, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK30, xcbutil,
-sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
+sqlite, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 let
   majorVersion = "7.14";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool automake autoconf m4 pkgconfig ];
 
   buildInputs = [
-    curl libGLU_combined libXmu libXi freeglut libjpeg wxGTK30 sqlite gtk2 libXScrnSaver
+    curl libGLU_combined libXmu libXi freeglut libjpeg wxGTK30 wxGTK30.gtk sqlite libXScrnSaver
     libnotify patchelf libX11 libxcb xcbutil
   ];
 
