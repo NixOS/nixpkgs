@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
       name = "CVE-2019-13118.patch";
       sha256 = "0bglz9m9sh2vi50qxcm06iqrazw3h45ycgxnp15iankq95z283iq";
     })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxslt/commit/2232473733b7313d67de8836ea3b29eec6e8e285.patch";
+      name = "CVE-2019-18197.patch";
+      sha256 = "05izqkn6yxspxskfbw08927j65ar58q0y2dfhqvzkvvv5qzpy1ks";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
