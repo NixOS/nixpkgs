@@ -24,6 +24,8 @@ in stdenv.mkDerivation {
   dontStrip = true;
   hardeningDisable = [ "stackprotector" "fortify" ];
 
+  enableParallelBuilding = true;
+
   meta = {
     platforms = lib.platforms.windows;
   };
