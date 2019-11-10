@@ -20083,6 +20083,10 @@ let
       url = mirror://cpan/authors/id/M/MD/MDOOTSON/Wx-0.9932.tar.gz;
       sha256 = "0w0vcpk8bmklh16c0z1vxgipnmvdw7cckcmay7k7cihgb99vdz8w";
     };
+    patches = [ (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/perl-Wx/raw/aad232e010f3aff77966442dae55b9266e876617/f/gtk3.patch";
+      sha256 = "0gpc3ncf1q78y2hrzdw7965yy8q88h7jplzq6w6625nk613jd28a";
+    }) ];
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
     #   Error: Unable to initialize GTK, is DISPLAY set properly?"
