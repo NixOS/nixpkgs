@@ -54,10 +54,15 @@ in {
         networking.firewall.enable = false;
         services.slurm.dbdserver = {
           enable = true;
+          storagePass = "password123";
         };
         services.mysql = {
           enable = true;
-          package = pkgs.mysql;
+          package = pkgs.mariadb;
+          initialScript = pkgs.writeText "mysql-init.sql" ''
+            CREATE USER 'slurm'@'localhost' IDENTIFIED BY 'password123';
+            GRANT ALL PRIVILEGES ON slurm_acct_db.* TO 'slurm'@'localhost';
+          '';
           ensureDatabases = [ "slurm_acct_db" ];
           ensureUsers = [{
             ensurePermissions = { "slurm_acct_db.*" = "ALL PRIVILEGES"; };

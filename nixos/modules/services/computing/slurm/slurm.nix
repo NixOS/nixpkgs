@@ -39,6 +39,8 @@ let
      DbdHost=${cfg.dbdserver.dbdHost}
      SlurmUser=${cfg.user}
      StorageType=accounting_storage/mysql
+     StorageUser=${cfg.dbdserver.storageUser}
+     ${optionalString (cfg.dbdserver.storagePass != null) "StoragePass=${cfg.dbdserver.storagePass}"}
      ${cfg.dbdserver.extraConfig}
    '';
 
@@ -82,6 +84,37 @@ in
           description = ''
             Hostname of the machine where <literal>slurmdbd</literal>
             is running (i.e. name returned by <literal>hostname -s</literal>).
+          '';
+        };
+
+        storageUser = mkOption {
+          type = types.str;
+          default = cfg.user;
+          description = ''
+            Database user name.
+          '';
+        };
+
+        storagePass = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Database password. Note that this password will be publicable
+            readable in the nix store. Use <option>configFile</option>
+            to store the and config file and password outside the nix store.
+          '';
+        };
+
+        configFile = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Path to <literal>slurmdbd.conf</literal>. The password for the database connection
+            is stored in the config file. Use this option to specfify a path
+            outside the nix store. If this option is unset a configuration file
+            will be generated. See also:
+            <citerefentry><refentrytitle>slurmdbd.conf</refentrytitle>
+            <manvolnum>8</manvolnum></citerefentry>.
           '';
         };
 
@@ -360,7 +393,11 @@ in
       requires = [ "munged.service" "mysql.service" ];
 
       # slurm strips the last component off the path
-      environment.SLURM_CONF = "${slurmdbdConf}/slurm.conf";
+      environment.SLURM_CONF =
+        if (cfg.dbdserver.configFile == null) then
+          "${slurmdbdConf}/slurm.conf"
+        else
+          cfg.dbdserver.configFile;
 
       serviceConfig = {
         Type = "forking";
