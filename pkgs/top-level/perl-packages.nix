@@ -20101,7 +20101,8 @@ let
       url = mirror://cpan/authors/id/M/MB/MBARBON/Wx-GLCanvas-0.09.tar.gz;
       sha256 = "1q4gvj4gdx4l8k4mkgiix24p9mdfy1miv7abidf0my3gy2gw5lka";
     };
-    propagatedBuildInputs = [ pkgs.libGLU Wx ];
+    buildInputs = [ pkgs.xorg.libX11 pkgs.libGLU ];
+    propagatedBuildInputs = [ Wx ];
     doCheck = false;
   };
 
