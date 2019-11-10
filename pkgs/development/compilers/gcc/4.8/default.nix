@@ -96,65 +96,8 @@ let version = "4.8.5";
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
-    crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
-    crossConfigureFlags =
-      # Ensure that -print-prog-name is able to find the correct programs.
-      [ "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
-        "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" ] ++
-      (if crossStageStatic then [
-        "--disable-libssp"
-        "--disable-nls"
-        "--without-headers"
-        "--disable-threads"
-        "--disable-libgomp"
-        "--disable-libquadmath"
-        "--disable-shared"
-        "--disable-libatomic" # requires libc
-        "--disable-decimal-float" # requires libc
-        "--disable-libmpx" # requires libc
-      ] ++ optionals crossMingw [
-        "--with-headers=${libcCross}/include"
-        "--with-gcc"
-        "--with-gnu-as"
-        "--with-gnu-ld"
-        "--disable-debug"
-        "--enable-sjlj-exceptions"
-        "--disable-win32-registry"
-      ] else [
-        (if crossDarwin then "--with-sysroot=${getLib libcCross}/share/sysroot"
-         else                "--with-headers=${getDev libcCross}${libcCross.incdir or "/include"}")
-        "--enable-__cxa_atexit"
-        "--enable-long-long"
-        "--enable-threads=${if targetPlatform.isUnix then "posix"
-                            else if targetPlatform.isWindows then "win32"
-                            else "single"}"
-        "--enable-nls"
-        "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
-      ] ++ optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
-        # libsanitizer requires netrom/netrom.h which is not
-        # available in uclibc.
-        "--disable-libsanitizer"
-        # In uclibc cases, libgomp needs an additional '-ldl'
-        # and as I don't know how to pass it, I disable libgomp.
-        "--disable-libgomp"
-      ] ++ optionals (targetPlatform.libc == "musl") [
-        # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
-        "--disable-libmpx"
-      ] ++ optionals crossMingw [
-        "--enable-sjlj-exceptions"
-        "--enable-hash-synchronization"
-        "--enable-libssp"
-        "--disable-nls"
-        "--with-dwarf2"
-        # To keep ABI compatibility with upstream mingw-w64
-        "--enable-fully-dynamic-string"
-      ] ++ optional (targetPlatform.libc == "newlib") "--with-newlib"
-        ++ optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
-      );
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
-
-    bootstrap = targetPlatform == hostPlatform;
 
 in
 
@@ -238,86 +181,34 @@ stdenv.mkDerivation ({
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
-  configureFlags =
-    # Basic dependencies
-    [
-      "--with-gmp-include=${gmp.dev}/include"
-      "--with-gmp-lib=${gmp.out}/lib"
-      "--with-mpfr-include=${mpfr.dev}/include"
-      "--with-mpfr-lib=${mpfr.out}/lib"
-      "--with-mpc=${libmpc}"
-    ] ++
-    optional (libelf != null) "--with-libelf=${libelf}" ++
-    optional (!(crossMingw && crossStageStatic))
-      "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include" ++
+  configureFlags = import ../common/configure-flags.nix {
+    inherit
+      stdenv
+      targetPackages
+      crossStageStatic libcCross
+      version
 
-    # Basic configuration
-    [
-      "--enable-lto"
-      "--disable-libstdcxx-pch"
-      "--without-included-gettext"
-      "--with-system-zlib"
-      "--enable-static"
-      "--enable-languages=${
-        concatStrings (intersperse ","
-          (  optional langC        "c"
-          ++ optional langCC       "c++"
-          ++ optional langFortran  "fortran"
-          ++ optional langJava     "java"
-          ++ optional langGo       "go"
-          ++ optional langObjC     "objc"
-          ++ optional langObjCpp   "obj-c++"
-          ++ optionals crossDarwin [ "objc" "obj-c++" ]
-          )
-        )
-      }"
-    ] ++
+      gmp mpfr libmpc libelf isl
+      cloog
 
-    (if (enableMultilib || targetPlatform.isAvr)
-      then ["--enable-multilib" "--disable-libquadmath"]
-      else ["--disable-multilib"]) ++
-    optional (!enableShared) "--disable-shared" ++
-    (if enablePlugin
-      then ["--enable-plugin"]
-      else ["--disable-plugin"]) ++
+      enablePlugin
+      enableMultilib
+      enableShared
 
-    # Optional features
-    optional (isl != null) "--with-isl=${isl}" ++
-    optionals (cloog != null) [
-      "--with-cloog=${cloog}"
-      "--disable-cloog-version-check"
-      "--enable-cloog-backend=isl"
-    ] ++
-
-    # Java options
-    optionals langJava [
-      "--with-ecj-jar=${javaEcj}"
-
-      # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
-      # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
-      "--enable-java-home"
-      "--with-java-home=\${prefix}/lib/jvm/jre"
-    ] ++
-    optional javaAwtGtk "--enable-java-awt=gtk" ++
-    optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}" ++
-
-    (import ../common/platform-flags.nix { inherit (stdenv) lib targetPlatform; }) ++
-    optional (targetPlatform != hostPlatform) crossConfigureFlags ++
-    optional (!bootstrap) "--disable-bootstrap" ++
-
-    # Platform-specific flags
-    optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}" ++
-    optionals hostPlatform.isSunOS [
-      "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
-      # On Illumos/Solaris GNU as is preferred
-      "--with-gnu-as" "--without-gnu-ld"
-    ]
-  ;
+      langC
+      langCC
+      langFortran
+      langJava javaAwtGtk javaAntlr javaEcj
+      langGo
+      langObjC
+      langObjCpp
+      ;
+  };
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
   buildFlags = optional
-    (bootstrap && hostPlatform == buildPlatform)
+    (hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   dontStrip = !stripped;
