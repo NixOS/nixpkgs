@@ -62,6 +62,25 @@ in {
     };
   };
 
+  ingest-attachment = esPlugin rec {
+    name = "elasticsearch-ingest-attachment-${version}";
+    pluginName = "ingest-attachment";
+    version = esVersion;
+    src = pkgs.fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
+      sha256 =
+        if version == "7.0.1" then "03hnw0g3gyvs1aby75b3wz093dn5dsyn2845hxxwh1n2s8csswkk"
+        else if version == "6.7.2" then "1dgb0gx4q5xlhkchwxbsaml3i1w9vzppnw068b8kfdq5g5wi31kd"
+        else if version == "5.6.16" then "0qp9r6n0f24adxpb0142nw80a89pfx4hns82l61ssmykawsrfhkg"
+        else throw "unsupported version ${version} for plugin ${pluginName}";
+    };
+    meta = with stdenv.lib; {
+      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/ingest-attachment;
+      description = "Ingest processor that uses Apache Tika to extract contents";
+      license = licenses.asl20;
+    };
+  };
+
   repository-s3 = esPlugin rec {
     name = "elasticsearch-repository-s3-${version}";
     pluginName = "repository-s3";
