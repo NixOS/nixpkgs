@@ -1,4 +1,4 @@
-{ fetchFromBitbucket, stdenv, boost, cmake, libGLU_combined }:
+{ fetchFromBitbucket, stdenv, boost, cmake, libGL, libGLU }:
 
 stdenv.mkDerivation {
   pname = "coin";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost libGLU_combined ];
+  buildInputs = [ boost libGL libGLU ];
 
   meta = {
     homepage = "https://bitbucket.org/Coin3D/coin/wiki/Home";

@@ -58,7 +58,7 @@ stdenv.mkDerivation {
           # TODO: move to buildInputs, this should not be propagated.
           AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL
-          darwin.libobjc libiconv MetalKit
+          darwin.libobjc libiconv MetalKit IOKit
         ]
       else
         [
