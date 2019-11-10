@@ -101,20 +101,7 @@ let version = "4.8.5";
       # Ensure that -print-prog-name is able to find the correct programs.
       [ "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
         "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" ] ++
-      (if crossMingw && crossStageStatic then [
-        "--with-headers=${libcCross}/include"
-        "--with-gcc"
-        "--with-gnu-as"
-        "--with-gnu-ld"
-        "--with-gnu-ld"
-        "--disable-shared"
-        "--disable-nls"
-        "--disable-debug"
-        "--enable-sjlj-exceptions"
-        "--enable-threads=win32"
-        "--disable-win32-registry"
-        "--disable-libmpx" # requires libc
-      ] else if crossStageStatic then [
+      (if crossStageStatic then [
         "--disable-libssp"
         "--disable-nls"
         "--without-headers"
@@ -125,38 +112,47 @@ let version = "4.8.5";
         "--disable-libatomic" # requires libc
         "--disable-decimal-float" # requires libc
         "--disable-libmpx" # requires libc
+      ] ++ optionals crossMingw [
+        "--with-headers=${libcCross}/include"
+        "--with-gcc"
+        "--with-gnu-as"
+        "--with-gnu-ld"
+        "--disable-debug"
+        "--enable-sjlj-exceptions"
+        "--disable-win32-registry"
       ] else [
         (if crossDarwin then "--with-sysroot=${getLib libcCross}/share/sysroot"
          else                "--with-headers=${getDev libcCross}${libcCross.incdir or "/include"}")
         "--enable-__cxa_atexit"
         "--enable-long-long"
-      ] ++
-        (if crossMingw then [
-          "--enable-threads=win32"
-          "--enable-sjlj-exceptions"
-          "--enable-hash-synchronization"
-          "--enable-libssp"
-          "--disable-nls"
-          "--with-dwarf2"
-          # To keep ABI compatibility with upstream mingw-w64
-          "--enable-fully-dynamic-string"
-        ] else
-          optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
-            # In uclibc cases, libgomp needs an additional '-ldl'
-            # and as I don't know how to pass it, I disable libgomp.
-            "--disable-libgomp"
-          ]
-          ++ optional (targetPlatform.libc == "newlib") "--with-newlib"
-          ++ optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
-          ++ [
-            "--enable-threads=${if targetPlatform.isUnix then "posix"
-                                else if targetPlatform.isWindows then "win32"
-                                else "single"}"
-            "--enable-nls"
-            "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
-        ]));
+        "--enable-threads=${if targetPlatform.isUnix then "posix"
+                            else if targetPlatform.isWindows then "win32"
+                            else "single"}"
+        "--enable-nls"
+        "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
+      ] ++ optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
+        # libsanitizer requires netrom/netrom.h which is not
+        # available in uclibc.
+        "--disable-libsanitizer"
+        # In uclibc cases, libgomp needs an additional '-ldl'
+        # and as I don't know how to pass it, I disable libgomp.
+        "--disable-libgomp"
+      ] ++ optionals (targetPlatform.libc == "musl") [
+        # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
+        "--disable-libmpx"
+      ] ++ optionals crossMingw [
+        "--enable-sjlj-exceptions"
+        "--enable-hash-synchronization"
+        "--enable-libssp"
+        "--disable-nls"
+        "--with-dwarf2"
+        # To keep ABI compatibility with upstream mingw-w64
+        "--enable-fully-dynamic-string"
+      ] ++ optional (targetPlatform.libc == "newlib") "--with-newlib"
+        ++ optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
+      );
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
-    crossNameAddon = if targetPlatform != hostPlatform then "${targetPlatform.config}${stageNameAddon}-" else "";
+    crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
 
     bootstrap = targetPlatform == hostPlatform;
 
