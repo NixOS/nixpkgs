@@ -2084,6 +2084,8 @@ in
     utillinux = utillinuxMinimal;
   };
 
+  rasdaemon = callPackage ../os-specific/linux/rasdaemon { };
+
   sqlint = callPackage ../development/tools/sqlint { };
 
   antibody = callPackage ../shells/zsh/antibody { };

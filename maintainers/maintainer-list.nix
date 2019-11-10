@@ -3734,6 +3734,12 @@
     githubId = 8355305;
     name = "leo60228";
   };
+  leocp1 = {
+    email = "leocp1@users.noreply.github.com";
+    github = "leocp1";
+    githubId = 1205599;
+    name = "leocp1";
+  };
   leonardoce = {
     email = "leonardo.cecchi@gmail.com";
     github = "leonardoce";

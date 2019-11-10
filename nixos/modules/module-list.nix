@@ -61,6 +61,7 @@
   ./hardware/pcmcia.nix
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
+  ./hardware/rasdaemon.nix
   ./hardware/steam-hardware.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
