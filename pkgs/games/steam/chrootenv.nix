@@ -20,6 +20,7 @@ let
       # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
       lsb-release
       # Errors in output without those
+      libva
       pciutils
       python2
       # Games' dependencies
@@ -75,6 +76,7 @@ in buildFHSUserEnv rec {
     xorg.libX11
     xorg.libXfixes
     libGL
+    libva
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
