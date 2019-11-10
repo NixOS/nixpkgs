@@ -104,21 +104,6 @@
 
   icicles = callPackage ./icicles { };
 
-  rtags = melpaBuild {
-    inherit (external.rtags) version src meta;
-
-    pname = "rtags";
-
-    dontConfigure = true;
-
-    propagatedUserEnvPkgs = [ external.rtags ];
-    recipe = pkgs.writeText "recipe" ''
-      (rtags
-       :repo "andersbakken/rtags" :fetcher github
-       :files ("src/*.el"))
-    '';
-  };
-
   lib-requires =
     callPackage ./lib-requires { };
 

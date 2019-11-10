@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "mox3";
-  version = "0.26.0";
+  version = "0.28.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b13c0b8459d6fb0688f9a4e70feeec43fa2cca05b727fc01156789596e083bb1";
+    sha256 = "17d4vglb71s96hhi6d30vnkr7g1pahv95igc4sjv857qf278d540";
   };
 
   buildInputs = [ subunit testrepository testtools six ];

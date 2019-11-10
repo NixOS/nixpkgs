@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , nose
 , webob
 , six
@@ -15,6 +16,7 @@
 buildPythonPackage rec {
   version = "2.0.32";
   pname = "webtest";
+  disabled = isPy27; # paste.deploy is not longer a valid import
 
   src = fetchPypi {
     pname = "WebTest";
@@ -29,6 +31,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ webob six beautifulsoup4 waitress ];
 
   checkInputs = [ nose mock PasteDeploy wsgiproxy2 pyquery ];
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 
   meta = with stdenv.lib; {
     description = "Helper to test WSGI applications";

@@ -115,6 +115,16 @@ in
         '';
       };
 
+      agentPKCS11Whitelist = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "\${pkgs.opensc}/lib/opensc-pkcs11.so";
+        description = ''
+          A pattern-list of acceptable paths for PKCS#11 shared libraries
+          that may be used with the -s option to ssh-add.
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.openssh;
@@ -241,6 +251,7 @@ in
             ExecStart =
                 "${cfg.package}/bin/ssh-agent " +
                 optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
+                optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
                 "-a %t/ssh-agent";
             StandardOutput = "null";
             Type = "forking";

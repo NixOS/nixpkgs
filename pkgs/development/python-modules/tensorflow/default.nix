@@ -1,4 +1,5 @@
 { stdenv, pkgs, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+, addOpenGLRunpath
 # Python deps
 , buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast, python
 # Python libraries
@@ -112,7 +113,7 @@ let
 
     nativeBuildInputs = [
       swig which pythonEnv
-    ];
+    ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
     buildInputs = [
       jemalloc
@@ -203,6 +204,7 @@ let
     TF_NEED_CUDA = tfFeature cudaSupport;
     TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
     GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
+    GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
     TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
 
     postPatch = ''
@@ -295,6 +297,21 @@ let
         bazel-bin/tensorflow/tools/pip_package/build_pip_package --src "$PWD/dist"
         cp -Lr "$PWD/dist" "$python"
       '';
+
+      postFixup = lib.optionalString cudaSupport ''
+        find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+          addOpenGLRunpath "$lib"
+        done
+      '';
+    };
+
+    meta = with stdenv.lib; {
+      description = "Computation using data flow graphs for scalable machine learning";
+      homepage = http://tensorflow.org;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ jyp abbradar ];
+      platforms = platforms.linux;
+      broken = !(xlaSupport -> cudaSupport);
     };
   };
 
@@ -337,6 +354,14 @@ in buildPythonPackage {
     tensorflow-tensorboard
   ];
 
+  nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
+
+  postFixup = lib.optionalString cudaSupport ''
+    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      addOpenGLRunpath "$lib"
+    done
+  '';
+
   # Actual tests are slow and impure.
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
@@ -346,12 +371,5 @@ in buildPythonPackage {
 
   passthru.libtensorflow = bazel-build.out;
 
-  meta = with stdenv.lib; {
-    description = "Computation using data flow graphs for scalable machine learning";
-    homepage = http://tensorflow.org;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jyp abbradar ];
-    platforms = platforms.linux;
-    broken = !(xlaSupport -> cudaSupport);
-  };
+  inherit (bazel-build) meta;
 }

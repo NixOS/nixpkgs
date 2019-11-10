@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, qt5, libjack2, alsaLib, liblo, lv2 }:
+{ mkDerivation, stdenv, fetchurl, pkgconfig, qtbase, qttools, libjack2, alsaLib, liblo, lv2 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "synthv1";
-  version = "0.9.9";
+  version = "0.9.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/synthv1/${pname}-${version}.tar.gz";
-    sha256 = "0cvamqzg74qfr7kzk3skimskmv0j3d1rmmpbpsmfcrg8srvyx9r2";
+    sha256 = "116k2vca9dygvsd684wvxm61p0l1xrrgdph4qrrprlsr6vj0llgm";
   };
 
-  buildInputs = [ qt5.qtbase qt5.qttools libjack2 alsaLib liblo lv2 ];
+  buildInputs = [ qtbase qttools libjack2 alsaLib liblo lv2 ];
 
   nativeBuildInputs = [ pkgconfig ];
 

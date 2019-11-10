@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgArches,
+{ stdenv, lib, pkgArches, callPackage,
   name, version, src, monos, geckos, platforms,
   pkgconfig, fontforge, makeWrapper, flex, bison,
   supportFlags,
@@ -7,6 +7,9 @@
 
 with import ./util.nix { inherit lib; };
 
+let
+  vkd3d = callPackage ./vkd3d.nix {};
+in
 stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   builder = buildScript;
 }) // rec {
@@ -46,8 +49,10 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optional vulkanSupport          pkgs.vulkan-loader
   ++ lib.optional sdlSupport             pkgs.SDL2
+  ++ lib.optional faudioSupport          pkgs.faudio
+  ++ lib.optional vkd3dSupport           vkd3d
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1;
-    [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav 
+    [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav
     (gst-plugins-bad.override { enableZbar = false; }) ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]

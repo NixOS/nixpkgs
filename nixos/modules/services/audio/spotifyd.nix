@@ -28,7 +28,7 @@ in
       after = [ "network-online.target" "sound.target" ];
       description = "spotifyd, a Spotify playing daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --cache_path /var/cache/spotifyd --config ${spotifydConf}";
+        ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
         Restart = "always";
         RestartSec = 12;
         DynamicUser = true;

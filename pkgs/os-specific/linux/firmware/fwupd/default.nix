@@ -57,6 +57,7 @@ let
     pygobject3
     pycairo
     pillow
+    setuptools
   ]);
 
   installedTestsPython = python3.withPackages (p: with p; [
@@ -236,9 +237,9 @@ stdenv.mkDerivation rec {
   postFixup = ''
     find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
       | while IFS= read -r -d ''' file; do
-      if [[ "''${file}" != *.efi ]]; then
-        echo "Wrapping program ''${file}"
-        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+      if [[ "$file" != *.efi ]]; then
+        echo "Wrapping program $file"
+        wrapGApp "$file"
       fi
     done
   '';
@@ -261,7 +262,7 @@ stdenv.mkDerivation rec {
     ];
 
     tests = {
-      installedTests = nixosTests.fwupd;
+      installedTests = nixosTests.installed-tests.fwupd;
     };
   };
 

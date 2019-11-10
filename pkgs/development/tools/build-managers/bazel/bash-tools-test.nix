@@ -36,7 +36,7 @@ let
 
     bazelScript = ''
       ${bazel}/bin/bazel build :tool_usage --distdir=${distDir}
-      cp bazel-genfiles/output.txt $out
+      cp bazel-bin/output.txt $out
       echo "Testing content" && [ "$(cat $out | wc -l)" == "2" ] && echo "OK"
     '';
   };

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, python }:
 
 buildPythonPackage rec {
   pname = "diff-match-patch";
@@ -14,4 +14,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "a809a996d0f09b9bbd59e9bbd0b71eed8c807922512910e05cbd3f9480712ddb";
   };
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest -v diff_match_patch.tests
+  '';
 }

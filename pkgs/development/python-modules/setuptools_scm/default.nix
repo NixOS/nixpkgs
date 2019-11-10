@@ -9,10 +9,6 @@ buildPythonPackage rec {
     sha256 = "19cyndx23xmpbhz4qrwmfwsmnnaczd0dw7qg977ksq2dbvxy29dx";
   };
 
-  # Seems to fail due to chroot and would cause circular dependency
-  # with pytest
-  doCheck = false;
-
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/pypa/setuptools_scm/;
     description = "Handles managing your python package versions in scm metadata";

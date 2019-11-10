@@ -23,12 +23,14 @@
 , zeitgeist
 , glib-networking
 , elementary-icon-theme
+, libcloudproviders
+, fetchpatch
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.1.9";
+  version = "4.2.0";
 
   repoName = "files";
 
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "12p1li9a7kqdlgkq20svaly5kr661ww93qngaiic6zv1bdw2bpmv";
+    sha256 = "12f0hzb62nchksyqd2gwj3cv001rph24ggd9wywh9i1qwppx4b5k";
   };
 
   passthru = {
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libcanberra
+    libcloudproviders
     libdbusmenu-gtk3
     libgee
     libnotify
@@ -76,7 +79,14 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  patches = [ ./hardcode-gsettings.patch ];
+  patches = [
+    ./hardcode-gsettings.patch
+    # Fixes https://github.com/elementary/files/issues/1081
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/76b5cc95466733c2c100a99127ecd4fbd4d2a5ec.patch";
+      sha256 = "0dn8a9l7i2rdgia1rsc50332fsw0yrbfvpb5z8ba4iiki3lxy2nn";
+    })
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

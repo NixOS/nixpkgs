@@ -9,4 +9,5 @@ mkXfceDerivation {
 
   nativeBuildInputs = [ libxslt docbook_xsl ];
   buildInputs = [ exo gtk2 libburn libisofs libxfce4ui ];
+  meta.broken = true;
 }

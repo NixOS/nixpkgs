@@ -21,6 +21,7 @@ in
       name = "owamp";
       group = "owamp";
       description = "Owamp daemon";
+      isSystemUser = true;
     };
 
     users.groups = singleton {

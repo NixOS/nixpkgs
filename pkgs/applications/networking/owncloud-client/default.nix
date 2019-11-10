@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, sqlite }:
+{ stdenv, fetchurl, mkDerivation, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, sqlite }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "owncloud-client";
   version = "2.5.4.11654";
 

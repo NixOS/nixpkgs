@@ -26,6 +26,7 @@ callPackage ./generic.nix (rec {
       azure-mgmt-nspkg = callPackage ./azure-mgmt-nspkg { };
       azure-mgmt-resource = callPackage ./azure-mgmt-resource { };
       azure-mgmt-storage = callPackage ./azure-mgmt-storage { };
+      azure-storage = callPackage ./azure-storage { };
     });
   };
 })

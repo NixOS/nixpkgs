@@ -1,8 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, removeReferencesTo
-, zlib, libjpeg, libpng, libtiff, pam, dbus, systemd, acl, gmp, darwin
-, libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, removeReferencesTo
+, zlib
+, libjpeg
+, libpng
+, libtiff
+, pam
+, dbus
+, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, systemd ? null
+, acl
+, gmp
+, darwin
+, libusb ? null
+, gnutls ? null
+, avahi ? null
+, libpaper ? null
 , coreutils
 }:
+
+assert enableSystemd -> systemd != null;
 
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.
@@ -33,7 +51,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb gnutls libpaper ]
-    ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]
+    ++ optionals stdenv.isLinux [ avahi pam dbus ]
+    ++ optional enableSystemd systemd
+    # Separate from above only to not modify order, to avoid mass rebuilds; merge this with the above at next big change.
+    ++ optionals stdenv.isLinux [ acl ]
     ++ optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);
@@ -48,6 +69,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     "--enable-dbus"
     "--enable-pam"
+    "--with-dbusdir=${placeholder "out"}/share/dbus-1"
   ] ++ optional (libusb != null) "--enable-libusb"
     ++ optional (gnutls != null) "--enable-ssl"
     ++ optional (avahi != null) "--enable-avahi"
@@ -81,7 +103,6 @@ stdenv.mkDerivation rec {
       "STATEDIR=$(TMPDIR)/dummy"
       # Idem for /etc.
       "PAMDIR=$(out)/etc/pam.d"
-      "DBUSDIR=$(out)/etc/dbus-1"
       "XINETD=$(out)/etc/xinetd.d"
       "SERVERROOT=$(out)/etc/cups"
       # Idem for /usr.

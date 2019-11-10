@@ -35,7 +35,7 @@ See <https://tug.org/texlive/acquire-mirror.html> for instructions.
 
 
 ```
-$ curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
+$ curl -L http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
            | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
 ```
 

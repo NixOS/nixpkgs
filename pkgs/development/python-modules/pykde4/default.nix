@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   pname = "pykde4";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${version}/src/${pname}-${version}-${version}.tar.xz";
+    url = "mirror://kde/stable/${version}/src/${pname}-${version}.tar.xz";
     sha256 = "1z40gnkyjlv6ds3cmpzvv99394rhmydr6rxx7qj33m83xnsxgfbz";
   };
 
@@ -37,6 +37,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
+    hydraPlatforms = platforms.none;
     description = "Python bindings for KDE";
     license = with licenses; [ gpl2 lgpl2 ];
     homepage = https://api.kde.org/pykde-4.3-api/;

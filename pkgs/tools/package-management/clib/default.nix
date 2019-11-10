@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, curl  }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.1";
+  version = "1.11.2";
   pname = "clib";
 
   src = fetchFromGitHub {
     rev    = version;
     owner  = "clibs";
     repo   = "clib";
-    sha256 = "1kl8amlw0106jsvv71a7nifhff1jdvgsrxr7l7hfr75i506q8976";
+    sha256 = "03q5l873zc1dm478f35ibqandypakf47hzqb5gjpnpbcyb2m2jxz";
   };
 
   hardeningDisable = [ "fortify" ];

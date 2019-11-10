@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     "--enable-library"
     "--enable-cups"
     "--enable-pie"
-    "--with-dbusconfdir=$(out)/etc"
-    "--with-dbussystembusdir=$(out)/share/dbus-1/system-services"
-    "--with-dbussessionbusdir=$(out)/share/dbus-1/services"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--with-systemduserunitdir=$(out)/etc/systemd/user"
-    "--with-udevdir=$(out)/lib/udev"
+    "--with-dbusconfdir=${placeholder "out"}/share"
+    "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
+    "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+    "--with-udevdir=${placeholder "out"}/lib/udev"
     ] ++ optional enableWiimote [ "--enable-wiimote" ]
       ++ optional enableMidi    [ "--enable-midi" ]
       ++ optional enableSixaxis [ "--enable-sixaxis" ]);
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
 
-  makeFlags = "rulesdir=$(out)/lib/udev/rules.d";
+  makeFlags = "rulesdir=${placeholder "out"}/lib/udev/rules.d";
 
   postInstall = ''
     mkdir -p $test/{bin,test}

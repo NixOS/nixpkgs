@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    (pkgconfig.override { vanilla = true; })
+    pkgconfig
     mesa.dev
     wrapGAppsHook
   ];

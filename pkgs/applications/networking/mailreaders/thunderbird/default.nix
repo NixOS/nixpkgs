@@ -25,11 +25,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "68.0";
+  version = "68.2.2";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "2cz583rwfpj4z5cwg2vfy4ha0pz4xs9g7li078rmk6x19haiv8s9fwijd82xgxax0afn8wk80bq5kd8yz38l9432f6bar8xnwb21y4i";
+    sha512 = "3mvanjfc35f14lsfa4zjlhsvwij1n9dz9xmisd5s376r5wp9y33sva5ly914b2hmdl85ypdwv90zyi6whj7jb2f2xmqk480havxgjcn";
   };
 
   # from firefox, but without sound libraries
@@ -136,6 +136,9 @@ in stdenv.mkDerivation rec {
       gappsWrapperArgs+=(
         --argv0 "$target"
         --set MOZ_APP_LAUNCHER thunderbird
+        # See commit 87e261843c4236c541ee0113988286f77d2fa1ee
+        --set MOZ_LEGACY_PROFILES 1
+        --set MOZ_ALLOW_DOWNGRADE 1
         # https://github.com/NixOS/nixpkgs/pull/61980
         --set SNAP_NAME "thunderbird"
       )

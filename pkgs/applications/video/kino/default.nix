@@ -80,7 +80,7 @@ stdenv.mkDerivation {
 
   postInstall = "
     rpath=`patchelf --print-rpath \$out/bin/kino`;
-    for i in $\buildInputs; do
+    for i in $buildInputs; do
       echo adding \$i/lib
       rpath=\$rpath\${rpath:+:}\$i/lib
     done

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A CFFI binding for Hoedown, a markdown parsing library";
-    homepage = "http://misaka.61924.nl/";
+    homepage = "https://misaka.61924.nl";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
   };

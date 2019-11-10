@@ -132,6 +132,39 @@ with self; {
     };
   };
 
+  pulseaudio = buildLuaPackage rec {
+    pname = "pulseaudio";
+    version = "0.1";
+    name = "pulseaudio-${version}";
+
+    src = fetchFromGitHub {
+      owner = "doronbehar";
+      repo = "lua-pulseaudio";
+      rev = "v${version}";
+      sha256 = "0vldm34m3ysgn8gvwfdglpw4jl5680fvfay7pzs14gzkzcvgv25b";
+    };
+    disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+    buildInputs = [ pkgs.libpulseaudio ];
+    propagatedBuildInputs = [ lua ];
+    nativeBuildInputs = [ pkgs.pulseaudio pkgconfig ];
+
+    makeFlags = [
+      "INST_LIBDIR=${placeholder "out"}/lib/lua/${lua.luaversion}"
+      "INST_LUADIR=${placeholder "out"}/share/lua/${lua.luaversion}"
+      "LUA_BINDIR=${placeholder "out"}/bin"
+    ];
+    preBuild = ''
+      mkdir -p ${placeholder "out"}/lib/lua/${lua.luaversion}
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/doronbehar/lua-pulseaudio";
+      description = "Libpulse Lua bindings";
+      maintainers = with maintainers; [ doronbehar ];
+      license = licenses.lgpl21;
+    };
+  };
+
   vicious = toLuaModule(stdenv.mkDerivation rec {
     pname = "vicious";
     version = "2.3.1";

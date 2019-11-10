@@ -16,7 +16,6 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest cffi ];
   checkPhase = ''
-    export PYTHONPATH=.:$PYTHONPATH
     py.test
   '';
 
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     description = "Universal Python binding for the LMDB 'Lightning' Database";
     homepage = "https://github.com/dw/py-lmdb";
     license = licenses.openldap;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ copumpkin ivan ];
   };
 
 }

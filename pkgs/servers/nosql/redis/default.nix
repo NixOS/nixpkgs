@@ -1,12 +1,12 @@
 { stdenv, fetchurl, lua, jemalloc }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.5";
+  version = "5.0.6";
   pname = "redis";
 
   src = fetchurl {
     url = "http://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "0xd3ak527cnkz2cn422l2ag9nsa6mhv7y2y49zwqy7fjk6bh0f91";
+    sha256 = "1cr2dn9ilhj52snmlz38fw30gdlgbxq2sadyspawahp1cw988936";
   };
 
   # Cross-compiling fixes

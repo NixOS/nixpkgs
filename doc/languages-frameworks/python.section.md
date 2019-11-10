@@ -593,7 +593,7 @@ as the interpreter unless overridden otherwise.
 All parameters from `stdenv.mkDerivation` function are still supported. The following are specific to `buildPythonPackage`:
 
 * `catchConflicts ? true`: If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
-* `disabled` ? false: If `true`, package is not build for the particular Python interpreter version.
+* `disabled` ? false: If `true`, package is not built for the particular Python interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment variable in wrapped programs.
 * `installFlags ? []`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.
@@ -850,9 +850,8 @@ Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is in
 Packages inside nixpkgs are written by hand. However many tools exist in
 community to help save time. No tool is preferred at the moment.
 
-- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov
-- [pypi2nix](https://github.com/garbas/pypi2nix) by Rok Garbas
-- [pypi2nix](https://github.com/offlinehacker/pypi2nix) by Jaka Hudoklin
+- [pypi2nix](https://github.com/nix-community/pypi2nix): Generate Nix expressions for your Python project. Note that [sharing derivations from pypi2nix with nixpkgs is possible but not encouraged](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376).
+- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov.
 
 ### Deterministic builds
 

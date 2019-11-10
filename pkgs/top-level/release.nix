@@ -62,7 +62,7 @@ let
               jobs.vim.x86_64-darwin
 
               # UI apps
-              jobs.firefox-unwrapped.x86_64-darwin
+              # jobs.firefox-unwrapped.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
               jobs.inkscape.x86_64-darwin
               jobs.gimp.x86_64-darwin

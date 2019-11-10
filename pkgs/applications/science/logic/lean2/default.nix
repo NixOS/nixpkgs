@@ -32,5 +32,6 @@ stdenv.mkDerivation {
     license     = licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice gebner ];
+    broken = true;
   };
 }

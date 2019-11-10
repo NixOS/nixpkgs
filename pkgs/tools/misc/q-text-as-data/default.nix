@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "q-text-as-data";
-  version = "1.7.1";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "harelba";
     repo = "q";
     rev = version;
-    sha256 = "021c2sd6qscz1ipwzzjf43pfd311dcay7yralksl25rs0r7h3li2";
+    sha256 = "0p8rbfwwcqjyrix51v52zp9b03z4xg1fv2raf2ygqp9a4l27dca8";
   };
 
   buildInputs = [ python2 ];

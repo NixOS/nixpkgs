@@ -30,5 +30,6 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.linux ++ platforms.darwin;
+    broken = true;
   };
 }

@@ -3,9 +3,9 @@ echo "Sourcing flit-build-hook"
 
 flitBuildPhase () {
     echo "Executing flitBuildPhase"
-    preBuild
+    runHook preBuild
     @pythonInterpreter@ -m flit build --format wheel
-    postBuild
+    runHook postBuild
     echo "Finished executing flitBuildPhase"
 }
 

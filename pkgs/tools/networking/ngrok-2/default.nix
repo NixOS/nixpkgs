@@ -32,9 +32,6 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D ngrok $out/bin/ngrok
-  '' + optionalString stdenv.isLinux ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-              $out/bin/ngrok
   '';
 
   passthru.updateScript = ./update.sh;

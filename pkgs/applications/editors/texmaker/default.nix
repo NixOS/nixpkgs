@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, qtbase, qtscript, qmake, zlib, pkgconfig, poppler }:
+{ lib, mkDerivation, fetchurl, qtbase, qtscript, qmake, zlib, pkgconfig, poppler }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "texmaker";
   version = "5.0.3";
 
@@ -13,14 +13,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig poppler qmake ];
   NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags DESKTOPDIR=$out/share/applications ICONDIR=$out/share/pixmaps METAINFODIR=$out/share/metainfo"
-  '';
-
+  qmakeFlags = [
+    "DESKTOPDIR=${placeholder "out"}/share/applications"
+    "ICONDIR=${placeholder "out"}/share/pixmaps"
+    "METAINFODIR=${placeholder "out"}/share/metainfo"
+  ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TeX and LaTeX editor";
     longDescription=''
 	This editor is a full fledged IDE for TeX and

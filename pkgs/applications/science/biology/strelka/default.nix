@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Illumina/strelka;
     maintainers = with maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];
+    broken = true;
   };
 
 }

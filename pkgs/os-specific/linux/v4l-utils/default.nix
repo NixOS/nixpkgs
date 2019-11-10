@@ -19,14 +19,14 @@ in stdenv.mkDerivation rec {
     sha256 = "1ng0x3wj3a1ckfd00yxa4za43xms92gdp7rdag060b7p39z7m4gf";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" ] ++ lib.optional withUtils "lib" ++ [ "dev" ];
 
-  configureFlags =
-    if withUtils then [
-      "--with-udevdir=${placeholder "out"}/lib/udev"
-    ] else [
-      "--disable-v4l-utils"
-    ];
+  configureFlags = (if withUtils then [
+    "--with-localedir=${placeholder "lib"}/share/locale"
+    "--with-udevdir=${placeholder "out"}/lib/udev"
+  ] else [
+    "--disable-v4l-utils"
+  ]);
 
   postFixup = ''
     # Create symlink for V4l1 compatibility
@@ -39,10 +39,8 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libjpeg ];
 
-  NIX_CFLAGS_COMPILE = lib.optional withQt "-std=c++11";
-
   postPatch = ''
-    patchShebangs .
+    patchShebangs utils/cec-ctl/msg2ctl.pl
   '';
 
   meta = with stdenv.lib; {

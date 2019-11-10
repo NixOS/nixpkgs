@@ -1,15 +1,15 @@
 {stdenv, fetchFromGitHub, cmake, libGLU_combined, zlib, openssl, libyamlcpp, boost
 , SDL, SDL_image, SDL_mixer, SDL_gfx }:
 
-let version = "1.0.0.2018.10.08"; in
+let version = "1.0.0.2019.10.18"; in
 stdenv.mkDerivation {
   pname = "openxcom";
   inherit version;
   src = fetchFromGitHub {
-    owner = "SupSuper";
+    owner = "OpenXcom";
     repo = "OpenXcom";
-    rev = "13049d617fe762b91893faaf7c14ddefa49e2f1d";
-    sha256 = "0vpcfk3g1bnwwmrln14jkj2wvw2z8igxw2mdb7c3y66466wm93ig";
+    rev = "f9853b2cb8c8f741ac58707487ef493416d890a3";
+    sha256 = "0kbfawj5wsp1mwfcm5mwpkq6s3d13pailjm5w268gqpxjksziyq0";
   };
 
   nativeBuildInputs = [ cmake ];

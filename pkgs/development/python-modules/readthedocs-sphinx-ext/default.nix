@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "readthedocs-sphinx-ext";
-  version = "0.5.17";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "21097cbb37c9a0590e2cb444b55bd87302fc8f69640fa2d4f2d113e98e9558ff";
+    sha256 = "cc94753be6b2db997e3291046b39e49d578f6441fd75159db22a51a29d2cf1fc";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -527,6 +527,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
+      broken = true;
     };
   };
 

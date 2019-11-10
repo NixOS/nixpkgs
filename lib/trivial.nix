@@ -29,6 +29,43 @@ rec {
     # Value to ignore
     y: x;
 
+  /* Pipes a value through a list of functions, left to right.
+
+     Type: pipe :: a -> [<functions>] -> <return type of last function>
+     Example:
+       pipe 2 [
+         (x: x + 2)  # 2 + 2 = 4
+         (x: x * 2)  # 4 * 2 = 8
+       ]
+       => 8
+
+       # ideal to do text transformations
+       pipe [ "a/b" "a/c" ] [
+
+         # create the cp command
+         (map (file: ''cp "${src}/${file}" $out\n''))
+
+         # concatenate all commands into one string
+         lib.concatStrings
+
+         # make that string into a nix derivation
+         (pkgs.runCommand "copy-to-out" {})
+
+       ]
+       => <drv which copies all files to $out>
+
+     The output type of each function has to be the input type
+     of the next function, and the last function returns the
+     final value.
+  */
+  pipe = val: functions:
+    let reverseApply = x: f: f x;
+    in builtins.foldl' reverseApply val functions;
+  /* note please don’t add a function like `compose = flip pipe`.
+     This would confuse users, because the order of the functions
+     in the list is not clear. With pipe, it’s obvious that it
+     goes first-to-last. With `compose`, not so much.
+  */
 
   ## Named versions corresponding to some builtin operators.
 
@@ -134,7 +171,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Loris";
+  codeName = "Markhor";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =

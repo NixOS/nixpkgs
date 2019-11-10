@@ -5,8 +5,7 @@
  <title>Nixpkgs Library Functions</title>
 
  <para>
-  Nixpkgs provides a standard library at <varname>pkgs.lib</varname>, or
-  through <code>import &lt;nixpkgs/lib&gt;</code>.
+  Nixpkgs provides a standard library at <varname>pkgs.lib</varname>, or through <code>import &lt;nixpkgs/lib&gt;</code>.
  </para>
 
  <xi:include href="./library/asserts.xml" />

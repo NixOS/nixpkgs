@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, nasm }:
+{ stdenv, fetchurl, cmake, nasm, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake nasm ];
 
   cmakeFlags = [
-    "-DENABLE_STATIC=0"
+    "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
   ];
 
   doInstallCheck = true;

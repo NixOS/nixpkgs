@@ -1,15 +1,16 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig
-, glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3 }:
+, glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3
+, json-glib, libunistring }:
 
 stdenv.mkDerivation rec {
   pname = "libratbag";
-  version = "0.9.905";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner  = "libratbag";
     repo   = "libratbag";
     rev    = "v${version}";
-    sha256 = "0bh1nf9sv7wka0vh5bz9krf2cfxz0rr64hrpdm7imsb6cn39k01y";
+    sha256 = "10hahpv2n48b5z35d2draka7cz1a9vw53rvwfmpp5dibwnmi81jb";
   };
 
   nativeBuildInputs = [
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib systemd udev libevdev
+    glib systemd udev libevdev json-glib libunistring
     (python3.withPackages (ps: with ps; [ evdev pygobject3 ]))
   ];
 

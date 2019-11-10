@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "accupy";
-  version = "0.1.4";
+  version = "0.2.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2a67f2a778b824fb24eb338fed8e0b61c1af93369d57ff8132f5d602d60f0543";
+    sha256 = "e27ca7eed8a1bde2e6e040f8f3ee94a5d7522f42c4360756c9ec8931cf13ca98";
   };
 
   buildInputs = [

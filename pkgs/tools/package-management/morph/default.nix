@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "morph";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "dbcdk";
     repo = "morph";
     rev = "v${version}";
-    sha256 = "1lp5nsril9pnqllkpmvj8wd2f7p4xzwc2z3f5j6yfakd2sg41kgc";
+    sha256 = "0nwl9n5b0lnil96573wa3hyr3vyvfiwvmpkla3pmwkpmriac4xrg";
   };
 
   goPackagePath = "github.com/dbcdk/morph";

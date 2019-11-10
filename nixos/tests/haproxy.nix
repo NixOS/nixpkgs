@@ -16,6 +16,8 @@ import ./make-test.nix ({ pkgs, ...}: {
           frontend http
             bind *:80
             mode http
+            option http-use-htx
+            http-request use-service prometheus-exporter if { path /metrics }
             use_backend http_server
         '';
       };
@@ -36,6 +38,6 @@ import ./make-test.nix ({ pkgs, ...}: {
     $machine->waitForUnit('haproxy.service');
     $machine->waitForUnit('httpd.service');
     $machine->succeed('curl -k http://localhost:80/index.txt | grep "We are all good!"');
-
+    $machine->succeed('curl -k http://localhost:80/metrics | grep haproxy_process_pool_allocated_bytes');
   '';
 })

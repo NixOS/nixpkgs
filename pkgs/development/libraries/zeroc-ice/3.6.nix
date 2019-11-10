@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, mcpp, bzip2, expat, openssl, db5
+{ stdenv, lib, fetchFromGitHub, fetchpatch, mcpp, bzip2, expat, openssl, db5
 , darwin, libiconv, Security
 , cpp11 ? false
 }:
@@ -25,6 +25,16 @@ stdenv.mkDerivation rec {
     substituteInPlace config/Make.rules.Darwin \
         --replace xcrun ""
   '';
+
+  patches = [
+    # Fixes compilation issues with GCC 8 using one of the patches
+    # provided in https://github.com/zeroc-ice/ice/issues/82
+    ( fetchpatch {
+      url = "https://github.com/zeroc-ice/ice/commit/a6a4981616b669432ff7b588179d6e93694d9e3f.patch";
+      sha256 = "17j5r7gsa3izrm7zln4mrp7l16h532gvmpas0kzglybicbiz7d56";
+      stripLen = 1;
+    })
+  ];
 
   preBuild = ''
     makeFlagsArray+=(
