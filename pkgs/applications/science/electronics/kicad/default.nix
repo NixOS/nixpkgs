@@ -52,7 +52,10 @@ in stdenv.mkDerivation rec {
   ];
 
   pythonPath = [ wxPython ];
-  propagatedBuildInputs = [ wxPython ];
+  propagatedBuildInputs = [
+    wxPython
+    pythonPackages.six
+  ];
 
   buildInputs = [
     libGLU_combined zlib libX11 pcre libXdmcp glew glm libpthreadstubs
@@ -96,7 +99,6 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
-
     wrapProgram "$out/bin/kicad" \
       --prefix LD_LIBRARY_PATH : "${libngspice}/lib" \
       --prefix XDG_DATA_DIRS : "${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}" \
