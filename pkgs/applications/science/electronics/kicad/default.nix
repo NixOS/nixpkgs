@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     lndir
   ];
 
-  pythonPath = [ wxPython ];
+  pythonPath = [ wxPython pythonPackages.six ];
   propagatedBuildInputs = [
     wxPython
     pythonPackages.six
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     libGLU_combined zlib libX11 pcre libXdmcp glew glm libpthreadstubs
-    cairo curl openssl boost wxGTK swig wxPython
+    cairo curl openssl boost wxGTK swig
   ] ++ optional (oceSupport) opencascade
     ++ optional (ngspiceSupport) libngspice;
 
@@ -98,13 +98,15 @@ in stdenv.mkDerivation rec {
 # since wrapGApp needs most of these set explicitly anyway (with dontWrapGApps = true;), lets not depend on it
   preFixup = ''
     buildPythonPath "$out $pythonPath"
-    gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
     wrapProgram "$out/bin/kicad" \
       --prefix LD_LIBRARY_PATH : "${libngspice}/lib" \
       --prefix XDG_DATA_DIRS : "${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}" \
       --prefix XDG_DATA_DIRS : ""${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
-      --prefix XDG_DATA_DIRS : "$out/share"
+      --prefix XDG_DATA_DIRS : "$out/share" \
+      --set PYTHONPATH "$program_PYTHONPATH"
+    wrapProgram "$out/bin/pcbnew" \
+      --set PYTHONPATH "$program_PYTHONPATH"
   '';
 
   meta = {
