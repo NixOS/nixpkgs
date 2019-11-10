@@ -4690,6 +4690,8 @@ in {
 
   pyhocon = callPackage ../development/python-modules/pyhocon { };
 
+  pyjson5 = callPackage ../development/python-modules/pyjson5 {};
+
   pymaging = callPackage ../development/python-modules/pymaging { };
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
