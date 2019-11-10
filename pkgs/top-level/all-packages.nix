@@ -2786,7 +2786,9 @@ in
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
-  dolphinEmu = callPackage ../misc/emulators/dolphin-emu { };
+  dolphinEmu = callPackage ../misc/emulators/dolphin-emu {
+    wxGTK30 = wxGTK30.override { withGtk2 = true; };
+  };
   dolphinEmuMaster = qt5.callPackage ../misc/emulators/dolphin-emu/master.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
   };
