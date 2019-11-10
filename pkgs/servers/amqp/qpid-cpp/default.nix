@@ -33,7 +33,7 @@ let
       sed -i '/management/d' CMakeLists.txt
     '';
 
-    NIX_CFLAGS_COMPILE = toString [
+    env.NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=deprecated-declarations"
       "-Wno-error=int-in-bool-context"
       "-Wno-error=maybe-uninitialized"
