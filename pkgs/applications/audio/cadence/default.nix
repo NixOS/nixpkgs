@@ -37,7 +37,7 @@
   dontWrapQtApps = true;
 
   # Replace with our own wrappers. They need to be changed manually since it wouldn't work otherwise.
-  postInstall = let
+  preFixup = let
     outRef = placeholder "out";
     prefix = "${outRef}/share/cadence/src";
     scriptAndSource = lib.mapAttrs' (script: source:
