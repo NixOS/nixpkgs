@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
+, alsaLib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , factorio-utils
 , releaseType
 , mods ? []
@@ -39,7 +39,7 @@ let
     the store using e.g.:
 
       releaseType=alpha
-      version=0.16.51
+      version=0.17.74
       nix-prefetch-url file://$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
@@ -52,15 +52,15 @@ let
   binDists = {
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
       alpha = {
-        stable        = bdist { sha256 = "0b4hbpdcrh5hgip9q5dkmw22p66lcdhnr0kmb0w5dw6yi7fnxxh0"; version = "0.16.51"; withAuth = true; };
-        experimental  = bdist { sha256 = "1q66chnxsdlaz1bj3al62iikyxvknj1vkwh5bcc46favy4wpqpzz"; version = "0.17.52"; withAuth = true; };
+        stable        = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
+        experimental  = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
       };
       headless = {
-        stable        = bdist { sha256 = "0zrnpg2js0ysvx9y50h3gajldk16mv02dvrwnkazh5kzr1d9zc3c"; version = "0.16.51"; };
-        experimental  = bdist { sha256 = "03nv0qagv5pmqqbisf0hq6cb5rg2ih37lzkvcxihnnw72r78li94"; version = "0.17.52"; };
+        stable        = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
+        experimental  = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
       };
       demo = {
-        stable        = bdist { sha256 = "0zf61z8937yd8pyrjrqdjgd0rjl7snwrm3xw86vv7s7p835san6a"; version = "0.16.51"; };
+        stable        = bdist { sha256 = "07qknasaqvzl9vy1fglm7xmdi7ynhmslrb0a209fhbfs0s7qqlgi"; version = "0.17.79"; };
       };
     };
     i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
@@ -175,10 +175,11 @@ let
     headless = base;
     demo = base // {
 
-      buildInputs = [ makeWrapper ];
+      buildInputs = [ makeWrapper libpulseaudio ];
 
       libPath = stdenv.lib.makeLibraryPath [
         alsaLib
+        libpulseaudio
         libX11
         libXcursor
         libXinerama
