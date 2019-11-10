@@ -934,6 +934,12 @@
     githubId = 5718007;
     name = "Bastian Köcher";
   };
+  blitz = {
+    email = "js@alien8.de";
+    github = "blitz";
+    githubId = 37907;
+    name = "Julian Stecklina";
+  };
   bluescreen303 = {
     email = "mathijs@bluescreen303.nl";
     github = "bluescreen303";
