@@ -1,6 +1,8 @@
 { stdenv
 , fetchurl
 , substituteAll
+, glib
+, libxml2
 , openconnect
 , intltool
 , pkgconfig
@@ -41,6 +43,8 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    glib
+    libxml2
     openconnect
     networkmanager
   ] ++ stdenv.lib.optionals withGnome [
