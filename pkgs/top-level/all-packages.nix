@@ -1500,6 +1500,8 @@ in
 
   dateutils = callPackage ../tools/misc/dateutils { };
 
+  datovka = libsForQt5.callPackage ../applications/networking/datovka { };
+
   ddar = callPackage ../tools/backup/ddar { };
 
   ddate = callPackage ../tools/misc/ddate { };
