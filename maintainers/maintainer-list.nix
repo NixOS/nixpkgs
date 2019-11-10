@@ -1401,6 +1401,12 @@
     githubId = 411324;
     name = "Carles Pagès";
   };
+  craigem = {
+    email = "craige@mcwhirter.io";
+    github = "craigem";
+    githubId = "6470493";
+    name = "Craige McWhirter";
+  };
   cransom = {
     email = "cransom@hubns.net";
     github = "cransom";
