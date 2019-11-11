@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = (stdenv.lib.optionalString stdenv.isDarwin ''
-    for file in out-shared/*.dylib*; do
-      install_name_tool -id $out/lib/$file $file
+    for file in out-shared/*.dylib.*.*; do
+      install_name_tool -id $out/lib/$(basename $file) $file
     done
   '') + # XXX consider removing above after transition to cmake in the next release
   "
