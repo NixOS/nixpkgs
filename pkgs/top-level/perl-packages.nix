@@ -1175,6 +1175,21 @@ let
     };
   };
 
+  CacheKyotoTycoon = buildPerlModule {
+    pname = "Cache-KyotoTycoon";
+    version = "0.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Cache-KyotoTycoon-0.16.tar.gz";
+      sha256 = "0z4lnc3jfqx8rykm998q2jy5wkhb8p5pir80g9lqpi4lb0ilic6c";
+    };
+    propagatedBuildInputs = [ Furl URI ];
+    buildInputs = [ FileWhich TestTCP TestRequires TestSharedFork ];
+    meta = {
+      description = "KyotoTycoon client library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CacheMemcached = buildPerlPackage {
     pname = "Cache-Memcached";
     version = "1.30";
@@ -7401,6 +7416,21 @@ let
       sha256 = "0h8gakd6b9770n2xhld1hhqghdar3hrq2js4mgiwxy86j4r0hpiw";
     };
     doCheck = false;
+  };
+
+  Furl = buildPerlModule {
+    pname = "Furl";
+    version = "3.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Furl-3.13.tar.gz";
+      sha256 = "1wxa2v9yjzvnzp62p1jvcx8x61z5qvlvzyah853vvaywpjxwyyl8";
+    };
+    propagatedBuildInputs = [ HTTPParserXS ModuleBuildTiny ClassAccessorLite ];
+    buildInputs = [ HTTPBody HTTPProxy NetIDNEncode Plack PlackMiddlewareDeflater Starlet TestRequires TestTCP TestSharedFork ];
+    meta = {
+      description = "Lightning-fast URL fetcher";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   GamesSolitaireVerify = buildPerlModule {
