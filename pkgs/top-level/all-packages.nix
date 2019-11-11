@@ -2311,6 +2311,8 @@ in
     buildGoModule = buildGo112Module;
   };
 
+  circus = callPackage ../tools/networking/circus { };
+
   # Cleanup before 20.03:
   citrix_receiver = throw "citrix_receiver has been discontinued by Citrix (https://docs.citrix.com/en-us/citrix-workspace-app.html). Please use citrix_workspace.";
   citrix_receiver_13_10_0 = citrix_receiver;
@@ -2969,6 +2971,7 @@ in
   evemu = callPackage ../tools/system/evemu { };
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
+  # When updating make sure to update all plugins or they will break!
   elk6Version = "6.8.3";
   elk7Version = "7.3.1";
 
@@ -4387,6 +4390,8 @@ in
   libcryptui = callPackage ../development/libraries/libcryptui { };
 
   libsmi = callPackage ../development/libraries/libsmi { };
+
+  licensor = callPackage ../tools/misc/licensor { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
 
@@ -6757,9 +6762,7 @@ in
 
   trilium = callPackage ../applications/office/trilium { };
 
-  trousers = callPackage ../tools/security/trousers {
-    openssl = openssl_1_0_2;
-  };
+  trousers = callPackage ../tools/security/trousers { };
 
   trx = callPackage ../tools/audio/trx { };
 
@@ -25337,9 +25340,7 @@ in
 
   zimg = callPackage ../development/libraries/zimg { };
 
-  wtf = callPackage ../applications/misc/wtf {
-    buildGoModule = buildGo112Module;
-  };
+  wtf = callPackage ../applications/misc/wtf { };
 
   zk-shell = callPackage ../applications/misc/zk-shell { };
 
