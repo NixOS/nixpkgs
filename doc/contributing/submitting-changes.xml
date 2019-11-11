@@ -305,6 +305,11 @@ Additional information.
     review uncommitted changes:
 <screen>nix-shell -p nix-review --run "nix-review wip"</screen>
    </para>
+
+   <para>
+    review changes from last commit:
+<screen>nix-shell -p nix-review --run "nix-review ref HEAD"</screen>
+   </para>
   </section>
 
   <section xml:id="submitting-changes-tested-execution">
