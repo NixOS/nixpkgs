@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl
+, autoreconfHook
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
 }:
 
@@ -23,12 +24,17 @@ stdenv.mkDerivation rec {
 
   patches =
     # https://github.com/ivmai/bdwgc/pull/208
-    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
+    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch
+    # boehm-gc whitelists GCC threading models
+    ++ lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
 
   configureFlags =
     [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
     ++ lib.optional enableLargeConfig "--enable-large-config"
     ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static";
+
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isMinGW autoreconfHook;
 
   doCheck = true; # not cross;
 
