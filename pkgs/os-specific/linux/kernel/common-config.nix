@@ -24,6 +24,13 @@ let
   # configuration items have to be part of a subattrs
   flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));
 
+  whenPlatformHasEBPFJit =
+    mkIf (stdenv.hostPlatform.isAarch32 ||
+          stdenv.hostPlatform.isAarch64 ||
+          stdenv.hostPlatform.isx86_64 ||
+          (stdenv.hostPlatform.isPowerPC && stdenv.hostPlatform.is64bit) ||
+          (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit));
+
   options = {
 
     debug = {
@@ -106,7 +113,12 @@ let
       IP_DCCP_CCID3      = no; # experimental
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;
-      BPF_JIT            = mkIf (stdenv.hostPlatform.system == "x86_64-linux") yes;
+      BPF_JIT            = whenPlatformHasEBPFJit yes;
+      BPF_JIT_ALWAYS_ON  = whenPlatformHasEBPFJit yes;
+      HAVE_EBPF_JIT      = whenPlatformHasEBPFJit yes;
+      BPF_STREAM_PARSER  = whenAtLeast "4.19" yes;
+      XDP_SOCKETS        = whenAtLeast "4.19" yes;
+      XDP_SOCKETS_DIAG   = whenAtLeast "4.19" yes;
       WAN                = yes;
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
