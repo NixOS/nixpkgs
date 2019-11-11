@@ -3,7 +3,17 @@
 {
   ansible = with python3Packages; toPythonApplication ansible;
 
-  ansible_2_8 = with python3Packages; toPythonApplication ansible;
+  ansible_2_9 = with python3Packages; toPythonApplication ansible;
+
+  ansible_2_8 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
+    pname = "ansible";
+    version = "2.8.4";
+
+    src = fetchurl {
+      url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
+      sha256 = "1wczcxv8n8x59vz770h4zvqlr063lf8wsygiglq7x6v1wcnkw5d0";
+    };
+  }));
 
   ansible_2_7 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
     pname = "ansible";

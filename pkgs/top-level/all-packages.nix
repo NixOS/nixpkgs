@@ -9365,7 +9365,8 @@ in
   inherit (callPackage ../tools/admin/ansible { })
     ansible
     ansible_2_6
-    ansible_2_7;
+    ansible_2_7
+    ansible_2_8;
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
