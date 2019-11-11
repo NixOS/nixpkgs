@@ -23,9 +23,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which openblas curl
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ]
+    pkgconfig bison imake which openblas curl tcl tk
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ]
     ++ stdenv.lib.optional javaSupport jdk;
 
   patches = [
@@ -62,8 +61,6 @@ stdenv.mkDerivation rec {
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-      --without-tcltk
-      --without-aqua
       --disable-R-framework
       OBJC="clang"
       CPPFLAGS="-isystem ${libcxx}/include/c++/v1"

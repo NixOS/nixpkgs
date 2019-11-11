@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     platforms = ocaml.meta.platforms or [];
     license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [
-      z77z
+      maggesi
     ];
   };
 }

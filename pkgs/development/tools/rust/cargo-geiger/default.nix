@@ -1,6 +1,8 @@
 { stdenv, lib, fetchFromGitHub
-, rustPlatform, pkgconfig
-, openssl, Security }:
+, rustPlatform, pkgconfig, openssl
+# darwin dependencies
+, Security, CoreFoundation, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
@@ -26,8 +28,15 @@ rustPlatform.buildRustPackage rec {
     --skip test_package::case_6
   '';
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
   nativeBuildInputs = [ pkgconfig ];
+
+  # FIXME: Use impure version of CoreFoundation because of missing symbols.
+  # CFURLSetResourcePropertyForKey is defined in the headers but there's no
+  # corresponding implementation in the sources from opensource.apple.com.
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
+  '';
 
   meta = with lib; {
     description = "Detects usage of unsafe Rust in a Rust crate and its dependencies.";

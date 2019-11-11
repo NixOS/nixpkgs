@@ -10,6 +10,7 @@ buildPythonPackage rec {
     sha256 = "19dc27bfb3c72471bd30a235a4d5fbefef8a7e31cab367744b5d87a205e7bfd9";
   };
 
+  patches = [ ./black-19.10b0.patch ];
   postPatch = ''
     substituteInPlace pytest.ini --replace "--flake8" ""
   '';

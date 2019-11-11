@@ -1,7 +1,7 @@
 {stdenv, composeXcodeWrapper}:
 { name
 , src
-, sdkVersion ? "12.1"
+, sdkVersion ? "13.1"
 , target ? null
 , configuration ? null
 , scheme ? null

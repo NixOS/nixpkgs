@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
     maintainers = with maintainers; [
       raskin
-      z77z
+      maggesi
       vrthra
     ];
     platforms = [ "x86_64-linux" ];

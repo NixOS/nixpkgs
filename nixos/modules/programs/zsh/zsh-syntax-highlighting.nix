@@ -81,7 +81,7 @@ in
     ];
 
     programs.zsh.interactiveShellInit = with pkgs;
-      lib.concatStringsSep "\n" ([
+      lib.mkAfter (lib.concatStringsSep "\n" ([
         "source ${zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
       ] ++ optional (length(cfg.highlighters) > 0)
         "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${concatStringsSep " " cfg.highlighters})"
@@ -95,6 +95,6 @@ in
             styles: design:
             "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'"
           ) cfg.styles)
-      );
+      ));
   };
 }

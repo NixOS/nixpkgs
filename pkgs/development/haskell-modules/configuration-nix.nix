@@ -500,8 +500,8 @@ self: super: builtins.intersectAttrs super {
   # requires autotools to build
   secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
-  # tests require git
-  hapistrano = addBuildTool super.hapistrano pkgs.buildPackages.git;
+  # tests require git and zsh
+  hapistrano = addBuildTools super.hapistrano [ pkgs.buildPackages.git pkgs.buildPackages.zsh ];
 
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobject-introspection;

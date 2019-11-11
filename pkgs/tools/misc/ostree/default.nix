@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gjs
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gjs, nixosTests
 , glib, systemd, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse, utillinuxMinimal, libselinux
 , libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42, python3
 }:
@@ -53,6 +53,12 @@ stdenv.mkDerivation rec {
     "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
+
+  passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.ostree;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";

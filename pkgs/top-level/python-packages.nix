@@ -2243,8 +2243,6 @@ in {
 
   howdoi = callPackage ../development/python-modules/howdoi {};
 
-  neurotools = callPackage ../development/python-modules/neurotools {};
-
   jdatetime = callPackage ../development/python-modules/jdatetime {};
 
   daphne = callPackage ../development/python-modules/daphne { };
@@ -2421,6 +2419,12 @@ in {
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
 
   fx2 = callPackage ../development/python-modules/fx2 { };
+
+  # gaia isn't supported with python3 and it's not available from pypi
+  gaia = disabledIf (isPyPy || isPy3k) (toPythonModule (pkgs.gaia.override {
+    pythonPackages = self;
+    pythonSupport = true;
+  }));
 
   gateone = callPackage ../development/python-modules/gateone { };
 
@@ -2646,6 +2650,8 @@ in {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik { };
 
+  measurement = callPackage ../development/python-modules/measurement {};
+
   midiutil = callPackage ../development/python-modules/midiutil {};
 
   misaka = callPackage ../development/python-modules/misaka {};
@@ -2659,6 +2665,8 @@ in {
   mwlib-ext = callPackage ../development/python-modules/mwlib-ext { };
 
   mwlib-rl = callPackage ../development/python-modules/mwlib-rl { };
+
+  myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
   natsort = callPackage ../development/python-modules/natsort { };
 

@@ -55,7 +55,7 @@ in buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://gitlab.com/gitlab-org/gitaly;
     description = "A Git RPC service for handling all the git calls made by GitLab";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ roblabla globin fpletz ];
     license = licenses.mit;
   };
