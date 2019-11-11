@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  PREFIX = placeholder "out";
-  LIBDIRNAME = "/lib";
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type -Wno-error=format-truncation";
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type -Wno-error=format-truncation";
+    PREFIX = placeholder "out";
+    LIBDIRNAME = "/lib";
+  };
 
   checkInputs = [ perl ];
 
