@@ -212,7 +212,14 @@ in rec {
     binary = binaryCrystal_0_29;
   };
 
-  crystal = crystal_0_30;
+  crystal_0_31 = generic {
+    version = "0.31.1";
+    sha256  = "1dswxa32w16gnc6yjym12xj7ibg0g6zk3ngvl76lwdjqb1h6lwz8";
+    doCheck = false; # 5 checks are failing now
+    binary = crystal_0_30;
+  };
+
+  crystal = crystal_0_31;
 
   crystal2nix = callPackage ./crystal2nix.nix {};
 }

@@ -1401,6 +1401,12 @@
     githubId = 411324;
     name = "Carles Pagès";
   };
+  craigem = {
+    email = "craige@mcwhirter.io";
+    github = "craigem";
+    githubId = "6470493";
+    name = "Craige McWhirter";
+  };
   cransom = {
     email = "cransom@hubns.net";
     github = "cransom";
@@ -6517,6 +6523,12 @@
     github = "tari";
     githubId = 506181;
     name = "Peter Marheine";
+  };
+  tasmo = {
+    email = "tasmo@tasmo.de";
+    github = "tasmo";
+    githubId = 102685;
+    name = "Thomas Friese";
   };
   tavyc = {
     email = "octavian.cerna@gmail.com";

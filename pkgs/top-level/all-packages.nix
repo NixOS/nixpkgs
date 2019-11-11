@@ -780,6 +780,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  calls = callPackage ../applications/networking/calls { };
+
   certigo = callPackage ../tools/admin/certigo { };
 
   chezmoi = callPackage ../tools/misc/chezmoi { };
@@ -806,6 +808,8 @@ in
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   claws = callPackage ../tools/misc/claws { };
+
+  cloud-custodian = python3Packages.callPackage ../tools/networking/cloud-custodian  { };
 
   codespell = with python3Packages; toPythonApplication codespell;
 
@@ -1454,7 +1458,9 @@ in
 
   colorls = callPackage ../tools/system/colorls { };
 
-  coloursum = callPackage ../tools/text/coloursum { };
+  coloursum = callPackage ../tools/text/coloursum {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   compsize = callPackage ../os-specific/linux/compsize { };
 
@@ -1495,6 +1501,8 @@ in
   datefudge = callPackage ../tools/system/datefudge { };
 
   dateutils = callPackage ../tools/misc/dateutils { };
+
+  datovka = libsForQt5.callPackage ../applications/networking/datovka { };
 
   ddar = callPackage ../tools/backup/ddar { };
 
@@ -1683,6 +1691,8 @@ in
   firectl = callPackage ../applications/virtualization/firectl { };
 
   firestarter = callPackage ../applications/misc/firestarter { };
+
+  fselect = callPackage ../tools/misc/fselect { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
 
@@ -4653,6 +4663,8 @@ in
 
   libircclient = callPackage ../development/libraries/libircclient { };
 
+  libisds = callPackage ../development/libraries/libisds { };
+
   libite = callPackage ../development/libraries/libite { };
 
   liblangtag = callPackage ../development/libraries/liblangtag {
@@ -6100,8 +6112,6 @@ in
   s6-networking = skawarePackages.s6-networking;
 
   s6-portable-utils = skawarePackages.s6-portable-utils;
-
-  sablotron = callPackage ../tools/text/xml/sablotron { };
 
   safecopy = callPackage ../tools/system/safecopy { };
 
@@ -7670,6 +7680,7 @@ in
     crystal_0_27
     crystal_0_29
     crystal_0_30
+    crystal_0_31
     crystal
     crystal2nix;
 
@@ -8268,6 +8279,8 @@ in
         inherit installjdk pluginSupport;
       });
 
+  jasmin = callPackage ../development/compilers/jasmin { };
+
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
   julia_07 = callPackage ../development/compilers/julia/0.7.nix {
@@ -8610,6 +8623,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   rustracerd = callPackage ../development/tools/rust/racerd {
+    inherit (rustPackages_1_38_0) rustPlatform;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
@@ -9750,6 +9764,8 @@ in
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
+
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
@@ -10563,9 +10579,11 @@ in
     stdenv = gcc6Stdenv;
   };
 
-  arrow-cpp = callPackage ../development/libraries/arrow-cpp {
+  arrow-cpp = callPackage ../development/libraries/arrow-cpp ({
     gtest = gtest.override { static = true; };
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6; # hidden symbol `__divmoddi4'
+  });
 
   assimp = callPackage ../development/libraries/assimp { };
 
@@ -13756,6 +13774,8 @@ in
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
   qgnomeplatform =  libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
+
+  randomx = callPackage ../development/libraries/randomx { };
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
@@ -18465,6 +18485,8 @@ in
   ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
 
   epic5 = callPackage ../applications/networking/irc/epic5 { };
+
+  epr = callPackage ../applications/misc/epr { };
 
   eq10q = callPackage ../applications/audio/eq10q { };
 

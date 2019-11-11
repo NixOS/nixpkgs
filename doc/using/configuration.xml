@@ -142,7 +142,7 @@
 <programlisting>
 {
   allowUnfreePredicate = (pkg: builtins.elem
-    (builtins.parseDrvName pkg.name).name [
+    (pkg.pname or (builtins.parseDrvName pkg.name).name) [
       "flashplayer"
       "vscode"
     ]);

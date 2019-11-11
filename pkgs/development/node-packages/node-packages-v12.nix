@@ -2047,13 +2047,13 @@ let
         sha512 = "w2VwSrBoHa5BsSyH+KxEqeQBAllHhccyMFVHtGtdMpF4W7IRWfZjFiQceJPChOeTsSDVUpER2T8FA93pr0L+QA==";
       };
     };
-    "temp-0.9.0" = {
+    "temp-0.9.1" = {
       name = "temp";
       packageName = "temp";
-      version = "0.9.0";
+      version = "0.9.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/temp/-/temp-0.9.0.tgz";
-        sha512 = "YfUhPQCJoNQE5N+FJQcdPz63O3x3sdT4Xju69Gj4iZe0lBKOtnAMi0SLj9xKhGkcGhsxThvTJ/usxtFPo438zQ==";
+        url = "https://registry.npmjs.org/temp/-/temp-0.9.1.tgz";
+        sha512 = "WMuOgiua1xb5R56lE0eH6ivpVmg/lq2OHm4+LtT/xtEtPQ+sz6N3bBM6WZ5FvO1lO4IKIOb43qnhoc4qxP5OeA==";
       };
     };
     "to-object-path-0.3.0" = {
@@ -2749,7 +2749,7 @@ in
       })
       sources."strip-ansi-3.0.1"
       sources."tar-4.4.13"
-      sources."temp-0.9.0"
+      sources."temp-0.9.1"
       (sources."tough-cookie-2.4.3" // {
         dependencies = [
           sources."punycode-1.4.1"
