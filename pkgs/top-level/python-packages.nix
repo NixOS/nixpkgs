@@ -4285,6 +4285,8 @@ in {
   else
     callPackage ../development/python-modules/path.py/2.nix { };
 
+  patool = callPackage ../tools/archivers/patool { };
+
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
 
   pbr = callPackage ../development/python-modules/pbr { };
@@ -6456,7 +6458,6 @@ in {
   hcloud = callPackage ../development/python-modules/hcloud { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
-
 });
 
 in fix' (extends overrides packages)
