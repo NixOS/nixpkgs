@@ -8575,6 +8575,9 @@ in
   cargo-audit = callPackage ../tools/package-management/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-deb = callPackage ../tools/package-management/cargo-deb {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-deps = callPackage ../tools/package-management/cargo-deps { };
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
