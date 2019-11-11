@@ -1,7 +1,7 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonApplication, fetchPypi
 , iowait, psutil, pyzmq, tornado_4, mock }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   pname = "circus";
   version = "0.15.0";
 
