@@ -7,6 +7,11 @@ let
   };
 in
 nodePackages // {
+  "@angular/cli" = nodePackages."@angular/cli".override {
+    prePatch = ''
+      export NG_CLI_ANALYTICS=false
+    '';
+  };
   bower2nix = nodePackages.bower2nix.override {
     buildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
