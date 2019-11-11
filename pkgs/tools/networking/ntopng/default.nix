@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
 , geoip, geolite-legacy, sqlite, which, autoreconfHook, mariadb, readline80
-, pkgconfig, groff, curl, json_c, zeromq, rrdtool, libmaxminddb
+, pkgconfig, groff, curl, json_c, lua5_3, zeromq, rrdtool, libmaxminddb
 }:
 
-# ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
-# directory, but we use zeromq, and rrdtool from nixpkgs
+# ntopng includes Lua, mongoose, rrdtool and zeromq in its third-party/
+# directory, but we use lua, zeromq, and rrdtool from nixpkgs
 
 let
   ndpi = fetchFromGitHub {
@@ -27,15 +27,19 @@ in stdenv.mkDerivation rec {
   postUnpack = ''
     cp    --recursive ${ndpi} $sourceRoot/nDPI
     chmod --recursive +w $sourceRoot/nDPI
+    # ensure that lua or rrdtool from third-party is not used accidentally
+    rm --recursive --force $sourceRoot/third-party/lua-5.*
+    rm --recursive --force $sourceRoot/third-party/rrdtool-*
   '';
 
   patches = [
     ./0001-Undo-weird-modification-of-data_dir.patch
     ./0002-fix-cookie-match-issue.patch
+    ./0003-skip-building-lua.patch
   ];
 
   buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 libmaxminddb glib geoip geolite-legacy
-    sqlite curl json_c zeromq mariadb readline80 rrdtool ];
+    sqlite curl json_c lua5_3 zeromq mariadb readline80 rrdtool ];
 
   nativeBuildInputs = [ autoreconfHook groff pkgconfig which ];
 
