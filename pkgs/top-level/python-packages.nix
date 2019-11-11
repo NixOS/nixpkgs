@@ -234,6 +234,8 @@ in {
 
   atomman = callPackage ../development/python-modules/atomman { };
 
+  authlib = callPackage ../development/python-modules/authlib { };
+
   # packages defined elsewhere
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
