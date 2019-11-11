@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from xml.sax.saxutils import XMLGenerator
 import _thread
 import atexit
+import base64
 import json
 import os
 import ptpython.repl
@@ -709,6 +710,13 @@ class Machine:
         """Make the machine reachable.
         """
         self.send_monitor_command("set_link virtio-net-pci.1 on")
+
+    def copy_file_from_host(self, from_path, to_path):
+        """Copy a file to the machine.
+        """
+        with open(from_path, "rb") as f:
+            content = base64.b64encode(f.read())
+            self.succeed("echo '{}' | base64 -d > {}".format(content.decode(), to_path))
 
 
 def create_machine(args):
