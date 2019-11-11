@@ -1948,6 +1948,20 @@ let
     };
   };
 
+  CDB_File = buildPerlPackage {
+    pname = "CDB_File";
+    version = "0.99";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/CDB_File-0.99.tar.gz";
+      sha256 = "1c32b30131871e8a7b23f47d8f65d9cdeb87069fa4c221781a03416496f91f16";
+    };
+    meta = {
+      homepage = "http://github.com/toddr/CDB_File";
+      description = "Perl extension for access to cdb databases";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Catmandu = buildPerlModule {
     pname = "Catmandu";
     version = "1.2002";
