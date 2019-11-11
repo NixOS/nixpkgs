@@ -1,7 +1,9 @@
 { stdenv, fetchurl, pkgconfig
 
 # Optional Dependencies
-, openssl ? null, libev ? null, zlib ? null, c-ares ? null
+, openssl ? null, zlib ? null
+, enableLibEv ? !stdenv.hostPlatform.isWindows, libev ? null
+, enableCAres ? !stdenv.hostPlatform.isWindows, c-ares ? null
 , enableHpack ? false, jansson ? null
 , enableAsioLib ? false, boost ? null
 , enableGetAssets ? false, libxml2 ? null
@@ -28,7 +30,10 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libev zlib c-ares ]
+  buildInputs = [ openssl ]
+    ++ optional enableLibEv libev
+    ++ [ zlib ]
+    ++ optional enableCAres c-ares
     ++ optional enableHpack jansson
     ++ optional enableAsioLib boost
     ++ optional enableGetAssets libxml2
