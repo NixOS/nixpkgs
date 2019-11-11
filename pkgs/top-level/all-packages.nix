@@ -4002,6 +4002,8 @@ in
 
   hylafaxplus = callPackage ../servers/hylafaxplus { };
 
+  hyphen = callPackage ../development/libraries/hyphen { };
+
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
 
   i2p = callPackage ../tools/networking/i2p {};
