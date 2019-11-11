@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perlPackages, libXft
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perlPackages, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, gtkspell2, cairo, python2, poppler, imagemagick, libwpg, librevenge
@@ -18,6 +18,14 @@ stdenv.mkDerivation rec {
     url = "https://media.inkscape.org/dl/resources/file/${name}.tar.bz2";
     sha256 = "0pjinhjibfsz1aywdpgpj3k23xrsszpj4a1ya5562dkv2yl2vv2p";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "inkscape-poppler_0_76_compat.patch";
+      url = "https://gitlab.com/inkscape/inkscape/commit/e831b034746f8dc3c3c1b88372751f6dcb974831.diff";
+      sha256 = "096rdyi6ppjq1h9jwwsm9hb99nggfrfinik8rm23jkn4h2zl01zf";
+    })
+  ];
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
   # CMake’s ARGMAX check doesn’t offer enough padding for NIX_LDFLAGS.

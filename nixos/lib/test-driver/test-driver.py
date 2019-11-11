@@ -4,7 +4,9 @@ from contextlib import contextmanager
 from xml.sax.saxutils import XMLGenerator
 import _thread
 import atexit
+import json
 import os
+import ptpython.repl
 import pty
 import queue
 import re
@@ -15,7 +17,6 @@ import sys
 import tempfile
 import time
 import unicodedata
-import ptpython.repl
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -305,7 +306,7 @@ class Machine:
             if state == "inactive":
                 status, jobs = self.systemctl("list-jobs --full 2>&1", user)
                 if "No jobs" in jobs:
-                    info = self.get_unit_info(unit)
+                    info = self.get_unit_info(unit, user)
                     if info["ActiveState"] == state:
                         raise Exception(
                             (
@@ -318,7 +319,11 @@ class Machine:
     def get_unit_info(self, unit, user=None):
         status, lines = self.systemctl('--no-pager show "{}"'.format(unit), user)
         if status != 0:
-            return None
+            raise Exception(
+                'retrieving systemctl info for unit "{}" {} failed with exit code {}'.format(
+                    unit, "" if user is None else 'under user "{}"'.format(user), status
+                )
+            )
 
         line_pattern = re.compile(r"^([^=]+)=(.*)$")
 
@@ -343,6 +348,18 @@ class Machine:
                 ).format(user, q)
             )
         return self.execute("systemctl {}".format(q))
+
+    def require_unit_state(self, unit, require_state="active"):
+        with self.nested(
+            "checking if unit ‘{}’ has reached state '{}'".format(unit, require_state)
+        ):
+            info = self.get_unit_info(unit)
+            state = info["ActiveState"]
+            if state != require_state:
+                raise Exception(
+                    "Expected unit ‘{}’ to to be in state ".format(unit)
+                    + "'active' but it is in state ‘{}’".format(state)
+                )
 
     def execute(self, command):
         self.connect()
@@ -494,6 +511,11 @@ class Machine:
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
 
+    def dump_tty_contents(self, tty):
+        """Debugging: Dump the contents of the TTY<n>
+        """
+        self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
+
     def get_screen_text(self):
         if shutil.which("tesseract") is None:
             raise Exception("get_screen_text used but enableOCR is false")
@@ -588,7 +610,7 @@ class Machine:
             stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            shell=False,
+            shell=True,
             cwd=self.state_dir,
             env=environment,
         )
@@ -597,7 +619,7 @@ class Machine:
 
         def process_serial_output():
             for line in self.process.stdout:
-                line = line.decode().replace("\r", "").rstrip()
+                line = line.decode("unicode_escape").replace("\r", "").rstrip()
                 eprint("{} # {}".format(self.name, line))
                 self.logger.enqueue({"msg": line, "machine": self.name})
 
@@ -611,14 +633,14 @@ class Machine:
         self.log("QEMU running (pid {})".format(self.pid))
 
     def shutdown(self):
-        if self.booted:
+        if not self.booted:
             return
 
         self.shell.send("poweroff\n".encode())
         self.wait_for_shutdown()
 
     def crash(self):
-        if self.booted:
+        if not self.booted:
             return
 
         self.log("forced crash")
@@ -642,8 +664,37 @@ class Machine:
                 if status == 0:
                     return
 
+    def get_window_names(self):
+        return self.succeed(
+            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
+        ).splitlines()
+
+    def wait_for_window(self, regexp):
+        pattern = re.compile(regexp)
+
+        def window_is_visible(last_try):
+            names = self.get_window_names()
+            if last_try:
+                self.log(
+                    "Last chance to match {} on the window list,".format(regexp)
+                    + " which currently contains: "
+                    + ", ".join(names)
+                )
+            return any(pattern.search(name) for name in names)
+
+        with self.nested("Waiting for a window to appear"):
+            retry(window_is_visible)
+
     def sleep(self, secs):
         time.sleep(secs)
+
+    def forward_port(self, host_port=8080, guest_port=80):
+        """Forward a TCP port on the host to a TCP port on the guest.
+        Useful during interactive testing.
+        """
+        self.send_monitor_command(
+            "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
+        )
 
     def block(self):
         """Make the machine unreachable by shutting down eth1 (the multicast

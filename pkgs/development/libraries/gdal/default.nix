@@ -20,7 +20,15 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/gdal";
 
-  patches = [ ./001.3_0_1.darwin.patch ];
+  patches = [
+    ./001.3_0_1.darwin.patch
+    (fetchpatch {
+      name = "CVE-2019-17545.patch";
+      url = "https://github.com/OSGeo/gdal/commit/148115fcc40f1651a5d15fa34c9a8c528e7147bb.patch";
+      stripLen = 1;
+      sha256 = "0hai59hhvrci9xwjw4lp3wc1brn00imngmqrbbs8v9yr3b0fzbgs";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

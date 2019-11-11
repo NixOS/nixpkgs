@@ -22,6 +22,6 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     branch = "108";
     platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [ z77z ];
+    maintainers = with maintainers; [ maggesi ];
   };
 }

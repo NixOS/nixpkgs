@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , substituteAll
+, nixosTests
 
 , autoreconfHook
 , docbook_xml_dtd_412
@@ -131,7 +132,16 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    installedTestsDependencies = [ gnupg ostree python2 gnumake ];
+    installedTestsDependencies = [
+      gnupg
+      ostree
+      python2
+      gnumake
+    ];
+
+    tests = {
+      installedTests = nixosTests.installed-tests.flatpak-builder;
+    };
   };
 
   meta = with stdenv.lib; {

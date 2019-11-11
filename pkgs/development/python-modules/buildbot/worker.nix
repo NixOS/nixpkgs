@@ -7,7 +7,7 @@ buildPythonPackage (rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8330cf314064516648e78d2685b2eaae14fc9481351eb229f1392b38bdc18815";
+    sha256 = "05c8q6ykharry4lv47imh6agq55fxar8a9ldwx46clb480qwyc43";
   };
 
   propagatedBuildInputs = [ twisted future ];
@@ -20,7 +20,7 @@ buildPythonPackage (rec {
   '';
 
   meta = with lib; {
-    homepage = http://buildbot.net/;
+    homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
     maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
     license = licenses.gpl2;
