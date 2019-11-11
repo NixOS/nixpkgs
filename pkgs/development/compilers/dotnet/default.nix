@@ -11,6 +11,11 @@ let
 in rec {
   combinePackages = attrs: callPackage (import ./combinePackages.nix attrs) {};
 
+  netcore_2_1 = buildNetCore {
+    version = "2.1.13";
+    sha512 = "2gkawhm4vk74qmdlpa9128brirwqxpa1b6w8jmcyd6j4i8lpnkp83jhmjjrjr4jdihchapp8qxb7sa1qdj21yswbpn03n86g8l3gh0h";
+  };
+
   sdk_2_1 = buildNetCoreSdk {
     version = "2.1.509";
     sha512 = "4B7DC25841F56AADDD685ADB227B362177268E3D052B4ADDDAC2530889B6506B7B4768B751AE75F131143424D02EEE77B4565DAD6B49048C39D2C47E39412FDF";
