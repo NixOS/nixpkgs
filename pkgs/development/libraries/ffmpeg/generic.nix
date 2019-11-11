@@ -44,7 +44,7 @@
 
 let
   inherit (stdenv) isDarwin isFreeBSD isLinux isAarch32;
-  inherit (stdenv.lib) optional optionals optionalString enableFeature;
+  inherit (stdenv.lib) optional optionals optionalString enableFeature filter;
 
   cmpVer = builtins.compareVersions;
   reqMin = requiredVersion: (cmpVer requiredVersion branch != 1);
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
 
   configurePlatforms = [];
-  configureFlags = [
+  configureFlags = filter (v: v != null) ([
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
       "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
     # License
@@ -96,13 +96,15 @@ stdenv.mkDerivation rec {
       (ifMinVer "0.6" "--enable-pic")
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
+    ] ++
       (if multithreadBuild then (
          if stdenv.isCygwin then
-           "--disable-pthreads --enable-w32threads"
+           ["--disable-pthreads" "--enable-w32threads"]
          else # Use POSIX threads by default
-           "--enable-pthreads --disable-w32threads")
+           ["--enable-pthreads" "--disable-w32threads"])
        else
-         "--disable-pthreads --disable-w32threads")
+         ["--disable-pthreads" "--disable-w32threads"])
+    ++ [
       (ifMinVer "0.9" "--disable-os2threads") # We don't support OS/2
       "--enable-network"
       (ifMinVer "2.4" "--enable-pixelutils")
@@ -161,7 +163,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
-  ] ++ optional stdenv.cc.isClang "--cc=clang";
+  ] ++ optional stdenv.cc.isClang "--cc=clang");
 
   nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
 
