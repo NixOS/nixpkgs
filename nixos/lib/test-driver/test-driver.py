@@ -381,15 +381,17 @@ class Machine:
 
     def succeed(self, *commands):
         """Execute each command and check that it succeeds."""
+        output = ""
         for command in commands:
             with self.nested("must succeed: {}".format(command)):
-                status, output = self.execute(command)
+                (status, out) = self.execute(command)
                 if status != 0:
-                    self.log("output: {}".format(output))
+                    self.log("output: {}".format(out))
                     raise Exception(
                         "command `{}` failed (exit code {})".format(command, status)
                     )
-                return output
+                output += out
+        return output
 
     def fail(self, *commands):
         """Execute each command and check that it fails."""

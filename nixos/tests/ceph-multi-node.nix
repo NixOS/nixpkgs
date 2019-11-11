@@ -49,9 +49,6 @@ let
     boot.kernelModules = [ "xfs" ];
 
     services.ceph = cephConfig;
-
-    # So that we don't have to battle systemd when bootstraping
-    systemd.targets.ceph.wantedBy = lib.mkForce [];
   };
 
   networkMonA = {
@@ -107,33 +104,16 @@ let
     };
   }; };
 
+  # Following deployment is based on the manual deployment described here:
+  # https://docs.ceph.com/docs/master/install/manual-deployment/
+  # For other ways to deploy a ceph cluster, look at the documentation at
+  # https://docs.ceph.com/docs/master/
   testscript = { ... }: ''
     startAll;
 
     $monA->waitForUnit("network.target");
     $osd0->waitForUnit("network.target");
     $osd1->waitForUnit("network.target");
-
-    # Create the ceph-related directories
-    $monA->mustSucceed(
-      "mkdir -p /var/lib/ceph/mgr/ceph-${cfg.monA.name}",
-      "mkdir -p /var/lib/ceph/mon/ceph-${cfg.monA.name}",
-      "chown ceph:ceph -R /var/lib/ceph/",
-      "mkdir -p /etc/ceph",
-      "chown ceph:ceph -R /etc/ceph"
-    );
-    $osd0->mustSucceed(
-      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
-      "chown ceph:ceph -R /var/lib/ceph/",
-      "mkdir -p /etc/ceph",
-      "chown ceph:ceph -R /etc/ceph"
-    );
-    $osd1->mustSucceed(
-      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
-      "chown ceph:ceph -R /var/lib/ceph/",
-      "mkdir -p /etc/ceph",
-      "chown ceph:ceph -R /etc/ceph"
-    );
 
     # Bootstrap ceph-mon daemon
     $monA->mustSucceed(
@@ -142,6 +122,7 @@ let
       "sudo -u ceph ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
       "monmaptool --create --add ${cfg.monA.name} ${cfg.monA.ip} --fsid ${cfg.clusterId} /tmp/monmap",
       "sudo -u ceph ceph-mon --mkfs -i ${cfg.monA.name} --monmap /tmp/monmap --keyring /tmp/ceph.mon.keyring",
+      "sudo -u ceph mkdir -p /var/lib/ceph/mgr/ceph-${cfg.monA.name}/",
       "sudo -u ceph touch /var/lib/ceph/mon/ceph-${cfg.monA.name}/done",
       "systemctl start ceph-mon-${cfg.monA.name}"
     );
@@ -168,12 +149,14 @@ let
     # Bootstrap both OSDs
     $osd0->mustSucceed(
       "mkfs.xfs /dev/vdb",
+      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
       "mount /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
       "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --add-key ${cfg.osd0.key}",
       "echo '{\"cephx_secret\": \"${cfg.osd0.key}\"}' | ceph osd new ${cfg.osd0.uuid} -i -",
     );
     $osd1->mustSucceed(
       "mkfs.xfs /dev/vdb",
+      "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
       "mount /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
       "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",
       "echo '{\"cephx_secret\": \"${cfg.osd1.key}\"}' | ceph osd new ${cfg.osd1.uuid} -i -"
@@ -209,22 +192,17 @@ let
       "ceph osd pool delete multi-node-other-test multi-node-other-test --yes-i-really-really-mean-it"
     );
 
-    # As we disable the target in the config, we still want to test that it works as intended
-    $osd0->mustSucceed("systemctl stop ceph-osd-${cfg.osd0.name}");
-    $osd1->mustSucceed("systemctl stop ceph-osd-${cfg.osd1.name}");
-    $monA->mustSucceed(
-      "systemctl stop ceph-mgr-${cfg.monA.name}",
-      "systemctl stop ceph-mon-${cfg.monA.name}"
-    );
-    
-    $monA->succeed("systemctl start ceph.target");
-    $monA->waitForUnit("ceph-mon-${cfg.monA.name}");
-    $monA->waitForUnit("ceph-mgr-${cfg.monA.name}");
-    $osd0->succeed("systemctl start ceph.target");
-    $osd0->waitForUnit("ceph-osd-${cfg.osd0.name}");
-    $osd1->succeed("systemctl start ceph.target");
-    $osd1->waitForUnit("ceph-osd-${cfg.osd1.name}");
-    
+    # Shut down ceph on all machines in a very unpolite way
+    $monA->crash;
+    $osd0->crash;
+    $osd1->crash;
+
+    # Start it up
+    $osd0->start;
+    $osd1->start;
+    $monA->start;
+
+    # Ensure the cluster comes back up again
     $monA->succeed("ceph -s | grep 'mon: 1 daemons'");
     $monA->waitUntilSucceeds("ceph -s | grep 'quorum ${cfg.monA.name}'");
     $monA->waitUntilSucceeds("ceph osd stat | grep -e '2 osds: 2 up[^,]*, 2 in'");

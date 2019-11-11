@@ -1643,8 +1643,6 @@ in {
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
-  circus = callPackage ../development/python-modules/circus {};
-
   colorcet = callPackage ../development/python-modules/colorcet { };
 
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };
@@ -1963,6 +1961,8 @@ in {
   eth-utils = callPackage ../development/python-modules/eth-utils { };
 
   impacket = callPackage ../development/python-modules/impacket { };
+
+  jsonlines = callPackage ../development/python-modules/jsonlines { };
 
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
@@ -4688,6 +4688,8 @@ in {
   purepng = callPackage ../development/python-modules/purepng { };
 
   pyhocon = callPackage ../development/python-modules/pyhocon { };
+
+  pyjson5 = callPackage ../development/python-modules/pyjson5 {};
 
   pymaging = callPackage ../development/python-modules/pymaging { };
 
