@@ -19,6 +19,6 @@ buildGoModule rec {
     description = "The fastest shell plugin manager";
     homepage = https://github.com/getantibody/antibody;
     license = licenses.mit;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ filalex77 worldofpeace ];
   };
 }
