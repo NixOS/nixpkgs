@@ -967,6 +967,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  yabai = callPackage ../os-specific/darwin/yabai {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa CoreServices IOKit ScriptingBridge;
+  };
+
   wiiload = callPackage ../development/tools/wiiload { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
