@@ -232,7 +232,6 @@ in
       security.pam.services.kdm.enableKwallet = true;
       security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
-      security.pam.services.slim.enableKwallet = true;
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
