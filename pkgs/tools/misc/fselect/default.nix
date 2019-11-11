@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0pg3ahx8rmzr585qa4vphd1vxcm1r3sx5iyi8ghg5nn6sibqy0z4";
   };
 
-  cargoSha256 = "0pg3ahx8rmzr585qa4vphd1vxcm1r3sx5iyi8ghg5nn6sibqy0z4";
+  cargoSha256 = "0yf3xkxxlb9252r869wbiv3b3kpz4p5gp556sic63bp0acig6a76";
 
   meta = with stdenv.lib; {
     description = "Find files with SQL-like queries";
