@@ -1,7 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, iowait, psutil, pyzmq, tornado, mock }:
+{ stdenv, python3Packages }:
 
-buildPythonPackage rec {
+let
+  inherit (python3Packages) buildPythonApplication fetchPypi iowait psutil pyzmq tornado_4 mock;
+in
+
+buildPythonApplication rec {
   pname = "circus";
   version = "0.15.0";
 
@@ -13,15 +16,14 @@ buildPythonPackage rec {
   postPatch = ''
     # relax version restrictions to fix build
     substituteInPlace setup.py \
-      --replace "pyzmq>=13.1.0,<17.0" "pyzmq>13.1.0" \
-      --replace "tornado>=3.0,<5.0" "tornado>=3.0"
+      --replace "pyzmq>=13.1.0,<17.0" "pyzmq>13.1.0"
   '';
 
   checkInputs = [ mock ];
 
   doCheck = false; # weird error
 
-  propagatedBuildInputs = [ iowait psutil pyzmq tornado ];
+  propagatedBuildInputs = [ iowait psutil pyzmq tornado_4 ];
 
   meta = with stdenv.lib; {
     description = "A process and socket manager";

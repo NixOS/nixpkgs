@@ -1643,8 +1643,6 @@ in {
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
-  circus = callPackage ../development/python-modules/circus {};
-
   colorcet = callPackage ../development/python-modules/colorcet { };
 
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };
