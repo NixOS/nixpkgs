@@ -2,7 +2,7 @@
 
 let
   pname = "victor-mono";
-  version = "1.2.5";
+  version = "1.2.7";
 in fetchFromGitHub rec {
   name = "${pname}-${version}";
 
@@ -18,7 +18,7 @@ in fetchFromGitHub rec {
   # Both methods produce the same file, but this way
   # we can safely reason about what version it is.
   postFetch = ''
-    tar xvf $downloadedFile --strip-components=2 ${name}/public/VictorMonoAll.zip
+    tar xvf $downloadedFile --strip-components=2 ${pname}-${version}/public/VictorMonoAll.zip
 
     mkdir -p $out/share/fonts/{true,open}type/${pname}
 
@@ -26,7 +26,7 @@ in fetchFromGitHub rec {
     unzip -j VictorMonoAll.zip \*.otf -d $out/share/fonts/opentype/${pname}
   '';
 
-  sha256 = "0dj5h45qk6abggj6mgm19sb0a7q0v4x41f2zds1ab79yd22gbjns";
+  sha256 = "0x4ydp11ry94wkkspnmy1xpzqq3m45xg60z1hq4ll9gmlccaknj0";
 
   meta = with lib; {
     description = "Free programming font with cursive italics and ligatures";

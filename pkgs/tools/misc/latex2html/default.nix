@@ -1,17 +1,16 @@
-{ stdenv, fetchurl, makeWrapper
+{ stdenv, fetchFromGitHub, makeWrapper
 , ghostscript, netpbm, perl }:
 # TODO: withTex
 
-# Ported from Homebrew.
-# https://github.com/Homebrew/homebrew-core/blob/21834573f690407d34b0bbf4250b82ec38dda4d6/Formula/latex2html.rb
-
 stdenv.mkDerivation rec {
   pname = "latex2html";
-  version = "2018";
+  version = "2019.2";
 
-  src = fetchurl {
-    url = "http://mirrors.ctan.org/support/latex2html/latex2html-${version}.tar.gz";
-    sha256 = "1qnlg8ajh0amy9gy8rh8sp1l224ak54264i3dhk7rrv9s4k7bqq9";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1bcdhbaxf334wlxzkw5samj2y2q173709y0km3x8xs4bbh70ds6c";
   };
 
   buildInputs = [ ghostscript netpbm perl ];

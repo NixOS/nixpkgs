@@ -9,8 +9,8 @@
  </refmeta>
 
  <refnamediv>
-  <refname><command>nixos-rebuild</command>
-  </refname><refpurpose>reconfigure a NixOS machine</refpurpose>
+  <refname><command>nixos-rebuild</command></refname>
+  <refpurpose>reconfigure a NixOS machine</refpurpose>
  </refnamediv>
 
  <refsynopsisdiv>
@@ -491,6 +491,20 @@
       You can include a remote user name in the host name
       (<replaceable>user@host</replaceable>). You can also set ssh options by
       defining the <envar>NIX_SSHOPTS</envar> environment variable.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--use-remote-sudo</option>
+    </term>
+    <listitem>
+     <para>
+      When set, nixos-rebuild prefixes remote commands that run on
+      the <option>--build-host</option> and <option>--target-host</option>
+      systems with <command>sudo</command>. Setting this option allows
+      deploying as a non-root user.
      </para>
     </listitem>
    </varlistentry>

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , click
 , pytest
 , six
@@ -6,13 +6,14 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "4.0.3";
+  version = "4.1.2";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     rev = version;
-    sha256 = "1h4j8hincf49zyd0rvn4bh0ypj8836y8vz3d496ycb9gjzkr6044";
+    sha256 = "0icqhafsnmcs6628cg3jjgq0d3x835nqmhljcz93yi457hfqd2lp";
   };
 
   checkInputs = [ pytest ];

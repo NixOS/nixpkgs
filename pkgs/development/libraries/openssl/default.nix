@@ -44,10 +44,11 @@ let
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
     configureScript = {
-        x86_64-darwin  = "./Configure darwin64-x86_64-cc";
-        x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         armv6l-linux = "./Configure linux-armv4 -march=armv6";
         armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
+        x86_64-darwin  = "./Configure darwin64-x86_64-cc";
+        x86_64-linux = "./Configure linux-x86_64";
+        x86_64-solaris = "./Configure solaris64-x86_64-gcc";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
@@ -95,7 +96,11 @@ let
     '' +
     ''
       mkdir -p $bin
+    '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    ''
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
+    '' +
+    ''
       mv $out/bin $bin/
 
       mkdir $dev
@@ -107,7 +112,7 @@ let
       rmdir $out/etc/ssl/{certs,private}
     '';
 
-    postFixup = ''
+    postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows) ''
       # Check to make sure the main output doesn't depend on perl
       if grep -r '${buildPackages.perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2

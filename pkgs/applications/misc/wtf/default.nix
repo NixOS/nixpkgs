@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.22.0";
+  version = "0.23.0";
 
   overrideModAttrs = _oldAttrs : _oldAttrs // {
     preBuild = ''export GOPROXY="https://gocenter.io"'';
@@ -17,10 +17,10 @@ buildGoModule rec {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1d8lp94cw8rh9r9y64awxafhw9fmp33v3m761gzy500hrxal2rzb";
+    sha256 = "0bhk81jmv6rq8h898lmvrh9v356310fbi82lvakmgay7nvzk9a1c";
    };
 
-  modSha256 = "0m180571j4564py5mzdcbyypk71fdlp2vkfdwi6q85nd2q94sx6h";
+  modSha256 = "1ndb7zbhaq0cnd8fd05fvb62qi0mxilgydz42qqz2z4fkbx9gp3m";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 

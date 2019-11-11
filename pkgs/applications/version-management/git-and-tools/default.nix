@@ -74,6 +74,8 @@ let
 
   git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
 
+  git-annex-utils = callPackage ./git-annex-utils { };
+
   git-bug = callPackage ./git-bug { };
 
   # support for bugzilla

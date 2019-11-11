@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
+{ stdenv, fetchurl, nixosTests, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
 , docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
 , jasper, gobject-introspection, doCheck ? false, makeWrapper }:
 
 let
   pname = "gdk-pixbuf";
-  version = "2.38.2";
+  version = "2.40.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "10875lywkabh6nm2rgf0vxqn39h34b72kcbh63fp77fqq0g6bykk";
+    sha256 = "1rnlx9yfw970maxi2x6niaxmih5la11q1ilr7gzshz2kk585k0hm";
   };
 
   patches = [
@@ -83,6 +83,10 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
+    };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.gdk-pixbuf;
     };
 
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc

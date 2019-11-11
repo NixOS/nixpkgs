@@ -7,7 +7,7 @@
 # be nice to add the native GUI (and/or the GTK GUI) as an option too, but that
 # requires invoking the Xcode build system, which is non-trivial for now.
 
-{ stdenv, lib, fetchurl,
+{ stdenv, lib, fetchurl, fetchpatch,
   # Main build tools
   python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4, lzma,
   # Processing, video codecs, containers
@@ -80,6 +80,13 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
   # cp: cannot create regular file './internal_defaults.json': File exists
   enableParallelBuilding = false;
+
+  # The samplerate patch should be removed when HandBrake 1.3.0 is released
+  patches = [(fetchpatch {
+    name = "set-ffmpeg-samplerate.patch";
+    url = "https://patch-diff.githubusercontent.com/raw/HandBrake/HandBrake/pull/2126.patch";
+    sha256 = "00lds9h27cvyr53qpvv8gbv01hfxdxd8gphxcwbwg8akqrvk9gbf";
+  })];
 
   preConfigure = ''
     patchShebangs scripts

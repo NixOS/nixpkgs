@@ -165,13 +165,14 @@ in
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
-      "getty@tty1.service"
+      "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
       "plymouth-start.service"
     ];
     systemd.services.display-manager.conflicts = [
-      "getty@tty1.service"
-      "plymouth-quit.service"
+       "getty@tty${gdm.initialVT}.service"
+       # TODO: Add "plymouth-quit.service" so GDM can control when plymouth quits.
+       # Currently this breaks switching configurations while using plymouth.
     ];
     systemd.services.display-manager.onFailure = [
       "plymouth-quit.service"

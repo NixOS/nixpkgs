@@ -17,10 +17,11 @@
 , virtualenv
 , functools32
 , pytest
+, jsonschema
 }:
 
 let
-  cleo6 = cleo.overrideAttrs (oldAttrs: rec {
+  cleo6 = cleo.overridePythonAttrs (oldAttrs: rec {
     version = "0.6.8";
     src = fetchPypi {
       inherit (oldAttrs) pname;
@@ -28,8 +29,6 @@ let
       sha256 = "06zp695hq835rkaq6irr1ds1dp2qfzyf32v60vxpd8rcnxv319l5";
     };
   });
-
-  jsonschema3 = callPackage ./jsonschema.nix { };
   glob2 = callPackage ./glob2.nix { };
 
 in buildPythonPackage rec {
@@ -51,11 +50,12 @@ in buildPythonPackage rec {
   format = "pyproject";
 
   propagatedBuildInputs = [
+    cachy
     cleo6
     requests
     cachy
     requests-toolbelt
-    jsonschema3
+    jsonschema
     pyrsistent
     pyparsing
     cachecontrol

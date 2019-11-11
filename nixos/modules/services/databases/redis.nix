@@ -186,25 +186,20 @@ in
 
   config = mkIf config.services.redis.enable {
 
-    boot.kernel.sysctl = mkIf cfg.vmOverCommit {
-      "vm.overcommit_memory" = "1";
-    };
+    boot.kernel.sysctl = {
+      "vm.nr_hugepages" = "0";
+    } // mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; };
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
 
-    users.users.redis.description = "Redis database user";
+    users.users.redis = {
+      description = "Redis database user";
+      isSystemUser = true;
+    };
 
     environment.systemPackages = [ cfg.package ];
-
-    systemd.services.disable-transparent-huge-pages = {
-      description = "Disable Transparent Huge Pages (required by Redis)";
-      before = [ "redis.service" ];
-      wantedBy = [ "redis.service" ];
-      script = "echo never > /sys/kernel/mm/transparent_hugepage/enabled";
-      serviceConfig.Type = "oneshot";
-    };
 
     systemd.services.redis =
       { description = "Redis Server";

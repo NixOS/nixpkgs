@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "minidb";
   version = "2.0.2";
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "thp";

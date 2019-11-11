@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.3.3";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "06z1l27rp3dpyphg3zqg0ww568a4g8iwz01vy4f7rl62asrbglsy";
+    sha256 = "1g7rhgp405v7q9xx44k6jn3py4v73a9qjwhai6l459wdywdz1n3n";
   };
 
   # test-utils coredumps so don't run those

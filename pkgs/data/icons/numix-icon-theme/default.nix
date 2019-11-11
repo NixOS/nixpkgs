@@ -11,7 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "0pn3x0mmsph777lwhg890ck366p31bjl3755h4pv161ym08d4z9w";
   };
 
-  nativeBuildInputs = [ gtk3 hicolor-icon-theme ];
+  nativeBuildInputs = [ gtk3 ];
+
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   installPhase = ''
     mkdir -p $out/share/icons

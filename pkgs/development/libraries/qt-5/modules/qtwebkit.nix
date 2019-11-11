@@ -50,13 +50,12 @@ qtModule {
     export qmakeFlags="$qmakeFlags CONFIG+=silent"
   '';
 
-  NIX_CFLAGS_COMPILE =
-    [
+  NIX_CFLAGS_COMPILE = [
       # with gcc7 this warning blows the log over Hydra's limit
       "-Wno-expansion-to-defined"
-      # with gcc8, -Wclass-memaccess became part of -Wall and this too exceeds the logging limit
-      "-Wno-class-memaccess"
     ]
+    # with gcc8, -Wclass-memaccess became part of -Wall and this too exceeds the logging limit
+    ++ optional stdenv.cc.isGNU "-Wno-class-memaccess"
     # with clang this warning blows the log over Hydra's limit
     ++ optional stdenv.isDarwin "-Wno-inconsistent-missing-override"
     ++ optionals flashplayerFix

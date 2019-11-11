@@ -15,11 +15,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.34.0";
+  version = "3.34.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vdx4mfj46cpvzn6mhxc1ivg138437f5m4n3k4vb54pk45w4s00x";
+    sha256 = "07kd7wdk12nba33jfr44xqdlryiy86wgvsyjs8cw55y8p5cnbn6c";
   };
 
   LANG = "en_US.UTF-8";

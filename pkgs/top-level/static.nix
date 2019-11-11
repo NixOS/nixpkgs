@@ -161,6 +161,9 @@ in {
     enableShared = false;
     enableStatic = true;
   };
+  libressl = super.libressl.override {
+    buildShared = false;
+  };
 
   darwin = super.darwin // {
     libiconv = super.darwin.libiconv.override {

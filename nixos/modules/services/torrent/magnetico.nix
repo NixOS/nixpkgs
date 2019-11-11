@@ -171,6 +171,7 @@ in {
 
     users.users.magnetico = {
       description = "Magnetico daemons user";
+      isSystemUser = true;
     };
 
     systemd.services.magneticod = {

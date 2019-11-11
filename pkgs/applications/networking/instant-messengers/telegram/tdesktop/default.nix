@@ -1,14 +1,14 @@
 { mkDerivation, lib, fetchFromGitHub, fetchsvn, fetchpatch
 , pkgconfig, pythonPackages, cmake, wrapGAppsHook, wrapQtAppsHook, gcc9
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
-, dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
+, dee, ffmpeg_4, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
 
 with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.8.13";
+  version = "1.8.15";
   # Note: Due to our strong dependency on the Arch patches it's probably best
   # to also wait for the Arch update (especially if the patches don't apply).
 
@@ -17,7 +17,7 @@ mkDerivation rec {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "19p4cjzk7jyhrd4sd8dq1r1zksff23zyg5rh5vlr3kqd372bffzz";
+    sha256 = "03173y2nlkf757llgpia8p2dkkwsjra7b6qm5nhmkcwcm8kmsvyy";
     fetchSubmodules = true;
   };
 
@@ -59,7 +59,7 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase qtimageformats gtk3 libappindicator-gtk3
-    dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
+    dee ffmpeg_4 openalSoft minizip libopus alsaLib libpulseaudio range-v3
   ];
 
   enableParallelBuilding = true;

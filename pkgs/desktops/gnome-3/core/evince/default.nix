@@ -1,5 +1,5 @@
 { stdenv
-, fetchFromGitLab
+, fetchurl
 , meson
 , ninja
 , pkgconfig
@@ -43,18 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "3.34.0";
+  version = "3.34.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  # meson.build not distributed
-  # See: https://gitlab.gnome.org/GNOME/evince/issues/1270
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = pname;
-    rev = version;
-    sha256 = "0kjylhlkadi89w3p9afzl69jpd9gryk21sm1g89a0y2pkwz181qr";
+  src = fetchurl {
+    url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1pr6fvbaam1mzxjwyqd53hcxzdjzf73idn10j4j7n54nwg6hgr45";
   };
 
   postPatch = ''

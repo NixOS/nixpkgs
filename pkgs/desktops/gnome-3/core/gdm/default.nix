@@ -19,11 +19,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "3.34.0";
+  version = "3.34.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0pnh0nj4kk8n48kgj77bb5r4z5jnb7kxnvpnddk6b9n96g0qwklv";
+    sha256 = "1lyqvcwxhwxklbxn4xjswjzr6fhjix6h28mi9ypn34wdm9bzcpg8";
   };
 
   # Only needed to make it build
@@ -31,12 +31,14 @@ stdenv.mkDerivation rec {
     substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver.out}/bin/X"
   '';
 
+  initialVT = "7";
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-plymouth=yes"
     "--enable-gdm-xsession"
-    # "--with-initial-vt=7"
+    "--with-initial-vt=${initialVT}"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
   ];
@@ -51,18 +53,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
-    # See: https://gitlab.gnome.org/GNOME/gdm/issues/515
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gdm/commit/0e05e2fd3c2a3b28ed4db0e51e4646aa6af67a5f.patch";
-      sha256 = "10kbjn0kis0xf95dfzq4w6xazyfbcz8yj9lrixg5jb3srrnp0hhf";
-    })
-
-    # https://gitlab.gnome.org/GNOME/gdm/merge_requests/84
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gdm/commit/2136c3baab81b6ec2115180f67ada91727e948f7.patch";
-      sha256 = "1ispxh4p6hdh3bx9x86497gzlwpgj32x2ymmv60wafg76vmrlcc2";
-    })
-
     # Change hardcoded paths to nix store paths.
     (substituteAll {
       src = ./fix-paths.patch;

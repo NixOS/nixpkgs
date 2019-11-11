@@ -11,7 +11,6 @@
 , appstream-glib
 , desktop-file-utils
 , totem-pl-parser
-, hicolor-icon-theme
 , gobject-introspection
 , wrapGAppsHook
 , lastFMSupport ? true
@@ -20,7 +19,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.1.4.16";
+  version = "1.2.5";
 
   format = "other";
   doCheck = false;
@@ -29,7 +28,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "1azfxc1vc1j4ph0zrfsgz2gac1vwmbj65j6wjlxx3nr8kia4mccl";
+    sha256 = "148p3ab7nnfz13hgjkx1cf2ahq9mgl72csrl35xy6d0nkfqbfr8r";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ python3.pkgs.buildPythonApplication rec  {
   ];
 
   buildInputs = with gst_all_1; [
-    gobject-introspection
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -51,7 +49,6 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
-    hicolor-icon-theme
     libsoup
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
@@ -74,6 +71,8 @@ python3.pkgs.buildPythonApplication rec  {
   postFixup = ''
     wrapPythonProgramsIn $out/libexec "$out $propagatedBuildInputs"
   '';
+
+  strictDeps = false;
 
   # Produce only one wrapper using wrap-python passing
   # gappsWrapperArgs to wrap-python additional wrapper

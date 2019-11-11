@@ -55,20 +55,7 @@
    <title>Rebar3</title>
 
    <para>
-    By default, Rebar3 wants to manage its own dependencies. This is perfectly acceptable in the normal, non-Nix setup, but in the Nix world, it is not. To rectify this, we provide two versions of Rebar3:
-    <itemizedlist>
-     <listitem>
-      <para>
-       <literal>rebar3</literal>: patched to remove the ability to download anything. When not running it via <literal>nix-shell</literal> or <literal>nix-build</literal>, it's probably not going to work as desired.
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal>rebar3-open</literal>: the normal, unmodified Rebar3. It should work exactly as would any other version of Rebar3. Any Erlang package should rely on <literal>rebar3</literal> instead. See <xref
-            linkend="rebar3-packages"/>.
-      </para>
-     </listitem>
-    </itemizedlist>
+    We provide a version of Rebar3, which is the normal, unmodified Rebar3, under <literal>rebar3</literal>. We also provide a helper to fetch Rebar3 dependencies from a lockfile under <literal>fetchRebar3Deps</literal>.
    </para>
   </section>
 

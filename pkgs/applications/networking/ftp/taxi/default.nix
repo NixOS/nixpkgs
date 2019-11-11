@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3, vala
 , gtk3, libgee, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pantheon.vala
+    vala
     gobject-introspection
     meson
     ninja

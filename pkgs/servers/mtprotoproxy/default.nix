@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mtprotoproxy";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "alexbers";
     repo = "mtprotoproxy";
     rev = "v${version}";
-    sha256 = "1i8v6w79ad3xn9dnn144q93vcs23cj0m7hj3x33i16hxz325zb9y";
+    sha256 = "1j8bxwcq968h5sd58g03yc4zjqkhkjdn0f04vr826hhsdxy853r4";
   };
 
   nativeBuildInputs = [ wrapPython ];

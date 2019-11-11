@@ -10,22 +10,15 @@
 
 stdenv.mkDerivation rec {
   pname = "fribidi";
-  version = "1.0.5";
+  version = "1.0.7";
 
   outputs = [ "out" "devdoc" ];
 
-  # NOTE: 2018-06-06 v1.0.5: Only URL tarball has "Have pre-generated man pages: true", which works-around upstream usage of some rare ancient `c2man` fossil application.
+  # NOTE: Only URL tarball has "Have pre-generated man pages: true", which works-around upstream usage of some rare ancient `c2man` fossil application.
   src = fetchurl {
     url = "https://github.com/fribidi/fribidi/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1kp4b1hpx2ky20ixgy2xhj5iygfl7ps5k9kglh1z5i7mhykg4r3a";
+    sha256 = "0pckda4fcn0aw32lpycwdp25r2m7vca8zspq815ppi9gkwgg5das";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/fribidi/fribidi/pull/88.patch";
-      sha256 = "1n4l6333vhbxfckwg101flmvq6bbygg66fjp69ddcjqaqb6gh9k9";
-    })
-  ];
 
   postPatch = ''
     patchShebangs test

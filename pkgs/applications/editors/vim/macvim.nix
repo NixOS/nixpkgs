@@ -136,6 +136,15 @@ stdenv.mkDerivation {
     find $out/share/man \( -name eVim.1 -or -name xxd.1 \) -delete
   '';
 
+  # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
+  # it's not clear what system-level components it may require, so for now we'll just allow full
+  # filesystem access. This way the package still can't access the network.
+  sandboxProfile = ''
+    (allow file-read* file-write* process-exec mach-lookup)
+    ; block homebrew dependencies
+    (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
+  '';
+
   meta = with stdenv.lib; {
     description = "Vim - the text editor - for macOS";
     homepage    = https://github.com/macvim-dev/macvim;

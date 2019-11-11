@@ -28,6 +28,7 @@ with pkgs;
         isPy35 = pythonVersion == "3.5";
         isPy36 = pythonVersion == "3.6";
         isPy37 = pythonVersion == "3.7";
+        isPy38 = pythonVersion == "3.8";
         isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
         isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
         isPy3k = isPy3;
@@ -51,10 +52,10 @@ in {
     sourceVersion = {
       major = "2";
       minor = "7";
-      patch = "16";
+      patch = "17";
       suffix = "";
     };
-    sha256 = "1mqfcqp5y8r0bfyr7ppl74n0lig45p9mc4b8adlcpvj74rhfy8pj";
+    sha256 = "0hds28cg226m8j8sr394nm9yc4gxhvlv109w0avsf2mxrlrz0hsd";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -64,10 +65,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "5";
-      patch = "7";
+      patch = "9";
       suffix = "";
     };
-    sha256 = "1p67pnp2ca5przx2s45r8m55dcn6f5hsm0l4s1zp7mglkf4r4n18";
+    sha256 = "0jdh9pvx6m6lfz2liwvvhn7vks7qrysqgwn517fkpxb77b33fjn2";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -90,10 +91,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "4";
+      patch = "5";
       suffix = "";
     };
-    sha256 = "0gxiv5617zd7dnqm5k9r4q2188lk327nf9jznwq9j6b8p0s92ygv";
+    sha256 = "154xc6dxww21qkmphg66pfks8987a17cl3vqq5g4hv1xkzm7cnp8";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -104,9 +105,9 @@ in {
       major = "3";
       minor = "8";
       patch = "0";
-      suffix = "b3";
+      suffix = "";
     };
-    sha256 = "03wq85pkpr9j56k3zg6whahc5park1pzshbakl7y50lzrkpq2ynd";
+    sha256 = "110d0did9rxn7rg85kf2fwli5hqq44xv2d8bi7d92m7v2d728mmk";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -197,6 +198,11 @@ in {
     pythonVersion = "3.6";
     inherit passthruFun;
     ncurses = ncurses5;
+  };
+
+  graalpython37 = callPackage ./graalpython/default.nix {
+    self = pythonInterpreters.graalpython37;
+    inherit passthruFun;
   };
 
 })

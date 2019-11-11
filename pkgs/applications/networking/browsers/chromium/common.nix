@@ -107,7 +107,7 @@ let
 
   base = rec {
     name = "${packageName}-unwrapped-${version}";
-    inherit (upstream-info) version;
+    inherit (upstream-info) channel version;
     inherit packageName buildType buildPath;
 
     src = upstream-info.main;
@@ -125,27 +125,21 @@ let
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU_combined
       pciutils protobuf speechd libXdamage at-spi2-core
+      jdk.jre
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional useVaapi libva
-      ++ optional pulseSupport libpulseaudio
-      ++ optional (versionAtLeast version "72") jdk.jre;
+      ++ optional pulseSupport libpulseaudio;
 
     patches = [
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
-      ./patches/jumbo-sorted.patch
       ./patches/no-build-timestamps.patch
+    ] ++ optionals (channel == "stable") [
       ./patches/widevine.patch
-      # Revert "Implement GetFallbackFont on Linux" to fix a performance regression
-      # Remove after https://bugs.chromium.org/p/chromium/issues/detail?id=1003997 is fixed
-      (fetchpatch {
-        url = "https://github.com/chromium/chromium/commit/5a32abe4247f80fdb55c55a289b906b0e42faa5f.patch";
-        sha256 = "1a4jqmki6cyi2dwvaszh01db2diqnz1d50mhpdpby3dd1cw0xmfy";
-        revert = true;
-      })
-
+    ] ++ optionals (channel == "beta" || channel == "dev") [
+      ./patches/widevine-79.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:
@@ -153,6 +147,7 @@ let
       # - https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
       #
+      # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/plain/chromium-vaapi.patch?h=chromium-vaapi
@@ -234,9 +229,6 @@ let
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
-      # Use jumbo for a 2x (at least) compilation speedup, except where it is currently broken:
-      # https://gist.github.com/ivan/6fe7014c1b1cc35dec133fa6de0549d9
-      use_jumbo_build = (version != "78.0.3904.17");
 
       proprietary_codecs = false;
       use_sysroot = false;

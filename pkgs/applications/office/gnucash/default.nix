@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
-    webkitgtk dconf hicolor-icon-theme libofx aqbanking gwenhywfar libdbi
+    webkitgtk dconf libofx aqbanking gwenhywfar libdbi
     libdbiDrivers guile
     perlWrapper perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);

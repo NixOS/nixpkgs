@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.16.0";
+  version = "1.16.2";
   pname = "annoy";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jnm38kg7aw63mkd5113i3pb2p9fp5cia91jwhyg9sazb45bzpv9";
+    sha256 = "41348e813fe7125eda3e2229a075eba3d065173ba6c5f20c545bb9c2932633fa";
   };
 
   checkInputs = [

@@ -217,9 +217,9 @@ let
 
   mongodb = buildPecl {
     pname = "mongodb";
-    version = "1.5.5";
+    version = "1.6.0";
 
-    sha256 = "0gpywk3wkimjrva1p95a7abvl3s8yccalf6yimn3nbkpvn2kknm6";
+    sha256 = "0bybfjs61v66bynajbd8dwjlwbz6p2gck49r3zqbxa3ja6d671l6";
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [
@@ -243,6 +243,15 @@ let
     postPatch = ''
       sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
     '';
+  };
+
+  pcov = buildPecl {
+    version = "1.0.6";
+    pname = "pcov";
+
+    sha256 = "1psfwscrc025z8mziq69pcx60k4fbkqa5g2ia8lplb94mmarj0v1";
+
+    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
   pcs = buildPecl {
@@ -338,12 +347,12 @@ let
   };
 
   phpcbf = mkDerivation rec {
-    version = "3.5.0";
+    version = "3.5.1";
     pname = "phpcbf";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "15n3r3sc62ar1kq38idw22y7gasvy747bix99zs0l0paapcbxz6n";
+      sha256 = "1b68cmdvg356s2vk5q0jkk8sizza7r7pbcl9v5s0944wi0apsj0r";
     };
 
     phases = [ "installPhase" ];
@@ -365,12 +374,12 @@ let
   };
 
   phpcs = mkDerivation rec {
-    version = "3.5.0";
+    version = "3.5.1";
     pname = "phpcs";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "078anf2r6a3p8v575m65vryazipgfchs07yb92m9xh41lk5wlndf";
+      sha256 = "060jzgd99j16xjs0n75sgp79an6n7qp6zv5lrw6700jnw67zpmn7";
     };
 
     phases = [ "installPhase" ];
@@ -392,12 +401,12 @@ let
   };
 
   phpstan = mkDerivation rec {
-    version = "0.11.16";
+    version = "0.11.19";
     pname = "phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "0c2417kwkj3nf1zya1flw7g1mz0dwhh27hjs3wz04b0kgnv4syzs";
+      sha256 = "0b04d2x07vipx1850v3d2hga3s6ssv7g21x58dhcjrg35i1bvq71";
     };
 
     phases = [ "installPhase" ];

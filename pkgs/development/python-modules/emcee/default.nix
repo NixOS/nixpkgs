@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "emcee";
-  version = "2.2.1";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b83551e342b37311897906b3b8acf32979f4c5542e0a25786ada862d26241172";
+    sha256 = "01mx1w4a7j5p29a3r7ilh9la9n6gnlgwb46m439vrnfgvbvjjy9c";
   };
 
   propagatedBuildInputs = [ numpy ];

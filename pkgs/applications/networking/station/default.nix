@@ -2,13 +2,13 @@
 
 let
   pname = "station";
-  version = "1.51.1";
+  version = "1.52.2";
 in appimageTools.wrapType2 rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/getstation/desktop-app-releases/releases/download/${version}/Station-${version}.AppImage";
-    sha256 = "1vfis2q7zf1sabdlxzmbxh135jk25ylhavrgfc30k5nad9cacw8k";
+    url = "https://github.com/getstation/desktop-app-releases/releases/download/${version}/Station-${version}-x86_64.AppImage";
+    sha256 = "0lhiwvnf94is9klvzrqv2wri53gj8nms9lg2678bs4y58pvjxwid";
   };
 
   profile = ''

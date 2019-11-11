@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "5.1.1";
+  version = "5.1.2";
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "173nm29g85w8cac3fg40b27qaq26g41wgg6qn79ql1hq4w2n5sgh";
+    sha256 = "04jx6ihj3zpj4c7acqa14gl37mpdnbgmfm4nvv97xkjc1cz920xm";
   };
 
   checkInputs = [ pytest nose ];

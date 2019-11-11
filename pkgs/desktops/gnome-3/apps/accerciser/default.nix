@@ -17,13 +17,13 @@
 
  python3.pkgs.buildPythonApplication rec {
   name = "accerciser-${version}";
-  version = "3.34.0";
+  version = "3.34.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/accerciser/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1npl1pxqrij9dsmp70ralcfbjbw503jsz2pqm3qjwyba5cf6kcbm";
+    sha256 = "1awf7fcm52r23s51gllyybhywf2kljqkaw4znblajph9sawnfs3l";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@
     pyatspi
     pycairo
     pygobject3
+    setuptools
     xlib
   ];
 

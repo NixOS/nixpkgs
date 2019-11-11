@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "--with-config-file=${placeholder "out"}/etc/man_db.conf"
     "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-pager=less"
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin [
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"

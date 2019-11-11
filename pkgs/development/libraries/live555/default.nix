@@ -3,14 +3,14 @@
 # Based on https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD
 stdenv.mkDerivation rec {
   pname = "live555";
-  version = "2019.08.16";
+  version = "2019.10.20";
 
   src = fetchurl { # the upstream doesn't provide a stable URL
     urls = [
       "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
       "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
     ];
-    sha256 = "1y77dc5qxd731w96x707iibavmkfayy5s557d7lasg742h36lcqv";
+    sha256 = "085csq31s4kak0sym5y170f82wp542bg1ff3kycanvs8w4d4n9j4";
   };
 
   postPatch = ''
@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
-    homepage = http://www.live555.com/liveMedia/;
+    homepage = "http://www.live555.com/liveMedia/";
+    changelog = "http://www.live555.com/liveMedia/public/changelog.txt";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isAarch64;

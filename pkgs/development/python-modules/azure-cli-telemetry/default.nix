@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "azure-cli-telemetry";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sf27pcz653h0cnxsg47nndilhqlw9fl019aqbnji2vn967r9rnl";
+    sha256 = "1f239d544d309c29e827982cc20113eb57037dba16db6cdd2e0283e437e0e577";
   };
 
   propagatedBuildInputs = [
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   # Remove overly restrictive version contraints and obsolete namespace setup
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "applicationinsights>=0.11.1,<0.11.8" "applicationinsights" \
-      --replace "portalocker==1.2.1" "portalocker"
+      --replace "applicationinsights>=0.11.1,<0.12" "applicationinsights"
     substituteInPlace setup.cfg \
       --replace "azure-namespace-package = azure-cli-nspkg" ""
+    rm azure_bdist_wheel.py # we'll fix PEP420 namespacing
   '';
 
   # Prevent these __init__'s from violating PEP420, only needed for python2

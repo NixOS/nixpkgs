@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg, gobject-introspection, hicolor-icon-theme
+{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg, gobject-introspection
 , gdk-pixbuf, pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
 
 let
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    gtk3 gdk-pixbuf json_c lcms2 libpng librsvg pycairo pygobject3 python hicolor-icon-theme
+    gtk3 gdk-pixbuf json_c lcms2 libpng librsvg pycairo pygobject3 python
   ];
 
   propagatedBuildInputs = [ numpy ];

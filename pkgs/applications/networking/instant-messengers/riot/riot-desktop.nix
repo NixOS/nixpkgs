@@ -6,12 +6,12 @@
 
 let
   executableName = "riot-desktop";
-  version = "1.4.1";
+  version = "1.5.0";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "0w4w39smak6hp65vam5rrz6l48rb4yzszzyn1yjhr1m8w8j9bvfl";
+    sha256 = "1xi5zg3602d7gdjxskpk2q3anpn2drrkxyirfvi9mzcfp2r05557";
   };
 
 in yarn2nix-moretea.mkYarnPackage rec {

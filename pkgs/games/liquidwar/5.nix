@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    broken = true;
   };
 }

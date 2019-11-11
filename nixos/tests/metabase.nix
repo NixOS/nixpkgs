@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "metabase";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ mmahut ];
@@ -12,9 +12,9 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
-    startAll;
-    $machine->waitForUnit("metabase.service");
-    $machine->waitForOpenPort(3000);
-    $machine->waitUntilSucceeds("curl -L http://localhost:3000/setup | grep Metabase");
+    start_all()
+    machine.wait_for_unit("metabase.service")
+    machine.wait_for_open_port(3000)
+    machine.wait_until_succeeds("curl -L http://localhost:3000/setup | grep Metabase")
   '';
 })

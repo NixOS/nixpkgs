@@ -1,7 +1,7 @@
 { stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, dbus, dde-daemon,
   dde-qt-dbus-factory, deepin, deepin-desktop-schemas,
   deepin-gettext-tools, deepin-icon-theme, deepin-wallpapers, dtkcore,
-  dtkwidget, gnugrep, gsettings-qt, hicolor-icon-theme, lightdm_qt,
+  dtkwidget, gnugrep, gsettings-qt, lightdm_qt,
   onboard, qtsvg, qttools, qtx11extras, setxkbmap, utillinux, which,
   xkeyboard_config, xorg, xrandr, wrapGAppsHook }:
 
@@ -36,7 +36,6 @@ mkDerivation rec {
     dtkwidget
     gnugrep
     gsettings-qt
-    hicolor-icon-theme
     lightdm_qt
     onboard
     qtsvg

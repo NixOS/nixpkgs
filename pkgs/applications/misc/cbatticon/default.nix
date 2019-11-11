@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cbatticon";
-  version = "1.6.9";
+  version = "1.6.10";
 
   src = fetchFromGitHub {
     owner = "valr";
     repo = pname;
     rev = version;
-    sha256 = "0kw09d678sd3m18fmi4380sl4a2m5lkfmq0kps16cdmq7z80rvaf";
+    sha256 = "0ivm2dzhsa9ir25ry418r2qg2llby9j7a6m3arbvq5c3kaj8m9jr";
   };
 
   nativeBuildInputs = [ pkgconfig gettext ];

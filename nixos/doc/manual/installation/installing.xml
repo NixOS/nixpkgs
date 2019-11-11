@@ -68,7 +68,7 @@
     If you would like to continue the installation from a different machine you
     need to activate the SSH daemon via <command>systemctl start
     sshd</command>. You then must set a password for either <literal>root</literal> or
-    <literal>nixos</literal> with <command>passwd></command> to be able to login.
+    <literal>nixos</literal> with <command>passwd</command> to be able to login.
    </para>
   </section>
  </section>
@@ -563,8 +563,5 @@ Retype new UNIX password: ***</screen>
   <xi:include href="installing-from-other-distro.xml" />
 
   <xi:include href="installing-behind-a-proxy.xml" />
-
-  <xi:include href="installing-nspawn-container.xml" />
-
  </section>
 </chapter>

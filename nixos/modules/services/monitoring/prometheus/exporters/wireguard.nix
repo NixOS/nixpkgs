@@ -6,6 +6,10 @@ let
   cfg = config.services.prometheus.exporters.wireguard;
 in {
   port = 9586;
+  imports = [
+    (mkRenamedOptionModule [ "addr" ] [ "listenAddress" ])
+    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+  ];
   extraOpts = {
     verbose = mkEnableOption "Verbose logging mode for prometheus-wireguard-exporter";
 
@@ -42,14 +46,6 @@ in {
         Whether or not the remote IP of a WireGuard peer should be exposed via prometheus.
       '';
     };
-
-    addr = mkOption {
-      type = types.str;
-      default = "0.0.0.0";
-      description = ''
-        IP address of the exporter.
-      '';
-    };
   };
   serviceOpts = {
     path = [ pkgs.wireguard-tools ];
@@ -59,7 +55,7 @@ in {
       ExecStart = ''
         ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
           -p ${toString cfg.port} \
-          -l ${cfg.addr} \
+          -l ${cfg.listenAddress} \
           ${optionalString cfg.verbose "-v"} \
           ${optionalString cfg.singleSubnetPerField "-s"} \
           ${optionalString cfg.withRemoteIp "-r"} \

@@ -1,5 +1,5 @@
 { mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
-, lib, fetchhg, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
+, lib, fetchurl, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools
 , withServer ? true
@@ -14,14 +14,11 @@ let
 in
 mkDerivation rec {
   pname = "hedgewars";
-  version = "1.0.0-beta2";
+  version = "1.0.0";
 
-  # it's crazy slow to fetch the whole repo but the beta versions are not
-  # released as tarballs
-  src = fetchhg {
-    url = "https://hg.hedgewars.org/hedgewars/";
-    rev = "dff37ac61dcf";
-    sha256 = "1dsq6wfv3d7jfnr068b7ixpnqp0h6mj7zgby6h1viwblgbirri78";
+  src = fetchurl {
+    url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
+    sha256 = "0nqm9w02m0xkndlsj6ys3wr0ik8zc14zgilq7k6fwjrf3zk385i1";
   };
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];

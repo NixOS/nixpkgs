@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.0.0";
+  version = "9.0.0";
   pname = "azure-mgmt-compute";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1zdypc8f825n60341ai2482rwgsc7l8dpr691j8hqz571l80y85w";
+    sha256 = "06795ccb7377eaa3864819a1c63b9bfe9957a58814c65025aef89e9cd81190fc";
   };
 
   postInstall = if isPy3k then "" else ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Compute Management Client Library";
-    homepage = https://github.com/Azure/azure-sdk-for-python/tree/master/azure-mgmt-compute;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ olcai mwilsoninsight ];
   };

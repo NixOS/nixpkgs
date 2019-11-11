@@ -97,6 +97,13 @@ stdenv.mkDerivation rec {
     # now set the cache dir to be withing the .sage directory. This is not
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
+
+    # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
+    ./patches/ignore-cmp-deprecation.patch
+
+    # Werkzeug has deprecated ImmutableDict, but it is still used in legacy
+    # sagenb. That's no big issue since sagenb will be removed soon anyways.
+    ./patches/ignore-werkzeug-immutable-dict-deprecation.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

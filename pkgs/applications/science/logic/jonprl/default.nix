@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

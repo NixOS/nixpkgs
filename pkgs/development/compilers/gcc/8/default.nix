@@ -6,6 +6,7 @@
 , profiledCompiler ? false
 , staticCompiler ? false
 , enableShared ? true
+, enableLTO ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which
@@ -247,7 +248,7 @@ stdenv.mkDerivation ({
 
     # Basic configuration
     [
-      "--enable-lto"
+      (if enableLTO then "--enable-lto" else "--disable-lto")
       "--disable-libstdcxx-pch"
       "--without-included-gettext"
       "--with-system-zlib"
@@ -378,9 +379,6 @@ stdenv.mkDerivation ({
       stdenv.lib.platforms.freebsd ++
       stdenv.lib.platforms.illumos ++
       stdenv.lib.platforms.darwin;
-
-    # See #40038
-    broken = stdenv.isDarwin;
   };
 }
 

@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     sha256 = "0m07gq4zfgigsiz8b518xyb19v7qqp76qmp7lb262825vkqzl3zq";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   propagatedBuildInputs = [ libogg ];
 

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobject-introspection
-, gtk3, libwnck3, keybinder3, intltool, libcanberra-gtk3, libappindicator-gtk3, libpulseaudio }:
+, gtk3, libwnck3, keybinder3, intltool, libcanberra-gtk3, libappindicator-gtk3, libpulseaudio
+, fetchpatch }:
 
 python3.pkgs.buildPythonApplication rec {
   name = "kazam-${version}";
@@ -18,6 +19,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pyxdg pycairo dbus-python ];
+ 
+  # workaround https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   patches = [
     # Fix paths
@@ -26,10 +30,10 @@ python3.pkgs.buildPythonApplication rec {
       libcanberra = libcanberra-gtk3;
       inherit libpulseaudio;
     })
-    # Fix compability with Python 3.4
-    (fetchurl {
-      url = https://sources.debian.org/data/main/k/kazam/1.4.5-2/debian/patches/configparser_api_changes.patch;
-      sha256 = "0yvmipnh98s7y07cp1f113l0qqfw65k13an96byq707z3ymv1c2h";
+    # https://github.com/hzbd/kazam/pull/21
+    (fetchpatch {
+      url = https://github.com/hzbd/kazam/commit/37e53a5aa61f4223a9ea03ceeda26eeba2b9d37b.patch;
+      sha256 = "1q5dpmdm6cvgzw8xa7bwclnqa05xc73ja1lszwmwv5glyik0fk4z";
     })
   ];
 

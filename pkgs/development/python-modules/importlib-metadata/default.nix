@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "0.18";
+  version = "0.23";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "cb6ee23b46173539939964df59d3d72c3e0c1b5d54b84f1d8a7e912fe43612db";
+    sha256 = "09mdqdfv5rdrwz80jh9m379gxmvk2vhjfz0fg53hid00icvxf65a";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

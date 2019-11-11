@@ -1,5 +1,5 @@
 { stdenv, fetchurl, file, which, intltool, gobject-introspection,
-  findutils, xdg_utils, gnome3, gtk3, pythonPackages, hicolor-icon-theme,
+  findutils, xdg_utils, gnome3, gtk3, pythonPackages,
   wrapGAppsHook
 }:
 
@@ -29,7 +29,6 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.pyxdg
     pythonPackages.ptyprocess
     pythonPackages.pycairo
-    hicolor-icon-theme
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ];
 

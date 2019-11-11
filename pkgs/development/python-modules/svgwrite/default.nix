@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "svgwrite";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "72ef66c9fe367989823cb237ab7f012ac809dd3ba76c1b5ebd9aa61580e2e75e";
+    sha256 = "11e47749b159ed7004721e11d380b4642a26154b8cb2f7b0102fea9c71a3dfa1";
   };
 
   buildInputs = [ setuptools ];

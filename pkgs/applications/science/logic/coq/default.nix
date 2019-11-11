@@ -9,6 +9,7 @@
 , ocamlPackages, ncurses
 , buildIde ? true
 , glib, gnome3, wrapGAppsHook
+, darwin
 , csdp ? null
 , version
 }:
@@ -28,7 +29,8 @@ let
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
    "8.9.1" = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
-   "8.10+beta3" = "08c7q97jyblsf7dhk8jf1fx1cp9qr3dr5s42wigx10wh7i6j7pca";
+   "8.10.0" = "138jw94wp4mg5dgjc2asn8ng09ayz1mxdznq342n0m469j803gzg";
+   "8.10.1" = "072v2zkjzf7gj48137wpr3c9j0hg9pdhlr5l8jrgrwynld8fp7i4";
   }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
@@ -101,10 +103,13 @@ self = stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [ ocaml findlib camlp5 num ])
+  buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
+  ++ [ ocamlPackages.num ]
   ++ stdenv.lib.optionals buildIde
     (if versionAtLeast "8.10"
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
+     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
      else [ ocamlPackages.lablgtk ]);
 
   postPatch = ''

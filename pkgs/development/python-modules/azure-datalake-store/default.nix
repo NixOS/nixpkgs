@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This project is the Python filesystem library for Azure Data Lake Store";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/data-lake-store?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

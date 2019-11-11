@@ -48,7 +48,7 @@ import ./make-test.nix ({ pkgs, ...} :
     $machine->waitForWindow("^Desktop ");
 
     # Check that logging in has given the user ownership of devices.
-    $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+    $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
 
     $machine->execute("su - alice -c 'DISPLAY=:0.0 dolphin &'");
     $machine->waitForWindow(" Dolphin");

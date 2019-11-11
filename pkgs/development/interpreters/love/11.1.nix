@@ -5,7 +5,7 @@
 
 let
   pname = "love";
-  version = "11.2";
+  version = "11.3";
 in
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "rude";
     repo = "love";
     rev = version;
-    sha256 = "0q1lsgc1621czrg49nmabq6am9sgxa9syxrwzlksqqr4dyzw4nmf";
+    sha256 = "18gfp65ngb8k8g7hgbw2bhrwk2i7m56m21d39pk4484q9z8p4vm7";
   };
 
   nativeBuildInputs = [ pkgconfig ];

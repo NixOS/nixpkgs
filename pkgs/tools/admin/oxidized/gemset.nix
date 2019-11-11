@@ -50,6 +50,16 @@
     };
     version = "1.10.0";
   };
+  git = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0bf83icwypi3p3pd97vlqbnp3hvf31ncd440m9kh9y7x6yk74wyh";
+      type = "gem";
+    };
+    version = "1.5.0";
+  };
   haml = {
     dependencies = ["temple" "tilt"];
     groups = ["default"];
@@ -112,7 +122,7 @@
     version = "0.1.1";
   };
   oxidized = {
-    dependencies = ["asetus" "net-ssh" "net-telnet" "rugged" "slop"];
+    dependencies = ["asetus" "git" "net-ssh" "net-telnet" "rugged" "slop"];
     groups = ["default"];
     platforms = [];
     source = {

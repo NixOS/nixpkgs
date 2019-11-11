@@ -6,7 +6,6 @@
 , gtk3
 , libwnck3
 , keybinder3
-, hicolor-icon-theme
 , wrapGAppsHook
 , wafHook
 }:
@@ -27,7 +26,7 @@ buildPythonApplication rec {
     # For setup hook
     gobject-introspection wafHook
   ];
-  buildInputs = [ hicolor-icon-theme docutils libwnck3 keybinder3 ];
+  buildInputs = [ docutils libwnck3 keybinder3 ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
 
   # without strictDeps kupfer fails to build: Could not find the python module 'gi.repository.Gtk'
