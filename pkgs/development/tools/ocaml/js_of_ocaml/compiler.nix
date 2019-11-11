@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildDunePackage
-, cmdliner, cppo, yojson
+, ocaml, findlib, cmdliner, dune, cppo, yojson
 }:
 
 buildDunePackage rec {
