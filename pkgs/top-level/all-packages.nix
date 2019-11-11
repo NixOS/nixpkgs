@@ -4388,6 +4388,8 @@ in
 
   libsmi = callPackage ../development/libraries/libsmi { };
 
+  licensor = callPackage ../tools/misc/licensor { };
+
   lesspipe = callPackage ../tools/misc/lesspipe { };
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
