@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
-    repo = pname;
+    repo = "calls";
     rev = "4b4cfa04266ebbe2f3da5abd9624ea07aa159fea";
     sha256 = "0qvnddjpkh6gsywzdi24lmjlbwi0q54m1xa6hiaf1ch1j7kcv8fr";
   };
