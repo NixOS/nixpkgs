@@ -145,9 +145,9 @@ int stat(const char * path, struct stat * st)
     return __stat_real(rewrite(path, buf), st);
 }
 
-int * access(const char * path, int mode)
+int access(const char * path, int mode)
 {
-    int * (*access_real) (const char *, int mode) = dlsym(RTLD_NEXT, "access");
+    int (*access_real) (const char *, int mode) = dlsym(RTLD_NEXT, "access");
     char buf[PATH_MAX];
     return access_real(rewrite(path, buf), mode);
 }
