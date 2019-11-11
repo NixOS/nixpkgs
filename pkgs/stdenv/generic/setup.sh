@@ -1107,8 +1107,8 @@ fixupPhase() {
 
     # Apply fixup to each output.
     local output
-    for output in ${outputs[@]}; do
-        prefix="${output}" runHook fixupOutput
+    for output in ${!outputs[@]}; do
+        prefix="${!output}" runHook fixupOutput
     done
 
 
