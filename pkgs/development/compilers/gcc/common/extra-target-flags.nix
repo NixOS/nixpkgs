@@ -1,4 +1,4 @@
-{ stdenv, crossStageStatic, libcCross }:
+{ stdenv, crossStageStatic, libcCross, threadsCross }:
 
 let
   inherit (stdenv) lib hostPlatform targetPlatform;
@@ -12,6 +12,7 @@ in
         "-B${lib.getLib dep}${dep.libdir or "/lib"}"
       ]);
     in mkFlags libcCross
+    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross)
     ;
 
   EXTRA_TARGET_LDFLAGS = let
@@ -24,5 +25,6 @@ in
           "-Wl,-rpath-link,${lib.getLib dep}${dep.libdir or "/lib"}"
       ]));
     in mkFlags libcCross
+    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross)
     ;
 }

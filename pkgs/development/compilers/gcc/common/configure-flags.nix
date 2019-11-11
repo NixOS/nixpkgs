@@ -62,7 +62,7 @@ let
       "--enable-__cxa_atexit"
       "--enable-long-long"
       "--enable-threads=${if targetPlatform.isUnix then "posix"
-                          else if targetPlatform.isWindows then "win32"
+                          else if targetPlatform.isWindows then "mcf"
                           else "single"}"
       "--enable-nls"
       "--disable-decimal-float" # No final libdecnumber (it may work only in 386)

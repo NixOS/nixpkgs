@@ -23,6 +23,7 @@
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
+, threadsCross ? null # for MinGW
 , crossStageStatic ? false
 , # Strip kills static libs of other archs (hence no cross)
   stripped ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -45,10 +46,14 @@ assert stdenv.hostPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 
+# threadsCross is just for MinGW
+assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+
 with stdenv.lib;
 with builtins;
 
-let version = "5.5.0";
+let majorVersion = "5";
+    version = "${majorVersion}.5.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -61,6 +66,10 @@ let version = "5.5.0";
       ++ optional stdenv.hostPlatform.isMusl (fetchpatch {
         url = https://raw.githubusercontent.com/richfelker/musl-cross-make/e84b1bd1fc12a3def33111ca6df522cd6e5ec361/patches/gcc-5.3.0/0001-musl.diff;
         sha256 = "0pppbf8myi2kjhm3z3479ihn1cm60kycfv60gj8yy1bs0pl1qcfm";
+      })
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
+        url = "https://raw.githubusercontent.com/lhmouse/MINGW-packages/${import ../common/mfcgthreads-patches-repo.nix}/mingw-w64-gcc-git/9000-gcc-${majorVersion}-branch-Added-mcf-thread-model-support-from-mcfgthread.patch";
+        sha256 = "074bl5n27d1ksa31pvzj4vd8xd46r118k0w94gdv3s1vydg7mah0";
       });
 
     javaEcj = fetchurl {
@@ -183,6 +192,8 @@ stdenv.mkDerivation ({
     ++ (optional hostPlatform.isDarwin gnused)
     ;
 
+  depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
+
   NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
   preConfigure = import ../common/pre-configure.nix {
@@ -266,7 +277,7 @@ stdenv.mkDerivation ({
 
   inherit
     (import ../common/extra-target-flags.nix {
-      inherit stdenv crossStageStatic libcCross;
+      inherit stdenv crossStageStatic libcCross threadsCross;
     })
     EXTRA_TARGET_FLAGS
     EXTRA_TARGET_LDFLAGS
