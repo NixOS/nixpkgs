@@ -1,6 +1,6 @@
 { callPackage, ... } @ args:
 
 callPackage ./. (args // {
-  version = "3.1.4";
-  sha256 = "05jkaq151a45rqpyh0vrn6xcpawayfxyzhwn1w32hk0fw3z746ks";
+  version = "3.1.5";
+  sha256 = "1mfrm595kfnpjladaq6m184npa3rxff9pr1vwa35r057s7nmzpm9";
 })
