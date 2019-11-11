@@ -10,25 +10,21 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "9.0.beta4";
+  version = "9.0.beta5";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "135xif40mw2whxpkyddvxz8rpz4ksi4lp47wyjl9zq9s9s78f75j";
+    sha256 = "01rlpvrzpr66lmhin743j0f6r5zf2yk4qc79b8v1xafjq70r65vp";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
-    # https://trac.sagemath.org/ticket/25358
-    (fetchpatch {
-      name = "safe-directory-test-without-patch.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=093c46e2667c299ef07d276089e47962668ac4c6";
-      sha256 = "0knkyvkgj7r8d3sy7b065dmzrqlshza05yzha2gxga7mb7pph4iq";
-    })
+    # https://trac.sagemath.org/ticket/25358 (will be unnecessary with python 3)
+    ./patches/safe-directory-test-without-patch.patch
 
     # Unfortunately inclusion in upstream sage was rejected. Instead the bug was
     # fixed in python, but of course not backported to 2.7. So we'll probably
@@ -111,7 +107,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # make sure shebangs etc are fixed, but sage-python23 still works
     find . -type f -exec sed \
-      -e 's/sage-python23/python/g' \
+      -e 's/sage-python\(23\)\?/python/g' \
       -i {} \;
 
     echo '#!${runtimeShell}
