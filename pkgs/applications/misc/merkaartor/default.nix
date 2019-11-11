@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, qmake, pkgconfig, boost, gdal, proj
-, qtbase, qtsvg, qtwebkit }:
+, qtbase, qtsvg, qtwebview, qtwebkit }:
 
 stdenv.mkDerivation rec {
   pname = "merkaartor";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper qmake pkgconfig ];
 
-  buildInputs = [ boost gdal proj qtbase qtsvg qtwebkit ];
+  buildInputs = [ boost gdal proj qtbase qtsvg qtwebview qtwebkit ];
 
   enableParallelBuilding = true;
 
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://merkaartor.be/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
+    broken = true;  # Does not build with qt >= 5.12
   };
 }

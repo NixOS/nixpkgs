@@ -5213,7 +5213,7 @@ in
 
   niff = callPackage ../tools/package-management/niff { };
 
-  nifskope = libsForQt59.callPackage ../tools/graphics/nifskope { };
+  nifskope = libsForQt5.callPackage ../tools/graphics/nifskope { };
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
 
@@ -9853,7 +9853,7 @@ in
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
-  gede = libsForQt59.callPackage ../development/tools/misc/gede { };
+  gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
   gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
 
@@ -13482,10 +13482,7 @@ in
 
   python-qt = callPackage ../development/libraries/python-qt {
     python = python27;
-    qmake = qt59.qmake;
-    qttools = qt59.qttools;
-    qtwebengine = qt59.qtwebengine;
-    qtxmlpatterns = qt59.qtxmlpatterns;
+    inherit (qt5) qmake qttools qtwebengine qtxmlpatterns;
   };
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside {};
@@ -18164,7 +18161,7 @@ in
     pygments = python27Packages.pygments;
   };
 
-  csound-qt = libsForQt59.callPackage ../applications/audio/csound/csound-qt {
+  csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt {
     python = python27;
   };
 
@@ -19853,7 +19850,7 @@ in
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
-  merkaartor = libsForQt59.callPackage ../applications/misc/merkaartor {
+  merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor {
     gdal = gdal_2; # https://github.com/openstreetmap/merkaartor/issues/179
   };
 
@@ -20562,7 +20559,7 @@ in
     gtksharp = gtk-sharp-2_0;
   };
 
-  plex-media-player = libsForQt59.callPackage ../applications/video/plex-media-player { };
+  plex-media-player = libsForQt5.callPackage ../applications/video/plex-media-player { };
 
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
@@ -22462,7 +22459,7 @@ in
 
   chessdb = callPackage ../games/chessdb { };
 
-  chessx = libsForQt59.callPackage ../games/chessx { };
+  chessx = libsForQt5.callPackage ../games/chessx { };
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
