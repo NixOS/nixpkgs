@@ -13533,23 +13533,6 @@ in
     developerBuild = true;
   });
 
-  qt511 = recurseIntoAttrs (makeOverridable
-    (import ../development/libraries/qt-5/5.11) {
-      inherit newScope;
-      inherit stdenv fetchurl fetchFromGitHub fetchpatch makeSetupHook makeWrapper;
-      bison = bison2; # error: too few arguments to function 'int yylex(...
-      inherit cups;
-      harfbuzz = harfbuzzFull;
-      inherit libGL;
-      inherit perl;
-      inherit gtk3;
-      inherit (gnome3) dconf;
-      inherit (gst_all_1) gstreamer gst-plugins-base;
-      inherit llvmPackages_5;
-    });
-
-  libsForQt511 = recurseIntoAttrs (lib.makeScope qt511.newScope mkLibsForQt5);
-
   qt512 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.12) {
       inherit newScope;
