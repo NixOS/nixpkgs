@@ -2309,7 +2309,7 @@ in
     buildGoModule = buildGo112Module;
   };
 
-  circus = python3Packages.callPackage ../tools/networking/circus { };
+  circus = callPackage ../tools/networking/circus { };
 
   # Cleanup before 20.03:
   citrix_receiver = throw "citrix_receiver has been discontinued by Citrix (https://docs.citrix.com/en-us/citrix-workspace-app.html). Please use citrix_workspace.";
