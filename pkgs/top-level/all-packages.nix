@@ -1692,6 +1692,8 @@ in
 
   firestarter = callPackage ../applications/misc/firestarter { };
 
+  fselect = callPackage ../tools/misc/fselect { };
+
   fsmon = callPackage ../tools/misc/fsmon { };
 
   fsql = callPackage ../tools/misc/fsql { };
