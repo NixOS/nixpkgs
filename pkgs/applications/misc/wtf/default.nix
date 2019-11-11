@@ -7,22 +7,20 @@
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.23.0";
-
-  overrideModAttrs = _oldAttrs : _oldAttrs // {
-    preBuild = ''export GOPROXY="https://gocenter.io"'';
-  };
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bhk81jmv6rq8h898lmvrh9v356310fbi82lvakmgay7nvzk9a1c";
+    sha256 = "0jz7hjcm0hfxcih2zplp47wx6lyvhhzj9ka4ljqrx0i4l7cm9ahs";
    };
 
-  modSha256 = "1ndb7zbhaq0cnd8fd05fvb62qi0mxilgydz42qqz2z4fkbx9gp3m";
+  modSha256 = "04d8hvd90f7v853p23xcx38qz3ryv7kz7zjk9b131cjnd4mcv0sm";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  subPackages = [ "." ];
 
   nativeBuildInputs = [ makeWrapper ];
 
