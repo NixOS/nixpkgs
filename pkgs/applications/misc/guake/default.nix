@@ -23,7 +23,7 @@ in python3.pkgs.buildPythonApplication {
 
   buildInputs = [ gtk3 keybinder3 libnotify python3 vte ];
 
-  propagatedBuildInputs = with python3.pkgs; [ dbus-python pbr pycairo pygobject3 libwnck3 ];
+  propagatedBuildInputs = with python3.pkgs; [ dbus-python pbr pycairo pygobject3 setuptools libwnck3 ];
 
   LC_ALL = "en_US.UTF-8"; # fixes weird encoding error, see https://github.com/NixOS/nixpkgs/pull/38642#issuecomment-379727699
 
