@@ -1,4 +1,4 @@
-import ./make-test.nix {
+import ./make-test-python.nix {
   name = "opensmtpd";
 
   nodes = {
@@ -102,23 +102,23 @@ import ./make-test.nix {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $client->waitForUnit("network-online.target");
-    $smtp1->waitForUnit('opensmtpd');
-    $smtp2->waitForUnit('opensmtpd');
-    $smtp2->waitForUnit('dovecot2');
+    client.wait_for_unit("network-online.target")
+    smtp1.wait_for_unit("opensmtpd")
+    smtp2.wait_for_unit("opensmtpd")
+    smtp2.wait_for_unit("dovecot2")
 
     # To prevent sporadic failures during daemon startup, make sure
     # services are listening on their ports before sending requests
-    $smtp1->waitForOpenPort(25);
-    $smtp2->waitForOpenPort(25);
-    $smtp2->waitForOpenPort(143);
+    smtp1.wait_for_open_port(25)
+    smtp2.wait_for_open_port(25)
+    smtp2.wait_for_open_port(143)
 
-    $client->succeed('send-a-test-mail');
-    $smtp1->waitUntilFails('smtpctl show queue | egrep .');
-    $smtp2->waitUntilFails('smtpctl show queue | egrep .');
-    $client->succeed('check-mail-landed >&2');
+    client.succeed("send-a-test-mail")
+    smtp1.wait_until_fails("smtpctl show queue | egrep .")
+    smtp2.wait_until_fails("smtpctl show queue | egrep .")
+    client.succeed("check-mail-landed >&2")
   '';
 
   meta.timeout = 30;
