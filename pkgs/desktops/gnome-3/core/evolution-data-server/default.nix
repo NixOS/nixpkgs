@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
 
+  postFixup = ''
+    cp -r $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas $out/share/glib-2.0/schemas
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution-data-server";
