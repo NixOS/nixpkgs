@@ -4496,6 +4496,10 @@
     github = "moredread";
     githubId = 100848;
     name = "André-Patrick Bubel";
+    keys = [{
+      longkeyid = "rsa8192/0x118CE7C424B45728";
+      fingerprint = "4412 38AD CAD3 228D 876C  5455 118C E7C4 24B4 5728";
+    }];
   };
   moretea = {
     email = "maarten@moretea.nl";
