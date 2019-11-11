@@ -251,24 +251,13 @@ stdenv.mkDerivation ({
     ++ optionals javaAwtGtk [ gmp mpfr ]
   ));
 
-  EXTRA_TARGET_FLAGS = optionals
-    (targetPlatform != hostPlatform && libcCross != null)
-    ([
-      "-idirafter ${getDev libcCross}${libcCross.incdir or "/include"}"
-    ] ++ optionals (! crossStageStatic) [
-      "-B${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]);
-
-  EXTRA_TARGET_LDFLAGS = optionals
-    (targetPlatform != hostPlatform && libcCross != null)
-    ([
-      "-Wl,-L${libcCross.out}${libcCross.libdir or "/lib"}"
-    ] ++ (if crossStageStatic then [
-        "-B${libcCross.out}${libcCross.libdir or "/lib"}"
-      ] else [
-        "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}"
-        "-Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]));
+  inherit
+    (import ../common/extra-target-flags.nix {
+      inherit stdenv crossStageStatic libcCross;
+    })
+    EXTRA_TARGET_FLAGS
+    EXTRA_TARGET_LDFLAGS
+    ;
 
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;

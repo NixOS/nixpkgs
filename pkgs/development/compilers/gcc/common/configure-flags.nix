@@ -49,7 +49,7 @@ let
       "--disable-decimal-float" # requires libc
       "--disable-libmpx" # requires libc
     ] ++ lib.optionals crossMingw [
-      "--with-headers=${libcCross}/include"
+      "--with-headers=${lib.getDev libcCross}/include"
       "--with-gcc"
       "--with-gnu-as"
       "--with-gnu-ld"
