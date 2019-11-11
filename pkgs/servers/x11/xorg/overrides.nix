@@ -63,7 +63,7 @@ self: super:
     x11BuildHook = ./imake.sh;
     patches = [./imake.patch ./imake-cc-wrapper-uberhack.patch];
     setupHook = ./imake-setup-hook.sh;
-    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.isDarwin
+    env.CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.isDarwin
       then "${tradcpp}/bin/cpp"
       else "gcc"}\"'";
 
