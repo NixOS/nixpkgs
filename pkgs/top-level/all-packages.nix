@@ -6638,6 +6638,8 @@ in
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
+  
+  tiledb = callPackage ../development/libraries/tiledb { };
 
   timemachine = callPackage ../applications/audio/timemachine { };
 
