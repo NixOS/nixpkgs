@@ -53,14 +53,14 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "mobilesdk-7.1.0.GA";
+  name = "mobilesdk-8.2.1.GA";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = http://builds.appcelerator.com/mobile/7_1_X/mobilesdk-7.1.0.v20180314133955-linux.zip;
-    sha256 = "18b3jnr65sdn5wj191bcl48gvhyklxmighxakv4vrz1fb59kyvqn";
+    url = https://builds.appcelerator.com/mobile/8_2_X/mobilesdk-8.2.1.v20191025070136-linux.zip;
+    sha256 = "1nvcmm6cby6bmwdiacq46n5y4zjpz9qlipakvglw27j3p4rbmkwl";
   }
   else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = http://builds.appcelerator.com/mobile/7_1_X/mobilesdk-7.1.0.v20180314133955-osx.zip;
-    sha256 = "1f62616biwsw1fqxz2sq7lpa6bsfjazffliplyf5dpnh298cnc1m";
+    url = https://builds.appcelerator.com/mobile/8_2_X/mobilesdk-8.2.1.v20191025070136-osx.zip;
+    sha256 = "1nxwmyw3vqc5wghj38kpksisy0i808x0x3pa8w3p290w709g311l";
   }
   else throw "Platform: ${stdenv.system} not supported!";
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
 
     # Rename ugly version number
     cd mobilesdk/*
-    mv * 7.1.0.GA
+    mv * 8.2.1.GA
     cd *
 
     # Patch bundled gradle build infrastructure to make shebangs work
@@ -86,6 +86,13 @@ stdenv.mkDerivation {
 
     # Patch maven central repository with our own local directory. This prevents the builder from downloading Maven artifacts
     sed -i -e 's|mavenCentral()|maven { url "${fakeMavenRepo}" }|' android/templates/build/proguard.gradle
+
+    ${stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") ''
+      # Patch the strip frameworks script in the iPhone build template to not let
+      # it skip the strip phase. This is caused by an assumption on the file
+      # permissions in which Nix deviates from the standard.
+      sed -i -e "s|-perm +111|-perm /111|" iphone/templates/build/strip-frameworks.sh
+    ''}
 
     # Patch some executables
 
