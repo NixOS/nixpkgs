@@ -8525,6 +8525,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
+  cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
