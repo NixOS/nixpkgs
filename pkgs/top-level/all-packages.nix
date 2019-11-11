@@ -22325,7 +22325,7 @@ in
 
   displaycal = (newScope pythonPackages) ../applications/graphics/displaycal {};
 
-  drumkv1 = callPackage ../applications/audio/drumkv1 { };
+  drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
 

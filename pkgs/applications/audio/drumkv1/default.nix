@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5 }:
+{ mkDerivation, lib, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "drumkv1";
   version = "0.9.11";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An old-school drum-kit sampler synthesizer with stereo fx";
     homepage = http://drumkv1.sourceforge.net/;
     license = licenses.gpl2Plus;
