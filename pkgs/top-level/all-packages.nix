@@ -2971,6 +2971,7 @@ in
   evemu = callPackage ../tools/system/evemu { };
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
+  # When updating make sure to update all plugins or they will break!
   elk6Version = "6.8.3";
   elk7Version = "7.3.1";
 
