@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
       name = "CVE-2019-6128.patch";
       sha256 = "03yvsfq6dxjd3v8ypfwz6cpz2iymqwcbawqqlmkh40dayi7fgizr";
     })
+    (fetchurl {
+      url = "https://gitlab.com/libtiff/libtiff/commit/802d3cbf3043be5dce5317e140ccb1c17a6a2d39.patch";
+      name = "CVE-2019-7663.patch";
+      sha256 = "01nq5z1l55clasy4aqr0r2rgiaxay1108vni2nzd8lx4qc5q09hx";
+    })
     # Manual backport of https://gitlab.com/libtiff/libtiff/commit/1b5e3b6a23827c33acf19ad50ce5ce78f12b3773.patch
     ./CVE-2019-14973.patch
   ];
