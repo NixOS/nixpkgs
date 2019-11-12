@@ -1,24 +1,30 @@
 { stdenv, lib, fetchFromGitHub, python3Packages
 , hackrf, rtl-sdr, airspy, limesuite, libiio
+, qt5
 , USRPSupport ? false, uhd }:
 
 python3Packages.buildPythonApplication rec {
   pname = "urh";
-  version = "2.7.5";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0v9038gl8340vdw8l30vjgjh5z7yys5w1cv9smgm1fzkcys392mh";
+    sha256 = "1c87lff9bqhf574420ycqz88x6ad5hmy36wrb8pi0dqd1s1d72qb";
   };
 
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   buildInputs = [ hackrf rtl-sdr airspy limesuite libiio ]
     ++ lib.optional USRPSupport uhd;
 
   propagatedBuildInputs = with python3Packages; [
-    pyqt5 numpy psutil cython pyzmq pyaudio
+    pyqt5 numpy psutil cython pyzmq pyaudio setuptools
   ];
+
+  postFixup = ''
+    wrapQtApp $out/bin/urh
+  '';
 
   doCheck = false;
 
