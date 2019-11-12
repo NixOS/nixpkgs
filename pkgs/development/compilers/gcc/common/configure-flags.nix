@@ -21,7 +21,7 @@
 }:
 
 assert cloog != null -> stdenv.lib.versionOlder version "5";
-assert langJava -> stdenv.lib.versionOlder version "6";
+assert langJava -> stdenv.lib.versionOlder version "7";
 
 let
   inherit (stdenv)
