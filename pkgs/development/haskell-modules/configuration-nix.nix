@@ -624,5 +624,4 @@ self: super: builtins.intersectAttrs super {
   # need it during the build itself, too.
   cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.buildHaskellPackages.gtk2hs-buildtools) ["fortify"];
-
 }
