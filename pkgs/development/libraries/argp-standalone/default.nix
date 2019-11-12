@@ -43,6 +43,8 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
+  makeFlags = [ "AR:=$(AR)" ];
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
