@@ -308,7 +308,7 @@ Additional information.
 
    <para>
     review changes from last commit:
-<screen>nix-shell -p nix-review --run "nix-review ref HEAD"</screen>
+<screen>nix-shell -p nix-review --run "nix-review rev HEAD"</screen>
    </para>
   </section>
 
