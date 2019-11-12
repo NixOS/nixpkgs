@@ -215,7 +215,7 @@ self: super:
 
   libXmu = super.libXmu.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
-    buildFlags = [ "BITMAP_DEFINES=-DBITMAPDIR=\"/no-such-path\"" ];
+    buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
   });
 
   libXrandr = super.libXrandr.overrideAttrs (attrs: {
