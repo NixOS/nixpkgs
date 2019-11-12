@@ -7355,6 +7355,19 @@ let
     buildInputs = [ TestPod ];
   };
 
+  FindLib = buildPerlPackage {
+    pname = "Find-Lib";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YA/YANNK/Find-Lib-1.04.tar.gz";
+      sha256 = "0lg88v0sqfpq4d3jwvk6c9blqnpxbz8f4s22zr3b1qb160g94wqx";
+    };
+    meta = with stdenv.lib; {
+      description = "Helper to smartly find libs to use in the filesystem tree";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FontAFM = buildPerlPackage {
     pname = "Font-AFM";
     version = "1.20";
