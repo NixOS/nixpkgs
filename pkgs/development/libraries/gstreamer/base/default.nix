@@ -9,7 +9,7 @@
 , libGL
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412
 , enableX11 ? stdenv.isLinux, libXv
-, enableWayland ? stdenv.isLinux, wayland
+, enableWayland ? stdenv.isLinux, wayland, wayland-protocols
 , enableAlsa ? stdenv.isLinux, alsaLib
 , enableCocoa ? false, darwin
 , enableCdparanoia ? (!stdenv.isDarwin), cdparanoia }:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
-    "-Dgl_winsys=[${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}]"
+    "-Dgl_winsys=[${lib.concatStringsSep "," (lib.optional enableX11 "'x11'" ++ lib.optional enableWayland "'wayland'" ++ lib.optional enableCocoa "'cocoa'")}]"
     # We must currently disable gtk_doc API docs generation,
     # because it is not compatible with some features being disabled.
     # See for example
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.isDarwin) libvisual
     ++ lib.optional enableAlsa alsaLib
     ++ lib.optionals enableX11 [ libXv pango ]
-    ++ lib.optional enableWayland wayland
+    ++ lib.optionals enableWayland [ wayland wayland-protocols ]
     ++ lib.optional enableCocoa darwin.apple_sdk.frameworks.Cocoa
     ++ lib.optional enableCdparanoia cdparanoia;
 
