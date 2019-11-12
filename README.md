@@ -28,6 +28,7 @@ See code for all available configurations.
 | --------------------------------- | -------------------------------------------------- |
 | [Acer Aspire 4810T][]             | `<nixos-hardware/acer/aspire/4810t>`               |
 | Airis N990                        | `<nixos-hardware/airis/n990>`                      |
+| Apple MacBook Air 3,X             | `<nixos-hardware/apple/macbook-air/3>`             |
 | Apple MacBook Air 4,X             | `<nixos-hardware/apple/macbook-air/4>`             |
 | Apple MacBook Air 6,X             | `<nixos-hardware/apple/macbook-air/6>`             |
 | [Apple MacBook Pro 10,1][]        | `<nixos-hardware/apple/macbook-pro/10-1>`          |
