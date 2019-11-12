@@ -90,6 +90,7 @@ godlygeek/tabular
 google/vim-codefmt
 google/vim-jsonnet
 google/vim-maktaba
+gotcha/vimelette
 gregsexton/gitv
 guns/xterm-color-table.vim
 hashivim/vim-terraform
