@@ -3,14 +3,19 @@
 
 mkDerivation rec {
   pname = "qt5dxcb-plugin";
-  version = "1.2.2";
+  version = "5.0.1";
 
-  src = fetchFromGitHub {
-    owner = "linuxdeepin";
-    repo = pname;
-    rev = version;
-    sha256 = "1zvab6qxdr49pmk6mbk7s0md7bx585p32lca0xbg8mrkajz7g8rq";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner = "linuxdeepin";
+      repo = pname;
+      rev = version;
+      sha256 = "1pkhbx4hzjv7n4mscv7dng9ymjcc1csdc82iy62yxshhq32bcfja";
+    })
+    qtbase.src
+  ];
+
+  sourceRoot = "source";
 
   nativeBuildInputs = [
     pkgconfig
@@ -22,7 +27,15 @@ mkDerivation rec {
     libSM
     mtdev
     cairo
+    qtbase
   ];
+
+  postPatch = ''
+    # The Qt5 platforms plugin is vendored in the package, however what's there is not always up-to-date with what's in nixpkgs.
+    # We simply copy the headers from qtbase's source tarball.
+    mkdir -p platformplugin/libqt5xcbqpa-dev/${qtbase.version}
+    cp -r ../qtbase-everywhere-src-${qtbase.version}/src/plugins/platforms/xcb/*.h platformplugin/libqt5xcbqpa-dev/${qtbase.version}/
+  '';
 
   qmakeFlags = [
     "INSTALL_PATH=${placeholder "out"}/${qtbase.qtPluginPrefix}/platforms"

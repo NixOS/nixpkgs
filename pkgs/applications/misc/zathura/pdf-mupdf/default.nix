@@ -2,7 +2,7 @@
 , pkgconfig, zathura_core, cairo , gtk-mac-integration, girara, mupdf }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.4";
+  version = "0.3.5";
   pname = "zathura-pdf-mupdf";
 
   # pwmt.org server was down at the time of last update
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "pwmt";
     repo = "zathura-pdf-mupdf";
     rev = version;
-    sha256 = "1m4w4jrybpjmx6pi33a5saxzmfd8rrym2k13jpd1fv543s17d9dy";
+    sha256 = "0wb46hllykbi30ir69s8s23mihivqn13mgfdzawbsn2a21p8y4zl";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];

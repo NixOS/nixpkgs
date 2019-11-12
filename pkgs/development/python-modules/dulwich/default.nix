@@ -4,12 +4,12 @@
 , git, glibcLocales }:
 
 buildPythonPackage rec {
-  version = "0.19.11";
+  version = "0.19.13";
   pname = "dulwich";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "afbe070f6899357e33f63f3f3696e601731fef66c64a489dea1bc9f539f4a725";
+    sha256 = "aa628449c5f594a9a282f4d9e5993fef65481ef5e3b9b6c52ff31200f8f5dc95";
   };
 
   LC_ALL = "en_US.UTF-8";

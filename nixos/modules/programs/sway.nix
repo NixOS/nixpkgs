@@ -55,7 +55,7 @@ in {
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
-        swaylock swayidle
+        swaylock swayidle swaybg
         xwayland rxvt_unicode dmenu
       ];
       defaultText = literalExample ''

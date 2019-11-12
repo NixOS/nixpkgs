@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, extra-cmake-modules, makeWrapper
-, boost, doxygen, openssl, mysql, postgresql, graphviz, loki
+, boost, doxygen, openssl, libmysqlclient, postgresql, graphviz, loki
 , qscintilla, qtbase, qttools }:
 
 mkDerivation {
@@ -16,7 +16,7 @@ mkDerivation {
   nativeBuildInputs = [ cmake extra-cmake-modules makeWrapper qttools ];
 
   buildInputs = [
-    boost doxygen graphviz loki mysql.connector-c openssl postgresql qscintilla qtbase
+    boost doxygen graphviz loki libmysqlclient openssl postgresql qscintilla qtbase
   ];
 
   preConfigure = ''
@@ -47,7 +47,7 @@ mkDerivation {
     "-lssl"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-L${mysql.connector-c}/lib/mysql" "-I${mysql.connector-c}/include/mysql" ];
+  NIX_CFLAGS_COMPILE = [ "-L${libmysqlclient}/lib/mysql" "-I${libmysqlclient}/include/mysql" ];
 
   qtWrapperArgs = [
     ''--prefix PATH : ${lib.getBin graphviz}/bin''

@@ -42,7 +42,7 @@ let mkContrib = repo: revs: param:
     sha256 = "18f5vbq6nx9gz2gcj5p7v2gmjczpspc5dmlj6by4jqv07iirzsz2";
   };
 
-  additions = mkContrib "additions" [ "8.6" "8.7" ] {
+  additions = mkContrib "additions" [ "8.6" ] {
     version = "v8.5.0-9-gbec504e";
     rev = "bec504e7822747376159aaa2156cf7453dbbd2b4";
     sha256 = "1vvkqjnqrf6m726krhlm2viza64ha2081xgc5wb9y5sygd0baaz7";

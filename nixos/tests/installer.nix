@@ -54,8 +54,6 @@ let
 
         hardware.enableAllFirmware = lib.mkForce false;
 
-        services.udisks2.enable = lib.mkDefault false;
-
         ${replaceChars ["\n"] ["\n  "] extraConfig}
       }
     '';
@@ -294,8 +292,6 @@ let
               ]
               ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
               ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
-
-            services.udisks2.enable = mkDefault false;
 
             nix.binaryCaches = mkForce [ ];
             nix.extraOptions =

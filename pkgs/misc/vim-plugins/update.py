@@ -154,13 +154,13 @@ def get_current_plugins() -> List[Plugin]:
     return plugins
 
 
-def prefetch_plugin(user: str, repo_name: str, cache: "Cache") -> Plugin:
+def prefetch_plugin(user: str, repo_name: str, alias: str, cache: "Cache") -> Plugin:
     repo = Repo(user, repo_name)
     commit, date = repo.latest_commit()
     has_submodules = repo.has_submodules()
     cached_plugin = cache[commit]
     if cached_plugin is not None:
-        cached_plugin.name = repo_name
+        cached_plugin.name = alias or repo_name
         cached_plugin.date = date
         return cached_plugin
 
@@ -170,7 +170,7 @@ def prefetch_plugin(user: str, repo_name: str, cache: "Cache") -> Plugin:
     else:
         sha256 = repo.prefetch_github(commit)
 
-    return Plugin(repo_name, commit, has_submodules, sha256, date=date)
+    return Plugin(alias or repo_name, commit, has_submodules, sha256, date=date)
 
 
 def print_download_error(plugin: str, ex: Exception):
@@ -207,18 +207,30 @@ def check_results(
         sys.exit(1)
 
 
+def parse_plugin_line(line: str) -> Tuple[str, str, str]:
+    try:
+        name, repo = line.split('/')
+        try:
+            repo, alias = repo.split(' as ')
+            return (name, repo, alias.strip())
+        except ValueError:
+            # no alias defined
+            return (name, repo.strip(), None)
+    except ValueError:
+        return (None, None, None)
+
+
 def load_plugin_spec() -> List[Tuple[str, str]]:
     plugin_file = ROOT.joinpath("vim-plugin-names")
     plugins = []
     with open(plugin_file) as f:
         for line in f:
-            spec = line.strip()
-            parts = spec.split("/")
-            if len(parts) != 2:
-                msg = f"Invalid repository {spec}, must be in the format owner/repo"
+            plugin = parse_plugin_line(line)
+            if not plugin[0]:
+                msg = f"Invalid repository {line}, must be in the format owner/repo[ as alias]"
                 print(msg, file=sys.stderr)
                 sys.exit(1)
-            plugins.append((parts[0], parts[1]))
+            plugins.append(plugin)
     return plugins
 
 
@@ -276,12 +288,12 @@ class Cache:
 
 
 def prefetch(
-    args: Tuple[str, str], cache: Cache
+    args: Tuple[str, str, str], cache: Cache
 ) -> Tuple[str, str, Union[Exception, Plugin]]:
-    assert len(args) == 2
-    owner, repo = args
+    assert len(args) == 3
+    owner, repo, alias = args
     try:
-        plugin = prefetch_plugin(owner, repo, cache)
+        plugin = prefetch_plugin(owner, repo, alias, cache)
         cache[plugin.commit] = plugin
         return (owner, repo, plugin)
     except Exception as e:

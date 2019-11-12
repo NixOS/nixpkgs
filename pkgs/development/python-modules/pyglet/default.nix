@@ -8,6 +8,8 @@
 , glibc
 , gtk2-x11
 , gdk-pixbuf
+, fontconfig
+, freetype
 }:
 
 buildPythonPackage rec {
@@ -43,6 +45,12 @@ buildPythonPackage rec {
                 path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
             elif name == 'gdk_pixbuf-2.0':
                 path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
+            elif name == 'Xext':
+                path = '${xorg.libXext}/lib/libXext${ext}'
+            elif name == 'fontconfig':
+                path = '${fontconfig.lib}/lib/libfontconfig${ext}'
+            elif name == 'freetype':
+                path = '${freetype}/lib/libfreetype${ext}'
             if path is not None:
                 return ctypes.cdll.LoadLibrary(path)
         raise Exception("Could not load library {}".format(names))

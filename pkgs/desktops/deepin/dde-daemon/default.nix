@@ -115,7 +115,7 @@ buildGoPackage rec {
   postFixup = ''
     # wrapGAppsHook does not work with binaries outside of $out/bin or $out/libexec
     for binary in $out/lib/deepin-daemon/*; do
-      wrapProgram $binary "''${gappsWrapperArgs[@]}"
+      wrapGApp "$binary"
     done
 
     searchHardCodedPaths $out  # debugging

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Client library for Microsoft Azure Storage services owning the azure.storage namespace, user should not use this directly";
-    homepage = https://github.com/Azure/azure-storage-python/tree/master/azure-storage-nspkg;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ cmcdragonkai ];
   };

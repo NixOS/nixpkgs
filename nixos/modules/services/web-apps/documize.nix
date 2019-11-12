@@ -14,6 +14,15 @@ in {
   options.services.documize = {
     enable = mkEnableOption "Documize Wiki";
 
+    stateDirectoryName = mkOption {
+      type = types.str;
+      default = "documize";
+      description = ''
+        The name of the directory below <filename>/var/lib/private</filename>
+        where documize runs in and stores, for example, backups.
+      '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.documize-community;
@@ -132,6 +141,8 @@ in {
         ];
         Restart = "always";
         DynamicUser = "yes";
+        StateDirectory = cfg.stateDirectoryName;
+        WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
       };
     };
   };

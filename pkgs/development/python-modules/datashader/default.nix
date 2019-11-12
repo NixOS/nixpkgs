@@ -29,11 +29,11 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5baf218713dc1ad4791f7bcf606ef8f618273945e788c59f9573aebd7cb851f8";
+    sha256 = "59ac9e3830167d07b350992402a9f547f26eca45cd69a0fb04061a4047e7ff2a";
   };
 
   propagatedBuildInputs = [

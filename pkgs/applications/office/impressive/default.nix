@@ -2,7 +2,7 @@
 , SDL, ghostscript, pdftk, dejavu_fonts }:
 
 let
-  version = "0.12.0";
+  version = "0.12.1";
   pythonEnv = python2.withPackages (ps: with ps; [pyopengl pygame pillow]);
 in stdenv.mkDerivation {
     # This project was formerly known as KeyJNote.
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
 
     src = fetchurl {
       url = "mirror://sourceforge/impressive/Impressive-${version}.tar.gz";
-      sha256 = "0zaqq3yvd296mfr5bxpj2hqlk7vrb0rsbgd4dc1l5ag46giqvivx";
+      sha256 = "1r7ihv41awnlnlry1kymb8fka053wdhzibfwcarn78rr3vs338vl";
     };
 
     buildInputs = [ makeWrapper pythonEnv ];

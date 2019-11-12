@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "Global Menu applet for XFCE4";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jD91mZM2 ];
+    broken = true;
   };
 }

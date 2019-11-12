@@ -20,10 +20,10 @@ in rec {
       };
     } ./flit-build-hook.sh) {};
 
-  pipBuildHook = callPackage ({ pip }:
+  pipBuildHook = callPackage ({ pip, wheel }:
     makeSetupHook {
       name = "pip-build-hook.sh";
-      deps = [ pip ];
+      deps = [ pip wheel ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
       };
@@ -88,8 +88,9 @@ in rec {
       };
     } ./setuptools-check-hook.sh) {};
 
-  wheelUnpackHook = callPackage ({ }:
+  wheelUnpackHook = callPackage ({ wheel }:
     makeSetupHook {
       name = "wheel-unpack-hook.sh";
+      deps = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
 }

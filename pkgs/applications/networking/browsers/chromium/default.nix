@@ -2,6 +2,8 @@
 , makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 , libva ? null
+, gcc, nspr, nss, patchelfUnstable, runCommand
+, lib
 
 # package customization
 , channel ? "stable"
@@ -34,14 +36,64 @@ in let
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableNaCl gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
-              useVaapi
-              enableWideVine;
+              useVaapi;
     };
 
-    browser = callPackage ./browser.nix { inherit channel; };
+    browser = callPackage ./browser.nix { inherit channel enableWideVine; };
 
     plugins = callPackage ./plugins.nix {
-      inherit enablePepperFlash enableWideVine;
+      inherit enablePepperFlash;
+    };
+  };
+
+  mkrpath = p: "${lib.makeSearchPathOutput "lib" "lib64" p}:${lib.makeLibraryPath p}";
+  widevine = let upstream-info = chromium.upstream-info; in stdenv.mkDerivation {
+    name = "chromium-binary-plugin-widevine";
+
+    # The .deb file for Google Chrome
+    src = upstream-info.binary;
+
+    nativeBuildInputs = [ patchelfUnstable ];
+
+    phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
+
+    unpackCmd = let
+      soPath =
+        if upstream-info.channel == "stable" then
+          "./opt/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
+        else if upstream-info.channel == "beta" then
+          "./opt/google/chrome-beta/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
+        else if upstream-info.channel == "dev" then
+          "./opt/google/chrome-unstable/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
+        else
+          throw "Unknown chromium channel.";
+    in ''
+      mkdir -p plugins
+      # Extract just libwidevinecdm.so from upstream's .deb file
+      ar p "$src" data.tar.xz | tar xJ -C plugins ${soPath}
+      mv plugins/${soPath} plugins/
+      rm -rf plugins/opt
+    '';
+
+    doCheck = true;
+    checkPhase = ''
+      ! find -iname '*.so' -exec ldd {} + | grep 'not found'
+    '';
+
+    PATCH_RPATH = mkrpath [ gcc.cc glib nspr nss ];
+
+    patchPhase = ''
+      patchelf --set-rpath "$PATCH_RPATH" libwidevinecdm.so
+    '';
+
+    installPhase = ''
+      install -vD libwidevinecdm.so \
+        "$out/lib/libwidevinecdm.so"
+    '';
+
+    meta = {
+      platforms = [ "x86_64-linux" ];
+      license = lib.licenses.unfree;
     };
   };
 
@@ -51,6 +103,19 @@ in let
 
   version = chromium.browser.version;
 
+  # We want users to be able to enableWideVine without rebuilding all of
+  # chromium, so we have a separate derivation here that copies chromium
+  # and adds the unfree libwidevinecdm.so.
+  chromiumWV = let browser = chromium.browser; in if enableWideVine then
+    runCommand (browser.name + "-wv") { version = browser.version; }
+      ''
+        mkdir -p $out
+        cp -a ${browser}/* $out/
+        chmod u+w $out/libexec/chromium
+        mkdir -p $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64
+        cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64/
+      ''
+    else browser;
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;
@@ -68,7 +133,7 @@ in stdenv.mkDerivation {
   outputs = ["out" "sandbox"];
 
   buildCommand = let
-    browserBinary = "${chromium.browser}/libexec/chromium/chromium";
+    browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
     libPath = stdenv.lib.makeLibraryPath ([]
       ++ stdenv.lib.optional useVaapi libva
@@ -91,7 +156,11 @@ in stdenv.mkDerivation {
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
 
-    export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:${libPath}"
+  '' + lib.optionalString (libPath != "") ''
+    # To avoid loading .so files from cwd, LD_LIBRARY_PATH here must not
+    # contain an empty section before or after a colon.
+    export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}${libPath}"
+  '' + ''
 
     # libredirect causes chromium to deadlock on startup
     export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
@@ -113,13 +182,7 @@ in stdenv.mkDerivation {
   '';
 
   inherit (chromium.browser) packageName;
-  meta = chromium.browser.meta // {
-    broken = if enableWideVine then
-          builtins.trace "WARNING: WideVine is not functional, please only use for testing"
-             true
-        else false;
-  };
-
+  meta = chromium.browser.meta;
   passthru = {
     inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;

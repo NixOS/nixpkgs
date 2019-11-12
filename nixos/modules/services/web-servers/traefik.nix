@@ -117,6 +117,7 @@ in {
       group = "traefik";
       home = cfg.dataDir;
       createHome = true;
+      isSystemUser = true;
     };
 
     users.groups.traefik = {};

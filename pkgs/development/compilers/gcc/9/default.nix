@@ -6,6 +6,7 @@
 , profiledCompiler ? false
 , staticCompiler ? false
 , enableShared ? true
+, enableLTO ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which
@@ -128,7 +129,12 @@ stdenv.mkDerivation ({
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
-    else "");
+    else "")
+      + stdenv.lib.optionalString targetPlatform.isAvr ''
+	        makeFlagsArray+=(
+	           'LIMITS_H_TEST=false'
+	        )
+	      '';
 
   inherit noSysDirs staticCompiler crossStageStatic
     libcCross crossMingw;
@@ -178,8 +184,9 @@ stdenv.mkDerivation ({
 
       gmp mpfr libmpc libelf isl
 
-      enablePlugin
+      enableLTO
       enableMultilib
+      enablePlugin
       enableShared
 
       langC

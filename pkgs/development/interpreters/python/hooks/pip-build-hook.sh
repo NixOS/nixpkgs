@@ -7,7 +7,7 @@ pipBuildPhase() {
 
     mkdir -p dist
     echo "Creating a wheel..."
-    @pythonInterpreter@ -m pip wheel --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist "$options" .
+    @pythonInterpreter@ -m pip wheel --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .
     echo "Finished creating a wheel..."
 
     runHook postBuild

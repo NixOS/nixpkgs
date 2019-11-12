@@ -31,5 +31,6 @@ in buildPythonApplication rec {
     homepage = https://pagure.io/fedpkg;
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
+    broken = true;
   };
 }

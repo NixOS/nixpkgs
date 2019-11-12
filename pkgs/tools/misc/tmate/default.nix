@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tmate";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner  = "tmate-io";
     repo   = "tmate";
     rev    = version;
-    sha256 = "0fwqhmkp1jfp8qk7497ws3nzvly7p06mv04z8z0qicn6a961v1sa";
+    sha256 = "183rvga8nvh9r7p8104vwcmzp3vrfdhnx73vh06m2fgdq9i5rz3l";
   };
 
   dontUseCmakeConfigure = true;

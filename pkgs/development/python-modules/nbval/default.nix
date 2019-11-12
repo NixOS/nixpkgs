@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "nbval";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g8xl4158ngyhiynrkk72jpawnk4isznbijz0w085g269fps0vp2";
+    sha256 = "0613drjl740ppam3spm4b8mdcwwvl1lfmqy3vkgznbvzfxfpb3zj";
   };
 
   checkInputs = [
@@ -44,6 +44,9 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest tests --ignore tests/test_timeouts.py
   '';
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A py.test plugin to validate Jupyter notebooks";

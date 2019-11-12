@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./find-headers.patch ];
 
+  # Fix with mesa 19.2: https://bugzilla.libsdl.org/show_bug.cgi?id=4797
+  postPatch = ''
+    substituteInPlace include/SDL_opengl_glext.h \
+      --replace "typedef ptrdiff_t GLsizeiptr;" "typedef signed long int khronos_ssize_t; typedef khronos_ssize_t GLsizeiptr;" \
+      --replace "typedef ptrdiff_t GLintptr;" "typedef signed long int khronos_intptr_t; typedef khronos_intptr_t GLintptr;"
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;

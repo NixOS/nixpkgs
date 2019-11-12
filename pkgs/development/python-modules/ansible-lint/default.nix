@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "4.1.0";
+  version = "4.1.1a0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9430ea6e654ba4bf5b9c6921efc040f46cda9c4fd2896a99ff71d21037bcb123";
+    sha256 = "00mw56a3lmdb5xvrzhahrzqv3wvxfz0mxl4n0qbkxzggf2pg0i8d";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

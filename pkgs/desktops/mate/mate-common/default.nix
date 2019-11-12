@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-common";
-  version = "1.22.0";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11lwckndizawbq993ws8lqp59vsc873zri0m8s1i5zyc4qx9f69z";
+    sha256 = "1xx7qrw8kc6355r1a1nybncf8s2rxjb2nqzw0gv2r5j5sqx8fzgf";
   };
 
   meta = {

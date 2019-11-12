@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "grafana";
-  version = "6.3.5";
+  version = "6.4.4";
 
   goPackagePath = "github.com/grafana/grafana";
 
@@ -12,12 +12,12 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "0qimqdlxkvh31n730gp1wl1va0bza69bw90nyzrmfb34733pmni2";
+    sha256 = "0v5iwny96kb07qkj2qqqfgvnsw3dfcq3wf66zsllqavnahvrd1s8";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "1rw2ws610ba2vl5kv3yay8s69xkqzisrl6q27zxa5kj48khvy101";
+    sha256 = "15583cdi4yajg678d3kj8nngs9lwj0qqn2nh5zm8il9p71w57x0k";
   };
 
   postPatch = ''

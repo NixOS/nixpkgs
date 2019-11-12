@@ -37,6 +37,12 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  # have it look for 4.7.2 instead of 4.7.1
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "antlr-4.7.1-complete.jar" "antlr-4.7.2-complete.jar"
+  '';
+
   nativeBuildInputs = [
     cmake ninja pkgconfig jre swig wrapGAppsHook
   ];
@@ -85,8 +91,8 @@ in stdenv.mkDerivation rec {
     find -L "$out/bin" -type f -executable -print0 \
       | while IFS= read -r -d ''' file; do
       if [[ "''${file}" != *-bin ]]; then
-        echo "Wrapping program ''${file}"
-        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+        echo "Wrapping program $file"
+        wrapGApp "$file"
       fi
     done
   '';

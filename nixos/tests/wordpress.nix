@@ -20,12 +20,6 @@ import ./make-test.nix ({ pkgs, ... }:
       };
 
       networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
-
-      # required for wordpress-init.service to succeed
-      systemd.tmpfiles.rules = [
-        "F /var/lib/wordpress/site1.local/secret-keys.php 0440 wordpress wwwrun - -"
-        "F /var/lib/wordpress/site2.local/secret-keys.php 0440 wordpress wwwrun - -"
-      ];
     };
 
   testScript = ''
@@ -37,6 +31,11 @@ import ./make-test.nix ({ pkgs, ... }:
 
     $machine->succeed("curl -L site1.local | grep 'Welcome to the famous'");
     $machine->succeed("curl -L site2.local | grep 'Welcome to the famous'");
+
+    $machine->succeed("systemctl --no-pager show wordpress-init-site1.local.service | grep 'ExecStart=.*status=0'");
+    $machine->succeed("systemctl --no-pager show wordpress-init-site2.local.service | grep 'ExecStart=.*status=0'");
+    $machine->succeed("grep -E '^define.*NONCE_SALT.{64,};\$' /var/lib/wordpress/site1.local/secret-keys.php");
+    $machine->succeed("grep -E '^define.*NONCE_SALT.{64,};\$' /var/lib/wordpress/site2.local/secret-keys.php");
   '';
 
 })

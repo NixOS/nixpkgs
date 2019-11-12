@@ -32,11 +32,12 @@ with lib;
   config = mkIf config.services.tinydns.enable {
     environment.systemPackages = [ pkgs.djbdns ];
 
-    users.users.tinydns = {};
+    users.users.tinydns.isSystemUser = true;
 
     systemd.services.tinydns = {
       description = "djbdns tinydns server";
       wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       path = with pkgs; [ daemontools djbdns ];
       preStart = ''
         rm -rf /var/lib/tinydns

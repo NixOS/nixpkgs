@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1m43nfcpagv03zwlivpzp82qdv590s5c8vjjn4iirqjl6mzvdshp";
+    sha256 = "1571pj1a9998sq14y9366s2rw9wd2kq3l3dvvsk610vyd0fki3qm";
   };
 
   buildInputs =

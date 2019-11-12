@@ -220,6 +220,43 @@ in
       exec ${lightdm}/sbin/lightdm
     '';
 
+    # Replaces getty
+    systemd.services.display-manager.conflicts = [
+      "getty@tty7.service"
+      # TODO: Add "plymouth-quit.service" so LightDM can control when plymouth
+      # quits. Currently this breaks switching to configurations with plymouth.
+     ];
+
+    # Pull in dependencies of services we replace.
+    systemd.services.display-manager.after = [
+      "rc-local.service"
+      "systemd-machined.service"
+      "systemd-user-sessions.service"
+      "getty@tty7.service"
+      "user.slice"
+    ];
+
+    # user.slice needs to be present
+    systemd.services.display-manager.requires = [
+      "user.slice"
+    ];
+
+    # lightdm stops plymouth so when it fails make sure plymouth stops.
+    systemd.services.display-manager.onFailure = [
+      "plymouth-quit.service"
+    ];
+
+    systemd.services.display-manager.serviceConfig = {
+      BusName = "org.freedesktop.DisplayManager";
+      IgnoreSIGPIPE = "no";
+      # This allows lightdm to pass the LUKS password through to PAM.
+      # login keyring is unlocked automatic when autologin is used.
+      KeyringMode = "shared";
+      KillMode = "mixed";
+      StandardError = "inherit";
+      StandardOutput = "syslog";
+    };
+
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
     environment.etc."lightdm/users.conf".source = usersConf;
 
@@ -249,7 +286,7 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = lightdm
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so

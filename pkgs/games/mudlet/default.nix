@@ -6,23 +6,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.0.3";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    sha256 = "18bl4k0qgh47d9k5ipfvypfj1il678c0ws64a8adn8k21jajzkik";
+    sha256 = "1d6r51cj8a71hmhzsayd2far4hliwz5pnrsaj3dn39m7c0iikgdn";
   };
-
-  patches = [
-    ( fetchpatch {
-      url = "https://github.com/Mudlet/Mudlet/commit/3c8f12b6d757894d92ec2e2c9b12b91f69e8a3b6.patch";
-      name = "hunspell-1.7";
-      sha256 = "09qggls4pzpd8h9h10fbpfd7x3kr7fjp9axdwz98igpwy714n98j";
-    })
-  ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook qttools which ];
   buildInputs = [
@@ -35,6 +27,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase =  ''
+    mkdir -pv $out/lib
+    cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog.so $out/lib
     mkdir -pv $out/bin
     cp src/mudlet $out
     mkdir -pv $out/share/mudlet

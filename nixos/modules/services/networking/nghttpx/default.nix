@@ -96,6 +96,7 @@ in
     users.groups.nghttpx = { };
     users.users.nghttpx = {
       group = config.users.groups.nghttpx.name;
+      isSystemUser = true;
     };
       
 

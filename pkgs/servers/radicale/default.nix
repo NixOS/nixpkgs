@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     vobject
     python-dateutil
     passlib
+    setuptools
   ];
 
   checkInputs = with python3.pkgs; [

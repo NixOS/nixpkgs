@@ -4,13 +4,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy";
-  version = "2.2.3";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     rev = "v${version}";
-    sha256 = "0i9rpnlmgrnkgmr9hyx9sky9gzj2cjhay84a0yaijwcb9nmr8nnc";
+    sha256 = "1qdflxr0an6l2m3j90h55bzyj7rjlkkwmxx945hwv8xi472rcgdj";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    gst-python pygobject3 pykka tornado_4 requests
+    gst-python pygobject3 pykka tornado_4 requests setuptools
   ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python;
 
   # There are no tests

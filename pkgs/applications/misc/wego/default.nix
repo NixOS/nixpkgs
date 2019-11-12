@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "wego";
-  version = "20170403-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "unstable-2017-04-03";
   rev = "415efdfab5d5ee68300bf261a0c6f630c6c2584c";
   
   goPackagePath = "github.com/schachmat/wego";
@@ -17,5 +17,7 @@ buildGoPackage rec {
 
   meta = {
     license = stdenv.lib.licenses.isc;
+    homepage = "https://github.com/schachmat/wego";
+    description = "Weather app for the terminal";
   };
 }

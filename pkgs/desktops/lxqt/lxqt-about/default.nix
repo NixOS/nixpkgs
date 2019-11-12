@@ -29,7 +29,7 @@ mkDerivation rec {
     description = "Dialogue window providing information about LXQt and the system it's running on";
     homepage = https://github.com/lxqt/lxqt-about;
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

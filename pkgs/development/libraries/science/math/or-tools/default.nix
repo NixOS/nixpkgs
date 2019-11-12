@@ -5,14 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "v7.0";
+  version = "7.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
-    rev = version;
-    sha256 = "09rs2j3w4ljw9qhhnsjlvfii297njjszwvkbgj1i6kns3wnlr7cp";
+    rev = "v${version}";
+    sha256 = "0q06vxmds6nm3dpjw4y5jzr8j98qgfb9i8pbm9pfhmqigv791hwc";
   };
+
+  patches = [
+    ./build.patch # https://github.com/google/or-tools/pull/1619
+    ./protobuf.patch # Otherwise it tries to install protobuf from pypi.
+  ];
 
   # The original build system uses cmake which does things like pull
   # in dependencies through git and Makefile creation time. We

@@ -8,7 +8,7 @@ let
   });
 in pythonPackages.buildPythonApplication rec {
   pname = "video2midi";
-  version = "0.3.9.1";
+  version = "0.3.9.6";
 
   format = "other";
 
@@ -16,7 +16,7 @@ in pythonPackages.buildPythonApplication rec {
     owner = "svsdval";
     repo = pname;
     rev = version;
-    sha256 = "1ndzhfng8z5080n1xkcavw21dm6rjz0x1954v9llifsdmf4cpn8y";
+    sha256 = "0x9b8hwl325gd6v9i60yh95gbn49nydpwyfqs92mbq8vvvq7x8fk";
   };
 
   propagatedBuildInputs = with pythonPackages; [ opencv3_ midiutil pygame pyopengl ];

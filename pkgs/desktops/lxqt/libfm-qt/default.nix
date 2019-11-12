@@ -5,14 +5,14 @@
 }:
 
 mkDerivation rec {
-  pname = "libfm-qt";
-  version = "0.14.1";
+  pname = "libfm-qt-unstable";
+  version = "2019-09-22";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    sha256 = "00rn5i16h659zyp1dx213nc3jz7rx9phiw71zf6nspxzxsb8w2sc";
+    repo = "libfm-qt";
+    rev = "7c94e9efb996df0602f1f2b34b0216ba9b6df498";
+    sha256 = "1fnli2kh7n4hxmqwcb1n06lyk67d9a2fx6z70gas5jzym7r2h5vw";
   };
 
   nativeBuildInputs = [

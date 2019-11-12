@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, coreutils, autoreconfHook, smlnj }:
 
 let
-  rev= "47273c463fc3c5d0a0ae655cf75a4700bdb020b4";
+  rev= "4528ccacdfd53d36f5959c005b27cd7ab6175b83";
 in stdenv.mkDerivation {
   pname = "manticore";
-  version = "2018.09.29";
+  version = "2019.09.20";
  
   src = fetchFromGitHub {
     owner = "ManticoreProject";
     repo = "manticore";
-    sha256 = "1prrgp7ldkdnrdbj224qqkirw8bj72460ix97c96fy264j9c97cn";
+    sha256 = "1xz7msiq5x2c56zjxydbxlj6r001mm5zszcda6f6v5qfmmd1bakz";
     inherit rev;
   };
 

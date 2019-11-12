@@ -11,13 +11,13 @@ with stdenv.lib;
 
 mkDerivation rec {
   pname = "fmit";
-  version = "1.2.6";
+  version = "1.2.13";
 
   src = fetchFromGitHub {
     owner = "gillesdegottex";
     repo = "fmit";
     rev = "v${version}";
-    sha256 = "03nzkig5mw2rqwhwmg0qvc5cnk9bwh2wp13jh0mdrr935w0587mz";
+    sha256 = "1qyskam053pvlap1av80rgp12pzhr92rs88vqs6s0ia3ypnixcc6";
   };
 
   nativeBuildInputs = [ qmake itstool wrapQtAppsHook ];

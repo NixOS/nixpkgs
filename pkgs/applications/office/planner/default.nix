@@ -45,6 +45,9 @@ in stdenv.mkDerivation {
     python2.pkgs.pygtk
   ];
 
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+
   preConfigure = ''./autogen.sh'';
   configureFlags = [
     "--enable-python"

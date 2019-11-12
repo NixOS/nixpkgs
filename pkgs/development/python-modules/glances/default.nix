@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchFromGitHub, isPyPy, lib
+{ buildPythonPackage, fetchFromGitHub, fetchpatch, isPyPy, lib
 , psutil, setuptools, bottle, batinfo, pysnmp
 , hddtemp, future
 # Optional dependencies:
@@ -9,18 +9,23 @@
 
 buildPythonPackage rec {
   pname = "glances";
-  version = "3.1.2";
+  version = "3.1.3";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "1z9sq0chhm8m4gq98yfknxj408cj017h7j375blngjk2zvhw39qd";
+    sha256 = "15yz8sbw3k3n0729g2zcwsxc5iyhkyrhqza6fnipxxpsskwgqbwp";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
-  patches = lib.optional doCheck ./skip-failing-tests.patch;
+  patches = lib.optional doCheck ./skip-failing-tests.patch
+    ++ [ (fetchpatch {
+      # Correct unitest
+      url = "https://github.com/nicolargo/glances/commit/abf64ffde31113f5f46ef286703ff061fc57395f.patch";
+      sha256 = "00krahqq89jvbgrqx2359cndmvq5maffhpj163z10s1n7q80kxp1";
+    }) ];
 
   doCheck = true;
   checkInputs = [ unittest2 ];

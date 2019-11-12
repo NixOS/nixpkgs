@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
-, pango, fcgi, firebird, mysql, postgresql, graphicsmagick, glew, openssl
-, pcre
+, pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
+, pcre, harfbuzz
 }:
 
 let
@@ -22,17 +22,22 @@ let
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
         cmake boost doxygen qt48Full libharu
-        pango fcgi firebird mysql.connector-c postgresql graphicsmagick glew
+        pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
         openssl pcre
       ];
 
       cmakeFlags = [
-        "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DWT_CPP_11_MODE=-std=c++11"
-        "-DGM_PREFIX=${graphicsmagick}"
-        "-DMYSQL_PREFIX=${mysql.connector-c}"
         "--no-warn-unused-cli"
-      ];
+      ]
+      ++ stdenv.lib.optionals (graphicsmagick != null) [
+        "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
+        "-DGM_PREFIX=${graphicsmagick}"
+      ]
+      ++ stdenv.lib.optional (harfbuzz != null)
+        "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
+      ++ stdenv.lib.optional (libmysqlclient != null)
+        "-DMYSQL_PREFIX=${libmysqlclient}";
 
       meta = with stdenv.lib; {
         homepage = "https://www.webtoolkit.eu/wt";
@@ -44,12 +49,12 @@ let
     };
 in {
   wt3 = generic {
-    version = "3.4.0";
-    sha256 = "0y0b2h9jf5cg1gdh48dj32pj5nsvipab1cgygncxf98c46ikhysg";
+    version = "3.4.2";
+    sha256 = "03mwr4yv3705y74pdh19lmh8szad6gk2x2m23f4pr0wrmqg73307";
   };
 
   wt4 = generic {
-    version = "4.1.0";
-    sha256 = "1a9nl5gs8m8pssf2l3z6kbl2rc9fw5ad7lfslw5yr3gzi0zqn05x";
+    version = "4.1.2";
+    sha256 = "06bnadpgflg8inikzynnz4l4r6w1bphjwlva4pzf51w648vpkknl";
   };
 }

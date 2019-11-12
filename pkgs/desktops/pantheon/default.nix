@@ -1,4 +1,4 @@
-{ pkgs, lib, gnome3 }:
+{ config, pkgs, lib, gnome3 }:
 
 
 lib.makeScope pkgs.newScope (self: with self; {
@@ -18,6 +18,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   ];
 
   desktop = [
+    elementary-default-settings
     elementary-session-settings
     elementary-shortcut-overlay
     gala
@@ -58,13 +59,14 @@ lib.makeScope pkgs.newScope (self: with self; {
   maintainers = with pkgs.stdenv.lib.maintainers; [ worldofpeace ];
 
   mutter = pkgs.gnome3.mutter328;
-  vala = pkgs.vala_0_40;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
   notes-up = pkgs.notes-up.override { withPantheon = true; };
 
   #### APPS
+
+  appcenter = callPackage ./apps/appcenter { };
 
   elementary-calculator = callPackage ./apps/elementary-calculator { };
 
@@ -76,6 +78,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-files = callPackage ./apps/elementary-files { };
 
+  elementary-feedback = callPackage ./apps/elementary-feedback { };
+
   elementary-music = callPackage ./apps/elementary-music { };
 
   elementary-photos = callPackage ./apps/elementary-photos { };
@@ -86,13 +90,15 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-videos = callPackage ./apps/elementary-videos { };
 
+  sideload = callPackage ./apps/sideload { };
+
   #### DESKTOP
 
   elementary-default-settings = callPackage ./desktop/elementary-default-settings { };
 
-  elementary-greeter = callPackage ./desktop/elementary-greeter {
-    inherit (gnome3) gnome-desktop;
-  };
+  elementary-greeter = callPackage ./desktop/elementary-greeter { };
+
+  elementary-onboarding = callPackage ./desktop/elementary-onboarding { };
 
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
@@ -220,5 +226,11 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-sound-theme = callPackage ./artwork/elementary-sound-theme { };
 
   elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
+
+} // lib.optionalAttrs (config.allowAliases or true) {
+
+  ### ALIASES
+
+  inherit (pkgs) vala; # added 2019-10-10
 
 })

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plano-theme";
-  version = "3.32-1";
+  version = "3.34-1";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0p9j4p32489jb6d67jhf9x26my0mddcc6a174x713drch8zvb96l";
+    sha256 = "0fdg4jyc3xv98yg2r6c8rccvbpf8y2l3x79qbpiq6ck9k6d34ycq";
   };
 
   buildInputs = [ gdk-pixbuf gtk_engines ];
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -dm 755 $out/share/themes/Plano
     cp -a * $out/share/themes/Plano/
-    rm $out/share/themes/Plano/LICENSE
+    rm $out/share/themes/Plano/{COPYING.LGPL-2.1,LICENSE,README.md}
   '';
 
   meta = with stdenv.lib; {
-    description = "Flat theme for GNOME & Xfce4";
+    description = "Flat theme for GNOME and Xfce";
     homepage = https://github.com/lassekongo83/plano-theme;
     license = licenses.gpl3;
     platforms = platforms.unix;

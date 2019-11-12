@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "1a126lzhd2f04zr3rvdl6814lfl0j077spi5dsf2alghgykn5iif";
+    sha256 = "1hyywwjsmvsd7di603f7iznjlccqlc7yvz0j59gax7bljm9wb6ni";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 addOpenGLRunpath ];
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
       --replace "-Wl,-Bsymbolic " ""
     substituteInPlace src/EGL/Makefile.am \
       --replace "-Wl,-Bsymbolic " ""
+    substituteInPlace src/GLdispatch/Makefile.am \
+      --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
   '';
 
   NIX_CFLAGS_COMPILE = [
@@ -32,17 +34,6 @@ stdenv.mkDerivation rec {
   # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
   configureFlags  = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
 
-  # Upstream patch fixing use of libdl, should be in next release.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/NVIDIA/libglvnd/commit/0177ade40262e31a80608a8e8e52d3da7163dccf.patch";
-      sha256 = "1rnz5jw2gvx4i1lcp0k85jz9xgr3dgzsd583m2dlxkaf2a09j89d";
-    })
-  ] ++ stdenv.lib.optional stdenv.isDarwin
-    (fetchpatch {
-      url = "https://github.com/NVIDIA/libglvnd/commit/294ccb2f49107432567e116e13efac586580a4cc.patch";
-      sha256 = "01339wg27cypv93221rhk3885vxbsg8kvbfyia77jmjdcnwrdwm2";
-    });
   outputs = [ "out" "dev" ];
 
   # Set RUNPATH so that libGLX can find driver libraries in /run/opengl-driver(-32)/lib.

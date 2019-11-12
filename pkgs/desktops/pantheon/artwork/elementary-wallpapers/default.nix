@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-wallpapers";
-  version = "5.3";
+  version = "5.4";
 
   repoName = "wallpapers";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1i0zf9gzhwm8hgq5cp1xnxipqjvgzd9wfiicz612hgp6ivc0z0ag";
+    sha256 = "1ihvv9v8m5f2n2v3bgg769l52wbg241zgp3d45q6phk7p8s1gz3s";
   };
 
   passthru = {

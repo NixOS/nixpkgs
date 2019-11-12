@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkgconfig, libxml2, glib, pipewire, fontconfig, flatpak, gsettings-desktop-schemas, acl, dbus, fuse, geoclue2, json-glib, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, nixosTests, substituteAll, autoreconfHook, pkgconfig, libxml2, glib, pipewire, fontconfig, flatpak, gsettings-desktop-schemas, acl, dbus, fuse, geoclue2, json-glib, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     "installed_testdir=$(installedTests)/libexec/installed-tests/xdg-desktop-portal"
     "installed_test_metadir=$(installedTests)/share/installed-tests/xdg-desktop-portal"
   ];
+
+  passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.xdg-desktop-portal;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Desktop integration portals for sandboxed apps";

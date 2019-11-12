@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pycdio";
-  version = "2.0.0";
+  version = "2.1.0";
   disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a1h0lmfl56a2a9xqhacnjclv81nv3906vdylalybxrk4bhrm3hj";
+    sha256 = "01b7vqqfry071p60sabydym7r3m3rxszyqpdbs1qi5rk2sfyblnn";
   };
 
   prePatch = "sed -i -e '/DRIVER_BSDI/d' pycdio.py";

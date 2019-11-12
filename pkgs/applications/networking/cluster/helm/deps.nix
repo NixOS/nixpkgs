@@ -298,6 +298,15 @@
     };
   }
   {
+    goPackagePath = "github.com/gofrs/flock";
+    fetch = {
+      type = "git";
+      url = "https://github.com/gofrs/flock";
+      rev = "v0.7.1";
+      sha256 = "1xn48643h991p383hlhzd6k5v9akx8c6dcy93fz37fwqrrhzpb03";
+    };
+  }
+  {
     goPackagePath = "github.com/ghodss/yaml";
     fetch = {
       type = "git";

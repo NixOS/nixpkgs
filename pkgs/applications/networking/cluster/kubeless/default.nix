@@ -1,6 +1,6 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "kubeless";
   version = "1.0.4";
 
@@ -10,7 +10,8 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "1f5w6kn9rsaxx9nf6kzyjkzm3s9ycy1c8h78hb61v4x915xd3040";
   };
-  modSha256 = "1pw4pwb8z2kq474jjipjdivlrin5zvw8d2if4317b0w0wyp6isgd";
+
+  goPackagePath = "github.com/kubeless/kubeless";
 
   subPackages = [ "cmd/kubeless" ];
 
