@@ -4,13 +4,13 @@
 
 buildGoPackage rec {
   pname = "buildah";
-  version = "1.11.4";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner  = "containers";
     repo   = "buildah";
     rev    = "v${version}";
-    sha256 = "11jdjrmyafy3fnnp4cdxh3fncjbcy7gggpzwp4n857ij7k2581hl";
+    sha256 = "09bfv2pypd66dnqvrhgcg35fsahi2k0kn5dnnbfqc39g0vfz29r7";
   };
 
   outputs = [ "bin" "man" "out" ];
@@ -35,6 +35,6 @@ buildGoPackage rec {
     description = "A tool which facilitates building OCI images";
     homepage = "https://github.com/containers/buildah";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch vdemeester ];
+    maintainers = with maintainers; [ Profpatsch vdemeester saschagrunert ];
   };
 }
