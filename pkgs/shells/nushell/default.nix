@@ -3,8 +3,12 @@
 , rustPlatform
 , openssl
 , pkg-config
+, python3
+, xorg
 , libiconv
+, AppKit
 , Security
+, withAllFeatures ? true
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,10 +24,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0b8alc3si6y4xmn812izknbkfkz64kz7kcnq4xaqws6iqn7pqidp";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ stdenv.lib.optionals (withAllFeatures && stdenv.isLinux) [ python3 ];
 
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ]
+    ++ stdenv.lib.optionals (withAllFeatures && stdenv.isLinux) [ xorg.libX11 ]
+    ++ stdenv.lib.optionals (withAllFeatures && stdenv.isDarwin) [ AppKit ];
+
+  cargoBuildFlags = stdenv.lib.optionals withAllFeatures [ "--features" "all" ];
 
   preCheck = ''
     export HOME=$TMPDIR
