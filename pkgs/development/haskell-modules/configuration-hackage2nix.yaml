@@ -4310,7 +4310,6 @@ broken-packages:
   - domplate
   - dot-linker
   - dot2graphml
-  - dotenv
   - dotfs
   - doublify-toolkit
   - dovin
