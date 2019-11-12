@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   # To build with GCC 8+ it needs:
-  CXXFLAGS = [ "-Wno-class-memaccess" "-Wno-ignored-qualifiers" ];
+  env.CXXFLAGS = toString [ "-Wno-class-memaccess" "-Wno-ignored-qualifiers" ];
   # CMake can't find json_c without:
-  env.NIX_CFLAGS_COMPILE = [ "-I${json_c.dev}/include/json-c" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${json_c.dev}/include/json-c" ];
 
   doCheck = false; # requires network access
 
