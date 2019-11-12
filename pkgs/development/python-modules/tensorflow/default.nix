@@ -114,6 +114,14 @@ let
       })
 
       ./tf-1.15-bazel-1.0.patch
+
+      (fetchpatch {
+        # be compatible with gast >0.2 instead of only gast 0.2.2
+        name = "gast-update.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/85751ad6c7f5fd12c6c79545d96896cba92fa8b4.patch";
+        sha256 = "077cpj0kzyqxzdya1dwh8df17zfzhqn7c685hx6iskvw2979zg2n";
+      })
+      ./lift-gast-restriction.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
