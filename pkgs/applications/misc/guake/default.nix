@@ -1,10 +1,21 @@
-{ stdenv, fetchFromGitHub, python3, gettext, gobject-introspection, wrapGAppsHook, glibcLocales
-, gtk3, keybinder3, libnotify, libutempter, vte, libwnck3 }:
+{ stdenv
+, fetchFromGitHub
+, python3
+, gettext
+, gobject-introspection
+, wrapGAppsHook
+, gtk3
+, keybinder3
+, libnotify
+, libutempter
+, vte
+, libwnck3
+}:
 
-let
+python3.pkgs.buildPythonApplication rec {
+  pname = "guake";
   version = "3.6.3";
-in python3.pkgs.buildPythonApplication {
-  name = "guake-${version}";
+
   format = "other";
 
   src = fetchFromGitHub {
@@ -19,18 +30,34 @@ in python3.pkgs.buildPythonApplication {
   # and https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  nativeBuildInputs = [ gettext gobject-introspection wrapGAppsHook python3.pkgs.pip glibcLocales ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook
+    python3.pkgs.pip
+  ];
 
-  buildInputs = [ gtk3 keybinder3 libnotify python3 vte ];
+  buildInputs = [
+    gtk3
+    keybinder3
+    libnotify
+    libwnck3
+    python3
+    vte
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [ dbus-python pbr pycairo pygobject3 libwnck3 ];
-
-  LC_ALL = "en_US.UTF-8"; # fixes weird encoding error, see https://github.com/NixOS/nixpkgs/pull/38642#issuecomment-379727699
+  propagatedBuildInputs = with python3.pkgs; [
+    dbus-python
+    pbr
+    pycairo
+    pygobject3
+    setuptools
+  ];
 
   PBR_VERSION = version; # pbr needs either .git directory, sdist, or env var
 
   makeFlags = [
-    "prefix=$(out)"
+    "prefix=${placeholder ''out''}"
   ];
 
   preFixup = ''
@@ -39,9 +66,9 @@ in python3.pkgs.buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "Drop-down terminal for GNOME";
-    homepage = http://guake-project.org;
+    homepage = "http://guake-project.org";
     license = licenses.gpl2;
-    platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];
+    platforms = platforms.linux;
   };
 }

@@ -11,10 +11,14 @@ in stdenv.mkDerivation {
     sha256 = "00zq3z1hbzd5yzmskskjg79xrzwsqx7ihyprfaxy4hb897vf29sm";
   };
 
+  outputs = [ "out" "dev" ];
+
   configureFlags = [
     "--enable-idl"
     "--enable-secure-api"
   ];
+
+  enableParallelBuilding = true;
 
   buildInputs = [ windows.mingw_w64_headers ];
   dontStrip = true;

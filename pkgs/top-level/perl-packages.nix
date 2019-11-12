@@ -1175,6 +1175,21 @@ let
     };
   };
 
+  CacheKyotoTycoon = buildPerlModule {
+    pname = "Cache-KyotoTycoon";
+    version = "0.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Cache-KyotoTycoon-0.16.tar.gz";
+      sha256 = "0z4lnc3jfqx8rykm998q2jy5wkhb8p5pir80g9lqpi4lb0ilic6c";
+    };
+    propagatedBuildInputs = [ Furl URI ];
+    buildInputs = [ FileWhich TestTCP TestRequires TestSharedFork ];
+    meta = {
+      description = "KyotoTycoon client library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CacheMemcached = buildPerlPackage {
     pname = "Cache-Memcached";
     version = "1.30";
@@ -1944,6 +1959,20 @@ let
     propagatedBuildInputs = [ CatalystRuntime Starman ];
     meta = {
       description = "Replace the development server with Starman";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CDB_File = buildPerlPackage {
+    pname = "CDB_File";
+    version = "0.99";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/CDB_File-0.99.tar.gz";
+      sha256 = "1c32b30131871e8a7b23f47d8f65d9cdeb87069fa4c221781a03416496f91f16";
+    };
+    meta = {
+      homepage = "http://github.com/toddr/CDB_File";
+      description = "Perl extension for access to cdb databases";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -7326,6 +7355,19 @@ let
     buildInputs = [ TestPod ];
   };
 
+  FindLib = buildPerlPackage {
+    pname = "Find-Lib";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YA/YANNK/Find-Lib-1.04.tar.gz";
+      sha256 = "0lg88v0sqfpq4d3jwvk6c9blqnpxbz8f4s22zr3b1qb160g94wqx";
+    };
+    meta = with stdenv.lib; {
+      description = "Helper to smartly find libs to use in the filesystem tree";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FontAFM = buildPerlPackage {
     pname = "Font-AFM";
     version = "1.20";
@@ -7387,6 +7429,21 @@ let
       sha256 = "0h8gakd6b9770n2xhld1hhqghdar3hrq2js4mgiwxy86j4r0hpiw";
     };
     doCheck = false;
+  };
+
+  Furl = buildPerlModule {
+    pname = "Furl";
+    version = "3.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Furl-3.13.tar.gz";
+      sha256 = "1wxa2v9yjzvnzp62p1jvcx8x61z5qvlvzyah853vvaywpjxwyyl8";
+    };
+    propagatedBuildInputs = [ HTTPParserXS ModuleBuildTiny ClassAccessorLite ];
+    buildInputs = [ HTTPBody HTTPProxy NetIDNEncode Plack PlackMiddlewareDeflater Starlet TestRequires TestTCP TestSharedFork ];
+    meta = {
+      description = "Lightning-fast URL fetcher";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   GamesSolitaireVerify = buildPerlModule {
@@ -10229,6 +10286,21 @@ let
       license = stdenv.lib.licenses.artistic2;
     };
     buildInputs = [ IPCRun3 TestFatal TestNeeds ];
+  };
+
+  LogDispatchFileRotate = buildPerlPackage {
+    pname = "Log-Dispatch-FileRotate";
+    version = "1.36";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Log-Dispatch-FileRotate-1.36.tar.gz";
+      sha256 = "0vlmi17p7fky3x58rs7r5mdxi6l5jla8zhlb55kvssxc1w5v2b27";
+    };
+    propagatedBuildInputs = [ DateManip LogDispatch PathTiny ];
+    meta = {
+      description = "Log to Files that Archive/Rotate Themselves";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+    buildInputs = [ TestFatal TestNeeds TestWarn ];
   };
 
   LogHandler = buildPerlModule {
