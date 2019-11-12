@@ -6584,6 +6584,8 @@ in
 
   tcpreplay = callPackage ../tools/networking/tcpreplay { };
 
+  tdns-cli = callPackage ../tools/networking/tdns-cli { };
+
   ted = callPackage ../tools/typesetting/ted { };
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
