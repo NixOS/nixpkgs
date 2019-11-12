@@ -21,10 +21,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ json_c libpcap ncurses ];
   nativeBuildInputs = [ cmake ];
 
-  # To build with GCC 8+ it needs:
-  env.CXXFLAGS = toString [ "-Wno-class-memaccess" "-Wno-ignored-qualifiers" ];
-  # CMake can't find json_c without:
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${json_c.dev}/include/json-c" ];
+  env = {
+    # To build with GCC 8+ it needs:
+    CXXFLAGS = "-Wno-class-memaccess -Wno-ignored-qualifiers";
+    # CMake can't find json_c without:
+    NIX_CFLAGS_COMPILE = "-I${json_c.dev}/include/json-c";
+  };
 
   doCheck = false; # requires network access
 
