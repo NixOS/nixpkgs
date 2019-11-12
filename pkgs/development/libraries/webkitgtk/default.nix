@@ -2,7 +2,7 @@
 , pkgconfig, gettext, gobject-introspection, libnotify, gnutls, libgcrypt
 , gtk3, wayland, libwebp, enchant2, xorg, libxkbcommon, epoxy, at-spi2-core
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11-kit
-, libidn, libedit, readline, libGLU_combined, libintl, openjpeg
+, libidn, libedit, readline, libGL, libGLU, libintl, openjpeg
 , enableGeoLocation ? true, geoclue2, sqlite
 , enableGtk2Plugins ? false, gtk2 ? null
 , gst-plugins-base, gst-plugins-bad, woff2
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
     })
+    ./libglvnd-headers.patch
   ];
 
   postPatch = ''
@@ -74,10 +75,11 @@ stdenv.mkDerivation rec {
     libintl libwebp enchant2 libnotify gnutls pcre nettle libidn libgcrypt woff2
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11-kit openjpeg
     sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at-spi2-core
+    libGL libGLU
   ] ++ optional enableGeoLocation geoclue2
     ++ optional enableGtk2Plugins gtk2
     ++ (with xorg; [ libXdmcp libXt libXtst libXdamage ])
-    ++ optionals stdenv.isDarwin [ libedit readline libGLU_combined ]
+    ++ optionals stdenv.isDarwin [ libedit readline ]
     ++ optionals stdenv.isLinux [
       wayland bubblewrap libseccomp xdg-dbus-proxy
   ];

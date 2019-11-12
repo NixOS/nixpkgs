@@ -9,8 +9,8 @@ _assignFirst() {
     local varName="$1"
     local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
-    while [ $# -ge 1 ]; do
-        if [ -n "${!1}" ]; then eval "${varName}"="$1"; return; fi
+    while (( $# )); do
+        if [ -n "${!1-}" ]; then eval "${varName}"="$1"; return; fi
         shift
     done
     echo "Error: _assignFirst found no valid variant!"
@@ -19,7 +19,7 @@ _assignFirst() {
 
 # Same as _assignFirst, but only if "$1" = ""
 _overrideFirst() {
-    if [ -z "${!1}" ]; then
+    if [ -z "${!1-}" ]; then
         _assignFirst "$@"
     fi
 }

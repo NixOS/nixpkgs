@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gstreamer, xorg, alsaLib, cdparanoia
+{ fetchurl, fetchpatch, stdenv, pkgconfig, gstreamer, xorg, alsaLib, cdparanoia
 , libogg, libtheora, libvorbis, freetype, pango, liboil, glib, cairo, orc
 , libintl
 , ApplicationServices
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gcc-4.9.patch
-    (fetchurl {
+    (fetchpatch {
       url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/f672277509705c4034bc92a141eefee4524d15aa.patch";
       name = "CVE-2019-9928.patch";
-      sha256 = "0hz3lsq3ppmaf329sbyi05y1qniqfj9vlp2f3z918383pvrcms4i";
+      sha256 = "1dlamsmyr7chrb6vqqmwikqvvqcx5l7k72p98448qm6k59ndnimc";
     })
   ];
 

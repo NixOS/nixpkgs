@@ -15,7 +15,7 @@ wrapGApp() {
     wrapProgram "$program" "${gappsWrapperArgs[@]}" "$@"
 }
 
-# Note: $gappsWrapperArgs still gets defined even if $dontWrapGApps is set.
+# Note: $gappsWrapperArgs still gets defined even if ${dontWrapGApps-} is set.
 wrapGAppsHook() {
   # guard against running multiple times (e.g. due to propagation)
   [ -z "$wrapGAppsHookHasRun" ] || return 0

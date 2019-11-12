@@ -131,6 +131,13 @@
       <link linkend="opt-networking.interfaces">networking.interfaces.&lt;name&gt;.…</link> options.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The stdenv now runs all bash with <literal>set -u</literal>, to catch the use of undefined variables.
+      Before, it itself used <literal>set -u</literal> but was careful to unset it so other packages' code ran as before.
+      Now, all bash code is held to the same high standard, and the rather complex stateful manipulation of the options can be discarded.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

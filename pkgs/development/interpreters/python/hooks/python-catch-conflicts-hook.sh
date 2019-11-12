@@ -5,6 +5,6 @@ pythonCatchConflictsPhase() {
     @pythonInterpreter@ @catchConflicts@
 }
 
-if [ -z "$dontUsePythonCatchConflicts" ]; then
+if [ -z "${dontUsePythonCatchConflicts-}" ]; then
     preDistPhases+=" pythonCatchConflictsPhase"
 fi

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, libGLU_combined }:
+{ stdenv, fetchurl, autoreconfHook, libGL, libGLU }:
 
 let version = "1.0"; in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libGLU_combined ];
+  buildInputs = [ libGL libGLU ];
 
   meta = {
     description = "A patent-free S3TC compatible implementation";

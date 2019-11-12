@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "rethinkdb";
-  version = "2.4.4";
+  version = "2.4.4.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d01b39c1921498e22e3c9cae1adb39c37b68e4438ef77218abc0166fdfd2ea7a";
+    sha256 = "e1c1f8ad93bc1c6f2aaa73afc333c57d505d8cc08c437d78a5c1eb8dc4b7e8c2";
   };
 
   doCheck = false;

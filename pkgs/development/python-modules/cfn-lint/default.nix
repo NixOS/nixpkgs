@@ -8,6 +8,7 @@
 , jsonpatch
 , jsonschema
 , pathlib2
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     jsonpatch
     jsonschema
     pathlib2
+    setuptools
   ];
 
   # No tests included in archive

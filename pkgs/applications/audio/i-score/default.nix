@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$(echo "${jamomacore}/jamoma/share/cmake/Jamoma")"
+    export CMAKE_PREFIX_PATH="''${CMAKE_PREFIX_PATH-}:$(echo "${jamomacore}/jamoma/share/cmake/Jamoma")"
   '';
 
   postInstall = ''rm $out/bin/i-score.sh'';

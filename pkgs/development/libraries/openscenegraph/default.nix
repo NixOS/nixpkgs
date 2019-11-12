@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen,
-  libX11, libXinerama, libXrandr, libGLU_combined,
+  libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
   jpegSupport ? true, libjpeg,
   jasperSupport ? true, jasper,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake doxygen ];
 
   buildInputs = [
-    libX11 libXinerama libXrandr libGLU_combined
+    libX11 libXinerama libXrandr libGLU libGL
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
     ++ lib.optional jasperSupport jasper

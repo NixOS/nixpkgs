@@ -60,6 +60,11 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit zenity;
     })
+    # Fix build with libglvnd provided headers
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/commit/a444a4c5f58ea516ad3cd9d6ddc0056c3ca9bc90.patch";
+      sha256 = "0imy2j8af9477jliwdq4jc40yw1cifsjjf196gnmwxr9rkj0hbrd";
+    })
   ];
 
   postPatch = ''
