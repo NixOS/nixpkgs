@@ -72,5 +72,12 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 gpl3 ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
+    knownVulnerabilities = [
+      "CVE-2018-7453: loop in PDF objects"
+      "CVE-2018-16369: loop in PDF objects"
+      "CVE-2019-9587: loop in PDF objects"
+      "CVE-2019-9588: loop in PDF objects"
+      "CVE-2019-16088: loop in PDF objects"
+    ];
   };
 }
