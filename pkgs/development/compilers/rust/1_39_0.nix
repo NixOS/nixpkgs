@@ -1,3 +1,11 @@
+# New rust versions should first go to staging.
+# Things to check after updating:
+# 1. Rustc should produce rust binaries on x86_64-linux, aarch64-linux and x86_64-darwin:
+#    i.e. nix-shell -p fd or @GrahamcOfBorg build fd on github
+#    This testing can be also done by other volunteers as part of the pull
+#    request review, in case platforms cannot be covered.
+# 2. The LLVM version used for building should match with rust upstream.
+# 3. Firefox and Thunderbird should still build on x86_64-linux.
 import ./default.nix {
   rustcVersion = "1.39.0";
   rustcSha256 = "0mwkc1bnil2cfyf6nglpvbn2y0zfbv44zfhsd5qg4c9rm6vgd8dl";
