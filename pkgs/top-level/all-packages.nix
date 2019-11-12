@@ -24254,6 +24254,8 @@ in
 
   ataripp = callPackage ../misc/emulators/atari++ { };
 
+  atlantis = callPackage ../applications/networking/cluster/atlantis { };
+
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
   areca = callPackage ../applications/backup/areca { };
