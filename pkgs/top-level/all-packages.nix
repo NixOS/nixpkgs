@@ -537,7 +537,7 @@ in
 
   amass = callPackage ../tools/networking/amass { };
 
-  afew = callPackage ../applications/networking/mailreaders/afew { pythonPackages = python3Packages; };
+  afew = callPackage ../applications/networking/mailreaders/afew { };
 
   afio = callPackage ../tools/archivers/afio { };
 
