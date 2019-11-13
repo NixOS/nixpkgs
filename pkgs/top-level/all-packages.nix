@@ -15420,11 +15420,7 @@ in
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus = callPackage ../servers/monitoring/prometheus {
-    # Version 2.12.0 fails to build with go 1.13 due to an incorrect module file
-    # compilation error :go: cloud.google.com/go@v0.44.1: Get https://proxy.golang.org/cloud.google.com/go/@v/v0.44.1.mod: dial tcp: lookup proxy.golang.org on [::1]:53: read udp [::1]:58980->[::1]:53: read: connection refused
-    buildGoPackage = buildGo112Package;
-  };
+  prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
   prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
