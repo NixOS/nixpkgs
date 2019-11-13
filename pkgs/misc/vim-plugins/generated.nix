@@ -2113,6 +2113,17 @@ let
     };
   };
 
+  palenight-vim = buildVimPluginFrom2Nix {
+    pname = "palenight-vim";
+    version = "2019-08-21";
+    src = fetchFromGitHub {
+      owner = "drewtempelmeyer";
+      repo = "palenight.vim";
+      rev = "139f5b929a8be2530c7386a5b4610d4459941199";
+      sha256 = "061iqgw9kzpsni9159bd8hllpkdmnrjbzpi9phy91l9klnja2cam";
+    };
+  };
+
   papercolor-theme = buildVimPluginFrom2Nix {
     pname = "papercolor-theme";
     version = "2019-11-06";
