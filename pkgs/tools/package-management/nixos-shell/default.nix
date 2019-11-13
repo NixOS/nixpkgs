@@ -17,4 +17,10 @@ stdenv.mkDerivation rec{
     mkdir -p $out/bin
     GOPATH=$src HOME="." go build -o $out/bin/nixos-shell nixos-shell
     '';
+  meta = with stdenv.lib;{
+    homepage = https://github.com/wavewave/nixos-shell ;
+    description = "Spawn ephemeral development environments in containers,like nix-shell only more";
+    license = licenses.free;
+    platform = platforms.linux;
+  };
 }
