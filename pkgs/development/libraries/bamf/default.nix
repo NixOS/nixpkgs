@@ -26,9 +26,7 @@ stdenv.mkDerivation rec {
     vala
     which
     # Tests
-    python2
-    python2.pkgs.libxslt
-    python2.pkgs.libxml2
+    (python2.withPackages(ps: with ps; [ libxslt libxml2 ]))
     dbus
     xorgserver
     wrapGAppsHook
