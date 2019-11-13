@@ -1575,9 +1575,7 @@ in
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
 
-  dosage = callPackage ../applications/graphics/dosage {
-    pythonPackages = python3Packages;
-  };
+  dosage = callPackage ../applications/graphics/dosage { };
 
   dozenal = callPackage ../applications/misc/dozenal { };
 
