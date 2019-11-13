@@ -109,6 +109,6 @@ stdenv.mkDerivation {
     description = "A small implementation of the C library";
     maintainers = with maintainers; [ rasendubi ];
     license = licenses.lgpl2;
-    platforms = platforms.linux;
+    platforms = intersectLists platforms.linux platforms.x86; # fails to build on ARM
   };
 }
