@@ -1325,6 +1325,8 @@ in {
 
   stups-tokens = callPackage ../development/python-modules/stups-tokens { };
 
+  stups-zign = callPackage ../development/python-modules/stups-zign { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
