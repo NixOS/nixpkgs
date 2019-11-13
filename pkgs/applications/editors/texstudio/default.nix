@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, mkDerivation, qmake, qtbase, qtscript, qtsvg,
+{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtscript, qtsvg,
   poppler, zlib, pkgconfig }:
 
 mkDerivation rec {
@@ -17,7 +17,7 @@ mkDerivation rec {
 
   qmakeFlags = [ "NO_APPDATA=True" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TeX and LaTeX editor";
     longDescription=''
 	Fork of TeXMaker, this editor is a full fledged IDE for
