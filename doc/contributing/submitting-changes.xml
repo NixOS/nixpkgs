@@ -298,17 +298,19 @@ Additional information.
 
    <para>
     review changes from pull request number 12345:
-<screen>nix run nixpkgs.nix-review -c nix-review pr 12345</screen>
+    <screen>nix run nixpkgs.nix-review -c nix-review pr 12345</screen>
    </para>
 
    <para>
     review uncommitted changes:
-<screen>nix run nixpkgs.nix-review -c nix-review wip</screen>
+    <screen>nix run nixpkgs.nix-review -c nix-review wip</screen>
    </para>
 
    <para>
     review changes from last commit:
-<screen>nix run nixpkgs.nix-review -c nix-review rev HEAD</screen>
+    <screen>nix run nixpkgs.nix-review -c nix-review rev HEAD</screen>
+   </para>
+  </section>
 
   <section xml:id="submitting-changes-tested-execution">
    <title>Tested execution of all binary files (usually in <filename>./result/bin/</filename>)</title>
