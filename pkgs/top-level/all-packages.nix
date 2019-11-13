@@ -10424,6 +10424,11 @@ in
 
   texi2mdoc = callPackage ../tools/misc/texi2mdoc { };
 
+  texlab = callPackage ../development/tools/misc/texlab {
+    inherit (darwin.apple_sdk.frameworks) Security;
+    texlab-citeproc-build-deps = nodePackages."texlab-citeproc-build-deps-../tools/misc/texlab/citeproc";
+  };
+
   tflint = callPackage ../development/tools/analysis/tflint { };
 
   todoist = callPackage ../applications/misc/todoist { };
