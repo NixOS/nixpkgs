@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "onedrive-abraunegg";
+  pname = "onedrive";
   version = "2.3.11";
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A complete tool to interact with OneDrive on Linux";
     homepage = "https://github.com/abraunegg/onedrive";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ doronbehar srgom];
+    maintainers = with maintainers; [ doronbehar srgom ];
     platforms = platforms.linux;
   };
 }
