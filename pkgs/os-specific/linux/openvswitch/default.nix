@@ -1,25 +1,25 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
-, procps, libcap_ng, openssl, python27 , perl
+, procps, libcap_ng, openssl, python3 , perl
 , kernel ? null }:
 
 with stdenv.lib;
 
 let
   _kernel = kernel;
-  python = python27.withPackages (ps: with ps; [ six ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
   version = "2.12.0";
   pname = "openvswitch";
 
   src = fetchurl {
-    url = "http://openvswitch.org/releases/${pname}-${version}.tar.gz";
+    url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1y78ix5inhhcvicbvyy2ij38am1215nr55vydhab3d4065q45z8k";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng python
+  buildInputs = [ makeWrapper utillinux openssl libcap_ng pythonEnv
                   perl procps which ];
 
   configureFlags = [
@@ -37,8 +37,8 @@ in stdenv.mkDerivation rec {
 
   postBuild = ''
     # fix tests
-    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${python.interpreter}'
-    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${python.interpreter}'
+    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${pythonEnv.interpreter}'
+    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${pythonEnv.interpreter}'
   '';
 
   enableParallelBuilding = true;
@@ -58,8 +58,8 @@ in stdenv.mkDerivation rec {
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
-    homepage = http://openvswitch.org/;
+    homepage = https://www.openvswitch.org/;
     license = licenses.asl20;
-    maintainers = [ maintainers.netixx ];
+    maintainers = with maintainers; [ netixx kmcopper ];
   };
 }
