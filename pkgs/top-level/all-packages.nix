@@ -837,7 +837,7 @@ in
 
   dgsh = callPackage ../shells/dgsh { };
 
-  dkimpy = with pythonPackages; toPythonApplication dkimpy;
+  dkimpy = with python3Packages; toPythonApplication dkimpy;
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
 
