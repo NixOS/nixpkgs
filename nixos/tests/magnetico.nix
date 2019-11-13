@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 let
   port = 8081;
@@ -24,13 +24,17 @@ in
 
   testScript =
     ''
-      startAll;
-      $machine->waitForUnit("magneticod");
-      $machine->waitForUnit("magneticow");
-      $machine->succeed("${pkgs.curl}/bin/curl ".
-        "-u user:password http://localhost:${toString port}");
-      $machine->succeed("${pkgs.curl}/bin/curl ".
-        "-u user:wrongpwd http://localhost:${toString port}") =~ "Unauthorised." or die;
-      $machine->shutdown();
+      start_all()
+      machine.wait_for_unit("magneticod")
+      machine.wait_for_unit("magneticow")
+      machine.succeed(
+          "${pkgs.curl}/bin/curl "
+          + "-u user:password http://localhost:${toString port}"
+      )
+      assert "Unauthorised." in machine.succeed(
+          "${pkgs.curl}/bin/curl "
+          + "-u user:wrongpwd http://localhost:${toString port}"
+      )
+      machine.shutdown()
     '';
 })
