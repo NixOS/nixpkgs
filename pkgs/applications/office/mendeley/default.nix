@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dpkg, which
+{ fetchurl, stdenv, mkDerivation, dpkg, which
 , makeWrapper
 , alsaLib
 , desktop-file-utils
@@ -90,7 +90,7 @@ let
 
 in
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "mendeley";
   inherit version;
 
