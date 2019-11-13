@@ -37,6 +37,50 @@ stdenv.mkDerivation rec {
         url = "https://patch-diff.githubusercontent.com/raw/samba-team/samba/pull/107.patch";
         sha256 = "0r6q34vjj0bdzmcbnrkad9rww58k4krbwicv4gs1g3dj49skpvd6";
       })
+      # note the following is a patch against the 4.8 branch, but luckily it applies
+      # and works against 4.7
+      (fetchpatch {
+        name = "4.8-CVE-2019-3880.patch";
+        url = "https://gitlab.com/samba-team/samba/commit/9a3ee861e43f84d48ef47998ceeb3bbf29f0c948.patch";
+        sha256 = "12822dpdar7jp65r86ppd2f0az414azzvaslb04ngbcz62zwskfw";
+      })
+      # and the following are all patches against the 4.9 branch, but luckily they all apply
+      # and work against 4.7 too
+      (fetchpatch {
+        name = "4.9-CVE-2019-10218.part1.patch";
+        url = "https://gitlab.com/samba-team/samba/commit/fc6022b9b19473076c4236fdf4ac474f44ca73e2.patch";
+        sha256 = "1y6cax6rhrwqnqhyh764sdc19vask3v3abrk7vnvyb24rc52q4v9";
+      })
+      (fetchpatch {
+        name = "4.9-CVE-2019-10218.part2.patch";
+        url = "https://gitlab.com/samba-team/samba/commit/167f78aa97af6502cb2027dc9dad40399b0a9c4f.patch";
+        sha256 = "1ncib6j4nrybzdq1bg02va7yh98s2faplfngwg3d0mkd4l1lr1wc";
+      })
+      (fetchpatch {
+        name = "4.9-CVE-2019-14833.part1.patch";
+        url = "https://gitlab.com/samba-team/samba/commit/e6de467a763b93152eef27726957a32879268fb7.patch";
+        sha256 = "13s6n4kb9m8vp1cn3kvldnqdirxmk3lm0klr0kjd81n762gmc0r3";
+      })
+      (fetchpatch {
+        name = "4.9-CVE-2019-14833.part2.patch";
+        url = "https://gitlab.com/samba-team/samba/commit/70078d4ddf3b842eeadee058dadeef82ec4edf0b.patch";
+        sha256 = "0z80x6qycip28lp0x0xdbj0a0f2s1cjzl1ry4ds3wr4hi9v9dqps";
+      })
+      (fetchpatch {
+        name = "4.9-CVE-2019-14847.part1.patch";
+        url = "https://gitlab.com/samba-team/samba/commit/ea39bdd6293041af668f1bfdfea39a725733bad3.patch";
+        sha256 = "1rrdz6a649is3mqx3syzlq769f08yavr2hjnd626hkxxxbvhsysc";
+      })
+      (fetchpatch {
+        name = "4.9-CVE-2019-14847.part2.patch";
+        url = "https://gitlab.com/samba-team/samba/commit/bdb3e3f669bd991da819040e726e003e4e2b841d.patch";
+        sha256 = "12mjby9vzp29s93q2wk73kalpr345gx813lhmvgkalbn6186w5f7";
+      })
+      (fetchpatch {
+        name = "4.9-CVE-2019-14847.part3.patch";
+        url = "https://gitlab.com/samba-team/samba/commit/77b10b360f4ffb7ac90bc5fce0a80306515c1aca.patch";
+        sha256 = "0mclx3zdb2l8w4p1iyak6d82dpnyksp3ixj5syck6v0f10nkniz8";
+      })
     ];
 
   buildInputs =
