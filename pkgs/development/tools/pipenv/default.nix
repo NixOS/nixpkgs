@@ -39,7 +39,11 @@ in buildPythonApplication rec {
 
   propagatedBuildInputs = runtimeDeps;
 
-  doCheck = false;
+  doCheck = true;
+  checkPhase = ''
+    export HOME=$PWD
+    $out/bin/pipenv install ${fetchPypi {pname="pyjokes"; version="0.6.0"; sha256="08860eedb78cbfa4618243c8db088f21c39823ece1fdaf0133e52d9c56e981a5";} }
+  '';
 
   meta = with lib; {
     description = "Python Development Workflow for Humans";
