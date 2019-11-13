@@ -4232,7 +4232,7 @@ in
 
   jpegrescan = callPackage ../applications/graphics/jpegrescan { };
 
-  jpylyzer = with pythonPackages; toPythonApplication jpylyzer;
+  jpylyzer = with python3Packages; toPythonApplication jpylyzer;
 
   jq = callPackage ../development/tools/jq { };
 
