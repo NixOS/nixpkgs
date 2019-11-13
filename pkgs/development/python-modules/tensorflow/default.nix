@@ -365,6 +365,7 @@ in buildPythonPackage {
   ] ++ lib.optionals (!isPy3k) [
     mock
     future
+    functools32
   ] ++ lib.optionals (pythonOlder "3.4") [
     backports_weakref enum34
   ] ++ lib.optionals withTensorboard [
