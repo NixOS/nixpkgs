@@ -9,7 +9,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionalString;
+  inherit (stdenv.lib) optionals optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   llvmSharedForBuild = pkgsBuildBuild.llvm_7.override { enableSharedLibraries = true; };
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
 
   # Increase codegen units to introduce parallelism within the compiler.
-  RUSTFLAGS = "-Ccodegen-units=10";
+  env.RUSTFLAGS = "-Ccodegen-units=10";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
@@ -83,12 +83,12 @@ in stdenv.mkDerivation rec {
     "${setBuild}.cxx=${cxxForBuild}"
     "${setHost}.cxx=${cxxForHost}"
     "${setTarget}.cxx=${cxxForTarget}"
-  ] ++ optional (!withBundledLLVM) [
+  ] ++ optionals (!withBundledLLVM) [
     "--enable-llvm-link-shared"
     "${setBuild}.llvm-config=${llvmSharedForBuild}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
-  ] ++ optional stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
     "--enable-profiler" # build libprofiler_builtins
   ];
 
