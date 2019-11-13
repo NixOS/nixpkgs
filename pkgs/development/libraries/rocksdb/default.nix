@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
     "-DWITH_ZSTD=1"
     "-DWITH_GFLAGS=0"
     (lib.optional
-        (stdenv.hostPlatform.system == "i686-linux"
-         || stdenv.hostPlatform.system == "x86_64-linux")
+        (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
         "-DFORCE_SSE42=1")
     (lib.optional enableLite "-DROCKSDB_LITE=1")
   ];
