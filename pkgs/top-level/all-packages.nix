@@ -22360,9 +22360,7 @@ in
 
   wownero = callPackage ../applications/blockchains/wownero.nix {};
 
-  zcash = callPackage ../applications/blockchains/zcash {
-    withGui = false;
-  };
+  zcash = callPackage ../applications/blockchains/zcash { };
 
   parity = callPackage ../applications/blockchains/parity { };
   parity-beta = callPackage ../applications/blockchains/parity/beta.nix { };
