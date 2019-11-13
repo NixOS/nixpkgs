@@ -327,7 +327,9 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ jyp abbradar ];
       platforms = platforms.linux;
-      broken = !(xlaSupport -> cudaSupport);
+      # The py2 build fails due to some issue importing protobuf. Possibly related to the fix in
+      # https://github.com/akesandgren/easybuild-easyblocks/commit/1f2e517ddfd1b00a342c6abb55aef3fd93671a2b
+      broken = !(xlaSupport -> cudaSupport) || !isPy3k;
     };
   };
 
