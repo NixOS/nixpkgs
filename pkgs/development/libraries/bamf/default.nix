@@ -1,6 +1,25 @@
-{ stdenv, fetchpatch, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
-, libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
-, xorgserver, dbus, python3, wrapGAppsHook }:
+{ stdenv
+, pantheon
+, autoconf
+, automake
+, libtool
+, gnome3
+, which
+, fetchgit
+, libgtop
+, libwnck3
+, glib
+, vala
+, pkgconfig
+, libstartup_notification
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, xorgserver
+, dbus
+, python3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "bamf";
@@ -15,8 +34,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    (python3.withPackages (ps: with ps; [ lxml ])) # Tests
     autoconf
     automake
+    dbus
     docbook_xsl
     gnome3.gnome-common
     gobject-introspection
@@ -25,11 +46,8 @@ stdenv.mkDerivation rec {
     pkgconfig
     vala
     which
-    # Tests
-    (python3.withPackages(ps: with ps; [ lxml ]))
-    dbus
-    xorgserver
     wrapGAppsHook
+    xorgserver
   ];
 
   buildInputs = [
@@ -52,8 +70,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-headless-tests"
     "--enable-gtk-doc"
+    "--enable-headless-tests"
   ];
 
   # fix paths
@@ -70,7 +88,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = [
+    "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
+  ];
 
   meta = with stdenv.lib; {
     description = "Application matching framework";
@@ -81,6 +101,6 @@ stdenv.mkDerivation rec {
     homepage = https://launchpad.net/bamf;
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;
   };
 }
