@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, bison, flex
+, asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
 , libmnl, libnftnl, libpcap
 , gmp, jansson, readline
 , withXtables ? false , iptables
@@ -16,11 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    "--disable-man-doc"
     "--with-json"
   ] ++ optional withXtables "--with-xtables";
 
-  nativeBuildInputs = [ pkgconfig bison flex ];
+  nativeBuildInputs = [
+    pkgconfig bison flex
+    asciidoc libxslt findXMLCatalogs docbook_xml_dtd_45 docbook_xsl
+  ];
 
   buildInputs = [
     libmnl libnftnl libpcap
