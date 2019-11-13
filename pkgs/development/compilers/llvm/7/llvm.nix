@@ -94,6 +94,9 @@ in stdenv.mkDerivation ({
     rm test/tools/llvm-dwarfdump/X86/debug_addr_dwarf4.s
     rm test/tools/llvm-dwarfdump/X86/debug_addr_unsupported_version.s
     rm test/tools/llvm-dwarfdump/X86/debug_addr_version_mismatch.s
+  '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
+    # Seems to require certain floating point hardware (NEON?)
+    rm test/ExecutionEngine/frem.ll
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';
