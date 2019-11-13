@@ -16574,6 +16574,10 @@ in
 
   musl = callPackage ../os-specific/linux/musl { };
 
+  nushell = callPackage ../shells/nushell {
+    inherit (darwin.apple_sdk.frameworks) AppKit Security;
+  };
+
   nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
              else unixtools.nettools;
 
