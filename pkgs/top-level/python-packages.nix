@@ -1321,6 +1321,8 @@ in {
 
   stumpy = callPackage ../development/python-modules/stumpy { };
 
+  stups-cli-support = callPackage ../development/python-modules/stups-cli-support { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
