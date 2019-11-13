@@ -42,7 +42,8 @@ in buildPythonApplication rec {
   doCheck = true;
   checkPhase = ''
     export HOME=$(mktemp -d)
-    $out/bin/pipenv install ${fetchPypi {pname="pyjokes"; version="0.6.0"; sha256="08860eedb78cbfa4618243c8db088f21c39823ece1fdaf0133e52d9c56e981a5";} }
+    cp -r --no-preserve=mode ${wheel.src} $HOME/wheel-src
+    $out/bin/pipenv install $HOME/wheel-src
   '';
 
   meta = with lib; {
