@@ -20332,6 +20332,8 @@ in
 
   obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
 
+  obs-ndi = callPackage ../applications/video/obs-studio/obs-ndi.nix { };
+
   octoprint = callPackage ../applications/misc/octoprint { };
 
   octoprint-plugins = callPackage ../applications/misc/octoprint/plugins.nix { };
