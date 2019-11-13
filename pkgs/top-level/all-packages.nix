@@ -1834,7 +1834,7 @@ in
 
   kisslicer = callPackage ../tools/misc/kisslicer { };
 
-  klaus = with pythonPackages; toPythonApplication klaus;
+  klaus = with python3Packages; toPythonApplication klaus;
 
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
