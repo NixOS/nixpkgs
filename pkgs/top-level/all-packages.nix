@@ -4882,6 +4882,8 @@ in
 
   man-db = callPackage ../tools/misc/man-db { };
 
+  sman = callPackage ../tools/misc/sman { };
+
   mandoc = callPackage ../tools/misc/mandoc { };
 
   mawk = callPackage ../tools/text/mawk { };
