@@ -1241,6 +1241,8 @@ in {
 
   stups-cli-support = callPackage ../development/python-modules/stups-cli-support { };
 
+  stups-tokens = callPackage ../development/python-modules/stups-tokens { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
