@@ -178,7 +178,7 @@ in {
     systemd.services.magneticod = {
       description = "Magnetico DHT crawler";
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network-online.target" ];
+      after    = [ "network.target" ];
 
       serviceConfig = {
         User      = "magnetico";
@@ -190,7 +190,7 @@ in {
     systemd.services.magneticow = {
       description = "Magnetico web interface";
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network-online.target" "magneticod.service"];
+      after    = [ "network.target" "magneticod.service"];
 
       serviceConfig = {
         User           = "magnetico";
