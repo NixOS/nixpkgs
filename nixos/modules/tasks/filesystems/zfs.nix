@@ -286,6 +286,16 @@ in
           <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
+
+      pools = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        example = [ "tank" ];
+        description = ''
+          List of ZFS pools to periodically trim. If empty, all pools
+          will be trimmed.
+        '';
+      };
     };
 
     services.zfs.autoScrub = {
@@ -557,7 +567,16 @@ in
         after = [ "zfs-import.target" ];
         path = [ packages.zfsUser ];
         startAt = cfgTrim.interval;
-        serviceConfig.ExecStart = "${pkgs.runtimeShell} -c 'zpool list -H -o name | xargs --no-run-if-empty -n1 zpool trim'";
+        script = let
+          pools = if cfgTrim.pools != [] then
+            concatMapStringsSep " " escapeShellArg cfgTrim.pools
+          else
+            "$(zpool list -H -o name)";
+        in ''
+          for pool in ${pools}; do
+            zpool trim "$pool"
+          done
+        '';
       };
     })
   ];
