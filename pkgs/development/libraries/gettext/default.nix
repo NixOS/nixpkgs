@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
   patches = [
     ./absolute-paths.diff
+    ./gettext.git-2336451ed68d91ff4b5ae1acbc1eca30e47a86a9.patch
   ];
 
   outputs = [ "out" "man" "doc" "info" ];
