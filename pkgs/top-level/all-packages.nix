@@ -22529,7 +22529,7 @@ in
     opencv3 = opencv3WithoutCuda;
   };
 
-  displaycal = (newScope pythonPackages) ../applications/graphics/displaycal {};
+  displaycal = callPackage ../applications/graphics/displaycal {};
 
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
