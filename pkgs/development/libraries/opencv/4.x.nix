@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, fetchFromGitHub
+, fetchurl, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
 , glog, boost, google-gflags, protobuf
 , config
@@ -159,6 +159,24 @@ stdenv.mkDerivation rec {
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-14491.CVE-2019-14492.patch";
+      url = "https://github.com/opencv/opencv/pull/15150/commits/321c74ccd6077bdea1d47450ca4fe955cb5b6330.patch";
+      sha256 = "03nxq24wsyszpl24i9fz3k06np75g9p4pqgnn1iw0nqdn7qds8pm";
+    })
+    (fetchpatch {
+      name = "CVE-2019-14493.patch";
+      url = "https://github.com/opencv/opencv/pull/15145/commits/5691d998ead1d9b0542bcfced36c2dceb3a59023.patch";
+      sha256 = "14qva9f5z10apz5q0skdyiclr9sgkhab4fzksy1w3b6j6hg4wm7m";
+    })
+    (fetchpatch {
+      name = "CVE-2019-15939.patch";
+      url = "https://github.com/opencv/opencv/pull/15382/commits/5a497077f109d543ab86dfdf8add1c76c0e47d29.patch";
+      sha256 = "18wqsss5zz3f6i1ih8gd17h2zrrqpgfd7jmc45v70gk30nmhcj5b";
+    })
+  ];
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
