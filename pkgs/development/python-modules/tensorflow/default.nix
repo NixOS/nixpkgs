@@ -384,7 +384,26 @@ in buildPythonPackage {
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
   checkPhase = ''
-    ${python.interpreter} -c "import tensorflow"
+    ${python.interpreter} <<EOF
+    # A simple "Hello world"
+    import tensorflow as tf
+    hello = tf.constant("Hello, world!")
+    sess = tf.Session()
+    sess.run(hello)
+
+    # Fit a simple model to random data
+    import numpy as np
+    np.random.seed(0)
+    tf.random.set_random_seed(0)
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Dense(1, activation="linear")
+    ])
+    model.compile(optimizer="sgd", loss="mse")
+
+    x = np.random.uniform(size=(1,1))
+    y = np.random.uniform(size=(1,))
+    model.fit(x, y, epochs=1)
+    EOF
   '';
 
   passthru.libtensorflow = bazel-build.out;
