@@ -292,7 +292,8 @@ in rec {
             deps;
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
-          configureFlags = let inherit (lib) elem optional; in configureFlags
+          configureFlags = let inherit (lib) elem optional; in
+            assert (lib.all (n: !builtins.isList n && !builtins.isAttrs n) configureFlags); configureFlags
             ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
