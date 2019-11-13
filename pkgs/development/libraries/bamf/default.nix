@@ -1,6 +1,6 @@
-{ stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
+{ stdenv, fetchpatch, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
 , libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
-, xorgserver, dbus, python2, wrapGAppsHook }:
+, xorgserver, dbus, python3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "bamf";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
-    url = https://git.launchpad.net/~unity-team/bamf;
+    url = "https://git.launchpad.net/~unity-team/bamf";
     rev = version;
     sha256 = "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz";
   };
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     vala
     which
     # Tests
-    (python2.withPackages(ps: with ps; [ libxslt libxml2 ]))
+    (python3.withPackages(ps: with ps; [ lxml ]))
     dbus
     xorgserver
     wrapGAppsHook
@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
     libgtop
     libstartup_notification
     libwnck3
+  ];
+
+  patches = [
+    # Port tests and checks to python3 lxml.
+    ./gtester2xunit-python3.patch
   ];
 
   # Fix hard-coded path
