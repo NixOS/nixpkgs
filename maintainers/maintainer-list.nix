@@ -2631,6 +2631,12 @@
     githubId = 9705357;
     name = "Guillaume Bouchard";
   };
+  GuillaumeDesforges = {
+    email = "aceus02@gmail.com";
+    github = "GuillaumeDesforges";
+    githubId = 1882000;
+    name = "Guillaume Desforges";
+  };
   guillaumekoenig = {
     email = "guillaume.edward.koenig@gmail.com";
     github = "guillaumekoenig";

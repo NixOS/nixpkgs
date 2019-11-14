@@ -1,24 +1,22 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
-, isPy3k
+, fetchPypi
+, isPy27
 , geographiclib
 }:
 
 buildPythonPackage rec {
-  pname = "geopy-unstable";
-  version = "2019-11-10";
+  pname = "geopy";
+  version = "1.20.0";
 
-  disabled = !isPy3k; # only Python 3
+  disabled = !isPy27; # only Python 2.7
   doCheck = false; # Needs network access
 
   propagatedBuildInputs = [ geographiclib ];
 
-  src = fetchFromGitHub {
-    owner = "geopy";
-    repo = "geopy";
-    rev = "531b7de6126838a3e69370227aa7f2086ba52b89";
-    sha256 = "07l1pblzg3hb3dbvd9rq8x78ly5dv0zxbc5hwskqil0bhv5v1p39";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "9419bc90ee6231590c4ae7acf1cf126cefbd0736942da7a6a1436946e80830e2";
   };
 
   meta = with stdenv.lib; {

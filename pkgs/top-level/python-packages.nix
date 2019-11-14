@@ -4886,7 +4886,9 @@ in {
 
   geographiclib = callPackage ../development/python-modules/geographiclib { };
 
-  geopy = callPackage ../development/python-modules/geopy { };
+  geopy = if isPy3k
+    then callPackage ../development/python-modules/geopy { }
+    else callPackage ../development/python-modules/geopy/2.nix { };
 
   django-haystack = callPackage ../development/python-modules/django-haystack { };
 
