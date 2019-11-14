@@ -147,7 +147,7 @@ in {
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e:
         "allow ${e}") cfg.allowedBridges;
       systemPackages = with pkgs; [ libvirt libressl.nc iptables cfg.qemuPackage ];
-      etc.ethertypes.source = "${iptables}/etc/ethertypes";
+      etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
     boot.kernelModules = [ "tun" ];
