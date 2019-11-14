@@ -78,6 +78,9 @@ in
       rm $out/share/mattermost-desktop/create_desktop_file.sh
       mkdir -p $out/share/applications
       mv Mattermost.desktop $out/share/applications/Mattermost.desktop
+      substituteInPlace \
+        $out/share/applications/Mattermost.desktop \
+        --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
 
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
