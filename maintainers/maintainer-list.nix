@@ -1411,6 +1411,12 @@
     githubId = 411324;
     name = "Carles Pagès";
   };
+  cptMikky = {
+    email = "jakub@ufiseru.cz";
+    github = "cptMikky";
+    githubid = 10010448;
+    name = "Jakub Fišer";
+  };
   craigem = {
     email = "craige@mcwhirter.io";
     github = "craigem";
