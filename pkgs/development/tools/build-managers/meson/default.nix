@@ -1,4 +1,11 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
+{ lib
+, python3Packages
+, fetchpatch
+, stdenv
+, writeTextDir
+, substituteAll
+, targetPackages
+}:
 
 let
   # See https://mesonbuild.com/Reference-tables.html#cpu-families
@@ -62,6 +69,15 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/mesonbuild/meson/issues/4784
     # Should be fixed in 0.52
     ./fix-objc-linking.patch
+
+    # Fixes error finding some frameworks
+    # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553704175
+    # https://github.com/mesonbuild/meson/pull/5980
+    # Should be fixed in 0.52
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/pull/5980.patch";
+      sha256 = "0g95gl662mribnnz5jcyn1jaaw8w7r1vgbg2jbm91dcrr5zji5ng";
+    })
   ];
 
   setupHook = ./setup-hook.sh;
