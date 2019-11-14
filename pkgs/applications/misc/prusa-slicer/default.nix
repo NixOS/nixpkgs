@@ -31,9 +31,11 @@ stdenv.mkDerivation rec {
     tbb
     wxGTK30
     xorg.libX11
-  ] ++ checkInputs;
+  ];
 
   checkInputs = [ gtest ];
+
+  doCheck = true;
 
   # The build system uses custom logic - defined in
   # xs/src/libnest2d/cmake_modules/FindNLopt.cmake in the package source -
