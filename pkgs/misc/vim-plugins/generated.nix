@@ -1675,12 +1675,12 @@ let
 
   mattn-calendar-vim = buildVimPluginFrom2Nix {
     pname = "mattn-calendar-vim";
-    version = "2018-08-24";
+    version = "2019-11-13";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "calendar-vim";
-      rev = "867d0cd2d9388e7f1a88f5fe4da23461422fa8fb";
-      sha256 = "0f13wkvnjcv3awmahrkqw9f9hjdj8fq8wm10rs8jfmzad7w16dvk";
+      rev = "17a0395f19739964b85672fb5538ea3f2e28ca7a";
+      sha256 = "01g9ig5h7cqvlv2xakr8cml7l4rlgnypglqzag8zyr2lb2c1dmm3";
     };
   };
 
@@ -1972,12 +1972,12 @@ let
 
   nerdtree = buildVimPluginFrom2Nix {
     pname = "nerdtree";
-    version = "2019-10-22";
+    version = "2019-11-13";
     src = fetchFromGitHub {
       owner = "scrooloose";
       repo = "nerdtree";
-      rev = "fec3e57ad23e4c268d07181d6afb858925b647a1";
-      sha256 = "1s5rmzl2rlqgxms5gi8gj6nnk18qqfsz6r40kk84cgqkf0ip13xv";
+      rev = "8d9b8dae67c5a6affbfd0304e0949ce9e79065ea";
+      sha256 = "1jgjw0lm1znf530mfa9iniwb3j35hpgz49ccykg5q6lrbscchc7h";
     };
   };
 
@@ -2765,12 +2765,12 @@ let
 
   ultisnips = buildVimPluginFrom2Nix {
     pname = "ultisnips";
-    version = "2019-11-12";
+    version = "2019-11-13";
     src = fetchFromGitHub {
       owner = "SirVer";
       repo = "ultisnips";
-      rev = "298f4c255dd7048a99d968d91fc001b6e2203e65";
-      sha256 = "0kdld6w8ic1skl37kl7hxlgr8xrcmgspmcvrq5k1c9c6z1pmra5m";
+      rev = "f7b9b3b1100b3b2883ed2d0ac3627708a10dc469";
+      sha256 = "08g1h9ra807d19rhaf5l6g7pryq07cyy4g1ab0ycwyb0whlr6m57";
     };
   };
 
@@ -3084,12 +3084,12 @@ let
 
   vim-airline = buildVimPluginFrom2Nix {
     pname = "vim-airline";
-    version = "2019-11-10";
+    version = "2019-11-13";
     src = fetchFromGitHub {
       owner = "vim-airline";
       repo = "vim-airline";
-      rev = "e4e4ba3c7b6f510ae10be2dfcac83e12afbd26e9";
-      sha256 = "0rwp8rwgb72wblrh3l6k7166da6pknvmyvx03fz53qmpxhsvhyhl";
+      rev = "e3e2b1af4466011aaba2d012fdf4afc851f09e22";
+      sha256 = "027ac6k3jvgkx7dlbxfa8a6ca9m29s2kf3227p680f449v8cq19c";
     };
   };
 
@@ -3689,12 +3689,12 @@ let
 
   vim-fugitive = buildVimPluginFrom2Nix {
     pname = "vim-fugitive";
-    version = "2019-11-08";
+    version = "2019-11-13";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-fugitive";
-      rev = "1e57d678bad1ffb7468e7dccc45401d1b096249a";
-      sha256 = "04k9bmqzlrx9pvkjs51znbbrqxy416k6jl7ffdp892hacgvr8cnj";
+      rev = "8c84ea6fdb1e019b6dd0d4157db772abc4896b1a";
+      sha256 = "17vsjlyas5dk3xpkxl0i3fznjzdd90izgk060m2m9asndnc32i87";
     };
   };
 
@@ -3766,12 +3766,12 @@ let
 
   vim-go = buildVimPluginFrom2Nix {
     pname = "vim-go";
-    version = "2019-11-12";
+    version = "2019-11-13";
     src = fetchFromGitHub {
       owner = "fatih";
       repo = "vim-go";
-      rev = "32f87164ba90fd011e9d751f4e9f57436c94139d";
-      sha256 = "0d52s8qankvc8kfy7sidv6ifws7nfiaph22hj27ysdfdg6ra5m7k";
+      rev = "10d8f9d5e33d8d18f06ca9b8e5719ab1940cb5a6";
+      sha256 = "057m286vi8qf2b4dzawzb575smh5a5pjblfs4xsw1jna5yjhsy70";
     };
   };
 
@@ -4130,12 +4130,12 @@ let
 
   vim-jsx-pretty = buildVimPluginFrom2Nix {
     pname = "vim-jsx-pretty";
-    version = "2019-11-10";
+    version = "2019-11-13";
     src = fetchFromGitHub {
       owner = "MaxMEllon";
       repo = "vim-jsx-pretty";
-      rev = "b71fa1f62e4bd727eb603db1182a859088210225";
-      sha256 = "10p5b4shlcjc231ln8fz1qlwbsqmkpxyvdz8jf6j5nnp6k5drwym";
+      rev = "ead98c912dd43436171fe5849602967dd61c60b0";
+      sha256 = "1iqqm146sm50gxq8b448gjj8l2sq3flcqmij0h6q2vvgdcsiq1pz";
     };
   };
 
@@ -5076,12 +5076,12 @@ let
 
   vim-terraform = buildVimPluginFrom2Nix {
     pname = "vim-terraform";
-    version = "2019-11-04";
+    version = "2019-11-13";
     src = fetchFromGitHub {
       owner = "hashivim";
       repo = "vim-terraform";
-      rev = "bd9c84050939b6a93eb7e7ce8321375e4009cc77";
-      sha256 = "09jqq9iakcp8ikqjm1jxmqcbbkvnxdcwn3bm0w2gfm3r9c5a8amd";
+      rev = "fd3374f1957d5611f0bc7dc2856a439c03d06ac0";
+      sha256 = "12j95yj1sc61j66mrcbrm0q052rbs0rmsksfyvaxc8q5kxc4dvyz";
     };
   };
 
