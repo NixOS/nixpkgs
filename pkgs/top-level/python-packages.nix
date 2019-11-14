@@ -834,6 +834,10 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  ovirt-engine-sdk = callPackage ../development/python-modules/ovirt-engine-sdk {
+    inherit (pkgs) libxml2Python;
+  };
+
   ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito {
       pythonPackages = self;
     });
