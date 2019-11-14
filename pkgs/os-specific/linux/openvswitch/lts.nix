@@ -1,25 +1,29 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
-, procps, libcap_ng, openssl, python27, iproute , perl
-, kernel ? null }:
+, procps, libcap_ng, openssl, python2, iproute , perl
+, automake, autoconf, libtool, kernel ? null }:
 
 with stdenv.lib;
 
 let
   _kernel = kernel;
 in stdenv.mkDerivation rec {
-  version = "2.5.6";
+  version = "2.5.9";
   pname = "openvswitch";
 
   src = fetchurl {
-    url = "http://openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "14zjcd0ddjv90rwb24l3cac6psd34a9r04jjghn1av0kf6b76zj4";
+    url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
+    sha256 = "0iv0ncwl6s4qyyb655yj5xvqrjr1zbymmab96q259wa09xnyw7b7";
   };
+
+  patches = [ ./patches/lts-ssl.patch ];
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng python27
+  nativeBuildInputs = [ autoconf libtool automake pkgconfig  ];
+  buildInputs = [ makeWrapper utillinux openssl libcap_ng python2
                   perl procps which ];
+
+  preConfigure = "./boot.sh";
 
   configureFlags = [
     "--localstatedir=/var"
@@ -36,8 +40,8 @@ in stdenv.mkDerivation rec {
 
   postBuild = ''
     # fix tests
-    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${python27.interpreter}'
-    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${python27.interpreter}'
+    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${python2.interpreter}'
+    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${python2.interpreter}'
   '';
 
   enableParallelBuilding = true;
@@ -71,7 +75,8 @@ in stdenv.mkDerivation rec {
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
-    homepage = http://openvswitch.org/;
+    homepage = https://www.openvswitch.org/;
     license = licenses.asl20;
+    maintainers = with maintainers; [ netixx kmcopper ];
   };
 }
