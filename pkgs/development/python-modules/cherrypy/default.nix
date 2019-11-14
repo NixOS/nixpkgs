@@ -43,8 +43,10 @@ in buildPythonPackage rec {
     # 3 out of 5 SignalHandlingTests need network access
     # test_2_File_Concurrency also fails upstream: https://github.com/cherrypy/cherrypy/issues/1306
     # ...and skipping it makes 2 other tests fail
+    # also skip test_null_bytes due to incompatibilities with lates pythons:
+    # https://github.com/cherrypy/cherrypy/issues/1781
     LANG=en_US.UTF-8 pytest -k "not SignalHandlingTests and not test_4_Autoreload \
-                            and not test_2_File_Concurrency and not test_3_Redirect and not test_4_File_deletion"
+                            and not test_2_File_Concurrency and not test_3_Redirect and not test_4_File_deletion and not test_null_bytes"
   '';
 
   meta = with lib; {
