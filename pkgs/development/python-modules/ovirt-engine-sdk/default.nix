@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pkgs }:
+{ lib, buildPythonPackage, fetchPypi, pkgs, libxml2Python }:
 
 buildPythonPackage rec {
   pname = "ovirt-engine-sdk-python";
@@ -15,11 +15,11 @@ buildPythonPackage rec {
     pycurl 
     six 
     enum34
-    pkgs.libxml2
+    libxml2Python
   ];
 
   prePatch = ''
-    substituteInPlace setup.py --replace "/usr/include/libxml2" "${pkgs.libxml2.dev}/include/libxml2"
+    substituteInPlace setup.py --replace "/usr/include/libxml2" "${lib.getDev libxml2Python}/include/libxml2"
   '';
 
   meta = with lib; {
