@@ -8,6 +8,7 @@
 , decorator
 , audioread
 , resampy
+, soundfile
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "cca58a2d9a47e35be63a3ce36482d241453bfe9b14bde2005430f969bd7d013a";
   };
 
-  propagatedBuildInputs = [ joblib matplotlib six scikitlearn decorator audioread resampy ];
+  propagatedBuildInputs = [ joblib matplotlib six scikitlearn decorator audioread resampy soundfile ];
 
   # No tests
   doCheck = false;

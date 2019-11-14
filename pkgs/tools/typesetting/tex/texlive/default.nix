@@ -38,9 +38,6 @@ let
     clean = removeSelfDep (orig // {
       # overrides of texlive.tlpdb
 
-      dvidvi = orig.dvidvi // {
-        hasRunfiles = false; # only contains docs that's in bin.core.doc already
-      };
       texlive-msg-translations = orig.texlive-msg-translations // {
         hasRunfiles = false; # only *.po for tlmgr
       };

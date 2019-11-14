@@ -7,13 +7,13 @@
 
 mkDerivation rec {
   pname = "dde-session-ui";
-  version = "4.9.12";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "00i45xv87wx9cww1d445lg6zjbhda5kki8nhsaav8gf2d4cmwzf4";
+    sha256 = "1gy9nlpkr9ayrs1z2dvd7h0dqlw6fq2m66d9cs48qyfkr6c8l9jj";
   };
 
   nativeBuildInputs = [
@@ -89,8 +89,8 @@ mkDerivation rec {
     substituteInPlace lightdm-deepin-greeter/scripts/lightdm-deepin-greeter --replace "/usr/bin/lightdm-deepin-greeter" "$out/bin/lightdm-deepin-greeter"
     substituteInPlace session-ui-guardien/guardien.cpp --replace "dde-lock" "$out/bin/dde-lock"
     substituteInPlace session-ui-guardien/guardien.cpp --replace "dde-shutdown" "$out/bin/dde-shutdown"
-    substituteInPlace session-widgets/lockworker.cpp --replace "dde-switchtogreeter" "$out/bin/dde-switchtogreeter"
-    substituteInPlace session-widgets/lockworker.cpp --replace "which" "${which}/bin/which"
+    substituteInPlace dde-lock/lockworker.cpp --replace "dde-switchtogreeter" "$out/bin/dde-switchtogreeter"
+    substituteInPlace dde-lock/lockworker.cpp --replace "which" "${which}/bin/which"
     substituteInPlace session-widgets/userinfo.cpp --replace "/usr/share/wallpapers/deepin" "${deepin-wallpapers}/share/wallpapers/deepin"
     substituteInPlace widgets/fullscreenbackground.cpp --replace "/usr/share/wallpapers/deepin" "${deepin-wallpapers}/share/wallpapers/deepin"
     substituteInPlace widgets/kblayoutwidget.cpp --replace "setxkbmap" "${setxkbmap}/bin/setxkbmap"

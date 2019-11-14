@@ -2,8 +2,7 @@
 , libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
 , libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
-, asio, buildEnv, check, scons
-, less, fetchpatch
+, asio, buildEnv, check, scons, less
 , withoutClient ? false
 }:
 
@@ -21,14 +20,14 @@ mariadb = server // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.3.18";
+  version = "10.3.20";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "1p6yvmahnkmsz50zjzp20ak7jzbqysly5bdl51nnrngrbfl6qib9";
+    sha256 = "14n4zfpwhvafz02r95bidmkwq2bz9jj3safqni1h21jfd0nqz0ak";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -46,12 +45,7 @@ common = rec { # attributes common to both builds
   patches = [
     ./cmake-includedir.patch
     ./cmake-libmariadb-includedir.patch
-  ] ++ optional stdenv.hostPlatform.isDarwin (fetchpatch {
-    url = "https://github.com/MariaDB/mariadb-connector-c/commit/ee91b2c98a63acb787114dee4f2694e154630928.patch";
-    extraPrefix = "libmariadb/";
-    sha256 = "06i865zwyhs9fvrgmargzn09pbg1cmably3c4wifd241bj8ig8qk";
-    stripLen = 1;
-  });
+  ];
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"

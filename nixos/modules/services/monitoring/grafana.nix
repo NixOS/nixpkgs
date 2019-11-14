@@ -43,7 +43,7 @@ let
 
     ANALYTICS_REPORTING_ENABLED = boolToString cfg.analytics.reporting.enable;
 
-    SMTP_ENABLE = boolToString cfg.smtp.enable;
+    SMTP_ENABLED = boolToString cfg.smtp.enable;
     SMTP_HOST = cfg.smtp.host;
     SMTP_USER = cfg.smtp.user;
     SMTP_PASSWORD = cfg.smtp.password;

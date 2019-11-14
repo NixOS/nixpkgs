@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "git-revise";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16sxmxksb5gjj6zfh1wy2czqj9nm4sd3j4fbrsphs8l065dzzikj";
+    sha256 = "0l3xhg00106p7ysg4gl9dna2zcrax58mzmm0ajjaxw58jfn8wsf1";
   };
 
   disabled = pythonOlder "3.6";
