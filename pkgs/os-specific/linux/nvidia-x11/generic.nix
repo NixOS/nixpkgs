@@ -30,7 +30,7 @@ assert ! versionOlder version "391" -> stdenv.hostPlatform.system == "x86_64-lin
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
   pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
-  i686bundled = versionAtLeast version "391";
+  i686bundled = stdenv.hostPlatform.system == "i686-linux" && versionAtLeast version "391";
 
   libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.xorg.libXext pkgs.xorg.libX11
     pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc ];
