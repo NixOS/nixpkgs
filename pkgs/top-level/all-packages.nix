@@ -250,8 +250,6 @@ in
     cacert = buildPackages.cacert;
   };
 
-  fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
-
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
@@ -2127,6 +2125,8 @@ in
     # epubcheck pulls in Java, which is problematic on some platforms
     epubcheck = null;
   };
+
+  asciidoctorj = callPackage ../tools/typesetting/asciidoctorj { };
 
   asunder = callPackage ../applications/audio/asunder { };
 
@@ -4094,7 +4094,9 @@ in
 
   intecture-auth = callPackage ../tools/admin/intecture/auth.nix { };
 
-  intecture-cli = callPackage ../tools/admin/intecture/cli.nix { };
+  intecture-cli = callPackage ../tools/admin/intecture/cli.nix {
+    openssl = openssl_1_0_2;
+  };
 
   intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
 
@@ -8434,7 +8436,10 @@ in
 
   llvmPackages_latest = llvmPackages_9;
 
-  lorri = throw "lorri is not stable yet. Please go to https://github.com/target/lorri and follow the installation instructions there, for the time being.";
+  lorri = callPackage ../tools/misc/lorri {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
 
   manticore = callPackage ../development/compilers/manticore { };
 
@@ -15416,11 +15421,7 @@ in
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus = callPackage ../servers/monitoring/prometheus {
-    # Version 2.12.0 fails to build with go 1.13 due to an incorrect module file
-    # compilation error :go: cloud.google.com/go@v0.44.1: Get https://proxy.golang.org/cloud.google.com/go/@v/v0.44.1.mod: dial tcp: lookup proxy.golang.org on [::1]:53: read udp [::1]:58980->[::1]:53: read: connection refused
-    buildGoPackage = buildGo112Package;
-  };
+  prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
   prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
