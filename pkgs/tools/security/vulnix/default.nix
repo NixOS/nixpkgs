@@ -1,10 +1,10 @@
-{ stdenv, pythonPackages, nix, ronn }:
+{ stdenv, python3Packages, nix, ronn }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "vulnix";
   version = "1.8.2";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
     sha256 = "0zn21j15vd1z7s40s45zr5wri3r770yvazxqmm60fqpzc5sg552y";
   };
@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
   nativeBuildInputs = [ ronn ];
 
-  checkInputs = with pythonPackages; [
+  checkInputs = with python3Packages; [
     freezegun
     pytest
     pytestcov
@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     nix
-  ] ++ (with pythonPackages; [
+  ] ++ (with python3Packages; [
     click
     colorama
     lxml

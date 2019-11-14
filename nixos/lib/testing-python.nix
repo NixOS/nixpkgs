@@ -26,7 +26,7 @@ in rec {
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ (python3.withPackages (p: [ p.ptpython ])) ];
-    checkInputs = with python3Packages; [ pylint black ];
+    checkInputs = with python3Packages; [ pylint black mypy ];
 
     dontUnpack = true;
 
@@ -34,6 +34,9 @@ in rec {
 
     doCheck = true;
     checkPhase = ''
+      mypy --disallow-untyped-defs \
+           --no-implicit-optional \
+           --ignore-missing-imports ${testDriverScript}
       pylint --errors-only ${testDriverScript}
       black --check --diff ${testDriverScript}
     '';

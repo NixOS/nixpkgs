@@ -398,7 +398,9 @@ nix:
 For more on how to write a `shell.nix` file see the below section. You'll need
 to express a derivation. Note that Nixpkgs ships with a convenience wrapper
 function around `mkDerivation` called `haskell.lib.buildStackProject` to help you
-create this derivation in exactly the way Stack expects. All of the same inputs
+create this derivation in exactly the way Stack expects. However for this to work
+you need to disable the sandbox, which you can do by using `--option sandbox relaxed`
+or `--option sandbox false` to the Nix command. All of the same inputs
 as `mkDerivation` can be provided. For example, to build a Stack project that
 including packages that link against a version of the R library compiled with
 special options turned on:

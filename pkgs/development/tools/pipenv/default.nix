@@ -39,7 +39,12 @@ in buildPythonApplication rec {
 
   propagatedBuildInputs = runtimeDeps;
 
-  doCheck = false;
+  doCheck = true;
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    cp -r --no-preserve=mode ${wheel.src} $HOME/wheel-src
+    $out/bin/pipenv install $HOME/wheel-src
+  '';
 
   meta = with lib; {
     description = "Python Development Workflow for Humans";

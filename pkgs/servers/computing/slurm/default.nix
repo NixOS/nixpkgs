@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
       "--with-zlib=${zlib}"
       "--sysconfdir=/etc/slurm"
     ] ++ (optional (gtk2 == null)  "--disable-gtktest")
-      ++ (optional enableX11 "--with-libssh2=${libssh2.dev}");
+      ++ (optional enableX11 "--with-libssh2=${libssh2.dev}")
+      ++ (optional (!enableX11) "--disable-x11");
 
 
   preConfigure = ''

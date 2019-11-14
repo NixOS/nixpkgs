@@ -4,7 +4,7 @@
 
 mkDerivation rec {
   pname = "qt5integration";
-  version = "0.3.12";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
