@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "merkaartor";
-  version = "0.18.3";
+  version = "unstable-2019-11-12";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "merkaartor";
-    rev = version;
-    sha256 = "0ls3q8m1hxiwyrypy6qca8wczhl4969ncl0sszfdwfv70rzxjk88";
+    rev = "29b3388680a03f1daac0037a2b504ea710da879a";
+    sha256 = "0h3d3srzl06p2ajq911j05zr4vkl88qij18plydx45yqmvyvh0xz";
   };
 
   nativeBuildInputs = [ makeWrapper qmake pkgconfig ];
@@ -30,6 +30,5 @@ stdenv.mkDerivation rec {
     homepage = http://merkaartor.be/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
-    broken = true;  # Does not build with qt >= 5.12
   };
 }

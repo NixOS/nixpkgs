@@ -19817,9 +19817,7 @@ in
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
-  merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor {
-    gdal = gdal_2; # https://github.com/openstreetmap/merkaartor/issues/179
-  };
+  merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
