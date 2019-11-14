@@ -283,8 +283,10 @@ in
   fetchhg = callPackage ../build-support/fetchhg { };
 
   # `fetchurl' downloads a file from the network.
-  fetchurl = makeOverridable (import ../build-support/fetchurl) {
-    inherit lib stdenvNoCC;
+  fetchurl = if stdenv.buildPlatform != stdenv.hostPlatform
+   then buildPackages.fetchurl # No need to do special overrides twice,
+   else makeOverridable (import ../build-support/fetchurl) {
+    inherit lib stdenvNoCC buildPackages;
     curl = buildPackages.curl.override (old: rec {
       # break dependency cycles
       fetchurl = stdenv.fetchurlBoot;
@@ -6560,9 +6562,7 @@ in
 
   trilium = callPackage ../applications/office/trilium { };
 
-  trousers = callPackage ../tools/security/trousers {
-    openssl = openssl_1_0_2;
-  };
+  trousers = callPackage ../tools/security/trousers { };
 
   trx = callPackage ../tools/audio/trx { };
 
@@ -7557,7 +7557,7 @@ in
     ../development/compilers/gcc/libstdc++-hook.sh;
 
   crossLibcStdenv = overrideCC stdenv
-    (if stdenv.targetPlatform.useLLVM or false
+    (if stdenv.hostPlatform.useLLVM or false
      then buildPackages.llvmPackages_8.lldClangNoLibc
      else buildPackages.gccCrossStageStatic);
 
@@ -7590,6 +7590,7 @@ in
       };
       bintools = binutils1;
       libc = libcCross1;
+      extraPackages = [];
   };
 
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
@@ -7599,6 +7600,7 @@ in
     profiledCompiler = with stdenv; (!isSunOS && !isDarwin && (isi686 || isx86_64));
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
     cloog = if !stdenv.isDarwin then cloog else null;
@@ -7612,6 +7614,7 @@ in
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_11 else null;
 
@@ -7625,6 +7628,7 @@ in
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
@@ -7636,6 +7640,7 @@ in
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
@@ -7647,6 +7652,7 @@ in
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
@@ -7658,6 +7664,7 @@ in
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
@@ -7669,6 +7676,7 @@ in
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
@@ -7680,6 +7688,7 @@ in
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
     isl = isl_0_17;
   }));
@@ -8474,6 +8483,7 @@ in
       # provide the default choice, avoiding infinite recursion.
       bintools ? if stdenv.targetPlatform.isDarwin then darwin.binutils else binutils
     , libc ? bintools.libc
+    , extraPackages ? stdenv.lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) threadsCross
     , ...
     } @ extraArgs:
       callPackage ../build-support/cc-wrapper (let self = {
@@ -8485,7 +8495,7 @@ in
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
 
-    inherit cc bintools libc;
+    inherit cc bintools libc extraPackages;
   } // extraArgs; in self);
 
   wrapCC = cc: wrapCCWith {
@@ -8862,7 +8872,7 @@ in
 
   pew = callPackage ../development/tools/pew {};
   poetry = with python3Packages; toPythonApplication poetry;
-  pipenv = python3Packages.callPackage ../development/tools/pipenv {};
+  pipenv = callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
 
@@ -10260,9 +10270,11 @@ in
 
   armadillo = callPackage ../development/libraries/armadillo {};
 
-  arrow-cpp = callPackage ../development/libraries/arrow-cpp {
+  arrow-cpp = callPackage ../development/libraries/arrow-cpp ({
     gtest = gtest.override { static = true; };
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6; # hidden symbol `__divmoddi4'
+  });
 
   assimp = callPackage ../development/libraries/assimp { };
 
@@ -10950,6 +10962,11 @@ in
     else throw "Unknown libc ${name}";
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
+
+  threadsCross =
+    if stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)
+    then targetPackages.windows.mcfgthreads or windows.mcfgthreads
+    else null;
 
   wasilibc = callPackage ../development/libraries/wasilibc {
     stdenv = crossLibcStdenv;
@@ -12916,7 +12933,10 @@ in
 
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
-  openssl = openssl_1_1;
+  openssl =
+    if stdenv.hostPlatform.isMinGW # Work around broken cross build
+    then openssl_1_0_2
+    else openssl_1_1;
 
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_0_2
@@ -13161,7 +13181,7 @@ in
   qt512 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.12) {
       inherit newScope;
-      inherit stdenv fetchurl fetchFromGitHub makeSetupHook makeWrapper;
+      inherit stdenv fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
       inherit harfbuzz;

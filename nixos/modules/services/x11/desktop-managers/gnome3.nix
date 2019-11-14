@@ -213,6 +213,12 @@ in
 
       services.xserver.updateDbusEnvironment = true;
 
+      # gnome has a custom alert theme but it still
+      # inherits from the freedesktop theme.
+      environment.systemPackages = with pkgs; [
+        sound-theme-freedesktop
+      ];
+
       # Needed for themes and backgrounds
       environment.pathsToLink = [
         "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173

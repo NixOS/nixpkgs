@@ -73,6 +73,5 @@ in stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
-    broken = !withQt5;
   };
 }
