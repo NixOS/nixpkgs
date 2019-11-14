@@ -199,7 +199,11 @@ in rec {
         lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
           (lib.concatLists propagatedDependencies));
 
-      propagaterOutput = if lib.elem "dev" outputs then "dev" else lib.head outputs;
+      propagaterOutput = let
+        # mimic behavior from `multiple-outputs.sh`
+        find = n: default: lib.findFirst (x: n == x) default outputs;
+        outputDev = find "dev" (find "out" null);
+      in if lib.elem outputDev outputs then outputDev else lib.head outputs;
       propagatedBuildOutputs = attrs.propagatedBuildOutputs or
         (lib.filter (i: i != propagaterOutput && lib.elem i outputs) [ "out" "bin" "dev" "lib"]);
 
