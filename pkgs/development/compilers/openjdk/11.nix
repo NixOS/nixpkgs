@@ -5,7 +5,8 @@
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? openjfx.meta.available, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
+, enableGnome ? true, gtk3
+, enableGnome2 ? true, gnome_vfs, glib, GConf
 }:
 
 let
@@ -27,8 +28,10 @@ let
       cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk11-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
+    ] ++ lib.optionals (!headless && enableGnome) [
+      gtk3
+    ] ++ lib.optionals (!headless && enableGnome && enableGnome2) [
+      gnome_vfs GConf glib
     ];
 
     patches = [
@@ -36,7 +39,7 @@ let
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap.patch
-    ] ++ lib.optionals (!headless && enableGnome2) [
+    ] ++ lib.optionals (!headless && enableGnome) [
       ./swing-use-gtk-jdk10.patch
     ];
 
@@ -65,8 +68,10 @@ let
 
     NIX_LDFLAGS = lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+    ] ++ lib.optionals (!headless && enableGnome) [
+      "-lgtk-3"
+    ] ++ lib.optionals (!headless && enableGnome && enableGnome2) [
+      "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
     ];
 
     buildFlags = [ "all" ];
