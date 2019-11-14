@@ -3687,6 +3687,17 @@ let
     };
   };
 
+  vim-fubitive = buildVimPluginFrom2Nix {
+    pname = "vim-fubitive";
+    version = "2016-03-21";
+    src = fetchFromGitHub {
+      owner = "tommcdo";
+      repo = "vim-fubitive";
+      rev = "a4ec11e2e6b1792d2c650335859f83cb815336a0";
+      sha256 = "0zni9j1ldnwqg3gh4g5n8azxwyjrx1l2d0a4m02ndjjy19myfhz1";
+    };
+  };
+
   vim-fugitive = buildVimPluginFrom2Nix {
     pname = "vim-fugitive";
     version = "2019-11-13";

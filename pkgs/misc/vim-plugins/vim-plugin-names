@@ -421,6 +421,7 @@ tmux-plugins/vim-tmux-focus-events
 tomasr/molokai
 tomlion/vim-solidity
 tommcdo/vim-exchange
+tommcdo/vim-fubitive
 tommcdo/vim-lion
 tommcdo/vim-ninja-feet
 tomtom/tcomment_vim
