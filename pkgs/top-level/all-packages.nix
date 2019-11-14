@@ -250,8 +250,6 @@ in
     cacert = buildPackages.cacert;
   };
 
-  fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
-
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
