@@ -112,8 +112,8 @@ in rec {
   terraform_0_11-full = terraform_0_11.full;
 
   terraform_0_12 = pluggable (generic {
-    version = "0.12.14";
-    sha256 = "0pq4sfnnlj91gxyxvyzzrgglnvh8xpan90gnc9jvnnb23iv4q96l";
+    version = "0.12.15";
+    sha256 = "18kvgb2sjldis7bykb11zqzx6avr7a4ry91xsfq4v0iwbi5k383b";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
