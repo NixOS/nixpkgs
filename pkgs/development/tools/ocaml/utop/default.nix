@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
        installPhase = ''
          mkdir -p "$out"/${path}
          for e in OCAMLPATH CAML_LD_LIBRARY_PATH; do
+           [[ -v "$e" ]] || continue
            printf %s "''${!e}" > "$out"/${path}/$e
          done
        '';
