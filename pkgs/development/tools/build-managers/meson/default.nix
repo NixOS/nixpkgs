@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/mesonbuild/meson/pull/5980
     # Should be fixed in 0.52
     (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/pull/5980.patch";
+      url = "https://github.com/mesonbuild/meson/commit/8d3fcb3dc4d7204a4646807f8b5191d79fb291e5.patch";
       sha256 = "0g95gl662mribnnz5jcyn1jaaw8w7r1vgbg2jbm91dcrr5zji5ng";
     })
   ];
