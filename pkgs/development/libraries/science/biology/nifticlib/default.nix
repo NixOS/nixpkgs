@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/niftilib;
     description = "Medical imaging format C API";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.publicDomain;
   };
 }
