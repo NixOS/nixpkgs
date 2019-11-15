@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, cmake, pkgconfig
-, boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK30
+, boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK31
 , gtest, nlopt, xorg, makeDesktopItem
 }:
 let
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     glew
     libpng
     tbb
-    wxGTK30
+    wxGTK31
     xorg.libX11
   ] ++ checkInputs;
 
@@ -65,7 +65,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DSLIC3R_FHS=1"
-    "-DSLIC3R_WX_STABLE=1"  # necessary when compiling against wxGTK 3.0
   ];
 
   postInstall = ''
