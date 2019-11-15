@@ -53,12 +53,13 @@ buildPythonPackage rec {
 
   checkPhase = ''
     # disable tests that require mongodb, postresql
-    rm flask_admin/tests/mongoengine/test_basic.py
-    rm flask_admin/tests/pymongo/__init__.py
-    rm flask_admin/tests/test_form_upload.py
-    rm flask_admin/tests/sqla/test_postgres.py
-    rm flask_admin/tests/geoa/test_basic.py
-    nosetests flask_admin/tests
+    nosetests \
+     -e "mongoengine" \
+     -e "pymongo" \
+     -e "test_form_upload" \
+     -e "test_postgres" \
+     -e "geoa" \
+     flask_admin/tests
   '';
 
   meta = with lib; {

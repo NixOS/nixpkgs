@@ -1151,8 +1151,6 @@ in {
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
-  python-openid = callPackage ../development/python-modules/python-openid { };
-
   python-packer = callPackage ../development/python-modules/python-packer { };
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
@@ -3244,8 +3242,6 @@ in {
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
-
-  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
 
   flask-openid = callPackage ../development/python-modules/flask-openid { };
 

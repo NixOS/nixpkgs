@@ -30,6 +30,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    # Disabled 3 tests failing due to string representations of dates:
+    # Like "12. April 2010 um 15:46:00 MESZ" != 12. "April 2010 15:46:00 MESZ"
+
     pytest tests/tests.py -k "not test_init_app \
                               and not test_custom_locale_selector \
                               and not test_basics"

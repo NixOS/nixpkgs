@@ -3,13 +3,13 @@
 , fetchPypi
 , flask
 , python3-openid
-, python-openid
-, isPy27
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "flask-openid";
   version = "1.2.5";
+  disable = !isPy3k;
 
   src = fetchPypi {
     pname = "Flask-OpenID";
@@ -19,7 +19,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     flask
-  ] ++ (if isPy27 then [ python-openid ] else [ python3-openid ]);
+    python3-openid
+  ];
 
   # no tests for repo...
   doCheck = false;

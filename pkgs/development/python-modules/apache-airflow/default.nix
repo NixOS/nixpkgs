@@ -3,8 +3,11 @@
 , buildPythonPackage
 , fetchPypi
 , fetchFromGitHub
+, fetchpatch
 , alembic
+, cached-property
 , configparser
+, colorlog
 , croniter
 , dill
 , flask
@@ -24,6 +27,7 @@
 , jinja2
 , ldap3
 , lxml
+, lazy-object-proxy
 , markdown
 , pandas
 , pendulum
@@ -37,6 +41,7 @@
 , sqlalchemy
 , tabulate
 , tenacity
+, termcolor
 , text-unidecode
 , thrift
 , tzlocal
@@ -46,58 +51,47 @@
 , enum34
 , typing
 , nose
-, isPy27
+, python
+, isPy3k
 }:
 
-let # import error "from pendulum import Pendulum" due to 2.x
-    pendulum1 = pendulum.overrideAttrs (super: rec {
-      name = "pendulum-1.5.1";
-
-      src = fetchPypi {
-        pname = super.pname;
-        version = "1.5.1";
-        sha256 = "738878168eb26e5446da5d1f7b3312ae993a542061be8882099c00ef4866b1a2";
-      };
-
-     propagatedBuildInputs = super.propagatedBuildInputs ++ [ tzlocal ];
-    });
-
-   # 2.x has fstrings
-   flask-appbuilder1 = flask-appbuilder.overrideAttrs (super: rec {
-     name = "flask-appbuilder-1.13.0";
-
-     src = fetchPypi {
-       pname = "Flask-AppBuilder";
-       version = "1.13.0";
-       sha256 = "1bjcnklpycw62a02kilkdc48vk67sykvlp8l1bvqszkjxvvfhgvg";
-     };
-
-     buildPhase = ''
-      substituteInPlace setup.py \
-        --replace "prison==0.1.0" "prison"
-     '' + super.buildPhase;
-   });
-in
 buildPythonPackage rec {
   pname = "apache-airflow";
-  version = "1.10.3";
+  version = "1.10.5";
+  disabled = (!isPy3k);
 
-
-  src = fetchFromGitHub {
+  src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
     rev = version;
-    sha256 = "040d1wbkcapkgb220yzk2dicnghhynj24m2xlbmqg6j54f007j94";
+    sha256 = "14fmhfwx977c9jdb2kgm93i6acx43l45ggj30rb37r68pzpb6l6h";
   };
+
+  patches = [
+       # Not yet accepted: https://github.com/apache/airflow/pull/6562
+     (fetchpatch {
+       name = "avoid-warning-from-abc.collections";
+       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch;
+       sha256 = "0swpay1qlb7f9kgc56631s1qd9k82w4nw2ggvkm7jvxwf056k61z";
+     })
+       # Not yet accepted: https://github.com/apache/airflow/pull/6561
+     (fetchpatch {
+       name = "pendulum2-compatibility";
+       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch;
+       sha256 = "17hw8qyd4zxvib9zwpbn32p99vmrdz294r31gnsbkkcl2y6h9knk";
+     })
+  ];
 
   propagatedBuildInputs = [
     alembic
+    cached-property
+    colorlog
     configparser
     croniter
     dill
     flask
-    flask-appbuilder1
     flask-admin
+    flask-appbuilder
     flask-bcrypt
     flask-caching
     flask_login
@@ -112,9 +106,10 @@ buildPythonPackage rec {
     jinja2
     ldap3
     lxml
+    lazy-object-proxy
     markdown
     pandas
-    pendulum1
+    pendulum
     psutil
     pygments
     python-daemon
@@ -124,13 +119,14 @@ buildPythonPackage rec {
     sqlalchemy
     tabulate
     tenacity
+    termcolor
     text-unidecode
     thrift
     tzlocal
     unicodecsv
     werkzeug
     zope_deprecation
-  ] ++ lib.optionals isPy27 [ enum34 typing ];
+  ];
 
   checkInputs = [
     snakebite
@@ -138,10 +134,14 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+
    substituteInPlace setup.py \
+     --replace "flask>=1.1.0, <2.0" "flask" \
      --replace "flask-caching>=1.3.3, <1.4.0" "flask-caching" \
-     --replace "flask-appbuilder==1.12.3" "flask-appbuilder" \
+     --replace "flask-appbuilder>=1.12.5, <2.0.0" "flask-appbuilder" \
      --replace "pendulum==1.4.4" "pendulum" \
+     --replace "cached_property~=1.5" "cached_property" \
+     --replace "dill>=0.2.2, <0.3" "dill" \
      --replace "configparser>=3.5.0, <3.6.0" "configparser" \
      --replace "jinja2>=2.7.3, <=2.10.0" "jinja2" \
      --replace "funcsigs==1.0.0" "funcsigs" \
@@ -151,7 +151,14 @@ buildPythonPackage rec {
      --replace "markdown>=2.5.2, <3.0" "markdown" \
      --replace "future>=0.16.0, <0.17" "future" \
      --replace "tenacity==4.12.0" "tenacity" \
+     --replace "text-unidecode==1.2" "text-unidecode" \
+     --replace "tzlocal>=1.4,<2.0.0" "tzlocal" \
+     --replace "sqlalchemy~=1.3" "sqlalchemy" \
      --replace "werkzeug>=0.14.1, <0.15.0" "werkzeug"
+ 
+  # dumb-init is only needed for CI and Docker, not relevant for NixOS.
+  substituteInPlace setup.py \
+     --replace "'dumb-init>=1.2.2'," ""
 
    substituteInPlace tests/core.py \
      --replace "/bin/bash" "${stdenv.shell}"
@@ -176,6 +183,6 @@ buildPythonPackage rec {
     description = "Programmatically author, schedule and monitor data pipelines";
     homepage = http://airflow.apache.org/;
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ maintainers.costrouc maintainers.ingenieroariel ];
   };
 }

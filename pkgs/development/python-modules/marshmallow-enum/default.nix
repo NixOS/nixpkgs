@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , marshmallow
-, pytest
+, pytestCheckHook
 , isPy27
 , enum34
 , pytest-flake8
@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-enum";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "justanr";
     repo = "marshmallow_enum";
     rev = "v${version}";
-    sha256 = "0ll65y8p0np6ayy8h8g5psf9xm7s0nclarxsh21fdsm72zscx356";
+    sha256 = "1ihrcmyfjabivg6hc44i59hnw5ijlg1byv3zs1rqxfynp8xr7398";
   };
 
   propagatedBuildInputs = [
@@ -24,13 +24,14 @@ buildPythonPackage rec {
   ] ++ lib.optionals isPy27 [ enum34 ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytest-flake8
   ];
 
-  checkPhase = ''
-    pytest tests
-  '';
+  disabledTests = [
+    "test_custom_error_in_deserialize_by_name"
+    "test_custom_error_in_deserialize_by_value"
+  ];
 
   meta = with lib; {
     description = "Enum field for Marshmallow";

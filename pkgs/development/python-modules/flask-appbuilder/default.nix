@@ -62,14 +62,10 @@ buildPythonPackage rec {
   postPatch = ''
    substituteInPlace setup.py \
      --replace "jsonschema>=3.0.1<4" "jsonschema" \
+     --replace "marshmallow>=2.18.0,<2.20" "marshmallow" \
+     --replace "PyJWT>=1.7.1" "PyJWT" \
      --replace "Flask-SQLAlchemy>=2.4,<3" "Flask-SQLAlchemy" \
      --replace "Flask-JWT-Extended>=3.18,<4" "Flask-JWT-Extended"
-  '';
-
-  checkPhase = ''
-    # remove mockldap requirement
-    rm flask_appbuilder/tests/_test_ldapsearch.py
-    nosetests flask_appbuilder.api flask_appbuilder.tests.test_api
   '';
 
   # majority of tests require network access or mongo

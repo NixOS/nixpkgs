@@ -4,18 +4,18 @@
 , pyyaml
 , prance
 , marshmallow
-, pytest
+, pytestCheckHook
 , mock
 , openapi-spec-validator
 }:
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "2.0.2";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11d1aaf620a80f67ded7688fcaf14fa4fd975d566876b5db69b067ffbfe4d1d9";
+    sha256 = "0rr32z9hbf8w4w1fs5gj2v0ixcq2vq7a3wssrlxagi5ii7ygap7y";
   };
 
   checkInputs = [
@@ -23,13 +23,9 @@ buildPythonPackage rec {
     prance
     openapi-spec-validator
     marshmallow
-    pytest
     mock
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with lib; {
     description = "A pluggable API specification generator. Currently supports the OpenAPI Specification (f.k.a. the Swagger specification";
