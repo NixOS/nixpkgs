@@ -27,6 +27,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/stefanhepp/pplatex";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.srgom ];
-    platforms = platforms.darwin;
+    platforms = platforms.unix;
   };
 }
