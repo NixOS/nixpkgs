@@ -25224,6 +25224,8 @@ in
 
   xcftools = callPackage ../tools/graphics/xcftools { };
 
+  xerox6280 = callPackage ../misc/cups/drivers/xerox6280 { };
+
   xhyve = callPackage ../applications/virtualization/xhyve {
     inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
     inherit (darwin.apple_sdk.libs) xpc;
