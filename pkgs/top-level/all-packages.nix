@@ -857,6 +857,13 @@ in
 
   enpass = callPackage ../tools/security/enpass { };
 
+  ensmallen = callPackage ../development/libraries/ensmallen { };
+
+  ensmallenOpenMP = callPackage ../development/libraries/ensmallen {
+    openmp = llvmPackages.openmp;
+    enableOpenMP = true;
+  };
+
   essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
   esh = callPackage ../tools/text/esh { };
@@ -1903,6 +1910,13 @@ in
   mkspiffs-presets = recurseIntoAttrs (callPackages ../tools/filesystems/mkspiffs/presets.nix { });
 
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
+
+  mlpack = callPackage ../development/libraries/mlpack {};
+
+  mlpackOpenMP = callPackage ../development/libraries/mlpack {
+    ensmallen = ensmallenOpenMP;
+    enableOpenMP = true;
+  };
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
