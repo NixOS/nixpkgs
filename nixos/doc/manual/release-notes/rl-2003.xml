@@ -71,7 +71,11 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+    The kubernetes kube-proxy now supports a new hostname configuration
+    <literal>services.kubernetes.proxy.hostname</literal> which has to
+    be set if the hostname of the node should be non default.
+    </para>
    </listitem>
   </itemizedlist>
 
