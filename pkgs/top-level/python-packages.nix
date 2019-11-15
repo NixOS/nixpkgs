@@ -1149,6 +1149,8 @@ in {
     igraph = pkgs.igraph;
   };
 
+  python-olm = callPackage ../development/python-modules/python-olm { };
+
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-packer = callPackage ../development/python-modules/python-packer { };
