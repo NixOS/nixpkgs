@@ -6914,6 +6914,12 @@
       fingerprint = "E631 8869 586F 99B4 F6E6  D785 5942 58F0 389D 2802";
     }];
   };
+  twistedjoe = {
+    email = "dupuisj@dupuisj.com";
+    github = "twistedjoe";
+    githubId = 1518299;
+    name = "Joé Dupuis";
+  };
   typetetris = {
     email = "ericwolf42@mail.com";
     github = "typetetris";
