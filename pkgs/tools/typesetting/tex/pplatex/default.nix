@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre }:
+
 stdenv.mkDerivation rec {
   pname = "pplatex";
   version = "unstable-2015-09-14";
@@ -26,7 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stefanhepp/pplatex";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.srgom ];
-    platforms = platforms.linux;
+    platforms = platforms.darwin;
   };
 }
-
