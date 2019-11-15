@@ -5740,6 +5740,8 @@ in
 
   ppl = callPackage ../development/libraries/ppl { };
 
+  pplatex = callPackage ../tools/typesetting/tex/pplatex { };
+
   ppp = callPackage ../tools/networking/ppp { };
 
   pptp = callPackage ../tools/networking/pptp {};
