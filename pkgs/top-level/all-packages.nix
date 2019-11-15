@@ -21002,6 +21002,8 @@ in
   sound-juicer = callPackage ../applications/audio/sound-juicer { };
 
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
+  
+   tensorman = callPackage ../tools/misc/tensorman { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
