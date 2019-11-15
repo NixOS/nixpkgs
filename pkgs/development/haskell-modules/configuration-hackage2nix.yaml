@@ -5186,6 +5186,8 @@ broken-packages:
   - GrowlNotify
   - grpc-api-etcd
   - grpc-etcd-client
+  - grpc-haskell
+  - grpc-haskell-core
   - gruff
   - gruff-examples
   - gsc-weighting
@@ -6154,6 +6156,7 @@ broken-packages:
   - http-dispatch
   - http-enumerator
   - http-grammar
+  - http-io-streams
   - http-kinder
   - http-monad
   - http-pony-serve-wai
@@ -7446,6 +7449,7 @@ broken-packages:
   - NestedFunctor
   - nestedmap
   - net-mqtt
+  - net-mqtt-rpc
   - net-spider
   - net-spider-cli
   - net-spider-pangraph
@@ -8550,6 +8554,7 @@ broken-packages:
   - rws
   - RxHaskell
   - s-expression
+  - S3
   - SableCC2Hs
   - safe-access
   - safe-buffer-monad
@@ -8682,6 +8687,7 @@ broken-packages:
   - Semantique
   - semdoc
   - semi-iso
+  - semialign-extras
   - semialign-indexed
   - semialign-optics
   - semibounded-lattices
