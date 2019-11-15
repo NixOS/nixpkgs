@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, pcre }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pplatex";
   version = "unstable-2015-09-14";
 
