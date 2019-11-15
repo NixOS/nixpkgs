@@ -957,6 +957,11 @@
     githubId = 5718007;
     name = "Bastian Köcher";
   };
+  blanky0230 = {
+    email = "blanky0230@gmail.com";
+    github = "blanky0230";
+    name = "Thomas Blank";
+  };
   blitz = {
     email = "js@alien8.de";
     github = "blitz";
