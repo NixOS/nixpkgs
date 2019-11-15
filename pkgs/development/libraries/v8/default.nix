@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
         mkdir -p $sourceRoot/${n}
         cp -r ${v}/* $sourceRoot/${n}
       '') deps)}
-    chmod u+w -R .
+    chmod u+w -R $sourceRoot/
   '';
 
   postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
   '';
 
-  gnFlags = [
+  gnFlags = builtins.toString ([
     "use_custom_libcxx=false"
     "is_clang=${if stdenv.cc.isClang then "true" else "false"}"
     "use_sysroot=false"
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     # ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
     ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
-  ] ++ stdenv.lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
+  ] ++ stdenv.lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'');
 
   # with gcc8, -Wclass-memaccess became part of -Wall and causes logging limit
   # to be exceeded
