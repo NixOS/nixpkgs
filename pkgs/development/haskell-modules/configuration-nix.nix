@@ -297,10 +297,22 @@ self: super: builtins.intersectAttrs super {
     );
 
   llvm-hs =
-      let dontCheckDarwin = if pkgs.stdenv.isDarwin
-                            then dontCheck
-                            else pkgs.lib.id;
-      in dontCheckDarwin (super.llvm-hs.override { llvm-config = pkgs.llvm_8; });
+    let llvmHsWithLlvm8 = super.llvm-hs.override { llvm-config = pkgs.llvm_8; };
+    in
+    if pkgs.stdenv.isDarwin
+    then
+      overrideCabal llvmHsWithLlvm8 (oldAttrs: {
+        # One test fails on darwin.
+        doCheck = false;
+        # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
+        # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
+        # when called from GHC, probably because clang is version 7, but we are
+        # using LLVM8.
+        preCompileBuildDriver = oldAttrs.preCompileBuildDriver or "" + ''
+          substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
+        '';
+      })
+    else llvmHsWithLlvm8;
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
