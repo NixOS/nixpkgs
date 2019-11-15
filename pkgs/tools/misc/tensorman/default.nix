@@ -1,7 +1,7 @@
 #{ pkgconfig, stdenv, rustPlatform, rustc, cargo, docker, openssl, fetchzip }:
 
 rustPlatform.buildRustPackage rec {
-  name = "tensorman-${version}";
+  pname = "tensorman-${version}";
   version = "0.1.0";
 
  src = fetchzip{
@@ -18,9 +18,9 @@ cargoSha256 = "1gh5w6zzrvjk60bqaf355fagijy723rvmqjh4laksd96pmzdfwn9";
 
   meta = with stdenv.lib; {
     description = "Utility for easy management of Tensorflow containers";
-    homepage = https://github.com/pop-os/tensorman/;
+    homepage = "https://github.com/pop-os/tensorman/";
     license = stdenv.lib.licenses.gpl3;
     platforms =  [ "x86_64-linux" ];
-    maintainers = [  ];
+    maintainers = [ "thefenriswolf" ];
   };
 }
