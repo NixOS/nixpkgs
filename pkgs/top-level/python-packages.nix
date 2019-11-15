@@ -3849,6 +3849,8 @@ in {
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
+  matrix-nio = callPackage ../development/python-modules/matrix-nio { };
+
   mautrix-appservice = callPackage ../development/python-modules/mautrix-appservice { };
 
   maya = callPackage ../development/python-modules/maya { };
