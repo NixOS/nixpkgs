@@ -1315,4 +1315,7 @@ self: super: {
     ];
   });
 
+  # Needs the corresponding version of haskell-src-exts.
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
