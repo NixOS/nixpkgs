@@ -21003,7 +21003,7 @@ in
 
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
   
-   tensorman = callPackage ../tools/misc/tensorman { };
+  tensorman = callPackage ../tools/misc/tensorman { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
