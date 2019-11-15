@@ -2433,6 +2433,8 @@ in {
 
   gpy = callPackage ../development/python-modules/gpy { };
 
+  gpyopt = callPackage ../development/python-modules/gpyopt { };
+
   gitdb = callPackage ../development/python-modules/gitdb { };
 
   gitdb2 = callPackage ../development/python-modules/gitdb2 { };
