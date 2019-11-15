@@ -41,5 +41,7 @@ in {
         Restart = "on-failure";
       };
     };
+
+    environment.systemPackages = [ pkgs.lorri ];
   };
 }
