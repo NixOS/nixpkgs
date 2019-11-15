@@ -19012,7 +19012,7 @@ in
 
   moe =  callPackage ../applications/editors/moe { };
 
-  multibootusb = callPackage ../applications/misc/multibootusb {};
+  multibootusb = qt5.callPackage ../applications/misc/multibootusb {};
 
   praat = callPackage ../applications/audio/praat { };
 
