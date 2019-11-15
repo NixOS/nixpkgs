@@ -1,19 +1,16 @@
-#{ pkgconfig, stdenv, rustPlatform, rustc, cargo, docker, openssl, fetchzip }:
+{ pkgconfig, stdenv, rustPlatform, rustc, cargo, docker, openssl, fetchFromGithub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tensorman-${version}";
   version = "0.1.0";
 
- src = fetchzip{
-    url = "https://github.com/pop-os/tensorman/archive/master_eoan.zip";
-    sha256 = "10srpa3m6bdx0hx9w0p4n699j3c6hw8xx7l2p6r0g2d2d8nakwyf";
-  };
-
- #  src = fetchFromGitHub { # revert this to fetch from Github when upstream has github releases
- #   owner = "pop-os";
- #   repo = "tensorman";
- #   rev = version;
- 
+ src = fetchFromGitHub {
+    owner = "pop-os";
+    repo = "tensorman";
+    rev = version;
+    sha256 = "0ywb53snvymmwh10hm6whckz7dwmpqa4rxiggd24y178jdfrm2ns";
+};
+buildInputs = [ pkgconfig openssl ];
 cargoSha256 = "1gh5w6zzrvjk60bqaf355fagijy723rvmqjh4laksd96pmzdfwn9";
 
   meta = with stdenv.lib; {
