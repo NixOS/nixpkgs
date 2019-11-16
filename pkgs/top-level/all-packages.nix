@@ -6342,6 +6342,8 @@ in
 
   smesh = callPackage ../development/libraries/smesh {};
 
+  smu = callPackage ../tools/text/smu { };
+
   smugline = python3Packages.smugline;
 
   snabb = callPackage ../tools/networking/snabb { } ;
