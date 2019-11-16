@@ -25545,4 +25545,6 @@ in
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
+  gortr = callPackage ../servers/gortr {};
+
 }
