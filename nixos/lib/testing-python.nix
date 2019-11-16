@@ -24,7 +24,7 @@ in rec {
 
     src = ./test-driver/nixos_test_driver;
 
-    nativeBuildInputs = [ flit ];
+    nativeBuildInputs = [ flit sphinx ];
     propagatedBuildInputs = [ ptpython ];
     checkInputs = [ pylint black mypy ];
 
@@ -44,6 +44,17 @@ in rec {
     makeWrapperArgs = [
       "--prefix PATH : ${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}"
     ];
+
+    outputs = [ "out" "devdoc" ];
+
+    postInstall = ''
+      pushd doc
+      make html
+      mkdir -p "$devdoc"
+      mv _build/html "$devdoc"
+      popd
+    '';
+
   };
 
   # Run an automated test suite in the given virtual network.
