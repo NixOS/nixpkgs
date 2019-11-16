@@ -19,10 +19,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libexif/libexif/commit/5d28011c40ec86cf52cffad541093d37c263898a.patch";
       sha256 = "1wv8s962wmbn2m2xypgirf12g6msrbplpsmd5bh86irfwhkcppj3";
     })
-    # This is basically
-    # https://github.com/libexif/libexif/commit/6aa11df549114ebda520dde4cdaea2f9357b2c89.patch,
-    # but without the addition to ./NEWS
-    ./CVE-2018-20030-2.patch
+    (fetchpatch {
+      name = "CVE-2018-20030-2.patch";
+      url = "https://github.com/libexif/libexif/commit/6aa11df549114ebda520dde4cdaea2f9357b2c89.patch";
+      sha256 = "01aqvz63glwq6wg0wr7ykqqghb4abgq77ghvhizbzadg1k4h7drx";
+      excludes = [ "NEWS" ];
+    })
   ];
 
   buildInputs = [ gettext ];
