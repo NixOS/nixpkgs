@@ -19140,6 +19140,8 @@ in
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
+  gxmatcheq-lv2 = callPackage ../applications/audio/gxmatcheq-lv2 { };
+
   gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
 
   hackrf = callPackage ../applications/radio/hackrf { };
