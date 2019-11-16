@@ -1,0 +1,16 @@
+# See PEP 517 and PEP 518 for this file.
+# In this case, we use Flit as build system.
+# https://github.com/takluyver/flit
+
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+module = "nixos_test_driver"
+author = "Nixpkgs contributors"
+author-email = "nixos1+inbox@discoursemail.com"
+home-page = "https://nixos.org"
+
+[tool.flit.scripts]
+nixos-test-driver = "nixos_test_driver:main"

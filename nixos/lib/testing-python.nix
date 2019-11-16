@@ -18,41 +18,33 @@ in rec {
 
   inherit pkgs;
 
-
-  testDriver = let
-    testDriverScript = ./test-driver/test-driver.py;
-  in stdenv.mkDerivation {
+  testDriver = with python3.pkgs; buildPythonApplication {
     name = "nixos-test-driver";
+    format = "pyproject";
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ (python3.withPackages (p: [ p.ptpython ])) ];
-    checkInputs = with python3Packages; [ pylint black mypy ];
+    src = ./test-driver/nixos_test_driver;
 
-    dontUnpack = true;
+    nativeBuildInputs = [ flit ];
+    propagatedBuildInputs = [ ptpython ];
+    checkInputs = [ pylint black mypy ];
 
     preferLocalBuild = true;
 
     doCheck = true;
+
     checkPhase = ''
-      mypy --disallow-untyped-defs \
-           --no-implicit-optional \
-           --ignore-missing-imports ${testDriverScript}
-      pylint --errors-only ${testDriverScript}
-      black --check --diff ${testDriverScript}
+      mypy \
+        --disallow-untyped-defs \
+        --no-implicit-optional \
+        --ignore-missing-imports ./nixos_test_driver.py
+      pylint --errors-only ./nixos_test_driver.py
+      black --check --diff ./nixos_test_driver.py
     '';
 
-    installPhase =
-      ''
-        mkdir -p $out/bin
-        cp ${testDriverScript} $out/bin/nixos-test-driver
-        chmod u+x $out/bin/nixos-test-driver
-        # TODO: copy user script part into this file (append)
-
-        wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
-      '';
+    makeWrapperArgs = [
+      "--prefix PATH : ${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}"
+    ];
   };
-
 
   # Run an automated test suite in the given virtual network.
   # `driver' is the script that runs the network.

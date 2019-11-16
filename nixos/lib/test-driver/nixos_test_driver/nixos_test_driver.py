@@ -1,4 +1,10 @@
-#! /somewhere/python3
+"""
+NixOS test driver
+=================
+"""
+__version__ = "0.1"
+
+
 from contextlib import contextmanager, _GeneratorContextManager
 from xml.sax.saxutils import XMLGenerator
 import _thread
@@ -783,7 +789,7 @@ def subtest(name: str) -> Iterator[None]:
     return False
 
 
-if __name__ == "__main__":
+def main() -> None:
     log = Logger()
 
     vlan_nrs = list(dict.fromkeys(os.environ["VLANS"].split()))
@@ -818,3 +824,7 @@ if __name__ == "__main__":
     run_tests()
     toc = time.time()
     print("test script finished in {:.2f}s".format(toc - tic))
+
+
+if __name__ == "__main__":
+    main()
