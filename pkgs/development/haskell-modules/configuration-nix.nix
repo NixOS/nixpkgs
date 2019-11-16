@@ -636,4 +636,8 @@ self: super: builtins.intersectAttrs super {
   # need it during the build itself, too.
   cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.buildHaskellPackages.gtk2hs-buildtools) ["fortify"];
+
+  # The DateZone xmobar plugin has the hardcoded path /usr/share/zoneinfo
+  # Essentially, this backports upstream PR https://github.com/jaor/xmobar/pull/411
+  xmobar = appendPatch super.xmobar ./patches/xmobar-tzdir.patch;
 }

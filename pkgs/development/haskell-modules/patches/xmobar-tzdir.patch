@@ -1,0 +1,43 @@
+commit d3b962ff8ea0a26bffba69ec27beed11d82b4908
+Author: Emmanuel Rosa <emmanuelrosa@protonmail.com>
+Date:   Sun Nov 17 12:05:41 2019 +0700
+
+    DateZone: get timezone series from TZDIR
+    
+    The DateZone plugin calls `getTimeZoneSeriesFromOlsonFile` using the
+    hard-coded path /usr/share/zoneinfo. While that may work just fine on
+    most Linux distros, it does not work on NixOS since that directory is
+    always locates somewhere under /nix/store.
+    
+    Based on mild research, it seems the environment variable TZDIR is
+    commonly set to the absolute path to `zoneinfo` (but without a trailing
+    slash).
+    
+    This change modifies the DateZone plugin to first try getting
+    the zoneinfo path from the TZDIR environment variable, falling back
+    to the hard-coded path /usr/share/zoneinfo
+
+diff --git a/src/Xmobar/Plugins/DateZone.hs b/src/Xmobar/Plugins/DateZone.hs
+index 22be6c2..35767a8 100644
+--- a/src/Xmobar/Plugins/DateZone.hs
++++ b/src/Xmobar/Plugins/DateZone.hs
+@@ -28,6 +28,9 @@ import Xmobar.Run.Exec
+ import Control.Concurrent.STM
+ 
+ import System.IO.Unsafe
++import System.Environment (lookupEnv)
++
++import Data.Maybe (fromMaybe)
+ 
+ import Data.Time.Format
+ import Data.Time.LocalTime
+@@ -63,7 +66,8 @@ instance Exec DateZone where
+       locale <- getTimeLocale
+       atomically $ putTMVar localeLock lock
+       if z /= "" then do
+-        timeZone <- getTimeZoneSeriesFromOlsonFile ("/usr/share/zoneinfo/" ++ z)
++        tzdir <- lookupEnv "TZDIR"
++        timeZone <- getTimeZoneSeriesFromOlsonFile ((fromMaybe "/usr/share/zoneinfo" tzdir) ++ "/" ++ z)
+         go (dateZone f locale timeZone)
+        else
+         go (date f locale)
