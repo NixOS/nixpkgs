@@ -249,13 +249,14 @@ let
         # plugins with dependencies
         plugins = findDependenciesRecursively specifiedPlugins;
 
-        # Vim almost reads JSON, so eventually JSON support should be added to Nix
-        # TODO: proper quoting
-        toNix = x:
-          if (builtins.isString x) then "'${x}'"
-          else if builtins.isAttrs x && builtins ? out then toNix x # a derivation
-          else if builtins.isAttrs x then "{${lib.concatStringsSep ", " (lib.mapAttrsToList (n: v: "${toNix n}: ${toNix v}") x)}}"
-          else if builtins.isList x then "[${lib.concatMapStringsSep ", " toNix x}]"
+        # Convert scalars, lists, and attrs, to VimL equivalents
+        toVimL = x:
+          if builtins.isString x then "'${lib.replaceStrings [ "\n" "'" ] [ "\n\\ " "''" ] x}'"
+          else if builtins.isAttrs x && builtins ? out then toVimL x # a derivation
+          else if builtins.isAttrs x then "{${lib.concatStringsSep ", " (lib.mapAttrsToList (n: v: "${toVimL n}: ${toVimL v}") x)}}"
+          else if builtins.isList x then "[${lib.concatMapStringsSep ", " toVimL x}]"
+          else if builtins.isInt x || builtins.isFloat x then builtins.toString x
+          else if builtins.isBool x then (if x then "1" else "0")
           else throw "turning ${lib.generators.toPretty {} x} into a VimL thing not implemented yet";
 
       in assert builtins.hasAttr "vim-addon-manager" knownPlugins;
@@ -290,9 +291,9 @@ let
           endif
         endif
 
-        " tell vam about which plugins to load when:
+        " tell vam which plugins to load, and when:
         let l = []
-        ${lib.concatMapStrings (p: "call add(l, {'name': '${p.pname}'})\n") plugins}
+        ${lib.concatMapStrings (p: "call add(l, ${toVimL p})\n") vam.pluginDictionaries}
         call vam#Scripts(l, {})
       '');
 
