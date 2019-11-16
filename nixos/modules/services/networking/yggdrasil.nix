@@ -128,12 +128,6 @@ in {
       }
     ];
 
-    environment.etc."yggdrasil.conf" = {
-      enable = true;
-      mode = "symlink";
-      source = "/run/yggdrasil/yggdrasil.conf";
-    };
-
     systemd.services.yggdrasil = {
       description = "Yggdrasil Network Service";
       path = [ cfg.package ] ++ optional (configProvided && configFileProvided) pkgs.jq;
@@ -146,7 +140,7 @@ in {
       '';
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/yggdrasil -useconffile /etc/yggdrasil.conf";
+        ExecStart = "${cfg.package}/bin/yggdrasil -useconffile /run/yggdrasil/yggdrasil.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
 
