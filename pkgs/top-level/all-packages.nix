@@ -10849,8 +10849,6 @@ in
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
 
-  coredumper = callPackage ../development/libraries/coredumper { };
-
   ctl = callPackage ../development/libraries/ctl { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };

@@ -68,6 +68,7 @@ mapAliases ({
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
   corebird = throw "deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
+  coredumper = throw "coredumper has been removed: Abandoned by upstream."; # added 2019-11-16
   cpp-gsl = microsoft_gsl; # added 2019-05-24
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
