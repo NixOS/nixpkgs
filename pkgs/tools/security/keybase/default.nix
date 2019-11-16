@@ -6,7 +6,7 @@
 
 buildGoPackage rec {
   pname = "keybase";
-  version = "4.7.2";
+  version = "5.0.0";
 
   goPackagePath = "github.com/keybase/client";
   subPackages = [ "go/keybase" ];
@@ -17,7 +17,7 @@ buildGoPackage rec {
     owner = "keybase";
     repo = "client";
     rev = "v${version}";
-    sha256 = "1ixfq9qv71misg04fvf4892z956w5aydq0r1wk6qk5jjqp6gf4lv";
+    sha256 = "0cxxqmgp82qi2b1fljyfa38is94y8ghb2pd31nbyh8y4wnmi0x1s";
   };
 
   patches = [
