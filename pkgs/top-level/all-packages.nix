@@ -8565,6 +8565,8 @@ in
 
   qbe = callPackage ../development/compilers/qbe { };
 
+  rasm = callPackage ../development/compilers/rasm { };
+
   rgbds = callPackage ../development/compilers/rgbds { };
 
   rtags = callPackage ../development/tools/rtags {
