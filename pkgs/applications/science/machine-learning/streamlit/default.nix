@@ -6,12 +6,12 @@
 
 buildPythonApplication rec {
   pname = "streamlit";
-  version = "0.49.0";
+  version = "0.50.2";
   format = "wheel"; # the only distribution available
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "1g12z93yh85vcgf3g9banshllr5fhz8i4f9llymcnk6mafvcsiv7";
+    sha256 = "1wymv7qckafs0p2jdjlxjaf1xrhm3iyd185jkldanbb0na5n3ndz";
   };
 
   propagatedBuildInputs = [
