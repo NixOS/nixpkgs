@@ -14,6 +14,12 @@ mkDerivation rec {
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [ qtscript qtsvg ];
 
+  postInstall = ''
+    install -Dm755 -t $out/share/man/man1 doc/*.1.gz
+  '';
+
+  dontGzipMan = true;
+
   meta = with stdenv.lib; {
     description = "A mind-mapping software";
     longDescription = ''
