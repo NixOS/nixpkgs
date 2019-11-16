@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A blocking, shuffling and loss-less compression library";
-    homepage = http://www.blosc.org;
+    homepage = https://www.blosc.org;
     license = licenses.bsd3;
     platforms = platforms.all;
   };

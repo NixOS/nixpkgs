@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "2.1";
 
   src = fetchurl {
-    url = "http://font.gohu.org/${pname}-${version}.tar.gz";
+    url = "https://font.gohu.org/${pname}-${version}.tar.gz";
     sha256 = "10dsl7insnw95hinkcgmp9rx39lyzb7bpx5g70vswl8d6p4n53bm";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     description = ''
       A monospace bitmap font well suited for programming and terminal use
     '';
-    homepage    = http://font.gohu.org/;
+    homepage    = https://font.gohu.org/;
     license     = licenses.wtfpl;
     maintainers = with maintainers; [ epitrochoid rnhmjoj ];
   };

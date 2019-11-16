@@ -445,7 +445,7 @@ let
     meta = {
       description = "A container for functions of the ClusterSSH programs";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      homepage = "http://github.com/duncs/clusterssh/wiki";
+      homepage = "https://github.com/duncs/clusterssh/wiki";
     };
   };
 
