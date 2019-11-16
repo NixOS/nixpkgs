@@ -3037,6 +3037,8 @@ in
 
   enscript = callPackage ../tools/text/enscript { };
 
+  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { };
+
   entr = callPackage ../tools/misc/entr { };
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
