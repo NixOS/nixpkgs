@@ -19021,6 +19021,8 @@ in
 
   svox = callPackage ../applications/audio/svox { };
 
+  giada = callPackage ../applications/audio/giada {};
+
   gkrellm = callPackage ../applications/misc/gkrellm {
     inherit (darwin) IOKit;
   };
