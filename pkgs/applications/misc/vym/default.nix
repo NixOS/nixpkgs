@@ -9,6 +9,27 @@ mkDerivation rec {
     sha256 = "0lyf0m4y5kn5s47z4sg10215f3jsn3k1bl389jfbh2f5v4srav4g";
   };
 
+  # Hardcoded paths scattered about all have form share/vym
+  # which is encouraging, although we'll need to patch them (below).
+  qmakeFlags = [
+    "DATADIR=${placeholder "out"}/share"
+    "DOCDIR=${placeholder "out"}/share/doc/vym"
+  ];
+
+  postPatch = ''
+    for x in \
+      exportoofiledialog.cpp \
+      main.cpp \
+      mainwindow.cpp \
+      tex/*.{tex,lyx}; \
+    do
+      substituteInPlace $x \
+        --replace /usr/share/vym $out/share/vym \
+        --replace /usr/local/share/vym $out/share/vym \
+        --replace /usr/share/doc $out/share/doc/vym
+    done
+  '';
+
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkgconfig qmake ];
