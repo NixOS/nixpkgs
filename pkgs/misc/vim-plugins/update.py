@@ -25,9 +25,9 @@ from typing import Dict, List, Optional, Tuple, Union, Any
 from urllib.parse import urljoin, urlparse
 from tempfile import NamedTemporaryFile
 
-ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"
-ATOM_LINK = "{http://www.w3.org/2005/Atom}link"
-ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"
+ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"  # " vim gets confused here
+ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
+ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 
 ROOT = Path(__file__).parent
 DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
@@ -69,7 +69,7 @@ class Repo:
                 updated_tag is not None and updated_tag.text is not None
             ), f"No updated tag found feed entry {xml}"
             updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
-            return Path(url.path).name, updated
+            return Path(str(url.path)).name, updated
 
     def prefetch_git(self, ref: str) -> str:
         data = subprocess.check_output(
@@ -210,20 +210,17 @@ def check_results(
         sys.exit(1)
 
 
-def parse_plugin_line(line: str) -> Tuple[str, str, str]:
+def parse_plugin_line(line: str) -> Tuple[str, str, Optional[str]]:
+    name, repo = line.split("/")
     try:
-        name, repo = line.split("/")
-        try:
-            repo, alias = repo.split(" as ")
-            return (name, repo, alias.strip())
-        except ValueError:
-            # no alias defined
-            return (name, repo.strip(), None)
+        repo, alias = repo.split(" as ")
+        return (name, repo, alias.strip())
     except ValueError:
-        return (None, None, None)
+        # no alias defined
+        return (name, repo.strip(), None)
 
 
-def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str]]:
+def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, Optional[str]]]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
@@ -385,7 +382,7 @@ def main() -> None:
 
     try:
         # synchronous variant for debugging
-        # results = map(prefetch_with_cache, plugins)
+        # results = list(map(prefetch_with_cache, plugin_names))
         pool = Pool(processes=30)
         results = pool.map(prefetch_with_cache, plugin_names)
     finally:
