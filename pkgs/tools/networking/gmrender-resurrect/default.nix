@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, makeWrapper
-, gstreamer, gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav, libupnp }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, makeWrapper, gstreamer
+, gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav, libupnp }:
 
 let
   version = "v0.0.8";
