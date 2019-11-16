@@ -1,4 +1,4 @@
-{ system
+{ system ? builtins.currentSystem
 , pkgs ? import ../.. { inherit system config; }
   # Use a minimal kernel?
 , minimal ? false
