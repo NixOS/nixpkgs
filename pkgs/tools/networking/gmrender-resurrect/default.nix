@@ -2,7 +2,7 @@
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav, libupnp }:
 
 let
-  version = "v0.0.8";
+  version = "0.0.8";
 
   makePluginPath = plugins: builtins.concatStringsSep ":" (map (p: p + "/lib/gstreamer-1.0") plugins);
 
@@ -15,7 +15,7 @@ in
     src = fetchFromGitHub {
       owner = "hzeller";
       repo = "gmrender-resurrect";
-      rev = version;
+      rev = "v${version}";
       sha256 = "14i5jrry6qiap5l2x2jqj7arymllajl3wgnk29ccvr8d45zp4jn1";
     };
 
