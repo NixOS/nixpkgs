@@ -1,10 +1,10 @@
 {stdenv, fetchurl, pam, openssl, db}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "pam_ccreds-10";
 
   src = fetchurl {
-    url = "http://www.padl.com/download/pam_ccreds.tgz";
+    url = "https://www.padl.com/download/${name}.tar.gz";
     sha256 = "1h7zyg1b1h69civyvrj95w22dg0y7lgw3hq4gqkdcg35w1y76fhz";
   };
   patchPhase = ''
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ pam openssl db ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.padl.com/OSS/pam_ccreds.html;
+    homepage = https://www.padl.com/OSS/pam_ccreds.html;
     description = "PAM module to locally authenticate using an enterprise identity when the network is unavailable";
     license = licenses.gpl2;
     platforms = platforms.linux;

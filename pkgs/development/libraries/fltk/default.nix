@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
+    url = "https://www.fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
     sha256 = "00jp24z1818k9n6nn6lx7qflqf2k13g4kxr0p8v1d37kanhb4ac7";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A C++ cross-platform lightweight GUI library";
-    homepage = http://www.fltk.org;
+    homepage = https://www.fltk.org;
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2;
   };

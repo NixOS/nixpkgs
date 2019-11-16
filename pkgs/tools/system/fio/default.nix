@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flexible IO Tester - an IO benchmark tool";
-    homepage = "http://git.kernel.dk/?p=fio.git;a=summary;";
+    homepage = "https://git.kernel.dk/cgit/fio/";
     license = licenses.gpl2;
     platforms = platforms.unix;
   };
