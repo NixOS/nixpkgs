@@ -1,24 +1,24 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm3, libXau
 , libXdmcp, lcms2, libiptcdata, libcanberra-gtk3, fftw, expat, pcre, libsigcxx, wrapGAppsHook
-, lensfun
+, lensfun, librsvg
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.5";
-  name = "rawtherapee-" + version;
+  version = "5.7";
+  pname = "rawtherapee";
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
     rev = version;
-    sha256 = "13clnx7rwkfa7wxgsim1xdx2pd7gwmmdad1m8a3fvywr20ml8xzk";
+    sha256 = "0j3887a3683fqpvp66kaw6x81ai3gf5nvrbmb4cc8rb0lgj2xv2g";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];
 
   buildInputs = [
     pixman libpthreadstubs gtkmm3 libXau libXdmcp
-    lcms2 libiptcdata libcanberra-gtk3 fftw expat pcre libsigcxx lensfun
+    lcms2 libiptcdata libcanberra-gtk3 fftw expat pcre libsigcxx lensfun librsvg
   ];
 
   cmakeFlags = [
