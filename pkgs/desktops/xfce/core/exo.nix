@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ URI glib gtk libxfce4ui libxfce4util hicolor-icon-theme ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.xfce.org/projects/${p_name}";
+    homepage = "https://docs.xfce.org/xfce/${p_name}/start";
     description = "Application library for the Xfce desktop environment";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

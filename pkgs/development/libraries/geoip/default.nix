@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ thoughtpolice raskin ];
     license     = licenses.lgpl21;
     platforms   = platforms.unix;
-    homepage    = "http://maxmind.com";
+    homepage    = "https://www.maxmind.com";
   };
 }

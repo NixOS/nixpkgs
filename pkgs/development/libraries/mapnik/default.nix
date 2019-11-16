@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open source toolkit for developing mapping applications";
-    homepage = http://mapnik.org;
+    homepage = https://mapnik.org;
     maintainers = with maintainers; [ hrdinka ];
     license = licenses.lgpl21;
     platforms = platforms.all;
