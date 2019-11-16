@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.7";
-  name = "rawtherapee-" + version;
+  pname = "rawtherapee";
 
   src = fetchFromGitHub {
     owner = "Beep6581";
