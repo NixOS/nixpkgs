@@ -95,10 +95,12 @@ machines: "List[Machine]"
 
 
 def eprint(*args: object, **kwargs: Any) -> None:
+    """Print to stderr."""
     print(*args, file=sys.stderr, **kwargs)
 
 
 def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]:
+    """Create a VLAN."""
     global log
     log.log("starting VDE switch for network {}".format(vlan_nr))
     vde_socket = os.path.abspath("./vde{}.ctl".format(vlan_nr))
@@ -137,6 +139,8 @@ def retry(fn: Callable) -> None:
 
 
 class Logger:
+    """Logger class."""
+
     def __init__(self) -> None:
         self.logfile = os.environ.get("LOGFILE", "/dev/null")
         self.logfile_handle = open(self.logfile, "wb")
@@ -201,6 +205,8 @@ class Logger:
 
 
 class Machine:
+    """Machine class."""
+
     def __init__(self, args: Dict[str, Any]) -> None:
         if "name" in args:
             self.name = args["name"]
@@ -284,9 +290,16 @@ class Machine:
         return start_command
 
     def is_up(self) -> bool:
+        """Check whether the machine is up and available."""
         return self.booted and self.connected
 
     def log(self, msg: str) -> None:
+        """Log the given ``msg``.
+
+        Args:
+            msg: Message to log.
+
+        """
         self.logger.log(msg, {"machine": self.name})
 
     def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
@@ -774,6 +787,7 @@ def run_tests() -> None:
 
 @contextmanager
 def subtest(name: str) -> Iterator[None]:
+    """Context manager for running a subtest."""
     global nr_tests
     global nr_succeeded
 
@@ -790,6 +804,7 @@ def subtest(name: str) -> Iterator[None]:
 
 
 def main() -> None:
+    """Main entry point for running the test driver."""
     log = Logger()
 
     vlan_nrs = list(dict.fromkeys(os.environ["VLANS"].split()))
