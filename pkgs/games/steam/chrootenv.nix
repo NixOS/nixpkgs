@@ -75,7 +75,7 @@ in buildFHSUserEnv rec {
     xorg.libX11
     xorg.libXfixes
     libGL
-    libva
+    pkgsi686Linux.libva
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
