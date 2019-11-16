@@ -3,7 +3,7 @@ let
   lpath = stdenv.lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU_combined libSM libXext ];
 in
 stdenv.mkDerivation rec {
-  name = "iceSL-${version}";
+  pname = "iceSL";
   version = "2.1.10";
 
   src =  if stdenv.hostPlatform.system == "x86_64-linux" then fetchzip {

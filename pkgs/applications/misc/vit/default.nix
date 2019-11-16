@@ -1,40 +1,37 @@
-{ stdenv, fetchFromGitHub
-, makeWrapper, which
-, taskwarrior, ncurses, perlPackages }:
+{ lib
+, python3Packages
+, taskwarrior }:
 
-stdenv.mkDerivation rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "vit";
-  version = "1.3";
+  version = "2.0.0";
+  disabled = lib.versionOlder python.version "3.6";
 
-  src = fetchFromGitHub {
-    owner = "scottkosty";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0a34rh5w8393wf7jwwr0f74rp1zv2vz606z5j8sr7w19k352ijip";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "5282d8076d9814d9248071aec8784cffbd968601542533ccb28ca61d1d08205e";
   };
 
-  preConfigure = ''
-    substituteInPlace Makefile.in \
-      --replace sudo ""
-    substituteInPlace configure \
-      --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
-    substituteInPlace cmdline.pl \
-      --replace "view " "vim -R "
+  propagatedBuildInputs = [
+    pytz
+    tasklib
+    tzlocal
+    urwid
+  ];
+
+  makeWrapperArgs = [ "--suffix" "PATH" ":" "${taskwarrior}/bin" ];
+
+  preCheck = ''
+    export TERM=''${TERM-linux}
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/vit --prefix PERL5LIB : $PERL5LIB
-  '';
-
-  nativeBuildInputs = [ makeWrapper which ];
-  buildInputs = [ taskwarrior ncurses ]
-    ++ (with perlPackages; [ perl Curses TryTiny TextCharWidth ]);
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = https://github.com/scottkosty/vit;
     description = "Visual Interactive Taskwarrior";
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill arcnmx ];
     platforms = platforms.all;
-    license = licenses.gpl3;
+    license = licenses.mit;
   };
 }
-

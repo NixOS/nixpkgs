@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , re2
-, pytest
 }:
 
 buildPythonPackage rec {

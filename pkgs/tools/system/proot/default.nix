@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub
 , talloc, docutils, swig, python, coreutils, enablePython ? true }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "proot";
   version = "20190510";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://proot-me.github.io;
+    homepage = https://proot-me.github.io;
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;

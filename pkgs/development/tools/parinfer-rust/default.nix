@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  name = "parinfer-rust-${version}";
+  pname = "parinfer-rust";
   version = "0.3.1";
 
   src = fetchFromGitHub {

@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation {
 
   src = null;
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   dontBuild = true;
 

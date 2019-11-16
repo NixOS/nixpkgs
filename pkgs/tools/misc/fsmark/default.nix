@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "fsmark-${version}";
+  pname = "fsmark";
   version = "3.3";
 
   src = fetchurl {

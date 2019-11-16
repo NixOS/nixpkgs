@@ -3,15 +3,15 @@
 , libpng }:
 
 stdenv.mkDerivation rec {
-  name = "gdal-${version}";
+  pname = "gdal";
   version = "1.11.5";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/gdal/${version}/${name}.tar.xz";
+    url = "https://download.osgeo.org/gdal/${version}/${pname}-${version}.tar.xz";
     sha256 = "0hphxzvy23v3vqxx1y22hhhg4cypihrb8555y12nb4mrhzlw7zfl";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libpng python pythonPackages.numpy proj openssl ];
+  buildInputs = [ unzip libjpeg libtiff libgeotiff libpng python pythonPackages.numpy proj openssl ];
 
   patches = [
     # This ensures that the python package is installed into gdal's prefix,
@@ -33,10 +33,15 @@ stdenv.mkDerivation rec {
 
     "--with-pg=${postgresql}/bin/pg_config"
     "--with-mysql=${mysql57.connector-c}/bin/mysql_config"
-    "--with-geotiff=${libgeotiff}"
+    "--with-geotiff=${libgeotiff.dev}"
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
+  ];
+
+  # Allow use of old proj_api.h
+  NIX_CFLAGS_COMPILE = [
+    "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1"
   ];
 
   # Prevent this:

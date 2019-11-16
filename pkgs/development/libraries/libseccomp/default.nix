@@ -1,7 +1,7 @@
 { stdenv, fetchurl, getopt, makeWrapper, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "libseccomp-${version}";
+  pname = "libseccomp";
   version = "2.4.1";
 
   src = fetchurl {

@@ -1,16 +1,15 @@
 { stdenv, fetchFromGitHub, pkgconfig, go, gobject-introspection,
-  libgudev, deepin, fetchurl }:
+  libgudev, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "go-gir-generator";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0jdhfnwrpp77893zxljr453w23kahqsdpd8a8i5jp6pyvkdm816j";
+    sha256 = "1ydzll8zlk897iqcihvv6p046p0rzr4qqz2drmz2nx95njp8n03a";
   };
 
   nativeBuildInputs = [
@@ -28,11 +27,11 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "GOCACHE=$(TMPDIR)/go-cache"
   ];
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Generate static golang bindings for GObject";

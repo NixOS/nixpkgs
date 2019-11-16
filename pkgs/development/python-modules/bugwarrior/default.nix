@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "bugwarrior";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfa4fac19b4f4638928347b8fe192315f72813c3e8ed668867e5891338c7e4ec";
+    sha256 = "1pmznka5dxcdjfak0p1yh7lhfbfazmx8g9ysv57lsrkqy4n61qks";
   };
 
   buildInputs = [ mock unittest2 nose /* jira megaplan */ ];

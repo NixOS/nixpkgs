@@ -1,11 +1,11 @@
 import ./make-test.nix ({ pkgs, lib, ...} :
 let
-  client_base = rec {
+  client_base = {
     
     containers.test1 = {
       autoStart = true;
       config = {
-        environment.etc."check".text = "client_base";
+        environment.etc.check.text = "client_base";
       };
     };
 
@@ -29,7 +29,7 @@ in {
       imports = [ client_base ];
 
       containers.test1.config = {
-        environment.etc."check".text = lib.mkForce "client_c1";
+        environment.etc.check.text = lib.mkForce "client_c1";
         services.httpd.enable = true;
         services.httpd.adminAddr = "nixos@example.com";
       };
@@ -38,7 +38,7 @@ in {
       imports = [ client_base ];
 
       containers.test1.config = {
-        environment.etc."check".text = lib.mkForce "client_c2";
+        environment.etc.check.text = lib.mkForce "client_c2";
         services.nginx.enable = true;
       };
     };

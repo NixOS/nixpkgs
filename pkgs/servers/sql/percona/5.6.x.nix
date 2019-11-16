@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, bison, ncurses, openssl, zlib, libaio, perl }:
 
 stdenv.mkDerivation rec {
-  name = "percona-server-${version}";
+  pname = "percona-server";
   version = "5.6.43-84.3";
 
   src = fetchurl {

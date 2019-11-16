@@ -1,5 +1,5 @@
 { stdenvNoCC, lib, buildPackages
-, fetchurl, fetchpatch, perl
+, fetchurl, perl
 , elf-header
 }:
 
@@ -7,7 +7,8 @@ let
   makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
     inherit src;
 
-    name = "linux-headers-${version}";
+    pname = "linux-headers";
+    inherit version;
 
     ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or stdenvNoCC.hostPlatform.kernelArch;
 

@@ -6,7 +6,6 @@
 , six
 , numpy
 , tifffile
-, pytest
 , nose
 }:
 

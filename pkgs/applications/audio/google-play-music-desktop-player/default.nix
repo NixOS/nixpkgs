@@ -1,5 +1,5 @@
 { stdenv, alsaLib, atk, cairo, cups, dbus, dpkg, expat, fontconfig, freetype
-, fetchurl, GConf, gdk_pixbuf, glib, gtk2, gtk3, libpulseaudio, makeWrapper, nspr
+, fetchurl, GConf, gdk-pixbuf, glib, gtk2, gtk3, libpulseaudio, makeWrapper, nspr
 , nss, pango, udev, xorg
 }:
 
@@ -16,7 +16,7 @@ let
     fontconfig
     freetype
     GConf
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk2
     gtk3
@@ -43,7 +43,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "google-play-music-desktop-player-${version}";
+  pname = "google-play-music-desktop-player";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/MarshallOfSound/Google-Play-Music-Desktop-Player-UNOFFICIAL-/releases/download/v${version}/google-play-music-desktop-player_${version}_amd64.deb";

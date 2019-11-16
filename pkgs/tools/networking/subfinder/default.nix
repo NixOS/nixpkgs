@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "subfinder-git-${version}";
+buildGoPackage {
+  pname = "subfinder-git";
   version = "2018-07-15";
 
   goPackagePath = "github.com/subfinder/subfinder";

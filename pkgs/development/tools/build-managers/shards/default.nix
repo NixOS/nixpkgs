@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, crystal, pcre, libyaml, which }:
 
 stdenv.mkDerivation rec {
-  name = "shards-${version}";
-  version = "0.8.1";
+  pname = "shards";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner  = "crystal-lang";
     repo   = "shards";
     rev    = "v${version}";
-    sha256 = "1cjn2lafr08yiqzlhyqx14jjjxf1y24i2kk046px07gljpnlgqwk";
+    sha256 = "19q0xww4v0h5ln9gz8d8zv0c9ig761ik7gw8y31yxynzgzihwpf4";
   };
 
   buildInputs = [ crystal libyaml pcre which ];

@@ -25,7 +25,8 @@ let
   };
 
   gui = stdenv.mkDerivation {
-    name = "scyther-gui-${version}";
+    pname = "scyther-gui";
+    inherit version;
     inherit src meta;
     buildInputs = [
       python27Packages.wrapPython

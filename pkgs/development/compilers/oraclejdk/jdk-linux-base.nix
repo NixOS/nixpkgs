@@ -32,7 +32,7 @@
 , cairo
 , alsaLib
 , atk
-, gdk_pixbuf
+, gdk-pixbuf
 , setJavaClassPath
 }:
 
@@ -183,7 +183,7 @@ let result = stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk] ++
+    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk-pixbuf atk] ++
     (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
@@ -201,4 +201,4 @@ let result = stdenv.mkDerivation rec {
     platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]; # some inherit jre.meta.platforms
   };
 
-}; in stdenv.lib.trivial.warn "Public updates for Oracle Java SE 8 released after January 2019 will not be available for business, commercial or production use without a commercial license. See https://java.com/en/download/release_notice.jsp for more information." result
+}; in result

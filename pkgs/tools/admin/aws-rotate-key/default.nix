@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "aws-rotate-key-${version}";
-  version = "1.0.4";
+  pname = "aws-rotate-key";
+  version = "1.0.6";
 
   goPackagePath = "github.com/Fullscreen/aws-rotate-key";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "Fullscreen";
     repo = "aws-rotate-key";
-    sha256 = "14bcs434646qdywws55r1a1v8ncwz8n0yljaa8zb5796pv4445wf";
+    sha256 = "sha256:1w9704g1l2b0y6g6mk79g28kk0yaswpgljkk85d0i10wyxq4icby";
   };
 
   goDeps = ./deps.nix;

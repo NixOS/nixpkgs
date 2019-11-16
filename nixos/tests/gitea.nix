@@ -3,7 +3,7 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 {
@@ -13,26 +13,16 @@ with pkgs.lib;
 
     machine =
       { config, pkgs, ... }:
-      { services.mysql.enable = true;
-        services.mysql.package = pkgs.mariadb;
-        services.mysql.ensureDatabases = [ "gitea" ];
-        services.mysql.ensureUsers = [
-          { name = "gitea";
-            ensurePermissions = { "gitea.*" = "ALL PRIVILEGES"; };
-          }
-        ];
-
-        services.gitea.enable = true;
+      { services.gitea.enable = true;
         services.gitea.database.type = "mysql";
-        services.gitea.database.socket = "/run/mysqld/mysqld.sock";
       };
 
     testScript = ''
-      startAll;
+      start_all()
 
-      $machine->waitForUnit('gitea.service');
-      $machine->waitForOpenPort('3000');
-      $machine->succeed("curl --fail http://localhost:3000/");
+      machine.wait_for_unit("gitea.service")
+      machine.wait_for_open_port(3000)
+      machine.succeed("curl --fail http://localhost:3000/")
     '';
   };
 
@@ -42,18 +32,16 @@ with pkgs.lib;
 
     machine =
       { config, pkgs, ... }:
-      {
-        services.gitea.enable = true;
+      { services.gitea.enable = true;
         services.gitea.database.type = "postgres";
-        services.gitea.database.passwordFile = pkgs.writeText "db-password" "secret";
       };
 
     testScript = ''
-      startAll;
+      start_all()
 
-      $machine->waitForUnit('gitea.service');
-      $machine->waitForOpenPort('3000');
-      $machine->succeed("curl --fail http://localhost:3000/");
+      machine.wait_for_unit("gitea.service")
+      machine.wait_for_open_port(3000)
+      machine.succeed("curl --fail http://localhost:3000/")
     '';
   };
 
@@ -68,12 +56,14 @@ with pkgs.lib;
       };
 
     testScript = ''
-      startAll;
+      start_all()
 
-      $machine->waitForUnit('gitea.service');
-      $machine->waitForOpenPort('3000');
-      $machine->succeed("curl --fail http://localhost:3000/");
-      $machine->succeed("curl --fail http://localhost:3000/user/sign_up | grep 'Registration is disabled. Please contact your site administrator.'");
+      machine.wait_for_unit("gitea.service")
+      machine.wait_for_open_port(3000)
+      machine.succeed("curl --fail http://localhost:3000/")
+      machine.succeed(
+          "curl --fail http://localhost:3000/user/sign_up | grep 'Registration is disabled. Please contact your site administrator.'"
+      )
     '';
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "leaps-${version}";
+  pname = "leaps";
   version = "0.9.0";
 
   goPackagePath = "github.com/Jeffail/leaps";

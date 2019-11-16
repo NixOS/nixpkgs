@@ -1,17 +1,17 @@
 { stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "tzdata-${version}";
-  version = "2019a";
+  pname = "tzdata";
+  version = "2019b";
 
   srcs =
     [ (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-        sha256 = "0wlpqm4asvi0waaz24xj20iq40gqfypmb4nldjhkfgm09bgnsdlh";
+        sha256 = "0r0clnlslwm15m1c61dinf1fi9ffgl6aipng7i7yryfwj0n0kn85";
       })
       (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-        sha256 = "1x9z8fpgnhzlsnps0hamb54ymaskjab7ys9m4i4gpk9hpiig2fc7";
+        sha256 = "0vbmswvv3li25s31shyllq5v24449lxnrki9hr043nipjd09sirf";
       })
     ];
 

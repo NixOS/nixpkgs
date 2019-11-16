@@ -11,7 +11,7 @@ buildPythonApplication rec {
   # https://github.com/blue-yonder/bonfire/pull/18
   src = fetchFromGitHub {
     owner = "blue-yonder";
-    repo = "${pname}";
+    repo = pname;
     rev = "d0af9ca10394f366cfa3c60f0741f1f0918011c2";
     sha256 = "193zcvzbhxwwkwbgmnlihhhazwkajycxf4r71jz1m12w301sjhq5";
   };
@@ -30,7 +30,12 @@ buildPythonApplication rec {
       --replace "data_files = *.rst, *.txt" ""
   '';
 
-  buildInputs = [ httpretty pytest_3 pytestcov ];
+  buildInputs = [ httpretty pytest pytestcov ];
+
+  preCheck = ''
+    # fix compatibility with pytest 4
+    substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
+  '';
 
   propagatedBuildInputs = [ arrow click keyring parsedatetime requests six termcolor ];
 

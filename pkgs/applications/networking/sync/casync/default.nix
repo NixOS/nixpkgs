@@ -7,8 +7,8 @@
 , glibcLocales, rsync
 }:
 
-stdenv.mkDerivation rec {
-  name = "casync-${version}";
+stdenv.mkDerivation {
+  pname = "casync";
   version = "2-152-ge4a3c5e";
 
   src = fetchFromGitHub {

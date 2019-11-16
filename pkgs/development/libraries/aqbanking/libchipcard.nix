@@ -3,14 +3,14 @@
 let
   inherit ((import ./sources.nix).libchipcard) sha256 releaseId version;
 in stdenv.mkDerivation rec {
-  name = "libchipcard-${version}";
+  pname = "libchipcard";
   inherit version;
 
   src = let
     qstring = "package=02&release=${releaseId}&file=01";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {
-    name = "${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
     urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
     inherit sha256;
   };

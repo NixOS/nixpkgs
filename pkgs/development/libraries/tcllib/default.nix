@@ -1,7 +1,7 @@
 { stdenv, fetchurl, tcl }:
 
 stdenv.mkDerivation rec {
-  name = "tcllib-${version}";
+  pname = "tcllib";
   version = "1.19";
 
   src = fetchurl {

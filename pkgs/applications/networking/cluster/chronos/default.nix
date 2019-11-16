@@ -1,7 +1,7 @@
 { stdenv, lib, makeWrapper, fetchgit, curl, jdk, maven, nodejs, mesos }:
 
 stdenv.mkDerivation rec {
-  name = "chronos-${version}";
+  pname = "chronos";
   version = "286b2ccb8e4695f8e413406ceca85b60d3a87e22";
 
   src = fetchgit {
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,libexec/chronos}
-    cp target/chronos*.jar $out/libexec/chronos/${name}.jar
+    cp target/chronos*.jar $out/libexec/chronos/${pname}-${version}.jar
 
     makeWrapper ${jdk.jre}/bin/java $out/bin/chronos \
-      --add-flags "-Xmx384m -Xms384m -cp $out/libexec/chronos/${name}.jar com.airbnb.scheduler.Main" \
+      --add-flags "-Xmx384m -Xms384m -cp $out/libexec/chronos/${pname}-${version}.jar com.airbnb.scheduler.Main" \
       --prefix "MESOS_NATIVE_LIBRARY" : "$MESOS_NATIVE_LIBRARY"
   '';
 

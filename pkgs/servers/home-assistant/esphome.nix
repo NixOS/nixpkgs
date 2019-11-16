@@ -1,15 +1,8 @@
-{ lib, python3, fetchpatch, platformio, esptool, git, protobuf3_7 }:
+{ lib, python3, platformio, esptool, git, protobuf3_10, fetchpatch }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95";
-        };
-      });
       tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
         version = "5.1.1";
         src = oldAttrs.src.override {
@@ -18,18 +11,19 @@ let
         };
       });
       protobuf = super.protobuf.override {
-        protobuf = protobuf3_7;
+        protobuf = protobuf3_10;
       };
+
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.12.2";
+  version = "1.14.1";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "935fc3d0f05b2f5911c29f60c9b5538bed584a31455b492944007d8b1524462c";
+    sha256 = "1hw1q2fck9429077w207rk65a1krzyi6qya5pzjkpw4av5s0v0g3";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
@@ -37,7 +31,15 @@ in python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     voluptuous pyyaml paho-mqtt colorlog
     tornado protobuf tzlocal pyserial ifaddr
+    protobuf
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "protobuf==3.10.0" "protobuf~=3.10" \
+      --replace "paho-mqtt==1.4.0" "paho-mqtt~=1.4" \
+      --replace "tornado==5.1.1" "tornado~=5.1"
+  '';
 
   makeWrapperArgs = [
     # platformio is used in esphomeyaml/platformio_api.py
@@ -54,6 +56,6 @@ in python.pkgs.buildPythonApplication rec {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = https://esphome.io/;
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda globin ];
   };
 }

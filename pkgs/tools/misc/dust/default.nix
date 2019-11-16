@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "dust-${version}";
-  version = "0.2.3";
+  pname = "dust";
+  version = "0.4.1.2";
 
   src = fetchFromGitHub {
     owner = "bootandy";
     repo = "dust";
     rev = "v${version}";
-    sha256 = "1l8z1daiq2x92449p2ciblcwl0ddgr3vqj2dsd3z8jj3y0z8j51s";
+    sha256 = "0a2n96p6z4y09l5z617qbpm8lgxvfagd1l950d2gz9xw4xf1ik5w";
   };
 
-  cargoSha256 = "1bby08ijpwb8676pgm87k80s0n0fqsxc3wmz0v8p9s85yzkflnx5";
+  cargoSha256 = "0cpgxkgz10na90r3fgz8hs20vihqdcc8983inn71fq90627bhdx7";
 
   doCheck = false;
 

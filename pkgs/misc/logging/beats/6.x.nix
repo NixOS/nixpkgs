@@ -8,7 +8,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
         owner = "elastic";
         repo = "beats";
         rev = "v${version}";
-        sha256 = "0if08dxibdnqpsxs8f6hvw147j0j8bavhcm11scn28j9id65absq";
+        sha256 = "0jkiz5dfdi9zsji04ipcmcj7pml9294v455y7s2c22k24gyzbaw8";
       };
 
       goPackagePath = "github.com/elastic/beats";
@@ -28,6 +28,7 @@ in {
   metricbeat6 = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
   packetbeat6 = beat "packetbeat" {
     buildInputs = [ libpcap ];
+    meta.broken = true;
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
     meta.longDescription = ''
       Packetbeat is an open source network packet analyzer that ships the

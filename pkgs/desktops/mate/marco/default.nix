@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, libcanberra-gtk3, libgtop, libstartup_notification, gnome3, gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "marco-${version}";
-  version = "1.22.1";
+  pname = "marco";
+  version = "1.22.3";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1j7pvq8ndyl2x8jmh95sj69cnf0q9qsjn7lkr3jz6hk103mga82f";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0faiqj9i1mqqy1v4jdcwy8nsbkkvs0cwd2dqypgscmcqpbq7jf8a";
   };
 
   nativeBuildInputs = [

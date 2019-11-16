@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, gtk3, granite
-, wingpanel, libgee, libwnck3, gobject-introspection, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, libgee
+, libwnck3
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
@@ -19,16 +30,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
@@ -36,7 +44,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   meta = with stdenv.lib; {
     description = "Notifications Indicator for Wingpanel";

@@ -30,10 +30,11 @@ let
     ctrl_interface=/run/hostapd
     ctrl_interface_group=${cfg.group}
 
-    ${if cfg.wpa then ''
+    ${optionalString cfg.wpa ''
       wpa=2
       wpa_passphrase=${cfg.wpaPassphrase}
-      '' else ""}
+    ''}
+    ${optionalString cfg.noScan "noscan=1"}
 
     ${cfg.extraConfig}
   '' ;
@@ -69,10 +70,18 @@ in
         '';
       };
 
+      noScan = mkOption {
+        default = false;
+        description = ''
+          Do not scan for overlapping BSSs in HT40+/- mode.
+          Caution: turning this on will violate regulatory requirements!
+        '';
+      };
+
       driver = mkOption {
         default = "nl80211";
         example = "hostapd";
-        type = types.string;
+        type = types.str;
         description = ''
           Which driver <command>hostapd</command> will use.
           Most applications will probably use the default.
@@ -82,7 +91,7 @@ in
       ssid = mkOption {
         default = "nixos";
         example = "mySpecialSSID";
-        type = types.string;
+        type = types.str;
         description = "SSID to be used in IEEE 802.11 management frames.";
       };
 
@@ -110,7 +119,7 @@ in
       group = mkOption {
         default = "wheel";
         example = "network";
-        type = types.string;
+        type = types.str;
         description = ''
           Members of this group can control <command>hostapd</command>.
         '';
@@ -126,7 +135,7 @@ in
       wpaPassphrase = mkOption {
         default = "my_sekret";
         example = "any_64_char_string";
-        type = types.string;
+        type = types.str;
         description = ''
           WPA-PSK (pre-shared-key) passphrase. Clients will need this
           passphrase to associate with this access point.
@@ -162,6 +171,7 @@ in
         after = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
         bindsTo = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
         requiredBy = [ "network-link-${cfg.interface}.service" ];
+        wantedBy = [ "multi-user.target" ];
 
         serviceConfig =
           { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";

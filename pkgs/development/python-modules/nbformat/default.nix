@@ -29,6 +29,9 @@ buildPythonPackage rec {
     export HOME=tmp
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "The Jupyter Notebook format";
     homepage = https://jupyter.org/;

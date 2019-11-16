@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "bluemix-cli-${version}";
+  pname = "bluemix-cli";
   version = "0.8.0";
 
   src =

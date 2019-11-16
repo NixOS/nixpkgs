@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, pytestcov, tox }:
+{ stdenv, fetchPypi, buildPythonPackage, pytest, pytestcov }:
 
 buildPythonPackage rec {
   pname = "distro";

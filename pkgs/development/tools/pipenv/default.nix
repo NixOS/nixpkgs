@@ -1,16 +1,22 @@
 { lib
-, buildPythonApplication
-, flake8
-, invoke
-, parver
-, pip
-, requests
-, virtualenv
-, fetchPypi
-, virtualenv-clone
+, python3
 }:
 
-buildPythonApplication rec {
+with python3.pkgs;
+
+let
+
+  runtimeDeps = [
+    certifi
+    setuptools
+    pip
+    virtualenv
+    virtualenv-clone
+  ];
+
+  pythonEnv = python3.withPackages(ps: with ps; [ virtualenv ]);
+
+in buildPythonApplication rec {
   pname = "pipenv";
   version = "2018.11.26";
 
@@ -21,22 +27,24 @@ buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = [
-    flake8
-    invoke
-    parver
-    pip
-    requests
-    virtualenv
-    virtualenv-clone
-  ];
+  postPatch = ''
+    # pipenv invokes python in a subprocess to create a virtualenv
+    # it uses sys.executable which will point in our case to a python that
+    # does not have virtualenv.
+    substituteInPlace pipenv/core.py \
+      --replace "vistir.compat.Path(sys.executable).absolute().as_posix()" "vistir.compat.Path('${pythonEnv.interpreter}').absolute().as_posix()"
+  '';
 
-  doCheck = false;
+  nativeBuildInputs = [ invoke parver ];
 
-  makeWrapperArgs = [
-    "--set PYTHONPATH \".:$PYTHONPATH\""
-    "--set PIP_IGNORE_INSTALLED 1"
-  ];
+  propagatedBuildInputs = runtimeDeps;
+
+  doCheck = true;
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    cp -r --no-preserve=mode ${wheel.src} $HOME/wheel-src
+    $out/bin/pipenv install $HOME/wheel-src
+  '';
 
   meta = with lib; {
     description = "Python Development Workflow for Humans";

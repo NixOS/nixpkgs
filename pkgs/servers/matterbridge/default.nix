@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchurl }:
 
 buildGoPackage rec {
-  name = "matterbridge-${version}";
+  pname = "matterbridge";
   version = "1.11.0";
 
   goPackagePath = "github.com/42wim/matterbridge";

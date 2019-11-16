@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, asciidoc-full, gettext
-, gobject-introspection, gtk3, hicolor-icon-theme, libappindicator-gtk3, libnotify, librsvg
+, gobject-introspection, gtk3, libappindicator-gtk3, libnotify, librsvg
 , udisks2, wrapGAppsHook
 , python3Packages
 }:
@@ -23,7 +23,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    hicolor-icon-theme
     librsvg              # required for loading svg icons (udiskie uses svg icons)
     gobject-introspection
     libnotify

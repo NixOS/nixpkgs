@@ -3,8 +3,8 @@
 # To make use of this derivation, use
 # `programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel9k}/share/zsh-powerlevel9k/powerlevel9k.zsh-theme";`
 
-stdenv.mkDerivation rec {
-  name = "powerlevel9k-${version}";
+stdenv.mkDerivation {
+  pname = "powerlevel9k";
   version = "2017-11-10";
   src = fetchFromGitHub {
     owner = "bhilburn";

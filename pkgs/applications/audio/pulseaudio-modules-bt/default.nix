@@ -23,18 +23,19 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "pulseaudio-modules-bt-${version}";
-  version = "1.1.99";
+  pname = "pulseaudio-modules-bt";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "EHfive";
     repo = "pulseaudio-modules-bt";
     rev = "v${version}";
-    sha256 = "0x670xbd62r3fs9a8pa5p4ppvxn6m64hvlrqa702gvikcvyrmwcg";
+    sha256 = "00xmidcw4fvpbmg0nsm2gk5zw26fpyjbc0pjk6mzr570zbnyqqbn";
   };
 
   patches = [
     ./fix-install-path.patch
+    ./fix-aac-defaults.patch
   ];
 
   nativeBuildInputs = [

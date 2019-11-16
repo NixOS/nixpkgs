@@ -1,11 +1,11 @@
 {stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate, pciutils, fftw}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-utils-${version}";
+  pname = "alsa-utils";
   version = "1.1.9";
 
   src = fetchurl {
-    url = "mirror://alsa/utils/${name}.tar.bz2";
+    url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
     sha256 = "0fi11b7r8hg1bdjw74s8sqx8rc4qb310jaj9lsia9labvfyjrpsx";
   };
 

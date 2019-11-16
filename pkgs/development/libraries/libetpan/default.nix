@@ -1,17 +1,24 @@
-{ autoconf, automake, fetchgit, libtool, stdenv, openssl }:
+{ stdenv, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, openssl
+}:
 
-let version = "1.8"; in
+stdenv.mkDerivation rec {
+  pname = "libetpan";
+  version = "1.9.3";
 
-stdenv.mkDerivation {
-  name = "libetpan-${version}";
-
-  src = fetchgit {
-    url = "git://github.com/dinhviethoa/libetpan";
-    rev = "refs/tags/" + version;
-    sha256 = "09xqy1n18qn63x7idfrpwm59lfkvb1p5vxkyksywvy4f6mn4pyxk";
+  src = fetchFromGitHub {
+    owner = "dinhviethoa";
+    repo = "libetpan";
+    rev = version;
+    sha256 = "19g4qskg71jv7sxfxsdkjmrxk9mk5kf9b6fhw06g6wvm3205n95f";
   };
 
-  buildInputs = [ autoconf automake libtool openssl ];
+  nativeBuildInputs = [ libtool autoconf automake ];
+
+  buildInputs = [ openssl ];
 
   configureScript = "./autogen.sh";
 

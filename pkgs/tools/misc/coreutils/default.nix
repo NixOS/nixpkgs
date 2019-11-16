@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+         # Fix failing test with musl. See https://lists.gnu.org/r/coreutils/2019-05/msg00031.html
+         # To be removed in coreutils-8.32.
+         ++ optional stdenv.hostPlatform.isMusl ./avoid-false-positive-in-date-debug-test.patch
          # Fix compilation in musl-cross environments. To be removed in coreutils-8.32.
          ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch;
 
@@ -35,6 +38,10 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
+
+    # Some target platforms, especially when building inside a container have
+    # issues with the inotify test.
+    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail-2/inotify-dir-recreate.sh
 
     # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
@@ -50,10 +57,12 @@ stdenv.mkDerivation rec {
     for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
       echo "int main() { return 77; }" > "$f"
     done
-  '' + optionalString (stdenv.hostPlatform.libc == "musl") ''
-    echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
-    echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-  '';
+  '' + optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
+    ''
+      echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+      echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
+    ''
+  ]);
 
   outputs = [ "out" "info" ];
 

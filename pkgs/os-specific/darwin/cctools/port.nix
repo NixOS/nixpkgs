@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
-, libcxxabi, libuuid, llvm
+, libcxxabi, libuuid
 , libobjc ? null, maloader ? null
 , enableTapiSupport ? true, libtapi
 }:

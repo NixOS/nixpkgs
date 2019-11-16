@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "lr-${version}";
+  pname = "lr";
   version = "1.4.1";
 
   src = fetchFromGitHub {
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "List files recursively";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.globin ];
+    maintainers = with maintainers; [ vika_nezrimaya ];
   };
 }

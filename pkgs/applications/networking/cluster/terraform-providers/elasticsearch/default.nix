@@ -1,24 +1,22 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
-buildGoPackage rec {
-  name = "terraform-provider-elasticsearch-${version}";
-  version = "0.6.0";
-
-  goPackagePath = "github.com/phillbaker/terraform-provider-elasticsearch";
-
-  # ./deps.nix was generated using the work-around described in:
-  # https://github.com/kamilchm/go2nix/issues/19
-  goDeps = ./deps.nix;
+{ stdenv, fetchFromGitHub, buildGoModule }:
+buildGoModule rec {
+  pname = "terraform-provider-elasticsearch";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "phillbaker";
     repo = "terraform-provider-elasticsearch";
     rev = "v${version}";
-    sha256 = "04i7jwhm1mg4m8p7y6yg83j76fx0ncallzbza1g1wc5cjjbkvgs2";
+    sha256 = "0ci9gcn9ijdbx25wa99iy0b3sl7akqa7b6gi9wnnl1dawpqznj7v";
   };
+
+  modSha256 = "1xk21xswqwpv34j4ba4fj8lcbvfdd12x7rq1hrdyd21mdhmrhw0p";
+
+  subPackages = [ "." ];
 
   # Terraform allow checking the provider versions, but this breaks
   # if the versions are not provided via file paths.
-  postBuild = "mv go/bin/terraform-provider-elasticsearch{,_v${version}}";
+  postInstall = "mv $out/bin/terraform-provider-elasticsearch{,_v${version}}";
 
   meta = with stdenv.lib; {
     description = "Terraform provider for elasticsearch";

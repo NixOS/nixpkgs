@@ -3,7 +3,8 @@
 let version = "1.0.18"; in
 
 stdenv.mkDerivation {
-  name = "redshift-plasma-applet-${version}";
+  pname = "redshift-plasma-applet";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "kotelnik";

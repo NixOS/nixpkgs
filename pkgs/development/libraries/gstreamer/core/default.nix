@@ -2,12 +2,17 @@
 , pkgconfig, gettext, gobject-introspection
 , bison, flex, python3, glib, makeWrapper
 , libcap,libunwind, darwin
+, elfutils # for libdw
+, bash-completion
+, docbook_xsl, docbook_xml_dtd_412
+, gtk-doc
 , lib
+, CoreServices
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-${version}";
-  version = "1.14.4";
+  pname = "gstreamer";
+  version = "1.16.0";
 
   meta = with lib ;{
     description = "Open source multimedia framework";
@@ -18,15 +23,11 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
-    sha256 = "1izzhnlsy83rgr4zl3jcl1sryxqbbigrrqw3j4x3nnphqnb6ckzr";
+    url = "${meta.homepage}/src/gstreamer/${pname}-${version}.tar.xz";
+    sha256 = "003wy1p1in85p9sr5jsyhbnwqaiwz069flwkhyx7qhxy31qjz3hf";
   };
 
   patches = [
-    (fetchpatch {
-        url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370411";
-        sha256 = "16plzzmkk906k4892zq68j3c9z8vdma5nxzlviq20jfv04ykhmk2";
-    })
     ./fix_pkgconfig_includedir.patch
   ];
 
@@ -35,12 +36,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext bison flex python3 makeWrapper gobject-introspection
+    bash-completion
+    gtk-doc
+    # Without these, enabling the 'gtk_doc' gives us `FAILED: meson-install`
+    docbook_xsl docbook_xml_dtd_412
   ];
+
   buildInputs =
-       lib.optionals stdenv.isLinux [ libcap libunwind ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreServices;
+       lib.optionals stdenv.isLinux [ libcap libunwind elfutils ]
+    ++ lib.optional stdenv.isDarwin CoreServices;
 
   propagatedBuildInputs = [ glib ];
+
+  mesonFlags = [
+    # Enables all features, so that we know when new dependencies are necessary.
+    "-Dauto_features=enabled"
+    "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+  ]
+    # darwin.libunwind doesn't have pkgconfig definitions so meson doesn't detect it.
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "-Dlibunwind=disabled" "-Dlibdw=disabled" ];
 
   postInstall = ''
     for prog in "$dev/bin/"*; do
@@ -49,9 +64,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preConfigure= ''
-    patchShebangs .
-  '';
+  preConfigure=
+    # These files are not executable upstream, so we need to
+    # make them executable for `patchShebangs` to pick them up.
+    # Can be removed when this is merged and available:
+    #     https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/141
+    ''
+      chmod +x gst/parse/get_flex_version.py
+    '' +
+    ''
+      patchShebangs .
+    '';
 
   preFixup = ''
     moveToOutput "share/bash-completion" "$dev"

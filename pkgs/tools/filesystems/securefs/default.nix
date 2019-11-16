@@ -3,7 +3,7 @@
 , fuse }:
 
 stdenv.mkDerivation rec {
-  name = "securefs-${version}";
+  pname = "securefs";
   version = "0.8.3";
 
   src = fetchFromGitHub {

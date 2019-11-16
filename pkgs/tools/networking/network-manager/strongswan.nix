@@ -2,21 +2,20 @@
 , gtk3, gnome3, libsecret }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "NetworkManager-strongswan";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchurl {
-    url = "https://download.strongswan.org/NetworkManager/${name}.tar.bz2";
-    sha256 = "1xhj5cipwbihf0cna8lpicpz7cd8fgkagpmg0xvj6pshymm5jbcd";
+    url = "https://download.strongswan.org/NetworkManager/${pname}-${version}.tar.bz2";
+    sha256 = "015xcj42pd84apa0j0n9r3fhldp42mj72dqvl2xf4r9gwg5nhfrl";
   };
 
   buildInputs = [ networkmanager strongswanNM libsecret gtk3 gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  # Fixes deprecation errors with networkmanager 1.10.2
-  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
 
   configureFlags = [
     "--without-libnm-glib"

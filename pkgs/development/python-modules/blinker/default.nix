@@ -13,6 +13,6 @@ buildPythonPackage rec {
     homepage = https://pythonhosted.org/blinker/;
     description = "Fast, simple object-to-object and broadcast signaling";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "serverlessrepo";
-  version = "0.1.8";
+  version = "0.1.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "533389d41a51450e50cc01405ab766550170149c08e1c85b3a1559b0fab4cb25";
+    sha256 = "671f48038123f121437b717ed51f253a55775590f00fbab6fbc6a01f8d05c017";
   };
 
   propagatedBuildInputs = [

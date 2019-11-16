@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "go-bindata-${version}";
+  pname = "go-bindata";
   version = "20151023-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "a0ff2567cfb70903282db057e799fd826784d41d";
   

@@ -1,8 +1,6 @@
 { config, lib, pkgs, utils, ... }:
 #
-# todo:
-#   - crontab for scrubs, etc
-#   - zfs tunables
+# TODO: zfs tunables
 
 with utils;
 with lib;
@@ -13,22 +11,19 @@ let
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
   cfgScrub = config.services.zfs.autoScrub;
+  cfgTrim = config.services.zfs.trim;
 
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
 
-  enableAutoSnapshots = cfgSnapshots.enable;
-  enableAutoScrub = cfgScrub.enable;
-  enableZfs = inInitrd || inSystem || enableAutoSnapshots || enableAutoScrub;
+  enableZfs = inInitrd || inSystem;
 
   kernel = config.boot.kernelPackages;
 
   packages = if config.boot.zfs.enableUnstable then {
-    spl = null;
     zfs = kernel.zfsUnstable;
     zfsUser = pkgs.zfsUnstable;
   } else {
-    spl = kernel.spl;
     zfs = kernel.zfs;
     zfsUser = pkgs.zfs;
   };
@@ -181,10 +176,9 @@ in
 
       requestEncryptionCredentials = mkOption {
         type = types.bool;
-        default = config.boot.zfs.enableUnstable;
+        default = true;
         description = ''
           Request encryption keys or passwords for all encrypted datasets on import.
-          Dataset encryption is only supported in zfsUnstable at the moment.
           For root pools the encryption key can be supplied via both an
           interactive prompt (keylocation=prompt) and from a file
           (keylocation=file://). Note that for data pools the encryption key can
@@ -271,14 +265,31 @@ in
       };
     };
 
-    services.zfs.autoScrub = {
+    services.zfs.trim = {
       enable = mkOption {
-        default = false;
+        description = "Whether to enable periodic TRIM on all ZFS pools.";
+        default = true;
+        example = false;
         type = types.bool;
+      };
+
+      interval = mkOption {
+        default = "weekly";
+        type = types.str;
+        example = "daily";
         description = ''
-          Enables periodic scrubbing of ZFS pools.
+          How often we run trim. For most desktop and server systems
+          a sufficient trimming frequency is once a week.
+
+          The format is described in
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
+    };
+
+    services.zfs.autoScrub = {
+      enable = mkEnableOption "Enables periodic scrubbing of ZFS pools.";
 
       interval = mkOption {
         default = "Sun, 02:00";
@@ -316,17 +327,13 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
-        {
-          assertion = cfgZfs.requestEncryptionCredentials -> cfgZfs.enableUnstable;
-          message = "This feature is only available for zfs unstable. Set the NixOS option boot.zfs.enableUnstable.";
-        }
       ];
 
       virtualisation.lxd.zfsSupport = true;
 
       boot = {
-        kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
-        extraModulePackages = with packages; [ zfs ] ++ optional (!cfgZfs.enableUnstable) spl;
+        kernelModules = [ "zfs" ];
+        extraModulePackages = with packages; [ zfs ];
       };
 
       boot.initrd = mkIf inInitrd {
@@ -383,10 +390,11 @@ in
       };
 
       environment.etc."zfs/zed.d".source = "${packages.zfsUser}/etc/zfs/zed.d/";
+      environment.etc."zfs/zpool.d".source = "${packages.zfsUser}/etc/zfs/zpool.d/";
 
       system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ packages.zfsUser ]
-        ++ optional enableAutoSnapshots autosnapPkg; # so the user can run the command to see flags
+        ++ optional cfgSnapshots.enable autosnapPkg; # so the user can run the command to see flags
 
       services.udev.packages = [ packages.zfsUser ]; # to hook zvol naming, etc.
       systemd.packages = [ packages.zfsUser ];
@@ -465,7 +473,7 @@ in
                       map createSyncService allPools ++
                       map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
-      systemd.targets."zfs-import" =
+      systemd.targets.zfs-import =
         let
           services = map (pool: "zfs-import-${pool}.service") dataPools;
         in
@@ -475,10 +483,10 @@ in
             wantedBy = [ "zfs.target" ];
           };
 
-      systemd.targets."zfs".wantedBy = [ "multi-user.target" ];
+      systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })
 
-    (mkIf enableAutoSnapshots {
+    (mkIf (enableZfs && cfgSnapshots.enable) {
       systemd.services = let
                            descr = name: if name == "frequent" then "15 mins"
                                     else if name == "hourly" then "hour"
@@ -516,7 +524,7 @@ in
                             }) snapshotNames);
     })
 
-    (mkIf enableAutoScrub {
+    (mkIf (enableZfs && cfgScrub.enable) {
       systemd.services.zfs-scrub = {
         description = "ZFS pools scrubbing";
         after = [ "zfs-import.target" ];
@@ -540,6 +548,16 @@ in
           OnCalendar = cfgScrub.interval;
           Persistent = "yes";
         };
+      };
+    })
+
+    (mkIf (enableZfs && cfgTrim.enable) {
+      systemd.services.zpool-trim = {
+        description = "ZFS pools trim";
+        after = [ "zfs-import.target" ];
+        path = [ packages.zfsUser ];
+        startAt = cfgTrim.interval;
+        serviceConfig.ExecStart = "${pkgs.runtimeShell} -c 'zpool list -H -o name | xargs --no-run-if-empty -n1 zpool trim'";
       };
     })
   ];

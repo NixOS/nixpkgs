@@ -2,12 +2,13 @@ diff --git a/sddm-theme/theme.conf.cmake b/sddm-theme/theme.conf.cmake
 index 69d3070..52e9102 100644
 --- a/sddm-theme/theme.conf.cmake
 +++ b/sddm-theme/theme.conf.cmake
-@@ -1,4 +1,4 @@
+@@ -1,5 +1,5 @@
  [General]
  type=image
  color=#1d99f3
--background=${CMAKE_INSTALL_PREFIX}/${WALLPAPER_INSTALL_DIR}/Next/contents/images/3200x2000.png
-+background=${NIXPKGS_WALLPAPER_INSTALL_DIR}/Next/contents/images/3200x2000.png
+ fontSize=10
+-background=${CMAKE_INSTALL_PREFIX}/${WALLPAPER_INSTALL_DIR}/Next/contents/images/5120x2880.png
++background=${NIXPKGS_WALLPAPER_INSTALL_DIR}/Next/contents/images/5120x2880.png
 diff --git a/startkde/CMakeLists.txt b/startkde/CMakeLists.txt
 index 6a1a212..f03fd34 100644
 --- a/startkde/CMakeLists.txt

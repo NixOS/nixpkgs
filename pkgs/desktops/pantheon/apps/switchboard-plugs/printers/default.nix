@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig
-, vala, libgee, granite, gtk3, cups, switchboard, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, cups
+, switchboard
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-printers";
@@ -19,7 +31,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -34,7 +45,15 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  patches = [
+    # Fix build with latest vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-printers/commit/3175c2ebf106145a95355d2571e0a2aa4834e884.patch";
+      sha256 = "1b2q48a1284037nz79vjcrz8g2qpsyg7s5rag6bfp03a1ijb7gw3";
+    })
+  ];
+
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Printers Plug";

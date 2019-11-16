@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "mwoauth";
-  version = "0.3.3";
+  version = "0.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8a57a315732733240e9522d3c4e370cbdf2c045d00fe0dab433d6119fa09038f";
+    sha256 = "c7e4c56561a280e14ca4cc20b79ba4a9dd4ec752ff4c797cf29dad4460fb7832";
   };
 
   # package has no tests

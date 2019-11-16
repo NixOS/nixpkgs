@@ -2,21 +2,22 @@
 
 # Optional dependencies
 , bzip2 ? null }:
-
 stdenv.mkDerivation rec {
-  name = "cfitsio-${version}";
-  version = "3.450";
+  pname = "cfitsio";
+  version = "3.47";
 
   src = fetchurl {
-    url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio${builtins.replaceStrings ["."] [""] version}.tar.gz";
-    sha256 = "0bmrkw6w65zb0k3mszaaqy1f4zjm2hl7njww74nb5v38wvdi4q5z";
+    url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${version}.tar.gz";
+    sha256 = "1vzlxnrjckz78p2wf148v2z3krkwnykfqvlj42sz3q711vqid1a1";
   };
 
   buildInputs = [ bzip2 ];
 
-  patches = [ ./darwin-curl-config.patch ./darwin-rpath-universal.patch ];
+  patches = [ ./darwin-rpath-universal.patch ];
 
   configureFlags = stdenv.lib.optional (bzip2 != null) "--with-bzip2=${bzip2.out}";
+
+  hardeningDisable = [ "format" ];
 
   # Shared-only build
   buildFlags = "shared";

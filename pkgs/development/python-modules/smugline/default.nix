@@ -8,7 +8,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname   = "smugline";
   version = "20160106";
 

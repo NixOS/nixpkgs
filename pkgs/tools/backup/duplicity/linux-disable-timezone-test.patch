@@ -1,0 +1,10 @@
+--- a/testing/unit/test_statistics.py
++++ b/testing/unit/test_statistics.py
+@@ -59,6 +59,7 @@ class StatsObjTest(UnitTestCase):
+         s1 = StatsDeltaProcess()
+         assert s1.get_stat('SourceFiles') == 0
+
++    @unittest.skip("Broken on Linux in Nix' build environment")
+     def test_get_stats_string(self):
+         """Test conversion of stat object into string"""
+         s = StatsObj()

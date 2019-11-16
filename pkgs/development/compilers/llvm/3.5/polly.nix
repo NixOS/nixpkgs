@@ -1,7 +1,8 @@
 { stdenv, fetch, cmake, isl, python, gmp, llvm, version }:
 
 stdenv.mkDerivation {
-  name = "polly-${version}";
+  pname = "polly";
+  inherit version;
 
   src =  fetch "polly" "1s6v54czmgq626an4yk2k34lrzkwmz1bjrbiafh7j23yc2w4nalx";
 

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "psensor-${version}";
+  pname = "psensor";
 
   version = "1.2.0";
 

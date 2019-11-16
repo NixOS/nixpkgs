@@ -1,15 +1,15 @@
 { stdenv, buildPythonPackage, fetchPypi
 , nose, chai, simplejson, backports_functools_lru_cache
-, dateutil, pytz
+, dateutil, pytz, mock, dateparser
 }:
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "0.13.1";
+  version = "0.15.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f54d9f016c0b7811fac9fb8c2c7fa7421d80c54dbdd75ffb12913c55db60b8a";
+    sha256 = "10257c5daba1a88db34afa284823382f4963feca7733b9107956bed041aff24f";
   };
 
   checkPhase = ''
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ nose chai simplejson pytz ];
-  propagatedBuildInputs = [ dateutil backports_functools_lru_cache ];
+  propagatedBuildInputs = [ dateutil backports_functools_lru_cache mock dateparser];
 
   postPatch = ''
     substituteInPlace setup.py --replace "==1.2.1" ""

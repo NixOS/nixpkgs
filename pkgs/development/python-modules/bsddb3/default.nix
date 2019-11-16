@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pkgs
-, isPy3k
 , python
 }:
 

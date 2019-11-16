@@ -7,8 +7,8 @@ let
   initScriptBuilder = pkgs.substituteAll {
     src = ./init-script-builder.sh;
     isExecutable = true;
-    inherit (pkgs.buildPackages) bash;
-    path = with pkgs.buildPackages; [coreutils gnused gnugrep];
+    inherit (pkgs) bash;
+    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   };
 
 in

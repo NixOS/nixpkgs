@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "13.2.1";
-  name = "mediathekview-${version}";
+  pname = "mediathekview";
   src = fetchurl {
     url = "https://download.mediathekview.de/stabil/MediathekView-${version}.tar.gz";
     sha256 = "11wg6klviig0h7pprfaygamsgqr7drqra2s4yxgfak6665033l2a";

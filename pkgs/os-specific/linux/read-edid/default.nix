@@ -1,11 +1,11 @@
 { stdenv, lib, fetchurl, cmake, libx86 }:
 
 stdenv.mkDerivation rec {
-  name = "read-edid-${version}";
+  pname = "read-edid";
   version = "3.0.2";
 
   src = fetchurl {
-    url = "http://www.polypux.org/projects/read-edid/${name}.tar.gz";
+    url = "http://www.polypux.org/projects/read-edid/${pname}-${version}.tar.gz";
     sha256 = "0vqqmwsgh2gchw7qmpqk6idgzcm5rqf2fab84y7gk42v1x2diin7";
   };
 

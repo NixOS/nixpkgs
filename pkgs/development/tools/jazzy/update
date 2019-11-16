@@ -1,8 +1,0 @@
-#!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bash bundler bundix
-
-set -e
-
-rm -f Gemfile.lock
-bundler lock
-bundix

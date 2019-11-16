@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "openresolv-${version}";
-  version = "3.9.0";
+  pname = "openresolv";
+  version = "3.9.2";
 
   src = fetchurl {
-    url = "mirror://roy/openresolv/${name}.tar.xz";
-    sha256 = "1f2dccc52iykbpma26fbxzga2l6g4njm3bgaxz4rgdrb4cwlv82i";
+    url = "mirror://roy/openresolv/${pname}-${version}.tar.xz";
+    sha256 = "0wyk9sl1xgvxjvj1v3nlgs79nykdr0b76k5zp3v6cm9fd10y5mql";
   };
 
   buildInputs = [ makeWrapper ];

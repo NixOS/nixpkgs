@@ -3,7 +3,8 @@ let
   version = "2.2.3";
 in
 stdenv.mkDerivation {
-  name = "minizinc-${version}";
+  pname = "minizinc";
+  inherit version;
 
   buildInputs = [ cmake flex bison ];
 

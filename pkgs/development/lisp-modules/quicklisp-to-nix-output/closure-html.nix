@@ -3,7 +3,7 @@ rec {
   baseName = ''closure-html'';
   version = ''20180711-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."alexandria" args."babel" args."closure-common" args."flexi-streams" args."trivial-features" args."trivial-gray-streams" ];
 
@@ -17,7 +17,7 @@ rec {
   asdFilesToKeep = ["closure-html.asd"];
   overrides = x: x;
 }
-/* (SYSTEM closure-html DESCRIPTION NIL SHA256
+/* (SYSTEM closure-html DESCRIPTION System lacks description SHA256
     0ljcrz1wix77h1ywp0bixm3pb5ncmr1vdiwh8m1qzkygwpfjr8aq URL
     http://beta.quicklisp.org/archive/closure-html/2018-07-11/closure-html-20180711-git.tgz
     MD5 461dc8caa65385da5f2d1cd8dd4f965f NAME closure-html FILENAME

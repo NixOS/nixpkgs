@@ -1,5 +1,5 @@
 { stdenv, python3Packages, fetchurl, makeWrapper
-, coreutils, iptables, nettools, openssh, procps, fetchpatch }:
+, coreutils, iptables, nettools, openssh, procps }:
 
 python3Packages.buildPythonApplication rec {
   name = "sshuttle-${version}";

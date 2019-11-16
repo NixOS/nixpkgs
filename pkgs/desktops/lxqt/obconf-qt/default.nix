@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, qttools,
-  qtx11extras, xorg, lxqt-build-tools, openbox, hicolor-icon-theme }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, qttools,
+  qtx11extras, xorg, lxqt-build-tools, openbox }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "obconf-qt";
   version = "0.14.1";
 
@@ -27,10 +27,9 @@ stdenv.mkDerivation rec {
     xorg.libXdmcp
     xorg.libSM
     openbox
-    hicolor-icon-theme
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Qt port of obconf, the Openbox configuration tool";
     homepage = https://github.com/lxqt/obconf-qt;
     license = licenses.gpl2;

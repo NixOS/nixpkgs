@@ -1,7 +1,7 @@
 {stdenv, fetchgit}:
 
 stdenv.mkDerivation rec {
-  name = "mdf2iso-${version}";
+  pname = "mdf2iso";
   version = "0.3.1";
 
   src = fetchgit {

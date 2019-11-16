@@ -1,15 +1,17 @@
-{ darkMode ? false, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
-cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk_pixbuf,
+{ theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
+cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk-pixbuf,
 libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
-at-spi2-atk, libuuid }:
+at-spi2-atk, at-spi2-core, libuuid, nodePackages, libpulseaudio
+}:
 
 let
 
-  version = "3.4.2";
+  version = "4.1.2";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     at-spi2-atk
+    at-spi2-core
     atk
     cairo
     cups
@@ -20,7 +22,7 @@ let
     freetype
     glib
     gnome2.GConf
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     pango
     libnotify
@@ -31,6 +33,7 @@ let
     stdenv.cc.cc
     systemd
     libuuid
+    libpulseaudio
 
     xorg.libxkbfile
     xorg.libX11
@@ -50,29 +53,34 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "0qbj41ymckz8w1p2pazyxg7pimgn9gmpvxz4ygcm0nyivfmw2crq";
+        sha256 = "0a1b2k81hm1lfrdb47gmd07jqb7hva9sxsiph7b3iwzpzw8pjrkh";
       }
     else
       throw "Slack is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "slack-${version}";
+  pname = "slack";
+  inherit version;
 
   inherit src;
 
   buildInputs = [
-    dpkg
     gtk3  # needed for GSETTINGS_SCHEMAS_PATH
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
 
-  unpackPhase = "true";
-  buildCommand = ''
+  dontUnpack = true;
+  dontBuild = true;
+  dontPatchELF = true;
+
+  installPhase = ''
+    # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
+    dpkg --fsys-tarfile $src | tar --extract
+    rm -rf usr/share/lintian
+
     mkdir -p $out
-    dpkg -x $src $out
-    cp -av $out/usr/* $out
-    rm -rf $out/etc $out/usr $out/share/lintian
+    mv usr/* $out
 
     # Otherwise it looks "suspicious"
     chmod -R g-w $out
@@ -91,27 +99,28 @@ in stdenv.mkDerivation {
     substituteInPlace $out/share/applications/slack.desktop \
       --replace /usr/bin/ $out/bin/ \
       --replace /usr/share/ $out/share/
-  '' + stdenv.lib.optionalString darkMode ''
-    cat <<EOF >> $out/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js
+  '' + stdenv.lib.optionalString (theme != null) ''
+    asar extract $out/lib/slack/resources/app.asar $out/lib/slack/resources/app.asar.unpacked
+    cat <<EOF >> $out/lib/slack/resources/app.asar.unpacked/dist/ssb-interop.bundle.js
+
+    var fs = require('fs');
     document.addEventListener('DOMContentLoaded', function() {
-    let tt__customCss = ".menu ul li a:not(.inline_menu_link) {color: #fff !important;}"
-    $.ajax({
-        url: 'https://cdn.rawgit.com/laCour/slack-night-mode/master/css/raw/black.css',
-        success: function(css) {
-            \$("<style></style>").appendTo('head').html(css + tt__customCss);
-            \$("<style></style>").appendTo('head').html('#reply_container.upload_in_threads .inline_message_input_container {background: padding-box #545454}');
-            \$("<style></style>").appendTo('head').html('.p-channel_sidebar {background: #363636 !important}');
-            \$("<style></style>").appendTo('head').html('#client_body:not(.onboarding):not(.feature_global_nav_layout):before {background: inherit;}');
-        }
+      fs.readFile('${theme}/theme.css', 'utf8', function(err, css) {
+        let s = document.createElement('style');
+        s.type = 'text/css';
+        s.innerHTML = css;
+        document.head.appendChild(s);
       });
     });
     EOF
+    asar pack $out/lib/slack/resources/app.asar.unpacked $out/lib/slack/resources/app.asar
   '';
 
   meta = with stdenv.lib; {
     description = "Desktop client for Slack";
     homepage = https://slack.com;
     license = licenses.unfree;
+    maintainers = [ maintainers.mmahut ];
     platforms = [ "x86_64-linux" ];
   };
 }

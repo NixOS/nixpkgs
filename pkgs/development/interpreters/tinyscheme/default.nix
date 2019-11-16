@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tinyscheme-${version}";
+  pname = "tinyscheme";
   version = "1.41";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tinyscheme/${name}.tar.gz";
+    url = "mirror://sourceforge/tinyscheme/${pname}-${version}.tar.gz";
     sha256 = "168rk4zrlhsknbvldq2jsgabpwlqkx6la44gkqmijmf7jhs11h7a";
   };
 

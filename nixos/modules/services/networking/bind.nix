@@ -33,7 +33,7 @@ let
       ${cfg.extraConfig}
 
       ${ concatMapStrings
-          ({ name, file, master ? true, slaves ? [], masters ? [] }:
+          ({ name, file, master ? true, slaves ? [], masters ? [], extraConfig ? "" }:
             ''
               zone "${name}" {
                 type ${if master then "master" else "slave"};
@@ -52,6 +52,7 @@ let
                    ''
                 }
                 allow-query { any; };
+                ${extraConfig}
               };
             '')
           cfg.zones }
@@ -131,6 +132,7 @@ in
           file = "/var/dns/example.com";
           masters = ["192.168.0.1"];
           slaves = [];
+          extraConfig = "";
         }];
       };
 
@@ -168,7 +170,9 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.bind.enable {
+  config = mkIf cfg.enable {
+
+    networking.resolvconf.useLocalResolver = mkDefault true;
 
     users.users = singleton
       { name = bindUser;
@@ -184,7 +188,7 @@ in
       preStart = ''
         mkdir -m 0755 -p /etc/bind
         if ! [ -f "/etc/bind/rndc.key" ]; then
-          ${pkgs.bind.out}/sbin/rndc-confgen -r /dev/urandom -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
+          ${pkgs.bind.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
         fi
 
         ${pkgs.coreutils}/bin/mkdir -p /run/named

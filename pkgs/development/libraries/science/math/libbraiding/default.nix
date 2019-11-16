@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0";
-  name = "libbraiding-${version}";
+  pname = "libbraiding";
 
   src = fetchFromGitHub {
     owner = "miguelmarco";

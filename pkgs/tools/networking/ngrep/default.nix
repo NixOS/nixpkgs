@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libpcap, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "ngrep-${version}";
+  pname = "ngrep";
   version = "1.47";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libgcrypt, libnl, pkgconfig, python2Packages, wireless-regdb }:
 
 stdenv.mkDerivation rec {
-  name = "crda-${version}";
+  pname = "crda";
   version = "3.18";
 
   src = fetchurl {

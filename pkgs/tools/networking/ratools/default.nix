@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "ratools-${version}";
+  pname = "ratools";
   version = "0.6.2";
 
   src = fetchFromGitHub {

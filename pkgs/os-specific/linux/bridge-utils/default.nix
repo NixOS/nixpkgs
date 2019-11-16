@@ -8,11 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "42f9e5fb8f6c52e63a98a43b81bd281c227c529f194913e1c51ec48a393b6688";
   };
 
-  # Remove patch once the kernel headers are updated
-  patches = [ ./add-ip6-header.patch ];
+  patches = [
+    ./autoconf-ar.patch
+    ./add-ip6-header.patch # Remove patch once the kernel headers are updated
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
 
   postInstall = ''
     # The bridge utils build does not fail even if the brctl binary

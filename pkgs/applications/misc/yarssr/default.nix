@@ -23,9 +23,9 @@ let
     gtk2
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "git-2017-12-01";
-  name = "yarssr-${version}";
+  pname = "yarssr";
 
   src = fetchFromGitHub {
     owner = "JGRennison";

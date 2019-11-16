@@ -8,7 +8,7 @@ let
             , extraMeta ? {}
             , version ? "2.1"
             , ... } @ args:
-           stdenv.mkDerivation (rec {
+           stdenv.mkDerivation ({
 
     name = "arm-trusted-firmware-${platform}-${version}";
     inherit version;
@@ -53,7 +53,7 @@ let
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
 
-in rec {
+in {
   inherit buildArmTrustedFirmware;
 
   armTrustedFirmwareAllwinner = buildArmTrustedFirmware rec {

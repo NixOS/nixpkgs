@@ -106,16 +106,24 @@ in {
 
       path = with pkgs; [ iptables ipset iproute systemd ];
 
-      postStart = ''
-        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:ip family inet
-        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:ip family inet6
+      # The sshguard ipsets must exist before we invoke
+      # iptables. sshguard creates the ipsets after startup if
+      # necessary, but if we let sshguard do it, we can't reliably add
+      # the iptables rules because postStart races with the creation
+      # of the ipsets. So instead, we create both the ipsets and
+      # firewall rules before sshguard starts.
+      preStart = ''
+        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:net family inet
+        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:net family inet6
         ${pkgs.iptables}/bin/iptables  -I INPUT -m set --match-set sshguard4 src -j DROP
         ${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP
       '';
 
-      preStop = ''
+      postStop = ''
         ${pkgs.iptables}/bin/iptables  -D INPUT -m set --match-set sshguard4 src -j DROP
         ${pkgs.iptables}/bin/ip6tables -D INPUT -m set --match-set sshguard6 src -j DROP
+        ${pkgs.ipset}/bin/ipset -quiet destroy sshguard4
+        ${pkgs.ipset}/bin/ipset -quiet destroy sshguard6
       '';
 
       unitConfig.Documentation = "man:sshguard(8)";

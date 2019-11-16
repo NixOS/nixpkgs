@@ -1,14 +1,14 @@
 {stdenv, fetchurl, jre}:
 
 stdenv.mkDerivation rec {
-  name = "antlr-${version}";
+  pname = "antlr";
   version = "3.4";
   src = fetchurl {
     url ="https://www.antlr3.org/download/antlr-${version}-complete.jar";
     sha256 = "1xqbam8vf04q5fasb0m2n1pn5dbp2yw763sj492ncq04c5mqcglx";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out"/{lib/antlr,bin}

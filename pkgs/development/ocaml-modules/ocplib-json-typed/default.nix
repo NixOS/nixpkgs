@@ -1,25 +1,21 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocplib-endian, js_of_ocaml, uri }:
+{ lib, buildDunePackage, fetchFromGitHub, uri }:
 
-stdenv.mkDerivation rec {
-	name = "ocaml${ocaml.version}-ocplib-json-typed-${version}";
-	version = "0.5";
+buildDunePackage rec {
+	pname = "ocplib-json-typed";
+	version = "0.7.1";
 	src = fetchFromGitHub {
 		owner = "OCamlPro";
 		repo = "ocplib-json-typed";
 		rev = "v${version}";
-		sha256 = "02c600wm2wdpzb66pivxzwjhqa2dm7dqyfvw3mbvkv1g2jj7kn2q";
+		sha256 = "1gv0vqqy9lh7isaqg54b3lam2sh7nfjjazi6x7zn6bh5f77g1p5q";
 	};
 
-	buildInputs = [ ocaml findlib ocplib-endian js_of_ocaml ];
 	propagatedBuildInputs = [ uri ];
-
-	createFindlibDestdir = true;
 
 	meta = {
 		description = "A collection of type-aware JSON utilities for OCaml";
-		license = stdenv.lib.licenses.lgpl21;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		license = lib.licenses.lgpl21;
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (src.meta) homepage;
-		inherit (ocaml.meta) platforms;
 	};
 }

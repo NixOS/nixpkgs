@@ -1,4 +1,4 @@
-{ stdenv, systemd, polkit, fetchFromGitHub, buildGoPackage, m4}:
+{ stdenv, fetchFromGitHub, buildGoPackage, m4 }:
 
 buildGoPackage rec {
   name = "localtime-2017-11-07";
@@ -11,18 +11,20 @@ buildGoPackage rec {
   };
   goPackagePath = "github.com/Stebalien/localtime";
 
-  buildInputs = [ systemd polkit m4 ];
+  buildInputs = [ m4 ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ 
+    "PREFIX=${placeholder "out"}" 
+    "BINDIR=${placeholder "bin"}/bin" 
+  ];
 
   buildPhase = ''
     cd go/src/${goPackagePath}
-    make localtimed
+    make $makeFlags
   '';
 
   installPhase = ''
-    mkdir -p $bin/bin
-    install -Dm555 localtimed $bin/bin
+    make install $makeFlags
   '';
 
   meta = with stdenv.lib; {

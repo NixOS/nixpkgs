@@ -1,5 +1,5 @@
 { fetchurl, ... }:
-rec {
+{
   baseName = ''metatilities-base'';
   version = ''20170403-git'';
 

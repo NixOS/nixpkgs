@@ -6,7 +6,6 @@
 , noSysDirs
 , gold ? !stdenv.buildPlatform.isDarwin || stdenv.hostPlatform == stdenv.targetPlatform
 , bison ? null
-, fetchpatch
 }:
 
 let
@@ -23,7 +22,7 @@ let
                   "${stdenv.targetPlatform.config}-";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = targetPrefix + basename;
 
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM

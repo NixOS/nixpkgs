@@ -17,7 +17,8 @@ in
       url = "http://www.sundtek.de/media/netinst/${platform}/installer.tar.gz";
       sha256 = "15y6r5w306pcq4g1rn9f7vf70f3a7qhq237ngaf0wxh2nr0aamxp";
     };
-    name = "sundtek-${version}";
+    pname = "sundtek";
+    inherit version;
 
     phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 

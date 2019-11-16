@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, openssl, lua, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "imapfilter-${version}";
-  version = "2.6.12";
+  pname = "imapfilter";
+  version = "2.6.14";
 
   src = fetchFromGitHub {
     owner = "lefcha";
     repo = "imapfilter";
     rev = "v${version}";
-    sha256 = "0vzpc54fjf5vb5vx5w0fl20xvx1k9cg6a3hbl86mm8kwsqf3wrab";
+    sha256 = "09aq9gw1vz0zl6k4fb4zdm6cpjhddsl13asfjx3qy21pbw0azmj6";
   };
 
   makeFlagsArray = "PREFIX=$(out)";

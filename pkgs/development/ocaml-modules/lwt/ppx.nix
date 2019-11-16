@@ -1,12 +1,11 @@
-{ stdenv, buildDunePackage, lwt, ppx_tools_versioned }:
+{ buildDunePackage, lwt, ppx_tools_versioned }:
 
 buildDunePackage {
   pname = "lwt_ppx";
 
   inherit (lwt) src version;
 
-  buildInputs = [ ppx_tools_versioned ];
-  propagatedBuildInputs = [ lwt ];
+  propagatedBuildInputs = [ lwt ppx_tools_versioned ];
 
   meta = {
     description = "Ppx syntax extension for Lwt";

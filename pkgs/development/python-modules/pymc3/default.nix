@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pymc3";
-  version = "3.6";
+  version = "3.7";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c00c0778d2451a348a9508f8b956fe280a0f9affd3f85140ac3948bc2902f5e9";
+    sha256 = "0ijna2ghvniryllr56qr4vi4k9q58mq21yx36nj5kg2j17f7rkbr";
   };
 
   # No need for coverage stats in Nix builds

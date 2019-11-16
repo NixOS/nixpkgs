@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libsndfile }:
 
 stdenv.mkDerivation rec {
-  name = "libbs2b-${version}";
+  pname = "libbs2b";
   version = "3.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bs2b/${name}.tar.bz2";
+    url = "mirror://sourceforge/bs2b/${pname}-${version}.tar.bz2";
     sha256 = "0vz442kkjn2h0dlxppzi4m5zx8qfyrivq581n06xzvnyxi5rg6a7";
   };
 

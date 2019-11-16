@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "keybinder3-${version}";
+  pname = "keybinder3";
   version = "0.3.2";
 
   src = fetchFromGitHub {

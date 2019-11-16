@@ -1,16 +1,16 @@
 { stdenv, buildPythonPackage, fetchPypi
-, protobuf, pytest }:
+, protobuf, pytest, setuptools }:
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "1.5.9";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "627ec53fab43d06c1b5c950e217fa9819e169daf753111a7f244e94bf8fb3384";
+    sha256 = "e61b8ed5e36b976b487c6e7b15f31bb10c7a0ca7bd5c0e837f4afab64b53a0c6";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  propagatedBuildInputs = [ protobuf setuptools ];
   checkInputs = [ pytest ];
 
   doCheck = false;  # there are no tests

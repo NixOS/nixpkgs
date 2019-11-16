@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchzip, makeDesktopItem, makeWrapper
+{ stdenv, fetchzip, makeDesktopItem, makeWrapper
 , jre
 }:
 
 stdenv.mkDerivation rec {
-  name = "ganttproject-bin-${version}";
+  pname = "ganttproject-bin";
   version = "2.8.10";
 
   src = let build = "r2364"; in fetchzip {

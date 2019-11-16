@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, Hypervisor, vmnet }:
 
 buildGoPackage rec {
-  name = "docker-machine-xhyve-${version}";
+  pname = "docker-machine-xhyve";
   version = "0.3.3";
 
   goPackagePath = "github.com/zchee/docker-machine-driver-xhyve";

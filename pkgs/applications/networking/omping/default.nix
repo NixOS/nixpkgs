@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "omping-${version}";
+  pname = "omping";
   version = "0.0.5";
 
   src = fetchFromGitHub {

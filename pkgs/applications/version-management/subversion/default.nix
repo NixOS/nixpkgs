@@ -19,10 +19,10 @@ let
 
   common = { version, sha256, extraBuildInputs ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
-    name = "subversion-${version}";
+    pname = "subversion";
 
     src = fetchurl {
-      url = "mirror://apache/subversion/${name}.tar.bz2";
+      url = "mirror://apache/subversion/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
 
@@ -98,7 +98,7 @@ let
     meta = with stdenv.lib; {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
       license = licenses.asl20;
-      homepage = http://subversion.apache.org/;
+      homepage = "http://subversion.apache.org/";
       maintainers = with maintainers; [ eelco lovek323 ];
       platforms = platforms.linux ++ platforms.darwin;
     };
@@ -112,19 +112,19 @@ let
 
 in {
   subversion19 = common {
-    version = "1.9.10";
-    sha256 = "1mwwbjs8nqr8qyc0xzy7chnylh4q3saycvly8rzq32swadbcca5f";
+    version = "1.9.12";
+    sha256 = "15z33gdnfiqblm5515020wfdwnp2837r3hnparava6m2fgyiafiw";
   };
 
   subversion_1_10 = common {
-    version = "1.10.4";
-    sha256 = "18c1vdq32nil76w678lxmp73jsbqha3dmzgmfrj76nc0xjmywql2";
+    version = "1.10.6";
+    sha256 = "19zc215mhpnm92mlyl5jbv57r5zqp6cavr3s2g9yglp6j4kfgj0q";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 
   subversion = common {
-    version = "1.12.0";
-    sha256 = "1prfbrd1jnndb5fcsvwnzvdi7c0bpirb6pmfq03w21x0v1rprbkz";
+    version = "1.12.2";
+    sha256 = "0wgpw3kzsiawzqk4y0xgh1z93kllxydgv4lsviim45y5wk4bbl1v";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 }

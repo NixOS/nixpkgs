@@ -59,8 +59,8 @@ in {
       type = types.attrsOf types.str;
       default = {};
       example = {
-        "nuc-server"  = "hostaddr=192.168.0.100 port=5432 dbname=postgres";
-        "mini-server" = "hostaddr=127.0.0.1 port=5432 dbname=postgres sslmode=require";
+        nuc-server  = "hostaddr=192.168.0.100 port=5432 dbname=postgres";
+        mini-server = "hostaddr=127.0.0.1 port=5432 dbname=postgres sslmode=require";
       };
       description = ''
         pgmanage requires at least one PostgreSQL server be defined.
@@ -192,13 +192,13 @@ in {
       };
     };
     users = {
-      users."${pgmanage}" = {
+      users.${pgmanage} = {
         name  = pgmanage;
         group = pgmanage;
         home  = cfg.sqlRoot;
         createHome = true;
       };
-      groups."${pgmanage}" = {
+      groups.${pgmanage} = {
         name = pgmanage;
       };
     };

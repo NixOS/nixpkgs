@@ -1,32 +1,38 @@
 { stdenv, unzip, fetchurl }:
 
-let
-  version = "24";
+# Upstream changes files in-place, to update:
+# 1. Check latest version at http://www.un4seen.com/
+# 2. Update `version`s and `sha256` sums.
+# See also http://www.un4seen.com/forum/?topic=18614.0
 
+let
   allBass = {
     bass = {
       h = "bass.h";
+      version = "2.4.14";
       so = {
         i686_linux = "libbass.so";
         x86_64-linux = "x64/libbass.so";
       };
-      urlpath = "bass${version}-linux.zip";
-      sha256 = "1hjxp1akj8367qlglv5rqpwq2dimfz3bkllwq39abavz4sp8smjz";
+      urlpath = "bass24-linux.zip";
+      sha256 = "1nyzs08z0djyvz6jx1y9y99y0ksp4sxz9l2x43k1c9irls24xpfy";
     };
 
     bass_fx = {
       h = "C/bass_fx.h";
+      version = "2.4.12.1";
       so = {
         i686_linux = "libbass_fx.so";
         x86_64-linux = "x64/libbass_fx.so";
       };
-      urlpath = "z/0/bass_fx${version}-linux.zip";
+      urlpath = "z/0/bass_fx24-linux.zip";
       sha256 = "1q0g74z7iyhxqps5b3gnnbic8v2jji1r0mkvais57lsx8y21sbin";
     };
   };
 
   dropBass = name: bass: stdenv.mkDerivation {
-    name = "lib${name}-${version}";
+    pname = "lib${name}";
+    inherit (bass) version;
 
     src = fetchurl {
       url = "https://www.un4seen.com/files/${bass.urlpath}";

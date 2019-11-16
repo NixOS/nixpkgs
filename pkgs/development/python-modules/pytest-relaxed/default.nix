@@ -7,18 +7,21 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.1.4";
+  version = "1.1.5";
   pname = "pytest-relaxed";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "511ac473252baa67d5451f7864516e2e8f1acedf0cef71f79d2ed916ee04e146";
+    sha256 = "e39a7e5b14e14dfff0de0ad720dfffa740c128d599ab14cfac13f4deb34164a6";
   };
 
-  propagatedBuildInputs = [ pytest six decorator ];
+  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
+
+  propagatedBuildInputs = [ six decorator ];
 
   patchPhase = ''
-    sed -i "s/pytest>=3,<3.3/pytest/g" setup.py
+    sed -i "s/pytest>=3,<5/pytest/g" setup.py
   '';
 
   # skip tests due to dir requirements

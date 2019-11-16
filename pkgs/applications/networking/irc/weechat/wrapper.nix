@@ -1,5 +1,5 @@
-{ stdenv, lib, runCommand, writeScriptBin, buildEnv
-, pythonPackages, perlPackages, runtimeShell
+{ lib, runCommand, writeScriptBin, buildEnv
+, python3Packages, perlPackages, runtimeShell
 }:
 
 weechat:
@@ -15,11 +15,13 @@ let
     availablePlugins = let
         simplePlugin = name: {pluginFile = "${weechat.${name}}/lib/weechat/plugins/${name}.so";};
       in rec {
-        python = {
-          pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
+        python = (simplePlugin "python") // {
+          extraEnv = ''
+            export PATH="${python3Packages.python}/bin:$PATH"
+          '';
           withPackages = pkgsFun: (python // {
             extraEnv = ''
-              export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
+              export PYTHONHOME="${python3Packages.python.withPackages pkgsFun}"
             '';
           });
         };
@@ -54,7 +56,7 @@ let
     init = let
       init = builtins.replaceStrings [ "\n" ] [ ";" ] (config.init or "");
 
-      mkScript = drv: lib.flip map drv.scripts (script: "/script load ${drv}/share/${script}");
+      mkScript = drv: lib.forEach drv.scripts (script: "/script load ${drv}/share/${script}");
 
       scripts = builtins.concatStringsSep ";" (lib.foldl (scripts: drv: scripts ++ mkScript drv)
         [ ] (config.scripts or []));

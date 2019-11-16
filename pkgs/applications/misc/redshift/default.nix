@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
-, gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
+, gtk3, python, pygobject3, pyxdg
 
 , withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "redshift-${version}";
+  pname = "redshift";
   version = "1.12";
 
   src = fetchFromGitHub {
@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     gobject-introspection
     gtk3
     python
-    hicolor-icon-theme
   ] ++ stdenv.lib.optional  withRandr        libxcb
     ++ stdenv.lib.optional  withGeoclue      geoclue
     ++ stdenv.lib.optional  withDrm          libdrm
@@ -88,6 +87,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = http://jonls.dk/redshift;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yegortimoshenko globin ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, fetchzip, unzip }:
+{ lib, fetchzip }:
 
 let
   version = "1.3.2";

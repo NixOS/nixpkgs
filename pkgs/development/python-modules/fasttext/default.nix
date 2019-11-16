@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "fasttext";
-  version = "0.2.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "fastText";
-    rev = version;
-    sha256 = "1fcrz648r2s80bf7vc0l371xillz5jk3ldaiv9jb7wnsyri831b4";
+    rev = "v${version}";
+    sha256 = "1cbzz98qn8aypp4r5kwwwc9wiq5bwzv51kcsb15xjfs9lz8h3rii";
   };
 
   buildInputs = [ pybind11 ];

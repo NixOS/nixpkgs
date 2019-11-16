@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libusb, fftwSinglePrec }:
 
 stdenv.mkDerivation rec {
-  name = "hackrf-${version}";
+  pname = "hackrf";
   version = "2018.01.1";
 
   src = fetchFromGitHub {

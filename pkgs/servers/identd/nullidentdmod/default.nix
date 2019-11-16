@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ... }: stdenv.mkDerivation rec {
-  name = "nullidentdmod-${version}";
+  pname = "nullidentdmod";
   version = "1.3";
 
   src = fetchFromGitHub {

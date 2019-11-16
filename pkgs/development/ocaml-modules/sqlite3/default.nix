@@ -1,7 +1,7 @@
 { stdenv, fetchurl, sqlite, ocaml, findlib, ocamlbuild, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-sqlite3-${version}";
+  pname = "ocaml-sqlite3";
   version = "2.0.9";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
-      z77z vbgl
+      maggesi vbgl
     ];
   };
 }

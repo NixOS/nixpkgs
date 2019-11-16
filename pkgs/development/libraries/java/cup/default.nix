@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jdk, ant } :
 
 stdenv.mkDerivation rec {
-  name = "java-cup-${version}";
+  pname = "java-cup";
   version = "11b-20160615";
 
   src = fetchurl {

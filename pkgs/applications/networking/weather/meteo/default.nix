@@ -1,17 +1,16 @@
 { stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, gtk3
-, json-glib, libsoup, clutter, clutter-gtk, libchamplain, webkitgtk, geocode-glib
-, libappindicator, desktop-file-utils, appstream, gobject-introspection, wrapGAppsHook
-, hicolor-icon-theme }:
+, json-glib, libsoup, webkitgtk, geocode-glib
+, libappindicator, desktop-file-utils, appstream, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "meteo";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitLab {
     owner = "bitseater";
     repo = pname;
     rev = version;
-    sha256 = "1786s5637hc3dnnkf5vr2ngfiq73dyvx8187gx7qkh7cr8xrl50w";
+    sha256 = "014x3mg2dc58h1qwy2nrz3a5mzdnbzish8zgn3x6lj6szfz5c72n";
   };
 
   nativeBuildInputs = [
@@ -28,7 +27,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     geocode-glib
     gtk3
-    hicolor-icon-theme
     json-glib
     libappindicator
     libsoup

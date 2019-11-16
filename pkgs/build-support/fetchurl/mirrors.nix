@@ -1,4 +1,4 @@
-rec {
+{
 
   # Content-addressable Nix mirrors.
   hashedMirrors = [
@@ -7,6 +7,13 @@ rec {
 
   # Mirrors for mirror://site/filename URIs, where "site" is
   # "sourceforge", "gnu", etc.
+
+  luarocks = [
+    https://luarocks.org
+    https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/
+    http://luafr.org/moonrocks
+    http://luarocks.logiceditor.com/rocks
+  ];
 
   # SourceForge.
   sourceforge = [
@@ -19,8 +26,11 @@ rec {
     https://kent.dl.sourceforge.net/sourceforge/
   ];
 
-  # SourceForge.jp.
-  sourceforgejp = [
+  # OSDN (formerly SourceForge.jp).
+  osdn = [
+    https://osdn.dl.osdn.jp/
+    https://osdn.mirror.constant.com/
+    https://mirrors.gigenet.com/OSDN/
     https://osdn.dl.sourceforge.jp/
     https://jaist.dl.sourceforge.jp/
   ];
@@ -166,6 +176,20 @@ rec {
     http://backpan.perl.org/  # for old releases
   ];
 
+  # CentOS.
+  centos = [
+    http://mirror.centos.org/centos/
+    # For old releases
+    http://vault.centos.org/
+    https://archive.kernel.org/centos-vault/
+    http://ftp.jaist.ac.jp/pub/Linux/CentOS-vault/
+    http://mirrors.aliyun.com/centos-vault/
+    https://mirror.chpc.utah.edu/pub/vault.centos.org/
+    https://mirror.its.sfu.ca/mirror/CentOS-vault/
+    https://mirror.math.princeton.edu/pub/centos-vault/
+    https://mirrors.tripadvisor.com/centos-vault/
+  ];
+
   # Debian.
   debian = [
     http://httpredir.debian.org/debian/
@@ -265,13 +289,14 @@ rec {
 
   # Apache mirrors (see http://www.apache.org/mirrors/).
   apache = [
+    https://www-eu.apache.org/dist/
+    https://www-us.apache.org/dist/
     http://www.eu.apache.org/dist/
-    http://wwwftp.ciril.fr/pub/apache/
     ftp://ftp.fu-berlin.de/unix/www/apache/
     http://ftp.tudelft.nl/apache/
     http://mirror.cc.columbia.edu/pub/software/apache/
-    http://www.apache.org/dist/
-    http://archive.apache.org/dist/ # fallback for old releases
+    https://www.apache.org/dist/
+    https://archive.apache.org/dist/ # fallback for old releases
     ftp://ftp.funet.fi/pub/mirrors/apache.org/
     http://apache.cs.uu.nl/
     http://apache.cs.utah.edu/
@@ -381,7 +406,7 @@ rec {
   # Steam Runtime mirrors
   steamrt = [
     http://repo.steampowered.com/steamrt/
-    https://abbradar.net/steamrt/
+    https://public.abbradar.moe/steamrt/
   ];
 
   # Python PyPI mirrors
@@ -406,9 +431,10 @@ rec {
 
   # Alsa Project
   alsa = [
-     ftp://ftp.alsa-project.org/pub/
-     http://alsa.cybermirror.org/
-     http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/
-     http://alsa.mirror.fr/
+    https://www.alsa-project.org/files/pub/
+    ftp://ftp.alsa-project.org/pub/
+    http://alsa.cybermirror.org/
+    http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/
+    http://alsa.mirror.fr/
   ];
 }

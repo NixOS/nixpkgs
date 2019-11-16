@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   version = "1.0";
   pname = "flintqs";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";

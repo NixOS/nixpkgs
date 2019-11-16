@@ -1,12 +1,21 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, pkg-config, sqlite, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "proj-5.2.0";
+stdenv.mkDerivation rec {
+  name = "proj";
+  version = "6.1.1";
 
-  src = fetchurl {
-    url = https://download.osgeo.org/proj/proj-5.2.0.tar.gz;
-    sha256 = "0q3ydh2j8qhwlxmnac72pg69rw2znbi5b6k5wama8qmwzycr94gg";
+  src = fetchFromGitHub {
+    owner = "OSGeo";
+    repo = "PROJ";
+    rev = version;
+    sha256 = "0w2v2l22kv0xzq5hwl7n8ki6an8vfsr0lg0cdbkwcl4xv889ysma";
   };
+
+  outputs = [ "out" "dev"];
+
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+
+  buildInputs = [ sqlite ];
 
   doCheck = stdenv.is64bit;
 

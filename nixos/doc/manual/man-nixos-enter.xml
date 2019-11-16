@@ -8,8 +8,8 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-enter</command>
-  </refname><refpurpose>run a command in a NixOS chroot environment</refpurpose>
+  <refname><command>nixos-enter</command></refname>
+  <refpurpose>run a command in a NixOS chroot environment</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
@@ -33,6 +33,12 @@
      <option>-c</option>
     </arg>
      <replaceable>shell-command</replaceable>
+   </arg>
+
+   <arg>
+    <arg choice='plain'>
+     <option>--silent</option>
+    </arg>
    </arg>
     
    <arg>
@@ -97,6 +103,16 @@
     <listitem>
      <para>
       The bash command to execute.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--silent</option>
+    </term>
+    <listitem>
+     <para>
+       Suppresses all output from the activation script of the target system.
      </para>
     </listitem>
    </varlistentry>

@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, buildEnv, callPackage
+{ stdenvNoCC, lib, buildEnv
 , df-games, themes, latestVersion, versionToName
 , dfVersion ? latestVersion
   # This package should, at any given time, provide an opinionated "optimal"

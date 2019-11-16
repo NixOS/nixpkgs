@@ -1,24 +1,24 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, glibc
-, bison2, curl, flex, gperftools, jansson, jemalloc, kerberos, lua, mariadb
+, bison2, curl, flex, gperftools, jansson, jemalloc, kerberos, lua, libmysqlclient
 , ncurses, openssl, pcre, pcre2, perl, rabbitmq-c, sqlite, tcl
 , libaio, libedit, libtool, libui, libuuid, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "maxscale-${version}";
+  pname = "maxscale";
   version = "2.1.17";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "MaxScale";
-    rev = "${name}";
+    rev = "${pname}-${version}";
     sha256 = "161kc6aqqj3z509q4qwvsd86h06hlyzdask4gawn2ij0h3ca58q6";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    bison2 curl flex gperftools jansson jemalloc kerberos lua mariadb.connector-c
+    bison2 curl flex gperftools jansson jemalloc kerberos lua libmysqlclient
     ncurses openssl pcre pcre2 perl rabbitmq-c sqlite tcl
     libaio libedit libtool libui libuuid zlib
   ];
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     find $out/bin -type f -perm -0100 | while read f1; do
       patchelf \
-        --set-rpath "$(patchelf --print-rpath $f1):${mariadb.connector-c}/lib/mariadb:$out/lib/maxscale" \
+        --set-rpath "$(patchelf --print-rpath $f1):${libmysqlclient}/lib/mariadb:$out/lib/maxscale" \
         --set-interpreter "$(cat ${stdenv.cc}/nix-support/dynamic-linker)" $f1 \
         && patchelf --shrink-rpath $f1
     done

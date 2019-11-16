@@ -1,10 +1,10 @@
 {
-  stdenv, makeWrapper, fetchFromGitHub, substituteAll,
-  imagemagick, i3lock-color, xdpyinfo, xrandr, bc, feh
+  stdenv, makeWrapper, fetchFromGitHub,
+  imagemagick, i3lock-color, xdpyinfo, xrandr, bc, feh, procps, xrdb
 }:
 
 stdenv.mkDerivation rec {
-  name = "betterlockscreen-${version}";
+  pname = "betterlockscreen";
   version = "3.0.1";
 
   src = fetchFromGitHub {
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./replace-i3lock.patch ];
 
-  installPhase = 
-    let 
-      PATH = 
+  installPhase =
+    let
+      PATH =
         stdenv.lib.makeBinPath
-        [imagemagick i3lock-color xdpyinfo xrandr bc feh];
+        [imagemagick i3lock-color xdpyinfo xrandr bc feh procps xrdb];
     in ''
       mkdir -p $out/bin
       cp betterlockscreen $out/bin/betterlockscreen

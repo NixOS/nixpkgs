@@ -34,11 +34,11 @@ in
 
     services.dbus.packages = [ pkgs.gnome3.dconf ];
 
-    environment.variables.GIO_EXTRA_MODULES = optional cfg.enable
-      "${pkgs.gnome3.dconf.lib}/lib/gio/modules";
-    # https://github.com/NixOS/nixpkgs/pull/31891
-    #environment.variables.XDG_DATA_DIRS = optional cfg.enable
-    #  "$(echo ${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-*)";
+    # For dconf executable
+    environment.systemPackages = [ pkgs.gnome3.dconf ];
+
+    # Needed for unwrapped applications
+    environment.variables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.gnome3.dconf.lib}/lib/gio/modules" ];
   };
 
 }

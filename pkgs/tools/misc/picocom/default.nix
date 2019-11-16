@@ -5,7 +5,7 @@ assert stdenv.isDarwin -> IOKit != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "picocom-${version}";
+  pname = "picocom";
   version = "3.1";
 
   src = fetchFromGitHub {

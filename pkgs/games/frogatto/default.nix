@@ -1,4 +1,4 @@
-{ lib, buildEnv, stdenv, callPackage, makeWrapper, makeDesktopItem }:
+{ buildEnv, stdenv, callPackage, makeWrapper, makeDesktopItem }:
 
 let
   description = "Action-adventure game, starring a certain quixotic frog";
@@ -15,7 +15,7 @@ let
     categories = "Application;Game;ArcadeGame;";
   };
   version = "unstable-2018-12-18";
-in buildEnv rec {
+in buildEnv {
   name = "frogatto-${version}";
 
   buildInputs = [ makeWrapper ];

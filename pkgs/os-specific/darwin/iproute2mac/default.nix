@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.1";
-  name = "iproute2mac-${version}";
+  pname = "iproute2mac";
 
   src = fetchFromGitHub {
     owner = "brona";

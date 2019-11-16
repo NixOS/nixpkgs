@@ -1,0 +1,63 @@
+diff --git a/swtpm-utils/lib/hmac.c b/swtpm-utils/lib/hmac.c
+index 5545375..f9bedea 100644
+--- a/swtpm-utils/lib/hmac.c
++++ b/swtpm-utils/lib/hmac.c
+@@ -381,15 +381,19 @@ uint32_t TSS_authhmac(unsigned char *digest, unsigned char *key, unsigned int ke
+ /****************************************************************************/
+ uint32_t TSS_rawhmac(unsigned char *digest, const unsigned char *key, unsigned int keylen, ...)
+    {
+-   HMAC_CTX hmac;
++   HMAC_CTX* hmac;
+    unsigned int dlen;
+    unsigned char *data;
+    va_list argp;
+-   
+-#ifdef HAVE_HMAC_CTX_CLEANUP
+-   HMAC_CTX_init(&hmac);
+-#endif
+-   HMAC_Init(&hmac,key,keylen,EVP_sha1());
++
++   hmac = HMAC_CTX_new();
++
++   if (hmac == NULL)
++     {
++     return ERR_MEM_ERR;
++     }
++
++   HMAC_Init_ex(hmac,key,keylen,EVP_sha1(),NULL);
+ 
+    va_start(argp,keylen);
+    for (;;)
+@@ -398,15 +402,11 @@ uint32_t TSS_rawhmac(unsigned char *digest, const unsigned char *key, unsigned i
+       if (dlen == 0) break;
+       data = (unsigned char *)va_arg(argp,unsigned char *);
+       if (data == NULL) return ERR_NULL_ARG;
+-      HMAC_Update(&hmac,data,dlen);
++      HMAC_Update(hmac,data,dlen);
+       }
+-   HMAC_Final(&hmac,digest,&dlen);
++   HMAC_Final(hmac,digest,&dlen);
+ 
+-#ifdef HAVE_HMAC_CTX_CLEANUP
+-   HMAC_CTX_cleanup(&hmac);
+-#else
+-   HMAC_cleanup(&hmac);
+-#endif
++   HMAC_CTX_free(hmac);
+    va_end(argp);
+    return 0;
+    }
+diff --git a/swtpm-utils/lib/keys.c b/swtpm-utils/lib/keys.c
+index 99691b6..6627a1f 100644
+--- a/swtpm-utils/lib/keys.c
++++ b/swtpm-utils/lib/keys.c
+@@ -1249,8 +1249,7 @@ RSA *TSS_convpubkey(pubkeydata *k)
+                 exp);
+    }
+    /* set up the RSA public key structure */
+-   rsa->n = mod;
+-   rsa->e = exp;
++   RSA_set0_key(rsa, mod, exp, NULL);
+    return rsa;
+    }
+ 

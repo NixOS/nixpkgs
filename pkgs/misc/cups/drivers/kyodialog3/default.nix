@@ -15,7 +15,7 @@ let
   debRegion = if region == "EU" then "EU." else "";
 in
 stdenv.mkDerivation rec {
-  name = "cups-kyodialog3-${version}";
+  pname = "cups-kyodialog3";
   version = "8.1601";
 
   dontStrip = true;

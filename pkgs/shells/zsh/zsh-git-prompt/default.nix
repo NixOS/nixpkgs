@@ -25,7 +25,6 @@
 # installed.
 #
 { fetchFromGitHub
-, haskell
 , python
 , git
 , lib

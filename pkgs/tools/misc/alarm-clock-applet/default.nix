@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.3.4";
-  name = "alarm-clock-applet-${version}";
+  pname = "alarm-clock-applet";
 
   src = fetchFromGitHub {
     owner = "joh";

@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, fetchgit, vdr, ffmpeg_2, alsaLib, fetchFromGitHub
+{ stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
-, libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg, ncurses }:
-let
+, libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg, ncurses
+, callPackage
+}: let
   mkPlugin = name: stdenv.mkDerivation {
     name = "vdr-${vdr.version}-${name}";
     inherit (vdr) src;
@@ -10,6 +11,8 @@ let
     installFlags = [ "DESTDIR=$(out)" ];
   };
 in {
+
+  xineliboutput = callPackage ./xineliboutput {};
 
   skincurses = (mkPlugin "skincurses").overrideAttrs(oldAttr: {
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
@@ -198,7 +201,7 @@ in {
 
   };
 
-  text2skin = stdenv.mkDerivation rec {
+  text2skin = stdenv.mkDerivation {
     name = "vdr-text2skin-1.3.4-20170702";
 
     src = fetchgit {

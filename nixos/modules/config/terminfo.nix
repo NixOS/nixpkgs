@@ -8,11 +8,11 @@
       "/share/terminfo"
     ];
 
-    environment.etc."terminfo" = {
+    environment.etc.terminfo = {
       source = "${config.system.path}/share/terminfo";
     };
 
-    environment.profileRelativeEnvVars = {
+    environment.profileRelativeSessionVariables = {
       TERMINFO_DIRS = [ "/share/terminfo" ];
     };
 

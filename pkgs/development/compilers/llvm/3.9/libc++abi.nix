@@ -1,7 +1,8 @@
 { stdenv, cmake, fetch, libcxx, libunwind, llvm, version }:
 
 stdenv.mkDerivation {
-  name = "libc++abi-${version}";
+  pname = "libc++abi";
+  inherit version;
 
   src = fetch "libcxxabi" "1qi9q06zanqm8awzq83810avmvi52air6gr9zfip8mbg5viqn3cj";
 

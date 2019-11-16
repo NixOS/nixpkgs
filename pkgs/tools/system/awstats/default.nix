@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perlPackages, jdk }:
 
 perlPackages.buildPerlPackage rec {
-  name = "awstats-${version}";
+  pname = "awstats";
   version = "7.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/awstats/${name}.tar.gz";
+    url = "mirror://sourceforge/awstats/${pname}-${version}.tar.gz";
     sha256 = "0z3p77jnpjilajs9yv87r8xla2x1gjqlvrhpbgbh5ih73386v3j2";
   };
 

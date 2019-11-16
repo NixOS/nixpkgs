@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "subprocess32";
-  version = "3.5.3";
+  version = "3.5.4";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6bc82992316eef3ccff319b5033809801c0c3372709c5f6985299c88ac7225c3";
+    sha256 = "eb2937c80497978d181efa1b839ec2d9622cf9600a039a79d0e108d1f9aec79d";
   };
 
   buildInputs = [ bash ];
@@ -32,6 +32,6 @@ buildPythonPackage rec {
   meta = {
     homepage = https://pypi.python.org/pypi/subprocess32;
     description = "Backport of the subprocess module from Python 3.2.5 for use on 2.x";
-    maintainers = with lib.maintainers; [ garbas ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

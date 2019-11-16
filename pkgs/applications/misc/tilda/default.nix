@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "tilda-${version}";
+  pname = "tilda";
   version = "1.4.1";
 
   src = fetchzip {
-    url = "https://github.com/lanoxx/tilda/archive/${name}.tar.gz";
+    url = "https://github.com/lanoxx/tilda/archive/${pname}-${version}.tar.gz";
     sha256 = "154rsldqjv2m1bddisb930qicb0y35kx7bxq392n2hn68jr2pxkj";
   };
 

@@ -407,6 +407,29 @@ addEntry("NixOS - Default", $defaultConfig);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
+# Find all the children of the current default configuration
+# Do not search for grand children
+my @links = sort (glob "$defaultConfig/fine-tune/*");
+foreach my $link (@links) {
+
+    my $entryName = "";
+
+    my $cfgName = readFile("$link/configuration-name");
+
+    my $date = strftime("%F", localtime(lstat($link)->mtime));
+    my $version =
+        -e "$link/nixos-version"
+        ? readFile("$link/nixos-version")
+        : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+
+    if ($cfgName) {
+        $entryName = $cfgName;
+    } else {
+        $entryName = "($date - $version)";
+    }
+    addEntry("NixOS - $entryName", $link);
+}
+
 my $grubBootPath = $grubBoot->path;
 # extraEntries could refer to @bootRoot@, which we have to substitute
 $conf =~ s/\@bootRoot\@/$grubBootPath/g;

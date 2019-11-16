@@ -10,7 +10,8 @@ let
 
 in stdenv.mkDerivation {
 
-  name = "opentx-${version}";
+  pname = "opentx";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "opentx";
@@ -57,6 +58,7 @@ in stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ elitak ];
+    broken = true;
   };
 
 }

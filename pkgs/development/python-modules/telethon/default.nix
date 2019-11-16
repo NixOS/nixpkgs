@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "telethon";
-  version = "1.6.2";
+  version = "1.10.8";
 
   src = fetchPypi {
     inherit version;
     pname = "Telethon";
-    sha256 = "074h5gj0c330rb1nxzpqm31fp1vw7calh1cdkapbjx90j769iz18";
+    sha256 = "1v0zq6kdvcff6pygi8syylqndamz884gaby4v16p5brg5rz6k25g";
   };
 
   propagatedBuildInputs = [

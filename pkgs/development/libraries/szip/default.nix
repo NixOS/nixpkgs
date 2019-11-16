@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
     
 stdenv.mkDerivation rec {
-  name = "szip-${version}";
+  pname = "szip";
   version = "2.1.1";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/lib-external/szip/${version}/src/szip-${version}.tar.gz";

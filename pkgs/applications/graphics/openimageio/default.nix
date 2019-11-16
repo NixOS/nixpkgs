@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_PYTHON=OFF"
-    # GNUInstallDirs
-    "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin"
   ];
 
   makeFlags = [
@@ -41,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.unix;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

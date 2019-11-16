@@ -22,9 +22,13 @@ in {
   };
 
   testScript = ''
+    my $config;
+
     $machine->waitForUnit("syncthing-init.service");
-    $machine->succeed("cat /var/lib/syncthing/config.xml") =~ /${testId}/ or die;
-    $machine->succeed("cat /var/lib/syncthing/config.xml") =~ /testFolder/ or die;
+    $config = $machine->succeed("cat /var/lib/syncthing/.config/syncthing/config.xml");
+   
+    $config =~ /${testId}/ or die;
+    $config =~ /testFolder/ or die;
   '';
 })
 

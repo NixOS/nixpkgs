@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "7";
-  name = "libuecc-${version}";
+  pname = "libuecc";
 
   src = fetchgit {
     url = "git://git.universe-factory.net/libuecc";

@@ -1,4 +1,4 @@
-{ lib, fetchurl }:
+{ fetchurl }:
 
 let
   version = "2.04";

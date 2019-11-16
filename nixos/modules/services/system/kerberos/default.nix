@@ -1,4 +1,4 @@
-{pkgs, config, lib, ...}:
+{config, lib, ...}:
 
 let
   inherit (lib) mkOption mkIf types length attrNames;

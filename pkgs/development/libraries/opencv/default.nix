@@ -10,7 +10,7 @@
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
-, cf-private, Cocoa, QTKit
+, Cocoa, QTKit
 }:
 
 let
@@ -19,7 +19,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "opencv-${version}";
+  pname = "opencv";
   version = "2.4.13";
 
   src = fetchFromGitHub {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
-    ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit cf-private /* For NSDefaultRunLoopMode */ ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
     ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
     homepage = https://opencv.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 }

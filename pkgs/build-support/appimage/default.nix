@@ -1,4 +1,4 @@
-{ pkgs, stdenv, libarchive, patchelf, zlib, buildFHSUserEnv, writeScript }:
+{ stdenv, libarchive, patchelf, zlib, buildFHSUserEnv, writeScript }:
 
 rec {
   # Both extraction functions could be unified, but then
@@ -97,7 +97,7 @@ rec {
       gtk2
       bzip2
       zlib
-      gdk_pixbuf
+      gdk-pixbuf
 
       xorg.libXinerama
       xorg.libXdamage
@@ -133,6 +133,11 @@ rec {
       xorg.libXt
       xorg.libXmu
       xorg.libxcb
+      xorg.xcbutil
+      xorg.xcbutilwm
+      xorg.xcbutilimage
+      xorg.xcbutilkeysyms
+      xorg.xcbutilrenderutil
       libGLU
       libuuid
       libogg
@@ -144,7 +149,7 @@ rec {
       libidn
       tbb
       wayland
-      mesa_noglu
+      mesa
       libxkbcommon
 
       flac
@@ -180,10 +185,12 @@ rec {
       keyutils.lib
       libjack2
       fribidi
+      p11_kit
 
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
+      at-spi2-core
     ];
   };
 }

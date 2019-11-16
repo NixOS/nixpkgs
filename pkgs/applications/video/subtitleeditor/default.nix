@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, intltool, file,
-  desktop-file-utils, enchant, gnome3, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
+  desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
   libsigcxx, libxmlxx, xdg_utils, isocodes, wrapGAppsHook
 }:
 
@@ -7,8 +7,9 @@ let
   version = "0.54.0";
 in
 
-stdenv.mkDerivation rec {
-  name = "subtitleeditor-${version}";
+stdenv.mkDerivation {
+  pname = "subtitleeditor";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "kitone";
@@ -48,9 +49,9 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-debug" ];
 
   meta = {
-    description = "GTK+3 application to edit video subtitles";
+    description = "GTK 3 application to edit video subtitles";
     longDescription = ''
-      Subtitle Editor is a GTK+3 tool to edit subtitles for GNU/Linux/*BSD. It
+      Subtitle Editor is a GTK 3 tool to edit subtitles for GNU/Linux/*BSD. It
       can be used for new subtitles or as a tool to transform, edit, correct
       and refine existing subtitle. This program also shows sound waves, which
       makes it easier to synchronise subtitles to voices.

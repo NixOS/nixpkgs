@@ -71,18 +71,18 @@ let
 
   d2u = stdenv.lib.replaceChars ["."] ["_"];
 
-in rec {
+in {
 
   application = mkSweetHome3D rec {
-    version = "6.1.2";
+    version = "6.2";
     module = "SweetHome3D";
     name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
     src = fetchsvn {
       url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
-      sha256 = "14svi112kml175dblzcdjzhlfwbp1cy6rki49mqb3632hwmif6ya";
-      rev = "6750";
+      sha256 = "0a514a1zmipykvawil46v826ivkw9c00vdkyggyl6m41giay15zf";
+      rev = "6822";
     };
     desktopName = "Sweet Home 3D";
     icons = {

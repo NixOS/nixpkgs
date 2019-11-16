@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A stub code generator and COM binding for Objective Caml";
-    homepage = "${webpage}";
+    homepage = webpage;
     license = "LGPL";
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };

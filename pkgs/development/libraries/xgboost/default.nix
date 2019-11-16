@@ -7,7 +7,7 @@
 assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
-  name = "xgboost-${version}";
+  pname = "xgboost";
   version = "0.90";
 
   # needs submodules
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
                ++ lib.optional ncclSupport "-DUSE_NCCL=ON";
 
   installPhase = let
-    libname = if stdenv.isDarwin then "libxgboost.dylib" else "libxgboost.so";
+    libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
   in ''
     mkdir -p $out
     cp -r ../include $out

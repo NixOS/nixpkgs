@@ -67,6 +67,7 @@ in
     users.users = optional (cfg.user == "memcached") {
       name = "memcached";
       description = "Memcached server user";
+      isSystemUser = true;
     };
 
     environment.systemPackages = [ memcached ];
@@ -86,7 +87,24 @@ in
         in "${memcached}/bin/memcached ${networking} -m ${toString cfg.maxMemory} -c ${toString cfg.maxConnections} ${concatStringsSep " " cfg.extraOptions}";
 
         User = cfg.user;
+
+        # Filesystem access
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
         RuntimeDirectory = "memcached";
+        # Caps
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        # Misc.
+        LockPersonality = true;
+        RestrictRealtime = true;
+        PrivateMounts = true;
+        MemoryDenyWriteExecute = true;
       };
     };
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages }:
 
 stdenv.mkDerivation rec {
-  name = "neap-${version}";
+  pname = "neap";
   version = "0.7.2";
 
   src = fetchFromGitHub {

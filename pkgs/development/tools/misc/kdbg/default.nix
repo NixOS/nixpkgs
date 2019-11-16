@@ -3,10 +3,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "kdbg-${version}";
+  pname = "kdbg";
   version = "3.0.0";
   src = fetchurl {
-    url = "mirror://sourceforge/kdbg/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/kdbg/${version}/${pname}-${version}.tar.gz";
     sha256 = "0lxfal6jijdcrf0hc81gmapfmz0kq4569d5qzfm4p72rq9s4r5in";
   };
 

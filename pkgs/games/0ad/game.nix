@@ -9,7 +9,7 @@
 assert withEditor -> wxGTK != null;
 
 stdenv.mkDerivation rec {
-  name = "0ad-${version}";
+  pname = "0ad";
   version = "0.0.23b";
 
   src = fetchurl {

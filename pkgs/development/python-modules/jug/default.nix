@@ -1,11 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
 , nose, numpy
 , bottle, pyyaml, redis, six
 , zlib }:
 
 buildPythonPackage rec {
   pname = "Jug";
-  version = "1.6.7";
+  version = "1.6.9";
   buildInputs = [ nose numpy ];
   propagatedBuildInputs = [
     bottle
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7faba838f3437163ae8459bff96e2c6ca1298312bdb9104c702685178d17269";
+    sha256 = "0193hp8ap6caw57jdch3vw0hl5m8942lxhjdsfaxk4bfb239l5kz";
   };
 
   meta = with stdenv.lib; {

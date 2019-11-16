@@ -1,16 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, udev, glib, gobject-introspection, gnome3 }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, udev
+, glib
+, gobject-introspection
+, gnome3
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "libgudev";
-in stdenv.mkDerivation rec {
-  name = "libgudev-${version}";
-  version = "232";
+  version = "233";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "ee4cb2b9c573cdf354f6ed744f01b111d4b5bed3503ffa956cefff50489c7860";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "00xvva04lgqamhnf277lg32phjn971wgpc9cxvgf5x13xdq4jz2q";
   };
 
   nativeBuildInputs = [ pkgconfig gobject-introspection ];

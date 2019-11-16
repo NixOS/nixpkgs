@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, zlib, openssl, pcsclite }:
+{ stdenv, fetchurl, pkgconfig, zlib, openssl_1_0_2, pcsclite }:
 
 stdenv.mkDerivation rec {
-  name = "globalplatform-${version}";
+  pname = "globalplatform";
   version  = "6.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/globalplatform/${name}.tar.gz";
+    url = "mirror://sourceforge/globalplatform/${pname}-${version}.tar.gz";
     sha256 = "191s9005xbc7i90bzjk4rlw15licd6m0rls9fxli8jyymz2021zy";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib openssl pcsclite ];
+  buildInputs = [ zlib openssl_1_0_2 pcsclite ];
 
   meta = with stdenv.lib; {
     homepage = https://sourceforge.net/p/globalplatform/wiki/Home/;

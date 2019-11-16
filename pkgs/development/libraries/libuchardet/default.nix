@@ -15,9 +15,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
-    # TODO: move the following to CMake setup hook
-    "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin"
-    "-DCMAKE_INSTALL_MANDIR=${placeholder "man"}/share/man"
   ];
 
   doCheck = true;

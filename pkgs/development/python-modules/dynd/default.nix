@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
 , isPyPy
 , isPy3k
 , cython
@@ -26,6 +25,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "ver = check_output(['git', 'describe', '--dirty'," "ver = '${version}'"
     substituteInPlace setup.py --replace "'--always', '--match', 'v*']).decode('ascii').strip('\n')" ""
   '';
+
+  dontUseCmakeConfigure = true;
 
   # Python 3 works but has a broken import test that I couldn't
   # figure out.

@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     (fetchpatch { url = http://sources.debian.net/data/main/p/ptlib/2.10.11~dfsg-2.1/debian/patches/no-sslv3;
       sha256 = "172s1dnnrl54p9sf1nl7s475sm78rpw3p8jxi0pdx6izzl8hcdr0";
     })
+    (fetchpatch {
+      name = "openssl-1.1.patch";
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/openssl-1.1.0.patch?h=packages/ptlib&id=1dfa9f55e7e030d261228fca27dda82979ca7f30";
+      sha256 = "11hdgyyibycg0wf5ls0wk9hksa4jd434i86xqiccbyg17n4l6lc1";
+    })
     ./ptlib-2.10.11-glibc-2.26.patch
   ];
 

@@ -48,7 +48,7 @@ else buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = http://graphite.wikidot.com/;
     description = "Enterprise scalable realtime graphing";
-    maintainers = with maintainers; [ rickynils offline basvandijk ];
+    maintainers = with maintainers; [ offline basvandijk ];
     license = licenses.asl20;
   };
 }

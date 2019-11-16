@@ -1,14 +1,14 @@
 { stdenv, buildPythonPackage, fetchPypi
-, django_environ, mock, django, six
+, django_environ, mock, django
 , pytest, pytestrunner, pytest-django
 }:
 buildPythonPackage rec {
   pname = "django-guardian";
-  version = "1.5.1";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fixr2g5amdgqzh0rvfvd7hbxyfd5ra3y3s0fsmp8i1b68p97930";
+    sha256 = "8cf4efd67a863eb32beafd4335a38ffb083630f8ab2045212d27f8f9c3abe5a6";
   };
 
   checkInputs = [ pytest pytestrunner pytest-django django_environ mock ];

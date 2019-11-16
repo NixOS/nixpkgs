@@ -2,7 +2,7 @@
 , libusb1, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "dmrconfig-${version}";
+  pname = "dmrconfig";
   version = "1.1";
 
   src = fetchFromGitHub {

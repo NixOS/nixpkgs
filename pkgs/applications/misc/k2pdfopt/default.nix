@@ -1,5 +1,5 @@
 { stdenv, fetchzip, fetchurl, fetchpatch, cmake, pkgconfig
-, zlib, libpng, openjpeg
+, zlib, libpng
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
 , enableMuPDF ? true, mupdf
@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "k2pdfopt-${version}";
+  pname = "k2pdfopt";
   version = "2.51a";
 
   src = (fetchzip {
@@ -30,73 +30,25 @@ stdenv.mkDerivation rec {
     cp -r ${v251a_src}/* $sourceRoot
   '';
 
-  patches = [ ./k2pdfopt.patch ];
+  patches = [ ./k2pdfopt.patch ./k2pdfopt-mupdf-1.16.1.patch ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs =
   let
+    #  The patches below were constructed by taking the files from k2pdfopt in
+    #  the {mupdf,leptonica,tesseract}_mod/ directories, replacing the
+    #  corresponding files in the respective source trees, resolving any errors
+    #  with more recent versions of these depencencies, and running diff.
     mupdf_modded = mupdf.overrideAttrs (attrs: {
-      # Excluded the pdf-*.c files, since they mostly just broke the #includes
-      prePatch = ''
-        cp ${src}/mupdf_mod/{font,stext-device,string}.c source/fitz/
-        cp ${src}/mupdf_mod/font-win32.c source/pdf/
-      '';
+      patches = attrs.patches ++ [ ./mupdf.patch ]; # Last verified with mupdf 1.16.1
     });
-
     leptonica_modded = leptonica.overrideAttrs (attrs: {
-      name = "leptonica-1.74.4";
-      # Modified source files apply to this particular version of leptonica
-      version = "1.74.4";
-
-      src = fetchurl {
-        url = "http://www.leptonica.org/source/leptonica-1.74.4.tar.gz";
-        sha256 = "0fw39amgyv8v6nc7x8a4c7i37dm04i6c5zn62d24bgqnlhk59hr9";
-      };
-
-      prePatch = ''
-        cp ${src}/leptonica_mod/{allheaders.h,dewarp2.c,leptwin.c} src/
-      '';
-      patches = [
-        # stripped down copy of upstream commit b88c821f8d347bce0aea86d606c710303919f3d2
-        ./leptonica-CVE-2018-3836.patch
-        (fetchpatch {
-          # CVE-2018-7186
-          url = "https://github.com/DanBloomberg/leptonica/commit/"
-              + "ee301cb2029db8a6289c5295daa42bba7715e99a.patch";
-          sha256 = "0cgb7mvz2px1rg5i80wk1wxxjvzjga617d8q6j7qygkp7jm6495d";
-        })
-        (fetchpatch {
-          # CVE-2018-7247
-          url = "https://github.com/DanBloomberg/leptonica/commit/"
-              + "c1079bb8e77cdd426759e466729917ca37a3ed9f.patch";
-          sha256 = "1z4iac5gwqggh7aa8cvyp6nl9fwd1v7wif26caxc9y5qr3jj34qf";
-        })
-        (fetchpatch {
-          # CVE-2018-7440
-          url = "https://github.com/DanBloomberg/leptonica/commit/"
-              + "49ecb6c2dfd6ed5078c62f4a8eeff03e3beced3b.patch";
-          sha256 = "1hjmva98iaw9xj7prg7aimykyayikcwnk4hk0380007hqb35lqmy";
-        })
-      ];
+      patches = [ ./leptonica.patch ]; # Last verified with leptonica 1.78.0
     });
     tesseract_modded = tesseract4.override {
       tesseractBase = tesseract4.tesseractBase.overrideAttrs (_: {
-        prePatch = ''
-          cp ${src}/tesseract_mod/baseapi.{h,cpp} src/api/
-          cp ${src}/tesseract_mod/ccutil.{h,cpp} src/ccutil/
-          cp ${src}/tesseract_mod/genericvector.h src/ccutil/
-          cp ${src}/tesseract_mod/input.cpp src/lstm/
-          cp ${src}/tesseract_mod/lstmrecognizer.cpp src/lstm/
-          cp ${src}/tesseract_mod/mainblk.cpp src/ccutil/
-          cp ${src}/tesseract_mod/params.cpp src/ccutil/
-          cp ${src}/tesseract_mod/serialis.{h,cpp} src/ccutil/
-          cp ${src}/tesseract_mod/tesscapi.cpp src/api/
-          cp ${src}/tesseract_mod/tessdatamanager.cpp src/ccstruct/
-          cp ${src}/tesseract_mod/tessedit.cpp src/ccmain/
-          cp ${src}/include_mod/{tesseract.h,leptonica.h} src/api/
-        '';
-        patches = [ ./tesseract.patch ];
+        patches = [ ./tesseract.patch ]; # Last verified with tesseract 1.4
       });
     };
   in

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "mnemonic";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02a7306a792370f4a0c106c2cf1ce5a0c84b9dbd7e71c6792fdb9ad88a727f1d";
+    sha256 = "4e37eb02b2cbd56a0079cabe58a6da93e60e3e4d6e757a586d9f23d96abea931";
   };
 
   propagatedBuildInputs = [ pbkdf2 ];

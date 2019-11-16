@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, python, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "pflask-${version}";
+  pname = "pflask";
   version = "git-2015-12-17";
   rev = "599418bb6453eaa0ccab493f9411f13726c1a636";
 

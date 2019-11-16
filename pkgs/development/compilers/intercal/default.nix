@@ -6,12 +6,12 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "intercal-${version}";
-  version = "0.30";
+  pname = "intercal";
+  version = "0.31";
 
   src = fetchurl {
-    url = "http://catb.org/esr/intercal/${name}.tar.gz";
-    sha256 = "058ppvvgz9r5603ia9jkknbrciypgg4hjbczrv9v1d9w3ak652xk";
+    url = "http://catb.org/esr/intercal/${pname}-${version}.tar.gz";
+    sha256 = "1z2gpa5rbqb7jscqlf258k0b0jc7d2zkyipb5csjpj6d3sw45n4k";
   };
 
   buildInputs =

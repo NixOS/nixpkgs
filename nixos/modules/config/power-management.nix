@@ -78,7 +78,7 @@ in
     };
 
     # Service executed before suspending/hibernating.
-    systemd.services."pre-sleep" =
+    systemd.services.pre-sleep =
       { description = "Pre-Sleep Actions";
         wantedBy = [ "sleep.target" ];
         before = [ "sleep.target" ];
@@ -89,7 +89,7 @@ in
         serviceConfig.Type = "oneshot";
       };
 
-    systemd.services."post-resume" =
+    systemd.services.post-resume =
       { description = "Post-Resume Actions";
         after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
         script =

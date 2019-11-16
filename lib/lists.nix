@@ -21,6 +21,19 @@ rec {
   */
   singleton = x: [x];
 
+  /*  Apply the function to each element in the list. Same as `map`, but arguments
+      flipped.
+
+      Type: forEach :: [a] -> (a -> b) -> [b]
+
+      Example:
+        forEach [ 1 2 ] (x:
+          toString x
+        )
+        => [ "1" "2" ]
+  */
+  forEach = xs: f: map f xs;
+
   /* “right fold” a binary function `op` between successive elements of
      `list` with `nul' as the starting value, i.e.,
      `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))`.
@@ -75,7 +88,7 @@ rec {
   /* Strict version of `foldl`.
 
      The difference is that evaluation is forced upon access. Usually used
-     with small whole results (in contract with lazily-generated list or large
+     with small whole results (in contrast with lazily-generated list or large
      lists where only a part is consumed.)
 
      Type: foldl' :: (b -> a -> b) -> b -> [a] -> b
@@ -446,11 +459,11 @@ rec {
       if length list < 2
       then # finish
            { result =  list; }
-      else if dfsthis ? "cycle"
+      else if dfsthis ? cycle
            then # there's a cycle, starting from the current vertex, return it
                 { cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
                   inherit (dfsthis) loops; }
-           else if toporest ? "cycle"
+           else if toporest ? cycle
                 then # there's a cycle somewhere else in the graph, return it
                      toporest
                 # Slow, but short. Can be made a bit faster with an explicit stack.

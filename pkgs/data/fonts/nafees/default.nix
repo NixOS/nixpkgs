@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nafees";
 
   srcs = [(fetchurl {

@@ -28,7 +28,7 @@ let
     "-datadir=${cfg.dataDir}"
     "-pid=${pidFile}"
   ];
-  hexStr = types.strMatching "[0-9a-f]+";
+
   rpcUserOpts = { name, ... }: {
     options = {
       name = mkOption {
@@ -59,8 +59,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.altcoins.bitcoind;
-        defaultText = "pkgs.altcoins.bitcoind";
+        default = pkgs.bitcoind;
+        defaultText = "pkgs.bitcoind";
         description = "The package providing bitcoin binaries.";
       };
       configFile = mkOption {
@@ -187,6 +187,7 @@ in {
       group = cfg.group;
       description = "Bitcoin daemon user";
       home = cfg.dataDir;
+      isSystemUser = true;
     };
     users.groups.${cfg.group} = {
       name = cfg.group;

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, bash, perl }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libfaketime-${version}";
-  version = "0.9.7";
+  pname = "libfaketime";
+  version = "0.9.8";
 
   src = fetchurl {
     url = "https://github.com/wolfcw/libfaketime/archive/v${version}.tar.gz";
-    sha256 = "07l189881q0hybzmlpjyp7r5fwz23iafkm957bwy4gnmn9lg6rad";
+    sha256 = "18s2hjm4sbrlg6sby944z87yslnq9s85p7j892hyr42qrlvq4a06";
   };
 
   patches = [
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   PREFIX = placeholder "out";
   LIBDIRNAME = "/lib";
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type -Wno-error=format-truncation";
 
   checkInputs = [ perl ];
 

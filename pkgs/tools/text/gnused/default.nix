@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "gnused-${version}";
+  pname = "gnused";
   version = "4.7";
 
   src = fetchurl {

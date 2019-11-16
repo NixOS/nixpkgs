@@ -10,12 +10,13 @@
 let
   isFuse3 = stdenv.lib.hasPrefix "3" version;
 in stdenv.mkDerivation rec {
-  name = "fuse-${version}";
+  pname = "fuse";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "libfuse";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = sha256Hash;
   };
 
@@ -28,7 +29,9 @@ in stdenv.mkDerivation rec {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
         sha256 = "1w4j6f1awjrycycpvmlv0x5v9gprllh4dnbjxl4dyl2jgbkaw6pa";
       })
-    ++ stdenv.lib.optional isFuse3 ./fuse3-install.patch;
+    ++ (if isFuse3
+      then [ ./fuse3-install.patch ./fuse3-Do-not-set-FUSERMOUNT_DIR.patch ]
+      else [ ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch ]);
 
   nativeBuildInputs = if isFuse3
     then [ meson ninja pkgconfig ]
@@ -36,7 +39,10 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
 
-  mesonFlags = stdenv.lib.optional isFuse3 "-Dudevrulesdir=etc/udev/rules.d";
+  mesonFlags = stdenv.lib.optionals isFuse3 [
+    "-Dudevrulesdir=/udev/rules.d"
+    "-Duseroot=false"
+  ];
 
   preConfigure = ''
     export MOUNT_FUSE_PATH=$out/sbin

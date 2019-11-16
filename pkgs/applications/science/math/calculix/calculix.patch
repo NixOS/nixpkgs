@@ -1,0 +1,31 @@
+diff --git a/ccx_2.15/src/Makefile b/ccx_2.15/src/Makefile
+index 9cab2fc..6e977b8 100755
+--- a/ccx_2.15/src/Makefile
++++ b/ccx_2.15/src/Makefile
+@@ -1,6 +1,6 @@
+ 
+ CFLAGS = -Wall -O3  -I ../../../SPOOLES.2.2 -DARCH="Linux" -DSPOOLES -DARPACK -DMATRIXSTORAGE -DNETWORKOUT
+-FFLAGS = -Wall -O3 
++FFLAGS = -Wall -O3
+ 
+ CC=cc
+ FC=gfortran
+@@ -18,15 +18,10 @@ OCCXF = $(SCCXF:.f=.o)
+ OCCXC = $(SCCXC:.c=.o)
+ OCCXMAIN = $(SCCXMAIN:.c=.o)
+ 
+-DIR=../../../SPOOLES.2.2
++LIBS = -lpthread -lm -lc -lspooles -larpack -lopenblas
+ 
+-LIBS = \
+-       $(DIR)/spooles.a \
+-	../../../ARPACK/libarpack_INTEL.a \
+-       -lpthread -lm -lc
+-
+-ccx_2.15: $(OCCXMAIN) ccx_2.15.a  $(LIBS)
+-	./date.pl; $(CC) $(CFLAGS) -c ccx_2.15.c; $(FC)  -Wall -O3 -o $@ $(OCCXMAIN) ccx_2.15.a $(LIBS)
++ccx_2.15: $(OCCXMAIN) ccx_2.15.a
++	$(CC) $(CFLAGS) -c ccx_2.15.c; $(FC)  -Wall -O3 -o $@ $(OCCXMAIN) ccx_2.15.a $(LIBS)
+ 
+ ccx_2.15.a: $(OCCXF) $(OCCXC)
+ 	ar vr $@ $?

@@ -3,7 +3,7 @@
 # add_executable(main src/main.cpp ${EASYLOGGINGPP_PREFIX}/include/easylogging++.cc)
 { stdenv, fetchFromGitHub, cmake, gtest }:
 stdenv.mkDerivation rec {
-  name = "easyloggingpp-${version}";
+  pname = "easyloggingpp";
   version = "9.96.7";
   src = fetchFromGitHub {
     owner = "muflihun";

@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "firehol-${version}";
+  pname = "firehol";
   version = "3.1.6";
 
   src = fetchFromGitHub {

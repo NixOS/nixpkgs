@@ -1,8 +1,8 @@
-{ stdenv, lib, gtest, fetchFromGitHub, cmake, boost, eigen, python, vtk, zlib }:
+{ stdenv, gtest, fetchFromGitHub, cmake, boost, eigen, python, vtk, zlib }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
-  name = "mirtk-${version}";
+  pname = "mirtk";
 
   src = fetchFromGitHub {
     owner = "BioMedIA";

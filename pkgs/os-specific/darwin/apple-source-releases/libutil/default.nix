@@ -1,4 +1,4 @@
-{ stdenv, lib, appleDerivation, xcbuildHook
+{ lib, appleDerivation, xcbuildHook
 
 # headersOnly is true when building for libSystem
 , headersOnly ? false }:

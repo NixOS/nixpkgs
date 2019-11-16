@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "6.4.2";
-  name = "Clipper-${version}";
+  pname = "Clipper";
   src = fetchurl {
     url = "mirror://sourceforge/polyclipping/clipper_ver${version}.zip";
     sha256 = "09q6jc5k7p9y5d75qr2na5d1gm0wly5cjnffh127r04l47c20hx1";

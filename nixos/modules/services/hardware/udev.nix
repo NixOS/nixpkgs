@@ -85,7 +85,7 @@ let
       for i in $import_progs $run_progs; do
         if [[ ! -x $i ]]; then
           echo "FAIL"
-          echo "$i is called in udev rules but not installed by udev"
+          echo "$i is called in udev rules but is not executable or does not exist"
           exit 1
         fi
       done
@@ -115,10 +115,6 @@ let
         done
         exit 1
       fi
-
-      ${optionalString config.networking.usePredictableInterfaceNames ''
-        cp ${./80-net-setup-link.rules} $out/80-net-setup-link.rules
-      ''}
 
       # If auto-configuration is disabled, then remove
       # udev's 80-drivers.rules file, which contains rules for
@@ -281,6 +277,8 @@ in
     services.udev.packages = [ extraUdevRules extraHwdbFile ];
 
     services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux udev ];
+
+    boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
     environment.etc =
       [ { source = udevRules;

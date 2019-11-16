@@ -1,30 +1,30 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
-, isPy27
-, mock
-, tox
-, pylint
+, fetchFromGitHub
+, isPy3k
+, geographiclib
 }:
 
 buildPythonPackage rec {
-  pname = "geopy";
-  version = "1.18.1";
-  disabled = !isPy27;
+  pname = "geopy-unstable";
+  version = "2019-11-10";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "07a21f699b3daaef726de7278f5d65f944609306ab8a389e9f56e09abf86eac8";
+  disabled = !isPy3k; # only Python 3
+  doCheck = false; # Needs network access
+
+  propagatedBuildInputs = [ geographiclib ];
+
+  src = fetchFromGitHub {
+    owner = "geopy";
+    repo = "geopy";
+    rev = "531b7de6126838a3e69370227aa7f2086ba52b89";
+    sha256 = "07l1pblzg3hb3dbvd9rq8x78ly5dv0zxbc5hwskqil0bhv5v1p39";
   };
-
-  doCheck = false;  # too much
-
-  buildInputs = [ mock tox pylint ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
     license = licenses.mit;
+    maintainers = with maintainers; [GuillaumeDesforges];
   };
-
 }

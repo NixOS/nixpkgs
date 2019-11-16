@@ -5,7 +5,6 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "nix-prefetch";
   version = "0.1.0";
 

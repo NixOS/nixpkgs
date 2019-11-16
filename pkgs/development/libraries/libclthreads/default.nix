@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libclthreads-${version}";
+  pname = "libclthreads";
   version = "2.4.2";
 
   src = fetchurl {

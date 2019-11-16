@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   version = "0.0.1";
-  name = "hecate-${version}";
+  pname = "hecate";
 
   src = fetchFromGitHub {
     owner  = "evanmiller";

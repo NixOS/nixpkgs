@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenArchiver_2_5 = map (obj: fetchMaven {
     version = "2.5";
     artifactId = "maven-archiver";

@@ -35,4 +35,4 @@ index d87922c0..859a30fb 100644
 -            'did you install compilers and run build.sh in root path?\n'
 -            'List of candidates:\n' + ('\n'.join(dll_path)))
 -    return lib_path
-+    return ["@libpath@/libxgboost.so"]
++    return ["@libpath@/libxgboost@extention@"]

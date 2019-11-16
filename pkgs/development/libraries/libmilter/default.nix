@@ -1,7 +1,7 @@
 { stdenv, fetchurl, m4 }:
 
 stdenv.mkDerivation rec {
-  name = "libmilter-${version}";
+  pname = "libmilter";
   version = "8.15.2";
 
   src = fetchurl {

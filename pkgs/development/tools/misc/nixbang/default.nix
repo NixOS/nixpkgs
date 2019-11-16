@@ -2,7 +2,8 @@
 
 let version = "0.1.2"; in
 pythonPackages.buildPythonApplication {
-  name = "nixbang-${version}";
+  pname = "nixbang";
+  inherit version;
   namePrefix = "";
 
   src = fetchFromGitHub {

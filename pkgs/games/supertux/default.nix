@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "supertux-${version}";
+  pname = "supertux";
   version = "0.6.0";
 
   src = fetchurl {

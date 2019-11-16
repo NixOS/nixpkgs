@@ -2,7 +2,7 @@
 , libXi, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "box2d-${version}";
+  pname = "box2d";
   version = "2.3.1";
 
   src = fetchurl {

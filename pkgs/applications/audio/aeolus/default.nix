@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aeolus-${version}";
+  pname = "aeolus";
   version = "0.9.7";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "0lhbr95hmbfj8ynbcpawn7jzjbpvrkm6k2yda39yhqk1bzg38v2k";
   };
 

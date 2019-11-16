@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "procps-${version}";
+  pname = "procps";
   version = "3.3.15";
 
   # The project's releases are on SF, but git repo on gitlab.

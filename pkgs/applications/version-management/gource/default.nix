@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.49";
-  name = "gource-${version}";
+  pname = "gource";
 
   src = fetchurl {
-    url = "https://github.com/acaudwell/Gource/releases/download/${name}/${name}.tar.gz";
+    url = "https://github.com/acaudwell/Gource/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "12hf5ipcsp9dxsqn84n4kr63xaiskrnf5a084wr29qk171lj7pd9";
   };
 

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbangert";
     repo = "beaker";
-    rev = "${version}";
+    rev = version;
     sha256 = "0xrvg503xmi28w0hllr4s7fkap0p09fgw2wax3p1s2r6b3xjvbz7";
   };
 
@@ -71,6 +71,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Session and Caching library with WSGI Middleware";
-    maintainers = with lib.maintainers; [ garbas domenkozar ];
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

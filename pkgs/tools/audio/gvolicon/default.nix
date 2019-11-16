@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, alsaLib, pkgconfig, fetchgit, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook }:
+{ stdenv, makeWrapper, alsaLib, pkgconfig, fetchgit, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook }:
 
 stdenv.mkDerivation {
   name = "gvolicon-2014-04-28";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    makeWrapper alsaLib gtk3 gdk_pixbuf gnome3.adwaita-icon-theme
+    makeWrapper alsaLib gtk3 gdk-pixbuf gnome3.adwaita-icon-theme
     librsvg wrapGAppsHook
   ];
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python3, libcap, glib
-, libssh, nghttp2, zlib, cmake, extra-cmake-modules, fetchpatch, makeWrapper
+, libssh, nghttp2, zlib, cmake, fetchpatch, makeWrapper
 , withQt ? true, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
 }:
@@ -10,7 +10,7 @@ assert withQt  -> qt5  != null;
 with stdenv.lib;
 
 let
-  version = "3.0.2";
+  version = "3.0.5";
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "0fz5lbyiw4a27fqc4ndi1w20bpcb6wi9k7vjv29l9fhd99kca7ky";
+    sha256 = "087qv7nd7zlbckvcs37fkkg7v0mw0hjd5yfbghqym764fpjgqlf5";
   };
 
   cmakeFlags = [
@@ -29,8 +29,8 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    bison cmake extra-cmake-modules flex pkgconfig
-  ];
+    bison cmake flex pkgconfig
+  ] ++ optional withQt qt5.wrapQtAppsHook;
 
   buildInputs = [
     gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
@@ -70,12 +70,9 @@ in stdenv.mkDerivation {
         done
     done
 
-    wrapProgram $out/Applications/Wireshark.app/Contents/MacOS/Wireshark \
-        --set QT_PLUGIN_PATH ${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}
+    wrapQtApp $out/Applications/Wireshark.app/Contents/MacOS/Wireshark
   '' else optionalString withQt ''
     install -Dm644 -t $out/share/applications ../wireshark.desktop
-    wrapProgram $out/bin/wireshark \
-        --set QT_PLUGIN_PATH ${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}
 
     substituteInPlace $out/share/applications/*.desktop \
         --replace "Exec=wireshark" "Exec=$out/bin/wireshark"

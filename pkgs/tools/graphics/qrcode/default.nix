@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "qrcode-git-${version}";
+stdenv.mkDerivation {
+  pname = "qrcode-git";
   version = "20160804";
 
   src = fetchFromGitHub {

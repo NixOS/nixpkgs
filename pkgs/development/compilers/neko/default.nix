@@ -1,9 +1,9 @@
 { stdenv, fetchurl, boehmgc, zlib, sqlite, pcre, cmake, pkgconfig
-, git, apacheHttpd, apr, aprutil, mysql, mbedtls, openssl, pkgs, gtk2, libpthreadstubs
+, git, apacheHttpd, apr, aprutil, libmysqlclient, mbedtls, openssl, pkgs, gtk2, libpthreadstubs
 }:
 
 stdenv.mkDerivation rec {
-  name = "neko-${version}";
+  pname = "neko";
   version = "2.2.0";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig git ];
   buildInputs =
     [ boehmgc zlib sqlite pcre apacheHttpd apr aprutil
-      mysql.connector-c mbedtls openssl libpthreadstubs ]
+      libmysqlclient mbedtls openssl libpthreadstubs ]
       ++ stdenv.lib.optional stdenv.isLinux gtk2
       ++ stdenv.lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
                                                 pkgs.darwin.apple_sdk.frameworks.Carbon];

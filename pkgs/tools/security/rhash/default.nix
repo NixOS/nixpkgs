@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3.8";
-  name = "rhash-${version}";
+  pname = "rhash";
 
   src = fetchFromGitHub {
     owner = "rhash";

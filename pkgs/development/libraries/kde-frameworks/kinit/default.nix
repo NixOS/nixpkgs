@@ -9,6 +9,7 @@ let inherit (lib) getLib; in
 mkDerivation {
   name = "kinit";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kcrash ki18n kio kservice kwindowsystem
@@ -19,9 +20,6 @@ mkDerivation {
     ''-DNIXPKGS_KF5_PARTS=\"${getLib kparts}/lib/libKF5Parts.so.5\"''
     ''-DNIXPKGS_KF5_PLASMA=\"${getLib plasma-framework}/lib/libKF5Plasma.so.5\"''
   ];
-  postFixup = ''
-    moveToOutput "lib/libexec/kf5/start_kdeinit" "$bin"
-  '';
   setupHook = writeScript "setup-hook.sh" ''
     kinitFixupOutputHook() {
         if [ $prefix != ''${!outputBin} ] && [ -d $prefix/lib ]; then

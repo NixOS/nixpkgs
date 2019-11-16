@@ -2,7 +2,8 @@
 
 buildGoPackage rec {
   name = "saml2aws-${version}";
-  version = "2.10.0";
+  pname = "saml2aws";
+  version = "2.15.0";
 
   goPackagePath = "github.com/versent/saml2aws";
   goDeps = ./deps.nix;
@@ -15,7 +16,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "Versent";
     repo = "saml2aws";
-    sha256 = "00m8x57fgry601w5f9dxnxdqbbqjiv7c0rsx47iv9qsp0w7l50c5";
+    sha256 = "0pn4zdzisgan7vvgi7hp8716wsb2x33gq55c7fw1aa2qwy0bq3gp";
   };
 
   meta = with stdenv.lib; {

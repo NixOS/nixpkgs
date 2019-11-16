@@ -8,7 +8,7 @@
 , expat
 , fetchurl
 , fontconfig
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gtk2
 , gtk3
@@ -51,7 +51,7 @@ let
     dbus
     expat
     fontconfig
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk2
     gtk3

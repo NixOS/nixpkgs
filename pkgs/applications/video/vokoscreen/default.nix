@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, mkDerivation
 , pkgconfig, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsaLib, libv4l, libXrandr
 , ffmpeg
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
 
   pname = "vokoscreen";
   version = "2.5.8-beta";

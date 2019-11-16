@@ -43,7 +43,7 @@ let
 
     ANALYTICS_REPORTING_ENABLED = boolToString cfg.analytics.reporting.enable;
 
-    SMTP_ENABLE = boolToString cfg.smtp.enable;
+    SMTP_ENABLED = boolToString cfg.smtp.enable;
     SMTP_HOST = cfg.smtp.host;
     SMTP_USER = cfg.smtp.user;
     SMTP_PASSWORD = cfg.smtp.password;
@@ -503,12 +503,12 @@ in {
         message = "Cannot set both adminPassword and adminPasswordFile";
       }
       {
-        assertion = cfg.security.secretKeyFile != opt.security.secretKeyFile.default -> cfg.security.secretKeyFile == null;
+        assertion = cfg.security.secretKey != opt.security.secretKey.default -> cfg.security.secretKeyFile == null;
         message = "Cannot set both secretKey and secretKeyFile";
       }
       {
         assertion = cfg.smtp.password != opt.smtp.password.default -> cfg.smtp.passwordFile == null;
-        message = "Cannot set both password and secretKeyFile";
+        message = "Cannot set both password and passwordFile";
       }
     ];
 
@@ -552,6 +552,8 @@ in {
       description = "Grafana user";
       home = cfg.dataDir;
       createHome = true;
+      group = "grafana";
     };
+    users.groups.grafana = {};
   };
 }

@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "synapse-bt";
-  version = "unstable-2019-05-26";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "Luminarys";
     repo = "synapse";
-    rev = "4a6e6c33b4c36eca89d216906d615797ba9a519e";
-    sha256 = "0110y3lkzfhgvmdg6q71jyp5q9jjp2bzdb6cwnkp8c734c2k1gfw";
+    rev = version;
+    sha256 = "01npv3zwia5d534zdwisd9xfng507adv4qkljf8z0zm0khqqn71a";
   };
 
   cargoSha256 = "0m4jigz6la3mf4yq217849ilcncb7d97mqyw2qicff4rbscdgf6h";

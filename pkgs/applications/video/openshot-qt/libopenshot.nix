@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   [ imagemagick ffmpeg swig python3 unittest-cpp
     cppzmq czmqpp qtbase qtmultimedia ];
 
-  LIBOPENSHOT_AUDIO_DIR = "${libopenshot-audio}";
+  LIBOPENSHOT_AUDIO_DIR = libopenshot-audio;
   "UNITTEST++_INCLUDE_DIR" = "${unittest-cpp}/include/UnitTest++";
 
   doCheck = false;

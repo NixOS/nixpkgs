@@ -1,9 +1,10 @@
-{ stdenv, version, fetch, cmake, libcxx, fetchpatch }:
+{ stdenv, version, fetch, cmake, fetchpatch, enableShared ? true }:
 
 stdenv.mkDerivation {
-  name = "libunwind-${version}";
+  pname = "libunwind";
+  inherit version;
 
-  src = fetch "libunwind" "0q7ndlldid9wchnny0a936llwxj7zgb9gxp46wjjxvwwkik3l97z";
+  src = fetch "libunwind" "0vhgcgzsb33l83qaikrkj87ypqb48mi607rccczccwiiv8ficw0q";
 
   nativeBuildInputs = [ cmake ];
 
@@ -19,4 +20,6 @@ stdenv.mkDerivation {
   ];
 
   enableParallelBuilding = true;
+
+  cmakeFlags = stdenv.lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
 }

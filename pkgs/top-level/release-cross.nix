@@ -107,7 +107,6 @@ in
     mapTestEqual = lib.mapAttrsRecursive testEqual;
 
   in mapTestEqual {
-    androidndk = nativePlatforms;
     boehmgc = nativePlatforms;
     libffi = nativePlatforms;
     libiconv = nativePlatforms;
@@ -144,9 +143,8 @@ in
 
   x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
 
-  /* Linux on Aarch64 */
-  android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
-  });
+  android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt linuxCommon;
+  android32 = mapTestOnCross lib.systems.examples.armv7a-android-prebuilt linuxCommon;
 
   wasi32 = mapTestOnCross lib.systems.examples.wasi32 wasiCommon;
 

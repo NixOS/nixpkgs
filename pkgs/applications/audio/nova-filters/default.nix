@@ -1,8 +1,8 @@
 {stdenv, fetchurl, sconsPackages, boost, ladspaH, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.2-2";
-  name = "nova-filters-${version}";
+  pname = "nova-filters";
 
   src = fetchurl {
     url = https://klingt.org/~tim/nova-filters/nova-filters_0.2-2.tar.gz;

@@ -1,23 +1,19 @@
-{ stdenv, rustPlatform, fetchFromGitHub, CoreServices, darwin }:
+{ stdenv, rustPlatform, fetchFromGitHub, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "1.10.2";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "10h9g6r5zkm71zpr33imh49187xx1wcv9sw7bf5dllgnxabd0lql";
+    sha256 = "1iaib7yvxyn3l9kiys9x7wziixj13fmx1z3wgdy6h8c7jv6fpc0j";
   };
 
-  cargoSha256 = "1sqwplvpg0n9j0h9j94m7a6ylgqi4y4wyx489y09z9gm7aqgrsjc";
+  cargoSha256 = "101p0qj7ydfhqfz402mxy4bs48vq3rzgj513f1kwv0ba4hn1sxkv";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
-    CoreServices
-    # This is needed to avoid an undefined symbol error "_CFURLResourceIsReachable"
-    darwin.cf-private
-  ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with stdenv.lib; {
     description = "Executes commands in response to file modifications";

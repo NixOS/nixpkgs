@@ -1,16 +1,27 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, perl }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, perl }:
 
 stdenv.mkDerivation rec {
-  name = "fakechroot-${version}";
-  version = "2.19";
+  pname = "fakechroot";
+  version = "2.20.1";
 
-  # TODO: move back to mainline once https://github.com/dex4er/fakechroot/pull/46 is merged
   src = fetchFromGitHub {
-    owner  = "copumpkin";
-    repo   = "fakechroot";
-    rev    = "dcc0cfe3941e328538f9e62b2c0b15430d393ec1";
-    sha256 = "1ls3y97qqfcfd3z0balz94xq1gskfk04pg85x6b7wjw8dm4030qd";
+    owner  = "dex4er";
+    repo   = pname;
+    rev    = version;
+    sha256 = "0xgnwazrmrg4gm30xjxdn6sx3lhqvxahrh6gmy3yfswxc30pmg86";
   };
+
+  # Use patch from https://github.com/dex4er/fakechroot/pull/46 , remove once merged!
+  # Courtesy of one of our own, @copumpkin!
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/dex4er/fakechroot/pull/46/commits/dcc0cfe3941e328538f9e62b2c0b15430d393ec1.patch";
+      sha256 = "1mk8j2njd94s7vf2wggi08xxxzx8dxrvdricl9cbspvkyp715w2m";
+      # Don't bother trying to reconcile conflicts for NEWS entries, as they will continue to occur
+      # and are uninteresting as well as unimportant for our purposes (since NEWS never leaves the build env).
+      excludes = [ "NEWS.md" ];
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ perl ];

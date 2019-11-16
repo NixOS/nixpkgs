@@ -64,10 +64,6 @@ nodePackages // {
     '';
   };
 
-  npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0".override {
-    postInstall = "npm run-script prepublish";
-  };
-
   pnpm = nodePackages.pnpm.override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -87,7 +83,7 @@ nodePackages // {
     '';
   };
 
-  scuttlebot = nodePackages.scuttlebot.override {
+  ssb-server = nodePackages.ssb-server.override {
     buildInputs = [ pkgs.automake pkgs.autoconf nodePackages.node-gyp-build ];
   };
 
@@ -115,5 +111,9 @@ nodePackages // {
 
       nodePackages.node-pre-gyp
     ];
+  };
+
+  thelounge = nodePackages.thelounge.override {
+    buildInputs = [ nodePackages.node-pre-gyp ];
   };
 }

@@ -1,0 +1,6 @@
+[
+  "nijs"
+, "coffee-script"
+, "grunt-cli"
+, "node2nix"
+]

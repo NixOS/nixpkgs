@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.1.5";
-  name = "nanomsg-${version}";
+  pname = "nanomsg";
 
   src = fetchFromGitHub {
     owner = "nanomsg";

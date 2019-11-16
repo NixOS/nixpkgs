@@ -47,16 +47,3 @@ index a148321..96cafb8 100644
    set(CLANG_LIBRARIES ${CLANG_LIBRARIES} ${CLANG_LIB})
  	unset(CLANG_LIB CACHE)
  endmacro()
-diff --git a/./CMakeLists.txt b/../Beignet-1.1.2-Source_new/CMakeLists.txt
-index 88985d7..01bca9e 100644
---- a/./CMakeLists.txt
-+++ b/../Beignet-1.1.2-Source_new/CMakeLists.txt
-@@ -205,7 +205,7 @@ IF(OCLIcd_FOUND)
-     "intel-beignet.icd.in"
-     "${ICD_FILE_NAME}"
-   )
--  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${ICD_FILE_NAME} DESTINATION /etc/OpenCL/vendors)
-+  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${ICD_FILE_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors)
- ELSE(OCLIcd_FOUND)
-   MESSAGE(STATUS "Looking for OCL ICD header file - not found")
- ENDIF(OCLIcd_FOUND)

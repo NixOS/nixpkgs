@@ -2,7 +2,7 @@
 , gnutls, libite, libconfuse }:
 
 stdenv.mkDerivation rec {
-  name = "inadyn-${version}";
+  pname = "inadyn";
   version = "2.5";
 
   src = fetchFromGitHub {

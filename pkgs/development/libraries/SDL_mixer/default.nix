@@ -3,10 +3,9 @@
 stdenv.mkDerivation rec {
   pname   = "SDL_mixer";
   version = "1.2.12";
-  name    = "${pname}-${version}";
 
   src = fetchurl {
-    url    = "http://www.libsdl.org/projects/${pname}/release/${name}.tar.gz";
+    url    = "http://www.libsdl.org/projects/${pname}/release/${pname}-${version}.tar.gz";
     sha256 = "0alrhqgm40p4c92s26mimg9cm1y7rzr6m0p49687jxd9g6130i0n";
   };
 

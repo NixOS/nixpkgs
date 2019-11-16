@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wrapGAppsHook, gtk2, boost, gnome2, gtkmm2, scons,
+{ stdenv, fetchFromGitHub, wrapGAppsHook, gtk2, boost, gtkmm2, scons,
 mjpegtools, libdvdread, dvdauthor, gettext, dvdplusrwtools, libxmlxx, ffmpeg,
 enca, pkgconfig, fetchpatch }:
 
@@ -8,7 +8,7 @@ fetchpatch {
   url = "https://aur.archlinux.org/cgit/aur.git/plain/${name}?h=e6cc6bc80c672aaa1a2260abfe8823da299a192c";
 }; in
 stdenv.mkDerivation rec {
-  name = "bombono-${version}";
+  pname = "bombono";
   version = "1.2.4";
   src = fetchFromGitHub {
     owner = "muravjov";

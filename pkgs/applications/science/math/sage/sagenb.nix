@@ -1,5 +1,4 @@
 { stdenv
-, fetchpatch
 , python
 , buildPythonPackage
 , fetchFromGitHub
@@ -26,6 +25,11 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "0bxvhr03qh2nsjdfc4pyfiqrn9jhp3vf7irsc9gqx0185jlblbxs";
   };
+
+  patches = [
+    # cmp deprecation in attrs needs to be handled in twisted
+    ./patches/sagenb-cmp-deprecation.patch
+  ];
 
   propagatedBuildInputs = [
     twisted

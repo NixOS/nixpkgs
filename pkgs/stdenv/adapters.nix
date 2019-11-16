@@ -60,8 +60,21 @@ rec {
           "--enable-static"
           "--disable-shared"
         ];
+        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
     };
+
+
+  /* Modify a stdenv so that all buildInputs are implicitly propagated to
+     consuming derivations
+  */
+  propagateBuildInputs = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ (args.buildInputs or []);
+        buildInputs = [];
+      });
+    };
+
 
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.

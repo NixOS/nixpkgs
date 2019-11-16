@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zqh2yq8zk7m9b4xw1ryqmrljkdigfb3hk5155a3b5hkfnn6xxyf";
+    sha256 = "0r8w2v89nj6b9p91p495cga5m72a673l2wc0hp0zqk05j4yrc9b4";
   };
 
   propagatedBuildInputs = [ flask ];

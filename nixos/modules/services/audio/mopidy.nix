@@ -70,25 +70,25 @@ in {
 
   config = mkIf cfg.enable {
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - mopidy mopidy - -"
+    ];
+
     systemd.services.mopidy = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "sound.target" ];
       description = "mopidy music player daemon";
-      preStart = "mkdir -p ${cfg.dataDir} && chown -R mopidy:mopidy  ${cfg.dataDir}";
       serviceConfig = {
         ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)}";
         User = "mopidy";
-        PermissionsStartOnly = true;
       };
     };
 
     systemd.services.mopidy-scan = {
       description = "mopidy local files scanner";
-      preStart = "mkdir -p ${cfg.dataDir} && chown -R mopidy:mopidy  ${cfg.dataDir}";
       serviceConfig = {
         ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)} local scan";
         User = "mopidy";
-        PermissionsStartOnly = true;
         Type = "oneshot";
       };
     };
@@ -98,7 +98,7 @@ in {
       group = "mopidy";
       extraGroups = [ "audio" ];
       description = "Mopidy daemon user";
-      home = "${cfg.dataDir}";
+      home = cfg.dataDir;
     };
 
     users.groups.mopidy.gid = gid;

@@ -30,11 +30,11 @@ with lib;
 
   config = mkIf config.services.gnome3.tracker-miners.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.tracker-miners ];
+    environment.systemPackages = [ pkgs.tracker-miners ];
 
-    services.dbus.packages = [ pkgs.gnome3.tracker-miners ];
+    services.dbus.packages = [ pkgs.tracker-miners ];
 
-    systemd.packages = [ pkgs.gnome3.tracker-miners ];
+    systemd.packages = [ pkgs.tracker-miners ];
 
   };
 

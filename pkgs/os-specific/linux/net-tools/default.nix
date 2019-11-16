@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "net-tools-${version}";
+  pname = "net-tools";
   version = "1.60_p20170221182432";
 
   src = fetchurl {
-    url = "mirror://gentoo/distfiles/${name}.tar.xz";
+    url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
     sha256 = "08r4r2a24g5bm8jwgfa998gs1fld7fgbdf7pilrpsw1m974xn04a";
   };
 

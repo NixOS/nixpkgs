@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg, alsaLib, atk, cairo, cups, dbus, expat, fontconfig
-, freetype, gdk_pixbuf, glib, gnome2, nspr, nss, pango, udev, xorg }:
+, freetype, gdk-pixbuf, glib, gnome2, nspr, nss, pango, udev, xorg }:
 let
   fullPath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -10,7 +10,7 @@ let
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gnome2.gtk
@@ -34,7 +34,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "1.17.82";
-  name = "stride-${version}";
+  pname = "stride";
 
   src = fetchurl {
     url = "https://packages.atlassian.com/stride-apt-client/pool/stride_${version}_amd64.deb";

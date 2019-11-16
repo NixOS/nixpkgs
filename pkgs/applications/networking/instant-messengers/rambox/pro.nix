@@ -2,25 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rambox-pro";
-  version = "1.1.2";
+  version = "1.1.7";
 
   dontBuild = true;
   dontStrip = true;
 
-  buildInputs = [ nss xorg.libxkbfile ];
+  buildInputs = [ nss xorg.libXext xorg.libxkbfile xorg.libXScrnSaver ];
   nativeBuildInputs = [ autoPatchelfHook makeWrapper nodePackages.asar ];
 
   src = fetchurl {
     url = "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.tar.gz";
-    sha256 = "0rrfpl371hp278b02b9b6745ax29yrdfmxrmkxv6d158jzlv0dlr";
+    sha256 = "1d84hlac3qwrbi8khp6r3bm5y25zcz52l6z54k7jmyplay46r5as";
   };
-
-  postPatch = ''
-    substituteInPlace resources/app.asar.unpacked/node_modules/ad-block/vendor/depot_tools/create-chromium-git-src \
-      --replace "/usr/bin/env -S bash -e" "${stdenv.shell}"
-    substituteInPlace resources/app.asar.unpacked/node_modules/ad-block/node_modules/bloom-filter-cpp/vendor/depot_tools/create-chromium-git-src \
-      --replace "/usr/bin/env -S bash -e" "${stdenv.shell}"
-  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/RamboxPro $out/share/applications

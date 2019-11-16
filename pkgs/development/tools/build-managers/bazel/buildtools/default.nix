@@ -1,16 +1,16 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
 
 buildGoPackage rec {
-  name = "bazel-buildtools-${version}";
-  version = "0.22.0";
+  pname = "bazel-buildtools";
+  version = "0.29.0";
+  rev = "5bcc31df55ec1de770cb52887f2e989e7068301f";
 
   goPackagePath = "github.com/bazelbuild/buildtools";
 
-  src = fetchFromGitHub {
-    owner = "bazelbuild";
-    repo = "buildtools";
-    rev = "55b64c3d2ddfb57f06477c1d94ef477419c96bd6";
-    sha256 = "0n6q8pkgy3vvmwyrxvkmjfbcxc31i31czg2bjdzq7awwrr4fdbwy";
+  src = fetchgit {
+    inherit rev;
+    url = "https://github.com/bazelbuild/buildtools";
+    sha256 = "0p2kgyawh3l46h7dzglqh9c7i16zr5mhmqlhy7qvr4skwif1l089";
   };
 
   goDeps = ./deps.nix;

@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gtk3
@@ -25,7 +24,7 @@
 , librest
 , gettext
 , desktop-file-utils
-, gdk_pixbuf
+, gdk-pixbuf
 , librsvg
 , wrapGAppsHook
 , gobject-introspection
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
     libraw
     json-glib
     glib
-    gdk_pixbuf
+    gdk-pixbuf
     librsvg
     librest
     gcr

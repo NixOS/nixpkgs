@@ -1,12 +1,30 @@
 { stdenv, fetchurl, makeWrapper, php }:
 
+let
+  versions = {
+    matomo = {
+      version = "3.11.0";
+      sha256 = "1fbnmmzzsi3dfm9qm30wypxjcazl37mryaik9mlrb19hnp2md40q";
+    };
+
+    matomo-beta = {
+      version = "3.12.0";
+      beta = 3;
+      sha256 = "1n7b8cag7rpi6y4145cll2irz3in4668jkiicy06wm5nq6lb4bdf";
+    };
+  };
+  common = pname: {version, sha256, beta ? null}:
+    let fullVersion = version + stdenv.lib.optionalString (beta != null) "-b${toString beta}";
+  name = "${pname}-${fullVersion}";
+in
+
 stdenv.mkDerivation rec {
-  name = "matomo-${version}";
-  version = "3.9.1";
+  inherit name;
+  version = fullVersion;
 
   src = fetchurl {
     url = "https://builds.matomo.org/matomo-${version}.tar.gz";
-    sha256 = "1y406dnwn4jyrjr2d5qfsg3b4v7nfbh09v74dm1vlcy3mkbhv2bp";
+    inherit sha256;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -39,8 +57,8 @@ stdenv.mkDerivation rec {
     cp -ra * $out/share/
     # tmp/ is created by matomo in PIWIK_USER_PATH
     rmdir $out/share/tmp
-    # config/ needs to be copied to PIWIK_USER_PATH anyway
-    mv $out/share/config $out/
+    # config/ needs to be accessed by PIWIK_USER_PATH anyway
+    ln -s $out/share/config $out/
 
     makeWrapper ${php}/bin/php $out/bin/matomo-console \
       --add-flags "$out/share/console"
@@ -53,6 +71,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = https://matomo.org/;
     platforms = platforms.all;
-    maintainers = [ maintainers.florianjacob ];
+    maintainers = with maintainers; [ florianjacob kiwi ];
   };
-}
+};
+in stdenv.lib.mapAttrs common versions

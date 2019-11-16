@@ -4,11 +4,11 @@
 }:
 
 python2Packages.buildPythonApplication  rec {
-  name = "cvs2svn-${version}";
+  pname = "cvs2svn";
   version = "2.5.0";
 
   src = fetchurl {
-    url = "http://cvs2svn.tigris.org/files/documents/1462/49543/${name}.tar.gz";
+    url = "http://cvs2svn.tigris.org/files/documents/1462/49543/${pname}-${version}.tar.gz";
     sha256 = "1ska0z15sjhyfi860rjazz9ya1gxbf5c0h8dfqwz88h7fccd22b4";
   };
 

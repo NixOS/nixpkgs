@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.2.0";
-  name = "ocaml-cow-${version}";
+  pname = "ocaml-cow";
 
   src = fetchFromGitHub {
     owner  = "mirage";

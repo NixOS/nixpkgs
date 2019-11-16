@@ -2,8 +2,9 @@
 
 let version = "3.5.2"; in
 
-stdenv.mkDerivation rec {
-  name = "libc++-${version}";
+stdenv.mkDerivation {
+  pname = "libc++";
+  inherit version;
 
   src = fetchurl {
     url = "http://llvm.org/releases/${version}/libcxx-${version}.src.tar.xz";

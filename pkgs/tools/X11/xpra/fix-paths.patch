@@ -1,33 +1,29 @@
+gdiff --git a/setup.py b/setup.py
+index 8d3df15..6156206 100755
 --- a/setup.py
 +++ b/setup.py
-@@ -1885,7 +1885,7 @@
-     if OSX:
-         pycairo = "py3cairo"
-     else:
--        pycairo = "pycairo"
-+        pycairo = "py3cairo"
-     cython_add(Extension("xpra.client.gtk3.cairo_workaround",
-                 ["xpra/client/gtk3/cairo_workaround.pyx"],
-                 **pkgconfig(pycairo)
---- a/xpra/client/gtk3/cairo_workaround.pyx
-+++ b/xpra/client/gtk3/cairo_workaround.pyx
-@@ -65,7 +65,7 @@
-     void cairo_surface_flush (cairo_surface_t *surface)
-     void cairo_surface_mark_dirty (cairo_surface_t *surface)
- 
--cdef extern from "pycairo/pycairo.h":
-+cdef extern from "py3cairo.h":
-     ctypedef struct Pycairo_CAPI_t:
-         pass
-     ctypedef struct PycairoSurface:
+@@ -2359,10 +2359,7 @@ if v4l2_ENABLED:
+     v4l2_pkgconfig = pkgconfig()
+     #fuly warning: cython makes this difficult,
+     #we have to figure out if "device_caps" exists in the headers:
+-    ENABLE_DEVICE_CAPS = False
+-    if os.path.exists("/usr/include/linux/videodev2.h"):
+-        hdata = open("/usr/include/linux/videodev2.h").read()
+-        ENABLE_DEVICE_CAPS = hdata.find("device_caps")>=0
++    ENABLE_DEVICE_CAPS = True
+     kwargs = {"ENABLE_DEVICE_CAPS" : ENABLE_DEVICE_CAPS}
+     make_constants("xpra", "codecs", "v4l2", "constants", **kwargs)
+     cython_add(Extension("xpra.codecs.v4l2.pusher",
+diff --git a/xpra/x11/bindings/keyboard_bindings.pyx b/xpra/x11/bindings/keyboard_bindings.pyx
+index bd7023d..064c6b5 100644
 --- a/xpra/x11/bindings/keyboard_bindings.pyx
 +++ b/xpra/x11/bindings/keyboard_bindings.pyx
-@@ -19,7 +19,7 @@
- 
+@@ -21,7 +21,7 @@ from libc.stdlib cimport free, malloc
+
  DEF PATH_MAX = 1024
- DEF DFLT_XKB_RULES_FILE = "base"
--DEF DFLT_XKB_CONFIG_ROOT = "/usr/share/X11/xkb"
-+DEF DFLT_XKB_CONFIG_ROOT = "@xkeyboardconfig@/share/X11/xkb"
- 
+ DEF DFLT_XKB_RULES_FILE = b"base"
+-DEF DFLT_XKB_CONFIG_ROOT = b"/usr/share/X11/xkb"
++DEF DFLT_XKB_CONFIG_ROOT = b"@xkeyboardconfig@/share/X11/xkb"
+
  ###################################
  # Headers, python magic

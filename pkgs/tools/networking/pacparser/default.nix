@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pacparser-${version}";
+  pname = "pacparser";
   version = "1.3.7";
 
   src = fetchurl {
-    url = "https://github.com/manugarg/pacparser/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/manugarg/pacparser/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "0jfjm8lqyhdy9ny8a8icyd4rhclhfn608cr1i15jml82q8pyqj7b";
   };
 

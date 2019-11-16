@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xorg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "x2vnc-1.7.2";
 
   src = fetchurl {

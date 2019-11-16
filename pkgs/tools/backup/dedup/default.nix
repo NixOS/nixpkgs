@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, lz4, snappy, libsodium
+{ stdenv, fetchurl, lz4, snappy, libsodium
 # For testing
 , coreutils, gawk
 }:

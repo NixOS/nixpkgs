@@ -86,14 +86,10 @@ if [ $(grep -c "$oldHash" "$nixFile") != 1 ]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
-oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; builtins.elemAt $attr.src.drvAttrs.urls 0" | tr -d '"')
+oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; builtins.elemAt ($attr.src.drvAttrs.urls or [ $attr.src.url ]) 0" | tr -d '"')
 
 if [ -z "$oldUrl" ]; then
-    oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.src.url" | tr -d '"')
-
-    if [ -z "$oldUrl" ]; then
-      die "Couldn't evaluate source url from '$attr.src'!"
-    fi
+    die "Couldn't evaluate source url from '$attr.src'!"
 fi
 
 drvName=$(nix-instantiate $systemArg --eval -E "with import ./. {}; (builtins.parseDrvName $attr.name).name" | tr -d '"')
@@ -109,13 +105,13 @@ if [ "$oldVersion" = "$newVersion" ]; then
 fi
 
 # Escape regex metacharacter that are allowed in store path names
-oldVersion=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
-oldUrl=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
+oldVersionEscaped=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
+oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
 
-if [ $(grep -c -E "^\s*(let\b)?\s*$versionKey\s*=\s*\"$oldVersion\"" "$nixFile") = 1 ]; then
-    pattern="/\b$versionKey\b\s*=/ s|\"$oldVersion\"|\"$newVersion\"|"
-elif [ $(grep -c -E "^\s*(let\b)?\s*name\s*=\s*\"[^\"]+-$oldVersion\"" "$nixFile") = 1 ]; then
-    pattern="/\bname\b\s*=/ s|-$oldVersion\"|-$newVersion\"|"
+if [ $(grep -c -E "^\s*(let\b)?\s*$versionKey\s*=\s*\"$oldVersionEscaped\"" "$nixFile") = 1 ]; then
+    pattern="/\b$versionKey\b\s*=/ s|\"$oldVersionEscaped\"|\"$newVersion\"|"
+elif [ $(grep -c -E "^\s*(let\b)?\s*name\s*=\s*\"[^\"]+-$oldVersionEscaped\"" "$nixFile") = 1 ]; then
+    pattern="/\bname\b\s*=/ s|-$oldVersionEscaped\"|-$newVersion\"|"
 else
     die "Couldn't figure out where out where to patch in new version in '$attr'!"
 fi
@@ -128,7 +124,7 @@ fi
 
 # Replace new URL
 if [ -n "$newUrl" ]; then
-    sed -i "$nixFile" -re "s|\"$oldUrl\"|\"$newUrl\"|"
+    sed -i "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
 
     if cmp -s "$nixFile" "$nixFile.bak"; then
         die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, mecab-nodic }:
 
-stdenv.mkDerivation rec {
-  name = "mecab-ipadic-${version}";
+stdenv.mkDerivation {
+  pname = "mecab-ipadic";
   version = "2.7.0-20070801";
 
   src = fetchurl {

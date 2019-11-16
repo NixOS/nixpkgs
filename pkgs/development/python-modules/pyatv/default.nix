@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.3.12";
+  version = "0.3.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "135xvy1nn0x5knc7l05amfs837xkx2gcg3lpp69ya9kqs8j6brgp";
+    sha256 = "8fc1a903a9d666e4109127410d35a83458559a86bc0de3fe1ffb3f15d2d653b3";
   };
 
   propagatedBuildInputs = [ srptools aiohttp zeroconf ed25519 cryptography curve25519-donna tox ];

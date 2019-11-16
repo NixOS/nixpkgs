@@ -1,6 +1,5 @@
 {stdenv, fetchFromGitHub, libX11}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "wayv";
   version = "0.3";
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name    = "daemonize-${version}";
+  pname = "daemonize";
   version = "1.7.8";
 
   src = fetchurl {

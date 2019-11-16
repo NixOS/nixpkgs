@@ -16,7 +16,7 @@ buildPythonPackage rec {
     homepage = http://pylonsproject.org/;
     description = "Utility library for i18n relied on by various Repoze and Pyramid packages";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

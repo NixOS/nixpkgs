@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenPluginTestingHarness_1_1 = map (obj: fetchMaven {
     version = "1.1";
     artifactId = "maven-plugin-testing-harness";

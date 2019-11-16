@@ -1,14 +1,14 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, gettext, python3
 , ncurses, swig, glib, utillinux, cryptsetup, nss, gpgme
 , autoconf, automake, libtool
-, writeShellScriptBin
 , buildPackages
 }:
 
 let
   version = "0.3.11";
-in stdenv.mkDerivation rec {
-  name = "volume_key-${version}";
+in stdenv.mkDerivation {
+  pname = "volume_key";
+  inherit version;
 
   src = fetchgit {
     url = https://pagure.io/volume_key.git;

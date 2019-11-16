@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   buildInputs = [cmake];
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
-    repo = "${baseName}";
-    rev = "${version}";
+    repo = baseName;
+    rev = version;
     sha256 = "063yl7kxkix76r49qrj0h1qpz2p538d1yw8aih0x4i47g35k00y7";
   };
 

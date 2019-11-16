@@ -5,7 +5,6 @@
 , zope_schema
 , zope_testrunner
 , manuel
-, isPy3k
 }:
 
 buildPythonPackage rec {

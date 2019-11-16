@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.6.6";
 
   # Upstream recommends and supports git
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     repo = pname;
     owner = pname;
     rev = "v${version}";

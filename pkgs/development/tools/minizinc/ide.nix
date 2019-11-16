@@ -1,9 +1,10 @@
 { stdenv, fetchFromGitHub, qtbase, qtwebengine, qtwebkit, qmake, makeWrapper, minizinc }:
 let
-  version = "2.2.3";
+  version = "2.3.1";
 in
 stdenv.mkDerivation {
-  name = "minizinc-ide-${version}";
+  pname = "minizinc-ide";
+  inherit version;
 
   nativeBuildInputs = [ qmake makeWrapper ];
   buildInputs = [ qtbase qtwebengine qtwebkit ];
@@ -12,7 +13,7 @@ stdenv.mkDerivation {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    sha256 = "1hanq7c6li59awlwghgvpd8w93a7zb6iw7p4062nphnbd1dmg92f";
+    sha256 = "0w9p5j2i7q4khmxyk2lr7a3qb2kd6ff1hfssxhgpm7zgzixm2300";
   };
 
   sourceRoot = "source/MiniZincIDE";

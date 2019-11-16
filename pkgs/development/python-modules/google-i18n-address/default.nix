@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "google-i18n-address";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f1j1lp9bmllkzhciw0lxi7ipm8w461n0p97mz9714br0cs9glm1";
+    sha256 = "1kkg3x92m40z0mw712z9apnrw08qsx0f9lj7lfgddkdbx4vd8v3w";
   };
 
   propagatedBuildInputs = [ requests ];

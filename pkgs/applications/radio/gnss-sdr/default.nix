@@ -5,23 +5,28 @@
 , glog
 , gmock
 , openssl
-, google-gflags
+, gflags
 , gnuradio
 , orc
 , pkgconfig
 , pythonPackages
 , uhd
+, log4cpp
+, openblas
+, matio
+, pugixml
+, protobuf
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnss-sdr-${version}";
-  version = "0.0.9";
+  pname = "gnss-sdr";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    sha256 = "0gis932ly3vk7d5qvznffp54pkmbw3m6v60mxjfdj5dd3r7vf975";
+    sha256 = "0ajj0wx68yyzigppxxa1wag3hzkrjj8dqq8k28rj0jhp8a6bw2q7";
   };
 
   buildInputs = [
@@ -31,7 +36,7 @@ stdenv.mkDerivation rec {
     glog
     gmock
     openssl.dev
-    google-gflags
+    gflags
     gnuradio
     orc
     pkgconfig
@@ -40,12 +45,17 @@ stdenv.mkDerivation rec {
     # UHD support is optional, but gnuradio is built with it, so there's
     # nothing to be gained by leaving it out.
     uhd
+    log4cpp
+    openblas
+    matio
+    pugixml
+    protobuf
   ];
 
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DGFlags_ROOT_DIR=${google-gflags}/lib"
+    "-DGFlags_ROOT_DIR=${gflags}/lib"
     "-DGLOG_INCLUDE_DIR=${glog}/include"
     "-DENABLE_UNIT_TESTING=OFF"
 
@@ -53,6 +63,8 @@ stdenv.mkDerivation rec {
     # armadillo is built using both, so skip checking for them.
     "-DBLAS=YES"
     "-DLAPACK=YES"
+    "-DBLAS_LIBRARIES=-lopenblas"
+    "-DLAPACK_LIBRARIES=-lopenblas"
 
     # Similarly, it doesn't actually use gfortran despite checking for
     # its presence.

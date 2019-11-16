@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch
+{ stdenv, lib, fetchFromGitHub
 , makeWrapper, unzip, which, writeTextFile
 , curl, tzdata, gdb, darwin, git
-, callPackage, targetPackages, ldc
+, targetPackages, ldc
 , version ? "2.085.1"
 , dmdSha256 ? "0ccidfcawrcwdpfjwjiln5xwr4ffp8i2hwx52p8zn3xmc5yxm660"
 , druntimeSha256 ? "109f2glsqrlshk06761xlw4r5v22mivp873cq9g5gcax3g00k617"
@@ -13,7 +13,7 @@ let
   dmdConfFile = writeTextFile {
       name = "dmd.conf";
       text = (lib.generators.toINI {} {
-        "Environment" = {
+        Environment = {
           DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${stdenv.lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"}'';
         };
       });
@@ -22,7 +22,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "dmd-${version}";
+  pname = "dmd";
   inherit version;
 
   enableParallelBuilding = true;

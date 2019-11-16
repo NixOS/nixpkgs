@@ -2,12 +2,12 @@
 , pytest, pytestrunner, pytestcov, mock, glibcLocales, lxml, boto3, requests, click, configparser }:
 
 buildPythonPackage rec {
-  version = "1.12.3";
   pname = "aws-adfs";
+  version = "1.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7df3fbe0572eb12294b2e072327ca97fd94d435b39cc10612e460cde914b831";
+    sha256 = "da20c682993d87d41534ffc2be0819d924aaf230b27abbc5d1fa8ad62410bf39";
   };
 
   # Relax version constraint
@@ -24,10 +24,10 @@ buildPythonPackage rec {
   checkInputs = [ glibcLocales pytest pytestrunner pytestcov mock ];
   propagatedBuildInputs = [ lxml boto3 requests click configparser ];
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool to ease aws cli authentication against ADFS";
     homepage = https://github.com/venth/aws-adfs;
-    license = lib.licenses.psfl;
-    maintainers = [ lib.maintainers.bhipple ];
+    license = licenses.psfl;
+    maintainers = [ maintainers.bhipple ];
   };
 }

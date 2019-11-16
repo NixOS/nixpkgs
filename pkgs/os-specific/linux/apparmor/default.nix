@@ -14,7 +14,7 @@
 
 let
   apparmor-series = "2.13";
-  apparmor-patchver = "1";
+  apparmor-patchver = "3";
   apparmor-version = apparmor-series + "." + apparmor-patchver;
 
   apparmor-meta = component: with stdenv.lib; {
@@ -27,7 +27,7 @@ let
 
   apparmor-sources = fetchurl {
     url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "7a060d94c275e59f96bacd1da150e6fee2c9152a85bf57800109d07d51ef8afb";
+    sha256 = "0fbnk9fzjsffwcijsv2wwykmybvfdckpqk99qlib3kb89him6w16";
   };
 
   prePatchCommon = ''
@@ -49,7 +49,9 @@ let
       sha256 = "1m4dx901biqgnr4w4wz8a2z9r9dxyw7wv6m6mqglqwf2lxinqmp4";
     })
     # (alpine patches {1,4,5,6,8} are needed for apparmor 2.11, but not 2.12)
-  ];
+    ] ++ [
+      ./cross.patch
+    ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
   # common derivation infra. Too much copy-paste to fix one by one.
@@ -185,7 +187,7 @@ let
     '';
     inherit patches;
     postPatch = "cd ./parser";
-    makeFlags = ''LANGS= USE_SYSTEM=1 INCLUDEDIR=${libapparmor}/include'';
+    makeFlags = ''LANGS= USE_SYSTEM=1 INCLUDEDIR=${libapparmor}/include AR=${stdenv.cc.bintools.targetPrefix}ar'';
     installFlags = ''DESTDIR=$(out) DISTRO=unknown'';
 
     inherit doCheck;

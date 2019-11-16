@@ -1,19 +1,26 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip, unixtools, which }:
 
 stdenv.mkDerivation rec {
-  name = "git-extras-${version}";
-  version = "4.7.0";
+  pname = "git-extras";
+  version = "5.0.0";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/tj/git-extras/archive/${version}.tar.gz";
-    sha256 = "0pab4f5kmmcn333aswkgndf1fgilc41h8h0rk3lviz0yi8j59vaq";
+    sha256 = "0c839kc5mhi1iqhc696p4dj67i5hm2gi4d8cvdpskaapb124mj2f";
   };
+
+  nativeBuildInputs = [ unixtools.column which ];
 
   dontBuild = true;
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
+  preInstall = ''
+    patchShebangs .
+  '';
+
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
+    # bash completion is already handled by make install
     install -D etc/git-extras-completion.zsh $out/share/zsh/site-functions/_git_extras
   '';
 

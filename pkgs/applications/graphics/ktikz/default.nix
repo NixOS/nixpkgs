@@ -1,70 +1,54 @@
-{ stdenv, fetchFromGitHub, gettext, poppler, qt5 , pkgconfig }:
-
-# Warning: You will also need a working pdflatex installation containing
-# at least auctex and pgf.
+{ stdenv, fetchFromGitHub, fetchpatch
+, pkgconfig, wrapQtAppsHook
+, poppler, qt5, gnuplot
+}:
 
 # This package only builds ktikz without KDE integration because KDE4 is
 # deprecated and upstream does not (yet ?) support KDE5.
 # See historical versions of this file for building ktikz with KDE4.
 
 stdenv.mkDerivation rec {
-  version = "unstable-20161122";
-  name = "qtikz-${version}";
+  version = "0.12";
+  pname = "qtikz";
+
+  meta = with stdenv.lib; {
+    description = "Editor for the TikZ language";
+    homepage = "https://github.com/fhackenberger/ktikz";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.layus ];
+    longDescription = ''
+      You will also need a working *tex installation in your PATH, containing at least `preview` and `pgf`.
+    '';
+  };
 
   src = fetchFromGitHub {
     owner = "fhackenberger";
     repo = "ktikz";
-    rev = "be66c8b1ff7e6b791b65af65e83c4926f307cf5a";
-    sha256 = "15jx53sjlnky4yg3ry1i1c29g28v1jbbvhbz66h7a49pfxa40fj3";
+    rev = version;
+    sha256 = "1s83x8r2yi64wc6ah2iz09dj3qahy0fkxx6cfgpkavjw9x0j0582";
   };
 
-  meta = with stdenv.lib; {
-    description = "Editor for the TikZ language";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.layus ];
-  };
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/fhackenberger/ktikz/commit/972685a406517bb85eb561f2c8e26f029eacd7db.patch";
+      sha256 = "13z40rcd4m4n088v7z2ns17lnpn0z3rzp31lsamic3qdcwjwa5k8";
+    })
+  ];
 
-  conf = ''
-    # installation prefix:
-    PREFIX = @out@
+  nativeBuildInputs = [ pkgconfig qt5.qttools qt5.qmake wrapQtAppsHook ];
+  QT_PLUGIN_PATH = "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}";
 
-    # install desktop file here (*nix only):
-    DESKTOP_INSTALL_DIR = @out@/share/applications
-
-    # install mimetype here:
-    MIME_INSTALL_DIR = @out@/share/mime/packages
-
-    # install doc here:
-    MAN_INSTALL_DIR = @out@/share/man
-
-    CONFIG -= debug
-    CONFIG += release
-
-    # qmake command:
-    QMAKECOMMAND = qmake
-    # lrelease command:
-    LRELEASECOMMAND = lrelease
-    # qcollectiongenerator command:
-    QCOLLECTIONGENERATORCOMMAND = qhelpgenerator
-
-    # TikZ documentation default file path:
-    TIKZ_DOCUMENTATION_DEFAULT = @out@/share/doc/texmf/pgf/pgfmanual.pdf.gz
-  '';
-
-  # 1. Configuration is done by overwriting qtikzconfig.pri
-  # 2. Recent Qt removed QString::fromAscii in favor of QString::fromLatin1
-  patchPhase = ''
-    echo "$conf" | sed "s!@out@!$out!g" > qmake/qtikzconfig.pri
-    find -name "*.cpp" -exec sed -i s/fromAscii/fromLatin1/g "{}" \;
-  '';
-
-  configurePhase = ''
-      qmake PREFIX="$out" ./qtikz.pro
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gettext qt5.full poppler ];
-
+  buildInputs = [ qt5.qtbase poppler ];
   enableParallelBuilding = true;
+
+  qmakeFlags = [
+    "DESKTOP_INSTALL_DIR=${placeholder "out"}/share/applications"
+    "MIME_INSTALL_DIR=${placeholder "out"}/share/mime/packages"
+    # qcollectiongenerator does no more exist in `qt5.qttools`.
+    # It was merged with qhelpgenerator at some point.
+    "QCOLLECTIONGENERATORCOMMAND=qhelpgenerator"
+  ];
+
+  qtWrapperArgs = [ ''--prefix PATH : "${gnuplot}/bin"'' ];
 }

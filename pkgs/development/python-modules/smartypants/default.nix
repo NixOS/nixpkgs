@@ -19,7 +19,7 @@ buildPythonPackage rec {
     description = "Python with the SmartyPants";
     homepage = "https://bitbucket.org/livibetter/smartypants.py";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 
 }

@@ -20,7 +20,7 @@ let
   };
 in
   stdenvNoCC.mkDerivation rec {
-    name = "mnist-${version}";
+    pname = "mnist";
     version = "2018-11-16";
     installPhase = ''
       mkdir -p $out

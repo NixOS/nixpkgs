@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "gpx-${version}";
+  pname = "gpx";
   version = "2.5.2";
 
   nativeBuildInputs = [ autoreconfHook ];

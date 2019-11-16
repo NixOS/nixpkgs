@@ -2,10 +2,10 @@
 
 let
   version = "063a";
-in fetchzip rec {
+in fetchzip {
   name = "mplus-${version}";
 
-  url = "mirror://sourceforgejp/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
+  url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
 
   postFetch = ''
     tar -xJf $downloadedFile --strip-components=1
@@ -17,7 +17,7 @@ in fetchzip rec {
 
   meta = with lib; {
     description = "M+ Outline Fonts";
-    homepage = http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/index-en.html;
+    homepage = "https://mplus-fonts.osdn.jp/about-en.html";
     license = licenses.mit;
     maintainers = with maintainers; [ henrytill ];
     platforms = platforms.all;

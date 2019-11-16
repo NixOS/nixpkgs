@@ -1,6 +1,6 @@
 {stdenv, fetchurl, libusb}:
 
-stdenv.mkDerivation rec {
+with stdenv; mkDerivation rec {
   name = "libftdi-0.20";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';
-  configureFlags = [ "--with-async-mode" ];
+  configureFlags = lib.optional (!isDarwin) [ "--with-async-mode" ];
 
   # allow async mode. from ubuntu. see:
   #   https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/trusty/libftdi/trusty/view/head:/debian/patches/04_async_mode.diff
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A library to talk to FTDI chips using libusb";
     homepage = https://www.intra2net.com/en/developer/libftdi/;
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.all;
   };
 }

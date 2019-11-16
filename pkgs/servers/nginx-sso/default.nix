@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub, stdenv }:
 
 buildGoPackage rec {
-  name = "nginx-sso-${version}";
+  pname = "nginx-sso";
   version = "0.16.1";
   rev = "v${version}";
 

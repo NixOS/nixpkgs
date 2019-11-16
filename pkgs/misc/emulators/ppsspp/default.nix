@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qtmultimedia
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, qtmultimedia
 , glew, libzip, snappy, zlib, withGamepads ? true, SDL2 }:
 
 assert withGamepads -> (SDL2 != null);
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "ppsspp-${version}";
+mkDerivation rec {
+  pname = "ppsspp";
   version = "1.4.2";
 
   src = fetchFromGitHub {

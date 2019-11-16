@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "urxvt-autocomplete-all-the-things-${version}";
+  pname = "urxvt-autocomplete-all-the-things";
   version = "1.6.0";
 
   src = fetchFromGitHub {

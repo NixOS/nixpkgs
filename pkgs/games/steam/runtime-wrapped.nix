@@ -26,7 +26,7 @@ let
   libs = [ "lib/${gnuArch}" "lib" "usr/lib/${gnuArch}" "usr/lib" ];
   bins = [ "bin" "usr/bin" ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "steam-runtime-wrapped";
 
   nativeBuildInputs = [ perl ];

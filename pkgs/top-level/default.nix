@@ -57,11 +57,11 @@ in let
 
   # From a minimum of `system` or `config` (actually a target triple, *not*
   # nixpkgs configuration), infer the other one and platform as needed.
-  localSystem = lib.systems.elaborate (
+  localSystem = lib.systems.elaborate (if builtins.isAttrs args.localSystem then (
     # Allow setting the platform in the config file. This take precedence over
     # the inferred platform, but not over an explicitly passed-in one.
     builtins.intersectAttrs { platform = null; } config1
-    // args.localSystem);
+    // args.localSystem) else args.localSystem);
 
   crossSystem = if crossSystem0 == null then localSystem
                 else lib.systems.elaborate crossSystem0;

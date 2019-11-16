@@ -19,7 +19,7 @@ buildPythonPackage rec {
     homepage = https://launchpad.net/txamqp;
     description = "Library for communicating with AMQP peers and brokers using Twisted";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rickynils ];
+    maintainers = [];
   };
 
 }

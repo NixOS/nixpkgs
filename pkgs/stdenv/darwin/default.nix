@@ -32,14 +32,14 @@ in rec {
     export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
     export NIX_IGNORE_LD_THROUGH_GCC=1
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
-    export MACOSX_DEPLOYMENT_TARGET=10.10
+    export MACOSX_DEPLOYMENT_TARGET=10.12
     export SDKROOT=
     export CMAKE_OSX_ARCHITECTURES=x86_64
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
   '';
 
-  bootstrapTools = derivation rec {
+  bootstrapTools = derivation {
     inherit system;
 
     name    = "bootstrap-tools";
@@ -142,7 +142,7 @@ in rec {
     };
 
   stage0 = stageFun 0 null {
-    overrides = self: super: with stage0; rec {
+    overrides = self: super: with stage0; {
       darwin = super.darwin // {
         Libsystem = stdenv.mkDerivation {
           name = "bootstrap-stage0-Libsystem";
@@ -199,7 +199,6 @@ in rec {
       ninja = super.ninja.override { buildDocs = false; };
       darwin = super.darwin // {
         cctools = super.darwin.cctools.override {
-          llvm = null;
           enableTapiSupport = false;
         };
       };

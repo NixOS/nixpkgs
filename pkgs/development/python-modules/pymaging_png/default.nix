@@ -4,7 +4,7 @@
 , pymaging
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pymaging-png";
   version = "unstable-2016-11-16";
 

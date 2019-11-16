@@ -5,7 +5,6 @@
 , makeWrapper
 , getent               # /etc/passwd
 , ncurses              # tput
-, procps               # ps
 , binutils-unwrapped   # strings
 , coreutils
 , findutils
@@ -16,7 +15,7 @@ let
   additionalPath = lib.makeBinPath [ getent ncurses binutils-unwrapped coreutils findutils ];
 in
 stdenv.mkDerivation rec {
-  name = "nix-top-${version}";
+  pname = "nix-top";
   version = "0.2.0";
 
   src = fetchFromGitHub {

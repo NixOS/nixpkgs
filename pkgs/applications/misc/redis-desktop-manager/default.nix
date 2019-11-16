@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "redis-desktop-manager-${version}";
+  pname = "redis-desktop-manager";
   version = "0.9.1";
 
   src = fetchgit {

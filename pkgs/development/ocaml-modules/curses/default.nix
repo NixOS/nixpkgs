@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml, findlib, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-curses-${version}";
+  pname = "ocaml-curses";
   version = "1.0.4";
 
   src = fetchurl {

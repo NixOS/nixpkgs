@@ -1,13 +1,13 @@
 { stdenv, fetchgit, ocamlPackages, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "virt-top-${version}";
-  version = "2017-11-18-unstable";
+  pname = "virt-top";
+  version = "1.0.9";
 
   src = fetchgit {
-    url = git://git.annexia.org/git/virt-top.git;
-    rev = "18a751d8c26548bb090ff05e30ccda3092e3373b";
-    sha256 = "0c4whjvw7p3yvd476i4ppdhi8j821r5y6caqrj2v9dc181cnp01i";
+    url = git://git.annexia.org/virt-top.git;
+    rev = "v${version}";
+    sha256 = "0m7pm8lzlpngsj0vjv0hg8l9ck3gvwpva7r472f8f03xpjffwiga";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

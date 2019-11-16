@@ -13,8 +13,9 @@ let
 
 in
 
-stdenv.mkDerivation rec {
-  name = "maude-${version}";
+stdenv.mkDerivation {
+  pname = "maude";
+  inherit version;
 
   src = fetchurl {
     url = "http://maude.cs.illinois.edu/w/images/d/d8/Maude-${version}.tar.gz";

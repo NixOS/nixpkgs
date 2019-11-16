@@ -3,7 +3,7 @@
 , glib, systemd, libusb1, vala, hwdata
 }:
 stdenv.mkDerivation rec {
-  name = "gusb-${version}";
+  pname = "gusb";
   version = "0.3.0";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];

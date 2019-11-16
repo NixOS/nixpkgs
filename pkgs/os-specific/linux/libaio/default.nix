@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.3.110";
-  name = "libaio-${version}";
+  pname = "libaio";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/l/i/libaio/${name}.tar.gz";
+    url = "https://fedorahosted.org/releases/l/i/libaio/${pname}-${version}.tar.gz";
     sha256 = "0zjzfkwd1kdvq6zpawhzisv7qbq1ffs343i5fs9p498pcf7046g0";
   };
 

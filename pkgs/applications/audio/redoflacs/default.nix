@@ -2,7 +2,7 @@
 , flac, sox }:
 
 stdenv.mkDerivation rec {
-  name = "redoflacs-${version}";
+  pname = "redoflacs";
   version = "0.30.20150202";
 
   src = fetchFromGitHub {

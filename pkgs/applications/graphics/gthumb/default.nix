@@ -1,31 +1,92 @@
-{ stdenv,  fetchurl, gnome3, itstool, libxml2, pkgconfig, intltool,
-  exiv2, libjpeg, libtiff, gst_all_1, libraw, libsoup, libsecret,
-  glib, gtk3, gsettings-desktop-schemas,
-  libchamplain, librsvg, libwebp, json-glib, webkitgtk, lcms2, bison,
-  flex, wrapGAppsHook, shared-mime-info }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, gnome3
+, pkgconfig
+, meson
+, ninja
+, exiv2
+, libjpeg
+, libtiff
+, gst_all_1
+, libraw
+, libsoup
+, libsecret
+, glib
+, gtk3
+, gsettings-desktop-schemas
+, libchamplain
+, librsvg
+, libwebp
+, json-glib
+, webkitgtk
+, lcms2
+, bison
+, flex
+, clutter-gtk
+, wrapGAppsHook
+, shared-mime-info
+, python3
+, desktop-file-utils
+, itstool
+}:
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.6.2";
+  version = "3.8.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0rjb0bsjhn7nyl5jyjgrypvr6qdr9dc2g586j3lzan96a2vnpgy9";
+    sha256 = "184zn79w4s9y1zy42ar31p3jsg8rmkxy8k6iry51nz8aizbcs7jb";
   };
 
-  nativeBuildInputs = [ itstool libxml2 intltool pkgconfig bison flex wrapGAppsHook ];
+  nativeBuildInputs = [
+    bison
+    desktop-file-utils
+    flex
+    itstool
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
+  ];
 
   buildInputs = [
-    glib gtk3 gsettings-desktop-schemas gst_all_1.gstreamer gst_all_1.gst-plugins-base
-    exiv2 libjpeg libtiff libraw libsoup libsecret libchamplain
-    librsvg libwebp json-glib webkitgtk lcms2 gnome3.adwaita-icon-theme
+    clutter-gtk
+    exiv2
+    glib
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    gtk3
+    json-glib
+    lcms2
+    libchamplain
+    libjpeg
+    libraw
+    librsvg
+    libsecret
+    libsoup
+    libtiff
+    libwebp
+    webkitgtk
   ];
 
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    "--enable-libchamplain"
+  mesonFlags = [
+    "-Dlibchamplain=true"
   ];
+
+  postPatch = ''
+    chmod +x gthumb/make-gthumb-h.py
+
+    patchShebangs data/gschemas/make-enums.py \
+      gthumb/make-gthumb-h.py \
+      po/make-potfiles-in.py \
+      postinstall.py \
+      gthumb/make-authors-tab.py
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
@@ -41,7 +102,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Gthumb";
     description = "Image browser and viewer for GNOME";
     platforms = platforms.linux;
-    license = licenses.gpl2;
-    maintainers = [ maintainers.mimadrid ];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.mimame ];
   };
 }

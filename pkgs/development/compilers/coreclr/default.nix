@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "coreclr-${version}";
+  pname = "coreclr";
   version = "2.0.7";
 
   src = fetchFromGitHub {

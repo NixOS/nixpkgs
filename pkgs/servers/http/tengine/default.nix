@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
+{ stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
 , gd, geoip, gperftools, jemalloc
 , withDebug ? false
 , withMail ? false
@@ -10,12 +10,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.0";
-  name = "tengine-${version}";
+  version = "2.3.2";
+  pname = "tengine";
 
-  src = fetchurl {
-    url = "https://github.com/alibaba/tengine/archive/${version}.tar.gz";
-    sha256 = "09165sdzad8bjxhnwphbags6yvxnz2rkf14p0w3vgvzssj017kqp";
+  src = fetchFromGitHub {
+    owner = "alibaba";
+    repo = pname;
+    rev = version;
+    sha256 = "04xfnbc0qlk8vi6bb8sl38nxnx9naxh550xsgrb4hql6jdi0wv7l";
   };
 
   buildInputs =
@@ -84,6 +86,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [
     "-I${libxml2.dev}/include/libxml2"
+    "-Wno-error=implicit-fallthrough"
   ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);

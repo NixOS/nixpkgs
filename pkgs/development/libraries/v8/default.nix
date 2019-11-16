@@ -14,7 +14,7 @@ let
       rev    = "936ba8a963284a6b3737cf2f0474a7131073abee";
       sha256 = "14nr22fqdpxma1kzjflj6a865vr3hfnnm2gs4vcixyq4kmfzfcy2";
     };
-    "build" = fetchgit {
+    build = fetchgit {
       url    = "${git_url}/chromium/src/build.git";
       rev    = "325e95d6dae64f35b160b3dc7d73218cee5ec079";
       sha256 = "0dddyxa76p2xpjhmxif05v63i5ar6h5v684fdl667sg84f5bhhxf";
@@ -44,7 +44,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "v8-${version}";
+  pname = "v8";
   version = "7.4.255";
 
   doCheck = true;
@@ -73,6 +73,11 @@ stdenv.mkDerivation rec {
     chmod u+w -R .
   '';
 
+  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace build/toolchain/linux/BUILD.gn \
+      --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+  '';
+
   gnFlags = [
     "use_custom_libcxx=false"
     "is_clang=${if stdenv.cc.isClang then "true" else "false"}"
@@ -92,6 +97,10 @@ stdenv.mkDerivation rec {
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
   ] ++ stdenv.lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
 
+  # with gcc8, -Wclass-memaccess became part of -Wall and causes logging limit
+  # to be exceeded
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isGNU "-Wno-class-memaccess";
+
   nativeBuildInputs = [ gn ninja pkgconfig python ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];
   buildInputs = [ glib icu ];
@@ -104,6 +113,17 @@ stdenv.mkDerivation rec {
     install -D d8 $out/bin/d8
     install -D obj/libv8_monolith.a $out/lib/libv8.a
     cp -r ../../include $out
+
+    mkdir -p $out/lib/pkgconfig
+    cat > $out/lib/pkgconfig/v8.pc << EOF
+    Name: v8
+    Description: V8 JavaScript Engine
+    Version: ${version}
+    Libs: -L$out/lib -lv8 -pthread
+    Cflags: -I$out/include
+    Libs: -L$out/lib -lpulse
+    Cflags: -I$out/include
+    EOF
   '';
 
   meta = with lib; {

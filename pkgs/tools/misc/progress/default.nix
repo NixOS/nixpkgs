@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, ncurses, which }:
 
 stdenv.mkDerivation rec {
-  name = "progress-${version}";
+  pname = "progress";
   version = "0.14";
 
   src = fetchFromGitHub {

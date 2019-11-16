@@ -1,13 +1,14 @@
 { stdenv
 , fetchFromGitHub
-, autoreconfHook, zlib, gmock, which, buildPackages
+, autoreconfHook, zlib, gmock, buildPackages
 , version, sha256
 , ...
 }:
 
 let
-mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
-  name = "protobuf-${version}";
+mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
+  pname = "protobuf";
+  inherit version;
 
   # make sure you test also -A pythonPackages.protobuf
   src = fetchFromGitHub {
@@ -39,10 +40,6 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
   doCheck = true;
 
   dontDisableStatic = true;
-
-  NIX_CFLAGS_COMPILE = with stdenv.lib;
-    # gcc before 6 doesn't know this option
-    optionalString (hasPrefix "gcc-6" stdenv.cc.cc.name) "-Wno-error=misleading-indentation";
 
   meta = {
     description = "Google's data interchange format";

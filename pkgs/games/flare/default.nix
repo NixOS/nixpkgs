@@ -1,10 +1,10 @@
-{ lib, buildEnv, callPackage, makeWrapper }:
+{ lib, buildEnv, callPackage, makeWrapper, Cocoa }:
 
 buildEnv {
-  name = "flare-1.10";
+  name = "flare-1.11";
 
   paths = [
-    (callPackage ./engine.nix {})
+    (callPackage ./engine.nix { inherit Cocoa; })
     (callPackage ./game.nix {})
   ];
 

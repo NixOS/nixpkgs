@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "spotipy";
   version = "2.4.4";
-  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;

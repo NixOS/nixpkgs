@@ -4,10 +4,11 @@
 let
   generic = version: sha256:
   stdenv.mkDerivation rec {
-    name = "physfs-${version}";
+    pname = "physfs";
+    inherit version;
 
     src = fetchurl {
-      url = "${meta.homepage}/downloads/${name}.tar.bz2";
+      url = "${meta.homepage}/downloads/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
 

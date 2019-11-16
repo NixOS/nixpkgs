@@ -1,25 +1,20 @@
-{ stdenv, fetchFromGitHub, qmake, pkgconfig, makeWrapper
+{ stdenv, fetchFromGitHub, qmake, pkgconfig, wrapQtAppsHook
 , qtbase, qttools, qtwebkit, sqlite
 }:
 
 stdenv.mkDerivation rec {
-  name = "quiterss-${version}";
-  version = "0.18.12";
+  pname = "quiterss";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "QuiteRSS";
     repo = "quiterss";
-    rev = "${version}";
-    sha256 = "0xav9qr8n6310636nfbgx4iix65fs3ya5rz2isxsf38bkjm7r3pa";
+    rev = version;
+    sha256 = "1czz8n21f4iaazvkq37m867bqy40sdkj44bqggfjcw49pl60kvjn";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
   buildInputs = [ qtbase qttools qtwebkit sqlite.dev ];
-
-  postFixup = ''
-    wrapProgram $out/bin/quiterss \
-      --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}"
-  '';
 
   meta = with stdenv.lib; {
     description = "A Qt-based RSS/Atom news feed reader";

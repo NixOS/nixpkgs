@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin
-    [ pkgs.darwin.apple_sdk.frameworks.CoreServices pkgs.darwin.cf-private ];
+    [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
   propagatedBuildInputs = [ argh pathtools pyyaml ];
 
   doCheck = false;

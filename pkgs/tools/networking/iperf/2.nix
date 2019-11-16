@@ -11,10 +11,18 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
   configureFlags = [ "--enable-fastsampling" ];
 
+  postInstall = ''
+    mv $out/bin/iperf $out/bin/iperf2
+    ln -s $out/bin/iperf2 $out/bin/iperf
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/iperf/;
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;
     license = licenses.mit;
+
+    # prioritize iperf3
+    priority = 10;
   };
 }

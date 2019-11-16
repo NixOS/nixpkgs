@@ -1,7 +1,7 @@
 {stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant, isocodes, intltool, gobject-introspection, vala}:
 
 stdenv.mkDerivation rec {
-  name = "gtkspell-${version}";
+  pname = "gtkspell";
   version = "3.0.10";
 
   outputs = [ "out" "dev" ];

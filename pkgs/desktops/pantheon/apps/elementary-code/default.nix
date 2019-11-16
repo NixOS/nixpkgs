@@ -1,25 +1,47 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, substituteAll
-, python3, desktop-file-utils, gtk3, granite, libgee, elementary-icon-theme
-, appstream, libpeas, editorconfig-core-c, gtksourceview3, gtkspell3, libsoup
-, vte, webkitgtk, zeitgeist, ctags, libgit2-glib, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, python3
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, elementary-icon-theme
+, appstream
+, libpeas
+, editorconfig-core-c
+, gtksourceview3
+, gtkspell3
+, libsoup
+, vte
+, webkitgtk
+, zeitgeist
+, ctags
+, libgit2-glib
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "code";
+  pname = "elementary-code";
   version = "3.1.1";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "code";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "0l469fi5vbcazwfhy320nr8wrzz96jbrqn4hag0kdm16wvf5x1yc";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
@@ -36,8 +58,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ctags
-    elementary-icon-theme
     editorconfig-core-c
+    elementary-icon-theme
     granite
     gtk3
     gtksourceview3

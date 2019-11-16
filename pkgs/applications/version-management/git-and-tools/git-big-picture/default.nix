@@ -4,8 +4,6 @@ python2Packages.buildPythonApplication rec {
   pname = "git-big-picture";
   version = "0.10.1";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "esc";
     repo = pname;

@@ -19,7 +19,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "cmucl-binary-${version}";
+  pname = "cmucl-binary";
+  inherit version;
 
   buildCommand = ''
     mkdir -p $out

@@ -26,13 +26,13 @@ let
 
 in stdenv.mkDerivation rec {
   version = "1.4.1";
-  name = "mesos-${version}";
+  pname = "mesos";
 
   enableParallelBuilding = true;
   dontDisableStatic = true;
 
   src = fetchurl {
-    url = "mirror://apache/mesos/${version}/${name}.tar.gz";
+    url = "mirror://apache/mesos/${version}/${pname}-${version}.tar.gz";
     sha256 = "1c7l0rim9ija913gpppz2mcms08ywyqhlzbbspqsi7wwfdd7jwsr";
   };
 
@@ -61,6 +61,9 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     pythonProtobuf
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow -Wno-error=class-memaccess";
+
   preConfigure = ''
     # https://issues.apache.org/jira/browse/MESOS-6616
     configureFlagsArray+=(

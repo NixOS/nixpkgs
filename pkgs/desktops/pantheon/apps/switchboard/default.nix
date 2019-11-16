@@ -1,16 +1,29 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja
-, vala, gtk3, libgee, granite, gettext, clutter-gtk, libunity
-, elementary-icon-theme, wrapGAppsHook, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, libgee
+, granite
+, gettext
+, clutter-gtk
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0lsrn636b0f9a58jbid6mlhgrf8ajnh7phwmhgxz55sz7k7qa58g";
+    sha256 = "160aar5dqd019vn28cm0d0ijj1i6mwpqkl7a1l4lpasw12drxwxz";
   };
 
   passthru = {
@@ -21,7 +34,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gettext
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -36,10 +48,11 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
-    libunity
   ];
 
-  patches = [ ./plugs-path-env.patch ];
+  patches = [
+    ./plugs-path-env.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

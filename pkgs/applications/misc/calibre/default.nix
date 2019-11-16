@@ -1,16 +1,20 @@
-{ stdenv, fetchurl, poppler_utils, pkgconfig, libpng
+{ lib, mkDerivation, fetchurl, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
-, makeWrapper, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
-, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo
+, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
+, xdg_utils, makeDesktopItem, removeReferencesTo
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.42.0";
-  name = "calibre-${version}";
+let
+  pypkgs = python2Packages;
+
+in
+mkDerivation rec {
+  pname = "calibre";
+  version = "3.48.0";
 
   src = fetchurl {
-    url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0ymdhws3cb44p3fb24vln1wx6s7qnb8rr241jvm6qbj5rnp984dm";
+    url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
+    sha256 = "034m89h7j2088p324i1kya33dfldmqyynjxk3w98xiqkz7q2hi82";
   };
 
   patches = [
@@ -20,10 +24,10 @@ stdenv.mkDerivation rec {
     # - switches the version update from enabled to disabled by default
     ./no_updates_dialog.patch
     # the unrar patch is not from debian
-  ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${python2Packages.pyqt5_with_qtwebkit}/share/sip/PyQt5':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${pypkgs.pyqt5_with_qtwebkit}/share/sip/PyQt5':"  \
       setup/build_environment.py
 
     # Remove unneeded files and libs
@@ -35,17 +39,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake removeReferencesTo ];
+  nativeBuildInputs = [ pkgconfig qmake removeReferencesTo ];
+
+  CALIBRE_PY3_PORT = builtins.toString pypkgs.isPy3k;
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
-    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
-  ] ++ (with python2Packages; [
-    apsw cssselect css-parser dateutil dnspython html5-parser lxml mechanize netifaces pillow
+    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
+  ] ++ (with pypkgs; [
+    apsw cssselect css-parser dateutil dnspython html5-parser lxml markdown netifaces pillow
     python pyqt5_with_qtwebkit sip
-    regex msgpack beautifulsoup4
+    regex msgpack beautifulsoup4 html2text
     # the following are distributed with calibre, but we use upstream instead
     odfpy
+  ]) ++ lib.optionals (!pypkgs.isPy3k) (with pypkgs; [
+    mechanize
   ]);
 
   installPhase = ''
@@ -60,8 +68,8 @@ stdenv.mkDerivation rec {
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo.dev}/include/podofo
     export PODOFO_LIB_DIR=${podofo.lib}/lib
-    export SIP_BIN=${python2Packages.sip}/bin/sip
-    ${python2Packages.python.interpreter} setup.py install --prefix=$out
+    export SIP_BIN=${pypkgs.sip}/bin/sip
+    ${pypkgs.python.interpreter} setup.py install --prefix=$out
 
     PYFILES="$out/bin/* $out/lib/calibre/calibre/web/feeds/*.py
       $out/lib/calibre/calibre/ebooks/metadata/*.py
@@ -69,11 +77,6 @@ stdenv.mkDerivation rec {
 
     sed -i "s/env python[0-9.]*/python/" $PYFILES
     sed -i "2i import sys; sys.argv[0] = 'calibre'" $out/bin/calibre
-
-    for a in $out/bin/*; do
-      wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix PATH : ${poppler_utils.out}/bin
-    done
 
     # Replace @out@ by the output path.
     mkdir -p $out/share/applications/
@@ -88,23 +91,35 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # Wrap manually
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+
   # Remove some references to shrink the closure size. This reference (as of
   # 2018-11-06) was a single string like the following:
   #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
   preFixup = ''
     remove-references-to -t ${podofo.dev} $out/lib/calibre/calibre/plugins/podofo.so
+
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        ''${qtWrapperArgs[@]} \
+        ''${gappsWrapperArgs[@]} \
+        --prefix PYTHONPATH : $PYTHONPATH \
+        --prefix PATH : ${poppler_utils.out}/bin
+    done
   '';
 
   disallowedReferences = [ podofo.dev ];
 
   calibreDesktopItem = makeDesktopItem {
-    name = "calibre";
+    name = "calibre-gui";
     desktopName = "calibre";
     exec = "@out@/bin/calibre --detach %F";
     genericName = "E-book library management";
     icon = "@out@/share/calibre/images/library.png";
     comment = "Manage, convert, edit, and read e-books";
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    mimeType = lib.concatStringsSep ";" [
       "application/x-mobipocket-subscription"
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       "text/html"
@@ -144,7 +159,7 @@ stdenv.mkDerivation rec {
   };
 
   ebookEditDesktopItem = makeDesktopItem {
-    name = "calibre-edit-ebook";
+    name = "calibre-edit-book";
     desktopName = "Edit E-book";
     genericName = "E-book Editor";
     comment = "Edit e-books";
@@ -167,9 +182,9 @@ stdenv.mkDerivation rec {
     extraEntries = "NoDisplay=true";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Comprehensive e-book software";
-    homepage = https://calibre-ebook.com;
+    homepage = "https://calibre-ebook.com";
     license = with licenses; if unrarSupport then unfreeRedistributable else gpl3;
     maintainers = with maintainers; [ domenkozar pSub AndersonTorres ];
     platforms = platforms.linux;

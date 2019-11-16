@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ... }: stdenv.mkDerivation rec {
-  name = "smarty3-${version}";
+  pname = "smarty3";
   version = "3.1.33";
 
   src = fetchFromGitHub {

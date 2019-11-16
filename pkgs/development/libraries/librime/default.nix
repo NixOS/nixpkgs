@@ -2,14 +2,14 @@
   libyamlcpp, gmock }:
 
 stdenv.mkDerivation rec {
-  name = "librime-${version}";
-  version = "1.4.0";
+  pname = "librime";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "librime";
-    rev = "${version}";
-    sha256 = "1zkx1wfbd94v55gfycyd2b94jxclfyk2zl7yw35pyjx63qdlb6sd";
+    rev = version;
+    sha256 = "0xskhdhk7dgpc71r39pfzxi5vrlzy90aqj1gzv8nnapq91p2awhv";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = https://rime.im/;
+    homepage    = "https://rime.im/";
     description = "Rime Input Method Engine, the core library";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ sifmelcara ];

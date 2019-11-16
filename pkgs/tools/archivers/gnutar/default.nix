@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, acl }:
 
 stdenv.mkDerivation rec {
-  name = "gnutar-${version}";
+  pname = "gnutar";
   version = "1.32";
 
   src = fetchurl {

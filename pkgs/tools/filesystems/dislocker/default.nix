@@ -6,8 +6,9 @@ with stdenv.lib;
 let
   version = "0.7.1";
 in
-stdenv.mkDerivation rec {
-  name = "dislocker-${version}";
+stdenv.mkDerivation {
+  pname = "dislocker";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "aorimn";

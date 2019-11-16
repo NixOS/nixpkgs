@@ -1,6 +1,6 @@
 { stdenv, fetchurl, netcdf, hdf5, curl, gfortran }:
 stdenv.mkDerivation rec {
-  name = "netcdf-fortran-${version}";
+  pname = "netcdf-fortran";
   version = "4.4.5";
 
   src = fetchurl {

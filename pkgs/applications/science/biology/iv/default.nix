@@ -20,6 +20,7 @@ stdenv.mkDerivation rec
           break
         fi
       done
+    '' + stdenv.lib.optionalString stdenv.isLinux ''
       patchelf --add-needed ${libX11}/lib/libX11.so $out/lib/libIVhines.so
     '';
     meta = with stdenv.lib;

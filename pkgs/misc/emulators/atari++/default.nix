@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
-  name = "atari++-${version}";
+  pname = "atari++";
   version = "1.81";
 
   src = fetchurl {

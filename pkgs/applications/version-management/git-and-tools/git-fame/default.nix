@@ -1,11 +1,13 @@
-{ stdenv, bundlerEnv, ruby }:
+{ stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
 
-bundlerEnv rec {
+bundlerEnv {
   inherit ruby;
 
   pname = "git_fame";
 
   gemdir = ./.;
+
+  passthru.updateScript = bundlerUpdateScript "gitAndTools.git-fame";
 
   meta = with stdenv.lib; {
     description = ''
@@ -13,7 +15,7 @@ bundlerEnv rec {
       '';
     homepage    = http://oleander.io/git-fame-rb;
     license     = licenses.mit;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 nicknovitski ];
     platforms   = platforms.unix;
   };
 }

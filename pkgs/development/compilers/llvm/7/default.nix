@@ -111,7 +111,7 @@ let
       '' + mkExtraBuildCommands cc;
     };
 
-    lldClangNoCompilerRt = wrapCCWith rec {
+    lldClangNoCompilerRt = wrapCCWith {
       cc = tools.clang-unwrapped;
       bintools = wrapBintoolsWith {
         inherit (tools) bintools;

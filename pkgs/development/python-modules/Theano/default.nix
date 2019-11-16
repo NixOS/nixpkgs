@@ -1,8 +1,6 @@
 { stdenv
 , runCommandCC
-, lib
 , fetchPypi
-, gcc
 , buildPythonPackage
 , isPyPy
 , pythonOlder

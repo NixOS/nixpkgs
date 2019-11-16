@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "CoinMP-${version}";
+  pname = "CoinMP";
   version = "1.8.4";
 
   src = fetchurl {
-    url = "https://www.coin-or.org/download/source/CoinMP/${name}.tgz";
+    url = "https://www.coin-or.org/download/source/CoinMP/${pname}-${version}.tgz";
     sha256 = "13d3j1sdcjzpijp4qks3n0zibk649ac3hhv88hkk8ffxrc6gnn9l";
   };
 

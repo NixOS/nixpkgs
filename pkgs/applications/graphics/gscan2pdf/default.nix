@@ -1,17 +1,20 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, wrapGAppsHook,
+{ stdenv, fetchurl, perlPackages, wrapGAppsHook,
+  # libs
   librsvg, sane-backends, sane-frontends,
-  imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper,
-  xvfb_run, hicolor-icon-theme, liberation_ttf, file, pdftk }:
+  # runtime dependencies
+  imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
+  # test dependencies
+  xvfb_run, liberation_ttf, file, tesseract }:
 
 with stdenv.lib;
 
 perlPackages.buildPerlPackage rec {
-  name = "gscan2pdf-${version}";
-  version = "2.3.0";
+  pname = "gscan2pdf";
+  version = "2.5.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gscan2pdf/${version}/${name}.tar.xz";
-    sha256 = "0mcsmly0j9pmyzh6py8r6sfa30hc6gv300hqq3dxj4hv653vhkk9";
+    url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0wp81nsi5jfypabwmjqiamxr739jq5ij79n5fzn5pbw1hg5gcmfz";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -66,7 +69,8 @@ perlPackages.buildPerlPackage rec {
       --prefix PATH : "${djvulibre}/bin" \
       --prefix PATH : "${poppler_utils}/bin" \
       --prefix PATH : "${ghostscript}/bin" \
-      --prefix PATH : "${unpaper}/bin"
+      --prefix PATH : "${unpaper}/bin" \
+      --prefix PATH : "${pdftk}/bin"
   '';
 
   enableParallelBuilding = true;
@@ -76,16 +80,17 @@ perlPackages.buildPerlPackage rec {
   outputs = [ "out" "man" ];
 
   checkInputs = [
-    xvfb_run
-    hicolor-icon-theme
     imagemagick
     libtiff
     djvulibre
     poppler_utils
     ghostscript
-    file
-    pdftk
     unpaper
+    pdftk
+
+    xvfb_run
+    file
+    tesseract # tests are expecting tesseract 3.x precisely
   ];
 
   checkPhase = ''
@@ -97,7 +102,6 @@ perlPackages.buildPerlPackage rec {
     description = "A GUI to produce PDFs or DjVus from scanned documents";
     homepage = http://gscan2pdf.sourceforge.net/;
     license = licenses.gpl3;
-    maintainers = [ maintainers.pacien ];
+    maintainers = with maintainers; [ pacien ];
   };
 }
-

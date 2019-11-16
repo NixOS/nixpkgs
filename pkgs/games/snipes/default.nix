@@ -6,8 +6,8 @@ let
     sha256 = "06n8gq18js0bv4svx84ljzhs9zmi81wy0zqcqj3b4g0rsrkr20a7";
   };
 
-in stdenv.mkDerivation rec {
-  name = "snipes-${version}";
+in stdenv.mkDerivation {
+  pname = "snipes";
   version = "20180930";
 
   src = fetchFromGitHub {

@@ -3,7 +3,8 @@
 let
   version = "1.8.0";
   drv = stdenv.mkDerivation {
-    name = "keepassrpc-${version}";
+    pname = "keepassrpc";
+    inherit version;
     src = fetchurl {
       url    = "https://github.com/kee-org/keepassrpc/releases/download/v${version}/KeePassRPC.plgx";
       sha256 = "1dclfpia559cqf78qw29zz235h1df5md4kgjv3bbi8y41wwmx7cd";

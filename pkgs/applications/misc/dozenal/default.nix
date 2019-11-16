@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "12010904";
-  name = "dozenal-${version}";
+  pname = "dozenal";
   src = fetchFromGitHub {
     owner = "dgoodmaniii";
     repo = "dozenal";

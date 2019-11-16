@@ -1,12 +1,12 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, coreutils, gawk, procps, gnused
-, bc, findutils, xdpyinfo, xprop, gnugrep, ncurses
+, bc, findutils, xdpyinfo, xprop, gnugrep, ncurses, pciutils
 , darwin
 }:
 
 let
   path = lib.makeBinPath ([
     coreutils gawk gnused findutils
-    gnugrep ncurses bc
+    gnugrep ncurses bc pciutils
   ] ++ lib.optionals stdenv.isLinux [
     procps
     xdpyinfo
@@ -19,14 +19,14 @@ let
   ]));
 
 in stdenv.mkDerivation rec {
-  name = "screenFetch-${version}";
-  version = "3.8.0";
+  pname = "screenFetch";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner  = "KittyKatt";
     repo   = "screenFetch";
     rev    = "v${version}";
-    sha256 = "00ibv72cb7cqfpljyzgvajhbp0clqsqliz18nyv83bfy3gkf2qs8";
+    sha256 = "11mqld9pppbappqbaj49mw2v5kysx06sy1xbs81i0hhgh35hlziv";
   };
 
   nativeBuildInputs = [ makeWrapper ];

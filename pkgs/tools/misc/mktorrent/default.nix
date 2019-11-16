@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, openssl}:
 
 stdenv.mkDerivation rec {
-  name = "mktorrent-${version}";
+  pname = "mktorrent";
   version = "1.1";
 
   src = fetchFromGitHub {

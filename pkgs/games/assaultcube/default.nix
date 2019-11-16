@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ file zlib ] ++ optionals client [ openal SDL SDL_image libogg libvorbis ];
 
   targets = (optionalString server "server") + (optionalString client " client");
-  makeFlags = [ "-C source/src" "CXX=c++" "${targets}" ];
+  makeFlags = [ "-C source/src" "CXX=c++" targets ];
 
   desktop = makeDesktopItem {
     name = "AssaultCube";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     genericName = "First-person shooter";
     categories = "Application;Game;ActionGame;Shooter";
     icon = "assaultcube.png";
-    exec = "${pname}";
+    exec = pname;
   };
 
   gamedatadir = "/share/games/${pname}";

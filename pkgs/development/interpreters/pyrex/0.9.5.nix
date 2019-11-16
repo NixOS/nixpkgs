@@ -2,8 +2,9 @@
 
 let version = "0.9.5.1.1"; in
 
-python2Packages.buildPythonPackage rec {
-  name = "pyrex-${version}";
+python2Packages.buildPythonPackage {
+  pname = "pyrex";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/oldtar/Pyrex-${version}.tar.gz";

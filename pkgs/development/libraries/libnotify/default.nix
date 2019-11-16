@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, fetchpatch
-, glib, gdk_pixbuf, gobject-introspection, gnome3 }:
+, glib, gdk-pixbuf, gobject-introspection, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libnotify";
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # disable tests as we don't need to depend on gtk+(2/3)
+    # disable tests as we don't need to depend on GTK (2/3)
     "-Dtests=false"
     "-Ddocbook_docs=disabled"
     "-Dgtk_doc=false"
   ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
-  buildInputs = [ glib gdk_pixbuf ];
+  buildInputs = [ glib gdk-pixbuf ];
 
   passthru = {
     updateScript = gnome3.updateScript {

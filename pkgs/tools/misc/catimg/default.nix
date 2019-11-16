@@ -4,13 +4,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "catimg";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "posva";
     repo = pname;
     rev = version;
-    sha256 = "0n74iczzgxrcq3zpa7ndycb9rinm829yvf81c747q4ngv5q6pzcm";
+    sha256 = "0g9ywbgy162wiam9hc3yqpq5q4gyxa8fj4jskr3fdz8z8jjaabzz";
   };
 
   nativeBuildInputs = [ cmake ];

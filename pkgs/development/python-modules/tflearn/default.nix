@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, fetchurl, pytest, scipy, h5py
+{ lib, fetchPypi, buildPythonPackage, pytest, scipy, h5py
 , pillow, tensorflow }:
 
 buildPythonPackage rec {

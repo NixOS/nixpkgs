@@ -140,7 +140,7 @@ in
     };
 
     logSize = mkOption {
-      type        = types.string;
+      type        = types.str;
       default     = "10MiB";
       description = ''
         Roll over to a new log file after the current log file
@@ -149,7 +149,7 @@ in
     };
 
     maxLogSize = mkOption {
-      type        = types.string;
+      type        = types.str;
       default     = "100MiB";
       description = ''
         Delete the oldest log file when the total size of all log
@@ -171,7 +171,7 @@ in
     };
 
     memory = mkOption {
-      type        = types.string;
+      type        = types.str;
       default     = "8GiB";
       description = ''
         Maximum memory used by the process. The default value is
@@ -193,7 +193,7 @@ in
     };
 
     storageMemory = mkOption {
-      type        = types.string;
+      type        = types.str;
       default     = "1GiB";
       description = ''
         Maximum memory used for data storage. The default value is
@@ -359,6 +359,13 @@ in
         }
       ];
 
+    systemd.tmpfiles.rules = [
+      "d /etc/foundationdb 0755 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.logDir}' 0770 ${cfg.user} ${cfg.group} - -"
+      "F '${cfg.pidfile}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.foundationdb = {
       description             = "FoundationDB Service";
 
@@ -396,25 +403,12 @@ in
       path = [ pkg pkgs.coreutils ];
 
       preStart = ''
-        rm -f ${cfg.pidfile}   && \
-          touch ${cfg.pidfile} && \
-          chown -R ${cfg.user}:${cfg.group} ${cfg.pidfile}
-
-        for x in "${cfg.logDir}" "${cfg.dataDir}"; do
-          [ ! -d "$x" ] && mkdir -m 0770 -vp "$x";
-          chown -R ${cfg.user}:${cfg.group} "$x";
-        done
-
-        [ ! -d /etc/foundationdb ] && \
-          mkdir -m 0775 -vp /etc/foundationdb && \
-          chown -R ${cfg.user}:${cfg.group} "/etc/foundationdb"
-
         if [ ! -f /etc/foundationdb/fdb.cluster ]; then
             cf=/etc/foundationdb/fdb.cluster
             desc=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
             rand=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
             echo ''${desc}:''${rand}@${initialIpAddr}:${builtins.toString cfg.listenPortStart} > $cf
-            chmod 0664 $cf && chown -R ${cfg.user}:${cfg.group} $cf
+            chmod 0664 $cf
             touch "${cfg.dataDir}/.first_startup"
         fi
       '';

@@ -106,21 +106,21 @@ The unique option `services.httpd.adminAddr' is defined multiple times, in `/etc
   configuration option is. The command <option>nixos-option</option> allows you
   to find out:
 <screen>
-$ nixos-option <xref linkend="opt-services.xserver.enable"/>
+<prompt>$ </prompt>nixos-option <xref linkend="opt-services.xserver.enable"/>
 true
 
-$ nixos-option <xref linkend="opt-boot.kernelModules"/>
+<prompt>$ </prompt>nixos-option <xref linkend="opt-boot.kernelModules"/>
 [ "tun" "ipv6" "loop" <replaceable>...</replaceable> ]
 </screen>
   Interactive exploration of the configuration is possible using <command>nix
   repl</command>, a read-eval-print loop for Nix expressions. A typical use:
 <screen>
-$ nix repl '&lt;nixpkgs/nixos>'
+<prompt>$ </prompt>nix repl '&lt;nixpkgs/nixos>'
 
-nix-repl> config.<xref linkend="opt-networking.hostName"/>
+<prompt>nix-repl> </prompt>config.<xref linkend="opt-networking.hostName"/>
 "mandark"
 
-nix-repl> map (x: x.hostName) config.<xref linkend="opt-services.httpd.virtualHosts"/>
+<prompt>nix-repl> </prompt>map (x: x.hostName) config.<xref linkend="opt-services.httpd.virtualHosts"/>
 [ "example.org" "example.gov" ]
 </screen>
  </para>
@@ -129,17 +129,17 @@ nix-repl> map (x: x.hostName) config.<xref linkend="opt-services.httpd.virtualHo
   While abstracting your configuration, you may find it useful to generate
   modules using code, instead of writing files. The example below would have
   the same effect as importing a file which sets those options.
-<screen>
-     { config, pkgs, ... }:
+<programlisting>
+{ config, pkgs, ... }:
 
-     let netConfig = { hostName }: {
-       networking.hostName = hostName;
-       networking.useDHCP = false;
-    };
+let netConfig = { hostName }: {
+  networking.hostName = hostName;
+  networking.useDHCP = false;
+};
 
-    in
+in
 
-    { imports = [ (netConfig "nixos.localdomain") ]; }
-  </screen>
+{ imports = [ (netConfig "nixos.localdomain") ]; }
+</programlisting>
  </para>
 </section>

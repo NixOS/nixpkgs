@@ -1,25 +1,21 @@
-{ composeAndroidPackages, stdenv }:
+{ composeAndroidPackages, stdenv, lib }:
 { name, app ? null
-, platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default", useGoogleAPIs ? false
+, platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default"
 , enableGPU ? false, extraAVDFiles ? []
 , package ? null, activity ? null
-, avdHomeDir ? null
-}@args:
+, avdHomeDir ? null, sdkExtraArgs ? {}
+}:
 
 let
-  androidSdkArgNames = builtins.attrNames (builtins.functionArgs composeAndroidPackages);
-  extraParams = removeAttrs args ([ "name" ] ++ androidSdkArgNames);
-
-  # Extract the parameters meant for the Android SDK
-  androidParams = {
+  sdkArgs = {
     platformVersions = [ platformVersion ];
     includeEmulator = true;
     includeSystemImages = true;
     systemImageTypes = [ systemImageType ];
     abiVersions = [ abiVersion ];
-  };
+  } // sdkExtraArgs;
 
-  androidsdkComposition = (composeAndroidPackages androidParams).androidsdk;
+  sdk = (composeAndroidPackages sdkArgs).androidsdk;
 in
 stdenv.mkDerivation {
   inherit name;
@@ -45,7 +41,7 @@ stdenv.mkDerivation {
     ''}
 
     # We need to specify the location of the Android SDK root folder
-    export ANDROID_SDK_ROOT=${androidsdkComposition}/libexec/android-sdk
+    export ANDROID_SDK_ROOT=${sdk}/libexec/android-sdk
 
     # We have to look for a free TCP port
 
@@ -53,7 +49,7 @@ stdenv.mkDerivation {
 
     for i in $(seq 5554 2 5584)
     do
-        if [ -z "$(${androidsdkComposition}/libexec/android-sdk/platform-tools/adb devices | grep emulator-$i)" ]
+        if [ -z "$(${sdk}/libexec/android-sdk/platform-tools/adb devices | grep emulator-$i)" ]
         then
             port=$i
             break
@@ -71,41 +67,41 @@ stdenv.mkDerivation {
     export ANDROID_SERIAL="emulator-$port"
 
     # Create a virtual android device for testing if it does not exists
-    ${androidsdkComposition}/libexec/android-sdk/tools/android list targets
+    ${sdk}/libexec/android-sdk/tools/android list targets
 
-    if [ "$(${androidsdkComposition}/libexec/android-sdk/tools/android list avd | grep 'Name: device')" = "" ]
+    if [ "$(${sdk}/libexec/android-sdk/tools/android list avd | grep 'Name: device')" = "" ]
     then
         # Create a virtual android device
-        yes "" | ${androidsdkComposition}/libexec/android-sdk/tools/android create avd -n device -t 1 --abi ${systemImageType}/${abiVersion} $NIX_ANDROID_AVD_FLAGS
+        yes "" | ${sdk}/libexec/android-sdk/tools/android create avd -n device -t 1 --abi ${systemImageType}/${abiVersion} $NIX_ANDROID_AVD_FLAGS
 
-        ${stdenv.lib.optionalString enableGPU ''
+        ${lib.optionalString enableGPU ''
           # Enable GPU acceleration
           echo "hw.gpu.enabled=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
         ''}
 
-        ${stdenv.lib.concatMapStrings (extraAVDFile: ''
+        ${lib.concatMapStrings (extraAVDFile: ''
           ln -sf ${extraAVDFile} $ANDROID_SDK_HOME/.android/avd/device.avd
         '') extraAVDFiles}
     fi
 
     # Launch the emulator
-    ${androidsdkComposition}/libexec/android-sdk/emulator/emulator -avd device -no-boot-anim -port $port $NIX_ANDROID_EMULATOR_FLAGS &
+    ${sdk}/libexec/android-sdk/emulator/emulator -avd device -no-boot-anim -port $port $NIX_ANDROID_EMULATOR_FLAGS &
 
     # Wait until the device has completely booted
     echo "Waiting until the emulator has booted the device and the package manager is ready..." >&2
 
-    ${androidsdkComposition}/libexec/android-sdk/platform-tools/adb -s emulator-$port wait-for-device
+    ${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port wait-for-device
 
     echo "Device state has been reached" >&2
 
-    while [ -z "$(${androidsdkComposition}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell getprop dev.bootcomplete | grep 1)" ]
+    while [ -z "$(${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell getprop dev.bootcomplete | grep 1)" ]
     do
         sleep 5
     done
 
     echo "dev.bootcomplete property is 1" >&2
 
-    #while [ -z "$(${androidsdkComposition}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell getprop sys.boot_completed | grep 1)" ]
+    #while [ -z "$(${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell getprop sys.boot_completed | grep 1)" ]
     #do
         #sleep 5
     #done
@@ -114,10 +110,10 @@ stdenv.mkDerivation {
 
     echo "ready" >&2
 
-    ${stdenv.lib.optionalString (app != null) ''
+    ${lib.optionalString (app != null) ''
       # Install the App through the debugger, if it has not been installed yet
 
-      if [ -z "${package}" ] || [ "$(${androidsdkComposition}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell pm list packages | grep package:${package})" = "" ]
+      if [ -z "${package}" ] || [ "$(${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell pm list packages | grep package:${package})" = "" ]
       then
           if [ -d "${app}" ]
           then
@@ -126,12 +122,12 @@ stdenv.mkDerivation {
               appPath="${app}"
           fi
 
-          ${androidsdkComposition}/libexec/android-sdk/platform-tools/adb -s emulator-$port install "$appPath"
+          ${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port install "$appPath"
       fi
 
       # Start the application
-      ${stdenv.lib.optionalString (package != null && activity != null) ''
-          ${androidsdkComposition}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/${activity}
+      ${lib.optionalString (package != null && activity != null) ''
+          ${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/${activity}
       ''}
     ''}
     EOF

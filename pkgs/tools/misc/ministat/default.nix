@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "ministat-${version}";
+  pname = "ministat";
   version = "20150715-1";
 
   src = fetchgit {

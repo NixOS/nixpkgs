@@ -1,4 +1,4 @@
-{ lib, fetchzip }:
+{ fetchzip }:
 
 fetchzip {
   name = "lmmath-0.903";

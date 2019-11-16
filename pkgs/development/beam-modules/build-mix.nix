@@ -63,7 +63,7 @@ let
         export MIX_ENV=prod
         export MIX_NO_DEPS=1
 
-        mix compile ${debugInfoFlag}
+        mix compile ${debugInfoFlag} --no-deps-check
 
         runHook postBuild
     ''

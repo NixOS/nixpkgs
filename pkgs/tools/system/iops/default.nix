@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "iops-${version}";
+  pname = "iops";
   version = "0.1";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/iops/${name}.tgz";
+    url = "https://www.vanheusden.com/iops/${pname}-${version}.tgz";
     sha256 = "1knih6dwwiicycp5ml09bj3k8j7air9bng070sfnxwfv786y90bz";
   };
 

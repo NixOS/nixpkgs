@@ -3,12 +3,11 @@
 
 buildPythonPackage rec {
   pname = "GPy";
-  version = "1.9.6";
-  name  = "${pname}-${version}";
+  version = "1.9.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f11d649b3320d4cb836d283706754953277c8696977726803ccd3ee1355a94a7";
+    sha256 = "04faf0c24eacc4dea60727c50a48a07ddf9b5751a3b73c382105e2a31657c7ed";
   };
 
   # running tests produces "ImportError: cannot import name 'linalg_cython'"

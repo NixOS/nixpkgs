@@ -4,7 +4,7 @@
 , python
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   name = "python-${pkgs.notmuch.name}";
 
   src = pkgs.notmuch.src;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     description = "A Python wrapper around notmuch";
     homepage = https://notmuchmail.org/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 
 }

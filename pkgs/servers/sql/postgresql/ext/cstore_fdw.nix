@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, postgresql, protobufc }:
 
 stdenv.mkDerivation rec {
-  name = "cstore_fdw-${version}";
+  pname = "cstore_fdw";
   version = "1.6.2";
 
   nativeBuildInputs = [ protobufc ];
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/{lib,share/extension}
+    mkdir -p $out/{lib,share/postgresql/extension}
 
     cp *.so      $out/lib
-    cp *.sql     $out/share/extension
-    cp *.control $out/share/extension
+    cp *.sql     $out/share/postgresql/extension
+    cp *.control $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {

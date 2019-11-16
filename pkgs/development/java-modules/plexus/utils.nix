@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusUtils_1_0_4 = map (obj: fetchMaven {
     version = "1.0.4";
     artifactId = "plexus-utils";

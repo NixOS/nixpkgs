@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "codesearch-${version}";
+  pname = "codesearch";
   version = "20150717-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "a45d81b686e85d01f2838439deaf72126ccd5a96";
 

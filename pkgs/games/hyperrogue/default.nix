@@ -2,7 +2,7 @@
   libpng, glew, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "hyperrogue-${version}";
+  pname = "hyperrogue";
   version = "10.5e";
 
   src = fetchFromGitHub {

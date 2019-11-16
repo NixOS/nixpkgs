@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, gettext
-, vim, glib, libxml2, openssl, ncurses, popt, screen
+, vim, glib, libxml2, ncurses, popt, screen
 }:
 
 stdenv.mkDerivation rec {
-  name = "apt-dater-${version}";
+  pname = "apt-dater";
   version = "1.0.4";
 
   src = fetchFromGitHub {

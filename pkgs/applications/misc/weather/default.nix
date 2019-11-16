@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
     version = "2.3";
-    name = "weather-${version}";
+    pname = "weather";
 
     src = fetchurl {
-        url = "http://fungi.yuggoth.org/weather/src/${name}.tar.xz";
+        url = "http://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
         sha256 = "0inij30prqqcmzjwcmfzjjn0ya5klv18qmajgxipz1jr3lpqs546";
     };
 

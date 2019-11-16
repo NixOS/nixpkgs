@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, fetchFromGitLab, meson, ninja, gettext, cargo, rustc, python3, rustPlatform, pkgconfig, gnome3
+{ stdenv, fetchurl, fetchpatch, meson, ninja, gettext, cargo, rustc, python3, pkgconfig, gnome3
 , glib, libhandy, gtk3, dbus, openssl, sqlite, gst_all_1, wrapGAppsHook }:
 
 # TODO: build from git for easier updates
 # rustPlatform.buildRustPackage rec {
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.4.6";
-  name = "gnome-podcasts-${version}";
+  pname = "gnome-podcasts";
 
   src = fetchurl {
     url = https://gitlab.gnome.org/World/podcasts/uploads/e59ac5d618d7daf4c7f33ba72957c466/gnome-podcasts-0.4.6.tar.xz;

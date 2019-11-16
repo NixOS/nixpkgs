@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "i3minator-${version}";
+  pname = "i3minator";
   version = "0.0.4";
 
   src = fetchFromGitHub {

@@ -20,10 +20,6 @@ let
 
   androidsdk = (composeAndroidPackages realAndroidsdkArgs).androidsdk;
 
-  realXcodewrapperArgs = {
-    inherit xcodeBaseDir;
-  } // xcodewrapperArgs;
-
   xcodewrapper = composeXcodeWrapper xcodewrapperArgs;
 
   deleteKeychain = ''

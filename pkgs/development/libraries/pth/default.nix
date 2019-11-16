@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = stdenv.lib.optionalString stdenv.isAarch32 ''
     configureFlagsArray=("CFLAGS=-DJB_SP=8 -DJB_PC=9")
+  '' + stdenv.lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
+    configureFlagsArray+=("ac_cv_check_sjlj=ssjlj")
   '';
 
   meta = with stdenv.lib; {
@@ -17,6 +19,5 @@ stdenv.mkDerivation rec {
     homepage = https://www.gnu.org/software/pth;
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    broken = stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isAarch64;
   };
 }

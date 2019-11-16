@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchFromGitLab, cmake, gfortran, perl
+{ stdenv, fetchFromGitLab, cmake, gfortran, perl
 , openblas, hdf5-cpp, python3, texlive
 , armadillo, openmpi, globalarrays, openssh
 , makeWrapper
@@ -11,7 +11,8 @@ let
   python = python3.withPackages (ps : with ps; [ six pyparsing ]);
 
 in stdenv.mkDerivation {
-  name = "openmolcas-${version}";
+  pname = "openmolcas";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "Molcas";

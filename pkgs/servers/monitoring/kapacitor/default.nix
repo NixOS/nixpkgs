@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "kapacitor-${version}";
+  pname = "kapacitor";
   version = "1.5.1";
 
   goPackagePath = "github.com/influxdata/kapacitor";

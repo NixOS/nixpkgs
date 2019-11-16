@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, glib, libdaemon
-, mpd_clientlib, curl, sqlite, ruby, bundlerEnv, libnotify, pandoc }:
+, mpd_clientlib, curl, sqlite, bundlerEnv, libnotify, pandoc }:
 
 let
   gemEnv = bundlerEnv {
     name = "mpdcron-bundle";
     gemdir = ./.;
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   version = "20161228";
-  name    = "mpdcron-${version}";
+  pname = "mpdcron";
 
   src = fetchFromGitHub {
     owner = "alip";

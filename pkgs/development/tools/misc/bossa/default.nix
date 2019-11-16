@@ -7,13 +7,13 @@ let
   bin2c = stdenv.mkDerivation {
     name = "bossa-bin2c";
     src = ./bin2c.c;
-    unpackPhase = "true";
+    dontUnpack = true;
     buildPhase = ''cc $src -o bin2c'';
     installPhase = ''mkdir -p $out/bin; cp bin2c $out/bin/'';
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bossa-1.8";
 
   src = fetchgit {

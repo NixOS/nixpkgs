@@ -1,13 +1,13 @@
 diff --git a/wee_slack.py b/wee_slack.py
-index c5c7bc6..23fef2f 100644
+index dbe6446..d1b7546 100644
 --- a/wee_slack.py
 +++ b/wee_slack.py
-@@ -25,6 +25,8 @@ try:
- except:
-     from StringIO import StringIO
+@@ -25,6 +25,8 @@ import random
+ import socket
+ import string
  
 +sys.path.append('@env@')
 +
- from websocket import create_connection, WebSocketConnectionClosedException
+ from websocket import ABNF, create_connection, WebSocketConnectionClosedException
  
- # hack to make tests possible.. better way?
+ try:

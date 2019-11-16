@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/alecthomas/template";
-      rev = "a0175ee3bccc567396460bf5acd36800cb10c49c";
-      sha256 = "0qjgvvh26vk1cyfq9fadyhfgdj36f1iapbmr5xp6zqipldz8ffxj";
+      rev = "fb15b899a75114aa79cc930e33c46b577cc664b1";
+      sha256 = "1vlasv4dgycydh5wx6jdcvz40zdv90zz1h7836z7lhsi2ymvii26";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/alecthomas/units";
-      rev = "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a";
-      sha256 = "1j65b91qb9sbrml9cpabfrcf07wmgzzghrl7809hjjhrmbzri5bl";
+      rev = "f65c72e2690dc4b403c8bd637baf4611cd4c069b";
+      sha256 = "04jyqm7m3m01ppfy1f9xk4qvrwvs78q9zml6llyf2b3v5k6b2bbc";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/disintegration/imaging";
-      rev = "061e8a750a4db9667cdf9e2af7f4029ba506cb3b";
-      sha256 = "13fkknwz2iby5rdzv9sgam6p27zdgxis3sxgyls9sdir5lbhjhm7";
+      rev = "9aab30e6aa535fe3337b489b76759ef97dfaf362";
+      sha256 = "015amm3x989hl3r4gxnixj602fl9j8z53n0lrq804cbfbk7a31fw";
     };
   }
   {
@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/fogleman/gg";
-      rev = "72436a171bf31757dc87fb8fa9f7485307350307";
-      sha256 = "116ysxj7nv9zw5ff75p2mriwf6fx4qzdik9za8cy0l0vih78qvjq";
+      rev = "4dc34561c649343936bb2d29e23959bd6d98ab12";
+      sha256 = "1x1finzdrr80dd3r7wvf7zb184yjf4dawz7s581p2dr64dcialww";
     };
   }
   {
@@ -77,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/image";
-      rev = "6d32002ffd7577f23673706728e1c510698cecb1";
-      sha256 = "03jzn07kfgdzzm4785xngcksv9ix6q1lf12b8j91flc0v7swsd1b";
+      rev = "e7c1f5e7dbb87d8921928a6d9fc52fb31ce73b24";
+      sha256 = "0czp897aicqw1dgybj0hc2zzwb20rhqkdqm7siqci3yk7yk9cymf";
     };
   }
   {
@@ -86,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "f4e77d36d62c17c2336347bb2670ddbd02d092b7";
-      sha256 = "0avjnglqqg9ya0cbhp23m4namykii219kxjywxn4cd7pfcc5arha";
+      rev = "daa7c04131f568e31c51927b359a2d197a357058";
+      sha256 = "17gbfvb5iqyayzw0zd6q218zsbf7x74rflvn18wkxvsw95n1y54h";
     };
   }
   {

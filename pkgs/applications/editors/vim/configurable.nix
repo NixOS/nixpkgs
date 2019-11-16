@@ -1,6 +1,6 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
+{ source ? "default", callPackage, stdenv, ncurses, pkgconfig, gettext
 , writeText, config, glib, gtk2-x11, gtk3-x11, lua, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
@@ -10,7 +10,7 @@
 , runtimeShell
 
 # apple frameworks
-, CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
+, CoreServices, CoreData, Cocoa, Foundation, libobjc
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
@@ -68,12 +68,12 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "vim_configurable-${version}";
+  pname = "vim_configurable";
 
   inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 
   src = builtins.getAttr source {
-    "default" = common.src; # latest release
+    default = common.src; # latest release
   };
 
   patches = [ ./cflags-prune.diff ] ++ stdenv.lib.optional ftNixSupport ./ft-nix-support.patch;
@@ -132,7 +132,7 @@ in stdenv.mkDerivation rec {
     libXmu glib libICE ]
     ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2-x11
     ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3-x11
-    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc cf-private ]
+    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
     ++ stdenv.lib.optional luaSupport lua
     ++ stdenv.lib.optional pythonSupport python
     ++ stdenv.lib.optional tclSupport tcl

@@ -2,10 +2,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libtool-2.4.6";
+  pname = "libtool";
+  version = "2.4.6";
 
   src = fetchurl {
-    url = "mirror://gnu/libtool/${name}.tar.gz";
+    url = "mirror://gnu/libtool/${pname}-${version}.tar.gz";
     sha256 = "1qq61k6lp1fp75xs398yzi6wvbx232l7xbyn3p13cnh27mflvgg3";
   };
 
@@ -23,13 +24,14 @@ stdenv.mkDerivation rec {
   doCheck = false;
   doInstallCheck = false;
 
+  enableParallelBuilding = true;
+
   # Don't run the native `strip' when cross-compiling.  This breaks at least
   # with `.a' files for MinGW.
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU Libtool, a generic library support script";
-
     longDescription = ''
       GNU libtool is a generic library support script.  Libtool hides
       the complexity of using shared libraries behind a consistent,
@@ -39,12 +41,9 @@ stdenv.mkDerivation rec {
       your Makefile, Makefile.in, or Makefile.am.  See the
       documentation for details.
     '';
-
     homepage = https://www.gnu.org/software/libtool/;
-
-    license = stdenv.lib.licenses.gpl2Plus;
-
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

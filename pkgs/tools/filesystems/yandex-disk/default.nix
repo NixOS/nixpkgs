@@ -4,7 +4,7 @@ let
   p = if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc.lib}/lib64";
-      sha256 = "1hxsizk3hm1465wkxwdbbcffgi3r64y3r0zsfzsvhvnzx4y5dadm";
+      sha256 = "14bpc5ddhxvgfxkxhj5q9z443s7z4nn1zf4k1hxj7rbf13rcpg00";
     }
     else {
       arch = "i386";
@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
 
-  name = "yandex-disk-${version}";
-  version = "0.1.5.1010";
+  pname = "yandex-disk";
+  version = "0.1.5.1039";
 
   src = fetchurl {
-    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
+    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm";
     sha256 = p.sha256;
   };
 

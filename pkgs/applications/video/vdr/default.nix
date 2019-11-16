@@ -4,19 +4,19 @@
 , enableBidi ? true
 }: stdenv.mkDerivation rec {
 
-  name = "vdr-${version}";
-  version = "2.4.0";
+  pname = "vdr";
+  version = "2.4.1";
 
   src = fetchurl {
-    url = "ftp://ftp.tvdr.de/vdr/${name}.tar.bz2";
-    sha256 = "1klcgy9kr7n6z8d2c77j63bl8hvhx5qnqppg73f77004hzz4kbwk";
+    url = "ftp://ftp.tvdr.de/vdr/${pname}-${version}.tar.bz2";
+    sha256 = "1p51b14aqzncx3xpfg0rjplc48pg7520035i5p6r5zzkqhszihr5";
   };
 
   enableParallelBuilding = true;
 
   postPatch = "substituteInPlace Makefile --replace libsystemd-daemon libsystemd";
 
-  buildInputs = [ fontconfig libjpeg libcap freetype ]
+  buildInputs = [ fontconfig libjpeg libcap freetype perl ]
   ++ lib.optional enableSystemd systemd
   ++ lib.optional enableBidi fribidi;
 

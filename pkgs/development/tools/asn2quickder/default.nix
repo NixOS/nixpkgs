@@ -12,11 +12,13 @@ buildPythonApplication rec {
     repo = "quick-der";
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs ./python/scripts/*
   '';
 
-  buildInputs = [ makeWrapper cmake ];
+  dontUseCmakeConfigure = true;
+
+  nativeBuildInputs = [ makeWrapper cmake ];
   checkInputs = [ pytestrunner pytest ];
 
   propagatedBuildInputs = [ pyparsing asn1ate six ];

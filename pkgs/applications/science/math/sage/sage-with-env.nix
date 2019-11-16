@@ -87,7 +87,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = src.version;
-  name = "sage-with-env-${version}";
+  pname = "sage-with-env";
   src = sage-env.lib.src;
 
   inherit buildInputs;
@@ -99,6 +99,13 @@ stdenv.mkDerivation rec {
     for pkg in ${lib.concatStringsSep " " input_names}; do
       touch "installed/$pkg"
     done
+
+    # threejs version is in format 0.<version>.minor, but sage currently still
+    # relies on installed_packages for the online version of threejs to work
+    # and expects the format r<version>. This is a hotfix for now.
+    # upstream: https://trac.sagemath.org/ticket/26434
+    rm "installed/threejs"*
+    touch "installed/threejs-r${lib.versions.minor three.version}"
   '';
 
   installPhase = ''

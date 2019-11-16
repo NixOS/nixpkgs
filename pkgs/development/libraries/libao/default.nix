@@ -1,16 +1,16 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig, libpulseaudio, alsaLib, libcap
-, CoreAudio, CoreServices, AudioUnit, AudioToolbox
+, CoreAudio, CoreServices, AudioUnit
 , usePulseAudio }:
 
 stdenv.mkDerivation rec {
   version = "1.2.2";
-  name = "libao-${version}";
+  pname = "libao";
 
   # the github mirror is more up to date than downloads.xiph.org
   src = fetchFromGitHub {
     owner  = "xiph";
     repo   = "libao";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0svgk4sc9kdhcsfyvbvgm5vpbg3sfr6z5rliflrw49v3x2i4vxq5";
   };
 

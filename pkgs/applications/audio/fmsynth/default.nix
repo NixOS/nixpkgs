@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, gtkmm2, lv2, lvtk, pkgconfig }:
-stdenv.mkDerivation rec {
-  name = "fmsynth-unstable-${version}";
+stdenv.mkDerivation {
+  pname = "fmsynth-unstable";
   version = "2015-02-07";
   src = fetchFromGitHub {
     owner = "Themaister";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     cd lv2
     substituteInPlace GNUmakefile --replace "/usr/lib/lv2" "$out/lib/lv2"
-    make
+    make  SIMD=0
   '';
 
   preInstall = "mkdir -p $out/lib/lv2";

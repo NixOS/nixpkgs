@@ -2,7 +2,6 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
-, fetchpatch
 , doit
 , glibcLocales
 , pytest

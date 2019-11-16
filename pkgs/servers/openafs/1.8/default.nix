@@ -7,8 +7,8 @@
 
 with (import ./srcs.nix { inherit fetchurl; });
 
-stdenv.mkDerivation rec {
-  name = "openafs-${version}";
+stdenv.mkDerivation {
+  pname = "openafs";
   inherit version srcs;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -96,6 +96,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.openafs.org;
     license = licenses.ipl10;
     platforms = platforms.linux;
-    maintainers = [ maintainers.z77z maintainers.spacefrogg ];
+    maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
   };
 }

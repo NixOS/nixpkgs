@@ -15,6 +15,8 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ocaml_lwt csv ocaml_sqlite3 ];
   doCheck = true;
 
+  preBuild = "rm META.sqlexpr";
+
   meta = {
     description = "Type-safe, convenient SQLite database access";
     homepage = "https://github.com/mfp/ocaml-sqlexpr";

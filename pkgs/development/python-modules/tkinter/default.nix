@@ -5,7 +5,7 @@
 , isPyPy
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   name = "tkinter-${python.version}";
   src = py;
   format = "other";

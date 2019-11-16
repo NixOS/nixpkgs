@@ -1,9 +1,9 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "jmespath-${version}";
+  pname = "jmespath";
   version = "0.2.2";
-  rev = "${version}";
+  rev = version;
 
   goPackagePath = "github.com/jmespath/go-jmespath";
 

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "std-man-pages-4.4.0";
 
   src = fetchurl {

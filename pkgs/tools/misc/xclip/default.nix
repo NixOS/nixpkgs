@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libXmu }:
 
 stdenv.mkDerivation rec {
-  name = "xclip-${version}";
+  pname = "xclip";
   version = "0.13";
 
   src = fetchFromGitHub {
