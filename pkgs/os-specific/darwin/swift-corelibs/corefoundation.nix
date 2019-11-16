@@ -90,4 +90,8 @@ stdenv.mkDerivation {
       ln -s Versions/Current/$i $base/$i
     done
   '';
+
+  meta = {
+    hydraPlatforms = []; # Do not build at hydra.nixos.org because it almost consistently fails to do so https://github.com/NixOS/nixpkgs/issues/72146
+  };
 }
