@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtscript, qtsvg,
-  poppler, zlib, pkgconfig }:
+  wrapQtAppsHook, poppler, zlib, pkgconfig }:
 
 mkDerivation rec {
   pname = "texstudio";
@@ -12,7 +12,7 @@ mkDerivation rec {
     sha256 = "0ck65fvz6mzfpqdb1ndgyvgxdnslrwhdr1swgck4gaghcrgbg3gq";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook pkgconfig ];
   buildInputs = [ qtbase qtscript qtsvg poppler zlib ];
 
   qmakeFlags = [ "NO_APPDATA=True" ];
