@@ -6546,6 +6546,8 @@ in
 
   staruml = callPackage ../tools/misc/staruml { inherit (gnome2) GConf; libgcrypt = libgcrypt_1_5; };
 
+  stone-phaser = callPackage ../applications/audio/stone-phaser { };
+
   systrayhelper = callPackage ../tools/misc/systrayhelper {};
 
   Sylk = callPackage ../applications/networking/Sylk {};
