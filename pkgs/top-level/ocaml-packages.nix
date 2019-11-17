@@ -374,6 +374,8 @@ let
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+    kafka = callPackage ../development/ocaml-modules/kafka { };
+
     ke = callPackage ../development/ocaml-modules/ke { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
