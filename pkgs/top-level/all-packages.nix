@@ -3037,6 +3037,8 @@ in
 
   enscript = callPackage ../tools/text/enscript { };
 
+  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { };
+
   entr = callPackage ../tools/misc/entr { };
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
@@ -6539,6 +6541,8 @@ in
   stricat = callPackage ../tools/security/stricat { };
 
   staruml = callPackage ../tools/misc/staruml { inherit (gnome2) GConf; libgcrypt = libgcrypt_1_5; };
+
+  stone-phaser = callPackage ../applications/audio/stone-phaser { };
 
   systrayhelper = callPackage ../tools/misc/systrayhelper {};
 
@@ -19134,6 +19138,8 @@ in
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
+  gxmatcheq-lv2 = callPackage ../applications/audio/gxmatcheq-lv2 { };
+
   gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
 
   hackrf = callPackage ../applications/radio/hackrf { };
@@ -19594,6 +19600,8 @@ in
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = buildPackages.go_1_12;
   };
+
+  kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
@@ -25538,5 +25546,7 @@ in
   keycard-cli = callPackage ../tools/security/keycard-cli {};
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
+
+  gortr = callPackage ../servers/gortr {};
 
 }

@@ -1,5 +1,12 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, ncurses
-, mpd_clientlib, gettext, boost }:
+, mpd_clientlib, gettext, boost
+, pcreSupport ? false
+, pcre ? null
+}:
+
+with stdenv.lib;
+
+assert pcreSupport -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "ncmpc";
@@ -12,14 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "1ssmk1p43gjhcqi86sh6b7csqpwwpf3hs32cmnylv6pmbcwbs69h";
   };
 
-  buildInputs = [ glib ncurses mpd_clientlib boost ];
+  buildInputs = [ glib ncurses mpd_clientlib boost ]
+    ++ optional pcreSupport pcre;
   nativeBuildInputs = [ meson ninja pkgconfig gettext ];
 
   mesonFlags = [
     "-Dlirc=disabled"
-    "-Dregex=disabled"
     "-Ddocumentation=disabled"
-  ];
+  ] ++ optional (!pcreSupport) "-Dregex=disabled";
 
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";

@@ -12902,6 +12902,22 @@ let
     };
   };
 
+  MySQLDiff = buildPerlPackage rec {
+    pname = "MySQL-Diff";
+    version = "0.60";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ES/ESTRABD/MySQL-Diff-0.60.tar.gz";
+      sha256 = "5d7080a4bd5714ff9ef536aa774a7adb3c6f0e760215ca6c39d8a3545344f956";
+    };
+    propagatedBuildInputs = [ FileSlurp StringShellQuote pkgs.mysql-client ];
+    meta = {
+      homepage = "https://github.com/estrabd/mysqldiff";
+      description = "Generates a database upgrade instruction set";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   namespaceautoclean = buildPerlPackage {
     pname = "namespace-autoclean";
     version = "0.29";
@@ -16326,6 +16342,7 @@ let
       url = mirror://cpan/authors/id/R/RO/ROSCH/String-ShellQuote-1.04.tar.gz;
       sha256 = "0dfxhr6hxc2majkkrm0qbx3qcbykzpphbj2ms93dc86f7183c1p6";
     };
+    doCheck = !stdenv.isDarwin;
     meta = {
       # http://cpansearch.perl.org/src/ROSCH/String-ShellQuote-1.04/README
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
