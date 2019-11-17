@@ -1133,6 +1133,8 @@ in
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
+  birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
+
   bitbucket-cli = python2Packages.bitbucket-cli;
 
   blink = libsForQt5.callPackage ../applications/networking/instant-messengers/blink { };
