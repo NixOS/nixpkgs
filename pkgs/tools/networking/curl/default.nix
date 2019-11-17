@@ -24,14 +24,14 @@ assert brotliSupport -> brotli != null;
 assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.66.0";
+  name = "curl-7.67.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${name}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
     ];
-    sha256 = "0hd1wwplw357hn876s4n2gk7dpmd1gfw5d2c3yi21i1m09726636";
+    sha256 = "0v2qb1c82m3qzkiyglsg1745qi791i9pl1jgnks8nm0sh9b6jpyx";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];

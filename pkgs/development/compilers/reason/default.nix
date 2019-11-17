@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
-      --set CAML_LD_LIBRARY_PATH ${ocaml_lwt}/lib/ocaml/${ocaml.version}/site-lib:$CAML_LD_LIBRARY_PATH \
-      --set OCAMLPATH $out/lib/ocaml/${ocaml.version}/site-lib:$OCAMLPATH
+      --prefix CAML_LD_LIBRARY_PATH : "${ocaml_lwt}/lib/ocaml/${ocaml.version}/site-lib" \
+      --prefix OCAMLPATH : "$out/lib/ocaml/${ocaml.version}/site-lib"
   '';
 
   meta = with stdenv.lib; {

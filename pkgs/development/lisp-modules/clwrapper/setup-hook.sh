@@ -27,7 +27,7 @@ setLisp () {
 
 collectNixLispLDLP () {
      if echo "$1/lib"/lib*.so* | grep . > /dev/null; then
-	 export NIX_LISP_LD_LIBRARY_PATH="$NIX_LISP_LD_LIBRARY_PATH${NIX_LISP_LD_LIBRARY_PATH:+:}$1/lib"
+	 export NIX_LISP_LD_LIBRARY_PATH="${NIX_LISP_LD_LIBRARY_PATH-}${NIX_LISP_LD_LIBRARY_PATH:+:}$1/lib"
      fi
 }
 
