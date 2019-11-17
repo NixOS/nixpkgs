@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zxd45g9ycw5kmm4i0800jnqg1ms2gbqcld6gkyv6n3ac1wxizpj";
   };
 
-  preConfigure = ''
-    cd steam-mobile
-  '';
+  sourceRoot = "source/steam-mobile";
 
   installFlags = [
     "PLUGIN_DIR_PURPLE=${placeholder "out"}/lib/purple-2"
