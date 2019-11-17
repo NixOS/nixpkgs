@@ -8,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "dpdk-${version}" + lib.optionalString mod "-${kernel.version}";
-  version = "17.11.2";
+  version = "17.11.9";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "19m5l3jkrns8r1zbjb6ry18w50ff36kbl5b5g6pfcp9p57sfisd2";
+    sha256 = "0vrcc9mdjs5fk69lh7bigsk9208dfmjsz3jxaddkjlvk2hds1id6";
   };
 
   nativeBuildInputs = [ pkgconfig ];
