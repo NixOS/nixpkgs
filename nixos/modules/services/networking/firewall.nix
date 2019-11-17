@@ -555,7 +555,7 @@ in
       options nf_conntrack nf_conntrack_helper=1
     '';
 
-    assertions = [ { assertion = (cfg.checkReversePath != false) || kernelHasRPFilter;
+    assertions = [ { assertion = cfg.checkReversePath -> kernelHasRPFilter;
                      message = "This kernel does not support rpfilter"; }
                  ];
 
