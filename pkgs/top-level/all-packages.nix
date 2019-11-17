@@ -666,6 +666,8 @@ in
     gsl = gsl_1;
   };
 
+  async = callPackage ../development/tools/async {};
+
   atheme = callPackage ../servers/irc/atheme { };
 
   atinout = callPackage ../tools/networking/atinout { };
