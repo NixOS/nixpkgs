@@ -8889,9 +8889,9 @@ in
     lfe lfe_1_2;
 
   inherit (beam.packages.erlang)
-    rebar rebar3-open rebar3
-    hexRegistrySnapshot fetchHex beamPackages
-    hex2nix relxExe;
+    rebar rebar3
+    fetchHex beamPackages
+    relxExe;
 
   inherit (beam.packages.erlangR19) cuter;
 
