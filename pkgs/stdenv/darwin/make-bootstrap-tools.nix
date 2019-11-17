@@ -3,7 +3,7 @@
 with import pkgspath { inherit system; };
 
 let
-  llvmPackages = llvmPackages_7;
+  llvmPackages = llvmPackages_9;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -82,6 +82,7 @@ in rec {
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
+      cp -d ${llvmPackages.libclang}/lib/libclang-cpp.dylib $out/lib
       cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
       cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
       cp -d ${llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
