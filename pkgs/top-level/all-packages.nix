@@ -1249,6 +1249,8 @@ in
     asciidoc = asciidoc-full;
   };
 
+  buildpack = callPackage ../development/tools/buildpack { };
+
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
   bustle = haskellPackages.bustle;
