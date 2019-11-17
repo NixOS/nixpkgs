@@ -2301,6 +2301,16 @@
     githubId = 415760;
     name = "Jonas Höglund";
   };
+  Flakebi = {
+    email = "flakebi@t-online.de";
+    github = "Flakebi";
+    githubId = "Flakebi";
+    name = "Sebastian Neubauer";
+    keys = [{
+      longkeyid = "rsa4096/0xECC755EE583C1672";
+      fingerprint = "2F93 661D AC17 EA98 A104  F780 ECC7 55EE 583C 1672";
+    }];
+  };
   flexw = {
     email = "felix.weilbach@t-online.de";
     github = "FlexW";
