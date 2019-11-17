@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchFromGitHub, makeWrapper, buildEnv, aspellDicts
+{ stdenv, python3, fetchFromGitHub, wrapQtAppsHook, buildEnv, aspellDicts
 # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
 # available.
 , enchantAspellDicts ? with aspellDicts; [ en en-computers en-science ]
@@ -42,12 +42,11 @@ in python.pkgs.buildPythonApplication {
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
   propagatedBuildInputs = [ pythonEnv ];
 
   postInstall = ''
-    mv $out/bin/retext $out/bin/.retext
-    makeWrapper "$out/bin/.retext" "$out/bin/retext" \
+    wrapQtApp "$out/bin/retext" \
       --set ASPELL_CONF "dict-dir ${buildEnv {
         name = "aspell-all-dicts";
         paths = map (path: "${path}/lib/aspell") enchantAspellDicts;
