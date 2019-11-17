@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, qmake, qtsvg }:
+{ stdenv, fetchurl, pkgconfig, qmake, qtsvg, qtscript, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "vym";
-  version = "2.6.11";
+  version = "2.7.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/vym/2.6.0/${pname}-${version}.tar.bz2";
-    sha256 = "1yznlb47jahd662a2blgh1ccwpl5dp5rjz9chsxjzhj3vbkzx3nl";
+    url = "mirror://sourceforge/project/vym/2.7.0/${pname}-${version}.tar.bz2";
+    sha256 = "1rnrfqlff7wv6yni8bvff8n90pmn82k82zd4sn1jsx9r1n3qsfkh";
   };
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
-  buildInputs = [ qtsvg ];
+  nativeBuildInputs = [ pkgconfig qmake wrapQtAppsHook ];
+  buildInputs = [ qtsvg qtscript ];
 
   meta = with stdenv.lib; {
     description = "A mind-mapping software";
