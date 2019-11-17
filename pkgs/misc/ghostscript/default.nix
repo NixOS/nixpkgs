@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     ./9.26-CVE-2019-3835-part-2.patch
     ./9.26-CVE-2019-3835-part-3.patch
     ./9.26-CVE-2019-3835-part-4.patch
+    ./9.26-CVE-2019-3838-part-1.patch
+    ./9.26-CVE-2019-3838-part-2.patch
     (fetchpatch {
       name = "CVE-2019-3839-part-1";
       url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=4ec9ca74bed49f2a82acb4bf430eae0d8b3b75c9";
