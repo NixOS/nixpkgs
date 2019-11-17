@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libtool, gettext, zlib, bzip2, flac, libvorbis
+{ fetchurl, fetchpatch, stdenv, libtool, gettext, zlib, bzip2, flac, libvorbis
 , exiv2, libgsf, rpm, pkgconfig
 , gtkSupport ? true, glib ? null, gtk3 ? null
 , videoSupport ? true, ffmpeg ? null, libmpeg2 ? null}:
@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/libextractor/${name}.tar.gz";
     sha256 = "1z1cb35griqzvshqdv5ck98dy0sgpsswn7fgiy7lbzi34sma8dg2";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-15531.patch";
+      url = "https://git.gnunet.org/libextractor.git/patch/?id=d2b032452241708bee68d02aa02092cfbfba951a";
+      sha256 = "01xhcjbzv6p53wz7y2ii76kb8m9iwvnm4ip9w4a0bpgaxqz4b9fw";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   preConfigure =
     '' echo "patching installation directory in \`extractor.c'..."
