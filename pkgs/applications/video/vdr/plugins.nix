@@ -49,7 +49,8 @@ in {
 
   vaapidevice = stdenv.mkDerivation {
 
-    name = "vdr-vaapidevice-0.7.0";
+    pname = "vdr-vaapidevice";
+    version = "20190525";
 
     buildInputs = [
       vdr libxcb xcbutilwm ffmpeg_3
@@ -61,14 +62,14 @@ in {
     makeFlags = [ "DESTDIR=$(out)" ];
 
     postPatch = ''
-      substituteInPlace softhddev.c --replace /usr/bin/X ${xorgserver}/bin/X
+      substituteInPlace vaapidev.c --replace /usr/bin/X ${xorgserver}/bin/X
     '';
 
     src = fetchFromGitHub {
       owner = "pesintta";
       repo = "vdr-plugin-vaapidevice";
-      sha256 = "072y61fpkh3i2dragg0nsd4g3malgwxkwpdrb1ykdljyzf52s5hs";
-      rev = "c99afc23a53e6d91f9afaa99af59b30e68e626a8";
+      sha256 = "1gwjp15kjki9x5742fhaqk3yc2bbma74yp2vpn6wk6kj46nbnwp6";
+      rev = "d19657bae399e79df107e316ca40922d21393f80";
     };
 
     meta = with stdenv.lib; {
