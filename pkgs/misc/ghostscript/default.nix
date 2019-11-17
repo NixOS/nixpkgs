@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
         excludes = ["Resource/Init/pdf_font.ps" "Resource/Init/pdf_draw.ps"];
         sha256 = "04sy05svm3d2hyyzq41x5aqg3cgg2shaq08ivdqsys95nlihccpn";
     })
+    ./9.26-CVE-2019-14869.patch
   ];
 
   outputs = [ "out" "man" "doc" ];
