@@ -66,9 +66,6 @@ stdenv.mkDerivation rec {
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
 
     patchShebangs ./buildtools/bin
-  '' + optionalString stdenv.isDarwin ''
-     substituteInPlace libcli/dns/wscript_build \
-       --replace "bld.SAMBA_BINARY('resolvconftest'" "True or bld.SAMBA_BINARY('resolvconftest'"
   '';
 
   configureFlags = [
