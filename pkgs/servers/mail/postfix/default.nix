@@ -12,7 +12,7 @@ let
     "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ]
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${lib.getDev mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
      ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
    auxlibs = lib.concatStringsSep " " ([
