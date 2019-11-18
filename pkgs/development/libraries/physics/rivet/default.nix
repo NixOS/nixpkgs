@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
-    license     = stdenv.lib.licenses.gpl2;
+    license     = licenses.gpl3;
     homepage    = "https://rivet.hepforge.org";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }
