@@ -241,20 +241,16 @@ class Machine:
         if "hda" in args:
             hda_path = os.path.abspath(args["hda"])
             if args.get("hdaInterface", "") == "scsi":
-                start_command += (
-                    "-drive id=hda,file="
-                    + hda_path
-                    + ",werror=report,if=none "
-                    + "-device scsi-hd,drive=hda "
-                )
+                hda_device_driver = "scsi-hd"
             else:
-                start_command += (
-                    "-drive file="
-                    + hda_path
-                    + ",if="
-                    + args["hdaInterface"]
-                    + ",werror=report "
-                )
+                hda_device_driver = "virtio-blk-pci"
+
+            start_command += "-drive id=hda,file={},if=none,werror=report ".format(
+                hda_path
+            )
+            start_command += "-device {},drive=hda,bootindex=0 ".format(
+                hda_device_driver
+            )
 
         if "cdrom" in args:
             start_command += "-cdrom " + args["cdrom"] + " "
@@ -267,8 +263,21 @@ class Machine:
                 + ",if=none,readonly "
                 + "-device usb-storage,drive=usbdisk "
             )
+
         if "bios" in args:
             start_command += "-bios " + args["bios"] + " "
+
+        if "efiFirmware" in args:
+            efi_firmware_path = os.path.abspath(args["efiFirmware"])
+            start_command += "-drive if=pflash,format=raw,readonly,file={} ".format(
+                efi_firmware_path
+            )
+
+        if "efiVars" in args:
+            efi_vars_path = os.path.abspath(args["efiVars"])
+            start_command += "-drive if=pflash,format=raw,file={} ".format(
+                efi_vars_path
+            )
 
         start_command += args.get("qemuFlags", "")
 

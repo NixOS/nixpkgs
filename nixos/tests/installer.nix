@@ -8,9 +8,13 @@ with pkgs.lib;
 let
 
   # The configuration to install.
-  makeConfig = { bootLoader, grubVersion, grubDevice, grubIdentifier, grubUseEfi
-               , extraConfig, forceGrubReinstallCount ? 0
+  makeConfig = { bootLoader, extraConfig, extraInstallerConfig
+               # grub-specific
+               , grubVersion, grubDevice, grubIdentifier, grubUseEfi, forceGrubReinstallCount ? 0
                }:
+    let
+      installerUseEFIBoot = attrByPath ["virtualisation" "useEFIBoot"] false extraInstallerConfig;
+    in
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
 
@@ -62,14 +66,18 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
-                  , grubIdentifier, preBootCommands, extraConfig
+  testScriptFun = { bootLoader, extraConfig, extraInstallerConfig
+                  , createPartitions, preBootCommands
+                  # test-specific
                   , testCloneConfig
+                  # grub-specific
+                  , grubVersion, grubDevice, grubUseEfi, grubIdentifier
                   }:
     let
 
-      iface = if grubVersion == 1 then "ide" else "virtio";
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+
+      installerUseEFIBoot = attrByPath ["virtualisation" "useEFIBoot"] false extraInstallerConfig;
 
       makeMachineConfig = name: pkgs.writeText "machine-config.json" (builtins.toJSON ({
         inherit name;
@@ -80,11 +88,12 @@ let
           (optionalString (system == "aarch64-linux") "-enable-kvm -machine virt,gic-version=host -cpu host ");
 
         hda = "vm-state-machine/machine.qcow2";
-        hdaInterface = iface;
-      } // (optionalAttrs isEfi {
-        bios = if pkgs.stdenv.isAarch64
-          then "${pkgs.OVMF.fd}/FV/QEMU_EFI.fd"
-          else "${pkgs.OVMF.fd}/FV/OVMF.fd";
+        hdaInterface = if grubVersion == 1 then "ide" else "virtio";
+      } // (optionalAttrs (isEfi && !installerUseEFIBoot) {
+        bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
+      }) // (optionalAttrs (isEfi && installerUseEFIBoot) {
+        efiFirmware = "vm-state-machine/efi_firmware.bin";
+        efiVars = "vm-state-machine/efi_vars.bin";
       })));
 
     in if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
@@ -115,7 +124,7 @@ let
       machine.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
 
       machine.copy_file_from_host(
-          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig; } }",
+          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig extraInstallerConfig; } }",
           "/mnt/etc/nixos/configuration.nix",
       )
 
@@ -168,7 +177,7 @@ let
 
       # We need a writable Nix store on next boot.
       machine.copy_file_from_host(
-          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig; forceGrubReinstallCount = 1; } }",
+          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig extraInstallerConfig; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix",
       )
 
@@ -189,7 +198,7 @@ let
       ${preBootCommands}
       machine.wait_for_unit("multi-user.target")
       machine.copy_file_from_host(
-          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig; forceGrubReinstallCount = 2; } }",
+          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig extraInstallerConfig; forceGrubReinstallCount = 2; } }",
           "/etc/nixos/configuration.nix",
       )
       machine.succeed("nixos-rebuild boot >&2")
@@ -263,7 +272,7 @@ let
 
         # The configuration of the machine used to run "nixos-install".
         machine =
-          { pkgs, ... }:
+          { pkgs, config, ... }:
 
           { imports =
               [ ../modules/profiles/installation-device.nix
@@ -278,8 +287,11 @@ let
             # installer. This ensures the target disk (/dev/vda) is
             # the same during and after installation.
             virtualisation.emptyDiskImages = [ 512 ];
-            virtualisation.bootDevice =
-              if grubVersion == 1 then "/dev/sdb" else "/dev/vdb";
+            virtualisation.bootDevice = if config.virtualisation.useBootLoader
+              then (if grubVersion == 1 then "/dev/sdc" else "/dev/vdc")
+              else (if grubVersion == 1 then "/dev/sdb" else "/dev/vdb");
+
+            # FIXME why scsi when grubVersion==1, while testScriptFun uses ide in that case ?
             virtualisation.qemu.diskInterface =
               if grubVersion == 1 then "scsi" else "virtio";
 
@@ -323,8 +335,9 @@ let
       };
 
       testScript = testScriptFun {
-        inherit bootLoader createPartitions preBootCommands
-                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
+        inherit bootLoader extraConfig extraInstallerConfig
+                createPartitions preBootCommands
+                grubVersion grubDevice grubIdentifier grubUseEfi
                 testCloneConfig;
       };
     };
@@ -419,7 +432,6 @@ let
          '';
        testCloneConfig = true;
   };
-
 
 in {
 
