@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake sqlite mysql.connector-c postgresql unixODBC ];
 
   cmakeFlags = [ "--no-warn-unused-cli" ];
-  NIX_CFLAGS_COMPILE = [ "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ];
+  NIX_CFLAGS_COMPILE = [ "-I${stdenv.lib.getDev mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ];
 
   meta = with stdenv.lib; {
     homepage = http://cppcms.com/sql/cppdb/;
