@@ -1,9 +1,11 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, git, gnupg }:
 
 let version = "1.12.0"; in
 stdenv.mkDerivation {
   pname = "yadm";
   inherit version;
+
+  buildInputs = [ git gnupg ];
 
   src = fetchFromGitHub {
     owner  = "TheLocehiliosan";
