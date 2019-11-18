@@ -420,6 +420,8 @@ in
 
   srcOnly = args: callPackage ../build-support/src-only args;
 
+  substitute = callPackage ../build-support/substitute/substitute.nix { };
+
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
 
   substituteAllFiles = callPackage ../build-support/substitute-files/substitute-all-files.nix { };
