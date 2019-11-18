@@ -13311,6 +13311,8 @@ in
     asciidoc = asciidoc-full;
   };
 
+  lyra = callPackage ../development/libraries/lyra { };
+
   lzo = callPackage ../development/libraries/lzo { };
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
