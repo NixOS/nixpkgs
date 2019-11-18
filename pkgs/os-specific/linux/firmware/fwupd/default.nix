@@ -45,6 +45,7 @@
 , freetype
 , fontconfig
 , pango
+, tpm2-tss
 , bubblewrap
 , efibootmgr
 , flashrom
@@ -79,18 +80,18 @@ let
 
   # # Currently broken on Aarch64
   # haveFlashrom = isx86;
-  # Experimental in 1.2.10
+  # Experimental
   haveFlashrom = false;
 
 in
 
 stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.2.10";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "0inngs7i48akm9c7fmdsf9zjif595rkaba69rl76jfwfv8r21vjb";
+    sha256 = "0nqzqvx8nzflhb4kzvkdcv7kixb50vh6h21kpkd7pjxp942ndzql";
   };
 
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
@@ -137,6 +138,7 @@ stdenv.mkDerivation rec {
     freetype
     fontconfig
     pango
+    tpm2-tss
     efivar
   ] ++ stdenv.lib.optionals haveDell [
     libsmbios
@@ -145,6 +147,10 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-paths.patch
     ./add-option-for-installation-sysconfdir.patch
+
+    # do not require which
+    # https://github.com/fwupd/fwupd/pull/1568
+    ./no-which.patch
 
     # installed tests are installed to different output
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle
@@ -195,6 +201,7 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
+    "-Dgtkdoc=true"
     "-Dplugin_dummy=true"
     "-Dudevdir=lib/udev"
     "-Dsystemdunitdir=lib/systemd/system"
@@ -209,8 +216,8 @@ stdenv.mkDerivation rec {
     "-Dplugin_synaptics=false"
   ] ++ stdenv.lib.optionals (!haveRedfish) [
     "-Dplugin_redfish=false"
-  ] ++ stdenv.lib.optionals (!haveFlashrom) [
-    "-Dplugin_flashrom=false"
+  ] ++ stdenv.lib.optionals haveFlashrom [
+    "-Dplugin_flashrom=true"
   ];
 
   # TODO: We need to be able to override the directory flags from meson setup hook
@@ -231,6 +238,9 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
   PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
 
+  # cannot install to systemd prefix
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMPRESETDIR = "${placeholder "out"}/lib/systemd/system-preset";
+
   # TODO: wrapGAppsHook wraps efi capsule even though it is not elf
   dontWrapGApps = true;
   # so we need to wrap the executables manually
@@ -247,11 +257,15 @@ stdenv.mkDerivation rec {
   # /etc/fwupd/uefi.conf is created by the services.hardware.fwupd NixOS module
   passthru = {
     filesInstalledToEtc = [
+      # "fwupd/daemon.conf" # already created by the module
+      "fwupd/redfish.conf"
       "fwupd/remotes.d/dell-esrt.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
       "fwupd/remotes.d/vendor-directory.conf"
+      "fwupd/thunderbolt.conf"
+      # "fwupd/uefi.conf" # already created by the module
       "pki/fwupd/GPG-KEY-Hughski-Limited"
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
@@ -267,7 +281,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://fwupd.org/;
+    homepage = "https://fwupd.org/";
     maintainers = with maintainers; [ jtojnar ];
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;
