@@ -8850,6 +8850,8 @@ in
 
   z88dk = callPackage ../development/compilers/z88dk { };
 
+  zulip = callPackage ../applications/networking/instant-messengers/zulip { };
+
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
   zulu = callPackage ../development/compilers/zulu { };
 
