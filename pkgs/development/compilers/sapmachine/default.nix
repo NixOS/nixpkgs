@@ -2,12 +2,9 @@
 
 let
   version = "13.0.1";
-  #version = "11.0.5";
 
   sha256_linux = "21b2a4d3d80bb8434235e9416d347967ca4714e1c54e49136e739b8447c87e56";
   sha256_darwin = "f0111c1cba6d1b1042724df7d28f2a274981bd90fbfe6c940ca5cc9ceddd8825";
-#  sha256_linux = "f8b849bbd044acfd38972987305bd4c8bf5706a794ec12b51f1ed747a492ca55";
-#  sha256_darwin = "31fcd79060ca5c62be9866450cf501361c0e478f3418c366a136f63a7a530059";
 
   platform = if stdenv.isDarwin then "osx" else "linux";
   sha256 = if stdenv.isDarwin then sha256_darwin else sha256_linux;
