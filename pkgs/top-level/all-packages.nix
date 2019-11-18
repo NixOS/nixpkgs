@@ -13181,6 +13181,8 @@ in
     then null
     else callPackage ../development/libraries/ncurses { };
 
+  ndi = callPackage ../development/libraries/ndi { };
+
   neardal = callPackage ../development/libraries/neardal { };
 
   neon = callPackage ../development/libraries/neon { };
