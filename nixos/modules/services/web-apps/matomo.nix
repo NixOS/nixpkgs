@@ -2,15 +2,13 @@
 with lib;
 let
   cfg = config.services.matomo;
+  fpm = config.services.phpfpm.pools.${pool};
 
   user = "matomo";
   dataDir = "/var/lib/${user}";
   deprecatedDataDir = "/var/lib/piwik";
 
   pool = user;
-  # it's not possible to use /run/phpfpm/${pool}.sock because /run/phpfpm/ is root:root 0770,
-  # and therefore is not accessible by the web server.
-  phpSocket = "/run/phpfpm-${pool}.sock";
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
@@ -50,7 +48,7 @@ in {
         default = null;
         example = "lighttpd";
         description = ''
-          Name of the web server user that forwards requests to the ${phpSocket} fastcgi socket for Matomo if the nginx
+          Name of the web server user that forwards requests to <option>services.phpfpm.pools.&lt;name&gt;.socket</option> the fastcgi socket for Matomo if the nginx
           option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
           and pass fastcgi requests to `index.php`, `matomo.php` and `piwik.php` (legacy name) to this socket.
@@ -68,25 +66,6 @@ in {
           Before deleting visitor logs,
           make sure though that you run <literal>systemctl start matomo-archive-processing.service</literal>
           at least once without errors if you have already collected data before.
-        '';
-      };
-
-      phpfpmProcessManagerConfig = mkOption {
-        type = types.str;
-        default = ''
-          ; default phpfpm process manager settings
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 10
-          pm.min_spare_servers = 5
-          pm.max_spare_servers = 20
-          pm.max_requests = 500
-
-          ; log worker's stdout, but this has a performance hit
-          catch_workers_output = yes
-        '';
-        description = ''
-          Settings for phpfpm's process manager. You might need to change this depending on the load for Matomo.
         '';
       };
 
@@ -233,15 +212,24 @@ in {
       else if (cfg.webServerUser != null) then cfg.webServerUser else "";
     in {
       ${pool} = {
-        listen = phpSocket;
-        extraConfig = ''
-          listen.owner = ${socketOwner}
-          listen.group = root
-          listen.mode = 0600
-          user = ${user}
-          env[PIWIK_USER_PATH] = ${dataDir}
-          ${cfg.phpfpmProcessManagerConfig}
+        inherit user;
+        phpOptions = ''
+          error_log = 'stderr'
+          log_errors = on
         '';
+        settings = mapAttrs (name: mkDefault) {
+          "listen.owner" = socketOwner;
+          "listen.group" = "root";
+          "listen.mode" = "0660";
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 10;
+          "pm.min_spare_servers" = 5;
+          "pm.max_spare_servers" = 20;
+          "pm.max_requests" = 500;
+          "catch_workers_output" = true;
+        };
+        phpEnv.PIWIK_USER_PATH = dataDir;
       };
     };
 
@@ -264,15 +252,15 @@ in {
         };
         # allow index.php for webinterface
         locations."= /index.php".extraConfig = ''
-          fastcgi_pass unix:${phpSocket};
+          fastcgi_pass unix:${fpm.socket};
         '';
         # allow matomo.php for tracking
         locations."= /matomo.php".extraConfig = ''
-          fastcgi_pass unix:${phpSocket};
+          fastcgi_pass unix:${fpm.socket};
         '';
         # allow piwik.php for tracking (deprecated name)
         locations."= /piwik.php".extraConfig = ''
-          fastcgi_pass unix:${phpSocket};
+          fastcgi_pass unix:${fpm.socket};
         '';
         # Any other attempt to access any php files is forbidden
         locations."~* ^.+\\.php$".extraConfig = ''
