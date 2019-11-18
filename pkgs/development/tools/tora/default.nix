@@ -47,7 +47,7 @@ mkDerivation {
     "-lssl"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-L${mysql.connector-c}/lib/mysql" "-I${mysql.connector-c}/include/mysql" ];
+  NIX_CFLAGS_COMPILE = [ "-L${mysql.connector-c}/lib/mysql" "-I${lib.getDev mysql.connector-c}/include/mysql" ];
 
   qtWrapperArgs = [
     ''--prefix PATH : ${lib.getBin graphviz}/bin''
