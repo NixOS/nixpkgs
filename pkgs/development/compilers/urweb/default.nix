@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";
-    export MSHEADER="${mysql.connector-c}/include/mysql/mysql.h";
+    export MSHEADER="${stdenv.lib.getDev mysql.connector-c}/include/mysql/mysql.h";
     export SQHEADER="${sqlite.dev}/include/sqlite3.h";
 
     export CC="${gcc}/bin/gcc";
