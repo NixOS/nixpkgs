@@ -11230,6 +11230,8 @@ in
 
   dlib = callPackage ../development/libraries/dlib { };
 
+  doctest = callPackage ../development/libraries/doctest { };
+
   docopt_cpp = callPackage ../development/libraries/docopt_cpp { };
 
   dotconf = callPackage ../development/libraries/dotconf { };
