@@ -10,7 +10,7 @@ let
   sha256 = if stdenv.isDarwin then sha256_darwin else sha256_linux;
   homepath = if stdenv.isDarwin then "Contents/Home" else ".";
 
-jdk = stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   inherit version platform sha256 homepath;
 
   name = "sapmachine";
