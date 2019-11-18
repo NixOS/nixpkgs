@@ -51,5 +51,5 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ choas ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
-};
+}
 in jdk
