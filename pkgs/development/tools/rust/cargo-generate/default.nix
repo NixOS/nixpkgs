@@ -18,7 +18,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl  ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Security libiconv curl ];
 
-  doCheck = false;
+  preCheck = ''
+    export HOME=$(mktemp -d) USER=nixbld
+    git config --global user.name Nixbld
+    git config --global user.email nixbld@localhost.localnet
+  '';
 
   meta = with stdenv.lib; {
     description = "cargo, make me a project";
