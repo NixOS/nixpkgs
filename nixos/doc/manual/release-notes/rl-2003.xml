@@ -141,6 +141,7 @@
      Consider migrating to a different display manager such as LightDM (current default in NixOS),
      SDDM, GDM, or using the startx module which uses Xinitrc.
      </para>
+   </listitem>
    <listitem>
     <para>
       The BEAM package set has been deleted. You will only find there the different interpreters.
