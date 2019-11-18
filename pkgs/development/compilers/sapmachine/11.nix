@@ -33,10 +33,6 @@ in stdenv.mkDerivation rec {
     EOF
   '';
 
-  passthru = {
-    home = jdk;
-  };
-
   meta = with stdenv.lib; {
     homepage = https://sap.github.io/SapMachine/;
     license = licenses.gpl2;
