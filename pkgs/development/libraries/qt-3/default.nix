@@ -62,7 +62,7 @@ stdenv.mkDerivation {
   ] ++ stdenv.lib.optionals cursorSupport [
     "-L${libXcursor.out}/lib -I${libXcursor.dev}/include"
   ] ++ stdenv.lib.optionals mysqlSupport [
-    "-qt-sql-mysql" "-L${mysql.connector-c}/lib/mysql" "-I${mysql.connector-c}/include/mysql"
+    "-qt-sql-mysql" "-L${mysql.connector-c}/lib/mysql" "-I${stdenv.lib.getDev mysql.connector-c}/include/mysql"
   ] ++ stdenv.lib.optionals xftSupport [
     "-L${libXft.out}/lib" "-I${libXft.dev}/include"
     "-L${libXft.freetype.out}/lib" "-I${libXft.freetype.dev}/include"
