@@ -855,6 +855,8 @@ in
 
   enpass = callPackage ../tools/security/enpass { };
 
+  essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
+
   esh = callPackage ../tools/text/esh { };
 
   ezstream = callPackage ../tools/audio/ezstream { };
