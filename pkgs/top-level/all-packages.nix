@@ -6710,6 +6710,8 @@ in
 
   svtplay-dl = callPackage ../tools/misc/svtplay-dl { };
 
+  sycl-info = callPackage ../development/libraries/sycl-info { };
+
   symengine = callPackage ../development/libraries/symengine { };
 
   sysbench = callPackage ../development/tools/misc/sysbench {};
