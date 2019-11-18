@@ -19,13 +19,13 @@ assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
 let
   baseParams = rec {
     name = "${targetPrefix}cctools-port-${version}";
-    version = "895";
+    version = "927.0.2";
 
     src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
-      rev    = "07619027f8311fa61b4a549c75994b88739a82d8";
-      sha256 = "12g94hhz5v5bmy2w0zb6fb4bjlmn992gygc60h9nai15kshj2spi";
+      rev    = "8239a5211bcf07d6b9d359782e1a889ec1d7cce5";
+      sha256 = "0h8b1my0wf1jyjq63wbiqkl2clgxsf87f6i4fjhqs431fzlq8sac";
     };
 
     outputs = [ "out" "dev" ];
@@ -35,7 +35,7 @@ let
       ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
       ++ stdenv.lib.optional enableTapiSupport libtapi;
 
-    patches = [ ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch ./apfs.patch ];
+    patches = [ ./ld-ignore-rpath-link.patch ];
 
     __propagatedImpureHostDeps = [
       # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
