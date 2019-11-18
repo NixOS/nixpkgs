@@ -3016,18 +3016,9 @@ in
     elasticsearch = elasticsearch7-oss;
   };
 
-  elasticsearch-curator = with (python3.override {
-    packageOverrides = self: super: {
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "6.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
-        };
-      });
-      pyyaml = super.pyyaml_3;
-    };
-  }).pkgs; toPythonApplication elasticsearch-curator;
+  elasticsearch-curator = callPackage ../tools/admin/elasticsearch-curator {
+    python = python3;
+  };
 
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
