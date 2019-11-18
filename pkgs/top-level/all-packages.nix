@@ -24251,6 +24251,8 @@ in
 
   fastjet = callPackage ../development/libraries/physics/fastjet { };
 
+  fastjet-contrib = callPackage ../development/libraries/physics/fastjet-contrib { };
+
   fastnlo = callPackage ../development/libraries/physics/fastnlo { };
 
   geant4 = libsForQt5.callPackage ../development/libraries/physics/geant4 { };
