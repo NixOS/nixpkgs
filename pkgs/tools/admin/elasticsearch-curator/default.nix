@@ -1,27 +1,29 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, boto3
-, click
-, certifi
-, requests-aws4auth
-, voluptuous
-, pyyaml
-, elasticsearch
-, nosexcover
-, coverage
-, nose
-, mock
-, funcsigs
-} :
+{ lib, fetchFromGitHub, python }:
 
-buildPythonPackage rec {
+let
+py = python.override {
+  packageOverrides = self: super: {
+    click = super.click.overridePythonAttrs (oldAttrs: rec {
+      version = "6.7";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
+      };
+    });
+  };
+};
+in
+
+with py.pkgs;
+buildPythonApplication rec {
   pname   = "elasticsearch-curator";
   version = "5.8.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f0eec9ad043a30bc2e2232637111960139a1bda38232241bdd2f0c253a3584df";
+  src = fetchFromGitHub {
+    owner = "elastic";
+    repo = "curator";
+    rev = "v${version}";
+    sha256 = "1shr9jslirjnbvma3p19djsnamxl7f3m9c8zrlclk57zv8rnwpkr";
   };
 
   # The test hangs so we disable it.
@@ -31,6 +33,7 @@ buildPythonPackage rec {
     click
     certifi
     requests-aws4auth
+    pyopenssl
     voluptuous
     pyyaml
     elasticsearch
@@ -46,10 +49,15 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    sed -i s/pyyaml==3.12/pyyaml==${pyyaml.version}/ setup.cfg setup.py
+    sed -i s/pyyaml==3.13/pyyaml/g setup.cfg setup.py
+    sed -i s/pyyaml==3.12/pyyaml/g setup.cfg setup.py
+    substituteInPlace setup.py \
+      --replace "urllib3>=1.24.2,<1.25" "urllib3"
+    substituteInPlace setup.cfg \
+      --replace "urllib3>=1.24.2,<1.25" "urllib3"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/elastic/curator;
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
     license = licenses.asl20;
@@ -68,6 +76,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ basvandijk ];
 
     # https://github.com/elastic/curator/pull/1280
-    broken = versionAtLeast click.version "7.0";
+    #broken = versionAtLeast click.version "7.0";
   };
 }
