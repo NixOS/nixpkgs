@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python2, python3, nodejs
 , libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, libGLU_combined, sqlite, zip, unzip
+, yasm, libGLU, libGL, sqlite, zip, unzip
 , libevent, libstartup_notification
 , icu, libpng, jemalloc
 , autoconf213, which, m4, fetchpatch
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     [ gtk2 zip libIDL libjpeg zlib bzip2
       dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-      nspr nss libnotify xorg.pixman yasm libGLU_combined
+      nspr nss libnotify xorg.pixman yasm libGLU libGL
       xorg.libXScrnSaver xorg.xorgproto
       xorg.libXext sqlite unzip
       libevent libstartup_notification /* cairo */

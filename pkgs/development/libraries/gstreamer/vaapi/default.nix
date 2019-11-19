@@ -10,7 +10,8 @@
 , libdrm
 , udev
 , xorg
-, libGLU_combined
+, libGLU
+, libGL
 , gstreamer
 , gst-plugins-bad
 , nasm
@@ -50,7 +51,8 @@ stdenv.mkDerivation rec {
     xorg.libXrandr
     xorg.libSM
     xorg.libICE
-    libGLU_combined
+    libGL
+    libGLU
     nasm
     libvpx
     python

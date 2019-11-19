@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, cmake, pkgconfig, curl, libsigcxx, SDL2
-, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU_combined
+, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU, libGL
 , glew
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng
-    assimp libGLU_combined glew
+    assimp libGLU libGL glew
   ];
 
   preConfigure = ''

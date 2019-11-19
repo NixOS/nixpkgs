@@ -70,7 +70,8 @@
 , xvidcore
 , gnutls
 , mjpegtools
-, libGLU_combined
+, libGLU
+, libGL
 , libintl
 , libgme
 , openssl
@@ -148,7 +149,8 @@ in stdenv.mkDerivation rec {
     libwebp
     xvidcore
     gnutls
-    libGLU_combined
+    libGL
+    libGLU
     libgme
     openssl
     x265
