@@ -5128,6 +5128,11 @@
     githubId = 131844;
     name = "Igor Pashev";
   };
+  pasqui23 = {
+    email = "p3dimaria@hotmail.it";
+    github = "pasqui23";
+    githubId = 6931743;
+  };
   patternspandemic = {
     email = "patternspandemic@live.com";
     github = "patternspandemic";
