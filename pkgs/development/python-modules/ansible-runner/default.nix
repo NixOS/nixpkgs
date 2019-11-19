@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "1.4.2";
+  version = "1.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9db56a69ad5d43fe7656ad8efb4083cb1800ea400f7828af6b20f44c0882404f";
+    sha256 = "e6ccb7ccf9bab9c49a391db37e0d399ba0e73f969801ae35ff74020bfd4fc346";
   };
 
   checkInputs = [ pytest mock ];
