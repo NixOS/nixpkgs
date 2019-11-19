@@ -5,8 +5,7 @@ let
 in
   stdenv.mkDerivation {
     name = gdb.name;
-    buildInputs = [ makeWrapper ];
-    propagatedBuildInputs = [ gdb ];
+    nativeBuildInputs = [ makeWrapper ];
     propagatedUserEnvPkgs = [ gdb ];
     phases = "installPhase fixupPhase";
 
