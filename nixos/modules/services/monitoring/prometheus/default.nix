@@ -37,14 +37,16 @@ let
   };
 
   prometheusYml = let
-    yml = if cfg.configText != null then
-      pkgs.writeText "prometheus.yml" cfg.configText
+    yml = if cfg.configFile != null
+      then cfg.configFile
       else generatedPrometheusYml;
     in promtoolCheck "check config" "prometheus.yml" yml;
 
+  etcConfPath = "prometheus/prometheus.yml";
+
   cmdlineArgs = cfg.extraFlags ++ [
     "--storage.tsdb.path=${workingDir}/data/"
-    "--config.file=${prometheusYml}"
+    "--config.file=/etc/${etcConfPath}"
     "--web.listen-address=${cfg.listenAddress}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
@@ -508,12 +510,12 @@ in {
       '';
     };
 
-    configText = mkOption {
-      type = types.nullOr types.lines;
+    configFile = mkOption {
+      type = types.nullOr types.path;
       default = null;
       description = ''
-        If non-null, this option defines the text that is written to
-        prometheus.yml. If null, the contents of prometheus.yml is generated
+        If non-null, this option defines the the path to prometheus.yml.
+        If null, the contents of prometheus.yml is generated
         from the structured config options.
       '';
     };
@@ -599,6 +601,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    environment.etc.${etcConfPath}.source = prometheusYml;
     users.groups.prometheus.gid = config.ids.gids.prometheus;
     users.users.prometheus = {
       description = "Prometheus daemon user";
@@ -608,6 +611,7 @@ in {
     systemd.services.prometheus = {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
+      restartTriggers = [ prometheusYml ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/prometheus" +
           optionalString (length cmdlineArgs != 0) (" \\\n  " +
