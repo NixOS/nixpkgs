@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0mr25p7j5hl8zmvz5i3g30s4xbdhk6d22lw2akch3si40il9q5fv";
+    sha256 = "1cg69nbdf4mcr16mi71aw9j8877lyj8yxjfk9bd3sml8f4fh7mmr";
   };
 
   patches = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/Views/General.vala \
+    substituteInPlace src/Views/Clicking.vala \
       --subst-var-by GSD_GSETTINGS ${glib.getSchemaPath elementary-settings-daemon}
   '';
 
@@ -53,8 +53,6 @@ stdenv.mkDerivation rec {
     libgee
     switchboard
   ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Mouse & Touchpad Plug";
