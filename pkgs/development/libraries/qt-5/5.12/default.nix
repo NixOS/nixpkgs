@@ -75,9 +75,11 @@ let
       # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/issues/707
       # https://bugreports.qt.io/browse/QTBUG-77037
       (fetchpatch {
-        name = "fix-build-with-pulseaudio-13.0.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
-        sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
+        name = "fix-build-with-pulseaudio-13.0-for-73-based.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtwebengine-chromium.git;a=patch;h=b84e8682b312fb16b16ffb9591415067ceae69f8";
+        sha256 = "0lmvf0v7y55k9q0qgzm5mhggp752ayyb7kxhdxjfxx9yqd3din90";
+        extraPrefix = "src/3rdparty/";
+        stripLen = 1;
       })
       # patch for CVE-2019-13720, can be removed when it is included in the next upstream release
       # https://bugreports.qt.io/browse/QTBUG-1019226

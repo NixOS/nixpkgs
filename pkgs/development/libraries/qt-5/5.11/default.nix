@@ -72,9 +72,12 @@ let
       # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/issues/707
       # https://bugreports.qt.io/browse/QTBUG-77037
       (fetchpatch {
-        name = "fix-build-with-pulseaudio-13.0.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
-        sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
+         # qtwebengine 5.11 is actually based on 65, but this does the job.
+        name = "fix-build-with-pulseaudio-13.0-for-61.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtwebengine-chromium.git;a=patch;h=3b5c9c313c5ecc93289d764200e1f222310c6f73";
+        sha256 = "0ackv7hxf733dmr7sd9ljhz43wqi1s0raz5f5ng6y9xdzk804zjd";
+        extraPrefix = "src/3rdparty/";
+        stripLen = 1;
       })
     ];
     qtwebkit = [ ./qtwebkit.patch ];
