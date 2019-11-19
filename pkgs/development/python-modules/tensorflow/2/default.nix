@@ -1,13 +1,13 @@
-{ stdenv, pkgs, bazel_0_26, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, pkgs, bazel_0_29, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , addOpenGLRunpath
 # Python deps
 , buildPythonPackage, isPy3k, isPy27, pythonOlder, pythonAtLeast, python
 # Python libraries
-, numpy, tensorflow-tensorboard, backports_weakref, mock, enum34, absl-py
+, numpy, tensorflow-tensorboard_2, backports_weakref, mock, enum34, absl-py
 , future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
 , functools32
 , opt-einsum
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_1_15_1
+, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_2
 # Common deps
 , git, swig, which, binutils, glibcLocales, cython
 # Common libraries
@@ -69,7 +69,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.15.2";
+  version = "2.1.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -94,45 +94,40 @@ let
 
   bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
-    bazel = bazel_0_26;
+    bazel = bazel_0_29;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1q0848drjvnaaa38dgns8knmpmkj5plzsc98j20m5ybv68s55w78";
+      sha256 = "1g79xi8yl4sjia8ysk9b7xfzrz83zy28v5dlb2wzmcf0k5pmz60p";
     };
 
     patches = [
       # Work around https://github.com/tensorflow/tensorflow/issues/24752
-      ./no-saved-proto.patch
+      ../no-saved-proto.patch
       # Fixes for NixOS jsoncpp
-      ./system-jsoncpp.patch
+      ../system-jsoncpp.patch
 
-      # https://github.com/tensorflow/tensorflow/pull/29673
-      (fetchpatch {
-        name = "fix-compile-with-cuda-and-mpi.patch";
-        url = "https://github.com/tensorflow/tensorflow/pull/29673/commits/498e35a3bfe38dd75cf1416a1a23c07c3b59e6af.patch";
-        sha256 = "1m2qmwv1ysqa61z6255xggwbq6mnxbig749bdvrhnch4zydxb4di";
-      })
       (fetchpatch {
         name = "backport-pr-18950.patch";
         url = "https://github.com/tensorflow/tensorflow/commit/73640aaec2ab0234d9fff138e3c9833695570c0a.patch";
         sha256 = "1n9ypbrx36fc1kc9cz5b3p9qhg15xxhq4nz6ap3hwqba535nakfz";
       })
 
-
       (fetchpatch {
-        # be compatible with gast >0.2 instead of only gast 0.2.2
-        name = "gast-update.patch";
-        url = "https://github.com/tensorflow/tensorflow/commit/85751ad6c7f5fd12c6c79545d96896cba92fa8b4.patch";
-        sha256 = "077cpj0kzyqxzdya1dwh8df17zfzhqn7c685hx6iskvw2979zg2n";
+        # Don't try to fetch things that don't exist
+        name = "prune-missing-deps.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/b39b1ed24b4814db27d2f748dc85c10730ae851d.patch";
+        sha256 = "1skysz53nancvw1slij6s7flar2kv3gngnsq60ff4lap88kx5s6c";
+        excludes = [ "tensorflow/cc/saved_model/BUILD" ];
       })
+
       ./lift-gast-restriction.patch
 
       # cuda 10.2 does not have "-bin2c-path" option anymore
       # https://github.com/tensorflow/tensorflow/issues/34429
-      ./cuda-10.2-no-bin2c-path.patch
+      ../cuda-10.2-no-bin2c-path.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
@@ -193,7 +188,6 @@ let
       "double_conversion"
       "flatbuffers"
       "gast_archive"
-      "gif_archive"
       # Lots of errors, requires an older version
       # "grpc"
       "hwloc"
@@ -208,7 +202,6 @@ let
       "org_sqlite"
       "pasta"
       "pcre"
-      "png_archive"
       "six_archive"
       "snappy"
       "swig"
@@ -295,9 +288,9 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "1qygfcvvn9vysap9nk6xccxi9mgmzyxiywz6k456f811l1v70p2c"
+        "0hg3ysy644950a34j28hrb317cz8gcbb9n84d36wdailvnlshghb"
       else
-        "0kfjanw0mfbh30vi1ms2xlg8yp429cbyfriik6yxd5cla2pncg2j";
+        "1gy4pz9kn30wb9c4a9584fibb88c3h38y3dqa99yw1lbsbyyi28c";
     };
 
     buildAttrs = {
@@ -373,7 +366,7 @@ in buildPythonPackage {
     numpy
     six
     protobuf
-    tensorflow-estimator_1_15_1
+    tensorflow-estimator_2
     termcolor
     wrapt
     grpcio
@@ -385,7 +378,7 @@ in buildPythonPackage {
   ] ++ lib.optionals (pythonOlder "3.4") [
     backports_weakref enum34
   ] ++ lib.optionals withTensorboard [
-    tensorflow-tensorboard
+    tensorflow-tensorboard_2
   ];
 
   nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
@@ -404,13 +397,12 @@ in buildPythonPackage {
     # A simple "Hello world"
     import tensorflow as tf
     hello = tf.constant("Hello, world!")
-    sess = tf.Session()
-    sess.run(hello)
+    tf.print(hello)
 
     # Fit a simple model to random data
     import numpy as np
     np.random.seed(0)
-    tf.random.set_random_seed(0)
+    tf.random.set_seed(0)
     model = tf.keras.models.Sequential([
         tf.keras.layers.Dense(1, activation="linear")
     ])
@@ -419,11 +411,9 @@ in buildPythonPackage {
     x = np.random.uniform(size=(1,1))
     y = np.random.uniform(size=(1,))
     model.fit(x, y, epochs=1)
-
-    # regression test for #77626
-    from tensorflow.contrib import tensor_forest
     EOF
   '';
+  # Regression test for #77626 removed because not more `tensorflow.contrib`.
 
   passthru.libtensorflow = bazel-build.out;
 
