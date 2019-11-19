@@ -4516,6 +4516,8 @@ in {
 
   Babel = callPackage ../development/python-modules/Babel { };
 
+  babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
+
   pybfd = callPackage ../development/python-modules/pybfd { };
 
   pybigwig = callPackage ../development/python-modules/pybigwig { };
