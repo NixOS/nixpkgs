@@ -290,10 +290,15 @@ class Machine:
 
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
+        answer = ""
         while True:
-            answer = self.monitor.recv(1024).decode()
+            undecoded_answer = self.monitor.recv(1024)
+            if not undecoded_answer:
+                break
+            answer += undecoded_answer.decode()
             if answer.endswith("(qemu) "):
-                return answer
+                break
+        return answer
 
     def send_monitor_command(self, command: str) -> str:
         message = ("{}\n".format(command)).encode()
