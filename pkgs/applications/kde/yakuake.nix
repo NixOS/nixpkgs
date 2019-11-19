@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdoctools, extra-cmake-modules,
   karchive, kcrash, kdbusaddons, ki18n, kiconthemes, knewstuff, knotifications,
-  knotifyconfig, konsole, kparts, kwindowsystem, qtx11extras
+  knotifyconfig, konsole, kparts, kwindowsystem, qtx11extras, kglobalaccel
 }:
 
 mkDerivation {
@@ -9,7 +9,7 @@ mkDerivation {
 
   buildInputs = [
     karchive kcrash kdbusaddons ki18n kiconthemes knewstuff knotifications
-    knotifyconfig kparts kwindowsystem qtx11extras
+    knotifyconfig kparts kwindowsystem qtx11extras kglobalaccel
   ];
 
   propagatedBuildInputs = [
