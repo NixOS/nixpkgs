@@ -20,6 +20,8 @@ with lib;
 
   security.allowUserNamespaces = mkDefault false;
 
+  nix.useSandbox = mkDefault false;
+
   security.protectKernelImage = mkDefault true;
 
   security.allowSimultaneousMultithreading = mkDefault false;
