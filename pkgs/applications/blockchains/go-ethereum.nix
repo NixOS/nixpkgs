@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "go-ethereum";
-  version = "1.9.6";
+  version = "1.9.7";
 
   goPackagePath = "github.com/ethereum/go-ethereum";
 
@@ -10,14 +10,11 @@ buildGoPackage rec {
   propagatedBuildInputs =
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
-  # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
-  hardeningDisable = [ "fortify" ];
-
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08k6p7mbszlg8mq8k3vi5xrfnhfbxlh2ynd0nr0j64qdhmhcdnq6";
+    sha256 = "07110dj91wmkpwz7iy0lmxx3y9wjxjrhk3rhkfdil74cxm0wkkn2";
   };
 
   meta = with stdenv.lib; {

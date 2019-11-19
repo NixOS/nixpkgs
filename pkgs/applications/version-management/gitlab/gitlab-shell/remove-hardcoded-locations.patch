@@ -1,0 +1,57 @@
+diff --git a/go/internal/config/config.go b/go/internal/config/config.go
+index 2231851..c869930 100644
+--- a/go/internal/config/config.go
++++ b/go/internal/config/config.go
+@@ -3,7 +3,6 @@ package config
+ import (
+ 	"io/ioutil"
+ 	"net/url"
+-	"os"
+ 	"path"
+ 	"path/filepath"
+ 
+@@ -38,16 +37,13 @@ type Config struct {
+ }
+ 
+ func New() (*Config, error) {
+-	dir, err := os.Getwd()
+-	if err != nil {
+-		return nil, err
+-	}
++	dir := "/run/gitlab"
+ 
+ 	return NewFromDir(dir)
+ }
+ 
+ func NewFromDir(dir string) (*Config, error) {
+-	return newFromFile(path.Join(dir, configFile))
++	return newFromFile("/run/gitlab/shell-config.yml")
+ }
+ 
+ func newFromFile(filename string) (*Config, error) {
+diff --git a/go/internal/keyline/key_line.go b/go/internal/keyline/key_line.go
+index f92f50b..160e287 100644
+--- a/go/internal/keyline/key_line.go
++++ b/go/internal/keyline/key_line.go
+@@ -36,7 +36,7 @@ func NewPrincipalKeyLine(keyId string, principal string, rootDir string) (*KeyLi
+ }
+ 
+ func (k *KeyLine) ToString() string {
+-	command := fmt.Sprintf("%s %s-%s", path.Join(k.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.Id)
++	command := fmt.Sprintf("%s %s-%s", path.Join("/run/current-system/sw/bin", executable.GitlabShell), k.Prefix, k.Id)
+ 
+ 	return fmt.Sprintf(`command="%s",%s %s`, command, SshOptions, k.Value)
+ }
+diff --git a/support/gitlab_config.rb b/support/gitlab_config.rb
+index 1416488..90a5f79 100644
+--- a/support/gitlab_config.rb
++++ b/support/gitlab_config.rb
+@@ -4,7 +4,7 @@ class GitlabConfig
+   attr_reader :config
+ 
+   def initialize
+-    @config = YAML.load_file(File.join(ROOT_PATH, 'config.yml'))
++    @config = YAML.load_file('/run/gitlab/shell-config.yml')
+   end
+ 
+   def auth_file

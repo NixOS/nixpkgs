@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils, utillinux,
+{ stdenv, fetchurl, coreutils, utillinux,
   which, gnused, gnugrep,
   groff, man-db, getent, libiconv, pcre2,
   gettext, ncurses, python3,
@@ -93,11 +93,11 @@ let
 
     etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
-    src = fetchFromGitHub {
-      owner = "fish-shell";
-      repo = "fish-shell";
-      rev = version;
-      sha256 = "1qh6dka1ayz352ihcq4529hjgnz255gyrqs3xyif6b2ycvrm4ad5";
+    src = fetchurl {
+      # There are differences between the release tarball and the tarball github packages from the tag
+      # Hence we cannot use fetchFromGithub
+      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
+      sha256 = "03j3jl9jzlnhq4p86zj8wqsh5sx45j1d1fvfa80ks1cfdg68qwhl";
     };
 
     nativeBuildInputs = [ cmake ];

@@ -1,17 +1,17 @@
-From 571060c0e1dca29554cc97cfb33087c9b41114a5 Mon Sep 17 00:00:00 2001
+From a3aaebda6d4b302cd202c21e306c55d3715e9b0d Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:36:41 -0500
-Subject: [PATCH 10/11] qtbase-qtpluginpath
+Subject: [PATCH 10/12] qtbase-qtpluginpath
 
 ---
  src/corelib/kernel/qcoreapplication.cpp | 9 +++++++++
  1 file changed, 9 insertions(+)
 
 diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcoreapplication.cpp
-index 8652c456..74562272 100644
+index db6546028a..cc97c46004 100644
 --- a/src/corelib/kernel/qcoreapplication.cpp
 +++ b/src/corelib/kernel/qcoreapplication.cpp
-@@ -2690,6 +2690,15 @@ QStringList QCoreApplication::libraryPaths()
+@@ -2694,6 +2694,15 @@ QStringList QCoreApplication::libraryPaths()
          QStringList *app_libpaths = new QStringList;
          coreappdata()->app_libpaths.reset(app_libpaths);
  
@@ -28,5 +28,5 @@ index 8652c456..74562272 100644
          if (!libPathEnv.isEmpty()) {
              QStringList paths = libPathEnv.split(QDir::listSeparator(), QString::SkipEmptyParts);
 -- 
-2.22.1
+2.23.GIT
 

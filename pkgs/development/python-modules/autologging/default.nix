@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Autologging";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16v2k16m433fxlvl7f0081n67rpxhs2hyn1ivkx1xs5qjxpv5n3k";
+    sha256 = "117659584d8aab8cf62046f682f8e57b54d958b8571c737fa8bf15c32937fbb6";
     extension = "zip";
   };
 

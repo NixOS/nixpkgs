@@ -1,18 +1,18 @@
-From 58d98b66da5d748d610f053053bd12e42c97d9e6 Mon Sep 17 00:00:00 2001
+From 361a9395704ca1ee170a8bb3823ba860293eecee Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:34:00 -0500
-Subject: [PATCH 01/11] qtbase-mkspecs-mac
+Subject: [PATCH 01/12] qtbase-mkspecs-mac
 
 ---
  mkspecs/common/mac.conf               |   2 +-
- mkspecs/features/mac/default_post.prf | 196 --------------------------
+ mkspecs/features/mac/default_post.prf | 201 --------------------------
  mkspecs/features/mac/default_pre.prf  |  58 --------
  mkspecs/features/mac/sdk.mk           |  25 ----
  mkspecs/features/mac/sdk.prf          |  61 --------
- 5 files changed, 1 insertion(+), 341 deletions(-)
+ 5 files changed, 1 insertion(+), 346 deletions(-)
 
 diff --git a/mkspecs/common/mac.conf b/mkspecs/common/mac.conf
-index b77494ec..470c38e7 100644
+index b77494ec9b..470c38e772 100644
 --- a/mkspecs/common/mac.conf
 +++ b/mkspecs/common/mac.conf
 @@ -24,7 +24,7 @@ QMAKE_INCDIR_OPENGL     = \
@@ -25,10 +25,10 @@ index b77494ec..470c38e7 100644
  
  QMAKE_LFLAGS_REL_RPATH  =
 diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/default_post.prf
-index c46222de..18dcfbce 100644
+index 26bd3e2e98..b80ec1e801 100644
 --- a/mkspecs/features/mac/default_post.prf
 +++ b/mkspecs/features/mac/default_post.prf
-@@ -64,202 +64,6 @@ qt {
+@@ -68,207 +68,6 @@ qt {
      }
  }
  
@@ -212,6 +212,11 @@ index c46222de..18dcfbce 100644
 -    QMAKE_PCH_OUTPUT_EXT = _${QMAKE_PCH_ARCH}$${QMAKE_PCH_OUTPUT_EXT}
 -}
 -
+-!equals(sdk_version, $$QMAKE_MAC_SDK_VERSION) {
+-    # Explicit SDK version has been set, respect that
+-    QMAKE_LFLAGS += -Wl,-sdk_version -Wl,$$sdk_version
+-}
+-
 -cache(QMAKE_XCODE_DEVELOPER_PATH, stash)
 -!isEmpty(QMAKE_XCODE_VERSION): \
 -    cache(QMAKE_XCODE_VERSION, stash)
@@ -229,10 +234,10 @@ index c46222de..18dcfbce 100644
 -QMAKE_MAC_XCODE_SETTINGS += xcode_product_bundle_identifier_setting
 -
  !macx-xcode {
-     generate_xcode_project.commands = @$(QMAKE) -spec macx-xcode $(EXPORT__PRO_FILE_)
+     generate_xcode_project.commands = @$(QMAKE) -spec macx-xcode \"$(EXPORT__PRO_FILE_)\" $$QMAKE_ARGS
      generate_xcode_project.target = xcodeproj
 diff --git a/mkspecs/features/mac/default_pre.prf b/mkspecs/features/mac/default_pre.prf
-index e3534561..3b01424e 100644
+index e3534561a5..3b01424e67 100644
 --- a/mkspecs/features/mac/default_pre.prf
 +++ b/mkspecs/features/mac/default_pre.prf
 @@ -1,60 +1,2 @@
@@ -297,7 +302,7 @@ index e3534561..3b01424e 100644
 -xcode_copy_phase_strip_setting.value = NO
 -QMAKE_MAC_XCODE_SETTINGS += xcode_copy_phase_strip_setting
 diff --git a/mkspecs/features/mac/sdk.mk b/mkspecs/features/mac/sdk.mk
-index c40f58c9..e69de29b 100644
+index c40f58c987..e69de29bb2 100644
 --- a/mkspecs/features/mac/sdk.mk
 +++ b/mkspecs/features/mac/sdk.mk
 @@ -1,25 +0,0 @@
@@ -327,7 +332,7 @@ index c40f58c9..e69de29b 100644
 -    endif
 -endif
 diff --git a/mkspecs/features/mac/sdk.prf b/mkspecs/features/mac/sdk.prf
-index 3a9c2778..e69de29b 100644
+index 3a9c2778bb..e69de29bb2 100644
 --- a/mkspecs/features/mac/sdk.prf
 +++ b/mkspecs/features/mac/sdk.prf
 @@ -1,61 +0,0 @@
@@ -393,5 +398,5 @@ index 3a9c2778..e69de29b 100644
 -    cache($$tool_variable, set stash, $$tool)
 -}
 -- 
-2.22.1
+2.23.GIT
 

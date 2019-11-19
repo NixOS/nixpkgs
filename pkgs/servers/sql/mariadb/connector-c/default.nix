@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake
+{ stdenv, fetchurl, cmake, fetchpatch
 , curl, openssl, zlib
 , libiconv
 , version, sha256, ...
@@ -18,10 +18,18 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      url = "https://github.com/MariaDB/mariadb-connector-c/commit/ee91b2c98a63acb787114dee4f2694e154630928.patch";
+      sha256 = "05mlyv20kzn9bax4byv2ph1cf42541fcl1zcqzbfwqmynnisvdah";
+    })
+  ];
+
   cmakeFlags = [
-    "-DWITH_EXTERNAL_ZLIB=ON"
     "-DMARIADB_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DWITH_CURL=ON"
+    "-DWITH_EXTERNAL_ZLIB=ON"
+    "-DWITH_MYSQLCOMPAT=ON"
   ];
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
@@ -39,10 +47,7 @@ stdenv.mkDerivation {
     ln -sv mariadb_config $out/bin/mysql_config
     ln -sv mariadb $out/lib/mysql
     ln -sv mariadb $out/include/mysql
-    ln -sv libmariadbclient.a $out/lib/mariadb/libmysqlclient.a
-    ln -sv libmariadbclient.a $out/lib/mariadb/libmysqlclient_r.a
-    ln -sv libmariadb.so $out/lib/mariadb/libmysqlclient.so
-    ln -sv libmariadb.so $out/lib/mariadb/libmysqlclient_r.so
+    ln -sv mariadb_version.h $out/include/mariadb/mysql_version.h
   '';
 
   meta = {

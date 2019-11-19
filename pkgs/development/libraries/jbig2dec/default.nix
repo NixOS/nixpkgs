@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "jbig2dec-0.14";
+  name = "jbig2dec-0.17";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/${name}.tar.gz";
-    sha256 = "0k01hp0q4275fj4rbr1gy64svfraw5w7wvwl08yjhvsnpb1rid11";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs950/${name}.tar.gz";
+    sha256 = "0wpvslmwazia3z8gyk343kbq6yj47pxr4x5yjvx332v309qssazp";
   };
 
   postPatch = ''
     patchShebangs test_jbig2dec.py
   '';
 
+  buildInputs = [ autoconf ];
+
   checkInputs = [ python ];
-  doCheck = false; # fails 1 of 4 tests
+  doCheck = true;
 
   meta = {
     homepage = https://www.jbig2dec.com/;

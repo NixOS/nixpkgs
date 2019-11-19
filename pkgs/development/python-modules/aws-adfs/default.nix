@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "1.17.0";
+  version = "1.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wnsmwjpfhxilmvrqvwilcf3h9p5m5ixi5gn9bgkr3gwd2laxf54";
+    sha256 = "da20c682993d87d41534ffc2be0819d924aaf230b27abbc5d1fa8ad62410bf39";
   };
 
   # Relax version constraint

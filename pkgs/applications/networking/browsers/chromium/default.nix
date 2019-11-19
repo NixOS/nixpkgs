@@ -60,7 +60,7 @@ in let
     unpackCmd = let
       soPath =
         if upstream-info.channel == "stable" then
-          "./opt/google/chrome/libwidevinecdm.so"
+          "./opt/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
         else if upstream-info.channel == "beta" then
           "./opt/google/chrome-beta/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
         else if upstream-info.channel == "dev" then
@@ -112,12 +112,8 @@ in let
         mkdir -p $out
         cp -a ${browser}/* $out/
         chmod u+w $out/libexec/chromium
-        if [[ ${channel} != "dev" ]]; then
-          cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/
-        else
-          mkdir -p $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64
-          cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64/
-        fi
+        mkdir -p $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64
+        cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64/
       ''
     else browser;
 in stdenv.mkDerivation {
@@ -160,7 +156,11 @@ in stdenv.mkDerivation {
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
 
-    export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:${libPath}"
+  '' + lib.optionalString (libPath != "") ''
+    # To avoid loading .so files from cwd, LD_LIBRARY_PATH here must not
+    # contain an empty section before or after a colon.
+    export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}${libPath}"
+  '' + ''
 
     # libredirect causes chromium to deadlock on startup
     export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"

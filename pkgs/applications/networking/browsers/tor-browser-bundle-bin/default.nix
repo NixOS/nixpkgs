@@ -93,19 +93,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "8.5.5";
+  version = "9.0.1";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "00r5k9bbfpv3s6shxqypl13psr1zz51xiyz3vmm4flhr2qa4ycsz";
+      sha256 = "09iasj13wn3d1dygpxn4www4rx8wnxxlm9h6df9lzf4wll15px55";
     };
 
     i686-linux = fetchurl {
-      url = "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "1nxvw5kiggfr4n5an436ass84cvwjviaa894kfm72yf2ls149f29";
+      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
+      sha256 = "1vz3pvqi114c9lkyhqy754ngi90708c187xwiyr9786ff89sjw5i";
     };
   };
 in
@@ -165,15 +165,12 @@ stdenv.mkDerivation rec {
     # interpreter for pre-compiled Go binaries by invoking the interpreter
     # directly.
     sed -i TorBrowser/Data/Tor/torrc-defaults \
-        -e "s|\(ClientTransportPlugin obfs2,obfs3,obfs4,scramblesuit\) exec|\1 exec $interp|" \
+        -e "s|\(ClientTransportPlugin meek_lite,obfs2,obfs3,obfs4,scramblesuit\) exec|\1 exec $interp|"
 
-    # Fixup fte transport
-    #
-    # Note: the script adds its dirname to search path automatically
-    sed -i TorBrowser/Tor/PluggableTransports/fteproxy.bin \
-        -e "s,/usr/bin/env python,${python27.interpreter},"
+    # Similarly fixup snowflake
+    sed -i TorBrowser/Data/Tor/torrc-defaults \
+        -e "s|\(ClientTransportPlugin snowflake\) exec|\1 exec $interp|"
 
-    patchelf --set-rpath "${fteLibPath}" TorBrowser/Tor/PluggableTransports/fte/cDFA.so
 
     # Prepare for autoconfig.
     #
@@ -237,6 +234,7 @@ stdenv.mkDerivation rec {
 
     # Preload extensions by moving into the runtime instead of storing under the
     # user's profile directory.
+    mkdir -p "$TBB_IN_STORE/browser/extensions"
     mv "$TBB_IN_STORE/TorBrowser/Data/Browser/profile.default/extensions/"* \
       "$TBB_IN_STORE/browser/extensions"
 
@@ -379,7 +377,11 @@ stdenv.mkDerivation rec {
     cp $desktopItem/share/applications"/"* $out/share/applications
     sed -i $out/share/applications/torbrowser.desktop \
         -e "s,Exec=.*,Exec=$out/bin/tor-browser," \
-        -e "s,Icon=.*,Icon=web-browser,"
+        -e "s,Icon=.*,Icon=tor-browser,"
+    for i in 16 32 48 64 128; do
+      mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps/
+      ln -s $out/share/tor-browser/browser/chrome/icons/default/default$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/tor-browser.png
+    done
 
     # Check installed apps
     echo "Checking bundled Tor ..."
@@ -395,7 +397,7 @@ stdenv.mkDerivation rec {
     longDescription = tor-browser-bundle.meta.longDescription;
     homepage = "https://www.torproject.org/";
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm ];
+    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 ];
     hydraPlatforms = [];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

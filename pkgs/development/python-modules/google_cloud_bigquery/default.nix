@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "1.9.0";
+  version = "1.21.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "169ffdb1b677f69f1f9d032bd38f724aed73e0565153ac17199472c083a3852f";
+    sha256 = "b38d5669235583ee4334d468b3719ea4a381da4b2abbedbf13cb926d893a11ab";
   };
 
   checkInputs = [ pytest mock ipython ];

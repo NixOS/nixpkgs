@@ -24,8 +24,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   gnome3 = self // { recurseForDerivations = false; };
-  vala = pkgs.vala_0_44;
-  gegl_0_4 = pkgs.gegl_0_4.override { gtk = pkgs.gtk3; };
 
 # ISO installer
 # installerIso = callPackage ./installer.nix {};
@@ -50,8 +48,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   evolution-data-server = callPackage ./core/evolution-data-server { };
 
   gdm = callPackage ./core/gdm { };
-
-  gjs = callPackage ./core/gjs { };
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
@@ -353,9 +349,15 @@ lib.makeScope pkgs.newScope (self: with self; {
   pidgin-im-gnome-shell-extension = pkgs.gnomeExtensions.pidgin-im-integration; # added 2019-08-01
 
   # added 2019-08-25
-  corePackages = throw "deprecated 2019-08-25: please use `services.gnome3.core-shell.enable`";
-  optionalPackages = throw "deprecated 2019-08-25: please use `services.gnome3.core-utilities.enable`";
-  gamesPackages = throw "deprecated 2019-08-25: please use `services.gnome3.games.enable`";
+  corePackages = throw "gnome3.corePackages is removed since 2019-08-25: please use `services.gnome3.core-shell.enable`";
+  optionalPackages = throw "gnome3.optionalPackages is removed since 2019-08-25: please use `services.gnome3.core-utilities.enable`";
+  gamesPackages = throw "gnome3.gamesPackages is removed since 2019-08-25: please use `services.gnome3.games.enable`";
 
-  nautilus-sendto = throw "deprecated 2019-09-17: abandoned";
+  nautilus-sendto = throw "nautilus-sendto is removed since 2019-09-17: abandoned upstream";
+
+  inherit (pkgs) vala; # added 2019-10-10
+
+  inherit (pkgs) gegl_0_4; # added 2019-10-31
+
+  inherit (pkgs) gjs; # added 2019-01-05
 })

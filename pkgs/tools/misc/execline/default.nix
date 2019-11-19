@@ -13,8 +13,8 @@ let
   execline =
     buildPackage {
       pname = "execline";
-      version = "2.5.1.0";
-      sha256 = "0xr6yb50wm6amj1wc7jmxyv7hvlx2ypbnww1vc288j275625d9xi";
+      version = "2.5.3.0";
+      sha256 = "0czdrv9m8mnx94nf28dafij6z03k4mbhbs6hccfaardfd5l5q805";
 
       description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 

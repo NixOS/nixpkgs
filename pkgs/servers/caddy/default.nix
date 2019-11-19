@@ -16,9 +16,15 @@ buildGoModule rec {
   };
   modSha256 = "0np0mbs0mrn8scqa0dgvi7ya1707b3883prdaf1whsqrcr71ig8q";
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w -X github.com/caddyserver/caddy/caddy/caddymain.gitTag=v${version}
+  preBuild = ''
+    cat << EOF > caddy/main.go
+    package main
+    import "github.com/caddyserver/caddy/caddy/caddymain"
+    func main() {
+      caddymain.EnableTelemetry = false
+      caddymain.Run()
+    }
+    EOF
   '';
 
   meta = with stdenv.lib; {

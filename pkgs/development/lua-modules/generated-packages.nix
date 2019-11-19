@@ -905,6 +905,24 @@ luadbi-sqlite3 = buildLuarocksPackage {
     };
   };
 };
+luadoc = buildLuarocksPackage {
+  pname = "luadoc";
+  version = "3.0.1-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/luadoc-3.0.1-1.src.rock;
+    sha256 = "112zqjbzkrhx3nvavrxx3vhpv2ix85pznzzbpa8fq4piyv5r781i";
+  };
+  propagatedBuildInputs = [ lualogging luafilesystem ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://luadoc.luaforge.net/";
+    description = "LuaDoc is a documentation tool for Lua source code";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luaevent = buildLuarocksPackage {
   pname = "luaevent";
   version = "0.4.6-1";
@@ -978,6 +996,24 @@ luafilesystem = buildLuarocksPackage {
     homepage = "git://github.com/keplerproject/luafilesystem";
     description = "File System Library for the Lua Programming Language";
     maintainers = with maintainers; [ flosse vcunat ];
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
+lualogging = buildLuarocksPackage {
+  pname = "lualogging";
+  version = "1.3.0-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lualogging-1.3.0-1.src.rock;
+    sha256 = "13fm1vlig3zmbfkmlq1vk3xfqhlvv5xf24b0p4k4d08395y858vc";
+  };
+  propagatedBuildInputs = [ luasocket ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/Neopallium/lualogging";
+    description = "A simple API to use logging features";
     license = {
       fullName = "MIT/X11";
     };

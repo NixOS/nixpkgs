@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , six
-, mypy_extensions
+, mypy-extensions
 , typing
 , pytest
 }:
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six mypy_extensions ]
+  propagatedBuildInputs = [ six mypy-extensions ]
     ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkPhase = ''

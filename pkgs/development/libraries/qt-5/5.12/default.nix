@@ -65,6 +65,7 @@ let
         ./qtbase.patch.d/0009-qtbase-tzdir.patch
         ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0011-qtbase-assert.patch
+        ./qtbase.patch.d/0012-fix-header_module.patch
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
@@ -77,6 +78,15 @@ let
         name = "fix-build-with-pulseaudio-13.0.patch";
         url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
+      })
+      # patch for CVE-2019-13720, can be removed when it is included in the next upstream release
+      # https://bugreports.qt.io/browse/QTBUG-1019226
+      (fetchpatch {
+        name = "qtwebengine-CVE-2019-13720.patch";
+        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=d6e5fc10";
+        sha256 = "0ywc12m196pr6xn7l5xbascihygkjj4pbcgcn9wxvi5ssdr6z46z";
+        extraPrefix = "src/3rdparty/";
+        stripLen = 1;
       })
     ]
       ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;

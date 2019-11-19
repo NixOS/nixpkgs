@@ -467,7 +467,7 @@ in {
               };
               "/" = {
                 priority = 200;
-                extraConfig = "rewrite ^ /index.php$request_uri;";
+                extraConfig = "rewrite ^ /index.php;";
               };
               "~ ^/store-apps" = {
                 priority = 201;
@@ -494,6 +494,7 @@ in {
                 extraConfig = ''
                   include ${config.services.nginx.package}/conf/fastcgi.conf;
                   fastcgi_split_path_info ^(.+\.php)(\\/.*)$;
+                  try_files $fastcgi_script_name =404;
                   fastcgi_param PATH_INFO $fastcgi_path_info;
                   fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
                   fastcgi_param modHeadersAvailable true;
@@ -531,6 +532,7 @@ in {
               add_header X-Download-Options noopen;
               add_header X-Permitted-Cross-Domain-Policies none;
               add_header Referrer-Policy no-referrer;
+              add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
               error_page 403 /core/templates/403.php;
               error_page 404 /core/templates/404.php;
               client_max_body_size ${cfg.maxUploadSize};

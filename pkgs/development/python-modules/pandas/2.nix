@@ -32,11 +32,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.24.2";
+  version = "0.25.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18imlm8xbhcbwy4wa957a1fkamrcb0z988z006jpfda3ki09z4ag";
+    sha256 = "ca91a19d1f0a280874a24dca44aadce42da7f3a7edb7e9ab7c7baad8febee2be";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];

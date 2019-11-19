@@ -122,7 +122,7 @@ in {
         description =
           ''
             Specify the scrolling method: <literal>twofinger</literal>, <literal>edge</literal>,
-            or <literal>none</literal>
+            <literal>button</literal>, or <literal>none</literal>
           '';
       };
 

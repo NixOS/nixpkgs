@@ -193,15 +193,10 @@ def update_gitlab_shell():
     repo = GitLabRepo(repo='gitlab-shell')
     gitlab_shell_dir = pathlib.Path(__file__).parent / 'gitlab-shell'
 
-    for fn in ['Gemfile.lock', 'Gemfile']:
-        with open(gitlab_shell_dir / fn, 'w') as f:
-            f.write(repo.get_file(fn, f"v{gitlab_shell_version}"))
-
     for fn in ['go.mod', 'go.sum']:
         with open(gitlab_shell_dir / fn, 'w') as f:
             f.write(repo.get_file(f"go/{fn}", f"v{gitlab_shell_version}"))
 
-    subprocess.check_output(['bundix'], cwd=gitlab_shell_dir)
     subprocess.check_output(['vgo2nix'], cwd=gitlab_shell_dir)
 
     for fn in ['go.mod', 'go.sum']:

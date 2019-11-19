@@ -24,20 +24,20 @@ let
   coreScripts = fetchFromGitHub {
     owner = "TES3MP";
     repo = "CoreScripts";
-    # usually latest master
-    rev = "71e15fa3b1d5131b6607ba1589f41c06672ce376";
-    sha256 = "1kwii8rpsxjmz4dh06wb0qaix17hq5s1qsvysv6n6209vlclfxjg";
+    # usually latest in stable branch (e.g. 0.7.0)
+    rev = "506146f5b2297242b713a030a589966156df1e8e";
+    sha256 = "0p4a4bgigyxfmaczf3jnz6ik4hgvdaafzc4614hbmbm1qbn8wpf9";
   };
 in openmw.overrideAttrs (oldAttrs: rec {
-  version = "2019-06-09";
+  version = "2019-07-01";
   name = "openmw-tes3mp-${version}";
 
   src = fetchFromGitHub {
     owner = "TES3MP";
     repo = "openmw-tes3mp";
     # usually latest in stable branch (e.g. 0.7.0)
-    rev = "01804af100785bc2c162d568258d9662012627a3";
-    sha256 = "0j99v9vvmic0bqw3y4550k1dy058lwvs9s9qcjmxh1wkqkvrpdnp";
+    rev = "94a9292cc676a037496f98877b62da80cde2ac47";
+    sha256 = "0kc45xs33rsxac1aba248slzvljx90ybdk4ag9jwjjmsjmy7w2w5";
   };
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];

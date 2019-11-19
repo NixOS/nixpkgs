@@ -16,6 +16,7 @@ let
       category-theory = callPackage ../development/coq-modules/category-theory { };
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
       CoLoR = callPackage ../development/coq-modules/CoLoR {};
+      coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-extensible-records = callPackage ../development/coq-modules/coq-extensible-records {};
@@ -127,7 +128,7 @@ in rec {
     version = "8.9.1";
   };
   coq_8_10 = callPackage ../applications/science/logic/coq {
-    version = "8.10.0";
+    version = "8.10.1";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;

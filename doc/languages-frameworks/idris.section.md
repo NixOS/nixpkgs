@@ -1,4 +1,4 @@
-# Idris packages
+# Idris
 
 ## Installing Idris
 

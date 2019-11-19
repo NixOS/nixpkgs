@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.22.6";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "1pnma62kib6zbs4wr7h5g53v3p81jb8cvyvqcvaidb1hlfibwnvm";
+    sha256 = "0yccw97pqn8afy96k5ssk7qi6r3wjshcnxk14k77qikkqa89zdmf";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

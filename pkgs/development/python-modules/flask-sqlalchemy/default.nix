@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-SQLAlchemy";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nnllf0ddbh9jlhngnyjj98lbxgxr1csaplllx0caw98syq0k5hc";
+    sha256 = "6974785d913666587949f7c2946f7001e4fa2cb2d19f4e69ead02e4b8f50b33d";
   };
 
   propagatedBuildInputs = [ flask sqlalchemy ];

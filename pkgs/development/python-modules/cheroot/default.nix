@@ -8,14 +8,12 @@ let inherit (stdenv) lib; in
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "6.5.6";
+  version = "8.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b824f9961eb447809badeb051820a05770354e2f9ae5c355eecc21f22633c217";
+    sha256 = "5b525b3e4a755adf78070ab54c1821fb860d4255a9317dba2b88eb2df2441cff";
   };
-
-  patches = [ ./tests.patch ];
 
   nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
 

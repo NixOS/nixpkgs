@@ -55,11 +55,11 @@
             "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz"
         ]
     },
-    "android_tools_pkg-0.10.tar.gz": {
-        "name": "android_tools_pkg-0.10.tar.gz",
-        "sha256": "9c5081f93276fefb3db7ca61cc1225ff6d1913e7e315568265bb1a728265a9b1",
+    "android_tools_pkg-0.11.tar.gz": {
+        "name": "android_tools_pkg-0.11.tar.gz",
+        "sha256": "6fc50151063bffdda700038ea7df99c89d54dc066e9377a5baff60d55d482ad2",
         "urls": [
-            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.10.tar.gz"
+            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.11.tar.gz"
         ]
     },
     "bazel_j2objc": {
@@ -165,25 +165,25 @@
             "https://github.com/bazelbuild/skydoc/archive/c7bbde2950769aac9a99364b0926230060a3ce04.tar.gz"
         ]
     },
-    "java_tools_javac11_darwin-v5.1.zip": {
-        "name": "java_tools_javac11_darwin-v5.1.zip",
-        "sha256": "2fa01b4cb69e33f85a96ba0620a2e6261f789eefdbeaeb1d2879140b50108db7",
+    "java_tools_javac11_darwin-v6.1.zip": {
+        "name": "java_tools_javac11_darwin-v6.1.zip",
+        "sha256": "f0c488dac18f18ab1a0d18bbd65288c7a128e90a24d9c16f65bd8243f79483a0",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v5.1/java_tools_javac11_darwin-v5.1.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v6.1/java_tools_javac11_darwin-v6.1.zip"
         ]
     },
-    "java_tools_javac11_linux-v5.1.zip": {
-        "name": "java_tools_javac11_linux-v5.1.zip",
-        "sha256": "ea2ee2f9eab37e04eae5aa8a266373132fe57676c25ea033504bc5438d6bc1ba",
+    "java_tools_javac11_linux-v6.1.zip": {
+        "name": "java_tools_javac11_linux-v6.1.zip",
+        "sha256": "12f7940ed0bc4c2e82238951cdf19b4179c7dcc361d16fe40fe4266538fb4ac6",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v5.1/java_tools_javac11_linux-v5.1.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v6.1/java_tools_javac11_linux-v6.1.zip"
         ]
     },
-    "java_tools_javac11_windows-v5.1.zip": {
-        "name": "java_tools_javac11_windows-v5.1.zip",
-        "sha256": "b2cfebc049c349268a7ca0e5ff37160899f87f6fe6a80a789de3df90db4ce4ef",
+    "java_tools_javac11_windows-v6.1.zip": {
+        "name": "java_tools_javac11_windows-v6.1.zip",
+        "sha256": "e2deb2efff684de78787e0bdc7620f9672d13f04a12856d8e7f677369a8e286b",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v5.1/java_tools_javac11_windows-v5.1.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v6.1/java_tools_javac11_windows-v6.1.zip"
         ]
     },
     "java_tools_langtools_javac10": {

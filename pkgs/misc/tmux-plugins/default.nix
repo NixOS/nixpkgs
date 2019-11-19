@@ -123,6 +123,16 @@ in rec {
     };
   };
 
+  gruvbox = mkDerivation {
+    pluginName = "gruvbox";
+    rtpFilePath = "gruvbox-tpm.tmux";
+    src = fetchgit {
+      url = "https://github.com/egel/tmux-gruvbox";
+      rev = "6149fd8b5d6924925b4d5aa6935039780e94f3d6";
+      sha256 = "1ykr4yardavd0x7yfrnshd4b0gi8p31pji7i79ib0nss134zncpb";
+    };
+  };
+
   logging = mkDerivation {
     pluginName = "logging";
     src = fetchgit {
@@ -175,6 +185,19 @@ in rec {
       rev = "731667692da46d51a6a9dffb4c43384a5d68ff28";
       sha256 = "1ihpl5wgjmhfgcrasgnydd7vpsar865sx2whra19gpfm4bglmdzl";
     };
+  };
+
+  plumb = mkDerivation {
+    pluginName = "plumb";
+    src = fetchFromGitHub {
+      owner = "eraserhd";
+      repo = "tmux-plumb";
+      rev = "v0.1.1";
+      sha256 = "1c6k4fdl0az9811r6k164mgd4w5la75xr6x7nabmy046xc0z5i2r";
+    };
+    postInstall = ''
+      sed -i -e 's,9 plumb,${pkgs.plan9port}/bin/9 plumb,' $target/scripts/plumb
+    '';
   };
 
   prefix-highlight = mkDerivation {

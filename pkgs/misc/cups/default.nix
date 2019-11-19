@@ -1,8 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, removeReferencesTo
-, zlib, libjpeg, libpng, libtiff, pam, dbus, systemd, acl, gmp, darwin
-, libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, removeReferencesTo
+, zlib
+, libjpeg
+, libpng
+, libtiff
+, pam
+, dbus
+, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, systemd ? null
+, acl
+, gmp
+, darwin
+, libusb ? null
+, gnutls ? null
+, avahi ? null
+, libpaper ? null
 , coreutils
 }:
+
+assert enableSystemd -> systemd != null;
 
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.
@@ -12,7 +30,7 @@ stdenv.mkDerivation rec {
   pname = "cups";
 
   # After 2.2.6, CUPS requires headers only available in macOS 10.12+
-  version = if stdenv.isDarwin then "2.2.6" else "2.2.12";
+  version = if stdenv.isDarwin then "2.2.6" else "2.3.0";
 
   passthru = { inherit version; };
 
@@ -20,7 +38,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
     sha256 = if version == "2.2.6"
              then "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20"
-             else "1a4sgx5y7z16flmpnchd2ix294bnzy0v8mdkd96a4j27kr2anq8g";
+             else "19d1jpdpxy0fclq37pchi7ldnw9dssxx3zskcgqai3h0rwlh5bxc";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -33,7 +51,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb gnutls libpaper ]
-    ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]
+    ++ optionals stdenv.isLinux [ avahi pam dbus ]
+    ++ optional enableSystemd systemd
+    # Separate from above only to not modify order, to avoid mass rebuilds; merge this with the above at next big change.
+    ++ optionals stdenv.isLinux [ acl ]
     ++ optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);

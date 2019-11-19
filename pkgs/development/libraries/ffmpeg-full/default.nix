@@ -3,7 +3,7 @@
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
 , gplLicensing ? true # GPL: fdkaac,openssl,frei0r,cdio,samba,utvideo,vidstab,x265,x265,xavs,avid,zvbi,x11grab
-, version3Licensing ? true # (L)GPL3: opencore-amrnb,opencore-amrwb,samba,vo-aacenc,vo-amrwbenc
+, version3Licensing ? true # (L)GPL3: libvmaf,opencore-amrnb,opencore-amrwb,samba,vo-aacenc,vo-amrwbenc
 , nonfreeLicensing ? false # NONFREE: openssl,fdkaac,blackmagic-design-desktop-video
 /*
  *  Build options
@@ -87,6 +87,7 @@
 , libv4l ? null # Video 4 Linux support
 , libva ? null # Vaapi hardware acceleration
 , libvdpau ? null # Vdpau hardware acceleration
+, libvmaf ? null # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , libvorbis ? null # Vorbis de/encoding, native encoder exists
 , libvpx ? null # VP8 & VP9 de/encoding
 , libwebp ? null # WebP encoder
@@ -364,6 +365,7 @@ stdenv.mkDerivation rec {
     (enableFeature ((isLinux || isFreeBSD) && libva != null) "vaapi")
     (enableFeature (libvdpau != null) "vdpau")
     (enableFeature (libvorbis != null) "libvorbis")
+    (enableFeature (!isAarch64 && libvmaf != null && version3Licensing) "libvmaf")
     (enableFeature (libvpx != null) "libvpx")
     (enableFeature (libwebp != null) "libwebp")
     (enableFeature (libX11 != null && libXv != null && libXext != null) "xlib")
@@ -425,6 +427,7 @@ stdenv.mkDerivation rec {
   ] ++ optional openglExtlib libGLU_combined
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
+    ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional nvenc nv-codec-headers

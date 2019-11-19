@@ -4,7 +4,7 @@
 , ninja
 , pkgconfig
 , intltool
-, vala_0_44
+, vala
 , wrapGAppsHook
 , gcr
 , libpeas
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     intltool
     ninja
     pkgconfig
-    vala_0_44
+    vala
     wrapGAppsHook
   ];
 

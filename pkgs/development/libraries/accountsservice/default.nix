@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     })
     ./no-create-dirs.patch
     ./Disable-methods-that-change-files-in-etc.patch
+    # Fixes https://github.com/NixOS/nixpkgs/issues/72396
+    ./drop-prefix-check-extensions.patch
     # Systemd unit improvements. Notably using StateDirectory eliminating the
     # need of an ad-hoc script.
     (fetchpatch {

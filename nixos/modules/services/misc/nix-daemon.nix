@@ -61,7 +61,7 @@ let
             '' else ''
               echo "Checking that Nix can read nix.conf..."
               ln -s $out ./nix.conf
-              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net"} >/dev/null
+              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net --option experimental-features nix-command"} >/dev/null
             '')
       );
 
@@ -152,8 +152,8 @@ in
         type = types.lines;
         default = "";
         example = ''
-          gc-keep-outputs = true
-          gc-keep-derivations = true
+          keep-outputs = true
+          keep-derivations = true
         '';
         description = "Additional text appended to <filename>nix.conf</filename>.";
       };

@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
-  version = "1.3.0";
+  version = "1.3.1";
   pname = "elementpath";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
     rev = "v${version}";
-    sha256 = "0ahqqqpcf3fd6xcdhiwwscincyj6h5xyjaacnqxwph1y1b8mnzyw";
+    sha256 = "0060cd49m0q25k7anzyiz76360hag2f9j5hvqhbmscivf1ssckzq";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this

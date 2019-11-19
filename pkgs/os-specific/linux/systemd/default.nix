@@ -24,8 +24,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "ccec67cab6c0fda85a1762eee7aeea422a0dc15e";
-    sha256 = "12nq2ah33amhyfma464a4ssf90wh2ai8c7w55j381cks8jliny40";
+    rev = "d25cf413c6bff1b5a9d216a8830e3a90c9cad1de";
+    sha256 = "0ilvrnh3m7g0yflxl16fk52gkb1z0fwwk9ba5gs4005nzpl0c7i0";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -84,8 +84,18 @@ stdenv.mkDerivation {
     "-Dldconfig=false"
     "-Dsmack=true"
     "-Db_pie=true"
-    "-Dsystem-uid-max=499" #TODO: debug why awking around in /etc/login.defs doesn't work
-    "-Dsystem-gid-max=499"
+    /*
+    As of now, systemd doesn't allow runtime configuration of these values. So
+    the settings in /etc/login.defs have no effect on it. Many people think this
+    should be supported however, see
+    - https://github.com/systemd/systemd/issues/3855
+    - https://github.com/systemd/systemd/issues/4850
+    - https://github.com/systemd/systemd/issues/9769
+    - https://github.com/systemd/systemd/issues/9843
+    - https://github.com/systemd/systemd/issues/10184
+    */
+    "-Dsystem-uid-max=999"
+    "-Dsystem-gid-max=999"
     # "-Dtime-epoch=1"
 
     (if !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
@@ -115,7 +125,7 @@ stdenv.mkDerivation {
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
+    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c units/systemd-logind.service.in units/systemd-nspawn@.service.in; do
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
@@ -125,6 +135,7 @@ stdenv.mkDerivation {
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
         --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
+        --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done

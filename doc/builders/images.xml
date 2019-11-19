@@ -1,0 +1,12 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="chap-images">
+ <title>Images</title>
+ <para>
+  This chapter describes tools for creating various types of images.
+ </para>
+ <xi:include href="images/appimagetools.xml" />
+ <xi:include href="images/dockertools.xml" />
+ <xi:include href="images/ocitools.xml" />
+ <xi:include href="images/snaptools.xml" />
+</chapter>

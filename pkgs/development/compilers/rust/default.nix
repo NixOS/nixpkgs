@@ -1,3 +1,9 @@
+{ rustcVersion
+, rustcSha256
+, bootstrapVersion
+, bootstrapHashes
+, selectRustPackage
+}:
 { stdenv, lib
 , buildPackages
 , newScope, callPackage
@@ -36,21 +42,27 @@
   # cycles / purify builds). In this way, nixpkgs would be in control of all
   # bootstrapping.
   packages = {
-    prebuilt = callPackage ./bootstrap.nix {};
+    prebuilt = callPackage ./bootstrap.nix {
+      version = bootstrapVersion;
+      hashes = bootstrapHashes;
+    };
     stable = lib.makeScope newScope (self: let
       # Like `buildRustPackages`, but may also contain prebuilt binaries to
       # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
       # nothing in the final package set should refer to this.
       bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
         lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
-          buildPackages.rust.packages.prebuilt);
+          (selectRustPackage buildPackages).packages.prebuilt);
       bootRustPlatform = makeRustPlatform bootstrapRustPackages;
     in {
       # Packages suitable for build-time, e.g. `build.rs`-type stuff.
-      buildRustPackages = buildPackages.rust.packages.stable;
+      buildRustPackages = (selectRustPackage buildPackages).packages.stable;
       # Analogous to stdenv
       rustPlatform = makeRustPlatform self.buildRustPackages;
       rustc = self.callPackage ./rustc.nix ({
+        version = rustcVersion;
+        sha256 = rustcSha256;
+
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
       } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {

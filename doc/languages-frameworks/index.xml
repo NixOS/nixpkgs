@@ -1,7 +1,7 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xml:id="chap-language-support">
- <title>Support for specific programming languages and frameworks</title>
+ <title>Languages and frameworks</title>
  <para>
   The <link linkend="chap-stdenv">standard build environment</link> makes it easy to build typical Autotools-based packages with very little code. Any other kind of package can be accomodated by overriding the appropriate phases of <literal>stdenv</literal>. However, there are specialised functions in Nixpkgs to easily build packages for other programming languages, such as Perl or Haskell. These are described in this chapter.
  </para>
@@ -9,6 +9,8 @@
  <xi:include href="beam.xml" />
  <xi:include href="bower.xml" />
  <xi:include href="coq.xml" />
+ <xi:include href="crystal.section.xml" />
+ <xi:include href="emscripten.section.xml" />
  <xi:include href="gnome.xml" />
  <xi:include href="go.xml" />
  <xi:include href="haskell.section.xml" />
@@ -27,6 +29,4 @@
  <xi:include href="texlive.xml" />
  <xi:include href="titanium.section.xml" />
  <xi:include href="vim.section.xml" />
- <xi:include href="emscripten.section.xml" />
- <xi:include href="crystal.section.xml" />
 </chapter>

@@ -4,7 +4,7 @@ author: Matthias Beyer
 date: 2017-03-05
 ---
 
-# User's Guide to the Rust Infrastructure
+# Rust
 
 To install the rust compiler and cargo put
 
@@ -67,6 +67,17 @@ build-time.
 
 When `verifyCargoDeps` is set to `true`, the build will also verify that the
 `cargoSha256` is not out of date by comparing the `Cargo.lock` file in both the `cargoDeps` and `src`. Note that this option changes the value of `cargoSha256` since it also copies the `Cargo.lock` in it. To avoid breaking backward-compatibility this option is not enabled by default but hopefully will be in the future.
+
+### Building a crate for a different target
+
+To build your crate with a different cargo `--target` simply specify the `target` attribute:
+
+```nix
+pkgs.rustPlatform.buildRustPackage {
+  (...)
+  target = "x86_64-fortanix-unknown-sgx";
+}
+```
 
 ## Compiling Rust crates using Nix instead of Cargo
 
@@ -192,7 +203,7 @@ argument and returns a set that contains all attribute that should be
 overwritten.
 
 For more complicated cases, such as when parts of the crate's
-derivation depend on the the crate's version, the `attrs` argument of
+derivation depend on the crate's version, the `attrs` argument of
 the override above can be read, as in the following example, which
 patches the derivation:
 

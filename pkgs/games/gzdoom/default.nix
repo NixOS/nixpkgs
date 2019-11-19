@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.2.1";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "1fak8bmsb3jqcx28hr60yj3dd3khzhjw1kgq6q7piwnmgr27ibgd";
+    sha256 = "06fy4ksn1n745y86s6rlnamkfyqi0894aznf6s56ff6hz2pngsfc";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -i \
       -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
       -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
-      src/sound/mididevices/music_fluidsynth_mididevice.cpp
+      libraries/zmusic/mididevices/music_fluidsynth_mididevice.cpp
   '';
 
   installPhase = ''

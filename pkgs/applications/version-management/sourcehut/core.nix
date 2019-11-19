@@ -1,17 +1,18 @@
 { stdenv, fetchgit, fetchNodeModules, buildPythonPackage
 , pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
 , sqlalchemy, flask_login, beautifulsoup4, sqlalchemy-utils, celery, alembic
+, importlib-metadata
 , sassc, nodejs
 , writeText }:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.54.2";
+  version = "0.54.4";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
     rev = version;
-    sha256 = "1m9nblm0ygjjdzcf79jk5v8p74dgyby15mqkggw9i3smz9r3afim";
+    sha256 = "0flxvn178hqd8ljz89ddis80zfnmzgimv4506w4dg2flbwzywy7z";
   };
 
   node_modules = fetchNodeModules {
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     # Unofficial runtime dependencies?
     celery
     alembic
+    importlib-metadata
   ];
 
   PKGVER = version;

@@ -20,6 +20,12 @@ let
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
+    angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
+
+    angstrom-lwt-unix = callPackage ../development/ocaml-modules/angstrom-lwt-unix { };
+
+    angstrom-unix = callPackage ../development/ocaml-modules/angstrom-unix { };
+
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
     apron = callPackage ../development/ocaml-modules/apron { };
@@ -219,9 +225,13 @@ let
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
+    duff = callPackage ../development/ocaml-modules/duff { };
+
     dune = callPackage ../development/tools/ocaml/dune { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
+
+    earlybird = callPackage ../development/ocaml-modules/earlybird { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
@@ -230,6 +240,8 @@ let
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
     elpi = callPackage ../development/ocaml-modules/elpi { };
+
+    encore = callPackage ../development/ocaml-modules/encore { };
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
@@ -285,6 +297,8 @@ let
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
+    imagelib-unix = callPackage ../development/ocaml-modules/imagelib/unix.nix { };
+
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
     integers = callPackage ../development/ocaml-modules/integers { };
@@ -312,7 +326,7 @@ let
 
     gg = callPackage ../development/ocaml-modules/gg { };
 
-    git = callPackage ../development/ocaml-modules/git { };
+    git = callPackage ../development/ocaml-modules/git { inherit (pkgs) git; };
 
     git-http = callPackage ../development/ocaml-modules/git-http { };
 
@@ -360,6 +374,8 @@ let
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+    ke = callPackage ../development/ocaml-modules/ke { };
+
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
     lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
@@ -405,10 +421,6 @@ let
     lru = callPackage ../development/ocaml-modules/lru { };
 
     lwt2 = callPackage ../development/ocaml-modules/lwt/legacy.nix { };
-
-    lwt3 = if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/lwt/3.x.nix { }
-      else throw "lwt3 is not available for OCaml ${ocaml.version}";
 
     lwt4 = callPackage ../development/ocaml-modules/lwt/4.x.nix { };
 
@@ -1091,8 +1103,6 @@ let
 
     # Apps / from all-packages
 
-    haxe = callPackage ../development/compilers/haxe { };
-
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 
     trv = callPackage ../development/tools/misc/trv { };
@@ -1100,11 +1110,6 @@ let
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
-
-
-    monotoneViz = callPackage ../applications/version-management/monotone-viz {
-      inherit (pkgs.gnome2) libgnomecanvas glib;
-    };
 
     unison = callPackage ../applications/networking/sync/unison {
       enableX11 = config.unison.enableX11 or true;

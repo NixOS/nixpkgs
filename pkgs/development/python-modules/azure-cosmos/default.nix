@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.1";
+  version = "3.1.2";
   pname = "azure-cosmos";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q8pl8wnadxhyawcrfzrm2k85xd4mdmdk2xwdial55zmpa8ji4pk";
+    sha256 = "7f8ac99e4e40c398089fc383bfadcdc83376f72b88532b0cac0b420357cd08c7";
   };
 
   propagatedBuildInputs = [ six requests ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Azure Cosmos DB API";
-    homepage = https://github.com/Azure/azure-cosmos-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

@@ -144,6 +144,24 @@ What's happening here?
 2. Then we create a Python 3.5 environment with the `withPackages` function.
 3. The `withPackages` function expects us to provide a function as an argument that takes the set of all python packages and returns a list of packages to include in the environment. Here, we select the packages `numpy` and `toolz` from the package set.
 
+To combine this with `mkShell` you can:
+
+```nix
+with import <nixpkgs> {};
+
+let
+  pythonEnv = python35.withPackages (ps: [
+    ps.numpy
+    ps.toolz
+  ]);
+in mkShell {
+  buildInputs = [
+    pythonEnv
+    hello
+  ];
+}
+```
+
 ##### Execute command with `--run`
 A convenient option with `nix-shell` is the `--run`
 option, with which you can execute a command in the `nix-shell`. We can
@@ -593,7 +611,7 @@ as the interpreter unless overridden otherwise.
 All parameters from `stdenv.mkDerivation` function are still supported. The following are specific to `buildPythonPackage`:
 
 * `catchConflicts ? true`: If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
-* `disabled` ? false: If `true`, package is not build for the particular Python interpreter version.
+* `disabled` ? false: If `true`, package is not built for the particular Python interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment variable in wrapped programs.
 * `installFlags ? []`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.

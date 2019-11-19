@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , nose
 , webob
 , six
@@ -15,6 +16,7 @@
 buildPythonPackage rec {
   version = "2.0.32";
   pname = "webtest";
+  disabled = isPy27; # paste.deploy is not longer a valid import
 
   src = fetchPypi {
     pname = "WebTest";

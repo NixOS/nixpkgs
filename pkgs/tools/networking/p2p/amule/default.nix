@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
       sha256 = "1n24r1j28083b8ipbnh1nf6i4j6vx59pdkfl1c0g6bb4psx9wvvi";
       name = "libupnp_18.patch";
     })
+    (fetchpatch {
+      name = "amule-cryptopp_6.patch";
+      url = "https://github.com/amule-project/amule/commit/27c13f3e622b8a3eaaa05bb62b0149604bdcc9e8.patch";
+      sha256 = "0kq095gi3xl665wr864zlhp5f3blk75pr725yany8ilzcwrzdrnm";
+    })
   ];
 
   postPatch = ''

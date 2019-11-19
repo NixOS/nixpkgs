@@ -5,7 +5,7 @@
 
 assert par2Support -> par2cmdline != null;
 
-let version = "0.29.3"; in
+let version = "0.30"; in
 
 with stdenv.lib;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     repo = "bup";
     owner = "bup";
     rev = version;
-    sha256 = "1b5ynljd9gs1vzbsa0kggw32s3r4zhbprc2clvjm5qmvnx23hxh8";
+    sha256 = "0kzi9mzgmx1kjv3aldawapz7bk73f02bysiwh8rngqnirmm0vxdp";
   };
 
   buildInputs = [

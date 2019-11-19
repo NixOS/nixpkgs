@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.99.2";
+  version = "0.100.3";
   components = {
     "abode" = ps: with ps; [  ];
     "acer_projector" = ps: with ps; [ pyserial ];
@@ -158,6 +158,7 @@
     "dlna_dmr" = ps: with ps; [  ];
     "dnsip" = ps: with ps; [ aiodns ];
     "dominos" = ps: with ps; [ aiohttp-cors ];
+    "doods" = ps: with ps; [  ];
     "doorbird" = ps: with ps; [  ];
     "dovado" = ps: with ps; [  ];
     "downloader" = ps: with ps; [  ];
@@ -213,7 +214,6 @@
     "familyhub" = ps: with ps; [  ];
     "fan" = ps: with ps; [  ];
     "fastdotcom" = ps: with ps; [  ];
-    "fedex" = ps: with ps; [  ];
     "feedreader" = ps: with ps; [  ];
     "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_motion" = ps: with ps; [ ha-ffmpeg ];
@@ -301,6 +301,7 @@
     "hdmi_cec" = ps: with ps; [  ];
     "heatmiser" = ps: with ps; [  ];
     "heos" = ps: with ps; [  ];
+    "here_travel_time" = ps: with ps; [  ];
     "hikvision" = ps: with ps; [  ];
     "hikvisioncam" = ps: with ps; [  ];
     "hipchat" = ps: with ps; [  ];
@@ -338,7 +339,7 @@
     "iglo" = ps: with ps; [  ];
     "ign_sismologia" = ps: with ps; [  ];
     "ihc" = ps: with ps; [ defusedxml ];
-    "image_processing" = ps: with ps; [ aiohttp-cors ];
+    "image_processing" = ps: with ps; [ aiohttp-cors pillow ];
     "imap" = ps: with ps; [  ];
     "imap_email_content" = ps: with ps; [  ];
     "incomfort" = ps: with ps; [  ];
@@ -362,9 +363,11 @@
     "isy994" = ps: with ps; [  ];
     "itach" = ps: with ps; [  ];
     "itunes" = ps: with ps; [  ];
+    "izone" = ps: with ps; [  ];
     "jewish_calendar" = ps: with ps; [  ];
     "joaoapps_join" = ps: with ps; [  ];
     "juicenet" = ps: with ps; [  ];
+    "kaiterra" = ps: with ps; [  ];
     "kankun" = ps: with ps; [  ];
     "keba" = ps: with ps; [  ];
     "keenetic_ndms2" = ps: with ps; [  ];
@@ -391,7 +394,6 @@
     "light" = ps: with ps; [  ];
     "lightwave" = ps: with ps; [  ];
     "limitlessled" = ps: with ps; [ limitlessled ];
-    "linksys_ap" = ps: with ps; [ beautifulsoup4 ];
     "linksys_smart" = ps: with ps; [  ];
     "linky" = ps: with ps; [  ];
     "linode" = ps: with ps; [ linode-api ];
@@ -412,7 +414,7 @@
     "london_underground" = ps: with ps; [  ];
     "loopenergy" = ps: with ps; [  ];
     "lovelace" = ps: with ps; [  ];
-    "luci" = ps: with ps; [ packaging ];
+    "luci" = ps: with ps; [  ];
     "luftdaten" = ps: with ps; [ luftdaten ];
     "lupusec" = ps: with ps; [  ];
     "lutron" = ps: with ps; [  ];
@@ -516,6 +518,7 @@
     "octoprint" = ps: with ps; [  ];
     "oem" = ps: with ps; [  ];
     "ohmconnect" = ps: with ps; [ defusedxml ];
+    "ombi" = ps: with ps; [  ];
     "onboarding" = ps: with ps; [ aiohttp-cors ];
     "onewire" = ps: with ps; [  ];
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
@@ -558,7 +561,7 @@
     "pjlink" = ps: with ps; [  ];
     "plaato" = ps: with ps; [ aiohttp-cors ];
     "plant" = ps: with ps; [  ];
-    "plex" = ps: with ps; [  ];
+    "plex" = ps: with ps; [ aiohttp-cors ];
     "plugwise" = ps: with ps; [  ];
     "plum_lightpad" = ps: with ps; [  ];
     "pocketcasts" = ps: with ps; [  ];
@@ -628,6 +631,7 @@
     "russound_rio" = ps: with ps; [  ];
     "russound_rnet" = ps: with ps; [  ];
     "sabnzbd" = ps: with ps; [  ];
+    "saj" = ps: with ps; [  ];
     "samsungtv" = ps: with ps; [ wakeonlan ];
     "satel_integra" = ps: with ps; [  ];
     "scene" = ps: with ps; [  ];
@@ -676,6 +680,7 @@
     "solaredge" = ps: with ps; [ stringcase ];
     "solaredge_local" = ps: with ps; [  ];
     "solax" = ps: with ps; [  ];
+    "soma" = ps: with ps; [  ];
     "somfy" = ps: with ps; [  ];
     "somfy_mylink" = ps: with ps; [  ];
     "sonarr" = ps: with ps; [  ];
@@ -692,7 +697,6 @@
     "spotify" = ps: with ps; [ aiohttp-cors ];
     "sql" = ps: with ps; [ sqlalchemy ];
     "squeezebox" = ps: with ps; [  ];
-    "srp_energy" = ps: with ps; [  ];
     "ssdp" = ps: with ps; [ netdisco ];
     "starlingbank" = ps: with ps; [  ];
     "startca" = ps: with ps; [ xmltodict ];
@@ -723,7 +727,6 @@
     "system_health" = ps: with ps; [ aiohttp-cors ];
     "system_log" = ps: with ps; [ aiohttp-cors ];
     "systemmonitor" = ps: with ps; [ psutil ];
-    "sytadin" = ps: with ps; [ beautifulsoup4 ];
     "tado" = ps: with ps; [  ];
     "tahoma" = ps: with ps; [  ];
     "tank_utility" = ps: with ps; [  ];
@@ -739,7 +742,7 @@
     "telnet" = ps: with ps; [  ];
     "temper" = ps: with ps; [  ];
     "template" = ps: with ps; [  ];
-    "tensorflow" = ps: with ps; [ numpy pillow protobuf tensorflow ];
+    "tensorflow" = ps: with ps; [ numpy protobuf tensorflow ];
     "tesla" = ps: with ps; [  ];
     "tfiac" = ps: with ps; [  ];
     "thermoworks_smoke" = ps: with ps; [ stringcase ];
@@ -791,12 +794,10 @@
     "upcloud" = ps: with ps; [  ];
     "updater" = ps: with ps; [ distro ];
     "upnp" = ps: with ps; [  ];
-    "ups" = ps: with ps; [  ];
     "uptime" = ps: with ps; [  ];
     "uptimerobot" = ps: with ps; [  ];
     "uscis" = ps: with ps; [  ];
     "usgs_earthquakes_feed" = ps: with ps; [  ];
-    "usps" = ps: with ps; [  ];
     "utility_meter" = ps: with ps; [  ];
     "uvc" = ps: with ps; [  ];
     "vacuum" = ps: with ps; [  ];
@@ -838,7 +839,7 @@
     "wink" = ps: with ps; [  ];
     "wirelesstag" = ps: with ps; [  ];
     "withings" = ps: with ps; [ aiohttp-cors ];
-    "workday" = ps: with ps; [  ];
+    "workday" = ps: with ps; [ holidays ];
     "worldclock" = ps: with ps; [  ];
     "worldtidesinfo" = ps: with ps; [  ];
     "worxlandroid" = ps: with ps; [  ];
@@ -859,6 +860,7 @@
     "yale_smart_alarm" = ps: with ps; [  ];
     "yamaha" = ps: with ps; [  ];
     "yamaha_musiccast" = ps: with ps; [  ];
+    "yandex_transport" = ps: with ps; [  ];
     "yandextts" = ps: with ps; [  ];
     "yeelight" = ps: with ps; [  ];
     "yeelightsunflower" = ps: with ps; [  ];

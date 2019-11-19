@@ -12,11 +12,6 @@ let
 
   samba = cfg.package;
 
-  setupScript =
-    ''
-      mkdir -p /var/lock/samba /var/log/samba /var/cache/samba /var/lib/samba/private
-    '';
-
   shareConfig = name:
     let share = getAttr name cfg.shares; in
     "[${name}]\n " + (smbToString (
@@ -45,7 +40,7 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
-      after = [ "network.target" ];
+      after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") ];
       requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
@@ -62,6 +57,7 @@ let
         Type = "notify";
         NotifyAccess = "all"; #may not do anything...
       };
+      unitConfig.RequiresMountsFor = "/var/lib/samba";
 
       restartTriggers = [ configFile ];
     };
@@ -228,8 +224,7 @@ in
         systemd = {
           targets.samba = {
             description = "Samba Server";
-            requires = [ "samba-setup.service" ];
-            after = [ "samba-setup.service" "network.target" ];
+            after = [ "network.target" ];
             wantedBy = [ "multi-user.target" ];
           };
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
@@ -238,12 +233,13 @@ in
             samba-smbd = daemonService "smbd" "";
             samba-nmbd = mkIf cfg.enableNmbd (daemonService "nmbd" "");
             samba-winbindd = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
-            samba-setup = {
-              description = "Samba Setup Task";
-              script = setupScript;
-              unitConfig.RequiresMountsFor = "/var/lib/samba";
-            };
           };
+          tmpfiles.rules = [
+            "d /var/lock/samba - - - - -"
+            "d /var/log/samba - - - - -"
+            "d /var/cache/samba - - - - -"
+            "d /var/lib/samba/private - - - - -"
+          ];
         };
 
         security.pam.services.samba = {};

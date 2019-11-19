@@ -135,7 +135,8 @@ with lib;
     # piwik was renamed to matomo
     (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
     (mkRenamedOptionModule [ "services" "piwik" "webServerUser" ] [ "services" "matomo" "webServerUser" ])
-    (mkRenamedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] [ "services" "matomo" "phpfpmProcessManagerConfig" ])
+    (mkRemovedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
+    (mkRemovedOptionModule [ "services" "matomo" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
     (mkRenamedOptionModule [ "services" "piwik" "nginx" ] [ "services" "matomo" "nginx" ])
 
     # tarsnap
@@ -233,6 +234,7 @@ with lib;
     (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
     (mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
     (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
+    (mkRemovedOptionModule [ "fonts" "enableCoreFonts" ] "Use fonts.fonts = [ pkgs.corefonts ]; instead.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -290,5 +292,14 @@ with lib;
        (opt: mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
          The prometheus exporters are now configured using `services.prometheus.exporters'.
          See the 18.03 release notes for more information.
+       '' ))
+
+    ++ (forEach [ "enable" "substitutions" "preset" ]
+       (opt: mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
+         The fonts.fontconfig.ultimate module and configuration is obsolete.
+         The repository has since been archived and activity has ceased.
+         https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+         No action should be needed for font configuration, as the fonts.fontconfig
+         module is already used by default.
        '' ));
 }

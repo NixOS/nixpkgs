@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "mock";
-  version = "2.0.0";
+  version = "3.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1flbpksir5sqrvq2z0dp8sl4bzbadg21sj4d42w3klpdfvgvcn5i";
+    sha256 = "83657d894c90d5681d62155c82bda9c1187827525880eda8ff5df4ec813437c3";
   };
 
   buildInputs = [ unittest2 ];

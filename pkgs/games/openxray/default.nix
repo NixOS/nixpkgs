@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "OpenXRay";
-  version = "510";
+  version = "558";
 
   src = fetchFromGitHub {
     owner = "OpenXRay";
     repo = "xray-16";
     rev = version;
-    sha256 = "0q142l6xvgnd6ycncqld69izxclynqrs73aq89pfy1r1nzhd60ay";
+    sha256 = "1wnkx9g0ww4f5pljrb0wzs054jzkig1i5hlz1p509rfvnhc50afp";
     fetchSubmodules = true;
   };
 
