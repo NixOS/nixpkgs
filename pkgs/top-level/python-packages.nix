@@ -958,6 +958,8 @@ in {
 
   pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
 
+  pydrive = callPackage ../development/python-modules/pydrive { };
+
   pydy = callPackage ../development/python-modules/pydy { };
 
   pyexiv2 = disabledIf isPy3k (toPythonModule (callPackage ../development/python-modules/pyexiv2 {}));
