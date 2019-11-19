@@ -10,12 +10,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.1";
+  version = "1.5.2";
   pname = "portalocker";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08d8vm373fbx90wrql2i7025d4ir54sq8ahx6g1pw9h793zqrn0y";
+    sha256 = "dac62e53e5670cb40d2ee4cdc785e6b829665932c3ee75307ad677cf5f7d2e9f";
   };
 
   checkInputs = [
