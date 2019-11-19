@@ -15802,6 +15802,8 @@ in
 
   fwts = callPackage ../os-specific/linux/fwts { };
 
+  gobi_loader = callPackage ../os-specific/linux/gobi_loader { };
+
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
   libuuid = if stdenv.isLinux
