@@ -67,7 +67,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.15.0";
+  version = "2.0.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -97,7 +97,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1j8vysfblkyydrr67qr3i7kvaq5ygnjlx8hw9a9pc95ac462jq7i";
+      sha256 = "0zck3q6znmh0glak6qh2xzr25ycnhml7qcww7z8ynw2wbc75d7hp";
     };
 
     patches = [
@@ -113,6 +113,7 @@ let
         sha256 = "1m2qmwv1ysqa61z6255xggwbq6mnxbig749bdvrhnch4zydxb4di";
       })
 
+      # adopt to two bazel changes: alwayslink disabled by default and no nocopts
       ./tf-1.15-bazel-1.0.patch
 
       (fetchpatch {
@@ -282,9 +283,9 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "1rbg8w8pjf15hpvzrclsi19lhsrwdns6f8psb1wz35ay0ggdw8c0"
+        "02rfh2h9xbxsijm32ivxiaxb0d4cp5hjwwc6kphsxnm9kjyk7j8h"
       else
-        "0d8wq89iz9vrzvr971mgdclxxjcjr32r7aj817h019x3pc53qnwx";
+        "0805vn5dq8mkmkgjbl6agryb72lv41j83dikxclkwjvrz9z5j06y";
     };
 
     buildAttrs = {
@@ -390,13 +391,12 @@ in buildPythonPackage {
     # A simple "Hello world"
     import tensorflow as tf
     hello = tf.constant("Hello, world!")
-    sess = tf.Session()
-    sess.run(hello)
+    print(hello)
 
     # Fit a simple model to random data
     import numpy as np
     np.random.seed(0)
-    tf.random.set_random_seed(0)
+    tf.random.set_seed(0)
     model = tf.keras.models.Sequential([
         tf.keras.layers.Dense(1, activation="linear")
     ])

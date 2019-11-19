@@ -11,7 +11,7 @@ index f740ba66b5..6cc9003787 100644
  
  exports_files(
 diff --git a/tensorflow/c/eager/BUILD b/tensorflow/c/eager/BUILD
-index 5c42e508f7..16b421862c 100644
+index 0c869f0c8b..6bb7e7512d 100644
 --- a/tensorflow/c/eager/BUILD
 +++ b/tensorflow/c/eager/BUILD
 @@ -79,6 +79,7 @@ tf_cuda_library(
@@ -22,7 +22,7 @@ index 5c42e508f7..16b421862c 100644
  )
  
  tf_cuda_library(
-@@ -226,6 +227,7 @@ tf_cuda_library(
+@@ -225,6 +226,7 @@ tf_cuda_library(
          "//tensorflow/core/profiler/rpc/client:capture_profile",
          "//tensorflow/core:gpu_runtime",
      ],
@@ -43,18 +43,18 @@ index 39b84922d1..b2affdd999 100644
  
  tf_cc_test(
 diff --git a/tensorflow/core/BUILD b/tensorflow/core/BUILD
-index c23c1f9b39..805643b217 100644
+index 97b3db0526..ee9e943754 100644
 --- a/tensorflow/core/BUILD
 +++ b/tensorflow/core/BUILD
-@@ -777,6 +777,7 @@ cc_library(
+@@ -798,6 +798,7 @@ cc_library(
          ":lib_proto_parsing",
          ":protos_all_cc",
      ],
 +    alwayslink = 1,
  )
  
- # DEPRECATED: use platform:stringpiece instead.
-@@ -2496,6 +2497,7 @@ cc_library(
+ cc_library(
+@@ -2500,6 +2501,7 @@ cc_library(
                 "@com_google_protobuf//:protobuf",
             ] + tf_protos_all_impl() + tf_protos_grappler_impl() +
             tf_additional_numa_deps(),
@@ -62,20 +62,8 @@ index c23c1f9b39..805643b217 100644
  )
  
  # File compiled with extra flags to get cpu-specific acceleration.
-diff --git a/tensorflow/core/lib/random/BUILD b/tensorflow/core/lib/random/BUILD
-index 3bd933261b..e1e589e76d 100644
---- a/tensorflow/core/lib/random/BUILD
-+++ b/tensorflow/core/lib/random/BUILD
-@@ -50,6 +50,7 @@ cc_library(
-         "//tensorflow/core/platform:types",
-         "//third_party/eigen3",
-     ],
-+    alwayslink = 1,
- )
- 
- filegroup(
 diff --git a/tensorflow/core/platform/default/build_config.bzl b/tensorflow/core/platform/default/build_config.bzl
-index 5459d8d428..feba3a5686 100644
+index 6404fde550..567a1acede 100644
 --- a/tensorflow/core/platform/default/build_config.bzl
 +++ b/tensorflow/core/platform/default/build_config.bzl
 @@ -228,6 +228,7 @@ def cc_proto_library(
@@ -111,10 +99,10 @@ index 7bda81358f..ac1188d844 100644
  
  cc_binary(
 diff --git a/tensorflow/python/BUILD b/tensorflow/python/BUILD
-index 6fd9b4f273..29df3a3dff 100644
+index b4551daf2c..21623763ca 100644
 --- a/tensorflow/python/BUILD
 +++ b/tensorflow/python/BUILD
-@@ -375,6 +375,7 @@ cc_library(
+@@ -374,6 +374,7 @@ cc_library(
          "//tensorflow/core:lib",
          "//tensorflow/core:protos_all_cc",
      ],
@@ -122,7 +110,7 @@ index 6fd9b4f273..29df3a3dff 100644
  )
  
  cc_library(
-@@ -411,6 +412,7 @@ cc_library(
+@@ -410,6 +411,7 @@ cc_library(
          "//third_party/py/numpy:headers",
          "//third_party/python_runtime:headers",
      ],
@@ -130,7 +118,7 @@ index 6fd9b4f273..29df3a3dff 100644
  )
  
  cc_library(
-@@ -617,6 +619,7 @@ cc_library(
+@@ -616,6 +618,7 @@ cc_library(
          "//tensorflow/core:op_gen_lib",
          "//tensorflow/core:protos_all_cc",
      ],
@@ -139,10 +127,70 @@ index 6fd9b4f273..29df3a3dff 100644
  
  py_library(
 diff --git a/tensorflow/tensorflow.bzl b/tensorflow/tensorflow.bzl
-index a3956322fe..32752f59ad 100644
+index 97b10bf0d8..a621164718 100644
 --- a/tensorflow/tensorflow.bzl
 +++ b/tensorflow/tensorflow.bzl
-@@ -2331,6 +2331,7 @@ def tf_generate_proto_text_sources(name, srcs_relative_dir, srcs, protodeps = []
+@@ -960,7 +960,6 @@ def tf_cc_test(
+         extra_copts = [],
+         suffix = "",
+         linkopts = [],
+-        nocopts = None,
+         kernels = [],
+         **kwargs):
+     native.cc_test(
+@@ -999,7 +998,6 @@ def tf_cc_test(
+             clean_dep("//tensorflow:macos"): 1,
+             "//conditions:default": 0,
+         }),
+-        nocopts = nocopts,
+         **kwargs
+     )
+ 
+@@ -1163,8 +1161,7 @@ def tf_cc_tests(
+         size = "medium",
+         args = None,
+         linkopts = [],
+-        kernels = [],
+-        nocopts = None):
++        kernels = []):
+     for src in srcs:
+         tf_cc_test(
+             name = src_to_test_name(src),
+@@ -1174,7 +1171,6 @@ def tf_cc_tests(
+             kernels = kernels,
+             linkopts = linkopts,
+             linkstatic = linkstatic,
+-            nocopts = nocopts,
+             tags = tags,
+             deps = deps,
+         )
+@@ -1215,7 +1211,6 @@ def tf_cc_test_mkl(
+             size = size,
+             args = args,
+             features = disable_header_modules,
+-            nocopts = "-fno-exceptions",
+         )
+ 
+ def tf_cc_tests_gpu(
+@@ -1503,8 +1498,7 @@ def tf_mkl_kernel_library(
+         hdrs = None,
+         deps = None,
+         alwayslink = 1,
+-        copts = tf_copts() + tf_openmp_copts(),
+-        nocopts = "-fno-exceptions"):
++        copts = tf_copts() + tf_openmp_copts()):
+     """A rule to build MKL-based TensorFlow kernel libraries."""
+ 
+     if not bool(srcs):
+@@ -1532,7 +1526,6 @@ def tf_mkl_kernel_library(
+         deps = deps,
+         alwayslink = alwayslink,
+         copts = copts,
+-        nocopts = nocopts,
+         features = disable_header_modules,
+     )
+ 
+@@ -2323,6 +2316,7 @@ def tf_generate_proto_text_sources(name, srcs_relative_dir, srcs, protodeps = []
          hdrs = out_hdrs,
          visibility = visibility,
          deps = deps,
@@ -150,6 +198,22 @@ index a3956322fe..32752f59ad 100644
      )
  
  def tf_genrule_cmd_append_to_srcs(to_append):
+@@ -2390,7 +2384,6 @@ def tf_pybind_extension(
+         srcs_version = "PY2AND3",
+         data = [],
+         copts = None,
+-        nocopts = None,
+         linkopts = [],
+         deps = [],
+         visibility = None,
+@@ -2437,7 +2430,6 @@ def tf_pybind_extension(
+         srcs = srcs + hdrs,
+         data = data,
+         copts = copts,
+-        nocopts = nocopts,
+         linkopts = linkopts + _rpath_linkopts(name) + select({
+             "@local_config_cuda//cuda:darwin": [
+                 "-Wl,-exported_symbols_list,$(location %s)" % exported_symbols_file,
 diff --git a/tensorflow/tools/graph_transforms/BUILD b/tensorflow/tools/graph_transforms/BUILD
 index adafe2aca1..8965316b12 100644
 --- a/tensorflow/tools/graph_transforms/BUILD
@@ -171,6 +235,86 @@ index 7db21566e4..8e18c7cc3a 100644
      srcs = [":conversion_data.c"],
      deps = ["@icu//:headers"],
 +    alwayslink = 1,
+ )
+diff --git a/third_party/jpeg/BUILD.bazel b/third_party/jpeg/BUILD.bazel
+index 5243e995a3..90e45237c7 100644
+--- a/third_party/jpeg/BUILD.bazel
++++ b/third_party/jpeg/BUILD.bazel
+@@ -7,8 +7,6 @@ exports_files(["LICENSE.md"])
+ 
+ load("@org_tensorflow//third_party:common.bzl", "template_rule")
+ 
+-libjpegturbo_nocopts = "-[W]error"
+-
+ WIN_COPTS = [
+     "/Ox",
+     "-DWITH_SIMD",
+@@ -120,7 +118,6 @@ cc_library(
+         "jstdhuff.c",  # should have been named .inc
+     ],
+     copts = libjpegturbo_copts,
+-    nocopts = libjpegturbo_nocopts,
+     visibility = ["//visibility:public"],
+     deps = select({
+         ":k8": [":simd_x86_64"],
+@@ -168,7 +165,6 @@ cc_library(
+         "simd/powerpc/jsimd_altivec.h",
+     ],
+     copts = libjpegturbo_copts,
+-    nocopts = libjpegturbo_nocopts,
+ )
+ 
+ cc_library(
+@@ -217,7 +213,6 @@ cc_library(
+     ],
+     copts = libjpegturbo_copts,
+     linkstatic = 1,
+-    nocopts = libjpegturbo_nocopts,
+ )
+ 
+ genrule(
+@@ -327,7 +322,6 @@ cc_library(
+         "simd/jsimd.h",
+     ],
+     copts = libjpegturbo_copts,
+-    nocopts = libjpegturbo_nocopts,
+ )
+ 
+ cc_library(
+@@ -348,7 +342,6 @@ cc_library(
+         "simd/jsimd.h",
+     ],
+     copts = libjpegturbo_copts,
+-    nocopts = libjpegturbo_nocopts,
+ )
+ 
+ cc_library(
+@@ -501,7 +494,6 @@ cc_library(
+         "jsimddct.h",
+     ],
+     copts = libjpegturbo_copts,
+-    nocopts = libjpegturbo_nocopts,
+ )
+ 
+ template_rule(
+diff --git a/third_party/mkl_dnn/mkldnn.BUILD b/third_party/mkl_dnn/mkldnn.BUILD
+index 45703bde44..35832ffcef 100644
+--- a/third_party/mkl_dnn/mkldnn.BUILD
++++ b/third_party/mkl_dnn/mkldnn.BUILD
+@@ -91,7 +91,6 @@ cc_library(
+         "src/cpu/gemm",
+         "src/cpu/xbyak",
+     ],
+-    nocopts = "-fno-exceptions",
+     visibility = ["//visibility:public"],
+     deps = select({
+         "@org_tensorflow//tensorflow:linux_x86_64": [
+@@ -134,6 +133,5 @@ cc_library(
+         "src/cpu/gemm",
+         "src/cpu/xbyak",
+     ],
+-    nocopts = "-fno-exceptions",
+     visibility = ["//visibility:public"],
  )
 diff --git a/third_party/protobuf/protobuf.patch b/third_party/protobuf/protobuf.patch
 index df0648563d..18fc6cdf35 100644

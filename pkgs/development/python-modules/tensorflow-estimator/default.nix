@@ -6,14 +6,13 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-estimator";
-  # This is effectively 1.15.0. Upstream tagged 1.15.0 by mistake before actually updating the version in setup.py, which is why this tag is called 1.15.1.
-  version = "1.15.1";
+  version = "2.0.0";
   format = "wheel";
 
   src = fetchPypi {
     pname = "tensorflow_estimator";
     inherit version format;
-    sha256 = "1fc61wmc0w22frs79j2x4g6wnv5g21xc6rix1g4bsvy9qfvvylw8";
+    sha256 = "1nkjlwlnpr1avwdl3kmj5h25gg9vsk729mf6kdbjfinm2a3zxzal";
   };
 
   propagatedBuildInputs = [ mock numpy absl-py ];
