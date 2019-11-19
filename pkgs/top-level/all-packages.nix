@@ -1834,7 +1834,7 @@ in
 
   interlock = callPackage ../servers/interlock {};
 
-  jellyfin = callPackage ../servers/jellyfin { };
+  jellyfin = callPackage ../servers/jellyfin { ffmpeg = ffmpeg_4; };
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
