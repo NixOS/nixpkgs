@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+    "--with-auto-load-safe-path=${stdenv.cc.cc.lib}"
   ] ++ stdenv.lib.optional (!pythonSupport) "--without-python";
 
   postInstall =

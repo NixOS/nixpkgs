@@ -10471,9 +10471,7 @@ in
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
 
-  gdb = callPackage ../development/tools/misc/gdb/wrapper.nix { safePaths = [ stdenv.cc.cc.lib ]; };
-
-  gdb-unwrapped = callPackage ../development/tools/misc/gdb {
+  gdb = callPackage ../development/tools/misc/gdb {
     guile = null;
   };
 
