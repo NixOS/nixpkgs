@@ -606,12 +606,15 @@ class Machine:
             + os.environ.get("QEMU_OPTS", "")
         )
 
-        environment = {
-            "QEMU_OPTS": qemu_options,
-            "SHARED_DIR": self.shared_dir,
-            "USE_TMPDIR": "1",
-        }
-        environment.update(dict(os.environ))
+        environment = dict(os.environ)
+        environment.update(
+            {
+                "TMPDIR": self.state_dir,
+                "SHARED_DIR": self.shared_dir,
+                "USE_TMPDIR": "1",
+                "QEMU_OPTS": qemu_options,
+            }
+        )
 
         self.process = subprocess.Popen(
             self.script,
