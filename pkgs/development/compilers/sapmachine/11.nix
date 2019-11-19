@@ -1,6 +1,8 @@
 { stdenv, fetchurl, unzip }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "sapmachine";
+
   version = "11.0.5";
 
   sha256_linux = "f8b849bbd044acfd38972987305bd4c8bf5706a794ec12b51f1ed747a492ca55";
@@ -9,11 +11,6 @@ let
   platform = if stdenv.isDarwin then "osx" else "linux";
   sha256 = if stdenv.isDarwin then sha256_darwin else sha256_linux;
   homepath = if stdenv.isDarwin then "Contents/Home" else ".";
-
-in stdenv.mkDerivation rec {
-  inherit version platform sha256 homepath;
-
-  name = "sapmachine";
 
   src = fetchurl {
     url = "https://github.com/SAP/SapMachine/releases/download/sapmachine-${version}/sapmachine-jdk-${version}_${platform}-x64_bin.tar.gz";
