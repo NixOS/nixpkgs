@@ -13,7 +13,7 @@ let
 in stdenv.mkDerivation rec {
   inherit version platform sha256 homepath;
 
-  name = "sapmachine";
+  pname = "sapmachine";
 
   src = fetchurl {
     url = "https://github.com/SAP/SapMachine/releases/download/sapmachine-${version}/sapmachine-jdk-${version}_${platform}-x64_bin.tar.gz";
