@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, makeWrapper
+{ stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
+, fetchpatch
 , bash, libsamplerate, libsndfile, readline, eigen, celt
 , wafHook
 # Darwin Dependencies
@@ -14,7 +15,7 @@
 
 with stdenv.lib;
 let
-  inherit (python3Packages) python dbus-python;
+  inherit (python2Packages) python dbus-python;
   shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   libOnly = prefix == "lib";
@@ -27,13 +28,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}jack2-${version}";
-  version = "1.9.14";
+  version = "1.9.13";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${version}";
-    sha256 = "1prxg1l8wrxfp2mh7l4mvjvmml6816fciq1la88ylhwm1qnfvnax";
+    sha256 = "1dnq75ylcv3npsyvzzkj0g8mdnzwis1whc2pk6s5hkcc1bgvv2xy";
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
