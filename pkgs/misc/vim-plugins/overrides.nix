@@ -112,14 +112,15 @@ self: super: {
   });
 
   # Only official releases contains the required index.js file
+  # NB: Make sure you pick a rev from the release branch!
   coc-nvim = buildVimPluginFrom2Nix rec {
     pname = "coc-nvim";
-    version = "0.0.74";
+    version = "2019-11-18";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "v${version}";
-      sha256 = "1s4nib2mnhagd0ymx254vf7l1iijwrh2xdqn3bdm4f1jnip81r10";
+      rev = "a12d6833b4611f996528615186af86c3e041ffb6";
+      sha256 = "0rkfhzyf42rbsv8p2337pvkbs3crz1z3vv6ar26sadjg3802118z";
     };
   };
 
