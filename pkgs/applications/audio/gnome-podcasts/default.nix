@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     chmod +x scripts/compile-gschema.py # patchShebangs requires executable file
-    patchShebangs scripts/compile-gschema.py scripts/cargo.sh
+    patchShebangs scripts/compile-gschema.py scripts/cargo.sh scripts/test.sh
   '';
 
   meta = with stdenv.lib; {
