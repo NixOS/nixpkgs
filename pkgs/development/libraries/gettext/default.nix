@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
      "--disable-csharp" "--with-xz"
-     # avoid retaining reference to CF during stdenv bootstrap
-  ] ++ lib.optionals stdenv.isDarwin [
-    "gt_cv_func_CFPreferencesCopyAppValue=no"
-    "gt_cv_func_CFLocaleCopyCurrent=no"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # On cross building, gettext supposes that the wchar.h from libc
     # does not fulfill gettext needs, so it tries to work with its

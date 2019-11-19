@@ -1,16 +1,17 @@
 { theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
 cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk-pixbuf,
 libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
-at-spi2-atk, libuuid, nodePackages
+at-spi2-atk, at-spi2-core, libuuid, nodePackages, libpulseaudio
 }:
 
 let
 
-  version = "4.0.2";
+  version = "4.1.2";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     at-spi2-atk
+    at-spi2-core
     atk
     cairo
     cups
@@ -32,6 +33,7 @@ let
     stdenv.cc.cc
     systemd
     libuuid
+    libpulseaudio
 
     xorg.libxkbfile
     xorg.libX11
@@ -51,7 +53,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "053j5py16ilpwy868rhh5l2g93xj1fq4fwxrsi2bkfsnmq261hkm";
+        sha256 = "0a1b2k81hm1lfrdb47gmd07jqb7hva9sxsiph7b3iwzpzw8pjrkh";
       }
     else
       throw "Slack is not supported on ${stdenv.hostPlatform.system}";
@@ -63,18 +65,22 @@ in stdenv.mkDerivation {
   inherit src;
 
   buildInputs = [
-    dpkg
     gtk3  # needed for GSETTINGS_SCHEMAS_PATH
   ];
 
-  nativeBuildInputs = [ makeWrapper nodePackages.asar ];
+  nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
 
   dontUnpack = true;
-  buildCommand = ''
+  dontBuild = true;
+  dontPatchELF = true;
+
+  installPhase = ''
+    # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
+    dpkg --fsys-tarfile $src | tar --extract
+    rm -rf usr/share/lintian
+
     mkdir -p $out
-    dpkg -x $src $out
-    cp -av $out/usr/* $out
-    rm -rf $out/etc $out/usr $out/share/lintian
+    mv usr/* $out
 
     # Otherwise it looks "suspicious"
     chmod -R g-w $out

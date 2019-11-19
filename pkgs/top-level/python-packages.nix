@@ -1149,6 +1149,8 @@ in {
     igraph = pkgs.igraph;
   };
 
+  python-olm = callPackage ../development/python-modules/python-olm { };
+
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-packer = callPackage ../development/python-modules/python-packer { };
@@ -3847,6 +3849,8 @@ in {
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
+  matrix-nio = callPackage ../development/python-modules/matrix-nio { };
+
   mautrix-appservice = callPackage ../development/python-modules/mautrix-appservice { };
 
   maya = callPackage ../development/python-modules/maya { };
@@ -4886,7 +4890,9 @@ in {
 
   geographiclib = callPackage ../development/python-modules/geographiclib { };
 
-  geopy = callPackage ../development/python-modules/geopy { };
+  geopy = if isPy3k
+    then callPackage ../development/python-modules/geopy { }
+    else callPackage ../development/python-modules/geopy/2.nix { };
 
   django-haystack = callPackage ../development/python-modules/django-haystack { };
 

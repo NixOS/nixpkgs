@@ -2,14 +2,17 @@
 # somewhat manually install this:
 
 # nix-env -f "<nixpkgs>" -iA obs-ndi
-# mkdir -p ~/.config/obs-studio/plugins
-# ln -s ~/.nix-profile/share/obs/obs-plugins/obs-ndi ~/.config/obs-studio/plugins/
+# mkdir -p ~/.config/obs-studio/plugins/bin
+# ln -s ~/.nix-profile/lib/obs-plugins/obs-ndi.so ~/.config/obs-studio/plugins/bin/
 
-{ stdenv, fetchFromGitHub, obs-studio, cmake, qt5 }:
+{ stdenv, fetchFromGitHub, obs-studio, cmake, qt5, ndi }:
 
 stdenv.mkDerivation rec {
   pname = "obs-ndi";
   version = "4.7.1";
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ obs-studio qt5.qtbase ndi ];
 
   src = fetchFromGitHub {
     owner = "Palakis";
@@ -18,10 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "040fkbf3f3qgqcrd3072y3zrjb4fwga8zr10jym744xd7bgyylqh";
   };
 
-  patches = [ ./fix-search-path.patch ];
+  patches = [ ./fix-search-path.patch ./hardcode-ndi-path.patch ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio qt5.qtbase ];
+  postPatch = "sed -i -e s,@NDI@,${ndi},g src/obs-ndi.cpp";
 
   cmakeFlags = [
     "-DLIBOBS_INCLUDE_DIR=${obs-studio}/include/obs"

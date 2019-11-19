@@ -666,6 +666,8 @@ in
     gsl = gsl_1;
   };
 
+  async = callPackage ../development/tools/async {};
+
   atheme = callPackage ../servers/irc/atheme { };
 
   atinout = callPackage ../tools/networking/atinout { };
@@ -852,6 +854,8 @@ in
   enchive = callPackage ../tools/security/enchive { };
 
   enpass = callPackage ../tools/security/enpass { };
+
+  essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
   esh = callPackage ../tools/text/esh { };
 
@@ -1132,6 +1136,8 @@ in
   bicon = callPackage ../applications/misc/bicon { };
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
+
+  birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
   bitbucket-cli = python2Packages.bitbucket-cli;
 
@@ -2708,6 +2714,8 @@ in
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
+  dnsproxy = callPackage ../tools/networking/dnsproxy { };
+
   dnsperf = callPackage ../tools/networking/dnsperf { };
 
   dnsrecon = callPackage ../tools/security/dnsrecon { };
@@ -3036,6 +3044,8 @@ in
   };
 
   enscript = callPackage ../tools/text/enscript { };
+
+  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { };
 
   entr = callPackage ../tools/misc/entr { };
 
@@ -5736,6 +5746,8 @@ in
 
   ppl = callPackage ../development/libraries/ppl { };
 
+  pplatex = callPackage ../tools/typesetting/tex/pplatex { };
+
   ppp = callPackage ../tools/networking/ppp { };
 
   pptp = callPackage ../tools/networking/pptp {};
@@ -5883,6 +5895,8 @@ in
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
+  quickjs = callPackage ../development/interpreters/quickjs { };
+
   quickserve = callPackage ../tools/networking/quickserve { };
 
   quicktun = callPackage ../tools/networking/quicktun { };
@@ -5938,7 +5952,7 @@ in
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
-  retext = callPackage ../applications/editors/retext { };
+  retext = libsForQt5.callPackage ../applications/editors/retext { };
 
   richgo = callPackage ../development/tools/richgo {  };
 
@@ -6334,6 +6348,8 @@ in
 
   smesh = callPackage ../development/libraries/smesh {};
 
+  smu = callPackage ../tools/text/smu { };
+
   smugline = python3Packages.smugline;
 
   snabb = callPackage ../tools/networking/snabb { } ;
@@ -6410,6 +6426,8 @@ in
   speech-denoiser = callPackage ../applications/audio/speech-denoiser {};
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
+
+  squashfs-tools-ng = callPackage ../tools/filesystems/squashfs-tools-ng { };
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
 
@@ -6537,6 +6555,8 @@ in
   stricat = callPackage ../tools/security/stricat { };
 
   staruml = callPackage ../tools/misc/staruml { inherit (gnome2) GConf; libgcrypt = libgcrypt_1_5; };
+
+  stone-phaser = callPackage ../applications/audio/stone-phaser { };
 
   systrayhelper = callPackage ../tools/misc/systrayhelper {};
 
@@ -7023,6 +7043,8 @@ in
 
   whois = callPackage ../tools/networking/whois { };
 
+  wifite2 = callPackage ../tools/networking/wifite2 { };
+
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
   woff2 = callPackage ../development/web/woff2 { };
@@ -7214,6 +7236,8 @@ in
 
   waf = callPackage ../development/tools/build-managers/waf { python = python3; };
   wafHook = callPackage ../development/tools/build-managers/wafHook { };
+
+  wagyu = callPackage ../tools/misc/wagyu { };
 
   wakelan = callPackage ../tools/networking/wakelan { };
 
@@ -8826,6 +8850,8 @@ in
 
   z88dk = callPackage ../development/compilers/z88dk { };
 
+  zulip = callPackage ../applications/networking/instant-messengers/zulip { };
+
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
   zulu = callPackage ../development/compilers/zulu { };
 
@@ -8877,9 +8903,9 @@ in
     lfe lfe_1_2;
 
   inherit (beam.packages.erlang)
-    rebar rebar3-open rebar3
-    hexRegistrySnapshot fetchHex beamPackages
-    hex2nix relxExe;
+    rebar rebar3
+    fetchHex beamPackages
+    relxExe;
 
   inherit (beam.packages.erlangR19) cuter;
 
@@ -10715,7 +10741,8 @@ in
   boost169 = callPackage ../development/libraries/boost/1.69.nix { };
   boost16x = boost169;
   boost170 = callPackage ../development/libraries/boost/1.70.nix { };
-  boost17x = boost170;
+  boost171 = callPackage ../development/libraries/boost/1.71.nix { };
+  boost17x = boost171;
   boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
@@ -10842,8 +10869,6 @@ in
   cointop = callPackage ../applications/misc/cointop { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
-
-  coredumper = callPackage ../development/libraries/coredumper { };
 
   ctl = callPackage ../development/libraries/ctl { };
 
@@ -13143,6 +13168,8 @@ in
     if stdenv.hostPlatform.useiOSPrebuilt
     then null
     else callPackage ../development/libraries/ncurses { };
+
+  ndi = callPackage ../development/libraries/ndi { };
 
   neardal = callPackage ../development/libraries/neardal { };
 
@@ -17514,6 +17541,8 @@ in
 
   raleway = callPackage ../data/fonts/raleway { };
 
+  recursive = callPackage ../data/fonts/recursive { };
+
   rictydiminished-with-firacode = callPackage ../data/fonts/rictydiminished-with-firacode { };
 
   roboto = callPackage ../data/fonts/roboto { };
@@ -17943,6 +17972,8 @@ in
     inherit (pkgs.xorg) libX11 libXrender libXtst libXdamage
                         libXi libXext libXfixes libXcomposite;
   };
+
+  blugon = callPackage ../applications/misc/blugon { };
 
   bombono = callPackage ../applications/video/bombono {};
 
@@ -18688,6 +18719,8 @@ in
 
   grepm = callPackage ../applications/search/grepm { };
 
+  grip-search = callPackage ../tools/text/grip-search { };
+
   grip = callPackage ../applications/misc/grip {
     inherit (gnome2) libgnome libgnomeui vte;
   };
@@ -18728,7 +18761,7 @@ in
   wireshark-qt = wireshark;
 
   # The GTK UI is deprecated by upstream. You probably want the QT version.
-  wireshark-gtk = throw "Not supported anymore. Use wireshark-qt or wireshark-cli instead.";
+  wireshark-gtk = throw "wireshark-gtk is not supported anymore. Use wireshark-qt or wireshark-cli instead.";
   wireshark-cli = wireshark.override { withQt = false; };
 
   sngrep = callPackage ../applications/networking/sniffers/sngrep {};
@@ -18955,7 +18988,7 @@ in
 
   moe =  callPackage ../applications/editors/moe { };
 
-  multibootusb = callPackage ../applications/misc/multibootusb {};
+  multibootusb = qt5.callPackage ../applications/misc/multibootusb {};
 
   praat = callPackage ../applications/audio/praat { };
 
@@ -18969,6 +19002,8 @@ in
   rhvoice = callPackage ../applications/audio/rhvoice { };
 
   svox = callPackage ../applications/audio/svox { };
+
+  giada = callPackage ../applications/audio/giada {};
 
   gkrellm = callPackage ../applications/misc/gkrellm {
     inherit (darwin) IOKit;
@@ -19083,6 +19118,8 @@ in
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
+  gxmatcheq-lv2 = callPackage ../applications/audio/gxmatcheq-lv2 { };
+
   gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
 
   hackrf = callPackage ../applications/radio/hackrf { };
@@ -19107,6 +19144,8 @@ in
   hexchat = callPackage ../applications/networking/irc/hexchat { };
 
   hexcurse = callPackage ../applications/editors/hexcurse { };
+
+  hexdino = callPackage ../applications/editors/hexdino { };
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
@@ -19543,6 +19582,8 @@ in
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = buildPackages.go_1_12;
   };
+
+  kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
@@ -20947,6 +20988,8 @@ in
 
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
+  spike = callPackage ../applications/virtualization/spike { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   split2flac = callPackage ../applications/audio/split2flac { };
@@ -21064,15 +21107,9 @@ in
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
 
-  slim = callPackage ../applications/display-managers/slim {
-    libpng = libpng12;
-  };
-
   smartgithg = callPackage ../applications/version-management/smartgithg {
     jre = openjdk11;
   };
-
-  slimThemes = recurseIntoAttrs (callPackage ../applications/display-managers/slim/themes.nix {});
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
@@ -23251,8 +23288,8 @@ in
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
 
-    nohotcorner = throw "removed 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
-    mediaplayer = throw "deprecated 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
+    nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
+    mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
   };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
@@ -25491,5 +25528,7 @@ in
   keycard-cli = callPackage ../tools/security/keycard-cli {};
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
+
+  gortr = callPackage ../servers/gortr {};
 
 }

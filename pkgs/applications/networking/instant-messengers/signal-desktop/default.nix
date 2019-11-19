@@ -114,7 +114,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = https://signal.org/;
     license     = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ixmatus primeos ];
+    maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
     platforms   = [ "x86_64-linux" ];
   };
 }
