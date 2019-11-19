@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, fetchFromGitHub, setuptools
 , numpy, scipy, gpy, emcee, nose }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkPhase = "nosetests -v GPyOpt/testing";
 
-  propagatedBuildInputs = [ numpy scipy gpy emcee ];
+  propagatedBuildInputs = [ setuptools numpy scipy gpy emcee ];
 
   meta = with stdenv.lib; {
     description = "Bayesian optimization toolbox in Python";
