@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "2.1.9";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0g9apywxgkan82h933rjjdm9fhd8vak8mziwsbqlprdz310b2jb2";
+    sha256 = "0mr89kyq034wffzixqlq6lmhyc4jry3dcgxrk306dhks2myindqh";
   };
 
   passthru = {
