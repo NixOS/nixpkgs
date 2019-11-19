@@ -149,6 +149,12 @@
      SDDM, GDM, or using the startx module which uses Xinitrc.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The BEAM package set has been deleted. You will only find there the different interpreters.
+      You should now use the different build tools coming with the languages with sandbox mode disabled.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
