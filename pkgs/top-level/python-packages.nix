@@ -1962,6 +1962,10 @@ in {
 
   envs = callPackage ../development/python-modules/envs { };
 
+  enaml = callPackage ../development/python-modules/enaml { };
+
+  enamlx = callPackage ../development/python-modules/enamlx { };
+
   eth-hash = callPackage ../development/python-modules/eth-hash { };
 
   eth-typing = callPackage ../development/python-modules/eth-typing { };
@@ -4847,6 +4851,8 @@ in {
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
+
+  qt-reactor = callPackage ../development/python-modules/qt-reactor { };
 
   quantities = callPackage ../development/python-modules/quantities { };
 

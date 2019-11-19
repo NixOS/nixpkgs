@@ -19400,6 +19400,8 @@ in
 
   inherit (nodePackages) imapnotify;
 
+  inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
+
   img2pdf = callPackage ../applications/misc/img2pdf { };
 
   imgcat = callPackage ../applications/graphics/imgcat { };
