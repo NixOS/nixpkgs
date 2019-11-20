@@ -20439,7 +20439,6 @@ in
 
   orca = python3Packages.callPackage ../applications/misc/orca {
     inherit (pkgs) pkgconfig;
-    inherit (gnome3) yelp-tools;
   };
 
   osm2xmap = callPackage ../applications/misc/osm2xmap {
@@ -22258,6 +22257,8 @@ in
   yed = callPackage ../applications/graphics/yed {};
 
   inherit (gnome3) yelp;
+
+  yelp-tools = callPackage ../development/misc/yelp-tools { };
 
   yokadi = python3Packages.callPackage ../applications/misc/yokadi {};
 

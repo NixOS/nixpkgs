@@ -27,6 +27,7 @@
 , qt4
 , withQt5 ? false
 , qtbase
+, yelp-tools
 }:
 
 with stdenv.lib;
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf
     automake
-    gnome3.yelp-tools
+    yelp-tools
     gnome3.yelp-xsl
     gobject-introspection
     gtk-doc
