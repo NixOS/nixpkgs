@@ -749,7 +749,7 @@ def run_tests() -> None:
     if tests is not None:
         with log.nested("running the VM test script"):
             try:
-                exec(tests)
+                exec(tests, globals())
             except Exception as e:
                 eprint("error: {}".format(str(e)))
                 sys.exit(1)
