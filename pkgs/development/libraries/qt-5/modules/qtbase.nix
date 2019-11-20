@@ -169,11 +169,6 @@ stdenv.mkDerivation {
     export LD=$CXX
     ''}
 
-    configureFlags+="\
-        -plugindir $out/$qtPluginPrefix \
-        -qmldir $out/$qtQmlPrefix \
-        -docdir $out/$qtDocPrefix"
-
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
   '';
 
@@ -221,6 +216,10 @@ stdenv.mkDerivation {
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags =
     [
+      "-plugindir $(out)/$(qtPluginPrefix)"
+      "-qmldir $(out)/$(qtQmlPrefix)"
+      "-docdir $(out)/$(qtDocPrefix)"
+
       "-verbose"
       "-confirm-license"
       "-opensource"

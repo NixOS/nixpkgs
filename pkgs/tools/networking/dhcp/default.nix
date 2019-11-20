@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
     "--enable-early-chroot"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (lib.optional stdenv.isLinux "--with-randomdev=/dev/random")
-  ] ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+  ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
+    ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=pointer-compare -Wno-error=format-truncation";
 

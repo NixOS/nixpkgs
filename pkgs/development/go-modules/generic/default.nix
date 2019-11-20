@@ -42,11 +42,12 @@ let
     nativeBuildInputs = [ go git cacert ];
 
     inherit (args) src;
-    inherit (go) GOOS GOARCH;
+    env = {
+      inherit (go.env) GOOS GOARCH;
+      GO111MODULE = "on";
+    };
 
     patches = args.patches or [];
-
-    GO111MODULE = "on";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND" "SOCKS_SERVER"
@@ -84,14 +85,15 @@ let
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash = modSha256;
-  }; in modArgs // overrideModAttrs modArgs);
+  }; in lib.recursiveUpdate modArgs (overrideModAttrs modArgs));
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
 
-    inherit (go) GOOS GOARCH;
-
-    GO111MODULE = "on";
+    env = {
+      inherit (go.env) GOOS GOARCH;
+      GO111MODULE = "on";
+    };
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure

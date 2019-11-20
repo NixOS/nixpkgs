@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --replace "hid2hci " "$out/lib/udev/hid2hci "
   '';
 
-  configureFlags = (with stdenv.lib; [
+  configureFlags = with stdenv.lib; [
     "--localstatedir=/var"
     "--enable-library"
     "--enable-cups"
@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
     "--with-udevdir=${placeholder "out"}/lib/udev"
-    ] ++ optional enableWiimote [ "--enable-wiimote" ]
-      ++ optional enableMidi    [ "--enable-midi" ]
-      ++ optional enableSixaxis [ "--enable-sixaxis" ]);
+    ] ++ optional enableWiimote "--enable-wiimote"
+      ++ optional enableMidi    "--enable-midi"
+      ++ optional enableSixaxis "--enable-sixaxis";
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
