@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   port = 1888;
@@ -52,37 +52,44 @@ in {
     sub = args:
       "(${cmd "sub"} -C 1 ${args} | tee ${file} &)";
   in ''
-    startAll;
-    $server->waitForUnit("mosquitto.service");
+    start_all()
+    server.wait_for_unit("mosquitto.service")
 
-    $server->fail("test -f ${file}");
-    $client1->fail("test -f ${file}");
-    $client2->fail("test -f ${file}");
-
+    for machine in server, client1, client2:
+        machine.fail("test -f ${file}")
 
     # QoS = 0, so only one subscribers should get it
-    $server->execute("${sub "-q 0"}");
+    server.execute(
+        "${sub "-q 0"}"
+    )
 
     # we need to give the subscribers some time to connect
-    $client2->execute("sleep 5");
-    $client2->succeed("${cmd "pub"} -m FOO -q 0");
+    client2.execute("sleep 5")
+    client2.succeed(
+        "${cmd "pub"} -m FOO -q 0"
+    )
 
-    $server->waitUntilSucceeds("grep -q FOO ${file}");
-    $server->execute("rm ${file}");
-
+    server.wait_until_succeeds("grep -q FOO ${file}")
+    server.execute("rm ${file}")
 
     # QoS = 1, so both subscribers should get it
-    $server->execute("${sub "-q 1"}");
-    $client1->execute("${sub "-q 1"}");
+    server.execute(
+        "${sub "-q 1"}"
+    )
+    client1.execute(
+        "${sub "-q 1"}"
+    )
 
     # we need to give the subscribers some time to connect
-    $client2->execute("sleep 5");
-    $client2->succeed("${cmd "pub"} -m BAR -q 1");
+    client2.execute("sleep 5")
+    client2.succeed(
+        "${cmd "pub"} -m BAR -q 1"
+    )
 
-    $server->waitUntilSucceeds("grep -q BAR ${file}");
-    $server->execute("rm ${file}");
+    server.wait_until_succeeds("grep -q BAR ${file}")
+    server.execute("rm ${file}")
 
-    $client1->waitUntilSucceeds("grep -q BAR ${file}");
-    $client1->execute("rm ${file}");
+    client1.wait_until_succeeds("grep -q BAR ${file}")
+    client1.execute("rm ${file}")
   '';
 })
