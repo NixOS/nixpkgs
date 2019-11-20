@@ -16417,6 +16417,8 @@ in
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
+    zenpower = callPackage ../os-specific/linux/zenpower { };
+
     inherit (callPackage ../os-specific/linux/zfs {
       configFile = "kernel";
       inherit kernel;
