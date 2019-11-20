@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  patches = [
-    ./0001-Fix-cross-compilation-by-looking-for-ar.patch
-  ];
+  patches = [ ./0001-Fix-cross-compilation-by-looking-for-ar.patch ]
+    # Based on https://svnweb.freebsd.org/ports?view=revision&revision=512436
+    ++ stdenv.lib.optional stdenv.cc.isClang ./libcxx-9.patch;
 
   postPatch = stdenv.lib.optionalString (psutils != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
