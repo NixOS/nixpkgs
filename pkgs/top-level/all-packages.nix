@@ -2903,6 +2903,8 @@ in
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
+  session-manager-plugin = callPackage ../development/tools/aws-session-manager-plugin {};
+
   s-tar = callPackage ../tools/archivers/s-tar {};
 
   sonota = callPackage ../tools/misc/sonota { };

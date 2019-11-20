@@ -6276,6 +6276,12 @@
     githubId = 1437166;
     name = "Xia Bin";
   };
+  socksy = {
+    email = "ben@lovell.io";
+    github = "socksy";
+    githubId = 511549;
+    name = "Ben Lovell";
+  };
   solson = {
     email = "scott@solson.me";
     github = "solson";
