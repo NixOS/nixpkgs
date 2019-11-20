@@ -214,9 +214,12 @@ stdenv.mkDerivation {
       --prefix PATH ":" "$out/bin"
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "CUPS Linux drivers for Canon printers";
     homepage = http://www.canon.com/;
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      kylesferrazza
+    ];
   };
 }
