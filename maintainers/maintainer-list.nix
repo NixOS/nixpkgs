@@ -3700,6 +3700,18 @@
     githubId = 449813;
     name = "Roman Kuznetsov";
   };
+  kylesferrazza = {
+    name = "Kyle Sferrazza";
+    email = "kyle.sferrazza@gmail.com";
+
+    github = "kylesferrazza";
+    githubId = 6677292;
+
+    keys = [{
+      longkeyid = "rsa4096/81A1540948162372";
+      fingerprint = "5A9A 1C9B 2369 8049 3B48  CF5B 81A1 5409 4816 2372";
+    }];
+  };
   kylewlacy = {
     email = "kylelacy+nix@pm.me";
     github = "kylewlacy";
