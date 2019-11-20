@@ -4,12 +4,13 @@ rustPlatform.buildRustPackage rec {
   pname = "tensorman-${version}";
   version = "0.1.0";
 
- src = fetchFromGitHub {
-    owner = "pop-os";
-    repo = "tensorman";
-    rev = version;
-    sha256 = "0ywb53snvymmwh10hm6whckz7dwmpqa4rxiggd24y178jdfrm2ns";
+src = fetchFromGitHub {
+  owner = "pop-os";
+  repo = "tensorman";
+  rev = version;
+  sha256 = "0ywb53snvymmwh10hm6whckz7dwmpqa4rxiggd24y178jdfrm2ns";
 };
+
 buildInputs = [ pkgconfig openssl ];
 cargoSha256 = "1gh5w6zzrvjk60bqaf355fagijy723rvmqjh4laksd96pmzdfwn9";
 
@@ -18,6 +19,6 @@ cargoSha256 = "1gh5w6zzrvjk60bqaf355fagijy723rvmqjh4laksd96pmzdfwn9";
     homepage = "https://github.com/pop-os/tensorman/";
     license = stdenv.lib.licenses.gpl3;
     platforms =  [ "x86_64-linux" ];
-    maintainers = [ "thefenriswolf" ];
+    maintainers = with maintainers; [ thefenriswolf ];
   };
 }
