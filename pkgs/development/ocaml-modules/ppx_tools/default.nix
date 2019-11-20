@@ -38,7 +38,7 @@ in
     };
 
     nativeBuildInputs = [ ocaml findlib ];
-    buildInputs = [ findlib ];
+    buildInputs = [ ocaml findlib ];
 
     createFindlibDestdir = true;
 

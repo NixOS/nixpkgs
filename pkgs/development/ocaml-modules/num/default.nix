@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, ocaml, findlib, withStatic ? false }:
 
 stdenv.mkDerivation rec {
 	version = "1.1";
@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
 			url = "https://github.com/ocaml/num/commit/6d4c6d476c061298e6385e8a0864f083194b9307.patch";
 			sha256 = "18zlvb5n327q8y3c52js5dvyy29ssld1l53jqng8m9w1k24ypi0b";
 		})
-    ./enable-static.patch
-	];
+	] ++ lib.optional withStatic ./enable-static.patch;
 
 	nativeBuildInputs = [ ocaml findlib ];
   buildInputs = [ ocaml findlib ];
