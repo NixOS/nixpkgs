@@ -22,9 +22,9 @@ let
           else
             extern;
         in (if lib.lists.any (x: x == "lib") dep.crateType then
-           " --extern ${name}=${dep.out}/lib/lib${extern}-${dep.metadata}.rlib"
+           " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
          else
-           " --extern ${name}=${dep.out}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
+           " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies);
 
     echo_build_heading = colors: ''
@@ -96,12 +96,12 @@ stdenv.mkDerivation (rec {
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies =
       builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
+        (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))
         dependencies_;
 
     buildDependencies =
       builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
+        (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))
         buildDependencies_;
 
     completeDeps = lib.lists.unique (dependencies ++ lib.lists.concatMap (dep: dep.completeDeps) dependencies);
@@ -159,6 +159,9 @@ stdenv.mkDerivation (rec {
               extraRustcOpts;
     };
     installPhase = installCrate crateName metadata;
+
+    outputs = [ "out" "lib" ];
+    outputDev = [ "lib" ];
 
 } // extraDerivationAttrs
 )) {
