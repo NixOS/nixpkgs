@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ libffi ];
 
+  # fix usage of off_t without include
+  postPatch = ''
+    sed -i '1i#include <sys/types.h>' sysif.h
+  '';
+
   enableParallelBuilding = true;
 
   doCheck = true;
