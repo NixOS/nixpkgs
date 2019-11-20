@@ -6708,6 +6708,14 @@
     githubId = 42933;
     name = "Andrew Childs";
   };
+  
+  thefenriswolf = {
+    email = "stefan.rohrbacher97@gmail.com";
+    github = "thefenriswolf";
+    githubId = "8547242";
+    name = "Stefan Rohrbacher";
+  };
+  
   thesola10 = {
     email = "thesola10@bobile.fr";
     github = "thesola10";
