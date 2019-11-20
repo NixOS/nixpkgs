@@ -559,6 +559,8 @@ in
 
   airfield = callPackage ../tools/networking/airfield { };
 
+  apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
+
   airsonic = callPackage ../servers/misc/airsonic { };
 
   airspy = callPackage ../applications/radio/airspy { };
@@ -662,7 +664,7 @@ in
   asciiquarium = callPackage ../applications/misc/asciiquarium {};
 
   asymptote = callPackage ../tools/graphics/asymptote {
-    texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
+    texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo; };
     gsl = gsl_1;
   };
 
@@ -1251,6 +1253,8 @@ in
     asciidoc = asciidoc-full;
   };
 
+  buildpack = callPackage ../development/tools/buildpack { };
+
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
   bustle = haskellPackages.bustle;
@@ -1830,7 +1834,7 @@ in
 
   interlock = callPackage ../servers/interlock {};
 
-  jellyfin = callPackage ../servers/jellyfin { };
+  jellyfin = callPackage ../servers/jellyfin { ffmpeg = ffmpeg_4; };
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
@@ -3012,18 +3016,9 @@ in
     elasticsearch = elasticsearch7-oss;
   };
 
-  elasticsearch-curator = with (python3.override {
-    packageOverrides = self: super: {
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "6.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
-        };
-      });
-      pyyaml = super.pyyaml_3;
-    };
-  }).pkgs; toPythonApplication elasticsearch-curator;
+  elasticsearch-curator = callPackage ../tools/admin/elasticsearch-curator {
+    python = python3;
+  };
 
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
@@ -6678,6 +6673,8 @@ in
 
   tinyemu = callPackage ../applications/virtualization/tinyemu { };
 
+  tinyfecvpn = callPackage ../tools/networking/tinyfecvpn {};
+
   tinyprog = callPackage ../development/tools/misc/tinyprog { };
 
   tinyproxy = callPackage ../tools/networking/tinyproxy {};
@@ -6713,6 +6710,8 @@ in
   tokei = callPackage ../development/tools/misc/tokei { };
 
   toml2nix = (callPackage ../tools/toml2nix { }).toml2nix { };
+
+  topgrade = callPackage ../tools/misc/topgrade {  };
 
   tor = callPackage ../tools/security/tor {
     # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
@@ -7462,6 +7461,8 @@ in
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
 
   zsh-syntax-highlighting = callPackage ../shells/zsh/zsh-syntax-highlighting { };
+  
+  zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
   zsh-autosuggestions = callPackage ../shells/zsh/zsh-autosuggestions { };
 
@@ -9156,6 +9157,7 @@ in
   python36Full = python36.override{x11Support=true;};
   python37Full = python37.override{x11Support=true;};
   python38Full = python38.override{x11Support=true;};
+  python39Full = python38.override{x11Support=true;};
 
   # pythonPackages further below, but assigned here because they need to be in sync
   pythonPackages = python.pkgs;
@@ -9163,7 +9165,7 @@ in
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python {};
-  inherit (pythonInterpreters) python27 python35 python36 python37 python38 python3Minimal pypy27 pypy36;
+  inherit (pythonInterpreters) python27 python35 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
@@ -9171,6 +9173,7 @@ in
   python36Packages = python36.pkgs;
   python37Packages = recurseIntoAttrs python37.pkgs;
   python38Packages = recurseIntoAttrs python38.pkgs;
+  python39Packages = python39.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
@@ -18687,6 +18690,8 @@ in
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
+  geoipupdate = callPackage ../applications/misc/geoipupdate/default.nix { };
+
   ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
 
   gitweb = callPackage ../applications/version-management/git-and-tools/gitweb { };
@@ -19880,9 +19885,7 @@ in
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  # mediathekview needs JavaFX, which currently only is available inside OracleJRE
-  # we might be able to get rid of it, as soon as we have an OpenJRE with OpenJFX included
-  mediathekview = callPackage ../applications/video/mediathekview { jre = oraclejre; };
+  mediathekview = callPackage ../applications/video/mediathekview { jre = openjdk11; };
 
   meteo = callPackage ../applications/networking/weather/meteo { };
 
@@ -23361,11 +23364,11 @@ in
 
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
-  redshift = callPackage ../applications/misc/redshift {
+  inherit (callPackages ../applications/misc/redshift {
     inherit (python3Packages) python pygobject3 pyxdg wrapPython;
     inherit (darwin.apple_sdk.frameworks) CoreLocation ApplicationServices Foundation Cocoa;
     geoclue = geoclue2;
-  };
+  }) redshift redshift-wlr;
 
   redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
@@ -23401,10 +23404,7 @@ in
 
   solarc-gtk-theme = callPackage ../misc/themes/solarc { };
 
-  xfce = xfce4-12;
-
-  xfce4-12 = recurseIntoAttrs (callPackage ../desktops/xfce { });
-  xfce4-14 = recurseIntoAttrs (callPackage ../desktops/xfce4-14 { });
+  xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
 
@@ -24245,6 +24245,8 @@ in
   hoppet = callPackage ../development/libraries/physics/hoppet { };
 
   fastjet = callPackage ../development/libraries/physics/fastjet { };
+
+  fastjet-contrib = callPackage ../development/libraries/physics/fastjet-contrib { };
 
   fastnlo = callPackage ../development/libraries/physics/fastnlo { };
 

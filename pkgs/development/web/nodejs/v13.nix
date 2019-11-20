@@ -8,5 +8,5 @@ in
     version = "13.1.0";
     sha256 = "0s6b2k7i89j9mxwyz271fvm6bf8jcz2v5kzmn0v5icrkpmn0ab6l";
 
-    patches = stdenv.lib.optionals stdenv.isDarwin [ ./disable-libatomic-darwin-13_x.patch ];
+    patches = stdenv.lib.optionals stdenv.isDarwin [ ./disable-libatomic-darwin.patch ];
   }
