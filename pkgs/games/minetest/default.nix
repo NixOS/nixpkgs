@@ -48,7 +48,7 @@ let
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
     ] ++ optionals buildClient [
       libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
-    ] ++ optional buildServer [
+    ] ++ optionals buildServer [
       leveldb postgresql hiredis
     ];
 

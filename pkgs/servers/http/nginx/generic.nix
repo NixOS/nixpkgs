@@ -53,15 +53,15 @@ stdenv.mkDerivation {
     "--with-http_stub_status_module"
     "--with-threads"
     "--with-pcre-jit"
-  ] ++ optional withDebug [
+  ] ++ optionals withDebug [
     "--with-debug"
-  ] ++ optional withStream [
+  ] ++ optionals withStream [
     "--with-stream"
     "--with-stream_geoip_module"
     "--with-stream_realip_module"
     "--with-stream_ssl_module"
     "--with-stream_ssl_preread_module"
-  ] ++ optional withMail [
+  ] ++ optionals withMail [
     "--with-mail"
     "--with-mail_ssl_module"
   ] ++ optional (perl != null) [

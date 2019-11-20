@@ -53,23 +53,23 @@ stdenv.mkDerivation rec {
     "--with-poll_module"
     "--with-google_perftools_module"
     "--with-jemalloc"
-  ] ++ optional withDebug [
+  ] ++ optionals withDebug [
     "--with-debug"
-  ] ++ optional withMail [
+  ] ++ optionals withMail [
     "--with-mail"
     "--with-mail_ssl_module"
-  ] ++ optional (!withMail) [
+  ] ++ optionals (!withMail) [
     "--without-mail_pop3_module"
     "--without-mail_imap_module"
     "--without-mail_smtp_module"
-  ] ++ optional withStream [
+  ] ++ optionals withStream [
     "--with-stream"
     "--with-stream_ssl_module"
     "--with-stream_realip_module"
     "--with-stream_geoip_module"
     "--with-stream_ssl_preread_module"
     "--with-stream_sni"
-  ] ++ optional (!withStream) [
+  ] ++ optionals (!withStream) [
     "--without-stream_limit_conn_module"
     "--without-stream_access_module"
     "--without-stream_geo_module"
