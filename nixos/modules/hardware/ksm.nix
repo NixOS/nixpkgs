@@ -11,7 +11,7 @@ in {
   ];
 
   options.hardware.ksm = {
-    enable = mkEnableOption "Kernel Same-Page Merging";
+    enable = mkEnableOption "Kernel Samepage Merging";
     sleep = mkOption {
       type = types.nullOr types.int;
       default = null;
@@ -23,15 +23,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.services.enable-ksm = {
-      description = "Enable Kernel Same-Page Merging";
+    systemd.services.ksm = {
+      description = "Kernel Samepage Merging";
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
+      unitConfig.ConditionPathExists = "/sys/kernel/mm/ksm";
+      unitConfig.ConditionVirtualization = "no";
       script = ''
-        if [ -e /sys/kernel/mm/ksm ]; then
-          echo 1 > /sys/kernel/mm/ksm/run
-          ${optionalString (cfg.sleep != null) ''echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs''}
-        fi
+        echo 1 > /sys/kernel/mm/ksm/run
+        ${optionalString (cfg.sleep != null) ''echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs''}
       '';
     };
   };
