@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , pkgconfig
 , glib
 , sqlite
@@ -32,6 +33,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0ig3d3j1n0ghaxsgfww6g2hhcdwx8cljwwfmp9jk1nrvkxd6rnmv";
   };
+
+  patches = [
+    # Fix build with gettext 0.20
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/zeitgeist/zeitgeist/commit/b5c00e80189fd59a059a95c4e276728a2492cb89.patch";
+      sha256 = "1r7f7j3l2p6xlzxajihgx8bzbc2sxcb9spc9pi26rz9bwmngdyq7";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf
