@@ -54,6 +54,11 @@ let
       ./qtbase.patch
       ./qtbase-fixguicmake.patch
       ./qtbase-trayicons.patch # can be removed with 5.12.4 or 5.13
+      (fetchpatch {
+        name = "CVE-2019-18281.patch";
+        url = "https://github.com/qt/qtbase/commit/1232205e32464d90e871f39eb1e14fcf9b78a163.patch";
+        sha256 = "1xfw3p94k7j8bly4rcfrlad2qaz7144q0fjmqsaib1c2927kcsfz";
+      })
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
