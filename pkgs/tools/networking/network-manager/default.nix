@@ -61,6 +61,13 @@ in stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Fixes https://github.com/NixOS/nixpkgs/issues/72330
+    # Upstream MR: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/merge_requests/323
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/4c11364201c094ad19ab9980ea6051a82bd2a550.patch";
+      sha256 = "14dgb6ijxyzcglrk67is2fn49iwrhljf2sld8w557i6zkypilmsv";
+    })
   ];
 
   buildInputs = [
@@ -104,7 +111,7 @@ in stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/NetworkManager;
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom domenkozar obadz ];
+    maintainers = with maintainers; [ phreedom domenkozar obadz worldofpeace ];
     platforms = platforms.linux;
   };
 }
