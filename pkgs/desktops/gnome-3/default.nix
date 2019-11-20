@@ -99,8 +99,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-themes-extra = callPackage ./core/gnome-themes-extra { };
 
-  gnome-user-docs = callPackage ./core/gnome-user-docs { };
-
   gnome-user-share = callPackage ./core/gnome-user-share { };
 
   gucharmap = callPackage ./core/gucharmap { };
@@ -354,6 +352,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   nautilus-sendto = throw "nautilus-sendto is removed since 2019-09-17: abandoned upstream";
 
   inherit (pkgs) vala; # added 2019-10-10
+
+  inherit (pkgs) gnome-user-docs; # added 2019-11-20
 
   inherit (pkgs) gegl_0_4; # added 2019-10-31
 
