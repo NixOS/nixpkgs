@@ -11,16 +11,14 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "019hda2pj8lf7px4h1z07b9l6icxx4b2a072jw36lz9bh6jahp32";
   };
 
-  #adapted from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zsh-fast-syntax-highlighting-git
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
-    _plugindir="$out/share/zsh/site-functions"
+    plugindir="$out/share/zsh/site-functions"
 
-    cd "$src"
-    install -dm0755 "$_plugindir"
-    install -m0644 -- {,_,-}fast-* "$_plugindir"
-
-    cp -r {.,$_plugindir}/chroma
-    cp -r {.,$_plugindir}/themes
+    mkdir -p "$plugindir"
+    cp -r -- {,_,-}fast-* chroma themes "$plugindir"/
   '';
 
   meta = with lib; {
