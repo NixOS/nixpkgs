@@ -17090,6 +17090,8 @@ in
 
   kmod-debian-aliases = callPackage ../os-specific/linux/kmod-debian-aliases { };
 
+  ksmtuned = callPackages ../applications/virtualization/ksmtuned { };
+
   libcap = callPackage ../os-specific/linux/libcap { };
 
   libcap_ng = callPackage ../os-specific/linux/libcap-ng {

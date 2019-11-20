@@ -346,6 +346,7 @@
   ./services/hardware/illum.nix
   ./services/hardware/interception-tools.nix
   ./services/hardware/irqbalance.nix
+  ./services/hardware/ksmtuned.nix
   ./services/hardware/lcd.nix
   ./services/hardware/lirc.nix
   ./services/hardware/nvidia-optimus.nix

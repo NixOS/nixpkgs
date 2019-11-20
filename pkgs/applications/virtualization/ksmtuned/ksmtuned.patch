@@ -1,0 +1,105 @@
+diff --git a/meson.build b/meson.build
+index 7e86649..b8bead1 100644
+--- a/meson.build
++++ b/meson.build
+@@ -5,49 +5,12 @@ project(
+ )
+ 
+ conf_data = configuration_data()
+-conf_data.set('LIBEXECDIR',
+-              join_paths(get_option('prefix'), get_option('libexecdir')))
+-conf_data.set('SBINDIR',
+-              join_paths(get_option('prefix'), get_option('sbindir')))
+-conf_data.set('SYSCONFDIR',
+-              join_paths(get_option('prefix'), get_option('sysconfdir')))
+-
+-executable(
+-    'ksmctl',
+-    sources: 'src/ksmctl.c',
+-    install_dir: conf_data.get('LIBEXECDIR'),
+-    install: true,
+-)
+-
+-if get_option('redhat-sysconfig')
+-  install_data(
+-      'data/sysconfig/ksm',
+-      install_dir: join_paths(conf_data.get('SYSCONFDIR'), 'sysconfig'),
+-  )
+-endif
+-
+-install_data(
+-    'data/ksmtuned.conf',
+-    install_dir: conf_data.get('SYSCONFDIR'),
+-)
++conf_data.set('BINDIR',
++              join_paths(get_option('prefix'), get_option('bindir')))
+ 
+ configure_file(
+-    input: 'src/ksmtuned.sh.in',
++    input: 'src/ksmtuned.sh',
+     output: 'ksmtuned',
+     configuration: conf_data,
+-    install_dir: conf_data.get('SBINDIR'),
+-)
+-
+-configure_file(
+-    input: 'data/ksmtuned.service.in',
+-    output: 'ksmtuned.service',
+-    configuration: conf_data,
+-    install_dir: '/usr/lib/systemd/system/',
+-)
+-
+-configure_file(
+-    input: 'data/ksm.service.in',
+-    output: 'ksm.service',
+-    configuration: conf_data,
+-    install_dir: '/usr/lib/systemd/system/',
++    install_dir: conf_data.get('BINDIR'),
+ )
+diff --git a/src/ksmtuned.sh.in b/src/ksmtuned.sh
+similarity index 91%
+rename from src/ksmtuned.sh.in
+rename to src/ksmtuned.sh
+index 08a4ca7..30854c8 100755
+--- a/src/ksmtuned.sh.in
++++ b/src/ksmtuned.sh
+@@ -18,10 +18,6 @@
+ #
+ # needs testing and ironing. contact danken@redhat.com if something breaks.
+ 
+-if [ -f @SYSCONFDIR@/ksmtuned.conf ]; then
+-    . @SYSCONFDIR@/ksmtuned.conf
+-fi
+-
+ debug() {
+     if [ -n "$DEBUG" ]; then
+         s="`/bin/date`: $*"
+@@ -123,18 +119,15 @@ function nothing () {
+     :
+ }
+ 
+-loop () {
+-    trap nothing SIGUSR1
+-    while true
+-    do
+-        sleep $KSM_MONITOR_INTERVAL &
+-        wait $!
+-        adjust
+-    done
++function cleanup () {
++     KSMCTL stop
++     exit
+ }
+ 
+-PIDFILE=${PIDFILE-/var/run/ksmtune.pid}
+-if touch "$PIDFILE"; then
+-  loop &
+-  echo $! > "$PIDFILE"
+-fi
++trap cleanup SIGHUP
++trap nothing SIGUSR1
++while true; do
++      sleep $KSM_MONITOR_INTERVAL &
++      wait $!
++      adjust
++done
