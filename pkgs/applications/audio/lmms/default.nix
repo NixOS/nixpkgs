@@ -43,7 +43,7 @@ mkDerivation rec {
     description = "DAW similar to FL Studio (music production software)";
     homepage = https://lmms.io;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ goibhniu yegortimoshenko ];
   };
 }
