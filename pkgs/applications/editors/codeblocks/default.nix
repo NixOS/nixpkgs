@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
   postConfigure = optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
   configureFlags = [ "--enable-pch=no" ]
-    ++ optional contribPlugins [ "--with-contrib-plugins" "--with-boost-libdir=${boost}/lib" ];
+    ++ optionals contribPlugins [ "--with-contrib-plugins" "--with-boost-libdir=${boost}/lib" ];
 
   meta = {
     maintainers = [ maintainers.linquize ];
