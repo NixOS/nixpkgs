@@ -169,8 +169,8 @@
     </listitem>
     <listitem>
      <para>
-      Change <literal>stableBranch</literal> to true in Hydra and wait for
-      channel to update.
+      Change <literal>stableBranch</literal> to <literal>true</literal> in Hydra and wait for
+      the channel to update.
      </para>
     </listitem>
    </itemizedlist>
@@ -215,7 +215,7 @@
     <listitem>
      <para>
       Create a new topic on <link xlink:href="https://discourse.nixos.org/">the
-      Discourse instance</link> to announce the release with above information.
+      Discourse instance</link> to announce the release with the above information.
       Best to check how previous email was formulated to see what needs to be
       included.
      </para>
