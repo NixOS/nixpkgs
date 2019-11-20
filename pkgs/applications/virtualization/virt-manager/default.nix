@@ -9,10 +9,6 @@
 
 with stdenv.lib;
 
-# TODO: remove after there's support for setupPyDistFlags
-let
-  setuppy = ../../../development/interpreters/python/run_setup.py;
-in
 python3Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
   version = "2.2.1";
@@ -49,13 +45,7 @@ python3Packages.buildPythonApplication rec {
     ${python3Packages.python.interpreter} setup.py configure --prefix=$out
   '';
 
-  # TODO: remove after there's support for setupPyDistFlags
-  buildPhase = ''
-    runHook preBuild
-    cp ${setuppy} nix_run_setup
-    ${python3Packages.python.pythonForBuild.interpreter} nix_run_setup --no-update-icon-cache build_ext bdist_wheel
-    runHook postBuild
-  '';
+  setupPyGlobalFlags = [ "--no-update-icon-cache" ];
 
   preFixup = ''
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
