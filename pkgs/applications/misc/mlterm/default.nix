@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
       --replace "-m 2755 -g utmp" " " \
       --replace "-m 4755 -o root" " "
   '';
+
   env.NIX_LDFLAGS = "
     -L${stdenv.cc.cc.lib}/lib
     -lX11 -lgdk_pixbuf-2.0 -lcairo -lfontconfig -lfreetype -lXft
