@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
 
+  # Bug reported by upstream https://bugs.llvm.org/show_bug.cgi?id=43557
+  prePatch = stdenv.lib.optionalString stdenv.cc.isClang ''
+    rm tests/tcmp_ui.c
+  '';
+
   configureFlags =
     stdenv.lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe" ++
     stdenv.lib.optional stdenv.hostPlatform.is64bit "--with-pic";
