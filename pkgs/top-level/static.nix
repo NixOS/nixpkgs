@@ -51,7 +51,7 @@ self: super: let
       enableStaticLibraries = true;
     });
   };
-
+  
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
   gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
@@ -172,6 +172,10 @@ in {
     };
   };
 
+  kmod = super.kmod.override {
+    withStatic = true;
+  };
+  
   curl = super.curl.override {
     # a very sad story: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
     gssSupport = false;
@@ -195,6 +199,6 @@ in {
       };
     };
   };
-
+  
   python27 = super.python27.override { static = true; };
 }
