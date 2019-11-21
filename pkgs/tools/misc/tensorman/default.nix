@@ -1,7 +1,7 @@
 { pkgconfig, stdenv, rustPlatform, rustc, cargo, docker, openssl, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "tensorman-${version}";
+  pname = "tensorman";
   version = "0.1.0";
 
  src = fetchFromGitHub {
