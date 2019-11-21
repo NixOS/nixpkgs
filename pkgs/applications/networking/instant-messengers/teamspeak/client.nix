@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
 , xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, xkeyboard_config, alsaLib
-, libpulseaudio ? null, libredirect, quazip, less, which, unzip, llvmPackages
+, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
 }:
 
 let
@@ -26,6 +26,8 @@ let
     categories = "Network";
   };
 
+  fakeLess = writeShellScriptBin "less" "cat";
+
 in
 
 stdenv.mkDerivation rec {
@@ -46,11 +48,11 @@ stdenv.mkDerivation rec {
     sha256 = "1bywmdj54glzd0kffvr27r84n4dsd0pskkbmh59mllbxvj0qwy7f";
   };
 
-  buildInputs = [ makeWrapper less which unzip ];
+  nativeBuildInputs = [ makeWrapper fakeLess which unzip ];
 
   unpackPhase =
     ''
-      echo -e 'q\ny' | sh -xe $src
+      echo -e '\ny' | sh -xe $src
       cd TeamSpeak*
     '';
 
