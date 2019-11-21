@@ -9107,6 +9107,11 @@ in
     config.php.apxs2 = false;
   };
 
+  php74-embed = php74.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+  };
+
   php-unit = php73-unit;
 
   php72-unit = php72.override {
