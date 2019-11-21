@@ -24240,6 +24240,8 @@ in
   tetgen = callPackage ../applications/science/geometry/tetgen { }; # AGPL3+
   tetgen_1_4 = callPackage ../applications/science/geometry/tetgen/1.4.nix { }; # MIT
 
+  netgen-mesher = callPackage ../applications/science/geometry/netgen-mesher { };
+
   ### SCIENCE/BENCHMARK
 
   papi = callPackage ../development/libraries/science/benchmark/papi { };
