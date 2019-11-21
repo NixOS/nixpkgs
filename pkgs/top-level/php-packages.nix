@@ -141,6 +141,8 @@ let
              AC_MSG_WARN([Cannot find igbinary.h])
       '')
     ];
+
+    meta.broken = isPhp74; # Build error
   };
 
   event = buildPecl {
