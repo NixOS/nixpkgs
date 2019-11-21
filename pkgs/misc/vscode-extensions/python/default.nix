@@ -52,6 +52,12 @@ in vscode-utils.buildVscodeMarketplaceExtension {
     lttng-ust
   ];
 
+  # a few shared libraries use dlopen
+  runtimeDependencies = [
+    icu
+    openssl
+  ];
+
   nativeBuildInputs = [
     autoPatchelfHook
   ];
