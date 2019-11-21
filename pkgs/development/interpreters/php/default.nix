@@ -4,7 +4,7 @@
 , openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
-, libzip, valgrind
+, libzip, valgrind, oniguruma
 }:
 
 with lib;
@@ -78,6 +78,7 @@ let
       buildInputs = [ ]
         ++ optional (versionOlder version "7.3") pcre
         ++ optional (versionAtLeast version "7.3") pcre2
+        ++ optional (versionAtLeast version "7.4") oniguruma
         ++ optional withSystemd systemd
         ++ optionals imapSupport [ uwimap openssl pam ]
         ++ optionals curlSupport [ curl openssl ]
@@ -268,4 +269,16 @@ in {
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   };
+
+  php74 = let
+    version = "7.4.0RC6";
+    sha256 = "1q20ax5mphypq7dwxd509lzca6m0rcxkzmcbkc6kg4bw6gvnjkyv";
+  in (generic {
+    inherit version sha256;
+  }).overrideAttrs(oa: {
+    src = fetchurl {
+      url = "https://downloads.php.net/~derick/php-${version}.tar.bz2";
+      inherit sha256;
+    };
+  });
 }
