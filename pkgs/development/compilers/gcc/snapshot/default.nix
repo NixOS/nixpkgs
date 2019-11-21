@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
@@ -17,6 +17,7 @@
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
+, threadsCross ? null # for MinGW
 , crossStageStatic ? false
 , # Strip kills static libs of other archs (hence no cross)
   stripped ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -36,10 +37,14 @@ assert stdenv.hostPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 
+# threadsCross is just for MinGW
+assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+
 with stdenv.lib;
 with builtins;
 
-let version = "7-20170409";
+let majorVersion = "7";
+    version = "${majorVersion}-20170409";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -47,7 +52,11 @@ let version = "7-20170409";
       [ ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
-      ++ optional langFortran ../gfortran-driving.patch;
+      ++ optional langFortran ../gfortran-driving.patch
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
+        url = "https://raw.githubusercontent.com/lhmouse/MINGW-packages/${import ../common/mfcgthreads-patches-repo.nix}/mingw-w64-gcc-git/9000-gcc-${majorVersion}-branch-Added-mcf-thread-model-support-from-mcfgthread.patch";
+        sha256 = "1nyjnshpq5gbcbbpfv27hy4ajvycmgkpiabkjlxnnrnq1d99k1ay";
+      });
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -119,6 +128,8 @@ stdenv.mkDerivation ({
     ++ (optional hostPlatform.isDarwin gnused)
     ;
 
+  depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
+
   env.NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
   preConfigure = import ../common/pre-configure.nix {
@@ -180,30 +191,21 @@ stdenv.mkDerivation ({
   # compiler (after the specs for the cross-gcc are created). Having
   # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
-    ++ optional (zlib != null) zlib
-  ));
-
-  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
-
-  EXTRA_TARGET_FLAGS = optionals
-    (targetPlatform != hostPlatform && libcCross != null)
-    ([
-      "-idirafter ${getDev libcCross}${libcCross.incdir or "/include"}"
-    ] ++ optionals (! crossStageStatic) [
-      "-B${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]);
-
-  EXTRA_TARGET_LDFLAGS = optionals
-    (targetPlatform != hostPlatform && libcCross != null)
-    ([
-      "-Wl,-L${libcCross.out}${libcCross.libdir or "/lib"}"
-    ] ++ (if crossStageStatic then [
-        "-B${libcCross.out}${libcCross.libdir or "/lib"}"
-      ] else [
-        "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}"
-        "-Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]));
+  env = {
+    CPATH = toString (optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+      ++ optional (zlib != null) zlib
+    )));
+  
+    LIBRARY_PATH = optional (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
+  
+    inherit
+      (import ../common/extra-target-flags.nix {
+        inherit stdenv crossStageStatic libcCross threadsCross;
+      })
+      EXTRA_TARGET_FLAGS
+      EXTRA_TARGET_LDFLAGS
+      ;
+  };
 
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;

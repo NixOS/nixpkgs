@@ -11,8 +11,8 @@ in
       ] ++ stdenv.lib.optionals (! crossStageStatic) [
         "-B${lib.getLib dep}${dep.libdir or "/lib"}"
       ]);
-    in mkFlags libcCross
-    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross)
+    in builtins.toString (mkFlags libcCross
+    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross))
     ;
 
   EXTRA_TARGET_LDFLAGS = let
@@ -24,7 +24,7 @@ in
           "-Wl,-rpath,${lib.getLib dep}${dep.libdir or "/lib"}"
           "-Wl,-rpath-link,${lib.getLib dep}${dep.libdir or "/lib"}"
       ]));
-    in mkFlags libcCross
-    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross)
+    in builtins.toString (mkFlags libcCross
+    ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross))
     ;
 }

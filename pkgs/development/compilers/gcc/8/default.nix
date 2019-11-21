@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
@@ -17,6 +17,7 @@
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
+, threadsCross ? null # for MinGW
 , crossStageStatic ? false
 , # Strip kills static libs of other archs (hence no cross)
   stripped ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -35,10 +36,14 @@ assert stdenv.hostPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 
+# threadsCross is just for MinGW
+assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+
 with stdenv.lib;
 with builtins;
 
-let version = "8.3.0";
+let majorVersion = "8";
+    version = "${majorVersion}.3.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -51,7 +56,11 @@ let version = "8.3.0";
       }) */
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
-      ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch;
+      ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
+        url = "https://raw.githubusercontent.com/lhmouse/MINGW-packages/${import ../common/mfcgthreads-patches-repo.nix}/mingw-w64-gcc-git/9000-gcc-${majorVersion}-branch-Added-mcf-thread-model-support-from-mcfgthread.patch";
+        sha256 = "1in5kvcknlpi9z1vvjw6jfmwy8k12zvbqlqfnq84qpm99r0rh00a";
+      });
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -152,6 +161,10 @@ stdenv.mkDerivation ({
     ++ (optional hostPlatform.isDarwin gnused)
     ;
 
+  depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
+
+  env.NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
+
   preConfigure = import ../common/pre-configure.nix {
     inherit (stdenv) lib;
     inherit version hostPlatform langGo;
@@ -193,6 +206,7 @@ stdenv.mkDerivation ({
 
   dontStrip = !stripped;
 
+<<<<<<< HEAD
   installTargets = optional stripped "install-strip";
 
   env = {
@@ -221,12 +235,44 @@ stdenv.mkDerivation ({
           "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}" +
           " -Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
       );
+=======
+  installTargets =
+    if stripped
+    then "install-strip"
+    else "install";
+
+  # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+  ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
+
+  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+  # library headers and binaries, regarless of the language being compiled.
+  #
+  # Likewise, the LTO code doesn't find zlib.
+  #
+  # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+  # compiler (after the specs for the cross-gcc are created). Having
+  # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
+
+  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+    ++ optional (zlib != null) zlib
+  ));
+
+  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
+
+  inherit
+    (import ../common/extra-target-flags.nix {
+      inherit stdenv crossStageStatic libcCross threadsCross;
+    })
+    EXTRA_TARGET_FLAGS
+    EXTRA_TARGET_LDFLAGS
+    ;
   } // optionalAttrs (hostPlatform.system == "x86_64-solaris") {
     # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
     CC = "gcc -m64";
   } // optionalAttrs hostPlatform.isSunOS {
     NIX_LDFLAGS = "-lm -ldl";
   };
+>>>>>>> channels/nixos-unstable-small
 
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;
