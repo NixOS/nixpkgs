@@ -7463,7 +7463,7 @@ in
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
 
   zsh-syntax-highlighting = callPackage ../shells/zsh/zsh-syntax-highlighting { };
-  
+
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
   zsh-autosuggestions = callPackage ../shells/zsh/zsh-autosuggestions { };
@@ -13368,9 +13368,7 @@ in
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix { };
 
-  opensubdiv = callPackage ../development/libraries/opensubdiv {
-    cmake = cmake_2_8;
-  };
+  opensubdiv = callPackage ../development/libraries/opensubdiv { };
 
   open-wbo = callPackage ../applications/science/logic/open-wbo {};
 
