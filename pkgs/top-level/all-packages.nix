@@ -8853,6 +8853,8 @@ in
 
   yosys = callPackage ../development/compilers/yosys { };
 
+  yosys-withGui = callPackage ../development/compilers/yosys/gui-wrapper.nix { };
+
   z88dk = callPackage ../development/compilers/z88dk { };
 
   zulip = callPackage ../applications/networking/instant-messengers/zulip { };
