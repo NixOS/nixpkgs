@@ -14,6 +14,7 @@ let
     });
 
   isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
+  isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
 
   apcu = buildPecl {
     version = "5.1.18";
@@ -592,6 +593,8 @@ let
     sha256 = "0ial621zxn9zvjh7k1h755sm2lc9aafc389yxksqcxcmm7kqmd0a";
 
     buildInputs = [ pkgs.unixODBC ];
+
+    meta.broken = isPhp74; # Build error
   };
 
   v8 = buildPecl {
