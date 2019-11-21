@@ -269,6 +269,8 @@ let
     sha256 = "02ill1iqffa5fha9iz4y91823scml24ikfk8pn90jyycfwv07x6a";
 
     buildInputs = [ pkgs.unixODBC ];
+
+    meta.broken = isPhp74; # Build error
   };
 
   php-cs-fixer = mkDerivation rec {
