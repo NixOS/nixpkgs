@@ -12,7 +12,6 @@ with stdenv.lib;
 python3Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
   version = "2.2.1";
-  namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
