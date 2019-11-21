@@ -9078,6 +9078,10 @@ in
     php = php73;
   });
 
+  php74Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php74;
+  });
+
   phpPackages-unit = php72Packages-unit;
 
   php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
