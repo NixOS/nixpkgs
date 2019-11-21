@@ -958,6 +958,8 @@ in {
 
   pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
 
+  pydrive = callPackage ../development/python-modules/pydrive { };
+
   pydy = callPackage ../development/python-modules/pydy { };
 
   pyexiv2 = disabledIf isPy3k (toPythonModule (callPackage ../development/python-modules/pyexiv2 {}));
@@ -3398,7 +3400,7 @@ in {
   google_api_python_client = let
     google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
   in if isPy3k then google_api_python_client else
-    # Python 2.7 support was deprecated but is still needed by weboob
+    # Python 2.7 support was deprecated but is still needed by weboob and duplicity
     google_api_python_client.overridePythonAttrs (old: rec {
       version = "1.7.6";
       src = old.src.override {
@@ -4513,6 +4515,8 @@ in {
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   Babel = callPackage ../development/python-modules/Babel { };
+
+  babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
   pybfd = callPackage ../development/python-modules/pybfd { };
 
