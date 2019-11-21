@@ -543,7 +543,7 @@
    <listitem>
      <para>
       The <option>networking.useDHCP</option> option is unsupported in combination with
-      <option>networking.useNetworkd</option> in anticipation of defaulting to it by default.
+      <option>networking.useNetworkd</option> in anticipation of defaulting to it.
       It has to be set to <literal>false</literal> and enabled per
       interface with <option>networking.interfaces.&lt;name&gt;.useDHCP = true;</option>
     </para>

@@ -208,6 +208,9 @@ rec {
   vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
+    # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
+    # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
+    w64 = {};
 
     none = {};
     unknown = {};

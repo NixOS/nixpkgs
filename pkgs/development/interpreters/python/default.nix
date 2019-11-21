@@ -29,6 +29,7 @@ with pkgs;
         isPy36 = pythonVersion == "3.6";
         isPy37 = pythonVersion == "3.7";
         isPy38 = pythonVersion == "3.8";
+        isPy39 = pythonVersion == "3.9";
         isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
         isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
         isPy3k = isPy3;
@@ -108,6 +109,19 @@ in {
       suffix = "";
     };
     sha256 = "110d0did9rxn7rg85kf2fwli5hqq44xv2d8bi7d92m7v2d728mmk";
+    inherit (darwin) CF configd;
+    inherit passthruFun;
+  };
+
+  python39 = callPackage ./cpython {
+    self = python39;
+    sourceVersion = {
+      major = "3";
+      minor = "9";
+      patch = "0";
+      suffix = "a1";
+    };
+    sha256 = "02b337kvzb6ncqab21xnayh562zpz6bqzjmh35iy9l48zgpkvf1n";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };

@@ -5,7 +5,7 @@ let
 in fetchzip {
   name = "babelstone-han-${version}";
 
-  url = http://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip;
+  url = https://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip;
   postFetch = ''
     mkdir -p $out/share/fonts/truetype
     unzip $downloadedFile '*.ttf' -d $out/share/fonts/truetype

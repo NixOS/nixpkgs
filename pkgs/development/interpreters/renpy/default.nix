@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pythonPackages, pkgconfig, SDL2
+{ stdenv, fetchurl, python2Packages, pkgconfig, SDL2
 , libpng, ffmpeg, freetype, glew, libGLU_combined, fribidi, zlib
 , glib
 }:
 
-with pythonPackages;
+with python2Packages;
 
 stdenv.mkDerivation rec {
   pname = "renpy";

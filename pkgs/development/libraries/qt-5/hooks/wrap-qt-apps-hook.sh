@@ -1,5 +1,5 @@
 # Inherit arguments given in mkDerivation
-qtWrapperArgs=( $qtWrapperArgs )
+qtWrapperArgs=( ${qtWrapperArgs-} )
 
 qtHostPathSeen=()
 

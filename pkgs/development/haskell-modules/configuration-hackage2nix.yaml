@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 14.13
+  # LTS Haskell 14.14
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -60,7 +60,7 @@ default-package-overrides:
   - aeson-better-errors ==0.9.1.0
   - aeson-casing ==0.2.0.0
   - aeson-compat ==0.3.9
-  - aeson-diff ==1.1.0.7
+  - aeson-diff ==1.1.0.8
   - aeson-extra ==0.4.1.3
   - aeson-generic-compat ==0.0.1.3
   - aeson-iproute ==0.2
@@ -72,7 +72,7 @@ default-package-overrides:
   - al ==0.1.4.2
   - alarmclock ==0.7.0.2
   - alerts ==0.1.2.0
-  - alex ==3.2.4
+  - alex ==3.2.5
   - alg ==0.2.12.0
   - algebraic-graphs ==0.4
   - Allure ==0.9.5.0
@@ -90,7 +90,7 @@ default-package-overrides:
   - ansi-wl-pprint ==0.6.9
   - ANum ==0.2.0.2
   - aos-signature ==0.1.1
-  - apecs ==0.8.1
+  - apecs ==0.8.2
   - apecs-gloss ==0.2.3
   - apecs-physics ==0.4.2
   - api-field-json-th ==0.1.0.2
@@ -111,7 +111,7 @@ default-package-overrides:
   - asn1-parse ==0.9.5
   - asn1-types ==0.3.3
   - assert-failure ==0.1.2.2
-  - assoc ==1
+  - assoc ==1.0.1
   - astro ==0.4.2.1
   - async ==2.2.2
   - async-extra ==0.2.0.0
@@ -134,12 +134,12 @@ default-package-overrides:
   - authenticate ==1.3.4
   - authenticate-oauth ==1.6.0.1
   - auto ==0.4.3.1
-  - autoexporter ==1.1.14
+  - autoexporter ==1.1.15
   - auto-update ==0.1.6
   - avers ==0.0.17.1
   - avers-api ==0.1.0
   - avers-server ==0.1.0.1
-  - avro ==0.4.5.3
+  - avro ==0.4.5.4
   - avwx ==0.3.0.2
   - aws-cloudfront-signed-cookies ==0.2.0.1
   - aws-lambda-haskell-runtime ==2.0.1
@@ -311,7 +311,7 @@ default-package-overrides:
   - chiphunk ==0.1.2.1
   - choice ==0.2.2
   - chronologique ==0.3.1.1
-  - chronos ==1.0.7
+  - chronos ==1.0.8
   - chronos-bench ==0.2.0.2
   - chunked-data ==0.3.1
   - cipher-aes ==0.2.11
@@ -513,7 +513,7 @@ default-package-overrides:
   - deque ==0.4.3
   - deriveJsonNoPrefix ==0.1.0.1
   - deriving-compat ==0.5.7
-  - derulo ==1.0.5
+  - derulo ==1.0.7
   - detour-via-sci ==1.0.0
   - dhall ==1.24.0
   - dhall-bash ==1.0.21
@@ -521,7 +521,7 @@ default-package-overrides:
   - diagrams ==1.4
   - diagrams-contrib ==1.4.3
   - diagrams-core ==1.4.2
-  - diagrams-lib ==1.4.2.3
+  - diagrams-lib ==1.4.3
   - diagrams-postscript ==1.4.1
   - diagrams-rasterific ==1.4.1.1
   - diagrams-solve ==0.1.1
@@ -532,7 +532,7 @@ default-package-overrides:
   - digest ==0.0.1.2
   - digits ==0.3.1
   - dimensional ==1.3
-  - di-monad ==1.3
+  - di-monad ==1.3.1
   - directory-tree ==0.12.1
   - direct-sqlite ==2.3.24
   - discount ==0.1.1
@@ -550,7 +550,7 @@ default-package-overrides:
   - doctemplates ==0.2.2.1
   - doctest ==0.16.2
   - doctest-discover ==0.2.0.0
-  - doctest-driver-gen ==0.3.0.1
+  - doctest-driver-gen ==0.3.0.2
   - doldol ==0.4.1.2
   - do-list ==1.0.1
   - dom-parser ==3.1.0
@@ -799,7 +799,7 @@ default-package-overrides:
   - gingersnap ==0.3.1.0
   - gi-pango ==1.0.22
   - githash ==0.1.3.3
-  - github-release ==1.2.4
+  - github-release ==1.2.5
   - github-types ==0.2.1
   - github-webhooks ==0.10.1
   - gitrev ==1.3.1
@@ -876,7 +876,7 @@ default-package-overrides:
   - haskey-btree ==0.3.0.1
   - haskintex ==0.8.0.0
   - haskoin-core ==0.9.6
-  - hasql ==1.4
+  - hasql ==1.4.0.1
   - hasql-optparse-applicative ==0.3.0.5
   - hasql-pool ==0.5.1
   - hasql-transaction ==0.7.2
@@ -895,7 +895,7 @@ default-package-overrides:
   - hedgehog ==1.0.1
   - hedgehog-corpus ==0.1.0
   - hedgehog-fn ==1.0
-  - hedis ==0.12.8
+  - hedis ==0.12.9
   - hedn ==0.2.0.1
   - here ==1.2.13
   - heredoc ==0.2.0.0
@@ -1148,7 +1148,7 @@ default-package-overrides:
   - js-jquery ==3.3.1
   - json ==0.9.3
   - json-alt ==1.0.0
-  - json-feed ==1.0.6
+  - json-feed ==1.0.7
   - jsonpath ==0.1.0.2
   - json-rpc ==1.0.0
   - json-rpc-client ==0.2.5.0
@@ -1176,7 +1176,7 @@ default-package-overrides:
   - kraken ==0.1.0
   - l10n ==0.1.0.1
   - labels ==0.3.3
-  - lackey ==1.0.9
+  - lackey ==1.0.10
   - LambdaHack ==0.9.5.0
   - lame ==0.2.0
   - language-c ==0.8.3
@@ -1225,7 +1225,7 @@ default-package-overrides:
   - libmpd ==0.9.0.10
   - liboath-hs ==0.0.1.1
   - libraft ==0.5.0.0
-  - libyaml ==0.1.1.0
+  - libyaml ==0.1.1.1
   - LibZip ==1.0.1
   - lifted-async ==0.10.0.4
   - lifted-base ==0.2.3.12
@@ -1262,7 +1262,7 @@ default-package-overrides:
   - lrucache ==1.2.0.1
   - lrucaching ==0.3.3
   - lsp-test ==0.6.1.0
-  - lucid ==2.9.11
+  - lucid ==2.9.12
   - lucid-extras ==0.2.2
   - lxd-client-config ==0.1.0.1
   - lzma ==0.0.0.3
@@ -1356,7 +1356,7 @@ default-package-overrides:
   - monad-loops ==0.4.3
   - monad-memo ==0.5.1
   - monad-metrics ==0.2.1.4
-  - monad-par ==0.3.4.8
+  - monad-par ==0.3.5
   - monad-parallel ==0.7.2.3
   - monad-par-extras ==0.3.3
   - monad-peel ==0.2.1.2
@@ -1378,7 +1378,6 @@ default-package-overrides:
   - mono-traversable-instances ==0.1.0.0
   - mono-traversable-keys ==0.1.0
   - more-containers ==0.2.1.2
-  - morpheus-graphql ==0.6.2
   - mountpoints ==1.0.2
   - mpi-hs ==0.5.3.0
   - msgpack ==1.0.1.0
@@ -1432,7 +1431,7 @@ default-package-overrides:
   - network-conduit-tls ==1.3.2
   - network-house ==0.1.0.2
   - network-info ==0.2.0.10
-  - network-ip ==0.3.0.2
+  - network-ip ==0.3.0.3
   - network-messagepack-rpc ==0.1.1.4
   - network-multicast ==0.3.2
   - network-simple ==0.4.5
@@ -1452,7 +1451,7 @@ default-package-overrides:
   - nonempty-containers ==0.3.2.0
   - nonemptymap ==0.0.6.0
   - non-empty-sequence ==0.2.0.2
-  - nonempty-vector ==0.1.0.0
+  - nonempty-vector ==0.2.0.1
   - non-negative ==0.1.2
   - not-gloss ==0.7.7.0
   - no-value ==1.0.0.0
@@ -1724,10 +1723,10 @@ default-package-overrides:
   - rank2classes ==1.3.1.2
   - Rasterific ==0.7.4.4
   - rasterific-svg ==0.3.3.2
-  - ratel ==1.0.8
-  - ratel-wai ==1.1.0
+  - ratel ==1.0.9
+  - ratel-wai ==1.1.1
   - rattle ==0.1
-  - rattletrap ==9.0.6
+  - rattletrap ==9.0.7
   - rawfilepath ==0.2.4
   - rawstring-qm ==0.2.3.0
   - raw-strings-qq ==1.1
@@ -1822,7 +1821,7 @@ default-package-overrides:
   - salak-toml ==0.3.5.3
   - salak-yaml ==0.3.5.3
   - saltine ==0.1.0.2
-  - salve ==1.0.6
+  - salve ==1.0.8
   - sample-frame ==0.0.3
   - sample-frame-np ==0.0.4.1
   - sampling ==0.3.3
@@ -2033,7 +2032,7 @@ default-package-overrides:
   - stripe-scotty ==1.0.0.0
   - stripe-signature ==1.0.0.1
   - stripe-wreq ==1.0.1.0
-  - strive ==5.0.8
+  - strive ==5.0.9
   - structs ==0.1.2
   - structured-cli ==2.5.1.0
   - summoner ==1.3.0.1
@@ -2126,7 +2125,7 @@ default-package-overrides:
   - text-region ==0.3.1.0
   - text-short ==0.1.3
   - text-show ==3.8.2
-  - text-show-instances ==3.8.2
+  - text-show-instances ==3.8.3
   - text-zipper ==0.10.1
   - tfp ==1.0.1.1
   - tf-random ==0.5
@@ -2195,7 +2194,7 @@ default-package-overrides:
   - transformers-bifunctors ==0.1
   - transformers-compat ==0.6.5
   - transformers-fix ==1.0
-  - traverse-with-class ==1.0.0.0
+  - traverse-with-class ==1.0.1.0
   - tree-diff ==0.1
   - tree-fun ==0.8.1.0
   - trifecta ==2
@@ -2391,7 +2390,7 @@ default-package-overrides:
   - writer-cps-mtl ==0.1.1.6
   - writer-cps-transformers ==0.5.6.1
   - ws ==0.0.5
-  - wuss ==1.1.14
+  - wuss ==1.1.15
   - X11 ==1.9.1
   - X11-xft ==0.3.1
   - x11-xim ==0.0.9.0
@@ -2429,7 +2428,7 @@ default-package-overrides:
   - xmonad-extras ==0.15.2
   - xss-sanitize ==0.3.6
   - xxhash-ffi ==0.2.0.0
-  - yaml ==0.11.1.2
+  - yaml ==0.11.2.0
   - yeshql ==4.1.0.1
   - yeshql-core ==4.1.0.2
   - yeshql-hdbc ==4.1.0.2
@@ -4311,7 +4310,6 @@ broken-packages:
   - domplate
   - dot-linker
   - dot2graphml
-  - dotenv
   - dotfs
   - doublify-toolkit
   - dovin
@@ -5188,6 +5186,8 @@ broken-packages:
   - GrowlNotify
   - grpc-api-etcd
   - grpc-etcd-client
+  - grpc-haskell
+  - grpc-haskell-core
   - gruff
   - gruff-examples
   - gsc-weighting
@@ -6156,6 +6156,7 @@ broken-packages:
   - http-dispatch
   - http-enumerator
   - http-grammar
+  - http-io-streams
   - http-kinder
   - http-monad
   - http-pony-serve-wai
@@ -7448,6 +7449,7 @@ broken-packages:
   - NestedFunctor
   - nestedmap
   - net-mqtt
+  - net-mqtt-rpc
   - net-spider
   - net-spider-cli
   - net-spider-pangraph
@@ -8552,6 +8554,7 @@ broken-packages:
   - rws
   - RxHaskell
   - s-expression
+  - S3
   - SableCC2Hs
   - safe-access
   - safe-buffer-monad
@@ -8684,6 +8687,7 @@ broken-packages:
   - Semantique
   - semdoc
   - semi-iso
+  - semialign-extras
   - semialign-indexed
   - semialign-optics
   - semibounded-lattices

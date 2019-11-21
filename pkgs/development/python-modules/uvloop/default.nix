@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.13.0";
+  version = "0.14.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0blcnrd5vky2k1m1p1skx4516dr1jx76yyb0c6fi82si6mqd0b4l";
+    sha256 = "07j678z9gf41j98w72ysrnb5sa41pl5yxd7ib17lcwfxqz0cjfhj";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin_sandbox.patch;

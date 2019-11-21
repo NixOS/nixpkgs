@@ -22,6 +22,7 @@
 , writeTextFile
 , writeShellScriptBin
 , xkeyboard_config
+, runCommand
 }:
 
 let
@@ -141,6 +142,13 @@ let
           DesktopNames=GNOME-Flashback;GNOME;
         '';
       };
+
+      mkSystemdTargetForWm = { wmName }:
+        runCommand "gnome-flashback-${wmName}.target" {} ''
+          mkdir -p $out/lib/systemd/user
+          cp "${gnome-flashback}/lib/systemd/user/gnome-session-x11@gnome-flashback-metacity.target" \
+            "$out/lib/systemd/user/gnome-session-x11@gnome-flashback-${wmName}.target"
+        '';
     };
 
     meta = with stdenv.lib; {

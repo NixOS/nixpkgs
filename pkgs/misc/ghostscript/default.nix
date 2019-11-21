@@ -10,8 +10,8 @@ assert cupsSupport -> cups != null;
 
 let
   version = "9.${ver_min}";
-  ver_min = "27";
-  sha512 = "00m8pfvvg4dzvrzk66myr8kid76x44sgqk84m9562g4viv9zbw759l8q9qg64mgvbajzn78zpqfgdlgz9nwgcdb1vpwc08gm12ssrsy";
+  ver_min = "50";
+  sha512 = "3p46kzn6kh7z4qqnqydmmvdlgzy5730z3yyvyxv6i4yb22mgihzrwqmhmvfn3b7lypwf6fdkkndarzv7ly3zndqpyvg89x436sms7iw";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -47,24 +47,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
-    (fetchpatch {
-        name = "CVE-2019-10216.patch";
-        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=5b85ddd19a8420a1bd2d5529325be35d78e94234";
-        sha256 = "165svml4knq1xlysfvj7vc07h68bhv3rgvl83xrhxsxdzs1ign31";
-    })
-    (fetchpatch {
-        name = "CVE-2019-14811.CVE-2019-14812.CVE-2019-14813.patch";
-        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=885444fcbe10dc42787ecb76686c8ee4dd33bf33";
-        sha256 = "19928sr7xpx7iibk9gn127g0r1yv2lcfpwgk2ipzz4wgrs3f5j70";
-    })
-    (fetchpatch {
-        name = "CVE-2019-14817-partial.patch";
-        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=cd1b1cacadac2479e291efe611979bdc1b3bdb19";
-        # patch doesn't apply cleanly to all files, but at least partially applying it fixes
-        # *most* of the problematic sites.
-        excludes = ["Resource/Init/pdf_font.ps"];
-        sha256 = "0f8qgdqpv7bldc9akvjj10af2h2876cvnz4q3nvg4a00rk5i05wn";
-    })
   ];
 
   outputs = [ "out" "man" "doc" ];

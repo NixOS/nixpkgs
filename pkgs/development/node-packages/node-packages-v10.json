@@ -15,6 +15,7 @@
 , "bower2nix"
 , "browserify"
 , "castnow"
+, { "texlab-citeproc-build-deps": "../tools/misc/texlab/citeproc" }
 , "clean-css"
 , "coffee-script"
 , "coinmon"

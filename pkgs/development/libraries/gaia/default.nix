@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/MTG/gaia";
     description = "General library to work with points in a semimetric space";
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
+    platforms = platforms.x86; # upstream assume SSE2 / fails on ARM
     license = licenses.agpl3;
   };
 }

@@ -39,7 +39,7 @@
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
-, sambaSupport       ? true,           samba         ? null
+, sambaSupport       ? stdenv.isLinux, samba         ? null
 , sdl2Support        ? true,           SDL2          ? null
 , sndioSupport       ? true,           sndio         ? null
 , speexSupport       ? true,           speex         ? null
@@ -52,7 +52,7 @@
 , zimgSupport        ? true,           zimg          ? null
 , archiveSupport     ? false,          libarchive    ? null
 , jackaudioSupport   ? false,          libjack2      ? null
-, openalSupport      ? false,          openalSoft    ? null
+, openalSupport      ? true,          openalSoft    ? null
 , vapoursynthSupport ? false,          vapoursynth   ? null
 }:
 

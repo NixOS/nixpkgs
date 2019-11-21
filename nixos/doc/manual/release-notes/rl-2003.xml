@@ -71,7 +71,11 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+    The kubernetes kube-proxy now supports a new hostname configuration
+    <literal>services.kubernetes.proxy.hostname</literal> which has to
+    be set if the hostname of the node should be non default.
+    </para>
    </listitem>
   </itemizedlist>
 
@@ -136,6 +140,27 @@
       The stdenv now runs all bash with <literal>set -u</literal>, to catch the use of undefined variables.
       Before, it itself used <literal>set -u</literal> but was careful to unset it so other packages' code ran as before.
       Now, all bash code is held to the same high standard, and the rather complex stateful manipulation of the options can be discarded.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The SLIM Display Manager has been removed, as it has been unmaintained since 2013.
+     Consider migrating to a different display manager such as LightDM (current default in NixOS),
+     SDDM, GDM, or using the startx module which uses Xinitrc.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The BEAM package set has been deleted. You will only find there the different interpreters.
+      You should now use the different build tools coming with the languages with sandbox mode disabled.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     There is now only one Xfce package-set and module. This means attributes, <literal>xfce4-14</literal>
+     <literal>xfce4-12</literal>, and <literal>xfceUnstable</literal> all now point to the latest Xfce 4.14
+     packages. And in future NixOS releases will be the latest released version of Xfce available at the
+     time during the releases development (if viable).
     </para>
    </listitem>
   </itemizedlist>

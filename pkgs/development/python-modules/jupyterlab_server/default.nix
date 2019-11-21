@@ -6,6 +6,7 @@
 , pythonOlder
 , requests
 , pytest
+, pyjson5
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ requests pytest ];
-  propagatedBuildInputs = [ notebook jsonschema ];
+  propagatedBuildInputs = [ notebook jsonschema pyjson5 ];
 
   # test_listing test fails
   # this is a new package and not all tests pass

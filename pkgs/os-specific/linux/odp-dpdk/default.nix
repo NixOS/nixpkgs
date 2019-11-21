@@ -3,10 +3,10 @@
 }: let
 
   dpdk_17_11 = dpdk.overrideAttrs (old: rec {
-    version = "17.11.6";
+    version = "17.11.9";
     src = fetchurl {
       url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-      sha256 = "0g4l6yjcn17n18c7q1pxkmnj4fg2kiv0krz7n2vjjsb8s6gmbps2";
+      sha256 = "0vrcc9mdjs5fk69lh7bigsk9208dfmjsz3jxaddkjlvk2hds1id6";
     };
   });
 

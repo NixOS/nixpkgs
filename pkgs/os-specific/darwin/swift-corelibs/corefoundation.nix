@@ -67,10 +67,30 @@ stdenv.mkDerivation {
     LDFLAGS = "-current_version 1454.90.0 -compatibility_version 150.0.0 -init ___CFInitialize";
   };
 
-  configurePhase = "../configure release --sysroot UNUSED";
+  configurePhase = ''
+    ../configure release --sysroot UNUSED
+  '';
 
   enableParallelBuilding = true;
-  buildPhase = "ninja -j $NIX_BUILD_CORES";
+
+  # FIXME: Workaround for intermittent build failures of CFRuntime.c.
+  # Based on testing this issue seems to only occur with clang_7, so
+  # please remove this when updating the default llvm versions to 8 or
+  # later.
+  buildPhase = stdenv.lib.optionalString true ''
+    for i in {1..512}; do
+        if ninjaBuildPhase; then
+          break
+        fi
+
+        echo >&2
+        echo "[$i/512] retrying build, workaround for #66811" >&2
+        echo "  With clang_7 the build of CFRuntime.c fails intermittently." >&2
+        echo "  See https://github.com/NixOS/nixpkgs/issues/66811 for more details." >&2
+        echo >&2
+        continue
+    done
+  '';
 
   # TODO: their build system sorta kinda can do this, but it doesn't seem to work right now
   # Also, this includes a bunch of private headers in the framework, which is not what we want

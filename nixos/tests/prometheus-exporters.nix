@@ -457,9 +457,7 @@ let
         wait_for_unit("prometheus-varnish-exporter.service")
         wait_for_open_port(6081)
         wait_for_open_port(9131)
-        succeed(
-            "curl -sSf http://localhost:9131/metrics | grep -q 'varnish_up 1'"
-        )
+        succeed("curl -sSf http://localhost:9131/metrics | grep -q 'varnish_up 1'")
       '';
     };
 

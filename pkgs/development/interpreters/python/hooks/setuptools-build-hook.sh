@@ -17,7 +17,7 @@ setuptoolsBuildPhase() {
     eval "@pythonInterpreter@ nix_run_setup $args bdist_wheel"
 
     runHook postBuild
-    echo "Finished executing setuptoolsInstallPhase"
+    echo "Finished executing setuptoolsBuildPhase"
 }
 
 setuptoolsShellHook() {

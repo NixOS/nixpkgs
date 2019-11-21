@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.28";
+  name = "sudo-1.8.29";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "188k3w67aflbmi4b5z23pxrvzfcfndi22b84w86gzjh8b9sglaci";
+    sha256 = "0z4wyadh9cks17gdpfgx4kvbrlnyb6nai2sd6chk7qh4jsngylyf";
   };
 
   prePatch = ''
@@ -41,7 +41,14 @@ stdenv.mkDerivation rec {
     "--with-passprompt=[sudo] password for %p: "  # intentional trailing space
   ];
 
-  installFlags = [ "sudoers_uid=$(shell id -u)" "sudoers_gid=$(shell id -g)" "sysconfdir=$(out)/etc" "rundir=$(TMPDIR)/dummy" "vardir=$(TMPDIR)/dummy" ];
+  installFlags = [
+    "sudoers_uid=$(shell id -u)"
+    "sudoers_gid=$(shell id -g)"
+    "sysconfdir=$(out)/etc"
+    "rundir=$(TMPDIR)/dummy"
+    "vardir=$(TMPDIR)/dummy"
+    "DESTDIR=/"
+  ];
 
   postConfigure =
     ''

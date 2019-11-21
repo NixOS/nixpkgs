@@ -225,7 +225,7 @@ with super;
   });
 
   luasystem = super.luasystem.override({
-    buildInputs = [
+    buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [
       pkgs.glibc
     ];
   });

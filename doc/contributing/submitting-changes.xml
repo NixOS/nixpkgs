@@ -228,6 +228,33 @@ Additional information.
    </listitem>
   </itemizedlist>
  </section>
+ <section xml:id="submitting-changes-submitting-security-fixes">
+  <title>Submitting security fixes</title>
+
+  <para>
+   Security fixes are submitted in the same way as other changes and thus the same guidelines apply.
+  </para>
+
+  <para>
+   If the security fix comes in the form of a patch and a CVE is available, then the name of the patch should be the CVE identifier, so e.g. <literal>CVE-2019-13636.patch</literal> in the case of a patch that is included in the Nixpkgs tree. If a patch is fetched the name needs to be set as well, e.g.:
+  </para>
+
+<programlisting>
+   (fetchpatch {
+     name = "CVE-2019-11068.patch";
+     url = "https://gitlab.gnome.org/GNOME/libxslt/commit/e03553605b45c88f0b4b2980adfbbb8f6fca2fd6.patch";
+     sha256 = "0pkpb4837km15zgg6h57bncp66d5lwrlvkr73h0lanywq7zrwhj8";
+   })
+  </programlisting>
+
+  <para>
+   If a security fix applies to both master and a stable release then, similar to regular changes, they are preferably delivered via master first and cherry-picked to the release branch.
+  </para>
+
+  <para>
+   Critical security fixes may by-pass the staging branches and be delivered directly to release branches such as <literal>master</literal> and <literal>release-*</literal>.
+  </para>
+ </section>
  <section xml:id="submitting-changes-pull-request-template">
   <title>Pull Request Template</title>
 
@@ -298,12 +325,17 @@ Additional information.
 
    <para>
     review changes from pull request number 12345:
-<screen>nix-shell -p nix-review --run "nix-review pr 12345"</screen>
+    <screen>nix run nixpkgs.nix-review -c nix-review pr 12345</screen>
    </para>
 
    <para>
     review uncommitted changes:
-<screen>nix-shell -p nix-review --run "nix-review wip"</screen>
+    <screen>nix run nixpkgs.nix-review -c nix-review wip</screen>
+   </para>
+
+   <para>
+    review changes from last commit:
+    <screen>nix run nixpkgs.nix-review -c nix-review rev HEAD</screen>
    </para>
   </section>
 
@@ -409,7 +441,7 @@ Additional information.
    <itemizedlist>
     <listitem>
      <para>
-      If you're cherry-picking a commit to a stable release branch, always use <command>git cherry-pick -xe</command> and ensure the message contains a clear description about why this needs to be included in the stable branch.
+      If you're cherry-picking a commit to a stable release branch (“backporting”), always use <command>git cherry-pick -xe</command> and ensure the message contains a clear description about why this needs to be included in the stable branch.
      </para>
      <para>
       An example of a cherry-picked commit would look like this:

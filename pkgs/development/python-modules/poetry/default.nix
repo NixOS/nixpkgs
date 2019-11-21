@@ -7,6 +7,7 @@
 , pyrsistent
 , pyparsing
 , cachecontrol
+, lockfile
 , pkginfo
 , html5lib
 , shellingham
@@ -59,6 +60,7 @@ in buildPythonPackage rec {
     pyrsistent
     pyparsing
     cachecontrol
+    lockfile
     pkginfo
     html5lib
     shellingham
