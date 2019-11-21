@@ -493,6 +493,7 @@ let
       '';
       license = licenses.bsd3;
       homepage = "https://developers.google.com/protocol-buffers/";
+      broken = isPhp74; # Build error
     };
   };
 
