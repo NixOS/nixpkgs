@@ -954,7 +954,11 @@ in {
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
-  pydocstyle = callPackage ../development/python-modules/pydocstyle { };
+  pydocstyle =
+    if isPy27 then
+      callPackage ../development/python-modules/pydocstyle/2.nix { }
+    else
+      callPackage ../development/python-modules/pydocstyle { };
 
   pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
 
