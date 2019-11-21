@@ -1,28 +1,34 @@
-{ lib, fetchFromGitHub, buildPythonPackage, nose }:
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytest
+, pytest-asyncio
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  pname = "rx";
-  version = "1.6.1";
+  pname = "Rx";
+  version = "3.0.1";
+
+  disabled = pythonOlder "3.6";
 
   # There are no tests on the pypi source
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "rxpy";
-    rev = version;
-    sha256 = "14bca67a26clzcf2abz2yb8g9lfxffjs2l236dp966sp0lfbpsn5";
+    rev = "v${version}";
+    sha256 = "15flv8vdd8j1v58m3bhlnvmi1hfj2vz0ir6vk7z4wq613hyrx7ix";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [ pytest pytest-asyncio ];
 
   # Some tests are nondeterministic. (`grep sleep -r tests`)
-  # test_timeout_schedule_action_cancel: https://hydra.nixos.org/build/74954646
-  # test_new_thread_scheduler_timeout: https://hydra.nixos.org/build/74949851
   doCheck = false;
 
   meta = {
-    homepage = "https://github.com/ReactiveX/RxPY";
+    homepage = "https://rxpy.rtfd.io";
     description = "Reactive Extensions for Python";
     maintainers = with lib.maintainers; [ thanegill ];
-    license = lib.licenses.asl20;
+    license = lib.licenses.mit;
   };
 }
