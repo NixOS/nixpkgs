@@ -260,6 +260,8 @@ let
     pname = "pcs";
 
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
+
+    meta.broken = isPhp74; # Build error
   };
 
   pdo_sqlsrv = buildPecl {
