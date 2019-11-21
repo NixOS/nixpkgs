@@ -62,6 +62,7 @@
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
   ./hardware/steam-hardware.nix
+  ./hardware/tuxedo-keyboard.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
   ./hardware/video/amdgpu.nix

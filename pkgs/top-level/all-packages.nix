@@ -16570,7 +16570,7 @@ in
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
-    tuxedo-keyboard = callPackage ../os-specific/linux/firmware/tuxedo-keyboard { };
+    tuxedo-keyboard = callPackage ../os-specific/linux/tuxedo-keyboard { };
 
     jool = callPackage ../os-specific/linux/jool { };
 
