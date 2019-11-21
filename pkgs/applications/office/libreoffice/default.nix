@@ -65,6 +65,8 @@ in stdenv.mkDerivation rec {
 
   inherit (primary-src) src;
 
+  outputs = [ "out" "dev" ];
+
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ] ++ lib.optional stdenv.isx86_64 "-mno-fma";
@@ -276,6 +278,9 @@ in stdenv.mkDerivation rec {
 
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
+
+    mkdir -p $dev
+    cp -r include $dev
   '';
 
   configureFlags = [
