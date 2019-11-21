@@ -13414,11 +13414,6 @@ in
 
   phonon = callPackage ../development/libraries/phonon {};
 
-  # TODO(@Ma27) get rid of that as soon as QT4 can be dropped
-  phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix {
-    withQt4 = true;
-  };
-
   inherit (callPackage ../development/libraries/physfs { })
     physfs_2
     physfs;
