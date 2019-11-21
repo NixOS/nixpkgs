@@ -9132,6 +9132,15 @@ in
     config.php.fpm = false;
   };
 
+  php74-unit = php74.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+    config.php.systemd = false;
+    config.php.phpdbg = false;
+    config.php.cgi = false;
+    config.php.fpm = false;
+  };
+
   picoc = callPackage ../development/interpreters/picoc {};
 
   picolisp = callPackage ../development/interpreters/picolisp {};
