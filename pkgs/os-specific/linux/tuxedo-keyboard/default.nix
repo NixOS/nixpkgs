@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, kernel, kmod }:
 
-# TODO: look at the other kernel modules packages and see if you find improvements to do
-
 stdenv.mkDerivation rec {
   name = "tuxedo-keyboard-${kernel.version}-${version}";
   version = "2019-08-26";
@@ -12,30 +10,22 @@ stdenv.mkDerivation rec {
     rev = "d65e76e84cfd8169591fc2a0a7c9219fa19da1b5";
     sha256 = "1s48qpwybwh5pwqas2d1v2a7x4r97sm4hr9i4902r1d7h384bv17";
   };
-  
 
-  unpackPhase = ''
-    mkdir -p $out/build/src
-    cp -r $src/* $out/build
-  '';
-
-  patchPhase = ''
-    export KDIR=hello
-    substituteInPlace Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"
+  preConfigure = ''
+    substituteInPlace Makefile --replace '/lib/modules/' "${kernel.dev}/lib/modules/"
     substituteInPlace Makefile --replace '$(shell uname -r)' "${kernel.modDirVersion}"
-    substituteInPlace Makefile --replace './src' 'src'
   '';
 
   installPhase = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}"
-    cp $out/build/src/tuxedo_keyboard.ko $out/lib/modules/${kernel.modDirVersion}
-    rm -rf $out/build
+    mv src/tuxedo_keyboard.ko $out/lib/modules/${kernel.modDirVersion}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Full color keyboard driver for tuxedo computers laptops";
     homepage = "https://github.com/tuxedocomputers/tuxedo-keyboard/";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.blanky0230 ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.blanky0230 ];
   };
 }
