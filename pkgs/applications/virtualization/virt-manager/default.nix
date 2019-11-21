@@ -10,11 +10,11 @@
 with stdenv.lib;
 
 python3Packages.buildPythonApplication rec {
-  name = "virt-manager-${version}";
+  pname = "virt-manager";
   version = "2.2.1";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
+    url = "http://virt-manager.org/download/sources/virt-manager/${pname}-${version}.tar.gz";
     sha256 = "06ws0agxlip6p6n3n43knsnjyd91gqhh2dadgc33wl9lx1k8vn6g";
   };
 
