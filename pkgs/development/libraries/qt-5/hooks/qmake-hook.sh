@@ -1,6 +1,6 @@
 . @fix_qmake_libtool@
 
-qmakeFlags=( $qmakeFlags )
+qmakeFlags=( ${qmakeFlags-} )
 
 qmakePrePhase() {
     qmakeFlags=( \
@@ -31,6 +31,6 @@ qmakeConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "$dontUseQmakeConfigure" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseQmakeConfigure-}" -a -z "${configurePhase-}" ]; then
     configurePhase=qmakeConfigurePhase
 fi

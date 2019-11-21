@@ -22,11 +22,11 @@
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "5.6.0";
+  version = "5.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "427a468ec26e7d68a529b95f578d5cbf018cb4c1f889e897681c2b6d11897695";
+    sha256 = "21fb48e700b43e82ba0e3142421a659d7739b65568cc832a13976a77be16b523";
   };
 
   checkInputs = [ nose pytest glibcLocales ];

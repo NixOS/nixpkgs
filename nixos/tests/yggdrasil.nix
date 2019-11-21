@@ -81,7 +81,7 @@ in import ./make-test.nix ({ pkgs, ...} : {
           denyDhcpcdInterfaces = [ "ygg0" ];
           config = {
             IfTAPMode = true;
-            IFName = "ygg0";
+            IfName = "ygg0";
             MulticastInterfaces = [ "eth1" ];
             LinkLocalTCPPort = 43210;
           };

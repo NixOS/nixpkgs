@@ -2,18 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "olm";
-  version = "3.0.0";
-
-  meta = {
-    description = "Implements double cryptographic ratchet and Megolm ratchet";
-    license = stdenv.lib.licenses.asl20;
-    homepage = https://matrix.org/git/olm/about;
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
-  };
+  version = "3.1.4";
 
   src = fetchurl {
-    url = "https://matrix.org/git/olm/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "1iivxjk458v9lhqgzp0c4k5azligsh9k3rk6irf9ssj29wzgjm2c";
+    url = "https://matrix.org/git/olm/-/archive/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0f7azjxc77n4ib9nj3cwyk3vhk8r2dsyf7id6nvqyxqxwxn95a8w";
   };
 
   doCheck = true;
@@ -25,4 +18,11 @@ stdenv.mkDerivation rec {
   makeFlags = if stdenv.cc.isClang then [ "CC=cc" ] else null;
 
   installFlags = "PREFIX=$(out)";
+
+  meta = {
+    description = "Implements double cryptographic ratchet and Megolm ratchet";
+    license = stdenv.lib.licenses.asl20;
+    homepage = https://matrix.org/git/olm/about;
+    platforms = with stdenv.lib.platforms; darwin ++ linux;
+  };
 }

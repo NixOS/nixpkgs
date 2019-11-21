@@ -99,8 +99,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-themes-extra = callPackage ./core/gnome-themes-extra { };
 
-  gnome-user-docs = callPackage ./core/gnome-user-docs { };
-
   gnome-user-share = callPackage ./core/gnome-user-share { };
 
   gucharmap = callPackage ./core/gucharmap { };
@@ -159,8 +157,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   yelp = callPackage ./core/yelp { };
 
   yelp-xsl = callPackage ./core/yelp-xsl { };
-
-  yelp-tools = callPackage ./core/yelp-tools { };
 
   zenity = callPackage ./core/zenity { };
 
@@ -349,15 +345,19 @@ lib.makeScope pkgs.newScope (self: with self; {
   pidgin-im-gnome-shell-extension = pkgs.gnomeExtensions.pidgin-im-integration; # added 2019-08-01
 
   # added 2019-08-25
-  corePackages = throw "deprecated 2019-08-25: please use `services.gnome3.core-shell.enable`";
-  optionalPackages = throw "deprecated 2019-08-25: please use `services.gnome3.core-utilities.enable`";
-  gamesPackages = throw "deprecated 2019-08-25: please use `services.gnome3.games.enable`";
+  corePackages = throw "gnome3.corePackages is removed since 2019-08-25: please use `services.gnome3.core-shell.enable`";
+  optionalPackages = throw "gnome3.optionalPackages is removed since 2019-08-25: please use `services.gnome3.core-utilities.enable`";
+  gamesPackages = throw "gnome3.gamesPackages is removed since 2019-08-25: please use `services.gnome3.games.enable`";
 
-  nautilus-sendto = throw "deprecated 2019-09-17: abandoned";
+  nautilus-sendto = throw "nautilus-sendto is removed since 2019-09-17: abandoned upstream";
 
   inherit (pkgs) vala; # added 2019-10-10
+
+  inherit (pkgs) gnome-user-docs; # added 2019-11-20
 
   inherit (pkgs) gegl_0_4; # added 2019-10-31
 
   inherit (pkgs) gjs; # added 2019-01-05
+
+  inherit (pkgs) yelp-tools; # added 2019-11-20
 })

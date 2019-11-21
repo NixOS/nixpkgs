@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile --replace "-llua5.3" "-llua";
     substituteInPlace mle.h    --replace "<lua5.3/" "<";
+    patchShebangs tests/*
   '';
 
   buildInputs = [ termbox pcre uthash lua5_3 ];

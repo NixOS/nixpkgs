@@ -43,7 +43,7 @@ let
       propagate = out:
         let setupHook = { writeScript }:
               writeScript "setup-hook" ''
-                if [ "$hookName" != postHook ]; then
+                if [ "${hookName:-}" != postHook ]; then
                     postHooks+=("source @dev@/nix-support/setup-hook")
                 else
                     # Propagate $${out} output

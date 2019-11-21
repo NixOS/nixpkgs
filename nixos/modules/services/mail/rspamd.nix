@@ -60,7 +60,7 @@ let
       };
       type = mkOption {
         type = types.nullOr (types.enum [
-          "normal" "controller" "fuzzy_storage" "rspamd_proxy" "lua" "proxy"
+          "normal" "controller" "fuzzy" "rspamd_proxy" "lua" "proxy"
         ]);
         description = ''
           The type of this worker. The type <literal>proxy</literal> is

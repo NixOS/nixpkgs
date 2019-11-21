@@ -187,6 +187,19 @@ in rec {
     };
   };
 
+  plumb = mkDerivation {
+    pluginName = "plumb";
+    src = fetchFromGitHub {
+      owner = "eraserhd";
+      repo = "tmux-plumb";
+      rev = "v0.1.1";
+      sha256 = "1c6k4fdl0az9811r6k164mgd4w5la75xr6x7nabmy046xc0z5i2r";
+    };
+    postInstall = ''
+      sed -i -e 's,9 plumb,${pkgs.plan9port}/bin/9 plumb,' $target/scripts/plumb
+    '';
+  };
+
   prefix-highlight = mkDerivation {
     pluginName = "prefix-highlight";
     src = fetchgit {

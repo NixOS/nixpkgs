@@ -309,7 +309,7 @@ in
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
-        gnome-user-docs
+        pkgs.gnome-user-docs
         pkgs.orca
         pkgs.glib # for gsettings
         pkgs.gnome-menus
