@@ -21042,6 +21042,8 @@ in
 
   spike = callPackage ../applications/virtualization/spike { };
 
+  tensorman = callPackage ../tools/misc/tensorman { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   split2flac = callPackage ../applications/audio/split2flac { };
