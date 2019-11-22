@@ -5415,6 +5415,17 @@ let
     };
   };
 
+  vimagit = buildVimPluginFrom2Nix {
+    pname = "vimagit";
+    version = "2019-07-24";
+    src = fetchFromGitHub {
+      owner = "jreybert";
+      repo = "vimagit";
+      rev = "94762b1356ebdcb8ec486a86f45e69ef77a69465";
+      sha256 = "1p8izqdkx8g1aqmq9a2qm506bs4mvc4xdbzkh2k5xprm5vc14z0s";
+    };
+  };
+
   vimelette = buildVimPluginFrom2Nix {
     pname = "vimelette";
     version = "2019-05-02";
