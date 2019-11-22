@@ -22542,12 +22542,12 @@ in
 
   construoBase = lowPrio (callPackage ../games/construo {
     libGL = null;
+    libGLU = null;
     freeglut = null;
   });
 
   construo = construoBase.override {
-    inherit  freeglut;
-    libGL = libGLU_combined;
+    inherit  freeglut libGL libGLU;
   };
 
   crack_attack = callPackage ../games/crack-attack { };
