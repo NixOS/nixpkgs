@@ -71,6 +71,8 @@ let
     "link=${link}"
     "-sEXPAT_INCLUDE=${expat.dev}/include"
     "-sEXPAT_LIBPATH=${expat.out}/lib"
+  ] ++ optionals (versionAtLeast version "1.70") [
+    "--cmakedir=$dev/lib/cmake"
 
     # TODO: make this unconditional
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
