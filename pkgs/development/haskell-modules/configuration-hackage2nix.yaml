@@ -5487,8 +5487,6 @@ broken-packages:
   - haskelldb-th
   - haskelldb-wx
   - HaskellLM
-  - HaskellNet
-  - HaskellNet-SSL
   - HaskellNN
   - Haskelloids
   - haskellscrabble
@@ -6041,7 +6039,6 @@ broken-packages:
   - hsI2C
   - hsignal
   - hSimpleDB
-  - hsimport
   - HsJudy
   - hskeleton
   - hslackbuilder
