@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, ... }:
+import ./make-test-python.nix ({ lib, ... }:
 
 with lib;
 
@@ -11,8 +11,9 @@ with lib;
     { services.jackett.enable = true; };
 
   testScript = ''
-    $machine->waitForUnit('jackett.service');
-    $machine->waitForOpenPort('9117');
-    $machine->succeed("curl --fail http://localhost:9117/");
+    machine.start()
+    machine.wait_for_unit("jackett.service")
+    machine.wait_for_open_port(9117)
+    machine.succeed("curl --fail http://localhost:9117/")
   '';
 })
