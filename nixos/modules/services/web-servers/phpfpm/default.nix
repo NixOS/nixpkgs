@@ -262,6 +262,7 @@ in {
         in {
           Slice = "phpfpm.slice";
           PrivateDevices = true;
+          PrivateTmp = true;
           ProtectSystem = "full";
           ProtectHome = true;
           # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work
