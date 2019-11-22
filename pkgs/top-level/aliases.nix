@@ -309,6 +309,9 @@ mapAliases ({
   procps-ng = procps; # added 2018-06-08
   pyo3-pack = maturin;
   pulseaudioLight = pulseaudio; # added 2018-04-25
+  phonon-backend-gstreamer = throw "Please use libsForQt5.phonon-backend-gstreamer, as Qt4 support in this package has been removed."; # added 2019-11-22
+  phonon-backend-vlc = throw "Please use libsForQt5.phonon-backend-vlc, as Qt4 support in this package has been removed."; # added 2019-11-22
+  phonon = throw "Please use libsForQt5.phonon, as Qt4 support in this package has been removed."; # added 2019-11-22
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
