@@ -52,7 +52,7 @@ in {
       serviceConfig = {
         ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${cfg.mountPoint}";
         ExecStart = "${pkgs.kbfs}/bin/kbfsfuse ${toString cfg.extraFlags} ${cfg.mountPoint}";
-        ExecStopPost = "/run/wrappers/bin/fusermount -u ${cfg.mountPoint}";
+        ExecStopPost = "${pkgs.fuse}/bin/fusermount -u ${cfg.mountPoint}";
         Restart = "on-failure";
         PrivateTmp = true;
       };
