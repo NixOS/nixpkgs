@@ -6,10 +6,7 @@ with lib;
 let
   cfg = config.console;
 
-  makeColor = n: value: "COLOR_${toString n}=${value}";
-  makeColorCS =
-    let positions = [ "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "A" "B" "C" "D" "E" "F" ];
-    in n: value: "\\033]P${elemAt positions (n - 1)}${value}";
+  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
 
   isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
 
@@ -25,7 +22,6 @@ let
   vconsoleConf = pkgs.writeText "vconsole.conf" ''
     KEYMAP=${cfg.keyMap}
     FONT=${cfg.font}
-    ${concatImapStringsSep "\n" makeColor cfg.colors}
   '';
 
   consoleEnv = pkgs.buildEnv {
@@ -160,10 +156,6 @@ in
           ${optionalString cfg.earlySetup ''
             setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
           ''}
-
-          ${concatImapStringsSep "\n" (n: color: ''
-            printf "${makeColorCS n color}" >> /dev/console
-          '') cfg.colors}
         '';
 
         systemd.services.systemd-vconsole-setup =
@@ -172,6 +164,14 @@ in
             restartTriggers = [ vconsoleConf consoleEnv ];
           };
       }
+
+      (mkIf (cfg.colors != []) {
+        boot.kernelParams = [
+          "vt.default_red=${makeColor 0 cfg.colors}"
+          "vt.default_grn=${makeColor 1 cfg.colors}"
+          "vt.default_blu=${makeColor 2 cfg.colors}"
+        ];
+      })
 
       (mkIf cfg.earlySetup {
         boot.initrd.extraUtilsCommands = ''
