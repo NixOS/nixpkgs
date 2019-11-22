@@ -1,5 +1,5 @@
 {stdenv}:
-{version ? "10.1", xcodeBaseDir ? "/Applications/Xcode.app"}:
+{version ? "11.1", xcodeBaseDir ? "/Applications/Xcode.app"}:
 
 assert stdenv.isDarwin;
 

@@ -3,8 +3,17 @@
 { stdenv, python3, fetchFromGitHub }:
 
 let
-  python = python3;
-
+  python = python3.override {
+    packageOverrides = self: super: {
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "2.6.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
+        };
+      });
+    };
+  };
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
   inherit version;

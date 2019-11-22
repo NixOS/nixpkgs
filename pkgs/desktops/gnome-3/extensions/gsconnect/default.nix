@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, substituteAll, python3, openssl, folks, gsound
 , meson, ninja, libxml2, pkgconfig, gobject-introspection, wrapGAppsHook
-, glib, gtk3, at-spi2-core, upower, openssh, gnome3 }:
+, glib, gtk3, at-spi2-core, upower, openssh, gnome3, gjs }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-gsconnect";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gsound
     upower
     gnome3.caribou
-    gnome3.gjs # for running daemon
+    gjs # for running daemon
     gnome3.evolution-data-server # for libebook-contacts typelib
   ];
 

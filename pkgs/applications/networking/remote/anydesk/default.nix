@@ -5,8 +5,8 @@
 
 let
   sha256 = {
-    x86_64-linux = "0mixw2sk7li1hjagibwzdgbfnrih5acricczqmfks1gsinjqrn82";
-    i386-linux   = "1gshd4vm8ysn636r1z44vmzdzrgybsmj8ma4zdabvs9jsbm2da3c";
+    x86_64-linux = "1zdbgbbdavaqx4y02sw9y7i1r9wkxqccrqkn0sp5847a26cpk9k9";
+    i386-linux   = "11qwyxvy3c3n7hvksmlsfl9vvqaqkv3kwbk5rgjyy7vy8vn4kjmk";
   }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   arch = {
@@ -28,7 +28,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "5.1.2";
+  version = "5.4.1";
 
   src = fetchurl {
     url = "https://download.anydesk.com/linux/${pname}-${version}-${arch}.tar.gz";
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
     gnome2.gtkglext libGLU_combined freetype fontconfig
     pangox_compat polkit polkit_gnome pulseaudio
   ] ++ (with xorg; [
-    libxcb libX11 libXdamage libXext libXfixes libXi libXmu
+    libxcb libxkbfile libX11 libXdamage libXext libXfixes libXi libXmu
     libXrandr libXtst libXt libICE libSM libXrender
   ]);
 

@@ -90,16 +90,17 @@ while [ "$#" -gt 0 ]; do
         targetHost="$1"
         shift 1
         ;;
+      --use-remote-sudo)
+        # note the trailing space
+        maybeSudo="sudo "
+        shift 1
+        ;;
       *)
         echo "$0: unknown option \`$i'"
         exit 1
         ;;
     esac
 done
-
-if [ -n "$SUDO_USER" ]; then
-    maybeSudo="sudo "
-fi
 
 if [ -z "$buildHost" -a -n "$targetHost" ]; then
     buildHost="$targetHost"

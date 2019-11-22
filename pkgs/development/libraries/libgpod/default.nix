@@ -1,11 +1,11 @@
 {stdenv, lib, fetchurl, gettext, perlPackages, intltool, pkgconfig, glib,
   libxml2, sqlite, zlib, sg3_utils, gdk-pixbuf, taglib,
-  libimobiledevice, pythonPackages, mutagen,
+  libimobiledevice, python3Packages, mutagen,
   monoSupport ? false, mono, gtk-sharp-2_0
 }:
 
 let
-  inherit (pythonPackages) python pygobject2;
+  inherit (python3Packages) python pygobject2;
 in stdenv.mkDerivation rec {
   name = "libgpod-0.8.3";
   src = fetchurl {

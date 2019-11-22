@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "libwhereami";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
-    sha256 = "0yq6m4kh06idp3l8cp7kswn5k8vcaip1zqhypbhszybqa0afb5az";
+    sha256 = "16xjb6zp60ma76aa3kq3q8i8zn0n61gf39fny12cny8nggwjpbww";
     rev = version;
     repo = "libwhereami";
     owner = "puppetlabs";

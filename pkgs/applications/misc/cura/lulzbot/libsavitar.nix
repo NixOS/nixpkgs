@@ -3,13 +3,13 @@
 buildPythonPackage {
   pname = "libsavitar-lulzbot";
   name = "libsavitar-lulzbot";
-  version = "3.6.18";
+  version = "3.6.21";
   format = "other";
 
   src = fetchgit {
     url = https://code.alephobjects.com/source/savitar.git;
-    rev = "988a26d35b2a1d042f8c38938ccda77ab146af7d";
-    sha256 = "146agw3a92azkgs5ahmn2rrck4an78m2r3pcss6ihmb60lx165k7";
+    rev = "ee8ada42c55f54727ce4d275c294ba426d3d8234";
+    sha256 = "1wm5ii3cmni8dk3c65kw4wglpypkdsfpgd480d3hc1r5bqpq0d6j";
   };
 
   postPatch = ''

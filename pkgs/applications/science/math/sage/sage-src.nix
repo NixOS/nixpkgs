@@ -107,6 +107,17 @@ stdenv.mkDerivation rec {
 
     # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
     ./patches/ignore-cmp-deprecation.patch
+
+    # Werkzeug has deprecated ImmutableDict, but it is still used in legacy
+    # sagenb. That's no big issue since sagenb will be removed soon anyways.
+    ./patches/ignore-werkzeug-immutable-dict-deprecation.patch
+
+    # threejs r109 (#28560)
+    (fetchpatch {
+      name = "threejs-r109.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=fcc11d6effa39f375bc5f4ea5831fb7a2f2767da";
+      sha256 = "0hnmc8ld3bblks0hcjvjjaydkgwdr1cs3dbl2ys4gfq964pjgqwc";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

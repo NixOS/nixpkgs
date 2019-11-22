@@ -1,9 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
+{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
   txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, parameterized,
-  git, glibcLocales }:
+  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
+  parameterized, git, openssh, glibcLocales }:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -29,7 +29,7 @@ let
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "e4e6b2861c4f29ed5d84ca497ca7053ae1cc9b9a5387389c457ff9f7e651bf19";
+      sha256 = "06dza7kggybz8nf3i1skkadwrq9s0nkpqjfahifysaag3j3b5rp4";
     };
 
     propagatedBuildInputs = [
@@ -63,8 +63,10 @@ let
       flake8
       buildbot-worker
       buildbot-pkg
+      buildbot-plugins.www
       parameterized
       git
+      openssh
       glibcLocales
     ];
 
@@ -72,6 +74,13 @@ let
       # This patch disables the test that tries to read /etc/os-release which
       # is not accessible in sandboxed builds.
       ./skip_test_linux_distro.patch
+      # Work around https://github.com/glyph/automat/issues/117
+      (fetchpatch {
+        url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/buildbot-automat-117.diff?h=packages/buildbot&id=7904292340f98578adfe783a09e9eb4c5b1d4632";
+        name = "buildbot-automat-117.diff";
+        stripLen = 1;
+        sha256 = "0rng6f8nvghkihajz9m925rdp9q3c395bj4wc7r2s1minv613hba";
+      })
     ];
 
     postPatch = ''
@@ -93,7 +102,7 @@ let
     };
 
     meta = with lib; {
-      homepage = http://buildbot.net/;
+      homepage = "https://buildbot.net/";
       description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
       maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;

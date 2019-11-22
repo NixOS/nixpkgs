@@ -75,7 +75,7 @@ in
 
         Note that this configuration will only be successful when a display manager
         for which the <option>services.xserver.displayManager.setupCommands</option>
-        option is supported is used; notably, SLiM is not supported.
+        option is supported is used.
       '';
     };
 

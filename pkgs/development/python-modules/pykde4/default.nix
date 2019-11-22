@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   pname = "pykde4";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${version}/src/${pname}-${version}-${version}.tar.xz";
+    url = "mirror://kde/stable/${version}/src/${pname}-${version}.tar.xz";
     sha256 = "1z40gnkyjlv6ds3cmpzvv99394rhmydr6rxx7qj33m83xnsxgfbz";
   };
 

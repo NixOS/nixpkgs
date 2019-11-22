@@ -128,7 +128,7 @@
       tcpcryptd = 93; # tcpcryptd uses a hard-coded uid. We patch it in Nixpkgs to match this choice.
       firebird = 95;
       #keys = 96; # unused
-      haproxy = 97;
+      #haproxy = 97; # DynamicUser as of 2019-11-08
       mongodb = 98;
       openldap = 99;
       #users = 100; # unused
@@ -443,7 +443,7 @@
       #tcpcryptd = 93; # unused
       firebird = 95;
       keys = 96;
-      haproxy = 97;
+      #haproxy = 97; # DynamicUser as of 2019-11-08
       #mongodb = 98; # unused
       openldap = 99;
       munin = 102;

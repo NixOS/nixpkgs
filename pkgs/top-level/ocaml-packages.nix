@@ -422,10 +422,6 @@ let
 
     lwt2 = callPackage ../development/ocaml-modules/lwt/legacy.nix { };
 
-    lwt3 = if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/lwt/3.x.nix { }
-      else throw "lwt3 is not available for OCaml ${ocaml.version}";
-
     lwt4 = callPackage ../development/ocaml-modules/lwt/4.x.nix { };
 
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt4 else lwt2;

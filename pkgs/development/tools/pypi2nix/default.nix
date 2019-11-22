@@ -4,12 +4,13 @@ with python3;
 
 pkgs.buildPythonApplication rec {
   pname = "pypi2nix";
-  version = "2.0.0";
+  version = "2.0.1";
   src = pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0w9z07kdnfs96230jag8xgz4wx337bb3q3bvqxn3r31x8fsmz6rr";
+    sha256 = "138fwd3cznkfa6w3a5s4fbflh88q26hk4grlmq73dcbk06ykf84k";
   };
   checkInputs = with pkgs; [ pytest ];
+  buildInputs = with pkgs; [ setuptools_scm ];
   propagatedBuildInputs = with pkgs; [
     attrs
     click

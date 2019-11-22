@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0k2bq7l0m7qfpy1mkb3qvsinqd8n4lp0vwz3x64wlgfn2qipm1fn";
+    sha256 = "1dwq9rqswgnnglhrgcpvrp6shn3pb4x8f8f23x84sqakb430idp7";
   };
 
   passthru = {
@@ -50,8 +50,6 @@ stdenv.mkDerivation rec {
     switchboard
     zeitgeist
   ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   patches = [
     ./hardcode-gsettings.patch

@@ -79,6 +79,7 @@ rec {
         else if final.isAarch64 then "arm64"
         else if final.isx86_32 then "x86"
         else if final.isx86_64 then "ia64"
+        else if final.isMips then "mips"
         else final.parsed.cpu.name;
 
       qemuArch =

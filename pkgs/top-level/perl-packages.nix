@@ -5,7 +5,7 @@
    for each package in a separate file: the call to the function would
    be almost as much code as the function itself. */
 
-{config, pkgs, fetchurl, fetchpatch, stdenv, perl, overrides, buildPerl, shortenPerlShebang}:
+{config, pkgs, fetchurl, fetchpatch, fetchFromGitHub, stdenv, perl, overrides, buildPerl, shortenPerlShebang}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
 assert stdenv.lib.versionAtLeast perl.version "5.28.2";
@@ -207,6 +207,27 @@ let
        description = "Lets your class/object say it works like something else";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
+  };
+
+  AlienSDL = buildPerlModule {
+    pname = "Alien-SDL";
+    version = "1.446";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FROGGS/Alien-SDL-1.446.tar.gz";
+      sha256 = "c9aa2c9dc3c63d89773c7d7203f2a46d1b924d0c72d9f801af147a3dc8bc512a";
+    };
+    patches = [ ../development/perl-modules/alien-sdl.patch ];
+
+    installPhase = "./Build install --prefix $out";
+
+    SDL_INST_DIR = pkgs.SDL.dev;
+    buildInputs = [ ArchiveExtract ArchiveZip TextPatch pkgs.SDL ];
+    propagatedBuildInputs = [ CaptureTiny FileShareDir FileWhich ];
+
+    meta = {
+      description = "Get, Build and Use SDL libraries";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   AlienTidyp = buildPerlModule {
@@ -1154,6 +1175,21 @@ let
     };
   };
 
+  CacheKyotoTycoon = buildPerlModule {
+    pname = "Cache-KyotoTycoon";
+    version = "0.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Cache-KyotoTycoon-0.16.tar.gz";
+      sha256 = "0z4lnc3jfqx8rykm998q2jy5wkhb8p5pir80g9lqpi4lb0ilic6c";
+    };
+    propagatedBuildInputs = [ Furl URI ];
+    buildInputs = [ FileWhich TestTCP TestRequires TestSharedFork ];
+    meta = {
+      description = "KyotoTycoon client library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CacheMemcached = buildPerlPackage {
     pname = "Cache-Memcached";
     version = "1.30";
@@ -1923,6 +1959,20 @@ let
     propagatedBuildInputs = [ CatalystRuntime Starman ];
     meta = {
       description = "Replace the development server with Starman";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CDB_File = buildPerlPackage {
+    pname = "CDB_File";
+    version = "0.99";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/CDB_File-0.99.tar.gz";
+      sha256 = "1c32b30131871e8a7b23f47d8f65d9cdeb87069fa4c221781a03416496f91f16";
+    };
+    meta = {
+      homepage = "http://github.com/toddr/CDB_File";
+      description = "Perl extension for access to cdb databases";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3370,6 +3420,19 @@ let
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
   };
 
+  CryptECB = buildPerlPackage {
+    pname = "Crypt-ECB";
+    version = "2.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AP/APPEL/Crypt-ECB-2.21.tar.gz";
+      sha256 = "890f8b3040220ea705ee5ca4f9bd23435a1779bc3ffa75533736e6c9c21d1015";
+    };
+    meta = with stdenv.lib; {
+      description = "Use block ciphers using ECB mode";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CryptEksblowfish = buildPerlModule {
     pname = "Crypt-Eksblowfish";
     version = "0.009";
@@ -3578,6 +3641,23 @@ let
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
+  };
+
+  CryptOpenSSLX509 = buildPerlPackage rec {
+    pname = "Crypt-OpenSSL-X509";
+    version = "1.813";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.813.tar.gz";
+      sha256 = "684bd888d2ed4c748f8f6dd8e87c14afa2974b12ee01faa082ad9cfa1e321e62";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    meta = {
+      homepage = "https://github.com/dsully/perl-crypt-openssl-x509";
+      description = "Perl extension to OpenSSL's X509 API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   CryptPBKDF2 = buildPerlPackage {
@@ -7288,6 +7368,19 @@ let
     buildInputs = [ TestPod ];
   };
 
+  FindLib = buildPerlPackage {
+    pname = "Find-Lib";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YA/YANNK/Find-Lib-1.04.tar.gz";
+      sha256 = "0lg88v0sqfpq4d3jwvk6c9blqnpxbz8f4s22zr3b1qb160g94wqx";
+    };
+    meta = with stdenv.lib; {
+      description = "Helper to smartly find libs to use in the filesystem tree";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FontAFM = buildPerlPackage {
     pname = "Font-AFM";
     version = "1.20";
@@ -7349,6 +7442,21 @@ let
       sha256 = "0h8gakd6b9770n2xhld1hhqghdar3hrq2js4mgiwxy86j4r0hpiw";
     };
     doCheck = false;
+  };
+
+  Furl = buildPerlModule {
+    pname = "Furl";
+    version = "3.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Furl-3.13.tar.gz";
+      sha256 = "1wxa2v9yjzvnzp62p1jvcx8x61z5qvlvzyah853vvaywpjxwyyl8";
+    };
+    propagatedBuildInputs = [ HTTPParserXS ModuleBuildTiny ClassAccessorLite ];
+    buildInputs = [ HTTPBody HTTPProxy NetIDNEncode Plack PlackMiddlewareDeflater Starlet TestRequires TestTCP TestSharedFork ];
+    meta = {
+      description = "Lightning-fast URL fetcher";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   GamesSolitaireVerify = buildPerlModule {
@@ -10193,6 +10301,21 @@ let
     buildInputs = [ IPCRun3 TestFatal TestNeeds ];
   };
 
+  LogDispatchFileRotate = buildPerlPackage {
+    pname = "Log-Dispatch-FileRotate";
+    version = "1.36";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Log-Dispatch-FileRotate-1.36.tar.gz";
+      sha256 = "0vlmi17p7fky3x58rs7r5mdxi6l5jla8zhlb55kvssxc1w5v2b27";
+    };
+    propagatedBuildInputs = [ DateManip LogDispatch PathTiny ];
+    meta = {
+      description = "Log to Files that Archive/Rotate Themselves";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+    buildInputs = [ TestFatal TestNeeds TestWarn ];
+  };
+
   LogHandler = buildPerlModule {
     pname = "Log-Handler";
     version = "0.88";
@@ -10299,6 +10422,24 @@ let
     meta = {
       homepage = https://github.com/rjbs/Log-Dispatchouli;
       description = "A simple wrapper around Log::Dispatch";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  LogJournald = buildPerlModule rec {
+    pname = "Log-Journald";
+    version = "0.30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/Log-Journald-${version}.tar.gz";
+      sha256 = "55992cf9a1e1fb833f428300525bfa7cf7ed46b83ec414f82a091789b37d08a3";
+    };
+    buildInputs = [ ModuleBuild pkgs.pkgconfig pkgs.systemd ];
+    postPatch = ''
+      substituteInPlace Build.PL \
+        --replace "libsystemd-journal" "libsystemd"
+    '';
+    meta = {
+      description = "Send messages to a systemd journal";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11676,12 +11817,28 @@ let
     };
   };
 
+  MojoRedis = buildPerlPackage {
+    pname = "Mojo-Redis";
+    version = "3.24";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojo-Redis-3.24.tar.gz";
+      sha256 = "ca9ca1026bf7d658f23860d54cbc79605e4e5a8b1cc8e7b053b36a218cef566b";
+    };
+    propagatedBuildInputs = [ Mojolicious ProtocolRedisFaster ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/mojo-redis";
+      description = "Redis driver based on Mojo::IOLoop";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MojoSQLite = buildPerlModule {
     pname = "Mojo-SQLite";
-    version = "3.002";
+    version = "3.003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.002.tar.gz";
-      sha256 = "16dn0p14i6r4c8aspvkp7rfry3zy7kr2ffcmncj0pqygk62miinp";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.003.tar.gz";
+      sha256 = "d96c00dcf45e2becc8e8181df074853d42616f2a660703455d0e0a2741478092";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstract URIdb ];
@@ -14605,6 +14762,37 @@ let
     propagatedBuildInputs = [ IPCSignal ];
   };
 
+  ProtocolRedis = buildPerlPackage {
+    pname = "Protocol-Redis";
+    version = "1.0010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/U/UN/UNDEF/Protocol-Redis-1.0010.tar.gz";
+      sha256 = "e787236e46b1f0738a98113ea0dfbee4c695723bb37dce8d6936fd9a519e5343";
+    };
+    meta = {
+      homepage = "https://github.com/und3f/protocol-redis";
+      description = "Redis protocol parser/encoder with asynchronous capabilities";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  ProtocolRedisFaster = buildPerlPackage {
+    pname = "Protocol-Redis-Faster";
+    version = "0.003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Protocol-Redis-Faster-0.003.tar.gz";
+      sha256 = "6b9afb3de94ec1ccd7db4f9e6a2eaba254a57790301c17bcb13bb3edfe1850b7";
+    };
+    propagatedBuildInputs = [ ProtocolRedis ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Protocol-Redis-Faster";
+      description = "Optimized pure-perl Redis protocol parser/encoder";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ProtocolWebSocket = buildPerlModule {
     pname = "Protocol-WebSocket";
     version = "0.26";
@@ -15412,6 +15600,24 @@ let
     meta = {
       description = "Act on upper scopes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  SDL = buildPerlModule {
+    pname = "SDL";
+    version = "2.548";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FROGGS/SDL-2.548.tar.gz";
+      sha256 = "252a192bfa9c2070a4883707d139c3a45d9c4518ccd66a1e699b5b7959bd4fb5";
+    };
+    perlPreHook = "export LD=$CC";
+    preCheck = "rm t/core_audiospec.t";
+    buildInputs = [ AlienSDL CaptureTiny TestDeep TestDifferences TestException TestMost TestWarn ]
+      ++ (with pkgs; [ SDL SDL_gfx SDL_mixer SDL_image SDL_ttf SDL_Pango SDL_net ] );
+    propagatedBuildInputs = [ FileShareDir TieSimple ];
+    meta = {
+      description = "SDL bindings to Perl";
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 
@@ -16481,6 +16687,18 @@ let
       url = mirror://cpan/authors/id/M/MZ/MZSANFORD/Sys-CPU-0.61.tar.gz;
       sha256 = "1r6976bs86j7zp51m5vh42xlyah951jgdlkimv202413kjvqc2i5";
     };
+    patches = [
+      # Bug #95400 for Sys-CPU: Tests fail on ARM and AArch64 Linux
+      # https://rt.cpan.org/Public/Bug/Display.html?id=95400
+      (fetchpatch {
+        url = "https://rt.cpan.org/Ticket/Attachment/1359669/721669/0001-Add-support-for-cpu_type-on-ARM-and-AArch64-Linux-pl.patch";
+        sha256 = "0rmazzdy34znksdhh8drc83lk754slhjgvnk4kk27z3kw5gm10m0";
+      })
+      (fetchpatch {
+        url = "https://rt.cpan.org/Ticket/Attachment/1388036/737125/0002-cpu_clock-can-be-undefined-on-an-ARM.patch";
+        sha256 = "0z3wqfahc9av7y34aqp6biq3sf8v8q4yynx7bv290vds50dsjb4w";
+      })
+    ];
     buildInputs = stdenv.lib.optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
     doCheck = !stdenv.isAarch64;
   };
@@ -18667,6 +18885,20 @@ let
     };
   };
 
+  TextPatch = buildPerlPackage {
+    pname = "Text-Patch";
+    version = "1.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CA/CADE/Text-Patch-1.8.tar.gz";
+      sha256 = "eaf18e61ba6a3e143846a7cc66f08ce58a0c4fbda92acb31aede25cb3b5c3dcc";
+    };
+    propagatedBuildInputs = [ TextDiff ];
+    meta = {
+      description = "Patches text with given patch";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   TextPDF = buildPerlPackage {
     pname = "Text-PDF";
     version = "0.31";
@@ -19122,6 +19354,19 @@ let
     };
   };
 
+  TieSimple = buildPerlPackage {
+    pname = "Tie-Simple";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HANENKAMP/Tie-Simple-1.04.tar.gz";
+      sha256 = "29e9e2133951046c78f205f1b3e8df62c90e114f0e08fa06b817766a0f808b12";
+    };
+    meta = {
+      description = "Variable ties made much easier: much, much, much easier..";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TieSub = buildPerlPackage {
      pname = "Tie-Sub";
      version = "1.001";
@@ -19231,6 +19476,41 @@ let
       description = "A Perl module to deal with time periods";
       license = stdenv.lib.licenses.gpl1;
       maintainers = [ maintainers.winpat ];
+    };
+  };
+
+  Tirex = buildPerlPackage rec {
+    pname = "Tirex";
+    version = "0.6.1";
+
+    src = fetchFromGitHub {
+      owner  = "openstreetmap";
+      repo   = "tirex";
+      rev    = "v${version}";
+      sha256 = "0dskf50qm6yh3rx6j2nqydr1if71x6ik85hxsa2r9qgldcby2rgh";
+    };
+
+    buildInputs = [
+      GD
+      IPCShareLite
+      JSON
+      LWP
+      pkgs.cairo
+      pkgs.mapnik
+      pkgs.zlib
+    ];
+
+    installPhase = ''
+      make install DESTDIR=$out INSTALLOPTS=""
+      mv $out/$out/lib $out/$out/share $out
+      rmdir $out/$out $out/nix/store $out/nix
+    '';
+
+    meta = {
+      description = "Tools for running a map tile server";
+      homepage = https://github.com/openstreetmap/tirex;
+      maintainers = with maintainers; [ jglukasik ];
+      license = with stdenv.lib.licenses; [ gpl2 ];
     };
   };
 

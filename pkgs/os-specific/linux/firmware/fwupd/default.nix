@@ -262,7 +262,7 @@ stdenv.mkDerivation rec {
     ];
 
     tests = {
-      installedTests = nixosTests.fwupd;
+      installedTests = nixosTests.installed-tests.fwupd;
     };
   };
 

@@ -3,12 +3,12 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "dcmtk";
-  version = "3.6.4";
+  version = "3.6.5";
   src = fetchFromGitHub {
     owner = "DCMTK";
     repo = pname;
     rev = "DCMTK-${version}";
-    sha256 = "0fbx35zax8n4gayaac5bankqwzg2y2adggykbbf8lpd773jfxsp6";
+    sha256 = "0i38k1s0wdpbxxpiwsx490mszhxi45wp0z67iksvh60wfkaw54na";
   };
 
   nativeBuildInputs = [ cmake ];

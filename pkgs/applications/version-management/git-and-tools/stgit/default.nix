@@ -2,7 +2,7 @@
 
 let
   name = "stgit-${version}";
-  version = "0.20";
+  version = "0.21";
 in
 stdenv.mkDerivation {
   inherit name;
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "ctmarinas";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "0zfrs9f6a84z5gr3k6y81h8jyar7h3q3z9p13cbrq9slljg5r6iw";
+    sha256 = "16gwdad18rc9bivyzrjccp83iccmqr45fp2zawycmrfp2ancffc7";
   };
 
   buildInputs = [ python2 git ];

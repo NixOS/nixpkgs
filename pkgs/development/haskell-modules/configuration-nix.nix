@@ -297,10 +297,22 @@ self: super: builtins.intersectAttrs super {
     );
 
   llvm-hs =
-      let dontCheckDarwin = if pkgs.stdenv.isDarwin
-                            then dontCheck
-                            else pkgs.lib.id;
-      in dontCheckDarwin (super.llvm-hs.override { llvm-config = pkgs.llvm_8; });
+    let llvmHsWithLlvm8 = super.llvm-hs.override { llvm-config = pkgs.llvm_8; };
+    in
+    if pkgs.stdenv.isDarwin
+    then
+      overrideCabal llvmHsWithLlvm8 (oldAttrs: {
+        # One test fails on darwin.
+        doCheck = false;
+        # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
+        # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
+        # when called from GHC, probably because clang is version 7, but we are
+        # using LLVM8.
+        preCompileBuildDriver = oldAttrs.preCompileBuildDriver or "" + ''
+          substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
+        '';
+      })
+    else llvmHsWithLlvm8;
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -517,9 +529,9 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
-  # https://github.com/haskell-servant/servant/pull/1128
-  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.15" then
-    appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch
+  # https://github.com/haskell-servant/servant/pull/1238
+  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.16" then
+    appendPatch super.servant-client-core ./patches/servant-client-core-redact-auth-header.patch
   else
     super.servant-client-core;
 
@@ -624,5 +636,4 @@ self: super: builtins.intersectAttrs super {
   # need it during the build itself, too.
   cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.buildHaskellPackages.gtk2hs-buildtools) ["fortify"];
-
 }

@@ -28,7 +28,7 @@ buildPythonPackage rec{
     description = "Using Trezor as hardware SSH agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ np mmahut ];
+    maintainers = with maintainers; [ hkjn np mmahut ];
   };
 
 }

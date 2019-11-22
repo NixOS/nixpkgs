@@ -49,6 +49,12 @@
        zfs as soon as any zfs mountpoint is configured in <varname>fileSystems</varname>.
      </para>
    </listitem>
+   <listitem>
+    <para>
+      <command>nixos-option</command> has been rewritten in C++, speeding it up, improving correctness,
+      and adding a <option>--all</option> option which prints all options and their values.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -65,7 +71,11 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+    The kubernetes kube-proxy now supports a new hostname configuration
+    <literal>services.kubernetes.proxy.hostname</literal> which has to
+    be set if the hostname of the node should be non default.
+    </para>
    </listitem>
   </itemizedlist>
 
@@ -124,6 +134,13 @@
       but direct users to configure the per-device
       <link linkend="opt-networking.interfaces">networking.interfaces.&lt;name&gt;.…</link> options.
     </para>
+   </listitem>
+   <listitem>
+    <para>
+     The SLIM Display Manager has been removed, as it has been unmaintained since 2013.
+     Consider migrating to a different display manager such as LightDM (current default in NixOS),
+     SDDM, GDM, or using the startx module which uses Xinitrc.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
