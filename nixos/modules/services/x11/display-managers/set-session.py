@@ -78,7 +78,8 @@ def main():
                 )
                 user.set_x_session(session)
             else:
-                raise Exception(f"Couldn't figure out session type for {session_file}")
+                logging.error(f"Couldn't figure out session type for {session_file}")
+                sys.exit(1)
 
 
 if __name__ == "__main__":
