@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
       '';
       license = licenses.mit;
       maintainers = with maintainers; [ afldcr filalex77 ];
-      platforms = platforms.unix;
+      platforms = platforms.linux;
     };
 
     buildInputs = [
