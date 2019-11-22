@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 14.14
+  # LTS Haskell 14.16
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -55,7 +55,7 @@ default-package-overrides:
   - adjunctions ==4.4
   - adler32 ==0.1.2.0
   - advent-of-code-api ==0.1.2.3
-  - aeson ==1.4.5.0
+  - aeson ==1.4.6.0
   - aeson-attoparsec ==0.0.0
   - aeson-better-errors ==0.9.1.0
   - aeson-casing ==0.2.0.0
@@ -120,7 +120,7 @@ default-package-overrides:
   - async-timer ==0.2.0.0
   - atom-basic ==0.2.5
   - atomic-primops ==0.8.3
-  - atomic-write ==0.2.0.6
+  - atomic-write ==0.2.0.7
   - attoparsec ==0.13.2.3
   - attoparsec-base64 ==0.0.0
   - attoparsec-binary ==0.2
@@ -131,7 +131,7 @@ default-package-overrides:
   - attoparsec-uri ==0.0.7
   - audacity ==0.0.2
   - aur ==6.2.0.1
-  - authenticate ==1.3.4
+  - authenticate ==1.3.5
   - authenticate-oauth ==1.6.0.1
   - auto ==0.4.3.1
   - autoexporter ==1.1.15
@@ -142,7 +142,7 @@ default-package-overrides:
   - avro ==0.4.5.4
   - avwx ==0.3.0.2
   - aws-cloudfront-signed-cookies ==0.2.0.1
-  - aws-lambda-haskell-runtime ==2.0.1
+  - aws-lambda-haskell-runtime ==2.0.2
   - backprop ==0.2.6.3
   - bank-holidays-england ==0.2.0.2
   - barbies ==1.1.3.0
@@ -279,7 +279,7 @@ default-package-overrides:
   - casing ==0.1.4.1
   - cassava ==0.5.2.0
   - cassava-conduit ==0.5.1
-  - cassava-megaparsec ==2.0.0
+  - cassava-megaparsec ==2.0.1
   - cassava-records ==0.1.0.4
   - cast ==0.1.0.2
   - caster ==0.0.3.0
@@ -311,7 +311,7 @@ default-package-overrides:
   - chiphunk ==0.1.2.1
   - choice ==0.2.2
   - chronologique ==0.3.1.1
-  - chronos ==1.0.8
+  - chronos ==1.0.9
   - chronos-bench ==0.2.0.2
   - chunked-data ==0.3.1
   - cipher-aes ==0.2.11
@@ -326,7 +326,7 @@ default-package-overrides:
   - classy-prelude ==1.5.0
   - classy-prelude-conduit ==1.5.0
   - classy-prelude-yesod ==1.5.0
-  - clay ==0.13.1
+  - clay ==0.13.2
   - clientsession ==0.9.1.2
   - Clipboard ==2.3.2.0
   - clock ==0.8
@@ -336,7 +336,7 @@ default-package-overrides:
   - clr-marshal ==0.2.0.0
   - clumpiness ==0.17.0.2
   - cmark ==0.6
-  - cmark-gfm ==0.2.0
+  - cmark-gfm ==0.2.1
   - cmdargs ==0.10.20
   - codec ==0.2.1
   - codec-beam ==0.2.0
@@ -388,7 +388,7 @@ default-package-overrides:
   - connection ==0.3.1
   - connection-pool ==0.2.2
   - console-style ==0.0.2.1
-  - constraint ==0.1.3.0
+  - constraint ==0.1.4.0
   - constraints ==0.10.1
   - contravariant ==1.5.2
   - contravariant-extras ==0.3.5
@@ -397,9 +397,9 @@ default-package-overrides:
   - control-monad-free ==0.6.2
   - control-monad-omega ==0.3.2
   - convertible ==1.1.1.0
-  - cookie ==0.4.4
-  - core-data ==0.2.1.0
-  - core-text ==0.2.2.1
+  - cookie ==0.4.5
+  - core-data ==0.2.1.4
+  - core-text ==0.2.2.4
   - countable ==1.0
   - country ==0.1.6
   - courier ==0.1.1.5
@@ -408,7 +408,7 @@ default-package-overrides:
   - cprng-aes ==0.6.1
   - cpu ==0.1.2
   - cpuinfo ==0.1.0.1
-  - cql ==4.0.1
+  - cql ==4.0.2
   - cql-io ==1.1.1
   - crackNum ==2.3
   - crc32c ==0.0.0
@@ -519,14 +519,14 @@ default-package-overrides:
   - dhall-bash ==1.0.21
   - dhall-json ==1.3.0
   - diagrams ==1.4
-  - diagrams-contrib ==1.4.3
+  - diagrams-contrib ==1.4.4
   - diagrams-core ==1.4.2
   - diagrams-lib ==1.4.3
   - diagrams-postscript ==1.4.1
   - diagrams-rasterific ==1.4.1.1
   - diagrams-solve ==0.1.1
   - diagrams-svg ==1.4.2
-  - di-core ==1.0.3
+  - di-core ==1.0.4
   - dictionary-sharing ==0.1.0.0
   - Diff ==0.3.4
   - digest ==0.0.1.2
@@ -544,7 +544,7 @@ default-package-overrides:
   - dlist ==0.8.0.7
   - dlist-instances ==0.1.1.1
   - dlist-nonempty ==0.1.1
-  - dns ==4.0.0
+  - dns ==4.0.1
   - dockerfile ==0.2.0
   - docopt ==0.7.0.5
   - doctemplates ==0.2.2.1
@@ -555,7 +555,7 @@ default-package-overrides:
   - do-list ==1.0.1
   - dom-parser ==3.1.0
   - do-notation ==0.1.0.2
-  - dotenv ==0.8.0.2
+  - dotenv ==0.8.0.4
   - dotgen ==0.4.2
   - dotnet-timespan ==0.0.1.0
   - double-conversion ==2.0.2.0
@@ -664,7 +664,7 @@ default-package-overrides:
   - filecache ==0.4.1
   - file-embed ==0.0.11
   - file-embed-lzma ==0
-  - filelock ==0.1.1.3
+  - filelock ==0.1.1.4
   - filemanip ==0.3.6.3
   - file-modules ==0.1.2.4
   - filepattern ==0.1.1
@@ -734,7 +734,7 @@ default-package-overrides:
   - gauge ==0.2.5
   - gc ==0.0.3
   - gd ==3000.7.3
-  - gdp ==0.0.0.2
+  - gdp ==0.0.3.0
   - general-games ==1.1.1
   - generic-arbitrary ==0.1.0
   - generic-data ==0.7.0.0
@@ -847,7 +847,7 @@ default-package-overrides:
   - hackage-db ==2.0.1
   - hackage-security ==0.5.3.0
   - haddock-library ==1.7.0
-  - hadolint ==1.17.2
+  - hadolint ==1.17.3
   - half ==0.3
   - hamilton ==0.1.0.3
   - hamtsolo ==1.0.3
@@ -885,7 +885,7 @@ default-package-overrides:
   - haxl ==2.1.2.0
   - hbeanstalk ==0.2.4
   - HCodecs ==0.5.1
-  - hdaemonize ==0.5.5
+  - hdaemonize ==0.5.6
   - HDBC ==2.4.0.3
   - HDBC-mysql ==0.7.1.0
   - HDBC-session ==0.1.2.0
@@ -929,7 +929,7 @@ default-package-overrides:
   - hmpfr ==0.4.4
   - hoauth2 ==1.8.9
   - Hoed ==0.5.1
-  - hOpenPGP ==2.8
+  - hOpenPGP ==2.8.4
   - hopenpgp-tools ==0.21.3
   - hopfli ==0.2.2.1
   - hosc ==0.17
@@ -1007,7 +1007,7 @@ default-package-overrides:
   - htoml ==1.0.0.3
   - http2 ==1.6.5
   - HTTP ==4000.3.14
-  - http-api-data ==0.4.1
+  - http-api-data ==0.4.1.1
   - http-client ==0.6.4
   - http-client-tls ==0.3.5.3
   - http-common ==0.8.2.0
@@ -1047,7 +1047,7 @@ default-package-overrides:
   - hw-mquery ==0.2.0.2
   - hw-packed-vector ==0.0.0.3
   - hw-parser ==0.1.0.2
-  - hw-prim ==0.6.2.38
+  - hw-prim ==0.6.2.39
   - hw-rankselect ==0.13.0.0
   - hw-rankselect-base ==0.3.2.3
   - hw-simd ==0.1.1.5
@@ -1086,7 +1086,6 @@ default-package-overrides:
   - indents ==0.5.0.1
   - indexed ==0.1.3
   - indexed-list-literals ==0.2.1.2
-  - indexed-profunctors ==0.1
   - infer-license ==0.2.0
   - inflections ==0.4.0.4
   - influxdb ==1.7.1.1
@@ -1096,7 +1095,7 @@ default-package-overrides:
   - inline-c-cpp ==0.3.0.3
   - inline-r ==0.10.2
   - inliterate ==0.1.0
-  - insert-ordered-containers ==0.2.3
+  - insert-ordered-containers ==0.2.2
   - inspection-testing ==0.4.2.2
   - instance-control ==0.1.2.0
   - int-cast ==0.2.0.0
@@ -1141,7 +1140,7 @@ default-package-overrides:
   - ixset-typed ==0.4.0.1
   - ix-shapable ==0.1.0
   - jack ==0.7.1.4
-  - jose ==0.8.1.0
+  - jose ==0.8.2.0
   - jose-jwt ==0.8.0
   - js-dgtable ==0.5.2
   - js-flot ==0.8.3
@@ -1253,7 +1252,7 @@ default-package-overrides:
   - log-domain ==0.12
   - logfloat ==0.13.3.3
   - logger-thread ==0.1.0.2
-  - logging-effect ==1.3.7
+  - logging-effect ==1.3.8
   - logging-facade ==0.3.0
   - logging-facade-syslog ==1
   - logict ==0.7.0.2
@@ -1280,7 +1279,7 @@ default-package-overrides:
   - markdown-unlit ==0.5.0
   - markov-chain ==0.0.3.4
   - massiv ==0.4.3.0
-  - massiv-io ==0.1.7.0
+  - massiv-io ==0.1.9.0
   - massiv-test ==0.1.1
   - mathexpr ==0.3.0.0
   - math-functions ==0.3.3.0
@@ -1352,7 +1351,7 @@ default-package-overrides:
   - monad-logger ==0.3.30
   - monad-logger-json ==0.1.0.0
   - monad-logger-prefix ==0.1.11
-  - monad-logger-syslog ==0.1.4.0
+  - monad-logger-syslog ==0.1.5.0
   - monad-loops ==0.4.3
   - monad-memo ==0.5.1
   - monad-metrics ==0.2.1.4
@@ -1432,7 +1431,7 @@ default-package-overrides:
   - network-house ==0.1.0.2
   - network-info ==0.2.0.10
   - network-ip ==0.3.0.3
-  - network-messagepack-rpc ==0.1.1.4
+  - network-messagepack-rpc ==0.1.2.0
   - network-multicast ==0.3.2
   - network-simple ==0.4.5
   - network-simple-tls ==0.3.2
@@ -1448,10 +1447,9 @@ default-package-overrides:
   - nonce ==1.0.7
   - nondeterminism ==1.4
   - non-empty ==0.3.2
-  - nonempty-containers ==0.3.2.0
+  - nonempty-containers ==0.3.1.0
   - nonemptymap ==0.0.6.0
-  - non-empty-sequence ==0.2.0.2
-  - nonempty-vector ==0.2.0.1
+  - non-empty-sequence ==0.2.0.4
   - non-negative ==0.1.2
   - not-gloss ==0.7.7.0
   - no-value ==1.0.0.0
@@ -1461,7 +1459,7 @@ default-package-overrides:
   - numbers ==3000.2.0.2
   - numeric-extras ==0.1
   - numeric-prelude ==0.4.3.1
-  - numhask ==0.3.0.0
+  - numhask ==0.3.1
   - NumInstances ==1.4
   - numtype-dk ==0.5.0.2
   - nuxeo ==0.3.2
@@ -1495,8 +1493,6 @@ default-package-overrides:
   - open-witness ==0.4.0.1
   - operational ==0.2.3.5
   - operational-class ==0.3.0.0
-  - optics-core ==0.2
-  - optics-extra ==0.2
   - optional-args ==1.0.2
   - options ==1.2.1.1
   - optparse-applicative ==0.14.3.0
@@ -1548,7 +1544,7 @@ default-package-overrides:
   - pcf-font-embed ==0.1.2.0
   - pcg-random ==0.1.3.6
   - pcre-heavy ==1.0.0.2
-  - pcre-light ==0.4.0.4
+  - pcre-light ==0.4.1.0
   - pcre-utils ==0.1.8.1.1
   - pdfinfo ==1.5.4
   - peano ==0.1.0.1
@@ -1651,7 +1647,7 @@ default-package-overrides:
   - primitive ==0.6.4.0
   - primitive-extras ==0.7.1.1
   - prim-uniq ==0.1.0.1
-  - probability ==0.2.5.2
+  - probability ==0.2.6
   - process-extras ==0.7.4
   - product-isomorphic ==0.0.3.3
   - product-profunctors ==0.10.0.0
@@ -1909,7 +1905,7 @@ default-package-overrides:
   - sexpr-parser ==0.1.1.2
   - SHA ==1.6.4.4
   - shake-language-c ==0.12.0
-  - shakespeare ==2.0.22
+  - shakespeare ==2.0.23
   - shared-memory ==0.2.0.0
   - shell-conduit ==4.7.0
   - shell-escape ==0.2.0
@@ -1953,7 +1949,7 @@ default-package-overrides:
   - smallcheck-series ==0.6.1
   - smoothie ==0.4.2.9
   - snap-blaze ==0.2.1.5
-  - snap-core ==1.0.4.0
+  - snap-core ==1.0.4.1
   - snap-server ==1.1.1.1
   - snowflake ==0.1.1.1
   - soap ==0.2.3.6
@@ -2226,7 +2222,7 @@ default-package-overrides:
   - type-operators ==0.2.0.0
   - typerep-map ==0.3.2
   - type-spec ==0.4.0.0
-  - tz ==0.1.3.2
+  - tz ==0.1.3.3
   - tzdata ==0.1.20190325.0
   - ua-parser ==0.7.5.1
   - ucam-webauth ==0.1.0.0
@@ -2355,7 +2351,7 @@ default-package-overrides:
   - webex-teams-api ==0.2.0.0
   - webex-teams-conduit ==0.2.0.0
   - webex-teams-pipes ==0.2.0.0
-  - web-routes ==0.27.14.2
+  - web-routes ==0.27.14.3
   - web-routes-hsp ==0.24.6.1
   - web-routes-wai ==0.24.3.1
   - webrtc-vad ==0.1.0.3
@@ -2437,7 +2433,7 @@ default-package-overrides:
   - yesod-auth ==1.6.8
   - yesod-auth-hashdb ==1.7.1.1
   - yesod-auth-oauth2 ==0.6.1.2
-  - yesod-bin ==1.6.0.3
+  - yesod-bin ==1.6.0.4
   - yesod-core ==1.6.16.1
   - yesod-csp ==0.2.5.0
   - yesod-eventsource ==1.6.0
@@ -2452,7 +2448,7 @@ default-package-overrides:
   - yesod-recaptcha2 ==0.3.0
   - yesod-sitemap ==1.6.0
   - yesod-static ==1.6.0.1
-  - yesod-test ==1.6.7
+  - yesod-test ==1.6.8
   - yesod-text-markdown ==0.1.10
   - yesod-websockets ==0.3.0.2
   - yes-precure5-command ==5.5.3
