@@ -1,7 +1,7 @@
 # This performs a full 'end-to-end' test of a multi-node CockroachDB cluster
 # using the built-in 'cockroach workload' command, to simulate a semi-realistic
 # test load. It generally takes anywhere from 3-5 minutes to run and 1-2GB of
-# RAM (though each of 3 workers gets 1GB allocated)
+# RAM (though each of 3 workers gets 2GB allocated)
 #
 # CockroachDB requires synchronized system clocks within a small error window
 # (~500ms by default) on each node in order to maintain a multi-node cluster.
@@ -55,7 +55,7 @@ let
 
     {
       # Bank/TPC-C benchmarks take some memory to complete
-      virtualisation.memorySize = 1024;
+      virtualisation.memorySize = 2048;
 
       # Install the KVM PTP "Virtualized Clock" driver. This allows a /dev/ptp0
       # device to appear as a reference clock, synchronized to the host clock.
