@@ -1870,10 +1870,7 @@ in {
 
   cheetah = callPackage ../development/python-modules/cheetah { };
 
-  cherrypy = if isPy3k then
-    callPackage ../development/python-modules/cherrypy { }
-  else
-    callPackage ../development/python-modules/cherrypy/17.nix { };
+  cherrypy = callPackage ../development/python-modules/cherrypy { };
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
@@ -4449,7 +4446,7 @@ in {
 
   praw = if isPy3k then callPackage ../development/python-modules/praw { }
     else callPackage ../development/python-modules/praw/6.3.nix { };
-  
+
   prance = callPackage ../development/python-modules/prance { };
 
   prawcore = callPackage ../development/python-modules/prawcore { };
