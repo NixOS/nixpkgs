@@ -511,7 +511,8 @@ self: super: {
      else dontCheck super.tasty-discover);
 
   # generic-deriving bound is too tight
-  aeson = doJailbreak super.aeson;
+  # https://github.com/bos/aeson/issues/740#issue-527440688
+  aeson = doJailbreak (dontCheck super.aeson);
 
   # containers >=0.4 && <0.6 is too tight
   # https://github.com/RaphaelJ/friday/issues/34
@@ -1322,6 +1323,7 @@ self: super: {
   # missing dependencies: connection >=0.2.7 && <0.3
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL;
   # Needs the corresponding version of haskell-src-exts.
+
   haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
