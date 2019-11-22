@@ -142,26 +142,26 @@ self: super: {
   vector = dontCheck (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
   conduit-extra = if pkgs.stdenv.isDarwin
-    then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
-    else super.conduit-extra;
+                  then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
+                  else super.conduit-extra;
 
   # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
-    then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
-    else super.halive;
+           then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
+           else super.halive;
 
   barbly = addBuildDepend super.barbly pkgs.darwin.apple_sdk.frameworks.AppKit;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
   hakyll = if pkgs.stdenv.isDarwin
-    then dontCheck (overrideCabal super.hakyll (drv: {
-      testToolDepends = [];
-    }))
-    else super.hakyll;
+           then dontCheck (overrideCabal super.hakyll (drv: {
+             testToolDepends = [];
+           }))
+           else super.hakyll;
 
   double-conversion = if !pkgs.stdenv.isDarwin
-    then super.double-conversion
-    else addExtraLibrary super.double-conversion pkgs.libcxx;
+                      then super.double-conversion
+                      else addExtraLibrary super.double-conversion pkgs.libcxx;
 
   inline-c-cpp = overrideCabal super.inline-c-cpp (drv: {
     postPatch = (drv.postPatch or "") + ''
@@ -1047,7 +1047,7 @@ self: super: {
   dhall =
     generateOptparseApplicativeCompletion "dhall" (
       dontCheck super.dhall
-  );
+    );
   dhall_1_27_0 = dontCheck super.dhall_1_27_0;
 
 
@@ -1056,12 +1056,12 @@ self: super: {
   dhall-json =
     generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (
       dontCheck super.dhall-json
-  );
+    );
 
   dhall-nix =
     generateOptparseApplicativeCompletion "dhall-to-nix" (
       super.dhall-nix
-  );
+    );
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
@@ -1145,7 +1145,7 @@ self: super: {
   # Requires pg_ctl command during tests
   beam-postgres = overrideCabal super.beam-postgres (drv: {
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
-    });
+  });
 
   # Fix for base >= 4.11
   scat = overrideCabal super.scat (drv: {
@@ -1176,7 +1176,7 @@ self: super: {
         rev = "70918d80b6fd43aca7e4d00ba0d2ea116b666556";
         sha256 = "0bzp959qy74zmqq75f60rcixpjbvvyrb5a8zp2nyql3nm9vxzy5k";
       };
-  }) (with self; [temporary lattices Cabal_3_0_0_0]));
+    }) (with self; [temporary lattices Cabal_3_0_0_0]));
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
@@ -1309,5 +1309,11 @@ self: super: {
       })
     ];
   });
+
+  # missing dependencies: mime-mail >=0.4.7 && <0.5
+  HaskellNet = doJailbreak super.HaskellNet;
+
+  # missing dependencies: connection >=0.2.7 && <0.3
+  HaskellNet-SSL = doJailbreak super.HaskellNet-SSL;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
