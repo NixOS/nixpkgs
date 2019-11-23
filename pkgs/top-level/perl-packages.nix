@@ -16250,10 +16250,10 @@ let
 
   StringCRC32 = buildPerlPackage {
     pname = "String-CRC32";
-    version = "1.7";
+    version = "1.8";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEEJO/String-CRC32-1.7.tar.gz;
-      sha256 = "1j1bwbxcgxfbgw708rfrni3spwnnmnf717vq9s64nd63jmc4w5lg";
+      url = mirror://cpan/authors/id/L/LE/LEEJO/String-CRC32-1.8.tar.gz;
+      sha256 = "0vvwlf50vylx1m7nrjphkz309nsl2k2yqyldn3942337kiipjnmn";
     };
   };
 
