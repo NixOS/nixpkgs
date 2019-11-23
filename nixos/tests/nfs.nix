@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, version ? 4, ... }:
+import ./make-test-python.nix ({ pkgs, version ? 4, ... }:
 
 let
 
@@ -41,50 +41,54 @@ in
 
   testScript =
     ''
-      $server->waitForUnit("nfs-server");
-      $server->succeed("systemctl start network-online.target");
-      $server->waitForUnit("network-online.target");
+      import time
 
-      startAll;
+      server.wait_for_unit("nfs-server")
+      server.succeed("systemctl start network-online.target")
+      server.wait_for_unit("network-online.target")
 
-      $client1->waitForUnit("data.mount");
-      $client1->succeed("echo bla > /data/foo");
-      $server->succeed("test -e /data/foo");
+      start_all()
 
-      $client2->waitForUnit("data.mount");
-      $client2->succeed("echo bla > /data/bar");
-      $server->succeed("test -e /data/bar");
+      client1.wait_for_unit("data.mount")
+      client1.succeed("echo bla > /data/foo")
+      server.succeed("test -e /data/foo")
 
-      # Test whether restarting ‘nfs-server’ works correctly.
-      $server->succeed("systemctl restart nfs-server");
-      $client2->succeed("echo bla >> /data/bar"); # will take 90 seconds due to the NFS grace period
+      client2.wait_for_unit("data.mount")
+      client2.succeed("echo bla > /data/bar")
+      server.succeed("test -e /data/bar")
 
-      # Test whether we can get a lock.
-      $client2->succeed("time flock -n -s /data/lock true");
+      with subtest("restarting 'nfs-server' works correctly"):
+          server.succeed("systemctl restart nfs-server")
+          # will take 90 seconds due to the NFS grace period
+          client2.succeed("echo bla >> /data/bar")
 
-      # Test locking: client 1 acquires an exclusive lock, so client 2
-      # should then fail to acquire a shared lock.
-      $client1->succeed("flock -x /data/lock -c 'touch locked; sleep 100000' &");
-      $client1->waitForFile("locked");
-      $client2->fail("flock -n -s /data/lock true");
+      with subtest("can get a lock"):
+          client2.succeed("time flock -n -s /data/lock true")
 
-      # Test whether client 2 obtains the lock if we reset client 1.
-      $client2->succeed("flock -x /data/lock -c 'echo acquired; touch locked; sleep 100000' >&2 &");
-      $client1->crash;
-      $client1->start;
-      $client2->waitForFile("locked");
+      with subtest("client 2 fails to acquire lock held by client 1"):
+          client1.succeed("flock -x /data/lock -c 'touch locked; sleep 100000' &")
+          client1.wait_for_file("locked")
+          client2.fail("flock -n -s /data/lock true")
 
-      # Test whether locks survive a reboot of the server.
-      $client1->waitForUnit("data.mount");
-      $server->shutdown;
-      $server->start;
-      $client1->succeed("touch /data/xyzzy");
-      $client1->fail("time flock -n -s /data/lock true");
+      with subtest("client 2 obtains lock after resetting client 1"):
+          client2.succeed(
+              "flock -x /data/lock -c 'echo acquired; touch locked; sleep 100000' >&2 &"
+          )
+          client1.crash()
+          client1.start()
+          client2.wait_for_file("locked")
 
-      # Test whether unmounting during shutdown happens quickly.
-      my $t1 = time;
-      $client1->shutdown;
-      my $duration = time - $t1;
-      die "shutdown took too long ($duration seconds)" if $duration > 30;
+      with subtest("locks survive server reboot"):
+          client1.wait_for_unit("data.mount")
+          server.shutdown()
+          server.start()
+          client1.succeed("touch /data/xyzzy")
+          client1.fail("time flock -n -s /data/lock true")
+
+      with subtest("unmounting during shutdown happens quickly"):
+          t1 = time.monotonic()
+          client1.shutdown()
+          duration = time.monotonic() - t1
+          assert duration < 30, f"shutdown took too long ({duration} seconds)"
     '';
 })
