@@ -9,6 +9,7 @@
 , xvfb_run
 , dbus
 , libnotify
+, wrapGAppsHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -59,6 +60,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
+
+  nativeBuildInputs = [
+    wrapGAppsHook
+  ];
+
   buildInputs = [
     gnome3.adwaita-icon-theme
     libnotify
@@ -82,13 +88,6 @@ python3Packages.buildPythonApplication rec {
     pyxdg
     dateutil
     setuptools
-  ];
-
-  makeWrapperArgs = [
-    "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
-    "--set GDK_PIXBUF_MODULE_FILE \"$GDK_PIXBUF_MODULE_FILE\""
-    "--prefix XDG_DATA_DIRS : \"$out/share\""
-    "--suffix XDG_DATA_DIRS : \"$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\""
   ];
 
   meta = {
