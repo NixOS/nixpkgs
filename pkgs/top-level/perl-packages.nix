@@ -14838,11 +14838,11 @@ let
 
   ProtocolHTTP2 = buildPerlModule {
     pname = "Protocol-HTTP2";
-    version = "1.09";
+    version = "1.10";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CR/CRUX/Protocol-HTTP2-1.09.tar.gz;
-      sha256 = "1bc0ybkqhv81dscgzlbr62w4zqjsidcikmkbjanzn83g2b6ia9nc";
+      url = mirror://cpan/authors/id/C/CR/CRUX/Protocol-HTTP2-1.10.tar.gz;
+      sha256 = "0jm6jq1wszjrrcypyi642m2i8wgni50wdnzh9dzfkyjazdc00sn2";
     };
     buildInputs = [ AnyEvent ModuleBuildTiny NetSSLeay TestLeakTrace TestSharedFork TestTCP ];
   };
