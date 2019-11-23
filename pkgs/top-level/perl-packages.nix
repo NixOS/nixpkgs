@@ -12198,10 +12198,10 @@ let
 
   MooXlate = buildPerlPackage {
     pname = "MooX-late";
-    version = "0.015";
+    version = "0.016";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOBYINK/MooX-late-0.015.tar.gz;
-      sha256 = "175326af3076fa8698669f289fad1322724978cddaf40ea04e600fcd7f6afbbf";
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/MooX-late-0.016.tar.gz;
+      sha256 = "1fb6393e8b77c0ec1e99229bc6f5b9db362eedc172fa940b37defd9bb3415e4e";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ Moo TypeTiny ];
