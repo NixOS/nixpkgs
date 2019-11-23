@@ -8848,10 +8848,10 @@ let
 
   ImageInfo = buildPerlPackage {
     pname = "Image-Info";
-    version = "1.41";
+    version = "1.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SR/SREZIC/Image-Info-1.41.tar.gz;
-      sha256 = "c546d27414686660dbc3cd8501537128c5285a8db0faf742c2dc12b9a29ba3db";
+      url = mirror://cpan/authors/id/S/SR/SREZIC/Image-Info-1.42.tar.gz;
+      sha256 = "2bca560c3f71b3c1cd63ac3a974e62f3baeb986b7ffaa026b929081b914a8f4f";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
