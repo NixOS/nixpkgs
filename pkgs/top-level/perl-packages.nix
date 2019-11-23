@@ -10694,10 +10694,10 @@ let
 
   MailDKIM = buildPerlPackage {
     pname = "Mail-DKIM";
-    version = "0.57";
+    version = "0.58";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-0.57.tar.gz;
-      sha256 = "0fmfhwn4sh98w62rc8j584l23vlhr7vii8glm2njx14f81a56lvb";
+      url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-0.58.tar.gz;
+      sha256 = "0cgkal65qqcy57b21lgij90ba36wl66byw9i76g5yhwaa8ms8hqa";
     };
     propagatedBuildInputs = [ CryptOpenSSLRSA MailAuthenticationResults MailTools NetDNSResolverMock YAMLLibYAML ];
     doCheck = false; # tries to access the domain name system
