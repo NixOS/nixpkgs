@@ -151,6 +151,7 @@ in
       enableSubversionRepository = config.services.svnserve.enable;
       enableTomcatWebApplication = config.services.tomcat.enable;
       enableMongoDatabase = config.services.mongodb.enable;
+      enableInfluxDatabase = config.services.influxdb.enable;
     });
 
     dysnomia.properties = {

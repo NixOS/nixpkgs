@@ -93,8 +93,6 @@ makeScope newScope (self: with self; {
 
   ## COMMON PARTS WITH XFCE 4.12
 
-  gtk-xfce-engine = callPackage ../xfce/core/gtk-xfce-engine.nix { withGtk3 = false; };
-
   xfce4-icon-theme = callPackage ../xfce/art/xfce4-icon-theme.nix { };
 
   xfwm4-themes = callPackage ../xfce/art/xfwm4-themes.nix { };
@@ -113,7 +111,6 @@ makeScope newScope (self: with self; {
 
 
   ## ALIASES
-
-  # added 2019-08-18
-  xfce4-mixer = throw "deprecated 2019-08-18: obsoleted by xfce4-pulseaudio-plugin";
+  xfce4-mixer = throw "deprecated 2019-08-18: obsoleted by xfce4-pulseaudio-plugin"; # added 2019-08-18
+  gtk-xfce-engine = throw "deprecated 2019-09-17: Xfce 4.14 deprecated gtk-xfce-engine"; # added 2019-09-17
 })

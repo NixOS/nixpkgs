@@ -187,6 +187,7 @@ in {
       group = cfg.group;
       description = "Bitcoin daemon user";
       home = cfg.dataDir;
+      isSystemUser = true;
     };
     users.groups.${cfg.group} = {
       name = cfg.group;

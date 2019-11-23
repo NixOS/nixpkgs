@@ -1,5 +1,5 @@
 { stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
-, docbook_xml_dtd_45, docbook_xsl, gnome-doc-utils, flex, bison
+, docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
 , pam ? null, glibcCross ? null
 }:
 
@@ -19,18 +19,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.6";
+  version = "4.7";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     rev = version;
-    sha256 = "1llcv77lvpc4h3rgww9ms736kbdisiylcr2z02863f41afxbwl82";
+    sha256 = "0a7g9k83igfid8pybqpk6fracmz2q021isn2by3994p4hhh3s327";
   };
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
   nativeBuildInputs = [autoreconfHook libxslt libxml2
-    docbook_xml_dtd_45 docbook_xsl gnome-doc-utils flex bison
+    docbook_xml_dtd_45 docbook_xsl flex bison itstool
     ];
 
   patches =
@@ -38,12 +38,11 @@ stdenv.mkDerivation rec {
       # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
       ./respect-xml-catalog-files-var.patch
       dots_in_usernames
-
-      # Check for correct DocBook version during configure
-      # https://github.com/shadow-maint/shadow/pull/162
+      # Allow building with itstool
+      # https://github.com/shadow-maint/shadow/pull/184
       (fetchpatch {
-        url = "https://github.com/shadow-maint/shadow/commit/47797ca6654f79e3de854a6c69db2bdb0516db08.patch";
-        sha256 = "1zn8f6fd26gj5sh60099xqc7mjwgbbkkic5xfigvxa4b90vm8fd7";
+        url = https://github.com/shadow-maint/shadow/commit/6c6c8d3a33bba32277e1ed46f55df1e6dbc914b7.patch;
+        sha256 = "0xfr1mrfv5xsmri6l7ycbpz3qhs4vf3fyci4kwpffi3icsfjn557";
       })
     ];
 

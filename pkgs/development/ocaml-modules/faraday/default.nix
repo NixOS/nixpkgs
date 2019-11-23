@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, alcotest, bigstringaf }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, bigstringaf }:
 
 buildDunePackage rec {
   pname = "faraday";
@@ -13,9 +13,9 @@ buildDunePackage rec {
     sha256 = "0z6ikwlqad91iac0q5z88p3wzq5k15y86ckzmhdq1aqwrcm14bq2";
   };
 
-  buildInputs = [ alcotest ];
+  checkInputs = lib.optional doCheck alcotest;
   propagatedBuildInputs = [ bigstringaf ];
-  doCheck = true;
+  doCheck = lib.versions.majorMinor ocaml.version != "4.07";
 
   meta = {
     description = "Serialization library built for speed and memory efficiency";

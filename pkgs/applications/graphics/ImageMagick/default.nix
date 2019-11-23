@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.9-34";
-    sha256 = "0sqrgyfi7i7x1akna95c1qhk9sxxswzm3pkssfi4w6v7bn24g25g";
+    version = "6.9.10-69";
+    sha256 = "0l4lllis16gbwjpvvsyfz91i9nq11zb3lg2zlmyay7v5697jshh6";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.

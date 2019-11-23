@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "snd-19.6";
+  name = "snd-19.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/snd/${name}.tar.gz";
-    sha256 = "0s2qv8sznvw6559bi39qj9p072azh9qcb2b86w6w8clz2azjaa76";
+    sha256 = "0cdf3940cjvf5kls5l1zjll9wgg152xzlxs0jmpsq1kml12qa67b";
   };
 
   nativeBuildInputs = [ pkgconfig ];

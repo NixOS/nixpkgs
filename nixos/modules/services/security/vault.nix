@@ -119,9 +119,8 @@ in
     };
     users.groups.vault.gid = config.ids.gids.vault;
 
-    systemd.tmpfiles.rules = optional (cfg.storagePath != null) [
-      "d '${cfg.storagePath}' 0700 vault vault - -"
-    ];
+    systemd.tmpfiles.rules = optional (cfg.storagePath != null)
+      "d '${cfg.storagePath}' 0700 vault vault - -";
 
     systemd.services.vault = {
       description = "Vault server daemon";

@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "1.4.1";
+  version = "1.5.0";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl ];
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "1gbca0fyaxjkwijdp2ah4iykwq5xabz9kkf8ak76sif4lz64y54b";
+    sha256 = "0qw7yp2vh3fkx43zlnj8xsvd0d68rcmdcl3p9jpmr97hyl376xf2";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" ];
+  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.

@@ -14,7 +14,7 @@
 , libgphoto2
 , avahi
 , libarchive
-, fuse
+, fuse3
 , libcdio
 , libxml2
 , libxslt
@@ -36,15 +36,16 @@
 , libsecret
 , libgdata
 , python3
+, gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.40.2";
+  version = "1.42.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "07lpcfric3h0302n9b1pwa38mjb76r9s98kg2867y2d1qvzfivxx";
+    sha256 = "0c3pqc8qc2pn08by43rkkmk725k3cqmw7qyhfqgng0qx98dhf1lx";
   };
 
   postPatch = ''
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
     libgphoto2
     avahi
     libarchive
-    fuse
+    fuse3
     libcdio
     samba
     libmtp
@@ -87,6 +88,7 @@ stdenv.mkDerivation rec {
     libcdio-paranoia
     libnfs
     openssh
+    gsettings-desktop-schemas
     # TODO: a ligther version of libsoup to have FTP/HTTP support?
   ] ++ stdenv.lib.optionals gnomeSupport [
     gnome3.libsoup

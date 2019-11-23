@@ -13,6 +13,9 @@ stdenv.mkDerivation {
     sha256 = "0ph0s24b37d1c50p8zbzgf4q2xns43a8v6vk85iz633wdd72zsa0";
   };
 
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pidgin json-glib glib http-parser sqlite olm libgcrypt ];
 

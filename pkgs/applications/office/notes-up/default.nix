@@ -1,4 +1,19 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, cmake, ninja, gtk3, gtksourceview3, webkitgtk, gtkspell3, glib, libgee, sqlite, discount, wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, vala
+, cmake
+, ninja
+, gtk3
+, gtksourceview3
+, webkitgtk
+, gtkspell3
+, glib
+, libgee
+, sqlite
+, discount
+, wrapGAppsHook
 , withPantheon ? false }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     wrapGAppsHook
   ];

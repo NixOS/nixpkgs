@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "kafkacat";
 
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "kafkacat";
     rev = version;
-    sha256 = "0zs2nmf3ghm9iar7phc0ncqsb9nhipav94v6qmpxkfwxd2ljkpds";
+    sha256 = "0lf2pf3zqncd4a44h0mjm66qnw02k9kvz1hjkah6p6gp7mx3ksjv";
   };
 
   nativeBuildInputs = [ pkgconfig ];

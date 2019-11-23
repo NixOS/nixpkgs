@@ -6,7 +6,9 @@ stdenv.mkDerivation rec {
     url = "https://www.soft-switch.org/downloads/spandsp/spandsp-${version}.tar.gz";
     sha256 = "0rclrkyspzk575v8fslzjpgp4y2s4x7xk3r55ycvpi4agv33l1fc";
   };
-  buildInputs = [];
+
+  outputs = [ "out" "dev" ];
+
   propagatedBuildInputs = [audiofile libtiff];
   meta = {
     homepage = http://www.creytiv.com/baresip.html;
@@ -18,4 +20,3 @@ stdenv.mkDerivation rec {
     updateWalker = true;
   };
 }
-

@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "deepin-image-viewer";
-  version = "1.3.17";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0hz4f1kqcycyvggwfzpkblhhha87rqd427hq0mf31jfh5x17ymnh";
+    sha256 = "01524hfdy3wvdf07n9b3qb8jdpxzg2hwjpl4gxvr68qws5nbnb3c";
   };
 
   nativeBuildInputs = [

@@ -53,12 +53,11 @@ ecmPostHook() {
 }
 postHooks+=(ecmPostHook)
 
-xdgDataSubdirs=(
-    "doc" "config.kcfg" "kconf_update" "kservices5" "kservicetypes5" \
+xdgDataSubdirs=( \
+    "config.kcfg" "kconf_update" "kservices5" "kservicetypes5" \
     "kxmlgui5" "knotifications5" "icons" "locale" "sounds" "templates" \
     "wallpapers" "applications" "desktop-directories" "mime" "appdata" "dbus-1" \
 )
-
 
 ecmHostPathSeen=( )
 
@@ -104,5 +103,10 @@ ecmHostPathHook() {
     then
         qtWrapperArgs+=(--prefix INFOPATH : "$infoDir")
     fi
+
+    if [ -d "$1/dbus-1" ]
+    then
+        propagatedUserEnvPkgs+=" $1"
+    fi
 }
-addEnvHooks "$hostOffset" ecmHostPathHook
+addEnvHooks "$targetOffset" ecmHostPathHook

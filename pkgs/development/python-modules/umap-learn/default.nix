@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.3.9";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     rev = version;
-    sha256 = "1cdc7hs3vwzxvzs34l9a06q8rvks29wj6swyj8zvwr32knxch8a9";
+    sha256 = "0nck5va5km7qkbrhn15dsn0p2mms9kc641lcypy7l8haqgm44h8x";
   };
 
   checkInputs = [

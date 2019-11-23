@@ -104,9 +104,7 @@ stdenv.mkDerivation rec {
     description = "A free computer algebra system (CAS)";
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;
-    ## xcas is buildable on darwin but there are specific instructions I could
-    ## not test
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.symphorien ];
   };
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   inherit (geant4_nomt) version src;
   pname = "g4py";
 
-  sourceRoot = "geant4.10.04.p01/environments/g4py";
+  sourceRoot = "geant4.10.05.p01/environments/g4py";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ geant4_nomt xercesc boost_python python ];

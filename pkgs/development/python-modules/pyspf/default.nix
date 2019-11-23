@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "pyspf";
-  version = "2.0.12";
+  version = "2.0.12"; # version 2.0.13 should not be used, see #72791
 
   src = fetchPypi {
     inherit pname version;

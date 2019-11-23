@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, python, pyaes, pycrypto, wrapPython }:
+{ stdenv, fetchFromGitHub, python, pyaes, pycrypto, uvloop, wrapPython }:
 
 stdenv.mkDerivation rec {
   pname = "mtprotoproxy";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "alexbers";
     repo = "mtprotoproxy";
     rev = "v${version}";
-    sha256 = "11jaz01cagmqadyxkks7dx41ggg6pp2l1ia9npqyrl2xhcxm5b0x";
+    sha256 = "1j8bxwcq968h5sd58g03yc4zjqkhkjdn0f04vr826hhsdxy853r4";
   };
 
   nativeBuildInputs = [ wrapPython ];
-  pythonPath = [ pyaes pycrypto ];
+  pythonPath = [ pyaes pycrypto uvloop ];
 
   installPhase = ''
     install -Dm755 mtprotoproxy.py $out/bin/mtprotoproxy

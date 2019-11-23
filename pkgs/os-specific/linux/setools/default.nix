@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bison, flex, python3 , swig
+{ stdenv, fetchFromGitHub, python3
 , libsepol, libselinux, checkpolicy
 , withGraphics ? false
 }:
@@ -8,16 +8,16 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "setools";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
     repo = pname;
     rev = version;
-    sha256 = "1bjwcvr6rjx79cdcvaxn68bdrnl4f2a8gnnqsngdxhkhwpddksjy";
+    sha256 = "18kklv26dwm2fdjjzfflvxsq83b2svnwf4g18xq7wsfsri121a90";
   };
 
-  nativeBuildInputs = [ bison flex swig ];
+  nativeBuildInputs = [ cython ];
   buildInputs = [ libsepol ];
   propagatedBuildInputs = [ enum34 libselinux networkx ]
     ++ optionals withGraphics [ pyqt5 ];

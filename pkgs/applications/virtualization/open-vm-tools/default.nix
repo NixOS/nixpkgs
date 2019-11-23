@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # igrone glib-2.62 deprecations
+  # Drop in next stable release.
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
       --prefix PATH ':' "${lib.makeBinPath [ iproute dbus systemd which ]}"

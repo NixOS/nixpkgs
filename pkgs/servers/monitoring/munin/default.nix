@@ -96,10 +96,10 @@ stdenv.mkDerivation rec {
     PREFIX=$(out)
     DESTDIR=$(out)
     PERLLIB=$(out)/${perlPackages.perl.libPrefix}
-    PERL=${perlPackages.perl}/bin/perl
-    PYTHON=${python}/bin/python
-    RUBY=${ruby}/bin/ruby
-    JAVARUN=${jre}/bin/java
+    PERL=${perlPackages.perl.outPath}/bin/perl
+    PYTHON=${python.outPath}/bin/python
+    RUBY=${ruby.outPath}/bin/ruby
+    JAVARUN=${jre.outPath}/bin/java
     PLUGINUSER=munin
   '';
 

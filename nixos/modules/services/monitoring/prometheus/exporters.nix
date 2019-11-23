@@ -30,10 +30,12 @@ let
     "json"
     "mail"
     "minio"
+    "nextcloud"
     "nginx"
     "node"
     "postfix"
     "postgres"
+    "rspamd"
     "snmp"
     "surfboard"
     "tor"
@@ -193,6 +195,8 @@ in
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
     services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
+  })] ++ [(mkIf config.services.rspamd.enable {
+    services.prometheus.exporters.rspamd.url = mkDefault "http://localhost:11334/stat";
   })] ++ (mapAttrsToList (name: conf:
     mkExporterConf {
       inherit name;

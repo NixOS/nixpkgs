@@ -27,7 +27,7 @@
 , # Whetherto build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "8.9.20190601"
+, version ? "8.9.20190924"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -89,8 +89,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "9bc10993bb300d3712b0f13ec6e28621d75d4204";
-    sha256 = "1s7vbinywx8ffj09nxr0h32nggjiqpssrvgmj7820k32w2yi7i8v";
+    rev = "795986aaf33e2ffc233836b86a92a77366c91db2";
+    sha256 = "0a111x6c53r07q5qdg6c8mnydqp0wh4mpxmw7ga4x5wlap8i0bji";
   };
 
   enableParallelBuilding = true;
@@ -183,7 +183,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3 sphinx
-    bootPkgs.ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
   # For building runtime libs
@@ -224,14 +224,14 @@ stdenv.mkDerivation (rec {
     inherit enableShared;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc-8.7";
+    haskellCompilerName = "ghc-${version}";
   };
 
   meta = {
     homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
-    inherit (bootPkgs.ghc.meta) license platforms;
+    inherit (ghc.meta) license platforms;
   };
 
 } // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {

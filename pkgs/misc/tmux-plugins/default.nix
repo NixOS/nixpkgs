@@ -123,6 +123,16 @@ in rec {
     };
   };
 
+  gruvbox = mkDerivation {
+    pluginName = "gruvbox";
+    rtpFilePath = "gruvbox-tpm.tmux";
+    src = fetchgit {
+      url = "https://github.com/egel/tmux-gruvbox";
+      rev = "6149fd8b5d6924925b4d5aa6935039780e94f3d6";
+      sha256 = "1ykr4yardavd0x7yfrnshd4b0gi8p31pji7i79ib0nss134zncpb";
+    };
+  };
+
   logging = mkDerivation {
     pluginName = "logging";
     src = fetchgit {
@@ -222,6 +232,16 @@ in rec {
       url = "https://github.com/tmux-plugins/tmux-sidebar";
       rev = "23014524cab53f8d36373983500fe05a527a444d";
       sha256 = "1w363587isdip1r81h0vkp5163lpa83lvasg8l04h43sbip2y6i8";
+    };
+  };
+
+  sysstat = mkDerivation {
+    pluginName = "sysstat";
+    src = fetchFromGitHub {
+      owner = "samoshkin";
+      repo = "tmux-plugin-sysstat";
+      rev = "29e150f403151f2341f3abcb2b2487a5f011dd23";
+      sha256 = "013mv9p6r2r0ls3p60l8hdad4hm8niv3wr27vgm925gxmibi4hyq";
     };
   };
 

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "boot-stage1";
 
   machine = { config, pkgs, lib, ... }: {
@@ -150,12 +150,12 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
-    $machine->waitForUnit("multi-user.target");
-    $machine->succeed('test -s /run/canary2.pid');
-    $machine->fail('pgrep -a canary1');
-    $machine->fail('kill -0 $(< /run/canary2.pid)');
-    $machine->succeed('pgrep -a -f \'^@canary3$\''');
-    $machine->succeed('pgrep -a -f \'^kcanary$\''');
+    machine.wait_for_unit("multi-user.target")
+    machine.succeed("test -s /run/canary2.pid")
+    machine.fail("pgrep -a canary1")
+    machine.fail("kill -0 $(< /run/canary2.pid)")
+    machine.succeed('pgrep -a -f "^@canary3$"')
+    machine.succeed('pgrep -a -f "^kcanary$"')
   '';
 
   meta.maintainers = with pkgs.stdenv.lib.maintainers; [ aszlig ];

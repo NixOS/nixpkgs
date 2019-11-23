@@ -23,8 +23,7 @@
     </term>
     <listitem>
      <para>
-      A list of strings representing the path through the nested attribute set
-      <varname>set</varname>.
+      A list of strings representing the path through the nested attribute set <varname>set</varname>.
      </para>
     </listitem>
    </varlistentry>
@@ -34,8 +33,7 @@
     </term>
     <listitem>
      <para>
-      Default value if <varname>attrPath</varname> does not resolve to an
-      existing value.
+      Default value if <varname>attrPath</varname> does not resolve to an existing value.
      </para>
     </listitem>
    </varlistentry>
@@ -88,8 +86,7 @@ lib.attrsets.attrByPath [ "a" "b" ] 0 {}
     </term>
     <listitem>
      <para>
-      A list of strings representing the path through the nested attribute set
-      <varname>set</varname>.
+      A list of strings representing the path through the nested attribute set <varname>set</varname>.
      </para>
     </listitem>
    </varlistentry>
@@ -125,8 +122,7 @@ lib.attrsets.hasAttrByPath
   <xi:include href="./locations.xml" xpointer="lib.attrsets.setAttrByPath" />
 
   <para>
-   Create a new attribute set with <varname>value</varname> set at the nested
-   attribute location specified in <varname>attrPath</varname>.
+   Create a new attribute set with <varname>value</varname> set at the nested attribute location specified in <varname>attrPath</varname>.
   </para>
 
   <variablelist>
@@ -146,8 +142,7 @@ lib.attrsets.hasAttrByPath
     </term>
     <listitem>
      <para>
-      The value to set at the location described by
-      <varname>attrPath</varname>.
+      The value to set at the location described by <varname>attrPath</varname>.
      </para>
     </listitem>
    </varlistentry>
@@ -171,8 +166,7 @@ lib.attrsets.setAttrByPath [ "a" "b" ] 3
   <xi:include href="./locations.xml" xpointer="lib.attrsets.getAttrFromPath" />
 
   <para>
-   Like <xref linkend="function-library-lib.attrsets.attrByPath" /> except
-   without a default, and it will throw if the value doesn't exist.
+   Like <xref linkend="function-library-lib.attrsets.attrByPath" /> except without a default, and it will throw if the value doesn't exist.
   </para>
 
   <variablelist>
@@ -182,8 +176,7 @@ lib.attrsets.setAttrByPath [ "a" "b" ] 3
     </term>
     <listitem>
      <para>
-      A list of strings representing the path through the nested attribute set
-      <varname>set</varname>.
+      A list of strings representing the path through the nested attribute set <varname>set</varname>.
      </para>
     </listitem>
    </varlistentry>
@@ -235,8 +228,7 @@ lib.attrsets.getAttrFromPath [ "x" "y" ] { }
     </term>
     <listitem>
      <para>
-      The list of attributes to fetch from <varname>set</varname>. Each
-      attribute name must exist on the attrbitue set.
+      The list of attributes to fetch from <varname>set</varname>. Each attribute name must exist on the attrbitue set.
      </para>
     </listitem>
    </varlistentry>
@@ -282,8 +274,7 @@ error: attribute 'd' missing
   </para>
 
   <para>
-   Provides a backwards-compatible interface of
-   <function>builtins.attrValues</function> for Nix version older than 1.8.
+   Provides a backwards-compatible interface of <function>builtins.attrValues</function> for Nix version older than 1.8.
   </para>
 
   <variablelist>
@@ -317,14 +308,11 @@ lib.attrsets.attrValues { a = 1; b = 2; c = 3; }
   <xi:include href="./locations.xml" xpointer="lib.attrsets.catAttrs" />
 
   <para>
-   Collect each attribute named `attr' from the list of attribute sets,
-   <varname>sets</varname>. Sets that don't contain the named attribute are
-   ignored.
+   Collect each attribute named `attr' from the list of attribute sets, <varname>sets</varname>. Sets that don't contain the named attribute are ignored.
   </para>
 
   <para>
-   Provides a backwards-compatible interface of
-   <function>builtins.catAttrs</function> for Nix version older than 1.9.
+   Provides a backwards-compatible interface of <function>builtins.catAttrs</function> for Nix version older than 1.9.
   </para>
 
   <variablelist>
@@ -334,8 +322,7 @@ lib.attrsets.attrValues { a = 1; b = 2; c = 3; }
     </term>
     <listitem>
      <para>
-      Attribute name to select from each attribute set in
-      <varname>sets</varname>.
+      Attribute name to select from each attribute set in <varname>sets</varname>.
      </para>
     </listitem>
    </varlistentry>
@@ -372,8 +359,7 @@ catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
   <xi:include href="./locations.xml" xpointer="lib.attrsets.filterAttrs" />
 
   <para>
-   Filter an attribute set by removing all attributes for which the given
-   predicate return false.
+   Filter an attribute set by removing all attributes for which the given predicate return false.
   </para>
 
   <variablelist>
@@ -386,8 +372,7 @@ catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
       <literal>String -> Any -> Bool</literal>
      </para>
      <para>
-      Predicate which returns true to include an attribute, or returns false to
-      exclude it.
+      Predicate which returns true to include an attribute, or returns false to exclude it.
      </para>
      <variablelist>
       <varlistentry>
@@ -412,8 +397,7 @@ catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
       </varlistentry>
      </variablelist>
      <para>
-      Returns <literal>true</literal> to include the attribute,
-      <literal>false</literal> to exclude the attribute.
+      Returns <literal>true</literal> to include the attribute, <literal>false</literal> to exclude the attribute.
      </para>
     </listitem>
    </varlistentry>
@@ -447,8 +431,7 @@ filterAttrs (n: v: n == "foo") { foo = 1; bar = 2; }
   <xi:include href="./locations.xml" xpointer="lib.attrsets.filterAttrsRecursive" />
 
   <para>
-   Filter an attribute set recursively by removing all attributes for which the
-   given predicate return false.
+   Filter an attribute set recursively by removing all attributes for which the given predicate return false.
   </para>
 
   <variablelist>
@@ -461,8 +444,7 @@ filterAttrs (n: v: n == "foo") { foo = 1; bar = 2; }
       <literal>String -> Any -> Bool</literal>
      </para>
      <para>
-      Predicate which returns true to include an attribute, or returns false to
-      exclude it.
+      Predicate which returns true to include an attribute, or returns false to exclude it.
      </para>
      <variablelist>
       <varlistentry>
@@ -487,8 +469,7 @@ filterAttrs (n: v: n == "foo") { foo = 1; bar = 2; }
       </varlistentry>
      </variablelist>
      <para>
-      Returns <literal>true</literal> to include the attribute,
-      <literal>false</literal> to exclude the attribute.
+      Returns <literal>true</literal> to include the attribute, <literal>false</literal> to exclude the attribute.
      </para>
     </listitem>
    </varlistentry>
@@ -557,8 +538,7 @@ lib.attrsets.filterAttrsRecursive
       <literal>Any -> Any -> Any</literal>
      </para>
      <para>
-      Given a value <varname>val</varname> and a collector
-      <varname>col</varname>, combine the two.
+      Given a value <varname>val</varname> and a collector <varname>col</varname>, combine the two.
      </para>
      <variablelist>
       <varlistentry>
@@ -578,8 +558,7 @@ lib.attrsets.filterAttrsRecursive
        <listitem>
 <!-- TODO: make this not bad, use more fold-ey terms -->
         <para>
-         The result of previous <function>op</function> calls with other values
-         and <function>nul</function>.
+         The result of previous <function>op</function> calls with other values and <function>nul</function>.
         </para>
        </listitem>
       </varlistentry>
@@ -632,9 +611,7 @@ lib.attrsets.foldAttrs
   <xi:include href="./locations.xml" xpointer="lib.attrsets.collect" />
 
   <para>
-   Recursively collect sets that verify a given predicate named
-   <varname>pred</varname> from the set <varname>attrs</varname>. The recursion
-   stops when <varname>pred</varname> returns <literal>true</literal>.
+   Recursively collect sets that verify a given predicate named <varname>pred</varname> from the set <varname>attrs</varname>. The recursion stops when <varname>pred</varname> returns <literal>true</literal>.
   </para>
 
   <variablelist>
@@ -702,8 +679,7 @@ collect (x: x ? outPath)
   <xi:include href="./locations.xml" xpointer="lib.attrsets.nameValuePair" />
 
   <para>
-   Utility function that creates a <literal>{name, value}</literal> pair as
-   expected by <function>builtins.listToAttrs</function>.
+   Utility function that creates a <literal>{name, value}</literal> pair as expected by <function>builtins.listToAttrs</function>.
   </para>
 
   <variablelist>
@@ -747,13 +723,11 @@ nameValuePair "some" 6
   <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrs" />
 
   <para>
-   Apply a function to each element in an attribute set, creating a new
-   attribute set.
+   Apply a function to each element in an attribute set, creating a new attribute set.
   </para>
 
   <para>
-   Provides a backwards-compatible interface of
-   <function>builtins.mapAttrs</function> for Nix version older than 2.1.
+   Provides a backwards-compatible interface of <function>builtins.mapAttrs</function> for Nix version older than 2.1.
   </para>
 
   <variablelist>
@@ -814,9 +788,7 @@ lib.attrsets.mapAttrs
   <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrs-prime" />
 
   <para>
-   Like <function>mapAttrs</function>, but allows the name of each attribute to
-   be changed in addition to the value. The applied function should return both
-   the new name and value as a <function>nameValuePair</function>.
+   Like <function>mapAttrs</function>, but allows the name of each attribute to be changed in addition to the value. The applied function should return both the new name and value as a <function>nameValuePair</function>.
   </para>
 
   <variablelist>
@@ -829,10 +801,8 @@ lib.attrsets.mapAttrs
       <literal>String -> Any -> { name = String; value = Any }</literal>
      </para>
      <para>
-      Given an attribute's name and value, return a new
-      <link
-       linkend="function-library-lib.attrsets.nameValuePair">name
-      value pair</link>.
+      Given an attribute's name and value, return a new <link
+       linkend="function-library-lib.attrsets.nameValuePair">name value pair</link>.
      </para>
      <variablelist>
       <varlistentry>
@@ -891,8 +861,7 @@ lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair ("foo_" + name) 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsToList" />
 
   <para>
-   Call <varname>fn</varname> for each attribute in the given
-   <varname>set</varname> and return the result in a list.
+   Call <varname>fn</varname> for each attribute in the given <varname>set</varname> and return the result in a list.
   </para>
 
   <variablelist>
@@ -962,9 +931,7 @@ lib.attrsets.mapAttrsToList (name: value: "${name}=${value}")
   <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsRecursive" />
 
   <para>
-   Like <function>mapAttrs</function>, except that it recursively applies
-   itself to attribute sets. Also, the first argument of the argument function
-   is a <emphasis>list</emphasis> of the names of the containing attributes.
+   Like <function>mapAttrs</function>, except that it recursively applies itself to attribute sets. Also, the first argument of the argument function is a <emphasis>list</emphasis> of the names of the containing attributes.
   </para>
 
   <variablelist>
@@ -989,10 +956,7 @@ lib.attrsets.mapAttrsToList (name: value: "${name}=${value}")
          The list of attribute names to this value.
         </para>
         <para>
-         For example, the <varname>name_path</varname> for the
-         <literal>example</literal> string in the attribute set <literal>{ foo
-         = { bar = "example"; }; }</literal> is <literal>[ "foo" "bar"
-         ]</literal>.
+         For example, the <varname>name_path</varname> for the <literal>example</literal> string in the attribute set <literal>{ foo = { bar = "example"; }; }</literal> is <literal>[ "foo" "bar" ]</literal>.
         </para>
        </listitem>
       </varlistentry>
@@ -1059,11 +1023,7 @@ mapAttrsRecursive
   <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsRecursiveCond" />
 
   <para>
-   Like <function>mapAttrsRecursive</function>, but it takes an additional
-   predicate function that tells it whether to recursive into an attribute set.
-   If it returns false, <function>mapAttrsRecursiveCond</function> does not
-   recurse, but does apply the map function. It is returns true, it does
-   recurse, and does not apply the map function.
+   Like <function>mapAttrsRecursive</function>, but it takes an additional predicate function that tells it whether to recursive into an attribute set. If it returns false, <function>mapAttrsRecursiveCond</function> does not recurse, but does apply the map function. It is returns true, it does recurse, and does not apply the map function.
   </para>
 
   <variablelist>
@@ -1076,8 +1036,7 @@ mapAttrsRecursive
       <literal>(AttrSet -> Bool)</literal>
      </para>
      <para>
-      Determine if <function>mapAttrsRecursive</function> should recurse deeper
-      in to the attribute set.
+      Determine if <function>mapAttrsRecursive</function> should recurse deeper in to the attribute set.
      </para>
      <variablelist>
       <varlistentry>
@@ -1114,10 +1073,7 @@ mapAttrsRecursive
          The list of attribute names to this value.
         </para>
         <para>
-         For example, the <varname>name_path</varname> for the
-         <literal>example</literal> string in the attribute set <literal>{ foo
-         = { bar = "example"; }; }</literal> is <literal>[ "foo" "bar"
-         ]</literal>.
+         For example, the <varname>name_path</varname> for the <literal>example</literal> string in the attribute set <literal>{ foo = { bar = "example"; }; }</literal> is <literal>[ "foo" "bar" ]</literal>.
         </para>
        </listitem>
       </varlistentry>
@@ -1181,8 +1137,7 @@ lib.attrsets.mapAttrsRecursiveCond
   <xi:include href="./locations.xml" xpointer="lib.attrsets.genAttrs" />
 
   <para>
-   Generate an attribute set by mapping a function over a list of attribute
-   names.
+   Generate an attribute set by mapping a function over a list of attribute names.
   </para>
 
   <variablelist>
@@ -1241,8 +1196,7 @@ lib.attrsets.genAttrs [ "foo" "bar" ] (name: "x_${name}")
   <xi:include href="./locations.xml" xpointer="lib.attrsets.isDerivation" />
 
   <para>
-   Check whether the argument is a derivation. Any set with <code>{ type =
-   "derivation"; }</code> counts as a derivation.
+   Check whether the argument is a derivation. Any set with <code>{ type = "derivation"; }</code> counts as a derivation.
   </para>
 
   <variablelist>
@@ -1320,8 +1274,7 @@ lib.attrsets.isDerivation "foobar"
     </term>
     <listitem>
      <para>
-      Condition under which the <varname>as</varname> attribute set is
-      returned.
+      Condition under which the <varname>as</varname> attribute set is returned.
      </para>
     </listitem>
    </varlistentry>
@@ -1363,8 +1316,7 @@ lib.attrsets.optionalAttrs false { my = "set"; }
   <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrsWithNames" />
 
   <para>
-   Merge sets of attributes and use the function <varname>f</varname> to merge
-   attribute values where the attribute name is in <varname>names</varname>.
+   Merge sets of attributes and use the function <varname>f</varname> to merge attribute values where the attribute name is in <varname>names</varname>.
   </para>
 
   <variablelist>
@@ -1451,11 +1403,8 @@ lib.attrsets.zipAttrsWithNames
   <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrsWith" />
 
   <para>
-   Merge sets of attributes and use the function <varname>f</varname> to merge
-   attribute values. Similar to
-   <xref
-   linkend="function-library-lib.attrsets.zipAttrsWithNames" /> where
-   all key names are passed for <varname>names</varname>.
+   Merge sets of attributes and use the function <varname>f</varname> to merge attribute values. Similar to <xref
+   linkend="function-library-lib.attrsets.zipAttrsWithNames" /> where all key names are passed for <varname>names</varname>.
   </para>
 
   <variablelist>
@@ -1531,9 +1480,7 @@ lib.attrsets.zipAttrsWith
   <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrs" />
 
   <para>
-   Merge sets of attributes and combine each attribute value in to a list.
-   Similar to <xref linkend="function-library-lib.attrsets.zipAttrsWith" />
-   where the merge function returns a list of all values.
+   Merge sets of attributes and combine each attribute value in to a list. Similar to <xref linkend="function-library-lib.attrsets.zipAttrsWith" /> where the merge function returns a list of all values.
   </para>
 
   <variablelist>
@@ -1573,12 +1520,7 @@ lib.attrsets.zipAttrs
   <xi:include href="./locations.xml" xpointer="lib.attrsets.recursiveUpdateUntil" />
 
   <para>
-   Does the same as the update operator <literal>//</literal> except that
-   attributes are merged until the given predicate is verified. The predicate
-   should accept 3 arguments which are the path to reach the attribute, a part
-   of the first attribute set and a part of the second attribute set. When the
-   predicate is verified, the value of the first attribute set is replaced by
-   the value of the second attribute set.
+   Does the same as the update operator <literal>//</literal> except that attributes are merged until the given predicate is verified. The predicate should accept 3 arguments which are the path to reach the attribute, a part of the first attribute set and a part of the second attribute set. When the predicate is verified, the value of the first attribute set is replaced by the value of the second attribute set.
   </para>
 
   <variablelist>
@@ -1681,10 +1623,7 @@ lib.attrsets.recursiveUpdateUntil (path: l: r: path == ["foo"])
   <xi:include href="./locations.xml" xpointer="lib.attrsets.recursiveUpdate" />
 
   <para>
-   A recursive variant of the update operator <literal>//</literal>. The
-   recursion stops when one of the attribute values is not an attribute set, in
-   which case the right hand side value takes precedence over the left hand
-   side value.
+   A recursive variant of the update operator <literal>//</literal>. The recursion stops when one of the attribute values is not an attribute set, in which case the right hand side value takes precedence over the left hand side value.
   </para>
 
   <variablelist>

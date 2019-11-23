@@ -239,7 +239,7 @@ in {
         description = "Any metrics received which match one of the experssions will be dropped.";
         default = null;
         type = types.nullOr types.str;
-        example = "^some\.noisy\.metric\.prefix\..*";
+        example = "^some\\.noisy\\.metric\\.prefix\\..*";
       };
 
       whitelist = mkOption {

@@ -26,7 +26,7 @@ let
     i686-cygwin = "win32";
   };
 
-  dfVersionTriple = splitString "." dfVersion;
+  dfVersionTriple = splitVersion dfVersion;
   baseVersion = elemAt dfVersionTriple 1;
   patchVersion = elemAt dfVersionTriple 2;
 

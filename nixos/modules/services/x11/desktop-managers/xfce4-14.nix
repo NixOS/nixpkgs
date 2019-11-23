@@ -53,6 +53,7 @@ in
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
+      gnome3.gnome-themes-extra
       gnome3.adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
@@ -69,16 +70,17 @@ in
 
       exo
       garcon
-      gtk-xfce-engine
       libxfce4ui
       xfconf
 
       mousepad
+      parole
       ristretto
       xfce4-appfinder
       xfce4-screenshooter
       xfce4-session
       xfce4-settings
+      xfce4-taskmanager
       xfce4-terminal
 
       # TODO: resync patch for plugins
@@ -86,12 +88,20 @@ in
       thunar
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.hardware.pulseaudio.enable xfce4-pulseaudio-plugin
       ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optional cfg.enableXfwm xfwm4
-      ++ optionals (!cfg.noDesktop) [
-        xfce4-panel
+      ++ optionals config.hardware.pulseaudio.enable [
+        pavucontrol
+        # volume up/down keys support:
+        # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
+        # but can only be used with xfce4-panel, so for no-desktop usage we still include
+        # xfce4-volumed-pulse
+        (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
+      ] ++ optionals cfg.enableXfwm [
+        xfwm4
+        xfwm4-themes
+      ] ++ optionals (!cfg.noDesktop) [
         xfce4-notifyd
+        xfce4-panel
         xfdesktop
       ];
 
@@ -102,24 +112,10 @@ in
       "/share/gtksourceview-4.0"
     ];
 
-    # Use the correct gnome3 packageSet
-    networking.networkmanager.basePackages = mkIf config.networking.networkmanager.enable {
-      inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
-      inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
-      networkmanager-openconnect networkmanager-fortisslvpn
-      networkmanager-iodine networkmanager-l2tp;
-    };
-
     services.xserver.desktopManager.session = [{
       name = "xfce4-14";
       bgSupport = true;
       start = ''
-        # Set GTK_PATH so that GTK can find the theme engines.
-        export GTK_PATH="${config.system.path}/lib/gtk-2.0:${config.system.path}/lib/gtk-3.0"
-
-        # Set GTK_DATA_PREFIX so that GTK can find the Xfce themes.
-        export GTK_DATA_PREFIX=${config.system.path}
-
         ${pkgs.runtimeShell} ${pkgs.xfce4-14.xinitrc} &
         waitPID=$!
       '';

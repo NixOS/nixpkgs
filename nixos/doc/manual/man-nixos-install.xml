@@ -8,8 +8,8 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-install</command>
-  </refname><refpurpose>install bootloader and NixOS</refpurpose>
+  <refname><command>nixos-install</command></refname>
+  <refpurpose>install bootloader and NixOS</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>

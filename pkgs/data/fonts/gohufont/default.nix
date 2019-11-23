@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     # convert bdf to psf fonts
     build=$(pwd)
     mkdir psf
-    cd ${bdf2psf}/usr/share/bdf2psf
+    cd ${bdf2psf}/share/bdf2psf
     for i in $bdf/*.bdf; do
       bdf2psf \
         --fb "$i" standard.equivalents \

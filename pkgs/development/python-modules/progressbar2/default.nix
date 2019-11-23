@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "3.42.0";
+  version = "3.47.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a26r022lvz0vvwvhq2rfyl6h0hxbayvgbnajpnc0fc8f4gzr1n0";
+    sha256 = "7538d02045a1fd3aa2b2834bfda463da8755bd3ff050edc6c5ddff3bc616215f";
   };
 
   postPatch = ''

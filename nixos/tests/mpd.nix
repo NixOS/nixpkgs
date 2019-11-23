@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test.nix ({ pkgs, lib, ... }:
   let
     track = pkgs.fetchurl {
       # Sourced from http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in
@@ -46,38 +46,51 @@ import ./make-test.nix ({ pkgs, ... }:
     };
 
   nodes =
-    { client = 
+    { client =
       { ... }: { };
 
       serverALSA =
-        { ... }: (mkServer {
-          mpd = defaultMpdCfg // {
-            network.listenAddress = "any";
-            extraConfig = ''
-              audio_output {
-                type "alsa"
-                name "ALSA"
-                mixer_type "null"
-              }
-            '';
-          };
-
-          musicService = with defaultMpdCfg; musicService { inherit user group musicDirectory; };
-        }) // { networking.firewall.allowedTCPPorts = [ 6600 ]; };
+        { ... }: lib.mkMerge [
+          (mkServer {
+            mpd = defaultMpdCfg // {
+              network.listenAddress = "any";
+              extraConfig = ''
+                audio_output {
+                  type "alsa"
+                  name "ALSA"
+                  mixer_type "null"
+                }
+              '';
+            };
+            musicService = with defaultMpdCfg; musicService { inherit user group musicDirectory; };
+          })
+          { networking.firewall.allowedTCPPorts = [ 6600 ]; }
+        ];
 
       serverPulseAudio =
-        { ... }: (mkServer {
-          mpd = defaultMpdCfg // {
-            extraConfig = ''
-              audio_output {
-                type "pulse"
-                name "The Pulse"
-              }
-            '';
-          };
+        { ... }: lib.mkMerge [
+          (mkServer {
+            mpd = defaultMpdCfg // {
+              extraConfig = ''
+                audio_output {
+                  type "pulse"
+                  name "The Pulse"
+                }
+              '';
+            };
 
-          musicService = with defaultCfg; musicService { inherit user group musicDirectory; };
-        }) // { hardware.pulseaudio.enable = true; };
+            musicService = with defaultCfg; musicService { inherit user group musicDirectory; };
+          })
+          {
+            hardware.pulseaudio = {
+              enable = true;
+              systemWide = true;
+              tcp.enable = true;
+              tcp.anonymousClients.allowAll = true;
+            };
+            systemd.services.mpd.environment.PULSE_SERVER = "localhost";
+          }
+        ];
     };
 
   testScript = ''
@@ -110,6 +123,7 @@ import ./make-test.nix ({ pkgs, ... }:
     play_some_music($serverALSA);
     play_some_music($serverPulseAudio);
 
+    $client->waitForUnit("multi-user.target");
     $client->succeed("$mpc -h serverALSA status");
 
     # The PulseAudio-based server is configured not to accept external client connections

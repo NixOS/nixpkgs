@@ -9,6 +9,10 @@ buildPythonPackage rec {
     sha256 = "60192920cff75afdd096eea3a43276e33ec15f4f00bd04d2d1dda616c84f22a5";
   };
 
+  patches = lib.optional (!(pythonOlder "3.6")) [
+    ./0001-Remove-coding-annotations.patch
+  ];
+
   propagatedBuildInputs = [
     aiohttp
     future-fstrings

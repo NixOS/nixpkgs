@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
-, gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
+, gtk3, python, pygobject3, pyxdg
 
 , withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     gobject-introspection
     gtk3
     python
-    hicolor-icon-theme
   ] ++ stdenv.lib.optional  withRandr        libxcb
     ++ stdenv.lib.optional  withGeoclue      geoclue
     ++ stdenv.lib.optional  withDrm          libdrm

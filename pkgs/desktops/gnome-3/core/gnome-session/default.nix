@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
-  version = "3.32.0";
+  version = "3.34.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zrzkpd406i159mla7bfs5npa32fgqh66aip1rfq02rgsgmc9m5v";
+    sha256 = "0q366pns99f6wka5ikahqpasnsm72q9pg0c0nnfb2ld7spi1z06p";
   };
 
   patches = [

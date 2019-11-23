@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-openfiles";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e51c91889eb9e4c75f47735efc57a1435f3f1182463600ba7bce7f2556a46884";
+    sha256 = "af591422f2bfa95f7690d83aeb8d76bd5421cb8b1dcaf085d58cd92e8d92058d";
   };
 
   propagatedBuildInputs = [

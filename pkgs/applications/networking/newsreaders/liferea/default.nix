@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, python3Packages, wrapGAppsHook
 , glib, libxml2, libxslt, sqlite, libsoup , webkitgtk, json-glib, gst_all_1
 , libnotify, gtk3, gsettings-desktop-schemas, libpeas, dconf, librsvg
-, gobject-introspection, glib-networking, hicolor-icon-theme
+, gobject-introspection, glib-networking
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib gtk3 webkitgtk libxml2 libxslt sqlite libsoup gsettings-desktop-schemas
     libpeas gsettings-desktop-schemas json-glib dconf gobject-introspection
-    librsvg glib-networking libnotify hicolor-icon-theme
+    librsvg glib-networking libnotify
   ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
   ]);

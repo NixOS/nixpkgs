@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , jdcal
 , et_xmlfile
@@ -9,11 +10,12 @@
 
 buildPythonPackage rec {
   pname = "openpyxl";
-  version = "2.6.2";
+  version = "3.0.0";
+  disabled = isPy27; # 2.6.4 was final python2 release
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d2af392cef8c8227bd2ac3ebe3a28b25aba74fd4fa473ce106065f0b73bfe2e";
+    sha256 = "340a1ab2069764559b9d58027a43a24db18db0e25deb80f81ecb8ca7ee5253db";
   };
 
   checkInputs = [ pytest ];

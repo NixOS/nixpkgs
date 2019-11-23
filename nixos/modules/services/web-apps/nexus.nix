@@ -68,6 +68,7 @@ in
           -Dkaraf.data=${cfg.home}/nexus3
           -Djava.io.tmpdir=${cfg.home}/nexus3/tmp
           -Dkaraf.startLocalConsole=false
+          -Djava.endorsed.dirs=${cfg.package}/lib/endorsed
         '';
 
         description = ''
