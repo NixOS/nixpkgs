@@ -368,10 +368,10 @@ let
 
   ApacheLogFormatCompiler = buildPerlModule {
     pname = "Apache-LogFormat-Compiler";
-    version = "0.35";
+    version = "0.36";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KAZEBURO/Apache-LogFormat-Compiler-0.35.tar.gz;
-      sha256 = "06i70ydxk2wa2rcqn16842kra2qz3jwk0vk1abq8lah4180c0m0n";
+      url = mirror://cpan/authors/id/K/KA/KAZEBURO/Apache-LogFormat-Compiler-0.36.tar.gz;
+      sha256 = "05xcl7j65vakx7x79jqjikyw0nzf60bc2w6hhc0q5sklxq1ral4l";
     };
     buildInputs = [ HTTPMessage ModuleBuildTiny TestMockTime TestRequires TryTiny URI ];
     propagatedBuildInputs = [ POSIXstrftimeCompiler ];
