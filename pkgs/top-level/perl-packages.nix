@@ -8984,10 +8984,10 @@ let
 
   IOCaptureOutput = buildPerlPackage {
     pname = "IO-CaptureOutput";
-    version = "1.1104";
+    version = "1.1105";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/IO-CaptureOutput-1.1104.tar.gz;
-      sha256 = "fcc732fcb438f97a72b30e8c7796484bef2562e374553b207028e2fbf73f8330";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/IO-CaptureOutput-1.1105.tar.gz;
+      sha256 = "ae99009fca1273800f169ecb82f4ed1cc6c76795f156bee5c0093005d572f487";
     };
     meta = {
       homepage = https://github.com/dagolden/IO-CaptureOutput;
