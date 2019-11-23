@@ -2,7 +2,7 @@
 , desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
 , libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext, fetchpatch
 , sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
-, xvfb_run, dbus, shared-mime-info, libunwind, libunity, folks, glib-networking
+, xvfb-run, dbus, shared-mime-info, libunwind, libunity, folks, glib-networking
 , gobject-introspection, gspell, appstream-glib, libytnef, libhandy }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     libunwind libunity folks gspell libytnef libhandy
   ];
 
-  checkInputs = [ xvfb_run dbus ];
+  checkInputs = [ xvfb-run dbus ];
 
   mesonFlags = [
     "-Dcontractor=true" # install the contractor file (Pantheon specific)

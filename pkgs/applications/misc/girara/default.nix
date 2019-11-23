@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, check, dbus, xvfb_run, glib, gtk, gettext, libiconv, json_c, libintl
+{ stdenv, fetchurl, meson, ninja, pkgconfig, check, dbus, xvfb-run, glib, gtk, gettext, libiconv, json_c, libintl
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "13vr62kkkqs2xsrmsn114n6c6084ix1qyjksczqsc3s2y3bdsmj4";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext check dbus xvfb_run ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext check dbus xvfb-run ];
   buildInputs = [ libintl libiconv json_c ];
   propagatedBuildInputs = [ glib gtk ];
 

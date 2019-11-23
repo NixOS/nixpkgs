@@ -1,6 +1,6 @@
 { stdenv, fetchurl, itstool, python3, intltool, wrapGAppsHook
 , libxml2, gobject-introspection, gtk3, gtksourceview, gnome3
-, gsettings-desktop-schemas, dbus, xvfb_run
+, gsettings-desktop-schemas, dbus, xvfb-run
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
   ];
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo ];
-  checkInputs = [ xvfb_run python3.pkgs.pytest dbus gtksourceview gtk3 ];
+  checkInputs = [ xvfb-run python3.pkgs.pytest dbus gtksourceview gtk3 ];
 
   installPhase = ''
     runHook preInstall

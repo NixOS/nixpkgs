@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gtk3
-, pkgconfig, gnome3, dbus, xvfb_run }:
+, pkgconfig, gnome3, dbus, xvfb-run }:
 let
   version = "5.0.1";
   pname = "amtk";
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   doCheck = stdenv.isLinux;
   checkPhase = ''
     export NO_AT_BRIDGE=1
-    ${xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+    ${xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       make check
   '';

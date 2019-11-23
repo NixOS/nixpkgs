@@ -1,7 +1,7 @@
 { lib, python3Packages, gtk3, cairo
 , aspellDicts, buildEnv
 , gnome3, librsvg
-, xvfb_run, dbus, libnotify
+, xvfb-run, dbus, libnotify
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     paths = lib.collect lib.isDerivation aspellDicts;
   }}/lib/aspell";
 
-  checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
+  checkInputs = [ xvfb-run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
   buildInputs = [
     gnome3.adwaita-icon-theme libnotify librsvg
   ];

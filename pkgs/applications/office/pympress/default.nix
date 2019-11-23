@@ -1,7 +1,7 @@
 { lib
 , python3Packages
 , wrapGAppsHook
-, xvfb_run
+, xvfb-run
 , gtk3
 , gobject-introspection
 , libcanberra-gtk3

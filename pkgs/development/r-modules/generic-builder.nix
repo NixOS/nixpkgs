@@ -1,10 +1,10 @@
-{ stdenv, R, libcxx, xvfb_run, utillinux, Cocoa, Foundation, gettext, gfortran }:
+{ stdenv, R, libcxx, xvfb-run, utillinux, Cocoa, Foundation, gettext, gfortran }:
 
 { name, buildInputs ? [], requireX ? false, ... } @ attrs:
 
 stdenv.mkDerivation ({
   buildInputs = buildInputs ++ [R gettext] ++
-                stdenv.lib.optionals requireX [utillinux xvfb_run] ++
+                stdenv.lib.optionals requireX [utillinux xvfb-run] ++
                 stdenv.lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran];
 
   NIX_CFLAGS_COMPILE =
@@ -29,7 +29,7 @@ stdenv.mkDerivation ({
   rCommand = if requireX then
     # Unfortunately, xvfb-run has a race condition even with -a option, so that
     # we acquire a lock explicitly.
-    "flock ${xvfb_run} xvfb-run -a -e xvfb-error R"
+    "flock ${xvfb-run} xvfb-run -a -e xvfb-error R"
   else
     "R";
 

@@ -10,7 +10,7 @@
 , libappindicator
 , intltool
 , wmctrl
-, xvfb_run
+, xvfb-run
 }:
 
 python27Packages.buildPythonApplication rec  {
@@ -58,7 +58,7 @@ python27Packages.buildPythonApplication rec  {
     pytest
     pytest-mock
     pytestpep8
-    xvfb_run
+    xvfb-run
   ];
 
   patches = [

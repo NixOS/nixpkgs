@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, vala
-, libxml2, perl, intltool, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info }:
+, libxml2, perl, intltool, gettext, gnome3, gobject-introspection, dbus, xvfb-run, shared-mime-info }:
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool perl gobject-introspection vala ];
 
-  checkInputs = [ xvfb_run dbus ];
+  checkInputs = [ xvfb-run dbus ];
 
   buildInputs = [ atk cairo glib pango libxml2 gettext ];
 
