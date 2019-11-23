@@ -6270,6 +6270,20 @@ let
     };
   };
 
+  EnvSanctify = buildPerlPackage {
+    pname = "Env-Sanctify";
+    version = "1.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BI/BINGOS/Env-Sanctify-1.12.tar.gz;
+      sha256 = "0prj51c9w4k6nrpnpfw6an96953vna74g698kyk78m163ikbbqr0";
+    };
+    meta = {
+      description = "Lexically scoped sanctification of %ENV";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/bingos/env-sanctify";
+    };
+  };
+
   Error = buildPerlModule {
     pname = "Error";
     version = "0.17028";
@@ -7451,8 +7465,8 @@ let
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Furl-3.13.tar.gz";
       sha256 = "1wxa2v9yjzvnzp62p1jvcx8x61z5qvlvzyah853vvaywpjxwyyl8";
     };
-    propagatedBuildInputs = [ HTTPParserXS ModuleBuildTiny ClassAccessorLite ];
-    buildInputs = [ HTTPBody HTTPProxy NetIDNEncode Plack PlackMiddlewareDeflater Starlet TestRequires TestTCP TestSharedFork ];
+    propagatedBuildInputs = [ ClassAccessorLite HTTPParserXS MozillaCA ];
+    buildInputs = [ HTTPCookieJar HTTPProxy ModuleBuildTiny Plack Starlet TestFakeHTTPD TestRequires TestSharedFork TestTCP TestValgrind URI ];
     meta = {
       description = "Lightning-fast URL fetcher";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -8544,6 +8558,22 @@ let
     meta = {
       description = "HTTP Body Parser";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  HTTPCookieJar = buildPerlPackage {
+    pname = "HTTP-CookieJar";
+    version = "0.008";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/HTTP-CookieJar-0.008.tar.gz;
+      sha256 = "0rfw6avcralggs7bf7n86flvhaahxjnqzvpwszp0sk4z4wwy01wm";
+    };
+    propagatedBuildInputs = [ HTTPDate ];
+    buildInputs = [ TestDeep TestRequires URI ];
+    meta = {
+      description = "A minimalist HTTP user agent cookie jar";
+      license = with stdenv.lib.licenses; [ asl20 ];
+      homepage = "https://github.com/dagolden/HTTP-CookieJar";
     };
   };
 
@@ -12238,6 +12268,21 @@ let
     };
   };
 
+  TestValgrind = buildPerlPackage {
+    pname = "Test-Valgrind";
+    version = "1.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/V/VP/VPIT/Test-Valgrind-1.19.tar.gz;
+      sha256 = "06w1c0ddmmdkhhvv9pxq2nv5i40nbqf4cssfkq38yypfbyhsff0q";
+    };
+    propagatedBuildInputs = [ EnvSanctify FileHomeDir PerlDestructLevel XMLTwig ];
+    meta = {
+      description = "Generate suppressions, analyse and test any command with valgrind.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "http://search.cpan.org/dist/Test-Valgrind/";
+    };
+  };
+
   MouseXTypesPathClass = buildPerlPackage {
     pname = "MouseX-Types-Path-Class";
     version = "0.07";
@@ -14259,6 +14304,17 @@ let
       homepage = http://perlcritic.com;
       description = "Critique Perl source code for best-practices";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  PerlDestructLevel = buildPerlPackage {
+    pname = "Perl-Destruct-Level";
+    version = "0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RG/RGARCIA/Perl-Destruct-Level-0.02.tar.gz;
+      sha256 = "0fyiysrq874ncscgdjg522fs29gvqads6ynyhwxwwq1b545srd20";
+    };
+    meta = {
     };
   };
 
