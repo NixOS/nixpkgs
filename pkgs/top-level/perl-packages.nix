@@ -3817,12 +3817,12 @@ let
 
   DataCompare = buildPerlPackage {
     pname = "Data-Compare";
-    version = "1.26";
+    version = "1.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Compare-1.26.tar.gz;
-      sha256 = "03g0z2w8hz7750x6wkl6zq7shk12fry44gkzrz7b904s5fmphl4p";
+      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Compare-1.27.tar.gz;
+      sha256 = "1gg8rqbv3x6a1lrpabv6vnlab53zxmpwz2ygad9fcx4gygqj12l1";
     };
-    propagatedBuildInputs = [ FileFindRule ];
+    propagatedBuildInputs = [ Clone FileFindRule ];
   };
 
   DataDump = buildPerlPackage {
