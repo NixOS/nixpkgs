@@ -1183,7 +1183,7 @@ let
       sha256 = "0z4lnc3jfqx8rykm998q2jy5wkhb8p5pir80g9lqpi4lb0ilic6c";
     };
     propagatedBuildInputs = [ Furl URI ];
-    buildInputs = [ FileWhich TestTCP TestRequires TestSharedFork ];
+    buildInputs = [ FileWhich TestRequires TestSharedFork TestTCP ];
     meta = {
       description = "KyotoTycoon client library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
