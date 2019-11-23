@@ -8549,10 +8549,10 @@ let
 
   HTTPCookies = buildPerlPackage {
     pname = "HTTP-Cookies";
-    version = "6.04";
+    version = "6.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.04.tar.gz;
-      sha256 = "1m0kxcirbvbkrm2c59p1bkbvzlcdymg8fdpa7wlxijlx0xwz1iqc";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.07.tar.gz;
+      sha256 = "0apa7smnlzanh1gdrm7id42iv64vy5skj53ank2rsk07avg8qbva";
     };
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
