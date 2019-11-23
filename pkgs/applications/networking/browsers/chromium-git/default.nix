@@ -116,16 +116,10 @@ let
               'return sandbox_binary;' \
               'return base::FilePath(GetDevelSandboxPath());'
 
-          substituteInPlace services/audio/audio_sandbox_hook_linux.cc \
-            --replace \
-              '/usr/share/alsa/' \
-              '${alsaLib}/share/alsa/' \
-            --replace \
-              '/usr/lib/x86_64-linux-gnu/gconv/' \
-              '${glibc}/lib/gconv/' \
-            --replace \
-              '/usr/share/locale/' \
-              '${glibc}/share/locale/'
+          sed -i.bak -e 's|".*/gconv/|"${glibc}/lib/gconv/|'            \
+                     -e 's|".*/share/alsa/|"${alsaLib}/share/alsa/|'    \
+                     -e 's|".*/share/locale/|"${glibc}/share/locale/|'  \
+            services/audio/audio_sandbox_hook_linux.cc
 
           sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
             chrome/browser/shell_integration_linux.cc
@@ -147,12 +141,12 @@ let
           patchShebangs --build .
 
           mkdir -p third_party/node/linux/node-linux-x64/bin
-          ln -s ${nodejs}/bin/node                    third_party/node/linux/node-linux-x64/bin/node      || true
+          ln -s --force ${nodejs}/bin/node                    third_party/node/linux/node-linux-x64/bin/node      || true
 
           mkdir -p third_party/llvm-build/Release+Asserts/bin
-          ln -s ${llvmPackages_9.clang}/bin/clang     third_party/llvm-build/Release+Asserts/bin/clang    || true
-          ln -s ${llvmPackages_9.clang}/bin/clang++   third_party/llvm-build/Release+Asserts/bin/clang++  || true
-          ln -s ${llvmPackages_9.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar  || true
+          ln -s --force ${llvmPackages_9.clang}/bin/clang     third_party/llvm-build/Release+Asserts/bin/clang    || true
+          ln -s --force ${llvmPackages_9.clang}/bin/clang++   third_party/llvm-build/Release+Asserts/bin/clang++  || true
+          ln -s --force ${llvmPackages_9.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar  || true
 
           echo 'build_with_chromium = true'                > build/config/gclient_args.gni
           echo 'checkout_android = false'                 >> build/config/gclient_args.gni
