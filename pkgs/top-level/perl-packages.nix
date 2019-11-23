@@ -4811,10 +4811,10 @@ let
 
   DBDMock = buildPerlModule {
     pname = "DBD-Mock";
-    version = "1.49";
+    version = "1.52";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JL/JLCOOPER/DBD-Mock-1.49.tar.gz;
-      sha256 = "3c88bd9322d3d1a215b0c8dad8b27f06885a063f8f47fb8747f6e86f8b9d7116";
+      url = mirror://cpan/authors/id/J/JL/JLCOOPER/DBD-Mock-1.52.tar.gz;
+      sha256 = "c33ac1118ff4e6a542e62e0fc56d9c0d4abecc442c7acb59c0975fc376812442";
     };
     propagatedBuildInputs = [ DBI ];
     buildInputs = [ ModuleBuildTiny TestException ];
