@@ -12,16 +12,18 @@ in
 
 { stdenv, fetchurl, ncurses, buildEnv
 , libX11, xorgproto, useX11 ? safeX11 stdenv
+, aflSupport ? false
 , flambdaSupport ? false
 }:
 
 assert useX11 -> !stdenv.isAarch32 && !stdenv.isMips;
+assert aflSupport -> stdenv.lib.versionAtLeast version "4.05";
 assert flambdaSupport -> stdenv.lib.versionAtLeast version "4.03";
 
 let
    useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optional optionals optionalString;
-   name = "ocaml${optionalString flambdaSupport "+flambda"}-${version}";
+   name = "ocaml${optionalString aflSupport "+afl"}${optionalString flambdaSupport "+flambda"}-${version}";
 in
 
 let
@@ -49,6 +51,7 @@ stdenv.mkDerivation (args // {
     optionals useX11 (flags
       [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}"]
       [ "-x11lib" x11lib "-x11include" x11inc ])
+  ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
   ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
   ;
 
