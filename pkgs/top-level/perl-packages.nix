@@ -221,7 +221,7 @@ let
     installPhase = "./Build install --prefix $out";
 
     SDL_INST_DIR = pkgs.SDL.dev;
-    buildInputs = [ ArchiveExtract ArchiveZip TextPatch pkgs.SDL ];
+    buildInputs = [ pkgs.SDL ArchiveExtract ArchiveZip TextPatch ];
     propagatedBuildInputs = [ CaptureTiny FileShareDir FileWhich ];
 
     meta = {
