@@ -8577,15 +8577,16 @@ let
 
   HTTPDate = buildPerlPackage {
     pname = "HTTP-Date";
-    version = "6.02";
+    version = "6.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/HTTP-Date-6.02.tar.gz;
-      sha256 = "0cz357kafhhzw7w59iyi0wvhw7rlh5g1lh38230ckw7rl0fr9fg8";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Date-6.05.tar.gz;
+      sha256 = "0awjdbz7x0jd5pna55dwxhs3k6xp3sw6b2zg3p2yndxxvya64p9n";
     };
     meta = {
       description = "Date conversion routines";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ TimeDate TimeLocal ];
   };
 
   HTTPEntityParser = buildPerlModule {
