@@ -168,9 +168,6 @@ let
       buildPhase = ''
         ( cd src
           ninja -C out/Release chrome
-
-          find chrome/test/chromedriver -exec touch -t 198001010000.00 {} +   # fix zip issues with timestamps older than 1980
-          ninja -C out/Release chromedriver
         )
       '';
 
@@ -179,9 +176,7 @@ let
           mkdir -p locales resources extensions   # the directories are optional, ensure they exist for following `cp` success
 
           mkdir -p $out/bin
-          cp -r chrome chromedriver locales resources extensions *.so *.pak *.dat *.bin $out/bin/
-          ln -s -f $out/bin/chrome       $out/bin/chrome-${version}
-          ln -s -f $out/bin/chromedriver $out/bin/chromedriver-${version}
+          cp -r chrome locales resources extensions *.so *.pak *.dat *.bin $out/bin/
         )
       '';
 
