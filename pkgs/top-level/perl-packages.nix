@@ -18463,10 +18463,10 @@ let
 
   TestTime = buildPerlPackage {
     pname = "Test-Time";
-    version = "0.05";
+    version = "0.08";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SATOH/Test-Time-0.05.tar.gz;
-      sha256 = "abef8885a811440114bfe067edc32f08500fbfd624902f8c3a81fc224ac4b410";
+      url = mirror://cpan/authors/id/S/SA/SATOH/Test-Time-0.08.tar.gz;
+      sha256 = "b8bc3b074bb2247e8588399c1e55d071f049cf6ce1c8b4192c38cf3c24559548";
     };
     meta = {
       description = "Overrides the time() and sleep() core functions for testing";
