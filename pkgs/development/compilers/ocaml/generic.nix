@@ -41,11 +41,15 @@ stdenv.mkDerivation (args // {
   };
 
   prefixKey = "-prefix ";
-  configureFlags = optionals useX11 (
-    if stdenv.lib.versionAtLeast version "4.08"
-    then [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}"]
-    else [ "-x11lib" x11lib "-x11include" x11inc ])
-  ++ optional flambdaSupport "-flambda"
+  configureFlags =
+    let flags = new: old:
+      if stdenv.lib.versionAtLeast version "4.08"
+      then new else old
+    ; in
+    optionals useX11 (flags
+      [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}"]
+      [ "-x11lib" x11lib "-x11include" x11inc ])
+  ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
   ;
 
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
