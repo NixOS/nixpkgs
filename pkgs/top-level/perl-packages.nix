@@ -14062,10 +14062,10 @@ let
 
   ParsePMFile = buildPerlPackage {
      pname = "Parse-PMFile";
-     version = "0.41";
+     version = "0.42";
      src = fetchurl {
-       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-PMFile-0.41.tar.gz;
-       sha256 = "1ffv9msp4xjfaylay2zfqangxhgyr5xk993k5n1k08hh6qagq8df";
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-PMFile-0.42.tar.gz;
+       sha256 = "0v3k5jslbl29735hs32x9si546v55cyy6sb58aib8vmq684wgxp7";
      };
      buildInputs = [ ExtUtilsMakeMakerCPANfile ];
      meta = {
