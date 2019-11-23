@@ -88,6 +88,8 @@ let
       services.cockroachdb.listen.address = myAddr;
       services.cockroachdb.join = lib.mkIf (joinNode != null) joinNode;
 
+      systemd.services.chronyd.unitConfig.ConditionPathExists = "/dev/ptp0";
+
       # Hold startup until Chrony has performed its first measurement (which
       # will probably result in a full timeskip, thanks to makestep)
       systemd.services.cockroachdb.preStart = ''
