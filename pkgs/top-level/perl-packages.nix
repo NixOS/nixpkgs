@@ -15170,10 +15170,10 @@ let
 
   PodSimple = buildPerlPackage {
     pname = "Pod-Simple";
-    version = "3.39";
+    version = "3.40";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.39.tar.gz;
-      sha256 = "0qh43griaz3i21ca745irrnjbksv5q07h4wdjv28nqpcc55pva8m";
+      url = mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.40.tar.gz;
+      sha256 = "0384k8k18srsdj2a2j10gbvv19lnvynq359y9kb4zn5bv2wqqfh6";
     };
   };
 
