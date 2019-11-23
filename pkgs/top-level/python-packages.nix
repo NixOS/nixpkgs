@@ -4198,7 +4198,10 @@ in {
 
   offtrac = callPackage ../development/python-modules/offtrac { };
 
-  openpyxl = callPackage ../development/python-modules/openpyxl { };
+  openpyxl = if isPy3k then
+    callPackage ../development/python-modules/openpyxl { }
+  else
+    callPackage ../development/python-modules/openpyxl/2.nix { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
