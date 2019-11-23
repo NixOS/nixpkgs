@@ -1,7 +1,14 @@
-{ lib, python3Packages, gtk3, cairo
-, aspellDicts, buildEnv
-, gnome3, librsvg
-, xvfb_run, dbus, libnotify
+{ lib
+, python3Packages
+, gtk3
+, cairo
+, aspellDicts
+, buildEnv
+, gnome3
+, librsvg
+, xvfb_run
+, dbus
+, libnotify
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -48,7 +55,9 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
   buildInputs = [
-    gnome3.adwaita-icon-theme libnotify librsvg
+    gnome3.adwaita-icon-theme
+    libnotify
+    librsvg
   ];
 
   # A few parts of chkdeps need to have a display and a dbus session, so we not
@@ -61,7 +70,13 @@ python3Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3Packages; [
-    paperwork-backend pypillowfight gtk3 cairo pyxdg dateutil setuptools
+    paperwork-backend
+    pypillowfight
+    gtk3
+    cairo
+    pyxdg
+    dateutil
+    setuptools
   ];
 
   makeWrapperArgs = [
