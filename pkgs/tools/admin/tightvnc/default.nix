@@ -9,6 +9,13 @@ stdenv.mkDerivation {
     sha256 = "f48c70fea08d03744ae18df6b1499976362f16934eda3275cead87baad585c0d";
   };
 
+  patches = [
+    ./1.3.10-CVE-2019-15678.patch
+    ./1.3.10-CVE-2019-15679.patch
+    ./1.3.10-CVE-2019-15680.patch
+    ./1.3.10-CVE-2019-8287.patch
+  ];
+
   # for the builder script
   inherit fontDirectories;
 
