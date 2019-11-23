@@ -1,9 +1,10 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
 { config, lib, stdenv, fetchurl, autoconf, bison, libtool, pkgconfig, re2c
 , libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pcre, pcre2, sqlite, libjpeg, libpng, freetype
+, openssl, pcre, pcre2, sqlite
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
+, gd, freetype, libXpm, libjpeg, libpng, libwebp
 , libzip, valgrind, oniguruma
 }:
 
@@ -84,7 +85,7 @@ let
         ++ optionals imapSupport [ uwimap openssl pam ]
         ++ optionals curlSupport [ curl openssl ]
         ++ optionals ldapSupport [ openldap openssl ]
-        ++ optionals gdSupport [ libpng libjpeg freetype ]
+        ++ optionals gdSupport [ gd freetype libXpm libjpeg libpng libwebp ]
         ++ optionals opensslSupport [ openssl openssl.dev ]
         ++ optional apxs2Support apacheHttpd
         ++ optional (ldapSupport && stdenv.isLinux) cyrus_sasl
@@ -154,12 +155,26 @@ let
       ++ optional (mysqliSupport && mysqlndSupport) "--with-mysqli=mysqlnd"
       ++ optional (pdo_mysqlSupport || mysqliSupport) "--with-mysql-sock=/run/mysqld/mysqld.sock"
       ++ optional bcmathSupport "--enable-bcmath"
-      # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
       ++ optionals gdSupport [
-        ( if (versionOlder version "7.4") then "--with-gd" else "--enable-gd" )
-        "--with-freetype-dir=${freetype.dev}"
-        "--with-png-dir=${libpng.dev}"
-        "--with-jpeg-dir=${libjpeg.dev}"
+        ( if (versionOlder version "7.4")
+          then [
+            "--with-gd=${gd.dev}"
+            "--with-webp-dir=${libwebp}"
+            "--with-jpeg-dir=${libjpeg.dev}"
+            "--with-png-dir=${libpng.dev}"
+            "--with-freetype-dir=${freetype.dev}"
+            "--with-xpm-dir=${libXpm.dev}"
+            "--enable-gd-jis-conv"
+          ] else [
+            "--enable-gd"
+            "--with-external-gd=${gd.dev}"
+            "--with-webp=${libwebp}"
+            "--with-jpeg=${libjpeg.dev}"
+            "--with-xpm=${libXpm.dev}"
+            "--with-freetype=${freetype.dev}"
+            "--enable-gd-jis-conv"
+          ]
+        )
       ]
       ++ optional gmpSupport "--with-gmp=${gmp.dev}"
       ++ optional soapSupport "--enable-soap"
