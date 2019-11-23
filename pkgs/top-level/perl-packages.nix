@@ -18343,10 +18343,10 @@ let
 
   TestScript = buildPerlPackage {
     pname = "Test-Script";
-    version = "1.25";
+    version = "1.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/Test-Script-1.25.tar.gz;
-      sha256 = "199s78hh77zwwqba6pa1ngzjnzrdj2ka6qv5w0i286aafh93705n";
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Test-Script-1.26.tar.gz;
+      sha256 = "1dvkb8dvidnycd6ws2h2iy262h37fjakflv6z90xrw72xix26hkd";
     };
 
     buildInputs = [ Test2Suite ];
