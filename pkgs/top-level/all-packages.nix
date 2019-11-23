@@ -14105,6 +14105,8 @@ in
     stdenv = gcc6Stdenv; # upstream code incompatible with gcc7
   };
 
+  wally-cli = callPackage ../development/tools/wally-cli { };
+
   wavpack = callPackage ../development/libraries/wavpack { };
 
   wayland = callPackage ../development/libraries/wayland { };
