@@ -11946,13 +11946,13 @@ let
 
   Moo = buildPerlPackage {
     pname = "Moo";
-    version = "2.003004";
+    version = "2.003006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/Moo-2.003004.tar.gz;
-      sha256 = "f8bbb625f8e963eabe05cff9048fdd72bdd26777404ff2c40bc690f558be91e1";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Moo-2.003006.tar.gz;
+      sha256 = "bcb2092ab18a45005b5e2e84465ebf3a4999d8e82a43a09f5a94d859ae7f2472";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ModuleRuntime RoleTiny SubQuote ];
+    propagatedBuildInputs = [ ClassMethodModifiers ModuleRuntime RoleTiny SubQuote ];
     meta = {
       description = "Minimalist Object Orientation (with Moose compatibility)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
