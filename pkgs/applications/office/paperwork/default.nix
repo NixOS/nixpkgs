@@ -54,7 +54,8 @@ python3Packages.buildPythonApplication rec {
   }}/lib/aspell";
 
   postInstall = ''
-    ln -s ${python3Packages.paperwork-backend}/bin/paperwork-shell $out/bin
+    # paperwork-shell needs to be re-wrapped with access to paperwork
+    cp ${python3Packages.paperwork-backend}/bin/.paperwork-shell-wrapped $out/bin/paperwork-shell
   '';
 
   checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
