@@ -57,6 +57,12 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     # paperwork-shell needs to be re-wrapped with access to paperwork
     cp ${python3Packages.paperwork-backend}/bin/.paperwork-shell-wrapped $out/bin/paperwork-shell
+    # install desktop files and icons
+    # paperwork-shell install copies everything to $HOME/.local/share instead of $out/share
+    mkdir -p home/.local
+    mkdir -p $out/share
+    ln -s $out/share home/.local/share
+    HOME=$(readlink -f home) $out/bin/paperwork-shell install
   '';
 
   checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
