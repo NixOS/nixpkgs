@@ -9071,6 +9071,10 @@ in
     php = php73;
   });
 
+  php74Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php74;
+  });
+
   phpPackages-unit = php72Packages-unit;
 
   php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
@@ -9079,6 +9083,10 @@ in
 
   php73Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php73-unit;
+  });
+
+  php74Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php74-unit;
   });
 
   inherit (callPackages ../development/interpreters/php {

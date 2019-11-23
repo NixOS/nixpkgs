@@ -14,6 +14,7 @@ let
     });
 
   isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
+  isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
 
   apcu = buildPecl {
     version = "5.1.17";
@@ -101,7 +102,7 @@ let
     };
   };
 
-  couchbase = buildPecl rec {
+  couchbase = assert !isPhp74; buildPecl rec {
     version = "2.6.1";
     pname = "couchbase";
 
@@ -140,6 +141,8 @@ let
              AC_MSG_WARN([Cannot find igbinary.h])
       '')
     ];
+
+    meta.broken = isPhp74;
   };
 
   event = buildPecl {
@@ -254,20 +257,24 @@ let
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
-  pcs = buildPecl {
+  pcs = assert !isPhp74; buildPecl {
     version = "1.3.3";
     pname = "pcs";
 
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
+
+    meta.broken = isPhp74;
   };
 
-  pdo_sqlsrv = buildPecl {
+  pdo_sqlsrv = assert !isPhp74; buildPecl {
     version = "5.6.1";
     pname = "pdo_sqlsrv";
 
     sha256 = "02ill1iqffa5fha9iz4y91823scml24ikfk8pn90jyycfwv07x6a";
 
     buildInputs = [ pkgs.unixODBC ];
+
+     meta.broken = isPhp74;
   };
 
   php-cs-fixer = mkDerivation rec {
@@ -478,7 +485,7 @@ let
     };
   };
 
-  protobuf = buildPecl {
+  protobuf = assert !isPhp74; buildPecl {
     version = "3.9.0";
     pname = "protobuf";
 
@@ -492,6 +499,8 @@ let
       '';
       license = licenses.bsd3;
       homepage = "https://developers.google.com/protocol-buffers/";
+
+      broken = isPhp74;
     };
   };
 
@@ -585,13 +594,15 @@ let
     sha256 = "0b5pw17lzqknhijfymksvf8fm1zilppr97ypb31n599jw3mxf62f";
   };
 
-  sqlsrv = buildPecl {
+  sqlsrv = assert !isPhp74; buildPecl {
     version = "5.6.1";
     pname = "sqlsrv";
 
     sha256 = "0ial621zxn9zvjh7k1h755sm2lc9aafc389yxksqcxcmm7kqmd0a";
 
     buildInputs = [ pkgs.unixODBC ];
+
+    meta.broken = isPhp74;
   };
 
   v8 = buildPecl {
