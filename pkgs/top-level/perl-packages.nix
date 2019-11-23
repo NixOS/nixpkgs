@@ -18370,10 +18370,10 @@ let
 
   TestSimple13 = buildPerlPackage {
     pname = "Test-Simple";
-    version = "1.302168";
+    version = "1.302169";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302168.tar.gz;
-      sha256 = "02f6132b2062abb23474b0fc02e70a0fbbf7bf581a6010e64c08891530447ffa";
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302169.tar.gz;
+      sha256 = "411704776f0f787b1c2e4fb0e612162650a80b0dc0a719d84abc1070025ac723";
     };
     meta = {
       description = "Basic utilities for writing tests";
