@@ -7777,6 +7777,7 @@ let
       sha256 = "af53f2d3f63297e046676eae14a76296afdd2910e09723b6b113708622b7989b";
     };
     buildInputs = [ pkgs.gnupg1orig ];
+    doCheck = !stdenv.isAarch64;
   };
 
   GnuPGInterface = buildPerlPackage {
