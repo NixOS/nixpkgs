@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "gpxsee";
-  version = "7.17";
+  version = "7.18";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "10mch709m4ws73yzkrx9lm2hwzl179ggpk6xkbhkvnl7rsd2yz08";
+    sha256 = "1z3knfqfv0rwsq66adk0qngw1r500yvy4z259bygqkzbn2l5fcjk";
   };
 
   nativeBuildInputs = [ qmake ];
