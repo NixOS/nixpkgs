@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtool, curl
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool, curl
 , python, munge, perl, pam, openssl, zlib
 , ncurses, mysql, gtk2, lua, hwloc, numactl
 , readline, freeipmi, libssh2, xorg, lz4
@@ -21,6 +21,21 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-12838-prerequisite-1.patch";
+      url = "https://github.com/SchedMD/slurm/commit/e8567e06be57190825bff737e5523c307da51530.patch";
+      sha256 = "1sxllghnc8j5sh4md1lv3hdj3h3xag3ylqv3v00nhxfximgc74d6";
+      excludes = [ "NEWS" ];
+    })
+    (fetchpatch {
+      name = "CVE-2019-12838.patch";
+      url = "https://github.com/SchedMD/slurm/commit/afa7d743f407c60a7c8a4bd98a10be32c82988b5.patch";
+      sha256 = "017zskjr2yyphij61zws391znghmnh7r7zr21kjngqaixpjaark9";
+      excludes = [ "NEWS" ];
+    })
+  ];
 
   prePatch = stdenv.lib.optional enableX11 ''
     substituteInPlace src/common/x11_util.c \
