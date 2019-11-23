@@ -10309,12 +10309,12 @@ let
       url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Log-Dispatch-FileRotate-1.36.tar.gz";
       sha256 = "0vlmi17p7fky3x58rs7r5mdxi6l5jla8zhlb55kvssxc1w5v2b27";
     };
-    propagatedBuildInputs = [ DateManip LogDispatch PathTiny ];
+    propagatedBuildInputs = [ DateManip LogDispatch ];
     meta = {
       description = "Log to Files that Archive/Rotate Themselves";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ TestFatal TestNeeds TestWarn ];
+    buildInputs = [ PathTiny TestWarn ];
   };
 
   LogHandler = buildPerlModule {
