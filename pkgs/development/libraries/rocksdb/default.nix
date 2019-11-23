@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, cmake
+, cmake, ninja
 , bzip2, lz4, snappy, zlib, zstd
 , enableLite ? false
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s0n4p1b4jzmslz9d2xd4ajra0m6l9x26mjwlbgw0klxjggmy8qn";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
   patches = [
