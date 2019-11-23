@@ -19663,16 +19663,17 @@ let
 
   TypeTiny = buildPerlPackage {
     pname = "Type-Tiny";
-    version = "1.004004";
+    version = "1.006000";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-1.004004.tar.gz;
-      sha256 = "081281ea004cdd89003d938aa52c1398e24411dd8f7163b14d0977a13f7062be";
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-1.006000.tar.gz;
+      sha256 = "d5a60013df0b4a108e5755cfea84a8e81b1eacd4a91f6f17a5515a864ed7fd00";
     };
     propagatedBuildInputs = [ ExporterTiny ];
     meta = {
       description = "Tiny, yet Moo(se)-compatible type constraint";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestMemoryCycle ];
   };
 
   TypesSerialiser = buildPerlPackage {
