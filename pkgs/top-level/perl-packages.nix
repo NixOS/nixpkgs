@@ -20066,10 +20066,10 @@ let
 
   WWWMechanize = buildPerlPackage {
     pname = "WWW-Mechanize";
-    version = "1.94";
+    version = "1.95";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-1.94.tar.gz;
-      sha256 = "00hh5iaxyfmfgh5irz23v5qpc40hff2v78jyi93assi7a4amfl68";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-1.95.tar.gz;
+      sha256 = "1w121x0xsn1bm699ncanyxqv3njqam3zzjkq8p54bqmzpikn5crs";
     };
     propagatedBuildInputs = [ HTMLForm HTMLTree LWP ];
     doCheck = false;
