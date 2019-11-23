@@ -8591,10 +8591,10 @@ let
 
   HTTPEntityParser = buildPerlModule {
      pname = "HTTP-Entity-Parser";
-     version = "0.21";
+     version = "0.22";
      src = fetchurl {
-       url = mirror://cpan/authors/id/K/KA/KAZEBURO/HTTP-Entity-Parser-0.21.tar.gz;
-       sha256 = "1n7qhyscllialds5jsk1k8x2vmfbjvisa3342as5x15hpm13wkf1";
+       url = mirror://cpan/authors/id/K/KA/KAZEBURO/HTTP-Entity-Parser-0.22.tar.gz;
+       sha256 = "1j6nxs0nmx160ip0xw9gb3l19ii8pz9x1ay1y15q7rmllbr1rzlk";
      };
      propagatedBuildInputs = [ HTTPMultiPartParser HashMultiValue JSONMaybeXS StreamBuffered WWWFormUrlEncoded ];
      buildInputs = [ HTTPMessage ModuleBuildTiny ];
