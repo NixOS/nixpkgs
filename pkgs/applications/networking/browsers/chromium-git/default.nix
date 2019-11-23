@@ -48,13 +48,13 @@ let
     use_lld = false;
     use_gold = false;
     use_pulseaudio = true;
-    link_pulseaudio = gnFlags.use_pulseaudio;     
+    link_pulseaudio = gnFlags.use_pulseaudio;
     enable_widevine = false;
     enable_swiftshader = false;
-    
+
     # enable support for the H.264 codec
-    proprietary_codecs = true;          
-    ffmpeg_branding = "Chrome";         
+    proprietary_codecs = true;
+    ffmpeg_branding = "Chrome";
 
     # explicit host_cpu and target_cpu prevent "nix-shell pkgsi686Linux.chromium-git" from building x86_64 version
     # there is no problem with nix-build, but platform detection in nix-shell is not correct
@@ -191,7 +191,7 @@ let
     };
 
 in {
-  chromium-git_78 = common { version = "78.0.3904.77";  };
-  chromium-git_79 = common { version = "79.0.3945.9";   };
-  chromium-git_80 = common { version = "80.0.3949.1";   };
+  chromium-git_78 = common { version = "78.0.3904.117"; };
+  chromium-git_79 = common { version = "79.0.3945.51";  };
+  chromium-git_80 = common { version = "80.0.3975.1";   };
 }
