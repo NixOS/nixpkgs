@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
 
-haskellPackages.mkDerivation {
+haskellPackages.mkDerivation rec {
 
   pname = "carp";
   version = "0.3.0";
