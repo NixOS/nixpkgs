@@ -1,4 +1,4 @@
-{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsaLib, dbus, xkeyboardconfig, bc }:
+{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsaLib, dbus, xkeyboardconfig, bc, addOpenGLRunpath }:
 
 let
   ld_library_path = builtins.concatStringsSep ":" [
@@ -24,6 +24,7 @@ let
       zlib
       libpng
       dbus
+      addOpenGLRunpath.driverLink
     ])
   ];
   license_dir = "~/.config/houdini";
