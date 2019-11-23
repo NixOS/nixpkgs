@@ -4703,12 +4703,12 @@ let
 
   DevelChecklib = buildPerlPackage {
     pname = "Devel-CheckLib";
-    version = "1.13";
+    version = "1.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MATTN/Devel-CheckLib-1.13.tar.gz;
-      sha256 = "1a19qkwxwz3wqb16cdabymfbf9kiydiifw90nd5srpq5hy8gvb94";
+      url = mirror://cpan/authors/id/M/MA/MATTN/Devel-CheckLib-1.14.tar.gz;
+      sha256 = "15621qh5gaan1sgmk9y9svl70nm8viw17x5h1kf0zknkk8lmw77j";
     };
-    buildInputs = [ IOCaptureOutput MockConfig ];
+    buildInputs = [ CaptureTiny MockConfig ];
   };
 
   DevelCheckOS = buildPerlPackage {
