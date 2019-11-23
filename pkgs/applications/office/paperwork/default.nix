@@ -53,6 +53,10 @@ python3Packages.buildPythonApplication rec {
     paths = lib.collect lib.isDerivation aspellDicts;
   }}/lib/aspell";
 
+  postInstall = ''
+    ln -s ${python3Packages.paperwork-backend}/bin/paperwork-shell $out/bin
+  '';
+
   checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
   buildInputs = [
     gnome3.adwaita-icon-theme
