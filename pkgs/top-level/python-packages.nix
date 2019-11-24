@@ -251,8 +251,6 @@ in {
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
-  azure-cli-telemetry = callPackage ../development/python-modules/azure-cli-telemetry { };
-
   azure-common = callPackage ../development/python-modules/azure-common { };
 
   azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
