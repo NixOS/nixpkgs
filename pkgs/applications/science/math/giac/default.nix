@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, texlive, bison, flex, liblapack
+{ stdenv, lib, fetchurl, fetchpatch, texlive, bison, flex, liblapack
 , gmp, mpfr, pari, ntl, gsl, blas, mpfi, ecm, glpk, nauty
 , readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGL ? null, libGLU ? null, xorg ? null, fltk ? null
@@ -7,8 +7,7 @@
 assert enableGUI -> libGLU != null && libGL != null && xorg != null && fltk != null;
 
 stdenv.mkDerivation rec {
-  name = "${attr}-${version}";
-  attr = if enableGUI then "giac-with-xcas" else "giac";
+  pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
   version = "1.5.0-21"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
     description = "A free computer algebra system (CAS)";
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux ++ (optionals (!enableGUI) platforms.darwin);
     maintainers = [ maintainers.symphorien ];
   };
 }
