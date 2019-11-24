@@ -84,5 +84,6 @@
       platforms = [
         "x86_64-linux"
       ];
+      hydraPlatforms = [ ];
     };
   }
