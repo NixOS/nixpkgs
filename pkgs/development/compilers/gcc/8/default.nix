@@ -132,10 +132,10 @@ stdenv.mkDerivation ({
         )
     else "")
       + stdenv.lib.optionalString targetPlatform.isAvr ''
-	        makeFlagsArray+=(
-	           'LIMITS_H_TEST=false'
-	        )
-	      '';
+          makeFlagsArray+=(
+             'LIMITS_H_TEST=false'
+          )
+        '';
 
   inherit noSysDirs staticCompiler crossStageStatic
     libcCross crossMingw;

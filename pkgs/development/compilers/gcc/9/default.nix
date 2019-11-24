@@ -131,10 +131,10 @@ stdenv.mkDerivation ({
         )
     else "")
       + stdenv.lib.optionalString targetPlatform.isAvr ''
-	        makeFlagsArray+=(
-	           'LIMITS_H_TEST=false'
-	        )
-	      '';
+          makeFlagsArray+=(
+             'LIMITS_H_TEST=false'
+          )
+        '';
 
   inherit noSysDirs staticCompiler crossStageStatic
     libcCross crossMingw;
@@ -206,23 +206,27 @@ stdenv.mkDerivation ({
 
   installTargets = optional stripped "install-strip";
 
-  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-  # library headers and binaries, regarless of the language being compiled.
-  #
-  # Likewise, the LTO code doesn't find zlib.
-  #
-  # Cross-compiling, we need gcc not to read ./specs in order to build the g++
-  # compiler (after the specs for the cross-gcc are created). Having
-  # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
-
   env = {
-    CPATH = toString (optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
-      ++ optional (zlib != null) zlib
-    )));
-
-    LIBRARY_PATH = optionalString (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
-
     NIX_NO_SELF_RPATH = true;
+
+    # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+    # library headers and binaries, regarless of the language being compiled.
+    #
+    # Likewise, the LTO code doesn't find zlib.
+    #
+    # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+    # compiler (after the specs for the cross-gcc are created). Having
+    # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
+
+    CPATH = toString (makeSearchPathOutput "dev" "include" ([]
+      ++ optional (zlib != null) zlib
+    ));
+
+    # Per https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html only
+    # affects native buidls, but should be fine for cross.
+    LIBRARY_PATH = toString (makeLibraryPath ([]
+      ++ optional (zlib != null) zlib
+    ));
 
     inherit
       (import ../common/extra-target-flags.nix {
@@ -231,8 +235,7 @@ stdenv.mkDerivation ({
       EXTRA_TARGET_FLAGS
       EXTRA_TARGET_LDFLAGS
       ;
-  } // optionalAttrs hostPlatform.isSunOS {
-    NIX_LDFLAGS =  "-lm -ldl";
+    NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
   } // optionalAttrs (hostPlatform.system == "x86_64-solaris") {
     # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
     CC = "gcc -m64";
