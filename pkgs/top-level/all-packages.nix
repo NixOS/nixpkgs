@@ -1013,8 +1013,6 @@ in
 
   adapta-gtk-theme = callPackage ../misc/themes/adapta { };
 
-  adapta-kde-theme = callPackage ../misc/themes/adapta-kde { };
-
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
     inherit (pythonPackages) sphinx;
@@ -17046,6 +17044,8 @@ in
   ### DATA
 
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
+
+  adapta-kde-theme = callPackage ../data/themes/adapta-kde { };
 
   adementary-theme = callPackage ../data/themes/adementary { };
 
