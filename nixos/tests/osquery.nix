@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 with lib;
 
@@ -15,14 +15,14 @@ with lib;
   };
 
   testScript = ''
-    $machine->start;
-    $machine->waitForUnit("osqueryd.service");
+    machine.start()
+    machine.wait_for_unit("osqueryd.service")
 
-    $machine->succeed("echo 'SELECT address FROM etc_hosts LIMIT 1;' | osqueryi | grep '127.0.0.1'");
-    $machine->succeed(
+    machine.succeed("echo 'SELECT address FROM etc_hosts LIMIT 1;' | osqueryi | grep '127.0.0.1'")
+    machine.succeed(
       "echo 'SELECT value FROM osquery_flags WHERE name = \"logger_path\";' | osqueryi | grep /var/log/osquery/logs"
-    );
+    )
 
-    $machine->succeed("echo 'SELECT value FROM osquery_flags WHERE name = \"pidfile\";' | osqueryi | grep /run/osqueryd.pid");
+    machine.succeed("echo 'SELECT value FROM osquery_flags WHERE name = \"pidfile\";' | osqueryi | grep /run/osqueryd.pid")
   '';
 })
