@@ -124,11 +124,16 @@ let
           sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
             chrome/browser/shell_integration_linux.cc
 
-          sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
+          sed -i.bak -e 's!"[^"]*libudev\.so!"${systemd.lib}/lib/libudev.so!' \
             device/udev_linux/udev?_loader.cc
 
-          sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
-            gpu/config/gpu_info_collector_linux.cc
+          for f in gpu/config/gpu_info_collector_linux.cc \
+                   third_party/angle/src/gpu_info_util/SystemInfo_libpci.cpp \
+                   ios/third_party/webkit/src/Source/ThirdParty/ANGLE/src/gpu_info_util/SystemInfo_libpci.cpp ; do
+            if [ -f "$f" ]; then
+              sed -i.bak -e 's!"[^"]*libpci\.so!"${pciutils}/lib/libpci.so!' "$f"
+            fi
+          done
 
           # Allow to put extensions into the system-path.
           sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
@@ -184,7 +189,6 @@ let
         description = "An open source web browser from Google";
         homepage = https://github.com/chromium/chromium;
         license = licenses.bsd3;
-        hydraPlatforms = [];
         platforms = [ "i686-linux" "armv7l-linux" "x86_64-linux" "aarch64-linux" ];
         maintainers = with maintainers; [ volth ];
       };
