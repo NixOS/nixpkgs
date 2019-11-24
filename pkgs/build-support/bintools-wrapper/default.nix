@@ -34,7 +34,7 @@ let
   targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
                                         (targetPlatform.config + "-");
 
-  bintoolsVersion = stdenv.lib.getVersion version;
+  bintoolsVersion = stdenv.lib.getVersion bintools;
   bintoolsName = stdenv.lib.removePrefix targetPrefix (stdenv.lib.getName bintools);
 
   libc_bin = if libc == null then null else getBin libc;
