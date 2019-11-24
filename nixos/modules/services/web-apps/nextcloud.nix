@@ -390,6 +390,7 @@ in {
         in {
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-nextcloud.service" ];
+          path = [ occ ];
           script = ''
             chmod og+x ${cfg.home}
             ln -sf ${pkgs.nextcloud}/apps ${cfg.home}/

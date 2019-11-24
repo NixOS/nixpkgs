@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "adwaita-qt";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = pname;
     rev = version;
-    sha256 = "1jlh4l3sxiwglgx6h4aqi364gr4xipmn09bk88cp997r9sm8jcp9";
+    sha256 = "1z1zl6b1190nffcdyjnwz2xy4s6cvgd98aas9z71l5iddwzy32fm";
   };
 
   nativeBuildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook
+{ stdenv, fetchgit, fetchpatch, autoreconfHook
 , pkgconfig, libtool, boost, SDL
 , glib, pango, gettext, curl, xorg
 , libpng, libjpeg, giflib, speex, atk
@@ -92,6 +92,13 @@ stdenv.mkDerivation {
     ++ optional  enableHwAccel   libGLU_combined
     ++ optionals enablePlugins   [ xulrunner npapi_sdk ]
     ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome2.GConf ];
+
+  patches = [
+    (fetchpatch { # fix compilation due to bad detection of libgif version: https://savannah.gnu.org/patch/index.php?9873
+      url = "https://savannah.gnu.org/patch/download.php?file_id=47859";
+      sha256 = "0aimayzgi5065gkcfcr8d5lkd9c0471q7dqmln42hjzq847n6d5y";
+    })
+  ];
 
   configureFlags = with stdenv.lib; [
     "--with-boost-incl=${boost.dev}/include"

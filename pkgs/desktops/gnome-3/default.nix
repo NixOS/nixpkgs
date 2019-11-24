@@ -99,8 +99,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-themes-extra = callPackage ./core/gnome-themes-extra { };
 
-  gnome-user-docs = callPackage ./core/gnome-user-docs { };
-
   gnome-user-share = callPackage ./core/gnome-user-share { };
 
   gucharmap = callPackage ./core/gucharmap { };
@@ -159,8 +157,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   yelp = callPackage ./core/yelp { };
 
   yelp-xsl = callPackage ./core/yelp-xsl { };
-
-  yelp-tools = callPackage ./core/yelp-tools { };
 
   zenity = callPackage ./core/zenity { };
 
@@ -357,7 +353,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   inherit (pkgs) vala; # added 2019-10-10
 
+  inherit (pkgs) gnome-user-docs; # added 2019-11-20
+
   inherit (pkgs) gegl_0_4; # added 2019-10-31
 
   inherit (pkgs) gjs; # added 2019-01-05
+
+  inherit (pkgs) yelp-tools; # added 2019-11-20
 })

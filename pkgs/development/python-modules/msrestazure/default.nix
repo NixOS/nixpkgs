@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.6.1";
+  version = "0.6.2";
   pname = "msrestazure";
 
   # Pypi tarball doesnt include tests
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Azure";
     repo = "msrestazure-for-python";
     rev = "v${version}";
-    sha256 = "09swndz57131b8x57mzibnsr1sv0l80pk62p89q99gsd6mvc389c";
+    sha256 = "09qwdg4la4jwp5ibypdwsn7h8m2sh8c1kdxvffyxcjan50h14s04";
   };
 
   propagatedBuildInputs = [ adal msrest ];
