@@ -90,15 +90,12 @@ in {
   inherit buildUBoot;
 
   ubootTools = buildUBoot {
-    defconfig = "allnoconfig";
+    defconfig = "tools-only_defconfig";
     installDir = "$out/bin";
     hardeningDisable = [];
     dontStrip = false;
     extraMeta.platforms = lib.platforms.linux;
     extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
-    postConfigure = ''
-      sed -i '/CONFIG_SYS_TEXT_BASE/c\CONFIG_SYS_TEXT_BASE=0x00000000' .config
-    '';
     filesToInstall = [
       "tools/dumpimage"
       "tools/fdtgrep"
