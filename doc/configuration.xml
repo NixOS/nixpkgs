@@ -272,7 +272,7 @@
      very short names:
 <programlisting>
 {
-  allowInsecurePredicate = (pkg: (builtins.stringLength (lib.getName pkg) &lt;= 5);
+  allowInsecurePredicate = pkg: builtins.stringLength (lib.getName pkg) &lt;= 5;
 }
 </programlisting>
     </para>
