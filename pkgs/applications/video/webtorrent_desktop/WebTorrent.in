@@ -1,0 +1,4 @@
+#!@shell@
+
+cd @out@/lib/node_modules/webtorrent-desktop
+exec @electron@/bin/electron .

@@ -23032,6 +23032,7 @@ in
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
+  webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
   webtorrent_desktop_bin = callPackage ../applications/video/webtorrent_desktop/binary.nix {};
 
   wrapWeechat = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
