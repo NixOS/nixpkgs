@@ -1,18 +1,17 @@
-{ stdenv, fetchFromGitHub, mkDerivation
+{ lib, fetchFromGitHub, mkDerivation
 , cmake, extra-cmake-modules
-, qtbase, kcoreaddons, kdecoration }:
+, qtbase, kcoreaddons, kdecoration
+}:
 
-let
-  version = "2017-03-15";
-in mkDerivation rec {
+mkDerivation rec {
   pname = "kde2-decoration";
-  inherit version;
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "repos-holder";
     repo = "kdecoration2-kde2";
-    rev = "2a9cf18ac0646b3532d4db2dd28bd73c4c229783";
-    sha256 = "0kilw6sd3blvm6gx9w4w5ivkjfxlv6wnyivw46pwwvhgxqymkbxk";
+    rev = version;
+    sha256 = "1766z9wscybcqvr828xih93b3rab3hb0ghsf818iflhp1xy0js08";
   };
 
   enableParallelBuilding = true;
@@ -21,9 +20,9 @@ in mkDerivation rec {
 
   buildInputs = [ qtbase kcoreaddons kdecoration ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "KDE 2 window decoration ported to Plasma 5";
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/repos-holder/kdecoration2-kde2";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gnidorah ];
