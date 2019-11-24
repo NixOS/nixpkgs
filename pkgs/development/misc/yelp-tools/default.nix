@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "yelp-tools"; attrPath = "gnome3.yelp-tools"; };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
   };
 
   nativeBuildInputs = [ pkgconfig ];

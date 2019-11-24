@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , lib
+, fetchpatch
 , sphinx
 , flake8
 , pytest
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dac62e53e5670cb40d2ee4cdc785e6b829665932c3ee75307ad677cf5f7d2e9f";
+    sha256 = "17rfgmgwyxyng8q7bvn369cncadqws2wgkg45q6v8337wm9jxins";
   };
 
   checkInputs = [

@@ -23,6 +23,7 @@ let
     deepin-calculator = callPackage ./deepin-calculator { };
     deepin-desktop-base = callPackage ./deepin-desktop-base { };
     deepin-desktop-schemas = callPackage ./deepin-desktop-schemas { };
+    deepin-editor = callPackage ./deepin-editor { };
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
     deepin-gtk-theme = callPackage ./deepin-gtk-theme { };
     deepin-icon-theme = callPackage ./deepin-icon-theme { };

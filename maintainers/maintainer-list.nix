@@ -1780,6 +1780,12 @@
     githubId = 875324;
     name = "David Johnson";
   };
+  dmrauh = {
+    email = "dmrauh@posteo.de";
+    github = "dmrauh";
+    githubId = 37698547;
+    name = "Dominik Michael Rauh";
+  };
   dmvianna = {
     email = "dmlvianna@gmail.com";
     github = "dmvianna";
@@ -2515,6 +2521,7 @@
   gazally = {
     email = "gazally@runbox.com";
     github = "gazally";
+    githubId = 16470252;
     name = "Gemini Lasswell";
   };
   gebner = {
@@ -3699,6 +3706,18 @@
     github = "kuznero";
     githubId = 449813;
     name = "Roman Kuznetsov";
+  };
+  kylesferrazza = {
+    name = "Kyle Sferrazza";
+    email = "kyle.sferrazza@gmail.com";
+
+    github = "kylesferrazza";
+    githubId = 6677292;
+
+    keys = [{
+      longkeyid = "rsa4096/81A1540948162372";
+      fingerprint = "5A9A 1C9B 2369 8049 3B48  CF5B 81A1 5409 4816 2372";
+    }];
   };
   kylewlacy = {
     email = "kylelacy+nix@pm.me";
@@ -6087,7 +6106,7 @@
     name = "Shahrukh Khan";
   };
   shanemikel = {
-    email = "shanemikel1@gmail.com";
+    email = "shanepearlman@pm.me";
     github = "shanemikel";
     githubId = 6720672;
     name = "Shane Pearlman";

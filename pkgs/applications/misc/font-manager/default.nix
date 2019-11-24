@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, ninja, gettext, python3, fetchpatch,
-  pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
+  pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg, yelp-tools,
   vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     itstool
     desktop-file-utils
     vala
-    gnome3.yelp-tools
+    yelp-tools
     wrapGAppsHook
     # For https://github.com/FontManager/master/blob/master/lib/unicode/meson.build
     gobject-introspection

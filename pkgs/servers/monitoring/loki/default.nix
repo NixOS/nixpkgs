@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
 
 buildGoPackage rec {
-  version = "0.4.0";
+  version = "1.0.0";
   pname = "grafana-loki";
   goPackagePath = "github.com/grafana/loki";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "1anwq5dbh29dma18hnialbb253ciazzxmnqvympbh29ricldcf8p";
+    sha256 = "0qqmxrbiph268i5c8i6wpcihspdcglfxd4hy6ag03bl66rciq8nb";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,10 +23,10 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Like Prometheus, but for logs.";
+    description = "Like Prometheus, but for logs";
     license = licenses.asl20;
     homepage = "https://grafana.com/loki";
-    maintainers = with maintainers; [ willibutz globin ];
+    maintainers = with maintainers; [ willibutz globin mmahut ];
     platforms = platforms.linux;
   };
 }
