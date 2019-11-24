@@ -345,6 +345,15 @@ in
       '';
     };
 
+    systemd.network-wait-online.ignore = mkOption {
+      default = [ ];
+      example = [ "enp2s1" ];
+      type = with types; listOf str;
+      description = lib.mdDoc ''
+        Interfaces to ignore, when waiting for network online.
+      '';
+    };
+
     systemd.additionalUpstreamSystemUnits = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -606,6 +615,16 @@ in
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-importd.environment = proxy_env;
     systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
+    systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = mkIf
+      (0 != length config.systemd.network-wait-online.ignore) [
+        "" # clear old command
+        "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online ${
+          toString
+            (map
+              (ig: "--ignore ${escapeShellArg ig}")
+              config.systemd.network-wait-online.ignore)
+        }"
+      ];
 
     # NixOS has kernel modules in a different location, so override that here.
     systemd.services.kmod-static-nodes.unitConfig.ConditionFileNotEmpty = [
