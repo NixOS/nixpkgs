@@ -10469,6 +10469,8 @@ in
 
   tflint = callPackage ../development/tools/analysis/tflint { };
 
+  tfsec = callPackage ../development/tools/analysis/tfsec { };
+
   todoist = callPackage ../applications/misc/todoist { };
 
   todolist = callPackage ../applications/misc/todolist { };
