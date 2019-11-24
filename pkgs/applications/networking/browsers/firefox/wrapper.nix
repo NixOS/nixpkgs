@@ -18,8 +18,9 @@ browser:
 
 let
   wrapper =
-    { browserName ? browser.browserName or (builtins.parseDrvName browser.name).name
-    , name ? (browserName + "-" + (builtins.parseDrvName browser.name).version)
+    { browserName ? browser.browserName or (lib.getName browser)
+    , pname ? browserName
+    , version ? lib.getVersion browser
     , desktopName ? # browserName with first letter capitalized
       (lib.toUpper (lib.substring 0 1 browserName) + lib.substring 1 (-1) browserName)
     , nameSuffix ? ""
@@ -83,7 +84,7 @@ let
       gtk_modules = [ libcanberra-gtk2 ];
 
     in stdenv.mkDerivation {
-      inherit name;
+      inherit pname version;
 
       desktopItem = makeDesktopItem {
         name = browserName;

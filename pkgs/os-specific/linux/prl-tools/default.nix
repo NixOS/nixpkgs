@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ( cd $sourceRoot/tools; tar -xaf prltools${if x64 then ".x64" else ""}.tar.gz )
   '';
 
-  kernelVersion = if libsOnly then "" else (builtins.parseDrvName kernel.name).version;
+  kernelVersion = if libsOnly then "" else lib.getName kernel.name;
   kernelDir = if libsOnly then "" else "${kernel.dev}/lib/modules/${kernelVersion}";
   scriptPath = lib.concatStringsSep ":" (lib.optionals (!libsOnly) [ "${utillinux}/bin" "${gawk}/bin" ]);
 
