@@ -45,12 +45,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
     with subtest("wordpress-init went through"):
         for site_name in site_names:
             info = machine.get_unit_info(f"wordpress-init-{site_name}")
-            assert info.Result == "success"
+            assert info["Result"] == "success"
 
     with subtest("secret keys are set"):
-        re.compile(r"^define.*NONCE_SALT.{64,};$")
+        pattern = re.compile(r"^define.*NONCE_SALT.{64,};$", re.MULTILINE)
         for site_name in site_names:
-            assert r.match(
+            assert pattern.search(
                 machine.succeed(f"cat /var/lib/wordpress/{site_name}/secret-keys.php")
             )
   '';
