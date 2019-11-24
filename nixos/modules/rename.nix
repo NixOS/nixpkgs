@@ -285,6 +285,9 @@ with lib;
     (mkRemovedOptionModule [ "services.beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services.beegfs" ] "The BeeGFS module has been removed")
 
+    # osquery
+    (mkRemovedOptionModule [ "services.osquery" ] "The osquery module has been removed")
+
     # Redis
     (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
     (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
