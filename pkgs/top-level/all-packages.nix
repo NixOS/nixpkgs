@@ -4152,6 +4152,8 @@ in
 
   netmask = callPackage ../tools/networking/netmask {};
 
+  netplan = callPackage ../tools/networking/netplan {};
+
   ipv6calc = callPackage ../tools/networking/ipv6calc {};
 
   ipxe = callPackage ../tools/misc/ipxe { };
