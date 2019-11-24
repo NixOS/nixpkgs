@@ -72,35 +72,32 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     url = "http://localhost/index.html"
 
 
-    def checkEtag():
-        etag = webserver.succeed(
-            f'curl -v {url} 2>&1 | sed -n -e "s/^< [Ee][Tt][Aa][Gg]: *//p"'
-        )
-        httpCode = webserver.succeed(
+    def check_etag():
+        etag = webserver.succeed(f'curl -v {url} 2>&1 | sed -n -e "s/^< etag: *//ip"')
+        http_code = webserver.succeed(
             f"curl -w '%{http_code}' -X HEAD -H 'If-None-Match: {etag}' {url}"
         )
-        assert httpCode == "304"
+        assert http_code == "304"
 
         return etag
 
 
     webserver.wait_for_unit("nginx")
-    webserver.wait_for_open_port("80")
+    webserver.wait_for_open_port(80)
 
     with subtest("check ETag if serving Nix store paths"):
-        oldEtag = checkEtag
+        old_etag = check_etag()
         webserver.succeed(
             "${etagSystem}/bin/switch-to-configuration test >&2"
         )
-        webserver.sleep(1)  # race condition
-        newEtag = checkEtag
-        assert oldEtag != newEtag
+        new_etag = check_etag()
+        assert old_etag != new_etag
 
     with subtest("config is reloaded on nixos-rebuild switch"):
         webserver.succeed(
             "${justReloadSystem}/bin/switch-to-configuration test >&2"
         )
-        webserver.wait_for_open_port("8080")
+        webserver.wait_for_open_port(8080)
         webserver.fail("journalctl -u nginx | grep -q -i stopped")
         webserver.succeed("journalctl -u nginx | grep -q -i reloaded")
 
