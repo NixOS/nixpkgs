@@ -4524,6 +4524,12 @@
     githubId = 117842;
     name = "Henri Bourcereau";
   };
+  mmilata = {
+    email = "martin@martinmilata.cz";
+    github = "mmilata";
+    gitHubId = 85857;
+    name = "Martin Milata";
+  };
   mmlb = {
     email = "me.mmlb@mmlb.me";
     github = "mmlb";
