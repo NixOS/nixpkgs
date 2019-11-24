@@ -3,7 +3,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "wordpress";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ grahamc ]; # under duress!
+    maintainers = [
+      flokli
+      grahamc # under duress!
+      mmilata
+    ];
   };
 
   machine =
