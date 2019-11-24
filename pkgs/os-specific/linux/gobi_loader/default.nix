@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0jkmpqkiddpxrzl2s9s3kh64ha48m00nn53f82m1rphw8maw5gbq";
   };
 
+  postPatch = ''
+    substituteInPlace 60-gobi.rules --replace "gobi_loader" "${placeholder "out"}/lib/udev/gobi_loader"
+    substituteInPlace 60-gobi.rules --replace "/lib/firmware" "/run/current-system/firmware"
+  '';
+
   makeFlags = "prefix=${placeholder "out"}";
 
   meta = with stdenv.lib; {
