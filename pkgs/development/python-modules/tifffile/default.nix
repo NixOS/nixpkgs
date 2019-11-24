@@ -23,7 +23,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ numpy ]
-    ++ lib.optional isPy27 [ futures enum34 pathlib ];
+    ++ lib.optionals isPy27 [ futures enum34 pathlib ];
 
   meta = with lib; {
     description = "Read and write image data from and to TIFF files.";
