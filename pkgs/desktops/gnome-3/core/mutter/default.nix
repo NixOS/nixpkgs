@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, substituteAll, stdenv, pkgconfig, gnome3, gettext, gobject-introspection, upower, cairo
-, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
+, pango, cogl, json-glib, libstartup_notification, zenity, libcanberra-gtk3
 , ninja, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , gsettings-desktop-schemas, glib, gtk3, gnome-desktop
 , geocode-glib, pipewire, libgudev, libwacom, xwayland, meson
@@ -7,17 +7,20 @@
 , xorgserver
 , python3
 , wrapGAppsHook
+, sysprof
+, desktop-file-utils
+, libcap_ng
 }:
 
 stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.32.2";
+  version = "3.34.1";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1h577i2ap7dpfy1jg101jvc6nzccc0csgvd55ahydlr8f94frcva";
+    sha256 = "13kmmgg2zizr0522clwc2zn3bkwbir503b1wjiiixf5xi37jc65s";
   };
 
   mesonFlags = [
@@ -28,6 +31,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # required for pkgconfig to detect mutter-clutter
     libXtst
+    json-glib
+    libcap_ng
   ];
 
   nativeBuildInputs = [
@@ -39,28 +44,32 @@ stdenv.mkDerivation rec {
     # for cvt command
     xorgserver
     wrapGAppsHook
+    desktop-file-utils
   ];
 
   buildInputs = [
     glib gobject-introspection gtk3 gsettings-desktop-schemas upower
-    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
+    gnome-desktop cairo pango cogl zenity libstartup_notification
     geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
     libxkbcommon pipewire xwayland
-    gnome-settings-daemon
+    gnome-settings-daemon sysprof
   ];
 
   patches = [
+    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
+    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
+    ./drop-inheritable.patch
+   # TODO: submit upstream
+   ./0001-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
     })
-    # Fix a segmentation fault in dri_flush_front_buffer() upon
-    # suspend/resume. This change should be removed when Mutter
-    # is updated to 3.34.
+    # Fix build with libglvnd provided headers
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/8307c0f7ab60760de53f764e6636893733543be8.diff";
-      sha256 = "1hzfva71xdqvvnx5smjsrjlgyrmc7dj94mpylkak0gwda5si0h2n";
+      url = "https://gitlab.gnome.org/GNOME/mutter/commit/a444a4c5f58ea516ad3cd9d6ddc0056c3ca9bc90.patch";
+      sha256 = "0imy2j8af9477jliwdq4jc40yw1cifsjjf196gnmwxr9rkj0hbrd";
     })
   ];
 

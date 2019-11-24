@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.33.0";
+  version = "0.42.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mc8ljfk6xyn2cq725s8hgapp62z5mylzw9akvkhwwz3bh8m5a7f";
+    sha256 = "48cb522c1c993e238bfe272fbb18049cbd4bf5b9d6c0d4a4fa113cc790e8196c";
   };
 
   propagatedBuildInputs = [

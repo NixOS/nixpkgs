@@ -2,18 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "cask";
-  version = "0.8.4";
 
-  src = fetchurl {
-    url = "https://github.com/cask/cask/archive/v${version}.tar.gz";
-    sha256 = "02f8bb20b33b23fb11e7d2a1d282519dfdb8b3090b9672448b8c2c2cacd3e478";
-  };
+  inherit (emacsPackages.melpaStablePackages.cask) src version;
 
   doCheck = true;
+
+  nativeBuildInputs = [ emacsPackages.emacs ];
   buildInputs = with emacsPackages; [
     s f dash ansi ecukes servant ert-runner el-mock
     noflet ert-async shell-split-string git package-build
+  ] ++ [
+    python
   ];
+
   buildPhase = ''
     emacs --batch -L . -f batch-byte-compile cask.el cask-cli.el
   '';
@@ -38,11 +39,9 @@ stdenv.mkDerivation rec {
       Cask can also be used to manage dependencies for your local Emacs configuration.
     '';
 
-    homepage = https://cask.readthedocs.io/en/latest/index.html;
+    homepage = "https://cask.readthedocs.io/en/latest/index.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.flexw ];
   };
-
-  nativeBuildInputs = [ emacsPackages.emacs python ];
 }

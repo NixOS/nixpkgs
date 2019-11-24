@@ -60,6 +60,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
+      rm -rf $bazelOut/external/{rules_cc,\@rules_cc.marker}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
       rm -rf $bazelOut/external/{local_*,\@local_*.marker}
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran }:
+{ stdenv, fetchurl, gfortran, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "QCDNUM";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gfortran ];
+  buildInputs = [ zlib ];
 
   enableParallelBuilding = true;
 

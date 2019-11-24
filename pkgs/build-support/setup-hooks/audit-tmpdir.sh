@@ -7,7 +7,7 @@
 # the moment that would produce too many spurious errors (e.g. debug
 # info or assertion messages that refer to $TMPDIR).
 
-fixupOutputHooks+=('if [ -z "$noAuditTmpdir" -a -e "$prefix" ]; then auditTmpdir "$prefix"; fi')
+fixupOutputHooks+=('if [[ -z "${noAuditTmpdir-}" && -e "$prefix" ]]; then auditTmpdir "$prefix"; fi')
 
 auditTmpdir() {
     local dir="$1"

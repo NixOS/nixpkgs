@@ -54,8 +54,8 @@ in
         type = types.attrsOf types.str;
         default = {};
         example = {
-          h = "noaction 5\e(";
-          l = "noaction 5\e)";
+          h = "noaction 5\\e(";
+          l = "noaction 5\\e)";
         };
         description = "Defines new command keys.";
       };

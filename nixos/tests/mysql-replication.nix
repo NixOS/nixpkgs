@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 let
   replicateUser = "replicate";
@@ -54,28 +54,36 @@ in
   };
 
   testScript = ''
-    $master->start;
-    $master->waitForUnit("mysql");
-    $master->waitForOpenPort(3306);
+    master.start()
+    master.wait_for_unit("mysql")
+    master.wait_for_open_port(3306)
     # Wait for testdb to be fully populated (5 rows).
-    $master->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
+    master.wait_until_succeeds(
+        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+    )
 
-    $slave1->start;
-    $slave2->start;
-    $slave1->waitForUnit("mysql");
-    $slave1->waitForOpenPort(3306);
-    $slave2->waitForUnit("mysql");
-    $slave2->waitForOpenPort(3306);
+    slave1.start()
+    slave2.start()
+    slave1.wait_for_unit("mysql")
+    slave1.wait_for_open_port(3306)
+    slave2.wait_for_unit("mysql")
+    slave2.wait_for_open_port(3306)
 
     # wait for replications to finish
-    $slave1->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
-    $slave2->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
+    slave1.wait_until_succeeds(
+        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+    )
+    slave2.wait_until_succeeds(
+        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+    )
 
-    $slave2->succeed("systemctl stop mysql");
-    $master->succeed("echo 'insert into testdb.tests values (123, 456);' | mysql -u root -N");
-    $slave2->succeed("systemctl start mysql");
-    $slave2->waitForUnit("mysql");
-    $slave2->waitForOpenPort(3306);
-    $slave2->waitUntilSucceeds("echo 'select * from testdb.tests where Id = 123;' | mysql -u root -N | grep 456");
+    slave2.succeed("systemctl stop mysql")
+    master.succeed("echo 'insert into testdb.tests values (123, 456);' | mysql -u root -N")
+    slave2.succeed("systemctl start mysql")
+    slave2.wait_for_unit("mysql")
+    slave2.wait_for_open_port(3306)
+    slave2.wait_until_succeeds(
+        "echo 'select * from testdb.tests where Id = 123;' | mysql -u root -N | grep 456"
+    )
   '';
 })

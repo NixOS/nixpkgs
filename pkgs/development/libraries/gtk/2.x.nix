@@ -25,19 +25,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  setupHook = ./setup-hook.sh;
+  setupHooks =  [
+    ./hooks/gtk2-clean-immodules-cache.sh
+    ./hooks/drop-icon-theme-cache.sh
+  ];
 
-  nativeBuildInputs = [ setupHook perl pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = [ setupHooks perl pkgconfig gettext gobject-introspection ];
 
   patches = [
-    ./2.0-immodules.cache.patch
-    ./gtk2-theme-paths.patch
+    ./patches/2.0-immodules.cache.patch
+    ./patches/gtk2-theme-paths.patch
   ] ++ optionals stdenv.isDarwin [
     (fetchpatch {
       url = https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776;
       sha256 = "0sp8f1r5c4j2nlnbqgv7s7nxa4cfwigvm033hvhb1ld652pjag4r";
     })
-    ./2.0-darwin-x11.patch
+    ./patches/2.0-darwin-x11.patch
   ];
 
   propagatedBuildInputs = with xorg;

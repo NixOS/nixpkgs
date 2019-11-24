@@ -1,4 +1,5 @@
 {
+  buildPackages,
   cacert,
   callPackage,
   closureInfo,
@@ -47,7 +48,7 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? "amd64"
+    , arch ? buildPackages.go.GOARCH
 
       # This is used to set name to the pulled image
     , finalImageName ? imageName
@@ -540,7 +541,7 @@ rec {
       configJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
-            architecture = "amd64";
+            architecture = buildPackages.go.GOARCH;
             os = "linux";
           });
           impure = runCommand "${baseName}-standard-dynamic-date.json"
@@ -658,7 +659,7 @@ rec {
       baseJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
-            architecture = "amd64";
+            architecture = buildPackages.go.GOARCH;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"

@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
       name = "Allow_input_files_to_be_missing_for_ed-style_patches.patch";
       sha256 = "0iw0lk0yhnhvfjzal48ij6zdr92mgb84jq7fwryy1hdhi47hhq64";
     })
-    (fetchurl { # CVE-2018-1000156
+    (fetchurl {
       url = https://git.savannah.gnu.org/cgit/patch.git/patch/?id=123eaff0d5d1aebe128295959435b9ca5909c26d;
-      name = "Fix_arbitrary_command_execution_in_ed-style_patches.patch";
+      name = "CVE-2018-1000156.patch";
       sha256 = "1bpy16n3hm5nv9xkrn6c4wglzsdzj3ss1biq16w9kfv48p4hx2vg";
     })
     # https://git.savannah.gnu.org/cgit/patch.git/commit/?id=9c986353e420ead6e706262bf204d6e03322c300
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ./CVE-2019-13636.patch
 
     # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=3fcd042d26d70856e826a42b5f93dc4854d80bf0
-    ./CVE-2019-13638.patch
+    ./CVE-2019-13638-and-CVE-2018-20969.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

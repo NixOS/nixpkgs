@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.2.9";
+  version = "0.3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f6d6046f9f9195206063dd0415dff185ad593d6ee8b0e67f12597c0f4df4986f";
+    sha256 = "42d8ef819367516592a825746a18073ced42ca169ab1f5f4044134703e7a049c";
   };
 
   # Messy test suite. Even when running the tests like tox does, it fails

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cosmosdb";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1d9xzf9ydlhwlsk7ij64ji1r2j0l7bwaykwngcy5lh8sdxax305r";
+    sha256 = "0iakxb2rr1w9171802m9syjzqas02vjah711mpagbgcj549mjysb";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Cosmos DB Management Client Library";
-    homepage = https://github.com/Azure/sdk-for-python/tree/master/azure-mgmt-cosmosdb;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

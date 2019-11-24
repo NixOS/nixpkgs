@@ -92,13 +92,15 @@ rec {
         PATH=${makeBinPath [
           pkgs.binutils-unwrapped
           pkgs.coreutils
+          pkgs.findutils
           pkgs.gcc
           pkgs.pkgconfig
         ]}
+        export PKG_CONFIG_PATH=${concatMapStringsSep ":" (pkg: "${pkg}/lib/pkgconfig") libraries}
         gcc \
             ${optionalString (libraries != [])
               "$(pkg-config --cflags --libs ${
-                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgsconfig -name \*.pc -exec basename {} \;)") libraries
+                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgconfig -name \\*.pc)") libraries
               })"
             } \
             -O \

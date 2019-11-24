@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "opensmtpd";
-  version = "6.4.2p1";
+  version = "6.6.1p1";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
-    sha256 = "0pgv080ai7d98l9340jadp9wjiaqj2qvgpqhilcz0kps2mdiawbd";
+    sha256 = "1ngil8j13m2rq07g94j4yjr6zmaimzy8wbfr17shi7rxnazys6zb";
   };
 
   patches = [
@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
   # See https://github.com/OpenSMTPD/OpenSMTPD/issues/885 for the `sh bootstrap`
   # requirement
   postPatch = ''
-    substituteInPlace smtpd/parse.y \
-      --replace "/usr/libexec/" "$out/libexec/opensmtpd/"
     substituteInPlace mk/smtpctl/Makefile.am --replace "chgrp" "true"
     substituteInPlace mk/smtpctl/Makefile.am --replace "chmod 2555" "chmod 0555"
     sh bootstrap

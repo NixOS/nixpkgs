@@ -4,17 +4,15 @@
 
 buildGoPackage rec {
   pname = "fscrypt";
-  version = "unstable-2019-08-29";
+  version = "0.2.5";
 
   goPackagePath = "github.com/google/fscrypt";
-
-  goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
-    rev = "8a3acda2011e9a080ee792c1e11646e6118a4930";
-    sha256 = "17h6r5lqiz0cw9vsixv48a1p78nd7bs1kncg6p4lfagl7kr5hpls";
+    rev = "v${version}";
+    sha256 = "1jf6363kc9id3ar93znlcglx3llgv01ccp3nlbamm98rm9dps4qk";
   };
 
   buildInputs = [ pam ];

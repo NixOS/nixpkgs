@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
-, libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
+, libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
 , openssl, gperf, cppunit, GConf, ORBit2, poppler, utillinux
-, librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw, mysql
+, librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
@@ -64,6 +64,8 @@ in stdenv.mkDerivation rec {
   inherit version;
 
   inherit (primary-src) src;
+
+  outputs = [ "out" "dev" ];
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
@@ -276,6 +278,9 @@ in stdenv.mkDerivation rec {
 
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
+
+    mkdir -p $dev
+    cp -r include $dev
   '';
 
   configureFlags = [
@@ -361,9 +366,9 @@ in stdenv.mkDerivation rec {
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU_combined mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base glib mysql.connector-c
+      gst_all_1.gst-plugins-base glib libmysqlclient
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
-      python3 sablotron sane-backends unzip vigra which zip zlib
+      python3 sane-backends unzip vigra which zip zlib
       mdds bluez5 libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
       librevenge libe-book libmwaw glm glew ncurses epoxy

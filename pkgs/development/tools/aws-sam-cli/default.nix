@@ -5,21 +5,26 @@
 let
   py = python.override {
     packageOverrides = self: super: {
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "6.7";
+
+      aws-sam-translator = super.aws-sam-translator.overridePythonAttrs (oldAttrs: rec {
+        version = "1.14.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
+          sha256 = "1cghn1m7ana9s8kyg61dwp9mrism5l04vy5rj1wnmksz8vzmnq9w";
         };
       });
 
-      aws-sam-translator = super.aws-sam-translator.overridePythonAttrs (oldAttrs: rec {
-        version = "1.10.0";
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.1.1";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "0e1fa094c6791b233f5e73f2f0803ec6e0622f2320ec5a969f0986855221b92b";
+          sha256 = "0grwi50v3vahvcijlw6g6q55yc5jyj0p1cmiq3rkycxnfr16i81g";
         };
+        nativeBuildInputs = [ super.setuptools_scm ];
+        propagatedBuildInputs = with super; oldAttrs.propagatedBuildInputs ++ [ pyrsistent attrs importlib-metadata ];
+        doCheck = false;
       });
+
     };
   };
 
@@ -29,11 +34,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.16.1";
+  version = "0.22.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2dd68800723c76f52980141ba704e105d77469b6ba465781fbc9120e8121e76c";
+    sha256 = "1flbvqlj5llz7nrszmcf00v2a1pa36alv90r1l8lwn8zid5aabkn";
   };
 
   # Tests are not included in the PyPI package
@@ -55,8 +60,10 @@ buildPythonApplication rec {
     six
   ];
 
+  # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt --replace "requests==2.20.1" "requests==2.22.0"
+    substituteInPlace requirements/base.txt --replace "serverlessrepo==0.1.9" "serverlessrepo~=0.1.9"
     substituteInPlace requirements/base.txt --replace "six~=1.11.0" "six~=1.12.0"
     substituteInPlace requirements/base.txt --replace "PyYAML~=3.12" "PyYAML~=5.1"
   '';

@@ -1,6 +1,6 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
 { lib, stdenv, fetchurl, autoconf, bison, libtool, pkgconfig, re2c
-, mysql, libxml2, readline, zlib, curl, postgresql, gettext
+, libmysqlclient, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
@@ -64,7 +64,7 @@ let
   }:
 
     let
-      mysqlBuildInputs = optional (!mysqlndSupport) mysql.connector-c;
+      mysqlBuildInputs = optional (!mysqlndSupport) libmysqlclient;
       libmcrypt' = libmcrypt.override { disablePosixThreads = true; };
     in stdenv.mkDerivation {
 
@@ -149,9 +149,9 @@ let
       ++ optional postgresqlSupport "--with-pgsql=${postgresql}"
       ++ optional pdo_odbcSupport "--with-pdo-odbc=unixODBC,${unixODBC}"
       ++ optional pdo_pgsqlSupport "--with-pdo-pgsql=${postgresql}"
-      ++ optional pdo_mysqlSupport "--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"
+      ++ optional pdo_mysqlSupport "--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else libmysqlclient}"
       ++ optionals mysqliSupport [
-        "--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"
+        "--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${libmysqlclient}/bin/mysql_config"}"
       ]
       ++ optional ( pdo_mysqlSupport || mysqliSupport ) "--with-mysql-sock=/run/mysqld/mysqld.sock"
       ++ optional bcmathSupport "--enable-bcmath"
@@ -254,16 +254,16 @@ let
 
 in {
   php72 = generic {
-    version = "7.2.22";
-    sha256 = "12phn0rrd5r1j6xlz83h7v6gszmj4lb5gwj927psbbc6nn1rh2n1";
+    version = "7.2.24";
+    sha256 = "00znhjcn6k4mbxz6jqlqf6bzr4cqdf8pnbmxkg6bns1hnr6r6yd0";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.9";
-    sha256 = "1i33v50rbqrfwjwch1d46mbpwbxrg1xfycs9mjl7xsy9m04rg753";
+    version = "7.3.11";
+    sha256 = "1rxm256vhnvyabfwmyv51sqrkjlid1g8lczcy4skc2f72d5zzlcj";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;

@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
     pname = "pyparsing";
-    version = "2.3.1";
+    version = "2.4.5";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "66c9268862641abcac4a96ba74506e594c884e3f57690a696d21ad8210ed667a";
+      sha256 = "4ca62001be367f01bd3e92ecbb79070272a9d4964dce6a48a82ff0b8bc7e683a";
     };
 
     # Not everything necessary to run the tests is included in the distribution

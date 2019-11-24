@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "Werkzeug";
-  version = "0.15.5";
+  version = "0.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a13b74dd3c45f758d4ebdb224be8f1ab8ef58b3c0ffc1783a8c7d9f4f50227e6";
+    sha256 = "7280924747b5733b246fe23972186c6b348f9ae29724135a6dfc1e53cea433e7";
   };
 
   propagatedBuildInputs = [ itsdangerous ];

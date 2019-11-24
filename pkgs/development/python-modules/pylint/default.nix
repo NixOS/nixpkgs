@@ -1,20 +1,20 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, astroid,
-  isort, mccabe, pytest, pytestrunner }:
+  isort, mccabe, pytestCheckHook, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.3.1";
+  version = "2.4.3";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wgzq0da87m7708hrc9h4bc5m4z2p7379i4xyydszasmjns3sgkj";
+    sha256 = "856476331f3e26598017290fd65bebe81c960e806776f324093a46b76fb2d1c0";
   };
 
   nativeBuildInputs = [ pytestrunner ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [ astroid isort mccabe ];
 
@@ -23,17 +23,15 @@ buildPythonPackage rec {
     rm -vf pylint/test/test_functional.py
   '';
 
-  checkPhase = ''
-    pytest pylint/test -k "not ${lib.concatStringsSep " and not " (
-      # Broken tests
-      [ "member_checks_py37" "iterable_context_py36" ] ++
-      # Disable broken darwin tests
-      lib.optionals stdenv.isDarwin [
-        "test_parallel_execution"
-        "test_py3k_jobs_option"
-      ]
-    )}"
-  '';
+  disabledTests = [
+    # https://github.com/PyCQA/pylint/issues/3198
+    "test_by_module_statement_value"
+   ] ++ lib.optionals stdenv.isDarwin [
+      "test_parallel_execution"
+      "test_py3k_jobs_option"
+   ];
+
+  dontUseSetuptoolsCheck = true;
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp

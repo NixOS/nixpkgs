@@ -24,7 +24,7 @@
 
 buildGoPackage rec {
   pname = "dde-api";
-  version = "3.18.4.1";
+  version = "5.0.0";
 
   goPackagePath = "pkg.deepin.io/dde/api";
 
@@ -32,7 +32,7 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0bcjp5ijwa4wmx6p43lik6vjlb7d5rk7nf8xl495i3yk9x70wyfa";
+    sha256 = "0iv4krj6dqdknwvmax7aj40k1h96259kqcfnljadrwpl7cvsvp5p";
   };
 
   goDeps = ./deps.nix;

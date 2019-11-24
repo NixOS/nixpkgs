@@ -2,6 +2,7 @@ let generateNodeConf = { lib, pkgs, config, privkpath, pubk, peerId, nodeId, ...
       imports = [ common/user-account.nix ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking.useNetworkd = true;
+      networking.useDHCP = false;
       networking.firewall.enable = false;
       virtualisation.vlans = [ 1 ];
       environment.systemPackages = with pkgs; [ wireguard-tools ];
@@ -44,7 +45,7 @@ let generateNodeConf = { lib, pkgs, config, privkpath, pubk, peerId, nodeId, ...
         };
       };
     };
-in import ./make-test.nix ({pkgs, ... }: {
+in import ./make-test-python.nix ({pkgs, ... }: {
   name = "networkd-wireguard";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ninjatrappeur ];
@@ -69,12 +70,12 @@ in import ./make-test.nix ({pkgs, ... }: {
     in generateNodeConf (attrs // localConf);
   };
 testScript = ''
-    startAll;
-    $node1->waitForUnit('systemd-networkd-wait-online.service');
-    $node2->waitForUnit('systemd-networkd-wait-online.service');
-    $node1->succeed('ping -c 5 10.0.0.2');
-    $node2->succeed('ping -c 5 10.0.0.1');
+    start_all()
+    node1.wait_for_unit("systemd-networkd-wait-online.service")
+    node2.wait_for_unit("systemd-networkd-wait-online.service")
+    node1.succeed("ping -c 5 10.0.0.2")
+    node2.succeed("ping -c 5 10.0.0.1")
     # Is the fwmark set?
-    $node2->succeed('wg | grep -q 42');
+    node2.succeed("wg | grep -q 42")
 '';
 })

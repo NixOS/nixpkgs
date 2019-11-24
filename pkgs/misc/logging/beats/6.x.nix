@@ -28,6 +28,7 @@ in {
   metricbeat6 = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
   packetbeat6 = beat "packetbeat" {
     buildInputs = [ libpcap ];
+    meta.broken = true;
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
     meta.longDescription = ''
       Packetbeat is an open source network packet analyzer that ships the

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3Packages }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, python3Packages }:
 
 let
 
@@ -11,8 +11,8 @@ let
       src = fetchFromGitHub {
         owner = "fieldOfView";
         repo = pname;
-        rev = "46548cbb8d32d10fe3aee12f272d5d8f34271738";
-        sha256 = "0pllba8qx1746pnf5ccbkqn2j6f8hhknpgyrrv244ykvigrlczx0";
+        rev = "a82a42a87bbeb390b80b991afb1a6741c46a3432";
+        sha256 = "0q5yd7pw626qls2ks2y39hb9czd6lgh71jalzl2drwdi6a8mwsfz";
       };
 
       nativeBuildInputs = [ cmake ];

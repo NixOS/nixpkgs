@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0vmn8518zk7qk1mbp1h8dm0f8fx0z0jvmy42c1n15il714lj7vsl";
   };
 
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+
   buildInputs = [ glib pkgconfig gtk2 hamlib ];
 
   meta = with stdenv.lib; {

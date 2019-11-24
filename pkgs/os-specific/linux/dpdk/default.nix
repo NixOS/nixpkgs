@@ -8,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "dpdk-${version}" + lib.optionalString mod "-${kernel.version}";
-  version = "17.11.2";
+  version = "19.08.2";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "19m5l3jkrns8r1zbjb6ry18w50ff36kbl5b5g6pfcp9p57sfisd2";
+    sha256 = "141bqqy4w6nzs9z70x7yv94a4gmxjfal46pxry9bwdh3zi1jwnyd";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -59,6 +59,6 @@ EOF
     homepage = http://dpdk.org/;
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
     platforms =  [ "x86_64-linux" ];
-    maintainers = with maintainers; [ domenkozar orivej ];
+    maintainers = with maintainers; [ domenkozar magenbluten orivej ];
   };
 }

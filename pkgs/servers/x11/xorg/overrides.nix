@@ -79,6 +79,13 @@ self: super:
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
+    patches = [
+      # Fixes an issue that happens when cross-compiling for us.
+      (fetchpatch {
+        url = "https://cgit.freedesktop.org/xorg/lib/libX11/patch/?id=0327c427d62f671eced067c6d9b69f4e216a8cac";
+        sha256 = "11k2mx56hjgw886zf1cdf2nhv7052d5rggimfshg6lq20i38vpza";
+      })
+    ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -368,6 +375,8 @@ self: super:
   xf86videoglide   = super.xf86videoglide.overrideAttrs   (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videoi128    = super.xf86videoi128.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videosavage  = super.xf86videosavage.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videotga     = super.xf86videotga.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videov4l     = super.xf86videov4l.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videovoodoo  = super.xf86videovoodoo.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
@@ -583,6 +592,16 @@ self: super:
         propagatedBuildInputs = [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
+        # patchPhase is not working, this is a hack but we can remove it in the next xorg-server release
+        preConfigure = let
+          headerFix = fetchpatch {
+            url = "https://gitlab.freedesktop.org/xorg/xserver/commit/741bd73429e337071f49509ddcc5fb392e20b0f6.patch";
+            sha256 = "0qjiin9pkggl3c33lfkpn9a9z8ldjpb3y47cflsjkfn868gsk8ri";
+            excludes = [ "hw/xwayland/xwayland-glx.c" ];  # File not in release yet
+          };
+        in ''
+          patch -p1 < ${headerFix}
+        '';
         prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
           export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
         '';
@@ -620,8 +639,8 @@ self: super:
           libAppleWM xorgproto
         ];
 
-        # XQuartz patchset
         patches = [
+          # XQuartz patchset
           (fetchpatch {
             url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
             sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";

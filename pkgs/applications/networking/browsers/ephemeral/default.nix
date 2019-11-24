@@ -1,10 +1,10 @@
 { stdenv
 , fetchFromGitHub
 , desktop-file-utils
+, vala
 , gettext
 , glib
 , gtk3
-, hicolor-icon-theme
 , libgee
 , libdazzle
 , meson
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
-  version = "5.3.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ephemeral";
     rev = version;
-    sha256 = "1xglhv4rpl6vqryvliyvr9y8mqli4x4bjcfjsl1v8gdxkzkwfy39";
+    sha256 = "1i77chbjjg8zda5bnn1wj4h00a88awfls5b3i3dqwgsi356hv4wb";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gtk3
-    hicolor-icon-theme
     libdazzle
     libgee
     pantheon.granite

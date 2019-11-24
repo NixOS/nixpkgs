@@ -3,7 +3,7 @@
 
 mkDerivation rec {
   pname = "deepin-shortcut-viewer";
-  version = "1.3.5";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";

@@ -37,6 +37,12 @@ stdenv.mkDerivation {
 
   patchFlags = "-p3";
 
+  # fixes build on gcc8
+  postPatch = ''
+    substituteInPlace ./methodjit/MethodJIT.cpp \
+      --replace 'asm volatile' 'asm'
+  '';
+
   # On the Sheevaplug, ARM, its nanojit thing segfaults in japi-tests in
   # "make check". Disabling tracejit makes it work, but then it needs the
   # patch findvanilla.patch do disable a checker about allocator safety. In case

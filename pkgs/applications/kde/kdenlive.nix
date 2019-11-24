@@ -70,10 +70,13 @@ mkDerivation {
     kpurpose
     kdeclarative
   ];
+  patches = [ ./mlt-path.patch ];
+  inherit mlt;
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.
     ''
       sed -i CMakeLists.txt -e '/find_package(Qt5 REQUIRED/ s|)| Concurrent)|'
+      substituteAllInPlace src/kdenlivesettings.kcfg
     '';
   meta = {
     license = with lib.licenses; [ gpl2Plus ];

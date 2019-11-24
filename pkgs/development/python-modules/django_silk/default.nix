@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "3.0.3";
+  version = "3.0.4";
 
   # pypi tarball doesn't include test project
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
     rev = version;
-    sha256 = "0j1r88zv7fvmlnrzr2h65czzdcpvl7n847ra1pfc52bfa4lf8b9j";
+    sha256 = "10542yvbchcy8hik2hw3jclb4ic89mxkw0sykag4bw9sv43xv7vx";
   };
   # "test_time_taken" tests aren't suitable for reproducible execution, but django's
   # test runner doesn't have an easy way to ignore tests - so instead prevent it from picking

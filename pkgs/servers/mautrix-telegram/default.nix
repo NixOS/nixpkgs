@@ -1,15 +1,24 @@
-{ lib, python3, mautrix-telegram }:
+{ lib, python3, mautrix-telegram, fetchpatch }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fbed41838e1ef7e43f6e47ff38f9906cb311cfc5b3b6bc6f704babd7c83b193d";
+    sha256 = "1lsi6x5yr8f9yjxsh1rmcd6wnxr6s6rpr720lg7sq629m42d9p1d";
   };
+
+  patches = [
+    (fetchpatch {
+      url = https://github.com/tulir/mautrix-telegram/commit/be6d395ed66d86ec7f13a262f9ae37731987019c.patch;
+      sha256 = "1q69ip17r45yhyrxr0pj8bvqj2grw2l39wak8pi5pm7qrxra93j2";
+    })
+  ];
+
+  disabled = pythonOlder "3.6";
 
   postPatch = ''
     sed -i -e '/alembic>/d' setup.py
@@ -28,6 +37,7 @@ buildPythonPackage rec {
     telethon-session-sqlalchemy
     pillow
     lxml
+    setuptools
   ];
 
   # `alembic` (a database migration tool) is only needed for the initial setup,
