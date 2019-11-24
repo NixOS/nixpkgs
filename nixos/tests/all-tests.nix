@@ -258,6 +258,7 @@ in
   syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
+  systemd-analyze = handleTest ./systemd-analyze.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
