@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     sha256 = "1byigmhmby8lgi2vmgxy9jlrrqk7jyr507zqkihq5bv8kfsanv1x";
     message = ''
       This nix expression requires that ${name} is already part of the store.
-      Download it from https://sidefx.com and add it to the nix store with:
+      Download it from https://www.sidefx.com and add it to the nix store with:
 
           nix-prefetch-url <URL>
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "3D animation application software";
-    homepage = https://sidefx.com;
+    homepage = https://www.sidefx.com;
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.canndrew ];
