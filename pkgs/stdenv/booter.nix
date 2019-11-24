@@ -121,9 +121,12 @@ stageFuns: let
   postStage = buildPackages: {
     __raw = true;
     stdenv.cc =
-      if buildPackages.stdenv.cc.isClang or false
-      then buildPackages.clang
-      else buildPackages.gcc;
+      if buildPackages.stdenv.hasCC
+      then
+        if buildPackages.stdenv.cc.isClang or false
+        then buildPackages.clang
+        else buildPackages.gcc
+      else buildPackages.stdenv.cc;
   };
 
 in dfold folder postStage (_: {}) withAllowCustomOverrides
