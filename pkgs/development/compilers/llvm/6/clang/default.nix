@@ -6,8 +6,7 @@
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
   self = stdenv.mkDerivation ({
-    pname = "clang";
-    inherit version;
+    name = "clang-${version}";
 
     src = fetch "cfe" "0rxn4rh7rrnsqbdgp4gzc8ishbkryhpl1kd3mpnxzpxxhla3y93w";
 
@@ -88,7 +87,7 @@ let
       platforms   = stdenv.lib.platforms.all;
     };
   } // stdenv.lib.optionalAttrs enableManpages {
-    pname = "clang-manpages";
+    name = "clang-manpages-${version}";
 
     buildPhase = ''
       make docs-clang-man

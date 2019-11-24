@@ -23,8 +23,7 @@ let
 in
 
 stdenv.mkDerivation ({
-  pname = "llvm";
-  inherit version;
+  name = "llvm-${version}";
 
   src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
 
@@ -150,7 +149,7 @@ stdenv.mkDerivation ({
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  pname = "llvm-manpages";
+  name = "llvm-manpages-${version}";
 
   buildPhase = ''
     make docs-llvm-man

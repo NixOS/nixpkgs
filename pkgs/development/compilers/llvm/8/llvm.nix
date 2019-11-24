@@ -28,8 +28,7 @@ let
     concatStringsSep "." (take 1 (splitString "." release_version));
 
 in stdenv.mkDerivation ({
-  pname = "llvm";
-  inherit version;
+  name = "llvm-${version}";
 
   src = fetch "llvm" "1rvm5gqp5v8hfn17kqws3zhk94w4kxndal12bqa0y57p09nply24";
   polly_src = fetch "polly" "1lfjdz3ilj5xmjxvicd8f5ykybks67ry2pdb777352r3mzlgg8g8";
@@ -151,7 +150,7 @@ in stdenv.mkDerivation ({
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  pname = "llvm-manpages";
+  name = "llvm-manpages-${version}";
 
   buildPhase = ''
     make docs-llvm-man

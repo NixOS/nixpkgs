@@ -93,8 +93,8 @@ let majorVersion = "6";
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
-    stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
-    crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
+    stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
+    crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
 
 in
 
@@ -102,8 +102,7 @@ in
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
-  pname = "${crossNameAddon}${name}${if stripped then "" else "-debug"}";
-  inherit version;
+  name = crossNameAddon + "${name}${if stripped then "" else "-debug"}-${version}";
 
   builder = ../builder.sh;
 
