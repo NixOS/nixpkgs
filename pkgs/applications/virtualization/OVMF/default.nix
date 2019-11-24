@@ -16,7 +16,7 @@ let
   else
     throw "Unsupported architecture";
 
-  version = (builtins.parseDrvName edk2.name).version;
+  version = lib.getVersion edk2;
 in
 
 edk2.mkDerivation projectDscPath {

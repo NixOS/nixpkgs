@@ -84,7 +84,8 @@ let
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
-      removePrefix removeSuffix versionOlder versionAtLeast getVersion
+      removePrefix removeSuffix versionOlder versionAtLeast
+      getName getVersion
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber isStorePath
       toInt readPathsFromFile fileContents;

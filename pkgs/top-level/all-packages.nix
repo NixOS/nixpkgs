@@ -18299,8 +18299,8 @@ in
 
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
     browserName = "firefox";
-    name = "firefox-bin-" +
-      (builtins.parseDrvName firefox-bin-unwrapped.name).version;
+    pname = "firefox-bin";
+    version = lib.getVersion firefox-bin-unwrapped;
     desktopName = "Firefox";
   };
 
@@ -18313,8 +18313,8 @@ in
 
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
     browserName = "firefox";
-    name = "firefox-beta-bin-" +
-      (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
+    pname = "firefox-beta-bin";
+    version = lib.getVersion firefox-beta-bin-unwrapped;
     desktopName = "Firefox Beta";
   };
 
@@ -18328,8 +18328,8 @@ in
   firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
     browserName = "firefox";
     nameSuffix = "-devedition";
-    name = "firefox-devedition-bin-" +
-      (builtins.parseDrvName firefox-devedition-bin-unwrapped.name).version;
+    pname = "firefox-devedition-bin";
+    version = lib.getVersion firefox-devedition-bin-unwrapped;
     desktopName = "Firefox DevEdition";
   };
 

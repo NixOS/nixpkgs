@@ -126,7 +126,7 @@ let
 
   packageData = package: {
     name = package.name;
-    pname = (builtins.parseDrvName package.name).name;
+    pname = lib.getName package;
     updateScript = map builtins.toString (pkgs.lib.toList package.updateScript);
   };
 

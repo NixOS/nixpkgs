@@ -3,7 +3,7 @@
 
 set -eu -o pipefail
 
-oldVersion="$(nix-instantiate --eval -E "with import ./. {}; oh-my-zsh.version or (builtins.parseDrvName oh-my-zsh.name).version" | tr -d '"')"
+oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion oh-my-zsh" | tr -d '"')"
 latestSha="$(curl -L -s https://api.github.com/repos/robbyrussell/oh-my-zsh/commits\?sha\=master\&since\=${oldVersion} | jq -r '.[0].sha')"
 url="$(nix-instantiate --eval -E "with import ./. {}; oh-my-zsh.src.url" | tr -d '"')"
 
