@@ -7715,7 +7715,6 @@ broken-packages:
   - pandoc-japanese-filters
   - pandoc-lens
   - pandoc-markdown-ghci-filter
-  - pandoc-placetable
   - pandoc-plantuml-diagrams
   - pandoc-pyplot
   - pandoc-unlit
