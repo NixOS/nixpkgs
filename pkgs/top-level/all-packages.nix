@@ -10697,6 +10697,8 @@ in
 
   bamf = callPackage ../development/libraries/bamf { };
 
+  bcg729 = callPackage ../development/libraries/bcg729 { };
+
   bctoolbox = callPackage ../development/libraries/bctoolbox { };
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
