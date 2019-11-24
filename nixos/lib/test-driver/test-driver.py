@@ -215,7 +215,7 @@ class Machine:
             return path
 
         self.state_dir = create_dir("vm-state-{}".format(self.name))
-        self.shared_dir = create_dir("xchg-shared")
+        self.shared_dir = create_dir("{}/xchg".format(self.state_dir))
 
         self.booted = False
         self.connected = False
