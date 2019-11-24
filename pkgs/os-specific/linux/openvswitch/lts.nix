@@ -1,26 +1,29 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
-, procps, libcap_ng, openssl, python3 , perl
-, kernel ? null }:
+, procps, libcap_ng, openssl, python2, iproute , perl
+, automake, autoconf, libtool, kernel ? null }:
 
 with stdenv.lib;
 
 let
   _kernel = kernel;
-  pythonEnv = python3.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
-  version = "2.12.0";
+  version = "2.5.9";
   pname = "openvswitch";
 
   src = fetchurl {
     url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1y78ix5inhhcvicbvyy2ij38am1215nr55vydhab3d4065q45z8k";
+    sha256 = "0iv0ncwl6s4qyyb655yj5xvqrjr1zbymmab96q259wa09xnyw7b7";
   };
+
+  patches = [ ./patches/lts-ssl.patch ];
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng pythonEnv
+  nativeBuildInputs = [ autoconf libtool automake pkgconfig  ];
+  buildInputs = [ makeWrapper utillinux openssl libcap_ng python2
                   perl procps which ];
+
+  preConfigure = "./boot.sh";
 
   configureFlags = [
     "--localstatedir=/var"
@@ -37,12 +40,26 @@ in stdenv.mkDerivation rec {
 
   postBuild = ''
     # fix tests
-    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${pythonEnv.interpreter}'
-    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${pythonEnv.interpreter}'
+    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${python2.interpreter}'
+    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${python2.interpreter}'
   '';
 
   enableParallelBuilding = true;
   doCheck = false; # bash-completion test fails with "compgen: command not found"
+
+  postInstall = ''
+    cp debian/ovs-monitor-ipsec $out/share/openvswitch/scripts
+    makeWrapper \
+      $out/share/openvswitch/scripts/ovs-monitor-ipsec \
+      $out/bin/ovs-monitor-ipsec \
+      --prefix PYTHONPATH : "$out/share/openvswitch/python"
+    substituteInPlace $out/share/openvswitch/scripts/ovs-monitor-ipsec \
+      --replace "UnixctlServer.create(None)" "UnixctlServer.create(os.environ['UNIXCTLPATH'])"
+    substituteInPlace $out/share/openvswitch/scripts/ovs-monitor-ipsec \
+      --replace "self.psk_file" "root_prefix + self.psk_file"
+    substituteInPlace $out/share/openvswitch/scripts/ovs-monitor-ipsec \
+      --replace "self.cert_dir" "root_prefix + self.cert_dir"
+  '';
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
