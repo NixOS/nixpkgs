@@ -19,9 +19,8 @@ browser:
 let
   wrapper =
     { browserName ? browser.browserName or (lib.getName browser)
-    , name ? browserName + "-" + lib.getVersion browser # TODO delete, it's just for compat
-    , pname ? lib.getName name
-    , version ? lib.getVersion name
+    , pname ? browserName
+    , version ? lib.getVersion browser
     , desktopName ? # browserName with first letter capitalized
       (lib.toUpper (lib.substring 0 1 browserName) + lib.substring 1 (-1) browserName)
     , nameSuffix ? ""

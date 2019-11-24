@@ -18867,7 +18867,6 @@ in
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
     browserName = "firefox";
     pname = "firefox-bin";
-    version = lib.getVersion firefox-bin-unwrapped;
     desktopName = "Firefox";
   };
 
@@ -18881,7 +18880,6 @@ in
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
     browserName = "firefox";
     pname = "firefox-beta-bin";
-    version = lib.getVersion firefox-beta-bin-unwrapped;
     desktopName = "Firefox Beta";
   };
 
@@ -18896,7 +18894,6 @@ in
     browserName = "firefox";
     nameSuffix = "-devedition";
     pname = "firefox-devedition-bin";
-    version = lib.getVersion firefox-devedition-bin-unwrapped;
     desktopName = "Firefox DevEdition";
   };
 
