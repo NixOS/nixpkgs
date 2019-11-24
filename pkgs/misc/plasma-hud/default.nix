@@ -1,4 +1,4 @@
-{python3, fetchFromGitHub, rofi, gobject-introspection}:
+{lib, python3, fetchFromGitHub, rofi, gobject-introspection}:
 with python3.pkgs;
 buildPythonApplication rec{
   pname = "plasma-hud";
@@ -29,4 +29,10 @@ buildPythonApplication rec{
     cp -r {$src/usr/lib/plasma-hud,$out/bin}/plasma-hud
     cp -r {$src,$out}/etc
   '';
+  meta = with lib;{
+    license = licenses.gpl2;
+    homepage = "https://github.com/Zren/plasma-hud";
+    platforms = platforms.unix;
+    description = "Run menubar commands, much like the Unity 7 Heads-Up Display (HUD)";
+  };
 }
