@@ -6106,7 +6106,7 @@
     name = "Shahrukh Khan";
   };
   shanemikel = {
-    email = "shanemikel1@gmail.com";
+    email = "shanepearlman@pm.me";
     github = "shanemikel";
     githubId = 6720672;
     name = "Shane Pearlman";
