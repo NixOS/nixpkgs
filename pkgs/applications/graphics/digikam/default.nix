@@ -26,7 +26,7 @@
 , exiv2
 , ffmpeg
 , flex
-, jasper
+, jasper ? null, withJpeg2k ? false  # disable JPEG2000 support, jasper has unfixed CVE
 , lcms2
 , lensfun
 , libgphoto2
@@ -70,7 +70,6 @@ mkDerivation rec {
     exiv2
     ffmpeg
     flex
-    jasper
     lcms2
     lensfun
     libgphoto2
@@ -103,7 +102,8 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ];
+  ]
+  ++ lib.optionals withJpeg2k [ jasper ];
 
   enableParallelBuilding = true;
 
