@@ -86,6 +86,16 @@ let
             ${toString config.virtualisation.diskSize}M || exit 1
       fi
 
+      ${if cfg.useEFIBoot then ''
+        EFI_FIRMWARE=$(readlink -f efi_firmware.bin)
+        EFI_VARS=$(readlink -f efi_vars.bin)
+        cp ${pkgs.OVMF.fd}/FV/OVMF_CODE.fd $EFI_FIRMWARE || exit 1
+        chmod 0444 $EFI_FIRMWARE || exit 1
+        cp ${pkgs.OVMF.fd}/FV/OVMF_VARS.fd $EFI_VARS || exit 1
+        chmod 0644 $EFI_VARS || exit 1
+      '' else ''
+      ''}
+
       # Create a directory for storing temporary data of the running VM.
       if [ -z "$TMPDIR" -o -z "$USE_TMPDIR" ]; then
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
@@ -98,13 +108,6 @@ let
         # Create a writable copy/snapshot of the boot disk.
         # A writable boot disk can be booted from automatically.
         ${qemu}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
-
-        ${if cfg.useEFIBoot then ''
-          # VM needs a writable flash BIOS.
-          cp ${bootDisk}/bios.bin $TMPDIR || exit 1
-          chmod 0644 $TMPDIR/bios.bin || exit 1
-        '' else ''
-        ''}
       '' else ''
       ''}
 
@@ -147,18 +150,11 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              bootFlash=$out/bios.bin
               ${qemu}/bin/qemu-img create -f qcow2 $diskImage "40M"
-              ${if cfg.useEFIBoot then ''
-                cp ${pkgs.OVMF-CSM.fd}/FV/OVMF.fd $bootFlash
-                chmod 0644 $bootFlash
-              '' else ''
-              ''}
             '';
+
           buildInputs = [ pkgs.utillinux ];
-          QEMU_OPTS = if cfg.useEFIBoot
-                      then "-pflash $out/bios.bin -nographic -serial pty"
-                      else "-nographic -serial pty";
+          QEMU_OPTS = "-nographic -serial pty";
         }
         ''
           # Create a /boot EFI partition with 40M and arbitrary but fixed GUIDs for reproducibility
@@ -428,7 +424,6 @@ in
           ''
             If enabled, the virtual machine will provide a EFI boot
             manager.
-            useEFIBoot is ignored if useBootLoader == false.
           '';
       };
 
@@ -510,7 +505,8 @@ in
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])
       (mkIf cfg.useEFIBoot [
-        "-pflash $TMPDIR/bios.bin"
+        "-drive if=pflash,format=raw,readonly,file=$EFI_FIRMWARE"
+        "-drive if=pflash,format=raw,file=$EFI_VARS"
       ])
       (mkIf (!cfg.graphics) [
         "-nographic"
