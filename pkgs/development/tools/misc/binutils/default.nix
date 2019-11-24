@@ -24,6 +24,7 @@ in
 
 stdenv.mkDerivation {
   name = targetPrefix + basename;
+  inherit version;
 
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
@@ -132,7 +133,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit targetPrefix version;
+    inherit targetPrefix;
   };
 
   meta = with lib; {
