@@ -163,6 +163,19 @@
      time during the releases development (if viable).
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <link linkend="opt-services.phpfpm.pools">phpfpm</link> module now sets
+      <literal>PrivateTmp=true</literal> in its systemd units for better process isolation.
+      If you rely on <literal>/tmp</literal> being shared with other services, explicitly override this by
+      setting <literal>serviceConfig.PrivateTmp</literal> to <literal>false</literal> for each phpfpm unit.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     KDE’s old multimedia framework Phonon no longer supports Qt 4. For that reason, Plasma desktop also does not have <option>enableQt4Support</option> option any more.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

@@ -1780,6 +1780,12 @@
     githubId = 875324;
     name = "David Johnson";
   };
+  dmrauh = {
+    email = "dmrauh@posteo.de";
+    github = "dmrauh";
+    githubId = 37698547;
+    name = "Dominik Michael Rauh";
+  };
   dmvianna = {
     email = "dmlvianna@gmail.com";
     github = "dmvianna";
@@ -2515,6 +2521,7 @@
   gazally = {
     email = "gazally@runbox.com";
     github = "gazally";
+    githubId = 16470252;
     name = "Gemini Lasswell";
   };
   gebner = {
@@ -6099,7 +6106,7 @@
     name = "Shahrukh Khan";
   };
   shanemikel = {
-    email = "shanemikel1@gmail.com";
+    email = "shanepearlman@pm.me";
     github = "shanemikel";
     githubId = 6720672;
     name = "Shane Pearlman";

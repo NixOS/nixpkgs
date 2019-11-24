@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
-  version = "7.2.2";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "passcod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ld45xqmmi13x1wgwm9fa7sck2jiw34pr9xzdwrx5ygl81hf3plv";
+    sha256 = "0l1aalb8ans7scljrza7akhi821jbpqgn6sa8kgd8sys83r93fkj";
   };
 
-  cargoSha256 = "1g8qg7nicdan0w39rfzin573lgx3sbfr3b9hn8k3vgyq0jg6ywh7";
+  cargoSha256 = "0dlbln8nsvmrc9p99bl6yni57fravicias9gbv88fg7az904ilzz";
 
   buildInputs = lib.optional stdenv.isDarwin CoreServices;
 

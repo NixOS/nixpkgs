@@ -1,5 +1,5 @@
 # similar to interpreters/python/default.nix
-{ stdenv, lib, callPackage, fetchurl }:
+{ stdenv, lib, callPackage, fetchurl, fetchpatch }:
 let
   dsoPatch51 = fetchurl {
     url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/lua-arch.patch?h=packages/lua51";
@@ -18,7 +18,10 @@ in rec {
   lua5_3 = callPackage ./interpreter.nix {
     sourceVersion = { major = "5"; minor = "3"; patch = "5"; };
     hash = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac";
-    patches = lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ] ;
+    patches =
+      lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ] ++ [
+        ./CVE-2019-6706.patch
+      ];
     postConfigure = lib.optionalString (!stdenv.isDarwin) ''
       cat ${./lua-5.3-dso.make} >> src/Makefile
       sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile

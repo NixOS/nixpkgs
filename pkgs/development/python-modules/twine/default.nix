@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , pkginfo
 , requests
 , requests_toolbelt
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "twine";
   version = "2.0.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OpenID support for Flask";
-    homepage = http://github.com/mitsuhiko/flask-openid/;
+    homepage = https://pythonhosted.org/Flask-OpenID/;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

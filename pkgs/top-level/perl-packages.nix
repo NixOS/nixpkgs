@@ -1519,7 +1519,7 @@ let
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ CatalystActionRenderView CatalystPluginConfigLoader CatalystPluginStaticSimple ConfigGeneral FileChangeNotify FileCopyRecursive ModuleInstall TemplateToolkit ];
     meta = {
-      homepage = http://dev.catalyst.perl.org/;
+      homepage = http://wiki.catalystframework.org/wiki/;
       description = "Catalyst Development Tools";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1577,7 +1577,7 @@ let
     buildInputs = [ TestFatal TypeTiny ];
     propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT DataDump HTTPBody ModulePluggable MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass PerlIOutf8_strict PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StringRewritePrefix TaskWeaken TextSimpleTable TreeSimpleVisitorFactory URIws ];
     meta = {
-      homepage = http://dev.catalyst.perl.org/;
+      homepage = http://wiki.catalystframework.org/wiki/;
       description = "The Catalyst Framework Runtime";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1971,7 +1971,7 @@ let
       sha256 = "1c32b30131871e8a7b23f47d8f65d9cdeb87069fa4c221781a03416496f91f16";
     };
     meta = {
-      homepage = "http://github.com/toddr/CDB_File";
+      homepage = "https://github.com/toddr/CDB_File";
       description = "Perl extension for access to cdb databases";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4995,7 +4995,7 @@ let
       EOF
     '';
     meta = {
-      homepage = http://dbi.perl.org/;
+      homepage = https://dbi.perl.org/;
       description = "Database independent interface for Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -5028,7 +5028,7 @@ let
     buildInputs = [ DBDSQLite TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ConfigAny ContextPreserve DBI DataDumperConcise DataPage ModuleFind PathClass SQLAbstract ScopeGuard SubName namespaceclean ];
     meta = {
-      homepage = http://www.dbix-class.org/;
+      homepage = https://metacpan.org/pod/DBIx::Class;
       description = "Extensible and flexible object <-> relational mapper";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -15428,7 +15428,7 @@ let
     };
     buildInputs = [ TestLongString TestWWWMechanize TestWWWMechanizeCGI ];
     meta = {
-      homepage = http://jaldhar.github.com/REST-Utils;
+      homepage = https://jaldhar.github.io/REST-Utils/;
       description = "Utility functions for REST applications";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -19991,7 +19991,7 @@ let
     outputs = [ "out" ];
     propagatedBuildInputs = [ CGI CSSDOM ConfigGeneral LWP NetIP TermReadKey ];
     meta = {
-      homepage = http://validator.w3.org/checklink;
+      homepage = https://validator.w3.org/checklink;
       description = "A tool to check links and anchors in Web pages or full Web sites";
       license = stdenv.lib.licenses.w3c;
     };
