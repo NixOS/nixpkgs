@@ -216,7 +216,7 @@
      The following configuration example only allows insecure packages with very short names:
 <programlisting>
 {
-  allowInsecurePredicate = (pkg: (builtins.stringLength (lib.getName pkg) &lt;= 5);
+  allowInsecurePredicate = pkg: builtins.stringLength (lib.getName pkg) &lt;= 5;
 }
 </programlisting>
     </para>
