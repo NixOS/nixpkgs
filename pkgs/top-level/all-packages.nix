@@ -21815,7 +21815,7 @@ in
 
   chessdb = callPackage ../games/chessdb { };
 
-  chessx = libsForQt59.callPackage ../games/chessx { };
+  chessx = libsForQt5.callPackage ../games/chessx { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
