@@ -10,11 +10,11 @@ let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
   pname = "network-manager";
-  version = "1.20.4";
+  version = "1.20.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "0k4i6m8acp48vl6l13267wv6kfkmzfjq2mraaa5m9n82wyvkimx3";
+    sha256 = "0fa5my2czxxlr0lcrzm4zcbcfmvzflnzg1n0yrf6wssa07qaklp8";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -61,13 +61,6 @@ in stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
-
-    # Fixes https://github.com/NixOS/nixpkgs/issues/72330
-    # Upstream MR: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/merge_requests/323
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/4c11364201c094ad19ab9980ea6051a82bd2a550.patch";
-      sha256 = "14dgb6ijxyzcglrk67is2fn49iwrhljf2sld8w557i6zkypilmsv";
-    })
   ];
 
   buildInputs = [

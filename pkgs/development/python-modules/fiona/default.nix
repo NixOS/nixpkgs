@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "Fiona";
-  version = "1.8.9.post2";
+  version = "1.8.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "210fb038b579fab38f35ddbdd31b9725f4d5099b3edfd4b87c983e5d47b79983";
+    sha256 = "1e7ca9e051f5bffa1c43c70d573da9ca223fc076b84fa73380614fc02b9eb7f6";
   };
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
