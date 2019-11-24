@@ -107,6 +107,17 @@ stdenv.mkDerivation {
   </varlistentry>
   <varlistentry>
    <term>
+    <literal>fetchFromGitiles</literal>
+   </term>
+   <listitem>
+    <para>
+     This is used with Gitiles repositories. The arguments expected
+     are similar to fetchgit.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>
     <literal>fetchFromBitbucket</literal>
    </term>
    <listitem>

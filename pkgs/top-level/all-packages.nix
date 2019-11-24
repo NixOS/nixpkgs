@@ -358,6 +358,8 @@ in
 
   fetchFromGitLab = callPackage ../build-support/fetchgitlab {};
 
+  fetchFromGitiles = callPackage ../build-support/fetchgitiles {};
+
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz {};
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
