@@ -2164,8 +2164,6 @@ in
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
-  beegfs = callPackage ../os-specific/linux/beegfs { };
-
   beets = callPackage ../tools/audio/beets {
     pythonPackages = python3Packages;
   };
@@ -14393,6 +14391,8 @@ in
     stdenv = gcc6Stdenv; # upstream code incompatible with gcc7
   };
 
+  wally-cli = callPackage ../development/tools/wally-cli { };
+
   wavpack = callPackage ../development/libraries/wavpack { };
 
   wayland = callPackage ../development/libraries/wayland { };
@@ -16228,8 +16228,6 @@ in
     bpftrace = callPackage ../os-specific/linux/bpftrace { };
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
-
-    beegfs-module = callPackage ../os-specific/linux/beegfs/kernel-module.nix { };
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
@@ -18818,8 +18816,7 @@ in
 
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
     browserName = "firefox";
-    name = "firefox-bin-" +
-      (builtins.parseDrvName firefox-bin-unwrapped.name).version;
+    pname = "firefox-bin";
     desktopName = "Firefox";
   };
 
@@ -18832,8 +18829,7 @@ in
 
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
     browserName = "firefox";
-    name = "firefox-beta-bin-" +
-      (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
+    pname = "firefox-beta-bin";
     desktopName = "Firefox Beta";
   };
 
@@ -18847,8 +18843,7 @@ in
   firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
     browserName = "firefox";
     nameSuffix = "-devedition";
-    name = "firefox-devedition-bin-" +
-      (builtins.parseDrvName firefox-devedition-bin-unwrapped.name).version;
+    pname = "firefox-devedition-bin";
     desktopName = "Firefox DevEdition";
   };
 
@@ -20986,6 +20981,8 @@ in
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
   spike = callPackage ../applications/virtualization/spike { };
+
+  tensorman = callPackage ../tools/misc/tensorman { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
 

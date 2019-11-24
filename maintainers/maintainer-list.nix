@@ -4524,6 +4524,12 @@
     githubId = 117842;
     name = "Henri Bourcereau";
   };
+  mmilata = {
+    email = "martin@martinmilata.cz";
+    github = "mmilata";
+    gitHubId = 85857;
+    name = "Martin Milata";
+  };
   mmlb = {
     email = "me.mmlb@mmlb.me";
     github = "mmlb";
@@ -6726,6 +6732,12 @@
     github = "thefloweringash";
     githubId = 42933;
     name = "Andrew Childs";
+  };
+  thefenriswolf = {
+    email = "stefan.rohrbacher97@gmail.com";
+    github = "thefenriswolf";
+    githubId = "8547242";
+    name = "Stefan Rohrbacher";
   };
   thesola10 = {
     email = "thesola10@bobile.fr";

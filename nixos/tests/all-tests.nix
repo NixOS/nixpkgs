@@ -28,7 +28,7 @@ in
   babeld = handleTest ./babeld.nix {};
   bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
   beanstalkd = handleTest ./beanstalkd.nix {};
-  beegfs = handleTestOn ["x86_64-linux"] ./beegfs.nix {}; # beegfs is unsupported on aarch64
+  bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   #blivet = handleTest ./blivet.nix {};   # broken since 2017-07024

@@ -235,6 +235,7 @@ with lib;
     (mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
     (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
     (mkRemovedOptionModule [ "fonts" "enableCoreFonts" ] "Use fonts.fonts = [ pkgs.corefonts ]; instead.")
+    (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -278,6 +279,10 @@ with lib;
 
     # BLCR
     (mkRemovedOptionModule [ "environment.blcr.enable" ] "The BLCR module has been removed")
+
+    # beegfs
+    (mkRemovedOptionModule [ "services.beegfsEnable" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule [ "services.beegfs" ] "The BeeGFS module has been removed")
 
     # Redis
     (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")

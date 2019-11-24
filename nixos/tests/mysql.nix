@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "mysql";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco shlevy ];
@@ -47,17 +47,23 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    startAll;
+    start_all
 
-    $mysql->waitForUnit("mysql");
-    $mysql->succeed("echo 'use empty_testdb;' | mysql -u root");
-    $mysql->succeed("echo 'use testdb; select * from tests;' | mysql -u root -N | grep 4");
+    mysql.wait_for_unit("mysql")
+    mysql.succeed("echo 'use empty_testdb;' | mysql -u root")
+    mysql.succeed("echo 'use testdb; select * from tests;' | mysql -u root -N | grep 4")
     # ';' acts as no-op, just check whether login succeeds with the user created from the initialScript
-    $mysql->succeed("echo ';' | mysql -u passworduser --password=password123");
+    mysql.succeed("echo ';' | mysql -u passworduser --password=password123")
 
-    $mariadb->waitForUnit("mysql");
-    $mariadb->succeed("echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser mysql -u testuser");
-    $mariadb->succeed("echo 'use testdb; insert into tests values (42);' | sudo -u testuser mysql -u testuser");
-    $mariadb->succeed("echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 42");
+    mariadb.wait_for_unit("mysql")
+    mariadb.succeed(
+        "echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser mysql -u testuser"
+    )
+    mariadb.succeed(
+        "echo 'use testdb; insert into tests values (42);' | sudo -u testuser mysql -u testuser"
+    )
+    mariadb.succeed(
+        "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 42"
+    )
   '';
 })

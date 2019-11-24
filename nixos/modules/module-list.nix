@@ -35,7 +35,6 @@
   ./config/terminfo.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
-  ./config/vpnc.nix
   ./config/vte.nix
   ./config/zram.nix
   ./hardware/acpilight.nix
@@ -539,7 +538,6 @@
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-proxy.nix
   ./services/monitoring/zabbix-server.nix
-  ./services/network-filesystems/beegfs.nix
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/davfs2.nix
   ./services/network-filesystems/drbd.nix
