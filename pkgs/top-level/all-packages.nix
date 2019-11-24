@@ -2062,6 +2062,8 @@ in
 
   step-cli = callPackage ../tools/security/step-cli { };
 
+  string-machine = callPackage ../applications/audio/string-machine { };
+
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
   sweep-visualizer = callPackage ../tools/misc/sweep-visualizer { };
