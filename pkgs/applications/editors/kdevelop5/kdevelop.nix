@@ -36,7 +36,7 @@ mkDerivation rec {
   # https://cgit.kde.org/kdevelop.git/commit/?id=716372ae2e8dff9c51e94d33443536786e4bd85b
   # required as nixos seems to be unable to find CLANG_BUILTIN_DIR
   cmakeFlags = [
-    "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${(builtins.parseDrvName llvmPackages.clang.name).version}/include"
+    "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${lib.getVersion llvmPackages.clang}/include"
   ];
 
   dontWrapQtApps = true;
