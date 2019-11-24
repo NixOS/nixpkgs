@@ -173,7 +173,7 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
-  ] ++ stdenv.lib.optional enableDwarf [
+  ] ++ stdenv.lib.optionals enableDwarf [
     "--enable-dwarf-unwind"
     "--with-libdw-includes=${stdenv.lib.getDev elfutils}/include"
     "--with-libdw-libraries=${stdenv.lib.getLib elfutils}/lib"
