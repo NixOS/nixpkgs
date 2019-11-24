@@ -35,8 +35,8 @@ let
   targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
                                            (targetPlatform.config + "-");
 
-  ccVersion = (builtins.parseDrvName cc.name).version;
-  ccName = (builtins.parseDrvName cc.name).name;
+  ccVersion = if cc == null then null else stdenv.lib.getVersion cc;
+  ccName = cc.pname or (builtins.parseDrvName cc.name).name;
 
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
@@ -96,6 +96,7 @@ stdenv.mkDerivation {
   name = targetPrefix
     + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${ccName}-wrapper")
     + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
+  version = ccVersion;
 
   preferLocalBuild = true;
 
