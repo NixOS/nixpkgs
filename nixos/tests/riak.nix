@@ -1,21 +1,15 @@
-import ./make-test.nix {
+import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "riak";
 
-  nodes = {
-    master =
-      { pkgs, ... }:
-
-      {
-        services.riak.enable = true;
-        services.riak.package = pkgs.riak;
-      };
+  machine = {
+    services.riak.enable = true;
+    services.riak.package = pkgs.riak;
   };
 
   testScript = ''
-    startAll;
+    machine.start()
 
-    $master->waitForUnit("riak");
-    $master->sleep(20); # Hopefully this is long enough!!
-    $master->succeed("riak ping 2>&1");
+    machine.wait_for_unit("riak")
+    machine.wait_until_succeeds("riak ping 2>&1")
   '';
-}
+})
