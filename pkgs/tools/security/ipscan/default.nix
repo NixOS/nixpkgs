@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${stdenv.lib.makeLibraryPath [ swt xorg.libXtst ]}" \
-      --add-flags "-Xmx256m -Djava.library.path=${swt}/lib -cp $out/share/java/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
+      --add-flags "-Xmx256m -cp $out/share/java/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 
     mkdir -p $out/share/applications
     cp usr/share/applications/ipscan.desktop $out/share/applications/ipscan.desktop
