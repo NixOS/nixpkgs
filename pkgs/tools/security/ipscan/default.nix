@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Fast and friendly network scanner";
     homepage = https://angryip.org;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kylesferrazza ];
   };
 }
