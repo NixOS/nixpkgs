@@ -9882,6 +9882,8 @@ in
 
   frame = callPackage ../development/libraries/frame { };
 
+  frp = callPackage ../tools/networking/frp { };
+
   fsatrace = callPackage ../development/tools/misc/fsatrace { };
 
   fswatch = callPackage ../development/tools/misc/fswatch {
