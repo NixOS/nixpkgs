@@ -1,4 +1,4 @@
-let generateNodeConf = { lib, pkgs, config, privkpath, pubk, peerId, nodeId, ...}: {
+let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
       imports = [ common/user-account.nix ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking.useNetworkd = true;
@@ -7,13 +7,16 @@ let generateNodeConf = { lib, pkgs, config, privkpath, pubk, peerId, nodeId, ...
       virtualisation.vlans = [ 1 ];
       environment.systemPackages = with pkgs; [ wireguard-tools ];
       boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
+      systemd.tmpfiles.rules = [
+        "f /run/wg_priv 0640 root systemd-network - ${privk}"
+      ];
       systemd.network = {
         enable = true;
         netdevs = {
           "90-wg0" = {
             netdevConfig = { Kind = "wireguard"; Name = "wg0"; };
             wireguardConfig = {
-              PrivateKeyFile = privkpath ;
+              PrivateKeyFile = "/run/wg_priv";
               ListenPort = 51820;
               FwMark = 42;
             };
@@ -53,7 +56,7 @@ in import ./make-test-python.nix ({pkgs, ... }: {
   nodes = {
     node1 = { pkgs, ... }@attrs:
     let localConf = {
-        privkpath = pkgs.writeText "priv.key" "GDiXWlMQKb379XthwX0haAbK6hTdjblllpjGX0heP00=";
+        privk = "GDiXWlMQKb379XthwX0haAbK6hTdjblllpjGX0heP00=";
         pubk = "iRxpqj42nnY0Qz8MAQbSm7bXxXP5hkPqWYIULmvW+EE=";
         nodeId = "1";
         peerId = "2";
@@ -62,7 +65,7 @@ in import ./make-test-python.nix ({pkgs, ... }: {
 
     node2 = { pkgs, ... }@attrs:
     let localConf = {
-        privkpath = pkgs.writeText "priv.key" "eHxSI2jwX/P4AOI0r8YppPw0+4NZnjOxfbS5mt06K2k=";
+        privk = "eHxSI2jwX/P4AOI0r8YppPw0+4NZnjOxfbS5mt06K2k=";
         pubk = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
         nodeId = "2";
         peerId = "1";
