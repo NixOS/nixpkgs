@@ -5254,6 +5254,8 @@ in {
   # alias for an older package which did not support Python 3
   Quandl = callPackage ../development/python-modules/quandl { };
 
+  querystring_parser = callPackage ../development/python-modules/querystring-parser { };
+
   qscintilla-qt4 = callPackage ../development/python-modules/qscintilla { };
 
   qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
