@@ -1,32 +1,34 @@
-{ stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg }:
+{ stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
 
-let
+stdenv.mkDerivation rec {
   pname = "ipscan";
   version = "3.6.2";
 
-  jar = fetchurl {
-    url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan-linux64-${version}.jar";
-    sha256 = "0fmrrxanw46g53jvlb50516jqwqjzky564bf3df9i3ymjffrfnw4";
+  src = fetchurl {
+    url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_amd64.deb";
+    sha256 = "0wnnnabpj0dsxdijvss5sl9kd4i6rmcq55zbas33xs3c5g305ssk";
   };
 
-  jarName = "${pname}-${version}.jar";
-  jarPath = "$out/share/java/${jarName}";
-in stdenv.mkDerivation rec {
-  inherit pname version;
-
-  dontUnpack = true;
+  sourceRoot = ".";
+  unpackCmd = "${dpkg}/bin/dpkg-deb -x $src .";
 
   buildInputs = [ makeWrapper jdk ];
 
   installPhase = ''
     mkdir -p $out/share/java
-    ln -s ${jar} ${jarPath}
+    cp usr/lib/ipscan/ipscan-linux64-${version}.jar $out/share/java/${pname}-${version}.jar
+
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${stdenv.lib.makeLibraryPath [ swt xorg.libXtst ]}" \
-      --add-flags "-Xmx256m -Djava.library.path=${swt}/lib -cp ${jar}:${swt}/jars/swt.jar net.azib.ipscan.Main"
-  '';
+      --add-flags "-Xmx256m -Djava.library.path=${swt}/lib -cp $out/share/java/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 
-  passthru.jar = jar;
+    mkdir -p $out/share/applications
+    cp usr/share/applications/ipscan.desktop $out/share/applications/ipscan.desktop
+    substituteInPlace $out/share/applications/ipscan.desktop --replace "/usr/bin" "$out/bin"
+
+    mkdir -p $out/share/pixmaps
+    cp usr/share/pixmaps/ipscan.png $out/share/pixmaps/ipscan.png
+  '';
 
   meta = with stdenv.lib; {
     description = "Fast and friendly network scanner";
