@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "arc-kde-theme";
-  version = "2017-11-09";
+  version = "20180614";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = "arc-kde";
-    rev = "a0abe6fc5ebf74f9ae88b8a2035957cc16f706f5";
-    sha256 = "1p6f4ny97096nb054lrgyjwikmvg0qlbcnsjag7m5dfbclfnvzkg";
+    rev = version;
+    sha256 = "0wli16k9my7m8a9561545vjwfifmxm4w606z1h0j08msvlky40xw";
   };
 
-  makeFlags = ["PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   # Make this a fixed-output derivation
   outputHashMode = "recursive";

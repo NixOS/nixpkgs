@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   version = "7.0.1";
   pname = "clearlooks-phenix";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/jpfleury/clearlooks-phenix/archive/${version}.tar.gz";
-    sha256 = "1x2psfbhxc3bk3q795bafxv6p890yfsankfw64p44q4r1x0236ra";
+    sha256 = "1b6y4l3rf3c5r4v72fyj3ppvnvw13kvr2a1dyl63ni1jxnlk50kd";
   };
 
   dontBuild = true;
