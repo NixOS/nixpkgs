@@ -3259,6 +3259,8 @@ in
 
   fbv = callPackage ../tools/graphics/fbv { };
 
+  fbvnc = callPackage ../tools/admin/fbvnc {};
+
   fim = callPackage ../tools/graphics/fim { };
 
   flac123 = callPackage ../applications/audio/flac123 { };
