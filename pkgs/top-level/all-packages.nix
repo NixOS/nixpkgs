@@ -6093,7 +6093,9 @@ in
 
   rubocop = callPackage ../development/tools/rubocop { };
 
-  runelite = callPackage ../games/runelite { };
+  runelite = callPackage ../games/runelite {
+    jre = openjdk11;
+  };
 
   runningx = callPackage ../tools/X11/runningx { };
 
