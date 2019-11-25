@@ -5254,7 +5254,9 @@ in {
 
   texttable = callPackage ../development/python-modules/texttable { };
 
-  tiledb = callPackage ../development/python-modules/tiledb { 
+  textwrap3 =  callPackage ../development/python-modules/textwrap3 { };
+
+  tiledb = callPackage ../development/python-modules/tiledb {
     inherit (pkgs) tiledb;
   };
 
