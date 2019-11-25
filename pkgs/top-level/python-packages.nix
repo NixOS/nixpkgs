@@ -2921,6 +2921,8 @@ in {
 
   mlrose = callPackage ../development/python-modules/mlrose { };
 
+  mlflow = callPackage ../development/python-modules/mlflow { };
+
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
   mwlib = callPackage ../development/python-modules/mwlib { };
