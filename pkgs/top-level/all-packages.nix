@@ -16233,6 +16233,12 @@ in
     ];
   };
 
+  linux_5_4 = callPackage ../os-specific/linux/kernel/linux-5.4.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+    ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -16429,7 +16435,7 @@ in
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_5_3;
+  linuxPackages_latest = linuxPackages_5_4;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -16443,6 +16449,7 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_3);
+  linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
 
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
