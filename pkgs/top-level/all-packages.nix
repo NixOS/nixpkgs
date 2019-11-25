@@ -7149,6 +7149,8 @@ in
 
   unrar = callPackage ../tools/archivers/unrar { };
 
+  vegeta = callPackage ../tools/networking/vegeta { };
+
   xar = callPackage ../tools/compression/xar { };
 
   xarchive = callPackage ../tools/archivers/xarchive { };
