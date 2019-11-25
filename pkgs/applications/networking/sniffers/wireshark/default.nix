@@ -1,26 +1,24 @@
 { stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python3, libcap, glib
 , libssh, nghttp2, zlib, cmake, fetchpatch, makeWrapper
-, withQt ? true, qt5 ? null
+, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
 }:
 
-assert withQt  -> qt5  != null;
 
 with stdenv.lib;
 
 let
-  version = "3.2.1";
-  variant = if withQt then "qt" else "cli";
-
-in stdenv.mkDerivation {
-  pname = "wireshark-${variant}";
+common = { version, sources-sha256 }: { withQt }:
+assert withQt -> qt5 != null;
+stdenv.mkDerivation {
+  pname = "wireshark-${if withQt then "qt" else "cli"}";
   inherit version;
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "0nz84zyhs4177ljxmv34vgc9kgg7ssxhxa4mssxqwh6nb00697sq";
+    sha256 = sources-sha256;
   };
 
   cmakeFlags = [
@@ -56,11 +54,11 @@ in stdenv.mkDerivation {
     export LD_LIBRARY_PATH="$PWD/run"
   '';
 
-  postInstall = ''
+  postInstall = optionalString (versionAtLeast version "3.0") ''
     # to remove "cycle detected in the references"
     mkdir -p $dev/lib/wireshark
     mv $out/lib/wireshark/cmake $dev/lib/wireshark
-  '' + (if stdenv.isDarwin && withQt then ''
+  '' + (optionalString withQt (if stdenv.isDarwin then ''
     mkdir -p $out/Applications
     mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
 
@@ -71,15 +69,15 @@ in stdenv.mkDerivation {
     done
 
     wrapQtApp $out/Applications/Wireshark.app/Contents/MacOS/Wireshark
-  '' else optionalString withQt ''
+  '' else ''
     install -Dm644 -t $out/share/applications ../wireshark.desktop
 
     substituteInPlace $out/share/applications/*.desktop \
         --replace "Exec=wireshark" "Exec=$out/bin/wireshark"
 
     install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
+  '')) + ''
     mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv
-
     cp config.h $dev/include/
     cp ../ws_*.h $dev/include
     cp ../epan/*.h $dev/include/epan/
@@ -88,7 +86,7 @@ in stdenv.mkDerivation {
     cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
     cp ../wsutil/*.h $dev/include/wsutil/
     cp ../wiretap/*.h $dev/include/wiretap
-  '');
+  '';
 
   enableParallelBuilding = true;
 
@@ -113,4 +111,26 @@ in stdenv.mkDerivation {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
+};
+
+wireshark-2_6  = common {
+  version        = "2.6.12";
+  sources-sha256 = "1mjb32iwdc15ixyqa78qqbwy4291i668db5w0v0rscarskgkvbc3";
+};
+wireshark-3_0  = common {
+  version        = "3.0.7";
+  sources-sha256 = "1wljg5z994r8zbjig52zlgp0b8lqbzdl1d6ysnw9hcvm2y82farv";
+};
+wireshark-3_2 = common {
+  version        = "3.2.1";
+  sources-sha256 = "0nz84zyhs4177ljxmv34vgc9kgg7ssxhxa4mssxqwh6nb00697sq";
+};
+
+in {
+  wireshark-qt_2_6  = wireshark-2_6 { withQt = true;  };
+  wireshark-cli_2_6 = wireshark-2_6 { withQt = false; };
+  wireshark-qt_3_0  = wireshark-3_0 { withQt = true;  };
+  wireshark-cli_3_0 = wireshark-3_0 { withQt = false; };
+  wireshark-qt_3_2  = wireshark-3_2 { withQt = true;  };
+  wireshark-cli_3_2 = wireshark-3_2 { withQt = false; };
 }
