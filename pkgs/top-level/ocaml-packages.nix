@@ -755,6 +755,8 @@ let
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
+    setcore = callPackage ../development/ocaml-modules/setcore { };
+
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
     spelll = callPackage ../development/ocaml-modules/spelll { };
