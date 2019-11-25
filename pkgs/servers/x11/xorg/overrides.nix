@@ -592,16 +592,6 @@ self: super:
         propagatedBuildInputs = [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
-        # patchPhase is not working, this is a hack but we can remove it in the next xorg-server release
-        preConfigure = let
-          headerFix = fetchpatch {
-            url = "https://gitlab.freedesktop.org/xorg/xserver/commit/741bd73429e337071f49509ddcc5fb392e20b0f6.patch";
-            sha256 = "0qjiin9pkggl3c33lfkpn9a9z8ldjpb3y47cflsjkfn868gsk8ri";
-            excludes = [ "hw/xwayland/xwayland-glx.c" ];  # File not in release yet
-          };
-        in ''
-          patch -p1 < ${headerFix}
-        '';
         prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
           export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
         '';
