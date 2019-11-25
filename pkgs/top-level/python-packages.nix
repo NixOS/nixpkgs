@@ -3851,6 +3851,8 @@ in {
 
   python_magic = callPackage ../development/python-modules/python-magic { };
 
+  m3u8 = callPackage ../development/python-modules/m3u8 { };
+
   magic = callPackage ../development/python-modules/magic { };
 
   m2crypto = callPackage ../development/python-modules/m2crypto { };
@@ -4489,7 +4491,7 @@ in {
 
   praw = if isPy3k then callPackage ../development/python-modules/praw { }
     else callPackage ../development/python-modules/praw/6.3.nix { };
-  
+
   prance = callPackage ../development/python-modules/prance { };
 
   prawcore = callPackage ../development/python-modules/prawcore { };
