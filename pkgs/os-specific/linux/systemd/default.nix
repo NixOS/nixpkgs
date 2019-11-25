@@ -36,10 +36,10 @@ in stdenv.mkDerivation {
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "NixOS";
+    owner = "flokli";
     repo = "systemd";
-    rev = "491a247eff9b7ce1e5877f5f3431517c95f3222f";
-    sha256 = "1xqiahapg480m165glrwqbfmc1fxw5sacdlm933cwyi1q8x4537g";
+    rev = "717698964418d41883eceb056256b8e077165eed";
+    sha256 = "0sffsd52160fnbjfm7h72xl4dixsj3823biv2rmf3xih4l1y383q";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
