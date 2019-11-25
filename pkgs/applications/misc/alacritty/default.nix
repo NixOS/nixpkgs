@@ -114,7 +114,7 @@ in buildRustPackage rec {
     description = "GPU-accelerated terminal emulator";
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [ filalex77 mic92 ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 }
