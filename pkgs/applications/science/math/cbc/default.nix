@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cbc";
-  version = "2.10.2";
+  version = "2.10.3";
 
   src = fetchurl {
     url = "https://www.coin-or.org/download/source/Cbc/Cbc-${version}.tgz";
-    sha256 = "0frbxkh6nbh46kaxsx5bmzridgip3v7aq75l8yak5npiiq4jlwv3";
+    sha256 = "1zzcg40ky5v96s7br2hqlkqdspwrn43kf3757g6c35wl29bq6f5d";
   };
 
   configureFlags = [ "-C" ];

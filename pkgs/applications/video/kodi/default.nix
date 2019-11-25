@@ -8,12 +8,12 @@
 , libXt, libXmu, libXext
 , libXinerama, libXrandr
 , libXtst, libXfixes, systemd
-, alsaLib, libGLU_combined, glew, fontconfig, freetype, ftgl
+, alsaLib, libGLU, libGL, glew, fontconfig, freetype, ftgl
 , libjpeg, jasper, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, libdrm
+, sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
@@ -156,12 +156,12 @@ in stdenv.mkDerivation {
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xorgproto libXt libXmu libXext
       libXinerama libXrandr libXtst libXfixes
-      alsaLib libGLU_combined glew fontconfig freetype ftgl
+      alsaLib libGL libGLU glew fontconfig freetype ftgl
       libjpeg jasper libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql.connector-c avahi lame
+      sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo xdpyinfo
       libcec libcec_platform dcadec libuuid
       libgcrypt libgpgerror libunistring

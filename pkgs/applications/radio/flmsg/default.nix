@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.10";
+  version = "4.0.14";
   pname = "flmsg";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "1vprax1w5wm3v2i4d0mbakrxp7v53m2bm8icsvaji06ixskq7cxf";
+    sha256 = "0s1prawkpvr7xr7h8w7r0ly90ya3n8h6qsii0x6laqrkgjn9w9iy";
   };
 
   buildInputs = [

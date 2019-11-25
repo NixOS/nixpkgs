@@ -8,13 +8,13 @@
 
 
 buildPythonPackage rec {
-  version = "2.2.0";
+  version = "5.1.0";
   pname = "azure-mgmt-resource";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "173pxgly95dwblp4nj4l70zb0gasibgcjmcynxwa5282plynhgdw";
+    sha256 = "88db03ea5b9db1dfbf3de8c7be111ed41b121a374645e3ddf3fbba47584c32b1";
   };
 
   postInstall = if isPy3k then "" else ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with pkgs.lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/resources?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ olcai mwilsoninsight ];
   };

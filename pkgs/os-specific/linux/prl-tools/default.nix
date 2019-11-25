@@ -9,7 +9,7 @@ assert (!libsOnly) -> kernel != null;
 assert kernel != null -> stdenv.lib.versionOlder kernel.version "4.15";
 
 let xorgFullVer = lib.getVersion xorg.xorgserver;
-    xorgVer = lib.concatStringsSep "." (lib.take 2 (lib.splitString "." xorgFullVer));
+    xorgVer = lib.versions.majorMinor xorgFullVer;
     x64 = if stdenv.hostPlatform.system == "x86_64-linux" then true
           else if stdenv.hostPlatform.system == "i686-linux" then false
           else throw "Parallels Tools for Linux only support {x86-64,i686}-linux targets";

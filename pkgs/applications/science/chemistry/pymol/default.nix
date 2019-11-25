@@ -47,5 +47,6 @@ python3Packages.buildPythonApplication {
     description = description;
     homepage = https://www.pymol.org/;
     license = licenses.psfl;
+    broken = true;
   };
 }

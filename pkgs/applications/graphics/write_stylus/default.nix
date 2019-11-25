@@ -1,4 +1,12 @@
 { stdenv, lib, qtbase, qtsvg, libglvnd, fetchurl, makeDesktopItem }:
+let
+  # taken from: https://www.iconfinder.com/icons/50835/edit_pencil_write_icon
+  # license: Free for commercial use
+  desktopIcon = fetchurl {
+    url = "https://www.iconfinder.com/icons/50835/download/png/256";
+    sha256 = "0abdya42yf9alxbsmc2nf8jwld50zfria6z3d4ncvp1zw2a9jhb8";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "write_stylus";
   version = "209";
@@ -7,7 +15,7 @@ stdenv.mkDerivation rec {
     name = "Write";
     exec = "Write";
     comment = "A word processor for handwriting";
-    icon = "write_stylus";
+    icon = desktopIcon;
     desktopName = "Write";
     genericName = "Write";
     categories = "Office;Graphics";
@@ -16,13 +24,6 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://www.styluslabs.com/write/write${version}.tar.gz";
     sha256 = "1p6glp4vdpwl8hmhypayc4cvs3j9jfmjfhhrgqm2xkgl5bfbv2qd";
-  };
-
-  # taken from: https://www.iconfinder.com/icons/50835/edit_pencil_write_icon
-  # license: Free for commercial use
-  icon = fetchurl {
-    url = "https://oyra.eu/write/icon.tar.gz";
-    sha256 = "1zd98g63apwi17qc1hm1g14maain5d18g4afadxm30qjz2s0mvs8";
   };
 
   sourceRoot = ".";
@@ -34,9 +35,6 @@ stdenv.mkDerivation rec {
     cp -R Write $out/
     # symlink the binary to bin/
     ln -s $out/Write/Write $out/bin/Write
-
-    # untar icons
-    tar -xzf ${icon} *.tar.gz -C $out/
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/

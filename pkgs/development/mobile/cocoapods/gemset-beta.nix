@@ -16,10 +16,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1vlasxdgz49y75p8vjkbdpb4kmc73xv71d7vpn9x9xjgvsar03kp";
+      sha256 = "1ayg8j3819ay2d8618jv32ca16fh8qsgjsiq9j32yd016c170nkj";
       type = "gem";
     };
-    version = "1.26.1";
+    version = "1.27.1";
   };
   atomos = {
     groups = ["default"];
@@ -57,10 +57,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1qsj34czqsy93w2bnwhdhr0cyzjwl7vy3sknmak4syyni6m0rlli";
+      sha256 = "007ssx75588ji2d8l8s6c95dng1c7b6yacng8nngpy7maijzjgzc";
       type = "gem";
     };
-    version = "1.8.0.beta.2";
+    version = "1.8.4";
   };
   cocoapods-core = {
     dependencies = ["activesupport" "algoliasearch" "concurrent-ruby" "fuzzy_match" "nap"];
@@ -68,10 +68,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "166pr9m3da9hsra9rviaxz3i4spm7kl003mkn7sn25r9smcvfdj4";
+      sha256 = "0zcisqb404828n5d3lbk9y2yyx8v2yr6rk1l8y9a4i1hp743fiad";
       type = "gem";
     };
-    version = "1.8.0.beta.2";
+    version = "1.8.4";
   };
   cocoapods-deintegrate = {
     groups = ["default"];
@@ -130,10 +130,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1m0p27aij7d0n0b8h7nvyv3q3prcpwisbj7sla0fp2hvn4lqarl5";
+      sha256 = "0vrwsgaq3nf7v3pwksgqy0mhswrp3ipczrc96vl3ii2pcc9ilwkw";
       type = "gem";
     };
-    version = "1.4.0";
+    version = "1.4.1";
   };
   cocoapods-try = {
     groups = ["default"];
@@ -241,10 +241,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0icglrhghgwdlnzzp4jf76b0mbc71s80njn5afyfjn4wqji8mqbq";
+      sha256 = "0zjm24aiz42i9n37mcw8lydd7n0y7wfk27by06jx77ypcld3qvkw";
       type = "gem";
     };
-    version = "5.11.3";
+    version = "5.12.2";
   };
   molinillo = {
     groups = ["default"];
@@ -323,9 +323,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "162gwhrl7ppj6hlmnpp1scvy1ylcv5xqk51826v075sckdqjp8c8";
+      sha256 = "1c69yrhqd92q6nnpyhvnqyw9l7axnc91gnbd2gai8f5njdisd8wx";
       type = "gem";
     };
-    version = "1.12.0";
+    version = "1.13.0";
   };
 }

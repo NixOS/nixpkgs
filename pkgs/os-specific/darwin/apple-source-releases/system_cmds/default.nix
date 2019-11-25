@@ -14,8 +14,8 @@ appleDerivation {
   #                    + lib.optionalString hostPlatform.isAarch32 "-D__arm__";
   NIX_CFLAGS_COMPILE = [ "-DDAEMON_UID=1"
                          "-DDAEMON_GID=1"
-                         "-DDEFAULT_AT_QUEUE=\'a\'"
-                         "-DDEFAULT_BATCH_QUEUE=\'b\'"
+                         "-DDEFAULT_AT_QUEUE='a'"
+                         "-DDEFAULT_BATCH_QUEUE='b'"
                          "-DPERM_PATH=\"/usr/lib/cron/\""
                          "-DOPEN_DIRECTORY"
                          "-DNO_DIRECT_RPC"

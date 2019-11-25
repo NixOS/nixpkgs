@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ stdenv, fetchFromGitHub, buildGoPackage }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "vault";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "1xljm7xmb4ldg3wx8s9kw1spffg4ywk4r1jqfa743czd2xxmqavl";
+    sha256 = "0ayvmqg4fj9cliwbl4pb12mailq7062j3f9v8arpv6x5r4hydlpy";
   };
 
-  modSha256 = "13pr3piv6hrsc562qagpn1h5wckiziyfqraj13172hdglz3n2i7q";
+  goPackagePath = "github.com/hashicorp/vault";
+
+  subPackages = [ "." ];
 
   buildFlagsArray = [
     "-tags='vault'"
@@ -19,8 +21,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/bash-completion/completions
-    echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
+    mkdir -p $bin/share/bash-completion/completions
+    echo "complete -C $bin/bin/vault vault" > $bin/share/bash-completion/completions/vault
   '';
 
   meta = with stdenv.lib; {

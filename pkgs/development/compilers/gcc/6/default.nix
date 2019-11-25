@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ stdenv, targetPackages, fetchurl, fetchpatch, fetchFromGitHub, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
@@ -7,7 +7,9 @@
 , profiledCompiler ? false
 , staticCompiler ? false
 , enableShared ? true
+, enableLTO ? true
 , texinfo ? null
+, flex
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, libmpc, gettext, which
 , libelf                      # optional, for link-time optimizations (LTO)
@@ -106,7 +108,12 @@ stdenv.mkDerivation ({
 
   builder = ../builder.sh;
 
-  src = fetchurl {
+  src = if stdenv.targetPlatform.isVc4 then fetchFromGitHub {
+    owner = "itszor";
+    repo = "gcc-vc4";
+    rev = "e90ff43f9671c760cf0d1dd62f569a0fb9bf8918";
+    sha256 = "0gxf66hwqk26h8f853sybphqa5ca0cva2kmrw5jsiv6139g0qnp8";
+  } else fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
     sha256 = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
   };
@@ -171,7 +178,8 @@ stdenv.mkDerivation ({
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
-    ++ (optional javaAwtGtk pkgconfig);
+    ++ (optional javaAwtGtk pkgconfig)
+    ++ (optional (stdenv.targetPlatform.isVc4) flex);
 
   # For building runtime libs
   depsBuildTarget =
@@ -216,8 +224,9 @@ stdenv.mkDerivation ({
 
       gmp mpfr libmpc libelf isl
 
-      enablePlugin
+      enableLTO
       enableMultilib
+      enablePlugin
       enableShared
 
       langC

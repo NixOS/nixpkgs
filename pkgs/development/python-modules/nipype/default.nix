@@ -45,11 +45,11 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.2.0";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09azgfmb0992c3xqmi7n93pz95i4v37vc9kqmjh8c9jjxjzszdd5";
+    sha256 = "a79c7a72897d81985d20a8c805465285400b59a45ddc527cda44026795fd1c47";
   };
 
   postPatch = ''

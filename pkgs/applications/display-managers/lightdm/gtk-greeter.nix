@@ -1,7 +1,18 @@
-{ stdenv, fetchurl, lightdm, pkgconfig, intltool
-, hicolor-icon-theme, makeWrapper
-, useGTK2 ? false, gtk2, gtk3 # gtk3 seems better supported
-, exo, at-spi2-core
+{ stdenv
+, lightdm_gtk_greeter
+, fetchurl
+, lightdm
+, pkgconfig
+, intltool
+, linkFarm
+, wrapGAppsHook
+, useGTK2 ? false
+, gtk2
+, gtk3 # gtk3 seems better supported
+, exo
+, at-spi2-core
+, librsvg
+, hicolor-icon-theme
 }:
 
 #ToDo: bad icons with gtk2;
@@ -20,14 +31,15 @@ stdenv.mkDerivation rec {
     sha256 = "1pis5qyg95pg31dvnfqq34bzgj00hg4vs547r8h60lxjk81z8p15";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ lightdm exo intltool makeWrapper hicolor-icon-theme ]
+  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+  buildInputs = [ lightdm exo librsvg hicolor-icon-theme ]
     ++ (if useGTK2 then [ gtk2 ] else [ gtk3 ]);
 
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-indicator-services-command"
+    "--sbindir=${placeholder "out"}/bin" # for wrapGAppsHook to wrap automatically
   ] ++ stdenv.lib.optional useGTK2 "--with-gtk2";
 
   preConfigure = ''
@@ -43,10 +55,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \
-      --replace "Exec=lightdm-gtk-greeter" "Exec=$out/sbin/lightdm-gtk-greeter"
-    wrapProgram "$out/sbin/lightdm-gtk-greeter" \
-      --prefix XDG_DATA_DIRS ":" "${hicolor-icon-theme}/share"
+      --replace "Exec=lightdm-gtk-greeter" "Exec=$out/bin/lightdm-gtk-greeter"
   '';
+
+  passthru.xgreeters = linkFarm "lightdm-gtk-greeter-xgreeters" [{
+    path = "${lightdm_gtk_greeter}/share/xgreeters/lightdm-gtk-greeter.desktop";
+    name = "lightdm-gtk-greeter.desktop";
+  }];
 
   meta = with stdenv.lib; {
     homepage = https://launchpad.net/lightdm-gtk-greeter;

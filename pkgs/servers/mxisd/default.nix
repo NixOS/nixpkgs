@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub, jre, git, gradle_4_10, perl, makeWrapper }:
+{ stdenv, fetchFromGitHub, jre, git, gradle_4, perl, makeWrapper }:
 
 let
   name = "mxisd-${version}";
-  version = "1.4.5";
-  rev = "a964b073bfa7552e94fe51f48e18830b1051b0b7";
+  version = "1.4.6";
+  rev = "6e9601cb3a18281857c3cefd20ec773023b577d2";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "kamax-matrix";
     repo = "mxisd";
-    sha256 = "1h1lx531rjswh0m2zdsmfizrkkx9bh414v9m321hbbfzk3f98fkk";
+    sha256 = "07gpdgbz281506p2431qn92bvdza6ap3jfq5b7xdm7nwrry80pzd";
   };
 
 
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
     inherit src;
-    nativeBuildInputs = [ gradle_4_10 perl git ];
+    nativeBuildInputs = [ gradle_4 perl git ];
 
     buildPhase = ''
       export MXISD_BUILD_VERSION=${rev}
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation {
   inherit name src version;
-  nativeBuildInputs = [ gradle_4_10 perl makeWrapper ];
+  nativeBuildInputs = [ gradle_4 perl makeWrapper ];
   buildInputs = [ jre ];
 
   patches = [ ./0001-gradle.patch ];

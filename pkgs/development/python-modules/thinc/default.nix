@@ -8,7 +8,7 @@
 , cymem
 , darwin
 , msgpack-numpy
-, msgpack-python
+, msgpack
 , preshed
 , numpy
 , murmurhash
@@ -28,11 +28,11 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.0.8";
+  version = "7.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "191admjvhqsbxpqn73q42i0i8kvlblj0k6p0z9p7n3pcxzl75nsw";
+    sha256 = "1f9bg7iyhwnk8jfras8d4wzq0ypn5na0bdbwkl7y2mr06yrdd0ff";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
    cython
    cymem
    msgpack-numpy
-   msgpack-python
+   msgpack
    preshed
    numpy
    murmurhash
@@ -64,11 +64,6 @@ buildPythonPackage rec {
     mock
     pytest
   ];
-
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6"
-  '';
 
   # Cannot find cython modules.
   doCheck = false;

@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://lloyd.github.com/yajl/;
     license = stdenv.lib.licenses.isc;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ z77z ];
+    maintainers = with stdenv.lib.maintainers; [ maggesi ];
   };
 }

@@ -104,4 +104,6 @@ mkDerivation (common "tamarin-prover" src // {
           tamarin-prover-term
           tamarin-prover-theory
         ];
+
+  broken = true;
 })

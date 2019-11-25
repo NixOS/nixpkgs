@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.8.9";
+  version = "0.8.13";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gqbdk4gaxkpval52fsravjgvqz6c9zh1ahry57a2p6kszw96n13";
+    sha256 = "0yy41v2crds9500fa4r0kqiddciqkilr2h13nrjqy44ckvw2mi5y";
   };
 
-  cargoSha256 = "1k0yl03rxbv009gb2jkc0f7mjq3pzc9bf8hppk2w9xicxpq6l55c";
+  cargoSha256 = "1gnl97h0l9k8xnrwl6807qlbx13vd45kmla02mk9p1h52sr0din5";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

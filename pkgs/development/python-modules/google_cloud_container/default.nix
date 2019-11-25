@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "566834ef43e79917b112e3bd2848e84cfb0f4d7b565581607e2548f5c8e5d87a";
+    sha256 = "90cceceb487f1f4f2336b3674d594bc5e492fadbe27a5f06ca056d7148fd90ba";
   };
 
   checkInputs = [ pytest mock ];

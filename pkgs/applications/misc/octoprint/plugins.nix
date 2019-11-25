@@ -47,13 +47,13 @@ let
 
     mqtt = buildPlugin rec {
       pname = "MQTT";
-      version = "0.8.0";
+      version = "0.8.6";
 
       src = fetchFromGitHub {
         owner = "OctoPrint";
         repo = "OctoPrint-MQTT";
         rev = version;
-        sha256 = "1318pgwy39gkdqgll3q5lwm7avslgdwyiwb5v8m23cgyh5w8cjq7";
+        sha256 = "0y1jnfplcy8mh3szrfbbvngl02j49cbdizglrfsry4fvqg50zjxd";
       };
 
       propagatedBuildInputs = with python2Packages; [ paho-mqtt ];
@@ -87,13 +87,13 @@ let
 
     stlviewer = buildPlugin rec {
       pname = "STLViewer";
-      version = "0.4.1";
+      version = "0.4.2";
 
       src = fetchFromGitHub {
         owner = "jneilliii";
         repo = "OctoPrint-STLViewer";
-        rev = "v${version}";
-        sha256 = "1f64s37g2d79g76v0vjnjrc2jp2gwrsnfgx7w3n0hkf1lz1pjkm0";
+        rev = version;
+        sha256 = "0mkvh44fn2ch4z2avsdjwi1rp353ylmk9j5fln4x7rx8ph8y7g2b";
       };
 
       meta = with stdenv.lib; {
@@ -168,13 +168,13 @@ let
 
     printtimegenius = buildPlugin rec {
       pname = "PrintTimeGenius";
-      version = "1.3.1";
+      version = "2.0.2";
 
       src = fetchFromGitHub {
         owner = "eyal0";
         repo = "OctoPrint-${pname}";
         rev = version;
-        sha256 = "0ijv1nxmikv06a00hqqkqri6wnydqh6lwcx07pmvw6jy706jhy28";
+        sha256 = "1w4jm42434x87sbih45brkb9krik851vxkz153w3w5c8p74kgg6f";
       };
 
       preConfigure = ''

@@ -96,7 +96,7 @@ EOF
     description = "The Dark Mod - stealth FPS inspired by the Thief series";
     homepage = "http://www.thedarkmod.com";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ cf6b88f ];
+    maintainers = with maintainers; [ cizra ];
     platforms = with platforms; [ "x86_64-linux" ];  # tdm also supports x86, but I don't have a x86 install at hand to test.
   };
 }

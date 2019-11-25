@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , pantheon
+, fetchpatch
 , substituteAll
 , meson
 , ninja
@@ -54,6 +55,11 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./xkb.patch;
       config = "${xorg.xkeyboardconfig}/share/X11/xkb/rules/evdev.xml";
+    })
+    # Fix build with latest vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-keyboard/commit/28fa960f607f0b1d67f2864965a079bdfc23e3a8.patch";
+      sha256 = "0121qcg8n7gkz7gpwrxc1cx0nnypj02zy2jmp3cks5r9sc0yi0hw";
     })
   ];
 

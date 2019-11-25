@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "3c0f73db9f8392f7048c8a244809f154d7c39f354e2167f6c477630aa517ed04";
   };
+
+  propagatedBuildInputs = [ setuptools ];
 
   patches = [
     (fetchpatch {

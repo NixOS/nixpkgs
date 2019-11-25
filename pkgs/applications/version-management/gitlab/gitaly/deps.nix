@@ -478,15 +478,6 @@
     };
   }
   {
-    goPackagePath = "gitlab.com/gitlab-org/gitaly-proto";
-    fetch = {
-      type = "git";
-      url = "https://gitlab.com/gitlab-org/gitaly-proto.git";
-      rev = "v1.36.0";
-      sha256 = "0xma8ys3lf1bdhlkmcis31xs1h1dshcr5796wwfwnzijwk6422m3";
-    };
-  }
-  {
     goPackagePath = "gitlab.com/gitlab-org/labkit";
     fetch = {
       type = "git";
@@ -509,8 +500,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "c2843e01d9a2";
-      sha256 = "01xgxbj5r79nmisdvpq48zfy8pzaaj90bn6ngd4nf33j9ar1dp8r";
+      rev = "20be4c3c3ed5";
+      sha256 = "1ph7y8v30hc95h1dwr7vrhg1nzs47a261qin6zg8mhf12g5k2lxb";
     };
   }
   {
@@ -554,8 +545,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "d0b11bdaac8a";
-      sha256 = "18yfsmw622l7gc5sqriv5qmck6903vvhivpzp8i3xfy3z33dybdl";
+      rev = "953cdadca894";
+      sha256 = "0gkha4whk8xkcv3isigbs250akag99isxnd3v9xmy0kl3g88hxy1";
     };
   }
   {

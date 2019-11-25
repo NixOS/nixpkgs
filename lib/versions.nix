@@ -1,13 +1,15 @@
 /* Version string functions. */
 { lib }:
 
-let
+rec {
 
+  /* Break a version string into its component parts.
+
+     Example:
+       splitVersion "1.2.3"
+       => ["1" "2" "3"]
+  */
   splitVersion = builtins.splitVersion or (lib.splitString ".");
-
-in
-
-{
 
   /* Get the major version string from a string.
 

@@ -181,7 +181,7 @@ in
     };
 
     configFile = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.path;
       default = null;
       description = "Config file used for the whole dovecot configuration.";
       apply = v: if v != null then v else pkgs.writeText "dovecot.conf" dovecotConf;

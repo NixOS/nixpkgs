@@ -23,24 +23,56 @@ let
 
   cfg = config.virtualisation;
 
-  qemuGraphics = lib.optionalString (!cfg.graphics) "-nographic";
-
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
-  # XXX: This is very ugly and in the future we really should use attribute
-  # sets to build ALL of the QEMU flags instead of this mixed mess of Nix
-  # expressions and shell script stuff.
-  mkDiskIfaceDriveFlag = idx: driveArgs: let
-    inherit (cfg.qemu) diskInterface;
-    # The drive identifier created by incrementing the index by one using the
-    # shell.
-    drvId = "drive$((${idx} + 1))";
-    # NOTE: DO NOT shell escape, because this may contain shell variables.
-    commonArgs = "index=${idx},id=${drvId},${driveArgs}";
-    isSCSI = diskInterface == "scsi";
-    devArgs = "${diskInterface}-hd,drive=${drvId}";
-    args = "-drive ${commonArgs},if=none -device lsi53c895a -device ${devArgs}";
-  in if isSCSI then args else "-drive ${commonArgs},if=${diskInterface}";
+  driveOpts = { ... }: {
+
+    options = {
+
+      file = mkOption {
+        type = types.str;
+        description = "The file image used for this drive.";
+      };
+
+      driveExtraOpts = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        description = "Extra options passed to drive flag.";
+      };
+
+      deviceExtraOpts = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        description = "Extra options passed to device flag.";
+      };
+
+    };
+
+  };
+
+  driveCmdline = idx: { file, driveExtraOpts, deviceExtraOpts, ... }:
+    let
+      drvId = "drive${toString idx}";
+      mkKeyValue = generators.mkKeyValueDefault {} "=";
+      mkOpts = opts: concatStringsSep "," (mapAttrsToList mkKeyValue opts);
+      driveOpts = mkOpts (driveExtraOpts // {
+        index = idx;
+        id = drvId;
+        "if" = "none";
+        inherit file;
+      });
+      deviceOpts = mkOpts (deviceExtraOpts // {
+        drive = drvId;
+      });
+      device =
+        if cfg.qemu.diskInterface == "scsi" then
+          "-device lsi53c895a -device scsi-hd,${deviceOpts}"
+        else
+          "-device virtio-blk-pci,${deviceOpts}";
+    in
+      "-drive ${driveOpts} ${device}";
+
+  drivesCmdLine = drives: concatStringsSep " " (imap1 driveCmdline drives);
 
   # Shell script to start the VM.
   startVM =
@@ -77,13 +109,11 @@ let
       ''}
 
       cd $TMPDIR
-      idx=2
-      extraDisks=""
+      idx=0
       ${flip concatMapStrings cfg.emptyDiskImages (size: ''
         if ! test -e "empty$idx.qcow2"; then
             ${qemu}/bin/qemu-img create -f qcow2 "empty$idx.qcow2" "${toString size}M"
         fi
-        extraDisks="$extraDisks ${mkDiskIfaceDriveFlag "$idx" "file=$(pwd)/empty$idx.qcow2,werror=report"}"
         idx=$((idx + 1))
       '')}
 
@@ -97,21 +127,7 @@ let
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
           -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
-          ${if cfg.useBootLoader then ''
-            ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report"} \
-            ${mkDiskIfaceDriveFlag "1" "file=$TMPDIR/disk.img,media=disk"} \
-            ${if cfg.useEFIBoot then ''
-              -pflash $TMPDIR/bios.bin \
-            '' else ''
-            ''}
-          '' else ''
-            ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report"} \
-            -kernel ${config.system.build.toplevel}/kernel \
-            -initrd ${config.system.build.toplevel}/initrd \
-            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS" \
-          ''} \
-          $extraDisks \
-          ${qemuGraphics} \
+          ${drivesCmdLine config.virtualisation.qemu.drives} \
           ${toString config.virtualisation.qemu.options} \
           $QEMU_OPTS \
           "$@"
@@ -367,6 +383,12 @@ in
           '';
         };
 
+      drives =
+        mkOption {
+          type = types.listOf (types.submodule driveOpts);
+          description = "Drives passed to qemu.";
+        };
+
       diskInterface =
         mkOption {
           default = "virtio";
@@ -476,8 +498,49 @@ in
 
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
-      (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usb" "-device usb-tablet,bus=usb-bus.0" ])
-      (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [ "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet" ])
+      (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
+        "-vga std" "-usb" "-device usb-tablet,bus=usb-bus.0"
+      ])
+      (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
+        "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
+      ])
+      (mkIf (!cfg.useBootLoader) [
+        "-kernel ${config.system.build.toplevel}/kernel"
+        "-initrd ${config.system.build.toplevel}/initrd"
+        ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
+      ])
+      (mkIf cfg.useEFIBoot [
+        "-pflash $TMPDIR/bios.bin"
+      ])
+      (mkIf (!cfg.graphics) [
+        "-nographic"
+      ])
+    ];
+
+    virtualisation.qemu.drives = mkMerge [
+      (mkIf cfg.useBootLoader [
+        {
+          file = "$NIX_DISK_IMAGE";
+          driveExtraOpts.cache = "writeback";
+          driveExtraOpts.werror = "report";
+        }
+        {
+          file = "$TMPDIR/disk.img";
+          driveExtraOpts.media = "disk";
+          deviceExtraOpts.bootindex = "1";
+        }
+      ])
+      (mkIf (!cfg.useBootLoader) [
+        {
+          file = "$NIX_DISK_IMAGE";
+          driveExtraOpts.cache = "writeback";
+          driveExtraOpts.werror = "report";
+        }
+      ])
+      (imap0 (idx: _: {
+        file = "$(pwd)/empty${toString idx}.qcow2";
+        driveExtraOpts.werror = "report";
+      }) cfg.emptyDiskImages)
     ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store
@@ -557,7 +620,7 @@ in
 
     # Wireless won't work in the VM.
     networking.wireless.enable = mkVMOverride false;
-    networking.connman.enable = mkVMOverride false;
+    services.connman.enable = mkVMOverride false;
 
     # Speed up booting by not waiting for ARP.
     networking.dhcpcd.extraConfig = "noarp";

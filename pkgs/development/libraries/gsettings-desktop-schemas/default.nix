@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "3.32.0";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gsettings-desktop-schemas/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0d8a6479vappgplq5crdr3ah0ykqcr3fw533wkx9v1a8lnrv8n9d";
+    sha256 = "1bayr76aylawf2fhyjhv9zgk4kpv7ivrrmd80khb0h3h1wk092r8";
   };
 
   passthru = {

@@ -1,5 +1,5 @@
 { python37, openssl
-, callPackage }:
+, callPackage, recurseIntoAttrs }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
 # Then we expose them through all-packages.nix as an application through `toPythonApplication`
@@ -25,7 +25,7 @@ let
       scmsrht = self.callPackage ./scm.nix { };
     };
   };
-in with python.pkgs; {
+in with python.pkgs; recurseIntoAttrs {
   inherit python;
   buildsrht = toPythonApplication buildsrht;
   dispatchsrht = toPythonApplication dispatchsrht;

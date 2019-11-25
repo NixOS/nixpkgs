@@ -79,12 +79,6 @@ let
         sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
       })
 
-      (fetchpatch {
-        url = "https://github.com/python/cpython/commit/979daae300916adb399ab5b51410b6ebd0888f13.patch";
-        name = "CVE-2018-20852.patch";
-        sha256 = "0p838ycssd6abxzby69rhngjqqm59cmlp07910mpjx7lmsz049pb";
-      })
-
       # Fix race-condition during pyc creation. Has a slight backwards
       # incompatible effect: pyc symlinks will now be overridden
       # (https://bugs.python.org/issue17222). Included in python >= 3.4,

@@ -32,7 +32,6 @@
 , rubberband
 , mda_lv2
 , lsp-plugins
-, hicolor-icon-theme
 }:
 
 let
@@ -47,13 +46,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.6.6";
+  version = "4.6.8";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "15w1kc1b0i8wrkrbfzrvcscanxvcsz336bfyi1awb1lbclvd3sf4";
+    sha256 = "09crsg73mvqdknvh6lczwx16x73zb2vb3m53bsapqiaq4lmwy3qr";
   };
 
   nativeBuildInputs = [
@@ -86,7 +85,6 @@ in stdenv.mkDerivation rec {
     dbus
     fftwFloat
     zita-convolver
-    hicolor-icon-theme
   ];
 
   postPatch = ''

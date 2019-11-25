@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtwebengine, hicolor-icon-theme }:
+{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtwebengine }:
 
 let
   description = "A note-taking application that knows programmers and Markdown better";
@@ -15,7 +15,7 @@ in mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase qtwebengine hicolor-icon-theme ];
+  buildInputs = [ qtbase qtwebengine ];
 
   meta = with lib; {
     inherit description;

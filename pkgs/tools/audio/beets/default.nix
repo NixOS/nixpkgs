@@ -6,6 +6,7 @@
 # Attributes needed for tests of the external plugins
 , callPackage, beets
 
+, enableAbsubmit       ? stdenv.lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms, essentia-extractor ? null
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
@@ -17,9 +18,12 @@
 , enableKeyfinder      ? true, keyfinder-cli ? null
 , enableKodiupdate     ? true
 , enableLastfm         ? true
+, enableLoadext        ? true
 , enableMpd            ? true
+, enablePlaylist       ? true
 , enableReplaygain     ? true, bs1770gain ? null
 , enableSonosUpdate    ? true
+, enableSubsonicupdate ? true
 , enableThumbnails     ? true
 , enableWeb            ? true
 
@@ -30,6 +34,7 @@
 , bashInteractive, bash-completion
 }:
 
+assert enableAbsubmit    -> essentia-extractor            != null;
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
 assert enableConvert     -> ffmpeg != null;
@@ -48,6 +53,7 @@ with stdenv.lib;
 
 let
   optionalPlugins = {
+    absubmit = enableAbsubmit;
     acousticbrainz = enableAcousticbrainz;
     badfiles = enableBadfiles;
     chroma = enableAcoustid;
@@ -60,21 +66,24 @@ let
     kodiupdate = enableKodiupdate;
     lastgenre = enableLastfm;
     lastimport = enableLastfm;
+    loadext = enableLoadext;
     mpdstats = enableMpd;
     mpdupdate = enableMpd;
+    playlist = enablePlaylist;
     replaygain = enableReplaygain;
     sonosupdate = enableSonosUpdate;
+    subsonicupdate = enableSubsonicupdate;
     thumbnails = enableThumbnails;
     web = enableWeb;
   };
 
   pluginsWithoutDeps = [
-    "absubmit" "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates"
-    "edit" "embedart" "export" "filefilter" "freedesktop" "fromfilename"
-    "ftintitle" "fuzzy" "hook" "ihate" "importadded" "importfeeds" "info"
-    "inline" "ipfs" "lyrics" "mbcollection" "mbsubmit" "mbsync" "metasync"
-    "missing" "permissions" "play" "plexupdate" "random" "rewrite" "scrub"
-    "smartplaylist" "spotify" "the" "types" "zero"
+    "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
+    "export" "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
+    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
+    "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "permissions" "play"
+    "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
+    "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -102,13 +111,13 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   pname = "beets";
-  version = "1.4.7";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "17gfz0g7pqm6wha8zf63zpw07zgi787w1bjwdcxdh1l3z4m7jc9l";
+    sha256 = "1qxdqbzvz97zgykzdwn78g2xyxmg0q2jdb12dnjnrwvhmjv67vi8";
   };
 
   propagatedBuildInputs = [
@@ -123,10 +132,14 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.gst-python
     pythonPackages.pygobject3
     gobject-introspection
-  ] ++ optional enableAcoustid      pythonPackages.pyacoustid
+  ] ++ optional enableAbsubmit      essentia-extractor
+    ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
               || enableKodiupdate
+              || enableLoadext
+              || enablePlaylist
+              || enableSubsonicupdate
               || enableAcousticbrainz)
                                     pythonPackages.requests
     ++ optional enableConvert       ffmpeg
@@ -160,14 +173,6 @@ in pythonPackages.buildPythonApplication rec {
   patches = [
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
-
-    # Fix Python 3.7 compatibility
-    (fetchpatch {
-      url = "https://github.com/beetbox/beets/commit/"
-          + "15d44f02a391764da1ce1f239caef819f08beed8.patch";
-      sha256 = "12rjb4959nvnrm3fvvki7chxjkipa0cy8i0yi132xrcn8141dnpm";
-      excludes = [ "docs/changelog.rst" ];
-    })
   ];
 
   postPatch = ''

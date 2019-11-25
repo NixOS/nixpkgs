@@ -172,6 +172,7 @@ let
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
+      rocs = callPackage ./rocs.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
       # Okteta was removed from kde applications and will now be released independently

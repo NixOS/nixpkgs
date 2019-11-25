@@ -104,21 +104,6 @@
 
   icicles = callPackage ./icicles { };
 
-  rtags = melpaBuild {
-    inherit (external.rtags) version src meta;
-
-    pname = "rtags";
-
-    dontConfigure = true;
-
-    propagatedUserEnvPkgs = [ external.rtags ];
-    recipe = pkgs.writeText "recipe" ''
-      (rtags
-       :repo "andersbakken/rtags" :fetcher github
-       :files ("src/*.el"))
-    '';
-  };
-
   lib-requires =
     callPackage ./lib-requires { };
 
@@ -143,9 +128,7 @@
   # From old emacsPackages (pre emacsPackagesNg)
   cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
-  colorThemeSolarized = callPackage ./color-theme-solarized {
-    colorTheme = self.color-theme;
-  };
+  colorThemeSolarized = callPackage ./color-theme-solarized { };
   emacsSessionManagement = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
   hol_light_mode = callPackage ./hol_light { };

@@ -6,8 +6,7 @@ gem 'bundler', '>= 1.17.3'
 gem 'rugged', '~> 0.28'
 gem 'github-linguist', '~> 6.1', require: 'linguist'
 gem 'gitlab-markup', '~> 1.7.0'
-gem 'activesupport', '~> 5.1.7'
-gem 'gitaly-proto', '~> 1.36.0'
+gem 'activesupport', '~> 5.2.3'
 gem 'rdoc', '~> 4.2'
 gem 'gitlab-gollum-lib', '~> 4.2.7.7', require: false
 gem 'gitlab-gollum-rugged_adapter', '~> 0.4.4.2', require: false
@@ -17,7 +16,7 @@ gem 'faraday', '~> 0.12'
 gem 'rbtrace', require: false
 
 # Labkit provides observability functionality
-gem 'gitlab-labkit', '~> 0.3.0'
+gem 'gitlab-labkit', '~> 0.5.0'
 
 # Detects the open source license the repository includes
 # This version needs to be in sync with GitLab CE/EE

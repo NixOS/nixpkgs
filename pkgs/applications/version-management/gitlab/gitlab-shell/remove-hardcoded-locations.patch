@@ -1,5 +1,5 @@
 diff --git a/go/internal/config/config.go b/go/internal/config/config.go
-index f951fe6..b422fe3 100644
+index 2231851..c869930 100644
 --- a/go/internal/config/config.go
 +++ b/go/internal/config/config.go
 @@ -3,7 +3,6 @@ package config
@@ -8,9 +8,9 @@ index f951fe6..b422fe3 100644
  	"net/url"
 -	"os"
  	"path"
- 	"strings"
+ 	"path/filepath"
  
-@@ -30,16 +29,13 @@ type Config struct {
+@@ -38,16 +37,13 @@ type Config struct {
  }
  
  func New() (*Config, error) {
@@ -28,44 +28,30 @@ index f951fe6..b422fe3 100644
 +	return newFromFile("/run/gitlab/shell-config.yml")
  }
  
- func (c *Config) FeatureEnabled(featureName string) bool {
-diff --git a/lib/gitlab_keys.rb b/lib/gitlab_keys.rb
-index 0600a18..c46f2d7 100644
---- a/lib/gitlab_keys.rb
-+++ b/lib/gitlab_keys.rb
-@@ -10,7 +10,7 @@ class GitlabKeys # rubocop:disable Metrics/ClassLength
-   attr_accessor :auth_file, :key
+ func newFromFile(filename string) (*Config, error) {
+diff --git a/go/internal/keyline/key_line.go b/go/internal/keyline/key_line.go
+index f92f50b..160e287 100644
+--- a/go/internal/keyline/key_line.go
++++ b/go/internal/keyline/key_line.go
+@@ -36,7 +36,7 @@ func NewPrincipalKeyLine(keyId string, principal string, rootDir string) (*KeyLi
+ }
  
-   def self.command(whatever)
--    "#{ROOT_PATH}/bin/gitlab-shell #{whatever}"
-+    "/run/current-system/sw/bin/gitlab-shell #{whatever}"
+ func (k *KeyLine) ToString() string {
+-	command := fmt.Sprintf("%s %s-%s", path.Join(k.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.Id)
++	command := fmt.Sprintf("%s %s-%s", path.Join("/run/current-system/sw/bin", executable.GitlabShell), k.Prefix, k.Id)
+ 
+ 	return fmt.Sprintf(`command="%s",%s %s`, command, SshOptions, k.Value)
+ }
+diff --git a/support/gitlab_config.rb b/support/gitlab_config.rb
+index 1416488..90a5f79 100644
+--- a/support/gitlab_config.rb
++++ b/support/gitlab_config.rb
+@@ -4,7 +4,7 @@ class GitlabConfig
+   attr_reader :config
+ 
+   def initialize
+-    @config = YAML.load_file(File.join(ROOT_PATH, 'config.yml'))
++    @config = YAML.load_file('/run/gitlab/shell-config.yml')
    end
  
-   def self.command_key(key_id)
-diff --git a/lib/gitlab_shell.rb b/lib/gitlab_shell.rb
-index 2cb76a8..f59ad5e 100644
---- a/lib/gitlab_shell.rb
-+++ b/lib/gitlab_shell.rb
-@@ -190,7 +190,8 @@ class GitlabShell # rubocop:disable Metrics/ClassLength
- 
-     args = [executable, gitaly_address, json_args]
-     # We use 'chdir: ROOT_PATH' to let the next executable know where config.yml is.
--    Kernel.exec(env, *args, unsetenv_others: true, chdir: ROOT_PATH)
-+    # Except we don't, because we're already in the right directory on nixos!
-+    Kernel.exec(env, *args, unsetenv_others: true)
-   end
- 
-   def api
-diff --git a/go/internal/command/fallback/fallback.go b/go/internal/command/fallback/fallback.go
-index 2cb76a8..f59ad5e 100644
---- a/go/internal/command/fallback/fallback.go
-+++ b/go/internal/command/fallback/fallback.go
-@@ -21,7 +21,7 @@
- )
- 
- func (c *Command) Execute() error {
--	rubyCmd := filepath.Join(c.RootDir, "bin", RubyProgram)
-+	rubyCmd := filepath.Join("/run/current-system/sw/bin", RubyProgram)
- 
- 	// Ensure rubyArgs[0] is the full path to gitlab-shell-ruby
- 	rubyArgs := append([]string{rubyCmd}, c.Args[1:]...)
+   def auth_file

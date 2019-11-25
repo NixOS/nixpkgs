@@ -1,18 +1,15 @@
 { stdenv, fetchFromGitHub, cmake, python3, spirv-headers }:
-let
-  # Update spirv-headers rev in lockstep according to DEPs file
-  version = "2019.3";
-in
 
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
-  inherit version;
+  # Update spirv-headers rev in lockstep according to DEPs file
+  version = "2019.4";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
     rev = "v${version}";
-    sha256 = "1wvipjcjsi815ls08s3dz9hwlbb59dbl4syxkskg1k9d5jjph1a8";
+    sha256 = "17bbvhk4p42x4jlvcr5p9903xiiryw57c8yyfxmqik10s8601an9";
   };
   enableParallelBuilding = true;
 

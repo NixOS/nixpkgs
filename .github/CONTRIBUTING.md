@@ -51,4 +51,4 @@ For package version upgrades and such a one-line commit message is usually suffi
 
 ## Reviewing contributions
 
-See the nixpkgs manual for more details on how to [Review contributions](https://nixos.org/nixpkgs/manual/#sec-reviewing-contributions).
+See the nixpkgs manual for more details on how to [Review contributions](https://nixos.org/nixpkgs/manual/#chap-reviewing-contributions).

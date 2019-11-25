@@ -44,10 +44,11 @@ let
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
     configureScript = {
-        x86_64-darwin  = "./Configure darwin64-x86_64-cc";
-        x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         armv6l-linux = "./Configure linux-armv4 -march=armv6";
         armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
+        x86_64-darwin  = "./Configure darwin64-x86_64-cc";
+        x86_64-linux = "./Configure linux-x86_64";
+        x86_64-solaris = "./Configure solaris64-x86_64-gcc";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
@@ -95,7 +96,11 @@ let
     '' +
     ''
       mkdir -p $bin
+    '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    ''
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
+    '' +
+    ''
       mv $out/bin $bin/
 
       mkdir $dev
@@ -107,7 +112,7 @@ let
       rmdir $out/etc/ssl/{certs,private}
     '';
 
-    postFixup = ''
+    postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows) ''
       # Check to make sure the main output doesn't depend on perl
       if grep -r '${buildPackages.perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2
@@ -127,8 +132,8 @@ let
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2s";
-    sha256 = "15mbmg8hf7s12vr3v2bdc0pi9y4pdbnsxhzk4fyyap42jaa5rgfa";
+    version = "1.0.2t";
+    sha256 = "1g67ra0ph7gpz6fgvv1i96d792jmd6ymci5kk53vbikszr74djql";
     patches = [
       ./1.0.2/nix-ssl-cert-file.patch
 
@@ -139,8 +144,8 @@ in {
   };
 
   openssl_1_1 = common {
-    version = "1.1.1c";
-    sha256 = "142c7zdlz06hjrrvinb9f276czc78bnkyhd9xma621qmmmwk1yzn";
+    version = "1.1.1d";
+    sha256 = "1whinyw402z3b9xlb3qaxv4b9sk4w1bgh9k0y8df1z4x3yy92fhy";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 

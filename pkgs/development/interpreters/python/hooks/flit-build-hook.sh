@@ -3,13 +3,13 @@ echo "Sourcing flit-build-hook"
 
 flitBuildPhase () {
     echo "Executing flitBuildPhase"
-    preBuild
+    runHook preBuild
     @pythonInterpreter@ -m flit build --format wheel
-    postBuild
+    runHook postBuild
     echo "Finished executing flitBuildPhase"
 }
 
-if [ -z "$dontUseFlitBuild" ] && [ -z "$buildPhase" ]; then
+if [ -z "${dontUseFlitBuild-}" ] && [ -z "${buildPhase-}" ]; then
     echo "Using flitBuildPhase"
     buildPhase=flitBuildPhase
 fi

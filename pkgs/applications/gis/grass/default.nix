@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages, libLAS, proj-datumgrid
+, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python2Packages, libLAS, proj-datumgrid
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo proj
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.connector-c blas
+  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
   libLAS proj-datumgrid ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
 
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     "--with-postgres-libs=${postgresql.lib}/lib/"
     # it complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
-    "--with-mysql-includes=${mysql.connector-c}/include/mysql"
-    "--with-mysql-libs=${mysql.connector-c}/lib/mysql"
+    "--with-mysql-includes=${libmysqlclient}/include/mysql"
+    "--with-mysql-libs=${libmysqlclient}/lib/mysql"
     "--with-blas"
     "--with-liblas=${libLAS}/bin/liblas-config"
   ];

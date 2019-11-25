@@ -73,9 +73,9 @@ let
   };
 
   v5 = {
-    version = "5.0.1";
-    sha256 = "11i8fqjpdggqfdlx440k5758zy0nbf9phxan9r63mavc7mph88ay";
-    dataSha256 = "1hw3n7qqpasq6bivxhq01kr0d58w0gp46s0baxixp1fakd79p8a7";
+    version = "5.1.0";
+    sha256 = "184n9gxfa7yr0j85z2x736maaymsnppd5jzm326wlqri3c0qqy3z";
+    dataSha256 = "1r9fxz2j24q74a9injvbxbf2xk67fzabv616i676zw2cvgv9hn39";
   };
 
 in {

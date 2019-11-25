@@ -18,6 +18,31 @@ runTests {
     expected = 2;
   };
 
+  testPipe = {
+    expr = pipe 2 [
+      (x: x + 2) # 2 + 2 = 4
+      (x: x * 2) # 4 * 2 = 8
+    ];
+    expected = 8;
+  };
+
+  testPipeEmpty = {
+    expr = pipe 2 [];
+    expected = 2;
+  };
+
+  testPipeStrings = {
+    expr = pipe [ 3 4 ] [
+      (map toString)
+      (map (s: s + "\n"))
+      concatStrings
+    ];
+    expected = ''
+      3
+      4
+    '';
+  };
+
   /*
   testOr = {
     expr = or true false;
@@ -100,6 +125,21 @@ runTests {
   testSplitStringsLastEmpty = {
     expr = strings.splitString ":" "2001:db8:0:0042::8a2e:370:";
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
+  };
+
+  testSplitVersionSingle = {
+    expr = versions.splitVersion "1";
+    expected = [ "1" ];
+  };
+
+  testSplitVersionDouble = {
+    expr = versions.splitVersion "1.2";
+    expected = [ "1" "2" ];
+  };
+
+  testSplitVersionTriple = {
+    expr = versions.splitVersion "1.2.3";
+    expected = [ "1" "2" "3" ];
   };
 
   testIsStorePath =  {

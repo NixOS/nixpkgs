@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-remote-hg";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "mnauw";
     repo = "git-remote-hg";
     rev = "v${version}";
-    sha256 = "0anl054zdi5rg5m4bm1n763kbdjkpdws3c89c8w8m5gq1ifsbd4d";
+    sha256 = "1by5ygqvq9ww990kdrjndaqsssyf2jc4n380f9pfh2avsr7871wc";
   };
 
   buildInputs = [ mercurial.python mercurial makeWrapper

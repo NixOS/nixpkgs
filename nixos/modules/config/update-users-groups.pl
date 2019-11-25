@@ -56,12 +56,12 @@ sub allocGid {
         $gidsUsed{$prevGid} = 1;
         return $prevGid;
     }
-    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 499, 0, sub { my ($gid) = @_; getgrgid($gid) });
+    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 999, 0, sub { my ($gid) = @_; getgrgid($gid) });
 }
 
 sub allocUid {
     my ($name, $isSystemUser) = @_;
-    my ($min, $max, $up) = $isSystemUser ? (400, 499, 0) : (1000, 29999, 1);
+    my ($min, $max, $up) = $isSystemUser ? (400, 999, 0) : (1000, 29999, 1);
     my $prevUid = $uidMap->{$name};
     if (defined $prevUid && $prevUid >= $min && $prevUid <= $max && !defined $uidsUsed{$prevUid}) {
         print STDERR "reviving user '$name' with UID $prevUid\n";

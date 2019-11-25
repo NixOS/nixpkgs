@@ -7,13 +7,13 @@
 let
 unwrapped = mkDerivation rec {
   pname = "dde-dock";
-  version = "4.10.3";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "17iy78r0frpv42g521igfdcgdklbifzig1wzxq2nl14fq0bgxg4v";
+    sha256 = "12dshsqhzajnxm7r53qg0c84b6xlj313qnssnx2m25z4jdp5i7pr";
   };
 
   nativeBuildInputs = [

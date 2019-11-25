@@ -28,6 +28,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A set of tools for configuring the Logitech G15 keyboard";
+    # Doesn't work with new `keyring` library which is Python 3-only now.
+    # https://github.com/Gnome15/gnome15/issues/29
+    broken = true;
     license = licenses.gpl3;
     homepage = https://gnome15.org/;
     platforms = platforms.linux;

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     description = "Generate OCaml modules from source files";
     platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [
-      z77z
+      maggesi
     ];
   };
 }
