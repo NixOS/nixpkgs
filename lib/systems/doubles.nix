@@ -48,6 +48,7 @@ in {
   mips    = filterDoubles predicates.isMips;
   riscv   = filterDoubles predicates.isRiscV;
   vc4     = filterDoubles predicates.isVc4;
+  js      = filterDoubles predicates.isJavaScript;
 
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
