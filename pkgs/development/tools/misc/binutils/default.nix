@@ -1,11 +1,13 @@
 { stdenv, lib, buildPackages
-, fetchurl, zlib, autoreconfHook, gettext
+, fetchFromGitHub, fetchurl, zlib, autoreconfHook, gettext
 # Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
 , enableShared ? true
 , noSysDirs
 , gold ? !stdenv.buildPlatform.isDarwin || stdenv.hostPlatform == stdenv.targetPlatform
 , bison ? null
+, flex
+, texinfo
 }:
 
 let
@@ -20,16 +22,23 @@ let
   # PATH to both be usable.
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
                   "${stdenv.targetPlatform.config}-";
+  vc4-binutils-src = fetchFromGitHub {
+    owner = "itszor";
+    repo = "binutils-vc4";
+    rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
+    sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
+  };
+  # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
+  normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
+    url = "mirror://gnu/binutils/${basename}.tar.bz2";
+    sha256 = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
+  });
 in
 
 stdenv.mkDerivation {
   name = targetPrefix + basename;
 
-  # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
-  src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
-    url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
-  });
+  src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src else normal-src;
 
   patches = [
     # Make binutils output deterministic by default.
@@ -54,6 +63,8 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
+  ] ++ lib.optionals (!stdenv.targetPlatform.isVc4)
+  [
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
     ./gold-symbol-visibility.patch
 
@@ -69,9 +80,9 @@ stdenv.mkDerivation {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     bison
-  ] ++ lib.optionals stdenv.targetPlatform.isiOS [
+  ] ++ (lib.optionals stdenv.targetPlatform.isiOS [
     autoreconfHook
-  ];
+  ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ texinfo flex ];
   buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;

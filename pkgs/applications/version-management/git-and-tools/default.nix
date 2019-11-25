@@ -103,6 +103,8 @@ let
 
   git-imerge = callPackage ./git-imerge { };
 
+  git-machete = python3Packages.callPackage ./git-machete { };
+
   git-octopus = callPackage ./git-octopus { };
 
   git-open = callPackage ./git-open { };

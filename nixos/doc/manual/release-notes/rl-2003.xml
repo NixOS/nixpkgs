@@ -176,6 +176,16 @@
      KDE’s old multimedia framework Phonon no longer supports Qt 4. For that reason, Plasma desktop also does not have <option>enableQt4Support</option> option any more.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The BeeGFS module has been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The osquery module has been removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

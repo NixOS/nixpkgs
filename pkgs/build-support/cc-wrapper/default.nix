@@ -35,8 +35,8 @@ let
   targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
                                            (targetPlatform.config + "-");
 
-  ccVersion = (builtins.parseDrvName cc.name).version;
-  ccName = (builtins.parseDrvName cc.name).name;
+  ccVersion = stdenv.lib.getVersion cc;
+  ccName = stdenv.lib.removePrefix targetPrefix (stdenv.lib.getName cc);
 
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
@@ -94,7 +94,7 @@ assert nativePrefix == bintools.nativePrefix;
 
 stdenv.mkDerivation {
   name = targetPrefix
-    + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${ccName}-wrapper")
+    + (if name != "" then name else "${ccName}-wrapper")
     + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
 
   preferLocalBuild = true;
