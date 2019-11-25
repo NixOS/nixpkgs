@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "elfkickers";
-  version = "3.1";
+  version = "3.1a";
 
   src = fetchurl {
     url = "http://www.muppetlabs.com/~breadbox/pub/software/ELFkickers-${version}.tar.gz";
-    sha256 = "0n0sypjrdm3ramv0sby4sdh3i3j9d0ihadr951wa08ypdnq3yrkd";
+    sha256 = "02354yn1lh1dxny35ky2d0b44iq302krsqpwk5grr4glma00hhq6";
   };
 
   makeFlags = [ "CC=cc prefix=$(out)" ];
