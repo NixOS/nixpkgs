@@ -574,6 +574,8 @@ in {
 
   btchip = callPackage ../development/python-modules/btchip { };
 
+  databricks-cli = callPackage ../development/python-modules/databricks-cli { };
+
   datatable = callPackage ../development/python-modules/datatable {
     inherit (pkgs.llvmPackages) openmp libcxx libcxxabi;
   };
