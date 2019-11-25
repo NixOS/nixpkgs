@@ -5,7 +5,7 @@ rustPlatform.buildRustPackage {
   version = "20191111";
 
   src = fetchFromGitHub {
-    owner = "CraneStation";
+    owner = "bytecodealliance";
     repo = "wasmtime";
     rev = "0006a2af954eba74c79885cb1fe8cdeb68f531c1";
     sha256 = "0lf3pdkjxcrjmjic7xxyjl5dka3arxi809sp9hm4hih5p2fhf2gw";
