@@ -14912,8 +14912,6 @@ in
     kerberos = libkrb5;
   };
 
-  rdf4store = callPackage ../servers/http/4store { };
-
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = pkgs.apacheHttpd_2_4;
 

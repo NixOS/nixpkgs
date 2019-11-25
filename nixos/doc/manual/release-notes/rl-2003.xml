@@ -220,6 +220,11 @@
      in conjunction with an external webserver to replace this functionality.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The fourStore and fourStoreEndpoint modules have been removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
