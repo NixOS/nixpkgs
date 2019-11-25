@@ -10,6 +10,7 @@ with lib;
     (mkRenamedOptionModule [ "networking" "enableRalinkFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
     (mkRenamedOptionModule [ "networking" "enableRTL8192cFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
     (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
+    (mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])
     (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
       (config:
         let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
@@ -283,6 +284,9 @@ with lib;
     # beegfs
     (mkRemovedOptionModule [ "services.beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services.beegfs" ] "The BeeGFS module has been removed")
+
+    # osquery
+    (mkRemovedOptionModule [ "services.osquery" ] "The osquery module has been removed")
 
     # Redis
     (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")

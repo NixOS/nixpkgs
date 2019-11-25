@@ -3,7 +3,6 @@ from contextlib import contextmanager, _GeneratorContextManager
 from xml.sax.saxutils import XMLGenerator
 import _thread
 import atexit
-import json
 import os
 import ptpython.repl
 import pty
@@ -16,7 +15,7 @@ import sys
 import tempfile
 import time
 import unicodedata
-from typing import Tuple, TextIO, Any, Callable, Dict, Iterator, Optional, List
+from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -771,7 +770,9 @@ def run_tests() -> None:
             machine.execute("sync")
 
     if nr_tests != 0:
-        log.log("{} out of {} tests succeeded".format(nr_succeeded, nr_tests))
+        eprint("{} out of {} tests succeeded".format(nr_succeeded, nr_tests))
+        if nr_tests > nr_succeeded:
+            sys.exit(1)
 
 
 @contextmanager

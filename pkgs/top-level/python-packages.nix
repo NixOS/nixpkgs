@@ -499,6 +499,8 @@ in {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
+  catalogue = callPackage ../development/python-modules/catalogue { };
+
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
@@ -5251,6 +5253,10 @@ in {
   extras = callPackage ../development/python-modules/extras { };
 
   texttable = callPackage ../development/python-modules/texttable { };
+
+  tiledb = callPackage ../development/python-modules/tiledb { 
+    inherit (pkgs) tiledb;
+  };
 
   tiros = callPackage ../development/python-modules/tiros { };
 

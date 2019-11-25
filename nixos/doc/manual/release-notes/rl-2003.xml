@@ -181,6 +181,11 @@
      The BeeGFS module has been removed.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The osquery module has been removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

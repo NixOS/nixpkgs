@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "adapta-kde-theme";
-  version = "20180512";
+  version = "20180828";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = "adapta-kde";
     rev = version;
-    sha256 = "1lgpkylhzbayk892inql16sjyy9d3v126f9i1v7qgha1203rwcji";
+    sha256 = "1q85678sff8is2kwvgd703ckcns42gdga2c1rqlp61gb6bqf09j8";
   };
 
-  makeFlags = ["PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   # Make this a fixed-output derivation
   outputHashMode = "recursive";

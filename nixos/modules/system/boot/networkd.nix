@@ -924,6 +924,8 @@ in
 
   config = mkIf config.systemd.network.enable {
 
+    users.users.systemd-network.group = "systemd-network";
+
     systemd.additionalUpstreamSystemUnits = [
       "systemd-networkd.service" "systemd-networkd-wait-online.service"
     ];

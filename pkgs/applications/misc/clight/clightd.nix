@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clightd";
-  version = "3.4";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clightd";
     rev = version;
-    sha256 = "0g6kawizwfhvigkwm7rbfq6rg872xn8igy8n355w4d7mmcxk0jf8";
+    sha256 = "0cskxy3xsy187in5vg8xcs3kwcx2s160qv009v0ahkcalp29ghz4";
   };
 
   # dbus-1.pc has datadir=/etc
