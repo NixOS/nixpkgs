@@ -5336,6 +5336,11 @@ in
 
   omping = callPackage ../applications/networking/omping { };
 
+  onefetch = callPackage ../tools/misc/onefetch {
+    inherit (darwin) libresolv;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   onioncircuits = callPackage ../tools/security/onioncircuits { };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { };
