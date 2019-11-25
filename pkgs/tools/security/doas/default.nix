@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "doas";
 
-  version = "6.0";
+  version = "6.6";
 
   src = fetchFromGitHub {
     owner = "Duncaen";
     repo = "OpenDoas";
     rev = "v${version}";
-    sha256 = "1j50l3jvbgvg8vmp1nx6vrjxkbj5bvfh3m01bymzfn25lkwwhz1x";
+    sha256 = "1l563z8dcgc6wcjf03lk4ddqv3g2kvizqdcvkdkpxkgqq9nv9gkb";
   };
 
   # otherwise confuses ./configure
