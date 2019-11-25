@@ -8,7 +8,8 @@
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
-, safePaths ? [ stdenv.cc.cc.lib ]
+# $debugdir:$datadir/auto-load are whitelisted by default by GDB
+, safePaths ? [ "$debugdir" "$datadir/auto-load" stdenv.cc.cc.lib ]
 
 }:
 
