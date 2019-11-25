@@ -5254,6 +5254,10 @@ in {
 
   texttable = callPackage ../development/python-modules/texttable { };
 
+  tiledb = callPackage ../development/python-modules/tiledb { 
+    inherit (pkgs) tiledb;
+  };
+
   tiros = callPackage ../development/python-modules/tiros { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
