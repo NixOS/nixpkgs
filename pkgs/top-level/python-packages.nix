@@ -6572,6 +6572,8 @@ in {
 
   managesieve = callPackage ../development/python-modules/managesieve { };
 
+  pony = callPackage ../development/python-modules/pony { };
+
 });
 
 in fix' (extends overrides packages)
