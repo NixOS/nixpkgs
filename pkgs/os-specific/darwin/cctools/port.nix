@@ -30,12 +30,7 @@ let
 
     outputs = [ "out" "dev" ];
 
-    nativeBuildInputs = [ autoconf automake ]
-
-      # TODO: remove on next hash change, libtool is unnecessary with autoreconfHook
-      ++ stdenv.lib.optional (stdenv.targetPlatform == stdenv.hostPlatform) libtool
-
-      ++ [ autoreconfHook ];
+    nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
     buildInputs = [ libuuid ]
       ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
       ++ stdenv.lib.optional enableTapiSupport libtapi;
