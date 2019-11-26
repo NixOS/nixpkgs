@@ -7,6 +7,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake python llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
+  NIX_CFLAGS_COMPILE = [
+    "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+  ];
+
   cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
