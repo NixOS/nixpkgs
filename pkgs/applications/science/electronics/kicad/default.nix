@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU_combined, zlib, wxGTK
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, zlib, wxGTK
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp, makeWrapper, gnome3
 , gsettings-desktop-schemas, librsvg, hicolor-icon-theme, lndir, cups
 , fetchpatch
 
-, oceSupport ? true, opencascade
-, withOCCT ? false, opencascade-occt
+, oceSupport ? false, opencascade
+, withOCCT ? true, opencascade-occt
 , ngspiceSupport ? true, libngspice
 , scriptingSupport ? true, swig, python, pythonPackages, wxPython
 , debug ? false, valgrind
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   ;
 
   buildInputs = [
-    libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext
+    libGLU libGL zlib libX11 wxGTK pcre libXdmcp gettext
     glew glm libpthreadstubs cairo curl openssl boost
   ]
   ++ optionals (scriptingSupport) [ swig python wxPython ]

@@ -4,8 +4,8 @@
 , gsettings-desktop-schemas, librsvg, hicolor-icon-theme, cups
 , fetchpatch, kicad-libraries, lndir
 
-, oceSupport ? true, opencascade
-, withOCCT ? false, opencascade-occt
+, oceSupport ? false, opencascade
+, withOCCT ? true, opencascade-occt
 , ngspiceSupport ? true, libngspice
 , scriptingSupport ? true, swig, python, pythonPackages, wxPython
 , debug ? false, valgrind
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     group = "kicad";
     owner = "code";
     repo = "kicad";
-    rev = "65ef8c18944947c3305619032bd1aedbe8b99d64";
-    sha256 = "0p0bm2yb34gqwks3qppwzgf5nylmn85psx2wwgk34yc8hs1p7yq0";
+    rev = "ffcf3b01fce98f1bcbdf3b76fbc88228126be965";
+    sha256 = "0qzjv06az1xl3am5v4v09nyfjcpq1wf3137wjv7a0vh8m38dvrwk";
   };
 
   patches = [
