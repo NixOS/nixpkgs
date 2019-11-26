@@ -1,0 +1,51 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -136,11 +136,6 @@
+     AC_DEFINE(WITH_VERBOSE_MODE,1,[Build with verbose mode support])
+ fi
+ 
+-AC_ARG_ENABLE([gtk-doc],
+-  AC_HELP_STRING([--enable-gtk-doc],
+-                 [use gtk-doc to build documentation [[default=yes]]]),,
+-  enable_gtk_doc=yes)
+-
+ # prefixes for fixing gtk-doc references
+ CAIRO_PREFIX="`$PKG_CONFIG --variable=prefix cairo`"
+ GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
+@@ -465,8 +460,6 @@
+ # Use gnome-doc-utils:
+ GNOME_DOC_INIT([0.8.0])
+ 
+-GTK_DOC_CHECK([1.15], [--flavour no-tmpl])
+-
+ AC_CHECK_DECL([GL_EXT_x11_sync_object],
+               [],
+               [AC_MSG_ERROR([GL_EXT_x11_sync_object definition not found, please update your GL headers])],
+@@ -484,15 +477,6 @@
+ AC_CONFIG_FILES([
+ Makefile
+ data/Makefile
+-doc/Makefile
+-doc/man/Makefile
+-doc/reference/Makefile
+-doc/reference/muffin/Makefile
+-doc/reference/muffin/muffin-docs.sgml
+-doc/reference/clutter/Makefile
+-doc/reference/clutter/clutter-docs.xml
+-doc/reference/cogl/Makefile
+-doc/reference/cogl/cogl-docs.xml
+ src/Makefile
+ src/wm-tester/Makefile
+ src/libmuffin.pc
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,8 +1,6 @@
+ 
+-SUBDIRS=cogl clutter src po doc data
++SUBDIRS=cogl clutter src po data
+ 
+ EXTRA_DIST = HACKING MAINTAINERS rationales.txt
+ 
+-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+-
+ DISTCLEANFILES = intltool-extract intltool-merge intltool-update po/stamp-it po/.intltool-merge-cache

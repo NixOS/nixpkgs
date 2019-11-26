@@ -1,0 +1,32 @@
+--- a/pygobject/meson.build
++++ b/pygobject/meson.build
+@@ -3,14 +3,7 @@
+     required: true,
+ )
+ 
+-foreach exec : ['python2', 'python3']
+-    r = run_command(exec, '-c', 'import gi;print(gi._overridesdir)')
+-
+-    if r.returncode() == 0
+-        override_dir = r.stdout().strip()
+-        install_data(['XApp.py'],
+-            install_dir: override_dir
+-        )
+-    endif
+-endforeach
+-
++override_dir = get_option('py-overrides-dir')
++install_data(['XApp.py'],
++    install_dir: override_dir
++)
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -8,3 +8,8 @@
+     value : false,
+     description: 'Show build warnings for deprecations'
+ )
++option('py-overrides-dir',
++    type : 'string',
++    value : '',
++    description: 'Path to pygobject overrides directory'
++)
