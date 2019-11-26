@@ -268,7 +268,7 @@ in
           List of binary cache URLs used to obtain pre-built binaries
           of Nix packages.
 
-          By default https://cache.nixos.org/ is added,
+          By default https://cache.nixos.org is added,
           to override it use <literal>lib.mkForce []</literal>.
         '';
       };
@@ -380,7 +380,7 @@ in
   config = {
 
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
-    nix.binaryCaches = [ "https://cache.nixos.org/" ];
+    nix.binaryCaches = [ "https://cache.nixos.org" ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 

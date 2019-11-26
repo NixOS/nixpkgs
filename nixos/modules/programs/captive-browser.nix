@@ -34,7 +34,7 @@ in
                                          ''--no-first-run''
                                          ''--new-window''
                                          ''--incognito''
-                                         ''http://cache.nixos.org/''
+                                         ''http://cache.nixos.org''
                                        ];
         description = ''
           The shell (/bin/sh) command executed once the proxy starts.
