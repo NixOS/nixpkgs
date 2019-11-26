@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "08fkypbx1j1kp3hp0y88idbj0la17hjwmw2w6f6jijwdipgwax7b";
   };
 
-  patches = [ ./py-override.patch ];
+  patches = [
+    ./py-override.patch
+  ];
 
-  buildInputs = [ glib gobjectIntrospection gtk3 libgnomekbd libxklavier pkgconfig python3Packages.pygobject3 vala ];
+  buildInputs = [ glib gobjectIntrospection gtk3 libgnomekbd libxklavier pkgconfig python3Packages.pygobject3 vala wayland ];
   nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];
 
    mesonFlags = [
@@ -28,4 +30,12 @@ stdenv.mkDerivation rec {
     substituteInPlace files/meson.build \
       --replace "'/'" "'$prefix/'"
   '';
+
+  meta = {
+    homepage = "http://cinnamon.linuxmint.com";
+    # description = "The cinnamon session files" ;
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+  };
 }

@@ -36,4 +36,12 @@ stdenv.mkDerivation rec {
         --suffix XDG_DATA_DIRS : "${cinnamon-settings-daemon}/etc/xdg"
     done
   '';
+
+  meta = {
+    homepage = "http://cinnamon.linuxmint.com";
+    description = "The cinnamon session files" ;
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+  };
 }

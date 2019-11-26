@@ -21,4 +21,14 @@ stdenv.mkDerivation rec {
       wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
   '';
+
+  meta = {
+    homepage = "http://cinnamon.linuxmint.com";
+    description = "The cinnamon settings daemon" ;
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+
+    broken = true;
+  };
 }

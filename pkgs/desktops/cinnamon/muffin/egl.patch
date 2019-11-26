@@ -1,0 +1,37 @@
+From bf4b6471b7dc1b73e9d6b9fdfec8aa403c510794 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Tue, 26 Nov 2019 11:44:04 +0100
+Subject: [PATCH] fix: cogl-texture-2d.c:432:43: error: 'EGL_WAYLAND_BUFFER_WL'
+ undeclared (first use in this function); did you mean 'EGL_TRIPLE_BUFFER_NV'?
+
+---
+ cogl/configure.ac | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/cogl/configure.ac b/cogl/configure.ac
+index b06677a..120505e 100644
+--- a/cogl/configure.ac
++++ b/cogl/configure.ac
+@@ -487,7 +487,8 @@ AS_IF([test "x$enable_gles1" = "xyes"],
+ 
+             AC_CHECK_HEADERS([EGL/eglext.h],
+                              [COGL_EGL_INCLUDES="$COGL_EGL_INCLUDE
+-#include <EGL/eglext.h>"],
++#include <EGL/eglext.h>
++#include <EGL/eglmesaext.h>"],
+                              [],
+                              [$COGL_EGL_INCLUDES])
+ 
+@@ -759,7 +760,8 @@ AS_IF([test "x$NEED_EGL" = "xyes" && test "x$EGL_CHECKED" != "xyes"],
+           )
+ 
+         COGL_EGL_INCLUDES="#include <EGL/egl.h>
+-#include <EGL/eglext.h>"
++#include <EGL/eglext.h>
++#include <EGL/eglmesaext.h>"
+         AC_SUBST([COGL_EGL_INCLUDES])
+       ])
+ 
+-- 
+2.20.1
+
