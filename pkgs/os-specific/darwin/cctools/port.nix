@@ -40,7 +40,7 @@ let
       ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
       ++ stdenv.lib.optional enableTapiSupport libtapi;
 
-    patches = [ ./ld-ignore-rpath-link.patch ];
+    patches = [ ./ld-ignore-rpath-link.patch ./ld-rpath-nonfinal.patch ];
 
     __propagatedImpureHostDeps = [
       # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
