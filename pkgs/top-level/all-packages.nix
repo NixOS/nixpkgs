@@ -13522,7 +13522,7 @@ in
 
   pugixml = callPackage ../development/libraries/pugixml { };
 
-  pybind11 = callPackage ../development/libraries/pybind11 { };
+  pybind11 = pythonPackages.pybind11;
 
   python-qt = callPackage ../development/libraries/python-qt {
     python = python27;
