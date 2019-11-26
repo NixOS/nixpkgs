@@ -5,15 +5,22 @@ let
 
   self = rec {
 
+    cinnamon = callPackage ./cinnamon { };
+    cinnamon-desktop = callPackage ./cinnamon-desktop { };
+    cinnamon-menus = callPackage ./cinnamon-menus { };
+    cinnamon-session = callPackage ./cinnamon-session { gconf = super.gnome2.GConf; };
+    cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
+    cjs = callPackage ./cjs { };
+    muffin = callPackage ./muffin { };
+    xapps = callPackage ./xapps { };
 
+    # basePackages = [
+    #
+    #];
 
-    basePackages = [
-
-    ];
-
-    extraPackages = [
-
-    ];
+    #extraPackages = [
+    #
+    #];
 
   };
 
