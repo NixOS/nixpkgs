@@ -21,7 +21,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs.cinnamon // pkgs; [
 
-    ]
+    ];
 
     environment.pathsToLink = [
 
