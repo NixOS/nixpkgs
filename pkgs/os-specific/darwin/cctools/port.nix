@@ -30,11 +30,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = [ autoconf automake ]
-    # TODO: remove on next hash change, libtool is unnecessary with autoreconfHook
-    ++ stdenv.lib.optional (stdenv.targetPlatform == stdenv.hostPlatform) libtool
-    ++ [ autoreconfHook installShellFiles ];
-
+  nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
   buildInputs = [ libuuid ]
     ++ lib.optionals stdenv.isDarwin [ libobjc ]
     ++ lib.optional enableTapiSupport libtapi;
