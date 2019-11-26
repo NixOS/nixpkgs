@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0hflsbx70dli34mpx94vd33p55ycfs3ahzwcdzqxdiwiiskjpykq";
+    sha256 = "1c9ysx0fhxxginmp607b4fk74dvlr32n6w52gawm06prf4xg90nb";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -43,13 +43,24 @@ in stdenv.mkDerivation {
   prePatch = ''
     substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
       --replace "<ttm/" "<drm/ttm/"
-    ${dos2unix}/bin/dos2unix src/vboxguest-${version}/vboxguest/r0drv/linux/mp-r0drv-linux.c
+    ${dos2unix}/bin/dos2unix ${
+      toString (map (f: "src/vboxguest-${version}/${f}") [
+        "vboxguest/include/iprt/cdefs.h"
+        "vboxguest/r0drv/linux/alloc-r0drv-linux.c"
+        "vboxguest/r0drv/linux/the-linux-kernel.h"
+        "vboxguest/r0drv/linux/thread2-r0drv-linux.c"
+        "vboxsf/include/iprt/cdefs.h"
+        "vboxsf/r0drv/linux/the-linux-kernel.h"
+        "vboxvideo/vbox_drv.c"
+        "vboxvideo/vbox_main.c"
+      ])
+    }
   '';
 
   patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
-  # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
-  # https://www.virtualbox.org/ticket/18911
-  patches = [ ./kernel-5.3-fix.patch ];
+  # Kernel 5.4 fix, should be fixed with next upstream release
+  # https://www.virtualbox.org/ticket/18945
+  patches = [ ./kernel-5.4-fix.patch ];
 
   unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
