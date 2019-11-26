@@ -62,20 +62,11 @@ in
     services.redmine = {
       enable = mkEnableOption "Redmine";
 
-      # default to the 4.x series not forcing major version upgrade of those on the 3.x series
       package = mkOption {
         type = types.package;
-        default = if versionAtLeast config.system.stateVersion "19.03"
-          then pkgs.redmine_4
-          else pkgs.redmine
-        ;
-        defaultText = "pkgs.redmine";
-        description = ''
-          Which Redmine package to use. This defaults to version 3.x if
-          <literal>system.stateVersion &lt; 19.03</literal> and version 4.x
-          otherwise.
-        '';
-        example = "pkgs.redmine_4.override { ruby = pkgs.ruby_2_4; }";
+        default = pkgs.redmine;
+        description = "Which Redmine package to use.";
+        example = "pkgs.redmine.override { ruby = pkgs.ruby_2_4; }";
       };
 
       user = mkOption {

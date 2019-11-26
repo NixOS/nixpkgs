@@ -31,6 +31,44 @@ let
     load-module module-position-event-sounds
   '';
 
+  dmDefault = config.services.xserver.desktopManager.default;
+  wmDefault = config.services.xserver.windowManager.default;
+  hasDefaultUserSession = dmDefault != "none" || wmDefault != "none";
+  defaultSessionName = dmDefault + optionalString (wmDefault != "none") ("+" + wmDefault);
+
+  setSessionScript = pkgs.python3.pkgs.buildPythonApplication {
+    name = "set-session";
+
+    format = "other";
+
+    src = ./set-session.py;
+
+    dontUnpack = true;
+
+    strictDeps = false;
+
+    nativeBuildInputs = with pkgs; [
+      wrapGAppsHook
+      gobject-introspection
+    ];
+
+    buildInputs = with pkgs; [
+      accountsservice
+      glib
+    ];
+
+    propagatedBuildInputs = with pkgs.python3.pkgs; [
+      pygobject3
+      ordered-set
+    ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      cp $src $out/bin/set-session
+      chmod +x $out/bin/set-session
+    '';
+  };
+
 in
 
 {
@@ -156,6 +194,8 @@ in
           cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
           yes
           EOF
+        '' + optionalString hasDefaultUserSession ''
+          ${setSessionScript}/bin/set-session ${defaultSessionName}
         '';
       };
 

@@ -1,4 +1,13 @@
-{ stdenv, fetchurl, readline }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  readline,
+  enableCurrenciesUpdater ? true,
+  pythonPackages ? null
+}:
+
+assert enableCurrenciesUpdater -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "units";
@@ -9,7 +18,22 @@ stdenv.mkDerivation rec {
     sha256 = "0mk562g7dnidjgfgvkxxpvlba66fh1ykmfd9ylzvcln1vxmi6qj2";
   };
 
-  buildInputs = [ readline ];
+  pythonEnv = pythonPackages.python.withPackages(ps: [
+    ps.requests
+  ]);
+
+  buildInputs = [ readline ]
+    ++ lib.optionals enableCurrenciesUpdater [
+      pythonEnv
+    ]
+  ;
+  prePatch = ''
+    substituteInPlace units_cur \
+      --replace "#!/usr/bin/env python" ${pythonEnv}/bin/python
+  '';
+  postInstall = ''
+    cp units_cur ${placeholder "out"}/bin/
+  '';
 
   doCheck = true;
 

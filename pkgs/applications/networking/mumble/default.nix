@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, qt5
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib, python
+, rnnoise
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
@@ -73,7 +74,7 @@ let
     type = "mumble";
 
     nativeBuildInputs = [ qt5.qttools ];
-    buildInputs = [ libopus libsndfile speex qt5.qtsvg ]
+    buildInputs = [ libopus libsndfile speex qt5.qtsvg rnnoise ]
       ++ optional stdenv.isLinux alsaLib
       ++ optional jackSupport libjack2
       ++ optional speechdSupport speechd

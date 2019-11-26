@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec{
   pname = "cypress";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "1gyl5c86gr5sv6z5rkg0afdxqrmsxmyrimm1p5q6jlrlyzki1bfs";
+    sha256 = "1w1nqa0j3bzjr000d4jlr34d1asdc1fv81pq831s3wl55hyqbij6";
   };
 
   # don't remove runtime deps
@@ -26,7 +26,11 @@ stdenv.mkDerivation rec{
     mkdir -p $out/bin $out/opt/cypress
     cp -vr * $out/opt/cypress/
     # Let's create the file binary_state ourselves to make the npm package happy on initial verification.
-    echo '{"verified": true}' > $out/opt/cypress/binary_state.json
+    # Cypress now verifies version by reading bin/resources/app/package.json
+    mkdir -p $out/bin/resources/app
+    printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
+    # Cypress now looks for binary_state.json in bin
+    echo '{"verified": true}' > $out/bin/binary_state.json
     ln -s $out/opt/cypress/Cypress $out/bin/Cypress
   '';
 

@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, glib, gtk3, json-glib, sqlite, libsoup, gettext, vala
 , meson, ninja, pkgconfig, gnome3, gst_all_1, wrapGAppsHook, gobject-introspection
-, glib-networking, python3, fetchpatch }:
+, glib-networking, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.2";
+  version = "1.0.3.1";
   pname = "cawbird";
 
   src = fetchFromGitHub {
     owner = "IBBoard";
     repo = "cawbird";
     rev = "v${version}";
-    sha256 = "sha256:0b79ngwilicqkgacva93cir4rmk15yzgsih56yb3a4n6bqjispay";
+    sha256 = "sha256:1v1y4bx0mm518b9vlpsry12fw1qz2j28jfhjqq73blvzd89lgb0y";
   };
 
   nativeBuildInputs = [

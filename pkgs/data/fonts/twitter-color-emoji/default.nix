@@ -3,6 +3,7 @@
 
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , cairo
 , graphicsmagick
 , pkg-config
@@ -10,21 +11,11 @@
 , python3
 , which
 , zopfli
-, fetchpatch
+, noto-fonts-emoji
 }:
 
 let
   version = "12.1.2";
-
-  # Cannot use noto-fonts-emoji.src since it is too old
-  # and still tries to use vendored pngquant.
-  notoSrc = fetchFromGitHub {
-    name = "noto";
-    owner = "googlefonts";
-    repo = "noto-emoji";
-    rev = "833a43d03246a9325e748a2d783006454d76ff66";
-    sha256 = "1g6ikzk8banm3ihqm9g27ggjq2mn1b1hq3zhpl13lxid6mp60s4a";
-  };
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
@@ -34,24 +25,21 @@ let
     sha256 = "0vzmlp83vnk4njcfkn03jcc1vkg2rf12zf5kj3p3a373xr4ds1zn";
   };
 
-  python = python3.withPackages (pp: with pp; [
-    nototools
-  ]);
 in
 stdenv.mkDerivation rec {
   pname = "twitter-color-emoji";
   inherit version;
 
   srcs = [
-    notoSrc
+    noto-fonts-emoji.src
     twemojiSrc
   ];
 
-  sourceRoot = notoSrc.name;
+  sourceRoot = noto-fonts-emoji.src.name;
 
   postUnpack = ''
     chmod -R +w ${twemojiSrc.name}
-    mv ${twemojiSrc.name} ${notoSrc.name}
+    mv ${twemojiSrc.name} ${noto-fonts-emoji.src.name}
   '';
 
   nativeBuildInputs = [
@@ -59,21 +47,14 @@ stdenv.mkDerivation rec {
     graphicsmagick
     pkg-config
     pngquant
-    python
+    python3
+    python3.pkgs.nototools
     which
     zopfli
   ];
 
   patches = [
-    # Port to python3
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/3bc176c10ced2824fe03da5ff561e22a36bf8ccd/f/noto-emoji-port-to-python3.patch";
-      sha256 = "1b91abd050phxlxq7322i74nkx16fkhpw14yh97r2j4c7fqarr2q";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/3bc176c10ced2824fe03da5ff561e22a36bf8ccd/f/noto-emoji-python3.patch";
-      sha256 = "0mw2c748izb6h9a19jwc0qxlb6l1kj6k8gc345lpf7lfcxfl7l59";
-    })
+    # ImageMagick -> GrahphicsMagick
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/3bc176c10ced2824fe03da5ff561e22a36bf8ccd/f/noto-emoji-use-gm.patch";
       sha256 = "0yfmfzaaiq5163c06172g4r734aysiqyv1s28siv642vqzsqh4i2";

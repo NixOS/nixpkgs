@@ -1,28 +1,30 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , fetchurl, file, python2
-, llvm_7, darwin, git, cmake, rustPlatform
+, llvm_9, darwin, git, cmake, rustPlatform
 , pkgconfig, openssl
 , which, libffi
 , withBundledLLVM ? false
+, version
+, sha256
 }:
 
 let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
-  llvmSharedForBuild = pkgsBuildBuild.llvm_7.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvm_7.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvm_7.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = pkgsBuildBuild.llvm_9.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvm_9.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvm_9.override { enableSharedLibraries = true; };
 
   # For use at runtime
-  llvmShared = llvm_7.override { enableSharedLibraries = true; };
+  llvmShared = llvm_9.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.38.0";
+  inherit version;
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "101dlpsfkq67p0hbwx4acqq6n90dj4bbprndizpgh1kigk566hk4";
+    inherit sha256;
   };
 
   __darwinAllowLocalNetworking = true;

@@ -10,6 +10,8 @@ stdenv.mkDerivation {
   };
 
   meta = {
+    description = "A XMPP (Jabber) client library for instant messaging and presence";
+    homepage = "http://www.igniterealtime.org/projects/smack/";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.asl20;
   };

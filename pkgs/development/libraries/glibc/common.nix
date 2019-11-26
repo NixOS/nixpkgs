@@ -103,7 +103,7 @@ stdenv.mkDerivation ({
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
 
     # Remove after upgrading to glibc 2.28+
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) (fetchpatch {
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform || stdenv.hostPlatform.isMusl) (fetchpatch {
       url = "https://sourceware.org/git/?p=glibc.git;a=patch;h=780684eb04298977bc411ebca1eadeeba4877833";
       name = "correct-pwent-parsing-issue-and-resulting-build.patch";
       sha256 = "08fja894vzaj8phwfhsfik6jj2pbji7kypy3q8pgxvsd508zdv1q";

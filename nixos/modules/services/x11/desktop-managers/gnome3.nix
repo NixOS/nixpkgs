@@ -184,6 +184,13 @@ in
         enableGnomeKeyring = true;
       };
 
+      systemd.packages = with pkgs.gnome3; [
+        gnome-flashback
+      ] ++ (map
+        (wm: gnome-flashback.mkSystemdTargetForWm {
+          inherit (wm) wmName;
+        }) cfg.flashback.customSessions);
+
       services.dbus.packages = [
         pkgs.gnome3.gnome-screensaver
       ];
@@ -216,6 +223,12 @@ in
       networking.networkmanager.enable = mkDefault true;
 
       services.xserver.updateDbusEnvironment = true;
+
+      # gnome has a custom alert theme but it still
+      # inherits from the freedesktop theme.
+      environment.systemPackages = with pkgs; [
+        sound-theme-freedesktop
+      ];
 
       # Needed for themes and backgrounds
       environment.pathsToLink = [
@@ -265,6 +278,26 @@ in
         source-sans-pro
       ];
 
+      ## Enable soft realtime scheduling, only supported on wayland ##
+
+      security.wrappers.".gnome-shell-wrapped" = {
+        source = "${pkgs.gnome3.gnome-shell}/bin/.gnome-shell-wrapped";
+        capabilities = "cap_sys_nice=ep";
+      };
+
+      systemd.user.services.gnome-shell-wayland = let
+        gnomeShellRT = with pkgs.gnome3; pkgs.runCommand "gnome-shell-rt" {} ''
+          mkdir -p $out/bin/
+          cp ${gnome-shell}/bin/gnome-shell $out/bin
+          sed -i "s@${gnome-shell}/bin/@${config.security.wrapperDir}/@" $out/bin/gnome-shell
+        '';
+      in {
+        # Note we need to clear ExecStart before overriding it
+        serviceConfig.ExecStart = ["" "${gnomeShellRT}/bin/gnome-shell"];
+        # Do not use the default environment, it provides a broken PATH
+        environment = mkForce {};
+      };
+
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
@@ -276,7 +309,7 @@ in
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
-        gnome-user-docs
+        pkgs.gnome-user-docs
         pkgs.orca
         pkgs.glib # for gsettings
         pkgs.gnome-menus

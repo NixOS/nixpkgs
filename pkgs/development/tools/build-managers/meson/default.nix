@@ -1,4 +1,11 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
+{ lib
+, python3Packages
+, fetchpatch
+, stdenv
+, writeTextDir
+, substituteAll
+, targetPackages
+}:
 
 let
   # See https://mesonbuild.com/Reference-tables.html#cpu-families
@@ -54,6 +61,14 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
+
+    # Fix detecting incorrect compiler in the store path hash.
+    # https://github.com/NixOS/nixpkgs/issues/73417#issuecomment-554077964
+    # https://github.com/mesonbuild/meson/pull/6185
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/972ede1d14fdf17fe5bb8fb99be220f9395c2392.patch";
+      sha256 = "19bfsylhpy0b2xv3ks8ac9x3q6vvvyj1wjcy971v9d5f1455xhbb";
+    })
   ] ++ lib.optionals stdenv.isDarwin [
     # We use custom Clang, which makes Meson think *not Apple*, while still
     # relying on system linker. When it detects standard Clang, Meson will
@@ -96,7 +111,7 @@ python3Packages.buildPythonApplication rec {
   isCross = stdenv.targetPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
-    homepage = http://mesonbuild.com;
+    homepage = https://mesonbuild.com;
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
     maintainers = with maintainers; [ mbe rasendubi ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
-      z77z vbgl
+      maggesi vbgl
     ];
   };
 }

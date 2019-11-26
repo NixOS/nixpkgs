@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quiterss";
-  version = "0.18.12";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "QuiteRSS";
     repo = "quiterss";
     rev = version;
-    sha256 = "0xav9qr8n6310636nfbgx4iix65fs3ya5rz2isxsf38bkjm7r3pa";
+    sha256 = "0zr17r33g99ylvb1avcbixg2jiwisaks4x91lywv2dy3g6dkpxml";
   };
 
   nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];

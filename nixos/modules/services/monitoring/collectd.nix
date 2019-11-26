@@ -131,6 +131,7 @@ in {
 
     users.users = optional (cfg.user == "collectd") {
       name = "collectd";
+      isSystemUser = true;
     };
   };
 }

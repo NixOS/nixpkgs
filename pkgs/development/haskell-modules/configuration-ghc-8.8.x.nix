@@ -102,11 +102,6 @@ self: super: {
   vault = dontHaddock super.vault;
   monad-par = dontCheck super.monad-par;   # test suite does not compile in monad-par-0.3.4.8
 
-  # TODO dont fetch patch if https://github.com/simonmar/alex/issues/140 is resolved
-  alex = appendPatch super.alex (pkgs.fetchpatch {
-    url = "https://github.com/simonmar/alex/commit/deaae6eddef5186bfd0e42e2c3ced39e26afa4d6.patch";
-    sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
-  });
   # https://github.com/snapframework/snap-core/issues/288
   snap-core = overrideCabal super.snap-core (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; });
   # needs a release

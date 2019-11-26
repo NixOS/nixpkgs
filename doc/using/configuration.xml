@@ -141,11 +141,10 @@
      For a more useful example, try the following. This configuration only allows unfree packages named flash player and visual studio code:
 <programlisting>
 {
-  allowUnfreePredicate = (pkg: builtins.elem
-    (builtins.parseDrvName pkg.name).name [
-      "flashplayer"
-      "vscode"
-    ]);
+  allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "flashplayer"
+    "vscode"
+  ];
 }
 </programlisting>
     </para>
@@ -217,7 +216,7 @@
      The following configuration example only allows insecure packages with very short names:
 <programlisting>
 {
-  allowInsecurePredicate = (pkg: (builtins.stringLength (builtins.parseDrvName pkg.name).name) &lt;= 5);
+  allowInsecurePredicate = pkg: builtins.stringLength (lib.getName pkg) &lt;= 5;
 }
 </programlisting>
     </para>

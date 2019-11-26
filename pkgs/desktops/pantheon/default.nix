@@ -1,4 +1,4 @@
-{ pkgs, lib, gnome3 }:
+{ config, pkgs, lib, gnome3 }:
 
 
 lib.makeScope pkgs.newScope (self: with self; {
@@ -66,6 +66,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   #### APPS
 
+  appcenter = callPackage ./apps/appcenter { };
+
   elementary-calculator = callPackage ./apps/elementary-calculator { };
 
   elementary-calendar = callPackage ./apps/elementary-calendar { };
@@ -75,6 +77,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-code = callPackage ./apps/elementary-code { };
 
   elementary-files = callPackage ./apps/elementary-files { };
+
+  elementary-feedback = callPackage ./apps/elementary-feedback { };
 
   elementary-music = callPackage ./apps/elementary-music { };
 
@@ -86,11 +90,15 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-videos = callPackage ./apps/elementary-videos { };
 
+  sideload = callPackage ./apps/sideload { };
+
   #### DESKTOP
 
   elementary-default-settings = callPackage ./desktop/elementary-default-settings { };
 
   elementary-greeter = callPackage ./desktop/elementary-greeter { };
+
+  elementary-onboarding = callPackage ./desktop/elementary-onboarding { };
 
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
@@ -219,8 +227,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
 
+} // lib.optionalAttrs (config.allowAliases or true) {
+
   ### ALIASES
 
-  vala = pkgs.vala; # added 2019-10-10
+  inherit (pkgs) vala; # added 2019-10-10
 
 })

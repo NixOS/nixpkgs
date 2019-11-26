@@ -1,5 +1,5 @@
 diff --git a/src/Views/Appearance.vala b/src/Views/Appearance.vala
-index 721d458..17e1c58 100644
+index c8300cc..fc48a0e 100644
 --- a/src/Views/Appearance.vala
 +++ b/src/Views/Appearance.vala
 @@ -66,10 +66,16 @@ public class Appearance : Gtk.Grid {
@@ -17,7 +17,23 @@ index 721d458..17e1c58 100644
 +        SettingsSchemaSource panel_schema_source = new SettingsSchemaSource.from_directory ("@WINGPANEL_GSETTINGS_PATH@", SettingsSchemaSource.get_default (), true);
 +        SettingsSchema panel_schema = panel_schema_source.lookup (PANEL_SCHEMA, false);
 +
-+        var panel_settings = new Settings.full (panel_schema, null, null);
++        var panel_settings = new GLib.Settings.full (panel_schema, null, null);
          panel_settings.bind (TRANSLUCENCY_KEY, translucency_switch, "active", SettingsBindFlags.DEFAULT);
  
          var interface_settings = new Settings (INTERFACE_SCHEMA);
+diff --git a/src/Views/HotCorners.vala b/src/Views/HotCorners.vala
+index 481e7c5..d102d03 100644
+--- a/src/Views/HotCorners.vala
++++ b/src/Views/HotCorners.vala
+@@ -30,7 +30,10 @@ public class HotCorners : Gtk.Grid {
+         row_spacing = 24;
+         halign = Gtk.Align.CENTER;
+ 
+-        behavior_settings = new GLib.Settings ("org.pantheon.desktop.gala.behavior");
++
++        SettingsSchemaSource gala_schema_source = new SettingsSchemaSource.from_directory ("@GALA_GSETTINGS_PATH@", SettingsSchemaSource.get_default (), true);
++        SettingsSchema behavior_schema = gala_schema_source.lookup ("org.pantheon.desktop.gala.behavior", false);
++        behavior_settings = new GLib.Settings.full (behavior_schema, null, null);
+ 
+         custom_command_revealer = new Gtk.Revealer ();
+ 

@@ -185,16 +185,19 @@ in
   ###### implementation
 
   config = mkIf config.services.redis.enable {
-
-    boot.kernel.sysctl = {
-      "vm.nr_hugepages" = "0";
-    } // mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; };
+    boot.kernel.sysctl = (mkMerge [
+      { "vm.nr_hugepages" = "0"; }
+      ( mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; } )
+    ]);
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
 
-    users.users.redis.description = "Redis database user";
+    users.users.redis = {
+      description = "Redis database user";
+      isSystemUser = true;
+    };
 
     environment.systemPackages = [ cfg.package ];
 

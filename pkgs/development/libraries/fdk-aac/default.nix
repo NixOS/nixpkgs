@@ -5,11 +5,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "fdk-aac";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/opencore-amr/fdk-aac/${pname}-${version}.tar.gz";
-    sha256 = "0v6rbyw9f9lpfvcg3v1qyapga5hqfnb3wp3x5yaxpwcgjw7ydmpp";
+    sha256 = "0wgjjc0dfkm2w966lc9c8ir8f671vl1ppch3mya3h58jjjm360c4";
   };
 
   configureFlags = [ ]

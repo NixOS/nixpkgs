@@ -79,9 +79,9 @@ buildPythonApplication rec {
   '';
 
   buildPhase = if stdenv.isDarwin then ''
-    make app
+    ${python.interpreter} setup.py kitty.app --update-check-interval=0
   '' else ''
-    ${python.interpreter} setup.py linux-package
+    ${python.interpreter} setup.py linux-package --update-check-interval=0
   '';
 
   installPhase = ''

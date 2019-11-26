@@ -11,6 +11,7 @@
 , libusb1
 , rlp
 , shamir-mnemonic
+, trezor-udev-rules
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "cd8aafd70a281daa644c4a3fb021ffac20b7a88e86226ecc8bb3e78e1734a184";
   };
 
-  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic ];
+  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic trezor-udev-rules ];
 
   checkInputs = [
     pytest

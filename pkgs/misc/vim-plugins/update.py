@@ -8,6 +8,7 @@
 # linted:
 # $ nix run nixpkgs.python3Packages.flake8 -c flake8 --ignore E501,E265 update.py
 
+import argparse
 import functools
 import json
 import os
@@ -29,6 +30,8 @@ ATOM_LINK = "{http://www.w3.org/2005/Atom}link"
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"
 
 ROOT = Path(__file__).parent
+DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
+DEFAULT_OUT = ROOT.joinpath("generated.nix")
 
 
 class Repo:
@@ -154,13 +157,13 @@ def get_current_plugins() -> List[Plugin]:
     return plugins
 
 
-def prefetch_plugin(user: str, repo_name: str, cache: "Cache") -> Plugin:
+def prefetch_plugin(user: str, repo_name: str, alias: str, cache: "Cache") -> Plugin:
     repo = Repo(user, repo_name)
     commit, date = repo.latest_commit()
     has_submodules = repo.has_submodules()
     cached_plugin = cache[commit]
     if cached_plugin is not None:
-        cached_plugin.name = repo_name
+        cached_plugin.name = alias or repo_name
         cached_plugin.date = date
         return cached_plugin
 
@@ -170,7 +173,7 @@ def prefetch_plugin(user: str, repo_name: str, cache: "Cache") -> Plugin:
     else:
         sha256 = repo.prefetch_github(commit)
 
-    return Plugin(repo_name, commit, has_submodules, sha256, date=date)
+    return Plugin(alias or repo_name, commit, has_submodules, sha256, date=date)
 
 
 def print_download_error(plugin: str, ex: Exception):
@@ -207,18 +210,29 @@ def check_results(
         sys.exit(1)
 
 
-def load_plugin_spec() -> List[Tuple[str, str]]:
-    plugin_file = ROOT.joinpath("vim-plugin-names")
+def parse_plugin_line(line: str) -> Tuple[str, str, str]:
+    try:
+        name, repo = line.split("/")
+        try:
+            repo, alias = repo.split(" as ")
+            return (name, repo, alias.strip())
+        except ValueError:
+            # no alias defined
+            return (name, repo.strip(), None)
+    except ValueError:
+        return (None, None, None)
+
+
+def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str]]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
-            spec = line.strip()
-            parts = spec.split("/")
-            if len(parts) != 2:
-                msg = f"Invalid repository {spec}, must be in the format owner/repo"
+            plugin = parse_plugin_line(line)
+            if not plugin[0]:
+                msg = f"Invalid repository {line}, must be in the format owner/repo[ as alias]"
                 print(msg, file=sys.stderr)
                 sys.exit(1)
-            plugins.append((parts[0], parts[1]))
+            plugins.append(plugin)
     return plugins
 
 
@@ -276,12 +290,12 @@ class Cache:
 
 
 def prefetch(
-    args: Tuple[str, str], cache: Cache
+    args: Tuple[str, str, str], cache: Cache
 ) -> Tuple[str, str, Union[Exception, Plugin]]:
-    assert len(args) == 2
-    owner, repo = args
+    assert len(args) == 3
+    owner, repo, alias = args
     try:
-        plugin = prefetch_plugin(owner, repo, cache)
+        plugin = prefetch_plugin(owner, repo, alias, cache)
         cache[plugin.commit] = plugin
         return (owner, repo, plugin)
     except Exception as e:
@@ -293,10 +307,10 @@ header = (
 )
 
 
-def generate_nix(plugins: List[Tuple[str, str, Plugin]]):
+def generate_nix(plugins: List[Tuple[str, str, Plugin]], outfile: str):
     sorted_plugins = sorted(plugins, key=lambda v: v[2].name.lower())
 
-    with open(ROOT.joinpath("generated.nix"), "w+") as f:
+    with open(outfile, "w+") as f:
         f.write(header)
         f.write(
             """
@@ -326,15 +340,44 @@ let
   }};
 """
             )
-        f.write("""
+        f.write(
+            """
 });
 in lib.fix' (lib.extends overrides packages)
-""")
-    print("updated generated.nix")
+"""
+        )
+    print(f"updated {outfile}")
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Updates nix derivations for vim plugins"
+            f"By default from {DEFAULT_IN} to {DEFAULT_OUT}"
+        )
+    )
+    parser.add_argument(
+        "--input-names",
+        "-i",
+        dest="input_file",
+        default=DEFAULT_IN,
+        help="A list of plugins in the form owner/repo",
+    )
+    parser.add_argument(
+        "--out",
+        "-o",
+        dest="outfile",
+        default=DEFAULT_OUT,
+        help="Filename to save generated nix code",
+    )
+
+    return parser.parse_args()
 
 
 def main() -> None:
-    plugin_names = load_plugin_spec()
+
+    args = parse_args()
+    plugin_names = load_plugin_spec(args.input_file)
     current_plugins = get_current_plugins()
     cache = Cache(current_plugins)
 
@@ -350,7 +393,7 @@ def main() -> None:
 
     plugins = check_results(results)
 
-    generate_nix(plugins)
+    generate_nix(plugins, args.outfile)
 
 
 if __name__ == "__main__":
