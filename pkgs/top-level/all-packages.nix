@@ -2563,7 +2563,8 @@ in
 
   cron = callPackage ../tools/system/cron { };
 
-  inherit (callPackages ../development/compilers/cudatoolkit { })
+  cudaPackages = recurseIntoAttrs (callPackage ../development/compilers/cudatoolkit {});
+  inherit (cudaPackages)
     cudatoolkit_6
     cudatoolkit_6_5
     cudatoolkit_7
@@ -2579,7 +2580,8 @@ in
 
   cudatoolkit = cudatoolkit_10;
 
-  inherit (callPackages ../development/libraries/science/math/cudnn { })
+  cudnnPackages = callPackages ../development/libraries/science/math/cudnn { };
+  inherit (cudnnPackages)
     cudnn_cudatoolkit_7
     cudnn_cudatoolkit_7_5
     cudnn6_cudatoolkit_8
