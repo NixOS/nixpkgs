@@ -3,7 +3,6 @@ from contextlib import contextmanager, _GeneratorContextManager
 from xml.sax.saxutils import XMLGenerator
 import _thread
 import atexit
-import json
 import os
 import ptpython.repl
 import pty
@@ -16,7 +15,7 @@ import sys
 import tempfile
 import time
 import unicodedata
-from typing import Tuple, TextIO, Any, Callable, Dict, Iterator, Optional, List
+from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -290,10 +289,15 @@ class Machine:
 
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
+        answer = ""
         while True:
-            answer = self.monitor.recv(1024).decode()
+            undecoded_answer = self.monitor.recv(1024)
+            if not undecoded_answer:
+                break
+            answer += undecoded_answer.decode()
             if answer.endswith("(qemu) "):
-                return answer
+                break
+        return answer
 
     def send_monitor_command(self, command: str) -> str:
         message = ("{}\n".format(command)).encode()
@@ -606,12 +610,15 @@ class Machine:
             + os.environ.get("QEMU_OPTS", "")
         )
 
-        environment = {
-            "QEMU_OPTS": qemu_options,
-            "SHARED_DIR": self.shared_dir,
-            "USE_TMPDIR": "1",
-        }
-        environment.update(dict(os.environ))
+        environment = dict(os.environ)
+        environment.update(
+            {
+                "TMPDIR": self.state_dir,
+                "SHARED_DIR": self.shared_dir,
+                "USE_TMPDIR": "1",
+                "QEMU_OPTS": qemu_options,
+            }
+        )
 
         self.process = subprocess.Popen(
             self.script,
@@ -749,7 +756,7 @@ def run_tests() -> None:
     if tests is not None:
         with log.nested("running the VM test script"):
             try:
-                exec(tests)
+                exec(tests, globals())
             except Exception as e:
                 eprint("error: {}".format(str(e)))
                 sys.exit(1)
@@ -763,7 +770,9 @@ def run_tests() -> None:
             machine.execute("sync")
 
     if nr_tests != 0:
-        log.log("{} out of {} tests succeeded".format(nr_succeeded, nr_tests))
+        eprint("{} out of {} tests succeeded".format(nr_succeeded, nr_tests))
+        if nr_tests > nr_succeeded:
+            sys.exit(1)
 
 
 @contextmanager

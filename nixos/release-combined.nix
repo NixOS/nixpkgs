@@ -136,7 +136,6 @@ in rec {
         (all nixos.tests.switchTest)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
-        (all nixos.tests.xfce4-14)
 
         nixpkgs.tarball
         (all allSupportedNixpkgs.emacs)

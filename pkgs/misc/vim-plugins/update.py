@@ -8,6 +8,7 @@
 # linted:
 # $ nix run nixpkgs.python3Packages.flake8 -c flake8 --ignore E501,E265 update.py
 
+import argparse
 import functools
 import json
 import os
@@ -29,6 +30,8 @@ ATOM_LINK = "{http://www.w3.org/2005/Atom}link"
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"
 
 ROOT = Path(__file__).parent
+DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
+DEFAULT_OUT = ROOT.joinpath("generated.nix")
 
 
 class Repo:
@@ -209,9 +212,9 @@ def check_results(
 
 def parse_plugin_line(line: str) -> Tuple[str, str, str]:
     try:
-        name, repo = line.split('/')
+        name, repo = line.split("/")
         try:
-            repo, alias = repo.split(' as ')
+            repo, alias = repo.split(" as ")
             return (name, repo, alias.strip())
         except ValueError:
             # no alias defined
@@ -220,8 +223,7 @@ def parse_plugin_line(line: str) -> Tuple[str, str, str]:
         return (None, None, None)
 
 
-def load_plugin_spec() -> List[Tuple[str, str]]:
-    plugin_file = ROOT.joinpath("vim-plugin-names")
+def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str]]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
@@ -305,10 +307,10 @@ header = (
 )
 
 
-def generate_nix(plugins: List[Tuple[str, str, Plugin]]):
+def generate_nix(plugins: List[Tuple[str, str, Plugin]], outfile: str):
     sorted_plugins = sorted(plugins, key=lambda v: v[2].name.lower())
 
-    with open(ROOT.joinpath("generated.nix"), "w+") as f:
+    with open(outfile, "w+") as f:
         f.write(header)
         f.write(
             """
@@ -338,15 +340,44 @@ let
   }};
 """
             )
-        f.write("""
+        f.write(
+            """
 });
 in lib.fix' (lib.extends overrides packages)
-""")
-    print("updated generated.nix")
+"""
+        )
+    print(f"updated {outfile}")
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Updates nix derivations for vim plugins"
+            f"By default from {DEFAULT_IN} to {DEFAULT_OUT}"
+        )
+    )
+    parser.add_argument(
+        "--input-names",
+        "-i",
+        dest="input_file",
+        default=DEFAULT_IN,
+        help="A list of plugins in the form owner/repo",
+    )
+    parser.add_argument(
+        "--out",
+        "-o",
+        dest="outfile",
+        default=DEFAULT_OUT,
+        help="Filename to save generated nix code",
+    )
+
+    return parser.parse_args()
 
 
 def main() -> None:
-    plugin_names = load_plugin_spec()
+
+    args = parse_args()
+    plugin_names = load_plugin_spec(args.input_file)
     current_plugins = get_current_plugins()
     cache = Cache(current_plugins)
 
@@ -362,7 +393,7 @@ def main() -> None:
 
     plugins = check_results(results)
 
-    generate_nix(plugins)
+    generate_nix(plugins, args.outfile)
 
 
 if __name__ == "__main__":

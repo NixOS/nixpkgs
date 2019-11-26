@@ -22,7 +22,7 @@
 , libpulseaudio ? null
 , libselinux ? null
 , libsepol ? null
-, p11_kit ? null
+, p11-kit ? null
 , utillinux ? null
 , qtbase
 , qtx11extras
@@ -66,7 +66,7 @@ mkDerivation rec {
     libpulseaudio
     libselinux
     libsepol
-    p11_kit
+    p11-kit
     utillinux
   ]
   ++ lib.optionals withGstreamer (with gst_all_1; [

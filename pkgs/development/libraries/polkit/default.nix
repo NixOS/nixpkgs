@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
     [ expat pam spidermonkey_60 ]
-    ++ (if useSystemd then [systemd] else [elogind])
+    # On Linux, fall back to elogind when systemd support is off.
+    ++ stdenv.lib.optional stdenv.isLinux (if useSystemd then systemd else elogind)
     ++ stdenv.lib.optional withGnome gobject-introspection;
 
   propagatedBuildInputs = [

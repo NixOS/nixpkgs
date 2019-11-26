@@ -177,9 +177,6 @@ in {
         NoNewPrivileges = "true";
         PrivateDevices = "true";
         MemoryDenyWriteExecute = "true";
-
-        # Permission for preStart
-        PermissionsStartOnly = "true";
       };
     };
     users.users.${cfg.user} = {

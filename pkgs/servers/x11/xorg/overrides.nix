@@ -529,7 +529,7 @@ self: super:
   xorgserver = with self; super.xorgserver.overrideAttrs (attrs_passed:
     # exchange attrs if abiCompat is set
     let
-      version = (builtins.parseDrvName attrs_passed.name).version;
+      version = lib.getVersion attrs_passed;
       attrs =
         if (abiCompat == null || lib.hasPrefix abiCompat version) then
           attrs_passed // {
@@ -564,7 +564,7 @@ self: super:
 
     in attrs //
     (let
-      version = (builtins.parseDrvName attrs.name).version;
+      version = lib.getVersion attrs;
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
         zlib libGL libGLU dbus

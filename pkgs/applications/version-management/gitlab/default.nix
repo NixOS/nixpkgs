@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs
 , gitlabEnterprise ? false, callPackage, yarn
-, yarn2nix-moretea, replace
+, fixup_yarn_lock, replace
 }:
 
 let
@@ -62,7 +62,7 @@ let
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${yarn2nix-moretea.fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 

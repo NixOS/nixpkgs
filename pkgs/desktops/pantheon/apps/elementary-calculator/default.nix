@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "1.5.2";
+  version = "1.5.3";
 
   repoName = "calculator";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1vdgl89hdf9q1ya6as7310hlr0xls3w7js2gzsd9z8arb6037ccl";
+    sha256 = "0ibnj3zm93p8ghiy8gbbm0vlig9mnqjsvvp1cpw62dnap0qixdcg";
   };
 
   passthru = {

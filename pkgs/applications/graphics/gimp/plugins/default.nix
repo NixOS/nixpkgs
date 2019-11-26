@@ -68,13 +68,20 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
        Filters/Generic/FFT Forward
        Filters/Generic/FFT Inverse
     */
-    name = "fourier-0.4.1";
+    name = "fourier-0.4.3";
     buildInputs = with pkgs; [ fftw ];
-    postInstall = "fail";
-    installPhase = "installPlugins fourier";
+
     src = fetchurl {
-      url = "http://registry.gimp.org/files/${name}.tar.gz";
-      sha256 = "1pr3y3zl9w8xs1circdrxpr98myz9m8wfzy022al79z4pdanwvs1";
+      url = "https://www.lprp.fr/files/old-web/soft/gimp/${name}.tar.gz";
+      sha256 = "0mf7f8vaqs2madx832x3kcxw3hv3w3wampvzvaps1mkf2kvrjbsn";
+    };
+
+    installPhase = "installPlugins fourier";
+
+    meta = with stdenv.lib; {
+      description = "GIMP plug-in to do the fourier transform";
+      homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
+      license = with licenses; [ gpl3Plus ];
     };
   };
 

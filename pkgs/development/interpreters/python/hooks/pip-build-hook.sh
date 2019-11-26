@@ -36,7 +36,7 @@ if [ -z "${dontUsePipBuild-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=pipBuildPhase
 fi
 
-if [ -z "$shellHook" ]; then
+if [ -z "${shellHook-}" ]; then
     echo "Using pipShellHook"
     shellHook=pipShellHook
 fi

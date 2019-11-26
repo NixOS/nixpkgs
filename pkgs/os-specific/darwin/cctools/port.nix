@@ -18,7 +18,7 @@ assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
 
 let
   baseParams = rec {
-    name = "${targetPrefix}cctools-port-${version}";
+    name = "${targetPrefix}cctools-port";
     version = "927.0.2";
 
     src = fetchFromGitHub {

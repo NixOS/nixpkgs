@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, isPy3k
+{ lib, fetchPypi, buildPythonPackage, isPy3k
 , numpy
+, wheel
 , werkzeug
 , protobuf
 , grpcio
@@ -34,10 +35,29 @@ buildPythonPackage rec {
     werkzeug
     protobuf
     markdown
-    grpcio absl-py
+    grpcio
+    absl-py
+    # not declared in install_requires, but used at runtime
+    # https://github.com/NixOS/nixpkgs/issues/73840
+    wheel
   ] ++ lib.optional (!isPy3k) futures;
 
-  meta = with stdenv.lib; {
+  # in the absence of a real test suite, run cli and imports
+  checkPhase = ''
+    $out/bin/tensorboard --help > /dev/null
+  '';
+
+  pythonImportsCheck = [
+    "tensorboard"
+    "tensorboard.backend"
+    "tensorboard.compat"
+    "tensorboard.data"
+    "tensorboard.plugins"
+    "tensorboard.summary"
+    "tensorboard.util"
+  ];
+
+  meta = with lib; {
     description = "TensorFlow's Visualization Toolkit";
     homepage = http://tensorflow.org;
     license = licenses.asl20;
