@@ -21602,10 +21602,6 @@ in
 
   uwimap = callPackage ../tools/networking/uwimap { };
 
-  uzbl = callPackage ../applications/networking/browsers/uzbl {
-    webkitgtk = webkitgtk24x-gtk2;
-  };
-
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
