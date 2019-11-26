@@ -605,6 +605,10 @@ let
 
     owee = callPackage ../development/ocaml-modules/owee { };
 
+    owl-base = callPackage ../development/ocaml-modules/owl-base { };
+
+    owl = callPackage ../development/ocaml-modules/owl { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
