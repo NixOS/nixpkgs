@@ -24,15 +24,6 @@ stdenv.mkDerivation rec {
     sha256 = "1cg69nbdf4mcr16mi71aw9j8877lyj8yxjfk9bd3sml8f4fh7mmr";
   };
 
-  patches = [
-    ./hardcode-settings-daemon-gsettings.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/Views/Clicking.vala \
-      --subst-var-by GSD_GSETTINGS ${glib.getSchemaPath elementary-settings-daemon}
-  '';
-
   passthru = {
     updateScript = pantheon.updateScript {
       repoName = pname;
@@ -51,6 +42,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    elementary-settings-daemon
     switchboard
   ];
 
