@@ -188,7 +188,7 @@
    </listitem>
    <listitem>
     <para>
-      Going forward, <literal>~/bin/<literal> in the users home directory will no longer be in <literal>PATH</literal> by default.
+      Going forward, <literal>~/bin</literal> in the users home directory will no longer be in <literal>PATH</literal> by default.
       If you depend on this you should set the option <literal>environment.homeBinInPath</literal> to <literal>true</literal>.
       The aforementioned option was added this release.
     </para>
