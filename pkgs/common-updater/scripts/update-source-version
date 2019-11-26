@@ -93,7 +93,7 @@ if [ -z "$oldUrl" ]; then
 fi
 
 drvName=$(nix-instantiate $systemArg --eval -E "with import ./. {}; lib.getName $attr" | tr -d '"')
-oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.${versionKey} or lib.getVersion $attr" | tr -d '"')
+oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.${versionKey} or (lib.getVersion $attr)" | tr -d '"')
 
 if [ -z "$drvName" -o -z "$oldVersion" ]; then
     die "Couldn't evaluate name and version from '$attr.name'!"
