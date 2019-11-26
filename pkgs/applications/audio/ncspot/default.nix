@@ -11,17 +11,17 @@ let
     ++ lib.optional withPortAudio "portaudio_backend";
 in
 rustPlatform.buildRustPackage rec {
-  pname = "ncspot-unstable";
-  version = "2019-10-12";
+  pname = "ncspot";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
-    rev = "4defded54646958268a20787917e4721ae96407d";
-    sha256 = "1w3cmilwjzk3pfnq97qgz6hzxgjgi27dm8jq7maw87qyl3v17gyg";
+    rev = "v${version}";
+    sha256 = "0ldisr45w6ys1j62qv99ssqfg5q9dwrrzxh2maggyrx1zqdlsk6m";
   };
 
-  cargoSha256 = "1w1fk39pragfy2i2myw99mqf63w6fw4nr2kri8ily2iqc6g9xpgw";
+  cargoSha256 = "0k765hinqxfm30li1z66m1chsv69v6hiz109q2zlkxzg937qbnjh";
 
   cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
 
