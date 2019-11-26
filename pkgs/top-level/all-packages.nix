@@ -9290,6 +9290,7 @@ in
   } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
   }));
+  spidermonkey_52 = callPackage ../development/interpreters/spidermonkey/52.nix { };
   spidermonkey_60 = callPackage ../development/interpreters/spidermonkey/60.nix { };
   spidermonkey = spidermonkey_38;
 
