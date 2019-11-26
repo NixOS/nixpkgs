@@ -1,4 +1,4 @@
-{ fetchFromGitHub, glib, gobjectIntrospection, meson, ninja, pkgconfig, stdenv }:
+{ fetchFromGitHub, glib, gobjectIntrospection, meson, ninja, pkgconfig, stdenv, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-menus";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   buildInputs = [ glib gobjectIntrospection pkgconfig ];
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [ meson ninja wrapGAppsHook ];
 
   postPatch = ''
   '';

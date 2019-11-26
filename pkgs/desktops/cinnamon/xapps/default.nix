@@ -1,20 +1,20 @@
-{ fetchFromGitHub, glib, gobjectIntrospection, gtk3, libgnomekbd, libxklavier, meson, ninja, pkgconfig, python3, python3Packages, stdenv, vala }:
+{ fetchFromGitHub, glib, gobjectIntrospection, gtk3, libgnomekbd, libxklavier, meson, ninja, pkgconfig, python3, python3Packages, stdenv, vala, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "xapps";
-  version = "1.4.7";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xapps";
     rev = "${version}";
-    sha256 = "0q0gjri9vqiz7aypnm7s48hq27s3619jmw6vxlf3rnn62viczp7q";
+    sha256 = "08fkypbx1j1kp3hp0y88idbj0la17hjwmw2w6f6jijwdipgwax7b";
   };
 
   patches = [ ./py-override.patch ];
 
   buildInputs = [ glib gobjectIntrospection gtk3 libgnomekbd libxklavier pkgconfig python3Packages.pygobject3 vala ];
-  nativeBuildInputs = [ meson ninja python3 ];
+  nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];
 
    mesonFlags = [
     "-Dpy-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"

@@ -1,4 +1,4 @@
-{ autoreconfHook, cinnamon-desktop, fetchFromGitHub, glib, gnome3, gnome-doc-utils, gobjectIntrospection, gtk3, intltool, json-glib, libinput, libstartup_notification, libxkbcommon, libXtst, pkgconfig, stdenv, udev, xorg }:
+{ autoreconfHook, cinnamon-desktop, fetchFromGitHub, glib, gnome3, gnome-doc-utils, gobjectIntrospection, gtk3, intltool, json-glib, libinput, libstartup_notification, libxkbcommon, libXtst, pkgconfig, stdenv, udev, xorg, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "muffin";
@@ -14,5 +14,5 @@ stdenv.mkDerivation rec {
   patches = [ ./disable-docs.patch ];
 
   buildInputs = [ cinnamon-desktop glib gobjectIntrospection gtk3 gnome3.zenity gnome-doc-utils intltool json-glib libinput libstartup_notification libxkbcommon libXtst pkgconfig udev xorg.xkeyboardconfig xorg.libxkbfile ];
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook wrapGAppsHook ];
 }
