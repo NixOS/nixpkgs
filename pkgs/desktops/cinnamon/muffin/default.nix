@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ./disable-docs.patch
     (fetchpatch { # https://github.com/linuxmint/muffin/issues/535#issuecomment-536917143
       url = "https://src.fedoraproject.org/rpms/muffin/blob/master/f/0001-fix-warnings-when-compiling.patch";
-      sha256 = "7afedb246946b64ffa5c26cebc4c01dcbf06fe9989d4894d9f588b78f8ef3853";
+      sha256 = "15wdbn3afn3103v7rq1icp8n0vqqwrrya03h0g2rzqlrsc7wrvzw";
     })
   ];
 
