@@ -1,18 +1,15 @@
 { version, sha256 }:
 
-{ stdenv, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python3Packages }:
 
-let name = "scons";
-in python2Packages.buildPythonApplication {
-  name = "${name}-${version}";
+python3Packages.buildPythonApplication rec {
+  pname = "scons";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/scons/${name}-${version}.tar.gz";
+    url = "mirror://sourceforge/scons/${pname}-${version}.tar.gz";
     inherit sha256;
   };
-
-  # Fix a regression in 3.0.0 (causes build errors for some packages)
-  patches = stdenv.lib.optional (version == "3.0.0") ./print-statements.patch;
 
   setupHook = ./setup-hook.sh;
 
