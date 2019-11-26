@@ -17,3 +17,6 @@ result-*
 /pkgs/development/mobile/androidenv/xml/*
 .envrc
 .direnv
+shell.nix
+.history
+pkgs/applications/search/deezer-downloader/
