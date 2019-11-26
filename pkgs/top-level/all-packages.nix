@@ -19973,6 +19973,8 @@ in
     wxGTK30 = wxGTK30.override { withWebKit  = true ; };
   };
 
+  mmsd = callPackage ../tools/networking/mmsd { };
+
   moc = callPackage ../applications/audio/moc { };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
