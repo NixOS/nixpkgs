@@ -14,8 +14,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.start()
 
     machine.wait_for_unit("rabbitmq.service")
-    machine.wait_until_succeeds(
-        'su -s ${pkgs.stdenv.shell} rabbitmq -c "rabbitmqctl status"'
-    )
+    machine.wait_until_succeeds('su - rabbitmq -c "rabbitmqctl status"')
   '';
 })
