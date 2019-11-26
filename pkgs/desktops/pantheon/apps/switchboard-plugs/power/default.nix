@@ -60,11 +60,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-  PKG_CONFIG_DBUS_1_SYSTEM_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/system-services";
-  PKG_CONFIG_DBUS_1_SYSCONFDIR = "${placeholder "out"}/etc";
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
-
   meta = with stdenv.lib; {
     description = "Switchboard Power Plug";
     homepage = https://github.com/elementary/switchboard-plug-power;
