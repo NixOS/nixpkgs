@@ -1,0 +1,141 @@
+diff --git a/vboxguest/include/iprt/cdefs.h b/vboxguest/include/iprt/cdefs.h
+index 8aa1736..d5c5a4c 100644
+--- a/vboxguest/include/iprt/cdefs.h
++++ b/vboxguest/include/iprt/cdefs.h
+@@ -1166,7 +1166,7 @@
+  * Tell the compiler that we're falling through to the next case in a switch.
+  * @sa RT_FALL_THRU  */
+ #if RT_GNUC_PREREQ(7, 0)
+-# define RT_FALL_THROUGH()      __attribute__((fallthrough))
++# define RT_FALL_THROUGH()      __attribute__((__fallthrough__))
+ #else
+ # define RT_FALL_THROUGH()      (void)0
+ #endif
+diff --git a/vboxguest/r0drv/linux/alloc-r0drv-linux.c b/vboxguest/r0drv/linux/alloc-r0drv-linux.c
+index 42e4ef5..acb0ac7 100644
+--- a/vboxguest/r0drv/linux/alloc-r0drv-linux.c
++++ b/vboxguest/r0drv/linux/alloc-r0drv-linux.c
+@@ -443,9 +443,6 @@ RTR0DECL(void *) RTMemContAlloc(PRTCCPHYS pPhys, size_t cb)
+             }
+ 
+             SetPageReserved(&paPages[iPage]);
+-#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 4, 20) /** @todo find the exact kernel where change_page_attr was introduced. */
+-            MY_SET_PAGES_EXEC(&paPages[iPage], 1);
+-#endif
+         }
+         *pPhys = page_to_phys(paPages);
+         pvRet = phys_to_virt(page_to_phys(paPages));
+@@ -491,9 +488,6 @@ RTR0DECL(void) RTMemContFree(void *pv, size_t cb)
+         for (iPage = 0; iPage < cPages; iPage++)
+         {
+             ClearPageReserved(&paPages[iPage]);
+-#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 4, 20) /** @todo find the exact kernel where change_page_attr was introduced. */
+-            MY_SET_PAGES_NOEXEC(&paPages[iPage], 1);
+-#endif
+         }
+         __free_pages(paPages, cOrder);
+         IPRT_LINUX_RESTORE_EFL_AC();
+diff --git a/vboxguest/r0drv/linux/the-linux-kernel.h b/vboxguest/r0drv/linux/the-linux-kernel.h
+index 8fda072..7904327 100644
+--- a/vboxguest/r0drv/linux/the-linux-kernel.h
++++ b/vboxguest/r0drv/linux/the-linux-kernel.h
+@@ -337,8 +337,10 @@ DECLINLINE(unsigned long) msecs_to_jiffies(unsigned int cMillies)
+ #endif
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 25)
+-# define MY_SET_PAGES_EXEC(pPages, cPages)    set_pages_x(pPages, cPages)
+-# define MY_SET_PAGES_NOEXEC(pPages, cPages)  set_pages_nx(pPages, cPages)
++# if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 0) /* The interface was removed, but we only need it for < 2.4.22, so who cares. */
++#  define MY_SET_PAGES_EXEC(pPages, cPages)     set_pages_x(pPages, cPages)
++#  define MY_SET_PAGES_NOEXEC(pPages, cPages)   set_pages_nx(pPages, cPages)
++# endif
+ #else
+ # define MY_SET_PAGES_EXEC(pPages, cPages) \
+     do { \
+diff --git a/vboxguest/r0drv/linux/thread2-r0drv-linux.c b/vboxguest/r0drv/linux/thread2-r0drv-linux.c
+index 7c82b38..04479b5 100644
+--- a/vboxguest/r0drv/linux/thread2-r0drv-linux.c
++++ b/vboxguest/r0drv/linux/thread2-r0drv-linux.c
+@@ -36,6 +36,9 @@
+ #include <iprt/errcore.h>
+ #include "internal/thread.h"
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++    #include <uapi/linux/sched/types.h>
++#endif /* >= KERNEL_VERSION(4, 11, 0) */
+ 
+ RTDECL(RTTHREAD) RTThreadSelf(void)
+ {
+diff --git a/vboxsf/include/iprt/cdefs.h b/vboxsf/include/iprt/cdefs.h
+index 8aa1736..d5c5a4c 100644
+--- a/vboxsf/include/iprt/cdefs.h
++++ b/vboxsf/include/iprt/cdefs.h
+@@ -1166,7 +1166,7 @@
+  * Tell the compiler that we're falling through to the next case in a switch.
+  * @sa RT_FALL_THRU  */
+ #if RT_GNUC_PREREQ(7, 0)
+-# define RT_FALL_THROUGH()      __attribute__((fallthrough))
++# define RT_FALL_THROUGH()      __attribute__((__fallthrough__))
+ #else
+ # define RT_FALL_THROUGH()      (void)0
+ #endif
+diff --git a/vboxsf/r0drv/linux/the-linux-kernel.h b/vboxsf/r0drv/linux/the-linux-kernel.h
+index 8fda072..7904327 100644
+--- a/vboxsf/r0drv/linux/the-linux-kernel.h
++++ b/vboxsf/r0drv/linux/the-linux-kernel.h
+@@ -337,8 +337,10 @@ DECLINLINE(unsigned long) msecs_to_jiffies(unsigned int cMillies)
+ #endif
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 25)
+-# define MY_SET_PAGES_EXEC(pPages, cPages)    set_pages_x(pPages, cPages)
+-# define MY_SET_PAGES_NOEXEC(pPages, cPages)  set_pages_nx(pPages, cPages)
++# if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 0) /* The interface was removed, but we only need it for < 2.4.22, so who cares. */
++#  define MY_SET_PAGES_EXEC(pPages, cPages)     set_pages_x(pPages, cPages)
++#  define MY_SET_PAGES_NOEXEC(pPages, cPages)   set_pages_nx(pPages, cPages)
++# endif
+ #else
+ # define MY_SET_PAGES_EXEC(pPages, cPages) \
+     do { \
+diff --git a/vboxvideo/vbox_drv.c b/vboxvideo/vbox_drv.c
+index 8e4f337..9454301 100644
+--- a/vboxvideo/vbox_drv.c
++++ b/vboxvideo/vbox_drv.c
+@@ -265,12 +265,16 @@ static void vbox_master_drop(struct drm_device *dev, struct drm_file *file_priv)
+ }
+ 
+ static struct drm_driver driver = {
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 0)
+ 	.driver_features =
+ 	    DRIVER_MODESET | DRIVER_GEM | DRIVER_HAVE_IRQ |
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 1, 0) && !defined(RHEL_81)
++# if LINUX_VERSION_CODE < KERNEL_VERSION(5, 1, 0) && !defined(RHEL_81)
+ 	    DRIVER_IRQ_SHARED |
+-#endif
++# endif /* < KERNEL_VERSION(5, 1, 0) && !defined(RHEL_81) */
+ 	    DRIVER_PRIME,
++#else /* >= KERNEL_VERSION(5, 4, 0) */
++	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_HAVE_IRQ,
++#endif /* < KERNEL_VERSION(5, 4, 0) */
+ 	.dev_priv_size = 0,
+ 
+ 	.load = vbox_driver_load,
+diff --git a/vboxvideo/vbox_main.c b/vboxvideo/vbox_main.c
+index 11b9745..cc7831d 100644
+--- a/vboxvideo/vbox_main.c
++++ b/vboxvideo/vbox_main.c
+@@ -612,11 +612,13 @@ void vbox_gem_free_object(struct drm_gem_object *obj)
+ 
+ static inline u64 vbox_bo_mmap_offset(struct vbox_bo *bo)
+ {
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 12, 0) && !defined(RHEL_70)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0)
++	return drm_vma_node_offset_addr(&bo->bo.base.vma_node);
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(3, 12, 0) && !defined(RHEL_70)
+ 	return bo->bo.addr_space_offset;
+ #else
+ 	return drm_vma_node_offset_addr(&bo->bo.vma_node);
+-#endif
++#endif /* >= KERNEL_VERSION(5, 4, 0) */
+ }
+ 
+ int

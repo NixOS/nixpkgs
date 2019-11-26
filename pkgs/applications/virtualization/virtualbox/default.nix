@@ -21,8 +21,8 @@ let
   buildType = "release";
   # Remember to change the extpackRev and version in extpack.nix and
   # guest-additions/default.nix as well.
-  main = "1hxbvr78b0fddcn7npz72ki89lpmbgqj4b5qvxm1wik7v0d8v1y8";
-  version = "6.0.12";
+  main = "036x2mvkk22lbg72cz6pik9z538j1ag6mmwjjmfikgrq1i7v24jy";
+  version = "6.0.14";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
@@ -92,9 +92,9 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
-    # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
-    # https://www.virtualbox.org/ticket/18911
-    ./kernel-5.3-fix.patch
+    # Kernel 5.4 fix, should be fixed with next upstream release
+    # https://www.virtualbox.org/ticket/18945
+    ./kernel-5.4-fix.patch
   ];
 
   postPatch = ''

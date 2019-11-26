@@ -1,0 +1,294 @@
+diff --git a/include/iprt/cdefs.h b/include/iprt/cdefs.h
+index 8aa1736a..d5c5a4cc 100644
+--- a/include/iprt/cdefs.h
++++ b/include/iprt/cdefs.h
+@@ -1166,7 +1166,7 @@
+  * Tell the compiler that we're falling through to the next case in a switch.
+  * @sa RT_FALL_THRU  */
+ #if RT_GNUC_PREREQ(7, 0)
+-# define RT_FALL_THROUGH()      __attribute__((fallthrough))
++# define RT_FALL_THROUGH()      __attribute__((__fallthrough__))
+ #else
+ # define RT_FALL_THROUGH()      (void)0
+ #endif
+diff --git a/src/VBox/Additions/linux/drm/vbox_drv.c b/src/VBox/Additions/linux/drm/vbox_drv.c
+index 0055cc12..51474887 100644
+--- a/src/VBox/Additions/linux/drm/vbox_drv.c
++++ b/src/VBox/Additions/linux/drm/vbox_drv.c
+@@ -270,12 +270,16 @@ static void vbox_master_drop(struct drm_device *dev, struct drm_file *file_priv)
+ }
+ 
+ static struct drm_driver driver = {
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 0)
+ 	.driver_features =
+ 	    DRIVER_MODESET | DRIVER_GEM | DRIVER_HAVE_IRQ |
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 1, 0) && !defined(RHEL_81)
++# if LINUX_VERSION_CODE < KERNEL_VERSION(5, 1, 0) && !defined(RHEL_81)
+ 	    DRIVER_IRQ_SHARED |
+-#endif
++# endif /* < KERNEL_VERSION(5, 1, 0) && !defined(RHEL_81) */
+ 	    DRIVER_PRIME,
++#else /* >= KERNEL_VERSION(5, 4, 0) */
++	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_HAVE_IRQ,
++#endif /* < KERNEL_VERSION(5, 4, 0) */
+ 	.dev_priv_size = 0,
+ 
+ 	.load = vbox_driver_load,
+diff --git a/src/VBox/Additions/linux/drm/vbox_main.c b/src/VBox/Additions/linux/drm/vbox_main.c
+index 62c638fc..4e522741 100644
+--- a/src/VBox/Additions/linux/drm/vbox_main.c
++++ b/src/VBox/Additions/linux/drm/vbox_main.c
+@@ -616,11 +616,13 @@ void vbox_gem_free_object(struct drm_gem_object *obj)
+ 
+ static inline u64 vbox_bo_mmap_offset(struct vbox_bo *bo)
+ {
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 12, 0) && !defined(RHEL_70)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0)
++	return drm_vma_node_offset_addr(&bo->bo.base.vma_node);
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(3, 12, 0) && !defined(RHEL_70)
+ 	return bo->bo.addr_space_offset;
+ #else
+ 	return drm_vma_node_offset_addr(&bo->bo.vma_node);
+-#endif
++#endif /* >= KERNEL_VERSION(5, 4, 0) */
+ }
+ 
+ int
+diff --git a/src/VBox/HostDrivers/VBoxNetFlt/linux/VBoxNetFlt-linux.c b/src/VBox/HostDrivers/VBoxNetFlt/linux/VBoxNetFlt-linux.c
+index a2f2a284..03b83a5e 100644
+--- a/src/VBox/HostDrivers/VBoxNetFlt/linux/VBoxNetFlt-linux.c
++++ b/src/VBox/HostDrivers/VBoxNetFlt/linux/VBoxNetFlt-linux.c
+@@ -924,8 +924,13 @@ static void vboxNetFltLinuxSkBufToSG(PVBOXNETFLTINS pThis, struct sk_buff *pBuf,
+     for (i = 0; i < skb_shinfo(pBuf)->nr_frags; i++)
+     {
+         skb_frag_t *pFrag = &skb_shinfo(pBuf)->frags[i];
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0)
++        pSG->aSegs[iSeg].cb = pFrag->bv_len;
++        pSG->aSegs[iSeg].pv = VBOX_SKB_KMAP_FRAG(pFrag) + pFrag->bv_offset;
++# else /* < KERNEL_VERSION(5, 4, 0) */
+         pSG->aSegs[iSeg].cb = pFrag->size;
+         pSG->aSegs[iSeg].pv = VBOX_SKB_KMAP_FRAG(pFrag) + pFrag->page_offset;
++# endif /* >= KERNEL_VERSION(5, 4, 0) */
+         Log6((" %p", pSG->aSegs[iSeg].pv));
+         pSG->aSegs[iSeg++].Phys = NIL_RTHCPHYS;
+         Assert(iSeg <= pSG->cSegsAlloc);
+@@ -940,8 +945,13 @@ static void vboxNetFltLinuxSkBufToSG(PVBOXNETFLTINS pThis, struct sk_buff *pBuf,
+         for (i = 0; i < skb_shinfo(pFragBuf)->nr_frags; i++)
+         {
+             skb_frag_t *pFrag = &skb_shinfo(pFragBuf)->frags[i];
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0)
++            pSG->aSegs[iSeg].cb = pFrag->bv_len;
++            pSG->aSegs[iSeg].pv = VBOX_SKB_KMAP_FRAG(pFrag) + pFrag->bv_offset;
++# else /* < KERNEL_VERSION(5, 4, 0) */
+             pSG->aSegs[iSeg].cb = pFrag->size;
+             pSG->aSegs[iSeg].pv = VBOX_SKB_KMAP_FRAG(pFrag) + pFrag->page_offset;
++# endif /* >= KERNEL_VERSION(5, 4, 0) */
+             Log6((" %p", pSG->aSegs[iSeg].pv));
+             pSG->aSegs[iSeg++].Phys = NIL_RTHCPHYS;
+             Assert(iSeg <= pSG->cSegsAlloc);
+diff --git a/src/VBox/Runtime/common/fs/ntfsvfs.cpp b/src/VBox/Runtime/common/fs/ntfsvfs.cpp
+index 8af82602..0a95adb2 100644
+--- a/src/VBox/Runtime/common/fs/ntfsvfs.cpp
++++ b/src/VBox/Runtime/common/fs/ntfsvfs.cpp
+@@ -1052,7 +1052,7 @@ static int rtFsNtfsAttr_ParseExtents(PRTFSNTFSATTR pAttrib, PRTFSNTFSEXTENTS pEx
+                     case 4: cClustersInRun |= (uint32_t)pbPairs[offPairs + 3] << 24; RT_FALL_THRU();
+                     case 3: cClustersInRun |= (uint32_t)pbPairs[offPairs + 2] << 16; RT_FALL_THRU();
+                     case 2: cClustersInRun |= (uint16_t)pbPairs[offPairs + 1] <<  8; RT_FALL_THRU();
+-                    case 1: cClustersInRun |= (uint16_t)pbPairs[offPairs + 0] <<  0; RT_FALL_THRU();
++                    case 1: cClustersInRun |= (uint16_t)pbPairs[offPairs + 0] <<  0;
+                 }
+                 offPairs += cbRunField;
+                 AssertBreakStmt(cClustersInRun <= cMaxClustersInRun,
+diff --git a/src/VBox/Runtime/r0drv/linux/alloc-r0drv-linux.c b/src/VBox/Runtime/r0drv/linux/alloc-r0drv-linux.c
+index 4843cb02..26bfe42b 100644
+--- a/src/VBox/Runtime/r0drv/linux/alloc-r0drv-linux.c
++++ b/src/VBox/Runtime/r0drv/linux/alloc-r0drv-linux.c
+@@ -443,9 +443,6 @@ RTR0DECL(void *) RTMemContAlloc(PRTCCPHYS pPhys, size_t cb)
+             }
+ 
+             SetPageReserved(&paPages[iPage]);
+-#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 4, 20) /** @todo find the exact kernel where change_page_attr was introduced. */
+-            MY_SET_PAGES_EXEC(&paPages[iPage], 1);
+-#endif
+         }
+         *pPhys = page_to_phys(paPages);
+         pvRet = phys_to_virt(page_to_phys(paPages));
+@@ -491,9 +488,6 @@ RTR0DECL(void) RTMemContFree(void *pv, size_t cb)
+         for (iPage = 0; iPage < cPages; iPage++)
+         {
+             ClearPageReserved(&paPages[iPage]);
+-#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 4, 20) /** @todo find the exact kernel where change_page_attr was introduced. */
+-            MY_SET_PAGES_NOEXEC(&paPages[iPage], 1);
+-#endif
+         }
+         __free_pages(paPages, cOrder);
+         IPRT_LINUX_RESTORE_EFL_AC();
+diff --git a/src/VBox/Runtime/r0drv/linux/memobj-r0drv-linux.c b/src/VBox/Runtime/r0drv/linux/memobj-r0drv-linux.c
+index d11c2d7a..c85d85ba 100644
+--- a/src/VBox/Runtime/r0drv/linux/memobj-r0drv-linux.c
++++ b/src/VBox/Runtime/r0drv/linux/memobj-r0drv-linux.c
+@@ -86,6 +86,8 @@ typedef struct RTR0MEMOBJLNX
+     /** Set if the allocation is contiguous.
+      * This means it has to be given back as one chunk. */
+     bool                fContiguous;
++    /** Set if executable allocation. */
++    bool                fExecutable;
+     /** Set if we've vmap'ed the memory into ring-0. */
+     bool                fMappedToRing0;
+     /** The pages in the apPages array. */
+@@ -289,10 +291,11 @@ static void rtR0MemObjLinuxDoMunmap(void *pv, size_t cb, struct task_struct *pTa
+  *                      Only valid if fContiguous == true, ignored otherwise.
+  * @param   fFlagsLnx   The page allocation flags (GPFs).
+  * @param   fContiguous Whether the allocation must be contiguous.
++ * @param   fExecutable Whether the memory must be executable.
+  * @param   rcNoMem     What to return when we're out of pages.
+  */
+ static int rtR0MemObjLinuxAllocPages(PRTR0MEMOBJLNX *ppMemLnx, RTR0MEMOBJTYPE enmType, size_t cb,
+-                                     size_t uAlignment, gfp_t fFlagsLnx, bool fContiguous, int rcNoMem)
++                                     size_t uAlignment, gfp_t fFlagsLnx, bool fContiguous, bool fExecutable, int rcNoMem)
+ {
+     size_t          iPage;
+     size_t const    cPages = cb >> PAGE_SHIFT;
+@@ -371,7 +374,8 @@ static int rtR0MemObjLinuxAllocPages(PRTR0MEMOBJLNX *ppMemLnx, RTR0MEMOBJTYPE en
+     for (iPage = 0; iPage < cPages; iPage++)
+     {
+         pMemLnx->apPages[iPage] = &paPages[iPage];
+-        MY_SET_PAGES_EXEC(pMemLnx->apPages[iPage], 1);
++        if (fExecutable)
++            MY_SET_PAGES_EXEC(pMemLnx->apPages[iPage], 1);
+         if (PageHighMem(pMemLnx->apPages[iPage]))
+             BUG();
+     }
+@@ -379,6 +383,7 @@ static int rtR0MemObjLinuxAllocPages(PRTR0MEMOBJLNX *ppMemLnx, RTR0MEMOBJTYPE en
+     fContiguous = true;
+ #endif /* < 2.4.22 */
+     pMemLnx->fContiguous = fContiguous;
++    pMemLnx->fExecutable = fExecutable;
+ 
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 5, 0)
+     /*
+@@ -409,7 +414,7 @@ static int rtR0MemObjLinuxAllocPages(PRTR0MEMOBJLNX *ppMemLnx, RTR0MEMOBJTYPE en
+              * This should never happen!
+              */
+             printk("rtR0MemObjLinuxAllocPages(cb=0x%lx, uAlignment=0x%lx): alloc_pages(..., %d) returned physical memory at 0x%lx!\n",
+-                    (unsigned long)cb, (unsigned long)uAlignment, rtR0MemObjLinuxOrder(cPages), (unsigned long)page_to_phys(pMemLnx->apPages[0]));
++                   (unsigned long)cb, (unsigned long)uAlignment, rtR0MemObjLinuxOrder(cPages), (unsigned long)page_to_phys(pMemLnx->apPages[0]));
+             rtR0MemObjLinuxFreePages(pMemLnx);
+             return rcNoMem;
+         }
+@@ -438,14 +443,12 @@ static void rtR0MemObjLinuxFreePages(PRTR0MEMOBJLNX pMemLnx)
+         while (iPage-- > 0)
+         {
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 5, 0)
+-            /*
+-             * See SetPageReserved() in rtR0MemObjLinuxAllocPages()
+-             */
++            /* See SetPageReserved() in rtR0MemObjLinuxAllocPages() */
+             ClearPageReserved(pMemLnx->apPages[iPage]);
+ #endif
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 4, 22)
+-#else
+-            MY_SET_PAGES_NOEXEC(pMemLnx->apPages[iPage], 1);
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2, 4, 22)
++            if (pMemLnx->fExecutable)
++                MY_SET_PAGES_NOEXEC(pMemLnx->apPages[iPage], 1);
+ #endif
+         }
+ 
+@@ -662,10 +665,10 @@ DECLHIDDEN(int) rtR0MemObjNativeAllocPage(PPRTR0MEMOBJINTERNAL ppMem, size_t cb,
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 4, 22)
+     rc = rtR0MemObjLinuxAllocPages(&pMemLnx, RTR0MEMOBJTYPE_PAGE, cb, PAGE_SIZE, GFP_HIGHUSER,
+-                                   false /* non-contiguous */, VERR_NO_MEMORY);
++                                   false /* non-contiguous */, fExecutable, VERR_NO_MEMORY);
+ #else
+     rc = rtR0MemObjLinuxAllocPages(&pMemLnx, RTR0MEMOBJTYPE_PAGE, cb, PAGE_SIZE, GFP_USER,
+-                                   false /* non-contiguous */, VERR_NO_MEMORY);
++                                   false /* non-contiguous */, fExecutable, VERR_NO_MEMORY);
+ #endif
+     if (RT_SUCCESS(rc))
+     {
+@@ -696,19 +699,19 @@ DECLHIDDEN(int) rtR0MemObjNativeAllocLow(PPRTR0MEMOBJINTERNAL ppMem, size_t cb,
+ #if (defined(RT_ARCH_AMD64) || defined(CONFIG_X86_PAE)) && defined(GFP_DMA32)
+     /* ZONE_DMA32: 0-4GB */
+     rc = rtR0MemObjLinuxAllocPages(&pMemLnx, RTR0MEMOBJTYPE_LOW, cb, PAGE_SIZE, GFP_DMA32,
+-                                   false /* non-contiguous */, VERR_NO_LOW_MEMORY);
++                                   false /* non-contiguous */, fExecutable, VERR_NO_LOW_MEMORY);
+     if (RT_FAILURE(rc))
+ #endif
+ #ifdef RT_ARCH_AMD64
+         /* ZONE_DMA: 0-16MB */
+         rc = rtR0MemObjLinuxAllocPages(&pMemLnx, RTR0MEMOBJTYPE_LOW, cb, PAGE_SIZE, GFP_DMA,
+-                                       false /* non-contiguous */, VERR_NO_LOW_MEMORY);
++                                       false /* non-contiguous */, fExecutable, VERR_NO_LOW_MEMORY);
+ #else
+ # ifdef CONFIG_X86_PAE
+ # endif
+         /* ZONE_NORMAL: 0-896MB */
+         rc = rtR0MemObjLinuxAllocPages(&pMemLnx, RTR0MEMOBJTYPE_LOW, cb, PAGE_SIZE, GFP_USER,
+-                                       false /* non-contiguous */, VERR_NO_LOW_MEMORY);
++                                       false /* non-contiguous */, fExecutable, VERR_NO_LOW_MEMORY);
+ #endif
+     if (RT_SUCCESS(rc))
+     {
+@@ -738,17 +741,17 @@ DECLHIDDEN(int) rtR0MemObjNativeAllocCont(PPRTR0MEMOBJINTERNAL ppMem, size_t cb,
+ #if (defined(RT_ARCH_AMD64) || defined(CONFIG_X86_PAE)) && defined(GFP_DMA32)
+     /* ZONE_DMA32: 0-4GB */
+     rc = rtR0MemObjLinuxAllocPages(&pMemLnx, RTR0MEMOBJTYPE_CONT, cb, PAGE_SIZE, GFP_DMA32,
+-                                   true /* contiguous */, VERR_NO_CONT_MEMORY);
++                                   true /* contiguous */, fExecutable, VERR_NO_CONT_MEMORY);
+     if (RT_FAILURE(rc))
+ #endif
+ #ifdef RT_ARCH_AMD64
+         /* ZONE_DMA: 0-16MB */
+         rc = rtR0MemObjLinuxAllocPages(&pMemLnx, RTR0MEMOBJTYPE_CONT, cb, PAGE_SIZE, GFP_DMA,
+-                                       true /* contiguous */, VERR_NO_CONT_MEMORY);
++                                       true /* contiguous */, fExecutable, VERR_NO_CONT_MEMORY);
+ #else
+         /* ZONE_NORMAL (32-bit hosts): 0-896MB */
+         rc = rtR0MemObjLinuxAllocPages(&pMemLnx, RTR0MEMOBJTYPE_CONT, cb, PAGE_SIZE, GFP_USER,
+-                                       true /* contiguous */, VERR_NO_CONT_MEMORY);
++                                       true /* contiguous */, fExecutable, VERR_NO_CONT_MEMORY);
+ #endif
+     if (RT_SUCCESS(rc))
+     {
+@@ -795,7 +798,7 @@ static int rtR0MemObjLinuxAllocPhysSub2(PPRTR0MEMOBJINTERNAL ppMem, RTR0MEMOBJTY
+ 
+     rc = rtR0MemObjLinuxAllocPages(&pMemLnx, enmType, cb, uAlignment, fGfp,
+                                    enmType == RTR0MEMOBJTYPE_PHYS /* contiguous / non-contiguous */,
+-                                   VERR_NO_PHYS_MEMORY);
++                                   false /*fExecutable*/, VERR_NO_PHYS_MEMORY);
+     if (RT_FAILURE(rc))
+         return rc;
+ 
+diff --git a/src/VBox/Runtime/r0drv/linux/the-linux-kernel.h b/src/VBox/Runtime/r0drv/linux/the-linux-kernel.h
+index c0dec19a..da84e528 100644
+--- a/src/VBox/Runtime/r0drv/linux/the-linux-kernel.h
++++ b/src/VBox/Runtime/r0drv/linux/the-linux-kernel.h
+@@ -337,8 +337,10 @@ DECLINLINE(unsigned long) msecs_to_jiffies(unsigned int cMillies)
+ #endif
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 25)
+-# define MY_SET_PAGES_EXEC(pPages, cPages)    set_pages_x(pPages, cPages)
+-# define MY_SET_PAGES_NOEXEC(pPages, cPages)  set_pages_nx(pPages, cPages)
++# if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 0) /* The interface was removed, but we only need it for < 2.4.22, so who cares. */
++#  define MY_SET_PAGES_EXEC(pPages, cPages)     set_pages_x(pPages, cPages)
++#  define MY_SET_PAGES_NOEXEC(pPages, cPages)   set_pages_nx(pPages, cPages)
++# endif
+ #else
+ # define MY_SET_PAGES_EXEC(pPages, cPages) \
+     do { \
+diff --git a/src/VBox/Runtime/r0drv/linux/thread2-r0drv-linux.c b/src/VBox/Runtime/r0drv/linux/thread2-r0drv-linux.c
+index 8647583a..dd8395ad 100644
+--- a/src/VBox/Runtime/r0drv/linux/thread2-r0drv-linux.c
++++ b/src/VBox/Runtime/r0drv/linux/thread2-r0drv-linux.c
+@@ -36,6 +36,9 @@
+ #include <iprt/errcore.h>
+ #include "internal/thread.h"
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++    #include <uapi/linux/sched/types.h>
++#endif /* >= KERNEL_VERSION(4, 11, 0) */
+ 
+ RTDECL(RTTHREAD) RTThreadSelf(void)
+ {
