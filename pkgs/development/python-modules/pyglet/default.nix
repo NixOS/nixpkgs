@@ -37,7 +37,7 @@ buildPythonPackage rec {
             if name == 'GL':
                 path = '${libGL}/lib/libGL${ext}'
             elif name == 'GLU':
-                path = '${libGL}/lib/libGLU${ext}'
+                path = '${libGLU}/lib/libGLU${ext}'
             elif name == 'c':
                 path = '${glibc}/lib/libc${ext}.6'
             elif name == 'X11':
