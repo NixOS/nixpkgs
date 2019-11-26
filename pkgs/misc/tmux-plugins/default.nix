@@ -25,7 +25,7 @@ let
     addonInfo ? null,
     preInstall ? "",
     postInstall ? "",
-    path ? (builtins.parseDrvName pluginName).name,
+    path ? lib.getName pluginName,
     dependencies ? [],
     ...
   }:
