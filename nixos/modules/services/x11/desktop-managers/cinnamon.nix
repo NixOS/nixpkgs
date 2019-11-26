@@ -31,7 +31,8 @@ in
       name = "cinnamon";
       bgSupport = true;
       start = ''
-        ${pkgs.runtimeShell} # TODO &
+        ${pkgs.runtimeShell} cinnamon-session-cinnamon &
+        # or cinnamon-session-cinnamon2d for 2d/sw-rendering. how to add?
         waitPID=$!
       '';
     }];

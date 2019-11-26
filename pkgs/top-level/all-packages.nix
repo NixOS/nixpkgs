@@ -23356,6 +23356,8 @@ in
 
   ### DESKTOP ENVIRONMENTS
 
+  cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
+
   deepin = recurseIntoAttrs (import ../desktops/deepin {
     inherit pkgs libsForQt5;
     inherit (lib) makeScope;
