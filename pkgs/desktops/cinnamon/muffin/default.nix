@@ -19,12 +19,16 @@ stdenv.mkDerivation rec {
   https://bugs.gentoo.org/698736 - Muffin is a mutter fork, so patch _should_ apply  */
 
   patches = [
-    #(fetchpatch {
+    #(fetchpatch { # superseeded by egl.patch
     #  url = "https://698736.bugs.gentoo.org/attachment.cgi?id=594588";
     #  sha256 = "f042267b05bec579da0697e4906048af928093a9b3cddc937c63defde627f2d5";
     #})
     ./egl.patch
     ./disable-docs.patch
+    (fetchpatch { # https://github.com/linuxmint/muffin/issues/535#issuecomment-536917143
+      url = "https://src.fedoraproject.org/rpms/muffin/blob/master/f/0001-fix-warnings-when-compiling.patch";
+      sha256 = "c70bbcb02959bbc9ca7fab1ac506bafe82ebc8c83f635c43d53fb427cd04a3c7";
+    })
   ];
 
   buildInputs = [ cinnamon-desktop glib gobjectIntrospection gtk3 gnome3.zenity gnome-doc-utils intltool json-glib libinput libstartup_notification libxkbcommon libXtst pkgconfig udev xorg.xkeyboardconfig xorg.libxkbfile ];
