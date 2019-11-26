@@ -235,6 +235,8 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
+    eigen = callPackage ../development/ocaml-modules/eigen { };
+
     elina = callPackage ../development/ocaml-modules/elina { };
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
