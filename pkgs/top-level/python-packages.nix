@@ -5647,6 +5647,8 @@ in {
 
   sphinxcontrib-devhelp = callPackage ../development/python-modules/sphinxcontrib-devhelp {};
 
+  sphinxcontrib-fulltoc = callPackage ../development/python-modules/sphinxcontrib-fulltoc { };
+
   sphinxcontrib-htmlhelp = callPackage ../development/python-modules/sphinxcontrib-htmlhelp {};
 
   sphinxcontrib-jsmath = callPackage ../development/python-modules/sphinxcontrib-jsmath {};
