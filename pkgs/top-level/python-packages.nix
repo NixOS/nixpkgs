@@ -7120,6 +7120,8 @@ in {
 
   textfsm = callPackage ../development/python-modules/textfsm { };
 
+  testing-common-database = callPackage ../development/python-modules/testing-common-database { };
+
   testpath = callPackage ../development/python-modules/testpath { };
 
   testrepository = callPackage ../development/python-modules/testrepository { };
