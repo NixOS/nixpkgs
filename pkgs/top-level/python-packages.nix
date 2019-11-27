@@ -6180,6 +6180,7 @@ in {
     cudnn = pkgs.cudnn_cudatoolkit_10;
     nccl = pkgs.nccl_cudatoolkit_10;
     openssl = pkgs.openssl_1_0_2;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
   };
 
   tensorflow = if stdenv.isDarwin then self.tensorflow-bin else self.tensorflow-build;
