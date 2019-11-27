@@ -7425,7 +7425,7 @@ in
 
   qhull = callPackage ../development/libraries/qhull { };
 
-  qjoypad = callPackage ../tools/misc/qjoypad { };
+  qjoypad = libsForQt5.callPackage ../tools/misc/qjoypad { };
 
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
