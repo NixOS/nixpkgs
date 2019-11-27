@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/keyutils/raw/4cecffcb8e2a2aa4ef41777ed40e4e4bcfb2e5bf/debian/patches/Make-build-reproducible.patch";
       sha256 = "0wnvbjfrbk7rghd032z684l7vk7mhy3bd41zvhkrhgp3cd5id0bm";
     })
+    ./conf-symlink.patch
   ];
 
   BUILDDATE = "1970-01-01";
