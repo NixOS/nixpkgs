@@ -466,6 +466,8 @@ let
 
     metrics = callPackage ../development/ocaml-modules/metrics { };
 
+    metrics-lwt = callPackage ../development/ocaml-modules/metrics/lwt.nix { };
+
     mezzo = callPackage ../development/compilers/mezzo { };
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
