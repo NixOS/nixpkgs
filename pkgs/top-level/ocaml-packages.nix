@@ -460,6 +460,8 @@ let
 
     merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
 
+    metrics = callPackage ../development/ocaml-modules/metrics { };
+
     mezzo = callPackage ../development/compilers/mezzo { };
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
