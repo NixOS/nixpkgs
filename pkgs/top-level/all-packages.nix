@@ -8525,6 +8525,8 @@ in
 
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
+  muon = callPackage ../development/compilers/muon { };
+
   nim = callPackage ../development/compilers/nim { };
   nrpl = callPackage ../development/tools/nrpl { };
 
