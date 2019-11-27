@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "wtf8";
-  version = "1.0.1";
+  version = "1.0.2";
 
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "1msg3vycd3k8qqj61sc23qks541cxpb97vrnrvrhjnqxsqnh6ygq";
+    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    sha256 = "09ygcxxd5warkdzz17rgpidrd0pg14cy2svvnvy1hna080lzg7vp";
   };
 
   meta = with stdenv.lib; {
