@@ -5,8 +5,9 @@
 , meson
 , ninja
 , libX11
-, mesa
+, mesa_glu
 , wayland
+, fetchpatch
 }:
 
 let
@@ -50,6 +51,14 @@ in stdenv.mkDerivation rec {
     sha256 = "0wvamjcfycd7rgk7v14g2rin55xin9rfkxmivyay3cm08vnl7y1d";
   };
 
+  patches = [
+    # https://github.com/NVIDIA/egl-wayland/pull/24
+    (fetchpatch {
+      url = "https://github.com/NVIDIA/egl-wayland/commit/1f0230f5c41722d8ec0df2828e97188ffd0a11eb.patch";
+      sha256 = "16dgbm6gzaa6jx7fg9fy1sjpfhfp3r7036zri5q7kq1q02w3yhcm";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -59,7 +68,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     eglexternalplatform
     libX11
-    mesa
+    mesa_glu
     wayland
   ];
 
