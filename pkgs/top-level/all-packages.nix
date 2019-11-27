@@ -17207,6 +17207,8 @@ in
 
   camingo-code = callPackage ../data/fonts/camingo-code { };
 
+  chili-theme = libsForQt5.callPackage ../data/themes/chili/chili.nix {};
+
   combinatorial_designs = callPackage ../data/misc/combinatorial_designs { };
 
   conway_polynomials = callPackage ../data/misc/conway_polynomials { };
