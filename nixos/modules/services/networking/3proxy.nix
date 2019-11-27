@@ -31,11 +31,12 @@ in {
         Example users file with md5-crypted passwords:
 
         <para>
-          "test1:CR:$1$tFkisVd2$1GA8JXkRmTXdLDytM/i3a1"
-          "test2:CR:$1$rkpibm5J$Aq1.9VtYAn0JrqZ8M.1ME."
+          test1:CR:$1$tFkisVd2$1GA8JXkRmTXdLDytM/i3a1
+          test2:CR:$1$rkpibm5J$Aq1.9VtYAn0JrqZ8M.1ME.
         </para>
 
         You can generate md5-crypted passwords via https://unix4lyfe.org/crypt/
+        Note that htpasswd tool generates incompatible md5-crypted passwords.
         Consult <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/How-To-(incomplete)#USERS">documentation</link> for more information.
       '';
     };
