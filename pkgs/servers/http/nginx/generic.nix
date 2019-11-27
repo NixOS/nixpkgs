@@ -1,6 +1,5 @@
 { stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
-, substituteAll, gd, geoip
-, perl ? null
+, substituteAll, gd, geoip, perl
 , withDebug ? false
 , withStream ? true
 , withMail ? false
