@@ -7122,6 +7122,8 @@ in {
 
   testing-common-database = callPackage ../development/python-modules/testing-common-database { };
 
+  testing-postgresql = callPackage ../development/python-modules/testing-postgresql { };
+
   testpath = callPackage ../development/python-modules/testpath { };
 
   testrepository = callPackage ../development/python-modules/testrepository { };
