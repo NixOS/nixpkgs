@@ -712,6 +712,8 @@ in {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  ipympl = callPackage ../development/python-modules/ipympl { };
+
   itanium_demangler = callPackage ../development/python-modules/itanium_demangler { };
 
   janus = callPackage ../development/python-modules/janus { };
