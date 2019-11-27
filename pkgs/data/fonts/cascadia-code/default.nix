@@ -2,7 +2,7 @@
 
 let
   pname = "cascadia-code";
-  version = "1910.04";
+  version = "1911.20";
 in
 fetchurl {
   name = "${pname}-${version}";
@@ -15,7 +15,7 @@ fetchurl {
     install -Dm444 $downloadedFile $out/share/fonts/truetype/Cascadia.ttf
   '';
 
-  sha256 = "124zbv7xwirwwxrm988h3plwd2vynqxyx7p2gijqrnw69q9pf67q";
+  sha256 = "1dfd3g7cf2h0z2gxvk4pxy46xswd3wyqz3p8ypxcv2dkz4ri6l0j";
 
   meta = with lib; {
     description = "Monospaced font that includes programming ligatures and is designed to enhance the modern look and feel of the Windows Terminal";
