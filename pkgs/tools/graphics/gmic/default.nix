@@ -46,6 +46,12 @@ stdenv.mkDerivation rec {
     "-DENABLE_DYNAMIC_LINKING=ON"
   ];
 
+  postInstall = ''
+    # HACK: headers require CImg
+    # https://framagit.org/dtschump/gmic/issues/5
+    cp ../src/CImg.h $dev/include
+  '';
+
   meta = with stdenv.lib; {
     description = "Open and full-featured framework for image processing";
     homepage = http://gmic.eu/;
