@@ -244,7 +244,7 @@
      </question>
      <answer>
       <para>
-       Many packages assume that an unprefixed <command>ar</command> is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefixed `ar`.
+       Many packages assume that an unprefixed <command>ar</command> is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefixed <command>ar</command>.
       </para>
      </answer>
     </qandaentry>
