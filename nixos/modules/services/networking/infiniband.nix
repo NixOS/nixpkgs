@@ -2,13 +2,17 @@
 
 let
   cfg = config.networking.ib-interfaces;
+  systemd = config.systemd.package;
 in {
-
-  imports = [];
 
   options = {
     networking.ib-interfaces = {
       enable = lib.mkEnableOption "ib-interfaces";
+      configDir = lib.mkOption {
+        default = "${pkgs.rdma-core}/etc/rdma/modules";
+        type = lib.types.path;
+        description = "The directory containing rdma kernel module configuration files";
+      };
     };
   };
 
@@ -22,7 +26,7 @@ in {
         phases = ["unpackPhase" "patchPhase" "installPhase"];
         patchPhase = ''
           substituteInPlace 60-srp_daemon.rules \
-            --replace /bin/systemctl ${pkgs.systemd}/bin/systemctl
+            --replace /bin/systemctl ${systemd}/bin/systemctl
         '';
         installPhase = ''
           mkdir -p $out/lib/udev/rules.d
@@ -30,49 +34,59 @@ in {
         '';
       }; in [ patchedUdevRules ];
 
-    # Units
-    systemd.units = with pkgs; {
-      "ibacm.service".text =
-        builtins.readFile "${rdma-core}/lib/systemd/system/ibacm.service";
-      "ibacm.socket".text =
-        builtins.readFile "${rdma-core}/lib/systemd/system/ibacm.socket";
-      "iwpmd.service".text =
-        builtins.readFile "${rdma-core}/lib/systemd/system/iwpmd.service";
-      "rdma-hw.target".text =
-        builtins.readFile "${rdma-core}/lib/systemd/system/rdma-hw.target";
-      "rdma-load-modules@.service".text = ''
-        [Unit]
-        Description=Load RDMA modules from /nix/store/q38v9b228hiwavpnvfqgds42hfwqv6a3-rdma-core-25.0/etc/rdma/modules/%I.conf
-        Documentation=file:/nix/store/q38v9b228hiwavpnvfqgds42hfwqv6a3-rdma-core-25.0/share/doc/udev.md
+
+    # This unit is reproduced from "${rdma-core}/lib/systemd/system/rdma-load-modules@.service";
+    systemd.services."rdma-load-modules@" = {
+      description="Load RDMA modules from ${cfg.configDir}";
+      conflicts = ["shutdown.target"];
+      wants = ["network-pre.target"];
+
+      before = [
         # Kernel module loading must take place before sysinit.target, similar to
         # systemd-modules-load.service
-        DefaultDependencies=no
-        Before=sysinit.target
+        "sysinit.target"
+
         # Do not execute concurrently with an ongoing shutdown
-        Conflicts=shutdown.target
-        Before=shutdown.target
+        "shutdown.target"
+
         # Partially support distro network setup scripts that run after
         # systemd-modules-load.service but before sysinit.target, eg a classic network
         # setup script. Run them after modules have loaded.
-        Wants=network-pre.target
-        Before=network-pre.target
+        "network-pre.target"
+
         # Orders all kernel module startup before rdma-hw.target can become ready
-        Before=rdma-hw.target
+        "rdma-hw.target"
+      ];
 
-        ConditionCapability=CAP_SYS_MODULE
+      unitConfig = {
+        enable = false;
+        DefaultDependencies="no";
+        ConditionCapability="CAP_SYS_MODULE";
+      };
 
-        [Service]
-        Type=oneshot
-        RemainAfterExit=yes
-        ExecStart=${pkgs.systemd}/lib/systemd/systemd-modules-load /nix/store/q38v9b228hiwavpnvfqgds42hfwqv6a3-rdma-core-25.0/etc/rdma/modules/%I.conf
-        TimeoutSec=90s
-      '';
-      "rdma-ndd.service".text =
-        builtins.readFile "${rdma-core}/lib/systemd/system/rdma-ndd.service";
-      "srp_daemon_port@.service".text =
-        builtins.readFile "${rdma-core}/lib/systemd/system/srp_daemon_port@.service";
-      "srp_daemon.service".text =
-        builtins.readFile "${rdma-core}/lib/systemd/system/srp_daemon.service";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = "yes";
+        ExecStart = "${systemd}/lib/systemd/systemd-modules-load ${cfg.configDir}/%I.conf";
+        TimeoutSec = 90;
+      };
     };
+
+    # Units files pulled straight from the rdma-core package
+    systemd.units = let
+      mkUnit = name: lib.nameValuePair name ({
+        unit = pkgs.runCommand "unit" { preferLocalBuild = true; } ''
+          mkdir -p $out
+          ln -s ${pkgs.rdma-core}/lib/systemd/system/${name} $out/${name}
+        '';
+      });
+    in lib.listToAttrs (map mkUnit [
+      "ibacm.socket"
+      "iwpmd.service"
+      "rdma-hw.target"
+      "rdma-ndd.service"
+      "srp_daemon_port@.service"
+      "srp_daemon.service"
+    ]);
   };
 }
