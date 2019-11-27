@@ -28,7 +28,7 @@ stdenv.mkDerivation rec  {
     description = "Flat remix is a pretty simple icon theme inspired on material design";
     homepage = https://drasite.com/flat-remix;
     license = with licenses; [ gpl3 ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ mschneider ];
   };
 }
