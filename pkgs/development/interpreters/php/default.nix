@@ -270,15 +270,8 @@ in {
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   };
 
-  php74 = let
-    version = "7.4.0RC6";
-    sha256 = "1q20ax5mphypq7dwxd509lzca6m0rcxkzmcbkc6kg4bw6gvnjkyv";
-  in (generic {
-    inherit version sha256;
-  }).overrideAttrs(oa: {
-    src = fetchurl {
-      url = "https://downloads.php.net/~derick/php-${version}.tar.bz2";
-      inherit sha256;
-    };
-  });
+  php74 = generic {
+    version = "7.4.0";
+    sha256 = "1h01bahvcm9kgm5jqhm2j9k9d4q4rpfkkpqk00c47rirdblnn85z";
+  };
 }
