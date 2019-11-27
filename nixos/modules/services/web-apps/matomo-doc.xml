@@ -86,12 +86,6 @@ GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
   <itemizedlist>
    <listitem>
     <para>
-     Matomo's file integrity check will warn you. This is due to the patches
-     necessary for NixOS, you can safely ignore this.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      Matomo will warn you that the JavaScript tracker is not writable. This is
      because it's located in the read-only nix store. You can safely ignore
      this, unless you need a plugin that needs JavaScript tracker access.
