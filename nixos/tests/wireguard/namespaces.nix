@@ -23,43 +23,42 @@ import ../make-test.nix ({ pkgs, ...} : {
     # interface should be created in the socketNamespace
     # and not moved from there
     peer0 = pkgs.lib.attrsets.recursiveUpdate node {
-      networking.wireguard.interfaces.wg0 = {
-        preSetup = ''
-          ip netns add ${socketNamespace}
-        '';
-        inherit socketNamespace;
+      networking = {
+        namespaces = [ socketNamespace ];
+        wireguard.interfaces.wg0 = {
+          inherit socketNamespace;
+        };
       };
     };
     # interface should be created in the init namespace
     # and moved to the interfaceNamespace
     peer1 = pkgs.lib.attrsets.recursiveUpdate node {
-      networking.wireguard.interfaces.wg0 = {
-        preSetup = ''
-          ip netns add ${interfaceNamespace}
-        '';
-        inherit interfaceNamespace;
+      networking = {
+        namespaces = [ interfaceNamespace ];
+        wireguard.interfaces.wg0 = {
+          inherit interfaceNamespace;
+        };
       };
     };
     # interface should be created in the socketNamespace
     # and moved to the interfaceNamespace
     peer2 = pkgs.lib.attrsets.recursiveUpdate node {
-      networking.wireguard.interfaces.wg0 = {
-        preSetup = ''
-          ip netns add ${socketNamespace}
-          ip netns add ${interfaceNamespace}
-        '';
-        inherit socketNamespace interfaceNamespace;
+      networking = {
+        namespaces = [ socketNamespace interfaceNamespace ];
+        wireguard.interfaces.wg0 = {
+          inherit socketNamespace interfaceNamespace;
+        };
       };
     };
     # interface should be created in the socketNamespace
     # and moved to the init namespace
     peer3 = pkgs.lib.attrsets.recursiveUpdate node {
-      networking.wireguard.interfaces.wg0 = {
-        preSetup = ''
-          ip netns add ${socketNamespace}
-        '';
-        inherit socketNamespace;
-        interfaceNamespace = "init";
+      networking = {
+        namespaces = [ socketNamespace ];
+        wireguard.interfaces.wg0 = {
+          inherit socketNamespace;
+          interfaceNamespace = "init";
+        };
       };
     };
   };
