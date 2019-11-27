@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, opencv, zlib
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, opencv4, zlib
 , libxml2, freetype, libjpeg, libtiff, swig, openexr
 , ilmbase, boost165
 , withPython ? true, python35
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     '';
 
     buildInputs = [
-      cmake pkgconfig boost165 opencv zlib libxml2 freetype libjpeg libtiff
+      cmake pkgconfig boost165 opencv4 zlib libxml2 freetype libjpeg libtiff
       swig openexr ilmbase
     ] ++ stdenv.lib.optional withPython python35;
 
