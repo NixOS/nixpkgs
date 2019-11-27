@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , python
 , glibcLocales
 , pkgconfig
@@ -40,6 +41,15 @@ in buildPythonPackage rec {
   ];
   buildInputs = [ glibcLocales gdb ];
   LC_ALL = "en_US.UTF-8";
+
+  patches = [
+    # https://github.com/cython/cython/issues/2752, needed by sage (https://trac.sagemath.org/ticket/26855) and up to be included in 0.30
+    (fetchpatch {
+      name = "non-int-conversion-to-pyhash.patch";
+      url = "https://github.com/cython/cython/commit/28251032f86c266065e4976080230481b1a1bb29.patch";
+      sha256 = "19rg7xs8gr90k3ya5c634bs8gww1sxyhdavv07cyd2k71afr83gy";
+    })
+  ];
 
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"
