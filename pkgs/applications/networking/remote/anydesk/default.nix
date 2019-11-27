@@ -5,8 +5,8 @@
 
 let
   sha256 = {
-    x86_64-linux = "1zdbgbbdavaqx4y02sw9y7i1r9wkxqccrqkn0sp5847a26cpk9k9";
-    i386-linux   = "11qwyxvy3c3n7hvksmlsfl9vvqaqkv3kwbk5rgjyy7vy8vn4kjmk";
+    x86_64-linux = "0dcg9znjxpnysypznnnq4xbaciiqz8l4p1hrbis3pazwi7bakizs";
+    i386-linux   = "04bvsvqjkayac17y9jcpdcfm3hzm2kq1brd9vwnx34gg07x9mn7g";
   }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   arch = {
@@ -28,7 +28,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "5.4.1";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "https://download.anydesk.com/linux/${pname}-${version}-${arch}.tar.gz";
