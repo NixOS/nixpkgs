@@ -8,6 +8,8 @@
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
+# $debugdir:$datadir/auto-load are whitelisted by default by GDB
+, safePaths ? [ "$debugdir" "$datadir/auto-load" stdenv.cc.cc.lib ]
 
 }:
 
@@ -70,6 +72,7 @@ stdenv.mkDerivation rec {
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+    "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ stdenv.lib.optional (!pythonSupport) "--without-python";
 
   postInstall =
