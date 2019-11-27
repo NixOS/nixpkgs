@@ -4846,8 +4846,6 @@ in {
 
   pywal = callPackage ../development/python-modules/pywal { };
 
-  pywebkitgtk = callPackage ../development/python-modules/pywebkitgtk { };
-
   pywinrm = callPackage ../development/python-modules/pywinrm { };
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
