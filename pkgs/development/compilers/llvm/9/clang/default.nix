@@ -43,6 +43,8 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./compiler-rt-baremetal.patch
+      # https://reviews.llvm.org/rL371557
+      ./builtin-constant-p.patch
     ];
 
     postPatch = ''
