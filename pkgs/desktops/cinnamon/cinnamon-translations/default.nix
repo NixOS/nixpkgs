@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
-      mkdir -pv $out/share/cinnamon/locale
-      cp -av "mo-export/"* $out/share/cinnamon/locale/
+      mv usr $out # files get installed like so: msgfmt -o usr/share/locale/$lang/LC_MESSAGES/$dir.mo $file
     '';
 
   meta = {
