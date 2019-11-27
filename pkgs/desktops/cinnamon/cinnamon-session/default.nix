@@ -1,4 +1,4 @@
-{ cinnamon-desktop, cinnamon-settings-daemon, dbus-glib, docbook_xsl, docbook_xml_dtd_412, fetchFromGitHub, glib, gsettings_desktop_schemas, gtk3, libcanberra, libxslt, makeWrapper, meson, ninja, pkgconfig, python3, stdenv, systemd, wrapGAppsHook, xapps, xmlto, xorg }:
+{ cinnamon-desktop, cinnamon-settings-daemon, dbus-glib, docbook_xsl, docbook_xml_dtd_412, fetchFromGitHub, glib, gsettings_desktop_schemas, gtk3, libcanberra, libxslt, makeWrapper, meson, ninja, pkgconfig, python3, stdenv, systemd, wrapGAppsHook, xapps, xmlto, xorg, gnome2, cmake, libexecinfo }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
@@ -11,11 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "1jrwjnrcmp5m9vlp42ql79bxic5nrs37kkgcvgyhvvvskvdwpyfw";
   };
 
-  buildInputs = [ cinnamon-desktop cinnamon-settings-daemon dbus-glib docbook_xsl docbook_xml_dtd_412 glib gsettings_desktop_schemas gtk3 libcanberra libxslt makeWrapper pkgconfig python3 xapps xmlto xorg.xtrans ];
-  nativeBuildInputs = [ meson ninja wrapGAppsHook ];
+  /* Run-time dependency libelogind found: NO (tried pkgconfig and cmake)
+  Run-time dependency libsystemd-login found: NO (tried pkgconfig and cmake)
+  Run-time dependency libsystemd found: NO (tried pkgconfig and cmake) */
+
+  buildInputs = [ cinnamon-desktop cinnamon-settings-daemon dbus-glib docbook_xsl docbook_xml_dtd_412 glib gsettings_desktop_schemas gtk3 libcanberra libxslt makeWrapper pkgconfig python3 xapps xmlto xorg.xtrans xorg.libXtst gnome2.GConf systemd ];
+  nativeBuildInputs = [ meson ninja wrapGAppsHook cmake libexecinfo ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-  configureFlags = "--enable-systemd";
+  configureFlags = [ "--enable-systemd" ];
 
   postPatch = ''
     chmod +x data/meson_install_schemas.py # patchShebangs requires executable file

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lxjdr4g9j4y9ssjzgnim611vbq09w9bm3rkk4f28hm12da26jzq";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/gio-unix-2.0" ];
+
   patches = [
     ./py-override.patch
   ];

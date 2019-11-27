@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./disable-docs.patch ];
 
-  buildInputs = [ atk cacert cinnamon-desktop cinnamon-menus cjs dbus_glib gdk_pixbuf glib gobjectIntrospection gtk3 intltool json-glib libcroco libsoup libstartup_notification libXtst muffin networkmanager pkgconfig polkit ];
-  nativeBuildInputs = [ autoreconfHook wrapGAppsHook ];
+  buildInputs = [ atk cacert cinnamon-desktop cinnamon-menus cjs dbus_glib gdk_pixbuf glib gobjectIntrospection gtk3 json-glib libcroco libsoup libstartup_notification libXtst muffin networkmanager pkgconfig polkit ];
+  nativeBuildInputs = [ autoreconfHook wrapGAppsHook intltool ];
 
-  configureFlags = "--disable-static --with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt";
+  configureFlags = [ "--disable-static" "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt" ];
 
   # Run intltoolize to create po/Makefile.in.in
   preConfigure = ''
