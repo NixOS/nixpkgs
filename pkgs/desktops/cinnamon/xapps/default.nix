@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ./py-override.patch
   ];
 
-  buildInputs = [ glib gobjectIntrospection gtk3 libgnomekbd libxklavier pkgconfig python3Packages.pygobject3 vala wayland ];
+  buildInputs = [ glib gobjectIntrospection gtk3 libgnomekbd libxklavier pkgconfig python3Packages.pygobject3 vala ];
   nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];
 
    mesonFlags = [

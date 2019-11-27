@@ -1,4 +1,4 @@
-{ cinnamon-desktop, cinnamon-settings-daemon, dbus-glib, docbook_xsl, docbook_xml_dtd_412, fetchFromGitHub, gconf, glib, gsettings_desktop_schemas, gtk3, libcanberra, libxslt, makeWrapper, meson, ninja, pkgconfig, python3, stdenv, systemd, wrapGAppsHook, xapps, xmlto, xorg }:
+{ cinnamon-desktop, cinnamon-settings-daemon, dbus-glib, docbook_xsl, docbook_xml_dtd_412, fetchFromGitHub, glib, gsettings_desktop_schemas, gtk3, libcanberra, libxslt, makeWrapper, meson, ninja, pkgconfig, python3, stdenv, systemd, wrapGAppsHook, xapps, xmlto, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jrwjnrcmp5m9vlp42ql79bxic5nrs37kkgcvgyhvvvskvdwpyfw";
   };
 
-  buildInputs = [ cinnamon-desktop cinnamon-settings-daemon dbus-glib docbook_xsl docbook_xml_dtd_412 gconf glib gsettings_desktop_schemas gtk3 libcanberra libxslt makeWrapper pkgconfig python3 xapps xmlto xorg.xtrans ];
+  buildInputs = [ cinnamon-desktop cinnamon-settings-daemon dbus-glib docbook_xsl docbook_xml_dtd_412 glib gsettings_desktop_schemas gtk3 libcanberra libxslt makeWrapper pkgconfig python3 xapps xmlto xorg.xtrans ];
   nativeBuildInputs = [ meson ninja wrapGAppsHook ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
