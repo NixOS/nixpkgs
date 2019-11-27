@@ -1770,6 +1770,8 @@ in {
 
   beaker = callPackage ../development/python-modules/beaker { };
 
+  bespon = callPackage ../development/python-modules/bespon { };
+
   betamax = callPackage ../development/python-modules/betamax {};
 
   betamax-matchers = callPackage ../development/python-modules/betamax-matchers { };
