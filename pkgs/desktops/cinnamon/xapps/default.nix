@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xapps";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "xapps";
+    repo = "${pname}";
     rev = "${version}";
-    sha256 = "08fkypbx1j1kp3hp0y88idbj0la17hjwmw2w6f6jijwdipgwax7b";
+    sha256 = "1lxjdr4g9j4y9ssjzgnim611vbq09w9bm3rkk4f28hm12da26jzq";
   };
 
   patches = [
@@ -18,9 +18,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gobjectIntrospection gtk3 libgnomekbd libxklavier pkgconfig python3Packages.pygobject3 vala ];
   nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];
 
-   mesonFlags = [
+  mesonFlags = [
     "-Dpy-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
-   ];
+  ];
+
+  preBuild = ''
+    chmod +x /build/source/libxapp/g-codegen.py
+    patchShebangs /build/source/libxapp/g-codegen.py
+    pwd
+    '';
 
   postPatch = ''
     chmod +x schemas/meson_install_schemas.py # patchShebangs requires executable file
