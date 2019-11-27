@@ -11,15 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q4qj28swi2y93fj7pfil68l2cf9gmhbk6jmr8d70l54xf7sigsh";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/gio-unix-2.0" "-I${libxml2.dev}/include/libxml2" ];
-
-  configureFlags = [ "--with-libxml=${libxml2.dev}" ];
-
-  buildInputs = [ glib gobjectIntrospection pkgconfig libxml2 ];
+  buildInputs = [ glib gobjectIntrospection pkgconfig ];
   nativeBuildInputs = [ meson ninja wrapGAppsHook cmake ];
-
-  postPatch = ''
-  '';
 
   meta = {
     homepage = "http://cinnamon.linuxmint.com";
