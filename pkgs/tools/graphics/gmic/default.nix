@@ -3,7 +3,7 @@
 , cmake
 , ninja
 , pkgconfig
-, opencv
+, opencv3
 , openexr
 , graphicsmagick
 , fftw
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libtiff
     libpng
-    opencv
+    opencv3
     openexr
     graphicsmagick
   ];
