@@ -35,7 +35,7 @@ in {
 
       path = [ fake-lsb-release ];
       serviceConfig = {
-        ExecStart = "${cfg.package.bin}/bin/agent";
+        ExecStart = "${cfg.package.bin}/bin/amazon-ssm-agent";
         KillMode = "process";
         Restart = "on-failure";
         RestartSec = "15min";

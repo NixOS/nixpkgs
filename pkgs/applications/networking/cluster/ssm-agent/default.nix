@@ -1,22 +1,52 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ stdenv, fetchFromGitHub, buildGoPackage, bash, makeWrapper }:
 
 buildGoPackage rec {
   pname   = "amazon-ssm-agent";
-  version = "2.0.633.0";
+  version = "2.3.760.0";
 
   goPackagePath = "github.com/aws/${pname}";
-  subPackages   = [ "agent" ];
+  subPackages   = [
+    "agent"
+    "agent/framework/processor/executer/outofproc/worker"
+    "agent/framework/processor/executer/outofproc/worker"
+    "agent/framework/processor/executer/outofproc/sessionworker"
+    "agent/session/logging"
+    "agent/cli-main"
+  ];
+
+  buildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
-    rev    = "v${version}";
+    rev    = "${version}";
     owner  = "aws";
     repo   = pname;
-    sha256 = "10arshfn2k3m3zzgw8b3xc6ywd0ss73746nq5srh2jir7mjzi4xv";
+    sha256 = "1sqdb2nr99gl1c7wl35jpi8c3fyl8lbmavpxwzlman1al44k7jsc";
   };
 
   preBuild = ''
     mv go/src/${goPackagePath}/vendor strange-vendor
     mv strange-vendor/src go/src/${goPackagePath}/vendor
+
+    cd go/src/${goPackagePath}
+    echo ${version} > VERSION
+    go run agent/version/versiongenerator/version-gen.go
+    substituteInPlace agent/appconfig/constants_unix.go \
+      --replace /usr/bin/ssm-document-worker $bin/bin/ssm-document-worker \
+      --replace /usr/bin/ssm-session-worker $bin/bin/ssm-session-worker \
+      --replace /usr/bin/ssm-session-logger $bin/bin/ssm-session-logger
+    cd -
+  '';
+
+  postBuild = ''
+    mv go/bin/agent go/bin/amazon-ssm-agent
+    mv go/bin/worker go/bin/ssm-document-worker
+    mv go/bin/sessionworker go/bin/ssm-session-worker
+    mv go/bin/logging go/bin/ssm-session-logger
+    mv go/bin/cli-main go/bin/ssm-cli
+  '';
+
+  postInstall = ''
+    wrapProgram $bin/bin/amazon-ssm-agent --prefix PATH : ${bash}/bin
   '';
 
   meta = with stdenv.lib; {
