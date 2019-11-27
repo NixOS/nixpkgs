@@ -27,13 +27,6 @@ let
       };
   };
 
-  environment = {
-    etc."request-key.conf".text = ''
-      create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
-    '';
-    systemPackages = with pkgs; [ keyutils ];
-  };
-
 in
 
 {
@@ -41,7 +34,7 @@ in
  
   nodes = {
     client = { lib, ... }:
-      { inherit krb5 users environment;
+      { inherit krb5 users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";
@@ -57,7 +50,7 @@ in
       };
 
     server = { lib, ...}:
-      { inherit krb5 users environment;
+      { inherit krb5 users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";
