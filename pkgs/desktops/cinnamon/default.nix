@@ -6,6 +6,7 @@ let
   self = rec {
 
     cinnamon = callPackage ./cinnamon { };
+    cinnamon-control-center = callPackage ./cinnamon-control-center { };
     cinnamon-desktop = callPackage ./cinnamon-desktop { };
     cinnamon-translations = callPackage ./cinnamon-translations { };
     cinnamon-menus = callPackage ./cinnamon-menus { };
