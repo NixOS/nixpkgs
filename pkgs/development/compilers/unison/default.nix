@@ -4,18 +4,18 @@
 
 stdenv.mkDerivation rec {
   pname = "unison-code-manager";
-  milestone_id = "M1f";
+  milestone_id = "M1g";
   version = "1.0.${milestone_id}-alpha";
 
   src = if (stdenv.isDarwin) then
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-osx.tar.gz";
-      sha256 = "089nb0b9ghsdbs39sskwa9a6v6s5xwshcfzk9qbbpahzphp1xmfk";
+      sha256 = "186y7y7ffg976w01cbb8am84ajbifb7lcnsc4g3x262mkswr7lry";
     }
   else
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-linux64.tar.gz";
-      sha256 = "0jq2cspanlw15910khlzfdqdfgkwkr1q4fkmrkj0q8gz70mqi6ri";
+      sha256 = "1ki9car1clpaspnl5jb5qnr6nzv108q279n8m8bjm8azfcnl61ab";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
