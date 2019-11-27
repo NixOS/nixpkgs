@@ -13,6 +13,8 @@
 , libpng
 }:
 
+# gmic fails to link https://framagit.org/dtschump/gmic/issues/5
+
 stdenv.mkDerivation rec {
   pname = "gmic";
   version = "2.7.5";
