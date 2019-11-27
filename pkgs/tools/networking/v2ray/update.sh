@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq vgo2nix
+#!nix-shell -i bash -p curl jq
 set -eo pipefail
 
 version_nix=$(dirname "$0")/default.nix
@@ -27,10 +27,6 @@ if [[ $core_rev != $old_core_rev ]]; then
     { read hash; read store_path; } < <(
         nix-prefetch-url --unpack --print-path "https://github.com/v2ray/v2ray-core/archive/$core_rev.zip"
     )
-
-    echo "Generating deps.nix..." >&2
-    # `outfile` is required to be absolute path
-    vgo2nix -dir "$store_path" -outfile "$(realpath "$deps_nix")"
 
     sed --in-place \
         -e "s/\bversion = \".*\"/version = \"$(echo "$core_rev" | tail -c+2)\"/" \

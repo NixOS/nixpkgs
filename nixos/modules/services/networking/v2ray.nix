@@ -12,7 +12,7 @@ with lib;
         description = ''
           Whether to run v2ray server.
 
-          Either `configFile` or `config` must be specified.
+          Either <literal>configFile</literal> or <literal>config</literal> must be specified.
         '';
       };
 
@@ -23,7 +23,7 @@ with lib;
         description = ''
           The absolute path to the configuration file.
 
-          Either `configFile` or `config` must be specified.
+          Either <literal>configFile</literal> or <literal>config</literal> must be specified.
 
           See <link xlink:href="https://v2ray.com/en/configuration/overview.html"/>.
         '';

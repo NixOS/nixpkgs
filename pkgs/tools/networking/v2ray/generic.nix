@@ -1,4 +1,4 @@
-{ lib, linkFarm, buildGoPackage, runCommand, makeWrapper, go
+{ lib, linkFarm, buildGoModule, runCommand, makeWrapper
 
 # Version specific args
 , version, src, assets
@@ -9,14 +9,11 @@ let
     inherit name path;
   }) assets);
 
-  core = buildGoPackage rec {
+  core = buildGoModule rec {
     pname = "v2ray-core";
     inherit version src;
 
-    goPackagePath = "v2ray.com/core";
-    goDeps = ./deps.nix;
-
-    nativeBuildInputs = [ go ];
+    modSha256 = "11gsncy3449a7y6w6pr7acqabyj2q2a1q52f8fcl5cdz1vjbmmxi";
 
     buildPhase = ''
       runHook preBuild
@@ -28,7 +25,7 @@ let
     '';
 
     installPhase = ''
-      install -Dm755 v2ray v2ctl -t $bin/bin
+      install -Dm755 v2ray v2ctl -t $out/bin
     '';
   };
 
