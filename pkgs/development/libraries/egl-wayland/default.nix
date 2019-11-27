@@ -6,6 +6,7 @@
 , ninja
 , libX11
 , mesa
+, libGL
 , wayland
 }:
 
@@ -50,6 +51,10 @@ in stdenv.mkDerivation rec {
     sha256 = "0wvamjcfycd7rgk7v14g2rin55xin9rfkxmivyay3cm08vnl7y1d";
   };
 
+  # Add missing include
+  # https://github.com/NVIDIA/egl-wayland/pull/24
+  patches = [ ./eglmesaext.patch ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -60,6 +65,7 @@ in stdenv.mkDerivation rec {
     eglexternalplatform
     libX11
     mesa
+    libGL
     wayland
   ];
 
