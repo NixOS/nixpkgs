@@ -53,8 +53,7 @@ in
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
   containers-hosts = handleTest ./containers-hosts.nix {};
   containers-imperative = handleTest ./containers-imperative.nix {};
-  containers-ipv4 = handleTest ./containers-ipv4.nix {};
-  containers-ipv6 = handleTest ./containers-ipv6.nix {};
+  containers-ip = handleTest ./containers-ip.nix {};
   containers-macvlans = handleTest ./containers-macvlans.nix {};
   containers-physical_interfaces = handleTest ./containers-physical_interfaces.nix {};
   containers-restart_networking = handleTest ./containers-restart_networking.nix {};
