@@ -5653,6 +5653,8 @@ in {
 
   sphinxcontrib-jsmath = callPackage ../development/python-modules/sphinxcontrib-jsmath {};
 
+  sphinxcontrib-katex = callPackage ../development/python-modules/sphinxcontrib-katex { };
+
   sphinxcontrib-qthelp = callPackage ../development/python-modules/sphinxcontrib-qthelp {};
 
   sphinxcontrib-serializinghtml = callPackage ../development/python-modules/sphinxcontrib-serializinghtml {};
