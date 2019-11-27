@@ -5459,6 +5459,8 @@ in
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
+  overcommit = callPackage ../development/tools/overcommit { };
+
   overmind = callPackage ../applications/misc/overmind { };
 
   owncloud-client = libsForQt5.callPackage ../applications/networking/owncloud-client { };
