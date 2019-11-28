@@ -20,7 +20,8 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs.cinnamon // pkgs; [
-
+      cinnamon-session
+      cinnamon-desktop
     ];
 
     environment.pathsToLink = [
