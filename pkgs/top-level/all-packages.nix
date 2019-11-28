@@ -19928,6 +19928,12 @@ in
   };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
+  
+  matrixcli = callPackage ../applications/networking/instant-messengers/matrixcli {
+    inherit (python3Packages) buildPythonApplication buildPythonPackage
+      pygobject3 pytestrunner requests responses pytest python-olm
+      canonicaljson;
+  };
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
