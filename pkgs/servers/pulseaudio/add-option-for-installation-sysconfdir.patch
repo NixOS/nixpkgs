@@ -1,0 +1,98 @@
+diff --git a/meson.build b/meson.build
+index 45df103f0..d3e246dba 100644
+--- a/meson.build
++++ b/meson.build
+@@ -65,12 +65,22 @@ datadir = join_paths(prefix, get_option('datadir'))
+ localedir = join_paths(prefix, get_option('localedir'))
+ localstatedir = join_paths(prefix, get_option('localstatedir'))
+ sysconfdir = join_paths(prefix, get_option('sysconfdir'))
++if get_option('sysconfdir_install') != ''
++  sysconfdir_install = join_paths(get_option('prefix'), get_option('sysconfdir_install'))
++else
++  sysconfdir_install = sysconfdir
++endif
+ privlibdir = join_paths(libdir, 'pulseaudio')
+ alsadatadir = join_paths(datadir, 'pulseaudio', 'alsa-mixer')
+ 
+ pkgconfigdir = join_paths(libdir, 'pkgconfig')
+ pulselibexecdir = join_paths(libexecdir, 'pulse')
+ pulsesysconfdir = join_paths(sysconfdir, 'pulse')
++if get_option('sysconfdir_install') != ''
++  pulsesysconfdir_install = join_paths(get_option('prefix'),  get_option('sysconfdir_install'), 'pulse')
++else
++  pulsesysconfdir_install = pulsesysconfdir
++endif
+ 
+ modlibexecdir = get_option('modlibexecdir')
+ if modlibexecdir == ''
+diff --git a/meson_options.txt b/meson_options.txt
+index 766877319..01268d6ae 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -60,6 +60,9 @@ option('bashcompletiondir',
+ option('zshcompletiondir',
+        type : 'string',
+        description : 'Zsh completions directory')
++option('sysconfdir_install',
++       type: 'string', value: '',
++       description: 'sysconfdir to use during installation')
+ 
+ # Optional features
+ 
+diff --git a/src/daemon/meson.build b/src/daemon/meson.build
+index 9bc3bf18e..4cc28e2d7 100644
+--- a/src/daemon/meson.build
++++ b/src/daemon/meson.build
+@@ -53,7 +53,7 @@ if x11_dep.found()
+     po_dir : po_dir,
+     type : 'desktop',
+     install : true,
+-    install_dir : join_paths(sysconfdir, 'xdg', 'autostart'),
++    install_dir : join_paths(sysconfdir_install, 'xdg', 'autostart'),
+   )
+ 
+   desktop_utils = find_program('desktop-file-validate', required: false)
+@@ -85,7 +85,7 @@ custom_target('daemon.conf',
+   command : [m4, '@INPUT@'],
+   build_by_default : true,
+   install : true,
+-  install_dir : pulsesysconfdir,
++  install_dir : pulsesysconfdir_install,
+ )
+ 
+ default_conf = configuration_data()
+@@ -111,7 +111,7 @@ custom_target('default.pa',
+   command : [m4, '@INPUT@'],
+   build_by_default : true,
+   install : true,
+-  install_dir : pulsesysconfdir,
++  install_dir : pulsesysconfdir_install,
+ )
+ 
+ system_conf = configuration_data()
+@@ -132,12 +132,12 @@ custom_target('system.pa',
+   command : [m4, '@INPUT@'],
+   build_by_default : true,
+   install : true,
+-  install_dir : pulsesysconfdir,
++  install_dir : pulsesysconfdir_install,
+ )
+ 
+ if dbus_dep.found()
+   install_data('pulseaudio-system.conf',
+-    install_dir : join_paths(sysconfdir, 'dbus-1', 'system.d')
++    install_dir : join_paths(sysconfdir_install, 'dbus-1', 'system.d')
+   )
+ endif
+ 
+diff --git a/src/pulse/meson.build b/src/pulse/meson.build
+index 00c686772..1765136a1 100644
+--- a/src/pulse/meson.build
++++ b/src/pulse/meson.build
+@@ -130,5 +130,5 @@ client_conf_file = configure_file(
+   input : 'client.conf.in',
+   output : 'client.conf',
+   configuration : client_conf,
+-  install_dir : pulsesysconfdir,
++  install_dir : pulsesysconfdir_install,
+ )
