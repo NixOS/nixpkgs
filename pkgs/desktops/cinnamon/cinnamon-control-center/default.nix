@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, glib, gettext, cinnamon-desktop, intltool, libxslt, gtk3, libnotify,
 gnome-menus, libxml2, systemd, upower, cinnamon-settings-daemon, colord, polkit, ibus, libcanberra_gtk3, libpulseaudio, isocodes, kerberos,
-libxkbfile, cinnamon-menus, dbus-glib, libgnomekbd, libxklavier, networkmanager }:
+libxkbfile, cinnamon-menus, dbus-glib, libgnomekbd, libxklavier, networkmanager, libwacom, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
@@ -13,11 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "1rxm5n2prh182rxvjs7psxgjddikrjr8492j22060gmyvq55n7kc";
   };
 
- configureFlags = [ "--enable-systemd" "--disable-update-mimedb" ];
+  # TODO: fix network manager integration
+ configureFlags = [ "--enable-systemd" "--disable-update-mimedb" "--disable-networkmanager" "--disable-modemmanager" ];
 
  # patches = [ ./region.patch ];
 
- buildInputs = [ gtk3 glib cinnamon-desktop libnotify cinnamon-menus libxml2 dbus-glib systemd polkit libgnomekbd libxklavier networkmanager ];
+ buildInputs = [ gtk3 glib cinnamon-desktop libnotify cinnamon-menus libxml2 dbus-glib systemd polkit libgnomekbd libxklavier /* networkmanager */ colord cinnamon-settings-daemon libwacom gnome3.gnome-online-accounts ];
 
  #buildInputs = [
   #  glib gtk3 cinnamon-desktop
@@ -27,8 +28,6 @@ stdenv.mkDerivation rec {
   #  isocodes kerberos libxkbfile ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook gettext /*gnome_common*/ intltool libxslt ];
-
-  preBuild = "patchShebangs ./scripts";
 
   meta = {
     homepage = "http://cinnamon.linuxmint.com";
