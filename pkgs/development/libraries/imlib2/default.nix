@@ -5,11 +5,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "imlib2-1.5.1";
+  name = "imlib2-1.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/${name}.tar.bz2";
-    sha256 = "1bms2iwmvnvpz5jqq3r52glarqkafif47zbh1ykz8hw85d2mfkps";
+    sha256 = "07b9v3ycwhici35fnczvpyjpgkc7gbcdhajpl9dwhpzdzbfl1i6g";
   };
 
   buildInputs = [ libjpeg libtiff giflib libpng bzip2 freetype libid3tag ]
