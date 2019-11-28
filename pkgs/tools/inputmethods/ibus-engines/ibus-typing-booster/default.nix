@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus-typing-booster";
-  version = "2.7.0";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "mike-fabian";
     repo = "ibus-typing-booster";
     rev = version;
-    sha256 = "1rd9dkjc9s15mxifcbr12944rsh8z66p0j6abh3iw8vkiylk674s";
+    sha256 = "1v11hipdh8chkd81gcack42v8h8q4z2x2gv2gyymqk15yj0959i3";
   };
 
   patches = [ ./hunspell-dirs.patch ];
