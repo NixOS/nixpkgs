@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xapps";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1lxjdr4g9j4y9ssjzgnim611vbq09w9bm3rkk4f28hm12da26jzq";
+    sha256 = "08c8j7wv56zf8mfgjfhd0wc1bbrw0dj1lmlawvsxwfajnnyjsm0d";
   };
 
   NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/gio-unix-2.0" ];
