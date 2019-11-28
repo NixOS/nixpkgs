@@ -25,7 +25,7 @@ in
     ];
 
     environment.pathsToLink = [
-
+      "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173
     ];
 
     services.xserver.desktopManager.session = [{
