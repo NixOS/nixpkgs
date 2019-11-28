@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/gio-unix-2.0" ];
 
   patches = [
-    ./py-override.patch
+    ./py-override.patch # details see https://github.com/linuxmint/xapps/pull/65
   ];
 
   buildInputs = [ glib gobjectIntrospection gtk3 libgnomekbd libxklavier pkgconfig python3Packages.pygobject3 vala ];
