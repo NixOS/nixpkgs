@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "03v41wk1gmgmyl31j7a3pav52gfv2faibj1jnpj3ycwcv4cch5w5";
   };
 
- buildInputs = [ glib python3 gtk3 pam python3.pkgs.pygobject3 ];
+ buildInputs = [ glib (python3.withPackages (pp: with pp; [ pygobject3 ])) gtk3 pam ];
 
  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
