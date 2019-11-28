@@ -28,7 +28,7 @@ in
       # session requirements
       cinnamon-screensaver
       # nemo-autostart: provided by nemo
-      # nm-applet: TODO
+      pkgs.gnome3.networkmanagerapplet
       # cinnamon-killer-daemon: provided by cinnamon-common
 
       # packages
