@@ -1,9 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock, git
-, cherrypy, gevent, tornado }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, pytest, mock
+, git, cherrypy, gevent, tornado }:
 
 buildPythonPackage rec {
   pname = "ws4py";
   version = "0.5.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
