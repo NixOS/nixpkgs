@@ -19,7 +19,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Pony is a Python ORM with beautiful query syntax";
     homepage = "https://ponyorm.org/";
-    maintainers = with maintainers; [ d-goldin ];
+    maintainers = with maintainers; [ d-goldin xvapx ];
     license = licenses.asl20;
   };
 }
