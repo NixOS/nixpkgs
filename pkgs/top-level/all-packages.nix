@@ -14370,10 +14370,18 @@ in
     go = buildPackages.go_1_12;
   };
 
+  buildGo113Package = callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_13;
+  };
+
   buildGoPackage = buildGo112Package;
 
   buildGo112Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_12;
+  };
+
+  buildGo113Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_13;
   };
 
   buildGoModule = buildGo112Module;
