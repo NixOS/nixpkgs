@@ -3,6 +3,7 @@
 , backports_lzma
 , cachetools
 , lz4
+, pandas
 , pytestrunner
 , pytest
 , pkgconfig
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   checkInputs = [
     lz4
     mock
+    pandas
     pkgconfig
     pytest
     requests
