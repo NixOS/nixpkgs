@@ -59,6 +59,27 @@ nix-repl> texlive.collection-<TAB>
   </itemizedlist>
  </section>
 
+ <section xml:id="sec-language-texlive-custom-packages">
+  <title>Custom packages</title>
+  <para>
+    You may find that you need to add your own package to the combination. This is currently not handled in a user-friendly way by the combine function. Here is a hackish way to do it, as an example:
+<programlisting>
+let
+  customDerivation = runCommand "customDerivation" {
+    passthru = { tlType = "run"; pname = "customDerivation"; };
+  } ''
+  # build your derivation here, its output should have folder structure
+  # similar to what would be expected in /usr/share/texmf in a regular OS.
+  '';
+in
+  texlive.combine {
+    # inherit (texlive) whatever-you-want;
+    customPackage = { pkgs = [ customDerivation ]; };
+  }
+</programlisting>
+  </para>
+ </section>
+
  <section xml:id="sec-language-texlive-known-problems">
   <title>Known problems</title>
 
