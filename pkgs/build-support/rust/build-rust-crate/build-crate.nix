@@ -91,18 +91,18 @@
 
     echo "$EXTRA_LINK_SEARCH" | while read i; do
        if [[ ! -z "$i" ]]; then
-         for lib in $i; do
-           echo "-L $lib" >> target/link
-           L=$(echo $lib | sed -e "s#$(pwd)/target/build#$out/lib#")
+         for library in $i; do
+           echo "-L $library" >> target/link
+           L=$(echo $library | sed -e "s#$(pwd)/target/build#$lib/lib#")
            echo "-L $L" >> target/link.final
          done
        fi
     done
     echo "$EXTRA_LINK" | while read i; do
        if [[ ! -z "$i" ]]; then
-         for lib in $i; do
-           echo "-l $lib" >> target/link
-           echo "-l $lib" >> target/link.final
+         for library in $i; do
+           echo "-l $library" >> target/link
+           echo "-l $library" >> target/link.final
          done
        fi
     done
