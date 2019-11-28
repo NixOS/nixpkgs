@@ -5,13 +5,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "jimtcl";
-  version = "0.78";
+  version = "0.79";
 
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
     rev = version;
-    sha256 = "1nrjxjfh69i35ig8sxdlal4ydd3cl0x68c05s6svnf1y2i1bl23j";
+    sha256 = "1k88hz0v3bi19xdvlp0i9nsx38imzwpjh632w7326zwbv2wldf0h";
   };
 
   buildInputs = [
