@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     group = "xorg-team";
     owner = "xserver";
     repo = "xorg-server";
-    rev = "acb49777829b320d58a3a6c65828aabfffeb381e";
-    sha256 = "1ci6wzka62iwihccl4g48rm0fj119jg38z9nvxhwi0v7dvlvkwvh";
+    rev = "xorg-server-2_${version}";
+    sha256 = "03a2x0fds45j7dqsp31ifsr1bm8zl6yac925n0bqdf4sjiyscq20";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
