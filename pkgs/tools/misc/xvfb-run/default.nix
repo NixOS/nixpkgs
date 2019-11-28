@@ -1,29 +1,38 @@
-{ stdenv, fetchurl, makeWrapper, xorgserver, getopt
-, xauth, utillinux, which, fontsConf, gawk, coreutils }:
-let
-  xvfb_run = fetchurl {
-    name = "xvfb-run";
-    # https://git.archlinux.org/svntogit/packages.git/?h=packages/xorg-server
-    url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/xvfb-run?h=packages/xorg-server&id=9cb733cefa92af3fca608fb051d5251160c9bbff;
-    sha256 = "1307mz4nr8ga3qz73i8hbcdphky75rq8lrvfk2zm4kmv6pkbk611";
-  };
-in
-stdenv.mkDerivation {
-  name = "xvfb-run";
-  buildInputs = [makeWrapper];
-  buildCommand = ''
-    mkdir -p $out/bin
-    cp ${xvfb_run} $out/bin/xvfb-run
+{ stdenv, fetchFromGitLab, makeWrapper, xorgserver, getopt, xauth, utillinux, fontsConf, gawk
+, coreutils }:
 
-    chmod a+x $out/bin/xvfb-run
-    patchShebangs $out/bin/xvfb-run
+stdenv.mkDerivation rec {
+  pname = "xvfb-run";
+  version = "1.20.6-1";
+
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    group = "xorg-team";
+    owner = "xserver";
+    repo = "xorg-server";
+    rev = "acb49777829b320d58a3a6c65828aabfffeb381e";
+    sha256 = "1ci6wzka62iwihccl4g48rm0fj119jg38z9nvxhwi0v7dvlvkwvh";
+  };
+
+  phases = [ "unpackPhase" "installPhase" ];
+
+  buildInputs = [ makeWrapper ];
+  installPhase = ''
+    mkdir -p $out/bin $out/share/man/man1
+    install -m 555 debian/local/xvfb-run $out/bin/xvfb-run
+    install debian/local/xvfb-run.1 $out/share/man/man1/xvfb-run.1
+
+    patchShebangsAuto
     wrapProgram $out/bin/xvfb-run \
       --set FONTCONFIG_FILE "${fontsConf}" \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux gawk coreutils ]}
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth utillinux gawk coreutils ]}
   '';
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    description = ''Starter script for an instance of Xvfb, the "fake" X server'';
+    inherit (src.meta) homepage;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ b4dm4n ];
+    platforms = platforms.linux;
   };
 }
