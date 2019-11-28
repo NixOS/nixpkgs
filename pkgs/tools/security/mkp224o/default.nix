@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mkp224o";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "cathugger";
     repo = "mkp224o";
     rev = "v${version}";
-    sha256 = "1il12ahcs5pj52hxn4xvpjfz801xcg31zk2jnkl80frzlwq040qi";
+    sha256 = "0b7xs4gnyfhdkwl8wkb6mazas88ybnlbxck59p4n2mnlndvd8kb7";
   };
 
   buildCommand =
