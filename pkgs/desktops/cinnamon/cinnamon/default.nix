@@ -1,4 +1,4 @@
-{ atk, autoreconfHook, cacert, cinnamon-desktop, cinnamon-menus, cjs, dbus_glib, fetchFromGitHub, gdk_pixbuf, glib, gobjectIntrospection, gtk3, intltool, json-glib, libcroco, libsoup, libstartup_notification, libXtst, muffin, networkmanager, pkgconfig, polkit, stdenv, wrapGAppsHook, libxml2 }:
+{ atk, autoreconfHook, cacert, cinnamon-desktop, cinnamon-menus, cjs, dbus_glib, fetchFromGitHub, gdk_pixbuf, glib, gobjectIntrospection, gtk3, intltool, json-glib, libcroco, libsoup, libstartup_notification, libXtst, muffin, networkmanager, pkgconfig, polkit, stdenv, wrapGAppsHook, libxml2, gnome2 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon";
@@ -11,12 +11,22 @@ stdenv.mkDerivation rec {
     sha256 = "0sv7nqd1l6c727qj30dcgdkvfh1wxpszpgmbdyh58ilmc8xklnqd";
   };
 
-  patches = [ ./disable-docs.patch ];
+  # patches = [ ./disable-docs.patch ];
 
   buildInputs = [ atk cacert cinnamon-desktop cinnamon-menus cjs dbus_glib gdk_pixbuf glib gobjectIntrospection gtk3 json-glib libcroco libsoup libstartup_notification libXtst muffin networkmanager pkgconfig polkit libxml2 ];
-  nativeBuildInputs = [ autoreconfHook wrapGAppsHook intltool ];
+  nativeBuildInputs = [ autoreconfHook wrapGAppsHook intltool gnome2.gtkdoc ];
 
-  configureFlags = [ "--disable-static" "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt" "--with-libxml=${libxml2.dev}/include/libxml2" ];
+  preConfigurePhases = "confFixPhase";
+
+  confFixPhase = ''
+    patchShebangs ./autogen.sh
+    '';
+
+  autoreconfPhase = ''
+    GTK_DOC_CHECK=false NOCONFIGURE=1 bash ./autogen.sh
+    '';
+
+  configureFlags = [ "--disable-static" "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt" "--with-libxml=${libxml2.dev}/include/libxml2" "--enable-gtk-doc=no" ];
 
   # Run intltoolize to create po/Makefile.in.in
   preConfigure = ''
