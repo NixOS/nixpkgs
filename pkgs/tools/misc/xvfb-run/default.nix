@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = ''Starter script for an instance of Xvfb, the "fake" X server'';
-    inherit (src.meta) homepage;
-    license = licenses.gpl2;
+    description = "A wrapper for the Xvfb command which simplifies the task of running commands";
+    homepage = src.meta.homepage +  "debian/local";
+    license = licenses.mit;
     maintainers = with maintainers; [ b4dm4n ];
     platforms = platforms.linux;
   };
