@@ -18183,9 +18183,7 @@ in
 
   cgminer = callPackage ../applications/misc/cgminer { };
 
-  chirp = callPackage ../applications/radio/chirp {
-    inherit (pythonPackages) pyserial pygtk;
-  };
+  chirp = callPackage ../applications/radio/chirp { };
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
 
