@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://cinnamon.linuxmint.com";
-    description = "The cinnamon-menu library";
+    description = "A menu system for the Cinnamon project";
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.mkg20001 ];
