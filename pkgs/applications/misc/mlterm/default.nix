@@ -86,8 +86,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    description = "Multi Lingual TERMinal emulator on X11";
     homepage = http://mlterm.sourceforge.net/;
-    license = licenses.bsd2;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ vrthra ramkromberg ];
     platforms = with platforms; linux;
   };
