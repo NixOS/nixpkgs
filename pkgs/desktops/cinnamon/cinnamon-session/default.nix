@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "4.2.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1jrwjnrcmp5m9vlp42ql79bxic5nrs37kkgcvgyhvvvskvdwpyfw";
+    sha256 = "0hplck17rksfgqm2z58ajvz4p2m4zg6ksdpbc27ki20iv4fv620s";
   };
 
   /* Run-time dependency libelogind found: NO (tried pkgconfig and cmake)

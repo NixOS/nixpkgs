@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "4.2.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "0bjqv3n417azjs2m1hlml6kw0rkax2fr22ym12n4l55fx3kl60p9";
+    sha256 = "17hb8gkb9pfj56ckva5g4x83yvmdv7hvpidxjsdf79dw6pabr5rg";
   };
 
   buildInputs = [ gdk_pixbuf gtk3 intltool pkgconfig pulseaudio xkeyboard_config xorg.libxkbfile ];

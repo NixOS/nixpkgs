@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "4.2.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1jfhjizifm2pkf66jggvdvxlsmq1jhzphpa5m8q1kybva57nxnms";
+    sha256 = "1h74d68a7hx85vv6ak26b85jq0wr56ps9rzfvqsnxwk81zxw2n7q";
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
