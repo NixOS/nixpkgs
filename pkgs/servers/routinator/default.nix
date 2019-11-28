@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "routinator";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0v0j8lv1l7mxxwv7ycissya0rrvjqidb37dylqqy4zvirmk1b2av";
+    sha256 = "1hbqvjv9h1aghpyrl03w5f4j8gjy6n9lx83rmpsh5p7yd9ahwmf9";
   };
 
-  cargoSha256 = "19333br2r27s0rsv7imsv2y1j9gmljy4v8bqybvblrw1vc5961kq";
+  cargoSha256 = "08lizhag7aqz3a59gaapsymn7sf9c6im1aw64n0r9a5advhwdh18";
 
   meta = with stdenv.lib; {
     description = "An RPKI Validator written in Rust";
