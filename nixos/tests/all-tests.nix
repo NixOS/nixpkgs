@@ -288,6 +288,7 @@ in
   uwsgi = handleTest ./uwsgi.nix {};
   vault = handleTest ./vault.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
+  wg-quick = handleTest ./wireguard/wg-quick.nix {};
   wireguard = handleTest ./wireguard {};
   wireguard-generated = handleTest ./wireguard/generated.nix {};
   wireguard-namespaces = handleTest ./wireguard/namespaces.nix {};
