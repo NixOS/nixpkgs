@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, mock, testscenarios, docutils, lockfile }:
+{ lib, buildPythonPackage, fetchPypi
+, docutils
+, lockfile
+, mock
+, pytest
+, testscenarios
+, twine
+}:
 
 buildPythonPackage rec {
   pname = "python-daemon";
@@ -9,11 +16,21 @@ buildPythonPackage rec {
     sha256 = "57c84f50a04d7825515e4dbf3a31c70cc44414394a71608dee6cfde469e81766";
   };
 
-  # A test fail within chroot builds.
-  doCheck = false;
-
-  buildInputs = [ mock testscenarios ];
+  nativeBuildInputs = [ twine ];
   propagatedBuildInputs = [ docutils lockfile ];
+
+  checkInputs = [ pytest mock testscenarios ];
+  checkPhase = ''
+    pytest -k 'not detaches_process_context \
+                and not standard_stream_file_descriptors'
+  '';
+
+  pythonImportsCheck = [
+    "daemon"
+    "daemon.daemon"
+    "daemon.pidfile"
+    "daemon.runner"
+  ];
 
   meta = with lib; {
     description = "Library to implement a well-behaved Unix daemon process";

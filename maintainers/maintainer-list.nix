@@ -1484,6 +1484,16 @@
       }
     ];
   };
+  d-goldin = {
+    email = "dgoldin+github@protonmail.ch";
+    github = "d-goldin";
+    githubId = 43349662;
+    name = "Dima";
+    keys = [{
+      longkeyid = "rsa4096/BAB1D15FB7B4D4CE";
+      fingerprint = "1C4E F4FE 7F8E D8B7 1E88 CCDF BAB1 D15F B7B4 D4CE";
+    }];
+  };
   dadada = {
     name = "dadada";
     email = "dadada@dadada.li";
@@ -4490,6 +4500,12 @@
     github = "MikePlayle";
     githubId = 16974598;
     name = "Mike Playle";
+  };
+  mkaito = {
+    email = "chris@mkaito.net";
+    github = "mkaito";
+    githubId = 20434;
+    name = "Christian Höppner";
   };
   mkazulak = {
     email = "kazulakm@gmail.com";

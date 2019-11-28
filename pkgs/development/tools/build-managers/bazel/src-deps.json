@@ -55,11 +55,11 @@
             "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz"
         ]
     },
-    "android_tools_pkg-0.11.tar.gz": {
-        "name": "android_tools_pkg-0.11.tar.gz",
-        "sha256": "6fc50151063bffdda700038ea7df99c89d54dc066e9377a5baff60d55d482ad2",
+    "android_tools_pkg-0.12.tar.gz": {
+        "name": "android_tools_pkg-0.12.tar.gz",
+        "sha256": "96c4eef4d195dd95e43a4259cf5b82a1e34f67333439e91955bbdc0e1c8e7a31",
         "urls": [
-            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.11.tar.gz"
+            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.12.tar.gz"
         ]
     },
     "bazel_j2objc": {
@@ -108,11 +108,11 @@
     },
     "com_google_googletest": {
         "name": "com_google_googletest",
-        "sha256": "0fb00ff413f6b9b80ccee44a374ca7a18af7315aea72a43c62f2acd1ca74e9b5",
-        "strip_prefix": "googletest-f13bbe2992d188e834339abe6f715b2b2f840a77",
+        "sha256": "9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb",
+        "strip_prefix": "googletest-release-1.10.0",
         "urls": [
-            "https://mirror.bazel.build/github.com/google/googletest/archive/f13bbe2992d188e834339abe6f715b2b2f840a77.tar.gz",
-            "https://github.com/google/googletest/archive/f13bbe2992d188e834339abe6f715b2b2f840a77.tar.gz"
+            "https://mirror.bazel.build/github.com/google/googletest/archive/release-1.10.0.tar.gz",
+            "https://github.com/google/googletest/archive/release-1.10.0.tar.gz"
         ]
     },
     "coverage_output_generator-v2.0.zip": {

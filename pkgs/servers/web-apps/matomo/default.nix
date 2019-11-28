@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    # copy evertything to share/, used as webroot folder, and then remove what's known to be not needed
+    # copy everything to share/, used as webroot folder, and then remove what's known to be not needed
     mkdir -p $out/share
     cp -ra * $out/share/
     # tmp/ is created by matomo in PIWIK_USER_PATH
@@ -64,6 +64,27 @@ stdenv.mkDerivation rec {
       --add-flags "$out/share/console"
 
     runHook postInstall
+  '';
+
+  filesToFix = [
+    "misc/composer/build-xhprof.sh"
+    "misc/composer/clean-xhprof.sh"
+    "misc/cron/archive.sh"
+    "plugins/Installation/FormDatabaseSetup.php"
+    "vendor/leafo/lessphp/package.sh"
+    "vendor/pear/archive_tar/sync-php4"
+    "vendor/szymach/c-pchart/coverage.sh"
+  ];
+
+  # This fixes the consistency check in the admin interface
+  postFixup = ''
+    pushd $out/share > /dev/null
+    for f in $filesToFix; do
+      length="$(wc -c "$f" | cut -d' ' -f1)"
+      hash="$(md5sum "$f" | cut -d' ' -f1)"
+      sed -i "s:\\(\"$f\"[^(]*(\\).*:\\1\"$length\", \"$hash\"),:g" config/manifest.inc.php
+    done
+    popd > /dev/null
   '';
 
   meta = with stdenv.lib; {

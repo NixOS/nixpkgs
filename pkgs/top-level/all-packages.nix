@@ -2563,7 +2563,8 @@ in
 
   cron = callPackage ../tools/system/cron { };
 
-  inherit (callPackages ../development/compilers/cudatoolkit { })
+  cudaPackages = recurseIntoAttrs (callPackage ../development/compilers/cudatoolkit {});
+  inherit (cudaPackages)
     cudatoolkit_6
     cudatoolkit_6_5
     cudatoolkit_7
@@ -2579,7 +2580,8 @@ in
 
   cudatoolkit = cudatoolkit_10;
 
-  inherit (callPackages ../development/libraries/science/math/cudnn { })
+  cudnnPackages = callPackages ../development/libraries/science/math/cudnn { };
+  inherit (cudnnPackages)
     cudnn_cudatoolkit_7
     cudnn_cudatoolkit_7_5
     cudnn6_cudatoolkit_8
@@ -4148,6 +4150,8 @@ in
 
   netmask = callPackage ../tools/networking/netmask {};
 
+  ipscan = callPackage ../tools/security/ipscan { };
+
   ipv6calc = callPackage ../tools/networking/ipv6calc {};
 
   ipxe = callPackage ../tools/misc/ipxe { };
@@ -5240,6 +5244,9 @@ in
 
   nnn = callPackage ../applications/misc/nnn { };
 
+
+  noise-repellent = callPackage ../applications/audio/noise-repellent { };
+
   notary = callPackage ../tools/security/notary { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
@@ -5328,6 +5335,11 @@ in
   };
 
   omping = callPackage ../applications/networking/omping { };
+
+  onefetch = callPackage ../tools/misc/onefetch {
+    inherit (darwin) libresolv;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   onioncircuits = callPackage ../tools/security/onioncircuits { };
 
@@ -5451,6 +5463,8 @@ in
   otfcc = callPackage ../tools/misc/otfcc { };
 
   otpw = callPackage ../os-specific/linux/otpw { };
+
+  overcommit = callPackage ../development/tools/overcommit { };
 
   overmind = callPackage ../applications/misc/overmind { };
 
@@ -6393,8 +6407,6 @@ in
   stubby = callPackage ../tools/networking/stubby { };
 
   syntex = callPackage ../tools/graphics/syntex {};
-
-  fusesmb = callPackage ../tools/filesystems/fusesmb { samba = samba3; };
 
   sl = callPackage ../tools/misc/sl { stdenv = gccStdenv; };
 
@@ -9513,7 +9525,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk8;
     buildJdkName = "jdk8";
-    runJdk = jdk11;
+    runJdk = jdk11_headless;
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   };
 
@@ -11024,6 +11036,8 @@ in
   vmmlib = callPackage ../development/libraries/vmmlib {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   };
+
+  egl-wayland = callPackage ../development/libraries/egl-wayland {};
 
   elastix = callPackage ../development/libraries/science/biology/elastix { };
 
@@ -13481,6 +13495,7 @@ in
 
   protobuf = protobuf3_7;
 
+  protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
   protobuf3_10 = callPackage ../development/libraries/protobuf/3.10.nix { };
   protobuf3_9 = callPackage ../development/libraries/protobuf/3.9.nix { };
   protobuf3_8 = callPackage ../development/libraries/protobuf/3.8.nix { };
@@ -15154,12 +15169,14 @@ in
   nginx = nginxStable;
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
+    perl = null;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
+    perl = null;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.dav nginxModules.moreheaders ];
@@ -15517,25 +15534,12 @@ in
 
   deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
 
-  samba3 = callPackage ../servers/samba/3.x.nix { };
-
   samba4 = callPackage ../servers/samba/4.x.nix {
     rpcgen = netbsd.rpcgen;
     python = python3;
   };
 
   samba = samba4;
-
-  # A lightweight Samba 3, useful for non-Linux-based OSes.
-  samba3_light = lowPrio (samba3.override {
-    pam = null;
-    fam = null;
-    cups = null;
-    acl = null;
-    openldap = null;
-    # libunwind 1.0.1 is not ported to GNU/Hurd.
-    libunwind = null;
-  });
 
   samba4Full = lowPrio (samba4.override {
     enableLDAP = true;
@@ -17223,6 +17227,8 @@ in
 
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
+  flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme { };
+
   font-awesome_4 = (callPackage ../data/fonts/font-awesome-5 { }).v4;
   font-awesome_5 = (callPackage ../data/fonts/font-awesome-5 { }).v5;
   font-awesome = font-awesome_5;
@@ -17594,6 +17600,8 @@ in
   raleway = callPackage ../data/fonts/raleway { };
 
   recursive = callPackage ../data/fonts/recursive { };
+
+  rhodium-libre = callPackage ../data/fonts/rhodium-libre { };
 
   rictydiminished-with-firacode = callPackage ../data/fonts/rictydiminished-with-firacode { };
 
@@ -19962,6 +19970,8 @@ in
     wxGTK30 = wxGTK30.override { withWebKit  = true ; };
   };
 
+  mmsd = callPackage ../tools/networking/mmsd { };
+
   moc = callPackage ../applications/audio/moc { };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
@@ -20168,6 +20178,8 @@ in
   p4v = libsForQt5.callPackage ../applications/version-management/p4v { };
 
   partio = callPackage ../development/libraries/partio {};
+
+  pbis-open = callPackage ../tools/security/pbis { };
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
@@ -20609,7 +20621,7 @@ in
     gtksharp = gtk-sharp-2_0;
   };
 
-  plex-media-player = libsForQt5.callPackage ../applications/video/plex-media-player { };
+  plex-media-player = libsForQt512.callPackage ../applications/video/plex-media-player { };
 
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
@@ -22396,9 +22408,7 @@ in
 
   wownero = callPackage ../applications/blockchains/wownero.nix {};
 
-  zcash = callPackage ../applications/blockchains/zcash {
-    withGui = false;
-  };
+  zcash = callPackage ../applications/blockchains/zcash { };
 
   parity = callPackage ../applications/blockchains/parity { };
   parity-beta = callPackage ../applications/blockchains/parity/beta.nix { };

@@ -21,17 +21,53 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from multiprocessing.dummy import Pool
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union, Any
+from typing import Dict, List, Optional, Tuple, Union, Any, Callable
 from urllib.parse import urljoin, urlparse
 from tempfile import NamedTemporaryFile
 
-ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"
-ATOM_LINK = "{http://www.w3.org/2005/Atom}link"
-ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"
+ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"  # " vim gets confused here
+ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
+ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 
 ROOT = Path(__file__).parent
 DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
 DEFAULT_OUT = ROOT.joinpath("generated.nix")
+
+import time
+from functools import wraps
+
+
+def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: float = 2):
+    """Retry calling the decorated function using an exponential backoff.
+
+    http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/
+    original from: http://wiki.python.org/moin/PythonDecoratorLibrary#Retry
+    (BSD licensed)
+
+    :param ExceptionToCheck: the exception on which to retry
+    :param tries: number of times to try (not retry) before giving up
+    :param delay: initial delay between retries in seconds
+    :param backoff: backoff multiplier e.g. value of 2 will double the delay
+        each retry
+    """
+
+    def deco_retry(f: Callable) -> Callable:
+        @wraps(f)
+        def f_retry(*args: Any, **kwargs: Any) -> Any:
+            mtries, mdelay = tries, delay
+            while mtries > 1:
+                try:
+                    return f(*args, **kwargs)
+                except ExceptionToCheck as e:
+                    print(f"{str(e)}, Retrying in {mdelay} seconds...")
+                    time.sleep(mdelay)
+                    mtries -= 1
+                    mdelay *= backoff
+            return f(*args, **kwargs)
+
+        return f_retry  # true decorator
+
+    return deco_retry
 
 
 class Repo:
@@ -45,9 +81,12 @@ class Repo:
     def __repr__(self) -> str:
         return f"Repo({self.owner}, {self.name})"
 
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def has_submodules(self) -> bool:
         try:
-            urllib.request.urlopen(self.url("blob/master/.gitmodules")).close()
+            urllib.request.urlopen(
+                self.url("blob/master/.gitmodules"), timeout=10
+            ).close()
         except urllib.error.HTTPError as e:
             if e.code == 404:
                 return False
@@ -55,8 +94,9 @@ class Repo:
                 raise
         return True
 
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> Tuple[str, datetime]:
-        with urllib.request.urlopen(self.url("commits/master.atom")) as req:
+        with urllib.request.urlopen(self.url("commits/master.atom"), timeout=10) as req:
             xml = req.read()
             root = ET.fromstring(xml)
             latest_entry = root.find(ATOM_ENTRY)
@@ -69,7 +109,7 @@ class Repo:
                 updated_tag is not None and updated_tag.text is not None
             ), f"No updated tag found feed entry {xml}"
             updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
-            return Path(url.path).name, updated
+            return Path(str(url.path)).name, updated
 
     def prefetch_git(self, ref: str) -> str:
         data = subprocess.check_output(
@@ -210,20 +250,17 @@ def check_results(
         sys.exit(1)
 
 
-def parse_plugin_line(line: str) -> Tuple[str, str, str]:
+def parse_plugin_line(line: str) -> Tuple[str, str, Optional[str]]:
+    name, repo = line.split("/")
     try:
-        name, repo = line.split("/")
-        try:
-            repo, alias = repo.split(" as ")
-            return (name, repo, alias.strip())
-        except ValueError:
-            # no alias defined
-            return (name, repo.strip(), None)
+        repo, alias = repo.split(" as ")
+        return (name, repo, alias.strip())
     except ValueError:
-        return (None, None, None)
+        # no alias defined
+        return (name, repo.strip(), None)
 
 
-def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str]]:
+def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, Optional[str]]]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
@@ -385,7 +422,7 @@ def main() -> None:
 
     try:
         # synchronous variant for debugging
-        # results = map(prefetch_with_cache, plugins)
+        # results = list(map(prefetch_with_cache, plugin_names))
         pool = Pool(processes=30)
         results = pool.map(prefetch_with_cache, plugin_names)
     finally:
