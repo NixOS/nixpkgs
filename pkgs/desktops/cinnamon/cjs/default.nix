@@ -1,4 +1,4 @@
-{ autoconf-archive, autoreconfHook, dbus_glib, fetchFromGitHub, gobjectIntrospection, pkgconfig, spidermonkey_52, stdenv, wrapGAppsHook }:
+{ autoconf-archive, autoreconfHook, dbus-glib, fetchFromGitHub, gobject-introspection, pkgconfig, spidermonkey_52, stdenv, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cjs";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q5h2pbwysc6hwq5js3lwi6zn7i5qjjy070ynfhfn3z69lw5iz2d";
   };
 
-  buildInputs = [ autoconf-archive dbus_glib gobjectIntrospection pkgconfig spidermonkey_52 ];
-  nativeBuildInputs = [ autoreconfHook wrapGAppsHook ];
+  buildInputs = [ autoconf-archive dbus-glib pkgconfig spidermonkey_52 ];
+  nativeBuildInputs = [ autoreconfHook wrapGAppsHook gobject-introspection ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/linuxmint/cinnamon-translations";
