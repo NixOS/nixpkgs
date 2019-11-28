@@ -2563,7 +2563,7 @@ in
 
   cron = callPackage ../tools/system/cron { };
 
-  cudaPackages = callPackages ../development/compilers/cudatoolkit { };
+  cudaPackages = recurseIntoAttrs (callPackage ../development/compilers/cudatoolkit {});
   inherit (cudaPackages)
     cudatoolkit_6
     cudatoolkit_6_5
