@@ -12,6 +12,7 @@ let
     cinnamon-menus = callPackage ./cinnamon-menus { };
     cinnamon-session = callPackage ./cinnamon-session { };
     cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
+    cinnamon-screensaver = callPackage ./cinnamon-screensaver { };
     cjs = callPackage ./cjs { };
     muffin = callPackage ./muffin { };
     xapps = callPackage ./xapps { };

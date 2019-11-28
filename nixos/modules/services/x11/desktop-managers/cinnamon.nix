@@ -20,9 +20,13 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs.cinnamon // pkgs; [
-      cinnamon-common # common-files
+      # common-files
+      cinnamon-common
       cinnamon-session
       cinnamon-desktop
+
+      # session requirements
+      cinnamon-screensaver
     ];
 
     environment.pathsToLink = [
