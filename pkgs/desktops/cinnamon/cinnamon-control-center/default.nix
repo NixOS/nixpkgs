@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "1rxm5n2prh182rxvjs7psxgjddikrjr8492j22060gmyvq55n7kc";
   };
 
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook wrapGAppsHook gettext /*gnome_common*/ intltool libxslt libtool ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://cinnamon.linuxmint.com";
     description = "Cinnamon control center" ;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mkg20001 ];
   };
 }

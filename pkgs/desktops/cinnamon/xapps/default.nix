@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "1lxjdr4g9j4y9ssjzgnim611vbq09w9bm3rkk4f28hm12da26jzq";
   };
 

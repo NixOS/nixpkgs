@@ -6,12 +6,10 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "0sv7nqd1l6c727qj30dcgdkvfh1wxpszpgmbdyh58ilmc8xklnqd";
   };
-
-  # patches = [ ./disable-docs.patch ];
 
   buildInputs = [ atk cacert cinnamon-desktop cinnamon-menus cjs dbus_glib gdk_pixbuf glib gobjectIntrospection gtk3 json-glib libcroco libsoup libstartup_notification libXtst muffin networkmanager pkgconfig polkit libxml2 ];
   nativeBuildInputs = [ autoreconfHook wrapGAppsHook intltool gnome2.gtkdoc ];
@@ -27,11 +25,6 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags = [ "--disable-static" "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt" "--with-libxml=${libxml2.dev}/include/libxml2" "--enable-gtk-doc=no" ];
-
-  # Run intltoolize to create po/Makefile.in.in
-  preConfigure = ''
-    intltoolize
-  '';
 
   postPatch = ''
     substituteInPlace src/Makefile.am \

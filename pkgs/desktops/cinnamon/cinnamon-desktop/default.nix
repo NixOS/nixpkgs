@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "0bjqv3n417azjs2m1hlml6kw0rkax2fr22ym12n4l55fx3kl60p9";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     patchShebangs install-scripts/meson_install_schemas.py
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://cinnamon.linuxmint.com";
     description = "Library and data for various Cinnamon modules";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
        gtk-doc.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mkg20001 ];
   };
 }
