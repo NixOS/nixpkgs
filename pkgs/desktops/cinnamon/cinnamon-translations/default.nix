@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
       mv usr $out # files get installed like so: msgfmt -o usr/share/locale/$lang/LC_MESSAGES/$dir.mo $file
     '';
 
-  meta = {
-    homepage = "http://cinnamon.linuxmint.com";
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/linuxmint/cinnamon-translations";
     description = "Translations files for the Cinnamon desktop" ;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mkg20001 ];
   };
 }

@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
-    homepage = "http://cinnamon.linuxmint.com";
-    description = "The cinnamon session files" ;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/linuxmint/cinnamon-session";
+    description = "The Cinnamon session manager" ;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mkg20001 ];
   };
 }

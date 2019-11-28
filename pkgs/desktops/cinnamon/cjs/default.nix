@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoconf-archive dbus_glib gobjectIntrospection pkgconfig spidermonkey_52 ];
   nativeBuildInputs = [ autoreconfHook wrapGAppsHook ];
 
-  meta = {
-    homepage = "http://cinnamon.linuxmint.com";
-    description = "JavaScript bindings for Cinnamon" ;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/linuxmint/cinnamon-translations";
+    description = "JavaScript bindings for Cinnamon";
 
     longDescription = ''
        This module contains JavaScript bindings based on gobject-introspection.
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
        in doc/Style_Guide.txt to help keep things sane.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mkg20001 ];
   };
 }

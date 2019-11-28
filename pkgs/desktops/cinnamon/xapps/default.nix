@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
       --replace "'/'" "'$prefix/'"
   '';
 
-  meta = {
-    homepage = "http://cinnamon.linuxmint.com";
-    # description = "The cinnamon session files" ;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/linuxmint/xapps";
+    description = "Cross-desktop libraries and common resources";
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mkg20001 ];
   };
 }

@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ cinnamon-desktop glib gobjectIntrospection gtk3 gnome3.zenity gnome-doc-utils intltool json-glib libinput libstartup_notification libxkbcommon libXtst pkgconfig udev xorg.xkeyboardconfig xorg.libxkbfile ];
   nativeBuildInputs = [ autoreconfHook wrapGAppsHook ];
 
-  meta = {
-    homepage = "http://cinnamon.linuxmint.com";
-    # description = "The cinnamon session files" ;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/linuxmint/muffin";
+    description = "The window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mkg20001 ];
   };
 }

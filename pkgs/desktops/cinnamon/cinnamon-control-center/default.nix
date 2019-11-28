@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook wrapGAppsHook gettext /*gnome_common*/ intltool libxslt libtool ];
 
   meta = with stdenv.lib; {
-    homepage = "http://cinnamon.linuxmint.com";
-    description = "Cinnamon control center" ;
+    homepage = "https://github.com/linuxmint/cinnamon-control-center";
+    description = "A collection of configuration plugins used in cinnamon-settings" ;
 
     platforms = platforms.linux;
     maintainers = [ maintainers.mkg20001 ];

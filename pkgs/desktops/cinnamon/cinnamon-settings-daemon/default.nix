@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
-    homepage = "http://cinnamon.linuxmint.com";
-    description = "The cinnamon settings daemon" ;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/linuxmint/cinnamon-settings-daemon";
+    description = "The settings daemon for the Cinnamon desktop";
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mkg20001 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mkg20001 ];
   };
 }
