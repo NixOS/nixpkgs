@@ -253,7 +253,10 @@ stdenv.mkDerivation {
   installCheckTarget = "test";
 
   # see also installCheckFlagsArray
-  installCheckFlags = "DEFAULT_TEST_TARGET=prove";
+  installCheckFlags = [
+    "DEFAULT_TEST_TARGET=prove"
+    "PERL_PATH=${buildPackages.perl}/bin/perl"
+  ];
 
   preInstallCheck = ''
     installCheckFlagsArray+=(
@@ -295,6 +298,13 @@ stdenv.mkDerivation {
 
     # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
+
+    ${stdenv.lib.optionalString (!perlSupport) ''
+      # request-pull is a Bash script that invokes Perl, so it is not available
+      # when NO_PERL=1, and the test should be skipped, but the test suite does
+      # not check for the Perl prerequisite.
+      disable_test t5150-request-pull
+    ''}
 
     # As of 2.19.0, t5562 refers to #!/usr/bin/perl
     patchShebangs t/t5562/invoke-with-content-length.pl
