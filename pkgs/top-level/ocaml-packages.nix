@@ -185,6 +185,8 @@ let
 
     cpuid = callPackage ../development/ocaml-modules/cpuid { };
 
+    crunch = callPackage ../development/tools/ocaml/crunch { };
+
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     cstruct =

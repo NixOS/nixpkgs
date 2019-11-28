@@ -8569,6 +8569,8 @@ in
 
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
 
+  ocaml-crunch = ocamlPackages.crunch.bin;
+
   ocamlformat = callPackage ../development/tools/ocaml/ocamlformat { };
 
   orc = callPackage ../development/compilers/orc { };
