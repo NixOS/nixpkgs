@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
+{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config, replace
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
@@ -388,7 +388,64 @@ let
             exit 1
         fi
 
-        makeWrapper "$(readlink -v --canonicalize-existing "${browser}${browser.execdir or "/bin"}/${browserName}")" \
+
+        # Link the runtime. The executable itself has to be copied,
+        # because it will resolve paths relative to its true location.
+        # Any symbolic links have to be replicated as well.
+        cd "${browser}"
+        find . -type d -exec mkdir -p "$out"/{} \;
+
+        find . -type f \( -not -name "${browserName}" \) -exec ln -sT "${browser}"/{} "$out"/{} \;
+
+        find . -type f -name "${browserName}" -print0 | while read -d $'\0' f; do
+          cp -P --no-preserve=mode,ownership "${browser}/$f" "$out/$f"
+          chmod a+rwx "$out/$f"
+        done
+
+        # fix links and absolute references
+        cd "${browser}"
+
+        find . -type l -print0 | while read -d $'\0' l; do
+          target="$(readlink "$l" | ${replace}/bin/replace-literal -es -- "${browser}" "$out")"
+          ln -sfT "$target" "$out/$l"
+        done
+
+        # This will not patch binaries, only "text" files.
+        # Its there for the wrapper mostly.
+        cd "$out"
+        ${replace}/bin/replace-literal -esfR -- "${browser}" "$out"
+
+        # create the wrapper
+
+        executablePrefix="$out${browser.execdir or "/bin"}"
+        executablePath="$executablePrefix/${browserName}"
+
+        if [ ! -x "$executablePath" ]
+        then
+            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${browserName}'"
+            exit 1
+        fi
+
+        if [ ! -L "$executablePath" ]
+        then
+          # Careful here, the file at executablePath may already be
+          # a wrapper. That is why we postfix it with -old instead
+          # of -wrapped.
+          oldExe="$executablePrefix"/".${browserName}"-old
+          mv "$executablePath" "$oldExe"
+        else
+          oldExe="$(readlink -v --canonicalize-existing "$executablePath")"
+        fi
+
+        if [ ! -x "${browser}${browser.execdir or "/bin"}/${browserName}" ]
+        then
+            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${browserName}'"
+            exit 1
+        fi
+
+
+
+        makeWrapper "$oldExe" \
           "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
             --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
             --suffix LD_LIBRARY_PATH ':' "$libs" \
@@ -432,6 +489,30 @@ let
         # For manpages, in case the program supplies them
         mkdir -p $out/nix-support
         echo ${browser} > $out/nix-support/propagated-user-env-packages
+
+        # user customization
+        mkdir -p $out/lib/firefox
+
+        # creating policies.json
+        mkdir -p "$out/lib/firefox/distribution"
+
+        cat > "$out/lib/firefox/distribution/policies.json" < ${policiesJson}
+
+        # preparing for autoconfig
+        mkdir -p "$out/lib/firefox/defaults/pref"
+
+        cat > "$out/lib/firefox/defaults/pref/autoconfig.js" <<EOF
+          pref("general.config.filename", "mozilla.cfg");
+          pref("general.config.obscure_value", 0);
+        EOF
+
+        cat > "$out/lib/firefox/mozilla.cfg" < ${mozillaCfg}
+
+        mkdir -p $out/lib/firefox/distribution/extensions
+
+        for i in ${toString extensions}; do
+          ln -s -t $out/lib/firefox/distribution/extensions $i/*
+        done
       '';
 
       preferLocalBuild = true;
