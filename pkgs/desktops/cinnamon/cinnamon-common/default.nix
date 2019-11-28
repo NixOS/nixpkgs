@@ -1,12 +1,12 @@
 { atk, autoreconfHook, cacert, cinnamon-desktop, cinnamon-menus, cjs, dbus_glib, fetchFromGitHub, gdk_pixbuf, glib, gobjectIntrospection, gtk3, intltool, json-glib, libcroco, libsoup, libstartup_notification, libXtst, muffin, networkmanager, pkgconfig, polkit, stdenv, wrapGAppsHook, libxml2, gnome2 }:
 
 stdenv.mkDerivation rec {
-  pname = "cinnamon";
+  pname = "cinnamon-common";
   version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cinnamon";
     rev = version;
     sha256 = "0sv7nqd1l6c727qj30dcgdkvfh1wxpszpgmbdyh58ilmc8xklnqd";
   };

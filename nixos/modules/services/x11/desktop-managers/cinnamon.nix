@@ -20,7 +20,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs.cinnamon // pkgs; [
-      cinnamon # common-files
+      cinnamon-common # common-files
       cinnamon-session
       cinnamon-desktop
     ];
