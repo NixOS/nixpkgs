@@ -1,7 +1,7 @@
 From f0fe6625fb607f9ecaa86cb2c6ba233b13bb2f25 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
 Date: Thu, 28 Nov 2019 22:02:09 +0100
-Subject: [PATCH] patch: datadir
+Subject: [PATCH 1/2] patch: datadir
 
 ---
  libnemo-extension/meson.build | 4 ++--

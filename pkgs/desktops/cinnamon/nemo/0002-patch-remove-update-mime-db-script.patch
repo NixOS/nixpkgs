@@ -1,0 +1,27 @@
+From 5bda451b0a45489d6326a92b75bf33ca5f77c2a7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Thu, 28 Nov 2019 22:46:40 +0100
+Subject: [PATCH 2/2] patch: remove update mime db script
+
+---
+ install-scripts/meson_update_mime_database.py | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/install-scripts/meson_update_mime_database.py b/install-scripts/meson_update_mime_database.py
+index a997dbc..b77a6e0 100644
+--- a/install-scripts/meson_update_mime_database.py
++++ b/install-scripts/meson_update_mime_database.py
+@@ -1,10 +1,3 @@
+ #!/usr/bin/python3
+ 
+-import os
+-import subprocess
+ 
+-mimedir = os.path.join(os.environ['MESON_INSTALL_PREFIX'], 'share', 'mime')
+-
+-if not os.environ.get('DESTDIR'):
+-    print('Updating mime database...')
+-    subprocess.call(['update-mime-database', mimedir])
+-- 
+2.20.1
+
