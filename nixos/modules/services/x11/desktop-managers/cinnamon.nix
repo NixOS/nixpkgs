@@ -27,6 +27,12 @@ in
 
       # session requirements
       cinnamon-screensaver
+      # nemo-autostart: provided by nemo
+      # nm-applet: TODO
+      # cinnamon-killer-daemon: provided by cinnamon-common
+
+      # packages
+      nemo
     ];
 
     environment.pathsToLink = [

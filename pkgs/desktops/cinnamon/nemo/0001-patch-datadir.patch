@@ -1,0 +1,34 @@
+From f0fe6625fb607f9ecaa86cb2c6ba233b13bb2f25 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Thu, 28 Nov 2019 22:02:09 +0100
+Subject: [PATCH] patch: datadir
+
+---
+ libnemo-extension/meson.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libnemo-extension/meson.build b/libnemo-extension/meson.build
+index a177ed6..a3708c9 100644
+--- a/libnemo-extension/meson.build
++++ b/libnemo-extension/meson.build
+@@ -64,7 +64,7 @@ gnome.generate_gir(nemo_extension_lib,
+   namespace: 'Nemo',
+   includes: [ 'Gtk-3.0', 'Gio-2.0', 'GLib-2.0', ],
+   include_directories: [ rootInclude, ],
+-  install_dir_typelib: join_paths(go_intr.get_pkgconfig_variable('libdir'), 'girepository-1.0'),
++  install_dir_typelib: join_paths(get_option('libdir'), 'girepository-1.0'),
+   install: true,
+ )
+ 
+@@ -76,7 +76,7 @@ if meson.version().version_compare('>=0.41.0')
+     requires: [ 'gio-2.0', 'glib-2.0', 'gtk+-3.0' ],
+     libraries: nemo_extension_lib,
+     subdirs: 'nemo',
+-    variables: 'extensiondir=${libdir}/@0@/@1@'.format('nemo', 'extensions-3.0'),
++    variables: 'extensiondir=/run/current-system/sw/lib/@0@/@1@'.format('nemo', 'extensions-3.0'),
+   )
+ else
+   pc_conf = configuration_data()
+-- 
+2.20.1
+

@@ -15,6 +15,7 @@ let
     cinnamon-screensaver = callPackage ./cinnamon-screensaver { };
     cjs = callPackage ./cjs { };
     muffin = callPackage ./muffin { };
+    nemo = callPackage ./nemo { };
     xapps = callPackage ./xapps { };
 
     # basePackages = [
