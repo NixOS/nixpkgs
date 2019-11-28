@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-hangul";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0gha8dfdf54rx8fv3yfikbgdg6lqq6l883lhg7q68ybvkjx9bwbs";
+    sha256 = "0yj5a0acp6cqm5qf3lf816plzh7s80jpv3cbjj1wpql139f71cz6";
   };
 
   patches = [
