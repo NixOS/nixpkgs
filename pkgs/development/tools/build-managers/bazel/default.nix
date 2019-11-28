@@ -22,11 +22,11 @@
 }:
 
 let
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0vpfpm3l3zp6749b23ysqqf1la029jzq43ks60q6f5mr3056pd4w";
+    sha256 = "1qfk14mgx1m454b4w4ldggljzqkqwpdwrlynq7rc8aq11yfs8p95";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
