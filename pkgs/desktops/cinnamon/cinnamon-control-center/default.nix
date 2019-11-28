@@ -44,6 +44,21 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 bash ./autogen.sh
     '';
 
+
+  preBuildPhases = "hackyDatetimeBackward";
+  preInstallPhases = "undoHackyDatetimeBackward";
+
+  # it needs to have access to that file, otherwise we can't run tests after build
+
+  hackyDatetimeBackward = ''
+    mkdir -p $out/share/cinnamon-control-center/
+    ln -s $PWD/panels/datetime $out/share/cinnamon-control-center/
+    '';
+
+  undoHackyDatetimeBackward = ''
+    rm -rfv $out
+    '';
+
   nativeBuildInputs = [ pkgconfig autoreconfHook wrapGAppsHook gettext /*gnome_common*/ intltool libxslt libtool ];
 
   meta = {
