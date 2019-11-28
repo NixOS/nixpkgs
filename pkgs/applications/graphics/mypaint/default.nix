@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
   ];
 
   postInstall = ''
-    sed -i -e 's|/usr/bin/env python2.7|${python}/bin/python|' $out/bin/mypaint
+    sed -i -e 's|/usr/bin/env python2.7|${python2}/bin/python|' $out/bin/mypaint
   '';
 
   preFixup = ''
