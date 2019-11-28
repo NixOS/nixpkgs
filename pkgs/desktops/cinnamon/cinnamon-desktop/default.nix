@@ -1,4 +1,4 @@
-{ fetchFromGitHub, gdk_pixbuf, gobject-introspection, gtk3, intltool, meson, ninja, pkgconfig, pkgs, pulseaudio, python3, stdenv, xkeyboard_config, xorg, wrapGAppsHook }:
+{ fetchFromGitHub, gdk-pixbuf, gobject-introspection, gtk3, intltool, meson, ninja, pkgconfig, pkgs, pulseaudio, python3, stdenv, xkeyboard_config, xorg, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "17hb8gkb9pfj56ckva5g4x83yvmdv7hvpidxjsdf79dw6pabr5rg";
   };
 
-  buildInputs = [ gdk_pixbuf gtk3 intltool pkgconfig pulseaudio xkeyboard_config xorg.libxkbfile ];
+  buildInputs = [ gdk-pixbuf gtk3 intltool pkgconfig pulseaudio xkeyboard_config xorg.libxkbfile ];
   nativeBuildInputs = [ meson gobject-introspection ninja python3 wrapGAppsHook ];
 
   postPatch = ''
