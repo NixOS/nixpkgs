@@ -17,10 +17,8 @@ stdenv.mkDerivation rec {
 
  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  preConfigurePhases = "confFixPhase";
-
-  confFixPhase = ''
-    patchShebangs ./autogen.sh
+  postPatch = ''
+    patchShebangs autogen.sh
     '';
 
   autoreconfPhase = ''

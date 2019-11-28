@@ -14,12 +14,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ atk cacert cinnamon-desktop cinnamon-menus cjs dbus_glib gdk_pixbuf glib gobjectIntrospection gtk3 json-glib libcroco libsoup libstartup_notification libXtst muffin networkmanager pkgconfig polkit libxml2 ];
   nativeBuildInputs = [ autoreconfHook wrapGAppsHook intltool gnome2.gtkdoc ];
 
-  preConfigurePhases = "confFixPhase";
-
-  confFixPhase = ''
-    patchShebangs ./autogen.sh
-    '';
-
   autoreconfPhase = ''
     GTK_DOC_CHECK=false NOCONFIGURE=1 bash ./autogen.sh
     '';
@@ -29,5 +23,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/Makefile.am \
       --replace "\$(libdir)/muffin" "${muffin}/lib/muffin"
+    patchShebangs autogen.sh
   '';
 }
