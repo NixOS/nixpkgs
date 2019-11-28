@@ -1,4 +1,4 @@
-{ fetchFromGitHub, glib, gobjectIntrospection, gtk3, libgnomekbd, libxklavier, meson, ninja, pkgconfig, python3, python3Packages, stdenv, vala, wrapGAppsHook }:
+{ fetchFromGitHub, glib, gobject-introspection, gtk3, libgnomekbd, libxklavier, meson, ninja, pkgconfig, python3, python3Packages, stdenv, vala, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "xapps";
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     ./py-override.patch # details see https://github.com/linuxmint/xapps/pull/65
   ];
 
-  buildInputs = [ glib gobjectIntrospection gtk3 libgnomekbd libxklavier pkgconfig python3Packages.pygobject3 vala ];
-  nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];
+  buildInputs = [ glib gtk3 libgnomekbd libxklavier pkgconfig python3Packages.pygobject3 vala ];
+  nativeBuildInputs = [ meson gobject-introspection ninja python3 wrapGAppsHook ];
 
   mesonFlags = [
     "-Dpy-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"

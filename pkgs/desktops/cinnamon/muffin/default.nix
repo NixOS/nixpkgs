@@ -1,4 +1,4 @@
-{ autoreconfHook, cinnamon-desktop, fetchFromGitHub, glib, gnome3, gnome-doc-utils, fetchpatch, gobjectIntrospection, gtk3, intltool, json-glib, libinput, libstartup_notification, libxkbcommon, libXtst, pkgconfig, stdenv, udev, xorg, wrapGAppsHook }:
+{ autoreconfHook, cinnamon-desktop, fetchFromGitHub, glib, gnome3, gnome-doc-utils, fetchpatch, gobject-introspection, gtk3, intltool, json-glib, libinput, libstartup_notification, libxkbcommon, libXtst, pkgconfig, stdenv, udev, xorg, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "muffin";
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ cinnamon-desktop glib gobjectIntrospection gtk3 gnome3.zenity gnome-doc-utils intltool json-glib libinput libstartup_notification libxkbcommon libXtst pkgconfig udev xorg.xkeyboardconfig xorg.libxkbfile ];
-  nativeBuildInputs = [ autoreconfHook wrapGAppsHook ];
+  buildInputs = [ cinnamon-desktop glib gtk3 gnome3.zenity gnome-doc-utils intltool json-glib libinput libstartup_notification libxkbcommon libXtst pkgconfig udev xorg.xkeyboardconfig xorg.libxkbfile ];
+  nativeBuildInputs = [ autoreconfHook wrapGAppsHook gobject-introspection ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/linuxmint/muffin";
