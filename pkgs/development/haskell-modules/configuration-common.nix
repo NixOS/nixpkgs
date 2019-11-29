@@ -1185,18 +1185,6 @@ self: super: {
   # test suite failure: https://github.com/jgm/pandoc/issues/5582
   pandoc = dontCheck super.pandoc;
 
-  # The latest release version is ancient. You really need this tool from git.
-  haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
-    (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-      version = "20190814-git";
-      src = pkgs.fetchFromGitHub {
-        owner = "haskell-CI";
-        repo = "haskell-ci";
-        rev = "70918d80b6fd43aca7e4d00ba0d2ea116b666556";
-        sha256 = "0bzp959qy74zmqq75f60rcixpjbvvyrb5a8zp2nyql3nm9vxzy5k";
-      };
-  }) (with self; [temporary lattices Cabal_3_0_0_0]));
-
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
 

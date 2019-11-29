@@ -2544,7 +2544,6 @@ package-maintainers:
     - funcmp
     - git-annex
     - hackage-db
-    - haskell-ci
     - hledger
     - hledger-interest
     - hledger-ui
@@ -3455,6 +3454,7 @@ broken-packages:
   - cabal-install-bundle
   - cabal-install-ghc72
   - cabal-install-ghc74
+  - cabal-install-parsers
   - cabal-meta
   - cabal-mon
   - cabal-nirvana
@@ -5436,6 +5436,7 @@ broken-packages:
   - haskell-bitmex-client
   - haskell-bitmex-rest
   - haskell-brainfuck
+  - haskell-ci
   - haskell-cnc
   - haskell-coffee
   - haskell-compression
