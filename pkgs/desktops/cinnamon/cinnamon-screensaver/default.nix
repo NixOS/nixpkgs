@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
  buildInputs = [
   glib
   (python3.withPackages (pp: with pp; [ pygobject3 setproctitle xapp pycairo ]))
+  xapps
   gtk3
   pam
   accountsservice

@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     libxml2
     keybinder3
   ];
+
   nativeBuildInputs = [
     autoreconfHook
     wrapGAppsHook
