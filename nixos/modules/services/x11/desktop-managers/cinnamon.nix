@@ -33,6 +33,9 @@ in
 
       # packages
       nemo
+
+      # theme (TODO: .theme option)
+      pkgs.gnome3.adwaita-icon-theme
     ];
 
     environment.pathsToLink = [
