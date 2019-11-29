@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "03v41wk1gmgmyl31j7a3pav52gfv2faibj1jnpj3ycwcv4cch5w5";
   };
 
- buildInputs = [ glib (python3.withPackages (pp: with pp; [ pygobject3 setproctitle ])) gtk3 pam ];
+ buildInputs = [ glib (python3.withPackages (pp: with pp; [ pygobject3 setproctitle xapp ])) gtk3 pam ];
 
  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0"; # TODO: https://github.com/NixOS/nixpkgs/issues/36468
 

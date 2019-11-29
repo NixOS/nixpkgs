@@ -5392,6 +5392,8 @@ in {
 
   xapian = callPackage ../development/python-modules/xapian { xapian = pkgs.xapian; };
 
+  xapp = callPackage ../development/python-modules/xapp { };
+
   xlwt = callPackage ../development/python-modules/xlwt { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
