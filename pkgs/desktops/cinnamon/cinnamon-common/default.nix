@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ # TODO: review if we really need this all
-    (python3.withPackages (pp: with pp; [ setproctitle pygobject3 ]))
+    (python3.withPackages (pp: with pp; [ setproctitle pygobject3 pycairo ]))
     atk
     cacert
     cinnamon-desktop
