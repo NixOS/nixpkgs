@@ -25,6 +25,9 @@ in
       cinnamon-session
       cinnamon-desktop
 
+      # utils needed by some scripts
+      pkgs.killall
+
       # session requirements
       cinnamon-screensaver
       # nemo-autostart: provided by nemo
