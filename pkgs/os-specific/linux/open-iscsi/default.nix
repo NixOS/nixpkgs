@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
     $out/sbin/iscsistart -v
   '';
 
+  postFixup = ''
+    sed -i "s|/sbin/iscsiadm|$out/bin/iscsiadm|" $out/bin/iscsi_fw_login
+  '';
+
   meta = with stdenv.lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";
     license = licenses.gpl2;
