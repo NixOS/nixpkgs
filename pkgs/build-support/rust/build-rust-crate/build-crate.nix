@@ -7,7 +7,8 @@
 
   let
 
-    deps = makeDeps dependencies crateRenames;
+    deps = makeDeps false dependencies crateRenames;
+    linkedDeps = makeDeps true dependencies crateRenames;
     rustcOpts =
       lib.lists.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
@@ -35,10 +36,10 @@
        noisily rustc --crate-name $CRATE_NAME $lib_src \
          ${lib.strings.concatStrings (map (x: " --crate-type ${x}") crateType)}  \
          ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/lib \
-         --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow \
+         --emit=dep-info,metadata,link -L dependency=target/deps ${if lib.lists.any (x: x == "proc-macro" || x == "dylib") crateType then linkedDeps else deps} --cap-lints allow \
          $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
 
-       EXTRA_LIB=" --extern $CRATE_NAME=target/lib/lib$CRATE_NAME-${metadata}.rlib"
+       EXTRA_LIB=" --extern $CRATE_NAME=target/lib/lib$CRATE_NAME-${metadata}.${if lib.lists.any (x: x == "proc-macro" || x == "dylib") crateType then "rlib" else "rmeta"}"
        if [ -e target/deps/lib$CRATE_NAME-${metadata}${stdenv.hostPlatform.extensions.sharedLibrary} ]; then
           EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/lib/lib$CRATE_NAME-${metadata}${stdenv.hostPlatform.extensions.sharedLibrary}"
        fi
@@ -54,7 +55,7 @@
       echo_build_heading $@
       noisily rustc --crate-name $crate_name_ $main_file --crate-type bin ${rustcOpts}\
         ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps \
-        $LINK ${deps}$EXTRA_LIB --cap-lints allow \
+        $LINK ${linkedDeps}$EXTRA_LIB --cap-lints allow \
         $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors} \
         ${if stdenv.hostPlatform != stdenv.buildPlatform then "--target ${rust.toRustTarget stdenv.hostPlatform} -C linker=${stdenv.hostPlatform.config}-gcc" else ""}
       if [ "$crate_name_" != "$crate_name" ]; then

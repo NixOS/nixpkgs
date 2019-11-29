@@ -13,7 +13,7 @@ let
       then "macos"
       else stdenv.hostPlatform.parsed.kernel.name;
 
-    makeDeps = dependencies: crateRenames:
+    makeDeps = linked: dependencies: crateRenames:
       (lib.concatMapStringsSep " " (dep:
         let
           extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName;
@@ -22,7 +22,10 @@ let
           else
             extern;
         in (if lib.lists.any (x: x == "lib") dep.crateType then
-           " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
+           if linked then
+              " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
+	   else
+	      " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rmeta"
          else
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies);
@@ -94,6 +97,7 @@ stdenv.mkDerivation (rec {
     name = "rust_${crate.crateName}-${crate.version}";
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
+    dontStrip = stdenv.hostPlatform.isDarwin;
     dependencies =
       builtins.map
         (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))

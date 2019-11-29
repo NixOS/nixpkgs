@@ -25,7 +25,7 @@ let version_ = lib.splitString "-" crateVersion;
     rustcOpts = lib.lists.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
         (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
-    buildDeps = makeDeps buildDependencies crateRenames;
+    buildDeps = makeDeps true buildDependencies crateRenames;
     authors = lib.concatStringsSep ":" crateAuthors;
     optLevel = if release then 3 else 0;
     completeDepsDir = lib.concatStringsSep " " completeDeps;
@@ -40,6 +40,7 @@ in ''
     # $2 is the target path
     i=$1
     ln -s -f $i/lib/*.rlib $2 #*/
+    ln -s -f $i/lib/*.rmeta $2 #*/
     ln -s -f $i/lib/*.so $i/lib/*.dylib $2 #*/
     if [ -e "$i/lib/link" ]; then
         cat $i/lib/link >> target/link

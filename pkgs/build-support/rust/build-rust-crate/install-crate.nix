@@ -5,27 +5,27 @@ crateName: metadata:
   mkdir $out
   if [[ -s target/env ]]; then
     mkdir -p $lib
-    cp target/env $lib/env
+    cp -r target/env $lib/env
   fi
   if [[ -s target/link.final ]]; then
     mkdir -p $lib/lib
-    cp target/link.final $lib/lib/link
+    cp -r target/link.final $lib/lib/link
   fi
-  if [[ "$(ls -A target/lib)" ]]; then
+  if [ "$(ls -A target/lib)" ]; then
     mkdir -p $lib/lib
-    cp target/lib/* $lib/lib #*/
+    cp -r target/lib/* $lib/lib #*/
     for library in $lib/lib/*.so $lib/lib/*.dylib; do #*/
       ln -s $library $(echo $library | sed -e "s/-${metadata}//")
     done
   fi
-  if [[ "$(ls -A target/build)" ]]; then # */
+  if [ "$(ls -A target/build)" ]; then # */
     mkdir -p $lib/lib
     cp -r target/build/* $lib/lib # */
   fi
   if [[ -d target/bin ]]; then
     if [[ "$(ls -A target/bin)" ]]; then
       mkdir -p $out/bin
-      cp -P target/bin/* $out/bin # */
+      cp -rP target/bin/* $out/bin # */
     fi
   fi
   runHook postInstall
