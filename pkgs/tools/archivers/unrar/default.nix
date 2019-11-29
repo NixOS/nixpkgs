@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unrar";
-  version = "5.8.3";
+  version = "5.8.4";
 
   src = fetchurl {
     url = "https://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
-    sha256 = "19lizlsbblkcdyc81jycp5k8kf5d8h2hlgfy16zb1g2vixf6i49m";
+    sha256 = "15igz4xkzxlf81kl9p1n447rp2zrzpi6qdwn2iimzrppgqqb4z0b";
   };
 
   postPatch = ''
