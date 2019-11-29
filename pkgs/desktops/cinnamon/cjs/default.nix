@@ -8,7 +8,8 @@
   stdenv,
   wrapGAppsHook,
   python3,
-  cairo }:
+  cairo,
+  gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "cjs";
@@ -27,9 +28,10 @@ stdenv.mkDerivation rec {
     pkgconfig
     spidermonkey_52
 
-    # test: try to fix cairo bug
-    (python3.withPackages (pp: with pp; [ setproctitle pygobject3 pycairo ]))
+    # fix cairo bug
+    # (python3.withPackages (pp: with pp; [ setproctitle pygobject3 pycairo ]))
     cairo
+    caribou
   ];
 
   nativeBuildInputs = [
