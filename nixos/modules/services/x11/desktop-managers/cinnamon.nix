@@ -45,14 +45,23 @@ in
       "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173
     ];
 
-    services.xserver.desktopManager.session = [{
-      name = "cinnamon";
-      bgSupport = true;
-      start = ''
-        ${pkgs.runtimeShell} ${pkgs.cinnamon.cinnamon-common}/bin/cinnamon-session-cinnamon & # cinnamon-session-cinnamon &
-        # or cinnamon-session-cinnamon2d for 2d/sw-rendering. how to add?
-        waitPID=$!
-      '';
-    }];
+    services.xserver.desktopManager.session = [
+      {
+        name = "cinnamon";
+        bgSupport = true;
+        start = ''
+          ${pkgs.runtimeShell} ${pkgs.cinnamon.cinnamon-common}/bin/cinnamon-session-cinnamon &
+          waitPID=$!
+        '';
+      }
+      {
+        name = "cinnamon2d";
+        bgSupport = true;
+        start = ''
+          ${pkgs.runtimeShell} ${pkgs.cinnamon.cinnamon-common}/bin/cinnamon-session-cinnamon2d &
+          waitPID=$!
+        '';
+      }
+    ];
   };
 }
