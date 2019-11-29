@@ -1730,6 +1730,8 @@ in {
 
   crc16 = callPackage ../development/python-modules/crc16 { };
 
+  crccheck = callPackage ../development/python-modules/crccheck { };
+
   croniter = callPackage ../development/python-modules/croniter { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
