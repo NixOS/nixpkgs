@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "16ckcjxa3dgmz1y8gd57q2h84akra3j4bgl4fwv4m05bam3ml1xs";
   };
 
-  propagatedBuildInputs = [ python3Packages.pyqt4 ];
+  propagatedBuildInputs = [ python3Packages.pyqt5 ];
 
   patchPhase = ''
       substituteInPlace ./setup.py \
