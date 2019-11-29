@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sv7nqd1l6c727qj30dcgdkvfh1wxpszpgmbdyh58ilmc8xklnqd";
   };
 
-  buildInputs = [ python3 atk cacert cinnamon-desktop cinnamon-menus cjs dbus-glib gdk-pixbuf glib gtk3 json-glib libcroco libsoup libstartup_notification libXtst muffin networkmanager pkgconfig polkit libxml2 ];
+  buildInputs = [ (python3.withPackages (pp: with pp; [ setproctitle ])) atk cacert cinnamon-desktop cinnamon-menus cjs dbus-glib gdk-pixbuf glib gtk3 json-glib libcroco libsoup libstartup_notification libXtst muffin networkmanager pkgconfig polkit libxml2 ];
   nativeBuildInputs = [ autoreconfHook wrapGAppsHook intltool gnome2.gtkdoc gobject-introspection ];
 
   autoreconfPhase = ''
