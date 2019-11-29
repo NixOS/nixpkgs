@@ -2,11 +2,16 @@
 
 let
 
-  runCommand' = stdenv: name: env: buildCommand:
+  runCommand' = runLocal: stdenv: name: env: buildCommand:
     stdenv.mkDerivation ({
       inherit name buildCommand;
       passAsFile = [ "buildCommand" ];
-    } // env);
+    }
+    // (lib.optionalAttrs runLocal {
+          preferLocalBuild = true;
+          allowSubstitutes = false;
+       })
+    // env);
 
 in
 
@@ -21,10 +26,26 @@ rec {
   * runCommand "name" {envVariable = true;} ''echo hello > $out''
   * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
   * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
+  *
+  * The `*Local` variants force a derivation to be built locally,
+  * it is not substituted.
+  *
+  * This is intended for very cheap commands (<1s execution time).
+  * It saves on the network roundrip and can speed up a build.
+  *
+  * It is the same as adding the special fields
+  * `preferLocalBuild = true;`
+  * `allowSubstitutes = false;`
+  * to a derivation’s attributes.
   */
   runCommand = runCommandNoCC;
-  runCommandNoCC = runCommand' stdenvNoCC;
-  runCommandCC = runCommand' stdenv;
+  runCommandLocal = runCommandNoCCLocal;
+
+  runCommandNoCC = runCommand' false stdenvNoCC;
+  runCommandNoCCLocal = runCommand' true stdenvNoCC;
+
+  runCommandCC = runCommand' false stdenv;
+  runCommandCCLocal = runCommand' true stdenv;
 
 
   /* Writes a text file to the nix store.
