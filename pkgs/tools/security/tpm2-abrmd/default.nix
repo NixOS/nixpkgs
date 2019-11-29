@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-abrmd";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1lbfhyyh9k54r8s1h8ca2czxv4hg0yq984kdh3vqh3990aca0x9a";
+    sha256 = "0l4da545174pd5z2rzbvba4a90wqlnj0lyn36gi6l7nj3yz5kjv3";
   };
 
   nativeBuildInputs = [ pkgconfig ];
