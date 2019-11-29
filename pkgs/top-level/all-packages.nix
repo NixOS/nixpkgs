@@ -19206,6 +19206,8 @@ in
 
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
+  rmapi = callPackage ../applications/office/rmapi { };
+
   gradio = callPackage ../applications/audio/gradio { };
 
   puddletag = callPackage ../applications/audio/puddletag { };
