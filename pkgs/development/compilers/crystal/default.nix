@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, makeWrapper
 , coreutils, git, gmp, nettools, openssl_1_0_2, readline, tzdata, libxml2, libyaml
-, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib, pkgconfig
 , callPackage }:
 
 # We need multiple binaries as a given binary isn't always able to build
@@ -38,8 +38,14 @@ let
     '';
   };
 
-  generic = { version, sha256, binary, doCheck ? true }:
-  let compiler = stdenv.mkDerivation rec {
+  commonBuildInputs = extraBuildInputs: [
+    boehmgc libatomic_ops pcre libevent libyaml zlib libxml2 openssl_1_0_2
+  ] ++ extraBuildInputs
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+
+
+  generic = ({ version, sha256, binary, doCheck ? true, extraBuildInputs ? [] }:
+  lib.fix (compiler: stdenv.mkDerivation {
     pname = "crystal";
     inherit doCheck version;
 
@@ -72,14 +78,9 @@ let
         --replace '`hostname`' '`${nettools}/bin/hostname`'
     '';
 
-    buildInputs = [
-      boehmgc libatomic_ops pcre libevent libyaml
-      llvm zlib openssl_1_0_2
-    ] ++ stdenv.lib.optionals stdenv.isDarwin [
-      libiconv
-    ];
+    buildInputs = commonBuildInputs extraBuildInputs;
 
-    nativeBuildInputs = [ binary makeWrapper which ];
+    nativeBuildInputs = [ binary makeWrapper which pkgconfig llvm ];
 
     makeFlags = [
       "CRYSTAL_CONFIG_VERSION=${version}"
@@ -91,9 +92,12 @@ let
 
     FLAGS = [
       "--release"
-      "--no-debug"
       "--single-module" # needed for deterministic builds
     ];
+
+    # This makes sure we don't keep depending on the previous version of
+    # crystal used to build this one.
+    CRYSTAL_LIBRARY_PATH = "${placeholder "out"}/lib/crystal";
 
     # We *have* to add `which` to the PATH or crystal is unable to build stuff
     # later if which is not available.
@@ -102,9 +106,11 @@ let
 
       install -Dm755 .build/crystal $out/bin/crystal
       wrapProgram $out/bin/crystal \
-          --suffix PATH : ${lib.makeBinPath [ clang which ]} \
+          --suffix PATH : ${lib.makeBinPath [ pkgconfig clang which ]} \
           --suffix CRYSTAL_PATH : lib:$out/lib/crystal \
-          --suffix LIBRARY_PATH : ${lib.makeLibraryPath buildInputs}
+          --suffix CRYSTAL_LIBRARY_PATH : ${
+            lib.makeLibraryPath (commonBuildInputs extraBuildInputs)
+          }
       install -dm755 $out/lib/crystal
       cp -r src/* $out/lib/crystal/
 
@@ -147,7 +153,7 @@ let
       maintainers = with maintainers; [ manveru david50407 peterhoeg ];
       platforms = builtins.attrNames archs;
     };
-  }; in compiler;
+  }));
 
 in rec {
   binaryCrystal_0_26 = genericBinary {
@@ -217,6 +223,14 @@ in rec {
     sha256  = "1dswxa32w16gnc6yjym12xj7ibg0g6zk3ngvl76lwdjqb1h6lwz8";
     doCheck = false; # 5 checks are failing now
     binary = crystal_0_30;
+  };
+
+  crystal_0_32 = generic {
+    version = "255bfc5fa925b95b72e34b26ad997fb2b3f83059";
+    sha256  = "1dgk36cj5lwhs1c4zp0s1c9hjk0h3vljq6zwhlnzkl1xs7cgzim1";
+    doCheck = false; # 5 checks are failing now
+    binary = crystal_0_31;
+    extraBuildInputs = [ readline ];
   };
 
   crystal = crystal_0_31;
