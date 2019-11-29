@@ -4563,8 +4563,6 @@ in
 
   next = callPackage ../applications/networking/browsers/next { };
 
-  next-gtk-webkit = callPackage ../applications/networking/browsers/next-gtk-webkit { };
-
   nfpm = callPackage ../tools/package-management/nfpm { };
 
   nginx-config-formatter = callPackage ../tools/misc/nginx-config-formatter { };
