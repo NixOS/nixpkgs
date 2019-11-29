@@ -25,7 +25,8 @@
   libxml2,
   gnome2,
   python3,
-  keybinder3 }:
+  keybinder3,
+  cairo }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     (python3.withPackages (pp: with pp; [ setproctitle pygobject3 pycairo ]))
     atk
     cacert
+    cairo
     cinnamon-desktop
     cinnamon-menus
     cjs
