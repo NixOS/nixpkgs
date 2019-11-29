@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, jdk, mesos, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "marathon-${version}";
+  pname = "marathon";
   version = "1.4.2";
 
   src = fetchurl {
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,libexec/marathon}
-    cp target/scala-*/marathon*.jar $out/libexec/marathon/${name}.jar
+    cp target/scala-*/marathon*.jar $out/libexec/marathon/${pname}-${version}.jar
 
     makeWrapper ${jdk.jre}/bin/java $out/bin/marathon \
-      --add-flags "-Xmx512m -jar $out/libexec/marathon/${name}.jar" \
+      --add-flags "-Xmx512m -jar $out/libexec/marathon/${pname}-${version}.jar" \
       --set "MESOS_NATIVE_JAVA_LIBRARY" "$MESOS_NATIVE_JAVA_LIBRARY"
     '';
 

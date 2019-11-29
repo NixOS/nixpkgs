@@ -1,7 +1,7 @@
 { lib, bundlerEnv, bundlerUpdateScript, ruby_2_4, perl, autoconf }:
 
-bundlerEnv rec {
-  pname = "chef-dk";
+bundlerEnv {
+  name = "chef-dk-2.4.17";
 
   ruby = ruby_2_4;
   gemdir = ./.;

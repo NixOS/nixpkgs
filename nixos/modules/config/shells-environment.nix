@@ -118,6 +118,14 @@ in
       type = with types; attrsOf (nullOr (either str path));
     };
 
+    environment.homeBinInPath = mkOption {
+      description = ''
+        Include ~/bin/ in $PATH.
+      '';
+      default = false;
+      type = types.bool;
+    };
+
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
       defaultText = "\${config.system.build.binsh}/bin/sh";
@@ -157,13 +165,15 @@ in
     # terminal instead of logging out of X11).
     environment.variables = config.environment.sessionVariables;
 
+    environment.profileRelativeEnvVars = config.environment.profileRelativeSessionVariables;
+
     environment.shellAliases = mapAttrs (name: mkDefault) {
       ls = "ls --color=tty";
       ll = "ls -l";
       l  = "ls -alh";
     };
 
-    environment.etc."shells".text =
+    environment.etc.shells.text =
       ''
         ${concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
         /bin/sh
@@ -171,7 +181,7 @@ in
 
     # For resetting environment with `. /etc/set-environment` when needed
     # and discoverability (see motivation of #30418).
-    environment.etc."set-environment".source = config.system.build.setEnvironment;
+    environment.etc.set-environment.source = config.system.build.setEnvironment;
 
     system.build.setEnvironment = pkgs.writeText "set-environment"
       ''
@@ -184,8 +194,10 @@ in
 
         ${cfg.extraInit}
 
-        # ~/bin if it exists overrides other bin directories.
-        export PATH="$HOME/bin:$PATH"
+        ${optionalString cfg.homeBinInPath ''
+          # ~/bin if it exists overrides other bin directories.
+          export PATH="$HOME/bin:$PATH"
+        ''}
       '';
 
     system.activationScripts.binsh = stringAfter [ "stdio" ]

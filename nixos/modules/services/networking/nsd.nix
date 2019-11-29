@@ -916,9 +916,8 @@ in
     systemd.services.nsd = {
       description = "NSD authoritative only domain name service";
 
-      after = [ "keys.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      wants = [ "keys.target" ];
 
       serviceConfig = {
         ExecStart = "${nsdPkg}/sbin/nsd -d -c ${nsdEnv}/nsd.conf";
@@ -955,7 +954,7 @@ in
       '';
     };
 
-    systemd.timers."nsd-dnssec" = mkIf dnssec {
+    systemd.timers.nsd-dnssec = mkIf dnssec {
       description = "Automatic DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];
@@ -966,7 +965,7 @@ in
       };
     };
 
-    systemd.services."nsd-dnssec" = mkIf dnssec {
+    systemd.services.nsd-dnssec = mkIf dnssec {
       description = "DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];

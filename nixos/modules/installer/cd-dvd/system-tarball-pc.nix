@@ -129,7 +129,7 @@ in
   ];
 
   nixpkgs.config = {
-    packageOverrides = p: rec {
+    packageOverrides = p: {
       linux_3_4 = p.linux_3_4.override {
         extraConfig = ''
           # Enable drivers in kernel for most NICs.

@@ -23,8 +23,9 @@ let
   mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
 in
 
-stdenv.mkDerivation rec {
-  name = "openjpeg-${version}";
+stdenv.mkDerivation {
+  pname = "openjpeg";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "uclouvain";

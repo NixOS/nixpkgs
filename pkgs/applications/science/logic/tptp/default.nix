@@ -1,7 +1,7 @@
 { stdenv, fetchurl, yap, tcsh, perl, patchelf }:
 
 stdenv.mkDerivation rec {
-  name = "TPTP-${version}";
+  pname = "TPTP";
   version = "7.2.0";
 
   src = fetchurl {

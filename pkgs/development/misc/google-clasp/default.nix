@@ -5,7 +5,7 @@ in
 (import ./google-clasp.nix {
   inherit pkgs;
   inherit (stdenv.hostPlatform) system;
-})."@google/clasp-${version}".override rec {
+})."@google/clasp-${version}".override {
   preRebuild = ''
     patch -p1 <<<"${builtins.readFile ./dotf.patch}"
   '';

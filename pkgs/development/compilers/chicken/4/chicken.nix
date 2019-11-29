@@ -11,7 +11,8 @@ let
   lib = stdenv.lib;
 in
 stdenv.mkDerivation {
-  name = "chicken-${version}";
+  pname = "chicken";
+  inherit version;
 
   binaryVersion = 8;
 

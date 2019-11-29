@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
 
-  name = "camlp5-7.08";
+  name = "camlp5-7.10";
 
   src = fetchzip {
-    url = "https://github.com/camlp5/camlp5/archive/rel708.tar.gz";
-    sha256 = "0b39bvr1aa7kzjhbyycmvcrwil2yjbxc84cb43zfzahx4p2aqr76";
+    url = "https://github.com/camlp5/camlp5/archive/rel710.tar.gz";
+    sha256 = "1a1lgsc8350afdwmsznsys7m0c0cks4nw6irqz2f92g8g4vkk9b7";
   };
 
   buildInputs = [ ocaml ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
-      z77z vbgl
+      maggesi vbgl
     ];
   };
 }

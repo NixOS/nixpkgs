@@ -3,15 +3,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nsjail-${version}";
-  version = "2.8";
+  pname = "nsjail";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner           = "google";
     repo            = "nsjail";
     rev             = version;
     fetchSubmodules = true;
-    sha256          = "0cgycj0cz74plmz4asxryqprg6mkzpmnxzqbfsp1wwackinxq5fq";
+    sha256          = "0218n0qjb45fawqqfj3gdxgd0fw5k0vxn9iggi0ciljmr9zywkgh";
   };
 
   postPatch = ''

@@ -15,8 +15,8 @@ let
     rev    = "c894b9e59f02203dbe4e2be657572cf88c4230c3";
     sha256 = "0wasql7ph5g473zxhc2z47z3pjp42q0dsn4gpijwzbxawid71b4w";
   };
-in stdenv.mkDerivation rec {
-  name    = "xcbuild-${version}";
+in stdenv.mkDerivation {
+  pname = "xcbuild";
 
   # Once a version is released that includes
   # https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,

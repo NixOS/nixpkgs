@@ -3,13 +3,12 @@
 let
   base = import ./base.nix { inherit stdenv fetchurl; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rrsync-${base.version}";
 
   src = base.src;
 
-  buildInputs = [ rsync ];
-  nativeBuildInputs = [perl];
+  buildInputs = [ rsync perl ];
 
   # Skip configure and build phases.
   # We just want something from the support directory

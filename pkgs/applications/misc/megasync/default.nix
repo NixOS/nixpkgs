@@ -7,7 +7,6 @@
 , doxygen
 , fetchFromGitHub
 , ffmpeg
-, hicolor-icon-theme
 , libmediainfo
 , libraw
 , libsodium
@@ -26,7 +25,7 @@
 }:
 
 mkDerivation rec {
-  name = "megasync-${version}";
+  pname = "megasync";
   version = "4.2.3.0";
 
   src = fetchFromGitHub {
@@ -51,7 +50,6 @@ mkDerivation rec {
     cryptopp
     curl
     ffmpeg
-    hicolor-icon-theme
     libmediainfo
     libraw
     libsodium

@@ -3,8 +3,9 @@
 , ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "protobuf-c-${version}";
+stdenv.mkDerivation {
+  pname = "protobuf-c";
+  inherit version;
 
   inherit src;
 

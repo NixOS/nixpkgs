@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "1.6.0";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lvj8z6fikpb5r4rq9n53x3lmsm3vlbr58ikz28x85kly633fakm";
+    sha256 = "cacb9df31c9680ec5f95553976c4da484d407e85e41c83cb812aa014f0eddc50";
   };
 
   checkInputs = [ pytest ];

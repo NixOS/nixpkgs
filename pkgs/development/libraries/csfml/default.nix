@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "csfml-${version}";
+  pname = "csfml";
+  inherit version;
   src = fetchFromGitHub {
     owner = "SFML";
     repo  = "CSFML";

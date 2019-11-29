@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.9.4";
-  name = "aspcud-${version}";
+  pname = "aspcud";
 
   src = fetchzip {
     url = "https://github.com/potassco/aspcud/archive/v${version}.tar.gz";

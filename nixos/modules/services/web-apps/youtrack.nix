@@ -28,28 +28,28 @@ in
         The interface youtrack will listen on.
       '';
       default = "127.0.0.1";
-      type = types.string;
+      type = types.str;
     };
 
     baseUrl = mkOption {
       description = ''
         Base URL for youtrack. Will be auto-detected and stored in database.
       '';
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
     };
 
     extraParams = mkOption {
       default = {};
       description = ''
-        Extra parameters to pass to youtrack. See 
+        Extra parameters to pass to youtrack. See
         https://www.jetbrains.com/help/youtrack/standalone/YouTrack-Java-Start-Parameters.html
         for more information.
       '';
       example = {
         "jetbrains.youtrack.overrideRootPassword" = "tortuga";
       };
-      type = types.attrsOf types.string;
+      type = types.attrsOf types.str;
     };
 
     package = mkOption {
@@ -73,7 +73,7 @@ in
       description = ''
         Where to keep the youtrack database.
       '';
-      type = types.string;
+      type = types.path;
       default = "/var/lib/youtrack";
     };
 
@@ -83,7 +83,7 @@ in
         If null, do not setup anything.
       '';
       default = null;
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
     };
 
     jvmOpts = mkOption {
@@ -92,7 +92,7 @@ in
         See https://www.jetbrains.com/help/youtrack/standalone/Configure-JVM-Options.html
         for more information.
       '';
-      type = types.string;
+      type = types.separatedString " ";
       example = "-XX:MetaspaceSize=250m";
       default = "";
     };
@@ -101,7 +101,7 @@ in
       description = ''
         Maximum Java heap size
       '';
-      type = types.string;
+      type = types.str;
       default = "1g";
     };
 
@@ -109,7 +109,7 @@ in
       description = ''
         Maximum java Metaspace memory.
       '';
-      type = types.string;
+      type = types.str;
       default = "350m";
     };
   };

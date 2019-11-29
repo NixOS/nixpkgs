@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "statik";
   version = "unstable-2019-07-31";
   goPackagePath = "github.com/rakyll/statik";

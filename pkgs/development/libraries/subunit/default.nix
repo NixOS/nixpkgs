@@ -3,11 +3,11 @@
 # NOTE: for subunit python library see pkgs/top-level/python-packages.nix
 
 stdenv.mkDerivation rec {
-  name = "subunit-${version}";
+  pname = "subunit";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/subunit/trunk/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/subunit/trunk/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "0lcah7p66c05p7xpw6ns1is0i02lh0nq8gq51mv4wyvbr6zaasa8";
   };
 

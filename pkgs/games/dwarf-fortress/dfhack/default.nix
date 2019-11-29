@@ -83,8 +83,9 @@ let
     fi
   '';
 
-  dfhack = stdenv.mkDerivation rec {
-    name = "dfhack-base-${version}";
+  dfhack = stdenv.mkDerivation {
+    pname = "dfhack-base";
+    inherit version;
 
     # Beware of submodules
     src = fetchFromGitHub {

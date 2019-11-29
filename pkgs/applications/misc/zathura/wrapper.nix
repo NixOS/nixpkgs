@@ -17,11 +17,11 @@ in symlinkJoin {
   '';
 
   meta = with lib; {
-    homepage = https://pwmt.org/projects/zathura/;
+    homepage = https://git.pwmt.org/pwmt/zathura/;
     description = "A highly customizable and functional PDF viewer";
     longDescription = ''
       Zathura is a highly customizable and functional PDF viewer based on the
-      poppler rendering library and the gtk+ toolkit. The idea behind zathura
+      poppler rendering library and the GTK toolkit. The idea behind zathura
       is an application that provides a minimalistic and space saving interface
       as well as an easy usage that mainly focuses on keyboard interaction.
     '';

@@ -35,7 +35,7 @@
 let
   v_base = "5.0.2";
   version = "${v_base}-RELEASE";
-  version_friendly = "${v_base}";
+  version_friendly = v_base;
 
   tag = "refs/tags/swift-${version}";
   fetch = { repo, sha256, fetchSubmodules ? false }:
@@ -131,7 +131,7 @@ let
       extra_cmake_options="${stdenv.lib.concatStringsSep "," cmakeFlags}"'';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "swift-${version_friendly}";
 
   nativeBuildInputs = [

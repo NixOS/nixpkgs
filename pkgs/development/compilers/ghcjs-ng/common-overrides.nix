@@ -1,8 +1,7 @@
-{ haskellLib, alex, happy }:
+{ haskellLib }:
 
 let inherit (haskellLib) addBuildTools appendConfigureFlag dontHaddock doJailbreak;
 in self: super: {
-  ghc-api-ghcjs = addBuildTools super.ghc-api-ghcjs [alex happy];
   ghcjs = dontHaddock (appendConfigureFlag (doJailbreak super.ghcjs) "-fno-wrapper-install");
   haddock-library-ghcjs = dontHaddock super.haddock-library-ghcjs;
   system-fileio = doJailbreak super.system-fileio;

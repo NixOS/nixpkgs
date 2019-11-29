@@ -15,7 +15,7 @@ let
     categories = "Application;Utility;";
   };
 in mkDerivation rec {
-  name = "golden-cheetah-${version}";
+  pname = "golden-cheetah";
   version = "3.5-DEV1903";
 
   src = fetchFromGitHub {

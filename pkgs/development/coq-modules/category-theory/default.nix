@@ -19,10 +19,10 @@ let
     "8.8" = v20190414;
     "8.9" = v20190414;
   };
-  param = params."${coq.coq-version}";
+  param = params.${coq.coq-version};
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "coq${coq.coq-version}-category-theory-${param.version}";
 

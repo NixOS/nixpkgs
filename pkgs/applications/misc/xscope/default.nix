@@ -1,12 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libXt }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xscope";
   version = "1.4.1";
 
   src = fetchurl {
-    url = "mirror://xorg/individual/app/${name}.tar.bz2";
+    url = "mirror://xorg/individual/app/${pname}-${version}.tar.bz2";
     sha256 = "08zl3zghvbcqy0r5dn54dim84lp52s0ygrr87jr3a942a6ypz01k";
   };
 

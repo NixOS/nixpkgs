@@ -13,8 +13,8 @@ let
 
 in stdenv.mkDerivation rec {
   version = "1.30.0";
-  name = "rkt-${version}";
-  BUILDDIR="build-${name}";
+  pname = "rkt";
+  BUILDDIR="build-${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "coreos";

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, alsaLib, pkgconfig, libjack2
 , AudioUnit, AudioToolbox, CoreAudio, CoreServices, Carbon }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "portaudio-190600-20161030";
 
   src = fetchurl {

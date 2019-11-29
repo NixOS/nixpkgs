@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, readline, flex, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "cgdb-${version}";
+  pname = "cgdb";
   version = "0.7.1";
 
   src = fetchurl {
-    url = "https://cgdb.me/files/${name}.tar.gz";
+    url = "https://cgdb.me/files/${pname}-${version}.tar.gz";
     sha256 = "1671gpz5gx5j0zga8xy2x7h33vqh3nij93lbb6dbb366ivjknwmv";
   };
 

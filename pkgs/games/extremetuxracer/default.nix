@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU_combined, libX11, xorgproto, tcl, freeglut, freetype
+{ stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, freeglut, freetype
 , sfml, libXi
 , libXmu, libXext, libXt, libSM, libICE
 , libpng, pkgconfig, gettext, intltool
@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.7.5";
-  name = "extremetuxracer-${version}";
+  pname = "extremetuxracer";
 
   src = fetchurl {
     url = "mirror://sourceforge/extremetuxracer/etr-${version}.tar.xz";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libGLU_combined libX11 xorgproto tcl freeglut freetype
+    libGLU libGL libX11 xorgproto tcl freeglut freetype
     sfml libXi
     libXmu libXext libXt libSM libICE
     libpng pkgconfig gettext intltool

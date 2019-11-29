@@ -1,6 +1,6 @@
 { callPackage, fetchurl, tcl, stdenv, ... } @ args:
 
-callPackage ./generic.nix (args // rec {
+callPackage ./generic.nix (args // {
 
   src = fetchurl {
     url = "mirror://sourceforge/tcl/tk${tcl.version}.1-src.tar.gz"; # TODO: remove '.1' for v8.6.10 or v8.7.x

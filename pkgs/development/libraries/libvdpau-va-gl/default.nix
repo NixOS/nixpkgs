@@ -2,7 +2,7 @@
 , libXext, libvdpau, glib, libva, ffmpeg, libGLU }:
 
 stdenv.mkDerivation rec {
-  name = "libvdpau-va-gl-${version}";
+  pname = "libvdpau-va-gl";
   version = "0.4.2";
 
   src = fetchFromGitHub {

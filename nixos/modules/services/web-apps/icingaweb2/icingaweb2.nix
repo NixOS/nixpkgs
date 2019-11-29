@@ -165,7 +165,7 @@ in {
 
   config = mkIf cfg.enable {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = {
+      ${poolName} = {
         user = "icingaweb2";
         phpOptions = ''
           extension = ${pkgs.phpPackages.imagick}/lib/php/extensions/imagick.so
@@ -189,7 +189,7 @@ in {
     services.nginx = {
       enable = true;
       virtualHosts = mkIf (cfg.virtualHost != null) {
-        "${cfg.virtualHost}" = {
+        ${cfg.virtualHost} = {
           root = "${pkgs.icingaweb2}/public";
 
           extraConfig = ''
@@ -216,7 +216,7 @@ in {
 
     # /etc/icingaweb2
     environment.etc = let
-      doModule = name: optionalAttrs (cfg.modules."${name}".enable) { "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}"; };
+      doModule = name: optionalAttrs (cfg.modules.${name}.enable) { "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}"; };
     in {}
       # Module packages
       // (mapAttrs' (k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }) cfg.modulePackages)

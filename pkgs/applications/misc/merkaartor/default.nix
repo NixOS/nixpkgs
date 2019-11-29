@@ -2,7 +2,7 @@
 , qtbase, qtsvg, qtwebkit }:
 
 stdenv.mkDerivation rec {
-  name = "merkaartor-${version}";
+  pname = "merkaartor";
   version = "0.18.3";
 
   src = fetchFromGitHub {

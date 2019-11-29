@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, libftdi, pciutils }:
 
 stdenv.mkDerivation rec {
-  name = "flashrom-${version}";
+  pname = "flashrom";
   version = "1.1";
 
   src = fetchurl {

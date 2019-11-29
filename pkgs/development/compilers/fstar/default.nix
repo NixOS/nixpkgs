@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, z3, ocamlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "fstar-${version}";
+  pname = "fstar";
   version = "0.9.6.0";
 
   src = fetchFromGitHub {

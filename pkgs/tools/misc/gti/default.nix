@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gti-${version}";
+  pname = "gti";
   version = "1.6.1";
 
   src = fetchFromGitHub {

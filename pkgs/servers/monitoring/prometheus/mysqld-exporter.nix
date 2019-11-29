@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mysqld_exporter-${version}";
+  pname = "mysqld_exporter";
   version = "0.11.0";
   rev = "v${version}";
 

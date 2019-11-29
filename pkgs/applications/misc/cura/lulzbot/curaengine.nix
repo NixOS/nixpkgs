@@ -1,8 +1,8 @@
 { stdenv, callPackage, fetchgit, fetchpatch, cmake, libarcusLulzbot, stb, protobuf }:
 
 stdenv.mkDerivation rec {
-  name = "curaengine-lulzBot-${version}";
-  version = "3.6.18";
+  pname = "curaengine-lulzBot";
+  version = "3.6.21";
 
   src = fetchgit {
     url = https://code.alephobjects.com/source/curaengine-lulzbot.git;

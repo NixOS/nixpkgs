@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.1.1";
-  name = "itsx-${version}";
+  pname = "itsx";
 
   src = fetchurl {
     url = "http://microbiology.se/sw/ITSx_${version}.tar.gz";

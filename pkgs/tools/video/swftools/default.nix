@@ -2,11 +2,11 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "swftools-${version}";
+  pname = "swftools";
   version = "0.9.2";
 
   src = fetchurl {
-    url = "http://www.swftools.org/${name}.tar.gz";
+    url = "http://www.swftools.org/${pname}-${version}.tar.gz";
     sha256 = "1w81dyi81019a6jmnm5z7fzarswng27lg1d4k4d5llxzqszr2s5z";
   };
 

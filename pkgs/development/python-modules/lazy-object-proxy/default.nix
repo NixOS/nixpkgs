@@ -2,18 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
-  version = "1.3.1";
+  version = "1.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb91be369f945f10d3a49f5f9be8b3d0b93a4c2be8f8a5b83b0571b8123e0a7a";
+    sha256 = "fd135b8d35dfdcdb984828c84d695937e58cc5f49e1c854eb311c4d6aa03f4f1";
   };
 
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [ setuptools_scm ];
+
+  checkInputs = [ pytest ];
   checkPhase = ''
     py.test tests
   '';

@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hanwen/go-fuse";
-      rev =  "a533f0a5a633cccc0928c81985b13fa24407a211";
-      sha256 = "0kc2jjjyhnrd934jn7hzfx8kd4z2yq5yblwrxr6xcjjql1vb1n9k";
+      rev =  "161a164844568ebf4bfaa68c90ba3a9f2914dda4";
+      sha256 = "1r0rs76k9zg60i02jlcqxi7m4ivla1xwv3ijwav7pfbyyr1yqhsx";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/jacobsa/crypto";
-      rev =  "d95898ceee0769dac9bf74c46f8f68d3d3d79100";
-      sha256 = "0dgcvms7if672f09y0cj49n711i9r0609p5f1s27i53yah4qlm19";
+      rev =  "9f44e2d11115452dad8f404f029574422855f46a";
+      sha256 = "18c3cx8izxdajq22zdq0n19j9d2l6iickd3mz39j5h96kw7l5qmy";
     };
   }
   {
@@ -37,12 +37,21 @@
     };
   }
   {
+    goPackagePath  = "github.com/sabhiram/go-gitignore";
+    fetch = {
+      type = "git";
+      url = "https://github.com/sabhiram/go-gitignore";
+      rev =  "d3107576ba9425fc1c85f4b3569c4631b805a02e";
+      sha256 = "1rdwyxgcsiwgmlqnc3k6h300mzlvjc3j21np4yh1h476wc8dvl0l";
+    };
+  }
+  {
     goPackagePath  = "golang.org/x/crypto";
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev =  "8dd112bcdc25174059e45e07517d9fc663123347";
-      sha256 = "0gbcz7gxmgg88s28vb90dsp1vdq0har7zvg2adsqbp8bm05x9q6b";
+      rev =  "a1f597ede03a7bef967a422b5b3a5bd08805a01e";
+      sha256 = "0yiczljll72ip2vkxgd6052rhpaba37a68vf6si3v8s8s3g870lc";
     };
   }
   {

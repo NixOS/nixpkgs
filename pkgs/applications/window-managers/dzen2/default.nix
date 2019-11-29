@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libX11, libXft, libXinerama, libXpm }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dzen2-0.9.5";
 
   nativeBuildInputs = [ pkgconfig ];

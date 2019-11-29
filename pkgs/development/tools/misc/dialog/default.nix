@@ -8,13 +8,13 @@ assert withLibrary -> libtool != null;
 assert unicodeSupport -> ncurses.unicode && ncurses != null;
 
 stdenv.mkDerivation rec {
-  name = "dialog-${version}";
+  pname = "dialog";
   version = "1.3-20190211";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.invisible-island.net/dialog/${name}.tgz"
-      "https://invisible-mirror.net/archives/dialog/${name}.tgz"
+      "ftp://ftp.invisible-island.net/dialog/${pname}-${version}.tgz"
+      "https://invisible-mirror.net/archives/dialog/${pname}-${version}.tgz"
     ];
     sha256 = "1lx0bvradzx1zl7znlrsnyljcs596r7wamkhyq37ikbxsy4y5h29";
   };

@@ -7,8 +7,8 @@
 #    on linux systems, but we here do not attempt to fix it.)
 
 let
-  imagej150 = stdenv.mkDerivation rec {
-    name = "imagej-${version}";
+  imagej150 = stdenv.mkDerivation {
+    pname = "imagej";
     version = "150";
 
     src = fetchurl {

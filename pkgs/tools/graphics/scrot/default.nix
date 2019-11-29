@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ giblib xlibsWrapper libXfixes libXcursor ];
 
   meta = with stdenv.lib; {
-    homepage = http://linuxbrit.co.uk/scrot/;
+    homepage = https://github.com/resurrecting-open-source-projects/scrot;
     description = "A command-line screen capture utility";
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin ];

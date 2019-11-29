@@ -13,7 +13,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libvmi-${version}";
+  pname = "libvmi";
   version = "0.12.0";
   libVersion = "0.0.12";
 

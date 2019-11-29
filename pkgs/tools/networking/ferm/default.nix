@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables }:
+{ stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "2.4.1";
-  name = "ferm-${version}";
+  pname = "ferm";
 
   src = fetchurl {
     url = "http://ferm.foo-projects.org/download/2.4/ferm-${version}.tar.xz";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       wrapProgram "$i" --prefix PATH : "${iptables}/bin:${ipset}/bin:${ebtables}/bin"
     done
   '';
+
+  passthru.tests.ferm = nixosTests.ferm;
 
   meta = {
     homepage = http://ferm.foo-projects.org/;

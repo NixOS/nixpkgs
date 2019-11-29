@@ -60,7 +60,7 @@ in {
       pkgs.lz4
     ];
 
-    systemd.services."zfs-replication" = {
+    systemd.services.zfs-replication = {
       after = [
         "zfs-snapshot-daily.service"
         "zfs-snapshot-frequent.service"

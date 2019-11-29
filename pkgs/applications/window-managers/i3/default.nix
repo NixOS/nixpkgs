@@ -4,12 +4,12 @@
 , xorgserver, xvfb_run }:
 
 stdenv.mkDerivation rec {
-  name = "i3-${version}";
-  version = "4.17";
+  pname = "i3";
+  version = "4.17.1";
 
   src = fetchurl {
-    url = "https://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "1z8qmkkq9dhqmqy8sjw3rnpnmnb8v7lr456bs0qzp23bgpj17gjf";
+    url = "https://i3wm.org/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "0iazv2i2rgmakzh95pgj6iapyzn7bdpcbcd35a79mhlml4ry33qy";
   };
 
   nativeBuildInputs = [ which pkgconfig makeWrapper ];

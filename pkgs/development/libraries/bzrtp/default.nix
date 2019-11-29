@@ -7,13 +7,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
-    repo = "${baseName}";
-    rev = "${version}";
+    repo = baseName;
+    rev = version;
     sha256 = "0438zzxp82bj5fmvqnwlljkgrz9ab5qm5lgpwwgmg1cp78bp2l45";
   };
 
   buildInputs = [ bctoolbox sqlite ];
   nativeBuildInputs = [ cmake ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
   meta = with stdenv.lib; {
     description = "BZRTP is an opensource implementation of ZRTP keys exchange protocol";

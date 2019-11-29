@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "netsurf-buildsystem-${version}";
+  pname = "netsurf-buildsystem";
   version = "1.8";
 
   src = fetchurl {
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Build system for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

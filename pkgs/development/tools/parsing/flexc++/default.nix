@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, bobcat, icmake, yodl }:
 
 stdenv.mkDerivation rec {
-  name = "flexc++-${version}";
+  pname = "flexc++";
   version = "2.05.00";
 
   src = fetchFromGitHub {

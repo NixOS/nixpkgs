@@ -16,7 +16,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "mosdepth-${version}";
+  pname = "mosdepth";
   version = "0.2.6";
 
   src = fetchFromGitHub {

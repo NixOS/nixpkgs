@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPy3k, future, pyusb, ipython, pygreat }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "GreatFET";
   version = "2019.5.1.dev0";
 

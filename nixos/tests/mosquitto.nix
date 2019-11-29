@@ -1,22 +1,11 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   port = 1888;
   username = "mqtt";
   password = "VERY_secret";
   topic = "test/foo";
-
-  cmd = bin: pkgs.lib.concatStringsSep " " [
-    "${pkgs.mosquitto}/bin/mosquitto_${bin}"
-    "-V mqttv311"
-    "-h server"
-    "-p ${toString port}"
-    "-u ${username}"
-    "-P '${password}'"
-    "-t ${topic}"
-  ];
-
-in rec {
+in {
   name = "mosquitto";
   meta = with pkgs.stdenv.lib; {
     maintainers = with maintainers; [ peterhoeg ];
@@ -34,7 +23,7 @@ in rec {
         enable = true;
         host = "0.0.0.0";
         checkPasswords = true;
-        users."${username}" = {
+        users.${username} = {
           inherit password;
           acl = [
             "topic readwrite ${topic}"
@@ -49,40 +38,53 @@ in rec {
 
   testScript = let
     file = "/tmp/msg";
-    sub = args:
-      "(${cmd "sub"} -C 1 ${args} | tee ${file} &)";
   in ''
-    startAll;
-    $server->waitForUnit("mosquitto.service");
+    def mosquitto_cmd(binary):
+        return (
+            "${pkgs.mosquitto}/bin/mosquitto_{} "
+            "-V mqttv311 "
+            "-h server "
+            "-p ${toString port} "
+            "-u ${username} "
+            "-P '${password}' "
+            "-t ${topic}"
+        ).format(binary)
 
-    $server->fail("test -f ${file}");
-    $client1->fail("test -f ${file}");
-    $client2->fail("test -f ${file}");
 
+    def publish(args):
+        return "{} {}".format(mosquitto_cmd("pub"), args)
+
+
+    def subscribe(args):
+        return "({} -C 1 {} | tee ${file} &)".format(mosquitto_cmd("sub"), args)
+
+
+    start_all()
+    server.wait_for_unit("mosquitto.service")
+
+    for machine in server, client1, client2:
+        machine.fail("test -f ${file}")
 
     # QoS = 0, so only one subscribers should get it
-    $server->execute("${sub "-q 0"}");
+    server.execute(subscribe("-q 0"))
 
     # we need to give the subscribers some time to connect
-    $client2->execute("sleep 5");
-    $client2->succeed("${cmd "pub"} -m FOO -q 0");
+    client2.execute("sleep 5")
+    client2.succeed(publish("-m FOO -q 0"))
 
-    $server->waitUntilSucceeds("grep -q FOO ${file}");
-    $server->execute("rm ${file}");
-
+    server.wait_until_succeeds("grep -q FOO ${file}")
+    server.execute("rm ${file}")
 
     # QoS = 1, so both subscribers should get it
-    $server->execute("${sub "-q 1"}");
-    $client1->execute("${sub "-q 1"}");
+    server.execute(subscribe("-q 1"))
+    client1.execute(subscribe("-q 1"))
 
     # we need to give the subscribers some time to connect
-    $client2->execute("sleep 5");
-    $client2->succeed("${cmd "pub"} -m BAR -q 1");
+    client2.execute("sleep 5")
+    client2.succeed(publish("-m BAR -q 1"))
 
-    $server->waitUntilSucceeds("grep -q BAR ${file}");
-    $server->execute("rm ${file}");
-
-    $client1->waitUntilSucceeds("grep -q BAR ${file}");
-    $client1->execute("rm ${file}");
+    for machine in server, client1:
+        machine.wait_until_succeeds("grep -q BAR ${file}")
+        machine.execute("rm ${file}")
   '';
 })

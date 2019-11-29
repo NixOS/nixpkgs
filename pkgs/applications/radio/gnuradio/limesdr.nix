@@ -7,8 +7,9 @@ assert pythonSupport -> python != null && swig != null;
 let
   version = "2.0.0";
 
-in stdenv.mkDerivation rec {
-  name = "gr-limesdr-${version}";
+in stdenv.mkDerivation {
+  pname = "gr-limesdr";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "myriadrf";

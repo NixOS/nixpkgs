@@ -1,12 +1,11 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper,
   libinput, wmctrl, python3,
-  xdotool ? null,
+  coreutils, xdotool ? null,
   extraUtilsPath ? lib.optional (xdotool != null) xdotool
 }:
 stdenv.mkDerivation rec {
   pname = "libinput-gestures";
   version = "2.39";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "bulletmark";
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
       rm "$out/bin/libinput-gestures-setup"
       substituteInPlace "$out/share/applications/libinput-gestures.desktop" --replace "/usr" "$out"
       chmod +x "$out/share/applications/libinput-gestures.desktop"
-      wrapProgram "$out/bin/libinput-gestures" --prefix PATH : "${lib.makeBinPath extraUtilsPath}"
+      wrapProgram "$out/bin/libinput-gestures" --prefix PATH : "${lib.makeBinPath ([coreutils] ++ extraUtilsPath)}"
     '';
 
   meta = with stdenv.lib; {

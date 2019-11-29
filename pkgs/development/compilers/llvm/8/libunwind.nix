@@ -1,7 +1,8 @@
 { stdenv, version, fetch, cmake, fetchpatch, enableShared ? true }:
 
 stdenv.mkDerivation {
-  name = "libunwind-${version}";
+  pname = "libunwind";
+  inherit version;
 
   src = fetch "libunwind" "0vhgcgzsb33l83qaikrkj87ypqb48mi607rccczccwiiv8ficw0q";
 

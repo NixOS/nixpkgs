@@ -1,5 +1,5 @@
 {stdenv, qtdeclarative, fetchFromGitHub, qmake }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "qml-box2d-2018-04-06";
   src = fetchFromGitHub {
     owner = "qml-box2d";

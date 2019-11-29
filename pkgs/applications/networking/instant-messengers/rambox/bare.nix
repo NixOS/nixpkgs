@@ -2,7 +2,7 @@
 , auth0ClientID, auth0Domain }:
 
 stdenv.mkDerivation rec {
-  name = "rambox-bare-${version}";
+  pname = "rambox-bare";
   version = "0.6.9";
 
   src = fetchFromGitHub {

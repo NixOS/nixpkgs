@@ -16,7 +16,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "git-dit-${version}";
+  pname = "git-dit";
   version = "0.4.0";
 
   src = fetchFromGitHub {

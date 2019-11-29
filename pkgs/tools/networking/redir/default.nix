@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "redir-${version}";
+  pname = "redir";
   version = "3.3";
 
   src = fetchFromGitHub {

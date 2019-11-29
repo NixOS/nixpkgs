@@ -44,6 +44,8 @@ cat >data.json <<EOF
   "enabled": "1",
   "visible": "1",
   "keepnr": "1",
+  "enableemail": true,
+  "emailoverride": "hydra@localhost",
   "nixexprinput": "trivial",
   "nixexprpath": "trivial.nix",
   "inputs": {

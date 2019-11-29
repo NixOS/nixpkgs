@@ -40,7 +40,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nvidia-settings";
   inherit (nvidia_x11) version;
   inherit src;

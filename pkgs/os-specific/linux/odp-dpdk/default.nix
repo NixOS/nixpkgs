@@ -1,34 +1,56 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig
-, dpdk, libconfig, libpcap, numactl, openssl
-}:
+, dpdk, libconfig, libpcap, numactl, openssl, zlib, libbsd, libelf, jansson
+}: let
+  dpdk_18_11 = dpdk.overrideAttrs (old: rec {
+    version = "18.11.5";
+    src = fetchurl {
+      url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
+      sha256 = "0000000000000000000000000000000000000000000000000000";
+    };
+  });
 
-stdenv.mkDerivation rec {
-  name = "odp-dpdk-${version}";
-  version = "1.19.0.0_DPDK_17.11";
+in stdenv.mkDerivation rec {
+  pname = "odp-dpdk";
+  version = "1.22.0.0_DPDK_18.11";
 
   src = fetchurl {
-    url = "https://git.linaro.org/lng/odp-dpdk.git/snapshot/${name}.tar.gz";
-    sha256 = "05bwjaxl9hqc6fbkp95nniq11g3kvzmlxw0bq55i7p2v35nv38px";
+    url = "https://git.linaro.org/lng/odp-dpdk.git/snapshot/${pname}-${version}.tar.gz";
+    sha256 = "1m8xhmfjqlj2gkkigq5ka3yh0xgzrcpfpaxp1pnh8d1g99094vbx";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ dpdk libconfig libpcap numactl openssl ];
-
-  RTE_SDK = "${dpdk}/share/dpdk";
-  RTE_TARGET = "x86_64-native-linuxapp-gcc";
-
-  dontDisableStatic = true;
-
-  configureFlags = [
-    "--disable-shared"
-    "--with-dpdk-path=${dpdk}"
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
   ];
+  buildInputs = [
+    dpdk_18_11
+    libconfig
+    libpcap
+    numactl
+    openssl
+    zlib
+    libbsd
+    libelf
+    jansson
+  ];
+
+  # for some reason, /build/odp-dpdk-1.22.0.0_DPDK_18.11/lib/.libs ends up in all binaries,
+  # while it should be $out/lib instead.
+  # prepend rpath with the proper location, the /build will get removed during rpath shrinking
+  preFixup = ''
+    for prog in $out/bin/*; do
+      patchelf --set-rpath $out/lib:`patchelf --print-rpath $prog` $prog
+    done
+  '';
+
+  # binaries will segfault otherwise
+  dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "Open Data Plane optimized for DPDK";
     homepage = https://www.opendataplane.org;
     license = licenses.bsd3;
-    platforms =  [ "x86_64-linux" ];
+    platforms =  platforms.linux;
     maintainers = [ maintainers.abuibrahim ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "btor2tools-${version}";
+stdenv.mkDerivation {
+  pname = "btor2tools";
   version = "pre55_8c150b39";
 
   src = fetchFromGitHub {

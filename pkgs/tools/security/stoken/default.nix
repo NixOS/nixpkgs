@@ -5,7 +5,6 @@
 stdenv.mkDerivation rec {
   pname = "stoken";
   version = "0.92";
-  name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "cernekee";
     repo = pname;

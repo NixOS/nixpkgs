@@ -1,19 +1,24 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libcanberra-gtk3, clutter-gtk, intltool, itstool
-, libxml2, libgee, libgnome-games-support }:
+, librsvg, gsound, clutter-gtk, gettext, itstool, vala, python3
+, libxml2, libgee, libgnome-games-support, meson, ninja
+, desktop-file-utils, hicolor-icon-theme}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-nibbles-${version}";
-  version = "3.32.0";
+  pname = "gnome-nibbles";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nibbles/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0g627pzbfywiy2rsh4aidgbln9s4j5m8pryw4cgr5ygc4z8l6l9p";
+    url = "mirror://gnome/sources/gnome-nibbles/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0nfy1wvxsyrpdinfn5v86gvq3ma487njz607biwwhji9z050gw3p";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool itstool libxml2 ];
+  nativeBuildInputs = [
+    meson ninja vala python3
+    pkgconfig wrapGAppsHook gettext itstool libxml2
+    desktop-file-utils hicolor-icon-theme
+  ];
   buildInputs = [
-    gtk3 librsvg libcanberra-gtk3 clutter-gtk gnome3.adwaita-icon-theme
+    gtk3 librsvg gsound clutter-gtk gnome3.adwaita-icon-theme
     libgee libgnome-games-support
   ];
 

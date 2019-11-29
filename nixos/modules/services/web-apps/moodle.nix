@@ -18,7 +18,7 @@ let
   global $CFG;
   $CFG = new stdClass();
 
-  $CFG->dbtype    = '${ { "mysql" = "mariadb"; "pgsql" = "pgsql"; }.${cfg.database.type} }';
+  $CFG->dbtype    = '${ { mysql = "mariadb"; pgsql = "pgsql"; }.${cfg.database.type} }';
   $CFG->dblibrary = 'native';
   $CFG->dbhost    = '${cfg.database.host}';
   $CFG->dbname    = '${cfg.database.name}';
@@ -44,6 +44,8 @@ let
   $CFG->pathtodu = '${pkgs.coreutils}/bin/du';
   $CFG->aspellpath = '${pkgs.aspell}/bin/aspell';
   $CFG->pathtodot = '${pkgs.graphviz}/bin/dot';
+
+  ${cfg.extraConfig}
 
   require_once('${cfg.package}/share/moodle/lib/setup.php');
 
@@ -92,8 +94,8 @@ in
         type = types.int;
         description = "Database host port.";
         default = {
-          "mysql" = 3306;
-          "pgsql" = 5432;
+          mysql = 3306;
+          pgsql = 5432;
         }.${cfg.database.type};
         defaultText = "3306";
       };
@@ -170,6 +172,19 @@ in
       description = ''
         Options for the Moodle PHP pool. See the documentation on <literal>php-fpm.conf</literal>
         for details on configuration directives.
+      '';
+    };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Any additional text to be appended to the config.php
+        configuration file. This is a PHP script. For configuration
+        details, see <link xlink:href="https://docs.moodle.org/37/en/Configuration_file"/>.
+      '';
+      example = ''
+        $CFG->disableupdatenotifications = true;
       '';
     };
   };
@@ -294,7 +309,9 @@ in
 
     systemd.services.httpd.after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
 
-    users.users."${user}".group = group;
-
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
   };
 }

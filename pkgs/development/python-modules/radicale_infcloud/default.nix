@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildPythonPackage }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "radicale_infcloud";
   version = "2017-07-27";
 

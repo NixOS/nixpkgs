@@ -86,7 +86,7 @@ let
   optionsList = lib.sort optionLess optionsListDesc;
 
   # Convert the list of options into an XML file.
-  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
+  optionsXML = pkgs.writeText "options.xml" (builtins.toXML optionsList);
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
@@ -126,7 +126,7 @@ let
     }
   '';
 
-in rec {
+in {
   inherit optionsNix;
 
   optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);

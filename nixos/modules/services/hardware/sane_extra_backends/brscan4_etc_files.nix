@@ -33,7 +33,7 @@ let
   addAllNetDev = xs: concatStringsSep "\n" (map addNetDev xs);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "brscan4-etc-files-0.4.3-3";
   src = "${brscan4}/opt/brother/scanner/brscan4";

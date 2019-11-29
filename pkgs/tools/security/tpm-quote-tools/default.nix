@@ -1,11 +1,11 @@
 { stdenv, fetchurl, trousers, openssl }:
 
 stdenv.mkDerivation rec { 
-  name = "tpm-quote-tools-${version}";
+  pname = "tpm-quote-tools";
   version = "1.0.4";
 
   src = fetchurl { 
-    url = "mirror://sourceforge/project/tpmquotetools/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/tpmquotetools/${version}/${pname}-${version}.tar.gz";
     sha256 = "1qjs83xb4np4yn1bhbjfhvkiika410v8icwnjix5ad96w2nlxp0h";
   };
 

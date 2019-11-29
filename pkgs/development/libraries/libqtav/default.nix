@@ -8,7 +8,7 @@
 with lib;
 
 mkDerivation rec {
-  name = "libqtav-${version}";
+  pname = "libqtav";
   version = "1.12.0";
 
   nativeBuildInputs = [ extra-cmake-modules qttools ];

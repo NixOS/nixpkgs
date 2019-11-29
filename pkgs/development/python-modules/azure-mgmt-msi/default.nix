@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
+, isPy3k
 , msrest
 , msrestazure
 , azure-common
@@ -24,12 +26,17 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
+  postInstall = lib.optionalString isPy3k ''
+    rm $out/${python.sitePackages}/azure/__init__.py
+    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
+  '';
+
   # has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure MSI Management Client Library";
-    homepage = https://github.com/Azure/azure-sdk-for-python/tree/master/azure-mgmt-msi;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

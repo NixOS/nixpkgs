@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "parmetis-${version}";
+  pname = "parmetis";
   version = "4.0.3";
 
   src = fetchurl {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk
+{ stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk
 , gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    pantheon.vala
+    vala
     wrapGAppsHook
   ];
 

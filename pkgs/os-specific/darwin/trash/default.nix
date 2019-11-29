@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.2";
-  name = "trash-${version}";
+  pname = "trash";
 
   src = fetchFromGitHub {
     owner = "ali-rantakari";

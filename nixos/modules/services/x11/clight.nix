@@ -75,7 +75,7 @@ in {
       longitude = mkDefault config.location.longitude;
     });
 
-    services.geoclue2.appConfig."clightc" = {
+    services.geoclue2.appConfig.clightc = {
       isAllowed = true;
       isSystem = true;
     };

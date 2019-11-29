@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cgat-developers";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1gyabqafq4s2sy0prh3k1m8859shzjmfxr7fimx10liflvki96a9";
   };

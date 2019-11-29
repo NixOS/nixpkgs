@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi
 , redis
 , memcached
-, msgpack-python
+, msgpack
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     redis
     memcached
-    msgpack-python
+    msgpack
   ];
 
   # The Pypi tarball doesn't include tests, and the GitHub source isn't

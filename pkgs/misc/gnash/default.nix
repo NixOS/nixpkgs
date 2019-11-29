@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook
+{ stdenv, fetchgit, fetchpatch, autoreconfHook
 , pkgconfig, libtool, boost, SDL
 , glib, pango, gettext, curl, xorg
 , libpng, libjpeg, giflib, speex, atk
@@ -64,8 +64,8 @@ assert length toolkits  == 0 -> throw "at least one GUI toolkit must be enabled"
 assert length renderers == 0 -> throw "at least one renderer must be enabled";
 
 
-stdenv.mkDerivation rec {
-  name = "gnash-${version}";
+stdenv.mkDerivation {
+  pname = "gnash";
   version = "0.8.11-2019-30-01";
 
   src = fetchgit {
@@ -92,6 +92,13 @@ stdenv.mkDerivation rec {
     ++ optional  enableHwAccel   libGLU_combined
     ++ optionals enablePlugins   [ xulrunner npapi_sdk ]
     ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome2.GConf ];
+
+  patches = [
+    (fetchpatch { # fix compilation due to bad detection of libgif version: https://savannah.gnu.org/patch/index.php?9873
+      url = "https://savannah.gnu.org/patch/download.php?file_id=47859";
+      sha256 = "0aimayzgi5065gkcfcr8d5lkd9c0471q7dqmln42hjzq847n6d5y";
+    })
+  ];
 
   configureFlags = with stdenv.lib; [
     "--with-boost-incl=${boost.dev}/include"

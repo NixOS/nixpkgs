@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine = { pkgs, ... }:
     {
       boot.kernelPackages = pkgs.linuxPackages;
-      environment.etc."plainFile".text = ''
+      environment.etc.plainFile.text = ''
         Hello World
       '';
       environment.etc."folder/with/file".text = ''

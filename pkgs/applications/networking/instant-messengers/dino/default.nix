@@ -14,14 +14,14 @@
 , icu
  }:
 
-stdenv.mkDerivation rec {
-  name = "dino-unstable-2019-03-07";
+stdenv.mkDerivation {
+  name = "dino-unstable-2019-10-28";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "cc7b0aa7bd5b6599159f654fdd8a2fd111e16a3e";
-    sha256 = "1cq62vif92fz38si2bl49qwy4ys9gxdrvzkv25av6c6nwmyih4gv";
+    rev = "388cc56674487e7b9e339637369fc55f0e271daf";
+    sha256 = "1v8rnjbzi8qhwb1fv787byxk8ygfs16z2j64h0s6sd3asr4n0kz1";
     fetchSubmodules = true;
   };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "Modern Jabber/XMPP Client using GTK+/Vala";
+    description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = https://github.com/dino/dino;
     license = licenses.gpl3;
     platforms = platforms.linux;

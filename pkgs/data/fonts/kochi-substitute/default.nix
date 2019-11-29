@@ -3,7 +3,8 @@
 let version = "20030809";
 in
 stdenv.mkDerivation {
-  name = "kochi-substitute-${version}";
+  pname = "kochi-substitute";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://debian/pool/main/t/ttf-kochi/ttf-kochi-gothic_${version}-15_all.deb";

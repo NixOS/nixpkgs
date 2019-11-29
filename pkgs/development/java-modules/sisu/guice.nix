@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   sisuGuice_2_9_4 = map (obj: fetchMaven {
     version = "2.9.4";
     artifactId = "sisu-guice";

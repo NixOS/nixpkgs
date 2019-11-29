@@ -5,7 +5,8 @@ let
   version = "1.3.3";
 in
   stdenv.mkDerivation {
-    name = "money-manager-ex-${version}";
+    pname = "money-manager-ex";
+    inherit version;
 
     src = fetchgit {
       url = "https://github.com/moneymanagerex/moneymanagerex.git";

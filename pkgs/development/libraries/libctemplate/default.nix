@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
-  name = "ctemplate-${version}";
+  pname = "ctemplate";
 
   version = "2.3";
 

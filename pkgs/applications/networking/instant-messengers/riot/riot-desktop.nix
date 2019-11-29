@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_5, riot-web, yarn2nix-moretea }:
+{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_5, riot-web, mkYarnPackage }:
 
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
@@ -6,15 +6,15 @@
 
 let
   executableName = "riot-desktop";
-  version = "1.3.3";
+  version = "1.5.5";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "1nzzxcz4r9932cha80q1bzn1425m67fsl89pn7n7ybrv6y0jnxpc";
+    sha256 = "18xhqniwxp1sv49qcd9ah8nyy2n2yliy3wg613raxjl16qvvzxmc";
   };
 
-in yarn2nix-moretea.mkYarnPackage rec {
+in mkYarnPackage rec {
   name = "riot-desktop-${version}";
   inherit version;
 
@@ -31,6 +31,7 @@ in yarn2nix-moretea.mkYarnPackage rec {
     ln -s '${riot-web}' "$out/share/riot/webapp"
     cp -r '${riot-web-src}/origin_migrator' "$out/share/riot/origin_migrator"
     cp -r './deps/riot-web' "$out/share/riot/electron"
+    cp -r './deps/riot-web/img' "$out/share/riot"
     rm "$out/share/riot/electron/node_modules"
     cp -r './node_modules' "$out/share/riot/electron"
 

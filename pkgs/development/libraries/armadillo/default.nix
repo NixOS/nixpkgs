@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake, openblasCompat, superlu, hdf5 }:
 
 stdenv.mkDerivation rec {
-  version = "9.600.6";
-  name = "armadillo-${version}";
+  pname = "armadillo";
+  version = "9.800.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/arma/armadillo-${version}.tar.xz";
-    sha256 = "0wlk1yv9531vpvgja4cpy0sxykrn0p5w376kx86vl45b50yamx7g";
+    sha256 = "0mslyfzwb8zdhchhj7szj25qi2ain7cnlsrzccrfm2mr4a6jv5h9";
   };
 
   nativeBuildInputs = [ cmake ];

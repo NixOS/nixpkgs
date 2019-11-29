@@ -11,7 +11,7 @@ buildPythonApplication rec {
   # https://github.com/blue-yonder/bonfire/pull/18
   src = fetchFromGitHub {
     owner = "blue-yonder";
-    repo = "${pname}";
+    repo = pname;
     rev = "d0af9ca10394f366cfa3c60f0741f1f0918011c2";
     sha256 = "193zcvzbhxwwkwbgmnlihhhazwkajycxf4r71jz1m12w301sjhq5";
   };

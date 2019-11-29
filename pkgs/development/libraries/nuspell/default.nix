@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, boost, icu, catch2, ronn }:
 
 stdenv.mkDerivation rec {
-  name = "nuspell-${version}";
+  pname = "nuspell";
   version = "2.3.0";
 
   src = fetchFromGitHub {

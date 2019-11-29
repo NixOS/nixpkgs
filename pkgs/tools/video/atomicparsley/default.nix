@@ -1,7 +1,7 @@
 { stdenv, fetchhg, autoreconfHook, zlib, Cocoa }:
 
-stdenv.mkDerivation rec {
-  name = "atomicparsley-${version}";
+stdenv.mkDerivation {
+  pname = "atomicparsley";
   version = "0.9.6";
 
   src = fetchhg {

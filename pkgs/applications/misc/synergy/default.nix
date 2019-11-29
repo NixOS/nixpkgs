@@ -3,7 +3,7 @@
 , libX11, libXi, libXtst, libXrandr, xinput, curl, openssl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "synergy-${version}";
+  pname = "synergy";
   version = "1.8.8";
 
   src = fetchFromGitHub {

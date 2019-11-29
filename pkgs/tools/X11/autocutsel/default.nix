@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.10.0";
-  name = "autocutsel-${version}";
+  pname = "autocutsel";
  
   src = fetchurl {
-    url = "https://github.com/sigmike/autocutsel/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/sigmike/autocutsel/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "0gsys2dzh4az51ndcsabhlbbrjn2nm75lnjr45kg6r8sm8q66dx2";
   };
  

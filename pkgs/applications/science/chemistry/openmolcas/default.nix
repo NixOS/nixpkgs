@@ -11,7 +11,8 @@ let
   python = python3.withPackages (ps : with ps; [ six pyparsing ]);
 
 in stdenv.mkDerivation {
-  name = "openmolcas-${version}";
+  pname = "openmolcas";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "Molcas";

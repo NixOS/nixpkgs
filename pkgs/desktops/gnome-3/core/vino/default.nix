@@ -28,7 +28,7 @@
 , telepathy-glib ? null
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vino";
   version = "unstable-2019-07-08";
 
@@ -82,10 +82,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = "vino";
-      attrPath = "gnome3.vino";
-    };
+    # updateScript = gnome3.updateScript {
+    #   packageName = "vino";
+    #   attrPath = "gnome3.vino";
+    # };
   };
 
   meta = with stdenv.lib; {

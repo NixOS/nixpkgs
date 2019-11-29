@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.12.0";
-  name = "half-${version}";
+  pname = "half";
 
   src = fetchzip {
     url = "mirror://sourceforge/half/${version}/half-${version}.zip";

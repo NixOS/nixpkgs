@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, makeWrapper, gcc, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "icmake-${version}";
+  pname = "icmake";
   version = "9.02.08";
 
   src = fetchFromGitLab {

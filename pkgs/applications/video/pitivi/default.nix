@@ -12,7 +12,7 @@ let
   # don't bother exposing the package to all of nixpkgs.
   gst-transcoder = stdenv.mkDerivation rec {
     version = "1.14.1";
-    name = "gst-transcoder-${version}";
+    pname = "gst-transcoder";
     src = fetchFromGitHub {
       owner = "pitivi";
       repo = "gst-transcoder";

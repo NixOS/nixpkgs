@@ -20,16 +20,16 @@ if ((!lib.versionOlder args.version "391")
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_430 else legacy_390;
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_43x else legacy_390;
 
   # No active beta right now
   beta = stable;
 
-  stable_430 = generic {
-    version = "430.40";
-    sha256_64bit = "1myzhy1mf27dcx0admm3pbbkfdd9p66lw0cq2mz1nwds92gqj07p";
-    settingsSha256 = "0rg9dxg02pnpi0a1yi3a41wn6kmlk0dm6dvfbazyqi4gbzr12qrl";
-    persistencedSha256 = "0findlrs5v1m7gl0vxkpd04lh54pib80w5vp4j77qb5snhgvckhq";
+  stable_43x = generic {
+    version = "435.21";
+    sha256_64bit = "0v3pq677ab01qdmwl5dawk8hn39qlwj05p8s9qzh9irmrlnc1izs";
+    settingsSha256 = "1p13cz79kncwx5067a3d7dbz6a1ibp611zynp1qdxpa65hwp2pxa";
+    persistencedSha256 = "0br8znxhz2ryzdj0j4jhqzvdgw9h899q8yz0p9429xz4wxkavgdr";
   };
 
   # Last one supporting x86
@@ -39,18 +39,6 @@ rec {
     sha256_64bit = "0h0jcckqpd63vaj95lvdgj2sbbn9y1ri1xx7r2snxfx0plhwz46n";
     settingsSha256 = "1w5nkxs7a40mq0qf97nhfazdqhfn1bvr54v50s8p0ggixb6vdm3l";
     persistencedSha256 = "02v76202qcnh8hvg4y9wmk9swdlv7z39ppfd1c850nlv158vn5nf";
-
-    patches = [
-      (fetchurl {
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-4.16.patch?h=2ad07241ea525a6b6b555b6cb96a97634a4b2cb0";
-        sha256 = "11b3dp0na496rn13v5q4k66bf61174800g36rcwj42r0xj9cfak2";
-      })
-
-      (fetchurl {
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-5.1.patch?h=42d50ef8d6048608d18bdf2c296dd335260c5a1a";
-        sha256 = "03v46ym2bcckg9q2xrilkg21hfiwypr6gl4jmly2q3m4yza9ja6r";
-      })
-    ];
   };
 
   legacy_340 = generic {

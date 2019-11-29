@@ -1,16 +1,16 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 # SHA of ${version} for the tool's help output
-let rev = "7ad367535a6710802085d41e0dbb53df359b9882";
+let rev = "c9c2a461cd3397909fe6e45ff71836347ef89fd8";
 in
 buildGoPackage rec {
   pname = "sonobuoy";
-  version = "0.15.0";
+  version = "0.16.1";
 
   goPackagePath = "github.com/heptio/sonobuoy";
 
   buildFlagsArray =
-    let t = "${goPackagePath}";
+    let t = goPackagePath;
     in ''
       -ldflags=
         -s -X ${t}/pkg/buildinfo.Version=${version}
@@ -19,10 +19,10 @@ buildGoPackage rec {
     '';
 
   src = fetchFromGitHub {
-    sha256 = "0dkmhmr7calk8mkdxfpy3yjzk10ja4gz1jq8pgk3v8rh04f4h1x5";
+    sha256 = "14qc5a7jbr403wjpk6pgpb94i72yx647sg9srz07q6drq650kyfv";
     rev = "v${version}";
     repo = "sonobuoy";
-    owner = "heptio";
+    owner = "vmware-tanzu";
   };
 
   meta = with lib; {
@@ -36,8 +36,8 @@ buildGoPackage rec {
       accessible and non-destructive manner.
     '';
 
-    homepage = "https://github.com/heptio/sonobuoy";
+    homepage = "https://sonobuoy.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ carlosdagos ];
+    maintainers = with maintainers; [ carlosdagos saschagrunert ];
   };
 }

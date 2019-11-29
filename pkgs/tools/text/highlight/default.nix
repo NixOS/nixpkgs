@@ -3,14 +3,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "highlight-${version}";
-  version = "3.53";
+  pname = "highlight";
+  version = "3.54";
 
   src = fetchFromGitLab {
     owner = "saalen";
     repo = "highlight";
     rev = "v${version}";
-    sha256 = "11szws4q6qyffq2fsvh1vksh1d0kcwg6smyyba9yr61hzx6zmzgr";
+    sha256 = "1144qv3c02hd3qrnms9cxfprdmkvz06vy4zjq500wg4iz7r8654m";
   };
 
   enableParallelBuilding = true;

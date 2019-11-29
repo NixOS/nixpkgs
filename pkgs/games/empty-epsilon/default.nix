@@ -8,8 +8,8 @@ let
 
   version = "${major}.${minor}.${patch}";
 
-  serious-proton = stdenv.mkDerivation rec {
-    name = "serious-proton-${version}";
+  serious-proton = stdenv.mkDerivation {
+    pname = "serious-proton";
     inherit version;
 
     src = fetchFromGitHub {
@@ -34,8 +34,8 @@ let
 in
 
 
-stdenv.mkDerivation rec {
-  name = "empty-epsilon-${version}";
+stdenv.mkDerivation {
+  pname = "empty-epsilon";
   inherit version;
 
   src = fetchFromGitHub {

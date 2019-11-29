@@ -8,11 +8,11 @@
 # https://wiki.archlinux.org/index.php/BluRay
 
 stdenv.mkDerivation rec {
-  name = "libaacs-${version}";
+  pname = "libaacs";
   version  = "0.9.0";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libaacs/${version}/${name}.tar.bz2";
+    url = "http://get.videolan.org/libaacs/${version}/${pname}-${version}.tar.bz2";
     sha256 = "1kms92i0c7i1yl659kqjf19lm8172pnpik5lsxp19xphr74vvq27";
   };
 

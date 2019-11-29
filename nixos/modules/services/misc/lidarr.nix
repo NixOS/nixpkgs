@@ -10,6 +10,12 @@ in
     services.lidarr = {
       enable = mkEnableOption "Lidarr";
 
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/lidarr/.config/Lidarr";
+        description = "The directory where Lidarr stores its data files.";
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.lidarr;
@@ -44,6 +50,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.lidarr = {
       description = "Lidarr";
       after = [ "network.target" ];
@@ -53,11 +63,8 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/Lidarr";
+        ExecStart = "${cfg.package}/bin/Lidarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
-
-        StateDirectory = "lidarr";
-        StateDirectoryMode = "0770";
       };
     };
 

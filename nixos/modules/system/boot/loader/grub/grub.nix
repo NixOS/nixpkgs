@@ -8,7 +8,7 @@ let
 
   efi = config.boot.loader.efi;
 
-  grubPkgs = 
+  grubPkgs =
     # Package set of targeted architecture
     if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
@@ -47,8 +47,8 @@ let
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
-      fullName = (builtins.parseDrvName realGrub.name).name;
-      fullVersion = (builtins.parseDrvName realGrub.name).version;
+      fullName = lib.getName realGrub;
+      fullVersion = lib.getVersion realGrub;
       grubEfi = f grubEfi;
       grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
       bootPath = args.path;
@@ -72,7 +72,7 @@ let
              else "${convertedFont}");
     });
 
-  bootDeviceCounters = fold (device: attr: attr // { "${device}" = (attr."${device}" or 0) + 1; }) {}
+  bootDeviceCounters = fold (device: attr: attr // { ${device} = (attr.${device} or 0) + 1; }) {}
     (concatMap (args: args.devices) cfg.mirroredBoots);
 
   convertedFont = (pkgs.runCommand "grub-font-converted.pf2" {}
@@ -333,7 +333,7 @@ in
       };
 
       backgroundColor = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         example = "#7EBAE4";
         default = null;
         description = ''
@@ -399,7 +399,7 @@ in
         example = "text";
         type = types.str;
         description = ''
-          The gfxpayload to pass to GRUB when loading a graphical boot interface under EFI. 
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under EFI.
         '';
       };
 
@@ -408,7 +408,7 @@ in
         example = "keep";
         type = types.str;
         description = ''
-          The gfxpayload to pass to GRUB when loading a graphical boot interface under BIOS. 
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under BIOS.
         '';
       };
 
@@ -535,7 +535,7 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Whether to force the use of a ia32 boot loader on x64 systems. Required 
+          Whether to force the use of a ia32 boot loader on x64 systems. Required
           to install and run NixOS on 64bit x86 systems with 32bit (U)EFI.
         '';
       };
@@ -554,7 +554,7 @@ in
         systemHasTPM = mkOption {
           default = "";
           example = "YES_TPM_is_activated";
-          type = types.string;
+          type = types.str;
           description = ''
             Assertion that the target system has an activated TPM. It is a safety
             check before allowing the activation of 'trustedBoot.enable'. TrustedBoot

@@ -12,7 +12,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "2.8.12.1";
-  name = "wxGTK-${version}";
+  pname = "wxGTK";
 
   src = fetchurl {
     url = "mirror://sourceforge/wxpython/wxPython-src-${version}.tar.bz2";

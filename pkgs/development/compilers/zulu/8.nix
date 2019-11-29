@@ -23,10 +23,10 @@ let
     xorg.libXt xorg.libXrender stdenv.cc.cc
   ]));
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version openjdk platform hash extension;
 
-  name = "zulu-${version}";
+  pname = "zulu";
 
   src = fetchurl {
     url = "https://cdn.azul.com/zulu/bin/zulu${version}-jdk${openjdk}-${platform}_x64.${extension}";
@@ -58,14 +58,14 @@ in stdenv.mkDerivation rec {
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
-    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
   '';
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
 
   passthru = {
-    home = "${zulu}";
+    home = zulu;
   };
 
   meta = with stdenv.lib; {

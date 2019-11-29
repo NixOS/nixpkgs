@@ -1,7 +1,7 @@
 { stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, ... }:
 
 stdenv.mkDerivation rec {
-  name = "sonarr-${version}";
+  pname = "sonarr";
   version = "2.0.0.5338";
 
   src = fetchurl {
@@ -9,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "05l7l4d1765m01c14iz8lcr61dnm4xd5p09sns4w8wmanks9jg3x";
   };
 
-  buildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, qttools
-, liblscp, libgig, qtbase }:
+, liblscp, libgig, qtbase, mkDerivation }:
 
-stdenv.mkDerivation rec {
-  name = "qsampler-${version}";
-  version = "0.5.6";
+mkDerivation rec {
+  pname = "qsampler";
+  version = "0.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qsampler/${name}.tar.gz";
-    sha256 = "0lx2mzyajmjckwfvgf8p8bahzpj0n0lflyip41jk32nwd2hzjhbs";
+    url = "mirror://sourceforge/qsampler/${pname}-${version}.tar.gz";
+    sha256 = "1krhjyd67hvnv6sgndwq81lfvnb4qkhc7da1119fn2lzl7hx9wh3";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig qttools ];

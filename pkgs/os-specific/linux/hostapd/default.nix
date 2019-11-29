@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
 
 stdenv.mkDerivation rec {
-  name = "hostapd-${version}";
+  pname = "hostapd";
   version = "2.8";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${name}.tar.gz";
+    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
     sha256 = "1c74rrazkhy4lr7pwgwa2igzca7h9l4brrs7672kiv7fwqmm57wj";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://hostap.epitest.fi;
+    homepage = https://hostap.epitest.fi;
     repositories.git = git://w1.fi/hostap.git;
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;

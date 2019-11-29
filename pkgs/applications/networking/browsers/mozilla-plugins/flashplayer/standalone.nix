@@ -48,9 +48,9 @@
 , debug ? false
 }:
 
-stdenv.mkDerivation rec {
-  name = "flashplayer-standalone-${version}";
-  version = "32.0.0.238";
+stdenv.mkDerivation {
+  pname = "flashplayer-standalone";
+  version = "32.0.0.293";
 
   src = fetchurl {
     url =
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "1vhfjpwsmg96irfvz81ldzn2m4qcjnql5psg4cifjay423yxabvy"
+        "13mrknvl3yd8vrcs7mp6szz6f9ssfs72apzvc60f9qfwkhiwlg87"
       else
-        "0am95xi2jasvxj5b2i12wzpvl3bvxli537k1i04698cg0na6x0y0";
+        "0isvmzyi4isxvxxc5ksplcqc5cafpvbrln3dddpms8zps2dxpyzi";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     description = "Adobe Flash Player standalone executable";
     homepage = https://www.adobe.com/support/flashplayer/debug_downloads.html;
     license = stdenv.lib.licenses.unfree;
-    maintainers = [];
+    maintainers = with stdenv.lib.maintainers; [ taku0 ];
     platforms = [ "x86_64-linux" ];
     # Application crashed with an unhandled SIGSEGV
     # Not on all systems, though. Video driver problem?

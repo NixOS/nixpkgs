@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lv2, pkgconfig, python, serd, sord, sratom, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "lilv-${version}";
+  pname = "lilv";
   version = "0.24.4";
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${name}.tar.bz2";
+    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
     sha256 = "0f24cd7wkk5l969857g2ydz2kjjrkvvddg1g87xzzs78lsvq8fy3";
   };
 

@@ -5,7 +5,8 @@
 let version = "1.3.11"; in
 
 stdenv.mkDerivation {
-  name = "gmtp-${version}";
+  pname = "gmtp";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/gmtp/gMTP-${version}/gmtp-${version}.tar.gz";

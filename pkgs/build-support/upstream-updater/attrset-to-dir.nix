@@ -1,5 +1,5 @@
 a :  
-a.stdenv.mkDerivation rec {
+a.stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p "$out/attributes"
     

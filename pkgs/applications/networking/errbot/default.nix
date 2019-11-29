@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "errbot-${version}";
+  pname = "errbot";
   version = "5.2.0";
 
   src = fetchurl {
-    url = "mirror://pypi/e/errbot/${name}.tar.gz";
+    url = "mirror://pypi/e/errbot/${pname}-${version}.tar.gz";
     sha256 = "0q5fg113s3gnym38d4y5mlnxw6vrm388zw5mlapf7b2zgx34r053";
   };
 

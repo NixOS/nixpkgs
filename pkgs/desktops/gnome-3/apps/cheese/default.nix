@@ -1,38 +1,40 @@
-{ stdenv, intltool, fetchurl, wrapGAppsHook, gnome-video-effects, libcanberra-gtk3
+{ stdenv, gettext, fetchurl, wrapGAppsHook, gnome-video-effects, libcanberra-gtk3
 , pkgconfig, gtk3, glib, clutter-gtk, clutter-gst, udev, gst_all_1, itstool
-, libgudev, autoreconfHook, vala, docbook_xml_dtd_43, docbook_xsl, appstream-glib
+, libgudev, vala, docbook_xml_dtd_43, docbook_xsl, appstream-glib
 , libxslt, yelp-tools, gnome-common, gtk-doc
-, adwaita-icon-theme, librsvg, totem, gdk-pixbuf, gnome3, gnome-desktop, libxml2 }:
+, adwaita-icon-theme, librsvg, totem, gdk-pixbuf, gnome3, gnome-desktop, libxml2
+, meson, ninja, dbus, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "cheese-${version}";
-  version = "3.32.1";
+  pname = "cheese";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1xlmsm4zsx05ahvpd4mgy1hfhxbag0r5i6p63bksjxdligdd36kv";
+    url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0wvyc9wb0avrprvm529m42y5fkv3lirdphqydc9jw0c8mh05d1ni";
   };
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "cheese"; attrPath = "gnome3.cheese"; };
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool itstool vala wrapGAppsHook libxml2 appstream-glib
+    meson ninja pkgconfig gettext itstool vala wrapGAppsHook libxml2 appstream-glib
     libxslt docbook_xml_dtd_43 docbook_xsl
-    autoreconfHook gtk-doc yelp-tools gnome-common
+    gtk-doc yelp-tools gnome-common python3
   ];
   buildInputs = [ gtk3 glib gnome-video-effects
                   gdk-pixbuf adwaita-icon-theme librsvg udev gst_all_1.gstreamer
                   gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gnome-desktop
                   gst_all_1.gst-plugins-bad clutter-gtk clutter-gst
-                  libcanberra-gtk3 libgudev ];
+                  libcanberra-gtk3 libgudev dbus ];
 
   outputs = [ "out" "man" "devdoc" ];
-
-  patches = [
-    gtk-doc.respect_xml_catalog_files_var_patch
-  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

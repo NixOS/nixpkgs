@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.6.1";
-  name    = "xar-${version}";
+  pname = "xar";
 
   src = fetchurl {
-    url    = "https://github.com/downloads/mackyle/xar/${name}.tar.gz";
+    url    = "https://github.com/downloads/mackyle/xar/${pname}-${version}.tar.gz";
     sha256 = "0ghmsbs6xwg1092v7pjcibmk5wkyifwxw6ygp08gfz25d2chhipf";
   };
 

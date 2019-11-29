@@ -1,7 +1,7 @@
 {stdenv, buildOcamlJane,
  ppx_core, ppx_driver, ppx_here, ppx_sexp_conv, ppx_tools}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "ppx_sexp_value";
   hash = "04602ppqfwx33ghjywam00hlqqzsz4d99r60k9q0v1mynk9pjhj0";
   propagatedBuildInputs = [ ppx_core ppx_driver ppx_here ppx_sexp_conv ppx_tools ];

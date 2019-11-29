@@ -131,11 +131,12 @@ in
     users.users.${user} = {
       description = "Zabbix Agent daemon user";
       inherit group;
+      isSystemUser = true;
     };
 
     users.groups.${group} = { };
 
-    systemd.services."zabbix-agent" = {
+    systemd.services.zabbix-agent = {
       description = "Zabbix Agent";
 
       wantedBy = [ "multi-user.target" ];

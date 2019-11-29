@@ -4,7 +4,7 @@ if !stdenv.lib.versionAtLeast cohttp.version "0.99"
 then cohttp
 else
 
-buildDunePackage rec {
+buildDunePackage {
 	pname = "cohttp-lwt";
 	inherit (cohttp) version src meta;
 

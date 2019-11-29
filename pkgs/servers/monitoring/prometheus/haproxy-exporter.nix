@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "haproxy_exporter-${version}";
+  pname = "haproxy_exporter";
   version = "0.8.0";
   rev = "v${version}";
 

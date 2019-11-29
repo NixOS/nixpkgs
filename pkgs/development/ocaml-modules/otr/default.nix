@@ -9,7 +9,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "ocaml-otr";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0iz6p85a0jxng9aq9blqsky173zaqfr6wlc5j48ad55lgwzlbih5";
   };
 

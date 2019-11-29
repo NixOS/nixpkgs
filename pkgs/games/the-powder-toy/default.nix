@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, scons, pkgconfig, SDL2, lua, fftwFloat, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "the-powder-toy-${version}";
+  pname = "the-powder-toy";
   version = "94.1";
 
   src = fetchFromGitHub {

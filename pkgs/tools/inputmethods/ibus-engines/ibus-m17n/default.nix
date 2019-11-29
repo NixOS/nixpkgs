@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-m17n-${version}";
+  pname = "ibus-m17n";
   version = "1.4.1";
 
   src = fetchFromGitHub {

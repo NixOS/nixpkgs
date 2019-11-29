@@ -5,7 +5,7 @@ with stdenv.lib;
 
 buildPythonApplication rec {
 
-  name    = "termdown-${version}";
+  pname = "termdown";
   version = "1.16.0";
 
   src = fetchFromGitHub {

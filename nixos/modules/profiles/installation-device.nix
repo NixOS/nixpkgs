@@ -31,9 +31,6 @@ with lib;
     # Let the user play Rogue on TTY 8 during the installation.
     #services.rogue.enable = true;
 
-    # Disable some other stuff we don't need.
-    services.udisks2.enable = mkDefault false;
-
     # Use less privileged nixos user
     users.users.nixos = {
       isNormalUser = true;
@@ -55,13 +52,16 @@ with lib;
     services.mingetty.autologinUser = "nixos";
 
     # Some more help text.
-    services.mingetty.helpLine =
-      ''
+    services.mingetty.helpLine = ''
+      The "nixos" and "root" accounts have empty passwords.
 
-        The "nixos" and "root" account have empty passwords.  ${
-          optionalString config.services.xserver.enable
-            "Type `sudo systemctl start display-manager' to\nstart the graphical user interface."}
-      '';
+      Type `sudo systemctl start sshd` to start the SSH daemon.
+      You then must set a password for either "root" or "nixos"
+      with `passwd` to be able to login.
+    '' + optionalString config.services.xserver.enable ''
+      Type `sudo systemctl start display-manager' to
+      start the graphical user interface.
+    '';
 
     # Allow sshd to be started manually through "systemctl start sshd".
     services.openssh = {

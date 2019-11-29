@@ -3,7 +3,7 @@
 , pantheon
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-redacted-script";
   version = "unstable-2016-06-03";
 

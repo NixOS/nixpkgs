@@ -1,11 +1,11 @@
 { stdenv, fetchurl, boost, fastjet, gfortran, lhapdf, python2, root, yoda, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "fastnlo_toolkit-${version}";
+  pname = "fastnlo_toolkit";
   version = "2.3.1pre-2402";
 
   src = fetchurl {
-    url = "https://fastnlo.hepforge.org/code/v23/${name}.tar.gz";
+    url = "https://fastnlo.hepforge.org/code/v23/${pname}-${version}.tar.gz";
     sha256 = "1h41xnqcz401x3zbs8i2dsb4xlhbv8i5ps0561p6y7gcyridgcbl";
   };
 

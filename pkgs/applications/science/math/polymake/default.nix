@@ -7,7 +7,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "polymake";
   version = "3.2.rc4";
 

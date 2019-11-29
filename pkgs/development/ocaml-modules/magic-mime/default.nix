@@ -3,7 +3,8 @@
 let version = "1.0.0"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-magic-mime-${version}";
+  pname = "ocaml-magic-mime";
+  inherit version;
 
   src = fetchzip {
     url = "https://github.com/mirage/ocaml-magic-mime/archive/v${version}.tar.gz";

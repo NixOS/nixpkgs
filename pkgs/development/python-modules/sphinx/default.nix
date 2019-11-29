@@ -20,17 +20,24 @@
 , whoosh
 , imagesize
 , requests
+, sphinxcontrib-applehelp
+, sphinxcontrib-devhelp
+, sphinxcontrib-htmlhelp
+, sphinxcontrib-jsmath
+, sphinxcontrib-qthelp
+, sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
 , typing
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "1.8.3";
+  version = "2.2.0";
   src = fetchPypi {
     pname = "Sphinx";
     inherit version;
-    sha256 = "c4cb17ba44acffae3d3209646b6baec1e215cad3065e852c68cc569d4df1b9f8";
+    sha256 = "0d586b0f8c2fc3cc6559c5e8fd6124628110514fda0e5d7c82e682d749d2e845";
   };
   LC_ALL = "en_US.UTF-8";
 
@@ -46,12 +53,19 @@ buildPythonPackage rec {
     pygments
     alabaster
     Babel
+    setuptools
     snowballstemmer
     six
     sqlalchemy
     whoosh
     imagesize
     requests
+    sphinxcontrib-applehelp
+    sphinxcontrib-devhelp
+    sphinxcontrib-htmlhelp
+    sphinxcontrib-jsmath
+    sphinxcontrib-qthelp
+    sphinxcontrib-serializinghtml
     sphinxcontrib-websupport
   ] ++ lib.optional (pythonOlder "3.5") typing;
 

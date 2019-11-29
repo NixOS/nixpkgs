@@ -20,14 +20,14 @@ let
     startupNotify = "false";
   };
 in stdenv.mkDerivation rec {
-  name = "dolphin-emu-${version}";
-  version = "5.0-10879";
+  pname = "dolphin-emu";
+  version = "5.0-11109";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "c7fc9126aaf447a014af4aed195b17aa593dd49b";
-    sha256 = "1pf4mxacxhrkvvh9j49ackm8hahl8x0ligmann1pafsb4lw0xbnj";
+    rev = "93d7b3d15962a3393cf2971e14c4acf54d90cecd";
+    sha256 = "1kkx3agdsc0qmf3yymlzq315nypm34qvq04qpjqycpfhmpx8gdnq";
   };
 
   enableParallelBuilding = true;

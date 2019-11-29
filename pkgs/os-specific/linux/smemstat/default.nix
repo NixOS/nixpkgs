@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "smemstat-${version}";
+  pname = "smemstat";
   version = "0.02.05";
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/smemstat/smemstat-${version}.tar.xz";

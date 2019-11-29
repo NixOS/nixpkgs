@@ -111,7 +111,7 @@ in
 
       systemd.services.boinc = {
         description = "BOINC Client";
-        after = ["network.target" "local-fs.target"];
+        after = ["network.target"];
         wantedBy = ["multi-user.target"];
         script = ''
           ${fhsEnvExecutable} --dir ${cfg.dataDir} --redirectio ${allowRemoteGuiRpcFlag}

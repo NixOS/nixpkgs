@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libpng, bison, flex, ffmpeg }:
 
 stdenv.mkDerivation rec {
-  name = "cfdg-${version}";
+  pname = "cfdg";
   version = "3.0.9";
   src = fetchurl {
     sha256 = "1jqpinz6ri4a2l04mf2z1ljalkdk1m07hj47lqkh8gbf2slfs0jl";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp cfdg $out/bin/
 
-    mkdir -p $out/share/doc/${name}
-    cp *.txt $out/share/doc/${name}
+    mkdir -p $out/share/doc/${pname}-${version}
+    cp *.txt $out/share/doc/${pname}-${version}
   '';
 
   meta = with stdenv.lib; {

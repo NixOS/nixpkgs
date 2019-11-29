@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, gpgme }:
 
 stdenv.mkDerivation rec {
-  name = "gpgstats-${version}";
+  pname = "gpgstats";
   version = "0.5";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/gpgstats/${name}.tgz";
+    url = "https://www.vanheusden.com/gpgstats/${pname}-${version}.tgz";
     sha256 = "1n3njqhjwgfllcxs0xmk89dzgirrpfpfzkj71kqyvq97gc1wbcxy";
   };
 

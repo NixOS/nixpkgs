@@ -1,7 +1,7 @@
 { stdenv, appleDerivation, lib
 , Librpcsvc, apple_sdk, pam, CF, openbsm }:
 
-appleDerivation rec {
+appleDerivation {
   # xcbuild fails with:
   # /nix/store/fc0rz62dh8vr648qi7hnqyik6zi5sqx8-xcbuild-wrapper/nix-support/setup-hook: line 1:  9083 Segmentation fault: 11  xcodebuild OTHER_CFLAGS="$NIX_CFLAGS_COMPILE" OTHER_CPLUSPLUSFLAGS="$NIX_CFLAGS_COMPILE" OTHER_LDFLAGS="$NIX_LDFLAGS" build
   # see issue facebook/xcbuild#188
@@ -14,8 +14,8 @@ appleDerivation rec {
   #                    + lib.optionalString hostPlatform.isAarch32 "-D__arm__";
   NIX_CFLAGS_COMPILE = [ "-DDAEMON_UID=1"
                          "-DDAEMON_GID=1"
-                         "-DDEFAULT_AT_QUEUE=\'a\'"
-                         "-DDEFAULT_BATCH_QUEUE=\'b\'"
+                         "-DDEFAULT_AT_QUEUE='a'"
+                         "-DDEFAULT_BATCH_QUEUE='b'"
                          "-DPERM_PATH=\"/usr/lib/cron/\""
                          "-DOPEN_DIRECTORY"
                          "-DNO_DIRECT_RPC"

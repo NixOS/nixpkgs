@@ -1,54 +1,40 @@
-{ stdenv, fetchurl, docbook_xsl, dbus, dbus-glib, expat
-, gsettings-desktop-schemas, gdk-pixbuf, gtk3, hicolor-icon-theme
-, imagemagick, itstool, librsvg, libtool, libxslt, makeWrapper
-, pkgconfig, python, pythonPackages, vte
-, wrapGAppsHook}:
+{ at-spi2-core, cmake, dbus, dbus-glib, docbook_xsl, epoxy, fetchpatch, fetchFromGitHub
+, glib, gtk3, harfbuzz, libXdmcp, libXtst, libpthreadstubs
+, libselinux, libsepol, libtasn1, libxkbcommon, libxslt, p11-kit, pcre2
+, pkgconfig, stdenv, utillinuxMinimal, vte, wrapGAppsHook, xmlto
+}:
 
-# TODO: Still getting following warning.
-# WARNING **: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files
-# Seems related to this:
-# https://forums.gentoo.org/viewtopic-t-947210-start-0.html
+stdenv.mkDerivation rec {
+  pname = "roxterm";
+  version = "3.7.5";
 
-let version = "3.3.2";
-in stdenv.mkDerivation rec {
-  name = "roxterm-${version}";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/roxterm/${name}.tar.xz";
-    sha256 = "0vjh7k4jm4bd01j88w9bmvq27zqsajjzy131fpi81zkii5lisl1k";
+  src = fetchFromGitHub {
+    owner = "realh";
+    repo = "roxterm";
+    rev = version;
+    sha256 = "042hchvgk9jzz035zsgnfhh8105zvspbzz6b78waylsdlgqn0pp1";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-
-  buildInputs =
-    [ docbook_xsl expat imagemagick itstool librsvg libtool libxslt
-      makeWrapper python pythonPackages.lockfile dbus dbus-glib
-      gdk-pixbuf gsettings-desktop-schemas gtk3
-      hicolor-icon-theme vte ];
-
-  NIX_CFLAGS_COMPILE = [ "-I${dbus-glib.dev}/include/dbus-1.0"
-                         "-I${dbus.dev}/include/dbus-1.0"
-                         "-I${dbus.lib}/lib/dbus-1.0/include" ];
-
-  # Fix up python path so the lockfile library is on it.
-  PYTHONPATH = stdenv.lib.makeSearchPathOutput "lib" python.sitePackages [
-    pythonPackages.lockfile
+  patches = [
+    # This is the commit directly after v3.7.5.  It is needed to get roxterm to
+    # build correctly.  It can be removed when v3.7.6 (or v3.8.0) has been
+    # released.
+    (fetchpatch {
+      url = "https://github.com/realh/roxterm/commit/f7c38fd48bd1810e16d82794bdfb61a9760a2fe1.patch";
+      sha256 = "1v77b7ilgf8zy1npxxcyc06mq6lck6bi6lw4aksnq3mi61n5znmx";
+    })
   ];
 
-  buildPhase = ''
-    # Fix up the LD_LIBRARY_PATH so that expat is on it
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${expat.out}/lib"
+  nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook libxslt ];
 
-    python mscript.py configure --prefix="$out" --disable-nls --disable-translations
-    python mscript.py build
-  '';
-
-  installPhase = ''
-    python mscript.py install
-  '';
+  buildInputs =
+    [ gtk3 dbus dbus-glib vte pcre2 harfbuzz libpthreadstubs libXdmcp
+      utillinuxMinimal glib docbook_xsl xmlto libselinux
+      libsepol libxkbcommon epoxy at-spi2-core libXtst libtasn1 p11-kit
+    ];
 
   meta = with stdenv.lib; {
-    homepage = http://roxterm.sourceforge.net/;
+    homepage = "https://github.com/realh/roxterm";
     license = licenses.gpl3;
     description = "Tabbed, VTE-based terminal emulator";
     longDescription = ''

@@ -3,7 +3,7 @@
 , copyfile, removefile, libresolv, Libnotify, libplatform, libpthread
 , mDNSResponder, launchd, libutil, hfs, darling }:
 
-appleDerivation rec {
+appleDerivation {
   dontBuild = true;
   dontFixup = true;
 

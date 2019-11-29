@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "shaarli-material-${version}";
+  pname = "shaarli-material";
   version = "0.10.4";
 
   src = fetchFromGitHub {

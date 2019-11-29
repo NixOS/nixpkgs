@@ -5,8 +5,9 @@
   , ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "ign-transport-${version}";
+stdenv.mkDerivation {
+  pname = "ign-transport";
+  inherit version;
   inherit src;
 
   nativeBuildInputs = [ pkgconfig ];

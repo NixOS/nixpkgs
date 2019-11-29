@@ -7,7 +7,8 @@ let
   version = "1.5.1";
 in
 stdenv.mkDerivation {
-  name = "stlink-${version}";
+  pname = "stlink";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "texane";

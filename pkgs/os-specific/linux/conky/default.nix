@@ -67,7 +67,7 @@ assert journalSupport      -> systemd != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "conky-${version}";
+  pname = "conky";
   version = "1.11.5";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { lib, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "speedometer-${version}";
+  pname = "speedometer";
   version = "2.8";
 
   src = fetchurl {

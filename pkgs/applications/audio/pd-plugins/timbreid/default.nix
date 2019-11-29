@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.7.0";
-  name = "timbreid-${version}";
+  pname = "timbreid";
 
   src = fetchurl {
     url = "http://williambrent.conflations.com/pd/timbreID-${version}-src.zip";

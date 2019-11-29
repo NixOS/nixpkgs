@@ -18,6 +18,7 @@ http,,,,,vcunat
 inspect,,,,,
 ldoc,,,,,
 lgi,,,,,
+ljsyscall,,,,lua5_1,lblasc
 lpeg,,,,,vyp
 lpeg_patterns,,,,,
 lpeglabel,,,,,
@@ -36,14 +37,17 @@ lua-zlib,,,,,koral
 lua_cliargs,,,,,
 luabitop,,,,,
 luacheck,,,,,
+luacov,,,,,
 luadbi,,,,,
 luadbi-mysql,,,,,
 luadbi-postgresql,,,,,
 luadbi-sqlite3,,,,,
+luadoc,,,,,
 luaevent,,,,,
 luaexpat,,,1.3.0-1,,arobyn flosse
 luaffi,,http://luarocks.org/dev,,,
 luafilesystem,,,1.7.0-2,,flosse vcunat
+lualogging,,,,,
 luaossl,,,,lua5_1,vcunat
 luaposix,,,,,vyp lblasc
 luasec,,,,,flosse
@@ -51,7 +55,9 @@ luasocket,,,,,
 luasql-sqlite3,,,,,vyp
 luassert,,,,,
 luasystem,,,,,
+luautf8,,,,,pstn
 luazip,,,,,
+lua-yajl,,,,,pstn
 luuid,,,,,
 luv,,,,,
 markdown,,,,,
@@ -65,3 +71,4 @@ say,,,,,
 std__debug,std._debug,,,,
 std_normalize,std.normalize,,,,
 stdlib,,,,,vyp
+pulseaudio,,,,,doronbehar

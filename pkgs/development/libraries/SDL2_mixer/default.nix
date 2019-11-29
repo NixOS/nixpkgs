@@ -4,11 +4,11 @@
 , enableNativeMidi ? false, fluidsynth ? null }:
 
 stdenv.mkDerivation rec {
-  name = "SDL2_mixer-${version}";
+  pname = "SDL2_mixer";
   version = "2.0.4";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_mixer/release/${name}.tar.gz";
+    url = "https://www.libsdl.org/projects/SDL_mixer/release/${pname}-${version}.tar.gz";
     sha256 = "0694vsz5bjkcdgfdra6x9fq8vpzrl8m6q96gh58df7065hw5mkxl";
   };
 

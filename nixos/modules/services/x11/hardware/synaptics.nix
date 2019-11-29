@@ -44,19 +44,19 @@ in {
       };
 
       accelFactor = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = "0.001";
         description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
 
       minSpeed = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = "0.6";
         description = "Cursor speed factor for precision finger motion.";
       };
 
       maxSpeed = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = "1.0";
         description = "Cursor speed factor for highest-speed finger motion.";
       };
@@ -167,7 +167,7 @@ in {
 
     services.xserver.modules = [ pkg.out ];
 
-    environment.etc."${etcFile}".source =
+    environment.etc.${etcFile}.source =
       "${pkg.out}/share/X11/xorg.conf.d/70-synaptics.conf";
 
     environment.systemPackages = [ pkg ];

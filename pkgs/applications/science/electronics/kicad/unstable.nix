@@ -11,7 +11,7 @@ assert ngspiceSupport -> libngspice != null;
 
 with lib;
 stdenv.mkDerivation rec {
-  name = "kicad-unstable-${version}";
+  pname = "kicad-unstable";
   version = "2018-06-12";
 
   src = fetchFromGitHub {
@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

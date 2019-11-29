@@ -3,17 +3,18 @@
 }:
 
 let
-  version = "0.9.8";
+  version = "0.9.10";
 
 in
-stdenv.mkDerivation rec {
-  name = "endless-sky-${version}";
+stdenv.mkDerivation {
+  pname = "endless-sky";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     rev = "v${version}";
-    sha256 = "0i36lawypikbq8vvzfis1dn7yf6q0d2s1cllshfn7kmjb6pqfi6c";
+    sha256 = "1wax9qhxakydg6bs92d1jy2fki1n9r0wkps1np02y0pvm1fl189i";
   };
 
   enableParallelBuilding = true;

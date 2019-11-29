@@ -1,6 +1,6 @@
 { mkDerivation }:
 
-mkDerivation rec {
+mkDerivation {
   version = "21.3.8.3";
   sha256 = "1szybirrcpqsl2nmlmpbkxjqnm6i7l7bma87m5cpwi0kpvlxwmcw";
 

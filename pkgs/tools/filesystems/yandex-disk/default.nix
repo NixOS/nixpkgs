@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
 
-  name = "yandex-disk-${version}";
+  pname = "yandex-disk";
   version = "0.1.5.1039";
 
   src = fetchurl {
-    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
+    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm";
     sha256 = p.sha256;
   };
 

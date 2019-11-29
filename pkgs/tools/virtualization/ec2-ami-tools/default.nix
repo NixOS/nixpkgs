@@ -1,14 +1,14 @@
 { stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ec2-ami-tools-${version}";
+  pname = "ec2-ami-tools";
 
   version = "1.5.7";
 
   buildInputs = [ unzip makeWrapper ];
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/ec2-downloads/${name}.zip";
+    url = "https://s3.amazonaws.com/ec2-downloads/${pname}-${version}.zip";
     sha256 = "17xj7xmdbcwdbzalhfs6yyiwa64978mk3li39l949qfjjgrxjias";
   };
 

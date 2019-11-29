@@ -17,7 +17,7 @@ let versions = builtins.fromJSON (builtins.readFile ./versions.json);
 in
 stdenv.mkDerivation {
   name = "ngrok-${version}";
-  version = "${version}";
+  version = version;
 
   # run ./update
   src = fetchurl { inherit sha256 url; };
@@ -32,9 +32,6 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D ngrok $out/bin/ngrok
-  '' + optionalString stdenv.isLinux ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-              $out/bin/ngrok
   '';
 
   passthru.updateScript = ./update.sh;

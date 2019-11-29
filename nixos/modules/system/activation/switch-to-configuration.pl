@@ -10,6 +10,9 @@ use Cwd 'abs_path';
 
 my $out = "@out@";
 
+# FIXME: maybe we should use /proc/1/exe to get the current systemd.
+my $curSystemd = abs_path("/run/current-system/sw/bin");
+
 # To be robust against interruption, record what units need to be started etc.
 my $startListFile = "/run/systemd/start-list";
 my $restartListFile = "/run/systemd/restart-list";
@@ -211,7 +214,17 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # Reload the changed mount unit to force a remount.
                 $unitsToReload{$unit} = 1;
                 recordUnit($reloadListFile, $unit);
-            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
+            } elsif ($unit =~ /\.socket$/) {
+                my $unitInfo = parseUnit($newUnitFile);
+                # If a socket unit has been changed, the corresponding
+                # service unit has to be stopped before the socket can
+                # be restarted. The service will be started again on demand.
+                my $serviceUnit = $unitInfo->{'Unit'} // "$baseName.service";
+                $unitsToStop{$serviceUnit} = 1;
+                $unitsToStop{$unit} = 1;
+                $unitsToStart{$unit} = 1;
+                recordUnit($startListFile, $unit);
+            } elsif ($unit =~ /\.path$/ || $unit =~ /\.slice$/) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
@@ -267,7 +280,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
 sub pathToUnitName {
     my ($path) = @_;
     # Use current version of systemctl binary before daemon is reexeced.
-    open my $cmd, "-|", "/run/current-system/sw/bin/systemd-escape", "--suffix=mount", "-p", $path
+    open my $cmd, "-|", "$curSystemd/systemd-escape", "--suffix=mount", "-p", $path
         or die "Unable to escape $path!\n";
     my $escaped = join "", <$cmd>;
     chomp $escaped;
@@ -370,7 +383,7 @@ if (scalar (keys %unitsToStop) > 0) {
     print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
         if scalar @unitsToStopFiltered;
     # Use current version of systemctl binary before daemon is reexeced.
-    system("/run/current-system/sw/bin/systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
+    system("$curSystemd/systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
@@ -382,10 +395,12 @@ my $res = 0;
 print STDERR "activating the configuration...\n";
 system("$out/activate", "$out") == 0 or $res = 2;
 
-# Restart systemd if necessary.
+# Restart systemd if necessary. Note that this is done using the
+# current version of systemd, just in case the new one has trouble
+# communicating with the running pid 1.
 if ($restartSystemd) {
     print STDERR "restarting systemd...\n";
-    system("@systemd@/bin/systemctl", "daemon-reexec") == 0 or $res = 2;
+    system("$curSystemd/systemctl", "daemon-reexec") == 0 or $res = 2;
 }
 
 # Forget about previously failed services.
@@ -401,8 +416,10 @@ while (my $f = <$listActiveUsers>) {
     my ($uid, $name) = ($+{uid}, $+{user});
     print STDERR "reloading user units for $name...\n";
 
-    system("@su@", "-s", "@shell@", "-l", $name, "-c", "XDG_RUNTIME_DIR=/run/user/$uid @systemd@/bin/systemctl --user daemon-reload");
-    system("@su@", "-s", "@shell@", "-l", $name, "-c", "XDG_RUNTIME_DIR=/run/user/$uid @systemd@/bin/systemctl --user start nixos-activation.service");
+    system("@su@", "-s", "@shell@", "-l", $name, "-c",
+           "export XDG_RUNTIME_DIR=/run/user/$uid; " .
+           "$curSystemd/systemctl --user daemon-reexec; " .
+           "@systemd@/bin/systemctl --user start nixos-activation.service");
 }
 
 close $listActiveUsers;

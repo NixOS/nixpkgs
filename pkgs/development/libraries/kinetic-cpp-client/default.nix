@@ -8,7 +8,7 @@ let
     sha256 = "0406pp0sdf0rg6s5g18r2d8si2rin7p6qbzp7c6pma5hyzsygz48";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kinetic-cpp-client-2015-04-14";
 
   src = fetchgit {

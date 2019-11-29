@@ -42,23 +42,22 @@ ecmPostHook() {
     cmakeFlags+=" -DKDE_INSTALL_CONFDIR=${!outputBin}/etc/xdg"
     cmakeFlags+=" -DKDE_INSTALL_AUTOSTARTDIR=${!outputBin}/etc/xdg/autostart"
 
-    if [ -n "$qtPluginPrefix" ]; then
+    if [ -n "${qtPluginPrefix-}" ]; then
         cmakeFlags+=" -DKDE_INSTALL_QTPLUGINDIR=${!outputBin}/$qtPluginPrefix"
         cmakeFlags+=" -DKDE_INSTALL_PLUGINDIR=${!outputBin}/$qtPluginPrefix"
     fi
 
-    if [ -n "$qtQmlPrefix" ]; then
+    if [ -n "${qtQmlPrefix-}" ]; then
         cmakeFlags+=" -DKDE_INSTALL_QMLDIR=${!outputBin}/$qtQmlPrefix"
     fi
 }
 postHooks+=(ecmPostHook)
 
-xdgDataSubdirs=(
-    "doc" "config.kcfg" "kconf_update" "kservices5" "kservicetypes5" \
+xdgDataSubdirs=( \
+    "config.kcfg" "kconf_update" "kservices5" "kservicetypes5" \
     "kxmlgui5" "knotifications5" "icons" "locale" "sounds" "templates" \
     "wallpapers" "applications" "desktop-directories" "mime" "appdata" "dbus-1" \
 )
-
 
 ecmHostPathSeen=( )
 
@@ -104,5 +103,10 @@ ecmHostPathHook() {
     then
         qtWrapperArgs+=(--prefix INFOPATH : "$infoDir")
     fi
+
+    if [ -d "$1/dbus-1" ]
+    then
+        propagatedUserEnvPkgs+=" $1"
+    fi
 }
-addEnvHooks "$hostOffset" ecmHostPathHook
+addEnvHooks "$targetOffset" ecmHostPathHook

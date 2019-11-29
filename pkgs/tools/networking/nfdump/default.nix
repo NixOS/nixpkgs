@@ -5,7 +5,8 @@
 let version = "1.6.18"; in
 
 stdenv.mkDerivation {
-  name = "nfdump-${version}";
+  pname = "nfdump";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "phaag";

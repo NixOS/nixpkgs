@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "google-compute-engine-oslogin-${version}";
+  pname = "google-compute-engine-oslogin";
   version = "1.5.3";
   # from packages/google-compute-engine-oslogin/packaging/debian/changelog
 

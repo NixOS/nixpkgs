@@ -1,7 +1,7 @@
 {stdenv, fetchurl, fetchpatch, ocaml, findlib, camlp4}:
 
-stdenv.mkDerivation rec {
-  name = "camomile-${version}";
+stdenv.mkDerivation {
+  pname = "camomile";
   version = "0.8.5";
 
   src = fetchurl {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

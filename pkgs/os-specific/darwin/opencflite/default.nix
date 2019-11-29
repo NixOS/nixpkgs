@@ -1,11 +1,11 @@
 { stdenv, fetchurl, icu, libuuid, tzdata }:
 
 stdenv.mkDerivation rec {
-  name = "opencflite-${version}";
+  pname = "opencflite";
   version = "476.19.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/opencflite/${name}.tar.gz";
+    url = "mirror://sourceforge/opencflite/${pname}-${version}.tar.gz";
     sha256 = "0jgmzs0ycl930hmzcvx0ykryik56704yw62w394q1q3xw5kkjn9v";
   };
 

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tomb-${version}";
+  pname = "tomb";
   version = "2.6";
 
   src = fetchFromGitHub {

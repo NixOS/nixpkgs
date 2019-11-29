@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch
 , aws-xray-sdk
 , backports_tempfile
 , boto
@@ -22,16 +22,29 @@
 , sure
 , werkzeug
 , xmltodict
+, isPy38
 }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.3.10";
+  version = "1.3.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vlq015irqqwdknk1an7qqkg1zjk18c7jd89r7zbxxfwy3bgzwwj";
+    sha256 = "0rhbjvqi1khp80gfnl3x632kwlpq3k7m8f13nidznixdpa78vm4m";
   };
+
+  # 3.8 is not yet support
+  # https://github.com/spulec/moto/pull/2519
+  disabled = isPy38;
+
+  # Backported fix from 1.3.14.dev for compatibility with botocore >= 1.9.198.
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/spulec/moto/commit/e4a4e6183560489e98b95e815b439c7a1cf3566c.diff";
+      sha256 = "1fixr7riimnldiikv33z4jwjgcsccps0c6iif40x8wmpvgcfs0cb";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

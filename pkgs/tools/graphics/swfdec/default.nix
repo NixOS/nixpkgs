@@ -4,7 +4,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "swfdec";
   version = "0.8.4";
 

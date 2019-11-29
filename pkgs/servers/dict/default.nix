@@ -1,7 +1,7 @@
 { stdenv, fetchurl, which, bison, flex, libmaa, zlib, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "dictd-${version}";
+  pname = "dictd";
   version = "1.12.1";
 
   src = fetchurl {

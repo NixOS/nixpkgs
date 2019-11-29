@@ -15,6 +15,7 @@ CSV_FILE="maintainers/scripts/luarocks-packages.csv"
 TMP_FILE="$(mktemp)"
 # Set in the update-luarocks-shell.nix
 NIXPKGS_PATH="$LUAROCKS_NIXPKGS_PATH"
+export LUAROCKS_CONFIG="$NIXPKGS_PATH/maintainers/scripts/luarocks-config.lua"
 
 # 10 is a pretty arbitrary number of simultaneous jobs, but it is generally
 # impolite to hit a webserver with *too* many simultaneous connections :)

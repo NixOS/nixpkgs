@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "catch-${version}";
+  pname = "catch";
   version = "1.12.2";
 
   src = fetchFromGitHub {

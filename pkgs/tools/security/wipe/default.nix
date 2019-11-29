@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "wipe-${version}";
+  pname = "wipe";
   version = "2.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wipe/${version}/${name}.tar.bz2";
+    url = "mirror://sourceforge/wipe/${version}/${pname}-${version}.tar.bz2";
     sha256 = "180snqvh6k6il6prb19fncflf2jcvkihlb4w84sbndcv1wvicfa6";
   };
 

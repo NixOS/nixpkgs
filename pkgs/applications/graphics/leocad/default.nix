@@ -6,7 +6,7 @@ set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
 { stdenv, fetchFromGitHub, qt4, qmake4Hook, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "leocad-${version}";
+  pname = "leocad";
   version = "19.07.1";
 
   src = fetchFromGitHub {

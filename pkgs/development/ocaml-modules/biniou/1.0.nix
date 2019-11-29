@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
-    homepage = "${webpage}";
+    homepage = webpage;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms or [];

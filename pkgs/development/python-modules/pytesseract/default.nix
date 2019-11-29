@@ -2,17 +2,17 @@
 
 buildPythonPackage rec {
   pname = "pytesseract";
-  version = "0.2.9";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mjr3pa4fycdsl7xk9s8fpn2vhpgx7mrdnn5h4lyyjhz86195ivg";
+    sha256 = "0n9vasm5fp25fmr9ns9i3bf4kri63s1mvmjgc6q8w7rx840ww7df";
   };
 
   patches = [
     (substituteAll {
       src = ./tesseract-binary.patch;
-      drv = "${tesseract}";
+      drv = tesseract;
     })
   ];
 

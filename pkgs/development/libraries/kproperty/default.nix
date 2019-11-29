@@ -8,10 +8,9 @@
 mkDerivation rec {
   pname = "kproperty";
   version = "3.2.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
+    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
     sha256 = "1yldfsdamk4dag8dyryjn5n9j2pzi42s79kkafymfnbifhnhrbv7";
   };
 

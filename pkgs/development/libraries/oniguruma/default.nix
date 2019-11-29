@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "onig-${version}";
+  pname = "onig";
   version = "6.9.3";
 
   src = fetchFromGitHub {

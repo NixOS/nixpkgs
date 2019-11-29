@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, flex, bison, file }:
 
 stdenv.mkDerivation rec {
-  name = "libstdc++5-${version}";
+  pname = "libstdc++5";
   version = "3.3.6";
 
   src = [

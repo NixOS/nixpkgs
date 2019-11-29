@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "evmdis-unstable-${version}";
+buildGoPackage {
+  pname = "evmdis-unstable";
   version = "2018-03-23";
   goPackagePath = "github.com/Arachnid/evmdis";
 

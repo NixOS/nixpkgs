@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, curl, boost, eigen
 , freeimage, freetype, libGLU_combined, SDL2, alsaLib, libarchive }:
 
-stdenv.mkDerivation rec {
-  name = "emulationstation-${version}";
+stdenv.mkDerivation {
+  pname = "emulationstation";
   version = "2.0.1a";
 
   src = fetchFromGitHub {

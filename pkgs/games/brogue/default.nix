@@ -1,7 +1,7 @@
 { stdenv, fetchurl, SDL, ncurses, libtcod, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "brogue-${version}";
+  pname = "brogue";
   version = "1.7.5";
 
   src = fetchurl {

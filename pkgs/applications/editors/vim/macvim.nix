@@ -24,16 +24,16 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
-  name = "macvim-${version}";
+stdenv.mkDerivation {
+  pname = "macvim";
 
-  version = "8.1.1722";
+  version = "8.1.2234";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "snapshot-157";
-    sha256 = "1gmgc4pwaqy78gj4p7iib94n7j52ir0aa03ks595h3vy1hkcwwky";
+    rev = "snapshot-161";
+    sha256 = "1hp3y85pj1icz053g627a1wp5pnwgxhk07pyd4arwcxs2103agw4";
   };
 
   enableParallelBuilding = true;
@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
   # The sparkle patch modified the nibs, so we have to recompile them
   postPatch = ''
     for nib in MainMenu Preferences; do
-      /usr/bin/ibtool --compile src/MacVim/English.lproj/$nib.nib/keyedobjects.nib src/MacVim/English.lproj/$nib.nib
+      # redirect stdin/stdout/stderr to /dev/null because ibtool marks them nonblocking
+      # and not redirecting screws with subsequent commands.
+      # redirecting stderr is unfortunate but I don't know of a reasonable way to remove O_NONBLOCK
+      # from the fds.
+      /usr/bin/ibtool --compile src/MacVim/English.lproj/$nib.nib/keyedobjects.nib src/MacVim/English.lproj/$nib.nib >/dev/null 2>/dev/null </dev/null
     done
   '';
 
@@ -72,6 +76,7 @@ stdenv.mkDerivation rec {
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
       "--with-compiledby=Nix"
+      "LDFLAGS=-headerpad_max_install_names"
   ];
 
   makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
@@ -129,11 +134,21 @@ stdenv.mkDerivation rec {
     find $out/share/man \( -name eVim.1 -or -name xxd.1 \) -delete
   '';
 
+  # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
+  # it's not clear what system-level components it may require, so for now we'll just allow full
+  # filesystem access. This way the package still can't access the network.
+  sandboxProfile = ''
+    (allow file-read* file-write* process-exec mach-lookup)
+    ; block homebrew dependencies
+    (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
+  '';
+
   meta = with stdenv.lib; {
     description = "Vim - the text editor - for macOS";
     homepage    = https://github.com/macvim-dev/macvim;
     license = licenses.vim;
     maintainers = with maintainers; [ cstrahan lilyball ];
     platforms   = platforms.darwin;
+    hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
 }

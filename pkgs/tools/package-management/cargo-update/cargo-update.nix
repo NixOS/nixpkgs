@@ -520,7 +520,7 @@ rec {
     dependencies = mapFeatures features ([ winapi_0_2_8 ]);
     buildDependencies = mapFeatures features ([ winapi_build_0_1_1 ]);
   };
-  advapi32_sys_0_2_0_features = f: updateFeatures f (rec {
+  advapi32_sys_0_2_0_features = f: updateFeatures f ({
     advapi32_sys_0_2_0.default = (f.advapi32_sys_0_2_0.default or true);
     winapi_0_2_8.default = true;
     winapi_build_0_1_1.default = true;
@@ -528,14 +528,14 @@ rec {
   aho_corasick_0_6_4 = { features?(aho_corasick_0_6_4_features {}) }: aho_corasick_0_6_4_ {
     dependencies = mapFeatures features ([ memchr_2_0_1 ]);
   };
-  aho_corasick_0_6_4_features = f: updateFeatures f (rec {
+  aho_corasick_0_6_4_features = f: updateFeatures f ({
     aho_corasick_0_6_4.default = (f.aho_corasick_0_6_4.default or true);
     memchr_2_0_1.default = true;
   }) [ memchr_2_0_1_features ];
   ansi_term_0_11_0 = { features?(ansi_term_0_11_0_features {}) }: ansi_term_0_11_0_ {
     dependencies = (if kernel == "windows" then mapFeatures features ([ winapi_0_3_4 ]) else []);
   };
-  ansi_term_0_11_0_features = f: updateFeatures f (rec {
+  ansi_term_0_11_0_features = f: updateFeatures f ({
     ansi_term_0_11_0.default = (f.ansi_term_0_11_0.default or true);
     winapi_0_3_4.consoleapi = true;
     winapi_0_3_4.default = true;
@@ -543,7 +543,7 @@ rec {
     winapi_0_3_4.processenv = true;
   }) [ winapi_0_3_4_features ];
   array_tool_1_0_3 = { features?(array_tool_1_0_3_features {}) }: array_tool_1_0_3_ {};
-  array_tool_1_0_3_features = f: updateFeatures f (rec {
+  array_tool_1_0_3_features = f: updateFeatures f ({
     array_tool_1_0_3.default = (f.array_tool_1_0_3.default or true);
   }) [];
   atty_0_2_10 = { features?(atty_0_2_10_features {}) }: atty_0_2_10_ {
@@ -551,7 +551,7 @@ rec {
       ++ (if (kernel == "linux" || kernel == "darwin") then mapFeatures features ([ libc_0_2_40 ]) else [])
       ++ (if kernel == "windows" then mapFeatures features ([ winapi_0_3_4 ]) else []);
   };
-  atty_0_2_10_features = f: updateFeatures f (rec {
+  atty_0_2_10_features = f: updateFeatures f ({
     atty_0_2_10.default = (f.atty_0_2_10.default or true);
     libc_0_2_40.default = (f.libc_0_2_40.default or false);
     termion_1_5_1.default = true;
@@ -575,14 +575,14 @@ rec {
   bitflags_1_0_3 = { features?(bitflags_1_0_3_features {}) }: bitflags_1_0_3_ {
     features = mkFeatures (features.bitflags_1_0_3 or {});
   };
-  bitflags_1_0_3_features = f: updateFeatures f (rec {
+  bitflags_1_0_3_features = f: updateFeatures f ({
     bitflags_1_0_3.default = (f.bitflags_1_0_3.default or true);
   }) [];
   cargo_update_1_5_2 = { features?(cargo_update_1_5_2_features {}) }: cargo_update_1_5_2_ {
     dependencies = mapFeatures features ([ array_tool_1_0_3 clap_2_31_2 git2_0_6_11 json_0_11_13 lazy_static_1_0_0 lazysort_0_2_0 regex_0_2_11 semver_0_9_0 serde_1_0_55 serde_derive_1_0_55 tabwriter_1_0_4 toml_0_4_6 url_1_7_0 ]);
     buildDependencies = mapFeatures features ([ embed_resource_1_1_4 ]);
   };
-  cargo_update_1_5_2_features = f: updateFeatures f (rec {
+  cargo_update_1_5_2_features = f: updateFeatures f ({
     array_tool_1_0_3.default = true;
     cargo_update_1_5_2.default = (f.cargo_update_1_5_2.default or true);
     clap_2_31_2.default = true;
@@ -677,7 +677,7 @@ rec {
   cmake_0_1_31 = { features?(cmake_0_1_31_features {}) }: cmake_0_1_31_ {
     dependencies = mapFeatures features ([ cc_1_0_15 ]);
   };
-  cmake_0_1_31_features = f: updateFeatures f (rec {
+  cmake_0_1_31_features = f: updateFeatures f ({
     cc_1_0_15.default = true;
     cmake_0_1_31.default = (f.cmake_0_1_31.default or true);
   }) [ cc_1_0_15_features ];
@@ -688,7 +688,7 @@ rec {
       ++ (if kernel == "windows" then mapFeatures features ([ winapi_0_3_4 ]) else []);
     buildDependencies = mapFeatures features ([ cc_1_0_15 pkg_config_0_3_11 ]);
   };
-  curl_sys_0_4_5_features = f: updateFeatures f (rec {
+  curl_sys_0_4_5_features = f: updateFeatures f ({
     cc_1_0_15.default = true;
     curl_sys_0_4_5.default = (f.curl_sys_0_4_5.default or true);
     libc_0_2_40.default = true;
@@ -702,20 +702,20 @@ rec {
   embed_resource_1_1_4 = { features?(embed_resource_1_1_4_features {}) }: embed_resource_1_1_4_ {
     dependencies = (if kernel == "windows" && abi == "msvc" then mapFeatures features ([ winreg_0_4_0 ]) else []);
   };
-  embed_resource_1_1_4_features = f: updateFeatures f (rec {
+  embed_resource_1_1_4_features = f: updateFeatures f ({
     embed_resource_1_1_4.default = (f.embed_resource_1_1_4.default or true);
     winreg_0_4_0.default = (f.winreg_0_4_0.default or false);
   }) [ winreg_0_4_0_features ];
   fuchsia_zircon_0_3_3 = { features?(fuchsia_zircon_0_3_3_features {}) }: fuchsia_zircon_0_3_3_ {
     dependencies = mapFeatures features ([ bitflags_1_0_3 fuchsia_zircon_sys_0_3_3 ]);
   };
-  fuchsia_zircon_0_3_3_features = f: updateFeatures f (rec {
+  fuchsia_zircon_0_3_3_features = f: updateFeatures f ({
     bitflags_1_0_3.default = true;
     fuchsia_zircon_0_3_3.default = (f.fuchsia_zircon_0_3_3.default or true);
     fuchsia_zircon_sys_0_3_3.default = true;
   }) [ bitflags_1_0_3_features fuchsia_zircon_sys_0_3_3_features ];
   fuchsia_zircon_sys_0_3_3 = { features?(fuchsia_zircon_sys_0_3_3_features {}) }: fuchsia_zircon_sys_0_3_3_ {};
-  fuchsia_zircon_sys_0_3_3_features = f: updateFeatures f (rec {
+  fuchsia_zircon_sys_0_3_3_features = f: updateFeatures f ({
     fuchsia_zircon_sys_0_3_3.default = (f.fuchsia_zircon_sys_0_3_3.default or true);
   }) [];
   git2_0_6_11 = { features?(git2_0_6_11_features {}) }: git2_0_6_11_ {
@@ -769,21 +769,21 @@ rec {
   idna_0_1_4 = { features?(idna_0_1_4_features {}) }: idna_0_1_4_ {
     dependencies = mapFeatures features ([ matches_0_1_6 unicode_bidi_0_3_4 unicode_normalization_0_1_7 ]);
   };
-  idna_0_1_4_features = f: updateFeatures f (rec {
+  idna_0_1_4_features = f: updateFeatures f ({
     idna_0_1_4.default = (f.idna_0_1_4.default or true);
     matches_0_1_6.default = true;
     unicode_bidi_0_3_4.default = true;
     unicode_normalization_0_1_7.default = true;
   }) [ matches_0_1_6_features unicode_bidi_0_3_4_features unicode_normalization_0_1_7_features ];
   json_0_11_13 = { features?(json_0_11_13_features {}) }: json_0_11_13_ {};
-  json_0_11_13_features = f: updateFeatures f (rec {
+  json_0_11_13_features = f: updateFeatures f ({
     json_0_11_13.default = (f.json_0_11_13.default or true);
   }) [];
   kernel32_sys_0_2_2 = { features?(kernel32_sys_0_2_2_features {}) }: kernel32_sys_0_2_2_ {
     dependencies = mapFeatures features ([ winapi_0_2_8 ]);
     buildDependencies = mapFeatures features ([ winapi_build_0_1_1 ]);
   };
-  kernel32_sys_0_2_2_features = f: updateFeatures f (rec {
+  kernel32_sys_0_2_2_features = f: updateFeatures f ({
     kernel32_sys_0_2_2.default = (f.kernel32_sys_0_2_2.default or true);
     winapi_0_2_8.default = true;
     winapi_build_0_1_1.default = true;
@@ -811,7 +811,7 @@ rec {
     dependencies = mapFeatures features ([ rand_0_3_22 ]);
     features = mkFeatures (features.lazysort_0_2_0 or {});
   };
-  lazysort_0_2_0_features = f: updateFeatures f (rec {
+  lazysort_0_2_0_features = f: updateFeatures f ({
     lazysort_0_2_0.default = (f.lazysort_0_2_0.default or true);
     rand_0_3_22.default = true;
   }) [ rand_0_3_22_features ];
@@ -863,7 +863,7 @@ rec {
       ++ (if (kernel == "linux" || kernel == "darwin") then mapFeatures features ([ openssl_sys_0_9_30 ]) else []);
     buildDependencies = mapFeatures features ([ cmake_0_1_31 pkg_config_0_3_11 ]);
   };
-  libssh2_sys_0_2_7_features = f: updateFeatures f (rec {
+  libssh2_sys_0_2_7_features = f: updateFeatures f ({
     cmake_0_1_31.default = true;
     libc_0_2_40.default = true;
     libssh2_sys_0_2_7.default = (f.libssh2_sys_0_2_7.default or true);
@@ -876,14 +876,14 @@ rec {
       ++ (if abi == "msvc" then mapFeatures features ([]) else []);
     buildDependencies = mapFeatures features ([ cc_1_0_15 pkg_config_0_3_11 ]);
   };
-  libz_sys_1_0_18_features = f: updateFeatures f (rec {
+  libz_sys_1_0_18_features = f: updateFeatures f ({
     cc_1_0_15.default = true;
     libc_0_2_40.default = true;
     libz_sys_1_0_18.default = (f.libz_sys_1_0_18.default or true);
     pkg_config_0_3_11.default = true;
   }) [ libc_0_2_40_features cc_1_0_15_features pkg_config_0_3_11_features ];
   matches_0_1_6 = { features?(matches_0_1_6_features {}) }: matches_0_1_6_ {};
-  matches_0_1_6_features = f: updateFeatures f (rec {
+  matches_0_1_6_features = f: updateFeatures f ({
     matches_0_1_6.default = (f.matches_0_1_6.default or true);
   }) [];
   memchr_2_0_1 = { features?(memchr_2_0_1_features {}) }: memchr_2_0_1_ {
@@ -910,7 +910,7 @@ rec {
       (memchr_2_0_1.default or false);
   }) [ libc_0_2_40_features ];
   openssl_probe_0_1_2 = { features?(openssl_probe_0_1_2_features {}) }: openssl_probe_0_1_2_ {};
-  openssl_probe_0_1_2_features = f: updateFeatures f (rec {
+  openssl_probe_0_1_2_features = f: updateFeatures f ({
     openssl_probe_0_1_2.default = (f.openssl_probe_0_1_2.default or true);
   }) [];
   openssl_sys_0_9_30 = { features?(openssl_sys_0_9_30_features {}) }: openssl_sys_0_9_30_ {
@@ -918,18 +918,18 @@ rec {
       ++ (if abi == "msvc" then mapFeatures features ([]) else []);
     buildDependencies = mapFeatures features ([ cc_1_0_15 pkg_config_0_3_11 ]);
   };
-  openssl_sys_0_9_30_features = f: updateFeatures f (rec {
+  openssl_sys_0_9_30_features = f: updateFeatures f ({
     cc_1_0_15.default = true;
     libc_0_2_40.default = true;
     openssl_sys_0_9_30.default = (f.openssl_sys_0_9_30.default or true);
     pkg_config_0_3_11.default = true;
   }) [ libc_0_2_40_features cc_1_0_15_features pkg_config_0_3_11_features ];
   percent_encoding_1_0_1 = { features?(percent_encoding_1_0_1_features {}) }: percent_encoding_1_0_1_ {};
-  percent_encoding_1_0_1_features = f: updateFeatures f (rec {
+  percent_encoding_1_0_1_features = f: updateFeatures f ({
     percent_encoding_1_0_1.default = (f.percent_encoding_1_0_1.default or true);
   }) [];
   pkg_config_0_3_11 = { features?(pkg_config_0_3_11_features {}) }: pkg_config_0_3_11_ {};
-  pkg_config_0_3_11_features = f: updateFeatures f (rec {
+  pkg_config_0_3_11_features = f: updateFeatures f ({
     pkg_config_0_3_11.default = (f.pkg_config_0_3_11.default or true);
   }) [];
   proc_macro2_0_3_8 = { features?(proc_macro2_0_3_8_features {}) }: proc_macro2_0_3_8_ {
@@ -1007,13 +1007,13 @@ rec {
     winapi_0_3_4.winnt = true;
   }) [ fuchsia_zircon_0_3_3_features libc_0_2_40_features winapi_0_3_4_features ];
   redox_syscall_0_1_37 = { features?(redox_syscall_0_1_37_features {}) }: redox_syscall_0_1_37_ {};
-  redox_syscall_0_1_37_features = f: updateFeatures f (rec {
+  redox_syscall_0_1_37_features = f: updateFeatures f ({
     redox_syscall_0_1_37.default = (f.redox_syscall_0_1_37.default or true);
   }) [];
   redox_termios_0_1_1 = { features?(redox_termios_0_1_1_features {}) }: redox_termios_0_1_1_ {
     dependencies = mapFeatures features ([ redox_syscall_0_1_37 ]);
   };
-  redox_termios_0_1_1_features = f: updateFeatures f (rec {
+  redox_termios_0_1_1_features = f: updateFeatures f ({
     redox_syscall_0_1_37.default = true;
     redox_termios_0_1_1.default = (f.redox_termios_0_1_1.default or true);
   }) [ redox_syscall_0_1_37_features ];
@@ -1036,7 +1036,7 @@ rec {
   regex_syntax_0_5_6 = { features?(regex_syntax_0_5_6_features {}) }: regex_syntax_0_5_6_ {
     dependencies = mapFeatures features ([ ucd_util_0_1_1 ]);
   };
-  regex_syntax_0_5_6_features = f: updateFeatures f (rec {
+  regex_syntax_0_5_6_features = f: updateFeatures f ({
     regex_syntax_0_5_6.default = (f.regex_syntax_0_5_6.default or true);
     ucd_util_0_1_1.default = true;
   }) [ ucd_util_0_1_1_features ];
@@ -1055,7 +1055,7 @@ rec {
     serde_1_0_55.default = true;
   }) [ semver_parser_0_7_0_features serde_1_0_55_features ];
   semver_parser_0_7_0 = { features?(semver_parser_0_7_0_features {}) }: semver_parser_0_7_0_ {};
-  semver_parser_0_7_0_features = f: updateFeatures f (rec {
+  semver_parser_0_7_0_features = f: updateFeatures f ({
     semver_parser_0_7_0.default = (f.semver_parser_0_7_0.default or true);
   }) [];
   serde_1_0_55 = { features?(serde_1_0_55_features {}) }: serde_1_0_55_ {
@@ -1081,7 +1081,7 @@ rec {
     dependencies = mapFeatures features ([ proc_macro2_0_3_8 quote_0_5_2 syn_0_13_10 ]);
     features = mkFeatures (features.serde_derive_1_0_55 or {});
   };
-  serde_derive_1_0_55_features = f: updateFeatures f (rec {
+  serde_derive_1_0_55_features = f: updateFeatures f ({
     proc_macro2_0_3_8.default = true;
     quote_0_5_2.default = true;
     serde_derive_1_0_55.default = (f.serde_derive_1_0_55.default or true);
@@ -1089,7 +1089,7 @@ rec {
     syn_0_13_10.visit = true;
   }) [ proc_macro2_0_3_8_features quote_0_5_2_features syn_0_13_10_features ];
   strsim_0_7_0 = { features?(strsim_0_7_0_features {}) }: strsim_0_7_0_ {};
-  strsim_0_7_0_features = f: updateFeatures f (rec {
+  strsim_0_7_0_features = f: updateFeatures f ({
     strsim_0_7_0.default = (f.strsim_0_7_0.default or true);
   }) [];
   syn_0_13_10 = { features?(syn_0_13_10_features {}) }: syn_0_13_10_ {
@@ -1155,7 +1155,7 @@ rec {
     dependencies = (if !(kernel == "redox") then mapFeatures features ([ libc_0_2_40 ]) else [])
       ++ (if kernel == "redox" then mapFeatures features ([ redox_syscall_0_1_37 redox_termios_0_1_1 ]) else []);
   };
-  termion_1_5_1_features = f: updateFeatures f (rec {
+  termion_1_5_1_features = f: updateFeatures f ({
     libc_0_2_40.default = true;
     redox_syscall_0_1_37.default = true;
     redox_termios_0_1_1.default = true;
@@ -1164,14 +1164,14 @@ rec {
   textwrap_0_9_0 = { features?(textwrap_0_9_0_features {}) }: textwrap_0_9_0_ {
     dependencies = mapFeatures features ([ unicode_width_0_1_4 ]);
   };
-  textwrap_0_9_0_features = f: updateFeatures f (rec {
+  textwrap_0_9_0_features = f: updateFeatures f ({
     textwrap_0_9_0.default = (f.textwrap_0_9_0.default or true);
     unicode_width_0_1_4.default = true;
   }) [ unicode_width_0_1_4_features ];
   thread_local_0_3_5 = { features?(thread_local_0_3_5_features {}) }: thread_local_0_3_5_ {
     dependencies = mapFeatures features ([ lazy_static_1_0_0 unreachable_1_0_0 ]);
   };
-  thread_local_0_3_5_features = f: updateFeatures f (rec {
+  thread_local_0_3_5_features = f: updateFeatures f ({
     lazy_static_1_0_0.default = true;
     thread_local_0_3_5.default = (f.thread_local_0_3_5.default or true);
     unreachable_1_0_0.default = true;
@@ -1179,12 +1179,12 @@ rec {
   toml_0_4_6 = { features?(toml_0_4_6_features {}) }: toml_0_4_6_ {
     dependencies = mapFeatures features ([ serde_1_0_55 ]);
   };
-  toml_0_4_6_features = f: updateFeatures f (rec {
+  toml_0_4_6_features = f: updateFeatures f ({
     serde_1_0_55.default = true;
     toml_0_4_6.default = (f.toml_0_4_6.default or true);
   }) [ serde_1_0_55_features ];
   ucd_util_0_1_1 = { features?(ucd_util_0_1_1_features {}) }: ucd_util_0_1_1_ {};
-  ucd_util_0_1_1_features = f: updateFeatures f (rec {
+  ucd_util_0_1_1_features = f: updateFeatures f ({
     ucd_util_0_1_1.default = (f.ucd_util_0_1_1.default or true);
   }) [];
   unicode_bidi_0_3_4 = { features?(unicode_bidi_0_3_4_features {}) }: unicode_bidi_0_3_4_ {
@@ -1208,25 +1208,25 @@ rec {
       (unicode_bidi_0_3_4.with_serde or false);
   }) [ matches_0_1_6_features ];
   unicode_normalization_0_1_7 = { features?(unicode_normalization_0_1_7_features {}) }: unicode_normalization_0_1_7_ {};
-  unicode_normalization_0_1_7_features = f: updateFeatures f (rec {
+  unicode_normalization_0_1_7_features = f: updateFeatures f ({
     unicode_normalization_0_1_7.default = (f.unicode_normalization_0_1_7.default or true);
   }) [];
   unicode_width_0_1_4 = { features?(unicode_width_0_1_4_features {}) }: unicode_width_0_1_4_ {
     features = mkFeatures (features.unicode_width_0_1_4 or {});
   };
-  unicode_width_0_1_4_features = f: updateFeatures f (rec {
+  unicode_width_0_1_4_features = f: updateFeatures f ({
     unicode_width_0_1_4.default = (f.unicode_width_0_1_4.default or true);
   }) [];
   unicode_xid_0_1_0 = { features?(unicode_xid_0_1_0_features {}) }: unicode_xid_0_1_0_ {
     features = mkFeatures (features.unicode_xid_0_1_0 or {});
   };
-  unicode_xid_0_1_0_features = f: updateFeatures f (rec {
+  unicode_xid_0_1_0_features = f: updateFeatures f ({
     unicode_xid_0_1_0.default = (f.unicode_xid_0_1_0.default or true);
   }) [];
   unreachable_1_0_0 = { features?(unreachable_1_0_0_features {}) }: unreachable_1_0_0_ {
     dependencies = mapFeatures features ([ void_1_0_2 ]);
   };
-  unreachable_1_0_0_features = f: updateFeatures f (rec {
+  unreachable_1_0_0_features = f: updateFeatures f ({
     unreachable_1_0_0.default = (f.unreachable_1_0_0.default or true);
     void_1_0_2.default = (f.void_1_0_2.default or false);
   }) [ void_1_0_2_features ];
@@ -1249,11 +1249,11 @@ rec {
       (url_1_7_0.heap_size or false);
   }) [ idna_0_1_4_features matches_0_1_6_features percent_encoding_1_0_1_features ];
   utf8_ranges_1_0_0 = { features?(utf8_ranges_1_0_0_features {}) }: utf8_ranges_1_0_0_ {};
-  utf8_ranges_1_0_0_features = f: updateFeatures f (rec {
+  utf8_ranges_1_0_0_features = f: updateFeatures f ({
     utf8_ranges_1_0_0.default = (f.utf8_ranges_1_0_0.default or true);
   }) [];
   vcpkg_0_2_3 = { features?(vcpkg_0_2_3_features {}) }: vcpkg_0_2_3_ {};
-  vcpkg_0_2_3_features = f: updateFeatures f (rec {
+  vcpkg_0_2_3_features = f: updateFeatures f ({
     vcpkg_0_2_3.default = (f.vcpkg_0_2_3.default or true);
   }) [];
   vec_map_0_8_1 = { features?(vec_map_0_8_1_features {}) }: vec_map_0_8_1_ {
@@ -1278,7 +1278,7 @@ rec {
       (void_1_0_2.default or false);
   }) [];
   winapi_0_2_8 = { features?(winapi_0_2_8_features {}) }: winapi_0_2_8_ {};
-  winapi_0_2_8_features = f: updateFeatures f (rec {
+  winapi_0_2_8_features = f: updateFeatures f ({
     winapi_0_2_8.default = (f.winapi_0_2_8.default or true);
   }) [];
   winapi_0_3_4 = { features?(winapi_0_3_4_features {}) }: winapi_0_3_4_ {
@@ -1286,21 +1286,21 @@ rec {
       ++ (if kernel == "x86_64-pc-windows-gnu" then mapFeatures features ([ winapi_x86_64_pc_windows_gnu_0_4_0 ]) else []);
     features = mkFeatures (features.winapi_0_3_4 or {});
   };
-  winapi_0_3_4_features = f: updateFeatures f (rec {
+  winapi_0_3_4_features = f: updateFeatures f ({
     winapi_0_3_4.default = (f.winapi_0_3_4.default or true);
     winapi_i686_pc_windows_gnu_0_4_0.default = true;
     winapi_x86_64_pc_windows_gnu_0_4_0.default = true;
   }) [ winapi_i686_pc_windows_gnu_0_4_0_features winapi_x86_64_pc_windows_gnu_0_4_0_features ];
   winapi_build_0_1_1 = { features?(winapi_build_0_1_1_features {}) }: winapi_build_0_1_1_ {};
-  winapi_build_0_1_1_features = f: updateFeatures f (rec {
+  winapi_build_0_1_1_features = f: updateFeatures f ({
     winapi_build_0_1_1.default = (f.winapi_build_0_1_1.default or true);
   }) [];
   winapi_i686_pc_windows_gnu_0_4_0 = { features?(winapi_i686_pc_windows_gnu_0_4_0_features {}) }: winapi_i686_pc_windows_gnu_0_4_0_ {};
-  winapi_i686_pc_windows_gnu_0_4_0_features = f: updateFeatures f (rec {
+  winapi_i686_pc_windows_gnu_0_4_0_features = f: updateFeatures f ({
     winapi_i686_pc_windows_gnu_0_4_0.default = (f.winapi_i686_pc_windows_gnu_0_4_0.default or true);
   }) [];
   winapi_x86_64_pc_windows_gnu_0_4_0 = { features?(winapi_x86_64_pc_windows_gnu_0_4_0_features {}) }: winapi_x86_64_pc_windows_gnu_0_4_0_ {};
-  winapi_x86_64_pc_windows_gnu_0_4_0_features = f: updateFeatures f (rec {
+  winapi_x86_64_pc_windows_gnu_0_4_0_features = f: updateFeatures f ({
     winapi_x86_64_pc_windows_gnu_0_4_0.default = (f.winapi_x86_64_pc_windows_gnu_0_4_0.default or true);
   }) [];
   winreg_0_4_0 = { features?(winreg_0_4_0_features {}) }: winreg_0_4_0_ {

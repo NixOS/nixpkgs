@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.3.1";
-  name = "flamerobin-${version}";
+  pname = "flamerobin";
 
   src = fetchFromGitHub {
     owner = "mariuz";

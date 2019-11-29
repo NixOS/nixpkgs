@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pcre }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "leafnode-2.0.0.alpha20121101a.12";
 
   src = fetchurl {

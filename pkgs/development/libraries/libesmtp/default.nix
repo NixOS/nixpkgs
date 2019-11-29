@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
-  name = "libESMTP-${version}";
+stdenv.mkDerivation {
+  pname = "libESMTP";
   version = "1.0.6";
 
   src = fetchurl {

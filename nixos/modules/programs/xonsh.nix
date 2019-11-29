@@ -45,7 +45,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc."xonshrc".text = cfg.config;
+    environment.etc.xonshrc.text = cfg.config;
 
     environment.systemPackages = [ cfg.package ];
 

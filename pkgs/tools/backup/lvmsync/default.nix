@@ -3,7 +3,7 @@
 let
 
   pname = "lvmsync";
-  version = (import ./gemset.nix)."${pname}".version;
+  version = (import ./gemset.nix).${pname}.version;
 
 in stdenv.mkDerivation rec {
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optimised synchronisation of LVM snapshots over a network";
-    homepage = http://theshed.hezmatt.org/lvmsync/;
+    homepage = https://theshed.hezmatt.org/lvmsync/;
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine nicknovitski ];

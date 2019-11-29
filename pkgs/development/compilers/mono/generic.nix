@@ -7,10 +7,12 @@ let
   llvm     = callPackage ./llvm.nix { };
 in
 stdenv.mkDerivation rec {
-  name = "mono-${version}";
+  pname = "mono";
+  inherit version;
+
   src = fetchurl {
     inherit sha256;
-    url = "https://download.mono-project.com/sources/mono/${name}.${srcArchiveSuffix}";
+    url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
   };
 
   buildInputs =
@@ -39,10 +41,6 @@ stdenv.mkDerivation rec {
     patchShebangs ./
     ./autogen.sh --prefix $out $configureFlags
   '';
-
-  # Attempt to fix this error when running "mcs --version":
-  # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
-  dontStrip = true;
 
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config

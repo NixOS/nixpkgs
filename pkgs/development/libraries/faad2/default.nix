@@ -4,11 +4,11 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "faad2-${version}";
+  pname = "faad2";
   version = "2.8.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/faac/${name}.tar.gz";
+    url = "mirror://sourceforge/faac/${pname}-${version}.tar.gz";
     sha256 = "1db37ydb6mxhshbayvirm5vz6j361bjim4nkpwjyhmy4ddfinmhl";
   };
 

@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, cmake, zlib, python2}:
 
 stdenv.mkDerivation rec {
-  name = "strelka-${version}";
+  pname = "strelka";
   version = "2.9.10";
 
   src = fetchFromGitHub {
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Illumina/strelka;
     maintainers = with maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];
+    broken = true;
   };
 
 }

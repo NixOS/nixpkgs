@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "pass-genphrase-${version}";
-  version = "0.1";
+  pname = "pass-genphrase";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "congma";
     repo = "pass-genphrase";
-    rev = "${version}";
-    sha256 = "0vcg3b79n1r949qfn8ns85bq2mfsmbf4jw2dlzif8425n8ppfsgd";
+    rev = version;
+    sha256 = "1sdkmz5s6wdx4vdlgqf5kmyrm17zwzy3n52s13qpx32bnnajap1h";
   };
 
   dontBuild = true;

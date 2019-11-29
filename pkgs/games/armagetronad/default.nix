@@ -7,7 +7,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "armagetron-${version}";
+  pname = "armagetron";
+  inherit version;
   src = fetchurl {
     url = "https://launchpad.net/armagetronad/${versionMajor}/${versionMajor}.${versionMinor}/+download/armagetronad-${version}.src.tar.bz2";
     sha256 = "157pp84wf0q3bdb72rnbm3ck0czwx2ply6lyhj8z7kfdc7csdbr3";

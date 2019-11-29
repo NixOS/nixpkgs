@@ -21,12 +21,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "liquibase";
   version = "3.6.2";
 
   src = fetchurl {
-    url = "https://github.com/liquibase/liquibase/releases/download/${pname}-parent-${version}/${name}-bin.tar.gz";
+    url = "https://github.com/liquibase/liquibase/releases/download/${pname}-parent-${version}/${pname}-${version}-bin.tar.gz";
     sha256 = "199ybjk0xxsg04v5x5l4arljmzj96hxva6ym6bp7av7dny0nqvfx";
   };
 
@@ -48,10 +47,10 @@ stdenv.mkDerivation rec {
       cp ${logback-core} ${logback-classic} ${slf4j} $out/lib
 
       # Clean up documentation.
-      mkdir -p $out/share/doc/${name}
+      mkdir -p $out/share/doc/${pname}-${version}
       mv $out/LICENSE.txt \
          $out/README.txt \
-         $out/share/doc/${name}
+         $out/share/doc/${pname}-${version}
 
       # Remove silly files.
       rm $out/liquibase.bat $out/liquibase.spec

@@ -1,7 +1,7 @@
-{ stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell }:
+{ stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-taskwhisperer-${version}";
+  pname = "gnome-shell-extension-taskwhisperer";
   version = "12";
 
   src = fetchFromGitHub {
@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
   uuid = "taskwhisperer-extension@infinicode.de";
 
   makeFlags = [
-    "INSTALLBASE=${placeholder ''out''}/share/gnome-shell/extensions"
+    "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions"
   ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       task = "${taskwarrior}/bin/task";
-      shell = "${runtimeShell}";
+      shell = runtimeShell;
     })
   ];
 
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jonafato ];
     homepage = https://github.com/cinatic/taskwhisperer;
+    broken = versionAtLeast gnome3.gnome-shell.version "3.32"; # Doesnt't support 3.34
   };
 }

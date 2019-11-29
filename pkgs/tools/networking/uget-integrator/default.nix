@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, uget, python3Packages }:
 
 stdenv.mkDerivation rec {
-  name = "uget-integrator-${version}";
+  pname = "uget-integrator";
   version = "1.0.0";
 
   src = fetchFromGitHub {

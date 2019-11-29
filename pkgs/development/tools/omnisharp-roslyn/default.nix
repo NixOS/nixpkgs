@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "omnisharp-roslyn-${version}";
+  pname = "omnisharp-roslyn";
   version = "1.32.19";
   
   src = fetchurl {

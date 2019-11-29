@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cairo, harfbuzz
+{ stdenv, fetchurl, fetchpatch, pkgconfig, cairo, harfbuzz
 , libintl, gobject-introspection, darwin, fribidi, gnome3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
 , meson, ninja, glib
@@ -37,10 +37,15 @@ in stdenv.mkDerivation rec {
     optional x11Support libXft;
 
   patches = [
-    (fetchurl {
+    (fetchpatch {
       # Add gobject-2 to .pc file
       url = "https://gitlab.gnome.org/GNOME/pango/commit/546f4c242d6f4fe312de3b7c918a848e5172e18d.patch";
-      sha256 = "034na38cq98vk8gggn3yfr65jmv3jgig8d25zg89wydrandp14yr";
+      sha256 = "1cqhy4xbwx3ad7z5d1ks7smf038b9as8c6qy84rml44h0fgiq4m2";
+    })
+    (fetchpatch {
+      # Fixes CVE-2019-1010238
+      url = "https://gitlab.gnome.org/GNOME/pango/commit/490f8979a260c16b1df055eab386345da18a2d54.diff";
+      sha256 = "1s0qclbaknkx3dkc3n6mlmx3fnhlr2pkncqjkywprpvahmmypr7k";
     })
   ];
 
@@ -70,8 +75,8 @@ in stdenv.mkDerivation rec {
       Pango is a library for laying out and rendering of text, with an
       emphasis on internationalization.  Pango can be used anywhere
       that text layout is needed, though most of the work on Pango so
-      far has been done in the context of the GTK+ widget toolkit.
-      Pango forms the core of text and font handling for GTK+-2.x.
+      far has been done in the context of the GTK widget toolkit.
+      Pango forms the core of text and font handling for GTK.
     '';
 
     homepage = https://www.pango.org/;

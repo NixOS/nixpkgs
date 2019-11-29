@@ -23,11 +23,15 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "47";
+  version = "50";
   disabled = !isPy3k;
 
-  # ignore failing pytest
-  checkPhase = "pytest -k 'not test_font_stretch'";
+  # excluded test needs the Ahem font
+  checkPhase = ''
+    runHook preCheck
+    pytest -k 'not test_font_stretch'
+    runHook postCheck
+  '';
 
   # ignore failing flake8-test
   prePatch = ''
@@ -55,7 +59,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "WeasyPrint";
-    sha256 = "0hd1zwrkfnj7g0jaaf6jvarlj6l5imar6ar78zxdgv17a3s3k3dg";
+    sha256 = "0invs96zvmcr6wh5klj52jrcnr9qg150v9wpmbhcsf3vv1d1hbcw";
   };
 
   meta = with stdenv.lib; {

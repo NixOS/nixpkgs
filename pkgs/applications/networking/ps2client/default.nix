@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "unstable-2018-10-18";
-  name = "ps2client-${version}";
+  pname = "ps2client";
 
   src = fetchFromGitHub {
     owner = "ps2dev";

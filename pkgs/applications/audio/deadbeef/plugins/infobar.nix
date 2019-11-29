@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, deadbeef, gtk3, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "deadbeef-infobar-plugin-${version}";
+  pname = "deadbeef-infobar-plugin";
   version = "1.4";
 
   src = fetchurl {

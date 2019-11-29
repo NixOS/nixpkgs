@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, glib, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-dash-to-panel-${version}";
-  version = "19";
+  pname = "gnome-shell-dash-to-panel";
+  version = "26";
 
   src = fetchFromGitHub {
     owner = "home-sweet-gnome";
     repo = "dash-to-panel";
     rev = "v${version}";
-    sha256 = "0r26ph6zq87kvglydv00rf24mshz7l4r38zf9niyp3mxyzz6rwys";
+    sha256 = "1phfx2pblygpcvsppsqqqflm7qnz46mqkw29hj0nv2dn69hf4xbc";
   };
 
   buildInputs = [

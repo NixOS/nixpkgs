@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, mono}:
 stdenv.mkDerivation rec {
-  name = "syntex-${version}";
+  pname = "syntex";
   version = "0.0pre20160915";
   src = fetchFromGitHub {
     owner = "mxgmn";

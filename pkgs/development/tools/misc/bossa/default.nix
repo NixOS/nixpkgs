@@ -13,7 +13,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bossa-1.8";
 
   src = fetchgit {

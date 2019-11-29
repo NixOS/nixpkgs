@@ -21,14 +21,14 @@ in
       enable = mkEnableOption "Charybdis IRC daemon";
 
       config = mkOption {
-        type = types.string;
+        type = types.str;
         description = ''
           Charybdis IRC daemon configuration file.
         '';
       };
 
       statedir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/lib/charybdis";
         description = ''
           Location of the state directory of charybdis.
@@ -36,7 +36,7 @@ in
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "ircd";
         description = ''
           Charybdis IRC daemon user.
@@ -44,7 +44,7 @@ in
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "ircd";
         description = ''
           Charybdis IRC daemon group.
@@ -101,7 +101,7 @@ in
       };
 
     }
-    
+
     (mkIf (cfg.motd != null) {
       environment.etc."charybdis/ircd.motd".text = cfg.motd;
     })

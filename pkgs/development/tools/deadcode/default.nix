@@ -6,7 +6,7 @@
 # TODO(yl): should we package https://github.com/remyoudompheng/go-misc instead of
 # the standalone extract of deadcode from it?
 buildGoPackage rec {
-  name = "deadcode-unstable-${version}";
+  pname = "deadcode-unstable";
   version = "2016-07-24";
   rev = "210d2dc333e90c7e3eedf4f2242507a8e83ed4ab";
 

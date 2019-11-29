@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, libx86emu, flex, perl, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "hwinfo-${version}";
+  pname = "hwinfo";
   version = "21.67";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
-    rev = "${version}";
+    rev = version;
     sha256 = "1fvlrqx1wgl79a9j3xhhhdihj4lkpbrchfsc27il0p52fynn4dji";
   };
 

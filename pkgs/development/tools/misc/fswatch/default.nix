@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fswatch-${version}";
+  pname = "fswatch";
   version = "1.14.0";
 
   src = fetchFromGitHub {

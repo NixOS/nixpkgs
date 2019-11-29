@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "nfpm";
-  version = "0.12.0";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    sha256 = "090mxkmbfzi3mby18zhrr34fr6vzc7j0r2ss3rjr5lyfgilw1qwr";
+    sha256 = "0wgp4bana38r385qgcm83fhqd053y5i9swh5cmnmbqjibx85g5r2";
   };
 
-  modSha256 = "02nkqmljb528ppsr2dw2r3rc83j3qmys3a8v0a1z2b4sq2sv1v7w";
+  modSha256 = "1d532nv76gzckq2a0nyr9xixbm3rr8d8vlzgdz6i61xsjakfm6ap";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with lib; {
     description = "A simple deb and rpm packager written in Go";

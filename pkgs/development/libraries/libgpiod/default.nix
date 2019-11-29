@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-tools=${if enable-tools then "yes" else "no"}"
     "--enable-bindings-cxx"
-    "--prefix=${placeholder ''out''}"
+    "--prefix=${placeholder "out"}"
   ];
 
   meta = with stdenv.lib; {

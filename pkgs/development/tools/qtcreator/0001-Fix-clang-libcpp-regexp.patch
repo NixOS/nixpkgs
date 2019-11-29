@@ -1,8 +1,8 @@
 diff --git a/src/plugins/cpptools/headerpathfilter.cpp b/src/plugins/cpptools/headerpathfilter.cpp
-index b514c46..5f96358 100644
+index e2d1e6a..1a1d839 100644
 --- a/src/plugins/cpptools/headerpathfilter.cpp
 +++ b/src/plugins/cpptools/headerpathfilter.cpp
-@@ -92,8 +92,8 @@ HeaderPaths::iterator resourceIterator(HeaderPaths &headerPaths, bool isMacOs)
+@@ -96,8 +96,8 @@ HeaderPaths::iterator resourceIterator(HeaderPaths &headerPaths, bool isMacOs)
  {
      // include/c++, include/g++, libc++\include and libc++abi\include
      static const QString cppIncludes = R"((.*\/include\/.*(g\+\+|c\+\+).*))"

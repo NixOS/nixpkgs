@@ -7,10 +7,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.0.3";
-  name = "k9copy-${version}";
+  pname = "k9copy";
 
   src = fetchurl {
-    url = "mirror://sourceforge/k9copy-reloaded/${name}.tar.gz";
+    url = "mirror://sourceforge/k9copy-reloaded/${pname}-${version}.tar.gz";
     sha256 = "0dp06rwihks50c57bbv04d6bj2qc88isl91971r4lii2xp0qn7sg";
   };
 

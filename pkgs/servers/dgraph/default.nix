@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "dgraph-${version}";
-  version = "0.8.2";
+  pname = "dgraph";
+  version = "1.0.17";
 
   goPackagePath = "github.com/dgraph-io/dgraph";
 
@@ -10,32 +10,26 @@ buildGoPackage rec {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "0zc5bda8m2srjbk0gy1nnm0bya8if0kmk1szqr1qv3xifdzmi4nf";
+    sha256 = "05z1xwbd76q49zyqahh9krvq78dgkzr22qc6srr4djds0l7y6x5i";
   };
 
-  extraOutputsToInstall = [ "dashboard" ];
+  # see licensing
+  buildFlags = [ "-tags oss" ];
 
   goDeps = ./deps.nix;
-  subPackages = [ "cmd/dgraph" "cmd/dgraphloader" "cmd/bulkloader"];
-
-  # let's move the dashboard to a different output, to prevent $bin from
-  # depending on $out
-  # TODO: provide a proper npm application for the dashboard.
-  postPatch = ''
-    mv dashboard/* $dashboard
-  '';
+  subPackages = [ "dgraph"];
 
   preBuild = ''
     export buildFlagsArray="-ldflags=\
-      -X github.com/dgraph-io/dgraph/x.dgraphVersion=${version} \
-      -X github.com/dgraph-io/dgraph/cmd/dgraph/main.uiDir=$dashboard/src/assets/"
+      -X github.com/dgraph-io/dgraph/x.dgraphVersion=${version}"
   '';
 
   meta = {
     homepage = "https://dgraph.io/";
     description = "Fast, Distributed Graph DB";
     maintainers = with stdenv.lib.maintainers; [ sigma ];
-    license = stdenv.lib.licenses.agpl3;
+    # Apache 2.0 because we use only build tag "oss"
+    license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
   };
 }

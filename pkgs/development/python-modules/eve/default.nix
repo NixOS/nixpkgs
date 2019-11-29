@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "Eve";
-  version = "0.9";
+  version = "0.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18shfaxa1vqshnyiqx3jqsri2wxz9ibip3mdxaz8pljmk734r4b1";
+    sha256 = "0191ed42ef85d747758bba29df5ff1e296b8152fefddb2f75c3d778c2e6fb9d3";
   };
 
   propagatedBuildInputs = [
@@ -18,6 +18,11 @@ buildPythonPackage rec {
     simplejson
     werkzeug
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "werkzeug==0.15.4" "werkzeug"
+  '';
 
   # tests call a running mongodb instance
   doCheck = false;

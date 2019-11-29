@@ -233,7 +233,7 @@ in
         # In the meantime this at least suppresses a useless graph full of
         # NaNs in the output.
         default = [ "munin_stats" ];
-        type = with types; listOf string;
+        type = with types; listOf str;
         description = ''
           Munin plugins to disable, even if
           <literal>munin-node-configure --suggest</literal> tries to enable

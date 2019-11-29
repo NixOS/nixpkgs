@@ -1,0 +1,12 @@
+diff --git a/cmake/build_configurations/mysql_release.cmake b/cmake/build_configurations/mysql_release.cmake
+index f7790748..995621e0 100644
+--- a/cmake/build_configurations/mysql_release.cmake
++++ b/cmake/build_configurations/mysql_release.cmake
+@@ -121,7 +121,6 @@ ENDIF()
+ 
+ IF(UNIX)
+   SET(WITH_EXTRA_CHARSETS all CACHE STRING "")
+-  SET(PLUGIN_AUTH_PAM YES)
+ 
+   IF(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+     IF(NOT IGNORE_AIO_CHECK)

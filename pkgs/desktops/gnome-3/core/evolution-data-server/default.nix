@@ -5,14 +5,14 @@
 , glib, gtk3, gnome-online-accounts, libgweather, libgdata, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "evolution-data-server-${version}";
-  version = "3.32.4";
+  pname = "evolution-data-server";
+  version = "3.34.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0zsc9xwy6ixk3x0dx69ax5isrdw8qxjdxg2i5fr95s40nss7rxl3";
+    url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "16z85y6hhazcrp5ngw47w4x9r0j8zrj7awv5im58hhp0xs19zf1y";
   };
 
   patches = [
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch --subst-var-by ESD_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas \
-      --subst-var-by GDS_GSETTINGS_PATH "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}/glib-2.0/schemas"
+    substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch --subst-var-by ESD_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
+      --subst-var-by GDS_GSETTINGS_PATH ${glib.getSchemaPath gsettings-desktop-schemas}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
 

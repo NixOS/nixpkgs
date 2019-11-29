@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libusb, pcsclite }:
 
 stdenv.mkDerivation rec {
-  name = "pcsc-cyberjack-${version}";
+  pname = "pcsc-cyberjack";
   version = "3.99.5_SP12";
 
   src = with stdenv.lib; let

@@ -3,7 +3,7 @@
   libiconv, CoreFoundation, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "sit-${version}";
+  pname = "sit";
   version = "0.4.1";
 
   src = fetchFromGitHub {

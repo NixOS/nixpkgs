@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.5.7.27050-0";
-  name = "firebird-${version}";
+  pname = "firebird";
 
   # enableParallelBuilding = false; build fails
 
@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--with-serivec-port=${builtins.toString port}"
       "--with-service-name=${serviceName}"
-      # "--disable-static"
       "--with-system-editline"
       "--with-fblog=/var/log/firebird"
       "--with-fbconf=/etc/firebird"

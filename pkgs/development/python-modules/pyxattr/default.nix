@@ -7,7 +7,6 @@
 buildPythonPackage rec {
     pname = "pyxattr";
     version = "0.6.1";
-    name = pname + "-" + version;
 
     src = fetchPypi {
       inherit pname version;

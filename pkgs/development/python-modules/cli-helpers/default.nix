@@ -1,14 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, configobj
-, terminaltables
-, tabulate
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , backports_csv
-, wcwidth
-, pytest
+, configobj
 , mock
-, isPy27
+, pytest
+, tabulate
+, terminaltables
+, wcwidth
 }:
 
 buildPythonPackage rec {
@@ -26,6 +23,9 @@ buildPythonPackage rec {
     tabulate
     wcwidth
   ] ++ (lib.optionals isPy27 [ backports_csv ]);
+
+  # namespace collision between backport.csv and backports.configparser
+  doCheck = !isPy27;
 
   checkInputs = [ pytest mock ];
 

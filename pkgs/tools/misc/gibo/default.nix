@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, coreutils, findutils, git }:
 
 stdenv.mkDerivation rec {
-  name = "gibo-${version}";
+  pname = "gibo";
   version = "1.0.6";
 
   src = fetchFromGitHub {

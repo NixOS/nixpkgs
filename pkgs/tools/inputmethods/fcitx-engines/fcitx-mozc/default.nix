@@ -39,6 +39,11 @@ in clangStdenv.mkDerivation rec {
       url    = "https://download.fcitx-im.org/fcitx-mozc/${name}";
       sha256 = "1f9m4310kz09v5qvnv75ka2vq63m7by023qrkpddgq4dv7gxx3ca";
      })
+    # https://github.com/google/mozc/pull/444 - fix for gcc8 STL
+    (fetchpatch {
+      url = "https://github.com/google/mozc/commit/82d38f929882a9c62289b179c6fe41efed249987.patch";
+      sha256 = "07cja1b7qfsd3i76nscf1zwiav74h7d6h2g9g2w4bs3h1mc9jwla";
+    })
   ];
 
   postPatch = ''

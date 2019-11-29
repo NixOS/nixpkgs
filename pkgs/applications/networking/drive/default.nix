@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "drive-${version}";
+  pname = "drive";
   version = "0.3.8.1";
 
   goPackagePath = "github.com/odeke-em/drive";

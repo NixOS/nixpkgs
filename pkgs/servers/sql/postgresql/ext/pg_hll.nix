@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
-  name = "pg_hll-${version}";
-  version = "2.12";
+  pname = "pg_hll";
+  version = "2.14";
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "postgresql-hll";
     rev    = "refs/tags/v${version}";
-    sha256 = "1jdc9gjqc3dkjxv855q1p594j0awhrrymrcqnl5vw5vx2ny3bpgn";
+    sha256 = "13vphxkc9pn4bkpgab560bgdbl99li2b3p1n2rm5a78wswlsbsps";
   };
 
   installPhase = ''

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vimb-${version}";
+  pname = "vimb";
   version = "3.3.0";
 
   src = fetchFromGitHub {

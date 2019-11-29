@@ -1,7 +1,7 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "mandoc-${version}";
+  pname = "mandoc";
   version = "1.14.5";
 
   src = fetchurl {

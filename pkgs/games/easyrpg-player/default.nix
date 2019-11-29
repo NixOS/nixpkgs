@@ -4,7 +4,7 @@
 , mpg123 ? null, opusfile ? null, pcre, pixman, SDL2_mixer, speexdsp ? null, wildmidi ? null, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "easyrpg-player-${version}";
+  pname = "easyrpg-player";
   version = "0.6.1";
 
   src = fetchFromGitHub {

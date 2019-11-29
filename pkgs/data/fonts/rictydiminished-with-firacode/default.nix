@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, fontforge, pythonFull }:
+{ stdenv, fetchgit, fontforge, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "rictydiminished-with-firacode-${version}";
+  pname = "rictydiminished-with-firacode";
   version = "0.0.1";
   src = fetchgit {
     url = "https://github.com/hakatashi/RictyDiminished-with-FiraCode.git";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     fontforge
-    (pythonFull.withPackages (ps: [
+    (python3.withPackages (ps: [
       ps.jinja2
       ps.py3to2
       ps.fonttools

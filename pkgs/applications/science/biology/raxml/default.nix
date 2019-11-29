@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "RAxML";
   version = "8.2.12";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "stamatak";

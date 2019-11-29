@@ -47,7 +47,8 @@ in
 
 stdenv.mkDerivation {
 
-  name = "dart-${version}";
+  pname = "dart";
+  inherit version;
 
   nativeBuildInputs = [
     unzip

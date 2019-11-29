@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "wlc-${version}";
+  pname = "wlc";
   version = "0.0.11";
 
   src = fetchFromGitHub {

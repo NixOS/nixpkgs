@@ -3,12 +3,13 @@ let
   version = "0.7.2";
 in
 stdenv.mkDerivation rec {
-  name="dfu-programmer-${version}";
+  pname = "dfu-programmer";
+  inherit version;
 
   buildInputs = [ libusb ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/dfu-programmer/${name}.tar.gz";
+    url = "mirror://sourceforge/dfu-programmer/${pname}-${version}.tar.gz";
     sha256 = "15gr99y1z9vbvhrkd25zqhnzhg6zjmaam3vfjzf2mazd39mx7d0x";
   };
 

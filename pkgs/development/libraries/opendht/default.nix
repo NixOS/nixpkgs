@@ -4,13 +4,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opendht-${version}";
+  pname = "opendht";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
-    rev = "${version}";
+    rev = version;
     sha256 = "1mj3zsywxphh9wcazyqsldwwn14r77xv9cjsmc0nmcybsl2bwnpl";
   };
 

@@ -7,7 +7,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   name = "gateone-1.2-0d57c3";
   disabled = isPy3k;
 

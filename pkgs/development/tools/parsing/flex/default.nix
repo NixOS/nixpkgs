@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "flex-${version}";
+  pname = "flex";
   version = "2.6.4";
 
   src = fetchurl {

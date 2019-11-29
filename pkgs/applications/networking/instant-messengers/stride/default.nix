@@ -34,7 +34,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "1.17.82";
-  name = "stride-${version}";
+  pname = "stride";
 
   src = fetchurl {
     url = "https://packages.atlassian.com/stride-apt-client/pool/stride_${version}_amd64.deb";

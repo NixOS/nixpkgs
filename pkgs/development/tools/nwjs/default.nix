@@ -32,7 +32,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "nwjs-${version}";
+  pname = "nwjs";
   version = "0.33.4";
 
   src = if sdk then fetchurl {

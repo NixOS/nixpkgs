@@ -4,10 +4,10 @@ stdenv.mkDerivation rec {
 
   version = "2.10.1";
 
-  name = "bibletime-${version}";
+  pname = "bibletime";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bibletime/${name}.tar.xz";
+    url = "mirror://sourceforge/bibletime/${pname}-${version}.tar.xz";
     sha256 = "14fayy5h1ffjxin669q56fflxn4ij1irgn60cygwx2y02cwxbll6";
   };
 

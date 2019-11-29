@@ -2,11 +2,11 @@
 , gnome-doc-utils, intltool, libX11, which, itstool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "zenity-${version}";
+  pname = "zenity";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/zenity/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/zenity/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "15fdh8xfdhnwcynyh4byx3mrjxbyprqnwxzi7qn3g5wwaqryg1p7";
   };
 

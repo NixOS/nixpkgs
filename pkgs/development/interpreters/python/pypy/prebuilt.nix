@@ -6,7 +6,7 @@
 # Dependencies
 , bzip2
 , zlib
-, openssl
+, openssl_1_0_2
 , expat
 , libffi
 , ncurses
@@ -27,7 +27,7 @@ with stdenv.lib;
 
 let
   isPy3k = majorVersion == "3";
-  passthru = passthruFun rec {
+  passthru = passthruFun {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
@@ -44,7 +44,7 @@ let
   deps = [
     bzip2
     zlib
-    openssl
+    openssl_1_0_2
     expat
     libffi
     ncurses

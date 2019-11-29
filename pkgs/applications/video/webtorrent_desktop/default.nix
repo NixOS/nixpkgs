@@ -38,7 +38,7 @@
     udev
     ]);
   in stdenv.mkDerivation rec {
-    name = "webtorrent-desktop-${version}";
+    pname = "webtorrent-desktop";
     version = "0.20.0";
 
     src =

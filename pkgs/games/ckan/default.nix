@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, perl, mono, gtk2, curl }:
 
 stdenv.mkDerivation rec {
-  name = "ckan-${version}";
+  pname = "ckan";
   version = "1.16.1";
 
   src = fetchFromGitHub {

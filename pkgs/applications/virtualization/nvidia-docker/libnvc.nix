@@ -12,7 +12,7 @@ with lib; let
   };
 
 in stdenv.mkDerivation rec {
-  name = "libnvidia-container-${version}";
+  pname = "libnvidia-container";
   version = "1.0.0";
 
   src = fetchFromGitHub {

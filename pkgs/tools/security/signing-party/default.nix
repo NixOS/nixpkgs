@@ -14,7 +14,6 @@ let
 in stdenv.mkDerivation rec {
   pname = "signing-party";
   version = "2.10";
-  name = "${pname}-${version}";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";

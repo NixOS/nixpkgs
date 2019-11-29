@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.1.5";
-  name = "apvlv-${version}";
+  pname = "apvlv";
 
   src = fetchFromGitHub {
     owner = "naihe2010";

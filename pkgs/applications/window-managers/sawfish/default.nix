@@ -10,7 +10,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
 
-  name = "sawfish-${version}";
+  pname = "sawfish";
   version = "1.12.90";
   sourceName = "sawfish_${version}";
 

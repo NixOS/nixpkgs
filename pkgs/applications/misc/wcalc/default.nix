@@ -1,11 +1,11 @@
 { stdenv, fetchurl, mpfr, readline }:
 
 stdenv.mkDerivation rec {
-  name = "wcalc-${version}";
+  pname = "wcalc";
   version = "2.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/w-calc/${name}.tar.bz2";
+    url = "mirror://sourceforge/w-calc/${pname}-${version}.tar.bz2";
     sha256 = "1vi8dl6rccqiq1apmpwawyg2ywx6a1ic1d3cvkf2hlwk1z11fb0f";
   };
 

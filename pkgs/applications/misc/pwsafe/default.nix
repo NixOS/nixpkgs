@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pwsafe";
-  version = "1.08.1";
+  version = "1.08.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "${version}BETA";
-    sha256 = "0x89pn056h8b4yvxbd6l3qwrghslxc7vlxnblmcmsx7xx4i041ng";
+    sha256 = "14qwk3cv5psj7ll71ikyv452x55c7iwjw9765yrpij6741r4yjln";
   };
 
   nativeBuildInputs = [ 

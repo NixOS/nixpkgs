@@ -1,22 +1,21 @@
 { stdenv, gtk, pkgconfig, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "dragon-drop-${version}";
-  version = "1.1.0";
+  pname = "dragon-drop";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "mwh";
     repo = "dragon";
     rev = "v${version}";
-    sha256 = "0iwlrcqvbjshpwvg0gsqdqcjv48q1ary59pm74zzjnr8v9470smr";
+    sha256 = "0fgzz39007fdjwq72scp0qygp2v3zc5f1xkm0sxaa8zxm25g1bra";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv dragon $out/bin
+    install -D dragon -t $out/bin
   '';
 
   meta = with stdenv.lib; {

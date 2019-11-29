@@ -10,11 +10,13 @@
 , nose
 , cython
 , python
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "yt";
   version = "3.5.1";
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;

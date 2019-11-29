@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, gobject-introspection, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "mate-menus-${version}";
-  version = "1.22.0";
+  pname = "mate-menus";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1lkakbf2f1815c146z4xp5f0h4lim6jzr02681wbvzalc6k97v5c";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0kh6y76f1rhp3nr22rp93bx77wcgqnygag2ir076cqkppayjc3c0";
   };
 
   nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];

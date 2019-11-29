@@ -9,7 +9,7 @@
 assert withSystemLibav -> libav != null;
 
 stdenv.mkDerivation rec {
-  name = "gst-libav-${version}";
+  pname = "gst-libav";
   version = "1.16.0";
 
   meta = {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-libav/${name}.tar.xz";
+    url = "${meta.homepage}/src/gst-libav/${pname}-${version}.tar.xz";
     sha256 = "16ixqpfrr7plaaz14n3vagr2q5xbfkv7gpmcsyndrkx98f813b6z";
   };
 

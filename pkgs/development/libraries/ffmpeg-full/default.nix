@@ -3,7 +3,7 @@
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
 , gplLicensing ? true # GPL: fdkaac,openssl,frei0r,cdio,samba,utvideo,vidstab,x265,x265,xavs,avid,zvbi,x11grab
-, version3Licensing ? true # (L)GPL3: opencore-amrnb,opencore-amrwb,samba,vo-aacenc,vo-amrwbenc
+, version3Licensing ? true # (L)GPL3: libvmaf,opencore-amrnb,opencore-amrwb,samba,vo-aacenc,vo-amrwbenc
 , nonfreeLicensing ? false # NONFREE: openssl,fdkaac,blackmagic-design-desktop-video
 /*
  *  Build options
@@ -87,6 +87,7 @@
 , libv4l ? null # Video 4 Linux support
 , libva ? null # Vaapi hardware acceleration
 , libvdpau ? null # Vdpau hardware acceleration
+, libvmaf ? null # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , libvorbis ? null # Vorbis de/encoding, native encoder exists
 , libvpx ? null # VP8 & VP9 de/encoding
 , libwebp ? null # WebP encoder
@@ -237,12 +238,12 @@ assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-full-${version}";
-  version = "4.2";
+  pname = "ffmpeg-full";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "1mgcxm7sqkajx35px05szsmn9mawwm03cfpmk3br7bcp3a1i0gq2";
+    sha256 = "1m5nkc61ihgcf0b2wabm0zyqa8sj3c0w8fi6kr879lb0kdzciiyf";
   };
 
   patches = [ ./prefer-libdav1d-over-libaom.patch ];
@@ -272,7 +273,7 @@ stdenv.mkDerivation rec {
      *  Build flags
      */
     # On some ARM platforms --enable-thumb
-    "--enable-shared --disable-static"
+    "--enable-shared"
     (enableFeature true "pic")
     (if stdenv.cc.isClang then "--cc=clang" else null)
     (enableFeature smallBuild "small")
@@ -364,6 +365,7 @@ stdenv.mkDerivation rec {
     (enableFeature ((isLinux || isFreeBSD) && libva != null) "vaapi")
     (enableFeature (libvdpau != null) "vdpau")
     (enableFeature (libvorbis != null) "libvorbis")
+    (enableFeature (!isAarch64 && libvmaf != null && version3Licensing) "libvmaf")
     (enableFeature (libvpx != null) "libvpx")
     (enableFeature (libwebp != null) "libwebp")
     (enableFeature (libX11 != null && libXv != null && libXext != null) "xlib")
@@ -425,6 +427,7 @@ stdenv.mkDerivation rec {
   ] ++ optional openglExtlib libGLU_combined
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
+    ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional nvenc nv-codec-headers

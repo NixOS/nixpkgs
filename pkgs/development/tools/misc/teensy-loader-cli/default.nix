@@ -3,7 +3,8 @@ let
   version = "2.1";
 in
 stdenv.mkDerivation {
-  name = "teensy-loader-cli-${version}";
+  pname = "teensy-loader-cli";
+  inherit version;
   src = fetchgit {
     url = "git://github.com/PaulStoffregen/teensy_loader_cli.git";
     rev = "f5b6d7aafda9a8b014b4bb08660833ca45c136d2";

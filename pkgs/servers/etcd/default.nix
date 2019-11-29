@@ -3,7 +3,7 @@
 with lib;
 
 buildGoPackage rec {
-  name = "etcd-${version}";
+  pname = "etcd";
   version = "3.3.13"; # After updating check that nixos tests pass
   rev = "v${version}";
 

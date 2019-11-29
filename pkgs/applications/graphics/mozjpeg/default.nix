@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.3.1";
-  name = "mozjpeg-${version}";
+  pname = "mozjpeg";
 
   src = fetchFromGitHub {
     owner = "mozilla";

@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
-    "INSTALL_LIB=${placeholder ''out''}/bin"
-    "INSTALL_MAN=${placeholder ''out''}/share/man/man1"
+    "PREFIX=${placeholder "out"}"
+    "INSTALL_LIB=${placeholder "out"}/bin"
+    "INSTALL_MAN=${placeholder "out"}/share/man/man1"
   ];
 
   patches = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/ingydotnet/git-subrepo;
     description = "Git submodule alternative";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix ++ platforms.darwin;
     maintainers = [ maintainers.ryantrinkle ];
   };
 }

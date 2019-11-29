@@ -70,7 +70,7 @@ in
       };
 
       storageBackend = mkOption {
-        type = types.enum [ "inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" ];
+        type = types.enum [ "inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" "raft" ];
         default = "inmem";
         description = "The name of the type of storage backend";
       };
@@ -119,9 +119,8 @@ in
     };
     users.groups.vault.gid = config.ids.gids.vault;
 
-    systemd.tmpfiles.rules = optional (cfg.storagePath != null) [
-      "d '${cfg.storagePath}' 0700 vault vault - -"
-    ];
+    systemd.tmpfiles.rules = optional (cfg.storagePath != null)
+      "d '${cfg.storagePath}' 0700 vault vault - -";
 
     systemd.services.vault = {
       description = "Vault server daemon";

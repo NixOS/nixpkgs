@@ -3,7 +3,7 @@
 let
   inherit (pythonPackages) python;
 in pythonPackages.buildPythonApplication rec {
-  name = "jbrout-${version}";
+  pname = "jbrout";
   version = "338";
 
   src = fetchsvn {

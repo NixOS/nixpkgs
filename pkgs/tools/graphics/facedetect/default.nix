@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages }:
 
 stdenv.mkDerivation rec {
-  name = "facedetect-${version}";
+  pname = "facedetect";
   version = "0.1";
 
   src = fetchFromGitHub {
@@ -12,17 +12,17 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python2Packages.python python2Packages.wrapPython ];
-  pythonPath = [ python2Packages.numpy python2Packages.opencv ];
+  pythonPath = [ python2Packages.numpy python2Packages.opencv4 ];
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
   patchPhase = ''
     substituteInPlace facedetect \
-      --replace /usr/share/opencv "${python2Packages.opencv}/share/OpenCV"
+      --replace /usr/share/opencv "${python2Packages.opencv4}/share/opencv4"
   '';
 
   installPhase = ''
-    install -v -m644 -D README.rst $out/share/doc/${name}/README.rst
+    install -v -m644 -D README.rst $out/share/doc/${pname}-${version}/README.rst
     install -v -m755 -D facedetect $out/bin/facedetect
     wrapPythonPrograms
   '';

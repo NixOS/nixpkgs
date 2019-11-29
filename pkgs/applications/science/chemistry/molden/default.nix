@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "6.2";
-  name = "molden-${version}";
+  pname = "molden";
 
   src = fetchurl {
     url = "ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden${version}.tar.gz";

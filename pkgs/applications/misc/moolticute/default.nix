@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "moolticute-${version}";
+  pname = "moolticute";
   version = "0.30.8";
 
   src = fetchurl {

@@ -26,19 +26,21 @@
 , withKeePassKeeShareSecure ? true
 , withKeePassSSHAgent ? true
 , withKeePassNetworking ? false
+, withKeePassTouchID ? true
+, withKeePassFDOSecrets ? true
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "keepassxc-${version}";
-  version = "2.4.3";
+  pname = "keepassxc";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
-    rev = "${version}";
-    sha256 = "1r63bl0cam04rps1bjr107qvwsmay4254nv00gwhh9n45s6cslac";
+    rev = version;
+    sha256 = "0dkya9smx81c5cgcwk2gi2m1pabfff1v9gd3ngl42sdvyb63wgdq";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
@@ -69,6 +71,8 @@ stdenv.mkDerivation rec {
   ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
   ++ (optional withKeePassKeeShareSecure "-DWITH_XC_KEESHARE_SECURE=ON")
   ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
+  ++ (optional (withKeePassTouchID && stdenv.isDarwin) "-DWITH_XC_TOUCHID=ON")
+  ++ (optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;

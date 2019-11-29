@@ -14,7 +14,7 @@ let params =
       sha256 = "0fri4nih40vfb0fbr82dsi631ydkw48xszinq43lyinpknf54y17";
     };
 
-    "8.8" = rec {
+    "8.8" = {
       version = "20190311";
       rev = "22af9e9a223d0038f05638654422e637e863b355";
       sha256 = "00rnr19lg6lg0haq1sy4ld38p7imzand6fc52fvfq27gblxkp2aq";
@@ -26,12 +26,12 @@ let params =
       sha256 = "1c34v1k37rk7v0xk2czv5n79mbjxjrm6nh3llg2mpfmdsqi68wf3";
     };
   };
-  param = params."${coq.coq-version}";
+  param = params.${coq.coq-version};
 in
 
 let recent = stdenv.lib.versionAtLeast coq.coq-version "8.8"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "coq${coq.coq-version}-QuickChick-${param.version}";
 

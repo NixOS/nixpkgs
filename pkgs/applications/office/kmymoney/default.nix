@@ -10,17 +10,16 @@
 # Needed for running tests:
 , qtbase, xvfb_run
 
-# For weboob, which only supports Python 2.x:
-, python2Packages
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
-  name = "kmymoney-${version}";
-  version = "5.0.5";
+  pname = "kmymoney";
+  version = "5.0.7";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-    sha256 = "1hghs4676kn2giwpwz1y7p6djpmi41x64idf3ybiz8ky14a5s977";
+    url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "1h5mzvgpfyl2j66b3nsw17yxvg0ja1qhjlcmfkz62221vcqsrp6m";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python2Packages.wrapPython
+    doxygen extra-cmake-modules graphviz kdoctools python3Packages.wrapPython
     wrapQtAppsHook
   ];
 
@@ -41,10 +40,10 @@ stdenv.mkDerivation rec {
 
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
-    python2Packages.weboob
+    python3Packages.weboob
   ];
 
-  weboobPythonPath = [ python2Packages.weboob ];
+  weboobPythonPath = [ python3Packages.weboob ];
 
   postInstall = ''
     buildPythonPath "$weboobPythonPath"

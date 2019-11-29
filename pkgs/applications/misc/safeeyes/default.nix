@@ -4,7 +4,6 @@
 let inherit (python3Packages) python buildPythonApplication fetchPypi;
 
 in buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "safeeyes";
   version = "2.0.9";
   namePrefix = "";

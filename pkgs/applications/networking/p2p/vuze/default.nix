@@ -1,7 +1,7 @@
 { stdenv, fetchsvn, jdk, jre, ant, swt, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "vuze-${version}";
+  pname = "vuze";
   version = "5750";
 
   src = fetchsvn {

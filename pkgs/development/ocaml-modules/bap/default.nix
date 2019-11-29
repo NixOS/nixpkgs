@@ -1,10 +1,14 @@
 { stdenv, fetchFromGitHub, fetchurl
 , ocaml, findlib, ocamlbuild, ocaml_oasis,
- bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, frontc, ounit, ppx_jane, parsexp,
- utop,
+ bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp,
+ utop, libxml2,
  ppx_tools_versioned,
  which, makeWrapper, writeText
 }:
+
+if stdenv.lib.versionAtLeast core_kernel.version "0.12"
+then throw "BAP needs core_kernel-0.11 (hence OCaml ≤ 4.06)"
+else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-bap-${version}";
@@ -24,15 +28,15 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}-llvm-plugins/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}-llvm-plugins/"
   '';
 
   nativeBuildInputs = [ which makeWrapper ];
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
-                  llvm_38 ppx_tools_versioned
-                  utop ];
+                  llvm ppx_tools_versioned
+                  utop libxml2 ];
 
   propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_jane core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
                             piqi-ocaml uuidm frontc ounit ];
@@ -40,7 +44,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     export OCAMLPATH=$OCAMLPATH:$OCAMLFIND_DESTDIR;
     export PATH=$PATH:$out/bin
-    export CAML_LD_LIBRARY_PATH=$CAML_LD_LIBRARY_PATH:$OCAMLFIND_DESTDIR/bap-plugin-llvm/:$OCAMLFIND_DESTDIR/bap/
+    export CAML_LD_LIBRARY_PATH=''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}$OCAMLFIND_DESTDIR/bap-plugin-llvm/:$OCAMLFIND_DESTDIR/bap/
     mkdir -p $out/lib/bap
     make install
     rm $out/bin/baptop
@@ -51,7 +55,7 @@ stdenv.mkDerivation rec {
 
   disableIda = "--disable-ida --disable-fsi-benchmark";
 
-  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm_38}/bin/llvm-config" ];
+  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm}/bin/llvm-config" ];
 
   BAPBUILDFLAGS = "-j $(NIX_BUILD_CORES)";
 

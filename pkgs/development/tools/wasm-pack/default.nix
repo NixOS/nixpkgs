@@ -8,7 +8,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "wasm-pack-${version}";
+  pname = "wasm-pack";
   version = "0.8.1";
 
   src = fetchFromGitHub {

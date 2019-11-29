@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoconf, cairo, opencv, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "frei0r-plugins-${version}";
+  pname = "frei0r-plugins";
   version = "1.6.1";
 
   src = fetchurl {
-    url = "https://files.dyne.org/frei0r/releases/${name}.tar.gz";
+    url = "https://files.dyne.org/frei0r/releases/${pname}-${version}.tar.gz";
     sha256 = "0pji26fpd0dqrx1akyhqi6729s394irl73dacnyxk58ijqq4dhp0";
   };
 

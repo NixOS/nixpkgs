@@ -1,7 +1,7 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
-  name = "lf-${version}";
+  pname = "lf";
   version = "13";
 
   src = fetchFromGitHub {

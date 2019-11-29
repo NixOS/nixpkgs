@@ -1,6 +1,6 @@
 { lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "github_changelog_generator";
   gemdir = ./.;
   exes = [ "github_changelog_generator" ];

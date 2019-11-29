@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex, bison, readline }:
+{ lib, stdenv, fetchurl, fetchpatch, flex, bison, readline, libssh }:
 
 with lib;
 
@@ -6,15 +6,16 @@ let
 
   generic = { version, sha256, enableIPv6 ? false }:
     stdenv.mkDerivation rec {
-      name = "bird-${version}";
+      pname = "bird";
+      inherit version;
 
       src = fetchurl {
         inherit sha256;
-        url = "ftp://bird.network.cz/pub/bird/${name}.tar.gz";
+        url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
       };
 
       nativeBuildInputs = [ flex bison ];
-      buildInputs = [ readline ];
+      buildInputs = [ readline libssh ];
 
       patches = [
         (./. + "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch")
@@ -46,18 +47,18 @@ in
 
 {
   bird = generic {
-    version = "1.6.6";
-    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
+    version = "1.6.8";
+    sha256 = "1ch0pkkhd7axdjlvhprynh9q08x0nm984nvkm1cjb7gm5rfsnqbc";
   };
 
   bird6 = generic {
-    version = "1.6.6";
-    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
+    version = "1.6.8";
+    sha256 = "1ch0pkkhd7axdjlvhprynh9q08x0nm984nvkm1cjb7gm5rfsnqbc";
     enableIPv6 = true;
   };
 
   bird2 = generic {
-    version = "2.0.5";
-    sha256 = "1lr963ywy0mkrhgs5969wc354lizddsagrlbf8x84yb5s9pp6jsf";
+    version = "2.0.7";
+    sha256 = "0rhhbfmfw2d93rvhglv03rdzxsq2disw6s1wm8d6bgdxmrc2n7b3";
   };
 }

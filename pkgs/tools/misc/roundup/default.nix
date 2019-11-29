@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ronn, shocco }:
 
 stdenv.mkDerivation rec {
-  name = "roundup-${version}";
+  pname = "roundup";
   version = "0.0.6";
 
   src = fetchFromGitHub {

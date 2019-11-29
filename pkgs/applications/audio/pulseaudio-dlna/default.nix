@@ -17,7 +17,7 @@ assert vorbisSupport -> vorbisTools != null;
 let
   zeroconf = pythonPackages.callPackage ./zeroconf.nix { };
 
-in pythonPackages.buildPythonApplication rec {
+in pythonPackages.buildPythonApplication {
   pname = "pulseaudio-dlna";
   version = "2017-11-01";
 

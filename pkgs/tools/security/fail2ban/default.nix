@@ -3,7 +3,8 @@
 let version = "0.10.4"; in
 
 pythonPackages.buildPythonApplication {
-  name = "fail2ban-${version}";
+  pname = "fail2ban";
+  inherit version;
 
   src = fetchFromGitHub {
     owner  = "fail2ban";

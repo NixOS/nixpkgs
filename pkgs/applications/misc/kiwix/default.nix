@@ -31,10 +31,10 @@ let
 
   pugixml = stdenv.mkDerivation rec {
     version = "1.2";
-    name = "pugixml-${version}";
+    pname = "pugixml";
 
     src = fetchurl {
-      url = "http://download.kiwix.org/dev/${name}.tar.gz";
+      url = "http://download.kiwix.org/dev/${pname}-${version}.tar.gz";
       sha256 = "0sqk0vdwjq44jxbbkj1cy8qykrmafs1sickzldb2w2nshsnjshhg";
     };
 
@@ -42,8 +42,8 @@ let
 
     unpackPhase = ''
       # not a nice src archive: all the files are in the root :(
-      mkdir ${name}
-      cd ${name}
+      mkdir ${pname}-${version}
+      cd ${pname}-${version}
       tar -xf ${src}
 
       # and the build scripts are in there :'(
@@ -54,7 +54,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "kiwix-${version}";
+  pname = "kiwix";
   version = "0.9";
 
   src = fetchurl {
@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-static"
     "--disable-staticbins"
   ];
 

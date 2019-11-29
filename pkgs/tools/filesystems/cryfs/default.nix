@@ -4,13 +4,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cryfs-${version}";
+  pname = "cryfs";
   version = "0.9.10";
 
   src = fetchFromGitHub {
     owner  = "cryfs";
     repo   = "cryfs";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "04yqpad8x0hiiwpykcn3swi0py6sg9xid6g15ny2qs4j3llin5ry";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "git-appraise-unstable-${version}";
+  pname = "git-appraise-unstable";
   version = "2018-02-26";
   rev = "2414523905939525559e4b2498c5597f86193b61";
 

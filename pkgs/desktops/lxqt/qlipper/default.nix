@@ -1,7 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qttools }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "qlipper";
   version = "5.1.1";
 

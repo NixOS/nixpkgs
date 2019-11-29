@@ -18,8 +18,9 @@ browser:
 
 let
   wrapper =
-    { browserName ? browser.browserName or (builtins.parseDrvName browser.name).name
-    , name ? (browserName + "-" + (builtins.parseDrvName browser.name).version)
+    { browserName ? browser.browserName or (lib.getName browser)
+    , pname ? browserName
+    , version ? lib.getVersion browser
     , desktopName ? # browserName with first letter capitalized
       (lib.toUpper (lib.substring 0 1 browserName) + lib.substring 1 (-1) browserName)
     , nameSuffix ? ""
@@ -83,7 +84,7 @@ let
       gtk_modules = [ libcanberra-gtk2 ];
 
     in stdenv.mkDerivation {
-      inherit name;
+      inherit pname version;
 
       desktopItem = makeDesktopItem {
         name = browserName;
@@ -129,6 +130,8 @@ let
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set SNAP_NAME "firefox" \
+            --set MOZ_LEGACY_PROFILES 1 \
+            --set MOZ_ALLOW_DOWNGRADE 1 \
             ${lib.optionalString gdkWayland ''
               --set GDK_BACKEND "wayland" \
             ''}${lib.optionalString (browser ? gtk3)

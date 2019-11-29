@@ -22,10 +22,10 @@ let params = {
         sha256 = "1slw227idwjw9a21vj3s6kal22mrmvvlpg8r7xk590ml99bn6404";
       };
     };
-    param = params."${coq.coq-version}";
+    param = params.${coq.coq-version};
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "coq${coq.coq-version}-bignums";
 

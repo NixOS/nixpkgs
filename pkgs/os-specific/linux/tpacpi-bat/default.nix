@@ -2,7 +2,7 @@
 
 # Requires the acpi_call kernel module in order to run.
 stdenv.mkDerivation rec {
-  name = "tpacpi-bat-${version}";
+  pname = "tpacpi-bat";
   version = "3.1";
 
   src = fetchFromGitHub {

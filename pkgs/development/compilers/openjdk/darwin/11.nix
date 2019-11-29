@@ -44,7 +44,7 @@ let
 
       # Set JAVA_HOME automatically.
       cat <<EOF >> $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
     '';
 
@@ -52,7 +52,10 @@ let
       home = jdk;
     };
 
-    meta.platforms = stdenv.lib.platforms.darwin;
+    meta = with stdenv.lib; {
+      license = licenses.gpl2;
+      platforms = platforms.darwin;
+    };
 
   };
 in jdk

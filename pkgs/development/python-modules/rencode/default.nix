@@ -5,7 +5,7 @@
 , cython
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rencode";
   version = "git20150810";
   disabled = isPy33;

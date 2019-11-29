@@ -354,7 +354,7 @@ rec {
        => { a = ["x" "y"]; b = ["z"] }
   */
   zipAttrsWith = f: sets: zipAttrsWithNames (concatMap attrNames sets) f sets;
-  /* Like `zipAttrsWith' with `(name: values: value)' as the function.
+  /* Like `zipAttrsWith' with `(name: values: values)' as the function.
 
     Example:
       zipAttrs [{a = "x";} {a = "y"; b = "z";}]

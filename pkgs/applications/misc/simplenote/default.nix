@@ -1,64 +1,95 @@
-{ fetchurl, stdenv, lib, zlib, glib, alsaLib, dbus, gtk2, atk, pango, freetype, fontconfig
-, libgnome-keyring3, gdk-pixbuf, cairo, cups, expat, libgpgerror, nspr
-, nss, xorg, libcap, systemd, libnotify ,libXScrnSaver, gnome2 }:
+{ atomEnv
+, autoPatchelfHook
+, dpkg
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, udev
+, wrapGAppsHook
+}:
 
-stdenv.mkDerivation rec {
+let
+  inherit (stdenv.hostPlatform) system;
 
-  name = "simplenote-${pkgver}";
-  pkgver = "1.1.3";
+  throwSystem = throw "Unsupported system: ${system}";
 
-  src = fetchurl {
-    url = "https://github.com/Automattic/simplenote-electron/releases/download/v${pkgver}/Simplenote-linux-${pkgver}.tar.gz";
-    sha256 = "1z92yyjmg3bgfqfdpnysf98h9hhhnqzdqqigwlmdmn3d7fy49kcf";
-  };
+  pname = "simplenote";
 
-  buildCommand = let
+  version = "1.11.0";
 
-    packages = [
-      stdenv.cc.cc zlib glib dbus gtk2 atk pango freetype libgnome-keyring3
-      fontconfig gdk-pixbuf cairo cups expat libgpgerror alsaLib nspr nss
-      xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
-      xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
-      xorg.libXcursor libcap systemd libnotify libXScrnSaver gnome2.GConf
-      xorg.libxcb
-    ];
-
-    libPathNative = lib.makeLibraryPath packages;
-    libPath64 = lib.makeSearchPathOutput "lib" "lib64" packages;
-    libPath = "${libPathNative}:${libPath64}";
-
-  in ''
-    mkdir -p $out/share/
-    mkdir -p $out/bin
-    tar xvzf $src -C $out/share/
-    mv $out/share/Simplenote-linux-x64 $out/share/simplenote
-    mv $out/share/simplenote/Simplenote $out/share/simplenote/simplenote
-    mkdir -p $out/share/applications
-
-    cat > $out/share/applications/simplenote.desktop << EOF
-    [Desktop Entry]
-    Name=Simplenote
-    Comment=Simplenote for Linux
-    Exec=$out/bin/simplenote
-    Icon=$out/share/simplenote/Simplenote.png
-    Type=Application
-    StartupNotify=true
-    Categories=Development;
-    EOF
-
-    fixupPhase
-
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}:$out/share/simplenote" \
-      $out/share/simplenote/simplenote
-
-    ln -s $out/share/simplenote/simplenote $out/bin/simplenote
-  '';
+  sha256 = {
+    x86_64-linux = "1ljam1yfiy1lh6lrknrq7cdqpj1q7f655mxjiiwv3izp98qr1f8s";
+  }.${system} or throwSystem;
 
   meta = with stdenv.lib; {
     description = "The simplest way to keep notes";
-    homepage = https://github.com/Automattic/simplenote-electron;
-    license = licenses.lgpl2;
-    platforms = [ "x86_64-linux" ];
+    homepage = "https://github.com/Automattic/simplenote-electron";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      kiwi
+    ];
+    platforms = [
+      "x86_64-linux"
+    ];
   };
-}
+
+  linux = stdenv.mkDerivation rec {
+    inherit pname version meta;
+
+    src = fetchurl {
+      url =
+        "https://github.com/Automattic/simplenote-electron/releases/download/"
+        + "v${version}/Simplenote-linux-${version}-amd64.deb";
+      inherit sha256;
+    };
+
+    desktopItem = makeDesktopItem {
+      categories = "Development";
+      comment = "Simplenote for Linux";
+      desktopName = "Simplenote";
+      exec = "simplenote %U";
+      icon = "simplenote";
+      name = "simplenote";
+      startupNotify = "true";
+      type = "Application";
+    };
+
+    dontBuild = true;
+    dontConfigure = true;
+    dontPatchELF = true;
+    dontWrapGApps = true;
+
+    nativeBuildInputs = [
+      autoPatchelfHook
+      dpkg
+      makeWrapper
+      wrapGAppsHook
+    ];
+
+    buildInputs = atomEnv.packages;
+
+    unpackPhase = "dpkg-deb -x $src .";
+
+    installPhase = ''
+      mkdir -p "$out/bin"
+      cp -R "opt" "$out"
+      cp -R "usr/share" "$out/share"
+      chmod -R g-w "$out"
+
+      mkdir -p "$out/share/applications"
+      cp "${desktopItem}/share/applications/"* "$out/share/applications"
+    '';
+
+    runtimeDependencies = [
+      udev.lib
+    ];
+
+    postFixup = ''
+      makeWrapper $out/opt/Simplenote/simplenote $out/bin/simplenote \
+        "''${gappsWrapperArgs[@]}"
+    '';
+  };
+
+in
+linux

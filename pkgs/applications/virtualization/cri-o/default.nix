@@ -17,7 +17,7 @@
 
 buildGoPackage rec {
   project = "cri-o";
-  version = "1.15.0";
+  version = "1.16.1";
   name = "${project}-${version}${flavor}";
 
   goPackagePath = "github.com/${project}/${project}";
@@ -26,7 +26,7 @@ buildGoPackage rec {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "08m84rlar25w6dwv76rab4vdlavacn7kb5ravzqnb8ngx68csbp3";
+    sha256 = "0w690zhc55gdqzc31jc34nrzwd253pfb3rq23z51q22nqwmlsh9p";
   };
 
   outputs = [ "bin" "out" ];
@@ -42,17 +42,23 @@ buildGoPackage rec {
     pushd go/src/${goPackagePath}
 
     # Build pause
-    go build -tags ${makeFlags} -o bin/crio-config -buildmode=pie \
-      -ldflags '-s -w ${ldflags}' ${goPackagePath}/cmd/crio-config
-
     make -C pause
 
-    # Build the crio binary
-    go build -tags ${makeFlags} -o bin/crio -buildmode=pie \
-      -ldflags '-s -w ${ldflags}' ${goPackagePath}/cmd/crio
+    # Build the crio binaries
+    function build() {
+      go build \
+        -tags ${makeFlags} \
+        -o bin/"$1" \
+        -buildmode=pie \
+        -ldflags '-s -w ${ldflags}' \
+        ${goPackagePath}/cmd/"$1"
+    }
+    build crio
+    build crio-status
   '';
   installPhase = ''
     install -Dm755 bin/crio $bin/bin/crio${flavor}
+    install -Dm755 bin/crio-status $bin/bin/crio-status${flavor}
 
     mkdir -p $bin/libexec/crio
     install -Dm755 bin/pause $bin/libexec/crio/pause${flavor}

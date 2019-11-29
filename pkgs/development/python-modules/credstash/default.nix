@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "credstash";
-  version = "1.15.0";
+  version = "1.16.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "814560f99ae2409e2c6d906d878f9dadada5d1d0a950aafb6b2c0d535291bdfb";
+    sha256 = "019wviz3hx0pkh3mgqr3prg55njyhzvhjqcpndgrfmkykjkcj435";
   };
 
   # The install phase puts an executable and a copy of the library it imports in

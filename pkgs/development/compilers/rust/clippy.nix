@@ -1,5 +1,5 @@
 { stdenv, lib, rustPlatform, rustc, Security, patchelf }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   name = "clippy-${rustc.version}";
   inherit (rustc) version src;
 

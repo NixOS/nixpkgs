@@ -10,12 +10,12 @@ let
     else throw "Unknown architecture";
 in
 stdenv.mkDerivation rec {
-  name = "bandwidth-${version}";
-  version = "1.5.1";
+  pname = "bandwidth";
+  version = "1.9.3";
 
   src = fetchurl {
-    url = "https://zsmith.co/archives/${name}.tar.gz";
-    sha256 = "1v9k1a2ilkbhc3viyacgq88c9if60kwsd1fy6rn84317qap4i7ib";
+    url = "https://zsmith.co/archives/${pname}-${version}.tar.gz";
+    sha256 = "0zpv2qgkbak0llw47qcakhyh2z3zv4d69kasldmpdlpqryd9za84";
   };
 
   buildInputs = [ nasm ];

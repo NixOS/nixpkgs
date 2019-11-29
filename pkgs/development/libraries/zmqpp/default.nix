@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, zeromq }:
 
 stdenv.mkDerivation rec {
-  name = "zmqpp-${version}";
+  pname = "zmqpp";
   version = "4.2.0";
 
   src = fetchFromGitHub {

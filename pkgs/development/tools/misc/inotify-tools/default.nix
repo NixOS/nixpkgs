@@ -1,7 +1,7 @@
 { stdenv, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "inotify-tools-${version}";
+  pname = "inotify-tools";
   version = "3.20.1";
 
   src = fetchFromGitHub {

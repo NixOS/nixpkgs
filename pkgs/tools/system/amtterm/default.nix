@@ -2,14 +2,14 @@
 
 
 stdenv.mkDerivation rec {
-  name = "amtterm-${version}";
+  pname = "amtterm";
   version = "1.6-1";
 
   buildInputs = with perlPackages; [ perl SOAPLite ];
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchurl {
-    url = "https://www.kraxel.org/cgit/amtterm/snapshot/${name}.tar.gz";
+    url = "https://www.kraxel.org/cgit/amtterm/snapshot/${pname}-${version}.tar.gz";
     sha256 = "1jxcsqkag2bxmrnr4m6g88sln1j2d9liqlna57fj8kkc85316vlc";
   };
 

@@ -509,7 +509,7 @@ in
       };
 
       localRecipients = mkOption {
-        type = with types; nullOr (listOf string);
+        type = with types; nullOr (listOf str);
         default = null;
         description = ''
           List of accepted local users. Specify a bare username, an
@@ -530,7 +530,7 @@ in
 
       dnsBlacklists = mkOption {
         default = [];
-        type = with types; listOf string;
+        type = with types; listOf str;
         description = "dns blacklist servers to use with smtpd_client_restrictions";
       };
 
@@ -626,6 +626,14 @@ in
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";
         source = "${pkgs.postfix}/bin/sendmail";
+        group = setgidGroup;
+        setuid = false;
+        setgid = true;
+      };
+
+      security.wrappers.mailq = {
+        program = "mailq";
+        source = "${pkgs.postfix}/bin/mailq";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -877,22 +885,22 @@ in
     }
 
     (mkIf haveAliases {
-      services.postfix.aliasFiles."aliases" = aliasesFile;
+      services.postfix.aliasFiles.aliases = aliasesFile;
     })
     (mkIf haveTransport {
-      services.postfix.mapFiles."transport" = transportFile;
+      services.postfix.mapFiles.transport = transportFile;
     })
     (mkIf haveVirtual {
-      services.postfix.mapFiles."virtual" = virtualFile;
+      services.postfix.mapFiles.virtual = virtualFile;
     })
     (mkIf haveLocalRecipients {
-      services.postfix.mapFiles."local_recipients" = localRecipientMapFile;
+      services.postfix.mapFiles.local_recipients = localRecipientMapFile;
     })
     (mkIf cfg.enableHeaderChecks {
-      services.postfix.mapFiles."header_checks" = headerChecksFile;
+      services.postfix.mapFiles.header_checks = headerChecksFile;
     })
     (mkIf (cfg.dnsBlacklists != []) {
-      services.postfix.mapFiles."client_access" = checkClientAccessFile;
+      services.postfix.mapFiles.client_access = checkClientAccessFile;
     })
   ]);
 }

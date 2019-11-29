@@ -5,13 +5,14 @@
 , vala, meson, ninja, libhandy, gsettings-desktop-schemas }:
 
 let
-  version = "3.32.1";
+  version = "3.34";
 in stdenv.mkDerivation rec {
-  name = "gnome-contacts-${version}";
+  pname = "gnome-contacts";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "17g1gh8yj58cfpdx69h2szivlbjgvv982kmhnkkh0i5bwj0zs2yy";
+    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "04igc9xvyc4kb5xf5g2missnvyvj9zv5cqxf5k4z7hb0sv42wq4r";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];
@@ -32,15 +33,6 @@ in stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Fixes build with libhandy >= 0.0.10
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-contacts/commit/c5eee38cd2556403a640a0a4c11d36cbf9a5a798.patch";
-      sha256 = "0s2cl7z6b0x3ky4y28yyxc9x5zp4r3vqmvbhz5m2fm6830fyjg13";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-contacts/commit/1f1500ca01098ffda6392f5ec9ce3a29a48a84b1.patch";
-      sha256 = "082zaaj2l5cgr2qy145x8yknja87r0vpigrhidal40041kd5nldg";
-    })
   ];
 
   postPatch = ''

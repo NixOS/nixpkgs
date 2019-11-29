@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, eigen }:
 
 stdenv.mkDerivation rec {
-  name = "vcg-${version}";
+  pname = "vcg";
   version = "1.0.1";
 
   src = fetchFromGitHub {

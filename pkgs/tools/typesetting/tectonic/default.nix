@@ -2,7 +2,7 @@
 , darwin, fontconfig, harfbuzz, openssl, pkgconfig }:
 
 rustPlatform.buildRustPackage rec {
-  name = "tectonic-${version}";
+  pname = "tectonic";
   version = "0.1.11";
 
   src = fetchFromGitHub {

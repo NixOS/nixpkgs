@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "ua-unstable-${version}";
+  pname = "ua-unstable";
   version = "2017-02-24";
   rev = "325dab92c60e0f028e55060f0c288aa70905fb17";
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, git, nettools, perl }:
 
 stdenv.mkDerivation rec {
-  name = "gitolite-${version}";
+  pname = "gitolite";
   version = "3.6.11";
 
   src = fetchFromGitHub {

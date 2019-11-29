@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "eschalot";
   version = "2018-01-19";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ReclaimYourPrivacy";

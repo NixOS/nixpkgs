@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, openssl, libevent }:
 
 stdenv.mkDerivation rec {
-  name = "coturn-${version}";
+  pname = "coturn";
   version = "4.5.1.1";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
-    rev = "${version}";
+    rev = version;
     sha256 = "12x604lgva1d3g4wvl3f66rdj6lkjk5cqr0l3xas33xgzgm13pwr";
   };
 

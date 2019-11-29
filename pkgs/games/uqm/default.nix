@@ -27,7 +27,7 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "uqm-${version}";
+  pname = "uqm";
   version = "0.7.0";
 
   src = fetchurl {

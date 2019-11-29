@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.14.0";
-  name = "ib-controller-${version}";
+  pname = "ib-controller";
 
   src = fetchurl {
     url = "https://github.com/ib-controller/ib-controller/archive/${version}.tar.gz";

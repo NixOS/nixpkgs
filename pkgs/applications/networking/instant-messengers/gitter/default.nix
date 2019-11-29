@@ -20,7 +20,6 @@ let gitterDirectorySuffix = "opt/gitter";
 in stdenv.mkDerivation rec {
   pname = "gitter";
   version = "4.1.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://update.gitter.im/linux64/${pname}_${version}_amd64.deb";

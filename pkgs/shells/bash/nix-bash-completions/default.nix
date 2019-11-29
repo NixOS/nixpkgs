@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.6.7";
-  name = "nix-bash-completions-${version}";
+  pname = "nix-bash-completions";
 
   src = fetchFromGitHub {
     owner = "hedning";

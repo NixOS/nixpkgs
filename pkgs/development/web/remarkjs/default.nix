@@ -17,7 +17,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "remarkjs-${version}";
+  pname = "remarkjs";
 
   version = "0.7.0";
 

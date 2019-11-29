@@ -1,20 +1,34 @@
-{ stdenv, fetchFromGitHub, lib, bzip2, cmake, lz4, snappy, zlib, zstd, enableLite ? false }:
+{ stdenv, fetchFromGitHub, fetchpatch
+, cmake, ninja
+, bzip2, lz4, snappy, zlib, zstd
+, enableLite ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "6.1.2";
+  version = "6.4.6";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gy2zjga3r8k9pbn2b0b5fzv4m0h2ip3zmyja1i7fli9n56civ3y";
+    sha256 = "0s0n4p1b4jzmslz9d2xd4ajra0m6l9x26mjwlbgw0klxjggmy8qn";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
-  patches = [ ./0001-findzlib.patch ];
+  patches = [
+    # https://github.com/facebook/rocksdb/pull/6076
+    (fetchpatch {
+      url = "https://github.com/facebook/rocksdb/commit/c0be4b2ff1a5393419673fab961cb9b09ba38752.diff";
+      sha256 = "1f2wg9kqlmf2hiiihmbp8m5fr2wnn7896g6i9yg9hdgi40pw30w6";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "find_package(zlib " "find_package(ZLIB "
+  '';
 
   cmakeFlags = [
     "-DPORTABLE=1"
@@ -28,12 +42,17 @@ stdenv.mkDerivation rec {
     "-DWITH_ZLIB=1"
     "-DWITH_ZSTD=1"
     "-DWITH_GFLAGS=0"
-    (lib.optional
-        (stdenv.hostPlatform.system == "i686-linux"
-         || stdenv.hostPlatform.system == "x86_64-linux")
+    "-DUSE_RTTI=1"
+    "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
+    (stdenv.lib.optional
+        (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
         "-DFORCE_SSE42=1")
-    (lib.optional enableLite "-DROCKSDB_LITE=1")
+    (stdenv.lib.optional enableLite "-DROCKSDB_LITE=1")
+    "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
   ];
+
+  # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
+  hardeningDisable = stdenv.lib.optional stdenv.hostPlatform.isWindows "format";
 
   meta = with stdenv.lib; {
     homepage = https://rocksdb.org;

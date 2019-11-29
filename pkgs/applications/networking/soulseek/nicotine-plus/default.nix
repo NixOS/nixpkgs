@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 
-python27Packages.buildPythonApplication rec {
+python27Packages.buildPythonApplication {
   pname = "nicotine-plus";
   version = "1.4.1";
 

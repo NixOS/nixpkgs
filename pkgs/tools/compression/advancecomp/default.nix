@@ -2,7 +2,7 @@
 , autoreconfHook, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "advancecomp-${version}";
+  pname = "advancecomp";
   version = "2.1";
 
   src = fetchFromGitHub {

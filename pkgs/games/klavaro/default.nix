@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, intltool, curl, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "klavaro-${version}";
+  pname = "klavaro";
   version = "3.08";
 
   src = fetchurl {
-    url = "mirror://sourceforge/klavaro/${name}.tar.bz2";
+    url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
     sha256 = "0qmvr6d8wshwp0xvk5wbig4vlzxzcxrakhyhd32v8v3s18nhqsrc";
   };
 
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://klavaro.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [stdenv.lib.maintainers.mimadrid];
+    maintainers = [stdenv.lib.maintainers.mimame];
   };
 }

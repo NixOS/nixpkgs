@@ -4,7 +4,8 @@ let
   version = "3.2.7a";
 
 in stdenv.mkDerivation {
-  name = "fig2dev-${version}";
+  pname = "fig2dev";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/fig2dev-${version}.tar.xz";

@@ -11,7 +11,7 @@
 #
 
 buildGoPackage rec {
-  name = "terraform-provider-ibm-${version}";
+  pname = "terraform-provider-ibm";
   version = "0.11.1";
 
   goPackagePath = "github.com/terraform-providers/terraform-provider-ibm";

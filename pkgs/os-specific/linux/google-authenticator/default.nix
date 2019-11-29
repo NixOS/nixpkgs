@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, autoreconfHook, pam, qrencode }:
 
 stdenv.mkDerivation rec {
-  name = "google-authenticator-libpam-${version}";
+  pname = "google-authenticator-libpam";
   version = "1.06";
 
   src = fetchurl {

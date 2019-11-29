@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AdoptOpenJDK";
     repo = "IcedTea-Web";
-    rev = "${pname}-${version}";
+    rev = "icedtea-web-${version}";
     sha256 = "0bm5k11i2vgb54ch1bawsmjbwnqnp04saadwm2f2mggmmdc6b1qq";
   };
 
@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
       based on the NetX project.
     '';
     homepage = https://github.com/adoptopenjdk/icedtea-web;
-    maintainers = with stdenv.lib.maintainers; [ wizeman ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

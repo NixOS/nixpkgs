@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "expat-2.2.7";
+  name = "expat-2.2.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/expat/${name}.tar.bz2";
-    sha256 = "067cfhqwiswm4zynw7xaxl59mrrimaiyjhnn8byxma1i98pi1jfb";
+    url = "https://github.com/libexpat/libexpat/releases/download/R_2_2_8/${name}.tar.xz";
+    sha256 = "16vpj5mk3lps3x7fr8cs03rffx3ir4jilyqw0frayn6q94daijk1";
   };
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers

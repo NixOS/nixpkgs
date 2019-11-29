@@ -6,7 +6,7 @@ if !stdenv.lib.versionAtLeast conduit-lwt.version "1.0"
 then conduit-lwt
 else
 
-buildDunePackage rec {
+buildDunePackage {
 	pname = "conduit-lwt-unix";
 	inherit (conduit-lwt) version src meta;
 

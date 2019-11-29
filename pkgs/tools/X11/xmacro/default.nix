@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libX11, libXtst, xorgproto, libXi }:
 
 stdenv.mkDerivation rec {
-  name = "xmacro-${version}";
+  pname = "xmacro";
   version = "0.4.6";
 
   src = fetchurl {
-    url = "http://download.sarine.nl/xmacro/${name}.tar.gz";
+    url = "http://download.sarine.nl/xmacro/${pname}-${version}.tar.gz";
     sha256 = "1p9jljxyn4j6piljiyi2xv6f8jhjbzhabprp8p0qmqxaxgdipi61";
   };
 

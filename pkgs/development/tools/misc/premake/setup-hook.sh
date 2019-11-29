@@ -14,6 +14,6 @@ premakeConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "$configurePhase" ]; then
+if [ -z "${configurePhase-}" ]; then
     configurePhase=premakeConfigurePhase
 fi

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
 , xwininfo, xdotool, xprop }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tdrop";
   version = "unstable-2018-11-13";
 

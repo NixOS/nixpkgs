@@ -71,11 +71,13 @@ import ./make-test.nix ({ pkgs, ... }: {
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35268
     subtest "file system with x-initrd.mount is not unmounted", sub {
+      $machine->succeed('mountpoint -q /test-x-initrd-mount');
       $machine->shutdown;
-      $machine->waitForUnit('multi-user.target');
-      # If the file system was unmounted during the shutdown the file system
-      # has a last mount time, because the file system wasn't checked.
-      $machine->fail('dumpe2fs /dev/vdb | grep -q "^Last mount time: *n/a"');
+      system('qemu-img', 'convert', '-O', 'raw',
+             'vm-state-machine/empty2.qcow2', 'x-initrd-mount.raw');
+      my $extinfo = `${pkgs.e2fsprogs}/bin/dumpe2fs x-initrd-mount.raw`;
+      die "File system was not cleanly unmounted: $extinfo"
+        unless $extinfo =~ /^Filesystem state: *clean$/m;
     };
 
     subtest "systemd-shutdown works", sub {

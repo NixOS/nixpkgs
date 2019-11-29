@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Omake build system";
-    homepage = "${webpage}";
+    homepage = webpage;
     license = "GPL";
     platforms = ocaml.meta.platforms or [];
   };

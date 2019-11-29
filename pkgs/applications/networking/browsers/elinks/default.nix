@@ -10,7 +10,7 @@
 assert enableGuile -> guile != null;
 assert enablePython -> python != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "elinks-0.12pre6";
 
   src = fetchurl {

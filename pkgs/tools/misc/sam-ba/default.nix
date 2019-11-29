@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "2.16";
-  name = "sam-ba-${version}";
+  pname = "sam-ba";
 
   src = fetchzip {
     url = "http://www.atmel.com/dyn/resources/prod_documents/sam-ba_${version}_linux.zip";

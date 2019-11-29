@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.5.1";
-  name = "libmpeg2-${version}";
+  pname = "libmpeg2";
 
   src = fetchurl {
-    url = "http://libmpeg2.sourceforge.net/files/${name}.tar.gz";
+    url = "http://libmpeg2.sourceforge.net/files/${pname}-${version}.tar.gz";
     sha256 = "1m3i322n2fwgrvbs1yck7g5md1dbg22bhq5xdqmjpz5m7j4jxqny";
   };
 

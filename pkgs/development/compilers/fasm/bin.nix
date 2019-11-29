@@ -1,13 +1,13 @@
 { stdenvNoCC, lib, fetchurl }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "fasm-bin-${version}";
+  pname = "fasm-bin";
 
-  version = "1.73.16";
+  version = "1.73.18";
 
   src = fetchurl {
     url = "https://flatassembler.net/fasm-${version}.tgz";
-    sha256 = "1jaqm7w458ny37fsw3fln17kw31rcsk8kyadci45qcbw6jspmn7k";
+    sha256 = "0m88vi8ac9mlak430nyrg3nxsj0fzy3yli8kk0mqsw8rqw2pfvqb";
   };
 
   installPhase = ''

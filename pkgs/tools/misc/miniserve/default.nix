@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib }:
 
 rustPlatform.buildRustPackage rec {
-  name    = "miniserve-${version}";
+  pname = "miniserve";
   version = "0.2.1";
 
   src = fetchFromGitHub {

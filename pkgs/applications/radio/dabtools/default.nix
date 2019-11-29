@@ -2,7 +2,7 @@
 , libusb1, rtl-sdr, fftw
 } :
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dabtools";
   version = "20180405";
 

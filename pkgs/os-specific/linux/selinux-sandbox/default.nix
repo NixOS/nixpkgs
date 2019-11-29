@@ -8,13 +8,13 @@ with stdenv.lib;
 with python3.pkgs;
 
 stdenv.mkDerivation rec {
-  name = "selinux-sandbox-${version}";
-  version = "2.7";
-  se_release = "20170804";
+  pname = "selinux-sandbox";
+  version = "2.9";
+  inherit (policycoreutils) se_release se_url;
 
   src = fetchurl {
-    url = "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/${se_release}/selinux-sandbox-${version}.tar.gz";
-    sha256 = "0hf5chm90iapb42njaps6p5460ys3ajh5446ja544vdbh01n544l";
+    url = "${se_url}/${se_release}/selinux-sandbox-${version}.tar.gz";
+    sha256 = "0qj20jyi8v1653xdqj5yak3wwbvg5bw8f2jmx8fpahl6y1bmz481";
   };
 
   nativeBuildInputs = [ wrapPython ];
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/test" "${coreutils}/bin/test" \
   '';
 
-  preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
-    makeFlagsArray+=("DESTDIR=$out")
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SYSCONFDIR=$(out)/etc/sysconfig"
+  ];
 
   postFixup = ''
     wrapPythonPrograms

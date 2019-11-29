@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "snappy-${version}";
+  pname = "snappy";
   version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
-    rev = "${version}";
+    rev = version;
     sha256 = "1x7r8sjmdqlqjz0xfiwdyrqpgaj5yrvrgb28ivgpvnxgar5qv6m2";
   };
 
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = https://google.github.io/snappy/;
     license = licenses.bsd3;
     description = "Compression/decompression library for very high speeds";
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }

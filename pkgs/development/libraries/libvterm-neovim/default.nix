@@ -4,15 +4,15 @@
 , libtool
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libvterm-neovim";
-  version = "2018-11-26";
+  version = "2019-10-08";
 
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "libvterm";
-    rev = "f600f523545b7d4018ebf320e3273795dbe43c8a";
-    sha256 = "08lxd8xs9cg4axgq6bkb7afjxg3s29s1a3niqqm4wjb7iyi2jx5b";
+    rev = "7c72294d84ce20da4c27362dbd7fa4b08cfc91da";
+    sha256 = "111qyxq33x74dwdnqcnzlv9j0n8hxyribd6ppwcsxmyrniyw9qrk";
   };
 
   buildInputs = [ perl ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "VT220/xterm/ECMA-48 terminal emulator library";
     homepage = http://www.leonerd.org.uk/code/libvterm/;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rvolosatovs ];
     platforms = platforms.unix;
   };
 }

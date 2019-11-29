@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libsrtp-${version}";
+  pname = "libsrtp";
   version = "2.2.0";
 
   src = fetchFromGitHub {
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1ac7xs1djb03j131f1gmqyfmrplblid9qqyxahs0shdy707r5ll6";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
 

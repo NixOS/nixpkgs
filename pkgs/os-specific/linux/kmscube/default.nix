@@ -1,6 +1,6 @@
 { stdenv, fetchgit, autoreconfHook, libdrm, libX11, libGL, mesa, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kmscube-2018-06-17";
 
   src = fetchgit {

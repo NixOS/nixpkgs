@@ -5,7 +5,7 @@
 # but Python 2 + packages during runtime.
 
 stdenv.mkDerivation rec {
-  name = "uzbl-${version}";
+  pname = "uzbl";
   version = "0.9.0";
 
   meta = with stdenv.lib; {

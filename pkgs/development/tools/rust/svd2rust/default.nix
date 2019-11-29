@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "svd2rust-${version}";
+  pname = "svd2rust";
   version = "0.14.0";
 
   src = fetchFromGitHub {

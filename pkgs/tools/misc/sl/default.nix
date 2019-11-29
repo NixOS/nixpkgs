@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "sl-${version}";
+  pname = "sl";
   version = "5.05";
 
   src = fetchFromGitHub {

@@ -1,27 +1,25 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, six
+{ stdenv, buildPythonPackage, fetchFromGitHub
+, aiohttp
 , eventlet
-, mock
 , iana-etc
 , libredirect
-, aiohttp
-, websockets
-, websocket_client
+, mock
 , requests
+, six
 , tornado
+, websocket_client
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "3.4.3";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "v${version}";
-    sha256 = "0wk81rqigw47z087f5kc7b9iwqggypxc62q8q818qyzqwb93ysxf";
+    sha256 = "1495r55177c38wq88pb28l50dfd4213iyxwq1k5rmsgp66vww09s";
   };
 
   propagatedBuildInputs = [
@@ -29,13 +27,13 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    aiohttp
     eventlet
     mock
-    aiohttp
-    websockets
-    websocket_client
-    tornado
     requests
+    tornado
+    websocket_client
+    websockets
   ];
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox

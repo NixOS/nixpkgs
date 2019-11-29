@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "uftp-${version}";
+  pname = "uftp";
   version = "4.10";
 
   src = fetchurl {

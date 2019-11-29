@@ -4,8 +4,8 @@
 
 with python3Packages;
 
-buildPythonApplication rec {
-  name = "steamcontroller-${version}";
+buildPythonApplication {
+  pname = "steamcontroller";
   version = "2017-08-11";
 
   src = fetchFromGitHub {

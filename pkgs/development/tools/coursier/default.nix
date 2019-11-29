@@ -7,7 +7,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "coursier-${version}";
+  pname = "coursier";
   version = "2.0.0-RC3-3";
 
   src = fetchurl {

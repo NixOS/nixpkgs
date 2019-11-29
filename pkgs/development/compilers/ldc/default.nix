@@ -2,8 +2,8 @@
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, targetPackages
 , bootstrapVersion ? false
-, version ? "1.16.0"
-, ldcSha256 ? "00kk6pijn1ay2kkrp6b5ismawxr10azwij89k1rkszavqq6rsva2"
+, version ? "1.17.0"
+, ldcSha256 ? "1aag5jfrng6p4ms0fs90hjbv9bcj3hj8h52r68c3cm6racdajbva"
 }:
 
 let
@@ -21,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ldc-${version}";
+  pname = "ldc";
+  inherit version;
 
   enableParallelBuilding = true;
 

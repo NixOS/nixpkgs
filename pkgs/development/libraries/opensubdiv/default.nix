@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensubdiv-${version}";
+  pname = "opensubdiv";
   version = "3.4.0";
 
   src = fetchFromGitHub {

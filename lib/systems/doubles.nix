@@ -7,7 +7,7 @@ let
 
   all = [
     "aarch64-linux"
-    "armv5tel-linux" "armv6l-linux" "armv7l-linux"
+    "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux"
 
     "mipsel-linux"
 
@@ -26,14 +26,14 @@ let
 
     "riscv32-linux" "riscv64-linux"
 
-    "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "powerpc-none" "msp430-none" "riscv64-none" "riscv32-none"
+    "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "powerpc-none" "msp430-none" "riscv64-none" "riscv32-none" "vc4-none"
   ];
 
   allParsed = map parse.mkSystemFromString all;
 
   filterDoubles = f: map parse.doubleFromSystem (lists.filter f allParsed);
 
-in rec {
+in {
   inherit all;
 
   none = [];
@@ -45,6 +45,7 @@ in rec {
   x86_64  = filterDoubles predicates.isx86_64;
   mips    = filterDoubles predicates.isMips;
   riscv   = filterDoubles predicates.isRiscV;
+  vc4     = filterDoubles predicates.isVc4;
 
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;

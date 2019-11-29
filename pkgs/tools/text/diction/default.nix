@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "diction-${version}";
+  pname = "diction";
   version = "1.13";
 
   src = fetchurl {
-    url = "http://www.moria.de/~michael/diction/${name}.tar.gz";
+    url = "http://www.moria.de/~michael/diction/${pname}-${version}.tar.gz";
     sha256 = "08fi971b8qa4xycxbgb42i6b5ms3qx9zpp5hwpbxy2vypfs0wph9";
   };
 

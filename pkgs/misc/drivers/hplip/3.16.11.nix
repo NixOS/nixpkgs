@@ -1,6 +1,6 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
-, cups, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
+, cups, libjpeg, libusb1, python2Packages, sane-backends, dbus, usbutils
 , net_snmp, openssl, nettools
 , bash, coreutils, utillinux
 , qtSupport ? true
@@ -28,14 +28,14 @@ let
   };
 
   hplipPlatforms = {
-    "i686-linux"    = "x86_32";
-    "x86_64-linux"  = "x86_64";
-    "armv6l-linux"  = "arm32";
-    "armv7l-linux"  = "arm32";
-    "aarch64-linux" = "arm64";
+    i686-linux    = "x86_32";
+    x86_64-linux  = "x86_64";
+    armv6l-linux  = "arm32";
+    armv7l-linux  = "arm32";
+    aarch64-linux = "arm64";
   };
 
-  hplipArch = hplipPlatforms."${stdenv.hostPlatform.system}"
+  hplipArch = hplipPlatforms.${stdenv.hostPlatform.system}
     or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
   pluginArches = [ "x86_32" "x86_64" "arm32" "arm64" ];
@@ -45,7 +45,7 @@ in
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
-pythonPackages.buildPythonApplication {
+python2Packages.buildPythonApplication {
   inherit name src;
   format = "other";
 
@@ -63,7 +63,7 @@ pythonPackages.buildPythonApplication {
     pkgconfig
   ];
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python2Packages; [
     dbus
     pillow
     pygobject2

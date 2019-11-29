@@ -5,12 +5,12 @@
 }:
 
 mkDerivation rec {
-  name = "musescore-${version}";
-  version = "3.0.5";
+  pname = "musescore";
+  version = "3.2.3";
 
   src = fetchzip {
-    url = "https://download.musescore.com/releases/MuseScore-${version}/MuseScore-${version}.zip";
-    sha256 = "1pbf6v0l3nixxr8k5igwhj09wnqvw92av6q6yjrbb3kyjh5br2d8";
+    url = "https://github.com/musescore/MuseScore/releases/download/v${version}/MuseScore-${version}.zip";
+    sha256 = "17mr0c8whw6vz86lp1j36rams4h8virc4z68fld0q3rpq6g05szs";
     stripRoot = false;
   };
 

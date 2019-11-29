@@ -7,7 +7,7 @@ with lib;
       type = types.bool;
       default = config.services.xserver.enable;
       description = ''
-        Whether to build icon theme caches for GTK+ applications.
+        Whether to build icon theme caches for GTK applications.
       '';
     };
   };

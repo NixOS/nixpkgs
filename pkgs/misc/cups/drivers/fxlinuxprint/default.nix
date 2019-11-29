@@ -6,7 +6,7 @@ let
          else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation rec {
-  name = "fxlinuxprint-${version}";
+  pname = "fxlinuxprint";
   version = "1.1.2-1";
 
   src = fetchzip {

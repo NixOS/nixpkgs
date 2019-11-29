@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "duncanthrax";
     repo = "scream";
-    rev = "${version}";
+    rev = version;
     sha256 = "1iqhs7m0fv3vfld7h288j5j0jc5xdihaghd0jd9qrk68mj2g6g9w";
   };
 

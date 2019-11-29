@@ -6,12 +6,20 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   version = "2.9";
 
-  name = "wpa_supplicant-${version}";
+  pname = "wpa_supplicant";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${name}.tar.gz";
+    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
     sha256 = "05qzak1mssnxcgdrafifxh9w86a4ha69qabkg4bsigk499xyxggw";
   };
+
+  patches = [
+    (fetchurl {
+      name = "CVE-2019-16275.patch";
+      url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
+      sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
+    })
+  ];
 
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
@@ -85,17 +93,19 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man5 $out/share/man/man8
     cp -v "doc/docbook/"*.5 $out/share/man/man5/
     cp -v "doc/docbook/"*.8 $out/share/man/man8/
-    mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
+
+    mkdir -p $out/share/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
     cp -v "dbus/"*service $out/share/dbus-1/system-services
     sed -e "s@/sbin/wpa_supplicant@$out&@" -i "$out/share/dbus-1/system-services/"*
-    cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
+    cp -v dbus/dbus-wpa_supplicant.conf $out/share/dbus-1/system.d
     cp -v "systemd/"*.service $out/etc/systemd/system
+
     rm $out/share/man/man8/wpa_priv.8
     install -Dm444 wpa_supplicant.conf $out/share/doc/wpa_supplicant/wpa_supplicant.conf.example
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://hostap.epitest.fi/wpa_supplicant/;
+    homepage = https://hostap.epitest.fi/wpa_supplicant/;
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marcweber ];

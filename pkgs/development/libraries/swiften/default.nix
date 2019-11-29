@@ -1,6 +1,6 @@
 { stdenv, python, fetchurl, openssl, boost, scons }:
 stdenv.mkDerivation rec {
-  name    = "swiften-${version}";
+  pname = "swiften";
   version = "4.0.2";
 
   nativeBuildInputs = [ scons];

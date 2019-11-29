@@ -10,8 +10,6 @@
 , wingpanel
 , accountsservice
 , libgee
-, elementary-icon-theme
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -36,19 +34,17 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
     accountsservice
-    elementary-icon-theme
     granite
     gtk3
     libgee
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   meta = with stdenv.lib; {
     description = "Session Indicator for Wingpanel";

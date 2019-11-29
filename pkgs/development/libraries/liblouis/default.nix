@@ -1,25 +1,36 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, pkgconfig, gettext, python3
-, texinfo, help2man, libyaml, perl
+{ fetchFromGitHub
+, stdenv
+, autoreconfHook
+, pkgconfig
+, gettext
+, python3
+, texinfo
+, help2man
+, libyaml
+, perl
 }:
 
-let
-  version = "3.10.0";
-in stdenv.mkDerivation rec {
-  name = "liblouis-${version}";
+stdenv.mkDerivation rec {
+  pname = "liblouis";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${version}";
-    sha256 = "1wimv2wfl566jp8hhrxr91dmx20hldqzj70dar8i9k3hzq1kmb4q";
+    sha256 = "1y0pypgxchxczdnjkblibbvvy4gdk2pf8dzpqmbf824c7zpy8z5r";
   };
 
   outputs = [ "out" "dev" "man" "info" "doc" ];
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig gettext python3
+    autoreconfHook
+    pkgconfig
+    gettext
+    python3
     # Docs, man, info
-    texinfo help2man
+    texinfo
+    help2man
   ];
 
   buildInputs = [

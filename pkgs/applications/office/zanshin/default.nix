@@ -7,16 +7,15 @@
   krunner, kwallet
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "zanshin";
-  version = "2017-11-25";
-  name = "${pname}-${version}";
+  version = "2019-07-28";
 
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "zanshin";
-    rev = "3df91dd81682d2ccfe542c4582dc1d5f98537c89";
-    sha256 = "18wx7bdqzp81xmwi266gphh2lfbcp5s0fzyp654gki40yhkqph6m";
+    rev = "a8c223e745ed7e6aa3dd3cb0786a625a5c54e378";
+    sha256 = "0jglwh30x7qrl41n3dhawn4c25dmrzscpvcajhgb6fwcl4w8cgfm";
   };
 
   nativeBuildInputs = [

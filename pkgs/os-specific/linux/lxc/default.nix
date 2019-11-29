@@ -8,7 +8,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxc-${version}";
+  pname = "lxc";
   version = "3.2.1";
 
   src = fetchurl {

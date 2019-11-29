@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libX11, libXrandr, glib, colord }:
 
 stdenv.mkDerivation rec {
-  name = "xiccd-${version}";
+  pname = "xiccd";
   version = "0.3.0";
 
   src = fetchFromGitHub {
