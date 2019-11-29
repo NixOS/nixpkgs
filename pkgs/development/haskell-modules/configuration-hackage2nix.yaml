@@ -2594,6 +2594,7 @@ package-maintainers:
   cdepillabout:
     - pretty-simple
     - purescript
+    - spago
     - termonad
 
 unsupported-platforms:
