@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs autogen.sh
+    sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
     '';
 
   autoreconfPhase = ''
