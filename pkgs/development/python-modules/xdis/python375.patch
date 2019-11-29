@@ -1,0 +1,37 @@
+From 7ab97cb1e3833ff8ba0cdefd0bf92966acce6ac8 Mon Sep 17 00:00:00 2001
+From: rocky <rocky@dusytfeet.com>
+Date: Thu, 17 Oct 2019 01:32:06 -0400
+Subject: [PATCH] Add Python 3.7.5 as a 3.7 release
+
+(cherry picked from commit d80eb9e161e0d7c3710ab958fc7aa14e35464293)
+---
+ admin-tools/pyenv-newer-versions | 2 +-
+ xdis/magics.py                   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/admin-tools/pyenv-newer-versions b/admin-tools/pyenv-newer-versions
+index 3efc7e5..b2a3e02 100644
+--- a/admin-tools/pyenv-newer-versions
++++ b/admin-tools/pyenv-newer-versions
+@@ -5,4 +5,4 @@ if [[ $0 == ${BASH_SOURCE[0]} ]] ; then
+     echo "This script should be *sourced* rather than run directly through bash"
+     exit 1
+ fi
+-export PYVERSIONS='3.5.7 3.6.9 3.3.7 2.6.9 2.7.16 3.4.8 3.7.4'
++export PYVERSIONS='3.5.7 3.6.9 3.3.7 2.6.9 2.7.16 3.4.8 3.7.5'
+diff --git a/xdis/magics.py b/xdis/magics.py
+index 41300ab..05fef85 100755
+--- a/xdis/magics.py
++++ b/xdis/magics.py
+@@ -324,7 +324,7 @@ add_canonic_versions("3.5.3pypy", "3.5pypy")
+ add_canonic_versions("3.6.1pypy", "3.6pypy")
+ add_canonic_versions("2.7.8Pyston", "2.7.7Pyston")
+ add_canonic_versions("3.7.0alpha3", "3.7.0alpha3")
+-add_canonic_versions("3.7 3.7.0beta5 3.7.1 3.7.2 3.7.3 3.7.4", "3.7.0")
++add_canonic_versions("3.7 3.7.0beta5 3.7.1 3.7.2 3.7.3 3.7.4 3.7.5", "3.7.0")
+ add_canonic_versions("3.8.0alpha0 3.8.0alpha3 3.8.0a0", "3.8.0a3+")
+ add_canonic_versions("3.8.0 3.8", "3.8.0beta2")
+ 
+-- 
+2.24.0
+
