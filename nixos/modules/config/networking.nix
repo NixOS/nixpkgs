@@ -41,19 +41,6 @@ in
       '';
     };
 
-    networking.hostConf = lib.mkOption {
-      type = types.lines;
-      default = "multi on";
-      example = ''
-        multi on
-        reorder on
-        trim lan
-      '';
-      description = ''
-        The contents of <filename>/etc/host.conf</filename>. See also <citerefentry><refentrytitle>host.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
-      '';
-    };
-
     networking.timeServers = mkOption {
       default = [
         "0.nixos.pool.ntp.org"
@@ -186,7 +173,9 @@ in
         '';
 
         # /etc/host.conf: resolver configuration file
-        "host.conf".text = cfg.hostConf;
+        "host.conf".text = ''
+          multi on
+        '';
 
       } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
         # /etc/rpc: RPC program numbers.
