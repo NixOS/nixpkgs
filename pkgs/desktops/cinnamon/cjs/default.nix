@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # fix cairo bug
     # (python3.withPackages (pp: with pp; [ setproctitle pygobject3 pycairo ]))
     cairo
-    caribou
+    gnome3.caribou
   ];
 
   nativeBuildInputs = [
