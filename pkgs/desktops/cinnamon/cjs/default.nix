@@ -1,4 +1,14 @@
-{ autoconf-archive, autoreconfHook, dbus-glib, fetchFromGitHub, gobject-introspection, pkgconfig, spidermonkey_52, stdenv, wrapGAppsHook }:
+{ autoconf-archive,
+  autoreconfHook,
+  dbus-glib,
+  fetchFromGitHub,
+  gobject-introspection,
+  pkgconfig,
+  spidermonkey_52,
+  stdenv,
+  wrapGAppsHook,
+  python3
+  cairo }:
 
 stdenv.mkDerivation rec {
   pname = "cjs";
@@ -11,8 +21,22 @@ stdenv.mkDerivation rec {
     sha256 = "0q5h2pbwysc6hwq5js3lwi6zn7i5qjjy070ynfhfn3z69lw5iz2d";
   };
 
-  buildInputs = [ autoconf-archive dbus-glib pkgconfig spidermonkey_52 ];
-  nativeBuildInputs = [ autoreconfHook wrapGAppsHook gobject-introspection ];
+  buildInputs = [
+    autoconf-archive
+    dbus-glib
+    pkgconfig
+    spidermonkey_52
+
+    # test: try to fix cairo bug
+    (python3.withPackages (pp: with pp; [ setproctitle pygobject3 pycairo ]))
+    cairo
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    wrapGAppsHook
+    gobject-introspection
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/linuxmint/cinnamon-translations";
