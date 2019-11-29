@@ -19935,6 +19935,8 @@ in
       canonicaljson;
   };
 
+  matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder {};
+
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
   mcpp = callPackage ../development/compilers/mcpp { };
