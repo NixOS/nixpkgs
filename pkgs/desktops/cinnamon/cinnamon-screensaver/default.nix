@@ -25,7 +25,8 @@
   python3,
   pam,
   accountsservice,
-  cairo }:
+  cairo,
+  xapps }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
