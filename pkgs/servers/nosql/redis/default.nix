@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lua, jemalloc }:
+{ stdenv, fetchurl, lua, jemalloc, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "5.0.6";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = false; # needs tcl
+
+  passthru.tests.redis = nixosTests.redis;
 
   meta = with stdenv.lib; {
     homepage = https://redis.io;
