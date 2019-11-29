@@ -4814,6 +4814,8 @@ in {
 
   pyserial = callPackage ../development/python-modules/pyserial {};
 
+  pyserial-asyncio = callPackage ../development/python-modules/pyserial-asyncio { };
+
   pysonos = callPackage ../development/python-modules/pysonos {};
 
   pymongo = callPackage ../development/python-modules/pymongo {};
