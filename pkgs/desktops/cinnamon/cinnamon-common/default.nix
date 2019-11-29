@@ -24,7 +24,8 @@
   wrapGAppsHook,
   libxml2,
   gnome2,
-  python3 }:
+  python3,
+  keybinder3 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     polkit
     libxml2
+    keybinder3
   ];
   nativeBuildInputs = [
     autoreconfHook
