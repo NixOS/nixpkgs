@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cinnamon-desktop cinnamon-settings-daemon dbus-glib glib gsettings-desktop-schemas gtk3 libcanberra libxslt makeWrapper pkgconfig xapps xmlto xorg.xtrans xorg.libXtst gnome2.GConf systemd ];
   nativeBuildInputs = [ meson ninja wrapGAppsHook cmake libexecinfo docbook_xsl docbook_xml_dtd_412 python3 ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";  # TODO: https://github.com/NixOS/nixpkgs/issues/36468
   configureFlags = [ "--enable-systemd" ];
 
   postPatch = ''

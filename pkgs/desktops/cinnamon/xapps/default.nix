@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "08c8j7wv56zf8mfgjfhd0wc1bbrw0dj1lmlawvsxwfajnnyjsm0d";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/gio-unix-2.0" ];
+  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/gio-unix-2.0" ]; # TODO: https://github.com/NixOS/nixpkgs/issues/36468
 
   patches = [
     ./py-override.patch # details see https://github.com/linuxmint/xapps/pull/65

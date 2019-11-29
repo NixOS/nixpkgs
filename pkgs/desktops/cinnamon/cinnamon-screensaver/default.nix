@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
  buildInputs = [ glib (python3.withPackages (pp: with pp; [ pygobject3 setproctitle ])) gtk3 pam ];
 
- NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+ NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0"; # TODO: https://github.com/NixOS/nixpkgs/issues/36468
 
   postPatch = ''
     patchShebangs autogen.sh

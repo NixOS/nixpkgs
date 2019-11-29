@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-patch-datadir.patch ./0002-patch-remove-update-mime-db-script.patch ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/gio-unix-2.0" ];
+  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/gio-unix-2.0" ];  # TODO: https://github.com/NixOS/nixpkgs/issues/36468
 
   buildInputs = [ glib pkgconfig gtk3 libnotify cinnamon-desktop libxml2 xapps libexif exempi ];
   nativeBuildInputs = [ meson gobject-introspection ninja wrapGAppsHook cmake intltool ];

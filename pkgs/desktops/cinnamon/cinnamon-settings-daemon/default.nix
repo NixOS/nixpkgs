@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h74d68a7hx85vv6ak26b85jq0wr56ps9rzfvqsnxwk81zxw2n7q";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0"; # TODO: https://github.com/NixOS/nixpkgs/issues/36468
 
   buildInputs = [ autoconf-archive cinnamon-desktop colord gtk3 glib gsettings-desktop-schemas intltool lcms2 libcanberra libcanberra-gtk3 libgnomekbd libnotify libxklavier makeWrapper pkgconfig pulseaudio systemd upower ];
   nativeBuildInputs = [ autoreconfHook ];
