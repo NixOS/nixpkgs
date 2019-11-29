@@ -7,7 +7,7 @@
   spidermonkey_52,
   stdenv,
   wrapGAppsHook,
-  python3
+  python3,
   cairo }:
 
 stdenv.mkDerivation rec {
