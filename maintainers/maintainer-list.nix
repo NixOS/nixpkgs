@@ -7664,4 +7664,10 @@
     githubId = 50867187;
     name = "Rakesh Gupta";
   };
+  waiting-for-dev = {
+    email = "marc@lamarciana.com";
+    github = "waiting-for-dev";
+    githubId = 52650;
+    name = "Marc Busqué";
+  };
 }
