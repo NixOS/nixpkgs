@@ -724,6 +724,8 @@ in
 
   brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
 
+  boxes = callPackage ../tools/text/boxes { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
@@ -8334,6 +8336,8 @@ in
       });
 
   jasmin = callPackage ../development/compilers/jasmin { };
+
+  java-service-wrapper = callPackage ../tools/system/java-service-wrapper { };
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
@@ -18246,6 +18250,8 @@ in
   coursera-dl = callPackage ../applications/misc/coursera-dl {};
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim {};
+
+  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor { };
 
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 

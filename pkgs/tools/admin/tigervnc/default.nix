@@ -11,14 +11,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.9.0";
+  version = "1.10.0";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
-    rev = "v1.9.0";
-    sha256 = "0b47fg3741qs3zdpl2zr0s6jz46dypp2j6gqrappbzm3ywnnmm1x";
+    rev = "v1.10.0";
+    sha256 = "0l0x7cq65wv9n93r952qsikwzcls1sq3r32mx0c4wg19dha0x1m4";
   };
 
   inherit fontDirectories;
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.tigervnc.org/;
+    homepage = "https://tigervnc.org/";
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
     maintainers = with stdenv.lib.maintainers; [viric];

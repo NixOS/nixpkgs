@@ -1,7 +1,7 @@
 # TODO: Resolve the issues with the Mono bindings.
 
-{ stdenv, fetchurl, fetchpatch, lib, file
-, pkgconfig, autoconf
+{ stdenv, fetchurl, fetchpatch, lib
+, pkgconfig, autoreconfHook
 , glib, dbus-glib, gtkVersion ? "3"
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "17xlqd60v0zllrxp8bgq3k5a1jkj0svkqn8rzllcyjh8k0gpr46m";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf vala gobject-introspection ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook vala gobject-introspection ];
 
   propagatedBuildInputs =
     if gtkVersion == "2"
@@ -46,25 +46,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    autoconf
-    for f in {configure,ltmain.sh,m4/libtool.m4}; do
-      substituteInPlace $f \
-        --replace /usr/bin/file ${file}/bin/file
-    done
-  '';
-
   configureFlags = [
     "CFLAGS=-Wno-error"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-gtk=${gtkVersion}"
   ];
-
-  postConfigure = ''
-    substituteInPlace configure \
-      --replace /usr/bin/file ${file}/bin/file
-  '';
 
   doCheck = false; # generates shebangs in check phase, too lazy to fix
 

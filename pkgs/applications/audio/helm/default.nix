@@ -1,5 +1,5 @@
-  { stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
-  , lv2, pkgconfig, libGLU, libGL }:
+{ stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
+, lv2, pkgconfig, libGLU, libGL }:
 
   stdenv.mkDerivation {
   version = "0.9.0";
