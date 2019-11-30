@@ -1,6 +1,6 @@
 # TODO: Resolve the issues with the Mono bindings.
 
-{ stdenv, fetchurl, fetchpatch, lib, file
+{ stdenv, fetchurl, fetchpatch, lib
 , pkgconfig, autoreconfHook
 , glib, dbus-glib, gtkVersion ? "3"
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
@@ -46,24 +46,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    for f in {configure,ltmain.sh,m4/libtool.m4}; do
-      substituteInPlace $f \
-        --replace /usr/bin/file ${file}/bin/file
-    done
-  '';
-
   configureFlags = [
     "CFLAGS=-Wno-error"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-gtk=${gtkVersion}"
   ];
-
-  postConfigure = ''
-    substituteInPlace configure \
-      --replace /usr/bin/file ${file}/bin/file
-  '';
 
   doCheck = false; # generates shebangs in check phase, too lazy to fix
 
