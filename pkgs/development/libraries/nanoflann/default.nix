@@ -13,12 +13,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake ];
 
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES=OFF"
+  ];
+
   doCheck = true;
   checkTarget = "test";
 
   meta = {
-    homepage = https://github.com/jlblancoc/nanoflann;
-    license = stdenv.lib.licenses.bsd3;
+    homepage = "https://github.com/jlblancoc/nanoflann";
+    license = stdenv.lib.licenses.bsd2;
     description = "Header only C++ library for approximate nearest neighbor search";
     platforms = stdenv.lib.platforms.unix;
   };
