@@ -21109,7 +21109,7 @@ in
   split2flac = callPackage ../applications/audio/split2flac { };
 
   spotify-tui = callPackage ../applications/audio/spotify-tui {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
   squishyball = callPackage ../applications/audio/squishyball {
