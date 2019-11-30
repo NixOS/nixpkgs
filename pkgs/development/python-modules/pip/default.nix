@@ -26,7 +26,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ bootstrapped-pip ];
-  propagatedBuildInputs = [ setuptools ];
 
   # pip detects that we already have bootstrapped_pip "installed", so we need
   # to force it a little.
