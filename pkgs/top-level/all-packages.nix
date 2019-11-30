@@ -15731,7 +15731,7 @@ in
   };
 
   # Update this when adding the newest kernel major version!
-  linux_latest = callPackage ../os-specific/linux/kernel/linux-5.3.nix {
+  linux_latest = callPackage ../os-specific/linux/kernel/linux-5.4.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
