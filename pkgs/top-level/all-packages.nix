@@ -18295,6 +18295,8 @@ in
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim {};
 
+  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor { };
+
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 
   crun = callPackage ../applications/virtualization/crun {};
