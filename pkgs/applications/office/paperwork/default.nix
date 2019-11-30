@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication rec {
     description = "A personal document manager for scanned documents";
     homepage = https://openpaper.work/;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.aszlig ];
+    maintainers = with lib.maintainers; [ aszlig symphorien ];
     platforms = lib.platforms.linux;
   };
 }
