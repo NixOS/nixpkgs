@@ -497,6 +497,8 @@ in {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
+  cadquery = callPackage ../development/python-modules/cadquery { };
+
   catalogue = callPackage ../development/python-modules/catalogue { };
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
@@ -1101,6 +1103,8 @@ in {
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
 
+  pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
+
   pyside = callPackage ../development/python-modules/pyside {
     inherit (pkgs) mesa;
   };
@@ -1155,11 +1159,15 @@ in {
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
+  pytest-qt = callPackage ../development/python-modules/pytest-qt { };
+
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
+
+  pytest-xvfb = callPackage ../development/python-modules/pytest-xvfb { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
 
@@ -5263,6 +5271,8 @@ in {
   };
 
   tiros = callPackage ../development/python-modules/tiros { };
+
+  tinydb = callPackage ../development/python-modules/tinydb { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
 
