@@ -49,6 +49,7 @@ with lib;
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
+    (mkRemovedOptionModule [ "services" "firefox" "syncserver" ] "Syncserver uses out-dated python2 libraries. Upstream works on new Rust implementation")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule ["hardware" "brightnessctl" ] ''
       The brightnessctl module was removed because newer versions of
