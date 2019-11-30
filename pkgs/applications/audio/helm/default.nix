@@ -1,5 +1,5 @@
-  { stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
-  , lv2, pkgconfig, libGLU_combined }:
+{ stdenv, fetchFromGitHub , xorg, libGL, freetype, alsaLib, curl, libjack2
+, lv2, pkgconfig, libGLU_combined }:
 
   stdenv.mkDerivation {
   version = "0.9.0";
@@ -14,7 +14,7 @@
 
   buildInputs = [
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
-    xorg.libXinerama xorg.libXrender xorg.libXrandr
+    xorg.libXinerama xorg.libXrender xorg.libXrandr libGL
     freetype alsaLib curl libjack2 pkgconfig libGLU_combined lv2
   ];
 
