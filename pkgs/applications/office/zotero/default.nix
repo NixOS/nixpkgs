@@ -25,7 +25,7 @@
 , libXt
 , libnotify
 , gnome3
-, libGLU_combined
+, libGLU, libGL
 , nspr
 , nss
 , pango
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       libXrender
       libXt
       libnotify
-      libGLU_combined
+      libGLU libGL
       nspr
       nss
       pango

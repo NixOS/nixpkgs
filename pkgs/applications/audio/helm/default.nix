@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub , xorg, libGL, freetype, alsaLib, curl, libjack2
-, lv2, pkgconfig, libGLU_combined }:
+{ stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
+, lv2, pkgconfig, libGLU, libGL }:
 
   stdenv.mkDerivation {
   version = "0.9.0";
@@ -14,8 +14,8 @@
 
   buildInputs = [
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
-    xorg.libXinerama xorg.libXrender xorg.libXrandr libGL
-    freetype alsaLib curl libjack2 pkgconfig libGLU_combined lv2
+    xorg.libXinerama xorg.libXrender xorg.libXrandr
+    freetype alsaLib curl libjack2 pkgconfig libGLU libGL lv2
   ];
 
   CXXFLAGS = "-DHAVE_LROUND";

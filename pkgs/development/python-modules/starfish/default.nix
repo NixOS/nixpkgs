@@ -26,11 +26,11 @@
 
 buildPythonPackage rec {
   pname = "starfish";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6924404b9ce7c55b427bebc5712656b87d17b5114e9fb610f2821865bd8d70f4";
+    sha256 = "02002b908572fcd2c7471475936a6c375f143d15df871399ce86ced6d7aef865";
   };
 
   propagatedBuildInputs = [

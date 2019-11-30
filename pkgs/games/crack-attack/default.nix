@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, freeglut, SDL, SDL_mixer, libGLU_combined, libXi, libXmu }:
+{ stdenv, fetchurl, pkgconfig, gtk2, freeglut, SDL, SDL_mixer, libGLU, libGL, libXi, libXmu }:
 
 stdenv.mkDerivation {
   name = "crack-attack-1.1.14";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--enable-sound=yes" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 freeglut SDL SDL_mixer libGLU_combined libXi libXmu ];
+  buildInputs = [ gtk2 freeglut SDL SDL_mixer libGLU libGL libXi libXmu ];
 
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
