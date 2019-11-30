@@ -20372,8 +20372,10 @@ let
       url = mirror://cpan/authors/id/T/TO/TODDR/XML-Parser-2.46.tar.gz;
       sha256 = "0pai3ik47q7rgnix9644c673fwydz52gqkxr9kxwq765j4j36cfk";
     };
+    buildInputs = [ pkgs.expat ];
+    rpath = stdenv.lib.makeLibraryPath [ pkgs.expat ];
     patchPhase = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
+      substituteInPlace ${pkgs.expat.dev}/Makefile.PL --replace 'use English;' '#'
     '' + stdenv.lib.optionalString stdenv.isCygwin ''
       sed -i"" -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
     '';
