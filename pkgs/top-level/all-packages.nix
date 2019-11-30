@@ -8734,9 +8734,7 @@ in
   shmig = callPackage ../development/tools/database/shmig { };
 
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
-  smlnj = if stdenv.isDarwin
-            then callPackage ../development/compilers/smlnj { }
-            else pkgsi686Linux.callPackage ../development/compilers/smlnj { };
+  smlnj = callPackage ../development/compilers/smlnj { };
 
   solc = callPackage ../development/compilers/solc { };
 
