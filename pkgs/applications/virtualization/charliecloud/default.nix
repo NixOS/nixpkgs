@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
 
-  version = "0.11";
+  version = "0.12";
   pname = "charliecloud";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "charliecloud";
     rev = "v${version}";
-    sha256 = "10dzas5fyh2lpa0kf1xv8z9c4g4cf0zlmnpilyvpcyccyfjf6cp2";
+    sha256 = "177rcf1klcxsp6x9cw75cmz3y2izgd1hvi1rb9vc6iz9qx1nmk3v";
   };
 
   buildInputs = [ python ];

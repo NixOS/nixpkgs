@@ -28,11 +28,11 @@
 
 buildPythonPackage rec {
   pname = "wxPython";
-  version = "4.0.7";
+  version = "4.0.7.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cq2iyqm08ihazh5xzdsha5h22mba0w4a0y7iikn6c6yvszhiriv";
+    sha256 = "da43eaa2eea32c34a52531331b0a69bd791c237803a7c5df451509624766f7ca";
   };
 
   doCheck = false;

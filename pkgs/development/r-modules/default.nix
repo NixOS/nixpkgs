@@ -454,6 +454,7 @@ let
     randomForest = [ pkgs.libiconv ];
     sundialr = [ pkgs.libiconv ];
     ucminf = [ pkgs.libiconv ];
+    glmnet = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [

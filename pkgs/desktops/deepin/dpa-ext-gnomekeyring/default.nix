@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dpa-ext-gnomekeyring";
-  version = "0.1.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";

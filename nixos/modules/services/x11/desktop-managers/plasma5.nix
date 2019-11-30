@@ -27,20 +27,13 @@ in
         example = "vlc";
         description = "Phonon audio backend to install.";
       };
-
-      enableQt4Support = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Enable support for Qt 4-based applications. Particularly, install a
-          default backend for Phonon.
-        '';
-      };
-
     };
 
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
+  ];
 
   config = mkMerge [
     (mkIf cfg.enable {
@@ -173,9 +166,7 @@ in
 
         # Phonon audio backend
         ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
-        ++ lib.optional (cfg.phononBackend == "gstreamer" && cfg.enableQt4Support) pkgs.phonon-backend-gstreamer
         ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
-        ++ lib.optional (cfg.phononBackend == "vlc" && cfg.enableQt4Support) pkgs.phonon-backend-vlc
 
         # Optional hardware support features
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt ]
@@ -232,7 +223,6 @@ in
       security.pam.services.kdm.enableKwallet = true;
       security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
-      security.pam.services.slim.enableKwallet = true;
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];

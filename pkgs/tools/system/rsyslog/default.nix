@@ -2,7 +2,7 @@
 , libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
-, libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
+, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
 , libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null, mongoc ? null
 }:
 
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.1910.0";
+  version = "8.1911.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "14qczsj12spx0m3dz1pkxnacwi5njr0syamnmi1rg8ri5xlyw682";
+    sha256 = "01713vwz3w5fx9b97286h1rx9hxhjsdah96nyhh75bb23impgx71";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
     postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
-    librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
+    librelp libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis mongoc
   ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
     ++ stdenv.lib.optional stdenv.isLinux systemd;
@@ -73,8 +73,7 @@ stdenv.mkDerivation rec {
     (mkFlag true                      "mmpstrucdata")
     (mkFlag (openssl != null)         "mmrfc5424addhmac")
     (mkFlag (librelp != null)         "relp")
-    (mkFlag (libgt != null)           "guardtime")
-    (mkFlag (libksi != null)          "gt-ksi")
+    (mkFlag (libksi != null)          "ksi-ls12")
     (mkFlag (liblogging != null)      "liblogging-stdlog")
     (mkFlag (liblogging != null)      "rfc3195")
     (mkFlag true                      "imfile")

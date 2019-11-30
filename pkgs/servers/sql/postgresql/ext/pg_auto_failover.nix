@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_auto_failover";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0v4fj83zifcqhihc5myh0qv2396n5kw4sa8ix6jljmp6wh036z9j";
+    sha256 = "1idlgqazr2qra5x702f2yjcl99zwm1i5fi84paplfy98i5jjmxm1";
   };
 
   buildInputs = [ postgresql openssl zlib readline ];

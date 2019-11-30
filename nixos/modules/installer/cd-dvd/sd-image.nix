@@ -140,7 +140,11 @@ in
         export img=$out/sd-image/${config.sdImage.imageName}
 
         echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
-        echo "file sd-image $img" >> $out/nix-support/hydra-build-products
+        if test -n "$compressImage"; then
+          echo "file sd-image $img.bz2" >> $out/nix-support/hydra-build-products
+        else
+          echo "file sd-image $img" >> $out/nix-support/hydra-build-products
+        fi
 
         # Gap in front of the first partition, in MiB
         gap=8

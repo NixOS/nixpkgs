@@ -235,6 +235,8 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
+    eigen = callPackage ../development/ocaml-modules/eigen { };
+
     elina = callPackage ../development/ocaml-modules/elina { };
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
@@ -374,6 +376,8 @@ let
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+    kafka = callPackage ../development/ocaml-modules/kafka { };
+
     ke = callPackage ../development/ocaml-modules/ke { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
@@ -421,10 +425,6 @@ let
     lru = callPackage ../development/ocaml-modules/lru { };
 
     lwt2 = callPackage ../development/ocaml-modules/lwt/legacy.nix { };
-
-    lwt3 = if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/lwt/3.x.nix { }
-      else throw "lwt3 is not available for OCaml ${ocaml.version}";
 
     lwt4 = callPackage ../development/ocaml-modules/lwt/4.x.nix { };
 
@@ -605,6 +605,10 @@ let
 
     owee = callPackage ../development/ocaml-modules/owee { };
 
+    owl-base = callPackage ../development/ocaml-modules/owl-base { };
+
+    owl = callPackage ../development/ocaml-modules/owl { };
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
@@ -758,6 +762,8 @@ let
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
+
+    sodium = callPackage ../development/ocaml-modules/sodium { };
 
     spelll = callPackage ../development/ocaml-modules/spelll { };
 

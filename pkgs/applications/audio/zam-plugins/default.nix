@@ -1,4 +1,4 @@
-{ stdenv, fetchgit , boost, libX11, libGLU_combined, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile, fftwFloat, libsamplerate }:
+{ stdenv, fetchgit , boost, libX11, libGL, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile, fftwFloat, libsamplerate }:
 
 stdenv.mkDerivation {
   pname = "zam-plugins";
@@ -12,15 +12,17 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ boost libX11 libGLU_combined liblo libjack2 ladspaH lv2 rubberband libsndfile fftwFloat libsamplerate ];
+  buildInputs = [ boost libX11 libGL liblo libjack2 ladspaH lv2 rubberband libsndfile fftwFloat libsamplerate ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs ./dpf/utils/generate-ttl.sh
   '';
 
   makeFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder ''out''}"
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.zamaudio.com/?p=976;

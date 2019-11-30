@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "4.0.4";
+  version = "4.1.3";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     rev = version;
-    sha256 = "1m54d61ka9wgq0iqlzmsikzxa6qmwvnwsgm2kxb3vw5ic1psv4pv";
+    sha256 = "0ixx9svyi0kw3z2i51cv1cyg4l5z8hy432kxgsvz20mr9a8z5c91";
   };
 
   checkInputs = [ pytest ];

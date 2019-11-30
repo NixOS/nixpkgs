@@ -25,7 +25,7 @@ let
     addonInfo ? null,
     preInstall ? "",
     postInstall ? "",
-    path ? (builtins.parseDrvName pluginName).name,
+    path ? lib.getName pluginName,
     dependencies ? [],
     ...
   }:
@@ -185,6 +185,19 @@ in rec {
       rev = "731667692da46d51a6a9dffb4c43384a5d68ff28";
       sha256 = "1ihpl5wgjmhfgcrasgnydd7vpsar865sx2whra19gpfm4bglmdzl";
     };
+  };
+
+  plumb = mkDerivation {
+    pluginName = "plumb";
+    src = fetchFromGitHub {
+      owner = "eraserhd";
+      repo = "tmux-plumb";
+      rev = "v0.1.1";
+      sha256 = "1c6k4fdl0az9811r6k164mgd4w5la75xr6x7nabmy046xc0z5i2r";
+    };
+    postInstall = ''
+      sed -i -e 's,9 plumb,${pkgs.plan9port}/bin/9 plumb,' $target/scripts/plumb
+    '';
   };
 
   prefix-highlight = mkDerivation {

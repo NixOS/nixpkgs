@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dpkg, which
+{ fetchurl, stdenv, mkDerivation, dpkg, which
 , makeWrapper
 , alsaLib
 , desktop-file-utils
@@ -90,7 +90,7 @@ let
 
 in
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "mendeley";
   inherit version;
 
@@ -106,6 +106,8 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
+  dontWrapQtApps = true;
+
   installPhase = ''
     dpkg-deb -x $src $out
     mv $out/opt/mendeleydesktop/{bin,lib,share} $out
@@ -115,7 +117,7 @@ stdenv.mkDerivation {
              --set-rpath ${stdenv.lib.makeLibraryPath deps}:$out/lib \
              $out/bin/mendeleydesktop
 
-    wrapProgram $out/bin/mendeleydesktop \
+    wrapQtApp $out/bin/mendeleydesktop \
       --add-flags "--unix-distro-build" \
       ${stdenv.lib.optionalString autorunLinkHandler # ignore errors installing the link handler
       ''--run "$out/bin/install-mendeley-link-handler.sh $out/bin/mendeleydesktop ||:"''}

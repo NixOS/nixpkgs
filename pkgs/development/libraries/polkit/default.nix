@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Don't use etc/dbus-1/system.d
+    # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/11
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/polkit/polkit/merge_requests/11.patch";
+      url = "https://gitlab.freedesktop.org/polkit/polkit/commit/5dd4e22efd05d55833c4634b56e473812b5acbf2.patch";
       sha256 = "17lv7xj5ksa27iv4zpm4zwd4iy8zbwjj4ximslfq3sasiz9kxhlp";
     })
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
@@ -54,7 +55,8 @@ stdenv.mkDerivation rec {
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
     [ expat pam spidermonkey_60 ]
-    ++ (if useSystemd then [systemd] else [elogind])
+    # On Linux, fall back to elogind when systemd support is off.
+    ++ stdenv.lib.optional stdenv.isLinux (if useSystemd then systemd else elogind)
     ++ stdenv.lib.optional withGnome gobject-introspection;
 
   propagatedBuildInputs = [

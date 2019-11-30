@@ -19,8 +19,8 @@ buildRustPackage rec {
 
   cargoSha256 = "07130587drrdkrk7aqb8pl8i3p485qr6xh1m86630ydlnb9z6s6i";
 
-  buildInputs = [ makeWrapper ]
-                ++ stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 

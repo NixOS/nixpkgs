@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, ...} : {
+import ./make-test-python.nix ({ lib, ...} : {
   name = "tinydns";
   meta = {
     maintainers = with lib.maintainers; [ basvandijk ];
@@ -19,8 +19,8 @@ import ./make-test.nix ({ lib, ...} : {
     };
   };
   testScript = ''
-    $nameserver->start;
-    $nameserver->waitForUnit("tinydns.service");
-    $nameserver->succeed("host bla.foo.bar | grep '1\.2\.3\.4'");
+    nameserver.start()
+    nameserver.wait_for_unit("tinydns.service")
+    nameserver.succeed("host bla.foo.bar | grep '1\.2\.3\.4'")
   '';
 })

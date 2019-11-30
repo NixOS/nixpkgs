@@ -8,10 +8,11 @@ rustPlatform.buildRustPackage rec {
     owner = "getzola";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dbj2rkn4k5glnwdazsvjhah5pj9cbdb8hwlvm5q4njsmrgpyaw5";
+    sha256 = "13kbgxh7r6124d1fjdf0x599j1kpgixp1y9d299zb5vrd6rf5wy5";
   };
+  cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0i0xqbpbv3md42d2853cfzkhfwlkvxahhz5dldla5x96rm1i2hr8";
+  cargoSha256 = "03rwf5l1l3ap03qi0xqcxsbyvpg3cqmr50j8ql6c5v55xl0ki9w8";
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ openssl ]

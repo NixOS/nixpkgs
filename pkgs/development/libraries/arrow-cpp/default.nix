@@ -12,12 +12,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "0n7xrn5490r2snjl45pm2a4pr2x8a29sh8mpyi4nj5pr9f62s1yi";
+    sha256 = "1jbghpppabsix2rkxbnh41inj9lcxfz4q94p96xzxshh4g3mhb4s";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -93,7 +93,7 @@ in stdenv.mkDerivation rec {
     ];
   in ''
     ctest -L unittest -V \
-      --exclude-regex '(${builtins.concatStringsSep "|" excludedTests})'
+      --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
   '');
 
   meta = {

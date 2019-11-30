@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub
-, git, gnupg, pass, pwgen
+, git, gnupg, pass, pwgen, qrencode
 , qtbase, qtsvg, qttools, qmake
 }:
 
@@ -13,6 +13,11 @@ mkDerivation rec {
     rev    = "v${version}";
     sha256 = "0748hjvhjrybi33ci3c8hcr74k9pdrf5jv8npf9hrsrmdyy1kr9x";
   };
+
+  postPatch = ''
+    substituteInPlace src/qtpass.cpp \
+      --replace "/usr/bin/qrencode" "${qrencode}/bin/qrencode"
+  '';
 
   buildInputs = [ git gnupg pass qtbase qtsvg ];
 

@@ -18,7 +18,7 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
+, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, tzdata, icu, libffi
 , cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
@@ -29,8 +29,6 @@
 }@args:
 
 let
-  v8 = v8_3_16_14;
-
   rainbow_rake = buildRubyGem {
     pname = "rake";
     gemName = "rake";
@@ -565,14 +563,6 @@ in
   tiny_tds = attrs: {
     nativeBuildInputs = [ pkgconfig openssl ];
     buildInputs = [ freetds ];
-  };
-
-  therubyracer = attrs: {
-    buildFlags = [
-      "--with-v8-dir=${v8}"
-      "--with-v8-include=${v8}/include"
-      "--with-v8-lib=${v8}/lib"
-    ];
   };
 
   typhoeus = attrs: {

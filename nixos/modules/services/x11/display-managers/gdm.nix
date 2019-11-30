@@ -31,6 +31,44 @@ let
     load-module module-position-event-sounds
   '';
 
+  dmDefault = config.services.xserver.desktopManager.default;
+  wmDefault = config.services.xserver.windowManager.default;
+  hasDefaultUserSession = dmDefault != "none" || wmDefault != "none";
+  defaultSessionName = dmDefault + optionalString (wmDefault != "none") ("+" + wmDefault);
+
+  setSessionScript = pkgs.python3.pkgs.buildPythonApplication {
+    name = "set-session";
+
+    format = "other";
+
+    src = ./set-session.py;
+
+    dontUnpack = true;
+
+    strictDeps = false;
+
+    nativeBuildInputs = with pkgs; [
+      wrapGAppsHook
+      gobject-introspection
+    ];
+
+    buildInputs = with pkgs; [
+      accountsservice
+      glib
+    ];
+
+    propagatedBuildInputs = with pkgs.python3.pkgs; [
+      pygobject3
+      ordered-set
+    ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      cp $src $out/bin/set-session
+      chmod +x $out/bin/set-session
+    '';
+  };
+
 in
 
 {
@@ -88,9 +126,19 @@ in
       wayland = mkOption {
         default = true;
         description = ''
-          Allow GDM run on Wayland instead of Xserver
+          Allow GDM to run on Wayland instead of Xserver.
+          Note to enable Wayland with Nvidia you need to
+          enable the <option>nvidiaWayland</option>.
         '';
         type = types.bool;
+      };
+
+      nvidiaWayland = mkOption {
+        default = false;
+        description = ''
+          Whether to allow wayland to be used with the proprietary
+          NVidia graphics driver.
+        '';
       };
 
       autoSuspend = mkOption {
@@ -156,6 +204,8 @@ in
           cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
           yes
           EOF
+        '' + optionalString hasDefaultUserSession ''
+          ${setSessionScript}/bin/set-session ${defaultSessionName}
         '';
       };
 
@@ -196,6 +246,19 @@ in
     services.accounts-daemon.enable = true;
 
     services.dbus.packages = [ gdm ];
+
+    # We duplicate upstream's udev rules manually to make wayland with nvidia configurable
+    services.udev.extraRules = ''
+      # disable Wayland on Cirrus chipsets
+      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      # disable Wayland on Hi1710 chipsets
+      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ${optionalString (!cfg.gdm.nvidiaWayland) ''
+        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ''}
+      # disable Wayland when modesetting is disabled
+      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-disable-wayland"
+    '';
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 

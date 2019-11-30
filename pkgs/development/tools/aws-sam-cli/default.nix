@@ -5,12 +5,11 @@
 let
   py = python.override {
     packageOverrides = self: super: {
-
-      aws-sam-translator = super.aws-sam-translator.overridePythonAttrs (oldAttrs: rec {
-        version = "1.14.0";
+      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.2";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "1cghn1m7ana9s8kyg61dwp9mrism5l04vy5rj1wnmksz8vzmnq9w";
+          sha256 = "0j6f4a9rpfh25k1gp7azqhnni4mb4fgy50jammgjgddw1l3w0w92";
         };
       });
 
@@ -34,11 +33,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.22.0";
+  version = "0.34.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1flbvqlj5llz7nrszmcf00v2a1pa36alv90r1l8lwn8zid5aabkn";
+    sha256 = "1ndgcbd6zr23lvmqn4wikgvnlwl0gj0wgyawaspwm3b0jlvxadik";
   };
 
   # Tests are not included in the PyPI package
@@ -58,6 +57,7 @@ buildPythonApplication rec {
     requests
     serverlessrepo
     six
+    tomlkit
   ];
 
   # fix over-restrictive version bounds

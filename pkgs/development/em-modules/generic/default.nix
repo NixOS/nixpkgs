@@ -10,8 +10,8 @@ pkgs.stdenv.mkDerivation (
   args //
   {
 
-  pname = "emscripten-${args.pname or (builtins.parseDrvName args.name).name}";
-  version = args.version or (builtins.parseDrvName args.name).version;
+  pname = "emscripten-${lib.getName args}";
+  version = lib.getVersion args;
   buildInputs = [ emscripten python ] ++ buildInputs;
   nativeBuildInputs = [ emscripten python ] ++ nativeBuildInputs;
 

@@ -1,18 +1,42 @@
 { stdenv, fetchFromGitHub, cmake, glew, freeimage,  liblockfile
-, openal, cryptopp, libtheora, SDL2, lzo, libjpeg, libogg, tbb
+, openal, libtheora, SDL2, lzo, libjpeg, libogg, tbb
 , pcre, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  pname = "OpenXRay";
-  version = "510";
+let
+  version = "558";
 
   src = fetchFromGitHub {
     owner = "OpenXRay";
     repo = "xray-16";
     rev = version;
-    sha256 = "0q142l6xvgnd6ycncqld69izxclynqrs73aq89pfy1r1nzhd60ay";
+    sha256 = "1wnkx9g0ww4f5pljrb0wzs054jzkig1i5hlz1p509rfvnhc50afp";
     fetchSubmodules = true;
   };
+
+  # https://github.com/OpenXRay/xray-16/issues/518
+  cryptopp = stdenv.mkDerivation {
+    pname = "cryptopp";
+    version = "5.6.5";
+
+    inherit src;
+
+    postUnpack = "sourceRoot+=/Externals/cryptopp";
+
+    makeFlags = [ "PREFIX=${placeholder "out"}" ];
+    enableParallelBuilding = true;
+
+    doCheck = true;
+
+    meta = with stdenv.lib; {
+      description = "Crypto++, a free C++ class library of cryptographic schemes";
+      homepage = "https://cryptopp.com/";
+      license = with licenses; [ boost publicDomain ];
+      platforms = platforms.all;
+    };
+  };
+in stdenv.mkDerivation rec {
+  pname = "OpenXRay";
+  inherit version src;
 
   hardeningDisable = [ "format" ];
   cmakeFlags = [ "-DCMAKE_INCLUDE_PATH=${cryptopp}/include/cryptopp" ];
@@ -47,6 +71,6 @@ stdenv.mkDerivation rec {
       url = https://github.com/OpenXRay/xray-16/blob/xd_dev/License.txt;
     };
     maintainers = [ maintainers.gnidorah ];
-    platforms = ["x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

@@ -37,6 +37,7 @@ with lib;
     systemd.services.tinydns = {
       description = "djbdns tinydns server";
       wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       path = with pkgs; [ daemontools djbdns ];
       preStart = ''
         rm -rf /var/lib/tinydns
