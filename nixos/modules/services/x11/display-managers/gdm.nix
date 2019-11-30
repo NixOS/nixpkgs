@@ -281,7 +281,7 @@ in
       customDconfDb = pkgs.stdenv.mkDerivation {
         name = "gdm-dconf-db";
         buildCommand = ''
-          ${pkgs.gnome3.dconf}/bin/dconf compile $out ${customDconf}/dconf
+          ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
         '';
       };
     in pkgs.stdenv.mkDerivation {
