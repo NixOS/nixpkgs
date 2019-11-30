@@ -136,8 +136,9 @@ let
       export PATH=${lib.makeBinPath checkInputs}:$PATH
     '';
 
-    passthru.buildCrystalPackage = callPackage ./build-package.nix {
-      crystal = compiler;
+    passthru = let args = { crystal = compiler; }; in {
+      buildCrystalPackage = callPackage ./build-package.nix args;
+      updateCrystalPackage = callPackage ./update-package.nix args;
     };
 
     meta = with lib; {

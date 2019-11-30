@@ -2950,6 +2950,8 @@ in
 
   ### DEVELOPMENT / EMSCRIPTEN
 
+  amber-cli = callPackage ../development/web/amber { };
+
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
 
   carp = callPackage ../development/compilers/carp { };
