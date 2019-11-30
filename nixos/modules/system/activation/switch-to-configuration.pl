@@ -214,17 +214,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # Reload the changed mount unit to force a remount.
                 $unitsToReload{$unit} = 1;
                 recordUnit($reloadListFile, $unit);
-            } elsif ($unit =~ /\.socket$/) {
-                my $unitInfo = parseUnit($newUnitFile);
-                # If a socket unit has been changed, the corresponding
-                # service unit has to be stopped before the socket can
-                # be restarted. The service will be started again on demand.
-                my $serviceUnit = $unitInfo->{'Unit'} // "$baseName.service";
-                $unitsToStop{$serviceUnit} = 1;
-                $unitsToStop{$unit} = 1;
-                $unitsToStart{$unit} = 1;
-                recordUnit($startListFile, $unit);
-            } elsif ($unit =~ /\.path$/ || $unit =~ /\.slice$/) {
+            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
