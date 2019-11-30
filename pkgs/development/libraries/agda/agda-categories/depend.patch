@@ -1,0 +1,9 @@
+diff --git a/agda-categories.agda-lib b/agda-categories.agda-lib
+index cc76242..888b196 100644
+--- a/agda-categories.agda-lib
++++ b/agda-categories.agda-lib
+@@ -1,3 +1,2 @@
+ name: agda-categories
+-depend: standard-library
+ include: .
+\ No newline at end of file
