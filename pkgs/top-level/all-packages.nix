@@ -16254,6 +16254,12 @@ in
       ];
   };
 
+  linux_testing_drm_next = callPackage ../os-specific/linux/kernel/linux-testing-drm-next.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+    ];
+  };
+
   linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -16480,6 +16486,9 @@ in
 
   # Build a kernel with bcachefs module
   linuxPackages_testing_bcachefs = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing_bcachefs);
+
+  # Build a kernel for drm-next branch
+  linuxPackages_testing_drm_next = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing_drm_next);
 
   # Build a kernel for Xen dom0
   linuxPackages_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
