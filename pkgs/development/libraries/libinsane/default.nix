@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Crossplatform access to image scanners (paper eaters only)";
-    inherit (src) homepage;
+    homepage = "https://openpaper.work/en/projects/";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.symphorien ];
   };
