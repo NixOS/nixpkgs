@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-wx-prefix=${wxGTK30}" ];
 
   preConfigure = ''
-    export LDFLAGS="$LDFLAGS $(${wxGTK30}/bin/wx-config --libs | sed -e s@-pthread@@) -lwx_gtk2u_aui-3.0"
+    export LDFLAGS="$LDFLAGS $(${wxGTK30}/bin/wx-config --libs | sed -e s@-pthread@@) -lwx_gtk3u_aui-3.0"
   '';
 
   meta = with stdenv.lib; {

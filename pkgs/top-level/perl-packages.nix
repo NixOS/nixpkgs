@@ -250,8 +250,11 @@ let
       url = mirror://cpan/authors/id/M/MD/MDOOTSON/Alien-wxWidgets-0.69.tar.gz;
       sha256 = "0jg2dmkzhj03f6b0vmv597yryfw9cclsdn9ynvvlrzzgpd5lw8jk";
     };
-    propagatedBuildInputs = [ pkgs.pkgconfig pkgs.gtk2 pkgs.wxGTK30 ModulePluggable ];
-    buildInputs = [ LWPProtocolHttps ];
+    # Don't try to find GTK2
+    AUTOMATED_TESTING = false;
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    propagatedBuildInputs = [ ModulePluggable ];
+    buildInputs = [ pkgs.wxGTK30 LWPProtocolHttps ];
   };
 
   AnyEvent = buildPerlPackage {
@@ -20122,6 +20125,10 @@ let
       url = mirror://cpan/authors/id/M/MD/MDOOTSON/Wx-0.9932.tar.gz;
       sha256 = "0w0vcpk8bmklh16c0z1vxgipnmvdw7cckcmay7k7cihgb99vdz8w";
     };
+    patches = [ (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/perl-Wx/raw/aad232e010f3aff77966442dae55b9266e876617/f/gtk3.patch";
+      sha256 = "0gpc3ncf1q78y2hrzdw7965yy8q88h7jplzq6w6625nk613jd28a";
+    }) ];
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
     #   Error: Unable to initialize GTK, is DISPLAY set properly?"
@@ -20136,7 +20143,8 @@ let
       url = mirror://cpan/authors/id/M/MB/MBARBON/Wx-GLCanvas-0.09.tar.gz;
       sha256 = "1q4gvj4gdx4l8k4mkgiix24p9mdfy1miv7abidf0my3gy2gw5lka";
     };
-    propagatedBuildInputs = [ pkgs.libGLU Wx ];
+    buildInputs = [ pkgs.xorg.libX11 pkgs.libGLU ];
+    propagatedBuildInputs = [ Wx ];
     doCheck = false;
   };
 

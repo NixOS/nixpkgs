@@ -2790,7 +2790,9 @@ in
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
-  dolphinEmu = callPackage ../misc/emulators/dolphin-emu { };
+  dolphinEmu = callPackage ../misc/emulators/dolphin-emu {
+    wxGTK30 = wxGTK30.override { withGtk2 = true; };
+  };
   dolphinEmuMaster = qt5.callPackage ../misc/emulators/dolphin-emu/master.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
   };
@@ -2800,11 +2802,7 @@ in
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
   slade = callPackage ../applications/misc/slade {
-    wxGTK = wxGTK30;
-  };
-
-  sladeUnstable = callPackage ../applications/misc/slade/git.nix {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK30.override { withWebKit = true; };
   };
 
   drive = callPackage ../applications/networking/drive { };
@@ -23027,6 +23025,7 @@ in
     mygui = mygui.override {
       withOgre = true;
     };
+    wxGTK30 = wxGTK30.override { withGtk2 = true; };
   };
 
   riko4 = callPackage ../games/riko4 { };
@@ -24232,7 +24231,6 @@ in
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly { wxGTK = wxGTK30; };
-  golly-beta = callPackage ../applications/science/misc/golly/beta.nix { wxGTK = wxGTK30; };
 
   megam = callPackage ../applications/science/misc/megam { };
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, gettext, pkgconfig, wxGTK30,
-  boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk2, gtkspell2, pugixml,
+  boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtkspell3, pugixml,
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook 
     libxslt xmlto boost libtool pkgconfig ];
 
-  buildInputs = [ lucenepp nlohmann_json wxGTK30 icu pugixml gtk2 gtkspell2 hicolor-icon-theme ];
+  buildInputs = [ lucenepp nlohmann_json wxGTK30 icu pugixml wxGTK30.gtk gtkspell3 hicolor-icon-theme ];
 
   propagatedBuildInputs = [ gettext ];
   

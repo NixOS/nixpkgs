@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, cmake, pkgconfig
+{ stdenv, lib, fetchFromGitHub, makeWrapper, cmake, pkgconfig, wrapGAppsHook
 , boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK30
-, gtest, nlopt, xorg, makeDesktopItem
+, gtest, nlopt, xorg, makeDesktopItem, gnome3
 }:
 let
   nloptVersion = if lib.hasAttr "version" nlopt
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     cmake
     makeWrapper
     pkgconfig
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -30,9 +31,11 @@ stdenv.mkDerivation rec {
     tbb
     wxGTK30
     xorg.libX11
-  ] ++ checkInputs;
+  ];
 
   checkInputs = [ gtest ];
+
+  doCheck = true;
 
   # The build system uses custom logic - defined in
   # xs/src/libnest2d/cmake_modules/FindNLopt.cmake in the package source -
@@ -66,6 +69,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DSLIC3R_FHS=1"
     "-DSLIC3R_WX_STABLE=1"  # necessary when compiling against wxGTK 3.0
+    "-DSLIC3R_GTK=3"
   ];
 
   postInstall = ''

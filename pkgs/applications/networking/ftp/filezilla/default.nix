@@ -4,7 +4,6 @@
 , dbus
 , gettext
 , gnutls
-, gtk2
 , libfilezilla
 , libidn
 , nettle
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     dbus
     gettext
     gnutls
-    gtk2
     libfilezilla
     libidn
     nettle
@@ -43,6 +41,7 @@ stdenv.mkDerivation rec {
     sqlite
     tinyxml
     wxGTK30
+    wxGTK30.gtk
     xdg_utils
   ];
 
