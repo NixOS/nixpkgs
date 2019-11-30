@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "yggdrasil";
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
     rev = "v${version}";
-    sha256 = "0cz9axphqvpqwy591ws9by7khpdw96iwf9vmhif3i52ghp8hpfd1";
+    sha256 = "03ywxamjcnhcr20vm9pn3rq3hqq49i6rfdvx44czzr30h8xp8dhw";
   };
 
   modSha256 = "1vqk0jyqc1qcryi247r5pbvfjw3m48l028fb2mrq1xqqfkjqrr85";
