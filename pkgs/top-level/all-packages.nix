@@ -16520,8 +16520,6 @@ in
   # GNU Linux-libre kernels
   linuxPackages-libre = recurseIntoAttrs (linuxPackagesFor linux-libre);
   linux-libre = callPackage ../os-specific/linux/kernel/linux-libre.nix {};
-  linuxPackages_latest-libre = recurseIntoAttrs (linuxPackagesFor linux_latest-libre);
-  linux_latest-libre = linux-libre.override { linux = linux_latest; };
 
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
@@ -19930,7 +19928,7 @@ in
   };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
-  
+
   matrixcli = callPackage ../applications/networking/instant-messengers/matrixcli {
     inherit (python3Packages) buildPythonApplication buildPythonPackage
       pygobject3 pytestrunner requests responses pytest python-olm
