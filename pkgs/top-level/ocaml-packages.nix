@@ -235,6 +235,8 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
+    eigen = callPackage ../development/ocaml-modules/eigen { };
+
     elina = callPackage ../development/ocaml-modules/elina { };
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
@@ -373,6 +375,8 @@ let
     js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
+
+    kafka = callPackage ../development/ocaml-modules/kafka { };
 
     ke = callPackage ../development/ocaml-modules/ke { };
 
@@ -600,6 +604,10 @@ let
     otr = callPackage ../development/ocaml-modules/otr { };
 
     owee = callPackage ../development/ocaml-modules/owee { };
+
+    owl-base = callPackage ../development/ocaml-modules/owl-base { };
+
+    owl = callPackage ../development/ocaml-modules/owl { };
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 

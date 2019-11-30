@@ -44,8 +44,12 @@ in stdenv.mkDerivation (fBuildAttrs // {
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
       export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
       export HOME="$NIX_BUILD_TOP"
+      export USER="nix"
       # This is needed for git_repository with https remotes
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
+      # This is needed for Bazel fetchers that are themselves programs (e.g.
+      # rules_go using the go toolchain)
+      export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
     buildPhase = fFetchAttrs.buildPhase or ''

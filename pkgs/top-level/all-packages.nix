@@ -2563,7 +2563,7 @@ in
 
   cron = callPackage ../tools/system/cron { };
 
-  cudaPackages = recurseIntoAttrs (callPackage ../development/compilers/cudatoolkit {});
+  cudaPackages = callPackages ../development/compilers/cudatoolkit { };
   inherit (cudaPackages)
     cudatoolkit_6
     cudatoolkit_6_5
@@ -3022,9 +3022,7 @@ in
 
   endlessh = callPackage ../servers/endlessh { };
 
-  cryfs = callPackage ../tools/filesystems/cryfs {
-    spdlog = spdlog_0;
-  };
+  cryfs = callPackage ../tools/filesystems/cryfs { };
 
   encfs = callPackage ../tools/filesystems/encfs {
     tinyxml2 = tinyxml-2;
@@ -4562,8 +4560,6 @@ in
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
   next = callPackage ../applications/networking/browsers/next { };
-
-  next-gtk-webkit = callPackage ../applications/networking/browsers/next-gtk-webkit { };
 
   nfpm = callPackage ../tools/package-management/nfpm { };
 
@@ -6650,7 +6646,7 @@ in
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
-  
+
   tiledb = callPackage ../development/libraries/tiledb { };
 
   timemachine = callPackage ../applications/audio/timemachine { };
@@ -8110,6 +8106,8 @@ in
 
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
+
+  spago = haskell.lib.justStaticExecutables haskellPackages.spago;
 
   tacacsplus = callPackage ../servers/tacacsplus { };
 
@@ -10005,6 +10003,8 @@ in
   heroku = callPackage ../development/tools/heroku {
     nodejs = nodejs-10_x;
   };
+
+  ccloud-cli = callPackage ../development/tools/ccloud-cli { };
 
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
@@ -13521,7 +13521,7 @@ in
 
   pugixml = callPackage ../development/libraries/pugixml { };
 
-  pybind11 = callPackage ../development/libraries/pybind11 { };
+  pybind11 = pythonPackages.pybind11;
 
   python-qt = callPackage ../development/libraries/python-qt {
     python = python27;
@@ -15047,7 +15047,7 @@ in
   gofish = callPackage ../servers/gopher/gofish { };
 
   grafana = callPackage ../servers/monitoring/grafana {
-    buildGoPackage = buildGo112Package;
+    buildGoPackage = buildGo113Package;
   };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
@@ -19882,6 +19882,14 @@ in
   };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
+  
+  matrixcli = callPackage ../applications/networking/instant-messengers/matrixcli {
+    inherit (python3Packages) buildPythonApplication buildPythonPackage
+      pygobject3 pytestrunner requests responses pytest python-olm
+      canonicaljson;
+  };
+
+  matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder {};
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 

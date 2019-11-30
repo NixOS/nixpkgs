@@ -1,4 +1,5 @@
 { stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+, nixosTests
 , substituteAll, gd, geoip, perl
 , withDebug ? false
 , withStream ? true
@@ -109,7 +110,10 @@ stdenv.mkDerivation {
     mv $out/sbin $out/bin
   '';
 
-  passthru.modules = modules;
+  passthru = {
+    modules = modules;
+    tests.nginx = nixosTests.nginx;
+  };
 
   meta = {
     description = "A reverse proxy and lightweight webserver";

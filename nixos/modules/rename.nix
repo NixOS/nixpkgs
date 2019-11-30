@@ -11,6 +11,8 @@ with lib;
     (mkRenamedOptionModule [ "networking" "enableRTL8192cFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
     (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
     (mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" ] [ "services" "ssmtp" ])
+    (mkRenamedOptionModule [ "services" "ssmtp" "directDelivery" ] [ "services" "ssmtp" "enable" ])
     (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
       (config:
         let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;

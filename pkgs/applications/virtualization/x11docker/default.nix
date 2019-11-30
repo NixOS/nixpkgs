@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg, getopt, gnugrep, gawk, ps, mount, iproute }:
 stdenv.mkDerivation rec {
   pname = "x11docker";
-  version = "6.3.0";
+  version = "6.4.0";
   src = fetchFromGitHub {
     owner = "mviereck";
     repo = "x11docker";
     rev = "v${version}";
-    sha256 = "0x2sx41y3ylzg511x52k3wh8mfbzp4ialpas6sn4ccagqxh2hc4y";
+    sha256 = "0s8gk2kqxkfwx1x44g19ckm7rqgrcax59y8brgmigajqizik7sql";
   };
   nativeBuildInputs = [ makeWrapper ];
 
