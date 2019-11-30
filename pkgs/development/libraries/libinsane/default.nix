@@ -9,7 +9,7 @@
 , sane-backends
 , gobject-introspection
 , vala
-, gtk_doc
+, gtk-doc
 , valgrind
 , doxygen
 , cunit
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pv5lapxvp1gdhsbxljrn1r1yj9k62n5sydyzasn1rfa33im2dyx";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja doxygen gtk_doc docbook_xsl gobject-introspection vala ];
+  nativeBuildInputs = [ meson pkg-config ninja doxygen gtk-doc docbook_xsl gobject-introspection vala ];
 
   buildInputs = [ sane-backends glib ];
 
