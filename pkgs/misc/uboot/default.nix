@@ -4,24 +4,27 @@
 }:
 
 let
-  buildUBoot = { version ? "2019.10"
-            , filesToInstall
-            , installDir ? "$out"
-            , defconfig
-            , extraConfig ? ""
-            , extraPatches ? []
-            , extraMakeFlags ? []
-            , extraMeta ? {}
-            , ... } @ args:
-           stdenv.mkDerivation ({
-
+  defaultVersion = "2019.10";
+  defaultSrc = fetchurl {
+    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
+    sha256 = "053hcrwwlacqh2niisn0zas95zkbffw5aw5sdhixs8lmfdq60vcd";
+  };
+  buildUBoot = {
+    version ? null
+  , src ? null
+  , filesToInstall
+  , installDir ? "$out"
+  , defconfig
+  , extraConfig ? ""
+  , extraPatches ? []
+  , extraMakeFlags ? []
+  , extraMeta ? {}
+  , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
-    inherit version;
 
-    src = fetchurl {
-      url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "053hcrwwlacqh2niisn0zas95zkbffw5aw5sdhixs8lmfdq60vcd";
-    };
+    version = if src == null then defaultVersion else version;
+
+    src = if src == null then defaultSrc else src;
 
     patches = [
       (fetchpatch {

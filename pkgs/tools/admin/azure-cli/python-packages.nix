@@ -117,6 +117,9 @@ let
       azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "7.0.0" "zip"
         "104w7rxv7hy84yzddbbpkjqha04ghr0zz9qy788n3wl69cj4cv1a";
 
+      azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "0.8.0" "zip"
+        "0iakxb2rr1w9171802m9syjzqas02vjah711mpagbgcj549mjysb";
+
       azure-mgmt-iothub = overrideAzureMgmtPackage super.azure-mgmt-iothub "0.8.2" "zip"
         "0w3w1d156rnkwjdarv3qvycklxr3z2j7lry7a3jfgj3ykzny12rq";
 

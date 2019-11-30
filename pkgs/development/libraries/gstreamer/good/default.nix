@@ -44,7 +44,7 @@
 assert gtkSupport -> gtk3 != null;
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (stdenv.lib) optionals;
 in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXdamage
     wavpack
-  ] ++ optional gtkSupport [
+  ] ++ optionals gtkSupport [
     # for gtksink
     gtk3
   ] ++ optionals stdenv.isDarwin [

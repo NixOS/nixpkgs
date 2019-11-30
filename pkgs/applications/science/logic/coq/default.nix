@@ -124,7 +124,7 @@ self = stdenv.mkDerivation {
   setupHook = writeText "setupHook.sh" ''
     addCoqPath () {
       if test -d "''$1/lib/coq/${coq-version}/user-contrib"; then
-        export COQPATH="''${COQPATH}''${COQPATH:+:}''$1/lib/coq/${coq-version}/user-contrib/"
+        export COQPATH="''${COQPATH-}''${COQPATH:+:}''$1/lib/coq/${coq-version}/user-contrib/"
       fi
     }
 

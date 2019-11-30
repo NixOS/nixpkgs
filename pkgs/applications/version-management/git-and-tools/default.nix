@@ -129,6 +129,8 @@ let
 
   git-subrepo = callPackage ./git-subrepo { };
 
+  git-subtrac = callPackage ./git-subtrac { };
+
   git-sync = callPackage ./git-sync { };
 
   git-test = callPackage ./git-test { };

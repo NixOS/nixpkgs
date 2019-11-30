@@ -1,14 +1,14 @@
-{ fetchgit, stdenv }:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kati-unstable";
-  version = "2017-05-23";
-  rev = "2dde61e46ab789f18956ff3b7c257dd8eb97993f";
+  version = "2019-09-23";
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/google/kati.git";
-    sha256 = "1das1fvycra546lmh72cr5qpgblhbzqqy7gfywiijjgx160l75vq";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "kati";
+    rev = "9da3296746a0cd55b38ebebf91e7f57105a4c36f";
+    sha256 = "0s5dfhgpcbx12b1fqmm8p0jpvrhgrnl9qywv1ksbwhw3pfp7j866";
   };
 
   patches = [ ./version.patch ];
@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
     install -D ckati $out/bin/ckati
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An experimental GNU make clone";
     homepage = https://github.com/google/kati;
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.asl20;
+    platforms = platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ danielfullmer ];
   };
 }

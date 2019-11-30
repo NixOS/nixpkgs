@@ -3,23 +3,21 @@
 , buildPythonPackage
 , fetchPypi
 , Babel
-, lxml
 }:
 
 buildPythonPackage rec {
   pname = "babelgladeextractor";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchPypi {
     pname = "BabelGladeExtractor";
     inherit version;
     extension = "tar.bz2";
-    sha256 = "18m5vi3sj2h26ibmb6fzfjs2lscg757ivk1bjgkn1haf9gdwyjj6";
+    sha256 = "1jhs12pliz54dbnigib1h8ywfzsj1g32c1vhspvg46f5983nvf93";
   };
 
   propagatedBuildInputs = [
     Babel
-    lxml # TODO: remove in 0.7.0
   ];
 
   # Tests missing

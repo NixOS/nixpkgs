@@ -167,6 +167,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  ansiwrap =  callPackage ../development/python-modules/ansiwrap { };
+
   ansi2html = callPackage ../development/python-modules/ansi2html { };
 
   anytree = callPackage ../development/python-modules/anytree {
@@ -250,10 +252,6 @@ in {
   azure = callPackage ../development/python-modules/azure { };
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
-
-  azure-cli-core = callPackage ../development/python-modules/azure-cli-core { };
-
-  azure-cli-telemetry = callPackage ../development/python-modules/azure-cli-telemetry { };
 
   azure-common = callPackage ../development/python-modules/azure-common { };
 
@@ -491,7 +489,7 @@ in {
 
   bt_proximity = callPackage ../development/python-modules/bt-proximity { };
 
-  bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
+  bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
@@ -877,6 +875,8 @@ in {
     });
 
   palettable = callPackage ../development/python-modules/palettable { };
+
+  papermill = callPackage ../development/python-modules/papermill { };
 
   parsley = callPackage ../development/python-modules/parsley { };
 
@@ -1324,6 +1324,8 @@ in {
   };
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
+
+  tesserocr = callPackage ../development/python-modules/tesserocr { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 
@@ -4489,7 +4491,7 @@ in {
 
   praw = if isPy3k then callPackage ../development/python-modules/praw { }
     else callPackage ../development/python-modules/praw/6.3.nix { };
-  
+
   prance = callPackage ../development/python-modules/prance { };
 
   prawcore = callPackage ../development/python-modules/prawcore { };
@@ -5254,7 +5256,9 @@ in {
 
   texttable = callPackage ../development/python-modules/texttable { };
 
-  tiledb = callPackage ../development/python-modules/tiledb { 
+  textwrap3 =  callPackage ../development/python-modules/textwrap3 { };
+
+  tiledb = callPackage ../development/python-modules/tiledb {
     inherit (pkgs) tiledb;
   };
 
@@ -6571,6 +6575,8 @@ in {
   hcloud = callPackage ../development/python-modules/hcloud { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
+
+  pony = callPackage ../development/python-modules/pony { };
 
 });
 
