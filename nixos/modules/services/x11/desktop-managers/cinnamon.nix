@@ -36,10 +36,14 @@ in
 
       # packages
       nemo
+      cinnamon-control-center
+      cinnamon-settings-daemon
 
       # theme
       pkgs.gnome3.adwaita-icon-theme
+      pkgs.hicolor-icon-theme
       pkgs.gnome3.gnome-themes-extra
+      pkgs.gnome3.gtk
     ];
 
     environment.pathsToLink = [
