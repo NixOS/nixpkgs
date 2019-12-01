@@ -11,7 +11,7 @@
 , meson
 , ninja
 , pkgconfig
-, gnome3
+, dconf
 , gst_all_1
 , wrapGAppsHook
 , gobject-introspection
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     sqlite
     libsoup
     gettext
-    gnome3.dconf
+    dconf
     gspell
     glib-networking
   ] ++ (with gst_all_1; [

@@ -5,6 +5,7 @@
 , cups
 , dbus-glib
 , dbus
+, dconf
 , fontconfig
 , freetype
 , gdk-pixbuf
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dgxzprpb8f5wpmvlvkxix0xxckfgjsi3wfcy9mb221a17cv0029";
   };
 
-  buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme gnome3.dconf ];
+  buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme dconf ];
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
