@@ -5178,6 +5178,8 @@ in {
 
   hvplot = callPackage ../development/python-modules/hvplot { };
 
+  hyperopt = callPackage ../development/python-modules/hyperopt { };
+
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
