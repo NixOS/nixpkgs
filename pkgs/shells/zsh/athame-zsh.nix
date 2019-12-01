@@ -19,11 +19,9 @@ zsh.overrideAttrs(o: {
     cp ${athame}/athame_zsh.h ./Src/Zle/athame_intermediary.h
     cp -r ${vimbed} ./Src/Zle/vimbed
     '';
-  #patches = o.upstreamPatches;
   buildInputs = [vim ncurses zsh];
   makeFlags = [
     "ATHAME_VIM_BIN=${vimbin}"
-    #"SHLIB_LIBS=\"-lncurses -lutil\""
     "ATHAME_USE_JOBS_DEFAULT=1"
   ];
   postPatch = ''
