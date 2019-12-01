@@ -31,4 +31,11 @@ zsh.overrideAttrs(o: {
     #sed -i 's|-Wl,-rpath,$(libdir) ||g' support/shobj-conf
     patch -p1 -i ${athame}/zsh.patch
     '';
+  meta = with stdenv.lib; {
+    description = "Athame patches zsh to add full Vim support by routing your keystrokes through an actual Vim process.";
+    homepage = https://github.com/ardagnir/athame;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bananPasha ];
+  };
 })

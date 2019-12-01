@@ -7670,4 +7670,9 @@
     githubId = 52650;
     name = "Marc Busqué";
   };
+  bananPasha = {
+    name = "Pavlo Vlasenko";
+    email = "smidy999green@gmail.com";
+    github = "BananchickPasha";
+  };
 }
