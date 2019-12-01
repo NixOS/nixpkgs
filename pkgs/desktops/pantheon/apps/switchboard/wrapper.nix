@@ -1,4 +1,6 @@
-{ makeWrapper
+{ wrapGAppsHook
+, glib
+, lib
 , symlinkJoin
 , switchboard
 , switchboardPlugs
@@ -11,13 +13,22 @@ in
 symlinkJoin {
   name = "${switchboard.name}-with-plugs";
 
-  paths = [ switchboard ] ++ selectedPlugs;
+  paths = [
+    switchboard
+  ] ++ selectedPlugs;
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [
+    wrapGAppsHook
+    glib
+  ] ++ (lib.forEach selectedPlugs (x: x.buildInputs))
+    ++ selectedPlugs;
 
   postBuild = ''
-    wrapProgram $out/bin/io.elementary.switchboard \
-      --set SWITCHBOARD_PLUGS_PATH "$out/lib/switchboard"
+    make_glib_find_gsettings_schemas
+
+    gappsWrapperArgs+=(--set SWITCHBOARD_PLUGS_PATH "$out/lib/switchboard")
+
+    wrapGAppsHook
   '';
 
   inherit (switchboard) meta;
