@@ -37,12 +37,20 @@ in
       # packages
       nemo
 
-      # theme (TODO: .theme option)
+      # theme
       pkgs.gnome3.adwaita-icon-theme
+      pkgs.gnome3.gnome-themes-extra
     ];
 
     environment.pathsToLink = [
       "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173
+    ];
+
+    fonts.fonts = with pkgs; [
+      cantarell-fonts
+      dejavu_fonts
+      source-code-pro # Default monospace font in 3.32
+      source-sans-pro
     ];
 
     services.xserver.desktopManager.session = [
