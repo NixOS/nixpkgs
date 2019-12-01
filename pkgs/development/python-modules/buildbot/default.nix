@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.5.0";
+    version = "2.5.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "06dza7kggybz8nf3i1skkadwrq9s0nkpqjfahifysaag3j3b5rp4";
+      sha256 = "13ddpcbndb22zlg9gjsf2pbgad45g1w5cg4a3z83085fkgnib7sr";
     };
 
     propagatedBuildInputs = [
@@ -74,13 +74,6 @@ let
       # This patch disables the test that tries to read /etc/os-release which
       # is not accessible in sandboxed builds.
       ./skip_test_linux_distro.patch
-      # Work around https://github.com/glyph/automat/issues/117
-      (fetchpatch {
-        url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/buildbot-automat-117.diff?h=packages/buildbot&id=7904292340f98578adfe783a09e9eb4c5b1d4632";
-        name = "buildbot-automat-117.diff";
-        stripLen = 1;
-        sha256 = "0rng6f8nvghkihajz9m925rdp9q3c395bj4wc7r2s1minv613hba";
-      })
     ];
 
     postPatch = ''
