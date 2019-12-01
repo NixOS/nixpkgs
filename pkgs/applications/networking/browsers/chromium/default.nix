@@ -1,4 +1,4 @@
-{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_8
+{ newScope, config, stdenv, llvmPackages_8
 , makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 , libva ? null
@@ -20,11 +20,8 @@
 }:
 
 let
-  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_8.stdenv;
-  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_8;
-in let
-  stdenv = stdenv_;
-  llvmPackages = llvmPackages_;
+  stdenv = llvmPackages_8.stdenv;
+  llvmPackages = llvmPackages_8;
 
   callPackage = newScope chromium;
 
