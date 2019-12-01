@@ -10471,7 +10471,9 @@ in
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
 
-  gdb = callPackage ../development/tools/misc/gdb {
+  gdb = callPackage ../development/tools/misc/gdb/wrapper.nix { };
+
+  gdb-unwrapped = callPackage ../development/tools/misc/gdb {
     guile = null;
   };
 
