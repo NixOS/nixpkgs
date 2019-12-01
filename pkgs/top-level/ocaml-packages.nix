@@ -223,6 +223,8 @@ let
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
 
+    dispatch =  callPackage ../development/ocaml-modules/dispatch { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
