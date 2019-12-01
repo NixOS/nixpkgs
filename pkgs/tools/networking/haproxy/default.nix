@@ -1,6 +1,6 @@
 { useLua ? !stdenv.isDarwin
 , usePcre ? true
-, stdenv, fetchurl
+, stdenv, fetchurl, fetchpatch
 , openssl, zlib, lua5_3 ? null, pcre ? null
 }:
 
@@ -15,6 +15,20 @@ stdenv.mkDerivation rec {
     url = "https://www.haproxy.org/download/${stdenv.lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
     sha256 = "1via9k84ycrdr8qh4qchcbqgpv0gynm3ra23nwsvqwfqvc0376id";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-19330-part1.patch";
+      url = "https://git.haproxy.org/?p=haproxy.git;a=patch;h=8f3ce06f14e13719c9353794d60001eab8d43717";
+      sha256 = "14hzbv5hdxffiwxwdka1d50w2lpv9jhazrrg729nwbpz7hy2cn6c";
+    })
+    ./1.9.8-CVE-2019-19330-part2.patch
+    (fetchpatch {
+      name = "CVE-2019-19330-part3.patch";
+      url = "https://git.haproxy.org/?p=haproxy.git;a=patch;h=146f53ae7e97dbfe496d0445c2802dd0a30b0878";
+      sha256 = "1dv53l3yq9b3iym5x3985sb2lg0mwjyvn8ylkr6rwj0nm9bnshln";
+    })
+  ];
 
   buildInputs = [ openssl zlib ]
     ++ stdenv.lib.optional useLua lua5_3
