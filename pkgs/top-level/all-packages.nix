@@ -669,7 +669,9 @@ in
   };
 
   async = callPackage ../development/tools/async {};
-
+  
+  athame-zsh = callPackage ../shells/zsh/athame-zsh.nix {};
+  
   atheme = callPackage ../servers/irc/atheme { };
 
   atinout = callPackage ../tools/networking/atinout { };
