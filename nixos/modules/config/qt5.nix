@@ -10,7 +10,7 @@ let
   isQtStyle = cfg.platformTheme == "gtk2" && cfg.style != "adwaita";
 
   packages = if isQGnome then [ pkgs.qgnomeplatform pkgs.adwaita-qt ]
-    else if isQtStyle then [ pkgs.qtstyleplugins ]
+    else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
     else throw "`qt5.platformTheme` ${cfg.platformTheme} and `qt5.style` ${cfg.style} are not compatible.";
 
 in

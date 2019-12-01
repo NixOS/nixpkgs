@@ -8,7 +8,7 @@ assert (!libsOnly) -> kernel != null;
 # Disable for kernels 4.15 and above due to compatibility issues
 assert kernel != null -> stdenv.lib.versionOlder kernel.version "4.15";
 
-let xorgFullVer = (builtins.parseDrvName xorg.xorgserver.name).version;
+let xorgFullVer = lib.getVersion xorg.xorgserver;
     xorgVer = lib.concatStringsSep "." (lib.take 2 (lib.splitString "." xorgFullVer));
     x64 = if stdenv.hostPlatform.system == "x86_64-linux" then true
           else if stdenv.hostPlatform.system == "i686-linux" then false
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ( cd $sourceRoot/tools; tar -xaf prltools${if x64 then ".x64" else ""}.tar.gz )
   '';
 
-  kernelVersion = if libsOnly then "" else (builtins.parseDrvName kernel.name).version;
+  kernelVersion = if libsOnly then "" else lib.getName kernel.name;
   kernelDir = if libsOnly then "" else "${kernel.dev}/lib/modules/${kernelVersion}";
   scriptPath = lib.concatStringsSep ":" (lib.optionals (!libsOnly) [ "${utillinux}/bin" "${gawk}/bin" ]);
 

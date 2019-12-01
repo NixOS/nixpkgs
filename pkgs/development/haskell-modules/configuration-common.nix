@@ -1223,4 +1223,10 @@ self: super: {
     '';
   });
 
+  # https://github.com/brendanhay/amazonka/commit/657b70d174fe5cb61e56cb8b9c5e57f1ec216f2b
+  amazonka = appendPatch super.amazonka ./patches/amazonka-Allow-http-client-0.6.patch;
+
+  # https://github.com/brendanhay/amazonka/commit/657b70d174fe5cb61e56cb8b9c5e57f1ec216f2b
+  amazonka-core = appendPatch super.amazonka-core ./patches/amazonka-core-Allow-http-client-0.6.patch;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
