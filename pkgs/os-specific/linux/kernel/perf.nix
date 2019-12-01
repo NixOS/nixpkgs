@@ -1,4 +1,4 @@
-{ lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto, makeWrapper
+{ lib, stdenv, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc, xmlto, makeWrapper
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
 , libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
 , zlib, withGtk ? false, gtk2 ? null
@@ -36,12 +36,13 @@ stdenv.mkDerivation {
   # perf refers both to newt and slang
   nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-    flex bison libiberty audit makeWrapper pkgconfig python perl
+    flex bison libiberty audit makeWrapper pkgconfig
   ];
   buildInputs = [
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
-    libopcodes
-  ] ++ stdenv.lib.optional withGtk gtk2;
+    libopcodes python3 perl
+  ] ++ stdenv.lib.optional withGtk gtk2
+    ++ (if (versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ]);
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.

@@ -3303,9 +3303,6 @@ in
   fprot = callPackage ../tools/security/fprot { };
 
   fprintd = callPackage ../tools/security/fprintd { };
-  fprintd-thinkpad = fprintd.override {
-    thinkpad = true;
-  };
 
   franz = callPackage ../applications/networking/instant-messengers/franz { };
 
@@ -5074,6 +5071,8 @@ in
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
   ndppd = callPackage ../applications/networking/ndppd { };
+
+  nebula = callPackage ../tools/networking/nebula { };
 
   nemiver = callPackage ../development/tools/nemiver { };
 
@@ -12220,9 +12219,6 @@ in
   };
 
   libfprint = callPackage ../development/libraries/libfprint { };
-  libfprint-thinkpad = libfprint.override {
-    thinkpad = true;
-  };
 
   libfpx = callPackage ../development/libraries/libfpx { };
 

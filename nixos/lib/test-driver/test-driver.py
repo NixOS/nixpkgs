@@ -16,6 +16,8 @@ import tempfile
 import time
 import unicodedata
 from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
+import shlex
+import pathlib
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -89,6 +91,10 @@ machines: "List[Machine]"
 
 def eprint(*args: object, **kwargs: Any) -> None:
     print(*args, file=sys.stderr, **kwargs)
+
+
+def make_command(args: list) -> str:
+    return " ".join(map(shlex.quote, (map(str, args))))
 
 
 def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]:
@@ -215,7 +221,7 @@ class Machine:
             return path
 
         self.state_dir = create_dir("vm-state-{}".format(self.name))
-        self.shared_dir = create_dir("xchg-shared")
+        self.shared_dir = create_dir("{}/xchg".format(self.state_dir))
 
         self.booted = False
         self.connected = False
@@ -523,6 +529,33 @@ class Machine:
             os.unlink(tmp)
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
+
+    def copy_from_vm(self, source: str, target_dir: str = "") -> None:
+        """Copy a file from the VM (specified by an in-VM source path) to a path
+        relative to `$out`. The file is copied via the `shared_dir` shared among
+        all the VMs (using a temporary directory).
+        """
+        # Compute the source, target, and intermediate shared file names
+        out_dir = pathlib.Path(os.environ.get("out", os.getcwd()))
+        vm_src = pathlib.Path(source)
+        with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
+            shared_temp = pathlib.Path(shared_td)
+            vm_shared_temp = pathlib.Path("/tmp/xchg") / shared_temp.name
+            vm_intermediate = vm_shared_temp / vm_src.name
+            intermediate = shared_temp / vm_src.name
+            # Copy the file to the shared directory inside VM
+            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
+            self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
+            self.succeed("sync")
+            abs_target = out_dir / target_dir / vm_src.name
+            abs_target.parent.mkdir(exist_ok=True, parents=True)
+            # Copy the file from the shared directory outside VM
+            if intermediate.is_dir():
+                shutil.copytree(intermediate, abs_target)
+            else:
+                shutil.copy(intermediate, abs_target)
+        # Make sure the cleanup is synced into VM
+        self.succeed("sync")
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>
