@@ -5075,6 +5075,8 @@ in
 
   ndppd = callPackage ../applications/networking/ndppd { };
 
+  nebula = callPackage ../tools/networking/nebula { };
+
   nemiver = callPackage ../development/tools/nemiver { };
 
   neofetch = callPackage ../tools/misc/neofetch { };
