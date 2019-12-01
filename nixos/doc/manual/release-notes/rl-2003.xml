@@ -199,6 +199,13 @@
       This has led to drastically reduced closed sizes for some rust crates since development dependencies are now in the <literal>lib</literal> output.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The packages <literal>openobex</literal> and <literal>obexftp</literal>
+     are no loger installed when enabling bluetooth via
+     <option>hardware.bluetooth.enable</option>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
