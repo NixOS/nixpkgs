@@ -24,6 +24,7 @@
   wrapGAppsHook,
   libxml2,
   gnome2,
+  gnome3,
   python3,
   keybinder3,
   cairo }:
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     polkit
     libxml2
     keybinder3
+    gnome3.caribou
   ];
 
   nativeBuildInputs = [
