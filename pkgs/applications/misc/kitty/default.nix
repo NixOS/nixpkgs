@@ -67,6 +67,7 @@ buildPythonApplication rec {
     (substituteAll {
       src = ./fix-paths.patch;
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
+      libcanberra = "${libcanberra}/lib/libcanberra.so";
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     ./no-lto.patch

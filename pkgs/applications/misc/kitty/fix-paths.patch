@@ -8,6 +8,16 @@
 +    static const char* libname = "@libstartup_notification@";
      // some installs are missing the .so symlink, so try the full name
      static const char* libname2 = "libstartup-notification-1.so.0";
+     static const char* libname3 = "libstartup-notification-1.so.0.0.0";
+@@ -105,7 +105,7 @@ load_libcanberra_functions(void) {
+ 
+ static void
+ load_libcanberra(void) {
+-    static const char* libname = "libcanberra.so";
++    static const char* libname = "@libcanberra@";
+     // some installs are missing the .so symlink, so try the full name
+     static const char* libname2 = "libcanberra.so.0";
+     static const char* libname3 = "libcanberra.so.0.2.5";
 
 --- a/docs/Makefile
 +++ b/docs/Makefile
