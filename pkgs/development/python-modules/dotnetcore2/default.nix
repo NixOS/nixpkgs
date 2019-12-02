@@ -15,7 +15,7 @@ buildPythonPackage rec {
     inherit pname version format;
     python = "py3";
     platform = "manylinux1_x86_64";
-    sha256 = "a335fb0abdaaeee7ba128b81b5350adfc5d2b2adf6a64cbc4d1a3b7cdf8560da";
+    sha256 = "0qhp94bjz4icz2f0fnhgck875chiqzy4lvsp6lwhj5jd0zsv2bb3";
   };
 
   nativeBuildInputs = [ unzip ];
