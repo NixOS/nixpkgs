@@ -6593,6 +6593,8 @@ in {
 
   pony = callPackage ../development/python-modules/pony { };
 
+  zigpy = callPackage ../development/python-modules/zigpy { };
+
   crccheck = callPackage ../development/python-modules/crccheck { };
 
 });
