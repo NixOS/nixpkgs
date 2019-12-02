@@ -75,6 +75,8 @@ let
 
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
 
+    bigstring = callPackage ../development/ocaml-modules/bigstring { };
+
     biocaml = callPackage ../development/ocaml-modules/biocaml { };
 
     bistro = callPackage ../development/ocaml-modules/bistro { };
