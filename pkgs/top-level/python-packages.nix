@@ -6597,6 +6597,8 @@ in {
 
   crccheck = callPackage ../development/python-modules/crccheck { };
 
+  zigpy-deconz = callPackage ../development/python-modules/zigpy-deconz { };
+
 });
 
 in fix' (extends overrides packages)
