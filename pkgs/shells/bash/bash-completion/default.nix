@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub
-, lib
 , fetchpatch
 , autoreconfHook
 , python3Packages
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Revert-build-Do-cmake-pc-and-profile-variable-replac.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # TODO: Remove when https://github.com/scop/bash-completion/commit/2cdac1b9f24df62a1fa80c1824ee8524c9b02393
     #       is availabe in a release in nixpkgs. see https://github.com/scop/bash-completion/issues/312.
     # Fixes a test failure with musl.
