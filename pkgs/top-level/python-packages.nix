@@ -5444,6 +5444,8 @@ in {
 
   Pyro4 = callPackage ../development/python-modules/pyro4 { };
 
+  Pyro5 = callPackage ../development/python-modules/pyro5 { };
+
   rope = callPackage ../development/python-modules/rope { };
 
   ropper = callPackage ../development/python-modules/ropper { };
