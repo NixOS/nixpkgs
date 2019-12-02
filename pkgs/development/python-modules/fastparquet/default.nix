@@ -1,20 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, numba, numpy, pandas,
-pytestrunner, thrift, pytest, python-snappy, lz4 }:
+{ lib, buildPythonPackage, fetchPypi, numba, numpy, pandas, pytestrunner,
+thrift, pytest, python-snappy, lz4 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.2.1";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "183wdmhnhnlsd7908n3d2g4qnb49fcipqfshghwpbdwdzjpa0day";
-  };
-
-  # Fixes for recent pandas version
-  # See https://github.com/dask/fastparquet/pull/396
-  patches = fetchpatch {
-    url = https://github.com/dask/fastparquet/commit/31fb3115598d1ab62a5c8bf7923a27c16f861529.patch;
-    sha256 = "0r1ig4rydmy4j85dgb52qbsx6knxdwn4dn9h032fg3p6xqq0zlpm";
+    sha256 = "d81dcec444f4c4829234b9baac57c7125b8fbe9119c2eca2dee922650db49205";
   };
 
   postPatch = ''
