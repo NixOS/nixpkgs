@@ -297,6 +297,10 @@ let
 
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
+    gnuplot = callPackage ../development/ocaml-modules/gnuplot {
+      inherit (pkgs) gnuplot;
+    };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
