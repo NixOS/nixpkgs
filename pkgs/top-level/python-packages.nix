@@ -6593,6 +6593,8 @@ in {
 
   pony = callPackage ../development/python-modules/pony { };
 
+  crccheck = callPackage ../development/python-modules/crccheck { };
+
 });
 
 in fix' (extends overrides packages)
