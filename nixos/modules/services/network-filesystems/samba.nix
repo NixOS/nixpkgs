@@ -40,7 +40,7 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
-      after = [ "network.target" ];
+      after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") ];
       requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
@@ -115,7 +115,7 @@ in
         type = types.package;
         default = pkgs.samba;
         defaultText = "pkgs.samba";
-        example = literalExample "pkgs.samba3";
+        example = literalExample "pkgs.samba4Full";
         description = ''
           Defines which package should be used for the samba server.
         '';

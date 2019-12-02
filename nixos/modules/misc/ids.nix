@@ -11,6 +11,9 @@
 
 { lib, ... }:
 
+let
+  inherit (lib) types;
+in
 {
   options = {
 
@@ -19,6 +22,7 @@
       description = ''
         The user IDs used in NixOS.
       '';
+      type = types.attrsOf types.int;
     };
 
     ids.gids = lib.mkOption {
@@ -26,6 +30,7 @@
       description = ''
         The group IDs used in NixOS.
       '';
+      type = types.attrsOf types.int;
     };
 
   };

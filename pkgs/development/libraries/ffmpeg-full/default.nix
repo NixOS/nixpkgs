@@ -104,7 +104,7 @@
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
-, openglExtlib ? false, libGLU_combined ? null # OpenGL rendering
+, openglExtlib ? false, libGL ? null, libGLU ? null # OpenGL rendering
 #, openh264 ? null # H.264/AVC encoder
 , openjpeg ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
@@ -234,7 +234,7 @@ assert gnutls != null -> !opensslExtlib;
 assert libxcbshmExtlib -> libxcb != null;
 assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
-assert openglExtlib -> libGLU_combined != null;
+assert openglExtlib -> libGL != null && libGLU != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
@@ -424,7 +424,7 @@ stdenv.mkDerivation rec {
     libxcb libXv libXext lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
     samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
-  ] ++ optional openglExtlib libGLU_combined
+  ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf

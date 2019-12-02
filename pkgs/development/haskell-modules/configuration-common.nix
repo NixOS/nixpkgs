@@ -74,7 +74,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1ahjddwl8wfkhc5sj2j2snh3cq0vg4apgv2maq3wdncin8bj7my6";
+      sha256 = "04l1yrjq7n4nlzkmkg73xp6p7vpw1iq53mrmyb8162wqb7zapg4f";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -275,6 +275,7 @@ self: super: {
   dlist = dontCheck super.dlist;
   docopt = dontCheck super.docopt;                      # http://hydra.cryp.to/build/499172/log/raw
   dom-selector = dontCheck super.dom-selector;          # http://hydra.cryp.to/build/497670/log/raw
+  dotenv = dontCheck super.dotenv;                      # Tests fail because of missing test file on version 0.8.0.2 fixed on version 0.8.0.4
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG;                          # http://hydra.cryp.to/build/498245/nixlog/1/raw
   ed25519 = dontCheck super.ed25519;
@@ -510,7 +511,9 @@ self: super: {
      else dontCheck super.tasty-discover);
 
   # generic-deriving bound is too tight
-  aeson = doJailbreak super.aeson;
+  # aeson 1.4.6.0 needs Diff 0.4.0 to do tests but nixpkgs is still at 0.3.4
+  # https://github.com/bos/aeson/issues/740
+  aeson = dontCheck (doJailbreak super.aeson);
 
   # containers >=0.4 && <0.6 is too tight
   # https://github.com/RaphaelJ/friday/issues/34
@@ -1182,18 +1185,6 @@ self: super: {
   # test suite failure: https://github.com/jgm/pandoc/issues/5582
   pandoc = dontCheck super.pandoc;
 
-  # The latest release version is ancient. You really need this tool from git.
-  haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
-    (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-      version = "20190814-git";
-      src = pkgs.fetchFromGitHub {
-        owner = "haskell-CI";
-        repo = "haskell-ci";
-        rev = "70918d80b6fd43aca7e4d00ba0d2ea116b666556";
-        sha256 = "0bzp959qy74zmqq75f60rcixpjbvvyrb5a8zp2nyql3nm9vxzy5k";
-      };
-  }) (with self; [temporary lattices Cabal_3_0_0_0]));
-
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
 
@@ -1250,7 +1241,7 @@ self: super: {
   });
 
   # The LTS-14.x version of their dependencies are too old.
-  cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
+  cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_0; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
 
   # Version bounds for http-client are too strict:
@@ -1313,5 +1304,14 @@ self: super: {
       })
     ];
   });
+
+  # Needs the corresponding version of haskell-src-exts.
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
+
+  # https://github.com/Daniel-Diaz/HaTeX/issues/144
+  HaTeX = dontCheck super.HaTeX;
+
+  # https://github.com/kazu-yamamoto/dns/issues/150
+  dns = dontCheck super.dns;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

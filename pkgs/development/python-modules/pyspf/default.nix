@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyspf";
-  version = "2.0.13";
+  version = "2.0.13"; # version 2.0.13 should not be used, see #72791
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16wjj99d2pikz6z1gwnl1jjvad6qjgpsf3a85lh47qqrjpiipp32";
+    sha256 = "62dc1be39519e343202d480da7ef93d834b5a50cd4f217bef9335ed15292929b";
   };
 
   propagatedBuildInputs = [ pydns ];

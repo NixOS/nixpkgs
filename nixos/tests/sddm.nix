@@ -27,7 +27,7 @@ let
         user = nodes.machine.config.users.users.alice;
       in ''
         start_all()
-        machine.wait_for_text("select your user")
+        machine.wait_for_text("(?i)select your user")
         machine.screenshot("sddm")
         machine.send_chars("${user.password}\n")
         machine.wait_for_file("${user.home}/.Xauthority")

@@ -93,7 +93,7 @@ in stdenv.mkDerivation rec {
     ];
   in ''
     ctest -L unittest -V \
-      --exclude-regex '(${builtins.concatStringsSep "|" excludedTests})'
+      --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
   '');
 
   meta = {

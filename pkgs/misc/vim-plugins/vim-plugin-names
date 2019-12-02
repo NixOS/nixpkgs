@@ -69,6 +69,7 @@ digitaltoad/vim-jade
 direnv/direnv.vim
 dleonard0/pony-vim-syntax
 dracula/vim
+drewtempelmeyer/palenight.vim
 drmingdrmer/xptemplate
 dylanaraps/wal.vim
 eagletmt/ghcmod-vim
@@ -155,6 +156,7 @@ jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 josa42/coc-go
 jpalardy/vim-slime
+jreybert/vimagit
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
 Julian/vim-textobj-variable-segment

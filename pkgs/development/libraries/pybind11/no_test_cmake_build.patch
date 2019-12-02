@@ -1,7 +1,0 @@
---- a/tests/CMakeLists.txt	2019-01-28 14:13:55.822119328 +0100
-+++ b/tests/CMakeLists.txt	2019-01-28 14:14:06.741161928 +0100
-@@ -233,4 +233,3 @@
- add_subdirectory(test_embed)
- 
- # Test CMake build using functions and targets from subdirectory or installed location
--add_subdirectory(test_cmake_build)

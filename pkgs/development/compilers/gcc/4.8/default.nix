@@ -24,6 +24,7 @@
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
+, threadsCross ? null # for MinGW
 , crossStageStatic ? false
 , # Strip kills static libs of other archs (hence no cross)
   stripped ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -48,10 +49,14 @@ assert stdenv.hostPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 
+# threadsCross is just for MinGW
+assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+
 with stdenv.lib;
 with builtins;
 
-let version = "4.8.5";
+let majorVersion = "4";
+    version = "${majorVersion}.8.5";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -97,8 +102,8 @@ let version = "4.8.5";
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
-    stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
-    crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
+    stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
+    crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
 
 in
 
@@ -106,7 +111,7 @@ in
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
-  name = crossNameAddon + "${name}${if stripped then "" else "-debug"}-${version}";
+  name = "${crossNameAddon}${name}${if stripped then "" else "-debug"}-${version}";
 
   builder = ../builder.sh;
 
@@ -171,6 +176,8 @@ stdenv.mkDerivation ({
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
     ;
+
+  depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
 
   preConfigure = import ../common/pre-configure.nix {
     inherit (stdenv) lib;
@@ -253,24 +260,13 @@ stdenv.mkDerivation ({
     ++ optionals javaAwtGtk [ gmp mpfr ]
   ));
 
-  EXTRA_TARGET_FLAGS = optionals
-    (targetPlatform != hostPlatform && libcCross != null)
-    ([
-      "-idirafter ${getDev libcCross}${libcCross.incdir or "/include"}"
-    ] ++ optionals (! crossStageStatic) [
-      "-B${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]);
-
-  EXTRA_TARGET_LDFLAGS = optionals
-    (targetPlatform != hostPlatform && libcCross != null)
-    ([
-      "-Wl,-L${libcCross.out}${libcCross.libdir or "/lib"}"
-    ] ++ (if crossStageStatic then [
-        "-B${libcCross.out}${libcCross.libdir or "/lib"}"
-      ] else [
-        "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}"
-        "-Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]));
+  inherit
+    (import ../common/extra-target-flags.nix {
+      inherit stdenv crossStageStatic libcCross threadsCross;
+    })
+    EXTRA_TARGET_FLAGS
+    EXTRA_TARGET_LDFLAGS
+    ;
 
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;

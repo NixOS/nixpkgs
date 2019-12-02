@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wob";
-  version = "0.2";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "francma";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "1jyia4166lp4cc8gmjmgcyz6prshhfjriam8w8mz2c5h77990fr9";
+    sha256 = "1z0vwss3ix5mf7mqpm4dzlv1bblddfi47ykblj0nmscxn1sinr7j";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wayland ];

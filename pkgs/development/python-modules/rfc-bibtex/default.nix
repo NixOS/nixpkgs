@@ -12,7 +12,7 @@ buildPythonApplication rec {
   disabled = !isPy3k;
 
   meta = with stdenv.lib; {
-    homepage = ttps://github.com/iluxonchik/rfc-bibtex/;
+    homepage = https://github.com/iluxonchik/rfc-bibtex/;
     description = "Generate Bibtex entries for IETF RFCs and Internet-Drafts";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];

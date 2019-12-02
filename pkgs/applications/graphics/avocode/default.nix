@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "avocode";
-  version = "3.9.6";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "0jnl461dg2s5panrw12707bv34g6wxc1pxc90awnja13yq0z6bfc";
+    sha256 = "13jwxwvwb9nnjxcnh9vfi22n4c00bhdypl84wrpdg5xw9325zhvy";
   };
 
   libPath = stdenv.lib.makeLibraryPath (with xorg; [

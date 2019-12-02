@@ -52,16 +52,16 @@ let
   ];
 in buildRustPackage rec {
   pname = "alacritty";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h9zid7bi19qga3a8a2d4x3ma9wf1njmj74s4xnw7nzqqf3dh750";
+    sha256 = "0adaqdbma6gskb2g14yscrgr9gch5wf2g2clchplv72c2qr1k427";
   };
 
-  cargoSha256 = "1rxb5ljgvn881jkxm8772kf815mmp08ci7sqmn2x1jwdcrphhxr1";
+  cargoSha256 = "1r267g8f986nxh8ms5yhp50qy1yl8gly2jr78p738qqc6frlxlhv";
 
   nativeBuildInputs = [
     cmake
@@ -76,10 +76,6 @@ in buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreGraphics CoreServices CoreText Foundation OpenGL ];
 
   outputs = [ "out" "terminfo" ];
-  postPatch = ''
-    substituteInPlace alacritty_terminal/src/config/mouse.rs \
-      --replace xdg-open ${xdg_utils}/bin/xdg-open
-  '';
 
   postBuild = lib.optionalString stdenv.isDarwin "make app";
 
@@ -118,7 +114,7 @@ in buildRustPackage rec {
     description = "GPU-accelerated terminal emulator";
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [ filalex77 mic92 ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 }

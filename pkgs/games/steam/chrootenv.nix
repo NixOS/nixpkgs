@@ -75,6 +75,7 @@ in buildFHSUserEnv rec {
     xorg.libX11
     xorg.libXfixes
     libGL
+    pkgsi686Linux.libva
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -85,14 +86,14 @@ in buildFHSUserEnv rec {
     xorg.xkeyboardconfig
     xorg.libpciaccess
     ## screeps dependencies
-    gnome3.gtk
+    gtk3
     dbus
     zlib
     glib
     atk
     cairo
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     pango
     fontconfig
   ] ++ (if (!nativeOnly) then [

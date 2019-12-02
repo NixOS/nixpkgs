@@ -22,7 +22,7 @@
 }:
 
 assert cloog != null -> stdenv.lib.versionOlder version "5";
-assert langJava -> stdenv.lib.versionOlder version "6";
+assert langJava -> stdenv.lib.versionOlder version "7";
 
 let
   inherit (stdenv)
@@ -50,7 +50,7 @@ let
       "--disable-decimal-float" # requires libc
       "--disable-libmpx" # requires libc
     ] ++ lib.optionals crossMingw [
-      "--with-headers=${libcCross}/include"
+      "--with-headers=${lib.getDev libcCross}/include"
       "--with-gcc"
       "--with-gnu-as"
       "--with-gnu-ld"
@@ -63,7 +63,7 @@ let
       "--enable-__cxa_atexit"
       "--enable-long-long"
       "--enable-threads=${if targetPlatform.isUnix then "posix"
-                          else if targetPlatform.isWindows then "win32"
+                          else if targetPlatform.isWindows then "mcf"
                           else "single"}"
       "--enable-nls"
       "--disable-decimal-float" # No final libdecnumber (it may work only in 386)

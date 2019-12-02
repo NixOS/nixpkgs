@@ -39,7 +39,7 @@
   can select an alternative one by picking one of the following lines:
 <programlisting>
 <xref linkend="opt-services.xserver.displayManager.sddm.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.slim.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.gdm.enable"/> = true;
 </programlisting>
  </para>
  <para>

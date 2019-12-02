@@ -6,12 +6,12 @@
 , jinja2
 , pyyaml
 , httplib2
-, boto
 , six
 , netaddr
 , dnspython
 , jmespath
 , dopy
+, ncclient
 , windowsSupport ? false
 , pywinrm
 }:
@@ -28,7 +28,9 @@ buildPythonPackage rec {
   };
 
   prePatch = ''
-    sed -i "s,/usr/,$out," lib/ansible/constants.py
+    # ansible-connection is wrapped, so make sure it's not passed
+    # through the python interpreter.
+    sed -i "s/\[python, /[/" lib/ansible/executor/task_executor.py
   '';
 
   postInstall = ''
@@ -39,7 +41,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pycrypto paramiko jinja2 pyyaml httplib2
-    six netaddr dnspython jmespath dopy
+    six netaddr dnspython jmespath dopy ncclient
   ] ++ lib.optional windowsSupport pywinrm;
 
   # dificult to test

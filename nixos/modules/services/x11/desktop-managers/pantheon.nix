@@ -159,7 +159,7 @@ in
     # Override GSettings schemas
     environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-    environment.sessionVariables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
+    environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
 
     # Settings from elementary-default-settings
     environment.sessionVariables.GTK_CSD = "1";

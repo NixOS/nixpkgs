@@ -1,23 +1,20 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg, ocb-stubblr, buildDunePackage }:
+{ lib, fetchurl, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "cpuid";
   version = "0.1.2";
 
-  src = fetchFromGitHub {
-    owner = "pqwy";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "04zqlvy608kj9pn48q5zybz62rlwzyfmadpwjhcxwcx28km528r4";
-  };
+  minimumOCamlVersion = "4.03";
 
-  #buildInputs = [ ocb-stubblr ];
+  src = fetchurl {
+    url = "https://github.com/pqwy/cpuid/releases/download/v${version}/cpuid-v${version}.tbz";
+    sha256 = "08ng4mva6qblb5ipkrxbr0my7ndkc4qwcbswkqgbgir864s74m93";
+  };
 
   meta = {
     homepage = https://github.com/pqwy/cpuid;
     description = "Detect CPU features from OCaml";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

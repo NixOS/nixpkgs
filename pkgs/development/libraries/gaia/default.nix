@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , libyaml
 , swig
+, eigen
 , pkgconfig
 , wafHook
 , makeWrapper
@@ -19,13 +20,13 @@ assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "gaia";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "MTG";
     repo = "gaia";
     rev = "v${version}";
-    sha256 = "12jxb354s2dblr2ghnl3w05m23jgzvrrgywfj8jaa32j3gw48fv2";
+    sha256 = "03vmdq7ca4f7zp2f4sxyqa8sdpdma3mn9fz4z7d93qryl0bhi7z3";
   };
 
   # Fix installation error when waf tries to put files in /etc/
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libyaml
+    eigen
     qt4
   ];
 
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/MTG/gaia";
     description = "General library to work with points in a semimetric space";
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
+    platforms = platforms.x86; # upstream assume SSE2 / fails on ARM
     license = licenses.agpl3;
   };
 }

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "9b47c5c3a094fa518ca88aeed35ae75834d53e4285512c61879f67a48c94ddaf";
   };
 
-  propagatedBuildInputs = [ pkgs.libGLU_combined pkgs.freeglut pillow ];
+  propagatedBuildInputs = [ pkgs.libGLU pkgs.libGL pkgs.freeglut pillow ];
 
   patchPhase = let
     ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''

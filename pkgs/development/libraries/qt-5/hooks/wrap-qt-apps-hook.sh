@@ -1,5 +1,5 @@
 # Inherit arguments given in mkDerivation
-qtWrapperArgs=( $qtWrapperArgs )
+qtWrapperArgs=( ${qtWrapperArgs-} )
 
 qtHostPathSeen=()
 
@@ -64,10 +64,10 @@ qtOwnPathsHook() {
 
 preFixupPhases+=" qtOwnPathsHook"
 
-# Note: $qtWrapperArgs still gets defined even if $dontWrapQtApps is set.
+# Note: $qtWrapperArgs still gets defined even if ${dontWrapQtApps-} is set.
 wrapQtAppsHook() {
     # skip this hook when requested
-    [ -z "$dontWrapQtApps" ] || return 0
+    [ -z "${dontWrapQtApps-}" ] || return 0
 
     # guard against running multiple times (e.g. due to propagation)
     [ -z "$wrapQtAppsHookHasRun" ] || return 0

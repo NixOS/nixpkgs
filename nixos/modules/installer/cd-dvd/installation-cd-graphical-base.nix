@@ -22,17 +22,7 @@ with lib;
     });
   '';
 
-  services.xserver = {
-    enable = true;
-
-    # Automatically login as nixos.
-    displayManager.slim = {
-      enable = true;
-      defaultUser = "nixos";
-      autoLogin = true;
-    };
-
-  };
+  services.xserver.enable = true;
 
   # Provide networkmanager for easy wireless configuration.
   networking.networkmanager.enable = true;

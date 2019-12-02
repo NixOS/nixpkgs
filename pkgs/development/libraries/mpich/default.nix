@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation  rec {
   pname = "mpich";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    sha256 = "1raism1r4jsx4cybc9ddyr1xkccbxm0l8j3ryrw8kslfkkr1wmgy";
+    sha256 = "1farz5zfx4cd0c3a0wb9pgfypzw0xxql1j1294z1sxslga1ziyjb";
   };
 
   configureFlags = [

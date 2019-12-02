@@ -8,12 +8,12 @@ gem 'bootsnap', '~> 1.4'
 gem 'nakayoshi_fork', '~> 0.0.4'
 
 # Responders respond_to and respond_with
-gem 'responders', '~> 2.0'
+gem 'responders', '~> 3.0'
 
 gem 'sprockets', '~> 3.7.0'
 
 # Default values for AR models
-gem 'default_value_for', '~> 3.2.0'
+gem 'default_value_for', '~> 3.3.0'
 
 # Supported DBs
 gem 'pg', '~> 1.1'
@@ -42,7 +42,7 @@ gem 'omniauth-shibboleth', '~> 1.3.0'
 gem 'omniauth-twitter', '~> 1.4'
 gem 'omniauth_crowd', '~> 2.2.0'
 gem 'omniauth-authentiq', '~> 0.3.3'
-gem 'omniauth_openid_connect', '~> 0.3.1'
+gem 'omniauth_openid_connect', '~> 0.3.3'
 gem "omniauth-ultraauth", '~> 0.0.2'
 gem 'omniauth-salesforce', '~> 1.0.5'
 gem 'rack-oauth2', '~> 1.9.3'
@@ -64,7 +64,7 @@ gem 'u2f', '~> 0.2.1'
 
 # GitLab Pages
 gem 'validates_hostname', '~> 1.0.6'
-gem 'rubyzip', '~> 1.2.2', require: 'zip'
+gem 'rubyzip', '~> 1.3.0', require: 'zip'
 # GitLab Pages letsencrypt support
 gem 'acme-client', '~> 2.0.2'
 
@@ -72,7 +72,7 @@ gem 'acme-client', '~> 2.0.2'
 gem 'browser', '~> 2.5'
 
 # GPG
-gem 'gpgme', '~> 2.0.18'
+gem 'gpgme', '~> 2.0.19'
 
 # LDAP Auth
 # GitLab fork with several improvements to original library. For full list of changes
@@ -136,7 +136,7 @@ gem 'faraday_middleware-aws-signers-v4'
 
 # Markdown and HTML processing
 gem 'html-pipeline', '~> 2.8'
-gem 'deckar01-task_list', '2.2.0'
+gem 'deckar01-task_list', '2.2.1'
 gem 'gitlab-markup', '~> 1.7.0'
 gem 'github-markup', '~> 1.7.0', require: 'github/markup'
 gem 'commonmarker', '~> 0.17'
@@ -151,7 +151,7 @@ gem 'asciidoctor-plantuml', '0.0.9'
 gem 'rouge', '~> 3.11.0'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
-gem 'nokogiri', '~> 1.10.4'
+gem 'nokogiri', '~> 1.10.5'
 gem 'escape_utils', '~> 1.1'
 
 # Calendar rendering
@@ -159,6 +159,7 @@ gem 'icalendar'
 
 # Diffs
 gem 'diffy', '~> 3.1.0'
+gem 'diff_match_patch', '~> 0.1.0'
 
 # Application server
 gem 'rack', '~> 2.0.7'
@@ -175,7 +176,7 @@ group :puma do
 end
 
 # State machine
-gem 'state_machines-activerecord', '~> 0.5.1'
+gem 'state_machines-activerecord', '~> 0.6.0'
 
 # Issue tags
 gem 'acts-as-taggable-on', '~> 6.0'
@@ -259,9 +260,6 @@ gem 'loofah', '~> 2.2'
 # Working with license
 gem 'licensee', '~> 8.9'
 
-# Protect against bruteforcing
-gem 'rack-attack', '~> 4.4.1'
-
 # Ace editor
 gem 'ace-rails-ap', '~> 4.1.0'
 
@@ -293,10 +291,13 @@ gem 'base32', '~> 0.3.0'
 
 gem "gitlab-license", "~> 1.0"
 
+# Protect against bruteforcing
+gem 'rack-attack', '~> 6.2.0'
+
 # Sentry integration
 gem 'sentry-raven', '~> 2.9'
 
-gem 'premailer-rails', '~> 1.9.7'
+gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
 gem 'gitlab-labkit', '~> 0.5'
@@ -331,7 +332,6 @@ group :metrics do
 end
 
 group :development do
-  gem 'foreman', '~> 0.84.0'
   gem 'brakeman', '~> 4.2', require: false
   gem 'danger', '~> 6.0', require: false
 
@@ -388,7 +388,6 @@ group :development, :test do
 
   gem 'benchmark-ips', '~> 2.3.0', require: false
 
-  gem 'license_finder', '~> 5.4', require: false
   gem 'knapsack', '~> 1.17'
 
   gem 'stackprof', '~> 0.2.10', require: false
@@ -396,6 +395,11 @@ group :development, :test do
   gem 'simple_po_parser', '~> 1.1.2', require: false
 
   gem 'timecop', '~> 0.8.0'
+end
+
+# Gems required in omnibus-gitlab pipeline
+group :development, :test, :omnibus do
+  gem 'license_finder', '~> 5.4', require: false
 end
 
 group :test do
@@ -407,6 +411,7 @@ group :test do
   gem 'concurrent-ruby', '~> 1.1'
   gem 'test-prof', '~> 0.10.0'
   gem 'rspec_junit_formatter'
+  gem 'guard-rspec'
 end
 
 gem 'octokit', '~> 4.9'
@@ -446,18 +451,18 @@ group :ed25519 do
 end
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 1.65.0'
+gem 'gitaly', '~> 1.70.0'
 
-gem 'grpc', '~> 1.19.0'
+gem 'grpc', '~> 1.24.0'
 
-gem 'google-protobuf', '~> 3.7.1'
+gem 'google-protobuf', '~> 3.8.0'
 
 gem 'toml-rb', '~> 1.0.0', require: false
 
 # Feature toggles
-gem 'flipper', '~> 0.13.0'
-gem 'flipper-active_record', '~> 0.13.0'
-gem 'flipper-active_support_cache_store', '~> 0.13.0'
+gem 'flipper', '~> 0.17.1'
+gem 'flipper-active_record', '~> 0.17.1'
+gem 'flipper-active_support_cache_store', '~> 0.17.1'
 gem 'unleash', '~> 0.1.5'
 
 # Structured logging
@@ -469,3 +474,5 @@ gem 'gitlab-net-dns', '~> 0.9.1'
 
 # Countries list
 gem 'countries', '~> 3.0'
+
+gem 'retriable', '~> 3.1.2'

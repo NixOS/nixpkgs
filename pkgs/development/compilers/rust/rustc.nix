@@ -1,6 +1,6 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , fetchurl, file, python2
-, llvm_7, darwin, git, cmake, rustPlatform
+, llvm_9, darwin, git, cmake, rust, rustPlatform
 , pkgconfig, openssl
 , which, libffi
 , withBundledLLVM ? false
@@ -12,12 +12,12 @@ let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
-  llvmSharedForBuild = pkgsBuildBuild.llvm_7.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvm_7.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvm_7.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = pkgsBuildBuild.llvm_9.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvm_9.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvm_9.override { enableSharedLibraries = true; };
 
   # For use at runtime
-  llvmShared = llvm_7.override { enableSharedLibraries = true; };
+  llvmShared = llvm_9.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
   inherit version;
@@ -53,9 +53,9 @@ in stdenv.mkDerivation rec {
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = let
-    setBuild  = "--set=target.${stdenv.buildPlatform.config}";
-    setHost   = "--set=target.${stdenv.hostPlatform.config}";
-    setTarget = "--set=target.${stdenv.targetPlatform.config}";
+    setBuild  = "--set=target.${rust.toRustTarget stdenv.buildPlatform}";
+    setHost   = "--set=target.${rust.toRustTarget stdenv.hostPlatform}";
+    setTarget = "--set=target.${rust.toRustTarget stdenv.targetPlatform}";
     ccForBuild  = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}cc";
     cxxForBuild = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}c++";
     ccForHost  = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}cc";
@@ -68,9 +68,9 @@ in stdenv.mkDerivation rec {
     "--set=build.cargo=${rustPlatform.rust.cargo}/bin/cargo"
     "--enable-rpath"
     "--enable-vendor"
-    "--build=${stdenv.buildPlatform.config}"
-    "--host=${stdenv.hostPlatform.config}"
-    "--target=${stdenv.targetPlatform.config}"
+    "--build=${rust.toRustTarget stdenv.buildPlatform}"
+    "--host=${rust.toRustTarget stdenv.hostPlatform}"
+    "--target=${rust.toRustTarget stdenv.targetPlatform}"
 
     "${setBuild}.cc=${ccForBuild}"
     "${setHost}.cc=${ccForHost}"

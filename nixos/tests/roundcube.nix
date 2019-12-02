@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       services.roundcube = {
         enable = true;
         hostName = "roundcube";
-        database.password = "notproduction";
+        database.password = "not production";
         package = pkgs.roundcube.withPlugins (plugins: [ plugins.persistent_login ]);
         plugins = [ "persistent_login" ];
       };
