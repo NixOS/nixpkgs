@@ -873,7 +873,7 @@
     "zengge" = ps: with ps; [  ];
     "zeroconf" = ps: with ps; [ aiohttp-cors zeroconf ];
     "zestimate" = ps: with ps; [ xmltodict ];
-    "zha" = ps: with ps; [  ];
+    "zha" = ps: with ps; [ zigpy zigpy-deconz zha-quirks ];
     "zhong_hong" = ps: with ps; [  ];
     "zigbee" = ps: with ps; [  ];
     "ziggo_mediabox_xl" = ps: with ps; [  ];
