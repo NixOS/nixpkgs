@@ -6,12 +6,13 @@
 let
   buildGawkextlibExtension = extension: extraDeps:
     stdenv.mkDerivation rec {
-      name = "gawkextlib-${extension}-2019-11-21";
+      pname = "gawkextlib-${extension}";
+      version = "unstable-2019-11-21";
 
       src = fetchgit {
         url = "git://git.code.sf.net/p/gawkextlib/code";
         rev = "f70f10da2804e4fd0a0bac57736e9c1cf21e345d";
-        sha256 = "sha256-M3bBjOp8OrrOosEDScEgJUEFJPYApaC/do3QYRP6DmU=";
+        sha256 = "0r8fz89n3l4dfszs1980yqj0ah95430lj0y1lb7blfkwxa6c2xik";
       };
 
       nativeBuildInputs =
@@ -64,7 +65,7 @@ let
       };
     };
   gawkextlib = (buildGawkextlibExtension "lib" []).overrideAttrs (old: {
-    configureFlags = null;
+    configureFlags = [];
     buildInputs = [ gawk ];
     postInstall = ''
       cp ../lib/gawkextlib.h $out/lib/.

@@ -1,4 +1,4 @@
-{ runCommand, gawk, extensions ? [ ], makeWrapper }:
+{ runCommand, gawk, extensions ? [], makeWrapper }:
 
 runCommand "gawk-with-extensions" {
   buildInputs = [ makeWrapper gawk ] ++ extensions;
@@ -7,6 +7,6 @@ runCommand "gawk-with-extensions" {
   for i in ${gawk}/bin/*; do
     name="$(basename "$i")"
     makeWrapper $i $out/bin/$name \
-      --suffix AWKLIBPATH : "${gawk}/lib/gawk:''${AWKLIBPATH:-}"
+      --prefix AWKLIBPATH : "${gawk}/lib/gawk:''${AWKLIBPATH:-}"
   done
 ''
