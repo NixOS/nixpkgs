@@ -629,6 +629,8 @@ let
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
+    phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
+
     piqi = callPackage ../development/ocaml-modules/piqi {
       base64 = base64_2;
     };
