@@ -18,7 +18,8 @@ let
       nativeBuildInputs =
         [ autoconf automake libtool autoreconfHook pkgconfig texinfo gettext ];
 
-      buildInputs = [ gawk gawkextlib ] ++ extraDeps;
+      buildInputs = [ gawk ] ++ extraDeps;
+      propagatedBuildInputs = [ gawkextlib ];
 
       configureFlags = [
         "--with-gawkextlib=${gawkextlib}/lib/"
@@ -57,10 +58,12 @@ let
     };
   gawkextlib = (buildGawkextlibExtension "lib" []).overrideAttrs (old: {
     configureFlags = [];
-    buildInputs = [ gawk ];
+    propagatedBuildInputs = [];
     postInstall = ''
       cp ../lib/gawkextlib.h $out/lib/.
     '';
+    setupHook = ./setup-hook-extlib.sh;
+    awklibpath = "${gawk}/lib/gawk";
   });
 in {
 
@@ -82,11 +85,5 @@ in {
   redis       = buildGawkextlibExtension "redis"       [ hiredis      ];
   xml         = buildGawkextlibExtension "xml"         [ expat        ];
   timex       = buildGawkextlibExtension "timex"       [              ];
-
-  select = (buildGawkextlibExtension "select" [ more ]).overrideAttrs (old: {
-    # Needed for tests
-    preCheck = ''
-      AWKLIBPATH=${gawk}/lib/gawk
-    '';
-  });
+  select      = buildGawkextlibExtension "select"      [ more         ];
 }
