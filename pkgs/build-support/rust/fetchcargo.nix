@@ -18,9 +18,9 @@ let cargo-vendor-normalise = stdenv.mkDerivation {
 };
 in
 { name ? "cargo-deps"
-, src
-, srcs
-, patches
+, src ? null
+, srcs ? []
+, patches ? []
 , sourceRoot
 , sha256
 , cargoUpdateHook ? ""
