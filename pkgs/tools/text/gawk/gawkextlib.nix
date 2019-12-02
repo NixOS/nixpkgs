@@ -37,6 +37,7 @@ let
       '';
 
       setupHook = ./setup-hook.sh;
+      inherit gawk;
 
       doCheck = stdenv.isLinux;
 
@@ -62,8 +63,6 @@ let
     postInstall = ''
       cp ../lib/gawkextlib.h $out/lib/.
     '';
-    setupHook = ./setup-hook-extlib.sh;
-    awklibpath = "${gawk}/lib/gawk";
   });
 in {
 
