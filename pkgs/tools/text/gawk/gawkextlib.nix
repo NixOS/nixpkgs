@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, writeText, pkgconfig, autoreconfHook, autoconf, automake
+{ stdenv, recurseIntoAttrs, fetchgit, writeText, pkgconfig, autoreconfHook, autoconf, automake
 , libtool, texinfo, gettext, gawk, rapidjson, gd, shapelib, libharu, lmdb, gmp
 , glibcLocales, mpfr, more, postgresql, hiredis, expat, tre, makeWrapper
 }:
@@ -18,12 +18,8 @@ let
       nativeBuildInputs =
         [ autoconf automake libtool autoreconfHook pkgconfig texinfo gettext ];
 
-      buildInputs = [
-        gawk
-        gawkextlib
-        #rapidjson gd shapelib libharu
-        #lmdb gmp mpfr postgresql hiredis expat tre
-      ] ++ extraDeps;
+      buildInputs = [ gawk gawkextlib ] ++ extraDeps;
+
       configureFlags = [
         "--with-gawkextlib=${gawkextlib}/lib/"
         "LDFLAGS=-L${gawkextlib}/lib"
@@ -33,6 +29,7 @@ let
         cd ${extension}
       '';
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/lib
         cp ./.libs/* $out/lib
         runHook postInstall
@@ -42,9 +39,7 @@ let
       preCheck = ''
         AWKLIBPATH=${gawk}/lib/gawk
       '';
-      setupHook = writeText "setupHook.sh" ''
-        export AWKLIBPATH="''${AWKLIBPATH-}''${AWKLIBPATH:+:}"@out@/lib
-      '';
+      setupHook = ./setup-hook.sh;
 
       doCheck = stdenv.isLinux;
 
@@ -71,10 +66,10 @@ let
       cp ../lib/gawkextlib.h $out/lib/.
     '';
   });
-in {
+in recurseIntoAttrs {
 
   # callPackage injects extra items into the root attrSet
-  full = {
+  extensions = {
     inherit gawkextlib;
 
     abort       = buildGawkextlibExtension "abort"       [              ];
