@@ -1,20 +1,25 @@
-{ stdenv, fetchurl, buildDunePackage, sexplib, ppx_sexp_conv }:
+{ stdenv, fetchurl, buildDunePackage, ocaml
+, macaddr, ounit, sexplib
+}:
 
 buildDunePackage rec {
   pname = "ipaddr";
-  version = "2.8.0";
+  version = "3.1.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-${pname}/archive/${version}.tar.gz";
-    sha256 = "1amb1pbm9ybpxy6190qygpj6nmbzzs2r6vx4xh5r6v89szx9rfxw";
+    url = "https://github.com/mirage/ocaml-${pname}/archive/v${version}.tar.gz";
+    sha256 = "1hi3v5dzg6h4qb268ch3h6v61gsc8bv21ajhb35z37v5nsdmyzbh";
   };
 
-  propagatedBuildInputs = [ ppx_sexp_conv sexplib ];
+  buildInputs = [ macaddr ounit sexplib ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mirage/ocaml-ipaddr;
     description = "A library for manipulation of IP (and MAC) address representations ";
     license = licenses.isc;
-    maintainers = [ maintainers.ericbmerritt ];
+    inherit (ocaml.meta) platforms;
+    maintainers = with maintainers; [ alexfmpe ericbmerritt ];
   };
 }
