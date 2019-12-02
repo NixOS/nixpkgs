@@ -206,6 +206,14 @@
      <option>hardware.bluetooth.enable</option>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>dump1090</literal> derivation has been changed to use FlightAware's dump1090
+     as its upstream. However, this version does not have an internal webserver anymore. The
+     assets in the <literal>share/dump1090</literal> directory of the derivation can be used
+     in conjunction with an external webserver to replace this functionality.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
