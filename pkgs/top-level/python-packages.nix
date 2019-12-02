@@ -6597,6 +6597,8 @@ in {
 
   crccheck = callPackage ../development/python-modules/crccheck { };
 
+  zha-quirks = callPackage ../development/python-modules/zha-quirks { };
+
   zigpy-deconz = callPackage ../development/python-modules/zigpy-deconz { };
 
 });
