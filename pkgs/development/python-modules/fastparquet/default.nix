@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, numba, numpy, pandas, pytestrunner,
+{ lib, buildPythonPackage, fetchFromGitHub, numba, numpy, pandas, pytestrunner,
 thrift, pytest, python-snappy, lz4 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
   version = "0.3.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d81dcec444f4c4829234b9baac57c7125b8fbe9119c2eca2dee922650db49205";
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = pname;
+    rev = version;
+    sha256 = "142kmyddaq6mvmca23abwns1csn8f3lk9c8mbxwxrg4wa1dh0lb4";
   };
 
   postPatch = ''
@@ -19,9 +21,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ numba numpy pandas thrift ];
   checkInputs = [ pytest python-snappy lz4 ];
-
-  # test_data/ missing in PyPI tarball
-  doCheck = false;
 
   meta = with lib; {
     description = "A python implementation of the parquet format";
