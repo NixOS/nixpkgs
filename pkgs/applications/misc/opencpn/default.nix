@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencpn-unstable";
-  version = "2019-05-15";
+  version = "2019-11-21";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
-    rev = "83a3c4b5ff011d4eb070f009e0a46d194b177047";
-    sha256 = "00s1mxnkf1gg41hrz0zp8ypkp98py0m1c22im2zd09k6lcddxw5p";
+    rev = "e73dc935545b2bbcf193cc61d987a0178c52d7a7";
+    sha256 = "0yiqahkzwcbzgabc5xgxmwlngapkfiaqyva3mwz29xj0c5lg2bdk";
   };
 
   nativeBuildInputs = [ pkgconfig ];

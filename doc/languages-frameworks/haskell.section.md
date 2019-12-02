@@ -25,14 +25,14 @@ avoided that by keeping all Haskell-related packages in a separate attribute
 set called `haskellPackages`, which the following command will list:
 ```
 $ nix-env -f "<nixpkgs>" -qaP -A haskellPackages
-haskellPackages.a50         a50-0.5
-haskellPackages.abacate     haskell-abacate-0.0.0.0
-haskellPackages.abcBridge   haskell-abcBridge-0.12
-haskellPackages.afv         afv-0.1.1
-haskellPackages.alex        alex-3.1.4
-haskellPackages.Allure      Allure-0.4.101.1
-haskellPackages.alms        alms-0.6.7
-[... some 8000 entries omitted  ...]
+haskellPackages.a50                                             a50-0.5
+haskellPackages.AAI                                             AAI-0.2.0.1
+haskellPackages.abacate                                         abacate-0.0.0.0
+haskellPackages.abc-puzzle                                      abc-puzzle-0.2.1
+haskellPackages.abcBridge                                       abcBridge-0.15
+haskellPackages.abcnotation                                     abcnotation-1.9.0
+haskellPackages.abeson                                          abeson-0.1.0.1
+[... some 14000 entries omitted  ...]
 ```
 
 To install any of those packages into your profile, refer to them by their
@@ -101,19 +101,21 @@ to compile your Haskell packages with any GHC version you please. The following
 command displays the complete list of available compilers:
 ```
 $ nix-env -f "<nixpkgs>" -qaP -A haskell.compiler
-haskell.compiler.ghc6104        ghc-6.10.4
-haskell.compiler.ghc6123        ghc-6.12.3
-haskell.compiler.ghc704         ghc-7.0.4
-haskell.compiler.ghc722         ghc-7.2.2
-haskell.compiler.ghc742         ghc-7.4.2
-haskell.compiler.ghc763         ghc-7.6.3
-haskell.compiler.ghc784         ghc-7.8.4
-haskell.compiler.ghc7102        ghc-7.10.2
-haskell.compiler.ghcHEAD        ghc-7.11.20150402
-haskell.compiler.ghcNokinds     ghc-nokinds-7.11.20150704
-haskell.compiler.ghcjs          ghcjs-0.1.0
-haskell.compiler.jhc            jhc-0.8.2
-haskell.compiler.uhc            uhc-1.1.9.0
+haskell.compiler.ghc822                  ghc-8.2.2
+haskell.compiler.integer-simple.ghc822   ghc-8.2.2
+haskell.compiler.ghc822Binary            ghc-8.2.2-binary
+haskell.compiler.ghc844                  ghc-8.4.4
+haskell.compiler.ghc863Binary            ghc-8.6.3-binary
+haskell.compiler.ghc864                  ghc-8.6.4
+haskell.compiler.integer-simple.ghc864   ghc-8.6.4
+haskell.compiler.ghc865                  ghc-8.6.5
+haskell.compiler.integer-simple.ghc865   ghc-8.6.5
+haskell.compiler.ghc881                  ghc-8.8.1
+haskell.compiler.integer-simple.ghc881   ghc-8.8.1
+haskell.compiler.ghcHEAD                 ghc-8.9.20190601
+haskell.compiler.integer-simple.ghcHEAD  ghc-8.9.20190601
+haskell.compiler.ghcjs84                 ghcjs-8.4.0.1
+haskell.compiler.ghcjs                   ghcjs-8.6.0.1
 ```
 
 We have no package sets for `jhc` or `uhc` yet, unfortunately, but for every

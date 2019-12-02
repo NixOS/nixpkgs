@@ -163,6 +163,57 @@
      time during the releases development (if viable).
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <link linkend="opt-services.phpfpm.pools">phpfpm</link> module now sets
+      <literal>PrivateTmp=true</literal> in its systemd units for better process isolation.
+      If you rely on <literal>/tmp</literal> being shared with other services, explicitly override this by
+      setting <literal>serviceConfig.PrivateTmp</literal> to <literal>false</literal> for each phpfpm unit.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     KDE’s old multimedia framework Phonon no longer supports Qt 4. For that reason, Plasma desktop also does not have <option>enableQt4Support</option> option any more.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The BeeGFS module has been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The osquery module has been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Going forward, <literal>~/bin</literal> in the users home directory will no longer be in <literal>PATH</literal> by default.
+      If you depend on this you should set the option <literal>environment.homeBinInPath</literal> to <literal>true</literal>.
+      The aforementioned option was added this release.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>buildRustCrate</literal> infrastructure now produces <literal>lib</literal> outputs in addition to the <literal>out</literal> output.
+      This has led to drastically reduced closed sizes for some rust crates since development dependencies are now in the <literal>lib</literal> output.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The packages <literal>openobex</literal> and <literal>obexftp</literal>
+     are no loger installed when enabling bluetooth via
+     <option>hardware.bluetooth.enable</option>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>dump1090</literal> derivation has been changed to use FlightAware's dump1090
+     as its upstream. However, this version does not have an internal webserver anymore. The
+     assets in the <literal>share/dump1090</literal> directory of the derivation can be used
+     in conjunction with an external webserver to replace this functionality.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

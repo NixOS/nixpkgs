@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Adds i18n/l10n support to Flask applications";
-    homepage = http://github.com/mrjoes/flask-babelex;
+    homepage = https://github.com/mrjoes/flask-babelex;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub
-, cmake, freetype, libpng, libGLU_combined, openssl, perl, libiconv
+, cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
 , qtscript, qtserialport, qttools
 , qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
 }:
@@ -18,7 +18,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
 
   buildInputs = [
-    freetype libpng libGLU_combined openssl libiconv qtscript qtserialport qttools
+    freetype libpng libGLU libGL openssl libiconv qtscript qtserialport qttools
     qtmultimedia qtlocation qtbase
   ];
 

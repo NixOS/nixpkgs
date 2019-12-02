@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU_combined, glew, pkgconfig, openalSoft, freealut, wxGTK, libogg
+{ stdenv, fetchurl, libGLU, libGL, glew, pkgconfig, openalSoft, freealut, wxGTK, libogg
 , freetype, libvorbis, fftwSinglePrec, SDL, SDL_net, expat, libjpeg, libpng }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ libGLU_combined glew openalSoft freealut wxGTK libogg freetype libvorbis
+    [ libGLU libGL glew openalSoft freealut wxGTK libogg freetype libvorbis
       SDL SDL_net expat libjpeg libpng fftwSinglePrec
     ];
 

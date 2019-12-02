@@ -9,6 +9,7 @@
 , makeDesktopItem
 , tzdata
 , cacert
+, dconf
 , glib
 , gtk2
 , atk
@@ -137,7 +138,7 @@ let
         gdk-pixbuf
         cairo
         pango
-        gnome3.dconf
+        dconf
         xorg.libX11
         xorg.libXext
         xorg.libXrender

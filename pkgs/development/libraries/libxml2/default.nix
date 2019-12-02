@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.9.9";
+  version = "2.9.10";
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
-    sha256 = "0wd881jzvqayx0ihzba29jl80k06xj9ywp16kxacdqs3064p1ywl";
+    sha256 = "07xynh8hcxb2yb1fs051xrgszjvj37wnxvxgsj10rzmqzy9y3zma";
   };
   patches = [
     # Upstream bugs:
@@ -52,6 +52,12 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  # disable test that's problematic with newer pythons: see
+  # https://mail.gnome.org/archives/xml/2017-August/msg00014.html
+  preCheck = lib.optionalString (pythonSupport && !(python?pythonOlder && python.pythonOlder "3.5")) ''
+    echo "" > python/tests/tstLastError.py
+  '';
 
   doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
     stdenv.hostPlatform.libc != "musl";

@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages, windows }:
+{ stdenv, cacert, git, rust, cargo, rustc, fetchcargo, buildPackages, windows }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
@@ -46,12 +46,7 @@ let
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
-  hostConfig = stdenv.hostPlatform.config;
-
-  rustHostConfig = {
-    x86_64-pc-mingw32 = "x86_64-pc-windows-gnu";
-  }.${hostConfig} or hostConfig;
-  rustTarget = if target == null then rustHostConfig else target;
+  rustTarget = if target == null then rust.toRustTarget stdenv.hostPlatform else target;
 
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
@@ -87,7 +82,7 @@ stdenv.mkDerivation (args // {
       --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
     cat >> .cargo/config <<'EOF'
-    [target."${stdenv.buildPlatform.config}"]
+    [target."${rust.toRustTarget stdenv.buildPlatform}"]
     "linker" = "${ccForBuild}"
     ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
     [target."${rustTarget}"]
@@ -129,10 +124,10 @@ stdenv.mkDerivation (args // {
     (
     set -x
     env \
-      "CC_${stdenv.buildPlatform.config}"="${ccForBuild}" \
-      "CXX_${stdenv.buildPlatform.config}"="${cxxForBuild}" \
-      "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
-      "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
+      "CC_${rust.toRustTarget stdenv.buildPlatform}"="${ccForBuild}" \
+      "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
+      "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
+      "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
       cargo build \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
         --target ${rustTarget} \

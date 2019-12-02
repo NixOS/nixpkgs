@@ -1,5 +1,5 @@
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "ferm";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ mic92 ];
@@ -53,24 +53,22 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript =
     ''
-      startAll;
+      start_all()
 
-      $client->waitForUnit("network-online.target");
-      $server->waitForUnit("ferm.service");
-      $server->waitForUnit("nginx.service");
-      $server->waitUntilSucceeds("ss -ntl | grep -q 80");
+      client.wait_for_unit("network-online.target")
+      server.wait_for_unit("ferm.service")
+      server.wait_for_unit("nginx.service")
+      server.wait_until_succeeds("ss -ntl | grep -q 80")
 
-      subtest "port 80 is allowed", sub {
-          $client->succeed("curl --fail -g http://192.168.1.1:80/status");
-          $client->succeed("curl --fail -g http://[fd00::1]:80/status");
-      };
+      with subtest("port 80 is allowed"):
+          client.succeed("curl --fail -g http://192.168.1.1:80/status")
+          client.succeed("curl --fail -g http://[fd00::1]:80/status")
 
-      subtest "port 8080 is not allowed", sub {
-          $server->succeed("curl --fail -g http://192.168.1.1:8080/status");
-          $server->succeed("curl --fail -g http://[fd00::1]:8080/status");
+      with subtest("port 8080 is not allowed"):
+          server.succeed("curl --fail -g http://192.168.1.1:8080/status")
+          server.succeed("curl --fail -g http://[fd00::1]:8080/status")
 
-          $client->fail("curl --fail -g http://192.168.1.1:8080/status");
-          $client->fail("curl --fail -g http://[fd00::1]:8080/status");
-      };
+          client.fail("curl --fail -g http://192.168.1.1:8080/status")
+          client.fail("curl --fail -g http://[fd00::1]:8080/status")
     '';
 })

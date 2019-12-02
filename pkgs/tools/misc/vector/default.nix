@@ -6,20 +6,31 @@
     (if stdenv.isAarch64
      then [ "jemallocator" ]
      else [ "leveldb" "jemallocator" ])
+
+# Unfortunately, buildRustPackage does not really support using overrideAttrs
+# on the underlying fields, because it doesn't pass them to stdenv.mkDerivation
+# as an attr. making it a parameter is the only way to do so. sigh
+
+, version ? "0.5.0"
+
+, srcRef ? {
+    rev    = "refs/tags/v${version}";
+    sha256 = "0niyxlvphn3awrpfh1hbqy767cckgjzyjrkqjxj844czxhh1hhff";
+  }
+
+, cargoSha256 ? "0bdgan891hrah54g6aaysqizkxrfsbidnxihai0i7h7knzq9gsk5"
+, patches ? []
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vector";
-  version = "0.5.0";
-
+  inherit version cargoSha256 patches;
   src = fetchFromGitHub {
-    owner  = "timberio";
-    repo   = pname;
-    rev    = "refs/tags/v${version}";
-    sha256 = "0niyxlvphn3awrpfh1hbqy767cckgjzyjrkqjxj844czxhh1hhff";
+    owner = "timberio";
+    repo  = pname;
+    inherit (srcRef) rev sha256;
   };
 
-  cargoSha256 = "0bdgan891hrah54g6aaysqizkxrfsbidnxihai0i7h7knzq9gsk5";
   buildInputs = [ openssl pkgconfig protobuf ]
                 ++ stdenv.lib.optional stdenv.isDarwin [ Security libiconv ];
 

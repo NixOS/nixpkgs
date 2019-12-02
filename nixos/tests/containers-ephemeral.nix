@@ -1,6 +1,6 @@
 # Test for NixOS' container support.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "containers-ephemeral";
 
   machine = { pkgs, ... }: {
@@ -16,10 +16,10 @@ import ./make-test.nix ({ pkgs, ...} : {
         services.nginx = {
           enable = true;
           virtualHosts.localhost = {
-            root = (pkgs.runCommand "localhost" {} ''
+            root = pkgs.runCommand "localhost" {} ''
               mkdir "$out"
               echo hello world > "$out/index.html"
-            '');
+            '';
           };
         };
         networking.firewall.allowedTCPPorts = [ 80 ];
@@ -28,29 +28,27 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    $machine->succeed("nixos-container list") =~ /webserver/ or die;
+    assert "webserver" in machine.succeed("nixos-container list")
 
-    # Start the webserver container.
-    $machine->succeed("nixos-container start webserver");
+    machine.succeed("nixos-container start webserver")
 
-    # Check that container got its own root folder
-    $machine->succeed("ls /run/containers/webserver");
+    with subtest("Container got its own root folder"):
+        machine.succeed("ls /run/containers/webserver")
 
-    # Check that container persistent directory is not created
-    $machine->fail("ls /var/lib/containers/webserver");
+    with subtest("Container persistent directory is not created"):
+        machine.fail("ls /var/lib/containers/webserver")
 
     # Since "start" returns after the container has reached
     # multi-user.target, we should now be able to access it.
-    my $ip = $machine->succeed("nixos-container show-ip webserver");
-    chomp $ip;
-    $machine->succeed("ping -n -c1 $ip");
-    $machine->succeed("curl --fail http://$ip/ > /dev/null");
+    ip = machine.succeed("nixos-container show-ip webserver").rstrip()
+    machine.succeed(f"ping -n -c1 {ip}")
+    machine.succeed(f"curl --fail http://{ip}/ > /dev/null")
 
-    # Stop the container.
-    $machine->succeed("nixos-container stop webserver");
-    $machine->fail("curl --fail --connect-timeout 2 http://$ip/ > /dev/null");
+    with subtest("Stop the container"):
+        machine.succeed("nixos-container stop webserver")
+        machine.fail(f"curl --fail --connect-timeout 2 http://{ip}/ > /dev/null")
 
-    # Check that container's root folder was removed
-    $machine->fail("ls /run/containers/webserver");
+    with subtest("Container's root folder was removed"):
+        machine.fail("ls /run/containers/webserver")
   '';
 })

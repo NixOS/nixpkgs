@@ -3,8 +3,6 @@
 lib.makeScope pkgs.newScope (self: with self; {
   #### NixOS support
 
-  inherit (pkgs.gnome3) dconf;
-
   mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
   automakeAddFlags = pkgs.makeSetupHook { } ./automakeAddFlags.sh;
@@ -217,4 +215,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   thunar-bare = thunar.override {
     thunarPlugins = [];
   };
+
+  # added 2019-11-30
+  inherit (pkgs) dconf;
 })
