@@ -51,9 +51,8 @@ stdenv.mkDerivation rec {
       conversions for values passed between the two languages.
     '';
     homepage = http://sourceware.org/libffi/;
-    # See https://github.com/atgreen/libffi/blob/master/LICENSE .
-    license = licenses.free;
-    maintainers = [ ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
   };
 }
