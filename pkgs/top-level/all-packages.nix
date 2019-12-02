@@ -3394,11 +3394,9 @@ in
   };
 
   gawk-with-extensions = callPackage ../tools/text/gawk/gawk-with-extensions.nix {
-    extensions = let
-      gawkextlib = callPackage ../tools/text/gawk/gawkextlib.nix {};
-      in
-        builtins.attrValues gawkextlib.extensions;
+    extensions = gawkextlib;
   };
+  gawkextlib = callPackage ../tools/text/gawk/gawkextlib.nix {};
 
   gawkInteractive = appendToName "interactive"
     (gawk.override { interactive = true; });

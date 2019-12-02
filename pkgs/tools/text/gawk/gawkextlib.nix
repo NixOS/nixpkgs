@@ -1,4 +1,4 @@
-{ stdenv, recurseIntoAttrs, fetchgit, writeText, pkgconfig, autoreconfHook, autoconf, automake
+{ stdenv, fetchgit, writeText, pkgconfig, autoreconfHook, autoconf, automake
 , libtool, texinfo, gettext, gawk, rapidjson, gd, shapelib, libharu, lmdb, gmp
 , glibcLocales, mpfr, more, postgresql, hiredis, expat, tre, makeWrapper
 }:
@@ -35,10 +35,6 @@ let
         runHook postInstall
       '';
 
-      # Needed for some tests
-      preCheck = ''
-        AWKLIBPATH=${gawk}/lib/gawk
-      '';
       setupHook = ./setup-hook.sh;
 
       doCheck = stdenv.isLinux;
@@ -66,32 +62,31 @@ let
       cp ../lib/gawkextlib.h $out/lib/.
     '';
   });
-in recurseIntoAttrs {
+in {
 
-  # callPackage injects extra items into the root attrSet
-  extensions = {
-    inherit gawkextlib;
+# callPackage injects extra items into the root attrSet
+  inherit gawkextlib;
 
-    abort       = buildGawkextlibExtension "abort"       [              ];
-    aregex      = buildGawkextlibExtension "aregex"      [ tre          ];
-    csv         = buildGawkextlibExtension "csv"         [              ];
-    errno       = buildGawkextlibExtension "errno"       [              ];
-    gd          = buildGawkextlibExtension "gd"          [ gd more      ];
-    haru        = buildGawkextlibExtension "haru"        [ libharu      ];
-    json        = buildGawkextlibExtension "json"        [ rapidjson    ];
-    lmdb        = buildGawkextlibExtension "lmdb"        [ lmdb         ];
-    mbs         = buildGawkextlibExtension "mbs"         [ glibcLocales ];
-    mpfr        = buildGawkextlibExtension "mpfr"        [ gmp mpfr     ];
-    nl_langinfo = buildGawkextlibExtension "nl_langinfo" [              ];
-    pgsql       = buildGawkextlibExtension "pgsql"       [ postgresql   ];
-    select      = buildGawkextlibExtension "select"      [ more         ];
-    xml         = buildGawkextlibExtension "xml"         [ expat        ];
-    timex       = buildGawkextlibExtension "timex"       [              ];
+  abort       = buildGawkextlibExtension "abort"       [              ];
+  aregex      = buildGawkextlibExtension "aregex"      [ tre          ];
+  csv         = buildGawkextlibExtension "csv"         [              ];
+  errno       = buildGawkextlibExtension "errno"       [              ];
+  gd          = buildGawkextlibExtension "gd"          [ gd more      ];
+  haru        = buildGawkextlibExtension "haru"        [ libharu      ];
+  json        = buildGawkextlibExtension "json"        [ rapidjson    ];
+  lmdb        = buildGawkextlibExtension "lmdb"        [ lmdb         ];
+  mbs         = buildGawkextlibExtension "mbs"         [ glibcLocales ];
+  mpfr        = buildGawkextlibExtension "mpfr"        [ gmp mpfr     ];
+  nl_langinfo = buildGawkextlibExtension "nl_langinfo" [              ];
+  pgsql       = buildGawkextlibExtension "pgsql"       [ postgresql   ];
+  redis       = buildGawkextlibExtension "redis"       [ hiredis      ];
+  xml         = buildGawkextlibExtension "xml"         [ expat        ];
+  timex       = buildGawkextlibExtension "timex"       [              ];
 
-    redis = (buildGawkextlibExtension "redis" [ hiredis ]).overrideAttrs
-      (old: {
-        configureFlags = old.configureFlags
-          ++ [ "--with-hiredis=${hiredis}/lib/" ];
-      });
-  };
+  select = (buildGawkextlibExtension "select" [ more ]).overrideAttrs (old: {
+    # Needed for tests
+    preCheck = ''
+      AWKLIBPATH=${gawk}/lib/gawk
+    '';
+  });
 }
