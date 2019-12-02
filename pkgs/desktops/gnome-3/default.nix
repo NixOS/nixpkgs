@@ -14,10 +14,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   */
   removePackagesByName = packages: packagesToRemove:
     let
-      pkgName = drv: (builtins.parseDrvName drv.name).name;
-      namesToRemove = map pkgName packagesToRemove;
+      namesToRemove = map lib.getName packagesToRemove;
     in
-      lib.filter (x: !(builtins.elem (pkgName x) namesToRemove)) packages;
+      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
 
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning worldofpeace ];
 
@@ -36,7 +35,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   caribou = callPackage ./core/caribou { };
 
-  dconf = callPackage ./core/dconf { };
   dconf-editor = callPackage ./core/dconf-editor { };
 
   empathy = callPackage ./core/empathy { };
@@ -360,4 +358,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) gjs; # added 2019-01-05
 
   inherit (pkgs) yelp-tools; # added 2019-11-20
+
+  inherit (pkgs) dconf; # added 2019-11-30
 })

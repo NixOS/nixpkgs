@@ -11,6 +11,14 @@
 , llvmPackages_5
 , pkgsBuildTarget, pkgsBuildBuild
 }: rec {
+  toRustTarget = platform: with platform.parsed; let
+    cpu_ = {
+      "armv7a" = "armv7";
+      "armv7l" = "armv7";
+      "armv6l" = "arm";
+    }.${cpu.name} or cpu.name;
+  in "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+
   makeRustPlatform = { rustc, cargo, ... }: {
     rust = {
       inherit rustc cargo;

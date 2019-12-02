@@ -12,6 +12,7 @@
 , six
 , pytest
 , isPy27
+, tifffile
 }:
 
 buildPythonPackage rec {
@@ -31,14 +32,16 @@ buildPythonPackage rec {
     requests
     scikitimage
     six
+    tifffile
   ] ++ lib.optionals isPy27 [ pathlib enum34 ];
 
   checkInputs = [
     pytest
   ];
 
+  # ignore tests which require setup
   checkPhase = ''
-    pytest
+    pytest --ignore tests/io_
   '';
 
   meta = with lib; {

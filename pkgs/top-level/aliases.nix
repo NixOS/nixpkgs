@@ -47,6 +47,7 @@ mapAliases ({
   at_spi2_core = at-spi2-core; # added 2018-02-25
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
+  beegfs = throw "beegfs has been removed."; # added 2019-11-24
   bridge_utils = bridge-utils;  # added 2015-02-20
   bro = zeek; # added 2019-09-29
   btrfsProgs = btrfs-progs; # added 2016-01-03
@@ -114,8 +115,10 @@ mapAliases ({
   '';
   font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
+  fprintd-thinkpad = throw "removed from repository 2019-12-01: Install it manually with an override.";
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
+  fusesmb = throw "fusesmb is abandoned by upstream"; # added 2019-10-15
   gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
@@ -191,6 +194,7 @@ mapAliases ({
   liberation_ttf_v1_from_source = liberation_ttf_v1; # added 2018-12-12
   liberation_ttf_v2_from_source = liberation_ttf_v2; # added 2018-12-12
   liberationsansnarrow = liberation-sans-narrow; # added 2018-12-12
+  libfprint-thinkpad = throw "removed from repository 2019-12-01: Install it manually with an override.";
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
@@ -260,6 +264,7 @@ mapAliases ({
   openjpeg_2_1 = openjpeg_2; # added 2018-10-25
   opensans-ttf = open-sans; # added 2018-12-04
   openssh_with_kerberos = openssh; # added 2018-01-28
+  osquery = throw "osquery has been removed."; # added 2019-11-24
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
   parquet-cpp = arrow-cpp; # added 2018-09-08
@@ -337,6 +342,8 @@ mapAliases ({
   s6PortableUtils = s6-portable-utils; # added 2018-07-23
   sagemath = sage; # added 2018-10-27
   sam = deadpixi-sam; # added 2018-04-25
+  samba3 = throw "Samba 3 is discontinued, please switch to samba4"; # added 2019-10-15
+  samba3_light = throw "Samba 3 is discontinued, please switch to samba4"; # added 2019-10-15
   sambaMaster = throw "removed 2019-09-13: outdated and no longer needed";
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02

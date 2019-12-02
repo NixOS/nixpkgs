@@ -739,6 +739,9 @@ let
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # Enables support for the Allwinner Display Engine 2.0
       SUN8I_DE2_CCU = whenAtLeast "4.13" yes;
+
+      # See comments on https://github.com/NixOS/nixpkgs/commit/9b67ea9106102d882f53d62890468071900b9647
+      CRYPTO_AEGIS128_SIMD = no;
     };
   };
 in

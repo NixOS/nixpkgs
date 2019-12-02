@@ -35,13 +35,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1whdx0vgm0qbbzsw8dg2liz3cbh3ad5ybkriy4lmx5ynyhpbz0sx";
+    sha256 = "0y8lfrrkzcj8nw94jqawbxr4jz41ac0z539kkr3n3x0qmx72md2y";
   };
 
   passthru = {

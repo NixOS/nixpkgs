@@ -1,4 +1,4 @@
-{ wxGTK, lib, stdenv, fetchurl, fetchFromGitHub, cmake, libGLU_combined, zlib
+{ wxGTK, lib, stdenv, fetchurl, fetchFromGitHub, cmake, libGLU, libGL, zlib
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
 , wrapGAppsHook
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pythonPackages.wxPython ];
 
   buildInputs = [
-    libGLU_combined zlib libX11 wxGTK pcre libXdmcp glew glm libpthreadstubs
+    libGLU libGL zlib libX11 wxGTK pcre libXdmcp glew glm libpthreadstubs
     cairo curl openssl boost
     swig (python.withPackages (ps: with ps; [ wxPython ]))
   ] ++ optional (oceSupport) opencascade

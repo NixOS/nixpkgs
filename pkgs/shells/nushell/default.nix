@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "0_5_0";
-    sha256 = "1s60w29c8sv0a4nmpggls9pkqyfrwwxjzd65p68d1xxxsdb36rzj";
+    rev = version;
+    sha256 = "0fdi5c9l8ij2vqcxwi9203mh1qj3lcqsl4kl2rkshqj45hn4ab2a";
   };
 
-  cargoSha256 = "0b8alc3si6y4xmn812izknbkfkz64kz7kcnq4xaqws6iqn7pqidp";
+  cargoSha256 = "11cr88jmy34lzjka7agzfvm13hvg66ksa735rzcdx7lcxha538f3";
 
   nativeBuildInputs = [ pkg-config ]
     ++ stdenv.lib.optionals (withAllFeatures && stdenv.isLinux) [ python3 ];
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     ++ stdenv.lib.optionals (withAllFeatures && stdenv.isLinux) [ xorg.libX11 ]
     ++ stdenv.lib.optionals (withAllFeatures && stdenv.isDarwin) [ AppKit ];
 
-  cargoBuildFlags = stdenv.lib.optionals withAllFeatures [ "--features" "all" ];
+  cargoBuildFlags = stdenv.lib.optional withAllFeatures "--all-features";
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ filalex77 marsam ];
   };
 
   passthru = {

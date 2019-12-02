@@ -1484,6 +1484,16 @@
       }
     ];
   };
+  d-goldin = {
+    email = "dgoldin+github@protonmail.ch";
+    github = "d-goldin";
+    githubId = 43349662;
+    name = "Dima";
+    keys = [{
+      longkeyid = "rsa4096/BAB1D15FB7B4D4CE";
+      fingerprint = "1C4E F4FE 7F8E D8B7 1E88 CCDF BAB1 D15F B7B4 D4CE";
+    }];
+  };
   dadada = {
     name = "dadada";
     email = "dadada@dadada.li";
@@ -3601,6 +3611,12 @@
     github = "klntsky";
     githubId = 18447310;
   };
+  kmcopper = {
+    email = "kmcopper@danwin1210.me";
+    name = "Kyle Copperfield";
+    github = "kmcopper";
+    githubId = 57132115;
+  };
   kmeakin = {
     email = "karlwfmeakin@gmail.com";
     name = "Karl Meakin";
@@ -4147,6 +4163,12 @@
     githubId = 34086;
     name = "Marc Weber";
   };
+  marcus7070 = {
+    email = "marcus@geosol.com.au";
+    github = "marcus7070";
+    githubId = 50230945;
+    name = "Marcus Boyd";
+  };
 	marenz = {
 		email = "marenz@arkom.men";
 		github = "marenz2569";
@@ -4485,6 +4507,12 @@
     githubId = 16974598;
     name = "Mike Playle";
   };
+  mkaito = {
+    email = "chris@mkaito.net";
+    github = "mkaito";
+    githubId = 20434;
+    name = "Christian Höppner";
+  };
   mkazulak = {
     email = "kazulakm@gmail.com";
     github = "mulderr";
@@ -4523,6 +4551,12 @@
     github = "mmai";
     githubId = 117842;
     name = "Henri Bourcereau";
+  };
+  mmilata = {
+    email = "martin@martinmilata.cz";
+    github = "mmilata";
+    gitHubId = 85857;
+    name = "Martin Milata";
   };
   mmlb = {
     email = "me.mmlb@mmlb.me";
@@ -4637,6 +4671,12 @@
     github = "fstamour";
     githubId = 2881922;
     name = "Francis St-Amour";
+  };
+  mtrsk = {
+    email = "marcos.schonfinkel@protonmail.com";
+    github = "mtrsk";
+    githubId = 16356569;
+    name = "Marcos Benevides";
   };
   mredaelli = {
     email = "massimo@typish.io";
@@ -7629,5 +7669,11 @@
     github = "Ninlives";
     githubId = 17873203;
     name = "mlatus";
+  };
+  waiting-for-dev = {
+    email = "marc@lamarciana.com";
+    github = "waiting-for-dev";
+    githubId = 52650;
+    name = "Marc Busqué";
   };
 }

@@ -19,25 +19,25 @@
     };
     version = "1.1.2";
   };
-  htmlentities = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "1nkklqsn8ir8wizzlakncfv42i32wc0w9hxp00hvdlgjr7376nhj";
-      type = "gem";
-    };
-    version = "4.3.4";
-  };
   jaro_winkler = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1930v0chc1q4fr7hn0y1j34mw0v032a8kh0by4d4sbz8ksy056kf";
+      sha256 = "1y8l6k34svmdyqxya3iahpwbpvmn3fswhwsvrz0nk1wyb8yfihsh";
       type = "gem";
     };
-    version = "1.5.3";
+    version = "1.5.4";
+  };
+  maruku = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1r7bxpgnx2hp3g12bjrmdrpv663dfqxsdp0af69kjhxmaxpia56x";
+      type = "gem";
+    };
+    version = "0.7.3";
   };
   mini_portile2 = {
     groups = ["default"];
@@ -55,20 +55,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0nmdrqqz1gs0fwkgzxjl4wr554gr8dc1fkrqjc2jpsvwgm41rygv";
+      sha256 = "185g3dwba73jqxjr94bd2zk6fil6n9hmcfnfyzh3p1w47vm296r7";
       type = "gem";
     };
-    version = "1.10.4";
+    version = "1.10.5";
   };
   parallel = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "091p5zrzzyg3fg48jhdz9lzjf2r9r3akra2cd46yd4nza3xgxshz";
+      sha256 = "12jijkap4akzdv11lm08dglsc8jmc87xcgq6947i1s3qb69f4zn2";
       type = "gem";
     };
-    version = "1.18.0";
+    version = "1.19.1";
   };
   parser = {
     dependencies = ["ast"];
@@ -108,10 +108,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0s5q1i7776yklkcwwx6ibm2mwnjky6wv7rpa3xhn8448854is31n";
+      sha256 = "0m88b1bgbhmmbdnz2xv6n0il0j4q5qm9jbc0vf1zsaxmxqp06nx9";
       type = "gem";
     };
-    version = "0.75.1";
+    version = "0.77.0";
   };
   ruby-progressbar = {
     groups = ["default"];
@@ -124,15 +124,15 @@
     version = "1.10.1";
   };
   solargraph = {
-    dependencies = ["backport" "htmlentities" "jaro_winkler" "nokogiri" "parser" "reverse_markdown" "rubocop" "thor" "tilt" "yard"];
+    dependencies = ["backport" "jaro_winkler" "maruku" "nokogiri" "parser" "reverse_markdown" "rubocop" "thor" "tilt" "yard"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0w20g68i6djc2vyx3awzvn15brdfpcwbna27r0903h5djcmnr8a0";
+      sha256 = "1pdqpxvjj6r6gzrz9rmxfg85cmfjs4y2lyq8p5qfg3kfpqx4rhpw";
       type = "gem";
     };
-    version = "0.37.2";
+    version = "0.38.0";
   };
   thor = {
     groups = ["default"];

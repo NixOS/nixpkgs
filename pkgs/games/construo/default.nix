@@ -1,4 +1,12 @@
-{ stdenv, fetchurl, libX11, zlib, xorgproto, libGL ? null, libGLU ? null, freeglut ? null }:
+{ stdenv
+, fetchurl
+, libX11
+, zlib
+, xorgproto
+, libGL ? null
+, libGLU ? null
+, freeglut ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "construo";

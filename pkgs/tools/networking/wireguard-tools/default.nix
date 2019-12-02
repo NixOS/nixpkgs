@@ -1,6 +1,7 @@
 {
   stdenv, fetchzip,
 
+  iptables ? null,
   iproute ? null,
   libmnl ? null,
   makeWrapper ? null,
@@ -13,11 +14,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "0.0.20191012";
+  version = "0.0.20191127";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "0nwcx7m5cpp4h1bclswiqq1jzj08xzpxmq5s4rcfqmrp59cmwgrs";
+    sha256 = "1n1x5858c32p0a13rrhn9a491174k5z4wd0gsy8qn546k1a8qj99";
   };
 
   sourceRoot = "source/src/tools";
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute openresolv]}
+      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute iptables openresolv]}
     done
   '' + optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
