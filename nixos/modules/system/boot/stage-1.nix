@@ -82,6 +82,15 @@ let
     done
   '';
 
+  busybox = (pkgs.busybox.override { enableStatic = true; }).overrideAttrs (old: {
+    postInstall = ''
+      ${old.postInstall or ""}
+      ${pkgs.nukeReferences}/bin/nuke-refs -e $out $out/bin/busybox
+    '';
+    allowedReferences = ["out"];
+  });
+  systemd = config.systemd.package.override { utillinux = busybox; };
+
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
   # etc.  We don't want to bring in all of those packages, so we just
   # copy what we need.  Instead of using statically linked binaries,
@@ -89,7 +98,7 @@ let
   # work.
   extraUtils = pkgs.runCommandCC "extra-utils"
     { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
-      allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
+      allowedReferences = [ "out" busybox ]; # prevent accidents like glibc being included in the initrd
     }
     ''
       set +o pipefail
@@ -103,8 +112,18 @@ let
       }
 
       # Copy BusyBox.
-      for BIN in ${pkgs.busybox}/{s,}bin/*; do
-        copy_bin_and_libs $BIN
+      for BIN in ${busybox}/{s,}bin/*; do
+        ln -sf $BIN $out/bin/
+      done
+
+      # Copy systemd
+      mkdir $out/lib/systemd
+      for b in $(find ${systemd}/lib/systemd -type f -executable -maxdepth 1 -not -name "*.so*"); do
+        copy_bin_and_libs $b
+        ln -s ../../bin/$(basename $b) $out/lib/systemd/$(basename $b)
+      done
+      for b in ${systemd}/bin/*; do
+        copy_bin_and_libs $b
       done
 
       # Copy some utillinux stuff.
@@ -170,14 +189,17 @@ let
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
         if ! test -L $i; then
-          nuke-refs -e $out $i
+          nuke-refs -e $out -e ${busybox} $i
         fi
       done
 
-      find $out/bin -type f | while read i; do
+      find $out/bin $out/lib -type f | while read i; do
+        case $i in
+          $out/lib/ld*.so.?) continue;;
+        esac
         if ! test -L $i; then
           echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
+          patchelf $([ $(dirname $i) = $out/bin ] && echo --set-interpreter $out/lib/ld*.so.?) --set-rpath $out/lib $i || true
         fi
       done
 
@@ -261,8 +283,6 @@ let
 
     inherit (config.boot) resumeDevice;
 
-    inherit (config.system.build) earlyMountScript;
-
     inherit (config.boot.initrd) checkJournalingFS
       preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
 
@@ -286,6 +306,40 @@ let
     '';
   };
 
+  switchRootService = pkgs.writeText "initrd-switch-root.service" ''
+    [Unit]
+    Description=Switch Root
+    DefaultDependencies=no
+    ConditionPathExists=/etc/initrd-release
+    OnFailure=emergency.target
+    OnFailureJobMode=replace-irreversibly
+    AllowIsolate=yes
+
+    [Service]
+    Type=oneshot
+    ExecStart=${bootStage1}
+  '';
+
+  systemdEtc = pkgs.runCommand "systemd-initrd-etc" {
+    allowedReferences = ["out" extraUtils switchRootService];
+  } ''
+    mkdir -p $out/system
+    for u in ${systemd}/example/systemd/system/*; do
+      if [ -d $u ]; then
+        cp -Pr $u $out/system/
+      else
+        substitute $u $out/system/$(basename $u) \
+          --replace ${systemd} ${extraUtils} \
+          --replace ${pkgs.kmod} ${extraUtils} \
+          --replace ${pkgs.bashInteractive}/bin/bash ${extraUtils}/bin/ash
+      fi
+    done
+    rm $out/system/default.target $out/system/initrd-switch-root.service
+    ln -s initrd.target $out/system/default.target
+    ln -s ${switchRootService} $out/system/initrd-switch-root.service
+  '';
+
+  initrdRelease = config.environment.etc."os-release".source;
 
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
@@ -294,8 +348,17 @@ let
     inherit (config.boot.initrd) compressor prepend;
 
     contents =
-      [ { object = bootStage1;
+      [ { object = "${extraUtils}/bin/systemd";
           symlink = "/init";
+        }
+        { object = initrdRelease;
+          symlink = "/etc/initrd-release";
+        }
+        { object = initrdRelease;
+          symlink = "/etc/os-release";
+        }
+        { object = systemdEtc;
+          symlink = "/etc/systemd";
         }
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
@@ -557,7 +620,7 @@ in
     ];
 
     system.build =
-      { inherit bootStage1 initialRamdisk initialRamdiskSecretAppender extraUtils; };
+      { inherit bootStage1 initialRamdisk initialRamdiskSecretAppender extraUtils systemdEtc; };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "TMPFS")

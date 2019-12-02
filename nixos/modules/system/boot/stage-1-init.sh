@@ -100,18 +100,6 @@ waitDevice() {
     fi
 }
 
-# Mount special file systems.
-specialMount() {
-  local device="$1"
-  local mountPoint="$2"
-  local options="$3"
-  local fsType="$4"
-
-  mkdir -m 0755 -p "$mountPoint"
-  mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
-}
-source @earlyMountScript@
-
 # Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp
 mkfifo /tmp/stage-1-init.log.fifo
@@ -589,11 +577,4 @@ fi
 
 mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
 
-mount --move /proc $targetRoot/proc
-mount --move /sys $targetRoot/sys
-mount --move /dev $targetRoot/dev
-mount --move /run $targetRoot/run
-
-exec env -i $(type -P switch_root) "$targetRoot" "$stage2Init"
-
-fail # should never be reached
+exec env -i $(type -P systemctl) switch-root --no-block "$targetRoot" "$stage2Init"
