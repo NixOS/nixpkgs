@@ -7624,4 +7624,10 @@
     githubId = 50867187;
     name = "Rakesh Gupta";
   };
+  mlatus = {
+    email = "wqseleven@gmail.com";
+    github = "Ninlives";
+    githubId = 17873203;
+    name = "mlatus";
+  };
 }
