@@ -139,19 +139,15 @@ in
 
       path = [ cfg.package cfg.packageFirewall pkgs.iproute ];
 
-      preStart = ''
-        mkdir -p /var/lib/fail2ban
-      '';
-
       unitConfig.Documentation = "man:fail2ban(1)";
 
       serviceConfig = {
-        Type = "forking";
         ExecStart = "${cfg.package}/bin/fail2ban-server -xf start";
         ExecStop = "${cfg.package}/bin/fail2ban-server stop";
         ExecReload = "${cfg.package}/bin/fail2ban-server reload";
+        Type = "simple";
+        Restart = "on-failure";
         PIDFile = "/run/fail2ban/fail2ban.pid";
-        Restart = "always";
 
         ReadOnlyDirectories = "/";
         ReadWriteDirectories = "/run/fail2ban /var/tmp /var/lib";
