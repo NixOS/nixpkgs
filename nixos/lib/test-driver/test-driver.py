@@ -331,6 +331,7 @@ class Machine:
                         )
             if state == "active":
                 return True
+            time.sleep(1)
 
     def get_unit_info(self, unit: str, user: Optional[str] = None) -> Dict[str, str]:
         status, lines = self.systemctl('--no-pager show "{}"'.format(unit), user)
@@ -426,6 +427,7 @@ class Machine:
                 status, output = self.execute(command)
                 if status == 0:
                     return output
+                time.sleep(1)
 
     def wait_until_fails(self, command: str) -> str:
         with self.nested("waiting for failure: {}".format(command)):
@@ -433,6 +435,7 @@ class Machine:
                 status, output = self.execute(command)
                 if status != 0:
                     return output
+                time.sleep(1)
 
     def wait_for_shutdown(self) -> None:
         if not self.booted:
@@ -460,6 +463,7 @@ class Machine:
                 text = self.get_tty_text(tty)
                 if len(matcher.findall(text)) > 0:
                     return True
+                time.sleep(1)
 
     def send_chars(self, chars: List[str]) -> None:
         with self.nested("sending keys ‘{}‘".format(chars)):
@@ -472,6 +476,7 @@ class Machine:
                 status, _ = self.execute("test -e {}".format(filename))
                 if status == 0:
                     return True
+                time.sleep(1)
 
     def wait_for_open_port(self, port: int) -> None:
         def port_is_open(_: Any) -> bool:
@@ -712,6 +717,7 @@ class Machine:
                 status, _ = self.execute("[ -e /tmp/.X11-unix/X0 ]")
                 if status == 0:
                     return
+                time.sleep(1)
 
     def get_window_names(self) -> List[str]:
         return self.succeed(
