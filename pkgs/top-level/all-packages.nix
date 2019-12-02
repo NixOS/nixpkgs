@@ -20228,6 +20228,8 @@ in
 
   neocomp  = callPackage ../applications/window-managers/neocomp { };
 
+  netease-cloud-music = callPackage ../applications/audio/netease-cloud-music {};
+
   nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus {
     geoip = geoipWithDatabase;
   };
