@@ -14,7 +14,7 @@
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
-  useLLVM = !stdenv.targetPlatform.isx86;
+  useLLVM = !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS;
 
   libPath = lib.makeLibraryPath ([
     ncurses6 gmp

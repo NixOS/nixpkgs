@@ -8,7 +8,7 @@
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
-  useLLVM = !stdenv.targetPlatform.isx86;
+  useLLVM = !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS;
 
   useNcurses6 = stdenv.hostPlatform.system == "x86_64-linux";
 
