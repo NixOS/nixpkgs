@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, SDL, libogg, libvorbis, zlib, unzip }:
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, automake, autoconf, libtool, SDL, libogg, libvorbis, zlib, unzip }:
 
 let
 
@@ -12,35 +12,30 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "exult-1.4.9rc1";
+  name = "exult-1.5.0git";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/exult/${name}.tar.gz";
-    sha256 = "0a03a2l3ji6h48n106d4w55l8v6lni1axniafnvvv5c5n3nz5bgd";
+  src = fetchFromGitHub {
+    owner = "exult";
+    repo = "exult";
+    rev = "b727abfffc08a54e528bc1194d0de8562d18d74e";
+    sha256 = "1nvxpsycn7r2yiqlyjq8rx9wy2ywc8lnqivh6jzdh9rxryq05j94";
   };
+
+  preConfigure = "./autogen.sh";
 
   configureFlags = [ "--disable-tools" ];
 
-  patches =
-    [ # Arch Linux patch set.
-      ./arch.patch
-    ];
-
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL libogg libvorbis zlib unzip ];
+  buildInputs = [ automake autoconf libtool SDL libogg libvorbis zlib unzip ];
 
   enableParallelBuilding = true;
-
-  makeFlags = [ "DESTDIR=$(out)" ];
-
-  NIX_LDFLAGS = [ "-lX11" ];
 
   postInstall =
     ''
       mkdir -p $out/share/exult/music
       unzip -o -d $out/share/exult ${audio}
       chmod 644 $out/share/exult/*.flx
-    ''; # */
+    '';
 
   meta = {
     homepage = http://exult.sourceforge.net/;
