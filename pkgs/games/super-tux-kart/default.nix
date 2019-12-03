@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
-, openal, freealut, libGLU_combined, libvorbis, libogg, gettext, curl, freetype
+, openal, freealut, libGLU, libGL, libvorbis, libogg, gettext, curl, freetype
 , fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr, enet }:
 
 let
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     libX11 libXrandr
-    openal freealut libGLU_combined libvorbis libogg zlib freetype
+    openal freealut libGLU libGL libvorbis libogg zlib freetype
     curl fribidi bluez libjpeg libpng enet
   ];
 

@@ -156,6 +156,7 @@ jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 josa42/coc-go
 jpalardy/vim-slime
+jreybert/vimagit
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
 Julian/vim-textobj-variable-segment

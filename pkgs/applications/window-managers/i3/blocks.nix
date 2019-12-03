@@ -1,16 +1,16 @@
-{ fetchFromGitHub, fetchpatch, stdenv, autoreconfHook }:
+{ fetchFromGitHub, fetchpatch, stdenv, autoreconfHook, pkg-config }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation {
   pname = "i3blocks";
-  version = "unstable-2019-02-07";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "vivien";
     repo = "i3blocks";
-    rev = "ec050e79ad8489a6f8deb37d4c20ab10729c25c3";
-    sha256 = "1fx4230lmqa5rpzph68dwnpcjfaaqv5gfkradcr85hd1z8d1qp1b";
+    rev = "3417602a2d8322bc866861297f535e1ef80b8cb0";
+    sha256 = "0v8mwnm8qzpv6xnqvrk43s4b9iyld4naqzbaxk4ldq1qkhai0wsv";
   };
 
   patches = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = {
     description = "A flexible scheduler for your i3bar blocks";

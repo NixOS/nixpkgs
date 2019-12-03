@@ -66,7 +66,8 @@ in {
       if cfg.user == "roon-server" then {
         isSystemUser = true;
         description = "Roon Server user";
-        groups = [ cfg.group "audio" ];
+        group = cfg.group;
+        extraGroups = [ "audio" ];
       }
       else {};
   };

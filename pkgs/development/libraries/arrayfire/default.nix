@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
 , cudatoolkit, opencl-clhpp, ocl-icd, fftw, fftwFloat, mkl
-, blas, openblas, boost, mesa, libGLU_combined
+, blas, openblas, boost, mesa, libGLU, libGL
 , freeimage, python, clfft, clblas
 , doxygen, buildDocs ? false
 }:
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     opencl-clhpp fftw fftwFloat
     mkl
     openblas
-    libGLU_combined
+    libGLU libGL
     mesa freeimage
     boost.out boost.dev
   ] ++ (stdenv.lib.optional stdenv.isLinux [ cudatoolkit ocl-icd ])

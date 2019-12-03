@@ -169,7 +169,7 @@ in
         ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
 
         # Optional hardware support features
-        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt ]
+        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt openobex obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil

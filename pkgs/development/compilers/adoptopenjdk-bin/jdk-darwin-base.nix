@@ -28,9 +28,6 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
     # Remove some broken manpages.
     rm -rf $out/Home/man/ja*
 
-    # for backward compatibility
-    ln -s $out/Contents/Home $out/jre
-
     ln -s $out/Contents/Home/* $out/
 
     mkdir -p $out/nix-support

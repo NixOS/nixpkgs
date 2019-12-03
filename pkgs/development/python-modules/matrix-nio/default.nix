@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, git,
   attrs, future, peewee, h11, h2, atomicwrites, pycryptodome, sphinx, Logbook, jsonschema,
-  python-olm, unpaddedbase64, aiohttp }:
+  python-olm, unpaddedbase64, aiohttp, cachetools }:
 
 buildPythonPackage rec {
   pname = "nio";
@@ -36,6 +36,7 @@ buildPythonPackage rec {
     python-olm
     unpaddedbase64
     aiohttp
+    cachetools
   ];
 
   doCheck = false;

@@ -69,20 +69,29 @@ self: super: {
   snap-server = doJailbreak super.snap-server;
 
   # use latest version to fix the build
+  doctemplates = self.doctemplates_0_7_2;
   generics-sop = self.generics-sop_0_5_0_0;
   hackage-db = self.hackage-db_2_1_0;
+  haddock-library = self.haddock-library_1_8_0;
+  HsYAML = self.HsYAML_0_2_1_0;
   lens = self.lens_4_18_1;
   memory = self.memory_0_15_0;
   microlens = self.microlens_0_4_11_2;
   optparse-applicative = self.optparse-applicative_0_15_1_0;
+  pandoc = self.pandoc_2_8_0_1;
+  pandoc-types = self.pandoc-types_1_20;
   primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
   regex-base = self.regex-base_0_94_0_0;
   regex-pcre-builtin = self.regex-pcre-builtin_0_95_1_1_8_43;
   regex-posix = self.regex-posix_0_96_0_0;
   regex-tdfa = self.regex-tdfa_1_3_0;
   shelly = self.shelly_1_9_0;
+  skylighting = self.skylighting_0_8_3;
+  skylighting-core = self.skylighting-core_0_8_3;
   sop-core = self.sop-core_0_5_0_0;
+  texmath = self.texmath_0_12;
   tls = self.tls_1_5_2;
+  trifecta = self.trifecta_2_1;
   xmonad-contrib = self.xmonad-contrib_0_16;
 
   # These packages don't work and need patching and/or an update.

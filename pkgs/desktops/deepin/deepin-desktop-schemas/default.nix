@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, gnome3, glib, deepin-gtk-theme,
+{ stdenv, fetchFromGitHub, python3, dconf, glib, deepin-gtk-theme,
   deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.dconf
+    dconf
     deepin-gtk-theme
     deepin-icon-theme
     deepin-sound-theme

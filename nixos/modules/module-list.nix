@@ -35,7 +35,6 @@
   ./config/terminfo.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
-  ./config/vpnc.nix
   ./config/vte.nix
   ./config/zram.nix
   ./hardware/acpilight.nix
@@ -308,6 +307,7 @@
   ./services/desktops/gnome3/sushi.nix
   ./services/desktops/gnome3/tracker.nix
   ./services/desktops/gnome3/tracker-miners.nix
+  ./services/desktops/neard.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/system-config-printer.nix
   ./services/desktops/telepathy.nix
@@ -519,7 +519,6 @@
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
-  ./services/monitoring/osquery.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/exporters.nix
@@ -539,7 +538,6 @@
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-proxy.nix
   ./services/monitoring/zabbix-server.nix
-  ./services/network-filesystems/beegfs.nix
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/davfs2.nix
   ./services/network-filesystems/drbd.nix

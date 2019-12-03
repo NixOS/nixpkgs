@@ -167,6 +167,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  ansiwrap =  callPackage ../development/python-modules/ansiwrap { };
+
   ansi2html = callPackage ../development/python-modules/ansi2html { };
 
   anytree = callPackage ../development/python-modules/anytree {
@@ -250,10 +252,6 @@ in {
   azure = callPackage ../development/python-modules/azure { };
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
-
-  azure-cli-core = callPackage ../development/python-modules/azure-cli-core { };
-
-  azure-cli-telemetry = callPackage ../development/python-modules/azure-cli-telemetry { };
 
   azure-common = callPackage ../development/python-modules/azure-common { };
 
@@ -491,13 +489,17 @@ in {
 
   bt_proximity = callPackage ../development/python-modules/bt-proximity { };
 
-  bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
+  bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
   cachelib = callPackage ../development/python-modules/cachelib { };
 
   cachy = callPackage ../development/python-modules/cachy { };
+
+  cadquery = callPackage ../development/python-modules/cadquery { };
+
+  catalogue = callPackage ../development/python-modules/catalogue { };
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
@@ -876,6 +878,8 @@ in {
 
   palettable = callPackage ../development/python-modules/palettable { };
 
+  papermill = callPackage ../development/python-modules/papermill { };
+
   parsley = callPackage ../development/python-modules/parsley { };
 
   pastel = callPackage ../development/python-modules/pastel { };
@@ -1045,11 +1049,6 @@ in {
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
-  pykde4 = callPackage ../development/python-modules/pykde4 {
-    inherit (self) pyqt4;
-    callPackage = pkgs.callPackage;
-  };
-
   pykdtree = callPackage ../development/python-modules/pykdtree {
     inherit (pkgs.llvmPackages) openmp;
   };
@@ -1098,6 +1097,8 @@ in {
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
+
+  pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
 
   pyside = callPackage ../development/python-modules/pyside {
     inherit (pkgs) mesa;
@@ -1153,11 +1154,15 @@ in {
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
+  pytest-qt = callPackage ../development/python-modules/pytest-qt { };
+
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
+
+  pytest-xvfb = callPackage ../development/python-modules/pytest-xvfb { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
 
@@ -1322,6 +1327,8 @@ in {
   };
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
+
+  tesserocr = callPackage ../development/python-modules/tesserocr { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 
@@ -4487,7 +4494,7 @@ in {
 
   praw = if isPy3k then callPackage ../development/python-modules/praw { }
     else callPackage ../development/python-modules/praw/6.3.nix { };
-  
+
   prance = callPackage ../development/python-modules/prance { };
 
   prawcore = callPackage ../development/python-modules/prawcore { };
@@ -5030,7 +5037,9 @@ in {
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
-  rpy2 = callPackage ../development/python-modules/rpy2 {};
+  rpy2 = if isPy3k
+    then callPackage ../development/python-modules/rpy2 { }
+    else callPackage ../development/python-modules/rpy2/2.nix { };
 
   rtslib = callPackage ../development/python-modules/rtslib {};
 
@@ -5252,7 +5261,15 @@ in {
 
   texttable = callPackage ../development/python-modules/texttable { };
 
+  textwrap3 =  callPackage ../development/python-modules/textwrap3 { };
+
+  tiledb = callPackage ../development/python-modules/tiledb {
+    inherit (pkgs) tiledb;
+  };
+
   tiros = callPackage ../development/python-modules/tiros { };
+
+  tinydb = callPackage ../development/python-modules/tinydb { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
 
@@ -6565,6 +6582,8 @@ in {
   hcloud = callPackage ../development/python-modules/hcloud { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
+
+  pony = callPackage ../development/python-modules/pony { };
 
 });
 

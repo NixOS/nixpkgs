@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, gtk2, libGLU_combined, pango, pangox_compat, xorg }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, gtk2, libGLU, libGL, pango, pangox_compat, xorg }:
 
 stdenv.mkDerivation rec {
   name = "gtkglext-1.2.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xorg;
-    [ pkgconfig glib gtk2 libGLU_combined pango libX11 libXmu ];
+    [ pkgconfig glib gtk2 libGLU libGL pango libX11 libXmu ];
   propagatedBuildInputs = [ pangox_compat ];
 
   patches = [

@@ -47,6 +47,9 @@
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
 
+# NixOS integration test driver
+/nixos/lib/test-driver  @tfc
+
 # New NixOS modules
 /nixos/modules/module-list.nix @Infinisil
 

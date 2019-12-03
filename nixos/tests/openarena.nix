@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "openarena";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ tomfitzhenry ];
@@ -23,14 +23,19 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript =
     ''
-      $machine->waitForUnit("openarena.service");
-      $machine->waitUntilSucceeds("ss --numeric --udp --listening | grep -q 27960");
+      machine.wait_for_unit("openarena.service")
+      machine.wait_until_succeeds("ss --numeric --udp --listening | grep -q 27960")
 
       # The log line containing 'resolve address' is last and only message that occurs after
       # the server starts accepting clients.
-      $machine->waitUntilSucceeds("journalctl -u openarena.service | grep 'resolve address: dpmaster.deathmask.net'");
+      machine.wait_until_succeeds(
+          "journalctl -u openarena.service | grep 'resolve address: dpmaster.deathmask.net'"
+      )
 
       # Check it's possible to join the server.
-      $machine->succeed("echo -n -e '\\xff\\xff\\xff\\xffgetchallenge' | socat - UDP4-DATAGRAM:127.0.0.1:27960 | grep -q challengeResponse");
+      # Can't use substring match instead of grep because the output is not utf-8
+      machine.succeed(
+          "echo -n -e '\\xff\\xff\\xff\\xffgetchallenge' | socat - UDP4-DATAGRAM:127.0.0.1:27960 | grep -q challengeResponse"
+      )
     '';
 })

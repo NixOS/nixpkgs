@@ -4,7 +4,7 @@
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
 , openssl, gperf, cppunit, GConf, ORBit2, poppler, utillinux
-, librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw, libmysqlclient
+, librsvg, gnome_vfs, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
@@ -13,7 +13,7 @@
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
 , gnome3, glib, ncurses, epoxy, gpgme
-, langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "ru" "sl" "zh-CN" ]
+, langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
 }:
@@ -362,7 +362,7 @@ in stdenv.mkDerivation rec {
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs libGLU_combined mythes gst_all_1.gstreamer
+      libXdmcp libpthreadstubs libGLU libGL mythes gst_all_1.gstreamer
       gst_all_1.gst-plugins-base glib libmysqlclient
       neon nspr nss openldap openssl ORBit2 pam perl poppler
       python3 sane-backends unzip vigra which zip zlib

@@ -1,37 +1,29 @@
-{ stdenv, libsodium, fetchFromGitHub, wget, pkgconfig, autoreconfHook, openssl, db62, boost
-, zlib, gtest, gmock, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent
-, libsnark, withGui }:
+{ stdenv, libsodium, fetchFromGitHub, wget, pkgconfig, autoreconfHook, openssl, db62, boost17x
+, zlib, gtest, gmock, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent }:
 
 let librustzcash = callPackage ./librustzcash {};
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "zcash" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.0.13";
+  pname = "zcash";
+  version = "2.1.0-1";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "05y7wxs66anxr5akbf05r36mmjfzqpwawn6vyh3jhpva51hzzzyz";
+    sha256 = "05bnn4lxrrcv1ha3jdfrgwg4ar576161n3j9d4gpc14ww3zgf9vz";
   };
 
-  # Dependencies are underspecified: "make -C src gtest/zcash_gtest-test_merkletree.o"
-  # fails with "fatal error: test/data/merkle_roots.json.h: No such file or directory"
-  enableParallelBuilding = false;
-
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ gtest gmock gmp openssl wget db62 boost zlib
-                  protobuf libevent libsodium librustzcash libsnark ]
-                  ++ optionals stdenv.isLinux [ utillinux ]
-                  ++ optionals withGui [ qt4 qrencode ];
+  buildInputs = [ gtest gmock gmp openssl wget db62 boost17x zlib
+                  protobuf libevent libsodium librustzcash ]
+                  ++ optionals stdenv.isLinux [ utillinux ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib"
-                   ] ++ optionals withGui [ "--with-gui=qt4" ];
+  configureFlags = [ "--with-boost-libdir=${boost17x.out}/lib" ];
 
   patchPhase = ''
-    sed -i"" 's,-lboost_system-mt,-lboost_system,' configure.ac
     sed -i"" 's,-fvisibility=hidden,,g'            src/Makefile.am
   '';
 
@@ -42,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Peer-to-peer, anonymous electronic cash system";
     homepage = https://z.cash/;
-    maintainers = with maintainers; [ rht ];
+    maintainers = with maintainers; [ rht tkerber ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

@@ -126,9 +126,19 @@ in
       wayland = mkOption {
         default = true;
         description = ''
-          Allow GDM run on Wayland instead of Xserver
+          Allow GDM to run on Wayland instead of Xserver.
+          Note to enable Wayland with Nvidia you need to
+          enable the <option>nvidiaWayland</option>.
         '';
         type = types.bool;
+      };
+
+      nvidiaWayland = mkOption {
+        default = false;
+        description = ''
+          Whether to allow wayland to be used with the proprietary
+          NVidia graphics driver.
+        '';
       };
 
       autoSuspend = mkOption {
@@ -237,6 +247,19 @@ in
 
     services.dbus.packages = [ gdm ];
 
+    # We duplicate upstream's udev rules manually to make wayland with nvidia configurable
+    services.udev.extraRules = ''
+      # disable Wayland on Cirrus chipsets
+      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      # disable Wayland on Hi1710 chipsets
+      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ${optionalString (!cfg.gdm.nvidiaWayland) ''
+        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ''}
+      # disable Wayland when modesetting is disabled
+      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-disable-wayland"
+    '';
+
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
     programs.dconf.profiles.gdm =
@@ -258,7 +281,7 @@ in
       customDconfDb = pkgs.stdenv.mkDerivation {
         name = "gdm-dconf-db";
         buildCommand = ''
-          ${pkgs.gnome3.dconf}/bin/dconf compile $out ${customDconf}/dconf
+          ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
         '';
       };
     in pkgs.stdenv.mkDerivation {

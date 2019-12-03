@@ -10552,6 +10552,22 @@ let
      };
   };
 
+  LWPUserAgentDNSHosts = buildPerlModule {
+    pname = "LWP-UserAgent-DNS-Hosts";
+    version = "0.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MASAKI/LWP-UserAgent-DNS-Hosts-0.13.tar.gz;
+      sha256 = "0piwcsb0m1xpzxbakhr9zq45a9hq3rx7s55lrjg66nd4x5n7xs5y";
+    };
+    propagatedBuildInputs = [ LWP ScopeGuard ];
+    buildInputs = [ ModuleBuildTiny TestFakeHTTPD TestSharedFork TestTCP TestUseAllModules ];
+    meta = {
+      description = "Override LWP HTTP/HTTPS request's host like /etc/hosts";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/masaki/p5-LWP-UserAgent-DNS-Hosts";
+    };
+  };
+
   LWPUserAgentDetermined = buildPerlPackage {
     pname = "LWP-UserAgent-Determined";
     version = "1.07";
@@ -13702,8 +13718,8 @@ let
       sha256 = "1q3lz168q081iwl9jg21fbzhp9la79gav9mv6nmh2jab83s2l3mj";
     };
 
-    # FIXME: try with libGL + libGLU instead of libGLU_combined
-    buildInputs = [ pkgs.libGLU_combined pkgs.libGLU pkgs.freeglut pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXmu pkgs.xorg.libXext pkgs.xdummy ];
+    # FIXME: try with libGL + libGLU instead of libGLU libGL
+    buildInputs = [ pkgs.libGLU pkgs.libGL pkgs.libGLU pkgs.freeglut pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXmu pkgs.xorg.libXext pkgs.xdummy ];
 
     patches = [ ../development/perl-modules/perl-opengl.patch ];
 
@@ -17563,6 +17579,22 @@ let
     meta = {
       description = "Add test failures if warnings are caught";
       license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+  TestFakeHTTPD = buildPerlModule {
+    pname = "Test-Fake-HTTPD";
+    version = "0.08";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MASAKI/Test-Fake-HTTPD-0.08.tar.gz;
+      sha256 = "1jkflkcjzrdvnlxff1xqfhfdcpsmvvjqzayl7hk3whavsxdrf9yh";
+    };
+    propagatedBuildInputs = [ HTTPDaemon Plack ];
+    buildInputs = [ LWP ModuleBuildTiny TestException TestSharedFork TestTCP TestUseAllModules ];
+    meta = {
+      description = "a fake HTTP server";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/masaki/Test-Fake-HTTPD";
     };
   };
 

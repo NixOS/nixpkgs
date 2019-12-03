@@ -27,6 +27,7 @@ with python3.pkgs; buildPythonApplication rec {
     requests
     urllib3
     flask
+    flask-admin
     flask-api
     flask-bootstrap
     flask-paginate
