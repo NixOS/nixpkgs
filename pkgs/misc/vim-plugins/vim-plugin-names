@@ -240,6 +240,7 @@ mattn/calendar-vim as mattn-calendar-vim
 mattn/emmet-vim
 mattn/gist-vim
 mattn/webapi-vim
+matze/vim-move
 maximbaz/lightline-ale
 MaxMEllon/vim-jsx-pretty
 mbbill/undotree
