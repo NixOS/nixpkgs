@@ -19,6 +19,6 @@ buildGoModule rec {
     description = "CLI client for Flux, the GitOps Kubernetes operator";
     homepage = "https://github.com/fluxcd/flux";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih ];
+    maintainers = with maintainers; [ Gonzih filalex77 ];
   };
 }
