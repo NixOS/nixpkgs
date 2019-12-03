@@ -15,12 +15,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "rstya-board";
-  version = "0.6";
+  pname = "restya-board";
+  version = "0.6.7";
 
   src = fetchurl {
     url = "https://github.com/RestyaPlatform/board/releases/download/v${version}/board-v${version}.zip";
-    sha256 = "1js8c69qmga7bikp66fqhch3n2vw49918z32q88lz3havqzai8gd";
+    sha256 = "07xiakk8fljc79qi80n5945hy2rqrc8kn2i7d49rri2f440wv51i";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     unzip -d $out $src
 
     cd $out
-    patch -p1 < ${./fix_request-uri.patch}
 
     chmod +x $out/server/php/shell/*.sh
 
@@ -41,6 +40,13 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Web-based kanban board";
+    longDescription = ''
+      An open Source Trello-like Kanban-Board based on the Restya platform.
+      Please note: When updating this software, you have to run the database
+      migration scripts manually. You can find them at in the source repository
+      under /sql. More detailed instructions can be found at
+      https://github.com/RestyaPlatform/board/tree/v0.6.7#upgrade
+    '';
     license = licenses.osl3;
     homepage = http://restya.com;
     maintainers = with maintainers; [ tstrobel ];

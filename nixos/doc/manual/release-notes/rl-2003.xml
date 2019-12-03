@@ -355,6 +355,17 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
        now uses the short rather than full version string.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     Restya-Board has been upgraded from 6.0 to 6.7, improving security and
+     adding features but with potential incompatibilities.
+    </para>
+    <para>
+     Please note: When upgrading this software, you have to run the database
+     migration scripts manually. You can find them in the source repository
+     under /sql.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
