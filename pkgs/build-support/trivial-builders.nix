@@ -45,8 +45,8 @@ rec {
   runCommandNoCCLocal = runCommand' true stdenvNoCC;
 
   runCommandCC = runCommand' false stdenv;
-  runCommandCCLocal = runCommand' true stdenv;
-
+  # `runCommandCCLocal` left out on purpose.
+  # We shouldn’t force the user to have a cc in scope.
 
   /* Writes a text file to the nix store.
    * The contents of text is added to the file in the store.
