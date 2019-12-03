@@ -22,6 +22,6 @@ crystal.buildCrystalPackage rec {
     description = "A refreshing language for the front-end web";
     homepage = "https://mint-lang.com/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ manveru ];
+    maintainers = with maintainers; [ manveru filalex77 ];
   };
 }
