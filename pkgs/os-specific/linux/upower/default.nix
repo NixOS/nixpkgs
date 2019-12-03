@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
   installFlags = [
     "historydir=$(TMPDIR)/foo"
-    "sysconfdir=$(out)/etc"
+    "sysconfdir=${placeholder "out"}/etc"
   ];
 
   meta = with stdenv.lib; {
