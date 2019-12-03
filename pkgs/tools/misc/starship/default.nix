@@ -13,6 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
+  postPatch = ''
+    substituteInPlace src/utils.rs \
+      --replace "/bin/echo" "echo"
+  '';
+
   cargoSha256 = "110ajwgdshakcqxfnqi30yy0miikp2qx86flwfkd78jawfll2krp";
   checkPhase = "cargo test -- --skip directory::home_directory --skip directory::directory_in_root";
 
