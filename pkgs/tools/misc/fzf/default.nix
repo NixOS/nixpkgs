@@ -60,6 +60,7 @@ buildGoModule rec {
     homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
+    maintainers = with maintainers; [ filalex77 ];
     platforms = platforms.unix;
   };
 }
