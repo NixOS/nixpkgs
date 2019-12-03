@@ -54,6 +54,8 @@ in
 
     systemd.packages = [ cfg.package ];
 
+    environment.etc."UPower/UPower.conf".source = "${cfg.package}/etc/UPower/UPower.conf";
+
   };
 
 }
