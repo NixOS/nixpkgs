@@ -23,6 +23,6 @@ buildGoModule rec {
     description = "A fast and modern static website engine.";
     homepage = "https://gohugo.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ schneefux ];
+    maintainers = with maintainers; [ schneefux filalex77 ];
   };
 }
