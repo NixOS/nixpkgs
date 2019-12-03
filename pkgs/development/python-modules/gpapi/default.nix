@@ -1,8 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, protobuf, pycryptodome }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+, requests
+, protobuf
+, pycryptodome
+}:
 
 buildPythonPackage rec {
   version = "0.4.4";
   pname = "gpapi";
+  disabled = pythonOlder "3.3"; # uses shutil.which(), added in 3.3
 
   src = fetchPypi {
     inherit version pname;
