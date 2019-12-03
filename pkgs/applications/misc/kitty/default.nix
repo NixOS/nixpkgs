@@ -64,8 +64,10 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" ];
 
   patches = [
+    ./fix-paths.patch
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
     (substituteAll {
-      src = ./fix-paths.patch;
+      src = ./library-paths.patch;
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
       libcanberra = "${libcanberra}/lib/libcanberra.so";
     })
