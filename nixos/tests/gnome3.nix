@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "gnome3";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = pkgs.gnome3.maintainers;
@@ -38,27 +38,36 @@ import ./make-test.nix ({ pkgs, ...} : {
     wmClass = "${gdbus} ${eval} global.display.focus_window.wm_class";
   in ''
       # wait for gdm to start
-      $machine->waitForUnit("display-manager.service");
+      machine.wait_for_unit("display-manager.service")
+
+      machine.sleep(5)
 
       # wait for alice to be logged in
-      $machine->waitForUnit("default.target","alice");
+      machine.wait_for_unit("default.target", "alice")
 
       # Check that logging in has given the user ownership of devices.
-      $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
+      machine.succeed("getfacl -p /dev/snd/timer | grep -q alice")
 
       # Wait for the wayland server
-      $machine->waitForFile("/run/user/1000/wayland-0");
+      machine.wait_for_file("/run/user/1000/wayland-0")
 
       # Wait for gnome shell, correct output should be "(true, 'false')"
-      $machine->waitUntilSucceeds("su - alice -c '${startingUp} | grep -q true,..false'");
+      machine.wait_until_succeeds(
+          "su - alice -c '${startingUp} | grep -q true,..false'"
+      )
 
       # open a terminal
-      $machine->succeed("su - alice -c '${bus} gnome-terminal'");
+      machine.succeed(
+          "su - alice -c '${bus} gnome-terminal'"
+      )
+
       # and check it's there
-      $machine->waitUntilSucceeds("su - alice -c '${wmClass} | grep -q gnome-terminal-server'");
+      machine.wait_until_succeeds(
+          "su - alice -c '${wmClass} | grep -q gnome-terminal-server'"
+      )
 
       # wait to get a nice screenshot
-      $machine->sleep(20);
-      $machine->screenshot("screen");
+      machine.sleep(20)
+      machine.screenshot("screen")
     '';
 })
