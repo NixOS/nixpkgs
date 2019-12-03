@@ -239,8 +239,7 @@
    <listitem>
      <para>
        <literal>PRETTY_NAME</literal> in <literal>/etc/os-release</literal>
-       uses the release now instead of full version
-       to be more suitable for presentation to the user
+       now uses the short rather than full version string.
      </para>
    </listitem>
   </itemizedlist>
