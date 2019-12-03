@@ -1312,7 +1312,7 @@ in
   });
 
   caddy = callPackage ../servers/caddy { };
-  caddy-v2 = callPackage ../servers/caddy/v2.nix { };
+  caddy2 = callPackage ../servers/caddy/v2.nix { };
   traefik = callPackage ../servers/traefik { };
 
   calamares = libsForQt5.callPackage ../tools/misc/calamares {
