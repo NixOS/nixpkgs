@@ -18,6 +18,6 @@ crystal.buildCrystalPackage rec {
     description = "Code analysis server for the Crystal programming language";
     homepage = "https://github.com/crystal-lang-tools/scry";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg filalex77 ];
   };
 }
