@@ -355,6 +355,7 @@ rhysd/vim-grammarous
 rhysd/vim-operator-surround
 Rip-Rip/clang_complete
 rodjek/vim-puppet
+ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
