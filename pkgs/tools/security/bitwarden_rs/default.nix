@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/bitwarden_rs";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ msteen ];
+    maintainers = with maintainers; [ msteen filalex77 ];
     platforms = platforms.all;
   };
 }
