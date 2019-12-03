@@ -220,22 +220,19 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    systemd.services.upower.environment.UPOWER_CONF_FILE_NAME = pkgs.writeTextFile {
-      name = "UPower.conf";
-      text = generators.toINI {} {
-        UPower = {
-          EnableWattsUpPro = cfg.enableWattsUpPro;
-          NoPollBatteries = cfg.noPollBatteries;
-          IgnoreLid = cfg.ignoreLid;
-          UsePercentageForPolicy = cfg.usePercentageForPolicy;
-          PercentageLow = cfg.percentageLow;
-          PercentageCritical = cfg.percentageCritical;
-          PercentageAction = cfg.percentageAction;
-          TimeLow = cfg.timeLow;
-          TimeCritical = cfg.timeCritical;
-          TimeAction = cfg.timeAction;
-          CriticalPowerAction = cfg.criticalPowerAction;
-        };
+    environment.etc."UPower/UPower.conf".text = generators.toINI {} {
+      UPower = {
+        EnableWattsUpPro = cfg.enableWattsUpPro;
+        NoPollBatteries = cfg.noPollBatteries;
+        IgnoreLid = cfg.ignoreLid;
+        UsePercentageForPolicy = cfg.usePercentageForPolicy;
+        PercentageLow = cfg.percentageLow;
+        PercentageCritical = cfg.percentageCritical;
+        PercentageAction = cfg.percentageAction;
+        TimeLow = cfg.timeLow;
+        TimeCritical = cfg.timeCritical;
+        TimeAction = cfg.timeAction;
+        CriticalPowerAction = cfg.criticalPowerAction;
       };
     };
   };
