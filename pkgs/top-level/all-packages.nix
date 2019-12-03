@@ -5996,6 +5996,8 @@ in
 
   alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
 
+  rails  = callPackage ../development/web/rails { };
+
   remind = callPackage ../tools/misc/remind { };
 
   remmina = callPackage ../applications/networking/remote/remmina { };
