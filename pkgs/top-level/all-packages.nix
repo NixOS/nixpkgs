@@ -911,6 +911,8 @@ in
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
+
   httperf = callPackage ../tools/networking/httperf { };
 
   ili2c = callPackage ../tools/misc/ili2c { };
