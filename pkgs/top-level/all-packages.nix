@@ -5783,6 +5783,8 @@ in
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
+  pmacct = callPackage ../tools/networking/pmacct { };
+
   polygraph = callPackage ../tools/networking/polygraph { };
 
   progress = callPackage ../tools/misc/progress { };
