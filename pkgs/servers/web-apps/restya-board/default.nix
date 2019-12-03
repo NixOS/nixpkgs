@@ -2,14 +2,14 @@
 
 let
 
-  hide-card-id = fetchurl {
-    url = "https://github.com/RestyaPlatform/board-apps/releases/download/v2/r_hide_card_id-v0.1.2.zip";
-    sha256 = "1scm696rs8wx0z2y0g6r9vf01b0yay79azw8n785c6zdvrbqw7dp";
+  hide-card-additional-information = fetchurl {
+    url = "https://github.com/RestyaPlatform/board-apps/releases/download/v1/r_hide_card_additional_informations-v0.1.3.zip";
+    sha256 = "1cp92av7b4nzdgybbqnh9jpkqkjv1rvm98ca96ib4qfsyi9gjrp7";
   };
 
   togetherjs = fetchurl {
-    url = "https://github.com/RestyaPlatform/board-apps/releases/download/v2/r_togetherjs-v0.1.2.zip";
-    sha256 = "1kms7z0ci15plwbs6nxvz15w0ym3in39msbncaj3cn0p72kvx5cm";
+    url = "https://github.com/RestyaPlatform/board-apps/releases/download/v1/r_togetherjs-v0.1.3.zip";
+    sha256 = "1p765kbx4wzf6grgy4x3kvczm6jkm1ipl0cvkvyg4dsim07ab0zy";
   };
 
 in
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/server/php/shell/*.sh
 
     mkdir $out/client/apps
-    unzip -d $out/client/apps ${hide-card-id}
+    unzip -d $out/client/apps ${hide-card-additional-information}
     unzip -d $out/client/apps ${togetherjs}
   '';
 
