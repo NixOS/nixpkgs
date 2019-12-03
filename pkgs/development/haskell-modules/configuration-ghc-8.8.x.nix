@@ -80,6 +80,7 @@ self: super: {
   optparse-applicative = self.optparse-applicative_0_15_1_0;
   pandoc = self.pandoc_2_8_0_1;
   pandoc-types = self.pandoc-types_1_20;
+  prettyprinter = self.prettyprinter_1_5_1;
   primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
   regex-base = self.regex-base_0_94_0_0;
   regex-pcre-builtin = self.regex-pcre-builtin_0_95_1_1_8_43;
