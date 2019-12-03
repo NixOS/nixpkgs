@@ -36,23 +36,15 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    gala
+    wingpanel
     plank
     switchboard
   ];
 
   patches = [
     ./backgrounds.patch # Having https://github.com/elementary/switchboard-plug-pantheon-shell/issues/166 would make this patch uneeded
-    ./hardcode-gsettings.patch
   ];
-
-  postPatch = ''
-    substituteInPlace src/Views/Appearance.vala \
-      --subst-var-by GALA_GSETTINGS_PATH ${glib.getSchemaPath gala}
-    substituteInPlace src/Views/HotCorners.vala \
-      --subst-var-by GALA_GSETTINGS_PATH ${glib.getSchemaPath gala}
-    substituteInPlace src/Views/Appearance.vala \
-      --subst-var-by WINGPANEL_GSETTINGS_PATH ${glib.getSchemaPath wingpanel}
-  '';
 
   meta = with stdenv.lib; {
     description = "Switchboard Desktop Plug";

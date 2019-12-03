@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ounit topkg ];
+  buildInputs = [ findlib ounit topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ result cstruct zarith ] ++ param.propagatedBuildInputs;
 
   buildPhase = "${topkg.run} build --tests true";

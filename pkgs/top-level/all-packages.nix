@@ -853,6 +853,8 @@ in
 
   elvish = callPackage ../shells/elvish { };
 
+  emplace = callPackage ../tools/package-management/emplace { };
+
   encryptr = callPackage ../tools/security/encryptr {
     gconf = gnome2.GConf;
   };
@@ -1310,6 +1312,7 @@ in
   });
 
   caddy = callPackage ../servers/caddy { };
+  caddy2 = callPackage ../servers/caddy/v2.nix { };
   traefik = callPackage ../servers/traefik { };
 
   calamares = libsForQt5.callPackage ../tools/misc/calamares {
@@ -2561,7 +2564,7 @@ in
 
   cron = callPackage ../tools/system/cron { };
 
-  cudaPackages = callPackages ../development/compilers/cudatoolkit { };
+  cudaPackages = recurseIntoAttrs (callPackage ../development/compilers/cudatoolkit {});
   inherit (cudaPackages)
     cudatoolkit_6
     cudatoolkit_6_5
@@ -5020,6 +5023,8 @@ in
 
   mt-st = callPackage ../tools/backup/mt-st {};
 
+  multitime = callPackage ../tools/misc/multitime { };
+
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
@@ -6436,6 +6441,8 @@ in
 
   ssldump = callPackage ../tools/networking/ssldump { };
 
+  sslsplit = callPackage ../tools/networking/sslsplit { };
+
   sstp = callPackage ../tools/networking/sstp {};
 
   strip-nondeterminism = perlPackages.strip-nondeterminism;
@@ -6890,6 +6897,8 @@ in
   usync = callPackage ../applications/misc/usync { };
 
   uwsgi = callPackage ../servers/uwsgi { };
+
+  v2ray = callPackage ../tools/networking/v2ray { };
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
@@ -19527,7 +19536,7 @@ in
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
     stdenv = gcc6Stdenv;
-    boost = boost.override { enablePython = true; };
+    boost = boost155.override { enablePython = true; };
   };
 
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
@@ -24535,8 +24544,9 @@ in
     kops_1_12
     kops_1_13
     kops_1_14
+    kops_1_15
     ;
-  kops = kops_1_14;
+  kops = kops_1_15;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 

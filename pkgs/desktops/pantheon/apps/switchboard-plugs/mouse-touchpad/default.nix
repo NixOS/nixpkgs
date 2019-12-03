@@ -15,23 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1cg69nbdf4mcr16mi71aw9j8877lyj8yxjfk9bd3sml8f4fh7mmr";
+    sha256 = "1974zdr5w3xd882gi95fp7axgilfni1sclsr750qm32yhl7d9bfn";
   };
-
-  patches = [
-    ./hardcode-settings-daemon-gsettings.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/Views/Clicking.vala \
-      --subst-var-by GSD_GSETTINGS ${glib.getSchemaPath elementary-settings-daemon}
-  '';
 
   passthru = {
     updateScript = pantheon.updateScript {
@@ -51,6 +42,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    elementary-settings-daemon
     switchboard
   ];
 

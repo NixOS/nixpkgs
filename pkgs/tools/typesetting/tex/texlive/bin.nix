@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv, fetchurl, fetchpatch, patchutils
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
@@ -27,27 +27,47 @@ let
     };
 
     patches = [
-    ] ++ stdenv.lib.optionals (stdenv.lib.versionAtLeast (stdenv.lib.getVersion poppler) "0.76") [
-      (fetchpatch {
-        name = "pdftex-poppler0.76.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/texlive-bin/trunk/pdftex-poppler0.76.patch?id=8cb784073cfd2299a6c301ce7bb0d89126a47f4e";
-        sha256 = "04x7myzysranddzjifxhahl7gjy407zkiyzfs5l9cbwzp6pqh7gh";
-
-        includes = [
-          "texk/web2c/pdftexdir/pdftoepdf-poppler0.76.0.cc"
-          "texk/web2c/pdftexdir/pdftosrc-poppler0.76.0.cc"
-        ];
-      })
     ];
 
     postPatch = let
-      popplerSuffix = if (stdenv.lib.versionAtLeast (stdenv.lib.getVersion poppler) "0.76") then "-poppler0.76.0" else "-poppler0.72.0";
+      # The source compatible with Poppler ${popplerVersion} not yet available in TeXLive ${year}
+      # so we need to use files introduced in https://www.tug.org/svn/texlive?view=revision&revision=52959
+      popplerVersion = "0.83.0";
+      pdftoepdf = let
+        revert-pdfmajorversion = fetchpatch {
+          name = "pdftoepdf-revert-pdfmajorversion.patch";
+          url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftoepdf.cc?view=patch&r1=52953&r2=52952&pathrev=52953";
+          sha256 = "19jiv5xbvnfdk8lj6yd6mdxgs8f313a4dwg8svjj90dd35kjcfh8";
+          revert = true;
+          postFetch = ''
+            # The default file, changed by this patch, contains a branch for vendored Poppler
+            # The version-specific file replaces the section with an error, so we need to drop that part from the patch.
+            # Fortunately, there is not anything else in the patch after #else.
+            sed '/ #else/q' $out > "$tmpfile"
+            ${patchutils}/bin/recountdiff "$tmpfile" > "$out"
+          '';
+        };
+      in fetchurl {
+        name = "pdftoepdf-poppler${popplerVersion}.cc";
+        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftoepdf-poppler${popplerVersion}.cc?revision=52959&view=co";
+        sha256 = "0pngvw1jgnm4cqskrzf5a3z8rj4ssl10007n3wbblj50hvvzjph3";
+        postFetch = ''
+          # The trunk added some extra arguments to certain functions so we need to revert that
+          # https://www.tug.org/svn/texlive?view=revision&revision=52953
+          patch $out < ${revert-pdfmajorversion}
+        '';
+      };
+      pdftosrc = fetchurl {
+        name = "pdftosrc-poppler${popplerVersion}.cc";
+        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftosrc-poppler${popplerVersion}.cc?revision=52959&view=co";
+        sha256 = "0iq2cmwvf2lxy32sygrafwqgcwvvbdnvxm5l3mrg9cb2a1g06380";
+      };
     in ''
       for i in texk/kpathsea/mktex*; do
         sed -i '/^mydir=/d' "$i"
       done
-      cp -pv texk/web2c/pdftexdir/pdftoepdf{${popplerSuffix},}.cc
-      cp -pv texk/web2c/pdftexdir/pdftosrc{${popplerSuffix},}.cc
+      cp -pv ${pdftoepdf} texk/web2c/pdftexdir/pdftoepdf.cc
+      cp -pv ${pdftosrc} texk/web2c/pdftexdir/pdftosrc.cc
     '';
 
     # remove when removing synctex-missing-header.patch
