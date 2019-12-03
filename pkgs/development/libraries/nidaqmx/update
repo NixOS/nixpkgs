@@ -1,0 +1,158 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -p python3 -i python3
+
+import bz2
+import json
+import os
+import re
+import sqlite3
+import tempfile
+from typing import Dict, List, Set, Tuple
+import urllib.parse
+import urllib.request
+
+# Fetch the primary sqlite database. Note it is packaged into a tarball.
+REPO = "http://download.ni.com/ni-linux-desktop/2019.07/rpm/ni/el8/" # ensure trailing slash
+PRIMARY = f"{REPO}/repodata/4a944b2645cdd561519ba39045c33a182d65440c597f7fc7d2bd7e9d810ef87d-primary.sqlite.bz2"
+PRIMARY_SQLITE = os.path.splitext(os.path.basename(PRIMARY))[0]
+SHA256SUMS = f"{REPO}/SHA256SUMS"
+PATTERN = "^[a-zA-Z]+(-[a-zA-Z]+)*"
+MATCHER = re.compile(PATTERN)
+ARCH = "x86_64"
+
+
+def normalize_string(name):
+    return name.replace(".", "-")
+
+
+def normalize_dict_keys(dictionary):
+    return {normalize_string(key): value for key, value in dictionary.items()}
+
+
+class Repo:
+
+    def __init__(self, primary):
+        self.primary = primary
+        self.conn = None
+        
+    def __enter__(self):
+        self.conn = sqlite3.connect(self.primary)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.conn.close()
+
+    def _query(self, query):
+        cursor = self.conn.cursor()
+        return cursor.execute(query).fetchall()
+
+    def _get_package_id(self, pkg):
+        cursor = self.conn.cursor()
+        pkgs = cursor.execute("SELECT pkgKey FROM packages WHERE name = ? AND arch in (?, ?)", (pkg, ARCH, "noarch")).fetchall()
+        if len(pkgs) == 1:
+            # 1 row, 1 column
+            return pkgs[0][0]
+        elif not pkgs:
+            raise ValueError("No matching packages found.")
+        else:
+            raise ValueError("Too many packages matches the given name.")
+
+    def get_all_packages(self) -> Set[str]:
+        items = self._query("SELECT name FROM packages")
+        # Because we have only one column, select the zeroth element
+        return set(map(lambda row: row[0], items))
+
+    def get_all_packages_filenames(self) -> Dict[str,str]:
+        items = self._query("SELECT name,location_href FROM packages")
+        # Because we have only one column, select the zeroth element
+        return dict(items)
+
+    def get_requires(self, pkg) -> List[str]:
+        """Get the dependencies of a package."""
+        # Two queries is not very efficient...
+        pkg_id = self._get_package_id(pkg)
+        cursor = self.conn.cursor()
+        requires = cursor.execute("SELECT name FROM requires WHERE pkgKey = ?", (pkg_id,)).fetchall()
+        return set(map(lambda row: row[0], requires))
+
+    def get_all_requires(self) -> Dict[str, Set[str]]:
+        return {package: self.get_requires(package) for package in self.get_all_packages()} 
+
+
+def get_dependencies_and_filenames() -> Tuple[Dict[str, Set[str]], Dict[str, str]]:
+    """Get dependencies of all packages in the repo."""
+
+    with tempfile.TemporaryDirectory() as tempdir:
+
+        # Fetch the compressed database
+        filename_bz2 = filename=os.path.join(tempdir, os.path.basename(PRIMARY))
+        urllib.request.urlretrieve(PRIMARY, filename_bz2)
+
+        # Decompress
+        filename_sqlite = os.path.join(tempdir, PRIMARY_SQLITE)
+        with bz2.open(filename_bz2, "r") as fin, open(filename_sqlite, "wb") as fout:
+            fout.write(fin.read())
+
+        with Repo(os.path.join(filename_sqlite)) as repo:
+            # Dependencies is a mapping from package names to lists of dependencies
+            dependencies = repo.get_all_requires()
+            # Filenames is a mapping from package names to filenames
+            filenames = repo.get_all_packages_filenames()
+
+    return dependencies, filenames
+
+
+def get_hashes() -> Dict[str, str]:
+    """Obtain hashes.
+    
+    Keys are filenames, values are hashes.
+    """
+    with urllib.request.urlopen(SHA256SUMS) as response:
+        lines = response.read().decode().splitlines()
+
+    packages = {}
+    for line in lines:
+        sha256, filename = line.split()
+        if not os.path.splitext(filename)[1] == ".rpm":
+            continue
+        filename = filename[2:]  # remove ./
+        packages[filename] = sha256
+    return packages
+
+
+def main():
+
+    # Fetch data
+    dependencies, filenames = get_dependencies_and_filenames()
+    hashes = get_hashes()
+    
+    # Now we need to normalize all package names to get rid of the dot.
+    # This is done in a separate step to keep the earlier steps ignorant 
+    # of that we're going to use this with Nix.
+    filenames = normalize_dict_keys(filenames)
+    dependencies = {normalize_string(key): list(map(normalize_string, value)) for key, value in dependencies.items()}
+
+    packages = {}
+    for name, filename in filenames.items():
+        sha256 = hashes[filename]
+        requires = set(dependencies.get(name, {}))
+        requires_in_repo = set(filter(lambda dep: dep in dependencies, requires))
+        requires_not_in_repo = requires - requires_in_repo
+
+        packages[name] = {
+            "filename": filename,
+            "sha256": sha256,
+            "dependencies": list(requires_in_repo),
+            "dependencies_not_in_repo": list(requires_not_in_repo),
+        }
+    
+    repo = {}
+    repo["url"] = REPO
+    repo["packages"] = packages
+
+    with open(os.path.join(os.path.dirname(__file__), "repo.json"), "w") as fout:
+        json.dump(repo, fout, indent=4, sort_keys=True)
+
+
+if __name__ == "__main__":
+    main()

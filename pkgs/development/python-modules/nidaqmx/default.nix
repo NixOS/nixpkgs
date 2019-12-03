@@ -7,11 +7,10 @@
 , pykka
 , enum34
 , pythonOlder
-}:
 
-# Note we currently do not patch the path to the drivers
-# because those are not available in Nixpkgs.
-# https://github.com/NixOS/nixpkgs/pull/74980
+# NI libs
+, nidaqmx
+}:
 
 buildPythonPackage rec {
   pname = "nidaqmx";
@@ -35,6 +34,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pykka
   ];
+
+  postPatch = ''
+    substituteInPlace nidaqmx/_lib.py \
+      --replace "find_library('nidaqmx')" "\"${nidaqmx.packages.libnidaqmx}/lib/x86_64-linux-gnu/libnidaqmx.so.1\""
+  '';
 
   dontUseSetuptoolsCheck = true;
 

@@ -4329,7 +4329,9 @@ in {
 
   nibabel = callPackage ../development/python-modules/nibabel {};
 
-  nidaqmx = callPackage ../development/python-modules/nidaqmx { };
+  nidaqmx = callPackage ../development/python-modules/nidaqmx { 
+    inherit (pkgs) nidaqmx;
+  };
 
   nilearn = callPackage ../development/python-modules/nilearn {};
 
@@ -5012,6 +5014,8 @@ in {
   ptest = callPackage ../development/python-modules/ptest { };
 
   ptyprocess = callPackage ../development/python-modules/ptyprocess { };
+
+  pydaqmx = callPackage ../development/python-modules/pydaqmx { };
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 

@@ -1,0 +1,4136 @@
+{
+    "url": "http://download.ni.com/ni-linux-desktop/2019.07/rpm/ni/el8/",
+    "packages": {
+        "dkms": {
+            "filename": "dkms-2.6.1-1.el8.noarch.rpm",
+            "sha256": "68a2439f890c9e2ad37b53e255c66dd7e5d97a0637367699a32411dc66180a73",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "kernel-devel-uname-r",
+                "which",
+                "/bin/sh",
+                "gzip",
+                "systemd",
+                "elfutils-libelf-devel",
+                "gcc",
+                "/bin/bash",
+                "sed",
+                "kmod",
+                "cpio",
+                "tar",
+                "file",
+                "coreutils",
+                "findutils",
+                "gawk",
+                "grep"
+            ]
+        },
+        "labview-2019-rte": {
+            "filename": "labview-2019-rte-19.0.0-2.x86_64.rpm",
+            "sha256": "24469ba09d4810d223a863b409fd1cf2f19203be7dbb24c0eb7b33eeb5f1a351",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libiotracelog": {
+            "filename": "libiotracelog-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "784ea67673545290c5d363484c0f532a010150aa52c2680c23a53539ccfc2f73",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libivivisa-confmgr0": {
+            "filename": "libivivisa-confmgr0-7.0.0-1.x86_64.rpm",
+            "sha256": "9246106e6039f4bc4c179be93482ef3c2bdc1fa2f600d3e685358d7c90463c25",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libivivisa-utilities0": {
+            "filename": "libivivisa-utilities0-7.0.0-1.x86_64.rpm",
+            "sha256": "30cf75b30fd07598738a19cbbf9715583ba12e18ec93d33bba8504118b77bdab",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libivivisa0": {
+            "filename": "libivivisa0-7.0.0-1.x86_64.rpm",
+            "sha256": "d6f427573bc96f1cc33d84ead5391175ff74af625cb8f366c10c2fdf5caabe20",
+            "dependencies": [
+                "libivivisa-confmgr0",
+                "libivivisa-utilities0"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libivivisa0-devel": {
+            "filename": "libivivisa0-devel-7.0.0-1.x86_64.rpm",
+            "sha256": "c3a2cd0698d13b49c856760d828d1dede0d158159fc43ee03207256dbc28338b",
+            "dependencies": [
+                "libivivisa-confmgr0",
+                "libivivisa-utilities0",
+                "libivivisa0"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "libni1045tr1": {
+            "filename": "libni1045tr1-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "a631f5e3f89ed980e0d9acc4a82020f498f441c5a1cc956b134e8f28b9caf08d",
+            "dependencies": [
+                "ni-pxiplatformhwsupport-errors",
+                "ni-pxihw-ni1045-dkms",
+                "ni-apal-errors",
+                "ni-pxiplatformsoftware-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libni4882": {
+            "filename": "libni4882-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "9f8a36fdbdbeb5dbf771708ef2ec7a1777e83d5f0b4ab11ea60b4ebe4d3b249d",
+            "dependencies": [
+                "ni-488-2-dkms",
+                "ni-pal",
+                "ni-488-2-gpibenumsvc",
+                "ni-488-2-config"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6()(64bit)"
+            ]
+        },
+        "libni4882-devel": {
+            "filename": "libni4882-devel-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "524670238917e9daeecb03df1e028eb8499a2ee3a9d1292dc387a8ce804fbb23",
+            "dependencies": [
+                "ni-488-2-documentation",
+                "libni4882"
+            ],
+            "dependencies_not_in_repo": [
+                "gcc"
+            ]
+        },
+        "libniapxipm215": {
+            "filename": "libniapxipm215-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "9e2927ff7e072abeb964f874b5c44b802f69a531b8cb93bf7fd5b73121ed623a",
+            "dependencies": [
+                "ni-pxisa-compliance",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnicmm1": {
+            "filename": "libnicmm1-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "b595978d4dae579cf094c4edc6062522658632481ef6c89482804ef357a36e9c",
+            "dependencies": [
+                "ni-pxihw-nipxicmm-dkms",
+                "ni-pxiplatformhwsupport-errors",
+                "ni-apal-errors",
+                "ni-pxiplatformsoftware-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnicntdrv1": {
+            "filename": "libnicntdrv1-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "8f5ede25614ee833887b90b835d5f43b9a56cb917b6dde51b9c863d96611ac40",
+            "dependencies": [
+                "ni-controllerdriver-errors",
+                "ni-apal-errors",
+                "ni-pxihw-nicntdrv-dkms",
+                "ni-pxiplatformsoftware-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnidaqmx": {
+            "filename": "libnidaqmx-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "4119683aa716349d284e190c5d559968e48d223e5dc7dc3295b5841d82740b9a",
+            "dependencies": [
+                "ni-daqmx-mio",
+                "ni-daqmx-ef",
+                "ni-daqmx-notices",
+                "ni-daqmx-dsa",
+                "ni-daqmx-errors",
+                "ni-daqmx-switch"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnidaqmx-devel": {
+            "filename": "libnidaqmx-devel-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "a4f5f645a3474bf5e64148f167405ed2cb751dca8f940d9d1169754044340420",
+            "dependencies": [
+                "libnidaqmx",
+                "libnidaqmx-doc"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "libnidaqmx-doc": {
+            "filename": "libnidaqmx-doc-19.1.0.49154-0+f2.noarch.rpm",
+            "sha256": "8f1f0568823be6e814434cd14400d90d290ddb52c0342ae734a4668d68ab9cfb",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "libnidaqmx-labview": {
+            "filename": "libnidaqmx-labview-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "d4c078951f026ec3f189dc449088ee3e3901c62bbef3440df4d4fb03a0103c0c",
+            "dependencies": [
+                "ni-daqmx-notices",
+                "ni-daqmx-ef"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnidimu1": {
+            "filename": "libnidimu1-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "b14f21d6c54e95eed6a21f5c14569d96988b454116ac54fbaaecee0375e15b50",
+            "dependencies": [
+                "ni-routing-errors",
+                "ni-pal",
+                "ni-dim-dkms",
+                "ni-orb"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnidrumc1": {
+            "filename": "libnidrumc1-19.0.1.49152-0+f0.x86_64.rpm",
+            "sha256": "1ed9ea9f7f93925bcee4149ed3a8a06d780d2acb46a49ad6f0d1c753fe0d8542",
+            "dependencies": [
+                "libnidrumc1-bin",
+                "libusb-ni1"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnidrumc1-bin": {
+            "filename": "libnidrumc1-bin-19.0.1.49152-0+f0.x86_64.rpm",
+            "sha256": "7df513e48eb6b136746186596f1038083ab3fadb9626fbd2376d699b4c58076e",
+            "dependencies": [
+                "libusb-ni1"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnimru2u2": {
+            "filename": "libnimru2u2-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "2a90229da8a18cdc49061ff6560e3124a729a6cad93f8bcafdb908ec81c0ec21",
+            "dependencies": [
+                "ni-pal",
+                "ni-orb",
+                "ni-routing-errors",
+                "ni-apal-errors",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnimxi1": {
+            "filename": "libnimxi1-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "4416e3953d7e2049ec37a1deed9d0eb85a614f7d87feabd35a4617b827280d04",
+            "dependencies": [
+                "ni-pxihw-nimxi-dkms",
+                "ni-pxiplatformhwsupport-errors",
+                "ni-apal-errors",
+                "ni-pxiplatformsoftware-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnimximgr1": {
+            "filename": "libnimximgr1-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "7d1c2b27848fe4b6e7376fe1d7e13c344a1126b2661119fef24fc0e547134e0c",
+            "dependencies": [
+                "libnipcibrd1",
+                "libnipcibrd1-errors",
+                "libnimximgr1-data",
+                "libnimximgr1-errors",
+                "ni-pxiplatformsoftware-errors",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnimximgr1-data": {
+            "filename": "libnimximgr1-data-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "0d218e5fcbd8a762ddbe98c63e5026bc985db298f13335875c565f394ff3fa68",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnimximgr1-errors": {
+            "filename": "libnimximgr1-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "25437502483673517a16150620d56bb2fe768c1b6549b85a5e093be3b4749c07",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "libnip2p1": {
+            "filename": "libnip2p1-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "7e77ebc8f746db0e8e7a6c73397e55e64f9d980973954996c135f17d4ead6096",
+            "dependencies": [
+                "ni-apal-errors",
+                "ni-p2p-errors",
+                "ni-p2p-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnipcibrd1": {
+            "filename": "libnipcibrd1-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "3cf559cbebe10b21016d1c20ac19d309dc6cc4cb28c4a6c5d370580fe1b139f9",
+            "dependencies": [
+                "ni-apal-errors",
+                "ni-pxiplatformsoftware-errors",
+                "libnipcibrd1-bin",
+                "libnipcibrd1-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnipcibrd1-bin": {
+            "filename": "libnipcibrd1-bin-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "17b87b04c8d10f4aad58282f768448a7016965f2b4376b21915e336774f4f1fe",
+            "dependencies": [
+                "ni-apal-errors",
+                "libnipcibrd1-errors",
+                "ni-pxiplatformsoftware-errors"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "libnipcibrd1-errors": {
+            "filename": "libnipcibrd1-errors-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "019ce8292256e8c00d9ab5e2868226257302cb3b1f790a6bbc01f17d28db6fe0",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "libnipxices1": {
+            "filename": "libnipxices1-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "6f8b8f0aa2b3a84f5c90e78e59d32bd24f31674c2e974b34278b7f4d1d68c364",
+            "dependencies": [
+                "ni-pxihw-nipxiocp-dkms",
+                "ni-pxiplatformsoftware-errors",
+                "ni-pxiplatformhwsupport-errors",
+                "ni-apal-errors",
+                "ni-pxihw-nipxim2-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnipxicid1": {
+            "filename": "libnipxicid1-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "bfd259da950e4a6532ab18fcc83222ed8afcf55cc7f39b780d6ed068f7ab6141",
+            "dependencies": [
+                "ni-pxihw-nipxicid-dkms",
+                "ni-pxiplatformhwsupport-errors",
+                "ni-apal-errors",
+                "ni-pxiplatformsoftware-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnipxiepmu15": {
+            "filename": "libnipxiepmu15-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "911a11959c5e7d0ebc74ff9401ae2bb3cc145c12f23e0d4f6e41194c21e79445",
+            "dependencies": [
+                "ni-pal",
+                "ni-pxisa-compliance",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnipxigp15": {
+            "filename": "libnipxigp15-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "2acd07ddda00f7d5404bc109a287b49cf3695612300bce3bfcdb565c30fc4a9e",
+            "dependencies": [
+                "libnidimu1",
+                "ni-mxdf",
+                "ni-pxipf-errors",
+                "ni-mdbg",
+                "ni-orb-tools",
+                "ni-pxipf-nipxigp-dkms",
+                "ni-service-locator",
+                "ni-pal",
+                "ni-orb",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnipxirm1": {
+            "filename": "libnipxirm1-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "c83d46dc90e0492666d57cf760c84336e8f7f7bf04840052067afb168c10dd9f",
+            "dependencies": [
+                "libnidimu1",
+                "ni-mxdf",
+                "ni-pxipf-errors",
+                "ni-mdbg",
+                "ni-pxipf-nipxirm-dkms",
+                "ni-service-locator",
+                "ni-pal",
+                "ni-orb",
+                "ni-pxisa-compliance",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnipxisvc2": {
+            "filename": "libnipxisvc2-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "0a1bb6df30a680c07ccf62c66e5301280068557029446e3342e46e09fee65f20",
+            "dependencies": [
+                "ni-pal",
+                "ni-pxipf-errors",
+                "libnipxirm1"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libniqpxi1": {
+            "filename": "libniqpxi1-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "5f7acf977fc6bb99aa6a3165ca5b18e0d000554c75d8fe71fc6b111e1b6af81f",
+            "dependencies": [
+                "ni-euladepot",
+                "ni-pxipf-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnirocoapi1": {
+            "filename": "libnirocoapi1-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "8fbba1b199b368467f4a1a3ea7c5b413759998bcdc52c475736573e2aa5c829d",
+            "dependencies": [
+                "ni-routing-errors",
+                "ni-apal-errors",
+                "ni-service-locator"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnismbus2": {
+            "filename": "libnismbus2-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "00e7f7a95cf04c96049ffcc8ee2565277e110972666478c9dfb1f927d62c4768",
+            "dependencies": [
+                "ni-pal-errors",
+                "ni-pal",
+                "libnipxisvc2",
+                "ni-pxihw-nismbus-dkms",
+                "libnismbus2-bin",
+                "libnismbus2-errors",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnismbus2-bin": {
+            "filename": "libnismbus2-bin-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "5b2cda279a7ecf53294b9587f97d7f24472e73d0056d1011ab710073c47e8aac",
+            "dependencies": [
+                "ni-pxihw-nismbus-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnismbus2-errors": {
+            "filename": "libnismbus2-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "ec8894973e1cc4c331030f87f3b3d850659e868767f9e3dc2a41f9ed3ffbd36e",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "libnisync1": {
+            "filename": "libnisync1-18.1.0.49155-0+f3.x86_64.rpm",
+            "sha256": "0a6c46bf126f7e44b90fcd9c7ceb61cfc84d2e1ec130323971f8f9e1b2ae7847",
+            "dependencies": [
+                "ni-sysapi",
+                "ni-roco",
+                "ni-dim",
+                "ni-pxiplatformservices",
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libnisync1-devel": {
+            "filename": "libnisync1-devel-18.1.0.49155-0+f3.noarch.rpm",
+            "sha256": "911cabe7b77c4fc50621ae0b132aaef2cd4ad450fd33dff4ff456dc38608fed1",
+            "dependencies": [
+                "libnisync1",
+                "ni-visa-headers"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "libnisync_lvprovider1": {
+            "filename": "libnisync_lvprovider1-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "1128582929728c32376e029bdac228dc9b00a7ef630effdbff4c74f6009ac733",
+            "dependencies": [
+                "libnisync1",
+                "ni-sysapi",
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libusb-ni1": {
+            "filename": "libusb-ni1-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "14bb437889826fef8f7d7d51983b3ce238cc865d02d4f22342675357d3c87766",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libvisa": {
+            "filename": "libvisa-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "462a587db1ac3fd7dfc1bd8c4f83be62d2f128113014e503176c907afb84ff11",
+            "dependencies": [
+                "libvisa-data",
+                "ni-visa-errors",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "libvisa-data": {
+            "filename": "libvisa-data-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "af3c95a2a4615b7d270184cbfaabf8667986703925acf7efa14166092dff9566",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-488-2": {
+            "filename": "ni-488.2-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "f8624be3a49b4cb504ecd9b1f549e061c3d6571dd276b7ccb3f95eb8159d3747",
+            "dependencies": [
+                "ni-488-2-documentation",
+                "ni-488-2-utils",
+                "ni-488-2-runtime"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-488-2-config": {
+            "filename": "ni-488.2-config-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "0120d62078dc278f252754a5a9167585af5bfefe2358885da657d1642b4d1aaa",
+            "dependencies": [
+                "ni-pal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6()(64bit)"
+            ]
+        },
+        "ni-488-2-dkms": {
+            "filename": "ni-488.2-dkms-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "c21c5131a452a097c561ff20eb32a1af0f065e06d0acdf6a725b40e6021b9fc2",
+            "dependencies": [
+                "ni-euladepot",
+                "ni-pal-dkms",
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-488-2-documentation": {
+            "filename": "ni-488.2-documentation-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "3b5545df8a5bfdfc0749263540b9035a903cefd3208977cb45643abed76efce8",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-488-2-errors": {
+            "filename": "ni-488.2-errors-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "821a621fb87cd4b67badc639960055a0ff1534fd7dcf2ab5d52db6e1dfad5987",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-488-2-gpibenumsvc": {
+            "filename": "ni-488.2-gpibenumsvc-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "74e56a515a8798d565b9ce4811070f249cdf67665c4ead1ecebcd72c86234660",
+            "dependencies": [
+                "ni-488-2-dkms",
+                "ni-pal",
+                "ni-488-2-config"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6()(64bit)"
+            ]
+        },
+        "ni-488-2-gpibexplorer": {
+            "filename": "ni-488.2-gpibexplorer-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "ceacc73cdc0c6074fa84d69a78025438878984220e1e0021ed643a97e7aaede4",
+            "dependencies": [
+                "ni-488-2-gpibtroubleshooting",
+                "ni-avahi-client",
+                "ni-488-2-documentation",
+                "ni-488-2-gpibintctrl",
+                "ni-syscfg-runtime",
+                "libni4882",
+                "ni-488-2-sysapi-support",
+                "labview-2019-rte"
+            ],
+            "dependencies_not_in_repo": [
+                "libstdc++-so-6()(64bit)"
+            ]
+        },
+        "ni-488-2-gpibintctrl": {
+            "filename": "ni-488.2-gpibintctrl-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "42cbff6deadfa44ac0f66049c24f8dd17c296d15c66d4c04fff678722b495d6d",
+            "dependencies": [
+                "ni-488-2-documentation",
+                "libni4882"
+            ],
+            "dependencies_not_in_repo": [
+                "libstdc++-so-6()(64bit)"
+            ]
+        },
+        "ni-488-2-gpibtroubleshooting": {
+            "filename": "ni-488.2-gpibtroubleshooting-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "1f88936eff9571ebf57bde6bc88321f81ea4a939a2e42ebaaba3cd24c2cb4665",
+            "dependencies": [
+                "ni-488-2-documentation",
+                "ni-488-2-sysapi-support",
+                "libni4882",
+                "labview-2019-rte"
+            ],
+            "dependencies_not_in_repo": [
+                "libstdc++-so-6()(64bit)"
+            ]
+        },
+        "ni-488-2-iotrace-support": {
+            "filename": "ni-488.2-iotrace-support-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "86f71880d965ccc0c72532e5355cef91e474260f0cdfa9527466e61591c3c3e6",
+            "dependencies": [
+                "ni-488-2-documentation",
+                "ni-iotrace",
+                "libni4882"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-488-2-runtime": {
+            "filename": "ni-488.2-runtime-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "68b2598d757c695eda20d86e3a43668e8be9e493ebca7bad8b846bad3764d39e",
+            "dependencies": [
+                "ni-488-2-dkms",
+                "ni-488-2-gpibenumsvc",
+                "ni-488-2-config",
+                "libni4882",
+                "ni-488-2-errors",
+                "ni-488-2-sysapi-support"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-488-2-sysapi-support": {
+            "filename": "ni-488.2-sysapi-support-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "66584f8dc28b662104aba8b89e949e23079bd50bd4d6a2cff7a8ecb65bbd3565",
+            "dependencies": [
+                "nicurli",
+                "ni-pxiplatformservices",
+                "ni-488-2-config",
+                "ni-syscfg-runtime",
+                "libni4882",
+                "ni-488-2-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6()(64bit)"
+            ]
+        },
+        "ni-488-2-utils": {
+            "filename": "ni-488.2-utils-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "120d41afc72975e9109c80e8f680041d3f6cec949701e9a3d717504a13352712",
+            "dependencies": [
+                "ni-488-2-gpibexplorer",
+                "ni-488-2-gpibintctrl",
+                "ni-488-2-gpibtroubleshooting"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-5110": {
+            "filename": "ni-5110-19.0.1.49152-0+f0.noarch.rpm",
+            "sha256": "6d5798ca37a8641882ed6d8d85e986a3e8c5277c48edeebaaf8ebbb2b603cf14",
+            "dependencies": [
+                "ni-5110-dkms",
+                "ni-5110-libs",
+                "ni-rio-fpga-ids"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-5110-dkms": {
+            "filename": "ni-5110-dkms-19.0.1.49152-0+f0.x86_64.rpm",
+            "sha256": "7246a10b3bfcc21d4d4ce71910964c02c23a6ca358223a1f88ee473872b0900d",
+            "dependencies": [
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-5110-libs": {
+            "filename": "ni-5110-libs-19.0.1.49152-0+f0.x86_64.rpm",
+            "sha256": "7d9af83fc8c576f0542dbcdd92275d61d83bd71930162ccfe6b1e739c0e51e4b",
+            "dependencies": [
+                "ni-rio-sysapi",
+                "ni-roco",
+                "ni-pxiplatformservices",
+                "ni-syscfg-runtime",
+                "ni-5110-dkms",
+                "labview-2019-rte"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-5164": {
+            "filename": "ni-5164-19.0.1.49152-0+f0.noarch.rpm",
+            "sha256": "57f2891fb2029f1ae02916e97c371a1f3125607112bbd7fb54799b9c1cefb174",
+            "dependencies": [
+                "ni-5164-libs",
+                "ni-5164-dkms"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-5164-dkms": {
+            "filename": "ni-5164-dkms-19.0.1.49152-0+f0.x86_64.rpm",
+            "sha256": "0f9214d17d80af332d2d31db006cd5d1f17d137669c4579c98c4575978528f62",
+            "dependencies": [
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-5164-libs": {
+            "filename": "ni-5164-libs-19.0.1.49152-0+f0.x86_64.rpm",
+            "sha256": "909aebc6f072fe285cf54e480d28f04d942e29dce1ca06b9ef127f8d1054b28f",
+            "dependencies": [
+                "ni-rio",
+                "ni-rio-sysapi",
+                "ni-fpga-interface",
+                "ni-roco",
+                "ni-pxiplatformservices",
+                "labview-2019-rte",
+                "ni-syscfg-runtime",
+                "ni-5164-dkms",
+                "ni-bds"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-5170": {
+            "filename": "ni-5170-19.0.1.49152-0+f0.noarch.rpm",
+            "sha256": "46dcf53b2ad18bc48ad79f250a074393af70264cca1438fe0aa5f8e68b9f8030",
+            "dependencies": [
+                "ni-5170-dkms",
+                "ni-5170-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-5170-dkms": {
+            "filename": "ni-5170-dkms-19.0.1.49152-0+f0.x86_64.rpm",
+            "sha256": "35f0fd7e3c29a62d7aef162e3193b1eff770b426539987cdfd16e24ef867cdd7",
+            "dependencies": [
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-5170-libs": {
+            "filename": "ni-5170-libs-19.0.1.49152-0+f0.x86_64.rpm",
+            "sha256": "13be18f3f58ca5416efdc925c301329fe40516ed7038adc1595260a426f8005e",
+            "dependencies": [
+                "ni-rio",
+                "ni-rio-sysapi",
+                "ni-fpga-interface",
+                "ni-roco",
+                "ni-pxiplatformservices",
+                "labview-2019-rte",
+                "ni-syscfg-runtime",
+                "ni-5170-dkms",
+                "ni-bds"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-apal-errors": {
+            "filename": "ni-apal-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "777baa35f63083d2a5dd63a34988af60cbaa1b6451e9ec56bb81ef5e599e2945",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-avahi-client": {
+            "filename": "ni-avahi-client-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "a9d89e12ee926931bc439654304c29d40bc2387998ba95bb830358c7ed31886e",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "avahi"
+            ]
+        },
+        "ni-bds": {
+            "filename": "ni-bds-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "086fac7ffcb5844e62d00e961da0d73ebafe28a6eeec47501d8a243c81acac92",
+            "dependencies": [
+                "ni-apal-errors",
+                "ni-bds-dkms"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-bds-dkms": {
+            "filename": "ni-bds-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "fcf9796ee524c5d431fb6d2bd0a8cd580360258e81941f8be5bfa8af4288082f",
+            "dependencies": [
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-controllerdriver": {
+            "filename": "ni-controllerdriver-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "d3d5e982de042e50a089c7e4f9e6711336da3a82f18f53bae9490f1ef2ca91bb",
+            "dependencies": [
+                "ni-sysapi",
+                "ni-controllerdriver-errors",
+                "ni-pxihw-nicntdrv-dkms",
+                "ni-syscfg-runtime",
+                "libnicntdrv1",
+                "ni-pxiplatformsoftware-errors",
+                "ni-apal-errors",
+                "ni-controllerdriver-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-controllerdriver-devel": {
+            "filename": "ni-controllerdriver-devel-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "5406f9174c7c67bead8b60498ea183e6f1fa8a09c09c95890363209de62547ea",
+            "dependencies": [
+                "ni-syscfg-runtime",
+                "ni-controllerdriver-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-controllerdriver-errors": {
+            "filename": "ni-controllerdriver-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "b39d8ebb68292d7404942aae6d24c21e5dff5b388c75af7f9e6dc256bbdb4dab",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-controllerdriver-labview-2018-support": {
+            "filename": "ni-controllerdriver-labview-2018-support-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "b1a9de767086dc006df45983942e1e8c3ea11c2d86a0323d094cad502bc67714",
+            "dependencies": [
+                "ni-syscfg-labview-2018-support",
+                "ni-controllerdriver-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-controllerdriver-labview-2019-support": {
+            "filename": "ni-controllerdriver-labview-2019-support-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "0acd75d54879720e09cf5e464a0d808202782e9bbcacf7b3d3788c2f7354744a",
+            "dependencies": [
+                "ni-syscfg-labview-2019-support",
+                "ni-controllerdriver-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2019-core"
+            ]
+        },
+        "ni-controllerdriver-libs": {
+            "filename": "ni-controllerdriver-libs-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "f178d068519c7c2753785effe509f62257121fa5af5f5def90ca2a058e47bc29",
+            "dependencies": [
+                "ni-sysapi",
+                "ni-controllerdriver-errors",
+                "ni-euladepot",
+                "ni-syscfg-runtime",
+                "libnicntdrv1",
+                "ni-pxiplatformsoftware-errors",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-daqmx": {
+            "filename": "ni-daqmx-19.1.0.49155-0+f3.noarch.rpm",
+            "sha256": "d600fee0aa9bcf6ba5c7d36ecd3602f6ef470111abf36a3d58f97c61663d5f90",
+            "dependencies": [
+                "ni-daqmx-nistc2-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-daqmx-nihorbr-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-daqmx-nistcr-dkms",
+                "ni-daqmx-nicmr-dkms",
+                "ni-daqmx-niraptr-dkms",
+                "ni-daqmx-nidsar-dkms",
+                "ni-daqmx-niesr-dkms",
+                "ni-daqmx-nisdig-dkms",
+                "ni-daqmx-nitior-dkms",
+                "ni-daqmx-nistc3r-dkms",
+                "ni-daqmx-ef",
+                "ni-daqmx-nicartenum-dkms",
+                "ni-daqmx-nimsdr-dkms",
+                "ni-daqmx-nicondr-dkms",
+                "ni-daqmx-nixsr-dkms",
+                "ni-daqmx-niscd-dkms",
+                "ni-daqmx-mio",
+                "ni-daqmx-nissr-dkms",
+                "system-report",
+                "ni-daqmx-nifsl-dkms",
+                "ni-daqmx-nicsr-dkms",
+                "ni-daqmx-niwfr-dkms",
+                "ni-daqmx-dsa",
+                "libnidaqmx-devel",
+                "ni-daqmx-nicdcc-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-dsa": {
+            "filename": "ni-daqmx-dsa-19.1.0.49153-0+f1.noarch.rpm",
+            "sha256": "7b16c9d2413900c50ca5e9e1c88df5a41815ae53e788d11c696a87a0014d76ae",
+            "dependencies": [
+                "ni-daqmx-mio",
+                "ni-daqmx-notices",
+                "ni-daqmx-dsa-libs",
+                "ni-daqmx-ef"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-daqmx-dsa-libs": {
+            "filename": "ni-daqmx-dsa-libs-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "aa90340d93805f01ab1035643c698cef446afb7e957926e03a71ba3dd05f94d8",
+            "dependencies": [
+                "ni-daqmx-libs",
+                "libnipxiepmu15",
+                "ni-daqmx-mio-libs",
+                "ni-daqmx-notices",
+                "ni-orb",
+                "ni-daqmx-nidsar-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-ef": {
+            "filename": "ni-daqmx-ef-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "42bf8569eab9a49a6380b53ecc0ecf683952ab533f5c63e2e56aee858228e5f8",
+            "dependencies": [
+                "ni-xlator",
+                "ni-mxdf",
+                "ni-daqmx-libs",
+                "ni-avahi-client",
+                "ni-dim",
+                "ni-mxs",
+                "ni-mru",
+                "ni-daqmx-notices",
+                "ni-daqmx-errors",
+                "libniqpxi1",
+                "ni-rtsi-pal-libs",
+                "ni-rtsi-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-errors": {
+            "filename": "ni-daqmx-errors-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "b0a426859fd465bfb4ce529e0723035a0eea901414d92bc59b2f064cce14028b",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-daqmx-fsl-libs": {
+            "filename": "ni-daqmx-fsl-libs-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "7f788b1e4568eb9982c0c09270f3ff6aa6beaec97ad2403655b6106f8f9be750",
+            "dependencies": [
+                "ni-mdbg",
+                "ni-daqmx-nifsl-dkms",
+                "ni-pal",
+                "ni-daqmx-notices",
+                "ni-orb"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-labview-2017-support": {
+            "filename": "ni-daqmx-labview-2017-support-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "b10c084bf1d4907ab4cfff6ae889582cfb3c4b1da6a6e378584931128b1f8d80",
+            "dependencies": [
+                "libnidaqmx-labview",
+                "ni-daqmx-ef"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-daqmx-labview-2018-support": {
+            "filename": "ni-daqmx-labview-2018-support-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "1594b298d954d27d5f9f8e5a09d81a54aa033bae7f3a119a3b346c053f79bc74",
+            "dependencies": [
+                "libnidaqmx-labview",
+                "ni-daqmx-ef"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-daqmx-labview-2019-support": {
+            "filename": "ni-daqmx-labview-2019-support-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "5cf102129b5d50b2ee7ea617572955d86f741705e68c53ab5e377c5108f8fb25",
+            "dependencies": [
+                "libnidaqmx-labview",
+                "ni-daqmx-ef"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-daqmx-libs": {
+            "filename": "ni-daqmx-libs-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "e64e27b50d77a5e2242bfa55dc19a31d19aa056e594884619f3b3c7084e0b0b9",
+            "dependencies": [
+                "ni-mxdf",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-mxs",
+                "ni-daqmx-nimsdr-dkms",
+                "ni-pal",
+                "ni-syscfg-runtime",
+                "ni-daqmx-notices",
+                "ni-daqmx-errors",
+                "ni-orb"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-mio": {
+            "filename": "ni-daqmx-mio-19.1.0.49154-0+f2.noarch.rpm",
+            "sha256": "287ea3c4e6179dc2187f897ea2f0b4ddcac3193c5cc5ebd535479fbf2e79c86e",
+            "dependencies": [
+                "ni-daqmx-mio-libs",
+                "ni-daqmx-notices",
+                "ni-daqmx-ef",
+                "ni-pxiplatformservices"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-daqmx-mio-libs": {
+            "filename": "ni-daqmx-mio-libs-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "6dd5d8689846c1895eb16938b17ef3fe0bf89ec7d67882a916d575d00b612ac5",
+            "dependencies": [
+                "ni-daqmx-nistc2-dkms",
+                "nicurli",
+                "ni-daqmx-nichenum-dkms",
+                "ni-daqmx-notices",
+                "nixercesdelayloadi",
+                "ni-daqmx-nifresnelmbdc-dkms",
+                "ni-apal-errors",
+                "ni-daqmx-nihorbr-dkms",
+                "ni-daqmx-libs",
+                "ni-daqmx-nicdr-dkms",
+                "ni-daqmx-nistcr-dkms",
+                "ni-mru",
+                "ni-daqmx-nifdr-dkms",
+                "libnipxiepmu15",
+                "ni-daqmx-nicmr-dkms",
+                "ni-syncdomain-service",
+                "ni-daqmx-niraptr-dkms",
+                "ni-daqmx-niesr-dkms",
+                "ni-mxdf",
+                "ni-daqmx-nisdig-dkms",
+                "ni-daqmx-nitior-dkms",
+                "ni-daqmx-nistc3r-dkms",
+                "ni-daqmx-fsl-libs",
+                "ni-daqmx-nicartenum-dkms",
+                "ni-pal",
+                "ni-orb",
+                "ni-daqmx-nicondr-dkms",
+                "libnidrumc1",
+                "ni-daqmx-nixsr-dkms",
+                "ni-mdbg",
+                "ni-daqmx-nissr-dkms",
+                "ni-dim",
+                "ni-daqmx-nifsl-dkms",
+                "ni-daqmx-nicsr-dkms",
+                "ni-daqmx-niwfr-dkms",
+                "ni-daqmx-nicdcc-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nicartenum-dkms": {
+            "filename": "ni-daqmx-nicartenum-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "f6683f2b893de8e80dcb8c56d42f2e878622653e19d1b540a9f3cff2b9652a31",
+            "dependencies": [
+                "ni-pal-dkms",
+                "ni-kal",
+                "dkms",
+                "ni-daqmx-notices",
+                "ni-mdbg-dkms",
+                "ni-bds"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nicdcc-dkms": {
+            "filename": "ni-daqmx-nicdcc-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "b0cf437ed620ad2d706140b26686b1783f7f24225d1bb01d20cb916c00eb66fb",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nicdr-dkms": {
+            "filename": "ni-daqmx-nicdr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "fddc83af6a5c08486fbdcfe0ddcf7315c1278e800799f5b3e87191d70a2206ea",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nichenum-dkms": {
+            "filename": "ni-daqmx-nichenum-dkms-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "6d8f4966588a6a32da06ad9c39b157fd2527226fc6aed2d62cf538bba89a122b",
+            "dependencies": [
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-nifsl-dkms",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-bds"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nicmr-dkms": {
+            "filename": "ni-daqmx-nicmr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "9a60f1f91b81845a49954ccdeab5f5a4e8f1466a328110ae96e7501e589478b2",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-daqmx-nistc3r-dkms",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nicondr-dkms": {
+            "filename": "ni-daqmx-nicondr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "bfeb1c909cee10236e1f8f3c2fc49110db493657e67b86e0b9f4930d7a06bddd",
+            "dependencies": [
+                "ni-daqmx-nisdig-dkms",
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-daqmx-nistc3r-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nicsr-dkms": {
+            "filename": "ni-daqmx-nicsr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "14383ff50e77d14b25b2f1a6d7889b0ed22dbfccd59dfd6d2157a4d3165505cc",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-daqmx-nistc3r-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-daqmx-nifresnelmbdc-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-daqmx-nichenum-dkms",
+                "ni-kal",
+                "ni-daqmx-nifsl-dkms",
+                "dkms",
+                "ni-daqmx-notices",
+                "ni-mdbg-dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms",
+                "ni-daqmx-nicdcc-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nidmxf-dkms": {
+            "filename": "ni-daqmx-nidmxf-dkms-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "4614b99cfced9b555413b24f6472f4501a99bd781906d29f55e2a1ff28e4ce82",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nidsar-dkms": {
+            "filename": "ni-daqmx-nidsar-dkms-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "5b230409bc35c0270c9a725a3440354d3d5e5f15ad50cfdf906273a8640eed43",
+            "dependencies": [
+                "ni-daqmx-nistc2-dkms",
+                "ni-mxdf-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-pal-dkms",
+                "ni-daqmx-nistcr-dkms",
+                "ni-kal",
+                "ni-mdbg-dkms",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-niesr-dkms": {
+            "filename": "ni-daqmx-niesr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "53509480270b5663dc630502de8dd8741fd85450d3e64bec33e1755f0a5d62a3",
+            "dependencies": [
+                "ni-daqmx-nistc2-dkms",
+                "ni-daqmx-nisdig-dkms",
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-daqmx-nistcr-dkms",
+                "ni-kal",
+                "ni-mdbg-dkms",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nifdr-dkms": {
+            "filename": "ni-daqmx-nifdr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "bfc49dcba265086bd1540d15c9df48edae6ca7efb5c9e89086a8a3bbca17ddcd",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-daqmx-nistc3r-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-daqmx-nifresnelmbdc-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-daqmx-nichenum-dkms",
+                "ni-kal",
+                "ni-daqmx-nifsl-dkms",
+                "dkms",
+                "ni-daqmx-notices",
+                "ni-mdbg-dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms",
+                "ni-daqmx-nicdcc-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nifresnelmbdc-dkms": {
+            "filename": "ni-daqmx-nifresnelmbdc-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "ed91597635a62b5b6e57fe1f0b3ebe8d7857a0bdaee70a2c846cfefe115a3ba5",
+            "dependencies": [
+                "ni-pal-dkms",
+                "ni-kal",
+                "dkms",
+                "ni-daqmx-notices",
+                "ni-mdbg-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nifsl-dkms": {
+            "filename": "ni-daqmx-nifsl-dkms-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "cd5b1d6e88a00b607c0e77e11b17277562e5fb81e46fc4049aa018a961424d39",
+            "dependencies": [
+                "ni-pal-dkms",
+                "ni-kal",
+                "dkms",
+                "ni-daqmx-notices",
+                "ni-mdbg-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nihorbr-dkms": {
+            "filename": "ni-daqmx-nihorbr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "268f74206f33f14bc01b61cd80071cb23dda1306902818be47f5b101e4fe51d7",
+            "dependencies": [
+                "ni-daqmx-nisdig-dkms",
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-daqmx-nistc3r-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nilms-dkms": {
+            "filename": "ni-daqmx-nilms-dkms-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "d57bae2c0f1ce74035549c70a46f3adb761ffa0a438e12e347ac6984740c8c92",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nimsdr-dkms": {
+            "filename": "ni-daqmx-nimsdr-dkms-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "2348ecfd729bf9d837ddce92673a6888e89f981b52a344c8d735549ee1b2e158",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-niraptr-dkms": {
+            "filename": "ni-daqmx-niraptr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "c83d9f9e085ab92070ca51ae067b18824685c5a5b7ef6a77d76897a75dd30d7c",
+            "dependencies": [
+                "ni-daqmx-nisdig-dkms",
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-daqmx-nistc3r-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-niscd-dkms": {
+            "filename": "ni-daqmx-niscd-dkms-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "b1c5abf80cd988a51925af479db4fc50dd159c3722803aa442a41149d9f68534",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nisdig-dkms": {
+            "filename": "ni-daqmx-nisdig-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "1c0aab78f5c4e73734d26bb75281ca56f4e7107d1a968a22da1d21f534812fcd",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nissr-dkms": {
+            "filename": "ni-daqmx-nissr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "8682f82903983996f139bbf8648c7eb5403a71267b034e1a2855ff938a5ad075",
+            "dependencies": [
+                "ni-daqmx-nistc2-dkms",
+                "ni-daqmx-nisdig-dkms",
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-daqmx-nitior-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-daqmx-nistcr-dkms",
+                "ni-kal",
+                "ni-mdbg-dkms",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nistc2-dkms": {
+            "filename": "ni-daqmx-nistc2-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "4c97a44905f067a1186174c063d75e6693ac9e82b85f630ef8c9f7a28bb2bd07",
+            "dependencies": [
+                "ni-pal-dkms",
+                "ni-kal",
+                "dkms",
+                "ni-daqmx-notices",
+                "ni-mdbg-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nistc3r-dkms": {
+            "filename": "ni-daqmx-nistc3r-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "5866a11aa2855aac4a26781bf3c25842c3afa547ab40e2d2d6d8ee64b70612c1",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-nifsl-dkms",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms",
+                "ni-daqmx-nicdcc-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nistcr-dkms": {
+            "filename": "ni-daqmx-nistcr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "51fad5d7f7451a899aa0649613015f73473f19840fa94fd58d5a0dc80ccf347e",
+            "dependencies": [
+                "ni-daqmx-nistc2-dkms",
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nitior-dkms": {
+            "filename": "ni-daqmx-nitior-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "26d8ab5cb7800c73ac906933f6f0492fb00cf0b481b5b5917bdc7ec7c4df7467",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-niwfr-dkms": {
+            "filename": "ni-daqmx-niwfr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "f26c724899d11843dc989c4a1942863b5945cc09b1dc0989f3cc36a25a9d16bd",
+            "dependencies": [
+                "ni-daqmx-nistc2-dkms",
+                "ni-mxdf-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-daqmx-nistcr-dkms",
+                "ni-kal",
+                "ni-mdbg-dkms",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-nixsr-dkms": {
+            "filename": "ni-daqmx-nixsr-dkms-19.1.0.49154-0+f2.x86_64.rpm",
+            "sha256": "6357d97a3263a8117cc75488da6f88f87f5ca7b8a159d64e31a429d923c9c9aa",
+            "dependencies": [
+                "ni-daqmx-nisdig-dkms",
+                "ni-mxdf-dkms",
+                "ni-daqmx-nitior-dkms",
+                "ni-daqmx-nidmxf-dkms",
+                "ni-orb-dkms",
+                "ni-daqmx-nilms-dkms",
+                "ni-daqmx-nicdr-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "ni-daqmx-nifsl-dkms",
+                "ni-daqmx-notices",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-notices": {
+            "filename": "ni-daqmx-notices-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "6a667855f8754275ec5c15002bb3a4cd6525e01ec4281b65e032cd802509826d",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-daqmx-scxi-libs": {
+            "filename": "ni-daqmx-scxi-libs-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "e50c145852fb7eac564317585a2694118c04e1af4e969e64da35827ee8a3452c",
+            "dependencies": [
+                "ni-daqmx-libs",
+                "ni-daqmx-niscd-dkms",
+                "ni-mxs",
+                "ni-daqmx-mio-libs",
+                "ni-orb"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-switch": {
+            "filename": "ni-daqmx-switch-19.1.0.49153-0+f1.noarch.rpm",
+            "sha256": "c223a47180061eda16c099662400c545399b497010ece492337c7559bce06c69",
+            "dependencies": [
+                "ni-daqmx-switch-dkms",
+                "ni-daqmx-switch-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-daqmx-switch-dkms": {
+            "filename": "ni-daqmx-switch-dkms-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "1a8eb89a6ca9cf5959ad49ddb79eee0326fd53f2e598de21b96114a95690f8a9",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-daqmx-niscd-dkms",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-daqmx-switch-libs": {
+            "filename": "ni-daqmx-switch-libs-19.1.0.49153-0+f1.x86_64.rpm",
+            "sha256": "4ec8c9717610858d9c6ff35d015e9d37796f97d040f9e9b34a7dd3298a13711d",
+            "dependencies": [
+                "ni-daqmx-switch-dkms",
+                "ni-daqmx-scxi-libs",
+                "ni-daqmx-ef"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-dim": {
+            "filename": "ni-dim-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "f141c9fd826de12e6c9a6571543583f0c57d57b1048a0359492ea229e44589ad",
+            "dependencies": [
+                "libnidimu1",
+                "ni-dim-libs",
+                "ni-kal",
+                "ni-pal",
+                "ni-orb",
+                "ni-routing-errors",
+                "ni-dim-dkms",
+                "ni-dim-sysapi"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-dim-dkms": {
+            "filename": "ni-dim-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "19f67899624adecffe74b04c71022f410748c548073c634fe52a9d87733d2307",
+            "dependencies": [
+                "ni-routing-errors",
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ni-orb-nikalmod",
+                "ni-pal-nikalmod"
+            ]
+        },
+        "ni-dim-libs": {
+            "filename": "ni-dim-libs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "8c76a099dacf1f57d0ed701644404acf215dbf600e8c18fd645744d5b7079573",
+            "dependencies": [
+                "libnidimu1",
+                "ni-pal",
+                "ni-orb"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-dim-sysapi": {
+            "filename": "ni-dim-sysapi-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "8649f0081d33473e3425e588d4049c7d31a6e7b85a8d32d18100d069905ece20",
+            "dependencies": [
+                "ni-sysapi",
+                "libnidimu1",
+                "ni-pal",
+                "ni-orb"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-dmm": {
+            "filename": "ni-dmm-18.2.1.49152-0+f0.noarch.rpm",
+            "sha256": "089ee209c3df9be13968ded37e108640ebf8a92443b2ec0f6a20884297feaec0",
+            "dependencies": [
+                "system-report",
+                "ni-dmm-408x",
+                "ni-pxiplatformservices",
+                "ni-dmm-devel",
+                "ni-dmm-libs",
+                "ni-dmm-errors",
+                "ni-dmm-docs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-dmm-408x": {
+            "filename": "ni-dmm-408x-18.2.1.49152-0+f0.noarch.rpm",
+            "sha256": "1f54fae95769e632a537c08e2c40a8f0f5bd451c733d75d225beac2538320512",
+            "dependencies": [
+                "ni-dmm-408x-libs",
+                "ni-apal-errors",
+                "ni-dmm-libs",
+                "ni-dmm-408x-dkms"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-dmm-408x-dkms": {
+            "filename": "ni-dmm-408x-dkms-18.2.1.49152-0+f0.x86_64.rpm",
+            "sha256": "8d0f4e00e2466066d34f994edf742d5df166299fb536e4bbdcaadf0530750e05",
+            "dependencies": [
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-dmm-408x-libs": {
+            "filename": "ni-dmm-408x-libs-18.2.1.49152-0+f0.x86_64.rpm",
+            "sha256": "f18549ea404b86d02610245e0265522606f3b92cb11c59a24f54005ffe004150",
+            "dependencies": [
+                "ni-syscfg-runtime",
+                "ni-icp",
+                "ni-dmm-libs",
+                "ni-dmm-408x-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-dmm-daqmx": {
+            "filename": "ni-dmm-daqmx-18.2.1.49152-0+f0.noarch.rpm",
+            "sha256": "848dd927a8674f70d83b6668470ea96482e0b3e4c4795e091ef04e035a0fe905",
+            "dependencies": [
+                "ni-dmm-daqmx-libs",
+                "ni-dmm-daqmx-dkms",
+                "ni-dmm-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-dmm-daqmx-dkms": {
+            "filename": "ni-dmm-daqmx-dkms-18.2.1.49152-0+f0.x86_64.rpm",
+            "sha256": "4b78ad48b010c23c0818f627cb2bf8317e71979527371d78e95b848ef19c44e5",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-kal",
+                "ni-daqmx-nimsdr-dkms",
+                "dkms",
+                "ni-mdbg-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-dmm-daqmx-libs": {
+            "filename": "ni-dmm-daqmx-libs-18.2.1.49152-0+f0.x86_64.rpm",
+            "sha256": "80370420e5aeb14a92224bdac620f9e8e93f27a2b10617709944e0e35d2fb0e6",
+            "dependencies": [
+                "ni-daqmx-ef",
+                "ni-icp",
+                "ni-visa-runtime",
+                "ni-dmm-daqmx-dkms",
+                "ni-syscfg-runtime",
+                "ni-dmm-libs",
+                "ni-daqmx"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-dmm-devel": {
+            "filename": "ni-dmm-devel-18.2.1.49152-0+f0.noarch.rpm",
+            "sha256": "578075d7a6672e26181da301494b7d7560d4bfde146e94f322a287700e55306b",
+            "dependencies": [
+                "ni-dmm-libs",
+                "ni-icp-devel"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-dmm-docs": {
+            "filename": "ni-dmm-docs-18.2.1.49152-0+f0.noarch.rpm",
+            "sha256": "0155d5ed5b3aa21cc49a8b9b82601ca3802fbd280f379333e92bf905bbe61328",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-dmm-errors": {
+            "filename": "ni-dmm-errors-18.2.1.49152-0+f0.noarch.rpm",
+            "sha256": "2a351cb2c45260771db5f51d34ae12ff74888e652def6a70ed2b48b47b8947dc",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-dmm-labview-2015-support": {
+            "filename": "ni-dmm-labview-2015-support-18.2.1.49152-0+f0.x86_64.rpm",
+            "sha256": "fb0305d763232ad1100e68457e5f53abb0cf8d88d054d0c2530ff7e79720b59b",
+            "dependencies": [
+                "ni-dmm-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2015-core"
+            ]
+        },
+        "ni-dmm-labview-2016-support": {
+            "filename": "ni-dmm-labview-2016-support-18.2.1.49152-0+f0.x86_64.rpm",
+            "sha256": "074ea33ca1f2d85d7a3bf8ed0bfe33afedc57f74b2abb9a844064899d7d4d14b",
+            "dependencies": [
+                "ni-dmm-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2016-core"
+            ]
+        },
+        "ni-dmm-labview-2017-support": {
+            "filename": "ni-dmm-labview-2017-support-18.2.1.49152-0+f0.x86_64.rpm",
+            "sha256": "e6fafba368395721186779195b7b21d24b022dbe290f5950542e65220bef27d2",
+            "dependencies": [
+                "ni-dmm-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2017-core"
+            ]
+        },
+        "ni-dmm-labview-2018-support": {
+            "filename": "ni-dmm-labview-2018-support-18.2.1.49152-0+f0.x86_64.rpm",
+            "sha256": "8afd79f1b56044cf0b588126b07c61b1c55c279fb4b621f429309e5692dff7a2",
+            "dependencies": [
+                "ni-dmm-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-dmm-libs": {
+            "filename": "ni-dmm-libs-18.2.1.49152-0+f0.x86_64.rpm",
+            "sha256": "8adaf0a0a99e5e3a39c5c54dd754c855f47be10bf0003d0e5964e785c322f67b",
+            "dependencies": [
+                "ni-syscfg-runtime",
+                "ni-icp",
+                "ni-dmm-notices"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-dmm-notices": {
+            "filename": "ni-dmm-notices-18.2.1.49152-0+f0.noarch.rpm",
+            "sha256": "214e5e4c7f448e288db52426d1b604b12308d2305095dc6511729b6d723d5b60",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-euladepot": {
+            "filename": "ni-euladepot-18.2.1.49152-0+f0.noarch.rpm",
+            "sha256": "0ffec9637f0c4d29a44b9731da3d71587d82888b7d7b92b33fd13b129022f8ea",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-flexrio": {
+            "filename": "ni-flexrio-18.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "d939990d126676af2875df01fcd803d8f58a2932e7d0b96c7c466a1b4449922e",
+            "dependencies": [
+                "ni-flexrio-797x",
+                "ni-flexrio-errors",
+                "ni-flexrio-795x",
+                "ni-flexrio-796x",
+                "ni-flexrio-docs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-flexrio-795x": {
+            "filename": "ni-flexrio-795x-18.1.1.49154-0+f2.noarch.rpm",
+            "sha256": "8cc0e318e7fc059873d9550a98f583a710d833976930c3d70856863189146afc",
+            "dependencies": [
+                "ni-rio",
+                "ni-flexrio-modulario-libs",
+                "ni-rio-sysapi",
+                "ni-pxiplatformservices",
+                "ni-flexrio-795x-dkms",
+                "ni-bds"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-flexrio-795x-dkms": {
+            "filename": "ni-flexrio-795x-dkms-18.1.1.49154-0+f2.x86_64.rpm",
+            "sha256": "1110f3a26853a6604b579601eea5fe110a9b56e606856156fdbbe33129f2613e",
+            "dependencies": [
+                "ni-rio-dkms",
+                "ni-p2p-dkms",
+                "ni-kal",
+                "ni-flexrio-errors",
+                "dkms",
+                "ni-bds-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-flexrio-796x": {
+            "filename": "ni-flexrio-796x-18.1.1.49154-0+f2.noarch.rpm",
+            "sha256": "9d45e9d826348d54708ab8ae30ad8302ba0e7c4ffb865893c05a6bf46386d5ba",
+            "dependencies": [
+                "ni-rio",
+                "ni-flexrio-modulario-libs",
+                "ni-rio-sysapi",
+                "ni-pxiplatformservices",
+                "ni-flexrio-796x-dkms",
+                "ni-bds"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-flexrio-796x-dkms": {
+            "filename": "ni-flexrio-796x-dkms-18.1.1.49154-0+f2.x86_64.rpm",
+            "sha256": "2e46d559f99745cb002ad884ef97277ecff4deaf2651903a54f87e444c93c9f7",
+            "dependencies": [
+                "ni-rio-dkms",
+                "ni-p2p-dkms",
+                "ni-kal",
+                "ni-flexrio-errors",
+                "dkms",
+                "ni-bds-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-flexrio-797x": {
+            "filename": "ni-flexrio-797x-18.1.1.49153-0+f1.noarch.rpm",
+            "sha256": "8e64b5e89261c527f288b4c5baba8f3b92ba3a4ef9b7ab22c91cb0c49de97a5f",
+            "dependencies": [
+                "ni-rio",
+                "ni-rio-sysapi",
+                "ni-flexrio-modulario-libs",
+                "ni-roco",
+                "ni-flexrio-797x-libs",
+                "ni-pxiplatformservices",
+                "ni-flexrio-797x-dkms"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-flexrio-797x-dkms": {
+            "filename": "ni-flexrio-797x-dkms-18.1.1.49153-0+f1.x86_64.rpm",
+            "sha256": "2cf1d91ec74f19782784b6ce8c82237b214b81018f4bec9f2cb1de88bfc85d35",
+            "dependencies": [
+                "ni-flexrio-errors",
+                "ni-kal",
+                "dkms",
+                "ni-p2p-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-flexrio-797x-libs": {
+            "filename": "ni-flexrio-797x-libs-18.1.1.49153-0+f1.x86_64.rpm",
+            "sha256": "648fc11e1a771022f59ba4af555c4da7b1f88b5e85709543fad48a5c0d9618c4",
+            "dependencies": [
+                "ni-flexrio-797x-dkms",
+                "libnirocoapi1",
+                "libniqpxi1"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6()(64bit)"
+            ]
+        },
+        "ni-flexrio-docs": {
+            "filename": "ni-flexrio-docs-18.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "4bd31c0ee7409df9738243edd2e8fcf104ede9be4ff9e54b62e2e493dbaf05cc",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-flexrio-errors": {
+            "filename": "ni-flexrio-errors-18.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "2ae98ca3991f61210e5f724f9f9c978c4f8b9b9503b7910448627f9adf5e4543",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-flexrio-modulario-libs": {
+            "filename": "ni-flexrio-modulario-libs-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "241e839fe0347e6918edb27d5f65ec50ead85beedc923f940d2c8c54f68b6c77",
+            "dependencies": [
+                "ni-rio",
+                "ni-fpga-interface",
+                "ni-flexrio-errors",
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6()(64bit)"
+            ]
+        },
+        "ni-fpga-interface": {
+            "filename": "ni-fpga-interface-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "cb2f793ad81b5a95cf9a83e350adeac5f58eaec5c3161c34604edb59335650b6",
+            "dependencies": [
+                "ni-rio",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-icp": {
+            "filename": "ni-icp-18.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "6382bc0774f12511a56ce7482d1937c354b7d833cd6360f35e84ab658a9d398e",
+            "dependencies": [
+                "ni-icp-libs",
+                "ni-icp-errors",
+                "ni-icp-devel"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-icp-devel": {
+            "filename": "ni-icp-devel-18.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "e416a5769759b99fd1b2e12424c37de56f4cedf6494708ee2c6d8b582f80fd59",
+            "dependencies": [
+                "ni-icp-notices"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-icp-errors": {
+            "filename": "ni-icp-errors-18.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "e1ee4fe9590d08e2546b4b97096f040b6b7f3f932e4f7d92be70f1dd6e0d6248",
+            "dependencies": [
+                "ni-icp-notices"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-icp-libs": {
+            "filename": "ni-icp-libs-18.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "def9a818dc646db8809d35d61b776bb1f963f0fcc295fb6b6a36dc16d03b26f9",
+            "dependencies": [
+                "ni-icp-notices"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-icp-notices": {
+            "filename": "ni-icp-notices-18.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "9eadb31e37e736625ad1ba6aaf8c76abc26fa27bebcf49b1c86d7b438d5e1248",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-iotrace": {
+            "filename": "ni-iotrace-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "cfa7bf72ab9529b161cb70aae1462a81b202fb10e6bdba8fac8555a2ea1ca4af",
+            "dependencies": [
+                "libiotracelog",
+                "labview-2019-rte"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "shared-mime-info",
+                "xdg-utils",
+                "desktop-file-utils"
+            ]
+        },
+        "ni-kal": {
+            "filename": "ni-kal-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "21a1e4798e262f51fef64904358f82b5c3492b7a7277b7ac3a0b3009ae852947",
+            "dependencies": [
+                "dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "make",
+                "binutils",
+                "gcc",
+                "kernel-devel",
+                "bash"
+            ]
+        },
+        "ni-mdbg": {
+            "filename": "ni-mdbg-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "fc5cb45d4cf879ccf76de83320ffde54ceb8ee44a0469333604b83b813a1a40b",
+            "dependencies": [
+                "ni-pal",
+                "ni-mdbg-errors",
+                "ni-orb"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ni-mdbg-nikalmod"
+            ]
+        },
+        "ni-mdbg-dkms": {
+            "filename": "ni-mdbg-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "d29948b69bf5c3e705beafe80f921038db351d5fb3be1ff51afcb8b0c74385da",
+            "dependencies": [
+                "dkms",
+                "ni-mdbg-errors",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ni-orb-nikalmod",
+                "ni-pal-nikalmod"
+            ]
+        },
+        "ni-mdbg-errors": {
+            "filename": "ni-mdbg-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "3a3114b20d7a54d6276197a1461b5ac758f6899d4445f29680bdc012aacb1526",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-mru": {
+            "filename": "ni-mru-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "aef38eb521fa44f2577e2526a27ae7520ddd32b8e0944be1940835f5a5f5cf48",
+            "dependencies": [
+                "ni-mxdf",
+                "ni-mdbg",
+                "libnimru2u2",
+                "ni-dim",
+                "ni-kal",
+                "ni-pal",
+                "ni-orb",
+                "ni-routing-errors",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-mru-dkms": {
+            "filename": "ni-mru-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "68490053636b304a680cbcef267e663ab34b5e7fcd27c0d13e1bd1c2087c334f",
+            "dependencies": [
+                "ni-apal-errors",
+                "ni-kal",
+                "ni-routing-errors",
+                "dkms",
+                "ni-dim-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ni-orb-nikalmod",
+                "ni-pal-nikalmod",
+                "ni-mxdf-nikalmod",
+                "ni-mdbg-nikalmod"
+            ]
+        },
+        "ni-mxdf": {
+            "filename": "ni-mxdf-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "2c50e3223070ac70584a3c83fd99c66859f06d833c8ae12a021a31507a3670f6",
+            "dependencies": [
+                "ni-pal",
+                "ni-mxdf-errors",
+                "ni-mdbg",
+                "ni-orb"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ni-mxdf-nikalmod"
+            ]
+        },
+        "ni-mxdf-dkms": {
+            "filename": "ni-mxdf-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "0f1ad2589517f74e3dc9d696c23decab285391845ad20eef40f3b17cfb6bcf54",
+            "dependencies": [
+                "ni-mxdf-errors",
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ni-orb-nikalmod",
+                "ni-mdbg-nikalmod",
+                "ni-pal-nikalmod"
+            ]
+        },
+        "ni-mxdf-errors": {
+            "filename": "ni-mxdf-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "fc755326c8bc43bb5eb5fe9449c404d5317568b823f34947df078ef7c70c4391",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-mximanager": {
+            "filename": "ni-mximanager-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "3b6dc9630c65761add6850ab908d846fd81102d216d4b8c684002fa368d407de",
+            "dependencies": [
+                "ni-sysapi",
+                "ni-mximanager-libs",
+                "libnimximgr1-errors",
+                "libnimximgr1-data",
+                "libnimximgr1",
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-mximanager-libs": {
+            "filename": "ni-mximanager-libs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "f9cc6508952f6e7afe50b8b0254bad269544d06e90f20cea5ef60cc31e9113fe",
+            "dependencies": [
+                "libnipcibrd1",
+                "libnipcibrd1-errors",
+                "libnimximgr1-errors",
+                "libnimximgr1",
+                "ni-pxiplatformsoftware-errors",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-mxs": {
+            "filename": "ni-mxs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "df75af97d5f416f3cc87d89f5864538ef7c2cd354c3fdf6c9c3e675b2b672dff",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-networkdiscoverysvc": {
+            "filename": "ni-networkdiscoverysvc-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "df72a72a80bd2d5201e642c520bae675d4b23be3d028f0f58a1dfca15756a3f6",
+            "dependencies": [
+                "ni-sysapi",
+                "ni-avahi-client"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-orb": {
+            "filename": "ni-orb-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "fa15ff3b66caba2d1917f0b3210e02e3607db508611f201d32b5173ba9d84ef1",
+            "dependencies": [
+                "ni-pal",
+                "ni-orb-tools",
+                "ni-orb-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ni-orb-nikalmod"
+            ]
+        },
+        "ni-orb-dkms": {
+            "filename": "ni-orb-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "44df937604e9c19d3b48a5926abcbdb46aa73e40c438dfc7181a36687ad77fd4",
+            "dependencies": [
+                "dkms",
+                "ni-kal",
+                "ni-orb-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ni-pal-nikalmod"
+            ]
+        },
+        "ni-orb-errors": {
+            "filename": "ni-orb-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "b327e0e3ad7b6d12987d29e46a1e1d79c7a2eb29f39d6ec7667d4920f720ab1b",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-orb-tools": {
+            "filename": "ni-orb-tools-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "39d62cfa3e99f56dc685f9c303ccc911999c307cf3464445f0e87064895506a9",
+            "dependencies": [
+                "ni-orb-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-p2p": {
+            "filename": "ni-p2p-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "19994e104a461a0ed50fffded25765d486a2531025f44583f4766e2e22578b3e",
+            "dependencies": [
+                "ni-p2p-dkms",
+                "libnip2p1",
+                "ni-p2p-errors",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-p2p-devel": {
+            "filename": "ni-p2p-devel-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "a43d2097fe47ddd29994705793843963a67197b7b6527747245b8b0cf247875e",
+            "dependencies": [
+                "libnip2p1"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-p2p-dkms": {
+            "filename": "ni-p2p-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "91f090f52067f0ba001be52269ed12e6d67cb5eeda1a039b17c7bf3f8dcb5473",
+            "dependencies": [
+                "dkms",
+                "ni-p2p-errors",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-p2p-errors": {
+            "filename": "ni-p2p-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "0d714370c13e7232a3eca9a1095c52415691519cb2fa60eefa840ffb12ab4bd5",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pal": {
+            "filename": "ni-pal-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "e4a758453f4fa67d869632be2474d308c6e0dd63039d32a1f10421ee45dec76d",
+            "dependencies": [
+                "ni-pal-errors",
+                "ni-pal-support"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6()(64bit)",
+                "ni-pal-nikalmod"
+            ]
+        },
+        "ni-pal-dkms": {
+            "filename": "ni-pal-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "b226539d6e6101c89e3e23549eee7d32a724a6e067be39fea3393e931e8329f0",
+            "dependencies": [
+                "ni-pal-errors",
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pal-errors": {
+            "filename": "ni-pal-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "133eb6091c0dda369d1d23ab2e5bea1a96c720b8075e9a0239171586b91cb7dc",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pal-support": {
+            "filename": "ni-pal-support-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "62cfc165506cb75957d646aae62647cc4d69554cc6c5b9cc5c59b938775ecbdb",
+            "dependencies": [
+                "ni-pal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ni-pal-nikalmod"
+            ]
+        },
+        "ni-pxihw-ni1045-dkms": {
+            "filename": "ni-pxihw-ni1045-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "22bd80d2721b46cc3e98051c6bc7ac1cb6c1f5b295d9951690310c0dc7ac295b",
+            "dependencies": [
+                "ni-pxiplatformhwsupport-errors",
+                "ni-kal",
+                "ni-pxiplatformsoftware-errors",
+                "dkms",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxihw-nicntdrv-dkms": {
+            "filename": "ni-pxihw-nicntdrv-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "639f6b4b3b9580406fda5b8c4d5605f61392d640db5bdfb1226146ebd1abc149",
+            "dependencies": [
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxihw-nimxi-dkms": {
+            "filename": "ni-pxihw-nimxi-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "17468ab66372add9d761f5ce6a9e5497b5ef8af1f59998aff381d2e8ad352fc2",
+            "dependencies": [
+                "ni-pxiplatformhwsupport-errors",
+                "ni-kal",
+                "ni-pxiplatformsoftware-errors",
+                "dkms",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxihw-nipxicid-dkms": {
+            "filename": "ni-pxihw-nipxicid-dkms-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "3cab8eb17f3ebf0ad5354d3e0691c74332f868b14e6a42e993e580deb524b994",
+            "dependencies": [
+                "ni-pxiplatformhwsupport-errors",
+                "ni-kal",
+                "ni-pxiplatformsoftware-errors",
+                "dkms",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxihw-nipxicmm-dkms": {
+            "filename": "ni-pxihw-nipxicmm-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "d4290be5e40a0b7a12bf222587ca8044aca83037ecec0efb38b42fa8e6166668",
+            "dependencies": [
+                "ni-pxiplatformhwsupport-errors",
+                "ni-kal",
+                "ni-pxiplatformsoftware-errors",
+                "dkms",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxihw-nipxim2-dkms": {
+            "filename": "ni-pxihw-nipxim2-dkms-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "b03cdb51cc118a9c16b591a9fd729659bb1c31324bda3062173d6af9ce6ef547",
+            "dependencies": [
+                "ni-pxiplatformhwsupport-errors",
+                "ni-kal",
+                "ni-pxiplatformsoftware-errors",
+                "dkms",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxihw-nipxiocp-dkms": {
+            "filename": "ni-pxihw-nipxiocp-dkms-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "21e043dd947e1cd617c99f34d453816a8967851c20023890ae8ef18beb6d0c44",
+            "dependencies": [
+                "ni-pxiplatformhwsupport-errors",
+                "ni-kal",
+                "ni-pxiplatformsoftware-errors",
+                "dkms",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxihw-nismbus-dkms": {
+            "filename": "ni-pxihw-nismbus-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "478dcf0ee98d3b92597ff86902452e3bd344df47be81fb21a7a147f429af47ec",
+            "dependencies": [
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxipf-errors": {
+            "filename": "ni-pxipf-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "5dd31c77f7c6d0f67c09191bf74a03d15c14f7e728c48b8d68965f0f0712d8fb",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pxipf-nipxifp-dkms": {
+            "filename": "ni-pxipf-nipxifp-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "3a041d50b6a8881e02ff9b38f0388b869b4eb16d77aa003801cc01729653bc47",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-pxipf-errors",
+                "ni-orb-dkms",
+                "ni-pxipf-nipxirm-dkms",
+                "ni-orb-tools",
+                "ni-pal-dkms",
+                "ni-kal",
+                "ni-mdbg-dkms",
+                "dkms",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxipf-nipxigp-dkms": {
+            "filename": "ni-pxipf-nipxigp-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "37120f6ebf905c6fb57ddd9d33e468d42d917892d346695d7ce1a65f36668618",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-pxipf-errors",
+                "ni-orb-dkms",
+                "ni-pxipf-nipxirm-dkms",
+                "ni-pal-dkms",
+                "ni-mdbg-dkms",
+                "ni-kal",
+                "dkms",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxipf-nipxirm-bin": {
+            "filename": "ni-pxipf-nipxirm-bin-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "0ff57e26415e50c07a635193f111078713686a7ccf267e0b4a3de92f52e55a34",
+            "dependencies": [
+                "ni-apal-errors",
+                "ni-pxipf-errors",
+                "libnipxirm1"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxipf-nipxirm-dkms": {
+            "filename": "ni-pxipf-nipxirm-dkms-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "24fca20b660069c7a944d529e0d895155c6ac053602cd6232e0e25b31bba8589",
+            "dependencies": [
+                "ni-pxipf-errors",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-kal",
+                "ni-dim-dkms",
+                "dkms",
+                "ni-mdbg-dkms",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxiplatformframework": {
+            "filename": "ni-pxiplatformframework-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "70bbba2881ff544bc68a7d866bd4ba0413dd092fc28f818ab6a7a11c0cbb3250",
+            "dependencies": [
+                "libnipxigp15",
+                "ni-pxipf-nipxirm-bin",
+                "ni-pxipf-errors",
+                "ni-dim",
+                "ni-pxipf-nipxifp-dkms",
+                "ni-pxiplatformframework-data",
+                "libnipxirm1"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pxiplatformframework-data": {
+            "filename": "ni-pxiplatformframework-data-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "b36a56e10a65b7381d6c8ef38a0554fd0119a91980eeed3a600a0677d5dc70e1",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pxiplatformhwsupport": {
+            "filename": "ni-pxiplatformhwsupport-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "077db552c092c19ee59a6dbde3ec8622e6638444c3135ff232c89cbc2dd65fed",
+            "dependencies": [
+                "ni-pxiplatformhwsupport-data",
+                "ni-pxiplatformhwsupport-libs",
+                "ni-pxiplatformhwsupport-bin",
+                "ni-pxiplatformframework",
+                "ni-pal",
+                "ni-pxiplatformhwsupport-errors"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pxiplatformhwsupport-bin": {
+            "filename": "ni-pxiplatformhwsupport-bin-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "b643cc2b0062dc49f53db6155608002c45b6f8ab1176a6ab3304912f144db8a3",
+            "dependencies": [
+                "ni-pxiplatformhwsupport-errors",
+                "ni-apal-errors",
+                "ni-pxiplatformsoftware-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxiplatformhwsupport-data": {
+            "filename": "ni-pxiplatformhwsupport-data-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "2d391b6b7ed35b9266f1988b66c2a618ee4584c42ab4206c8e8cd1b9f5effa4e",
+            "dependencies": [
+                "ni-pxisa-compliance",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxiplatformhwsupport-errors": {
+            "filename": "ni-pxiplatformhwsupport-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "7efd70d372a918b2d8c5bee0051ca854002d3edf1c008311f00612327b5ff1ff",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pxiplatformhwsupport-libs": {
+            "filename": "ni-pxiplatformhwsupport-libs-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "633f7c0c8c8fb5fded2bcf6f6779231c2dee28093e25117c66c5fac4d795305b",
+            "dependencies": [
+                "libnipcibrd1-errors",
+                "ni-apal-errors",
+                "libnipxicid1",
+                "libnipcibrd1",
+                "libnimxi1",
+                "ni-pxiplatformhwsupport-errors",
+                "ni-pxisa-compliance",
+                "libnicmm1",
+                "ni-pxiplatformhwsupport-data",
+                "libnipxices1",
+                "ni-pal",
+                "libniapxipm215",
+                "ni-pal-errors",
+                "libni1045tr1",
+                "ni-service-locator",
+                "ni-pxiplatformhwsupport-bin",
+                "libnicntdrv1",
+                "ni-pxiplatformsoftware-errors",
+                "libnismbus2"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxiplatformservices": {
+            "filename": "ni-pxiplatformservices-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "f471559f66649172dc8ebdafa20205a1860d7f234026caa1d9fc61429fa3b18d",
+            "dependencies": [
+                "ni-controllerdriver",
+                "ni-sysapi",
+                "ni-pxiplatformservices-data",
+                "ni-roco",
+                "ni-pxiplatformservices-bin",
+                "ni-pxiplatformservices-libs",
+                "ni-mru",
+                "ni-pxiplatformframework",
+                "ni-syscfg-runtime",
+                "ni-pal",
+                "ni-mximanager",
+                "ni-pxiplatformhwsupport"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pxiplatformservices-bin": {
+            "filename": "ni-pxiplatformservices-bin-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "6c9efaa5e85b582f04bd3b644f1e0403da6426cfd47cb0e47c6961fe83bbb260",
+            "dependencies": [
+                "ni-pxiplatformservices-data",
+                "ni-pxiplatformservices-libs",
+                "libnipcibrd1",
+                "libnimximgr1"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxiplatformservices-data": {
+            "filename": "ni-pxiplatformservices-data-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "2ec8ce77f5405b6cbd2eb95f4e6eed84996d6f9d60e5feb51895d9af62529ecb",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxiplatformservices-devel": {
+            "filename": "ni-pxiplatformservices-devel-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "3e745330082bb880129c0c1783b1fbd859fe798717c3c673a61242991f68cd3b",
+            "dependencies": [
+                "ni-controllerdriver-devel",
+                "ni-syscfg-runtime",
+                "ni-pxiplatformservices-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pxiplatformservices-labview-2018-support": {
+            "filename": "ni-pxiplatformservices-labview-2018-support-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "778eede07093b62a80601e1fe54be664fb63a5bf706ad67846fb23c8ff88be3a",
+            "dependencies": [
+                "ni-syscfg-labview-2018-support",
+                "ni-pxiplatformservices-libs",
+                "ni-controllerdriver-labview-2018-support"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-pxiplatformservices-labview-2019-support": {
+            "filename": "ni-pxiplatformservices-labview-2019-support-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "022220dbe9be861c02943fcf4b932dd6d3d39f0fe573e57f8b62d82f43f41be7",
+            "dependencies": [
+                "ni-pxiplatformservices-libs",
+                "ni-syscfg-labview-2019-support",
+                "ni-controllerdriver-labview-2019-support"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2019-core"
+            ]
+        },
+        "ni-pxiplatformservices-libs": {
+            "filename": "ni-pxiplatformservices-libs-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "085199f5c2fb9a7091f317ef57f63072bd367ab444daac5d379821ea3c1edebf",
+            "dependencies": [
+                "ni-pxiplatformservices-data",
+                "libnipcibrd1",
+                "libnimximgr1",
+                "ni-pal",
+                "libnicntdrv1",
+                "libnipxisvc2",
+                "ni-pxiplatformsoftware-errors",
+                "libnismbus2",
+                "ni-pal-errors",
+                "ni-apal-errors",
+                "libniqpxi1"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-pxiplatformsoftware-errors": {
+            "filename": "ni-pxiplatformsoftware-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "33fa2e20061171a0b93ce8f3dd9ad153917da8077b87e34ca115b104fea9b8b2",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-pxisa-compliance": {
+            "filename": "ni-pxisa-compliance-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "787d0aadbd21e3b29f199d8fa7808fa76a6fc5ad849189157b809f9bb22dc182",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-rio": {
+            "filename": "ni-rio-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "bddfa22ab07e3b7587022d04d51950efcf93d553817774a9a21475bcc732622d",
+            "dependencies": [
+                "ni-rio-dkms",
+                "ni-rio-fpga-ids",
+                "ni-euladepot",
+                "ni-p2p",
+                "ni-rio-server"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-rio-dkms": {
+            "filename": "ni-rio-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "0f3a5b07927454b08d3fcd4453d53fb79d5bf46a11b58b720e3221ba5ef435e9",
+            "dependencies": [
+                "ni-p2p-dkms",
+                "ni-euladepot",
+                "ni-kal",
+                "dkms",
+                "ni-bds"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-rio-fpga-ids": {
+            "filename": "ni-rio-fpga-ids-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "148d2a30767e88fc9252b7e5b4ed7cb56e0c36b9477f083401c1f0b8d29250ba",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-rio-niriochinch-dkms": {
+            "filename": "ni-rio-niriochinch-dkms-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "f82e6bf3adf7a0104e77f8327995525a4e8a8bd7100b4610236d85bae79d6fe8",
+            "dependencies": [
+                "dkms",
+                "ni-rio-dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-rio-niriomt-dkms": {
+            "filename": "ni-rio-niriomt-dkms-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "1d76f0afa0d105ed8078fac493207c0239cf8855d5b8ccd8d16f21133ca3674e",
+            "dependencies": [
+                "dkms",
+                "ni-rio-dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-rio-server": {
+            "filename": "ni-rio-server-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "a3ce633c856a7d8a42897af77c02b1e40c59697c9823f94da1255f27ca86718a",
+            "dependencies": [
+                "ni-euladepot",
+                "ni-service-locator",
+                "ni-rio-fpga-ids"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-rio-sysapi": {
+            "filename": "ni-rio-sysapi-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "d262c0ab574ee28287518c03eab8c18b234ec60524f097517139e0c92529610b",
+            "dependencies": [
+                "ni-syscfg-runtime",
+                "ni-euladepot",
+                "ni-rio"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-roco": {
+            "filename": "ni-roco-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "fa05d3a8d2987207d1b998af41087894cedb75354b9d012336dd744071e2ab2e",
+            "dependencies": [
+                "ni-sysapi",
+                "libnirocoapi1",
+                "ni-service-locator",
+                "ni-routing-errors",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-routing-errors": {
+            "filename": "ni-routing-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "4d3765762be6a5daad6e5869e547505ce611f5ac4049119ed579ff2084c1c201",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-rseries": {
+            "filename": "ni-rseries-19.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "70b2f676b094c852aa02e279dc0a98f1665f4a999a08206652d924931906f87f",
+            "dependencies": [
+                "ni-rio-sysapi",
+                "ni-fpga-interface",
+                "ni-rio-niriomt-dkms",
+                "ni-rio-niriochinch-dkms"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-rtsi-libs": {
+            "filename": "ni-rtsi-libs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "292e174f5d4d317db156137248b6986617e7e78efe16c03de6027d2a501d69de",
+            "dependencies": [
+                "ni-syscfg-runtime",
+                "ni-daqmx-notices",
+                "ni-mxs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-rtsi-pal-libs": {
+            "filename": "ni-rtsi-pal-libs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "11fc6e1ceecb2bcca40868746293a103ca6dd6bf6dbcf3fde01f1ac68a86e8ff",
+            "dependencies": [
+                "ni-daqmx-notices",
+                "ni-rtsi-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-scope": {
+            "filename": "ni-scope-19.0.1.49152-0+f0.noarch.rpm",
+            "sha256": "7c4dd5605ad0fa7b37686ca972d5537f5c21e41e9d7acffa4177a877796defd5",
+            "dependencies": [
+                "ni-scope-5110",
+                "ni-scope-docs",
+                "ni-5170",
+                "ni-5110",
+                "system-report",
+                "ni-pxiplatformservices",
+                "ni-scope-errors",
+                "ni-scope-devel",
+                "ni-scope-5164",
+                "ni-5164",
+                "ni-scope-5170",
+                "ni-scope-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-scope-5110": {
+            "filename": "ni-scope-5110-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "7950478424888e332d09e62e2bcda625f69dbeb5ca9c9c1adf23565c4198b357",
+            "dependencies": [
+                "ni-scope-5110-libs",
+                "ni-scope-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-scope-5110-libs": {
+            "filename": "ni-scope-5110-libs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "9dac21669b7aa7bc325f9bde4b37b7082e3918eee7808336856825d8a78e2cee",
+            "dependencies": [
+                "ni-rio",
+                "ni-rio-sysapi",
+                "ni-fpga-interface",
+                "ni-5110",
+                "ni-roco",
+                "ni-icp",
+                "ni-syscfg-runtime",
+                "ni-scope-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-scope-5164": {
+            "filename": "ni-scope-5164-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "2b2e62fc291a48a6c4558a557ad195853080e8d651e40ca4032cd5f925714283",
+            "dependencies": [
+                "ni-scope-libs",
+                "ni-scope-5164-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-scope-5164-libs": {
+            "filename": "ni-scope-5164-libs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "2eeb920b1a41dd46735bbc9d53e333bff5e3c9497e5d8f2f537414caae08e417",
+            "dependencies": [
+                "ni-rio",
+                "ni-rio-sysapi",
+                "ni-fpga-interface",
+                "ni-roco",
+                "ni-icp",
+                "ni-syscfg-runtime",
+                "ni-5164",
+                "ni-scope-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-scope-5170": {
+            "filename": "ni-scope-5170-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "015842086d25e679ae0fc8d4e51601e26c11a6e1f20390e889c98e5eb2db20f5",
+            "dependencies": [
+                "ni-scope-libs",
+                "ni-scope-5170-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-scope-5170-libs": {
+            "filename": "ni-scope-5170-libs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "68e6ea48acc5fd36252564101c0f0f3151a2865e53d7a68cb47522e49f8928a1",
+            "dependencies": [
+                "ni-rio",
+                "ni-rio-sysapi",
+                "ni-fpga-interface",
+                "ni-5170",
+                "ni-roco",
+                "ni-icp",
+                "ni-syscfg-runtime",
+                "ni-scope-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-scope-daqmx": {
+            "filename": "ni-scope-daqmx-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "df35128d63f5d26cb45c881fa2d5e90652e4e8ba8c99d546f739c83f9c6293bb",
+            "dependencies": [
+                "ni-scope-daqmx-libs",
+                "ni-scope-daqmx-dkms",
+                "ni-scope-libs",
+                "ni-daqmx"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-scope-daqmx-dkms": {
+            "filename": "ni-scope-daqmx-dkms-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "9aa99692d380e18f0e5f5398a116d960adbdb57d5af2c83c4b0446a3fbd42df7",
+            "dependencies": [
+                "ni-mxdf-dkms",
+                "ni-p2p-dkms",
+                "ni-orb-dkms",
+                "ni-pal-dkms",
+                "ni-kal",
+                "dkms",
+                "ni-mdbg-dkms",
+                "ni-dim-dkms",
+                "ni-mru-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-scope-daqmx-libs": {
+            "filename": "ni-scope-daqmx-libs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "f74cfee5b41fa7e8375f5d16c220d89fbc0b7e82e69805d1b261147d32b7e4ff",
+            "dependencies": [
+                "ni-tclk-daqmx",
+                "ni-icp",
+                "ni-scope-libs",
+                "ni-visa-runtime",
+                "ni-scope-daqmx-dkms",
+                "ni-daqmx"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-scope-devel": {
+            "filename": "ni-scope-devel-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "6b33e83fb59dded99e9c713264caff94ab665f422d776622a3437ddf81e59273",
+            "dependencies": [
+                "ni-scope-libs",
+                "ni-tclk-devel",
+                "ni-icp-devel"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-scope-docs": {
+            "filename": "ni-scope-docs-19.0.1.49152-0+f0.noarch.rpm",
+            "sha256": "e49626415ef0f9328c108724f84f0c9b76bb59b608b0eca545ea79f4387cd75b",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-scope-errors": {
+            "filename": "ni-scope-errors-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "015e7072618f4b1fe9a3c8ac438b50b0d2856030fb734dec440abb60d3c78029",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-scope-labview-2016-support": {
+            "filename": "ni-scope-labview-2016-support-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "b6488ef5ad291de6b0658d7fd7f596b481189529668e735eb641355739a358f1",
+            "dependencies": [
+                "ni-tclk-labview-2016-support",
+                "ni-scope-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2016-core"
+            ]
+        },
+        "ni-scope-labview-2017-support": {
+            "filename": "ni-scope-labview-2017-support-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "ccebd8756f0c0015726b249c7338dd6959c7798f57fcf02d1f84f0ca4ba12527",
+            "dependencies": [
+                "ni-scope-libs",
+                "ni-tclk-labview-2017-support"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2017-core"
+            ]
+        },
+        "ni-scope-labview-2018-support": {
+            "filename": "ni-scope-labview-2018-support-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "d63f096c2e02c429916e6a75d6d8e5c643c880f0f94880795ea79b2b0baf9f11",
+            "dependencies": [
+                "ni-scope-libs",
+                "ni-tclk-labview-2018-support"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-scope-labview-2019-support": {
+            "filename": "ni-scope-labview-2019-support-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "e4560cd749be9272b94af056760278ce37745cc2a22fd36cd854349af79bd186",
+            "dependencies": [
+                "ni-tclk-labview-2019-support",
+                "ni-scope-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2019-core"
+            ]
+        },
+        "ni-scope-libs": {
+            "filename": "ni-scope-libs-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "5c372d0cda25c0a4d6b917f0d0f9c3f4d8f93f9965a40146335447faf9e49d42",
+            "dependencies": [
+                "ni-syscfg-runtime",
+                "ni-icp",
+                "ni-scope-notices"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-scope-notices": {
+            "filename": "ni-scope-notices-19.0.0.49152-0+f0.noarch.rpm",
+            "sha256": "7d6deb8fe30eed6650e6b3b3f71155ad4174ec17b11c20a27db3896bc7bafedb",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-serial": {
+            "filename": "ni-serial-18.1.0-3.el7.noarch.rpm",
+            "sha256": "fd8fd11d7f215d3dc2282113e50939e2ed77a6b7c8e0721e7cf1f79e15543a3e",
+            "dependencies": [
+                "dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "make"
+            ]
+        },
+        "ni-service-locator": {
+            "filename": "ni-service-locator-19.0.0.49153-0+f1.x86_64.rpm",
+            "sha256": "c7dc522341d35b4cca341c1d92096ab0d8159357fecb48bf3d21ca6593dc50ac",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-software-2019": {
+            "filename": "ni-software-2019-19.2.0.49152-0+f0.el8.noarch.rpm",
+            "sha256": "002c0fbff098542aaaeff3e1c1084a00c25af10b1e23abbcf52126f3a6e8610b",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-software-latest": {
+            "filename": "ni-software-latest-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "c92cee8cef6b22ebb181dcce28fa764d769efa21d22a0bd7c299243dd07d0779",
+            "dependencies": [
+                "ni-software-2019"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-switch": {
+            "filename": "ni-switch-18.1.1.49153-0+f1.noarch.rpm",
+            "sha256": "6b9c6e5971f0985bc779267f2f8d0a73b04f85c328db16e495648f3920b1dbc5",
+            "dependencies": [
+                "ni-switch-errors",
+                "system-report",
+                "ni-switch-libs",
+                "ni-pxiplatformservices",
+                "ni-switch-devel",
+                "ni-switch-ca4",
+                "ni-switch-docs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-switch-ca4": {
+            "filename": "ni-switch-ca4-18.1.1.49153-0+f1.noarch.rpm",
+            "sha256": "2d5aa86f10bead27737a21193cb658c93e9ff187822754b90577fac1eabb32b6",
+            "dependencies": [
+                "ni-switch-ca4-libs",
+                "ni-switch-ca4-dkms",
+                "ni-switch-libs",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-switch-ca4-dkms": {
+            "filename": "ni-switch-ca4-dkms-18.1.1.49153-0+f1.x86_64.rpm",
+            "sha256": "ffd9276c20a15aadd6faff5cbff6b267b551c4ec05701be23c1b8c561c8d337e",
+            "dependencies": [
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-switch-ca4-libs": {
+            "filename": "ni-switch-ca4-libs-18.1.1.49153-0+f1.x86_64.rpm",
+            "sha256": "6798bb6b99b65b7cc933fa2747ac025a56cc30802df40dcfc55a444dfc2345cd",
+            "dependencies": [
+                "ni-syscfg-runtime",
+                "ni-switch-ca4-dkms",
+                "ni-icp",
+                "ni-switch-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-switch-daqmx": {
+            "filename": "ni-switch-daqmx-18.1.1.49152-0+f0.noarch.rpm",
+            "sha256": "3fbaa47761535bdf9e1d69a44f9852e840d9d01aa68154525059301f572dd4f5",
+            "dependencies": [
+                "ni-switch-daqmx-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-switch-daqmx-config": {
+            "filename": "ni-switch-daqmx-config-18.1.1.49153-0+f1.x86_64.rpm",
+            "sha256": "252cf7882d6b3871572fa5551a21f0dc198821fa26e6279210d4c2c226325318",
+            "dependencies": [
+                "ni-switch-daqmx"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-switch-daqmx-libs": {
+            "filename": "ni-switch-daqmx-libs-18.1.1.49152-0+f0.x86_64.rpm",
+            "sha256": "ffbddd15eaa37016941cd086e78b97b0b4a0c9c1b4c29f38c3d677061480f997",
+            "dependencies": [
+                "ni-icp",
+                "ni-switch-libs",
+                "ni-visa-runtime",
+                "ni-syscfg-runtime",
+                "ni-daqmx"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-switch-devel": {
+            "filename": "ni-switch-devel-18.1.1.49152-0+f0.noarch.rpm",
+            "sha256": "2efc022d5a355a825202786a09b20b5b377f9f0cedba956da7eda2f92241da73",
+            "dependencies": [
+                "ni-switch-libs",
+                "ni-icp-devel"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-switch-docs": {
+            "filename": "ni-switch-docs-18.1.1.49153-0+f1.noarch.rpm",
+            "sha256": "306370bc73e2513eb10ece1276324534ca81bc7af16fa8647b496a051853ea5b",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-switch-errors": {
+            "filename": "ni-switch-errors-18.1.1.49152-0+f0.noarch.rpm",
+            "sha256": "1c9d161fcf5932c88aa1b13170ab80944296baec638f80bb973291e7617b93d6",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-switch-labview-2015-support": {
+            "filename": "ni-switch-labview-2015-support-18.1.1.49152-0+f0.x86_64.rpm",
+            "sha256": "b5f634bad321f225239b924b8d5a6294876359bb52934903ed6dde8e7d990eae",
+            "dependencies": [
+                "ni-switch-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2015-core"
+            ]
+        },
+        "ni-switch-labview-2016-support": {
+            "filename": "ni-switch-labview-2016-support-18.1.1.49152-0+f0.x86_64.rpm",
+            "sha256": "fcb980fb42f47d87e42f1722ed4ca7f4374609b378a6867d297c6b91a9edb9f6",
+            "dependencies": [
+                "ni-switch-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2016-core"
+            ]
+        },
+        "ni-switch-labview-2017-support": {
+            "filename": "ni-switch-labview-2017-support-18.1.1.49152-0+f0.x86_64.rpm",
+            "sha256": "be278de1e4f22ff8d85a2ecf74dab4d9675b9ff800fcd7583d331a30308b330b",
+            "dependencies": [
+                "ni-switch-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2017-core"
+            ]
+        },
+        "ni-switch-labview-2018-support": {
+            "filename": "ni-switch-labview-2018-support-18.1.1.49152-0+f0.x86_64.rpm",
+            "sha256": "899896017c2e3fd1ebfdf9148365c14d3792668b67520b08ee177f296193b083",
+            "dependencies": [
+                "ni-switch-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-switch-libs": {
+            "filename": "ni-switch-libs-18.1.1.49152-0+f0.x86_64.rpm",
+            "sha256": "fa583e9f2be25e1291a66470c9dc757806d83bbc1cab23db8f6beb2aa91a4fcd",
+            "dependencies": [
+                "ni-syscfg-runtime",
+                "ni-icp",
+                "ni-switch-notices"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-switch-notices": {
+            "filename": "ni-switch-notices-18.1.1.49152-0+f0.noarch.rpm",
+            "sha256": "c123b3b46f90f983d002d84565ce16690c929050e409779cb2da19bcc09d54cb",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-sync": {
+            "filename": "ni-sync-18.1.0.49154-0+f2.noarch.rpm",
+            "sha256": "1699b50e35c1f12e74223fef8540ea53fd2917c96dcf8fd8780be275cd315215",
+            "dependencies": [
+                "ni-sync-libs",
+                "ni-sync-drivers"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-sync-drivers": {
+            "filename": "ni-sync-drivers-18.1.0.49154-0+f2.noarch.rpm",
+            "sha256": "c8b39478881b644d6ba690e64e7c0998531dab98dcd31d82414f6fb09401c0af",
+            "dependencies": [
+                "ni-sync-pxie6674-hwsupport",
+                "ni-sync-pxie6674-dkms"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-sync-hardware-dat": {
+            "filename": "ni-sync-hardware-dat-18.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "fcb63de94d4987d96d81e1fea2faf3c61360bd025fecc55d6c488afe34119f5b",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "niexfinder-base"
+            ]
+        },
+        "ni-sync-labview-2016-api": {
+            "filename": "ni-sync-labview-2016-api-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "71b6383fcbc3fb8032a4dadee9d7e9852369c124ebe1dc5c6f564d36a5e202e8",
+            "dependencies": [
+                "libnisync1",
+                "libnisync_lvprovider1"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2016-core"
+            ]
+        },
+        "ni-sync-labview-2016-examples": {
+            "filename": "ni-sync-labview-2016-examples-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "fd827fe944962b659f09dde3e899d92a375c26044941e0de04fded2a50d9e367",
+            "dependencies": [
+                "ni-sync-labview-2016-api"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2016-core"
+            ]
+        },
+        "ni-sync-labview-2016-exfinder": {
+            "filename": "ni-sync-labview-2016-exfinder-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "f638db6753d4c2d17d69a9744096771ad4187ef3e593fb56cda711ac460291c8",
+            "dependencies": [
+                "ni-sync-labview-2016-examples",
+                "ni-sync-hardware-dat"
+            ],
+            "dependencies_not_in_repo": [
+                "niexfinder-labview-2016"
+            ]
+        },
+        "ni-sync-labview-2016-help": {
+            "filename": "ni-sync-labview-2016-help-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "caef12d29d9990f2581a82561cf662e443ab85369cbbcabf4c238342792430a9",
+            "dependencies": [
+                "ni-sync-labview-2016-api"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2016-core"
+            ]
+        },
+        "ni-sync-labview-2016-support": {
+            "filename": "ni-sync-labview-2016-support-18.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "809ad96f12541526880b2a03de52afde60403888478ced3c8a0d8f8a2bbe9303",
+            "dependencies": [
+                "ni-sync-labview-2016-examples",
+                "ni-sync-labview-2016-help",
+                "ni-sync-labview-2016-api",
+                "ni-sync-labview-2016-exfinder",
+                "ni-sync-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-sync-labview-2017-api": {
+            "filename": "ni-sync-labview-2017-api-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "f8de14b73e7e769a371a7d101b7d18e074c0575cdbd59825d2d0b7ce1b872bd5",
+            "dependencies": [
+                "libnisync1",
+                "libnisync_lvprovider1"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2017-core"
+            ]
+        },
+        "ni-sync-labview-2017-examples": {
+            "filename": "ni-sync-labview-2017-examples-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "c57437c243ec8bd757b5b30845809990b68d3d78f4ffc99c94b477bb711b7741",
+            "dependencies": [
+                "ni-sync-labview-2017-api"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2017-core"
+            ]
+        },
+        "ni-sync-labview-2017-exfinder": {
+            "filename": "ni-sync-labview-2017-exfinder-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "a56e29148d6ecc72cd44a818a2f845ff080c97c4732698948ee6e74ecc7e9bfb",
+            "dependencies": [
+                "ni-sync-hardware-dat",
+                "ni-sync-labview-2017-examples"
+            ],
+            "dependencies_not_in_repo": [
+                "niexfinder-labview-2017"
+            ]
+        },
+        "ni-sync-labview-2017-help": {
+            "filename": "ni-sync-labview-2017-help-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "87178ce0296100f14c10b9a67450e3e07ee472d93d369c19e8d55b0edc781602",
+            "dependencies": [
+                "ni-sync-labview-2017-api"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2017-core"
+            ]
+        },
+        "ni-sync-labview-2017-support": {
+            "filename": "ni-sync-labview-2017-support-18.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "6270d294a20159591896c8d49c2df0b737d007738b81542f8369c3f421fc7000",
+            "dependencies": [
+                "ni-sync-labview-2017-exfinder",
+                "ni-sync-labview-2017-examples",
+                "ni-sync-labview-2017-help",
+                "ni-sync-libs",
+                "ni-sync-labview-2017-api"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-sync-labview-2018-api": {
+            "filename": "ni-sync-labview-2018-api-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "883af1b8e3f6783292b84be7f57160d7c14c21a3fcfd4c901400dc9727230595",
+            "dependencies": [
+                "libnisync1",
+                "libnisync_lvprovider1"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-sync-labview-2018-examples": {
+            "filename": "ni-sync-labview-2018-examples-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "0bbff09a250b774af6a67a2e32877a426277f859ed07a8f6e632203f55e41b01",
+            "dependencies": [
+                "ni-sync-labview-2018-api"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-sync-labview-2018-exfinder": {
+            "filename": "ni-sync-labview-2018-exfinder-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "23b62d50421d666e64716b5fb75930dae1650ef6e4d0052c7435649982d8b5b5",
+            "dependencies": [
+                "ni-sync-hardware-dat",
+                "ni-sync-labview-2018-examples"
+            ],
+            "dependencies_not_in_repo": [
+                "niexfinder-labview-2018"
+            ]
+        },
+        "ni-sync-labview-2018-help": {
+            "filename": "ni-sync-labview-2018-help-18.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "d0dc94ba4b7218a6665c1ee551c03afe2e2db00e72e739cb0dcb2c2991339a5e",
+            "dependencies": [
+                "ni-sync-labview-2018-api"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-sync-labview-2018-support": {
+            "filename": "ni-sync-labview-2018-support-18.1.0.49152-0+f0.noarch.rpm",
+            "sha256": "c2a582735cac4cdc84d8fb024914ee7ebbafdc9568e5f0877e69b53403496fa6",
+            "dependencies": [
+                "ni-sync-labview-2018-exfinder",
+                "ni-sync-labview-2018-help",
+                "ni-sync-labview-2018-examples",
+                "ni-sync-labview-2018-api",
+                "ni-sync-libs"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-sync-libs": {
+            "filename": "ni-sync-libs-18.1.0.49154-0+f2.noarch.rpm",
+            "sha256": "30facb8a644bd3f26a8edc9a442048ba0c25cbc57898b4df289f95f5b286417f",
+            "dependencies": [
+                "libnisync1"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-sync-pxie6674-dkms": {
+            "filename": "ni-sync-pxie6674-dkms-18.1.1.49153-0+f1.x86_64.rpm",
+            "sha256": "1f2a57dcb3840d01b1d931f1b10575aa2555c56eb2b982d49bd1a17f1502a985",
+            "dependencies": [
+                "dkms",
+                "ni-kal"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-sync-pxie6674-hwsupport": {
+            "filename": "ni-sync-pxie6674-hwsupport-18.1.1.49153-0+f1.x86_64.rpm",
+            "sha256": "36287b638e0f0f02878c70ef0f9cafa20fca2ed586af1df5cf6240c167864b1b",
+            "dependencies": [
+                "ni-sync-pxie6674-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-syncdomain-service": {
+            "filename": "ni-syncdomain-service-19.1.0.49152-0+f0.x86_64.rpm",
+            "sha256": "e85db46aede31cc6542a039240ba28d7570cf6a00fb82b5e3b4091f17811a69b",
+            "dependencies": [
+                "nicurli",
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-sysapi": {
+            "filename": "ni-sysapi-19.0.0.49154-0+f2.x86_64.rpm",
+            "sha256": "6a0085328a2645842192e28be2a297605153d9ea37828342b6156fcd2c778b29",
+            "dependencies": [
+                "nitargetcfgi",
+                "niswactions"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-syscfg-devel": {
+            "filename": "ni-syscfg-devel-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "46ec287aac3d0b80e26c16b9581f1ab99fb293afb860586285ddff9f32ebd0f7",
+            "dependencies": [
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-syscfg-labview-2016-support": {
+            "filename": "ni-syscfg-labview-2016-support-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "39d430360c296a50fbdf4a7d07a8daccae58b425d360c1ace99396ed4222ca55",
+            "dependencies": [
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2016-core"
+            ]
+        },
+        "ni-syscfg-labview-2017-support": {
+            "filename": "ni-syscfg-labview-2017-support-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "823ce98c0307e918abe17cec72bc31970f0bb4928b3528a84aaa2f72dcc807b3",
+            "dependencies": [
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2017-core"
+            ]
+        },
+        "ni-syscfg-labview-2018-support": {
+            "filename": "ni-syscfg-labview-2018-support-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "2702509021404dfaf14d102d8b586300ff8797227f38b940cd192ab324a767a5",
+            "dependencies": [
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-syscfg-labview-2019-support": {
+            "filename": "ni-syscfg-labview-2019-support-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "9ca2e591ee6b2ad5fb09531a803651516b704b51dec1db99045790f359348904",
+            "dependencies": [
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2019-core"
+            ]
+        },
+        "ni-syscfg-runtime": {
+            "filename": "ni-syscfg-runtime-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "9d5e292e86c711d51449a16877485f193b5d4bb03a969f19a8b1d4952a080974",
+            "dependencies": [
+                "ni-sysapi",
+                "ni-networkdiscoverysvc",
+                "niswactions",
+                "ni-avahi-client",
+                "nitargetcfgi",
+                "ni-wsrepl"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-tclk": {
+            "filename": "ni-tclk-19.0.0.49153-0+f1.noarch.rpm",
+            "sha256": "57f8cf6df9878a53e75cafa7954e25c5e941e9607f318f079f84ea1a3fa4e7b8",
+            "dependencies": [
+                "ni-tclk-libs",
+                "ni-tclk-devel",
+                "ni-tclk-errors"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-tclk-daqmx": {
+            "filename": "ni-tclk-daqmx-19.0.0.49153-0+f1.x86_64.rpm",
+            "sha256": "7792897088b5bbc12995ad1e22ea505f20a45f40cea92f2609c56ff60c944873",
+            "dependencies": [
+                "ni-tclk-libs",
+                "ni-icp",
+                "ni-daqmx"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-tclk-devel": {
+            "filename": "ni-tclk-devel-19.0.0.49153-0+f1.noarch.rpm",
+            "sha256": "433f14081b50b6256ab7dd2c74b5b8cb4d7d436d8052f5b99d70d23f7c52e8e5",
+            "dependencies": [
+                "ni-tclk-libs",
+                "ni-icp-devel"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-tclk-errors": {
+            "filename": "ni-tclk-errors-19.0.0.49153-0+f1.noarch.rpm",
+            "sha256": "48bb043b736877d3e7c6aa44c492963878d4f11e822e40b8cf6e7873bdd269fd",
+            "dependencies": [],
+            "dependencies_not_in_repo": []
+        },
+        "ni-tclk-labview-2016-support": {
+            "filename": "ni-tclk-labview-2016-support-19.0.0.49153-0+f1.x86_64.rpm",
+            "sha256": "3b49b52728f5a2e6ce0204b24a47ab91cc2c29f6e6d3798a5c619281d9039d7f",
+            "dependencies": [
+                "ni-tclk-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2016-core"
+            ]
+        },
+        "ni-tclk-labview-2017-support": {
+            "filename": "ni-tclk-labview-2017-support-19.0.0.49153-0+f1.x86_64.rpm",
+            "sha256": "2214ba53b75d500a941c61f072b3ee365508af8bc0db0769a10de08e24ad9de8",
+            "dependencies": [
+                "ni-tclk-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2017-core"
+            ]
+        },
+        "ni-tclk-labview-2018-support": {
+            "filename": "ni-tclk-labview-2018-support-19.0.0.49153-0+f1.x86_64.rpm",
+            "sha256": "569374b608a458152e98dba2fa203d8bb37eb001fe664fff9f1067af32a95557",
+            "dependencies": [
+                "ni-tclk-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2018-core"
+            ]
+        },
+        "ni-tclk-labview-2019-support": {
+            "filename": "ni-tclk-labview-2019-support-19.0.0.49153-0+f1.x86_64.rpm",
+            "sha256": "38d7abc5dc16914d6a2d8c067833aa0a5055ddfb6be7c7128614ff7f2bc865c8",
+            "dependencies": [
+                "ni-tclk-libs"
+            ],
+            "dependencies_not_in_repo": [
+                "labview-2019-core"
+            ]
+        },
+        "ni-tclk-libs": {
+            "filename": "ni-tclk-libs-19.0.0.49153-0+f1.x86_64.rpm",
+            "sha256": "872a307377016ac1ccffde2f82edd72c465b82776039d693e98b83082b222a30",
+            "dependencies": [
+                "ni-tclk-notices"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6"
+            ]
+        },
+        "ni-tclk-notices": {
+            "filename": "ni-tclk-notices-19.0.0.49153-0+f1.noarch.rpm",
+            "sha256": "d7f64aa6ae9a9e4d1c4a18435f70bcb28775c71315e03cb963e011d7482b58aa",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa": {
+            "filename": "ni-visa-19.2.0.49153-0+f1.noarch.rpm",
+            "sha256": "a10cd285f63e28555d70dcf6d10aa8b48d8f4ed849a6c089bc6192de3c88d146",
+            "dependencies": [
+                "ni-visa-interactive-control",
+                "ni-visa-labview-rc",
+                "ni-visa-config",
+                "ni-visa-server",
+                "ni-visa-devel",
+                "ni-visa-runtime",
+                "ni-visa-ddw",
+                "ni-visa-doc"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-config": {
+            "filename": "ni-visa-config-19.2.0.49153-0+f1.x86_64.rpm",
+            "sha256": "e2bb2859ddcae7784bd73a0bc0971947458fa2bb33d8d3c5e64827a42bb114eb",
+            "dependencies": [
+                "ni-visa-runtime",
+                "ni-euladepot",
+                "labview-2019-rte"
+            ],
+            "dependencies_not_in_repo": [
+                "libnsl-so-1"
+            ]
+        },
+        "ni-visa-ddw": {
+            "filename": "ni-visa-ddw-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "593bd7b4999f18e32bd4f3dd10056976fef033611668b79f3483a16a4793eed5",
+            "dependencies": [
+                "ni-euladepot",
+                "labview-2019-rte"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-devel": {
+            "filename": "ni-visa-devel-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "e836a0a941659c8197c95cd30e29d6c7696c22f17f6980df26ed149645156f99",
+            "dependencies": [
+                "ni-visa-runtime",
+                "ni-visa-headers",
+                "ni-visa-doc"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-doc": {
+            "filename": "ni-visa-doc-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "932b7a7381309522bdf4861040fa145d7ad2cbf24844593ee08d26f904827baa",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-errors": {
+            "filename": "ni-visa-errors-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "18206d0d9412eaeda8cc0f3964dd159d26db7a838abcd42ca889e355ce1c1f7e",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-headers": {
+            "filename": "ni-visa-headers-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "c3f26388de8dec3fd79968e31ea27d25e40dac4efe813048251a281dc7c5edb5",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-interactive-control": {
+            "filename": "ni-visa-interactive-control-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "2a71405fed1cbb644620104ecbd13e83f541cedbcdcc116fdbc5cf4a21141d5f",
+            "dependencies": [
+                "ni-visa-runtime",
+                "labview-2019-rte"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-labview-2016-support": {
+            "filename": "ni-visa-labview-2016-support-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "60f4f716c8849b46993f6fc3548bacc13d2150ed861fc75bc5dabc813014ed59",
+            "dependencies": [
+                "ni-visa-runtime",
+                "ni-visa-labview-rc",
+                "ni-visa-labview-filter-dialog"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "labview-2016-core"
+            ]
+        },
+        "ni-visa-labview-2017-support": {
+            "filename": "ni-visa-labview-2017-support-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "59bc4961896ae6c7a8433aad5b7cb94ec3f19dd2604d4fdb223e24f1847f054c",
+            "dependencies": [
+                "ni-visa-runtime",
+                "ni-visa-labview-rc",
+                "ni-visa-labview-filter-dialog"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "labview-2017-core"
+            ]
+        },
+        "ni-visa-labview-2018-support": {
+            "filename": "ni-visa-labview-2018-support-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "23d47a5ff6a895248536f0d6322c2e7f3afe9085e69dd9096a2c3f2bf9175eab",
+            "dependencies": [
+                "ni-visa-runtime",
+                "ni-visa-labview-rc",
+                "ni-visa-labview-filter-dialog"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "labview-2018-core"
+            ]
+        },
+        "ni-visa-labview-2019-support": {
+            "filename": "ni-visa-labview-2019-support-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "794d5d0260d54a39c4641eda77af608839a9595189f67b1353b0ac0a2b18a6d8",
+            "dependencies": [
+                "ni-visa-runtime",
+                "ni-visa-labview-rc",
+                "ni-visa-labview-filter-dialog"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "labview-2019-core"
+            ]
+        },
+        "ni-visa-labview-filter-dialog": {
+            "filename": "ni-visa-labview-filter-dialog-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "f5efc66b2499917413d653691e0f4590499912ac292e3a0f83f85af8ea6c4cc9",
+            "dependencies": [
+                "ni-visa-runtime"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-labview-io-control": {
+            "filename": "ni-visa-labview-io-control-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "4d08a9be87c27de5bec3e06a296ed45968b454fe5c38ac8c84b09454364cf949",
+            "dependencies": [
+                "libvisa",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-labview-rc": {
+            "filename": "ni-visa-labview-rc-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "379f54690f1e5706a79aa0cc44cd3a0e634f1b79e91dfd2decd2c8d6c46e6b08",
+            "dependencies": [
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-lxi-discovery": {
+            "filename": "ni-visa-lxi-discovery-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "dd7370c3d78d4e3056d54702955338146d4030a5db1a505c75163939ebdbe067",
+            "dependencies": [
+                "libvisa",
+                "ni-avahi-client",
+                "nicurli",
+                "ni-euladepot",
+                "ni-visa-passport-enet"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-visa-passport-enet": {
+            "filename": "ni-visa-passport-enet-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "a09ccf7aa590df2fbbbea104338efb6651560aa527411fb836de11d21db2c8a5",
+            "dependencies": [
+                "libvisa",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-passport-enet-serial": {
+            "filename": "ni-visa-passport-enet-serial-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "472a4161865f363f09387a9d094b464529f5d1b1ccf8ac37a54195bca8348242",
+            "dependencies": [
+                "libvisa",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-passport-gpib": {
+            "filename": "ni-visa-passport-gpib-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "72fe7ffd0b22f863be3b637100444ffbc22405e65503625b054ffca82b2e9c68",
+            "dependencies": [
+                "libvisa",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-passport-pxi": {
+            "filename": "ni-visa-passport-pxi-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "aea5458d08b4d3450d55431fdd42873c5f7524193c06cb8f5f8b2436d7d970a5",
+            "dependencies": [
+                "libvisa",
+                "ni-euladepot",
+                "ni-pal",
+                "libniqpxi1",
+                "ni-visa-passport-pxi-dkms"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-visa-passport-pxi-dkms": {
+            "filename": "ni-visa-passport-pxi-dkms-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "779e293dd32fa44f9b58cf8ea1c111651aef834a14c33e4f24e63ffdfc5cabb5",
+            "dependencies": [
+                "ni-kal",
+                "ni-pal-dkms",
+                "dkms",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-visa-passport-remote": {
+            "filename": "ni-visa-passport-remote-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "da886eb86583f962615e4cc8d98424976840e627099c4354c9f0f0cfa72f03d7",
+            "dependencies": [
+                "libvisa",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-passport-serial": {
+            "filename": "ni-visa-passport-serial-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "3d3d534db1b14ef2055f4f191de93b199d7e2c1923ee54192bc05902486327ba",
+            "dependencies": [
+                "libvisa",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-passport-usb": {
+            "filename": "ni-visa-passport-usb-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "d5f578ff8b7e34bb24043374f50ff098f3715cee81444e1037395104b4de951d",
+            "dependencies": [
+                "libvisa",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-visa-runtime": {
+            "filename": "ni-visa-runtime-19.2.0.49152-0+f0.noarch.rpm",
+            "sha256": "e7f8d1d43dcbed5b63fce768b9251251422b901b4d5f50105e6f6bedfc41694b",
+            "dependencies": [
+                "libvisa",
+                "ni-visa-passport-enet-serial",
+                "ni-visa-passport-gpib",
+                "ni-visa-passport-serial",
+                "ni-visa-passport-remote",
+                "ni-visa-sysapi",
+                "ni-visa-passport-usb",
+                "ni-visa-labview-io-control",
+                "ni-visa-lxi-discovery",
+                "ni-visa-passport-pxi",
+                "ni-visa-passport-enet"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-server": {
+            "filename": "ni-visa-server-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "5e807ffad707eebfe2bc9493cf974e311eecaee984d2854b158dba754f7baee9",
+            "dependencies": [
+                "ni-visa-runtime",
+                "ni-euladepot"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-visa-sysapi": {
+            "filename": "ni-visa-sysapi-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "7fa5924a842bd8fb31c599778e7f000c901fe4df9b16b12c498f961707c14c6d",
+            "dependencies": [
+                "libvisa",
+                "ni-euladepot",
+                "ni-syscfg-runtime"
+            ],
+            "dependencies_not_in_repo": []
+        },
+        "ni-wsrepl": {
+            "filename": "ni-wsrepl-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "6c2dea42381e9264652507f9a2de7c7c7c2c189dce7ed883d2e19b73c3e59584",
+            "dependencies": [
+                "nicurli"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "ni-xlator": {
+            "filename": "ni-xlator-19.2.0.49152-0+f0.x86_64.rpm",
+            "sha256": "4bc389291bd6d3c7908302b076a73185fda05c25f9e9dd9bfe911d81b40350d8",
+            "dependencies": [
+                "ni-apal-errors"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "nicurli": {
+            "filename": "nicurli-19.0.0-f0.x86_64.rpm",
+            "sha256": "5c3a2e37ebee141b5efcae27b2eed4f85d8bd87e67c1a38b027d31f6ccd9bf9d",
+            "dependencies": [
+                "nissli",
+                "nisslcerts"
+            ],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "nisslcerts": {
+            "filename": "nisslcerts-19.0.0-3.0.noarch.rpm",
+            "sha256": "9006f4f19950649bc8448b29e79ea2220332788f46f02a57a0c31c23f6ac2ac7",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "ca-certificates"
+            ]
+        },
+        "nissli": {
+            "filename": "nissli-19.0.0-f0.x86_64.rpm",
+            "sha256": "b789bc348da243fffda71abc158bccec6df20c35947c3273a62a2c93c6d0c2b1",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "niswactions": {
+            "filename": "niswactions-19.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "6b3f53a6d021e93055208b7751d195c3ca760c64fe24ea7f169d0599a7fe26f3",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh"
+            ]
+        },
+        "nitargetcfgi": {
+            "filename": "nitargetcfgi-6.0.0.49152-0+f0.x86_64.rpm",
+            "sha256": "07edb20fd278be8dfab5551c9eb03ed88f6437c9aa69a2b7b1f64440b0b7c401",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6(GLIBCXX_3-4)(64bit)",
+                "libdl-so-2()(64bit)",
+                "libgcc_s-so-1(GCC_3-0)(64bit)",
+                "librt-so-1()(64bit)",
+                "librt-so-1(GLIBC_2-2-5)(64bit)",
+                "libpthread-so-0(GLIBC_2-3-2)(64bit)",
+                "libstdc++-so-6(GLIBCXX_3-4-11)(64bit)",
+                "libstdc++-so-6()(64bit)",
+                "libpthread-so-0(GLIBC_2-4)(64bit)",
+                "libc-so-6(GLIBC_2-7)(64bit)",
+                "libgcc_s-so-1()(64bit)",
+                "libstdc++-so-6(GLIBCXX_3-4-9)(64bit)",
+                "libpthread-so-0()(64bit)",
+                "libdl-so-2(GLIBC_2-2-5)(64bit)",
+                "libpthread-so-0(GLIBC_2-2-5)(64bit)"
+            ]
+        },
+        "nixercesdelayloadi": {
+            "filename": "nixercesdelayloadi-2.7.10.49152-0+f0.x86_64.rpm",
+            "sha256": "69d2d67bd35ffef1d5706384e82181511a326f4795bd1ddfb6104c5f7923561c",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "/bin/sh",
+                "libstdc++-so-6(GLIBCXX_3-4)(64bit)",
+                "libgcc_s-so-1(GCC_3-0)(64bit)",
+                "libpthread-so-0()(64bit)",
+                "libpthread-so-0(GLIBC_2-2-5)(64bit)",
+                "libstdc++-so-6()(64bit)",
+                "libc-so-6(GLIBC_2-4)(64bit)",
+                "libgcc_s-so-1()(64bit)"
+            ]
+        },
+        "system-report": {
+            "filename": "system-report-1.0.0-3.noarch.rpm",
+            "sha256": "82b3d970a910f7693c86627088d66038bbe83e0a6b157c41df61879e5283c5ae",
+            "dependencies": [],
+            "dependencies_not_in_repo": [
+                "bash"
+            ]
+        },
+        "visa-shared": {
+            "filename": "visa-shared-7.0.0-1.noarch.rpm",
+            "sha256": "04b9fae307ee7694b2daf0f88f73d5e93e713bb12945d64ba67c86cdfda7f212",
+            "dependencies": [
+                "libivivisa0-devel",
+                "libivivisa0"
+            ],
+            "dependencies_not_in_repo": []
+        }
+    }
+}

@@ -5290,6 +5290,12 @@ in
 
   ngrok-1 = callPackage ../tools/networking/ngrok-1 { };
 
+  nidaqmx = callPackages ../development/libraries/nidaqmx { 
+    kernel = linux;
+  };
+
+  nidaqmx15 = callPackages ../development/libraries/nidaqmxbase { };
+
   noice = callPackage ../applications/misc/noice { };
 
   noip = callPackage ../tools/networking/noip { };
@@ -16565,6 +16571,10 @@ in
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta { };
 
     tbs = callPackage ../os-specific/linux/tbs { };
+
+    nidaqmx = callPackages ../development/libraries/nidaqmx {
+      inherit kernel;
+    };
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
