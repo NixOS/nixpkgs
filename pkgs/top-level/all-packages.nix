@@ -2436,6 +2436,8 @@ in
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
 
+  gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
+
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
   libskk = callPackage ../development/libraries/libskk {
