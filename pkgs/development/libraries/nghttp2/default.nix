@@ -20,11 +20,11 @@ let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.39.2";
+  version = "1.40.0";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1l51q8xqg7d7y9413z8l0scxgbbl1qkwgq4f09jqb31j492kx8lj";
+    sha256 = "0kyrgd4s2pq51ps5z385kw1hn62m8qp7c4h6im0g4ibrf89qwxc2";
   };
 
   outputs = [ "bin" "out" "dev" "lib" ];
