@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
 , cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
-, libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
+, libpng, boost, doxygen, cairomm, pkgconfig, libjpeg, libtiff
 , gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
      libGLU libGL zlib python expat libxml2 libsigcxx libuuid freetype libpng
-     boost cairomm imagemagick libjpeg libtiff
+     boost cairomm libjpeg libtiff
      ftgl glew gtkmm2 glibmm gtkglext pangox_compat libXmu
     ];
 

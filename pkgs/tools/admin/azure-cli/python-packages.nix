@@ -1,4 +1,4 @@
-{ python, lib, src, version }:
+{ stdenv, python, lib, src, version }:
 
 let
   buildAzureCliPackage = with py.pkgs; attrs: buildPythonPackage (attrs // {
@@ -53,31 +53,37 @@ let
         propagatedBuildInputs = with self; [
           adal
           argcomplete
+          azure-common
           azure-cli-telemetry
+          azure-mgmt-resource
           colorama
-          jmespath
           humanfriendly
+          jmespath
           knack
           msrest
           msrestazure
           paramiko
+          psutil
           pygments
           pyjwt
           pyopenssl
+          pyperclip
           pyyaml
           requests
           six
-          azure-mgmt-resource
           tabulate
-          pyperclip
-          psutil
         ]
         ++ lib.optionals isPy3k [ antlr4-python3-runtime ]
         ++ lib.optionals (!isPy3k) [ enum34 futures antlr4-python2-runtime ndg-httpsclient ];
 
+        doCheck = stdenv.isLinux;
         # ignore test that does network call
         checkPhase = ''
-          HOME=$TMPDIR pytest --ignore=azure/cli/core/tests/test_profile.py
+          rm azure/{,cli/}__init__.py
+          python -c 'import azure.common; print(azure.common)'
+          PYTHONPATH=$PWD:$PYTHONPATH HOME=$TMPDIR pytest \
+            --ignore=azure/cli/core/tests/test_profile.py \
+            --ignore=azure/cli/core/tests/test_generic_update.py
         '';
 
         pythonImportsCheck = [
@@ -108,17 +114,20 @@ let
       azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "4.0.0" "zip"
         "0gy89bi89ikg5hps8rvnq28r33lixci3sk2m86jvziv9fh9rz41b";
 
-      azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "8.0.0" "zip"
-        "06hmf9iq2yqpmmvw7pr9zm4v427q03i436lnin3aczizfndrk76i";
+      azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "10.0.0" "zip"
+        "1s3bx6knxw5dxycp43yimvgrh0i19drzd09asglcwz2x5mr3bpyg";
 
       azure-mgmt-consumption = overrideAzureMgmtPackage super.azure-mgmt-consumption "2.0.0" "zip"
         "12ai4qps73ivawh0yzvgb148ksx02r30pqlvfihx497j62gsi1cs";
 
-      azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "7.0.0" "zip"
-        "104w7rxv7hy84yzddbbpkjqha04ghr0zz9qy788n3wl69cj4cv1a";
+      azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "8.0.0" "zip"
+        "0akpm12xj453dp84dfdpi06phr4q0hknr5l7bz96zbc8iand78wg";
 
       azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "0.8.0" "zip"
         "0iakxb2rr1w9171802m9syjzqas02vjah711mpagbgcj549mjysb";
+
+      azure-mgmt-imagebuilder = overrideAzureMgmtPackage super.azure-mgmt-imagebuilder "0.2.1" "zip"
+        "0mwlvy4x5nr3hsz7wdpdhpzwarzzwz4225bfpd68hr0pcjgzspky";
 
       azure-mgmt-iothub = overrideAzureMgmtPackage super.azure-mgmt-iothub "0.8.2" "zip"
         "0w3w1d156rnkwjdarv3qvycklxr3z2j7lry7a3jfgj3ykzny12rq";
@@ -129,8 +138,8 @@ let
       azure-mgmt-devtestlabs = overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "2.2.0" "zip"
         "15lpyv9z8ss47rjmg1wx5akh22p9br2vckaj7jk3639vi38ac5nl";
 
-      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "0.6.0" "zip"
-        "10ymvyj386z9bjdm2g1b5a4vfnn87ig2zm6xn2xddvbpy0jxnyfv";
+      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "0.7.0" "zip"
+        "0cf4pknb5y2yz4jqwg7xm626zkfx8i8hqcr3dkvq21lrx7fz96r3";
 
       azure-mgmt-dns = overrideAzureMgmtPackage super.azure-mgmt-dns "2.1.0" "zip"
         "1l55py4fzzwhxlmnwa41gpmqk9v2ncc79w7zq11sm9a5ynrv2c1p";
@@ -144,11 +153,14 @@ let
       azure-mgmt-web = overrideAzureMgmtPackage super.azure-mgmt-web "0.42.0" "zip"
         "0vp40i9aaw5ycz7s7qqir6jq7327f7zg9j9i8g31qkfl1h1c7pdn";
 
-      azure-mgmt-reservations = overrideAzureMgmtPackage super.azure-mgmt-reservations "0.3.2" "zip"
-        "0nksxjh5kh09dr0zw667fg8mzik4ymvfq3dipwag6pynbqr9ls4l";
+      azure-mgmt-reservations = overrideAzureMgmtPackage super.azure-mgmt-reservations "0.6.0" "zip"
+        "16ycni3cjl9c0mv419gy5rgbrlg8zp0vnr6aj8z8p2ypdw6sgac3";
 
       azure-mgmt-security = overrideAzureMgmtPackage super.azure-mgmt-security "0.1.0" "zip"
         "1cb466722bs0ribrirb32kc299716pl0pwivz3jyn40dd78cwhhx";
+
+      azure-mgmt-sqlvirtualmachine = overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "0.4.0" "zip"
+        "1jxmikjvyxkwr8c9kn6xw8gvj9pajlk7y8111rq8fgkivwjq8wcm";
 
       azure-mgmt-datamigration = overrideAzureMgmtPackage super.azure-mgmt-datamigration "0.1.0" "zip"
         "1pq5rn32yvrf5kqjafnj0kc92gpfg435w2l0k7cm8gvlja4r4m77";
@@ -165,8 +177,8 @@ let
       azure-mgmt-containerregistry = overrideAzureMgmtPackage super.azure-mgmt-containerregistry "3.0.0rc7" "zip"
         "1bzfpbz186dhnxn0blgr20xxnk67gkr8ysn2b3f1r41bq9hz97xp";
 
-      azure-mgmt-monitor = overrideAzureMgmtPackage super.azure-mgmt-monitor "0.5.2" "zip"
-        "1r01aq5rbynbc1my4qljdifjdj9h65bh8cdzgd7vm4ij7r48v9gi";
+      azure-mgmt-monitor = overrideAzureMgmtPackage super.azure-mgmt-monitor "0.7.0" "zip"
+        "1pprvk5255b6brbw73g0g13zygwa7a2px5x08wy3153rqlzan5l2";
 
       azure-mgmt-advisor =  overrideAzureMgmtPackage super.azure-mgmt-advisor "2.0.1" "zip"
         "1wsfkprdrn22mwm24y2zlcms8ppp7jwq3s86r3ymbl29pbaxca8r";
@@ -232,17 +244,6 @@ let
             --replace "azure-namespace-package = azure-mgmt-datalake-nspkg" ""
         '';
       });
-
-
-
-
-
-
-
-
-
-
-
 
     };
   };

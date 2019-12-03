@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lkhr7i44xw4kpfbhgj3rbqy3dv5bfm4kyrbl8a9rfafddcxlwss";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg fmt cmdliner lwt ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ findlib topkg fmt cmdliner lwt ];
   propagatedBuildInputs = [ result ];
 
   buildPhase = "${topkg.run} build --with-js_of_ocaml false";
