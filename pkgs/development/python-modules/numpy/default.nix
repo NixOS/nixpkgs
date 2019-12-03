@@ -1,14 +1,23 @@
-{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile, isPyPy }:
+{ lib, fetchPypi, buildPythonPackage, writeTextFile, isPyPy
+, python, gfortran, pytest
+, blas
+, mklSupport ? false
+, mkl ? null
+}:
+
+assert mklSupport -> mkl != null;
 
 let
-  blasImplementation = lib.nameFromURL blas.name "-";
+  blasPkg = if mklSupport then mkl else blas;
+  blasImplementation = lib.nameFromURL blasPkg.name "-";
+
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
       ${blasImplementation} = {
-        include_dirs = "${blas}/include";
-        library_dirs = "${blas}/lib";
-      } // lib.optionalAttrs (blasImplementation == "mkl") {
+        include_dirs = "${blasPkg}/include";
+        library_dirs = "${blasPkg}/lib";
+      } // lib.optionalAttrs mklSupport {
         mkl_libs = "mkl_rt";
         lapack_libs = "";
       };
@@ -25,7 +34,7 @@ in buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ gfortran pytest ];
-  buildInputs = [ blas ];
+  buildInputs = [ blasPkg ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -56,7 +65,7 @@ in buildPythonPackage rec {
   '';
 
   passthru = {
-    blas = blas;
+    blas = blasPkg;
     inherit blasImplementation cfg;
   };
 
