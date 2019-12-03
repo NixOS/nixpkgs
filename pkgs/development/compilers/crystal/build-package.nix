@@ -38,6 +38,14 @@ in stdenv.mkDerivation (mkDerivationArgs // {
     runHook postBuild
   '';
 
+  doCheck = args.doCheck or true;
+
+  checkPhase = args.checkPhase or ''
+    runHook preCheck
+    crystal spec
+    runHook postCheck
+  '';
+
   installPhase = args.installPhase or ''
     runHook preInstall
     mkdir -p "$out/bin"
