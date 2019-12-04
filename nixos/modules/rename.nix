@@ -60,6 +60,7 @@ with lib;
       please use 'services.prometheus2.alertmanagers' instead.
     '')
     (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
+    (mkRemovedOptionModule [ "services" "prometheus" "configText" ] "Use services.prometheus.configFile in combination with pkgs.writeText instead.")
     (mkRenamedOptionModule [ "services" "tor" "relay" "portSpec" ] [ "services" "tor" "relay" "port" ])
     (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
     (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
