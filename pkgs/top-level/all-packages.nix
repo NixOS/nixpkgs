@@ -24764,6 +24764,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  nix-linter = haskellPackages.callPackage ../development/tools/analysis/nix-linter { };
+
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
   nix-prefetch = callPackage ../tools/package-management/nix-prefetch { };
