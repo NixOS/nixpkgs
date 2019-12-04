@@ -845,6 +845,7 @@ rec {
         echo "         be better to only have one layer that contains a nix store."
 
         export NIX_REMOTE=local?root=$PWD
+        export USER=root
         ${nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
 
         mkdir -p nix/var/nix/gcroots/docker/
