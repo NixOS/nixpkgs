@@ -1,10 +1,11 @@
 { lib, buildGoModule, minikube }:
 
 buildGoModule rec {
-  inherit (minikube) version src nativeBuildInputs buildInputs goPackagePath postPatch preBuild;
+  inherit (minikube) version src nativeBuildInputs buildInputs goPackagePath preBuild;
 
   pname = "docker-machine-hyperkit";
   subPackages = [ "cmd/drivers/hyperkit" ];
+
   modSha256   = minikube.go-modules.outputHash;
 
   postInstall = ''
