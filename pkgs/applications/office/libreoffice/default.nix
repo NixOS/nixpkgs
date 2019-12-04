@@ -3,7 +3,7 @@
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
-, openssl, gperf, cppunit, GConf, ORBit2, poppler, utillinux
+, openssl, gperf, cppunit, GConf, ORBit2, poppler_0_61, utillinux
 , librsvg, gnome_vfs, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
@@ -367,7 +367,7 @@ in stdenv.mkDerivation rec {
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU libGL mythes gst_all_1.gstreamer
       gst_all_1.gst-plugins-base glib libmysqlclient
-      neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
+      neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler_0_61
       python3 sane-backends unzip vigra which zip zlib
       mdds bluez5 libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
