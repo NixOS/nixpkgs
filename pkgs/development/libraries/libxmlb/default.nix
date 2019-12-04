@@ -5,7 +5,6 @@
 , glib
 , gobject-introspection
 , gtk-doc
-, libuuid
 , meson
 , ninja
 , pkgconfig
@@ -16,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.1.13";
+  version = "0.1.14";
 
   outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
 
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    sha256 = "14bk7bk08mjbildak1l7jq7idcyask7384vigpq9zmwai1gax4s7";
+    sha256 = "05snbv1dvqa96k7xlwi2sj161315kps3baansr9xdpwim5ckmwc6";
   };
 
   patches = [
@@ -45,7 +44,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libuuid
   ];
 
   mesonFlags = [
