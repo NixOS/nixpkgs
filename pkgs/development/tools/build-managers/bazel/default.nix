@@ -19,6 +19,7 @@
 , enableNixHacks ? false
 , gcc-unwrapped
 , autoPatchelfHook
+, file
 , substituteAll
 }:
 
@@ -92,7 +93,7 @@ let
     #        ],
     #     )
     #
-    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip ];
+    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip file zip ];
 
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
