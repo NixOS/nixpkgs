@@ -13227,6 +13227,8 @@ in
 
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
+  micropython = callPackage ../development/interpreters/micropython { };
+
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
   minizip = callPackage ../development/libraries/minizip { };
