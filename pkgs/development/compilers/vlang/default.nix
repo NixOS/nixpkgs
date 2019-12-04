@@ -4,32 +4,36 @@ assert stdenv.hostPlatform.isUnix -> upx != null;
 
 stdenv.mkDerivation rec {
   pname = "vlang";
-  version = "0.1.21";
+  version = "0.1.23.1";
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "0npd7a7nhd6r9mr99naib9scqk30209hz18nxif27284ckjbl4fk";
+    sha256 = "0d3i6ay9ib9i5liybfl23hd6nl20wdkn5gspvwiyvajqygz2vffp";
   };
 
   # V compiler source translated to C for bootstrap.
-  # Use matching v.c release commit for now, 0.1.21 release is not available.
+  # Using matching v.c release commit
   vc = fetchFromGitHub {
     owner = "vlang";
     repo = "vc";
-    rev = "950a90b6acaebad1c6ddec5486fc54307e38a9cd";
-    sha256 = "1dh5l2m207rip1xj677hvbp067inw28n70ddz5wxzfpmaim63c0l";
+    rev = "66368fffce007edc7f49fa8e51de5a07bac17773";
+    sha256 = "02l7g81pp9k5jgbazpkdrqphy3pr075s0h8b3wfsyhrnjz13kdiq";
   };
 
   enableParallelBuilding = true;
   propagatedBuildInputs = [ glfw freetype openssl ]
     ++ stdenv.lib.optional stdenv.hostPlatform.isUnix upx;
 
+  patches = [
+    ./compilation-fixes-after-a7054b6.patch
+  ];
+
   buildPhase = ''
     runHook preBuild
     cc -std=gnu11 $CFLAGS -w -o v $vc/v.c -lm $LDFLAGS
-    ./v -prod -cflags `$CFLAGS` -o v compiler
+    ./v -prod -cflags `$CFLAGS` -o v v.v
     # Exclude thirdparty/vschannel as it is windows-specific.
     find thirdparty -path thirdparty/vschannel -prune -o -type f -name "*.c" -execdir cc -std=gnu11 $CFLAGS -w -c {} $LDFLAGS ';'
     runHook postBuild

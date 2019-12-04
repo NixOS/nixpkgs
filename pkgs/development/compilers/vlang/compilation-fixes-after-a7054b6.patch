@@ -1,0 +1,156 @@
+diff --git a/vlib/compiler/gen_c.v b/vlib/compiler/gen_c.v
+index 9c1608a..f63a47a 100644
+--- a/vlib/compiler/gen_c.v
++++ b/vlib/compiler/gen_c.v
+@@ -485,15 +485,17 @@ fn (p mut Parser) gen_struct_init(typ string, t Type) bool {
+ 		}
+ 	}
+ 	else {
+-		// TODO tmp hack for 0 pointers init
+-		// &User{!} ==> 0
+ 		if p.tok == .not {
++			// old &User{!} ==> 0 hack
++			p.error('use `$t.name(0)` instead of `&$t.name{!}`')
++			/*
+ 			p.next()
+ 			p.gen('0')
+ 			p.check(.rcbr)
+ 			return true
++			*/
+ 		}
+-		p.gen('($t.name*)memdup(&($t.name)  {')
++		p.gen('($t.name*)memdup(&($t.name) {')
+ 	}
+ 	return false
+ }
+diff --git a/vlib/gg/gg.v b/vlib/gg/gg.v
+index c986041..d453a1f 100644
+--- a/vlib/gg/gg.v
++++ b/vlib/gg/gg.v
+@@ -70,13 +70,13 @@ pub mut:
+ 
+ // fn new_context(width, height int, use_ortho bool, font_size int) *GG {
+ pub fn new_context(cfg Cfg) &GG {
+-	mut window := &glfw.Window{!}
++	mut window := &glfw.Window(0)
+ 	if cfg.create_window {
+ 		if cfg.resizable {
+ 			glfw.window_hint(C.GLFW_RESIZABLE, 1)
+ 		} else {
+ 			glfw.window_hint(C.GLFW_RESIZABLE, 0)
+-		}	
++		}
+ 		window = glfw.create_window(glfw.WinCfg{
+ 			title: cfg.window_title
+ 			width: cfg.width
+diff --git a/vlib/http/backend_nix.v b/vlib/http/backend_nix.v
+index d871e0c..2c1acdf 100644
+--- a/vlib/http/backend_nix.v
++++ b/vlib/http/backend_nix.v
+@@ -73,7 +73,7 @@ fn (req &Request) ssl_do(port int, method, host_name, path string) ?Response {
+ 	res = C.BIO_set_conn_hostname(web, addr.str)
+ 	if res != 1 {
+ 	}
+-	ssl := &C.SSL{!}
++	ssl := &C.SSL(0)
+ 	C.BIO_get_ssl(web, &ssl)
+ 	if isnil(ssl) {
+ 	}
+diff --git a/vlib/net/socket.v b/vlib/net/socket.v
+index 2bcd78b..59e9880 100644
+--- a/vlib/net/socket.v
++++ b/vlib/net/socket.v
+@@ -29,7 +29,7 @@ mut:
+ 	ai_socktype int
+ 	ai_flags int
+ 	ai_protocol int
+-	ai_addrlen int	
++	ai_addrlen int
+ 	ai_addr voidptr
+ 	ai_canonname voidptr
+ 	ai_next voidptr
+@@ -174,9 +174,9 @@ pub fn (s Socket) connect(address string, port int) ?int {
+ 	hints.ai_canonname = C.NULL
+ 	hints.ai_addr = C.NULL
+ 	hints.ai_next = C.NULL
+-	
+ 
+-	info := &C.addrinfo{!}
++
++	info := &C.addrinfo(0)
+ 	sport := '$port'
+ 	info_res := C.getaddrinfo(address.str, sport.str, &hints, &info)
+ 	if info_res != 0 {
+diff --git a/vlib/os/os_nix.v b/vlib/os/os_nix.v
+index 06885ed..2989ad1 100644
+--- a/vlib/os/os_nix.v
++++ b/vlib/os/os_nix.v
+@@ -31,7 +31,7 @@ pub fn ls(path string) ?[]string {
+ 	if isnil(dir) {
+ 		return error('ls() couldnt open dir "$path"')
+ 	}
+-	mut ent := &C.dirent{!}
++	mut ent := &C.dirent(0)
+ 	for {
+ 		ent = C.readdir(dir)
+ 		if isnil(ent) {
+diff --git a/vlib/sqlite/sqlite.v b/vlib/sqlite/sqlite.v
+index 131be42..e3dd3ba 100644
+--- a/vlib/sqlite/sqlite.v
++++ b/vlib/sqlite/sqlite.v
+@@ -19,13 +19,13 @@ pub mut:
+ }
+ 
+ pub fn connect(path string) DB {
+-	db := &C.sqlite3{!}
++	db := &C.sqlite3(0)
+ 	C.sqlite3_open(path.str, &db)
+ 	return DB {conn: db}
+ }
+ 
+ pub fn (db DB) q_int(query string) int {
+-	stmt := &C.sqlite3_stmt{!}
++	stmt := &C.sqlite3_stmt(0)
+ 	C.sqlite3_prepare_v2(db.conn, query.str, - 1, &stmt, 0)
+ 	C.sqlite3_step(stmt)
+ 	res := C.sqlite3_column_int(stmt, 0)
+@@ -41,7 +41,7 @@ fn C.sqlite3_prepare_v2()
+ fn C.sqlite3_finalize()
+ 
+ pub fn (db DB) q_string(query string) string {
+-	stmt := &C.sqlite3_stmt{!}
++	stmt := &C.sqlite3_stmt(0)
+ 	C.sqlite3_prepare_v2(db.conn, query.str, - 1, &stmt, 0)
+ 	C.sqlite3_step(stmt)
+ 	f := C.sqlite3_column_text(stmt, 0)
+@@ -53,7 +53,7 @@ pub fn (db DB) q_string(query string) string {
+ fn C.sqlite3_column_count(voidptr) int
+ 
+ pub fn (db DB) exec(query string) []Row {
+-	stmt := &C.sqlite3_stmt{!}
++	stmt := &C.sqlite3_stmt(0)
+ 	C.sqlite3_prepare_v2(db.conn, query.str, - 1, &stmt, 0)
+ 	nr_cols := C.sqlite3_column_count(stmt)
+ 	//println('nr cols $nr_cols')
+@@ -62,7 +62,7 @@ pub fn (db DB) exec(query string) []Row {
+ 		ret := C.sqlite3_step(stmt)
+ 		if ret != 0x64 {
+ 			break
+-		}	
++		}
+ 		mut row := Row{}
+ 		for i in 0..nr_cols {
+ 			val := tos_clone(C.sqlite3_column_text(stmt, i))
+diff --git a/vlib/time/time.v b/vlib/time/time.v
+index a300471..11a96eb 100644
+--- a/vlib/time/time.v
++++ b/vlib/time/time.v
+@@ -102,7 +102,7 @@ fn C.time(int) C.time_t
+ 
+ pub fn now() Time {
+ 	t := C.time(0)
+-	mut now := &C.tm{!}
++	mut now := &C.tm(0)
+ 	now = C.localtime(&t)
+ 	return convert_ctime(now)
+ }
