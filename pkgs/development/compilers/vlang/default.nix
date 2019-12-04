@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ chiiruno filalex77 ];
     platforms = platforms.all;
   };
 }
