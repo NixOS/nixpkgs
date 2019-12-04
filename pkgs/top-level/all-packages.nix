@@ -12803,6 +12803,10 @@ in
   };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
+
+  # newer NSS version for newer firefox stable releases
+  nss_3_47_1 = callPackage ../development/libraries/nss/3_47_1.nix { };
+
   nssTools = nss.tools;
 
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
