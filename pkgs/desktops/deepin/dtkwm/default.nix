@@ -37,7 +37,7 @@ mkDerivation rec {
     "LIB_INSTALL_DIR=${outRef}/lib"
   ];
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin graphical user interface library";
