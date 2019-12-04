@@ -178,7 +178,7 @@ core = stdenv.mkDerivation rec {
   '' + cleanBrokenLinks;
 
   # needed for poppler and xpdf
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++14";
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
   passthru = { inherit version buildInputs; };
