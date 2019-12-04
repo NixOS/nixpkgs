@@ -21,57 +21,26 @@ import ./make-test-python.nix ({ pkgs, ... } : {
     '';
   };
 
-  testScript = let
-    getaddrinfo_py = pkgs.writeScript "getaddrinfo.py" ''
-      import socket
-      import sys
-
-      result = set()
-      for gai in socket.getaddrinfo(sys.argv[1], 0):
-          result.add(gai[4][0])
-
-      print(' '.join(sorted(list(result))))
-    '';
-
-    getaddrinfo = "${pkgs.python3.interpreter} ${getaddrinfo_py}";
-
-  in
-  ''
-    def compare(test, should, is_):
-        should = should.strip()
-        is_ = is_.strip()
-        resolv.log("{}: expected '{}', actual '{}'".format(test, should, is_))
-        if should == is_:
-            resolv.log("* OK")
-            return True
-        else:
-            resolv.log("* FAILED")
-            return False
+  testScript = ''
+    def addrs_in(hostname, addrs):
+        res = resolv.succeed("getent ahosts {}".format(hostname))
+        for addr in addrs:
+            assert addr in res, "Expected output '{}' not found in\n{}".format(addr, res)
 
 
     start_all()
     resolv.wait_for_unit("nscd")
-    res = []
 
-    out = resolv.succeed(
-        "${getaddrinfo} host-ipv4.example.net"
-    )
-    res.append(compare("resolve IPv4", "192.0.2.1 192.0.2.2", out))
+    ipv4 = ["192.0.2.1", "192.0.2.2"]
+    ipv6 = ["2001:db8::2:1", "2001:db8::2:2"]
 
-    out = resolv.succeed(
-        "${getaddrinfo} host-ipv6.example.net"
-    )
-    res.append(compare("resolve IPv6", "2001:db8::2:1 2001:db8::2:2", out))
+    with subtest("IPv4 resolves"):
+        addrs_in("host-ipv4.example.net", ipv4)
 
-    out = resolv.succeed(
-        "${getaddrinfo} host-dual.example.net"
-    )
-    res.append(
-        compare(
-            "resolve dual stack", "192.0.2.1 192.0.2.2 2001:db8::2:1 2001:db8::2:2", out
-        )
-    )
+    with subtest("IPv6 resolves"):
+        addrs_in("host-ipv6.example.net", ipv6)
 
-    assert all(res) is True
+    with subtest("Dual stack resolves"):
+        addrs_in("host-dual.example.net", ipv4 + ipv6)
   '';
 })
