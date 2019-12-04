@@ -721,6 +721,8 @@ in {
 
   getmac = callPackage ../development/python-modules/getmac { };
 
+  gertty = callPackage ../development/python-modules/gertty { };
+
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
   gin-config = callPackage ../development/python-modules/gin-config { };
