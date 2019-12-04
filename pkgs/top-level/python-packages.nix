@@ -595,6 +595,8 @@ in {
 
   fdint = callPackage ../development/python-modules/fdint { };
 
+  ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
+
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
