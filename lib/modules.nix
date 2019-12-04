@@ -110,7 +110,7 @@ rec {
     in
       builtins.genericClosure {
         startSet = toClosureList unknownModule "" modules;
-        operator = m: toClosureList m.file m.key m.imports;
+        operator = m: toClosureList m._file m.key m.imports;
       };
 
   /* Massage a module into canonical form, that is, a set consisting
@@ -125,7 +125,7 @@ rec {
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by assignments to the top-level attributes `config' or `options'."
       else
-        { file = m._file or file;
+        { _file = m._file or file;
           key = toString m.key or key;
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
@@ -133,7 +133,7 @@ rec {
           config = mkMerge [ (m.config or {}) metaSet ];
         }
     else
-      { file = m._file or file;
+      { _file = m._file or file;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
@@ -189,7 +189,7 @@ rec {
      in the ‘value’ attribute of each option. */
   mergeModules = prefix: modules:
     mergeModules' prefix modules
-      (concatMap (m: map (config: { inherit (m) file; inherit config; }) (pushDownProperties m.config)) modules);
+      (concatMap (m: map (config: { file = m._file; inherit config; }) (pushDownProperties m.config)) modules);
 
   mergeModules' = prefix: options: configs:
     let
@@ -223,7 +223,7 @@ rec {
                ) {} modules;
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName = byName "options" (module: option:
-          [{ inherit (module) file; options = option; }]
+          [{ inherit (module) _file; options = option; }]
         ) options;
       # an attrset 'name' => list of submodules that define ‘name’.
       defnsByName = byName "config" (module: value:
@@ -250,7 +250,7 @@ rec {
               firstOption = findFirst (m: isOption m.options) "" decls;
               firstNonOption = findFirst (m: !isOption m.options) "" decls;
             in
-              throw "The option `${showOption loc}' in `${firstOption.file}' is a prefix of options in `${firstNonOption.file}'."
+              throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
           else
             mergeModules' loc decls defns
       ))
@@ -284,7 +284,7 @@ rec {
          bothHave "apply" ||
          (bothHave "type" && (! typesMergeable))
       then
-        throw "The option `${showOption loc}' in `${opt.file}' is already declared in ${showFiles res.declarations}."
+        throw "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
       else
         let
           /* Add the modules of the current option to the list of modules
@@ -298,11 +298,11 @@ rec {
             else packSubmodule file { options = opt; };
           getSubModules = opt.options.type.getSubModules or null;
           submodules =
-            if getSubModules != null then map (packSubmodule opt.file) getSubModules ++ res.options
-            else if opt.options ? options then map (coerceOption opt.file) options' ++ res.options
+            if getSubModules != null then map (packSubmodule opt._file) getSubModules ++ res.options
+            else if opt.options ? options then map (coerceOption opt._file) options' ++ res.options
             else res.options;
         in opt.options // res //
-          { declarations = res.declarations ++ [opt.file];
+          { declarations = res.declarations ++ [opt._file];
             options = submodules;
           } // typeSet
     ) { inherit loc; declarations = []; options = []; } opts;
