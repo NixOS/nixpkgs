@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "licensor";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "raftario";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bb6q3jpzdygjcs3apl38zzmgkn22ya5wxlqgmlp0cybqbhpi20s";
+    sha256 = "0zr8hcq7crmhrdhwcclc0nap68wvg5kqn5l93ha0vn9xgjy8z11p";
   };
 
-  cargoSha256 = "1cvwyj2043vi5905n5126ikwbs3flfgzqkzjnzha0h8in8p3skv1";
+  cargoSha256 = "042dplm0cdxkv73m5qlkc61h0x9fpzxn2b0c8gjx2hwvigcia139";
 
   meta = with lib; {
     description = "Write licenses to stdout";
