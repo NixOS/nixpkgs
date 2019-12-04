@@ -9093,6 +9093,10 @@ in
     php = php73;
   });
 
+  php74Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php74;
+  });
+
   phpPackages-unit = php72Packages-unit;
 
   php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
@@ -9103,11 +9107,16 @@ in
     php = php73-unit;
   });
 
+  php74Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php74-unit;
+  });
+
   inherit (callPackages ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   })
-    php72
-    php73;
+    php74
+    php73
+    php72;
 
   php-embed = php73-embed;
 
@@ -9117,6 +9126,11 @@ in
   };
 
   php73-embed = php73.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+  };
+
+  php74-embed = php74.override {
     config.php.embed = true;
     config.php.apxs2 = false;
   };
@@ -9133,6 +9147,15 @@ in
   };
 
   php73-unit = php73.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+    config.php.systemd = false;
+    config.php.phpdbg = false;
+    config.php.cgi = false;
+    config.php.fpm = false;
+  };
+
+  php74-unit = php74.override {
     config.php.embed = true;
     config.php.apxs2 = false;
     config.php.systemd = false;
