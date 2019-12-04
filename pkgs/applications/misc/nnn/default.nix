@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jarun/nnn";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ jfrankenau filalex77 ];
   };
 }
