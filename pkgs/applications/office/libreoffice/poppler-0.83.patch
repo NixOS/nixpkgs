@@ -1,0 +1,48 @@
+diff --git a/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx b/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx
+index 26048177e87d..da7736f607f9 100644
+--- a/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx
++++ b/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx
+@@ -491,12 +491,12 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
+     gfree(pBuf);
+ }
+ 
+-void PDFOutDev::printPath( GfxPath* pPath )
++void PDFOutDev::printPath( const GfxPath* pPath )
+ {
+     int nSubPaths = pPath ? pPath->getNumSubpaths() : 0;
+     for( int i=0; i<nSubPaths; i++ )
+     {
+-        GfxSubpath* pSub  = pPath->getSubpath( i );
++        const GfxSubpath* pSub  = pPath->getSubpath( i );
+         const int nPoints = pSub->getNumPoints();
+ 
+         printf( " subpath %d", pSub->isClosed() );
+diff --git a/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx b/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx
+index 02f6b59f6f15..1c7451a78601 100644
+--- a/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx
++++ b/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx
+@@ -149,7 +149,7 @@ namespace pdfi
+ 
+         int  parseFont( long long nNewId, GfxFont* pFont, GfxState* state ) const;
+         void writeFontFile( GfxFont* gfxFont ) const;
+-        static void printPath( GfxPath* pPath );
++        static void printPath( const GfxPath* pPath );
+ 
+     public:
+         explicit PDFOutDev( PDFDoc* pDoc );
+diff --git a/sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx b/sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx
+index 42178b650cdd..b1a54bd09c5f 100644
+--- a/sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx
++++ b/sdext/source/pdfimport/xpdfwrapper/wrapper_gpl.cxx
+@@ -68,7 +68,11 @@ int main(int argc, char **argv)
+     }
+ 
+     // read config file
++#if POPPLER_CHECK_VERSION(0, 83, 0)
++    globalParams = std::make_unique<GlobalParams>();
++#else
+     globalParams = new GlobalParams();
++#endif
+     globalParams->setErrQuiet(true);
+ #if defined(_MSC_VER)
+     globalParams->setupBaseFonts(nullptr);

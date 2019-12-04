@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, fetchpatch, pam, python3, libxslt, perl, ArchiveZip, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
@@ -73,6 +73,12 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./xdg-open-brief.patch
+    # poppler-0.82 compatibility:
+    (fetchpatch {
+      url = "https://github.com/LibreOffice/core/commit/2eadd46a.patch";
+      sha256 = "1mpipdfxvixjziizbhfbpybpzlg1ijw7s0yqjpmq5d7pf3pvkm4n";
+    })
+    ./poppler-0.83.patch
   ];
 
   tarballPath = "external/tarballs";
