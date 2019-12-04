@@ -105,19 +105,33 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
-    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
-    ./drop-inheritable.patch
-    # TODO: submit upstream
-    ./0001-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit zenity;
+    # Fixes from gnome-3-34 branch 2019-11-29.
+    (fetchpatch {
+      name = "gnome-3-34-2019-11-29.patch";
+      url = "https://github.com/GNOME/mutter/compare/3.34.1...c0e76186da5b7baf7c8804c0ffa80232a5a6bf98.patch";
+      excludes = [
+        ".gitlab-ci.yml"
+        ".gitlab-ci/checkout-gnome-shell.sh"
+      ];
+      sha256 = "1qmxic83bd3dvg6isipqy8jaaksd7p5s3cb7h44zinq738n8d0fb";
     })
+
     # Fix build with libglvnd provided headers
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/mutter/commit/a444a4c5f58ea516ad3cd9d6ddc0056c3ca9bc90.patch";
       sha256 = "0imy2j8af9477jliwdq4jc40yw1cifsjjf196gnmwxr9rkj0hbrd";
+    })
+
+    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
+    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
+    ./drop-inheritable.patch
+
+    # TODO: submit upstream
+    ./0001-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
+
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit zenity;
     })
   ];
 
