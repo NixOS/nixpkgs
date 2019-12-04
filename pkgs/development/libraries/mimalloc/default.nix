@@ -26,13 +26,16 @@ stdenv.mkDerivation rec {
     mv $out/lib/*/include $dev/include
 
     # move everything else into place
-    mv $out/lib/*/libmimalloc*${soext} $out/lib/libmimalloc${soext}
-    mv $out/lib/*/libmimalloc*.a       $out/lib/libmimalloc.a
-    mv $out/lib/*/mimalloc*.o          $out/lib/mimalloc.o
+    mv $out/lib/mimalloc-1.0/libmimalloc*${soext}.1.0 $out/lib/libmimalloc${soext}
+    mv $out/lib/mimalloc-1.0/libmimalloc*.a           $out/lib/libmimalloc.a
+    mv $out/lib/mimalloc-1.0/mimalloc*.o              $out/lib/mimalloc.o
 
     # remote duplicate dir. FIXME: try to fix the .cmake file distribution
     # so we can re-use it for dependencies...
-    rm -r $out/lib/mimalloc-1.0/
+    rm -rf $out/lib/mimalloc-1.0
+  '' + stdenv.lib.optionalString secureBuild ''
+    # fix a broken symlink for the -secure alias
+    ln -sfv $out/lib/libmimalloc.so $out/lib/libmimalloc-secure.so
   '';
 
   outputs = [ "out" "dev" ];
