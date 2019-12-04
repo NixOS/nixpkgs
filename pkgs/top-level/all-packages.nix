@@ -480,6 +480,8 @@ in
 
   _1password = callPackage ../applications/misc/1password { };
 
+  _6tunnel = callPackage ../tools/networking/6tunnel { };
+
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
   a2ps = callPackage ../tools/text/a2ps { };
