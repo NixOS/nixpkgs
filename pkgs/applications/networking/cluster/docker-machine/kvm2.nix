@@ -1,7 +1,7 @@
 { lib, buildGoModule, minikube }:
 
 buildGoModule rec {
-  inherit (minikube) version src nativeBuildInputs buildInputs goPackagePath postPatch preBuild;
+  inherit (minikube) version src nativeBuildInputs buildInputs goPackagePath preBuild;
 
   pname = "docker-machine-kvm2";
   subPackages = [ "cmd/drivers/kvm" ];

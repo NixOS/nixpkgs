@@ -4,36 +4,30 @@
 , pkgconfig
 , makeWrapper
 , go-bindata
-, bash
 , libvirt
 , vmnet
 }:
 
 buildGoModule rec {
   pname   = "minikube";
-  version = "1.3.1";
+  version = "1.5.2";
   # for -ldflags
-  commit  = "ca60a424ce69a4d79f502650199ca2b52f29e631";
+  commit  = "792dbf92a1de583fcee76f8791cff12e0c9440ad";
 
   goPackagePath = "k8s.io/minikube";
   subPackages   = [ "cmd/minikube" ];
-  modSha256     = "0ajzkc3xs7ql0v5762d3rh6idk04nhglfph3ldl25mnafwb7qd9l";
+  modSha256     = "0nv7f1a1ag3r58i1hnk0nikrms0a22017rq55nl39bg9z58d4vk2";
 
   src = fetchFromGitHub {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "0kfd7041y6fayz8jl7zlw2lccnrx4d9qramx99j8mcw5syc2mwsd";
+    sha256 = "1hahils630aajzrb0z82h3kpgibsyj0lwrknd9whdmvzi2yisr3w";
   };
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ libvirt ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ vmnet ];
-
-  postPatch = ''
-    substituteInPlace pkg/minikube/command/exec_runner.go \
-      --replace "/bin/bash" ${bash}/bin/bash
-  '';
 
   preBuild = ''
     go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets deploy/addons/...
