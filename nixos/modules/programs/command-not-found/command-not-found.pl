@@ -7,6 +7,7 @@ use String::ShellQuote;
 use Config;
 
 my $program = $ARGV[0];
+my $quoted_command = '"' . shell_quote(@ARGV) . '"';
 
 my $dbPath = "@dbPath@";
 
@@ -38,6 +39,9 @@ EOF
         print STDERR <<EOF;
 The program ‘$program’ is currently not installed. You can install it by typing:
   nix-env -iA nixos.$package
+
+Or run it once with:
+  nix-shell -p $package --run $quoted_command
 EOF
     }
 } else {
@@ -46,6 +50,8 @@ The program ‘$program’ is currently not installed. It is provided by
 several packages. You can install it by typing one of the following:
 EOF
     print STDERR "  nix-env -iA nixos.$_->{package}\n" foreach @$res;
+    print STDERR "\nOr run it once with:\n";
+    print STDERR "  nix-shell -p $_->{package} --run $quoted_command\n" foreach @$res;
 }
 
 exit 127;
