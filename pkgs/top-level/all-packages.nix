@@ -12802,6 +12802,11 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  # newer nspr version for newer firefox stable releases
+  nspr_4_23 = callPackage ../development/libraries/nspr/nspr_4_23.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   nss = lowPrio (callPackage ../development/libraries/nss { });
 
   # newer NSS version for newer firefox stable releases
