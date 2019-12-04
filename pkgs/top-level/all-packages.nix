@@ -18276,7 +18276,6 @@ in
       libpng = libpng_apng;
       python = python2;
       gnused = gnused_422;
-      sqlite = sqlite_3_30;
       inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
                                             Kerberos AVFoundation MediaToolbox
                                             CoreLocation Foundation AddressBook;
