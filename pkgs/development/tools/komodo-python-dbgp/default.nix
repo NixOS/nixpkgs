@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchFromGitHub,
   pythonPackages
 }:
 

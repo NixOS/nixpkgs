@@ -18301,8 +18301,6 @@ in
 
   das_watchdog = callPackage ../tools/system/das_watchdog { };
 
-  komodo-python-dbgp = callPackage ../development/tools/komodo-python-dbgp {};
-
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
 
   dd-agent = callPackage ../tools/networking/dd-agent/5.nix { };
@@ -24548,6 +24546,8 @@ in
   keynav = callPackage ../tools/X11/keynav { };
 
   kompose = callPackage ../applications/networking/cluster/kompose { };
+
+  komodo-python-dbgp = callPackage ../development/tools/komodo-python-dbgp {};
 
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
