@@ -77,6 +77,12 @@
     be set if the hostname of the node should be non default.
     </para>
    </listitem>
+   <listitem>
+    <para>
+    UPower's configuration is now managed by NixOS and can be customized
+    via <option>services.upower</option>.
+    </para>
+   </listitem>
   </itemizedlist>
 
  </section>
