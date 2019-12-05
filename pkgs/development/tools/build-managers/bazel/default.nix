@@ -171,6 +171,13 @@ stdenv.mkDerivation rec {
       src = ./strict_action_env.patch;
       strictActionEnvPatch = defaultShellPath;
     })
+
+    # bazel reads its system bazelrc in /etc
+    # override this path to a builtin one
+    (substituteAll {
+      src = ./bazel_rc.patch;
+      bazelSystemBazelRCPath = bazelRC;
+    })
   ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
 
@@ -431,12 +438,6 @@ stdenv.mkDerivation rec {
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
 
       patchShebangs .
-
-      # bazel reads its system bazelrc in /etc
-      # override this path to a builtin one
-      substituteInPlace \
-        src/main/cpp/option_processor.cc \
-        --replace BAZEL_SYSTEM_BAZELRC_PATH "\"${bazelRC}\""
     '';
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
