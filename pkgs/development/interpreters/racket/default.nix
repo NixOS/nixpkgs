@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       inherit sha256;
     }
   )) {
-    inherit ;name = "${pname}-${version}";
+    name = "${pname}-${version}";
     sha256 = "07rf8sakwssl0gn9g4d3ls2cr10zlhghz0pscrh0jc6mnprrb10i";
   };
 

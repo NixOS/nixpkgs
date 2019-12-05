@@ -29,7 +29,7 @@ mkDerivation rec {
        libdisomaster/libdisomaster.pro
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "A libisoburn wrapper for Qt";

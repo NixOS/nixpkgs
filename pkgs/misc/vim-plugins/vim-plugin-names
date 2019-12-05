@@ -240,6 +240,7 @@ mattn/calendar-vim as mattn-calendar-vim
 mattn/emmet-vim
 mattn/gist-vim
 mattn/webapi-vim
+matze/vim-move
 maximbaz/lightline-ale
 MaxMEllon/vim-jsx-pretty
 mbbill/undotree
@@ -355,6 +356,7 @@ rhysd/vim-grammarous
 rhysd/vim-operator-surround
 Rip-Rip/clang_complete
 rodjek/vim-puppet
+ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
@@ -400,6 +402,7 @@ slashmili/alchemist.vim
 sonph/onehalf
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
+svermeulen/vim-subversive
 t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime

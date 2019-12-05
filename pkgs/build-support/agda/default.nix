@@ -1,6 +1,4 @@
 # Builder for Agda packages. Mostly inspired by the cabal builder.
-#
-# Contact: stdenv.lib.maintainers.fuuzetsu
 
 { stdenv, Agda, glibcLocales
 , writeShellScriptBin

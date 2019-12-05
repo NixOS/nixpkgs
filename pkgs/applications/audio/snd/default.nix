@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = http://ccrma.stanford.edu/software/snd;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 
 

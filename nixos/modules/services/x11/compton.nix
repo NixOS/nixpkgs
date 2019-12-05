@@ -284,4 +284,6 @@ in {
     environment.systemPackages = [ pkgs.compton ];
   };
 
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+
 }

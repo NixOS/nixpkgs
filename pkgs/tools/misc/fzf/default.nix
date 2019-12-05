@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "0pwpr4fpw56yzzkcabzzgbgwraaxmp7xzzmap7w1xsrkbj7dl2xl";
+    sha256 = "192ci09yi2hps02skcnbfwyjbf7pl0wb6q2zshb58cid5zgla8bx";
   };
 
-  modSha256 = "0xc4166d74ix5nzjphrq4rgw7qpskz05ymzl77i2qh2nhbdb53p0";
+  modSha256 = "12lnv8b96adpcg9qfizcyd9nxz590nxd82xch6ij719zlqyps143";
 
   outputs = [ "out" "man" ];
 
@@ -60,6 +60,7 @@ buildGoModule rec {
     homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
+    maintainers = with maintainers; [ filalex77 ];
     platforms = platforms.unix;
   };
 }
