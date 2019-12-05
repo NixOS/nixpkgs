@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , perl
-, python2
+, python3
 , ruby
 , bison
 , gperf
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     ninja
     perl
     pkgconfig
-    python2
+    python3
     ruby
   ];
 
