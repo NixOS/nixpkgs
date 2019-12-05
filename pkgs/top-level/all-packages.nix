@@ -1289,6 +1289,8 @@ in
 
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
+  bs-platform = (callPackage ../development/compilers/bs-platform {}).bs-platform-621;
+
   c3d = callPackage ../applications/graphics/c3d {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
