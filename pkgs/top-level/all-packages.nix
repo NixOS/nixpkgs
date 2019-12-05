@@ -6810,6 +6810,7 @@ in
 
   inherit (callPackage ../applications/office/trilium {})
     trilium-desktop
+    trilium-server
     ;
   trilium = trilium-desktop;
 

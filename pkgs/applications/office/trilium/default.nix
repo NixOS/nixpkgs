@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook }:
+{ stdenv, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
 
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases.";
@@ -11,12 +11,21 @@ let
     categories = "Office";
   };
 
+  meta = with stdenv.lib; {
+    inherit description;
+    homepage = https://github.com/zadam/trilium;
+    license = licenses.agpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ emmanuelrosa dtzWill kampka ];
+  };
+
   version = "0.37.8";
 in {
   
   trilium-desktop = stdenv.mkDerivation rec {
     pname = "trilium-desktop";
     inherit version;
+    inherit meta;
 
     src = fetchurl {
       url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
@@ -58,13 +67,43 @@ in {
     '';
   
     dontStrip = true;
-  
-    meta = with stdenv.lib; {
-      inherit description;
-      homepage = https://github.com/zadam/trilium;
-      license = licenses.agpl3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ emmanuelrosa dtzWill ];
+  };
+
+
+  trilium-server = stdenv.mkDerivation rec {
+    pname = "trilium-server";
+    inherit version;
+    inherit meta;
+
+    src = fetchurl {
+      url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
+      sha256 = "04xhmc60fwvv8ip8mj112z7a9x5ahp51f1hvi20sffs0685mfaj3";
     };
+
+    nativeBuildInputs = [
+      autoPatchelfHook
+    ];
+
+    buildInputs = [
+      stdenv.cc.cc.lib
+      zlib
+      libxkbfile
+    ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      mkdir -p $out/share/trilium-server
+
+      cp -r ./* $out/share/trilium-server
+    '';
+
+    postFixup = ''
+      cat > $out/bin/trilium-server <<EOF
+      #!${stdenv.cc.shell}
+      cd $out/share/trilium-server
+      exec ./node/bin/node src/www
+      EOF
+      chmod a+x $out/bin/trilium-server
+    '';
   };
 }
