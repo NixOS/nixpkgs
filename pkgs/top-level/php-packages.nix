@@ -1,4 +1,5 @@
-{ pkgs, fetchgit, php }:
+{ pkgs, fetchurl, fetchFromGitHub, makeWrapper, pkgconfig
+, php }:
 
 let
   self = with self; {
@@ -50,13 +51,13 @@ let
     version = "2.7.5";
     pname = "box";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
       sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -77,14 +78,14 @@ let
     version = "1.9.1";
     pname = "composer";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
       sha256 = "04a1fqxhxrckgxw9xbx7mplkzw808k2dz4jqsxq2dy7w6y80n88z";
     };
 
     dontUnpack = true;
 
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     installPhase = with pkgs; ''
       mkdir -p $out/bin
@@ -108,7 +109,7 @@ let
 
     buildInputs = with pkgs; [ libcouchbase zlib igbinary pcs ];
 
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "couchbase";
       repo = "php-couchbase";
       rev = "v${version}";
@@ -160,7 +161,7 @@ let
       "--with-event-pthreads"
     ];
 
-    nativeBuildInputs = with pkgs; [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = with pkgs; [ openssl libevent ];
 
     meta = with pkgs.lib; {
@@ -197,7 +198,7 @@ let
       "--with-imagick=${imagemagick.dev}"
     ];
 
-    nativeBuildInputs = with pkgs; [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = with pkgs; [ (if isPhp73 then pcre2.dev else pcre.dev) ];
   };
 
@@ -212,7 +213,7 @@ let
     pname = "maxminddb";
     version = "1.5.0";
 
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "maxmind";
       repo = "MaxMind-DB-Reader-php";
       rev = "v${version}";
@@ -234,8 +235,9 @@ let
     version = "3.1.5";
     pname = "memcached";
 
-    src = fetchgit {
-      url = "https://github.com/php-memcached-dev/php-memcached";
+    src = fetchFromGitHub {
+      owner = "php-memcached-dev";
+      repo = "php-memcached";
       rev = "v${version}";
       sha256 = "01mbh2m3kfbdvih3c8g3g9h4vdd80r0i9g2z8b3lx3mi8mmcj380";
     };
@@ -245,7 +247,7 @@ let
       "--with-libmemcached-dir=${libmemcached}"
     ];
 
-    nativeBuildInputs = with pkgs; [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
@@ -255,7 +257,7 @@ let
 
     sha256 = "1j1w4n33347j9kwvxwsrix3gvjbiqcn1s5v59pp64s536cci8q0m";
 
-    nativeBuildInputs = with pkgs; [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = with pkgs; [
       cyrus_sasl
       icu
@@ -330,13 +332,13 @@ let
     version = "2.16.1";
     pname = "php-cs-fixer";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
       sha256 = "1dq1nhy666zg6d4fkfsjwhj1vwh1ncap2c9ljplxv98a9mm6fk68";
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -357,14 +359,14 @@ let
     version = "1.0.0";
     pname = "php-parallel-lint";
 
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "JakubOnderka";
       repo = "PHP-Parallel-Lint";
       rev = "v${version}";
       sha256 = "16nv8yyk2z3l213dg067l6di4pigg5rd8yswr5xgd18jwbys2vnw";
     };
 
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ composer box ];
 
     buildPhase = ''
@@ -394,7 +396,7 @@ let
 
     buildInputs = with pkgs; [ libxl ];
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://github.com/iliaal/php_excel/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
       sha256 = "0dpvih9gpiyh1ml22zi7hi6kslkilzby00z1p8x248idylldzs2n";
     };
@@ -412,13 +414,13 @@ let
     version = "3.5.3";
     pname = "phpcbf";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
       sha256 = "1mrsf9p6p64pyqyylnlxb2b7cirdfccch83g7yhfnka3znffq86v";
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -439,13 +441,13 @@ let
     version = "3.5.3";
     pname = "phpcs";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
       sha256 = "0y4nhsifj4pdmf5g1nnm4951yjgiqswyz7wmjxx6kqiqc7chlkml";
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -466,13 +468,13 @@ let
     version = "0.12.4";
     pname = "phpstan";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
       sha256 = "1h386zsbfw9f1r00pjbvj749q1fg5q22sgrnx7rqjrnwmbl5mh36";
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -502,7 +504,7 @@ let
     version = "1.1.1";
     pname = "pinba";
 
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "tony2001";
       repo = "pinba_extension";
       rev = "RELEASE_1_1_1";
@@ -523,7 +525,7 @@ let
     version = "1.1.2-dev";
     pname = "pinba";
 
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "tony2001";
       repo = "pinba_extension";
       rev = "edbc313f1b4fb8407bf7d5acf63fbb0359c7fb2e";
@@ -561,13 +563,13 @@ let
     version = "3.7.2";
     pname = "psalm";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
       sha256 = "0mcxlckycvpxxc6h0x0kdidbq2l4m3xws1v3kdf797js234x0vjx";
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -587,13 +589,13 @@ let
     version = "0.9.12";
     pname = "psysh";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
       sha256 = "0bzmc94li481xk81gv460ipq9zl03skbnq8m3rnw34i2c04hxczc";
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -616,7 +618,7 @@ let
     version = "3.2.0";
     pname = "pthreads";
 
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "krakjoe";
       repo = "pthreads";
       rev = "v${version}";
@@ -630,7 +632,7 @@ let
     version = "3.2.0-dev";
     pname = "pthreads";
 
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "krakjoe";
       repo = "pthreads";
       rev = "4d1c2483ceb459ea4284db4eb06646d5715e7154";
@@ -707,7 +709,7 @@ let
       "--with-yaml=${libyaml}"
     ];
 
-    nativeBuildInputs = with pkgs; [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
   };
 
   zmq = assert !isPhp73; buildPecl {
@@ -720,6 +722,6 @@ let
       "--with-zmq=${zeromq}"
     ];
 
-    nativeBuildInputs = with pkgs; [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
   };
 }; in self
