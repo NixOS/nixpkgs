@@ -16,6 +16,7 @@
 , glib-networking
 , json-glib
 , libarchive
+, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     webkitgtk
     json-glib
     libarchive
+    gnome3.adwaita-icon-theme
   ];
 
   meta = with stdenv.lib; {
