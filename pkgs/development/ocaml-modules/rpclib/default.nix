@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, alcotest, cmdliner, rresult, result, xmlm, yojson }:
+{ lib, fetchFromGitHub, buildDunePackage, alcotest, cmdliner, rresult, result, xmlm, yojson }:
 
 buildDunePackage rec {
   pname = "rpclib";
-  version = "5.9.0";
+  version = "6.0.0";
 
   minimumOCamlVersion = "4.04";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "mirage";
     repo = "ocaml-rpc";
     rev = "v${version}";
-    sha256 = "1swnnmmnkn53mxqpckdnd1j8bz0wksqznjbv0zamspxyqybmancq";
+    sha256 = "0bmr20sj7kybjjlwd42irj0f5zlnxcw7mxa1mdgxkki9bmhsqr51";
   };
 
   buildInputs = [ alcotest cmdliner yojson ];
@@ -18,7 +18,7 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-rpc";
     description = "Light library to deal with RPCs in OCaml";
     license = licenses.isc;
