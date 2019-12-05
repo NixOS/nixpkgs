@@ -21,12 +21,12 @@ let
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.8.2";
+  version = "1.8.3";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0walddppjb61k3dyq22cngkaw6alzn75k5npvnawla2l153irw5s";
+    sha256 = "055zmzk3q0m3hx1742nfy2mdawfllrkvijnbzp1hiv01dj1bxaf8";
   };
 
   # Needs tox
