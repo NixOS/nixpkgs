@@ -6383,6 +6383,8 @@ in {
 
   diskcache = callPackage ../development/python-modules/diskcache { };
 
+  dissononce = callPackage ../development/python-modules/dissononce { };
+
   distro = callPackage ../development/python-modules/distro { };
 
   bz2file =  callPackage ../development/python-modules/bz2file { };
