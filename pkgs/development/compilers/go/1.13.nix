@@ -97,7 +97,10 @@ stdenv.mkDerivation rec {
     rm src/net/cgo_unix_test.go
 
   '' + optionalString stdenv.isLinux ''
-    sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
+    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
+    # that run outside a nix server
+    sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
+
   '' + optionalString stdenv.isAarch32 ''
     echo '#!${runtimeShell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
