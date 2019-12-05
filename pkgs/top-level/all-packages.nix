@@ -19965,8 +19965,6 @@ in
 
   meme = callPackage ../applications/graphics/meme { };
 
-  mcomix = callPackage ../applications/graphics/mcomix { };
-
   mendeley = libsForQt5.callPackage ../applications/office/mendeley {
     gconf = pkgs.gnome2.GConf;
   };
