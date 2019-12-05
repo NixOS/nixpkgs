@@ -1,4 +1,4 @@
-{ stdenv, php, autoreconfHook, fetchurl, re2c }:
+{ stdenv, php, autoreconfHook, fetchurl, file, re2c }:
 
 { pname
 , version
@@ -23,4 +23,8 @@ stdenv.mkDerivation (args // {
   makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
 
   autoreconfPhase = "phpize";
+
+  preConfigure = ''
+    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
+  '';
 })

@@ -4,7 +4,7 @@ let
   self = with self; {
     buildPecl = import ../build-support/build-pecl.nix {
       inherit php;
-      inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
+      inherit (pkgs) stdenv autoreconfHook fetchurl file re2c;
     };
 
     # Wrap mkDerivation to prepend pname with "php-" to make names consistent
