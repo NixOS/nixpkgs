@@ -8,14 +8,6 @@ from itertools import chain
 
 import fontforge
 
-ADDITIONAL_LIGATURES = [
-    'x.multiply',
-    'colon.uc',
-    'plus.lc',
-    'plus.tosf2',
-]
-
-
 def run(fontpath, outpath, starting_point=0xe100):
     try:
         font = fontforge.open(fontpath)
