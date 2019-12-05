@@ -6942,7 +6942,7 @@ in
 
   vifm = callPackage ../applications/misc/vifm { };
 
-  vifm-full = callPackage ../applications/misc/vifm { 
+  vifm-full = callPackage ../applications/misc/vifm {
     mediaSupport = true;
     inherit lib udisks2 python3;
   };
