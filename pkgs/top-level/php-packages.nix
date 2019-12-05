@@ -56,7 +56,7 @@ let
     };
 
     phases = [ "installPhase" ];
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -84,7 +84,7 @@ let
 
     dontUnpack = true;
 
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -320,7 +320,7 @@ let
     };
 
     phases = [ "installPhase" ];
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -348,7 +348,8 @@ let
       sha256 = "16nv8yyk2z3l213dg067l6di4pigg5rd8yswr5xgd18jwbys2vnw";
     };
 
-    buildInputs = [ pkgs.makeWrapper composer box ];
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    buildInputs = [ composer box ];
 
     buildPhase = ''
       composer dump-autoload
@@ -396,7 +397,7 @@ let
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -423,7 +424,7 @@ let
     };
 
     phases = [ "installPhase" ];
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -450,7 +451,7 @@ let
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -545,7 +546,7 @@ let
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
@@ -571,7 +572,7 @@ let
     };
 
     phases = [ "installPhase" ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
