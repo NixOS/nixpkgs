@@ -21,6 +21,7 @@
 , autoPatchelfHook
 , file
 , substituteAll
+, writeTextFile
 }:
 
 let
@@ -123,6 +124,14 @@ let
     installPhase = ''
       cp -Ra * $out/
       touch $out/WORKSPACE
+    '';
+  };
+
+  bazelRC = writeTextFile {
+    name = "bazel-rc";
+    text = ''
+      build --override_repository=${remote_java_tools.name}=${remote_java_tools}
+      build --distdir=${distDir}
     '';
   };
 
@@ -423,7 +432,7 @@ stdenv.mkDerivation rec {
       # override this path to a builtin one
       substituteInPlace \
         src/main/cpp/option_processor.cc \
-        --replace BAZEL_SYSTEM_BAZELRC_PATH "\"$out/etc/bazelrc\""
+        --replace BAZEL_SYSTEM_BAZELRC_PATH "\"${bazelRC}\""
     '';
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
@@ -476,13 +485,6 @@ stdenv.mkDerivation rec {
     mv ./bazel_src/output/bazel $out/bin/bazel-real
 
     wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
-
-    # generates the system bazelrc
-    # warning: the name of the repository depends on the system, hence
-    # the reference to .name
-    mkdir $out/etc
-    echo "build --override_repository=${remote_java_tools.name}=${remote_java_tools}" > $out/etc/bazelrc
-    echo "build --distdir=${distDir}" >> $out/etc/bazelrc
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
