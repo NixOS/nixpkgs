@@ -2,6 +2,12 @@
 , python3, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
 
+# to get started with polybar you can copy the example configation
+# from /nix/store/<hash>-polybar-<version>/share/doc/config
+# to ~/.config/polybar/example and launch with 'polybar example'.
+# This default config requires the icon font 'siji' which can
+# be installed as documented on https://nixos.wiki/wiki/Fonts
+
 # optional packages-- override the variables ending in 'Support' to enable or
 # disable modules
 , alsaSupport   ? true,  alsaLib       ? null
