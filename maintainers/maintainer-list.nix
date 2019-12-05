@@ -7258,6 +7258,12 @@
     githubId = 508305;
     name = "Jaroslavas Pocepko";
   };
+  vonfry = {
+    email = "mail@vonfry.name";
+    github = "Vonfry";
+    githubId = 3413119;
+    name = "Rouyu Feng";
+  };
   vozz = {
     email = "oliver.huntuk@gmail.com";
     name = "Oliver Hunt";
