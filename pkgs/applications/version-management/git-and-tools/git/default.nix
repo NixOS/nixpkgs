@@ -1,5 +1,5 @@
 { fetchurl, stdenv, buildPackages
-, curl, openssl, zlib, expat, perlPackages, python, gettext, cpio
+, curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     "SHELL_PATH=${stdenv.shell}"
   ]
   ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
-  ++ (if pythonSupport then ["PYTHON_PATH=${python}/bin/python"] else ["NO_PYTHON=1"])
+  ++ (if pythonSupport then ["PYTHON_PATH=${python3}/bin/python"] else ["NO_PYTHON=1"])
   ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
   ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc"])
   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
@@ -253,7 +253,10 @@ stdenv.mkDerivation {
   installCheckTarget = "test";
 
   # see also installCheckFlagsArray
-  installCheckFlags = "DEFAULT_TEST_TARGET=prove";
+  installCheckFlags = [
+    "DEFAULT_TEST_TARGET=prove"
+    "PERL_PATH=${buildPackages.perl}/bin/perl"
+  ];
 
   preInstallCheck = ''
     installCheckFlagsArray+=(
@@ -295,6 +298,13 @@ stdenv.mkDerivation {
 
     # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
+
+    ${stdenv.lib.optionalString (!perlSupport) ''
+      # request-pull is a Bash script that invokes Perl, so it is not available
+      # when NO_PERL=1, and the test should be skipped, but the test suite does
+      # not check for the Perl prerequisite.
+      disable_test t5150-request-pull
+    ''}
 
     # As of 2.19.0, t5562 refers to #!/usr/bin/perl
     patchShebangs t/t5562/invoke-with-content-length.pl
