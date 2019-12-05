@@ -30,10 +30,14 @@ python3Packages.buildPythonApplication rec {
     pygobject3
   ];
 
-  installPhase = ''
-    make install PREFIX=$out DESTDIR=
-  '';
-  
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  installFlags = [
+    "DESTDIR="
+  ];
+
   meta = with stdenv.lib; {
     description = "Command line tool that generates XDG menus for several window managers";
     homepage = https://github.com/gapan/xdgmenumaker;
