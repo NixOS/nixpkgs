@@ -1,31 +1,37 @@
-{ stdenv, fetchFromGitHub, txt2tags, python2Packages }:
+{ stdenv, fetchFromGitHub, txt2tags, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "gapan";
-    repo = "xdgmenumaker";
+    repo = pname;
     rev = version;
     sha256 = "1vrsp5c1ah7p4dpwd6aqvinpwzd8crdimvyyr3lbm3c6cwpyjmif";
   };
 
+  format = "other";
+
+  strictDeps = false;
+
   nativeBuildInputs = [
+    gobject-introspection
     txt2tags
-    python2Packages.wrapPython
+    wrapGAppsHook
   ];
 
-  pythonPath = [
-    python2Packages.pyxdg
-    python2Packages.pygtk
+  buildInputs = [
+    glib
+  ];
+
+  pythonPath = with python3Packages; [
+    pyxdg
+    pygobject3
   ];
 
   installPhase = ''
     make install PREFIX=$out DESTDIR=
-    wrapProgram "$out/bin/xdgmenumaker" \
-      --prefix XDG_DATA_DIRS : "$out/share"
-    wrapPythonPrograms
   '';
   
   meta = with stdenv.lib; {
