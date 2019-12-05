@@ -1,5 +1,6 @@
 { stdenv, fetchurl, readline
 , compat ? false
+, enableShared ? true # the static lib is always built
 , callPackage
 , packageOverrides ? (self: super: {})
 , sourceVersion
@@ -43,6 +44,12 @@ self = stdenv.mkDerivation rec {
   ]) ++ (if stdenv.buildPlatform != stdenv.hostPlatform then [
     "CC=${stdenv.hostPlatform.config}-gcc"
     "RANLIB=${stdenv.hostPlatform.config}-ranlib"
+  ] else [
+  ]) ++ (if (!enableShared) then [
+    # Lua links with readline wich depends on ncurses. For some reason when
+    # building pkgsStatic.lua it fails because symbols from ncurses are not
+    # found. Adding ncurses here fixes the problem.
+    "MYLIBS=-lncurses"
   ] else [])
   ;
 
@@ -53,7 +60,8 @@ self = stdenv.mkDerivation rec {
     makeFlagsArray+=(${stdenv.lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.hostPlatform.config}-ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
-      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
+      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib"
+                else "liblua.a" + (if enableShared then " liblua.so liblua.so.${luaversion} liblua.so.${version}" else "")}" )
 
     runHook postConfigure
   '';
@@ -94,6 +102,7 @@ self = stdenv.mkDerivation rec {
     withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
     pkgs = luaPackages;
     interpreter = "${self}/bin/lua";
+    sharedEnabled = enableShared;
   };
 
   meta = {
