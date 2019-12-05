@@ -1,16 +1,23 @@
-{ stdenv, fetchzip }:
+{ stdenv, fira-code, python3, fontforge }:
 
-fetchzip {
-  name = "fira-code-symbols-20160811";
+let pythonEnv = python3.withPackages (p: [ p.fontforge ]);
+in stdenv.mkDerivation {
+  name = "fira-code-symbols-20191205";
+  # https://gist.github.com/xieve/d5a01cc59896c3973cb16df9ba8d30d4
+  src = ./fira_code_patch.py;
 
-  url = "https://github.com/tonsky/FiraCode/files/412440/FiraCode-Regular-Symbol.zip";
+  nativeBuildInputs = [ fontforge pythonEnv fira-code ];
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile -d $out/share/fonts/opentype
+  phases = [ "buildPhase" "installPhase" ];
+
+  buildPhase = ''
+    python3 $src -o . ${fira-code}/share/fonts/opentype/*.otf
+    '';
+
+  installPhase = ''
+    mkdir -p ${placeholder "out"}/share/fonts/opentype
+    ls *.otf | sed s/FiraCode-// | xargs -I{} -n1 cp FiraCode-{} ${placeholder "out"}/share/fonts/opentype/FiraCodeSymbols-{}
   '';
-
-  sha256 = "19krsp22rin74ix0i19v4bh1c965g18xkmz1n55h6n6qimisnbkm";
 
   meta = with stdenv.lib; {
     description = "FiraCode unicode ligature glyphs in private use area";
@@ -18,9 +25,12 @@ fetchzip {
       FiraCode uses ligatures, which some editors don’t support.
       This addition adds them as glyphs to the private unicode use area.
       See https://github.com/tonsky/FiraCode/issues/211.
+
+      Use https://gist.github.com/xieve/d5a01cc59896c3973cb16df9ba8d30d4 script
+      to patch fira code with current version.
     '';
     license = licenses.ofl;
-    maintainers = [ maintainers.Profpatsch ];
+    maintainers = [ maintainers.Profpatsch maintainers.vonfry ];
     homepage = "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
   };
 }
