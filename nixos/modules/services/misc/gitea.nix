@@ -396,9 +396,7 @@ in
         Restart = "always";
 
         # Filesystem
-        ProtectSystem = "strict";
         ProtectHome = true;
-        PrivateTmp = true;
         PrivateDevices = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
@@ -413,7 +411,7 @@ in
         PrivateMounts = true;
         PrivateUsers = true;
         MemoryDenyWriteExecute = true;
-        SystemCallFilter = "~@chown @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @privileged @raw-io @reboot @resources @setuid @swap";
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
         SystemCallArchitectures = "native";
         RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
       };
@@ -475,4 +473,5 @@ in
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
+  meta.maintainers = with lib.maintainers; [ srhb ];
 }
