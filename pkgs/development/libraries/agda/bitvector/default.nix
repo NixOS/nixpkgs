@@ -18,7 +18,7 @@ agda.mkDerivation (self: rec {
     description = "Sequences of bits and common operations on them";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     broken = true;
   };
 })

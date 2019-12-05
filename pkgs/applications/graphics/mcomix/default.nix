@@ -27,7 +27,7 @@ python27Packages.buildPythonApplication rec {
       '';
       homepage = http://mcomix.sourceforge.net/;
       license = stdenv.lib.licenses.gpl2;
-      maintainers = with stdenv.lib.maintainers; [ fuuzetsu AndersonTorres ];
+      maintainers = with stdenv.lib.maintainers; [ AndersonTorres ];
     };
 }
 # TODO:

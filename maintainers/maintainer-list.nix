@@ -3225,6 +3225,12 @@
     githubId = 2195834;
     name = "Jaakko Luttinen";
   };
+  jm2dev = {
+    email = "jomarcar@gmail.com";
+    github = "jm2dev";
+    githubId = 474643;
+    name = "José Miguel Martínez Carrasco";
+  };
   jmagnusj = {
     email = "jmagnusj@gmail.com";
     github = "magnusjonsson";

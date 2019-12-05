@@ -1138,6 +1138,8 @@ in {
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
+  pytest-bdd = callPackage ../development/python-modules/pytest-bdd { };
+  
   pytest-black = callPackage ../development/python-modules/pytest-black { };
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
@@ -3273,6 +3275,8 @@ in {
   flask-cors = callPackage ../development/python-modules/flask-cors { };
 
   flask_elastic = callPackage ../development/python-modules/flask-elastic { };
+
+  flask-httpauth = callPackage ../development/python-modules/flask-httpauth { };
 
   flask-jwt-extended = callPackage ../development/python-modules/flask-jwt-extended { };
 

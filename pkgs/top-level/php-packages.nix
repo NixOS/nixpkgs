@@ -14,12 +14,13 @@ let
     });
 
   isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
+  isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
 
   apcu = buildPecl {
-    version = "5.1.17";
+    version = "5.1.18";
     pname = "apcu";
 
-    sha256 = "14y7alvj5q17q1b544bxidavkn6i40cjbq2nv1m0k70ai5vv84bb";
+    sha256 = "0ayykd4hfvdzk7qnr5k6yq5scwf6rb2i05xscfv76q5dmkkynvfl";
 
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
     doCheck = true;
@@ -140,6 +141,8 @@ let
              AC_MSG_WARN([Cannot find igbinary.h])
       '')
     ];
+
+    meta.broken = isPhp74; # Build error
   };
 
   event = buildPecl {
@@ -259,6 +262,8 @@ let
     pname = "pcs";
 
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
+
+    meta.broken = isPhp74; # Build error
   };
 
   pdo_sqlsrv = buildPecl {
@@ -268,6 +273,8 @@ let
     sha256 = "02ill1iqffa5fha9iz4y91823scml24ikfk8pn90jyycfwv07x6a";
 
     buildInputs = [ pkgs.unixODBC ];
+
+    meta.broken = isPhp74; # Build error
   };
 
   php-cs-fixer = mkDerivation rec {
@@ -492,6 +499,7 @@ let
       '';
       license = licenses.bsd3;
       homepage = "https://developers.google.com/protocol-buffers/";
+      broken = isPhp74; # Build error
     };
   };
 
@@ -592,6 +600,8 @@ let
     sha256 = "0ial621zxn9zvjh7k1h755sm2lc9aafc389yxksqcxcmm7kqmd0a";
 
     buildInputs = [ pkgs.unixODBC ];
+
+    meta.broken = isPhp74; # Build error
   };
 
   v8 = buildPecl {
@@ -617,10 +627,10 @@ let
   };
 
   xdebug = buildPecl {
-    version = "2.7.1";
+    version = "2.8.0";
     pname = "xdebug";
 
-    sha256 = "1hr4gy87a3gp682ggwp831xk1fxasil9wan8cxv23q3m752x3sdp";
+    sha256 = "0r62501fdp63zz81scz2x1pq3qzpjafya96g12j0jx7crdz127fb";
 
     doCheck = true;
     checkTarget = "test";

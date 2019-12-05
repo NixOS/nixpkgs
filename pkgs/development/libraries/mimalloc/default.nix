@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ stdenv, fetchFromGitHub, cmake, ninja
 , secureBuild ? true
 }:
 
@@ -6,32 +6,36 @@ let
   soext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 stdenv.mkDerivation rec {
-  name    = "mimalloc-${version}";
+  pname   = "mimalloc";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner  = "microsoft";
-    repo   = "mimalloc";
+    repo   = pname;
     rev    = "refs/tags/v${version}";
     sha256 = "1i8pwzpcmbf7dxncb984xrnczn1737xqhf1jaizlyw0k1hpiam4v";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
   enableParallelBuilding = true;
-
   cmakeFlags = stdenv.lib.optional secureBuild [ "-DMI_SECURE=ON" ];
 
   postInstall = ''
+    # first, install headers, that's easy
     mkdir -p $dev
     mv $out/lib/*/include $dev/include
 
-    rm -f $out/lib/libmimalloc*${soext} # weird duplicate
+    # move everything else into place
+    mv $out/lib/mimalloc-1.0/libmimalloc*${soext}.1.0 $out/lib/libmimalloc${soext}
+    mv $out/lib/mimalloc-1.0/libmimalloc*.a           $out/lib/libmimalloc.a
+    mv $out/lib/mimalloc-1.0/mimalloc*.o              $out/lib/mimalloc.o
 
-    mv $out/lib/*/libmimalloc*${soext} $out/lib/libmimalloc${soext}
-    mv $out/lib/*/libmimalloc*.a       $out/lib/libmimalloc.a
-    mv $out/lib/*/mimalloc*.o          $out/lib/mimalloc.o
-
-    rm -rf $out/lib/mimalloc-*
+    # remote duplicate dir. FIXME: try to fix the .cmake file distribution
+    # so we can re-use it for dependencies...
+    rm -rf $out/lib/mimalloc-1.0
+  '' + stdenv.lib.optionalString secureBuild ''
+    # fix a broken symlink for the -secure alias
+    ln -sfv $out/lib/libmimalloc.so $out/lib/libmimalloc-secure.so
   '';
 
   outputs = [ "out" "dev" ];

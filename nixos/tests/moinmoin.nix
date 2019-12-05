@@ -1,6 +1,6 @@
-import ./make-test.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "moinmoin";
-  meta.maintainers = [ ]; # waiting for https://github.com/NixOS/nixpkgs/pull/65397
+  meta.maintainers = with lib.maintainers; [ mmilata ];
 
   machine =
     { ... }:
@@ -13,12 +13,16 @@ import ./make-test.nix ({ pkgs, lib, ... }: {
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $machine->waitForUnit('moin-ExampleWiki.service');
-    $machine->waitForUnit('nginx.service');
-    $machine->waitForFile('/run/moin/ExampleWiki/gunicorn.sock');
-    $machine->succeed('curl -L http://localhost/') =~ /If you have just installed/ or die;
-    $machine->succeed('moin-ExampleWiki account create --name=admin --email=admin@example.com --password=foo 2>&1') =~ /status success/ or die;
+    machine.wait_for_unit("moin-ExampleWiki.service")
+    machine.wait_for_unit("nginx.service")
+    machine.wait_for_file("/run/moin/ExampleWiki/gunicorn.sock")
+
+    assert "If you have just installed" in machine.succeed("curl -L http://localhost/")
+
+    assert "status success" in machine.succeed(
+        "moin-ExampleWiki account create --name=admin --email=admin@example.com --password=foo 2>&1"
+    )
   '';
 })

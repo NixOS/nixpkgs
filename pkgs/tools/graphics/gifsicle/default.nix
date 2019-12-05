@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.lcdf.org/gifsicle/;
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu zimbatm ];
+    maintainers = with stdenv.lib.maintainers; [ zimbatm ];
   };
 }

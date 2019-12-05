@@ -132,7 +132,7 @@ let
         description = "A flexible, powerful daemon for playing music";
         homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
         license     = licenses.gpl2;
-        maintainers = with maintainers; [ astsmtl fuuzetsu ehmry fpletz tobim ];
+        maintainers = with maintainers; [ astsmtl ehmry fpletz tobim ];
         platforms   = platforms.unix;
 
         longDescription = ''
