@@ -116,9 +116,9 @@ rec {
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
-    let metaSet = if m ? meta
-      then { meta = m.meta; }
-      else {};
+    let addMeta = config: if m ? meta
+      then mkMerge [ config { meta = m.meta; } ]
+      else config;
     in
     if m ? config || m ? options then
       let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta"]; in
@@ -130,7 +130,7 @@ rec {
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
           options = m.options or {};
-          config = mkMerge [ (m.config or {}) metaSet ];
+          config = addMeta (m.config or {});
         }
     else
       { _file = m._file or file;
@@ -138,7 +138,7 @@ rec {
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = mkMerge [ (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]) metaSet ];
+        config = addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]);
       };
 
   applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
