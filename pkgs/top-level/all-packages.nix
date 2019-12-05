@@ -6942,7 +6942,7 @@ in
 
   vifm = callPackage ../applications/misc/vifm { };
 
-  vifm-full = callPackage ../applications/misc/vifm { 
+  vifm-full = callPackage ../applications/misc/vifm {
     mediaSupport = true;
     inherit lib udisks2 python3;
   };
@@ -25183,11 +25183,6 @@ in
   vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
     llvmPackages = llvmPackages_6;
   });
-
-  vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {
-    webkitgtk = webkitgtk24x-gtk2;
-  };
-  vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
