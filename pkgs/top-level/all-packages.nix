@@ -9224,6 +9224,8 @@ in
   pypy27Packages = pypy27.pkgs;
   pypy3Packages = pypy3.pkgs;
 
+  pythonManylinuxPackages = callPackage ./../development/interpreters/python/manylinux { };
+
   update-python-libraries = callPackage ../development/interpreters/python/update-python-libraries { };
 
   # Should eventually be moved inside Python interpreters.
