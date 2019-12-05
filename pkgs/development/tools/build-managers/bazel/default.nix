@@ -132,6 +132,7 @@ let
     text = ''
       build --override_repository=${remote_java_tools.name}=${remote_java_tools}
       build --distdir=${distDir}
+      startup --server_javabase=${runJdk}
     '';
   };
 
@@ -483,8 +484,6 @@ stdenv.mkDerivation rec {
     # if it can’t find something in tools, it calls $out/bin/bazel-real
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
     mv ./bazel_src/output/bazel $out/bin/bazel-real
-
-    wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
