@@ -363,6 +363,7 @@ let
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
 
+      SECURITY_LOCKDOWN_LSM            = whenAtLeast "5.4" yes;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack
