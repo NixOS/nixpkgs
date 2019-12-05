@@ -1718,6 +1718,8 @@ in {
 
   configshell = callPackage ../development/python-modules/configshell { };
 
+  consonance = callPackage ../development/python-modules/consonance { };
+
   constantly = callPackage ../development/python-modules/constantly { };
 
   cornice = callPackage ../development/python-modules/cornice { };
