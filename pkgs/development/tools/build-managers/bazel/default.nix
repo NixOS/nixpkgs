@@ -133,6 +133,9 @@ let
       build --override_repository=${remote_java_tools.name}=${remote_java_tools}
       build --distdir=${distDir}
       startup --server_javabase=${runJdk}
+
+      # load default location for the system wide configuration
+      try-import /etc/bazel.bazelrc
     '';
   };
 
