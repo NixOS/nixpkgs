@@ -132,6 +132,48 @@ in {
       '';
     };
 
+    shutdownTimeout = mkOption {
+      type = types.int;
+      default = "300";
+      description = ''
+        When shutting down the guest how long to wait before timing out
+        (in seconds).
+      '';
+    };
+
+    parallelShutdown = mkOption {
+      type = types.int;
+      default = "0";
+      description = ''
+        Should libvirt-guests shut down in parallel.
+      '';
+    };
+
+    startDelay = mkOption {
+      type = types.int;
+      default = "0";
+      description = ''
+        When starting up guests how long to delay startup
+        (in seconds).
+      '';
+    };
+
+    bypassCache = mkOption {
+      type = types.int;
+      default = "0";
+      description = ''
+        Should libvirt-guests bypass filesystem cache..
+      '';
+    };
+
+    syncTime = mkOption {
+      type = types.int;
+      default = "0";
+      description = ''
+        Should libvirtd sync time with the guests.
+      '';
+    };
+
     allowedBridges = mkOption {
       type = types.listOf types.str;
       default = [ "virbr0" ];
@@ -241,6 +283,12 @@ in {
 
       environment.ON_BOOT = "${cfg.onBoot}";
       environment.ON_SHUTDOWN = "${cfg.onShutdown}";
+      environment.SHUTDOWN_TIMEOUT = "${cfg.shutdownTimeout}";
+      environment.PARALLEL_SHUTDOWN = "${cfg.parallelShutdown}";
+      environment.START_DELAY = "${cfg.startDelay}";
+      environment.BYPASS_CACHE = "${cfg.bypassCache}";
+      environment.SYNC_TIME = "${cfg.syncTime}";
+
     };
 
     systemd.sockets.virtlogd = {
