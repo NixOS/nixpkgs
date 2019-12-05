@@ -1899,6 +1899,8 @@ in
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
+  meson-tools = callPackage ../misc/meson-tools { };
+
   metabase = callPackage ../servers/metabase { };
 
   mididings = callPackage ../tools/audio/mididings { };
