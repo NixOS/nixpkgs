@@ -23,9 +23,24 @@ let
       if value != null then [ "${nameToEnvVar name}=${if isBool value then boolToString value else toString value}" ] else []
     ) cfg.config))));
 
+  # TODO: support backends other than sqlite
+  supportedBackupBackends = [ "sqlite" ];
+  bitwarden_rs = pkgs.bitwarden_rs.override { inherit (cfg) dbBackend; };
 in {
   options.services.bitwarden_rs = with types; {
     enable = mkEnableOption "bitwarden_rs";
+
+    dbBackend = mkOption {
+      type = enum [
+        "sqlite"
+        /* TODO: implement backups, etc.
+       "mysql" "postgresql" */
+      ];
+      default = "sqlite";
+      description = ''
+        The database backend to use. Currently only sqlite is supported.
+      '';
+    };
 
     backupDir = mkOption {
       type = nullOr str;
@@ -69,6 +84,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [{
+      assertion = cfg.backupDir != null -> elem cfg.dbBackend supportedBackupBackends;
+      message = "Backups for ${dbBackend} `dbBackend` are not supported (yet)";
+    }];
+
     services.bitwarden_rs.config = {
       dataFolder = "/var/lib/bitwarden_rs";
       webVaultEnabled = mkDefault true;
@@ -87,7 +107,7 @@ in {
         User = user;
         Group = group;
         EnvironmentFile = configFile;
-        ExecStart = "${pkgs.bitwarden_rs}/bin/bitwarden_rs";
+        ExecStart = "${bitwarden_rs}/bin/bitwarden_rs";
         LimitNOFILE = "1048576";
         LimitNPROC = "64";
         PrivateTmp = "true";
