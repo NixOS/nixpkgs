@@ -103,7 +103,7 @@ rec {
       toClosureList = file: parentKey: imap1 (n: x:
         if isAttrs x || isFunction x then
           let key = "${parentKey}:anon-${toString n}"; in
-          unifyModuleSyntax file key (unpackSubmodule (applyIfFunction key) x args)
+          unifyModuleSyntax file key (applyIfFunction key x args)
         else
           let file = toString x; key = toString x; in
           unifyModuleSyntax file key (applyIfFunction key (import x) args));
@@ -170,17 +170,6 @@ rec {
     in f (args // extraArgs)
   else
     f;
-
-  /* We have to pack and unpack submodules. We cannot wrap the expected
-     result of the function as we would no longer be able to list the arguments
-     of the submodule. (see applyIfFunction) */
-  unpackSubmodule = unpack: m: args:
-    if isType "submodule" m then
-      { _file = m.file; } // (unpack m.submodule args)
-    else unpack m args;
-
-  packSubmodule = file: m:
-    { _type = "submodule"; file = file; submodule = m; };
 
   /* Merge a list of modules.  This will recurse over the option
      declarations in all modules, combining them into a single set.
@@ -267,7 +256,14 @@ rec {
 
      'opts' is a list of modules.  Each module has an options attribute which
      correspond to the definition of 'loc' in 'opt.file'. */
-  mergeOptionDecls = loc: opts:
+  mergeOptionDecls =
+   let
+    packSubmodule = file: m:
+      { _file = file; imports = [ m ]; };
+    coerceOption = file: opt:
+      if isFunction opt then packSubmodule file opt
+      else packSubmodule file { options = opt; };
+   in loc: opts:
     foldl' (res: opt:
       let t  = res.type;
           t' = opt.options.type;
@@ -293,9 +289,7 @@ rec {
              current option declaration as the file use for the submodule.  If the
              submodule defines any filename, then we ignore the enclosing option file. */
           options' = toList opt.options.options;
-          coerceOption = file: opt:
-            if isFunction opt then packSubmodule file opt
-            else packSubmodule file { options = opt; };
+
           getSubModules = opt.options.type.getSubModules or null;
           submodules =
             if getSubModules != null then map (packSubmodule opt._file) getSubModules ++ res.options
