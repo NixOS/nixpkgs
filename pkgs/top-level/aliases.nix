@@ -425,6 +425,8 @@ mapAliases ({
   virtmanager-qt = virt-manager-qt; # added 2019-10-29
   vorbisTools = vorbis-tools; # added 2016-01-26
   webkit = webkitgtk; # added 2019-03-05
+  webkitgtk24x-gtk3 = throw "webkitgtk24x-gtk3 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
+  webkitgtk24x-gtk2 = throw "webkitgtk24x-gtk2 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
   weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
   wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22

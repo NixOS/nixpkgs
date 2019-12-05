@@ -14465,19 +14465,6 @@ in
     stdenv = clangStdenv; # TODO: https://github.com/NixOS/nixpkgs/issues/36947
   };
 
-  webkitgtk24x-gtk3 = callPackage ../development/libraries/webkitgtk/2.4.nix {
-    harfbuzz = harfbuzzFull.override {
-      icu = icu58;
-    };
-    gst-plugins-base = gst_all_1.gst-plugins-base;
-    inherit (darwin) libobjc;
-  };
-
-  webkitgtk24x-gtk2 = webkitgtk24x-gtk3.override {
-    withGtk2 = true;
-    enableIntrospection = false;
-  };
-
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
   webrtc-audio-processing = callPackage ../development/libraries/webrtc-audio-processing { };
