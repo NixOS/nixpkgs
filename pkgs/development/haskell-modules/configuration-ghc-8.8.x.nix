@@ -67,6 +67,7 @@ self: super: {
   # TODO: remove when upstream accepts https://github.com/snapframework/io-streams-haproxy/pull/17
   io-streams-haproxy = doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
   snap-server = doJailbreak super.snap-server;
+  xmobar = doJailbreak super.xmobar;
 
   # use latest version to fix the build
   dbus = self.dbus_1_2_11;
@@ -97,6 +98,7 @@ self: super: {
   regex-posix = self.regex-posix_0_96_0_0;
   regex-tdfa = self.regex-tdfa_1_3_0;
   shelly = self.shelly_1_9_0;
+  singletons = self.singletons_2_6;
   skylighting = self.skylighting_0_8_3;
   skylighting-core = self.skylighting-core_0_8_3;
   sop-core = self.sop-core_0_5_0_0;
@@ -104,8 +106,8 @@ self: super: {
   th-desugar = self.th-desugar_1_10;
   tls = self.tls_1_5_2;
   trifecta = self.trifecta_2_1;
+  xml-conduit = overrideCabal super.xml-conduit (drv: { version = "1.9.0.0"; sha256 = "1p57v127882rxvvmwjmvnqdmk3x2wg1z4d8y03849h0xaz1vid0w"; });
   xmonad-contrib = self.xmonad-contrib_0_16;
-  singletons = self.singletons_2_6;
 
   # These packages don't work and need patching and/or an update.
   hackage-security = appendPatch (doJailbreak super.hackage-security) (pkgs.fetchpatch {
