@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer-editing-services";
-  version = "1.16.1";
+  version = "1.16.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "10375z5mc3bwfs07mhmfx943sbp55z8m8ihp9xpcknkdks7qg168";
+    sha256 = "05hcf3prna8ajjnqd53221gj9syarrrjbgvjcbhicv0c38csc1hf";
   };
 
   patches = [
