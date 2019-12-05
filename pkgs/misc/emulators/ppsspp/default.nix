@@ -39,7 +39,7 @@ mkDerivation rec {
     homepage = https://www.ppsspp.org/;
     description = "A PSP emulator for Android, Windows, Mac and Linux, written in C++";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fuuzetsu AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.cygwin;
   };
 }
