@@ -4,13 +4,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "nnn";
-  version = "2.8";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05c7symzy43mc3gdq9qxnwqxgf0rims4fsc30y99pcx40zb405pk";
+    sha256 = "0h7j0wcpwwd2fibggr1nwkqpvhv2i1qnk54c4x6hixx31yidy2l0";
   };
 
   configFile = optionalString (conf != null) (builtins.toFile "nnn.h" conf);
