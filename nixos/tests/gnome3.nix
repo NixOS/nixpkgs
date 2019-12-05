@@ -46,7 +46,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       machine.wait_for_unit("default.target", "alice")
 
       # Check that logging in has given the user ownership of devices.
-      machine.succeed("getfacl -p /dev/snd/timer | grep -q alice")
+      assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
 
       # Wait for the wayland server
       machine.wait_for_file("/run/user/1000/wayland-0")
