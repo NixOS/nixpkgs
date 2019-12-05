@@ -39,7 +39,7 @@ with lib;
           fi
 
           # Set up a default Nix expression from which to install stuff.
-          if [ ! -e "$HOME/.nix-defexpr" -o -L "$HOME/.nix-defexpr" ]; then
+          if [ ! \( -e "$HOME/.nix-defexpr" -o -L "$HOME/.nix-defexpr" \) ]; then
               rm -f "$HOME/.nix-defexpr"
               mkdir -p "$HOME/.nix-defexpr"
               if [ "$USER" != root ]; then
