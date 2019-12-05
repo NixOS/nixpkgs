@@ -16,6 +16,7 @@
 , # Set to true to verify if the cargo dependencies are up to date.
   # This will change the value of cargoSha256.
   verifyCargoDeps ? false
+, cargoTestFlags ? []
 , buildType ? "release"
 , meta ? {}
 , target ? null
@@ -47,6 +48,8 @@ let
     '';
 
   rustTarget = if target == null then rust.toRustTarget stdenv.hostPlatform else target;
+
+  testFlags = stdenv.lib.concatStringsSep " " cargoTestFlags;
 
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
@@ -146,8 +149,8 @@ stdenv.mkDerivation (args // {
 
   checkPhase = args.checkPhase or ''
     runHook preCheck
-    echo "Running cargo cargo test -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    echo "Running cargo cargo test ${testFlags} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test ${testFlags} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
 
