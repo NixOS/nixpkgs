@@ -13,8 +13,8 @@ let
       pname = "php-${pname}";
     });
 
-  isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
-  isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
+    isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
+    isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
 
   apcu = buildPecl {
     version = "5.1.18";
@@ -22,7 +22,7 @@ let
 
     sha256 = "0ayykd4hfvdzk7qnr5k6yq5scwf6rb2i05xscfv76q5dmkkynvfl";
 
-    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
+    buildInputs = with pkgs; [ (if isPhp73 then pcre2.dev else pcre.dev) ];
     doCheck = true;
     checkTarget = "test";
     checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
@@ -36,7 +36,7 @@ let
 
     sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
 
-    buildInputs = [ apcu (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
+    buildInputs = with pkgs; [ apcu (if isPhp73 then pcre2.dev else pcre.dev) ];
   };
 
   ast = buildPecl {
@@ -86,12 +86,12 @@ let
 
     nativeBuildInputs = with pkgs; [ makeWrapper ];
 
-    installPhase = ''
+    installPhase = with pkgs; ''
       mkdir -p $out/bin
       install -D $src $out/libexec/composer/composer.phar
       makeWrapper ${php}/bin/php $out/bin/composer \
         --add-flags "$out/libexec/composer/composer.phar" \
-        --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
+        --prefix PATH : ${lib.makeBinPath [ unzip ]}
     '';
 
     meta = with pkgs.lib; {
@@ -106,7 +106,7 @@ let
     version = "2.6.1";
     pname = "couchbase";
 
-    buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
+    buildInputs = with pkgs; [ libcouchbase zlib igbinary pcs ];
 
     src = pkgs.fetchFromGitHub {
       owner = "couchbase";
@@ -115,9 +115,11 @@ let
       sha256 = "0jdzgcvab1vpxai23brmmvizjjq2d2dik9aklz6bzspfb512qjd6";
     };
 
-    configureFlags = [ "--with-couchbase" ];
+    configureFlags = [
+      "--with-couchbase"
+    ];
 
-    patches = [
+    patches = with pkgs; [
       (pkgs.writeText "php-couchbase.patch" ''
         --- a/config.m4
         +++ b/config.m4
@@ -126,7 +128,7 @@ let
            else
              AC_MSG_CHECKING(for libcouchbase in default path)
         -    for i in /usr/local /usr; do
-        +    for i in ${pkgs.libcouchbase}; do
+        +    for i in ${libcouchbase}; do
                if test -r $i/include/libcouchbase/couchbase.h; then
                  LIBCOUCHBASE_DIR=$i
                  AC_MSG_RESULT(found in $i)
@@ -151,13 +153,14 @@ let
 
     sha256 = "12liry5ldvgwp1v1a6zgfq8w6iyyxmsdj4c71bp157nnf58cb8hb";
 
-    configureFlags = [
-      "--with-event-libevent-dir=${pkgs.libevent.dev}"
+    configureFlags = with pkgs; [
+      "--with-event-libevent-dir=${libevent.dev}"
       "--with-event-core"
       "--with-event-extra"
       "--with-event-pthreads"
     ];
-    nativeBuildInputs = [ pkgs.pkgconfig ];
+
+    nativeBuildInputs = with pkgs; [ pkgconfig ];
     buildInputs = with pkgs; [ openssl libevent ];
 
     meta = with pkgs.lib; {
@@ -176,7 +179,10 @@ let
 
     sha256 = "1w8jmf1qpggdvq0ndfi86n7i7cqgh1s8q6hys2lijvi37rzn0nar";
 
-    configureFlags = [ "--enable-igbinary" ];
+    configureFlags = [
+      "--enable-igbinary"
+    ];
+
     makeFlags = [ "phpincludedir=$(dev)/include" ];
     outputs = [ "out" "dev" ];
   };
@@ -187,9 +193,12 @@ let
 
     sha256 = "0xvhaqny1v796ywx83w7jyjyd0nrxkxf34w9zi8qc8aw8qbammcd";
 
-    configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
+    configureFlags = with pkgs; [
+      "--with-imagick=${imagemagick.dev}"
+    ];
+
+    nativeBuildInputs = with pkgs; [ pkgconfig ];
+    buildInputs = with pkgs; [ (if isPhp73 then pcre2.dev else pcre.dev) ];
   };
 
   mailparse = buildPecl {
@@ -210,7 +219,8 @@ let
       sha256 = "1ilgpx36rgihjr8s4bvkbms5hl6xy7mymna3ym2bl4lb15vkr0sm";
     };
 
-    buildInputs = [ pkgs.libmaxminddb ];
+    buildInputs = with pkgs; [ libmaxminddb ];
+
     sourceRoot = "source/ext";
 
     meta = with pkgs.lib; {
@@ -230,12 +240,12 @@ let
       sha256 = "01mbh2m3kfbdvih3c8g3g9h4vdd80r0i9g2z8b3lx3mi8mmcj380";
     };
 
-    configureFlags = [
-      "--with-zlib-dir=${pkgs.zlib.dev}"
-      "--with-libmemcached-dir=${pkgs.libmemcached}"
+    configureFlags = with pkgs; [
+      "--with-zlib-dir=${zlib.dev}"
+      "--with-libmemcached-dir=${libmemcached}"
     ];
 
-    nativeBuildInputs = [ pkgs.pkgconfig ];
+    nativeBuildInputs = with pkgs; [ pkgconfig ];
     buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
@@ -245,15 +255,15 @@ let
 
     sha256 = "1j1w4n33347j9kwvxwsrix3gvjbiqcn1s5v59pp64s536cci8q0m";
 
-    nativeBuildInputs = [ pkgs.pkgconfig ];
+    nativeBuildInputs = with pkgs; [ pkgconfig ];
     buildInputs = with pkgs; [
       cyrus_sasl
       icu
       openssl
       snappy
       zlib
-      (if isPhp73 then pcre2 else pcre)
-    ] ++ lib.optional (pkgs.stdenv.isDarwin) pkgs.darwin.apple_sdk.frameworks.Security;
+      (if isPhp73 then pcre2.dev else pcre.dev)
+    ] ++ lib.optional (stdenv.isDarwin) darwin.apple_sdk.frameworks.Security;
   };
 
   oci8 = buildPecl {
@@ -261,11 +271,15 @@ let
     pname = "oci8";
 
     sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
-    buildInputs = [ pkgs.oracle-instantclient ];
-    configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
 
-    postPatch = ''
-      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+    buildInputs = with pkgs; [ oracle-instantclient ];
+
+    configureFlags = with pkgs; [
+      "--with-oci8=shared,instantclient,${oracle-instantclient.lib}/lib"
+    ];
+
+    postPatch = with pkgs; ''
+      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${oracle-instantclient.dev}/include"|' config.m4
     '';
   };
 
@@ -275,7 +289,7 @@ let
 
     sha256 = "1psfwscrc025z8mziq69pcx60k4fbkqa5g2ia8lplb94mmarj0v1";
 
-    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
+    buildInputs = with pkgs; [ (if isPhp73 then pcre2.dev else pcre.dev) ];
   };
 
   pcs = buildPecl {
@@ -293,11 +307,12 @@ let
     pname = "pdo_oci";
     sourceRoot = "php-${version}/ext/pdo_oci";
 
-    buildInputs = [ pkgs.oracle-instantclient ];
-    configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
+    buildInputs = with pkgs; [ oracle-instantclient ];
 
-    postPatch = ''
-      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+    configureFlags = with pkgs; [ "--with-pdo-oci=instantclient,${oracle-instantclient.lib}/lib" ];
+
+    postPatch = with pkgs; ''
+      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${oracle-instantclient.dev}/include"|' config.m4
     '';
   };
 
@@ -307,7 +322,8 @@ let
 
     sha256 = "0z4vbyd851b4jr6p69l2ylk91iihndsm2qjb429pxcv8g6dqzqll";
 
-    buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+    buildInputs = with pkgs; [ unixODBC ]
+      ++ lib.optional (stdenv.isDarwin) [ libiconv ];
   };
 
   php-cs-fixer = mkDerivation rec {
@@ -332,7 +348,7 @@ let
     meta = with pkgs.lib; {
       description = "A tool to automatically fix PHP coding standards issues";
       license = licenses.mit;
-      homepage = http://cs.sensiolabs.org/;
+      homepage = https://cs.sensiolabs.org/;
       maintainers = with maintainers; [ jtojnar ];
     };
   };
@@ -376,14 +392,19 @@ let
     pname = "php_excel";
     phpVersion = "php7";
 
-    buildInputs = [ pkgs.libxl ];
+    buildInputs = with pkgs; [ libxl ];
 
     src = pkgs.fetchurl {
       url = "https://github.com/iliaal/php_excel/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
       sha256 = "0dpvih9gpiyh1ml22zi7hi6kslkilzby00z1p8x248idylldzs2n";
     };
 
-    configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
+    configureFlags = with pkgs; [
+      "--with-excel"
+      "--with-libxl-incdir=${libxl}/include_c"
+      "--with-libxl-libdir=${libxl}/lib"
+    ];
+
     meta.broken = true;
   };
 
@@ -525,7 +546,7 @@ let
 
     sha256 = "0bhdykdyk58ywqj940zb7jyvrlgdr6hdb4s8kn79fz3p0i79l9hz";
 
-    buildInputs = with pkgs; [ (if isPhp73 then pcre2 else pcre) ];
+    buildInputs = with pkgs; [ (if isPhp73 then pcre2.dev else pcre.dev) ];
 
     meta = with pkgs.lib; {
       description = ''
@@ -632,7 +653,8 @@ let
 
     sha256 = "1kv4krk1w4hri99b0sdgwgy9c4y0yh217wx2y3irhkfi46kdrjnw";
 
-    buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+    buildInputs = with pkgs; [ unixODBC ]
+      ++ lib.optional (stdenv.isDarwin) [ libiconv ];
   };
 
   v8 = buildPecl {
@@ -641,8 +663,12 @@ let
 
     sha256 = "103nys7zkpi1hifqp9miyl0m1mn07xqshw3sapyz365nb35g5q71";
 
-    buildInputs = [ pkgs.v8_6_x ];
-    configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
+    buildInputs = with pkgs; [ v8_6_x ];
+
+    configureFlags = with pkgs; [
+      "--with-v8=${v8_6_x}"
+    ];
+
     meta.broken = true;
   };
 
@@ -652,8 +678,12 @@ let
 
     sha256 = "0g63dyhhicngbgqg34wl91nm3556vzdgkq19gy52gvmqj47rj6rg";
 
-    buildInputs = [ pkgs.v8_6_x ];
-    configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
+    buildInputs = with pkgs; [ v8_6_x ];
+
+    configureFlags = with pkgs; [
+      "--with-v8js=${v8_6_x}"
+    ];
+
     meta.broken = true;
   };
 
@@ -673,11 +703,11 @@ let
 
     sha256 = "1036zhc5yskdfymyk8jhwc34kvkvsn5kaf50336153v4dqwb11lp";
 
-    configureFlags = [
-      "--with-yaml=${pkgs.libyaml}"
+    configureFlags = with pkgs; [
+      "--with-yaml=${libyaml}"
     ];
 
-    nativeBuildInputs = [ pkgs.pkgconfig ];
+    nativeBuildInputs = with pkgs; [ pkgconfig ];
   };
 
   zmq = assert !isPhp73; buildPecl {
@@ -686,10 +716,10 @@ let
 
     sha256 = "1kj487vllqj9720vlhfsmv32hs2dy2agp6176mav6ldx31c3g4n4";
 
-    configureFlags = [
-      "--with-zmq=${pkgs.zeromq}"
+    configureFlags = with pkgs; [
+      "--with-zmq=${zeromq}"
     ];
 
-    nativeBuildInputs = [ pkgs.pkgconfig ];
+    nativeBuildInputs = with pkgs; [ pkgconfig ];
   };
 }; in self
