@@ -18748,9 +18748,11 @@ in
     postgresql_12
     postgresql_13
   ;
-  postgresql = postgresql_11.override { this = postgresql; };
+  postgresql = postgresql_13.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
-  postgresql11Packages = pkgs.postgresqlPackages;
+  postgresql11Packages = recurseIntoAttrs postgresql_11.pkgs;
+  postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
+  postgresql13Packages = pkgs.postgresqlPackages;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
