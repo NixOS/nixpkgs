@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
+{ stdenv, fetchFromGitHub, installShellFiles, pkgconfig, ncurses, readline, conf ? null }:
 
 with stdenv.lib;
 
@@ -16,16 +16,16 @@ stdenv.mkDerivation rec {
   configFile = optionalString (conf != null) (builtins.toFile "nnn.h" conf);
   preBuild = optionalString (conf != null) "cp ${configFile} nnn.h";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ installShellFiles pkgconfig ];
   buildInputs = [ readline ncurses ];
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
 
   # shell completions
   postInstall = ''
-    install -Dm555 misc/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
-    install -Dm555 misc/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
-    install -Dm555 misc/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
+    installShellCompletion misc/auto-completion/bash/nnn-completion.bash
+    installShellCompletion misc/auto-completion/zsh/_nnn
+    installShellCompletion misc/auto-completion/fish/nnn.fish
   '';
 
   meta = {
