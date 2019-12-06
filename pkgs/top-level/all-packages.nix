@@ -24207,7 +24207,7 @@ in
 
   kicad-small = kicad.override { with3d = false; };
 
-  kicad-libraries = callPackage ../applications/science/electronics/kicad/libraries.nix { };
+  kicad-libraries = callPackages ../applications/science/electronics/kicad/libraries.nix { };
 
   kicad-unstable = callPackage ../applications/science/electronics/kicad/unstable.nix {
     # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew

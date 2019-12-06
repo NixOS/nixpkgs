@@ -12,20 +12,18 @@
 , with3d ? true
 }:
 
-
 assert ngspiceSupport -> libngspice != null;
 
 with lib;
-
-# oce on aarch64 fails a test
 let
+  # oce on aarch64 fails a test
   withOCC = (stdenv.isAarch64 && (withOCCT || oceSupport)) || (!stdenv.isAarch64 && withOCCT);
   withOCE = oceSupport && !stdenv.isAarch64 && !withOCC;
 
 in
 stdenv.mkDerivation rec {
   pname = "kicad-unstable";
-  version = "2019-12-05";
+  version = "2019-12-10";
 
   src = fetchFromGitLab {
     group = "kicad";
@@ -35,6 +33,8 @@ stdenv.mkDerivation rec {
     sha256 = "0qzjv06az1xl3am5v4v09nyfjcpq1wf3137wjv7a0vh8m38dvrwk";
   };
 
+  # quick fix for #72248
+  # should be removed if a a more permanent fix is published
   patches = [
     (fetchpatch {
       url = "https://github.com/johnbeard/kicad/commit/dfb1318a3989e3d6f9f2ac33c924ca5030ea273b.patch";
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # tagged releases don't have "unknown"
   postPatch = ''
     substituteInPlace CMakeModules/KiCadVersion.cmake \
       --replace "unknown" ${version}
@@ -61,8 +62,10 @@ stdenv.mkDerivation rec {
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON"
     ++ optionals (withOCE)
       [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
-    ++ optionals (withOCC)
-      [ "-DKICAD_USE_OCC=ON" "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade" ]
+    ++ optionals (withOCC) [
+      "-DKICAD_USE_OCC=ON"
+      "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
+    ]
     ++ optionals (debug) [
       "-DCMAKE_BUILD_TYPE=Debug"
       "-DKICAD_STDLIB_DEBUG=ON"
@@ -106,7 +109,7 @@ stdenv.mkDerivation rec {
     "--prefix XDG_DATA_DIRS : ${gnome3.defaultIconTheme}/share"
     "--prefix XDG_DATA_DIRS : ${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}"
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
-    # wrapGAppsHook did these, as well, no idea if it matters...
+    # wrapGAppsHook did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"
     "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
 
@@ -152,9 +155,13 @@ stdenv.mkDerivation rec {
   ;
 
   meta = {
-    description = "Free Software EDA Suite, Nightly Development Build";
+    description = "Open Source EDA Suite, Development Build";
     homepage = "https://www.kicad-pcb.org/";
-    license = licenses.gpl2;
+    longDescription = ''
+      KiCad is an open source software suite for Electronic Design Automation.
+      The Programs handle Schematic Capture, and PCB Layout with Gerber output.
+    '';
+    license = licenses.agpl3;
     maintainers = with maintainers; [ evils kiwi berce ];
     platforms = with platforms; linux;
   };
