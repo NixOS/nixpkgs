@@ -81,8 +81,10 @@ in
         ExecStart = "@${pkgs.lxd.bin}/bin/lxd lxd --group lxd";
         Type = "simple";
         KillMode = "process"; # when stopping, leave the containers alone
-        LimitMEMLOCK = mkIf cfg.productionSetup "infinity";
-        LimitNOFILE = mkIf cfg.productionSetup "1048576";
+        LimitMEMLOCK = "infinity";
+        LimitNOFILE = "1048576";
+        LimitNPROC = "infinity";
+        TasksMax = "infinity";
       };
     };
 
