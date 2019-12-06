@@ -6942,7 +6942,7 @@ in
 
   vifm = callPackage ../applications/misc/vifm { };
 
-  vifm-full = callPackage ../applications/misc/vifm { 
+  vifm-full = callPackage ../applications/misc/vifm {
     mediaSupport = true;
     inherit lib udisks2 python3;
   };
@@ -7986,8 +7986,7 @@ in
     isl = isl_0_17;
   }));
 
-  # Version 8.x is marked broken on Darwin: https://gist.github.com/GrahamcOfBorg/bef0231b7129681950f03c4ac06781c8.
-  gfortran = if stdenv.isDarwin then gfortran7 else gfortran8;
+  gfortran = gfortran8;
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
