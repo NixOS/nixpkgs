@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "edbrowse";
-  version = "3.7.4";
+  version = "3.7.6";
 
   buildInputs = [ curl pcre readline openssl duktape perl html-tidy ];
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       '';
     license = licenses.gpl1Plus;
     homepage = http://edbrowse.org/;
-    maintainers = [ maintainers.schmitthenner maintainers.vrthra ];
+    maintainers = with maintainers; [ schmitthenner vrthra equirosa ];
     platforms = platforms.linux;
   };
 }
