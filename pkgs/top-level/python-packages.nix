@@ -1281,6 +1281,8 @@ in {
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 
+  sacremoses = callPackage ../development/python-modules/sacremoses { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece pkgconfig;
   };
