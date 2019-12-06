@@ -73,6 +73,8 @@ let
 
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
 
+    biocaml = callPackage ../development/ocaml-modules/biocaml { };
+
     bistro = callPackage ../development/ocaml-modules/bistro { };
 
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
@@ -137,6 +139,8 @@ let
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
+
+    cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
     charInfo_width = callPackage ../development/ocaml-modules/charInfo_width { };
 
@@ -292,6 +296,10 @@ let
     gen = callPackage ../development/ocaml-modules/gen { };
 
     gmap = callPackage ../development/ocaml-modules/gmap { };
+
+    gnuplot = callPackage ../development/ocaml-modules/gnuplot {
+      inherit (pkgs) gnuplot;
+    };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
@@ -470,7 +478,9 @@ let
 
     metrics-lwt = callPackage ../development/ocaml-modules/metrics/lwt.nix { };
 
-    metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix { };
+    metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix {
+      inherit (pkgs) gnuplot;
+    };
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
@@ -620,6 +630,8 @@ let
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
+
+    phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
     piqi = callPackage ../development/ocaml-modules/piqi {
       base64 = base64_2;
