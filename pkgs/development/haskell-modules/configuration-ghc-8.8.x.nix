@@ -96,7 +96,7 @@ self: super: {
   regex-compat = self.regex-compat_0_95_2_0;
   regex-pcre-builtin = self.regex-pcre-builtin_0_95_1_1_8_43;
   regex-posix = self.regex-posix_0_96_0_0;
-  regex-tdfa = self.regex-tdfa_1_3_0;
+  regex-tdfa = self.regex-tdfa_1_3_1_0;
   shelly = self.shelly_1_9_0;
   singletons = self.singletons_2_6;
   skylighting = self.skylighting_0_8_3;
