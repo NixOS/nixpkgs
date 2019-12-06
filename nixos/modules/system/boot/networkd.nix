@@ -11,7 +11,7 @@ let
   checkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
       "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name" "OriginalName"
-      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port"
+      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port" "Advertise"
       "TCPSegmentationOffload" "TCP6SegmentationOffload" "GenericSegmentationOffload"
       "GenericReceiveOffload" "LargeReceiveOffload" "RxChannels" "TxChannels"
       "OtherChannels" "CombinedChannels"
