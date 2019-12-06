@@ -1,5 +1,8 @@
-{ pkgs, fetchurl, fetchFromGitHub, makeWrapper, pkgconfig
-, php }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper, pkgconfig
+, pkgs, php
+}:
+
+with lib;
 
 let
   self = with self; {
@@ -10,12 +13,12 @@ let
 
     # Wrap mkDerivation to prepend pname with "php-" to make names consistent
     # with how buildPecl does it and make the file easier to overview.
-    mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
+    mkDerivation = { pname, ... }@args: stdenv.mkDerivation (args // {
       pname = "php-${pname}";
     });
 
-    isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
-    isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
+    isPhp73 = versionAtLeast php.version "7.3";
+    isPhp74 = versionAtLeast php.version "7.4";
 
   apcu = buildPecl {
     version = "5.1.18";
@@ -66,7 +69,7 @@ let
         --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
     '';
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "An application for building and managing Phars";
       license = licenses.mit;
       homepage = https://box-project.github.io/box2/;
@@ -92,10 +95,10 @@ let
       install -D $src $out/libexec/composer/composer.phar
       makeWrapper ${php}/bin/php $out/bin/composer \
         --add-flags "$out/libexec/composer/composer.phar" \
-        --prefix PATH : ${lib.makeBinPath [ unzip ]}
+        --prefix PATH : ${makeBinPath [ unzip ]}
     '';
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "Dependency Manager for PHP";
       license = licenses.mit;
       homepage = https://getcomposer.org/;
@@ -164,7 +167,7 @@ let
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = with pkgs; [ openssl libevent ];
 
-    meta = with pkgs.lib; {
+    meta = {
       description = ''
         This is an extension to efficiently schedule I/O, time and signal based
         events using the best I/O notification mechanism available for specific platform.
@@ -224,7 +227,7 @@ let
 
     sourceRoot = "source/ext";
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "C extension that is a drop-in replacement for MaxMind\\Db\\Reader";
       license = with licenses; [ asl20 ];
       maintainers = with maintainers; [ ajs124 das_j ];
@@ -265,7 +268,7 @@ let
       snappy
       zlib
       (if isPhp73 then pcre2.dev else pcre.dev)
-    ] ++ lib.optional (stdenv.isDarwin) darwin.apple_sdk.frameworks.Security;
+    ] ++ optional (stdenv.isDarwin) darwin.apple_sdk.frameworks.Security;
   };
 
   oci8 = buildPecl {
@@ -347,7 +350,7 @@ let
         --add-flags "$out/libexec/php-cs-fixer/php-cs-fixer.phar"
     '';
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "A tool to automatically fix PHP coding standards issues";
       license = licenses.mit;
       homepage = https://cs.sensiolabs.org/;
@@ -381,7 +384,7 @@ let
         --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
     '';
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "This tool check syntax of PHP files faster than serial check with fancier output";
       license = licenses.bsd2;
       homepage = https://github.com/JakubOnderka/PHP-Parallel-Lint;
@@ -429,7 +432,7 @@ let
         --add-flags "$out/libexec/phpcbf/phpcbf.phar"
     '';
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "PHP coding standard beautifier and fixer";
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
@@ -456,7 +459,7 @@ let
         --add-flags "$out/libexec/phpcs/phpcs.phar"
     '';
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "PHP coding standard tool";
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
@@ -483,7 +486,7 @@ let
         --add-flags "$out/libexec/phpstan/phpstan.phar"
     '';
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "PHP Static Analysis Tool";
       longDescription = ''
         PHPStan focuses on finding errors in your code without actually running
@@ -511,7 +514,7 @@ let
       sha256 = "1kdp7vav0y315695vhm3xifgsh6h6y6pny70xw3iai461n58khj5";
     };
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "PHP extension for Pinba";
       longDescription = ''
         Pinba is a MySQL storage engine that acts as a realtime monitoring and
@@ -532,7 +535,7 @@ let
       sha256 = "02sljqm6griw8ccqavl23f7w1hp2zflcv24lpf00k6pyrn9cwx80";
     };
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "PHP extension for Pinba";
       longDescription = ''
         Pinba is a MySQL storage engine that acts as a realtime monitoring and
@@ -550,7 +553,7 @@ let
 
     buildInputs = with pkgs; [ (if isPhp73 then pcre2.dev else pcre.dev) ];
 
-    meta = with pkgs.lib; {
+    meta = {
       description = ''
         Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
       '';
@@ -578,7 +581,7 @@ let
         --add-flags "$out/libexec/psalm/psalm.phar"
     '';
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "A static analysis tool for finding errors in PHP applications";
       license = licenses.mit;
       homepage = https://github.com/vimeo/psalm;
@@ -604,7 +607,7 @@ let
       wrapProgram $out/bin/psysh
     '';
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
       license = licenses.mit;
       homepage = https://psysh.org/;
