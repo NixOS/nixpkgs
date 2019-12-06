@@ -10,6 +10,14 @@ import ./make-test-python.nix ({ ... }: {
         dataDir = "/data/trilium";
       };
     };
+
+    nginx = {
+      services.trilium-server = {
+        enable = true;
+        nginx.enable = true;
+        nginx.hostName = "trilium.example.com";
+      };
+    };
   };
 
   testScript =
@@ -33,5 +41,13 @@ import ./make-test-python.nix ({ ... }: {
       with subtest("configured with custom data store"):
           configured.wait_for_unit("trilium-server.service")
           configured.succeed("test -f /data/trilium/document.db")
+
+      with subtest("nginx with custom host name"):
+          nginx.wait_for_unit("trilium-server.service")
+          nginx.wait_for_unit("nginx.service")
+
+          nginx.succeed(
+              "curl --resolve 'trilium.example.com:80:127.0.0.1' http://trilium.example.com/"
+          )
     '';
 })

@@ -55,9 +55,36 @@ in
         The port number to bind to.
       '';
     };
+
+    nginx = mkOption {
+      default = {};
+      description = ''
+        Configuration for nginx reverse proxy.
+      '';
+
+      type = types.submodule {
+        options = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Configure the nginx reverse proxy settings.
+            '';
+          };
+
+          hostName = mkOption {
+            type = types.str;
+            description = ''
+              The hostname use to setup the virtualhost configuration
+            '';
+          };
+        };
+      };
+    };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (lib.mkMerge [ 
+  {
     meta.maintainers = with lib.maintainers; [ kampka ];
 
     users.groups.trilium = {};
@@ -83,5 +110,28 @@ in
       "d  ${cfg.dataDir}            0750 trilium trilium - -"
       "L+ ${cfg.dataDir}/config.ini -    -       -       - ${configIni}"
     ];
-  };
+
+  }
+
+  (lib.mkIf cfg.nginx.enable {
+    services.nginx = {
+      enable = true;
+      virtualHosts."${cfg.nginx.hostName}" = {
+        locations."/" = {
+          proxyPass = "http://${cfg.host}:${toString cfg.port}/";
+          extraConfig = ''
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+          '';
+        };
+        extraConfig = ''
+          client_max_body_size 0;
+        '';
+      };
+    };
+  })
+  ]);
 }
