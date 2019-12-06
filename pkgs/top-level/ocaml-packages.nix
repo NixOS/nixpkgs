@@ -350,6 +350,8 @@ let
 
     graphql = callPackage ../development/ocaml-modules/graphql { };
 
+    graphql-lwt = callPackage ../development/ocaml-modules/graphql/lwt.nix { };
+
     graphql_parser = callPackage ../development/ocaml-modules/graphql/parser.nix { };
 
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
