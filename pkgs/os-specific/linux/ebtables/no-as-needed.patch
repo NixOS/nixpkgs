@@ -1,0 +1,11 @@
+--- ebtables-v2.0.10-4.orig/Makefile	2011-12-15 12:02:47.000000000 -0800
++++ ebtables-v2.0.10-4/Makefile	2012-12-17 22:09:45.065973753 -0800
+@@ -90,7 +90,7 @@
+ 	$(CC) -shared $(LDFLAGS) -Wl,-soname,libebtc.so -o libebtc.so -lc $(OBJECTS2)
+ 
+ ebtables: $(OBJECTS) ebtables-standalone.o libebtc.so
+-	$(CC) $(CFLAGS) $(CFLAGS_SH_LIB) $(LDFLAGS) -o $@ ebtables-standalone.o -I$(KERNEL_INCLUDES) -L. -Lextensions -lebtc $(EXT_LIBSI) \
++	$(CC) $(CFLAGS) $(CFLAGS_SH_LIB) $(LDFLAGS) -o $@ ebtables-standalone.o -I$(KERNEL_INCLUDES) -L. -Lextensions -Wl,--no-as-needed $(EXT_LIBSI) -lebtc \
+ 	-Wl,-rpath,$(LIBDIR)
+ 
+ ebtablesu: ebtablesu.c

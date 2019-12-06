@@ -1,0 +1,29 @@
+diff -ru '-x=~' ./include/linux/netfilter_bridge/ebtables.h ../ebtables-v2.0.10-4/include/linux/netfilter_bridge/ebtables.h
+--- ./include/linux/netfilter_bridge/ebtables.h	2018-11-02 22:33:49.240988662 -0700
++++ ../ebtables-v2.0.10-4/include/linux/netfilter_bridge/ebtables.h	2018-11-02 22:43:13.916282778 -0700
+@@ -15,7 +15,9 @@
+ #define __LINUX_BRIDGE_EFF_H
+ #include <linux/if.h>
+ #include <linux/netfilter_bridge.h>
++#define ethhdr ethhdr_lx
+ #include <linux/if_ether.h>
++#undef ethhdr
+ 
+ #define EBT_TABLE_MAXNAMELEN 32
+ #define EBT_CHAIN_MAXNAMELEN EBT_TABLE_MAXNAMELEN
+Only in ../ebtables-v2.0.10-4/include/linux/netfilter_bridge: ebtables.h~
+diff -ru '-x=~' ./include/linux/netfilter_bridge.h ../ebtables-v2.0.10-4/include/linux/netfilter_bridge.h
+--- ./include/linux/netfilter_bridge.h	2018-11-02 22:33:49.241988663 -0700
++++ ../ebtables-v2.0.10-4/include/linux/netfilter_bridge.h	2018-11-02 22:43:28.363296929 -0700
+@@ -5,7 +5,9 @@
+  */
+ 
+ #include <linux/netfilter.h>
++#define ethhdr ethhdr_lx
+ #include <linux/if_ether.h>
++#undef ethhdr
+ #include <linux/if_vlan.h>
+ #include <linux/if_pppox.h>
+ 
+Only in ../ebtables-v2.0.10-4/include/linux: netfilter_bridge.h~
+Only in ../ebtables-v2.0.10-4/: useful_functions.c~
