@@ -21,6 +21,7 @@
 , autoPatchelfHook
 , file
 , substituteAll
+, writeTextFile
 }:
 
 let
@@ -126,6 +127,18 @@ let
     '';
   };
 
+  bazelRC = writeTextFile {
+    name = "bazel-rc";
+    text = ''
+      build --override_repository=${remote_java_tools.name}=${remote_java_tools}
+      build --distdir=${distDir}
+      startup --server_javabase=${runJdk}
+
+      # load default location for the system wide configuration
+      try-import /etc/bazel.bazelrc
+    '';
+  };
+
 in
 stdenv.mkDerivation rec {
   pname = "bazel";
@@ -157,6 +170,13 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./strict_action_env.patch;
       strictActionEnvPatch = defaultShellPath;
+    })
+
+    # bazel reads its system bazelrc in /etc
+    # override this path to a builtin one
+    (substituteAll {
+      src = ./bazel_rc.patch;
+      bazelSystemBazelRCPath = bazelRC;
     })
   ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
@@ -418,12 +438,6 @@ stdenv.mkDerivation rec {
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
 
       patchShebangs .
-
-      # bazel reads its system bazelrc in /etc
-      # override this path to a builtin one
-      substituteInPlace \
-        src/main/cpp/option_processor.cc \
-        --replace BAZEL_SYSTEM_BAZELRC_PATH "\"$out/etc/bazelrc\""
     '';
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
@@ -474,15 +488,6 @@ stdenv.mkDerivation rec {
     # if it can’t find something in tools, it calls $out/bin/bazel-real
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
     mv ./bazel_src/output/bazel $out/bin/bazel-real
-
-    wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
-
-    # generates the system bazelrc
-    # warning: the name of the repository depends on the system, hence
-    # the reference to .name
-    mkdir $out/etc
-    echo "build --override_repository=${remote_java_tools.name}=${remote_java_tools}" > $out/etc/bazelrc
-    echo "build --distdir=${distDir}" >> $out/etc/bazelrc
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
