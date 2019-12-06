@@ -2017,6 +2017,8 @@ in
 
   stagit = callPackage ../development/tools/stagit { };
 
+  statserial = callPackage ../tools/misc/statserial { };
+
   step-cli = callPackage ../tools/security/step-cli { };
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
