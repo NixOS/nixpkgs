@@ -478,7 +478,9 @@ let
 
     metrics-lwt = callPackage ../development/ocaml-modules/metrics/lwt.nix { };
 
-    metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix { };
+    metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix {
+      inherit (pkgs) gnuplot;
+    };
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
