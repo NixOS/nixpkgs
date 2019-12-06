@@ -1287,6 +1287,8 @@ in {
     inherit (pkgs) sentencepiece pkgconfig;
   };
 
+  transformers = callPackage ../development/python-modules/transformers { };
+
   sentinel = callPackage ../development/python-modules/sentinel { };
 
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk {};
