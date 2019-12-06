@@ -35,11 +35,11 @@ in
           with nixos.
         '';
       };
-      productionSetup = mkOption {
+      recommendedSysctlSettings = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          modifies various settings to avoid common pitfalls when
+          enables various settings to avoid common pitfalls when
           running containers requiring many file operations.
           Fixes errors like "Too many open files" or
           "neighbour: ndisc_cache: neighbor table overflow!".
@@ -95,7 +95,7 @@ in
       subGidRanges = [ { startGid = 1000000; count = 65536; } ];
     };
 
-    boot.kernel.sysctl = mkIf cfg.productionSetup {
+    boot.kernel.sysctl = mkIf cfg.recommendedSysctlSettings {
       "fs.inotify.max_queued_events" = 1048576;
       "fs.inotify.max_user_instances" = 1048576;
       "fs.inotify.max_user_watches" = 1048576;
