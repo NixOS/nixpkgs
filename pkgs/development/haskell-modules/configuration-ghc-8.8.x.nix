@@ -124,7 +124,6 @@ self: super: {
     sha256 = "1asl932mibr5y057xx8v1a7n3qy87lcnclsfh8pbxq1m3iwjkxy8";
   });
   vault = dontHaddock super.vault;
-  monad-par = dontCheck super.monad-par;   # test suite does not compile in monad-par-0.3.4.8
 
   # https://github.com/snapframework/snap-core/issues/288
   snap-core = overrideCabal super.snap-core (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; });
