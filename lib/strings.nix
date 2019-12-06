@@ -41,23 +41,6 @@ rec {
   */
   concatImapStrings = f: list: concatStrings (lib.imap1 f list);
 
-  /* Place an element between each element of a list
-
-     Type: intersperse :: a -> [a] -> [a]
-
-     Example:
-       intersperse "/" ["usr" "local" "bin"]
-       => ["usr" "/" "local" "/" "bin"].
-  */
-  intersperse =
-    # Separator to add between elements
-    separator:
-    # Input list
-    list:
-    if list == [] || length list == 1
-    then list
-    else tail (lib.concatMap (x: [separator x]) list);
-
   /* Concatenate a list of strings with a separator between each element
 
      Type: concatStringsSep :: string -> [string] -> string

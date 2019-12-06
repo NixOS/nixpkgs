@@ -393,6 +393,23 @@ rec {
   reverseList = xs:
     let l = length xs; in genList (n: elemAt xs (l - n - 1)) l;
 
+  /* Place an element between each element of a list
+
+     Type: intersperse :: a -> [a] -> [a]
+
+     Example:
+       intersperse "/" ["usr" "local" "bin"]
+       => ["usr" "/" "local" "/" "bin"].
+  */
+  intersperse =
+    # Separator to add between elements
+    separator:
+    # Input list
+    list:
+    if list == [] || length list == 1
+    then list
+    else tail (lib.concatMap (x: [separator x]) list);
+
   /* Depth-First Search (DFS) for lists `list != []`.
 
      `before a b == true` means that `b` depends on `a` (there's an
