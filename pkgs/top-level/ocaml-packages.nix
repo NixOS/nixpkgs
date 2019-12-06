@@ -350,6 +350,8 @@ let
 
     graphql = callPackage ../development/ocaml-modules/graphql { };
 
+    graphql-cohttp = callPackage ../development/ocaml-modules/graphql/cohttp.nix { };
+
     graphql-lwt = callPackage ../development/ocaml-modules/graphql/lwt.nix { };
 
     graphql_parser = callPackage ../development/ocaml-modules/graphql/parser.nix { };
