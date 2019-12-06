@@ -16965,6 +16965,8 @@ in
     ubootRaspberryPi3_32bit
     ubootRaspberryPi3_64bit
     ubootRaspberryPiZero
+    ubootRock64
+    ubootRockPro64
     ubootSheevaplug
     ubootSopine
     ubootUtilite
@@ -16973,10 +16975,6 @@ in
 
   # Non-upstream U-Boots:
   ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
-
-  ubootRock64 = callPackage ../misc/uboot/rock64.nix { };
-
-  ubootRockPro64 = callPackage ../misc/uboot/rockpro64.nix { };
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
