@@ -865,11 +865,15 @@ Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is in
 
 ### Tools
 
-Packages inside nixpkgs are written by hand. However many tools exist in
-community to help save time. No tool is preferred at the moment.
+Packages inside nixpkgs are written by hand. However the Nix community has created many tools
+to help save time. No tool is preferred at the moment, but the following may be of interest:
 
-- [pypi2nix](https://github.com/nix-community/pypi2nix): Generate Nix expressions for your Python project. Note that [sharing derivations from pypi2nix with nixpkgs is possible but not encouraged](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376).
-- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov.
+- [pypi2nix](https://github.com/nix-community/pypi2nix): generate Nix expressions for Python packages.
+- [pip2nix](https://github.com/nix-community/pip2nix): generate Nix expressions for Python packages.
+- [nixpkgs-pytools](https://github.com/nix-community/nixpkgs-pytools): tools for removing the tedious nature of creating nixpkgs derivations.
+- [poetry2nix](https://github.com/nix-community/poetry2nix): turn Poetry projects into Nix derivations without the need to actually write Nix expressions.
+
+Note that pypi2nix maintains a separate package tree from nixpkgs, so Python package derivations from pypi2nix and nixpkgs [should not be used together](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376). But Python package derivations from pip2nix or nixpkgs-pytools can be used together with those from nixpkgs.
 
 ### Deterministic builds
 
