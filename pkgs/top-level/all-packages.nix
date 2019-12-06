@@ -5721,6 +5721,8 @@ in
 
   podman = callPackage ../applications/virtualization/podman { };
 
+  podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
+
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit { };
