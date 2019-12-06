@@ -348,6 +348,8 @@ let
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
+    graphql = callPackage ../development/ocaml-modules/graphql { };
+
     graphql_parser = callPackage ../development/ocaml-modules/graphql/parser.nix { };
 
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
