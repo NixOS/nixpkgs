@@ -207,6 +207,11 @@
    </listitem>
    <listitem>
     <para>
+      <literal>lib.strings.intersperse</literal> has been moved to <literal> lib.lists.intersperse</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The packages <literal>openobex</literal> and <literal>obexftp</literal>
      are no loger installed when enabling bluetooth via
      <option>hardware.bluetooth.enable</option>.

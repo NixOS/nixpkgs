@@ -54,9 +54,10 @@ rec {
     separator:
     # Input list
     list:
-    if list == [] || length list == 1
+    lib.warn "`lib.strings.intersperse' is deprecated and will be removed. Please use `lib.lists.intersperse'."
+    (if list == [] || length list == 1
     then list
-    else tail (lib.concatMap (x: [separator x]) list);
+    else tail (lib.concatMap (x: [separator x]) list));
 
   /* Concatenate a list of strings with a separator between each element
 
@@ -67,7 +68,7 @@ rec {
         => "usr/local/bin"
   */
   concatStringsSep = builtins.concatStringsSep or (separator: list:
-    concatStrings (intersperse separator list));
+    concatStrings (lib.lists.intersperse separator list));
 
   /* Maps a function over a list of strings and then concatenates the
      result with the specified separator interspersed between
