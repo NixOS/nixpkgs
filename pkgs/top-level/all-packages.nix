@@ -21491,7 +21491,7 @@ in
     inherit (gnome2) libIDL;
     inherit (rustPackages_1_38_0) cargo rustc;
     libpng = libpng_apng;
-    enableGTK3 = true;
+    gtk3Support = true;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
