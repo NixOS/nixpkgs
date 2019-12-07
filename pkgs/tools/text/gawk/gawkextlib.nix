@@ -38,17 +38,8 @@ let
         postPatch = ''
           cd ${name}
         '';
-        installPhase = ''
-          runHook preInstall
-          mkdir -p $out/lib
-          cp ./.libs/* $out/lib
-        '' + (stdenv.lib.optionalString (!is_extension) ''
-          cp ../lib/gawkextlib.h $out/lib/.
-        '') + ''
-          runHook postInstall
-        '';
 
-        setupHook = ./setup-hook.sh;
+        setupHook = if is_extension then ./setup-hook.sh else null;
         inherit gawk;
 
         inherit doCheck;
