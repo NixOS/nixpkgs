@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "documize-community";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "documize";
     repo = "community";
     rev = "v${version}";
-    sha256 = "1dnb5b24x50c258fk47i7vngv28gai0mywns6nvgm3q59zyzphbj";
+    sha256 = "0wi85ag5n49zqs68gznifza8qv8zkg9l8z1q6ckkvbkl2f3zpdl5";
   };
 
   modSha256 = "1z0v7n8klaxcqv7mvzf3jzgrp78zb4yiibx899ppk6i5qnj4xiv0";
