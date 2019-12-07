@@ -6,13 +6,13 @@ let
 
     octoprint = stdenv.mkDerivation rec {
       pname = "Cura-OctoPrintPlugin";
-      version = "3.5.8";
+      version = "3.5.11";
 
       src = fetchFromGitHub {
         owner = "fieldOfView";
         repo = pname;
-        rev = "a82a42a87bbeb390b80b991afb1a6741c46a3432";
-        sha256 = "0q5yd7pw626qls2ks2y39hb9czd6lgh71jalzl2drwdi6a8mwsfz";
+        rev = "3cef0a955ae7ccfa5c07d20d9d147c530cc9d6ec";
+        sha256 = "0q9bkwgpsbfwkp1bfaxq3wm9pbwx5d7ji0jr7cwc4y5nizji81is";
       };
 
       nativeBuildInputs = [ cmake ];
