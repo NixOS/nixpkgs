@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "curaengine";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "CuraEngine";
     rev = version;
-    sha256 = "074qcaj1v2ri9wppx9lr066nlidkrsp9m1rrrk2hs2b61x0340ff";
+    sha256 = "1m89bp4g0dldh7vv1clj110m29ajiaghdq7b49mb3y8ifgrf8rdi";
   };
 
   nativeBuildInputs = [ cmake ];
