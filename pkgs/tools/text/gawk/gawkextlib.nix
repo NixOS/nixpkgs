@@ -17,6 +17,10 @@ let
           sha256 = "0r8fz89n3l4dfszs1980yqj0ah95430lj0y1lb7blfkwxa6c2xik";
         };
 
+        postPatch = ''
+          cd ${name}
+        '';
+
         nativeBuildInputs = [
           autoconf
           automake
@@ -29,10 +33,6 @@ let
 
         buildInputs = [ gawk ] ++ extraBuildInputs;
         propagatedBuildInputs = stdenv.lib.optional is_extension gawkextlib;
-
-        postPatch = ''
-          cd ${name}
-        '';
 
         setupHook = if is_extension then ./setup-hook.sh else null;
         inherit gawk;
