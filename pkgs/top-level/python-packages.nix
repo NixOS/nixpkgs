@@ -793,6 +793,8 @@ in {
 
   manhole = callPackage ../development/python-modules/manhole { };
 
+  mapbox = callPackage ../development/python-modules/mapbox { };
+
   markerlib = callPackage ../development/python-modules/markerlib { };
 
   matchpy = callPackage ../development/python-modules/matchpy { };
