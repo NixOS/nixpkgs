@@ -3394,7 +3394,7 @@ in
   };
 
   gawk-with-extensions = callPackage ../tools/text/gawk/gawk-with-extensions.nix {
-    extensions = gawkextlib;
+    extensions = gawkextlib.full;
   };
   gawkextlib = callPackage ../tools/text/gawk/gawkextlib.nix {};
 

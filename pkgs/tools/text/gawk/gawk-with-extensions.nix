@@ -1,11 +1,7 @@
 { runCommand, gawk, lib, extensions, makeWrapper }:
 
-let filtered_ext = with lib;
-   filterAttrs (n: v: n != "override" && n != "overrideDerivation" ) extensions;
-
-in
 runCommand "gawk-with-extensions" {
-  buildInputs = [ makeWrapper gawk ] ++ (builtins.attrValues filtered_ext);
+  buildInputs = [ makeWrapper gawk ] ++ extensions;
 } ''
   mkdir -p $out/bin
   for i in ${gawk}/bin/*; do
