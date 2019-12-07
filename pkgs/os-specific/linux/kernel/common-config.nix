@@ -716,6 +716,9 @@ let
 
       # Enable AMD's ROCm GPU compute stack
       HSA_AMD = whenAtLeast "4.20" yes;
+      ZONE_DEVICE = whenAtLeast "5.3" yes;
+      HMM_MIRROR = whenAtLeast "5.3" yes;
+      DRM_AMDGPU_USERPTR = whenAtLeast "5.3" yes;
 
       PREEMPT = no;
       PREEMPT_VOLUNTARY = yes;
