@@ -5,7 +5,7 @@ makeWrapper
 }:
 
 let
-  buildGawkextlibExtension = extension: extraDeps:
+  buildGawkextlibExtension = extension: extraBuildInputs:
     stdenv.mkDerivation rec {
       pname = "gawkextlib-${extension}";
       version = "unstable-2019-11-21";
@@ -19,7 +19,7 @@ let
       nativeBuildInputs =
         [ autoconf automake libtool autoreconfHook pkgconfig texinfo gettext ];
 
-      buildInputs = [ gawk ] ++ extraDeps;
+      buildInputs = [ gawk ] ++ extraBuildInputs;
       propagatedBuildInputs = [ gawkextlib ];
 
       configureFlags = [
