@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline, perl, python2
-, utillinux, check, enableStatic ? false }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, lvm2
+, libuuid
+, gettext
+, readline
+, dosfstools
+, e2fsprogs
+, perl
+, python2
+, utillinux
+, check
+, enableStatic ? false
+}:
 
 stdenv.mkDerivation rec {
-  name = "parted-3.2";
+  name = "parted-3.3";
 
   src = fetchurl {
     url = "mirror://gnu/parted/${name}.tar.xz";
-    sha256 = "1r3qpg3bhz37mgvp9chsaa3k0csby3vayfvz8ggsqz194af5i2w5";
+    sha256 = "0i1xp367wpqw75b20c3jnism3dg3yqj4a7a22p2jb1h1hyyv9qjp";
   };
 
   outputs = [ "out" "dev" "man" "info" ];
-
-  patches = stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/main/parted/fix-includes.patch?id=9c5cd3c329a40ba4559cc1d8c7d17a9bf95c237b";
-      sha256 = "117ypyiwvzym6pi8xmy16wa5z3sbpx7gh6haabs6kfb1x2894z7q";
-    })
-    ++ stdenv.lib.optional (lvm2 == null)
-    (fetchpatch {
-      url = https://git.savannah.gnu.org/cgit/parted.git/patch/?id=7e87ca3c531228d35e13e802d2622006138b104c;
-      sha256 = "0i29lfg8cwj342q5s7qwqhncz2bkifj5rjc7cx6jd4zqb6ykkndj";
-    });
 
   postPatch = ''
     patchShebangs tests
@@ -42,8 +43,7 @@ stdenv.mkDerivation rec {
   # Tests were previously failing due to Hydra running builds as uid 0.
   # That should hopefully be fixed now.
   doCheck = !stdenv.hostPlatform.isMusl; /* translation test */
-
-  checkInputs = [ check perl python2 utillinux ];
+  checkInputs = [ check dosfstools e2fsprogs perl python2 utillinux ];
 
   meta = {
     description = "Create, destroy, resize, check, and copy partitions";
