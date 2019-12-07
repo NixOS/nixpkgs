@@ -1,42 +1,41 @@
 { stdenv, fetchurl, fetchFromGitHub
 , mkfontdir, mkfontscale, bdf2psf, bdftopcf
+, fonttosfnt
 }:
 
 stdenv.mkDerivation rec {
   pname = "gohufont";
   version = "2.1";
 
-  src = fetchurl {
-    url = "https://font.gohu.org/${pname}-${version}.tar.gz";
-    sha256 = "10dsl7insnw95hinkcgmp9rx39lyzb7bpx5g70vswl8d6p4n53bm";
-  };
-
-  bdf = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner  = "hchargois";
     repo   = "gohufont";
     rev    = "cc36b8c9fed7141763e55dcee0a97abffcf08224";
     sha256 = "1hmp11mrr01b29phw0xyj4h9b92qz19cf56ssf6c47c5j2c4xmbv";
   };
 
-  nativeBuildInputs = [ mkfontdir mkfontscale bdf2psf bdftopcf ];
+  nativeBuildInputs =
+    [ mkfontdir mkfontscale bdf2psf bdftopcf fonttosfnt ];
 
   buildPhase = ''
-    # convert bdf to psf fonts
+    # convert bdf fonts to psf
     build=$(pwd)
     mkdir psf
     cd ${bdf2psf}/share/bdf2psf
-    for i in $bdf/*.bdf; do
+    for i in $src/*.bdf; do
+      name=$(basename $i .bdf)
       bdf2psf \
         --fb "$i" standard.equivalents \
         ascii.set+useful.set+linux.set 512 \
-        "$build/psf/$(basename $i .bdf).psf"
+        "$build/psf/$name.psf"
     done
     cd $build
 
-    # convert hidpi variant to pcf
-    for i in $bdf/hidpi/*.bdf; do
-        name=$(basename $i .bdf).pcf
-        bdftopcf -o "$name" "$i"
+    # convert bdf fonts to pcf and otb
+    for i in *.bdf $src/hidpi/*.bdf; do
+        name=$(basename $i .bdf)
+        bdftopcf -o "$name.pcf" "$i"
+        fonttosfnt -v -o "$name.otb" "$i" || true
     done
   '';
 
@@ -46,10 +45,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$fontDir"
     mv -t "$fontDir" psf/*.psf
 
-    # install the pcf fonts (for xorg applications)
+    # install the pcf and otb fonts (for xorg applications)
     fontDir="$out/share/fonts/misc"
     mkdir -p "$fontDir"
-    mv -t "$fontDir" *.pcf.gz *.pcf
+    mv -t "$fontDir" *.pcf *.otb
 
     cd "$fontDir"
     mkfontdir
@@ -58,7 +57,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash     = "0kl7k8idl0fnsap2c4j02i33z017p2s4gi2cgspy6ica46fczcc1";
+  outputHash     = "0j9fhvzkascpb5y8lc1pmmmgd74apgw9mimbj0bk2chcbfsi852p";
 
   meta = with stdenv.lib; {
     description = ''

@@ -17493,7 +17493,7 @@ in
 
   geolite-legacy = callPackage ../data/misc/geolite-legacy { };
 
-  gohufont = callPackage ../data/fonts/gohufont { };
+  gohufont = callPackage ../data/fonts/gohufont { inherit (xorg) fonttosfnt mkfontdir; };
 
   gnome-user-docs = callPackage ../data/documentation/gnome-user-docs { };
 
