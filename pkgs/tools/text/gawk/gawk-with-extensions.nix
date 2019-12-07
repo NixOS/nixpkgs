@@ -1,4 +1,4 @@
-{ runCommand, gawk, lib, extensions, makeWrapper }:
+{ runCommand, gawk, extensions, makeWrapper }:
 
 runCommand "gawk-with-extensions" {
   buildInputs = [ makeWrapper gawk ] ++ extensions;
