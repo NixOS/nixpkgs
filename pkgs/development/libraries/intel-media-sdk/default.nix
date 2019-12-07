@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Intel Media SDK.";
     license = licenses.mit;
     maintainers = with maintainers; [ midchildan ];
-    platforms = with platforms; linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
