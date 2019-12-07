@@ -7,12 +7,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "1.24.1";
+  version = "1.25.0";
   pname = "docker-compose";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lx7bx6jvhydbab8vwry0bclhdf0dfj6jrns1m5y45yp9ybqxmd5";
+    sha256 = "0zlprmsgmj4z627snsl0qmq8y7ggcyqrqm5vxvrvcigl7zywnprc";
   };
 
   # lots of networking and other fails

@@ -1,18 +1,18 @@
-{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six, first
+{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six
 , setuptools_scm, git, glibcLocales, mock }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "3.8.0";
+  version = "4.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vwh3hx4jrzf51yj9h31nk9ji53lqaq63mlqd7n84hcmfwy3rwz4";
+    sha256 = "0x36mp3a3f3wandfc0g8d53gg2jkc14nhisbryzspcl9f05sbvq6";
   };
 
   LC_ALL = "en_US.UTF-8";
   checkInputs = [ pytest git glibcLocales mock ];
-  propagatedBuildInputs = [ pip click six first setuptools_scm ];
+  propagatedBuildInputs = [ pip click six setuptools_scm ];
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [
     # Depend on network tests:
@@ -32,12 +32,8 @@ buildPythonPackage rec {
     "test_stdin"
     "test_upgrade_packages_option"
     "test_url_package"
-    # Expect specific version of "six":
     "test_editable_package"
-    "test_input_file_without_extension"
     "test_locally_available_editable_package_is_not_archived_in_cache_dir"
-    "test_no_candidates"
-    "test_no_candidates_pre"
   ];
 
   checkPhase = ''

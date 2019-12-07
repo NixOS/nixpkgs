@@ -68,9 +68,9 @@ let
   } // lib.optionalAttrs stdenv'.isDarwin {
     MKRELRO = "no";
   } // lib.optionalAttrs (stdenv'.cc.isClang or false) {
-    HAVE_LLVM = lib.head (lib.splitString "." (lib.getVersion stdenv'.cc.cc));
+    HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
   } // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
-    HAVE_GCC = lib.head (lib.splitString "." (lib.getVersion stdenv'.cc.cc));
+    HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
   } // lib.optionalAttrs (attrs.headersOnly or false) {
     installPhase = "includesPhase";
     dontBuild = true;
@@ -126,6 +126,11 @@ let
     # override defaults to prevent infinite recursion
     nativeBuildInputs = [ makeMinimal ];
     buildInputs = [ zlib ];
+
+    # the build system re-runs `./configure` with `HOST_CC` (which is their
+    # name for Build CC) as a compiler to make `defs.mk`, which is installed
+    depsBuildBuild = [ buildPackages.stdenv.cc ] ++ buildInputs;
+    HOST_CC = "${buildPackages.stdenv.cc.targetPrefix}cc";
 
     # temporarily use gnuinstall for bootstrapping
     # bsdinstall will be built later
@@ -218,9 +223,9 @@ let
     ];
     skipIncludesPhase = true;
     buildPhase = ''
-      cc  -c -Iinclude -Ilib/libc/include lib/libc/gen/fts.c \
+      "$CC" -c -Iinclude -Ilib/libc/include lib/libc/gen/fts.c \
           -o lib/libc/gen/fts.o
-      ar -rsc libfts.a lib/libc/gen/fts.o
+      "$AR" -rsc libfts.a lib/libc/gen/fts.o
     '';
     installPhase = ''
       runHook preInstall

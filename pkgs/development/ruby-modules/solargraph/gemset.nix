@@ -19,35 +19,25 @@
     };
     version = "1.1.2";
   };
-  htmlentities = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "1nkklqsn8ir8wizzlakncfv42i32wc0w9hxp00hvdlgjr7376nhj";
-      type = "gem";
-    };
-    version = "4.3.4";
-  };
   jaro_winkler = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1930v0chc1q4fr7hn0y1j34mw0v032a8kh0by4d4sbz8ksy056kf";
+      sha256 = "1y8l6k34svmdyqxya3iahpwbpvmn3fswhwsvrz0nk1wyb8yfihsh";
       type = "gem";
     };
-    version = "1.5.3";
+    version = "1.5.4";
   };
-  kramdown = {
+  maruku = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1n1c4jmrh5ig8iv1rw81s4mw4xsp4v97hvf8zkigv4hn5h542qjq";
+      sha256 = "1r7bxpgnx2hp3g12bjrmdrpv663dfqxsdp0af69kjhxmaxpia56x";
       type = "gem";
     };
-    version = "1.17.0";
+    version = "0.7.3";
   };
   mini_portile2 = {
     groups = ["default"];
@@ -65,20 +55,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "02bjydih0j515szfv9mls195cvpyidh6ixm7dwbl3s2sbaxxk5s4";
+      sha256 = "185g3dwba73jqxjr94bd2zk6fil6n9hmcfnfyzh3p1w47vm296r7";
       type = "gem";
     };
-    version = "1.10.3";
+    version = "1.10.5";
   };
   parallel = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1x1gzgjrdlkm1aw0hfpyphsxcx90qgs3y4gmp9km3dvf4hc4qm8r";
+      sha256 = "12jijkap4akzdv11lm08dglsc8jmc87xcgq6947i1s3qb69f4zn2";
       type = "gem";
     };
-    version = "1.17.0";
+    version = "1.19.1";
   };
   parser = {
     dependencies = ["ast"];
@@ -86,10 +76,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1pnks149x0fzgqiw53qlmvcd8bi746cxdw03sjljby5s97p1fskn";
+      sha256 = "09davv4ld6caqlczw64vhwf8hr41apys3cj8v2h96yxs4qg1m2iw";
       type = "gem";
     };
-    version = "2.6.3.0";
+    version = "2.6.5.0";
   };
   rainbow = {
     groups = ["default"];
@@ -107,10 +97,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0w7y5n74daajvl9gixr91nh8670d7mkgspkk3ql71m8azq3nffbg";
+      sha256 = "1zb9n227b5s4cg942sc0g3n1bdx9fpcvq5m6w7ap0yc116ivv5w2";
       type = "gem";
     };
-    version = "1.1.0";
+    version = "1.3.0";
   };
   rubocop = {
     dependencies = ["jaro_winkler" "parallel" "parser" "rainbow" "ruby-progressbar" "unicode-display_width"];
@@ -118,10 +108,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0wpyass9qb2wvq8zsc7wdzix5xy2ldiv66wnx8mwwprz2dcvzayk";
+      sha256 = "0m88b1bgbhmmbdnz2xv6n0il0j4q5qm9jbc0vf1zsaxmxqp06nx9";
       type = "gem";
     };
-    version = "0.74.0";
+    version = "0.77.0";
   };
   ruby-progressbar = {
     groups = ["default"];
@@ -134,15 +124,15 @@
     version = "1.10.1";
   };
   solargraph = {
-    dependencies = ["backport" "htmlentities" "jaro_winkler" "kramdown" "parser" "reverse_markdown" "rubocop" "thor" "tilt" "yard"];
+    dependencies = ["backport" "jaro_winkler" "maruku" "nokogiri" "parser" "reverse_markdown" "rubocop" "thor" "tilt" "yard"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1r0a7nfb0cwg2d7awbmvzk14594w7vkx844sshl9jpzkjx1asa9n";
+      sha256 = "1pdqpxvjj6r6gzrz9rmxfg85cmfjs4y2lyq8p5qfg3kfpqx4rhpw";
       type = "gem";
     };
-    version = "0.35.2";
+    version = "0.38.0";
   };
   thor = {
     groups = ["default"];
@@ -159,10 +149,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0ca4k0clwf0rkvy7726x4nxpjxkpv67w043i39saxgldxd97zmwz";
+      sha256 = "0rn8z8hda4h41a64l0zhkiwz2vxw9b1nb70gl37h1dg2k874yrlv";
       type = "gem";
     };
-    version = "2.0.9";
+    version = "2.0.10";
   };
   unicode-display_width = {
     groups = ["default"];

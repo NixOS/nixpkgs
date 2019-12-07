@@ -3,12 +3,14 @@
 , fetchurl
 , urlgrabber
 , python
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "pykickstart";
   version = "1.99.39";
   md5_path = "d249f60aa89b1b4facd63f776925116d";
+  disabled = isPy3k;
 
   src = fetchurl {
     url = "https://src.fedoraproject.org/repo/pkgs/pykickstart/"

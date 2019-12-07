@@ -2,15 +2,15 @@
 
 buildPythonPackage rec {
   pname = "pgspecial";
-  version = "1.11.5";
+  version = "1.11.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yvlxv9vy0hbfgf0xcwl7wh5hg6cl86arsv1ip3kvn9znn6x8kgl";
+    sha256 = "8c53fa2b2490fa9ec34ede4eafff8ddbe8bce5cba3dcae96509be36ec8c75575";
   };
 
-  checkInputs = [ pytest psycopg2 ];
-  propagatedBuildInputs = [ click sqlparse ];
+  checkInputs = [ pytest ];
+  propagatedBuildInputs = [ click sqlparse psycopg2 ];
 
   checkPhase = ''
     find tests -name \*.pyc -delete

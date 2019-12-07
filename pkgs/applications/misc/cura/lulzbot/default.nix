@@ -1,45 +1,44 @@
-{ lib, callPackage, fetchgit, cmake, jq, python3Packages, qtbase, qtquickcontrols2 }:
+{ lib, mkDerivation, wrapQtAppsHook, callPackage, fetchgit, cmake, jq, python3, qtbase, qtquickcontrols2 }:
 
 let
   # admittedly, we're using (printer firmware) blobs when we could compile them ourselves.
-  curaBinaryDataVersion = "3.6.18"; # Marlin v2.0.0.144. Keep this accurate wrt. the below.
+  curaBinaryDataVersion = "3.6.21"; # Marlin v2.0.0.174 for Bio, v2.0.0.144 for others.
   curaBinaryData = fetchgit {
     url = https://code.alephobjects.com/diffusion/CBD/cura-binary-data.git;
-    rev = "cdc046494bbfe1f65bfb34659a257eef9a0100a0";
-    sha256 = "0v0s036gxdjiglas2yzw95alv60sw3pq5k1zrrhmw9mxr4irrblb";
+    rev = "5c75d0f6c10d8b7a903e2072a48cd1f08059509e";
+    sha256 = "1qdsj6rczwzdwzyr7nz7fnypbphckjrnwl8c9dr6izsxyzs465c4";
   };
 
   libarcusLulzbot = callPackage ./libarcus.nix {
-    inherit (python3Packages) buildPythonPackage sip pythonOlder;
+    inherit (python3.pkgs) buildPythonPackage sip pythonOlder;
   };
   libsavitarLulzbot = callPackage ./libsavitar.nix {
-    inherit (python3Packages) buildPythonPackage sip pythonOlder;
+    inherit (python3.pkgs) buildPythonPackage sip pythonOlder;
   };
 
-  inherit (python3Packages) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
+  inherit (python3.pkgs) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
   curaengine = callPackage ./curaengine.nix {
     inherit libarcusLulzbot;
   };
   uraniumLulzbot = callPackage ./uranium.nix {
     inherit callPackage libarcusLulzbot;
-    inherit (python3Packages) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
+    inherit (python3.pkgs) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
   };
 in
-python3Packages.buildPythonApplication rec {
-  name = "cura-lulzbot-${version}";
-  version = "3.6.18";
+mkDerivation rec {
+  pname = "cura-lulzbot";
+  version = "3.6.21";
 
   src = fetchgit {
     url = https://code.alephobjects.com/source/cura-lulzbot.git;
-    rev = "71f1ac5a2b9f535175a3858a565930348358a9ca";
-    sha256 = "0by06fpxvdgy858lwhsccbmvkdq67j2s1cz8v6jnrnjrsxk7vzka";
+    rev = "7faeb18604c83004846a02c60cb240708db0034f";
+    sha256 = "10q38s8c8x6xkh1vns4p3iqa5y267vrjh5vq8h55mg1q5001scyq";
   };
 
-  format = "other"; # using cmake to build
   buildInputs = [ qtbase qtquickcontrols2 ];
   # numpy-stl temporarily disabled due to https://code.alephobjects.com/T8415
-  propagatedBuildInputs = with python3Packages; [ pyserial requests zeroconf ] ++ [ libsavitarLulzbot uraniumLulzbot libarcusLulzbot ]; # numpy-stl
-  nativeBuildInputs = [ cmake python3Packages.wrapPython ];
+  propagatedBuildInputs = with python3.pkgs; [ pyserial requests zeroconf ] ++ [ libsavitarLulzbot uraniumLulzbot libarcusLulzbot ]; # numpy-stl
+  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
   cmakeFlags = [
     "-DURANIUM_DIR=${uraniumLulzbot.src}"
@@ -66,6 +65,11 @@ python3Packages.buildPythonApplication rec {
       uranium = uraniumLulzbot.version;
     }}
     EOF
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
+    wrapQtApp "$out/bin/cura-lulzbot"
   '';
 
   meta = with lib; {

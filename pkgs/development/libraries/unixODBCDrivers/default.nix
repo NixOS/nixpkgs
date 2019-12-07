@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, mariadb, sqlite, zlib, libxml2, dpkg, lib, kerberos, curl, libuuid, autoPatchelfHook }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, libuuid, patchelf, libiconv, fetchFromGitHub }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -29,30 +29,42 @@
 
   mariadb = stdenv.mkDerivation rec {
     pname = "mariadb-connector-odbc";
-    version = "2.0.10";
+    version = "3.1.4";
 
-    src = fetchurl {
-      url = "https://downloads.mariadb.org/interstitial/connector-odbc-${version}/src/${pname}-${version}-ga-src.tar.gz";
-      sha256 = "0b6ximy0dg0xhqbrm1l7pn8hjapgpmddi67kh54h6i9cq9hqfdvz";
+    src = fetchFromGitHub {
+      owner = "MariaDB";
+      repo = "mariadb-connector-odbc";
+      rev = version;
+      sha256 = "1kbz5mng9vx89cw2sx7gsvhbv4h86zwp31fr0hxqing3cwxhkfgw";
+      # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
+      # (see https://github.com/NixOS/nixpkgs/issues/73258)
+      fetchSubmodules = true;
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mariadb.connector-c ];
+    buildInputs = [ unixODBC openssl libiconv ];
+
+    preConfigure = ''
+      # we don't want to build a .pkg
+      sed -i 's/ADD_SUBDIRECTORY(osxinstall)//g' CMakeLists.txt
+    '';
 
     cmakeFlags = [
-      "-DMARIADB_INCLUDE_DIR=${mariadb.connector-c}/include/mariadb"
+      "-DWITH_OPENSSL=ON"
+      # on darwin this defaults to ON but we want to build against unixODBC
+      "-DWITH_IODBC=OFF"
     ];
 
     passthru = {
       fancyName = "MariaDB";
-      driver = "lib/libmaodbc.so";
+      driver = if stdenv.isDarwin then "lib/libmaodbc.dylib" else "lib/libmaodbc.so";
     };
 
     meta = with stdenv.lib; {
       description = "MariaDB ODBC database driver";
       homepage =  https://downloads.mariadb.org/connector-odbc/;
       license = licenses.gpl2;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
     };
   };
 
@@ -133,8 +145,7 @@
       sha256 = "0jb16irr7qlgd2zshg0vyia7zqipd0pcvwfcr6z807pss1mnzj8w";
     };
 
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ unixODBC dpkg kerberos libuuid stdenv.cc.cc ];
+    nativeBuildInputs = [ dpkg patchelf ];
 
     unpackPhase = "dpkg -x $src ./";
     buildPhase = "";
@@ -143,6 +154,11 @@
       mkdir -p $out
       mkdir -p $out/lib
       cp -r opt/microsoft/msodbcsql${versionMajor}/lib64 opt/microsoft/msodbcsql${versionMajor}/share $out/
+    '';
+
+    postFixup = ''
+      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl.out kerberos libuuid stdenv.cc.cc ]} \
+        $out/lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}
     '';
 
     passthru = {

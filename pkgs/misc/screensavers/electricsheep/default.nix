@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, libav, lua5_1, curl
-, libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, libGLU_combined
+, libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, libGLU, libGL
 , glee }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wxGTK30 libav lua5_1 curl libpng xorg.libXrender
-    flam3 libgtop boost tinyxml freeglut libGLU_combined glee
+    flam3 libgtop boost tinyxml freeglut libGLU libGL glee
   ];
 
   preAutoreconf = ''

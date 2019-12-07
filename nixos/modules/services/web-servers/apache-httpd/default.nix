@@ -6,13 +6,15 @@ let
 
   mainCfg = config.services.httpd;
 
+  runtimeDir = "/run/httpd";
+
   httpd = mainCfg.package.out;
 
   httpdConf = mainCfg.configFile;
 
   php = mainCfg.phpPackage.override { apacheHttpd = httpd.dev; /* otherwise it only gets .out */ };
 
-  phpMajorVersion = head (splitString "." php.version);
+  phpMajorVersion = lib.versions.major (lib.getVersion php);
 
   mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = httpd; };
 
@@ -27,103 +29,29 @@ let
 
   listenToString = l: "${l.ip}:${toString l.port}";
 
-  extraModules = attrByPath ["extraModules"] [] mainCfg;
-  extraForeignModules = filter isAttrs extraModules;
-  extraApacheModules = filter isString extraModules;
-
-
-  makeServerInfo = cfg: {
-    # Canonical name must not include a trailing slash.
-    canonicalNames =
-      let defaultPort = (head (defaultListen cfg)).port; in
-      map (port:
-        (if cfg.enableSSL then "https" else "http") + "://" +
-        cfg.hostName +
-        (if port != defaultPort then ":${toString port}" else "")
-        ) (map (x: x.port) (getListen cfg));
-
-    # Admin address: inherit from the main server if not specified for
-    # a virtual host.
-    adminAddr = if cfg.adminAddr != null then cfg.adminAddr else mainCfg.adminAddr;
-
-    vhostConfig = cfg;
-    serverConfig = mainCfg;
-    fullConfig = config; # machine config
-  };
-
-
   allHosts = [mainCfg] ++ mainCfg.virtualHosts;
-
-
-  callSubservices = serverInfo: defs:
-    let f = svc:
-      let
-        svcFunction =
-          if svc ? function then svc.function
-          # instead of using serviceType="mediawiki"; you can copy mediawiki.nix to any location outside nixpkgs, modify it at will, and use serviceExpression=./mediawiki.nix;
-          else if svc ? serviceExpression then import (toString svc.serviceExpression)
-          else import (toString "${toString ./.}/${if svc ? serviceType then svc.serviceType else svc.serviceName}.nix");
-        config = (evalModules
-          { modules = [ { options = res.options; config = svc.config or svc; } ];
-            check = false;
-          }).config;
-        defaults = {
-          extraConfig = "";
-          extraModules = [];
-          extraModulesPre = [];
-          extraPath = [];
-          extraServerPath = [];
-          globalEnvVars = [];
-          robotsEntries = "";
-          startupScript = "";
-          enablePHP = false;
-          enablePerl = false;
-          phpOptions = "";
-          options = {};
-          documentRoot = null;
-        };
-        res = defaults // svcFunction { inherit config lib pkgs serverInfo php; };
-      in res;
-    in map f defs;
-
-
-  # !!! callSubservices is expensive
-  subservicesFor = cfg: callSubservices (makeServerInfo cfg) cfg.extraSubservices;
-
-  mainSubservices = subservicesFor mainCfg;
-
-  allSubservices = mainSubservices ++ concatMap subservicesFor mainCfg.virtualHosts;
-
 
   enableSSL = any (vhost: vhost.enableSSL) allHosts;
 
+  enableUserDir = any (vhost: vhost.enableUserDir) allHosts;
 
-  # Names of modules from ${httpd}/modules that we want to load.
-  apacheModules =
-    [ # HTTP authentication mechanisms: basic and digest.
-      "auth_basic" "auth_digest"
-
-      # Authentication: is the user who he claims to be?
-      "authn_file" "authn_dbm" "authn_anon" "authn_core"
-
-      # Authorization: is the user allowed access?
-      "authz_user" "authz_groupfile" "authz_host" "authz_core"
-
-      # Other modules.
-      "ext_filter" "include" "log_config" "env" "mime_magic"
-      "cern_meta" "expires" "headers" "usertrack" /* "unique_id" */ "setenvif"
-      "mime" "dav" "status" "autoindex" "asis" "info" "dav_fs"
-      "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
-      "userdir" "alias" "rewrite" "proxy" "proxy_http"
-      "unixd" "cache" "cache_disk" "slotmem_shm" "socache_shmcb"
+  # NOTE: generally speaking order of modules is very important
+  modules =
+    [ # required apache modules our httpd service cannot run without
+      "authn_core" "authz_core"
+      "log_config"
+      "mime" "autoindex" "negotiation" "dir"
+      "alias" "rewrite"
+      "unixd" "slotmem_shm" "socache_shmcb"
       "mpm_${mainCfg.multiProcessingModule}"
-
-      # For compatibility with old configurations, the new module mod_access_compat is provided.
-      "access_compat"
     ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
-    ++ extraApacheModules;
+    ++ optional enableUserDir "userdir"
+    ++ optional mainCfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
+    ++ optional mainCfg.enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
+    ++ optional mainCfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
+    ++ mainCfg.extraModules;
 
 
   allDenied = "Require all denied";
@@ -147,20 +75,22 @@ let
 
 
   browserHacks = ''
-    BrowserMatch "Mozilla/2" nokeepalive
-    BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
-    BrowserMatch "RealPlayer 4\.0" force-response-1.0
-    BrowserMatch "Java/1\.0" force-response-1.0
-    BrowserMatch "JDK/1\.0" force-response-1.0
-    BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully
-    BrowserMatch "^WebDrive" redirect-carefully
-    BrowserMatch "^WebDAVFS/1.[012]" redirect-carefully
-    BrowserMatch "^gnome-vfs" redirect-carefully
+    <IfModule mod_setenvif.c>
+        BrowserMatch "Mozilla/2" nokeepalive
+        BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
+        BrowserMatch "RealPlayer 4\.0" force-response-1.0
+        BrowserMatch "Java/1\.0" force-response-1.0
+        BrowserMatch "JDK/1\.0" force-response-1.0
+        BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully
+        BrowserMatch "^WebDrive" redirect-carefully
+        BrowserMatch "^WebDAVFS/1.[012]" redirect-carefully
+        BrowserMatch "^gnome-vfs" redirect-carefully
+    </IfModule>
   '';
 
 
   sslConf = ''
-    SSLSessionCache shmcb:${mainCfg.stateDir}/ssl_scache(512000)
+    SSLSessionCache shmcb:${runtimeDir}/ssl_scache(512000)
 
     Mutex posixsem
 
@@ -188,13 +118,18 @@ let
 
   perServerConf = isMainServer: cfg: let
 
-    serverInfo = makeServerInfo cfg;
-
-    subservices = callSubservices serverInfo cfg.extraSubservices;
+    # Canonical name must not include a trailing slash.
+    canonicalNames =
+      let defaultPort = (head (defaultListen cfg)).port; in
+      map (port:
+        (if cfg.enableSSL then "https" else "http") + "://" +
+        cfg.hostName +
+        (if port != defaultPort then ":${toString port}" else "")
+        ) (map (x: x.port) (getListen cfg));
 
     maybeDocumentRoot = fold (svc: acc:
       if acc == null then svc.documentRoot else assert svc.documentRoot == null; acc
-    ) null ([ cfg ] ++ subservices);
+    ) null ([ cfg ]);
 
     documentRoot = if maybeDocumentRoot != null then maybeDocumentRoot else
       pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out";
@@ -209,15 +144,11 @@ let
       </Directory>
     '';
 
-    robotsTxt =
-      concatStringsSep "\n" (filter (x: x != "") (
-        # If this is a vhost, the include the entries for the main server as well.
-        (if isMainServer then [] else [mainCfg.robotsEntries] ++ map (svc: svc.robotsEntries) mainSubservices)
-        ++ [cfg.robotsEntries]
-        ++ (map (svc: svc.robotsEntries) subservices)));
+    # If this is a vhost, the include the entries for the main server as well.
+    robotsTxt = concatStringsSep "\n" (filter (x: x != "") ([ cfg.robotsEntries ] ++ lib.optional (!isMainServer) mainCfg.robotsEntries));
 
   in ''
-    ${concatStringsSep "\n" (map (n: "ServerName ${n}") serverInfo.canonicalNames)}
+    ${concatStringsSep "\n" (map (n: "ServerName ${n}") canonicalNames)}
 
     ${concatMapStrings (alias: "ServerAlias ${alias}\n") cfg.serverAliases}
 
@@ -292,8 +223,6 @@ let
       in concatMapStrings makeDirConf cfg.servedDirs
     }
 
-    ${concatMapStrings (svc: svc.extraConfig) subservices}
-
     ${cfg.extraConfig}
   '';
 
@@ -302,13 +231,13 @@ let
 
     ServerRoot ${httpd}
 
-    DefaultRuntimeDir ${mainCfg.stateDir}/runtime
+    DefaultRuntimeDir ${runtimeDir}/runtime
 
-    PidFile ${mainCfg.stateDir}/httpd.pid
+    PidFile ${runtimeDir}/httpd.pid
 
     ${optionalString (mainCfg.multiProcessingModule != "prefork") ''
       # mod_cgid requires this.
-      ScriptSock ${mainCfg.stateDir}/cgisock
+      ScriptSock ${runtimeDir}/cgisock
     ''}
 
     <IfModule prefork.c>
@@ -327,16 +256,12 @@ let
     Group ${mainCfg.group}
 
     ${let
-        load = {name, path}: "LoadModule ${name}_module ${path}\n";
-        allModules =
-          concatMap (svc: svc.extraModulesPre) allSubservices
-          ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
-          ++ optional mainCfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
-          ++ optional enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
-          ++ optional enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
-          ++ concatMap (svc: svc.extraModules) allSubservices
-          ++ extraForeignModules;
-      in concatMapStrings load (unique allModules)
+        mkModule = module:
+          if isString module then { name = module; path = "${httpd}/modules/mod_${module}.so"; }
+          else if isAttrs module then { inherit (module) name path; }
+          else throw "Expecting either a string or attribute set including a name and path.";
+      in
+        concatMapStringsSep "\n" (module: "LoadModule ${module.name}_module ${module.path}") (unique (map mkModule modules))
     }
 
     AddHandler type-map var
@@ -385,17 +310,10 @@ let
     }
   '';
 
-
-  enablePHP = mainCfg.enablePHP || any (svc: svc.enablePHP) allSubservices;
-
-  enablePerl = mainCfg.enablePerl || any (svc: svc.enablePerl) allSubservices;
-
-
   # Generate the PHP configuration file.  Should probably be factored
   # out into a separate module.
   phpIni = pkgs.runCommand "php.ini"
-    { options = concatStringsSep "\n"
-        ([ mainCfg.phpOptions ] ++ (map (svc: svc.phpOptions) allSubservices));
+    { options = mainCfg.phpOptions;
       preferLocalBuild = true;
     }
     ''
@@ -407,6 +325,11 @@ in
 
 
 {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "httpd" "extraSubservices" ] "Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.")
+    (mkRemovedOptionModule [ "services" "httpd" "stateDir" ] "The httpd module now uses /run/httpd as a runtime directory.")
+  ];
 
   ###### interface
 
@@ -444,7 +367,7 @@ in
         type = types.lines;
         default = "";
         description = ''
-          Cnfiguration lines appended to the generated Apache
+          Configuration lines appended to the generated Apache
           configuration file. Note that this mechanism may not work
           when <option>configFile</option> is overridden.
         '';
@@ -453,7 +376,12 @@ in
       extraModules = mkOption {
         type = types.listOf types.unspecified;
         default = [];
-        example = literalExample ''[ "proxy_connect" { name = "php5"; path = "''${pkgs.php}/modules/libphp5.so"; } ]'';
+        example = literalExample ''
+          [
+            "proxy_connect"
+            { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
+          ]
+        '';
         description = ''
           Additional Apache modules to be used.  These can be
           specified as a string in the case of modules distributed
@@ -497,16 +425,6 @@ in
         default = "/var/log/httpd";
         description = ''
           Directory for Apache's log files.  It is created automatically.
-        '';
-      };
-
-      stateDir = mkOption {
-        type = types.path;
-        default = "/run/httpd";
-        description = ''
-          Directory for Apache's transient runtime state (such as PID
-          files).  It is created automatically.  Note that the default,
-          <filename>/run/httpd</filename>, is deleted at boot time.
         '';
       };
 
@@ -637,8 +555,6 @@ in
                      message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
 
-    warnings = map (cfg: "apache-httpd's extraSubservices option is deprecated. Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.") (lib.filter (cfg: cfg.extraSubservices != []) allHosts);
-
     users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
         group = mainCfg.group;
@@ -651,7 +567,7 @@ in
         gid = config.ids.gids.wwwrun;
       });
 
-    environment.systemPackages = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
+    environment.systemPackages = [httpd];
 
     services.httpd.phpOptions =
       ''
@@ -666,6 +582,28 @@ in
         date.timezone = "${config.time.timeZone}"
       '';
 
+    services.httpd.extraModules = mkBefore [
+      # HTTP authentication mechanisms: basic and digest.
+      "auth_basic" "auth_digest"
+
+      # Authentication: is the user who he claims to be?
+      "authn_file" "authn_dbm" "authn_anon"
+
+      # Authorization: is the user allowed access?
+      "authz_user" "authz_groupfile" "authz_host"
+
+      # Other modules.
+      "ext_filter" "include" "env" "mime_magic"
+      "cern_meta" "expires" "headers" "usertrack" "setenvif"
+      "dav" "status" "asis" "info" "dav_fs"
+      "vhost_alias" "imagemap" "actions" "speling"
+      "proxy" "proxy_http"
+      "cache" "cache_disk"
+
+      # For compatibility with old configurations, the new module mod_access_compat is provided.
+      "access_compat"
+    ];
+
     systemd.services.httpd =
       { description = "Apache HTTPD";
 
@@ -674,22 +612,14 @@ in
 
         path =
           [ httpd pkgs.coreutils pkgs.gnugrep ]
-          ++ optional enablePHP pkgs.system-sendmail # Needed for PHP's mail() function.
-          ++ concatMap (svc: svc.extraServerPath) allSubservices;
+          ++ optional mainCfg.enablePHP pkgs.system-sendmail; # Needed for PHP's mail() function.
 
         environment =
-          optionalAttrs enablePHP { PHPRC = phpIni; }
-          // optionalAttrs mainCfg.enableMellon { LD_LIBRARY_PATH  = "${pkgs.xmlsec}/lib"; }
-          // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
+          optionalAttrs mainCfg.enablePHP { PHPRC = phpIni; }
+          // optionalAttrs mainCfg.enableMellon { LD_LIBRARY_PATH  = "${pkgs.xmlsec}/lib"; };
 
         preStart =
           ''
-            mkdir -m 0750 -p ${mainCfg.stateDir}
-            [ $(id -u) != 0 ] || chown root.${mainCfg.group} ${mainCfg.stateDir}
-
-            mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
-            [ $(id -u) != 0 ] || chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
-
             mkdir -m 0700 -p ${mainCfg.logDir}
 
             # Get rid of old semaphores.  These tend to accumulate across
@@ -698,21 +628,18 @@ in
             for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
                 ${pkgs.utillinux}/bin/ipcrm -s $i
             done
-
-            # Run the startup hooks for the subservices.
-            for i in ${toString (map (svn: svn.startupScript) allSubservices)}; do
-                echo Running Apache startup hook $i...
-                $i
-            done
           '';
 
         serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf}";
         serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
         serviceConfig.ExecReload = "${httpd}/bin/httpd -f ${httpdConf} -k graceful";
+        serviceConfig.Group = mainCfg.group;
         serviceConfig.Type = "forking";
-        serviceConfig.PIDFile = "${mainCfg.stateDir}/httpd.pid";
+        serviceConfig.PIDFile = "${runtimeDir}/httpd.pid";
         serviceConfig.Restart = "always";
         serviceConfig.RestartSec = "5s";
+        serviceConfig.RuntimeDirectory = "httpd httpd/runtime";
+        serviceConfig.RuntimeDirectoryMode = "0750";
       };
 
   };

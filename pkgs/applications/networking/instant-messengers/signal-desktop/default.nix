@@ -2,7 +2,7 @@
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, udev, libnotify, libuuid, at-spi2-core
+, cups, expat, udev, libnotify, libuuid, at-spi2-core, libappindicator-gtk3
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -37,6 +37,7 @@ let
     gnome2.GConf
     gtk3
     pango
+    libappindicator-gtk3
     libnotify
     libuuid
     libX11
@@ -58,7 +59,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "1.27.2"; # Please backport all updates to the stable channel.
+  version = "1.29.0"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -68,7 +69,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "08qh7867bc6z6mdbdilqdacx67n0kaxl3m4m97k0jxhd093a8xfz";
+    sha256 = "1zbj0z4bhmg6zf975bn67wpr1kdi0h05d90aniijnh5wqgnwhfqn";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -113,7 +114,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = https://signal.org/;
     license     = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ixmatus primeos ];
+    maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
     platforms   = [ "x86_64-linux" ];
   };
 }

@@ -2,22 +2,24 @@
 , requests, filetype, pyparsing, configparser, arxiv2bib
 , pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
 , pylibgen, click, python-slugify, habanero, isbnlib
-, prompt_toolkit, pygments
+, prompt_toolkit, pygments, stevedore, tqdm, lxml
+, python-doi, isPy3k, pythonOlder
 #, optional, dependencies
-, jinja2, whoosh, pytest
+, whoosh, pytest
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.8.2";
+  version = "0.9";
+  disabled = !isPy3k;
 
   # Missing tests on Pypi
   src = fetchFromGitHub {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sa4hpgjvqkjcmp9bjr27b5m5jg4pfspdc8nf1ny80sr0kzn72hb";
+    sha256 = "kzA8nlglbjHDPEB7HRAY2dza1Umn/OYUu+ydbA1OJ5Y=";
   };
 
   propagatedBuildInputs = [
@@ -25,11 +27,20 @@ buildPythonPackage rec {
     pyyaml chardet beautifulsoup4 colorama bibtexparser
     pylibgen click python-slugify habanero isbnlib
     prompt_toolkit pygments
+    stevedore tqdm lxml
+    python-doi
     # optional dependencies
-    jinja2 whoosh
+    whoosh
   ];
 
-  doCheck = !stdenv.isDarwin;
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "lxml<=4.3.5" "lxml~=4.3" \
+      --replace "python-slugify>=1.2.6,<4" "python-slugify"
+  '';
+
+  # pytest seems to hang with python3.8
+  doCheck = !stdenv.isDarwin && pythonOlder "3.8";
 
   checkInputs = ([
     pytest
@@ -42,7 +53,8 @@ buildPythonPackage rec {
   # fail with 5.x
   checkPhase = ''
     HOME=$(mktemp -d) pytest papis tests --ignore tests/downloaders \
-      -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url and not test_export_yaml and not test_citations"
+      -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url \
+      and not test_validate_arxivid and not test_downloader_getter"
   '';
 
   meta = {

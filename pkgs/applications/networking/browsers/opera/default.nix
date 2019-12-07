@@ -36,87 +36,81 @@
 , systemd
 , at-spi2-atk
 , at-spi2-core
+, autoPatchelfHook
+, wrapGAppsHook
 }:
 
 let
 
   mirror = "https://get.geo.opera.com/pub/opera/desktop";
 
-  rpath = lib.makeLibraryPath [
+in stdenv.mkDerivation rec {
 
-    # These provide shared libraries loaded when starting. If one is missing,
-    # an error is shown in stderr.
-    alsaLib.out
-    atk.out
-    cairo.out
+  pname = "opera";
+  version = "65.0.3467.48";
+
+  src = fetchurl {
+    url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
+    sha256 = "0vcpq2p8si6rlyvd8nzs0a7pjxks2qn8i8czna968wyfxlczckyr";
+  };
+
+  unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    alsaLib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    cairo
     cups
-    curl.out
-    dbus.lib
-    expat.out
+    curl
+    dbus
+    expat
     fontconfig.lib
-    freetype.out
-    gdk-pixbuf.out
-    glib.out
+    freetype
+    gdk-pixbuf
+    glib
     gnome2.GConf
-    gtk3.out
-    libX11.out
-    libXScrnSaver.out
-    libXcomposite.out
-    libXcursor.out
-    libXdamage.out
-    libXext.out
-    libXfixes.out
-    libXi.out
-    libXrandr.out
-    libXrender.out
-    libXtst.out
-    libxcb.out
-    libnotify.out
-    libuuid.out
-    nspr.out
-    nss.out
-    pango.out
+    gtk3
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    libnotify
+    libuuid
+    libxcb
+    nspr
+    nss
+    pango
     stdenv.cc.cc.lib
+  ];
+
+  runtimeDependencies = [
+    # Works fine without this except there is no sound.
+    libpulseaudio.out
 
     # This is a little tricky. Without it the app starts then crashes. Then it
     # brings up the crash report, which also crashes. `strace -f` hints at a
     # missing libudev.so.0.
     systemd.lib
-
-    # Works fine without this except there is no sound.
-    libpulseaudio.out
-
-    at-spi2-atk
-    at-spi2-core
   ];
 
-in stdenv.mkDerivation rec {
-
-  pname = "opera";
-  version = "62.0.3331.43";
-
-  src = fetchurl {
-    url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    sha256 = "0zylg32zn6blkgy4bwmjzc26i712lwakahvrd24ncpfa8805f7x7";
-  };
-
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
-
   installPhase = ''
-    mkdir --parent $out
-    mv * $out/
+    mkdir -p $out
+    cp -r . $out/
     mv $out/lib/*/opera/*.so $out/lib/
-  '';
-
-  postFixup = ''
-    find $out -executable -type f \
-    | while read f
-      do
-        patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "$out/lib:${rpath}" \
-          "$f"
-      done
   '';
 
   meta = with lib; {

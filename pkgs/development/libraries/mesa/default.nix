@@ -27,22 +27,22 @@
 with stdenv.lib;
 
 let
-  version = "19.1.5";
-  branch  = head (splitString "." version);
+  version = "19.2.6";
+  branch  = versions.major version;
 in
 
 stdenv.mkDerivation {
   pname = "mesa";
   inherit version;
 
-  src =  fetchurl {
+  src = fetchurl {
     urls = [
       "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "1d3frncljickn5yi2ch1w2phwxhxpi6diyac3cbin9f76m7f2m3v";
+    sha256 = "15vpj2v1j5j065f8syhcsyr6rkjm58250r0ri13v6bf8c3x28ywx";
   };
 
   prePatch = "patchShebangs .";
@@ -167,7 +167,7 @@ stdenv.mkDerivation {
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
 
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
-    rm $dev/lib/pkgconfig/{gl,egl}.pc
+    rm -f $dev/lib/pkgconfig/{gl,egl}.pc
 
     # Update search path used by pkg-config
     for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do

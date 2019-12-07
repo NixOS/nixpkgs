@@ -19,12 +19,13 @@
 let
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with stdenv.lib;
-    let parts = splitString "." release_version; in
+    let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
 
 stdenv.mkDerivation ({
-  name = "llvm-${version}";
+  pname = "llvm";
+  inherit version;
 
   src = fetch "llvm" "0l9bf7kdwhlj0kq1hawpyxhna1062z3h7qcz2y8nfl9dz2qksy6s";
 
@@ -166,7 +167,7 @@ stdenv.mkDerivation ({
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
+  pname = "llvm-manpages";
 
   buildPhase = ''
     make docs-llvm-man

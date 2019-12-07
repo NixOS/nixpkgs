@@ -21,14 +21,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.14.3";
+  version = "0.15.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0wi6b6b1nyp16rcpcghk6by62wy6qsamv1xdymyn0zbqgd8h9n6b";
+    sha256 = "1gh8lcyqpkwvmjxwiq5d43sd43bg3c49fyy2x8drqdzj34gc49qg";
   };
 
   buildInputs = [
@@ -64,9 +64,12 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" ];
 
   patches = [
+    ./fix-paths.patch
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
     (substituteAll {
-      src = ./fix-paths.patch;
+      src = ./library-paths.patch;
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
+      libcanberra = "${libcanberra}/lib/libcanberra.so";
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     ./no-lto.patch
@@ -79,9 +82,9 @@ buildPythonApplication rec {
   '';
 
   buildPhase = if stdenv.isDarwin then ''
-    make app
+    ${python.interpreter} setup.py kitty.app --update-check-interval=0
   '' else ''
-    ${python.interpreter} setup.py linux-package
+    ${python.interpreter} setup.py linux-package --update-check-interval=0
   '';
 
   installPhase = ''
@@ -89,7 +92,7 @@ buildPythonApplication rec {
     mkdir -p $out
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
-    ln -s ../Applications/kitty.app/Contents/MacOS/kitty-deref-symlink "$out/bin/kitty"
+    ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
     mkdir "$out/Applications"
     cp -r kitty.app "$out/Applications/kitty.app"
     '' else ''
@@ -123,6 +126,6 @@ buildPythonApplication rec {
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs ];
+    maintainers = with maintainers; [ tex rvolosatovs ma27 ];
   };
 }

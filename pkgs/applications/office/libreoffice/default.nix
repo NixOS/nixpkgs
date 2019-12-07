@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, fetchpatch, pam, python3, libxslt, perl, ArchiveZip, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
-, libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
+, libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
 , openssl, gperf, cppunit, GConf, ORBit2, poppler, utillinux
-, librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw, mysql
+, librsvg, gnome_vfs, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
@@ -13,7 +13,7 @@
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
 , gnome3, glib, ncurses, epoxy, gpgme
-, langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "ru" "sl" "zh-CN" ]
+, langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
 }:
@@ -65,12 +65,27 @@ in stdenv.mkDerivation rec {
 
   inherit (primary-src) src;
 
+  outputs = [ "out" "dev" ];
+
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ] ++ lib.optional stdenv.isx86_64 "-mno-fma";
 
   patches = [
     ./xdg-open-brief.patch
+
+    # Poppler-0.82 compatibility
+    # https://gerrit.libreoffice.org/81545
+    (fetchpatch {
+      url = "https://github.com/LibreOffice/core/commit/2eadd46ab81058087af95bdfc1fea28fcdb65998.patch";
+      sha256 = "1mpipdfxvixjziizbhfbpybpzlg1ijw7s0yqjpmq5d7pf3pvkm4n";
+    })
+    # Poppler-0.83 compatibility
+    # https://gerrit.libreoffice.org/84384
+    (fetchpatch {
+      url = "https://github.com/LibreOffice/core/commit/9065cd8d9a19864f6b618f2dc10daf577badd9ee.patch";
+      sha256 = "0nd0gck8ra3ffw936a7ri0s6a0ii5cyglnhip2prcjh5yf7vw2i2";
+    })
   ];
 
   tarballPath = "external/tarballs";
@@ -276,6 +291,9 @@ in stdenv.mkDerivation rec {
 
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
+
+    mkdir -p $dev
+    cp -r include $dev
   '';
 
   configureFlags = [
@@ -360,10 +378,10 @@ in stdenv.mkDerivation rec {
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs libGLU_combined mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base glib mysql.connector-c
+      libXdmcp libpthreadstubs libGLU libGL mythes gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base glib libmysqlclient
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
-      python3 sablotron sane-backends unzip vigra which zip zlib
+      python3 sane-backends unzip vigra which zip zlib
       mdds bluez5 libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
       librevenge libe-book libmwaw glm glew ncurses epoxy

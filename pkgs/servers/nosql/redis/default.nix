@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, lua, jemalloc }:
+{ stdenv, fetchurl, lua, jemalloc, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.5";
+  version = "5.0.7";
   pname = "redis";
 
   src = fetchurl {
     url = "http://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "0xd3ak527cnkz2cn422l2ag9nsa6mhv7y2y49zwqy7fjk6bh0f91";
+    sha256 = "0ax8sf3vw0yadr41kzc04917scrg5wir1d94zmbz00b8pzm79nv1";
   };
 
   # Cross-compiling fixes
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = false; # needs tcl
+
+  passthru.tests.redis = nixosTests.redis;
 
   meta = with stdenv.lib; {
     homepage = https://redis.io;

@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, libGLU_combined, libXi, libXt, libXext, libX11, libXmu, freeglut
+, libGLU, libGL, libXi, libXt, libXext, libX11, libXmu, freeglut
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.01";
   patchversion = "9";
 
-  buildInputs = [ libGLU_combined libXi libXt libXext libX11 libXmu freeglut ];
+  buildInputs = [ libGLU libGL libXi libXt libXext libX11 libXmu freeglut ];
 
   src = fetchurl {
     url = "mirror://debian/pool/main/s/space-orbit/space-orbit_${version}.orig.tar.gz";

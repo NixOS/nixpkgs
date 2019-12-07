@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "amazon-ecs-cli";
-  version = "1.15.1";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-v${version}";
-    sha256 = "0p0z12b6z00sxzjfsvb37czgczrsi61klr5azan0f8wf32x6wc28";
+    sha256 = "1w4n7rkcxpdzg7450s22a80a27g845n61k2bdfhq4c1md7604nyz";
   };
 
   dontUnpack = true;

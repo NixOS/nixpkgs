@@ -5,13 +5,17 @@ assert stdenv.isLinux -> libcap != null;
 
 stdenv.mkDerivation rec {
   pname = "chrony";
-
   version = "3.5";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/chrony/${pname}-${version}.tar.gz";
     sha256 = "1d9r2dhslll4kzdmxrj0qfgwq1b30d4l3s5cwr8yr93029dpj0jf";
   };
+
+  patches = [
+    ./allow-clock_adjtime.patch
+    ./fix-seccomp-build.patch
+  ];
 
   postPatch = ''
     patchShebangs test
@@ -32,7 +36,7 @@ stdenv.mkDerivation rec {
     repositories.git = git://git.tuxfamily.org/gitroot/chrony/chrony.git;
     license = licenses.gpl2;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz thoughtpolice ];
 
     longDescription = ''
       Chronyd is a daemon which runs in background on the system. It obtains

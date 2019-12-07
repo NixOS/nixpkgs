@@ -4,10 +4,30 @@
 , lib
 }:
 
-args@{ name, bazelFlags ? [], bazelBuildFlags ? [], bazelFetchFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
+args@{
+  name
+, bazelFlags ? []
+, bazelBuildFlags ? []
+, bazelFetchFlags ? []
+, bazelTarget
+, buildAttrs
+, fetchAttrs
+
+# Newer versions of Bazel are moving away from built-in rules_cc and instead
+# allow fetching it as an external dependency in a WORKSPACE file[1]. If
+# removed in the fixed-output fetch phase, building will fail to download it.
+# This can be seen e.g. in #73097
+#
+# This option allows configuring the removal of rules_cc in cases where a
+# project depends on it via an external dependency.
+#
+# [1]: https://github.com/bazelbuild/rules_cc
+, removeRulesCC ? true
+, ...
+}:
 
 let
-  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" ];
+  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ];
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
 
@@ -24,8 +44,12 @@ in stdenv.mkDerivation (fBuildAttrs // {
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
       export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
       export HOME="$NIX_BUILD_TOP"
+      export USER="nix"
       # This is needed for git_repository with https remotes
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
+      # This is needed for Bazel fetchers that are themselves programs (e.g.
+      # rules_go using the go toolchain)
+      export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
     buildPhase = fFetchAttrs.buildPhase or ''
@@ -60,6 +84,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
+      ${if removeRulesCC then "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}" else ""}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
       rm -rf $bazelOut/external/{local_*,\@local_*.marker}
 

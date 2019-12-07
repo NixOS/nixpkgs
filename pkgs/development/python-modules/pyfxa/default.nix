@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, fetchPypi
 , requests, cryptography, pybrowserid, hawkauthlib, six
-, grequests, mock, responses, unittest2 }:
+, grequests, mock, responses, pytest }:
 
 buildPythonPackage rec {
   pname = "PyFxA";
-  version = "0.6.0";
+  version = "0.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d511b6f43a9445587c609a138636d378de76661561116e1f4259fcec9d09b42b";
+    sha256 = "f47f4285629fa6c033c79adc3fb90926c0818a42cfddb04d32818547362f1627";
   };
 
   postPatch = ''
@@ -21,8 +21,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    grequests mock responses unittest2
+    grequests mock responses pytest
   ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
     description = "Firefox Accounts client library for Python";

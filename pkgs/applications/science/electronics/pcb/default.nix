@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk2, bison, intltool, flex
-, netpbm, imagemagick, dbus, xlibsWrapper, libGLU_combined
+, netpbm, imagemagick, dbus, xlibsWrapper, libGLU, libGL
 , shared-mime-info, tcl, tk, gnome2, pangox_compat, gd, xorg
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     gtk2 bison intltool flex netpbm imagemagick dbus xlibsWrapper
-    libGLU_combined tcl shared-mime-info tk
+    libGLU libGL tcl shared-mime-info tk
     gnome2.gtkglext pangox_compat gd xorg.libXmu
   ];
 

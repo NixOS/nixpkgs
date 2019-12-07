@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hitori";
-  version = "3.32.0";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/hitori/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15s20db2fq4cy031sw20pmf53hxiak44fgyjy5njqnp2h2sg3806";
+    sha256 = "1612hq6d2mnggppy949dkb8lz9886n0rlg68z7qmjjizz1l41lb5";
   };
 
   nativeBuildInputs = [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dmtcp";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
-    owner = "dmtcp";
-    repo = "dmtcp";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "1sq38in4wk855yhfnzbs9xpnps97fhja93w08xjmx7szzm33g5a8";
+    sha256 = "01skyhr573w1dygvkwz66lvir2jsq443fjwkysglwxvmrdfz9kwd";
   };
 
   dontDisableStatic = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       --replace "os.getenv('USER')" "\"nixbld1\""
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Distributed MultiThreaded Checkpointing";
     longDescription = ''
       DMTCP (Distributed MultiThreaded Checkpointing) is a tool to
@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
       programs spread across many machines and connected by sockets. It does
       not modify the user's program or the operating system.
     '';
-    homepage = http://dmtcp.sourceforge.net/;
-    license = stdenv.lib.licenses.lgpl3Plus; # most files seem this or LGPL-2.1+
+    homepage = "http://dmtcp.sourceforge.net/";
+    license = licenses.lgpl3Plus; # most files seem this or LGPL-2.1+
+    platforms = intersectLists platforms.linux platforms.x86; # broken on ARM and Darwin
   };
 }

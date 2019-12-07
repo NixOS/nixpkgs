@@ -14,12 +14,12 @@
 
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "1.18.2";
+  version = "1.20.0";
 
   src = fetchPypi {
     inherit version;
     pname = "pre_commit";
-    sha256 = "1y6gd6nq8mfyjxknrgdryvn1bj5arvwaz2r00h41g054lfg3iki1";
+    sha256 = "0vmv3hrivm0sm81cn59n2pmw8h323sg4sgncl910djby2a3jc5cz";
   };
 
   propagatedBuildInputs = [

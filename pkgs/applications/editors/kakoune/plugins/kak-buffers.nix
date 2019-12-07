@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib;
   { description = "Ease navigation between opened buffers in Kakoune";
     homepage = "https://github.com/Delapouite/kakoune-buffers";
-    license = licenses.publicDoman;
+    license = licenses.mit;
     maintainers = with maintainers; [ nrdxp ];
     platform = platforms.all;
   };

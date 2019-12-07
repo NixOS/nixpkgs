@@ -51,8 +51,7 @@ let
   # that we can disable the autospawn feature in programs that
   # are built with PulseAudio support (like KDE).
   clientConf = writeText "client.conf" ''
-    autospawn=${if nonSystemWide then "yes" else "no"}
-    ${optionalString nonSystemWide "daemon-binary=${binary}"}
+    autospawn=no
     ${cfg.extraClientConf}
   '';
 
@@ -99,11 +98,12 @@ in {
         description = ''
           If false, a PulseAudio server is launched automatically for
           each user that tries to use the sound system. The server runs
-          with user privileges. This is the recommended and most secure
-          way to use PulseAudio. If true, one system-wide PulseAudio
+          with user privileges. If true, one system-wide PulseAudio
           server is launched on boot, running as the user "pulse", and
           only users in the "audio" group will have access to the server.
           Please read the PulseAudio documentation for more details.
+
+          Don't enable this option unless you know what you are doing.
         '';
       };
 

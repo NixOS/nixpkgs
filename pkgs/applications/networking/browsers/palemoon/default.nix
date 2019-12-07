@@ -3,7 +3,7 @@
 , dbus, dbus-glib, ffmpeg, file, fontconfig, freetype
 , gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
 , libnotify, libstartup_notification, makeWrapper
-, libGLU_combined, perl, python, libpulseaudio
+, libGLU, libGL, perl, python, libpulseaudio
 , unzip, xorg, wget, which, yasm, zip, zlib
 }:
 
@@ -13,13 +13,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.7.0";
+  version = "28.7.2";
 
   src = fetchFromGitHub {
     owner  = "MoonchildProductions";
     repo   = "UXP";
     rev    = "PM${version}_Release";
-    sha256 = "0i6fy1mvjy6vpqnvhh516mxbv4d2z73yghk3frln4ql8zavba7qq";
+    sha256 = "08w90269mwcqsdhx4vvp18c5iccvzqhaaw6aw7w0nppf2f2k8lri";
   };
 
   desktopItem = makeDesktopItem {
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     alsaLib bzip2 cairo dbus dbus-glib ffmpeg file fontconfig freetype
     gnome2.GConf gnum4 gtk2 hunspell libevent libjpeg libnotify
-    libstartup_notification makeWrapper libGLU_combined perl
+    libstartup_notification makeWrapper libGLU libGL perl
     pkgconfig python libpulseaudio unzip wget which yasm zip zlib
   ] ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver

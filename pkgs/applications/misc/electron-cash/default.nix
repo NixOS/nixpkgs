@@ -1,14 +1,14 @@
-{ lib, fetchurl, python3Packages, qtbase, wrapQtAppsHook }:
+{ lib, fetchFromGitHub, python3Packages, qtbase, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.0.7";
+  version = "4.0.11";
 
-  src = fetchurl {
-    url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
-    # Verified using official SHA-1 and signature from
-    # https://github.com/fyookball/keys-n-hashes
-    sha256 = "d63ef2d52cff0b821b745067d752fd0c7f2902fa23eaf8e9392c54864cae5c77";
+  src = fetchFromGitHub {
+    owner = "Electron-Cash";
+    repo = "Electron-Cash";
+    rev = version;
+    sha256 = "1k4zbaj0g8bgk1l5vrb835a8bqfay2707bcb4ql2vx4igcwpb680";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -54,6 +54,10 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
+  '';
+
+  postFixup = ''
+    wrapQtApp $out/bin/electron-cash
   '';
 
   doInstallCheck = true;

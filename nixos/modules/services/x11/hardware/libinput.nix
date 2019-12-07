@@ -122,7 +122,7 @@ in {
         description =
           ''
             Specify the scrolling method: <literal>twofinger</literal>, <literal>edge</literal>,
-            or <literal>none</literal>
+            <literal>button</literal>, or <literal>none</literal>
           '';
       };
 
@@ -209,12 +209,12 @@ in {
 
     services.xserver.config =
       ''
-        # Automatically enable the libinput driver for all touchpads.
+        # General libinput configuration.
+        # See CONFIGURATION DETAILS section of man:libinput(4).
         Section "InputClass"
           Identifier "libinputConfiguration"
-          MatchIsTouchpad "on"
+          MatchDriver "libinput"
           ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
-          Driver "libinput"
           Option "AccelProfile" "${cfg.accelProfile}"
           ${optionalString (cfg.accelSpeed != null) ''Option "AccelSpeed" "${cfg.accelSpeed}"''}
           ${optionalString (cfg.buttonMapping != null) ''Option "ButtonMapping" "${cfg.buttonMapping}"''}

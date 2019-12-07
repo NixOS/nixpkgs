@@ -29,5 +29,6 @@ buildPythonPackage rec {
     license = with stdenv.lib.licenses; [ gpl3 ];
     maintainers = with stdenv.lib.maintainers; [ vinymeuh ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
+    broken = true;
   };
 }

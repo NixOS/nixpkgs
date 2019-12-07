@@ -2,18 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "re2c";
-  version = "1.0.3";
-
-  sourceRoot = "${src.name}/re2c";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner  = "skvadrik";
     repo   = "re2c";
     rev    = version;
-    sha256 = "0grx7nl9fwcn880v5ssjljhcb9c5p2a6xpwil7zxpmv0rwnr3yqi";
+    sha256 = "1qj0ck9msb9h8g9qb1lr57jmlj8x68ini3y3ccdifjjahhhr0hd4";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  doCheck = true;
+  enableParallelBuilding = true;
 
   preCheck = ''
     patchShebangs run_tests.sh

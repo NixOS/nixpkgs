@@ -99,7 +99,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     runHook preUnpack
 
     if [[ -f $src && $src == *.gem ]]; then
-      if [[ -z "$dontBuild" ]]; then
+      if [[ -z "''${dontBuild-}" ]]; then
         # we won't know the name of the directory that RubyGems creates,
         # so we'll just use a glob to find it and move it over.
         gempkg="$src"

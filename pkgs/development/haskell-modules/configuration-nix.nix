@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.connector-c; });
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.libmysqlclient; });
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
@@ -94,13 +94,24 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  cachix = overrideCabal (addBuildTools (enableSeparateBinOutput super.cachix) [pkgs.boost]) (drv: {
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace cachix.cabal --replace "c++14" "c++17"
-    '';
-  });
+  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
+  cachix = disableLibraryProfiling super.cachix;
 
+  # avoid compiling twice by providing executable as a separate output (with small closure size)
+  niv = enableSeparateBinOutput super.niv;
+  ormolu = enableSeparateBinOutput super.ormolu;
   ghcid = enableSeparateBinOutput super.ghcid;
+
+  # Ensure the necessary frameworks for Darwin.
+  OpenAL = if pkgs.stdenv.isDarwin
+    then addExtraLibrary super.OpenAL pkgs.darwin.apple_sdk.frameworks.OpenAL
+    else super.OpenAL;
+
+  # Ensure the necessary frameworks for Darwin.
+  proteaaudio = if pkgs.stdenv.isDarwin
+    then addExtraLibrary super.proteaaudio pkgs.darwin.apple_sdk.frameworks.AudioToolbox
+    else super.proteaaudio;
+
 
   hzk = overrideCabal super.hzk (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
@@ -158,7 +169,11 @@ self: super: builtins.intersectAttrs super {
   gio = disableHardening (addPkgconfigDepend (addBuildTool super.gio self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
   glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
   gtk3 = disableHardening (super.gtk3.override { inherit (pkgs) gtk3; }) ["fortify"];
-  gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.buildHaskellPackages.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
+  gtk = let gtk1 = addBuildTool super.gtk self.buildHaskellPackages.gtk2hs-buildtools;
+            gtk2 = addPkgconfigDepend gtk1 pkgs.gtk2;
+            gtk3 = disableHardening gtk1 ["fortify"];
+            gtk4 = if pkgs.stdenv.isDarwin then appendConfigureFlag gtk3 "-fhave-quartz-gtk" else gtk4;
+        in gtk3;
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
 
@@ -244,7 +259,7 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.libGLU_combined);
+  hsqml = dontCheck (addExtraLibraries (super.hsqml.override { qt5 = pkgs.qt5Full; }) [pkgs.libGLU pkgs.libGL]);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -282,10 +297,22 @@ self: super: builtins.intersectAttrs super {
     );
 
   llvm-hs =
-      let dontCheckDarwin = if pkgs.stdenv.isDarwin
-                            then dontCheck
-                            else pkgs.lib.id;
-      in dontCheckDarwin (super.llvm-hs.override { llvm-config = pkgs.llvm_8; });
+    let llvmHsWithLlvm8 = super.llvm-hs.override { llvm-config = pkgs.llvm_8; };
+    in
+    if pkgs.stdenv.isDarwin
+    then
+      overrideCabal llvmHsWithLlvm8 (oldAttrs: {
+        # One test fails on darwin.
+        doCheck = false;
+        # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
+        # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
+        # when called from GHC, probably because clang is version 7, but we are
+        # using LLVM8.
+        preCompileBuildDriver = oldAttrs.preCompileBuildDriver or "" + ''
+          substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
+        '';
+      })
+    else llvmHsWithLlvm8;
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -429,6 +456,14 @@ self: super: builtins.intersectAttrs super {
                             [ pkgs.darwin.apple_sdk.frameworks.OpenCL ];
   });
 
+  # depends on 'hie' executable
+  lsp-test = dontCheck super.lsp-test;
+
+  # tests depend on executable
+  ghcide = overrideCabal super.ghcide (drv: {
+    preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
+  });
+
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
   # depend on freeglut, which provides GHC to necessary information to generate a correct RPATH.
@@ -477,8 +512,8 @@ self: super: builtins.intersectAttrs super {
   # requires autotools to build
   secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
-  # tests require git
-  hapistrano = addBuildTool super.hapistrano pkgs.buildPackages.git;
+  # tests require git and zsh
+  hapistrano = addBuildTools super.hapistrano [ pkgs.buildPackages.git pkgs.buildPackages.zsh ];
 
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobject-introspection;
@@ -494,9 +529,9 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
-  # https://github.com/haskell-servant/servant/pull/1128
-  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.15" then
-    appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch
+  # https://github.com/haskell-servant/servant/pull/1238
+  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.16" then
+    appendPatch super.servant-client-core ./patches/servant-client-core-redact-auth-header.patch
   else
     super.servant-client-core;
 
@@ -589,8 +624,72 @@ self: super: builtins.intersectAttrs super {
   snap-server = dontCheck super.snap-server;
 
   # Tests require internet
-  dhall_1_25_0 = dontCheck super.dhall_1_25_0;
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
 
+  # Hadolint wants to build a statically linked binary by default.
+  hadolint = overrideCabal super.hadolint (drv: {
+    preConfigure = "sed -i -e /ld-options:/d hadolint.cabal";
+  });
+
+  # gtk2hs-buildtools is listed in setupHaskellDepends, but we
+  # need it during the build itself, too.
+  cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;
+  pango = disableHardening (addBuildTool super.pango self.buildHaskellPackages.gtk2hs-buildtools) ["fortify"];
+
+  spago =
+    let
+      # Spago basically compiles with LTS-14, but it requires a newer version
+      # of directory.  This is to work around a bug only present on windows, so
+      # we can safely jailbreak spago and use the older directory package from
+      # LTS-14.
+      spagoWithOverrides = doJailbreak (super.spago.override {
+        # spago requires the latest version of dhall.
+        directory = self.dhall_1_28_0;
+      });
+
+      docsSearchAppJsFile = pkgs.fetchurl {
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/v0.0.5/docs-search-app.js";
+        sha256 = "11721x455qzh40vzfmralaynn9v8b5wix86r107hhs08vhryjib2";
+      };
+
+      purescriptDocsSearchFile = pkgs.fetchurl {
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/v0.0.5/purescript-docs-search";
+        sha256 = "16p1fmdvpwz1yswav8qjsd26c9airb22xncqw1rjnbd8lcpqx0p5";
+      };
+
+      spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
+        postUnpack = (drv.postUnpack or "") + ''
+          # The source for spago is pulled directly from GitHub.  It uses a
+          # package.yaml file with hpack, not a .cabal file.  In the package.yaml file,
+          # it uses defaults from the master branch of the hspec repo.  It will try to
+          # fetch these at build-time (but it will fail if running in the sandbox).
+          #
+          # The following line modifies the package.yaml to not pull in
+          # defaults from the hspec repo.
+          substituteInPlace "$sourceRoot/package.yaml" --replace 'defaults: hspec/hspec@master' ""
+
+          # Spago includes the following two files directly into the binary
+          # with Template Haskell.  They are fetched at build-time from the
+          # `purescript-docs-search` repo above.  If they cannot be fetched at
+          # build-time, they are pulled in from the `templates/` directory in
+          # the spago source.
+          #
+          # However, they are not actually available in the spago source, so they
+          # need to fetched with nix and put in the correct place.
+          # https://github.com/spacchetti/spago/issues/510
+          cp ${docsSearchAppJsFile} "$sourceRoot/templates/docs-search-app.js"
+          cp ${purescriptDocsSearchFile} "$sourceRoot/templates/purescript-docs-search"
+        '';
+      });
+
+      # Haddock generation is broken for spago.
+      # https://github.com/spacchetti/spago/issues/511
+      spagoWithoutHaddocks = dontHaddock spagoFixHpack;
+
+      # Because of the problem above with pulling in hspec defaults to the
+      # package.yaml file, the tests are disabled.
+      spagoWithoutChecks = dontCheck spagoWithoutHaddocks;
+    in
+    spagoWithoutChecks;
 }

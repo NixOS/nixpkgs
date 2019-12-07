@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "1.10";
+  version = "2.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13ca794416707b8cefcb7584bbfff65a4640fcc2510ad73e818fef94d424fca6";
+    sha256 = "b884402c62d589a38444e8f4b3892b18312e8f9442cd8d12e7ec01c698328f54";
   };
+
+  propagatedBuildInputs = [ requests ];
 
   # Upstream provides no unit tests.
   doCheck = false;

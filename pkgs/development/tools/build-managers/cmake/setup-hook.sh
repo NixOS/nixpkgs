@@ -20,17 +20,17 @@ cmakeConfigurePhase() {
         export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
     fi
 
-    if [ -z "$dontFixCmake" ]; then
+    if [ -z "${dontFixCmake-}" ]; then
         fixCmakeFiles .
     fi
 
-    if [ -z "$dontUseCmakeBuildDir" ]; then
+    if [ -z "${dontUseCmakeBuildDir-}" ]; then
         mkdir -p build
         cd build
         cmakeDir=${cmakeDir:-..}
     fi
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -z "${dontAddPrefix-}" ]; then
         cmakeFlags="-DCMAKE_INSTALL_PREFIX=$prefix $cmakeFlags"
     fi
 
@@ -84,7 +84,7 @@ cmakeConfigurePhase() {
     cmakeFlags="-DCMAKE_INSTALL_LOCALEDIR=${!outputLib}/share/locale $cmakeFlags"
 
     # Don’t build tests when doCheck = false
-    if [ -z "$doCheck" ]; then
+    if [ -z "${doCheck-}" ]; then
         cmakeFlags="-DBUILD_TESTING=OFF $cmakeFlags"
     fi
 
@@ -99,7 +99,7 @@ cmakeConfigurePhase() {
     cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON $cmakeFlags"
     cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON $cmakeFlags"
 
-    if [ "$buildPhase" = ninjaBuildPhase ]; then
+    if [ "${buildPhase-}" = ninjaBuildPhase ]; then
         cmakeFlags="-GNinja $cmakeFlags"
     fi
 
@@ -115,7 +115,7 @@ cmakeConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseCmakeConfigure-}" -a -z "${configurePhase-}" ]; then
     setOutputFlags=
     configurePhase=cmakeConfigurePhase
 fi
@@ -124,24 +124,32 @@ addEnvHooks "$targetOffset" addCMakeParams
 
 makeCmakeFindLibs(){
   isystem_seen=
-  for flag in $NIX_CFLAGS_COMPILE $NIX_LDFLAGS; do
+  iframework_seen=
+  for flag in ${NIX_CFLAGS_COMPILE-} ${NIX_LDFLAGS-}; do
     if test -n "$isystem_seen" && test -d "$flag"; then
       isystem_seen=
-      export CMAKE_INCLUDE_PATH="$CMAKE_INCLUDE_PATH${CMAKE_INCLUDE_PATH:+:}${flag}"
+      export CMAKE_INCLUDE_PATH="${CMAKE_INCLUDE_PATH-}${CMAKE_INCLUDE_PATH:+:}${flag}"
+    elif test -n "$iframework_seen" && test -d "$flag"; then
+      iframework_seen=
+      export CMAKE_FRAMEWORK_PATH="${CMAKE_FRAMEWORK_PATH-}${CMAKE_FRAMEWORK_PATH:+:}${flag}"
     else
       isystem_seen=
+      iframework_seen=
       case $flag in
         -I*)
-          export CMAKE_INCLUDE_PATH="$CMAKE_INCLUDE_PATH${CMAKE_INCLUDE_PATH:+:}${flag:2}"
+          export CMAKE_INCLUDE_PATH="${CMAKE_INCLUDE_PATH-}${CMAKE_INCLUDE_PATH:+:}${flag:2}"
           ;;
         -L*)
-          export CMAKE_LIBRARY_PATH="$CMAKE_LIBRARY_PATH${CMAKE_LIBRARY_PATH:+:}${flag:2}"
+          export CMAKE_LIBRARY_PATH="${CMAKE_LIBRARY_PATH-}${CMAKE_LIBRARY_PATH:+:}${flag:2}"
           ;;
         -F*)
-          export CMAKE_FRAMEWORK_PATH="$CMAKE_FRAMEWORK_PATH${CMAKE_FRAMEWORK_PATH:+:}${flag:2}"
+          export CMAKE_FRAMEWORK_PATH="${CMAKE_FRAMEWORK_PATH-}${CMAKE_FRAMEWORK_PATH:+:}${flag:2}"
           ;;
         -isystem)
           isystem_seen=1
+          ;;
+        -iframework)
+          iframework_seen=1
           ;;
       esac
     fi

@@ -53,6 +53,7 @@ buildPythonPackage rec {
     description = "Python bindings for Subversion";
     homepage = http://pysvn.tigris.org/;
     license = licenses.asl20;
+    broken = true;
   };
 
 }

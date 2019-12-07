@@ -22,6 +22,13 @@ let
     }
   '';
 
+  mkBinExtern = name: extern: mkFile name ''
+    extern crate ${extern};
+    fn main() {
+      assert_eq!(${extern}::test(), 23);
+    }
+  '';
+
   mkLib = name: mkFile name "pub fn test() -> i32 { return 23; }";
 
   mkTest = crateArgs: let
@@ -34,12 +41,7 @@ let
     libTestBinary = if !isLib then null else mkCrate {
       crateName = "run-test-${crateName}";
       dependencies = [ crate ];
-      src = mkFile "src/main.rs" ''
-        extern crate ${libName};
-        fn main() {
-          assert_eq!(${libName}::test(), 23);
-        }
-      '';
+      src = mkBinExtern "src/main.rs" libName;
     };
 
     in runCommand "run-buildRustCrate-${crateName}-test" {
@@ -71,6 +73,18 @@ let
       };
       crateBinNoPath3 =  { crateBin = [{ name = "my-binary5"; }]; src = mkBin "src/bin/main.rs"; };
       crateBinNoPath4 =  { crateBin = [{ name = "my-binary6"; }]; src = mkBin "src/main.rs";};
+      crateBinRename1 = {
+        crateBin = [{ name = "my-binary-rename1"; }];
+        src = mkBinExtern "src/main.rs" "foo_renamed";
+        dependencies = [ (mkCrate { crateName = "foo"; src = mkLib "src/lib.rs"; }) ];
+        crateRenames = { "foo" = "foo_renamed"; };
+      };
+      crateBinRename2 = {
+        crateBin = [{ name = "my-binary-rename2"; }];
+        src = mkBinExtern "src/main.rs" "foo_renamed";
+        dependencies = [ (mkCrate { crateName = "foo"; libName = "foolib"; src = mkLib "src/lib.rs"; }) ];
+        crateRenames = { "foo" = "foo_renamed"; };
+      };
     };
     brotliCrates = (callPackage ./brotli-crates.nix {});
   in lib.mapAttrs (key: value: mkTest (value // lib.optionalAttrs (!value?crateName) { crateName = key; })) cases // {

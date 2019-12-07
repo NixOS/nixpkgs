@@ -9,7 +9,7 @@ python27Packages.buildPythonApplication rec {
       sha256 = "0fzsf9pklhfs1rzwzj64c0v30b74nk94p93h371rpg45qnfiahvy";
     };
 
-    propagatedBuildInputs = with python27Packages; [ pygtk pillow ];
+    propagatedBuildInputs = with python27Packages; [ pygtk pillow setuptools ];
 
     doCheck = false;
 
@@ -27,7 +27,7 @@ python27Packages.buildPythonApplication rec {
       '';
       homepage = http://mcomix.sourceforge.net/;
       license = stdenv.lib.licenses.gpl2;
-      maintainers = with stdenv.lib.maintainers; [ fuuzetsu AndersonTorres ];
+      maintainers = with stdenv.lib.maintainers; [ AndersonTorres ];
     };
 }
 # TODO:

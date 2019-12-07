@@ -4,7 +4,7 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc, rust }:
 
 let
     # This doesn't appear to be officially documented anywhere yet.
@@ -13,13 +13,18 @@ let
       then "macos"
       else stdenv.hostPlatform.parsed.kernel.name;
 
-    makeDeps = dependencies:
+    makeDeps = dependencies: crateRenames:
       (lib.concatMapStringsSep " " (dep:
-        let extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName; in
-        (if lib.lists.any (x: x == "lib") dep.crateType then
-           " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}.rlib"
+        let
+          extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName;
+          name = if builtins.hasAttr dep.crateName crateRenames then
+            lib.strings.replaceStrings ["-"] ["_"] crateRenames.${dep.crateName}
+          else
+            extern;
+        in (if lib.lists.any (x: x == "lib") dep.crateType then
+           " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
          else
-           " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
+           " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies);
 
     echo_build_heading = colors: ''
@@ -54,13 +59,13 @@ let
     '';
 
     configureCrate = import ./configure-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
-    buildCrate = import ./build-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
+    buildCrate = import ./build-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps rust; };
     installCrate = import ./install-crate.nix;
 
     in
 
 crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides,
-  dependencies, buildDependencies,
+  dependencies, buildDependencies, crateRenames,
   extraRustcOpts,
   preUnpack, postUnpack, prePatch, patches, postPatch,
   preConfigure, postConfigure, preBuild, postBuild, preInstall, postInstall }:
@@ -70,7 +75,7 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     buildDependencies_ = buildDependencies;
     processedAttrs = [
       "src" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
-      "buildDependencies" "dependencies" "features"
+      "buildDependencies" "dependencies" "features" "crateRenames"
       "crateName" "version" "build" "authors" "colors" "edition"
     ];
     extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
@@ -91,12 +96,12 @@ stdenv.mkDerivation (rec {
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies =
       builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
+        (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))
         dependencies_;
 
     buildDependencies =
       builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
+        (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))
         buildDependencies_;
 
     completeDeps = lib.lists.unique (dependencies ++ lib.lists.concatMap (dep: dep.completeDeps) dependencies);
@@ -143,17 +148,20 @@ stdenv.mkDerivation (rec {
 
     configurePhase = configureCrate {
       inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
-              crateFeatures libName build workspace_member release libPath crateVersion
+              crateFeatures crateRenames libName build workspace_member release libPath crateVersion
               extraLinkFlags extraRustcOpts
               crateAuthors crateHomepage verbose colors target_os;
     };
     buildPhase = buildCrate {
       inherit crateName dependencies
-              crateFeatures libName release libPath crateType
+              crateFeatures crateRenames libName release libPath crateType
               metadata crateBin hasCrateBin verbose colors
               extraRustcOpts;
     };
     installPhase = installCrate crateName metadata;
+
+    outputs = [ "out" "lib" ];
+    outputDev = [ "lib" ];
 
 } // extraDerivationAttrs
 )) {
@@ -177,4 +185,5 @@ stdenv.mkDerivation (rec {
   postInstall = crate_.postInstall or "";
   dependencies = crate_.dependencies or [];
   buildDependencies = crate_.buildDependencies or [];
+  crateRenames = crate_.crateRenames or {};
 }

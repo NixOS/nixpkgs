@@ -1,5 +1,7 @@
 { lib
 , buildPythonPackage
+, python
+, isPy3k
 , fetchPypi
 , azure-common
 , azure-nspkg
@@ -26,12 +28,16 @@ buildPythonPackage rec {
     cryptography
   ];
 
+  postInstall = lib.optionalString isPy3k ''
+    rm $out/${python.sitePackages}/azure/__init__.py
+  '';
+
   # has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure Key Vault Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/key-vault?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

@@ -114,12 +114,25 @@ EOF
     function get_latest_tag ( ) {
         repo_name="$1"
 
-        # Using github release api because sorting this repo just doesn't work because of old git sillyness
-        # Also too lazy to care to adapt `git ls-remote` command to work with it
-        if [ $repo_name == "switchboard-plug-pantheon-shell" ]; then
-            curl --silent --show-error --fail -X GET "https://api.github.com/repos/elementary/$repo_name/releases/latest" | jq -r '.tag_name'
+        OAUTH_TOKEN=$(printenv OAUTH_TOKEN)
+
+        if [ -n "$OAUTH_TOKEN"  ]; then
+            curl \
+                --silent \
+                --show-error \
+                --fail \
+                -X GET \
+                --header "Authorization: token $OAUTH_TOKEN" \
+                "https://api.github.com/repos/elementary/$repo_name/releases/latest" \
+                | jq -r '.tag_name'
         else
-            git ls-remote --tags --sort="v:refname" "https://github.com/elementary/$repo_name" | tail -n1 | sed 's/.*\///; s/\^{}//'
+            curl \
+                --silent \
+                --show-error \
+                --fail \
+                -X GET \
+                "https://api.github.com/repos/elementary/$repo_name/releases/latest" \
+                | jq -r '.tag_name'
         fi
     }
 

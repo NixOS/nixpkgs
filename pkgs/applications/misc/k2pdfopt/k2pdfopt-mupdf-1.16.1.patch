@@ -1,0 +1,151 @@
+diff --git a/willuslib/wmupdf.c b/willuslib/wmupdf.c
+index 81627ef..f14a96c 100644
+--- a/willuslib/wmupdf.c
++++ b/willuslib/wmupdf.c
+@@ -189,8 +189,6 @@ int wmupdf_remake_pdf(char *infile,char *outfile,WPDFPAGEINFO *pageinfo,int use_
+     pdf_write_opts.do_compress=1;
+     pdf_write_opts.do_linear=0;
+     pdf_write_opts.do_garbage=1; /* 2 and 3 don't work for this. */
+-    pdf_write_opts.continue_on_error=0;
+-    pdf_write_opts.errors=NULL;
+     write_failed=0;
+     wpdfpageinfo_sort(pageinfo);
+     xref=NULL;
+@@ -1687,8 +1685,8 @@ WPDFOUTLINE *wpdfoutline_read_from_pdf_file(char *filename)
+         /* Sumatra version of MuPDF v1.4 -- use locally installed fonts */
+         pdf_install_load_system_font_funcs(ctx);
+         fz_try(ctx) { doc=fz_open_document(ctx,filename); }
+-        fz_catch(ctx) 
+-            { 
++        fz_catch(ctx)
++            {
+             fz_drop_context(ctx);
+             return(NULL);
+             }
+@@ -1890,5 +1888,5 @@ static pdf_obj *pdf_new_string_utf8(fz_context *ctx,char *string)
+     willus_mem_free((double **)&utfbuf,funcname);
+     return(pdfobj);
+     }
+-    
++
+ #endif /* HAVE_MUPDF_LIB */
+diff --git a/willuslib/wmupdfinfo.c b/willuslib/wmupdfinfo.c
+index 5c7f38c..9b9e6fd 100644
+--- a/willuslib/wmupdfinfo.c
++++ b/willuslib/wmupdfinfo.c
+@@ -237,23 +237,22 @@ static void showglobalinfo(fz_context *ctx, globals *glo,char *filename)
+         pdf_obj *robj;
+ 
+         robj=pdf_resolve_indirect(ctx,obj);
+-        n=pdf_sprint_obj(ctx,NULL,0,robj,1);
+-        buf=malloc(n+2);
++        buf=pdf_sprint_obj(ctx,NULL,0,&n,robj,1,0);
+         if (buf==NULL)
+             {
+             fz_write_printf(ctx,out,"Info object (%d %d R):\n",pdf_to_num(ctx,obj),pdf_to_gen(ctx,obj));
+-		    pdf_print_obj(ctx,out,robj,1);
++		    pdf_print_obj(ctx,out,robj,1,0);
+             }
+         else
+             {
+-            pdf_sprint_obj(ctx,buf,n+2,robj,1);
++            pdf_sprint_obj(ctx,buf,n+2,&n,robj,1,0);
+             display_pdf_field(ctx,out,buf,"Title","TITLE");
+             display_pdf_field(ctx,out,buf,"CreationDate","CREATED");
+             display_pdf_field(ctx,out,buf,"ModDate","LAST MODIFIED");
+             display_pdf_field(ctx,out,buf,"Producer","PDF PRODUCER");
+             display_pdf_field(ctx,out,buf,"Creator","CREATOR");
+             display_file_size(ctx,out,filename);
+-            free(buf);
++            fz_free(ctx,buf);
+             }
+ 	    }
+     if (glo->dims==1)
+@@ -275,7 +274,7 @@ static void showglobalinfo(fz_context *ctx, globals *glo,char *filename)
+ 	if (obj)
+         {
+ 		fz_write_printf(ctx,out, "\nEncryption object (%d %d R):\n", pdf_to_num(ctx,obj), pdf_to_gen(ctx,obj));
+-		pdf_print_obj(ctx,out, pdf_resolve_indirect(ctx,obj), 1);
++		pdf_print_obj(ctx,out, pdf_resolve_indirect(ctx,obj), 1, 0);
+         }
+     }
+ 
+@@ -396,7 +395,7 @@ gatherdimensions(fz_context *ctx, globals *glo, int page, pdf_obj *pageref, pdf_
+ 	if (j < glo->dims)
+ 		return;
+ 
+-	glo->dim = fz_resize_array(ctx, glo->dim, glo->dims+1, sizeof(struct info));
++	glo->dim = fz_realloc_array(ctx, glo->dim, glo->dims+1, struct info);
+ 	glo->dims++;
+ 
+ 	glo->dim[glo->dims - 1].page = page;
+@@ -441,7 +440,7 @@ gatherfonts(fz_context *ctx, globals *glo, int page, pdf_obj *pageref, pdf_obj *
+ 		if (k < glo->fonts)
+ 			continue;
+ 
+-		glo->font = fz_resize_array(ctx, glo->font, glo->fonts+1, sizeof(struct info));
++		glo->font = fz_realloc_array(ctx, glo->font, glo->fonts+1, struct info);
+ 		glo->fonts++;
+ 
+ 		glo->font[glo->fonts - 1].page = page;
+@@ -510,7 +509,7 @@ gatherimages(fz_context *ctx, globals *glo, int page, pdf_obj *pageref, pdf_obj
+ 		if (k < glo->images)
+ 			continue;
+ 
+-		glo->image = fz_resize_array(ctx, glo->image, glo->images+1, sizeof(struct info));
++		glo->image = fz_realloc_array(ctx, glo->image, glo->images+1, struct info);
+ 		glo->images++;
+ 
+ 		glo->image[glo->images - 1].page = page;
+@@ -568,7 +567,7 @@ gatherforms(fz_context *ctx, globals *glo, int page, pdf_obj *pageref, pdf_obj *
+ 		if (k < glo->forms)
+ 			continue;
+ 
+-		glo->form = fz_resize_array(ctx, glo->form, glo->forms+1, sizeof(struct info));
++		glo->form = fz_realloc_array(ctx, glo->form, glo->forms+1, struct info);
+ 		glo->forms++;
+ 
+ 		glo->form[glo->forms - 1].page = page;
+@@ -613,7 +612,7 @@ gatherpsobjs(fz_context *ctx, globals *glo, int page, pdf_obj *pageref, pdf_obj
+ 		if (k < glo->psobjs)
+ 			continue;
+ 
+-		glo->psobj = fz_resize_array(ctx, glo->psobj, glo->psobjs+1, sizeof(struct info));
++		glo->psobj = fz_realloc_array(ctx, glo->psobj, glo->psobjs+1, struct info);
+ 		glo->psobjs++;
+ 
+ 		glo->psobj[glo->psobjs - 1].page = page;
+@@ -656,7 +655,7 @@ gathershadings(fz_context *ctx, globals *glo, int page, pdf_obj *pageref, pdf_ob
+ 		if (k < glo->shadings)
+ 			continue;
+ 
+-		glo->shading = fz_resize_array(ctx, glo->shading, glo->shadings+1, sizeof(struct info));
++		glo->shading = fz_realloc_array(ctx, glo->shading, glo->shadings+1, struct info);
+ 		glo->shadings++;
+ 
+ 		glo->shading[glo->shadings - 1].page = page;
+@@ -724,7 +723,7 @@ gatherpatterns(fz_context *ctx, globals *glo, int page, pdf_obj *pageref, pdf_ob
+ 		if (k < glo->patterns)
+ 			continue;
+ 
+-		glo->pattern = fz_resize_array(ctx, glo->pattern, glo->patterns+1, sizeof(struct info));
++		glo->pattern = fz_realloc_array(ctx, glo->pattern, glo->patterns+1, struct info);
+ 		glo->patterns++;
+ 
+ 		glo->pattern[glo->patterns - 1].page = page;
+@@ -1216,7 +1215,7 @@ void wmupdfinfo_get(char *filename,int *pagelist,char **buf)
+     if (fout==NULL)
+         return;
+     */
+-    
++
+     ctx = fz_new_context(NULL, NULL, FZ_STORE_UNLIMITED);
+     if (!ctx)
+         {
+@@ -1307,5 +1306,5 @@ static void date_convert(char *dst,char *src)
+     else if (src[i]!='\0')
+         sprintf(&dst[strlen(dst)]," %s",&src[i]);
+     }
+-    
++
+ #endif /* HAVE_MUPDF_LIB */

@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "httpretty";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01b52d45077e702eda491f4fe75328d3468fd886aed5dcc530003e7b2b5939dc";
+    sha256 = "66216f26b9d2c52e81808f3e674a6fb65d4bf719721394a1a9be926177e55fbe";
   };
 
   propagatedBuildInputs = [ six ];

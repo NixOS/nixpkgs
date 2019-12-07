@@ -49,16 +49,16 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.146";
+    version = "0.1.154";
     LanguageClient-neovim-src = fetchurl {
       url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
-      sha256 = "1xm98pyzf2dlh04ijjf3nkh37lyqspbbjddkjny1g06xxb4kfxnk";
+      sha256 = "03sp643nihj9p2s9cx2dcazhz68s30qx7igqprgsmr1040rhg2py";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0dixvmwq611wg2g3rp1n1gqali46904fnhb90gcpl9a1diqb34sh";
+      cargoSha256 = "1bvbls2l1xa0s3k11crvd98il4i20z5sn0hqmsc1b915k03qq4zj";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -78,17 +78,6 @@ self: super: {
       substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
         --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
     '';
-  };
-
-  # do not auto-update this one, as the name clashes with vim-snippets
-  vim-docbk-snippets = buildVimPluginFrom2Nix {
-    pname = "vim-docbk-snippets";
-    version = "2017-11-02";
-    src = fetchgit {
-      url = "https://github.com/jhradilek/vim-snippets";
-      rev = "69cce66defdf131958f152ea7a7b26c21ca9d009";
-      sha256 = "1363b2fmv69axrl2hm74dmx51cqd8k7rk116890qllnapzw1zjgc";
-    };
   };
 
   clang_complete = super.clang_complete.overrideAttrs(old: {
@@ -123,14 +112,15 @@ self: super: {
   });
 
   # Only official releases contains the required index.js file
+  # NB: Make sure you pick a rev from the release branch!
   coc-nvim = buildVimPluginFrom2Nix rec {
     pname = "coc-nvim";
-    version = "0.0.74";
+    version = "2019-11-29";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "v${version}";
-      sha256 = "1s4nib2mnhagd0ymx254vf7l1iijwrh2xdqn3bdm4f1jnip81r10";
+      rev = "d566fa03807d8d86ce9302680d135198a36c7d4d";
+      sha256 = "0m355w837f61jfpjrhi3h47z7vq16g8yai8kd82v1h71ns5fw9gz";
     };
   };
 
@@ -164,6 +154,10 @@ self: super: {
       patchShebangs .
       ./install.sh
     '';
+  });
+
+  defx-nvim = super.defx-nvim.overrideAttrs(old: {
+    dependencies = with super; [ nvim-yarp ];
   });
 
   deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
@@ -386,6 +380,10 @@ self: super: {
     '';
   });
 
+  vim-metamath = super.vim-metamath.overrideAttrs(old: {
+    preInstall = "cd vim";
+  });
+
   vim-snipmate = super.vim-snipmate.overrideAttrs(old: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
@@ -433,8 +431,8 @@ self: super: {
   youcompleteme = super.youcompleteme.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
-        --replace "'ycm_python_interpreter_path', '''" \
-        "'ycm_python_interpreter_path', '${python3}/bin/python'"
+        --replace "'ycm_path_to_python_interpreter', '''" \
+        "'ycm_path_to_python_interpreter', '${python3}/bin/python3'"
 
       rm -r third_party/ycmd
       ln -s ${ycmd}/lib/ycmd third_party

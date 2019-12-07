@@ -1,4 +1,4 @@
-import ../make-test.nix {
+import ../make-test-python.nix {
   name = "prosody-mysql";
 
   nodes = {
@@ -57,21 +57,21 @@ import ../make-test.nix {
   };
 
   testScript = { nodes, ... }: ''
-    $mysql->waitForUnit('mysql.service');
-    $server->waitForUnit('prosody.service');
-    $server->succeed('prosodyctl status') =~ /Prosody is running/;
+    mysql.wait_for_unit("mysql.service")
+    server.wait_for_unit("prosody.service")
+    server.succeed('prosodyctl status | grep "Prosody is running"')
 
     # set password to 'nothunter2' (it's asked twice)
-    $server->succeed('yes nothunter2 | prosodyctl adduser cthon98@example.com');
+    server.succeed("yes nothunter2 | prosodyctl adduser cthon98@example.com")
     # set password to 'y'
-    $server->succeed('yes | prosodyctl adduser azurediamond@example.com');
+    server.succeed("yes | prosodyctl adduser azurediamond@example.com")
     # correct password to 'hunter2'
-    $server->succeed('yes hunter2 | prosodyctl passwd azurediamond@example.com');
+    server.succeed("yes hunter2 | prosodyctl passwd azurediamond@example.com")
 
-    $client->succeed("send-message");
+    client.succeed("send-message")
 
-    $server->succeed('prosodyctl deluser cthon98@example.com');
-    $server->succeed('prosodyctl deluser azurediamond@example.com');
+    server.succeed("prosodyctl deluser cthon98@example.com")
+    server.succeed("prosodyctl deluser azurediamond@example.com")
   '';
 }
 

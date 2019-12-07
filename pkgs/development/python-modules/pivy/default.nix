@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = with pkgs; with xorg; [
     coin3d soqt qt5.qtbase
-    libGLU_combined
+    libGLU libGL
     libXi libXext libSM libICE libX11
   ];
 
@@ -27,6 +27,9 @@ buildPythonPackage rec {
     "-I${pkgs.qt5.qtbase.dev}/include/QtOpenGL"
     "-I${pkgs.qt5.qtbase.dev}/include/QtWidgets"
   ];
+
+  dontUseQmakeConfigure = true;
+  dontUseCmakeConfigure = true;
 
   doCheck = false;
 
@@ -39,6 +42,7 @@ buildPythonPackage rec {
     homepage = http://pivy.coin3d.org/;
     description = "A Python binding for Coin";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ gebner ];
   };
 
 }

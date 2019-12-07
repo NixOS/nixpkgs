@@ -72,6 +72,7 @@ let
   testCases = {
     loopback = {
       name = "Loopback";
+      machine.networking.useDHCP = false;
       machine.networking.useNetworkd = networkd;
       testScript = ''
         startAll;
@@ -139,14 +140,16 @@ let
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
-          useDHCP = true;
+          useDHCP = false;
           interfaces.eth1 = {
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
+            useDHCP = true;
           };
           interfaces.eth2 = {
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
+            useDHCP = true;
           };
         };
       };
@@ -320,13 +323,19 @@ let
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
+          useDHCP = false;
           firewall.logReversePathDrops = true; # to debug firewall rules
           # reverse path filtering rules for the macvlan interface seem
           # to be incorrect, causing the test to fail. Disable temporarily.
           firewall.checkReversePath = false;
-          useDHCP = true;
           macvlans.macvlan.interface = "eth1";
-          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
+          interfaces.eth1 = {
+            ipv4.addresses = mkOverride 0 [ ];
+            useDHCP = true;
+          };
+          interfaces.macvlan = {
+            useDHCP = true;
+          };
         };
       };
       testScript = { ... }:
@@ -440,6 +449,8 @@ let
     virtual = {
       name = "Virtual";
       machine = {
+        networking.useNetworkd = networkd;
+        networking.useDHCP = false;
         networking.interfaces.tap0 = {
           ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
           ipv6.addresses = [ { address = "2001:1470:fffd:2096::"; prefixLength = 64; } ];
@@ -489,6 +500,7 @@ let
         boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
         networking = {
           useNetworkd = networkd;
+          useDHCP = false;
           interfaces.eth1.ipv6.addresses = singleton {
             address = "fd00:1234:5678:1::1";
             prefixLength = 64;
@@ -514,11 +526,12 @@ let
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
-          useDHCP = true;
+          useDHCP = false;
           interfaces.eth1 = {
             preferTempAddress = true;
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
+            useDHCP = true;
           };
         };
       };
@@ -526,11 +539,12 @@ let
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
-          useDHCP = true;
+          useDHCP = false;
           interfaces.eth1 = {
             preferTempAddress = false;
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
+            useDHCP = true;
           };
         };
       };

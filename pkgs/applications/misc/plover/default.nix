@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, python27Packages, python36Packages, wmctrl }:
+{ stdenv, fetchurl, python27Packages, python36Packages, wmctrl,
+  qtbase, mkDerivationWith }:
 
 {
   stable = with python27Packages; buildPythonPackage rec {
@@ -19,11 +20,11 @@
     nativeBuildInputs     = [ setuptools_scm ];
     buildInputs           = [ pytest mock ];
     propagatedBuildInputs = [
-      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl
+      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl dbus-python
     ];
   };
 
-  dev = with python36Packages; buildPythonPackage rec {
+  dev = with python36Packages; mkDerivationWith buildPythonPackage rec {
     pname = "plover";
     version = "4.0.0.dev8";
 
@@ -43,6 +44,11 @@
     postPatch = "sed -i /PyQt5/d setup.cfg";
 
     checkInputs           = [ pytest mock ];
-    propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth ];
+    propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
+
+    dontWrapQtApps = true;
+    makeWrapperArgs = [
+      "\${qtWrapperArgs[@]}"
+    ];
   };
 }

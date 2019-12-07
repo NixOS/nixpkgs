@@ -1,5 +1,5 @@
 { stdenv, lib, fetchpatch, pkgconfig, cmake, bluez, ffmpeg, libao, gtk2, glib
-, libGLU_combined , gettext, libpthreadstubs, libXrandr, libXext, readline
+, libGLU, libGL , gettext, libpthreadstubs, libXrandr, libXext, readline
 , openal , libXdmcp, portaudio, fetchFromGitHub, libusb, libevdev
 , wxGTK30, soundtouch, miniupnpc, mbedtls, curl, lzo, sfml
 , libpulseaudio ? null }:
@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
       name = "dolphin-emu-5.0-soundtouch-exception-fix.patch";
       sha256 = "0yd3l46nja5qiknnl30ryad98f3v8911jwnr67hn61dzx2kwbbaw";
     })
+    # Fix build with gcc 8
+    (fetchpatch {
+      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/9b7b4aeac1b60dcf28bdcafbed6bc498b2aeb0ad/debian/patches/03_gcc8.patch";
+      name = "03_gcc8.patch";
+      sha256 = "1da95gb8c95kd5cjhdvg19cv2z863lj3va5gx3bqc7g8r36glqxr";
+    })
   ];
 
   postPatch = ''
@@ -39,7 +45,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake bluez ffmpeg libao libGLU_combined gtk2 glib
+  buildInputs = [ cmake bluez ffmpeg libao libGLU libGL gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
                   libevdev libXdmcp portaudio libusb libpulseaudio
                   libevdev libXdmcp portaudio libusb libpulseaudio

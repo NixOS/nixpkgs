@@ -31,8 +31,12 @@ let
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.stdenv.shell}
     cd ${pkgs.nextcloud}
-    exec /run/wrappers/bin/sudo -u nextcloud \
-      NEXTCLOUD_CONFIG_DIR="${cfg.home}/config" \
+    sudo=exec
+    if [[ "$USER" != nextcloud ]]; then
+      sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR'
+    fi
+    export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
+    $sudo \
       ${phpPackage}/bin/php \
       -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
@@ -120,16 +124,24 @@ in {
       '';
     };
 
-    poolConfig = mkOption {
-      type = types.lines;
-      default = ''
-        pm = dynamic
-        pm.max_children = 32
-        pm.start_servers = 2
-        pm.min_spare_servers = 2
-        pm.max_spare_servers = 4
-        pm.max_requests = 500
+    poolSettings = mkOption {
+      type = with types; attrsOf (oneOf [ str int bool ]);
+      default = {
+        "pm" = "dynamic";
+        "pm.max_children" = "32";
+        "pm.start_servers" = "2";
+        "pm.min_spare_servers" = "2";
+        "pm.max_spare_servers" = "4";
+        "pm.max_requests" = "500";
+      };
+      description = ''
+        Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
       '';
+    };
+
+    poolConfig = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
       description = ''
         Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
       '';
@@ -287,6 +299,11 @@ in {
           message = "Please specify exactly one of adminpass or adminpassFile";
         }
       ];
+
+      warnings = optional (cfg.poolConfig != null) ''
+        Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
+        Please migrate your configuration to config.services.nextcloud.poolSettings.
+      '';
     }
 
     { systemd.timers.nextcloud-cron = {
@@ -377,6 +394,7 @@ in {
         in {
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-nextcloud.service" ];
+          path = [ occ ];
           script = ''
             chmod og+x ${cfg.home}
             ln -sf ${pkgs.nextcloud}/apps ${cfg.home}/
@@ -406,6 +424,7 @@ in {
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           serviceConfig.Type = "oneshot";
           serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+          serviceConfig.User = "nextcloud";
           startAt = cfg.autoUpdateApps.startAt;
         };
       };
@@ -423,7 +442,7 @@ in {
           settings = mapAttrs (name: mkDefault) {
             "listen.owner" = "nginx";
             "listen.group" = "nginx";
-          };
+          } // cfg.poolSettings;
           extraConfig = cfg.poolConfig;
         };
       };
@@ -454,7 +473,7 @@ in {
               };
               "/" = {
                 priority = 200;
-                extraConfig = "rewrite ^ /index.php$request_uri;";
+                extraConfig = "rewrite ^ /index.php;";
               };
               "~ ^/store-apps" = {
                 priority = 201;
@@ -481,6 +500,7 @@ in {
                 extraConfig = ''
                   include ${config.services.nginx.package}/conf/fastcgi.conf;
                   fastcgi_split_path_info ^(.+\.php)(\\/.*)$;
+                  try_files $fastcgi_script_name =404;
                   fastcgi_param PATH_INFO $fastcgi_path_info;
                   fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
                   fastcgi_param modHeadersAvailable true;
@@ -518,6 +538,7 @@ in {
               add_header X-Download-Options noopen;
               add_header X-Permitted-Cross-Domain-Policies none;
               add_header Referrer-Policy no-referrer;
+              add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
               error_page 403 /core/templates/403.php;
               error_page 404 /core/templates/404.php;
               client_max_body_size ${cfg.maxUploadSize};
