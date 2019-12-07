@@ -14471,19 +14471,6 @@ in
     stdenv = clangStdenv; # TODO: https://github.com/NixOS/nixpkgs/issues/36947
   };
 
-  webkitgtk24x-gtk3 = callPackage ../development/libraries/webkitgtk/2.4.nix {
-    harfbuzz = harfbuzzFull.override {
-      icu = icu58;
-    };
-    gst-plugins-base = gst_all_1.gst-plugins-base;
-    inherit (darwin) libobjc;
-  };
-
-  webkitgtk24x-gtk2 = webkitgtk24x-gtk3.override {
-    withGtk2 = true;
-    enableIntrospection = false;
-  };
-
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
   webrtc-audio-processing = callPackage ../development/libraries/webrtc-audio-processing { };
@@ -20020,7 +20007,10 @@ in
   MMA = callPackage ../applications/audio/MMA { };
 
   mmex = callPackage ../applications/office/mmex {
-    wxGTK30 = wxGTK30.override { withWebKit  = true ; };
+    wxGTK30 = wxGTK30.override {
+      withWebKit = true;
+      withGtk2 = false;
+    };
   };
 
   mmsd = callPackage ../tools/networking/mmsd { };
@@ -21609,10 +21599,6 @@ in
   uvccapture = callPackage ../applications/video/uvccapture { };
 
   uwimap = callPackage ../tools/networking/uwimap { };
-
-  uzbl = callPackage ../applications/networking/browsers/uzbl {
-    webkitgtk = webkitgtk24x-gtk2;
-  };
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 
@@ -25191,11 +25177,6 @@ in
   vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
     llvmPackages = llvmPackages_6;
   });
-
-  vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {
-    webkitgtk = webkitgtk24x-gtk2;
-  };
-  vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
