@@ -1,3 +1,15 @@
+--- a/glfw/egl_context.c
++++ b/glfw/egl_context.c
+@@ -314,7 +314,7 @@ bool _glfwInitEGL(void)
+ #elif defined(__CYGWIN__)
+         "libEGL-1.so",
+ #else
+-        "libEGL.so.1",
++        "@libEGL@",
+ #endif
+         NULL
+     };
+
 --- a/kitty/desktop.c
 +++ b/kitty/desktop.c
 @@ -30,7 +30,7 @@
