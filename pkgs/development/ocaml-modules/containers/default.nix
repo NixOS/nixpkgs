@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   buildInputs = [ iter ];
 
-  checkInputs = lib.optionals doCheck [ gen mdx ounit qcheck uutf ];
+  checkInputs = lib.optionals doCheck [ gen mdx.bin ounit qcheck uutf ];
 
   propagatedBuildInputs = [ result uchar ];
 
