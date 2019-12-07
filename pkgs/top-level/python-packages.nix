@@ -1281,6 +1281,10 @@ in {
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 
+  sentencepiece = callPackage ../development/python-modules/sentencepiece {
+    inherit (pkgs) sentencepiece pkgconfig;
+  };
+
   sentinel = callPackage ../development/python-modules/sentinel { };
 
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk {};
