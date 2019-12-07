@@ -10872,7 +10872,10 @@ in
 
   caf = callPackage ../development/libraries/caf {};
 
-  cgal = callPackage ../development/libraries/CGAL {};
+  # CGAL 5 has API changes
+  cgal_4 = callPackage ../development/libraries/CGAL/4.nix {};
+  cgal_5 = callPackage ../development/libraries/CGAL {};
+  cgal = cgal_4;
 
   cgui = callPackage ../development/libraries/cgui {};
 
