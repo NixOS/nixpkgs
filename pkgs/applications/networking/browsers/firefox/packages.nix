@@ -14,13 +14,12 @@ let
 in
 
 rec {
-
   firefox = common rec {
     pname = "firefox";
-    ffversion = "70.0.1";
+    ffversion = "71.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0jzga89iyawswma2p2g1ygffivflc8a966v8s5pbz425xhgbcvif1li0y0rbhnc5dc08lh0mr3a9n5sry43rr5nhkqi1vsh1ri1i3kr";
+      sha512 = "0hfjlhwdhfdfzd27d6p3h8ff5m2jphlaipv4zym48bn6g95if1x98q2lb87617bxfm31di4rckjvqb70g9sm3smil6p6bnw2dsvnq1g";
     };
 
     patches = [
