@@ -65,12 +65,11 @@ nix-repl> texlive.collection-<TAB>
     You may find that you need to add your own package to the combination. This is currently not handled in a user-friendly way by the combine function. Here is a hackish way to do it, as an example:
 <programlisting>
 let
-  customDerivation = runCommand "customDerivation" {
+  customDerivation = stdenvNoCC.mkDerivation {
+    # build your derivation here, its output should have folder structure
+    # similar to what would be expected in /usr/share/texmf in a regular OS.
     passthru = { tlType = "run"; pname = "customDerivation"; };
-  } ''
-  # build your derivation here, its output should have folder structure
-  # similar to what would be expected in /usr/share/texmf in a regular OS.
-  '';
+  };
 in
   texlive.combine {
     # inherit (texlive) whatever-you-want;
