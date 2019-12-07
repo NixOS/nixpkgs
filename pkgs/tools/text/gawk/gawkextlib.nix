@@ -5,7 +5,7 @@ expat, tre, makeWrapper
 }:
 
 let
-  buildGawkextlibExtension = extension: extraBuildInputs:
+  buildExtension = extension: extraBuildInputs:
     stdenv.mkDerivation rec {
       pname = "gawkextlib-${extension}";
       version = "unstable-2019-11-21";
@@ -59,7 +59,7 @@ let
         maintainers = with maintainers; [ tomberek ];
       };
     };
-  gawkextlib = (buildGawkextlibExtension "lib" []).overrideAttrs (old: {
+  gawkextlib = (buildExtension "lib" []).overrideAttrs (old: {
     configureFlags = [];
     propagatedBuildInputs = [];
     postInstall = ''
@@ -67,22 +67,22 @@ let
     '';
   });
   libs = {
-    abort       = buildGawkextlibExtension "abort"       [              ];
-    aregex      = buildGawkextlibExtension "aregex"      [ tre          ];
-    csv         = buildGawkextlibExtension "csv"         [              ];
-    errno       = buildGawkextlibExtension "errno"       [              ];
-    gd          = buildGawkextlibExtension "gd"          [ gd           ];
-    haru        = buildGawkextlibExtension "haru"        [ libharu      ];
-    json        = buildGawkextlibExtension "json"        [ rapidjson    ];
-    lmdb        = buildGawkextlibExtension "lmdb"        [ lmdb         ];
-    mbs         = buildGawkextlibExtension "mbs"         [ glibcLocales ];
-    mpfr        = buildGawkextlibExtension "mpfr"        [ gmp mpfr     ];
-    nl_langinfo = buildGawkextlibExtension "nl_langinfo" [              ];
-    pgsql       = buildGawkextlibExtension "pgsql"       [ postgresql   ];
-    redis       = buildGawkextlibExtension "redis"       [ hiredis      ];
-    xml         = buildGawkextlibExtension "xml"         [ expat libiconv ];
-    timex       = buildGawkextlibExtension "timex"       [              ];
-    select      = buildGawkextlibExtension "select"      [              ];
+    abort       = buildExtension "abort"       [              ];
+    aregex      = buildExtension "aregex"      [ tre          ];
+    csv         = buildExtension "csv"         [              ];
+    errno       = buildExtension "errno"       [              ];
+    gd          = buildExtension "gd"          [ gd           ];
+    haru        = buildExtension "haru"        [ libharu      ];
+    json        = buildExtension "json"        [ rapidjson    ];
+    lmdb        = buildExtension "lmdb"        [ lmdb         ];
+    mbs         = buildExtension "mbs"         [ glibcLocales ];
+    mpfr        = buildExtension "mpfr"        [ gmp mpfr     ];
+    nl_langinfo = buildExtension "nl_langinfo" [              ];
+    pgsql       = buildExtension "pgsql"       [ postgresql   ];
+    redis       = buildExtension "redis"       [ hiredis      ];
+    xml         = buildExtension "xml"         [ expat libiconv ];
+    timex       = buildExtension "timex"       [              ];
+    select      = buildExtension "select"      [              ];
   };
 in recurseIntoAttrs (libs // {
   inherit gawkextlib;
