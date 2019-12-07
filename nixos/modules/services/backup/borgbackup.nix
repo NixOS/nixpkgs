@@ -250,6 +250,18 @@ in {
             '';
           };
 
+          persistent = mkOption {
+            type = types.bool;
+            description = ''
+              Set the <literal>Persistent</literal> option for the
+              <citerefentry><refentrytitle>systemd.timer</refentrytitle>
+              <manvolnum>5</manvolnum></citerefentry>
+              which triggers the backup immediately if the last trigger 
+              was missed (e.g. if the system was powered down).
+            '';
+            default = false;
+          };
+
           user = mkOption {
             type = types.str;
             description = ''
@@ -620,6 +632,10 @@ in {
         mapAttrs' mkBackupService jobs
         # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
         // mapAttrs' mkRepoService repos;
+
+      systemd.timers = mapAttrs' (name: cfg: 
+        nameValuePair "borgbackup-job-${name}"
+        { timerConfig.Persistent = cfg.persistent; }) jobs;
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
