@@ -26,11 +26,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "68.2.2";
+  version = "68.3.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "3mvanjfc35f14lsfa4zjlhsvwij1n9dz9xmisd5s376r5wp9y33sva5ly914b2hmdl85ypdwv90zyi6whj7jb2f2xmqk480havxgjcn";
+    sha512 = "3aqr3dj5laws516k6jf8f35a1964p0s75sp682yy87xnzgd8m1iha55z79dcavis2ma9hiyacjnznjz04qhqd4q8swjgfg7lj8lyiwl";
   };
 
   # from firefox, but without sound libraries
@@ -54,13 +54,7 @@ in stdenv.mkDerivation rec {
   patches = [
     # Remove buildconfig.html to prevent a dependency on clang etc.
     ./no-buildconfig.patch
-  ]
-  ++ lib.optional (lib.versionOlder version "69")
-    (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
-      name = "write_error-parallel_make.diff";
-      url = "https://hg.mozilla.org/mozilla-central/raw-diff/562655fe/python/mozbuild/mozbuild/action/node.py";
-      sha256 = "11d7rgzinb4mwl7yzhidjkajynmxgmffr4l9isgskfapyax9p88y";
-    });
+  ];
 
   configureFlags =
     [ # from firefox, but without sound libraries (alsa, libvpx, pulseaudio)
@@ -76,7 +70,7 @@ in stdenv.mkDerivation rec {
       "--with-system-libevent"
       "--with-system-png" # needs APNG support
       "--with-system-icu"
-      #"--enable-rust-simd" # not supported since rustc 1.32.0 -> 1.33.0; TODO: probably OK since 68.0.0
+      "--enable-rust-simd"
       "--enable-system-ffi"
       "--enable-system-pixman"
       "--enable-system-sqlite"
@@ -84,7 +78,7 @@ in stdenv.mkDerivation rec {
       "--enable-startup-notification"
       "--disable-crashreporter"
       "--disable-tests"
-      "--disable-necko-wifi" # maybe we want to enable this at some point
+      "--disable-necko-wifi"
       "--disable-updater"
       "--enable-jemalloc"
       "--disable-gconf"
