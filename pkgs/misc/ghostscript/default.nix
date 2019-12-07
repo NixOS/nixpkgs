@@ -52,6 +52,12 @@ stdenv.mkDerivation rec {
       url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=d3537a54740d78c5895ec83694a07b3e4f616f61";
       sha256 = "1hr8bpi87bbg1kvv28kflmfh1dhzxw66p9q0ddvbrj72qd86p3kx";
     })
+    ./9.26-CVE-2019-3835-part-1.patch
+    ./9.26-CVE-2019-3835-part-2.patch
+    ./9.26-CVE-2019-3835-part-3.patch
+    ./9.26-CVE-2019-3835-part-4.patch
+    ./9.26-CVE-2019-3838-part-1.patch
+    ./9.26-CVE-2019-3838-part-2.patch
     (fetchpatch {
       name = "CVE-2019-3839-part-1";
       url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=4ec9ca74bed49f2a82acb4bf430eae0d8b3b75c9";
@@ -76,6 +82,7 @@ stdenv.mkDerivation rec {
         excludes = ["Resource/Init/pdf_font.ps" "Resource/Init/pdf_draw.ps"];
         sha256 = "04sy05svm3d2hyyzq41x5aqg3cgg2shaq08ivdqsys95nlihccpn";
     })
+    ./9.26-CVE-2019-14869.patch
   ];
 
   outputs = [ "out" "man" "doc" ];
