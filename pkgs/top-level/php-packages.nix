@@ -587,10 +587,10 @@ let
   };
 
   redis = buildPecl {
-    version = "5.0.2";
+    version = "5.1.1";
     pname = "redis";
 
-    sha256 = "0b5pw17lzqknhijfymksvf8fm1zilppr97ypb31n599jw3mxf62f";
+    sha256 = "1041zv91fkda73w4c3pj6zdvwjgb3q7mxg6mwnq9gisl80mrs732";
   };
 
   sqlsrv = buildPecl {
