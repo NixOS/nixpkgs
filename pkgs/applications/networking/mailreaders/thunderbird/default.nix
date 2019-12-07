@@ -9,6 +9,7 @@
 , runtimeShell
 , cargo, rustc, rust-cbindgen, llvmPackages, nasm
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
+, waylandSupport ? true, libxkbcommon
 , enableCalendar ? true
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird" instead
@@ -43,7 +44,8 @@ in stdenv.mkDerivation rec {
       libevent libstartup_notification /* cairo */
       icu libpng jemalloc nasm
     ]
-    ++ lib.optionals enableGTK3 [ gtk3 gnome3.adwaita-icon-theme ];
+    ++ lib.optionals enableGTK3 [ gtk3 gnome3.adwaita-icon-theme ]
+    ++ lib.optional waylandSupport libxkbcommon;
 
   # from firefox + m4 + wrapperTool
   # llvm is for llvm-objdump
@@ -86,7 +88,7 @@ in stdenv.mkDerivation rec {
       "--disable-updater"
       "--enable-jemalloc"
       "--disable-gconf"
-      "--enable-default-toolkit=cairo-gtk${if enableGTK3 then "3" else "2"}"
+      "--enable-default-toolkit=cairo-gtk${if enableGTK3 then "3${lib.optionalString waylandSupport "-wayland"}" else "2"}"
       "--enable-js-shell"
     ]
       ++ lib.optional enableCalendar "--enable-calendar"
