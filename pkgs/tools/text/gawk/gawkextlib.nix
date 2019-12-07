@@ -41,6 +41,7 @@ let
       inherit gawk;
 
       doCheck = stdenv.isLinux;
+      checkInputs = [ more ];
 
       meta = with stdenv.lib; {
         homepage = "https://sourceforge.net/projects/gawkextlib/";
@@ -70,7 +71,7 @@ let
     aregex      = buildGawkextlibExtension "aregex"      [ tre          ];
     csv         = buildGawkextlibExtension "csv"         [              ];
     errno       = buildGawkextlibExtension "errno"       [              ];
-    gd          = buildGawkextlibExtension "gd"          [ gd more      ];
+    gd          = buildGawkextlibExtension "gd"          [ gd           ];
     haru        = buildGawkextlibExtension "haru"        [ libharu      ];
     json        = buildGawkextlibExtension "json"        [ rapidjson    ];
     lmdb        = buildGawkextlibExtension "lmdb"        [ lmdb         ];
@@ -81,7 +82,7 @@ let
     redis       = buildGawkextlibExtension "redis"       [ hiredis      ];
     xml         = buildGawkextlibExtension "xml"         [ expat libiconv ];
     timex       = buildGawkextlibExtension "timex"       [              ];
-    select      = buildGawkextlibExtension "select"      [ more         ];
+    select      = buildGawkextlibExtension "select"      [              ];
   };
 in recurseIntoAttrs (libs // {
   inherit gawkextlib;
