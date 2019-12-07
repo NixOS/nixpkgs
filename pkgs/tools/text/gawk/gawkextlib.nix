@@ -30,11 +30,6 @@ let
         buildInputs = [ gawk ] ++ extraBuildInputs;
         propagatedBuildInputs = stdenv.lib.optional is_extension gawkextlib;
 
-        configureFlags = stdenv.lib.optionals is_extension [
-          "--with-gawkextlib=${gawkextlib}/lib/"
-          "LDFLAGS=-L${gawkextlib}/lib"
-        ];
-
         postPatch = ''
           cd ${name}
         '';
