@@ -1,4 +1,7 @@
-{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+{ system ? builtins.currentSystem
+, pkgs ? import ../../.. { inherit system; config = {}; overlays = []; }
+}:
+
 with import ./base.nix { inherit system; };
 let
 

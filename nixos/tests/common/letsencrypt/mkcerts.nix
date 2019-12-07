@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import ../../../.. { config = {}; overlays = []; }
 , lib ? pkgs.lib
 
 , domains ? [ "acme-v02.api.letsencrypt.org" "letsencrypt.org" ]
