@@ -25607,4 +25607,6 @@ in
 
   gortr = callPackage ../servers/gortr {};
 
+  sentencepiece = callPackage ../development/libraries/sentencepiece {};
+
 }
