@@ -394,6 +394,11 @@ self: super: {
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
 
+  # use the correct version of network
+  systemd_2_2_0 = dontCheck (super.systemd_2_2_0.override {
+    network = self.network_3_1_1_1;
+  });
+
   # https://github.com/eli-frey/cmdtheline/issues/28
   cmdtheline = dontCheck super.cmdtheline;
 
