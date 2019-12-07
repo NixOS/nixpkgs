@@ -13763,6 +13763,8 @@ in
 
     qwt = callPackage ../development/libraries/qwt/6.nix { };
 
+    qxmpp = callPackage ../development/libraries/qxmpp { };
+
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
     vlc = callPackage ../applications/video/vlc {};
