@@ -110,7 +110,8 @@ let
       url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
       sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
     })
-  ] ++ patches;
+  ] ++ lib.optional (lib.versionAtLeast ffversion "71") ./fix-ff71-lto.patch
+  ++ patches;
 
 in
 
