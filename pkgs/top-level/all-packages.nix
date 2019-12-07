@@ -18613,7 +18613,8 @@ in
   inherit (callPackages ../applications/networking/browsers/chromium-git { })
     chromium-git_78
     chromium-git_79
-    chromium-git_80;
+    chromium-git_80
+    chromium-git_81;
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
