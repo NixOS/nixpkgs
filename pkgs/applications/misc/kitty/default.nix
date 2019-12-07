@@ -70,16 +70,13 @@ buildPythonApplication rec {
       src = ./library-paths.patch;
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
       libcanberra = "${libcanberra}/lib/libcanberra.so";
+      libEGL = "${stdenv.lib.getLib libGL}/lib/libEGL.so.1";
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     ./no-lto.patch
     ./no-werror.patch
     ./png2icns.patch
   ];
-
-  preConfigure  = stdenv.lib.optional (!stdenv.isDarwin) ''
-    substituteInPlace glfw/egl_context.c --replace "libEGL.so.1" "${stdenv.lib.getLib libGL}/lib/libEGL.so.1"
-  '';
 
   buildPhase = if stdenv.isDarwin then ''
     ${python.interpreter} setup.py kitty.app --update-check-interval=0
