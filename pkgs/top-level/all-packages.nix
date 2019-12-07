@@ -2041,7 +2041,9 @@ in
     conf = config.riot-web.conf or null;
   };
 
-  ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {};
+  ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit Security;
+  };
 
   roundcube = callPackage ../servers/roundcube { };
 
