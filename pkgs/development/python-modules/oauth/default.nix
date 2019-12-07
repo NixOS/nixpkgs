@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/oauth;
+    homepage = https://code.google.com/archive/p/oauth/;
     description = "Library for OAuth version 1.0a";
     license = licenses.mit;
   };
