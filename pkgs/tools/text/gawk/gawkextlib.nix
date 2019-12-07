@@ -5,7 +5,7 @@ expat, tre, makeWrapper
 }:
 
 let
-  buildExtension = stdenv.lib.makeOverridable ({ name, gawkextlib, extraBuildInputs ? [] }:
+  buildExtension = stdenv.lib.makeOverridable ({ name, gawkextlib, extraBuildInputs ? [], doCheck ? true }:
     let is_extension = !isNull gawkextlib; in
     stdenv.mkDerivation rec {
       pname = "gawkextlib-${name}";
@@ -44,7 +44,7 @@ let
       setupHook = ./setup-hook.sh;
       inherit gawk;
 
-      doCheck = stdenv.isLinux;
+      inherit doCheck;
       checkInputs = [ more ];
 
       meta = with stdenv.lib; {
@@ -72,8 +72,17 @@ let
     gd          = buildExtension { inherit gawkextlib; name = "gd";          extraBuildInputs = [ gd           ]; };
     haru        = buildExtension { inherit gawkextlib; name = "haru";        extraBuildInputs = [ libharu      ]; };
     json        = buildExtension { inherit gawkextlib; name = "json";        extraBuildInputs = [ rapidjson    ]; };
-    lmdb        = buildExtension { inherit gawkextlib; name = "lmdb";        extraBuildInputs = [ lmdb         ]; };
-    mbs         = buildExtension { inherit gawkextlib; name = "mbs";         extraBuildInputs = [ glibcLocales ]; };
+    lmdb        = buildExtension { inherit gawkextlib; name = "lmdb";        extraBuildInputs = [ lmdb         ];
+      #  mdb_env_open(env, /dev/null)
+      #! No such device
+      #  mdb_env_open(env, /dev/null)
+      #! Operation not supported by device
+      doCheck = !stdenv.isDarwin;
+    };
+    mbs         = buildExtension { inherit gawkextlib; name = "mbs";         extraBuildInputs = [ glibcLocales ];
+      #! "spät": length: 5, mbs_length: 6, wcswidth: 4
+      doCheck = !stdenv.isDarwin;
+    };
     mpfr        = buildExtension { inherit gawkextlib; name = "mpfr";        extraBuildInputs = [ gmp mpfr     ]; };
     nl_langinfo = buildExtension { inherit gawkextlib; name = "nl_langinfo"; };
     pgsql       = buildExtension { inherit gawkextlib; name = "pgsql";       extraBuildInputs = [ postgresql   ]; };
