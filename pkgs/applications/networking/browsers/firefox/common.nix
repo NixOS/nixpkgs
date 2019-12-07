@@ -116,7 +116,8 @@ let
       url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
       sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
     })
-  ] ++ patches;
+  ] ++ lib.optional (lib.versionAtLeast ffversion "71") ./fix-ff71-lto.patch
+  ++ patches;
 
   nss_pkg = if lib.versionAtLeast ffversion "71" then nss_3_47_1 else nss;
   nspr_pkg = if lib.versionAtLeast ffversion "71" then nspr_4_23 else nspr;
