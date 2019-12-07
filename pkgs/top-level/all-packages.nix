@@ -19611,6 +19611,8 @@ in
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
+  kaidan = libsForQt5.callPackage ../applications/networking/instant-messengers/kaidan { };
+
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
   kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer { };
