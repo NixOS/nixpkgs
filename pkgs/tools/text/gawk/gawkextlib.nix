@@ -1,6 +1,7 @@
-{ stdenv, fetchgit, writeText, pkgconfig, autoreconfHook, autoconf, automake
-, libtool, texinfo, gettext, gawk, rapidjson, gd, shapelib, libharu, lmdb, gmp
-, glibcLocales, mpfr, more, postgresql, hiredis, expat, tre, makeWrapper
+{ stdenv, recurseIntoAttrs, fetchgit, writeText, pkgconfig, autoreconfHook,
+autoconf, automake, libtool, texinfo, gettext, gawk, rapidjson, gd, shapelib,
+libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis, expat, tre,
+makeWrapper
 }:
 
 let
@@ -64,7 +65,7 @@ let
       cp ../lib/gawkextlib.h $out/lib/.
     '';
   });
-in {
+in recurseIntoAttrs {
 
 # callPackage injects extra items into the root attrSet
   inherit gawkextlib;
