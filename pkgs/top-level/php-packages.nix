@@ -200,13 +200,13 @@ let
   };
 
   memcached = buildPecl rec {
-    version = "3.1.3";
+    version = "3.1.5";
     pname = "memcached";
 
     src = fetchgit {
       url = "https://github.com/php-memcached-dev/php-memcached";
       rev = "v${version}";
-      sha256 = "1w9g8k7bmq3nbzskskpsr5632gh9q75nqy7nkjdzgs17klq9khjk";
+      sha256 = "01mbh2m3kfbdvih3c8g3g9h4vdd80r0i9g2z8b3lx3mi8mmcj380";
     };
 
     configureFlags = [
