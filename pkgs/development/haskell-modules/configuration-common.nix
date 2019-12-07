@@ -1319,4 +1319,7 @@ self: super: {
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
 
+  # needs newer version of the systemd package
+  spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
