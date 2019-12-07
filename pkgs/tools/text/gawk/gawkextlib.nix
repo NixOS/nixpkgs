@@ -1,7 +1,7 @@
 { stdenv, recurseIntoAttrs, fetchgit, writeText, pkgconfig, autoreconfHook,
-autoconf, automake, libtool, texinfo, gettext, gawk, rapidjson, gd, shapelib,
-libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis, expat, tre,
-makeWrapper
+autoconf, automake, libiconv, libtool, texinfo, gettext, gawk, rapidjson, gd,
+shapelib, libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis,
+expat, tre, makeWrapper
 }:
 
 let
@@ -83,7 +83,7 @@ in recurseIntoAttrs {
   nl_langinfo = buildGawkextlibExtension "nl_langinfo" [              ];
   pgsql       = buildGawkextlibExtension "pgsql"       [ postgresql   ];
   redis       = buildGawkextlibExtension "redis"       [ hiredis      ];
-  xml         = buildGawkextlibExtension "xml"         [ expat        ];
+  xml         = buildGawkextlibExtension "xml"         [ expat libiconv ];
   timex       = buildGawkextlibExtension "timex"       [              ];
   select      = buildGawkextlibExtension "select"      [ more         ];
 }
