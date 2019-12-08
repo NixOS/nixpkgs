@@ -15852,16 +15852,6 @@ in
 
   bluez = bluez5;
 
-  bluezFull = bluez.override {
-    enableHealth = true;
-    enableMesh = true;
-    enableMidi = true;
-    enableNfc = true;
-    enableSap = true;
-    enableSixaxis = true;
-    enableWiimote = true;
-  };
-
   inherit (python3Packages) bedup;
 
   bolt = callPackage ../os-specific/linux/bolt { };
@@ -25319,11 +25309,7 @@ in
 
   xteddy = callPackage ../applications/misc/xteddy { };
 
-  xwiimote = callPackage ../misc/drivers/xwiimote {
-    bluez = pkgs.bluez5.override {
-      enableWiimote = true;
-    };
-  };
+  xwiimote = callPackage ../misc/drivers/xwiimote { };
 
   xzoom = callPackage ../tools/X11/xzoom {};
 

@@ -1,43 +1,58 @@
-{ stdenv, lib, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  python3, readline, udev, libical, systemd, json_c,
-  enableHealth ? false,
-  enableMesh ? false,
-  enableMidi ? false,
-  enableNfc ? false,
-  enableSap ? false,
-  enableSixaxis ? false,
-  enableWiimote ? false,
+{ stdenv
+, lib
+, fetchurl
+, alsaLib
+, dbus
+, glib
+, json_c
+, libical
+, pkgconfig
+, python3
+, readline
+, systemd
+, udev
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.51";
-  name = "bluez-${version}";
+  pname = "bluez";
+  version = "5.52";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "1fpbsl9kkfq6mn6n0dg4h0il4c7fzhwhn79gh907k5b2kwszpvgb";
+    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
+    sha256 = "02jng21lp6fb3c2bh6vf9y7cj4gaxwk29dfc32ncy0lj0gi4q57p";
   };
 
   pythonPath = with python3.pkgs; [
-    dbus-python pygobject2 pygobject3 recursivePthLoader
+    dbus-python
+    pygobject3
+    recursivePthLoader
   ];
 
   buildInputs = [
-    dbus glib alsaLib python3 python3.pkgs.wrapPython
-    readline udev libical
-  ] ++ lib.optional enableSap json_c;
+    alsaLib
+    dbus
+    glib
+    json_c
+    libical
+    python3
+    readline
+    udev
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    python3.pkgs.wrapPython
+  ];
 
   outputs = [ "out" "dev" "test" ];
 
-  postConfigure = ''
+  postPatch = ''
     substituteInPlace tools/hid2hci.rules \
       --replace /sbin/udevadm ${systemd}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
   '';
 
-  configureFlags = (with stdenv.lib; [
+  configureFlags = [
     "--localstatedir=/var"
     "--enable-library"
     "--enable-cups"
@@ -48,19 +63,19 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
     "--with-udevdir=${placeholder "out"}/lib/udev"
-    ] ++ optional enableHealth  [ "--enable-health" ]
-      ++ optional enableMesh    [ "--enable-mesh" ]
-      ++ optional enableMidi    [ "--enable-midi" ]
-      ++ optional enableNfc     [ "--enable-nfc" ]
-      ++ optional enableSap     [ "--enable-sap" ]
-      ++ optional enableSixaxis [ "--enable-sixaxis" ]
-      ++ optional enableWiimote [ "--enable-wiimote" ]
-  );
+    "--enable-health"
+    "--enable-mesh"
+    "--enable-midi"
+    "--enable-nfc"
+    "--enable-sap"
+    "--enable-sixaxis"
+    "--enable-wiimote"
+  ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
-  installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
+  installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
 
-  makeFlags = "rulesdir=${placeholder "out"}/lib/udev/rules.d";
+  makeFlags = [ "rulesdir=${placeholder "out"}/lib/udev/rules.d" ];
 
   postInstall = ''
     mkdir -p $test/{bin,test}
