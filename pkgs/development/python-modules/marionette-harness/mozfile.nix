@@ -1,18 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
+, six
 }:
 
 buildPythonPackage rec {
   pname = "mozfile";
-  version = "1.2";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mz941np62mg0zncy74d8fbq9fafsxjsxlwdsydl92badhrhzc6k";
+    sha256 = "e5dc835582ea150e35ecd57e9d86cb707d3aa3b2505679db7332326dd49fd6b8";
   };
 
-  propagatedBuildInputs = [ ];
+  propagatedBuildInputs = lib.optional isPy27 six;
 
   # mozhttpd -> moznetwork -> mozinfo -> mozfile
   doCheck = false;

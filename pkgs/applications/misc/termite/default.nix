@@ -64,6 +64,8 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "terminfo" ];
 
+  passthru = { inherit vte-ng; };
+
   postInstall = ''
     mkdir -p $terminfo/share
     mv $out/share/terminfo $terminfo/share/terminfo

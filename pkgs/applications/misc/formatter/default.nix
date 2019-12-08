@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , meson
 , ninja
+, vala
 , pkgconfig
 , pantheon
 , python3
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "formatter";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "Djaler";
     repo = "Formatter";
     rev = version;
-    sha256 = "145742dk16736zxj30rzn61h4k0xpggfsbqkxllxd302mgbmxlzq";
+    sha256 = "1ghxd2h0pklhlrjslfr46vza1kjsm3mr0sdzzjiqi9jd6hddnk7i";
   };
 
   patches = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook

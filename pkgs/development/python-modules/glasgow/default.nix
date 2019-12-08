@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "glasgow";
-  version = "unstable-2019-09-28";
-  # python setup.py --version
-  realVersion = "0.1.dev1234+g${lib.substring 0 7 src.rev}";
+  version = "unstable-2019-10-16";
+  # python software/setup.py --version
+  realVersion = "0.1.dev1286+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
-    repo = "Glasgow";
-    rev = "a1cc0333315847980806fd0330021c6de05c5395";
-    sha256 = "0rdx7fymz828i73bc559sr67aikydz1m8s2a0i6c86gznh1s3cfk";
+    repo = "glasgow";
+    rev = "4f968dbe6cf4e9d8e2d0a5163d82e996c24d5e30";
+    sha256 = "1b50n12dc0b3jmim5ywg7daq62k5j4wkgmwzk88ric5ri3b8dl2r";
   };
 
   nativeBuildInputs = [ setuptools_scm sdcc ];
@@ -42,6 +42,8 @@ buildPythonPackage rec {
     crcmod
   ];
 
+  checkInputs = [ yosys icestorm nextpnr ];
+
   preBuild = ''
     make -C firmware LIBFX2=${fx2}/share/libfx2
     cp firmware/glasgow.ihex software/glasgow
@@ -55,6 +57,12 @@ buildPythonPackage rec {
   checkPhase = ''
     python -m unittest discover
   '';
+
+  makeWrapperArgs = [
+    "--set" "YOSYS" "${yosys}/bin/yosys"
+    "--set" "ICEPACK" "${icestorm}/bin/icepack"
+    "--set" "NEXTPNR_ICE40" "${nextpnr}/bin/nextpnr-ice40"
+  ];
 
   meta = with lib; {
     description = "Software for Glasgow, a digital interface multitool";

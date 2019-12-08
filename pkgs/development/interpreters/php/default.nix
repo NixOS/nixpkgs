@@ -4,7 +4,7 @@
 , openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
-, libzip, valgrind
+, libzip, valgrind, oniguruma
 }:
 
 with lib;
@@ -78,6 +78,7 @@ let
       buildInputs = [ ]
         ++ optional (versionOlder version "7.3") pcre
         ++ optional (versionAtLeast version "7.3") pcre2
+        ++ optional (versionAtLeast version "7.4") oniguruma
         ++ optional withSystemd systemd
         ++ optionals imapSupport [ uwimap openssl pam ]
         ++ optionals curlSupport [ curl openssl ]
@@ -114,7 +115,8 @@ let
         "--with-config-file-scan-dir=/etc/php.d"
       ]
       ++ optional (versionOlder version "7.3") "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
-      ++ optional (versionAtLeast version "7.3") "--with-pcre-regex=${pcre2.dev} PCRE_LIBDIR=${pcre2}"
+      ++ optional (versions.majorMinor version == "7.3") "--with-pcre-regex=${pcre2.dev} PCRE_LIBDIR=${pcre2}"
+      ++ optional (versionAtLeast version "7.4") "--with-external-pcre=${pcre2.dev} PCRE_LIBDIR=${pcre2}"
       ++ optional stdenv.isDarwin "--with-iconv=${libiconv}"
       ++ optional withSystemd "--with-fpm-systemd"
       ++ optionals imapSupport [
@@ -133,10 +135,11 @@ let
       ++ optional mhashSupport "--with-mhash"
       ++ optional curlSupport "--with-curl=${curl.dev}"
       ++ optional zlibSupport "--with-zlib=${zlib.dev}"
-      ++ optional libxml2Support "--with-libxml-dir=${libxml2.dev}"
+      ++ optional (libxml2Support && (versionOlder version "7.4")) "--with-libxml-dir=${libxml2.dev}"
       ++ optional (!libxml2Support) [
         "--disable-dom"
         "--disable-libxml"
+        (if (versionOlder version "7.4") then "--disable-libxml" else "--without-libxml")
         "--disable-simplexml"
         "--disable-xml"
         "--disable-xmlreader"
@@ -156,7 +159,12 @@ let
       ++ optional ( pdo_mysqlSupport || mysqliSupport ) "--with-mysql-sock=/run/mysqld/mysqld.sock"
       ++ optional bcmathSupport "--enable-bcmath"
       # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
-      ++ optionals gdSupport [
+      ++ optionals (gdSupport && versionAtLeast version "7.4") [
+        "--enable-gd"
+        "--with-jpeg=${libjpeg.dev}"
+        "--with-freetype=${freetype.dev}"
+        "--enable-gd-jis-conv"
+      ] ++ optionals (gdSupport && versionOlder version "7.4") [
         "--with-gd"
         "--with-freetype-dir=${freetype.dev}"
         "--with-png-dir=${libpng.dev}"
@@ -173,7 +181,7 @@ let
       ++ optional xslSupport "--with-xsl=${libxslt.dev}"
       ++ optional mcryptSupport "--with-mcrypt=${libmcrypt'}"
       ++ optional bz2Support "--with-bz2=${bzip2.dev}"
-      ++ optional zipSupport "--enable-zip"
+      ++ optional (zipSupport && (versionOlder version "7.4")) "--enable-zip"
       ++ optional ftpSupport "--enable-ftp"
       ++ optional fpmSupport "--enable-fpm"
       ++ optional ztsSupport "--enable-maintainer-zts"
@@ -181,7 +189,7 @@ let
       ++ optional sodiumSupport "--with-sodium=${libsodium.dev}"
       ++ optional tidySupport "--with-tidy=${html-tidy}"
       ++ optional argon2Support "--with-password-argon2=${libargon2}"
-      ++ optional libzipSupport "--with-libzip=${libzip.dev}"
+      ++ optional (libzipSupport && (versionOlder version "7.4")) "--with-libzip=${libzip.dev}"
       ++ optional phpdbgSupport "--enable-phpdbg"
       ++ optional (!phpdbgSupport) "--disable-phpdbg"
       ++ optional (!cgiSupport) "--disable-cgi"
@@ -254,18 +262,23 @@ let
 
 in {
   php72 = generic {
-    version = "7.2.23";
-    sha256 = "03a3snx8wdn2pwfy8qdk035da9g3qdnpgqvpz4qfgmr97mjg6ym1";
+    version = "7.2.25";
+    sha256 = "17kb7b3wpdmdhnlv23qc0vax0lp2gr1v7dxwdgs8g78gxnqkdcvw";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.10";
-    sha256 = "0j2lqiw8miv9aqg55z2dvfg3mwm5vyqx6ggmfbw013zvq1qxhvah";
+    version = "7.3.12";
+    sha256 = "0fccmnrwwyy5zvhj8wbyqqlyqr7pr5v4pfiqriw0ahciz4lv05yk";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
+  };
+
+  php74 = generic {
+    version = "7.4.0";
+    sha256 = "1h01bahvcm9kgm5jqhm2j9k9d4q4rpfkkpqk00c47rirdblnn85z";
   };
 }

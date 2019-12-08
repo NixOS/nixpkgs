@@ -6,6 +6,7 @@
 # Attributes needed for tests of the external plugins
 , callPackage, beets
 
+, enableAbsubmit       ? stdenv.lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms, essentia-extractor ? null
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
@@ -33,6 +34,7 @@
 , bashInteractive, bash-completion
 }:
 
+assert enableAbsubmit    -> essentia-extractor            != null;
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
 assert enableConvert     -> ffmpeg != null;
@@ -51,6 +53,7 @@ with stdenv.lib;
 
 let
   optionalPlugins = {
+    absubmit = enableAbsubmit;
     acousticbrainz = enableAcousticbrainz;
     badfiles = enableBadfiles;
     chroma = enableAcoustid;
@@ -75,12 +78,12 @@ let
   };
 
   pluginsWithoutDeps = [
-    "absubmit" "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates"
-    "edit" "embedart" "export" "filefilter" "freedesktop" "fromfilename"
-    "ftintitle" "fuzzy" "hook" "ihate" "importadded" "importfeeds" "info"
-    "inline" "ipfs" "lyrics" "mbcollection" "mbsubmit" "mbsync" "metasync"
-    "missing" "permissions" "play" "plexupdate" "random" "rewrite" "scrub"
-    "smartplaylist" "spotify" "the" "types" "zero"
+    "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
+    "export" "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
+    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
+    "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "permissions" "play"
+    "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
+    "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -129,7 +132,8 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.gst-python
     pythonPackages.pygobject3
     gobject-introspection
-  ] ++ optional enableAcoustid      pythonPackages.pyacoustid
+  ] ++ optional enableAbsubmit      essentia-extractor
+    ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
               || enableKodiupdate

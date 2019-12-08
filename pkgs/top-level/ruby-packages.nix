@@ -2466,17 +2466,6 @@
     };
     version = "1.8.0";
   };
-  therubyracer = {
-    dependencies = ["libv8" "ref"];
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "1g95bzs2axjglyjyj6xvsywqgr80bnzlkw7mddxx1fdrak5wni2q";
-      type = "gem";
-    };
-    version = "0.12.3";
-  };
   thor = {
     groups = ["default"];
     platforms = [];

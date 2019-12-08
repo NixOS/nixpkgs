@@ -97,6 +97,10 @@ stdenv.mkDerivation rec {
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
   ] ++ stdenv.lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
 
+  # with gcc8, -Wclass-memaccess became part of -Wall and causes logging limit
+  # to be exceeded
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isGNU "-Wno-class-memaccess";
+
   nativeBuildInputs = [ gn ninja pkgconfig python ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];
   buildInputs = [ glib icu ];

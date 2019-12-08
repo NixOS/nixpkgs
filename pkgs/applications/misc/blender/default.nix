@@ -1,7 +1,8 @@
 { config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, python3Packages
+, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimageio, openjpeg_1, python3Packages
+, openvdb, libXxf86vm, tbb
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
@@ -15,20 +16,21 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.80";
+  version = "2.81";
 
   src = fetchurl {
-    url = "https://download.blender.org/source/${pname}-${version}.tar.gz";
-    sha256 = "1h550jisdbis50hxwk5kxrvrk1a6sh2fsri3yyj66vhzbi87x7fd";
+    url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
+    sha256 = "1prp0f2152f1sz23jlc86vndfvmplb7qhllikkirq7hgpykrshna";
   };
 
   nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       libXi libX11 libXext libXrender
-      freetype libjpeg libpng libsamplerate libsndfile libtiff libGLU_combined openal
+      freetype libjpeg libpng libsamplerate libsndfile libtiff libGLU libGL openal
       opencolorio openexr openimageio openjpeg_1 python zlib fftw jemalloc
       (opensubdiv.override { inherit cudaSupport; })
+      openvdb libXxf86vm tbb
       makeWrapper
     ]
     ++ optional jackaudioSupport libjack2
@@ -56,6 +58,9 @@ stdenv.mkDerivation rec {
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
       "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python.sitePackages}"
+      "-DWITH_OPENVDB=ON"
+      "-DWITH_TBB=ON"
+      "-DWITH_IMAGE_OPENJPEG=ON"
     ]
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
     ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON"

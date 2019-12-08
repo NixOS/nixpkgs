@@ -10,6 +10,9 @@ with lib;
     (mkRenamedOptionModule [ "networking" "enableRalinkFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
     (mkRenamedOptionModule [ "networking" "enableRTL8192cFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
     (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
+    (mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" ] [ "services" "ssmtp" ])
+    (mkRenamedOptionModule [ "services" "ssmtp" "directDelivery" ] [ "services" "ssmtp" "enable" ])
     (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
       (config:
         let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
@@ -135,7 +138,8 @@ with lib;
     # piwik was renamed to matomo
     (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
     (mkRenamedOptionModule [ "services" "piwik" "webServerUser" ] [ "services" "matomo" "webServerUser" ])
-    (mkRenamedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] [ "services" "matomo" "phpfpmProcessManagerConfig" ])
+    (mkRemovedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
+    (mkRemovedOptionModule [ "services" "matomo" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
     (mkRenamedOptionModule [ "services" "piwik" "nginx" ] [ "services" "matomo" "nginx" ])
 
     # tarsnap
@@ -233,6 +237,9 @@ with lib;
     (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
     (mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
     (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
+    (mkRemovedOptionModule [ "fonts" "enableCoreFonts" ] "Use fonts.fonts = [ pkgs.corefonts ]; instead.")
+    (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
+    (mkRemovedOptionModule [ "networking" "hostConf" ] "Use environment.etc.\"host.conf\" instead.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -277,6 +284,13 @@ with lib;
     # BLCR
     (mkRemovedOptionModule [ "environment.blcr.enable" ] "The BLCR module has been removed")
 
+    # beegfs
+    (mkRemovedOptionModule [ "services.beegfsEnable" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule [ "services.beegfs" ] "The BeeGFS module has been removed")
+
+    # osquery
+    (mkRemovedOptionModule [ "services.osquery" ] "The osquery module has been removed")
+
     # Redis
     (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
     (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
@@ -290,5 +304,14 @@ with lib;
        (opt: mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
          The prometheus exporters are now configured using `services.prometheus.exporters'.
          See the 18.03 release notes for more information.
+       '' ))
+
+    ++ (forEach [ "enable" "substitutions" "preset" ]
+       (opt: mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
+         The fonts.fontconfig.ultimate module and configuration is obsolete.
+         The repository has since been archived and activity has ceased.
+         https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+         No action should be needed for font configuration, as the fonts.fontconfig
+         module is already used by default.
        '' ));
 }

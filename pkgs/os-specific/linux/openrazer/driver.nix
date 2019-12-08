@@ -14,7 +14,7 @@ stdenv.mkDerivation (common // {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildFlags = [
-    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.version}/build"
+    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
   installPhase = ''

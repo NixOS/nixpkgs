@@ -105,7 +105,7 @@ with super;
     ];
     buildInputs = [
       pkgs.glib
-      pkgs.gobjectIntrospection
+      pkgs.gobject-introspection
     ];
     patches = [
       (pkgs.fetchpatch {
@@ -224,7 +224,7 @@ with super;
   });
 
   luasystem = super.luasystem.override({
-    buildInputs = [
+    buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [
       pkgs.glibc
     ];
   });

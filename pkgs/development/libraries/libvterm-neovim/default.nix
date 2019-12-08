@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "libvterm-neovim";
-  version = "2019-08-28";
+  version = "2019-10-08";
 
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "libvterm";
-    rev = "1aa95e24d8f07a396aa80b7cd52f93e2b5bcca79";
-    sha256 = "0vjd397lqrfv4kc79i5izva4bynbymx3gllkg281fnk0b15vxfif";
+    rev = "7c72294d84ce20da4c27362dbd7fa4b08cfc91da";
+    sha256 = "111qyxq33x74dwdnqcnzlv9j0n8hxyribd6ppwcsxmyrniyw9qrk";
   };
 
   buildInputs = [ perl ];

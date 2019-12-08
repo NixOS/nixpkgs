@@ -4,14 +4,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.13";
+  version = "1.0.16";
   pname = "xmlschema";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "v${version}";
-    sha256 = "182439gqhlxhr9rdi9ak33z4ffy1w9syhykkckkl6mq050c80qdr";
+    sha256 = "0mxvpafkaxib3qiz3zl7fbsgjaq9hbx4kb0w646azwhg7n7nxghj";
   };
 
   propagatedBuildInputs = [ elementpath ];
@@ -25,6 +25,7 @@ buildPythonPackage rec {
       --replace "SKIP_REMOTE_TESTS = " "SKIP_REMOTE_TESTS = True #"
     pytest . \
       --ignore=xmlschema/tests/test_factory.py \
+      --ignore=xmlschema/tests/test_memory.py \
       --ignore=xmlschema/tests/test_validators.py \
       --ignore=xmlschema/tests/test_schemas.py \
       -k 'not element_tree_import_script'

@@ -61,6 +61,6 @@ postPatchMkspecs() {
         fixQtBuiltinPaths "$dev/mkspecs" '*.pr?'
     fi
 }
-if [ -z "$dontPatchMkspecs" ]; then
-    postPhases="${postPhases}${postPhases:+ }postPatchMkspecs"
+if [ -z "${dontPatchMkspecs-}" ]; then
+    postPhases="${postPhases-}${postPhases:+ }postPatchMkspecs"
 fi

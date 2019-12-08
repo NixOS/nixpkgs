@@ -29,32 +29,3 @@
  const Gio = imports.gi.Gio;
  const GLib = imports.gi.GLib;
  const Gtk = imports.gi.Gtk;
---- a/src/preferences/service.js
-+++ b/src/preferences/service.js
-@@ -435,9 +435,9 @@ var Window = GObject.registerClass({
- 
-     _restoreGeometry() {
-         if (this._mutterSettings === undefined) {
--            this._mutterSettings = new Gio.Settings({
--                schema_id: 'org.gnome.mutter'
--            });
-+            const _schema_source = Gio.SettingsSchemaSource.new_from_directory('@mutter_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
-+            const _schema = _schema_source.lookup('org.gnome.mutter', false);
-+            this._mutterSettings = new Gio.Settings({settings_schema: _schema});
-         }
- 
-         // Restore geometry, even if we're going to maximize
---- a/src/service/ui/messaging.js
-+++ b/src/service/ui/messaging.js
-@@ -891,9 +891,9 @@ var Window = GObject.registerClass({
-      */
-     _restoreGeometry() {
-         if (this._mutterSettings === undefined) {
--            this._mutterSettings = new Gio.Settings({
--                schema_id: 'org.gnome.mutter'
--            });
-+            const _schema_source = Gio.SettingsSchemaSource.new_from_directory('@mutter_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
-+            const _schema = _schema_source.lookup('org.gnome.mutter', false);
-+            this._mutterSettings = new Gio.Settings({settings_schema: _schema});
-         }
- 

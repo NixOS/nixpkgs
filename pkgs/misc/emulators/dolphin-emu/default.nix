@@ -1,5 +1,5 @@
 { stdenv, lib, fetchpatch, pkgconfig, cmake, bluez, ffmpeg, libao, gtk2, glib
-, libGLU_combined , gettext, libpthreadstubs, libXrandr, libXext, readline
+, libGLU, libGL , gettext, libpthreadstubs, libXrandr, libXext, readline
 , openal , libXdmcp, portaudio, fetchFromGitHub, libusb, libevdev
 , wxGTK30, soundtouch, miniupnpc, mbedtls, curl, lzo, sfml
 , libpulseaudio ? null }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake bluez ffmpeg libao libGLU_combined gtk2 glib
+  buildInputs = [ cmake bluez ffmpeg libao libGLU libGL gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
                   libevdev libXdmcp portaudio libusb libpulseaudio
                   libevdev libXdmcp portaudio libusb libpulseaudio

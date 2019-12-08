@@ -458,6 +458,13 @@ rec {
     propagatedBuildInputs = [ core_kernel ];
   };
 
+  ecaml = janePackage {
+    pname = "ecaml";
+    hash = "0n9xi6agc3lgyj2nsi10cbif0xwn57xyaranad9r285rmbxrgjh7";
+    meta.description = "Library for writing Emacs plugin in OCaml";
+    propagatedBuildInputs = [ async expect_test_helpers_kernel ];
+  };
+
   ### Packages at version 0.11, with dependencies at version 0.12
 
   configurator = janePackage {

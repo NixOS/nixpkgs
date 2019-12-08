@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.opus-codec.org/;
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
   };
 }

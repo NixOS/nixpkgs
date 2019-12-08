@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   # when updating this to >=7, check, see previous reverts:
   # nix-build -A nixos.tests.networking.scripted.macvlan.x86_64-linux nixos/release-combined.nix
   pname = "dhcpcd";
-  version = "8.0.3";
+  version = "8.1.2";
 
   src = fetchurl {
     url = "mirror://roy/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "07cg0sp8sk9b6ch2ajmvkbn6z08bgyx8xbd004s5mkasrlgrfx4n";
+    sha256 = "1b9mihp1mf2vng92fgks764a6pwf2gx7ccw6knja79c42nmyglyb";
   };
 
   nativeBuildInputs = [ pkgconfig ];

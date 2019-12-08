@@ -83,12 +83,12 @@ let
     doCheck = false; # fails, requires dbus daemon
 
     # Wait for PR #59372
-    #passthru = {
+    # passthru = {
     #  updateScript = gnome3.updateScript {
     #    attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
     #    packageName = pname;
     #  };
-    #};
+    # };
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
@@ -106,18 +106,18 @@ in rec {
   };
 
   vala_0_40 = generic {
-    version = "0.40.16";
-    sha256 = "0vv25fmr9jqiqf080vak1x4raa4w3cz3n5ysjglqsq9qfx304i7b";
+    version = "0.40.18";
+    sha256 = "1f7cdkjdysg4dcri1wbzdddm46amk2s48jkwb5ghpdvhjb4l5j2m";
   };
 
   vala_0_44 = generic {
-    version = "0.44.7";
-    sha256 = "0z5xy4qc95rm2gj7s2k14xm1xp3mrf0yz64fx4kddqjxkpsz87xz";
+    version = "0.44.11";
+    sha256 = "06spdvm9q9k4riq1d2fxkyc8d88bcv460v360465iy1lnj3z9x2s";
   };
 
   vala_0_46 = generic {
-    version = "0.46.1";
-    sha256 = "10czkhclnisdz6k5qfiicmvx47m9177l5dkhjn29g43khnmpkr8l";
+    version = "0.46.5";
+    sha256 = "07fv895sp9wq74b20qig7hic0r4ynrr5pfaqba02r44xb794fy0s";
   };
 
   vala = vala_0_46;

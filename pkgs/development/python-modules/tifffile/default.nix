@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2019.2.22";
+  version = "2019.7.26";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed49d75b3eff711dbe74b35324dfd79e0db598b6e772a9096001545e81e95437";
+    sha256 = "82c5c72de4dc19cc7011e4e8c45492e17121bd02cfa98c015ddd2a83e36f09bc";
   };
 
   patches = lib.optional isPy27 ./python2-regex-compat.patch;

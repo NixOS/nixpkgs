@@ -38,7 +38,7 @@ perlPackages.buildPerlPackage rec {
       ListMoreUtils
       HTMLParser
       ProcProcessTable
-      Log4Perl
+      LogLog4perl
       TryTiny
       DataUUID
       DateCalc

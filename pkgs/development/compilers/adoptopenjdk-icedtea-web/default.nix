@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
       based on the NetX project.
     '';
     homepage = https://github.com/adoptopenjdk/icedtea-web;
-    maintainers = with stdenv.lib.maintainers; [ wizeman ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

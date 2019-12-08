@@ -37,5 +37,5 @@ let
     };
   };
 in {
-  xapian_1_4 = generic "1.4.12" "0z5c1y9vp519h2x2igjq39v6j615nppry0wasd0xn4hphgd3d2jg";
+  xapian_1_4 = generic "1.4.14" "0ja95vn0lkf6qkjhg2blkx306i10hg4fr8wlrhalmly93307lnlp";
 }

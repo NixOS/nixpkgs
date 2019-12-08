@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python2, python3, nodejs
 , libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, libGLU_combined, sqlite, zip, unzip
+, yasm, libGLU, libGL, sqlite, zip, unzip
 , libevent, libstartup_notification
 , icu, libpng, jemalloc
 , autoconf213, which, m4, fetchpatch
@@ -25,11 +25,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "68.1.1";
+  version = "68.2.2";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "2ng5wwd7fn9247ggzlxx96scc2nalaahzvxkzvb87mp9fbfcsi3v9dh370cm42px8hrknnsp2lrfk9hqx4287zyn9pl3k9vr6a9cswl";
+    sha512 = "3mvanjfc35f14lsfa4zjlhsvwij1n9dz9xmisd5s376r5wp9y33sva5ly914b2hmdl85ypdwv90zyi6whj7jb2f2xmqk480havxgjcn";
   };
 
   # from firefox, but without sound libraries
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     [ gtk2 zip libIDL libjpeg zlib bzip2
       dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-      nspr nss libnotify xorg.pixman yasm libGLU_combined
+      nspr nss libnotify xorg.pixman yasm libGLU libGL
       xorg.libXScrnSaver xorg.xorgproto
       xorg.libXext sqlite unzip
       libevent libstartup_notification /* cairo */
@@ -52,11 +52,6 @@ in stdenv.mkDerivation rec {
   patches = [
     # Remove buildconfig.html to prevent a dependency on clang etc.
     ./no-buildconfig.patch
-    (fetchpatch {
-      # https://phabricator.services.mozilla.com/D47796
-      url = "https://d3kxowhw4s8amj.cloudfront.net/file/data/a54c6fszaol23yh5aa27/PHID-FILE-sql3i57neyrztfdngrwe/D47796.diff";
-      sha256 = "18i1bk6rz875dly2vnkrdgbah8kx0lv4akjzl0i9gxc58hi5q3nq";
-    })
   ]
   ++ lib.optional (lib.versionOlder version "69")
     (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
@@ -141,6 +136,9 @@ in stdenv.mkDerivation rec {
       gappsWrapperArgs+=(
         --argv0 "$target"
         --set MOZ_APP_LAUNCHER thunderbird
+        # See commit 87e261843c4236c541ee0113988286f77d2fa1ee
+        --set MOZ_LEGACY_PROFILES 1
+        --set MOZ_ALLOW_DOWNGRADE 1
         # https://github.com/NixOS/nixpkgs/pull/61980
         --set SNAP_NAME "thunderbird"
       )

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "armadillo";
-  version = "9.700.2";
+  version = "9.800.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/arma/armadillo-${version}.tar.xz";
-    sha256 = "1g88mizzkza91v51fz174gg0700f6y6snshplffpqw2gjx42ngwj";
+    sha256 = "0mslyfzwb8zdhchhj7szj25qi2ain7cnlsrzccrfm2mr4a6jv5h9";
   };
 
   nativeBuildInputs = [ cmake ];

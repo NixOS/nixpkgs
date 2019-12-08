@@ -7,6 +7,7 @@
 , libtirpc
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
+, smartmontools, sysstat, sudo
 
 # Kernel dependencies
 , kernel ? null
@@ -131,6 +132,13 @@ let
         (cd $out/share/bash-completion/completions; ln -s zfs zpool)
       '';
 
+      postFixup = ''
+        path="PATH=${makeBinPath [ coreutils gawk gnused gnugrep utillinux smartmontools sysstat sudo ]}"
+        for i in $out/libexec/zfs/zpool.d/*; do
+          sed -i "2i$path" $i
+        done
+      '';
+
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
 
       meta = {
@@ -140,7 +148,7 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        homepage = http://zfsonlinux.org/;
+        homepage = https://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman fpletz globin ];

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, dbus-glib,
   libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3,
-  desktop-file-utils, gnome3, gtk3, mate, hicolor-icon-theme, wrapGAppsHook
+  desktop-file-utils, dconf, gtk3, mate, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     librsvg
     libappindicator-gtk3
     gtk3
-    gnome3.dconf
+    dconf
     hicolor-icon-theme
     mate.mate-desktop
     mate.libmatekbd

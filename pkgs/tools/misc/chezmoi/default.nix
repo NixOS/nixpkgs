@@ -1,23 +1,31 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "chezmoi";
-  version = "1.5.5";
-
-  goPackagePath = "github.com/twpayne/chezmoi";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     rev = "v${version}";
-    sha256 = "18kc3b2ncjzxivycx3mhqw9kbqp0sxmlgc2ddvhgj2vpvlkayzkh";
+    sha256 = "1s64468q7hhp42lzgcixhh3jq7i7bgmiakahyfj0mzc49mn6rr0a";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "0c2jslcigq9ajchfr7inb7b6cpla7xjibcmjsvwspfzknrlrsbfn";
 
   buildFlagsArray = [
-    "-ldflags=-s -w -X ${goPackagePath}/cmd.VersionStr=${version}"
+    "-ldflags=-s -w -X github.com/twpayne/chezmoi/cmd.VersionStr=${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --bash completions/chezmoi-completion.bash
+    installShellCompletion --fish completions/chezmoi.fish
+    installShellCompletion --zsh completions/chezmoi.zsh
+  '';
+
+  subPackages = [ "." ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/twpayne/chezmoi;

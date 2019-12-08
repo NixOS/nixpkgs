@@ -13,6 +13,11 @@ buildGoModule rec {
 
   modSha256 = "0i86xs3lq2mj22yv7jmhmb34k7lz348bakqz020xpyccllkkszy4";
 
+  patches = [
+    ./go.mod.patch
+    ./go.sum.patch
+  ];
+
   meta = with lib;{
     description = "A user-space file system for interacting with Google Cloud Storage";
     homepage = "https://cloud.google.com/storage/docs/gcs-fuse";

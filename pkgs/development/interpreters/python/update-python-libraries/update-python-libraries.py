@@ -6,9 +6,9 @@ You can pass in multiple files or paths.
 
 You'll likely want to use
 ``
-  $ ./update-python-libraries ../../pkgs/development/python-modules/*
+  $ ./update-python-libraries ../../pkgs/development/python-modules/**/default.nix
 ``
-to update all libraries in that folder.
+to update all non-pinned libraries in that folder.
 """
 
 import argparse
@@ -116,11 +116,45 @@ SEMVER = {
 }
 
 
+def _determine_latest_version(current_version, target, versions):
+    """Determine latest version, given `target`.
+    """
+    current_version = Version(current_version)
+
+    def _parse_versions(versions):
+        for v in versions:
+            try:
+                yield Version(v)
+            except InvalidVersion:
+                pass
+
+    versions = _parse_versions(versions)
+
+    index = SEMVER[target]
+
+    ceiling = list(current_version[0:index])
+    if len(ceiling) == 0:
+        ceiling = None
+    else:
+        ceiling[-1]+=1
+        ceiling = Version(".".join(map(str, ceiling)))
+
+    # We do not want prereleases
+    versions = SpecifierSet(prereleases=PRERELEASES).filter(versions)
+
+    if ceiling is not None:
+        versions = SpecifierSet(f"<{ceiling}").filter(versions)
+
+    return (max(sorted(versions))).raw_version
+
+
 def _get_latest_version_pypi(package, extension, current_version, target):
     """Get latest version and hash from PyPI."""
     url = "{}/{}/json".format(INDEX, package)
     json = _fetch_page(url)
-    version = json['info']['version']
+
+    versions = json['releases'].keys()
+    version = _determine_latest_version(current_version, target, versions)
 
     try:
         releases = json['releases'][version]
@@ -132,7 +166,6 @@ def _get_latest_version_pypi(package, extension, current_version, target):
             sha256 = release['digests']['sha256']
             break
     else:
-        logging.error("Release not found for extension: {}".format(extension))
         sha256 = None
     return version, sha256
 
@@ -194,6 +227,10 @@ def _determine_extension(text, fetcher):
                 src_format = 'setuptools'
             elif src_format == 'flit':
                 raise ValueError("Don't know how to update a Flit package.")
+            elif src_format == 'other':
+                raise ValueError("Don't know how to update a format='other' package.")
+            elif src_format == 'pyproject':
+                raise ValueError("Don't know how to update a pyproject package.")
             extension = FORMATS[src_format]
 
     elif fetcher == 'fetchurl':

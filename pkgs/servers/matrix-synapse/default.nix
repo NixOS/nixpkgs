@@ -23,11 +23,11 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.3.1";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nz9bhy5hraa1h7100vr0innz8npnpha6xr9j2ln7h3cgwv73739";
+    sha256 = "184d7qd76bb2714pfkx9p4zzn4akb6xkx2iw86cpn7aqmccxysld";
   };
 
   patches = [
@@ -71,9 +71,12 @@ in buildPythonApplication rec {
     treq
     twisted
     unpaddedbase64
+    typing-extensions
   ] ++ lib.optional enableSystemd systemd;
 
   checkInputs = [ mock parameterized openssl ];
+
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
@@ -83,6 +86,6 @@ in buildPythonApplication rec {
     homepage = https://matrix.org;
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog pacien ];
+    maintainers = with maintainers; [ ralith roblabla ekleog pacien ma27 ];
   };
 }

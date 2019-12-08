@@ -14,12 +14,12 @@ with stdenv.lib;
 
 
 stdenv.mkDerivation rec {
-  version = "0.11.2"; # also update communityModules
+  version = "0.11.3"; # also update communityModules
   pname = "prosody";
 
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "0ca8ivqb4hxqka08pwnaqi1bqxrdl8zw47g6z7nw9q5r57fgc4c9";
+    sha256 = "11xz4milv2962qf75vrdwsvd8sy2332nf69202rmvz5989pvvnng";
   };
 
   # A note to all those merging automated updates: Please also update this

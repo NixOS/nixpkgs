@@ -1,5 +1,5 @@
-{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook
-, openssl, db48, boost, zlib, miniupnpc, gmp
+{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook, wrapQtAppsHook ? null
+, openssl_1_0_2, db48, boost, zlib, miniupnpc, gmp
 , qrencode, glib, protobuf, yasm, libevent
 , utillinux, qtbase ? null, qttools ? null
 , enableUpnp ? false
@@ -9,18 +9,18 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  pname = "pivx";
-  version = "3.2.0";
+  name = "pivx-${version}";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "PIVX-Project";
     repo= "PIVX";
     rev = "v${version}";
-    sha256 = "1sym6254vhq8qqpxq9qhy10m5167v7x93kqaj1gixc1vwwbxyazy";
+    sha256 = "1fqccdqhbwyvix0ihhbgg2w048i6bhfmazr36h2cn4j65n1fgmi2";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ glib gmp openssl db48 yasm boost zlib libevent miniupnpc protobuf utillinux ]
+  nativeBuildInputs = [ pkgconfig autoreconfHook ] ++ optionals withGui [ wrapQtAppsHook ];
+  buildInputs = [ glib gmp openssl_1_0_2 db48 yasm boost zlib libevent miniupnpc protobuf utillinux ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
                     ++ optional disableWallet "--disable-wallet"
                     ++ optional disableDaemon "--disable-daemon"
                     ++ optionals withGui [ "--with-gui=yes"
+                                           "--with-unsupported-ssl" # TODO remove this ASAP
                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                          ];
   
@@ -37,6 +38,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications $out/share/icons
     cp contrib/debian/pivx-qt.desktop $out/share/applications/
     cp share/pixmaps/*128.png $out/share/icons/
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/test_pivx
   '';
 
   meta = with stdenv.lib; {
@@ -50,12 +56,9 @@ stdenv.mkDerivation rec {
     homepage = https://www.dash.org;
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.unix;
-
+    # TODO
     # upstream doesn't support newer openssl versions
     # https://github.com/PIVX-Project/PIVX/issues/748
-    # "Your system is most probably using openssl 1.1 which is not the
-    # officialy supported version. Either use 1.0.1 or run again configure
-    # with the given option."
-    broken = true;
+    # openssl_1_0_2 should be replaced with openssl ASAP
   };
 }

@@ -2,7 +2,7 @@
 , libxml2, libxslt, ncurses, openssl, perl, autoconf
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
-, libGLU_combined ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
 , withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
 }:
 
@@ -18,7 +18,7 @@
 , enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
-, wxSupport ? true, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
+, wxSupport ? true, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
@@ -32,7 +32,7 @@
 
 assert wxSupport -> (if stdenv.isDarwin
   then wxmac != null
-  else libGLU_combined != null && wxGTK != null && xorg != null);
+  else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk != null;

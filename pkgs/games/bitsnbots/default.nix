@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, lua, libGLU_combined }:
+{ stdenv, fetchurl, SDL, lua, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
   name = "bitsnbots-20111230";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/${name}/bitsnbots $out/bin
   '';
 
-  buildInputs = [ SDL lua libGLU_combined ];
+  buildInputs = [ SDL lua libGLU libGL ];
 
   meta = {
     description = "Simple puzzle game with moving robots";

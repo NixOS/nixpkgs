@@ -21,8 +21,6 @@ in
         PAGER = mkDefault "less -R";
         EDITOR = mkDefault "nano";
         XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
-        GTK_DATA_PREFIX = "${config.system.path}"; # needed for gtk2 apps to find themes
-        GTK_EXE_PREFIX = "${config.system.path}";
       };
 
     environment.profiles = mkAfter

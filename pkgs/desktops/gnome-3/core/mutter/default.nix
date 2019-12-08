@@ -1,93 +1,134 @@
-{ fetchurl, fetchpatch, substituteAll, stdenv, pkgconfig, gnome3, gettext, gobject-introspection, upower, cairo
-, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
-, ninja, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
-, gsettings-desktop-schemas, glib, gtk3, gnome-desktop
-, geocode-glib, pipewire, libgudev, libwacom, xwayland, meson
+{ fetchurl
+, fetchpatch
+, substituteAll
+, stdenv
+, pkgconfig
+, gnome3
+, gettext
+, gobject-introspection
+, upower
+, cairo
+, pango
+, cogl
+, json-glib
+, libstartup_notification
+, zenity
+, libcanberra-gtk3
+, ninja
+, xkeyboard_config
+, libxkbfile
+, libxkbcommon
+, libXtst
+, libinput
+, gsettings-desktop-schemas
+, glib
+, gtk3
+, gnome-desktop
+, geocode-glib
+, pipewire
+, libgudev
+, libwacom
+, xwayland
+, meson
 , gnome-settings-daemon
 , xorgserver
 , python3
 , wrapGAppsHook
 , sysprof
 , desktop-file-utils
+, libcap_ng
+, egl-wayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.34.0";
+  version = "3.34.1";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0qdpw0fya8kr5737jf635455qb714wvhszkk82rlw48fqj8nk8ss";
+    sha256 = "13kmmgg2zizr0522clwc2zn3bkwbir503b1wjiiixf5xi37jc65s";
   };
 
   mesonFlags = [
-    "-Dxwayland-path=${xwayland}/bin/Xwayland"
+    "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
+    "-Dwayland_eglstream=true"
+    "-Dxwayland-path=${xwayland}/bin/Xwayland"
   ];
 
   propagatedBuildInputs = [
     # required for pkgconfig to detect mutter-clutter
+    json-glib
     libXtst
+    libcap_ng
   ];
 
   nativeBuildInputs = [
-    meson
-    pkgconfig
-    gettext
-    ninja
-    python3
-    # for cvt command
-    xorgserver
-    wrapGAppsHook
     desktop-file-utils
+    gettext
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
+    xorgserver # for cvt command
   ];
 
   buildInputs = [
-    glib gobject-introspection gtk3 gsettings-desktop-schemas upower
-    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
-    geocode-glib libinput libgudev libwacom
-    libcanberra-gtk3 zenity xkeyboard_config libxkbfile
-    libxkbcommon pipewire xwayland
-    gnome-settings-daemon sysprof
+    cairo
+    cogl
+    egl-wayland
+    geocode-glib
+    glib
+    gnome-desktop
+    gnome-settings-daemon
+    gobject-introspection
+    gsettings-desktop-schemas
+    gtk3
+    libcanberra-gtk3
+    libgudev
+    libinput
+    libstartup_notification
+    libwacom
+    libxkbcommon
+    libxkbfile
+    pango
+    pipewire
+    sysprof
+    upower
+    xkeyboard_config
+    xwayland
+    zenity
+    zenity
   ];
 
   patches = [
+    # Fixes from gnome-3-34 branch 2019-11-29.
     (fetchpatch {
-      name = "ensure-emit-x11-display-opened.patch";
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/850ef518795dcc20d3b9a4f661f70ff8d0ddacb2.patch";
-      sha256 = "0cxdbrbcc8kfkvw7ryxjm2v1vk15jki7bawn128385r5hasabhxf";
+      name = "gnome-3-34-2019-11-29.patch";
+      url = "https://github.com/GNOME/mutter/compare/3.34.1...c0e76186da5b7baf7c8804c0ffa80232a5a6bf98.patch";
+      excludes = [
+        ".gitlab-ci.yml"
+        ".gitlab-ci/checkout-gnome-shell.sh"
+      ];
+      sha256 = "1qmxic83bd3dvg6isipqy8jaaksd7p5s3cb7h44zinq738n8d0fb";
     })
-    # fix animation related crashes: https://gitlab.gnome.org/GNOME/mutter/merge_requests/805
+
+    # Fix build with libglvnd provided headers
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/63a0b702c94af013b94ad3f32a8c5ba86bf6dfba.patch";
-      sha256 = "13hvz3n275crvpankj1b47nds71c42nnbq1yx2xhhvk60qc72vh4";
+      url = "https://gitlab.gnome.org/GNOME/mutter/commit/a444a4c5f58ea516ad3cd9d6ddc0056c3ca9bc90.patch";
+      sha256 = "0imy2j8af9477jliwdq4jc40yw1cifsjjf196gnmwxr9rkj0hbrd";
     })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/1e637bd7e1b2a4316d1cf6da80966d43819a10df.patch";
-      sha256 = "0jcx33j2sw7hva0gs0svqg69habxxmgdi0kcb07nqq2df6pb62qf";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/c9c53cb55fd6e782c50f36da1e2adbf28111a660.patch";
-      sha256 = "0iwjlbr8j0icigmilpghlkcyg4hll9dm0mcaj8lvi7qxrgjrmczr";
-    })
-    # Fix crash when pressing ctrl-super: https://gitlab.gnome.org/GNOME/mutter/issues/823
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/0706e021f5bd82cf4c9b2c0d2916d272f3cba406.patch";
-      sha256 = "0i4ixr419jggrd17gxxs45jnx131lnp8wkkhhygqsrpq8941sdw6";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/76f2579e442d8ad0a3b8b644daab7c72a585506b.patch";
-      sha256 = "0c3ls624k9f4mqrrbv8ng0slvm31l0li6ciqn04qd4yi18plnldy";
-    })
-    # Avoid crashing any apps on X11 when restarting: https://gitlab.gnome.org/GNOME/mutter/merge_requests/808
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/f352c3d79da99e961341c1d2b5dd334dcade0271.patch";
-      sha256 = "1drn8wjbkj903jxay5wxq163i9ahp558sjl2bc3fi1qs90xj6cn2";
-    })
-   # TODO: submit upstream
-   ./0001-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
+
+    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
+    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
+    ./drop-inheritable.patch
+
+    # TODO: submit upstream
+    ./0001-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
+
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
@@ -102,18 +143,18 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
-  enableParallelBuilding = true;
-
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "mutter";
-      attrPath = "gnome3.mutter";
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
     };
   };
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    description = "A window manager for GNOME";
+    homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2;
+    maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
 }

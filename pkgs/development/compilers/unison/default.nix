@@ -4,18 +4,18 @@
 
 stdenv.mkDerivation rec {
   pname = "unison-code-manager";
-  milestone_id = "M1d";
+  milestone_id = "M1g";
   version = "1.0.${milestone_id}-alpha";
 
   src = if (stdenv.isDarwin) then
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-osx.tar.gz";
-      sha256 = "0cgkqwniw2fclsxgx6b1kgjmylqnn67kjs61iygzbpip8nvcm7pv";
+      sha256 = "186y7y7ffg976w01cbb8am84ajbifb7lcnsc4g3x262mkswr7lry";
     }
   else
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-linux64.tar.gz";
-      sha256 = "0rpz40d23daad16r2s4appiay3brbk0awp38yamavlr6dh23c9ws";
+      sha256 = "1ki9car1clpaspnl5jb5qnr6nzv108q279n8m8bjm8azfcnl61ab";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Modern, statically-typed purely functional language";
-    homepage = http://unisonweb.org/posts/;
-    license = licenses.free;
+    homepage = https://unisonweb.org/;
+    license = with licenses; [ mit bsd3 ];
     maintainers = [ maintainers.virusdave ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
   };

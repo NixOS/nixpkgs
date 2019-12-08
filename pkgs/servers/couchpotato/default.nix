@@ -1,6 +1,6 @@
-{ fetchurl, pythonPackages, lib }:
+{ fetchurl, python2Packages, lib }:
 
-with pythonPackages;
+with python2Packages;
 
 buildPythonApplication rec {
   pname = "couchpotato";

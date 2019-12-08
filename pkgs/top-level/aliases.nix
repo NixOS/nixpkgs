@@ -47,6 +47,7 @@ mapAliases ({
   at_spi2_core = at-spi2-core; # added 2018-02-25
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
+  beegfs = throw "beegfs has been removed."; # added 2019-11-24
   bridge_utils = bridge-utils;  # added 2015-02-20
   bro = zeek; # added 2019-09-29
   btrfsProgs = btrfs-progs; # added 2016-01-03
@@ -68,6 +69,7 @@ mapAliases ({
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
   corebird = throw "deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
+  coredumper = throw "coredumper has been removed: Abandoned by upstream."; # added 2019-11-16
   cpp-gsl = microsoft_gsl; # added 2019-05-24
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
@@ -106,10 +108,17 @@ mapAliases ({
   firefoxWrapper = firefox;           # 2015-09
   flameGraph = flamegraph; # added 2018-04-25
   font-awesome-ttf = font-awesome; # 2018-02-25
+  # 2019-10-31
+  fontconfig-ultimate = throw ''
+    fontconfig-ultimate has been removed. The repository has been archived upstream and activity has ceased for several years.
+    https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+  '';
   font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
+  fprintd-thinkpad = throw "removed from repository 2019-12-01: Install it manually with an override.";
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
+  fusesmb = throw "fusesmb is abandoned by upstream"; # added 2019-10-15
   gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
@@ -162,7 +171,7 @@ mapAliases ({
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
   jbuilder = dune; # added 2018-09-09
-  jikes = throw "deprecated in 2019-10-07: abandoned by upstream";
+  jikes = throw "deprecated in 2019-10-07: jikes was abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdiff3-qt5 = kdiff3; # added 2017-02-18
@@ -185,6 +194,7 @@ mapAliases ({
   liberation_ttf_v1_from_source = liberation_ttf_v1; # added 2018-12-12
   liberation_ttf_v2_from_source = liberation_ttf_v2; # added 2018-12-12
   liberationsansnarrow = liberation-sans-narrow; # added 2018-12-12
+  libfprint-thinkpad = throw "removed from repository 2019-12-01: Install it manually with an override.";
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
@@ -209,6 +219,7 @@ mapAliases ({
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
   mariadb-client = hiPrio mariadb.client; #added 2019.07.28
+  mess = mame; # added 2019-10-30
   mysql-client = hiPrio mariadb.client;
   memtest86 = memtest86plus; # added 2019-05-08
   mesa_noglu = mesa; # added 2019-05-28
@@ -253,6 +264,7 @@ mapAliases ({
   openjpeg_2_1 = openjpeg_2; # added 2018-10-25
   opensans-ttf = open-sans; # added 2018-12-04
   openssh_with_kerberos = openssh; # added 2018-01-28
+  osquery = throw "osquery has been removed."; # added 2019-11-24
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
   parquet-cpp = arrow-cpp; # added 2018-09-08
@@ -290,6 +302,11 @@ mapAliases ({
   pg_hll = postgresqlPackages.pg_hll;
   pg_cron = postgresqlPackages.pg_cron;
   pg_topn = postgresqlPackages.pg_topn;
+  pinentry_curses = pinentry-curses; # added 2019-10-14
+  pinentry_emacs = pinentry-emacs; # added 2019-10-14
+  pinentry_gtk2 = pinentry-gtk2; # added 2019-10-14
+  pinentry_qt = pinentry-qt; # added 2019-10-14
+  pinentry_gnome = pinentry-gnome; # added 2019-10-14
   postgis = postgresqlPackages.postgis;
   # end
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
@@ -297,6 +314,9 @@ mapAliases ({
   procps-ng = procps; # added 2018-06-08
   pyo3-pack = maturin;
   pulseaudioLight = pulseaudio; # added 2018-04-25
+  phonon-backend-gstreamer = throw "Please use libsForQt5.phonon-backend-gstreamer, as Qt4 support in this package has been removed."; # added 2019-11-22
+  phonon-backend-vlc = throw "Please use libsForQt5.phonon-backend-vlc, as Qt4 support in this package has been removed."; # added 2019-11-22
+  phonon = throw "Please use libsForQt5.phonon, as Qt4 support in this package has been removed."; # added 2019-11-22
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
@@ -322,6 +342,8 @@ mapAliases ({
   s6PortableUtils = s6-portable-utils; # added 2018-07-23
   sagemath = sage; # added 2018-10-27
   sam = deadpixi-sam; # added 2018-04-25
+  samba3 = throw "Samba 3 is discontinued, please switch to samba4"; # added 2019-10-15
+  samba3_light = throw "Samba 3 is discontinued, please switch to samba4"; # added 2019-10-15
   sambaMaster = throw "removed 2019-09-13: outdated and no longer needed";
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
@@ -330,6 +352,8 @@ mapAliases ({
   sapic = throw "deprecated 2019-1-19: sapic is bundled with 'tamarin-prover' now";
   scim = sc-im; # added 2016-01-22
   scollector = bosun; # added 2018-04-25
+  sdlmame = mame; # added 2019-10-30
+  seg3d = throw "seg3d has been removed from nixpkgs (2019-11-10)";
   shared_mime_info = shared-mime-info; # added 2018-02-25
   skrooge2 = skrooge; # added 2017-02-18
   skype = skypeforlinux; # added 2017-07-27
@@ -339,11 +363,14 @@ mapAliases ({
   slurm-llnl-full = slurm-full; # renamed July 2017
   slurm-full = slurm; # added 2018-05-1
   smbclient = samba; # added 2018-04-25
+  slim = throw "slim has been removed. Please use a different display-manager"; # added 2019-11-11
+  slimThemes = throw "slimThemes has been removed because slim has been also"; # added 2019-11-11
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speech_tools = speech-tools; # added 2018-04-25
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
+  spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_60 instead."; # added 2019-10-16
   sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   squid4 = squid;  # added 2019-08-22
@@ -369,12 +396,14 @@ mapAliases ({
   terraform-provider-libvirt = terraform-providers.libvirt; # added 2018-09-28
   terraform-provider-nixos = terraform-providers.nixos; # added 2018-09-28
   tesseract_4 = tesseract4; # added 2018-12-19
+  testdisk-photorec = throw "This package was a duplicate, please use testdisk or testdisk-qt instead"; # added 2019-10-13
   tex-gyre-bonum-math = tex-gyre-math.bonum; # added 2018-04-03
   tex-gyre-pagella-math = tex-gyre-math.pagella; # added 2018-04-03
   tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
   torbrowser = tor-browser-bundle-bin; # added 2017-04-05
+  transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
@@ -384,18 +413,28 @@ mapAliases ({
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   usbguard-nox = usbguard; # added 2019-09-04
+  uzbl = throw "uzbl has been removed from nixpkgs, as it's unmaintained and uses insecure libraries";
   v4l_utils = v4l-utils; # added 2019-08-07
+  v8_3_16_14 = throw "removed 2019-11-01: no longer referenced by other packages";
+  valadoc = throw "deprecated 2019-10-10: valadoc was merged into vala 0.38";
   vimbWrapper = vimb; # added 2015-01
-  vimprobable2Wrapper = vimprobable2; # added 2015-01
+  vimprobable2 = throw "vimprobable2 has been removed from nixpkgs. It relied on webkitgtk24x that has been removed."; # added 2019-12-05
+  vimprobable2-unwrapped = vimprobable2; # added 2019-12-05
   virtviewer = virt-viewer; # added 2015-12-24
+  virtmanager = virt-manager; # added 2019-10-29
+  virtmanager-qt = virt-manager-qt; # added 2019-10-29
   vorbisTools = vorbis-tools; # added 2016-01-26
   webkit = webkitgtk; # added 2019-03-05
+  webkitgtk24x-gtk3 = throw "webkitgtk24x-gtk3 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
+  webkitgtk24x-gtk2 = throw "webkitgtk24x-gtk2 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
   weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
   wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
   wireguard = wireguard-tools; # added 2018-05-19
   morituri = whipper; # added 2018-09-13
   xfceUnstable = xfce4-14; # added 2019-09-17
+  xfce4-14 = xfce;
+  xfce4-12 = xfce;
   x11 = xlibsWrapper; # added 2015-09
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25
@@ -406,6 +445,7 @@ mapAliases ({
   xpraGtk3 = xpra; # added 2018-09-13
   youtubeDL = youtube-dl;  # added 2014-10-26
   zdfmediathk = mediathekview; # added 2019-01-19
+  gnome_user_docs = gnome-user-docs; # added 2019-11-20
 
   # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
   # branch-off
@@ -454,4 +494,8 @@ mapAliases ({
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
   ocaml_4_02   = ocamlPackages_4_02.ocaml;
   ocaml_4_03   = ocamlPackages_4_03.ocaml;
-}))
+}) // {
+
+  # added 2019-10-28
+  gnatsd = nats-server;
+})

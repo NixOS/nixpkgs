@@ -29,7 +29,7 @@ in buildFHSUserEnv {
 
     # Dolphin
     bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
-    wavpack gnutls-kdh orc nettle gmp pcre vulkan-loader
+    wavpack orc nettle gmp pcre vulkan-loader
 
     # DOSBox
     SDL_net SDL_sound

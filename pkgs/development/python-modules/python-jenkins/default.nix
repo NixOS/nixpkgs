@@ -4,6 +4,7 @@
 , mock
 , pbr
 , pyyaml
+, setuptools
 , six
 , multi_key_dict
 , testscenarios
@@ -14,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "python-jenkins";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h14hfcwichmppbgxf1k8njw29hchpav1kj574b4lly3j0n2vnag";
+    sha256 = "0b11f7c1dffc48579afefa8a310cba5b1c98785b9132892ff8cf5312f32ebc90";
   };
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ pbr pyyaml six multi_key_dict requests ];
+  propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
 
   checkInputs = [ unittest2 testscenarios requests-mock ];
   checkPhase = ''

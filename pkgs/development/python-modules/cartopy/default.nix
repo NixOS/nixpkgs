@@ -1,5 +1,5 @@
 { buildPythonPackage, lib, fetchPypi
-, pytest, filelock, mock, pep8
+, pytest_4, filelock, mock, pep8
 , cython, isPy27
 , six, pyshp, shapely, geos, numpy
 , gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0q9ckfi37cxj7jwnqnzij62vwcf4krccx576vv5lhvpgvplxjjs2";
   };
 
-  checkInputs = [ filelock mock pytest pep8 ];
+  checkInputs = [ filelock mock pytest_4 pep8 ];
 
   # several tests require network connectivity: we disable them.
   # also py2.7's tk is over-eager in trying to open an x display,

@@ -11,7 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "00sk6sv0kkfb3q0jqwcllzawi30rw8nfkkfn5l1qwqha48izw3r4";
   };
 
-  nativeBuildInputs = [ pkgconfig gdk-pixbuf librsvg optipng gtk3 hicolor-icon-theme ];
+  nativeBuildInputs = [ pkgconfig gdk-pixbuf librsvg optipng gtk3 ];
+
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   postPatch = ''
     substituteInPlace svgtopng/Makefile --replace "-O0" "-O"

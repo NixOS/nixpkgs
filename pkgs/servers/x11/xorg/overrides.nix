@@ -79,6 +79,13 @@ self: super:
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
+    patches = [
+      # Fixes an issue that happens when cross-compiling for us.
+      (fetchpatch {
+        url = "https://cgit.freedesktop.org/xorg/lib/libX11/patch/?id=0327c427d62f671eced067c6d9b69f4e216a8cac";
+        sha256 = "11k2mx56hjgw886zf1cdf2nhv7052d5rggimfshg6lq20i38vpza";
+      })
+    ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -522,7 +529,7 @@ self: super:
   xorgserver = with self; super.xorgserver.overrideAttrs (attrs_passed:
     # exchange attrs if abiCompat is set
     let
-      version = (builtins.parseDrvName attrs_passed.name).version;
+      version = lib.getVersion attrs_passed;
       attrs =
         if (abiCompat == null || lib.hasPrefix abiCompat version) then
           attrs_passed // {
@@ -557,7 +564,7 @@ self: super:
 
     in attrs //
     (let
-      version = (builtins.parseDrvName attrs.name).version;
+      version = lib.getVersion attrs;
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
         zlib libGL libGLU dbus
@@ -622,8 +629,8 @@ self: super:
           libAppleWM xorgproto
         ];
 
-        # XQuartz patchset
         patches = [
+          # XQuartz patchset
           (fetchpatch {
             url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
             sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";

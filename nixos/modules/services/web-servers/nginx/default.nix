@@ -61,7 +61,10 @@ let
 
     ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
     http {
-      include ${cfg.package}/conf/mime.types;
+      # The mime type definitions included with nginx are very incomplete, so
+      # we use a list of mime types from the mailcap package, which is also
+      # used by most other Linux distributions by default.
+      include ${pkgs.mailcap}/etc/nginx/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
 
@@ -117,6 +120,14 @@ let
         proxy_read_timeout      90;
         proxy_http_version      1.0;
         include ${recommendedProxyConfig};
+      ''}
+
+      ${optionalString (cfg.mapHashBucketSize != null) ''
+        map_hash_bucket_size ${toString cfg.mapHashBucketSize};
+      ''}
+
+      ${optionalString (cfg.mapHashMaxSize != null) ''
+        map_hash_max_size ${toString cfg.mapHashMaxSize};
       ''}
 
       # $connection_upgrade is used for websocket proxying
@@ -505,6 +516,23 @@ in
           and not only at start, you have to set
           services.nginx.resolver, too.
         '';
+      };
+
+      mapHashBucketSize = mkOption {
+        type = types.nullOr (types.enum [ 32 64 128 ]);
+        default = null;
+        description = ''
+            Sets the bucket size for the map variables hash tables. Default
+            value depends on the processor’s cache line size.
+          '';
+      };
+
+      mapHashMaxSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the maximum size of the map variables hash tables.
+          '';
       };
 
       resolver = mkOption {

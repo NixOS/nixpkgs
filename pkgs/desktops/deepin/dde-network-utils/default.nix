@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "dde-network-utils";
-  version = "0.1.4";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0nj9lf455lf2hyqv6xwhm4vrr825ldbl83azzrrzqs6p781x65i1";
+    sha256 = "0670kfnkplf7skkd1ql6y9x15kmrcbdv1005qwkg4vn8hic6s0z3";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ mkDerivation rec {
     searchHardCodedPaths $out  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin network utils";

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU_combined, freeglut, camlp4 } :
+{stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU, libGL, freeglut, camlp4 } :
 
 let
   pname = "lablgl";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ocaml findlib lablgtk freeglut camlp4];
-  propagatedBuildInputs = [ libGLU_combined ];
+  propagatedBuildInputs = [ libGLU libGL ];
 
   patches = [ ./Makefile.config.patch ./META.patch ];
 

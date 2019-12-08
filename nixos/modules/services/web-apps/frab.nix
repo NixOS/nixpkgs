@@ -177,6 +177,7 @@ in
       { name = cfg.user;
         group = cfg.group;
         home = "${cfg.statePath}";
+        isSystemUser = true;
       }
     ];
 

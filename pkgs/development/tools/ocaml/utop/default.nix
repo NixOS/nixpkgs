@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "2.4.2";
 
   src = fetchurl {
-    url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "0fl8524vmxb9yxjwrh5varvfp0ff3sgfp627knwbxxr69w45ad8h";
+    url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
+    sha256 = "0y2v8rkfz19nlz8gh0lkh5wx5hyvw5gl4nw1kg8j2pw9jnilq5nb";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
        installPhase = ''
          mkdir -p "$out"/${path}
          for e in OCAMLPATH CAML_LD_LIBRARY_PATH; do
+           [[ -v "$e" ]] || continue
            printf %s "''${!e}" > "$out"/${path}/$e
          done
        '';

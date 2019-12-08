@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     description = "A library of cryptographic primitives for OCaml";
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

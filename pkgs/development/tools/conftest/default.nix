@@ -2,27 +2,21 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.12.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "instrumenta";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "0blrbbnvnnxyw0idhglqdz16i7g6g86a6kw2iw707bg0yfdl1ncq";
+    sha256 = "0lb644fj80r4igxbslbd5pksirnyf6slz4yn0mznyx8i2bd1g4ic";
   };
 
-  patches = [
-    # Version 0.12.0 does not build with go 1.13. See https://github.com/instrumenta/conftest/pull/85.
-    # TODO: Remove once https://github.com/instrumenta/conftest/pull/85 is merged and lands in a release.
-    ./go-1.13-deps.patch
-  ];
+  modSha256 = "1p7fjg1vcrcxb4f5hd00qxx4fqcl051klcjs6ljn4v46qcpn6dcn";
 
   buildFlagsArray = ''
     -ldflags=
         -X main.version=${version}
   '';
-
-  modSha256 = "11999ywy73ng45gl1qypky8342jvishcp11bdxbigvqhwl2zbpav";
 
   meta = with lib; {
     description = "Write tests against structured configuration data";

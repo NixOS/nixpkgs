@@ -5,14 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "atlassian-jira";
-  version = "8.4.1";
+  version = "8.5.0";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${version}.tar.gz";
-    sha256 = "0dkilp5wvda29rin2wj9zs2vgwyfning7cz6dyk0kyg45dl07wky";
+    sha256 = "093706cpaw1a1vwvzpa85j7n338d748w372vsk8c9lvagaskiwh2";
   };
-
-  phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];
 
   buildPhase = ''
     mv conf/server.xml conf/server.xml.dist

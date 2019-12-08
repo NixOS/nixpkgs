@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gtk3, python3 }:
+{ stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "paper-icon-theme";
@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja gtk3 python3 ];
+
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   postPatch = ''
     patchShebangs meson/post_install.py

@@ -845,6 +845,9 @@ rec {
         echo "         be better to only have one layer that contains a nix store."
 
         export NIX_REMOTE=local?root=$PWD
+        # A user is required by nix
+        # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
+        export USER=nobody
         ${nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
 
         mkdir -p nix/var/nix/gcroots/docker/

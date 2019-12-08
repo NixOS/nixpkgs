@@ -1,5 +1,8 @@
 { stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
-, rdma-core, zlib, numactl, libevent, hwloc, pkgsTargetTarget
+, rdma-core, zlib, numactl, libevent, hwloc, pkgsTargetTarget, symlinkJoin
+
+# Enable CUDA support
+, cudaSupport ? false, cudatoolkit ? null
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -8,25 +11,23 @@
 , enablePrefix ? false
 }:
 
-let
-  version = "4.0.1";
+assert !cudaSupport || cudatoolkit != null;
 
+let
+  version = "4.0.2";
+
+  cudatoolkit_joined = symlinkJoin {
+    name = "${cudatoolkit.name}-unsplit";
+    paths = [ cudatoolkit.out cudatoolkit.lib ];
+  };
 in stdenv.mkDerivation rec {
   pname = "openmpi";
   inherit version;
 
   src = with stdenv.lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "02cpzcp113gj5hb0j2xc0cqma2fn04i2i0bzf80r71120p9bdryc";
+    sha256 = "0ms0zvyxyy3pnx9qwib6zaljyp2b3ixny64xvq3czv3jpr8zf2wh";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "openmpi-mca_btl_vader_component_close-segfault.patch";
-      url = "https://github.com/open-mpi/ompi/pull/6526.patch";
-      sha256 = "0s7ac9rkcj3fi6ampkvy76njlj478yyr4zvypjc7licy6dgr595x";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./
@@ -41,15 +42,20 @@ in stdenv.mkDerivation rec {
 
   buildInputs = with stdenv; [ gfortran zlib ]
     ++ lib.optionals isLinux [ libnl numactl ]
+    ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (isLinux || isFreeBSD) rdma-core;
 
   nativeBuildInputs = [ perl ];
 
-  configureFlags = with stdenv; [ "--disable-mca-dso" ]
+  configureFlags = with stdenv; lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional isLinux  "--with-libnl=${libnl.dev}"
     ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
+    # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
+    # https://github.com/openucx/ucx
+    # https://www.open-mpi.org/faq/?category=buildcuda
+    ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
     ;
 
   enableParallelBuilding = true;
@@ -76,6 +82,10 @@ in stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru = {
+    inherit cudaSupport cudatoolkit;
+  };
 
   meta = with stdenv.lib; {
     homepage = https://www.open-mpi.org/;

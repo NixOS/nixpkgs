@@ -2,12 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.9.3";
+  version = "1.9.5";
 
   src = fetchurl {
     url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "1ykdy62sgzv33ggkmzwx2h0ifm7hyyxyfkb4zckv7gz4f28xsm8v";
+    sha256 = "0myv8l886gmlh9nh4j3q5549idxnl51hf9cw20yxfqbwd47l13ca";
   };
+
+  # https://github.com/NLnetLabs/unbound/pull/90
+  postPatch = ''
+    substituteInPlace validator/val_secalgo.c \
+      --replace '&nettle_secp_256r1' 'nettle_get_secp_256r1()' \
+      --replace '&nettle_secp_384r1' 'nettle_get_secp_384r1()'
+  '';
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
