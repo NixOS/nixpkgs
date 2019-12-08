@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "6.0.0";
+  version = "6.1.1";
   pname = "fmt";
 
   src = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
     rev = version;
-    sha256 = "0yfrw6by4h27k3psv9x1q7z2kdbz7pkwxidr494bpa6ppglij6ba";
+    sha256 = "0arii4hs33lqlbfwilnxiq8mqcvdwz66b24qa7fdjiga02j8kl2n";
   };
 
   outputs = [ "out" "dev" ];
