@@ -3399,6 +3399,11 @@ in
     inherit (darwin) locale;
   };
 
+  gawk-with-extensions = callPackage ../tools/text/gawk/gawk-with-extensions.nix {
+    extensions = gawkextlib.full;
+  };
+  gawkextlib = callPackage ../tools/text/gawk/gawkextlib.nix {};
+
   gawkInteractive = appendToName "interactive"
     (gawk.override { interactive = true; });
 
