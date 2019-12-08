@@ -1731,6 +1731,8 @@ in {
 
   crc16 = callPackage ../development/python-modules/crc16 { };
 
+  crccheck = callPackage ../development/python-modules/crccheck { };
+
   croniter = callPackage ../development/python-modules/croniter { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
@@ -2274,6 +2276,10 @@ in {
   heapdict = callPackage ../development/python-modules/heapdict { };
 
   zict = callPackage ../development/python-modules/zict { };
+
+  zigpy = callPackage ../development/python-modules/zigpy { };
+
+  zigpy-deconz = callPackage ../development/python-modules/zigpy-deconz { };
 
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
@@ -4815,6 +4821,8 @@ in {
 
   pyserial = callPackage ../development/python-modules/pyserial {};
 
+  pyserial-asyncio = callPackage ../development/python-modules/pyserial-asyncio { };
+
   pysonos = callPackage ../development/python-modules/pysonos {};
 
   pymongo = callPackage ../development/python-modules/pymongo {};
@@ -5765,6 +5773,8 @@ in {
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
   zfec = callPackage ../development/python-modules/zfec { };
+
+  zha-quirks = callPackage ../development/python-modules/zha-quirks { };
 
   zipp = callPackage ../development/python-modules/zipp { };
 
