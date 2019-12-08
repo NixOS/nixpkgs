@@ -219,6 +219,7 @@ mapAliases ({
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
   mariadb-client = hiPrio mariadb.client; #added 2019.07.28
+  mbedtls_1_3 = throw "End of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # added 2019-12-08
   mess = mame; # added 2019-10-30
   mysql-client = hiPrio mariadb.client;
   memtest86 = memtest86plus; # added 2019-05-08
@@ -285,6 +286,7 @@ mapAliases ({
   pltScheme = racket; # just to be sure
   plexpy = tautulli; # plexpy got renamed to tautulli, added 2019-02-22
   pmtools = acpica-tools; # added 2018-11-01
+  polarssl = mbedtls; # added 2018-04-25
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   postgresql95 = postgresql_9_5;
   postgresql96 = postgresql_9_6;

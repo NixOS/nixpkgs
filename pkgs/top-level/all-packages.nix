@@ -13126,8 +13126,6 @@ in
   matio = callPackage ../development/libraries/matio { };
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
-  mbedtls_1_3 = callPackage ../development/libraries/mbedtls/1.3.nix { };
-  polarssl = mbedtls; # TODO: add to aliases.nix
 
   mdds = callPackage ../development/libraries/mdds { };
 
