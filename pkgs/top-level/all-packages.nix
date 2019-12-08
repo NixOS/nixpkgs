@@ -1456,8 +1456,6 @@ in
 
   contrast = callPackage ../applications/accessibility/contrast { };
 
-  coprthr = callPackage ../development/libraries/coprthr { };
-
   cplex = callPackage ../applications/science/math/cplex (config.cplex or {});
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
