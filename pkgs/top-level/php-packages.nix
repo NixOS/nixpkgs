@@ -199,6 +199,27 @@ let
     sha256 = "00nk14jbdbln93mx3ag691avc11ff94hkadrcv5pn51c6ihsxbmz";
   };
 
+  maxminddb = buildPecl rec {
+    pname = "maxminddb";
+    version = "1.5.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "maxmind";
+      repo = "MaxMind-DB-Reader-php";
+      rev = "v${version}";
+      sha256 = "1ilgpx36rgihjr8s4bvkbms5hl6xy7mymna3ym2bl4lb15vkr0sm";
+    };
+
+    buildInputs = [ pkgs.libmaxminddb ];
+    sourceRoot = "source/ext";
+
+    meta = with pkgs.lib; {
+      description = "C extension that is a drop-in replacement for MaxMind\\Db\\Reader";
+      license = with licenses; [ asl20 ];
+      maintainers = with maintainers; [ ajs124 das_j ];
+    };
+  };
+
   memcached = buildPecl rec {
     version = "3.1.5";
     pname = "memcached";
