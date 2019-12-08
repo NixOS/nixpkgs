@@ -1059,6 +1059,8 @@ in
 
   awstats = callPackage ../tools/system/awstats { };
 
+  awsweeper = callPackage ../tools/admin/awsweeper { };
+
   axel = callPackage ../tools/networking/axel {
     libssl = openssl;
   };
