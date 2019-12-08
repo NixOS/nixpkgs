@@ -360,7 +360,7 @@ let
     doCheck = !stdenv.isLinux;
 
     meta = {
-      homepage = http://search.cpan.org/dist/Apache-AuthCookie/;
+      homepage = "https://github.com/mschout/apache-authcookie";
       description = "Perl Authentication and Authorization via cookies";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -2478,7 +2478,7 @@ let
     };
     buildInputs = [ TestFatal TestNeeds ];
     meta = {
-      homepage = https://github.com/sartak/Class-Method-Modifiers/tree;
+      homepage = "https://github.com/moose/Class-Method-Modifiers";
       description = "Provides Moose-like method modifiers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -6377,7 +6377,7 @@ let
     buildInputs = [ FennecLite TestException ];
     propagatedBuildInputs = [ MetaBuilder aliased ];
     meta = {
-      homepage = http://open-exodus.net/projects/Exporter-Declare;
+      homepage = "https://metacpan.org/release/Exporter-Declare";
       description = "Exporting done right";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -6418,7 +6418,7 @@ let
     meta = {
       description = "Compile and link C code for Perl modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      homepage = "http://search.cpan.org/dist/ExtUtils-CBuilder";
+      homepage = "https://metacpan.org/release/ExtUtils-CBuilder";
     };
   };
 
@@ -6722,7 +6722,7 @@ let
       sha256 = "dce28e3932762c2ff92aa52d90405c06e898e81cb7b164ccae8966ae77f1dcab";
     };
     meta = {
-      homepage = http://open-exodus.net/projects/Fennec-Lite;
+      homepage = "https://metacpan.org/release/Fennec-Lite";
       description = "Minimalist Fennec, the commonly used bits";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7140,7 +7140,7 @@ let
     };
     propagatedBuildInputs = [ FileShareDir ];
     meta = {
-      homepage = https://github.com/ingydotnet/file-share-pm/tree;
+      homepage = "https://github.com/ingydotnet/file-share-pm";
       description = "Extend File::ShareDir to Local Libraries";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7334,7 +7334,7 @@ let
       sha256 = "b79dc2244b2d97b6f27167fc3b7799ef61a179040f3abd76ce1e0a3b0bc4e078";
     };
     meta = {
-      homepage = http://perl.wdlabs.com/File-Which;
+      homepage = "https://metacpan.org/release/File-Which";
       description = "Perl implementation of the which utility as an API";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -8996,7 +8996,7 @@ let
       sha256 = "0nsd9knlbd7if2v6zwj4q978axq0w5hk8ymp61z14a821hjivqjl";
     };
     meta = {
-      homepage = https://github.com/ingydotnet/io-all-pm/tree;
+      homepage = "https://github.com/ingydotnet/io-all-pm";
       description = "IO::All of it to Graham and Damian!";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -12487,7 +12487,7 @@ let
     buildInputs = [ ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ Moose aliased namespaceautoclean ];
     meta = {
-      homepage = https://github.com/karenetheridge/moosex-lazyrequire;
+      homepage = "https://github.com/moose/MooseX-LazyRequire";
       description = "Required attributes which fail only when trying to use them";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -12588,7 +12588,7 @@ let
     buildInputs = [ CPANMetaCheck ModuleBuildTiny TestFatal TestNeeds ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
     meta = {
-      homepage = https://github.com/sartak/MooseX-Role-Parameterized/tree;
+      homepage = "https://github.com/moose/MooseX-Role-Parameterized";
       description = "Roles with composition parameters";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -18850,7 +18850,7 @@ let
       sha256 = "bb8a3b8ff515c85101baf553a769337f944a05cde81f111ae78aff416bf4ae2b";
     };
     meta = {
-      homepage = https://www.shlomifish.org/open-source/projects/Text-Format/;
+      homepage = "https://metacpan.org/release/Text-Format";
       description = "Format text";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ bcdarwin ];
@@ -19229,7 +19229,7 @@ let
       sha256 = "ef371b1769cd8d36d2d657e8321723d94c8f8d89e7fd7437c6648c5dc6711b7a";
     };
     meta = {
-      homepage = https://github.com/2shortplanks/Test-utf8/tree;
+      homepage = "https://github.com/2shortplanks/Test-utf8";
       description = "Handy utf8 tests";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -19984,7 +19984,7 @@ let
     };
     propagatedBuildInputs = [ URI ];
     meta = {
-      homepage = http://perl.wdlabs.com/URI-ws/;
+      homepage = "https://metacpan.org/release/URI-ws";
       description = "WebSocket support for URI package";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -20131,7 +20131,7 @@ let
     propagatedBuildInputs = [ HTMLForm HTMLTree LWP ];
     doCheck = false;
     meta = {
-      homepage = https://github.com/bestpractical/www-mechanize;
+      homepage = "https://github.com/libwww-perl/WWW-Mechanize";
       description = "Handy web browsing in a Perl object";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -20701,7 +20701,7 @@ let
     buildInputs = [ TestBase TestDeep TestYAML ];
 
     meta = {
-      homepage = https://github.com/ingydotnet/yaml-pm/tree;
+      homepage = "https://github.com/ingydotnet/yaml-pm";
       description = "YAML Ain't Markup Language (tm)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };

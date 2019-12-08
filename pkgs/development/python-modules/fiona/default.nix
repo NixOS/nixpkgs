@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OGR's neat, nimble, no-nonsense API for Python";
-    homepage = http://toblerity.org/fiona/;
+    homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

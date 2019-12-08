@@ -30,7 +30,7 @@ buildPythonPackage {
     ++ stdenv.lib.optional visualizationSupport pyqtgraph;
 
   meta = with stdenv.lib; {
-    homepage = "http://binwalk.org";
+    homepage = "https://github.com/ReFirmLabs/binwalk";
     description = "A tool for searching a given binary image for embedded files";
     maintainers = [ maintainers.koral ];
   };
