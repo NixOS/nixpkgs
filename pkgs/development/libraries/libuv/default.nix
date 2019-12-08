@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.33.1";
+  version = "1.34.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "13w60g9pc6998v8plslwpwn7f1hx3c1y4zhgmw025nyd504h5lak";
+    sha256 = "0vcrrqf0zqgsfmgbyl45qhajyab98kxqq66l0w4lkj5say86aln8";
   };
 
   postPatch = let
