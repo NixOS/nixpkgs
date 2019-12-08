@@ -23471,6 +23471,8 @@ in
 
   kwin-tiling = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/tiling.nix { };
 
+  krohnkite = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/krohnkite.nix { };
+
   ### SCIENCE
 
   ### SCIENCE/CHEMISTY
