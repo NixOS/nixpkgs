@@ -208,7 +208,7 @@
    <listitem>
     <para>
      The packages <literal>openobex</literal> and <literal>obexftp</literal>
-     are no loger installed when enabling bluetooth via
+     are no longer installed when enabling Bluetooth via
      <option>hardware.bluetooth.enable</option>.
     </para>
    </listitem>
