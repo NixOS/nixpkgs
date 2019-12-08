@@ -108,7 +108,7 @@ let
         '';
 
         meta = with stdenv.lib; {
-          homepage = http://ssr.msr-inria.inria.fr/;
+          homepage = "https://math-comp.github.io/";
           license = licenses.cecill-b;
           maintainers = [ maintainers.vbgl maintainers.jwiegley ];
           platforms = coq.meta.platforms;
