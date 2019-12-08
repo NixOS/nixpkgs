@@ -129,18 +129,18 @@ let
       name = "redis";
       extraBuildInputs = [ hiredis ];
     };
-    xml = buildExtension {
+    select = buildExtension {
       inherit gawkextlib;
-      name = "xml";
-      extraBuildInputs = [ expat libiconv ];
+      name = "select";
     };
     timex = buildExtension {
       inherit gawkextlib;
       name = "timex";
     };
-    select = buildExtension {
+    xml = buildExtension {
       inherit gawkextlib;
-      name = "select";
+      name = "xml";
+      extraBuildInputs = [ expat libiconv ];
     };
   };
 in recurseIntoAttrs (libs // {
