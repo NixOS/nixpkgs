@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
 
     asar e resources/app.asar $out/resources
 
+    substituteInPlace "$out/resources/dist/electron/main.js" \
+      --replace ",isHidden:" ",path:\"$out/bin/ramboxpro\",isHidden:"
+
     cp $desktopItem/share/applications/* $out/share/applications
     cp $out/resources/dist/electron/imgs/256x256.png $out/share/icons/hicolor/256x256/apps/ramboxpro.png
     cp $out/resources/dist/electron/imgs/256x256.png $out/resources/dist/renderer/assets/images/app/icon.png
