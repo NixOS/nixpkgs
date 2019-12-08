@@ -18967,10 +18967,6 @@ in
     desktopName = "Firefox DevEdition";
   };
 
-  firestr = libsForQt5.callPackage ../applications/networking/p2p/firestr
-    { boost = boost155;
-    };
-
   flac = callPackage ../applications/audio/flac { };
 
   redoflacs = callPackage ../applications/audio/redoflacs { };
