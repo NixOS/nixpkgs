@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmysofa";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "hoene";
     repo = "libmysofa";
     rev = "v${version}";
-    sha256 = "1gas6fp0xy57wwdvsdfq1yq2hg4zl2c074b260y7hh92z96pj22j";
+    sha256 = "14k8c31xh0v4r34h89ld440j9zri4plblmlhj5ddhdmzqmh4lr9f";
   };
 
   nativeBuildInputs = [ cmake ];
