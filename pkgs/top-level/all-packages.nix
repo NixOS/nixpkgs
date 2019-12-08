@@ -15806,8 +15806,6 @@ in
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
-  alienfx = callPackage ../os-specific/linux/alienfx { };
-
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };

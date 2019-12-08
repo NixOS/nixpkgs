@@ -40,6 +40,7 @@ mapAliases ({
   adobe_flex_sdk = apache-flex-sdk; # added 2018-06-01
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
+  alienfx = throw "alienfx has been removed."; # added 2019-12-08
   ammonite-repl = ammonite; # added 2017-05-02
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
