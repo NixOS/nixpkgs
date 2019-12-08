@@ -12827,6 +12827,8 @@ in
 
   libsoup = callPackage ../development/libraries/libsoup { };
 
+  libspectrum = callPackage ../development/libraries/libspectrum { };
+
   libspiro = callPackage ../development/libraries/libspiro {};
 
   libssh = callPackage ../development/libraries/libssh { };
