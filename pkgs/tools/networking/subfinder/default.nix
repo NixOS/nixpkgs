@@ -24,6 +24,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/projectdiscovery/subfinder";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz filalex77 ];
   };
 }
