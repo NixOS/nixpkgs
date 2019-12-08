@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchFromGitHub
 , freeglut
 , libGL
 , libGLU
@@ -11,16 +11,16 @@
 
 stdenv.mkDerivation rec {
   pname = "glui";
-  version = "2.36";
+  version = "2.37";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/glui/Source/${version}/glui-${version}.tgz";
-    sha256 = "11r7f0k5jlbl825ibhm5c6bck0fn1hbliya9x1f253ikry1mxvy1";
+  src = fetchFromGitHub {
+    owner = "libglui";
+    repo = "glui";
+    rev = version;
+    sha256 = "0qg2y8w95s03zay1qsqs8pqxxlg6l9kwm7rrs1qmx0h22sxb360i";
   };
 
   buildInputs = [ freeglut libGLU libGL libXmu libXext libX11 libXi ];
-
-  preConfigure = ''cd src'';
 
   installPhase = ''
     mkdir -p "$out"/{bin,lib,share/glui/doc,include}
