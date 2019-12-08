@@ -414,6 +414,8 @@ in {
 
   async_generator = callPackage ../development/python-modules/async_generator { };
 
+  asyncio-pool = callPackage ../development/python-modules/asyncio-pool { };
+
   asyncpg = callPackage ../development/python-modules/asyncpg { };
 
   asyncssh = callPackage ../development/python-modules/asyncssh { };
