@@ -49,12 +49,16 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       # Wait until the given interface has a non-tentative address of
       # the desired scope (i.e. has completed Duplicate Address
       # Detection).
-      def wait_for_address(machine, iface, scope):
-          machine.wait_until_succeeds(
-              f"[ `ip -o -6 addr show dev {iface} scope {scope} | grep -v tentative | wc -l` -ge 1 ]"
-          )
-          output = machine.succeed(f"ip -o -6 addr show dev {iface} scope {scope}")
+      def wait_for_address(machine, iface, scope, temporary=False):
+          temporary_flag = "temporary" if temporary else "-temporary"
+          cmd = f"ip -o -6 addr show dev {iface} scope {scope} -tentative {temporary_flag}"
+
+          machine.wait_until_succeeds(f"[ `{cmd} | wc -l` -eq 1 ]")
+          output = machine.succeed(cmd)
           ip = re.search(r"inet6 ([0-9a-f:]{2,})/", output).group(1)
+
+          if temporary:
+              scope = scope + " temporary"
           machine.log(f"{scope} address on {iface} is {ip}")
           return ip
 
@@ -78,7 +82,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           client.fail(f"curl --fail -g http://[{client_ip}]")
 
       with subtest("Privacy extensions: Global temporary address can be obtained and pinged"):
-          ip = wait_for_address(client, "eth1", "global temporary")
+          ip = wait_for_address(client, "eth1", "global", temporary=True)
           # Default route should have "src <temporary address>" in it
           client.succeed(f"ip r g ::2 | grep {ip}")
 
