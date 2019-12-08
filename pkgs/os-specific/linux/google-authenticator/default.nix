@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "google-authenticator-libpam";
-  version = "1.06";
+  version = "1.07";
 
   src = fetchurl {
     url = "https://github.com/google/google-authenticator-libpam/archive/${version}.tar.gz";
-    sha256 = "01kb1ppsc2fz1i3crdwi6ic8gyphjv89f5li6ypv3pp88v3kxw2j";
+    sha256 = "01841dfmf6aw39idlv8y52b1nw9wx4skklzqhw1f519m0671ajhh";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
