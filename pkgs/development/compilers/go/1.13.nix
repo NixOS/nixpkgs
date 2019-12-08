@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
       --replace '#!/usr/bin/env bash' '#!${runtimeShell}'
 
     # Patch the mimetype database location which is missing on NixOS.
-    substituteInPlace src/mime/type_unix.go \
-      --replace '/etc/mime.types' '${mailcap}/etc/mime.types'
+    # but also allow static binaries built with NixOS to run outside nix
+    sed -i 's,\"/etc/mime.types,"${mailcap}/etc/mime.types\"\,\n\t&,' src/mime/type_unix.go
 
     # Disabling the 'os/http/net' tests (they want files not available in
     # chroot builds)
@@ -97,7 +97,10 @@ stdenv.mkDerivation rec {
     rm src/net/cgo_unix_test.go
 
   '' + optionalString stdenv.isLinux ''
-    sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
+    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
+    # that run outside a nix server
+    sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
+
   '' + optionalString stdenv.isAarch32 ''
     echo '#!${runtimeShell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
