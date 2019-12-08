@@ -144,6 +144,6 @@ let
     };
   };
 in recurseIntoAttrs (libs // {
-  inherit gawkextlib;
+  inherit gawkextlib buildExtension;
   full = builtins.attrValues libs;
 })
