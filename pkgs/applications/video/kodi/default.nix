@@ -51,7 +51,7 @@ let
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "1m0295czxabdcqyqf5m94av9d88pzhnzjvyfs1q07xqq82h313p8";
+    sha256 = "0pcrraj1ddzrd296br10yjnaxgb3iym74xzixcakaqhhp00f5hf6";
   };
 
   cmakeProto = fetchurl {
