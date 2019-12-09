@@ -131,6 +131,9 @@ in
 
     environment.etc."slim.conf".source = slimConfig;
 
+    # Use the default theme when using autologin to save space.
+    services.xserver.displayManager.slim.theme = mkIf cfg.autoLogin null;
+
     services.xserver.displayManager.job.execCmd = "exec ${pkgs.slim-ng}/bin/slim -n -s";
 
     # Allow null passwords so that the user can login as root on the
