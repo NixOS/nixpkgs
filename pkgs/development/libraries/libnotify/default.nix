@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
-  buildInputs = [ glib gdk-pixbuf ];
+  propagatedBuildInputs = [ glib gdk-pixbuf ];
 
   passthru = {
     updateScript = gnome3.updateScript {
