@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "oclgrind";
-  version = "19.10"; # see comment in all-packages.nix
+  version = "19.10";
 
   src = fetchFromGitHub {
     owner = "jrprice";
