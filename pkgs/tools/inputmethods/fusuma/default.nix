@@ -16,9 +16,9 @@ bundlerApp {
 
   meta = with lib; {
     description = "Multitouch gestures with libinput driver on X11, Linux";
-    homepage    = https://github.com/iberianpig/fusuma;
-    license     = licenses.mit;
+    homepage = "https://github.com/iberianpig/fusuma";
+    license = licenses.mit;
     maintainers = with maintainers; [ jfrankenau nicknovitski ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }
