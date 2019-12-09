@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       "https://groups.google.com/forum/#!searchin/fplll-devel/FPLLL$20${version}"
     ];
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [raskin];
+    maintainers = with maintainers; [raskin timokau];
     platforms = platforms.unix;
   };
 }
