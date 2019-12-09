@@ -8,11 +8,12 @@ let
 
   cfg = dmcfg.slim;
 
-  slimConfig = pkgs.writeText "slim.cfg"
+  slimConfig = pkgs.writeText "slim.conf"
     ''
       xauth_path ${dmcfg.xauthBin}
       default_xserver ${dmcfg.xserverBin}
       xserver_arguments ${toString dmcfg.xserverArgs}
+      themes_dir ${slimThemesDir}
       sessiondir ${dmcfg.session.desktops}/share/xsessions
       login_cmd exec ${pkgs.runtimeShell} ${dmcfg.session.wrapper} "%session"
       halt_cmd ${config.systemd.package}/sbin/shutdown -h now
@@ -35,7 +36,7 @@ let
           unpackFile ${cfg.theme}
           ln -s * default
         '';
-    in if cfg.theme == null then "${pkgs.slim}/share/slim/themes" else unpackedTheme;
+    in if cfg.theme == null then "${pkgs.slim-ng}/share/slim/themes" else unpackedTheme;
 
 in
 
@@ -128,19 +129,9 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.displayManager.job =
-      { environment =
-          { SLIM_CFGFILE = slimConfig;
-            SLIM_THEMESDIR = slimThemesDir;
-          };
-        execCmd = "exec ${pkgs.slim}/bin/slim";
-      };
+    environment.etc."slim.conf".source = slimConfig;
 
-    services.xserver.displayManager.sessionCommands =
-      ''
-        # Export the config/themes for slimlock.
-        export SLIM_THEMESDIR=${slimThemesDir}
-      '';
+    services.xserver.displayManager.job.execCmd = "exec ${pkgs.slim-ng}/bin/slim -n -s";
 
     # Allow null passwords so that the user can login as root on the
     # installation CD.
@@ -149,7 +140,9 @@ in
     # Allow slimlock to work.
     security.pam.services.slimlock = {};
 
-    environment.systemPackages = [ pkgs.slim ];
+    environment.systemPackages = [ pkgs.slim-ng ];
+
+    meta.maintainers = [ maintainers.oxij ];
 
   };
 

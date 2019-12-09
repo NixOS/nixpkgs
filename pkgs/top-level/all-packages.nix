@@ -21441,7 +21441,7 @@ in
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
 
-  slim = callPackage ../applications/display-managers/slim {
+  slim-ng = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
   };
 
