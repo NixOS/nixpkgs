@@ -278,7 +278,7 @@ dvisvgm = stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   # TODO: dvisvgm still uses vendored dependencies
-  buildInputs = [ core/*kpathsea*/ ghostscript zlib freetype potrace xxHash ];
+  buildInputs = [ core/*kpathsea*/ ghostscript zlib freetype /*potrace xxHash*/ ];
 
   preConfigure = "cd texk/dvisvgm";
 
