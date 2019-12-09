@@ -372,6 +372,8 @@ let
 
     irmin = callPackage ../development/ocaml-modules/irmin { };
 
+    irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { };
+
     jingoo = callPackage ../development/ocaml-modules/jingoo {
       pcre = ocaml_pcre;
     };
