@@ -7633,6 +7633,8 @@ in {
 
   WSME = callPackage ../development/python-modules/WSME { };
 
+  wsnsimpy = callPackage ../development/python-modules/wsnsimpy { };
+
   wsproto = if (pythonAtLeast "3.6") then
     callPackage ../development/python-modules/wsproto { }
   else
