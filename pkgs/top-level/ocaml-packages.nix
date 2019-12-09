@@ -18,6 +18,8 @@ let
 
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
+    alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix {};
+
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
     angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
