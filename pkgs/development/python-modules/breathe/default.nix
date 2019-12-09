@@ -1,12 +1,12 @@
 { lib, fetchPypi, buildPythonPackage, docutils, six, sphinx, isPy3k }:
 
 buildPythonPackage rec {
-  version = "4.13.1";
+  version = "4.14.0";
   pname = "breathe";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6752345252f48092bf72a450fd9e84367bd5b4af99d86c92047f82c6c2287ab";
+    sha256 = "027arbjy0mzv13fbs3qf4qdl3cxzragkf07hc0n8rbwg13j4i20p";
   };
 
   propagatedBuildInputs = [ docutils six sphinx ];
