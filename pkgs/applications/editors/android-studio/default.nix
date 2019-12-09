@@ -18,9 +18,9 @@ let
     sha256Hash = "0qlrdf7a6f5585mrni1aa2chic4n7b9c8lgrj8br6q929hc2f5d9";
   };
   latestVersion = { # canary & dev
-    version = "4.0.0.4"; # "Android Studio 4.0 Canary 4"
-    build = "192.6008643";
-    sha256Hash = "1z1srginlg1xnp911nlilhf515mbpmngwhln29q6lxsir8g2cw2z";
+    version = "4.0.0.5"; # "Android Studio 4.0 Canary 5"
+    build = "193.6039983";
+    sha256Hash = "19pidwl46z7alc0d7awhvi4aq1r87f99wh5yfi94s1zd2azm9f9z";
   };
 in {
   # Attributes are named by their corresponding release channels
