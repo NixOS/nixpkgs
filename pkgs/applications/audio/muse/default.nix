@@ -1,7 +1,9 @@
 { stdenv
 , fetchFromGitHub
 , libjack2
-, qt5
+, wrapQtAppsHook
+, qtsvg
+, qttools
 , cmake
 , libsndfile
 , libsamplerate
@@ -13,7 +15,6 @@
 , dssi
 , liblo
 , pkgconfig
-, gitAndTools
 }:
 
 stdenv.mkDerivation {
@@ -45,14 +46,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkgconfig
-    gitAndTools.gitFull
+    wrapQtAppsHook
+    qttools
+    cmake
   ];
 
   buildInputs = [
     libjack2
-    qt5.qtsvg
-    qt5.qttools
-    cmake
+    qtsvg
     libsndfile
     libsamplerate
     ladspaH
@@ -65,15 +66,4 @@ stdenv.mkDerivation {
   ];
 
   sourceRoot = "source/muse3";
-
-  buildPhase = ''
-    cd ..
-    bash compile_muse.sh
-  '';
-
-  installPhase = ''
-    mkdir $out
-    cd build
-    make install
-  '';
 }
