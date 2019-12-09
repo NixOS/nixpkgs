@@ -376,6 +376,8 @@ let
 
     irmin-git = callPackage ../development/ocaml-modules/irmin/git.nix { };
 
+    irmin-graphql = callPackage ../development/ocaml-modules/irmin/graphql.nix { };
+
     irmin-http = callPackage ../development/ocaml-modules/irmin/http.nix { };
 
     irmin-mem = callPackage ../development/ocaml-modules/irmin/mem.nix { };
