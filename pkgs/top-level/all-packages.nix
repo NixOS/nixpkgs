@@ -1456,8 +1456,6 @@ in
 
   contrast = callPackage ../applications/accessibility/contrast { };
 
-  coprthr = callPackage ../development/libraries/coprthr { };
-
   cplex = callPackage ../applications/science/math/cplex (config.cplex or {});
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
@@ -13126,8 +13124,6 @@ in
   matio = callPackage ../development/libraries/matio { };
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
-  mbedtls_1_3 = callPackage ../development/libraries/mbedtls/1.3.nix { };
-  polarssl = mbedtls; # TODO: add to aliases.nix
 
   mdds = callPackage ../development/libraries/mdds { };
 
@@ -15807,8 +15803,6 @@ in
   acpitool = callPackage ../os-specific/linux/acpitool { };
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
-
-  alienfx = callPackage ../os-specific/linux/alienfx { };
 
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
 
@@ -18972,10 +18966,6 @@ in
     pname = "firefox-devedition-bin";
     desktopName = "Firefox DevEdition";
   };
-
-  firestr = libsForQt5.callPackage ../applications/networking/p2p/firestr
-    { boost = boost155;
-    };
 
   flac = callPackage ../applications/audio/flac { };
 
