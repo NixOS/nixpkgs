@@ -887,6 +887,8 @@ let
 
     xtmpl = callPackage ../development/ocaml-modules/xtmpl { };
 
+    yaml = callPackage ../development/ocaml-modules/yaml { };
+
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
     zarith = callPackage ../development/ocaml-modules/zarith { };
