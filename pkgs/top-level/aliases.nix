@@ -48,6 +48,7 @@ mapAliases ({
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
+  bluezFull = bluez; # Added 2019-12-03
   bridge_utils = bridge-utils;  # added 2015-02-20
   bro = zeek; # added 2019-09-29
   btrfsProgs = btrfs-progs; # added 2016-01-03
