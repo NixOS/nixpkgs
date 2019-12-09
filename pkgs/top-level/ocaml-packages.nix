@@ -370,6 +370,8 @@ let
 
     iri = callPackage ../development/ocaml-modules/iri { };
 
+    irmin = callPackage ../development/ocaml-modules/irmin { };
+
     jingoo = callPackage ../development/ocaml-modules/jingoo {
       pcre = ocaml_pcre;
     };
