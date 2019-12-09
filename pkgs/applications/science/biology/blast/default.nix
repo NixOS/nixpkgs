@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, boost, perl, cpio, gawk, coreutils }:
+{ stdenv, fetchurl, zlib, bzip2, boost168, perl, cpio, gawk, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "blast";
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ coreutils gawk zlib boost bzip2 cpio ];
+  buildInputs = [ coreutils gawk zlib boost168 bzip2 cpio ];
   hardeningDisable = [ "format" ];
 
   patches = [ ./no_slash_bin.patch ];
