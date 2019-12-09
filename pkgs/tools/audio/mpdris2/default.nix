@@ -1,6 +1,7 @@
 { stdenv
 , autoreconfHook
 , fetchFromGitHub
+, gdk-pixbuf
 , glib
 , gobject-introspection
 , intltool
@@ -34,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
+    gdk-pixbuf
     glib
     libnotify
   ];
