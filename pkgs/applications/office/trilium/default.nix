@@ -20,6 +20,7 @@ let
   };
 
   version = "0.37.8";
+
 in {
   
   trilium-desktop = stdenv.mkDerivation rec {
@@ -90,6 +91,7 @@ in {
       libxkbfile
     ];
 
+    patches = [ ./0001-Use-console-logger-instead-of-rolling-files.patch ] ;
     installPhase = ''
       mkdir -p $out/bin
       mkdir -p $out/share/trilium-server
