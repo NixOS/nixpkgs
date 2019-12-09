@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -12,8 +13,7 @@ buildPythonPackage rec {
     sha256 = "0wn7kqp0rxqr6gnqhdn8pc0wy359krzan0kbika6hfvb0c1rw1hs";
   };
 
-  # no tests
-  doCheck = false;
+  disabled = !isPy3k;
 
   meta = with stdenv.lib; {
     homepage = http://pypi.python.org/pypi/numericalunits;
