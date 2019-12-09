@@ -386,6 +386,8 @@ let
 
     irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { };
 
+    irmin-unix = callPackage ../development/ocaml-modules/irmin/unix.nix { };
+
     irmin-watcher = callPackage ../development/ocaml-modules/irmin-watcher { };
 
     jingoo = callPackage ../development/ocaml-modules/jingoo {
