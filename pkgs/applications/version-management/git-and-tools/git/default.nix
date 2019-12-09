@@ -230,6 +230,7 @@ stdenv.mkDerivation {
                 -e "s|exec wish|exec '${tk}/bin/wish'|g" \
                 "$out/$prog"
        done
+       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/gitk
      '' else ''
        # Don't wrap Tcl/Tk, replace them by notification scripts
        for prog in bin/gitk libexec/git-core/git-gui; do
