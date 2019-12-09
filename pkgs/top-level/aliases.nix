@@ -409,8 +409,6 @@ mapAliases ({
   slurm-llnl-full = slurm-full; # renamed July 2017
   slurm-full = slurm; # added 2018-05-1
   smbclient = samba; # added 2018-04-25
-  slim = throw "slim has been removed. Please use a different display-manager"; # added 2019-11-11
-  slimThemes = throw "slimThemes has been removed because slim has been also"; # added 2019-11-11
   net_snmp = net-snmp; # added 2019-12-21
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speech_tools = speech-tools; # added 2018-04-25

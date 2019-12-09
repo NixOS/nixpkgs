@@ -1,9 +1,9 @@
 # This module declares the options to define a *display manager*, the
-# program responsible for handling X logins (such as LightDM, GDM, or SDDM).
-# The display manager allows the user to select a *session
-# type*. When the user logs in, the display manager starts the
+# program responsible for handling X logins (such as xdm, gdb, or
+# SLiM).  The display manager allows the user to select a *session
+# type*.  When the user logs in, the display manager starts the
 # *session script* ("xsession" below) to launch the selected session
-# type. The session type defines two things: the *desktop manager*
+# type.  The session type defines two things: the *desktop manager*
 # (e.g., KDE, Gnome or a plain xterm), and optionally the *window
 # manager* (e.g. kwin or twm).
 
@@ -308,7 +308,7 @@ in
         execCmd = mkOption {
           type = types.str;
           example = literalExample ''
-            "''${pkgs.lightdm}/bin/lightdm"
+            "''${pkgs.slim}/bin/slim"
           '';
           description = "Command to start the display manager.";
         };
@@ -316,6 +316,7 @@ in
         environment = mkOption {
           type = types.attrsOf types.unspecified;
           default = {};
+          example = { SLIM_CFGFILE = "/etc/slim.conf"; };
           description = "Additional environment variables needed by the display manager.";
         };
 
