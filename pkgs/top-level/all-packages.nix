@@ -1841,6 +1841,8 @@ in
 
   icdiff = callPackage ../tools/text/icdiff {};
 
+  ifm = callPackage ../tools/graphics/ifm {};
+
   interlock = callPackage ../servers/interlock {};
 
   jellyfin = callPackage ../servers/jellyfin { ffmpeg = ffmpeg_4; };
