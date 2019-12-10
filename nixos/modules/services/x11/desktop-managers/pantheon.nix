@@ -81,6 +81,8 @@ in
 
     services.xserver.displayManager.lightdm.greeters.pantheon.enable = mkDefault true;
 
+    # Without this, Elementary LightDM greeter will pre-select non-existent `default` session
+    # https://github.com/elementary/greeter/issues/368
     services.xserver.displayManager.defaultSession = "pantheon";
 
     services.xserver.displayManager.sessionCommands = ''

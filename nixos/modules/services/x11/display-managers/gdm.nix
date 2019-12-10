@@ -31,44 +31,9 @@ let
     load-module module-position-event-sounds
   '';
 
-  dmDefault = config.services.xserver.desktopManager.default;
-  wmDefault = config.services.xserver.windowManager.default;
-  hasDefaultUserSession = dmDefault != "none" || wmDefault != "none";
-  defaultSessionName = dmDefault + optionalString (wmDefault != "none") ("+" + wmDefault);
+  defaultSessionName = config.services.xserver.displayManager.defaultSession;
 
-  setSessionScript = pkgs.python3.pkgs.buildPythonApplication {
-    name = "set-session";
-
-    format = "other";
-
-    src = ./set-session.py;
-
-    dontUnpack = true;
-
-    strictDeps = false;
-
-    nativeBuildInputs = with pkgs; [
-      wrapGAppsHook
-      gobject-introspection
-    ];
-
-    buildInputs = with pkgs; [
-      accountsservice
-      glib
-    ];
-
-    propagatedBuildInputs = with pkgs.python3.pkgs; [
-      pygobject3
-      ordered-set
-    ];
-
-    installPhase = ''
-      mkdir -p $out/bin
-      cp $src $out/bin/set-session
-      chmod +x $out/bin/set-session
-    '';
-  };
-
+  setSessionScript = pkgs.callPackage ./account-service-util.nix { };
 in
 
 {
@@ -186,7 +151,7 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          XDG_DATA_DIRS = "${cfg.session.desktops}/share/";
+          XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
@@ -204,16 +169,19 @@ in
           cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
           yes
           EOF
-        ''
-        # TODO: Make setSessionScript aware of previously used sessions
-        # + optionalString hasDefaultUserSession ''
-        #   ${setSessionScript}/bin/set-session ${defaultSessionName}
-        # ''
-        ;
+        '' + optionalString (defaultSessionName != null) ''
+          # Set default session in session chooser to a specified values – basically ignore session history.
+          ${setSessionScript}/bin/set-session ${cfg.sessionData.autologinSession}
+        '';
       };
 
-    # Because sd_login_monitor_new requires /run/systemd/machines
-    systemd.services.display-manager.wants = [ "systemd-machined.service" ];
+    systemd.services.display-manager.wants = [
+      # Because sd_login_monitor_new requires /run/systemd/machines
+      "systemd-machined.service"
+      # setSessionScript wants AccountsService
+      "accounts-daemon.service"
+    ];
+
     systemd.services.display-manager.after = [
       "rc-local.service"
       "systemd-machined.service"
@@ -329,7 +297,7 @@ in
       ${optionalString cfg.gdm.debug "Enable=true"}
     '';
 
-    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.session.wrapper;
+    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.sessionData.wrapper;
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
