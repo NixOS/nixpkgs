@@ -204,6 +204,14 @@
       The <literal>buildRustCrate</literal> infrastructure now produces <literal>lib</literal> outputs in addition to the <literal>out</literal> output.
       This has led to drastically reduced closed sizes for some rust crates since development dependencies are now in the <literal>lib</literal> output.
     </para>
+    </listitem>
+   <listitem>
+    <para>
+     Pango was upgraded to 1.44, which no longer uses freetype for font loading.  This means that type1
+     and bitmap fonts are no longer supported in applications relying on Pango for font rendering
+     (notably, GTK application). See <link xlink:href="https://gitlab.gnome.org/GNOME/pango/issues/386">
+     upstream issue</link> for more information.
+    </para>
    </listitem>
    <listitem>
     <para>

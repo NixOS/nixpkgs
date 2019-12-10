@@ -8003,8 +8003,7 @@ in
     isl = isl_0_17;
   }));
 
-  # Version 8.x is marked broken on Darwin: https://gist.github.com/GrahamcOfBorg/bef0231b7129681950f03c4ac06781c8.
-  gfortran = if stdenv.isDarwin then gfortran7 else gfortran8;
+  gfortran = gfortran8;
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
@@ -15868,12 +15867,6 @@ in
   };
 
   bluez = bluez5;
-
-  bluezFull = bluez.override {
-    enableWiimote = true;
-    enableMidi = true;
-    enableSixaxis = true;
-  };
 
   inherit (python3Packages) bedup;
 
@@ -25346,11 +25339,7 @@ in
 
   xteddy = callPackage ../applications/misc/xteddy { };
 
-  xwiimote = callPackage ../misc/drivers/xwiimote {
-    bluez = pkgs.bluez5.override {
-      enableWiimote = true;
-    };
-  };
+  xwiimote = callPackage ../misc/drivers/xwiimote { };
 
   xzoom = callPackage ../tools/X11/xzoom {};
 

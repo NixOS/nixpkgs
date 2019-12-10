@@ -84,6 +84,8 @@ let
     GOHOSTARCH = go.GOHOSTARCH or null;
     GOHOSTOS = go.GOHOSTOS or null;
 
+    GO111MODULE = "off";
+
     GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
     configurePhase = args.configurePhase or ''
