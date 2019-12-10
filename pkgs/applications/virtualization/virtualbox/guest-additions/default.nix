@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0hflsbx70dli34mpx94vd33p55ycfs3ahzwcdzqxdiwiiskjpykq";
+    sha256 = "cb82f43a71f91a50b97aa27063c5c8743772a623eb0073ab8daf77e840d73eb1";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -47,9 +47,6 @@ in stdenv.mkDerivation {
   '';
 
   patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
-  # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
-  # https://www.virtualbox.org/ticket/18911
-  patches = [ ./kernel-5.3-fix.patch ];
 
   unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''

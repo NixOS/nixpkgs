@@ -3,7 +3,7 @@
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, nettools, dbus, substituteAll
-, makeself, perl
+, makeself, perl, fetchpatch
 , javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
 , extensionPack ? null, fakeroot ? null
@@ -21,8 +21,8 @@ let
   buildType = "release";
   # Remember to change the extpackRev and version in extpack.nix and
   # guest-additions/default.nix as well.
-  main = "1hxbvr78b0fddcn7npz72ki89lpmbgqj4b5qvxm1wik7v0d8v1y8";
-  version = "6.0.12";
+  main = "5e12b14f0c38bf195d9592d76a9e0a128df2d38cd77c26ce5b5488397715dd0c";
+  version = "6.0.14";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
@@ -92,9 +92,21 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
-    # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
-    # https://www.virtualbox.org/ticket/18911
-    ./kernel-5.3-fix.patch
+
+    # Kernel 5.4 fix, should be included in VirtualBox 6.1. See
+    # https://www.virtualbox.org/ticket/18945.
+    (fetchpatch {
+      name = "kernel-5.4-fix-1.patch";
+      url = "https://www.virtualbox.org/changeset/81586/vbox?format=diff";
+      sha256 = "0zbkc9v65pkdmjik53x29g39qyf7narkhpwpx5n1n1bfqnhf0k1r";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      name = "kernel-5.4-fix-2.patch";
+      url = "https://www.virtualbox.org/changeset/81587/vbox?format=diff";
+      sha256 = "1j98cqxj8qlqwaqr4mvwwbkmchw8jmygjwgzz82gix7fj76j2y9c";
+      stripLen = 1;
+    })
   ];
 
   postPatch = ''
