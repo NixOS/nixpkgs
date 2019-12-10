@@ -127,9 +127,6 @@ let
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
-    ] ++ optionals (channel == "stable") [
-      ./patches/widevine.patch
-    ] ++ optionals (channel == "beta" || channel == "dev") [
       ./patches/widevine-79.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
