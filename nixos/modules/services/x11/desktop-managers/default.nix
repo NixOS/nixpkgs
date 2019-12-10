@@ -86,23 +86,14 @@ in
       };
 
       default = mkOption {
-        type = types.str;
-        default = "";
+        type = types.nullOr types.str;
+        default = null;
         example = "none";
-        description = "Default desktop manager loaded if none have been chosen.";
-        apply = defaultDM:
-          if defaultDM == "" && cfg.session.list != [] then
-            (head cfg.session.list).name
-          else if any (w: w.name == defaultDM) cfg.session.list then
-            defaultDM
-          else
-            throw ''
-              Default desktop manager (${defaultDM}) not found.
-              Probably you want to change
-                services.xserver.desktopManager.default = "${defaultDM}";
-              to one of
-                ${concatMapStringsSep "\n  " (w: "services.xserver.desktopManager.default = \"${w.name}\";") cfg.session.list}
-            '';
+        description = ''
+          <emphasis role="strong">Deprecated</emphasis>, please use <xref linkend="opt-services.xserver.displayManager.defaultSession"/> instead.
+
+          Default desktop manager loaded if none have been chosen.
+        '';
       };
 
     };

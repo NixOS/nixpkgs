@@ -83,8 +83,7 @@
   desktop environment. If you wanted no desktop environment and i3 as your your
   window manager, you'd define:
 <programlisting>
-<xref linkend="opt-services.xserver.desktopManager.default"/> = "none";
-<xref linkend="opt-services.xserver.windowManager.default"/> = "i3";
+<xref linkend="opt-services.xserver.displayManager.defaultSession"/> = "none+i3";
 </programlisting>
   And, finally, to enable auto-login for a user <literal>johndoe</literal>:
 <programlisting>
