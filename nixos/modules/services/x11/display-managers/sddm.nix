@@ -79,6 +79,11 @@ let
 
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "sddm" "themes" ]
+      "Set the option `services.xserver.displayManager.sddm.package' instead.")
+  ];
+
   options = {
 
     services.xserver.displayManager.sddm = {

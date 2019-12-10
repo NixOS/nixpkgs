@@ -149,6 +149,8 @@ in
     [ ./display-managers/default.nix
       ./window-managers/default.nix
       ./desktop-managers/default.nix
+      (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
+        "See the 16.09 release notes for more information.")
     ];
 
 

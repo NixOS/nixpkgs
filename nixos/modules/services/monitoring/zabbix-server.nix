@@ -44,6 +44,11 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "zabbixServer" "dbServer" ] [ "services" "zabbixServer" "database" "host" ])
+    (lib.mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
+  ];
+
   # interface
 
   options = {

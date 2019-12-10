@@ -86,7 +86,7 @@ let
       }
 
       plugin {
-        quota_rule = *:storage=${cfg.quotaGlobalPerUser} 
+        quota_rule = *:storage=${cfg.quotaGlobalPerUser}
         quota = maildir:User quota # per virtual mail user quota # BUG/FIXME broken, we couldn't get this working
         quota_status_success = DUNNO
         quota_status_nouser = DUNNO
@@ -133,6 +133,9 @@ let
   };
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+  ];
 
   options.services.dovecot2 = {
     enable = mkEnableOption "Dovecot 2.x POP3/IMAP server";

@@ -24,6 +24,10 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd")
+    (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
+  ];
 
   ###### interface
 

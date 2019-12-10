@@ -65,6 +65,9 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
+  ];
 
   ###### interface
 

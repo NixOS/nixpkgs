@@ -464,6 +464,11 @@ let
   };
 
 in {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
+  ];
+
   options.services.prometheus = {
 
     enable = mkOption {

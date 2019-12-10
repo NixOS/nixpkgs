@@ -5,6 +5,10 @@ with lib;
 let
   cfg = config.services.kubernetes.addons.dashboard;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "kubernetes" "addons" "dashboard" "enableRBAC" ] [ "services" "kubernetes" "addons" "dashboard" "rbac" "enable" ])
+  ];
+
   options.services.kubernetes.addons.dashboard = {
     enable = mkEnableOption "kubernetes dashboard addon";
 
