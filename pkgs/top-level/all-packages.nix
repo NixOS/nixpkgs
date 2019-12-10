@@ -8708,6 +8708,7 @@ in
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
+  rustup-with-dev = { devPkgs }: callPackage ../development/tools/rust/rustup/with-dev.nix { inherit devPkgs; };
 
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
