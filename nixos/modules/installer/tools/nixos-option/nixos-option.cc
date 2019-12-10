@@ -106,13 +106,14 @@ struct Context
 {
     Context(EvalState & state, Bindings & autoArgs, Value optionsRoot, Value configRoot)
         : state(state), autoArgs(autoArgs), optionsRoot(optionsRoot), configRoot(configRoot),
-          underscoreType(state.symbols.create("_type"))
+          underscoreType(state.symbols.create("_type")), submoduleAttr(state.symbols.create("__nixos-option-submodule-attr"))
     {}
     EvalState & state;
     Bindings & autoArgs;
     Value optionsRoot;
     Value configRoot;
     Symbol underscoreType;
+    Symbol submoduleAttr;
 };
 
 Value evaluateValue(Context & ctx, Value & v)
@@ -126,24 +127,29 @@ Value evaluateValue(Context & ctx, Value & v)
     return called;
 }
 
-bool isOption(Context & ctx, const Value & v)
+bool isType(Context & ctx, const Value & v, const std::string & type)
 {
     if (v.type != tAttrs) {
         return false;
     }
-    const auto & atualType = v.attrs->find(ctx.underscoreType);
-    if (atualType == v.attrs->end()) {
+    const auto & actualType = v.attrs->find(ctx.underscoreType);
+    if (actualType == v.attrs->end()) {
         return false;
     }
     try {
-        Value evaluatedType = evaluateValue(ctx, *atualType->value);
+        Value evaluatedType = evaluateValue(ctx, *actualType->value);
         if (evaluatedType.type != tString) {
             return false;
         }
-        return static_cast<std::string>(evaluatedType.string.s) == "option";
+        return static_cast<std::string>(evaluatedType.string.s) == type;
     } catch (Error &) {
         return false;
     }
+}
+
+bool isOption(Context & ctx, const Value & v)
+{
+    return isType(ctx, v, "option");
 }
 
 // Add quotes to a component of a path.
@@ -519,11 +525,24 @@ Value findAlongOptionPath(Context & ctx, const std::string & path)
             } else if (v.type != tAttrs) {
                 throw OptionPathError("Value is %s while a set was expected", showType(v));
             } else {
-                const auto & next = v.attrs->find(ctx.state.symbols.create(attr));
+                auto symbol = ctx.state.symbols.create(attr);
+                const auto & next = v.attrs->find(symbol);
                 if (next == v.attrs->end()) {
+                    try {
+                        const auto & value = findAlongAttrPath(ctx.state, path, ctx.autoArgs, ctx.configRoot);
+                        Value &dummyOpt = *ctx.state.allocValue();
+                        ctx.state.mkAttrs(dummyOpt, 1);
+                        Value *type = ctx.state.allocAttr(dummyOpt, ctx.state.symbols.create("_type"));
+                        nix::mkString(*type, ctx.submoduleAttr);
+                        v = dummyOpt;
+                        break;
+                    } catch (Error & e) {
+                        // do nothing
+                    }
                     throw OptionPathError("Attribute not found", attr, path);
+                } else {
+                   v = *next->value;
                 }
-                v = *next->value;
             }
         } catch (OptionPathError & e) {
             throw OptionPathError("At '%s' in path '%s': %s", attr, path, e.msg());
@@ -537,7 +556,9 @@ void printOne(Context & ctx, Out & out, const std::string & path)
     try {
         Value option = findAlongOptionPath(ctx, path);
         option = evaluateValue(ctx, option);
-        if (isOption(ctx, option)) {
+        if (isType(ctx, option, ctx.submoduleAttr)) {
+            printAttr(ctx, out, path, ctx.configRoot);
+        } else if (isOption(ctx, option)) {
             printOption(ctx, out, path, option);
         } else {
             printListing(out, option);
