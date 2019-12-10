@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : 
+import ./make-test-python.nix ({ pkgs, ...} :
 
 let
 
@@ -7,7 +7,7 @@ let
 
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
-      services.httpd.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
+      services.httpd.documentRoot = "${pkgs.nix.doc}/share/doc/nix/manual";
       networking.firewall.allowedTCPPorts = [ 80 ];
     };
 
@@ -62,35 +62,29 @@ in
 
   testScript =
     ''
-      startAll;
+      start_all()
 
-      $proxy->waitForUnit("httpd");
-      $backend1->waitForUnit("httpd");
-      $backend2->waitForUnit("httpd");
-      $client->waitForUnit("network.target");
+      with subtest("Wait for units to start"):
+          proxy.wait_for_unit("httpd")
+          backend1.wait_for_unit("httpd")
+          backend2.wait_for_unit("httpd")
+          client.wait_for_unit("network.target")
 
-      # With the back-ends up, the proxy should work.
-      $client->succeed("curl --fail http://proxy/");
+      with subtest("With the back-end up, the proxy should work"):
+          client.succeed("curl --fail http://proxy/")
+          client.succeed("curl --fail http://proxy/server-status")
 
-      $client->succeed("curl --fail http://proxy/server-status");
+      with subtest("The proxy should still work with the first back-end blocked off"):
+          backend1.block()
+          client.succeed("curl --fail http://proxy/")
+          client.succeed("curl --fail http://proxy/")
 
-      # Block the first back-end.
-      $backend1->block;
+      with subtest("The proxy should fail when the second back-end is blocked"):
+          backend2.block()
+          client.fail("curl --fail http://proxy/")
 
-      # The proxy should still work.
-      $client->succeed("curl --fail http://proxy/");
-
-      $client->succeed("curl --fail http://proxy/");
-
-      # Block the second back-end.
-      $backend2->block;
-
-      # Now the proxy should fail as well.
-      $client->fail("curl --fail http://proxy/");
-
-      # But if the second back-end comes back, the proxy should start
-      # working again.
-      $backend2->unblock;
-      $client->succeed("curl --fail http://proxy/");
+      with subtest("The proxy should start working again after second back-end comes back"):
+          backend2.unblock()
+          client.succeed("curl --fail http://proxy/")
     '';
 })
