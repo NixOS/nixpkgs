@@ -1,7 +1,8 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
-{ lib, stdenv, fetchurl, autoconf, bison, libtool, pkgconfig, re2c
+{ config, lib, stdenv, fetchurl
+, autoconf, automake, bison, file, flex, libtool, pkgconfig, re2c
 , libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pcre, pcre2, sqlite, config
+, openssl, pcre, pcre2, sqlite
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
 , gd, freetype, libXpm, libjpeg, libpng, libwebp
@@ -72,11 +73,14 @@ let
 
       inherit version;
 
-      name = "php-${version}";
+      pname = "php";
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [ autoconf bison libtool pkgconfig re2c ];
+      nativeBuildInputs = [
+        autoconf automake bison file flex libtool pkgconfig re2c
+      ];
+
       buildInputs = [ ]
         ++ optional (versionOlder version "7.3") pcre
         ++ optional (versionAtLeast version "7.3") pcre2
@@ -138,7 +142,6 @@ let
       ++ optional (libxml2Support && (versionOlder version "7.4")) "--with-libxml-dir=${libxml2.dev}"
       ++ optional (!libxml2Support) [
         "--disable-dom"
-        "--disable-libxml"
         (if (versionOlder version "7.4") then "--disable-libxml" else "--without-libxml")
         "--disable-simplexml"
         "--disable-xml"
@@ -217,11 +220,17 @@ let
             --replace '@PHP_LDFLAGS@' ""
         done
 
-        #[[ -z "$libxml2" ]] || addToSearchPath PATH $libxml2/bin
+        substituteInPlace ./build/libtool.m4 --replace /usr/bin/file ${file}/bin/file
 
         export EXTENSION_DIR=$out/lib/php/extensions
 
-        ./buildconf --force
+        ./buildconf --copy --force
+
+        if test -f $src/genfiles; then
+          ./genfiles
+        fi
+      '' + optionalString stdenv.isDarwin ''
+        substituteInPlace configure --replace "-lstdc++" "-lc++"
       '';
 
       postInstall = ''
@@ -233,8 +242,8 @@ let
         mkdir -p $dev/bin $dev/share/man/man1
         mv $out/bin/phpize $out/bin/php-config $dev/bin/
         mv $out/share/man/man1/phpize.1.gz \
-          $out/share/man/man1/php-config.1.gz \
-          $dev/share/man/man1/
+           $out/share/man/man1/php-config.1.gz \
+           $dev/share/man/man1/
       '';
 
       src = fetchurl {
@@ -252,10 +261,6 @@ let
       };
 
       patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
-
-      postPatch = optional stdenv.isDarwin ''
-        substituteInPlace configure --replace "-lstdc++" "-lc++"
-      '';
 
       stripDebugList = "bin sbin lib modules";
 
