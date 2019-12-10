@@ -67,14 +67,16 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     tenacity
   ];
 
-  makeWrapperArgs = [
-    "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
-    "--set PYTHONPATH \"$PYTHONPATH\""
-    "--prefix PATH : ${stdenv.lib.makeBinPath [ exiftool vmtouch ]}"
-    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libmediainfo ]}"
-    "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : \"$GST_PLUGIN_SYSTEM_PATH_1_0\""
-    "\${qtWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
+      --set PYTHONPATH "$PYTHONPATH"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ exiftool vmtouch ]}"
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libmediainfo ]}"
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
 
   meta = with stdenv.lib; {
     description = "Photo and video importer for cameras, phones, and memory cards";
