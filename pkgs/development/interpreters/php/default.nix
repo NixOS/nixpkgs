@@ -1,6 +1,6 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
 { lib, stdenv, fetchurl, autoconf, bison, libtool, pkgconfig, re2c
-, libmysqlclient, libxml2, readline, zlib, curl, postgresql, gettext
+, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
@@ -19,8 +19,8 @@ let
   , ldapSupport ? config.php.ldap or true
   , mhashSupport ? config.php.mhash or false
   , mysqlndSupport ? config.php.mysqlnd or true
-  , mysqliSupport ? config.php.mysqli or true
-  , pdo_mysqlSupport ? config.php.pdo_mysql or true
+  , mysqliSupport ? (config.php.mysqli or true) && (mysqlndSupport)
+  , pdo_mysqlSupport ? (config.php.pdo_mysql or true) && (mysqlndSupport)
   , libxml2Support ? config.php.libxml2 or true
   , apxs2Support ? config.php.apxs2 or (!stdenv.isDarwin)
   , embedSupport ? config.php.embed or false
@@ -64,7 +64,6 @@ let
   }:
 
     let
-      mysqlBuildInputs = optional (!mysqlndSupport) libmysqlclient;
       libmcrypt' = libmcrypt.override { disablePosixThreads = true; };
     in stdenv.mkDerivation {
 
@@ -95,8 +94,6 @@ let
         ++ optional postgresqlSupport postgresql
         ++ optional pdo_odbcSupport unixODBC
         ++ optional pdo_pgsqlSupport postgresql
-        ++ optionals pdo_mysqlSupport mysqlBuildInputs
-        ++ optionals mysqliSupport mysqlBuildInputs
         ++ optional gmpSupport gmp
         ++ optional gettextSupport gettext
         ++ optional intlSupport icu
@@ -152,11 +149,9 @@ let
       ++ optional postgresqlSupport "--with-pgsql=${postgresql}"
       ++ optional pdo_odbcSupport "--with-pdo-odbc=unixODBC,${unixODBC}"
       ++ optional pdo_pgsqlSupport "--with-pdo-pgsql=${postgresql}"
-      ++ optional pdo_mysqlSupport "--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else libmysqlclient}"
-      ++ optionals mysqliSupport [
-        "--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${libmysqlclient}/bin/mysql_config"}"
-      ]
-      ++ optional ( pdo_mysqlSupport || mysqliSupport ) "--with-mysql-sock=/run/mysqld/mysqld.sock"
+      ++ optional (pdo_mysqlSupport && mysqlndSupport) "--with-pdo-mysql=mysqlnd"
+      ++ optional (mysqliSupport && mysqlndSupport) "--with-mysqli=mysqlnd"
+      ++ optional (pdo_mysqlSupport || mysqliSupport) "--with-mysql-sock=/run/mysqld/mysqld.sock"
       ++ optional bcmathSupport "--enable-bcmath"
       # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
       ++ optionals (gdSupport && versionAtLeast version "7.4") [
