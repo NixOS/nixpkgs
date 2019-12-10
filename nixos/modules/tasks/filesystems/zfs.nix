@@ -103,6 +103,10 @@ in
 
 {
 
+  imports = [
+    (mkRemovedOptionModule [ "boot" "zfs" "enableLegacyCrypto" ] "The corresponding package was removed from nixpkgs.")
+  ];
+
   ###### interface
 
   options = {

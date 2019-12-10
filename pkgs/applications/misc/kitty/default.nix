@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, fetchFromGitHub, python3Packages, glfw, libunistring,
+{ stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
@@ -45,7 +45,7 @@ buildPythonApplication rec {
     python3
     zlib
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    fontconfig glfw libunistring libcanberra libX11
+    fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus
   ];
@@ -64,19 +64,19 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" ];
 
   patches = [
+    ./fix-paths.patch
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
     (substituteAll {
-      src = ./fix-paths.patch;
+      src = ./library-paths.patch;
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
+      libcanberra = "${libcanberra}/lib/libcanberra.so";
+      libEGL = "${stdenv.lib.getLib libGL}/lib/libEGL.so.1";
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     ./no-lto.patch
     ./no-werror.patch
     ./png2icns.patch
   ];
-
-  preConfigure  = stdenv.lib.optional (!stdenv.isDarwin) ''
-    substituteInPlace glfw/egl_context.c --replace "libEGL.so.1" "${stdenv.lib.getLib libGL}/lib/libEGL.so.1"
-  '';
 
   buildPhase = if stdenv.isDarwin then ''
     ${python.interpreter} setup.py kitty.app --update-check-interval=0

@@ -5,6 +5,7 @@
 , zlibSupport ? true, zlib ? null
 , sslSupport ? zlibSupport, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
+, wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
 , gssSupport ? !stdenv.hostPlatform.isWindows, libkrb5 ? null
 , c-aresSupport ? false, c-ares ? null
@@ -17,7 +18,10 @@ assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 assert !(gnutlsSupport && sslSupport);
+assert !(gnutlsSupport && wolfsslSupport);
+assert !(sslSupport && wolfsslSupport);
 assert gnutlsSupport -> gnutls != null;
+assert wolfsslSupport -> wolfssl != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 assert brotliSupport -> brotli != null;
@@ -53,6 +57,7 @@ stdenv.mkDerivation rec {
     optional c-aresSupport c-ares ++
     optional sslSupport openssl ++
     optional gnutlsSupport gnutls ++
+    optional wolfsslSupport wolfssl ++
     optional scpSupport libssh2 ++
     optional brotliSupport brotli;
 
@@ -67,7 +72,8 @@ stdenv.mkDerivation rec {
       # to nss-cacert from the default profile.
       "--without-ca-bundle"
       "--without-ca-path"
-      "--with-ca-fallback"
+      # The build fails when using wolfssl with --with-ca-fallback
+      ( if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
       ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
@@ -77,6 +83,7 @@ stdenv.mkDerivation rec {
       ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
+    ++ stdenv.lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
        # For the 'urandom', maybe it should be a cross-system option

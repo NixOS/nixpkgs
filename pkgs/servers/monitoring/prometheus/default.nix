@@ -1,10 +1,7 @@
-{ lib, go, buildGoPackage, fetchFromGitHub }:
+{ lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage }:
 
-buildGoPackage rec {
-  pname = "prometheus";
+let
   version = "2.14.0";
-
-  goPackagePath = "github.com/prometheus/prometheus";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -13,16 +10,47 @@ buildGoPackage rec {
     sha256 = "0zmxj78h3cnqbhsqab940hyzpim5i9r81b15a57f3dnrrd10p287";
   };
 
+  webui = mkYarnPackage {
+    src = "${src}/web/ui/react-app";
+    packageJSON = ./webui-package.json;
+    yarnNix = ./webui-yarndeps.nix;
+
+    # The standard yarn2nix directory management causes build failures with
+    # Prometheus's webui due to using relative imports into node_modules. Use
+    # an extremely simplified version of it instead.
+    configurePhase = "ln -s $node_modules node_modules";
+    buildPhase = "PUBLIC_URL=. yarn build";
+    installPhase = "mv build $out";
+    distPhase = "true";
+  };
+in buildGoPackage rec {
+  pname = "prometheus";
+  inherit src version;
+
+  goPackagePath = "github.com/prometheus/prometheus";
+
+  postPatch = ''
+    ln -s ${webui.node_modules} web/ui/react-app/node_modules
+    ln -s ${webui} web/ui/static/react
+  '';
+
   buildFlagsArray = let
     t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
-  in ''
-    -ldflags=
-       -X ${t}.Version=${version}
-       -X ${t}.Revision=unknown
-       -X ${t}.Branch=unknown
-       -X ${t}.BuildUser=nix@nixpkgs
-       -X ${t}.BuildDate=unknown
-       -X ${t}.GoVersion=${lib.getVersion go}
+  in [
+    "-tags=builtinassets"
+    ''
+      -ldflags=
+         -X ${t}.Version=${version}
+         -X ${t}.Revision=unknown
+         -X ${t}.Branch=unknown
+         -X ${t}.BuildUser=nix@nixpkgs
+         -X ${t}.BuildDate=unknown
+         -X ${t}.GoVersion=${lib.getVersion go}
+    ''
+  ];
+
+  preBuild = ''
+    make -C go/src/${goPackagePath} assets
   '';
 
   preInstall = ''

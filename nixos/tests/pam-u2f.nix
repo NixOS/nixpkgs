@@ -1,4 +1,4 @@
-import ./make-test.nix ({ ... }:
+import ./make-test-python.nix ({ ... }:
 
 {
   name = "pam-u2f";
@@ -17,7 +17,9 @@ import ./make-test.nix ({ ... }:
 
   testScript =
     ''
-      $machine->waitForUnit('multi-user.target');
-      $machine->succeed('egrep "auth required .*/lib/security/pam_u2f.so.*debug.*interactive.*cue" /etc/pam.d/ -R');
+      machine.wait_for_unit("multi-user.target")
+      machine.succeed(
+          'egrep "auth required .*/lib/security/pam_u2f.so.*debug.*interactive.*cue" /etc/pam.d/ -R'
+      )
     '';
 })

@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Simple yet powerful PDF reader designed for dual-screen presentations";
     license = licenses.gpl2Plus;
-    homepage = "https://pympress.xyz/";
+    homepage = "https://cimbali.github.io/pympress/";
     maintainers = [ maintainers.tbenst ];
   };
 }

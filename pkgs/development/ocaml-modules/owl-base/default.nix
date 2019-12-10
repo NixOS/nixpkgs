@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, integers, stdlib-shims }:
+{ stdenv, buildDunePackage, fetchFromGitHub, stdlib-shims }:
 
 buildDunePackage rec {
   pname = "owl-base";

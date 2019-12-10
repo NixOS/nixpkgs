@@ -73,6 +73,8 @@ let
 
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
 
+    biocaml = callPackage ../development/ocaml-modules/biocaml { };
+
     bistro = callPackage ../development/ocaml-modules/bistro { };
 
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
@@ -138,6 +140,8 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    cfstream = callPackage ../development/ocaml-modules/cfstream { };
+
     charInfo_width = callPackage ../development/ocaml-modules/charInfo_width { };
 
     checkseum = callPackage ../development/ocaml-modules/checkseum { };
@@ -185,6 +189,8 @@ let
 
     cpuid = callPackage ../development/ocaml-modules/cpuid { };
 
+    crunch = callPackage ../development/tools/ocaml/crunch { };
+
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     cstruct =
@@ -216,6 +222,8 @@ let
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
+
+    dispatch =  callPackage ../development/ocaml-modules/dispatch { };
 
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
@@ -291,6 +299,10 @@ let
 
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
+    gnuplot = callPackage ../development/ocaml-modules/gnuplot {
+      inherit (pkgs) gnuplot;
+    };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
@@ -335,6 +347,14 @@ let
     git-unix = callPackage ../development/ocaml-modules/git-unix { };
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
+
+    graphql = callPackage ../development/ocaml-modules/graphql { };
+
+    graphql-cohttp = callPackage ../development/ocaml-modules/graphql/cohttp.nix { };
+
+    graphql-lwt = callPackage ../development/ocaml-modules/graphql/lwt.nix { };
+
+    graphql_parser = callPackage ../development/ocaml-modules/graphql/parser.nix { };
 
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
 
@@ -468,7 +488,9 @@ let
 
     metrics-lwt = callPackage ../development/ocaml-modules/metrics/lwt.nix { };
 
-    metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix { };
+    metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix {
+      inherit (pkgs) gnuplot;
+    };
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
@@ -618,6 +640,8 @@ let
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
+
+    phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
     piqi = callPackage ../development/ocaml-modules/piqi {
       base64 = base64_2;
@@ -830,6 +854,8 @@ let
     visitors = callPackage ../development/ocaml-modules/visitors { };
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
+
+    webmachine = callPackage ../development/ocaml-modules/webmachine { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 

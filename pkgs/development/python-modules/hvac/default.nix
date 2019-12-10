@@ -1,15 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchPypi, requests, six }:
 
 buildPythonPackage rec {
   pname = "hvac";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b98be5868132a591ae5a3ca4b415231d4eac22d3fd77dbd69c3b1081d9ea26d";
+    sha256 = "1v37jabp859691863mw8j06hqxsy16ndf804z2k5y5b0d167j9by";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ requests six ];
 
   # Requires running a Vault server
   doCheck = false;

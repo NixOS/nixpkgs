@@ -1,9 +1,8 @@
 diff --git a/sddm-theme/theme.conf.cmake b/sddm-theme/theme.conf.cmake
-index 69d3070..52e9102 100644
+index ea9a943..f98ddd2 100644
 --- a/sddm-theme/theme.conf.cmake
 +++ b/sddm-theme/theme.conf.cmake
-@@ -1,5 +1,5 @@
- [General]
+@@ -2,4 +2,4 @@
  type=image
  color=#1d99f3
  fontSize=10
@@ -37,7 +36,7 @@ index 493218e..d507aa5 100644
 +    return system( NIXPKGS_KDOSTARTUPCONFIG5 );
      }
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index b68f0c6..a0ec214 100644
+index b68f0c6..97a13a1 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,22 +1,31 @@
@@ -443,7 +442,7 @@ index b68f0c6..a0ec214 100644
  if test $? -eq 255; then
    # Startup error
    echo 'startkde: Could not start ksmserver. Check your installation.'  1>&2
-@@ -286,36 +387,36 @@ fi
+@@ -286,19 +387,19 @@ fi
  #Anything after here is logout
  #It is not called after shutdown/restart
 
@@ -465,13 +464,12 @@ index b68f0c6..a0ec214 100644
              # ask remaining drkonqis to die in a graceful way
 -            qdbus | grep 'org.kde.drkonqi-' | while read address ; do
 -                qdbus "$address" "/MainApplication" "quit"
--            done
--            break
 +            @NIXPKGS_QDBUS@ | @NIXPKGS_GREP@ 'org.kde.drkonqi-' | while read address ; do
 +                @NIXPKGS_QDBUS@ "$address" "/MainApplication" "quit"
+             done
+             break
          fi
-     done
- fi
+@@ -307,15 +408,17 @@ fi
 
  echo 'startkde: Shutting down...'  1>&2
  # just in case
@@ -1008,5 +1006,3 @@ index dcb473a..0988740 100644
 
  echo 'startplasmacompositor: Shutting down...'  1>&2
 
---
-2.19.2

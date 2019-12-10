@@ -216,7 +216,7 @@
    <listitem>
     <para>
      The packages <literal>openobex</literal> and <literal>obexftp</literal>
-     are no loger installed when enabling bluetooth via
+     are no longer installed when enabling Bluetooth via
      <option>hardware.bluetooth.enable</option>.
     </para>
    </listitem>
@@ -226,6 +226,11 @@
      as its upstream. However, this version does not have an internal webserver anymore. The
      assets in the <literal>share/dump1090</literal> directory of the derivation can be used
      in conjunction with an external webserver to replace this functionality.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The fourStore and fourStoreEndpoint modules have been removed.
     </para>
    </listitem>
   </itemizedlist>

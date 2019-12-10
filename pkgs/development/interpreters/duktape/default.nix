@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "duktape";
-  version = "2.4.0";
+  version = "2.5.0";
   src = fetchurl {
     url = "http://duktape.org/duktape-${version}.tar.xz";
-    sha256 = "1z3i0ymnkk6q48bmbgh59g1ryrwjdv46vrf6nbnmqfv3s43r7a46";
+    sha256 = "05ln6b2a0s8ynz28armwqs2r5zjyi3cxi0dx6ahnxlqw19b13m43";
   };
 
   buildPhase = ''

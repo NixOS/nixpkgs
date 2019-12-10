@@ -25,6 +25,8 @@
 , sse42Support ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") ["westmere" "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" "skylake-avx512"]
 , avx2Support  ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
 , fmaSupport   ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
+# Darwin deps
+, Foundation, Security
 }:
 
 assert cudaSupport -> nvidia_x11 != null
@@ -157,6 +159,9 @@ let
       cudatoolkit
       cudnn
       nvidia_x11
+    ] ++ lib.optionals stdenv.isDarwin [
+      Foundation
+      Security
     ];
 
     # arbitrarily set to the current latest bazel version, overly careful
@@ -326,7 +331,7 @@ let
       homepage = http://tensorflow.org;
       license = licenses.asl20;
       maintainers = with maintainers; [ jyp abbradar ];
-      platforms = platforms.linux;
+      platforms = with platforms; linux ++ darwin;
       # The py2 build fails due to some issue importing protobuf. Possibly related to the fix in
       # https://github.com/akesandgren/easybuild-easyblocks/commit/1f2e517ddfd1b00a342c6abb55aef3fd93671a2b
       broken = !(xlaSupport -> cudaSupport) || !isPy3k;

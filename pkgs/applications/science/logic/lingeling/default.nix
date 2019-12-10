@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     description = "Fast SAT solver";
     homepage    = http://fmv.jku.at/lingeling/;
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -2,7 +2,6 @@
 , python3
 , groff
 , less
-, fetchpatch
 }:
 
 let
@@ -15,7 +14,6 @@ let
           sha256 = "25df4e10c263fb88b5ace923dd84bf9aa7f5019687b5e55382ffcdb8bede9db5";
         };
       });
-      prompt_toolkit = self.callPackage ../../../development/python-modules/prompt_toolkit/1.nix { };
     };
   };
 

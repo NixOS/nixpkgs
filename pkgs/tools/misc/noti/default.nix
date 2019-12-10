@@ -3,13 +3,13 @@
 
 buildGoPackage rec {
   pname = "noti";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "variadico";
     repo = "noti";
     rev = version;
-    sha256 = "1644bivjcky07n3rrm83vsms7hw47p4hnp2536q0z3qca5jyri2f";
+    sha256 = "0bcwfyd93fx0rzjc9jgg4pvvqbpxwizr044yqqa5rx70gaasz7qa";
   };
 
   buildInputs = lib.optional stdenv.isDarwin Cocoa;

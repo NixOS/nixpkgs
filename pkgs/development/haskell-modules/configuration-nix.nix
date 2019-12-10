@@ -645,7 +645,7 @@ self: super: builtins.intersectAttrs super {
       # LTS-14.
       spagoWithOverrides = doJailbreak (super.spago.override {
         # spago requires the latest version of dhall.
-        directory = self.dhall_1_27_0;
+        directory = self.dhall_1_28_0;
       });
 
       docsSearchAppJsFile = pkgs.fetchurl {

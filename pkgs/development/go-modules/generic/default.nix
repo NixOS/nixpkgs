@@ -98,6 +98,7 @@ let
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
+      export GOSUMDB=off
       export GOPROXY=file://${go-modules}
 
       runHook postConfigure
