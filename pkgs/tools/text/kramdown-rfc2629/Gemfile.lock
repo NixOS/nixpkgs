@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    certified (1.0.0)
+    kramdown (1.17.0)
+    kramdown-rfc2629 (1.2.13)
+      certified (~> 1.0)
+      kramdown (~> 1.17.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  kramdown-rfc2629
+
+BUNDLED WITH
+   1.17.3
