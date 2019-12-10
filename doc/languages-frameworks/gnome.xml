@@ -199,9 +199,9 @@ python3.pkgs.buildPythonApplication {
   dontWrapGApps = true;
 
   # Arguments to be passed to `makeWrapper`, only used by buildPython*
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 }
 </programlisting>
       And for a QT app like:
@@ -219,9 +219,9 @@ mkDerivation {
   dontWrapGApps = true;
 
   # Arguments to be passed to `makeWrapper`, only used by qt5’s mkDerivation
-  qtWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 }
 </programlisting>
      </para>
