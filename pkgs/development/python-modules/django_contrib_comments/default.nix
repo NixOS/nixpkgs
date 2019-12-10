@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "django-contrib-comments";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "61b051d7bc3ff593e86b41a1ed5e969423cf55cc92768598af3315e2528e0890";
+    sha256 = "d1232bade3094de07dcc205fc833204384e71ba9d30caadcb5bb2882ce8e8d31";
   };
 
   propagatedBuildInputs = [ django ];
