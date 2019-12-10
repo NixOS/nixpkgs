@@ -62,10 +62,12 @@ buildPythonApplication rec {
 
   # fix over-restrictive version bounds
   postPatch = ''
-    substituteInPlace requirements/base.txt --replace "requests==2.20.1" "requests==2.22.0"
-    substituteInPlace requirements/base.txt --replace "serverlessrepo==0.1.9" "serverlessrepo~=0.1.9"
-    substituteInPlace requirements/base.txt --replace "six~=1.11.0" "six~=1.12.0"
-    substituteInPlace requirements/base.txt --replace "PyYAML~=3.12" "PyYAML~=5.1"
+    substituteInPlace requirements/base.txt \
+      --replace "requests==2.20.1" "requests==2.22.0" \
+      --replace "serverlessrepo==0.1.9" "serverlessrepo~=0.1.9" \
+      --replace "six~=1.11.0" "six~=1.12.0" \
+      --replace "python-dateutil~=2.6, <2.8.1" "python-dateutil~=2.6" \
+      --replace "PyYAML~=3.12" "PyYAML~=5.1"
   '';
 
   meta = with lib; {
