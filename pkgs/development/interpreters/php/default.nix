@@ -62,6 +62,7 @@ let
   , cgotoSupport ? config.php.cgoto or false
   , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
   , ipv6Support ? config.php.ipv6 or true
+  , pearSupport ? (config.php.pear or true) && (libxml2Support)
   }:
 
     let
@@ -195,7 +196,8 @@ let
       ++ optional xmlrpcSupport "--with-xmlrpc"
       ++ optional cgotoSupport "--enable-re2c-cgoto"
       ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}"
-      ++ optional (!ipv6Support) "--disable-ipv6";
+      ++ optional (!ipv6Support) "--disable-ipv6"
+      ++ optional (pearSupport && libxml2Support) "--with-pear=$(out)/lib/php/pear";
 
       hardeningDisable = [ "bindnow" ];
 
