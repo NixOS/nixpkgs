@@ -189,6 +189,11 @@ let
 
 in {
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
+    (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ] "")
+  ];
+
   options = {
     services.gitlab = {
       enable = mkOption {
