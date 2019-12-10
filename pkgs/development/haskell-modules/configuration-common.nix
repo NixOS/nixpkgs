@@ -308,6 +308,7 @@ self: super: {
   hgdbmi = dontCheck super.hgdbmi;
   hi = dontCheck super.hi;
   hierarchical-clustering = dontCheck super.hierarchical-clustering;
+  hie-bios = dontCheck super.hie-bios;                  # https://github.com/mpickering/hie-bios/issues/25#issuecomment-567011935
   hlibgit2 = disableHardening super.hlibgit2 [ "format" ];
   hmatrix-tests = dontCheck super.hmatrix-tests;
   hquery = dontCheck super.hquery;
@@ -1323,8 +1324,10 @@ self: super: {
   spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
 
   # ghcide needs the latest versions of haskell-lsp.
-  ghcide = super.ghcide.override { haskell-lsp = self.haskell-lsp_0_18_0_0; lsp-test = self.lsp-test_0_8_2_0; };
-  haskell-lsp_0_18_0_0 = super.haskell-lsp_0_18_0_0.override { haskell-lsp-types = self.haskell-lsp-types_0_18_0_0; };
-  lsp-test_0_8_2_0 = (dontCheck super.lsp-test_0_8_2_0).override { haskell-lsp = self.haskell-lsp_0_18_0_0; };
-
+  ghcide = doJailbreak (super.ghcide.override {
+    haskell-lsp = super.haskell-lsp_0_19_0_0.override { # This is in fact a version too new.
+      haskell-lsp-types = super.haskell-lsp-types_0_19_0_0;
+    };
+    hie-bios = self.hie-bios;
+  });
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
