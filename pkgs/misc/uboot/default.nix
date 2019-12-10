@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchurl, fetchpatch, bc, bison, dtc, flex, openssl, swig
-, armTrustedFirmwareAllwinner
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, bc, bison, dtc, flex
+, openssl, swig, armTrustedFirmwareAllwinner, armTrustedFirmwareRK3328
+, armTrustedFirmwareRK3399
 , buildPackages
 }:
 
@@ -27,14 +28,22 @@ let
     src = if src == null then defaultSrc else src;
 
     patches = [
+      # Submitted upstream: https://patchwork.ozlabs.org/patch/1203693/
       (fetchpatch {
         url = https://github.com/dezgeg/u-boot/commit/extlinux-path-length-2018-03.patch;
         sha256 = "07jafdnxvqv8lz256qy29agjc2k1zj5ad4k28r1w5qkhwj4ixmf8";
+      })
+      # Submitted upstream: https://patchwork.ozlabs.org/patch/1203678/
+      (fetchpatch {
+        name = "rockchip-allow-loading-larger-kernels.patch";
+        url = "https://marc.info/?l=u-boot&m=157537843004298&q=raw";
+        sha256 = "0l3l88cc9xkxkraql82pfgpx6nqn4dj7cvfaagh5pzfwkxyw0n3p";
       })
     ] ++ extraPatches;
 
     postPatch = ''
       patchShebangs tools
+      patchShebangs arch/arm/mach-rockchip
     '';
 
     nativeBuildInputs = [
@@ -249,6 +258,43 @@ in {
     defconfig = "rpi_0_w_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRock64 = let
+    rkbin = fetchFromGitHub {
+      owner = "ayufan-rock64";
+      repo = "rkbin";
+      rev = "f79a708978232a2b6b06c2e4173c5314559e0d3a";
+      sha256 = "0h7xm4ck3p3380c6bqm5ixrkxwcx6z5vysqdwvfa7gcqx5d6x5zz";
+    };
+  in buildUBoot {
+    extraMakeFlags = [ "all" "u-boot.itb" ];
+    defconfig = "rock64-rk3328_defconfig";
+    extraMeta = {
+      platforms = [ "aarch64-linux" ];
+      license = lib.licenses.unfreeRedistributableFirmware;
+    };
+    BL31="${armTrustedFirmwareRK3328}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img"];
+    # Derive MAC address from cpuid
+    # Submitted upstream: https://patchwork.ozlabs.org/patch/1203686/
+    extraConfig = ''
+      CONFIG_MISC_INIT_R=y
+    '';
+    # Close to being blob free, but the U-Boot TPL causes random memory
+    # corruption
+    postBuild = ''
+      ./tools/mkimage -n rk3328 -T rksd -d ${rkbin}/rk33/rk3328_ddr_786MHz_v1.13.bin idbloader.img
+      cat spl/u-boot-spl.bin >> idbloader.img
+    '';
+  };
+
+  ubootRockPro64 = buildUBoot {
+    extraMakeFlags = [ "all" "u-boot.itb" ];
+    defconfig = "rockpro64-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31="${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
 
   ubootSheevaplug = buildUBoot {

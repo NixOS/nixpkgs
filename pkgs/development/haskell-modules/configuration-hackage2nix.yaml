@@ -4796,6 +4796,7 @@ broken-packages:
   - foscam-sort
   - Foster
   - fpco-api
+  - fplll
   - fpnla-examples
   - FPretty
   - fptest
@@ -7075,6 +7076,7 @@ broken-packages:
   - mangopay
   - manifold-random
   - manifolds
+  - Map
   - map-exts
   - map-reduce-folds
   - map-syntax
@@ -7099,6 +7101,7 @@ broken-packages:
   - marxup
   - masakazu-bot
   - MASMGen
+  - mason
   - massiv
   - massiv-io
   - massiv-test
@@ -8017,6 +8020,7 @@ broken-packages:
   - polh-lexicon
   - polimorf
   - Pollutocracy
+  - poly
   - poly-control
   - polydata
   - polydata-core
@@ -8399,6 +8403,7 @@ broken-packages:
   - reflex-dom-svg
   - reflex-gloss
   - reflex-gloss-scene
+  - reflex-libtelnet
   - reflex-orphans
   - reflex-sdl2
   - reflex-transformers
@@ -8657,7 +8662,6 @@ broken-packages:
   - savage
   - sax
   - SBench
-  - sbv
   - sbvPlugin
   - sc2-lowlevel
   - sc2-proto
@@ -9196,6 +9200,7 @@ broken-packages:
   - stack-run
   - stack-run-auto
   - stack-type
+  - stack-wrapper
   - stack2cabal
   - stack2nix
   - stackage

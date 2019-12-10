@@ -126,7 +126,7 @@ let
 
     gpg-agent --daemon --scdaemon-program $out/bin/scdaemon > /dev/null 2> /dev/null
     ''}
-        
+
     # Disable all input echo for the whole stage. We could use read -s
     # instead but that would ocasionally leak characters between read
     # invocations.
@@ -417,6 +417,9 @@ let
 
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
+  ];
 
   options = {
 

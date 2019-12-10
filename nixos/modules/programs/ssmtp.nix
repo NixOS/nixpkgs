@@ -13,6 +13,11 @@ let
 in
 {
 
+  imports = [
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" ] [ "services" "ssmtp" ])
+    (mkRenamedOptionModule [ "services" "ssmtp" "directDelivery" ] [ "services" "ssmtp" "enable" ])
+  ];
+
   options = {
 
     services.ssmtp = {

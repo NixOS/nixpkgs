@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "espeak-ng";
-  version = "1.49.2";
+  version = "1.50";
 
   src = fetchFromGitHub {
     owner = "espeak-ng";
     repo = "espeak-ng";
     rev = version;
-    sha256 = "17bbl3zi8214iaaj8kjnancjvmvizwybg3sg17qjq4mf5c6xfg2c";
+    sha256 = "0jkqhf2h94vbqq7mg7mmm23bq372fa7mdk941my18c3vkldcir1b";
   };
 
   nativeBuildInputs = [ autoconf automake which libtool pkgconfig ronn ];

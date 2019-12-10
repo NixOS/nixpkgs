@@ -1,7 +1,7 @@
 { config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
 , curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
+, openldap, perl, pkgconfig, poppler, python, shared-mime-info
 , glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
 # Build options
 # TODO: A flag to build the manual.
@@ -13,7 +13,6 @@
 , enableNetworkManager ? config.networking.networkmanager.enable or false
 , enablePgp ? true
 , enablePluginArchive ? false
-, enablePluginFancy ? false
 , enablePluginNotificationDialogs ? true
 , enablePluginNotificationSounds ? true
 , enablePluginPdf ? false
@@ -64,12 +63,10 @@ stdenv.mkDerivation rec {
     ++ optional enablePluginArchive libarchive
     ++ optional enablePluginNotificationSounds libcanberra-gtk2
     ++ optional enablePluginNotificationDialogs libnotify
-    ++ optional enablePluginFancy libsoup
     ++ optional enablePluginRssyl libxml2
     ++ optional enableNetworkManager networkmanager
     ++ optional enableLdap openldap
     ++ optional enablePluginPdf poppler
-    ++ optional enablePluginFancy webkitgtk24x-gtk2
     ++ optional enablePluginVcalendar libical;
 
   configureFlags =
@@ -81,7 +78,6 @@ stdenv.mkDerivation rec {
       "--disable-pgpmime-plugin"
     ]
     ++ optional (!enablePluginArchive) "--disable-archive-plugin"
-    ++ optional (!enablePluginFancy) "--disable-fancy-plugin"
     ++ optional (!enablePluginPdf) "--disable-pdf_viewer-plugin"
     ++ optional (!enablePluginPython) "--disable-python-plugin"
     ++ optional (!enablePluginRavatar) "--disable-libravatar-plugin"

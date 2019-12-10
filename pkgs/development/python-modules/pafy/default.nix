@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A library to download YouTube content and retrieve metadata";
-    homepage = http://np1.github.io/pafy/;
+    homepage = https://github.com/mps-youtube/pafy;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ odi ];
   };

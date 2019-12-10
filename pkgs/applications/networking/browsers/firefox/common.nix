@@ -95,7 +95,7 @@ let
   browserPatches = [
     ./env_var_for_system_dir.patch
   ]
-  ++ lib.optional (lib.versionAtLeast ffversion "63" && lib.versionOlder ffversion "69")
+  ++ lib.optional (lib.versionAtLeast ffversion "63" && lib.versionOlder ffversion "68.3.0")
     (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
       name = "write_error-parallel_make.diff";
       url = "https://hg.mozilla.org/mozilla-central/raw-diff/562655fe/python/mozbuild/mozbuild/action/node.py";
@@ -110,7 +110,8 @@ let
       url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
       sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
     })
-  ] ++ patches;
+  ] ++ lib.optional (lib.versionAtLeast ffversion "71") ./fix-ff71-lto.patch
+  ++ patches;
 
 in
 

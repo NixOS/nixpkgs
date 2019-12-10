@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vips";
-  version = "8.8.3";
+  version = "8.8.4";
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
-    sha256 = "0wlwcgcp7d3vhjdbi3xlpvnj4jl4321vac9v1sr1mis4aivwzsrn";
+    sha256 = "1gw8srjf5r6dhg6g5hh91if302mcr44dzy87mv230ar7027kwwbi";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''

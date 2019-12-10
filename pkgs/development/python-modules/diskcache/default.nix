@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Disk and file backed persistent cache";
-    homepage = https://www.grantjenks.com/docs/diskcache/;
+    homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

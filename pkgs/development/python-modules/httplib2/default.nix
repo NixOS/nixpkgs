@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = http://code.google.com/p/httplib2;
+    homepage = "https://github.com/httplib2/httplib2";
     description = "A comprehensive HTTP client library";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

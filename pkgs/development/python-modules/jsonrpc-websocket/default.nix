@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, aiohttp, jsonrpc-base }:
+, aiohttp, jsonrpc-base, pep8 }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
@@ -9,6 +9,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "f1aaca95db795d6a9f7bba52ff83c7fd4139050d0df93ee3a5a448adcfa0c0ac";
   };
+
+  nativeBuildInputs = [ pep8 ];
 
   propagatedBuildInputs = [ aiohttp jsonrpc-base ];
 

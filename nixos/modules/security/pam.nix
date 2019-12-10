@@ -484,6 +484,10 @@ in
 
 {
 
+  imports = [
+    (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
+  ];
+
   ###### interface
 
   options = {
@@ -707,7 +711,7 @@ in
 
           Use "challenge-response" for offline validation using YubiKeys with HMAC-SHA-1
           Challenge-Response configurations. See the man-page ykpamcfg(1) for further
-          details on how to configure offline Challenge-Response validation. 
+          details on how to configure offline Challenge-Response validation.
 
           More information can be found <link
           xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.

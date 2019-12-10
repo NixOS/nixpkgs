@@ -31,6 +31,11 @@ let
 in
 
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "opengl" "extraPackages" ])
+  ];
+
   options = {
 
     hardware.opengl = {

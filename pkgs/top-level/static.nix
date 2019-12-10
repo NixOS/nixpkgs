@@ -115,14 +115,15 @@ in {
   } // optionalAttrs super.stdenv.hostPlatform.isDarwin {
     pythonSupport = false;
   });
-  zlib = (super.zlib.override {
+  zlib = super.zlib.override {
     static = true;
     shared = false;
+    splitStaticOutput = false;
 
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
-  }).static;
+  };
   xz = super.xz.override {
     enableStatic = true;
   };
@@ -212,6 +213,10 @@ in {
   curl = super.curl.override {
     # a very sad story: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
     gssSupport = false;
+  };
+
+  e2fsprogs = super.e2fsprogs.override {
+    shared = false;
   };
 
   brotli = super.brotli.override {

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://alastair/python-musicbrainz-ngs;
+    homepage = "https://python-musicbrainzngs.readthedocs.org/";
     description = "Python bindings for musicbrainz NGS webservice";
     license = licenses.bsd2;
     maintainers = with maintainers; [ domenkozar ];

@@ -13,6 +13,10 @@ let
   '';
 in {
 
+  imports = [
+    (mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])
+  ];
+
   ###### interface
 
   options = {
