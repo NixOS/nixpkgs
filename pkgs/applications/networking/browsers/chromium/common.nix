@@ -16,7 +16,7 @@
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined, libGL
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
-, jdk
+, jre
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -116,7 +116,7 @@ let
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU_combined
       pciutils protobuf speechd libXdamage at-spi2-core
-      jdk.jre
+      jre
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
