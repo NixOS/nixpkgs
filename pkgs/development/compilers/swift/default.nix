@@ -221,6 +221,8 @@ stdenv.mkDerivation {
 
     # Workaround hardcoded dep on "libcurses" (vs "libncurses"):
     sed -i 's/curses/ncurses/' llbuild/*/*/CMakeLists.txt
+    # uuid.h is not part of glibc, but of libuuid
+    sed -i 's|''${GLIBC_INCLUDE_PATH}/uuid/uuid.h|${libuuid.dev}/include/uuid/uuid.h|' swift/stdlib/public/Platform/glibc.modulemap.gyb
 
     PREFIX=''${out/#\/}
     substituteInPlace indexstore-db/Utilities/build-script-helper.py \
@@ -265,15 +267,20 @@ stdenv.mkDerivation {
       extra_cmake_options="${stdenv.lib.concatStringsSep "," cmakeFlags}"
   '';
 
-  doCheck = false;
+  doCheck = true;
 
   checkInputs = [ file ];
 
-  # TODO: investigate the non-working tests
   checkPhase = ''
+    # FIXME: disable non-working tests
+    rm $SWIFT_SOURCE_ROOT/swift/test/Driver/static-stdlib-linux.swift  # static linkage of libatomic.a complains about missing PIC
+    rm $SWIFT_SOURCE_ROOT/swift/validation-test/Python/build_swift.swift  # install_prefix not passed properly
+
+    # match the swift wrapper in the install phase
+    export LIBRARY_PATH=${icu}/lib:${libuuid.out}/lib
+
     checkTarget=check-swift-all
     ninjaFlags='-C buildbot_linux/swift-${stdenv.hostPlatform.parsed.kernel.name}-${stdenv.hostPlatform.parsed.cpu.name}'
-
     ninjaCheckPhase
   '';
 
@@ -292,7 +299,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/swift \
       --suffix C_INCLUDE_PATH : $out/lib/swift/clang/include \
       --suffix CPLUS_INCLUDE_PATH : $out/lib/swift/clang/include \
-      --suffix LIBRARY_PATH : $icu/lib
+      --suffix LIBRARY_PATH : ${icu}/lib:${libuuid.out}/lib
   '';
 
   # Hack to avoid build and install directories in RPATHs.
