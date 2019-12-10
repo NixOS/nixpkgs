@@ -1123,6 +1123,16 @@ preBuild = ''
 
    <variablelist>
     <title>Variables controlling the install phase</title>
+     <varlistentry>
+     <term>
+       <varname>dontInstall</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the install phase.
+      </para>
+     </listitem>
+    </varlistentry>
     <varlistentry>
      <term>
       <varname>makeFlags</varname> / <varname>makeFlagsArray</varname> / <varname>makefile</varname>
