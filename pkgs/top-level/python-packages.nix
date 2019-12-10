@@ -5362,6 +5362,10 @@ in {
 
   uarray = callPackage ../development/python-modules/uarray { };
 
+  ueberzug = callPackage ../development/python-modules/ueberzug {
+    inherit (pkgs.xorg) libX11 libXext;
+  };
+
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
   umap-learn = callPackage ../development/python-modules/umap-learn { };
