@@ -93,7 +93,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ curl ];
       preStart = ''
-        test -f '/run/unit/control.unit.sock' || rm -f '/run/unit/control.unit.sock'
+        test -f '${cfg.stateDir}/conf.json' || rm -f '${cfg.stateDir}/conf.json'
       '';
       postStart = ''
         curl -X PUT --data-binary '@${configFile}' --unix-socket '/run/unit/control.unit.sock' 'http://localhost/config'
