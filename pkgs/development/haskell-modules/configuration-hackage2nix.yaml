@@ -3657,7 +3657,6 @@ broken-packages:
   - classy-miso
   - classy-parallel
   - ClassyPrelude
-  - clay
   - clckwrks
   - clckwrks-cli
   - clckwrks-dot-com
