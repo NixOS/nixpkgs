@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "soundfile";
-  version = "0.10.2";
+  version = "0.10.3.post1";
 
   src = fetchPypi {
     pname = "SoundFile";
     inherit version;
-    sha256 = "0w8mjadairg6av88090kwsridd0k115672b91zlcmf37r0c64zv3";
+    sha256 = "0yqhrfz7xkvqrwdxdx2ydy4h467sk7z3gf984y1x2cq7cm1gy329";
   };
 
     checkInputs = [ pytest ];
