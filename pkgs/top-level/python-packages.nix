@@ -1142,7 +1142,7 @@ in {
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
   pytest-bdd = callPackage ../development/python-modules/pytest-bdd { };
-  
+
   pytest-black = callPackage ../development/python-modules/pytest-black { };
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
@@ -5327,6 +5327,10 @@ in {
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 
   uarray = callPackage ../development/python-modules/uarray { };
+
+  ueberzug = callPackage ../development/python-modules/ueberzug {
+    inherit (pkgs.xorg) libX11 libXext;
+  };
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
