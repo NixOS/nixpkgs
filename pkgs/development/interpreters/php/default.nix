@@ -211,9 +211,6 @@ let
 
         export EXTENSION_DIR=$out/lib/php/extensions
 
-        configureFlags+=(--with-config-file-path=$out/etc \
-          --includedir=$dev/include)
-
         ./buildconf --force
       '';
 
