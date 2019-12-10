@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, youtube-dl, fetchPypi }:
 buildPythonPackage rec {
   pname = "pafy";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e842dc589a339a870b5869cc3802f2e95824edf347f65128223cd5ebdff21024";
+    sha256 = "364f1d1312c89582d97dc7225cf6858cde27cb11dfd64a9c2bab1a2f32133b1e";
   };
 
   # No tests included in archive
