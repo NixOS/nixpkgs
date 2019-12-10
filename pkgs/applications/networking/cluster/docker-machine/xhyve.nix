@@ -9,7 +9,7 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     rev    = "v${version}";
-    owner  = "zchee";
+    owner  = "machine-drivers";
     repo   = "docker-machine-driver-xhyve";
     sha256 = "0rj6pyqp4yv4j28bglqjs95rip5i77vv8mrkmqv1rxrsl3i8aqqy";
   };
@@ -18,7 +18,7 @@ buildGoPackage rec {
   buildInputs = [ Hypervisor vmnet ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/zchee/docker-machine-driver-xhyve;
+    homepage = https://github.com/machine-drivers/docker-machine-driver-xhyve;
     description = "Xhyve driver for docker-machine.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ periklis ];
