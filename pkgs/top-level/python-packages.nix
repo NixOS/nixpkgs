@@ -4149,6 +4149,8 @@ in {
 
   nibabel = callPackage ../development/python-modules/nibabel {};
 
+  nidaqmx = callPackage ../development/python-modules/nidaqmx { };
+
   nilearn = callPackage ../development/python-modules/nilearn {};
 
   nimfa = callPackage ../development/python-modules/nimfa {};
