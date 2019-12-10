@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "squaremap";
-  version = "1.0.4";
+  version = "1.0.5";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "feab6cb3b222993df68440e34825d8a16de2c74fdb290ae3974c86b1d5f3eef8";
+    sha256 = "b16ce5950cbfa63e3284015095293cd26ed5e26045fd14d488fb825b4f95e9a8";
   };
 
   meta = with stdenv.lib; {
