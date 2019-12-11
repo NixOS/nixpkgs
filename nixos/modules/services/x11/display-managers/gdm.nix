@@ -204,9 +204,12 @@ in
           cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
           yes
           EOF
-        '' + optionalString hasDefaultUserSession ''
-          ${setSessionScript}/bin/set-session ${defaultSessionName}
-        '';
+        ''
+        # TODO: Make setSessionScript aware of previously used sessions
+        # + optionalString hasDefaultUserSession ''
+        #   ${setSessionScript}/bin/set-session ${defaultSessionName}
+        # ''
+        ;
       };
 
     # Because sd_login_monitor_new requires /run/systemd/machines
