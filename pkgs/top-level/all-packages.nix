@@ -2914,6 +2914,8 @@ in
 
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
+  teams = callPackage ../applications/networking/instant-messengers/teams { };
+
   tealdeer = callPackage ../tools/misc/tealdeer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
