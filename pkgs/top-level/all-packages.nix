@@ -19237,10 +19237,6 @@ in
 
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
-  hamster-time-tracker = callPackage ../applications/misc/hamster-time-tracker {
-    inherit (gnome2) gnome_python;
-  };
-
   hashit = callPackage ../tools/misc/hashit { };
 
   hello = callPackage ../applications/misc/hello { };
