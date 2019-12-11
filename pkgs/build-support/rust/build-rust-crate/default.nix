@@ -14,7 +14,7 @@ let
       else stdenv.hostPlatform.parsed.kernel.name;
 
     makeDeps = dependencies: crateRenames:
-      (lib.concatMapStringsSep " " (dep:
+      lib.concatMapStringsSep " " (dep:
         let
           extern = lib.replaceStrings ["-"] ["_"] dep.libName;
           name = if lib.hasAttr dep.crateName crateRenames then
@@ -25,42 +25,20 @@ let
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
          else
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
-      ) dependencies);
+      ) dependencies;
 
-    echo_build_heading = colors: ''
-      echo_build_heading() {
-       start=""
-       end=""
-       if [[ "${colors}" == "always" ]]; then
-         start="$(printf '\033[0;1;32m')" #set bold, and set green.
-         end="$(printf '\033[0m')" #returns to "normal"
-       fi
-       if (( $# == 1 )); then
-         echo "$start""Building $1""$end"
-       else
-         echo "$start""Building $1 ($2)""$end"
-       fi
-      }
-    '';
-    noisily = colors: verbose: ''
-      noisily() {
-        start=""
-        end=""
-        if [[ "${colors}" == "always" ]]; then
-          start="$(printf '\033[0;1;32m')" #set bold, and set green.
-          end="$(printf '\033[0m')" #returns to "normal"
-        fi
-	${lib.optionalString verbose ''
-            echo -n "$start"Running "$end"
-            echo $@
-	''}
-	$@
-      }
-    '';
 
-    configureCrate = import ./configure-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
-    buildCrate = import ./build-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps rust; };
-    installCrate = import ./install-crate.nix;
+   inherit (import ./log.nix { inherit lib; }) noisily echo_build_heading;
+
+   configureCrate = import ./configure-crate.nix {
+     inherit lib stdenv echo_build_heading noisily makeDeps;
+   };
+
+   buildCrate = import ./build-crate.nix {
+     inherit lib stdenv echo_build_heading noisily makeDeps rust;
+   };
+
+   installCrate = import ./install-crate.nix;
 in
 
 crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides,

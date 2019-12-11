@@ -15,16 +15,6 @@
     rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
   in ''
     runHook preBuild
-    norm=""
-    bold=""
-    green=""
-    boldgreen=""
-    if [[ "${colors}" == "always" ]]; then
-      norm="$(printf '\033[0m')" #returns to "normal"
-      bold="$(printf '\033[0;1m')" #set bold
-      green="$(printf '\033[0;32m')" #set green
-      boldgreen="$(printf '\033[0;1;32m')" #set bold, and set green.
-    fi
     ${echo_build_heading colors}
     ${noisily colors verbose}
 
