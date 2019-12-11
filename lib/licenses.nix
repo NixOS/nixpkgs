@@ -100,6 +100,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = ''BSD 3-clause "New" or "Revised" License'';
   };
 
+  bsd3-lbnl = spdx {
+    spdxId = "BSD-3-Clause-LBNL";
+    fullName = ''Lawrence Berkeley National Labs BSD variant license'';
+  };
+
   bsdOriginal = spdx {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';

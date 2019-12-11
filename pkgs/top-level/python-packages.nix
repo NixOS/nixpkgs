@@ -896,6 +896,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  pynwb = callPackage ../development/python-modules/pynwb { };
+
   pyperf = callPackage ../development/python-modules/pyperf { };
 
   pefile = callPackage ../development/python-modules/pefile { };
