@@ -1519,6 +1519,8 @@ in
 
   datovka = libsForQt5.callPackage ../applications/networking/datovka { };
 
+  db-backup = callPackage ../tools/backup/db { };
+
   dconf = callPackage ../development/libraries/dconf { };
 
   ddar = callPackage ../tools/backup/ddar { };
