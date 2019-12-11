@@ -1997,6 +1997,8 @@ in
 
   psstop = callPackage ../tools/system/psstop { };
 
+  precice = callPackage ../development/libraries/precice { };
+
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
