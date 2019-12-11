@@ -81,15 +81,8 @@ stdenv.mkDerivation (rec {
     name = "rust_${crate.crateName}-${crate.version}";
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
-    dependencies =
-      map
-        (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))
-        dependencies_;
-
-    buildDependencies =
-      map
-        (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))
-        buildDependencies_;
+    dependencies = makeDependencies dependencies_;
+    buildDependencies = makeDependencies buildDependencies_;
 
     completeDeps = lib.unique (dependencies ++ lib.concatMap (dep: dep.completeDeps) dependencies);
     completeBuildDeps = lib.unique (
