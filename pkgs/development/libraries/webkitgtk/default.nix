@@ -50,6 +50,7 @@
 , libseccomp
 , xdg-dbus-proxy
 , substituteAll
+, gnome3
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -168,6 +169,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux;
     hydraPlatforms = [];
-    maintainers = with maintainers; [];
+    maintainers = gnome3.maintainers;
   };
 }
