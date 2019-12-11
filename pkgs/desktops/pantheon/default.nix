@@ -155,9 +155,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-keyboard = callPackage ./desktop/wingpanel-indicators/keyboard { };
 
-  wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network {
-    inherit (gnome3) networkmanagerapplet;
-  };
+  wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network { };
 
   wingpanel-indicator-nightlight = callPackage ./desktop/wingpanel-indicators/nightlight { };
 
@@ -193,9 +191,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   switchboard-plug-mouse-touchpad = callPackage ./apps/switchboard-plugs/mouse-touchpad { };
 
-  switchboard-plug-network = callPackage ./apps/switchboard-plugs/network {
-    inherit (gnome3) networkmanagerapplet;
-  };
+  switchboard-plug-network = callPackage ./apps/switchboard-plugs/network { };
 
   switchboard-plug-notifications = callPackage ./apps/switchboard-plugs/notifications { };
 

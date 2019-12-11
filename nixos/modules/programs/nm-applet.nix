@@ -10,5 +10,7 @@
       partOf = [ "graphical-session.target" ];
       serviceConfig.ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet";
     };
+
+    services.dbus.packages = [ pkgs.gcr ];
   };
 }
