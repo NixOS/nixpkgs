@@ -18371,8 +18371,6 @@ in
     inherit (pkgs.gnome2) libart_lgpl libgnomeui;
   };
 
-  diffuse = callPackage ../applications/version-management/diffuse { };
-
   direwolf = callPackage ../applications/misc/direwolf { };
 
   dirt = callPackage ../applications/audio/dirt {};
