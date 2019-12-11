@@ -7679,6 +7679,8 @@ in
 
   chez-scmutils = callPackage ../development/chez-modules/chez-scmutils { };
 
+  chez-matchable = callPackage ../development/chez-modules/chez-matchable { };
+
   clang = llvmPackages.clang;
   clang-manpages = llvmPackages.clang-manpages;
 
