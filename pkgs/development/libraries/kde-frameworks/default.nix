@@ -97,6 +97,7 @@ let
       breeze-icons = callPackage ./breeze-icons.nix {};
       kapidox = callPackage ./kapidox.nix {};
       karchive = callPackage ./karchive.nix {};
+      kcalendarcore = callPackage ./kcalendarcore.nix {};
       kcodecs = callPackage ./kcodecs.nix {};
       kconfig = callPackage ./kconfig.nix {};
       kcoreaddons = callPackage ./kcoreaddons.nix {};
