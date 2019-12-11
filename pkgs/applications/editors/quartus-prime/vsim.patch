@@ -1,0 +1,11 @@
+--- modelsim_ase/vco     	1970-01-01 01:00:01.000000000 +0100
++++ modelsim_ase/vco      	1970-01-01 01:00:01.000000000 +0100
+@@ -207,7 +207,7 @@
+           2.[5-9]*)         vco="linux" ;;
+           2.[1-9][0-9]*)    vco="linux" ;;
+           3.[0-9]*)    		vco="linux" ;;
+-          *)                vco="linux_rh60" ;;
++          *)                vco="linux" ;;
+         esac
+         if [ ! -x "$dir/$vco/vsim" ]; then
+           if [ -x "$dir/linuxle/vsim" ]; then

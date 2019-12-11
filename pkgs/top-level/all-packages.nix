@@ -25810,4 +25810,6 @@ in
   kcli = callPackage ../development/tools/kcli {};
 
   unstick = callPackage ../os-specific/linux/unstick {};
+
+  quartus-prime-lite = callPackage ../applications/editors/quartus-prime {};
 }
