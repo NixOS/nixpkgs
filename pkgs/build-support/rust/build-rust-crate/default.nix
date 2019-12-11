@@ -126,7 +126,10 @@ stdenv.mkDerivation (rec {
     colors = lib.attrByPath [ "colors" ] "always" crate;
     extraLinkFlags = lib.concatStringsSep " " (crate.extraLinkFlags or []);
     edition = crate.edition or null;
-    extraRustcOpts = lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts ++ extraRustcOpts_ ++ (lib.optional (edition != null) "--edition ${edition}");
+    extraRustcOpts =
+      lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
+      ++ extraRustcOpts_
+      ++ (lib.optional (edition != null) "--edition ${edition}");
 
     configurePhase = configureCrate {
       inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
