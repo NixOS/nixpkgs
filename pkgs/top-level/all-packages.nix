@@ -22610,7 +22610,8 @@ in
 
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {
     inherit (plasma5) oxygen;
-    inherit (kdeApplications) akonadi-contacts kcalcore;
+    inherit (kdeApplications) akonadi-contacts;
+    inherit (kdeFrameworks) kcalendarcore;
     ffmpeg = ffmpeg_4;
     opencv3 = opencv3WithoutCuda;
   };
