@@ -13,7 +13,9 @@ let
       then "macos"
       else stdenv.hostPlatform.parsed.kernel.name;
 
-    makeDeps = dependencies: crateRenames:
+    # Create rustc arguments to link against the given list of dependencies and
+    # renames
+    mkRustcDepArgs = dependencies: crateRenames:
       lib.concatMapStringsSep " " (dep:
         let
           extern = lib.replaceStrings ["-"] ["_"] dep.libName;
@@ -27,15 +29,14 @@ let
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies;
 
-
    inherit (import ./log.nix { inherit lib; }) noisily echo_build_heading;
 
    configureCrate = import ./configure-crate.nix {
-     inherit lib stdenv echo_build_heading noisily makeDeps;
+     inherit lib stdenv echo_build_heading noisily mkRustcDepArgs;
    };
 
    buildCrate = import ./build-crate.nix {
-     inherit lib stdenv echo_build_heading noisily makeDeps rust;
+     inherit lib stdenv echo_build_heading noisily mkRustcDepArgs rust;
    };
 
    installCrate = import ./install-crate.nix;
