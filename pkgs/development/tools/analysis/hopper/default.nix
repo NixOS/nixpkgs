@@ -1,6 +1,21 @@
-{ stdenv, fetchurl, pkgs, lib }:
+{ mkDerivation, stdenv, fetchurl, pkgs, lib, qtbase }:
+let
 
-stdenv.mkDerivation rec {
+  ldLibraryPath = with pkgs; stdenv.lib.makeLibraryPath  [
+    libbsd.out
+    libffi.out
+    gmpxx.out
+    python27Full.out
+    python27Packages.libxml2.out
+    qt5.qtbase
+    zlib
+    xlibs.libX11.out
+    xorg_sys_opengl.out
+    xlibs.libXrender.out
+    gcc-unwrapped.lib
+  ];
+
+in mkDerivation rec {
   pname    = "hopper";
   version = "4.5.7";
   rev = "v${lib.versions.major version}";
@@ -12,13 +27,13 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  ldLibraryPath = with pkgs; stdenv.lib.makeLibraryPath  [
-libbsd.out libffi.out gmpxx.out python27Full.out python27Packages.libxml2 qt5.qtbase zlib  xlibs.libX11.out xorg_sys_opengl.out xlibs.libXrender.out gcc-unwrapped.lib
+  buildInputs = [
+    qtbase
   ];
 
-  nativeBuildInputs = [ pkgs.qt5.wrapQtAppsHook ];
-
-  qtWrapperArgs = [ ''--suffix LD_LIBRARY_PATH : ${ldLibraryPath}'' ];
+  qtWrapperArgs = [
+    ''--suffix LD_LIBRARY_PATH : ${ldLibraryPath}''
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
