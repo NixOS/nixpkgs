@@ -93,8 +93,13 @@ stdenv.mkDerivation (rec {
     libName = if crate ? libName then crate.libName else crate.crateName;
     libPath = if crate ? libPath then crate.libPath else "";
 
-    depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
-    metadata = lib.substring 0 10 (builtins.hashString "sha256" (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata ));
+    # Seed the symbol hashes with something unique every time.
+    # https://doc.rust-lang.org/1.0.0/rustc/metadata/loader/index.html#frobbing-symbols
+    metadata = let
+      depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
+      hashedMetadata = builtins.hashString "sha256"
+        (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata);
+      in lib.substring 0 10 hashedMetadata;
 
     crateBin = if crate ? crateBin then
        lib.foldl' (bins: bin: let
