@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
-  avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
+  openssl, avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
 }:
 
 mkDerivation rec {
@@ -18,6 +18,10 @@ mkDerivation rec {
   postFixup = ''
     substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"
   '';
+
+  qtWrapperArgs = [
+    ''--prefix PATH : ${stdenv.lib.makeBinPath [ openssl ]}''
+  ];
 
   meta = {
     description = "Open-source KVM software";
