@@ -36,7 +36,7 @@
 
     build_bin() {
       crate_name=$1
-      crate_name_=$(echo $crate_name | sed -e "s/-/_/g")
+      crate_name_=$(echo $crate_name | tr '-' '_')
       main_file=""
       if [[ ! -z $2 ]]; then
         main_file=$2
@@ -54,7 +54,7 @@
 
 
     EXTRA_LIB=""
-    CRATE_NAME=$(echo ${libName} | sed -e "s/-/_/g")
+    CRATE_NAME=$(echo ${libName} | tr '-' '_')
 
     if [[ -e target/link_ ]]; then
       EXTRA_BUILD="$(cat target/link_) $EXTRA_BUILD"
@@ -108,7 +108,7 @@
         # https://github.com/rust-lang/cargo/blob/90fc9f620190d5fa3c80b0c8c65a1e1361e6b8ae/src/cargo/util/toml/targets.rs#L308-L325
 
         # the first two cases are the "new" default IIRC
-        BIN_NAME_=$(echo $BIN_NAME | sed -e 's/-/_/g')
+        BIN_NAME_=$(echo $BIN_NAME | tr '-' '_')
         FILES=( "src/bin/$BIN_NAME.rs" "src/bin/$BIN_NAME/main.rs" "src/bin/$BIN_NAME_.rs" "src/bin/$BIN_NAME_/main.rs" "src/bin/main.rs" "src/main.rs" )
 
         if ! [ -e "${libPath}" -o -e src/lib.rs -o -e "src/${libName}.rs" ]; then
