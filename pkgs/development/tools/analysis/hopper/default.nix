@@ -1,21 +1,17 @@
-{ mkDerivation, stdenv, fetchurl, pkgs, lib, qtbase }:
+{
+  stdenv, fetchurl, lib,
+
+  autoPatchelfHook,
+
+  wrapQtAppsHook,
+
+  libbsd,
+  python27,
+  gmpxx,
+}:
 let
 
-  ldLibraryPath = with pkgs; stdenv.lib.makeLibraryPath  [
-    libbsd.out
-    libffi.out
-    gmpxx.out
-    python27Full.out
-    python27Packages.libxml2.out
-    qt5.qtbase
-    zlib
-    xlibs.libX11.out
-    xorg_sys_opengl.out
-    xlibs.libXrender.out
-    gcc-unwrapped.lib
-  ];
-
-in mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname    = "hopper";
   version = "4.5.7";
   rev = "v${lib.versions.major version}";
@@ -27,31 +23,35 @@ in mkDerivation rec {
 
   sourceRoot = ".";
 
-  buildInputs = [
-    qtbase
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    autoPatchelfHook
   ];
 
-  qtWrapperArgs = [
-    ''--suffix LD_LIBRARY_PATH : ${ldLibraryPath}''
+  buildInputs = [
+    libbsd
+    python27
+    gmpxx
   ];
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/lib
     mkdir -p $out/share
+
     cp $sourceRoot/opt/hopper-${rev}/bin/Hopper $out/bin/hopper
     cp -r $sourceRoot/opt/hopper-${rev}/lib $out
     cp -r $sourceRoot/usr/share $out/share
-    patchelf \
-      --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
-      $out/bin/hopper
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://www.hopperapp.com/index.html";
     description = "A macOS and Linux Disassembler";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.luis ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.unfree;
+    maintainers = [
+      maintainers.luis
+      maintainers.Enteee
+    ];
+    platforms = platforms.linux;
   };
 }
