@@ -18014,8 +18014,6 @@ in
 
   batik = callPackage ../applications/graphics/batik { };
 
-  batti = callPackage ../applications/misc/batti { };
-
   baudline = callPackage ../applications/audio/baudline { };
 
 
