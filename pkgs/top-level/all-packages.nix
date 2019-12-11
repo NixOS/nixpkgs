@@ -3550,10 +3550,6 @@ in
 
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
 
-  gnome15 = callPackage ../applications/misc/gnome15 {
-    inherit (gnome2) gnome_python gnome_python_desktop;
-  };
-
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
