@@ -20416,8 +20416,6 @@ in
     inherit (gnome2) libglade;
   };
 
-  oblogout = callPackage ../tools/X11/oblogout { };
-
   obs-linuxbrowser = callPackage ../applications/video/obs-studio/linuxbrowser.nix { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
