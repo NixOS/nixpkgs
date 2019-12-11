@@ -46,10 +46,23 @@ in stdenvNoCC.mkDerivation {
       tar xzvf $f
     done
   '' else ''
-    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
+    # Common stuff
     rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
-    rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-common-f-${rpm-ver}.noarch.rpm
+
+    # Dynamic libraries
+    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
     rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-f-rt-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-rt-${rpm-ver}.x86_64.rpm
+
+    # Static libraries
+    rpmextract rpm/intel-mkl-cluster-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-f-${rpm-ver}.x86_64.rpm
+
+    # Intel OpenMP runtime
     rpmextract rpm/intel-openmp-${openmp-ver}.x86_64.rpm
   '';
 
