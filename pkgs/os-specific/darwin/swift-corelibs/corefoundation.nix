@@ -76,8 +76,8 @@ stdenv.mkDerivation {
   # later.
   buildPhase = stdenv.lib.optionalString true ''
     for i in {1..512}; do
-        if ninjaBuildPhase; then
-          break
+        if ninja -j $NIX_BUILD_CORES; then
+            break
         fi
 
         echo >&2
