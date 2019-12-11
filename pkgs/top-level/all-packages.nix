@@ -813,6 +813,8 @@ in
 
   cloudflare-wrangler = callPackage ../development/tools/cloudflare-wrangler { };
 
+  codeql = callPackage ../development/tools/analysis/codeql { };
+
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   ccextractor = callPackage ../applications/video/ccextractor { };
