@@ -20,9 +20,9 @@
 , verbose
 , workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
-    versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
+    versionPre = if lib.tail version_ == [] then "" else lib.elemAt version_ 1;
     version = lib.splitVersion (lib.head version_);
-    rustcOpts = lib.lists.foldl' (opts: opt: opts + " " + opt)
+    rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
         (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
     buildDeps = makeDeps buildDependencies crateRenames;
@@ -90,9 +90,9 @@ in ''
   export HOST="${stdenv.hostPlatform.config}"
   export PROFILE=${if release then "release" else "debug"}
   export OUT_DIR=$(pwd)/target/build/${crateName}.out
-  export CARGO_PKG_VERSION_MAJOR=${builtins.elemAt version 0}
-  export CARGO_PKG_VERSION_MINOR=${builtins.elemAt version 1}
-  export CARGO_PKG_VERSION_PATCH=${builtins.elemAt version 2}
+  export CARGO_PKG_VERSION_MAJOR=${lib.elemAt version 0}
+  export CARGO_PKG_VERSION_MINOR=${lib.elemAt version 1}
+  export CARGO_PKG_VERSION_PATCH=${lib.elemAt version 2}
   export CARGO_PKG_VERSION_PRE="${versionPre}"
   export CARGO_PKG_HOMEPAGE="${crateHomepage}"
   export NUM_JOBS=1

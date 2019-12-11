@@ -16,12 +16,12 @@ let
     makeDeps = dependencies: crateRenames:
       (lib.concatMapStringsSep " " (dep:
         let
-          extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName;
-          name = if builtins.hasAttr dep.crateName crateRenames then
+          extern = lib.replaceStrings ["-"] ["_"] dep.libName;
+          name = if lib.hasAttr dep.crateName crateRenames then
             lib.strings.replaceStrings ["-"] ["_"] crateRenames.${dep.crateName}
           else
             extern;
-        in (if lib.lists.any (x: x == "lib") dep.crateType then
+        in (if lib.any (x: x == "lib") dep.crateType then
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
          else
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
@@ -61,8 +61,7 @@ let
     configureCrate = import ./configure-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
     buildCrate = import ./build-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps rust; };
     installCrate = import ./install-crate.nix;
-
-    in
+in
 
 crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides,
   dependencies, buildDependencies, crateRenames,
@@ -95,34 +94,33 @@ stdenv.mkDerivation (rec {
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies =
-      builtins.map
+      map
         (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))
         dependencies_;
 
     buildDependencies =
-      builtins.map
+      map
         (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))
         buildDependencies_;
 
-    completeDeps = lib.lists.unique (dependencies ++ lib.lists.concatMap (dep: dep.completeDeps) dependencies);
-    completeBuildDeps = lib.lists.unique (
+    completeDeps = lib.unique (dependencies ++ lib.concatMap (dep: dep.completeDeps) dependencies);
+    completeBuildDeps = lib.unique (
       buildDependencies
-      ++ lib.lists.concatMap (dep: dep.completeBuildDeps ++ dep.completeDeps) buildDependencies
+      ++ lib.concatMap (dep: dep.completeBuildDeps ++ dep.completeDeps) buildDependencies
     );
 
-    crateFeatures = if crate ? features then
-        lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features ++ features) #"
-      else "";
+    crateFeatures = lib.optionalString (crate ? features)
+      (lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features ++ features));
 
     libName = if crate ? libName then crate.libName else crate.crateName;
     libPath = if crate ? libPath then crate.libPath else "";
 
-    depsMetadata = builtins.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
-    metadata = builtins.substring 0 10 (builtins.hashString "sha256" (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata ));
+    depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
+    metadata = lib.substring 0 10 (builtins.hashString "sha256" (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata ));
 
     crateBin = if crate ? crateBin then
-       builtins.foldl' (bins: bin: let
-            name = (if bin ? name then bin.name else crateName);
+       lib.foldl' (bins: bin: let
+            name = if bin ? name then bin.name else crateName;
             path = if bin ? path then bin.path else "";
           in
           bins + (if bin == "" then "" else ",") + "${name} ${path}"
@@ -142,9 +140,9 @@ stdenv.mkDerivation (rec {
       if lib.attrByPath ["plugin"] false crate then ["dylib"] else
         (crate.type or ["lib"]);
     colors = lib.attrByPath [ "colors" ] "always" crate;
-    extraLinkFlags = builtins.concatStringsSep " " (crate.extraLinkFlags or []);
+    extraLinkFlags = lib.concatStringsSep " " (crate.extraLinkFlags or []);
     edition = crate.edition or null;
-    extraRustcOpts = (if crate ? extraRustcOpts then crate.extraRustcOpts else []) ++ extraRustcOpts_ ++ (lib.optional (edition != null) "--edition ${edition}");
+    extraRustcOpts = lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts ++ extraRustcOpts_ ++ (lib.optional (edition != null) "--edition ${edition}");
 
     configurePhase = configureCrate {
       inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
