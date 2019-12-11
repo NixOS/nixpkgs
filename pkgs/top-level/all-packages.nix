@@ -21360,6 +21360,8 @@ in
 
   tambura = callPackage ../applications/audio/tambura { };
 
+  teams = callPackage ../applications/networking/instant-messengers/teams { };
+
   teamspeak_client = libsForQt512.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
