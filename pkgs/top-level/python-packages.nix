@@ -499,6 +499,8 @@ in {
 
   cadquery = callPackage ../development/python-modules/cadquery { };
 
+  caiman = callPackage ../development/python-modules/caiman { };
+
   catalogue = callPackage ../development/python-modules/catalogue { };
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
