@@ -19637,8 +19637,6 @@ in
 
   keyfinder-cli = libsForQt5.callPackage ../applications/audio/keyfinder-cli { };
 
-  keymon = callPackage ../applications/video/key-mon { };
-
   kgraphviewer = libsForQt5.callPackage ../applications/graphics/kgraphviewer { };
 
   khal = callPackage ../applications/misc/khal { };

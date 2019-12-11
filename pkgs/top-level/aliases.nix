@@ -188,6 +188,7 @@ mapAliases ({
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keybase-go = keybase;  # added 2016-08-24
   krename-qt5 = krename; # added 2017-02-18
+  keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived."; # 2019-12-10
   kvm = qemu_kvm; # added 2018-04-25
   letsencrypt = certbot; # added 2016-05-16
   libaudit = audit; # added 2018-04-25
