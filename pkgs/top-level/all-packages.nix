@@ -18287,12 +18287,6 @@ in
     python = python27;
   };
 
-  cinepaint = callPackage ../applications/graphics/cinepaint {
-    fltk = fltk13;
-    libpng = libpng12;
-    cmake = cmake_2_8;
-  };
-
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
 
