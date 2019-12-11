@@ -1226,8 +1226,6 @@ in
 
   boot = callPackage ../development/tools/build-managers/boot { };
 
-  bootchart = callPackage ../tools/system/bootchart { };
-
   bowtie2 = callPackage ../applications/science/biology/bowtie2 { };
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
