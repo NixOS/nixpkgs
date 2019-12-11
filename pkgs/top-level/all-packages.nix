@@ -21875,8 +21875,6 @@ in
 
   wily = callPackage ../applications/editors/wily { };
 
-  winswitch = callPackage ../tools/X11/winswitch { };
-
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR21;
   };
