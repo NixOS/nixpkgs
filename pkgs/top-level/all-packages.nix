@@ -5846,8 +5846,6 @@ in
 
   pythonIRClib = pythonPackages.pythonIRClib;
 
-  pythonSexy = pythonPackages.libsexy;
-
   pyditz = callPackage ../applications/misc/pyditz {
     pythonPackages = python27Packages;
   };
@@ -16569,8 +16567,6 @@ in
   librealsense = callPackage ../development/libraries/librealsense { };
 
   libsass = callPackage ../development/libraries/libsass { };
-
-  libsexy = callPackage ../development/libraries/libsexy { };
 
   libsepol = callPackage ../os-specific/linux/libsepol { };
 

@@ -2668,10 +2668,6 @@ in {
 
   latexcodec = callPackage ../development/python-modules/latexcodec {};
 
-  libsexy = callPackage ../development/python-modules/libsexy {
-    inherit (pkgs) libsexy pkgconfig;
-  };
-
   libselinux = pipe pkgs.libselinux [
     toPythonModule
 

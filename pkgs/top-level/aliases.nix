@@ -215,6 +215,7 @@ mapAliases ({
   libsysfs = sysfsutils; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
   libudev = udev; # added 2018-04-25
+  libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
   links = links2; # added 2016-01-31
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
