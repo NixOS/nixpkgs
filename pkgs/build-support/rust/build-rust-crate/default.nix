@@ -59,6 +59,15 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
     buildInputs_ = buildInputs;
     extraRustcOpts_ = extraRustcOpts;
+
+    # take a list of crates that we depend on and override them to fit our overrides, rustc, release, …
+    makeDependencies = map (dep: lib.getLib (dep.override { inherit release verbose crateOverrides; }));
+
+    # crate2nix has a hack for the old bash based build script that did split
+    # entries at `,`. No we have to work around that hack.
+    # https://github.com/kolloch/crate2nix/blame/5b19c1b14e1b0e5522c3e44e300d0b332dc939e7/crate2nix/templates/build.nix.tera#L89
+    crateBin = lib.filter (bin: !(bin ? name && bin.name == ",")) (crate.crateBin or []);
+    hasCrateBin = crate ? crateBin;
 in
 stdenv.mkDerivation (rec {
 
@@ -102,17 +111,6 @@ stdenv.mkDerivation (rec {
         (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata);
       in lib.substring 0 10 hashedMetadata;
 
-    crateBin = if crate ? crateBin then
-       lib.foldl' (bins: bin: let
-            name = if bin ? name then bin.name else crateName;
-            path = if bin ? path then bin.path else "";
-          in
-          bins + (if bin == "" then "" else ",") + "${name} ${path}"
-
-       ) "" crate.crateBin
-    else "";
-    hasCrateBin = crate ? crateBin;
-
     build = crate.build or "";
     workspace_member = crate.workspace_member or ".";
     crateVersion = crate.version;
@@ -140,7 +138,7 @@ stdenv.mkDerivation (rec {
     buildPhase = buildCrate {
       inherit crateName dependencies
               crateFeatures crateRenames libName release libPath crateType
-              metadata crateBin hasCrateBin verbose colors
+              metadata hasCrateBin crateBin verbose colors
               extraRustcOpts;
     };
     installPhase = installCrate crateName metadata;

@@ -6,7 +6,6 @@
   extraRustcOpts, verbose, colors }:
 
   let
-
     deps = mkRustcDepArgs dependencies crateRenames;
     rustcOpts =
       lib.foldl' (opts: opt: opts + " " + opt)
@@ -54,7 +53,7 @@
 
 
     EXTRA_LIB=""
-    CRATE_NAME=$(echo ${libName} | tr '-' '_')
+    CRATE_NAME='${lib.replaceStrings ["-"] ["_"] libName}'
 
     if [[ -e target/link_ ]]; then
       EXTRA_BUILD="$(cat target/link_) $EXTRA_BUILD"
@@ -95,20 +94,16 @@
        tr '\n' ' ' < target/link > target/link_
        LINK=$(cat target/link_)
     fi
-    ${lib.optionalString (crateBin != "") ''
-    printf "%s\n" "${crateBin}" | head -n1 | tr -s ',' '\n' | while read -r BIN_NAME BIN_PATH; do
-      mkdir -p target/bin
-      # filter empty entries / empty "lines"
-      if [[ -z "$BIN_NAME" ]]; then
-           continue
-      fi
 
-      if [[ -z "$BIN_PATH" ]]; then
+    ${lib.optionalString (lib.length crateBin > 0) (lib.concatMapStringsSep "\n" (bin: ''
+      mkdir -p target/bin
+      BIN_NAME='${bin.name or crateName}'
+      ${if !bin ? path then ''
         # heuristic to "guess" the correct source file as found in cargo:
         # https://github.com/rust-lang/cargo/blob/90fc9f620190d5fa3c80b0c8c65a1e1361e6b8ae/src/cargo/util/toml/targets.rs#L308-L325
 
         # the first two cases are the "new" default IIRC
-        BIN_NAME_=$(echo $BIN_NAME | tr '-' '_')
+        BIN_NAME_='${lib.replaceStrings ["-"] ["_"] bin.name}'
         FILES=( "src/bin/$BIN_NAME.rs" "src/bin/$BIN_NAME/main.rs" "src/bin/$BIN_NAME_.rs" "src/bin/$BIN_NAME_/main.rs" "src/bin/main.rs" "src/main.rs" )
 
         if ! [ -e "${libPath}" -o -e src/lib.rs -o -e "src/${libName}.rs" ]; then
@@ -130,12 +125,15 @@
           echo "failed to find file for binary target: $BIN_NAME" >&2
           exit 1
         fi
-      fi
+      '' else ''
+        BIN_PATH='${bin.path}'
+      ''}
       build_bin "$BIN_NAME" "$BIN_PATH"
-    done
-    ''}
+    '') crateBin)}
 
-    ${lib.optionalString (crateBin == "" && !hasCrateBin) ''
+    # If crateBin is empty and hasCrateBin is not set then we must try to
+    # detect some kind of bin target based on some files that might exist.
+    ${lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
       if [[ -e src/main.rs ]]; then
         mkdir -p target/bin
         build_bin ${crateName} src/main.rs
