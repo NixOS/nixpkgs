@@ -332,6 +332,7 @@ mapAliases ({
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
   pyo3-pack = maturin;
+  pmenu = throw "pmenu has been removed from nixpkgs, as its maintainer is no longer interested in the package."; # added 2019-12-10
   pulseaudioLight = pulseaudio; # added 2018-04-25
   phonon-backend-gstreamer = throw "Please use libsForQt5.phonon-backend-gstreamer, as Qt4 support in this package has been removed."; # added 2019-11-22
   phonon-backend-vlc = throw "Please use libsForQt5.phonon-backend-vlc, as Qt4 support in this package has been removed."; # added 2019-11-22

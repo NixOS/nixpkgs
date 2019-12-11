@@ -20656,8 +20656,6 @@ in
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
-  pmenu = callPackage ../applications/misc/pmenu { };
-
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
 
   poezio = python3Packages.poezio;
