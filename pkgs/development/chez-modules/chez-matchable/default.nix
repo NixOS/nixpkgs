@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, chez }:
+{ stdenv, fetchFromGitHub, chez }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "chez-matchable";
-  version = "1.0";
+  version = "20160306";
 
-  src = fetchgit {
-    url = "https://github.com/fedeinthemix/chez-matchable.git";
-    rev = "73e46432ae70ec72eba6ef116bd84ad9ee38b2f2";
-    sha256 = "0rvb177m3vfq625nj7dawgm323jvx3in3nq6xdw8z4psn3bn1ag9";
+  src = fetchFromGitHub {
+    owner = "fedeinthemix";
+    repo = "chez-matchable";
+    rev = "v${version}";
+    sha256 = "02qn7x348p23z1x5lwhkyj7i8z6mgwpzpnwr8dyina0yzsdkr71s";
   };
 
   buildInputs = [ chez ];
