@@ -19674,6 +19674,8 @@ in
 
   kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
+  k3s = callPackage ../applications/networking/cluster/k3s { };
+
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
