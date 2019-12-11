@@ -54,7 +54,7 @@ in {
   };
 
   wt4 = generic {
-    version = "4.1.2";
-    sha256 = "06bnadpgflg8inikzynnz4l4r6w1bphjwlva4pzf51w648vpkknl";
+    version = "4.2.0";
+    sha256 = "0zrrdjz0sa8hrmybjp4aap1lcqcqvsicd7dj49zj1m5k8gnfpm4v";
   };
 }
