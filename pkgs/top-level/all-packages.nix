@@ -1226,8 +1226,6 @@ in
 
   boot = callPackage ../development/tools/build-managers/boot { };
 
-  bootchart = callPackage ../tools/system/bootchart { };
-
   bowtie2 = callPackage ../applications/science/biology/bowtie2 { };
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
@@ -3550,10 +3548,6 @@ in
 
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
 
-  gnome15 = callPackage ../applications/misc/gnome15 {
-    inherit (gnome2) gnome_python gnome_python_desktop;
-  };
-
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
@@ -5850,8 +5844,6 @@ in
 
   pythonIRClib = pythonPackages.pythonIRClib;
 
-  pythonSexy = pythonPackages.libsexy;
-
   pyditz = callPackage ../applications/misc/pyditz {
     pythonPackages = python27Packages;
   };
@@ -5985,17 +5977,7 @@ in
 
   reaverwps-t6x = callPackage ../tools/networking/reaver-wps-t6x {};
 
-  recordmydesktop = callPackage ../applications/video/recordmydesktop { };
-
   rx = callPackage ../applications/graphics/rx { };
-
-  gtk-recordmydesktop = callPackage ../applications/video/recordmydesktop/gtk.nix {
-    jack2 = jack2Full;
-  };
-
-  qt-recordmydesktop = callPackage ../applications/video/recordmydesktop/qt.nix {
-    jack2 = jack2Full;
-  };
 
   qt-box-editor = libsForQt5.callPackage ../applications/misc/qt-box-editor { };
 
@@ -12461,10 +12443,6 @@ in
 
   libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
 
-  libindicate-gtk2 = libindicate.override { gtkVersion = "2"; };
-  libindicate-gtk3 = libindicate.override { gtkVersion = "3"; };
-  libindicate = callPackage ../development/libraries/libindicate { };
-
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   libindicator = callPackage ../development/libraries/libindicator { };
@@ -16574,8 +16552,6 @@ in
 
   libsass = callPackage ../development/libraries/libsass { };
 
-  libsexy = callPackage ../development/libraries/libsexy { };
-
   libsepol = callPackage ../os-specific/linux/libsepol { };
 
   libsmbios = callPackage ../os-specific/linux/libsmbios { };
@@ -18018,8 +17994,6 @@ in
 
   batik = callPackage ../applications/graphics/batik { };
 
-  batti = callPackage ../applications/misc/batti { };
-
   baudline = callPackage ../applications/audio/baudline { };
 
 
@@ -18287,12 +18261,6 @@ in
     python = python27;
   };
 
-  cinepaint = callPackage ../applications/graphics/cinepaint {
-    fltk = fltk13;
-    libpng = libpng12;
-    cmake = cmake_2_8;
-  };
-
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
 
@@ -18386,8 +18354,6 @@ in
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome2) libart_lgpl libgnomeui;
   };
-
-  diffuse = callPackage ../applications/version-management/diffuse { };
 
   direwolf = callPackage ../applications/misc/direwolf { };
 
@@ -19249,10 +19215,6 @@ in
 
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
-  hamster-time-tracker = callPackage ../applications/misc/hamster-time-tracker {
-    inherit (gnome2) gnome_python;
-  };
-
   hashit = callPackage ../tools/misc/hashit { };
 
   hello = callPackage ../applications/misc/hello { };
@@ -19653,8 +19615,6 @@ in
 
   keyfinder-cli = libsForQt5.callPackage ../applications/audio/keyfinder-cli { };
 
-  keymon = callPackage ../applications/video/key-mon { };
-
   kgraphviewer = libsForQt5.callPackage ../applications/graphics/kgraphviewer { };
 
   khal = callPackage ../applications/misc/khal { };
@@ -19971,8 +19931,6 @@ in
 
   meme = callPackage ../applications/graphics/meme { };
 
-  mcomix = callPackage ../applications/graphics/mcomix { };
-
   mendeley = libsForQt5.callPackage ../applications/office/mendeley {
     gconf = pkgs.gnome2.GConf;
   };
@@ -20021,8 +19979,6 @@ in
   mimms = callPackage ../applications/audio/mimms {};
 
   meh = callPackage ../applications/graphics/meh {};
-
-  mirage = callPackage ../applications/graphics/mirage { };
 
   mixxx = libsForQt5.callPackage ../applications/audio/mixxx {
     inherit (vamp) vampSDK;
@@ -20454,8 +20410,6 @@ in
     inherit (gnome2) libglade;
   };
 
-  oblogout = callPackage ../tools/X11/oblogout { };
-
   obs-linuxbrowser = callPackage ../applications/video/obs-studio/linuxbrowser.nix { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
@@ -20701,8 +20655,6 @@ in
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
-
-  pmenu = callPackage ../applications/misc/pmenu { };
 
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
 
@@ -21900,8 +21852,6 @@ in
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
   wily = callPackage ../applications/editors/wily { };
-
-  winswitch = callPackage ../tools/X11/winswitch { };
 
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR21;
