@@ -13,13 +13,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = "-C src prefix=$(out)";
+  makeFlags = [ 
+    "-C src"
+    "prefix=${placeholder "out"}"
+  ];
 
   src = fetchFromGitHub {
     owner = "CMB";
     repo = "edbrowse";
     rev = "v${version}";
-    sha256 = "0i9ivyfy1dd16c89f392kwx6wxgkkpyq2hl32jhzra0fb0zyl0k6";
+    sha256 = "0yk4djb9q8ll94fs57y706bsqlar4pfx6ysasvkzj146926lrh8a";
   };
   meta = with stdenv.lib; {
     description = "Command Line Editor Browser";
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
       edbrowse can also tap into databases through odbc. It was primarily written by Karl Dahlke.
       '';
     license = licenses.gpl1Plus;
-    homepage = http://edbrowse.org/;
+    homepage = "https://edbrowse.org/";
     maintainers = with maintainers; [ schmitthenner vrthra equirosa ];
     platforms = platforms.linux;
   };
