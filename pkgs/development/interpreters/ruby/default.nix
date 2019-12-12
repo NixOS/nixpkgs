@@ -149,14 +149,14 @@ let
         postInstall = ''
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
-
-          ${lib.optionalString removeReferenceToCC ''
+          ${
+            lib.optionalString removeReferenceToCC ''
               # Get rid of the CC runtime dependency
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
-                $out/lib/libruby.so.*
-          ''}
-
+                $out/lib/libruby*
+            ''
+          }
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
