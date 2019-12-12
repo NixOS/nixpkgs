@@ -441,4 +441,20 @@ runTests {
     expected  = "«foo»";
   };
 
+  testRenderOptions = {
+    expr =
+       renderOptions
+         { foo = "A";
+
+           bar = 1;
+
+           baz = null;
+
+           qux = true;
+
+           v = true;
+         };
+
+    expected = " --bar '1' --foo 'A' --qux -v";
+  };
 }
