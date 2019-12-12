@@ -459,10 +459,23 @@ self: super: builtins.intersectAttrs super {
   # depends on 'hie' executable
   lsp-test = dontCheck super.lsp-test;
 
-  # tests depend on executable
-  ghcide = overrideCabal super.ghcide (drv: {
+  # These need to be matched
+  haskell-lsp_0_18_0_0 = super.haskell-lsp_0_18_0_0.override {
+    haskell-lsp-types = self.haskell-lsp-types_0_18_0_0;
+  };
+  lsp-test_0_8_2_0 = (dontCheck super.lsp-test_0_8_2_0).override {
+    haskell-lsp = self.haskell-lsp_0_18_0_0;
+  };
+
+  # tests depend on executable, needs newer version
+  ghcide = (overrideCabal super.ghcide (drv: {
+    broken = false;
     preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
-  });
+  })).override {
+    haskell-lsp = self.haskell-lsp_0_18_0_0;
+    haskell-lsp-types = self.haskell-lsp-types_0_18_0_0;
+    lsp-test = self.lsp-test_0_8_2_0;
+  };
 
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
