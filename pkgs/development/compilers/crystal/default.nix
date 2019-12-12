@@ -226,14 +226,14 @@ in rec {
   };
 
   crystal_0_32 = generic {
-    version = "255bfc5fa925b95b72e34b26ad997fb2b3f83059";
-    sha256  = "1dgk36cj5lwhs1c4zp0s1c9hjk0h3vljq6zwhlnzkl1xs7cgzim1";
+    version = "0.32.0";
+    sha256  = "0cmhsg54rm00f1ismpzz0aafj7s5c9k1gxh168q1y2pp5v8llkvv";
     doCheck = false; # 5 checks are failing now
     binary = crystal_0_31;
     extraBuildInputs = [ readline ];
   };
 
-  crystal = crystal_0_31;
+  crystal = crystal_0_32;
 
   crystal2nix = callPackage ./crystal2nix.nix {};
 }
