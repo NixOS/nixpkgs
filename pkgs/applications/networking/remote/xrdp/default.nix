@@ -58,7 +58,7 @@ let
       ./bootstrap
     '';
     dontDisableStatic = true;
-    configureFlags = [ "--with-systemdsystemunitdir=/var/empty" "--enable-ipv6" "--enable-jpeg" "--enable-fuse" "--enable-rfxcodec" "--enable-opus" ];
+    configureFlags = [ "--with-systemdsystemunitdir=/var/empty" "--enable-ipv6" "--enable-jpeg" "--enable-fuse" "--enable-rfxcodec" "--enable-opus" "--enable-vsock" ];
 
     installFlags = [ "DESTDIR=$(out)" "prefix=" ];
 

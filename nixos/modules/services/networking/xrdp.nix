@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.xrdp;
-  confDir = pkgs.runCommand "xrdp.conf" { preferLocalBuild = true; } ''
+  confDir = pkgs.runCommand "xrdp.conf" { preferLocalBuild = true; } (''
     mkdir $out
 
     cp ${cfg.package}/etc/xrdp/{km-*,xrdp,sesman,xrdp_keyboard}.ini $out
@@ -32,7 +32,13 @@ let
     LANG=${config.i18n.defaultLocale}\
     LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
     ' $out/sesman.ini
-  '';
+  '' + optionalString cfg.vsock ''
+    substituteInPlace $out/xrdp.ini \
+      --replace "use_vsock=false" "use_vsock=true" \
+      --replace "security_layer=negotiate" "security_layer=rdp" \
+      --replace "crypt_level=high" "crypt_level=none" \
+      --replace "bitmap_compression=true" "bitmap_compression=false"
+  '');
 in
 {
 
@@ -78,6 +84,17 @@ in
         description = ''
           ssl certificate path
           A self-signed certificate will be generated if file not exists.
+        '';
+      };
+
+      vsock = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+          If NixOS is run as a Hyper-V guest, enabling vsock transport allows
+          to use enhanced session mode when connecting from the host operating
+          system.
         '';
       };
 
