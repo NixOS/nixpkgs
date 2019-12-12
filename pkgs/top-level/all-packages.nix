@@ -6847,6 +6847,10 @@ in
 
   ua = callPackage ../tools/networking/ua { };
 
+  uberwriter = callPackage ../applications/editors/uberwriter {
+    pythonPackages = python3Packages;
+  };
+
   ubridge = callPackage ../tools/networking/ubridge { };
 
   ucl = callPackage ../development/libraries/ucl { };
