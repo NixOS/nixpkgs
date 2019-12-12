@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   rev = "664664f6cd8a1c02a38063c8f2104f0515a19399";
 
   src = fetchgit { inherit rev;
-    url = "https://github.com/robbyrussell/oh-my-zsh";
+    url = "https://github.com/ohmyzsh/ohmyzsh";
     sha256 = "0d9x4fp9hxyk3h4jlq74v5k9xyngcx1g45aihikyj6fzqk2h1pax";
   };
 
