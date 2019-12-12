@@ -2023,6 +2023,8 @@ in
 
   stagit = callPackage ../development/tools/stagit { };
 
+  step-ca = callPackage ../tools/security/step-ca { };
+
   step-cli = callPackage ../tools/security/step-cli { };
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
