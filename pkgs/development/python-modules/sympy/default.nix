@@ -1,9 +1,13 @@
 { lib
 , buildPythonPackage
+, isPy3k
+, isPy27
 , fetchPypi
 , fetchpatch
 , glibcLocales
 , mpmath
+, antlr4-python3-runtime
+, antlr4-python2-runtime
 }:
 
 buildPythonPackage rec {
@@ -17,7 +21,13 @@ buildPythonPackage rec {
 
   checkInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [ mpmath ];
+  propagatedBuildInputs = [
+    mpmath
+  ] ++ lib.optionals isPy3k [
+    antlr4-python3-runtime
+  ] ++ lib.optionals isPy27 [
+    antlr4-python2-runtime
+  ];
 
   # tests take ~1h
   doCheck = false;
