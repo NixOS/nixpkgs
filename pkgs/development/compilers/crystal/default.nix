@@ -198,6 +198,15 @@ in rec {
     };
   };
 
+  binaryCrystal_0_31 = genericBinary {
+    version = "0.31.1";
+    sha256s = {
+      x86_64-linux  = "0r8salf572xrnr4m6ll9q5hz6jj8q7ff1rljlhmqb1r26a8mi2ih";
+      i686-linux    = "0hridnis5vvrswflx0q67xfg5hryhz6ivlwrb9n4pryj5d1gwjrr";
+      x86_64-darwin = "1dgxgv0s3swkc5cwawzgpbc6bcd2nx4hjxc7iw2h907y1vgmbipz";
+    };
+  };
+
   crystal_0_25 = generic {
     version = "0.25.1";
     sha256  = "15xmbkalsdk9qpc6wfpkly3sifgw6a4ai5jzlv78dh3jp7glmgyl";
@@ -241,14 +250,13 @@ in rec {
   };
 
   crystal_0_32 = generic {
-    version = "255bfc5fa925b95b72e34b26ad997fb2b3f83059";
-    sha256  = "1dgk36cj5lwhs1c4zp0s1c9hjk0h3vljq6zwhlnzkl1xs7cgzim1";
+    version = "0.32.0";
+    sha256  = "0cmhsg54rm00f1ismpzz0aafj7s5c9k1gxh168q1y2pp5v8llkvv";
     doCheck = false; # 5 checks are failing now
-    binary = crystal_0_31;
-    extraBuildInputs = [ readline ];
+    binary = binaryCrystal_0_31;
   };
 
-  crystal = crystal_0_31;
+  crystal = crystal_0_32;
 
   crystal2nix = callPackage ./crystal2nix.nix {};
 }
