@@ -9354,6 +9354,21 @@ in
     ruby_2_5
     ruby_2_6;
 
+  rubyMinimal = ruby.override {
+    # gem support is minimal overhead
+    rubygemsSupport = true;
+    useRailsExpress = false;
+    zlibSupport = false;
+    opensslSupport = false;
+    gdbmSupport = false;
+    cursesSupport = false;
+    docSupport = false;
+    yamlSupport = false;
+    fiddleSupport = false;
+    # remove gcc from runtime closure
+    removeReferenceToCC = true;
+  };
+
   ruby = ruby_2_6;
 
   rubyPackages_2_4 = recurseIntoAttrs ruby_2_4.gems;
