@@ -32,6 +32,7 @@ let
 
   teensy_libpath = stdenv.lib.makeLibraryPath [
     atk
+    cairo
     expat
     fontconfig
     freetype
@@ -42,11 +43,13 @@ let
     libpng12
     libusb
     pango
+    udev
     xorg.libSM
     xorg.libX11
     xorg.libXext
     xorg.libXft
     xorg.libXinerama
+    xorg.libXxf86vm
     zlib
   ];
   teensy_architecture =
