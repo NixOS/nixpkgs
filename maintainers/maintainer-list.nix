@@ -2874,6 +2874,12 @@
     githubId = 69209;
     name = "Ian Duncan";
   };
+  ianmjones = {
+    email = "ian@ianmjones.com";
+    github = "ianmjones";
+    githubId = 4710;
+    name = "Ian M. Jones";
+  };
   ianwookim = {
     email = "ianwookim@gmail.com";
     github = "wavewave";

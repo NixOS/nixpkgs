@@ -2015,6 +2015,8 @@ in
 
   snipes = callPackage ../games/snipes { };
 
+  snippetpixie = callPackage ../tools/text/snippetpixie { };
+
   socklog = callPackage ../tools/system/socklog { };
 
   staccato = callPackage ../tools/text/staccato { };
