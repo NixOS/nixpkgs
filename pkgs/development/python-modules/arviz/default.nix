@@ -72,8 +72,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "ArviZ is a Python package for exploratory analysis of Bayesian models.";
-    homepage = https://github.com/arviz-devs/arviz;
+    description = "ArviZ is a Python package for exploratory analysis of Bayesian models";
+    homepage = "https://arviz-devs.github.io/arviz/";
     license = licenses.asl20;
     maintainers = [ maintainers.omnipotententity ];
   };
