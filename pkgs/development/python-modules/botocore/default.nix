@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.13.2"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.13.37"; # N.B: if you change this, change boto3 and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8223485841ef4731a5d4943a733295ba69d0005c4ae64c468308cc07f6960d39";
+    sha256 = "1c0czyxx2a8h03r7psir00ifwdkapldrk3wd27b88dw2b1dv5v6d";
   };
 
   outputs = [ "out" "dev" ];
@@ -31,6 +31,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ mock nose ];
+
+  # current nixpkgs come with python-dateutil 2.8.1
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "python-dateutil>=2.1,<2.8.1" "python-dateutil>=2.1" \
+  '';
 
   checkPhase = ''
     nosetests -v
