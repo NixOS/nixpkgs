@@ -37,6 +37,13 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pimutils/vdirsyncer/commit/7b636e8e40d69c495901f965b9c0686513659e44.patch";
+      sha256 = "0vl942ii5iad47y63v0ngmhfp37n30nxyk4j7h64b95fk38vfwx9";
+    })
+  ];
+
   postPatch = ''
     # see https://github.com/pimutils/vdirsyncer/pull/805
     substituteInPlace setup.cfg --replace --duration --durations

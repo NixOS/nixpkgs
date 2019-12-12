@@ -12,6 +12,12 @@
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
+
+# backports of newer libraries for stable firefox >= 70
+, nss_3_47_1
+, sqlite_3_30
+, nspr_4_23
+
 , debugBuild ? false
 
 ### optionals
@@ -95,7 +101,7 @@ let
   browserPatches = [
     ./env_var_for_system_dir.patch
   ]
-  ++ lib.optional (lib.versionAtLeast ffversion "63" && lib.versionOlder ffversion "69")
+  ++ lib.optional (lib.versionAtLeast ffversion "63" && lib.versionOlder ffversion "68.3.0")
     (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
       name = "write_error-parallel_make.diff";
       url = "https://hg.mozilla.org/mozilla-central/raw-diff/562655fe/python/mozbuild/mozbuild/action/node.py";
@@ -110,7 +116,12 @@ let
       url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
       sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
     })
-  ] ++ patches;
+  ] ++ lib.optional (lib.versionAtLeast ffversion "71") ./fix-ff71-lto.patch
+  ++ patches;
+
+  nss_pkg = if lib.versionAtLeast ffversion "71" then nss_3_47_1 else nss;
+  nspr_pkg = if lib.versionAtLeast ffversion "71" then nspr_4_23 else nspr;
+  sqlite_pkg = if lib.versionAtLeast ffversion "70" then sqlite_3_30 else sqlite;
 
 in
 
@@ -133,11 +144,11 @@ stdenv.mkDerivation rec {
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU_combined
     xorg.libXScrnSaver xorg.xorgproto
-    xorg.libXext sqlite unzip makeWrapper
+    xorg.libXext sqlite_pkg unzip makeWrapper
     libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc glib
   ]
-  ++ lib.optionals (!isTorBrowserLike) [ nspr nss ]
+  ++ lib.optionals (!isTorBrowserLike) [ nspr_pkg nss_pkg ]
   ++ lib.optional (lib.versionOlder ffversion "53") libXdamage
   ++ lib.optional (lib.versionOlder ffversion "61") hunspell
 
