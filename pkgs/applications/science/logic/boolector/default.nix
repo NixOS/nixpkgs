@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, fetchpatch
 , cmake, lingeling, btor2tools
 }:
 
@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     rev    = "refs/tags/${version}";
     sha256 = "15i3ni5klss423m57wcy1gx0m5wfrjmglapwg85pm7fb3jj1y7sz";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-7560.patch";
+      url = "https://github.com/Boolector/boolector/commit/8d979d02e0482c7137c9f3a34e6d430dbfd1f5c5.patch";
+      sha256 = "1a1g02mk8b0azzjcigdn5zpshn0dn05fciwi8sd5q38yxvnvpbbi";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ lingeling btor2tools ];

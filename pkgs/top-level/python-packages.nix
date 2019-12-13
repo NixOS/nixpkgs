@@ -182,6 +182,8 @@ in {
   aresponses = callPackage ../development/python-modules/aresponses { };
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
+  
+  arviz = callPackage ../development/python-modules/arviz { };
 
   asana = callPackage ../development/python-modules/asana { };
 
@@ -792,6 +794,8 @@ in {
   mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
 
   manhole = callPackage ../development/python-modules/manhole { };
+
+  mapbox = callPackage ../development/python-modules/mapbox { };
 
   markerlib = callPackage ../development/python-modules/markerlib { };
 
@@ -2665,10 +2669,6 @@ in {
   jsonwatch = callPackage ../development/python-modules/jsonwatch { };
 
   latexcodec = callPackage ../development/python-modules/latexcodec {};
-
-  libsexy = callPackage ../development/python-modules/libsexy {
-    inherit (pkgs) libsexy pkgconfig;
-  };
 
   libselinux = pipe pkgs.libselinux [
     toPythonModule

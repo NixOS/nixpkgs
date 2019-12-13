@@ -38,6 +38,15 @@ in stdenv.mkDerivation rec {
     (stdenv.lib.enableFeature enableTiny "tiny")
   ];
 
+    patches = [
+      (fetchurl {
+        # fix compilation on macOS, where 'st_mtim' is unknown
+        # upstream patch not in 4.6
+        url = "https://git.savannah.gnu.org/cgit/nano.git/patch/?id=f516cddce749c3bf938271ef3182b9169ac8cbcc";
+        sha256 = "0gqymvr5vxxypr7y3sm252rsi4gjqp597l01x0lkxyvxsn45a4sx";
+      })
+  ];
+
   postInstall = ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
   '';

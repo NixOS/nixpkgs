@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "ee9d1982154a1e212d4e4bac6b610800bfb558e4fb853572a827bc14a96e4417";
   };
 
-  buildInputs = [ pbr ];
+  propagatedBuildInputs = [ pbr ];
 
   checkInputs = [ fixtures testtools ];
 

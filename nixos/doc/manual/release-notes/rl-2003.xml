@@ -233,6 +233,16 @@
      The fourStore and fourStoreEndpoint modules have been removed.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Polkit no longer has the user of uid 0 (root) as an admin identity.
+     We now follow the upstream default of only having every member of the wheel
+     group admin privileged. Before it was root and members of wheel.
+     The positive outcome of this is pkexec GUI popups or terminal prompts
+     will no longer require the user to choose between two essentially equivalent
+     choices (whether to perform the action as themselves with wheel permissions, or as the root user).
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

@@ -261,9 +261,24 @@ dvisvgm = stdenv.mkDerivation {
 
   inherit (common) src;
 
+  patches = [
+    # Fix for ghostscript>=9.27
+    # Backport of
+    # https://github.com/mgieseki/dvisvgm/commit/bc51951bc90b700c28ea018993bdb058e5271e9b
+    ./dvisvgm-fix.patch
+
+    # Needed for ghostscript>=9.50
+    (fetchpatch {
+      url = "https://github.com/mgieseki/dvisvgm/commit/7b93a9197b69305429183affd24fa40ee04a663a.patch";
+      sha256 = "1gmj76ja9xng39wxckhs9q140abixgb8rkrcfv2cdgq786wm3vag";
+      stripLen = 1;
+      extraPrefix = "texk/dvisvgm/dvisvgm-src/";
+    })
+  ];
+
   nativeBuildInputs = [ pkgconfig ];
   # TODO: dvisvgm still uses vendored dependencies
-  buildInputs = [ core/*kpathsea*/ ghostscript zlib freetype potrace xxHash ];
+  buildInputs = [ core/*kpathsea*/ ghostscript zlib freetype /*potrace xxHash*/ ];
 
   preConfigure = "cd texk/dvisvgm";
 
