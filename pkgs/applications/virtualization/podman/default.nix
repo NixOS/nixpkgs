@@ -20,12 +20,14 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ pkgconfig go-md2man installShellFiles ];
 
-  buildInputs = [ btrfs-progs libseccomp gpgme lvm2 systemd ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs libseccomp gpgme lvm2 systemd ];
 
   buildPhase = ''
-    pushd $NIX_BUILD_TOP/go/src/${goPackagePath}
+    pushd go/src/${goPackagePath}
     patchShebangs .
-    make binaries docs
+    ${if stdenv.isDarwin
+      then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"
+      else "make binaries docs"}
   '';
 
   installPhase = ''
@@ -40,6 +42,6 @@ buildGoPackage rec {
     description = "A program for managing pods, containers and container images";
     license = licenses.asl20;
     maintainers = with maintainers; [ vdemeester saschagrunert ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
