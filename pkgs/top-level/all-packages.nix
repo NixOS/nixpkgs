@@ -25808,4 +25808,6 @@ in
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
   kcli = callPackage ../development/tools/kcli {};
+
+  unstick = callPackage ../os-specific/linux/unstick {};
 }
