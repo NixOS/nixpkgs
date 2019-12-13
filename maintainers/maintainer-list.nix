@@ -6403,6 +6403,12 @@
     githubId = 1437166;
     name = "Xia Bin";
   };
+  softinio = {
+    email = "code@softinio.com";
+    github = "softinio";
+    githubId = 3371635;
+    name = "Salar Rahmanian";
+  };
   solson = {
     email = "scott@solson.me";
     github = "solson";
