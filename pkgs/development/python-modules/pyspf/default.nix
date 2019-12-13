@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pydns }:
+{ lib, buildPythonPackage, fetchFromGitHub, pydns }:
 
 buildPythonPackage rec {
   pname = "pyspf";
-  version = "2.0.13"; # version 2.0.13 should not be used, see #72791
+  version = "2.0.14pre1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "62dc1be39519e343202d480da7ef93d834b5a50cd4f217bef9335ed15292929b";
+  src = fetchFromGitHub {
+    owner = "sdgathman";
+    repo = pname;
+    rev = "pyspf-${version}";
+    sha256 = "17d8namkrsmmhc6p4226pffgafivn59qqlj42sq3sma10i09r0c2";
   };
 
   propagatedBuildInputs = [ pydns ];
