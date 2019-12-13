@@ -1,4 +1,4 @@
-{stdenv, go, fetchFromGitHub}:
+{stdenv, go, fetchFromGitHub, nixos-container}:
 
 stdenv.mkDerivation rec{
   pname = "nixos-shell";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec{
     sha256 = "1sjp9vawybiqr4pa6aryqgz17vixnywml17x4maiirw11v4marhb";
   };
   buildInputs = [ go ];
+  propagatedBuildInputs = [ nixos-container ];
   phases = [ "buildPhase" ];
   buildPhase =
     ''
