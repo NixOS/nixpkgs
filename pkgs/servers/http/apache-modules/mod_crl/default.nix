@@ -4,12 +4,10 @@ stdenv.mkDerivation rec {
  name = "mod_crl";
 
  meta = with stdenv.lib; {
+    description = "RedWax module for Certificate Revocation Lists";
     version = "0.2.1";
 
-    homepage = mod_ca.homepage;
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dirkx ];
+    inherit (mod_ca.meta) license platforms maintainers homepage;
  };
 
  src = fetchurl {
@@ -17,10 +15,5 @@ stdenv.mkDerivation rec {
    sha256 = "0k6iqn5a4bqdz3yx6d53f1r75c21jnwhxmmcq071zq0361xjzzj6";
  };
  buildInputs = [ mod_ca gnused coreutils pkgconfig apacheHttpd apr aprutil openssl openldap ];
-
- configurePlatforms = [];
- configureFlags = [
-       "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-	];
- installPhase = "make INCLUDEDIR=$out/include LIBEXECDIR=$out/libexec install";
+ inherit ( mod_ca ) configurePlatforms configureFlags installPhase; 
 }

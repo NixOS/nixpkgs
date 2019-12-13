@@ -4,13 +4,12 @@ stdenv.mkDerivation rec {
  baseurl = "https://redwax.eu/dist/rs/";
  name = "mod_ca";
  suffix = ".tar.gz";
- homepage = "https://redwax.eu";
 
  meta = with stdenv.lib; {
    description = "RedWax CA service modules.";
    version = "0.2.1";
 
-   homepage = mod_ca.homepage;
+   homepage = "https://redwax.eu";
    license = licenses.asl20;
    platforms = platforms.unix;
    maintainers = with maintainers; [ dirkx ];

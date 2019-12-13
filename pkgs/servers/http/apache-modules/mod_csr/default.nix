@@ -7,10 +7,7 @@ stdenv.mkDerivation rec {
     description = "RedWax CA service module to handle Certificate Signing Requests.";
     version = "0.2.1";
 
-    homepage = mod_ca.homepage;
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dirkx ];
+    inherit (mod_ca.meta) license platforms maintainers homepage;
  };
  
  src = fetchurl {
@@ -18,15 +15,9 @@ stdenv.mkDerivation rec {
    sha256 = "01sdvv07kchdd6ssrmd2cbhj50qh2ibp5g5h6jy1jqbzp0b3j9ja";
  };
  buildInputs = [ mod_ca gnused coreutils pkgconfig apacheHttpd apr aprutil openssl openldap ];
-
  preBuild = "cp ${./openssl_setter_compat.h} openssl_setter_compat.h";
 
- configurePlatforms = [];
- configureFlags = [
-       "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-	];
-
- installPhase = "make INCLUDEDIR=$out/include LIBEXECDIR=$out/libexec install";
+ inherit ( mod_ca ) configurePlatforms configureFlags installPhase; 
 }
 
 

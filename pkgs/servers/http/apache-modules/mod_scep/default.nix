@@ -6,23 +6,19 @@ stdenv.mkDerivation rec {
  meta = with stdenv.lib; {
    description = "RedWax CA service modules for SCEP (Automatic ceritifcate issue/renewal)";
    version = "0.2.1";
-   homepage = mod_ca.homepage;
-   license = licenses.asl20;
-   platforms = platforms.unix;
-   maintainers = with maintainers; [ dirkx ];
+
+   inherit (mod_ca.meta) license platforms maintainers homepage;
  };
 
  src = fetchurl {
    url = "${mod_ca.baseurl}${name}-${meta.version}${mod_ca.suffix}";
    sha256 = "14l8v6y6kx5dg8avb5ny95qdcgrw40ss80nqrgmw615mk7zcj81f";
  };
- preBuild = "cp ${./openssl_setter_compat.h} openssl_setter_compat.h";
+
  buildInputs = [ mod_ca gnused coreutils pkgconfig apacheHttpd apr aprutil openssl openldap ];
- configurePlatforms = [];
- configureFlags = [
-       "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-	];
- installPhase = "make INCLUDEDIR=$out/include LIBEXECDIR=$out/libexec install";
+ inherit ( mod_ca ) configurePlatforms configureFlags installPhase; 
+
+ preBuild = "cp ${./openssl_setter_compat.h} openssl_setter_compat.h";
 }
 
 
