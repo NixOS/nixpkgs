@@ -5,16 +5,16 @@ stdenv.mkDerivation rec {
 
  meta = with stdenv.lib; {
     description = "RedWax CA service module to handle Certificate Signing Requests.";
-    suffix = ".tar.gz";
-    homepage = "https://redwax.eu";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dirkx ];
     version = "0.2.1";
-    platforms = platforms.unix;
- };
 
+    homepage = mod_ca.homepage;
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dirkx ];
+ };
+ 
  src = fetchurl {
-   url = "${mod_ca.baseurl}${name}-${meta.version}${meta.suffix}";
+   url = "${mod_ca.baseurl}${name}-${meta.version}${mod_ca.suffix}";
    sha256 = "01sdvv07kchdd6ssrmd2cbhj50qh2ibp5g5h6jy1jqbzp0b3j9ja";
  };
  buildInputs = [ mod_ca gnused coreutils pkgconfig apacheHttpd apr aprutil openssl openldap ];
