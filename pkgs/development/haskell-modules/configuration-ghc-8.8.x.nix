@@ -89,7 +89,7 @@ self: super: {
   microlens-th = self.microlens-th_0_4_3_2;
   network = self.network_3_1_1_1;
   optparse-applicative = self.optparse-applicative_0_15_1_0;
-  pandoc = self.pandoc_2_8_1;
+  pandoc = self.pandoc_2_9;
   pandoc-types = self.pandoc-types_1_20;
   prettyprinter = self.prettyprinter_1_5_1;
   primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
