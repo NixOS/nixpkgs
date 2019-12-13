@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests }:
 
 buildGoModule rec {
   pname = "zsh-history";
@@ -28,5 +28,9 @@ buildGoModule rec {
     homepage = https://github.com/b4b4r07/history;
     platforms = platforms.unix;
     maintainers = with maintainers; [ kampka ];
+  };
+
+  passthru.tests = {
+    zsh-history-shell-integration = nixosTests.zsh-history;
   };
 }
