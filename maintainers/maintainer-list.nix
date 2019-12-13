@@ -5007,6 +5007,12 @@
     githubId = 2946283;
     name = "Brian Cohen";
   };
+  novoxudonoser = {
+    email = "radnovox@gmail.com";
+    github = "novoxudonoser";
+    githubId = 6052922;
+    name = "Kirill Struokov";
+  };
   np = {
     email = "np.nix@nicolaspouillard.fr";
     github = "np";
