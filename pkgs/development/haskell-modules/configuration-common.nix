@@ -1322,4 +1322,9 @@ self: super: {
   # needs newer version of the systemd package
   spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
 
+  # ghcide needs the latest versions of haskell-lsp.
+  ghcide = super.ghcide.override { haskell-lsp = self.haskell-lsp_0_18_0_0; lsp-test = self.lsp-test_0_8_2_0; };
+  haskell-lsp_0_18_0_0 = super.haskell-lsp_0_18_0_0.override { haskell-lsp-types = self.haskell-lsp-types_0_18_0_0; };
+  lsp-test_0_8_2_0 = (dontCheck super.lsp-test_0_8_2_0).override { haskell-lsp = self.haskell-lsp_0_18_0_0; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
