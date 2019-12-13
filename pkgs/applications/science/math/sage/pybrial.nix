@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , buildPythonPackage
+, brial
 }:
 # This has a cyclic dependency with sage. I don't include sage in the
 # buildInputs and let python figure it out at runtime. Because of this,
@@ -9,15 +10,10 @@
 # it).
 buildPythonPackage rec {
     pname = "pyBRiAl";
-    version = "1.2.3";
+    version = brial.version;
 
     # included with BRiAl source
-    src = fetchFromGitHub {
-      owner = "BRiAl";
-      repo = "BRiAl";
-      rev = version;
-      sha256 = "0qy4cwy7qrk4zg151cmws5cglaa866z461cnj9wdnalabs7v7qbg";
-    };
+    src = brial.src;
 
     sourceRoot = "source/sage-brial";
 
