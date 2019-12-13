@@ -2234,6 +2234,17 @@ let
     };
   };
 
+  quick-scope = buildVimPluginFrom2Nix {
+    pname = "quick-scope";
+    version = "2019-04-22";
+    src = fetchFromGitHub {
+      owner = "unblevable";
+      repo = "quick-scope";
+      rev = "994576d997a52b4c7828149e9f1325d1c4691ae2";
+      sha256 = "0lr27vwv2bzva9s7f9d856vvls10icwli0kwj5v5f1q8y83fa4zd";
+    };
+  };
+
   quickfix-reflector-vim = buildVimPluginFrom2Nix {
     pname = "quickfix-reflector-vim";
     version = "2019-12-11";
