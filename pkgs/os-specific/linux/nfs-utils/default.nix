@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3, buildPackages
+, python3, buildPackages, nixosTests
 }:
 
 let
@@ -104,6 +104,12 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   disallowedReferences = [ (lib.getDev kerberos) ];
+
+  passthru.tests = {
+    nfs3-simple = nixosTests.nfs3.simple;
+    nfs4-simple = nixosTests.nfs4.simple;
+    nfs4-kerberos = nixosTests.nfs4.kerberos;
+  };
 
   meta = with stdenv.lib; {
     description = "Linux user-space NFS utilities";
