@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mojave-gtk-theme";
-  version = "2019-09-09";
+  version = "2019-12-12";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "1qffh6jsvy61f29ymw1v9hpjnsvhqin19mp05cys1lnwc7y810zr";
+    sha256 = "0d5m9gh97db01ygqlp2sv9v1m183d9fgid9n9wms9r5rrrw6bs8m";
   };
 
   buildInputs = [ gtk_engines ];
@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     patchShebangs .
-    mkdir -p $out/share/themes
     name= ./install.sh -d $out/share/themes
   '';
 
