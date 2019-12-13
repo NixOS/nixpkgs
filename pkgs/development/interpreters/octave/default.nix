@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
 , libsndfile, portaudio, libX11, graphicsmagick, pcre, pkgconfig, libGL, libGLU, fltk
-, fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas, arpack, libwebp
+, fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas, arpack, libwebp, gl2ps
 , qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
 , suitesparse ? null, gnuplot ? null, jdk ? null, python ? null, overridePlatforms ? null
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull
     graphicsmagick pcre pkgconfig fltk zlib curl openblas libsndfile fftw
-    fftwSinglePrec portaudio qrupdate arpack libwebp ]
+    fftwSinglePrec portaudio qrupdate arpack libwebp gl2ps ]
     ++ (stdenv.lib.optional (qt != null) qt)
     ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
     ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
