@@ -1,19 +1,25 @@
-{ stdenv, fetchsvn, gnused, coreutils, pkgconfig, apacheHttpd, openssl, openldap, apr, aprutil, mod_ca }:
+{ stdenv, fetchurl, gnused, coreutils, pkgconfig, apacheHttpd, openssl, openldap, apr, aprutil, mod_ca }:
 
 stdenv.mkDerivation rec {
  name = "mod_csr";
 
  meta = with stdenv.lib; {
-    homepage = "https://redwax.eu";
     description = "RedWax CA service module to handle Certificate Signing Requests.";
+    baseurl = "https://redwax.eu/dist/rs/";
+    suffix = ".tar.gz";
+    homepage = "https://redwax.eu";
     license = licenses.asl20;
     maintainers = with maintainers; [ dirkx ];
+    version = "0.2.1";
  };
- src = fetchsvn {
-   url = "https://source.redwax.eu/svn/redwax/rs/mod_csr/trunk";
-   sha256 = "07fnswqxlv40kbj35vqhimk2qhwm01lky7y7z302hc1h14x2cn9z";
+
+ src = fetchurl {
+   url = "${meta.baseurl}${name}-${meta.version}${meta.suffix}";
+   sha256 = "01sdvv07kchdd6ssrmd2cbhj50qh2ibp5g5h6jy1jqbzp0b3j9ja";
  };
  buildInputs = [ mod_ca gnused coreutils pkgconfig apacheHttpd apr aprutil openssl openldap ];
+
+ preBuild = "cp ${./openssl_setter_compat.h} openssl_setter_compat.h";
 
  configurePlatforms = [];
  configureFlags = [

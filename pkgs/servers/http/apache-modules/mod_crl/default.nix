@@ -1,18 +1,21 @@
-{ stdenv, fetchsvn, gnused, coreutils, pkgconfig, apacheHttpd, openssl, openldap, mod_ca, apr, aprutil }:
+{ stdenv, fetchurl, gnused, coreutils, pkgconfig, apacheHttpd, openssl, openldap, mod_ca, apr, aprutil }:
 
 stdenv.mkDerivation rec {
  name = "mod_crl";
 
  meta = with stdenv.lib; {
-    homepage = "https://redwax.eu";
     description = "RedWax CA service module to handle Certificate Revocation Lists.";
+    baseurl = "https://redwax.eu/dist/rs/";
+    suffix = ".tar.gz";
+    homepage = "https://redwax.eu";
     license = licenses.asl20;
     maintainers = with maintainers; [ dirkx ];
+    version = "0.2.1";
  };
 
- src = fetchsvn {
-   url = "https://source.redwax.eu/svn/redwax/rs/mod_crl/trunk";
-   sha256 = "0z9pvv8c10w9rrm29i1zn4vmvxnj525f9xpyy6pyrn26ijbs91qv";
+ src = fetchurl {
+   url = "${meta.baseurl}${name}-${meta.version}${meta.suffix}";
+   sha256 = "0k6iqn5a4bqdz3yx6d53f1r75c21jnwhxmmcq071zq0361xjzzj6";
  };
  buildInputs = [ mod_ca gnused coreutils pkgconfig apacheHttpd apr aprutil openssl openldap ];
 

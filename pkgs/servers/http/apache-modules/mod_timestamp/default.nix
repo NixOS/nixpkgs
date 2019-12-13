@@ -1,18 +1,30 @@
-{ stdenv, fetchsvn, gnused, coreutils, pkgconfig, apacheHttpd, openssl, openldap, apr, aprutil, mod_ca}:
+{ stdenv, fetchurl, gnused, coreutils, pkgconfig, apacheHttpd, openssl, openldap, apr, aprutil, mod_ca}:
 
 stdenv.mkDerivation rec {
  name = "mod_timestamp";
 
  meta = with stdenv.lib; {
-    homepage = "https://redwax.eu";
-    description = "RedWax CA service module for issuing signed timestamps.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dirkx ];
+   description = "RedWax CA service module for issuing signed timestamps.";
+   suffix = ".tar.gz";
+
+   baseurl = "https://redwax.eu/dist/rs/";
+   homepage = "https://redwax.eu";
+
+   license = licenses.asl20;
+
+   maintainers = with maintainers; [ dirkx ];
+
+   version = "0.2.1";
+
+   # This propably should be a wildcard - as we build on all
+   # current NixOS platforms.
+   # platforms = [ platforms.linux platforms.darwin ]; 
  };
 
- src = fetchsvn {
-   url = "https://source.redwax.eu/svn/redwax/rs/mod_timestamp/trunk";
-   sha256 = "1gdd3vq4w8d6ppkwavpj6q1z21wmyzvjfb2sg2dkbkz1rs2bgfcx";
+ src = fetchurl {
+   url = "${meta.baseurl}${name}-${meta.version}${meta.suffix}";
+
+   sha256 = "0j4b04dbdwn9aff3da9m0lnqi0qbw6c6hhi81skl15kyc3vzp67f";
  };
  buildInputs = [ mod_ca gnused coreutils pkgconfig apacheHttpd apr aprutil openssl openldap ];
 
