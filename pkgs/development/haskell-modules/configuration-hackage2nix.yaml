@@ -4191,6 +4191,7 @@ broken-packages:
   - dhall-lsp-server
   - dhall-nix
   - dhall-to-cabal
+  - dhall-yaml
   - dhcp-lease-parser
   - dhrun
   - dia-base
