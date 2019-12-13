@@ -8,8 +8,8 @@
   ameba = {
     owner = "veelenga";
     repo = "ameba";
-    rev = "v0.10.0";
-    sha256 = "1yjxzwdhigsyjn0qp362jkj85qvg4dsyzal00pgr1srnh2xry912";
+    rev = "v0.10.1";
+    sha256 = "0dcw7px7g0c5pxpdlirhirqzhcc7gdwdfiwb9kgm4x1k74ghjgxq";
   };
   baked_file_system = {
     owner = "schovi";
@@ -26,8 +26,8 @@
   dotenv = {
     owner = "gdotdesign";
     repo = "cr-dotenv";
-    rev = "v0.3.0";
-    sha256 = "1fp6932vdjrxx68mnvxwdfm5kd9k1nbbq5j31k4s1ja7fpg7injp";
+    rev = "v0.3.1";
+    sha256 = "1xp7c3g8dj1hqk2b885qr4y0s8661gpp9q28lv6rhr0ckllc6zgz";
   };
   exception_page = {
     owner = "crystal-loot";
@@ -50,8 +50,8 @@
   markd = {
     owner = "icyleaf";
     repo = "markd";
-    rev = "v0.1.2";
-    sha256 = "0gns9cihmc5milwff5smia2qwvc3z50r0hn7z750li3cly0ddgh1";
+    rev = "v0.2.0";
+    sha256 = "0n27fndd77mlkgw1r4pf0sa8fz4gwsh7dpnjck95c0ml91cr8j1a";
   };
   radix = {
     owner = "luislavena";
