@@ -72,11 +72,13 @@ self: super: {
   # use latest version to fix the build
   brick = self.brick_0_50_1;
   dbus = self.dbus_1_2_11;
-  doctemplates = self.doctemplates_0_7_2;
+  doctemplates = self.doctemplates_0_8;
   exact-pi = doJailbreak super.exact-pi;
   generics-sop = self.generics-sop_0_5_0_0;
   hackage-db = self.hackage-db_2_1_0;
   haddock-library = self.haddock-library_1_8_0;
+  haskell-src-meta = self.haskell-src-meta_0_8_5;
+  haskell-src-meta_0_8_5 = dontCheck super.haskell-src-meta_0_8_5;
   HaTeX = self.HaTeX_3_22_0_0;
   HsYAML = self.HsYAML_0_2_1_0;
   json-autotype = doJailbreak super.json-autotype;
@@ -89,7 +91,7 @@ self: super: {
   microlens-th = self.microlens-th_0_4_3_2;
   network = self.network_3_1_1_1;
   optparse-applicative = self.optparse-applicative_0_15_1_0;
-  pandoc = self.pandoc_2_8_1;
+  pandoc = self.pandoc_2_9;
   pandoc-types = self.pandoc-types_1_20;
   prettyprinter = self.prettyprinter_1_5_1;
   primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
@@ -121,10 +123,6 @@ self: super: {
     sha256 = "01b2gnsq0x4fd9na8zpk6pajym55mbz64hgzawlwxdw0y6681kr5";
   });
   foundation = dontCheck super.foundation;
-  haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.3.patch";
-    sha256 = "1asl932mibr5y057xx8v1a7n3qy87lcnclsfh8pbxq1m3iwjkxy8";
-  });
   vault = dontHaddock super.vault;
 
   # https://github.com/snapframework/snap-core/issues/288
