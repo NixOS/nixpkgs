@@ -7,7 +7,6 @@ stdenv.mkDerivation rec {
    description = "RedWax CA service modules for PKCS#12 format files";
    suffix = ".tar.gz";
 
-   baseurl = "https://redwax.eu/dist/rs/";
    homepage = "https://redwax.eu";
 
    license = licenses.asl20;
@@ -15,14 +14,11 @@ stdenv.mkDerivation rec {
    maintainers = with maintainers; [ dirkx ];
 
    version = "0.2.1";
-
-   # This propably should be a wildcard - as we build on all
-   # current NixOS platforms.
-   # platforms = [ platforms.linux platforms.darwin ];
+   platforms = platforms.unix;
  };
 
  src = fetchurl {
-   url = "${meta.baseurl}${name}-${meta.version}${meta.suffix}";
+   url = "${mod_ca.baseurl}${name}-${meta.version}${meta.suffix}";
    sha256 = "0by4qfjs3a8q0amzwazfq8ii6ydv36v2mjga0jzc9i6xyl4rs6ai";
  };
 

@@ -7,7 +7,6 @@ stdenv.mkDerivation rec {
    description = "RedWax CA service modules for SCEP (Automatic ceritifcate issue/renewal)";
    suffix = ".tar.gz";
 
-   baseurl = "https://redwax.eu/dist/rs/";
    homepage = "https://redwax.eu";
 
    license = licenses.asl20;
@@ -15,16 +14,11 @@ stdenv.mkDerivation rec {
    maintainers = with maintainers; [ dirkx ];
 
    version = "0.2.1";
-
-   # This propably should be a wildcard - as we build on all
-   # current NixOS platforms.
-   # platforms = [ platforms.linux platforms.darwin ]; 
-
+   platforms = platforms.unix;
  };
 
  src = fetchurl {
-   url = "${meta.baseurl}${name}-${meta.version}${meta.suffix}";
-
+   url = "${mod_ca.baseurl}${name}-${meta.version}${meta.suffix}";
    sha256 = "14l8v6y6kx5dg8avb5ny95qdcgrw40ss80nqrgmw615mk7zcj81f";
  };
  preBuild = "cp ${./openssl_setter_compat.h} openssl_setter_compat.h";
