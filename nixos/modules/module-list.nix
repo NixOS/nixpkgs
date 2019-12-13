@@ -169,6 +169,7 @@
   ./programs/zsh/zsh.nix
   ./programs/zsh/zsh-autoenv.nix
   ./programs/zsh/zsh-autosuggestions.nix
+  ./programs/zsh/zsh-history.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
   ./rename.nix
   ./security/acme.nix
