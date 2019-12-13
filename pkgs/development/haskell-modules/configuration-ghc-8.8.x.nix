@@ -122,7 +122,7 @@ self: super: {
   });
   foundation = dontCheck super.foundation;
   haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.3.patch";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/82815489c5bb1ae8552dd6993aa2bad0cefd36ac/patches/haskell-src-meta-0.8.3.patch";
     sha256 = "1asl932mibr5y057xx8v1a7n3qy87lcnclsfh8pbxq1m3iwjkxy8";
   });
   vault = dontHaddock super.vault;
