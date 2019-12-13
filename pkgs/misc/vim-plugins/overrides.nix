@@ -115,12 +115,12 @@ self: super: {
   # NB: Make sure you pick a rev from the release branch!
   coc-nvim = buildVimPluginFrom2Nix rec {
     pname = "coc-nvim";
-    version = "2019-11-29";
+    version = "2019-11-30";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "d566fa03807d8d86ce9302680d135198a36c7d4d";
-      sha256 = "0m355w837f61jfpjrhi3h47z7vq16g8yai8kd82v1h71ns5fw9gz";
+      rev = "42a45c639e2c43f9f1795c3804787c6a686781c0";
+      sha256 = "0bny7s7scbls01jkvrwcd516py09lp0vkr65p1ik4282blyxyy6s";
     };
   };
 
