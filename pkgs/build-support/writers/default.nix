@@ -148,6 +148,7 @@ rec {
         cp $contentPath tmp.hs
         ${ghc.withPackages (_: libraries )}/bin/ghc tmp.hs
         mv tmp $out
+        ${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded "$out"
       '';
     } name;
 
