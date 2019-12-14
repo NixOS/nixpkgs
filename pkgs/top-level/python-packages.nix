@@ -2034,6 +2034,8 @@ in {
 
   envs = callPackage ../development/python-modules/envs { };
 
+  etelemetry = callPackage ../development/python-modules/etelemetry { };
+
   eth-hash = callPackage ../development/python-modules/eth-hash { };
 
   eth-typing = callPackage ../development/python-modules/eth-typing { };
