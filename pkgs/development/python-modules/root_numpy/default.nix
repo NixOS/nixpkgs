@@ -1,4 +1,4 @@
-{ lib, fetchPypi, isPy3k, buildPythonPackage, numpy, root, nose }:
+{ lib, fetchPypi, isPy3k, buildPythonPackage, numpy, root, nose, setuptools }:
 
 buildPythonPackage rec {
   pname = "root_numpy";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     nosetests -s -v root_numpy
   '';
 
-  propagatedBuildInputs = [ numpy root ];
+  propagatedBuildInputs = [ numpy root setuptools ];
 
   meta = with lib; {
     homepage = http://scikit-hep.org/root_numpy;
