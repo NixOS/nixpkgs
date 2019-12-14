@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , substituteAll
 , fetchpatch
 , nose
@@ -11,13 +11,11 @@
 
 buildPythonPackage rec {
   pname = "anytree";
-  version = "2.7.2";
+  version = "2.7.3";
 
-  src = fetchFromGitHub {
-    owner = "c0fec0de";
-    repo = pname;
-    rev = version;
-    sha256 = "0ag5ir9h5p7rbm2pmpxlkflwigrm7z4afh24jvbhqj7pyrbjmk9w";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "05736hamjv4f38jw6z9y4wckc7mz18ivbizm1s3pb0n6fp1sy4zk";
   };
 
   patches = [
