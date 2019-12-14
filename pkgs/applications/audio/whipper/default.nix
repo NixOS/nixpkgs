@@ -1,24 +1,26 @@
-{ stdenv, fetchFromGitHub, python2, cdparanoia, cdrdao, flac
-, sox, accuraterip-checksum, utillinux, substituteAll }:
+{ stdenv, fetchFromGitHub, python3, cdparanoia, cdrdao, flac
+, sox, accuraterip-checksum, libsndfile, utillinux, substituteAll }:
 
-python2.pkgs.buildPythonApplication rec {
-  name = "whipper-${version}";
-  version = "0.7.3";
+python3.pkgs.buildPythonApplication rec {
+  pname = "whipper";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "whipper-team";
     repo = "whipper";
     rev = "v${version}";
-    sha256 = "0ypbgc458i7yvbyvg6wg6agz5yzlwm1v6zw7fmyq9h59xsv27mpr";
+    sha256 = "0x1qsp021i0l5sdcm2kcv9zfwp696k4izhw898v6marf8phll7xc";
   };
 
-  pythonPath = with python2.pkgs; [
+  pythonPath = with python3.pkgs; [
     pygobject3 musicbrainzngs urllib3 chardet
-    pycdio setuptools mutagen CDDB
+    pycdio setuptools setuptools_scm mutagen
     requests
   ];
 
-  checkInputs = with python2.pkgs; [
+  buildInputs = [ libsndfile ];
+
+  checkInputs = with python3.pkgs; [
     twisted
   ];
 
@@ -33,6 +35,10 @@ python2.pkgs.buildPythonApplication rec {
     "--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao utillinux flac sox ])
   ];
 
+  preBuild = ''
+    export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
+  '';
+
   # some tests require internet access
   # https://github.com/JoeLametta/whipper/issues/291
   doCheck = false;
@@ -44,7 +50,7 @@ python2.pkgs.buildPythonApplication rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/whipper-team/whipper;
     description = "A CD ripper aiming for accuracy over speed";
-    maintainers = with maintainers; [ rycee ];
+    maintainers = with maintainers; [ rycee emily ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
