@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "RedWax CA service module to handle Certificate Signing Requests";
 
-    inherit(mod_ca.meta) license platforms maintainers homepage;
+    homepage = "https://redwax.eu";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [dirkx];
   };
 }

@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "RedWax module for Certificate Revocation Lists";
 
-    inherit(mod_ca.meta) license platforms maintainers homepage;
+    homepage = "https://redwax.eu";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [dirkx];
   };
 }
