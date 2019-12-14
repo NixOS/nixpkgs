@@ -16541,7 +16541,9 @@ in
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
-  libselinux = callPackage ../os-specific/linux/libselinux { };
+  libselinux = callPackage ../os-specific/linux/libselinux {
+    python = python3;
+  };
 
   libsemanage = callPackage ../os-specific/linux/libsemanage { };
 
@@ -25034,7 +25036,6 @@ in
   serviio = callPackage ../servers/serviio {};
   selinux-python = callPackage ../os-specific/linux/selinux-python {
     # needs python3 bindings
-    libselinux = libselinux.override { python = python3; };
     libsemanage = libsemanage.override { python = python3; };
   };
 
