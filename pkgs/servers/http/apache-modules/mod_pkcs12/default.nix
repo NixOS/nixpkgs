@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0by4qfjs3a8q0amzwazfq8ii6ydv36v2mjga0jzc9i6xyl4rs6ai";
   };
 
-  buildInputs =[mod_ca pkgconfig apr aprutil];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs =[mod_ca apr aprutil];
   inherit(mod_ca) configureFlags installFlags;
 
   meta = with stdenv.lib; {

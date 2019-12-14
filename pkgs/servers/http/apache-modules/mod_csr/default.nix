@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "01sdvv07kchdd6ssrmd2cbhj50qh2ibp5g5h6jy1jqbzp0b3j9ja";
   };
 
-  buildInputs =[mod_ca pkgconfig apr aprutil];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs =[mod_ca apr aprutil];
   inherit(mod_ca) configureFlags installFlags;
 
   # After openssl-1.0.2t, starting in  openssl-1.1.0l

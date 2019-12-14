@@ -9,14 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "1pxapjrzdsk2s25vhgvf56fkakdqcbn9hjncwmqh0asl1pa25iic";
   };
 
-  buildInputs =[pkgconfig apacheHttpd openssl openldap];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs =[ apacheHttpd openssl openldap];
 
   configureFlags =[
        "--with-apxs=${apacheHttpd.dev}/bin/apxs"
     ];
 
   installFlags =[
-           "INCLUDEDIR=$(out)/include"
+           "INCLUDEDIR=${placeholder ''out''}/include"
            "LIBEXECDIR=$(out)/modules"
     ];
 
