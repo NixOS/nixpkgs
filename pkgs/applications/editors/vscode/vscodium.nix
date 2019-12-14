@@ -11,8 +11,8 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "01mblkwq3qnj70rwizv408x6sc0jg4wav44p9z3cmzcf9prpm2gs";
-    x86_64-darwin = "1lvh735vddz65l1ahbl66k04rck36lpvp1n3z3hrk0mjn451ga6v";
+    x86_64-linux = "1njxa19mzzydz1jacghwmha3dl4a13m9xzzwsb0rbks5zc9a0v7m";
+    x86_64-darwin = "0cpd87q0q3i172l4s43s79by42wa9k5pyik3v2z5mq8zpms8qcq4";
   }.${system};
 
   sourceRoot = {
@@ -23,7 +23,7 @@ in
   callPackage ./generic.nix rec {
     inherit sourceRoot;
 
-    version = "1.40.1";
+    version = "1.41.0";
     pname = "vscodium";
 
     executableName = "codium";

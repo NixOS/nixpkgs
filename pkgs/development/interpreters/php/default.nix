@@ -182,6 +182,7 @@ let
       ++ optional mcryptSupport "--with-mcrypt=${libmcrypt'}"
       ++ optional bz2Support "--with-bz2=${bzip2.dev}"
       ++ optional (zipSupport && (versionOlder version "7.4")) "--enable-zip"
+      ++ optional (zipSupport && (versionAtLeast version "7.4")) "--with-zip"
       ++ optional ftpSupport "--enable-ftp"
       ++ optional fpmSupport "--enable-fpm"
       ++ optional ztsSupport "--enable-maintainer-zts"

@@ -1,6 +1,6 @@
 { buildPythonPackage, fetchFromGitHub, pytest, six, clint, pyyaml, docopt
 , requests, jsonpatch, args, schema, responses, backports_csv, isPy3k
-, lib, glibcLocales }:
+, lib, glibcLocales, setuptools }:
 
 buildPythonPackage rec {
   pname = "internetarchive";
@@ -23,6 +23,7 @@ buildPythonPackage rec {
     jsonpatch
     args
     schema
+    setuptools
   ] ++ lib.optional (!isPy3k) backports_csv;
 
   checkInputs = [ pytest responses glibcLocales ];

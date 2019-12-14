@@ -585,6 +585,8 @@ let
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
+    ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
+
     ocf = callPackage ../development/ocaml-modules/ocf { };
 
     ocp-build = callPackage ../development/tools/ocaml/ocp-build { };

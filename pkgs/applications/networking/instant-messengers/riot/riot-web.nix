@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
       then writeText "riot-config.json" conf
       else "$out/config.sample.json";
   in ''
+    runHook preInstall
+
     mkdir -p $out/
     cp -R . $out/
     ln -s ${configFile} $out/config.json
+
+    runHook postInstall
   '';
 
   meta = {

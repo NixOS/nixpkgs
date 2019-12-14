@@ -31,7 +31,10 @@ in stdenv.mkDerivation rec {
   version = "5.5.1";
 
   src = fetchurl {
-    url = "https://download.anydesk.com/linux/${pname}-${version}-${arch}.tar.gz";
+    urls = [
+      "https://download.anydesk.com/linux/${pname}-${version}-${arch}.tar.gz"
+      "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-${arch}.tar.gz"
+    ];
     inherit sha256;
   };
 

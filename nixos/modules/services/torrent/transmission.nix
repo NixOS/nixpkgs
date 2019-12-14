@@ -71,7 +71,7 @@ in
       };
 
       downloadDirPermissions = mkOption {
-        type = types.string;
+        type = types.str;
         default = "770";
         example = "775";
         description = ''

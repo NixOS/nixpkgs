@@ -478,7 +478,7 @@ Retype new UNIX password: ***</screen>
      shows what packages are available, and
 <screen>
 <prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -iA w3m</screen>
-     install the <literal>w3m</literal> browser.
+     installs the <literal>w3m</literal> browser.
     </para>
    </listitem>
   </orderedlist>
