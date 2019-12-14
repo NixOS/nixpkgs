@@ -5,6 +5,7 @@
 , fetchpatch
 , nose
 , six
+, withGraphviz ? true
 , graphviz
 , fontconfig
 }:
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "05736hamjv4f38jw6z9y4wckc7mz18ivbizm1s3pb0n6fp1sy4zk";
   };
 
-  patches = [
+  patches = lib.optionals withGraphviz [
     (substituteAll {
       src = ./graphviz.patch;
       inherit graphviz;
@@ -33,10 +34,13 @@ buildPythonPackage rec {
     six
   ];
 
-  # Fontconfig error: Cannot load default config file
-  preCheck = ''
+  # tests print “Fontconfig error: Cannot load default config file”
+  preCheck = lib.optionalString withGraphviz ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
   '';
+
+  # circular dependency anytree → graphviz → pango → glib → gtk-doc → anytree
+  doCheck = withGraphviz;
 
   checkPhase = ''
     runHook preCheck
