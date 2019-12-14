@@ -1,33 +1,31 @@
-{ stdenv, fetchurl, gnused, coreutils, pkgconfig, apacheHttpd, openssl, openldap }:
+{ stdenv, fetchurl, pkgconfig, apacheHttpd, openssl, openldap }:
 
 stdenv.mkDerivation rec {
- baseurl = "https://redwax.eu/dist/rs/";
- name = "mod_ca";
- suffix = ".tar.gz";
+  pname = "mod_ca";
+  version = "0.2.1";
 
- meta = with stdenv.lib; {
-   description = "RedWax CA service modules.";
-   version = "0.2.1";
+  src = fetchurl {
+    url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
+    sha256 = "1pxapjrzdsk2s25vhgvf56fkakdqcbn9hjncwmqh0asl1pa25iic";
+  };
 
-   homepage = "https://redwax.eu";
-   license = licenses.asl20;
-   platforms = platforms.unix;
-   maintainers = with maintainers; [ dirkx ];
- };
+  buildInputs =[pkgconfig apacheHttpd openssl openldap];
 
- src = fetchurl {
-   url = "${baseurl}${name}-${meta.version}${suffix}";
-   sha256 = "1pxapjrzdsk2s25vhgvf56fkakdqcbn9hjncwmqh0asl1pa25iic";
- };
-
- buildInputs = [ gnused coreutils pkgconfig apacheHttpd openssl openldap ];
-
- configurePlatforms = [];
- configureFlags = [
+  configureFlags =[
        "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-	];
+    ];
 
- installPhase = "make INCLUDEDIR=$out/include LIBEXECDIR=$out/libexec install";
+  installFlags =[
+           "INCLUDEDIR=$(out)/include"
+           "LIBEXECDIR=$(out)/modules"
+    ];
+
+  meta = with stdenv.lib; {
+    description = "RedWax CA service module";
+
+    homepage = "https://redwax.eu";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [dirkx];
+  };
 }
-
-

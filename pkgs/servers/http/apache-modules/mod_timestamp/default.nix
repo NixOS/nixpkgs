@@ -1,21 +1,20 @@
-{ stdenv, fetchurl, gnused, coreutils, pkgconfig, apacheHttpd, openssl, openldap, apr, aprutil, mod_ca}:
+{ stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
 
 stdenv.mkDerivation rec {
- name = "mod_timestamp";
+  pname = "mod_timestamp";
+  version = "0.2.1";
 
- meta = with stdenv.lib; {
-   description = "RedWax CA service module for issuing signed timestamps.";
-   version = "0.2.1";
+  src = fetchurl {
+    url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
+    sha256 = "0j4b04dbdwn9aff3da9m0lnqi0qbw6c6hhi81skl15kyc3vzp67f";
+  };
 
-   inherit (mod_ca.meta) license platforms maintainers homepage;
- };
+  buildInputs =[mod_ca pkgconfig apr aprutil];
+  inherit(mod_ca) configureFlags installFlags;
 
- src = fetchurl {
-   url = "${mod_ca.baseurl}${name}-${meta.version}${mod_ca.suffix}";
-   sha256 = "0j4b04dbdwn9aff3da9m0lnqi0qbw6c6hhi81skl15kyc3vzp67f";
- };
- buildInputs = [ mod_ca gnused coreutils pkgconfig apacheHttpd apr aprutil openssl openldap ];
- inherit ( mod_ca ) configurePlatforms configureFlags installPhase; 
+  meta = with stdenv.lib; {
+    description = "RedWax CA service module for issuing signed timestamps";
+
+    inherit(mod_ca.meta) license platforms maintainers homepage;
+  };
 }
-
-
