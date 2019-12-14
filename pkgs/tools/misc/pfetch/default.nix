@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A pretty system information tool written in POSIX sh.";
+    description = "A pretty system information tool written in POSIX sh";
     homepage = https://github.com/dylanaraps/pfetch;
     license = licenses.mit;
     platforms = platforms.all;
