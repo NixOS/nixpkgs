@@ -6,27 +6,31 @@
      boilerplate related to command-line construction for simple use cases.
 
      Example:
-       encodeGNUCommandLine { foo = "A"; bar = 1; baz = null; qux = true; v = true; }
+       encodeGNUCommandLine { } { foo = "A"; bar = 1; baz = null; qux = true; v = true; }
        => " --bar '1' --foo 'A' --qux -v"
   */
   encodeGNUCommandLine =
+    { renderKey ?
+        key: if builtins.stringLength key == 1 then "-${key}" else "--${key}"
+
+    , renderOption ?
+        key: value:
+          if value == null
+          then ""
+          else " ${renderKey key} ${lib.escapeShellArg value}"
+
+    , renderBool ? key: value: if value then " ${renderKey key}" else ""
+
+    , renderList ? key: value: lib.concatMapStrings renderOption value
+    }:
     options:
       let
         render = key: value:
-          let
-            hyphenate =
-              k: if builtins.stringLength k == 1 then "-${k}" else "--${k}";
-
-            renderOption = v: if v == null then "" else " ${hyphenate key} ${lib.escapeShellArg v}";
-
-            renderSwitch = if value then " ${hyphenate key}" else "";
-
-          in
                  if builtins.isBool value
-            then renderSwitch
+            then renderBool key value
             else if builtins.isList value
-            then lib.concatMapStrings renderOption value
-            else renderOption value;
+            then renderList key value
+            else renderOption key value;
 
       in
         lib.concatStrings (lib.mapAttrsToList render options);

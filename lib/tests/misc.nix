@@ -444,6 +444,7 @@ runTests {
   testRenderOptions = {
     expr =
        encodeGNUCommandLine
+         { }
          { foo = "A";
 
            bar = 1;
