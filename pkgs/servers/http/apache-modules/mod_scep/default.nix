@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ mod_ca apr aprutil ];
-  inherit(mod_ca) configureFlags installFlags;
+  inherit (mod_ca) configureFlags installFlags;
 
   # After openssl-1.0.2t, starting in  openssl-1.1.0l
   # parts of the OpenSSL struct API was replaced by

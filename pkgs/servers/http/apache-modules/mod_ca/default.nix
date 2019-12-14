@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   # the various submodules.
   #
   configureFlags = [
-       "--with-apxs=${apacheHttpd.dev}/bin/apxs"
+    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
   ];
 
   installFlags = [
-       "INCLUDEDIR=${placeholder ''out''}/include"
-       "LIBEXECDIR=$(out)/modules"
+    "INCLUDEDIR=${placeholder ''out''}/include"
+    "LIBEXECDIR=$(out)/modules"
   ];
 
   meta = with stdenv.lib; {

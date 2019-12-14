@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ mod_ca apr aprutil ];
-  inherit(mod_ca) configureFlags installFlags;
+  inherit (mod_ca) configureFlags installFlags;
 
   meta = with stdenv.lib; {
     description = "RedWax CA service modules of OCSP Online Certificate Validation";
