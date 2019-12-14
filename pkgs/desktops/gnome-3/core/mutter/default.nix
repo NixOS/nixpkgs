@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.34.1";
+  version = "3.34.2";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13kmmgg2zizr0522clwc2zn3bkwbir503b1wjiiixf5xi37jc65s";
+    sha256 = "0b8bz5kvs7rlwvqsg87cf6jhrrj95vgd1l235mjx8rip35ipfvrd";
   };
 
   mesonFlags = [
@@ -105,17 +105,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Fixes from gnome-3-34 branch 2019-11-29.
-    (fetchpatch {
-      name = "gnome-3-34-2019-11-29.patch";
-      url = "https://github.com/GNOME/mutter/compare/3.34.1...c0e76186da5b7baf7c8804c0ffa80232a5a6bf98.patch";
-      excludes = [
-        ".gitlab-ci.yml"
-        ".gitlab-ci/checkout-gnome-shell.sh"
-      ];
-      sha256 = "1qmxic83bd3dvg6isipqy8jaaksd7p5s3cb7h44zinq738n8d0fb";
-    })
-
     # Fix build with libglvnd provided headers
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/mutter/commit/a444a4c5f58ea516ad3cd9d6ddc0056c3ca9bc90.patch";
