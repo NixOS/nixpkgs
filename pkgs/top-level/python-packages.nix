@@ -5044,8 +5044,6 @@ in {
 
   Pyro4 = callPackage ../development/python-modules/pyro4 { };
 
-  root_numpy = callPackage ../development/python-modules/root_numpy { };
-
   rootpy = callPackage ../development/python-modules/rootpy { };
 
   rope = callPackage ../development/python-modules/rope { };

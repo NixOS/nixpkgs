@@ -1,4 +1,4 @@
-{ lib, fetchPypi, isPy3k, buildPythonPackage, numpy, matplotlib, root, root_numpy, tables, pytest }:
+{ lib, fetchPypi, isPy3k, buildPythonPackage, numpy, matplotlib, root, tables, pytest }:
 
 buildPythonPackage rec {
   pname = "rootpy";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   disabled = isPy3k;
 
-  propagatedBuildInputs = [ matplotlib numpy root root_numpy tables ];
+  propagatedBuildInputs = [ matplotlib numpy root tables ];
 
   checkInputs = [ pytest ];
   checkPhase = ''
