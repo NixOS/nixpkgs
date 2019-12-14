@@ -230,6 +230,9 @@ let
       # ninja: error: '../../native_client/toolchain/linux_x86/pnacl_newlib/bin/x86_64-nacl-objcopy',
       # needed by 'nacl_irt_x86_64.nexe', missing and no known rule to make it
       enable_nacl = false;
+      # Enabling the Widevine component here doesn't affect whether we can
+      # redistribute the chromium package; the Widevine component is either
+      # added later in the wrapped -wv build or downloaded from Google.
       enable_widevine = true;
       use_cups = cupsSupport;
 
