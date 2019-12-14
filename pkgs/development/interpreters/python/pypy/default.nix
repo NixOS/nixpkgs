@@ -9,6 +9,7 @@
 , pythonVersion
 , sha256
 , passthruFun
+, writeText
 }:
 
 assert zlibSupport -> zlib != null;
@@ -123,7 +124,15 @@ in with passthru; stdenv.mkDerivation rec {
     ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${concatStringsSep " or " disabledTests})' lib-python
   '';
 
-  installPhase = ''
+  installPhase = let
+    manyLinux = writeText "_manylinux.py" ''
+      import os
+      manylinux1_compatible = os.environ.get('NIX_PYTHON_MANYLINUX') == '1'
+      manylinux2010_compatible = os.environ.get('NIX_PYTHON_MANYLINUX') == '2010'
+      manylinux2014_compatible = os.environ.get('NIX_PYTHON_MANYLINUX') == '2014'
+    '';
+  in
+    ''
     mkdir -p $out/{bin,include,lib,${executable}-c}
 
     cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
@@ -137,8 +146,7 @@ in with passthru; stdenv.mkDerivation rec {
     # verify cffi modules
     $out/bin/${executable} -c ${if isPy3k then "'import tkinter;import sqlite3;import curses;import lzma'" else "'import Tkinter;import sqlite3;import curses'"}
 
-    # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-    echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+    ln -s ${manyLinux} $out/lib/${libPrefix}/_manylinux.py
 
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/lib/${libPrefix}/${sitePackages}/sitecustomize.py

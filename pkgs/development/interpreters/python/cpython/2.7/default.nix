@@ -9,6 +9,7 @@
 , readline
 , sqlite
 , tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
+, writeText
 , zlib
 , self
 , CF, configd, coreutils
@@ -216,7 +217,14 @@ in with passthru; stdenv.mkDerivation ({
           substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
     '';
 
-    postInstall =
+    postInstall = let
+      manyLinux = writeText "_manylinux.py" ''
+        import os
+        manylinux1_compatible = os.environ.get('NIX_PYTHON_MANYLINUX') == '1'
+        manylinux2010_compatible = os.environ.get('NIX_PYTHON_MANYLINUX') == '2010'
+        manylinux2014_compatible = os.environ.get('NIX_PYTHON_MANYLINUX') == '2014'
+     '';
+    in
       ''
         # needed for some packages, especially packages that backport
         # functionality to 2.x from 3.x
@@ -234,8 +242,7 @@ in with passthru; stdenv.mkDerivation ({
         ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb${sourceVersion.major}.${sourceVersion.minor}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
 
-        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+        ln -s ${manyLinux} $out/lib/${libPrefix}/_manylinux.py
 
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
 

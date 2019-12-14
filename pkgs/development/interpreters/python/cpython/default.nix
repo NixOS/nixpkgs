@@ -28,6 +28,7 @@
 , stripTkinter ? false
 , rebuildBytecode ? true
 , stripBytecode ? false
+, writeText
 }:
 
 assert x11Support -> tcl != null
@@ -191,7 +192,15 @@ in with passthru; stdenv.mkDerivation {
 
   setupHook = python-setup-hook sitePackages;
 
-  postInstall = ''
+  postInstall = let
+      manyLinux = writeText "_manylinux.py" ''
+        import os
+        manylinux1_compatible = os.environ.get('NIX_PYTHON_MANYLINUX') == '1'
+        manylinux2010_compatible = os.environ.get('NIX_PYTHON_MANYLINUX') == '2010'
+        manylinux2014_compatible = os.environ.get('NIX_PYTHON_MANYLINUX') == '2014'
+     '';
+  in
+    ''
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
     for item in $out/lib/${libPrefix}/test/*; do
@@ -207,9 +216,7 @@ in with passthru; stdenv.mkDerivation {
     touch $out/lib/${libPrefix}/test/__init__.py
 
     ln -s "$out/include/${executable}m" "$out/include/${executable}"
-
-    # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-    echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+    ln -s ${manyLinux} $out/lib/${libPrefix}/_manylinux.py
 
     # Determinism: Windows installers were not deterministic.
     # We're also not interested in building Windows installers.
