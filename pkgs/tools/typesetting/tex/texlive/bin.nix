@@ -302,6 +302,15 @@ dvipng = stdenv.mkDerivation {
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript makeWrapper ];
 
+  patches = [
+    (fetchpatch {
+      url = "http://git.savannah.nongnu.org/cgit/dvipng.git/patch/?id=f3ff241827a587e3d39eda477041fd3280f5b245";
+      sha256 = "1a0ixl9mga24p6xk8dy3v60yifvbzd27vs0hv8996rfkp8jqa7is";
+      stripLen = 1;
+      extraPrefix = "texk/dvipng/dvipng-src/";
+    })
+  ];
+
   preConfigure = ''
     cd texk/dvipng
     patchShebangs doc/texi2pod.pl

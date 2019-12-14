@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals stdenv.cc.isClang [
     (fetchpatch {
       url = "https://github.com/KaOSx/main/raw/1270b8080f37fb6cca562829a521991800b0a497/libmad/optimize.diff";
-      sha256 = "0ciyaj1acg08g8hpzqx6whayq206fvf4whksz2pjgxlv207lqgjh";
+      sha256 = "1wp60ywzk6nmxc3kq3v6i8b7s4cibvf5cjir859zv10y5aa1d0pk";
     })
   ];
 
