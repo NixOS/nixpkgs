@@ -1,0 +1,14 @@
+context-adjusted adaptation of upstream commit cdc3e7eeafa9f683214d2c15d52ef384c3de6611
+
+diff --git a/hw/9pfs/9p.c b/hw/9pfs/9p.c
+index 55821343e5..0b8425fe18 100644
+--- a/hw/9pfs/virtio-9p.c
++++ b/hw/9pfs/virtio-9p.c
+@@ -100,7 +100,6 @@ static int dotl_to_open_flags(int flags)
+         { P9_DOTL_LARGEFILE, O_LARGEFILE },
+         { P9_DOTL_DIRECTORY, O_DIRECTORY },
+         { P9_DOTL_NOFOLLOW, O_NOFOLLOW },
+-        { P9_DOTL_NOATIME, O_NOATIME },
+         { P9_DOTL_SYNC, O_SYNC },
+     };
+ 
