@@ -1736,7 +1736,7 @@
     githubId = 11946442;
     name = "Dipin Hora";
   };
-  dirkx= {
+  dirkx = {
     email = "dirkx@webweaving.org";
     github = "dirkx";
     githubId = 392583;
