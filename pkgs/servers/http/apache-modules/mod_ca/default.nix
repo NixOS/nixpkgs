@@ -12,14 +12,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ apacheHttpd openssl openldap ];
 
+  # Note that configureFlags and installFlags are inherited by
+  # the various submodules.
+  #
   configureFlags = [
        "--with-apxs=${apacheHttpd.dev}/bin/apxs"
- ];
+  ];
 
   installFlags = [
        "INCLUDEDIR=${placeholder ''out''}/include"
        "LIBEXECDIR=$(out)/modules"
- ];
+  ];
 
   meta = with stdenv.lib; {
     description = "RedWax CA service module";
