@@ -223,6 +223,9 @@ let
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;
+      # Enabling the Widevine component here doesn't affect whether we can
+      # redistribute the chromium package; the Widevine component is either
+      # added later in the wrapped -wv build or downloaded from Google.
       enable_widevine = true;
       use_cups = cupsSupport;
 
