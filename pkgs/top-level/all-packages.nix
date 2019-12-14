@@ -21484,6 +21484,8 @@ in
 
   tint2 = callPackage ../applications/misc/tint2 { };
 
+  tipp10 = qt5.callPackage ../applications/misc/tipp10 { };
+
   tixati = callPackage ../applications/networking/p2p/tixati { };
 
   tkcvs = callPackage ../applications/version-management/tkcvs { };
