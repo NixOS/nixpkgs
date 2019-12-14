@@ -5764,6 +5764,8 @@ in
 
   povray = callPackage ../tools/graphics/povray { };
 
+  powerd = callPackage ../os-specific/linux/powerd { };
+
   ppl = callPackage ../development/libraries/ppl { };
 
   pplatex = callPackage ../tools/typesetting/tex/pplatex { };
