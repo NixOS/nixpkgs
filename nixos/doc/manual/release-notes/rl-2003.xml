@@ -235,6 +235,14 @@
      choices (whether to perform the action as themselves with wheel permissions, or as the root user).
     </para>
    </listitem>
+   <listitem>
+    <para>
+     NixOS containers no longer build NixOS manual by default. This saves evaluation time,
+     especially if there are many declarative containers defined. Note that this is already done
+     when <literal>&lt;nixos/modules/profiles/minimal.nix&gt;</literal> module is included
+     in container config.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
