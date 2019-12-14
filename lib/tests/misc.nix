@@ -443,7 +443,7 @@ runTests {
 
   testRenderOptions = {
     expr =
-       renderOptions
+       encodeGNUCommandLine
          { foo = "A";
 
            bar = 1;

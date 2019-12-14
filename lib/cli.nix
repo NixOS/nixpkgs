@@ -6,10 +6,10 @@
      boilerplate related to command-line construction for simple use cases.
 
      Example:
-       renderOptions { foo = "A"; bar = 1; baz = null; qux = true; v = true; }
+       encodeGNUCommandLine { foo = "A"; bar = 1; baz = null; qux = true; v = true; }
        => " --bar '1' --foo 'A' --qux -v"
   */
-  renderOptions =
+  encodeGNUCommandLine =
     options:
       let
         render = key: value:

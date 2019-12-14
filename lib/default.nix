@@ -121,7 +121,7 @@ let
       isOptionType mkOptionType;
     inherit (asserts)
       assertMsg assertOneOf;
-    inherit (cli) renderOptions;
+    inherit (cli) encodeGNUCommandLine;
     inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
       traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal
