@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs =[mod_ca apr aprutil];
+  buildInputs =[ mod_ca apr aprutil ];
   inherit(mod_ca) configureFlags installFlags;
 
   # After openssl-1.0.2t, starting in  openssl-1.1.0l
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://redwax.eu";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [dirkx];
+    maintainers = with maintainers; [ dirkx ];
   };
 }

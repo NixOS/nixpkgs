@@ -10,16 +10,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs =[ apacheHttpd openssl openldap];
+  buildInputs =[ apacheHttpd openssl openldap ];
 
-  configureFlags =[
+  configureFlags =[ 
        "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-    ];
+ ];
 
-  installFlags =[
-           "INCLUDEDIR=${placeholder ''out''}/include"
-           "LIBEXECDIR=$(out)/modules"
-    ];
+  installFlags =[ 
+       "INCLUDEDIR=${placeholder ''out''}/include"
+       "LIBEXECDIR=$(out)/modules"
+ ];
 
   meta = with stdenv.lib; {
     description = "RedWax CA service module";
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://redwax.eu";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [dirkx];
+    maintainers = with maintainers; [ dirkx ];
   };
 }
