@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
+{ stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
 
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases.";
@@ -107,5 +107,9 @@ in {
       EOF
       chmod a+x $out/bin/trilium-server
     '';
+
+    passthru.tests = {
+      trilium-server = nixosTests.trilium-server;
+    };
   };
 }
