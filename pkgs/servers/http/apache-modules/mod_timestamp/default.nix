@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs =[ mod_ca apr aprutil ];
+  buildInputs = [ mod_ca apr aprutil ];
   inherit(mod_ca) configureFlags installFlags;
 
   meta = with stdenv.lib; {

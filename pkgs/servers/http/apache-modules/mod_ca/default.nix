@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs =[ apacheHttpd openssl openldap ];
+  buildInputs = [ apacheHttpd openssl openldap ];
 
-  configureFlags =[ 
+  configureFlags = [
        "--with-apxs=${apacheHttpd.dev}/bin/apxs"
  ];
 
-  installFlags =[ 
+  installFlags = [
        "INCLUDEDIR=${placeholder ''out''}/include"
        "LIBEXECDIR=$(out)/modules"
  ];
