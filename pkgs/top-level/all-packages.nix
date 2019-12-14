@@ -10160,6 +10160,8 @@ in
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
+  mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
+
   go-md2man = callPackage ../development/tools/misc/md2man {};
 
   mage = callPackage ../development/tools/build-managers/mage { };
