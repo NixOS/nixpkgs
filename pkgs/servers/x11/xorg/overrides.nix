@@ -72,7 +72,9 @@ self: super:
 
   mkfontdir = self.mkfontscale;
 
-  libxcb = super.libxcb.overrideAttrs (attrs: {
+  libxcb = (super.libxcb.override {
+    python = python3;
+  }).overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
   });
