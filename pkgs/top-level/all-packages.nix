@@ -3280,6 +3280,7 @@ in
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    python = python3;
   });
   fontforge-gtk = fontforge.override {
     withSpiro = true;
