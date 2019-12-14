@@ -429,12 +429,12 @@ let
   };
 
   phpstan = mkDerivation rec {
-    version = "0.12.0";
+    version = "0.12.3";
     pname = "phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "0029727360x0qf6acw4y9yczj59y477i0hx278pb64dvy63fzkmk";
+      sha256 = "08ya50qf75nq8ypyhb0vsqnj166kc27rc8iasxr3y7kssbfd95ai";
     };
 
     phases = [ "installPhase" ];
@@ -457,7 +457,7 @@ let
         actual line.
       '';
       license = licenses.mit;
-      homepage = https://github.com/phpstan/phpstan;
+      homepage = "https://github.com/phpstan/phpstan";
       maintainers = with maintainers; [ etu ];
     };
   };
