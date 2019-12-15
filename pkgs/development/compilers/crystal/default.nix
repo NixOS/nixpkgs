@@ -56,6 +56,8 @@ let
       inherit sha256;
     };
 
+    outputs = [ "out" "lib" "bin" ];
+
     # we are almost able to run the full test suite now
     postPatch = ''
       substituteInPlace src/crystal/system/unix/time.cr \
@@ -97,22 +99,22 @@ let
 
     # This makes sure we don't keep depending on the previous version of
     # crystal used to build this one.
-    CRYSTAL_LIBRARY_PATH = "${placeholder "out"}/lib/crystal";
+    CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
 
     # We *have* to add `which` to the PATH or crystal is unable to build stuff
     # later if which is not available.
     installPhase = ''
       runHook preInstall
 
-      install -Dm755 .build/crystal $out/bin/crystal
-      wrapProgram $out/bin/crystal \
+      install -Dm755 .build/crystal $bin/bin/crystal
+      wrapProgram $bin/bin/crystal \
           --suffix PATH : ${lib.makeBinPath [ pkgconfig clang which ]} \
-          --suffix CRYSTAL_PATH : lib:$out/lib/crystal \
+          --suffix CRYSTAL_PATH : lib:$lib/crystal \
           --suffix CRYSTAL_LIBRARY_PATH : ${
             lib.makeLibraryPath (commonBuildInputs extraBuildInputs)
           }
-      install -dm755 $out/lib/crystal
-      cp -r src/* $out/lib/crystal/
+      install -dm755 $lib/crystal
+      cp -r src/* $lib/crystal/
 
       install -dm755 $out/share/doc/crystal/api
       cp -r docs/* $out/share/doc/crystal/api/
@@ -124,6 +126,10 @@ let
       install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
 
       install -Dm644 -t $out/share/licenses/crystal LICENSE README.md
+
+      mkdir -p $out
+      ln -s $bin/bin $out/bin
+      ln -s $lib $out/lib
 
       runHook postInstall
     '';
