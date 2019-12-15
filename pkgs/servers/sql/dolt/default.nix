@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, lib, buildGoModule }:
 
 buildGoModule rec {
-    name = "dolt-${version}";
+    pname = "dolt";
     version = "0.12.0";
 
     src = fetchFromGitHub {
