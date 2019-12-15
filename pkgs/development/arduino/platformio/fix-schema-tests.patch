@@ -1,0 +1,33 @@
+--- a/platformio/package/manifest/schema.py
++++ b/platformio/package/manifest/schema.py
+@@ -12,7 +12,8 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+
+-import requests
++import json
++import os
+ import semantic_version
+ from marshmallow import Schema, ValidationError, fields, validate, validates
+
+@@ -161,7 +162,7 @@ class ManifestSchema(Schema):
+     def validate_license(self, value):
+         try:
+             spdx = self.load_spdx_licenses()
+-        except requests.exceptions.RequestException:
++        except (ValueError, OSError):
+             raise ValidationError("Could not load SPDX licenses for validation")
+         for item in spdx.get("licenses", []):
+             if item.get("licenseId") == value:
+@@ -174,9 +175,5 @@ class ManifestSchema(Schema):
+     @staticmethod
+     @memoized(expire="1h")
+     def load_spdx_licenses():
+-        r = requests.get(
+-            "https://raw.githubusercontent.com/spdx/license-list-data"
+-            "/v3.6/json/licenses.json"
+-        )
+-        r.raise_for_status()
+-        return r.json()
++        with open(os.environ["SPDX_LICENSE_FILE"]) as f:
++            return json.load(f)
