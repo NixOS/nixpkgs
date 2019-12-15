@@ -6,8 +6,23 @@
      boilerplate related to command-line construction for simple use cases.
 
      Example:
-       encodeGNUCommandLine { } { foo = "A"; bar = 1; baz = null; qux = true; v = true; }
-       => " --bar '1' --foo 'A' --qux -v"
+       encodeGNUCommandLine
+         { }
+         { data = builtins.toJSON { id = 0; };
+
+           X = "PUT";
+
+           retry = 3;
+
+           retry-delay = null;
+
+           url = [ "https://example.com/foo" "https://example.com/bar" ];
+
+           silent = false;
+
+           verbose = true;
+         };
+       => " -X 'PUT' --data '{\"id\":0}' --retry '3' --url 'https://example.com/foo' --url 'https://example.com/bar' --verbose"
   */
   encodeGNUCommandLine =
     { renderKey ?
@@ -21,7 +36,7 @@
 
     , renderBool ? key: value: if value then " ${renderKey key}" else ""
 
-    , renderList ? key: value: lib.concatMapStrings renderOption value
+    , renderList ? key: value: lib.concatMapStrings (renderOption key) value
     }:
     options:
       let

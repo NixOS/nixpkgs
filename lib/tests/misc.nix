@@ -445,17 +445,21 @@ runTests {
     expr =
        encodeGNUCommandLine
          { }
-         { foo = "A";
+         { data = builtins.toJSON { id = 0; };
 
-           bar = 1;
+           X = "PUT";
 
-           baz = null;
+           retry = 3;
 
-           qux = true;
+           retry-delay = null;
 
-           v = true;
+           url = [ "https://example.com/foo" "https://example.com/bar" ];
+
+           silent = false;
+
+           verbose = true;
          };
 
-    expected = " --bar '1' --foo 'A' --qux -v";
+    expected = " -X 'PUT' --data '{\"id\":0}' --retry '3' --url 'https://example.com/foo' --url 'https://example.com/bar' --verbose";
   };
 }
