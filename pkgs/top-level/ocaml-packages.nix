@@ -444,6 +444,8 @@ let
 
     lru = callPackage ../development/ocaml-modules/lru { };
 
+    lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
+
     lwt2 = callPackage ../development/ocaml-modules/lwt/legacy.nix { };
 
     lwt4 = callPackage ../development/ocaml-modules/lwt/4.x.nix { };

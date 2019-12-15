@@ -5651,6 +5651,8 @@ in
     ssh = openssh;
   };
 
+  pfetch = callPackage ../tools/misc/pfetch { };
+
   pfstools = callPackage ../tools/graphics/pfstools { };
 
   philter = callPackage ../tools/networking/philter { };
@@ -10339,8 +10341,6 @@ in
 
   puppet-lint = callPackage ../development/tools/puppet/puppet-lint { };
 
-  pyflame = callPackage ../development/tools/profiling/pyflame { };
-
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
   qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
@@ -13664,7 +13664,7 @@ in
 
     inherit (kdeFrameworks.override { libsForQt5 = self; })
       attica baloo bluez-qt kactivities kactivities-stats
-      karchive kauth kbookmarks kcmutils kcodecs kcompletion kconfig
+      karchive kauth kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
       kconfigwidgets kcoreaddons kcrash kdbusaddons kdeclarative kdelibs4support
       kdesignerplugin kdnssd kemoticons kfilemetadata kglobalaccel kguiaddons
       khtml ki18n kiconthemes kidletime kimageformats kio kitemmodels kitemviews
@@ -21623,7 +21623,7 @@ in
   vcv-rack = callPackage ../applications/audio/vcv-rack { };
 
   vdirsyncer = callPackage ../tools/misc/vdirsyncer {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   vdirsyncerStable = callPackage ../tools/misc/vdirsyncer/stable.nix { };
@@ -22624,7 +22624,8 @@ in
 
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {
     inherit (plasma5) oxygen;
-    inherit (kdeApplications) akonadi-contacts kcalcore;
+    inherit (kdeApplications) akonadi-contacts;
+    inherit (kdeFrameworks) kcalendarcore;
     ffmpeg = ffmpeg_4;
     opencv3 = opencv3WithoutCuda;
   };
@@ -23351,6 +23352,8 @@ in
   zeroad = zeroadPackages.zeroad;
 
   ### DESKTOP ENVIRONMENTS
+
+  cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
 
   deepin = recurseIntoAttrs (import ../desktops/deepin {
     inherit pkgs libsForQt5;
