@@ -1309,6 +1309,8 @@ in {
 
   pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
+  pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
+
   pytricia =  callPackage ../development/python-modules/pytricia { };
 
   pytrends = callPackage ../development/python-modules/pytrends { };
