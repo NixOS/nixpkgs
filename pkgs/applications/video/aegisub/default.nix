@@ -1,16 +1,42 @@
-{ config, stdenv, fetchurl, fetchpatch
-, libX11, wxGTK
-, libiconv, fontconfig, freetype
-, libGLU, libGL
-, libass, fftw, ffms
-, ffmpeg, pkgconfig, zlib # Undocumented (?) dependencies
-, icu, boost, intltool # New dependencies
-, spellcheckSupport ? true, hunspell ? null
-, automationSupport ? true, lua ? null
-, openalSupport ? false, openal ? null
-, alsaSupport ? stdenv.isLinux, alsaLib ? null
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
-, portaudioSupport ? false, portaudio ? null }:
+{ config
+, stdenv
+, fetchurl
+, fetchpatch
+, libX11
+, wxGTK
+, libiconv
+, fontconfig
+, freetype
+, libGLU
+, libGL
+, libass
+, fftw
+, ffms
+, ffmpeg
+, pkg-config
+, zlib
+, icu
+, boost
+, intltool
+
+, spellcheckSupport ? true
+, hunspell ? null
+
+, automationSupport ? true
+, lua ? null
+
+, openalSupport ? false
+, openal ? null
+
+, alsaSupport ? stdenv.isLinux
+, alsaLib ? null
+
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio ? null
+
+, portaudioSupport ? false
+, portaudio ? null
+}:
 
 assert spellcheckSupport -> (hunspell != null);
 assert automationSupport -> (lua != null);
@@ -20,7 +46,8 @@ assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation
+ rec {
   pname = "aegisub";
   version = "3.2.2";
 
@@ -43,9 +70,26 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = with stdenv.lib;
-  [ pkgconfig intltool libX11 wxGTK fontconfig freetype libGLU libGL
-    libass fftw ffms ffmpeg zlib icu boost boost.out libiconv
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
+
+  buildInputs = with stdenv.lib; [
+    libX11
+    wxGTK
+    fontconfig
+    freetype
+    libGLU
+    libGL
+    libass
+    fftw
+    ffms
+    ffmpeg
+    zlib
+    icu
+    boost
+    libiconv
   ]
     ++ optional spellcheckSupport hunspell
     ++ optional automationSupport lua
@@ -78,11 +122,11 @@ stdenv.mkDerivation rec {
       audio, and features many powerful tools for styling them, including a
       built-in real-time video preview.
     '';
-    homepage = http://www.aegisub.org/;
+    homepage = "http://www.aegisub.org/";
+    # The Aegisub sources are itself BSD/ISC,
+    # but they are linked against GPL'd softwares
+    # - so the resulting program will be GPL
     license = licenses.bsd3;
-              # The Aegisub sources are itself BSD/ISC,
-              # but they are linked against GPL'd softwares
-              # - so the resulting program will be GPL
     maintainers = [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
