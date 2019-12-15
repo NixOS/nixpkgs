@@ -24198,24 +24198,11 @@ in
 
   fped = callPackage ../applications/science/electronics/fped { };
 
-  kicad = callPackage ../applications/science/electronics/kicad {
-    wxGTK = wxGTK30.override { withGtk2 = false; };
-    pythonPackages = python3Packages;
-    python = python3;
-    wxPython = python3Packages.wxPython_4_0;
-  };
+  kicad = callPackage ../applications/science/electronics/kicad { };
 
-  kicad-small = kicad.override { with3d = false; };
+  kicad-small = kicad.override { pname = "kicad-small"; with3d = false; };
 
-  kicad-unstable = callPackage ../applications/science/electronics/kicad {
-    pname = "kicad-unstable";
-    # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
-    wxGTK = wxGTK31.override { withGtk2 = false; };
-    pythonPackages = python3Packages;
-    python = python3;
-    wxPython = python3Packages.wxPython_4_0;
-    debug = true;
-  };
+  kicad-unstable = kicad.override { pname = "kicad-unstable"; debug = true; };
 
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 

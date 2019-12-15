@@ -11,6 +11,7 @@
 , ngspiceSupport ? true, libngspice
 , scriptingSupport ? true, swig, python, pythonPackages, wxPython
 , debug ? false, valgrind
+, with3d ? true
 , withI18n ? true
 }:
 
@@ -75,8 +76,10 @@ stdenv.mkDerivation rec {
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON"
     ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
     ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
-    ++ optionals (withOCE)
-      [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
+    ++ optionals (withOCE) [
+      "-DKICAD_USE_OCE=ON"
+      "-DOCE_DIR=${opencascade}"
+    ]
     ++ optionals (withOCC) [
       "-DKICAD_USE_OCC=ON"
       "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
@@ -87,10 +90,6 @@ stdenv.mkDerivation rec {
       "-DKICAD_USE_VALGRIND=ON"
     ]
   ;
-
-  pythonPath =
-    optionals (scriptingSupport)
-      [ wxPython pythonPackages.six ];
 
   nativeBuildInputs = [ cmake doxygen pkgconfig lndir ];
 
