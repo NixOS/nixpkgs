@@ -24,7 +24,7 @@ buildPythonPackage rec {
     description = "fork of PDFMiner using six for Python 2+3 compatibility";
     homepage = https://github.com/pdfminer/pdfminer.six;
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [ psyanticy marsam ];
   };
 }
 
