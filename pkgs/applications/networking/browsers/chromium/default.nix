@@ -41,8 +41,8 @@ let
   };
 
   mkrpath = p: "${lib.makeSearchPathOutput "lib" "lib64" p}:${lib.makeLibraryPath p}";
-  widevine = let upstream-info = chromium.upstream-info; in stdenv.mkDerivation {
-    name = "chromium-binary-plugin-widevine";
+  widevineCdm = let upstream-info = chromium.upstream-info; in stdenv.mkDerivation {
+    name = "chrome-widevine-cdm";
 
     # The .deb file for Google Chrome
     src = upstream-info.binary;
@@ -52,21 +52,25 @@ let
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
 
     unpackCmd = let
-      soPath =
+      widevineCdmPath =
         if upstream-info.channel == "stable" then
-          "./opt/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
+          "./opt/google/chrome/WidevineCdm"
         else if upstream-info.channel == "beta" then
-          "./opt/google/chrome-beta/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
+          "./opt/google/chrome-beta/WidevineCdm"
         else if upstream-info.channel == "dev" then
-          "./opt/google/chrome-unstable/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
+          "./opt/google/chrome-unstable/WidevineCdm"
         else
           throw "Unknown chromium channel.";
     in ''
-      mkdir -p plugins
-      # Extract just libwidevinecdm.so from upstream's .deb file
-      ar p "$src" data.tar.xz | tar xJ -C plugins ${soPath}
-      mv plugins/${soPath} plugins/
-      rm -rf plugins/opt
+      # Extract just WidevineCdm from upstream's .deb file
+      ar p "$src" data.tar.xz | tar xJ "${widevineCdmPath}"
+
+      # Move things around so that we don't have to reference a particular
+      # chrome-* directory later.
+      mv "${widevineCdmPath}" ./
+
+      # unpackCmd wants a single output directory; let it take WidevineCdm/
+      rm -rf opt
     '';
 
     doCheck = true;
@@ -77,12 +81,12 @@ let
     PATCH_RPATH = mkrpath [ gcc.cc glib nspr nss ];
 
     patchPhase = ''
-      patchelf --set-rpath "$PATCH_RPATH" libwidevinecdm.so
+      patchelf --set-rpath "$PATCH_RPATH" _platform_specific/linux_x64/libwidevinecdm.so
     '';
 
     installPhase = ''
-      install -vD libwidevinecdm.so \
-        "$out/lib/libwidevinecdm.so"
+      mkdir -p $out/WidevineCdm
+      cp -a * $out/WidevineCdm/
     '';
 
     meta = {
@@ -99,15 +103,14 @@ let
 
   # We want users to be able to enableWideVine without rebuilding all of
   # chromium, so we have a separate derivation here that copies chromium
-  # and adds the unfree libwidevinecdm.so.
+  # and adds the unfree WidevineCdm.
   chromiumWV = let browser = chromium.browser; in if enableWideVine then
     runCommand (browser.name + "-wv") { version = browser.version; }
       ''
         mkdir -p $out
         cp -a ${browser}/* $out/
         chmod u+w $out/libexec/chromium
-        mkdir -p $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64
-        cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/WidevineCdm/_platform_specific/linux_x64/
+        cp -a ${widevineCdm}/WidevineCdm $out/libexec/chromium/
       ''
     else browser;
 in stdenv.mkDerivation {
