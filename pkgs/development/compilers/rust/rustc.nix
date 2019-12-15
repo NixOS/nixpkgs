@@ -1,5 +1,5 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, fetchurl, file, python2
+, fetchurl, file, python3
 , llvm_9, darwin, git, cmake, rust, rustPlatform
 , pkgconfig, openssl
 , which, libffi
@@ -121,7 +121,7 @@ in stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
-    file python2 rustPlatform.rust.rustc git cmake
+    file python3 rustPlatform.rust.rustc git cmake
     which libffi removeReferencesTo pkgconfig
   ];
 
