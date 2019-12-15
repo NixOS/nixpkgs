@@ -13,7 +13,8 @@ perlPackages.buildPerlPackage rec {
   patches = [ ./sa-update_add--siteconfigpath.patch ];
 
   buildInputs = [ makeWrapper ] ++ (with perlPackages; [ HTMLParser NetDNS NetAddrIP DBFile HTTPDate MailDKIM
-    LWP IOSocketSSL DBI EncodeDetect IPCountry NetIdent Razor2ClientAgent MailSPF NetDNSResolverProgrammable ]);
+    LWP IOSocketSSL DBI EncodeDetect IPCountry NetIdent Razor2ClientAgent MailSPF NetDNSResolverProgrammable
+    Socket6 ]);
 
   # Enabling 'taint' mode is desirable, but that flag disables support
   # for the PERL5LIB environment variable. Needs further investigation.
