@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
+  patches = [
+    ./0001-Fix-cross-compilation-by-looking-for-ar.patch
+  ];
+
   postPatch = stdenv.lib.optionalString (psutils != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
       --replace "psselect" "${psutils}/bin/psselect"

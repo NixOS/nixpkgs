@@ -294,10 +294,6 @@ stdenv.mkDerivation {
     disable_test t1700-split-index "null sha1"
 
     # Tested to fail: 2.18.0
-    disable_test t7005-editor "editor with a space"
-    disable_test t7005-editor "core.editor with a space"
-
-    # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
 
     ${stdenv.lib.optionalString (!perlSupport) ''
@@ -306,9 +302,6 @@ stdenv.mkDerivation {
       # not check for the Perl prerequisite.
       disable_test t5150-request-pull
     ''}
-
-    # As of 2.19.0, t5562 refers to #!/usr/bin/perl
-    patchShebangs t/t5562/invoke-with-content-length.pl
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # XXX: Some tests added in 2.24.0 fail.
     # Please try to re-enable on the next release.

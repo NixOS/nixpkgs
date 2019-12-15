@@ -111,7 +111,7 @@ let
           cp ${config}/config.sub tool/
         '';
 
-        configureFlags = ["--enable-shared" "--enable-pthread"]
+        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby_${tag}"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
           ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [

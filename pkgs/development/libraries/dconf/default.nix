@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix build with Meson 0.52
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/dconf/commit/cc32667c5d7d9ff95e65cc21f59905d8f9218394.patch";
+      sha256 = "02gfadn34bg818a7vb3crhsiahskiflcvx9l6iqwf1v269q93mr8";
+    })
   ];
 
   postPatch = ''

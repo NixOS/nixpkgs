@@ -9,7 +9,7 @@
 , qtwebengine
 
 , akonadi-contacts
-, kcalcore
+, kcalendarcore
 , kconfigwidgets
 , kcoreaddons
 , kdoctools
@@ -89,7 +89,7 @@ mkDerivation rec {
     qtwebengine
 
     akonadi-contacts
-    kcalcore
+    kcalendarcore
     kconfigwidgets
     kcoreaddons
     kfilemetadata
