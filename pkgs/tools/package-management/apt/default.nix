@@ -16,11 +16,11 @@
 stdenv.mkDerivation rec {
   pname = "apt";
 
-  version = "1.4.6";
+  version = "1.4.9";
 
   src = fetchzip {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/apt_${version}.tar.xz";
-    sha256 = "0ahwhmscrmnpvl1r732wg93dzkhv8c1sph2yrqgsrhr73c1616ix";
+    url = "mirror://debian/pool/main/a/apt/apt_${version}.tar.xz";
+    sha256 = "1xmgl7wj6gl1f8c2yxp5fcandxyg7jyigpsqr8kp76r06648dxv2";
   };
 
   nativeBuildInputs = [ pkgconfig ];
