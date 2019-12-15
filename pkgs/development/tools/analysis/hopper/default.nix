@@ -8,10 +8,11 @@
   libbsd,
   python27,
   gmpxx,
-}:
-let
 
-in stdenv.mkDerivation rec {
+  ncurses5,
+  gnustep,
+}:
+stdenv.mkDerivation rec {
   pname    = "hopper";
   version = "4.5.19";
   rev = "v${lib.versions.major version}";
@@ -32,25 +33,47 @@ in stdenv.mkDerivation rec {
     libbsd
     python27
     gmpxx
+
+    ncurses5
+    gnustep.libobjc
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/lib
     mkdir -p $out/share
 
     cp $sourceRoot/opt/hopper-${rev}/bin/Hopper $out/bin/hopper
-    cp -r $sourceRoot/opt/hopper-${rev}/lib $out
-    cp -r $sourceRoot/usr/share $out/share
+    cp \
+      --archive \
+      $sourceRoot/opt/hopper-${rev}/lib/libBlocksRuntime.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libdispatch.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libgnustep-base.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libHopperCore.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libkqueue.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libobjcxx.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libpthread_workqueue.so* \
+      $out/lib
+
+    cp -r $sourceRoot/usr/share $out
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    substituteInPlace "$out/share/applications/hopper-${rev}.desktop" \
+      --replace "Exec=/opt/hopper-${rev}/bin/Hopper" "Exec=$out/bin/hopper"
   '';
 
   meta = with stdenv.lib; {
     homepage = "https://www.hopperapp.com/index.html";
     description = "A macOS and Linux Disassembler";
     license = licenses.unfree;
-    maintainers = [
-      maintainers.luis
-      maintainers.Enteee
+    maintainers = with maintainers; [
+      luis
+      Enteee
     ];
     platforms = platforms.linux;
   };
