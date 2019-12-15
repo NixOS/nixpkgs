@@ -24199,9 +24199,7 @@ in
   fped = callPackage ../applications/science/electronics/fped { };
 
   kicad = callPackage ../applications/science/electronics/kicad { };
-
   kicad-small = kicad.override { pname = "kicad-small"; with3d = false; };
-
   kicad-unstable = kicad.override { pname = "kicad-unstable"; debug = true; };
 
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };

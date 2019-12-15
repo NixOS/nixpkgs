@@ -11,7 +11,6 @@
 , ngspiceSupport ? true, libngspice
 , scriptingSupport ? true, swig, python, pythonPackages, wxPython
 , debug ? false, valgrind
-, with3d ? true
 , withI18n ? true
 }:
 
@@ -56,10 +55,11 @@ stdenv.mkDerivation rec {
   ];
 
   # tagged releases don't have "unknown"
-  postPatch = optional (!stable)
-  ''
+  # kicad nightlies use git describe --dirty
+  # nix removes .git, so its approximated here
+  postPatch = ''
     substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace "unknown" ${baseVersion}
+      --replace "unknown" ${builtins.substring 0 10 src.rev}
   '';
 
   makeFlags = optional (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
@@ -117,9 +117,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "just the built source without the libraries";
+    description = "Just the built source without the libraries";
     longDescription = ''
-      just the build products, optionally with the i18n linked in
+      Just the build products, optionally with the i18n linked in
       the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad-pcb.org/";

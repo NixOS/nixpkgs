@@ -19,6 +19,7 @@ with lib;
 let
 
   stable = pname != "kicad-unstable";
+  baseName = if (stable) then "kicad" else "kicad-unstable";
 
   versions = {
     "kicad" = {
@@ -39,30 +40,30 @@ let
     };
     "kicad-unstable" = {
       kicadVersion = {
-        version = "2019-12-15";
+        version = "2019-12-31";
         src = {
-          rev = "1abb198fb42c68ab8dd8ce6ff97d984df6688e10";
-          sha256 = "1b7k05bl2w4by5bhk6sfb2iynddlg3gah8qma7l9am6q1j3lmx4p";
+          rev = "eaaa4eb63acb289047dfbb6cc275579dea58f12b";
+          sha256 = "1v2hf2slphjdh14y56pmzlpi6mqidrd8198if1fi0cch72v37zch";
         };
       };
       libVersion = {
         version = "unstable";
         libSources = {
-          i18n.rev = "f1084526305005fa53e78000f7db2d67e8a0d423";
-          i18n.sha256 = "1yhc0m4psx0rz5msb1zqn5fz6l1ynwykrsk1443g4073lmjibv74";
-          symbols.rev = "68176b08fdfd34673f4518ef6c331ad2ecf7a9a6";
-          symbols.sha256 = "0kcn8pwdac5snd6vzmdw82k5x9q12nijpdss3nvi5my6g3ilwgjj";
+          i18n.rev = "e7439fd76f27cfc26e269c4e6c4d56245345c28b";
+          i18n.sha256 = "1nqm1kx5b4f7s0f9q8bg4rdhqnp0128yp6bgnrkia1kwmfnf5gmy";
+          symbols.rev = "1bc5ff11c76bcbfda227e534b0acf737edddde8f";
+          symbols.sha256 = "05kv93790wi4dpbn2488p587b83yz1zw9h62lkv41h7vn2r1mmb7";
           templates.rev = "0c0490897f803ab8b7c3dad438b7eb1f80e0417c";
           templates.sha256 = "0cs3bm3zb5ngw5ldn0lzw5bvqm4kvcidyrn76438alffwiz2b15g";
-          footprints.rev = "8cef00a34078c3dabe943a76f9cdf7d05ffc38fc";
-          footprints.sha256 = "0aplxxbcyb4vpj3kpcnj6lbnpk9zjql46js9i4iaqs388z93sb97";
-          packages3d.rev = "58d73640ebb764637eb7bba6290815b84a24b8ad";
-          packages3d.sha256 = "0cff2ms1bsw530kqb1fr1m2pjixyxzwa81mxgac3qpbcf8fnpvaz";
+          footprints.rev = "454126c125edd3fa8633f301421a7d9c4de61b77";
+          footprints.sha256 = "00nli4kx2i68bk852rivbirzcgpsdlpdk34g1q892952jsbh7fy6";
+          packages3d.rev = "c2b92a411adc93ddeeed74b36b542e1057f81a2a";
+          packages3d.sha256 = "05znc6y2lc31iafspg308cxdda94zg6c7mwslmys76npih1pb8qc";
         };
       };
     };
   };
-  versionConfig = versions.${if (stable) then "kicad" else "kicad-unstable"};
+  versionConfig = versions.${baseName};
 
   wxGTK = if (stable)
     # wxGTK3x may default to withGtk2 = false, see #73145
@@ -77,19 +78,23 @@ let
 
   kicad-libraries = callPackages ./libraries.nix versionConfig.libVersion;
   kicad-base = callPackage ./base.nix {
-   pname = if (stable) then "kicad" else "kicad-unstable";
-   inherit versions stable;
-   inherit wxGTK python wxPython;
-   inherit debug with3d withI18n withOCCT oceSupport ngspiceSupport scriptingSupport;
+    pname = baseName;
+    inherit versions stable baseName;
+    inherit wxGTK python wxPython;
+    inherit debug withI18n withOCCT oceSupport ngspiceSupport scriptingSupport;
   };
 
 in
 stdenv.mkDerivation rec {
 
   inherit pname;
-  version = versions.${if (stable) then "kicad" else "kicad-unstable"}.kicadVersion.version;
+  version = versions.${baseName}.kicadVersion.version;
 
   src = kicad-base;
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+  dontFixup = true;
 
   pythonPath = optionals (scriptingSupport)
     [ wxPython pythonPackages.six ];
@@ -115,8 +120,8 @@ stdenv.mkDerivation rec {
     "--prefix KICAD_TEMPLATE_DIR : ${kicad-libraries.symbols}/share/kicad/template"
     "--prefix KICAD_TEMPLATE_DIR : ${kicad-libraries.footprints}/share/kicad/template"
   ]
-  ++ optionals (ngspiceSupport) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
   ++ optionals (with3d) [ "--set KISYS3DMOD ${kicad-libraries.packages3d}/share/kicad/modules/packages3d" ]
+  ++ optionals (ngspiceSupport) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493
   ++ [ "--set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" ]
@@ -127,7 +132,7 @@ stdenv.mkDerivation rec {
   # not sure if anything has to be done with the other stuff in kicad-base/bin
   # dxf2idf, idf2vrml, idfcyl, idfrect, kicad2step, kicad-ogltest
   installPhase =
-    optionalString (scriptingSupport) '' buildPythonPath "$out $pythonPath"
+    optionalString (scriptingSupport) '' buildPythonPath "${kicad-base} $pythonPath"
     '' +
     '' makeWrapper ${kicad-base}/bin/kicad $out/bin/kicad $makeWrapperArgs ''
     + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
