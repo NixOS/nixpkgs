@@ -31,6 +31,7 @@
 , vdpauSupport ? true, libvdpau ? null
 , useWayland ? false, wayland ? null, wayland-protocols ? null
 , waylandpp ?  null, libxkbcommon ? null
+, useGbm ? false, mesa ? null, libinput ? null
 }:
 
 assert dbusSupport  -> dbus != null;
@@ -185,6 +186,11 @@ in stdenv.mkDerivation {
       wayland waylandpp
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
+    ]
+    ++ lib.optional useGbm [
+      libxkbcommon.dev
+      mesa.dev
+      libinput.dev
     ];
 
     nativeBuildInputs = [
@@ -207,6 +213,9 @@ in stdenv.mkDerivation {
     ] ++ lib.optional useWayland [
       "-DCORE_PLATFORM_NAME=wayland"
       "-DWAYLAND_RENDER_SYSTEM=gl"
+    ] ++ lib.optional useGbm [
+      "-DCORE_PLATFORM_NAME=gbm"
+      "-DGBM_RENDER_SYSTEM=gles"
     ];
 
     enableParallelBuilding = true;
