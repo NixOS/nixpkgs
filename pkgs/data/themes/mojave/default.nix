@@ -1,15 +1,23 @@
-{ stdenv, fetchFromGitHub, gtk_engines, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, fetchurl, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "mojave-gtk-theme";
-  version = "2019-09-09";
+  version = "2019-12-12";
 
-  src = fetchFromGitHub {
-    owner = "vinceliuice";
-    repo = pname;
-    rev = version;
-    sha256 = "1qffh6jsvy61f29ymw1v9hpjnsvhqin19mp05cys1lnwc7y810zr";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner = "vinceliuice";
+      repo = pname;
+      rev = version;
+      sha256 = "0d5m9gh97db01ygqlp2sv9v1m183d9fgid9n9wms9r5rrrw6bs8m";
+    })
+    (fetchurl {
+      url = "https://github.com/vinceliuice/Mojave-gtk-theme/raw/11741a99d96953daf9c27e44c94ae50a7247c0ed/macOS_Mojave_Wallpapers.tar.xz";
+      sha256 = "18zzkwm1kqzsdaj8swf0xby1n65gxnyslpw4lnxcx1rphip0rwf7";
+    })
+  ];
+
+  sourceRoot = "source";
 
   buildInputs = [ gtk_engines ];
 
@@ -17,8 +25,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     patchShebangs .
-    mkdir -p $out/share/themes
     name= ./install.sh -d $out/share/themes
+    install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
   '';
 
   meta = with stdenv.lib; {

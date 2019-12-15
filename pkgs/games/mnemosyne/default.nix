@@ -33,15 +33,16 @@ python.pkgs.buildPythonApplication rec {
   # No tests/ directrory in tarball
   doCheck = false;
 
-  dontWrapQtApps = true;
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
-
   postInstall = ''
     mkdir -p $out/share
     mv $out/${python.sitePackages}/$out/share/locale $out/share
     rm -r $out/${python.sitePackages}/nix
+  '';
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = {

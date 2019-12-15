@@ -294,5 +294,6 @@ in
   xss-lock = handleTest ./xss-lock.nix {};
   yabar = handleTest ./yabar.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
+  zsh-history = handleTest ./zsh-history.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
 }

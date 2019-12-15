@@ -7,12 +7,14 @@
 with lib;
 
 let
-
   cfg = config.networking.nat;
 
   dest = if cfg.externalIP == null then "-j MASQUERADE" else "-j SNAT --to-source ${cfg.externalIP}";
 
+  helpers = import ./helpers.nix { inherit config lib; };
+
   flushNat = ''
+    ${helpers}
     ip46tables -w -t nat -D PREROUTING -j nixos-nat-pre 2>/dev/null|| true
     ip46tables -w -t nat -F nixos-nat-pre 2>/dev/null || true
     ip46tables -w -t nat -X nixos-nat-pre 2>/dev/null || true
@@ -27,6 +29,7 @@ let
   '';
 
   setupNat = ''
+    ${helpers}
     # Create subchain where we store rules
     ip46tables -w -t nat -N nixos-nat-pre
     ip46tables -w -t nat -N nixos-nat-post

@@ -5651,6 +5651,8 @@ in
     ssh = openssh;
   };
 
+  pfetch = callPackage ../tools/misc/pfetch { };
+
   pfstools = callPackage ../tools/graphics/pfstools { };
 
   philter = callPackage ../tools/networking/philter { };
@@ -10338,8 +10340,6 @@ in
   pup = callPackage ../development/tools/pup { };
 
   puppet-lint = callPackage ../development/tools/puppet/puppet-lint { };
-
-  pyflame = callPackage ../development/tools/profiling/pyflame { };
 
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
@@ -21609,7 +21609,7 @@ in
   vcv-rack = callPackage ../applications/audio/vcv-rack { };
 
   vdirsyncer = callPackage ../tools/misc/vdirsyncer {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   vdirsyncerStable = callPackage ../tools/misc/vdirsyncer/stable.nix { };
@@ -23337,6 +23337,8 @@ in
   zeroad = zeroadPackages.zeroad;
 
   ### DESKTOP ENVIRONMENTS
+
+  cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
 
   deepin = recurseIntoAttrs (import ../desktops/deepin {
     inherit pkgs libsForQt5;

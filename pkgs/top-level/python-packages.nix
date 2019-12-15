@@ -182,7 +182,7 @@ in {
   aresponses = callPackage ../development/python-modules/aresponses { };
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
-  
+
   arviz = callPackage ../development/python-modules/arviz { };
 
   asana = callPackage ../development/python-modules/asana { };
@@ -1148,7 +1148,7 @@ in {
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
   pytest-bdd = callPackage ../development/python-modules/pytest-bdd { };
-  
+
   pytest-black = callPackage ../development/python-modules/pytest-black { };
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
@@ -5422,6 +5422,11 @@ in {
 
   xapian = callPackage ../development/python-modules/xapian { xapian = pkgs.xapian; };
 
+  xapp = callPackage ../development/python-modules/xapp {
+    inherit (pkgs) gtk3 gobject-introspection polkit;
+    inherit (pkgs.cinnamon) xapps;
+  };
+
   xlwt = callPackage ../development/python-modules/xlwt { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
@@ -5713,6 +5718,8 @@ in {
   twitter-common-log = callPackage ../development/python-modules/twitter-common-log { };
 
   twitter-common-options = callPackage ../development/python-modules/twitter-common-options { };
+
+  python-twitter = callPackage ../development/python-modules/python-twitter { };
 
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
