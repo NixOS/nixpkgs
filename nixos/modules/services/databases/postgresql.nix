@@ -111,6 +111,25 @@ in
         ];
       };
 
+      ensureExtensions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Ensures that the specified extensions exist.
+          Extensions will be created in the 'public' schema, thus making them automatically 
+          availabe on the default search path.
+          
+          This option will never drop existing extensions, especially not when the value of this
+          option is changed. This means that extensions created once through this option or
+          otherwise have to be removed manually.
+        '';
+        example = [
+          "hstore"
+          "pgcrypto"
+          "pg_trgm"
+        ];
+      };
+
       ensureUsers = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -344,6 +363,10 @@ in
                 $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
               '') user.ensurePermissions)}
             '') cfg.ensureUsers}
+          '' + optionalString (cfg.ensureExtensions != []) ''
+            ${concatMapStrings (extension: ''
+              $PSQL -tAc "SELECT 1 FROM pg_available_extensions WHERE name = '${extension}' and installed_version is not null" | grep -q 1 || $PSQL -tAc 'CREATE EXTENSION "${extension}" SCHEMA public CASCADE'
+            '') cfg.ensureExtensions}
           '';
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";

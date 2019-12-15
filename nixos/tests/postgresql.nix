@@ -31,6 +31,7 @@ let
       {
         services.postgresql.enable = true;
         services.postgresql.package = postgresql-package;
+        services.postgresql.ensureExtensions = [ "hstore" ];
 
         services.postgresqlBackup.enable = true;
         services.postgresqlBackup.databases = optional (!backup-all) "postgres";
@@ -61,6 +62,12 @@ let
       machine.succeed(check_count("SELECT * FROM sth;", 5))
       machine.fail(check_count("SELECT * FROM sth;", 4))
       machine.succeed(check_count("SELECT xpath('/test/text()', doc) FROM xmltest;", 1))
+      machine.succeed(
+          check_count(
+              "SELECT * FROM pg_available_extensions WHERE name = 'hstore' AND installed_version is not null",
+              1,
+          )
+      )
 
       # Check backup service
       machine.succeed("systemctl start ${backupService}.service")
