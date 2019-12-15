@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pytz, pytest, freezegun, glibcLocales }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pytz, pytest, freezegun, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "Babel";
@@ -11,13 +11,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pytz ];
 
-  checkInputs = [ pytest freezegun glibcLocales ];
+  checkInputs = [ pytest freezegun ]
+    # Without this, tests fail with a unicode error on Python < 3
+    # (checked with 2.7) if glibc is used, see:
+    # https://github.com/NixOS/nixpkgs/issues/74904
+    ++ lib.optionals (!isPy3k && stdenv.hostPlatform.libc == "glibc") [ glibcLocales ];
 
-  doCheck = !stdenv.isDarwin;
-
-  preCheck = ''
-    export LC_ALL="en_US.UTF-8"
-  '';
+  doCheck = !stdenv.isDarwin
+    # Test failure on musl when Python < 3 (checked with 2.7) is used:
+    # https://github.com/NixOS/nixpkgs/issues/74904 (like above).
+    && !(stdenv.hostPlatform.isMusl && !isPy3k);
 
   meta = with lib; {
     homepage = http://babel.edgewall.org;
