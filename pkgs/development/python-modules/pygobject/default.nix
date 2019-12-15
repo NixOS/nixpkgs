@@ -2,21 +2,17 @@
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "2.28.6";
+  version = "2.28.7";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/2.28/${pname}-${version}.tar.xz";
-    sha256 = "1f5dfxjnil2glfwxnqr14d2cjfbkghsbsn8n04js2c2icr7iv2pv";
+    sha256 = "0nkam61rsn7y3wik3vw46wk5q2cjfh2iph57hl9m39rc8jijb7dv";
   };
 
   outputs = [ "out" "devdoc" ];
 
-  patches = [
-    # Fix warning spam
-    ./pygobject-2.28.6-set_qdata.patch
-    ./pygobject-2.28.6-gio-types-2.32.patch
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  patches = stdenv.lib.optionals stdenv.isDarwin [
     ./pygobject-2.0-fix-darwin.patch
   ];
 
@@ -38,8 +34,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = http://live.gnome.org/PyGObject;
-    description = "Python bindings for Glib";
+    homepage = "https://pygobject.readthedocs.io/";
+    description = "Python bindings for GLib";
     platforms = stdenv.lib.platforms.unix;
   };
 }

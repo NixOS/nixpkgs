@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-libav";
-  version = "1.16.1";
+  version = "1.16.2";
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1i31ra0l77cfahb6k5xpx45zwvpskzm848aijsbbx9x4x65799g8";
+    sha256 = "1wpfilc98bad9nsv3y1qapxp35dvn2mvwvrmqwrsj58cf09gc967";
   };
 
   outputs = [ "out" "dev" ];
