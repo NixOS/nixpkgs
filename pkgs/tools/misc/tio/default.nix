@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     homepage = https://tio.github.io/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ yegortimoshenko ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
