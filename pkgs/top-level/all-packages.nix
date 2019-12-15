@@ -18608,7 +18608,7 @@ in
   eq10q = callPackage ../applications/audio/eq10q { };
 
   errbot = callPackage ../applications/networking/errbot {
-    pythonPackages = python3Packages;
+    python = python3;
   };
 
   espeak-classic = callPackage ../applications/audio/espeak { };
