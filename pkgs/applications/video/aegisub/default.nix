@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl
+{ config, stdenv, fetchurl, fetchpatch
 , libX11, wxGTK
 , libiconv, fontconfig, freetype
 , libGLU, libGL
@@ -29,8 +29,19 @@ stdenv.mkDerivation rec {
     sha256 = "11b83qazc8h0iidyj1rprnnjdivj1lpphvpa08y53n42bfa36pn5";
   };
 
-  # Fixup build with icu-59
-  postPatch = "sed '1i#include <unicode/unistr.h>' -i src/utils.cpp";
+  patches = [
+    # Compatibility with ICU 59
+    (fetchpatch {
+      url = "https://github.com/Aegisub/Aegisub/commit/dd67db47cb2203e7a14058e52549721f6ff16a49.patch";
+      sha256 = "07qqlckiyy64lz8zk1as0vflk9kqnjb340420lp9f0xj93ncssj7";
+    })
+
+    # Compatbility with Boost 1.69
+    (fetchpatch {
+      url = "https://github.com/Aegisub/Aegisub/commit/c3c446a8d6abc5127c9432387f50c5ad50012561.patch";
+      sha256 = "1n8wmjka480j43b1pr30i665z8hdy6n3wdiz1ls81wyv7ai5yygf";
+    })
+  ];
 
   buildInputs = with stdenv.lib;
   [ pkgconfig intltool libX11 wxGTK fontconfig freetype libGLU libGL
