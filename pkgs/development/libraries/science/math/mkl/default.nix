@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchurl, rpmextract, undmg, darwin }:
+{ stdenvNoCC, fetchurl, rpm, cpio, undmg, darwin, enableStatic ? false }:
 /*
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.
@@ -39,7 +39,7 @@ in stdenvNoCC.mkDerivation {
     then
       [ undmg darwin.cctools ]
     else
-      [ rpmextract ];
+      [ rpm cpio ];
 
   buildPhase = if stdenvNoCC.isDarwin then ''
     for f in Contents/Resources/pkg/*.tgz; do
@@ -47,24 +47,28 @@ in stdenvNoCC.mkDerivation {
     done
   '' else ''
     # Common stuff
-    rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
-    rpmextract rpm/intel-mkl-common-f-${rpm-ver}.noarch.rpm
+    rpm2cpio rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm | cpio -idv
+    rpm2cpio rpm/intel-mkl-common-f-${rpm-ver}.noarch.rpm | cpio -idv
 
     # Dynamic libraries
-    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-f-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-rt-${rpm-ver}.x86_64.rpm
-
-    # Static libraries
-    rpmextract rpm/intel-mkl-cluster-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-f-${rpm-ver}.x86_64.rpm
+    rpm2cpio rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm | cpio -idv
+    rpm2cpio rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm | cpio -idv
+    rpm2cpio rpm/intel-mkl-gnu-f-rt-${rpm-ver}.x86_64.rpm | cpio -idv
+    rpm2cpio rpm/intel-mkl-gnu-rt-${rpm-ver}.x86_64.rpm | cpio -idv
 
     # Intel OpenMP runtime
-    rpmextract rpm/intel-openmp-${openmp-ver}.x86_64.rpm
-  '';
+    rpm2cpio rpm/intel-openmp-${openmp-ver}.x86_64.rpm | cpio -idv
+  '' + (if enableStatic then ''
+    # Static libraries
+    rpm2cpio rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm | cpio -idv
+    rpm2cpio rpm/intel-mkl-cluster-${rpm-ver}.x86_64.rpm | cpio -idv
+    rpm2cpio rpm/intel-mkl-gnu-${rpm-ver}.x86_64.rpm | cpio -idv
+    rpm2cpio rpm/intel-mkl-gnu-f-${rpm-ver}.x86_64.rpm | cpio -idv
+  '' else ''
+    # Extract the PkgConfig files for dynamic libraries only
+    rpm2cpio rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm | cpio -idv '*dynamic*.pc'
+  ''
+  );
 
   installPhase = ''
     for f in $(find . -name 'mkl*.pc') ; do
