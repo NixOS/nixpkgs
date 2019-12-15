@@ -14871,7 +14871,7 @@ in
     mod_csr = callPackage ../servers/http/apache-modules/mod_csr { };
     mod_ocsp = callPackage ../servers/http/apache-modules/mod_ocsp{ };
     mod_scep = callPackage ../servers/http/apache-modules/mod_scep { };
-    mod_pkcs12= callPackage ../servers/http/apache-modules/mod_pkcs12 { };
+    mod_pkcs12 = callPackage ../servers/http/apache-modules/mod_pkcs12 { };
     mod_spkac= callPackage ../servers/http/apache-modules/mod_spkac { };
     mod_timestamp = callPackage ../servers/http/apache-modules/mod_timestamp { };
 
@@ -15144,7 +15144,7 @@ in
   mod_scep = pkgs.apacheHttpdPackages.mod_scep;
   mod_spkac = pkgs.apacheHttpdPackages.mod_spkac;
   mod_pkcs12 = pkgs.apacheHttpdPackages.mod_pkcs12;
-  mod_timestamp= pkgs.apacheHttpdPackages.mod_timestamp;
+  mod_timestamp = pkgs.apacheHttpdPackages.mod_timestamp;
 
   inherit (callPackages ../servers/mpd { })
     mpd mpd-small mpdWithFeatures;
