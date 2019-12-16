@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, libpcap, libnet, zlib, curl, pcre
-, openssl, ncurses, glib, gtk3, atk, pango, flex, bison, geoip
+, openssl, ncurses, glib, gtk3, atk, pango, flex, bison, geoip, harfbuzz
 , pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake flex bison pkgconfig ];
   buildInputs = [
     libpcap libnet zlib curl pcre openssl ncurses
-    glib gtk3 atk pango geoip
+    glib gtk3 atk pango geoip harfbuzz
   ];
 
   preConfigure = ''
@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
     "-DBUNDLED_LIBS=Off"
     "-DGTK3_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ];
+
+  # TODO: Remove after the next release (0.8.4 should work without this):
+  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
 
   meta = with stdenv.lib; {
     description = "Comprehensive suite for man in the middle attacks";
