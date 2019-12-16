@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, crystal, shards }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ameba";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner  = "crystal-ameba";
     repo   = "ameba";
-    rev    = "v0.10.1";
-    sha256 = "0dcw7px7g0c5pxpdlirhirqzhcc7gdwdfiwb9kgm4x1k74ghjgxq";
+    rev    = "v${version}";
+    sha256 = "0zjv59f555q2w8ahrvmpdzasrifwjgr0mk6rly9yss4ab3rj8cy2";
   };
 
   nativeBuildInputs = [ crystal shards ];
