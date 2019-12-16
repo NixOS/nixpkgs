@@ -170,6 +170,9 @@ in {
     # --disable-shared flag
     stdenv = super.stdenv;
   };
+  double-conversion = super.double-conversion.override {
+    static = true;
+  };
   gmp = super.gmp.override {
     withStatic = true;
   };
