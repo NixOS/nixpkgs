@@ -4338,6 +4338,8 @@ in {
 
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
 
+  aiokafka = callPackage ../development/python-modules/aiokafka { };
+
   olefile = callPackage ../development/python-modules/olefile { };
 
   requests-mock = callPackage ../development/python-modules/requests-mock { };
