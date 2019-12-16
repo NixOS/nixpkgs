@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "sqlite";
   version = "3.30.0";
 
-  # NB! Make sure to update analyzer.nix src (in the same directory).
+  # NB! Make sure to update analyzer.nix and sqldiff.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2019/sqlite-autoconf-${archiveVersion version}.tar.gz";
     sha256 = "0n7w839y55dc3qqf2zv8xk6238cc6mpx24q4w5amwic7g96cza70";

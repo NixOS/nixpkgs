@@ -14134,6 +14134,8 @@ in
 
   sqlite-analyzer = lowPrio (callPackage ../development/libraries/sqlite/analyzer.nix { });
 
+  sqlite-sqldiff = lowPrio (callPackage ../development/libraries/sqlite/sqldiff.nix { });
+
   sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
 
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
