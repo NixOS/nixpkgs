@@ -15529,6 +15529,8 @@ in
 
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
+  public-inbox = perlPackages.callPackage ../servers/mail/public-inbox { };
+
   pure-ftpd = callPackage ../servers/ftp/pure-ftpd { };
 
   pyIRCt = callPackage ../servers/xmpp/pyIRCt {};
