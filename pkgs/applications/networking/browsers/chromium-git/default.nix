@@ -1,7 +1,7 @@
 { stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand
 , python2, gn, ninja, llvmPackages_latest, nodejs, jre8, bison, gperf, pkg-config, protobuf
 , dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf
-, glib, gtk3, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU_combined, libXdamage
+, glib, gtk3, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU, libGL, libXdamage
 , customGnFlags ? {}
 }:
 
@@ -103,7 +103,7 @@ let
       nativeBuildInputs = [ gn ninja python2 pkg-config jre8 gperf bison ];
       buildInputs = [
         dbus at-spi2-atk atk at-spi2-core nspr nss pciutils utillinux kerberos
-        gdk-pixbuf glib gtk3 alsaLib libXScrnSaver libXcursor libXtst libGLU_combined libXdamage
+        gdk-pixbuf glib gtk3 alsaLib libXScrnSaver libXcursor libXtst libGLU libGL libXdamage
       ] ++ lib.optionals gnFlags.use_pulseaudio [
         pulseaudio
       ];
