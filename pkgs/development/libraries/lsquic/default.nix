@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kkb32svbi493f9wlwc9wbg2ydq1kr0gjpalmp39ngf18lv20bad";
     fetchSubmodules = true;
   };
+  passthru.boringssl = boringssl';
   postPatch = ''
     patchShebangs src/liblsquic/gen-verstrs.pl
   '';

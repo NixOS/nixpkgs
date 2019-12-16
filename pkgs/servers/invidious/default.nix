@@ -1,4 +1,7 @@
-{ lib, crystal, fetchgit, git, libxml2, sqlite, openssl, librsvg, writeText }:
+{ lib, crystal, pkgconfig, fetchgit, git, libxml2, sqlite, openssl, librsvg, writeText, lsquic }:
+let
+  inherit (lsquic) boringssl;
+in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
   version = "0.20.1";
@@ -6,12 +9,22 @@ crystal.buildCrystalPackage rec {
   src = fetchgit {
     url = "https://github.com/omarroth/invidious.git";
     rev = version;
-    sha256 = "17il5mmmz5960aask63wv8vyy3hkyrq30ak5vzdql9pwcmdf6zs8";
+    sha256 = "0sb6nnf9r27cvg41zsssjybg4j20013izn0d5ffvk12panzznpc0";
     # Needed for extracting commit history, as well as for git version embedding
     deepClone = true;
   };
 
-  nativeBuildInputs = [ git ];
+  nativeBuildInputs = [ git pkgconfig ];
+
+  postConfigure = ''
+    cp -rL lib lib2
+    rm lib
+    mv lib2 lib
+    chmod +w -R lib
+    cp ${boringssl}/lib/libcrypto.a lib/lsquic/src/lsquic/ext
+    cp ${boringssl}/lib/libssl.a lib/lsquic/src/lsquic/ext
+    cp ${lsquic}/lib/liblsquic.a lib/lsquic/src/lsquic/ext
+  '';
 
   postPatch = ''
     # Patch the assets and locales paths to be absolute
@@ -32,7 +45,7 @@ crystal.buildCrystalPackage rec {
   crystalBinaries.invidious.src = "src/invidious.cr";
   crystalBinaries.invidious.options = [ ];
 
-  buildInputs = [ libxml2 sqlite openssl ];
+  buildInputs = [ libxml2 sqlite lsquic boringssl ];
 
   postInstall = ''
     mkdir -p $out/nix-support/invidious $out/share/invidious/config
