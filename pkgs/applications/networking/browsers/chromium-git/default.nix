@@ -1,5 +1,5 @@
 { stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand
-, python2, gn, ninja, llvmPackages_9, nodejs, jre8, bison, gperf, pkg-config, protobuf
+, python2, gn, ninja, llvmPackages_latest, nodejs, jre8, bison, gperf, pkg-config, protobuf
 , dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf
 , glib, gtk3, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU_combined, libXdamage
 , customGnFlags ? {}
@@ -149,9 +149,9 @@ let
           ln -s --force ${nodejs}/bin/node                    third_party/node/linux/node-linux-x64/bin/node      || true
 
           mkdir -p third_party/llvm-build/Release+Asserts/bin
-          ln -s --force ${llvmPackages_9.clang}/bin/clang     third_party/llvm-build/Release+Asserts/bin/clang    || true
-          ln -s --force ${llvmPackages_9.clang}/bin/clang++   third_party/llvm-build/Release+Asserts/bin/clang++  || true
-          ln -s --force ${llvmPackages_9.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar  || true
+          ln -s --force ${llvmPackages_latest.clang}/bin/clang     third_party/llvm-build/Release+Asserts/bin/clang    || true
+          ln -s --force ${llvmPackages_latest.clang}/bin/clang++   third_party/llvm-build/Release+Asserts/bin/clang++  || true
+          ln -s --force ${llvmPackages_latest.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar  || true
 
           echo 'build_with_chromium = true'                > build/config/gclient_args.gni
           echo 'checkout_android = false'                 >> build/config/gclient_args.gni
