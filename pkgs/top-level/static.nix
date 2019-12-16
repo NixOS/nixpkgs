@@ -203,6 +203,9 @@ in {
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
+  woff2 = super.woff2.override {
+    static = true;
+  };
   lz4 = super.lz4.override {
     enableShared = false;
     enableStatic = true;
