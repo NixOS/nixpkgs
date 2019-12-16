@@ -69,11 +69,14 @@ let
     desktopItem = makeDesktopItem {
       categories = "Network;InstantMessaging;Chat;VideoConference";
       comment = "Secure messenger for everyone";
-      desktopName = "Wire Desktop";
+      desktopName = "Wire";
       exec = "wire-desktop %U";
       genericName = "Secure messenger";
       icon = "wire-desktop";
       name = "wire-desktop";
+      extraEntries = ''
+        StartupWMClass="Wire"
+      '';
     };
 
     dontBuild = true;

@@ -89,7 +89,7 @@ in {
 
       pgdumpOptions = mkOption {
         type = types.separatedString " ";
-        default = "-Cbo";
+        default = "-C";
         description = ''
           Command line options for pg_dump. This options is not used
           if <literal>config.services.postgresqlBackup.backupAll</literal> is enabled.
