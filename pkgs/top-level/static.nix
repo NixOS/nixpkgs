@@ -206,6 +206,9 @@ in {
   woff2 = super.woff2.override {
     static = true;
   };
+  snappy = super.snappy.override {
+    static = true;
+  };
   lz4 = super.lz4.override {
     enableShared = false;
     enableStatic = true;
