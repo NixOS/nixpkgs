@@ -1,25 +1,25 @@
-{ stdenv, buildPythonPackage, fetchPypi, coverage, mock
+{ stdenv, buildPythonPackage, fetchPypi, coverage, mock, flufl_lock
 , robot-detection, django_extensions, rjsmin, cssmin, django-mailman3
 , django-haystack, lockfile, networkx, dateutil, defusedxml
 , django-paintstore, djangorestframework, django, django-q
-, django_compressor, beautifulsoup4, six, psycopg2, whoosh
+, django_compressor, beautifulsoup4, six, psycopg2, whoosh, isort
 }:
 
 buildPythonPackage rec {
   pname = "HyperKitty";
-  version = "1.2.2";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z2zswlml6nppxhzw9a4nrj7i5wsxd29s3q78ka1rwr5m5n7s1rz";
+    sha256 = "0agqd3hicygq7jixf6n54d5ljdlbif514hv3j7jq8hsfr9lpnay6";
   };
 
   buildInputs = [ coverage mock ];
   propagatedBuildInputs = [
     robot-detection django_extensions rjsmin cssmin django-mailman3
     django-haystack lockfile networkx dateutil defusedxml
-    django-paintstore djangorestframework django django-q
-    django_compressor beautifulsoup4 six psycopg2 whoosh
+    django-paintstore djangorestframework django django-q flufl_lock
+    django_compressor beautifulsoup4 six psycopg2 whoosh isort
   ];
 
   checkPhase = ''
