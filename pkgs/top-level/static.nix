@@ -55,7 +55,7 @@ self: super: let
   removeUnknownConfigureFlags = f: with self.lib;
     remove "--disable-shared"
     (remove "--enable-static" f);
-  
+
   ocamlFixPackage = b:
     b.overrideAttrs (o: {
       configurePlatforms = [ ];
@@ -63,7 +63,7 @@ self: super: let
       buildInputs = o.buildInputs ++ o.nativeBuildInputs or [ ];
       propagatedNativeBuildInputs = o.propagatedBuildInputs or [ ];
     });
-  
+
   ocamlStaticAdapter = _: super:
     self.lib.mapAttrs
       (_: p: if p ? overrideAttrs then ocamlFixPackage p else p)
@@ -170,6 +170,10 @@ in {
     # --disable-shared flag
     stdenv = super.stdenv;
   };
+  thrift = super.thrift.override {
+    static = true;
+    twisted = null;
+  };
   double-conversion = super.double-conversion.override {
     static = true;
   };
@@ -227,7 +231,7 @@ in {
   kmod = super.kmod.override {
     withStatic = true;
   };
-  
+
   curl = super.curl.override {
     # a very sad story: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
     gssSupport = false;
@@ -263,6 +267,6 @@ in {
   ocaml-ng = self.lib.mapAttrs (_: set:
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
-  
+
   python27 = super.python27.override { static = true; };
 }
