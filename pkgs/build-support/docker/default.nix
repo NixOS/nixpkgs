@@ -536,7 +536,12 @@ rec {
   }:
     let
       baseName = baseNameOf name;
-      contentsEnv = symlinkJoin { name = "bulk-layers"; paths = (if builtins.isList contents then contents else [ contents ]); };
+      contentsEnv = symlinkJoin {
+        name = "bulk-layers";
+        paths = if builtins.isList contents
+          then contents
+          else [ contents ];
+      };
 
       configJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
