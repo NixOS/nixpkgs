@@ -35,6 +35,10 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
 
+  patches = [
+    ./libffi-3.3-abi.patch
+  ];
+
   configureFlags = [
     (if threadSupport then "--enable-threads" else "--disable-threads")
     "--with-gmp-prefix=${gmp.dev}"
