@@ -2,7 +2,7 @@
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
-, perl, perlPackages, pkgconfig, autoreconfHook
+, perl, perlPackages, python2Packages, pkgconfig, autoreconfHook
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , cairo, pixman, xorg, clisp, biber, xxHash
 , makeWrapper, shortenPerlShebang
@@ -356,6 +356,43 @@ latexindent = perlPackages.buildPerlPackage rec {
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang "$out"/bin/latexindent
   '';
+};
+
+
+pygmentex = python2Packages.buildPythonApplication rec {
+  pname = "pygmentex";
+  inherit (src) version;
+
+  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
+
+  propagatedBuildInputs = with python2Packages; [ pygments chardet ];
+
+  dontBuild = true;
+
+  doCheck = false;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D ./scripts/pygmentex/pygmentex.py "$out"/bin/pygmentex
+
+    runHook postInstall
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = https://www.ctan.org/pkg/pygmentex;
+    description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
+    longDescription = ''
+      PygmenTeX is a Python-based LaTeX package that can be used for
+      typesetting code listings in a LaTeX document using Pygments.
+
+      Pygments is a generic syntax highlighter for general use in all kinds of
+      software such as forum systems, wikis or other applications that need to
+      prettify source code.
+    '';
+    license = licenses.lppl13c;
+    maintainers = with maintainers; [ romildo ];
+  };
 };
 
 
