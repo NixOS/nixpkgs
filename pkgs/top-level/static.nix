@@ -176,6 +176,9 @@ in {
   gmp = super.gmp.override {
     withStatic = true;
   };
+  gflags = super.gflags.override {
+    enableShared = false;
+  };
   glog = super.glog.override {
     static = true;
   };
