@@ -45,11 +45,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    # Since upstream introduced --doctest-modules in
-    # https://github.com/fplll/fpylll/commit/9732fdb40cf1bd43ad1f60762ec0a8401743fc79,
-    # it is necessary to ignore import mismatches. Not sure why, but the files
-    # should be identical anyway.
-    PY_IGNORE_IMPORTMISMATCH=1 pytest
+    # avoid importing local files, and doing doc tests
+    cd tests
+    pytest
   '';
 
   meta = {
