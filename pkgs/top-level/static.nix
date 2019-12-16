@@ -176,6 +176,9 @@ in {
   gmp = super.gmp.override {
     withStatic = true;
   };
+  glog = super.glog.override {
+    static = true;
+  };
   cdo = super.cdo.override {
     enable_all_static = true;
   };
