@@ -1,22 +1,22 @@
 { stdenv, buildPythonPackage, fetchPypi, alembic, aiosmtpd, dnspython
 , flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
 , requests, zope_configuration, click, falcon, importlib-resources
-, zope_component, lynx, postfix
+, zope_component, lynx, postfix, authheaders, gunicorn
 }:
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.2.2";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09s9p5pb8gff6zblwidyq830yfgcvv50p5drdaxj1qpy8w46lvc6";
+    sha256 = "1qph9i93ndahfxi3bb2sd0kjm2c0pkh844ai6zacfmvihl1k3pvy";
   };
 
   propagatedBuildInputs = [
     alembic aiosmtpd click dnspython falcon flufl_bounce flufl_i18n flufl_lock
     importlib-resources lazr_config passlib requests zope_configuration
-    zope_component
+    zope_component authheaders gunicorn
   ];
 
   patchPhase = ''
