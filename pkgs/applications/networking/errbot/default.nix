@@ -37,6 +37,7 @@ py.pkgs.buildPythonApplication rec {
     sleekxmpp pyasn1 pyasn1-modules hypchat
   ];
 
+  __darwinAllowLocalNetworking = true;
   checkInputs = with py.pkgs; [ mock pytest ];
   # avoid tests that do network calls
   checkPhase = ''
