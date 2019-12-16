@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, fixDarwinDylibNames, autoconf, boost
 , brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl
-, python, rapidjson, snappy, thrift, uriparser, which, zlib, zstd }:
+, python, rapidjson, snappy, thrift, uriparser, which, zlib, zstd
+, enableShared ? true }:
 
 let
   parquet-testing = fetchFromGitHub {
@@ -34,6 +35,9 @@ in stdenv.mkDerivation rec {
   patches = [
     # patch to fix python-test
     ./darwin.patch
+  ] ++ stdenv.lib.optionals (!enableShared) [
+    # The shared jemalloc lib is unused and breaks in static mode due to missing -fpic.
+    ./jemalloc-disable-shared.patch
   ];
 
   nativeBuildInputs = [
@@ -71,8 +75,13 @@ in stdenv.mkDerivation rec {
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
     "-DARROW_PARQUET=ON"
     "-DARROW_PLASMA=ON"
-    "-DARROW_PYTHON=ON"
+    # Disable Python for static mode because openblas is currently broken there.
+    "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
     "-Duriparser_SOURCE=SYSTEM"
+  ] ++ stdenv.lib.optionals (!enableShared) [
+    "-DARROW_BUILD_SHARED=OFF"
+    "-DARROW_TEST_LINKAGE=static"
+    "-DOPENSSL_USE_STATIC_LIBS=ON"
   ] ++ stdenv.lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
