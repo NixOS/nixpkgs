@@ -528,11 +528,9 @@ rec {
     created ? "1970-01-01T00:00:01Z",
     # Optional bash script to run on the files prior to fixturizing the layer.
     extraCommands ? "", uid ? 0, gid ? 0,
-    # Docker's lowest maximum layer limit is 42-layers for an old
-    # version of the AUFS graph driver. We pick 24 to ensure there is
-    # plenty of room for extension. I believe the actual maximum is
-    # 128.
-    maxLayers ? 24
+    # We pick 100 to ensure there is plenty of room for extension. I
+    # believe the actual maximum is 128.
+    maxLayers ? 100
   }:
     let
       baseName = baseNameOf name;
