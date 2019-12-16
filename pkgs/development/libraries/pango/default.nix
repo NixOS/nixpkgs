@@ -33,8 +33,10 @@ in stdenv.mkDerivation rec {
     CoreGraphics
     CoreText
   ]);
-  propagatedBuildInputs = [ cairo glib libintl harfbuzz ] ++
-    optional x11Support libXft;
+  propagatedBuildInputs = [ cairo glib libintl ]
+  ++ optional x11Support libXft
+  # darwin needs harfbuzz to be compiled with coretext
+  ++ (if stdenv.isDarwin then [ harfbuzzFull ] else [ harfbuzz ]);
 
   mesonFlags = [
     "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
