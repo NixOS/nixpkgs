@@ -34,7 +34,12 @@ stdenv.mkDerivation {
   postInstall = ''
     make install-private-headers
     ln -s $out/bin/tclsh${release} $out/bin/tclsh
-    ln -s $out/lib/libtcl${release}.so $out/lib/libtcl.so
+    if [[ -e "$out/lib/libtcl${release}.so" ]]; then
+      ln -s $out/lib/libtcl${release}.so $out/lib/libtcl.so
+    fi
+    if [[ -e "$out/lib/libtcl${release}.dylib" ]]; then
+      ln -s $out/lib/libtcl${release}.dylib $out/lib/libtcl.dylib
+    fi
   '';
 
   meta = with stdenv.lib; {
