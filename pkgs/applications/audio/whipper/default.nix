@@ -3,19 +3,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whipper";
-  version = "0.9.0";
+  version = "0.9.1.dev7+g${stdenv.lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "whipper-team";
     repo = "whipper";
-    rev = "v${version}";
-    sha256 = "0x1qsp021i0l5sdcm2kcv9zfwp696k4izhw898v6marf8phll7xc";
+    rev = "9e95f0604fa30ab06445fe46e3bc93bba6092a05";
+    sha256 = "1c2qldw9vxpvdfh5wl6mfcd7zzz3v8r86ffqll311lcp2zin33dg";
   };
 
   pythonPath = with python3.pkgs; [
-    pygobject3 musicbrainzngs urllib3 chardet
-    pycdio setuptools setuptools_scm mutagen
+    musicbrainzngs
+    mutagen
+    pycdio
+    pygobject3
     requests
+    ruamel_yaml
+    setuptools
+    setuptools_scm
   ];
 
   buildInputs = [ libsndfile ];
@@ -36,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
+    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
   '';
 
   # some tests require internet access
