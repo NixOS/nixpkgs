@@ -333,6 +333,7 @@ mapAliases ({
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
+  pygmentex = texlive.bin.pygmentex; # added 2019-12-15
   pyo3-pack = maturin;
   pmenu = throw "pmenu has been removed from nixpkgs, as its maintainer is no longer interested in the package."; # added 2019-12-10
   pulseaudioLight = pulseaudio; # added 2018-04-25
