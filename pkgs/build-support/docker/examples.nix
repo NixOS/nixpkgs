@@ -236,7 +236,6 @@ rec {
     name = "another-layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
-    contents = [ pkgs.hello ];
   };
 
 }

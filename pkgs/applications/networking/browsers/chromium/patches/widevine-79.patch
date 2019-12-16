@@ -1,11 +1,13 @@
-diff --git a/third_party/widevine/cdm/widevine_cdm_version.h b/third_party/widevine/cdm/widevine_cdm_version.h
-index dd6efed02646..4d8b2b7d85f7 100644
---- a/third_party/widevine/cdm/widevine_cdm_version.h
-+++ b/third_party/widevine/cdm/widevine_cdm_version.h
-@@ -11,5 +11,6 @@
- // If the Widevine CDM is available define the following:
- //  - WIDEVINE_CDM_VERSION_STRING (with the version of the CDM that's available
- //    as a string, e.g., "1.0.123.456").
-+#define WIDEVINE_CDM_VERSION_STRING "undefined"
+diff --git a/third_party/widevine/cdm/BUILD.gn b/third_party/widevine/cdm/BUILD.gn
+index ed0e2f5208b..5b431a030d5 100644
+--- a/third_party/widevine/cdm/BUILD.gn
++++ b/third_party/widevine/cdm/BUILD.gn
+@@ -14,7 +14,7 @@ buildflag_header("buildflags") {
  
- #endif  // WIDEVINE_CDM_VERSION_H_
+   flags = [
+     "ENABLE_WIDEVINE=$enable_widevine",
+-    "BUNDLE_WIDEVINE_CDM=$bundle_widevine_cdm",
++    "BUNDLE_WIDEVINE_CDM=true",
+     "ENABLE_WIDEVINE_CDM_COMPONENT=$enable_widevine_cdm_component",
+   ]
+ }

@@ -2436,6 +2436,8 @@ in
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
 
+  gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
+
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
   libskk = callPackage ../development/libraries/libskk {
@@ -5848,8 +5850,6 @@ in
 
   pydf = callPackage ../applications/misc/pydf { };
 
-  pygmentex = callPackage ../tools/typesetting/pygmentex { };
-
   pympress = callPackage ../applications/office/pympress { };
 
   pythonIRClib = pythonPackages.pythonIRClib;
@@ -8620,6 +8620,8 @@ in
 
   qbe = callPackage ../development/compilers/qbe { };
 
+  rasm = callPackage ../development/compilers/rasm { };
+
   rgbds = callPackage ../development/compilers/rgbds { };
 
   rtags = callPackage ../development/tools/rtags {
@@ -9876,6 +9878,8 @@ in
   doctl = callPackage ../development/tools/doctl { };
 
   doit = callPackage ../development/tools/build-managers/doit { };
+
+  dolt = callPackage ../servers/sql/dolt { };
 
   dot2tex = pythonPackages.dot2tex;
 
@@ -11627,7 +11631,9 @@ in
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
-  pango = callPackage ../development/libraries/pango { };
+  pango = callPackage ../development/libraries/pango {
+    harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
+  };
 
   pangolin = callPackage ../development/libraries/pangolin {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -17050,6 +17056,8 @@ in
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested { };
 
+  xilinx-bootgen = callPackage ../tools/misc/xilinx-bootgen { };
+
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
@@ -18622,7 +18630,7 @@ in
   eq10q = callPackage ../applications/audio/eq10q { };
 
   errbot = callPackage ../applications/networking/errbot {
-    pythonPackages = python3Packages;
+    python = python3;
   };
 
   espeak-classic = callPackage ../applications/audio/espeak { };
@@ -19201,6 +19209,8 @@ in
   gpsd = callPackage ../servers/gpsd { };
 
   gpsprune = callPackage ../applications/misc/gpsprune { };
+
+  gpxlab = libsForQt5.callPackage ../applications/misc/gpxlab { };
 
   gpxsee = libsForQt5.callPackage ../applications/misc/gpxsee { };
 
@@ -24969,6 +24979,10 @@ in
   retrofe = callPackage ../misc/emulators/retrofe { };
 
   rfc-bibtex = python3Packages.callPackage ../development/python-modules/rfc-bibtex { };
+
+  pick-colour-picker = python3Packages.callPackage ../applications/graphics/pick-colour-picker {
+    inherit (pkgs) glib gtk3 gobject-introspection wrapGAppsHook;
+  };
 
   rpl = callPackage ../tools/text/rpl {
     pythonPackages = python3Packages;

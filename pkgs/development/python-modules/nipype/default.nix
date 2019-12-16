@@ -6,6 +6,8 @@
 , click
 , configparser ? null
 , dateutil
+, etelemetry
+, filelock
 , funcsigs
 , future
 , futures
@@ -14,6 +16,7 @@
 , nibabel
 , numpy
 , packaging
+, pathlib2
 , prov
 , psutil
 , pybids
@@ -60,6 +63,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     dateutil
+    etelemetry
+    filelock
     funcsigs
     future
     networkx
@@ -77,6 +82,7 @@ buildPythonPackage rec {
   ] ++ stdenv.lib.optional (!isPy3k) [
     configparser
     futures
+    pathlib2 # darwin doesn't receive this transitively, but it is in install_requires
   ];
 
   checkInputs = [
@@ -91,6 +97,8 @@ buildPythonPackage rec {
     which
   ];
 
+  # checks on darwin inspect memory which doesn't work in build environment
+  doCheck = !stdenv.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
     LC_ALL="en_US.UTF-8" pytest -v nipype -k 'not display'

@@ -179,6 +179,8 @@ in {
 
   apprise = callPackage ../development/python-modules/apprise { };
 
+  arrayqueues = callPackage ../development/python-modules/arrayqueues { };
+
   aresponses = callPackage ../development/python-modules/aresponses { };
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
@@ -1729,6 +1731,8 @@ in {
 
   colorlog = callPackage ../development/python-modules/colorlog { };
 
+  colorspacious = callPackage ../development/python-modules/colorspacious { };
+
   colour = callPackage ../development/python-modules/colour {};
 
   configshell = callPackage ../development/python-modules/configshell { };
@@ -2035,6 +2039,8 @@ in {
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   envs = callPackage ../development/python-modules/envs { };
+
+  etelemetry = callPackage ../development/python-modules/etelemetry { };
 
   eth-hash = callPackage ../development/python-modules/eth-hash { };
 
@@ -2472,6 +2478,8 @@ in {
 
   filetype = callPackage ../development/python-modules/filetype { };
 
+  flammkuchen = callPackage ../development/python-modules/flammkuchen { };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flit = callPackage ../development/python-modules/flit { };
@@ -2700,6 +2708,8 @@ in {
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
   lightning = callPackage ../development/python-modules/lightning { };
+
+  lightparam = callPackage ../development/python-modules/lightparam { };
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
@@ -4935,6 +4945,8 @@ in {
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
+  qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
+
   quamash = callPackage ../development/python-modules/quamash { };
 
   quandl = callPackage ../development/python-modules/quandl { };
@@ -5244,6 +5256,8 @@ in {
   streamz = callPackage ../development/python-modules/streamz { };
 
   structlog = callPackage ../development/python-modules/structlog { };
+
+  stytra = callPackage ../development/python-modules/stytra { };
 
   sybil = callPackage ../development/python-modules/sybil { };
 
