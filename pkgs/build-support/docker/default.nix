@@ -290,7 +290,7 @@ rec {
   mkManyPureLayers = {
     name,
     # Files to add to the layer.
-    closure,
+    closures,
     configJson,
     # Docker has a 125-layer maximum, we pick 100 to ensure there is
     # plenty of room for extension.
@@ -303,10 +303,12 @@ rec {
         isExecutable = true;
         src = ./store-path-to-layer.sh;
       };
+
+      overallClosure = writeText "closure" (lib.concatStringsSep " " closures);
     in
     runCommand "${name}-granular-docker-layers" {
       inherit maxLayers;
-      paths = referencesByPopularity closure;
+      paths = referencesByPopularity overallClosure;
       nativeBuildInputs = [ jshon rsync tarsum ];
       enableParallelBuilding = true;
     }
@@ -558,7 +560,7 @@ rec {
 
       bulkLayers = mkManyPureLayers {
           name = baseName;
-          closure = writeText "closure" "${contentsEnv} ${configJson}";
+          closures = [ contentsEnv configJson ];
           # One layer will be taken up by the customisationLayer, so
           # take up one less.
           maxLayers = maxLayers - 1;
