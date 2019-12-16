@@ -21,6 +21,6 @@ sed -i -e "s/rev = \".*\"/rev = \"$rev\"/" \
     -e "s/sha256 = \".*\"/sha256 = \"$sha256\"/" "$path"
 
 if [ -n "$COMMIT" ]; then
-    git commit -qm "linux-libre_latest: $old_rev -> $rev" "$path"
-    echo "Updated linux-libre_latest $old_rev -> $rev"
+    git commit -qm "linux_latest-libre: $old_rev -> $rev" "$path"
+    echo "Updated linux_latest-libre $old_rev -> $rev"
 fi
