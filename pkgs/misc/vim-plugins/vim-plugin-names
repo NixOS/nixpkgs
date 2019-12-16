@@ -106,6 +106,7 @@ godlygeek/tabular
 google/vim-codefmt
 google/vim-jsonnet
 google/vim-maktaba
+gorkunov/smartpairs.vim
 gotcha/vimelette
 gregsexton/gitv
 guns/vim-clojure-highlight
