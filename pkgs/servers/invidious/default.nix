@@ -30,6 +30,7 @@ crystal.buildCrystalPackage rec {
 
   shardsFile = ./shards.nix;
   crystalBinaries.invidious.src = "src/invidious.cr";
+  crystalBinaries.invidious.options = [ ];
 
   buildInputs = [ libxml2 sqlite openssl_1_0_2 ];
 
