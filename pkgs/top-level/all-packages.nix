@@ -23641,6 +23641,8 @@ in
 
   niftyseg = callPackage ../applications/science/biology/niftyseg { };
 
+  manta = callPackage ../applications/science/biology/manta { };
+
   octopus-caller = callPackage ../applications/science/biology/octopus { };
 
   paml = callPackage ../applications/science/biology/paml { };
