@@ -1,4 +1,4 @@
-{ lib, pkgs }:
+{ makeSetupHook, lib, pkgs }:
 
 let
   # Create a derivation that links all desired manylinux libraries
@@ -68,14 +68,19 @@ let
     "libcrypt.so.1" = glibc;
     }));
 
+  createManyLinuxSetupHook = manylinuxVersion: makeSetupHook {
+    name = "manylinux${toString manylinuxVersion}-setup-hook";
+    substitutions = { inherit manylinuxVersion; };
+  } ./setup-hook.sh;
+
 in {
   # List of libraries that are needed for manylinux compatibility.
   # When using a wheel that is manylinux1 compatible, just extend
   # the `buildInputs` with one of these `manylinux` lists.
   # Additionally, add `autoPatchelfHook` to `nativeBuildInputs`.
-  manylinux1 = lib.unique (lib.attrValues manylinux1Libs);
-  manylinux2010 = lib.unique (lib.attrValues manylinux2010Libs);
-  manylinux2014 = lib.unique (lib.attrValues manylinux2014Libs);
+  manylinux1 = lib.unique (lib.attrValues manylinux1Libs) ++ [ (createManyLinuxSetupHook "1") ];
+  manylinux2010 = lib.unique (lib.attrValues manylinux2010Libs) ++ [ (createManyLinuxSetupHook "2010") ];
+  manylinux2014 = lib.unique (lib.attrValues manylinux2014Libs) ++ [ (createManyLinuxSetupHook "2014") ];
 
   # These are symlink trees to the relevant libs and are typically not needed
   # These exist so as to quickly test whether all required libraries are provided
