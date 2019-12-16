@@ -158,6 +158,7 @@ joonty/vim-xdebug
 josa42/coc-go
 jpalardy/vim-slime
 jreybert/vimagit
+jsfaint/gen_tags.vim
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
 Julian/vim-textobj-variable-segment
