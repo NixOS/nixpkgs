@@ -165,6 +165,8 @@ in {
 
   aioredis = callPackage ../development/python-modules/aioredis { };
 
+  aiorun = callPackage ../development/python-modules/aiorun { };
+
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
   ansiwrap =  callPackage ../development/python-modules/ansiwrap { };
