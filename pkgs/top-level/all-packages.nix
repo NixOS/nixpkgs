@@ -17318,6 +17318,8 @@ in
 
   greybird = callPackage ../data/themes/greybird { };
 
+  gubbi-font = callPackage ../data/fonts/gubbi { };
+
   gyre-fonts = callPackage ../data/fonts/gyre {};
 
   hack-font = callPackage ../data/fonts/hack { };
