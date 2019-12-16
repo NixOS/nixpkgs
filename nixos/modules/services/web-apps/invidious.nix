@@ -1,26 +1,16 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, options, ... }:
 let
   cfg = config.services.invidious;
+  inherit (lib) types;
+
+  databaseUser = "kemal";
+  databaseName = "invidious";
+
+  settingsFile = pkgs.writeText "invidious-settings" (builtins.toJSON cfg.settings);
 
   # TODO: Add a test
 
-  inherit ((import ../../../../lib).types) oneOf;
-
   serviceConfig = {
-
-    services.invidious.settings = {
-      # These defaults are needed because otherwise invidious doesn't start
-      channel_threads = lib.mkDefault 1;
-      feed_threads = lib.mkDefault 1;
-      full_refresh = lib.mkDefault false;
-
-      # The cfg.port option is provided such that the value can be used to open
-      # the port in the firewall or be forwarded to with a web server
-      external_port = lib.mkDefault cfg.port;
-
-      # Automatically initializes the database if necessary
-      check_tables = true;
-    };
 
     systemd.services.invidious = {
       description = "Invidious (An alternative YouTube front-end)";
@@ -29,52 +19,71 @@ let
       wantedBy = [ "multi-user.target" ];
 
       # https://github.com/crystal-lang/crystal/issues/8126
-      # TODO: Can I remove this?
+      # TODO: Can I remove this now?
       environment.HOME = "/var/empty";
+
+      # TODO: Remove set -x
+      preStart = let
+        jqFilter = if cfg.database.host == null
+          then "."
+          else ".db.password = $(cat ${cfg.database.passwordFile})";
+        in ''
+          set -x
+          mkdir -p config
+          ${lib.getBin pkgs.jq}/bin/jq "${jqFilter}" ${settingsFile} > config/config.yml
+          ln -sf ${pkgs.invidious}/share/invidious/config/sql config
+        '';
 
       serviceConfig = {
         RestartSec = "2s";
         DynamicUser = true;
         ExecStart = "${pkgs.invidious}/bin/invidious";
-        WorkingDirectory = pkgs.runCommandNoCC "invidious-working-dir" {
-          config = builtins.toJSON cfg.settings;
-          passAsFile = "config";
-        } ''
-          mkdir -p $out/config
-
-          # Invidious reads the configuration from this path
-          mv "$configPath" $out/config/config.yml
-
-          # Needed for check_tables to be able to initialize the database
-          ln -s ${pkgs.invidious}/share/invidious/config/sql $out/config
-        '';
+        # Needed to read and store password in a config file
+        RuntimeDirectory = "invidious";
+        WorkingDirectory = "%t/invidious";
       };
     };
+
+    services.invidious.settings = {
+      # These defaults are needed because otherwise invidious doesn't start
+      # TODO: Are these all needed still?
+      channel_threads = lib.mkDefault 1;
+      feed_threads = lib.mkDefault 1;
+      full_refresh = lib.mkDefault false;
+
+      # The cfg.port option is provided such that the value can be used to open
+      # the port in the firewall or be forwarded to with a web server
+      port = lib.mkDefault cfg.port;
+
+      # Automatically initializes the database if necessary
+      check_tables = true;
+
+      ## Database parts
+      db = {
+        # TODO: mkDefault's here?
+        user = databaseUser;
+        dbname = databaseName;
+        port = cfg.database.port;
+        # Blank for unix sockets, see
+        # https://github.com/will/crystal-pg/blob/1548bb255210/src/pq/conninfo.cr#L100-L108
+        host = if cfg.database.host == null then "" else cfg.database.host;
+        # Not needed because peer authentication is enabled
+        password = lib.mkIf (cfg.database.host == null) "";
+      };
+    };
+
+    assertions = [{
+      assertion = cfg.database.host != null -> cfg.database.passwordFile != null;
+      message = "If database host isn't null, database password needs to be set";
+    }];
 
   };
 
   # Settings necessary for running with an automatically managed local database
-  localDatabaseConfig = let
-    databaseUser = "kemal";
-    databaseName = "invidious";
-  in {
+  localDatabaseConfig = lib.mkIf cfg.database.createLocally {
 
-    # While Invidious does support using a different non-local database, the
-    # migration scripts are hardcoded to this. So to get this working you'd have
-    # to run the (potentially adjusted) migration scripts manually on the other
-    # host, and that in sync with the Invidious update on this host, which would
-    # be a hassle. So for simplicity and better user experience, this module
-    # always uses a local database which gets managed fully automatic.
-
-    services.invidious.settings.db = {
-      user = databaseUser;
-      dbname = databaseName;
-      port = config.services.postgresql.port;
-      # Blank for unix sockets, see https://github.com/will/crystal-pg/blob/1548bb2552104241a8b020869f1a64c9744cfe44/src/pq/conninfo.cr#L100-L108
-      host = "";
-      # Not needed because peer authentication is enabled
-      password = "";
-    };
+    # Default to using the local database if we create it
+    services.invidious.database.host = lib.mkDefault null;
 
     services.postgresql = {
       enable = true;
@@ -90,12 +99,21 @@ let
       identMap = ''
         invidious invidious ${databaseUser}
       '';
-      # And this specifically enables peer authentication for only this database
-      # , which allows passwordless authentication over the postgres unix socket
-      # for the user map given above
+      # And this specifically enables peer authentication for only this
+      # database, which allows passwordless authentication over the postgres
+      # unix socket for the user map given above
       authentication = ''
         local ${databaseName} ${databaseUser} peer map=invidious
       '';
+    };
+
+    systemd.services.invidious-db-password = lib.mkIf (cfg.database.passwordFile != null) {
+      description = "Invidious database password setter";
+      path = [ config.services.postgresql.package ];
+      script = ''
+        psql -c "ALTER ROLE ${databaseUser} WITH PASSWORD '$(cat ${lib.escapeShellArg cfg.database.passwordFile})';"
+      '';
+      serviceConfig.User = "invidious";
     };
 
     systemd.services.invidious-db-clean = {
@@ -118,7 +136,6 @@ let
       # TODO: Add description and docs
       requires = [ "postgresql.service" ];
       after = [ "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
 
       path = [ config.services.postgresql.package ];
 
@@ -222,7 +239,7 @@ in {
     enable = lib.mkEnableOption "Invidious";
 
     settings =
-      let jsonType = with lib.types; nullOr (oneOf
+      let jsonType = with types; nullOr (oneOf
         [ bool str int (listOf jsonType) (attrsOf jsonType) ] ) // {
           description = "JSON (null, bool, string, int, list of JSON or attrs of JSON)";
         };
@@ -235,8 +252,9 @@ in {
       };
 
     port = lib.mkOption {
-      type = lib.types.port;
+      type = types.port;
       # Default from https://github.com/kemalcr/kemal/blob/15022c25b824ecbfe465862bfa8a8e37a4b6ab40/src/kemal/config.cr#L31
+      # TODO: Still from there?
       default = 3000;
       description = ''
         Port Invidious should listen on. To allow access from outside, you can
@@ -246,8 +264,52 @@ in {
       '';
     };
 
+    database = {
+      createLocally = lib.mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to create a local database.
+        '';
+      };
+
+      host = lib.mkOption {
+        type = types.nullOr types.str;
+        # Set this to null if createLocally is true, otherwise don't set this
+        description = ''
+          Database host. If null, the local unix socket is used. Otherwise TPC is used.
+        '';
+
+      };
+
+      port = lib.mkOption {
+        type = types.port;
+        default = if cfg.database.host == null
+          then config.services.postgresql.port
+          else options.services.postgresql.port.default;
+        description = ''
+          Database port. Defaults to the local postgresql port if host == null
+          Defaults to the default postgresql port if host != null
+        '';
+      };
+
+      passwordFile = lib.mkOption {
+        type = types.nullOr types.str;
+        apply = lib.mapNullable toString;
+        default = null;
+        # Should be required if host != null
+        # When this is set and createLocally is true then set a database password
+        description = ''
+          Path to file containing database password.
+          If createLocally is true, the database password is set to this
+          If createLocally is false, it is used to access the remote database
+        '';
+      };
+
+    };
+
     nginx = lib.mkOption {
-      type = lib.types.bool;
+      type = types.bool;
       default = false;
       description = ''
         Integrate Invidious with nginx by defining a proxy pass to it from the
