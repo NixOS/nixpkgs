@@ -4803,6 +4803,8 @@ in
 
   lshw = callPackage ../tools/system/lshw { };
 
+  lsquic = callPackage ../development/libraries/lsquic { };
+
   ltris = callPackage ../games/ltris { };
 
   lv = callPackage ../tools/text/lv { };
