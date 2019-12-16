@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = https://gym.openai.com/;
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
+    broken = true; # now requires opencv-python, but it's unavailable
   };
 }
