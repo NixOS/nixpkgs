@@ -1,4 +1,4 @@
-{ lib, crystal, fetchgit, git, libxml2, sqlite, openssl_1_0_2, librsvg, writeText }:
+{ lib, crystal, fetchgit, git, libxml2, sqlite, openssl, librsvg, writeText }:
 crystal.buildCrystalPackage rec {
   pname = "invidious";
   version = "0.20.1";
@@ -32,7 +32,7 @@ crystal.buildCrystalPackage rec {
   crystalBinaries.invidious.src = "src/invidious.cr";
   crystalBinaries.invidious.options = [ ];
 
-  buildInputs = [ libxml2 sqlite openssl_1_0_2 ];
+  buildInputs = [ libxml2 sqlite openssl ];
 
   postInstall = ''
     mkdir -p $out/nix-support/invidious $out/share/invidious/config
