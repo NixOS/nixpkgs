@@ -172,6 +172,7 @@ junegunn/vim-easy-align
 junegunn/vim-github-dashboard
 junegunn/vim-peekaboo
 junegunn/vim-plug
+junegunn/vim-slash
 justincampbell/vim-eighties
 justinmk/vim-dirvish
 justinmk/vim-sneak

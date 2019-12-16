@@ -4931,6 +4931,17 @@ let
     };
   };
 
+  vim-slash = buildVimPluginFrom2Nix {
+    pname = "vim-slash";
+    version = "2019-08-28";
+    src = fetchFromGitHub {
+      owner = "junegunn";
+      repo = "vim-slash";
+      rev = "31aee09b7ea8893a18fa34f65e63e364fc998444";
+      sha256 = "0ifdd3yqbk8hdvdmr4k44967lyvjnv9ig3r2145wn1lab797sbl4";
+    };
+  };
+
   vim-sleuth = buildVimPluginFrom2Nix {
     pname = "vim-sleuth";
     version = "2019-11-16";
