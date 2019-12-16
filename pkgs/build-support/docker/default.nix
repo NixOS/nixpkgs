@@ -287,6 +287,12 @@ rec {
   # unless there are more paths than $maxLayers. In that case, create
   # $maxLayers-1 for the most popular layers, and smush the remainaing
   # store paths in to one final layer.
+  #
+  # NOTE: the `closures` parameter is a list of closures to include.
+  # The TOP LEVEL store paths themselves will never be present in the
+  # resulting image. At this time (2019-12-16) none of these layers
+  # are appropriate to include, as they are all created as
+  # implementation details of dockerTools.
   mkManyPureLayers = {
     name,
     # Files to add to the layer.
@@ -327,7 +333,7 @@ rec {
       # code behaves properly when the number of layers equals:
       #      maxLayers-1, maxLayers, and maxLayers+1
       paths() {
-        cat $paths
+        cat $paths ${lib.concatMapStringsSep " " (path: "| grep -v ${path}") (closures ++ [ overallClosure ])}
       }
 
       paths | head -n $((maxLayers - 1)) | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
