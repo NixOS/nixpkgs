@@ -9199,7 +9199,6 @@ broken-packages:
   - stack-run-auto
   - stack-type
   - stack-wrapper
-  - stack2cabal
   - stack2nix
   - stackage
   - stackage-build-plan
