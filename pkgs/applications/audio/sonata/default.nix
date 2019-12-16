@@ -2,7 +2,7 @@
 , python3Packages, gnome3, gtk3, gsettings-desktop-schemas, gobject-introspection }:
 
 let
-  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2;
+  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
 in buildPythonApplication rec {
   pname = "sonata";
   version = "1.7b1";
@@ -29,7 +29,7 @@ in buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    gobject-introspection gtk3 pygobject3
+    gobject-introspection gtk3 pygobject3 setuptools
   ];
 
   # The optional tagpy dependency (for editing metadata) is not yet
