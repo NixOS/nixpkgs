@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
-  version = "0.7.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "anderejd";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "1lm8dx19svdpg99zbpfcm1272n18y63sq756hf6k99zi51av17xc";
+    sha256 = "0yn4m94bklxyg0cxzhqm1m976z66rbi58ri1phffvqz457mxj3hk";
   };
 
-  cargoSha256 = "16zvm2y0j7ywv6fx0piq99g8q1sayf3qipd6adrwyqyg8rbf4cw6";
+  cargoSha256 = "0608wvbdw4i9pp3x6dgny186if6bzlbivkvfd5lfp1x1f53534za";
 
   # Multiple tests require internet connectivity, so they are disabled here.
   # If we ever get cargo-insta (https://crates.io/crates/insta) in tree,
