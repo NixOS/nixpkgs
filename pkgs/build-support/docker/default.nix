@@ -697,7 +697,7 @@ rec {
         passthru.layer = layer;
         passthru.raw = result_raw;
         passthru.contentsList = let
-          contentsList = if builtins.isList contents then contents else [ contents ];
+          contentsList = lib.toList contents;
           reg = if fromImage == null then [] else fromImage.contentsList;
         in
           contentsList ++ reg;
