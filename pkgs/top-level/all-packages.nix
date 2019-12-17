@@ -26117,6 +26117,8 @@ in
     mpi = true;
   });
 
+  sambamba = callPackage ../applications/science/biology/sambamba { };
+
   samblaster = callPackage ../applications/science/biology/samblaster { };
 
   samtools = callPackage ../applications/science/biology/samtools { };
