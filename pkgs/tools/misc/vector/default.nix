@@ -1,11 +1,11 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform
 , openssl, pkgconfig, protobuf
-, Security, libiconv, cmake
+, Security, libiconv, rdkafka
 
 , features ?
     (if stdenv.isAarch64
-     then [ "shiplift/unix-socket" "jemallocator" "rdkafka" "rdkafka/cmake_build" ]
-     else [ "leveldb" "leveldb/leveldb-sys-2" "shiplift/unix-socket" "jemallocator" "rdkafka" "rdkafka/cmake_build" ])
+     then [ "shiplift/unix-socket" "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ]
+     else [ "leveldb" "leveldb/leveldb-sys-2" "shiplift/unix-socket" "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ])
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1akyzrscc6pv7ggb1kna05vvxhfzrf1b4kji4bah1ry3yyqxdjsj";
-  buildInputs = [ openssl pkgconfig protobuf cmake ]
+  buildInputs = [ openssl pkgconfig protobuf rdkafka ]
                 ++ stdenv.lib.optional stdenv.isDarwin [ Security libiconv ];
 
   # needed for internal protobuf c wrapper library
