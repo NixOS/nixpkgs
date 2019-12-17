@@ -165,6 +165,8 @@ in {
 
   aioredis = callPackage ../development/python-modules/aioredis { };
 
+  aiorun = callPackage ../development/python-modules/aiorun { };
+
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
   ansiwrap =  callPackage ../development/python-modules/ansiwrap { };
@@ -1905,6 +1907,8 @@ in {
   carrot = callPackage ../development/python-modules/carrot {};
 
   cartopy = callPackage ../development/python-modules/cartopy {};
+
+  casbin = callPackage ../development/python-modules/casbin { };
 
   case = callPackage ../development/python-modules/case {};
 
@@ -4337,6 +4341,8 @@ in {
   fasteners = callPackage ../development/python-modules/fasteners { };
 
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
+
+  aiokafka = callPackage ../development/python-modules/aiokafka { };
 
   olefile = callPackage ../development/python-modules/olefile { };
 

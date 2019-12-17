@@ -360,6 +360,8 @@ in
 
   fetchFromGitLab = callPackage ../build-support/fetchgitlab {};
 
+  fetchFromGitiles = callPackage ../build-support/fetchgitiles {};
+
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz {};
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
@@ -1492,6 +1494,8 @@ in
   cri-tools = callPackage ../tools/virtualization/cri-tools {};
 
   crip = callPackage ../applications/audio/crip { };
+
+  crosvm = callPackage ../applications/virtualization/crosvm { };
 
   crunch = callPackage ../tools/security/crunch { };
 
@@ -19299,6 +19303,8 @@ in
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
+  hydroxide = callPackage ../applications/networking/hydroxide { };
+
   hyper = callPackage ../applications/misc/hyper { };
 
   hyper-haskell-server-with-packages = callPackage ../development/tools/haskell/hyper-haskell/server.nix {
@@ -23402,6 +23408,7 @@ in
     timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
+    workspace-matrix = callPackage ../desktops/gnome-3/extensions/workspace-matrix { };
 
     nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
     mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
