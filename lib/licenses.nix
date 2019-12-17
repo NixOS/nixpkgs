@@ -541,6 +541,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Notion modified LGPL";
   };
 
+  npl1 = {
+    url = "https://git.pixie.town/thufie/NPL";
+    fullName = "Non-Violent Public License v1";
+    free = false;
+  };
+
   nposl3 = spdx {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
