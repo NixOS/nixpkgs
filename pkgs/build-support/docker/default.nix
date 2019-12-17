@@ -751,14 +751,16 @@ rec {
         mkdir image
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
-          ln -snf $fromImage/image/* image/.
-          cp $fromImage/baseFiles baseFiles
-          cp --remove-destination $fromImage/image/manifest.json image/manifest.json
-          chmod +w baseFiles
+          if [[ -d $fromImage ]]; then
+            ln -snf $fromImage/image/* image/.
+            cp $fromImage/baseFiles baseFiles
+            cp --remove-destination $fromImage/image/manifest.json image/manifest.json
+            chmod +w baseFiles
+          else
+            tar -C image -xpf "$fromImage"
+          fi
 
-          echo $fromImage
-
-          cat $fromImage/image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+          cat image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
 
           # Do not import the base image configuration and manifest
           rm -f image/*.json
