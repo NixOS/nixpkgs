@@ -39,12 +39,12 @@ let
      inherit lib stdenv echo_build_heading noisily mkRustcDepArgs rust;
    };
 
-   installCrate = import ./install-crate.nix;
+   installCrate = import ./install-crate.nix { inherit stdenv; };
 in
 
 crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides,
   dependencies, buildDependencies, crateRenames,
-  extraRustcOpts,
+  extraRustcOpts, buildTests,
   preUnpack, postUnpack, prePatch, patches, postPatch,
   preConfigure, postConfigure, preBuild, postBuild, preInstall, postInstall }:
 
@@ -59,6 +59,7 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
     buildInputs_ = buildInputs;
     extraRustcOpts_ = extraRustcOpts;
+    buildTests_ = buildTests;
 
     # take a list of crates that we depend on and override them to fit our overrides, rustc, release, …
     makeDependencies = map (dep: lib.getLib (dep.override { inherit release verbose crateOverrides; }));
@@ -78,7 +79,7 @@ stdenv.mkDerivation (rec {
         crate.src
       else
         fetchCrate { inherit (crate) crateName version sha256; };
-    name = "rust_${crate.crateName}-${crate.version}";
+    name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests "-test"}";
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies = makeDependencies dependencies_;
@@ -122,6 +123,8 @@ stdenv.mkDerivation (rec {
       ++ extraRustcOpts_
       ++ (lib.optional (edition != null) "--edition ${edition}");
 
+    buildTests = buildTests_;
+
     configurePhase = configureCrate {
       inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
               crateFeatures crateRenames libName build workspace_member release libPath crateVersion
@@ -132,12 +135,14 @@ stdenv.mkDerivation (rec {
       inherit crateName dependencies
               crateFeatures crateRenames libName release libPath crateType
               metadata hasCrateBin crateBin verbose colors
-              extraRustcOpts;
+              extraRustcOpts buildTests;
     };
-    installPhase = installCrate crateName metadata;
+    installPhase = installCrate crateName metadata buildTests;
 
-    outputs = [ "out" "lib" ];
-    outputDev = [ "lib" ];
+    # depending on the test setting we are either producing something with bins
+    # and libs or just test binaries
+    outputs = if buildTests then [ "out" ] else [ "out" "lib" ];
+    outputDev = if buildTests then [ "out" ] else  [ "lib" ];
 
 } // extraDerivationAttrs
 )) {
@@ -162,4 +167,5 @@ stdenv.mkDerivation (rec {
   dependencies = crate_.dependencies or [];
   buildDependencies = crate_.buildDependencies or [];
   crateRenames = crate_.crateRenames or {};
+  buildTests = crate_.buildTests or false;
 }
