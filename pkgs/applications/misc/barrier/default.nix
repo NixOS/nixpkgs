@@ -14,8 +14,8 @@ mkDerivation rec {
     sha256 = "1gbg3p7c0vcsdzsjj1ssx6k8xpj3rpyvais12266f0xvnbvihczd";
   };
 
-  buildInputs = [ cmake curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
-  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
+  nativeBuildInputs = [ cmake wrapGAppsHook ];
 
   postFixup = ''
     substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"
