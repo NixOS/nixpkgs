@@ -27,6 +27,6 @@ buildPythonApplication rec {
     description = "Browse Reddit from your Terminal (fork of rtv)";
     homepage = "https://gitlab.com/ajak/tuir/";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ filalex77 matthiasbeyer ];
   };
 }
