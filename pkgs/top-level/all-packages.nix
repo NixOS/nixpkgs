@@ -24845,6 +24845,8 @@ in
 
   last = callPackage ../applications/science/biology/last { };
 
+  lumpy = callPackage ../applications/science/biology/lumpy { };
+
   macse = callPackage ../applications/science/biology/macse { };
 
   migrate = callPackage ../applications/science/biology/migrate { };
