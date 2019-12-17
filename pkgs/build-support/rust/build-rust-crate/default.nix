@@ -55,8 +55,9 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
       "src" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
       "buildDependencies" "dependencies" "features" "crateRenames"
       "crateName" "version" "build" "authors" "colors" "edition"
+      "buildTests"
     ];
-    extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
+    extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
     buildInputs_ = buildInputs;
     extraRustcOpts_ = extraRustcOpts;
     buildTests_ = buildTests;
@@ -73,13 +74,23 @@ in
 stdenv.mkDerivation (rec {
 
     inherit (crate) crateName;
-    inherit preUnpack postUnpack prePatch patches postPatch preConfigure postConfigure preBuild postBuild preInstall postInstall;
+    inherit
+      preUnpack
+      postUnpack
+      prePatch
+      patches
+      postPatch
+      preConfigure
+      postConfigure
+      preBuild
+      postBuild
+      preInstall
+      postInstall
+      buildTests
+    ;
 
-    src = if lib.hasAttr "src" crate then
-        crate.src
-      else
-        fetchCrate { inherit (crate) crateName version sha256; };
-    name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests "-test"}";
+    src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
+    name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies = makeDependencies dependencies_;
@@ -123,7 +134,6 @@ stdenv.mkDerivation (rec {
       ++ extraRustcOpts_
       ++ (lib.optional (edition != null) "--edition ${edition}");
 
-    buildTests = buildTests_;
 
     configurePhase = configureCrate {
       inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
