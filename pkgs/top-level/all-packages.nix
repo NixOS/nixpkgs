@@ -19285,6 +19285,8 @@ in
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
+  hydroxide = callPackage ../applications/networking/hydroxide { };
+
   hyper = callPackage ../applications/misc/hyper { };
 
   hyper-haskell-server-with-packages = callPackage ../development/tools/haskell/hyper-haskell/server.nix {
