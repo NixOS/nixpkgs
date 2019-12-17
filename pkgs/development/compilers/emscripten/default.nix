@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "1j3f0hpy05qskaiyv75l7wv4n0nzxhrh9b296zchx3f6f9h2rghq";
+    sha256 = "1bavcdhqx6bk8f4ra2qd2vjl33aklcj3ib9d49m4f0plwqka0w7k";
     inherit rev;
   };
 
