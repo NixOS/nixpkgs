@@ -8102,6 +8102,10 @@ in
 
   gforth = callPackage ../development/compilers/gforth {};
 
+  gleam = callPackage ../development/compilers/gleam {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   gtk-server = callPackage ../development/interpreters/gtk-server {};
 
   # Haskell and GHC
