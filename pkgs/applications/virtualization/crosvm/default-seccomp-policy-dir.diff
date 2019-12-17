@@ -1,9 +1,9 @@
-diff --git a/src/main.rs b/src/main.rs
-index 81f20a7..481ebd7 100644
---- a/src/main.rs
-+++ b/src/main.rs
-@@ -158,7 +158,9 @@ impl Default for Config {
-             wayland_dmabuf: false,
+diff --git a/src/crosvm.rs b/src/crosvm.rs
+index b7055df..5989c87 100644
+--- a/src/crosvm.rs
++++ b/src/crosvm.rs
+@@ -141,7 +141,9 @@ impl Default for Config {
+             x_display: None,
              shared_dirs: Vec::new(),
              sandbox: !cfg!(feature = "default-no-sandbox"),
 -            seccomp_policy_dir: PathBuf::from(SECCOMP_POLICY_DIR),

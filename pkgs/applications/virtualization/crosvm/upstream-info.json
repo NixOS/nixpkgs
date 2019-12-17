@@ -1,18 +1,18 @@
 {
-  "version": "77.12371.0.0-rc1",
+  "version": "79.12607.0.0-rc4",
   "components": {
     "chromiumos/platform/crosvm": {
       "url": "https://chromium.googlesource.com/chromiumos/platform/crosvm",
-      "rev": "f5285c647acacb4f25ef8cf9334254b976e71686",
-      "date": "2019-07-25T22:15:48+00:00",
-      "sha256": "1ccjd540xmpad082w9ri13q78wkg95xxmq38b8ybcrj4f7lsxm6w",
+      "rev": "cfb7db44eb9e5a0bca9a22bfb985252ef74ab251",
+      "date": "2019-10-17T23:22:08+00:00",
+      "sha256": "0gm1ggyzh9qfizm36jmh71c3anygxj1840cm94h71kzg9kiw0330",
       "fetchSubmodules": false
     },
     "chromiumos/third_party/adhd": {
       "url": "https://chromium.googlesource.com/chromiumos/third_party/adhd",
-      "rev": "a1c0d93d991daffb042b979ac807bbe9c1f9a3ee",
-      "date": "2019-07-25T20:38:50-07:00",
-      "sha256": "11bijqd876adarq96syywn6znfbiflqssgb2j4w032iw2vfnnsyy",
+      "rev": "a8df1c52bde3bfd2aebc1d7adcd6f195eb212cb1",
+      "date": "2019-10-17T18:53:18+00:00",
+      "sha256": "1hyvnvwr5ka9zw4h7hhl6fpsfl2acp3zy4wr5qrw8s1cn8ljr9vy",
       "fetchSubmodules": false
     }
   }
