@@ -1,10 +1,10 @@
-{ stdenv, fetchgit, libcap }:
+{ stdenv, fetchFromGitiles, libcap }:
 
 stdenv.mkDerivation rec {
   pname = "minijail";
   version = "android-10.0.0_r9";
 
-  src = fetchgit {
+  src = fetchFromGitiles {
     url = "https://android.googlesource.com/platform/external/minijail";
     rev = version;
     sha256 = "0gcfsyim1krrddcklydqfxl8mamaxgail2xl5qp9yclq60km8f22";
