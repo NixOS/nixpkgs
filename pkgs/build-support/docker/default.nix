@@ -564,10 +564,23 @@ rec {
           inherit uid gid extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
+        nativeBuildInputs = [ pigz coreutils ];
+        passthru.raw = result_raw;
+        passthru.contentsList = let
+          contentsList = if builtins.isList contents then contents else [ contents ];
+        in
+          contentsList;
+
+      } ''
+          echo "Cooking the image..."
+          tar -C ${result_raw}/image --dereference --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | ${pigz}/bin/pigz -nT > $out
+      '';
+      result_raw = runCommand "docker-image-${baseName}" {
         nativeBuildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
         baseJson = configJson;
+        passthru.cooked = result;
         passthru.imageTag =
           if tag == null
           then lib.head (lib.splitString "-" (lib.last (lib.splitString "/" result)))
@@ -581,6 +594,10 @@ rec {
         '' else ''
           imageTag="${tag}"
         ''}
+
+        mkdir $out
+        cd $out
+        touch baseFiles
 
         find ${bulkLayers} -mindepth 1 -maxdepth 1 | sort -t/ -k5 -n > layer-list
         echo ${customisationLayer} >> layer-list
@@ -606,10 +623,6 @@ rec {
           -n object -s "$layerID" -i "$imageTag" \
           -i "$imageName" > image/repositories
 
-        echo "Cooking the image..."
-        tar -C image --dereference --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0  --mode=a-w --xform s:'^./':: -c . | pigz -nT > $out
-
-        echo "Finished."
       '';
 
     in
@@ -679,14 +692,38 @@ rec {
                   extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
+        nativeBuildInputs = [ pigz coreutils ];
+        passthru.buildArgs = args;
+        passthru.layer = layer;
+        passthru.raw = result_raw;
+        passthru.contentsList = let
+          contentsList = if builtins.isList contents then contents else [ contents ];
+          reg = if fromImage == null then [] else fromImage.contentsList;
+        in
+          contentsList ++ reg;
+
+      } ''
+          echo "Cooking the image..."
+          tar -C ${result_raw}/image --dereference --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | ${pigz}/bin/pigz -nT > $out
+      '';
+      result_raw = runCommand "docker-image-${baseName}" {
         nativeBuildInputs = [ jshon pigz coreutils findutils jq moreutils ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
         imageTag = if tag == null then "" else lib.toLower tag;
-        inherit fromImage baseJson;
+        inherit baseJson;
+        fromImage = if fromImage == null
+                    then "" else if fromImage?raw then
+                    fromImage.raw else fromImage;
         layerClosure = writeReferencesToFile layer;
         passthru.buildArgs = args;
         passthru.layer = layer;
+        passthru.cooked = result;
+        passthru.contentsList = let
+          contentsList = if builtins.isList contents then contents else [ contents ];
+          reg = if fromImage == null then [] else fromImage.contentsList;
+        in
+          contentsList ++ reg;
       } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"
@@ -708,16 +745,22 @@ rec {
           done
         }
 
-        mkdir image
+        mkdir $out
+        cd $out
         touch baseFiles
+        mkdir image
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
-          tar -C image -xpf "$fromImage"
+          ln -snf $fromImage/image/* image/.
+          cp $fromImage/baseFiles baseFiles
+          cp --remove-destination $fromImage/image/manifest.json image/manifest.json
+          chmod +w baseFiles
 
-          cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+          echo $fromImage
+
+          cat $fromImage/image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
 
           # Do not import the base image configuration and manifest
-          chmod a+w image image/*.json
           rm -f image/*.json
 
           if [[ -z "$fromImageName" ]]; then
@@ -776,6 +819,7 @@ rec {
           cat temp/json | jshon -s "$parentID" -i parent > tmpjson
           mv tmpjson temp/json
         fi
+        echo "Taking sha256sum of generated json ..."
 
         # Take the sha256 sum of the generated json and use it as the layer ID.
         # Compute the size and add it to the json under the 'Size' field.
@@ -800,7 +844,10 @@ rec {
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
 
         for layerTar in $(cat ./layer-list); do
-          layerChecksum=$(sha256sum image/$layerTar | cut -d ' ' -f1)
+          echo "Taking sha256sum of $layerTar ..."
+          layerChecksum=$( awk -v key=$layerTar '$1==key{print $2;c++}END{exit 1-c}' $fromImage/layer-checksum 2>/dev/null || sha256sum image/$layerTar | cut -d ' ' -f1)
+          echo Caching $layerChecksum
+          echo $layerTar $layerChecksum >> layer-checksum
           imageJson=$(echo "$imageJson" | jq ".history |= . + [{\"created\": \"$(jq -r .created ${baseJson})\"}]")
           # diff_ids order is from the bottom-most to top-most layer
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= . + [\"sha256:$layerChecksum\"]")
@@ -812,6 +859,7 @@ rec {
         manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
         echo "$manifestJson" > image/manifest.json
 
+        rm -f image/repositories
         # Store the json under the name image/repositories.
         jshon -n object \
           -n object -s "$layerID" -i "$imageTag" \
@@ -820,10 +868,9 @@ rec {
         # Make the image read-only.
         chmod -R a-w image
 
-        echo "Cooking the image..."
-        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nT > $out
-
         echo "Finished."
+        echo "To cook and load:"
+        printf "\e[32m%s\e[0m" 'tar -C result/image --dereference --hard-dereference --sort=name --mtime="1" --owner=0 --group=0 --mode=a-w --xform s:'^./':: -c . | docker load'
       '';
 
     in
