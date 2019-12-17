@@ -20951,8 +20951,6 @@ in
 
   rtl-sdr = callPackage ../applications/radio/rtl-sdr { };
 
-  rtv = callPackage ../applications/misc/rtv { };
-
   rubyripper = callPackage ../applications/audio/rubyripper {};
 
   runc = callPackage ../applications/virtualization/runc {};
