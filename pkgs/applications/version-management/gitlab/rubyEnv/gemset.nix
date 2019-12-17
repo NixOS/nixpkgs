@@ -188,10 +188,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0hqpn25iyypkwkrqaibjm5nss5jmlkrddhia7frmz94prvyjr02w";
+      sha256 = "0c5jhqfgvpz84d8jai51hin018ldpfd0civbk7mfwmrj7n71p6bl";
       type = "gem";
     };
-    version = "2.0.0";
+    version = "3.0.0";
   };
   apollo_upload_server = {
     dependencies = ["graphql" "rails"];
@@ -220,10 +220,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1h0qiywvjjc9iyzq9nz5iaqyh6qsrix4ip0w86j5c4v5g940z6qx";
+      sha256 = "19yr6ibz481jizvx0cjfvql142v8izi474c4vmwy9qzksyq2xhdj";
       type = "gem";
     };
-    version = "0.8.1";
+    version = "0.9.3";
   };
   asciidoctor = {
     groups = ["default"];
