@@ -24919,6 +24919,8 @@ in
     mpi = true;
   });
 
+  samblaster = callPackage ../applications/science/biology/samblaster { };
+
   samtools = callPackage ../applications/science/biology/samtools { };
   samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix {
     stdenv = gccStdenv;
