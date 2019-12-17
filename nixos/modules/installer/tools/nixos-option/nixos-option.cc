@@ -290,9 +290,14 @@ FindAlongOptionPathRet findAlongOptionPath(Context & ctx, const std::string & pa
     return {v, processedPath};
 }
 
-// Calls f on all the option names
-void mapOptions(const std::function<void(const std::string & path)> & f, Context & ctx, Value root)
+// Calls f on all the option names at or below the option described by `path`.
+// Note that "the option described by `path`" is not trivial -- if path describes a value inside an aggregate
+// option (such as users.users.root), the *option* described by that path is one path component shorter
+// (eg: users.users), which results in f being called on sibling-paths (eg: users.users.nixbld1).  If f
+// doesn't want these, it must do its own filtering.
+void mapOptions(const std::function<void(const std::string & path)> & f, Context & ctx, const std::string & path)
 {
+    auto root = findAlongOptionPath(ctx, path);
     recurse(
         [f, &ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
             bool isOpt = std::holds_alternative<std::exception_ptr>(v) || isOption(ctx, std::get<Value>(v));
@@ -301,7 +306,7 @@ void mapOptions(const std::function<void(const std::string & path)> & f, Context
             }
             return !isOpt;
         },
-        ctx, root, "");
+        ctx, root.option, root.path);
 }
 
 // Calls f on all the config values inside one option.
@@ -475,17 +480,26 @@ void printConfigValue(Context & ctx, Out & out, const std::string & path, std::v
     out << ";\n";
 }
 
-void printAll(Context & ctx, Out & out)
+// Replace with std::starts_with when C++20 is available
+bool starts_with(const std::string & s, const std::string & prefix)
+{
+    return s.size() >= prefix.size() &&
+           std::equal(s.begin(), std::next(s.begin(), prefix.size()), prefix.begin(), prefix.end());
+}
+
+void printRecursive(Context & ctx, Out & out, const std::string & path)
 {
     mapOptions(
-        [&ctx, &out](const std::string & optionPath) {
+        [&ctx, &out, &path](const std::string & optionPath) {
             mapConfigValuesInOption(
-                [&ctx, &out](const std::string & configPath, std::variant<Value, std::exception_ptr> v) {
-                    printConfigValue(ctx, out, configPath, v);
+                [&ctx, &out, &path](const std::string & configPath, std::variant<Value, std::exception_ptr> v) {
+                    if (starts_with(configPath, path)) {
+                        printConfigValue(ctx, out, configPath, v);
+                    }
                 },
                 optionPath, ctx);
         },
-        ctx, ctx.optionsRoot);
+        ctx, path);
 }
 
 void printAttr(Context & ctx, Out & out, const std::string & path, Value & root)
@@ -569,7 +583,7 @@ void printOne(Context & ctx, Out & out, const std::string & path)
 
 int main(int argc, char ** argv)
 {
-    bool all = false;
+    bool recursive = false;
     std::string path = ".";
     std::string optionsExpr = "(import <nixpkgs/nixos> {}).options";
     std::string configExpr = "(import <nixpkgs/nixos> {}).config";
@@ -585,8 +599,8 @@ int main(int argc, char ** argv)
             nix::showManPage("nixos-option");
         } else if (*arg == "--version") {
             nix::printVersion("nixos-option");
-        } else if (*arg == "--all") {
-            all = true;
+        } else if (*arg == "-r" || *arg == "--recursive") {
+            recursive = true;
         } else if (*arg == "--path") {
             path = nix::getArg(*arg, arg, end);
         } else if (*arg == "--options_expr") {
@@ -615,18 +629,12 @@ int main(int argc, char ** argv)
     Context ctx{*state, *myArgs.getAutoArgs(*state), optionsRoot, configRoot};
     Out out(std::cout);
 
-    if (all) {
-        if (!args.empty()) {
-            throw UsageError("--all cannot be used with arguments");
-        }
-        printAll(ctx, out);
-    } else {
-        if (args.empty()) {
-            printOne(ctx, out, "");
-        }
-        for (const auto & arg : args) {
-            printOne(ctx, out, arg);
-        }
+    auto print = recursive ? printRecursive : printOne;
+    if (args.empty()) {
+        print(ctx, out, "");
+    }
+    for (const auto & arg : args) {
+        print(ctx, out, arg);
     }
 
     ctx.state.printStats();
