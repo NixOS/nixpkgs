@@ -197,6 +197,99 @@ void recurse(const std::function<bool(const std::string & path, std::variant<Val
     }
 }
 
+bool optionTypeIs(Context & ctx, Value & v, const std::string & soughtType)
+{
+    try {
+        const auto & typeLookup = v.attrs->find(ctx.state.sType);
+        if (typeLookup == v.attrs->end()) {
+            return false;
+        }
+        Value type = evaluateValue(ctx, *typeLookup->value);
+        if (type.type != tAttrs) {
+            return false;
+        }
+        const auto & nameLookup = type.attrs->find(ctx.state.sName);
+        if (nameLookup == type.attrs->end()) {
+            return false;
+        }
+        Value name = evaluateValue(ctx, *nameLookup->value);
+        if (name.type != tString) {
+            return false;
+        }
+        return name.string.s == soughtType;
+    } catch (Error &) {
+        return false;
+    }
+}
+
+bool isAggregateOptionType(Context & ctx, Value & v)
+{
+    return optionTypeIs(ctx, v, "attrsOf") || optionTypeIs(ctx, v, "listOf") || optionTypeIs(ctx, v, "loaOf");
+}
+
+MakeError(OptionPathError, EvalError);
+
+Value getSubOptions(Context & ctx, Value & option)
+{
+    Value getSubOptions = evaluateValue(ctx, *findAlongAttrPath(ctx.state, "type.getSubOptions", ctx.autoArgs, option));
+    if (getSubOptions.type != tLambda) {
+        throw OptionPathError("Option's type.getSubOptions isn't a function");
+    }
+    Value emptyString{};
+    nix::mkString(emptyString, "");
+    Value v;
+    ctx.state.callFunction(getSubOptions, emptyString, v, nix::Pos{});
+    return v;
+}
+
+// Carefully walk an option path, looking for sub-options when a path walks past
+// an option value.
+struct FindAlongOptionPathRet
+{
+    Value option;
+    std::string path;
+};
+FindAlongOptionPathRet findAlongOptionPath(Context & ctx, const std::string & path)
+{
+    Strings tokens = parseAttrPath(path);
+    Value v = ctx.optionsRoot;
+    std::string processedPath;
+    for (auto i = tokens.begin(); i != tokens.end(); i++) {
+        const auto & attr = *i;
+        try {
+            bool lastAttribute = std::next(i) == tokens.end();
+            v = evaluateValue(ctx, v);
+            if (attr.empty()) {
+                throw OptionPathError("empty attribute name");
+            }
+            if (isOption(ctx, v) && optionTypeIs(ctx, v, "submodule")) {
+                v = getSubOptions(ctx, v);
+            }
+            if (isOption(ctx, v) && isAggregateOptionType(ctx, v)) {
+                auto subOptions = getSubOptions(ctx, v);
+                if (lastAttribute && subOptions.attrs->empty()) {
+                    break;
+                }
+                v = subOptions;
+                // Note that we've consumed attr, but didn't actually use it.  This is the path component that's looked
+                // up in the list or attribute set that doesn't name an option -- the "root" in "users.users.root.name".
+            } else if (v.type != tAttrs) {
+                throw OptionPathError("Value is %s while a set was expected", showType(v));
+            } else {
+                const auto & next = v.attrs->find(ctx.state.symbols.create(attr));
+                if (next == v.attrs->end()) {
+                    throw OptionPathError("Attribute not found", attr, path);
+                }
+                v = *next->value;
+            }
+            processedPath = appendPath(processedPath, attr);
+        } catch (OptionPathError & e) {
+            throw OptionPathError("At '%s' in path '%s': %s", attr, path, e.msg());
+        }
+    }
+    return {v, processedPath};
+}
+
 // Calls f on all the option names
 void mapOptions(const std::function<void(const std::string & path)> & f, Context & ctx, Value root)
 {
@@ -450,99 +543,6 @@ void printListing(Out & out, Value & v)
             out << name << "\n";
         }
     }
-}
-
-bool optionTypeIs(Context & ctx, Value & v, const std::string & soughtType)
-{
-    try {
-        const auto & typeLookup = v.attrs->find(ctx.state.sType);
-        if (typeLookup == v.attrs->end()) {
-            return false;
-        }
-        Value type = evaluateValue(ctx, *typeLookup->value);
-        if (type.type != tAttrs) {
-            return false;
-        }
-        const auto & nameLookup = type.attrs->find(ctx.state.sName);
-        if (nameLookup == type.attrs->end()) {
-            return false;
-        }
-        Value name = evaluateValue(ctx, *nameLookup->value);
-        if (name.type != tString) {
-            return false;
-        }
-        return name.string.s == soughtType;
-    } catch (Error &) {
-        return false;
-    }
-}
-
-bool isAggregateOptionType(Context & ctx, Value & v)
-{
-    return optionTypeIs(ctx, v, "attrsOf") || optionTypeIs(ctx, v, "listOf") || optionTypeIs(ctx, v, "loaOf");
-}
-
-MakeError(OptionPathError, EvalError);
-
-Value getSubOptions(Context & ctx, Value & option)
-{
-    Value getSubOptions = evaluateValue(ctx, *findAlongAttrPath(ctx.state, "type.getSubOptions", ctx.autoArgs, option));
-    if (getSubOptions.type != tLambda) {
-        throw OptionPathError("Option's type.getSubOptions isn't a function");
-    }
-    Value emptyString{};
-    nix::mkString(emptyString, "");
-    Value v;
-    ctx.state.callFunction(getSubOptions, emptyString, v, nix::Pos{});
-    return v;
-}
-
-// Carefully walk an option path, looking for sub-options when a path walks past
-// an option value.
-struct FindAlongOptionPathRet
-{
-    Value option;
-    std::string path;
-};
-FindAlongOptionPathRet findAlongOptionPath(Context & ctx, const std::string & path)
-{
-    Strings tokens = parseAttrPath(path);
-    Value v = ctx.optionsRoot;
-    std::string processedPath;
-    for (auto i = tokens.begin(); i != tokens.end(); i++) {
-        const auto & attr = *i;
-        try {
-            bool lastAttribute = std::next(i) == tokens.end();
-            v = evaluateValue(ctx, v);
-            if (attr.empty()) {
-                throw OptionPathError("empty attribute name");
-            }
-            if (isOption(ctx, v) && optionTypeIs(ctx, v, "submodule")) {
-                v = getSubOptions(ctx, v);
-            }
-            if (isOption(ctx, v) && isAggregateOptionType(ctx, v)) {
-                auto subOptions = getSubOptions(ctx, v);
-                if (lastAttribute && subOptions.attrs->empty()) {
-                    break;
-                }
-                v = subOptions;
-                // Note that we've consumed attr, but didn't actually use it.  This is the path component that's looked
-                // up in the list or attribute set that doesn't name an option -- the "root" in "users.users.root.name".
-            } else if (v.type != tAttrs) {
-                throw OptionPathError("Value is %s while a set was expected", showType(v));
-            } else {
-                const auto & next = v.attrs->find(ctx.state.symbols.create(attr));
-                if (next == v.attrs->end()) {
-                    throw OptionPathError("Attribute not found", attr, path);
-                }
-                v = *next->value;
-            }
-            processedPath = appendPath(processedPath, attr);
-        } catch (OptionPathError & e) {
-            throw OptionPathError("At '%s' in path '%s': %s", attr, path, e.msg());
-        }
-    }
-    return {v, processedPath};
 }
 
 void printOne(Context & ctx, Out & out, const std::string & path)
