@@ -8,7 +8,8 @@
 
 mkDerivation rec {
   pname = "amarok";
-  version = "2.9.0-20190824";
+  version = "2.9.1pre";
+  versionSuffix = "20190824";
 
   src = fetchgit {
     # master has the Qt5 version as of April 2018 but a formal release has not

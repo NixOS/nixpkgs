@@ -8,7 +8,7 @@
 
 buildBazelPackage rec {
   name = "bazel-remote-${version}";
-  version = "2019-01-12";
+  version = "2019.01.12";
 
   src = fetchFromGitHub {
     owner = "buchgr";

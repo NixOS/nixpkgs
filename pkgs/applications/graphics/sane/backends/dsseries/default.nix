@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsane-dsseries";
-  version = "1.0.5-1";
+  version = "1.0.5-1"; # '-1' is not suffix, but part of version
 
   src = fetchurl {
     url = "https://download.brother.com/welcome/dlf100974/${pname}-${version}.x86_64.rpm";

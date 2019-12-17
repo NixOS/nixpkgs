@@ -2,12 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "QuadProgpp";
-  version = "4b6bd65f09fbff99c172a86d6e96ca74449b323f";
+  version = "1.2.2pre";
+  versionSuffix = "_" + builtins.substring 0 7 src.rev;
 
   src = fetchFromGitHub {
     owner = "liuq";
     repo = "QuadProgpp";
-    rev = version;
+    rev = "4b6bd65f09fbff99c172a86d6e96ca74449b323f";
     sha256 = "02r0dlk2yjpafknvm945vbgs4sl26w2i1gw3pllar9hi364y8hnx";
   };
 

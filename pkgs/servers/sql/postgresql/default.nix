@@ -22,6 +22,7 @@ let
   in stdenv.mkDerivation rec {
     pname = "postgresql";
     inherit version;
+    versionSuffix = ".p" + toString (lib.length patches);
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";

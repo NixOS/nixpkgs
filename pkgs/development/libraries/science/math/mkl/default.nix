@@ -6,18 +6,11 @@
 let
   # Release notes and download URLs are here:
   # https://registrationcenter.intel.com/en/products/
-  version = "${year}.${spot}.${rel}";
-  year = "2019";
-
-  # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
-  # https://github.com/matthewbauer/undmg/issues/4
-  spot = if stdenvNoCC.isDarwin then "3" else "5";
-  rel = if stdenvNoCC.isDarwin then "199" else "281";
-
-  rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
-
-  # Intel openmp uses its own versioning, but shares the spot release patch.
-  openmp-ver = "19.0.${spot}-${rel}-19.0.${spot}-${rel}";
+  version = if stdenvNoCC.isDarwin
+    # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
+    # https://github.com/matthewbauer/undmg/issues/4
+    then "2019.3.199"
+    else "2019.5.281";
 
 in stdenvNoCC.mkDerivation {
   pname = "mkl";
@@ -46,11 +39,11 @@ in stdenvNoCC.mkDerivation {
       tar xzvf $f
     done
   '' else ''
-    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
-    rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-openmp-${openmp-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-cluster-rt-*.x86_64.rpm
+    rpmextract rpm/intel-mkl-common-c-*.noarch.rpm
+    rpmextract rpm/intel-mkl-core-20*.x86_64.rpm
+    rpmextract rpm/intel-mkl-core-rt-*.x86_64.rpm
+    rpmextract rpm/intel-openmp-*.x86_64.rpm
   '';
 
   installPhase = ''

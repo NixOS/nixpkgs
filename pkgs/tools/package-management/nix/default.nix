@@ -19,18 +19,20 @@ common =
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 
-  , name, suffix ? "", src, includesPerl ? false, fromGit ? false
+  , version, suffix ? "", src, includesPerl ? false, fromGit ? false
 
-  }:
+  }@attrs:
   let
      sh = busybox-sandbox-shell;
      nix = stdenv.mkDerivation rec {
-      inherit name src;
-      version = lib.getVersion name;
+      pname = "nix";
+      version = attrs.version;
+      versionSuffix = suffix;
+      VERSION_SUFFIX = suffix;
+
+      inherit src;
 
       is20 = lib.versionAtLeast version "2.0pre";
-
-      VERSION_SUFFIX = lib.optionalString fromGit suffix;
 
       outputs = [ "out" "dev" "man" "doc" ];
 
@@ -161,9 +163,9 @@ in rec {
   nix = nixStable;
 
   nix1 = callPackage common rec {
-    name = "nix-1.11.16";
+    version = "1.11.16";
     src = fetchurl {
-      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      url = "http://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
       sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
 
@@ -174,9 +176,9 @@ in rec {
   };
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.1";
+    version = "2.3.1";
     src = fetchurl {
-      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      url = "http://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
       sha256 = "bb6578e9f20eebab6d78469ecc59c450ac54f276e5a86a882015d98fecb1bc7b";
     };
 
@@ -186,8 +188,8 @@ in rec {
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.3${suffix}";
-    suffix = "pre6895_84de821";
+    version = "2.3pre";
+    suffix = "6895_84de821";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
@@ -200,8 +202,8 @@ in rec {
   });
 
   nixFlakes = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
-    suffix = "pre20191022_9cac895";
+    version = "2.4pre";
+    suffix = "20191022_9cac895";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
