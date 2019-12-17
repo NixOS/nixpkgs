@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "helm";
@@ -15,6 +15,13 @@ buildGoModule rec {
   goPackagePath = "k8s.io/helm";
   subPackages = [ "cmd/helm" ];
   buildFlagsArray = [ "-ldflags=-w -s -X helm.sh/helm/v3/internal/version.gitCommit=v${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    $out/bin/helm completion bash > helm.bash
+    $out/bin/helm completion zsh > helm.zsh
+    installShellCompletion helm.{bash,zsh}
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/kubernetes/helm;
