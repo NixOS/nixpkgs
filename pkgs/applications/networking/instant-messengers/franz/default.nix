@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
     # provide desktop item and icon
     cp -r usr/share $out
     substituteInPlace $out/share/applications/franz.desktop \
-      --replace Exec=\"/opt/Franz/franz\" Exec=franz
+      --replace /opt/Franz/franz franz
   '';
 
   dontWrapGApps = true;
