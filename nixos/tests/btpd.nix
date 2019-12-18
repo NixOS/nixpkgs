@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, ... }: {
+import ./make-test-python.nix ({ lib, ... }: {
   name = "btpd";
 
   meta.maintainers = with lib.maintainers; [ tadeokondrak ];
@@ -8,9 +8,9 @@ import ./make-test.nix ({ lib, ... }: {
   };
 
   testScript = ''
-    $machine->start;
-    $machine->waitForUnit("btpd.service");
-    $machine->waitForOpenPort("6681");
-    $machine->succeed("btcli -d /var/lib/btpd stat");
+    machine.start()
+    machine.wait_for_unit("btpd.service")
+    machine.wait_for_open_port("6681")
+    machine.succeed("btcli -d /var/lib/btpd stat")
   '';
 })
