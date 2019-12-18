@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [
     "INCLUDEDIR=${placeholder ''out''}/include"
-    "LIBEXECDIR=$(out)/modules"
+    "LIBEXECDIR=${placeholder ''out''}/modules"
   ];
 
   meta = with stdenv.lib; {
