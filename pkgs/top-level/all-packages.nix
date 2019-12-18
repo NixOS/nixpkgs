@@ -15813,6 +15813,8 @@ in
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
+  alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
+
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
