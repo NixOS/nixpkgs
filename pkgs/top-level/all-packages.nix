@@ -14924,6 +14924,16 @@ in
     inherit apacheHttpd;
 
     mod_auth_mellon = callPackage ../servers/http/apache-modules/mod_auth_mellon { };
+ 
+    # Redwax collection 
+    mod_ca = callPackage ../servers/http/apache-modules/mod_ca { };
+    mod_crl = callPackage ../servers/http/apache-modules/mod_crl { };
+    mod_csr = callPackage ../servers/http/apache-modules/mod_csr { };
+    mod_ocsp = callPackage ../servers/http/apache-modules/mod_ocsp{ };
+    mod_scep = callPackage ../servers/http/apache-modules/mod_scep { };
+    mod_pkcs12 = callPackage ../servers/http/apache-modules/mod_pkcs12 { };
+    mod_spkac= callPackage ../servers/http/apache-modules/mod_spkac { };
+    mod_timestamp = callPackage ../servers/http/apache-modules/mod_timestamp { };
 
     mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
 
@@ -15187,6 +15197,14 @@ in
   mod_fastcgi = pkgs.apacheHttpdPackages.mod_fastcgi;
   mod_python = pkgs.apacheHttpdPackages.mod_python;
   mod_wsgi = pkgs.apacheHttpdPackages.mod_wsgi;
+  mod_ca = pkgs.apacheHttpdPackages.mod_ca;
+  mod_crl = pkgs.apacheHttpdPackages.mod_crl;
+  mod_csr = pkgs.apacheHttpdPackages.mod_csr;
+  mod_ocsp = pkgs.apacheHttpdPackages.mod_ocsp;
+  mod_scep = pkgs.apacheHttpdPackages.mod_scep;
+  mod_spkac = pkgs.apacheHttpdPackages.mod_spkac;
+  mod_pkcs12 = pkgs.apacheHttpdPackages.mod_pkcs12;
+  mod_timestamp = pkgs.apacheHttpdPackages.mod_timestamp;
 
   inherit (callPackages ../servers/mpd { })
     mpd mpd-small mpdWithFeatures;
