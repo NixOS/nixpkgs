@@ -29224,6 +29224,8 @@ in
     hasktags = haskellPackages.hasktags;
   };
 
+  spacenavd = callPackage ../misc/drivers/spacenavd { };
+
   splix = callPackage ../misc/cups/drivers/splix { };
 
   steamcontroller = callPackage ../misc/drivers/steamcontroller { };
