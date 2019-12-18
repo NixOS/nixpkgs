@@ -9,7 +9,8 @@
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
 , onlyLibVLC ? false
-, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null, wrapQtAppsHook ? null
+, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null
+, wrapQtAppsHook ? null, wrapGAppsHook ? null
 , jackSupport ? false
 , removeReferencesTo
 , chromecastSupport ? true, protobuf, libmicrodns
@@ -21,7 +22,7 @@
 
 with stdenv.lib;
 
-assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
+assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null && wrapGAppsHook != null);
 
 stdenv.mkDerivation rec {
   pname = "vlc";
@@ -49,8 +50,9 @@ stdenv.mkDerivation rec {
     ++ optional jackSupport libjack2
     ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
-  nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ]
-    ++ optionals withQt5 [ wrapQtAppsHook ];
+    nativeBuildInputs =
+      [ autoreconfHook perl pkgconfig removeReferencesTo wrapGAppsHook ]
+      ++ optionals withQt5 [ wrapQtAppsHook ];
 
   enableParallelBuilding = true;
 
