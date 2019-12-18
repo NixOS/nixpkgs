@@ -1,31 +1,57 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, gtk2, libGLU, libGL, pango, pangox_compat, xorg }:
+{ stdenv
+, fetchFromGitLab
+, pkgconfig
+, gtk-doc
+, autoconf
+, automake
+, which
+, libtool
+, gobject-introspection
+, glib
+, gtk2
+, libGLU
+, libGL
+, pango
+, xorg
+}:
 
 stdenv.mkDerivation rec {
-  name = "gtkglext-1.2.0";
+  pname = "gtkglext";
+  version = "unstable-2019-12-19";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gtkglext/1.2/${name}.tar.bz2";
-    sha256 = "0lbz96jwz57hnn52b8rfj54inwpwcc9fkdq6ya043cgnfih77g8n";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "Archive";
+    repo = pname;
+    # build fixes
+    # https://gitlab.gnome.org/Archive/gtkglext/merge_requests/1
+    rev = "ad95fbab68398f81d7a5c895276903b0695887e2";
+    sha256 = "1d1bp4635nla7d07ci40c7w4drkagdqk8wg93hywvdipmjfb4yqb";
   };
 
-  buildInputs = with xorg;
-    [ pkgconfig glib gtk2 libGLU libGL pango libX11 libXmu ];
-  propagatedBuildInputs = [ pangox_compat ];
-
-  patches = [
-    # The library uses `GTK_WIDGET_REALIZED', `GTK_WIDGET_TOPLEVEL', and
-    # `GTK_WIDGET_NO_WINDOW', all of which appear to be deprecated nowadays.
-    (fetchpatch {
-      name = "02_fix_gtk-2.20_deprecated_symbols.diff";
-      url = https://git.gnome.org/browse/gtkglext/patch/?id=d8f285d1397f6c41099c67e668288eecc1cdae67;
-      sha256 = "1zxak73plhy3m6psil1q9ssvjh9aqrif7kcbcz69y480qfb4ja08";
-    })
-    # Fix build with glibc ≥ 2.27
-    (fetchurl {
-      url = https://salsa.debian.org/gewo/gtkglext/raw/3b002677c907890c7de002c9f5b4b3ec71d11b31/debian/patches/04_glibc2.27-ftbfs.diff;
-      sha256 = "1l1swkjkai6pnah23xfsfpbq2fgbhp5pzj3l0ybsx6b858cxqzj5";
-    })
+  nativeBuildInputs = [
+    pkgconfig
+    gtk-doc
+    autoconf
+    automake
+    which
+    libtool
+    gobject-introspection
   ];
+
+  buildInputs = [
+    glib
+    gtk2
+    libGLU
+    libGL
+    pango
+    xorg.libX11
+    xorg.libXmu
+  ];
+
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://projects.gnome.org/gtkglext/;
