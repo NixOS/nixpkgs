@@ -8,7 +8,6 @@
 , gmpxx
 , ncurses5
 , gnustep
-,
 }:
 stdenv.mkDerivation rec {
   pname = "hopper";
