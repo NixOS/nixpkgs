@@ -492,6 +492,7 @@ self: super: {
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
   shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin && false; });
+  shake_0_18_3 = overrideCabal super.shake_0_18_3 (drv: { doCheck = !pkgs.stdenv.isDarwin && false; });
 
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
@@ -1343,7 +1344,7 @@ self: super: {
   spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
 
   # ghcide needs the latest versions of haskell-lsp.
-  ghcide = super.ghcide.override { haskell-lsp = self.haskell-lsp_0_18_0_0; lsp-test = self.lsp-test_0_8_2_0; };
+  ghcide = super.ghcide.override { haskell-lsp = self.haskell-lsp_0_18_0_0; hie-bios = self.hie-bios_0_2_0; lsp-test = self.lsp-test_0_8_2_0; shake = self.shake_0_18_3; };
   haskell-lsp_0_18_0_0 = super.haskell-lsp_0_18_0_0.override { haskell-lsp-types = self.haskell-lsp-types_0_18_0_0; };
   lsp-test_0_8_2_0 = (dontCheck super.lsp-test_0_8_2_0).override { haskell-lsp = self.haskell-lsp_0_18_0_0; };
 
