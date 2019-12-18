@@ -308,7 +308,6 @@ self: super: {
   hgdbmi = dontCheck super.hgdbmi;
   hi = dontCheck super.hi;
   hierarchical-clustering = dontCheck super.hierarchical-clustering;
-  hie-bios = dontCheck super.hie-bios;                  # https://github.com/mpickering/hie-bios/issues/25#issuecomment-567011935
   hlibgit2 = disableHardening super.hlibgit2 [ "format" ];
   hmatrix-tests = dontCheck super.hmatrix-tests;
   hquery = dontCheck super.hquery;
@@ -1323,11 +1322,19 @@ self: super: {
   # needs newer version of the systemd package
   spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
 
-  # ghcide needs the latest versions of haskell-lsp.
-  ghcide = doJailbreak (super.ghcide.override {
-    haskell-lsp = super.haskell-lsp_0_19_0_0.override { # This is in fact a version too new.
+  # https://github.com/NixOS/nixpkgs/pull/75869
+  hie-bios = dontCheck super.hie-bios;
+
+  # ghcide needs version 0.18 of haskell-lsp.
+  # 0.19 is in fact a version too new, but it compiles.
+  # This override should be removed as soon as versions have stabilized again.
+  ghcide = allowInconsistentDependencies (doJailbreak (super.ghcide.override {
+    haskell-lsp = super.haskell-lsp_0_19_0_0.override {
       haskell-lsp-types = super.haskell-lsp-types_0_19_0_0;
     };
+    lsp-test = doJailbreak (super.lsp-test.override {
+      haskell-lsp = self.haskell-lsp;
+    });
     hie-bios = self.hie-bios;
-  });
+  }));
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
