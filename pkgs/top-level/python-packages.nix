@@ -1739,6 +1739,8 @@ in {
 
   colorclass = callPackage ../development/python-modules/colorclass {};
 
+  colorgram = callPackage ../development/python-modules/colorgram {};
+
   colorlog = callPackage ../development/python-modules/colorlog { };
 
   colorspacious = callPackage ../development/python-modules/colorspacious { };
