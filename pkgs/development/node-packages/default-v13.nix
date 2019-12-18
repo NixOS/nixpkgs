@@ -13,4 +13,7 @@ nodePackages // {
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}
     '';
   };
+  dat = nodePackages.dat.override {
+    buildInputs = [ nodePackages.node-gyp-build pkgs.libtool ];
+  };
 }
