@@ -1,10 +1,10 @@
-{ pkgs ? (import <nixpkgs> {}) }:
+{ pkgs ? (import <nixpkgs> {}), variant }:
 
 with pkgs;
 
 let
 
-  primary-src = callPackage ./default-primary-src.nix {};
+  primary-src = callPackage (./. + "/src-${variant}/primary.nix") {};
 
 in
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   shellHook = ''
     function generate {
-      python3 generate-libreoffice-srcs.py > libreoffice-srcs.nix
+      python3 generate-libreoffice-srcs.py ${variant} > src-${variant}/download.nix
     }
   '';
 }
