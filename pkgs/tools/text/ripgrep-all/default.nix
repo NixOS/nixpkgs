@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg
-, pandoc, poppler_utils, ripgrep, Security
+, pandoc, poppler_utils, ripgrep, Security, imagemagick, tesseract
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/rga \
-      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg pandoc poppler_utils ripgrep ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg pandoc poppler_utils ripgrep imagemagick tesseract ]}"
   '';
 
   meta = with stdenv.lib; {
