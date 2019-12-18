@@ -23581,6 +23581,8 @@ in
 
   kssd = callPackage ../applications/science/biology/kssd { };
 
+  last = callPackage ../applications/science/biology/last { };
+
   macse = callPackage ../applications/science/biology/macse { };
 
   migrate = callPackage ../applications/science/biology/migrate { };
