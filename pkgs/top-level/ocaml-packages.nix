@@ -241,6 +241,8 @@ let
 
     dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
 
+    dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { buildDunePackage = buildDune2Package; };
+
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { buildDunePackage = buildDune2Package; };
 
     earley = callPackage ../development/ocaml-modules/earley { };
