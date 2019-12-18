@@ -5102,6 +5102,8 @@ in
 
   nemiver = callPackage ../development/tools/nemiver { };
 
+  neo-cowsay = callPackage ../tools/misc/neo-cowsay { };
+
   neofetch = callPackage ../tools/misc/neofetch { };
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
