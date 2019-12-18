@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ocaml, findlib, dune
-, lambdaTerm, cppo, makeWrapper
+, lambdaTerm, cppo, makeWrapper, buildDunePackage
 }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.03"
 then throw "utop is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "utop";
   version = "2.4.2";
 
@@ -16,11 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml findlib cppo dune ];
+  buildInputs = [ cppo ];
 
   propagatedBuildInputs = [ lambdaTerm ];
-
-  inherit (dune) installPhase;
 
   postFixup =
    let
