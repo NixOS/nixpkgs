@@ -7,6 +7,7 @@
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
+, spaceNavSupport ? false, libspnav
 , makeWrapper
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
 , embree, gmp
@@ -56,7 +57,8 @@ stdenv.mkDerivation rec {
     ])
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit
-    ++ optional colladaSupport opencollada;
+    ++ optional colladaSupport opencollada
+    ++ optional spaceNavSupport libspnav;
 
   postPatch = ''
     # allow usage of dynamically linked embree
