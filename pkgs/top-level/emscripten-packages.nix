@@ -26,7 +26,7 @@ rec {
           `pkg-config zlib --cflags` \
           `pkg-config zlib --libs` \
           -I . \
-          .libs/libjson-c.so \
+          .libs/libjson-c.${if pkgs.stdenv.isDarwin then "dylib" else "so"} \
           -o ./test1.js
 
         echo "Using node to execute the test which basically outputs an error on stderr which we grep for" 
@@ -163,7 +163,7 @@ rec {
         echo "Compiling a custom test"
         set -x
         emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 test/example.c -DZ_SOLO \
-        libz.so.${old.version} -I . -o example.js
+        ${if pkgs.stdenv.isDarwin then "libz.${old.version}.dylib" else "libz.so.${old.version}"} -I . -o example.js
 
         echo "Using node to execute the test"
         ${pkgs.nodejs}/bin/node ./example.js 
