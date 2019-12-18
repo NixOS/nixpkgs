@@ -18,6 +18,7 @@
 , mock
 , magic-wormhole-transit-relay
 , magic-wormhole-mailbox-server
+, isPy27
 }:
 
 buildPythonPackage rec {
@@ -55,6 +56,9 @@ buildPythonPackage rec {
     description = "Securely transfer data between computers";
     homepage = https://github.com/warner/magic-wormhole;
     license = licenses.mit;
+    # Currently broken on Python 2.7. See
+    # https://github.com/NixOS/nixpkgs/issues/71826
+    broken = isPy27;
     maintainers = with maintainers; [ asymmetric ];
   };
 }
