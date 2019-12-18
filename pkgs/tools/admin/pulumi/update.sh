@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-VERSION="1.4.0"
+VERSION="1.7.1"
 
 declare -A plugins
 plugins=(
-    ["aws"]="1.7.0"
-    ["gcp"]="1.4.1"
-    ["kubernetes"]="1.2.3"
-    ["random"]="0.2.0"
+    ["aws"]="1.16.0"
+    ["gcp"]="2.1.0"
+    ["kubernetes"]="1.4.1"
+    ["random"]="1.4.0"
 )
 
 function genMainSrc() {
