@@ -23587,6 +23587,10 @@ in
 
   migrate = callPackage ../applications/science/biology/migrate { };
 
+  minia = callPackage ../applications/science/biology/minia {
+    boost = boost159;
+  };
+
   mirtk = callPackage ../development/libraries/science/biology/mirtk { };
 
   muscle = callPackage ../applications/science/biology/muscle { };
