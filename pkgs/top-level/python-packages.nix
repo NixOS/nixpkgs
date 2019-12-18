@@ -1694,6 +1694,10 @@ in {
 
   bumps = callPackage ../development/python-modules/bumps {};
 
+  bx-python = callPackage ../development/python-modules/bx-python {
+    inherit (pkgs) zlib;
+  };
+
   cached-property = callPackage ../development/python-modules/cached-property { };
 
   caffe = toPythonModule (pkgs.caffe.override {
