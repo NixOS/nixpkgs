@@ -61,6 +61,7 @@ in
     collectSettingsArgs = optionalString (cfg.collectdBinary.enable) ''
       --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
       --collectd.security-level ${cfg.collectdBinary.securityLevel} \
+      ${optionalString (cfg.collectdBinary.authFile != null) "-collectd.auth-file ${escapeShellArg cfg.collectdBinary.authFile}"} \
     '';
   in {
     serviceConfig = {
