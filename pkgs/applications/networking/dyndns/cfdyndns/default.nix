@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, openssl }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, openssl, pkg-config }:
 
 with rustPlatform;
 
@@ -8,13 +8,13 @@ buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "colemickens";
     repo = "cfdyndns";
-    rev = "v${version}";
-    sha256 = "1mcdjykrgh0jq6k6y664lai8sbgzk6j7k0r944f43vg63d1jql5b";
+    rev = "93221d18c42b6cdc766fa43c88bf11dbfc585d9d";
+    sha256 = "1q6mm586vn2928fb567yi09d0iclw2b51xh2kdzawzi2qpgc2vhs";
   };
 
-  cargoSha256 = "1d7jpffkw2m2v37bfdqsl9sqwsl19cgglpa00lwy4ih09kzbc2n9";
+  cargoSha256 = "0xa8w792rsyj1pb6i1rxsn2b1wk4bdm0kmbfhq7yzndfngbrapss";
 
-  buildInputs = [ makeWrapper openssl ];
+  buildInputs = [ makeWrapper openssl pkg-config];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -27,6 +27,5 @@ buildRustPackage rec {
     license = stdenv.lib.licenses.mit;
     maintainers = with maintainers; [ colemickens ];
     platforms = with platforms; linux;
-    broken = true;
   };
 }
