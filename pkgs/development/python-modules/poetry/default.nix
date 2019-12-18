@@ -19,40 +19,34 @@
 , functools32
 , pytest
 , jsonschema
+, intreehooks
+, keyring
+, pexpect
 }:
 
 let
-  cleo6 = cleo.overridePythonAttrs (oldAttrs: rec {
-    version = "0.6.8";
-    src = fetchPypi {
-      inherit (oldAttrs) pname;
-      inherit version;
-      sha256 = "06zp695hq835rkaq6irr1ds1dp2qfzyf32v60vxpd8rcnxv319l5";
-    };
-  });
   glob2 = callPackage ./glob2.nix { };
 
 in buildPythonPackage rec {
   pname = "poetry";
-  version = "0.12.17";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gxwcd65qjmzqzppf53x51sic1rbcd9py6cdzx3aprppipimslvf";
+    sha256 = "0gzifln8mns4cr43gc1gacbhzr83wpdwfaz65am4i9vi0f8k0agm";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace \
-      "requests-toolbelt>=0.8.0,<0.9.0" \
-      "requests-toolbelt>=0.8.0,<0.10.0" \
-      --replace 'pyrsistent>=0.14.2,<0.15.0' 'pyrsistent>=0.14.2,<0.16.0'
+  patchPhase = ''
+    substituteInPlace pyproject.toml \
+      --replace 'requests-toolbelt = "^0.8.0"' 'requests-toolbelt = ">=0.8.0"' \
+      --replace 'pyrsistent = "^0.14.2"' 'pyrsistent = ">=0.14.2"'
   '';
 
   format = "pyproject";
 
   propagatedBuildInputs = [
     cachy
-    cleo6
+    cleo
     requests
     cachy
     requests-toolbelt
@@ -65,6 +59,9 @@ in buildPythonPackage rec {
     html5lib
     shellingham
     tomlkit
+    intreehooks
+    keyring
+    pexpect
   ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
     ++ lib.optionals isPy27 [ virtualenv functools32 subprocess32 ];
 
@@ -85,7 +82,7 @@ in buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/sdispater/poetry;
+    homepage = https://github.com/python-poetry/poetry;
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
