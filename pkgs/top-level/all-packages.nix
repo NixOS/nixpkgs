@@ -23677,6 +23677,8 @@ in
 
   svaba = callPackage ../applications/science/biology/svaba { };
 
+  tebreak = callPackage ../applications/science/biology/tebreak { };
+
   trimal = callPackage ../applications/science/biology/trimal { };
 
   truvari = callPackage ../applications/science/biology/truvari { };
