@@ -16,6 +16,8 @@ let
 
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
 
+    buildDune2Package = buildDunePackage.override { dune = dune_2; };
+
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
@@ -236,6 +238,8 @@ let
     duff = callPackage ../development/ocaml-modules/duff { };
 
     dune = callPackage ../development/tools/ocaml/dune { };
+
+    dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
 
