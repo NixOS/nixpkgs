@@ -15061,6 +15061,8 @@ in
 
   libspectre = callPackage ../development/libraries/libspectre { };
 
+  libspnav = callPackage ../development/libraries/libspnav { };
+
   libgsf = callPackage ../development/libraries/libgsf { };
 
   # GNU libc provides libiconv so systems with glibc don't need to build
