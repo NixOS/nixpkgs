@@ -3610,6 +3610,17 @@ let
     };
   };
 
+  vim-elm-syntax = buildVimPluginFrom2Nix {
+    pname = "vim-elm-syntax";
+    version = "2019-11-28";
+    src = fetchFromGitHub {
+      owner = "andys8";
+      repo = "vim-elm-syntax";
+      rev = "7ed55d9bc2c0cfd023d7cc6541634bcbf36430b5";
+      sha256 = "1kq7qcw9l41q646a2ilwy94lj1qz9as14aqfmzkbi938yij18zpx";
+    };
+  };
+
   vim-eunuch = buildVimPluginFrom2Nix {
     pname = "vim-eunuch";
     version = "2019-11-13";
