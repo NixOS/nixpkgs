@@ -29226,6 +29226,8 @@ in
 
   spacenavd = callPackage ../misc/drivers/spacenavd { };
 
+  spacenav-cube-example = callPackage ../applications/misc/spacenav-cube-example { };
+
   splix = callPackage ../misc/cups/drivers/splix { };
 
   steamcontroller = callPackage ../misc/drivers/steamcontroller { };
