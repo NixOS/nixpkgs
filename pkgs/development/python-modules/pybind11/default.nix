@@ -39,6 +39,14 @@ buildPythonPackage rec {
   dontUsePipInstall = true;
   dontUseSetuptoolsCheck = true;
 
+  patches = [
+    ./0001-Find-include-directory.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace pybind11/__init__.py --subst-var-by include "$out/include"
+  '';
+
   preFixup = ''
     pushd ..
     export PYBIND11_USE_CMAKE=1
@@ -49,8 +57,6 @@ buildPythonPackage rec {
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
     popd
   '';
-
-  doCheck = true;
 
   checkInputs = [
     pytest
