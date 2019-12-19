@@ -77,6 +77,13 @@ stdenv.mkDerivation rec {
     ./no-etc-install.patch
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
+    (fetchpatch {
+      name = "CVE-2019-15890.patch";
+      url = "https://git.qemu.org/?p=libslirp.git;a=patch;h=c59279437eda91841b9d26079c70b8a540d41204";
+      sha256 = "1q2rc67mfdz034mk81z9bw105x9zad7n954sy3kq068b1svrf7iy";
+      stripLen = 1;
+      extraPrefix = "slirp/";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
