@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "3.10.12";
+  version = "3.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "34953903abe09bbab3ec1a9a4843b05c75b218daa6132c8275d871e88b6e3447";
+    sha256 = "a9521786d0e16d00a457807e364229ba844ea5f8b0ac6653b00277351f12ab49";
   };
 
   nativeBuildInputs = [ pytestrunner ];
