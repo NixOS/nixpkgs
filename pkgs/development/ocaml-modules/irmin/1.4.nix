@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, ocaml
+{ lib, fetchFromGitHub, buildDunePackage, ocaml
 , astring, cstruct, fmt, hex, jsonm, logs, ocaml_lwt, ocamlgraph, uri
 }:
 
@@ -19,11 +19,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/mirage/irmin;
     description = "Irmin, a distributed database that follows the same design principles as Git";
     license = licenses.isc;
-    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.alexfmpe ];
   };
 }
