@@ -2575,6 +2575,8 @@ package-maintainers:
     - elm-export-persistent
     - pipes-mongodb
     - streaming-wai
+  kiwi:
+    - glirc
   psibi:
     - path-pieces
     - persistent
@@ -5080,7 +5082,6 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
-  - glirc
   - GLMatrix
   - glob-posix
   - global

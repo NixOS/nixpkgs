@@ -11621,6 +11621,8 @@ in
 
   glib-networking = callPackage ../development/libraries/glib-networking {};
 
+  glirc = haskell.lib.justStaticExecutables haskellPackages.glirc;
+
   gom = callPackage ../development/libraries/gom { };
 
   ace = callPackage ../development/libraries/ace { };
