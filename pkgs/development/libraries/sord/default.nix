@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python, serd, pcre, wafHook }:
+{ stdenv, fetchurl, pkgconfig, python3, serd, pcre, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "sord";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "13fshxwpipjrvsah1m2jw1kf022z2q5vpw24bzcznglgvms13x89";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ python serd pcre ];
+  nativeBuildInputs = [ pkgconfig python3 wafHook ];
+  buildInputs = [ serd pcre ];
 
   meta = with stdenv.lib; {
     homepage = http://drobilla.net/software/sord;

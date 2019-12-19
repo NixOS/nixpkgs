@@ -24,8 +24,7 @@ assert nlSupport     -> ! iwSupport && libnl         != null;
 assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
 assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
-let xcbproto-py3 = xcbproto.override { python = python3; };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
     pname = "polybar";
     version = "3.4.1";
 
@@ -51,7 +50,7 @@ in stdenv.mkDerivation rec {
     };
 
     buildInputs = [
-      cairo libXdmcp libpthreadstubs libxcb pcre python3 xcbproto-py3 xcbutil
+      cairo libXdmcp libpthreadstubs libxcb pcre python3 xcbproto xcbutil
       xcbutilcursor xcbutilimage xcbutilrenderutil xcbutilwm xcbutilxrm
 
       (if alsaSupport   then alsaLib       else null)
