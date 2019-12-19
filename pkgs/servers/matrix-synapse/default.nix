@@ -1,5 +1,5 @@
 { lib, stdenv, python3, openssl
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? stdenv.isLinux, nixosTests
 }:
 
 with python3.pkgs;
@@ -77,6 +77,8 @@ in buildPythonApplication rec {
   checkInputs = [ mock parameterized openssl ];
 
   doCheck = !stdenv.isDarwin;
+
+  passthru.tests = { inherit (nixosTests) matrix-synapse; };
 
   checkPhase = ''
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
