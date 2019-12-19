@@ -6,6 +6,11 @@
       patch = ./bridge-stp-helper.patch;
     };
 
+  request_key_helper =
+    { name = "request-key-helper";
+      patch = ./request-key-helper.patch;
+    };
+
   p9_fixes =
     { name = "p9-fixes";
       patch = ./p9-fixes.patch;

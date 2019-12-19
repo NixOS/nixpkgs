@@ -16151,6 +16151,7 @@ in
   linux_mptcp_94 = callPackage ../os-specific/linux/kernel/linux-mptcp-94.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
       ]
@@ -16168,6 +16169,7 @@ in
   linux_rpi1 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
     kernelPatches = with kernelPatches; [
       bridge_stp_helper
+      request_key_helper
     ];
     rpiVersion = 1;
   };
@@ -16175,6 +16177,7 @@ in
   linux_rpi2 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
     kernelPatches = with kernelPatches; [
       bridge_stp_helper
+      request_key_helper
     ];
     rpiVersion = 2;
   };
@@ -16182,6 +16185,7 @@ in
   linux_rpi3 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
     kernelPatches = with kernelPatches; [
       bridge_stp_helper
+      request_key_helper
     ];
     rpiVersion = 3;
   };
@@ -16189,6 +16193,7 @@ in
   linux_rpi4 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
     kernelPatches = with kernelPatches; [
       bridge_stp_helper
+      request_key_helper
     ];
     rpiVersion = 4;
   };
@@ -16196,6 +16201,7 @@ in
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
         kernelPatches.cpu-cgroup-v2."4.4"
         kernelPatches.modinst_arg_list_too_long
         # https://github.com/NixOS/nixpkgs/issues/42755
@@ -16209,6 +16215,7 @@ in
   linux_4_9 = callPackage ../os-specific/linux/kernel/linux-4.9.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
         kernelPatches.cpu-cgroup-v2."4.9"
         kernelPatches.modinst_arg_list_too_long
       ];
@@ -16217,6 +16224,7 @@ in
   linux_4_14 = callPackage ../os-specific/linux/kernel/linux-4.14.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
@@ -16228,6 +16236,7 @@ in
   linux_4_19 = callPackage ../os-specific/linux/kernel/linux-4.19.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
         kernelPatches.modinst_arg_list_too_long
         kernelPatches.export_kernel_fpu_functions."4.14"
       ];
@@ -16236,6 +16245,7 @@ in
   linux_5_3 = callPackage ../os-specific/linux/kernel/linux-5.3.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
       kernelPatches.export_kernel_fpu_functions."5.3"
     ];
   };
@@ -16243,18 +16253,21 @@ in
   linux_5_4 = callPackage ../os-specific/linux/kernel/linux-5.4.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
     ];
   };
 
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
     ];
   };
 
   linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
         kernelPatches.modinst_arg_list_too_long
       ];
   };
@@ -16262,6 +16275,7 @@ in
   linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
       kernelPatches.modinst_arg_list_too_long
     ];
   };

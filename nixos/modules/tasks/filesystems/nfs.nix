@@ -25,6 +25,9 @@ let
   '';
 
   nfsConfFile = pkgs.writeText "nfs.conf" cfg.extraConfig;
+  requestKeyConfFile = pkgs.writeText "request-key.conf" ''
+    create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
+  '';
 
   cfg = config.services.nfs;
 
@@ -57,9 +60,12 @@ in
 
     systemd.packages = [ pkgs.nfs-utils ];
 
+    environment.systemPackages = [ pkgs.keyutils ];
+
     environment.etc = {
       "idmapd.conf".source = idmapdConfFile;
       "nfs.conf".source = nfsConfFile;
+      "request-key.conf".source = requestKeyConfFile;
     };
 
     systemd.services.nfs-blkmap =

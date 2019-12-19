@@ -190,8 +190,9 @@ in
   networkingProxy = handleTest ./networking-proxy.nix {};
   nextcloud = handleTest ./nextcloud {};
   nexus = handleTest ./nexus.nix {};
-  nfs3 = handleTest ./nfs.nix { version = 3; };
-  nfs4 = handleTest ./nfs.nix { version = 4; };
+  # TODO: Test nfsv3 + Kerberos
+  nfs3 = handleTest ./nfs { version = 3; };
+  nfs4 = handleTest ./nfs { version = 4; };
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = handleTest ./nginx.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
