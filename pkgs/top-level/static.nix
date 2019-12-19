@@ -243,4 +243,6 @@ in {
   ) super.ocaml-ng;
   
   python27 = super.python27.override { static = true; };
+
+  oniguruma = super.oniguruma.overrideAttrs (_: { cmakeFlags = ["-DBUILD_SHARED_LIBS=OFF"]; });
 }
