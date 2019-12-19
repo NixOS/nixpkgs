@@ -314,7 +314,7 @@ let
       then callPackage ../development/ocaml-modules/ipaddr { }
       else ipaddr_p4;
 
-    irmin = callPackage ../development/ocaml-modules/irmin { };
+    irmin_1 = callPackage ../development/ocaml-modules/irmin/1.4.nix { };
 
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 

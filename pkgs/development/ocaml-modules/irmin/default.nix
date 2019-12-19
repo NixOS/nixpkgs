@@ -15,7 +15,7 @@ buildDunePackage rec {
     sha256 = "0f272h9d0hs0wn5m30348wx7vz7524yk40wx5lx895vv3r3p7q7c";
   };
 
-  buildInputs = [ astring cstruct fmt hex jsonm logs ocaml_lwt ocamlgraph uri ];
+  propagatedBuildInputs = [ astring cstruct fmt hex jsonm logs ocaml_lwt ocamlgraph uri ];
 
   doCheck = true;
 
