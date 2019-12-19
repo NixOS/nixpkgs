@@ -115,6 +115,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     which
+  ];
+
+  depsBuildBuild = [
     buildPackages.gfortran
     buildPackages.stdenv.cc
   ];
