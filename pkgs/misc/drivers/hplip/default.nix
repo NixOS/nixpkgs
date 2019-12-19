@@ -75,6 +75,7 @@ python3Packages.buildPythonApplication {
     reportlab
     usbutils
     sip
+    dbus-python
   ] ++ stdenv.lib.optionals withQt5 [
     pyqt5
     enum-compat
