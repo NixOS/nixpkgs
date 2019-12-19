@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-Caching";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17jnnmnpdflv120yhsfbnpick06iias6f2hcxmf1mi1nr35kdqjj";
+    sha256 = "3d0bd13c448c1640334131ed4163a12aff7df2155e73860f07fc9e5e75de7126";
   };
 
   propagatedBuildInputs = [ flask ];
