@@ -251,6 +251,7 @@ in {
       home = cfg.configDir;
       createHome = true;
       group = "hass";
+      extraGroups = [ "dialout" ];
       uid = config.ids.uids.hass;
     };
 
