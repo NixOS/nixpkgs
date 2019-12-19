@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, ppx_sexp_conv, sexplib, conduit, ocaml_lwt }:
+{ stdenv, buildDunePackage, ppx_sexp_conv, conduit, ocaml_lwt }:
 
 if !stdenv.lib.versionAtLeast conduit.version "1.0"
 then conduit

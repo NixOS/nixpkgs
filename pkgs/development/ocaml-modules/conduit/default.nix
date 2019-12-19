@@ -21,7 +21,6 @@ buildDunePackage rec {
     description = "Network connection library for TCP and SSL";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ alexfmpe vbgl ];
-    inherit (ocaml.meta) platforms;
-	  inherit (src.meta) homepage;
+    inherit (src.meta) homepage;
   };
 }
