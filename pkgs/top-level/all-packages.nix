@@ -17052,6 +17052,8 @@ in
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
+  wooting-udev-rules = callPackage ../os-specific/linux/wooting-udev-rules { };
+
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
   wpa_supplicant_gui = libsForQt5.callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
