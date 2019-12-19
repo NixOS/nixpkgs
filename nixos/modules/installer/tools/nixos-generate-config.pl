@@ -335,6 +335,9 @@ if (@swaps) {
         next unless -e $swapFilename;
         my $dev = findStableDevPath $swapFilename;
         if ($swapType =~ "partition") {
+            # zram devices are more likely created by configuration.nix, so
+            # ignore them here
+            next if ($swapFilename =~ /^\/dev\/zram/);
             push @swapDevices, "{ device = \"$dev\"; }";
         } elsif ($swapType =~ "file") {
             # swap *files* are more likely specified in configuration.nix, so
