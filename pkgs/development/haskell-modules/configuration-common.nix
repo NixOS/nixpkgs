@@ -1327,4 +1327,7 @@ self: super: {
   haskell-lsp_0_18_0_0 = super.haskell-lsp_0_18_0_0.override { haskell-lsp-types = self.haskell-lsp-types_0_18_0_0; };
   lsp-test_0_8_2_0 = (dontCheck super.lsp-test_0_8_2_0).override { haskell-lsp = self.haskell-lsp_0_18_0_0; };
 
+  # spago-0.12.1 fails to build with dhall-1.28.0
+  spago = appendPatch super.spago ./patches/spago-0.12.1-dhall-1.28.0.patch;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
