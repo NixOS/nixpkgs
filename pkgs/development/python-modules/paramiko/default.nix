@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h9hb2kp07zdfbanad527ll90n9ji7isf7m39jyp0sr21pxfvcpl";
+    sha256 = "920492895db8013f6cc0179293147f830b8c7b21fdfc839b6bad760c27459d9f";
   };
 
   checkInputs = [ pytest mock pytest-relaxed ];
