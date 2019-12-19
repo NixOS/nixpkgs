@@ -7732,6 +7732,12 @@
     githubId = 1986844;
     name = "Daniel Wheeler";
   };
+  misuzu = {
+    email = "bakalolka@gmail.com";
+    github = "misuzu";
+    githubId = 248143;
+    name = "misuzu";
+  };
   zokrezyl = {
     email = "zokrezyl@gmail.com";
     github = "zokrezyl";
