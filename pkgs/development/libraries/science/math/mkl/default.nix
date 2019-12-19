@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchurl, rpm, cpio, undmg, darwin, enableStatic ? false }:
+{ stdenvNoCC, fetchurl, rpmextract, undmg, darwin, enableStatic ? false }:
 /*
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.
@@ -39,7 +39,7 @@ in stdenvNoCC.mkDerivation {
     then
       [ undmg darwin.cctools ]
     else
-      [ rpm cpio ];
+      [ rpmextract ];
 
   buildPhase = if stdenvNoCC.isDarwin then ''
     for f in Contents/Resources/pkg/*.tgz; do
@@ -47,26 +47,25 @@ in stdenvNoCC.mkDerivation {
     done
   '' else ''
     # Common stuff
-    rpm2cpio rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm | cpio -idv
-    rpm2cpio rpm/intel-mkl-common-f-${rpm-ver}.noarch.rpm | cpio -idv
+    rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
+    rpmextract rpm/intel-mkl-common-f-${rpm-ver}.noarch.rpm
 
     # Dynamic libraries
-    rpm2cpio rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm | cpio -idv
-    rpm2cpio rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm | cpio -idv
-    rpm2cpio rpm/intel-mkl-gnu-f-rt-${rpm-ver}.x86_64.rpm | cpio -idv
-    rpm2cpio rpm/intel-mkl-gnu-rt-${rpm-ver}.x86_64.rpm | cpio -idv
+    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-f-rt-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-rt-${rpm-ver}.x86_64.rpm
 
     # Intel OpenMP runtime
-    rpm2cpio rpm/intel-openmp-${openmp-ver}.x86_64.rpm | cpio -idv
+    rpmextract rpm/intel-openmp-${openmp-ver}.x86_64.rpm
   '' + (if enableStatic then ''
     # Static libraries
-    rpm2cpio rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm | cpio -idv
-    rpm2cpio rpm/intel-mkl-cluster-${rpm-ver}.x86_64.rpm | cpio -idv
-    rpm2cpio rpm/intel-mkl-gnu-${rpm-ver}.x86_64.rpm | cpio -idv
-    rpm2cpio rpm/intel-mkl-gnu-f-${rpm-ver}.x86_64.rpm | cpio -idv
+    rpmextract rpm/intel-mkl-cluster-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-f-${rpm-ver}.x86_64.rpm
   '' else ''
-    # Extract the PkgConfig files for dynamic libraries only
-    rpm2cpio rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm | cpio -idv '*dynamic*.pc'
+    # Take care of installing dynamic-only PkgConfig files during the installPhase
   ''
   );
 
@@ -97,16 +96,21 @@ in stdenvNoCC.mkDerivation {
       cp -r compilers_and_libraries_${version}/mac/mkl/bin/pkgconfig/* $out/lib/pkgconfig
   '' else ''
       mkdir -p $out/lib
+      cp license.txt $out/lib/
 
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/include $out/
 
+      mkdir -p $out/lib/pkgconfig
+  '') +
+    (if enableStatic then ''
       cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/* $out/lib/
-      cp license.txt $out/lib/
-
-      mkdir -p $out/lib/pkgconfig
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/* $out/lib/pkgconfig
-  '');
+    '' else ''
+      cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/*.so* $out/lib/
+      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/*.so* $out/lib/
+      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/*dynamic*.pc $out/lib/pkgconfig
+    '');
 
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
   # larger updated load commands do not fit. Use install_name_tool
