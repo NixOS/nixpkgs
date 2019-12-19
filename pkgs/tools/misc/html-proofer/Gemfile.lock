@@ -5,8 +5,8 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     ethon (0.12.0)
       ffi (>= 1.3.0)
-    ffi (1.11.1)
-    html-proofer (3.12.2)
+    ffi (1.11.2)
+    html-proofer (3.14.0)
       addressable (~> 2.3)
       mercenary (~> 0.3)
       nokogiri (~> 1.10)
@@ -16,9 +16,9 @@ GEM
       yell (~> 2.0)
     mercenary (0.3.6)
     mini_portile2 (2.4.0)
-    nokogiri (1.10.4)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
-    parallel (1.17.0)
+    parallel (1.19.0)
     public_suffix (4.0.1)
     rainbow (3.0.0)
     typhoeus (1.3.1)
@@ -32,4 +32,4 @@ DEPENDENCIES
   html-proofer
 
 BUNDLED WITH
-   1.17.2
+   1.17.3
