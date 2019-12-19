@@ -2,7 +2,7 @@
   stdenv, lib,
   src, patches, version, qtCompatVersion,
 
-  coreutils, bison, flex, gdb, gperf, lndir, perl, pkgconfig, python2,
+  coreutils, bison, flex, gdb, gperf, lndir, perl, pkgconfig, python3,
   which,
   # darwin support
   darwin, libiconv,
@@ -75,7 +75,8 @@ stdenv.mkDerivation {
     );
 
   buildInputs =
-    lib.optionals (!stdenv.isDarwin)
+    [ python3 ]
+    ++ lib.optionals (!stdenv.isDarwin)
     (
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
@@ -86,7 +87,7 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig python2 which ];
+    [ bison flex gperf lndir perl pkgconfig which ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
