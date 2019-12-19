@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, python
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, python3
 , zlib, libssh2, openssl, http-parser, curl
 , libiconv, Security
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DTHREADSAFE=ON" ];
 
-  nativeBuildInputs = [ cmake python pkgconfig ];
+  nativeBuildInputs = [ cmake python3 pkgconfig ];
 
   buildInputs = [ zlib libssh2 openssl http-parser curl ]
     ++ stdenv.lib.optional stdenv.isDarwin Security;
