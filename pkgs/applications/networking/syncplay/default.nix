@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pyside2, shiboken2, twisted, certifi }:
+{ lib, fetchFromGitHub, buildPythonApplication, pyside2, shiboken2, twisted, certifi, qt5 }:
 
 buildPythonApplication rec {
   pname = "syncplay";
@@ -14,8 +14,13 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ pyside2 shiboken2 twisted certifi ] ++ twisted.extras.tls;
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
+
+  postFixup = ''
+    wrapQtApp $out/bin/syncplay
+  '';
 
   meta = with lib; {
     homepage = https://syncplay.pl/;
