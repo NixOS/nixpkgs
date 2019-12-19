@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "1.3";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a017b8d9e9da6761f4574642149c337f8f540d4edfe573fb91ad2c4001a2bc76";
+    sha256 = "c071295307c447f85aaa3c3ab3ce058e29d67010f4fabf278a8e163916e4deab";
   };
 
   propagatedBuildInputs = [ six ];
