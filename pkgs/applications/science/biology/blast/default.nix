@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, boost168, perl, cpio, gawk, coreutils }:
+{ stdenv, fetchurl, zlib, bzip2, perl, cpio, gawk, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "blast";
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ coreutils gawk zlib boost168 bzip2 cpio ];
+  buildInputs = [ coreutils gawk zlib bzip2 cpio ];
   hardeningDisable = [ "format" ];
 
   patches = [ ./no_slash_bin.patch ];
@@ -85,7 +85,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # Many tests require either network access or locally available databases
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = ''Basic Local Alignment Search Tool (BLAST) finds regions of
