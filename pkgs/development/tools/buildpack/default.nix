@@ -2,20 +2,20 @@
 
 buildGoPackage rec {
   pname = "pack";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "buildpack";
+    owner = "buildpacks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yh62h7lz2i07gixccmfyxk607djp1nrs57rzk7nkxnjcj4jj5sr";
+    sha256 = "00v4kb9cv6nn7vrybjkv0kgcvfm5dsg0168dv253mrp9xmv8kd9l";
   };
 
-  goPackagePath = "github.com/buildpack/pack";
+  goPackagePath = "github.com/buildpacks/pack";
 
   subPackages = [ "cmd/pack" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/buildpack/pack/cmd.Version=${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/buildpacks/pack/cmd.Version=${version}" ];
 
   meta = with lib; {
     homepage = "https://buildpacks.io/";
