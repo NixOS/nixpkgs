@@ -19,13 +19,20 @@ stdenv.mkDerivation rec {
     sed -i '/#include <asm\/siginfo.h>/ d' signal_handler.c
   '';
 
+  postPatch = ''
+    patchShebangs platform2_preinstall.sh
+  '';
+
+  postBuild = ''
+    ./platform2_preinstall.sh ${version} $out/include/chromeos
+  '';
+
   installPhase = ''
-    mkdir -p $out/lib
+    mkdir -p $out/lib/pkgconfig $out/include/chromeos $out/bin
     cp -v *.so $out/lib
-    mkdir -p $out/include
-    cp -v libminijail.h $out/include
-    mkdir -p $out/bin
-    cp minijail0 $out/bin
+    cp -v *.pc $out/lib/pkgconfig
+    cp -v libminijail.h scoped_minijail.h $out/include/chromeos
+    cp -v minijail0 $out/bin
   '';
 
   meta = {

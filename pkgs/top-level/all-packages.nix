@@ -8113,6 +8113,10 @@ in
 
   gforth = callPackage ../development/compilers/gforth {};
 
+  gleam = callPackage ../development/compilers/gleam {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   gtk-server = callPackage ../development/interpreters/gtk-server {};
 
   # Haskell and GHC
@@ -15809,6 +15813,8 @@ in
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
+  alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
+
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
@@ -17313,6 +17319,8 @@ in
   go-font = callPackage ../data/fonts/go-font { };
 
   greybird = callPackage ../data/themes/greybird { };
+
+  gubbi-font = callPackage ../data/fonts/gubbi { };
 
   gyre-fonts = callPackage ../data/fonts/gyre {};
 
@@ -25624,5 +25632,7 @@ in
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
   gortr = callPackage ../servers/gortr {};
+
+  sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
 }
