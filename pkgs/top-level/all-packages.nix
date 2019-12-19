@@ -19794,13 +19794,15 @@ in
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     libreoffice = callPackage ../applications/office/libreoffice
       (libreoffice-args // {
+        variant = "fresh";
       });
   });
   libreoffice-fresh-unwrapped = libreoffice-fresh.libreoffice;
 
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
-    libreoffice = callPackage ../applications/office/libreoffice/still.nix
+    libreoffice = callPackage ../applications/office/libreoffice
       (libreoffice-args // {
+        variant = "still";
       });
   });
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
