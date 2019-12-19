@@ -692,4 +692,18 @@ self: super: builtins.intersectAttrs super {
       spagoWithoutChecks = dontCheck spagoWithoutHaddocks;
     in
     spagoWithoutChecks;
+
+  # https://github.com/dhall-lang/dhall-haskell/commit/dedd5e0ea6fd12f87d887af3d2220eebc61ee8af
+  # This raises the lower bound on prettyprinter to 1.5.1 since
+  # `removeTrailingWhitespace` is buggy in earlier versions.
+  dhall_1_28_0 =
+    let
+      prettyprinter-ansi-terminal = super.prettyprinter-ansi-terminal.override { prettyprinter = self.prettyprinter_1_5_1; };
+    in
+      super.dhall_1_28_0.override {
+        prettyprinter = self.prettyprinter_1_5_1;
+        prettyprinter-ansi-terminal = prettyprinter-ansi-terminal;
+      };
+  dhall-bash_1_0_25 = super.dhall-bash_1_0_25.override { dhall = self.dhall_1_28_0; };
+  dhall-json_1_6_0 = super.dhall-json_1_6_0.override { dhall = self.dhall_1_28_0; };
 }
