@@ -6638,6 +6638,8 @@ in {
 
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
+  wfuzz = callPackage ../development/python-modules/wfuzz { };
+
   wget = callPackage ../development/python-modules/wget { };
 
   runway-python = callPackage ../development/python-modules/runway-python { };

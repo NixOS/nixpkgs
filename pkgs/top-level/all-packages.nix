@@ -25620,6 +25620,8 @@ in
 
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 
+  wfuzz = with python3Packages; toPythonApplication wfuzz;
+
   bemenu = callPackage ../applications/misc/bemenu { };
 
   dapper = callPackage ../development/tools/dapper { };
