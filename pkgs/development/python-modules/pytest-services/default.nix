@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-services";
-  version = "1.3.1";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "035bc9ce8addb33f7c2ec95a9c0c88926d213a6c2e12b2c57da31a4ec0765f2c";
+    sha256 = "0848cead86d3816b9c4e37cecfda31d21a4366f0dca2313ea29f3ca375c6295d";
   };
 
   propagatedBuildInputs = [
