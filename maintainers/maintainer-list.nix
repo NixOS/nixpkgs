@@ -2087,6 +2087,12 @@
     githubId = 1365692;
     name = "Will Fancher";
   };
+  elyhaka = {
+    email = "elyhaka@protonmail.com";
+    github = "Elyhaka";
+    githubId = 57923898;
+    name = "Elyhaka";
+  };
   emmanuelrosa = {
     email = "emmanuel_rosa@aol.com";
     github = "emmanuelrosa";

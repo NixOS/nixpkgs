@@ -17576,6 +17576,8 @@ in
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
+  pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
+
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
