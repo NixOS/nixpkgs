@@ -1,17 +1,19 @@
-{stdenv, lib, fetchurl, gettext, perlPackages, intltool, pkgconfig, glib,
+{ stdenv, lib, fetchurl, gettext, perlPackages, intltool, pkgconfig, glib,
   libxml2, sqlite, zlib, sg3_utils, gdk-pixbuf, taglib,
-  libimobiledevice, python3Packages, mutagen,
+  libimobiledevice, mutagen,
   monoSupport ? false, mono, gtk-sharp-2_0
 }:
 
-let
-  inherit (python3Packages) python pygobject2;
-in stdenv.mkDerivation rec {
+
+stdenv.mkDerivation rec {
   name = "libgpod-0.8.3";
+
   src = fetchurl {
     url = "mirror://sourceforge/gtkpod/${name}.tar.bz2";
     sha256 = "0pcmgv1ra0ymv73mlj4qxzgyir026z9jpl5s5bkg35afs1cpk2k3";
   };
+
+  outputs = [ "out" "dev" ];
 
   preConfigure = "configureFlagsArray=( --with-udev-dir=$out/lib/udev )";
 
@@ -23,7 +25,7 @@ in stdenv.mkDerivation rec {
   dontStrip = true;
 
   propagatedBuildInputs = [ glib libxml2 sqlite zlib sg3_utils
-    gdk-pixbuf taglib libimobiledevice python pygobject2 mutagen ];
+    gdk-pixbuf taglib libimobiledevice  mutagen ];
 
   nativeBuildInputs = [ gettext intltool pkgconfig ]
     ++ (with perlPackages; [ perl XMLParser ])

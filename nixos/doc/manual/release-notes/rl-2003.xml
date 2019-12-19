@@ -55,6 +55,19 @@
       and adding a <option>--all</option> option which prints all options and their values.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <option>services.xserver.desktopManager.default</option> and <option>services.xserver.windowManager.default</option> options were replaced by a single <xref linkend="opt-services.xserver.displayManager.defaultSession"/> option to improve support for upstream session files. If you used something like:
+<programlisting>
+services.xserver.desktopManager.default = "xfce";
+services.xserver.windowManager.default = "icewm";
+</programlisting>
+     you should change it to:
+<programlisting>
+services.xserver.displayManager.defaultSession = "xfce+icewm";
+</programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

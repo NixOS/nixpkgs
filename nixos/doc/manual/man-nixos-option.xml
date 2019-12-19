@@ -119,4 +119,13 @@ Defined by:
    bug, please report to Nicolas Pierron.
   </para>
  </refsection>
+ <refsection>
+  <title>See also</title>
+  <para>
+   <citerefentry>
+    <refentrytitle>configuration.nix</refentrytitle>
+    <manvolnum>5</manvolnum>
+   </citerefentry>
+  </para>
+ </refsection>
 </refentry>
