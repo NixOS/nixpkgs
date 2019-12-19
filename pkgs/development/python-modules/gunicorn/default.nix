@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "19.9.0";
+  version = "20.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3";
+    sha256 = "1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626";
   };
 
   propagatedBuildInputs = [ setuptools ];
