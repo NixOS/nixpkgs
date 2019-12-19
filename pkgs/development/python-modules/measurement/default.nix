@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "measurement";
-  version = "2.0.1";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "36ca385ffdccf140a75a7e1d816a4df97a6dd255f16fd2f53dd7ab43632a8835";
+    sha256 = "352b20f7f0e553236af7c5ed48d091a51cf26061c1a063f46b31706ff7c0d57a";
   };
 
   propagatedBuildInputs = [ pbr six sympy ];
