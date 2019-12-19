@@ -690,6 +690,8 @@ in {
 
   geoip2 = callPackage ../development/python-modules/geoip2 { };
 
+  getmac = callPackage ../development/python-modules/getmac { };
+
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
   gin-config = callPackage ../development/python-modules/gin-config { };
