@@ -8146,6 +8146,8 @@ in
 
   spago = haskell.lib.justStaticExecutables haskellPackages.spago;
 
+  pulp = nodePackages.pulp;
+
   tacacsplus = callPackage ../servers/tacacsplus { };
 
   tamarin-prover =
