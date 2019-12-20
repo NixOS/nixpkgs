@@ -26,6 +26,8 @@ in
          enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
 
+      apps.enable = mkEnableOption "Pantheon default applications";
+
     };
 
     services.xserver.desktopManager.pantheon = {
@@ -121,6 +123,7 @@ in
         switchboard-plug-power
         elementary-default-settings
       ];
+      services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
       services.gnome3.at-spi2-core.enable = true;
       services.gnome3.evolution-data-server.enable = true;
@@ -186,7 +189,7 @@ in
           gnome3.geary
           gnome3.epiphany
           gnome3.gnome-font-viewer
-        ] ++ pantheon.apps) config.environment.pantheon.excludePackages)
+        ]) config.environment.pantheon.excludePackages)
         ++ (with pkgs;
         [
           adwaita-qt
@@ -209,13 +212,32 @@ in
       fonts.fonts = with pkgs; [
         open-sans
         roboto-mono
-        pantheon.elementary-redacted-script # needed by screenshot-tool
       ];
 
       fonts.fontconfig.defaultFonts = {
         monospace = [ "Roboto Mono" ];
         sansSerif = [ "Open Sans" ];
       };
+    })
+
+    (mkIf serviceCfg.apps.enable {
+      environment.systemPackages = (with pkgs.pantheon; pkgs.gnome3.removePackagesByName [
+        elementary-calculator
+        elementary-calendar
+        elementary-camera
+        elementary-code
+        elementary-files
+        elementary-music
+        elementary-photos
+        elementary-screenshot-tool
+        elementary-terminal
+        elementary-videos
+      ] config.environment.pantheon.excludePackages);
+
+      # needed by screenshot-tool
+      fonts.fonts = [
+        pkgs.pantheon.elementary-redacted-script
+      ];
     })
 
     (mkIf serviceCfg.contractor.enable {
