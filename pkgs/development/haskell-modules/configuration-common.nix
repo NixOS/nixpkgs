@@ -1344,8 +1344,8 @@ self: super: {
 
   # ghcide needs the latest versions of haskell-lsp.
   ghcide = super.ghcide.override { haskell-lsp = self.haskell-lsp_0_18_0_0; lsp-test = self.lsp-test_0_8_2_0; };
-  haskell-lsp_0_18_0_0 = super.haskell-lsp_0_18_0_0.override { haskell-lsp-types = self.haskell-lsp-types_0_18_0_0; };
-  lsp-test_0_8_2_0 = (dontCheck super.lsp-test_0_8_2_0).override { haskell-lsp = self.haskell-lsp_0_18_0_0; };
+  haskell-lsp_0_19_0_0 = super.haskell-lsp_0_19_0_0.override { haskell-lsp-types = self.haskell-lsp-types_0_19_0_0; };
+  lsp-test_0_9_0_0 = (dontCheck super.lsp-test_0_9_0_0).override { haskell-lsp = self.haskell-lsp_0_19_0_0; };
 
   # 2019-12-19 - glirc wants regex-tdfa >=1.3 which results in errors with regex-base which errors more
   # hoping to make a proper derivation with plugins enabled and more reliable building -- kiwi
