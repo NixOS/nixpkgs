@@ -1,4 +1,5 @@
 [
   "node2nix",
-  "dat"
+  "dat" ,
+  "sodium-native"
 ]

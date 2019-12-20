@@ -1957,13 +1957,13 @@ let
         sha1 = "12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44";
       };
     };
-    "is-string-1.0.4" = {
+    "is-string-1.0.5" = {
       name = "is-string";
       packageName = "is-string";
-      version = "1.0.4";
+      version = "1.0.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/is-string/-/is-string-1.0.4.tgz";
-        sha1 = "cc3a9b69857d621e963725a24caeec873b826e64";
+        url = "https://registry.npmjs.org/is-string/-/is-string-1.0.5.tgz";
+        sha512 = "buY6VNRjhQMiF1qWDouloZlQbRhDPCebwxSjxMjxgemYT46YMd2NR0/H+fBhEfWX4A/w9TBJ+ol+okqJKFE6vQ==";
       };
     };
     "is-typedarray-1.0.0" = {
@@ -3289,13 +3289,13 @@ let
         sha512 = "NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==";
       };
     };
-    "resolve-1.13.1" = {
+    "resolve-1.14.1" = {
       name = "resolve";
       packageName = "resolve";
-      version = "1.13.1";
+      version = "1.14.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/resolve/-/resolve-1.13.1.tgz";
-        sha512 = "CxqObCX8K8YtAhOBRg+lrcdn+LK+WYOS8tSjqSFbjtrI5PnS63QPhZl4+yKfrU9tdsbMu9Anr/amegT87M9Z6w==";
+        url = "https://registry.npmjs.org/resolve/-/resolve-1.14.1.tgz";
+        sha512 = "fn5Wobh4cxbLzuHaE+nphztHy43/b++4M6SsGFC2gB8uYwf0C8LcarfCz1un7UTW8OFQg9iNjZ4xpcFVGebDPg==";
       };
     };
     "resolve-url-0.2.1" = {
@@ -4552,7 +4552,7 @@ in
         ];
       })
       sources."request-2.88.0"
-      sources."resolve-1.13.1"
+      sources."resolve-1.14.1"
       sources."retry-0.10.1"
       sources."rimraf-2.6.3"
       sources."safe-buffer-5.2.0"
@@ -4911,7 +4911,7 @@ in
       sources."is-redirect-1.0.0"
       sources."is-retry-allowed-1.2.0"
       sources."is-stream-1.1.0"
-      sources."is-string-1.0.4"
+      sources."is-string-1.0.5"
       sources."is-typedarray-1.0.0"
       sources."is-windows-1.0.2"
       sources."isarray-1.0.0"
@@ -5264,6 +5264,29 @@ in
       description = "Dat is the package manager for data. Easily share and version control data.";
       homepage = https://datproject.org/;
       license = "BSD-3-Clause";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  sodium-native = nodeEnv.buildNodePackage {
+    name = "sodium-native";
+    packageName = "sodium-native";
+    version = "2.4.6";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/sodium-native/-/sodium-native-2.4.6.tgz";
+      sha512 = "Ro9lhTjot8M01nwKLXiqLSmjR7B8o+Wg4HmJUjEShw/q6XPlNMzjPkA1VJKaMH8SO8fJ/sggAKVwreTaFszS2Q==";
+    };
+    dependencies = [
+      sources."ini-1.3.5"
+      sources."nan-2.14.0"
+      sources."node-gyp-build-4.2.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Low level bindings for libsodium";
+      homepage = https://github.com/sodium-friends/sodium-native;
+      license = "MIT";
     };
     production = true;
     bypassCache = true;
