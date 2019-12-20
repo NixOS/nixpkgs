@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "08zgi2yiynb20l1f9rhly4a7zgqnr7lq3cr5vkmh1jnfs6z27dv6";
   };
 
-  cargoSha256 = "0ca9gaih0b9qg7bdgyhvb9gr1mq23r62pi0845vwc216jfaag079";
+  cargoSha256 = "0hd46h4wwh81hnida0in3142884y8n6ygk7qm09i5wj52g73bivv";
 
   meta = with lib; {
     description = "A tool to conveniently learn about the disk usage of directories, fast!";
