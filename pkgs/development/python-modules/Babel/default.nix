@@ -22,6 +22,15 @@ buildPythonPackage rec {
     # https://github.com/NixOS/nixpkgs/issues/74904 (like above).
     && !(stdenv.hostPlatform.isMusl && !isPy3k);
 
+  # Without this, the build oddly fails on ofborg CI (but not on nh2's NixOS)
+  # when Python M 3 is used.
+  # Even more oddly, using `export LC_ALL="C.UTF-8"` (with quotes) makes it
+  # fail as well.
+  # See https://github.com/NixOS/nixpkgs/pull/75676#issuecomment-567289105
+  preCheck = if isPy3k then null else ''
+    export LC_ALL=C.UTF-8
+  '';
+
   meta = with lib; {
     homepage = http://babel.edgewall.org;
     description = "A collection of tools for internationalizing Python applications";
