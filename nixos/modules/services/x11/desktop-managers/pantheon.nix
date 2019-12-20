@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.xserver.desktopManager.pantheon;
+  serviceCfg = config.services.pantheon;
 
   nixos-gsettings-desktop-schemas = pkgs.pantheon.elementary-gsettings-schemas.override {
     extraGSettingsOverridePackages = cfg.extraGSettingsOverridePackages;
@@ -18,6 +19,14 @@ in
   meta.maintainers = pkgs.pantheon.maintainers;
 
   options = {
+
+    services.pantheon = {
+
+      contractor = {
+         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
+      };
+
+    };
 
     services.xserver.desktopManager.pantheon = {
       enable = mkOption {
@@ -67,147 +76,158 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = mkMerge [
+    (mkIf cfg.enable {
 
-    services.xserver.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
 
-    # Ensure lightdm is used when Pantheon is enabled
-    # Without it screen locking will be nonfunctional because of the use of lightlocker
+      # Ensure lightdm is used when Pantheon is enabled
+      # Without it screen locking will be nonfunctional because of the use of lightlocker
+      warnings = optional (config.services.xserver.displayManager.lightdm.enable != true)
+        ''
+          Using Pantheon without LightDM as a displayManager will break screenlocking from the UI.
+        '';
 
-    warnings = optional (config.services.xserver.displayManager.lightdm.enable != true)
-      ''
-        Using Pantheon without LightDM as a displayManager will break screenlocking from the UI.
+      services.xserver.displayManager.lightdm.greeters.pantheon.enable = mkDefault true;
+
+      # Without this, elementary LightDM greeter will pre-select non-existent `default` session
+      # https://github.com/elementary/greeter/issues/368
+      services.xserver.displayManager.defaultSession = "pantheon";
+
+      services.xserver.displayManager.sessionCommands = ''
+        if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
+            ${concatMapStrings (p: ''
+              if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+                export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+              fi
+
+              if [ -d "${p}/lib/girepository-1.0" ]; then
+                export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+                export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+              fi
+            '') cfg.sessionPath}
+        fi
       '';
 
-    services.xserver.displayManager.lightdm.greeters.pantheon.enable = mkDefault true;
+      hardware.bluetooth.enable = mkDefault true;
+      hardware.pulseaudio.enable = mkDefault true;
+      security.polkit.enable = true;
+      services.accounts-daemon.enable = true;
+      services.bamf.enable = true;
+      services.colord.enable = mkDefault true;
+      services.tumbler.enable = mkDefault true;
+      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+      services.dbus.packages = with pkgs.pantheon; [
+        switchboard-plug-power
+        elementary-default-settings
+      ];
+      services.pantheon.contractor.enable = mkDefault true;
+      services.gnome3.at-spi2-core.enable = true;
+      services.gnome3.evolution-data-server.enable = true;
+      services.gnome3.glib-networking.enable = true;
+      # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
+      services.gnome3.gnome-keyring.enable = true;
+      services.gnome3.gnome-settings-daemon.enable = true;
+      services.udev.packages = [ pkgs.pantheon.elementary-settings-daemon ];
+      services.gvfs.enable = true;
+      services.gnome3.rygel.enable = mkDefault true;
+      services.gsignond.enable = mkDefault true;
+      services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];
+      services.udisks2.enable = true;
+      services.upower.enable = config.powerManagement.enable;
+      services.xserver.libinput.enable = mkDefault true;
+      services.xserver.updateDbusEnvironment = true;
+      services.zeitgeist.enable = mkDefault true;
+      services.geoclue2.enable = mkDefault true;
+      # pantheon has pantheon-agent-geoclue2
+      services.geoclue2.enableDemoAgent = false;
+      services.geoclue2.appConfig."io.elementary.desktop.agent-geoclue2" = {
+        isAllowed = true;
+        isSystem = true;
+      };
 
-    # Without this, Elementary LightDM greeter will pre-select non-existent `default` session
-    # https://github.com/elementary/greeter/issues/368
-    services.xserver.displayManager.defaultSession = "pantheon";
+      programs.dconf.enable = true;
+      programs.evince.enable = mkDefault true;
+      programs.file-roller.enable = mkDefault true;
+      # Otherwise you can't store NetworkManager Secrets with
+      # "Store the password only for this user"
+      programs.nm-applet.enable = true;
 
-    services.xserver.displayManager.sessionCommands = ''
-      if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
-          ${concatMapStrings (p: ''
-            if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-              export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-            fi
+      # Shell integration for VTE terminals
+      programs.bash.vteIntegration = mkDefault true;
+      programs.zsh.vteIntegration = mkDefault true;
 
-            if [ -d "${p}/lib/girepository-1.0" ]; then
-              export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-              export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-            fi
-          '') cfg.sessionPath}
-      fi
-    '';
+      # Harmonize Qt5 applications under Pantheon
+      qt5.enable = true;
+      qt5.platformTheme = "gnome";
+      qt5.style = "adwaita";
 
-    hardware.bluetooth.enable = mkDefault true;
-    hardware.pulseaudio.enable = mkDefault true;
-    security.polkit.enable = true;
-    services.accounts-daemon.enable = true;
-    services.bamf.enable = true;
-    services.colord.enable = mkDefault true;
-    services.tumbler.enable = mkDefault true;
-    services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-    services.dbus.packages = with pkgs.pantheon; [
-      switchboard-plug-power
-      elementary-default-settings
-    ];
-    services.pantheon.contractor.enable = mkDefault true;
-    services.gnome3.at-spi2-core.enable = true;
-    services.gnome3.evolution-data-server.enable = true;
-    services.gnome3.glib-networking.enable = true;
-    # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
-    services.gnome3.gnome-keyring.enable = true;
-    services.gnome3.gnome-settings-daemon.enable = true;
-    services.udev.packages = [ pkgs.pantheon.elementary-settings-daemon ];
-    services.gvfs.enable = true;
-    services.gnome3.rygel.enable = mkDefault true;
-    services.gsignond.enable = mkDefault true;
-    services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];
-    services.udisks2.enable = true;
-    services.upower.enable = config.powerManagement.enable;
-    services.xserver.libinput.enable = mkDefault true;
-    services.xserver.updateDbusEnvironment = true;
-    services.zeitgeist.enable = mkDefault true;
-    services.geoclue2.enable = mkDefault true;
-    # pantheon has pantheon-agent-geoclue2
-    services.geoclue2.enableDemoAgent = false;
-    services.geoclue2.appConfig."io.elementary.desktop.agent-geoclue2" = {
-      isAllowed = true;
-      isSystem = true;
-    };
+      networking.networkmanager.enable = mkDefault true;
 
-    programs.dconf.enable = true;
-    programs.evince.enable = mkDefault true;
-    programs.file-roller.enable = mkDefault true;
-    # Otherwise you can't store NetworkManager Secrets with
-    # "Store the password only for this user"
-    programs.nm-applet.enable = true;
+      # Override GSettings schemas
+      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-    # Shell integration for VTE terminals
-    programs.bash.vteIntegration = mkDefault true;
-    programs.zsh.vteIntegration = mkDefault true;
+      environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
 
-    # Harmonize Qt5 applications under Pantheon
-    qt5.enable = true;
-    qt5.platformTheme = "gnome";
-    qt5.style = "adwaita";
+      # Settings from elementary-default-settings
+      environment.sessionVariables.GTK_CSD = "1";
+      environment.sessionVariables.GTK3_MODULES = [ "pantheon-filechooser-module" ];
+      environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
 
-    networking.networkmanager.enable = mkDefault true;
+      environment.pathsToLink = [
+        # FIXME: modules should link subdirs of `/share` rather than relying on this
+        "/share"
+      ];
 
-    # Override GSettings schemas
-    environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+      environment.systemPackages =
+        pkgs.pantheon.artwork ++ pkgs.pantheon.desktop ++ pkgs.pantheon.services ++ cfg.sessionPath
+        ++ (with pkgs; gnome3.removePackagesByName
+        ([
+          gnome3.geary
+          gnome3.epiphany
+          gnome3.gnome-font-viewer
+        ] ++ pantheon.apps) config.environment.pantheon.excludePackages)
+        ++ (with pkgs;
+        [
+          adwaita-qt
+          desktop-file-utils
+          glib
+          glib-networking
+          gnome-menus
+          gnome3.adwaita-icon-theme
+          gtk3.out
+          hicolor-icon-theme
+          lightlocker
+          onboard
+          plank
+          qgnomeplatform
+          shared-mime-info
+          sound-theme-freedesktop
+          xdg-user-dirs
+        ]);
 
-    environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
+      fonts.fonts = with pkgs; [
+        open-sans
+        roboto-mono
+        pantheon.elementary-redacted-script # needed by screenshot-tool
+      ];
 
-    # Settings from elementary-default-settings
-    environment.sessionVariables.GTK_CSD = "1";
-    environment.sessionVariables.GTK3_MODULES = [ "pantheon-filechooser-module" ];
-    environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
+      fonts.fontconfig.defaultFonts = {
+        monospace = [ "Roboto Mono" ];
+        sansSerif = [ "Open Sans" ];
+      };
+    })
 
-    environment.pathsToLink = [
-      # FIXME: modules should link subdirs of `/share` rather than relying on this
-      "/share"
-    ];
+    (mkIf serviceCfg.contractor.enable {
+      environment.systemPackages = with  pkgs.pantheon; [
+        contractor
+        extra-elementary-contracts
+      ];
 
-    environment.systemPackages =
-      pkgs.pantheon.artwork ++ pkgs.pantheon.desktop ++ pkgs.pantheon.services ++ cfg.sessionPath
-      ++ (with pkgs; gnome3.removePackagesByName
-      ([
-        gnome3.geary
-        gnome3.epiphany
-        gnome3.gnome-font-viewer
-      ] ++ pantheon.apps) config.environment.pantheon.excludePackages)
-      ++ (with pkgs;
-      [
-        adwaita-qt
-        desktop-file-utils
-        glib
-        glib-networking
-        gnome-menus
-        gnome3.adwaita-icon-theme
-        gtk3.out
-        hicolor-icon-theme
-        lightlocker
-        onboard
-        plank
-        qgnomeplatform
-        shared-mime-info
-        sound-theme-freedesktop
-        xdg-user-dirs
-      ]);
+      environment.pathsToLink = [
+        "/share/contractor"
+      ];
+    })
 
-    fonts.fonts = with pkgs; [
-      open-sans
-      roboto-mono
-      pantheon.elementary-redacted-script # needed by screenshot-tool
-    ];
-
-    fonts.fontconfig.defaultFonts = {
-      monospace = [ "Roboto Mono" ];
-      sansSerif = [ "Open Sans" ];
-    };
-
-  };
-
+  ];
 }
