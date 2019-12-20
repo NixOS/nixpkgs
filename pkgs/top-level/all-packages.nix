@@ -8142,6 +8142,8 @@ in
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
+  purescript-psa = nodePackages.purescript-psa;
+
   spago = haskell.lib.justStaticExecutables haskellPackages.spago;
 
   tacacsplus = callPackage ../servers/tacacsplus { };

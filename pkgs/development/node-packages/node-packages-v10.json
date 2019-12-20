@@ -104,6 +104,7 @@
 , "pnpm"
 , "prettier"
 , "pulp"
+, "purescript-psa"
 , "react-native-cli"
 , "react-tools"
 , "reveal.js"
