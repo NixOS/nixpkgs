@@ -96,8 +96,8 @@ cmakeConfigurePhase() {
     # and unecessary attempts to access non-existent home folder
     # https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#disabling-the-package-registry
     cmakeFlags="-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON $cmakeFlags"
-    cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON $cmakeFlags"
-    cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON $cmakeFlags"
+    cmakeFlags="-DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF $cmakeFlags"
+    cmakeFlags="-DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF $cmakeFlags"
 
     if [ "${buildPhase-}" = ninjaBuildPhase ]; then
         cmakeFlags="-GNinja $cmakeFlags"
