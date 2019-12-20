@@ -19,7 +19,7 @@
         makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
           --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
           --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
-          --add-flags "-jarDirs '$out/share/flyway/jars'" \
+          --add-flags "-DjarDirs '$out/share/flyway/jars'" \
           --add-flags "org.flywaydb.commandline.Main"
       '';
       meta = with stdenv.lib; {
