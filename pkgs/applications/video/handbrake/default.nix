@@ -10,8 +10,9 @@
 { stdenv, lib, fetchurl, fetchpatch,
   # Main build tools
   python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4, lzma,
+  numactl,
   # Processing, video codecs, containers
-  ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora,
+  ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora, dav1d,
   # Codecs, audio
   libopus, lame, libvorbis, a52dec, speex, libsamplerate,
   # Text processing
@@ -48,11 +49,11 @@ assert stdenv.isDarwin -> AudioToolbox != null && Foundation != null
 
 stdenv.mkDerivation rec {
   pname = "handbrake";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchurl {
     url = ''https://download2.handbrake.fr/${version}/HandBrake-${version}-source.tar.bz2'';
-    sha256 = "0k2yaqy7zi06k8mkp9az2mn9dlgj3a1339vacakfh2nn2zsics6z";
+    sha256 = "15hxncswmaj62hb40fxixsa6d519zb712z9xbdq979q4rasjxa59";
   };
 
   nativeBuildInputs = [
@@ -60,10 +61,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
-    ffmpeg-full libogg libtheora x264 x265 libvpx
+    ffmpeg-full libogg libtheora x264 x265 libvpx dav1d
     libopus lame libvorbis a52dec speex libsamplerate
     libiconv fribidi fontconfig freetype libass jansson libxml2 harfbuzz
-    libdvdread libdvdnav libdvdcss libbluray lzma
+    libdvdread libdvdnav libdvdcss libbluray lzma numactl
   ] ++ lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
@@ -81,13 +82,6 @@ stdenv.mkDerivation rec {
   # cp: cannot create regular file './internal_defaults.json': File exists
   enableParallelBuilding = false;
 
-  # The samplerate patch should be removed when HandBrake 1.3.0 is released
-  patches = [(fetchpatch {
-    name = "set-ffmpeg-samplerate.patch";
-    url = "https://patch-diff.githubusercontent.com/raw/HandBrake/HandBrake/pull/2126.patch";
-    sha256 = "00lds9h27cvyr53qpvv8gbv01hfxdxd8gphxcwbwg8akqrvk9gbf";
-  })];
-
   preConfigure = ''
     patchShebangs scripts
 
@@ -99,6 +93,7 @@ stdenv.mkDerivation rec {
     # Force using nixpkgs dependencies
     sed -i '/MODULES += contrib/d' make/include/main.defs
     sed -i '/PKG_CONFIG_PATH=/d' gtk/module.rules
+    sed -i 's/^[[:space:]]*\(meson\|ninja\)[[:space:]]*= ToolProbe.*$//g' make/configure.py
   '';
 
   configureFlags = [
@@ -112,6 +107,8 @@ stdenv.mkDerivation rec {
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
   NIX_LDFLAGS = [
     "-lx265"
+    # NOTE: The -ldl flag was fixed upstream for a release after 1.3.0    
+    "-ldl"
   ];
 
   preBuild = ''
