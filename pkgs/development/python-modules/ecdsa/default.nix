@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pkgs
+, six
 }:
 
 buildPythonPackage rec {
@@ -13,6 +14,7 @@ buildPythonPackage rec {
     sha256 = "64c613005f13efec6541bb0a33290d0d03c27abab5f15fbab20fb0ee162bdd8e";
   };
 
+  propagatedBuildInputs = [ six ];
   # Only needed for tests
   checkInputs = [ pkgs.openssl ];
 
