@@ -18451,6 +18451,8 @@ in
 
   docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
 
+  docker-credential-helpers = callPackage ../tools/admin/docker-credential-helpers { };
+
   doodle = callPackage ../applications/search/doodle { };
 
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
