@@ -2069,6 +2069,17 @@ let
     };
   };
 
+  nvim-lsp = buildVimPluginFrom2Nix {
+    pname = "nvim-lsp";
+    version = "2019-12-17";
+    src = fetchFromGitHub {
+      owner = "neovim";
+      repo = "nvim-lsp";
+      rev = "29edb620716055819d38f572f7a0d0a00303d5d0";
+      sha256 = "0d7aph6rlx8g8a0dqpvp5xl6887z5pab34d0ip3gpggab1281grr";
+    };
+  };
+
   nvim-terminal-lua = buildVimPluginFrom2Nix {
     pname = "nvim-terminal-lua";
     version = "2019-10-17";

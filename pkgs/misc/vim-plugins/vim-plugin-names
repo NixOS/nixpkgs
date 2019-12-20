@@ -315,6 +315,7 @@ neomake/neomake
 neovimhaskell/haskell-vim
 neovimhaskell/nvim-hs.vim
 neovim/nvimdev.nvim
+neovim/nvim-lsp
 neutaaaaan/iosvkem
 nfnty/vim-nftables
 nicoe/deoplete-khard
