@@ -8063,7 +8063,6 @@ broken-packages:
   - postgresql-simple-queue
   - postgresql-simple-sop
   - postgresql-simple-typed
-  - postgresql-simple-url
   - postgresql-typed
   - postgresql-typed-lifted
   - postgrest
