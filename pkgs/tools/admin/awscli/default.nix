@@ -7,6 +7,13 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
+      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d";
+        };
+      });
       rsa = super.rsa.overridePythonAttrs (oldAttrs: rec {
         version = "3.4.2";
         src = oldAttrs.src.override {
