@@ -644,8 +644,8 @@ self: super: builtins.intersectAttrs super {
       # we can safely jailbreak spago and use the older directory package from
       # LTS-14.
       spagoWithOverrides = doJailbreak (super.spago.override {
-        # spago requires the latest version of dhall.
-        directory = self.dhall_1_28_0;
+        # spago requires dhall_1_27_0.
+        dhall = self.dhall_1_27_0;
       });
 
       docsSearchAppJsFile = pkgs.fetchurl {
@@ -683,13 +683,9 @@ self: super: builtins.intersectAttrs super {
         '';
       });
 
-      # Haddock generation is broken for spago.
-      # https://github.com/spacchetti/spago/issues/511
-      spagoWithoutHaddocks = dontHaddock spagoFixHpack;
-
       # Because of the problem above with pulling in hspec defaults to the
       # package.yaml file, the tests are disabled.
-      spagoWithoutChecks = dontCheck spagoWithoutHaddocks;
+      spagoWithoutChecks = dontCheck spagoFixHpack;
     in
     spagoWithoutChecks;
 }
