@@ -52,6 +52,18 @@ in
         ];
       };
 
+      extraWingpanelIndicators = mkOption {
+        default = null;
+        type = with types; nullOr (listOf package);
+        description = "Indicators to add to Wingpanel.";
+      };
+
+      extraSwitchboardPlugs = mkOption {
+        default = null;
+        type = with types; nullOr (listOf package);
+        description = "Plugs to add to Switchboard.";
+      };
+
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
@@ -183,8 +195,12 @@ in
         elementary-session-settings
         elementary-shortcut-overlay
         gala
-        switchboard-with-plugs
-        wingpanel-with-indicators
+        (switchboard-with-plugs.override {
+          plugs = cfg.extraSwitchboardPlugs;
+        })
+        (wingpanel-with-indicators.override {
+          indicators = cfg.extraWingpanelIndicators;
+        })
 
         # Services
         cerbere
