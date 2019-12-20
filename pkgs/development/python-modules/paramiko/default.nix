@@ -3,6 +3,7 @@
 , fetchPypi
 , cryptography
 , bcrypt
+, invoke
 , pynacl
 , pyasn1
 , pytest
@@ -19,14 +20,17 @@ buildPythonPackage rec {
     sha256 = "920492895db8013f6cc0179293147f830b8c7b21fdfc839b6bad760c27459d9f";
   };
 
-  checkInputs = [ pytest mock pytest-relaxed ];
+  checkInputs = [ invoke pytest mock pytest-relaxed ];
   propagatedBuildInputs = [ bcrypt cryptography pynacl pyasn1 ];
 
   __darwinAllowLocalNetworking = true;
 
   # 2 sftp tests fail (skip for now)
+  # test_config relies on artifacts to be to downloaded
   checkPhase = ''
-    pytest tests --ignore=tests/test_sftp.py
+    pytest tests \
+      --ignore=tests/test_sftp.py \
+      --ignore=tests/test_config.py
   '';
 
   meta = with pkgs.lib; {
