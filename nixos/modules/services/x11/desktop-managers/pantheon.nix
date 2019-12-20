@@ -111,6 +111,7 @@ in
         fi
       '';
 
+      # Default services
       hardware.bluetooth.enable = mkDefault true;
       hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
@@ -121,17 +122,14 @@ in
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs.pantheon; [
         switchboard-plug-power
-        elementary-default-settings
+        elementary-default-settings # accountsservice extensions
       ];
       services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
       services.gnome3.at-spi2-core.enable = true;
       services.gnome3.evolution-data-server.enable = true;
       services.gnome3.glib-networking.enable = true;
-      # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
       services.gnome3.gnome-keyring.enable = true;
-      services.gnome3.gnome-settings-daemon.enable = true;
-      services.udev.packages = [ pkgs.pantheon.elementary-settings-daemon ];
       services.gvfs.enable = true;
       services.gnome3.rygel.enable = mkDefault true;
       services.gsignond.enable = mkDefault true;
@@ -148,10 +146,77 @@ in
         isAllowed = true;
         isSystem = true;
       };
-
+      # Use gnome-settings-daemon fork
+      services.udev.packages = [
+        pkgs.pantheon.elementary-settings-daemon
+      ];
+      systemd.packages = [
+        pkgs.pantheon.elementary-settings-daemon
+      ];
       programs.dconf.enable = true;
+      networking.networkmanager.enable = mkDefault true;
+
+      # Global environment
+      environment.systemPackages = with pkgs; [
+        desktop-file-utils
+        glib
+        gnome-menus
+        gnome3.adwaita-icon-theme
+        gtk3.out
+        hicolor-icon-theme
+        lightlocker
+        onboard
+        plank
+        qgnomeplatform
+        shared-mime-info
+        sound-theme-freedesktop
+        xdg-user-dirs
+      ] ++ (with pkgs.pantheon; [
+        # Artwork
+        elementary-gtk-theme
+        elementary-icon-theme
+        elementary-sound-theme
+        elementary-wallpapers
+
+        # Desktop
+        elementary-default-settings
+        elementary-session-settings
+        elementary-shortcut-overlay
+        gala
+        switchboard-with-plugs
+        wingpanel-with-indicators
+
+        # Services
+        cerbere
+        elementary-capnet-assist
+        elementary-dpms-helper
+        elementary-settings-daemon
+        pantheon-agent-geoclue2
+        pantheon-agent-polkit
+      ]) ++ (gnome3.removePackagesByName [
+        gnome3.geary
+        gnome3.epiphany
+        gnome3.gnome-font-viewer
+      ] config.environment.pantheon.excludePackages);
+
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
+
+      # Settings from elementary-default-settings
+      environment.sessionVariables.GTK_CSD = "1";
+      environment.sessionVariables.GTK3_MODULES = [ "pantheon-filechooser-module" ];
+      environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
+
+      # Override GSettings schemas
+      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+
+      environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
+
+      environment.pathsToLink = [
+        # FIXME: modules should link subdirs of `/share` rather than relying on this
+        "/share"
+      ];
+
       # Otherwise you can't store NetworkManager Secrets with
       # "Store the password only for this user"
       programs.nm-applet.enable = true;
@@ -165,50 +230,7 @@ in
       qt5.platformTheme = "gnome";
       qt5.style = "adwaita";
 
-      networking.networkmanager.enable = mkDefault true;
-
-      # Override GSettings schemas
-      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
-
-      environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
-
-      # Settings from elementary-default-settings
-      environment.sessionVariables.GTK_CSD = "1";
-      environment.sessionVariables.GTK3_MODULES = [ "pantheon-filechooser-module" ];
-      environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
-
-      environment.pathsToLink = [
-        # FIXME: modules should link subdirs of `/share` rather than relying on this
-        "/share"
-      ];
-
-      environment.systemPackages =
-        pkgs.pantheon.artwork ++ pkgs.pantheon.desktop ++ pkgs.pantheon.services ++ cfg.sessionPath
-        ++ (with pkgs; gnome3.removePackagesByName
-        ([
-          gnome3.geary
-          gnome3.epiphany
-          gnome3.gnome-font-viewer
-        ]) config.environment.pantheon.excludePackages)
-        ++ (with pkgs;
-        [
-          adwaita-qt
-          desktop-file-utils
-          glib
-          glib-networking
-          gnome-menus
-          gnome3.adwaita-icon-theme
-          gtk3.out
-          hicolor-icon-theme
-          lightlocker
-          onboard
-          plank
-          qgnomeplatform
-          shared-mime-info
-          sound-theme-freedesktop
-          xdg-user-dirs
-        ]);
-
+      # Default Fonts
       fonts.fonts = with pkgs; [
         open-sans
         roboto-mono

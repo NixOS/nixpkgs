@@ -3,31 +3,6 @@
 
 lib.makeScope pkgs.newScope (self: with self; {
 
-  artwork = [
-    elementary-gtk-theme
-    elementary-icon-theme
-    elementary-sound-theme
-    elementary-wallpapers
-  ];
-
-  desktop = [
-    elementary-default-settings
-    elementary-session-settings
-    elementary-shortcut-overlay
-    gala
-    switchboard-with-plugs
-    wingpanel-with-indicators
-  ];
-
-  services = [
-    cerbere
-    elementary-capnet-assist
-    elementary-settings-daemon
-    elementary-dpms-helper
-    pantheon-agent-geoclue2
-    pantheon-agent-polkit
-  ];
-
   switchboardPlugs = [
     switchboard-plug-a11y switchboard-plug-about
     switchboard-plug-applications switchboard-plug-bluetooth
