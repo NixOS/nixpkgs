@@ -9,7 +9,7 @@
 
 { stdenv, lib, fetchurl, fetchpatch,
   # Main build tools
-  python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4, lzma,
+  python2, pkgconfig, autoconf, automake, libtool, m4, lzma,
   numactl,
   # Processing, video codecs, containers
   ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora, dav1d,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    python2 pkgconfig autoconf automake cmake nasm libtool m4
+    python2 pkgconfig autoconf automake libtool m4
   ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
@@ -75,13 +75,6 @@ stdenv.mkDerivation rec {
   # look at ./make/configure.py search "enable_nvenc"
     ++ lib.optional stdenv.isLinux nv-codec-headers;
 
-  # NOTE: 2018-12-25: v1.2.0 now requires cmake dep
-  # (default distribution bundles&builds 3rd party libs),
-  # don't trigger cmake build
-  dontUseCmakeConfigure = true;
-  # cp: cannot create regular file './internal_defaults.json': File exists
-  enableParallelBuilding = false;
-
   preConfigure = ''
     patchShebangs scripts
 
@@ -93,7 +86,9 @@ stdenv.mkDerivation rec {
     # Force using nixpkgs dependencies
     sed -i '/MODULES += contrib/d' make/include/main.defs
     sed -i '/PKG_CONFIG_PATH=/d' gtk/module.rules
-    sed -i 's/^[[:space:]]*\(meson\|ninja\)[[:space:]]*= ToolProbe.*$//g' make/configure.py
+    sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
+        -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
+        -i make/configure.py
   '';
 
   configureFlags = [
