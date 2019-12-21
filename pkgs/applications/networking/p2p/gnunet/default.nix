@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = https://gnunet.org/;
-    license = licenses.gpl2Plus;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.gnu ++ platforms.linux;
   };
