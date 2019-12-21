@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, pytest, glibcLocales }:
+{ stdenv, buildPythonPackage, fetchPypi, python, pytest, glibcLocales, isPy37 }:
 
 buildPythonPackage rec {
   version = "3.7";
@@ -24,6 +24,8 @@ buildPythonPackage rec {
       --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
   '');
 
+  # https://github.com/jmcgeheeiv/pyfakefs/issues/508
+  doCheck = !isPy37;
   checkInputs = [ pytest glibcLocales ];
 
   checkPhase = ''
