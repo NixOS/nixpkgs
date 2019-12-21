@@ -125,7 +125,10 @@ let
   };
   foiltex = { pkgs = [ foiltex_run ]; };
 
-  latex_with_foiltex = texlive.combine { inherit (texlive) scheme-small; inherit foiltex; };
+  latex_with_foiltex = texlive.combine {
+    inherit (texlive) scheme-small;
+    inherit foiltex;
+  };
 in
   runCommand "test.pdf" {
     nativeBuildInputs = [ latex_with_foiltex ];
