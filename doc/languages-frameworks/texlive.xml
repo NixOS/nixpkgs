@@ -93,16 +93,14 @@ let
       runHook postUnpack
     '';
 
-    nativeBuildInputs = [ texlive.combined.scheme-medium ];
+    nativeBuildInputs = [ texlive.combined.scheme-small ];
 
     dontConfigure = true;
 
     buildPhase = ''
       runHook preBuild
 
-      # Generate documentation
-      latexmk -pdf foiltex.dtx
-      # Generate style files
+      # Generate the style files
       latex foiltex.ins
 
       runHook postBuild
@@ -113,7 +111,7 @@ let
 
       path="$out/tex/latex/foiltex"
       mkdir -p "$path"
-      cp *.{cls,def,clo,pdf} "$path/"
+      cp *.{cls,def,clo} "$path/"
 
       runHook postInstall
     '';
