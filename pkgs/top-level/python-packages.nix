@@ -268,6 +268,8 @@ in {
 
   azure-batch = callPackage ../development/python-modules/azure-batch { };
 
+  azure-core = callPackage ../development/python-modules/azure-core { };
+
   azure-cosmosdb-nspkg = callPackage ../development/python-modules/azure-cosmosdb-nspkg { };
 
   azure-cosmosdb-table = callPackage ../development/python-modules/azure-cosmosdb-table { };
