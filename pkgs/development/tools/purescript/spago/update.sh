@@ -14,7 +14,7 @@ set -eo pipefail
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Spago derivation created with cabal2nix.
-spago_derivation_file="${script_dir}/default.nix"
+spago_derivation_file="${script_dir}/spago.nix"
 
 # This is the current revision of spago in Nixpkgs.
 old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$spago_derivation_file")"
