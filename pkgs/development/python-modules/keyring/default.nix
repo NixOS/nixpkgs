@@ -1,6 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
-, dbus-python, setuptools_scm, entrypoints, secretstorage
-, pytest, pytest-flake8 }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pythonOlder
+, dbus-python
+, entrypoints
+, importlib-metadata
+, pytest
+, pytest-flake8
+, secretstorage
+, setuptools_scm
+}:
 
 buildPythonPackage rec {
   pname = "keyring";
@@ -16,12 +22,14 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytest-flake8 ];
 
-  propagatedBuildInputs = [ dbus-python entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
+  propagatedBuildInputs = [ dbus-python entrypoints ]
+  ++ lib.optional stdenv.isLinux secretstorage
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # checks try to access a darwin path on linux
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Store and access your passwords safely";
     homepage    = "https://pypi.python.org/pypi/keyring";
     license     = licenses.psfl;
