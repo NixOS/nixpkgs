@@ -30,7 +30,7 @@ let
   callTest = f: f { inherit system pkgs; };
 
   hydraPkgs = {
-    inherit (pkgs) nixStable nixUnstable;
+    inherit (pkgs) nixStable nixUnstable nixFlakes;
   };
 
   tests = pkgs.lib.flip pkgs.lib.mapAttrs hydraPkgs (name: nix:
