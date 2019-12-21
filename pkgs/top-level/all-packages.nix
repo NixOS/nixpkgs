@@ -23396,6 +23396,8 @@ in
 
   ### DESKTOP ENVIRONMENTS
 
+  cdesktopenv = callPackage ../desktops/cdesktopenv { };
+
   cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
 
   deepin = recurseIntoAttrs (import ../desktops/deepin {
