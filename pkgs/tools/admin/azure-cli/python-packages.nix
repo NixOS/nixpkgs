@@ -114,8 +114,8 @@ let
       azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "0.4.0" "zip"
         "0zssvzdip23yzaxlac9rlzg9mlyjl97fwr0gj8y27z8j58pwj72i";
 
-      azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "4.0.0" "zip"
-        "0gy89bi89ikg5hps8rvnq28r33lixci3sk2m86jvziv9fh9rz41b";
+      azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "6.0.0" "zip"
+        "08n6r6ja7p20qlhb9pp51nwwxz2mal19an98zry276i8z5x8ckp0";
 
       azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "10.0.0" "zip"
         "1s3bx6knxw5dxycp43yimvgrh0i19drzd09asglcwz2x5mr3bpyg";
@@ -150,11 +150,17 @@ let
       azure-mgmt-network = overrideAzureMgmtPackage super.azure-mgmt-network "7.0.0" "zip"
         "0ss5yc9k3dh78lb88nfh3z98yz1pcd8d7d7cfjlxmv4n3dlr1kij";
 
+      azure-mgmt-media = overrideAzureMgmtPackage super.azure-mgmt-media "1.1.1" "zip"
+        "16wk0ksycrscsn3n14qk4vvf7i567vq6f96lwf5dwbc81wx6n32x";
+
       azure-mgmt-msi = overrideAzureMgmtPackage super.azure-mgmt-msi "0.2.0" "zip"
         "0rvik03njz940x2hvqg6iiq8k0d88gyygsr86w8s0sa12sdbq8l6";
 
       azure-mgmt-web = overrideAzureMgmtPackage super.azure-mgmt-web "0.42.0" "zip"
         "0vp40i9aaw5ycz7s7qqir6jq7327f7zg9j9i8g31qkfl1h1c7pdn";
+
+      azure-mgmt-redis = overrideAzureMgmtPackage super.azure-mgmt-redis "7.0.0rc1" "zip"
+        "086wk31wsl8dx14qpd0g1bly8i9a8fix007djlj9cybva2f2bk6k";
 
       azure-mgmt-reservations = overrideAzureMgmtPackage super.azure-mgmt-reservations "0.6.0" "zip"
         "16ycni3cjl9c0mv419gy5rgbrlg8zp0vnr6aj8z8p2ypdw6sgac3";
@@ -176,6 +182,9 @@ let
 
       azure-mgmt-keyvault = overrideAzureMgmtPackage super.azure-mgmt-keyvault "1.1.0" "zip"
         "16a0d3j5dilbp7pd7gbwf8jr46vzbjim1p9alcmisi12m4km7885";
+
+      azure-mgmt-cdn = overrideAzureMgmtPackage super.azure-mgmt-cdn "3.1.0" "zip"
+        "1qvnksmvsg8cw1ac6vbdxjdqsm7s1sak27k8xy24hm7c9a8y1nqc";
 
       azure-mgmt-containerregistry = overrideAzureMgmtPackage super.azure-mgmt-containerregistry "3.0.0rc7" "zip"
         "1bzfpbz186dhnxn0blgr20xxnk67gkr8ysn2b3f1r41bq9hz97xp";
@@ -228,6 +237,24 @@ let
           inherit version;
           sha256 = "00g41b5q4ijlv02zvzjgfwrwy71cgr3lc3if4nayqmyl6xsprj2f";
         };
+      });
+
+      azure-keyvault = super.azure-keyvault.overrideAttrs(oldAttrs: rec {
+        version = "1.1.0";
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          extension = "zip";
+          sha256 = "0jfxm8lx8dzs3v2b04ljizk8gfckbm5l2v86rm7k0npbfvryba1p";
+        };
+
+        propagatedBuildInputs = with self; [
+          azure-common azure-nspkg msrest msrestazure cryptography
+        ];
+        postInstall = ''
+          rm -f $out/${self.python.sitePackages}/azure/__init__.py
+        '';
+        pythonImportsCheck = [ ];
       });
 
       # part of azure.mgmt.datalake namespace
