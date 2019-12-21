@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, flask, pytest, pytestcov, pytest-xprocess }:
+{ lib, buildPythonPackage, fetchPypi, flask, pytest, pytestcov, pytest-xprocess, pytestcache }:
 
 buildPythonPackage rec {
   pname = "Flask-Caching";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask ];
 
-  checkInputs = [ pytest pytestcov pytest-xprocess ];
+  checkInputs = [ pytest pytestcov pytest-xprocess pytestcache ];
 
   # backend_cache relies on pytest-cache, which is a stale package from 2013
   checkPhase = ''
