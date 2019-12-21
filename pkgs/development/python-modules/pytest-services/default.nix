@@ -6,6 +6,7 @@
 , psutil
 , pytest
 , subprocess32
+, zc_lockfile
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,7 @@ buildPythonPackage rec {
     requests
     psutil
     pytest
+    zc_lockfile
   ] ++ lib.optional (!isPy3k) subprocess32;
 
   # no tests in PyPI tarball
