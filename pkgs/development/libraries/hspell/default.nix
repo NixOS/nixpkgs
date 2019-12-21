@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   PERL_USE_UNSAFE_INC = "1";
 
+  outputs = [ "bin" "out" "man" "dev" "lib" ];
+
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
     sha256 = "08x7rigq5pa1pfpl30qp353hbdkpadr1zc49slpczhsn0sg36pd6";
