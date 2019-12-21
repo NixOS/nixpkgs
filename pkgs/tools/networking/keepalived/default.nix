@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, libnfnetlink, libnl, net_snmp, openssl
+, libnfnetlink, libnl, net-snmp, openssl
 , pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libnfnetlink
     libnl
-    net_snmp
+    net-snmp
     openssl
   ];
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, systemd
 , boost, libsodium, libedit, re2
-, net_snmp, lua, protobuf, openssl, zlib, h2o
+, net-snmp, lua, protobuf, openssl, zlib, h2o
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig protobuf ];
-  buildInputs = [ systemd boost libsodium libedit re2 net_snmp lua openssl zlib h2o ];
+  buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o ];
 
   configureFlags = [
     "--enable-libsodium"
