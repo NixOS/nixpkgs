@@ -1,18 +1,12 @@
-{ lib
-, buildPythonPackage
-, python
-, isPy3k
-, fetchPypi
-, azure-common
-, azure-nspkg
-, msrest
-, msrestazure
-, cryptography
+{ lib, buildPythonPackage, isPy27, fetchPypi
+, azure-keyvault-keys
+, azure-keyvault-secrets
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault";
   version = "4.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,24 +15,22 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    azure-common
-    azure-nspkg
-    msrest
-    msrestazure
-    cryptography
+    azure-keyvault-keys
+    azure-keyvault-secrets
   ];
 
-  postInstall = lib.optionalString isPy3k ''
-    rm $out/${python.sitePackages}/azure/__init__.py
-  '';
-
-  # has no tests
+  # this is just a meta package, which contains keys and secrets
   doCheck = false;
+
+  pythonImportsCheck = [
+    "azure.keyvault.keys"
+    "azure.keyvault.secrets"
+  ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Key Vault Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer ];
   };
 }
