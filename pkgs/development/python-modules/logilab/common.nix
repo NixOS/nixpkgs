@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, unittest2, six }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, unittest2, six }:
 
 buildPythonPackage rec {
   pname = "logilab-common";
   version = "1.5.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
