@@ -15453,6 +15453,8 @@ in
   riemann = callPackage ../servers/monitoring/riemann { };
   riemann-dash = callPackage ../servers/monitoring/riemann-dash { };
 
+  unpfs = callPackage ../servers/unpfs {};
+
   oidentd = callPackage ../servers/identd/oidentd { };
 
   openfire = callPackage ../servers/xmpp/openfire { };
