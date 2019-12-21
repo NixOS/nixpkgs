@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412, docbook_xsl, libxml2 }:
+{ stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412, docbook_xsl, libxml2, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   name = "giflib-5.2.1";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace 'PREFIX = /usr/local' 'PREFIX = ${builtins.placeholder "out"}'
   '';
+
+  nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [ xmlto docbook_xml_dtd_412 docbook_xsl libxml2 ];
 
