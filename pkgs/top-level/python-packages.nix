@@ -5132,6 +5132,8 @@ in {
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
 
+  snitun = callPackage ../development/python-modules/snitun { };
+
   snscrape = callPackage ../development/python-modules/snscrape { };
 
   snug = callPackage ../development/python-modules/snug { };
