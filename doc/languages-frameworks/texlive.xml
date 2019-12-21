@@ -62,7 +62,7 @@ nix-repl> texlive.collection-<TAB>
  <section xml:id="sec-language-texlive-custom-packages">
   <title>Custom packages</title>
   <para>
-    You may find that you need to use an external TeX package. A derivation for such package has to provide contents of the "texmf" directory in its output and provide a <varname>tlType</varname> attribute. Here is a (very verbose) example:
+    You may find that you need to use an external TeX package. A derivation for such package has to provide contents of the "texmf" directory in its output and provide the <varname>tlType</varname> attribute. Here is a (very verbose) example:
 <programlisting><![CDATA[
 with import <nixpkgs> {};
 
