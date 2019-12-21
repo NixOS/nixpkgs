@@ -1,10 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , pyyaml
 , six
 , requests
 , aws-sam-translator
+, importlib-metadata
+, importlib-resources
 , jsonpatch
 , jsonschema
 , pathlib2
@@ -29,7 +32,7 @@ buildPythonPackage rec {
     jsonschema
     pathlib2
     setuptools
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
 
   # No tests included in archive
   doCheck = false;
