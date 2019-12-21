@@ -286,6 +286,8 @@ in {
 
   azure-keyvault-keys = callPackage ../development/python-modules/azure-keyvault-keys { };
 
+  azure-keyvault-secrets = callPackage ../development/python-modules/azure-keyvault-secrets { };
+
   azure-loganalytics = callPackage ../development/python-modules/azure-loganalytics { };
 
   azure-servicebus = callPackage ../development/python-modules/azure-servicebus { };
