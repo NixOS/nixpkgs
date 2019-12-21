@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     for i in *.pk3; do
       install -Dm644 "$i" "$out/lib/gzdoom/$i"
     done
+    for i in fm_banks/*; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    for i in soundfonts/*; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
     mkdir $out/bin
     makeWrapper $out/lib/gzdoom/gzdoom $out/bin/gzdoom
   '';
