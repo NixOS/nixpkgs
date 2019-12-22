@@ -23025,7 +23025,7 @@ in
 
   privateer = callPackage ../games/privateer { };
 
-  pysolfc = callPackage ../games/pysolfc { };
+  pysolfc = python3Packages.callPackage ../games/pysolfc { };
 
   qweechat = callPackage ../applications/networking/irc/qweechat { };
 
