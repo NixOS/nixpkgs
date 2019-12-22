@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools
-, qtconnectivity, qtcharts
+, qtconnectivity, qtcharts, libusb
 , yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper
 }:
 
@@ -27,7 +27,7 @@ in mkDerivation rec {
 
   buildInputs = [
     qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools zlib
-    qtconnectivity qtcharts
+    qtconnectivity qtcharts libusb
   ];
   nativeBuildInputs = [ flex makeWrapper qmake yacc ];
 
@@ -39,6 +39,9 @@ in mkDerivation rec {
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
     echo 'QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease' >> src/gcconfig.pri
+    echo 'LIBUSB_INSTALL = ${libusb}' >> src/gcconfig.pri
+    echo 'LIBUSB_INCLUDE = ${libusb.dev}/include' >> src/gcconfig.pri
+    echo 'LIBUSB_LIBS = -L${libusb}/lib -lusb' >> src/gcconfig.pri
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
   '';
 
