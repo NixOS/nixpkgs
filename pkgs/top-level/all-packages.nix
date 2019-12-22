@@ -5822,6 +5822,8 @@ in
 
   pmacct = callPackage ../tools/networking/pmacct { };
 
+  pms = callPackage ../applications/audio/pms { };
+
   polygraph = callPackage ../tools/networking/polygraph { };
 
   progress = callPackage ../tools/misc/progress { };
