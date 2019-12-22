@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, mkDerivation
-, qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools
+, qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
 , qtconnectivity, qtcharts, libusb
 , yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper
 }:
@@ -26,7 +26,7 @@ in mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools zlib
+    qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
     qtconnectivity qtcharts libusb
   ];
   nativeBuildInputs = [ flex makeWrapper qmake yacc ];
@@ -43,6 +43,10 @@ in mkDerivation rec {
     echo 'LIBUSB_INCLUDE = ${libusb.dev}/include' >> src/gcconfig.pri
     echo 'LIBUSB_LIBS = -L${libusb}/lib -lusb' >> src/gcconfig.pri
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
+
+    # Use qtwebengine instead of qtwebkit
+    substituteInPlace src/gcconfig.pri \
+      --replace "#DEFINES += NOWEBKIT" "DEFINES += NOWEBKIT"
   '';
 
   installPhase = ''
