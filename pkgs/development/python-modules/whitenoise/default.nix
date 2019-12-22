@@ -1,8 +1,9 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy27 }:
 
 buildPythonPackage rec {
   pname = "whitenoise";
   version = "5.0.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
