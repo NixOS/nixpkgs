@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , decorator, requests, simplejson, pillow
-, nose, mock, pytest }:
+, nose, mock, pytest, freezegun }:
 
 buildPythonPackage rec {
   pname = "datadog";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ decorator requests simplejson pillow ];
 
-  checkInputs = [ nose mock pytest ];
+  checkInputs = [ nose mock pytest freezegun ];
   checkPhase = ''
     pytest tests/unit
   '';
