@@ -60,6 +60,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Create simple and beautiful presentations";
     homepage = https://github.com/Philip-Scott/Spice-up;

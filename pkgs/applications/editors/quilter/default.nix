@@ -39,6 +39,12 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Focus on your writing - designed for elementary OS";
     homepage = https://github.com/lainsce/quilter;

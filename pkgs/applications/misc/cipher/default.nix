@@ -48,6 +48,12 @@ stdenv.mkDerivation rec {
     patchShebangs post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "A simple application for encoding and decoding text, designed for elementary OS";
     homepage = "https://github.com/arshubham/cipher";
