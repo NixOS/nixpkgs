@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , numpy
 , pytest
 , pytestrunner
@@ -10,6 +11,7 @@
 buildPythonPackage rec {
   pname = "fonttools";
   version = "4.2.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
