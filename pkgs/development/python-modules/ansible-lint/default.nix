@@ -42,5 +42,6 @@ buildPythonPackage rec {
     description = "Best practices checker for Ansible";
     license = licenses.mit;
     maintainers = [ maintainers.sengaya ];
+    broken = true; # requires new flit to build
   };
 }
