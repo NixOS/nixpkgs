@@ -16,13 +16,13 @@ let
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.5-DEV1903";
+  version = "3.5-RC2X";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
-    rev = "v${version}";
-    sha256 = "130b0hm04i0hf97rs1xrdfhbal5vjsknj3x4cdxjh7rgbg2p1sm3";
+    rev = "V${version}";
+    sha256 = "1d85700gjbcw2badwz225rjdr954ai89900vp8sal04sk79wbr6g";
   };
 
   buildInputs = [
@@ -55,9 +55,6 @@ in mkDerivation rec {
 
     runHook postInstall
   '';
-
-  # RCC: Error in 'Resources/application.qrc': Cannot find file 'translations/gc_fr.qm'
-  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     description = "Performance software for cyclists, runners and triathletes";
