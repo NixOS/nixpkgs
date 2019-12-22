@@ -1,27 +1,25 @@
 { stdenv, fetchFromGitHub, rustPlatform
-, pkg-config, openssl
 , libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.31.0";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1g4cpnlz2gx4c3cmqx3a69iwjs2cg8p86l0zd198h6fv8pa1i16y";
+    sha256 = "047nvi231hzwjfci13x8lhszmaccb94mn5lvnyq24zb0im8br6d3";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ (stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ]);
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postPatch = ''
     substituteInPlace src/utils.rs \
       --replace "/bin/echo" "echo"
   '';
 
-  cargoSha256 = "03qrcf0y6j22asp7x10di6xi8hgai84kvh1imiw9vibxp90868bh";
+  cargoSha256 = "0r1kbv6f5v95wnshxj1wkqvp1adyrivzlr606c6blhl9z9j7m3d7";
   checkPhase = "cargo test -- --skip directory::home_directory --skip directory::directory_in_root";
 
   meta = with stdenv.lib; {
