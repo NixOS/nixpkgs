@@ -29,6 +29,12 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Friendly SQL Client";
     longDescription = ''

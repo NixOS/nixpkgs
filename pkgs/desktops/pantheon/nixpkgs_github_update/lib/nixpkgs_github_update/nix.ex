@@ -2,7 +2,7 @@ defmodule NixpkgsGitHubUpdate.Nix do
   def executable do
     nix = System.find_executable("nix")
 
-    if nil === nix do
+    if nix == nil do
       raise RuntimeError, message: "missing executable for 'nix'"
     end
 
@@ -22,19 +22,29 @@ defmodule NixpkgsGitHubUpdate.Nix do
     |> handle_eval
   end
 
-  def handle_eval({eval_result, 0}) do
+  defp handle_eval({eval_result, 0}) do
     case eval_result do
       "" -> eval_result
       _ -> Poison.Parser.parse!(eval_result, %{})
     end
   end
 
-  def handle_eval({eval_result, _}) do
-    IO.puts("Error running nix eval: #{eval_result}")
+  defp handle_eval({eval_result, _}) do
+    raise RuntimeError, message: "Error running nix eval: #{eval_result}"
   end
 
   def attribute_exists?(attribute) do
-    eval!("(with import <nixpkgs> {}; lib.isDerivation #{attribute})")
+    attr_exist_expression = """
+      with import <nixpkgs> {};
+
+      let
+        attrSet = pkgs.lib.attrByPath (pkgs.lib.splitString "." "#{attribute}") null pkgs;
+      in
+        if attrSet == null then false
+        else true
+    """
+
+    eval!("(#{attr_exist_expression})")
   end
 
   def update_source_version(attribute, version) do
@@ -45,9 +55,9 @@ defmodule NixpkgsGitHubUpdate.Nix do
   end
 
   def get_url_attr(attribute) do
-    case eval!("nixpkgs.#{attribute}.src.fetchSubmodules") do
+    case attribute_exists?("#{attribute}.src.fetchSubmodules") do
       true -> "url"
-      _ -> "urls"
+      false -> "urls"
     end
   end
 
