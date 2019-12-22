@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, staticOnly ? false }:
 
 stdenv.mkDerivation rec {
   pname = "onig";
@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = []
+    ++ stdenv.lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/kkos/oniguruma;

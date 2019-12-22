@@ -244,5 +244,7 @@ in {
   
   python27 = super.python27.override { static = true; };
 
-  oniguruma = super.oniguruma.overrideAttrs (_: { cmakeFlags = ["-DBUILD_SHARED_LIBS=OFF"]; });
+  oniguruma = super.oniguruma.override {
+    staticOnly = true;
+  };
 }
