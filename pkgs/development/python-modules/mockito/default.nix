@@ -9,12 +9,11 @@ buildPythonPackage rec {
     sha256 = "2a1cbae9d0aef4ae7586b03f2a463e8c5ba96aa937c0535ced4a5621f851feeb";
   };
 
-  # Failing tests due 2to3
-  doCheck = !isPy3k;
-
   propagatedBuildInputs = stdenv.lib.optionals (!isPy3k) [ funcsigs ];
   checkInputs = [ pytest numpy ];
 
+  # tests are no longer packaged in pypi tarball
+  doCheck = false;
   checkPhase = ''
     pytest
   '';
