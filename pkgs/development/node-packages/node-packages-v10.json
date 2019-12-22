@@ -103,6 +103,7 @@
 , "peerflix-server"
 , "pnpm"
 , "prettier"
+, "pscid"
 , "pulp"
 , "purescript-psa"
 , "react-native-cli"

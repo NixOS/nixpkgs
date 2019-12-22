@@ -8154,6 +8154,8 @@ in
 
   pulp = nodePackages.pulp;
 
+  pscid = nodePackages.pscid;
+
   tacacsplus = callPackage ../servers/tacacsplus { };
 
   tamarin-prover =
