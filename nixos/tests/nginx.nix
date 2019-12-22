@@ -7,7 +7,7 @@
 import ./make-test.nix ({ pkgs, ... }: {
   name = "nginx";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ mbbx6spp ];
+    maintainers = [ mbbx6spp danbst ];
   };
 
   nodes = {
@@ -59,6 +59,11 @@ import ./make-test.nix ({ pkgs, ... }: {
         {
           services.nginx.package = pkgs.nginxUnstable;
         }
+
+        {
+          services.nginx.package = pkgs.nginxUnstable;
+          services.nginx.virtualHosts."!@$$(#*%".locations."~@#*$*!)".proxyPass = ";;;";
+        }
       ];
     };
 
@@ -68,6 +73,7 @@ import ./make-test.nix ({ pkgs, ... }: {
     etagSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-1";
     justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-2";
     reloadRestartSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-3";
+    reloadWithErrorsSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-4";
   in ''
     my $url = 'http://localhost/index.html';
 
@@ -106,6 +112,16 @@ import ./make-test.nix ({ pkgs, ... }: {
       $webserver->succeed("${reloadRestartSystem}/bin/switch-to-configuration test >&2");
       $webserver->waitForUnit("nginx");
       $webserver->succeed("journalctl -u nginx | grep -q -i stopped");
+    };
+
+    subtest "nixos-rebuild --switch should fail when there are configuration errors", sub {
+      $webserver->fail("${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2");
+      $webserver->succeed("[[ \$(systemctl is-failed nginx-config-reload) == failed ]]");
+      $webserver->succeed("[[ \$(systemctl is-failed nginx) == active ]]");
+
+      # just to make sure operation is idempotent. During development I had a situation
+      # when first time it shows error, but stops showing it on subsequent rebuilds
+      $webserver->fail("${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2");
     };
   '';
 })
