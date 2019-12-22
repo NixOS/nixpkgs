@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, rustPlatform
-, pkg-config, openssl
 , libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,8 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "047nvi231hzwjfci13x8lhszmaccb94mn5lvnyq24zb0im8br6d3";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ (stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ]);
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postPatch = ''
     substituteInPlace src/utils.rs \
