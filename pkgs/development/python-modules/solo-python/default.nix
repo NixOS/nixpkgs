@@ -48,5 +48,6 @@
     homepage = "https://github.com/solokeys/solo-python";
     maintainers = with maintainers; [ wucke13 ];
     license = with licenses; [ asl20 mit ];
+    broken = true; # no longer compatible with fido2
   };
 }
