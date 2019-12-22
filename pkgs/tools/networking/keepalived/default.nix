@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, nixosTests
 , libnfnetlink, libnl, net-snmp, openssl
 , pkgconfig, autoreconfHook }:
 
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     net-snmp
     openssl
   ];
+
+  passthru.tests.keepalived = nixosTests.keepalived;
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
