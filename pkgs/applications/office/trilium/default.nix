@@ -15,7 +15,7 @@ let
     inherit description;
     homepage = https://github.com/zadam/trilium;
     license = licenses.agpl3;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ emmanuelrosa dtzWill kampka ];
   };
 

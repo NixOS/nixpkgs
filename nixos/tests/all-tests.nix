@@ -277,7 +277,7 @@ in
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
   trac = handleTest ./trac.nix {};
-  trilium-server = handleTest ./trilium-server.nix {};
+  trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   udisks2 = handleTest ./udisks2.nix {};
