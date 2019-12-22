@@ -4,6 +4,7 @@
 , pytest
 , matplotlib
 , nose
+, pillow
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     matplotlib
     nose
+    pillow
   ];
 
   checkInputs = [
