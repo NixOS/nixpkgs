@@ -18747,10 +18747,9 @@ let
       url = mirror://cpan/authors/id/H/HA/HANK/Text-Aspell-0.09.tar.gz;
       sha256 = "0r9g31rd55934mp6n45b96g934ck4qns8x9i7qckn9wfy44k5sib";
     };
-    propagatedBuildInputs = [ pkgs.aspell ];
+    buildInputs = [ pkgs.aspell ];
     ASPELL_CONF = "dict-dir ${pkgs.aspellDicts.en}/lib/aspell";
-    NIX_CFLAGS_COMPILE = "-I${pkgs.aspell}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.aspell}/lib -laspell";
+    NIX_CFLAGS_LINK = "-laspell";
   };
 
   TextAutoformat = buildPerlPackage {

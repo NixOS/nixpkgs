@@ -30,20 +30,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  doCheck = true;
+  outputs = [ "bin" "out" "man" "dev" "lib" ];
 
-  preConfigure = ''
-    configureFlagsArray=(
-      --enable-pkglibdir=$out/lib/aspell
-      --enable-pkgdatadir=$out/lib/aspell
-    );
-  '';
+  doCheck = true;
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--enable-pkglibdir=${placeholder "lib"}/lib/aspell"
+    "--enable-pkgdatadir=${placeholder "lib"}/lib/aspell"
+  ];
 
   # Include u-deva.cmap and u-deva.cset in the aspell package
   # to avoid conflict between 'mr' and 'hi' dictionaries as they
   # both include those files.
   postInstall = ''
-    cp ${devaMapsSource}/u-deva.{cmap,cset} $out/lib/aspell/
+    cp ${devaMapsSource}/u-deva.{cmap,cset} $lib/lib/aspell/
   '';
 
   meta = {
