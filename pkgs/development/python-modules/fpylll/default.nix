@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.5.0dev";
+  version = "0.5.1dev";
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
     rev = version;
-    sha256 = "091zqgsqd5cqma1hvimkq5xpr9f1jw80v9m2fr6k9hvssqjzgnab";
+    sha256 = "15vdfgx448mr1nf054h7lr2j3dd35fsfhikqzrh9zsng8n12hxa5";
   };
 
   buildInputs = [
