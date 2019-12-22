@@ -24900,7 +24900,7 @@ in
     "Also see https://github.com/NixOS/nixpkgs/pull/44903"
   );
 
-  nix-review = callPackage ../tools/package-management/nix-review { };
+  nixpkgs-review = callPackage ../tools/package-management/nixpkgs-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
