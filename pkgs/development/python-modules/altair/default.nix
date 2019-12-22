@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
 , entrypoints
 , glibcLocales
 , ipython
@@ -19,6 +19,7 @@
 buildPythonPackage rec {
   pname = "altair";
   version = "4.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
