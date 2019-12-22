@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
 , coverage
 , mock
 , pytest
@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "gunicorn";
   version = "20.0.4";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
