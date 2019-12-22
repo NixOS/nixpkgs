@@ -1,7 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, django }:
+{ stdenv, buildPythonPackage, fetchPypi, django, isPy27 }:
+
 buildPythonPackage rec {
   version = "3.11.0";
   pname = "djangorestframework";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
