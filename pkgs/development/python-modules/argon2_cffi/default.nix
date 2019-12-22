@@ -15,7 +15,8 @@ buildPythonPackage rec {
   version = "19.2.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "argon2-cffi";
+    inherit version;
     sha256 = "ffaa623eea77b497ffbdd1a51e941b33d3bf552c60f14dbee274c4070677bda3";
   };
 
