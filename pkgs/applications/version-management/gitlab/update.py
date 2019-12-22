@@ -195,7 +195,7 @@ def update_gitlab_shell():
 
     for fn in ['go.mod', 'go.sum']:
         with open(gitlab_shell_dir / fn, 'w') as f:
-            f.write(repo.get_file(f"go/{fn}", f"v{gitlab_shell_version}"))
+            f.write(repo.get_file(fn, f"v{gitlab_shell_version}"))
 
     subprocess.check_output(['vgo2nix'], cwd=gitlab_shell_dir)
 
