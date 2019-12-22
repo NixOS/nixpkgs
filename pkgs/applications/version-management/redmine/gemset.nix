@@ -91,10 +91,10 @@
   builder = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0qibi5s67lpdv1wgcj66wcymcr04q6j4mzws6a479n0mlrmh5wr1";
+      sha256 = "045wzckxpwcqzrjr353cxnyaxgf0qg22jh00dcx7z38cys5g1jlr";
       type = "gem";
     };
-    version = "3.2.3";
+    version = "3.2.4";
   };
   capybara = {
     dependencies = ["addressable" "mini_mime" "nokogiri" "rack" "rack-test" "xpath"];
@@ -142,10 +142,10 @@
     dependencies = ["addressable"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1y4vc018b5mzp7winw4pbb22jk0dpxp22pzzxq7w0rgvfxzi89pd";
+      sha256 = "04c4dl8cm5rjr50k9qa6yl9r05fk9zcb1zxh0y0cdahxlsgcydfw";
       type = "gem";
     };
-    version = "1.7.0";
+    version = "1.7.1";
   };
   docile = {
     source = {
@@ -166,10 +166,10 @@
   ffi = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "06mvxpjply8qh4j3fj9wh08kdzwkbnvsiysh0vrhlk5cwxzjmblh";
+      sha256 = "10ay35dm0lkcqprsiya6q2kwvyid884102ryipr4vrk790yfp8kd";
       type = "gem";
     };
-    version = "1.11.1";
+    version = "1.11.3";
   };
   globalid = {
     dependencies = ["activesupport"];
@@ -209,10 +209,10 @@
     dependencies = ["crass" "nokogiri"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "06kfq90vi38gv6i128f4zg462kj32szs5vsgm25hxgw9zd12pj9x";
+      sha256 = "1g7ps9m3s14cajhxrfgbzahv9i3gy47s4hqrv3mpybpj5cyr0srn";
       type = "gem";
     };
-    version = "2.3.0";
+    version = "2.4.0";
   };
   mail = {
     dependencies = ["mime-types"];
@@ -222,14 +222,6 @@
       type = "gem";
     };
     version = "2.6.6";
-  };
-  metaclass = {
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0hp99y2b1nh0nr8pc398n3f8lakgci6pkrg4bf2b2211j1f6hsc5";
-      type = "gem";
-    };
-    version = "0.0.4";
   };
   mime-types = {
     dependencies = ["mime-types-data"];
@@ -275,19 +267,18 @@
   minitest = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0zjm24aiz42i9n37mcw8lydd7n0y7wfk27by06jx77ypcld3qvkw";
+      sha256 = "0w16p7cvslh3hxd3cia8jg4pd85z7rz7xqb16vh42gj4rijn8rmi";
       type = "gem";
     };
-    version = "5.12.2";
+    version = "5.13.0";
   };
   mocha = {
-    dependencies = ["metaclass"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1s56iivmwpv4979hd25v3ghwwgy8ah15nh378lrj8czlh4kf5k5s";
+      sha256 = "06i2q5qjr9mvjgjc8w41pdf3qalw340y33wjvzc0rp4a1cbbb7pp";
       type = "gem";
     };
-    version = "1.9.0";
+    version = "1.11.1";
   };
   multi_json = {
     source = {
@@ -350,10 +341,10 @@
   rack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1g9926ln2lw12lfxm4ylq1h6nl0rafl10za3xvjzc87qvnqic87f";
+      sha256 = "1riq0z408dwvqcqrpq05bp2w879l4sjxzb4cbrbx55kpi6h2g1cj";
       type = "gem";
     };
-    version = "1.6.11";
+    version = "1.6.12";
   };
   rack-openid = {
     dependencies = ["rack" "ruby-openid"];
@@ -421,10 +412,10 @@
   rake = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "05l80mgaabdipkjsnjlffn9gc1wx9fi629d2kfbz8628cx3m6686";
+      sha256 = "0w6qza25bq1s825faaglkx1k6d59aiyjjk3yw3ip5sb463mhhai9";
       type = "gem";
     };
-    version = "13.0.0";
+    version = "13.0.1";
   };
   rbpdf = {
     dependencies = ["htmlentities" "rbpdf-font"];
@@ -565,10 +556,10 @@
   thor = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1yhrnp9x8qcy5vc7g438amd5j9sw83ih7c30dr6g6slgw9zj3g29";
+      sha256 = "1xbhkmyhlxwzshaqa7swy2bx6vd64mm0wrr8g3jywvxy7hg0cwkm";
       type = "gem";
     };
-    version = "0.20.3";
+    version = "1.0.1";
   };
   thread_safe = {
     source = {
