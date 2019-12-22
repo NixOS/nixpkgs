@@ -1,10 +1,11 @@
 { lib, buildPythonPackage, fetchPypi,
-  dateutil, simplejson
+  dateutil, simplejson, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow";
   version = "3.3.0";
+  disabled = isPy27;
 
   meta = {
     homepage = "https://github.com/marshmallow-code/marshmallow";
