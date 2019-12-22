@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, libX11, gnome3, gtk3, glib
+{ stdenv, fetchurl, fetchpatch, substituteAll, pkgconfig, libxslt, ninja, libX11, gnome3, gtk3, glib
 , gettext, libxml2, xkeyboard_config, isocodes, meson, wayland
 , libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
 
@@ -29,6 +29,14 @@ stdenv.mkDerivation rec {
       src = ./bubblewrap-paths.patch;
       bubblewrap_bin = "${bubblewrap}/bin/bwrap";
       inherit (builtins) storeDir;
+    })
+
+    # honor $XKB_CONFIG_ROOT
+    # addresses #76590: services.xserver.extraLayouts aren't honored by GNOME3
+    # NOTE: should be merged upstream in 3.36.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-desktop/commit/450446b5353e8231edded4d5b5db90a67a9fa9b7.diff";
+      sha256 = "07y989x7mbgn3rsm2qfdi8qkkc8i60k28hw87l744nlkydn78kq5";
     })
   ];
 
