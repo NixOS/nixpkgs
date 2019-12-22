@@ -21,9 +21,15 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
 
+  # heavily relies on importing tests from keyring package
+  doCheck = false;
   checkPhase = ''
     py.test
   '';
+
+  pythonImportsCheck = [
+    "keyrings.alt"
+  ];
 
   meta = with stdenv.lib; {
     license = licenses.mit;
