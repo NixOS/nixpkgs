@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mkDerivation, autoPatchelfHook
+{ stdenv, fetchurl, mkDerivation, autoPatchelfHook, bash
 , fetchFromGitHub
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
@@ -94,19 +94,35 @@ in mkDerivation {
         mkdir -p $out/share/icons/hicolor/$path/apps
         cp $icon $out/share/icons/hicolor/$path/apps/us.zoom.Zoom.png
     done
-
-    ln -s $out/share/zoom-us/zoom $out/bin/zoom-us
   '';
+
+  # $out/share/zoom-us isn't in auto-wrap directories list, need manual wrapping
+  dontWrapQtApps = true;
 
   qtWrapperArgs = [
     ''--prefix PATH : ${makeBinPath [ coreutils glib.dev pciutils procps qttools.dev utillinux ]}''
     ''--prefix LD_PRELOAD : ${libv4l}/lib/libv4l/v4l2convert.so''
+    # --run "cd ${placeholder "out"}/share/zoom-us"
+    # ^^ unfortunately, breaks run arg into multiple array elements, due to
+    # some bad array propagation. We'll do that in bash below
   ];
+
+  postFixup = ''
+    # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
+    # everybody runs Zoom only after cd to Zoom package directory? Anyway, :facepalm:
+    qtWrapperArgs+=( --run "cd ${placeholder "out"}/share/zoom-us" )
+
+    for app in ZoomLauncher zopen zoom; do
+      wrapQtApp $out/share/zoom-us/$app
+    done
+
+    ln -s $out/share/zoom-us/ZoomLauncher $out/bin/zoom-us
+  '';
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    homepage = https://zoom.us/;
+    homepage = "https://zoom.us/";
     description = "zoom.us video conferencing application";
     license = stdenv.lib.licenses.unfree;
     platforms = builtins.attrNames srcs;
