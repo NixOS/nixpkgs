@@ -19,9 +19,11 @@ buildPythonPackage rec {
 
   # ignore test that's incompatible with pytest5
   # test_eventlet touches network
+  # test_mongodb requires pymongo
   checkPhase = ''
-    pytest -k 'not restore_current_app_fallback' \
-      --ignore=t/unit/concurrency/test_eventlet.py
+    pytest -k 'not restore_current_app_fallback and not msgpack' \
+      --ignore=t/unit/concurrency/test_eventlet.py \
+      --ignore=t/unit/backends/test_mongodb.py
   '';
 
   checkInputs = [ case pytest boto3 moto ];
