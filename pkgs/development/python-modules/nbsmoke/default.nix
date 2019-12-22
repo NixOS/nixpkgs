@@ -4,6 +4,7 @@
 , pytest
 , jupyter_client
 , ipykernel
+, holoviews
 , nbformat
 , nbconvert
 , pyflakes
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pytest
+    holoviews
     jupyter_client
     ipykernel
     nbformat
