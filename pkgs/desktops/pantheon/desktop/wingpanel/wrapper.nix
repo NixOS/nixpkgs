@@ -13,7 +13,7 @@
 let
   selectedIndicators =
     if indicators == null then wingpanelIndicators
-    else indicators ++ (lib.optional useDefaultIndicators wingpanelIndicators);
+    else indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
 in
 symlinkJoin {
   name = "${wingpanel.name}-with-indicators";
