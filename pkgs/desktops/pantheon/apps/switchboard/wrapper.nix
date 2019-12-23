@@ -12,7 +12,7 @@
 let
   selectedPlugs =
     if plugs == null then switchboardPlugs
-    else plugs ++ (lib.optional useDefaultPlugs switchboardPlugs);
+    else plugs ++ (lib.optionals useDefaultPlugs switchboardPlugs);
 in
 symlinkJoin {
   name = "${switchboard.name}-with-plugs";
