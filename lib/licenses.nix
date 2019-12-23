@@ -877,6 +877,18 @@ in mkLicense lset) ({
     fullName = "Non-Profit Open Software License 3.0";
   };
 
+  nvidiaCuda = {
+    fullName = "CUDA Toolkit Supplement to Software License Agreement for NVIDIA Software Development Kits";
+    url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
+    free = false;
+  };
+
+  nvidiaCudnn = {
+    fullName = "cuDNN Supplement to Software License Agreement for NVIDIA Software Development Kits";
+    url = "https://docs.nvidia.com/deeplearning/sdk/cudnn-sla/index.html#supplement";
+    free = false;
+  };
+
   obsidian = {
     fullName = "Obsidian End User Agreement";
     url = "https://obsidian.md/eula";
