@@ -7543,6 +7543,8 @@ in
 
   zsh-autosuggestions = callPackage ../shells/zsh/zsh-autosuggestions { };
 
+  zsh-powerlevel10k = callPackage ../shells/zsh/zsh-powerlevel10k { };
+
   zsh-powerlevel9k = callPackage ../shells/zsh/zsh-powerlevel9k { };
 
   zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
