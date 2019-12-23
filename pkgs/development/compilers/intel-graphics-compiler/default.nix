@@ -24,13 +24,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.2878";
+  version = "1.0.3041";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    sha256 = "0rgij1013fy2x2szfchy3z6390mjfqw3nz4zprcb5v2v6mpvcj4l";
+    sha256 = "1d3vxq4v8jdjgl5jdm9qpxzgaw98r84dzs9lk9ph02khfkajqhjm";
   };
 
   nativeBuildInputs = [ clang cmake bison flex llvm python ];
