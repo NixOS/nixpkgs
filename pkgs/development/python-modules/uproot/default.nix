@@ -43,8 +43,11 @@ buildPythonPackage rec {
   ];
 
   # skip tests which do network calls
+  # test_compression.py is missing zstandard package
   checkPhase = ''
-    pytest tests -k 'not hist_in_tree and not branch_auto_interpretation'
+    pytest tests -k 'not hist_in_tree \
+      and not branch_auto_interpretation' \
+      --ignore=tests/test_compression.py
   '';
 
   meta = with lib; {
