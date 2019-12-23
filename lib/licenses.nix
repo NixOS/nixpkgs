@@ -883,12 +883,6 @@ in mkLicense lset) ({
     free = false;
   };
 
-  nvidiaCudnn = {
-    fullName = "cuDNN Supplement to Software License Agreement for NVIDIA Software Development Kits";
-    url = "https://docs.nvidia.com/deeplearning/sdk/cudnn-sla/index.html#supplement";
-    free = false;
-  };
-
   obsidian = {
     fullName = "Obsidian End User Agreement";
     url = "https://obsidian.md/eula";
