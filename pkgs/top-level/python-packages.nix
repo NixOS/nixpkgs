@@ -1414,6 +1414,8 @@ in {
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
+  adb-shell = callPackage ../development/python-modules/adb-shell { };
+
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
