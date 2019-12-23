@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
+{ lib, fetchurl, buildDunePackage, ocaml
 , astring, cstruct, fmt, hex, jsonm, logs, ocaml_lwt, ocamlgraph, uri
 }:
 
@@ -8,11 +8,9 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.03";
 
-  src = fetchFromGitHub {
-    owner = "mirage";
-    repo = pname;
-    rev = version;
-    sha256 = "0f272h9d0hs0wn5m30348wx7vz7524yk40wx5lx895vv3r3p7q7c";
+  src = fetchurl {
+    url = "https://github.com/mirage/${pname}/releases/download/${version}/${pname}-${version}.tbz";
+    sha256 = "019di4cz0z65knl232rnwj26npnc1mqh8j71xbf0mav6x350g1w5";
   };
 
   propagatedBuildInputs = [ astring cstruct fmt hex jsonm logs ocaml_lwt ocamlgraph uri ];
