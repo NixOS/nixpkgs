@@ -18211,8 +18211,6 @@ in
 
   carla = qt5.callPackage ../applications/audio/carla { };
 
-  catfish = callPackage ../applications/search/catfish { };
-
   catimg = callPackage ../tools/misc/catimg { };
 
   catt = python3Packages.callPackage ../applications/video/catt { };

@@ -1,21 +1,19 @@
 { stdenv, fetchurl, file, which, intltool, gobject-introspection,
-  findutils, xdg_utils, dconf, gtk3, pythonPackages,
+  findutils, xdg_utils, dconf, gtk3, python3Packages,
   wrapGAppsHook
 }:
 
-pythonPackages.buildPythonApplication rec {
-  majorver = "1.4";
-  minorver = "10";
-  version = "${majorver}.${minorver}";
+python3Packages.buildPythonApplication rec {
   pname = "catfish";
+  version = "1.4.11";
 
   src = fetchurl {
-    url = "https://archive.xfce.org/src/apps/${pname}/${majorver}/${pname}-${version}.tar.bz2";
-    sha256 = "0g9l5sv5d7wmyb23cvpz5mpvjnxiqjh25v9gr5qzhcah202a0wr5";
+    url = "https://archive.xfce.org/src/apps/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "11fdzz3l5mydscs4a398siphxwr6xf3cfyimr0hgpkg3169syyv1";
   };
 
   nativeBuildInputs = [
-    pythonPackages.distutils_extra
+    python3Packages.distutils_extra
     file
     which
     intltool
@@ -26,16 +24,16 @@ pythonPackages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     dconf
-    pythonPackages.pyxdg
-    pythonPackages.ptyprocess
-    pythonPackages.pycairo
+    python3Packages.pyxdg
+    python3Packages.ptyprocess
+    python3Packages.pycairo
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ];
 
   propagatedBuildInputs = [
-    pythonPackages.dbus-python
-    pythonPackages.pygobject3
-    pythonPackages.pexpect
+    python3Packages.dbus-python
+    python3Packages.pygobject3
+    python3Packages.pexpect
     xdg_utils
     findutils
   ];
