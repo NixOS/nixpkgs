@@ -250,12 +250,26 @@ in
         Type = "simple";
         Restart = "on-failure";
         PIDFile = "/run/fail2ban/fail2ban.pid";
-
-        ReadOnlyDirectories = "/";
-        ReadWriteDirectories = "/run/fail2ban /var/tmp /var/lib";
-        PrivateTmp = "true";
+        # Capabilities
+        CapabilityBoundingSet = [ "CAP_AUDIT_READ" "CAP_DAC_READ_SEARCH" "CAP_NET_ADMIN" "CAP_NET_RAW" ];
+        # Security
+        NoNewPrivileges = true;
+        # Directory
         RuntimeDirectory = "fail2ban";
-        CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_NET_ADMIN CAP_NET_RAW";
+        RuntimeDirectoryMode = "0750";
+        StateDirectory = "fail2ban";
+        StateDirectoryMode = "0750";
+        LogsDirectory = "fail2ban";
+        LogsDirectoryMode = "0750";
+        # Sandboxing
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
       };
     };
 
