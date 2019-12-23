@@ -546,6 +546,18 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Non-Profit Open Software License 3.0";
   };
 
+  nvidiaCuda = {
+    fullName = "CUDA Toolkit Supplement to Software License Agreement for NVIDIA Software Development Kits";
+    url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
+    free = false;
+  };
+
+  nvidiaCudnn = {
+    fullName = "cuDNN Supplement to Software License Agreement for NVIDIA Software Development Kits";
+    url = "https://docs.nvidia.com/deeplearning/sdk/cudnn-sla/index.html#supplement";
+    free = false;
+  };
+
   ocamlpro_nc = {
     fullName = "OCamlPro Non Commercial license version 1";
     url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-2.2.0/OCamlPro-Non-Commercial-License.pdf";
