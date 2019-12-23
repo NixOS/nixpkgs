@@ -24,9 +24,10 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
+  # still needed when overriding to previous versions
+  # E.g. azure-cli
   postInstall = lib.optionalString isPy3k ''
-    rm $out/${python.sitePackages}/azure/__init__.py
-    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
+    rm -f $out/${python.sitePackages}/azure/{,mgmt/}__init__.py
   '';
 
   # has no tests
