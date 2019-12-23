@@ -25669,4 +25669,6 @@ in
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
+  xp-pen-g430 = callPackage ../misc/drivers/xp-pen-g430 {};
+
 }
