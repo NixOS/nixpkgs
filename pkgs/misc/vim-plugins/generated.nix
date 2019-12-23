@@ -422,6 +422,17 @@ let
     };
   };
 
+  coc-metals = buildVimPluginFrom2Nix {
+    pname = "coc-metals";
+    version = "2019-12-21";
+    src = fetchFromGitHub {
+      owner = "ckipp01";
+      repo = "coc-metals";
+      rev = "d2c9395ac1456765a8979ed9e4e55cd1a1d55e16";
+      sha256 = "0yg9rk0374ijm87sd47grw74930dkqgkp4zmcg24qxigik8h9nha";
+    };
+  };
+
   coc-neco = buildVimPluginFrom2Nix {
     pname = "coc-neco";
     version = "2019-09-23";
