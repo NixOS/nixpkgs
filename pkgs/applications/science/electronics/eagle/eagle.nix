@@ -13,11 +13,11 @@ let
   in
   mkDerivation rec {
     pname = "eagle";
-    version = "9.5.1";
+    version = "9.5.2";
 
     src = fetchurl {
       url = "https://eagle-updates.circuits.io/downloads/${builtins.replaceStrings ["."] ["_"] version}/Autodesk_EAGLE_${version}_English_Linux_64bit.tar.gz";
-      sha256 = "07lvjn0mxqkv5kx41bzakifpb5bjhljx0ssvk33ipzb0nvl6nx63";
+      sha256 = "0k707pyh0g2r6sgyran59sznq0nlh0i16la2gxqj3c5da1vb58y5";
     };
 
     desktopItem = makeDesktopItem {
