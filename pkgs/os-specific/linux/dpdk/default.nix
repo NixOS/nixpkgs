@@ -7,7 +7,6 @@
 , shared ? false }:
 
 let
-  kver = kernel.modDirVersion or null;
   mod = kernel != null;
 
 in stdenv.mkDerivation rec {
@@ -44,13 +43,23 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Denable_docs=true"
-    "-Denable_kmods=${if kernel != null then "true" else "false"}"
+    "-Denable_kmods=${if mod then "true" else "false"}"
   ]
-  ++ lib.optionals (shared == false) [
-    "-Ddefault_library=static"
-  ]
+  ++ lib.optional (!shared) "-Ddefault_library=static"
   ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
-  ++ lib.optional (kernel != null) "-Dkernel_dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
+  ++ lib.optional mod "-Dkernel_dir=${placeholder "kmod"}/lib/modules/${kernel.modDirVersion}";
+
+  # dpdk meson script does not support separate kernel source and installion
+  # dirs (except via destdir), so we temporarily link the former into the latter.
+  preConfigure = lib.optionalString mod ''
+    mkdir -p $kmod/lib/modules/${kernel.modDirVersion}
+    ln -sf ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build \
+      $kmod/lib/modules/${kernel.modDirVersion}
+  '';
+
+  postBuild = lib.optionalString mod ''
+    rm -f $kmod/lib/modules/${kernel.modDirVersion}/build
+  '';
 
   outputs = [ "out" ] ++ lib.optional mod "kmod";
 
