@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libqglviewer";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "http://www.libqglviewer.com/src/libQGLViewer-${version}.tar.gz";
-    sha256 = "08f10yk22kjdsvrqhd063gqa8nxnl749c20mwhaxij4f7rzdkixz";
+    sha256 = "023w7da1fyn2z69nbkp2rndiv886zahmc5cmira79zswxjfpklp2";
   };
 
   nativeBuildInputs = [ qmake ];
