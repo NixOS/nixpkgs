@@ -285,7 +285,7 @@ in
           sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', 'restya');/g" "${runDir}/server/php/config.inc.php"
         '' else ''
           sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', '${cfg.database.host}');/g" "${runDir}/server/php/config.inc.php"
-          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', ${if cfg.database.passwordFile == null then "''" else "'file_get_contents(${cfg.database.passwordFile})'"});/g" "${runDir}/server/php/config.inc.php
+          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', ${if cfg.database.passwordFile == null then "''" else "'${builtins.replaceStrings ["\n"] [""] (builtins.readFile cfg.database.passwordFile)}');/g"}" "${runDir}/server/php/config.inc.php"
         ''}
         sed -i "s/^.*'R_DB_PORT'.*$/define('R_DB_PORT', '${toString cfg.database.port}');/g" "${runDir}/server/php/config.inc.php"
         sed -i "s/^.*'R_DB_NAME'.*$/define('R_DB_NAME', '${cfg.database.name}');/g" "${runDir}/server/php/config.inc.php"
@@ -305,9 +305,9 @@ in
         mkdir -m 0750 -p "${cfg.dataDir}/client/img"
         cp -r "${pkgs.restya-board}/media/"* "${cfg.dataDir}/media"
         cp -r "${pkgs.restya-board}/client/img/"* "${cfg.dataDir}/client/img"
-        chown "${cfg.user}"."${cfg.group}" "${cfg.dataDir}"
-        chown -R "${cfg.user}"."${cfg.group}" "${cfg.dataDir}/media"
-        chown -R "${cfg.user}"."${cfg.group}" "${cfg.dataDir}/client/img"
+        chown "${cfg.user}":"${cfg.group}" "${cfg.dataDir}"
+        chown -R "${cfg.user}":"${cfg.group}" "${cfg.dataDir}/media"
+        chown -R "${cfg.user}":"${cfg.group}" "${cfg.dataDir}/client/img"
 
         ${optionalString (cfg.database.host == null) ''
           if ! [ -e "${cfg.dataDir}/.db-initialized" ]; then
