@@ -684,7 +684,7 @@ in
       stopIfChanged = false;
       preStart = ''
         ${cfg.preStart}
-        ${cfg.package}/bin/nginx -c '${configPath}' -p '${cfg.stateDir}' -t
+        ${execCommand} -t
       '';
       serviceConfig = {
         ExecStart = execCommand;
@@ -711,11 +711,11 @@ in
       wants = [ "nginx.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
-      stopIfChanged = false;
       serviceConfig.Type = "oneshot";
+      serviceConfig.TimeoutStartSec = 60;
       script = ''
         if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
-          ${execCommand} -s reload && \
+          ${execCommand} -t && \
             ${pkgs.systemd}/bin/systemctl reload nginx.service
         fi
       '';
