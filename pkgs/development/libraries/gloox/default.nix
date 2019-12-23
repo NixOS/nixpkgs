@@ -11,7 +11,7 @@ assert idnSupport -> libidn != null;
 with stdenv.lib;
 
 let
-  version = "1.0.22";
+  version = "1.0.23";
 in
 stdenv.mkDerivation {
   pname = "gloox";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://camaya.net/download/gloox-${version}.tar.bz2";
-    sha256 = "0r69gq8if9yy1amjzl7qrq9lzhhna7qgz905ln4wvkwchha1ppja";
+    sha256 = "12jz8glg9zmyk0iyv1ywf5i0hq93dfq8lvn6lyjgy8730w66mjwp";
   };
 
   buildInputs = [ ]
