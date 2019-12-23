@@ -59,6 +59,9 @@ let
     (mkOverride "colorlog" "4.0.2"
       "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
 
+    (mkOverride "importlib-metadata" "0.23"
+      "09mdqdfv5rdrwz80jh9m379gxmvk2vhjfz0fg53hid00icvxf65a")
+
     # required by aioesphomeapi
     (self: super: {
       protobuf = super.protobuf.override {
