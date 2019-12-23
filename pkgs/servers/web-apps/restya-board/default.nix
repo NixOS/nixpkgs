@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, unzip }:
+{ stdenv, fetchurl, fetchFromGitHub }:
 
 let
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vba8qrg28a5g2ax7xzdp5j2wgl4v7cgasbzhhdji29qjfrldgbf";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ ];
 
   outputs = [ "out" ];
 
