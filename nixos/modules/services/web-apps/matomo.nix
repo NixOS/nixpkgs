@@ -11,6 +11,7 @@ let
   pool = user;
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
+  geoDB = "GeoLite2-City.mmdb";
 
   fqdn =
     let
@@ -69,6 +70,16 @@ in {
         '';
       };
 
+      geolocation = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Support for geolocation using GeoIP2. Uses <option>services.geoip-updater.enable</option>.
+
+          In Matomo administration, you need to choose the "GeoIP 2 (Php)" location provider under System > Geolocation.
+        '';
+      };
+
       nginx = mkOption {
         type = types.nullOr (types.submodule (
           recursiveUpdate
@@ -110,7 +121,11 @@ in {
     assertions = [ {
         assertion = cfg.nginx != null || cfg.webServerUser != null;
         message = "Either services.matomo.nginx or services.matomo.nginx.webServerUser is mandatory";
-    }];
+    }]
+    ++ optional cfg.geolocation {
+      assertion = builtins.elem "${geoDB}.gz" config.services.geoip-updater.databases;
+      message = ''services.matomo.geolocation needs "${geoDB}.gz" in services.geoip-updater.databases'';
+    };
 
     users.users.${user} = {
       isSystemUser = true;
@@ -289,6 +304,12 @@ in {
         '';
       }];
     };
+
+    services.geoip-updater.enable = mkIf cfg.geolocation true;
+    systemd.tmpfiles.rules = mkIf cfg.geolocation [
+      "d ${dataDir}/misc          0770 matomo matomo - -"
+      "L ${dataDir}/misc/${geoDB} -    -      -      - ${config.services.geoip-updater.databaseDir}/${geoDB}"
+    ];
   };
 
   meta = {
