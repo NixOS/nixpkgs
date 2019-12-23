@@ -911,12 +911,12 @@ let
 
   deoplete-jedi = buildVimPluginFrom2Nix {
     pname = "deoplete-jedi";
-    version = "2019-12-13";
+    version = "2019-12-22";
     src = fetchFromGitHub {
       owner = "deoplete-plugins";
       repo = "deoplete-jedi";
-      rev = "7990447a308c6c5839ada856f31a7dd3e34f20a4";
-      sha256 = "1570k79ihz6kif85ichdgdnbipbdkqb5ks8izhqppb68lajyjvd2";
+      rev = "63beb118c8d215bad4f8759b84608fd463abebc5";
+      sha256 = "1rilqprq6fq01qj1idgvy38p827gjq2bsx93xfbim6yc4hkj10d9";
       fetchSubmodules = true;
     };
   };
@@ -1653,12 +1653,12 @@ let
 
   lightline-vim = buildVimPluginFrom2Nix {
     pname = "lightline-vim";
-    version = "2019-12-20";
+    version = "2019-12-23";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "lightline.vim";
-      rev = "6fb3ddd293cbd0614f6ed5e637a059c72de643f7";
-      sha256 = "1c0dsxqj5f3i2i3k6q7m1b2xlxz9mizmchydw1mz7s3rd0vs06sq";
+      rev = "6daec38c1da2cbfae43d4d0d67f6a4fa7680c2b5";
+      sha256 = "192adkzqqcvwz9jzh9klqkrldbnjmc2gbk5rvhgz2f0bq9hkkchg";
     };
   };
 
@@ -1917,12 +1917,12 @@ let
 
   neosnippet-vim = buildVimPluginFrom2Nix {
     pname = "neosnippet-vim";
-    version = "2019-12-12";
+    version = "2019-12-22";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neosnippet.vim";
-      rev = "84057dd1dd28e1198d0b2777301ef6cafd8f2cef";
-      sha256 = "164077vmqf4kcj0kn5c027faa4fjzfdbl1cz4j45dxpbak36hy6w";
+      rev = "e559f3060e512efe8d7795afce74119552dcd838";
+      sha256 = "1gchpdvg19lv96j5cryvlbfmavmybrnjps1a4c7hz9ias34w12ji";
     };
   };
 
@@ -2930,12 +2930,12 @@ let
 
   vim = buildVimPluginFrom2Nix {
     pname = "vim";
-    version = "2019-12-19";
+    version = "2019-12-23";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "vim";
-      rev = "a6f90e5691d8b80db024d8298b3fb461752e0248";
-      sha256 = "1g19lgjlqcyvs5x120sv5iwnggjyfzyl1k9w4b39yhhfmqi1vvf9";
+      rev = "df624b570ff296b551e9c0125ffa7db2ae5844e2";
+      sha256 = "1mqw8ybcq7cca1kaah8pbxzdra8l4qyf59v2rk4a8qj9nvkzbvgb";
     };
   };
 
