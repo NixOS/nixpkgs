@@ -1614,7 +1614,7 @@ in
 
   dua = callPackage ../tools/misc/dua { };
 
-  inherit (ocamlPackages) dune;
+  inherit (ocamlPackages) dune dune_2;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
