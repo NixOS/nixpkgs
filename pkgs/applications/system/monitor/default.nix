@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , meson
 , ninja
 , vala
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "17z1m193s7qygavfwd8qsw97blxbfmq9gnsymdjlc1ddk8hldw0z";
+    sha256 = "0cqzxlzdbij26qgbbngqx6njcpcymkgvm29b7ipldgkssxp1mkkg";
   };
 
   nativeBuildInputs = [
@@ -48,19 +47,6 @@ stdenv.mkDerivation rec {
     libgtop
     libwnck3
   ];
-
-   patches =  [
-     (fetchpatch {
-       name = "07d1984175fcaef2909029a387f830efd647471b.patch";
-       url = "https://github.com/stsdc/monitor/commit/07d1984175fcaef2909029a387f830efd647471b.patch";
-       sha256 = "0nrfsg8k6spcgk1aw227vgyvz73xfl49yck7gm0id6aj180bmcx8";
-     })
-     (fetchpatch {
-       name = "ab2cfed150cd2a6b5c3fcee5297a65c1b429c674.patch";
-       url = "https://github.com/stsdc/monitor/commit/ab2cfed150cd2a6b5c3fcee5297a65c1b429c674.patch";
-       sha256 = "1imzsir654symx646w1w1nm2zaq3z4sn6c9hak9n54ziwa7wn171";
-     })
-   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
