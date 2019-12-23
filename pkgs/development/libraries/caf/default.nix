@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "actor-framework";
-  version = "0.17.2";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "actor-framework";
     repo = "actor-framework";
     rev = version;
-    sha256 = "0z9qh580pa1mx9h48npwji24bjyqxm1w93wdcc4inmjzdmrqwzim";
+    sha256 = "187r7vc4kpd0v6bb1y51zwqm9y1lh0m84vkwmrxn8rrp4bwdxlpj";
   };
 
   nativeBuildInputs = [ cmake ];
