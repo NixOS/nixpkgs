@@ -1432,7 +1432,7 @@
   craigem = {
     email = "craige@mcwhirter.io";
     github = "craigem";
-    githubId = "6470493";
+    githubId = 6470493;
     name = "Craige McWhirter";
   };
   cransom = {
@@ -2344,7 +2344,7 @@
   Flakebi = {
     email = "flakebi@t-online.de";
     github = "Flakebi";
-    githubId = "Flakebi";
+    githubId = 6499211;
     name = "Sebastian Neubauer";
     keys = [{
       longkeyid = "rsa4096/0xECC755EE583C1672";
@@ -3041,7 +3041,8 @@
   jacg = {
     name = "Jacek Generowicz";
     email = "jacg@my-post-office.net";
-    githubId = "2570854";
+    github = "jacg";
+    githubId = 2570854;
   };
   jasoncarr = {
     email = "jcarr250@gmail.com";
@@ -6856,7 +6857,7 @@
   thefenriswolf = {
     email = "stefan.rohrbacher97@gmail.com";
     github = "thefenriswolf";
-    githubId = "8547242";
+    githubId = 8547242;
     name = "Stefan Rohrbacher";
   };
   thesola10 = {
