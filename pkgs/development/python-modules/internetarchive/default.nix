@@ -24,7 +24,8 @@ buildPythonPackage rec {
     args
     schema
     setuptools
-  ] ++ lib.optional (!isPy3k) backports_csv;
+    backports_csv
+  ];
 
   checkInputs = [ pytest responses glibcLocales ];
 
