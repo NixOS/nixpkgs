@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg
-, lsb-release, freetype, fontconfig, pangox_compat, polkit, polkit_gnome
+, lsb-release, freetype, fontconfig, polkit, polkit_gnome
 , pulseaudio }:
 
 let
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
     gnome2.gtkglext libGLU libGL freetype fontconfig
-    pangox_compat polkit polkit_gnome pulseaudio
+    polkit polkit_gnome pulseaudio
   ] ++ (with xorg; [
     libxcb libxkbfile libX11 libXdamage libXext libXfixes libXi libXmu
     libXrandr libXtst libXt libICE libSM libXrender
@@ -65,6 +65,11 @@ in stdenv.mkDerivation rec {
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}" \
+      $out/bin/anydesk
+
+    # pangox is not actually necessary (it was only added as a part of gtkglext)
+    patchelf \
+      --remove-needed libpangox-1.0.so.0 \
       $out/bin/anydesk
 
     wrapProgram $out/bin/anydesk \
