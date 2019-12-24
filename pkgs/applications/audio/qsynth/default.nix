@@ -4,11 +4,11 @@
 
 mkDerivation  rec {
   pname = "qsynth";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/${pname}-${version}.tar.gz";
-    sha256 = "173v0jqybi5szxxvj4n6wyg9sj54rmm6pxwhynx8wkm7nsbh0aij";
+    sha256 = "12jhfan81a10vbqfky5nmam3lk6d0i4654mm192v68q5r867xmcl";
   };
 
   nativeBuildInputs = [ autoconf pkgconfig ];
