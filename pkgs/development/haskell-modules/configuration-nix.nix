@@ -592,12 +592,19 @@ self: super: builtins.intersectAttrs super {
       '';
     });
 
-  # On Darwin, git-annex mis-detects options to `cp`, so we wrap the binary to
-  # ensure it uses Nixpkgs' coreutils.
   git-annex = with pkgs;
     if (!stdenv.isLinux) then
       let path = stdenv.lib.makeBinPath [ coreutils ];
       in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
+        # This is an instance of https://github.com/NixOS/nix/pull/1085
+        # Fails with:
+        #   gpg: can't connect to the agent: File name too long
+        postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+          substituteInPlace Test.hs \
+            --replace ', testCase "crypto" test_crypto' ""
+        '';
+        # On Darwin, git-annex mis-detects options to `cp`, so we wrap the
+        # binary to ensure it uses Nixpkgs' coreutils.
         postFixup = ''
           wrapProgram $out/bin/git-annex \
             --prefix PATH : "${path}"
