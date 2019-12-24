@@ -3,7 +3,7 @@
 , fetchPypi
 , adb-homeassistant
 , flask
-, pure-python-adb-homeassistant
+, pure-python-adb
 , pycryptodome
 , pyyaml
 , rsa

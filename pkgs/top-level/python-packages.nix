@@ -1424,6 +1424,8 @@ in {
 
   altair = callPackage ../development/python-modules/altair { };
 
+  androidtv = callPackage ../development/python-modules/androidtv { };
+
   vega = callPackage ../development/python-modules/vega { };
 
   accupy = callPackage ../development/python-modules/accupy { };
