@@ -2099,6 +2099,8 @@ in
     hiredis = null;
   };
 
+  xmousepasteblock = callPackage ../tools/X11/xmousepasteblock { };
+
   mar1d = callPackage ../games/mar1d { } ;
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
