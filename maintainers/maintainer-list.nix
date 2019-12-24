@@ -3814,8 +3814,15 @@
   };
   lattfein = {
     email = "lattfein@gmail.com";
-    github = "lattfein";
-    githubId = 53550838;
+    # Their GitHub account was deleted.
+    #
+    # See: https://github.com/NixOS/nixpkgs/pull/69007 where this
+    # was added but is now owned by a ghost.
+    #
+    # Possibly the username lattfein (currently github ID 56827487) is
+    # owned by the same person, but we should confirm before adding
+    # the GitHub name or ID back.
+    # github = "lattfein";
     name = "Koki Yasuno";
   };
   layus = {
