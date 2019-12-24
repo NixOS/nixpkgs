@@ -1,10 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, six
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
 , pytest, backports_unittest-mock, keyring, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "keyrings.alt";
   version = "3.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
