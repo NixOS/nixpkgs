@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , locket
 , numpy
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "partd";
   version = "1.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
