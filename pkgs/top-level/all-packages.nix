@@ -13935,6 +13935,8 @@ in
 
   sad = callPackage ../applications/science/logic/sad { };
 
+  safeclib = callPackage ../development/libraries/safeclib {};
+
   safefile = callPackage ../development/libraries/safefile {};
 
   sbc = callPackage ../development/libraries/sbc { };
