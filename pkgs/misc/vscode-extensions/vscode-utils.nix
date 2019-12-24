@@ -1,16 +1,9 @@
-{ stdenv, lib, fetchurl, vscode, unzip }:
+{ stdenv, lib, writeShellScriptBin, fetchurl, vscode, unzip }:
 
 let
   extendedPkgVersion = lib.getVersion vscode;
   extendedPkgName = lib.removeSuffix "-${extendedPkgVersion}" vscode.name;
 
-  mktplcExtRefToFetchArgs = ext: {
-    url = "https://${ext.publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${ext.publisher}/extension/${ext.name}/${ext.version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage";
-    sha256 = ext.sha256;
-    # The `*.vsix` file is in the end a simple zip file. Change the extension
-    # so that existing `unzip` hooks takes care of the unpacking.
-    name = "${ext.publisher}-${ext.name}.zip";
-  };
 
   buildVscodeExtension = a@{
     name,
@@ -38,6 +31,7 @@ let
     buildInputs = [ unzip ] ++ buildInputs;
 
     installPhase = ''
+
       runHook preInstall
 
       mkdir -p "$out/$installPrefix"
@@ -48,9 +42,8 @@ let
 
   });
 
-
   fetchVsixFromVscodeMarketplace = mktplcExtRef:
-    fetchurl((mktplcExtRefToFetchArgs mktplcExtRef));
+    fetchurl((import ./mktplcExtRefToFetchArgs.nix mktplcExtRef));
 
   buildVscodeMarketplaceExtension = a@{
     name ? "",
@@ -80,10 +73,24 @@ let
   extensionsFromVscodeMarketplace = mktplcExtRefList:
     builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
 
-in
+  vscodeWithConfiguration = (userParams : import ./vscodeWithConfiguration.nix {
+   inherit lib vscode extensionsFromVscodeMarketplace writeShellScriptBin;
+  } // userParams);
+
+  
+  vscodeExts2nix = (userParams : import ./vscodeExts2nix.nix {
+    inherit lib vscode;
+  } // userParams);
+
+  vscodeEnv = (userParams : import ./vscodeEnv.nix {
+    inherit lib writeShellScriptBin extensionsFromVscodeMarketplace vscode;
+  } // userParams );
+
+in 
 
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
           buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
-          extensionsFromVscodeMarketplace;
+          extensionsFromVscodeMarketplace
+          vscodeWithConfiguration vscodeExts2nix vscodeEnv;
 }
