@@ -16,6 +16,7 @@ in pkgs.lib.listToAttrs (pkgs.lib.crossLists (predictable: withNetworkd: {
       networking.usePredictableInterfaceNames = lib.mkForce predictable;
       networking.useNetworkd = withNetworkd;
       networking.dhcpcd.enable = !withNetworkd;
+      networking.useDHCP = !withNetworkd;
     };
 
     testScript = ''

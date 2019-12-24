@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ stdenv, mkDerivation, fetchurl, makeDesktopItem
 , libXrender, libXrandr, libXcursor, libX11, libXext, libXi, libxcb
  , libGL, glib, nss, nspr, expat, alsaLib
 , qtbase, qtdeclarative, qtsvg, qtlocation, qtwebchannel, qtwebengine
@@ -11,7 +11,7 @@ let
       qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
     ];
   in
-  stdenv.mkDerivation rec {
+  mkDerivation rec {
     pname = "eagle";
     version = "9.4.2";
 

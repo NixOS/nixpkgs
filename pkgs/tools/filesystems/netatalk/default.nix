@@ -1,6 +1,6 @@
 { fetchurl, stdenv, autoreconfHook, pkgconfig, perl, python
 , db, libgcrypt, avahi, libiconv, pam, openssl, acl
-, ed, glibc
+, ed, glibc, libevent
 }:
 
 stdenv.mkDerivation rec{
@@ -18,12 +18,13 @@ stdenv.mkDerivation rec{
 
   nativeBuildInputs = [ autoreconfHook pkgconfig perl python python.pkgs.wrapPython ];
 
-  buildInputs = [ db libgcrypt avahi libiconv pam openssl acl ];
+  buildInputs = [ db libgcrypt avahi libiconv pam openssl acl libevent ];
 
   configureFlags = [
     "--with-bdb=${db.dev}"
     "--with-ssl-dir=${openssl.dev}"
     "--with-lockfile=/run/lock/netatalk"
+    "--with-libevent=${libevent.dev}"
     "--localstatedir=/var/lib"
   ];
 

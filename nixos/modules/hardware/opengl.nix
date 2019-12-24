@@ -122,7 +122,7 @@ in
       setLdLibraryPath = mkOption {
         type = types.bool;
         internal = true;
-        default = false;
+        default = true;
         description = ''
           Whether the <literal>LD_LIBRARY_PATH</literal> environment variable
           should be set to the locations of driver libraries. Drivers which

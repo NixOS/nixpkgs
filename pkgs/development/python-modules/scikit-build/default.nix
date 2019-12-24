@@ -22,6 +22,8 @@ buildPythonPackage rec {
     requests flake8
   ];
 
+  dontUseCmakeConfigure = true;
+
   disabledTests = lib.concatMapStringsSep " and " (s: "not " + s) ([
     "test_hello_develop" # tries setuptools develop install
     "test_source_distribution" # pip has no way to install missing dependencies

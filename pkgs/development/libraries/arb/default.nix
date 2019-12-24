@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = ''A library for arbitrary-precision interval arithmetic'';
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = with maintainers; [ raskin timokau ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

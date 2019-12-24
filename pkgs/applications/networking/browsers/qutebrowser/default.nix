@@ -47,7 +47,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pyyaml pyqt5 pyqtwebengine jinja2 pygments
-    pypeg2 cssutils pyopengl attrs
+    pypeg2 cssutils pyopengl attrs setuptools
     # scripts and userscripts libs
     tldextract beautifulsoup4
     pyreadability pykeepass stem

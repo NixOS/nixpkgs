@@ -126,7 +126,7 @@ let
 
   packageData = package: {
     name = package.name;
-    pname = lib.getName package;
+    pname = pkgs.lib.getName package;
     updateScript = map builtins.toString (pkgs.lib.toList package.updateScript);
   };
 

@@ -5,7 +5,7 @@
    for each package in a separate file: the call to the function would
    be almost as much code as the function itself. */
 
-{config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides,
+{config, pkgs, fetchurl, fetchFromGitHub, fetchpatch, stdenv, gnused, perl, overrides,
   buildPerl, shortenPerlShebang}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
@@ -9144,6 +9144,14 @@ let
       url = mirror://cpan/authors/id/I/IS/ISAAC/libapreq2-2.13.tar.gz;
       sha256 = "5731e6833b32d88e4a5c690e45ddf20fcf969ce3da666c5627d775e92da0cf6e";
     };
+    patches = [
+      (fetchpatch {
+        name = "CVE-2019-12412.patch";
+        url = "https://svn.apache.org/viewvc/httpd/apreq/trunk/library/parser_multipart.c?r1=1866760&r2=1866759&pathrev=1866760&view=patch";
+        sha256 = "08zaw5pb2i4w1y8crhxmlf0d8gzpvi9z49x4nwlkg4j87x7gjvaa";
+        stripLen = 2;
+      })
+    ];
     outputs = [ "out" ];
     buildInputs = [ pkgs.apacheHttpd pkgs.apr pkgs.aprutil ApacheTest ExtUtilsXSBuilder ];
     propagatedBuildInputs = [ (pkgs.apacheHttpdPackages.mod_perl.override { inherit perl; }) ];
@@ -12665,6 +12673,21 @@ let
     };
   };
 
+  NetPrometheus = buildPerlModule {
+    pname = "Net-Prometheus";
+    version = "0.07";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.07.tar.gz;
+      sha256 = "1dh498b26wdaip053hw52317jjmb2n2r5209a1zv5yfrlxpblqm7";
+    };
+    propagatedBuildInputs = [ RefUtil StructDumb ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "export monitoring metrics for F<prometheus>";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   NetSCP = buildPerlPackage {
     pname = "Net-SCP";
     version = "0.08.reprise";
@@ -13941,7 +13964,8 @@ let
       sha256 = "1qss4q5df3nsydsbggb7gg50bn0kdxq5wn8riqm9zwkiq6a4bifg";
     };
     nativeBuildInputs = [ pkgs.docbook_xsl pkgs.docbook_xsl_ns ModuleBuild ];
-    propagatedBuildInputs = [ TextWrapI18N LocaleGettext TermReadKey SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
+    propagatedBuildInputs = [ TextWrapI18N LocaleGettext SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
+    # TermReadKey was removed from propagatedBuildInputs to unfreeze the build
     buildInputs = [ pkgs.gettext pkgs.libxslt pkgs.glibcLocales pkgs.docbook_xml_dtd_412 pkgs.docbook_sgml_dtd_41 pkgs.texlive.combined.scheme-basic pkgs.opensp ];
     LC_ALL = "en_US.UTF-8";
     SGML_CATALOG_FILES = "${pkgs.docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml";
@@ -15733,6 +15757,20 @@ let
       description = "A Perl module for stripping bits of non-deterministic information";
       license = licenses.gpl3;
       maintainers = with maintainers; [ pSub ];
+    };
+  };
+
+  StructDumb = buildPerlModule {
+    pname = "Struct-Dumb";
+    version = "0.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.09.tar.gz;
+      sha256 = "0g9rziaqxkm00vh30g1yfwzq3b1xl23p8fbm4rszqsp641wr2z9k";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "make simple lightweight record-like structures";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

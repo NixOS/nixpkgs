@@ -15,12 +15,13 @@
 , regex
 , cymem
 , pathlib
-, msgpack-python
+, msgpack
 , msgpack-numpy
 , jsonschema
 , blis
 , wasabi
 , srsly
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -49,12 +50,13 @@ buildPythonPackage rec {
    requests
    regex
    ftfy
-   msgpack-python
+   msgpack
    msgpack-numpy
    jsonschema
    blis
    wasabi
    srsly
+   setuptools
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [

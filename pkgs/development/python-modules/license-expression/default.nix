@@ -12,6 +12,7 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "0q8sha38w7ajg7ar0rmbqrwv0n58l8yzyl96cqwcbvp578fn3ir0";
   };
+  postPatch = "patchShebangs ./configure";
 
   propagatedBuildInputs = [ boolean-py ];
 

@@ -1,0 +1,25 @@
+From c3b4004386074342d22cab5e129c1f7e623f4272 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?F=C3=A9lix=20Baylac-Jacqu=C3=A9?= <felix@alternativebit.fr>
+Date: Mon, 21 Oct 2019 10:56:13 +0200
+Subject: [PATCH] Change ACME directory endpoint to /directory
+
+---
+ wfe/wfe.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wfe/wfe.go b/wfe/wfe.go
+index e24797f..10d29fb 100644
+--- a/wfe/wfe.go
++++ b/wfe/wfe.go
+@@ -39,7 +39,7 @@ const (
+ 	// Note: We deliberately pick endpoint paths that differ from Boulder to
+ 	// exercise clients processing of the /directory response
+ 	// We export the DirectoryPath so that the pebble binary can reference it
+-	DirectoryPath     = "/dir"
++	DirectoryPath     = "/directory"
+ 	noncePath         = "/nonce-plz"
+ 	newAccountPath    = "/sign-me-up"
+ 	acctPath          = "/my-account/"
+-- 
+2.23.0
+

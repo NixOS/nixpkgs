@@ -263,6 +263,8 @@ in {
 
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
 
+  azure-functions-devops-build = callPackage ../development/python-modules/azure-functions-devops-build { };
+
   azure-graphrbac = callPackage ../development/python-modules/azure-graphrbac { };
 
   azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
@@ -293,6 +295,10 @@ in {
 
   azure-mgmt-advisor = callPackage ../development/python-modules/azure-mgmt-advisor { };
 
+  azure-mgmt-apimanagement = callPackage ../development/python-modules/azure-mgmt-apimanagement { };
+
+  azure-mgmt-appconfiguration = callPackage ../development/python-modules/azure-mgmt-appconfiguration { };
+
   azure-mgmt-applicationinsights = callPackage ../development/python-modules/azure-mgmt-applicationinsights { };
 
   azure-mgmt-authorization = callPackage ../development/python-modules/azure-mgmt-authorization { };
@@ -302,6 +308,8 @@ in {
   azure-mgmt-batchai = callPackage ../development/python-modules/azure-mgmt-batchai { };
 
   azure-mgmt-billing = callPackage ../development/python-modules/azure-mgmt-billing { };
+
+  azure-mgmt-botservice = callPackage ../development/python-modules/azure-mgmt-botservice { };
 
   azure-mgmt-cdn = callPackage ../development/python-modules/azure-mgmt-cdn { };
 
@@ -314,6 +322,8 @@ in {
   azure-mgmt-consumption = callPackage ../development/python-modules/azure-mgmt-consumption { };
 
   azure-mgmt-containerinstance = callPackage ../development/python-modules/azure-mgmt-containerinstance { };
+
+  azure-mgmt-containerregistry = callPackage ../development/python-modules/azure-mgmt-containerregistry { };
 
   azure-mgmt-containerservice = callPackage ../development/python-modules/azure-mgmt-containerservice { };
 
@@ -333,6 +343,8 @@ in {
 
   azure-mgmt-devtestlabs = callPackage ../development/python-modules/azure-mgmt-devtestlabs { };
 
+  azure-mgmt-deploymentmanager = callPackage ../development/python-modules/azure-mgmt-deploymentmanager { };
+
   azure-mgmt-dns = callPackage ../development/python-modules/azure-mgmt-dns { };
 
   azure-mgmt-eventgrid = callPackage ../development/python-modules/azure-mgmt-eventgrid { };
@@ -340,6 +352,10 @@ in {
   azure-mgmt-eventhub = callPackage ../development/python-modules/azure-mgmt-eventhub { };
 
   azure-mgmt-hanaonazure = callPackage ../development/python-modules/azure-mgmt-hanaonazure { };
+
+  azure-mgmt-hdinsight = callPackage ../development/python-modules/azure-mgmt-hdinsight { };
+
+  azure-mgmt-imagebuilder = callPackage ../development/python-modules/azure-mgmt-imagebuilder { };
 
   azure-mgmt-iotcentral = callPackage ../development/python-modules/azure-mgmt-iotcentral { };
 
@@ -349,11 +365,15 @@ in {
 
   azure-mgmt-keyvault = callPackage ../development/python-modules/azure-mgmt-keyvault { };
 
+  azure-mgmt-kusto = callPackage ../development/python-modules/azure-mgmt-kusto { };
+
   azure-mgmt-loganalytics = callPackage ../development/python-modules/azure-mgmt-loganalytics { };
 
   azure-mgmt-logic = callPackage ../development/python-modules/azure-mgmt-logic { };
 
   azure-mgmt-machinelearningcompute = callPackage ../development/python-modules/azure-mgmt-machinelearningcompute { };
+
+  azure-mgmt-managedservices = callPackage ../development/python-modules/azure-mgmt-managedservices { };
 
   azure-mgmt-managementgroups = callPackage ../development/python-modules/azure-mgmt-managementgroups { };
 
@@ -369,6 +389,8 @@ in {
 
   azure-mgmt-msi = callPackage ../development/python-modules/azure-mgmt-msi { };
 
+  azure-mgmt-netapp = callPackage ../development/python-modules/azure-mgmt-netapp { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-notificationhubs = callPackage ../development/python-modules/azure-mgmt-notificationhubs { };
@@ -376,6 +398,8 @@ in {
   azure-mgmt-policyinsights = callPackage ../development/python-modules/azure-mgmt-policyinsights { };
 
   azure-mgmt-powerbiembedded = callPackage ../development/python-modules/azure-mgmt-powerbiembedded { };
+
+  azure-mgmt-privatedns = callPackage ../development/python-modules/azure-mgmt-privatedns { };
 
   azure-mgmt-rdbms = callPackage ../development/python-modules/azure-mgmt-rdbms { };
 
@@ -395,6 +419,8 @@ in {
 
   azure-mgmt-search = callPackage ../development/python-modules/azure-mgmt-search { };
 
+  azure-mgmt-security = callPackage ../development/python-modules/azure-mgmt-security { };
+
   azure-mgmt-servicebus = callPackage ../development/python-modules/azure-mgmt-servicebus { };
 
   azure-mgmt-servicefabric = callPackage ../development/python-modules/azure-mgmt-servicefabric { };
@@ -403,6 +429,8 @@ in {
 
   azure-mgmt-sql = callPackage ../development/python-modules/azure-mgmt-sql { };
 
+  azure-mgmt-sqlvirtualmachine = callPackage ../development/python-modules/azure-mgmt-sqlvirtualmachine { };
+
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
 
   azure-mgmt-subscription = callPackage ../development/python-modules/azure-mgmt-subscription { };
@@ -410,6 +438,8 @@ in {
   azure-mgmt-trafficmanager = callPackage ../development/python-modules/azure-mgmt-trafficmanager { };
 
   azure-mgmt-web = callPackage ../development/python-modules/azure-mgmt-web { };
+
+  azure-multiapi-storage = callPackage ../development/python-modules/azure-multiapi-storage { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
@@ -715,7 +745,9 @@ in {
 
   mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
 
-  mailmanclient = callPackage ../development/python-modules/mailmanclient { };
+  mailman-web = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/web.nix { });
+
+  mailmanclient = disabledIf (!isPy3k) (callPackage ../development/python-modules/mailmanclient { });
 
   mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
 
@@ -1195,6 +1227,8 @@ in {
   spglib = callPackage ../development/python-modules/spglib { };
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
+
+  sshtunnel = callPackage ../development/python-modules/sshtunnel { };
 
   sslib = callPackage ../development/python-modules/sslib { };
 
@@ -1774,6 +1808,8 @@ in {
 
   characteristic = callPackage ../development/python-modules/characteristic { };
 
+  chart-studio = callPackage ../development/python-modules/chart-studio { };
+
   cheetah = callPackage ../development/python-modules/cheetah { };
 
   cherrypy = if isPy3k then
@@ -1981,15 +2017,17 @@ in {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
-  pytest = if isPy3k then
-    callPackage ../development/python-modules/pytest {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override { doCheck = false; };
-    }
-  else callPackage ../development/python-modules/pytest/2.nix {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override { doCheck = false; };
-    };
+  pytest = if isPy3k then self.pytest_5 else self.pytest_4;
+
+  pytest_5 = callPackage ../development/python-modules/pytest {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
+  };
+
+  pytest_4 = callPackage ../development/python-modules/pytest/4.nix {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
+  };
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
@@ -3097,8 +3135,6 @@ in {
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
-  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
-
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
   flask_principal = callPackage ../development/python-modules/flask-principal { };
@@ -3141,7 +3177,10 @@ in {
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
 
-  opt-einsum = callPackage ../development/python-modules/opt-einsum {};
+  opt-einsum = if isPy27 then
+      callPackage ../development/python-modules/opt-einsum/2.nix {}
+    else
+      callPackage ../development/python-modules/opt-einsum {};
 
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
@@ -3811,13 +3850,6 @@ in {
   msgpack = callPackage ../development/python-modules/msgpack {};
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy {};
-
-  msgpack-python = self.msgpack.overridePythonAttrs {
-    pname = "msgpack-python";
-    postPatch = ''
-      substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
-    '';
-  };
 
   msrplib = callPackage ../development/python-modules/msrplib { };
 
@@ -5060,6 +5092,8 @@ in {
 
   vsts = callPackage ../development/python-modules/vsts { };
 
+  vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
+
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
   webassets = callPackage ../development/python-modules/webassets { };
@@ -5273,6 +5307,8 @@ in {
   secretstorage = if isPy3k
     then callPackage ../development/python-modules/secretstorage { }
     else callPackage ../development/python-modules/secretstorage/2.nix { };
+
+  secure = callPackage ../development/python-modules/secure { };
 
   semantic = callPackage ../development/python-modules/semantic { };
 
@@ -5705,6 +5741,8 @@ in {
 
   basemap = callPackage ../development/python-modules/basemap { };
 
+  dict2xml = callPackage ../development/python-modules/dict2xml { };
+
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
   markdown2 = callPackage ../development/python-modules/markdown2 { };
@@ -5942,6 +5980,8 @@ in {
   jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
+
+  javaproperties = callPackage ../development/python-modules/javaproperties { };
 
   tempora= callPackage ../development/python-modules/tempora { };
 

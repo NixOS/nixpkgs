@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Attempts to prevent you from accidentally shutting down or rebooting machines";
-    homepage    = https://anonscm.debian.org/git/collab-maint/molly-guard.git/;
+    homepage    = https://salsa.debian.org/debian/molly-guard;
     license     = licenses.artistic2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ DerTim1 ];

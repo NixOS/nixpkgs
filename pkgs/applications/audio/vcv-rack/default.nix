@@ -7,16 +7,11 @@ let
     name = "glfw-git-${version}";
     version = "2019-06-30";
     src = fetchFromGitHub {
-      owner = "AndrewBelt";
+      owner = "glfw";
       repo = "glfw";
-      rev = "d9ab59efc781c392128a449361a381fcc93cf6f3";
-      sha256 = "1ykkq6qq8y6j5hlfj2zp1p87kr33vwhywziprz20v5avx1q7rjm8";
+      rev = "d25248343e248337284dfbe5ecd1eddbd37ae66d";
+      sha256 = "0gbz353bfmqbpm0af2nqf5draz3k4f3lqwiqj68s8nwn7878aqm3";
     };
-    # We patch the source to export a function that was added to the glfw fork
-    # for Rack so it is present when we build glfw as a shared library.
-    # See https://github.com/AndrewBelt/glfw/pull/1 for discussion of this issue
-    # with upstream.
-    patches = [ ./glfw.patch ];
     buildInputs = oldAttrs.buildInputs ++ [ libXext libXi ];
   });
   pfft-source = fetchFromBitbucket {
@@ -24,6 +19,30 @@ let
     repo = "pffft";
     rev = "29e4f76ac53bef048938754f32231d7836401f79";
     sha256 = "084csgqa6f1a270bhybjayrh3mpyi2jimc87qkdgsqcp8ycsx1l1";
+  };
+  nanovg-source = fetchFromGitHub {
+    owner = "memononen";
+    repo = "nanovg";
+    rev = "1f9c8864fc556a1be4d4bf1d6bfe20cde25734b4";
+    sha256 = "08r15zrr6p1kxigxzxrg5rgya7wwbdx7d078r362qbkmws83wk27";
+  };
+  nanosvg-source = fetchFromGitHub {
+    owner = "memononen";
+    repo = "nanosvg";
+    rev = "25241c5a8f8451d41ab1b02ab2d865b01600d949";
+    sha256 = "114qgfmazsdl53rm4pgqif3gv8msdmfwi91lyc2jfadgzfd83xkg";
+  };
+  osdialog-source = fetchFromGitHub {
+    owner = "AndrewBelt";
+    repo = "osdialog";
+    rev = "e5db5de6444f4b2c4e1390c67b3efd718080c3da";
+    sha256 = "0iqxn1md053nl19hbjk8rqsdcmjwa5l5z0ci4fara77q43rc323i";
+  };
+  oui-blendish-source = fetchFromGitHub {
+    owner = "AndrewBelt";
+    repo = "oui-blendish";
+    rev = "79ec59e6bc7201017fc13a20c6e33380adca1660";
+    sha256 = "17kd0lh2x3x12bxkyhq6z8sg6vxln8m9qirf0basvcsmylr6rb64";
   };
 in
 with stdenv.lib; stdenv.mkDerivation rec {
@@ -34,16 +53,25 @@ with stdenv.lib; stdenv.mkDerivation rec {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "04kg0nm7w19s2zfrsxjfl3bs4sy3bzf28kzl4hayzwv480667ybx";
-    fetchSubmodules = true;
+    sha256 = "1wm41jkdm3dacl1n7q65lp3a4a5n2pz1wgb559hingfa2h0cwvsw";
   };
 
-  patches = [ ./rack-minimize-vendoring.patch ];
+  patches = [
+    ./rack-minimize-vendoring.patch
+    # We patch out a call to a custom function, that is not needed on Linux.
+    # This avoids needing a patched version of glfw. The version we previously used disappeared
+    # on GitHub. See https://github.com/NixOS/nixpkgs/issues/71189
+    ./remove-custom-glfw-function.patch
+  ];
 
   prePatch = ''
-    cp -r ${pfft-source} dep/jpommier-pffft-source
-
     mkdir -p dep/include
+
+    cp -r ${pfft-source} dep/jpommier-pffft-source
+    cp -r ${nanovg-source}/* dep/nanovg
+    cp -r ${nanosvg-source}/* dep/nanosvg
+    cp -r ${osdialog-source}/* dep/osdialog
+    cp -r ${oui-blendish-source}/* dep/oui-blendish
 
     cp dep/jpommier-pffft-source/*.h dep/include
     cp dep/nanosvg/**/*.h dep/include

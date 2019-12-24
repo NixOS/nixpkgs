@@ -1,0 +1,57 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-ibus-typing-booster">
+  <title>ibus-engines.typing-booster</title>
+
+  <para>
+   This package is an ibus-based completion method to speed up typing.
+  </para>
+
+  <section xml:id="sec-ibus-typing-booster-activate">
+   <title>Activating the engine</title>
+
+   <para>
+    IBus needs to be configured accordingly to activate <literal>typing-booster</literal>. The configuration depends on the desktop manager in use. For detailed instructions, please refer to the <link xlink:href="https://mike-fabian.github.io/ibus-typing-booster/documentation.html">upstream docs</link>.
+   </para>
+
+   <para>
+    On NixOS you need to explicitly enable <literal>ibus</literal> with given engines before customizing your desktop to use <literal>typing-booster</literal>. This can be achieved using the <literal>ibus</literal> module:
+<programlisting>{ pkgs, ... }: {
+  i18n.inputMethod = {
+    enabled = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [ typing-booster ];
+  };
+}</programlisting>
+   </para>
+  </section>
+
+  <section xml:id="sec-ibus-typing-booster-customize-hunspell">
+   <title>Using custom hunspell dictionaries</title>
+
+   <para>
+    The IBus engine is based on <literal>hunspell</literal> to support completion in many languages. By default the dictionaries <literal>de-de</literal>, <literal>en-us</literal>, <literal>fr-moderne</literal> <literal>es-es</literal>, <literal>it-it</literal>, <literal>sv-se</literal> and <literal>sv-fi</literal> are in use. To add another dictionary, the package can be overridden like this:
+<programlisting>ibus-engines.typing-booster.override {
+  langs = [ "de-at" "en-gb" ];
+}</programlisting>
+   </para>
+
+   <para>
+    <emphasis>Note: each language passed to <literal>langs</literal> must be an attribute name in <literal>pkgs.hunspellDicts</literal>.</emphasis>
+   </para>
+  </section>
+
+  <section xml:id="sec-ibus-typing-booster-emoji-picker">
+   <title>Built-in emoji picker</title>
+
+   <para>
+    The <literal>ibus-engines.typing-booster</literal> package contains a program named <literal>emoji-picker</literal>. To display all emojis correctly, a special font such as <literal>noto-fonts-emoji</literal> is needed:
+   </para>
+
+   <para>
+    On NixOS it can be installed using the following expression:
+<programlisting>{ pkgs, ... }: {
+  fonts.fonts = with pkgs; [ noto-fonts-emoji ];
+}</programlisting>
+   </para>
+  </section>
+ </section>

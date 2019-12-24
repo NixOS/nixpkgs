@@ -26,5 +26,6 @@ stdenv.mkDerivation rec { pname = "EZminc";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.free;
+    broken = true;
   };
 }

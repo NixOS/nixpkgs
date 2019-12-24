@@ -75,8 +75,10 @@ in buildFHSUserEnv rec {
     xorg.libX11
     xorg.libXfixes
     libGL
+    pkgsi686Linux.libva
 
     # Not formally in runtime but needed by some games
+    at-spi2-atk
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     libdrm

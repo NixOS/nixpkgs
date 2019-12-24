@@ -98,6 +98,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "dev" ];
+
   postPatch = ''
     echo \#!${runtimeShell} > data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .

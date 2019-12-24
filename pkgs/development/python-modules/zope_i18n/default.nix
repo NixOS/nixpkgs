@@ -21,6 +21,7 @@ buildPythonPackage rec {
     description = "Zope Internationalization Support";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
+    broken = true;
   };
 
 }

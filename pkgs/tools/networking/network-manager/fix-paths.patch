@@ -1,6 +1,8 @@
+diff --git a/clients/common/nm-vpn-helpers.c b/clients/common/nm-vpn-helpers.c
+index 081d60561..3b686f754 100644
 --- a/clients/common/nm-vpn-helpers.c
 +++ b/clients/common/nm-vpn-helpers.c
-@@ -214,10 +214,7 @@
+@@ -216,10 +216,7 @@ nm_vpn_openconnect_authenticate_helper (const char *host,
  		NULL,
  	};
  
@@ -10,11 +12,13 @@
 -		return FALSE;
 +	path = "@openconnect@/bin/openconnect";
  
- 	argv[0] = (char *) path;
- 	argv[1] = "--authenticate";
+ 	if (!g_spawn_sync (NULL,
+ 	                   (char **) NM_MAKE_STRV (path, "--authenticate", host),
+diff --git a/data/84-nm-drivers.rules b/data/84-nm-drivers.rules
+index d246ef6ce..f0e94ea6b 100644
 --- a/data/84-nm-drivers.rules
 +++ b/data/84-nm-drivers.rules
-@@ -7,6 +7,6 @@
+@@ -7,6 +7,6 @@ ACTION!="add|change", GOTO="nm_drivers_end"
  # Determine ID_NET_DRIVER if there's no ID_NET_DRIVER or DRIVERS (old udev?)
  ENV{ID_NET_DRIVER}=="?*", GOTO="nm_drivers_end"
  DRIVERS=="?*", GOTO="nm_drivers_end"
@@ -22,9 +26,11 @@
 +PROGRAM="@shell@ -c '@ethtool@/bin/ethtool -i $1 | @gnused@/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", RESULT=="?*", ENV{ID_NET_DRIVER}="%c"
  
  LABEL="nm_drivers_end"
+diff --git a/data/NetworkManager.service.in b/data/NetworkManager.service.in
+index ff90456ff..a007f7021 100644
 --- a/data/NetworkManager.service.in
 +++ b/data/NetworkManager.service.in
-@@ -8,7 +8,7 @@
+@@ -8,7 +8,7 @@ Before=network.target @DISTRO_NETWORK_SERVICE@
  [Service]
  Type=dbus
  BusName=org.freedesktop.NetworkManager
@@ -33,9 +39,33 @@
  #ExecReload=/bin/kill -HUP $MAINPID
  ExecStart=@sbindir@/NetworkManager --no-daemon
  Restart=on-failure
+diff --git a/libnm/meson.build b/libnm/meson.build
+index 2938d35d5..4b3df97f1 100644
+--- a/libnm/meson.build
++++ b/libnm/meson.build
+@@ -269,7 +269,7 @@ if enable_introspection
+     name,
+     input: libnm_gir[0],
+     output: name,
+-    command: [generate_setting_docs_env, python.path(), generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--output', '@OUTPUT@'],
++    command: [generate_setting_docs_env, generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--output', '@OUTPUT@'],
+     depends: libnm_gir,
+   )
+ 
+@@ -278,7 +278,7 @@ if enable_introspection
+     name,
+     input: libnm_gir[0],
+     output: name,
+-    command: [generate_setting_docs_env, python.path(), generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--overrides', nm_settings_docs_overrides, '--output', '@OUTPUT@'],
++    command: [generate_setting_docs_env, generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--overrides', nm_settings_docs_overrides, '--output', '@OUTPUT@'],
+     depends: libnm_gir,
+   )
+ endif
+diff --git a/src/devices/nm-device.c b/src/devices/nm-device.c
+index 43f03739b..3fb27ddbd 100644
 --- a/src/devices/nm-device.c
 +++ b/src/devices/nm-device.c
-@@ -12451,14 +12451,14 @@ nm_device_start_ip_check (NMDevice *self)
+@@ -12621,14 +12621,14 @@ nm_device_start_ip_check (NMDevice *self)
  			gw = nm_ip4_config_best_default_route_get (priv->ip_config_4);
  			if (gw) {
  				nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);
@@ -53,7 +83,7 @@
  			}
  		}
 diff --git a/src/nm-core-utils.c b/src/nm-core-utils.c
-index 6f55e62a7..93721e7fb 100644
+index fd1628027..e8a554edf 100644
 --- a/src/nm-core-utils.c
 +++ b/src/nm-core-utils.c
 @@ -442,7 +442,7 @@ nm_utils_modprobe (GError **error, gboolean suppress_error_logging, const char *

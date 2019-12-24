@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wireguard-exporter";
-  version = "3.0.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "MindFlavor";
     repo = "prometheus_wireguard_exporter";
     rev = version;
-    sha256 = "0wfv54ny557mjajjdf0lyq5sbf9m7y50ggm7s2v30c639i0swyrc";
+    sha256 = "1hyqvk3sxirm91lasf1z1wkzaql1g52my9a9q42z1h0hq66bc6nk";
   };
 
-  cargoSha256 = "06s9194lvwd7lynxnsrjfbjfj87ngvjbqjhx3idf7d1w9mgi4ysw";
+  cargoSha256 = "0wdyvl58h66xjcnl2kf3f7gnn4nc4vzpl870jc5x0qrkz28jppxz";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

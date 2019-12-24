@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
 , backports_functools_lru_cache, configparser, futures, future, jedi, pluggy, python-jsonrpc-server
-, pytest, mock, pytestcov, coverage
+, pytest, mock, pytestcov, coverage, setuptools
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
   # The following packages are optional and
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     HOME=$TEMPDIR pytest
   '';
 
-  propagatedBuildInputs = [ jedi pluggy future python-jsonrpc-server ]
+  propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server ]
     ++ stdenv.lib.optional (withProvider "autopep8") autopep8
     ++ stdenv.lib.optional (withProvider "mccabe") mccabe
     ++ stdenv.lib.optional (withProvider "pycodestyle") pycodestyle

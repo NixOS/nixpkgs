@@ -12,6 +12,12 @@ in
 
 {
 
+  imports = [
+    (mkRemovedOptionModule
+      ["services" "gnome3" "gnome-settings-daemon" "package"]
+      "")
+  ];
+
   ###### interface
 
   options = {
@@ -19,13 +25,6 @@ in
     services.gnome3.gnome-settings-daemon = {
 
       enable = mkEnableOption "GNOME Settings Daemon";
-
-      # There are many forks of gnome-settings-daemon
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gnome3.gnome-settings-daemon;
-        description = "Which gnome-settings-daemon package to use.";
-      };
 
     };
 
@@ -36,9 +35,13 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      pkgs.gnome3.gnome-settings-daemon
+    ];
 
-    services.udev.packages = [ cfg.package ];
+    services.udev.packages = [
+      pkgs.gnome3.gnome-settings-daemon
+    ];
 
   };
 

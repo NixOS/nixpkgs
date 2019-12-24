@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  stdenv, fetchurl, fetchFromGitHub, makeSetupHook, makeWrapper,
+  stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
   llvmPackages_5,
@@ -53,12 +53,22 @@ let
     qtbase = [
       ./qtbase.patch
       ./qtbase-fixguicmake.patch
+      ./qtbase-trayicons.patch # can be removed with 5.12.4 or 5.13
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtwebengine = [
       ./qtwebengine-no-build-skip.patch
+      # patch for CVE-2019-13720, can be removed when it is included in the next upstream release
+      # https://bugreports.qt.io/browse/QTBUG-1019226
+      (fetchpatch {
+        name = "qtwebengine-CVE-2019-13720.patch";
+        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=d6e5fc10";
+        sha256 = "0ywc12m196pr6xn7l5xbascihygkjj4pbcgcn9wxvi5ssdr6z46z";
+        extraPrefix = "src/3rdparty/";
+        stripLen = 1;
+      })
     ]
       ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [ ./qtwebkit.patch ]
@@ -67,6 +77,10 @@ let
         ./qtwebkit-darwin-no-qos-classes.patch
       ];
     qttools = [ ./qttools.patch ];
+    qtwayland = [
+      ./qtwayland-fix-webengine-freezeups-1.patch # can be removed with 5.12.4 or 5.13
+      ./qtwayland-fix-webengine-freezeups-2.patch # can be removed with 5.12.4 or 5.13
+    ];
   };
 
   qtModule =

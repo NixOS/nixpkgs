@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, qt5, autoconf, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, autoconf, pkgconfig
+, mkDerivation, qtbase, qttools, qtx11extras
+}:
 
-stdenv.mkDerivation  rec {
+mkDerivation  rec {
   pname = "qsynth";
   version = "0.5.7";
 
@@ -11,7 +13,7 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ autoconf pkgconfig ];
 
-  buildInputs = [ alsaLib fluidsynth libjack2 qt5.qtbase qt5.qttools qt5.qtx11extras ];
+  buildInputs = [ alsaLib fluidsynth libjack2 qtbase qttools qtx11extras ];
 
   enableParallelBuilding = true;
 

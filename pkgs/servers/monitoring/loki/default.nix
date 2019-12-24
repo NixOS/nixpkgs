@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
 
 buildGoPackage rec {
-  version = "0.3.0";
+  version = "1.1.0";
   pname = "grafana-loki";
   goPackagePath = "github.com/grafana/loki";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "1b61fqk6ah4qps4nq7ypdax4i7pkhjxdw4qrhc1zvzzhxr7x13rs";
+    sha256 = "1c9bw5bib577pgjd71skncxf3cdcyj1ab36j6ag7szl2kym62j6x";
   };
 
   nativeBuildInputs = [ makeWrapper ];

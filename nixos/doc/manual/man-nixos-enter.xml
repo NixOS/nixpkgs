@@ -8,8 +8,8 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-enter</command>
-  </refname><refpurpose>run a command in a NixOS chroot environment</refpurpose>
+  <refname><command>nixos-enter</command></refname>
+  <refpurpose>run a command in a NixOS chroot environment</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>

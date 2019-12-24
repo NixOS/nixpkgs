@@ -95,5 +95,6 @@ in stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ Phlogistique kamilchm ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

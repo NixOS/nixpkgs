@@ -1,18 +1,28 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, ell, coreutils, readline, python3Packages }:
+{ stdenv
+, fetchgit
+, fetchpatch
+, autoreconfHook
+, pkgconfig
+, ell
+, coreutils
+, docutils
+, readline
+, python3Packages
+}:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-
-  version = "0.19";
+  version = "0.22";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "0848r06bnx5k6wlmy425hljc3f03x9xx0r83vdvf630jryc9llmz";
+    sha256 = "0mjc08ayq2k7sinqanrlm97dn88dxkqkyk2vqqcx1nqjvwvbpbsp";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    docutils
     pkgconfig
     python3Packages.wrapPython
   ];

@@ -149,7 +149,7 @@ let
         --setenv PATH="$PATH" \
         ${optionalString cfg.ephemeral "--ephemeral"} \
         ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
-          ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
+          ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"'' else ""
         } \
         ${if cfg.tmpfs != null && cfg.tmpfs != [] then
           ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}'' else ""
@@ -824,5 +824,12 @@ in
     '';
 
     environment.systemPackages = [ pkgs.nixos-container ];
+
+    boot.kernelModules = [
+      "bridge"
+      "macvlan"
+      "tap"
+      "tun"
+    ];
   });
 }

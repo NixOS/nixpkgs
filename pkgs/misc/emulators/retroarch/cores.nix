@@ -7,7 +7,7 @@ let
 
   d2u = stdenv.lib.replaceChars ["-"] ["_"];
 
-  mkLibRetroCore = ({ core, src, description, license, ... }@a:
+  mkLibRetroCore = ({ core, src, description, license, broken ? false, ... }@a:
   stdenv.lib.makeOverridable stdenv.mkDerivation rec {
 
     name = "libretro-${core}-${version}";
@@ -38,6 +38,7 @@ let
       inherit description;
       homepage = https://www.libretro.com/;
       inherit license;
+      inherit broken;
       maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
       platforms = platforms.unix;
     };
@@ -145,6 +146,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Dolphin to libretro";
     license = gpl2Plus;
+    broken = true;
 
     extraBuildInputs = [
       cmake curl libGLU_combined pcre pkgconfig sfml miniupnpc

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "2.0.1";
+  version = "2.2.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "db09e34dfc148279f303481c7da94b84c9b1442a41794f039c31253e81a58ffb";
+    sha256 = "0znal1hi964acc8bl3z0ikscax7zziks838ld099rjsbffjwmwn5";
   };
 
   propagatedBuildInputs = [ attrs protobuf zeroconf ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Client for ESPHome native API";
-    homepage = https://github.com/esphome/aioesphomeapi;
+    homepage = "https://github.com/esphome/aioesphomeapi";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
 

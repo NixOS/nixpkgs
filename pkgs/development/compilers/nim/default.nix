@@ -1,6 +1,6 @@
 # based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
 
-{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim-11_x, openssl, pcre, readline,
+{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim, openssl, pcre, readline,
   boehmgc, sfml, tzdata, coreutils, sqlite }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   #    as part of building it, so it cannot be read-only
 
   checkInputs = [
-    nodejs-slim-11_x tzdata coreutils
+    nodejs-slim tzdata coreutils
   ];
 
   nativeBuildInputs = [

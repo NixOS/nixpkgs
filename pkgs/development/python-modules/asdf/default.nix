@@ -9,17 +9,25 @@
 , numpy
 , isPy27
 , astropy
+, setuptools_scm
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.3.3";
+  version = "2.4.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d02e936a83abd206e7bc65050d94e8848da648344dbec9e49dddc2bdc3bd6870";
+    sha256 = "1wlgx8469wwsczc2gjka9k1a03yzird67zg3va0kg8y6j1qmbwvg";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "semantic_version>=2.3.1,<=2.6.0" "semantic_version>=2.3.1" \
+      --replace "doctest_plus = enabled" ""
+  '';
 
   checkInputs = [
     pytest-astropy
@@ -32,6 +40,8 @@ buildPythonPackage rec {
     jsonschema
     six
     numpy
+    setuptools_scm
+    setuptools
   ];
 
   checkPhase = ''

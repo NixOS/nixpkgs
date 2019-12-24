@@ -1,5 +1,5 @@
 { monolithic ? true # build monolithic amule
-, daemon ? false # build amule daemon
+, enableDaemon ? false # build amule daemon
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
 , fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
@@ -32,7 +32,7 @@ mkDerivation rec {
     "--disable-debug"
     "--enable-optimize"
     (stdenv.lib.enableFeature monolithic "monolithic")
-    (stdenv.lib.enableFeature daemon "amule-daemon")
+    (stdenv.lib.enableFeature enableDaemon "amule-daemon")
     (stdenv.lib.enableFeature client "amule-gui")
     (stdenv.lib.enableFeature httpServer "webserver")
   ];

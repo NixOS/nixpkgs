@@ -28,6 +28,9 @@ buildPythonPackage rec {
     "-I${pkgs.qt5.qtbase.dev}/include/QtWidgets"
   ];
 
+  dontUseQmakeConfigure = true;
+  dontUseCmakeConfigure = true;
+
   doCheck = false;
 
   postPatch = ''
@@ -39,6 +42,7 @@ buildPythonPackage rec {
     homepage = http://pivy.coin3d.org/;
     description = "A Python binding for Coin";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ gebner ];
   };
 
 }

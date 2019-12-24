@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     libGLU_combined zlib libX11 wxGTK pcre libXdmcp glew glm libpthreadstubs
     cairo curl openssl boost
-    swig python
+    swig (python.withPackages (ps: with ps; [ wxPython ]))
   ] ++ optional (oceSupport) opencascade
     ++ optional (ngspiceSupport) libngspice;
 

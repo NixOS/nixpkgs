@@ -5,11 +5,25 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
+  basePackages = with pkgs; [
+    crda
+    modemmanager
+    networkmanager
+    networkmanager-fortisslvpn
+    networkmanager-iodine
+    networkmanager-l2tp
+    networkmanager-openconnect
+    networkmanager-openvpn
+    networkmanager-vpnc
+  ] ++ optional (!enableIwd) wpa_supplicant;
+
   dynamicHostsEnabled =
     cfg.dynamicHosts.enable && cfg.dynamicHosts.hostsDirs != {};
 
+  enableIwd = cfg.wifi.backend == "iwd";
+
   # /var/lib/misc is for dnsmasq.leases.
-  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
+  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc /var/lib/NetworkManager-fortisslvpn";
 
   configFile = pkgs.writeText "NetworkManager.conf" ''
     [main]
@@ -35,6 +49,7 @@ let
 
     [device]
     wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
+    wifi.backend=${cfg.wifi.backend}
 
     ${cfg.extraConfig}
   '';
@@ -173,24 +188,13 @@ in {
         '';
       };
 
-      # Ugly hack for using the correct gnome3 packageSet
-      basePackages = mkOption {
-        type = types.attrsOf types.package;
-        default = { inherit (pkgs)
-                            networkmanager modemmanager wpa_supplicant crda
-                            networkmanager-openvpn networkmanager-vpnc
-                            networkmanager-openconnect networkmanager-fortisslvpn
-                            networkmanager-l2tp networkmanager-iodine; };
-        internal = true;
-      };
-
       packages = mkOption {
-        type = types.listOf types.path;
+        type = types.listOf types.package;
         default = [ ];
         description = ''
           Extra packages that provide NetworkManager plugins.
         '';
-        apply = list: (attrValues cfg.basePackages) ++ list;
+        apply = list: basePackages ++ list;
       };
 
       dhcp = mkOption {
@@ -231,6 +235,15 @@ in {
 
       wifi = {
         macAddress = macAddressOpt;
+
+        backend = mkOption {
+          type = types.enum [ "wpa_supplicant" "iwd" ];
+          default = "wpa_supplicant";
+          description = ''
+            Specify the Wi-Fi backend used for the device.
+            Currently supported are <option>wpa_supplicant</option> or <option>iwd</option> (experimental).
+          '';
+        };
 
         powersave = mkOption {
           type = types.nullOr types.bool;
@@ -388,7 +401,7 @@ in {
       }
     ];
 
-    environment.etc = with cfg.basePackages; [
+    environment.etc = with pkgs; [
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
       }
@@ -462,11 +475,21 @@ in {
         mkdir -m 700 -p /etc/ipsec.d
         mkdir -m 755 -p ${stateDirs}
       '';
+
+      aliases = [
+        "dbus-org.freedesktop.NetworkManager.service"
+        "network-manager.service"
+      ];
     };
 
     systemd.services.NetworkManager-wait-online = {
       wantedBy = [ "network-online.target" ];
     };
+
+    systemd.services.ModemManager.aliases = [
+      "dbus-org.freedesktop.ModemManager1.service"
+      "modem-manager.service"
+    ];
 
     systemd.services.nm-setup-hostsdirs = mkIf dynamicHostsEnabled {
       wantedBy = [ "NetworkManager.service" ];
@@ -489,19 +512,25 @@ in {
 
       # useful binaries for user-specified hooks
       path = [ pkgs.iproute pkgs.utillinux pkgs.coreutils ];
+      aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
     };
 
-    # Turn off NixOS' network management
-    networking = {
-      useDHCP = false;
-      # use mkDefault to trigger the assertion about the conflict above
-      wireless.enable = mkDefault false;
-    };
+    # Turn off NixOS' network management when networking is managed entirely by NetworkManager
+    networking = mkMerge [
+      {
+        useDHCP = false;
+      }
+
+      (mkIf cfg.enableStrongSwan {
+        networkmanager.packages = [ pkgs.networkmanager_strongswan ];
+      })
+
+      (mkIf enableIwd {
+        wireless.iwd.enable = true;
+      })
+    ];
 
     security.polkit.extraConfig = polkitConf;
-
-    networking.networkmanager.packages =
-      mkIf cfg.enableStrongSwan [ pkgs.networkmanager_strongswan ];
 
     services.dbus.packages =
       optional cfg.enableStrongSwan pkgs.strongswanNM ++ cfg.packages;

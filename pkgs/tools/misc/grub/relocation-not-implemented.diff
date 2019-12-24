@@ -1,0 +1,25 @@
+https://git.savannah.gnu.org/cgit/grub.git/commit/util?id=842c390469e2c2e10b5
+diff --git a/util/grub-mkimagexx.c b/util/grub-mkimagexx.c
+index a2bb054..39d7efb 100644
+--- a/util/grub-mkimagexx.c
++++ b/util/grub-mkimagexx.c
+@@ -841,6 +841,7 @@ SUFFIX (relocate_addresses) (Elf_Ehdr *e, Elf_Shdr *sections,
+ 		  break;
+ 
+ 		case R_X86_64_PC32:
++		case R_X86_64_PLT32:
+ 		  {
+ 		    grub_uint32_t *t32 = (grub_uint32_t *) target;
+ 		    *t32 = grub_host_to_target64 (grub_target_to_host32 (*t32)
+diff --git a/util/grub-module-verifier.c b/util/grub-module-verifier.c
+index 9179285..a79271f 100644
+--- a/util/grub-module-verifier.c
++++ b/util/grub-module-verifier.c
+@@ -19,6 +19,7 @@ struct grub_module_verifier_arch archs[] = {
+       -1
+     }, (int[]){
+       R_X86_64_PC32,
++      R_X86_64_PLT32,
+       -1
+     }
+   },

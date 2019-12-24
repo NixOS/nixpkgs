@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
         cp -r $out/libexec/configuration/ \$HOME/.xmind/configuration-cathy/
       fi
 
-      exec "$out/libexec/XMind" "$@"
+      exec "$out/libexec/XMind" "\$@"
     EOF
     chmod +x $out/bin/XMind
 

@@ -4,8 +4,7 @@
  <title>TeX Live</title>
 
  <para>
-  Since release 15.09 there is a new TeX Live packaging that lives entirely
-  under attribute <varname>texlive</varname>.
+  Since release 15.09 there is a new TeX Live packaging that lives entirely under attribute <varname>texlive</varname>.
  </para>
 
  <section xml:id="sec-language-texlive-users-guide">
@@ -14,28 +13,23 @@
   <itemizedlist>
    <listitem>
     <para>
-     For basic usage just pull <varname>texlive.combined.scheme-basic</varname>
-     for an environment with basic LaTeX support.
+     For basic usage just pull <varname>texlive.combined.scheme-basic</varname> for an environment with basic LaTeX support.
     </para>
    </listitem>
    <listitem>
     <para>
-     It typically won't work to use separately installed packages together.
-     Instead, you can build a custom set of packages like this:
+     It typically won't work to use separately installed packages together. Instead, you can build a custom set of packages like this:
 <programlisting>
 texlive.combine {
   inherit (texlive) scheme-small collection-langkorean algorithms cm-super;
 }
 </programlisting>
-     There are all the schemes, collections and a few thousand packages, as
-     defined upstream (perhaps with tiny differences).
+     There are all the schemes, collections and a few thousand packages, as defined upstream (perhaps with tiny differences).
     </para>
    </listitem>
    <listitem>
     <para>
-     By default you only get executables and files needed during runtime, and a
-     little documentation for the core packages. To change that, you need to
-     add <varname>pkgFilter</varname> function to <varname>combine</varname>.
+     By default you only get executables and files needed during runtime, and a little documentation for the core packages. To change that, you need to add <varname>pkgFilter</varname> function to <varname>combine</varname>.
 <programlisting>
 texlive.combine {
   # inherit (texlive) whatever-you-want;
@@ -59,10 +53,7 @@ nix-repl> texlive.collection-<TAB>
    </listitem>
    <listitem>
     <para>
-     Note that the wrapper assumes that the result has a chance to be useful.
-     For example, the core executables should be present, as well as some core
-     data files. The supported way of ensuring this is by including some
-     scheme, for example <varname>scheme-basic</varname>, into the combination.
+     Note that the wrapper assumes that the result has a chance to be useful. For example, the core executables should be present, as well as some core data files. The supported way of ensuring this is by including some scheme, for example <varname>scheme-basic</varname>, into the combination.
     </para>
    </listitem>
   </itemizedlist>
@@ -84,14 +75,12 @@ nix-repl> texlive.collection-<TAB>
    </listitem>
    <listitem>
     <para>
-     feature/bug: when a package is rejected by <varname>pkgFilter</varname>,
-     its dependencies are still propagated;
+     feature/bug: when a package is rejected by <varname>pkgFilter</varname>, its dependencies are still propagated;
     </para>
    </listitem>
    <listitem>
     <para>
-     in case of any bugs or feature requests, file a github issue or better a
-     pull request and /cc @vcunat.
+     in case of any bugs or feature requests, file a github issue or better a pull request and /cc @vcunat.
     </para>
    </listitem>
   </itemizedlist>

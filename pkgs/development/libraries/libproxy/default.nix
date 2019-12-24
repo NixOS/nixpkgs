@@ -6,7 +6,7 @@
 , fetchpatch
 , dbus
 , networkmanager
-, spidermonkey_38
+, spidermonkey_60
 , pcre
 , gsettings-desktop-schemas
 , glib
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     JavaScriptCore
   ] else [
     glib
-    spidermonkey_38
+    spidermonkey_60
     dbus
     networkmanager
   ]);
@@ -59,14 +59,28 @@ stdenv.mkDerivation rec {
     "-DPYTHON3_SITEPKG_DIR=${placeholder "py3"}/${python3.sitePackages}"
   ];
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = [
+    # Make build with spidermonkey_60
+    (fetchpatch {
+      url = "https://github.com/libproxy/libproxy/pull/86.patch";
+      sha256 = "17c06ilinrnzr7xnnmw9pc6zrncyaxcdd6r6k1ah5p156skbykfs";
+    })
+    (fetchpatch {
+      url = "https://github.com/libproxy/libproxy/pull/87.patch";
+      sha256 = "0sagzfwm16f33inbkwsp88w9wmrd034rjmw0y8d122f7k1qfx6zc";
+    })
+    (fetchpatch {
+      url = "https://github.com/libproxy/libproxy/pull/95.patch";
+      sha256 = "18vyr6wlis9zfwml86606jpgb9mss01l9aj31iiciml8p857aixi";
+    })
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
     (fetchpatch {
       url = "https://github.com/libproxy/libproxy/commit/44158f03f8522116758d335688ed840dfcb50ac8.patch";
       sha256 = "0axfvb6j7gcys6fkwi9dkn006imhvm3kqr83gpwban8419n0q5v1";
     })
   ];
 
-  postFixup = ''
+  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
     # config_gnome3 uses the helper to find GNOME proxy settings
     wrapProgram $out/libexec/pxgsettings --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
   '';

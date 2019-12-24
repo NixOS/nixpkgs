@@ -77,7 +77,14 @@ $out/lib/common-lisp/query-fs"
     };
   };
   cffi = addNativeLibs [pkgs.libffi];
-  cl-mysql = addNativeLibs [pkgs.mysql];
+  cl-mysql = x: {
+    propagatedBuildInputs = [pkgs.mysql.connector-c];
+    overrides = y: (x.overrides y) // {
+      prePatch = ((x.overrides y).prePatch or "") + ''
+        sed -i 's,libmysqlclient_r,${pkgs.mysql.connector-c}/lib/mysql/libmysqlclient_r,' system.lisp
+      '';
+    };
+  };
   cl-ppcre-template = x: {
     overrides = y: (x.overrides y) // {
       postPatch = ''

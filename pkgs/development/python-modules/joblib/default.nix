@@ -3,10 +3,11 @@
 , fetchPypi
 , fetchpatch
 , stdenv
-, sphinx
 , numpydoc
 , pytest
 , python-lz4
+, setuptools
+, sphinx
 }:
 
 
@@ -37,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ sphinx numpydoc pytest ];
-  propagatedBuildInputs = [ python-lz4 ];
+  propagatedBuildInputs = [ python-lz4 setuptools ];
 
   # test_disk_used is broken: https://github.com/joblib/joblib/issues/57
   # test_dispatch_multiprocessing is broken only on Darwin.

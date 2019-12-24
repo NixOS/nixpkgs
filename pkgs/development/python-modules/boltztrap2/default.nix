@@ -23,6 +23,8 @@ buildPythonPackage rec {
     sha256 = "1hambr925ml2v2zcxnmnpi39395gl2928yac4p2kghk9xicymraw";
   };
 
+  dontUseCmakeConfigure = true;
+
   nativeBuildInputs = [ cmake cython ];
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ spglib numpy scipy matplotlib ase netcdf4 ];

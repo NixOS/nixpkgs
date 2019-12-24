@@ -135,5 +135,7 @@ let
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       fakeSha256 fakeSha512
       nixType imap;
+    inherit (versions)
+      splitVersion;
   });
 in lib

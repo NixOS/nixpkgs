@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, makeWrapper, prettytable, pythonOlder, solc }:
+{ lib, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder
+, prettytable
+, setuptools
+, solc
+}:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
@@ -15,7 +19,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ prettytable ];
+  propagatedBuildInputs = [ prettytable setuptools ];
 
   postFixup = ''
     wrapProgram $out/bin/slither \

@@ -1,0 +1,493 @@
+From d85beeb65820d6e5733f88af63b15f77d03aa6ba Mon Sep 17 00:00:00 2001
+From: Johan Klokkhammer Helsing <johan.helsing@qt.io>
+Date: Mon, 28 Jan 2019 09:48:26 +0100
+Subject: [PATCH 2/2] Client: Full implementation for frame callbacks (second
+ try)
+
+The Wayland plugin now takes full control over delivering update request and
+implement frame callbacks for both egl and shm.
+
+[ChangeLog][QPA plugin] The non-blocking version of eglSwapBuffers is now used, if
+supported. This fixed a bug where minimized windows would block the event loop.
+
+[ChangeLog][QPA plugin] Windows that don't get frame callbacks from the
+compositor within 100 ms are now set as not exposed. This should stop most
+clients from rendering unnecessary frames to minimized or hidden windows.
+
+Also, when we relied on the QPA version of requestUpdate, we would sometimes
+deliver one update request while we were waiting for a frame callback. When we
+implement the fallback timer ourselves we can make sure we only deliver the
+fallback if there are no pending frame callbacks.
+
+QtQuick and other applications often depend on blocking swapBuffers to throttle
+animations. If the context's surface format has a non-zero swapInterval, try to
+emulate a blocking swap.
+
+Fixes: QTBUG-69077
+Change-Id: I3c6964f31a16e9aff70b8ec3c5340e640a30fef2
+Reviewed-by: Paul Olav Tvete <paul.tvete@qt.io>
+---
+ src/client/qwaylanddisplay.cpp                |  38 +++-
+ src/client/qwaylanddisplay_p.h                |   3 +
+ src/client/qwaylandwindow.cpp                 | 180 +++++++++++++++---
+ src/client/qwaylandwindow_p.h                 |  17 +-
+ .../client/wayland-egl/qwaylandglcontext.cpp  |  25 ++-
+ .../qwaylandxcompositeeglcontext.cpp          |   2 +-
+ .../qwaylandxcompositeglxcontext.cpp          |   2 +-
+ 7 files changed, 218 insertions(+), 49 deletions(-)
+
+diff --git a/src/client/qwaylanddisplay.cpp b/src/client/qwaylanddisplay.cpp
+index f2bd3160..82003a30 100644
+--- a/src/client/qwaylanddisplay.cpp
++++ b/src/client/qwaylanddisplay.cpp
+@@ -68,6 +68,8 @@
+ 
+ #include <QtWaylandClient/private/qwayland-text-input-unstable-v2.h>
+ 
++#include <QtCore/private/qcore_unix_p.h>
++
+ #include <QtCore/QAbstractEventDispatcher>
+ #include <QtGui/private/qguiapplication_p.h>
+ 
+@@ -190,7 +192,6 @@ void QWaylandDisplay::flushRequests()
+     wl_display_flush(mDisplay);
+ }
+ 
+-
+ void QWaylandDisplay::blockingReadEvents()
+ {
+     if (wl_display_dispatch(mDisplay) < 0) {
+@@ -204,6 +205,41 @@ void QWaylandDisplay::exitWithError()
+     ::exit(1);
+ }
+ 
++wl_event_queue *QWaylandDisplay::createEventQueue()
++{
++    return wl_display_create_queue(mDisplay);
++}
++
++void QWaylandDisplay::dispatchQueueWhile(wl_event_queue *queue, std::function<bool ()> condition, int timeout)
++{
++    if (!condition())
++        return;
++
++    QElapsedTimer timer;
++    timer.start();
++    struct pollfd pFd = qt_make_pollfd(wl_display_get_fd(mDisplay), POLLIN);
++    while (timeout == -1 || timer.elapsed() < timeout) {
++        while (wl_display_prepare_read_queue(mDisplay, queue) != 0)
++            wl_display_dispatch_queue_pending(mDisplay, queue);
++
++        wl_display_flush(mDisplay);
++
++        const int remaining = qMax(timeout - timer.elapsed(), 0ll);
++        const int pollTimeout = timeout == -1 ? -1 : remaining;
++        if (qt_poll_msecs(&pFd, 1, pollTimeout) > 0)
++            wl_display_read_events(mDisplay);
++        else
++            wl_display_cancel_read(mDisplay);
++
++        if (wl_display_dispatch_queue_pending(mDisplay, queue) < 0) {
++            checkError();
++            exitWithError();
++        }
++        if (!condition())
++            break;
++    }
++}
++
+ QWaylandScreen *QWaylandDisplay::screenForOutput(struct wl_output *output) const
+ {
+     for (int i = 0; i < mScreens.size(); ++i) {
+diff --git a/src/client/qwaylanddisplay_p.h b/src/client/qwaylanddisplay_p.h
+index cc6a0a72..fa8b4c3f 100644
+--- a/src/client/qwaylanddisplay_p.h
++++ b/src/client/qwaylanddisplay_p.h
+@@ -182,6 +182,9 @@ public:
+     void handleKeyboardFocusChanged(QWaylandInputDevice *inputDevice);
+     void handleWindowDestroyed(QWaylandWindow *window);
+ 
++    wl_event_queue *createEventQueue();
++    void dispatchQueueWhile(wl_event_queue *queue, std::function<bool()> condition, int timeout = -1);
++
+ public slots:
+     void blockingReadEvents();
+     void flushRequests();
+diff --git a/src/client/qwaylandwindow.cpp b/src/client/qwaylandwindow.cpp
+index 600ea1df..4d399f8f 100644
+--- a/src/client/qwaylandwindow.cpp
++++ b/src/client/qwaylandwindow.cpp
+@@ -67,6 +67,7 @@
+ #include <QtGui/private/qwindow_p.h>
+ 
+ #include <QtCore/QDebug>
++#include <QtCore/QThread>
+ 
+ #include <wayland-client.h>
+ 
+@@ -81,6 +82,7 @@ QWaylandWindow *QWaylandWindow::mMouseGrab = nullptr;
+ QWaylandWindow::QWaylandWindow(QWindow *window)
+     : QPlatformWindow(window)
+     , mDisplay(waylandScreen()->display())
++    , mFrameQueue(mDisplay->createEventQueue())
+     , mResizeAfterSwap(qEnvironmentVariableIsSet("QT_WAYLAND_RESIZE_AFTER_SWAP"))
+ {
+     static WId id = 1;
+@@ -363,6 +365,8 @@ void QWaylandWindow::sendExposeEvent(const QRect &rect)
+ {
+     if (!(mShellSurface && mShellSurface->handleExpose(rect)))
+         QWindowSystemInterface::handleExposeEvent(window(), rect);
++    else
++        qCDebug(lcQpaWayland) << "sendExposeEvent: intercepted by shell extension, not sending";
+     mLastExposeGeometry = rect;
+ }
+ 
+@@ -547,18 +551,11 @@ void QWaylandWindow::handleScreenRemoved(QScreen *qScreen)
+ void QWaylandWindow::attach(QWaylandBuffer *buffer, int x, int y)
+ {
+     Q_ASSERT(!buffer->committed());
+-    if (mFrameCallback) {
+-        wl_callback_destroy(mFrameCallback);
+-        mFrameCallback = nullptr;
+-    }
+-
+     if (buffer) {
+-        mFrameCallback = frame();
+-        wl_callback_add_listener(mFrameCallback, &QWaylandWindow::callbackListener, this);
+-        mWaitingForFrameSync = true;
++        handleUpdate();
+         buffer->setBusy();
+ 
+-        attach(buffer->buffer(), x, y);
++        QtWayland::wl_surface::attach(buffer->buffer(), x, y);
+     } else {
+         QtWayland::wl_surface::attach(nullptr, 0, 0);
+     }
+@@ -614,32 +611,61 @@ void QWaylandWindow::commit(QWaylandBuffer *buffer, const QRegion &damage)
+ }
+ 
+ const wl_callback_listener QWaylandWindow::callbackListener = {
+-    QWaylandWindow::frameCallback
++    [](void *data, wl_callback *callback, uint32_t time) {
++        Q_UNUSED(callback);
++        Q_UNUSED(time);
++        auto *window = static_cast<QWaylandWindow*>(data);
++        if (window->thread() != QThread::currentThread())
++            QMetaObject::invokeMethod(window, [=] { window->handleFrameCallback(); }, Qt::QueuedConnection);
++        else
++            window->handleFrameCallback();
++    }
+ };
+ 
+-void QWaylandWindow::frameCallback(void *data, struct wl_callback *callback, uint32_t time)
++void QWaylandWindow::handleFrameCallback()
+ {
+-    Q_UNUSED(time);
+-    Q_UNUSED(callback);
+-    QWaylandWindow *self = static_cast<QWaylandWindow*>(data);
++    bool wasExposed = isExposed();
+ 
+-    self->mWaitingForFrameSync = false;
+-    if (self->mUpdateRequested) {
+-        self->mUpdateRequested = false;
+-        self->deliverUpdateRequest();
++    if (mFrameCallbackTimerId != -1) {
++        killTimer(mFrameCallbackTimerId);
++        mFrameCallbackTimerId = -1;
+     }
++
++    mWaitingForFrameCallback = false;
++    mFrameCallbackTimedOut = false;
++
++    if (!wasExposed && isExposed())
++        sendExposeEvent(QRect(QPoint(), geometry().size()));
++    if (wasExposed && hasPendingUpdateRequest())
++        deliverUpdateRequest();
+ }
+ 
+ QMutex QWaylandWindow::mFrameSyncMutex;
+ 
+-void QWaylandWindow::waitForFrameSync()
++bool QWaylandWindow::waitForFrameSync(int timeout)
+ {
+     QMutexLocker locker(&mFrameSyncMutex);
+-    if (!mWaitingForFrameSync)
+-        return;
+-    mDisplay->flushRequests();
+-    while (mWaitingForFrameSync)
+-        mDisplay->blockingReadEvents();
++    if (!mWaitingForFrameCallback)
++        return true;
++
++    wl_proxy_set_queue(reinterpret_cast<wl_proxy *>(mFrameCallback), mFrameQueue);
++    mDisplay->dispatchQueueWhile(mFrameQueue, [&]() { return mWaitingForFrameCallback; }, timeout);
++
++    if (mWaitingForFrameCallback) {
++        qCDebug(lcWaylandBackingstore) << "Didn't receive frame callback in time, window should now be inexposed";
++        mFrameCallbackTimedOut = true;
++        mWaitingForUpdate = false;
++        sendExposeEvent(QRect());
++    }
++
++    // Stop current frame timer if any, can't use killTimer directly, because we might be on a diffent thread
++    if (mFrameCallbackTimerId != -1) {
++        int id = mFrameCallbackTimerId;
++        mFrameCallbackTimerId = -1;
++        QMetaObject::invokeMethod(this, [=] { killTimer(id); }, Qt::QueuedConnection);
++    }
++
++    return !mWaitingForFrameCallback;
+ }
+ 
+ QMargins QWaylandWindow::frameMargins() const
+@@ -971,6 +997,9 @@ bool QWaylandWindow::isExposed() const
+     if (!window()->isVisible())
+         return false;
+ 
++    if (mFrameCallbackTimedOut)
++        return false;
++
+     if (mShellSurface)
+         return mShellSurface->isExposed();
+ 
+@@ -1046,12 +1075,107 @@ QVariant QWaylandWindow::property(const QString &name, const QVariant &defaultVa
+     return m_properties.value(name, defaultValue);
+ }
+ 
++void QWaylandWindow::timerEvent(QTimerEvent *event)
++{
++    if (event->timerId() == mFallbackUpdateTimerId) {
++        killTimer(mFallbackUpdateTimerId);
++        mFallbackUpdateTimerId = -1;
++        qCDebug(lcWaylandBackingstore) << "mFallbackUpdateTimer timed out";
++
++        if (!isExposed()) {
++            qCDebug(lcWaylandBackingstore) << "Fallback update timer: Window not exposed,"
++                                           << "not delivering update request.";
++            return;
++        }
++
++        if (mWaitingForUpdate && hasPendingUpdateRequest() && !mWaitingForFrameCallback) {
++            qCWarning(lcWaylandBackingstore) << "Delivering update request through fallback timer,"
++                                             << "may not be in sync with display";
++            deliverUpdateRequest();
++        }
++    }
++
++    if (event->timerId() == mFrameCallbackTimerId) {
++        killTimer(mFrameCallbackTimerId);
++        mFrameCallbackTimerId = -1;
++        qCDebug(lcWaylandBackingstore) << "Didn't receive frame callback in time, window should now be inexposed";
++        mFrameCallbackTimedOut = true;
++        mWaitingForUpdate = false;
++        sendExposeEvent(QRect());
++    }
++}
++
+ void QWaylandWindow::requestUpdate()
+ {
+-    if (!mWaitingForFrameSync)
+-        QPlatformWindow::requestUpdate();
+-    else
+-        mUpdateRequested = true;
++    Q_ASSERT(hasPendingUpdateRequest()); // should be set by QPA
++
++    // If we have a frame callback all is good and will be taken care of there
++    if (mWaitingForFrameCallback)
++        return;
++
++    // If we've already called deliverUpdateRequest(), but haven't seen any attach+commit/swap yet
++    if (mWaitingForUpdate) {
++        // Ideally, we should just have returned here, but we're not guaranteed that the client
++        // will actually update, so start this timer to deliver another request update after a while
++        // *IF* the client doesn't update.
++        int fallbackTimeout = 100;
++        mFallbackUpdateTimerId = startTimer(fallbackTimeout);
++        return;
++    }
++
++    // Some applications (such as Qt Quick) depend on updates being delivered asynchronously,
++    // so use invokeMethod to delay the delivery a bit.
++    QMetaObject::invokeMethod(this, [this] {
++        // Things might have changed in the meantime
++        if (hasPendingUpdateRequest() && !mWaitingForUpdate && !mWaitingForFrameCallback)
++            deliverUpdateRequest();
++    }, Qt::QueuedConnection);
++}
++
++// Should be called whenever we commit a buffer (directly through wl_surface.commit or indirectly
++// with eglSwapBuffers) to know when it's time to commit the next one.
++// Can be called from the render thread (without locking anything) so make sure to not make races in this method.
++void QWaylandWindow::handleUpdate()
++{
++    // TODO: Should sync subsurfaces avoid requesting frame callbacks?
++
++    if (mFrameCallback) {
++        wl_callback_destroy(mFrameCallback);
++        mFrameCallback = nullptr;
++    }
++
++    if (mFallbackUpdateTimerId != -1) {
++        // Ideally, we would stop the fallback timer here, but since we're on another thread,
++        // it's not allowed. Instead we set mFallbackUpdateTimer to -1 here, so we'll just
++        // ignore it if it times out before it's cleaned up by the invokeMethod call.
++        int id = mFallbackUpdateTimerId;
++        mFallbackUpdateTimerId = -1;
++        QMetaObject::invokeMethod(this, [=] { killTimer(id); }, Qt::QueuedConnection);
++    }
++
++    mFrameCallback = frame();
++    wl_callback_add_listener(mFrameCallback, &QWaylandWindow::callbackListener, this);
++    mWaitingForFrameCallback = true;
++    mWaitingForUpdate = false;
++
++    // Stop current frame timer if any, can't use killTimer directly, see comment above.
++    if (mFrameCallbackTimerId != -1) {
++        int id = mFrameCallbackTimerId;
++        mFrameCallbackTimerId = -1;
++        QMetaObject::invokeMethod(this, [=] { killTimer(id); }, Qt::QueuedConnection);
++    }
++
++    // Start a timer for handling the case when the compositor stops sending frame callbacks.
++    QMetaObject::invokeMethod(this, [=] { // Again; can't do it directly
++        if (mWaitingForFrameCallback)
++            mFrameCallbackTimerId = startTimer(100);
++    }, Qt::QueuedConnection);
++}
++
++void QWaylandWindow::deliverUpdateRequest()
++{
++    mWaitingForUpdate = true;
++    QPlatformWindow::deliverUpdateRequest();
+ }
+ 
+ void QWaylandWindow::addAttachOffset(const QPoint point)
+diff --git a/src/client/qwaylandwindow_p.h b/src/client/qwaylandwindow_p.h
+index 56ebd3cc..c47123dc 100644
+--- a/src/client/qwaylandwindow_p.h
++++ b/src/client/qwaylandwindow_p.h
+@@ -120,7 +120,7 @@ public:
+     void handleExpose(const QRegion &region);
+     void commit(QWaylandBuffer *buffer, const QRegion &damage);
+ 
+-    void waitForFrameSync();
++    bool waitForFrameSync(int timeout);
+ 
+     QMargins frameMargins() const override;
+ 
+@@ -191,7 +191,10 @@ public:
+ 
+     bool startSystemMove(const QPoint &pos) override;
+ 
++    void timerEvent(QTimerEvent *event) override;
+     void requestUpdate() override;
++    void handleUpdate();
++    void deliverUpdateRequest() override;
+ 
+ public slots:
+     void applyConfigure();
+@@ -211,10 +214,17 @@ protected:
+     Qt::MouseButtons mMousePressedInContentArea = Qt::NoButton;
+ 
+     WId mWindowId;
+-    bool mWaitingForFrameSync = false;
++    bool mWaitingForFrameCallback = false;
++    bool mFrameCallbackTimedOut = false; // Whether the frame callback has timed out
++    int mFrameCallbackTimerId = -1; // Started on commit, reset on frame callback
+     struct ::wl_callback *mFrameCallback = nullptr;
++    struct ::wl_event_queue *mFrameQueue = nullptr;
+     QWaitCondition mFrameSyncWait;
+ 
++    // True when we have called deliverRequestUpdate, but the client has not yet attached a new buffer
++    bool mWaitingForUpdate = false;
++    int mFallbackUpdateTimerId = -1; // Started when waiting for app to commit
++
+     QMutex mResizeLock;
+     bool mWaitingToApplyConfigure = false;
+     bool mCanResize = true;
+@@ -253,11 +263,10 @@ private:
+     void handleMouseEventWithDecoration(QWaylandInputDevice *inputDevice, const QWaylandPointerEvent &e);
+     void handleScreenChanged();
+ 
+-    bool mUpdateRequested = false;
+     QRect mLastExposeGeometry;
+ 
+     static const wl_callback_listener callbackListener;
+-    static void frameCallback(void *data, struct wl_callback *wl_callback, uint32_t time);
++    void handleFrameCallback();
+ 
+     static QMutex mFrameSyncMutex;
+     static QWaylandWindow *mMouseGrab;
+diff --git a/src/hardwareintegration/client/wayland-egl/qwaylandglcontext.cpp b/src/hardwareintegration/client/wayland-egl/qwaylandglcontext.cpp
+index e58403ad..30dab408 100644
+--- a/src/hardwareintegration/client/wayland-egl/qwaylandglcontext.cpp
++++ b/src/hardwareintegration/client/wayland-egl/qwaylandglcontext.cpp
+@@ -315,7 +315,9 @@ QWaylandGLContext::QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *dis
+        mSupportNonBlockingSwap = false;
+     }
+     if (!mSupportNonBlockingSwap) {
+-        qWarning() << "Non-blocking swap buffers not supported. Subsurface rendering can be affected.";
++        qWarning(lcQpaWayland) << "Non-blocking swap buffers not supported."
++                               << "Subsurface rendering can be affected."
++                               << "It may also cause the event loop to freeze in some situations";
+     }
+ 
+     updateGLFormat();
+@@ -550,20 +552,15 @@ void QWaylandGLContext::swapBuffers(QPlatformSurface *surface)
+         m_blitter->blit(window);
+     }
+ 
+-
+-    QWaylandSubSurface *sub = window->subSurfaceWindow();
+-    if (sub) {
+-        QMutexLocker l(sub->syncMutex());
+-
+-        int si = (sub->isSync() && mSupportNonBlockingSwap) ? 0 : m_format.swapInterval();
+-
+-        eglSwapInterval(m_eglDisplay, si);
+-        eglSwapBuffers(m_eglDisplay, eglSurface);
+-    } else {
+-        eglSwapInterval(m_eglDisplay, m_format.swapInterval());
+-        eglSwapBuffers(m_eglDisplay, eglSurface);
++    int swapInterval = mSupportNonBlockingSwap ? 0 : m_format.swapInterval();
++    eglSwapInterval(m_eglDisplay, swapInterval);
++    if (swapInterval == 0 && m_format.swapInterval() > 0) {
++        // Emulating a blocking swap
++        glFlush(); // Flush before waiting so we can swap more quickly when the frame event arrives
++        window->waitForFrameSync(100);
+     }
+-
++    window->handleUpdate();
++    eglSwapBuffers(m_eglDisplay, eglSurface);
+ 
+     window->setCanResize(true);
+ }
+diff --git a/src/hardwareintegration/client/xcomposite-egl/qwaylandxcompositeeglcontext.cpp b/src/hardwareintegration/client/xcomposite-egl/qwaylandxcompositeeglcontext.cpp
+index c07ad534..a6fead95 100644
+--- a/src/hardwareintegration/client/xcomposite-egl/qwaylandxcompositeeglcontext.cpp
++++ b/src/hardwareintegration/client/xcomposite-egl/qwaylandxcompositeeglcontext.cpp
+@@ -65,7 +65,7 @@ void QWaylandXCompositeEGLContext::swapBuffers(QPlatformSurface *surface)
+     QSize size = w->geometry().size();
+ 
+     w->commit(w->buffer(), QRegion(0, 0, size.width(), size.height()));
+-    w->waitForFrameSync();
++    w->waitForFrameSync(100);
+ }
+ 
+ EGLSurface QWaylandXCompositeEGLContext::eglSurfaceForPlatformSurface(QPlatformSurface *surface)
+diff --git a/src/hardwareintegration/client/xcomposite-glx/qwaylandxcompositeglxcontext.cpp b/src/hardwareintegration/client/xcomposite-glx/qwaylandxcompositeglxcontext.cpp
+index 33ae2e03..35188741 100644
+--- a/src/hardwareintegration/client/xcomposite-glx/qwaylandxcompositeglxcontext.cpp
++++ b/src/hardwareintegration/client/xcomposite-glx/qwaylandxcompositeglxcontext.cpp
+@@ -93,7 +93,7 @@ void QWaylandXCompositeGLXContext::swapBuffers(QPlatformSurface *surface)
+     glXSwapBuffers(m_display, w->xWindow());
+ 
+     w->commit(w->buffer(), QRegion(0, 0, size.width(), size.height()));
+-    w->waitForFrameSync();
++    w->waitForFrameSync(100);
+ }
+ 
+ QFunctionPointer QWaylandXCompositeGLXContext::getProcAddress(const char *procName)
+-- 
+2.22.0
+

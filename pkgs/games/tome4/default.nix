@@ -25,6 +25,11 @@ in stdenv.mkDerivation rec {
     sha256 = "0mc5dgh2x9nbili7gy6srjhb23ckalf08wqq2amyjr5rq392jvd7";
   };
 
+  prePatch = ''
+    # http://forums.te4.org/viewtopic.php?f=42&t=49478&view=next#p234354
+    sed -i 's|#include <GL/glext.h>||' src/tgl.h
+  '';
+
   nativeBuildInputs = [ makeWrapper unzip premake4 ];
 
   # tome4 vendors quite a few libraries so someone might want to look

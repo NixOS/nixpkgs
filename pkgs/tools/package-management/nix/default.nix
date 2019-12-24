@@ -10,7 +10,7 @@ let
 
 common =
   { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline
+  , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns, jq
   , busybox-sandbox-shell
   , storeDir
@@ -39,7 +39,7 @@ common =
         ++ lib.optionals (!is20) [ curl perl ]
         ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq ];
 
-      buildInputs = [ curl openssl sqlite xz bzip2 ]
+      buildInputs = [ curl openssl sqlite xz bzip2 (nlohmann_json.override { multipleHeaders = true; }) ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is20 [ brotli boost editline ]
         ++ lib.optional withLibseccomp libseccomp
@@ -121,7 +121,7 @@ common =
         homepage = https://nixos.org/;
         license = stdenv.lib.licenses.lgpl2Plus;
         maintainers = [ stdenv.lib.maintainers.eelco ];
-        platforms = stdenv.lib.platforms.all;
+        platforms = stdenv.lib.platforms.unix;
         outputsToInstall = [ "out" "man" ];
       };
 
@@ -200,13 +200,13 @@ in rec {
   });
 
   nixFlakes = lib.lowPrio (callPackage common rec {
-    name = "nix-2.3${suffix}";
-    suffix = "pre20190830_04np4n6";
+    name = "nix-2.4${suffix}";
+    suffix = "pre20191022_9cac895";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "aa82f8b2d2a2c42f0d713e8404b668cef1a4b108";
-      hash = "sha256-09ZHwpxf9pRDacCSGTHYx+fnKYgxKx8G37Jqb4wl1xI=";
+      rev = "9cac895406724e0304dff140379783c4d786e855";
+      hash = "sha256-Y1cdnCNoJmjqyC/a+Nt2N+5L3Ttg7K7zOD7gmtg1QzA=";
     };
     fromGit = true;
 

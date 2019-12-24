@@ -29,5 +29,6 @@ buildPythonPackage rec {
     description = "Python API for libminc using EZMINC";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ bcdarwin ];
+    broken = true;
   };
 }

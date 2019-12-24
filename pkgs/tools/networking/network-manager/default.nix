@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, dbus, dbus-glib
+{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, fetchpatch, dbus, dbus-glib
 , gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
 , libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
@@ -10,11 +10,11 @@ let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
   pname = "network-manager";
-  version = "1.18.2";
+  version = "1.18.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "1hx5dx5dgdqh3p8fq7q1pxy2bx2iymc74lj60ycrf7ydfjlprnad";
+    sha256 = "0pnh1wr2p1fqa5pr945fr3lngfc5ccfrmgddqsg55lxnjpv0ggd3";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -62,6 +62,13 @@ in stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Fixes https://github.com/NixOS/nixpkgs/issues/72330
+    # Upstream MR: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/merge_requests/323
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/ed03fcbd17a7f73faad2adf7bf21ae77ad93740d.patch";
+      sha256 = "1vv9c1i499900kjnisirby3jz9b99nwcm87r9x20xp4p73zpq2ry";
+    })
   ];
 
   buildInputs = [
@@ -94,18 +101,6 @@ in stdenv.mkDerivation rec {
     # We are using a symlink that will be overridden during installation.
     mkdir -p ${placeholder "out"}/lib
     ln -s $PWD/libnm/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
-  '';
-
-  postInstall = ''
-    # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
-    # aliases ourselves.
-    ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
-
-    # Add the legacy service name from before #51382 to prevent NetworkManager
-    # from not starting back up:
-    # TODO: remove this once 19.10 is released
-    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
   '';
 
   passthru = {

@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = http://pyro.ai;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teh ];
+    broken = true;
   };
 }

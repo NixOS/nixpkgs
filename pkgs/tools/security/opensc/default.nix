@@ -22,6 +22,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenSC/OpenSC/commit/0d7967549751b7032f22b437106b41444aff0ba9.patch";
       sha256 = "1y42lmz8i9w99hgpakdncnv8f94cqjfabz0v4xg6wfz9akl3ff7d";
     })
+    (fetchpatch {
+      name = "CVE-2019-15945.patch";
+      url = "https://github.com/OpenSC/OpenSC/commit/412a6142c27a5973c61ba540e33cdc22d5608e68.patch";
+      sha256 = "088i2i1fkvdxnywmb54bn4283vhbxx6i2632b34ss5dh7k080hp7";
+    })
+    (fetchpatch {
+      name = "CVE-2019-15946.patch";
+      url = "https://github.com/OpenSC/OpenSC/commit/a3fc7693f3a035a8a7921cffb98432944bb42740.patch";
+      sha256 = "1qr9n8cbarrdn4kr5z0ys7flq50hfmcbm8584mhw7r39p08qwmvq";
+    })
   ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

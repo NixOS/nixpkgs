@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
+{ stdenv, fetchurl, fetchpatch, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
 , libkrb5 ? null, systemd ? null, jemalloc ? null, mysql ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
@@ -18,7 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "1dcz0w5xalqsi2xjb5j7c9mq5kf9s9kq9j2inpv4w5wkrrg569zb";
   };
 
-  #patches = [ ./fix-gnutls-detection.patch ];
+  patches = [
+    #./fix-gnutls-detection.patch
+    (fetchpatch {
+      name = "CVE-2019-17040.patch";
+      url = "https://github.com/rsyslog/rsyslog/pull/3875.patch";
+      sha256 = "0f93ahlkw7p5znqak0l82mw9gz3kxpi1zxfzycb5dk8n5zb89rfn";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [

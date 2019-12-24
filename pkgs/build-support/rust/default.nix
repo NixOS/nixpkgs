@@ -126,8 +126,8 @@ stdenv.mkDerivation (args // {
 
   checkPhase = args.checkPhase or ''
     runHook preCheck
-    echo "Running cargo test"
-    cargo test
+    echo "Running cargo cargo test -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
 

@@ -1,50 +1,34 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, appimage-run }:
+{ stdenv, fetchurl, makeDesktopItem, appimageTools }:
 
-stdenv.mkDerivation rec {
+let
   pname = "ledger-live-desktop";
-  version = "1.12.0";
+  version = "1.15.0";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    sha256 = "0sn0ri8kqvy36d6vjwsb0mh54nwic58416m6q5drl1schsn6wyvj";
+    sha256 = "0r7gm7q7gj39v36jd5xz20931za94nf2fpf3clbghkhlbrm0kbnq";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ appimage-run ];
-
-  desktopIcon = fetchurl {
-    url = "https://raw.githubusercontent.com/LedgerHQ/${pname}/v${version}/build/icon.png";
-    sha256 = "1mmfaf0yk7xf1kgbs3ka8wsbz1qgh60xj6z91ica1i7lw2qbdd5h";
+  appimageContents = appimageTools.extractType2 {
+    inherit name src;
   };
+in appimageTools.wrapType2 rec {
+  inherit name src;
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = "${placeholder "out"}/bin/${pname}";
-    icon = pname;
-    desktopName = "Ledger Live";
-    categories = "Utility;";
-  };
-
-  unpackPhase = ":";
-
-  installPhase = ''
-    runHook preInstall
-
-    ${desktopItem.buildCommand}
-    install -D $src $out/share/${src.name}
-    install -Dm -x ${desktopIcon} \
-      $out/share/icons/hicolor/1024x1024/apps/${pname}.png
-    makeWrapper ${appimage-run}/bin/appimage-run $out/bin/${pname} \
-      --add-flags $out/share/${src.name}
-
-    runHook postInstall
+  extraInstallCommands = ''
+    mv $out/bin/${name} $out/bin/${pname}
+    install -m 444 -D ${appimageContents}/ledger-live-desktop.desktop $out/share/applications/ledger-live-desktop.desktop
+    install -m 444 -D ${appimageContents}/ledger-live-desktop.png $out/share/icons/hicolor/1024x1024/apps/ledger-live-desktop.png
+    substituteInPlace $out/share/applications/ledger-live-desktop.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with stdenv.lib; {
     description = "Wallet app for Ledger Nano S and Ledger Blue";
     homepage = "https://www.ledger.com/live";
     license = licenses.mit;
-    maintainers = with maintainers; [ thedavidmeister ];
+    maintainers = with maintainers; [ thedavidmeister nyanloutre ];
     platforms = [ "x86_64-linux" ];
   };
 }

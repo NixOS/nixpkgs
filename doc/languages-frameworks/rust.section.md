@@ -4,7 +4,7 @@ author: Matthias Beyer
 date: 2017-03-05
 ---
 
-# User's Guide to the Rust Infrastructure
+# Rust
 
 To install the rust compiler and cargo put
 
@@ -188,7 +188,7 @@ argument and returns a set that contains all attribute that should be
 overwritten.
 
 For more complicated cases, such as when parts of the crate's
-derivation depend on the the crate's version, the `attrs` argument of
+derivation depend on the crate's version, the `attrs` argument of
 the override above can be read, as in the following example, which
 patches the derivation:
 

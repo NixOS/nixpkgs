@@ -11,13 +11,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation {
   pname = "arx-libertatis";
-  version = "2019-02-16";
+  version = "2019-07-22";
 
   src = fetchFromGitHub {
-    owner  = "arx";
-    repo   = "ArxLibertatis";
-    rev    = "fbce6ccbc7f58583f33f29b838c38ef527edc267";
-    sha256 = "0qrygp09dqhpb5q6a1zl6l03qh9bi7xcahd8hy9177z1cix3k0kz";
+    owner = "arx";
+    repo = "ArxLibertatis";
+    rev = "db77aa26bb8612f711b65e72b1cd8cf6481700c7";
+    sha256 = "0c88djyzjna17wjcvkgsfx3011m1rba5xdzdldy1hjmafpqgb4jj";
   };
 
 

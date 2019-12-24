@@ -187,7 +187,7 @@ let
     # Note: For DHCP the values both, none, v4, v6 are deprecated
     (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6"])
     (assertValueOneOf "DHCPServer" boolValues)
-    (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6"])
+    (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "ipv4-fallback" "fallback"])
     (assertValueOneOf "IPv4LLRoute" boolValues)
     (assertValueOneOf "LLMNR" ["yes" "resolve" "no"])
     (assertValueOneOf "MulticastDNS" ["yes" "resolve" "no"])
@@ -201,7 +201,7 @@ let
     (assertValueOneOf "IPv6AcceptRA" boolValues)
     (assertValueOneOf "IPv4ProxyARP" boolValues)
     (assertValueOneOf "IPv6ProxyNDP" boolValues)
-    (assertValueOneOf "IPv6PrefixDelegation" boolValues)
+    (assertValueOneOf "IPv6PrefixDelegation" (boolValues ++ [ "dhcpv6" "static" ]))
     (assertValueOneOf "ActiveSlave" boolValues)
     (assertValueOneOf "PrimarySlave" boolValues)
     (assertValueOneOf "ConfigureWithoutCarrier" boolValues)

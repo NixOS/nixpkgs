@@ -20,7 +20,7 @@ mkDerivation rec {
   };
   nativeBuildInputs = [
     cmake
-    (python3.withPackages (pp: with pp; [ pyyaml jinja2 ]))
+    (python3.withPackages (pp: with pp; [ pyyaml jinja2 setuptools ]))
   ];
   buildInputs = [
     qtbase

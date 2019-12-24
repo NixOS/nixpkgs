@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export CPPFLAGS="-I${mysql.connector-c}/include/mysql"
+    export CPPFLAGS="-I${stdenv.lib.getDev mysql.connector-c}/include/mysql"
     export LDFLAGS="-L${mysql.connector-c}/lib/mysql -L${postgresql}/lib"
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';

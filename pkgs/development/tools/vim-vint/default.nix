@@ -21,7 +21,7 @@ buildPythonApplication rec {
     substituteInPlace setup.py --replace "return requires" "return []"
   '';
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ ansicolor chardet pyyaml ] ;
+  propagatedBuildInputs = [ ansicolor chardet pyyaml  setuptools] ;
 
   # The acceptance tests check for stdout and location of binary files, which fails in nix-build.
   checkPhase = ''

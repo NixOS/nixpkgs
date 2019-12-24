@@ -1,0 +1,72 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-eclipse">
+  <title>Eclipse</title>
+
+  <para>
+   The Nix expressions related to the Eclipse platform and IDE are in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/eclipse"><filename>pkgs/applications/editors/eclipse</filename></link>.
+  </para>
+
+  <para>
+   Nixpkgs provides a number of packages that will install Eclipse in its various forms. These range from the bare-bones Eclipse Platform to the more fully featured Eclipse SDK or Scala-IDE packages and multiple version are often available. It is possible to list available Eclipse packages by issuing the command:
+<screen>
+<prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -qaP -A eclipses --description
+</screen>
+   Once an Eclipse variant is installed it can be run using the <command>eclipse</command> command, as expected. From within Eclipse it is then possible to install plugins in the usual manner by either manually specifying an Eclipse update site or by installing the Marketplace Client plugin and using it to discover and install other plugins. This installation method provides an Eclipse installation that closely resemble a manually installed Eclipse.
+  </para>
+
+  <para>
+   If you prefer to install plugins in a more declarative manner then Nixpkgs also offer a number of Eclipse plugins that can be installed in an <emphasis>Eclipse environment</emphasis>. This type of environment is created using the function <varname>eclipseWithPlugins</varname> found inside the <varname>nixpkgs.eclipses</varname> attribute set. This function takes as argument <literal>{ eclipse, plugins ? [], jvmArgs ? [] }</literal> where <varname>eclipse</varname> is a one of the Eclipse packages described above, <varname>plugins</varname> is a list of plugin derivations, and <varname>jvmArgs</varname> is a list of arguments given to the JVM running the Eclipse. For example, say you wish to install the latest Eclipse Platform with the popular Eclipse Color Theme plugin and also allow Eclipse to use more RAM. You could then add
+<screen>
+packageOverrides = pkgs: {
+  myEclipse = with pkgs.eclipses; eclipseWithPlugins {
+    eclipse = eclipse-platform;
+    jvmArgs = [ "-Xmx2048m" ];
+    plugins = [ plugins.color-theme ];
+  };
+}
+</screen>
+   to your Nixpkgs configuration (<filename>~/.config/nixpkgs/config.nix</filename>) and install it by running <command>nix-env -f '&lt;nixpkgs&gt;' -iA myEclipse</command> and afterward run Eclipse as usual. It is possible to find out which plugins are available for installation using <varname>eclipseWithPlugins</varname> by running
+<screen>
+<prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -qaP -A eclipses.plugins --description
+</screen>
+  </para>
+
+  <para>
+   If there is a need to install plugins that are not available in Nixpkgs then it may be possible to define these plugins outside Nixpkgs using the <varname>buildEclipseUpdateSite</varname> and <varname>buildEclipsePlugin</varname> functions found in the <varname>nixpkgs.eclipses.plugins</varname> attribute set. Use the <varname>buildEclipseUpdateSite</varname> function to install a plugin distributed as an Eclipse update site. This function takes <literal>{ name, src }</literal> as argument where <literal>src</literal> indicates the Eclipse update site archive. All Eclipse features and plugins within the downloaded update site will be installed. When an update site archive is not available then the <varname>buildEclipsePlugin</varname> function can be used to install a plugin that consists of a pair of feature and plugin JARs. This function takes an argument <literal>{ name, srcFeature, srcPlugin }</literal> where <literal>srcFeature</literal> and <literal>srcPlugin</literal> are the feature and plugin JARs, respectively.
+  </para>
+
+  <para>
+   Expanding the previous example with two plugins using the above functions we have
+<screen>
+packageOverrides = pkgs: {
+  myEclipse = with pkgs.eclipses; eclipseWithPlugins {
+    eclipse = eclipse-platform;
+    jvmArgs = [ "-Xmx2048m" ];
+    plugins = [
+      plugins.color-theme
+      (plugins.buildEclipsePlugin {
+        name = "myplugin1-1.0";
+        srcFeature = fetchurl {
+          url = "http://…/features/myplugin1.jar";
+          sha256 = "123…";
+        };
+        srcPlugin = fetchurl {
+          url = "http://…/plugins/myplugin1.jar";
+          sha256 = "123…";
+        };
+      });
+      (plugins.buildEclipseUpdateSite {
+        name = "myplugin2-1.0";
+        src = fetchurl {
+          stripRoot = false;
+          url = "http://…/myplugin2.zip";
+          sha256 = "123…";
+        };
+      });
+    ];
+  };
+}
+</screen>
+  </para>
+</section>

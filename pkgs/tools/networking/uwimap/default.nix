@@ -21,7 +21,7 @@ stdenv.mkDerivation ({
     ++ stdenv.lib.optional (!stdenv.isDarwin) pam;
 
   patches = [ (fetchpatch {
-    url = "https://anonscm.debian.org/cgit/collab-maint/uw-imap.git/plain/debian/patches/1006_openssl1.1_autoverify.patch?id=b4df81d246a6cdbfd035c21f43e844effda3582b";
+    url = "https://salsa.debian.org/holmgren/uw-imap/raw/dcb42981201ea14c2d71c01ebb4a61691b6f68b3/debian/patches/1006_openssl1.1_autoverify.patch";
     sha256 = "09xb58awvkhzmmjhrkqgijzgv7ia381ablf0y7i1rvhcqkb5wga7";
   }) ];
 

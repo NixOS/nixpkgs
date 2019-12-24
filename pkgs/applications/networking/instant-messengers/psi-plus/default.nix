@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ orivej ];
     license = licenses.gpl2;
     platforms = platforms.linux;
+    broken = true;
   };
 }

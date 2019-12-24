@@ -2,6 +2,7 @@
 , pkgconfig, libtool, intltool
 , libXmu
 , lua
+, tinyxml
 , agg, alsaLib, soundtouch, openal
 , desktop-file-utils
 , gtk2, gtkglext, libglade, pangox_compat
@@ -19,11 +20,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch {
-      name = "gcc6_fixes.patch";
-      url = "https://anonscm.debian.org/viewvc/pkg-games/packages/trunk/desmume/debian/patches/gcc6_fixes.patch?revision=15925";
-      sha256 = "0j3fmxz0mfb3f4biks03pyz8f9hy958ks6qplisl60rzq9v9qpks";
-     })
+    ./gcc6_fixes.patch
+    ./gcc7_fixes.patch
+    ./01_use_system_tinyxml.patch
   ];
 
   CXXFLAGS = "-fpermissive";
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
     openal desktop-file-utils gtk2 gtkglext libglade pangox_compat
-    libGLU libpcap SDL zziplib ];
+    libGLU libpcap SDL zziplib tinyxml ];
 
   configureFlags = [
     "--disable-glade"  # Failing on compile step

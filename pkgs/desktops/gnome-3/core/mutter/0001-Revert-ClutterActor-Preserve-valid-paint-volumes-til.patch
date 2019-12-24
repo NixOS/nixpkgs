@@ -1,0 +1,147 @@
+From 76477def5c103f10d62e604305802d7f5506afd4 Mon Sep 17 00:00:00 2001
+From: worldofpeace <worldofpeace@protonmail.ch>
+Date: Sun, 15 Sep 2019 20:14:16 -0400
+Subject: [PATCH] Revert "ClutterActor: Preserve valid paint volumes till the
+ next relayout/repaint"
+
+This causes issues for users of mutter like in gala[0].
+
+Upstream report: https://gitlab.gnome.org/GNOME/mutter/issues/536
+[0]: https://github.com/elementary/gala/issues/605
+---
+ clutter/clutter/clutter-actor.c | 35 +++++----------------------------
+ 1 file changed, 5 insertions(+), 30 deletions(-)
+
+diff --git a/clutter/clutter/clutter-actor.c b/clutter/clutter/clutter-actor.c
+index e70892308..8cb60fa07 100644
+--- a/clutter/clutter/clutter-actor.c
++++ b/clutter/clutter/clutter-actor.c
+@@ -24,7 +24,7 @@
+ 
+ /**
+  * SECTION:clutter-actor
+- * @short_description: The basic element of the scene graph 
++ * @short_description: The basic element of the scene graph
+  *
+  * The ClutterActor class is the basic element of the scene graph in Clutter,
+  * and it encapsulates the position, size, and transformations of a node in
+@@ -840,7 +840,6 @@ struct _ClutterActorPrivate
+   guint needs_compute_expand        : 1;
+   guint needs_x_expand              : 1;
+   guint needs_y_expand              : 1;
+-  guint needs_paint_volume_update   : 1;
+   guint had_effects_on_last_paint_volume_update : 1;
+ };
+ 
+@@ -1511,8 +1510,6 @@ clutter_actor_real_map (ClutterActor *self)
+ 
+   CLUTTER_ACTOR_SET_FLAGS (self, CLUTTER_ACTOR_MAPPED);
+ 
+-  self->priv->needs_paint_volume_update = TRUE;
+-
+   stage = _clutter_actor_get_stage_internal (self);
+   priv->pick_id = _clutter_stage_acquire_pick_id (CLUTTER_STAGE (stage), self);
+ 
+@@ -2746,7 +2743,6 @@ clutter_actor_real_queue_relayout (ClutterActor *self)
+   priv->needs_width_request  = TRUE;
+   priv->needs_height_request = TRUE;
+   priv->needs_allocation     = TRUE;
+-  priv->needs_paint_volume_update = TRUE;
+ 
+   /* reset the cached size requests */
+   memset (priv->width_requests, 0,
+@@ -4742,7 +4738,7 @@ clutter_actor_set_rotation_center_internal (ClutterActor        *self,
+                                             ClutterRotateAxis    axis,
+                                             const ClutterVertex *center)
+ {
+-  ClutterVertex v = CLUTTER_VERTEX_INIT_ZERO; 
++  ClutterVertex v = CLUTTER_VERTEX_INIT_ZERO;
+   GObject *obj = G_OBJECT (self);
+   ClutterTransformInfo *info;
+ 
+@@ -8531,7 +8527,6 @@ clutter_actor_init (ClutterActor *self)
+   priv->needs_width_request = TRUE;
+   priv->needs_height_request = TRUE;
+   priv->needs_allocation = TRUE;
+-  priv->needs_paint_volume_update = TRUE;
+ 
+   priv->cached_width_age = 1;
+   priv->cached_height_age = 1;
+@@ -10098,9 +10093,6 @@ clutter_actor_allocate (ClutterActor           *self,
+       return;
+     }
+ 
+-  if (CLUTTER_ACTOR_IS_MAPPED (self))
+-    self->priv->needs_paint_volume_update = TRUE;
+-
+   if (!stage_allocation_changed)
+     {
+       /* If the actor didn't move but needs_allocation is set, we just
+@@ -12992,9 +12984,6 @@ clutter_actor_add_child_internal (ClutterActor              *self,
+       child->priv->needs_height_request = TRUE;
+       child->priv->needs_allocation = TRUE;
+ 
+-      if (CLUTTER_ACTOR_IS_MAPPED (child))
+-        child->priv->needs_paint_volume_update = TRUE;
+-
+       /* we only queue a relayout here, because any possible
+        * redraw has already been queued either by show() or
+        * by our call to queue_redraw() above
+@@ -14130,7 +14119,7 @@ clutter_actor_get_anchor_point_gravity (ClutterActor *self)
+  *
+  * Since: 0.6
+  *
+- * Deprecated: 1.12: Use #ClutterActor:pivot-point and 
++ * Deprecated: 1.12: Use #ClutterActor:pivot-point and
+  * clutter_actor_set_translation() instead.
+  */
+ void
+@@ -14178,7 +14167,7 @@ clutter_actor_move_anchor_point (ClutterActor *self,
+  *
+  * Since: 0.6
+  *
+- * Deprecated: 1.12: Use #ClutterActor:pivot-point and 
++ * Deprecated: 1.12: Use #ClutterActor:pivot-point and
+  * clutter_actor_set_translation() instead.
+  */
+ void
+@@ -14230,7 +14219,7 @@ clutter_actor_move_anchor_point_from_gravity (ClutterActor   *self,
+  *
+  * Since: 0.6
+  *
+- * Deprecated: 1.12: Use #ClutterActor:pivot-point and 
++ * Deprecated: 1.12: Use #ClutterActor:pivot-point and
+  * clutter_actor_set_translation() instead. E.g. For %CLUTTER_GRAVITY_CENTER set
+  * pivot_point to (0.5,0.5) and the translation to (width/2,height/2).
+  */
+@@ -17567,19 +17556,6 @@ _clutter_actor_get_paint_volume_mutable (ClutterActor *self)
+ 
+   if (priv->paint_volume_valid)
+     {
+-      /* If effects are applied, the actor paint volume
+-       * needs to be recomputed on each paint, since those
+-       * paint volumes could change over the duration of the
+-       * effect.
+-       *
+-       * We also need to update the paint volume if we went
+-       * from having effects to not having effects on the last
+-       * paint volume update. */
+-      if (!priv->needs_paint_volume_update &&
+-          priv->current_effect == NULL &&
+-          !has_paint_volume_override_effects &&
+-          !priv->had_effects_on_last_paint_volume_update)
+-        return &priv->paint_volume;
+       clutter_paint_volume_free (&priv->paint_volume);
+     }
+ 
+@@ -17588,7 +17564,6 @@ _clutter_actor_get_paint_volume_mutable (ClutterActor *self)
+   if (_clutter_actor_get_paint_volume_real (self, &priv->paint_volume))
+     {
+       priv->paint_volume_valid = TRUE;
+-      priv->needs_paint_volume_update = FALSE;
+       return &priv->paint_volume;
+     }
+   else
+-- 
+2.22.1
+

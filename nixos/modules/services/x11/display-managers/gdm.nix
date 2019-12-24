@@ -42,10 +42,7 @@ in
     services.xserver.displayManager.gdm = {
 
       enable = mkEnableOption ''
-        GDM as the display manager.
-        <emphasis>GDM in NixOS is not well-tested with desktops other
-        than GNOME, so use with caution, as it could render the
-        system unusable.</emphasis>
+        GDM, the GNOME Display Manager
       '';
 
       debug = mkEnableOption ''

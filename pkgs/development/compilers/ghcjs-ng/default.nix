@@ -34,7 +34,6 @@ let
 
       (callPackage ./common-overrides.nix {
         inherit haskellLib;
-        inherit (bootPkgs) alex happy;
       })
       ghcjsDepOverrides
     ]);

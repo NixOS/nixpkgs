@@ -1,8 +1,9 @@
-{ pkgs
+{ lib
 , buildPythonPackage
 , fetchPypi
 , azure-nspkg
 , isPyPy
+, setuptools
 , python
 , isPy3k
 }:
@@ -20,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     azure-nspkg
-  ];
+  ] ++ lib.optionals (!isPy3k) [ setuptools ]; # need for namespace lookup
 
   postInstall = if isPy3k then "" else ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
@@ -28,7 +29,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "This is the Microsoft Azure common code";
     homepage = https://github.com/Azure/azure-sdk-for-python/tree/master/azure-common;
     license = licenses.mit;

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
-  version = "0.6.2";
+  version = "0.6.3";
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
     url = "https://github.com/AsamK/signal-cli/releases/download/v${version}/signal-cli-${version}.tar.gz";
-    sha256 = "050nizf7v10jlrwr8f4awzi2368qr01pzpvl2qkrwhdk25r505yr";
+    sha256 = "1gvdifscyxmxn2dwlkqi684ahy5kbcj84mqda0m8l4aa8iaq1d59";
   };
 
   buildInputs = [ makeWrapper ];

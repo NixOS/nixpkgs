@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  patches = stdenv.lib.optional (builtins.compareVersions qt.version "5.0.0" >= 0) [ ./c++11.patch ];
+
   # tells CMake to use this CA bundle file if it is accessible
   preConfigure = ''
     export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt

@@ -4,6 +4,7 @@
 , mock
 , pbr
 , pyyaml
+, setuptools
 , six
 , multi_key_dict
 , testscenarios
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ pbr pyyaml six multi_key_dict requests ];
+  propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
 
   checkInputs = [ unittest2 testscenarios requests-mock ];
   checkPhase = ''

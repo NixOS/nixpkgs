@@ -3,7 +3,7 @@
 fetchzip {
   name = "vista-fonts-1";
 
-  url = http://download.microsoft.com/download/f/5/a/f5a3df76-d856-4a61-a6bd-722f52a5be26/PowerPointViewer.exe;
+  url = https://web.archive.org/web/20171225132744/http://download.microsoft.com/download/E/6/7/E675FFFC-2A6D-4AB0-B3EB-27C9F8C8F696/PowerPointViewer.exe;
 
   postFetch = ''
     ${cabextract}/bin/cabextract --lowercase --filter ppviewer.cab $downloadedFile
@@ -21,7 +21,7 @@ fetchzip {
     done
   '';
 
-  sha256 = "1q2d24c203vkl6pwk86frmaj6jra49hr9mydq7cnlx4hilqslw3g";
+  sha256 = "1l27zg5jraa16zm11d3qz1w7m6f1ih3xy5avww454ylm50fw6z11";
 
   meta = {
     description = "Some TrueType fonts from Microsoft Windows Vista (Calibri, Cambria, Candara, Consolas, Constantia, Corbel)";
@@ -31,6 +31,5 @@ fetchzip {
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.
     priority = 5;
-    broken = true; # source url is 404
   };
 }

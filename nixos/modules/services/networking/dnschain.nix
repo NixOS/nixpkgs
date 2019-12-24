@@ -137,7 +137,7 @@ in
       ];
 
     services.pdns-recursor = mkIf cfgs.pdns-recursor.resolveDNSChainQueries {
-      forwardZones =
+      forwardZonesRecurse =
         { bit = "127.0.0.1:${toString cfg.dns.port}";
           dns = "127.0.0.1:${toString cfg.dns.port}";
         };

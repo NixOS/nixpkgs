@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     sha256 = "02g5zj4rq5sr15jzjqk70xk4k92i2pdmpq00xb4pnba8ps1mx18a";
   };
 
+  patches = [
+    # fetchpatch is way to hard due to bootstapping, and fetchurl from github isn't stable
+    ./cve-2019-5481.diff
+    ./cve-2019-5482.diff
+  ];
+
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
 

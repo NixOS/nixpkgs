@@ -72,6 +72,7 @@ stdenv.mkDerivation {
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
       "--with-compiledby=Nix"
+      "LDFLAGS=-headerpad_max_install_names"
   ];
 
   makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
@@ -102,6 +103,9 @@ stdenv.mkDerivation {
     substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include"
 
     substituteInPlace src/MacVim/vimrc --subst-var-by CSCOPE ${cscope}/bin/cscope
+
+    # Work around weird code-signing issue
+    substituteInPlace src/auto/config.mk --replace "XCODEFLAGS''\t=" "XCODEFLAGS''\t= CODE_SIGN_IDENTITY="
   '';
 
   postInstall = ''

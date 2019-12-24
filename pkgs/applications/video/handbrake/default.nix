@@ -3,7 +3,7 @@
 # Derivation patches HandBrake to use Nix closure dependencies.
 #
 
-{ stdenv, lib, fetchurl,
+{ stdenv, lib, fetchurl, fetchpatch,
   # Main build tools
   python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4,
   # Processing, video codecs, containers
@@ -60,6 +60,13 @@ stdenv.mkDerivation rec {
   # don't trigger cmake build
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
+
+  # The samplerate patch should be removed when HandBrake 1.3.0 is released
+  patches = [(fetchpatch {
+    name = "set-ffmpeg-samplerate.patch";
+    url = "https://patch-diff.githubusercontent.com/raw/HandBrake/HandBrake/pull/2126.patch";
+    sha256 = "00lds9h27cvyr53qpvv8gbv01hfxdxd8gphxcwbwg8akqrvk9gbf";
+  })];
 
   preConfigure = ''
     patchShebangs scripts

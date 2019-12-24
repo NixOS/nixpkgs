@@ -1,7 +1,7 @@
 { stdenv, meson, ninja, gettext, fetchurl, pkgconfig, gtk3, glib, icu
 , wrapGAppsHook, gnome3, libxml2, libxslt, itstool
 , webkitgtk, libsoup, glib-networking, libsecret, gnome-desktop, libnotify, p11-kit
-, sqlite, gcr, isocodes, desktop-file-utils, python3
+, sqlite, gcr, isocodes, desktop-file-utils, python3, nettle
 , gdk-pixbuf, gst_all_1, json-glib, libdazzle, libhandy }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf gnome3.adwaita-icon-theme gcr
     glib-networking gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav json-glib libdazzle
+    gst_all_1.gst-libav json-glib libdazzle nettle
   ];
 
   postPatch = ''

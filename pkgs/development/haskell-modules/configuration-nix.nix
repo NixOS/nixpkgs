@@ -94,7 +94,7 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  cachix = overrideCabal (addBuildTools (enableSeparateBinOutput super.cachix) [pkgs.boost]) (drv: {
+  cachix = overrideCabal (addBuildTools super.cachix [pkgs.boost]) (drv: {
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace cachix.cabal --replace "c++14" "c++17"
     '';
@@ -494,9 +494,9 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
-  # https://github.com/haskell-servant/servant/pull/1128
-  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.15" then
-    appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch
+  # https://github.com/haskell-servant/servant/pull/1238
+  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.16" then
+    appendPatch super.servant-client-core ./patches/servant-client-core-redact-auth-header.patch
   else
     super.servant-client-core;
 

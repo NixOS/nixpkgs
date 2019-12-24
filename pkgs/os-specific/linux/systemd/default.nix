@@ -27,8 +27,8 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "7019836a26ebdc1ba20c03d06dbb3a613833bd0f";
-    sha256 = "0ywaq5jfy177k4q5hwr43v66sz62l1bqhgyxs2vk9m1d5kvrjwk6";
+    rev = "d25cf413c6bff1b5a9d216a8830e3a90c9cad1de";
+    sha256 = "0ilvrnh3m7g0yflxl16fk52gkb1z0fwwk9ba5gs4005nzpl0c7i0";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -223,7 +223,7 @@ in stdenv.mkDerivation {
   # in a backwards-incompatible way.  If the interface version of two
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 3;
+  passthru.interfaceVersion = 2;
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
@@ -231,6 +231,6 @@ in stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ eelco andir ];
+    maintainers = with maintainers; [ eelco andir mic92 ];
   };
 }

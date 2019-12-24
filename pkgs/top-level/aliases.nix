@@ -56,6 +56,7 @@ mapAliases ({
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
+  cide = throw "deprecated in 2019-09-11: abandoned by upstream";
   cifs_utils = cifs-utils; # added 2016-08
   ckb = ckb-next; # added 2018-10-21
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
@@ -65,6 +66,7 @@ mapAliases ({
   compton-git = compton; # added 2019-05-20
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
+  corebird = throw "deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
   cpp-gsl = microsoft_gsl; # added 2019-05-24
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
@@ -158,6 +160,7 @@ mapAliases ({
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
   jbuilder = dune; # added 2018-09-09
+  jikes = throw "deprecated in 2019-10-07: jikes was abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdiff3-qt5 = kdiff3; # added 2017-02-18
@@ -215,6 +218,7 @@ mapAliases ({
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   module_init_tools = kmod; # added 2016-04-22
+  mono-zeroconf = throw "deprecated 2019-09-20: abandoned by upstream.";
   mpich2 = mpich;  # added 2018-08-06
   msf = metasploit; # added 2018-04-25
   libmsgpack = msgpack; # added 2018-08-17
@@ -315,6 +319,7 @@ mapAliases ({
   s6PortableUtils = s6-portable-utils; # added 2018-07-23
   sagemath = sage; # added 2018-10-27
   sam = deadpixi-sam; # added 2018-04-25
+  sambaMaster = throw "removed 2019-09-13: outdated and no longer needed";
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
   saneBackendsGit = sane-backends-git; # added 2016-01-02
@@ -325,6 +330,7 @@ mapAliases ({
   shared_mime_info = shared-mime-info; # added 2018-02-25
   skrooge2 = skrooge; # added 2017-02-18
   skype = skypeforlinux; # added 2017-07-27
+  skydive = throw "skydive has been removed from nixpkgs (2019-09-10)";
   slic3r-prusa3d = prusa-slicer; # added 2019-05-21
   slurm-llnl = slurm; # renamed July 2017
   slurm-llnl-full = slurm-full; # renamed July 2017
@@ -341,6 +347,7 @@ mapAliases ({
   sshfsFuse = sshfs-fuse; # added 2016-09
   suil-qt5 = suil; # added 2018-05-01
   surf-webkit2 = surf; # added 2017-04-02
+  sup = throw "deprecated in 2019-09-10: abandoned by upstream";
   system_config_printer = system-config-printer;  # added 2016-01-03
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
@@ -385,6 +392,7 @@ mapAliases ({
   winusb = woeusb; # added 2017-12-22
   wireguard = wireguard-tools; # added 2018-05-19
   morituri = whipper; # added 2018-09-13
+  xfceUnstable = xfce4-14; # added 2019-09-17
   x11 = xlibsWrapper; # added 2015-09
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25

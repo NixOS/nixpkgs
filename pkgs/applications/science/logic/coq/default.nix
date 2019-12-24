@@ -7,7 +7,7 @@
 
 { stdenv, fetchFromGitHub, writeText, pkgconfig
 , ocamlPackages, ncurses
-, buildIde ? true
+, buildIde ? !(stdenv.lib.versionAtLeast version "8.10" && stdenv.isDarwin) # GTK3 at version 3.24.10 on darwin has wrong gdkconfig.h
 , glib, gnome3, wrapGAppsHook
 , csdp ? null
 , version
@@ -28,7 +28,7 @@ let
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
    "8.9.1" = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
-   "8.10+beta2" = "0jk7pwydhd17ab7ii69zvi4sgrr630q2lsxhckaj3sz55cpjlhal";
+   "8.10.0" = "138jw94wp4mg5dgjc2asn8ng09ayz1mxdznq342n0m469j803gzg";
   }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
@@ -101,7 +101,9 @@ self = stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [ ocaml findlib camlp5 num ])
+  buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
+  ++ [ ocamlPackages.num ]
   ++ stdenv.lib.optionals buildIde
     (if versionAtLeast "8.10"
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]

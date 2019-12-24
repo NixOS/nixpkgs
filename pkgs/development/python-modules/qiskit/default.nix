@@ -59,5 +59,7 @@ buildPythonPackage rec {
     maintainers = with stdenv.lib.maintainers; [
       pandaman
     ];
+    # Needs to be updated and have its new dependencies added
+    broken = true;
   };
 }

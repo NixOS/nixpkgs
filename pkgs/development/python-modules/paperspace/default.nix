@@ -22,5 +22,6 @@ buildPythonPackage rec {
     license     = licenses.isc;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
+    broken = true;
   };
 }

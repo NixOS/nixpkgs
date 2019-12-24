@@ -38,6 +38,7 @@ let
     doCheck = false;
 
     meta.platforms = stdenv.lib.platforms.linux;
+    meta.broken = true;
   };
 in stdenv.lib.overrideDerivation base (b: {
   postFixup = b.postFixup + ''

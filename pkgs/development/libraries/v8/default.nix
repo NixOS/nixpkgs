@@ -73,6 +73,11 @@ stdenv.mkDerivation rec {
     chmod u+w -R .
   '';
 
+  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace build/toolchain/linux/BUILD.gn \
+      --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+  '';
+
   gnFlags = [
     "use_custom_libcxx=false"
     "is_clang=${if stdenv.cc.isClang then "true" else "false"}"
@@ -91,6 +96,10 @@ stdenv.mkDerivation rec {
     ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
   ] ++ stdenv.lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
+
+  # with gcc8, -Wclass-memaccess became part of -Wall and causes logging limit
+  # to be exceeded
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isGNU "-Wno-class-memaccess";
 
   nativeBuildInputs = [ gn ninja pkgconfig python ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];

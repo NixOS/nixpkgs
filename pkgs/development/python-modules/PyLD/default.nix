@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, gnugrep }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, python, gnugrep }:
 
 let
 
@@ -28,6 +28,14 @@ buildPythonPackage {
     rev = "652473f828e9a396d4c1db9addbd294fb7db1797";
     sha256 = "1bmpz4s6j7by6l45wwxy7dn7hmrhxc26kbx2hbfy41x29vbjg6j9";
   };
+
+  patches = [
+    # Fix tests on Python 3. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/digitalbazaar/pyld/commit/ec4bd907b7fbd566e1f6c76d09676e4900e3dcd0.patch";
+      sha256 = "0i5phs5qnq4bjsb72if1sbfg751qc14qbdskqn0xhlzx0r75l7za";
+    })
+  ];
 
   # Unfortunately PyLD does not pass all testcases in the JSON-LD corpus. We
   # check for at least a minimum amount of successful tests so we know it's not

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , msrestazure
 , azure-common
 , azure-mgmt-nspkg
@@ -8,26 +8,32 @@
 , isPy3k
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "azure-mgmt-billing";
   version = "0.2.0"; #pypi's 0.2.0 doesn't build ootb
 
-  src = fetchFromGitHub {
-    owner = "Azure";
-    repo = "azure-sdk-for-python";
-    rev = "ee5b47525d6c1eae3b1fd5f65b0421eab62a6e6f";
-    sha256 = "0xzdn7da5c3q5knh033vbsqk36vwbm75cx8vf10x0yj58krb4kn4";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1li2bcdwdapwwx7xbvgfsq51f2mrwm0qyzih8cjhszcah2rkpxw5";
+    extension = "zip";
   };
-
-  preBuild = ''
-    cd ./azure-mgmt-billing
-  '';
 
   propagatedBuildInputs = [
     msrestazure
     azure-common
     azure-mgmt-nspkg
   ];
+
+  preBuild = ''
+    rm azure_bdist_wheel.py
+    substituteInPlace setup.cfg \
+      --replace "azure-namespace-package = azure-mgmt-nspkg" ""
+  '';
+
+  postInstall = lib.optionalString isPy3k ''
+    rm $out/${python.sitePackages}/azure/__init__.py
+    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
+  '';
 
   # has no tests
   doCheck = false;

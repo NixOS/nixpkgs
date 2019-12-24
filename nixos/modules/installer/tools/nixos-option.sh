@@ -82,7 +82,7 @@ evalNix(){
   set -e
 
   if test $exit_code -eq 0; then
-      sed '/^warning: Nix search path/d' <<EOF
+      sed '/^warning: Nix search path/d;/^trace:/d' <<EOF
 $result
 EOF
       return 0;
