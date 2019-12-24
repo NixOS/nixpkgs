@@ -1,10 +1,10 @@
 { fetchurl, stdenv, erlang, cl, libGL, libGLU, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "wings-2.2.4";
+  name = "wings-2.2.5";
   src = fetchurl {
     url = "mirror://sourceforge/wings/${name}.tar.bz2";
-    sha256 = "1xcmifs4vq2810pqqvsjsm8z3lz24ys4c05xkh82nyppip2s89a3";
+    sha256 = "1y6zpsiygyyfiix06lw2p2wa6r3zh36pqgk4hfwh1g29ix5giv4m";
   };
 
   ERL_LIBS = "${cl}/lib/erlang/lib";
