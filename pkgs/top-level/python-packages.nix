@@ -1343,6 +1343,8 @@ in {
 
   stups-cli-support = callPackage ../development/python-modules/stups-cli-support { };
 
+  stups-fullstop = callPackage ../development/python-modules/stups-fullstop { };
+
   stups-tokens = callPackage ../development/python-modules/stups-tokens { };
 
   stups-zign = callPackage ../development/python-modules/stups-zign { };
