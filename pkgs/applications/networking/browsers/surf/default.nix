@@ -1,21 +1,20 @@
 { lib, stdenv, fetchurl
 , pkgconfig, wrapGAppsHook
-, glib, glib-networking, gsettings-desktop-schemas, gtk, libsoup, webkitgtk
+, glib, glib-networking, gsettings-desktop-schemas, gtk, libsoup, webkitgtk, gcr
 , xorg, dmenu, findutils, gnused, coreutils
 , patches ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "surf";
-  version = "2.0";
 
-  src = fetchurl {
-    url = "https://dl.suckless.org/surf/surf-${version}.tar.gz";
-    sha256 = "07cmajyafljigy10d21kkyvv5jf3hxkx06pz3rwwk3y3c9x4rvps";
+  src = fetchGit {
+    url = "https://git.suckless.org/surf";
+    ref = "d068a3878b6b9f2841a49cd7948cdf9d62b55585";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ glib glib-networking gsettings-desktop-schemas gtk libsoup webkitgtk ];
+  buildInputs = [ glib glib-networking gsettings-desktop-schemas gtk libsoup webkitgtk gcr ];
 
   inherit patches;
 
