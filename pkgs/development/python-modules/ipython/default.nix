@@ -23,7 +23,7 @@
 buildPythonPackage rec {
   pname = "ipython";
   version = "7.10.2";
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
