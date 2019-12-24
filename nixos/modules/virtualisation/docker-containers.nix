@@ -161,6 +161,15 @@ let
             ["--network=host"]
           '';
         };
+        restart = mkOption {
+          type = types.enum [ "no" "on-success" "on-failure" "on-abnormal" "on-watchdog" "on-abort" "always" ];
+          default = "always";
+          description = ''
+            When to restart the container.
+            See <citerefentry><refentrytitle>systemd.service</refentrytitle>
+            <manvolnum>5</manvolnum></citerefentry> for more info.
+            '';
+        };
       };
     };
 
@@ -207,7 +216,7 @@ let
 
       TimeoutStartSec = 0;
       TimeoutStopSec = 120;
-      Restart = "always";
+      Restart = container.restart;
     };
   };
 
