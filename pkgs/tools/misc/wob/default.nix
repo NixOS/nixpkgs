@@ -1,21 +1,22 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, wayland # wayland-scanner
+, meson, ninja, pkg-config, scdoc, wayland # wayland-scanner
 , wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
   pname = "wob";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "francma";
     repo = pname;
     rev = version;
-    fetchSubmodules = true;
-    sha256 = "1z0vwss3ix5mf7mqpm4dzlv1bblddfi47ykblj0nmscxn1sinr7j";
+    sha256 = "1z8q5p5q8f0dfjzr96jldz97ycir9ip4p2cwj26nywmb8r0hznjr";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland ];
+  postPatch = "sed -Ei 's/Version\ 0\.[0-9]/Version ${version}/' wob.1.scd";
+
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland ];
   buildInputs = [ wayland-protocols ];
 
   meta = with stdenv.lib; {
