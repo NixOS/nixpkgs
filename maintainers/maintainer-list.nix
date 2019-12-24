@@ -4897,7 +4897,7 @@
     name = "Martin Milata";
   };
   mmlb = {
-    email = "me.mmlb@mmlb.me";
+    email = "manny@peekaboo.mmlb.icu";
     github = "mmlb";
     name = "Manuel Mendez";
   };
