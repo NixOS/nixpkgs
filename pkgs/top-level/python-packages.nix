@@ -935,7 +935,9 @@ in {
 
   proglog = callPackage ../development/python-modules/proglog { };
 
-  pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
+  pure-python-adb = callPackage ../development/python-modules/pure-python-adb { };
+
+  pure-python-adb-homeassistant = self.pure-python-adb;
 
   purl = callPackage ../development/python-modules/purl { };
 
