@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     rev = version;
-    sha256 = "07wh9q72vsaf5j2m2c6cfmllwhr3m9f8xzg8h0i6mhd7d0wr4lna";
+    sha256 = "1zikn5cbanl9ndyjdbcn9amxsr76zy3b1zaiwcgdq1llx174i0rx";
   };
 
   nativeBuildInputs = [
