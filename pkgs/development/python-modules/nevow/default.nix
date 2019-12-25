@@ -10,14 +10,6 @@ buildPythonPackage rec {
     sha256 = "afb6ba85a5351953578c018fcdb9dfbd62f29a8d46c58bc9652bc000a27223f3";
   };
 
-  patches = [
-    # Fix builds against recent Twisted.
-    (fetchpatch {
-      url = "https://github.com/twisted/nevow/commit/f1b366f1a73009b6a1df12fa6f4dc464c564c944.patch";
-      sha256 = "147fibcbqh715in8cbkp7jlkh4b3qvn95v1mv9si0ln1747wbby2";
-    })
-  ];
-
   propagatedBuildInputs = [ twisted ];
 
   checkInputs = [ twisted ];
