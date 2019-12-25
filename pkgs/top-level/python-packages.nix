@@ -3408,7 +3408,7 @@ in {
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
 
   graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix {
-    inherit (pkgs) pkgconfig;
+    inherit (pkgs) pkg-config;
   };
 
   grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
