@@ -131,7 +131,7 @@ let
                    '';
 
   crossCabalFlags = [
-    "--with-ghc=${ghc.targetPrefix}ghc"
+    "--with-ghc=${ghcCommand}"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
   ] ++ optionals stdenv.hasCC [
     "--with-gcc=${stdenv.cc.targetPrefix}cc"
