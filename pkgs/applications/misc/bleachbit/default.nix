@@ -1,4 +1,14 @@
-{ stdenv, pythonPackages, fetchurl, gettext }:
+{ stdenv
+, pythonPackages
+, fetchurl
+, gettext
+, gobject-introspection
+, wrapGAppsHook
+, glib
+, gtk3
+, libnotify
+}:
+
 pythonPackages.buildPythonApplication rec {
   pname = "bleachbit";
   version = "3.0";
@@ -10,7 +20,24 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "18ns9hms671b4l0189m1m2agprkydnpvyky9q2f5hxf35i9cn67d";
   };
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    libnotify
+  ];
+
+  propagatedBuildInputs = with pythonPackages; [
+    chardet
+    pygobject3
+    requests
+    scandir
+  ];
 
   # Patch the many hardcoded uses of /usr/share/ and /usr/bin
   postPatch = ''
@@ -20,15 +47,17 @@ pythonPackages.buildPythonApplication rec {
 
   dontBuild = true;
 
-  installFlags = [ "prefix=${placeholder "out"}" ];
+  installFlags = [
+    "prefix=${placeholder "out"}"
+  ];
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk ];
+  strictDeps = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://bleachbit.sourceforge.net;
     description = "A program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ leonardoce ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ leonardoce ];
   };
 }

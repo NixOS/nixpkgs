@@ -41,7 +41,7 @@ mkDerivation rec {
       -e "s,\$\$\[QT_INSTALL_PLUGINS\],$out/$qtPluginPrefix,"
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Image Viewer for Deepin Desktop Environment";

@@ -14,6 +14,9 @@
 # coc-go dependency
 , go
 
+# deoplete-khard dependency
+, khard
+
 # vim-go denpencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
@@ -49,16 +52,16 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.154";
+    version = "0.1.155";
     LanguageClient-neovim-src = fetchurl {
       url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
-      sha256 = "03sp643nihj9p2s9cx2dcazhz68s30qx7igqprgsmr1040rhg2py";
+      sha256 = "0v9n450iwgvm1d4qwv742bjam3p747cvyrkapkgxy7n1ar8rz50i";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "1bvbls2l1xa0s3k11crvd98il4i20z5sn0hqmsc1b915k03qq4zj";
+      cargoSha256 = "139sj1aq0kr4r4qzhgcn2hb4dyvp5wxjz7bxbm0bbh9bv2pr98jq";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -115,12 +118,12 @@ self: super: {
   # NB: Make sure you pick a rev from the release branch!
   coc-nvim = buildVimPluginFrom2Nix rec {
     pname = "coc-nvim";
-    version = "2019-11-29";
+    version = "2019-11-30";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "d566fa03807d8d86ce9302680d135198a36c7d4d";
-      sha256 = "0m355w837f61jfpjrhi3h47z7vq16g8yai8kd82v1h71ns5fw9gz";
+      rev = "42a45c639e2c43f9f1795c3804787c6a686781c0";
+      sha256 = "0bny7s7scbls01jkvrwcd516py09lp0vkr65p1ik4282blyxyy6s";
     };
   };
 
@@ -172,6 +175,17 @@ self: super: {
       popd
       find ./rplugin/ -name "ujson*.so" -exec mv -v {} ./rplugin/python3/ \;
    '';
+  });
+
+  deoplete-khard = super.deoplete-khard.overrideAttrs(old: {
+    dependencies = [ self.deoplete-nvim ];
+    passthru.python3Dependencies = ps: [ (ps.toPythonModule khard) ];
+    meta = {
+      description = "Address-completion for khard via deoplete";
+      homepage = "https://github.com/nicoe/deoplete-khard";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ jorsn ];
+    };
   });
 
   ensime-vim = super.ensime-vim.overrideAttrs(old: {

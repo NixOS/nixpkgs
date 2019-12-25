@@ -50,9 +50,10 @@ buildPythonPackage rec {
   '';
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   meta = with stdenv.lib; {
     description = "Scientific python development environment";

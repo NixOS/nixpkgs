@@ -1,19 +1,19 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "1.23";
+  version = "1.24";
   pname = "numericalunits";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q1jrzxx0k7j82c5q061hd10mp965ra8813vb09ji326fbxzn2gy";
+    sha256 = "0wn7kqp0rxqr6gnqhdn8pc0wy359krzan0kbika6hfvb0c1rw1hs";
   };
 
-  # no tests
-  doCheck = false;
+  disabled = !isPy3k;
 
   meta = with stdenv.lib; {
     homepage = http://pypi.python.org/pypi/numericalunits;

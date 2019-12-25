@@ -16,6 +16,9 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "networking" "hostConf" ] "Use environment.etc.\"host.conf\" instead.")
+  ];
 
   options = {
 
@@ -38,19 +41,6 @@ in
       example = "192.168.0.1 lanlocalhost";
       description = ''
         Additional verbatim entries to be appended to <filename>/etc/hosts</filename>.
-      '';
-    };
-
-    networking.hostConf = lib.mkOption {
-      type = types.lines;
-      default = "multi on";
-      example = ''
-        multi on
-        reorder on
-        trim lan
-      '';
-      description = ''
-        The contents of <filename>/etc/host.conf</filename>. See also <citerefentry><refentrytitle>host.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
       '';
     };
 
@@ -186,7 +176,9 @@ in
         '';
 
         # /etc/host.conf: resolver configuration file
-        "host.conf".text = cfg.hostConf;
+        "host.conf".text = ''
+          multi on
+        '';
 
       } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
         # /etc/rpc: RPC program numbers.

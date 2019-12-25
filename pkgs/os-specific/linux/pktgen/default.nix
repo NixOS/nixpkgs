@@ -3,9 +3,7 @@
 , gtk2, which, withGtk ? false
 }:
 
-let
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pktgen";
   version = "3.7.2";
 

@@ -7,9 +7,8 @@ buildDunePackage rec {
 
   inherit (owl-base) version src meta;
 
-  buildInputs = [ eigen ];
   checkInputs = [ alcotest ];
-  propagatedBuildInputs = [ stdio stdlib-shims openblasCompat owl-base ];
+  propagatedBuildInputs = [ eigen stdio stdlib-shims openblasCompat owl-base ];
 
-  # tests not enabled for now due to owlbarn/owl/issues/460
+  doCheck = !stdenv.isDarwin;  # https://github.com/owlbarn/owl/issues/462
 }

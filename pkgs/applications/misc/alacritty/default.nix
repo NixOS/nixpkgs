@@ -101,7 +101,7 @@ in buildRustPackage rec {
     gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
 
     install -dm 755 "$terminfo/share/terminfo/a/"
-    tic -x -o "$terminfo/share/terminfo" extra/alacritty.info
+    tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 

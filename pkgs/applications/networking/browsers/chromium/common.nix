@@ -23,7 +23,6 @@
 , libva ? null # useVaapi
 
 # package customization
-, enableNaCl ? false
 , useVaapi ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
@@ -136,10 +135,8 @@ let
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
-    ] ++ optionals (channel == "stable") [
-      ./patches/widevine.patch
-    ] ++ optionals (channel == "beta" || channel == "dev") [
       ./patches/widevine-79.patch
+      ./patches/dont-use-ANGLE-by-default.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:
@@ -152,11 +149,7 @@ let
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
       ./patches/vaapi-fix.patch
-    ] ++ optional stdenv.isAarch64 (fetchpatch {
-      url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
-      postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
-      sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
-    });
+    ];
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -234,7 +227,12 @@ let
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
-      enable_nacl = enableNaCl;
+      # ninja: error: '../../native_client/toolchain/linux_x86/pnacl_newlib/bin/x86_64-nacl-objcopy',
+      # needed by 'nacl_irt_x86_64.nexe', missing and no known rule to make it
+      enable_nacl = false;
+      # Enabling the Widevine component here doesn't affect whether we can
+      # redistribute the chromium package; the Widevine component is either
+      # added later in the wrapped -wv build or downloaded from Google.
       enable_widevine = true;
       use_cups = cupsSupport;
 

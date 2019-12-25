@@ -7,9 +7,8 @@
  <para>
   To enable the Xfce Desktop Environment, set
 <programlisting>
-<link linkend="opt-services.xserver.desktopManager.default">services.xserver.desktopManager</link> = {
-  <link linkend="opt-services.xserver.desktopManager.xfce.enable">xfce.enable</link> = true;
-  <link linkend="opt-services.xserver.desktopManager.default">default</link> = "xfce";
+<xref linkend="opt-services.xserver.desktopManager.xfce.enable" /> = true;
+<xref linkend="opt-services.xserver.displayManager.defaultSession" /> = "xfce";
 };
 </programlisting>
  </para>

@@ -32,6 +32,13 @@ let
   '';
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
+    (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
+    (mkRemovedOptionModule [ "services" "redis" "dbFilename" ] "The redis module now uses /var/lib/redis/dump.rdb as database dump location.")
+    (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
+    (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
+  ];
 
   ###### interface
 

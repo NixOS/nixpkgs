@@ -23,11 +23,6 @@ buildPythonPackage rec {
     sha256 = "7538d02045a1fd3aa2b2834bfda463da8755bd3ff050edc6c5ddff3bc616215f";
   };
 
-  postPatch = ''
-    rm -r tests/__pycache__
-    rm tests/*.pyc
-  '';
-
   propagatedBuildInputs = [ python-utils ];
   nativeBuildInputs = [ pytestrunner ];
   checkInputs = [

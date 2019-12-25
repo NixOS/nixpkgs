@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 let
-  version = "2019.3.0.7";
+  version = "2019.3.1.3";
   majorVersion = builtins.substring 0 6 version;
 in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.flexibee.eu/download/${majorVersion}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "01n2pkh17s2iab7n9xgq9vqcf1fnzmb382zmmd1lwyw3x57f5rq2";
+    sha256 = "0jfj0vmrwa05ga4rhqn0sapad06mq0pampmkr75vail2289zkga2";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -536,7 +536,7 @@ in
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/rbreadline.rb \
-        --replace 'infocmp' '${ncurses.dev}/bin/infocmp'
+        --replace 'infocmp' '${ncurses}/bin/infocmp'
     '';
   };
 

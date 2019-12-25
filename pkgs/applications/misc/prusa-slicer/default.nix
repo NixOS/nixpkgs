@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, cmake, pkgconfig
-, boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK30
+, boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK31
 , gtest, nlopt, xorg, makeDesktopItem
 }:
 let
@@ -9,7 +9,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
-  version = "2.1.0";
+  version = "2.1.1";
 
   enableParallelBuilding = true;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     glew
     libpng
     tbb
-    wxGTK30
+    wxGTK31
     xorg.libX11
   ] ++ checkInputs;
 
@@ -59,13 +59,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    sha256 = "172nz01iiqfjzkpcbl78j6almq6av70l71jgrzrcdw6ham1wqnpr";
+    sha256 = "0i393nbc2salb4j5l2hvy03ng7hmf90d2xj653pw9bsikhj0r3jd";
     rev = "version_${version}";
   };
 
   cmakeFlags = [
     "-DSLIC3R_FHS=1"
-    "-DSLIC3R_WX_STABLE=1"  # necessary when compiling against wxGTK 3.0
   ];
 
   postInstall = ''

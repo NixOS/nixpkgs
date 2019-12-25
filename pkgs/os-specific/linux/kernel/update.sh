@@ -57,3 +57,6 @@ ls $NIXPKGS/pkgs/os-specific/linux/kernel | while read FILE; do
 
   echo "Updated $OLDVER -> $V"
 done
+
+# Update linux-libre
+COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/update-libre.sh

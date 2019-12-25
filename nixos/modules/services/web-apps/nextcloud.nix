@@ -31,8 +31,12 @@ let
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.stdenv.shell}
     cd ${pkgs.nextcloud}
-    exec /run/wrappers/bin/sudo -u nextcloud \
-      NEXTCLOUD_CONFIG_DIR="${cfg.home}/config" \
+    sudo=exec
+    if [[ "$USER" != nextcloud ]]; then
+      sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR'
+    fi
+    export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
+    $sudo \
       ${phpPackage}/bin/php \
       -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
@@ -420,6 +424,7 @@ in {
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           serviceConfig.Type = "oneshot";
           serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+          serviceConfig.User = "nextcloud";
           startAt = cfg.autoUpdateApps.startAt;
         };
       };

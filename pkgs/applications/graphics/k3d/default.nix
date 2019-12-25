@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
 , cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
-, libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
+, libpng, boost, doxygen, cairomm, pkgconfig, libjpeg, libtiff
+, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
 
 stdenv.mkDerivation rec {
   version = "0.8.0.6";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
      libGLU libGL zlib python expat libxml2 libsigcxx libuuid freetype libpng
-     boost cairomm imagemagick libjpeg libtiff
-     ftgl glew gtkmm2 glibmm gtkglext pangox_compat libXmu
+     boost cairomm libjpeg libtiff
+     ftgl glew gtkmm2 glibmm gtkglext libXmu
     ];
 
   #doCheck = false;

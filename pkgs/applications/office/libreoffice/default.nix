@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, fetchpatch, pam, python3, libxslt, perl, ArchiveZip, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
@@ -16,27 +16,25 @@
 , langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
-}:
+, variant ? "fresh"
+} @ args:
+
+assert builtins.elem variant [ "fresh" "still" ];
 
 let
-  primary-src = import ./default-primary-src.nix { inherit fetchurl; };
-in
+  importVariant = f: import (./. + "/src-${variant}/${f}");
 
-let inherit (primary-src) major minor subdir version; in
+  primary-src = importVariant "primary.nix" { inherit fetchurl; };
 
-let
+  inherit (primary-src) major minor subdir version;
+
   lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
-
-  fetchSrc = {name, sha256}: fetchurl {
-    url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
-    inherit sha256;
-  };
 
   srcs = {
     third_party =
       map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;}))
-      ((import ./libreoffice-srcs.nix) ++ [
+      (importVariant "download.nix" ++ [
         (rec {
           name = "unowinreg.dll";
           url = "https://dev-www.libreoffice.org/extern/${md5name}";
@@ -46,20 +44,10 @@ let
         })
       ]);
 
-    translations = fetchSrc {
-      name = "translations";
-      sha256 = "0730fw2kr00b2d56jkdzjdz49c4k4mxiz879c7ikw59c5zvrh009";
-    };
-
-    # TODO: dictionaries
-
-    help = fetchSrc {
-      name = "help";
-      sha256 = "1w9bqwzz75vvxxy9dgln0v6p6isf8mkqnkg1nzlaykvdgsn5sp4z";
-    };
-
+    translations = primary-src.translations;
+    help = primary-src.help;
   };
-in stdenv.mkDerivation rec {
+in (stdenv.mkDerivation rec {
   pname = "libreoffice";
   inherit version;
 
@@ -73,6 +61,19 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./xdg-open-brief.patch
+
+    # Poppler-0.82 compatibility
+    # https://gerrit.libreoffice.org/81545
+    (fetchpatch {
+      url = "https://github.com/LibreOffice/core/commit/2eadd46ab81058087af95bdfc1fea28fcdb65998.patch";
+      sha256 = "1mpipdfxvixjziizbhfbpybpzlg1ijw7s0yqjpmq5d7pf3pvkm4n";
+    })
+    # Poppler-0.83 compatibility
+    # https://gerrit.libreoffice.org/84384
+    (fetchpatch {
+      url = "https://github.com/LibreOffice/core/commit/9065cd8d9a19864f6b618f2dc10daf577badd9ee.patch";
+      sha256 = "0nd0gck8ra3ffw936a7ri0s6a0ii5cyglnhip2prcjh5yf7vw2i2";
+    })
   ];
 
   tarballPath = "external/tarballs";
@@ -389,4 +390,4 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
-}
+}).overrideAttrs ((importVariant "override.nix") args)

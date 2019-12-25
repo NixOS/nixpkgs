@@ -20,7 +20,7 @@ agda.mkDerivation (self: rec {
     description = "Correct-by-Construction Pretty-Printing";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     broken = true; # 2018-04-11
   };
 })

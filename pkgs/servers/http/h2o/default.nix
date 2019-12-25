@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , pkgconfig, cmake, ninja
-, libressl, libuv, zlib
+, openssl, libuv, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig cmake ninja ];
-  buildInputs = [ libressl libuv zlib ];
+  buildInputs = [ openssl libuv zlib ];
 
   meta = with stdenv.lib; {
     description = "Optimized HTTP/1 and HTTP/2 server";

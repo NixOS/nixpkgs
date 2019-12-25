@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ...} :
 
 let
   unlines = lib.concatStringsSep "\n";
@@ -288,108 +288,118 @@ in
 
     client1 = mkClient true; # use nss_pam_ldapd
     client2 = mkClient false; # use nss_ldap and pam_ldap
-
   };
 
   testScript = ''
-    $server->start;
-    $server->waitForUnit("default.target");
+    def expect_script(*commands):
+        script = ";".join(commands)
+        return f"${pkgs.expect}/bin/expect -c '{script}'"
 
-    subtest "slapd", sub {
-      subtest "auth as database admin with SASL and check a POSIX account", sub {
-        $server->succeed(join ' ', 'test',
-         '"$(ldapsearch -LLL -H ldapi:// -Y EXTERNAL',
-             '-b \'uid=${ldapUser},ou=accounts,ou=posix,${dbSuffix}\' ',
-             '-s base uidNumber |',
-           'sed -ne \'s/^uidNumber: \\(.*\\)/\\1/p\' ',
-         ')" -eq ${toString ldapUserId}');
-      };
-      subtest "auth as database admin with password and check a POSIX account", sub {
-        $server->succeed(join ' ', 'test',
-         '"$(ldapsearch -LLL -H ldap://server',
-             '-D \'cn=admin,${dbSuffix}\' -w \'${dbAdminPwd}\' ',
-             '-b \'uid=${ldapUser},ou=accounts,ou=posix,${dbSuffix}\' ',
-             '-s base uidNumber |',
-           'sed -ne \'s/^uidNumber: \\(.*\\)/\\1/p\' ',
-         ')" -eq ${toString ldapUserId}');
-      };
-    };
 
-    $client1->start;
-    $client1->waitForUnit("default.target");
+    server.start()
+    server.wait_for_unit("default.target")
 
-    subtest "password", sub {
-      subtest "su with password to a POSIX account", sub {
-        $client1->succeed("${pkgs.expect}/bin/expect -c '" . join ';',
-          'spawn su "${ldapUser}"',
-          'expect "Password:"',
-          'send "${ldapUserPwd}\n"',
-          'expect "*"',
-          'send "whoami\n"',
-          'expect -ex "${ldapUser}" {exit}',
-          'exit 1' . "'");
-      };
-      subtest "change password of a POSIX account as root", sub {
-        $client1->succeed("chpasswd <<<'${ldapUser}:new-password'");
-        $client1->succeed("${pkgs.expect}/bin/expect -c '" . join ';',
-          'spawn su "${ldapUser}"',
-          'expect "Password:"',
-          'send "new-password\n"',
-          'expect "*"',
-          'send "whoami\n"',
-          'expect -ex "${ldapUser}" {exit}',
-          'exit 1' . "'");
-        $client1->succeed('chpasswd <<<\'${ldapUser}:${ldapUserPwd}\' ');
-      };
-      subtest "change password of a POSIX account from itself", sub {
-        $client1->succeed('chpasswd <<<\'${ldapUser}:${ldapUserPwd}\' ');
-        $client1->succeed("${pkgs.expect}/bin/expect -c '" . join ';',
-          'spawn su --login ${ldapUser} -c passwd',
-          'expect "Password: "',
-          'send "${ldapUserPwd}\n"',
-          'expect "(current) UNIX password: "',
-          'send "${ldapUserPwd}\n"',
-          'expect "New password: "',
-          'send "new-password\n"',
-          'expect "Retype new password: "',
-          'send "new-password\n"',
-          'expect "passwd: password updated successfully" {exit}',
-          'exit 1' . "'");
-        $client1->succeed("${pkgs.expect}/bin/expect -c '" . join ';',
-          'spawn su "${ldapUser}"',
-          'expect "Password:"',
-          'send "${ldapUserPwd}\n"',
-          'expect "su: Authentication failure" {exit}',
-          'exit 1' . "'");
-        $client1->succeed("${pkgs.expect}/bin/expect -c '" . join ';',
-          'spawn su "${ldapUser}"',
-          'expect "Password:"',
-          'send "new-password\n"',
-          'expect "*"',
-          'send "whoami\n"',
-          'expect -ex "${ldapUser}" {exit}',
-          'exit 1' . "'");
-        $client1->succeed('chpasswd <<<\'${ldapUser}:${ldapUserPwd}\' ');
-      };
-    };
+    with subtest("slapd: auth as database admin with SASL and check a POSIX account"):
+        server.succeed(
+            'test "$(ldapsearch -LLL -H ldapi:// -Y EXTERNAL '
+            + "-b 'uid=${ldapUser},ou=accounts,ou=posix,${dbSuffix}' "
+            + "-s base uidNumber | "
+            + "sed -ne 's/^uidNumber: \\(.*\\)/\\1/p')\" -eq ${toString ldapUserId}"
+        )
 
-    $client2->start;
-    $client2->waitForUnit("default.target");
+    with subtest("slapd: auth as database admin with password and check a POSIX account"):
+        server.succeed(
+            "test \"$(ldapsearch -LLL -H ldap://server -D 'cn=admin,${dbSuffix}' "
+            + "-w '${dbAdminPwd}' -b 'uid=${ldapUser},ou=accounts,ou=posix,${dbSuffix}' "
+            + "-s base uidNumber | "
+            + "sed -ne 's/^uidNumber: \\(.*\\)/\\1/p')\" -eq ${toString ldapUserId}"
+        )
 
-    subtest "NSS", sub {
-        $client1->succeed("test \"\$(id -u '${ldapUser}')\" -eq ${toString ldapUserId}");
-        $client1->succeed("test \"\$(id -u -n '${ldapUser}')\" = '${ldapUser}'");
-        $client1->succeed("test \"\$(id -g '${ldapUser}')\" -eq ${toString ldapGroupId}");
-        $client1->succeed("test \"\$(id -g -n '${ldapUser}')\" = '${ldapGroup}'");
-        $client2->succeed("test \"\$(id -u '${ldapUser}')\" -eq ${toString ldapUserId}");
-        $client2->succeed("test \"\$(id -u -n '${ldapUser}')\" = '${ldapUser}'");
-        $client2->succeed("test \"\$(id -g '${ldapUser}')\" -eq ${toString ldapGroupId}");
-        $client2->succeed("test \"\$(id -g -n '${ldapUser}')\" = '${ldapGroup}'");
-    };
+    client1.start()
+    client1.wait_for_unit("default.target")
 
-    subtest "PAM", sub {
-        $client1->succeed("echo ${ldapUserPwd} | su -l '${ldapUser}' -c true");
-        $client2->succeed("echo ${ldapUserPwd} | su -l '${ldapUser}' -c true");
-    };
+    with subtest("password: su with password to a POSIX account"):
+        client1.succeed(
+            expect_script(
+                'spawn su "${ldapUser}"',
+                'expect "Password:"',
+                'send "${ldapUserPwd}\n"',
+                'expect "*"',
+                'send "whoami\n"',
+                'expect -ex "${ldapUser}" {exit}',
+                "exit 1",
+            )
+        )
+
+    with subtest("password: change password of a POSIX account as root"):
+        client1.succeed(
+            "chpasswd <<<'${ldapUser}:new-password'",
+            expect_script(
+                'spawn su "${ldapUser}"',
+                'expect "Password:"',
+                'send "new-password\n"',
+                'expect "*"',
+                'send "whoami\n"',
+                'expect -ex "${ldapUser}" {exit}',
+                "exit 1",
+            ),
+            "chpasswd <<<'${ldapUser}:${ldapUserPwd}'",
+        )
+
+    with subtest("password: change password of a POSIX account from itself"):
+        client1.succeed(
+            "chpasswd <<<'${ldapUser}:${ldapUserPwd}' ",
+            expect_script(
+                "spawn su --login ${ldapUser} -c passwd",
+                'expect "Password: "',
+                'send "${ldapUserPwd}\n"',
+                'expect "(current) UNIX password: "',
+                'send "${ldapUserPwd}\n"',
+                'expect "New password: "',
+                'send "new-password\n"',
+                'expect "Retype new password: "',
+                'send "new-password\n"',
+                'expect "passwd: password updated successfully" {exit}',
+                "exit 1",
+            ),
+            expect_script(
+                'spawn su "${ldapUser}"',
+                'expect "Password:"',
+                'send "${ldapUserPwd}\n"',
+                'expect "su: Authentication failure" {exit}',
+                "exit 1",
+            ),
+            expect_script(
+                'spawn su "${ldapUser}"',
+                'expect "Password:"',
+                'send "new-password\n"',
+                'expect "*"',
+                'send "whoami\n"',
+                'expect -ex "${ldapUser}" {exit}',
+                "exit 1",
+            ),
+            "chpasswd <<<'${ldapUser}:${ldapUserPwd}'",
+        )
+
+    client2.start()
+    client2.wait_for_unit("default.target")
+
+    with subtest("NSS"):
+        client1.succeed(
+            "test \"$(id -u    '${ldapUser}')\" -eq ${toString ldapUserId}",
+            "test \"$(id -u -n '${ldapUser}')\" =  '${ldapUser}'",
+            "test \"$(id -g    '${ldapUser}')\" -eq ${toString ldapGroupId}",
+            "test \"$(id -g -n '${ldapUser}')\" =  '${ldapGroup}'",
+            "test \"$(id -u    '${ldapUser}')\" -eq ${toString ldapUserId}",
+            "test \"$(id -u -n '${ldapUser}')\" =  '${ldapUser}'",
+            "test \"$(id -g    '${ldapUser}')\" -eq ${toString ldapGroupId}",
+            "test \"$(id -g -n '${ldapUser}')\" =  '${ldapGroup}'",
+        )
+
+    with subtest("PAM"):
+        client1.succeed(
+            "echo ${ldapUserPwd} | su -l '${ldapUser}' -c true",
+            "echo ${ldapUserPwd} | su -l '${ldapUser}' -c true",
+        )
   '';
 })

@@ -23,11 +23,11 @@ exportLuaPathsFor = luaPkgs: ''
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "4.2.2";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "03b68dff16429aed7a5b0cea7189276c8056e8ecd567b678c2595d48d9a51458";
+    sha256 = "0ca0f171ae2b2d76830967a5150eb0fa496b48b2a48f41b2be65d3743aaece25";
   };
 
   # https://gitlab.labs.nic.cz/knot/knot-resolver/issues/496

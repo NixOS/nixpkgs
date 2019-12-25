@@ -66,7 +66,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Scientific tools for Python";
-    homepage = http://numpy.scipy.org/;
+    homepage = https://numpy.org/;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

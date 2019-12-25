@@ -52,6 +52,6 @@ stdenv.mkDerivation {
     homepage = http://tibia.com;
     license = stdenv.lib.licenses.unfree;
     platforms = ["i686-linux"];
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

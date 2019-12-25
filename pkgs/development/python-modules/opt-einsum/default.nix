@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Optimizing NumPy's einsum function with order optimization and GPU support.";
-    homepage = http://optimized-einsum.readthedocs.io;
+    homepage = https://github.com/dgasmith/opt_einsum;
     license = licenses.mit;
     maintainers = with maintainers; [ teh ];
   };

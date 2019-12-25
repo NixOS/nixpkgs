@@ -111,6 +111,9 @@ let
         '';
       };
 
+      azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "0.4.0" "zip"
+        "0zssvzdip23yzaxlac9rlzg9mlyjl97fwr0gj8y27z8j58pwj72i";
+
       azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "4.0.0" "zip"
         "0gy89bi89ikg5hps8rvnq28r33lixci3sk2m86jvziv9fh9rz41b";
 
@@ -125,6 +128,9 @@ let
 
       azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "0.8.0" "zip"
         "0iakxb2rr1w9171802m9syjzqas02vjah711mpagbgcj549mjysb";
+
+      azure-mgmt-imagebuilder = overrideAzureMgmtPackage super.azure-mgmt-imagebuilder "0.2.1" "zip"
+        "0mwlvy4x5nr3hsz7wdpdhpzwarzzwz4225bfpd68hr0pcjgzspky";
 
       azure-mgmt-iothub = overrideAzureMgmtPackage super.azure-mgmt-iothub "0.8.2" "zip"
         "0w3w1d156rnkwjdarv3qvycklxr3z2j7lry7a3jfgj3ykzny12rq";
@@ -155,6 +161,9 @@ let
 
       azure-mgmt-security = overrideAzureMgmtPackage super.azure-mgmt-security "0.1.0" "zip"
         "1cb466722bs0ribrirb32kc299716pl0pwivz3jyn40dd78cwhhx";
+
+      azure-mgmt-sqlvirtualmachine = overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "0.4.0" "zip"
+        "1jxmikjvyxkwr8c9kn6xw8gvj9pajlk7y8111rq8fgkivwjq8wcm";
 
       azure-mgmt-datamigration = overrideAzureMgmtPackage super.azure-mgmt-datamigration "0.1.0" "zip"
         "1pq5rn32yvrf5kqjafnj0kc92gpfg435w2l0k7cm8gvlja4r4m77";

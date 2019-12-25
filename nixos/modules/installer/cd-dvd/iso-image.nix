@@ -603,9 +603,6 @@ in
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
         }
-        { source = config.isoImage.efiSplashImage;
-          target = "/EFI/boot/efi-background.png";
-        }
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -630,8 +627,8 @@ in
         { source = "${efiDir}/EFI";
           target = "/EFI";
         }
-        { source = pkgs.writeText "loopback.cfg" "source /EFI/boot/grub.cfg";
-          target = "/boot/grub/loopback.cfg";
+        { source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/boot/grub.cfg") + "/grub";
+          target = "/boot/grub";
         }
       ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
@@ -640,6 +637,10 @@ in
       ] ++ optionals (config.isoImage.grubTheme != null) [
         { source = config.isoImage.grubTheme;
           target = "/EFI/boot/grub-theme";
+        }
+      ] ++ [
+        { source = config.isoImage.efiSplashImage;
+          target = "/EFI/boot/efi-background.png";
         }
       ];
 

@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.26.4";
+  version = "0.26.5";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "1v2j1ns17wyj7xl91p6wy1iwfx2fnn8af9nm939skc6229m87zzn";
+    sha256 = "145mwg6izrpi4r1qrygi4yb7qd68g4k64i3qmamk0671wxhjqi3c";
   };
 
   nativeBuildInputs = [ cmake perl ];
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"
     "-DSYSDIG_VERSION=${version}"
+    "-DCREATE_TEST_TARGETS=OFF"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   # needed since luajit-2.1.0-beta3

@@ -3,7 +3,7 @@
 , faad2, rtl-sdr, soapysdr-with-plugins, libusb, fftwSinglePrec, lame, mpg123 }:
 let
 
-  version = "2.0";
+  version = "2.1";
 
 in mkDerivation {
 
@@ -14,7 +14,7 @@ in mkDerivation {
     owner = "AlbrechtL";
     repo = "welle.io";
     rev = "v${version}";
-    sha256 = "0cp8dyswgwidabaj9bvkkc6hl3160096j6myckd5bw00zxnbfiqn";
+    sha256 = "1j63gdbd66d6rfjsxwdm2agrcww1rs4438kg7313h6zixpcc1icj";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

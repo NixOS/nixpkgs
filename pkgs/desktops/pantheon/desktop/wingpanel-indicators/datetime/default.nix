@@ -16,22 +16,7 @@
 , libxml2
 , libsoup
 , elementary-calendar
-, fetchurl
 }:
-
-let
-
-  # Terrible workaround https://github.com/elementary/wingpanel-indicator-datetime/issues/122
-  # Evolution Data Server functionality will be broken (events from calendar in indicator)
-  # but at least we don't fail to build.
-  old-evolution-data-server = evolution-data-server.overrideAttrs(old: {
-    src = fetchurl {
-      url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor "3.32.4"}/${old.pname}-3.32.4.tar.xz";
-      sha256 = "0zsc9xwy6ixk3x0dx69ax5isrdw8qxjdxg2i5fr95s40nss7rxl3";
-    };
-  });
-
-in
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
@@ -46,7 +31,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -60,13 +45,21 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    old-evolution-data-server
+    evolution-data-server
     granite
     gtk3
     libgee
     libical
     libsoup
     wingpanel
+  ];
+
+  patches = [
+    # Add support for libecal-2.0
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-datetime/commit/3ccd05d611e6dd5274a03f061ba1b5e13d6fe0cf.patch";
+      sha256 = "011q9b4pjmk4fpq5zscl5r8m4n3jiyx464023h4j7zf8r1070jz6";
+    })
   ];
 
   postPatch = ''

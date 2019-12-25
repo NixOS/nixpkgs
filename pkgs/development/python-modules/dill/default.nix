@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Serialize all of python (almost)";
-    homepage = http://www.cacr.caltech.edu/~mmckerns/dill.htm;
+    homepage = "https://github.com/uqfoundation/dill/";
     license = lib.licenses.bsd3;
   };
 }

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "0.15.4";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0a5lqzxs417alpjr42q5197v6dwgrc74434znszk4lfhivr88p8v";
+    sha256 = "1lbxqa4kwzjdd79whrjgh8li453z4ckkjx4s4qzmrv7aqa2xmfsf";
   };
 
   configureFlags = [ "--target=linux" ];

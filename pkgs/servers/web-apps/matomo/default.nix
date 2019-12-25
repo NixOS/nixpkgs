@@ -3,8 +3,8 @@
 let
   versions = {
     matomo = {
-      version = "3.11.0";
-      sha256 = "1fbnmmzzsi3dfm9qm30wypxjcazl37mryaik9mlrb19hnp2md40q";
+      version = "3.13.0";
+      sha256 = "0h4jqibb86zw5l26r927qrbjhba8c79pc4xp3hgpi25p3fjncax8";
     };
 
     matomo-beta = {
@@ -74,15 +74,22 @@ stdenv.mkDerivation rec {
     "vendor/leafo/lessphp/package.sh"
     "vendor/pear/archive_tar/sync-php4"
     "vendor/szymach/c-pchart/coverage.sh"
+    # drupal_test.sh does not exist in 3.12.0-b3; added for 3.13.0
+    "vendor/twig/twig/drupal_test.sh"
   ];
 
   # This fixes the consistency check in the admin interface
+  #
+  # The filesToFix list may contain files that are exclusive to only one of the versions we build
+  # make sure to test for existence to avoid erroring on an incompatible version and failing
   postFixup = ''
     pushd $out/share > /dev/null
     for f in $filesToFix; do
-      length="$(wc -c "$f" | cut -d' ' -f1)"
-      hash="$(md5sum "$f" | cut -d' ' -f1)"
-      sed -i "s:\\(\"$f\"[^(]*(\\).*:\\1\"$length\", \"$hash\"),:g" config/manifest.inc.php
+      if [ -f "$f" ]; then
+        length="$(wc -c "$f" | cut -d' ' -f1)"
+        hash="$(md5sum "$f" | cut -d' ' -f1)"
+        sed -i "s:\\(\"$f\"[^(]*(\\).*:\\1\"$length\", \"$hash\"),:g" config/manifest.inc.php
+      fi
     done
     popd > /dev/null
   '';

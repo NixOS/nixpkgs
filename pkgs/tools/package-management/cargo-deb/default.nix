@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
-  version = "1.21.1";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "mmstick";
     repo = "cargo-deb";
     rev = "v${version}";
-    sha256 = "10b25a0cnrd2bhf38yqc32l06vp6sdlfcpa6n9718yipp7b60cq2";
+    sha256 = "0jjhbs48f0rprzxnfgav6mjbyvcqnr7xq1qgyjxwd61z8g3m8hx8";
   };
 
   buildInputs = with stdenv; lib.optionals isDarwin [ Security ];
 
-  cargoSha256 = "182ayprs2awmz7lzqkhawrmpfjla3jcj58q8g8c908gchkh05kns";
+  cargoSha256 = "03z9hq873jfsbssnd3kr5vz9lx9mvhb1navb2glm6kkw1k2zm4d2";
 
   meta = with stdenv.lib; {
     description = "Generate Debian packages from information in Cargo.toml";

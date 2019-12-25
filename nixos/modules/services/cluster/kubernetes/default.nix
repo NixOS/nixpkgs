@@ -74,6 +74,10 @@ let
   };
 in {
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
+  ];
+
   ###### interface
 
   options.services.kubernetes = {

@@ -394,6 +394,11 @@ self: super: {
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
 
+  # use the correct version of network
+  systemd_2_2_0 = dontCheck (super.systemd_2_2_0.override {
+    network = self.network_3_1_1_1;
+  });
+
   # https://github.com/eli-frey/cmdtheline/issues/28
   cmdtheline = dontCheck super.cmdtheline;
 
@@ -1052,8 +1057,7 @@ self: super: {
     generateOptparseApplicativeCompletion "dhall" (
       dontCheck super.dhall
   );
-  dhall_1_27_0 = dontCheck super.dhall_1_27_0;
-
+  dhall_1_28_0 = dontCheck super.dhall_1_28_0;
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
   # https://github.com/dhall-lang/dhall-haskell/pull/997
@@ -1080,6 +1084,7 @@ self: super: {
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
+  haddock-library_1_8_0 = doJailbreak super.haddock-library_1_8_0;
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
@@ -1209,8 +1214,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_27_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_27_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_28_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_28_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1220,7 +1225,7 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   # need newer version of ghc-libparser
-  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_1; };
+  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_1_20191204; };
 
   # https://github.com/sol/hpack/issues/366
   hpack = self.hpack_0_33_0;
@@ -1313,5 +1318,13 @@ self: super: {
 
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
+
+  # needs newer version of the systemd package
+  spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
+
+  # ghcide needs the latest versions of haskell-lsp.
+  ghcide = super.ghcide.override { haskell-lsp = self.haskell-lsp_0_18_0_0; lsp-test = self.lsp-test_0_8_2_0; };
+  haskell-lsp_0_18_0_0 = super.haskell-lsp_0_18_0_0.override { haskell-lsp-types = self.haskell-lsp-types_0_18_0_0; };
+  lsp-test_0_8_2_0 = (dontCheck super.lsp-test_0_8_2_0).override { haskell-lsp = self.haskell-lsp_0_18_0_0; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

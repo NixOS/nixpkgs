@@ -127,7 +127,7 @@ let
             <note><para>These themes need to be packaged before use, see example.</para></note>
           '';
           example = ''
-            # For shits and giggles, let's package the responsive theme
+            # Let's package the responsive theme
             responsiveTheme = pkgs.stdenv.mkDerivation {
               name = "responsive-theme";
               # Download the theme from the wordpress site

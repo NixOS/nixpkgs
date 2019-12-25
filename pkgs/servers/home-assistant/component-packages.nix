@@ -644,7 +644,7 @@
     "sensehat" = ps: with ps; [  ];
     "sensibo" = ps: with ps; [  ];
     "sensor" = ps: with ps; [  ];
-    "serial" = ps: with ps; [  ];
+    "serial" = ps: with ps; [ pyserial-asyncio ];
     "serial_pm" = ps: with ps; [  ];
     "sesame" = ps: with ps; [  ];
     "seven_segments" = ps: with ps; [  ];
@@ -814,7 +814,7 @@
     "vicare" = ps: with ps; [  ];
     "vivotek" = ps: with ps; [  ];
     "vizio" = ps: with ps; [  ];
-    "vlc" = ps: with ps; [  ];
+    "vlc" = ps: with ps; [ python-vlc ];
     "vlc_telnet" = ps: with ps; [  ];
     "voicerss" = ps: with ps; [  ];
     "volkszaehler" = ps: with ps; [  ];
@@ -873,7 +873,7 @@
     "zengge" = ps: with ps; [  ];
     "zeroconf" = ps: with ps; [ aiohttp-cors zeroconf ];
     "zestimate" = ps: with ps; [ xmltodict ];
-    "zha" = ps: with ps; [  ];
+    "zha" = ps: with ps; [ zha-quirks zigpy-deconz zigpy ];
     "zhong_hong" = ps: with ps; [  ];
     "zigbee" = ps: with ps; [  ];
     "ziggo_mediabox_xl" = ps: with ps; [  ];

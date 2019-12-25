@@ -3,13 +3,13 @@
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
 
 let
-  version = "5.3.3";
+  version = "5.4.1";
 in stdenv.mkDerivation {
   pname = "franz";
   inherit version;
   src = fetchurl {
     url = "https://github.com/meetfranz/franz/releases/download/v${version}/franz_${version}_amd64.deb";
-    sha256 = "03ii1gpc2wijy917565pqig1ihd4zhal12i2f5k916i7fp8912m1";
+    sha256 = "1g1z5zjm9l081hpqslfc4h7pqh4k76ccmlz71r21204wy630mw6h";
   };
 
   # don't remove runtime deps
@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
     # provide desktop item and icon
     cp -r usr/share $out
     substituteInPlace $out/share/applications/franz.desktop \
-      --replace Exec=\"/opt/Franz/franz\" Exec=franz
+      --replace /opt/Franz/franz franz
   '';
 
   dontWrapGApps = true;
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
     description = "A free messaging app that combines chat & messaging services into one application";
     homepage = https://meetfranz.com;
     license = licenses.free;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ maintainers.davidtwco ];
     platforms = ["x86_64-linux"];
     hydraPlatforms = [];
   };

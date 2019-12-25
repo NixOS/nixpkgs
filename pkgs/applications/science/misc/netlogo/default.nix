@@ -15,11 +15,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "netlogo";
-  version = "6.0.4";
+  version = "6.1.1";
 
   src = fetchurl {
     url = "https://ccl.northwestern.edu/netlogo/${version}/NetLogo-${version}-64.tgz";
-    sha256 = "0dcd9df4dfb218826a74f9df42163fa588908a1dfe58864106936f8dfb76acec";
+    sha256 = "1j08df68pgggxqkmpzd369w4h97q0pivmmljdb48hjghx7hacblp";
   };
 
   src1 = fetchurl {

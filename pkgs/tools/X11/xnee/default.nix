@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
     homepage = https://www.gnu.org/software/xnee/;
 
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

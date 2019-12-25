@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "0q6cwfy3pwmaw3j1hhfk1ivcf03ijyvchyf92wdgrpj6q626kcpj";
+    sha256 = "0px8kh5875q2iyza4ylpa6vxpy6qxg0qvn2idk1j6dcdf5pdryph";
   };
 
   nativeBuildInputs = [ autoreconfHook bison flex mcpp doxygen graphviz makeWrapper perl ];

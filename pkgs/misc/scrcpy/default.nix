@@ -10,10 +10,10 @@
 }:
 
 let
-  version = "1.10";
+  version = "1.12.1";
   prebuilt_server = fetchurl {
-    url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}.jar";
-    sha256 = "144k25x6ha89l9p5a1dm6r3fqvgqszzwrhvkvk0r44vg0i71msyb";
+    url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
+    sha256 = "1sk6hbbnf4g6q58fspwlh8bn16j73j3i8hlcshqxzhfhl746krb3";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hhncqcs49n9g8sgvwbyvkaq4b1dhrpn7qgnaj6grjcb0i27vzaq";
+    sha256 = "16zi0d2jjm2nlrwkwvsxzfpgy45ami45wfh67wq7na2h2ywfmgcp";
   };
 
   # postPatch:
@@ -40,12 +40,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ffmpeg SDL2 ];
 
-  # FIXME: remove on update to > 1.10
-  patches = [(fetchpatch {
-    url = "https://github.com/Genymobile/scrcpy/commit/c05056343b56be65ae887f8b7ead61a8072622b9.diff";
-    sha256 = "1xh24gr2g2i9rk0zyv19jx54hswrq12ssp227vxbhsbamin9ir5b";
-  })];
-
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
     echo -n > server/meson.build
@@ -54,7 +48,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Doverride_server_path=${prebuilt_server}" ];
   postInstall = ''
     mkdir -p "$out/share/scrcpy"
-    ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server.jar"
+    ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
     # runtime dep on `adb` to push the server
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"

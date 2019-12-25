@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "debianutils";
-  version = "4.8.6.3";
+  version = "4.9";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/${pname}/${pname}_${version}.tar.xz";
-    sha256 = "08g2gdm6n66w5m8qwm4f48wzgs3ymkpki6dg01nwzwbdzhxdxirc";
+    sha256 = "0gq7m2glwdhai93ms2qlnqjlynczzncxsddcq8l5yc6bp1f5r5r0";
   };
 
   meta = with stdenv.lib; {
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus publicDomain smail ];
     maintainers = [];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

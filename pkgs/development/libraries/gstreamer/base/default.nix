@@ -26,6 +26,7 @@
 , libXv
 , enableWayland ? stdenv.isLinux
 , wayland
+, wayland-protocols
 , enableAlsa ? stdenv.isLinux
 , alsaLib
 # Enabling Cocoa seems to currently not work, giving compile
@@ -40,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-base";
-  version = "1.16.1";
+  version = "1.16.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0aybbwnzm15074smdk2bamj3ssck3hjvmilvgh49f19xjf4w8g2w";
+    sha256 = "0sl1hxlyq46r02k7z70v09vx1gi4rcypqmzra9jid93lzvi76gmi";
   };
 
   patches = [
@@ -82,10 +83,15 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     pango
     darwin.apple_sdk.frameworks.OpenGL
-  ] ++ lib.optional enableAlsa alsaLib
-    ++ lib.optionals enableX11 [ libXv pango ]
-    ++ lib.optional enableWayland wayland
-    ++ lib.optional enableCocoa darwin.apple_sdk.frameworks.Cocoa
+  ] ++ lib.optionals enableAlsa [
+    alsaLib
+  ] ++ lib.optionals enableX11 [
+    libXv
+    pango
+  ] ++ lib.optionals enableWayland [
+    wayland
+    wayland-protocols
+  ] ++ lib.optional enableCocoa darwin.apple_sdk.frameworks.Cocoa
     ++ lib.optional enableCdparanoia cdparanoia;
 
   propagatedBuildInputs = [
@@ -95,9 +101,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
-    "-Dgl_platform=[${lib.optionalString (enableX11 || enableWayland || enableCocoa) "auto"}]"
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
-    "-Dgl_winsys=[${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}]"
+    "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
     # We must currently disable gtk_doc API docs generation,
     # because it is not compatible with some features being disabled.
     # See for example

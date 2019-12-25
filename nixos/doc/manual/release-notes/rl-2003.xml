@@ -55,6 +55,19 @@
       and adding a <option>--all</option> option which prints all options and their values.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <option>services.xserver.desktopManager.default</option> and <option>services.xserver.windowManager.default</option> options were replaced by a single <xref linkend="opt-services.xserver.displayManager.defaultSession"/> option to improve support for upstream session files. If you used something like:
+<programlisting>
+services.xserver.desktopManager.default = "xfce";
+services.xserver.windowManager.default = "icewm";
+</programlisting>
+     you should change it to:
+<programlisting>
+services.xserver.displayManager.defaultSession = "xfce+icewm";
+</programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -75,6 +88,12 @@
     The kubernetes kube-proxy now supports a new hostname configuration
     <literal>services.kubernetes.proxy.hostname</literal> which has to
     be set if the hostname of the node should be non default.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    UPower's configuration is now managed by NixOS and can be customized
+    via <option>services.upower</option>.
     </para>
    </listitem>
   </itemizedlist>
@@ -121,18 +140,18 @@
    </listitem>
    <listitem>
     <para>
-      The <literal>99-main.network</literal> file was removed. Maching all
-      network interfaces caused many breakages, see
-      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18962">#18962</link>
-        and <link xlink:href="https://github.com/NixOS/nixpkgs/pull/71106">#71106</link>.
+     The <literal>99-main.network</literal> file was removed. Maching all
+     network interfaces caused many breakages, see
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18962">#18962</link>
+       and <link xlink:href="https://github.com/NixOS/nixpkgs/pull/71106">#71106</link>.
     </para>
     <para>
-      We already don't support the global <link linkend="opt-networking.useDHCP">networking.useDHCP</link>,
-      <link linkend="opt-networking.defaultGateway">networking.defaultGateway</link> and
-      <link linkend="opt-networking.defaultGateway6">networking.defaultGateway6</link> options
-      if <link linkend="opt-networking.useNetworkd">networking.useNetworkd</link> is enabled,
-      but direct users to configure the per-device
-      <link linkend="opt-networking.interfaces">networking.interfaces.&lt;name&gt;.…</link> options.
+     We already don't support the global <link linkend="opt-networking.useDHCP">networking.useDHCP</link>,
+     <link linkend="opt-networking.defaultGateway">networking.defaultGateway</link> and
+     <link linkend="opt-networking.defaultGateway6">networking.defaultGateway6</link> options
+     if <link linkend="opt-networking.useNetworkd">networking.useNetworkd</link> is enabled,
+     but direct users to configure the per-device
+     <link linkend="opt-networking.interfaces">networking.interfaces.&lt;name&gt;.…</link> options.
     </para>
    </listitem>
    <listitem>
@@ -198,11 +217,19 @@
       The <literal>buildRustCrate</literal> infrastructure now produces <literal>lib</literal> outputs in addition to the <literal>out</literal> output.
       This has led to drastically reduced closed sizes for some rust crates since development dependencies are now in the <literal>lib</literal> output.
     </para>
+    </listitem>
+   <listitem>
+    <para>
+     Pango was upgraded to 1.44, which no longer uses freetype for font loading.  This means that type1
+     and bitmap fonts are no longer supported in applications relying on Pango for font rendering
+     (notably, GTK application). See <link xlink:href="https://gitlab.gnome.org/GNOME/pango/issues/386">
+     upstream issue</link> for more information.
+    </para>
    </listitem>
    <listitem>
     <para>
      The packages <literal>openobex</literal> and <literal>obexftp</literal>
-     are no loger installed when enabling bluetooth via
+     are no longer installed when enabling Bluetooth via
      <option>hardware.bluetooth.enable</option>.
     </para>
    </listitem>
@@ -212,6 +239,92 @@
      as its upstream. However, this version does not have an internal webserver anymore. The
      assets in the <literal>share/dump1090</literal> directory of the derivation can be used
      in conjunction with an external webserver to replace this functionality.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The fourStore and fourStoreEndpoint modules have been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Polkit no longer has the user of uid 0 (root) as an admin identity.
+     We now follow the upstream default of only having every member of the wheel
+     group admin privileged. Before it was root and members of wheel.
+     The positive outcome of this is pkexec GUI popups or terminal prompts
+     will no longer require the user to choose between two essentially equivalent
+     choices (whether to perform the action as themselves with wheel permissions, or as the root user).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     NixOS containers no longer build NixOS manual by default. This saves evaluation time,
+     especially if there are many declarative containers defined. Note that this is already done
+     when <literal>&lt;nixos/modules/profiles/minimal.nix&gt;</literal> module is included
+     in container config.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Virtual console options have been reorganized and can be found under
+     a single top-level attribute: <literal>console</literal>.
+     The full set of changes is as follows:
+    </para>
+    <itemizedlist>
+      <listitem>
+       <para>
+         <literal>i18n.consoleFont</literal> renamed to
+         <link linkend="opt-console.font">console.font</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>i18n.consoleKeyMap</literal> renamed to
+         <link linkend="opt-console.keyMap">console.keyMap</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>i18n.consoleColors</literal> renamed to
+         <link linkend="opt-console.colors">console.colors</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>i18n.consolePackages</literal> renamed to
+         <link linkend="opt-console.packages">console.packages</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>i18n.consoleUseXkbConfig</literal> renamed to
+         <link linkend="opt-console.useXkbConfig">console.useXkbConfig</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>boot.earlyVconsoleSetup</literal> renamed to
+         <link linkend="opt-console.earlySetup">console.earlySetup</link>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>boot.extraTTYs</literal> renamed to
+         <link linkend="opt-console.extraTTYs">console.extraTTYs</link>
+       </para>
+      </listitem>
+    </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-services.awstats">awstats</link> module has been rewritten
+     to serve stats via static html pages, updated on a timer, over <link linkend="opt-services.nginx.virtualHosts">nginx</link>,
+     instead of dynamic cgi pages over <link linkend="opt-services.httpd">apache</link>.
+    </para>
+    <para>
+     Minor changes will be required to migrate existing configurations. Details of the
+     required changes can seen by looking through the <link linkend="opt-services.awstats">awstats</link>
+     module.
     </para>
    </listitem>
   </itemizedlist>
@@ -230,11 +343,29 @@
    </listitem>
    <listitem>
     <para>
+     The nginx web server previously started its master process as root
+     privileged, then ran worker processes as a less privileged identity user.
+     This was changed to start all of nginx as a less privileged user (defined by
+     <literal>services.nginx.user</literal> and
+     <literal>services.nginx.group</literal>). As a consequence, all files that
+     are needed for nginx to run (included configuration fragments, SSL
+     certificates and keys, etc.) must now be readable by this less privileged
+     user/group.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      OpenSSH has been upgraded from 7.9 to 8.1, improving security and adding features
      but with potential incompatibilities.  Consult the
      <link xlink:href="https://www.openssh.com/txt/release-8.1">
      release announcement</link> for more information.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <literal>PRETTY_NAME</literal> in <literal>/etc/os-release</literal>
+       now uses the short rather than full version string.
+     </para>
    </listitem>
   </itemizedlist>
  </section>

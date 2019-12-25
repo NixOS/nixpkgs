@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "reviewdog";
-  version = "0.9.12";
+  version = "0.9.14";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0r7y8nbpwfbvinpapv6lgnlc93kwn4b6722cp5ihyf361fklcd02";
+    sha256 = "1npawdvryrxrdfkv4j1jk63l3mwsdgsj85k9yqyhrrphk2w4s1cr";
   };
 
-  modSha256 = "1ydfirjhw238zbia5mk90fx9rrg3kvm2h54zjhiimlvnpls5y8c9";
+  modSha256 = "0a6bmwysgvwpddh2mp228s2brb0kqfcxqjffs2pabf7ym5flmz0g";
 
   subPackages = [ "cmd/reviewdog" ];
 
-  buildFlagsArray = [ "-ldflags=-X github.com/reviewdog/reviewdog/commands.Version=${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/reviewdog/reviewdog/commands.Version=${version}" ];
 
   meta = with lib; {
     description = "Automated code review tool integrated with any code analysis tools regardless of programming language";

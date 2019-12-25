@@ -98,7 +98,6 @@ in
 
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.gnome-keyring.enable = true;
-    services.gnome3.gnome-settings-daemon.enable = true;
     services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
     services.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;

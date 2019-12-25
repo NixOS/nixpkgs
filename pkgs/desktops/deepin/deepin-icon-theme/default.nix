@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     cp -a ./Sea ./usr/share/icons/hicolor "$out"/share/icons/
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Icons for the Deepin Desktop Environment";

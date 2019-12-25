@@ -33,6 +33,6 @@ in stdenv.mkDerivation rec {
     description = "Default typeface used in the user interface of GNOME since version 3.0";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.ofl;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

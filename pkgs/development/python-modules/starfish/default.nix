@@ -85,5 +85,6 @@ buildPythonPackage rec {
     homepage = https://spacetx-starfish.readthedocs.io/en/latest/;
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true; # incompatible with latest python-dateutil, scikit-image
   };
 }

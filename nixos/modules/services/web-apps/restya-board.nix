@@ -116,7 +116,7 @@ in
         };
 
         passwordFile = mkOption {
-          type = types.nullOr types.str;
+          type = types.nullOr types.path;
           default = null;
           description = ''
             The database user's password. 'null' if no password is set.
@@ -285,7 +285,7 @@ in
           sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', 'restya');/g" "${runDir}/server/php/config.inc.php"
         '' else ''
           sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', '${cfg.database.host}');/g" "${runDir}/server/php/config.inc.php"
-          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', '$(<${cfg.database.dbPassFile})');/g" "${runDir}/server/php/config.inc.php"
+          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', ${if cfg.database.passwordFile == null then "''" else "'file_get_contents(${cfg.database.passwordFile})'"});/g" "${runDir}/server/php/config.inc.php
         ''}
         sed -i "s/^.*'R_DB_PORT'.*$/define('R_DB_PORT', '${toString cfg.database.port}');/g" "${runDir}/server/php/config.inc.php"
         sed -i "s/^.*'R_DB_NAME'.*$/define('R_DB_NAME', '${cfg.database.name}');/g" "${runDir}/server/php/config.inc.php"

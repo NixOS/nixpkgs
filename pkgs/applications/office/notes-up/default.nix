@@ -50,6 +50,12 @@ stdenv.mkDerivation rec {
   # Whether to build with contractor support (Pantheon specific)
   cmakeFlags = if withPantheon then null else [ "-Dnoele=yes" ];
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Markdown notes editor and manager designed for elementary OS"
     + stdenv.lib.optionalString withPantheon " - built with Contractor support";

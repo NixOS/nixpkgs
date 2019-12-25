@@ -1,14 +1,13 @@
-{ stdenv, fetchgit, libcap }:
+{ stdenv, fetchFromGitiles, libcap }:
 
 stdenv.mkDerivation rec {
-  shortname = "minijail";
-  name = "${shortname}-${version}";
-  version = "android-9.0.0_r3";
+  pname = "minijail";
+  version = "android-10.0.0_r9";
 
-  src = fetchgit {
+  src = fetchFromGitiles {
     url = "https://android.googlesource.com/platform/external/minijail";
     rev = version;
-    sha256 = "1g1g52s3q61amcnx8cv1332sbixpck1bmjzgsrjiw5ix7chrzkp2";
+    sha256 = "0gcfsyim1krrddcklydqfxl8mamaxgail2xl5qp9yclq60km8f22";
   };
 
   buildInputs = [ libcap ];
@@ -20,13 +19,20 @@ stdenv.mkDerivation rec {
     sed -i '/#include <asm\/siginfo.h>/ d' signal_handler.c
   '';
 
+  postPatch = ''
+    patchShebangs platform2_preinstall.sh
+  '';
+
+  postBuild = ''
+    ./platform2_preinstall.sh ${version} $out/include/chromeos
+  '';
+
   installPhase = ''
-    mkdir -p $out/lib
+    mkdir -p $out/lib/pkgconfig $out/include/chromeos $out/bin
     cp -v *.so $out/lib
-    mkdir -p $out/include
-    cp -v libminijail.h $out/include
-    mkdir -p $out/bin
-    cp minijail0 $out/bin
+    cp -v *.pc $out/lib/pkgconfig
+    cp -v libminijail.h scoped_minijail.h $out/include/chromeos
+    cp -v minijail0 $out/bin
   '';
 
   meta = {

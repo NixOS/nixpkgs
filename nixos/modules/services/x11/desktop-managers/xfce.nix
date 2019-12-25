@@ -31,6 +31,7 @@ in
     (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
       [ "services" "xserver" "displayManager" "sessionCommands" ])
+    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
   ];
 
   options = {

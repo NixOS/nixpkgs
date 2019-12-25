@@ -24,6 +24,6 @@ agda.mkDerivation (self: rec {
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
     broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ jwiegley fuuzetsu mudri ];
+    maintainers = with maintainers; [ jwiegley mudri ];
   };
 })

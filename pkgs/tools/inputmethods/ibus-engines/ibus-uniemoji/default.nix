@@ -1,8 +1,19 @@
-{ stdenv, fetchFromGitHub
-, python3Packages
+{ stdenv
+, fetchFromGitHub
+, gobject-introspection
+, wrapGAppsHook
+, python3
+, ibus
 }:
 
-stdenv.mkDerivation rec {
+let
+  python = python3.withPackages (ps: with ps; [
+    pygobject3
+    (toPythonModule ibus)
+    pyxdg
+    python-Levenshtein
+  ]);
+in stdenv.mkDerivation rec {
   pname = "ibus-uniemoji";
   version = "0.6.0";
 
@@ -13,25 +24,39 @@ stdenv.mkDerivation rec {
     sha256 = "121zh3q0li1k537fcvbd4ns4jgl9bbb9gm9ihy8cfxgirv38lcfa";
   };
 
-  propagatedBuildInputs = with python3Packages; [ pyxdg python-Levenshtein pygobject3 ];
+  patches = [
+    # Do not run wrapper script with Python,
+    # the wrapped script will have Python in shebang anyway.
+    ./allow-wrapping.patch
+  ];
 
-  nativeBuildInputs = [ python3Packages.wrapPython ];
+
+  nativeBuildInputs = [
+    wrapGAppsHook
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    python
+    ibus
+  ];
+
+  makeFlags = [
+    "PREFIX=${placeholder ''out''}"
+    "SYSCONFDIR=${placeholder ''out''}/etc"
+    "PYTHON=${python.interpreter}"
+  ];
 
   postFixup = ''
-    buildPythonPath $out
-    patchPythonScript $out/share/ibus-uniemoji/uniemoji.py
+    wrapGApp $out/share/ibus-uniemoji/uniemoji.py
   '';
-
-  makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc"
-                "PYTHON=${python3Packages.python.interpreter}"
-              ];
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
-    description  = "Input method (ibus) for entering unicode symbols and emoji by name";
-    homepage     = "https://github.com/salty-horse/ibus-uniemoji";
-    license      = with licenses; [ gpl3 mit ];
-    platforms    = platforms.linux;
-    maintainers  = with maintainers; [ aske ];
+    description = "Input method (ibus) for entering unicode symbols and emoji by name";
+    homepage = "https://github.com/salty-horse/ibus-uniemoji";
+    license = with licenses; [ gpl3 mit ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ aske ];
   };
 }

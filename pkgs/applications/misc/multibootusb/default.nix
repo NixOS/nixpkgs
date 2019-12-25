@@ -52,17 +52,6 @@ python36Packages.buildPythonApplication rec {
     python36Packages.six
   ];
 
-  makeWrapperArgs = [
-    # Firstly, add all necessary QT variables
-    "\${qtWrapperArgs[@]}"
-
-    # Then, add the installed scripts/ directory to the python path
-    "--prefix" "PYTHONPATH" ":" "$out/lib/${python36Packages.python.libPrefix}/site-packages"
-
-    # Finally, move to directory that contains data
-    "--run" "\"cd $out/share/${pname}\""
-  ];
-
   postInstall = ''
     # This script doesn't work and it doesn't add much anyway
     rm $out/bin/multibootusb-pkexec
@@ -70,6 +59,19 @@ python36Packages.buildPythonApplication rec {
     # The installed data isn't sufficient for whatever reason, missing gdisk/gdisk.exe
     mkdir -p "$out/share/${pname}"
     cp -r data "$out/share/${pname}/data"
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      # Firstly, add all necessary QT variables
+      "''${qtWrapperArgs[@]}"
+
+      # Then, add the installed scripts/ directory to the python path
+      --prefix "PYTHONPATH" ":" "$out/lib/${python36Packages.python.libPrefix}/site-packages"
+
+      # Finally, move to directory that contains data
+      --run "cd $out/share/${pname}"
+    )
   '';
 
   meta = with stdenv.lib; {

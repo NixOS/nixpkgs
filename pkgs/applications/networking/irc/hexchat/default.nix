@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, lua, perl, python3
 , pciutils, dbus-glib, libcanberra-gtk2, libproxy
-, libsexy, enchant2, libnotify, openssl, isocodes
+, enchant2, libnotify, openssl, isocodes
 , desktop-file-utils
 , meson, ninja
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk2 lua perl python3 pciutils dbus-glib libcanberra-gtk2 libproxy
-    libsexy libnotify openssl desktop-file-utils
+    libnotify openssl desktop-file-utils
     isocodes
   ];
 

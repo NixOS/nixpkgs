@@ -9,12 +9,12 @@
 }:
 
  mkDerivation rec {
-  version = "0.9.0";
+  version = "0.9.1";
   pname = "cadence";
 
   src = fetchzip {
     url = "https://github.com/falkTX/Cadence/archive/v${version}.tar.gz";
-    sha256 = "08vcggypkdfr70v49innahs5s11hi222dhhnm5wcqzdgksphqzwx";
+    sha256 = "07z8grnnpkd0nf3y3r6qjlk1jlzrbhdrp9mnhrhhmws54p1bhl20";
   };
 
   nativeBuildInputs = [

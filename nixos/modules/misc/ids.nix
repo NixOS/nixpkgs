@@ -80,8 +80,8 @@ in
       #kdm = 39; # dropped in 17.03
       #ghostone = 40; # dropped in 18.03
       git = 41;
-      fourstore = 42;
-      fourstorehttp = 43;
+      #fourstore = 42; # dropped in 20.03
+      #fourstorehttp = 43; # dropped in 20.03
       virtuoso = 44;
       rtkit = 45;
       dovecot2 = 46;

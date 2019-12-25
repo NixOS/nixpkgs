@@ -185,7 +185,7 @@ stdenv.mkDerivation {
       free = false;
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "Atari ST/STE/TT/Falcon emulator";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

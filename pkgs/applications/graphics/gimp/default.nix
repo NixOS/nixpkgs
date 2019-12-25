@@ -157,6 +157,8 @@ in stdenv.mkDerivation rec {
     "--without-webkit" # old version is required
     "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
     "--with-icc-directory=/run/current-system/sw/share/color/icc"
+    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
+    "--libdir=\${exec_prefix}/lib"
   ];
 
   # on Darwin,

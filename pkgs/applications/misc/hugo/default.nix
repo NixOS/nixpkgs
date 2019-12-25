@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.60.0";
+  version = "0.61.0";
 
   goPackagePath = "github.com/gohugoio/hugo";
 
   src = fetchFromGitHub {
-    owner  = "gohugoio";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "0g8rq79xp7c9p31xc0anfjyz7xp8n7qzv3vmvg2nmzl7nayg88aa";
+    owner = "gohugoio";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1ad70g4gb44dk48pbgk48jzs44b6l7ksxb739ahp7vs1nyvvgffr";
   };
 
-  modSha256 = "12h1ik1hgs4lkmk699wpa34rnycnm03qyr2vp1y5lywz1h93by20";
+  modSha256 = "1jb1iqlp1005aj8smcgznmwnqaysi5g5wcsj8nvvm70hhc9j8wns";
 
   buildFlags = "-tags extended";
 
@@ -21,8 +21,8 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "A fast and modern static website engine.";
-    homepage = https://gohugo.io;
+    homepage = "https://gohugo.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ schneefux ];
+    maintainers = with maintainers; [ schneefux filalex77 ];
   };
 }

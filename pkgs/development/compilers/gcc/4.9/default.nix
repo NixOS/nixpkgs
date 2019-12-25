@@ -116,7 +116,8 @@ in
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
-  name = "${crossNameAddon}${name}${if stripped then "" else "-debug"}-${version}";
+  pname = "${crossNameAddon}${name}${if stripped then "" else "-debug"}";
+  inherit version;
 
   builder = ../builder.sh;
 

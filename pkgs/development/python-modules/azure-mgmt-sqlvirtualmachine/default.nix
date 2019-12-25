@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.0";
+  version = "0.5.0";
   pname = "azure-mgmt-sqlvirtualmachine";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jxmikjvyxkwr8c9kn6xw8gvj9pajlk7y8111rq8fgkivwjq8wcm";
+    sha256 = "1b9am8raa17hxnz7d5pk2ix0309wsnhnchq1mi22icd728sl5adm";
     extension = "zip";
   };
 

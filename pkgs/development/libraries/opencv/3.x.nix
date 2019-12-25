@@ -9,7 +9,7 @@
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
 , enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
-, enableJPEG2K    ? true, jasper
+, enableJPEG2K    ? false, jasper  # disable jasper by default (many CVE)
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas
 , enableContrib   ? true

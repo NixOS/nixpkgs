@@ -367,7 +367,7 @@ in
         type = types.lines;
         default = "";
         description = ''
-          Cnfiguration lines appended to the generated Apache
+          Configuration lines appended to the generated Apache
           configuration file. Note that this mechanism may not work
           when <option>configFile</option> is overridden.
         '';

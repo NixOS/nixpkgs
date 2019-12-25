@@ -5,7 +5,7 @@
 , cmake, gettext, libtool
 , libGLU
 , gnutls, pam, nettle
-, xterm, openssh
+, xterm, openssh, perl
 , makeWrapper}:
 
 with stdenv.lib;
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with xorg; [
     libjpeg_turbo fltk pixman
-    gnutls pam nettle
+    gnutls pam nettle perl
     xorgproto
     utilmacros libXtst libXext libX11 libXext libICE libXi libSM libXft
     libxkbfile libXfont2 libpciaccess

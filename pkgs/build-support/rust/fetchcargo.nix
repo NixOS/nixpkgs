@@ -18,19 +18,19 @@ let cargo-vendor-normalise = stdenv.mkDerivation {
 };
 in
 { name ? "cargo-deps"
-, src
-, srcs
-, patches
+, src ? null
+, srcs ? []
+, patches ? []
 , sourceRoot
 , sha256
 , cargoUpdateHook ? ""
 , # whenever to also include the Cargo.lock in the output
   copyLockfile ? false
-}:
-stdenv.mkDerivation {
+, ...
+} @ args:
+stdenv.mkDerivation ({
   name = "${name}-vendor";
   nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ];
-  inherit src srcs patches sourceRoot;
 
   phases = "unpackPhase patchPhase installPhase";
 
@@ -76,4 +76,6 @@ stdenv.mkDerivation {
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
   preferLocalBuild = true;
-}
+} // (builtins.removeAttrs args [
+  "name" "sha256" "cargoUpdateHook" "copyLockfile"
+]))

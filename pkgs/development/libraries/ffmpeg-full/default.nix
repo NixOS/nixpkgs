@@ -353,6 +353,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (cdio-paranoia != null && gplLicensing) "libcdio")
     (enableFeature (if isLinux then libdc1394 != null && libraw1394 != null else false) "libdc1394")
     (enableFeature (libiconv != null) "iconv")
+    (enableFeature (libjack2 != null) "libjack")
     #(enableFeature (if isLinux then libiec61883 != null && libavc1394 != null && libraw1394 != null else false) "libiec61883")
     (enableFeature (if isLinux && !isAarch64 then libmfx != null else false) "libmfx")
     (enableFeature (libmodplug != null) "libmodplug")
@@ -466,6 +467,6 @@ stdenv.mkDerivation rec {
         licenses.lgpl21Plus
     );
     platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel fuuzetsu ];
+    maintainers = with maintainers; [ codyopel ];
   };
 }

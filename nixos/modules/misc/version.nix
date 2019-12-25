@@ -10,6 +10,12 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])
+    (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [ "system" "nixos" "versionSuffix" ])
+    (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
+    (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
+  ];
 
   options.system = {
 
@@ -92,7 +98,7 @@ in
         VERSION="${cfg.version} (${cfg.codeName})"
         VERSION_CODENAME=${toLower cfg.codeName}
         VERSION_ID="${cfg.version}"
-        PRETTY_NAME="NixOS ${cfg.version} (${cfg.codeName})"
+        PRETTY_NAME="NixOS ${cfg.release} (${cfg.codeName})"
         LOGO="nix-snowflake"
         HOME_URL="https://nixos.org/"
         DOCUMENTATION_URL="https://nixos.org/nixos/manual/index.html"

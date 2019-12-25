@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo, shared ? true }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     if stdenv.isLinux then [
-      "--enable-elf-shlibs"
+      # It seems that the e2fsprogs is one of the few packages that cannot be
+      # build with shared and static libs.
+      (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
       "--enable-symlink-install"
       "--enable-relative-symlinks"
       "--with-crond-dir=no"
