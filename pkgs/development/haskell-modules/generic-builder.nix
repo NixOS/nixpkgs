@@ -133,8 +133,11 @@ let
   crossCabalFlags = [
     "--with-ghc=${ghcCommand}"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
+    # Pass the "wrong" C compiler rather than none at all so packages that just
+    # use the C preproccessor still work, see
+    # https://github.com/haskell/cabal/issues/6466 for details.
+    "--with-gcc=${(if stdenv.hasCC then stdenv else buildPackages.stdenv).cc.targetPrefix}cc"
   ] ++ optionals stdenv.hasCC [
-    "--with-gcc=${stdenv.cc.targetPrefix}cc"
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
     "--with-ar=${stdenv.cc.bintools.targetPrefix}ar"
     # use the one that comes with the cross compiler.
