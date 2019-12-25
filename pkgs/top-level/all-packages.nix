@@ -10277,7 +10277,7 @@ in
 
   arrow-cpp = callPackage ../development/libraries/arrow-cpp ({
     gtest = gtest.override { static = true; };
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
     stdenv = overrideCC stdenv buildPackages.gcc6; # hidden symbol `__divmoddi4'
   });
 
