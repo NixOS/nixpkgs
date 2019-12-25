@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = https://www.darktable.org;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu flosse mrVanDalo ];
   };
 }
