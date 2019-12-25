@@ -4,11 +4,10 @@
 , meson
 , ninja
 , pkgconfig
-, python
+, python3
 , gst-plugins-base
 , libxml2
 , flex
-, perl
 , gettext
 , gobject-introspection
 }:
@@ -34,9 +33,8 @@ stdenv.mkDerivation rec {
     pkgconfig
     gettext
     gobject-introspection
-    python
+    python3
     flex
-    perl
   ];
 
   buildInputs = [
