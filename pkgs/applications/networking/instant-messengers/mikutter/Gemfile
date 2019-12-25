@@ -7,34 +7,30 @@ def source(url)
 
 source 'https://rubygems.org'
 
-ruby '>= 2.3.0'
+ruby '>= 2.5.0'
 
 group :default do
-  gem 'oauth', '>= 0.5.1'
-  gem 'json_pure', '~> 1.8'
-  gem 'addressable', '>= 2.5.2', '< 2.6'
-  gem 'diva', '>= 0.3.2', '< 2.0'
-  gem 'memoist', '>= 0.16', '< 0.17'
-  gem 'ruby-hmac', '~> 0.4'
-  gem 'typed-array', '~> 0.1'
-  gem 'delayer', '~> 0.0'
-  gem 'pluggaloid', '>= 1.1.1', '< 2.0'
-  gem 'delayer-deferred', '>= 2.0', '< 3.0'
-  gem 'twitter-text', '>= 2.1.0'
+  gem 'addressable','>= 2.7.0', '< 2.8'
+  gem 'delayer','>= 1.0.1', '< 1.1'
+  gem 'delayer-deferred','>= 2.1.1', '< 2.2'
+  gem 'diva','>= 1.0.1', '< 1.1'
+  gem 'memoist','>= 0.16.2', '< 0.17'
+  gem 'oauth','>= 0.5.4'
+  gem 'pluggaloid','>= 1.2.0', '< 1.3'
+  gem 'typed-array','>= 0.1.2', '< 0.2'
 end
 
 group :test do
-  gem 'test-unit', '~> 3.0'
-  gem 'rake', '~> 10.1'
-  gem 'watch', '~> 0.1'
-  gem 'mocha', '~> 0.14'
-  gem 'webmock', '~> 1.17'
-  gem 'ruby-prof'
+  gem 'test-unit','>= 3.3.4', '< 4.0'
+  gem 'rake','>= 13.0.1'
+  gem 'mocha','>= 1.11.1'
+  gem 'webmock','>= 3.7.6'
+  gem 'ruby-prof','>= 1.1.0'
 end
 
 
 group :plugin do
-  Dir.glob(File.expand_path(File.join(__dir__, 'core/plugin/*/Gemfile'))){ |path|
+  Dir.glob(File.expand_path(File.join(__dir__, 'plugin/*/Gemfile'))){ |path|
     eval File.open(path).read
   }
   Dir.glob(File.join(File.expand_path(ENV['MIKUTTER_CONFROOT'] || '~/.mikutter'), 'plugin/*/Gemfile')){ |path|
