@@ -1,5 +1,5 @@
 { stdenv
-, avahi, libjpeg, libusb1, libv4l, net_snmp, libpng
+, avahi, libjpeg, libusb1, libv4l, net-snmp, libpng
 , gettext, pkgconfig
 
 # List of { src name backend } attibute sets - see installFirmware below:
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional (libusb1 != null) "--enable-libusb_1_0"
     ;
 
-  buildInputs = [ avahi libusb1 libv4l net_snmp libpng ];
+  buildInputs = [ avahi libusb1 libv4l net-snmp libpng ];
   nativeBuildInputs = [ gettext pkgconfig ];
   enableParallelBuilding = true;
 

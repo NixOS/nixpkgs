@@ -2081,7 +2081,7 @@ in
     libmysqlclient = null;
     postgresql = null;
     libdbi = null;
-    net_snmp = null;
+    net-snmp = null;
     libuuid = null;
     gnutls = null;
     libgcrypt = null;
@@ -15442,7 +15442,7 @@ in
 
   check-esxi-hardware = callPackage ../servers/monitoring/plugins/esxi.nix {};
 
-  net_snmp = callPackage ../servers/monitoring/net-snmp { };
+  net-snmp = callPackage ../servers/monitoring/net-snmp { };
 
   newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
 
