@@ -241,9 +241,9 @@ in
                     StateDirectoryMode = rights;
                     WorkingDirectory = "/var/lib/${lpath}";
                     ExecStart = "${pkgs.simp_le}/bin/simp_le ${escapeShellArgs cmdline}";
-                    ExecStopPost =
+                    ExecStartPost =
                       let
-                        script = pkgs.writeScript "acme-post-stop" ''
+                        script = pkgs.writeScript "acme-post-start" ''
                           #!${pkgs.runtimeShell} -e
                           ${data.postRun}
                         '';

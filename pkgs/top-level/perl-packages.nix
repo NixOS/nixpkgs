@@ -4721,6 +4721,20 @@ let
     propagatedBuildInputs = [ DataCompare ];
   };
 
+  DevelLeak = buildPerlPackage rec {
+    pname = "Devel-Leak";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NI/NI-S/Devel-Leak-${version}.tar.gz";
+      sha256 = "0lkj2xwc3lhxv7scl43r8kfmls4am0b98sqf5vmf7d72257w6hkg";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/Devel-Leak";
+      description = "Utility for looking for perl objects that are not reclaimed";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ]; # According to Debian
+    };
+  };
+
   DevelPatchPerl = buildPerlPackage {
     pname = "Devel-PatchPerl";
     version = "1.80";
@@ -15708,6 +15722,28 @@ let
     meta = {
       description = "SDL bindings to Perl";
       license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  };
+
+  SearchXapian = buildPerlPackage rec {
+    pname = "Search-Xapian";
+    version = "1.2.25.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-${version}.tar.gz";
+      sha256 = "0hpa8gi38j0ibq8af6dy69lm1bl5jnq76nsa69dbrzbr88l5m594";
+    };
+    patches = [
+      (fetchpatch {
+        url = "https://git.xapian.org/?p=xapian;a=patch;h=69ad652b7ad7912801e686db2da55d73f79fbf75";
+        name = "fix-automated-testing-false-negative";
+        sha256 = "1241mpyf8mgx7szyl5sxa6wl388rzph3q51mn9v4yjbm0k5l0sxr";
+        stripLen = 1;
+      })
+    ];
+    buildInputs = [ pkgs.xapian ExtUtilsMakeMaker DevelLeak ];
+    meta = {
+      description = "Perl XS frontend to the Xapian C++ search library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

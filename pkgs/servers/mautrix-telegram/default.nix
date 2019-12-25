@@ -5,6 +5,7 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "mautrix-telegram";
   version = "0.6.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,12 +17,17 @@ buildPythonPackage rec {
       url = https://github.com/tulir/mautrix-telegram/commit/be6d395ed66d86ec7f13a262f9ae37731987019c.patch;
       sha256 = "1q69ip17r45yhyrxr0pj8bvqj2grw2l39wak8pi5pm7qrxra93j2";
     })
+    # bump dependencies, remove on next bump
+    (fetchpatch {
+      url = "https://github.com/tulir/mautrix-telegram/commit/cdee0df5ab9e04d6831e34590959496061c6621c.patch";
+      sha256 = "0sbfaais0jgg305dcjg9hn8b975ymdivvhmlzsxm1nm2ksa4c0v1";
+    })
   ];
-
-  disabled = pythonOlder "3.6";
 
   postPatch = ''
     sed -i -e '/alembic>/d' setup.py
+    substituteInPlace setup.py \
+      --replace "telethon>=1.9,<1.10" "telethon~=1.9"
   '';
 
   propagatedBuildInputs = [

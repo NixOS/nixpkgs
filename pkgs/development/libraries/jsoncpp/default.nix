@@ -1,4 +1,4 @@
-{ stdenv , fetchFromGitHub , cmake , python }:
+{ stdenv, fetchFromGitHub, cmake, python, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "jsoncpp";
@@ -29,6 +29,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake python ];
+
+  # fix inverted sense in isAnyCharRequiredQuoting on aarch64. See: https://github.com/open-source-parsers/jsoncpp/pull/1120
+  patches = stdenv.lib.optionals stdenv.isAarch64 [
+    (fetchpatch {
+      url = "https://github.com/open-source-parsers/jsoncpp/commit/9093358efae9e5981aa60013487fc7215f040a59.patch";
+      sha256 = "1wiqp70sck2md14sfc0zdkblqk9750cl55ykf9d6b9vs1ifzzzq5";
+     })
+  ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

@@ -1,11 +1,11 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform
 , openssl, pkgconfig, protobuf
-, Security, libiconv
+, Security, libiconv, rdkafka
 
 , features ?
     (if stdenv.isAarch64
-     then [ "shiplift/unix-socket" "jemallocator" ]
-     else [ "leveldb" "leveldb/leveldb-sys-2" "shiplift/unix-socket" "jemallocator" ])
+     then [ "shiplift/unix-socket" "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ]
+     else [ "leveldb" "leveldb/leveldb-sys-2" "shiplift/unix-socket" "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ])
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,14 +20,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1akyzrscc6pv7ggb1kna05vvxhfzrf1b4kji4bah1ry3yyqxdjsj";
-  buildInputs = [ openssl pkgconfig protobuf ]
+  buildInputs = [ openssl pkgconfig protobuf rdkafka ]
                 ++ stdenv.lib.optional stdenv.isDarwin [ Security libiconv ];
 
   # needed for internal protobuf c wrapper library
   PROTOC="${protobuf}/bin/protoc";
   PROTOC_INCLUDE="${protobuf}/include";
 
-  # rdkafka fails to build, for some reason...
   cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
   checkPhase = ":"; # skip tests, too -- they don't respect the rdkafka flag...
 

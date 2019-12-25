@@ -1,24 +1,17 @@
-{ stdenv, lib, fetchhg, pkg-config, wayland, gtk3 }:
+{ stdenv, lib, fetchhg, pkg-config, meson, ninja, wayland, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "wofi";
-  version = "2019-10-28";
+  version = "1.0";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/wofi";
-    rev = "3fac708b2b541bb9927ec1b2389c4eb294e1b35b";
-    sha256 = "0sp9hqm1lv9wyxj8z7vazs25nvl6yznd5vfhmwb51axwkr79s2ym";
+    rev = "v${version}";
+    sha256 = "147yarm26nl0zc0a2rs7qi4jd7bz48vvyaygsif1qsv8fx0xiqqf";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ wayland gtk3 ];
-
-  sourceRoot = "hg-archive/Release";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp wofi $out/bin/
-  '';
 
   meta = with lib; {
     description = "A launcher/menu program for wlroots based wayland compositors such as sway";

@@ -25,6 +25,8 @@ with lib;
     (mkRemovedOptionModule [ "services.beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services.beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services.osquery" ] "The osquery module has been removed")
+    (mkRemovedOptionModule [ "services.fourStore" ] "The fourStore module has been removed")
+    (mkRemovedOptionModule [ "services.fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
 
     # Do NOT add any option renames here, see top of the file
   ];

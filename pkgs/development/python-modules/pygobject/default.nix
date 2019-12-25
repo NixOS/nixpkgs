@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, pkgconfig, glib }:
+{ stdenv, fetchurl, python, buildPythonPackage, pkgconfig, glib, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pygobject";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # same site-packages: we need a pth file for both. pygtk.py would be
   # used to select a specific version, in our setup it should have no
   # effect, but we leave it in case somebody expects and calls it.
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString (!isPy3k) ''
     mv $out/lib/${python.libPrefix}/site-packages/{pygtk.pth,${pname}-${version}.pth}
 
     # Prevent wrapping of codegen files as these are meant to be

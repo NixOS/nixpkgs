@@ -11,6 +11,7 @@
   ./config/xdg/mime.nix
   ./config/xdg/portal.nix
   ./config/appstream.nix
+  ./config/console.nix
   ./config/xdg/sounds.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
@@ -557,6 +558,7 @@
   ./services/network-filesystems/yandex-disk.nix
   ./services/network-filesystems/xtreemfs.nix
   ./services/network-filesystems/ceph.nix
+  ./services/networking/3proxy.nix
   ./services/networking/amuled.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
@@ -693,6 +695,7 @@
   ./services/networking/sniproxy.nix
   ./services/networking/smokeping.nix
   ./services/networking/softether.nix
+  ./services/networking/spacecookie.nix
   ./services/networking/spiped.nix
   ./services/networking/squid.nix
   ./services/networking/sslh.nix
@@ -813,6 +816,7 @@
   ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/trac.nix
+  ./services/web-apps/trilium.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
   ./services/web-apps/virtlyst.nix
@@ -938,7 +942,6 @@
   ./tasks/filesystems/vfat.nix
   ./tasks/filesystems/xfs.nix
   ./tasks/filesystems/zfs.nix
-  ./tasks/kbd.nix
   ./tasks/lvm.nix
   ./tasks/network-interfaces.nix
   ./tasks/network-interfaces-systemd.nix

@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "croc";
-  version = "6.4.7";
+  version = "6.4.8";
 
   goPackagePath = "github.com/schollz/croc";
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "schollz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1i8g90sr5rk7flfxvmxca6z5vp9wh8zraf2lfz618s5axds3kb50";
+    sha256 = "03wm7agjwky9ma321x6as76rg053cagmni9ygwls82jjs2pvv0bv";
   };
 
-  modSha256 = "1w84xqnn9fnkakak6j069app4ybbxpwq79g8qypwvmqg5bhvzywg";
+  modSha256 = "011pcmfih8lg8l7hwdsq51p5brnhsddzv7mvsaw5sfv8nq9p8zc2";
   subPackages = [ "." ];
 
   meta = with stdenv.lib; {

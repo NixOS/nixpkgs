@@ -5,10 +5,14 @@
 , switchboard
 , switchboardPlugs
 , plugs
+  # Only useful to disable for development testing.
+, useDefaultPlugs ? true
 }:
 
 let
-  selectedPlugs = if plugs == null then switchboardPlugs else plugs;
+  selectedPlugs =
+    if plugs == null then switchboardPlugs
+    else plugs ++ (lib.optionals useDefaultPlugs switchboardPlugs);
 in
 symlinkJoin {
   name = "${switchboard.name}-with-plugs";

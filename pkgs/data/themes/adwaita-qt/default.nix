@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, qtbase }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, qtbase, pantheon }:
 
 mkDerivation rec {
   pname = "adwaita-qt";
@@ -25,6 +25,12 @@ mkDerivation rec {
     substituteInPlace style/CMakeLists.txt \
        --replace "DESTINATION \"\''${QT_PLUGINS_DIR}/styles" "DESTINATION \"$qtPluginPrefix/styles"
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "A style to bend Qt applications to look like they belong into GNOME Shell";

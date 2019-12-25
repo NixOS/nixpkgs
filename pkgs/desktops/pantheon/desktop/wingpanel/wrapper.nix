@@ -6,10 +6,14 @@
 , wingpanelIndicators
 , switchboard-with-plugs
 , indicators ? null
+  # Only useful to disable for development testing.
+, useDefaultIndicators ? true
 }:
 
 let
-  selectedIndicators = if indicators == null then wingpanelIndicators else indicators;
+  selectedIndicators =
+    if indicators == null then wingpanelIndicators
+    else indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
 in
 symlinkJoin {
   name = "${wingpanel.name}-with-indicators";

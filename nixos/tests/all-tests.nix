@@ -21,6 +21,7 @@ let
     else {};
 in
 {
+  _3proxy = handleTest ./3proxy.nix {};
   acme = handleTestOn ["x86_64-linux"] ./acme.nix {};
   atd = handleTest ./atd.nix {};
   automysqlbackup = handleTest ./automysqlbackup.nix {};
@@ -256,6 +257,7 @@ in
   smokeping = handleTest ./smokeping.nix {};
   snapper = handleTest ./snapper.nix {};
   solr = handleTest ./solr.nix {};
+  spacecookie = handleTest ./spacecookie.nix {};
   sonarr = handleTest ./sonarr.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
@@ -277,6 +279,7 @@ in
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
   trac = handleTest ./trac.nix {};
+  trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   udisks2 = handleTest ./udisks2.nix {};
