@@ -1,5 +1,6 @@
 { stdenv, fetchurl, rpmextract, autoPatchelfHook
-, xorg, gtk3, gnome2, nss, alsaLib, udev, libnotify }:
+, xorg, gtk3, gnome2, nss, alsaLib, udev, libnotify
+, wrapGAppsHook }:
 
 let
   version = "4.5.2";
@@ -17,7 +18,7 @@ in stdenv.mkDerivation {
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  nativeBuildInputs = [ rpmextract autoPatchelfHook ];
+  nativeBuildInputs = [ rpmextract autoPatchelfHook wrapGAppsHook ];
   buildInputs = (with xorg; [
     libXdamage libXtst libXScrnSaver libxkbfile
   ]) ++ [

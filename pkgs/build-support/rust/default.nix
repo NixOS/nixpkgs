@@ -4,6 +4,7 @@
 , cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
+, unpackPhase ? null
 , cargoPatches ? []
 , patches ? []
 , sourceRoot ? null
@@ -29,7 +30,7 @@ assert buildType == "release" || buildType == "debug";
 let
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
-        inherit name src srcs sourceRoot cargoUpdateHook;
+        inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
         copyLockfile = verifyCargoDeps;
         patches = cargoPatches;
         sha256 = cargoSha256;

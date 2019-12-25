@@ -12,6 +12,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six attrs twisted pyopenssl service-identity autobahn ];
   checkInputs = [ treq mock ];
 
+  checkPhase = ''
+    trial wormhole_mailbox_server
+  '';
+
   meta = with stdenv.lib; {
     description = "Securely transfer data between computers";
     homepage = https://github.com/warner/magic-wormhole-mailbox-server;

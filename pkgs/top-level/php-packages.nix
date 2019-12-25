@@ -507,10 +507,10 @@ let
   };
 
   protobuf = buildPecl {
-    version = "3.11.1";
+    version = "3.11.2";
     pname = "protobuf";
 
-    sha256 = "1dv2hln2rifjlljry4b7qqx3gx68fm0a6nf66sh4ls2p9if1jzp2";
+    sha256 = "0bhdykdyk58ywqj940zb7jyvrlgdr6hdb4s8kn79fz3p0i79l9hz";
 
     buildInputs = with pkgs; [ (if isPhp73 then pcre2 else pcre) ];
 
@@ -520,7 +520,6 @@ let
       '';
       license = licenses.bsd3;
       homepage = "https://developers.google.com/protocol-buffers/";
-      broken = isPhp74; # Build error
     };
   };
 

@@ -61,6 +61,7 @@ mapAliases ({
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
+  catfish = xfce.catfish; # added 2019-12-22
   checkbashism = checkbashisms; # added 2016-08-16
   cide = throw "deprecated in 2019-09-11: abandoned by upstream";
   cinepaint = throw "cinepaint has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
@@ -270,6 +271,7 @@ mapAliases ({
   networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
   networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
   networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
+  nix-review = nixpkgs-review; # added 2019-12-22
   nfsUtils = nfs-utils;  # added 2014-12-06
   nginxUnstable = nginxMainline; # added 2018-04-25
   nilfs_utils = nilfs-utils; # added 2018-04-25
@@ -344,6 +346,7 @@ mapAliases ({
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   qtpfsgui = throw "Is now luminanceHDR"; # added 2019-06-26
+  rdf4store = throw "rdf4store has been removed from nixpkgs."; # added 2019-12-21
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
   rhc = throw "deprecated in 2019-04-09: abandoned by upstream.";

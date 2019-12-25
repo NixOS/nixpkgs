@@ -12,16 +12,16 @@ buildGoModule rec {
   pname = "gotify-server";
   # Note that when this is updated, along with the hash, the `ui.nix` file
   # should include the same changes to the version and the sha256.
-  version = "2.0.11";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "gotify";
     repo = "server";
     rev = "v${version}";
-    sha256 = "0zrylyaxy1cks1wlzyf0di8in2braj4pfriyqa24vipwrlnhvgs6";
+    sha256 = "0pkws83ymmlxcdxadb1w6rmibw84vzhx9xrhxc6b1rjncb80l0kk";
   };
 
-  modSha256 = "19mghbs1jasb7vxdw13mmwsbk5sfg3y2vvddr73c82lq0f8g2iha";
+  modSha256 = "1awhbc8qs2bwv6y2vwd92r4ys0l1bzymrb36iamr040x961682wv";
 
   postPatch = ''
     substituteInPlace app.go \

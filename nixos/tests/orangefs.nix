@@ -1,4 +1,4 @@
-import ./make-test.nix ({ ... } :
+import ./make-test-python.nix ({ ... } :
 
 let
   server = { pkgs, ... } : {
@@ -52,37 +52,31 @@ in {
 
   testScript = ''
     # format storage
-    foreach my $server  (($server1,$server2))
-    {
-      $server->start();
-      $server->waitForUnit("multi-user.target");
-      $server->succeed("mkdir -p /data/storage /data/meta");
-      $server->succeed("chown orangefs:orangefs /data/storage /data/meta");
-      $server->succeed("chmod 0770 /data/storage /data/meta");
-      $server->succeed("sudo -g orangefs -u orangefs pvfs2-server -f /etc/orangefs/server.conf");
-    }
+    for server in server1, server2:
+        server.start()
+        server.wait_for_unit("multi-user.target")
+        server.succeed("mkdir -p /data/storage /data/meta")
+        server.succeed("chown orangefs:orangefs /data/storage /data/meta")
+        server.succeed("chmod 0770 /data/storage /data/meta")
+        server.succeed(
+            "sudo -g orangefs -u orangefs pvfs2-server -f /etc/orangefs/server.conf"
+        )
 
     # start services after storage is formated on all machines
-    foreach my $server  (($server1,$server2))
-    {
-      $server->succeed("systemctl start orangefs-server.service");
-    }
+    for server in server1, server2:
+        server.succeed("systemctl start orangefs-server.service")
 
-    # Check if clients can reach and mount the FS
-    foreach my $client  (($client1,$client2))
-    {
-      $client->start();
-      $client->waitForUnit("orangefs-client.service");
-      # Both servers need to be reachable
-      $client->succeed("pvfs2-check-server -h server1 -f orangefs -n tcp -p 3334");
-      $client->succeed("pvfs2-check-server -h server2 -f orangefs -n tcp -p 3334");
-      $client->waitForUnit("orangefs.mount");
+    with subtest("clients can reach and mount the FS"):
+        for client in client1, client2:
+            client.start()
+            client.wait_for_unit("orangefs-client.service")
+            # Both servers need to be reachable
+            client.succeed("pvfs2-check-server -h server1 -f orangefs -n tcp -p 3334")
+            client.succeed("pvfs2-check-server -h server2 -f orangefs -n tcp -p 3334")
+            client.wait_for_unit("orangefs.mount")
 
-    }
-
-    # R/W test between clients
-    $client1->succeed("echo test > /orangefs/file1");
-    $client2->succeed("grep test /orangefs/file1");
-
+    with subtest("R/W test between clients"):
+        client1.succeed("echo test > /orangefs/file1")
+        client2.succeed("grep test /orangefs/file1")
   '';
 })

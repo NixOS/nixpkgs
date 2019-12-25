@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bundlerEnv, ruby }:
 
 let
-  version = "4.0.5";
+  version = "4.1.0";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -16,7 +16,7 @@ in
 
     src = fetchurl {
       url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
-      sha256 = "1s39qd3j27ryn3p01501iavbkyvikdxl3165nk8i8pgxcxlbxsk4";
+      sha256 = "1fxc0xql54cfvj4g8v31vsv19jbij326qkgdz2h5xlp09r821wli";
     };
 
     buildInputs = [ rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler ];

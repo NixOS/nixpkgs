@@ -16,7 +16,11 @@ let
 
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
 
+    buildDune2Package = buildDunePackage.override { dune = dune_2; };
+
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
+
+    alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix {};
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
@@ -237,6 +241,12 @@ let
 
     dune = callPackage ../development/tools/ocaml/dune { };
 
+    dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
+
+    dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { buildDunePackage = buildDune2Package; };
+
+    dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { buildDunePackage = buildDune2Package; };
+
     earley = callPackage ../development/ocaml-modules/earley { };
 
     earlybird = callPackage ../development/ocaml-modules/earlybird { };
@@ -326,6 +336,8 @@ let
       then callPackage ../development/ocaml-modules/ipaddr { }
       else ipaddr_p4;
 
+    irmin_1 = callPackage ../development/ocaml-modules/irmin/1.4.nix { };
+
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 
     iter = callPackage ../development/ocaml-modules/iter { };
@@ -362,9 +374,31 @@ let
 
     httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
+    index = callPackage ../development/ocaml-modules/index { };
+
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
     iri = callPackage ../development/ocaml-modules/iri { };
+
+    irmin = callPackage ../development/ocaml-modules/irmin { };
+
+    irmin-fs = callPackage ../development/ocaml-modules/irmin/fs.nix { };
+
+    irmin-git = callPackage ../development/ocaml-modules/irmin/git.nix { };
+
+    irmin-graphql = callPackage ../development/ocaml-modules/irmin/graphql.nix { };
+
+    irmin-http = callPackage ../development/ocaml-modules/irmin/http.nix { };
+
+    irmin-mem = callPackage ../development/ocaml-modules/irmin/mem.nix { };
+
+    irmin-pack = callPackage ../development/ocaml-modules/irmin/pack.nix { };
+
+    irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { };
+
+    irmin-unix = callPackage ../development/ocaml-modules/irmin/unix.nix { };
+
+    irmin-watcher = callPackage ../development/ocaml-modules/irmin-watcher { };
 
     jingoo = callPackage ../development/ocaml-modules/jingoo {
       pcre = ocaml_pcre;
@@ -730,6 +764,8 @@ let
 
     pa_test = callPackage ../development/ocaml-modules/pa_test { };
 
+    parany = callPackage ../development/ocaml-modules/parany { };
+
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
@@ -796,6 +832,8 @@ let
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
+
+    setcore = callPackage ../development/ocaml-modules/setcore { };
 
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
@@ -870,6 +908,8 @@ let
     xml-light = callPackage ../development/ocaml-modules/xml-light { };
 
     xtmpl = callPackage ../development/ocaml-modules/xtmpl { };
+
+    yaml = callPackage ../development/ocaml-modules/yaml { };
 
     yojson = callPackage ../development/ocaml-modules/yojson { };
 

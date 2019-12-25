@@ -11,32 +11,15 @@ let
     else if isx86_64 then "x86_64"
     else throw "no seccomp policy files available for host platform";
 
-  # used to turn symlinks into real files because write permissions are necessary for the vendoring process
-  delink = src: runCommand "${src.name}-delinked" {
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-  } ''
-    cp -prL --reflink=auto ${src} $out
-  '';
+  crosvmSrc = fetchgit {
+    inherit (upstreamInfo.components."chromiumos/platform/crosvm")
+      url rev sha256 fetchSubmodules;
+  };
 
-  # used to place subtrees into the location they have in the Chromium monorepo
-  move = src: target: runCommand "moved-${src.name}" {
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-  } ''
-    mkdir -p $(dirname $out/${target})
-    ln -s ${src} $out/${target}
-  '';
-
-  # used to check out subtrees from the Chromium monorepo
-  chromiumSource = name: subtrees: delink (symlinkJoin {
-    inherit name;
-    paths = stdenv.lib.mapAttrsToList (
-      location: { url, rev, sha256, fetchSubmodules, ... }:
-      move (fetchgit {
-        inherit url rev sha256 fetchSubmodules;
-      }) location) subtrees;
-  });
+  adhdSrc = fetchgit {
+    inherit (upstreamInfo.components."chromiumos/third_party/adhd")
+      url rev sha256 fetchSubmodules;
+  };
 
 in
 
@@ -44,15 +27,33 @@ in
     pname = "crosvm";
     inherit (upstreamInfo) version;
 
-    src = chromiumSource "${pname}-sources" upstreamInfo.components;
+    unpackPhase = ''
+      runHook preUnpack
 
-    sourceRoot = "${src.name}/chromiumos/platform/crosvm";
+      mkdir -p chromiumos/platform chromiumos/third_party
+
+      pushd chromiumos/platform
+      unpackFile ${crosvmSrc}
+      mv ${crosvmSrc.name} crosvm
+      popd
+
+      pushd chromiumos/third_party
+      unpackFile ${adhdSrc}
+      mv ${adhdSrc.name} adhd
+      popd
+
+      chmod -R u+w -- "$sourceRoot"
+
+      runHook postUnpack
+    '';
+
+    sourceRoot = "chromiumos/platform/crosvm";
 
     patches = [
-      ./default-seccomp-policy-dir.patch
+      ./default-seccomp-policy-dir.diff
     ];
 
-    cargoSha256 = "16cfp79c13ng5jjcrvz00h3cg7cc9ywhjiq02vsm757knn9jgr1v";
+    cargoSha256 = "1d7y07wkliy5qnlyx5zj6ni39avhs3s48sqgvwxm5g5zrahg2a85";
 
     nativeBuildInputs = [ pkgconfig ];
 
@@ -72,11 +73,16 @@ in
       cp seccomp/${arch}/* $out/share/policy/
     '';
 
-    passthru.updateScript = ./update.py;
+    passthru = {
+      inherit adhdSrc;
+      src = crosvmSrc;
+      updateScript = ./update.py;
+    };
 
     meta = with stdenv.lib; {
       description = "A secure virtual machine monitor for KVM";
       homepage = "https://chromium.googlesource.com/chromiumos/platform/crosvm/";
+      maintainers = with maintainers; [ qyliss ];
       license = licenses.bsd3;
       platforms = [ "aarch64-linux" "x86_64-linux" ];
     };

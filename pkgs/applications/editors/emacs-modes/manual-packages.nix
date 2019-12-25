@@ -117,6 +117,8 @@
 
   structured-haskell-mode = self.shm;
 
+  sv-kalender = callPackage ./sv-kalender { };
+
   thingatpt-plus = callPackage ./thingatpt-plus { };
 
   tramp = callPackage ./tramp { };

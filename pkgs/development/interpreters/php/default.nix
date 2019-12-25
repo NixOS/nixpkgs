@@ -263,23 +263,23 @@ let
 
 in {
   php72 = generic {
-    version = "7.2.25";
-    sha256 = "17kb7b3wpdmdhnlv23qc0vax0lp2gr1v7dxwdgs8g78gxnqkdcvw";
+    version = "7.2.26";
+    sha256 = "0yw49v3rk3cd0fb4gsli74pgd4qrykhn9c37dyfr3zsprzp8cvgk";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.12";
-    sha256 = "0fccmnrwwyy5zvhj8wbyqqlyqr7pr5v4pfiqriw0ahciz4lv05yk";
+    version = "7.3.13";
+    sha256 = "1g376b9caw21mw8738z354llbzb3shzgc60m7naw7wql5038jysw";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   };
 
   php74 = generic {
-    version = "7.4.0";
-    sha256 = "1h01bahvcm9kgm5jqhm2j9k9d4q4rpfkkpqk00c47rirdblnn85z";
+    version = "7.4.1";
+    sha256 = "0klfwhm2935ariwzqdri1fwh4a0vbrk3jis53qzi18isp3qa073b";
   };
 }

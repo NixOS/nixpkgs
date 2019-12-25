@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quilter";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "13l8z3bchha4ax14s48pcqdxh8gnj4mlvv06lk9dwk9fplc93821";
+    sha256 = "1vbckx4c2bklzxpqz332sjcyrx1xl1j0cp8778fvpl7x7mlnz460";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Focus on your writing - designed for elementary OS";

@@ -33,6 +33,12 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "A simple app for checking usual checksums - Designed for elementary OS";
     homepage = https://github.com/artemanufrij/hashit;

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "scc";
-  version = "2.8.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "boyter";
@@ -17,9 +17,9 @@ buildGoPackage rec {
   subPackages = [ "./" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/boyter/scc;
+    homepage = "https://github.com/boyter/scc";
     description = "A very fast accurate code counter with complexity calculations and COCOMO estimates written in pure Go";
-    maintainers = with maintainers; [ sigma ];
+    maintainers = with maintainers; [ sigma filalex77 ];
     license = with licenses; [ unlicense /* or */ mit ];
     platforms = platforms.unix;
   };

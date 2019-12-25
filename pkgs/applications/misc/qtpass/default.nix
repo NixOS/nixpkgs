@@ -1,5 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub
 , git, gnupg, pass, pwgen, qrencode
+, fetchpatch
 , qtbase, qtsvg, qttools, qmake
 }:
 
@@ -24,6 +25,16 @@ mkDerivation rec {
   nativeBuildInputs = [ qmake qttools ];
 
   enableParallelBuilding = true;
+
+  patches = [
+    # Fix path to pass-otp plugin `/usr/lib/password-store/extensions/otp.bash` being hardcoded.
+    # TODO: Remove when https://github.com/IJHack/QtPass/pull/499 is merged and available.
+    (fetchpatch {
+      name = "qtpass-Dont-hardcode-pass-otp-usr-lib-path.patch";
+      url = "https://github.com/IJHack/QtPass/commit/2ca9f0ec5a8d709c97a2433c5cd814040c82d4f3.patch";
+      sha256 = "0ljlvqxvarrz2a4j71i66aflrxi84zirb6cg9kvygnvhvm1zbc7d";
+    })
+  ];
 
   qmakeFlags = [
     # setup hook only sets QMAKE_LRELEASE, set QMAKE_LUPDATE too:

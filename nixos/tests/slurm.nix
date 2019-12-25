@@ -119,7 +119,7 @@ in {
 
   with subtest("can_start_slurmctld"):
       control.succeed("systemctl restart slurmctld")
-      control.waitForUnit("slurmctld.service")
+      control.wait_for_unit("slurmctld.service")
 
   with subtest("can_start_slurmd"):
       for node in [node1, node2, node3]:

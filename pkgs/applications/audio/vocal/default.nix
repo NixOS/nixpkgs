@@ -58,6 +58,13 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
+
   meta = with stdenv.lib; {
     description = "The podcast client for the modern free desktop";
     longDescription = ''
