@@ -129,5 +129,13 @@ in rec {
     gcc = gcc7;
   };
 
-  cudatoolkit_10 = cudatoolkit_10_1;
+  cudatoolkit_10_2 = common {
+    version = "10.2.89";
+    url = "http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_440.33.01_linux.run";
+    sha256 = "04fasl9sjkb1jvchvqgaqxprnprcz7a8r52249zp2ijarzyhf3an";
+
+    gcc = gcc7;
+  };
+
+  cudatoolkit_10 = cudatoolkit_10_2;
 }
