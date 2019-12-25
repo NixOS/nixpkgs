@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$PWD/lib
   '';
 
   meta = with stdenv.lib; {
