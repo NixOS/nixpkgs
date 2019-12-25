@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, lib
-, intltool, glib, pkgconfig, polkit, python, sqlite
+, intltool, glib, pkgconfig, polkit, python3, sqlite
 , gobject-introspection, vala, gtk-doc, autoreconfHook, autoconf-archive
 # TODO: set enableNixBackend to true, as soon as it builds
 , nix, enableNixBackend ? false, boost
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "02wq3jw3mkdld90irh5vdfd5bri2g1p89mhrmj56kvif1fqak46x";
   };
 
-  buildInputs = [ glib polkit python gobject-introspection ]
+  buildInputs = [ glib polkit python3 gobject-introspection ]
                   ++ lib.optional enableSystemd systemd
                   ++ lib.optional enableBashCompletion bash-completion;
   propagatedBuildInputs = [ sqlite nix boost ];
