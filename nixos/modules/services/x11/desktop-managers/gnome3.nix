@@ -52,6 +52,7 @@ let
     '';
 
   flashbackEnabled = cfg.flashback.enableMetacity || length cfg.flashback.customSessions > 0;
+  flashbackPkg = if cfg.flashback.useXscreensaver then pkgs.gnome3.gnome-flashback-xscreensaver else pkgs.gnome3.gnome-flashback;
 
 in
 
@@ -126,6 +127,8 @@ in
           default = [];
           description = "Other GNOME Flashback sessions to enable.";
         };
+
+        useXscreensaver = mkEnableOption "Use xscreensaver instead of the deprecated gnome-screensaver.";
       };
     };
 
@@ -172,17 +175,14 @@ in
 
     (mkIf flashbackEnabled {
       services.xserver.displayManager.sessionPackages =  map
-        (wm: pkgs.gnome3.gnome-flashback.mkSessionForWm {
+        (wm: flashbackPkg.mkSessionForWm {
           inherit (wm) wmName wmLabel wmCommand;
+          withScreenSaverProxy = !cfg.flashback.useXscreensaver;
         }) (optional cfg.flashback.enableMetacity {
               wmName = "metacity";
               wmLabel = "Metacity";
               wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
             } ++ cfg.flashback.customSessions);
-
-      security.pam.services.gnome-screensaver = {
-        enableGnomeKeyring = true;
-      };
 
       systemd.packages = with pkgs.gnome3; [
         gnome-flashback
@@ -190,9 +190,22 @@ in
         (wm: gnome-flashback.mkSystemdTargetForWm {
           inherit (wm) wmName;
         }) cfg.flashback.customSessions);
+    })
+
+    (mkIf (flashbackEnabled && !cfg.flashback.useXscreensaver) {
+      security.pam.services.gnome-screensaver = {
+        enableGnomeKeyring = true;
+      };
+
 
       services.dbus.packages = [
         pkgs.gnome3.gnome-screensaver
+      ];
+    })
+
+    (mkIf (flashbackEnabled && cfg.flashback.useXscreensaver) {
+      services.dbus.packages = [
+        pkgs.gnome3.gnome-screensaver-xscreensaver
       ];
     })
 

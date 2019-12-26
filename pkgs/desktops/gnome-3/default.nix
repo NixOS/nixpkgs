@@ -267,11 +267,15 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-applets = callPackage ./misc/gnome-applets { };
 
-  gnome-flashback = callPackage ./misc/gnome-flashback { };
-
   gnome-panel = callPackage ./misc/gnome-panel { };
 
   gnome-screensaver = callPackage ./misc/gnome-screensaver { };
+  gnome-screensaver-xscreensaver = pkgs.python3Packages.callPackage ./misc/gnome-screensaver/gnome-xscreensaver { };
+
+  gnome-flashback = callPackage ./misc/gnome-flashback { };
+  gnome-flashback-xscreensaver = callPackage ./misc/gnome-flashback {
+    gnome-screensaver = gnome-screensaver-xscreensaver;
+  };
 
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 

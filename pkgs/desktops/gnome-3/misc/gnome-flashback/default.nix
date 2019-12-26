@@ -23,12 +23,14 @@
 , writeShellScriptBin
 , xkeyboard_config
 , runCommand
+, networkmanagerapplet
+, gnome-screensaver
 }:
 
 let
   pname = "gnome-flashback";
   version = "3.34.2";
-  requiredComponents = wmName: "RequiredComponents=${wmName};gnome-flashback;gnome-panel;org.gnome.SettingsDaemon.A11ySettings;org.gnome.SettingsDaemon.Color;org.gnome.SettingsDaemon.Datetime;org.gnome.SettingsDaemon.Housekeeping;org.gnome.SettingsDaemon.Keyboard;org.gnome.SettingsDaemon.MediaKeys;org.gnome.SettingsDaemon.Power;org.gnome.SettingsDaemon.PrintNotifications;org.gnome.SettingsDaemon.Rfkill;org.gnome.SettingsDaemon.ScreensaverProxy;org.gnome.SettingsDaemon.Sharing;org.gnome.SettingsDaemon.Smartcard;org.gnome.SettingsDaemon.Sound;org.gnome.SettingsDaemon.Wacom;org.gnome.SettingsDaemon.XSettings;";
+  requiredComponents = wmName: withScreenSaverProxy: "RequiredComponents=${wmName};gnome-flashback;gnome-panel;org.gnome.SettingsDaemon.A11ySettings;org.gnome.SettingsDaemon.Color;org.gnome.SettingsDaemon.Datetime;org.gnome.SettingsDaemon.Housekeeping;org.gnome.SettingsDaemon.Keyboard;org.gnome.SettingsDaemon.MediaKeys;org.gnome.SettingsDaemon.Power;org.gnome.SettingsDaemon.PrintNotifications;org.gnome.SettingsDaemon.Rfkill${stdenv.lib.optionalString withScreenSaverProxy ";org.gnome.SettingsDaemon.ScreensaverProxy"};org.gnome.SettingsDaemon.Sharing;org.gnome.SettingsDaemon.Smartcard;org.gnome.SettingsDaemon.Sound;org.gnome.SettingsDaemon.Wacom;org.gnome.SettingsDaemon.XSettings;";
   gnome-flashback = stdenv.mkDerivation rec {
     name = "${pname}-${version}";
 
@@ -44,13 +46,21 @@ let
       @@ -4 +4 @@
       -Exec=gnome-flashback
       +Exec=$out/bin/gnome-flashback
+      +++ data/autostart/gnome-flashback-nm-applet.desktop.in
+      @@ -6 +6 @@ Icon=nm-device-wireless
+      -Exec=nm-applet
+      +Exec=${networkmanagerapplet}/bin/nm-applet
+      +++ data/autostart/gnome-flashback-screensaver.desktop.in
+      @@ -7 +7 @@ Icon=preferences-desktop-screensaver
+      -Exec=gnome-screensaver
+      +Exec=${gnome-screensaver}/bin/gnome-screensaver
       END_PATCH
     '';
 
     postInstall = ''
       # Check that our expected RequiredComponents match the stock session files, but then don't install them.
       # They can be installed using mkSessionForWm.
-      grep '${requiredComponents "metacity"}' $out/share/gnome-session/sessions/gnome-flashback-metacity.session || (echo "RequiredComponents have changed, please update gnome-flashback/default.nix."; false)
+      grep '${requiredComponents "metacity" true}' $out/share/gnome-session/sessions/gnome-flashback-metacity.session || (echo "RequiredComponents have changed, please update gnome-flashback/default.nix."; false)
 
       rm -r $out/share/gnome-session
       rm -r $out/share/xsessions
@@ -90,7 +100,7 @@ let
         attrPath = "gnome3.${pname}";
       };
 
-      mkSessionForWm = { wmName, wmLabel, wmCommand }:
+      mkSessionForWm = { wmName, wmLabel, wmCommand, withScreenSaverProxy }:
         let
           wmApplication = writeTextFile {
             name = "gnome-flashback-${wmName}-wm";
@@ -115,7 +125,7 @@ let
           text = ''
             [GNOME Session]
             Name=GNOME Flashback (${wmLabel})
-            ${requiredComponents wmName}
+            ${requiredComponents wmName withScreenSaverProxy}
           '';
         };
 
