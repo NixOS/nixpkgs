@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper
+{ stdenv, lib, fetchurl
 , autoreconfHook, pkgconfig, libxkbcommon, pango, which, git
 , cairo, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
 , bison, flex, librsvg, check
@@ -19,15 +19,10 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libxkbcommon pango cairo git bison flex librsvg check
     libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/rofi-theme-selector \
-      --prefix XDG_DATA_DIRS : $out/share
-  '';
 
   doCheck = false;
 
