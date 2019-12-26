@@ -150,7 +150,7 @@ let
           with on-the-fly code analysis, error prevention and
           automated refactorings for PHP and JavaScript code.
         '';
-        maintainers = with maintainers; [ schristo ];
+        maintainers = with maintainers; [ schristo ma27 ];
         platforms = platforms.linux;
       };
     });
