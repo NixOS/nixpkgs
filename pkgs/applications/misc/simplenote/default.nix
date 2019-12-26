@@ -87,6 +87,7 @@ let
 
     postFixup = ''
       makeWrapper $out/opt/Simplenote/simplenote $out/bin/simplenote \
+        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] }" \
         "''${gappsWrapperArgs[@]}"
     '';
   };
