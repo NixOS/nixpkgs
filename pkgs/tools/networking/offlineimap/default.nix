@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, python2Packages,
-  asciidoc, cacert, libxml2, libxslt, docbook_xsl, enableProxy ? false }:
+  asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
 
 python2Packages.buildPythonApplication rec {
   version = "7.3.0";
@@ -23,10 +23,7 @@ python2Packages.buildPythonApplication rec {
   doCheck = false;
 
   nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xsl ];
-  propagatedBuildInputs = with python2Packages; [ six kerberos rfc6555 ]
-                                             ++ (if enableProxy
-                                                   then [ pysocks ]
-                                                   else [  ]);
+  propagatedBuildInputs = with python2Packages; [ six kerberos rfc6555 pysocks ];
 
   postInstall = ''
     make -C docs man
