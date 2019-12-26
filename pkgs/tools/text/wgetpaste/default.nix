@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Command-line interface to various pastebins";
     homepage = http://wgetpaste.zlin.dk/;
     license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [ qknight domenkozar ndowens ];
+    maintainers = with stdenv.lib.maintainers; [ qknight domenkozar ];
     platforms = stdenv.lib.platforms.all;
   };
 }

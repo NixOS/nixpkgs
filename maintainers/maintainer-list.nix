@@ -4903,12 +4903,6 @@
     githubId = 364510;
     name = "Tobias Geerinckx-Rice";
   };
-  ndowens = {
-    email = "ndowens04@gmail.com";
-    github = "ndowens";
-    githubId = 117743;
-    name = "Nathan Owens";
-  };
   neeasade = {
     email = "nathanisom27@gmail.com";
     github = "neeasade";
