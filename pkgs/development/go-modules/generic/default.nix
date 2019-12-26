@@ -84,10 +84,16 @@ let
     '';
 
     dontFixup = true;
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = modSha256;
-  }; in modArgs // overrideModAttrs modArgs);
+  }; in modArgs // (
+    if modSha256 == null then
+      { __noChroot = true; }
+    else
+      {
+        outputHashMode = "recursive";
+        outputHashAlgo = "sha256";
+        outputHash = modSha256;
+      }
+  ) // overrideModAttrs modArgs);
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
