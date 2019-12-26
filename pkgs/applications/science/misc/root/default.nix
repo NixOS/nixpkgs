@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, cmake, gl2ps, gsl, libX11, libXpm, libXft, libXext
-, libGLU, libGL, libxml2, lz4, lzma, pcre, pkgconfig, python, xxHash, zlib
+{ stdenv, fetchurl, makeWrapper, cmake, gl2ps, gsl, libX11, libXpm, libXft
+, libXext, libGLU, libGL, libxml2, lz4, lzma, pcre, pkgconfig, python, xxHash
+, zlib
 , Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "196ghma6g5a7sqz52wyjkgvmh4hj4vqwppm0zwdypy33hgy8anii";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ makeWrapper cmake pkgconfig ];
   buildInputs = [ gl2ps pcre python zlib libxml2 lz4 lzma gsl xxHash ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
@@ -72,6 +73,13 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional stdenv.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
+      wrapProgram "$out/bin/$prog" \
+        --prefix PYTHONPATH : "$out/lib"
+    done
+  '';
 
   setupHook = ./setup-hook.sh;
 
