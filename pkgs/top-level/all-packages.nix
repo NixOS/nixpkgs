@@ -11002,8 +11002,6 @@ in
 
   cointop = callPackage ../applications/misc/cointop { };
 
-  commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
-
   ctl = callPackage ../development/libraries/ctl { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
