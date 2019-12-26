@@ -73,11 +73,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
 
     def check_etag():
-        etag = webserver.succeed(f'curl -v {url} 2>&1 | sed -n -e "s/^< etag: *//ip"')
+        etag = webserver.succeed(
+            f'curl -v {url} 2>&1 | sed -n -e "s/^< etag: *//ip"'
+        ).rstrip()
         http_code = webserver.succeed(
-            f"curl -w '%{http_code}' -X HEAD -H 'If-None-Match: {etag}' {url}"
+            f"curl -w '%{{http_code}}' --head --fail -H 'If-None-Match: {etag}' {url}"
         )
-        assert http_code == "304"
+        assert http_code.split("\n")[-1] == "304"
 
         return etag
 
@@ -90,6 +92,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         webserver.succeed(
             "${etagSystem}/bin/switch-to-configuration test >&2"
         )
+        webserver.sleep(1)
         new_etag = check_etag()
         assert old_etag != new_etag
 
