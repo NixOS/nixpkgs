@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage rec {
   postFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/cargo-flamegraph \
       --suffix PATH ':' ${perf}/bin
+    wrapProgram $out/bin/flamegraph \
+      --suffix PATH ':' ${perf}/bin
   '';
 
   meta = with lib; {
