@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     sha256 = "01anczfcdwd22hb0y4zw647f86ivk5zq8lcd13xfxjvkmnsnbj9w";
   };
 
+  patches = [
+    # https://github.com/nginx/unit/issues/357
+    ./drop_cap.patch
+  ];
+
   nativeBuildInputs = [ which ];
 
   buildInputs = [ ]
