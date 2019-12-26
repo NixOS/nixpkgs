@@ -3803,6 +3803,8 @@ in
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   }).overrideAttrs(x: { configureFlags = x.configureFlags ++ ["--with-cgraph=no"];});
 
+  grex = callPackage ../tools/text/grex { };
+
   grin = callPackage ../tools/text/grin { };
 
   ripgrep = callPackage ../tools/text/ripgrep {
