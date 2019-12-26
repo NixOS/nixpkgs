@@ -8,14 +8,19 @@ let
 
   homeDir = cfg.home;
   downloadDirPermissions = cfg.downloadDirPermissions;
-  downloadDir = "${homeDir}/Downloads";
-  incompleteDir = "${homeDir}/.incomplete";
+  homeDirPermissions = cfg.homeDirPermissions;
+  defaultDownloadDir = "${homeDir}/Downloads";
+  defaultIncompleteDir = "${homeDir}/.incomplete";
 
   settingsDir = "${homeDir}/.config/transmission-daemon";
   settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
   # for users in group "transmission" to have access to torrents
-  fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
+  fullSettings = {
+    umask = 2;
+    download-dir = defaultDownloadDir;
+    incomplete-dir = defaultIncompleteDir;
+  } // cfg.settings;
 
   preStart = pkgs.writeScript "transmission-pre-start" ''
     #!${pkgs.runtimeShell}
@@ -23,7 +28,8 @@ let
     for DIR in "${homeDir}" "${settingsDir}" "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"; do
       mkdir -p "$DIR"
     done
-    chmod 700 "${homeDir}" "${settingsDir}"
+    chmod 700 "${settingsDir}"
+    chmod ${homeDirPermissions} "${homeDir}"
     chmod ${downloadDirPermissions} "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"
     cp -f ${settingsFile} ${settingsDir}/settings.json
   '';
@@ -40,7 +46,7 @@ in
           Transmission daemon can be controlled via the RPC interface using
           transmission-remote or the WebUI (http://localhost:9091/ by default).
 
-          Torrents are downloaded to ${downloadDir} by default and are
+          Torrents are downloaded to ${defaultDownloadDir} by default and are
           accessible to users in the "transmission" group.
         '';
       };
@@ -49,8 +55,8 @@ in
         type = types.attrs;
         default =
           {
-            download-dir = downloadDir;
-            incomplete-dir = incompleteDir;
+            download-dir = defaultDownloadDir;
+            incomplete-dir = defaultIncompleteDir;
             incomplete-dir-enabled = true;
           };
         example =
@@ -76,6 +82,15 @@ in
         example = "775";
         description = ''
           The permissions to set for download-dir and incomplete-dir.
+          They will be applied on every service start.
+        '';
+      };
+      homeDirPermissions = mkOption {
+        type = types.str;
+        default = "770";
+        example = "775";
+        description = ''
+          The permissions to set for home directory.
           They will be applied on every service start.
         '';
       };
