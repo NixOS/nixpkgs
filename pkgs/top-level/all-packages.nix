@@ -3552,6 +3552,8 @@ in
 
   glogg = libsForQt5.callPackage ../tools/text/glogg { };
 
+  glow = callPackage ../tools/text/glow { };
+
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
   gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
