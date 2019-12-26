@@ -19179,6 +19179,8 @@ in
     inherit (darwin) IOKit;
   };
 
+  glow = callPackage ../applications/editors/glow { };
+
   glowing-bear = callPackage ../applications/networking/irc/glowing-bear { };
 
   gmtk = callPackage ../development/libraries/gmtk { };
