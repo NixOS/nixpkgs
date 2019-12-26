@@ -2598,6 +2598,8 @@ in {
   then callPackage ../development/python-modules/gurobipy/linux.nix {}
   else throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
 
+  hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
+
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
 
   hiro = callPackage ../development/python-modules/hiro {};
@@ -5187,6 +5189,8 @@ in {
   slimit = callPackage ../development/python-modules/slimit { };
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
+
+  snitun = callPackage ../development/python-modules/snitun { };
 
   snscrape = callPackage ../development/python-modules/snscrape { };
 
