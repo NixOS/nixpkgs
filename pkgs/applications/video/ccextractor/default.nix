@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkgconfig, cmake
-, glew, glfw3, leptonica, libiconv, tesseract3, zlib }:
+, glew, glfw3, zlib, libiconv
+, ocrSupport ? true, leptonica ? null, tesseract4 ? null }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -17,7 +18,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ glew glfw3 leptonica tesseract3 zlib ] ++ lib.optional (!stdenv.isLinux) libiconv;
+  cmakeFlags = [
+    "-DWITH_OCR=${if ocrSupport then "ON" else "OFF"}"
+  ];
+
+  buildInputs = [ glew glfw3 zlib ]
+    ++ lib.optionals ocrSupport [ leptonica tesseract4 ]
+    ++ lib.optional (!stdenv.isLinux) libiconv;
 
   meta = {
     homepage = "https://www.ccextractor.org";
@@ -29,6 +36,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ titanous ];
+    maintainers = with maintainers; [ nilsirl titanous ];
   };
 }
