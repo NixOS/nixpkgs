@@ -2704,6 +2704,12 @@ in {
 
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
+  fenics = callPackage ../development/libraries/science/math/fenics {
+    inherit (pkgs) pkg-config;
+    mpi = pkgs.openmpi;
+    pytest = self.pytest_4;
+  };
+
   filetype = callPackage ../development/python-modules/filetype { };
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
