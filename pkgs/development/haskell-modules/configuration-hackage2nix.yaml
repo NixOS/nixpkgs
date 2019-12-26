@@ -6438,6 +6438,7 @@ broken-packages:
   - ip2proxy
   - ipatch
   - ipc
+  - ipfs
   - ipld-cid
   - ipopt-hs
   - ipprint
@@ -6530,6 +6531,7 @@ broken-packages:
   - jmonkey
   - jni
   - jobqueue
+  - jobs-ui
   - join
   - join-api
   - joinlist
@@ -7247,6 +7249,8 @@ broken-packages:
   - mmsyn2
   - mmsyn4
   - mmsyn6ukr
+  - mmsyn7h
+  - mmsyn7ukr
   - mmtf
   - mmtl
   - mmtl-base
