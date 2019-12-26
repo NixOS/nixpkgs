@@ -64,7 +64,7 @@ let
       $wgScriptPath = "";
 
       ## The protocol and server name to use in fully-qualified URLs
-      $wgServer = "${if cfg.virtualHost.enableSSL then "https" else "http"}://${cfg.virtualHost.hostName}";
+      $wgServer = "${if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then "https" else "http"}://${cfg.virtualHost.hostName}";
 
       ## The URL path to static resources (images, scripts, etc.)
       $wgResourceBasePath = $wgScriptPath;
@@ -290,19 +290,13 @@ in
       };
 
       virtualHost = mkOption {
-        type = types.submodule ({
-          options = import ../web-servers/apache-httpd/per-server-options.nix {
-            inherit lib;
-            forMainServer = false;
-          };
-        });
+        type = types.submodule (import ../web-servers/apache-httpd/per-server-options.nix);
         example = literalExample ''
           {
             hostName = "mediawiki.example.org";
-            enableSSL = true;
             adminAddr = "webmaster@example.org";
-            sslServerCert = "/var/lib/acme/mediawiki.example.org/full.pem";
-            sslServerKey = "/var/lib/acme/mediawiki.example.org/key.pem";
+            forceSSL = true;
+            enableACME = true;
           }
         '';
         description = ''
@@ -389,31 +383,28 @@ in
 
     services.httpd = {
       enable = true;
-      adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = [ (mkMerge [
-        cfg.virtualHost {
-          documentRoot = mkForce "${pkg}/share/mediawiki";
-          extraConfig = ''
-            <Directory "${pkg}/share/mediawiki">
-              <FilesMatch "\.php$">
-                <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-                </If>
-              </FilesMatch>
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${pkg}/share/mediawiki";
+        extraConfig = ''
+          <Directory "${pkg}/share/mediawiki">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
 
-              Require all granted
-              DirectoryIndex index.php
-              AllowOverride All
-            </Directory>
-          '' + optionalString (cfg.uploadsDir != null) ''
-            Alias "/images" "${cfg.uploadsDir}"
-            <Directory "${cfg.uploadsDir}">
-              Require all granted
-            </Directory>
-          '';
-        }
-      ]) ];
+            Require all granted
+            DirectoryIndex index.php
+            AllowOverride All
+          </Directory>
+        '' + optionalString (cfg.uploadsDir != null) ''
+          Alias "/images" "${cfg.uploadsDir}"
+          <Directory "${cfg.uploadsDir}">
+            Require all granted
+          </Directory>
+        '';
+      } ];
     };
 
     systemd.tmpfiles.rules = [
