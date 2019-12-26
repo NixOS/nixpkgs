@@ -37,7 +37,9 @@ stdenv.mkDerivation rec {
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the
   # binaries can't find libdarktable.so, so change LD_LIBRARY_PATH in
-  # the wrappers:
+  # the wrappers.
+  # We also need to add a symlink to the shared dir containing the
+  # lensfun database:
   preFixup = let
     libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     libPathPrefix = "$out/lib/darktable" + stdenv.lib.optionalString stdenv.isLinux ":${ocl-icd}/lib";
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix ${libPathEnvVar} ":" "${libPathPrefix}"
     )
+    ln -s ${lensfun}/share/lensfun $out/share
   '';
 
   meta = with stdenv.lib; {
