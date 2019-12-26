@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "telegraf";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ mic92 ];
@@ -22,9 +22,9 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $machine->waitForUnit("telegraf.service");
-    $machine->waitUntilSucceeds("grep -q example /tmp/metrics.out");
+    machine.wait_for_unit("telegraf.service")
+    machine.wait_until_succeeds("grep -q example /tmp/metrics.out")
   '';
 })

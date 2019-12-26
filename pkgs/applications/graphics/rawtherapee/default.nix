@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.7";
-  name = "rawtherapee-" + version;
+  pname = "rawtherapee";
 
   src = fetchFromGitHub {
     owner = "Beep6581";
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];
 
   buildInputs = [
-    pixman libpthreadstubs gtkmm3 libXau libXdmcp librsvg
-    lcms2 libiptcdata libcanberra-gtk3 fftw expat pcre libsigcxx lensfun
+    pixman libpthreadstubs gtkmm3 libXau libXdmcp
+    lcms2 libiptcdata libcanberra-gtk3 fftw expat pcre libsigcxx lensfun librsvg
   ];
 
   cmakeFlags = [

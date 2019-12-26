@@ -9,13 +9,12 @@ let
 
   toDrv = data:
     buildGoPackage rec {
-      inherit (data) owner repo version sha256;
+      inherit (data) owner repo rev version sha256;
       name = "${repo}-${version}";
       goPackagePath = "github.com/${owner}/${repo}";
       subPackages = [ "." ];
       src = fetchFromGitHub {
-        inherit owner repo sha256;
-        rev = "v${version}";
+        inherit owner repo rev sha256;
       };
 
 

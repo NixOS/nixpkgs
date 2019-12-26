@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gotify-server";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ma27 ];
@@ -14,32 +14,32 @@ import ./make-test.nix ({ pkgs, lib, ...} : {
   };
 
   testScript = ''
-    startAll;
+    machine.start()
 
-    $machine->waitForUnit("gotify-server");
-    $machine->waitForOpenPort(3000);
+    machine.wait_for_unit("gotify-server.service")
+    machine.wait_for_open_port(3000)
 
-    my $token = $machine->succeed(
-      "curl --fail -sS -X POST localhost:3000/application -F name=nixos " .
-      '-H "Authorization: Basic $(echo -ne "admin:admin" | base64 --wrap 0)" ' .
-      '| jq .token | xargs echo -n'
-    );
+    token = machine.succeed(
+        "curl --fail -sS -X POST localhost:3000/application -F name=nixos "
+        + '-H "Authorization: Basic $(echo -ne "admin:admin" | base64 --wrap 0)" '
+        + "| jq .token | xargs echo -n"
+    )
 
-    my $usertoken = $machine->succeed(
-      "curl --fail -sS -X POST localhost:3000/client -F name=nixos " .
-      '-H "Authorization: Basic $(echo -ne "admin:admin" | base64 --wrap 0)" ' .
-      '| jq .token | xargs echo -n'
-    );
+    usertoken = machine.succeed(
+        "curl --fail -sS -X POST localhost:3000/client -F name=nixos "
+        + '-H "Authorization: Basic $(echo -ne "admin:admin" | base64 --wrap 0)" '
+        + "| jq .token | xargs echo -n"
+    )
 
-    $machine->succeed(
-      "curl --fail -sS -X POST 'localhost:3000/message?token=$token' -H 'Accept: application/json' " .
-      '-F title=Gotify -F message=Works'
-    );
+    machine.succeed(
+        f"curl --fail -sS -X POST 'localhost:3000/message?token={token}' -H 'Accept: application/json' "
+        + "-F title=Gotify -F message=Works"
+    )
 
-    my $title = $machine->succeed(
-      "curl --fail -sS 'localhost:3000/message?since=0&token=$usertoken' | jq '.messages|.[0]|.title' | xargs echo -n"
-    );
+    title = machine.succeed(
+        f"curl --fail -sS 'localhost:3000/message?since=0&token={usertoken}' | jq '.messages|.[0]|.title' | xargs echo -n"
+    )
 
-    $title eq "Gotify" or die "Wrong title ($title), expected 'Gotify'!";
+    assert title == "Gotify"
   '';
 })

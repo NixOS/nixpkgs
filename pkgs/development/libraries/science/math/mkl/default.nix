@@ -46,6 +46,7 @@ in stdenvNoCC.mkDerivation {
       tar xzvf $f
     done
   '' else ''
+    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
     rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
     rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
     rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm

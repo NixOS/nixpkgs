@@ -16,6 +16,10 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
+  ];
+
   options = {
 
     services.xserver.desktopManager.enlightenment.enable = mkOption {

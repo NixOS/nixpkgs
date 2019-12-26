@@ -138,6 +138,7 @@ let
       konquest = callPackage ./konquest.nix {};
       konqueror = callPackage ./konqueror.nix {};
       korganizer = callPackage ./korganizer.nix {};
+      kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};

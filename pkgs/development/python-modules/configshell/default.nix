@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "configshell";
-  version = "1.1.fb25";
+  version = "1.1.27";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo ="${pname}-fb";
     rev = "v${version}";
-    sha256 = "0zpr2n4105qqsklyfyr9lzl1rhxjcv0mnsl57hgk0m763w6na90h";
+    sha256 = "1nldzq3097xqgzd8qxv36ydvx6vj2crwanihz53k46is0myrwcnn";
   };
 
   propagatedBuildInputs = [ pyparsing six urwid ];

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "adwaita-icon-theme";
-  version = "3.34.0";
+  version = "3.34.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/adwaita-icon-theme/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zvwikj3a07i3g3rir4cc63b14822lrzzgprs1j2nmb3h8gykds0";
+    sha256 = "025rj1fskw1y448hiar4a9icyzpyr242nlh9xhsmyp8jb71dihp7";
   };
 
   # For convenience, we can specify adwaita-icon-theme only in packages

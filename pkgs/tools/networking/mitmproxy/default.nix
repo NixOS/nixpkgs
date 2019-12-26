@@ -52,10 +52,12 @@ buildPythonPackage rec {
 
   doCheck = (!stdenv.isDarwin);
 
+  # examples.complex.xss_scanner doesn't import correctly with pytest5
   checkPhase = ''
     export HOME=$(mktemp -d)
     export LC_CTYPE=en_US.UTF-8
-    pytest -k 'not test_find_unclaimed_URLs and not test_tcp'
+    pytest --ignore test/examples \
+      -k 'not test_find_unclaimed_URLs and not test_tcp'
   '';
 
   propagatedBuildInputs = [

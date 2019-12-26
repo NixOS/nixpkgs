@@ -27,11 +27,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "1.12.2";
+  version = "1.13.2";
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "10k8352s0z7yan6d4z2am80qd3bsaky4h89g72wl4xr3x067ahmw";
+    sha256 = "0x4yfvk8415p80h9an242n6q3b43mw6mnnczh95zd3j0zwdr6wrg";
   };
 
   patches = optional smimeSupport (fetchpatch {

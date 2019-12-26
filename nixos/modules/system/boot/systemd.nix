@@ -63,6 +63,7 @@ let
       "systemd-logind.service"
       "autovt@.service"
       "systemd-user-sessions.service"
+      "dbus-org.freedesktop.import1.service"
       "dbus-org.freedesktop.machine1.service"
       "user@.service"
       "user-runtime-dir@.service"
@@ -145,6 +146,7 @@ let
       "user.slice"
       "machine.slice"
       "machines.target"
+      "systemd-importd.service"
       "systemd-machined.service"
       "systemd-nspawn@.service"
 
@@ -406,7 +408,6 @@ let
 in
 
 {
-
   ###### interface
 
   options = {
@@ -1004,5 +1005,7 @@ in
     [ (mkRenamedOptionModule [ "boot" "systemd" "sockets" ] [ "systemd" "sockets" ])
       (mkRenamedOptionModule [ "boot" "systemd" "targets" ] [ "systemd" "targets" ])
       (mkRenamedOptionModule [ "boot" "systemd" "services" ] [ "systemd" "services" ])
+      (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
+      (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
     ];
 }

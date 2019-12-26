@@ -163,6 +163,15 @@
     };
   }
   {
+    goPackagePath = "github.com/golang/lint";
+    fetch = {
+      type = "git";
+      url = "https://github.com/golang/lint";
+      rev = "06c8688daad7";
+      sha256 = "0xi94dwvz50a66bq1hp9fyqkym5mcpdxdb1hrfvicldgjf37lc47";
+    };
+  }
+  {
     goPackagePath = "github.com/golang/mock";
     fetch = {
       type = "git";
@@ -250,6 +259,15 @@
       url = "https://github.com/kelseyhightower/envconfig";
       rev = "v1.3.0";
       sha256 = "1zcq480ig7wbg4378qcfxznp2gzqmk7x6rbxizflvg9v2f376vrw";
+    };
+  }
+  {
+    goPackagePath = "github.com/kisielk/gotool";
+    fetch = {
+      type = "git";
+      url = "https://github.com/kisielk/gotool";
+      rev = "v1.0.0";
+      sha256 = "14af2pa0ssyp8bp2mvdw184s5wcysk6akil3wzxmr05wwy951iwn";
     };
   }
   {

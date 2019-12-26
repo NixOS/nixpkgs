@@ -127,6 +127,9 @@ in
       "https://acme-staging-v02.api.letsencrypt.org/directory".
     ''
     )
+    (mkRemovedOptionModule [ "security" "acme" "directory"] "ACME Directory is now hardcoded to /var/lib/acme and its permisisons are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
+    (mkRemovedOptionModule [ "security" "acme" "preDelay"] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
+    (mkRemovedOptionModule [ "security" "acme" "activationDelay"] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
   ];
   options = {
     security.acme = {
@@ -224,6 +227,12 @@ in
                   environment.REQUESTS_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
                   serviceConfig = {
                     Type = "oneshot";
+                    # With RemainAfterExit the service is considered active even
+                    # after the main process having exited, which means when it
+                    # gets changed, the activation phase restarts it, meaning
+                    # the permissions of the StateDirectory get adjusted
+                    # according to the specified group
+                    RemainAfterExit = true;
                     SuccessExitStatus = [ "0" "1" ];
                     User = data.user;
                     Group = data.group;
@@ -232,9 +241,9 @@ in
                     StateDirectoryMode = rights;
                     WorkingDirectory = "/var/lib/${lpath}";
                     ExecStart = "${pkgs.simp_le}/bin/simp_le ${escapeShellArgs cmdline}";
-                    ExecStopPost =
+                    ExecStartPost =
                       let
-                        script = pkgs.writeScript "acme-post-stop" ''
+                        script = pkgs.writeScript "acme-post-start" ''
                           #!${pkgs.runtimeShell} -e
                           ${data.postRun}
                         '';

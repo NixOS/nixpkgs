@@ -18,7 +18,7 @@ pipInstallPhase() {
     echo "Finished executing pipInstallPhase"
 }
 
-if [ -z "$dontUsePipInstall" ] && [ -z "$installPhase" ]; then
+if [ -z "${dontUsePipInstall-}" ] && [ -z "${installPhase-}" ]; then
     echo "Using pipInstallPhase"
     installPhase=pipInstallPhase
 fi

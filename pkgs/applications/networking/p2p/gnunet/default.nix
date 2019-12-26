@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.11.6";
+  version = "0.11.8";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "1gspr1lh885sb9r2anh7bi4zan3zjqx33lpyhq9hm2g0n5ip187q";
+    sha256 = "1zkmcq75sfr3iyg8rgxp9dbl7fwsvc1a71rc0vgisghcbrx1n7yj";
   };
 
   enableParallelBuilding = true;
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = https://gnunet.org/;
-    license = licenses.gpl2Plus;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.gnu ++ platforms.linux;
   };

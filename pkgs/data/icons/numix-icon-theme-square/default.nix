@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    for panel in $out/share/icons/*/*/panel; do
+      ln -sf $(realpath ${numix-icon-theme}/share/icons/Numix/16/$(readlink $panel)) $panel
+    done
+
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done

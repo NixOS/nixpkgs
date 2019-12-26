@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
-, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU_combined, alsaLib, freetype
+, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsaLib, freetype
 , perl, pkgconfig , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
 , libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
 , libXNVCtrl, enableXnvctrl ? false
@@ -26,7 +26,7 @@ mkDerivation rec {
   setSourceRoot = ''sourceRoot=$(echo */mythtv)'';
 
   buildInputs = [
-    freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU_combined
+    freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU libGL
     perl libsamplerate libbluray lzo alsaLib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
     libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2
   ] ++ stdenv.lib.optional enableXnvctrl libXNVCtrl;

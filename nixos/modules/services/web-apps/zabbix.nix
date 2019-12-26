@@ -113,19 +113,15 @@ in
       };
 
       virtualHost = mkOption {
-        type = types.submodule ({
-          options = import ../web-servers/apache-httpd/per-server-options.nix {
-            inherit lib;
-            forMainServer = false;
-          };
-        });
-        example = {
-          hostName = "zabbix.example.org";
-          enableSSL = true;
-          adminAddr = "webmaster@example.org";
-          sslServerCert = "/var/lib/acme/zabbix.example.org/full.pem";
-          sslServerKey = "/var/lib/acme/zabbix.example.org/key.pem";
-        };
+        type = types.submodule (import ../web-servers/apache-httpd/per-server-options.nix);
+        example = literalExample ''
+          {
+            hostName = "zabbix.example.org";
+            adminAddr = "webmaster@example.org";
+            forceSSL = true;
+            enableACME = true;
+          }
+        '';
         description = ''
           Apache configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
           See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
@@ -190,23 +186,21 @@ in
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = [ (mkMerge [
-        cfg.virtualHost {
-          documentRoot = mkForce "${cfg.package}/share/zabbix";
-          extraConfig = ''
-            <Directory "${cfg.package}/share/zabbix">
-              <FilesMatch "\.php$">
-                <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-                </If>
-              </FilesMatch>
-              AllowOverride all
-              Options -Indexes
-              DirectoryIndex index.php
-            </Directory>
-          '';
-        }
-      ]) ];
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${cfg.package}/share/zabbix";
+        extraConfig = ''
+          <Directory "${cfg.package}/share/zabbix">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
+            AllowOverride all
+            Options -Indexes
+            DirectoryIndex index.php
+          </Directory>
+        '';
+      } ];
     };
 
     users.users.${user} = mapAttrs (name: mkDefault) {

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, plib, freeglut, xorgproto, libX11, libXext, libXi
-, libICE, libSM, libXt, libXmu, libGLU_combined, boost, zlib, libjpeg, freealut
+, libICE, libSM, libXt, libXmu, libGLU, libGL, boost, zlib, libjpeg, freealut
 , openscenegraph, openal, expat, cmake, apr
 , curl
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ plib freeglut xorgproto libX11 libXext libXi
-                  libICE libSM libXt libXmu libGLU_combined boost zlib libjpeg freealut
+                  libICE libSM libXt libXmu libGLU libGL boost zlib libjpeg freealut
                   openscenegraph openal expat apr curl ];
 
   enableParallelBuilding = true;

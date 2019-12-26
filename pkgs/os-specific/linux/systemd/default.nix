@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
-, xz, pam, acl, libuuid, m4, utillinux, libffi
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap
+, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -15,8 +15,22 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-stdenv.mkDerivation {
-  version = "243";
+let gnupg-minimal = gnupg.override {
+  enableMinimal = true;
+  guiSupport = false;
+  pcsclite = null;
+  sqlite = null;
+  pinentry = null;
+  adns = null;
+  gnutls = null;
+  libusb = null;
+  openldap = null;
+  readline = null;
+  zlib = null;
+  bzip2 = null;
+};
+in stdenv.mkDerivation {
+  version = "243.3";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -24,8 +38,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "d25cf413c6bff1b5a9d216a8830e3a90c9cad1de";
-    sha256 = "0ilvrnh3m7g0yflxl16fk52gkb1z0fwwk9ba5gs4005nzpl0c7i0";
+    rev = "491a247eff9b7ce1e5877f5f3431517c95f3222f";
+    sha256 = "1xqiahapg480m165glrwqbfmc1fxw5sacdlm933cwyi1q8x4537g";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -41,7 +55,7 @@ stdenv.mkDerivation {
       (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
     ];
   buildInputs =
-    [ linuxHeaders libcap kmod xz pam acl
+    [ linuxHeaders libcap curl.dev kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
       libmicrohttpd pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
@@ -67,6 +81,7 @@ stdenv.mkDerivation {
     "-Ddebug-shell=${bashInteractive}/bin/bash"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
+    "-Dimportd=true"
     "-Dlz4=true"
     "-Dhostnamed=true"
     "-Dnetworkd=true"
@@ -77,7 +92,7 @@ stdenv.mkDerivation {
     "-Dlocaled=true"
     "-Dresolve=true"
     "-Dsplit-usr=false"
-    "-Dlibcurl=false"
+    "-Dlibcurl=true"
     "-Dlibidn=false"
     "-Dlibidn2=true"
     "-Dquotacheck=false"
@@ -142,6 +157,14 @@ stdenv.mkDerivation {
 
     for dir in tools src/resolve test src/test; do
       patchShebangs $dir
+    done
+
+    # absolute paths to gpg & tar
+    substituteInPlace src/import/pull-common.c \
+      --replace '"gpg"' '"${gnupg-minimal}/bin/gpg"'
+    for file in src/import/{{export,import,pull}-tar,import-common}.c; do
+      substituteInPlace $file \
+        --replace '"tar"' '"${gnutar}/bin/tar"'
     done
 
     substituteInPlace src/journal/catalog.c \

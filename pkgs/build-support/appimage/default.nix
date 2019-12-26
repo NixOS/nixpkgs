@@ -185,7 +185,7 @@ rec {
       keyutils.lib
       libjack2
       fribidi
-      p11_kit
+      p11-kit
 
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage

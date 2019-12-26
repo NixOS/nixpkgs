@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2019.09.08";
+  version = "2019.11.09";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0l50smy3hai6pb6lwvcgzrx6yfzshqlvx8ym5my1ji07ilnasmmp";
+    sha256 = "1ni25jmri0928jj2c24xw5f2fzljjla54zh80fimks1aa5752j29";
   };
 
   patchPhase = ''
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A modified version of Supybot, an IRC bot";
-    homepage = http://supybot.fr.cr;
+    homepage = "https://github.com/ProgVal/Limnoria";
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
   };

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ''
   rm -rf $out/var/run
   wrapProgram $out/bin/ocsigenserver \
-    --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH:${mkpath ssl "ssl"}:${mkpath ocamlnet "netsys"}:${mkpath ocamlnet "netstring"}:${mkpath ocaml_pcre "pcre"}:${mkpath ocaml_sqlite3 "sqlite3"}"
+    --suffix CAML_LD_LIBRARY_PATH : "${mkpath ssl "ssl"}:${mkpath ocamlnet "netsys"}:${mkpath ocamlnet "netstring"}:${mkpath ocaml_pcre "pcre"}:${mkpath ocaml_sqlite3 "sqlite3"}"
   '';
 
   dontPatchShebangs = true;

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, stdenv, wrapQtAppsHook, pcre, pugixml, qtbase, qtmultimedia, qttools, yajl, libzip, hunspell
+{ fetchFromGitHub, fetchpatch, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, qtmultimedia, qttools, yajl, libzip, hunspell
 , boost, libGLU, lua, cmake,  which, }:
 
 let
@@ -6,19 +6,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.1.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    sha256 = "1d6r51cj8a71hmhzsayd2far4hliwz5pnrsaj3dn39m7c0iikgdn";
+    sha256 = "0qqdmivfwf9jmv5yx90z1fj99nlhnq762lfw6bcxgv74y4l4b4c0";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook qttools which ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook git qttools which ];
   buildInputs = [
-    pcre pugixml qtbase qtmultimedia luaEnv libzip libGLU yajl boost hunspell
+    pcre pugixml qtbase libsForQt5.qtkeychain qtmultimedia luaEnv libzip libGLU yajl boost hunspell
   ];
 
   WITH_FONTS = "NO";
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     makeQtWrapper $out/mudlet $out/bin/mudlet \
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "$NIX_LUA_PATH" \
+      --prefix LD_LIBRARY_PATH : "${libsForQt5.qtkeychain}/lib/" \
       --run "cd $out";
   '';
 

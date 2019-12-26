@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin sound theme";

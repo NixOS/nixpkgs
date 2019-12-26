@@ -20,7 +20,7 @@ addToLuaSearchPathWithCustomDelimiter() {
   if [[ ! -d "$topDir" ]]; then return; fi
 
   # export only if we haven't already got this dir in the search path
-  if [[ ${!varName} == *"$absPattern"* ]]; then return; fi
+  if [[ ${!varName-} == *"$absPattern"* ]]; then return; fi
 
   export "${varName}=${!varName:+${!varName};}${absPattern}"
 }

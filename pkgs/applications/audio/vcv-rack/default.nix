@@ -3,17 +3,10 @@
 , libzip, rtaudio, rtmidi, speex, libsamplerate }:
 
 let
-  glfw-git = glfw.overrideAttrs (oldAttrs: rec {
-    name = "glfw-git-${version}";
-    version = "2019-06-30";
-    src = fetchFromGitHub {
-      owner = "glfw";
-      repo = "glfw";
-      rev = "d25248343e248337284dfbe5ecd1eddbd37ae66d";
-      sha256 = "0gbz353bfmqbpm0af2nqf5draz3k4f3lqwiqj68s8nwn7878aqm3";
-    };
-    buildInputs = oldAttrs.buildInputs ++ [ libXext libXi ];
-  });
+  # The package repo vendors some of the package dependencies as submodules.
+  # Others are downloaded with `make deps`. Due to previous issues with the
+  # `glfw` submodule (see above) and because we can not access the network when
+  # building in a sandbox, we fetch the dependency source manually.
   pfft-source = fetchFromBitbucket {
     owner = "jpommier";
     repo = "pffft";
@@ -47,24 +40,22 @@ let
 in
 with stdenv.lib; stdenv.mkDerivation rec {
   pname = "VCV-Rack";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "1g3mkghgiycbxyvzjhanc1b10jynkfkw03bpnha06qgd6gd9wv7k";
+    sha256 = "0ji64prr74qzxf5bx1sw022kbslx9nzll16lmk5in78hbl137b3i";
   };
 
   patches = [
     ./rack-minimize-vendoring.patch
-    # We patch out a call to a custom function, that is not needed on Linux.
-    # This avoids needing a patched version of glfw. The version we previously used disappeared
-    # on GitHub. See https://github.com/NixOS/nixpkgs/issues/71189
-    ./remove-custom-glfw-function.patch
   ];
 
   prePatch = ''
+    # As we can't use `make dep` to set up the dependencies (as explained
+    # above), we do it here manually
     mkdir -p dep/include
 
     cp -r ${pfft-source} dep/jpommier-pffft-source
@@ -86,7 +77,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ glfw-git alsaLib curl glew gtk2-x11 jansson libjack2 libzip rtaudio rtmidi speex libsamplerate ];
+  buildInputs = [ alsaLib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
 
   buildFlags = "Rack";
 

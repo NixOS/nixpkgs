@@ -2,12 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "amazon-ecs-cli";
-  version = "1.17.0";
+  version = "1.18.0";
 
-  src = fetchurl {
-    url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-v${version}";
-    sha256 = "0dqnxzfdic3v10rr8k83zfbv7qc3yanajd81a0amzs778sqp7x9f";
-  };
+  src =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      fetchurl {
+        url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-v${version}";
+        sha256 = "1w4n7rkcxpdzg7450s22a80a27g845n61k2bdfhq4c1md7604nyz";
+      }
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then
+      fetchurl {
+        url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-v${version}";
+        sha256 = "011rw4rv2vz6xa4vqfjsf9j6m3rffclv9xh0dgf5ckd07m3fd3sm";
+      }
+    else throw "Architecture not supported";
 
   dontUnpack = true;
 
@@ -24,7 +32,6 @@ stdenv.mkDerivation rec {
     longDescription = "The Amazon Elastic Container Service (Amazon ECS) command line interface (CLI) provides high-level commands to simplify creating, updating, and monitoring clusters and tasks from a local development environment.";
     license = licenses.asl20;
     maintainers = with maintainers; [ Scriptkiddi ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }
-

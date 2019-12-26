@@ -1,24 +1,24 @@
 { mkDerivation, lib, fetchFromGitHub
-, cmake, freetype, libpng, libGLU_combined, openssl, perl, libiconv
+, cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
 , qtscript, qtserialport, qttools
 , qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
 }:
 
 mkDerivation rec {
   pname = "stellarium";
-  version = "0.19.2";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "1ki3s4smazr6xfkr0grrmjp2s8yjprismiaq7l54d0il7rkvhibd";
+    sha256 = "175aj4bgi9b6bif6fvjdlpd68brcwij4x3ml0lxk6i51binv233y";
   };
 
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
 
   buildInputs = [
-    freetype libpng libGLU_combined openssl libiconv qtscript qtserialport qttools
+    freetype libpng libGLU libGL openssl libiconv qtscript qtserialport qttools
     qtmultimedia qtlocation qtbase
   ];
 

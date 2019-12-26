@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, sfml, libGLU_combined, bullet, glm, libmad, xlibsWrapper, openal
+{ stdenv, fetchgit, cmake, sfml, libGLU, libGL, bullet, glm, libmad, xlibsWrapper, openal
 , SDL2, boost, ffmpeg, Cocoa, OpenAL }:
 
 stdenv.mkDerivation {
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    sfml libGLU_combined bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
+    sfml libGLU libGL bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
 
   meta = with stdenv.lib; {

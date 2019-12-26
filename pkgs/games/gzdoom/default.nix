@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.2.3";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "06fy4ksn1n745y86s6rlnamkfyqi0894aznf6s56ff6hz2pngsfc";
+    sha256 = "1mkfpa3mx1rpd6lywdcqcf0y9ydzr1jxpk330kl9lxw59xihk0pc";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -33,6 +33,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"
     for i in *.pk3; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    for i in fm_banks/*; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    for i in soundfonts/*; do
       install -Dm644 "$i" "$out/lib/gzdoom/$i"
     done
     mkdir $out/bin

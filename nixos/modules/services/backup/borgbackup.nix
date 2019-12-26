@@ -68,7 +68,7 @@ let
       { BORG_PASSPHRASE = passphrase; }
     else { };
 
-  mkBackupService = name: cfg: 
+  mkBackupService = name: cfg:
     let
       userHome = config.users.users.${cfg.user}.home;
     in nameValuePair "borgbackup-job-${name}" {
@@ -97,6 +97,23 @@ let
       } // (mkPassEnv cfg) // cfg.environment;
       inherit (cfg) startAt;
     };
+
+  # utility function around makeWrapper
+  mkWrapperDrv = {
+      original, name, set ? {}
+    }:
+    pkgs.runCommandNoCC "${name}-wrapper" {
+      buildInputs = [ pkgs.makeWrapper ];
+    } (with lib; ''
+      makeWrapper "${original}" "$out/bin/${name}" \
+        ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
+    '');
+
+  mkBorgWrapper = name: cfg: mkWrapperDrv {
+    original = "${pkgs.borgbackup}/bin/borg";
+    name = "borg-job-${name}";
+    set = { BORG_REPO = cfg.repo; } // (mkPassEnv cfg) // cfg.environment;
+  };
 
   # Paths listed in ReadWritePaths must exist before service is started
   mkActivationScript = name: cfg:
@@ -176,7 +193,11 @@ in {
   ###### interface
 
   options.services.borgbackup.jobs = mkOption {
-    description = "Deduplicating backups using BorgBackup.";
+    description = ''
+      Deduplicating backups using BorgBackup.
+      Adding a job will cause a borg-job-NAME wrapper to be added
+      to your system path, so that you can perform maintenance easily.
+    '';
     default = { };
     example = literalExample ''
       {
@@ -623,6 +644,6 @@ in {
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
-      environment.systemPackages = with pkgs; [ borgbackup ];
+      environment.systemPackages = with pkgs; [ borgbackup ] ++ (mapAttrsToList mkBorgWrapper jobs);
     });
 }

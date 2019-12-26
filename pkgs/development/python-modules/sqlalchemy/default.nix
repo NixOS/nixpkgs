@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, isPy35
+{ stdenv, lib, fetchPypi, buildPythonPackage, isPy3k, isPy35
 , mock
 , pysqlite
 , fetchpatch
@@ -25,7 +25,9 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  disabledTests = lib.optionals isPy35 [ "exception_persistent_flush_py3k "];
+  # disable mem-usage tests on mac, has trouble serializing pickle files
+  disabledTests = lib.optionals isPy35 [ "exception_persistent_flush_py3k "]
+    ++ lib.optionals stdenv.isDarwin [ "MemUsageWBackendTest" "MemUsageTest" ];
 
   patches = [
     # Two patches for sqlite 3.30 compatibility.

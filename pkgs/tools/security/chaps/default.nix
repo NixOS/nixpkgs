@@ -1,9 +1,10 @@
-{ stdenv, fetchgit, fetchurl, trousers, leveldb, unzip, scons, pkgconfig
-, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam }:
+{ stdenv, fetchFromGitiles, fetchFromGitHub, fetchurl, trousers, leveldb, unzip
+, scons, pkgconfig, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam
+}:
 
 let
-  src_chromebase = fetchgit {
-    url = "https://chromium.googlesource.com/chromium/src/base.git";
+  src_chromebase = fetchFromGitiles {
+    url = "https://chromium.googlesource.com/chromium/src/base";
     rev = "2dfe404711e15e24e79799516400c61b2719d7af";
     sha256 = "2bd93a3ace4b6767db2c1bd1e16f426c97b8d2133a9cb15f8372b2516cfa65c5";
   };
@@ -13,7 +14,7 @@ let
     sha256 = "0nq98cpnv2jsx2byp4ilam6kydcnziflkc16ikydajmp4mcvpz16";
   };
 
-  src_platform2 = fetchgit {
+  src_platform2 = fetchFromGitiles {
     url = "https://chromium.googlesource.com/chromiumos/platform2";
     rev = "e999e989eaa71c3db7314fc7b4e20829b2b5473b";
     sha256 = "15n1bsv6r7cny7arx0hdb223xzzbk7vkxg2r7xajhl4nsj39adjh";
@@ -25,8 +26,9 @@ stdenv.mkDerivation rec {
   name = "chaps-0.42-6812";
   version = "0.42-6812";
 
-  src = fetchgit {
-    url = "https://github.com/google/chaps-linux";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "chaps-linux";
     rev = "989aadc45cdb216ca35b0c97d13fc691576fa1d7";
     sha256 = "0chk6pnn365d5kcz6vfqx1d0383ksk97icc0lzg0vvb0kvyj0ff1";
   };

@@ -2,7 +2,7 @@
 , intltool, spidermonkey_60 , gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
 , useSystemd ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl), systemd, elogind
-, withGnome ? true
+, withIntrospection ? true
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Don't use etc/dbus-1/system.d
+    # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/11
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/polkit/polkit/merge_requests/11.patch";
+      url = "https://gitlab.freedesktop.org/polkit/polkit/commit/5dd4e22efd05d55833c4634b56e473812b5acbf2.patch";
       sha256 = "17lv7xj5ksa27iv4zpm4zwd4iy8zbwjj4ximslfq3sasiz9kxhlp";
     })
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
@@ -54,8 +55,9 @@ stdenv.mkDerivation rec {
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
     [ expat pam spidermonkey_60 ]
-    ++ (if useSystemd then [systemd] else [elogind])
-    ++ stdenv.lib.optional withGnome gobject-introspection;
+    # On Linux, fall back to elogind when systemd support is off.
+    ++ stdenv.lib.optional stdenv.isLinux (if useSystemd then systemd else elogind)
+    ++ stdenv.lib.optional withIntrospection gobject-introspection;
 
   propagatedBuildInputs = [
     glib # in .pc Requires
@@ -84,7 +86,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-polkitd-user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "--with-os-type=NixOS" # not recognized but prevents impurities on non-NixOS
-    (if withGnome then "--enable-introspection" else "--disable-introspection")
+    (if withIntrospection then "--enable-introspection" else "--disable-introspection")
   ] ++ stdenv.lib.optional (!doCheck) "--disable-test";
 
   makeFlags = [

@@ -25,22 +25,20 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "unstable-2019-10-29";
+  version = "5.0.3";
 
   repoName = "calendar";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "7d201fc5ea9e8dc25c46427397594fcab2016ed6"; # needed for libical 2.0 compat
-    sha256 = "11bqf3nxrj1sfd0qq5h0jsmimc6mwkd2g7q9ycizn9x5ak2gb8xi";
+    rev = version;
+    sha256 = "1dqcmh585fjib4m8bs7qy23fv429s7q9nbcqnn0vvmy1n36fic4m";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
-      versionPolicy = "master";
+      attrPath = "pantheon.${pname}";
     };
   };
 

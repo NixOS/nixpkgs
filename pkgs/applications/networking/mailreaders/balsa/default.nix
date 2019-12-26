@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "balsa";
-  version = "2.5.7";
+  version = "2.5.9";
 
   src = fetchurl {
     url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.bz2";
-    sha256 = "0yfqhfpwm1qnwmbpr6dfn2f5w8a8xxq51pn8ypgg0fw973l1c1nx";
+    sha256 = "19gs1qfvbk9qx4rjmgrmvid00kl9k153zjjx8zjii2lz09w7g19i";
   };
 
   nativeBuildInputs = [

@@ -494,6 +494,20 @@
      </para>
     </listitem>
    </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--use-remote-sudo</option>
+    </term>
+    <listitem>
+     <para>
+      When set, nixos-rebuild prefixes remote commands that run on
+      the <option>--build-host</option> and <option>--target-host</option>
+      systems with <command>sudo</command>. Setting this option allows
+      deploying as a non-root user.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
 
   <para>

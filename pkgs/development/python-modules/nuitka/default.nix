@@ -46,7 +46,7 @@ in buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python compiler with full language support and CPython compatibility";
     license = licenses.asl20;
-    homepage = http://nuitka.net/;
+    homepage = https://nuitka.net/;
   };
 
 }

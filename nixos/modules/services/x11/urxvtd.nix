@@ -45,4 +45,6 @@ in {
     environment.variables.RXVT_SOCKET = "/run/user/$(id -u)/urxvtd-socket";
   };
 
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+
 }

@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p $out/include
+    substituteInPlace Makefile \
+      --replace "install -m 0755 -s" \
+                'install -m 0755 -s --strip-program $(STRIP)'
   '';
 
   installFlags = [

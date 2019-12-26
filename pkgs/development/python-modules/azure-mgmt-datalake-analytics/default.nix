@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
+, isPy3k
 , msrestazure
 , azure-common
 , azure-mgmt-datalake-nspkg
@@ -21,6 +23,12 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-datalake-nspkg
   ];
+
+  postInstall = lib.optionalString isPy3k ''
+    rm $out/${python.sitePackages}/azure/__init__.py
+    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
+    rm $out/${python.sitePackages}/azure/mgmt/datalake/__init__.py
+  '';
 
   # has no tests
   doCheck = false;

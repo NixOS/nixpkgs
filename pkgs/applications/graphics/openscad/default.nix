@@ -7,7 +7,7 @@
 , flex
 , eigen
 , boost
-, libGLU_combined
+, libGLU, libGL
 , glew
 , opencsg
 , cgal
@@ -44,7 +44,7 @@ mkDerivation rec {
     eigen boost glew opencsg cgal mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla
-  ] ++ stdenv.lib.optional stdenv.isLinux libGLU_combined
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ libGLU libGL ]
     ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
   ;
 

@@ -8,12 +8,6 @@
   <varname>pkgs.dockerTools</varname> is a set of functions for creating and manipulating Docker images according to the <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#docker-image-specification-v120"> Docker Image Specification v1.2.0 </link>. Docker itself is not used to perform any of the operations done by these functions.
  </para>
 
- <warning>
-  <para>
-   The <varname>dockerTools</varname> API is unstable and may be subject to backwards-incompatible changes in the future.
-  </para>
- </warning>
-
  <section xml:id="ssec-pkgs-dockerTools-buildImage">
   <title>buildImage</title>
 

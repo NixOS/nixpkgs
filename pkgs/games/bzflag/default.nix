@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig
-, curl, SDL2, libGLU_combined, glew, ncurses, c-ares
+, curl, SDL2, libGLU, libGL, glew, ncurses, c-ares
 , Carbon, CoreServices }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ curl SDL2 libGLU_combined glew ncurses c-ares ]
+  buildInputs = [ curl SDL2 libGLU libGL glew ncurses c-ares ]
     ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices ];
 
   meta = with lib; {

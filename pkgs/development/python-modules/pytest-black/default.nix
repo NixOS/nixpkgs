@@ -14,6 +14,7 @@ buildPythonPackage rec {
     sha256 = "03gwwy1h3qnfh6vpfhgsa5ag53a9sw1g42sc2s8a2hilwb7yrfvm";
   };
 
+  patches = [ ./black-version.patch ];
   nativeBuildInputs = [ setuptools_scm ];
 
   propagatedBuildInputs = [ black pytest toml ];

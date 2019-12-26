@@ -3,7 +3,7 @@
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
 , enableMuPDF ? true, mupdf
-, enableJPEG2K ? true, jasper
+, enableJPEG2K ? false, jasper ? null  # disabled by default, jasper has unfixed CVE
 , enableDJVU ? true, djvulibre
 , enableGOCR ? false, gocr # Disabled by default due to crashes
 , enableTesseract ? true, leptonica, tesseract4

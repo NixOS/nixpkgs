@@ -181,7 +181,10 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     #    '... foo = self.callHackage "foo" "1.5.3" {}; ...'
     callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
 
-    # callHackageDirect :: Text -> Text -> AttrSet -> HaskellPackage
+    # callHackageDirect
+    #   :: { pkg :: Text, ver :: Text, sha256 :: Text }
+    #   -> AttrSet
+    #   -> HaskellPackage
     #
     # This function does not depend on all-cabal-hashes and therefore will work
     # for any version that has been released on hackage as opposed to only

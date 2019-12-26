@@ -32,11 +32,6 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  preInstall = ''
-    substituteInPlace helpers/saver_blank \
-      --replace 'protect xset' 'protect ${xset}/bin/xset'
-  '';
-
   meta = with lib; {
     description = "X11 screen lock utility with security in mind";
     homepage = https://github.com/google/xsecurelock;

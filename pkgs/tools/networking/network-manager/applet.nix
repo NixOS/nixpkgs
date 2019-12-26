@@ -2,7 +2,7 @@
 , libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl, docbook_xml_dtd_43
 , mobile-broadband-provider-info, glib-networking, gsettings-desktop-schemas
 , libgudev, jansson, wrapGAppsHook, gobject-introspection, python3, gtk3
-, libappindicator-gtk3, withGnome ? false, gcr, glib }:
+, libappindicator-gtk3, withGnome ? true, gcr, glib }:
 
 let
   pname = "network-manager-applet";

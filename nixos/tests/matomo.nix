@@ -1,7 +1,7 @@
 { system ? builtins.currentSystem, config ? { }
 , pkgs ? import ../.. { inherit system config; } }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -24,11 +24,16 @@ let
     };
 
     testScript = ''
-      startAll;
-      $machine->waitForUnit("mysql.service");
-      $machine->waitForUnit("phpfpm-matomo.service");
-      $machine->waitForUnit("nginx.service");
-      $machine->succeed("curl -sSfL http://localhost/ | grep '<title>Matomo[^<]*Installation'");
+      start_all()
+      machine.wait_for_unit("mysql.service")
+      machine.wait_for_unit("phpfpm-matomo.service")
+      machine.wait_for_unit("nginx.service")
+
+      # without the grep the command does not produce valid utf-8 for some reason
+      with subtest("welcome screen loads"):
+          machine.succeed(
+              "curl -sSfL http://localhost/ | grep '<title>Matomo[^<]*Installation'"
+          )
     '';
   };
 in {

@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ gebner ma27 ];
     platforms = platforms.unix;
     license = licenses.asl20;
-    homepage = http://alviano.net/software/maxino/;
+    homepage = https://alviano.net/software/maxino/;
     # See pkgs/applications/science/logic/glucose/default.nix
     badPlatforms = [ "aarch64-linux" ];
   };

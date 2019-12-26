@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ stdenv, mkDerivation, fetchurl, makeDesktopItem
 , libXrender, libXrandr, libXcursor, libX11, libXext, libXi, libxcb
  , libGL, glib, nss, nspr, expat, alsaLib
 , qtbase, qtdeclarative, qtsvg, qtlocation, qtwebchannel, qtwebengine
@@ -11,13 +11,13 @@ let
       qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
     ];
   in
-  stdenv.mkDerivation rec {
+  mkDerivation rec {
     pname = "eagle";
-    version = "9.5.0";
+    version = "9.5.1";
 
     src = fetchurl {
       url = "https://eagle-updates.circuits.io/downloads/${builtins.replaceStrings ["."] ["_"] version}/Autodesk_EAGLE_${version}_English_Linux_64bit.tar.gz";
-      sha256 = "0wakaja98mkdgcxp18d7499i0254ns1xhnx4bag2lqi7j8qn8rqy";
+      sha256 = "07lvjn0mxqkv5kx41bzakifpb5bjhljx0ssvk33ipzb0nvl6nx63";
     };
 
     desktopItem = makeDesktopItem {

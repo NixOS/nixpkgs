@@ -1,5 +1,7 @@
 { lib
 , buildPythonPackage
+, python
+, isPy3k
 , fetchPypi
 , azure-common
 , azure-nspkg
@@ -25,6 +27,10 @@ buildPythonPackage rec {
     msrestazure
     cryptography
   ];
+
+  postInstall = lib.optionalString isPy3k ''
+    rm $out/${python.sitePackages}/azure/__init__.py
+  '';
 
   # has no tests
   doCheck = false;

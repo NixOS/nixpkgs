@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1d9r2dhslll4kzdmxrj0qfgwq1b30d4l3s5cwr8yr93029dpj0jf";
   };
 
+  patches = [
+    ./allow-clock_adjtime.patch
+    ./fix-seccomp-build.patch
+  ];
+
   postPatch = ''
     patchShebangs test
   '';

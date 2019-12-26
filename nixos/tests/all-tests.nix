@@ -21,6 +21,7 @@ let
     else {};
 in
 {
+  _3proxy = handleTest ./3proxy.nix {};
   acme = handleTestOn ["x86_64-linux"] ./acme.nix {};
   atd = handleTest ./atd.nix {};
   automysqlbackup = handleTest ./automysqlbackup.nix {};
@@ -28,7 +29,7 @@ in
   babeld = handleTest ./babeld.nix {};
   bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
   beanstalkd = handleTest ./beanstalkd.nix {};
-  beegfs = handleTestOn ["x86_64-linux"] ./beegfs.nix {}; # beegfs is unsupported on aarch64
+  bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   #blivet = handleTest ./blivet.nix {};   # broken since 2017-07024
@@ -48,16 +49,16 @@ in
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
   codimd = handleTest ./codimd.nix {};
-  colord = handleTest ./colord.nix {};
+  consul = handleTest ./consul.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
   containers-ephemeral = handleTest ./containers-ephemeral.nix {};
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
   containers-hosts = handleTest ./containers-hosts.nix {};
   containers-imperative = handleTest ./containers-imperative.nix {};
-  containers-ipv4 = handleTest ./containers-ipv4.nix {};
-  containers-ipv6 = handleTest ./containers-ipv6.nix {};
+  containers-ip = handleTest ./containers-ip.nix {};
   containers-macvlans = handleTest ./containers-macvlans.nix {};
   containers-physical_interfaces = handleTest ./containers-physical_interfaces.nix {};
+  containers-portforward = handleTest ./containers-portforward.nix {};
   containers-restart_networking = handleTest ./containers-restart_networking.nix {};
   containers-tmpfs = handleTest ./containers-tmpfs.nix {};
   couchdb = handleTest ./couchdb.nix {};
@@ -88,30 +89,25 @@ in
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
-  flatpak = handleTest ./flatpak.nix {};
-  flatpak-builder = handleTest ./flatpak-builder.nix {};
   fluentd = handleTest ./fluentd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   fsck = handleTest ./fsck.nix {};
-  fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64
-  gdk-pixbuf = handleTest ./gdk-pixbuf.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   gitea = handleTest ./gitea.nix {};
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
-  gjs = handleTest ./gjs.nix {};
-  glib-networking = handleTest ./glib-networking.nix {};
+  gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix {};
   glusterfs = handleTest ./glusterfs.nix {};
   gnome3-xorg = handleTest ./gnome3-xorg.nix {};
   gnome3 = handleTest ./gnome3.nix {};
-  gnome-photos = handleTest ./gnome-photos.nix {};
+  installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
   google-oslogin = handleTest ./google-oslogin {};
-  graphene = handleTest ./graphene.nix {};
   grafana = handleTest ./grafana.nix {};
   graphite = handleTest ./graphite.nix {};
   graylog = handleTest ./graylog.nix {};
+  gvisor = handleTest ./gvisor.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
@@ -135,8 +131,8 @@ in
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
-  jormungandr = handleTest ./jormungandr.nix {};
   kafka = handleTest ./kafka.nix {};
+  keepalived = handleTest ./keepalived.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-latest = handleTest ./kernel-latest.nix {};
   kernel-lts = handleTest ./kernel-lts.nix {};
@@ -150,14 +146,14 @@ in
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
-  libgdata = handleTest ./libgdata.nix {};
-  libxmlb = handleTest ./libxmlb.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   login = handleTest ./login.nix {};
   loki = handleTest ./loki.nix {};
   #logstash = handleTest ./logstash.nix {};
+  lorri = handleTest ./lorri/default.nix {};
+  magnetico = handleTest ./magnetico.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};
   matomo = handleTest ./matomo.nix {};
@@ -196,8 +192,9 @@ in
   networkingProxy = handleTest ./networking-proxy.nix {};
   nextcloud = handleTest ./nextcloud {};
   nexus = handleTest ./nexus.nix {};
-  nfs3 = handleTest ./nfs.nix { version = 3; };
-  nfs4 = handleTest ./nfs.nix { version = 4; };
+  # TODO: Test nfsv3 + Kerberos
+  nfs3 = handleTest ./nfs { version = 3; };
+  nfs4 = handleTest ./nfs { version = 4; };
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = handleTest ./nginx.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
@@ -215,9 +212,7 @@ in
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
-  osquery = handleTest ./osquery.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
-  ostree = handleTest ./ostree.nix {};
   overlayfs = handleTest ./overlayfs.nix {};
   packagekit = handleTest ./packagekit.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
@@ -243,7 +238,6 @@ in
   prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
   quagga = handleTest ./quagga.nix {};
-  quake3 = handleTest ./quake3.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
@@ -257,13 +251,14 @@ in
   rxe = handleTest ./rxe.nix {};
   samba = handleTest ./samba.nix {};
   sddm = handleTest ./sddm.nix {};
+  shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
   simple = handleTest ./simple.nix {};
-  slim = handleTest ./slim.nix {};
   slurm = handleTest ./slurm.nix {};
   smokeping = handleTest ./smokeping.nix {};
   snapper = handleTest ./snapper.nix {};
   solr = handleTest ./solr.nix {};
+  spacecookie = handleTest ./spacecookie.nix {};
   sonarr = handleTest ./sonarr.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
@@ -271,17 +266,21 @@ in
   syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
+  systemd-analyze = handleTest ./systemd-analyze.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
+  systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
+  timezone = handleTest ./timezone.nix {};
   tinydns = handleTest ./tinydns.nix {};
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
   trac = handleTest ./trac.nix {};
+  trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   udisks2 = handleTest ./udisks2.nix {};
@@ -291,15 +290,15 @@ in
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   wireguard = handleTest ./wireguard {};
   wireguard-generated = handleTest ./wireguard/generated.nix {};
+  wireguard-namespaces = handleTest ./wireguard/namespaces.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xautolock = handleTest ./xautolock.nix {};
-  xdg-desktop-portal = handleTest ./xdg-desktop-portal.nix {};
   xfce = handleTest ./xfce.nix {};
-  xfce4-14 = handleTest ./xfce4-14.nix {};
   xmonad = handleTest ./xmonad.nix {};
   xrdp = handleTest ./xrdp.nix {};
   xss-lock = handleTest ./xss-lock.nix {};
   yabar = handleTest ./yabar.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
+  zsh-history = handleTest ./zsh-history.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
 }

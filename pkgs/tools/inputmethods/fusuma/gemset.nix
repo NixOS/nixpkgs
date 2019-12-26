@@ -1,10 +1,12 @@
 {
   fusuma = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0hj64kafxj29gk53vj2syhs3vdywl3h9cpiknaqqm4srjx9g04a0";
+      sha256 = "150jc8jyqj3w4k13lf1ihqmm2sld1yawp4jwnf43jixnc9rmzx6f";
       type = "gem";
     };
-    version = "0.10.2";
+    version = "1.3.0";
   };
 }

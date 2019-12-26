@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU_combined, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
+{ stdenv, fetchurl, libGLU, libGL, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
 , speex, libvorbis, libogg, boost, fribidi, bsdiff
 , fetchpatch
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ sconsPackages.scons_3_0_1 ];
-  buildInputs = [ libGLU_combined SDL SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
+  buildInputs = [ libGLU libGL SDL SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
 
   postConfigure = ''
     sconsFlags+=" BINDIR=$out/bin"

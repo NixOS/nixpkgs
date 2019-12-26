@@ -1,31 +1,22 @@
 { stdenv, fetchurl, pkgconfig, intltool, perlPackages
 , goffice, gnome3, wrapGAppsHook, gtk3, bison, pythonPackages
-, itstool, autoreconfHook
+, itstool
 }:
 
 let
   inherit (pythonPackages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "gnumeric";
-  version = "1.12.45"; # TODO next release: remove gamma patch and autoreconfHook
+  version = "1.12.46";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0c8dl1kvnj3g32qy3s92qpqpqfy0in59cx005gjvvzsflahav61h";
+    sha256 = "9fdc67377af52dfe69a7db4f533938024a75f454fc5d25ab43b8e6739be0b5e1";
   };
-
-  patches = stdenv.lib.optional stdenv.isDarwin
-    # https://gitlab.gnome.org/GNOME/gnumeric/issues/402
-    (fetchurl {
-      name = "math-gamma.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnumeric/uploads/cf8d162bc719de92e97d01cb0ba5b637/ppp";
-      sha256 = "17wiigs06qc86a1nghwcg3pcnpa28123jblgsxpy3j7drardgnlp";
-    });
 
   configureFlags = [ "--disable-component" ];
 
-  nativeBuildInputs = [ pkgconfig intltool bison itstool wrapGAppsHook ]
-    ++ stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+  nativeBuildInputs = [ pkgconfig intltool bison itstool wrapGAppsHook ];
 
   # ToDo: optional libgda, introspection?
   buildInputs = [

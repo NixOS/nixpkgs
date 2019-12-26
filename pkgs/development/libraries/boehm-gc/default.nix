@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl
+, autoreconfHook
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
 }:
 
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     urls = [
       "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
-      "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
+      "https://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
     ];
     sha256 = "1798rp3mcfkgs38ynkbg2p47bq59pisrc6mn0l20pb5iczf0ssj3";
   };
@@ -22,11 +23,16 @@ stdenv.mkDerivation rec {
   '';
 
   patches = # https://github.com/ivmai/bdwgc/pull/208
-    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
+    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch
+    # boehm-gc whitelists GCC threading models
+    ++ lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
 
   configureFlags =
     [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
     ++ lib.optional enableLargeConfig "--enable-large-config";
+
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isMinGW autoreconfHook;
 
   doCheck = true; # not cross;
 
@@ -52,10 +58,10 @@ stdenv.mkDerivation rec {
       C or C++ programs, though that is not its primary goal.
     '';
 
-    homepage = http://hboehm.info/gc/;
+    homepage = https://hboehm.info/gc/;
 
     # non-copyleft, X11-style license
-    license = http://hboehm.info/gc/license.txt;
+    license = https://hboehm.info/gc/license.txt;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

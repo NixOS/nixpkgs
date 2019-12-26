@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib python2 ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
+
   preConfigure = ''
     sed -i 's|/usr/bin/env python|${python2}/bin/python|' src/python/lib/makeRunScript.py
     patchShebangs .
@@ -33,7 +35,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Illumina/strelka;
     maintainers = with maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];
-    broken = true;
   };
 
 }

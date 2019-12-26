@@ -36,11 +36,10 @@ in
 
 stdenv.mkDerivation rec {
   version = "4.1.0";
-  name = "qemu-"
-    + stdenv.lib.optionalString xenSupport "xen-"
-    + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
-    + stdenv.lib.optionalString nixosTestRunner "for-vm-tests-"
-    + version;
+  pname = "qemu"
+    + stdenv.lib.optionalString xenSupport "-xen"
+    + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
+    + stdenv.lib.optionalString nixosTestRunner "-for-vm-tests";
 
   src = fetchurl {
     url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";

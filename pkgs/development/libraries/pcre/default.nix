@@ -29,8 +29,6 @@ in stdenv.mkDerivation {
   ]
     ++ optional (variant != null) "--enable-${variant}";
 
-  buildInputs = optional (stdenv.hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
-
   # https://bugs.exim.org/show_bug.cgi?id=2173
   patches = [ ./stacksize-detection.patch ];
 

@@ -5,6 +5,7 @@ require 'rubygems/command'
 require 'fileutils'
 require 'pathname'
 require 'tmpdir'
+require 'shellwords'
 
 if defined?(Encoding.default_internal)
   Encoding.default_internal = Encoding::UTF_8
@@ -31,7 +32,7 @@ bin_dir = File.join(ENV["out"], "bin")
 type        = ARGV[0]
 name        = ARGV[1]
 version     = ARGV[2]
-build_flags = ARGV[3]
+build_flags = Shellwords.split(ARGV[3])
 if type == "git"
   uri         = ARGV[4]
   REPO        = ARGV[5]
@@ -117,7 +118,7 @@ else
   source = Bundler::Source::Path.new(options)
 end
 spec = source.specs.search_all(name).first
-Bundler.rubygems.with_build_args [build_flags] do
+Bundler.rubygems.with_build_args build_flags do
   source.install(spec)
 end
 

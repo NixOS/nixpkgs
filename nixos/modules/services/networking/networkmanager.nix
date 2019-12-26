@@ -336,6 +336,7 @@ in {
   };
 
   imports = [
+    (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
     (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
@@ -456,15 +457,19 @@ in {
     };
 
     # Turn off NixOS' network management when networking is managed entirely by NetworkManager
-    networking = (mkIf (!delegateWireless) {
-      useDHCP = false;
-      # Use mkDefault to trigger the assertion about the conflict above
-      wireless.enable = mkDefault false;
-    }) // (mkIf cfg.enableStrongSwan {
-      networkmanager.packages = [ pkgs.networkmanager_strongswan ];
-    }) // (mkIf enableIwd {
-      wireless.iwd.enable = true;
-    });
+    networking = mkMerge [
+      (mkIf (!delegateWireless) {
+        useDHCP = false;
+      })
+
+      (mkIf cfg.enableStrongSwan {
+        networkmanager.packages = [ pkgs.networkmanager_strongswan ];
+      })
+
+      (mkIf enableIwd {
+        wireless.iwd.enable = true;
+      })
+    ];
 
     security.polkit.extraConfig = polkitConf;
 

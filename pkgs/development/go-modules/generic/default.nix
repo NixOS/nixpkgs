@@ -10,6 +10,9 @@
 # A function to override the go-modules derivation
 , overrideModAttrs ? (_oldAttrs : {})
 
+# path to go.mod and go.sum directory
+, modRoot ? "./"
+
 # modSha256 is the sha256 of the vendored dependencies
 , modSha256
 
@@ -58,7 +61,7 @@ let
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
       mkdir -p "''${GOPATH}/pkg/mod/cache/download"
-
+      cd "${modRoot}"
       runHook postConfigure
     '';
 
@@ -98,7 +101,10 @@ let
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
+      export GOSUMDB=off
       export GOPROXY=file://${go-modules}
+
+      cd "$modRoot"
 
       runHook postConfigure
     '';

@@ -28,18 +28,18 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0xsxm0qgmnljd4s8m6xajzsjp9skpsa8wwlwqmc5yx34diad7zag";
+    sha256 = "18l0kbm778728rksifslnaw2arnpr92sk24nw26k1zvs4prz5i7j";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

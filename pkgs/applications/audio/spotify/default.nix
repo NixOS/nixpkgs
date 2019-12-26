@@ -1,7 +1,7 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk
+, at-spi2-atk, at-spi2-core, libpulseaudio
 }:
 
 let
@@ -10,20 +10,21 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.0.96.181.gf6bc1b6b-12";
+  version = "1.1.10.546.ge08ef575-19";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "30";
+  rev = "36";
 
 
   deps = [
     alsaLib
     atk
     at-spi2-atk
+    at-spi2-core
     cairo
     cups
     curl
@@ -38,6 +39,7 @@ let
     libgcrypt
     libnotify
     libpng
+    libpulseaudio
     nss
     pango
     stdenv.cc.cc
@@ -73,7 +75,7 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "859730fbc80067f0828f7e13eee9a21b13b749f897a50e17c2da4ee672785cfd79e1af6336e609529d105e040dc40f61b6189524783ac93d49f991c4ea8b3c56";
+    sha512 = "c49f1a86a9b737e64a475bbe62754a36f607669e908eb725a2395f0a0a6b95968e0c8ce27ab2c8b6c92fe8cbacb1ef58de11c79b92dc0f58c2c6d3a140706a1f";
   };
 
   buildInputs = [ squashfsTools makeWrapper ];

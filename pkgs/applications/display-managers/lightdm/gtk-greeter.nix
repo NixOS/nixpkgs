@@ -20,7 +20,7 @@
 
 let
   ver_branch = "2.0";
-  version = "2.0.6";
+  version = "2.0.7";
 in
 stdenv.mkDerivation rec {
   pname = "lightdm-gtk-greeter";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "1pis5qyg95pg31dvnfqq34bzgj00hg4vs547r8h60lxjk81z8p15";
+    sha256 = "1g7wc3d3vqfa7mrdhx1w9ywydgjbffla6rbrxq9k3sc62br97qms";
   };
 
   nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Userspace library for the Linux io_uring API";
-    homepage    = http://git.kernel.dk/cgit/liburing/;
+    homepage    = https://git.kernel.dk/cgit/liburing/;
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];

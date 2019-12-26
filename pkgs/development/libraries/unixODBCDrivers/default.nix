@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, libmysqlclient, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, libuuid, patchelf }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, libuuid, patchelf, libiconv, fetchFromGitHub }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -29,35 +29,42 @@
 
   mariadb = stdenv.mkDerivation rec {
     pname = "mariadb-connector-odbc";
-    version = "3.1.2";
+    version = "3.1.4";
 
-    src = fetchurl {
-      url = "https://downloads.mariadb.org/interstitial/connector-odbc-${version}/${pname}-${version}-ga-src.tar.gz";
-      sha256 = "0iibly2mbqijqyq4pzpb6dh40clqhvqrhgnj8knm4bw3nlksd0d5";
+    src = fetchFromGitHub {
+      owner = "MariaDB";
+      repo = "mariadb-connector-odbc";
+      rev = version;
+      sha256 = "1kbz5mng9vx89cw2sx7gsvhbv4h86zwp31fr0hxqing3cwxhkfgw";
+      # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
+      # (see https://github.com/NixOS/nixpkgs/issues/73258)
+      fetchSubmodules = true;
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC libmysqlclient openssl ];
+    buildInputs = [ unixODBC openssl libiconv ];
+
+    preConfigure = ''
+      # we don't want to build a .pkg
+      sed -i 's/ADD_SUBDIRECTORY(osxinstall)//g' CMakeLists.txt
+    '';
 
     cmakeFlags = [
       "-DWITH_OPENSSL=ON"
-    ];
-
-   NIX_CFLAGS_COMPILE = [
-     "-I${libmysqlclient}/include/mysql"
-     "-L${libmysqlclient}/lib/mysql"
+      # on darwin this defaults to ON but we want to build against unixODBC
+      "-DWITH_IODBC=OFF"
     ];
 
     passthru = {
       fancyName = "MariaDB";
-      driver = "lib/libmaodbc.so";
+      driver = if stdenv.isDarwin then "lib/libmaodbc.dylib" else "lib/libmaodbc.so";
     };
 
     meta = with stdenv.lib; {
       description = "MariaDB ODBC database driver";
       homepage =  https://downloads.mariadb.org/connector-odbc/;
       license = licenses.gpl2;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
     };
   };
 

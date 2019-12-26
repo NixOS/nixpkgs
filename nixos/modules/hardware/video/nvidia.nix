@@ -75,7 +75,7 @@ in
 
         Note that this configuration will only be successful when a display manager
         for which the <option>services.xserver.displayManager.setupCommands</option>
-        option is supported is used; notably, SLiM is not supported.
+        option is supported is used.
       '';
     };
 
@@ -111,9 +111,10 @@ in
   config = mkIf enabled {
     assertions = [
       {
-        assertion = with config.services.xserver.displayManager; gdm.enable -> !gdm.wayland;
-        message = "NVIDIA drivers don't support wayland, set services.xserver.displayManager.gdm.wayland=false";
+        assertion = with config.services.xserver.displayManager; gdm.nvidiaWayland -> cfg.modesetting.enable;
+        message = "You cannot use wayland with GDM without modesetting enabled for NVIDIA drivers, set `hardware.nvidia.modesetting.enable = true`";
       }
+
       {
         assertion = !optimusCfg.enable ||
           (optimusCfg.nvidiaBusId != "" && optimusCfg.intelBusId != "");

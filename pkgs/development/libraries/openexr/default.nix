@@ -1,4 +1,5 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, libtool, pkgconfig, zlib, ilmbase, }:
+{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, libtool, pkgconfig,
+  zlib, ilmbase, fetchpatch }:
 
 let
   # Doesn't really do anything when not crosscompiling
@@ -16,6 +17,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./bootstrap.patch
+    (fetchpatch {
+      name = "CVE-2018-18444.patch";
+      url = "https://github.com/openexr/openexr/commit/1b0f1e5d7dcf2e9d6cbb4e005e803808b010b1e0.patch";
+      sha256 = "0f5m4wdwqqg8wfg7azzsz5yfpdrvws314rd4sqfc74j1g6wrcnqj";
+      stripLen = 1;
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -48,7 +55,8 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails 1 of 1 tests
 
   meta = with stdenv.lib; {
-    homepage = https://www.openexr.com/;
+    description = "A high dynamic-range (HDR) image file format";
+    homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

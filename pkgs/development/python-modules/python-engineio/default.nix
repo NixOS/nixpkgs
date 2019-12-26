@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "3.9.3";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "v${version}";
-    sha256 = "0rwlj12d37dpw6y3bdn6rxv68xnd9ykj4fr3ly0fa143xci35d9y";
+    sha256 = "1495r55177c38wq88pb28l50dfd4213iyxwq1k5rmsgp66vww09s";
   };
 
   propagatedBuildInputs = [

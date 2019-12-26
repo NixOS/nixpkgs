@@ -236,9 +236,12 @@ in {
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do
             DEVTYPE=
-            source /sys/class/net/$i/uevent
-            if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-              ifaces="$ifaces''${ifaces:+ -N} -i$i"
+            UEVENT_PATH=/sys/class/net/$i/uevent
+            if [ -e "$UEVENT_PATH" ]; then
+              source "$UEVENT_PATH"
+              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
+                ifaces="$ifaces''${ifaces:+ -N} -i$i"
+              fi
             fi
           done
         '' else ''

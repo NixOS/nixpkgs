@@ -20,10 +20,6 @@ buildPythonPackage rec {
     sha256 = "1ce57a8792c7d5d74206d797d379de6da35d56be433ea5840c41a49f202e2fab";
   };
 
-  # Fix tests using conftest.py from HEAD in the upstream GitHub
-  # repository.
-  patches = [ ./conftest-astropy-3-fix.patch ];
-
   propagatedBuildInputs = [ astropy requests keyring beautifulsoup4 html5lib ];
 
   nativeBuildInputs = [ astropy-helpers ];

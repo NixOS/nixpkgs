@@ -106,18 +106,18 @@ in rec {
   };
 
   vala_0_40 = generic {
-    version = "0.40.16";
-    sha256 = "0vv25fmr9jqiqf080vak1x4raa4w3cz3n5ysjglqsq9qfx304i7b";
+    version = "0.40.18";
+    sha256 = "1f7cdkjdysg4dcri1wbzdddm46amk2s48jkwb5ghpdvhjb4l5j2m";
   };
 
   vala_0_44 = generic {
-    version = "0.44.8";
-    sha256 = "0f7pc496zvxfhbkhg8ayxykjas6f55mgv452wsnh0bz5zbxm8xrl";
+    version = "0.44.11";
+    sha256 = "06spdvm9q9k4riq1d2fxkyc8d88bcv460v360465iy1lnj3z9x2s";
   };
 
   vala_0_46 = generic {
-    version = "0.46.2";
-    sha256 = "1g20fzcwh3j7ab46jalabyi005h2in0cp7xj0yga4b8hx29h61wj";
+    version = "0.46.5";
+    sha256 = "07fv895sp9wq74b20qig7hic0r4ynrr5pfaqba02r44xb794fy0s";
   };
 
   vala = vala_0_46;

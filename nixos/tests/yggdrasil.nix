@@ -19,7 +19,7 @@ let
     SigningPrivateKey = "2a6c21550f3fca0331df50668ffab66b6dce8237bcd5728e571e8033b363e247de111da0ec781e45bf6c63ecb45a78c24d7d4655abfaeea83b26c36eb5c0fd5b";
   };
 
-in import ./make-test.nix ({ pkgs, ...} : {
+in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "yggdrasil";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ gazally ];
@@ -81,7 +81,7 @@ in import ./make-test.nix ({ pkgs, ...} : {
           denyDhcpcdInterfaces = [ "ygg0" ];
           config = {
             IfTAPMode = true;
-            IFName = "ygg0";
+            IfName = "ygg0";
             MulticastInterfaces = [ "eth1" ];
             LinkLocalTCPPort = 43210;
           };
@@ -91,33 +91,35 @@ in import ./make-test.nix ({ pkgs, ...} : {
 
   testScript =
     ''
+      import re
+
       # Give Alice a head start so she is ready when Bob calls.
-      $alice->start;
-      $alice->waitForUnit("yggdrasil.service");
+      alice.start()
+      alice.wait_for_unit("yggdrasil.service")
 
-      $bob->start;
-      $carol->start;
-      $bob->waitForUnit("yggdrasil.service");
-      $carol->waitForUnit("yggdrasil.service");
+      bob.start()
+      carol.start()
+      bob.wait_for_unit("yggdrasil.service")
+      carol.wait_for_unit("yggdrasil.service")
 
-      $carol->waitUntilSucceeds("[ `ip -o -6 addr show dev ygg0 scope global | grep -v tentative | wc -l` -ge 1 ]");
-      my $carolIp6 = (split /[ \/]+/, $carol->succeed("ip -o -6 addr show dev ygg0 scope global"))[3];
+      ip_addr_show = "ip -o -6 addr show dev ygg0 scope global"
+      carol.wait_until_succeeds(f"[ `{ip_addr_show} | grep -v tentative | wc -l` -ge 1 ]")
+      carol_ip6 = re.split(" +|/", carol.succeed(ip_addr_show))[3]
 
       # If Alice can talk to Carol, then Bob's outbound peering and Carol's
       # local peering have succeeded and everybody is connected.
-      $alice->waitUntilSucceeds("ping -c 1 $carolIp6");
-      $alice->succeed("ping -c 1 ${bobIp6}");
+      alice.wait_until_succeeds(f"ping -c 1 {carol_ip6}")
+      alice.succeed(f"ping -c 1 ${bobIp6}")
 
-      $bob->succeed("ping -c 1 ${aliceIp6}");
-      $bob->succeed("ping -c 1 $carolIp6");
+      bob.succeed("ping -c 1 ${aliceIp6}")
+      bob.succeed(f"ping -c 1 {carol_ip6}")
 
-      $carol->succeed("ping -c 1 ${aliceIp6}");
-      $carol->succeed("ping -c 1 ${bobIp6}");
+      carol.succeed("ping -c 1 ${aliceIp6}")
+      carol.succeed("ping -c 1 ${bobIp6}")
 
-      $carol->fail("journalctl -u dhcpcd | grep ygg0");
+      carol.fail("journalctl -u dhcpcd | grep ygg0")
 
-      $alice->waitForUnit("httpd.service");
-      $carol->succeed("curl --fail -g http://[${aliceIp6}]");
-
+      alice.wait_for_unit("httpd.service")
+      carol.succeed("curl --fail -g http://[${aliceIp6}]")
     '';
 })

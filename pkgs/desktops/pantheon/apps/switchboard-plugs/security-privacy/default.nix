@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -48,21 +48,13 @@ stdenv.mkDerivation rec {
     libgee
     polkit
     switchboard
+    lightlocker
     zeitgeist
-  ];
-
-  patches = [
-    ./hardcode-gsettings.patch
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
-
-    substituteInPlace src/Views/LockPanel.vala \
-      --subst-var-by LIGHTLOCKER_GSETTINGS_PATH ${glib.getSchemaPath lightlocker}
-    substituteInPlace src/Views/FirewallPanel.vala \
-      --subst-var-by SWITCHBOARD_SEC_PRIV_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   meta = with stdenv.lib; {

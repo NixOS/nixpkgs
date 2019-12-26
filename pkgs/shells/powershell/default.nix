@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/powershell
     cp -r * $out/share/powershell
     makeWrapper $out/share/powershell/pwsh $out/bin/pwsh --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath libraries}" \
-                                           --set TERM xterm --set POWERSHELL_TELEMETRY_OPTOUT 1
+                                           --set TERM xterm --set POWERSHELL_TELEMETRY_OPTOUT 1 --set DOTNET_CLI_TELEMETRY_OPTOUT 1
   '';
 
   dontStrip = true;

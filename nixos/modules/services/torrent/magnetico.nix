@@ -35,6 +35,7 @@ let
        (if (cfg.web.credentialsFile != null || cfg.web.credentials != { })
          then "--credentials=${toString credFile}"
          else "--no-auth")
+       "--addr=${address}:${toString port}"
      ] ++ extraOptions);
 
 in {
@@ -177,7 +178,7 @@ in {
     systemd.services.magneticod = {
       description = "Magnetico DHT crawler";
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network-online.target" ];
+      after    = [ "network.target" ];
 
       serviceConfig = {
         User      = "magnetico";
@@ -189,7 +190,7 @@ in {
     systemd.services.magneticow = {
       description = "Magnetico web interface";
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network-online.target" "magneticod.service"];
+      after    = [ "network.target" "magneticod.service"];
 
       serviceConfig = {
         User           = "magnetico";
@@ -202,7 +203,7 @@ in {
     assertions =
     [
       {
-        assertion = cfg.web.credentialsFile != null || cfg.web.credentials != { };
+        assertion = cfg.web.credentialsFile == null || cfg.web.credentials == { };
         message = ''
           The options services.magnetico.web.credentialsFile and
           services.magnetico.web.credentials are mutually exclusives.
@@ -211,5 +212,7 @@ in {
     ];
 
   };
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
 }

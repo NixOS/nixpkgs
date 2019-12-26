@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "soupsieve";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "605f89ad5fdbfefe30cdc293303665eff2d188865d4dbe4eb510bba1edfbfce3";
+    sha256 = "e2c1c5dee4a1c36bcb790e0fabd5492d874b8ebd4617622c4f6a731701060dda";
   };
 
   checkPhase = ''

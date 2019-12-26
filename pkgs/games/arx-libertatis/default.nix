@@ -47,14 +47,14 @@ stdenv.mkDerivation {
   '' + optionalString withCrashReporter ''
     wrapQtApp "$out/libexec/arxcrashreporter"
   '';
-  
+
   meta = {
     description = ''
       A cross-platform, open source port of Arx Fatalis, a 2002
       first-person role-playing game / dungeon crawler
       developed by Arkane Studios.
     '';
-    homepage = http://arx-libertatis.org/;
+    homepage = https://arx-libertatis.org/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.linux;

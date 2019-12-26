@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libelf, which, pkgconfig, freeglut
 , avrgcc, avrlibc
-, libGLU_combined
+, libGLU, libGL
 , GLUT }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
   nativeBuildInputs = [ which pkgconfig avrgcc ];
-  buildInputs = [ libelf freeglut libGLU_combined ]
+  buildInputs = [ libelf freeglut libGLU libGL ]
     ++ stdenv.lib.optional stdenv.isDarwin GLUT;
 
   # Hack to avoid TMPDIR in RPATHs.

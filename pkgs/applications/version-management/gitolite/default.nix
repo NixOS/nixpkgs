@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, nettools, perl }:
+{ stdenv, fetchFromGitHub, git, lib, makeWrapper, nettools, perl }:
 
 stdenv.mkDerivation rec {
   pname = "gitolite";
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1rkj7gknwjlc5ij9w39zf5mr647bm45la57yjczydmvrb8c56yrh";
   };
 
-  buildInputs = [ git nettools perl ];
+  buildInputs = [ nettools perl ];
+  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = [ git ];
 
   dontBuild = true;
 
@@ -23,6 +25,11 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/perl "${perl}/bin/perl"
     substituteInPlace src/lib/Gitolite/Setup.pm \
       --replace hostname "${nettools}/bin/hostname"
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/gitolite-shell \
+      --prefix PATH : "${git}/bin"
   '';
 
   installPhase = ''

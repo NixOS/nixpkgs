@@ -11,8 +11,8 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "013jhmc29angqh9qb8jj0jqk4whqb59id61njm8gwz977sdgpf9l";
-    x86_64-darwin = "09jfii132cib1kn3bghwchdlvi4cfjqz5hvw6j5gr53h7j35k37j";
+    x86_64-linux = "1njxa19mzzydz1jacghwmha3dl4a13m9xzzwsb0rbks5zc9a0v7m";
+    x86_64-darwin = "0cpd87q0q3i172l4s43s79by42wa9k5pyik3v2z5mq8zpms8qcq4";
   }.${system};
 
   sourceRoot = {
@@ -23,7 +23,7 @@ in
   callPackage ./generic.nix rec {
     inherit sourceRoot;
 
-    version = "1.39.2";
+    version = "1.41.0";
     pname = "vscodium";
 
     executableName = "codium";
@@ -50,7 +50,7 @@ in
       homepage = https://github.com/VSCodium/vscodium;
       downloadPage = https://github.com/VSCodium/vscodium/releases;
       license = licenses.mit;
-      maintainers = with maintainers; [];
+      maintainers = with maintainers; [ synthetica ];
       platforms = [ "x86_64-linux" "x86_64-darwin" ];
     };
   }

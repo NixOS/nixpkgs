@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "cleo";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d0sxca308ilp73jdny4frn93asr4ih87xxl1d9rxf8m12xssa3c";
+    sha256 = "99cf342406f3499cec43270fcfaf93c126c5164092eca201dfef0f623360b409";
   };
 
   propagatedBuildInputs = [

@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libsndio.7.0.dylib $out/lib/libsndio.7.0.dylib
     for file in $out/bin/*; do
       install_name_tool -change libsndio.7.0.dylib $out/lib/libsndio.dylib $file
     done

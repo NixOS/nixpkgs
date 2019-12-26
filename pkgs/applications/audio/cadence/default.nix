@@ -1,4 +1,6 @@
 { stdenv
+, mkDerivation
+, lib
 , fetchzip
 , pkgconfig
 , qtbase
@@ -6,74 +8,65 @@
 , python3Packages
 }:
 
- stdenv.mkDerivation rec {
-  version = "0.9.0";
+ mkDerivation rec {
+  version = "0.9.1";
   pname = "cadence";
 
   src = fetchzip {
     url = "https://github.com/falkTX/Cadence/archive/v${version}.tar.gz";
-    sha256 = "08vcggypkdfr70v49innahs5s11hi222dhhnm5wcqzdgksphqzwx";
+    sha256 = "07z8grnnpkd0nf3y3r6qjlk1jlzrbhdrp9mnhrhhmws54p1bhl20";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ qtbase ];
+  nativeBuildInputs = [
+    pkgconfig
+  ];
 
-  makeFlags = ''
-    PREFIX=""
-    DESTDIR=$(out)
-  '';
+  buildInputs = [
+    qtbase
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ pyqt5_with_qtwebkit ];
+  makeFlags = [
+    "PREFIX=''"
+    "DESTDIR=${placeholder "out"}"
+  ];
 
-  postInstall = ''
-    # replace with our own wrappers. They need to be changed manually since it wouldn't work otherwise
-    rm $out/bin/cadence
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/cadence.py"
-    rm $out/bin/claudia
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/claudia \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/claudia.py"
-    rm $out/bin/catarina
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/catarina \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/catarina.py"
-    rm $out/bin/catia
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/catia \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/catia.py"
-    rm $out/bin/cadence-jacksettings
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-jacksettings \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/jacksettings.py"
-    rm $out/bin/cadence-aloop-daemon
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-aloop-daemon \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/cadence_aloop_daemon.py"
-    rm $out/bin/cadence-logs
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-logs \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/logs.py"
-    rm $out/bin/cadence-render
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-render \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/render.py"
-    rm $out/bin/claudia-launcher
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/claudia-launcher \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/claudia_launcher.py"
-    rm $out/bin/cadence-session-start
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-session-start \
-      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-      --add-flags "-O $out/share/cadence/src/cadence_session_start.py"
-  '';
+  propagatedBuildInputs = with python3Packages; [
+    pyqt5_with_qtwebkit
+  ];
+
+  dontWrapQtApps = true;
+
+  # Replace with our own wrappers. They need to be changed manually since it wouldn't work otherwise.
+  preFixup = let
+    outRef = placeholder "out";
+    prefix = "${outRef}/share/cadence/src";
+    scriptAndSource = lib.mapAttrs' (script: source:
+      lib.nameValuePair ("${outRef}/bin/" + script) ("${prefix}/" + source)
+    ) {
+      "cadence" = "cadence.py";
+      "claudia" = "claudia.py";
+      "catarina" = "catarina.py";
+      "catia" = "catia.py";
+      "cadence-jacksettings" = "jacksettings.py";
+      "cadence-aloop-daemon" = "cadence_aloop_daemon.py";
+      "cadence-logs" = "logs.py";
+      "cadence-render" = "render.py";
+      "claudia-launcher" = "claudia_launcher.py";
+      "cadence-session-start" = "cadence_session_start.py";
+    };
+  in lib.mapAttrsToList (script: source: ''
+    rm -f ${script}
+    makeWrapper ${python3Packages.python.interpreter} ${script} \
+      --set PYTHONPATH "$PYTHONPATH:${outRef}/share/cadence" \
+      ''${qtWrapperArgs[@]} \
+      --add-flags "-O ${source}"
+  '') scriptAndSource;
 
   meta = {
     homepage = https://github.com/falkTX/Cadence/;
     description = "Collection of tools useful for audio production";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ genesis ];
+    maintainers = with stdenv.lib.maintainers; [ genesis worldofpeace ];
     platforms = [ "x86_64-linux" ];
   };
 }

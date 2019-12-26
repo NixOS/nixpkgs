@@ -53,9 +53,8 @@ in
           Whether to enable lightdm-mini-greeter as the lightdm greeter.
 
           Note that this greeter starts only the default X session.
-          You can configure the default X session by
-          <option>services.xserver.desktopManager.default</option> and
-          <option>services.xserver.windowManager.default</option>.
+          You can configure the default X session using
+          <xref linkend="opt-services.xserver.displayManager.defaultSession"/>.
         '';
       };
 

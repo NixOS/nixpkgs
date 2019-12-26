@@ -1,41 +1,28 @@
-{ stdenv, fetchurl, ocaml, findlib, dune, alcotest, cmdliner, fmt, optint, rresult }:
+{ lib, fetchurl, buildDunePackage
+, bigarray-compat, optint
+, cmdliner, fmt, rresult
+, alcotest
+}:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "checkseum is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  version = "0.1.1";
+  pname = "checkseum";
 
-# The C implementation is not portable: x86 only
-let hasC = stdenv.isi686 || stdenv.isx86_64; in
-
-stdenv.mkDerivation rec {
-  version = "0.0.3";
-  name = "ocaml${ocaml.version}-checkseum-${version}";
   src = fetchurl {
-    url = "https://github.com/mirage/checkseum/releases/download/v0.0.3/checkseum-v0.0.3.tbz";
-    sha256 = "12j45zsvil1ynwx1x8fbddhqacc8r1zf7f6h576y3f3yvbg7l1fm";
+    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-v${version}.tbz";
+    sha256 = "0aa2r1l65a5hcgciw6n8r5ij4gpgg0cf9k24isybxiaiz63k94d3";
   };
 
-  postPatch = stdenv.lib.optionalString (!hasC) ''
-    rm -r bin src-c
-  '';
+  buildInputs = [ cmdliner fmt rresult ];
+  propagatedBuildInputs = [ bigarray-compat optint ];
+  checkInputs = lib.optionals doCheck [ alcotest ];
 
-  buildInputs = [ ocaml findlib dune alcotest cmdliner fmt rresult ];
-  propagatedBuildInputs = [ optint ];
-
-  buildPhase = "dune build";
-
-  doCheck = hasC;
-  checkPhase = "dune runtest";
-
-  inherit (dune) installPhase;
-
-  passthru = { inherit hasC; };
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/mirage/checkseum";
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

@@ -18,7 +18,6 @@ let
     ''}
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
-    log_file            "syslog"
     user                "${cfg.user}"
     group               "${cfg.group}"
 

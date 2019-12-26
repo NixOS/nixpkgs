@@ -30,11 +30,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.25.2";
+  version = "0.25.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca91a19d1f0a280874a24dca44aadce42da7f3a7edb7e9ab7c7baad8febee2be";
+    sha256 = "52da74df8a9c9a103af0a72c9d5fdc8e0183a90884278db7f386b5692a2220a4";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -111,7 +111,7 @@ in buildPythonPackage rec {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = http://pandas.pydata.org/;
+    homepage = https://pandas.pydata.org/;
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];

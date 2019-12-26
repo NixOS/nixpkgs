@@ -1,23 +1,22 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, Security }:
+{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, python3, libxcb, AppKit, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-tui";
-  version = "0.8.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "Rigellute";
     repo = "spotify-tui";
     rev = "v${version}";
-    sha256 = "0pgmcld48sd34jpsc4lr8dbqs8iwk0xp9aa3b15m61mv3lf04qc6";
+    sha256 = "1pshwn486msn418dilk57rl9471aas0dif765nx1p9xgkrjpb7wa";
   };
 
-  cargoSha256 = "1rb4dl9zn3xx2yrapx5cfsli93ggmdq8w9fqi8cy8giyja1mnqfl";
+  cargoSha256 = "0020igycgikkbd649hv6xlpn13dij4g7yc43fic9z710p6nsxqaq";
 
-  cargoPatches = [ ./fix-cargo-lock-version.patch ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ] ++ stdenv.lib.optionals stdenv.isLinux [ python3 ];
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+  	++ stdenv.lib.optional stdenv.isLinux libxcb
+    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   meta = with stdenv.lib; {
     description = "Spotify for the terminal written in Rust";

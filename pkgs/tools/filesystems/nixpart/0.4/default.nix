@@ -73,6 +73,5 @@ in buildPythonApplication rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.aszlig ];
     platforms = platforms.linux;
-    broken = true;
   };
 }

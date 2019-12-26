@@ -4,13 +4,13 @@
 
 buildGoPackage rec {
   pname = "buildah";
-  version = "1.11.4";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner  = "containers";
     repo   = "buildah";
     rev    = "v${version}";
-    sha256 = "11jdjrmyafy3fnnp4cdxh3fncjbcy7gggpzwp4n857ij7k2581hl";
+    sha256 = "0lsjsfp6ls38vlgibbnsyd1m7jvmjwdmpyrd0qigp4aa2abwi4dg";
   };
 
   outputs = [ "bin" "man" "out" ];
@@ -18,8 +18,14 @@ buildGoPackage rec {
   goPackagePath = "github.com/containers/buildah";
   excludedPackages = [ "tests" ];
 
+  # Disable module-mode, because Go 1.13 automatically enables it if there is
+  # go.mod file. Remove after https://github.com/NixOS/nixpkgs/pull/73380
+  GO111MODULE = "off";
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs ostree libselinux libseccomp ];
+
+  patches = [ ./disable-go-module-mode.patch ];
 
   buildPhase = ''
     pushd go/src/${goPackagePath}
@@ -35,6 +41,6 @@ buildGoPackage rec {
     description = "A tool which facilitates building OCI images";
     homepage = "https://github.com/containers/buildah";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch vdemeester ];
+    maintainers = with maintainers; [ Profpatsch vdemeester saschagrunert ];
   };
 }

@@ -3,7 +3,6 @@
 , fetchPypi
 , enum34
 , google_api_core
-, pytest
 , mock
 }:
 
@@ -16,11 +15,13 @@ buildPythonPackage rec {
     sha256 = "f33aea6721d453901ded268dee61a01ab77d4cd215a76edc3cc61b6028299d3e";
   };
 
-  checkInputs = [ pytest mock ];
+  checkInputs = [ mock ];
   propagatedBuildInputs = [ enum34 google_api_core ];
 
+  # pytest seems to pick up some file which overrides PYTHONPATH
   checkPhase = ''
-    pytest tests/unit
+    cd tests/unit
+    python -m unittest discover
   '';
 
   meta = with stdenv.lib; {

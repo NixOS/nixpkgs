@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, cmake
+{ mkDerivation, lib, fetchurl, fetchpatch, cmake
 , extra-cmake-modules, qtbase, qtscript
 , karchive, kcrash, kdnssd, ki18n, kio, knotifications, knotifyconfig
 , kdoctools, kross, kcmutils, kwindowsystem
 , libktorrent, taglib, libgcrypt, kplotting
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "ktorrent";
   version = "${libktorrent.mainVersion}";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "KDE integrated BtTorrent client";
     homepage    = https://www.kde.org/applications/internet/ktorrent/;
     license = licenses.gpl2;

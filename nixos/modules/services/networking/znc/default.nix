@@ -239,7 +239,7 @@ in
     services.znc = {
       configFile = mkDefault (pkgs.writeText "znc-generated.conf" semanticString);
       config = {
-        Version = (builtins.parseDrvName pkgs.znc.name).version;
+        Version = lib.getVersion pkgs.znc;
         Listener.l.Port = mkDefault 5000;
         Listener.l.SSL = mkDefault true;
       };

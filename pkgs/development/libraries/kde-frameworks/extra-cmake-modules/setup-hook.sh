@@ -42,12 +42,12 @@ ecmPostHook() {
     cmakeFlags+=" -DKDE_INSTALL_CONFDIR=${!outputBin}/etc/xdg"
     cmakeFlags+=" -DKDE_INSTALL_AUTOSTARTDIR=${!outputBin}/etc/xdg/autostart"
 
-    if [ -n "$qtPluginPrefix" ]; then
+    if [ -n "${qtPluginPrefix-}" ]; then
         cmakeFlags+=" -DKDE_INSTALL_QTPLUGINDIR=${!outputBin}/$qtPluginPrefix"
         cmakeFlags+=" -DKDE_INSTALL_PLUGINDIR=${!outputBin}/$qtPluginPrefix"
     fi
 
-    if [ -n "$qtQmlPrefix" ]; then
+    if [ -n "${qtQmlPrefix-}" ]; then
         cmakeFlags+=" -DKDE_INSTALL_QMLDIR=${!outputBin}/$qtQmlPrefix"
     fi
 }

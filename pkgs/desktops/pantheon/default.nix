@@ -3,37 +3,6 @@
 
 lib.makeScope pkgs.newScope (self: with self; {
 
-  apps = [
-    elementary-calculator elementary-calendar
-    elementary-camera elementary-code elementary-files
-    elementary-music elementary-photos elementary-screenshot-tool
-    elementary-terminal elementary-videos switchboard-with-plugs
-  ];
-
-  artwork = [
-    elementary-gtk-theme
-    elementary-icon-theme
-    elementary-sound-theme
-    elementary-wallpapers
-  ];
-
-  desktop = [
-    elementary-default-settings
-    elementary-session-settings
-    elementary-shortcut-overlay
-    gala
-    wingpanel-with-indicators
-  ];
-
-  services = [
-    cerbere
-    elementary-capnet-assist
-    elementary-settings-daemon
-    elementary-dpms-helper
-    pantheon-agent-geoclue2
-    pantheon-agent-polkit
-  ];
-
   switchboardPlugs = [
     switchboard-plug-a11y switchboard-plug-about
     switchboard-plug-applications switchboard-plug-bluetooth
@@ -53,6 +22,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-notifications wingpanel-indicator-power
     wingpanel-indicator-session wingpanel-indicator-sound
   ];
+
+  nixpkgs-github-update = callPackage ./nixpkgs_github_update { };
 
   updateScript = callPackage ./update.nix { };
 
@@ -155,9 +126,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-keyboard = callPackage ./desktop/wingpanel-indicators/keyboard { };
 
-  wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network {
-    inherit (gnome3) networkmanagerapplet;
-  };
+  wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network { };
 
   wingpanel-indicator-nightlight = callPackage ./desktop/wingpanel-indicators/nightlight { };
 
@@ -193,9 +162,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   switchboard-plug-mouse-touchpad = callPackage ./apps/switchboard-plugs/mouse-touchpad { };
 
-  switchboard-plug-network = callPackage ./apps/switchboard-plugs/network {
-    inherit (gnome3) networkmanagerapplet;
-  };
+  switchboard-plug-network = callPackage ./apps/switchboard-plugs/network { };
 
   switchboard-plug-notifications = callPackage ./apps/switchboard-plugs/notifications { };
 

@@ -1,6 +1,6 @@
 {
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   gfortran,
   cmake,
   python2,
@@ -8,19 +8,22 @@
 }:
 let
   inherit (stdenv.lib) optional;
-  version = "3.8.0";
+  version = "3.9.0";
 in
 
 stdenv.mkDerivation {
   pname = "liblapack";
   inherit version;
-  src = fetchurl {
-    url = "http://www.netlib.org/lapack/lapack-${version}.tar.gz";
-    sha256 = "1xmwi2mqmipvg950gb0rhgprcps8gy8sjm8ic9rgy2qjlv22rcny";
+
+  src = fetchFromGitHub {
+    owner = "Reference-LAPACK";
+    repo = "lapack";
+    rev = "v${version}";
+    sha256 = "0sxnc97z67i7phdmcnq8f8lmxgw10wdwvr8ami0w3pb179cgrbpb";
   };
 
-  buildInputs = [ gfortran cmake ];
-  nativeBuildInputs = [ python2 ];
+  buildInputs = [ gfortran ];
+  nativeBuildInputs = [ python2 cmake ];
 
   cmakeFlags = [
     "-DCMAKE_Fortran_FLAGS=-fPIC"

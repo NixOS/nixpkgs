@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-hub";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    sha256 = "03mz64lzicbxxz9b202kqs5ysf82sgb7lw967wkjdy2wbpqk8j0z";
-    rev = "v${version}";
-    repo = "git-hub";
     owner = "sociomantic-tsunami";
+    repo = "git-hub";
+    rev = "v${version}";
+    sha256 = "0jkzg7vjvgb952qncndhki7n70714w61flbzf4mdcjc286lqjvwb";
   };
 
   buildInputs = [ python2Packages.python ];

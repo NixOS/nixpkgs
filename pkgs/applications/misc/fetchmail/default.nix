@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--with-ssl=${openssl.dev}" ];
 
   meta = {
-    homepage = http://www.fetchmail.info/;
+    homepage = https://www.fetchmail.info/;
     description = "A full-featured remote-mail retrieval and forwarding utility";
     longDescription = ''
       A full-featured, robust, well-documented remote-mail retrieval and

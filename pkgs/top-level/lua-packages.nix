@@ -23,7 +23,7 @@ let
   isLua51 = (lib.versions.majorMinor lua.version) == "5.1";
   isLua52 = (lib.versions.majorMinor lua.version) == "5.2";
   isLua53 = lua.luaversion == "5.3";
-  isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
+  isLuaJIT = lib.getName lua == "luajit";
 
   lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
 
@@ -134,14 +134,14 @@ with self; {
 
   pulseaudio = buildLuaPackage rec {
     pname = "pulseaudio";
-    version = "0.1";
+    version = "0.2";
     name = "pulseaudio-${version}";
 
     src = fetchFromGitHub {
       owner = "doronbehar";
       repo = "lua-pulseaudio";
       rev = "v${version}";
-      sha256 = "0vldm34m3ysgn8gvwfdglpw4jl5680fvfay7pzs14gzkzcvgv25b";
+      sha256 = "140y1m6k798c4w7xfl0zb0a4ffjz6i1722bgkdcdg8g76hr5r8ys";
     };
     disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
     buildInputs = [ pkgs.libpulseaudio ];

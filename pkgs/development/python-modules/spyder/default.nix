@@ -14,6 +14,8 @@ buildPythonPackage rec {
     sha256 = "1z7qw1h3rhca12ycv8xrzw6z2gf81v0j6lfq9kpwh472w4vk75v1";
   };
 
+  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+
   propagatedBuildInputs = [
     jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
@@ -45,6 +47,12 @@ buildPythonPackage rec {
     mkdir -p $out/share/icons
     cp spyder/images/spyder.svg $out/share/icons
     cp -r $desktopItem/share/applications/ $out/share
+  '';
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with stdenv.lib; {

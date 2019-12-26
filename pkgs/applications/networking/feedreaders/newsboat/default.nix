@@ -1,13 +1,15 @@
-{ stdenv, rustPlatform, fetchurl, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
+{ stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
 , asciidoc, docbook_xml_dtd_45, libxslt, docbook_xsl, libiconv, Security, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
   version = "2.17.1";
 
-  src = fetchurl {
-    url = "https://newsboat.org/releases/${version}/${pname}-${version}.tar.xz";
-    sha256 = "15qr2y35yvl0hzsf34d863n8v042v78ks6ksh5p1awvi055x5sy1";
+  src = fetchFromGitHub {
+    owner = "newsboat";
+    repo = "newsboat";
+    rev = "r${version}";
+    sha256 = "1xdy45rc3zzmf59zzszq9wpks6pvc0flmmwak39ww7laj2vgb4a7";
   };
 
   cargoSha256 = "0db4j6y43gacazrvcmq823fzl5pdfdlg8mkjpysrw6h9fxisq83f";

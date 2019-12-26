@@ -1,14 +1,31 @@
-{ stdenv, fetchurl, substituteAll, openconnect, intltool, pkgconfig, autoreconfHook, networkmanager, gcr, libsecret, file
-, gtk3, withGnome ? true, gnome3, kmod, fetchpatch }:
+{ stdenv
+, fetchurl
+, substituteAll
+, glib
+, libxml2
+, openconnect
+, intltool
+, pkgconfig
+, autoreconfHook
+, networkmanager
+, gcr
+, libsecret
+, file
+, gtk3
+, withGnome ? true
+, gnome3
+, kmod
+, fetchpatch
+}:
 
 let
-  pname   = "NetworkManager-openconnect";
+  pname = "NetworkManager-openconnect";
   version = "1.2.6";
 in stdenv.mkDerivation {
-  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0nlp290nkawc4wqm978n4vhzg3xdqi8kpjjx19l855vab41rh44m";
   };
 
@@ -17,6 +34,7 @@ in stdenv.mkDerivation {
       src = ./fix-paths.patch;
       inherit kmod openconnect;
     })
+
     # Don't use etc/dbus-1/system.d
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/NetworkManager-openconnect/merge_requests/9.patch";
@@ -24,10 +42,22 @@ in stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ openconnect networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 gcr libsecret ];
+  buildInputs = [
+    glib
+    libxml2
+    openconnect
+    networkmanager
+  ] ++ stdenv.lib.optionals withGnome [
+    gtk3
+    gcr
+    libsecret
+  ];
 
-  nativeBuildInputs = [ intltool pkgconfig file ];
+  nativeBuildInputs = [
+    intltool
+    pkgconfig
+    file
+  ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
@@ -43,7 +73,7 @@ in stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    description = "NetworkManager's OpenConnect plugin";
+    description = "NetworkManager’s OpenConnect plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;
   };

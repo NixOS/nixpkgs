@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, qt5
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib, python
+, rnnoise
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
@@ -15,7 +16,8 @@ assert iceSupport -> zeroc-ice != null;
 with stdenv.lib;
 let
   generic = overrides: source: qt5.mkDerivation (source // overrides // {
-    name = "${overrides.type}-${source.version}";
+    pname = overrides.type;
+    version = source.version;
 
     patches = (source.patches or []) ++ optional jackSupport ./mumble-jack-support.patch;
 
@@ -62,9 +64,9 @@ let
 
     meta = {
       description = "Low-latency, high quality voice chat software";
-      homepage = https://mumble.info;
+      homepage = "https://mumble.info";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ petabyteboy ];
       platforms = platforms.linux;
     };
   });
@@ -73,7 +75,7 @@ let
     type = "mumble";
 
     nativeBuildInputs = [ qt5.qttools ];
-    buildInputs = [ libopus libsndfile speex qt5.qtsvg ]
+    buildInputs = [ libopus libsndfile speex qt5.qtsvg rnnoise ]
       ++ optional stdenv.isLinux alsaLib
       ++ optional jackSupport libjack2
       ++ optional speechdSupport speechd

@@ -26,7 +26,7 @@ in rec {
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ (python3.withPackages (p: [ p.ptpython ])) ];
-    checkInputs = with python3Packages; [ pylint black ];
+    checkInputs = with python3Packages; [ pylint black mypy ];
 
     dontUnpack = true;
 
@@ -34,6 +34,9 @@ in rec {
 
     doCheck = true;
     checkPhase = ''
+      mypy --disallow-untyped-defs \
+           --no-implicit-optional \
+           --ignore-missing-imports ${testDriverScript}
       pylint --errors-only ${testDriverScript}
       black --check --diff ${testDriverScript}
     '';
@@ -92,6 +95,8 @@ in rec {
     , makeCoverageReport ? false
     , enableOCR ? false
     , name ? "unnamed"
+    # Skip linting (mainly intended for faster dev cycles)
+    , skipLint ? false
     , ...
     } @ t:
 
@@ -130,7 +135,7 @@ in rec {
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
-      driver = runCommand testDriverName
+      driver = let warn = if skipLint then lib.warn "Linting is disabled!" else lib.id; in warn (runCommand testDriverName
         { buildInputs = [ makeWrapper];
           testScript = testScript';
           preferLocalBuild = true;
@@ -140,7 +145,9 @@ in rec {
           mkdir -p $out/bin
 
           echo -n "$testScript" > $out/test-script
-          ${python3Packages.black}/bin/black --check --diff $out/test-script
+          ${lib.optionalString (!skipLint) ''
+            ${python3Packages.black}/bin/black --check --diff $out/test-script
+          ''}
 
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
           vms=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
@@ -157,7 +164,7 @@ in rec {
             --set tests 'start_all(); join_all();' \
             --set VLANS '${toString vlans}' \
             ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
-        ''; # "
+        ''); # "
 
       passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
         meta = (drv.meta or {}) // t.meta;
@@ -258,11 +265,9 @@ in rec {
           inherit require;
           virtualisation.memorySize = 1024;
           services.xserver.enable = true;
-          services.xserver.displayManager.slim.enable = false;
           services.xserver.displayManager.auto.enable = true;
-          services.xserver.windowManager.default = "icewm";
+          services.xserver.displayManager.defaultSession = "none+icewm";
           services.xserver.windowManager.icewm.enable = true;
-          services.xserver.desktopManager.default = "none";
         };
     in
       runInMachine ({

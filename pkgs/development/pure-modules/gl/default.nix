@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, freeglut, libGLU_combined, xlibsWrapper }:
+{ stdenv, fetchurl, pkgconfig, pure, freeglut, libGLU, libGL, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   baseName = "gl";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ pure freeglut libGLU_combined xlibsWrapper ];
+  propagatedBuildInputs = [ pure freeglut libGLU libGL xlibsWrapper ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;
 

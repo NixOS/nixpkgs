@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geekbench";
-  version = "5.0.2";
+  version = "5.0.4";
 
   src = fetchurl {
     url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-    sha256 = "1vgq6dp22996y7llcij122idky92jgczliwm191yfc8b200xbx0p";
+    sha256 = "04d7ixfmzj22w9svjdj0kxsp7ycnzdzx9kd2z1vswnyybdkgyjy7";
   };
 
   dontConfigure = true;

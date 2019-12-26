@@ -74,7 +74,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0gfb7r3pj2cdzbm2lbymlx27kgy2adnvlzpv4s3lmdfpyzgflf1y";
+      sha256 = "04l1yrjq7n4nlzkmkg73xp6p7vpw1iq53mrmyb8162wqb7zapg4f";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -275,6 +275,7 @@ self: super: {
   dlist = dontCheck super.dlist;
   docopt = dontCheck super.docopt;                      # http://hydra.cryp.to/build/499172/log/raw
   dom-selector = dontCheck super.dom-selector;          # http://hydra.cryp.to/build/497670/log/raw
+  dotenv = dontCheck super.dotenv;                      # Tests fail because of missing test file on version 0.8.0.2 fixed on version 0.8.0.4
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG;                          # http://hydra.cryp.to/build/498245/nixlog/1/raw
   ed25519 = dontCheck super.ed25519;
@@ -288,6 +289,7 @@ self: super: {
   ghc-parmake = dontCheck super.ghc-parmake;
   ghcid = dontCheck super.ghcid;
   git-vogue = dontCheck super.git-vogue;
+  github-rest = dontCheck super.github-rest;  # test suite needs the network
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   GLFW-b = dontCheck super.GLFW-b;                      # https://github.com/bsl/GLFW-b/issues/50
   hackport = dontCheck super.hackport;
@@ -321,8 +323,8 @@ self: super: {
   influxdb = dontCheck super.influxdb;
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
-  language-slice = dontCheck super.language-slice;
   language-nix = if (pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isi686) then dontCheck super.language-nix else super.language-nix; # aarch64: https://ghc.haskell.org/trac/ghc/ticket/15275
+  language-slice = dontCheck super.language-slice;
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
@@ -368,6 +370,8 @@ self: super: {
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
   shake-language-c = dontCheck super.shake-language-c;
+  snap-core = dontCheck super.snap-core;
+  sourcemap = dontCheck super.sourcemap;
   static-resources = dontCheck super.static-resources;
   strive = dontCheck super.strive;                      # fails its own hlint test with tons of warnings
   svndump = dontCheck super.svndump;
@@ -384,13 +388,16 @@ self: super: {
   webdriver = dontCheck super.webdriver;
   webdriver-angular = dontCheck super.webdriver-angular;
   xsd = dontCheck super.xsd;
-  snap-core = dontCheck super.snap-core;
-  sourcemap = dontCheck super.sourcemap;
   zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
 
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
+
+  # use the correct version of network
+  systemd_2_2_0 = dontCheck (super.systemd_2_2_0.override {
+    network = self.network_3_1_1_1;
+  });
 
   # https://github.com/eli-frey/cmdtheline/issues/28
   cmdtheline = dontCheck super.cmdtheline;
@@ -509,7 +516,9 @@ self: super: {
      else dontCheck super.tasty-discover);
 
   # generic-deriving bound is too tight
-  aeson = doJailbreak super.aeson;
+  # aeson 1.4.6.0 needs Diff 0.4.0 to do tests but nixpkgs is still at 0.3.4
+  # https://github.com/bos/aeson/issues/740
+  aeson = dontCheck (doJailbreak super.aeson);
 
   # containers >=0.4 && <0.6 is too tight
   # https://github.com/RaphaelJ/friday/issues/34
@@ -1048,8 +1057,7 @@ self: super: {
     generateOptparseApplicativeCompletion "dhall" (
       dontCheck super.dhall
   );
-  dhall_1_27_0 = dontCheck super.dhall_1_27_0;
-
+  dhall_1_28_0 = dontCheck super.dhall_1_28_0;
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
   # https://github.com/dhall-lang/dhall-haskell/pull/997
@@ -1076,6 +1084,7 @@ self: super: {
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
+  haddock-library_1_8_0 = doJailbreak super.haddock-library_1_8_0;
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
@@ -1114,8 +1123,23 @@ self: super: {
   # https://github.com/snapframework/xmlhtml/pull/37
   xmlhtml = doJailbreak super.xmlhtml;
 
-  # Generate shell completions
-  purescript = generateOptparseApplicativeCompletion "purs" super.purescript;
+  purescript =
+    let
+      purescriptWithOverrides = super.purescript.override {
+        # PureScript requires an older version of happy.
+        happy = self.happy_1_19_9;
+      };
+
+      # PureScript is built against LTS-13, so we need to jailbreak it to
+      # accept more recent versions of the libraries it requires.
+      jailBrokenPurescript = doJailbreak purescriptWithOverrides;
+
+      # Haddocks for PureScript can't be built.
+      # https://github.com/purescript/purescript/pull/3745
+      dontHaddockPurescript = dontHaddock jailBrokenPurescript;
+    in
+    # Generate shell completions
+    generateOptparseApplicativeCompletion "purs" dontHaddockPurescript;
 
   # https://github.com/kcsongor/generic-lens/pull/65
   generic-lens = dontCheck super.generic-lens;
@@ -1166,18 +1190,6 @@ self: super: {
   # test suite failure: https://github.com/jgm/pandoc/issues/5582
   pandoc = dontCheck super.pandoc;
 
-  # The latest release version is ancient. You really need this tool from git.
-  haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
-    (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-      version = "20190814-git";
-      src = pkgs.fetchFromGitHub {
-        owner = "haskell-CI";
-        repo = "haskell-ci";
-        rev = "70918d80b6fd43aca7e4d00ba0d2ea116b666556";
-        sha256 = "0bzp959qy74zmqq75f60rcixpjbvvyrb5a8zp2nyql3nm9vxzy5k";
-      };
-  }) (with self; [temporary lattices Cabal_3_0_0_0]));
-
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
 
@@ -1202,8 +1214,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_27_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_27_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_28_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_28_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1213,7 +1225,7 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   # need newer version of ghc-libparser
-  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_1; };
+  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_1_20191204; };
 
   # https://github.com/sol/hpack/issues/366
   hpack = self.hpack_0_33_0;
@@ -1233,8 +1245,9 @@ self: super: {
     '';
   });
 
-  # The LTS-14.x version of optparse-applicative is too old.
-  cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
+  # The LTS-14.x version of their dependencies are too old.
+  cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_0; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
 
   # Version bounds for http-client are too strict:
   # https://github.com/bitnomial/prometheus/issues/34
@@ -1274,22 +1287,44 @@ self: super: {
 
   # polysemy-plugin requires polysemy >= 1.2.0.0
   polysemy = self.polysemy_1_2_3_0;
-
-  # The polysemy-plugin tests failed because it couldn't find
-  # the polysemy-plugin package in the doctests:
-  # https://github.com/NixOS/nixpkgs/issues/71164
-  # I've addressed this with a PR upstream:
-  # https://github.com/polysemy-research/polysemy/pull/265
-  # the patch of which is applied here.
-  polysemy-plugin = appendPatch (addSetupDepend super.polysemy-plugin self.cabal-doctest) (pkgs.fetchpatch {
-    url = "https://github.com/polysemy-research/polysemy/pull/265.patch";
-    sha256 = "19237js70chq84w7vqgvj49n6bs9lp95k13ia3xzbr1r9yyrfkhq";
-    stripLen = 1;
-  });
-
   polysemy-zoo = self.polysemy-zoo_0_6_0_1;
 
   # https://github.com/Happstack/web-routes-th/pull/3
   web-routes-th = doJailbreak super.web-routes-th;
+
+  # Remove for hail > 0.2.0.0
+  hail = overrideCabal super.hail (drv: {
+    patches = [
+      (pkgs.fetchpatch {
+        # Relax dependency constraints,
+        # upstream PR: https://github.com/james-preston/hail/pull/13
+        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/13.patch";
+        sha256 = "039p5mqgicbhld2z44cbvsmam3pz0py3ybaifwrjsn1y69ldsmkx";
+      })
+      (pkgs.fetchpatch {
+        # Relax dependency constraints,
+        # upstream PR: https://github.com/james-preston/hail/pull/15
+        url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/15.patch";
+        sha256 = "03kdvr8hxi6isb8yxp5rgcmz855n19m1yacn3d56a4i58j2mldjw";
+      })
+    ];
+  });
+
+  # Needs the corresponding version of haskell-src-exts.
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
+
+  # https://github.com/Daniel-Diaz/HaTeX/issues/144
+  HaTeX = dontCheck super.HaTeX;
+
+  # https://github.com/kazu-yamamoto/dns/issues/150
+  dns = dontCheck super.dns;
+
+  # needs newer version of the systemd package
+  spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
+
+  # ghcide needs the latest versions of haskell-lsp.
+  ghcide = super.ghcide.override { haskell-lsp = self.haskell-lsp_0_18_0_0; lsp-test = self.lsp-test_0_8_2_0; };
+  haskell-lsp_0_18_0_0 = super.haskell-lsp_0_18_0_0.override { haskell-lsp-types = self.haskell-lsp-types_0_18_0_0; };
+  lsp-test_0_8_2_0 = (dontCheck super.lsp-test_0_8_2_0).override { haskell-lsp = self.haskell-lsp_0_18_0_0; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

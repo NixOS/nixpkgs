@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
-, fetchpatch
+{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, makeWrapper
 , bash, libsamplerate, libsndfile, readline, eigen, celt
 , wafHook
 # Darwin Dependencies
@@ -15,7 +14,7 @@
 
 with stdenv.lib;
 let
-  inherit (python2Packages) python dbus-python;
+  inherit (python3Packages) python dbus-python;
   shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   libOnly = prefix == "lib";
@@ -28,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}jack2-${version}";
-  version = "1.9.12";
+  version = "1.9.14";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${version}";
-    sha256 = "0ynpyn0l77m94b50g7ysl795nvam3ra65wx5zb46nxspgbf6wnkh";
+    sha256 = "1prxg1l8wrxfp2mh7l4mvjvmml6816fciq1la88ylhwm1qnfvnax";
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
@@ -48,11 +47,6 @@ stdenv.mkDerivation rec {
     substituteInPlace svnversion_regenerate.sh \
         --replace /bin/bash ${bash}/bin/bash
   '';
-
-  patches = [ (fetchpatch {
-    url = "https://github.com/jackaudio/jack2/commit/d851fada460d42508a6f82b19867f63853062583.patch";
-    sha256 = "1iwwxjzvgrj7dz3s8alzlhcgmcarjcbkrgvsmy6kafw21pyyw7hp";
-  }) ];
 
   wafConfigureFlags = [
     "--classic"
@@ -70,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "JACK audio connection kit, version 2 with jackdbus";
-    homepage = http://jackaudio.org;
+    homepage = https://jackaudio.org;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ goibhniu ];

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.pps.univ-paris-diderot.fr/~jch/software/babel/;
     description = "Loop-avoiding distance-vector routing protocol";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ fpletz ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

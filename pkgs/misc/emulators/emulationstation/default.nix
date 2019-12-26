@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, curl, boost, eigen
-, freeimage, freetype, libGLU_combined, SDL2, alsaLib, libarchive }:
+, freeimage, freetype, libGLU, libGL, SDL2, alsaLib, libarchive }:
 
 stdenv.mkDerivation {
   pname = "emulationstation";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake alsaLib boost curl eigen freeimage freetype libarchive libGLU_combined SDL2 ];
+  buildInputs = [ cmake alsaLib boost curl eigen freeimage freetype libarchive libGLU libGL SDL2 ];
 
   buildPhase = "cmake . && make";
   installPhase = ''

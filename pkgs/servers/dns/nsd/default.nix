@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nsd";
-  version = "4.2.2";
+  version = "4.2.3";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1ys608jyp5scc957q4brm094c97sxlwymina7d2nvzi51aa37cw3";
+    sha256 = "1664wpglrwqk627xma10f9qa652vzmf90gsjd8pribyj74xrczc1";
   };
 
   prePatch = ''

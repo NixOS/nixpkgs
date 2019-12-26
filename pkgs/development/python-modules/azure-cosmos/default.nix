@@ -1,5 +1,6 @@
 { buildPythonPackage
 , lib
+, python
 , fetchPypi
 , six
 , requests
@@ -15,6 +16,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six requests ];
+
+  postInstall = ''
+    rm $out/${python.sitePackages}/azure/__init__.py
+  '';
 
   # requires an active Azure Cosmos service
   doCheck = false;

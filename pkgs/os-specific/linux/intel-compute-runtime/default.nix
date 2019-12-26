@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "19.34.13959";
+  version = "19.44.14658";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "1m54w5p5pilrkmlmqgvgrsm3d5dqfdr4jai5siq5ccsqj4gnv1wz";
+    sha256 = "1pl7yhmgzf7r2b8jyxzmwdc7772gd24izy2z2g4n5s205s125k7x";
   };
 
   # Build script tries to write the ICD to /etc

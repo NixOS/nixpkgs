@@ -12,6 +12,7 @@
 , xarray
 , networkx
 , streamz
+, colorcet
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest parameterized nbsmoke flake8 coveralls xarray networkx streamz ];
   propagatedBuildInputs = [
     bokeh
+    colorcet
     holoviews
     pandas
   ];

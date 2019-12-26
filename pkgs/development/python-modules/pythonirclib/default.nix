@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python IRC library";
-    homepage = https://bitbucket.org/jaraco/irc;
+    homepage = "https://github.com/jaraco/irc";
     license = with licenses; [ lgpl21 ];
   };
 

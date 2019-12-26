@@ -9,7 +9,7 @@
   , libxkbcommon      ? null
 
 , x11Support ? stdenv.isLinux
-  , libGLU_combined ? null
+  , libGLU, libGL ? null
   , libX11          ? null
   , libXext         ? null
   , libXxf86vm      ? null
@@ -39,7 +39,7 @@
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
-, sambaSupport       ? true,           samba         ? null
+, sambaSupport       ? stdenv.isLinux, samba         ? null
 , sdl2Support        ? true,           SDL2          ? null
 , sndioSupport       ? true,           sndio         ? null
 , speexSupport       ? true,           speex         ? null
@@ -52,7 +52,7 @@
 , zimgSupport        ? true,           zimg          ? null
 , archiveSupport     ? false,          libarchive    ? null
 , jackaudioSupport   ? false,          libjack2      ? null
-, openalSupport      ? false,          openalSoft    ? null
+, openalSupport      ? true,          openalSoft    ? null
 , vapoursynthSupport ? false,          vapoursynth   ? null
 }:
 
@@ -86,7 +86,7 @@ assert vapoursynthSupport -> available vapoursynth;
 assert vdpauSupport       -> available libvdpau;
 assert vulkanSupport      -> all available [ libplacebo shaderc vulkan-headers vulkan-loader ];
 assert waylandSupport     -> all available [ wayland wayland-protocols libxkbcommon ];
-assert x11Support         -> all available [ libGLU_combined libX11 libXext libXxf86vm libXrandr ];
+assert x11Support         -> all available [ libGLU libGL libX11 libXext libXxf86vm libXrandr ];
 assert xineramaSupport    -> x11Support && available libXinerama;
 assert xvSupport          -> x11Support && available libXv;
 assert youtubeSupport     -> available youtube-dl;
@@ -181,7 +181,7 @@ in stdenv.mkDerivation rec {
     ++ optionals drmSupport        [ libdrm mesa ]
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
-    ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
+    ++ optionals x11Support        [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
     ++ optionals vulkanSupport     [ libplacebo shaderc vulkan-headers vulkan-loader ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation Cocoa CoreAudio
@@ -235,7 +235,7 @@ in stdenv.mkDerivation rec {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = https://mpv.io;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz globin ivan ];
+    maintainers = with maintainers; [ AndersonTorres fpletz globin ivan ];
     platforms = platforms.darwin ++ platforms.linux;
 
     longDescription = ''

@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      versionPolicy = "master";
+      attrPath = "pantheon.${pname}";
     };
   };
 

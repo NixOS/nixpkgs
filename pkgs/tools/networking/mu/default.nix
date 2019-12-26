@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
 , xapian, glib, gmime3, texinfo , emacs, guile
-, gtk3, webkitgtk24x-gtk3, libsoup, icu
+, gtk3, webkitgtk, libsoup, icu
 , withMug ? false }:
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.3.5";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "1g7rhgp405v7q9xx44k6jn3py4v73a9qjwhai6l459wdywdz1n3n";
+    sha256 = "0yhjlj0z23jw3cf2wfnl98y8q6gikvmhkb8vdm87bd7jw0bdnrfz";
   };
 
   # test-utils coredumps so don't run those
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     sqlite xapian glib gmime3 texinfo emacs guile libsoup icu
-  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x-gtk3 ];
+  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
 

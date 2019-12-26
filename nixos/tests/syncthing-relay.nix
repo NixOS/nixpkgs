@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, pkgs, ... }: {
+import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "syncthing-relay";
   meta.maintainers = with pkgs.stdenv.lib.maintainers; [ delroth ];
 
@@ -14,9 +14,13 @@ import ./make-test.nix ({ lib, pkgs, ... }: {
   };
 
   testScript = ''
-    $machine->waitForUnit("syncthing-relay.service");
-    $machine->waitForOpenPort(12345);
-    $machine->waitForOpenPort(12346);
-    $machine->succeed("curl http://localhost:12346/status | jq -r '.options.\"provided-by\"'") =~ /nixos-test/ or die;
+    machine.wait_for_unit("syncthing-relay.service")
+    machine.wait_for_open_port(12345)
+    machine.wait_for_open_port(12346)
+
+    out = machine.succeed(
+        "curl -sS http://localhost:12346/status | jq -r '.options.\"provided-by\"'"
+    )
+    assert "nixos-test" in out
   '';
 })

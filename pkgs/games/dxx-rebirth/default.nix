@@ -1,5 +1,5 @@
 { gcc6Stdenv, fetchurl, fetchpatch, scons, pkgconfig
-, SDL, SDL_mixer, libGLU_combined, physfs
+, SDL, SDL_mixer, libGLU, libGL, physfs
 }:
 
 let
@@ -33,7 +33,7 @@ in gcc6Stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig scons ];
 
-  buildInputs = [ libGLU_combined physfs SDL SDL_mixer ];
+  buildInputs = [ libGLU libGL physfs SDL SDL_mixer ];
 
   enableParallelBuilding = true;
 

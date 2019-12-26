@@ -18,11 +18,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.5.10";
+  version = "1.6.5";
 
   src = fetchurl {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "0mc5dgh2x9nbili7gy6srjhb23ckalf08wqq2amyjr5rq392jvd7";
+    sha256 = "0ifi057idid8xq7af8ybs99b6939hyfif1ml1ihjpx02vinmd419";
   };
 
   prePatch = ''

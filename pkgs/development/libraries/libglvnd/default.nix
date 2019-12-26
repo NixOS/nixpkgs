@@ -14,6 +14,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 addOpenGLRunpath ];
   buildInputs = [ libX11 libXext xorgproto ];
 
+  # The following 3 patches should be removed once libglvnd >1.2.0 is released
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/NVIDIA/libglvnd/commit/6f52473dac08c44b081b792874b4ce73122096da.patch";
+      sha256 = "0rd9ihl8n33cm0rya5a7ki0hn31fh52r0gaj5d4w80jrsah2ayij";
+    })
+    (fetchpatch {
+      url = "https://github.com/NVIDIA/libglvnd/commit/51233cc52cbcbe25f8461830913c06f5b5bc9508.patch";
+      sha256 = "1qx3nw8vq5xcrixmi7xw1vpy4gbf7kmx38rx8wg8x046g4mv8ijj";
+    })
+    (fetchpatch {
+      url = "https://github.com/NVIDIA/libglvnd/commit/5dfdc5a6dc60a3bdc63cd4510dabacba388da13a.patch";
+      sha256 = "0gmb3619yz3z7n22afjh8p2y13bmsky4r0z0csm14is3wvdi64ya";
+    })
+  ];
+
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/GLX/Makefile.am \
       --replace "-Wl,-Bsymbolic " ""

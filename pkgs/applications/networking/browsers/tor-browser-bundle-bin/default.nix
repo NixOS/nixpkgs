@@ -93,19 +93,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "9.0";
+  version = "9.0.2";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "0aajbk65lpcazn8mdk7ngaqp0sykql8zjlkhznphxxw9v59mq3b7";
+      sha256 = "1xdnqphsj7wzwyv927jwd3fi36srx0minydwl5jg5yyd3m3if9hb";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "08ahs9985ndcq1ywz06q4znai6a3ivibjk473kymzl6k40q1c9y2";
+      sha256 = "1qk9fg5dvyyvbngsqla00by8a974mpvq9pnm2djif54lr2nfivwf";
     };
   };
 in
@@ -397,7 +397,7 @@ stdenv.mkDerivation rec {
     longDescription = tor-browser-bundle.meta.longDescription;
     homepage = "https://www.torproject.org/";
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm ];
+    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 cap ];
     hydraPlatforms = [];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

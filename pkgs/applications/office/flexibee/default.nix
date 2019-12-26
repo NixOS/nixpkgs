@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 let
-  version = "2019.3.0.3";
+  version = "2019.3.1.3";
   majorVersion = builtins.substring 0 6 version;
 in
 
@@ -11,16 +11,25 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.flexibee.eu/download/${majorVersion}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1ivhqh1rl4ll0af9nfgfm7f647vc9zk61aplinvz73xb3grb4j6f";
+    sha256 = "0jfj0vmrwa05ga4rhqn0sapad06mq0pampmkr75vail2289zkga2";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
+  prePatch = ''
+    substituteInPlace usr/sbin/flexibee-server \
+      --replace "/usr/share/flexibee" $out \
+      --replace "/var/run" "/run"
+  '';
+
 
   installPhase = ''
     runHook preInstall
     cp -R usr/share/flexibee/ $out/
     install -Dm755 usr/bin/flexibee $out/bin/flexibee
-    wrapProgram  $out/bin/flexibee --set JAVA_HOME "${jre}"
+    install -Dm755 usr/sbin/flexibee-server $out/bin/flexibee-server
+    wrapProgram $out/bin/flexibee --set JAVA_HOME "${jre}"
+    wrapProgram $out/bin/flexibee-server --set JAVA_HOME "${jre}"
     runHook postInstall
   '';
 

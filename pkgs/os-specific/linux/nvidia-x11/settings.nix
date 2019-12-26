@@ -50,6 +50,7 @@ stdenv.mkDerivation {
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
              ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
 
+  enableParallelBuilding = true;
   makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
   installFlags = [ "PREFIX=$(out)" ];
 

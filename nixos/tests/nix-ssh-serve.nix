@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 let inherit (import ./ssh-keys.nix pkgs)
       snakeOilPrivateKey snakeOilPublicKey;
     ssh-config = builtins.toFile "ssh.conf" ''
@@ -18,22 +18,28 @@ in
          client.nix.package = pkgs.nix;
        };
      testScript = ''
-       startAll;
+       start_all()
 
-       $client->succeed("mkdir -m 700 /root/.ssh");
-       $client->copyFileFromHost("${ssh-config}", "/root/.ssh/config");
-       $client->succeed("cat ${snakeOilPrivateKey} > /root/.ssh/id_ecdsa");
-       $client->succeed("chmod 600 /root/.ssh/id_ecdsa");
+       client.succeed("mkdir -m 700 /root/.ssh")
+       client.succeed(
+           "cat ${ssh-config} > /root/.ssh/config"
+       )
+       client.succeed(
+           "cat ${snakeOilPrivateKey} > /root/.ssh/id_ecdsa"
+       )
+       client.succeed("chmod 600 /root/.ssh/id_ecdsa")
 
-       $client->succeed("nix-store --add /etc/machine-id > mach-id-path");
+       client.succeed("nix-store --add /etc/machine-id > mach-id-path")
 
-       $server->waitForUnit("sshd");
+       server.wait_for_unit("sshd")
 
-       $client->fail("diff /root/other-store\$(cat mach-id-path) /etc/machine-id");
+       client.fail("diff /root/other-store$(cat mach-id-path) /etc/machine-id")
        # Currently due to shared store this is a noop :(
-       $client->succeed("nix copy --to ssh-ng://nix-ssh\@server \$(cat mach-id-path)");
-       $client->succeed("nix-store --realise \$(cat mach-id-path) --store /root/other-store --substituters ssh-ng://nix-ssh\@server");
-       $client->succeed("diff /root/other-store\$(cat mach-id-path) /etc/machine-id");
+       client.succeed("nix copy --to ssh-ng://nix-ssh@server $(cat mach-id-path)")
+       client.succeed(
+           "nix-store --realise $(cat mach-id-path) --store /root/other-store --substituters ssh-ng://nix-ssh@server"
+       )
+       client.succeed("diff /root/other-store$(cat mach-id-path) /etc/machine-id")
      '';
    }
 )
