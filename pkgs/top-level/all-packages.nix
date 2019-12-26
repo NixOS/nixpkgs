@@ -10589,7 +10589,7 @@ in
 
   texlab = callPackage ../development/tools/misc/texlab {
     inherit (darwin.apple_sdk.frameworks) Security;
-    texlab-citeproc-build-deps = nodePackages."texlab-citeproc-build-deps-../tools/misc/texlab/citeproc";
+    inherit (nodePackages) texlab-citeproc-build-deps;
   };
 
   tflint = callPackage ../development/tools/analysis/tflint { };
