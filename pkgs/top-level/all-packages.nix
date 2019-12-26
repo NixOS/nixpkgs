@@ -15455,6 +15455,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
 
+  qpaeq = qt5.callPackage ../servers/pulseaudio/qpaeq.nix { };
+
   pulseaudioFull = pulseaudio.override {
     x11Support = true;
     jackaudioSupport = true;
