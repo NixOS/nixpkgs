@@ -5216,6 +5216,8 @@ in
 
   nat-traverse = callPackage ../tools/networking/nat-traverse { };
 
+  navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
+
   nawk = callPackage ../tools/text/nawk { };
 
   nbd = callPackage ../tools/networking/nbd { };
