@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = https://xmlgraphics.apache.org/fop/;
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ bjornfor ndowens ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

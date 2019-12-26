@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     homepage = https://gentoo.com/di/;
     license = licenses.zlib;
     updateWalker = true;
-    maintainers = with maintainers; [ manveru ndowens ];
+    maintainers = with maintainers; [ manveru ];
     platforms = platforms.all;
   };
 }
