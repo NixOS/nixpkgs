@@ -14,6 +14,10 @@
 , modRoot ? "./"
 
 # modSha256 is the sha256 of the vendored dependencies
+#
+# CAUTION: if `null` is used as a value, the derivation won't be a
+# fixed-output derivation but disable the build sandbox instead. Don't use
+# this in nixpkgs as Hydra won't build those packages.
 , modSha256
 
 # We want parallel builds by default

@@ -66,6 +66,14 @@ pet = buildGoModule rec {
     </callout>
    </calloutlist>
   </para>
+
+  <para>
+    <varname>modSha256</varname> can also take <varname>null</varname> as an input.
+
+    When `null` is used as a value, the derivation won't be a
+    fixed-output derivation but disable the build sandbox instead. Don't use
+    this in nixpkgs as Hydra won't build those packages.
+  </para>
  </section>
 
  <section xml:id="ssec-go-legacy">
