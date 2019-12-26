@@ -2005,7 +2005,7 @@
     name = "Edward Tjörnhammar";
   };
   eelco = {
-    email = "eelco.dolstra@logicblox.com";
+    email = "edolstra+nixpkgs@gmail.com";
     github = "edolstra";
     githubId = 1148549;
     name = "Eelco Dolstra";
