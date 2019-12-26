@@ -717,8 +717,6 @@ in {
 
   helper = callPackage ../development/python-modules/helper { };
 
-  histbook = callPackage ../development/python-modules/histbook { };
-
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
