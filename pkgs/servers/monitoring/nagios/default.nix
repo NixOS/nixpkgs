@@ -20,6 +20,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace '$(MAKE) install-basic' ""
   '';
   installTargets = "install install-config";
+  postInstall = ''
+    # don't make default files use hardcoded paths to commands
+    sed -i 's@command_line *[^ ]*/\([^/]*\) @command_line \1 @'  $out/etc/objects/commands.cfg
+    sed -i 's@/usr/bin/@@g' $out/etc/objects/commands.cfg
+    sed -i 's@/bin/@@g' $out/etc/objects/commands.cfg
+  '';
+
 
   meta = {
     description = "A host, service and network monitoring program";
