@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  ZEEK_DIST = "${placeholder "out"}";
+  preConfigure = ''
+    substituteInPlace zeek-config.in --subst-var ZEEK_DIST
+  '';
+
   cmakeFlags = [
     "-DPY_MOD_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
     "-DENABLE_PERFTOOLS=true"
