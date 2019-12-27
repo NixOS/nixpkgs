@@ -40,6 +40,7 @@ let
       "-Wno-error=unused-function"
       "-Wno-error=ignored-qualifiers"
       "-Wno-error=catch-value"
+    ] ++ stdenv.lib.optionals stdenv.cc.isGNU [
       "-Wno-error=deprecated-copy"
     ];
   };
