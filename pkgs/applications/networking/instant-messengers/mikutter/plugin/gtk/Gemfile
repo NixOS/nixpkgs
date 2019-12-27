@@ -1,3 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'gtk2', '3.3.2'
+gem 'gtk2', '3.4.1'
+
