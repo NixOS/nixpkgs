@@ -1394,6 +1394,8 @@ in
 
   clac = callPackage ../tools/misc/clac {};
 
+  clash = callPackage ../tools/networking/clash { };
+
   clasp = callPackage ../tools/misc/clasp { };
 
   cli53 = callPackage ../tools/admin/cli53 { };
