@@ -2975,6 +2975,8 @@ in
 
   zeek = callPackage ../applications/networking/ids/zeek { };
 
+  zkg = callPackage ../tools/package-management/zkg { };
+
   zzuf = callPackage ../tools/security/zzuf { };
 
   ### DEVELOPMENT / EMSCRIPTEN
