@@ -266,6 +266,14 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
+     The <literal>kresd</literal> services deprecates the <literal>interfaces</literal> option
+     in favor of the <literal>listenPlain</literal> option which requires full
+     <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream=">systemd.socket compatible</link>
+     declaration which always include a port.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Virtual console options have been reorganized and can be found under
      a single top-level attribute: <literal>console</literal>.
      The full set of changes is as follows:
