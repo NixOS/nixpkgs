@@ -643,7 +643,7 @@ self: super: {
   # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
     src = pkgs.fetchFromGitHub {
-      owner = "chrisdone";
+      owner = "projectional-haskell";
       repo = "structured-haskell-mode";
       rev = "7f9df73f45d107017c18ce4835bbc190dfe6782e";
       sha256 = "1jcc30048j369jgsbbmkb63whs4wb37bq21jrm3r6ry22izndsqa";
