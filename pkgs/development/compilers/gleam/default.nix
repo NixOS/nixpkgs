@@ -5,7 +5,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "lpil";
+    owner = "gleam-lang";
     repo = pname;
     rev = "v${version}";
     sha256 = "1fvy2j6pw1rwm0rg7555q3qg2069cx2b9lk0nsyc3jxsqp9hbn6i";
