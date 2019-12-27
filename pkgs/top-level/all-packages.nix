@@ -9686,6 +9686,8 @@ in
     wxGTK = wxGTK30;
   };
 
+  btest = callPackage ../development/tools/btest { };
+
   buck = callPackage ../development/tools/build-managers/buck { };
 
   buildkite-agent = buildkite-agent2;
