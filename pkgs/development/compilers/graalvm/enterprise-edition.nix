@@ -1,7 +1,6 @@
 { stdenv, requireFile, perl, unzip, glibc, zlib, gdk-pixbuf, xorg, glib, fontconfig, freetype, cairo, pango, gtk3, gtk2, ffmpeg, libGL, atk, alsaLib, libav_0_8, setJavaClassPath }:
 
-let
-  graalvm8-ee = stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
     pname = "graalvm8-ee";
     version = "19.2.0";
     srcs = [
@@ -92,7 +91,7 @@ let
     '';
 
     propagatedBuildInputs = [ setJavaClassPath zlib ]; # $out/bin/native-image needs zlib to build native executables
-    
+
     doInstallCheck = true;
     installCheckPhase = ''
       echo ${stdenv.lib.escapeShellArg ''
@@ -119,7 +118,7 @@ let
       ./helloworld | fgrep 'Hello World'
     '';
 
-    passthru.home = graalvm8-ee;
+    passthru.home = placeholder "out";
 
     meta = with stdenv.lib; {
       homepage = https://www.graalvm.org/;
@@ -128,6 +127,4 @@ let
       maintainers = with maintainers; [ volth hlolli ];
       platforms = [ "x86_64-linux" ];
     };
-  };
-in
-  graalvm8-ee
+}

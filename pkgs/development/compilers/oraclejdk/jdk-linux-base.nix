@@ -192,7 +192,7 @@ let result = stdenv.mkDerivation rec {
 
   passthru.jre = result; # FIXME: use multiple outputs or return actual JRE package
 
-  passthru.home = result;
+  passthru.home = placeholder "out";
 
   passthru.architecture = architecture;
 

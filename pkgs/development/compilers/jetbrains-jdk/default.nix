@@ -5,7 +5,7 @@
 # TODO: Investigate building from source instead of patching binaries.
 # TODO: Binary patching for not just x86_64-linux but also x86_64-darwin i686-linux
 
-let drv = stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
   version = "485.1";
 
@@ -47,7 +47,7 @@ let drv = stdenv.mkDerivation rec {
     libX11 libXext libXtst libXi libXp libXt libXrender libXxf86vm
   ])) + ":${placeholder "out"}/lib/jli");
 
-  passthru.home = drv;
+  passthru.home = placeholder "out";
 
   meta = with stdenv.lib; {
     description = "An OpenJDK fork to better support Jetbrains's products.";
@@ -67,4 +67,4 @@ let drv = stdenv.mkDerivation rec {
     maintainers = with maintainers; [ edwtjo ];
     platforms = with platforms; [ "x86_64-linux" "x86_64-darwin" ];
   };
-}; in drv
+}

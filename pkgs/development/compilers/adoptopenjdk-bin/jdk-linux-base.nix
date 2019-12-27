@@ -66,7 +66,7 @@ let result = stdenv.mkDerivation rec {
   # FIXME: use multiple outputs or return actual JRE package
   passthru.jre = result;
 
-  passthru.home = result;
+  passthru.home = placeholder "out";
 
   meta = with stdenv.lib; {
     license = licenses.gpl2Classpath;

@@ -399,7 +399,7 @@ in rec {
     '';
 
     enableParallelBuilding = true;
-    passthru.home = graalvm8;
+    passthru.home = placeholder "out";
 
     meta = with stdenv.lib; {
       homepage = https://github.com/oracle/graal;
