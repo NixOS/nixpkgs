@@ -73,7 +73,7 @@ pet = buildGoModule rec {
     When `null` is used as a value, the derivation won't be a
     fixed-output derivation but disable the build sandbox instead. This can be useful outside
     of nixpkgs where re-generating the modSha256 on each mod.sum changes is cumbersome,
-    but will fail to build by Hydra, as builds with a disabled sanboxe are discouraged.
+    but will fail to build by Hydra, as builds with a disabled sandbox are discouraged.
     this in nixpkgs as Hydra won't build those packages.
   </para>
  </section>
