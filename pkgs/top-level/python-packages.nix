@@ -3213,6 +3213,8 @@ in {
 
   django-versatileimagefield = callPackage ../development/python-modules/django-versatileimagefield  { };
 
+  django-simple-captcha = callPackage ../development/python-modules/django-simple-captcha { };
+
   django-sites = callPackage ../development/python-modules/django-sites { };
 
   django-sr = callPackage ../development/python-modules/django-sr { };
