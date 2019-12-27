@@ -8227,6 +8227,7 @@ in
 
   go_1_12 = callPackage ../development/compilers/go/1.12.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
+    stdenv = if stdenv.isAarch64 then gcc8Stdenv else stdenv;
   };
 
   go_1_13 = callPackage ../development/compilers/go/1.13.nix {
