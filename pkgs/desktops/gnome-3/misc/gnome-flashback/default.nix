@@ -30,7 +30,31 @@
 let
   pname = "gnome-flashback";
   version = "3.34.2";
-  requiredComponents = wmName: withScreenSaverProxy: "RequiredComponents=${wmName};gnome-flashback;gnome-panel;org.gnome.SettingsDaemon.A11ySettings;org.gnome.SettingsDaemon.Color;org.gnome.SettingsDaemon.Datetime;org.gnome.SettingsDaemon.Housekeeping;org.gnome.SettingsDaemon.Keyboard;org.gnome.SettingsDaemon.MediaKeys;org.gnome.SettingsDaemon.Power;org.gnome.SettingsDaemon.PrintNotifications;org.gnome.SettingsDaemon.Rfkill${stdenv.lib.optionalString withScreenSaverProxy ";org.gnome.SettingsDaemon.ScreensaverProxy"};org.gnome.SettingsDaemon.Sharing;org.gnome.SettingsDaemon.Smartcard;org.gnome.SettingsDaemon.Sound;org.gnome.SettingsDaemon.Wacom;org.gnome.SettingsDaemon.XSettings;";
+  requiredComponents = wmName: withScreenSaverProxy:
+    let
+      components = [
+        wmName
+        "gnome-flashback"
+        "gnome-panel"
+        "org.gnome.SettingsDaemon.A11ySettings"
+        "org.gnome.SettingsDaemon.Color"
+        "org.gnome.SettingsDaemon.Datetime"
+        "org.gnome.SettingsDaemon.Housekeeping"
+        "org.gnome.SettingsDaemon.Keyboard"
+        "org.gnome.SettingsDaemon.MediaKeys"
+        "org.gnome.SettingsDaemon.Power"
+        "org.gnome.SettingsDaemon.PrintNotifications"
+        "org.gnome.SettingsDaemon.Rfkill"
+      ] ++ stdenv.lib.optionals withScreenSaverProxy [
+        "org.gnome.SettingsDaemon.ScreensaverProxy"
+      ] ++ [
+        "org.gnome.SettingsDaemon.Sharing"
+        "org.gnome.SettingsDaemon.Smartcard"
+        "org.gnome.SettingsDaemon.Sound"
+        "org.gnome.SettingsDaemon.Wacom"
+        "org.gnome.SettingsDaemon.XSettings"
+      ];
+    in "RequiredComponents=${stdenv.lib.concatStringSep ";" components};";
   gnome-flashback = stdenv.mkDerivation rec {
     name = "${pname}-${version}";
 
