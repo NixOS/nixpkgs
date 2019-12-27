@@ -2471,6 +2471,10 @@ in
       ibus-table = ibus-engines.table;
     };
 
+    table-vietnamese = callPackage ../tools/inputmethods/ibus-engines/ibus-table-vietnamese {
+      ibus-table = ibus-engines.table;
+    };
+
     uniemoji = callPackage ../tools/inputmethods/ibus-engines/ibus-uniemoji { };
 
     typing-booster-unwrapped = callPackage ../tools/inputmethods/ibus-engines/ibus-typing-booster { };
