@@ -659,15 +659,6 @@ self: super: {
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
   });
-  descriptive = overrideSrc super.descriptive {
-    version = "20180514-git";
-    src = pkgs.fetchFromGitHub {
-      owner = "chrisdone";
-      repo = "descriptive";
-      rev = "c088960113b2add758553e41cbe439d183b750cd";
-      sha256 = "17p65ihcvm1ghq23ww6phh8gdj7hwxlypjvh9jabsxvfbp2s8mrk";
-    };
-  };
 
   # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal super.hindent (drv: {
