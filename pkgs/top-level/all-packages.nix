@@ -24535,7 +24535,9 @@ in
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = callPackage ../applications/networking/instant-messengers/ekiga { };
+  ekiga = callPackage ../applications/networking/instant-messengers/ekiga {
+    boost = boost167;
+  };
 
   dumb = callPackage ../misc/dumb { };
 
