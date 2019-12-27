@@ -1,14 +1,14 @@
 { stdenv, buildDunePackage, fetchFromGitHub, autoconf }:
 
 buildDunePackage rec {
-  pname = "setcore";
-  version = "1.0.1";
+  pname = "cpu";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "UnixJunkie";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1yn660gxk2ccp7lbdq9v6pjz1c3pm08s9dl9k9l5492ld6bx8fxc";
+    sha256 = "1vir6gh1bhvxgj2fcn69c38yhw3jgk7dyikmw789m5ld2csnyjiv";
   };
 
   preConfigure = ''
@@ -22,7 +22,7 @@ buildDunePackage rec {
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
-    description = "Generalized map/reduce for multicore computing";
+    description = "Core pinning library";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.lgpl2;
   };
