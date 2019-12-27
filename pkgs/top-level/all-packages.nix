@@ -8154,7 +8154,7 @@ in
 
   purescript-psa = nodePackages.purescript-psa;
 
-  spago = haskell.lib.justStaticExecutables haskellPackages.spago;
+  spago = callPackage ../development/tools/purescript/spago { };
 
   pulp = nodePackages.pulp;
 
@@ -11662,6 +11662,8 @@ in
   glibmm = callPackage ../development/libraries/glibmm { };
 
   glib-networking = callPackage ../development/libraries/glib-networking {};
+
+  glirc = haskell.lib.justStaticExecutables haskellPackages.glirc;
 
   gom = callPackage ../development/libraries/gom { };
 
