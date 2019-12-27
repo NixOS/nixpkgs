@@ -1,0 +1,67 @@
+diff --git a/src/pip/_internal/wheel.py b/src/pip/_internal/wheel.py
+index 67bcc7f7..2e87b84b 100644
+--- a/src/pip/_internal/wheel.py
++++ b/src/pip/_internal/wheel.py
+@@ -12,6 +12,7 @@ import os.path
+ import re
+ import shutil
+ import stat
++import struct
+ import sys
+ import warnings
+ from base64 import urlsafe_b64encode
+@@ -124,6 +125,42 @@ def fix_script(path):
+     return None
+ 
+ 
++PATCHELF_BIN = '@PATCHELF_BIN@'
++NIX_MANYLILIB_PATH = '@NIX_MANYLILIB_PATH@'
++DYNAMIC_LOADER = '@DYNAMIC_LOADER@'
++
++
++def fix_nix_elf(path):
++    # type: (str) -> Optional[bool]
++    """Fix ELF files for use with nix
++    Return True if file was changed."""
++    if os.path.isfile(path):
++        with open(path, 'rb') as f:
++            head = f.read(0x12)
++        if len(head) < 0x12:
++            return False
++        if head[0:4] == b'\x7fELF':
++            output = call_subprocess([PATCHELF_BIN, '--print-rpath', path],
++                                     show_stdout=False, on_returncode='warn')
++            old_rpath = output.strip()
++            new_rpath = NIX_MANYLILIB_PATH
++            if old_rpath:
++                new_rpath = f'{old_rpath}:{new_rpath}'
++            # The --force-rpath does what we want here
++            # No RPATH/RUNPATH -> RPATH
++            # RPATH exists -> RPATH
++            # RUNPATH exists -> RUNPATH
++            # We can't convert RPATH to RUNPATH or some dynamic library setups break
++            # TODO: Find out why it doesn't work if we convert all rpath to runpath
++            call_subprocess([PATCHELF_BIN, '--force-rpath', '--set-rpath', new_rpath, path],
++                            show_stdout=False, on_returncode='warn')
++        if struct.unpack('<h', head[0x10:0x12]) == (2,):
++            call_subprocess([PATCHELF_BIN, '--set-interpreter', DYNAMIC_LOADER, path],
++                            show_stdout=False, on_returncode='warn')
++        return True
++    return None
++
++
+ dist_info_re = re.compile(r"""^(?P<namever>(?P<name>.+?)(-(?P<ver>.+?))?)
+                                 \.dist-info$""", re.VERBOSE)
+ 
+@@ -423,7 +460,7 @@ def move_wheel_files(
+                     changed = fixer(destfile)
+                 record_installed(srcfile, destfile, changed)
+ 
+-    clobber(source, lib_dir, True)
++    clobber(source, lib_dir, True, fixer=fix_nix_elf)
+ 
+     assert info_dir, "%s .dist-info directory not found" % req
+ 
+-- 
+2.21.0
+

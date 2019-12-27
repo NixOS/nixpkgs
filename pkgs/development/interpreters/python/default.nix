@@ -149,6 +149,26 @@ in {
     };
   });
 
+  python38Nix = python38Packages.python.override {
+    self = python38Nix;
+    bundledPipForEnsurePip = let
+        pipVersion = "19.2.3";
+        patchelf-pip = callPackage ../../python-modules/patchelf-pip {
+          python = python38Packages.python;
+          bootstrapped-pip = python38Packages.bootstrapped-pip;
+          manylinuxPackage = pythonManylinuxPackages.manylinux1Package;
+          src = fetchFromGitHub {
+            owner = "pypa";
+            repo = "pip";
+            rev = "${pipVersion}";
+            sha256 = "1jz29836dmvq6si1z5djf43cmq04my82z29xni937b6rwrvlc47a";
+          };
+          version = pipVersion;
+          patch = ../../python-modules/patchelf-pip/patches/19_2_3.patch;
+        };
+      in patchelf-pip;
+  };
+
   pypy27 = callPackage ./pypy {
     self = pypy27;
     sourceVersion = {

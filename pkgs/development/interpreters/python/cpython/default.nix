@@ -22,6 +22,7 @@
 , sha256
 , passthruFun
 , bash
+, bundledPipForEnsurePip ? null
 , stripConfig ? false
 , stripIdlelib ? false
 , stripTests ? false
@@ -128,6 +129,10 @@ in with passthru; stdenv.mkDerivation {
   postPatch = ''
   '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+  '' + optionalString (bundledPipForEnsurePip != null) ''
+    for p in Lib/ensurepip/_bundled/pip-*.whl; do
+      cp "${bundledPipForEnsurePip}/$(basename "$p")" "$p"
+    done
   '';
 
   CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);

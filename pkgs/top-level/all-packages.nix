@@ -9375,7 +9375,7 @@ in
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python {};
-  inherit (pythonInterpreters) python27 python35 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
+  inherit (pythonInterpreters) python27 python35 python36 python37 python38 python39 python3Minimal python38Nix pypy27 pypy36;
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
