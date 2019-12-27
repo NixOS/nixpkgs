@@ -1355,4 +1355,10 @@ self: super: {
     })];
   });
 
+  # https://github.com/haskell-servant/servant-blaze/issues/17
+  servant-blaze = doJailbreak super.servant-blaze;
+
+  # https://github.com/haskell-servant/servant-ekg/issues/15
+  servant-ekg = doJailbreak super.servant-ekg;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
