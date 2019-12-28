@@ -47,7 +47,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    start_all
+    start_all()
 
     mysql.wait_for_unit("mysql")
     mysql.succeed("echo 'use empty_testdb;' | mysql -u root")
