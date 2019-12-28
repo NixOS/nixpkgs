@@ -5911,7 +5911,9 @@ in
   qesteidutil = libsForQt5.callPackage ../tools/security/qesteidutil { } ;
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
 
-  qgrep = callPackage ../tools/text/qgrep {};
+  qgrep = callPackage ../tools/text/qgrep {
+    inherit (darwin.apple_sdk.frameworks) CoreServices CoreFoundation;
+  };
 
   qhull = callPackage ../development/libraries/qhull { };
 
