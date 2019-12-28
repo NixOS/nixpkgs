@@ -45,4 +45,3 @@ buildPythonPackage rec {
     maintainers = with stdenv.lib.maintainers; [ ];
   };
 }
-

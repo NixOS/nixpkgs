@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "cfn-flip";
-  version = "1.1.0.post1";
+  version = "1.2.2";
 
   src = fetchPypi {
     pname = "cfn_flip";
     inherit version;
-    sha256 = "16r01ijjwnq06ax5xrv6mq9l00f6sgzw776kr43zjai09xsbwwck";
+    sha256 = "05n5vvc5lqdzssgyb8kvb23byavs84ww4vbylaj13kakxxn05pcd";
   };
 
   propagatedBuildInputs = [ six pyyaml click ];
