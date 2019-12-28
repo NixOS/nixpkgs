@@ -2839,6 +2839,8 @@ in {
 
   oset = callPackage ../development/python-modules/oset { };
 
+  oyaml = callPackage ../development/python-modules/oyaml { };
+
   pamela = callPackage ../development/python-modules/pamela { };
 
   paperspace = callPackage ../development/python-modules/paperspace { };
