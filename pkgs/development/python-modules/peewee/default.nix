@@ -4,7 +4,7 @@
 , apsw
 , flask
 , withPostgres ? false, psycopg2
-, withMysql ? false, mysql-connector
+, withMysql ? false, mysql-connector-python
 }:
 
 buildPythonPackage rec {
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     apsw # sqlite performance improvement
   ] ++ (lib.optional withPostgres psycopg2)
-    ++ (lib.optional withMysql mysql-connector);
+    ++ (lib.optional withMysql mysql-connector-python);
 
   meta = with stdenv.lib;{
     description = "a small, expressive orm";

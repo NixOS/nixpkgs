@@ -3,7 +3,7 @@
 python2Packages.buildPythonApplication rec {
   pname = "s3cmd";
   version = "2.0.2";
-  
+
   src = fetchFromGitHub {
     owner  = "s3tools";
     repo   = "s3cmd";
