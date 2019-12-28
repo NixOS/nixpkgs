@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage    = https://swaywm.org;
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ];
+    maintainers = with maintainers; [ primeos synthetica ma27 ];
   };
 }

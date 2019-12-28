@@ -671,6 +671,7 @@ in
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/logs' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.nginx = {

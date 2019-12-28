@@ -113,7 +113,7 @@ in {
         services.httpd = {
           enable = true;
           adminAddr = "test@example.org";
-          documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
+          virtualHosts.localhost.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
         };
         networking.firewall.allowedTCPPorts = [ 80 ];
       }

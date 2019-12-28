@@ -9,21 +9,23 @@ let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
   
   # patch runs on remote machine hence use of which
+  # links to local node if version is 12
   patch = ''
     f="/home/''$USER/.vscode-server/bin/''$COMMIT_ID/node"
-    nodePath=''$(which node)
-    if [ -x "''$nodePath" ]; then
-      nodeVersion=''$(node -v)
-      if [[ "${nodeVersion:1:2}" == "12" ]]; then
-        echo PATCH: replacing ''$f with ''$nodePath
+    localNodePath=''$(which node)
+    if [ -x "''$localNodePath" ]; then
+      localNodeVersion=''$(node -v)
+      if [ "\''${localNodeVersion:1:2}" = "12" ]; then
+        echo PATCH: replacing ''$f with ''$localNodePath
         rm ''$f
-        ln -s ''$nodePath ''$f
+        ln -s ''$localNodePath ''$f
       fi
     fi
     ${stdenv.lib.optionalString useLocalExtensions ''
       # Use local extensions
-      if test -f "~/.vscode/extensions"; then
+      if [ -d ~/.vscode/extensions ]; then
         if ! test -L "~/.vscode-server/extensions"; then
+          mkdir -p ~/.vscode-server
           ln -s ~/.vscode/extensions ~/.vscode-server/
         fi
       fi

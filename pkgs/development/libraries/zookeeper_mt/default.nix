@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   setSourceRoot = "export sourceRoot=${zookeeper.name}/src/c";
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-overflow" ];
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionals (!stdenv.isDarwin) [ "-Wno-error=format-overflow" ];
 
   buildInputs = [ zookeeper bash ];
 

@@ -65,6 +65,7 @@ let
             "ValidHTTPCodes" = "404";
           }
         '';
+        description = "Extra configuration to be appendend to awstats.\${name}.conf.";
       };
 
       webService = {

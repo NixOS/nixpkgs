@@ -501,7 +501,7 @@ if (-f $fb_modes_file && -r $fb_modes_file) {
     my $console_width = $1, my $console_height = $2;
     if ($console_width > 1920) {
         push @attrs, "# High-DPI console";
-        push @attrs, 'i18n.consoleFont = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
+        push @attrs, 'console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
     }
 }
 

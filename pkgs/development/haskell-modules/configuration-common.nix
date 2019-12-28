@@ -74,7 +74,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "04l1yrjq7n4nlzkmkg73xp6p7vpw1iq53mrmyb8162wqb7zapg4f";
+      sha256 = "1i4arhwbc05iz8hl7kk843m2f49i3ysby1kxcm9qfhpk7z9nyzj4";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -643,7 +643,7 @@ self: super: {
   # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
     src = pkgs.fetchFromGitHub {
-      owner = "chrisdone";
+      owner = "projectional-haskell";
       repo = "structured-haskell-mode";
       rev = "7f9df73f45d107017c18ce4835bbc190dfe6782e";
       sha256 = "1jcc30048j369jgsbbmkb63whs4wb37bq21jrm3r6ry22izndsqa";
@@ -659,15 +659,6 @@ self: super: {
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
   });
-  descriptive = overrideSrc super.descriptive {
-    version = "20180514-git";
-    src = pkgs.fetchFromGitHub {
-      owner = "chrisdone";
-      repo = "descriptive";
-      rev = "c088960113b2add758553e41cbe439d183b750cd";
-      sha256 = "17p65ihcvm1ghq23ww6phh8gdj7hwxlypjvh9jabsxvfbp2s8mrk";
-    };
-  };
 
   # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal super.hindent (drv: {
@@ -1057,7 +1048,30 @@ self: super: {
     generateOptparseApplicativeCompletion "dhall" (
       dontCheck super.dhall
   );
-  dhall_1_28_0 = dontCheck super.dhall_1_28_0;
+  # https://github.com/dhall-lang/dhall-haskell/commit/dedd5e0ea6fd12f87d887af3d2220eebc61ee8af
+  # This raises the lower bound on prettyprinter to 1.5.1 since
+  # `removeTrailingWhitespace` is buggy in earlier versions.
+  # This will probably be able to be removed when we update to LTS-15.
+  dhall_1_28_0 =
+    dontCheck (super.dhall_1_28_0.override {
+      prettyprinter = self.prettyprinter_1_5_1;
+      prettyprinter-ansi-terminal =
+        self.prettyprinter-ansi-terminal.override {
+          prettyprinter = self.prettyprinter_1_5_1;
+        };
+    });
+  dhall-bash_1_0_25 = super.dhall-bash_1_0_25.override { dhall = self.dhall_1_28_0; };
+  dhall-json_1_6_0 = super.dhall-json_1_6_0.override {
+    dhall = self.dhall_1_28_0;
+    prettyprinter = self.prettyprinter_1_5_1;
+    prettyprinter-ansi-terminal =
+      self.prettyprinter-ansi-terminal.override {
+        prettyprinter = self.prettyprinter_1_5_1;
+      };
+  };
+
+  # Tests for dhall access the network.
+  dhall_1_27_0 = dontCheck super.dhall_1_27_0;
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
   # https://github.com/dhall-lang/dhall-haskell/pull/997
@@ -1322,9 +1336,29 @@ self: super: {
   # needs newer version of the systemd package
   spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
 
-  # ghcide needs the latest versions of haskell-lsp.
-  ghcide = super.ghcide.override { haskell-lsp = self.haskell-lsp_0_18_0_0; lsp-test = self.lsp-test_0_8_2_0; };
-  haskell-lsp_0_18_0_0 = super.haskell-lsp_0_18_0_0.override { haskell-lsp-types = self.haskell-lsp-types_0_18_0_0; };
-  lsp-test_0_8_2_0 = (dontCheck super.lsp-test_0_8_2_0).override { haskell-lsp = self.haskell-lsp_0_18_0_0; };
+  # 2019-12-19 - glirc wants regex-tdfa >=1.3 which results in errors with regex-base which errors more
+  # hoping to make a proper derivation with plugins enabled and more reliable building -- kiwi
+  glirc = doJailbreak super.glirc;
+
+  # apply patches from https://github.com/snapframework/snap-server/pull/126
+  # manually until they are accepted upstream
+  snap-server = overrideCabal super.snap-server (drv: {
+    patches = [(pkgs.fetchpatch {
+      # allow compilation with network >= 3
+      url = https://github.com/snapframework/snap-server/pull/126/commits/4338fe15d68e11e3c7fd0f9862f818864adc1d45.patch;
+      sha256 = "1nlw9lckm3flzkmhkzwc7zxhdh9ns33w8p8ds8nf574nqr5cr8bv";
+    })
+    (pkgs.fetchpatch {
+      # prefer fdSocket over unsafeFdSocket
+      url = https://github.com/snapframework/snap-server/pull/126/commits/410de2df123b1d56b3093720e9c6a1ad79fe9de6.patch;
+      sha256 = "08psvw0xny64q4bw1nwg01pkzh01ak542lw6k1ps7cdcwaxk0n94";
+    })];
+  });
+
+  # https://github.com/haskell-servant/servant-blaze/issues/17
+  servant-blaze = doJailbreak super.servant-blaze;
+
+  # https://github.com/haskell-servant/servant-ekg/issues/15
+  servant-ekg = doJailbreak super.servant-ekg;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
