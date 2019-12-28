@@ -138,7 +138,6 @@ in stdenv.mkDerivation rec {
     find $out/lib -name "*.so" -type f -exec remove-references-to -t ${llvmShared} '{}' '+'
   '';
 
-  configurePlatforms = [];
 
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
   # https://github.com/rust-lang/rust/issues/30181

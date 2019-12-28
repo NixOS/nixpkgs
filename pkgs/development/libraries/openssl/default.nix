@@ -42,7 +42,6 @@ let
     buildInputs = stdenv.lib.optional withCryptodev cryptodev;
 
     # TODO(@Ericson2314): Improve with mass rebuild
-    configurePlatforms = [];
     configureScript = {
         armv6l-linux = "./Configure linux-armv4 -march=armv6";
         armv7l-linux = "./Configure linux-armv4 -march=armv7-a";

@@ -78,8 +78,6 @@ stdenv.mkDerivation {
     "-Wno-error=implicit-fallthrough"
   ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
-  configurePlatforms = [];
-
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
   patches = stdenv.lib.singleton (substituteAll {

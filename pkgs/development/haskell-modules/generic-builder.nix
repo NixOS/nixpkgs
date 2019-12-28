@@ -356,7 +356,6 @@ stdenv.mkDerivation ({
   '';
 
   # Cabal takes flags like `--configure-option=--host=...` instead
-  configurePlatforms = [];
   inherit configureFlags;
 
   configurePhase = ''
