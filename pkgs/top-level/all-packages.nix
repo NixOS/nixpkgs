@@ -11775,6 +11775,8 @@ in
 
   gtkspellmm = callPackage ../development/libraries/gtkspellmm { };
 
+  gtk-layer-shell = callPackage ../development/libraries/gtk-layer-shell { };
+
   gts = callPackage ../development/libraries/gts { };
 
   gumbo = callPackage ../development/libraries/gumbo { };
