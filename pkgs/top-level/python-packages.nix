@@ -839,6 +839,8 @@ in {
 
   msal = callPackage ../development/python-modules/msal { };
 
+  msal-extensions = callPackage ../development/python-modules/msal-extensions { };
+
   msrest = callPackage ../development/python-modules/msrest { };
 
   msrestazure = callPackage ../development/python-modules/msrestazure { };
