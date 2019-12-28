@@ -4196,6 +4196,8 @@ in {
 
   nameparser = callPackage ../development/python-modules/nameparser { };
 
+  names = callPackage ../development/python-modules/names { };
+
   nbconvert = callPackage ../development/python-modules/nbconvert { };
 
   nbformat = callPackage ../development/python-modules/nbformat { };
