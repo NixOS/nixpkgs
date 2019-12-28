@@ -5099,6 +5099,8 @@ in {
 
   requests-http-signature = callPackage ../development/python-modules/requests-http-signature { };
 
+  requirements-detector = callPackage ../development/python-modules/requirements-detector { };
+
   resampy = callPackage ../development/python-modules/resampy { };
 
   restructuredtext_lint = callPackage ../development/python-modules/restructuredtext_lint { };
