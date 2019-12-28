@@ -8,7 +8,7 @@
 , isPyPy
 , six
 , pathlib
-, python_magic
+, python-magic
 , lib
 }:
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   # https://github.com/nicfit/eyeD3/blob/103198e265e3279384f35304e8218be6717c2976/Makefile#L97
   doCheck = false;
 
-  propagatedBuildInputs = [ six python_magic ] ++ lib.optional (pythonOlder "3.4") pathlib;
+  propagatedBuildInputs = [ six python-magic ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   postInstall = ''
     for prog in "$out/bin/"*; do

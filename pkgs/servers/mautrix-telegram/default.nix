@@ -38,7 +38,7 @@ buildPythonPackage rec {
     CommonMark
     ruamel_yaml
     future-fstrings
-    python_magic
+    python-magic
     telethon
     telethon-session-sqlalchemy
     pillow

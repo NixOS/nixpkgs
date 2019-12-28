@@ -49,7 +49,7 @@ buildPythonPackage rec {
     configobj
     defusedxml
     GitPython
-    google_api_python_client
+    google-api-python-client
     kubernetes
     ldap3
     mixpanel
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     pyopenssl
     pypdf2
     pysmb
-    python_magic
+    python-magic
     pytz
     pywinrm
     requirements-detector

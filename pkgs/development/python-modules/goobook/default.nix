@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
-, google_api_python_client, simplejson, oauth2client, setuptools
+, google-api-python-client, simplejson, oauth2client, setuptools
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    google_api_python_client simplejson oauth2client setuptools
+    google-api-python-client simplejson oauth2client setuptools
   ];
 
   meta = with stdenv.lib; {

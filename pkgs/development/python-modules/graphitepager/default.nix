@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, jinja2, markupsafe, pagerduty, pushbullet, python_magic, python-simple-hipchat
+, jinja2, markupsafe, pagerduty, pushbullet, python-magic, python-simple-hipchat
 , pyyaml, redis, requests, six, websocket_client, nose
 }:
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jinja2 markupsafe pagerduty pushbullet python_magic python-simple-hipchat
+    jinja2 markupsafe pagerduty pushbullet python-magic python-simple-hipchat
     pyyaml redis requests six websocket_client
   ];
 

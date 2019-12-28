@@ -271,7 +271,7 @@
     "gntp" = ps: with ps; [  ];
     "goalfeed" = ps: with ps; [  ];
     "gogogate2" = ps: with ps; [  ];
-    "google" = ps: with ps; [ google_api_python_client httplib2 oauth2client ];
+    "google" = ps: with ps; [ google-api-python-client httplib2 oauth2client ];
     "google_assistant" = ps: with ps; [ aiohttp-cors ];
     "google_cloud" = ps: with ps; [ google_cloud_texttospeech ];
     "google_domains" = ps: with ps; [  ];

@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, requests, websocket_client, python_magic
+, requests, websocket_client, python-magic
 , pytest, mock }:
 
 buildPythonPackage rec {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "aa9dc7bb46e083e3497d46241154f12944a8f540e29d150330ca94db0b453b8d";
   };
 
-  propagatedBuildInputs = [ requests websocket_client python_magic ];
+  propagatedBuildInputs = [ requests websocket_client python-magic ];
 
   checkInputs = [ pytest mock ];
 

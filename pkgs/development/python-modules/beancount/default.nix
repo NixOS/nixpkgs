@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, bottle, chardet, dateutil
-, google_api_python_client, lxml, oauth2client
-, ply, python_magic, pytest, requests }:
+, google-api-python-client, lxml, oauth2client
+, ply, python-magic, pytest, requests }:
 
 buildPythonPackage rec {
   version = "2.2.3";
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     bottle
     chardet
     dateutil
-    google_api_python_client
+    google-api-python-client
     lxml
     oauth2client
     ply
-    python_magic
+    python-magic
     requests
     # pytest really is a runtime dependency
     # https://bitbucket.org/blais/beancount/commits/554e13057551951e113835196770847c788dd592

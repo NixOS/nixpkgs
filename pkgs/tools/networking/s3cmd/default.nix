@@ -11,7 +11,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "0ninw830309cxga99gjnfghpkywf9kd6yz4wqsq85zni1dv39cdk";
   };
 
-  propagatedBuildInputs = with python2Packages; [ python_magic dateutil ];
+  propagatedBuildInputs = with python2Packages; [ python-magic dateutil ];
 
   meta = with stdenv.lib; {
     homepage = http://s3tools.org/;
