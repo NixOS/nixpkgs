@@ -28,6 +28,25 @@ let
     ES_PORT = toString(cfg.elasticsearch.port);
   } // cfg.extraConfig;
 
+  envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
+    (lib.concatLists (lib.mapAttrsToList (name: value:
+     if value != null then [
+       "${name}=\"${toString value}\""
+      ] else []
+    ) env))));
+
+  mastodonEnv = pkgs.runCommand "mastodon-env" { preferLocalBuild = true; } ''
+    mkdir -p $out/bin
+    cat > $out/bin/mastodon-env << EOF
+    #!${pkgs.bash}/bin/bash
+    set -a
+    source "${envFile}"
+    source /var/lib/mastodon/.secrets_env
+    eval -- "\$@"
+    EOF
+    chmod +x $out/bin/mastodon-env
+  '';
+
 in {
 
   options = {
@@ -56,8 +75,17 @@ in {
 
       user = lib.mkOption {
         description = ''
-          User under which mastodon runs
-          If it is set to "mastodon", a user will be created.
+          User under which mastodon runs. If it is set to "mastodon",
+          that user will be created, otherwise it should be set to the
+          name of a user created elsewhere.  In both cases,
+          <package>mastodon</package> and a package containing only
+          the shell script <code>mastodon-env</code> will be added to
+          the user's package set. To run a command from
+          <package>mastodon</package> such as <code>tootctl</code>
+          with the environment configured by this module use
+          <code>mastodon-env</code>, as in:
+
+          <code>mastodon-env tootctl accounts create newuser --email newuser@example.com</code>
         '';
         type = lib.types.str;
         default = "mastodon";
@@ -464,10 +492,15 @@ in {
       ensureDatabases = [ cfg.database.name ];
     };
 
-    users.users.mastodon = lib.mkIf (cfg.user == "mastodon") {
-      isSystemUser = true;
-      inherit (cfg) group;
-    };
+    users.users = lib.mkMerge [
+      (lib.mkIf (cfg.user == "mastodon") {
+        mastodon = {
+          isSystemUser = true;
+          inherit (cfg) group;
+        };
+      })
+      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ pkgs.mastodon mastodonEnv ])
+    ];
 
     users.groups.mastodon = lib.mkIf (cfg.group == "mastodon") { };
   };

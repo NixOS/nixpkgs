@@ -30,8 +30,13 @@ in {
 
   testScript =
     ''
+      def mastodon_cmd(cmd):
+          return f'su - mastodon -s /bin/sh -c "mastodon-env {cmd}" | cat'
+
+
       start_all()
       alice.wait_for_unit("multi-user.target")
+      alice.log(alice.succeed(mastodon_cmd("tootctl settings registrations open")))
       alice.wait_for_open_port(55001)
       alice.succeed("curl http://localhost:55001/")
     '';
