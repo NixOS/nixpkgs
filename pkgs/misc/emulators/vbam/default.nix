@@ -12,6 +12,9 @@
 , sfml
 , zip
 , zlib
+, enableWx ? false
+, gtk2
+, wxGTK
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +26,8 @@ stdenv.mkDerivation rec {
     rev = "d3397e6a1a777ca037c014510689b75da9e197db";
     sha256 = "079cn76sif5jzdl5xpa4rv6iyx4z3xp9fv2nzdbxqgdwi8dh0dr8";
   };
+
+  patches = lib.optionals enableWx [ ./wx-cmake-fix-prefix.patch ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
@@ -36,16 +41,18 @@ stdenv.mkDerivation rec {
     sfml
     zip
     zlib
-  ];
+  ] ++ lib.optionals enableWx [ gtk2 wxGTK ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE='Release'"
     "-DENABLE_FFMPEG='true'"
     "-DENABLE_LINK='true'"
     "-DSYSCONFDIR=etc"
-    "-DENABLE_WX='false'"
-    "-DENABLE_SDL='true'"
-  ];
+  ] ++ (if !enableWx
+        then [ "-DENABLE_WX='false'"
+               "-DENABLE_SDL='true'"
+             ]
+        else [ "-DENABLE_WX='true'" ]);
 
   meta =  with lib; {
     description = "A merge of the original Visual Boy Advance forks";

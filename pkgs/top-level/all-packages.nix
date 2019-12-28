@@ -25272,6 +25272,10 @@ in
   vbam = callPackage ../misc/emulators/vbam {
     ffmpeg = ffmpeg_4;
   };
+  vbam-wx = vbam.override {
+    enableWx = true;
+    wxGTK = wxGTK31;
+  };
 
   vice = callPackage ../misc/emulators/vice {
     giflib = giflib_4_1;
