@@ -5817,6 +5817,12 @@
     github = "rickynils";
     name = "Rickard Nilsson";
   };
+  rika = {
+    email = "rika@paymentswit.ch";
+    github = "NekomimiScience";
+    githubId = 1810487;
+    name = "Rika";
+  };
   rileyinman = {
     email = "rileyminman@gmail.com";
     github = "rileyinman";
