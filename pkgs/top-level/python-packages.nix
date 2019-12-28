@@ -268,6 +268,8 @@ in {
 
   azure-batch = callPackage ../development/python-modules/azure-batch { };
 
+  azure-core = callPackage ../development/python-modules/azure-core { };
+
   azure-cosmosdb-nspkg = callPackage ../development/python-modules/azure-cosmosdb-nspkg { };
 
   azure-cosmosdb-table = callPackage ../development/python-modules/azure-cosmosdb-table { };
@@ -280,7 +282,13 @@ in {
 
   azure-graphrbac = callPackage ../development/python-modules/azure-graphrbac { };
 
+  azure-identity = callPackage ../development/python-modules/azure-identity { };
+
   azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
+
+  azure-keyvault-keys = callPackage ../development/python-modules/azure-keyvault-keys { };
+
+  azure-keyvault-secrets = callPackage ../development/python-modules/azure-keyvault-secrets { };
 
   azure-loganalytics = callPackage ../development/python-modules/azure-loganalytics { };
 
@@ -654,6 +662,10 @@ in {
 
   flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
+  fluidasserts = callPackage ../development/python-modules/fluidasserts {
+    pythonPackages = self;
+  };
+
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
@@ -882,6 +894,8 @@ in {
   ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito {
       pythonPackages = self;
     });
+
+  oyaml = callPackage ../development/python-modules/oyaml { };
 
   palettable = callPackage ../development/python-modules/palettable { };
 
@@ -1261,6 +1275,8 @@ in {
 
   remotecv = callPackage ../development/python-modules/remotecv { };
 
+  requirements-detector = callPackage ../development/python-modules/requirements-detector { };
+
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
   rig = callPackage ../development/python-modules/rig { };
@@ -1638,6 +1654,8 @@ in {
   backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock {};
 
   babelfish = callPackage ../development/python-modules/babelfish {};
+
+  bandit = callPackage ../development/python-modules/bandit { };
 
   basiciw = callPackage ../development/python-modules/basiciw {
     inherit (pkgs) gcc wirelesstools;
@@ -2776,6 +2794,8 @@ in {
 
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
+  names = callPackage ../development/python-modules/names { };
+
   natsort = callPackage ../development/python-modules/natsort { };
 
   naturalsort = callPackage ../development/python-modules/naturalsort { };
@@ -3490,7 +3510,7 @@ in {
   google_api_core = callPackage ../development/python-modules/google_api_core { };
 
   google_api_python_client = let
-    google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
+    google_api_python_client = callPackage ../development/python-modules/google_api_python_client { };
   in if isPy3k then google_api_python_client else
     # Python 2.7 support was deprecated but is still needed by weboob and duplicity
     google_api_python_client.overridePythonAttrs (old: rec {
@@ -3901,7 +3921,7 @@ in {
 
   py_scrypt = callPackage ../development/python-modules/py_scrypt { };
 
-  python_magic = callPackage ../development/python-modules/python-magic { };
+  python_magic = callPackage ../development/python-modules/python_magic { };
 
   magic = callPackage ../development/python-modules/magic { };
 
@@ -4019,6 +4039,10 @@ in {
   mozterm = callPackage ../development/python-modules/mozterm { };
 
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
+
+  msal = callPackage ../development/python-modules/msal { };
+
+  msal-extensions = callPackage ../development/python-modules/msal-extensions { };
 
   multidict = callPackage ../development/python-modules/multidict { };
 
@@ -4142,6 +4166,8 @@ in {
   monotonic = callPackage ../development/python-modules/monotonic { };
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
+
+  mysql-connector-python = callPackage ../development/python-modules/mysql-connector-python { };
 
   namebench = callPackage ../development/python-modules/namebench { };
 
@@ -4502,6 +4528,8 @@ in {
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
+  pyjks = callPackage ../development/python-modules/pyjks { };
+
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
 
   pylibmc = callPackage ../development/python-modules/pylibmc {};
@@ -4706,6 +4734,8 @@ in {
   pysha3 = callPackage ../development/python-modules/pysha3 { };
 
   pyshp = callPackage ../development/python-modules/pyshp { };
+
+  pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc {
     inherit (pkgs) pkgconfig;
@@ -5350,6 +5380,8 @@ in {
 
   twisted = callPackage ../development/python-modules/twisted { };
 
+  twofish = callPackage ../development/python-modules/twofish { };
+
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 
   tzlocal = callPackage ../development/python-modules/tzlocal { };
@@ -5786,6 +5818,8 @@ in {
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
 
   pyuv = callPackage ../development/python-modules/pyuv { };
+
+  viewstate = callPackage ../development/python-modules/viewstate { };
 
   virtualenv-clone = callPackage ../development/python-modules/virtualenv-clone { };
 
@@ -6323,6 +6357,8 @@ in {
   jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
+
+  javaobj-py3 = callPackage ../development/python-modules/javaobj-py3 { };
 
   javaproperties = callPackage ../development/python-modules/javaproperties { };
 
