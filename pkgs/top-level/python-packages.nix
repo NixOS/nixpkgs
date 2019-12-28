@@ -2179,6 +2179,8 @@ in {
 
   pyjet = callPackage ../development/python-modules/pyjet {};
 
+  pyjks = callPackage ../development/python-modules/pyjks {};
+
   PyLD = callPackage ../development/python-modules/PyLD { };
 
   python-jose = callPackage ../development/python-modules/python-jose {};
