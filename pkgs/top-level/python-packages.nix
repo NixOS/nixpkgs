@@ -1155,6 +1155,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  pysmb = callPackage ../development/python-modules/pysmb { };
+
   pysmf = callPackage ../development/python-modules/pysmf { };
 
   pyspinel = callPackage ../development/python-modules/pyspinel {};
