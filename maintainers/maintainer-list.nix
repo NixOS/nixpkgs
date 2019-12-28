@@ -5669,6 +5669,12 @@
     githubId = 14829269;
     name = "Ram Kromberg";
   };
+  ranguli = {
+    email = "hello@joshmurphy.ca";
+    github = "ranguli";
+    githubId = 5544782;
+    name = "Joshua Murphy";
+  };
   rardiol = {
     email = "ricardo.ardissone@gmail.com";
     github = "rardiol";
