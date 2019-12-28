@@ -19701,6 +19701,8 @@ in
 
   imgcat = callPackage ../applications/graphics/imgcat { };
 
+  imgp = python3Packages.callPackage ../applications/graphics/imgp { };
+
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
