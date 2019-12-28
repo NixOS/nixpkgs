@@ -335,8 +335,8 @@ in {
         OTP_SECRET=$(cat ${cfg.otpSecretFile})
         VAPID_PRIVATE_KEY=$(cat ${cfg.vapidPrivateKeyFile})
         VAPID_PUBLIC_KEY=$(cat ${cfg.vapidPublicKeyFile})
-        DB_PASS=$(cat ${cfg.database.passwordFile})
-        SMTP_PASSWORD=$(cat ${cfg.smtp.passwordFile})
+        DB_PASS="$(cat ${cfg.database.passwordFile})"
+        SMTP_PASSWORD="$(cat ${cfg.smtp.passwordFile})"
         EOF
       '';
       serviceConfig = {
