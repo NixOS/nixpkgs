@@ -2518,6 +2518,8 @@ in
     caps2esc = callPackage ../tools/inputmethods/interception-tools/caps2esc.nix { };
   };
 
+  age = callPackage ../tools/security/age { };
+
   brotli = callPackage ../tools/compression/brotli { };
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
