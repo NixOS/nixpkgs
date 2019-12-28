@@ -6,7 +6,7 @@ let
 in
 
 appimageTools.wrapType2 rec {
-  name = "${pname}-${version}";;
+  name = "${pname}-${version}";
 
   extraPkgs = (pkgs: with pkgs; with xorg; [ gtk2 gdk_pixbuf glib libGL libGLU nss nspr
     alsaLib cups gnome2.GConf libcap fontconfig freetype pango
