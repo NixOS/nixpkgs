@@ -397,7 +397,7 @@ stdenv.mkDerivation ({
     ${optionalString (doHaddock && isLibrary) ''
       ${setupCommand} haddock --html \
         ${optionalString doHoogle "--hoogle"} \
-        ${optionalString doHaddockQuickjump "--quickjump"} \
+        ${optionalString (doHaddockQuickjump && stdenv.lib.versionAtLeast ghc.version "8.6") "--quickjump"} \
         ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
         ${stdenv.lib.concatStringsSep " " haddockFlags}
     ''}
