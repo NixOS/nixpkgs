@@ -3527,6 +3527,12 @@
     githubId = 87115;
     name = "Wael Nasreddine";
   };
+  kamadorueda = {
+    email = "kamadorueda@gmail.com";
+    github = "kamadorueda";
+    githubId = 47480384;
+    name = "Kevin Amado";
+  };
   kamilchm = {
     email = "kamil.chm@gmail.com";
     github = "kamilchm";
