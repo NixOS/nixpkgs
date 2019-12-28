@@ -1,4 +1,4 @@
-{ buildPythonPackage, dbus-python, pygobject3, xscreensaver }:
+{ buildPythonPackage, dbus-python, pygobject3, python-prctl, xscreensaver, xprintidle-ng }:
 
 buildPythonPackage {
   pname = "gnome-xscreensaver";
@@ -6,8 +6,12 @@ buildPythonPackage {
   src = ./.;
 
   postPatch = ''
-    substituteInPlace gnomexscreensaver.py --subst-var-by XSCREENSAVER_BIN ${xscreensaver}/bin/
+    substituteInPlace gnomexscreensaver.py \
+      --subst-var-by XSCREENSAVER_BIN ${xscreensaver}/bin/ \
+      --subst-var-by XPRINTIDLE_BIN ${xprintidle-ng}/bin/
   '';
+
+  propagatedBuildInputs = [ dbus-python pygobject3 python-prctl ];
 
   postInstall = ''
     mkdir -p $out/share/dbus-1/services
@@ -36,6 +40,4 @@ buildPythonPackage {
     X-GNOME-Autostart-Notify=true
     END_DESKTOP
   '';
-
-  propagatedBuildInputs = [ dbus-python pygobject3 ];
 }
