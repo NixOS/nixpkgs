@@ -25259,6 +25259,8 @@ in
     inherit (gnome2) GConf;
   };
 
+  unityhub = callPackage ../development/tools/unityhub { };
+
   urbit = callPackage ../misc/urbit { };
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
