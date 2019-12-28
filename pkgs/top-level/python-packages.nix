@@ -6387,6 +6387,8 @@ in {
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 
+  javaobj-py3 = callPackage ../development/python-modules/javaobj-py3 { };
+
   javaproperties = callPackage ../development/python-modules/javaproperties { };
 
   tempora= callPackage ../development/python-modules/tempora { };
