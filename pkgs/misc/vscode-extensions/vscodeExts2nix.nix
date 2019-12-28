@@ -1,14 +1,14 @@
 # based on the passed vscode will stdout a nix expression with the installed vscode extensions 
-{ pkgs                ? import <nixpkgs>{}
-, lib                 ? pkgs.lib
-, vscode              ? pkgs.vscode
-, writeShellScriptBin ? pkgs.writeShellScriptBin
+{ lib
+, vscodeDefault
+, writeShellScriptBin
+}:
 
 ##User input
-
-, extensionsToIgnore  ? []
+{ vscode             ? vscodeDefault 
+, extensionsToIgnore ? []
 # will use those extensions to get sha256 if still exists when executed.
-, extensions          ? [] 
+, extensions         ? [] 
 }:
 let 
   mktplcExtRefToFetchArgs = import ./mktplcExtRefToFetchArgs.nix;

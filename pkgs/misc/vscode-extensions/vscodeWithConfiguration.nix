@@ -1,17 +1,16 @@
 # wrapper over vscode to control extensions per project (extensions folder will be created in execution path)
-{ pkgs                            ? import <nixpkgs> {}
-, lib                             ? pkgs.lib
-, writeShellScriptBin             ? pkgs.writeShellScriptBin
-, extensionsFromVscodeMarketplace ? pkgs.vscode-utils.extensionsFromVscodeMarketplace
-
-##User input
-
-, vscode                          ? pkgs.vscode
+{ lib                             
+, writeShellScriptBin             
+, extensionsFromVscodeMarketplace 
+, vscodeDefault
+}:
+## User input
+{ vscode ? vscodeDefault                          
 # extensions to be symlinked into the project's extensions folder
-, nixExtensions                   ? []
+, nixExtensions        ? []                   
 # extensions to be copied into the project's extensions folder
-, mutableExtensions               ? []
-, vscodeExtsFolderName            ? ".vscode-exts"
+, mutableExtensions    ? []        
+, vscodeExtsFolderName ? ".vscode-exts"        
 }:
 let 
   nixExtsDrvs = extensionsFromVscodeMarketplace nixExtensions;

@@ -1,4 +1,4 @@
-{ stdenv, lib, writeShellScriptBin, fetchurl, vscode, unzip }:
+{ stdenv, lib, buildEnv, writeShellScriptBin, fetchurl, vscode, unzip }:
 
 let
 
@@ -72,21 +72,22 @@ let
   extensionsFromVscodeMarketplace = mktplcExtRefList:
     builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
 
-  vscodeWithConfiguration = (userParams : import ./vscodeWithConfiguration.nix {
-   inherit lib vscode extensionsFromVscodeMarketplace writeShellScriptBin;
-  } // userParams);
+  vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
+   inherit lib extensionsFromVscodeMarketplace writeShellScriptBin;
+   vscodeDefault = vscode;
+  };
 
   
-  vscodeExts2nix = (userParams : import ./vscodeExts2nix.nix {
-    inherit lib vscode;
-  } // userParams);
+  vscodeExts2nix = import ./vscodeExts2nix.nix {
+    inherit lib writeShellScriptBin;
+    vscodeDefault = vscode;
+  };
 
-  vscodeEnv = (userParams : import ./vscodeEnv.nix {
-    inherit lib writeShellScriptBin extensionsFromVscodeMarketplace vscode;
-  } // userParams );
-
+  vscodeEnv = import ./vscodeEnv.nix {
+    inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace;
+    vscodeDefault = vscode;
+  };
 in 
-
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
           buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
