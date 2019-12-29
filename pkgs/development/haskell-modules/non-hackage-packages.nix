@@ -8,7 +8,7 @@
 self: super: {
 
   multi-ghc-travis = throw ("haskellPackages.multi-ghc-travis has been renamed"
-    + "to haskell-ci, which is now on hackage");
+    + " to haskell-ci, which is now on hackage");
 
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
