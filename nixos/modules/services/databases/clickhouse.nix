@@ -8,16 +8,7 @@ with lib;
   ###### interface
 
   options = {
-
-    services.clickhouse = {
-
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable ClickHouse database server.";
-      };
-
-    };
-
+    services.clickhouse.enable = mkEnableOption "ClickHouse database server";
   };
 
 
