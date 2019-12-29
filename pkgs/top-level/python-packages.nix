@@ -6081,6 +6081,8 @@ in {
 
   ofxtools = callPackage ../development/python-modules/ofxtools { };
 
+  orm = callPackage ../development/python-modules/orm { };
+
   basemap = callPackage ../development/python-modules/basemap { };
 
   dict2xml = callPackage ../development/python-modules/dict2xml { };
