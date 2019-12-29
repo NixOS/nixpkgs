@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, buildDunePackage, ocaml
-, macaddr, ounit, sexplib
+{ lib, buildDunePackage
+, macaddr, ounit
 }:
 
 buildDunePackage rec {
@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/mirage/ocaml-ipaddr;
     description = "A library for manipulation of IP (and MAC) address representations ";
     license = licenses.isc;

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, buildDunePackage, ocaml
-, ppx_sexp_conv, sexplib
+{ lib, fetchurl, buildDunePackage
+, ppx_sexp_conv
 }:
 
 buildDunePackage rec {
@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   doCheck = false; # ipaddr and macaddr tests are together, which requires mutual dependency
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/mirage/ocaml-ipaddr;
     description = "A library for manipulation of MAC address representations";
     license = licenses.isc;
