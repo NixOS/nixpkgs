@@ -15933,6 +15933,8 @@ in
 
   wallabag = callPackage ../servers/web-apps/wallabag { };
 
+  warsaw-bin = callPackage ../servers/warsaw-bin { };
+
   webmetro = callPackage ../servers/webmetro { };
 
   webhook = callPackage ../servers/http/webhook { };
