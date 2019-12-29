@@ -2920,6 +2920,8 @@ in {
     inherit (pkgs) meson pkgconfig;
   };
 
+  python-lzf = callPackage ../development/python-modules/python-lzf { };
+
   pyramid = callPackage ../development/python-modules/pyramid { };
 
   pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
