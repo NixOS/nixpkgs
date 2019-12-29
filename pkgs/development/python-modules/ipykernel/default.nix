@@ -7,7 +7,7 @@
 , traitlets
 , tornado
 , pythonOlder
-, pytest
+, pytestCheckHook
 , nose
 }:
 
@@ -21,7 +21,6 @@ buildPythonPackage rec {
     sha256 = "04jx6ihj3zpj4c7acqa14gl37mpdnbgmfm4nvv97xkjc1cz920xm";
   };
 
-  checkInputs = [ pytest nose ];
   propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
 
   # https://github.com/ipython/ipykernel/pull/377
@@ -32,9 +31,10 @@ buildPythonPackage rec {
     })
   ];
 
-  # For failing tests, see https://github.com/ipython/ipykernel/issues/387
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest ipykernel -k "not (test_sys_path or test_sys_path_profile_dir or test_complete)"
+  checkInputs = [ pytestCheckHook nose ];
+  dontUseSetuptoolsCheck = true;
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   # Some of the tests use localhost networking.
