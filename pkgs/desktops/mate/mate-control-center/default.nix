@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # see https://github.com/mate-desktop/mate-control-center/pull/528
+    ./0001-Search-system-themes-in-system-data-dirs.patch
     # look up keyboard shortcuts in system data dirs
     ./mate-control-center.keybindings-dir.patch
   ];

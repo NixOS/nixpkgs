@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, utillinux, fetchpatch }:
+, lvm2, pam, python, utillinux, fetchpatch, json_c }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1czx8brfhbfi614mqw46d38xwq6w7d5aca3pibwx8zz47rn99w6d";
+    sha256 = "0605j4f3plb6q8lwf82y2jhply6dwj49jgxk8j16wsbf5k7lqzfq";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python utillinux
+    lvm2 pam python utillinux json_c
   ];
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Hard-coded root paths, hard-coded root paths everywhere...
-    for file in {client,data,pam,scripts}/Makefile.am; do
+    for file in {client,data,pam,scripts,zypp-plugin}/Makefile.am; do
       substituteInPlace $file \
         --replace '$(DESTDIR)/usr' "$out" \
         --replace "DESTDIR" "out" \

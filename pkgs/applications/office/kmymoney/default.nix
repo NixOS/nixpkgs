@@ -10,7 +10,7 @@
 # Needed for running tests:
 , qtbase, xvfb_run
 
-, python3Packages
+, python2, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python3Packages.wrapPython
-    wrapQtAppsHook
+    doxygen extra-cmake-modules graphviz kdoctools python2
+    python3Packages.wrapPython wrapQtAppsHook
   ];
 
   buildInputs = [

@@ -122,6 +122,8 @@ in
 
   ms-vscode.cpptools = callPackage ./cpptools {};
 
+  ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
+
   ms-python.python = callPackage ./python {
     extractNuGet = callPackage ./python/extract-nuget.nix { };
   };

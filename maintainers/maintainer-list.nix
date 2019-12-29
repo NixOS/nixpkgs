@@ -2005,7 +2005,7 @@
     name = "Edward Tjörnhammar";
   };
   eelco = {
-    email = "eelco.dolstra@logicblox.com";
+    email = "edolstra+nixpkgs@gmail.com";
     github = "edolstra";
     githubId = 1148549;
     name = "Eelco Dolstra";
@@ -2968,7 +2968,12 @@
   infinisil = {
     email = "contact@infinisil.com";
     github = "infinisil";
+    githubId = 20525370;
     name = "Silvan Mosberger";
+    keys = [{
+      longkeyid = "rsa4096/0x422E9EDAE0157170";
+      fingerprint = "6C2B 55D4 4E04 8266 6B7D  DA1A 422E 9EDA E015 7170";
+    }];
   };
   ingenieroariel = {
     email = "ariel@nunez.co";
@@ -4897,12 +4902,6 @@
     github = "nckx";
     githubId = 364510;
     name = "Tobias Geerinckx-Rice";
-  };
-  ndowens = {
-    email = "ndowens04@gmail.com";
-    github = "ndowens";
-    githubId = 117743;
-    name = "Nathan Owens";
   };
   neeasade = {
     email = "nathanisom27@gmail.com";

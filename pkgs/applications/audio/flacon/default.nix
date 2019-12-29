@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = https://flacon.github.io/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ndowens nico202 ];
+    maintainers = with maintainers; [ nico202 ];
   };
 }

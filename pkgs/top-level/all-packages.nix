@@ -508,6 +508,8 @@ in
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
+  act = callPackage ../development/tools/misc/act {};
+
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
   actkbd = callPackage ../tools/system/actkbd { };
@@ -2081,7 +2083,7 @@ in
     libmysqlclient = null;
     postgresql = null;
     libdbi = null;
-    net_snmp = null;
+    net-snmp = null;
     libuuid = null;
     gnutls = null;
     libgcrypt = null;
@@ -2515,6 +2517,8 @@ in
   interception-tools-plugins = {
     caps2esc = callPackage ../tools/inputmethods/interception-tools/caps2esc.nix { };
   };
+
+  age = callPackage ../tools/security/age { };
 
   brotli = callPackage ../tools/compression/brotli { };
 
@@ -5908,7 +5912,9 @@ in
   qesteidutil = libsForQt5.callPackage ../tools/security/qesteidutil { } ;
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
 
-  qgrep = callPackage ../tools/text/qgrep {};
+  qgrep = callPackage ../tools/text/qgrep {
+    inherit (darwin.apple_sdk.frameworks) CoreServices CoreFoundation;
+  };
 
   qhull = callPackage ../development/libraries/qhull { };
 
@@ -8155,7 +8161,7 @@ in
 
   purescript-psa = nodePackages.purescript-psa;
 
-  spago = haskell.lib.justStaticExecutables haskellPackages.spago;
+  spago = callPackage ../development/tools/purescript/spago { };
 
   pulp = nodePackages.pulp;
 
@@ -8523,7 +8529,6 @@ in
   llvmPackages_latest = llvmPackages_9;
 
   lorri = callPackage ../tools/misc/lorri {
-    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
@@ -8946,6 +8951,8 @@ in
 
   clojure = callPackage ../development/interpreters/clojure { };
 
+  clojure-lsp = callPackage ../development/tools/misc/clojure-lsp { };
+
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
   dhall = callPackage ../development/interpreters/dhall { };
@@ -9353,7 +9360,23 @@ in
   })
     ruby_2_4
     ruby_2_5
-    ruby_2_6;
+    ruby_2_6
+    ruby_2_7;
+
+  rubyMinimal = ruby.override {
+    # gem support is minimal overhead
+    rubygemsSupport = true;
+    useRailsExpress = false;
+    zlibSupport = false;
+    opensslSupport = false;
+    gdbmSupport = false;
+    cursesSupport = false;
+    docSupport = false;
+    yamlSupport = false;
+    fiddleSupport = false;
+    # remove gcc from runtime closure
+    removeReferenceToCC = true;
+  };
 
   ruby = ruby_2_6;
 
@@ -10572,7 +10595,7 @@ in
 
   texlab = callPackage ../development/tools/misc/texlab {
     inherit (darwin.apple_sdk.frameworks) Security;
-    texlab-citeproc-build-deps = nodePackages."texlab-citeproc-build-deps-../tools/misc/texlab/citeproc";
+    inherit (nodePackages) texlab-citeproc-build-deps;
   };
 
   tflint = callPackage ../development/tools/analysis/tflint { };
@@ -11644,6 +11667,8 @@ in
   glibmm = callPackage ../development/libraries/glibmm { };
 
   glib-networking = callPackage ../development/libraries/glib-networking {};
+
+  glirc = haskell.lib.justStaticExecutables haskellPackages.glirc;
 
   gom = callPackage ../development/libraries/gom { };
 
@@ -15442,7 +15467,7 @@ in
 
   check-esxi-hardware = callPackage ../servers/monitoring/plugins/esxi.nix {};
 
-  net_snmp = callPackage ../servers/monitoring/net-snmp { };
+  net-snmp = callPackage ../servers/monitoring/net-snmp { };
 
   newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
 
@@ -19165,6 +19190,8 @@ in
     inherit (darwin) IOKit;
   };
 
+  glow = callPackage ../applications/editors/glow { };
+
   glowing-bear = callPackage ../applications/networking/irc/glowing-bear { };
 
   gmtk = callPackage ../development/libraries/gmtk { };
@@ -21387,6 +21414,7 @@ in
 
   swift-im = libsForQt5.callPackage ../applications/networking/instant-messengers/swift-im {
     inherit (gnome2) GConf;
+    boost = boost168;
   };
 
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
@@ -21435,7 +21463,9 @@ in
 
   tailor = callPackage ../applications/version-management/tailor {};
 
-  taizen = callPackage ../applications/misc/taizen { };
+  taizen = callPackage ../applications/misc/taizen {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   tangogps = callPackage ../applications/misc/tangogps {
     gconf = gnome2.GConf;
@@ -21652,6 +21682,8 @@ in
   ulauncher = callPackage ../applications/misc/ulauncher { };
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
+
+  ueberzug = with python3Packages; toPythonApplication ueberzug;
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
@@ -24514,7 +24546,9 @@ in
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = callPackage ../applications/networking/instant-messengers/ekiga { };
+  ekiga = callPackage ../applications/networking/instant-messengers/ekiga {
+    boost = boost167;
+  };
 
   dumb = callPackage ../misc/dumb { };
 
@@ -25231,6 +25265,8 @@ in
     gcc_32bit = pkgsi686Linux.gcc;
     inherit (gnome2) GConf;
   };
+
+  unityhub = callPackage ../development/tools/unityhub { };
 
   urbit = callPackage ../misc/urbit { };
 

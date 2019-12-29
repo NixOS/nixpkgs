@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xsecurelock";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "xsecurelock";
     rev = "v${version}";
-    sha256 = "1if8byaby18ydkrk4k5yy8n0981x1dfqikq59gfpb7c2rv0vgi7i";
+    sha256 = "0zdwszscdw0p7kwpqqv1dywn00bq1wak2x602lb6hdmkffspi8bg";
   };
 
   nativeBuildInputs = [

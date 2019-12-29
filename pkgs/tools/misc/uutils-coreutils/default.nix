@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
       CLI utils in Rust. This repo is to aggregate the GNU coreutils rewrites.
     '';
     homepage = https://github.com/uutils/coreutils;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

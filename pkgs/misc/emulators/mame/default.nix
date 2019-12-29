@@ -1,9 +1,10 @@
 { stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
-, python, pkgconfig, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama }:
+, python, pkgconfig, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
+, installShellFiles }:
 
 let
   majorVersion = "0";
-  minorVersion = "216";
+  minorVersion = "217";
 
   desktopItem = makeDesktopItem {
     name = "MAME";
@@ -22,7 +23,7 @@ in mkDerivation {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${majorVersion}${minorVersion}";
-    sha256 = "0dmmw08pxxznvadrc51zg27jc9fjh688355w8kxkmi7k8qa367r0";
+    sha256 = "0yzn29fp72k2g5xgv47ss6fr3sk9wdxw9f52nwld1baxr2adc0qx";
   };
 
   hardeningDisable = [ "fortify" ];
@@ -33,7 +34,7 @@ in mkDerivation {
   dontWrapQtApps = true;
 
   buildInputs = [ SDL2 SDL2_ttf alsaLib qtbase libXinerama ];
-  nativeBuildInputs = [ python pkgconfig which makeWrapper ];
+  nativeBuildInputs = [ python pkgconfig which makeWrapper installShellFiles ];
 
   # by default MAME assumes that paths with stock resources
   # are relative and that you run MAME changing to
@@ -54,9 +55,7 @@ in mkDerivation {
     find ${dest} -maxdepth 1 -executable -type f -exec mv -t $out/bin {} \;
     install -Dm755 src/osd/sdl/taputil.sh $out/bin/taputil.sh
 
-    mkdir -p $out/share/man/man{1,6}
-    mv ${dest}/docs/man/*.1 $out/share/man/man1
-    mv ${dest}/docs/man/*.6 $out/share/man/man6
+    installManPage ${dest}/docs/man/*.1 ${dest}/docs/man/*.6
 
     mv artwork plugins samples ${dest}
 
