@@ -7,7 +7,7 @@ let
     echo "attempting to fetch configuration from EC2 user data..."
 
     export HOME=/root
-    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.gnused config.system.build.nixos-rebuild]}:$PATH
+    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.git pkgs.gnused config.system.build.nixos-rebuild]}:$PATH
     export NIX_PATH=nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
 
     userData=/etc/ec2-metadata/user-data
@@ -48,7 +48,7 @@ in {
     wantedBy = [ "multi-user.target" ];
     after = [ "multi-user.target" ];
     requires = [ "network-online.target" ];
- 
+
     restartIfChanged = false;
     unitConfig.X-StopOnRemoval = false;
 
@@ -58,4 +58,3 @@ in {
     };
   };
 }
-
