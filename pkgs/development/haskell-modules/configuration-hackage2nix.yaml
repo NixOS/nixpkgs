@@ -2751,6 +2751,7 @@ broken-packages:
   - accelerate-arithmetic
   - accelerate-fftw
   - accelerate-fourier
+  - accelerate-kullback-liebler
   - accelerate-llvm-native
   - accelerate-random
   - accelerate-typelits
@@ -3347,6 +3348,7 @@ broken-packages:
   - boolexpr
   - boombox
   - boomslang
+  - boopadoop
   - boots-app
   - boots-cloud
   - boots-web
@@ -5648,6 +5650,7 @@ broken-packages:
   - hdr-histogram
   - HDRUtils
   - headergen
+  - heart-app
   - heartbeat-streams
   - heatitup
   - heatitup-complete
@@ -6928,6 +6931,7 @@ broken-packages:
   - llvm-base-types
   - llvm-base-util
   - llvm-data-interop
+  - llvm-extension
   - llvm-extra
   - llvm-ffi
   - llvm-general
@@ -7248,6 +7252,8 @@ broken-packages:
   - mmsyn4
   - mmsyn6ukr
   - mmsyn7h
+  - mmsyn7l
+  - mmsyn7s
   - mmsyn7ukr
   - mmtf
   - mmtl
@@ -8270,6 +8276,7 @@ broken-packages:
   - quicktest
   - quickwebapp
   - quipper
+  - quipper-all
   - quipper-core
   - quipper-rendering
   - quiver-binary
@@ -8413,6 +8420,7 @@ broken-packages:
   - refresht
   - refurb
   - reg-alloc
+  - reg-alloc-graph-color
   - regex-deriv
   - regex-dfa
   - regex-generator
@@ -9802,6 +9810,7 @@ broken-packages:
   - typedquery
   - typehash
   - TypeIlluminator
+  - typelevel-rewrite-rules
   - typelevel-tensor
   - TypeNat
   - typeparams
