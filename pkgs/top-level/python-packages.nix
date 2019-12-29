@@ -4314,6 +4314,8 @@ in {
 
   orderedset = callPackage ../development/python-modules/orderedset { };
 
+  python-multipart = callPackage ../development/python-modules/python-multipart { };
+
   python-otr = callPackage ../development/python-modules/python-otr { };
 
   plone-testing = callPackage ../development/python-modules/plone-testing { };
