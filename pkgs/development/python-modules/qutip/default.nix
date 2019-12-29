@@ -1,29 +1,47 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , numpy
 , scipy
 , matplotlib
-, pyqt4
 , cython
-, pkgs
 , nose
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "2.2.0";
+  version = "4.4.1";
+  disabled = isPy27;
 
-  src = fetchurl {
-    url = "https://qutip.googlecode.com/files/QuTiP-${version}.tar.gz";
-    sha256 = "a26a639d74b2754b3a1e329d91300e587e8c399d8a81d8f18a4a74c6d6f02ba3";
+  src = fetchFromGitHub {
+    owner = "qutip";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0aa61q70hg3wk3k67zg4m095isclw49dlfl8kbakv0w698nhiazc";
   };
 
-  propagatedBuildInputs = [ numpy scipy matplotlib pyqt4 cython ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  buildInputs = [ pkgs.gcc pkgs.qt4 pkgs.blas nose ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    matplotlib
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    nose
+  ];
+
+  checkPhase = ''
+    pushd dist
+    HOME=$TMPDIR nosetests qutip
+    popd
+  '';
+
+  meta = with lib; {
     description = "QuTiP - Quantum Toolbox in Python";
     longDescription = ''
       QuTiP is open-source software for simulating the dynamics of
@@ -39,7 +57,6 @@ buildPythonPackage rec {
     '';
     homepage = http://qutip.org/;
     license = licenses.bsd0;
-    broken = true;
   };
 
 }
