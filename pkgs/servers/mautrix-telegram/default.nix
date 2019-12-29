@@ -65,6 +65,7 @@ buildPythonPackage rec {
     homepage = https://github.com/tulir/mautrix-telegram;
     description = "A Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nyanloutre ma27 ];
   };
 }
