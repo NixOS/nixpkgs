@@ -4350,6 +4350,8 @@ in {
 
   fasteners = callPackage ../development/python-modules/fasteners { };
 
+  aiocontextvars = callPackage ../development/python-modules/aiocontextvars { };
+
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
 
   aiokafka = callPackage ../development/python-modules/aiokafka { };
