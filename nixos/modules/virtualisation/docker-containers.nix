@@ -24,6 +24,27 @@ let
           '';
         };
 
+        devices = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            List of Linux devices to directly expose to this container.
+            Use with caution; mappings can potentially give far more access than you perhaps intend!
+
+            There are also some mount options available
+            as a third field; please refer to the
+            <link xlink:href="https://docs.docker.com/engine/reference/commandline/run/#add-host-device-to-container---device">
+            docker engine documentation</link> for details.
+          '';
+          example = literalExample ''
+            [
+              "/dev/dvb"
+              "/dev/dri:/dev/dri:r"
+              "/dev/sdb:/dev/sdb:rw"
+            ]
+          '';
+        };
+
         entrypoint = mkOption {
           type = with types; nullOr str;
           description = "Overwrite the default entrypoint of the image.";
@@ -43,6 +64,37 @@ let
         '';
         };
 
+        hostname = mkOption {
+          type = with types; nullOr str;
+          description = ''
+            Set the hostname inside the container.
+            If this is not set, the container will assume a hostname corresponding
+            to its engine ID, or the host's hostname if using host networking
+            (see the "network" option)
+          '';
+          default = null;
+          example = "MyFancyDockerContainer";
+        };
+
+        labels = mkOption {
+          type = with types; attrsOf str;
+          default = {};
+          description = ''
+            Labels that should be applied to this container.
+
+            For more details on labels, refer to the
+            <link xlink:href="https://docs.docker.com/config/labels-custom-metadata/">
+            Docker documentation</link>
+          '';
+          example = literalExample ''
+            {
+              "traefik.port" = "80";
+              "traefik.enable" = "true"
+              "mylabel.container.is-cool" = "true";
+            }
+        '';
+        };
+
         log-driver = mkOption {
           type = types.str;
           default = "none";
@@ -58,6 +110,21 @@ let
             <link xlink:href="https://docs.docker.com/engine/reference/run/#logging-drivers---log-driver">
             Docker engine documentation</link>
           '';
+        };
+
+        network = mkOption {
+          type = types.str;
+          default = "bridge";
+          description = ''
+            Network setting for the container.  The default of
+            <literal>"bridge"</literal> means that the container will be
+            connected to the default Docker bridge network.
+
+            For more details and a full list of options, refer to the
+            <link xlink:href="https://docs.docker.com/engine/reference/run/#network-settings">
+            Docker engine documentation</link>
+          '';
+          example = "host";
         };
 
         ports = mkOption {
@@ -158,7 +225,7 @@ let
           default = [];
           description = "Extra options for <command>docker run</command>.";
           example = literalExample ''
-            ["--network=host"]
+            ["--cpus 1"]
           '';
         };
       };
@@ -169,25 +236,35 @@ let
     after = [ "docker.service" "docker.socket" ];
     requires = [ "docker.service" "docker.socket" ];
     serviceConfig = {
-      ExecStart = concatStringsSep " \\\n  " ([
-        "${pkgs.docker}/bin/docker run"
-        "--rm"
-        "--name=%n"
-        "--log-driver=${container.log-driver}"
-      ] ++ optional (container.entrypoint != null)
-        "--entrypoint=${escapeShellArg container.entrypoint}"
-        ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
-        ++ map (p: "-p ${escapeShellArg p}") container.ports
-        ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
-        ++ map (v: "-v ${escapeShellArg v}") container.volumes
-        ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
-        ++ map escapeShellArg container.extraDockerOptions
-        ++ [container.image]
-        ++ map escapeShellArg container.cmd
-      );
-      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f %n";
+      ExecStartPre = [
+        # The - at the beginning of this rm command denotes that it is optional
+        # (ie if the RM fails because the container, say, doesn't exist, systemd will continue)
+        "-${pkgs.docker}/bin/docker rm -f %n" 
+        "${pkgs.docker}/bin/docker pull ${container.image}"
+        (concatStringsSep " \\\n  " ([
+          "${pkgs.docker}/bin/docker create"
+          "--name=%n"
+          "--log-driver=${container.log-driver}"
+          "--network=${container.network}"
+        ] ++ optional (container.entrypoint != null)
+          "--entrypoint=${escapeShellArg container.entrypoint}"
+          ++ map (d: "--device ${escapeShellArg d}") container.devices
+          ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
+          ++ optional (container.hostname != null)
+          "-h ${escapeShellArg container.hostname}"
+          ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
+          ++ map (p: "-p ${escapeShellArg p}") container.ports
+          ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
+          ++ map (v: "-v ${escapeShellArg v}") container.volumes
+          ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
+          ++ map escapeShellArg container.extraDockerOptions
+          ++ [container.image]
+          ++ map escapeShellArg container.cmd
+        ))
+      ];
+      ExecStart = "${pkgs.docker}/bin/docker start -a %n";
       ExecStop = "${pkgs.docker}/bin/docker stop %n";
-      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n";
+      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n"; # see - optional note as above
 
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
