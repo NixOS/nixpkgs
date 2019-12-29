@@ -9,13 +9,13 @@ let
   allBass = {
     bass = {
       h = "bass.h";
-      version = "2.4.14";
+      version = "2.4.15";
       so = {
         i686_linux = "libbass.so";
         x86_64-linux = "x64/libbass.so";
       };
       urlpath = "bass24-linux.zip";
-      sha256 = "1nyzs08z0djyvz6jx1y9y99y0ksp4sxz9l2x43k1c9irls24xpfy";
+      sha256 = "098vazhm7shnjxglzdrbwj68bpp0simn25vyjjz7l1f6ymrmia35";
     };
 
     bass_fx = {
