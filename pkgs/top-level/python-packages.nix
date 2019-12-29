@@ -288,6 +288,8 @@ in {
 
   azure-keyvault-keys = callPackage ../development/python-modules/azure-keyvault-keys { };
 
+  azure-keyvault-nspkg = callPackage ../development/python-modules/azure-keyvault-nspkg { };
+
   azure-keyvault-secrets = callPackage ../development/python-modules/azure-keyvault-secrets { };
 
   azure-loganalytics = callPackage ../development/python-modules/azure-loganalytics { };
@@ -1969,7 +1971,7 @@ in {
   certifi = callPackage ../development/python-modules/certifi { };
 
   certipy = callPackage ../development/python-modules/certipy {};
- 
+
   characteristic = callPackage ../development/python-modules/characteristic { };
 
   chart-studio = callPackage ../development/python-modules/chart-studio { };
