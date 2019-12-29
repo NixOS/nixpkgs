@@ -1,34 +1,48 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , capnproto
 , cython
 , isPyPy
-, isPy3k
+, isPy27
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "pycapnp";
-  version = "0.6.4";
-  disabled = isPyPy || isPy3k;
+  version = "1.0.0b1";
+  disabled = isPyPy || isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "44e14a5ace399cf1753acb8bbce558b8c895c48fd2102d266c34eaff286824cf";
+  src = fetchFromGitHub {
+    owner = "capnproto";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0m0ax6rfkpravc0sph1rmivvfps9kcqsc8va5bvabdwds6in7rsn";
   };
 
-  buildInputs = [ capnproto cython ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  # import setuptools as soon as possible, to minimize monkeypatching mayhem.
-  postConfigure = ''
-    sed -i '3iimport setuptools' setup.py
+  buildInputs = [
+    capnproto
+  ];
+
+  checkInputs = [
+    pytest
+  ];
+
+  checkPhase = ''
+    pushd dist
+    pytest ../test --ignore ../test/test_examples.py
+    popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ cstrahan ];
     license = licenses.bsd2;
     homepage = "http://jparyani.github.io/pycapnp/index.html";
-    broken = true; # 2018-04-11
+    description = "Cap'n Proto serialization/RPC system - Python bindings";
   };
 
 }
