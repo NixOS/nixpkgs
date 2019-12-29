@@ -830,6 +830,8 @@ in {
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
+  nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
+
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python { inherit (pkgs) nanomsg; };
 
   nbsmoke = callPackage ../development/python-modules/nbsmoke { };
