@@ -19,12 +19,12 @@ common =
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 
-  , name, suffix ? "", src, includesPerl ? false, fromGit ? false
+  , name, suffix ? "", src, includesPerl ? false, fromGit ? false, libarchive, rustc, cargo
 
   }:
   let
      sh = busybox-sandbox-shell;
-     nix = stdenv.mkDerivation rec {
+     nix = stdenv.mkDerivation (rec {
       inherit name src;
       version = lib.getVersion name;
 
@@ -37,9 +37,12 @@ common =
       nativeBuildInputs =
         [ pkgconfig ]
         ++ lib.optionals (!is20) [ curl perl ]
-        ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq ];
+        ++ lib.optionals fromGit [
+          autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq rustc cargo
+        ];
 
       buildInputs = [ curl openssl sqlite xz bzip2 nlohmann_json ]
+        ++ lib.optional fromGit libarchive
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is20 [ brotli boost editline ]
         ++ lib.optional withLibseccomp libseccomp
@@ -153,7 +156,10 @@ common =
           preBuild = "unset NIX_INDENT_MAKE";
         };
       };
-    };
+    } // lib.optionalAttrs fromGit {
+      # Cargo puts its data into $HOME/.cargo so we need to circumvent the homeless shelter.
+      preBuild = "HOME=$PWD";
+    });
   in nix;
 
 in rec {
@@ -186,13 +192,13 @@ in rec {
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.3${suffix}";
-    suffix = "pre6895_84de821";
+    name = "nix-2.4${suffix}";
+    suffix = "pre20191229_b0cadf5";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "84de8210040580ce7189332b43038d52c56a9689";
-      sha256 = "062pdly0m2hk8ly8li5psvpbj1mi7m1a15k8wyzf79q7294l5li3";
+      rev = "b0cadf547bf2f796b550d7555b97761ff1d0a379";
+      sha256 = "08zx7afglirsp5rh60kz1jvhgs838bzcq9b8r1h43gc2rp1dfs2q";
     };
     fromGit = true;
 
@@ -201,12 +207,12 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20191022_9cac895";
+    suffix = "pre20191229_c786673";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "9cac895406724e0304dff140379783c4d786e855";
-      hash = "sha256-Y1cdnCNoJmjqyC/a+Nt2N+5L3Ttg7K7zOD7gmtg1QzA=";
+      rev = "c7866733d7ce2836fbb43de90dd64d17b0d20753";
+      sha256 = "0crpxrlfbzjsf0in9wyfarqw0lkkzgw4c560253f11jca5sac8y2";
     };
     fromGit = true;
 
