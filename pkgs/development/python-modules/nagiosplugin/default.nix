@@ -15,10 +15,9 @@ buildPythonPackage rec {
     sha256 = "1vr3zy0zfvbrqc4nf81zxv4gs2q82sv5sjamdm4573ld529mk2nv";
   };
 
-  buildInputs = [ twine ];
+  nativeBuildInputs = [ twine ];
   checkInputs = [ pytest numpy ];
 
-  doCheck = true;
   checkPhase = ''
     # this test relies on who, which does not work in the sandbox
     pytest -k "not test_check_users" tests/
