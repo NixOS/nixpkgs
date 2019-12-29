@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     })
     # Manual backport of https://gitlab.com/libtiff/libtiff/commit/1b5e3b6a23827c33acf19ad50ce5ce78f12b3773.patch
     ./CVE-2019-14973.patch
+    (fetchurl {
+      url = "https://gitlab.com/libtiff/libtiff/commit/4bb584a35f87af42d6cf09d15e9ce8909a839145.patch";
+      name = "CVE-2019-17546.patch";
+      sha256 = "1pv4zimjfv6nbvr1m4vj79267zr3f3bwza5mjyarhvm0pp7q02xx";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
