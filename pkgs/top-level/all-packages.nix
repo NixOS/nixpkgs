@@ -15134,8 +15134,6 @@ in
     inherit (haskellPackages) Agda;
   };
 
-  agdaBase = callPackage ../development/libraries/agda/agda-base { };
-
   agdaIowaStdlib = callPackage ../development/libraries/agda/agda-iowa-stdlib { };
 
   agdaPrelude = callPackage ../development/libraries/agda/agda-prelude { };
