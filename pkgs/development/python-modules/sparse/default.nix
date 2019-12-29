@@ -1,25 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
+, fetchFromGitHub
 , numpy
 , scipy
 , numba
 , pytest
+, pytestcov
+, pytest-flake8
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "sparse";
   version = "0.8.0";
 
-  disabled = !isPy3k;
+  disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a3dc14ee5314caa2e64331b0b50c8f92e8999d7d275179a804a114e6cb1f8b81";
+  src = fetchFromGitHub {
+    owner = "pydata";
+    repo = pname;
+    rev = version;
+    sha256 = "0mhzmzi8z1f0clvrpm7adx3q414jp329ixczks0wkxamsg8plx5y";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytest
+    pytestcov
+    pytest-flake8
+  ];
+
   propagatedBuildInputs = [
     numpy
     scipy
@@ -35,6 +44,5 @@ buildPythonPackage rec {
     homepage = https://github.com/pydata/sparse/;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
-    broken = true;
   };
 }
