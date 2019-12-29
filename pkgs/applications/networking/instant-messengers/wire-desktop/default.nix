@@ -61,9 +61,12 @@ let
       exec = "wire-desktop %U";
       icon = "wire-desktop";
       comment = "Secure messenger for everyone";
-      desktopName = "Wire Desktop";
+      desktopName = "Wire";
       genericName = "Secure messenger";
       categories = "Network;InstantMessaging;Chat;VideoConference";
+      extraEntries = ''
+        StartupWMClass="Wire"
+      '';
     };
 
     dontBuild = true;

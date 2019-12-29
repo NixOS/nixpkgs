@@ -148,10 +148,10 @@
      </listitem>
      <listitem>
       <para>
-       The <link xlink:href="https://github.com/Mic92/nix-review">nix-review</link> tool can be used to review a pull request content in a single command. <varname>PRNUMBER</varname> should be replaced by the number at the end of the pull request title. You can also provide the full github pull request url.
+       The <link xlink:href="https://github.com/Mic92/nixpkgs-review">nixpkgs-review</link> tool can be used to review a pull request content in a single command. <varname>PRNUMBER</varname> should be replaced by the number at the end of the pull request title. You can also provide the full github pull request url.
       </para>
 <screen>
-<prompt>$ </prompt>nix-shell -p nix-review --run "nix-review pr PRNUMBER"
+<prompt>$ </prompt>nix-shell -p nixpkgs-review --run "nixpkgs-review pr PRNUMBER"
 </screen>
      </listitem>
     </itemizedlist>

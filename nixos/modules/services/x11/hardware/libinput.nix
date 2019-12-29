@@ -209,12 +209,12 @@ in {
 
     services.xserver.config =
       ''
-        # General libinput configuration.
-        # See CONFIGURATION DETAILS section of man:libinput(4).
+        # Automatically enable the libinput driver for all touchpads.
         Section "InputClass"
           Identifier "libinputConfiguration"
-          MatchDriver "libinput"
+          MatchIsTouchpad "on"
           ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
+          Driver "libinput"
           Option "AccelProfile" "${cfg.accelProfile}"
           ${optionalString (cfg.accelSpeed != null) ''Option "AccelSpeed" "${cfg.accelSpeed}"''}
           ${optionalString (cfg.buttonMapping != null) ''Option "ButtonMapping" "${cfg.buttonMapping}"''}
