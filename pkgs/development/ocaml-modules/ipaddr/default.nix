@@ -4,14 +4,12 @@
 
 buildDunePackage rec {
   pname = "ipaddr";
-  version = "3.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/ocaml-${pname}/archive/v${version}.tar.gz";
-    sha256 = "1hi3v5dzg6h4qb268ch3h6v61gsc8bv21ajhb35z37v5nsdmyzbh";
-  };
+  inherit (macaddr) version src;
 
-  buildInputs = [ macaddr ounit sexplib ];
+  buildInputs = [ ounit ];
+
+  propagatedBuildInputs = [ macaddr ];
 
   doCheck = true;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, ocaml
+{ stdenv, fetchFromGitHub, buildDunePackage
 , ppx_sexp_conv, sexplib
 , astring, ipaddr, macaddr, uri,
 }:

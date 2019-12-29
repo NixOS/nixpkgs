@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, ocaml
+{ stdenv, fetchurl, buildDunePackage, ocaml
 , ppx_sexp_conv, sexplib
 }:
 
@@ -8,14 +8,10 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.04";
 
-  src = fetchFromGitHub {
-    owner = "mirage";
-    repo = "ocaml-ipaddr";
-    rev = "v${version}";
-    sha256 = "0g7wgfn06z7fhdk4hlblf7b5k2ws56z0l73gk7189p5wvrmbavvx";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-ipaddr/archive/v${version}.tar.gz";
+    sha256 = "1hi3v5dzg6h4qb268ch3h6v61gsc8bv21ajhb35z37v5nsdmyzbh";
   };
-
-  buildInputs = [ sexplib ];
 
   propagatedBuildInputs = [ ppx_sexp_conv ];
 
