@@ -20,5 +20,7 @@ let
     iowa-stdlib = callPackage ../development/libraries/agda/iowa-stdlib { };
 
     agda-prelude = callPackage ../development/libraries/agda/agda-prelude { };
+
+    agda-categories = callPackage ../development/libraries/agda/agda-categories { };
   };
 in mkAgdaPackages Agda
