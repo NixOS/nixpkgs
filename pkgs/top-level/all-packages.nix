@@ -22399,6 +22399,8 @@ in
 
   yed = callPackage ../applications/graphics/yed {};
 
+  yeetgif = callPackage ../applications/graphics/yeetgif { };
+
   inherit (gnome3) yelp;
 
   yelp-tools = callPackage ../development/misc/yelp-tools { };
