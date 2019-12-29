@@ -585,6 +585,12 @@ in
     stdenv = clangStdenv;
   };
 
+  aflplusplus = callPackage ../tools/security/aflplusplus {
+    stdenv = clangStdenv;
+    python = python37;
+    wine = null;
+  };
+
   libdislocator = callPackage ../tools/security/afl/libdislocator.nix { };
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
