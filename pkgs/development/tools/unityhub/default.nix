@@ -1,12 +1,7 @@
 { stdenv, fetchurl, appimageTools, gsettings-desktop-schemas, gtk3 }:
 
-let
-  pname = "unityhub";
-  version = "2.2.2";
-in
-
 appimageTools.wrapType2 rec {
-  name = "${pname}-${version}";
+  name = "unityhub";
 
   extraPkgs = (pkgs: with pkgs; with xorg; [ gtk2 gdk_pixbuf glib libGL libGLU nss nspr
     alsaLib cups gnome2.GConf libcap fontconfig freetype pango
