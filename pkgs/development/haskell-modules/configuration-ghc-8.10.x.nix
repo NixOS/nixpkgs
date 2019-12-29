@@ -16,6 +16,7 @@ self: super: {
   containers = null;
   deepseq = null;
   directory = null;
+  exceptions = null;
   filepath = null;
   ghc-boot = null;
   ghc-boot-th = null;
