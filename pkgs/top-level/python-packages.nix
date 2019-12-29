@@ -1470,6 +1470,8 @@ in {
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
+  aiounittest = callPackage ../development/python-modules/aiounittest { };
+
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
