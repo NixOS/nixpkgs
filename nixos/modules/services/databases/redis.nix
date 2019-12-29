@@ -46,16 +46,12 @@ in
 
     services.redis = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the Redis server. Note that the NixOS module for
-          Redis disables kernel support for Transparent Huge Pages (THP),
-          because this features causes major performance problems for Redis,
-          e.g. (https://redis.io/topics/latency).
-        '';
-      };
+      enable = mkEnableOption ''
+        Whether to enable the Redis server. Note that the NixOS module for
+        Redis disables kernel support for Transparent Huge Pages (THP),
+        because this features causes major performance problems for Redis,
+        e.g. (https://redis.io/topics/latency)
+      '';
 
       package = mkOption {
         type = types.package;
@@ -134,12 +130,29 @@ in
       };
 
       slaveOf = mkOption {
-        default = null; # { ip, port }
-        description = "An attribute set with two attributes: ip and port to which this redis instance acts as a slave.";
+        type = with types; nullOr (submodule ({ ... }: {
+          options = {
+            ip = mkOption {
+              type = str;
+              description = "IP of the Redis master";
+              example = "192.168.1.100";
+            };
+
+            port = mkOption {
+              type = port;
+              description = "port of the Redis master";
+              default = 6379;
+            };
+          };
+        }));
+
+        default = null;
+        description = "IP and port to which this redis instance acts as a slave.";
         example = { ip = "192.168.1.100"; port = 6379; };
       };
 
       masterAuth = mkOption {
+        type = types.str;
         default = null;
         description = ''If the master is password protected (using the requirePass configuration)
         it is possible to tell the slave to authenticate before starting the replication synchronization
