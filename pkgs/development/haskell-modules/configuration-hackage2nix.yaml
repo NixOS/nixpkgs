@@ -8415,6 +8415,7 @@ broken-packages:
   - refresht
   - refurb
   - reg-alloc
+  - reg-alloc-graph-color
   - regex-deriv
   - regex-dfa
   - regex-generator
