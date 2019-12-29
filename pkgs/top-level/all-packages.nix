@@ -22233,6 +22233,8 @@ with pkgs;
 
   wallabag = callPackage ../servers/web-apps/wallabag { };
 
+  warsaw-bin = callPackage ../servers/warsaw-bin { };
+
   webdav = callPackage ../servers/webdav { };
 
   webdav-server-rs = callPackage ../servers/webdav-server-rs { };
