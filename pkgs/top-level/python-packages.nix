@@ -5104,6 +5104,8 @@ in {
 
   typesentry = callPackage ../development/python-modules/typesentry { };
 
+  typesystem = callPackage ../development/python-modules/typesystem { };
+
   s3transfer = callPackage ../development/python-modules/s3transfer { };
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
