@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 14.18
+  # LTS Haskell 14.19
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -73,7 +73,7 @@ default-package-overrides:
   - alarmclock ==0.7.0.2
   - alerts ==0.1.2.0
   - alex ==3.2.5
-  - alg ==0.2.13.0
+  - alg ==0.2.13.1
   - algebraic-graphs ==0.4
   - Allure ==0.9.5.0
   - almost-fix ==0.0.2
@@ -283,7 +283,7 @@ default-package-overrides:
   - cassava-records ==0.1.0.4
   - cast ==0.1.0.2
   - caster ==0.0.3.0
-  - category ==0.2.4.2
+  - category ==0.2.5.0
   - cayley-client ==0.4.9
   - cborg ==0.2.2.0
   - cborg-json ==0.2.1.0
@@ -562,7 +562,7 @@ default-package-overrides:
   - download ==0.3.2.7
   - drinkery ==0.4
   - dsp ==0.2.5
-  - dual ==0.1.0.2
+  - dual ==0.1.0.3
   - dual-tree ==0.2.2.1
   - dublincore-xml-conduit ==0.1.0.2
   - dunai ==0.5.1
@@ -630,7 +630,7 @@ default-package-overrides:
   - exact-pi ==0.5.0.1
   - exceptional ==0.3.0.0
   - exception-mtl ==0.4.0.1
-  - exceptions ==0.10.3
+  - exceptions ==0.10.4
   - exception-transformers ==0.4.0.8
   - executable-hash ==0.2.0.4
   - executable-path ==0.0.3.1
@@ -828,8 +828,8 @@ default-package-overrides:
   - gravatar ==0.8.0
   - graylog ==0.1.0.1
   - greskell ==0.2.3.1
-  - greskell-core ==0.1.2.7
-  - greskell-websocket ==0.1.1.2
+  - greskell-core ==0.1.3.0
+  - greskell-websocket ==0.1.2.0
   - groom ==0.1.2.1
   - groundhog ==0.10.0
   - groundhog-inspector ==0.10.0
@@ -853,7 +853,7 @@ default-package-overrides:
   - HandsomeSoup ==0.4.2
   - hapistrano ==0.3.10.0
   - happy ==1.19.12
-  - hasbolt ==0.1.4.0
+  - hasbolt ==0.1.4.1
   - hashable ==1.2.7.0
   - hashable-time ==0.2.0.2
   - hashids ==1.0.2.4
@@ -1013,7 +1013,7 @@ default-package-overrides:
   - http-conduit ==2.3.7.3
   - http-date ==0.0.8
   - http-directory ==0.1.5
-  - http-download ==0.1.0.0
+  - http-download ==0.1.0.1
   - httpd-shed ==0.4.1.1
   - http-link-header ==1.0.3.1
   - http-media ==0.8.0.0
@@ -1372,11 +1372,10 @@ default-package-overrides:
   - monoid-extras ==0.5.1
   - monoid-subclasses ==0.4.6.1
   - monoid-transformer ==0.0.4
-  - mono-traversable ==1.0.13.0
+  - mono-traversable ==1.0.15.1
   - mono-traversable-instances ==0.1.0.0
   - mono-traversable-keys ==0.1.0
   - more-containers ==0.2.2.0
-  - morpheus-graphql ==0.8.0
   - mountpoints ==1.0.2
   - mpi-hs ==0.5.3.0
   - msgpack ==1.0.1.0
@@ -1681,7 +1680,6 @@ default-package-overrides:
   - pure-zlib ==0.6.6
   - pushbullet-types ==0.4.1.0
   - pusher-http-haskell ==1.5.1.11
-  - PyF ==0.8.1.2
   - qchas ==1.1.0.1
   - qm-interpolated-string ==0.3.0.0
   - qnap-decrypt ==0.3.5
@@ -1839,7 +1837,7 @@ default-package-overrides:
   - sdl2-image ==2.0.0
   - sdl2-mixer ==1.1.0
   - sdl2-ttf ==2.1.0
-  - secp256k1-haskell ==0.1.5
+  - secp256k1-haskell ==0.1.6
   - securemem ==0.1.10
   - selda ==0.4.0.0
   - selda-json ==0.1.1.0
@@ -2139,7 +2137,7 @@ default-package-overrides:
   - thread-hierarchy ==0.3.0.1
   - thread-local-storage ==0.2
   - threads ==0.5.1.6
-  - threepenny-gui ==0.8.3.0
+  - threepenny-gui ==0.8.3.1
   - th-reify-compat ==0.0.1.5
   - th-reify-many ==0.1.9
   - throttle-io-stream ==0.2.0.1
@@ -2148,7 +2146,6 @@ default-package-overrides:
   - th-test-utils ==1.0.1
   - th-utilities ==0.2.3.1
   - thyme ==0.3.5.5
-  - tidal ==1.4.5
   - tile ==0.3.0.0
   - time-compat ==1.9.2.2
   - timeit ==2.0
@@ -2177,7 +2174,7 @@ default-package-overrides:
   - tomland ==1.1.0.1
   - tonalude ==0.1.1.0
   - tonaparser ==0.1.0.0
-  - tonatona ==0.1.0.1
+  - tonatona ==0.1.1.0
   - tonatona-logger ==0.2.0.0
   - tonatona-persistent-postgresql ==0.1.0.1
   - tonatona-persistent-sqlite ==0.1.0.1
@@ -2237,7 +2234,7 @@ default-package-overrides:
   - uncertain ==0.3.1.0
   - unconstrained ==0.1.0.2
   - unicode ==0.0.1.1
-  - unicode-show ==0.1.0.3
+  - unicode-show ==0.1.0.4
   - unicode-transforms ==0.3.6
   - unification-fd ==0.10.0.1
   - union ==0.1.2
@@ -2279,7 +2276,7 @@ default-package-overrides:
   - users-test ==0.5.0.1
   - utf8-light ==0.4.2
   - utf8-string ==1.0.1.1
-  - util ==0.1.15.0
+  - util ==0.1.17.0
   - utility-ht ==0.0.14
   - uuid ==1.3.13
   - uuid-types ==1.0.3
