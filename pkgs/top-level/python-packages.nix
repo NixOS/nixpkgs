@@ -534,6 +534,8 @@ in {
 
   cocotb = callPackage ../development/python-modules/cocotb { };
 
+  compiledb = callPackage ../development/python-modules/compiledb { };
+
   connexion = callPackage ../development/python-modules/connexion { };
 
   cozy = callPackage ../development/python-modules/cozy { };
