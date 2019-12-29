@@ -359,6 +359,7 @@ in {
                 where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
                 and s.nspname not like 'pg_temp%';" | sed -n 3p` -eq 0 ]; then
           SAFETY_ASSURED=1 rake db:schema:load
+          rake db:seed
         else
           rake db:migrate
         fi
