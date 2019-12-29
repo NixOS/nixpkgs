@@ -2957,6 +2957,7 @@ in
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
     inherit (pythonPackages) sphinx;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   volctl = callPackage ../tools/audio/volctl { };
