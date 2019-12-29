@@ -4498,6 +4498,12 @@ in {
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
 
+  prox-tv = callPackage ../development/python-modules/prox-tv {
+    # We need to use blas instead of openblas on darwin,
+    # see https://github.com/NixOS/nixpkgs/pull/45013.
+    useOpenblas = ! stdenv.isDarwin;
+  };
+
   pvlib = callPackage ../development/python-modules/pvlib { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
