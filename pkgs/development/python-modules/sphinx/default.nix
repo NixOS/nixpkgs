@@ -16,7 +16,6 @@
 , Babel
 , snowballstemmer
 , six
-, sqlalchemy
 , whoosh
 , imagesize
 , requests
@@ -56,7 +55,6 @@ buildPythonPackage rec {
     setuptools
     snowballstemmer
     six
-    sqlalchemy
     whoosh
     imagesize
     requests
