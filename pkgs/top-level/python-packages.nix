@@ -1462,6 +1462,8 @@ in {
 
   aioresponses = callPackage ../development/python-modules/aioresponses { };
 
+  aiosqlite = callPackage ../development/python-modules/aiosqlite { };
+
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
