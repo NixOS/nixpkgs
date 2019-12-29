@@ -16497,6 +16497,8 @@ in
 
      zfs = zfsStable;
 
+     zenpower = callPackage ../os-specific/linux/zenpower { };
+
      can-isotp = callPackage ../os-specific/linux/can-isotp { };
   });
 
