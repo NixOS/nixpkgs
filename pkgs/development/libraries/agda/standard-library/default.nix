@@ -1,8 +1,8 @@
-{ stdenv, agda, fetchFromGitHub, ghcWithPackages }:
+{ stdenv, mkDerivation, fetchFromGitHub, ghcWithPackages }:
 
-agda.mkDerivation (self: rec {
+mkDerivation rec {
+  pname = "standard-library";
   version = "1.1";
-  name = "agda-stdlib-${version}";
 
   src = fetchFromGitHub {
     repo = "agda-stdlib";
@@ -16,13 +16,11 @@ agda.mkDerivation (self: rec {
     runhaskell GenerateEverything.hs
   '';
 
-  topSourceDirectories = [ "src" ];
-
   meta = with stdenv.lib; {
     homepage = "https://wiki.portal.chalmers.se/agda/pmwiki.php?n=Libraries.StandardLibrary";
     description = "A standard library for use with the Agda compiler";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with maintainers; [ jwiegley mudri ];
+    maintainers = with maintainers; [ jwiegley mudri alexarice ];
   };
-})
+}
