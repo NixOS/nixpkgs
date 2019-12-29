@@ -757,6 +757,8 @@ in {
 
   jira = callPackage ../development/python-modules/jira { };
 
+  junitparser = callPackage ../development/python-modules/junitparser { };
+
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
