@@ -28,6 +28,7 @@ let
 
   swayPackage = pkgs.sway.override {
     extraSessionCommands = cfg.extraSessionCommands;
+    extraOptions = cfg.extraOptions;
     withBaseWrapper = cfg.wrapperFeatures.base;
     withGtkWrapper = cfg.wrapperFeatures.gtk;
   };
@@ -64,6 +65,21 @@ in {
       '';
       description = ''
         Shell commands executed just before Sway is started.
+      '';
+    };
+
+    extraOptions = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [
+        "--verbose"
+        "--debug"
+        "--unsupported-gpu"
+        "--my-next-gpu-wont-be-nvidia"
+      ];
+      description = ''
+        Command line arguments passed to launch Sway. Please DO NOT report
+        issues if you use an unsupported GPU (proprietary drivers).
       '';
     };
 
