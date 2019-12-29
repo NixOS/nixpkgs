@@ -2,7 +2,7 @@
 , pkgconfig
 , cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
 , dbus, file, ghostscript, usbutils
-, net_snmp, openssl, perl, nettools
+, net-snmp, openssl, perl, nettools
 , bash, coreutils, utillinux
 , withQt5 ? true
 , withPlugin ? false
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication {
     dbus
     file
     ghostscript
-    net_snmp
+    net-snmp
     openssl
     perl
     zlib

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ stdenv, fetchFromGitHub, pkgconfig, installShellFiles
 , buildGoPackage, gpgme, lvm2, btrfs-progs, libseccomp, systemd
 , go-md2man
 }:
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   outputs = [ "bin" "out" "man" ];
 
-  nativeBuildInputs = [ pkgconfig go-md2man ];
+  nativeBuildInputs = [ pkgconfig go-md2man installShellFiles ];
 
   buildInputs = [ btrfs-progs libseccomp gpgme lvm2 systemd ];
 
@@ -30,6 +30,8 @@ buildGoPackage rec {
 
   installPhase = ''
     install -Dm555 bin/podman $bin/bin/podman
+    installShellCompletion --bash completions/bash/podman
+    installShellCompletion --zsh completions/zsh/_podman
     MANDIR=$man/share/man make install.man
   '';
 

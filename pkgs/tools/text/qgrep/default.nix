@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, CoreServices, CoreFoundation, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -12,6 +12,20 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      url = "https://github.com/zeux/qgrep/commit/21c4d1a5ab0f0bdaa0b5ca993c1315c041418cc6.patch";
+      sha256 = "0wpxzrd9pmhgbgby17vb8279xwvkxfdd99gvv7r74indgdxqg7v8";
+    })
+  ];
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreFoundation ];
+
+  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace Makefile \
+      --replace "-msse2" "" --replace "-DUSE_SSE2" ""
+  '';
+
   installPhase = '' 
     install -Dm755 qgrep $out/bin/qgrep
   '';
@@ -23,5 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.yrashk ];
     platforms = platforms.all;
   };
-
 }

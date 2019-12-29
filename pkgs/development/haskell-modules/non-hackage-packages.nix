@@ -15,5 +15,5 @@ self: super: {
 
   # spago is not released to Hackage.
   # https://github.com/spacchetti/spago/issues/512
-  spago = self.callPackage ../tools/purescript/spago { };
+  spago = self.callPackage ../tools/purescript/spago/spago.nix { };
 }

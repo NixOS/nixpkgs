@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ wine_custom libX11 libGLU libGL curl ];
 
-  propagatedbuildInputs = [ curl cabextract ];
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
   patches = [ ./pipelight.patch ];
 

@@ -62,6 +62,18 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
+    ghc882 = callPackage ../development/compilers/ghc/8.8.2.nix {
+      bootPkgs = packages.ghc863Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_7;
+      llvmPackages = pkgs.llvmPackages_7;
+    };
+    ghc8101 = callPackage ../development/compilers/ghc/8.10.1.nix {
+      bootPkgs = packages.ghc863Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_9;
+      llvmPackages = pkgs.llvmPackages_9;
+    };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc863Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -119,6 +131,16 @@ in {
       buildHaskellPackages = bh.packages.ghc881;
       ghc = bh.compiler.ghc881;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
+    };
+    ghc882 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc882;
+      ghc = bh.compiler.ghc882;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
+    };
+    ghc8101 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8101;
+      ghc = bh.compiler.ghc8101;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;

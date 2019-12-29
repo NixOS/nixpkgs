@@ -3,16 +3,16 @@
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
 , openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
-, ocl-icd, pcre, gtk-mac-integration, isocodes
+, ocl-icd, pcre, gtk-mac-integration, isocodes, llvmPackages
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.6.3";
+  version = "3.0.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "a518999c8458472edfc04577026ce5047d74553052af0f52d10ba8ce601b78f0";
+    sha256 = "7195a5ff7ee95ab7c5a57e4e84f8c90cc4728b2c917359203c21293ab754c0db";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     libwebp libsecret gnome3.adwaita-icon-theme osm-gps-map pcre isocodes
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     colord colord-gtk libX11 ocl-icd
-  ] ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration;
+  ] ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration
+    ++ stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"

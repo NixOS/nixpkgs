@@ -64,7 +64,7 @@ in rec {
         "${ruby}/bin/ruby" \
         "${confFiles}/Gemfile" \
         "$out/${ruby.gemPath}" \
-        "${bundler}/${ruby.gemPath}" \
+        "${bundler}/${ruby.gemPath}/gems/bundler-${bundler.version}" \
         ${lib.escapeShellArg binPaths} \
         ${lib.escapeShellArg groups}
     '';

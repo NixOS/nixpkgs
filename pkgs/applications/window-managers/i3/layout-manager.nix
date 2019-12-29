@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Saving, loading and managing layouts for i3wm.";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

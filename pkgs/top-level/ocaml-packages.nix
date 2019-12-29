@@ -191,6 +191,8 @@ let
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
 
+    cpu = callPackage ../development/ocaml-modules/cpu { };
+
     cpuid = callPackage ../development/ocaml-modules/cpuid { };
 
     crunch = callPackage ../development/tools/ocaml/crunch { };
@@ -832,8 +834,6 @@ let
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
-
-    setcore = callPackage ../development/ocaml-modules/setcore { };
 
     sodium = callPackage ../development/ocaml-modules/sodium { };
 

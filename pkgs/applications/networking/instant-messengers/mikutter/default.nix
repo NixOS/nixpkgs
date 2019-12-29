@@ -7,23 +7,24 @@
 # find latest version at: http://mikutter.hachune.net/download#download
 # run these commands:
 #
-# wget http://mikutter.hachune.net/bin/mikutter.3.8.7.tar.gz
-# tar xvf mikutter.3.8.7.tar.gz
+# wget http://mikutter.hachune.net/bin/mikutter.4.0.0.tar.gz
+# mkdir mikutter
 # cd mikutter
+# tar xvf ../mikutter.4.0.0.tar.gz
 # find . -not -name Gemfile -exec rm {} \;
 # find . -type d -exec rmdir -p --ignore-fail-on-non-empty {} \;
 # cd ..
 # mv mikutter/* .
-# rm mikutter.3.8.7.tar.gz
+# rm mikutter.4.0.0.tar.gz
 # rm gemset.nix Gemfile.lock; nix-shell -p bundler bundix --run 'bundle lock && bundix'
 
 stdenv.mkDerivation rec {
   pname = "mikutter";
-  version = "3.8.7";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "https://mikutter.hachune.net/bin/mikutter.${version}.tar.gz";
-    sha256 = "1griypcd1xgyfd9wc3ls32grpw4ig0xxdiygpdinzr3bigfmd7iv";
+    sha256 = "0nx14vlp7p69m2vw0s6kbiyymsfq0r2jd4nm0v5c4xb9avkpgc8g";
   };
 
   env = bundlerEnv {
@@ -36,8 +37,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsaUtils libnotify which gtk2 ruby atk gobject-introspection ];
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  postUnpack = ''
-    rm -rf $sourceRoot/vendor
+  unpackPhase = ''
+    mkdir source
+    cd source
+    unpackFile $src
+    rm -rf vendor
   '';
 
   installPhase = ''
@@ -73,5 +77,6 @@ stdenv.mkDerivation rec {
     homepage = https://mikutter.hachune.net;
     platforms = ruby.meta.platforms;
     license = licenses.mit;
+    broken = true;
   };
 }

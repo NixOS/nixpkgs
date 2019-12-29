@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
       fonts and keyboard shortcuts
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sepi ma27 ];
+    maintainers = with maintainers; [ sepi ];
     platforms = platforms.all;
   };
 }
