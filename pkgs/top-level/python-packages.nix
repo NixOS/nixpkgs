@@ -550,6 +550,8 @@ in {
     inherit (pkgs.llvmPackages) openmp libcxx libcxxabi;
   };
 
+  databases = callPackage ../development/python-modules/databases { };
+
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datasette = callPackage ../development/python-modules/datasette { };
