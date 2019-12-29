@@ -5225,6 +5225,8 @@ in {
 
   shippai = callPackage ../development/python-modules/shippai {};
 
+  shutilwhich = callPackage ../development/python-modules/shutilwhich { };
+
   simanneal = callPackage ../development/python-modules/simanneal { };
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
