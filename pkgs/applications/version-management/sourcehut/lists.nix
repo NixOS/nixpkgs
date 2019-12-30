@@ -1,6 +1,6 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
-, srht, asyncpg, unidiff, aiosmtpd, pygit2, emailthreads }:
+, srht, asyncpg, aiosmtpd, pygit2, emailthreads }:
 
 buildPythonPackage rec {
   pname = "listssrht";
@@ -22,7 +22,6 @@ buildPythonPackage rec {
     srht
     pygit2
     asyncpg
-    unidiff
     aiosmtpd
     emailthreads
   ];
