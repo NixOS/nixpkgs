@@ -12,7 +12,9 @@ let
       inherit sha256;
     };
 
-    buildInputs = [ openssl zlib libuv ];
+    buildInputs = [ zlib ];
+
+    propagatedBuildInputs = [ openssl libuv ];
 
     nativeBuildInputs = [ cmake ];
 
