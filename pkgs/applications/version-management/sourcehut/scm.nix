@@ -25,22 +25,7 @@ buildPythonPackage rec {
     export PKGVER=${version}
   '';
 
-  # No actual? tests but seems like it needs this anyway
-  preCheck = let
-    config = writeText "config.ini" ''
-      [webhooks]
-      private-key=K6JupPpnr0HnBjelKTQUSm3Ro9SgzEA2T2Zv472OvzI=
-
-      [builds.sr.ht]
-      origin=http://builds.sr.ht.local
-      oauth-client-id=
-
-      [meta.sr.ht]
-      origin=http://meta.sr.ht.local
-    '';
-  in ''
-    cp -f ${config} config.ini
-  '';
+  dontUseSetuptoolsCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://git.sr.ht/~sircmpwn/git.sr.ht;
