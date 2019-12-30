@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ php perl gd libpng zlib unzip ];
 
   configureFlags = [ "--localstatedir=/var/lib/nagios" ];
-  buildFlags = "all";
+  buildFlags = [ "all" ];
 
   # Do not create /var directories
   preInstall = ''
     substituteInPlace Makefile --replace '$(MAKE) install-basic' ""
   '';
-  installTargets = "install install-config";
+  installTargets = [ "install" "install-config" ];
 
   meta = {
     description = "A host, service and network monitoring program";

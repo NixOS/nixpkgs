@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
-  buildFlags = "world";
+  buildFlags = [ "world" ];
 
   preInstall = ''
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib

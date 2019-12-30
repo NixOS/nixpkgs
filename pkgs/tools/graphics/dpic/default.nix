@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
-  makeFlags = "CC=${stdenv.cc.outPath}/bin/cc";
+  makeFlags = [ "CC=${stdenv.cc.outPath}/bin/cc" ];
 
   installPhase = ''
     mkdir -p $out/bin

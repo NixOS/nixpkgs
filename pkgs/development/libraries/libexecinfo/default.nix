@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC:=$(CC)" "AR:=$(AR)" ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   installPhase = ''
     install -Dm644 execinfo.h stacktraverse.h -t $out/include

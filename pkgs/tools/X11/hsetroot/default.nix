@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = [ underlinkingPatch ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   preConfigure = "./autogen.sh";
 

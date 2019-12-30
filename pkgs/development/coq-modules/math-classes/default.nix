@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ coq bignums ];
   enableParallelBuilding = true;
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
     homepage = https://math-classes.github.io;

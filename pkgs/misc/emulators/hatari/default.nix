@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # For pthread_cancel
-  cmakeFlags = "-DCMAKE_EXE_LINKER_FLAGS=-lgcc_s";
+  cmakeFlags = [ "-DCMAKE_EXE_LINKER_FLAGS=-lgcc_s" ];
 
   buildInputs = [ zlib SDL cmake ];
 

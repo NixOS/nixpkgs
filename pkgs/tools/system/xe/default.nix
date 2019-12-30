@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "04jr8f6jcijr0bsmn8ajm0aj35qh9my3xjsaq64h8lwg5bpyn29x";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "Simple xargs and apply replacement";

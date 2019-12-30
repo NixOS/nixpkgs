@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
   };
 
-  buildFlags = "build";
+  buildFlags = [ "build" ];
   enableParallelBuilding = true;
 
   doCheck = true;

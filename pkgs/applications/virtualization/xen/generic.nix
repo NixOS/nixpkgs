@@ -187,11 +187,11 @@ stdenv.mkDerivation (rec {
   '';
 
   # TODO: Flask needs more testing before enabling it by default.
-  #makeFlags = "XSM_ENABLE=y FLASK_ENABLE=y PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
+  #makeFlags = [ "XSM_ENABLE=y" "FLASK_ENABLE=y" "PREFIX=$(out)" "CONFIG_DIR=/etc" "XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files" ];
   makeFlags = [ "PREFIX=$(out) CONFIG_DIR=/etc" "XEN_SCRIPT_DIR=/etc/xen/scripts" ]
            ++ (config.makeFlags or []);
 
-  buildFlags = "xen tools";
+  buildFlags = [ "xen" "tools" ];
 
   postBuild = ''
     make -C docs man-pages

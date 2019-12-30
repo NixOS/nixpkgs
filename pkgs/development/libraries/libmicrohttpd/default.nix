@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmicrohttpd";
-  version = "0.9.68";
+  version = "0.9.69";
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/${pname}-${version}.tar.gz";
-    sha256 = "0q8bc4hrxn6llml7w2vam6n833x8injs39wgdkhwkawr50m6wwf5";
+    sha256 = "0zp34zgcahym5kp2r83gfb5wnr8yf643a26k6zk96x3qica6p6zv";
   };
 
   outputs = [ "out" "dev" "devdoc" "info" ];

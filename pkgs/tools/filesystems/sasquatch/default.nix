@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cd squashfs-tools
   '';
 
-  installFlags = "INSTALL_DIR=\${out}/bin";
+  installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
   makeFlags = [ "XZ_SUPPORT=1" ]
     ++ stdenv.lib.optional lz4Support "LZ4_SUPPORT=1";

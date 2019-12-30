@@ -25,6 +25,8 @@ stdenv.mkDerivation (common // rec {
     substituteInPlace lua/autoexec.lua --replace "/usr/share" "$out/share"
   '';
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy";
+
   makeFlags = common.makeFlags ++ [
     "LUA=1"
   ];

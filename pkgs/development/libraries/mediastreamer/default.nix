@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     "-DGIT_VERSION=\"v${version}\""
     "-Wno-error=deprecated-declarations"
     "-Wno-error=cast-function-type"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=stringop-overflow"
   ];
   NIX_LDFLAGS = "-lXext";
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cd ..
   '';
   patches = [ ./parse.patch ];
-  patchFlags = "-p 0";
+  patchFlags = [ "-p" "0" ];
   NIX_LD_FLAGS = ''
     -rpath ${stdenv.cc}/lib
     -rpath ${stdenv.cc}/lib64

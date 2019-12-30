@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=format-truncation"
     "-Wno-error=pointer-compare"
+    "-Wno-error=stringop-truncation"
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];

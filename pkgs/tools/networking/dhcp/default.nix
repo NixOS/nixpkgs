@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=pointer-compare"
     "-Wno-error=format-truncation"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=format-overflow"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];

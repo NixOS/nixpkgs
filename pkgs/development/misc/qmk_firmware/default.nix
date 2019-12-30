@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
       --replace arm-none-eabi arm-none-eabihf
     rm keyboards/handwired/frenchdev/rules.mk keyboards/dk60/rules.mk
   '';
-  buildFlags = "all:default";
+  buildFlags = [ "all:default" ];
   doCheck = true;
   checkTarget = "test:all";
   installPhase = ''

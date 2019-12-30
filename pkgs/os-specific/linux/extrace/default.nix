@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0acspj3djspfvgr3ng5b61qws6v2md6b0lc5qkby10mqnfpkvq85";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     install -dm755 "$out/share/licenses/extrace/"

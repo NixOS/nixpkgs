@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
   patches = [ ./hardcoded-compiler.patch ];
-  patchFlags = "-p3";
+  patchFlags = [ "-p3" ];
 
   outputs = [ "bin" "out" "dev" ];
 

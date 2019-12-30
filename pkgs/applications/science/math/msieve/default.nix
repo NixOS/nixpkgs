@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   ECM = if ecm == null then "0" else "1";
 
   # Doesn't hurt Linux but lets clang-based platforms like Darwin work fine too
-  makeFlags = "CC=cc all";
+  makeFlags = [ "CC=cc" "all" ];
 
   installPhase = ''
     mkdir -p $out/bin/

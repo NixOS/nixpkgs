@@ -62,7 +62,7 @@ multiStdenv.mkDerivation {
   # Cf. https://github.com/phantom-code/airwave/issues/57
   hardeningDisable = [ "format" ];
 
-  cmakeFlags = "-DVSTSDK_PATH=${vst-sdk}/VST2_SDK";
+  cmakeFlags = [ "-DVSTSDK_PATH=${vst-sdk}/VST2_SDK" ];
 
   postInstall = ''
     mv $out/bin $out/libexec

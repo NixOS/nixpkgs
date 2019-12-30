@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [pkgconfig];
   buildInputs = [gtk2 glib pidgin];
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postPatch = ''
     sed -e 's/-Wl,-soname//' -i Makefile

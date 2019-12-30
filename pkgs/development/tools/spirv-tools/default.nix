@@ -1,9 +1,12 @@
 { stdenv, fetchFromGitHub, cmake, python3, spirv-headers }:
+let
+  # Update spirv-headers rev in lockstep according to DEPs file
+  version = "2019.4";
+in
 
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
-  # Update spirv-headers rev in lockstep according to DEPs file
-  version = "2019.4";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
   };
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake python3 ];
+  nativeBuildInputs = [ cmake python3 ];
 
   cmakeFlags = [ "-DSPIRV-Headers_SOURCE_DIR=${spirv-headers.src}" ];
 

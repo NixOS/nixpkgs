@@ -26,11 +26,10 @@ stdenv.mkDerivation rec {
 
   installTargets = "install-cups";
 
-  installFlags =
-    ''
-      CUPS_FILTERS=$(out)/lib/cups/filter
-      CUPS_BACKENDS=$(out)/lib/cups/backend
-    '';
+  installFlags = [
+    "CUPS_FILTERS=$(out)/lib/cups/filter"
+    "CUPS_BACKENDS=$(out)/lib/cups/backend"
+  ];
 
   meta = {
     description = "Foomatic printing filters";

@@ -7,10 +7,10 @@ let
 in
 
 stdenv.mkDerivation rec {
-  
+
   pname = "ocaml";
   version = "3.11.2";
-  
+
   src = fetchurl {
     url = "https://caml.inria.fr/pub/distrib/ocaml-3.11/${pname}-${version}.tar.bz2";
     sha256 = "86f3387a0d7e7c8be2a3c53af083a5a726e333686208d5ea0dd6bb5ac3f58143";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
-  buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
+  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   prePatch = ''

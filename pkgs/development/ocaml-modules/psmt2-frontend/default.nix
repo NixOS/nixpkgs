@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  installFlags = "LIBDIR=$(OCAMLFIND_DESTDIR)";
+  installFlags = [ "LIBDIR=$(OCAMLFIND_DESTDIR)" ];
 
   meta = {
     description = "A simple parser and type-checker for polomorphic extension of the SMT-LIB 2 language";
