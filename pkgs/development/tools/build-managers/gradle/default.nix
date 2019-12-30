@@ -54,12 +54,12 @@ rec {
   gradle_latest = gradle_5_6;
 
   gradle_5_6 = gradleGen rec {
-    name = "gradle-5.6.1";
+    name = "gradle-5.6.4";
     nativeVersion = "0.18";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "04pccfcry5c59xwm6rr4r3baanwbfr5yrwhxv4r5v8z4414291h9";
+      sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
     };
   };
 
