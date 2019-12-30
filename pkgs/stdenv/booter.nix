@@ -126,7 +126,11 @@ stageFuns: let
         if buildPackages.stdenv.cc.isClang or false
         then buildPackages.clang
         else buildPackages.gcc
-      else buildPackages.stdenv.cc;
+      else
+        # This will blow up if anything uses it, but that's OK. The `if
+        # buildPackages.stdenv.cc.isClang then ... else ...` would blow up
+        # everything, so we make sure to avoid that.
+        buildPackages.stdenv.cc;
   };
 
 in dfold folder postStage (_: {}) withAllowCustomOverrides
