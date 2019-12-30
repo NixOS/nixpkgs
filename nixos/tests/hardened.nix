@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, latestKernel ? false, ... } : {
+import ./make-test-python.nix ({ pkgs, latestKernel ? false, ...} : {
   name = "hardened";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ joachifm ];
@@ -47,84 +47,70 @@ import ./make-test.nix ({ pkgs, latestKernel ? false, ... } : {
       };
     in
     ''
-      $machine->waitForUnit("multi-user.target");
+      import re
 
-      subtest "apparmor-loaded", sub {
-          $machine->succeed("systemctl status apparmor.service");
-      };
+      machine.wait_for_unit("multi-user.target")
 
-      # AppArmor securityfs
-      subtest "apparmor-securityfs", sub {
-          $machine->succeed("mountpoint -q /sys/kernel/security");
-          $machine->succeed("cat /sys/kernel/security/apparmor/profiles");
-      };
+      with subtest("apparmor.service is loaded"):
+          machine.succeed("systemctl status apparmor.service")
 
-      # Test loading out-of-tree modules
-      subtest "extra-module-packages", sub {
-          $machine->succeed("grep -Fq wireguard /proc/modules");
-      };
+      with subtest("AppArmor securityfs is mounted"):
+          machine.succeed("mountpoint -q /sys/kernel/security")
+          machine.succeed("cat /sys/kernel/security/apparmor/profiles")
 
-      # Test hidepid
-      subtest "hidepid", sub {
-          $machine->succeed("grep -Fq hidepid=2 /proc/mounts");
+      with subtest("out-of-tree modules can be loaded"):
+          machine.succeed("grep -Fq wireguard /proc/modules")
+
+      with subtest("hidepid=2 option"):
+          machine.succeed("grep -Fq hidepid=2 /proc/mounts")
           # cannot use pgrep -u here, it segfaults when access to process info is denied
-          $machine->succeed("[ `su - sybil -c 'ps --no-headers --user root | wc -l'` = 0 ]");
-          $machine->succeed("[ `su - alice -c 'ps --no-headers --user root | wc -l'` != 0 ]");
-      };
+          machine.succeed("[ `su - sybil -c 'ps --no-headers --user root | wc -l'` = 0 ]")
+          machine.succeed("[ `su - alice -c 'ps --no-headers --user root | wc -l'` != 0 ]")
 
-      # Test kernel module hardening
-      subtest "lock-modules", sub {
+      with subtest("kernel module hardening"):
           # note: this better a be module we normally wouldn't load ...
-          $machine->fail("modprobe dccp");
-      };
+          machine.fail("modprobe dccp")
 
-      # Test userns
-      subtest "userns", sub {
-          $machine->succeed("unshare --user true");
-          $machine->fail("su -l alice -c 'unshare --user true'");
-      };
+      with subtest("userns"):
+          machine.succeed("unshare --user true")
+          machine.fail("su -l alice -c 'unshare --user true'")
 
-      # Test dmesg restriction
-      subtest "dmesg", sub {
-          $machine->fail("su -l alice -c dmesg");
-      };
+      with subtest("dmesg restriction"):
+          machine.fail("su -l alice -c dmesg")
 
-      # Test access to kcore
-      subtest "kcore", sub {
-          $machine->fail("cat /proc/kcore");
-      };
+      with subtest("access to kcore"):
+          machine.fail("cat /proc/kcore")
 
-      # Test deferred mount
-      subtest "mount", sub {
-        $machine->fail("mountpoint -q /efi"); # was deferred
-        $machine->execute("mkdir -p /efi");
-        $machine->succeed("mount /dev/disk/by-label/EFISYS /efi");
-        $machine->succeed("mountpoint -q /efi"); # now mounted
-      };
+      with subtest("deferred mount"):
+          machine.fail("mountpoint -q /efi")
+          # was deferred
+          machine.execute("mkdir -p /efi")
+          machine.succeed("mount /dev/disk/by-label/EFISYS /efi")
+          machine.succeed("mountpoint -q /efi")
+          # now mounted
 
-      # Test Nix dæmon usage
-      subtest "nix-daemon", sub {
-        $machine->fail("su -l nobody -s /bin/sh -c 'nix ping-store'");
-        $machine->succeed("su -l alice -c 'nix ping-store'") =~ "OK";
-      };
+      with subtest("nix daemon usage"):
+          machine.fail("su -l nobody -s /bin/sh -c 'nix ping-store'")
+          assert re.search("OK", machine.succeed("su -l alice -c 'nix ping-store'"))
 
-      # Test kernel image protection
-      subtest "kernelimage", sub {
-        $machine->fail("systemctl hibernate");
-        $machine->fail("systemctl kexec");
-      };
+      with subtest("kernel image protection"):
+          machine.fail("systemctl hibernate")
+          machine.fail("systemctl kexec")
 
-      # Test hardened memory allocator
-      sub runMallocTestProg {
-          my ($progName, $errorText) = @_;
-          my $text = "fatal allocator error: " . $errorText;
-          $machine->fail("${hardened-malloc-tests}/bin/" . $progName) =~ $text;
-      };
 
-      subtest "hardenedmalloc", sub {
-        runMallocTestProg("double_free_large", "invalid free");
-        runMallocTestProg("unaligned_free_small", "invalid unaligned free");
-        runMallocTestProg("write_after_free_small", "detected write after free");
-      };
+      def run_malloc_test_prog(prog_name, error_text):
+          text = f"fatal allocator error: {error_text}"
+          assert re.search(
+              text,
+              machine.fail(
+                  f"${hardened-malloc-tests}/bin/{prog_name}"
+              ),
+          )
+
+
+      with subtest("Hardened memory allocator"):
+          run_malloc_test_prog("double_free_large", "invalid free")
+          run_malloc_test_prog("unaligned_free_small", "invalid unaligned free")
+          run_malloc_test_prog("write_after_free_small", "detected write after free")
     '';
 })
