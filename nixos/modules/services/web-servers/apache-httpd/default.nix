@@ -567,7 +567,7 @@ in
 
       sslProtocols = mkOption {
         type = types.str;
-        default = "All -SSLv2 -SSLv3 -TLSv1";
+        default = "All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1";
         example = "All -SSLv2 -SSLv3";
         description = "Allowed SSL/TLS protocol versions.";
       };
