@@ -52,10 +52,6 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
-  # cleanup: the build system creates (empty) $out/$out/share/icons (double prefix)
-  # if DESTDIR is unset
-  DESTDIR="/";
-
   nativeBuildInputs = [
     cmake
     pkgconfig

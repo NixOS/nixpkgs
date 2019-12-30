@@ -79,7 +79,7 @@ buildPythonPackage rec {
     simplejson
     traits
     xvfbwrapper
-  ] ++ stdenv.lib.optional (!isPy3k) [
+  ] ++ stdenv.lib.optionals (!isPy3k) [
     configparser
     futures
     pathlib2 # darwin doesn't receive this transitively, but it is in install_requires

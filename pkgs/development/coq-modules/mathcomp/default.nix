@@ -92,7 +92,7 @@ let
            attrValues (mkMathcompGenFrom overrides (mathcomp-deps mathcomp-pkg) mathcomp-version);
         enableParallelBuilding = true;
 
-        buildFlags = optionalString withDoc "doc";
+        buildFlags = optional withDoc "doc";
 
         COQBIN = "${coq}/bin/";
 
