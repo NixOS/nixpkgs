@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, php, gd, libpng, zlib, unzip }:
+{ stdenv, fetchurl, perl, php, gd, libpng, zlib, unzip, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "nagios";
@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
     sed -i 's@/bin/@@g' $out/etc/objects/commands.cfg
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) nagios;
+  };
 
   meta = {
     description = "A host, service and network monitoring program";
