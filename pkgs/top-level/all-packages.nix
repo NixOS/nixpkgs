@@ -7307,6 +7307,8 @@ in
     libpsl = null;
   };
 
+  what = callPackage ../tools/networking/what { };
+
   which = callPackage ../tools/system/which { };
 
   woeusb = callPackage ../tools/misc/woeusb { };
