@@ -33,6 +33,7 @@ in stdenv.mkDerivation rec {
     "-Wno-error=class-memaccess"
     "-Wno-error=maybe-uninitialized"
     "-Wno-error=catch-value"
+    "-Wno-error=stringop-truncation"
   ];
 
   cmakeFlags = [

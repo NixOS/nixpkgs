@@ -93,6 +93,12 @@ stdenv.mkDerivation rec {
       #})
       ./qt4-gcc6.patch
       ./qt4-openssl-1.1.patch
+      (fetchpatch {
+        name = "gcc9-foreach.patch";
+        url = "https://salsa.debian.org/qt-kde-team/qt/qt4-x11/raw/"
+          + "0d4a3dd61ccb156dee556c214dbe91c04d44a717/debian/patches/gcc9-qforeach.patch";
+        sha256 = "0dzn6qxrgxb75rvck9kmy5gspawdn970wsjw56026dhkih8cp3pg";
+      })
     ]
     ++ lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;

@@ -53,6 +53,13 @@ stdenv.mkDerivation ({
       url = "https://bugzilla.redhat.com/attachment.cgi?id=1389687";
       sha256 = "0ga2123aclq3x9w72d0rm0az12m8c1i4r1106vh701hf4cghgbch";
     })
+    ./fix-gcc9.patch
+    (fetchpatch {
+      name = "llvm4-avoid-undefined-behavior-in-unittest.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/D32089-Avoid-undefined-behavior-in-unittest.patch?h=llvm40&id=f459b0bad8aa3b94bc2733d79d176071a32846a6";
+      sha256 = "0x5q6a8lk6xg4ns4qh75fxvvmfnifwvyrq17ck85q8c0753i1irf";
+      extraPrefix = "";
+    })
   ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

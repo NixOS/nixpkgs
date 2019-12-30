@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     # for flock
     stdenv.lib.optional stdenv.isLinux utillinux;
 
-  CFLAGS = "-O2";
+  CFLAGS = "-O2 -Wno-error=stringop-truncation";
   buildPhase =
     stdenv.lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
     + "bash do";

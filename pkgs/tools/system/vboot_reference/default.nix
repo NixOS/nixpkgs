@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dont_static_link.patch ];
 
+  # fix build with gcc9
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace "ar qc" '${stdenv.cc.bintools.targetPrefix}ar qc'

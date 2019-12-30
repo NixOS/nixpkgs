@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" "stackprotector" ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
+
   configurePhase = ''
     for a in lcptools utils tb_polgen; do
       substituteInPlace $a/Makefile --replace /usr/sbin /sbin

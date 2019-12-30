@@ -244,6 +244,7 @@ in
       "-Wno-error=class-memaccess"
       "-Wno-error=ignored-qualifiers"
       "-Wno-error=tautological-compare"
+      "-Wno-error=stringop-truncation"
     ];
     dontBuild = false;
     postPatch = ''

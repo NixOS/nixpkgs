@@ -51,10 +51,7 @@ stdenv.mkDerivation {
       "-Wno-error=bool-compare"
       "-Wno-error=deprecated-declarations"
       "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
-    ]
-    # gcc before 6 doesn't know these options
-    ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
-      "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
+      "-Wno-error=stringop-truncation"
     ];
 
   doCheck = false; # requires "sparse"

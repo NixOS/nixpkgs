@@ -2,11 +2,11 @@
 
 let
   name = "qpid-cpp-${version}";
-  version = "1.38.0";
+  version = "1.39.0";
 
   src = fetchurl {
     url = "mirror://apache/qpid/cpp/${version}/${name}.tar.gz";
-    sha256 = "1q7nsl9g8xv81ymhpkdp9mlw3gkzba62gggp3b72f0ywpc3kc3cz";
+    sha256 = "088dx1l6myrksbhpr15bs09j6qm8vdliqwjp2ja5amym47md103r";
   };
 
   meta = with stdenv.lib; {
@@ -40,6 +40,8 @@ let
       "-Wno-error=unused-function"
       "-Wno-error=ignored-qualifiers"
       "-Wno-error=catch-value"
+    ] ++ stdenv.lib.optionals stdenv.cc.isGNU [
+      "-Wno-error=deprecated-copy"
     ];
   };
 

@@ -396,6 +396,10 @@ self: super:
   xf86videovoodoo  = super.xf86videovoodoo.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videowsfb    = super.xf86videowsfb.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
 
+  xf86videoomap    = super.xf86videoomap.overrideAttrs (attrs: {
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=format-overflow" ];
+  });
+
   xf86videoamdgpu = super.xf86videoamdgpu.overrideAttrs (attrs: {
     configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
   });

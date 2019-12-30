@@ -5,6 +5,14 @@
 , buildPackages
 }:
 
+let
+  gdCflags = [
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=missing-attributes"
+    "-Wno-error=array-bounds"
+  ];
+in
+
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
@@ -47,10 +55,10 @@ callPackage ./common.nix { inherit stdenv; } {
         #       musl-specific flags below.
         #       At next change to non-musl glibc builds, remove this `then`
         #       and the above condition, instead keeping only the `else` below.
-        then (stdenv.lib.optionalString withGd "-Wno-error=stringop-truncation")
+        then (if withGd then gdCflags else null)
         else
-          builtins.toString (builtins.concatLists [
-            (stdenv.lib.optional withGd "-Wno-error=stringop-truncation")
+          (builtins.concatLists [
+            (stdenv.lib.optionals withGd gdCflags)
             # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
             # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
             (stdenv.lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
