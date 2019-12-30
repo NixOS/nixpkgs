@@ -1,4 +1,5 @@
-{ stdenv, meson, ninja, fetchFromGitHub, which, python, libiconv }:
+{ stdenv, meson, ninja, fetchFromGitHub, which, python, fetchpatch
+, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "ksh";
@@ -10,6 +11,13 @@ stdenv.mkDerivation rec {
     rev    = version;
     sha256 = "0cdxz0nhpq03gb9rd76fn0x1yzs2c8q289b7vcxnzlsrz1imz65j";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/att/ast/commit/11983a71f5e29df578b7e2184400728b4e3f451d.patch";
+      sha256 = "1n9558c4v2qpgpjb1vafs29n3qn3z0770wr1ayc0xjf5z5j4g3kv";
+    })
+  ];
 
   nativeBuildInputs = [ meson ninja which python ];
 
