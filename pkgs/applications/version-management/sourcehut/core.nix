@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchNodeModules, buildPythonPackage
 , pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
-, sqlalchemy, flask_login, beautifulsoup4, sqlalchemy-utils, celery, alembic
+, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, celery, alembic
 , importlib-metadata
 , sassc, nodejs
 , writeText }:
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pygments
     requests
     sqlalchemy
-    flask_login
+    cryptography
     beautifulsoup4
     sqlalchemy-utils
 
@@ -57,17 +57,7 @@ buildPythonPackage rec {
     cp -r ${node_modules} srht/node_modules
   '';
 
-  preCheck = let
-    config = writeText "config.ini" ''
-      [webhooks]
-      private-key=K6JupPpnr0HnBjelKTQUSm3Ro9SgzEA2T2Zv472OvzI=
-
-      [meta.sr.ht]
-      origin=http://meta.sr.ht.local
-    '';
-  in ''
-    cp -f ${config} config.ini
-  '';
+  dontUseSetuptoolsCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://git.sr.ht/~sircmpwn/srht;
