@@ -159,6 +159,7 @@
   ./programs/wavemon.nix
   ./programs/way-cooler.nix
   ./programs/waybar.nix
+  ./programs/what.nix
   ./programs/wireshark.nix
   ./programs/x2goserver.nix
   ./programs/xfs_quota.nix
