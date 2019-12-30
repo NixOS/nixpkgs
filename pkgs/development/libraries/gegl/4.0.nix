@@ -57,6 +57,12 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gegl/commit/2bc06bfedee4fb25f6a966c8235b75292e24e55f.patch";
       sha256 = "1psls61wsrdq5pzpvj22mrm46lpzrw3wkx6li7dv6fyb65wz2n4d";
     })
+
+    # Fix test timeout. Downstream debian patch.
+    (fetchpatch {
+      url = "https://salsa.debian.org/gnome-team/gegl/raw/9b7520b38d87cd8ad4b39bf0b8c62d011da25169/debian/patches/increase_test_timeout.patch";
+      sha256 = "1prc1h1aipjd9db0i1j7nzga4zvk3vl8qsjpz1jzv1wwvz02isly";
+    })
   ];
 
   nativeBuildInputs = [

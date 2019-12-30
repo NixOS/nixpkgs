@@ -4,23 +4,19 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.6.1";
+  version = "0.7.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lsi6x5yr8f9yjxsh1rmcd6wnxr6s6rpr720lg7sq629m42d9p1d";
+    sha256 = "0xzivcn1s5j2nn9p7li9bzr0h225bnli4fr3yrh8v7npx2ymg1r3";
   };
 
   patches = [
+    # fix tests
     (fetchpatch {
-      url = https://github.com/tulir/mautrix-telegram/commit/be6d395ed66d86ec7f13a262f9ae37731987019c.patch;
-      sha256 = "1q69ip17r45yhyrxr0pj8bvqj2grw2l39wak8pi5pm7qrxra93j2";
-    })
-    # bump dependencies, remove on next bump
-    (fetchpatch {
-      url = "https://github.com/tulir/mautrix-telegram/commit/cdee0df5ab9e04d6831e34590959496061c6621c.patch";
-      sha256 = "0sbfaais0jgg305dcjg9hn8b975ymdivvhmlzsxm1nm2ksa4c0v1";
+      url = "https://github.com/tulir/mautrix-telegram/commit/fe52f0ad106122f08af72e356c4c62bb8875b453.patch";
+      sha256 = "0r7j7q78brqqx0rkchld328k00yq0ykdk7syvwpihqzj3gchacb7";
     })
   ];
 
@@ -33,7 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     Mako
     aiohttp
-    mautrix-appservice
+    mautrix
     sqlalchemy
     CommonMark
     ruamel_yaml
@@ -69,6 +65,7 @@ buildPythonPackage rec {
     homepage = https://github.com/tulir/mautrix-telegram;
     description = "A Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nyanloutre ma27 ];
   };
 }

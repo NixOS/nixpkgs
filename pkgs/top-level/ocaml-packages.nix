@@ -506,6 +506,8 @@ let
       lwt = ocaml_lwt;
     };
 
+    macaddr = callPackage ../development/ocaml-modules/macaddr { };
+
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };

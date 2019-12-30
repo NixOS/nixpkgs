@@ -27,7 +27,7 @@ let
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginStackTrace
-        CatalystRuntime
+        CatalystPluginUnicodeEncoding
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
@@ -51,6 +51,7 @@ let
         LWP
         LWPProtocolHttps
         NetAmazonS3
+        NetPrometheus
         NetStatsd
         PadWalker
         Readonly
@@ -58,6 +59,8 @@ let
         SetScalar
         Starman
         SysHostnameLong
+        TermSizeAny
+        TestMore
         TextDiff
         TextTable
         XMLSimple
@@ -69,15 +72,15 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2019-08-30";
+  version = "2019-11-13";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = pname;
-    rev = "242b8b7a314759ed33f69205d26a1b7c337511e0";
-    sha256 = "167ijcf9qdm10kjvqax3hcvs5mpa4mx2y2i9idwwc6xfvn8fhs84";
+    rev = "20dd0bbe6a90d9066e635ee82e98efec23b17e51";
+    sha256 = "06chiaa7p54zxngmy2q3ps7bbiqpdv9h2rfmprh83qz36xps9rs2";
   };
 
   buildInputs =

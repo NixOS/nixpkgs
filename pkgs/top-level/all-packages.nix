@@ -1396,6 +1396,8 @@ in
 
   clac = callPackage ../tools/misc/clac {};
 
+  clash = callPackage ../tools/networking/clash { };
+
   clasp = callPackage ../tools/misc/clasp { };
 
   cli53 = callPackage ../tools/admin/cli53 { };
@@ -2957,6 +2959,7 @@ in
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
     inherit (pythonPackages) sphinx;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   volctl = callPackage ../tools/audio/volctl { };
@@ -5977,6 +5980,8 @@ in
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
 
   rc = callPackage ../shells/rc { };
+
+  rdbtools = callPackage ../development/tools/rdbtools { python = python3; };
 
   rdma-core = callPackage ../os-specific/linux/rdma-core { };
 
@@ -11777,6 +11782,8 @@ in
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
 
   gtkspellmm = callPackage ../development/libraries/gtkspellmm { };
+
+  gtk-layer-shell = callPackage ../development/libraries/gtk-layer-shell { };
 
   gts = callPackage ../development/libraries/gts { };
 
@@ -23676,9 +23683,15 @@ in
 
   kssd = callPackage ../applications/science/biology/kssd { };
 
+  last = callPackage ../applications/science/biology/last { };
+
   macse = callPackage ../applications/science/biology/macse { };
 
   migrate = callPackage ../applications/science/biology/migrate { };
+
+  minia = callPackage ../applications/science/biology/minia {
+    boost = boost159;
+  };
 
   mirtk = callPackage ../development/libraries/science/biology/mirtk { };
 
@@ -23765,6 +23778,8 @@ in
   SPAdes = callPackage ../applications/science/biology/spades { };
 
   svaba = callPackage ../applications/science/biology/svaba { };
+
+  tebreak = callPackage ../applications/science/biology/tebreak { };
 
   trimal = callPackage ../applications/science/biology/trimal { };
 
