@@ -550,6 +550,8 @@ in {
     inherit (pkgs.llvmPackages) openmp libcxx libcxxabi;
   };
 
+  databases = callPackage ../development/python-modules/databases { };
+
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datasette = callPackage ../development/python-modules/datasette { };
@@ -1454,15 +1456,21 @@ in {
 
   aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
 
+  aiomysql = callPackage ../development/python-modules/aiomysql { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aioresponses = callPackage ../development/python-modules/aioresponses { };
+
+  aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
+
+  aiounittest = callPackage ../development/python-modules/aiounittest { };
 
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
 
@@ -2620,9 +2628,13 @@ in {
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
 
+  hstspreload = callPackage ../development/python-modules/hstspreload { };
+
   htmlmin = callPackage ../development/python-modules/htmlmin {};
 
   httpauth = callPackage ../development/python-modules/httpauth { };
+
+  httpx = callPackage ../development/python-modules/httpx { };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
 
@@ -4315,6 +4327,8 @@ in {
 
   orderedset = callPackage ../development/python-modules/orderedset { };
 
+  python-multipart = callPackage ../development/python-modules/python-multipart { };
+
   python-otr = callPackage ../development/python-modules/python-otr { };
 
   plone-testing = callPackage ../development/python-modules/plone-testing { };
@@ -4362,6 +4376,8 @@ in {
   retrying = callPackage ../development/python-modules/retrying { };
 
   fasteners = callPackage ../development/python-modules/fasteners { };
+
+  aiocontextvars = callPackage ../development/python-modules/aiocontextvars { };
 
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
 
@@ -5114,6 +5130,8 @@ in {
   typeguard = callPackage ../development/python-modules/typeguard { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
+
+  typesystem = callPackage ../development/python-modules/typesystem { };
 
   s3transfer = callPackage ../development/python-modules/s3transfer { };
 
@@ -6085,6 +6103,8 @@ in {
   ofxparse = callPackage ../development/python-modules/ofxparse { };
 
   ofxtools = callPackage ../development/python-modules/ofxtools { };
+
+  orm = callPackage ../development/python-modules/orm { };
 
   basemap = callPackage ../development/python-modules/basemap { };
 
