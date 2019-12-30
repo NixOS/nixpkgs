@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.11.5";
+  version = "0.11.6";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd8aafd70a281daa644c4a3fb021ffac20b7a88e86226ecc8bb3e78e1734a184";
+    sha256 = "1i73j812i0dgjw9n106pipc6qksd9cgs59d0as0b4j5iyl0087hh";
   };
 
   propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic trezor-udev-rules ];
