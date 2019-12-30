@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "qimage2ndarray";
-  version = "1.8";
+  version = "1.8.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b9eb08a9be27f5439289d90d7d5a5942aad403d5634fe336eb915678c65db48";
+    sha256 = "0f792693a0f1cd5f93fbf73bc3fb2d511fb9cceed3c9308bfb200f38c19a5545";
   };
 
   checkInputs = [

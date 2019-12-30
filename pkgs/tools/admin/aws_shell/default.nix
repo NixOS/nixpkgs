@@ -23,6 +23,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+     --replace "prompt-toolkit>=1.0.0,<1.1.0" "prompt-toolkit"
+  '';
+
   #Checks are failing due to missing TTY, which won't exist.
   doCheck = false;
   preCheck = ''

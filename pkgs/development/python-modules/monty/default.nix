@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, isPy27
 , nose
 , numpy
 , six
@@ -15,6 +16,7 @@
 buildPythonPackage rec {
   pname = "monty";
   version = "3.0.2";
+  disabled = isPy27; # uses type annotations
 
   # No tests in Pypi
   src = fetchFromGitHub {

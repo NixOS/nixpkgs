@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "imagecodecs-lite";
-  version = "2019.4.20";
+  version = "2019.12.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cp88g7g91gdhjhaz6gvb4jzvi5ad817id9f2bnc5r95ag93bqb0";
+    sha256 = "95d18aa13ceb1b18a6109433b42d054e13b9a295cba96c08ab719f864f589d68";
   };
 
   checkInputs = [ pytest ];

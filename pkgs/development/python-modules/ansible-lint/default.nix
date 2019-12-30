@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "4.1.1a0";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00mw56a3lmdb5xvrzhahrzqv3wvxfz0mxl4n0qbkxzggf2pg0i8d";
+    sha256 = "eb925d8682d70563ccb80e2aca7b3edf84fb0b768cea3edc6846aac7abdc414a";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -42,5 +42,6 @@ buildPythonPackage rec {
     description = "Best practices checker for Ansible";
     license = licenses.mit;
     maintainers = [ maintainers.sengaya ];
+    broken = true; # requires new flit to build
   };
 }

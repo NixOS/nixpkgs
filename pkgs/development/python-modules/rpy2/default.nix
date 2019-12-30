@@ -24,13 +24,13 @@
 }:
 
 buildPythonPackage rec {
-    version = "3.2.2";
+    version = "3.2.4";
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      sha256 = "0b3jpn9x7m2pccriyzgfsdb68qp6nq4ffhvjy1q2ar8wdxvmf5xp";
+      sha256 = "3daf1a4b28c4e354ef989093f03b066908bf6e5082a6f4af72cc3fd928a28dc6";
     };
 
     buildInputs = [
