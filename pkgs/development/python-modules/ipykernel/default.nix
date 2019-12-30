@@ -23,8 +23,6 @@ buildPythonPackage rec {
     sha256 = "1a08y677lpn80qzvv7z0smgggmr5m5ayf0bs6vds47xpxl9sss5k";
   };
 
-  checkInputs = [ flaky pytest nose ];
-
   propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
 
   # https://github.com/ipython/ipykernel/pull/377

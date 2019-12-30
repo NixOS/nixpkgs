@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ numpy ]
-    ++ lib.optionals isPy27 [ futures enum34 pathlib ];
+    ++ lib.optionals isPy27 [ futures enum34 pathlib ]
     ++ lib.optionals isPy3k [ imagecodecs-lite ];
 
   meta = with lib; {
