@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://cloudhead.io/rx/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ minijackson filalex77 ];
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" ];
   };
 }
