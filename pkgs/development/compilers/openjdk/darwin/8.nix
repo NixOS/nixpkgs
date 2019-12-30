@@ -45,6 +45,7 @@ let
       # Set JAVA_HOME automatically.
       cat <<EOF >> $out/nix-support/setup-hook
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+      if [ -z "\''${JAVA_8_HOME-}" ]; then export JAVA_8_HOME=$out; fi
       EOF
     '';
 

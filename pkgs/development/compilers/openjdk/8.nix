@@ -237,6 +237,7 @@ let
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out/lib/openjdk; fi
+      if [ -z "\''${JAVA_8_HOME-}" ]; then export JAVA_8_HOME=$out/lib/openjdk; fi
       EOF
     '';
 

@@ -157,6 +157,7 @@ let result = stdenv.mkDerivation rec {
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+    if [ -z "\''${JAVA_${productVersion}_HOME-}" ]; then export JAVA_${productVersion}_HOME=$out; fi
     EOF
   '';
 

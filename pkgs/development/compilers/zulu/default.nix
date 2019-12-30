@@ -56,6 +56,7 @@ in stdenv.mkDerivation {
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+    if [ -z "\''${JAVA_${openjdk}_HOME-}" ]; then export JAVA_${openjdk}_HOME=$out; fi
     EOF
   '';
 
