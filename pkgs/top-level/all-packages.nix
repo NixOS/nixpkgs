@@ -5995,6 +5995,8 @@ in
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
+  reredirect = callPackage ../tools/misc/reredirect { };
+
   retext = libsForQt5.callPackage ../applications/editors/retext { };
 
   richgo = callPackage ../development/tools/richgo {  };
