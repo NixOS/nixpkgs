@@ -300,7 +300,7 @@ in {
   ubootSheevaplug = buildUBoot {
     defconfig = "sheevaplug_defconfig";
     extraMeta.platforms = ["armv5tel-linux"];
-    filesToInstall = ["u-boot.bin"];
+    filesToInstall = ["u-boot.kwb"];
   };
 
   ubootSopine = buildUBoot {

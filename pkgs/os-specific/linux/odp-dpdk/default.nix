@@ -5,7 +5,7 @@
     version = "18.11.5";
     src = fetchurl {
       url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-      sha256 = "0000000000000000000000000000000000000000000000000000";
+      sha256 = "1n6nfaj7703l19jcw540lm8avni48hj9q1rq4mfp8b8gd4zjprj0";
     };
   });
 
@@ -45,6 +45,8 @@ in stdenv.mkDerivation rec {
 
   # binaries will segfault otherwise
   dontStrip = true;
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Open Data Plane optimized for DPDK";
