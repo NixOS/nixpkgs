@@ -79,6 +79,7 @@ in buildFHSUserEnv rec {
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
+    at-spi2-core   # CrossCode
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     libdrm
