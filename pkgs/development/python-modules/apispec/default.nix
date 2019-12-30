@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rr32z9hbf8w4w1fs5gj2v0ixcq2vq7a3wssrlxagi5ii7ygap7y";
+    sha256 = "24b8490c22310b0779a058ccb24ec2fef33d571bb5aba1f525ab5963b0eabcdd";
   };
 
   checkInputs = [

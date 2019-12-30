@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , spake2
 , pynacl
 , six
@@ -18,7 +19,6 @@
 , mock
 , magic-wormhole-transit-relay
 , magic-wormhole-mailbox-server
-, isPy27
 }:
 
 buildPythonPackage rec {
@@ -42,6 +42,8 @@ buildPythonPackage rec {
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
   '';
 
+  # zope.interface issue
+  doCheck = !isPy27;
   preCheck = ''
     export PATH=$out/bin:$PATH
     export LANG="en_US.UTF-8"

@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "aioamqp";
-  version = "0.13.0";
+  version = "0.14.0";
 
   meta = {
     homepage = https://github.com/polyconseil/aioamqp;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ced0d2bb0054809b37b0636da34fc7cda23d66943fb5f9f0610555988cf347b2";
+    sha256 = "eef5c23a7fedee079d8326406f5c7a5725dfe36c359373da3499fffa16f79915";
   };
 
   disabled = pythonOlder "3.3";

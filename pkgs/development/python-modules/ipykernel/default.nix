@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, flaky
 , ipython
 , jupyter_client
 , traitlets
@@ -14,13 +15,15 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "5.1.2";
+  version = "5.1.3";
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04jx6ihj3zpj4c7acqa14gl37mpdnbgmfm4nvv97xkjc1cz920xm";
+    sha256 = "1a08y677lpn80qzvv7z0smgggmr5m5ayf0bs6vds47xpxl9sss5k";
   };
+
+  checkInputs = [ flaky pytest nose ];
 
   propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
 

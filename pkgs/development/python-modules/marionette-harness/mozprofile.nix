@@ -16,7 +16,9 @@ buildPythonPackage rec {
     sha256 = "09l18x72vahq7il9nj6qj7la2d21vvbcn9szlm3vsvsbkz68w0yk";
   };
 
-  propagatedBuildInputs = [ mozlog mozfile mozhttpd wptserve ];
+  propagatedBuildInputs = [ mozlog mozfile mozhttpd ];
+
+  checkInputs = [ wptserve ];
 
   meta = {
     description = "Mozilla application profile handling library";

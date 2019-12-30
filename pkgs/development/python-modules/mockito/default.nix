@@ -1,20 +1,19 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k, funcsigs, pytest, numpy }:
 
 buildPythonPackage rec {
-  version = "1.1.1";
+  version = "1.2.0";
   pname = "mockito";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "142f5e8865a422ad2d67b9c67a382e3296e8f1633dbccd0e322180fba7d5303d";
+    sha256 = "2a1cbae9d0aef4ae7586b03f2a463e8c5ba96aa937c0535ced4a5621f851feeb";
   };
-
-  # Failing tests due 2to3
-  doCheck = !isPy3k;
 
   propagatedBuildInputs = stdenv.lib.optionals (!isPy3k) [ funcsigs ];
   checkInputs = [ pytest numpy ];
 
+  # tests are no longer packaged in pypi tarball
+  doCheck = false;
   checkPhase = ''
     pytest
   '';
