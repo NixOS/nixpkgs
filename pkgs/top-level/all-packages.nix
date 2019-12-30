@@ -3055,7 +3055,7 @@ in
 
   enscript = callPackage ../tools/text/enscript { };
 
-  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { };
+  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { stdenv = gcc8Stdenv; };
 
   entr = callPackage ../tools/misc/entr { };
 
