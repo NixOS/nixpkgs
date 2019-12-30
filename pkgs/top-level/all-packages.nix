@@ -901,7 +901,7 @@ in
 
   github-commenter = callPackage ../development/tools/github-commenter { };
 
-  gitless = callPackage ../applications/version-management/gitless { };
+  gitless = callPackage ../applications/version-management/gitless { python = python3; };
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
@@ -5995,6 +5995,8 @@ in
   redmine = callPackage ../applications/version-management/redmine { ruby = pkgs.ruby_2_5; };
 
   redsocks = callPackage ../tools/networking/redsocks { };
+
+  reredirect = callPackage ../tools/misc/reredirect { };
 
   retext = libsForQt5.callPackage ../applications/editors/retext { };
 
@@ -22400,6 +22402,8 @@ in
   ydiff = callPackage ../development/tools/ydiff { };
 
   yed = callPackage ../applications/graphics/yed {};
+
+  yeetgif = callPackage ../applications/graphics/yeetgif { };
 
   inherit (gnome3) yelp;
 
