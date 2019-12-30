@@ -179,6 +179,7 @@ in
   mysql = handleTest ./mysql.nix {};
   mysqlBackup = handleTest ./mysql-backup.nix {};
   mysqlReplication = handleTest ./mysql-replication.nix {};
+  nagios = handleTest ./nagios.nix {};
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
