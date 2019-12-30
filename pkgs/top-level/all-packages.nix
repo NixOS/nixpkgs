@@ -901,7 +901,7 @@ in
 
   github-commenter = callPackage ../development/tools/github-commenter { };
 
-  gitless = callPackage ../applications/version-management/gitless { };
+  gitless = callPackage ../applications/version-management/gitless { python = python3; };
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
