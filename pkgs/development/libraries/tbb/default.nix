@@ -11,10 +11,8 @@ with stdenv.lib; stdenv.mkDerivation rec {
     sha256 = "1a39nflw7b2n51jfp3fdprnkpgzaspzww1dckfvaigflfli9s8rj";
   };
 
-  makeFlags = concatStringsSep " " (
-    optional (compiler != null) "compiler=${compiler}" ++
-    optional (stdver != null) "stdver=${stdver}"
-  );
+  makeFlags = optional (compiler != null) "compiler=${compiler}"
+    ++ optional (stdver != null) "stdver=${stdver}";
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
 

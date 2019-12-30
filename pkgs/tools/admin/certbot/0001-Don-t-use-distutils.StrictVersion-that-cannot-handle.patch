@@ -1,6 +1,6 @@
-From 411b8a413baf39e9b967949b17a992e81a11abfe Mon Sep 17 00:00:00 2001
+From 0de195de31dc311976af52a7c2b547bc23af2691 Mon Sep 17 00:00:00 2001
 From: Frederik Rietdijk <fridh@fridh.nl>
-Date: Tue, 29 Oct 2019 14:08:07 +0100
+Date: Sat, 14 Dec 2019 19:27:14 +0100
 Subject: [PATCH] Don't use distutils.StrictVersion that cannot handle certain
  versions
 
@@ -18,13 +18,13 @@ line 137, in parse
 ValueError: invalid version number '41.4.0.post20191022'
 ```
 ---
- setup.py | 15 +--------------
+ certbot/setup.py | 15 +--------------
  1 file changed, 1 insertion(+), 14 deletions(-)
 
-diff --git a/setup.py b/setup.py
-index 1f4838c90..831528d77 100644
---- a/setup.py
-+++ b/setup.py
+diff --git a/certbot/setup.py b/certbot/setup.py
+index c1bf914..7456bf2 100644
+--- a/certbot/setup.py
++++ b/certbot/setup.py
 @@ -3,7 +3,6 @@ import os
  import re
  import sys
@@ -40,7 +40,7 @@ index 1f4838c90..831528d77 100644
 -# However environment markers are supported only with setuptools >= 36.2.
 -# So this dependency is not added for old Linux distributions with old setuptools,
 -# in order to allow these systems to build certbot from sources.
- pywin32_req = 'pywin32>=224'
+ pywin32_req = 'pywin32>=227'  # do not forget to edit pywin32 dependency accordingly in windows-installer/construct.py
 -if StrictVersion(setuptools_version) >= StrictVersion('36.2'):
 -    install_requires.append(pywin32_req + " ; sys_platform == 'win32'")
 -elif 'bdist_wheel' in sys.argv[1:]:
@@ -56,5 +56,5 @@ index 1f4838c90..831528d77 100644
  dev_extras = [
      'astroid==1.6.5',
 -- 
-2.23.0
+2.24.1
 

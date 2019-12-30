@@ -1702,6 +1702,10 @@ in {
 
   bumps = callPackage ../development/python-modules/bumps {};
 
+  bx-python = callPackage ../development/python-modules/bx-python {
+    inherit (pkgs) zlib;
+  };
+
   cached-property = callPackage ../development/python-modules/cached-property { };
 
   caffe = toPythonModule (pkgs.caffe.override {
@@ -1940,6 +1944,8 @@ in {
 
   certifi = callPackage ../development/python-modules/certifi { };
 
+  certipy = callPackage ../development/python-modules/certipy {};
+ 
   characteristic = callPackage ../development/python-modules/characteristic { };
 
   chart-studio = callPackage ../development/python-modules/chart-studio { };
@@ -2914,6 +2920,8 @@ in {
     inherit (pkgs) meson pkgconfig;
   };
 
+  python-lzf = callPackage ../development/python-modules/python-lzf { };
+
   pyramid = callPackage ../development/python-modules/pyramid { };
 
   pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
@@ -2939,6 +2947,10 @@ in {
   pytools = callPackage ../development/python-modules/pytools { };
 
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
+
+  python-lzo = callPackage ../development/python-modules/python-lzo {
+    inherit (pkgs) lzo;
+  };
 
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
@@ -3970,7 +3982,8 @@ in {
 
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
 
-  mautrix-appservice = callPackage ../development/python-modules/mautrix-appservice { };
+  mautrix = callPackage ../development/python-modules/mautrix { };
+  mautrix-appservice = self.mautrix; # alias 2019-12-28
 
   maya = callPackage ../development/python-modules/maya { };
 

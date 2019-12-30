@@ -40,7 +40,7 @@ buildPythonPackage rec {
     python-dateutil
     six
     more-itertools
-  ] ++ lib.optional (!isPy3k) [
+  ] ++ lib.optionals (!isPy3k) [
     pyOpenSSL
     ndg-httpsclient
     pyasn1
