@@ -125,7 +125,6 @@
 , "swagger"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
 , "tern"
-, { "texlab-citeproc-build-deps": "../tools/misc/texlab/citeproc" }
 , "textlint"
 , "textlint-plugin-latex"
 , "textlint-rule-abbr-within-parentheses"
