@@ -6,9 +6,6 @@ let
     meta = hspell.meta // {
       broken = true;
       description = "${variant} Hebrew dictionary";
-
-      buildFlags = [ variant ];
-
     } // (if a ? meta then a.meta else {});
   } // (removeAttrs a ["meta"]));
 in
