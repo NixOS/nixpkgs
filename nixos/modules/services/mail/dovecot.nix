@@ -14,7 +14,15 @@ let
       base_dir = ${baseDir}
       protocols = ${concatStringsSep " " cfg.protocols}
       sendmail_path = /run/wrappers/bin/sendmail
+      # defining mail_plugins must be done before the first protocol {} filter because of https://doc.dovecot.org/configuration_manual/config_file/config_file_syntax/#variable-expansion
+      mail_plugins = $mail_plugins ${concatStringsSep " " cfg.mailPlugins.globally.enable}
     ''
+
+    (concatStringsSep "\n" (mapAttrsToList (protocol: plugins: ''
+      protocol ${protocol} {
+        mail_plugins = $mail_plugins ${concatStringsSep " " plugins.enable}
+      }
+    '') cfg.mailPlugins.perProtocol))
 
     (if cfg.sslServerCert == null then ''
       ssl = no
@@ -72,17 +80,12 @@ let
     '')
 
     (optionalString cfg.enableQuota ''
-      mail_plugins = $mail_plugins quota
       service quota-status {
         executable = ${dovecotPkg}/libexec/dovecot/quota-status -p postfix
         inet_listener {
           port = ${cfg.quotaPort}
         }
         client_limit = 1
-      }
-
-      protocol imap {
-        mail_plugins = $mail_plugins imap_quota
       }
 
       plugin {
@@ -181,6 +184,40 @@ in
       default = "";
       example = "mail_debug = yes";
       description = "Additional entries to put verbatim into Dovecot's config file.";
+    };
+
+    mailPlugins =
+    let plugins = hint: types.submodule {
+        options = {
+          enable = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = "mail plugins to enable as a list of strings to append to the ${hint} <literal>$mail_plugins</literal> configuration variable";
+          };
+        };
+      };
+    in
+    mkOption {
+      type = with types; submodule {
+        options = {
+          globally = mkOption {
+            type = plugins "top-level";
+            example = { enable =[ "virtual" ]; };
+            default = { enable = []; };
+          };
+          perProtocol = mkOption {
+            type = attrsOf (plugins "corresponding per-protocol");
+            default = {};
+            example = { imap = [ "imap_acl" ]; };
+          };
+        };
+      };
+      description = "Additional entries to add to the mail_plugins variable, globally and per protocol";
+      example = {
+        globally.enable = [ "acl" ];
+        perProtocol.imap.enable = [ "imap_acl" ];
+      };
+      default = { globally.enable = []; perProtocol = {};};
     };
 
     configFile = mkOption {
@@ -309,6 +346,11 @@ in
      optional cfg.enableImap "imap"
      ++ optional cfg.enablePop3 "pop3"
      ++ optional cfg.enableLmtp "lmtp";
+
+    services.dovecot2.mailPlugins = mkIf cfg.enableQuota {
+      globally.enable = [ "quota" ];
+      perProtocol.imap.enable = [ "imap_quota" ];
+    };
 
     users.users = {
       dovenull =
