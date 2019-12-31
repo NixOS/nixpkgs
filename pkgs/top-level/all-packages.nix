@@ -1085,6 +1085,10 @@ in
 
   backblaze-b2 = python.pkgs.callPackage ../development/tools/backblaze-b2 { };
 
+  bandwhich = callPackage ../tools/networking/bandwhich {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   bar = callPackage ../tools/system/bar {};
 
   base16-shell-preview = callPackage ../misc/base16-shell-preview { };
