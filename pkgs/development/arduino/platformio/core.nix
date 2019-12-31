@@ -1,12 +1,13 @@
 { stdenv, lib, buildPythonApplication, fetchFromGitHub
-, bottle, click, colorama
-, lockfile, pyserial, requests
+, bottle, click, colorama, marshmallow
+, lockfile, pyserial, requests, pyelftools
 , pytest, semantic-version, tox, tabulate
-, git
+, git, fetchpatch, jsondiff, clang-tools, cppcheck
 }:
 
 let
   args = lib.concatStringsSep " " ((map (e: "--deselect tests/${e}") [
+    "commands/test_check.py"
     "commands/test_ci.py::test_ci_boards"
     "commands/test_ci.py::test_ci_project_conf"
     "commands/test_ci.py::test_ci_lib_and_board"
@@ -37,6 +38,8 @@ let
     "test_misc.py::test_ping_internet_ips"
     "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
+    "test_pkgmanifest.py::test_library_json_schema"
+    "test_pkgmanifest.py::test_platform_json_schema"
   ]) ++ (map (e: "--ignore=tests/${e}") [
     "commands/test_boards.py"
     "commands/test_platform.py"
@@ -47,35 +50,40 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "4.0.3";
+  version = "4.1.0";
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "1naaa53cc7n7zyqggqjvvgkcq8cyzngdf904y9ag0x1vvb70f8j9";
+    sha256 = "10v9jw1zjfqr3wl6kills3cfp0ky7xbm1gc3z0n57wrqbc6cmz95";
   };
 
   propagatedBuildInputs =  [
     bottle click colorama git lockfile
     pyserial requests semantic-version
-    tabulate
+    tabulate pyelftools marshmallow
   ];
 
   HOME = "/tmp";
 
-  checkInputs = [ pytest tox ];
+  checkInputs = [ pytest tox jsondiff clang-tools cppcheck ];
 
   checkPhase = ''
     runHook preCheck
-
     py.test -v tests ${args}
-
     runHook postCheck
   '';
 
-  patches = [ ./fix-searchpath.patch ];
+  patches = [
+    ./fix-searchpath.patch
+    (fetchpatch {
+      url = "https://github.com/platformio/platformio-core/commit/442a7e357636522e844d95375c246644b21a7802.patch";
+      sha256 = "0a3kj3k02237gr2yk30gpwc6vm04dsd1wxldj4dsbzs4a9yyi70m";
+      excludes = ["HISTORY.rst"];
+    })
+  ];
 
   meta = with stdenv.lib; {
     broken = stdenv.isAarch64;
