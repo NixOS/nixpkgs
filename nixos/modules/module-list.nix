@@ -95,6 +95,7 @@
   ./programs/adb.nix
   ./programs/atop.nix
   ./programs/autojump.nix
+  ./programs/bandwhich.nix
   ./programs/bash/bash.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
@@ -159,7 +160,6 @@
   ./programs/wavemon.nix
   ./programs/way-cooler.nix
   ./programs/waybar.nix
-  ./programs/what.nix
   ./programs/wireshark.nix
   ./programs/x2goserver.nix
   ./programs/xfs_quota.nix
