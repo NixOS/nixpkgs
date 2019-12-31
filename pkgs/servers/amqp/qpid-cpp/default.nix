@@ -33,7 +33,7 @@ let
       sed -i '/management/d' CMakeLists.txt
     '';
 
-    NIX_CFLAGS_COMPILE = toString [
+    NIX_CFLAGS_COMPILE = toString ([
       "-Wno-error=deprecated-declarations"
       "-Wno-error=int-in-bool-context"
       "-Wno-error=maybe-uninitialized"
@@ -42,7 +42,7 @@ let
       "-Wno-error=catch-value"
     ] ++ stdenv.lib.optionals stdenv.cc.isGNU [
       "-Wno-error=deprecated-copy"
-    ];
+    ]);
   };
 
   python-frontend = buildPythonPackage {
