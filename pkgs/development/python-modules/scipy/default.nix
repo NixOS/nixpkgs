@@ -1,31 +1,48 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy}:
+{ lib
+, fetchFromGitHub
+, python
+, buildPythonPackage
+, gfortran
+, nose
+, pytest
+, numpy
+, cython
+, pybind11
+}:
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.3.3";
+  version = "1.4.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "64bf4e8ae0db2d42b58477817f648d81e77f0b381d0ea4427385bba3f959380a";
+  src = fetchFromGitHub {
+    owner = "scipy";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "14y8wz6xyp628jqakbwbbaxph6xq38pm45ivk228ss4w5nr1dksj";
   };
 
-  checkInputs = [ nose pytest ];
-  nativeBuildInputs = [ gfortran ];
-  buildInputs = [ numpy.blas ];
-  propagatedBuildInputs = [ numpy ];
+  nativeBuildInputs = [
+    gfortran
+    cython
+  ];
 
-  # Remove tests because of broken wrapper
-  prePatch = ''
-    rm scipy/linalg/tests/test_lapack.py
-  '';
+  buildInputs = [
+    numpy.blas
+    pybind11
+  ];
 
-  # INTERNALERROR, solved with https://github.com/scipy/scipy/pull/8871
-  # however, it does not apply cleanly.
-  doCheck = false;
+  checkInputs = [
+    nose
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   preConfigure = ''
-    sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
+    export HOME=$TMPDIR
   '';
 
   preBuild = ''
@@ -35,11 +52,9 @@ buildPythonPackage rec {
   enableParallelBuilding = true;
 
   checkPhase = ''
-    runHook preCheck
     pushd dist
     ${python.interpreter} -c 'import scipy; scipy.test("fast", verbose=10)'
     popd
-    runHook postCheck
   '';
 
   passthru = {
