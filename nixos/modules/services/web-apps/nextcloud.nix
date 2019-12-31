@@ -62,7 +62,7 @@ in {
     https = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable if there is a TLS terminating proxy in front of nextcloud.";
+      description = "Use https for generated links.";
     };
 
     maxUploadSize = mkOption {
