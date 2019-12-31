@@ -13,7 +13,7 @@ let
 
     unpackPhase = ''
       unpackFile $src
-      mv cfe-${version}* clang
+      mv clang-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
       mv clang-tools-extra-* $sourceRoot/tools/extra
