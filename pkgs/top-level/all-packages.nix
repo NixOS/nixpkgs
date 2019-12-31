@@ -20621,8 +20621,8 @@ in
   osmo = callPackage ../applications/office/osmo { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon {
-    # https://forum.palemoon.org/viewtopic.php?f=57&t=15296#p111146
-    stdenv = gcc49Stdenv;
+    # https://www.palemoon.org/sourcecode.shtml
+    stdenv = gcc7Stdenv;
   };
 
   pamix = callPackage ../applications/audio/pamix { };
