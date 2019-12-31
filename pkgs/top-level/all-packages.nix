@@ -9297,7 +9297,9 @@ in
 
   pew = callPackage ../development/tools/pew {};
 
-  poetry = with python3Packages; toPythonApplication poetry;
+  poetry = callPackage ../development/tools/poetry {
+    python = python3;
+  };
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
   };
