@@ -8,7 +8,6 @@
 , catch
 , numpy
 , eigen
-, scipy
 }:
 
 buildPythonPackage rec {
@@ -55,7 +54,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     numpy
-    scipy
+    # scipy not included due to recursive dependency
   ];
 
   meta = {
