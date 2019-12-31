@@ -4355,6 +4355,8 @@ in {
 
   cachetools = callPackage ../development/python-modules/cachetools {};
 
+  cma = callPackage ../development/python-modules/cma { };
+
   cmd2 = callPackage ../development/python-modules/cmd2 {};
 
   warlock = callPackage ../development/python-modules/warlock { };
