@@ -1,17 +1,17 @@
 { stdenv, lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
-stdenv.mkDerivation {
+let
+  env = bundlerEnv {
+    name = "maphosts-gems";
+    inherit ruby;
+    gemdir = ./.;
+  };
+in stdenv.mkDerivation {
   name = "maphosts-${env.gems.maphosts.version}";
 
   phases = ["installPhase"];
 
-  installPhase = let
-    env = bundlerEnv {
-      name = "maphosts-gems";
-      inherit ruby;
-      gemdir = ./.;
-    };
-  in ''
+  installPhase = ''
     mkdir -p "$out/bin"
     ln -s "${env}/bin/maphosts" "$out/bin/maphosts"
   '';
