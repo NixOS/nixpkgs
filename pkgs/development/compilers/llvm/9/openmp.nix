@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "openmp";
   inherit version;
 
-  src = fetch pname "0nrv9np134b7c483jnq786spy3hbpj11d7g21g67cqq66c8ynycr";
+  src = fetch pname "1knafnpp0f7hylx8q20lkd6g1sf0flly572dayc5d5kghh7hd52w";
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ llvm ];
