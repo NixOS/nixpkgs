@@ -45,6 +45,7 @@ in
   lenovo-thinkpad-x230 = buildProfile ./lenovo/thinkpad/x230;
   lenovo-thinkpad-x250 = buildProfile ./lenovo/thinkpad/x250;
   lenovo-thinkpad-x260 = buildProfile ./lenovo/thinkpad/x260;
+  lenovo-thinkpad-x280 = buildProfile ./lenovo/thinkpad/x280;
 
   microsoft-surface-pro-3 = buildProfile ./microsoft/surface-pro/3;
 

@@ -59,6 +59,7 @@ See code for all available configurations.
 | Lenovo ThinkPad X250              | `<nixos-hardware/lenovo/thinkpad/x250>`            |
 | [Lenovo ThinkPad X260][]          | `<nixos-hardware/lenovo/thinkpad/x260>`            |
 | Lenovo ThinkPad X270              | `<nixos-hardware/lenovo/thinkpad/x270>`            |
+| Lenovo ThinkPad X280              | `<nixos-hardware/lenovo/thinkpad/x280>`            |
 | [Lenovo ThinkPad X1 (6th Gen)][]  | `<nixos-hardware/lenovo/thinkpad/x1/6th-gen>`      |
 | Lenovo ThinkPad X1 Extreme Gen 2  | `<nixos-hardware/lenovo/thinkpad/x1-extreme/gen2>` |
 | [Microsoft Surface Pro 3][]       | `<nixos-hardware/microsoft/surface-pro/3>`         |
