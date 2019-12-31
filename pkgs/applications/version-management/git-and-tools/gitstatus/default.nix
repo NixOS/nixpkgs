@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ (callPackage ./romkatv_libgit2.nix {}) ];
   patchPhase = ''
-    sed -i "s|local daemon.*|local daemon=$out/bin/gitstatusd|" gitstatus.plugin.zsh
+    sed -i "s|local daemon=.*|local daemon=$out/bin/gitstatusd|" gitstatus.plugin.zsh
   '';
   installPhase = ''
     install -Dm755 gitstatusd $out/bin/gitstatusd
