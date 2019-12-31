@@ -316,12 +316,11 @@ in rec {
       checkedEnv = let
         envNames = lib.attrNames env;
         drvNames = lib.attrNames derivationArg;
-        isInvalidName = n: let v = env.${n}; in !(lib.isString v || lib.isBool v || lib.isInt v);
-        withType = n: let t = builtins.typeOf env.${n}; in "${n} (${t})";
       in
         assert lib.assertMsg (lib.mutuallyExclusive envNames drvNames) "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${lib.concatStringsSep ", " (lib.intersectLists envNames drvNames)}";
-        assert lib.assertMsg (!lib.any isInvalidName envNames) "The ‘env’ attribute set can only contain string, boolean or integer attributes. The following attributes are of different type: ${lib.concatStringsSep ", " (map withType (lib.filter isInvalidName envNames))}";
-        env;
+        lib.mapAttrs
+          (n: v: assert lib.assertMsg (lib.isString v || lib.isBool v || lib.isInt v) "The ‘env’ attribute set can only contain string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+          env;
 
     in
 
@@ -329,7 +328,7 @@ in rec {
         validity.handled
         ({
            overrideAttrs = f: mkDerivation (attrs // (f attrs));
-           inherit meta passthru;
+           inherit meta passthru env;
          } //
          # Pass through extra attributes that are not inputs, but
          # should be made available to Nix expressions using the
