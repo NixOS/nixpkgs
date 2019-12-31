@@ -27,6 +27,8 @@ let
     "riscv32-linux" "riscv64-linux"
 
     "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "powerpc-none" "msp430-none" "riscv64-none" "riscv32-none"
+
+    "js-ghcjs"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -45,6 +47,7 @@ in {
   x86_64  = filterDoubles predicates.isx86_64;
   mips    = filterDoubles predicates.isMips;
   riscv   = filterDoubles predicates.isRiscV;
+  js      = filterDoubles predicates.isJavaScript;
 
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
