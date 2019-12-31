@@ -88,6 +88,8 @@ in rec {
 
     , patches ? []
 
+    , env ? {}
+
     , ... } @ attrs:
 
     let
@@ -182,11 +184,12 @@ in rec {
 
       derivationArg =
         (removeAttrs attrs
-          ["meta" "passthru" "pos"
+          (["meta" "passthru" "pos"
            "checkInputs" "installCheckInputs"
            "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
-           "sandboxProfile" "propagatedSandboxProfile"])
+           "sandboxProfile" "propagatedSandboxProfile"]
+           ++ lib.optional (lib.isAttrs env) "env"))
         // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
           name = "${attrs.pname}-${attrs.version}";
         } // (lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version)))) {
@@ -310,6 +313,16 @@ in rec {
                        else true);
         };
 
+      checkedEnv = let
+        envNames = lib.attrNames env;
+        drvNames = lib.attrNames derivationArg;
+        isInvalidName = n: let v = env.${n}; in !(lib.isString v || lib.isBool v || lib.isInt v);
+        withType = n: let t = builtins.typeOf env.${n}; in "${n} (${t})";
+      in
+        assert lib.assertMsg (lib.mutuallyExclusive envNames drvNames) "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${lib.concatStringsSep ", " (lib.intersectLists envNames drvNames)}";
+        assert lib.assertMsg (!lib.any isInvalidName envNames) "The ‘env’ attribute set can only contain string, boolean or integer attributes. The following attributes are of different type: ${lib.concatStringsSep ", " (map withType (lib.filter isInvalidName envNames))}";
+        env;
+
     in
 
       lib.extendDerivation
@@ -322,6 +335,6 @@ in rec {
          # should be made available to Nix expressions using the
          # derivation (e.g., in assertions).
          passthru)
-        (derivation derivationArg);
+        (derivation (derivationArg // lib.optionalAttrs (lib.isAttrs env) checkedEnv));
 
 }
