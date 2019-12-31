@@ -24,7 +24,7 @@ in
 , doCheck ? !isCross && stdenv.lib.versionOlder "7.4" ghc.version
 , doBenchmark ? false
 , doHoogle ? true
-, doHaddockQuickjump ? doHoogle
+, doHaddockQuickjump ? doHoogle && stdenv.lib.versionAtLeast ghc.version "8.6"
 , editedCabalFile ? null
 , enableLibraryProfiling ? !(ghc.isGhcjs or false)
 , enableExecutableProfiling ? false
@@ -397,7 +397,7 @@ stdenv.mkDerivation ({
     ${optionalString (doHaddock && isLibrary) ''
       ${setupCommand} haddock --html \
         ${optionalString doHoogle "--hoogle"} \
-        ${optionalString (doHaddockQuickjump && stdenv.lib.versionAtLeast ghc.version "8.6") "--quickjump"} \
+        ${optionalString doHaddockQuickjump "--quickjump"} \
         ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
         ${stdenv.lib.concatStringsSep " " haddockFlags}
     ''}
