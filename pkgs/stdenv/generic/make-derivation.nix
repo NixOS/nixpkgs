@@ -182,6 +182,8 @@ in rec {
         lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
           (lib.concatLists propagatedDependencies));
 
+      envIsExportable = lib.isAttrs env && !lib.isDerivation env;
+
       derivationArg =
         (removeAttrs attrs
           (["meta" "passthru" "pos"
@@ -189,7 +191,7 @@ in rec {
            "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"]
-           ++ lib.optional (lib.isAttrs env) "env"))
+           ++ lib.optional envIsExportable "env"))
         // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
           name = "${attrs.pname}-${attrs.version}";
         } // (lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version)))) {
@@ -334,6 +336,6 @@ in rec {
          # should be made available to Nix expressions using the
          # derivation (e.g., in assertions).
          passthru)
-        (derivation (derivationArg // lib.optionalAttrs (lib.isAttrs env) checkedEnv));
+        (derivation (derivationArg // lib.optionalAttrs envIsExportable checkedEnv));
 
 }
