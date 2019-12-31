@@ -98,7 +98,7 @@ let
         outputHashAlgo = "sha256";
         outputHash = modSha256;
       }
-  )) // overrideModAttrs modArgs);
+  )) (overrideModAttrs modArgs));
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
