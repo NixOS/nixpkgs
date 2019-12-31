@@ -40,10 +40,8 @@ stdenv.mkDerivation {
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
     ++ stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
-  preInstall = ''
-    installFlags="TEXMF=$out/texmf-dist";
-    installTargets="install install-tex";
-  '';
+  installFlags = [ "TEXMF=$(out)/texmf-dist" ];
+  installTargets = [ "install" "install-tex" ];
 
   checkInputs = [ procps ];
 

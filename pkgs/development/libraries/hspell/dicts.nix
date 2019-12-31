@@ -3,12 +3,11 @@
 let
   dict = variant: a: stdenv.mkDerivation ({
     inherit (hspell) src patchPhase nativeBuildInputs;
+    buildFlags = [ variant ];
+
     meta = hspell.meta // {
       broken = true;
       description = "${variant} Hebrew dictionary";
-
-      buildFlags = [ variant ];
-
     } // (if a ? meta then a.meta else {});
   } // (removeAttrs a ["meta"]));
 in

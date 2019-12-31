@@ -81,8 +81,8 @@ appleDerivation ({
     export DSTROOT=$out
   '';
 
-  buildFlags = lib.optionalString headersOnly "exporthdrs";
-  installTargets = lib.optionalString headersOnly "installhdrs";
+  buildFlags = lib.optional headersOnly "exporthdrs";
+  installTargets = lib.optional headersOnly "installhdrs";
 
   postInstall = lib.optionalString headersOnly ''
     mv $out/usr/include $out

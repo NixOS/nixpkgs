@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cert-paths.patch ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   postPatch = ''
     # fix unprefixed ranlib (needed on cross)

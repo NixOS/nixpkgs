@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnum4 ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-deprecated" ];
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated";
 
   preInstall = ''
     install -d -m755 "$out"/lib

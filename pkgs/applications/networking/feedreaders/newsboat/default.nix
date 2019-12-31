@@ -31,8 +31,8 @@ rustPlatform.buildRustPackage rec {
     make
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=sign-compare" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare"
+    + stdenv.lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
 
   doCheck = true;
 

@@ -24,7 +24,7 @@
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
 , buildPhase ? "", preBuild ? "", postBuild ? ""
 , installPhase ? "", preInstall ? "", postInstall ? ""
-, installTargets ? "install install-docs"
+, installTargets ? [ "install" "install-docs" ]
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , fixupPhase ? "", preFixup ? "", postFixup ? ""
 , meta ? {}
@@ -141,7 +141,7 @@ in stdenv.mkDerivation ({
 // optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }
 // optionalAttrs (installPhase != "")   { inherit installPhase; }
-// optionalAttrs (installTargets != "") { inherit installTargets; }
+// optionalAttrs (installTargets != []) { inherit installTargets; }
 // optionalAttrs (preInstall != "")     { inherit preInstall; }
 // optionalAttrs (fixupPhase != "")     { inherit fixupPhase; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }

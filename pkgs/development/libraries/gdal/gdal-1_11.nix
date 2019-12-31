@@ -40,9 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Allow use of old proj_api.h
-  NIX_CFLAGS_COMPILE = [
-    "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1"
-  ];
+  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
 
   # Prevent this:
   #

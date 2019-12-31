@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   buildInputs = [ zlib mpg123 libogg libvorbis portaudio libsndfile flac ]
   ++ stdenv.lib.optional usePulseAudio libpulseaudio;
 
-  configureFlags = stdenv.lib.optional (!usePulseAudio) [ "--without-pulseaudio" ];
+  configureFlags = stdenv.lib.optional (!usePulseAudio) "--without-pulseaudio";
 
   meta = with stdenv.lib; {
     description = "A cross-platform command-line based module file player";

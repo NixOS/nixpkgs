@@ -11,12 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0rffpzxcak19k6cngpxn73khvm3z1gswrqs90ycdzzb53p05ddas";
   };
 
-  buildInputs = optional gifview [ xorgproto libXt libX11 ];
+  buildInputs = optionals gifview [ xorgproto libXt libX11 ];
 
-  configureFlags = []
-    ++ optional (!gifview) [ "--disable-gifview" ];
+  configureFlags = optional (!gifview) "--disable-gifview";
 
-  LDFLAGS = optional static "-static";
+  LDFLAGS = optionalString static "-static";
 
   doCheck = true;
   checkPhase = ''

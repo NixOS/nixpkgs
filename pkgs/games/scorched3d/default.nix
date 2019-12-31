@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-fftw=${fftwSinglePrec.dev}" ];
 
-  NIX_LDFLAGS = [ "-lopenal" ];
+  NIX_LDFLAGS = "-lopenal";
 
   meta = with stdenv.lib; {
     homepage = http://scorched3d.co.uk/;

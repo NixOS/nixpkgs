@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     "--pid=/run/unit/unit.pid"
     "--user=unit"
     "--group=unit"
-  ] ++ optional withSSL     [ "--openssl" ]
-    ++ optional (!withIPv6) [ "--no-ipv6" ]
-    ++ optional withDebug   [ "--debug" ];
+  ] ++ optional withSSL     "--openssl"
+    ++ optional (!withIPv6) "--no-ipv6"
+    ++ optional withDebug   "--debug";
 
   postConfigure = ''
     ${optionalString withPython2    "./configure python --module=python2  --config=${python2}/bin/python2-config  --lib-path=${python2}/lib"}

@@ -153,7 +153,7 @@ let
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
     ++ (import ../common/platform-flags.nix { inherit (stdenv) lib targetPlatform; })
-    ++ lib.optional (targetPlatform != hostPlatform) crossConfigureFlags
+    ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
 
     # Platform-specific flags

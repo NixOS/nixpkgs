@@ -52,9 +52,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # TODO: some issues with temporary files
 
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
   enableParallelBuilding = true;
 

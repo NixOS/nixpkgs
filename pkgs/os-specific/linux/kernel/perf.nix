@@ -46,13 +46,13 @@ stdenv.mkDerivation {
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
-  NIX_CFLAGS_COMPILE =
-    [ "-Wno-error=cpp"
-      "-Wno-error=bool-compare"
-      "-Wno-error=deprecated-declarations"
-      "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
-      "-Wno-error=stringop-truncation"
-    ];
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=cpp"
+    "-Wno-error=bool-compare"
+    "-Wno-error=deprecated-declarations"
+    "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
+    "-Wno-error=stringop-truncation"
+  ];
 
   doCheck = false; # requires "sparse"
   doInstallCheck = false; # same

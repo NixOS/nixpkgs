@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   # fix build on gcc7+
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=builtin-declaration-mismatch"
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=deprecated-copy"

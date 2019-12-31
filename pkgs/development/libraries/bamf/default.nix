@@ -88,9 +88,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [
-    "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
-  ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   meta = with stdenv.lib; {
     description = "Application matching framework";

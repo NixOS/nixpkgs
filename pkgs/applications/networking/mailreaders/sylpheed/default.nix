@@ -21,10 +21,8 @@ stdenv.mkDerivation rec {
     ++ optionals gpgSupport [ gpgme ]
     ++ optionals sslSupport [ openssl ];
 
-  configureFlags = [
-    (optional gpgSupport "--enable-gpgme")
-    (optional sslSupport "--enable-ssl")
-  ];
+  configureFlags = optional gpgSupport "--enable-gpgme"
+    ++ optional sslSupport "--enable-ssl";
 
   meta = {
     homepage = http://sylpheed.sraoss.jp/en/;

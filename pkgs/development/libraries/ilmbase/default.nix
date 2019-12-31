@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ automake autoconf libtool which ];
 
-  NIX_CFLAGS_LINK = [ "-pthread" ];
+  NIX_CFLAGS_LINK = "-pthread";
 
   patches = [
     ./bootstrap.patch
