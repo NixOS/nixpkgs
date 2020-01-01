@@ -96,6 +96,7 @@
   ./programs/atop.nix
   ./programs/autojump.nix
   ./programs/bash/bash.nix
+  ./programs/bash-my-aws.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
   ./programs/captive-browser.nix
