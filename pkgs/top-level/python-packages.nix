@@ -3160,6 +3160,8 @@ in {
 
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
+  django-postgresql-netfields = callPackage ../development/python-modules/django-postgresql-netfields { };
+
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
   django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
