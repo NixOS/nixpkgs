@@ -3,6 +3,8 @@
 , gsmlib
 , lua
 , curl
+, libmysqlclient
+, postgresql
 }:
 
 let
@@ -101,6 +103,11 @@ in
     silk = mk "codecs/mod_silk" [];
     siren = mk "codecs/mod_siren" [];
     theora = mk "codecs/mod_theora" [];
+  };
+
+  databases = {
+    mariadb = mk "databases/mod_mariadb" [ libmysqlclient ];
+    pgsql = mk "databases/mod_pgsql" [ postgresql ];
   };
 
   dialplans = {

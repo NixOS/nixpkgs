@@ -1,18 +1,20 @@
-{ fetchurl, stdenv, lib, ncurses, curl, pkgconfig, gnutls, readline
+{ fetchFromGitHub, stdenv, lib, pkgconfig, autoreconfHook
+, ncurses, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre
-, ldns, libedit, yasm, which, lua, libopus, libsndfile, libtiff
-, libctb, gsmlib
+, ldns, libedit, yasm, which, libsndfile, libtiff
 
-, modules ? null
-, postgresql
-, enablePostgres ? true
+, curl, lua, libmysqlclient, postgresql, libopus, libctb, gsmlib
 
 , SystemConfiguration
+
+, modules ? null
 }:
 
 let
 
-availableModules = import ./modules.nix { inherit curl lua libopus libctb gsmlib; };
+availableModules = import ./modules.nix {
+  inherit curl lua libmysqlclient postgresql libopus libctb gsmlib;
+};
 
 # the default list from v1.8.7, except with applications/mod_signalwire also disabled
 defaultModules = mods: with mods; [
@@ -40,6 +42,9 @@ defaultModules = mods: with mods; [
   codecs.g729
   codecs.h26x
   codecs.opus
+
+  databases.mariadb
+  databases.pgsql
 
   dialplans.asterisk
   dialplans.xml
@@ -83,11 +88,13 @@ modulesConf = let
 in
 
 stdenv.mkDerivation rec {
-  name = "freeswitch-1.8.7";
-
-  src = fetchurl {
-    url = "https://files.freeswitch.org/freeswitch-releases/${name}.tar.bz2";
-    sha256 = "0k52mxdfc5w9fdnz8kvfjiwnnjjhnpkirnyrfkhq7bad84m731z4";
+  pname = "freeswitch";
+  version = "1.10.2";
+  src = fetchFromGitHub {
+    owner = "signalwire";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1fmrm51zgrasjbmhs0pzb1lyca3ddx0wd35shvxnkjnifi8qd1h7";
   };
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
@@ -95,23 +102,21 @@ stdenv.mkDerivation rec {
       --replace AS=\''${AS} AS=yasm
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
     openssl ncurses gnutls readline perl libjpeg
     sqlite pcre speex ldns libedit yasm which
     libsndfile libtiff
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
-  ++ lib.optionals enablePostgres [ postgresql ]
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = lib.optionals enablePostgres [ "--enable-core-pgsql-support" ];
-
   preConfigure = ''
+    ./bootstrap.sh
     cp "${modulesConf}" modules.conf
   '';
 
