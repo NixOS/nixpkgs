@@ -1,4 +1,18 @@
+{ fetchurl, stdenv, lib, ncurses, curl, pkgconfig, gnutls, readline
+, openssl, perl, sqlite, libjpeg, speex, pcre
+, ldns, libedit, yasm, which, lua, libopus, libsndfile, libtiff
+, libctb, gsmlib
+
+, modules ? null
+, postgresql
+, enablePostgres ? true
+
+, SystemConfiguration
+}:
+
 let
+
+availableModules = import ./modules.nix { inherit curl lua libopus libctb gsmlib; };
 
 # the default list from v1.8.7, except with applications/mod_signalwire also disabled
 defaultModules = mods: with mods; [
@@ -57,26 +71,9 @@ defaultModules = mods: with mods; [
   xml_int.cdr
   xml_int.rpc
   xml_int.scgi
-];
+] ++ lib.optionals stdenv.isLinux [ endpoints.gsmopen ];
 
-in
-
-{ fetchurl, stdenv, lib, ncurses, curl, pkgconfig, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre
-, ldns, libedit, yasm, which, lua, libopus, libsndfile, libtiff
-
-, modules ? defaultModules
-, postgresql
-, enablePostgres ? true
-
-, SystemConfiguration
-}:
-
-let
-
-availableModules = import ./modules.nix { inherit curl lua libopus; };
-
-enabledModules = modules availableModules;
+enabledModules = (if modules != null then modules else defaultModules) availableModules;
 
 modulesConf = let
   lst = builtins.map (mod: mod.path) enabledModules;
@@ -127,7 +124,7 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = https://freeswitch.org/;
     license = stdenv.lib.licenses.mpl11;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ misuzu ];
     platforms = with stdenv.lib.platforms; unix;
   };
 }
