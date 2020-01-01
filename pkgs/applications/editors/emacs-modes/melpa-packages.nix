@@ -296,7 +296,10 @@ let
 
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
-          buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+          buildInputs = old.buildInputs ++ [
+            pkgs.tdlib
+            (pkgs.callPackage ./telega/libtgvoip.nix {})
+          ];
           nativeBuildInputs = [ pkgs.pkg-config ];
 
           postPatch = ''
@@ -310,6 +313,7 @@ let
           '';
 
           postBuild = ''
+            export WITH_VOIP=t
             cd source/server
             make
             cd -
