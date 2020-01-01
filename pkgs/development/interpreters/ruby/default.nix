@@ -12,7 +12,8 @@ let
   opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
+  inherit (import ./rubygems { inherit stdenv lib fetchurl; })
+    rubygems_3_0 rubygems_3_1;
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -23,7 +24,7 @@ let
     then "$out/bin/ruby"
     else "${buildPackages.ruby}/bin/ruby";
 
-  generic = { version, sha256 }: let
+  generic = { version, sha256, rubygems }: let
     ver = version;
     tag = ver.gitTag;
     atLeast25 = lib.versionAtLeast ver.majMin "2.5";
@@ -236,6 +237,7 @@ in {
       src = "1bn6n5b920qy3lsx99jr8495jkc3sg89swgb96d5fgd579g6p6zr";
       git = "066kb1iki7mx7qkm10xhj5b6v8s47wg68v43l3nc36y2hyim1w2c";
     };
+    rubygems = rubygems_3_0;
   };
 
   ruby_2_5 = generic {
@@ -244,6 +246,7 @@ in {
       src = "1m6nmnj9shifp8g3yh7aimac01vl035bzcc19x2spdji6ig0sb8b";
       git = "0wppf82c9ccdbnvj30mppr5a3mc7sxm05diahjdw7hhk29n43knp";
     };
+    rubygems = rubygems_3_0;
   };
 
   ruby_2_6 = generic {
@@ -252,6 +255,7 @@ in {
       src = "0zgdrgylq6avbblf78kpaf0k2xnkpc3jng3wkd7x67ycdrqnp5v6";
       git = "0pay6ic22ag3bnvxffhgwp7z6clkd0p93944a1l4lvc5hxc8v77j";
     };
+    rubygems = rubygems_3_0;
   };
 
   ruby_2_7 = generic {
@@ -260,5 +264,6 @@ in {
       src = "1glc3zpnih6h8mrgfcak0aa7cgmi4zyvxfyi6y2brwg2nn9sm6cc";
       git = "11iz64k95czs273mb10195d1j75mmbcgddfdx1vay5876ffw81dq";
     };
+    rubygems = rubygems_3_1;
   };
 }

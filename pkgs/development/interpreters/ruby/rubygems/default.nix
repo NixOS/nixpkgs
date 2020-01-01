@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl }:
 
-stdenv.mkDerivation rec {
+let generic = { version, sha256 }: stdenv.mkDerivation {
   name = "rubygems";
-  version = "3.1.2";
+  inherit version;
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    sha256 = "0h7ij4jpj8rgnpkl63cwh2lnav73pw5wpfqra3va7077lsyadlgd";
+    inherit sha256;
   };
 
   patches = [
@@ -26,5 +26,15 @@ stdenv.mkDerivation rec {
     homepage = https://rubygems.org/;
     license = with licenses; [ mit /* or */ ruby ];
     maintainers = with maintainers; [ qyliss zimbatm ];
+  };
+};
+in {
+  rubygems_3_0 = generic {
+    version = "3.0.6";
+    sha256 = "1ca1i4xmggizr59m6p28gprlvshczsbx30q8iyzxb2vj4jn8arzx";
+  };
+  rubygems_3_1 = generic {
+    version = "3.1.2";
+    sha256 = "0h7ij4jpj8rgnpkl63cwh2lnav73pw5wpfqra3va7077lsyadlgd";
   };
 }
