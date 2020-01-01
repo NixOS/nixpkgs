@@ -5011,6 +5011,8 @@ in {
 
   python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
+  python-miio = callPackage ../development/python-modules/python-miio { };
+
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
