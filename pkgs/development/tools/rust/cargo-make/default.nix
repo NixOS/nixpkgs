@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.24.3";
+  version = "0.25.0";
 
   src =
     let
@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
         owner = "sagiegurari";
         repo = pname;
         rev = version;
-        sha256 = "1wcpk8b41v7j2z3vnn0nz18kkw4cm18k0qrnmn89h9cp5lpzfh8r";
+        sha256 = "1dvn3sjvvlllj99a94jl6yvdkv3a5qrrn3drdnx2s0v1w4djl5z4";
       };
     in
     runCommand "cargo-make-src" {} ''
