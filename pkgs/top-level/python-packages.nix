@@ -2772,6 +2772,8 @@ in {
 
   lpod = callPackage ../development/python-modules/lpod { };
 
+  lupa = callPackage ../development/python-modules/lupa { };
+
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
