@@ -224,7 +224,7 @@ rec {
       name = "attrs";
       description = "attribute set";
       check = isAttrs;
-      merge = loc: foldl' (res: def: mergeAttrs res def.value) {};
+      merge = lib.recursiveUpdate;
     };
 
     # derivation is a reserved keyword.
