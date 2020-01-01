@@ -66,7 +66,7 @@ in
         type = types.package;
         default = pkgs.redmine;
         description = "Which Redmine package to use.";
-        example = "pkgs.redmine.override { ruby = pkgs.ruby_2_4; }";
+        example = "pkgs.redmine.override { ruby = pkgs.ruby_2_7; }";
       };
 
       user = mkOption {
