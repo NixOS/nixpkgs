@@ -3,7 +3,7 @@
 let
   description = "A note-taking application that knows programmers and Markdown better";
 in mkDerivation rec {
-  version = "2.8.1";
+  version = "2.8.2";
   pname = "vnote";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ in mkDerivation rec {
     repo = "vnote";
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "0yb33rpmgnl3b3jbbxfr3zwxnx9p3shmfliw1i337aqjspbk8a9v";
+    sha256 = "18qffq5c2plr5rjb5lafhdz1v5kbbb2wiyacgdhh3xni3khni52l";
   };
 
   nativeBuildInputs = [ qmake ];
