@@ -13219,6 +13219,8 @@ in
 
   microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
 
+  micronucleus = callPackage ../development/tools/misc/micronucleus { };
+
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
   minizip = callPackage ../development/libraries/minizip { };
