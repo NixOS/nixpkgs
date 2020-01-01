@@ -19,14 +19,14 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "101.1";
+  version = "102";
   buildVersion = makeBuildVersion version;
 
   src = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "1rbsc8srg2a0mjhi3w6p3q94f7nifqp3w4x565g4g9fq5ksfrsmi";
+    sha256 = "0g4zy2zlynv6f427pq1ngnl0zpr6nnih10wd2l8vl9bxwzjygwdr";
   };
 
   desktopItem = makeDesktopItem {
@@ -65,7 +65,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1ydkpj48vy7pnhhmhbjr8kbf71dm6zzb45mc18xfamaji4jc3m38";
+    outputHash = "1sscxrr32f2agwz34pm491xqkz7m4bwdc1p3g64kcnl3p6rg7r7k";
   };
 
 in stdenv.mkDerivation rec {
