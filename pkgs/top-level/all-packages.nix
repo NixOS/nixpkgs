@@ -12216,6 +12216,8 @@ in
 
   libcredis = callPackage ../development/libraries/libcredis { };
 
+  libctb = callPackage ../development/libraries/libctb { };
+
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
   libcouchbase = callPackage ../development/libraries/libcouchbase { };
