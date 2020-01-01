@@ -809,6 +809,8 @@ in {
 
   markerlib = callPackage ../development/python-modules/markerlib { };
 
+  markuppy = callPackage ../development/python-modules/markuppy { };
+
   matchpy = callPackage ../development/python-modules/matchpy { };
 
   maxminddb = callPackage ../development/python-modules/maxminddb { };
