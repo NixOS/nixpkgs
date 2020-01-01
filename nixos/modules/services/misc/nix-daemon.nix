@@ -479,21 +479,15 @@ in
 
     services.xserver.displayManager.hiddenUsers = map ({ name, ... }: name) nixbldUsers;
 
-    # FIXME: use systemd-tmpfiles to create Nix directories.
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
-        # Nix initialisation.
-        install -m 0755 -d \
-          /nix/var/nix/gcroots \
-          /nix/var/nix/temproots \
-          /nix/var/nix/userpool \
-          /nix/var/nix/profiles \
-          /nix/var/nix/db \
-          /nix/var/log/nix/drvs
-        install -m 1777 -d \
-          /nix/var/nix/gcroots/per-user \
-          /nix/var/nix/profiles/per-user \
-          /nix/var/nix/gcroots/tmp
+        # Create directories in /nix.
+        ${nix}/bin/nix ping-store --no-net
+
+        # Subscribe the root user to the NixOS channel by default.
+        if [ ! -e "/root/.nix-channels" ]; then
+            echo "${config.system.defaultChannel} nixos" > "/root/.nix-channels"
+        fi
       '';
 
     nix.systemFeatures = mkDefault (
