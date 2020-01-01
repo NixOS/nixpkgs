@@ -24741,6 +24741,8 @@ in
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
+  m64py = libsForQt5.callPackage ../misc/emulators/m64py { };
+
   muse = callPackage ../applications/audio/muse { };
 
   musly = callPackage ../applications/audio/musly { };
