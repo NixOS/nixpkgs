@@ -1,4 +1,6 @@
 { libopus
+, libctb
+, gsmlib
 , lua
 , curl
 }:
@@ -114,7 +116,7 @@ in
   endpoints = {
     alsa = mk "endpoints/mod_alsa" [];
     dingaling = mk "endpoints/mod_dingaling" [];
-    gsmopen = mk "endpoints/mod_gsmopen" [];
+    gsmopen = mk "endpoints/mod_gsmopen" [ gsmlib libctb ];
     h323 = mk "endpoints/mod_h323" [];
     khomp = mk "endpoints/mod_khomp" [];
     loopback = mk "endpoints/mod_loopback" [];
