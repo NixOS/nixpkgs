@@ -7,7 +7,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "juzzlin";
     repo = pname;
-    rev = "refs/tags/${version}";
+    rev = version;
     sha256 = "1gw4w6cvr3vb4zdb1kq8gwmadh2lb0jd0bd2hc7cw2d5kdbjaln7";
   };
 
