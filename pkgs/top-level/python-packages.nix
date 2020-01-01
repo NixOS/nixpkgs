@@ -3277,6 +3277,8 @@ in {
 
   exifread = callPackage ../development/python-modules/exifread { };
 
+  fakeredis = callPackage ../development/python-modules/fakeredis { };
+
   fastimport = callPackage ../development/python-modules/fastimport { };
 
   fastpair = callPackage ../development/python-modules/fastpair { };
