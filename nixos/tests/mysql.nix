@@ -27,6 +27,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       {
         users.users.testuser = { };
+        users.users.testuser2 = { };
         services.mysql.enable = true;
         services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
           ALTER USER root@localhost IDENTIFIED WITH unix_socket;
@@ -34,11 +35,16 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           DELETE FROM mysql.user WHERE user = ''';
           FLUSH PRIVILEGES;
         '';
-        services.mysql.ensureDatabases = [ "testdb" ];
+        services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
         services.mysql.ensureUsers = [{
           name = "testuser";
           ensurePermissions = {
             "testdb.*" = "ALL PRIVILEGES";
+          };
+        } {
+          name = "testuser2";
+          ensurePermissions = {
+            "testdb2.*" = "ALL PRIVILEGES";
           };
         }];
         services.mysql.package = pkgs.mariadb;
@@ -47,7 +53,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    start_all
+    start_all()
 
     mysql.wait_for_unit("mysql")
     mysql.succeed("echo 'use empty_testdb;' | mysql -u root")
@@ -61,6 +67,14 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     )
     mariadb.succeed(
         "echo 'use testdb; insert into tests values (42);' | sudo -u testuser mysql -u testuser"
+    )
+    # Ensure testuser2 is not able to insert into testdb as mysql testuser2
+    mariadb.fail(
+        "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 mysql -u testuser2"
+    )
+    # Ensure testuser2 is not able to authenticate as mysql testuser
+    mariadb.fail(
+        "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 mysql -u testuser"
     )
     mariadb.succeed(
         "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 42"

@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "09kcyvhnhf5qsaivgrw58l9jh48rx40i9lkf10cpmk7jvqxgqyks";
+    rev = "f9da7f7d58da3ead2aaba6a519c554d1b199c158"; # 0.7.1 on crates.io
+    sha256 = "0k662wq2m3xfnzkkrsiv5h2m9y3l44fr3gab933ggrdgj2xydqnh";
   };
 
   cargoSha256 = "0bdxlbl33kilp9ai40dvdzlx9vcl8r21br82r5ljs2pg521jd66p";
@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 marsam ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 
   passthru = {

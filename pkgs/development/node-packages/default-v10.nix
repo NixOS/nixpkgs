@@ -31,6 +31,10 @@ nodePackages // {
     '';
   };
 
+  bitwarden-cli = pkgs.lib.overrideDerivation nodePackages."@bitwarden/cli" (drv: {
+    name = "bitwarden-cli-${drv.version}";
+  });
+
   ios-deploy = nodePackages.ios-deploy.override (drv: {
     nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.buildPackages.rsync ];
     preRebuild = ''
@@ -93,10 +97,6 @@ nodePackages // {
       makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
         --add-flags "$out/lib/node_modules/tedicross/main.js"
     '';
-  };
-
-  texlab-citeproc-build-deps = nodePackages."texlab-citeproc-build-deps-../tools/misc/texlab/citeproc".override {
-    buildInputs = stdenv.lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
   };
 
   webtorrent-cli = nodePackages.webtorrent-cli.override {

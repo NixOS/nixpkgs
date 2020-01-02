@@ -770,7 +770,7 @@ in
 
   bitwarden = callPackage ../tools/security/bitwarden { };
 
-  bitwarden-cli = callPackage ../tools/security/bitwarden-cli { };
+  inherit (nodePackages) bitwarden-cli;
 
   bitwarden_rs = callPackage ../tools/security/bitwarden_rs {
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
@@ -3791,6 +3791,8 @@ in
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
 
+  gsmlib = callPackage ../development/libraries/gsmlib { };
+
   gssdp = callPackage ../development/libraries/gssdp { };
 
   gt5 = callPackage ../tools/system/gt5 { };
@@ -5815,7 +5817,8 @@ in
 
   prototypejs = callPackage ../development/libraries/prototypejs { };
 
-  proxmark3 = callPackage ../tools/security/proxmark3 { };
+  inherit (callPackages ../tools/security/proxmark3 { gcc-arm-embedded = gcc-arm-embedded-8; })
+    proxmark3 proxmark3-unstable;
 
   proxychains = callPackage ../tools/networking/proxychains { };
 
@@ -9382,6 +9385,7 @@ in
   rubyPackages_2_4 = recurseIntoAttrs ruby_2_4.gems;
   rubyPackages_2_5 = recurseIntoAttrs ruby_2_5.gems;
   rubyPackages_2_6 = recurseIntoAttrs ruby_2_6.gems;
+  rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
 
   mruby = callPackage ../development/compilers/mruby { };
 
@@ -10594,7 +10598,6 @@ in
 
   texlab = callPackage ../development/tools/misc/texlab {
     inherit (darwin.apple_sdk.frameworks) Security;
-    inherit (nodePackages) texlab-citeproc-build-deps;
   };
 
   tflint = callPackage ../development/tools/analysis/tflint { };
@@ -12222,6 +12225,8 @@ in
   libcollectdclient = callPackage ../development/libraries/libcollectdclient { };
 
   libcredis = callPackage ../development/libraries/libcredis { };
+
+  libctb = callPackage ../development/libraries/libctb { };
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
@@ -18601,6 +18606,7 @@ in
 
   emacs26-nox = lowPrio (appendToName "nox" (emacs26.override {
     withX = false;
+    withNS = false;
     withGTK2 = false;
     withGTK3 = false;
   }));
@@ -19301,6 +19307,8 @@ in
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
   hashit = callPackage ../tools/misc/hashit { };
+
+  heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
   hello-unfree = callPackage ../applications/misc/hello-unfree { };
@@ -20595,8 +20603,8 @@ in
   osmo = callPackage ../applications/office/osmo { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon {
-    # https://forum.palemoon.org/viewtopic.php?f=57&t=15296#p111146
-    stdenv = gcc49Stdenv;
+    # https://www.palemoon.org/sourcecode.shtml
+    stdenv = gcc7Stdenv;
   };
 
   pamix = callPackage ../applications/audio/pamix { };
@@ -25707,5 +25715,7 @@ in
   gortr = callPackage ../servers/gortr {};
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
+
+  kcli = callPackage ../development/tools/kcli {};
 
 }

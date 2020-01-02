@@ -1471,6 +1471,12 @@
     githubId = 143982;
     name = "Charles Strahan";
   };
+  cswank = {
+    email = "craigswank@gmail.com";
+    github = "cswank";
+    githubId = 490965;
+    name = "Craig Swank";
+  };
   cwoac = {
     email = "oliver@codersoffortune.net";
     github = "cwoac";
@@ -4846,6 +4852,12 @@
     githubId = 69918;
     name = "Stefan Dorn";
   };
+  multun = {
+    email = "victor.collod@epita.fr";
+    github = "multun";
+    githubId = 5047140;
+    name = "Victor Collod";
+  };
   mvnetbiz = {
     email = "mvnetbiz@gmail.com";
     github = "mvnetbiz";
@@ -5821,6 +5833,12 @@
     email = "rickynils@gmail.com";
     github = "rickynils";
     name = "Rickard Nilsson";
+  };
+  rika = {
+    email = "rika@paymentswit.ch";
+    github = "NekomimiScience";
+    githubId = 1810487;
+    name = "Rika";
   };
   rileyinman = {
     email = "rileyminman@gmail.com";

@@ -763,6 +763,8 @@ in {
 
   jira = callPackage ../development/python-modules/jira { };
 
+  junitparser = callPackage ../development/python-modules/junitparser { };
+
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
@@ -3166,6 +3168,8 @@ in {
 
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
+  django-postgresql-netfields = callPackage ../development/python-modules/django-postgresql-netfields { };
+
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
   django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
@@ -4538,6 +4542,12 @@ in {
   }));
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
+
+  prox-tv = callPackage ../development/python-modules/prox-tv {
+    # We need to use blas instead of openblas on darwin,
+    # see https://github.com/NixOS/nixpkgs/pull/45013.
+    useOpenblas = ! stdenv.isDarwin;
+  };
 
   pvlib = callPackage ../development/python-modules/pvlib { };
 
