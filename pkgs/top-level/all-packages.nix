@@ -15959,6 +15959,8 @@ in
 
   coredns = callPackage ../servers/dns/coredns { };
 
+  corerad = callPackage ../tools/networking/corerad { };
+
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
   cpuset = callPackage ../os-specific/linux/cpuset { };
