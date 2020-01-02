@@ -1471,6 +1471,12 @@
     githubId = 143982;
     name = "Charles Strahan";
   };
+  cswank = {
+    email = "craigswank@gmail.com";
+    github = "cswank";
+    githubId = 490965;
+    name = "Craig Swank";
+  };
   cwoac = {
     email = "oliver@codersoffortune.net";
     github = "cwoac";
