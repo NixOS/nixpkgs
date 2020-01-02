@@ -17,7 +17,7 @@ buildGoModule rec {
     description = "A rule-based tunnel in Go";
     homepage = "https://github.com/Dreamacro/clash";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ contrun ];
+    maintainers = with maintainers; [ contrun filalex77 ];
     platforms = platforms.all;
   };
 }
