@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     # Run single threaded
     export OMP_NUM_THREADS=1
 
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
   '';
 
   meta = with stdenv.lib; {

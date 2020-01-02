@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # autotools check tries to dlopen libpython as a requirement for the python plugin
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${python}/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${python}/lib
   '';
 
   postPatch = ''
