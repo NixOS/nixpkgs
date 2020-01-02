@@ -25718,4 +25718,6 @@ in
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
+  kcli = callPackage ../development/tools/kcli {};
+
 }
