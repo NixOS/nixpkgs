@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   # dependency on `libtcam` (which itself is built as part of this build). In order to allow
   # that, we set the dynamic linker's path to point on the build time location of the library.
   preBuild = ''
-    export LD_LIBRARY_PATH=$PWD/src:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$PWD/src''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
   meta = with lib; {

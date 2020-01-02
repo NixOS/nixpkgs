@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ]; # headers are just two and very small
 
   preConfigure = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:"`pwd`/build/src
+    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}"`pwd`/build/src
   '' else ''
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:"`pwd`/build/src
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}"`pwd`/build/src
   '';
 
   nativeBuildInputs = [ cmake ];

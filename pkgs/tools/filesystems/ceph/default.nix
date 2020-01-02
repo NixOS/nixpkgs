@@ -132,7 +132,7 @@ in rec {
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
 
       # for pybind/rgw to find internal dep
-      export LD_LIBRARY_PATH="$PWD/build/lib:$LD_LIBRARY_PATH"
+      export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
 
       patchShebangs src/script src/spdk src/test src/tools

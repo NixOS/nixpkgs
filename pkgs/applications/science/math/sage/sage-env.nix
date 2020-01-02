@@ -177,7 +177,7 @@ writeTextFile rec {
     export SAGE_EXTCODE='${sagelib.src}/src/ext'
 
   # for find_library
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}:$DYLD_LIBRARY_PATH"
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
 } // {
   lib = sagelib; # equivalent of `passthru`, which `writeTextFile` doesn't support
