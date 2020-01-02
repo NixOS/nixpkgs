@@ -45,6 +45,7 @@ let
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
     configureScript = {
+        armv5tel-linux = "./Configure linux-armv4 -march=armv5te";
         armv6l-linux = "./Configure linux-armv4 -march=armv6";
         armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
         x86_64-darwin  = "./Configure darwin64-x86_64-cc";
