@@ -3,31 +3,23 @@
 , fetchFromGitHub
 , nodejs
 , Security
-, texlab-citeproc-build-deps
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0b9lw6cmh7gyzj0pb3ghvqc3q7lzl12bfg9pjhl31lib3mmga8yb";
+    # 1.9.0 + patches for building citeproc-db, see https://github.com/latex-lsp/texlab/pull/137
+    rev = "e38fe4bedc9d8094649a9d2753ca9855e0c18882";
+    sha256 = "0j87gmzyqrpgxrgalvlfqj5cj8j0h23hbbv8vdz2dhc847xhhfq1";
   };
 
-  cargoSha256 = "0qnysl0ayc242dgvanqgmx8v4a2cjg0f1lhbyw16qjv61qcsx8y5";
-
-  nativeBuildInputs = [ nodejs ];
+  cargoSha256 = "09d9r7aal1q00idv08zdw7dygyasyp5l6jrh96cdclf63h1p4fk9";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-  preBuild = ''
-    rm build.rs
-    ln -s ${texlab-citeproc-build-deps}/lib/node_modules/citeproc/node_modules src/citeproc/js
-    (cd src/citeproc/js && npm run dist)
-  '';
 
   meta = with stdenv.lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";

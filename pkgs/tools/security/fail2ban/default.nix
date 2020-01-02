@@ -47,6 +47,10 @@ python3.pkgs.buildPythonApplication {
     ${python3.interpreter} setup.py install_data --install-dir=$out --root=$out
   '';
 
+  postPatch = ''
+    ${stdenv.shell} ./fail2ban-2to3
+  '';
+
   postInstall = let
     sitePackages = "$out/${python3.sitePackages}";
   in ''

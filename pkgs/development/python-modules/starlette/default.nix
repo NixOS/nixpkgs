@@ -9,11 +9,13 @@
 , pyyaml
 , requests
 , ujson
+, python-multipart
 , pytest
-, python
 , uvicorn
 , isPy27
 , darwin
+, databases
+, aiosqlite
 }:
 
 buildPythonPackage rec {
@@ -35,13 +37,17 @@ buildPythonPackage rec {
     requests
     ujson
     uvicorn
+    python-multipart
+    databases
   ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
 
+  checkInputs = [
+    pytest
+    aiosqlite
+  ];
+
   checkPhase = ''
-    ${python.interpreter} -c """
-from starlette.applications import Starlette
-app = Starlette(debug=True)
-"""
+    pytest --ignore=tests/test_graphql.py
   '';
 
   meta = with lib; {

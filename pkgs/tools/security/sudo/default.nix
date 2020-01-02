@@ -5,14 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.29";
+  pname = "sudo";
+  version = "1.8.30";
 
   src = fetchurl {
-    urls =
-      [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
-        "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
-      ];
-    sha256 = "0z4wyadh9cks17gdpfgx4kvbrlnyb6nai2sd6chk7qh4jsngylyf";
+    url = "ftp://ftp.sudo.ws/pub/sudo/${pname}-${version}.tar.gz";
+    sha256 = "1rvrqlqrrjsd06dczgj9cwjdkpkqil5zzlwh87h06ms6qzfx6nm3";
   };
 
   prePatch = ''
@@ -41,15 +39,6 @@ stdenv.mkDerivation rec {
     "--with-passprompt=[sudo] password for %p: "  # intentional trailing space
   ];
 
-  installFlags = [
-    "sudoers_uid=$(shell id -u)"
-    "sudoers_gid=$(shell id -g)"
-    "sysconfdir=${placeholder ''out''}/etc"
-    "rundir=$(TMPDIR)/dummy"
-    "vardir=$(TMPDIR)/dummy"
-    "DESTDIR=/"
-  ];
-
   postConfigure =
     ''
     cat >> pathnames.h <<'EOF'
@@ -57,6 +46,7 @@ stdenv.mkDerivation rec {
       #define _PATH_MV "${coreutils}/bin/mv"
     EOF
     makeFlags="install_uid=$(id -u) install_gid=$(id -g)"
+    installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy DESTDIR=/"
     '';
 
   nativeBuildInputs = [ groff ];

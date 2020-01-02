@@ -44,4 +44,8 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit ];
   };
 
+  passthru = { 
+    shellPath = "/bin/pwsh"; 
+  };
+
 }

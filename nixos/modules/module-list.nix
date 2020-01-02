@@ -95,6 +95,7 @@
   ./programs/adb.nix
   ./programs/atop.nix
   ./programs/autojump.nix
+  ./programs/bandwhich.nix
   ./programs/bash/bash.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
@@ -691,6 +692,8 @@
   ./services/networking/skydns.nix
   ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
+  ./services/networking/shorewall.nix
+  ./services/networking/shorewall6.nix
   ./services/networking/shout.nix
   ./services/networking/sniproxy.nix
   ./services/networking/smokeping.nix

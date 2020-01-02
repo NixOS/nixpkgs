@@ -308,6 +308,7 @@ in {
 
                 if [ "$2" != "up" ]; then
                     logger "exit: event $2 != up"
+                    exit
                 fi
 
                 # coreutils and iproute are in PATH too

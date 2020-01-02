@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , mock
 , bokeh
@@ -13,6 +13,7 @@
 , mxnet
 , scikit-optimize
 , tensorflow
+, cma
 , sqlalchemy
 , numpy
 , scipy
@@ -21,6 +22,7 @@
 , colorlog
 , pandas
 , alembic
+, tqdm
 , typing
 , pythonOlder
 , isPy27
@@ -31,9 +33,11 @@ buildPythonPackage rec {
   version = "0.19.0";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cbcdc826915dd07f7df723bec0dd3edd5e61e54c40e7a8b023e19d4434eef602";
+  src = fetchFromGitHub {
+    owner = "optuna";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "179x2lsckpmkrkkdnvvbzky86g1ba882z677qwbayhsc835wbp0y";
   };
 
   checkInputs = [
@@ -49,6 +53,7 @@ buildPythonPackage rec {
     mxnet
     scikit-optimize
     tensorflow
+    cma
   ];
 
   propagatedBuildInputs = [
@@ -60,16 +65,22 @@ buildPythonPackage rec {
     colorlog
     pandas
     alembic
-  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
+    tqdm
+  ] ++ lib.optionals (pythonOlder "3.5") [
+    typing
+  ];
 
   configurePhase = if !(pythonOlder "3.5") then ''
     substituteInPlace setup.py \
-      --replace "'typing'" ""
+      --replace "'typing'," ""
   '' else "";
 
   checkPhase = ''
     pytest --ignore tests/test_cli.py \
-           --ignore tests/integration_tests/test_chainermn.py
+           --ignore tests/integration_tests/test_chainermn.py \
+           --ignore tests/integration_tests/test_pytorch_lightning.py \
+           --ignore tests/integration_tests/test_pytorch_ignite.py \
+           --ignore tests/integration_tests/test_fastai.py
   '';
 
   meta = with lib; {
