@@ -17051,6 +17051,7 @@ in
     ubootTools
     ubootA20OlinuxinoLime
     ubootBananaPi
+    ubootBananaPim3
     ubootBananaPim64
     ubootBeagleboneBlack
     ubootClearfog
