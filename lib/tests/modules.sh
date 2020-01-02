@@ -164,6 +164,24 @@ checkConfigOutput "true" config.enableAlias ./alias-with-priority.nix
 checkConfigOutput "false" config.enable ./alias-with-priority-can-override.nix
 checkConfigOutput "false" config.enableAlias ./alias-with-priority-can-override.nix
 
+# submoduleWith
+
+## specialArgs should work
+checkConfigOutput "foo" config.submodule.foo ./declare-submoduleWith-special.nix
+
+## shorthandOnlyDefines config behaves as expected
+checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
+checkConfigError 'value is a boolean while a set was expected' config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
+
+## submoduleWith should merge all modules in one swoop
+checkConfigOutput "true" config.submodule.inner ./declare-submoduleWith-modules.nix
+checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.nix
+
+## Paths should be allowed as values and work as expected
+checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
