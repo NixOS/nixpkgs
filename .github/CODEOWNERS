@@ -82,6 +82,7 @@
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7
+/pkgs/build-support/rust @andir
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers
