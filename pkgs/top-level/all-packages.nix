@@ -15121,6 +15121,8 @@ in
 
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
 
+  fido2luks = callPackage ../tools/security/fido2luks { };
+
   fingerd_bsd = callPackage ../servers/fingerd/bsd-fingerd { };
 
   firebird = callPackage ../servers/firebird { icu = null; stdenv = gcc5Stdenv; };
