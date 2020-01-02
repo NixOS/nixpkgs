@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "leveldb";
-  version = "0.194";
+  version = "0.201";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f6d1y65k6miimic82n8zsx50z9k982mvzp90crwcv1knjrphcww";
+    sha256 = "1gzc5x3i76d2gv8iprfvpnp3chf6arcfmmiv0ygy05r9hivfgzqw";
   };
 
   meta = with lib; {
