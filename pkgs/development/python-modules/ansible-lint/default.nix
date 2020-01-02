@@ -11,12 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "4.1.1a0";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00mw56a3lmdb5xvrzhahrzqv3wvxfz0mxl4n0qbkxzggf2pg0i8d";
+    sha256 = "0jj1vjmwgaj6d3f3xslcfq5zp16z7rxwlahfp36661fpha35v4pb";
   };
+
+  format = "pyproject";
 
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ pyyaml six ansible ruamel_yaml ];
@@ -31,10 +33,11 @@ buildPythonPackage rec {
   # give a hint to setuptools_scm on package version
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
+    export HOME=$(mktemp -d)
   '';
 
   checkPhase = ''
-    PATH=$out/bin:$PATH HOME=$(mktemp -d) nosetests test
+    PATH=$out/bin:$PATH nosetests test
   '';
 
   meta = with lib; {
