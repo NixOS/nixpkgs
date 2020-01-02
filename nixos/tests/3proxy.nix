@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "3proxy";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ misuzu ];
@@ -134,29 +134,52 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    startAll;
-
-    $peer1->waitForUnit("3proxy.service");
+    peer1.wait_for_unit("3proxy.service")
+    peer1.wait_for_open_port("9999")
 
     # test none auth
-    $peer0->succeed("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.2:3128 -S -O /dev/null http://216.58.211.112:9999");
-    $peer0->succeed("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.2:3128 -S -O /dev/null http://192.168.0.2:9999");
-    $peer0->succeed("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.2:3128 -S -O /dev/null http://127.0.0.1:9999");
+    peer0.succeed(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.2:3128 -S -O /dev/null http://216.58.211.112:9999"
+    )
+    peer0.succeed(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.2:3128 -S -O /dev/null http://192.168.0.2:9999"
+    )
+    peer0.succeed(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.2:3128 -S -O /dev/null http://127.0.0.1:9999"
+    )
 
-    $peer2->waitForUnit("3proxy.service");
+    peer2.wait_for_unit("3proxy.service")
+    peer2.wait_for_open_port("9999")
 
     # test iponly auth
-    $peer0->succeed("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.3:3128 -S -O /dev/null http://216.58.211.113:9999");
-    $peer0->fail("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.3:3128 -S -O /dev/null http://192.168.0.3:9999");
-    $peer0->fail("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.3:3128 -S -O /dev/null http://127.0.0.1:9999");
+    peer0.succeed(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.3:3128 -S -O /dev/null http://216.58.211.113:9999"
+    )
+    peer0.fail(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.3:3128 -S -O /dev/null http://192.168.0.3:9999"
+    )
+    peer0.fail(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.3:3128 -S -O /dev/null http://127.0.0.1:9999"
+    )
 
-    $peer3->waitForUnit("3proxy.service");
+    peer3.wait_for_unit("3proxy.service")
+    peer3.wait_for_open_port("9999")
 
     # test strong auth
-    $peer0->succeed("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://admin:bigsecret\@192.168.0.4:3128 -S -O /dev/null http://216.58.211.114:9999");
-    $peer0->fail("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://admin:bigsecret\@192.168.0.4:3128 -S -O /dev/null http://192.168.0.4:9999");
-    $peer0->fail("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.4:3128 -S -O /dev/null http://216.58.211.114:9999");
-    $peer0->fail("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.4:3128 -S -O /dev/null http://192.168.0.4:9999");
-    $peer0->fail("${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.4:3128 -S -O /dev/null http://127.0.0.1:9999");
+    peer0.succeed(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://admin:bigsecret\@192.168.0.4:3128 -S -O /dev/null http://216.58.211.114:9999"
+    )
+    peer0.fail(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://admin:bigsecret\@192.168.0.4:3128 -S -O /dev/null http://192.168.0.4:9999"
+    )
+    peer0.fail(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.4:3128 -S -O /dev/null http://216.58.211.114:9999"
+    )
+    peer0.fail(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.4:3128 -S -O /dev/null http://192.168.0.4:9999"
+    )
+    peer0.fail(
+        "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.4:3128 -S -O /dev/null http://127.0.0.1:9999"
+    )
   '';
 })
