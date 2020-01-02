@@ -21,7 +21,7 @@ nodePackages // {
   };
 
   dat = nodePackages.dat.override {
-    buildInputs = [ nodePackages.node-gyp-build ];
+    buildInputs = [ nodePackages.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
   };
 
   dnschain = nodePackages.dnschain.override {
