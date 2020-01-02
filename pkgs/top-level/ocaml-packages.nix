@@ -377,6 +377,8 @@ let
 
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
+    hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
