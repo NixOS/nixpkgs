@@ -19,8 +19,8 @@
         makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
           --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
           --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
-          --add-flags "-DjarDirs '$out/share/flyway/jars'" \
-          --add-flags "org.flywaydb.commandline.Main"
+          --add-flags "org.flywaydb.commandline.Main" \
+          --add-flags "-jarDirs='$out/share/flyway/jars'"
       '';
       meta = with stdenv.lib; {
         description = "Evolve your Database Schema easily and reliably across all your instances";
