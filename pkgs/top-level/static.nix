@@ -176,6 +176,12 @@ in {
   cdo = super.cdo.override {
     enable_all_static = true;
   };
+
+  gflags = super.gflags.override {
+    enableStatic = true;
+    enableShared = false;
+  };
+
   gsm = super.gsm.override {
     staticSupport = true;
   };
