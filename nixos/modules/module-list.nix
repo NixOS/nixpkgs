@@ -79,6 +79,7 @@
   ./i18n/input-method/nabi.nix
   ./i18n/input-method/uim.nix
   ./installer/tools/tools.nix
+  ./misc/apropos.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
   ./misc/documentation.nix
