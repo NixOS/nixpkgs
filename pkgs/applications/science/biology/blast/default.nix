@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, perl, cpio, gawk, coreutils }:
+{ lib, stdenv, fetchurl, zlib, bzip2, perl, cpio, gawk, coreutils, ApplicationServices }:
 
 stdenv.mkDerivation rec {
   pname = "blast";
@@ -11,7 +11,16 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "ncbi-blast-${version}+-src/c++";
   
-  configureFlags = [ "--without-makefile-auto-update" ];
+  configureFlags = [ 
+    # With flat Makefile we can use all_projects in order not to build extra.
+    # These extra cause clang to hang on Darwin.
+    "--with-flat-makefile"
+    "--without-makefile-auto-update" 
+    "--with-dll"  # build dynamic libraries (static are default)
+    ];
+  
+  makeFlags = [ "all_projects=app/" ];
+
   preConfigure = ''
     export NCBICXX_RECONF_POLICY=warn
     export PWD=$(pwd)
@@ -68,16 +77,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ coreutils gawk zlib bzip2 cpio ];
+  buildInputs = [ coreutils gawk zlib bzip2 cpio ]
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
   hardeningDisable = [ "format" ];
 
   patches = [ ./no_slash_bin.patch ];
 
   postInstall = ''
-    # BLAST installs some unit test binaries, but several of them cannot be run
-    # without the corresponding test databases, so clean up
-    rm -f $out/bin/*_unit_test
-
     patchShebangs $out/bin/get_species_taxids.sh
     patchShebangs $out/bin/legacy_blast.pl
     patchShebangs $out/bin/update_blastdb.pl
