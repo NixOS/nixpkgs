@@ -19541,6 +19541,7 @@ let
       url = mirror://cpan/authors/id/G/GB/GBARR/TimeDate-2.30.tar.gz;
       sha256 = "11lf54akr9nbivqkjrhvkmfdgkbhw85sq0q4mak56n6bf542bgbm";
     };
+    patches = [ ../development/perl-modules/TimeDate-getdate-offset-1970.patch ];
   };
 
   TimeDuration = buildPerlPackage {

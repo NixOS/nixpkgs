@@ -1,0 +1,13 @@
+diff --git a/t/getdate.t b/t/getdate.t
+index 31b577b..82c5850 100755
+--- a/t/getdate.t
++++ b/t/getdate.t
+@@ -156,7 +156,7 @@ Jul 22 10:00:00 UTC 2002	     ;1027332000
+ !;
+ 
+ require Time::Local;
+-my $offset = Time::Local::timegm(0,0,0,1,0,70);
++my $offset = Time::Local::timegm(0,0,0,1,0,1970);
+ 
+ @data = split(/\n/, $data);
+ 
