@@ -11,6 +11,7 @@ let
 
     ${cfg.extraConfig}
   '';
+  enableIwd = cfg.wifi.backend == "iwd";
 in {
 
   imports = [
@@ -56,6 +57,17 @@ in {
         '';
       };
 
+      wifi = {
+        backend = mkOption {
+          type = types.enum [ "wpa_supplicant" "iwd" ];
+          default = "wpa_supplicant";
+          description = ''
+            Specify the Wi-Fi backend used.
+            Currently supported are <option>wpa_supplicant</option> or <option>iwd</option>.
+          '';
+        };
+      };
+
       extraFlags = mkOption {
         type = with types; listOf str;
         default = [ ];
@@ -77,9 +89,6 @@ in {
       assertion = !config.networking.useDHCP;
       message = "You can not use services.connman with networking.useDHCP";
     }{
-      assertion = config.networking.wireless.enable;
-      message = "You must use services.connman with networking.wireless";
-    }{
       assertion = !config.networking.networkmanager.enable;
       message = "You can not use services.connman with networking.networkmanager";
     }];
@@ -89,12 +98,18 @@ in {
     systemd.services.connman = {
       description = "Connection service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "syslog.target" ];
+      after = [ "syslog.target" ] ++ optional enableIwd "iwd.service";
+      requires = optional enableIwd "iwd.service";
       serviceConfig = {
         Type = "dbus";
         BusName = "net.connman";
         Restart = "on-failure";
-        ExecStart = "${pkgs.connman}/sbin/connmand --config=${configFile} --nodaemon ${toString cfg.extraFlags}";
+        ExecStart = toString ([
+          "${pkgs.connman}/sbin/connmand"
+          "--config=${configFile}"
+          "--nodaemon"
+        ] ++ optional enableIwd "--wifi=iwd_agent"
+          ++ cfg.extraFlags);
         StandardOutput = "null";
       };
     };
@@ -125,7 +140,12 @@ in {
 
     networking = {
       useDHCP = false;
-      wireless.enable = true;
+      wireless = {
+        enable = mkIf (!enableIwd) true;
+        iwd = mkIf enableIwd {
+          enable = true;
+        };
+      };
       networkmanager.enable = false;
     };
   };
