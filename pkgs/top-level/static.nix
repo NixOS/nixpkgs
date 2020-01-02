@@ -152,7 +152,10 @@ in {
   optipng = super.optipng.override {
     static = true;
   };
-  openblas = super.openblas.override { enableStatic = true; };
+  openblas = super.openblas.override {
+    enableStatic = true;
+    enableShared = false;
+  };
   nix = super.nix.override { withAWS = false; };
   # openssl 1.1 doesn't compile
   openssl = super.openssl_1_0_2.override {
