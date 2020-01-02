@@ -695,4 +695,8 @@ self: super: builtins.intersectAttrs super {
       spagoWithoutChecks = dontCheck spagoFixHpack;
     in
     spagoWithoutChecks;
+
+  # checks SQL statements at compile time, and so requires a running PostgreSQL
+  # database to run it's test suite
+  postgresql-typed = dontCheck super.postgresql-typed;
 }

@@ -8067,7 +8067,6 @@ broken-packages:
   - postgresql-simple-queue
   - postgresql-simple-sop
   - postgresql-simple-typed
-  - postgresql-typed
   - postgresql-typed-lifted
   - postgrest
   - postgrest-ws
