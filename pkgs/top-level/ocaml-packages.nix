@@ -166,6 +166,12 @@ let
 
     cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
 
+    comby = callPackage ../development/tools/ocaml/comby { };
+
+    conduit_p4 = callPackage ../development/ocaml-modules/conduit/0.10.0.nix {
+       lwt = lwt2;
+    };
+
     conduit = callPackage ../development/ocaml-modules/conduit { };
 
     conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
