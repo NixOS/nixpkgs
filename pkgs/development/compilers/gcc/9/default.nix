@@ -5,7 +5,7 @@
 , langGo ? false
 , profiledCompiler ? false
 , staticCompiler ? false
-, enableShared ? true
+, enableShared ? !stdenv.targetPlatform.isMusl
 , enableLTO ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
