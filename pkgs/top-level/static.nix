@@ -149,6 +149,9 @@ in {
   gifsicle = super.gifsicle.override {
     static = true;
   };
+  grpc = super.grpc.override {
+    enableShared = false;
+  };
   bzip2 = super.bzip2.override {
     linkStatic = true;
   };

@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags
+, enableShared ? true
+}:
 
 stdenv.mkDerivation rec {
   version = "1.26.0"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
@@ -27,8 +29,9 @@ stdenv.mkDerivation rec {
       "-DgRPC_SSL_PROVIDER=package"
       "-DgRPC_PROTOBUF_PROVIDER=package"
       "-DgRPC_GFLAGS_PROVIDER=package"
-      "-DBUILD_SHARED_LIBS=ON"
+      "-DBUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}"
       "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+      "-DgRPC_BUILD_CSHARP_EXT=${if stdenv.hostPlatform.isMusl then "OFF" else "ON"}"
     ];
 
   # CMake creates a build directory by default, this conflicts with the
