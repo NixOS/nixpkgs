@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ stdenv, lib, fetchFromGitHub, cmake, static ? false }:
 
 stdenv.mkDerivation rec {
   pname = "double-conversion";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}" ];
 
   # Case sensitivity issue
   preConfigure = lib.optionalString stdenv.isDarwin ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Binary-decimal and decimal-binary routines for IEEE doubles";
-    homepage = https://github.com/google/double-conversion;
+    homepage = "https://github.com/google/double-conversion";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
