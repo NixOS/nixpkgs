@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, makeWrapper }:
+{ stdenv, fetchurl, tcl, makeWrapper, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "5.45.4";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ tcl ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s,/bin/stty,$(type -p stty),g" configure
   '';
 
@@ -22,7 +22,12 @@ stdenv.mkDerivation rec {
     "--with-tcl=${tcl}/lib"
     "--with-tclinclude=${tcl}/include"
     "--exec-prefix=\${out}"
-  ];
+  ] ++ (stdenv.lib.optionals stdenv.isAarch64 [
+    # FIXME(ma27) not entirely sure why this breaks now,
+    # we should at least find the cause before merging the glibc 2.30
+    # update.
+    "--build=aarch64-unknown-linux-gnu"
+  ]);
 
   postInstall = ''
     for i in $out/bin/*; do
