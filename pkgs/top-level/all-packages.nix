@@ -6945,6 +6945,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  termius = callPackage ../applications/networking/termius { };
+
   termplay = callPackage ../tools/misc/termplay { };
 
   tewisay = callPackage ../tools/misc/tewisay { };
