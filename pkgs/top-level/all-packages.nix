@@ -22215,7 +22215,7 @@ in
 
   inherit (xorg) xcompmgr;
 
-  compton = callPackage ../applications/window-managers/compton {};
+  picom = callPackage ../applications/window-managers/picom {};
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 
