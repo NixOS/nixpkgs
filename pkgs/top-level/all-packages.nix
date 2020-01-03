@@ -20049,6 +20049,9 @@ in
 
   menumaker = callPackage ../applications/misc/menumaker { };
 
+  mercurial_4 = callPackage ../applications/version-management/mercurial/4.9.nix {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
