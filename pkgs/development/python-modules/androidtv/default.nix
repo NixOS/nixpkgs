@@ -13,7 +13,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ adb-shell pure-python-adb ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytest
+  ] ++ lib.optionals isPy27 [ mock ];
 
   checkPhase = ''
     pytest tests/
