@@ -102,7 +102,7 @@ let
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource;
     inherit (modules) evalModules closeModules unifyModuleSyntax
-      applyIfFunction mergeModules
+      applyIfFunction unpackSubmodule packSubmodule mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
