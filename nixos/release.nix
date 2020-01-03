@@ -209,7 +209,8 @@ in rec {
     hydraJob ((import lib/eval-config.nix {
       inherit system;
       modules =
-        [ versionModule
+        [ configuration
+          versionModule
           ./maintainers/scripts/ec2/amazon-image.nix
         ];
     }).config.system.build.amazonImage)
