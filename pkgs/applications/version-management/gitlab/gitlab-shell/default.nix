@@ -2,12 +2,12 @@
 
 buildGoPackage rec {
   pname = "gitlab-shell-go";
-  version = "10.2.0";
+  version = "10.3.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "1mpzsdqd8mlsh8wccz4s8415w080z55lnifn7l7vd5rflpnyfhcj";
+    sha256 = "0kxbw2n5kabh0876xqn1dcjbxyrp82ms566rw065nqrb32g8c2hk";
   };
 
   buildInputs = [ ruby ];
