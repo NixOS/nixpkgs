@@ -162,6 +162,10 @@ in stdenv.mkDerivation rec {
     "-DZM_CONFIG_DIR=${placeholder "out"}/etc/zoneminder"
     "-DZM_WEB_USER=${user}"
     "-DZM_WEB_GROUP=${user}"
+
+    # Workaround issue in CMakeLists.txt where ZM_CGIDIR set to ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}/zoneminder/cgi-bin
+    # But CMAKE_INSTALL_LIBEXECDIR is already an absolute path from cmake setup-hook
+    "-DZM_CGIDIR=${placeholder "out"}/libexec/zoneminder/cgi-bin"
   ];
 
   passthru = { inherit dirName; };
