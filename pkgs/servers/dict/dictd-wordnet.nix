@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "542";
-  name = "dict-db-wordnet-${version}";
+  pname = "dict-db-wordnet";
 
   buildInputs = [python wordnet];
   convert = ./wordnet_structures.py;

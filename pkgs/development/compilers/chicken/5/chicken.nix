@@ -11,9 +11,10 @@ let
   lib = stdenv.lib;
 in
 stdenv.mkDerivation {
-  name = "chicken-${version}";
+  pname = "chicken";
+  inherit version;
 
-  binaryVersion = 9;
+  binaryVersion = 11;
 
   src = fetchurl {
     url = "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
@@ -22,8 +23,8 @@ stdenv.mkDerivation {
 
   setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
 
-  buildFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
-  installFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
+  buildFlags = "PLATFORM=${platform} PREFIX=$(out)";
+  installFlags = "PLATFORM=${platform} PREFIX=$(out)";
 
   buildInputs = [
     makeWrapper
@@ -37,10 +38,6 @@ stdenv.mkDerivation {
       wrapProgram $f \
         --prefix PATH : ${stdenv.cc}/bin
     done
-
-    mv $out/var/lib/chicken $out/lib
-    rmdir $out/var/lib
-    rmdir $out/var
   '';
 
   # TODO: Assert csi -R files -p '(pathname-file (repository-path))' == binaryVersion
@@ -48,7 +45,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.call-cc.org/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ the-kenny corngood ];
     platforms = stdenv.lib.platforms.linux; # Maybe other non-darwin Unix
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''

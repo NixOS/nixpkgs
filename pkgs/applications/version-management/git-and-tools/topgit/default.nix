@@ -1,26 +1,30 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, git, perl }:
 
 stdenv.mkDerivation rec {
-  name = "topgit-0.9";
+  pname = "topgit";
+  version = "0.19.12";
 
-  src = fetchurl {
-    url = "https://github.com/greenrd/topgit/archive/${name}.tar.gz";
-    sha256 = "1z9x42a0cmn8n2n961qcfl522nd6j9a3dpx1jbqfp24ddrk5zd94";
+  src = fetchFromGitHub {
+    owner = "mackyle";
+    repo = "topgit";
+    rev = "${pname}-${version}";
+    sha256 = "1wvf8hmwwl7a2fr17cfs3pbxjccdsjw9ngzivxlgja0gvfz4hjd5";
   };
 
-  configurePhase = "makeFlags=prefix=$out";
+  makeFlags = [ "prefix=${placeholder "out"}" ];
+
+  nativeBuildInputs = [ perl git ];
 
   postInstall = ''
-    mkdir -p "$out/share/doc/${name}" "$out/etc/bash_completion.d/"
-    mv README "$out/share/doc/${name}/"
-    mv contrib/tg-completion.bash "$out/etc/bash_completion.d/"
+    install -Dm644 README -t"$out/share/doc/${pname}-${version}/"
+    install -Dm755 contrib/tg-completion.bash -t "$out/etc/bash_completion.d/"
   '';
 
-  meta = {
-    homepage = https://github.com/greenrd/topgit;
+  meta = with stdenv.lib; {
     description = "TopGit manages large amount of interdependent topic branches";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ marcweber ];
+    homepage = "https://github.com/mackyle/topgit";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ marcweber ];
   };
 }

@@ -8,11 +8,11 @@ in
 
 stdenv.mkDerivation rec {
   
-  name = "ocaml-${version}";
+  pname = "ocaml";
   version = "3.11.2";
   
   src = fetchurl {
-    url = "https://caml.inria.fr/pub/distrib/ocaml-3.11/${name}.tar.bz2";
+    url = "https://caml.inria.fr/pub/distrib/ocaml-3.11/${pname}-${version}.tar.bz2";
     sha256 = "86f3387a0d7e7c8be2a3c53af083a5a726e333686208d5ea0dd6bb5ac3f58143";
   };
 

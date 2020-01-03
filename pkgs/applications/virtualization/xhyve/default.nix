@@ -1,12 +1,14 @@
-{ stdenv, lib, fetchurl, Hypervisor, vmnet, xpc, libobjc, zlib }:
+{ stdenv, lib, fetchFromGitHub, Hypervisor, vmnet, xpc, libobjc, zlib }:
 
 stdenv.mkDerivation rec {
-  name    = "xhyve-${version}";
-  version = "20190124";
+  pname = "xhyve";
+  version = "20191001";
 
-  src = fetchurl {
-    url    = "https://github.com/machyve/xhyve/archive/1dd9a5165848c7ed56dafc41932c553ea56a12af.tar.gz";
-    sha256 = "18zd74pd0azf43csbqb14srbyclfgx28dpgm8ygjmbcazbnipc1k";
+  src = fetchFromGitHub {
+    owner = "machyve";
+    repo = "xhyve";
+    rev = "1f46a3d0bbeb6c90883f302425844fcc3800a776";
+    sha256 = "0mm9xa0v6n7xl2qypnppq5abdncd31vffiklrhcrlni5ymyh9ia5";
   };
 
   buildInputs = [ Hypervisor vmnet xpc libobjc zlib ];

@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "go-jira-${version}";
+  pname = "go-jira";
   version = "1.0.17";
 
   goPackagePath = "gopkg.in/Netflix-Skunkworks/go-jira.v1";

@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "webhook-${version}";
+  pname = "webhook";
   version = "2.6.8";
 
   goPackagePath = "github.com/adnanh/webhook";

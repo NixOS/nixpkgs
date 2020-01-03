@@ -6,7 +6,7 @@
 let
   version = "1.0.2";
 
-  ETL = stdenv.mkDerivation rec {
+  ETL = stdenv.mkDerivation {
     name = "ETL-0.04.19";
 
     src = fetchFromGitHub {
@@ -21,8 +21,9 @@ let
     nativeBuildInputs = [ autoreconfHook ];
   };
 
-  synfig = stdenv.mkDerivation rec {
-    name = "synfig-${version}";
+  synfig = stdenv.mkDerivation {
+    pname = "synfig";
+    inherit version;
 
     src = fetchFromGitHub {
        repo   = "synfig";
@@ -46,8 +47,9 @@ let
     meta.broken = true;
   };
 in
-stdenv.mkDerivation rec {
-  name = "synfigstudio-${version}";
+stdenv.mkDerivation {
+  pname = "synfigstudio";
+  inherit version;
 
   src = fetchFromGitHub {
      repo   = "synfig";

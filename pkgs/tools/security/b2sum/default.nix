@@ -2,8 +2,8 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "b2sum-${version}";
+stdenv.mkDerivation {
+  pname = "b2sum";
   version = "unstable-2018-06-11";
 
   src = fetchzip {

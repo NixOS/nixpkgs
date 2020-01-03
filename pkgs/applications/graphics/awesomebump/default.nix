@@ -22,8 +22,9 @@ let
       install -D bin-linux/QtnPEG $out/bin/QtnPEG
     '';
   };
-in stdenv.mkDerivation rec {
-  name = "awesomebump-${version}";
+in stdenv.mkDerivation {
+  pname = "awesomebump";
+  inherit version;
 
   inherit src;
 

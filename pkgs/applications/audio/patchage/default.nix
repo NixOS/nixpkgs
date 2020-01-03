@@ -2,8 +2,8 @@
 , gtkmm2, libjack2, pkgconfig, python2, wafHook
 }:
 
-stdenv.mkDerivation rec {
-  name = "patchage-${version}";
+stdenv.mkDerivation {
+  pname = "patchage";
   version = "1.0.1";
   src = fetchsvn {
     url = http://svn.drobilla.net/lad/trunk/patchage/;

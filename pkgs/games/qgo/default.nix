@@ -7,8 +7,8 @@
 , qttranslations
 }:
 
-stdenv.mkDerivation rec {
-  name = "qgo-${version}";
+stdenv.mkDerivation {
+  pname = "qgo";
   version = "unstable-2017-12-18";
 
   meta = with stdenv.lib; {

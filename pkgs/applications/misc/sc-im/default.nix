@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.7.0";
-  name = "sc-im-${version}";
+  pname = "sc-im";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";

@@ -1,11 +1,11 @@
 { stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "reckon-${version}";
+  pname = "reckon";
   version = (import ./gemset.nix).reckon.version;
 
   env = bundlerEnv {
-    name = "${name}-gems";
+    name = "${pname}-${version}-gems";
 
     gemdir = ./.;
   };

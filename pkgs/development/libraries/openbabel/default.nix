@@ -1,7 +1,7 @@
 {stdenv, fetchurl, fetchpatch, cmake, zlib, libxml2, eigen, python, cairo, pcre, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "openbabel-${version}";
+  pname = "openbabel";
   version = "2.4.1";
 
   src = fetchurl {
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
+    description = "A toolbox designed to speak the many languages of chemical data";
+    homepage = "http://openbabel.org";
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];
     license = stdenv.lib.licenses.gpl2Plus;

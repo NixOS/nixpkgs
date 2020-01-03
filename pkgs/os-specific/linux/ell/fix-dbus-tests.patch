@@ -1,0 +1,65 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -140,6 +140,7 @@
+ ell_libell_private_la_SOURCES = $(ell_libell_la_SOURCES)
+ 
+ AM_CFLAGS = -fvisibility=hidden -DUNITDIR=\""$(top_srcdir)/unit/"\" \
++				-DDBUS_DAEMON=\""$(DBUS_DAEMONDIR)/dbus-daemon"\" \
+ 				-DCERTDIR=\""$(top_builddir)/unit/"\"
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+--- a/configure.ac
++++ b/configure.ac
+@@ -14,6 +14,8 @@
+ 
+ AC_PREFIX_DEFAULT(/usr/local)
+ 
++PKG_PROG_PKG_CONFIG
++
+ COMPILER_FLAGS
+ 
+ AC_LANG_C
+@@ -131,6 +133,10 @@
+ 	AC_CHECK_PROG(have_xxd, [xxd], [yes], [no])
+ fi
+ 
++PKG_CHECK_MODULES(DBUS, dbus-1, dummy=yes,
++			AC_MSG_ERROR(D-Bus is required for running tests))
++PKG_CHECK_VAR(DBUS_DAEMONDIR, dbus-1, daemondir)
++
+ AM_CONDITIONAL(DBUS_TESTS, test "${little_endian}" = "yes")
+ AM_CONDITIONAL(CERT_TESTS, test "${have_openssl}" = "yes")
+ 
+--- a/unit/test-dbus-message-fds.c
++++ b/unit/test-dbus-message-fds.c
+@@ -51,7 +51,7 @@
+ 	char *prg_envp[1];
+ 	pid_t pid;
+ 
+-	prg_argv[0] = "/usr/bin/dbus-daemon";
++	prg_argv[0] = DBUS_DAEMON;
+ 	prg_argv[1] = "--nopidfile";
+ 	prg_argv[2] = "--nofork";
+ 	prg_argv[3] = "--config-file=" UNITDIR "dbus.conf";
+--- a/unit/test-dbus-properties.c
++++ b/unit/test-dbus-properties.c
+@@ -48,7 +48,7 @@
+ 	char *prg_envp[1];
+ 	pid_t pid;
+ 
+-	prg_argv[0] = "/usr/bin/dbus-daemon";
++	prg_argv[0] = DBUS_DAEMON;
+ 	prg_argv[1] = "--nopidfile";
+ 	prg_argv[2] = "--nofork";
+ 	prg_argv[3] = "--config-file=" UNITDIR "dbus.conf";
+--- a/unit/test-dbus.c
++++ b/unit/test-dbus.c
+@@ -45,7 +45,7 @@
+ 	char *prg_envp[1];
+ 	pid_t pid;
+ 
+-	prg_argv[0] = "/usr/bin/dbus-daemon";
++	prg_argv[0] = DBUS_DAEMON;
+ 	prg_argv[1] = "--nopidfile";
+ 	prg_argv[2] = "--nofork";
+ 	prg_argv[3] = "--config-file=" UNITDIR "dbus.conf";

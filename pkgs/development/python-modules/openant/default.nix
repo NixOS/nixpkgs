@@ -4,7 +4,7 @@
 , pyusb
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "openant-unstable";
   version = "2017-02-11";
 

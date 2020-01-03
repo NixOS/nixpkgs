@@ -4,7 +4,7 @@ let
   name = "service-wrapper-${version}";
   version = "19.04"; # Akin to Ubuntu Release
 in
-runCommand "${name}" {
+runCommand name {
   script = substituteAll {
     src = ./service-wrapper.sh;
     isExecutable = true;

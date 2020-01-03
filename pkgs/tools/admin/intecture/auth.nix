@@ -4,7 +4,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "intecture-auth-${version}";
+  pname = "intecture-auth";
   version = "0.1.2";
 
   src = fetchFromGitHub {

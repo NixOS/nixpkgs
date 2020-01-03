@@ -3,7 +3,7 @@
 , curl, geoip, libxml2, lmdb, lua, pcre, yajl }:
 
 stdenv.mkDerivation rec {
-  name = "libmodsecurity-${version}";
+  pname = "libmodsecurity";
   version = "3.0.3";
 
   src = fetchFromGitHub {

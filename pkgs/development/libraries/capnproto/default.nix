@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "capnproto-${version}";
+  pname = "capnproto";
   version = "0.7.0";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, readline, gettext, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "gnu-apl-${version}";
+  pname = "gnu-apl";
   version = "1.8";
 
   src = fetchurl {
@@ -11,9 +11,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline gettext ncurses ];
 
-  # Needed with GCC 7
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=int-in-bool-context"
-    + stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=null-dereference";
+  # Needed with GCC 8
+  NIX_CFLAGS_COMPILE = with stdenv.lib; (optionals stdenv.cc.isGNU [
+    "-Wno-error=int-in-bool-context"
+    "-Wno-error=class-memaccess"
+    "-Wno-error=restrict"
+    "-Wno-error=format-truncation"
+   ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference";
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"

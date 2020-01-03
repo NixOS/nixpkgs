@@ -1,6 +1,6 @@
 {callPackage, stdenv, fetchFromGitHub, ...}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gitstatus";
   version = "unstable-2019-05-06";
 

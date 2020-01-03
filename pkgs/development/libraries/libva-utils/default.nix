@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-utils-${version}";
+  pname = "libva-utils";
   inherit (libva) version;
 
   src = fetchFromGitHub {

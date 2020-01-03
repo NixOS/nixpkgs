@@ -7,7 +7,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "lvm2-${version}";
+  pname = "lvm2";
+  inherit version;
 
   src = fetchgit {
     url = "git://sourceware.org/git/lvm2.git";
@@ -20,7 +21,6 @@ stdenv.mkDerivation {
     "--enable-udev_rules"
     "--enable-udev_sync"
     "--enable-pkgconfig"
-    "--enable-applib"
     "--enable-cmdlib"
   ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd"
   ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -33,17 +33,17 @@ stdenv.mkDerivation {
 
   preConfigure =
     ''
-      substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/bin/udevadm ${systemd}/bin/udevadm
-
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
+    '' + stdenv.lib.optionalString (systemd != null) ''
+      substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
+        --replace /usr/bin/udevadm ${systemd}/bin/udevadm
     '';
 
+  # https://github.com/NixOS/nixpkgs/pull/52597
   # gcc: error: ../../device_mapper/libdevice-mapper.a: No such file or directory
   enableParallelBuilding = false;
 
-  #patches = [ ./purity.patch ];
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       name = "fix-stdio-usage.patch";
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     ''
       substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
         --replace $out/sbin/blkid ${utillinux}/sbin/blkid
-
+    '' + stdenv.lib.optionalString (systemd != null) ''
       # Systemd stuff
       mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
       cp scripts/blk_availability_systemd_red_hat.service $out/etc/systemd/system

@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
-  pname = "pystache-${version}";
+  pname = "pystache";
   version = "0.5.4";
 
   src = fetchPypi {

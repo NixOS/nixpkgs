@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "toxiproxy-${version}";
+  pname = "toxiproxy";
   version = "2.1.3";
   src = fetchFromGitHub {
     owner = "Shopify";

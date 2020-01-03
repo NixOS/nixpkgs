@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "xkbmon-${version}";
+  pname = "xkbmon";
   version = "0.3";
 
   src = fetchFromGitHub {

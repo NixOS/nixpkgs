@@ -4,7 +4,7 @@
 
 let
 
-  hunspellDirs = with lib; makeSearchPath ":" (flatten (flip map langs (lang: [
+  hunspellDirs = with lib; makeSearchPath ":" (flatten (forEach langs (lang: [
     "${hunspellDicts.${lang}}/share/hunspell"
     "${hunspellDicts.${lang}}/share/myspell"
     "${hunspellDicts.${lang}}/share/myspell/dicts"

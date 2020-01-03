@@ -6,6 +6,10 @@ with lib;
   options.security.auditd.enable = mkEnableOption "the Linux Audit daemon";
 
   config = mkIf config.security.auditd.enable {
+    boot.kernelParams = [ "audit=1" ];
+
+    environment.systemPackages = [ pkgs.audit ];
+
     systemd.services.auditd = {
       description = "Linux Audit daemon";
       wantedBy = [ "basic.target" ];

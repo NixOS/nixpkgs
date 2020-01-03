@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name    = "${pname}-${version}";
   pname   = "amazon-ssm-agent";
   version = "2.0.633.0";
 

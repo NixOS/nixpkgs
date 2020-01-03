@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "python-eventlib";
-  version = "0.2.2";
+  version = "0.2.4";
   # Judging from SyntaxError
   disabled = isPy3k;
 
   src = fetchdarcs {
     url = "http://devel.ag-projects.com/repositories/${pname}";
     rev = "release-${version}";
-    sha256 = "1zxhpq8i4jwsk7wmfncqfm211hqikj3hp38cfv509924bi76wak8";
+    sha256 = "1w1axsm6w9bl2smzxmyk4in1lsm8gk8ma6y183m83cpj66aqxg4z";
   };
 
   propagatedBuildInputs = [ greenlet ];

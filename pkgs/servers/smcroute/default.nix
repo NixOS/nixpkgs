@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "smcroute-${version}";
+  pname = "smcroute";
   version = "2.4.4";
 
   src = fetchFromGitHub {

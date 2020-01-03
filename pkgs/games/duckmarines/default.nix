@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "duckmarines";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";
     genericName = "duckmarines";

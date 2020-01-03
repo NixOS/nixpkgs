@@ -161,7 +161,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps"] // {
 
   # enabled only for src.rock
   setSourceRoot= let
-    name_only=(builtins.parseDrvName name).name;
+    name_only= lib.getName name;
   in
     lib.optionalString (knownRockspec == null) ''
     # format is rockspec_basename/source_basename

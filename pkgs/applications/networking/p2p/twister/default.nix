@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoconf, automake, libtool, pkgconfig, python2
+{ stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkgconfig, python2
 , boost, db, openssl, geoip, libiconv, miniupnpc
 , srcOnly, fetchgit
 }:
@@ -16,13 +16,14 @@ let
   boostPython = boost.override { enablePython = true; };
 
 in stdenv.mkDerivation rec {
-  name = "twister-${version}";
-  version = "0.9.34";
+  pname = "twister";
+  version = "2019-08-19";
 
-  src = fetchurl {
-    url = "https://github.com/miguelfreitas/twister-core/"
-        + "archive/v${version}.tar.gz";
-    sha256 = "1bi8libivd9y2bn9fc7vbc5q0jnal0pykpzgri6anqaww22y58jq";
+  src = fetchFromGitHub {
+    owner = "miguelfreitas";
+    repo = "twister-core";
+    rev = "31faf3f63e461ea0a9b23081567a4a552cf06873";
+    sha256 = "0xh1lgnl9nd86jr0mp7m8bkd7r5j4d6chd0y73h2xv4aq5sld0sp";
   };
 
   configureFlags = [
@@ -39,12 +40,6 @@ in stdenv.mkDerivation rec {
     autoconf automake libtool python2
     boostPython db openssl geoip miniupnpc libiconv
   ];
-
-  patches = stdenv.lib.singleton (fetchpatch {
-    url = "https://github.com/miguelfreitas/twister-core/commit/"
-        + "dd4f5a176958ea6ed855dc3fcef79680c1c0c92c.patch";
-    sha256 = "06fgmqnjyl83civ3ixiq673k8zjgm8n2w4w46nsh810nprqim8s6";
-  });
 
   postPatch = ''
     sed -i -e '/-htmldir/s|(default: [^)]*)|(default: ${twisterHTML})|' \

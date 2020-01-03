@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pod2mdoc-${version}";
+  pname = "pod2mdoc";
   version = "0.0.10";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/pod2mdoc/snapshots/${name}.tgz";
+    url = "http://mdocml.bsd.lv/pod2mdoc/snapshots/${pname}-${version}.tgz";
     sha256 = "0nwa9zv9gmfi5ysz1wfm60kahc7nv0133n3dfc2vh2y3gj8mxr4f";
   };
 

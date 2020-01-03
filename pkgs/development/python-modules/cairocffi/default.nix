@@ -19,8 +19,8 @@
 }@args:
 
 import ./generic.nix ({
-  version = "1.0.2";
-  sha256 = "01ac51ae12c4324ca5809ce270f9dd1b67f5166fe63bd3e497e9ea3ca91946ff";
+  version = "1.1.0";
+  sha256 = "1nq53f5jipgy9jgyfxp43j40qfbmrhgn1cj8bp5rrb3liy3wbh7i";
   dlopen_patch = ./dlopen-paths.patch;
   disabled = pythonOlder "3.5";
   inherit withXcffib;

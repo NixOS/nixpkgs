@@ -103,7 +103,7 @@ in {
         PrivateTmp = true;
         ProtectHome = true;
         ProtectSystem = "full";
-        DecvicePolicy = "closed";
+        DevicePolicy = "closed";
         NoNewPrivileges = true;
         WorkingDirectory = cfg.dataDir;
       };

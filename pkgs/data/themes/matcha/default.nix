@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "matcha-${version}";
-  version = "2019-06-22";
+  pname = "matcha";
+  version = "2019-11-02";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = "matcha";
-    rev = "f42df7a3219d7fbacb7be1b2e0e416d74339865e";
-    sha256 = "1x954rmxv14xndn4ybhbr4pmzccnwqp462bpvzd2hak5wsqs4wxc";
+    repo = pname;
+    rev = version;
+    sha256 = "0wci9ahap8kynq8cbyxr7aba9ndb1d4kiq42xvzr34vw1rhcahrr";
   };
 
   buildInputs = [ gdk-pixbuf librsvg ];

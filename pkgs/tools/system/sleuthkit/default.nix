@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "4.6.5";
-  name = "sleuthkit-${version}";
+  pname = "sleuthkit";
 
   src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1q1cdixnfv9v4qlzza8xwdsyvq1vdw6gjgkd41yc1d57ldp1qm0c";
   };
 

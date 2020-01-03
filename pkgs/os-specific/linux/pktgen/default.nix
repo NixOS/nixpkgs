@@ -1,33 +1,21 @@
 { stdenv, lib, fetchurl, pkgconfig
-, dpdk, libpcap, numactl, utillinux
-, gtk2, withGtk ? false
+, dpdk, libpcap, lua5_3, numactl, utillinux
+, gtk2, which, withGtk ? false
 }:
 
-let
-
-  # pktgen needs a specific version of lua to apply its patch (see lib/lua/Makefile).
-  lua = rec {
-    name = "lua-5.3.4";
-    basename = name + ".tar.gz";
-    src = fetchurl {
-      url = "https://www.lua.org/ftp/${basename}";
-      sha256 = "0320a8dg3aci4hxla380dx1ifkw8gj4gbw5c4dz41g1kh98sm0gn";
-    };
-  };
-
-in stdenv.mkDerivation rec {
-  name = "pktgen-${version}";
-  version = "3.5.0";
+stdenv.mkDerivation rec {
+  pname = "pktgen";
+  version = "3.7.2";
 
   src = fetchurl {
-    url = "http://dpdk.org/browse/apps/pktgen-dpdk/snapshot/pktgen-${version}.tar.xz";
-    sha256 = "1gy99jr9dbwzi9pd3w5k673h3pfnbkz6rbzmrkwcyis72pnphy5z";
+    url = "http://dpdk.org/browse/apps/pktgen-dpdk/snapshot/${pname}-${version}.tar.xz";
+    sha256 = "03k7h4j2lsrh6b7477hgn87ljrjh2673ncffx9v261bx1ns54y7w";
   };
 
-  nativeBuildInputs = stdenv.lib.optionals withGtk [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs =
-    [ dpdk libpcap numactl ]
+    [ dpdk libpcap lua5_3 numactl which ]
     ++ stdenv.lib.optionals withGtk [gtk2];
 
   RTE_SDK = "${dpdk}/share/dpdk";
@@ -37,19 +25,13 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-msse3" ];
 
   postPatch = let dpdkMajor = lib.versions.major dpdk.version; in ''
-    substituteInPlace app/Makefile --replace 'yy :=' 'yy := ${dpdkMajor} #'
     substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${utillinux}/bin/lscpu
-
-    ln -s ${lua.src} lib/lua/${lua.basename}
-    make -C lib/lua get_tarball # unpack and patch
-    substituteInPlace lib/lua/${lua.name}/src/luaconf.h --replace /usr/local $out
   '';
 
   installPhase = ''
     install -d $out/bin
     install -m 0755 app/${RTE_TARGET}/pktgen $out/bin
-    install -d $out/lib/lua/5.3
-    install -m 0644 Pktgen.lua $out/lib/lua/5.3
+    install -m 0644 Pktgen.lua $out/bin
   '';
 
   enableParallelBuilding = true;

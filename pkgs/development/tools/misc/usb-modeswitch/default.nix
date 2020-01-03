@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
-  name = "usb-modeswitch-${version}";
-  version = "2.5.2";
+  pname = "usb-modeswitch";
+  version = "2.6.0";
 
   src = fetchurl {
-    url    = "http://www.draisberghof.de/usb_modeswitch/${name}.tar.bz2";
-    sha256 = "19ifi80g9ns5dmspchjvfj4ykxssq9yrci8m227dgb3yr04srzxb";
+    url    = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
+    sha256 = "18wbbxc5cfsmikba0msdvd5qlaga27b32nhrzicyd9mdddp265f2";
   };
 
   makeFlags = [

@@ -3,8 +3,8 @@
 , js_of_ocaml
 }:
 
-stdenv.mkDerivation rec {
-	name = "js_of_ocaml-ppx-${version}"; 
+stdenv.mkDerivation {
+	pname = "js_of_ocaml-ppx"; 
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;
 

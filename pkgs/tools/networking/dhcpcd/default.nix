@@ -3,11 +3,12 @@
 stdenv.mkDerivation rec {
   # when updating this to >=7, check, see previous reverts:
   # nix-build -A nixos.tests.networking.scripted.macvlan.x86_64-linux nixos/release-combined.nix
-  name = "dhcpcd-7.2.3";
+  pname = "dhcpcd";
+  version = "8.1.2";
 
   src = fetchurl {
-    url = "mirror://roy/dhcpcd/${name}.tar.xz";
-    sha256 = "0vjnd27y6jm5q2v7fkyxmsn77dcpvpzyzb5bq9lfkas8flbkiavl";
+    url = "mirror://roy/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1b9mihp1mf2vng92fgks764a6pwf2gx7ccw6knja79c42nmyglyb";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -27,14 +28,14 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  makeFlags = "PREFIX=\${out}";
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   # Hack to make installation succeed.  dhcpcd will still use /var/db
   # at runtime.
-  installFlags = "DBDIR=\${TMPDIR}/db SYSCONFDIR=$(out)/etc";
+  installFlags = [ "DBDIR=$(TMPDIR)/db" "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   # Check that the udev plugin got built.
-  postInstall = stdenv.lib.optional (udev != null) "[ -e $out/lib/dhcpcd/dev/udev.so ]";
+  postInstall = stdenv.lib.optional (udev != null) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   meta = with stdenv.lib; {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";

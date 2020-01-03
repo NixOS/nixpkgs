@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , gmp
 , readline
 , libX11
@@ -13,24 +12,12 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.11.1";
+  version = "2.11.2";
 
   src = fetchurl {
     url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
-    sha256 = "1jfax92jpydjd02fwl30r6b8kfzqqd6sm4yx94gidyz9lqjb7a94";
+    sha256 = "0fck8ssmirl8fy7s4mspgrxjs5sag76xbshqlqzkcl3kqyrk4raa";
   };
-
-  patches = [
-    # Fix a off-by-one bug that can potentially lead to segfaults (accepted upstream)
-    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2117
-    # https://trac.sagemath.org/ticket/27335
-    (fetchpatch {
-      name = "fix-off-by-one-error.patch";
-      # only relevant parts of https://pari.math.u-bordeaux.fr/cgi-bin/gitweb.cgi?p=pari.git;a=patch;h=aa1ee6e0898d177e6bcf49237d82c804bc410985
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pari/patches/red_montgomery.patch?id=bbea55c96e1f05302b3c7f593cf64492497047c5";
-      sha256 = "0vqkmhgv9splsdswp6zjnkj50z76rc1m6k9iy3cf9dxwqw3h3nr6";
-    })
-  ];
 
   buildInputs = [
     gmp

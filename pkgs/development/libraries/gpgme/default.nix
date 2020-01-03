@@ -12,11 +12,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gpgme-${version}";
+  pname = "gpgme";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "mirror://gnupg/gpgme/${name}.tar.bz2";
+    url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
     sha256 = "0imyjfryvvjdbai454p70zcr95m94j9xnzywrlilqdw2fqi0pqy4";
   };
 
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl21Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fuuzetsu primeos ];
+    maintainers = with maintainers; [ primeos ];
   };
 }

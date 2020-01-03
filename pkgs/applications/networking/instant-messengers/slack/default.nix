@@ -1,16 +1,17 @@
 { theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
 cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk-pixbuf,
 libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
-at-spi2-atk, libuuid, nodePackages
+at-spi2-atk, at-spi2-core, libuuid, nodePackages, libpulseaudio, xdg_utils
 }:
 
 let
 
-  version = "4.0.1";
+  version = "4.2.0";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     at-spi2-atk
+    at-spi2-core
     atk
     cairo
     cups
@@ -32,6 +33,7 @@ let
     stdenv.cc.cc
     systemd
     libuuid
+    libpulseaudio
 
     xorg.libxkbfile
     xorg.libX11
@@ -51,29 +53,34 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "1g7c8jka750pblsfzjvfyf7sp1m409kybqagml9miif1v71scxv2";
+        sha256 = "01b2klhky04fijdqcpfafgdqx2c5nh2fpnzvzgvz10hv7h16cinv";
       }
     else
       throw "Slack is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "slack-${version}";
+  pname = "slack";
+  inherit version;
 
   inherit src;
 
   buildInputs = [
-    dpkg
     gtk3  # needed for GSETTINGS_SCHEMAS_PATH
   ];
 
-  nativeBuildInputs = [ makeWrapper nodePackages.asar ];
+  nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
 
   dontUnpack = true;
-  buildCommand = ''
+  dontBuild = true;
+  dontPatchELF = true;
+
+  installPhase = ''
+    # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
+    dpkg --fsys-tarfile $src | tar --extract
+    rm -rf usr/share/lintian
+
     mkdir -p $out
-    dpkg -x $src $out
-    cp -av $out/usr/* $out
-    rm -rf $out/etc $out/usr $out/share/lintian
+    mv usr/* $out
 
     # Otherwise it looks "suspicious"
     chmod -R g-w $out
@@ -86,7 +93,8 @@ in stdenv.mkDerivation {
     # Replace the broken bin/slack symlink with a startup wrapper
     rm $out/bin/slack
     makeWrapper $out/lib/slack/slack $out/bin/slack \
-      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
+      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+      --prefix PATH : ${xdg_utils}/bin
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \

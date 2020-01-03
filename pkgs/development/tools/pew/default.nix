@@ -1,6 +1,5 @@
 { stdenv, python3Packages }:
 with python3Packages; buildPythonApplication rec {
-    name = "${pname}-${version}";
     pname = "pew";
     version = "1.1.2";
 

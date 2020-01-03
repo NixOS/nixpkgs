@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jdk, jre, ant }:
 
 stdenv.mkDerivation rec {
-  name = "freemind-${version}";
+  pname = "freemind";
   version = "1.0.1";
 
   src = fetchurl {

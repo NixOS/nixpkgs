@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
+{ stdenv, lib, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
 , pkgconfig, cmake, gnumake, yasm, python2Packages
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
@@ -8,12 +8,12 @@
 , libXt, libXmu, libXext
 , libXinerama, libXrandr
 , libXtst, libXfixes, systemd
-, alsaLib, libGLU_combined, glew, fontconfig, freetype, ftgl
-, libjpeg, jasper, libpng, libtiff
+, alsaLib, libGLU, libGL, glew, fontconfig, freetype, ftgl
+, libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, libdrm
+, sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
@@ -42,20 +42,35 @@ assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used i
 assert vdpauSupport -> libvdpau != null;
 assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
 
-# TODO for Kodi 18.0
-# - check if dbus support PR has been merged and add dbus as a buildInput
-
 let
-  kodiReleaseDate = "20190129";
-  kodiVersion = "18.1";
+  kodiReleaseDate = "20191116";
+  kodiVersion = "18.5";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "1w26aqvzxv4c70gcd1vw1pldapsc2xcacwq9b7dqx5m44j0zx1dc";
+    sha256 = "0pcrraj1ddzrd296br10yjnaxgb3iym74xzixcakaqhhp00f5hf6";
   };
+
+  cmakeProto = fetchurl {
+    url = "https://raw.githubusercontent.com/pramsey/libght/ca9b1121c352ea10170636e170040e1af015bad1/cmake/modules/CheckPrototypeExists.cmake";
+    sha256  = "1zai82gm5x55n3xvdv7mns3ja6a2k81x9zz0nk42j6s2yb0fkjxh";
+  };
+
+  cmakeProtoPatch = ''
+    # get rid of windows headers as they will otherwise be found first
+    rm -rf msvc
+
+    cp ${cmakeProto} cmake/${cmakeProto.name}
+    # we need to enable support for C++ for check_prototype_exists to do its thing
+    substituteInPlace CMakeLists.txt --replace 'LANGUAGES C' 'LANGUAGES C CXX'
+    if [ -f cmake/CheckHeadersSTDC.cmake ]; then
+      sed -i cmake/CheckHeadersSTDC.cmake \
+        -e '7iinclude(CheckPrototypeExists)'
+    fi
+  '';
 
   kodiDependency = { name, version, rev, sha256, ... } @attrs:
     let
@@ -83,16 +98,25 @@ let
     nativeBuildInputs = [ cmake nasm pkgconfig ];
   };
 
-  # we should be able to build these externally and have kodi reference them as buildInputs.
-  # Doesn't work ATM though so we just use them for the src
-
+  # We can build these externally but FindLibDvd.cmake forces us to build it
+  # them, so we currently just use them for the src.
   libdvdcss = kodiDependency rec {
     name              = "libdvdcss";
     version           = "1.4.2";
     rev               = "${version}-${rel}-Beta-5";
     sha256            = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
-    buildInputs       = [ libdvdread ];
-    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+    buildInputs       = [ linuxHeaders ];
+    nativeBuildInputs = [ cmake pkgconfig ];
+    postPatch = ''
+      rm -rf msvc
+
+      substituteInPlace config.h.cm \
+        --replace '#cmakedefine O_BINARY "''${O_BINARY}"' '#define O_BINARY 0'
+    '';
+    cmakeFlags = [
+      "-DBUILD_SHARED_LIBS=1"
+      "-DHAVE_LINUX_DVD_STRUCT=1"
+    ];
   };
 
   libdvdnav = kodiDependency rec {
@@ -100,8 +124,12 @@ let
     version           = "6.0.0";
     rev               = "${version}-${rel}-Alpha-3";
     sha256            = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
-    buildInputs       = [ libdvdread ];
-    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+    buildInputs       = [ libdvdcss libdvdread ];
+    nativeBuildInputs = [ cmake pkgconfig ];
+    postPatch         = cmakeProtoPatch;
+    postInstall = ''
+      mv $out/lib/liblibdvdnav.so $out/lib/libdvdnav.so
+    '';
   };
 
   libdvdread = kodiDependency rec {
@@ -109,10 +137,13 @@ let
     version           = "6.0.0";
     rev               = "${version}-${rel}-Alpha-3";
     sha256            = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
-    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+    buildInputs       = [ libdvdcss ];
+    nativeBuildInputs = [ cmake pkgconfig ];
+    configureFlags    = [ "--with-libdvdcss" ];
+    postPatch         = cmakeProtoPatch;
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
     name = "kodi-${lib.optionalString useWayland "wayland-"}${kodiVersion}";
 
     src = kodi_src;
@@ -125,12 +156,12 @@ in stdenv.mkDerivation rec {
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xorgproto libXt libXmu libXext
       libXinerama libXrandr libXtst libXfixes
-      alsaLib libGLU_combined glew fontconfig freetype ftgl
-      libjpeg jasper libpng libtiff
+      alsaLib libGL libGLU glew fontconfig freetype ftgl
+      libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql.connector-c avahi lame
+      sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo xdpyinfo
       libcec libcec_platform dcadec libuuid
       libgcrypt libgpgerror libunistring
@@ -160,7 +191,7 @@ in stdenv.mkDerivation rec {
       makeWrapper
       which
       pkgconfig gnumake
-      autoconf automake libtool # still needed for some components. Check if that is the case with 18.0
+      autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
     ] ++ lib.optional useWayland [ wayland-protocols ];
 
     cmakeFlags = [

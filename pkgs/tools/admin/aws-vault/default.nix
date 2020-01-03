@@ -1,6 +1,5 @@
 { buildGoPackage, lib, fetchFromGitHub }:
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "aws-vault";
   version = "4.5.1";
 

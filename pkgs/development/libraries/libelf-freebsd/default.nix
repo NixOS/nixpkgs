@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation (rec {
   version = "3258";
-  name = "libelf-freebsd-${version}";
+  pname = "libelf-freebsd";
 
   src = fetchsvn {
     url = svn://svn.code.sf.net/p/elftoolchain/code/trunk;

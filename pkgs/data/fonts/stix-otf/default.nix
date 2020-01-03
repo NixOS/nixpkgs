@@ -2,7 +2,7 @@
 
 let
   version = "1.1.1";
-in fetchzip rec {
+in fetchzip {
   name = "stix-otf-${version}";
 
   url = "http://ftp.fi.muni.cz/pub/linux/gentoo/distfiles/STIXv${version}-word.zip";

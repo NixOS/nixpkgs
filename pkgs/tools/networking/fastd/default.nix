@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "18";
-  name = "fastd-${version}";
+  pname = "fastd";
 
   src = fetchgit {
     url = "git://git.universe-factory.net/fastd";

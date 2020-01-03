@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libevent, openssl}:
 
 stdenv.mkDerivation rec {
-  name = "libcouchbase-${version}";
+  pname = "libcouchbase";
   version = "2.10.4";
 
   src = fetchFromGitHub {
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   # Running tests in parallel does not work
   enableParallelChecking = false;
+
+  patches = [ ./0001-Fix-timeouts-in-libcouchbase-testsuite.patch ];
 
   doCheck = !stdenv.isDarwin;
 

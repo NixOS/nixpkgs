@@ -1,14 +1,15 @@
-{ stdenv, buildGoPackage, libvirt, pkgconfig, minikube }:
+{ stdenv, buildGoModule, libvirt, pkgconfig, minikube }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "docker-machine-kvm2";
-  name = "${pname}-${version}";
   version = minikube.version;
 
   goPackagePath = "k8s.io/minikube";
   subPackages = [ "cmd/drivers/kvm" ];
 
   src = minikube.src;
+
+  modSha256 = minikube.go-modules.outputHash;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libvirt ];
@@ -18,7 +19,7 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    mv $bin/bin/kvm $bin/bin/docker-machine-driver-kvm2
+    mv $out/bin/kvm $out/bin/docker-machine-driver-kvm2
   '';
 
   meta = with stdenv.lib; {

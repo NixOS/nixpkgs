@@ -7,11 +7,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "fluxbox-${version}";
+  pname = "fluxbox";
   version = "1.3.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fluxbox/${name}.tar.xz";
+    url = "mirror://sourceforge/fluxbox/${pname}-${version}.tar.xz";
     sha256 = "1h1f70y40qd225dqx937vzb4k2cz219agm1zvnjxakn5jkz7b37w";
   };
 

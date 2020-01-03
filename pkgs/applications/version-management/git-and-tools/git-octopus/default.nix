@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "git-octopus-${version}";
+  pname = "git-octopus";
   version = "1.4";
 
   installFlags = [ "prefix=$(out)" ];

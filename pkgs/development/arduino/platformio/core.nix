@@ -1,7 +1,7 @@
 { stdenv, lib, buildPythonApplication, fetchFromGitHub
 , bottle, click, colorama
 , lockfile, pyserial, requests
-, pytest, semantic-version, tox
+, pytest, semantic-version, tox, tabulate
 , git
 }:
 
@@ -35,6 +35,7 @@ let
     "test_builder.py::test_build_unflags"
     "test_misc.py::test_api_cache"
     "test_misc.py::test_ping_internet_ips"
+    "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
   ]) ++ (map (e: "--ignore=tests/${e}") [
     "commands/test_boards.py"
@@ -46,19 +47,20 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "3.6.6";
+  version = "4.0.3";
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "1qwd6684y2xagl375sv8fm6a535hcdqx296hknjlbvsgc1jc514a";
+    sha256 = "1naaa53cc7n7zyqggqjvvgkcq8cyzngdf904y9ag0x1vvb70f8j9";
   };
 
   propagatedBuildInputs =  [
     bottle click colorama git lockfile
     pyserial requests semantic-version
+    tabulate
   ];
 
   HOME = "/tmp";

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, ant, jdk, jre, python, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rabbitmq-java-client-3.3.4";
 
   src = fetchurl {

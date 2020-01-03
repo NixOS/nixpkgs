@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3";
-  name = "openmvg-${version}";
+  pname = "openmvg";
 
   src = fetchgit {
     url = "https://www.github.com/openmvg/openmvg.git";

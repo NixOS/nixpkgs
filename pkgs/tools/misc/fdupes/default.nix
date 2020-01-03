@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "fdupes-${version}";
+  pname = "fdupes";
   version = "1.6.1";
 
   src = fetchFromGitHub {
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/adrianlopezroche/fdupes;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.z77z ];
+    maintainers = [ maintainers.maggesi ];
   };
 }

@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   version = "0.2.1";
   pname   = "torchvision";
-  name    = "${pname}-${version}";
 
   format = "wheel";
 

@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
-  name = "uftrace-${version}";
+  pname = "uftrace";
   version = "0.9.3";
 
   src = fetchFromGitHub {

@@ -3,7 +3,7 @@
 , qrencode, gdk-pixbuf, libnotify }:
 
 stdenv.mkDerivation rec {
-  name = "toxic-${version}";
+  pname = "toxic";
   version = "0.8.3";
 
   src = fetchFromGitHub {

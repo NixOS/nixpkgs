@@ -6,6 +6,8 @@
 , click
 , configparser ? null
 , dateutil
+, etelemetry
+, filelock
 , funcsigs
 , future
 , futures
@@ -14,8 +16,10 @@
 , nibabel
 , numpy
 , packaging
+, pathlib2
 , prov
 , psutil
+, pybids
 , pydot
 , pytest
 , pytest_xdist
@@ -44,11 +48,11 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.1.9";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f80096ec6cfd7cffc05764bba1749e424877140ef1373193f076bdd843f19016";
+    sha256 = "a79c7a72897d81985d20a8c805465285400b59a45ddc527cda44026795fd1c47";
   };
 
   postPatch = ''
@@ -59,6 +63,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     dateutil
+    etelemetry
+    filelock
     funcsigs
     future
     networkx
@@ -76,9 +82,11 @@ buildPythonPackage rec {
   ] ++ stdenv.lib.optional (!isPy3k) [
     configparser
     futures
+    pathlib2 # darwin doesn't receive this transitively, but it is in install_requires
   ];
 
   checkInputs = [
+    pybids
     codecov
     glibcLocales
     mock
@@ -89,12 +97,12 @@ buildPythonPackage rec {
     which
   ];
 
+  # checks on darwin inspect memory which doesn't work in build environment
+  doCheck = !stdenv.isDarwin;
+  # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest -v --doctest-modules nipype
+    LC_ALL="en_US.UTF-8" pytest -v nipype -k 'not display'
   '';
-
-  # See: https://github.com/nipy/nipype/issues/2839
-  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://nipy.org/nipype/;

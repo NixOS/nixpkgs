@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "LazyLimiter-${version}";
+  pname = "LazyLimiter";
   version = "0.3.2";
 
   src = fetchFromGitHub {

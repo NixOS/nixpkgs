@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.4.0";
-  name = "gl2ps-${version}";
+  pname = "gl2ps";
 
   src = fetchurl {
-    url = "http://geuz.org/gl2ps/src/${name}.tgz";
+    url = "http://geuz.org/gl2ps/src/${pname}-${version}.tgz";
     sha256 = "1qpidkz8x3bxqf69hlhyz1m0jmfi9kq24fxsp7rq6wfqzinmxjq3";
   };
 

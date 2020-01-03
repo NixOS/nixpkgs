@@ -11,7 +11,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "djbdns-${version}";
+  pname = "djbdns";
+  inherit version;
 
   src = fetchurl {
     url = "https://cr.yp.to/djbdns/djbdns-${version}.tar.gz";

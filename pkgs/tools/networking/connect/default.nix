@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "connect-${version}";
+  pname = "connect";
   version ="1.105";
 
   src = fetchurl {

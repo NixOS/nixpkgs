@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bundlerEnv, ruby }:
 
 let
-  version = "3.4.11";
+  version = "4.1.0";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -11,11 +11,12 @@ let
   };
 in
   stdenv.mkDerivation rec {
-    name = "redmine-${version}";
+    pname = "redmine";
+    inherit version;
 
     src = fetchurl {
-      url = "https://www.redmine.org/releases/${name}.tar.gz";
-      sha256 = "14987sd9ff2n3982qlfwd4m0g1m10w8jyv791nica3wppvnrxh0r";
+      url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
+      sha256 = "1fxc0xql54cfvj4g8v31vsv19jbij326qkgdz2h5xlp09r821wli";
     };
 
     buildInputs = [ rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler ];

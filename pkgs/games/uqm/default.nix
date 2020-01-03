@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, libGLU_combined
+{ stdenv, lib, fetchurl, pkgconfig, libGLU, libGL
 , SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
@@ -27,7 +27,7 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "uqm-${version}";
+  pname = "uqm";
   version = "0.7.0";
 
   src = fetchurl {
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU_combined ];
+  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
 
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages

@@ -121,8 +121,8 @@ in
 
     cc = let
       nativePrefix = { # switch
-        "i686-solaris" = "/usr/gnu";
-        "x86_64-solaris" = "/opt/local/gcc47";
+        i686-solaris = "/usr/gnu";
+        x86_64-solaris = "/opt/local/gcc47";
       }.${system} or "/usr";
     in
     import ../../build-support/cc-wrapper {

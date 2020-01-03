@@ -2,7 +2,7 @@
 , qtdeclarative, cmake, texlive, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "dwarf-therapist-${version}";
+  pname = "dwarf-therapist";
   version = "41.0.2";
 
   src = fetchFromGitHub {

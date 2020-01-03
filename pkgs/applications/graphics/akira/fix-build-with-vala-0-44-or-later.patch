@@ -1,0 +1,88 @@
+From bcda8fd53f6f232db0b6411269ba108af551629f Mon Sep 17 00:00:00 2001
+From: Alberto Fanjul <albertofanjul@gmail.com>
+Date: Tue, 9 Apr 2019 09:45:36 +0200
+Subject: [PATCH] Build on vala >= 0.44.2
+
+---
+ src/FileFormat/JsonObject.vala        |  2 +-
+ src/FileFormat/JsonObjectArray.vala   |  2 +-
+ src/FileFormat/ZipArchiveHandler.vala | 18 +++++++++++++++++-
+ 3 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/src/FileFormat/JsonObject.vala b/src/FileFormat/JsonObject.vala
+index 7bfe46f..805fbad 100644
+--- a/src/FileFormat/JsonObject.vala
++++ b/src/FileFormat/JsonObject.vala
+@@ -31,7 +31,7 @@ public abstract class Akira.FileFormat.JsonObject : GLib.Object {
+ 
+     private ObjectClass obj_class;
+ 
+-    public JsonObject.from_object (Json.Object object) {
++    protected JsonObject.from_object (Json.Object object) {
+         Object (object: object);
+     }
+ 
+diff --git a/src/FileFormat/JsonObjectArray.vala b/src/FileFormat/JsonObjectArray.vala
+index 4f6e573..d0a7dad 100644
+--- a/src/FileFormat/JsonObjectArray.vala
++++ b/src/FileFormat/JsonObjectArray.vala
+@@ -31,7 +31,7 @@ public abstract class Akira.FileFormat.JsonObjectArray : Object {
+      *
+      * Your JsonObject implementation should have it's own list of items
+      */
+-    public JsonObjectArray (Json.Object object, string property_name) {
++    protected JsonObjectArray (Json.Object object, string property_name) {
+         Object (object: object, property_name: property_name);
+     }
+ 
+diff --git a/src/FileFormat/ZipArchiveHandler.vala b/src/FileFormat/ZipArchiveHandler.vala
+index ca60dd0..5d65aa2 100644
+--- a/src/FileFormat/ZipArchiveHandler.vala
++++ b/src/FileFormat/ZipArchiveHandler.vala
+@@ -262,11 +262,17 @@ public class Akira.FileFormat.ZipArchiveHandler : GLib.Object {
+                 continue;
+             }
+ 
++            Posix.off_t offset;
++#if VALA_0_42
++            uint8[] buffer;
++            while (archive.read_data_block (out buffer, out offset) == Archive.Result.OK) {
++                if (extractor.write_data_block (buffer, offset) != Archive.Result.OK) {
++#else
+             void* buffer = null;
+             size_t buffer_length;
+-            Posix.off_t offset;
+             while (archive.read_data_block (out buffer, out buffer_length, out offset) == Archive.Result.OK) {
+                 if (extractor.write_data_block (buffer, buffer_length, offset) != Archive.Result.OK) {
++#endif
+                     break;
+                 }
+             }
+@@ -316,9 +322,15 @@ public class Akira.FileFormat.ZipArchiveHandler : GLib.Object {
+                     // Add an entry to the archive
+                     Archive.Entry entry = new Archive.Entry ();
+                     entry.set_pathname (initial_folder.get_relative_path (current_file));
++#if VALA_0_42
++                    entry.set_size ((Archive.int64_t) file_info.get_size ());
++                    entry.set_filetype (Archive.FileType.IFREG);
++                    entry.set_perm (Archive.FileType.IFREG);
++#else
+                     entry.set_size (file_info.get_size ());
+                     entry.set_filetype ((uint) Posix.S_IFREG);
+                     entry.set_perm (0644);
++#endif
+ 
+                     if (archive.write_header (entry) != Archive.Result.OK) {
+                         critical ("Error writing '%s': %s (%d)", current_file.get_path (), archive.error_string (), archive.errno ());
+@@ -333,7 +345,11 @@ public class Akira.FileFormat.ZipArchiveHandler : GLib.Object {
+                             break;
+                         }
+ 
++#if VALA_0_42
++                        archive.write_data (buffer[0:bytes_read]);
++#else
+                         archive.write_data (buffer, bytes_read);
++#endif
+                     }
+                 }
+             }

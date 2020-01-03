@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoreconfHook, flex, bison, texinfo, help2man, m4 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "flex-2.5.35";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libpng, netpbm }:
 
 stdenv.mkDerivation rec {
-  name = "sng-${version}";
+  pname = "sng";
   version = "1.1.0";
 
   src = fetchurl {

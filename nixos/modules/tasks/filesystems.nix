@@ -12,7 +12,7 @@ let
 
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
-  fileSystems = if fileSystems' ? "result"
+  fileSystems = if fileSystems' ? result
                 then # use topologically sorted fileSystems everywhere
                      fileSystems'.result
                 else # the assertion below will catch this,
@@ -211,7 +211,7 @@ in
       ls = sep: concatMapStringsSep sep (x: x.mountPoint);
       notAutoResizable = fs: fs.autoResize && !(hasPrefix "ext" fs.fsType || fs.fsType == "f2fs");
     in [
-      { assertion = ! (fileSystems' ? "cycle");
+      { assertion = ! (fileSystems' ? cycle);
         message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
       }
       { assertion = ! (any notAutoResizable fileSystems);

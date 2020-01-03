@@ -5,8 +5,9 @@
 let
   version = "2018-11-13";
 
-in stdenv.mkDerivation rec {
-  name = "openzwave-${version}";
+in stdenv.mkDerivation {
+  pname = "openzwave";
+  inherit version;
 
   # Use fork by Home Assistant because this package is mainly used for python.pkgs.homeassistant-pyozw.
   # See https://github.com/OpenZWave/open-zwave/compare/master...home-assistant:hass for the difference.

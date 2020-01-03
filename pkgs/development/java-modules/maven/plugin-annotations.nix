@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenPluginAnnotations_3_1 = map (obj: fetchMaven {
     version = "3.1";
     artifactId = "maven-plugin-annotations";

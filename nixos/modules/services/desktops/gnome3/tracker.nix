@@ -30,11 +30,11 @@ with lib;
 
   config = mkIf config.services.gnome3.tracker.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.tracker ];
+    environment.systemPackages = [ pkgs.tracker ];
 
-    services.dbus.packages = [ pkgs.gnome3.tracker ];
+    services.dbus.packages = [ pkgs.tracker ];
 
-    systemd.packages = [ pkgs.gnome3.tracker ];
+    systemd.packages = [ pkgs.tracker ];
 
   };
 

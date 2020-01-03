@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "minimap2";
   version = "2.17";
 

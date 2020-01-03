@@ -11,13 +11,18 @@ let params = {
     rev = "0.1";
     sha256 = "1zz26cyv99whj7rrpgnhhm9dfqnpmrx5pqizn8ihf8jkq8d4drz7";
   };
-  "8.9" = {
-    version = "0.1";
-    rev = "a69551a49543b22a7d4e6a2484356b56bd05068e";
+  "8.9" = rec {
+    version = "0.2";
+    rev = version;
     sha256 = "0xby1kb26r9gcvk5511wqj05fqm9paynwfxlfqkmwkgnfmzk0x73";
   };
+  "8.10" = rec {
+    version = "0.3";
+    rev = version;
+    sha256 = "0pzs5nsakh4l8ffwgn4ryxbnxdv2x0r1i7bc598ij621haxdirrr";
+  };
 };
-  param = params."${coq.coq-version}";
+  param = params.${coq.coq-version};
 in
 
 stdenv.mkDerivation rec {
@@ -31,7 +36,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ coq ] ++ (with coq.ocamlPackages; [ ocaml findlib camlp5 ]);
+  buildInputs = [ coq ] ++ (with coq.ocamlPackages; [ ocaml findlib ])
+  ++ stdenv.lib.optional (!stdenv.lib.versionAtLeast coq.coq-version "8.10")
+     coq.ocamlPackages.camlp5
+  ;
 
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 

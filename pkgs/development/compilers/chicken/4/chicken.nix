@@ -11,7 +11,8 @@ let
   lib = stdenv.lib;
 in
 stdenv.mkDerivation {
-  name = "chicken-${version}";
+  pname = "chicken";
+  inherit version;
 
   binaryVersion = 8;
 
@@ -62,7 +63,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.call-cc.org/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ the-kenny corngood ];
     platforms = stdenv.lib.platforms.linux; # Maybe other non-darwin Unix
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''

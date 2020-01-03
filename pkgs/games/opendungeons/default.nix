@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ogre, cegui, boost, sfml, openal, cmake, ois, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "opendungeons-${version}";
+  pname = "opendungeons";
   version = "0.7.1";
 
   src = fetchFromGitHub {

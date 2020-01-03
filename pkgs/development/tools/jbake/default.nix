@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "2.6.4";
-  name = "jbake-${version}";
+  pname = "jbake";
 
   src = fetchzip {
-    url = "https://dl.bintray.com/jbake/binary/${name}-bin.zip";
+    url = "https://dl.bintray.com/jbake/binary/${pname}-${version}-bin.zip";
     sha256 = "0zgp0wwxxmi13v5q5jvr610igx2vxg0bwck9j1imnn9ciakg1aaw";
   };
 

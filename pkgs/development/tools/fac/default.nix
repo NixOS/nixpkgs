@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, git }:
 
 buildGoPackage rec {
-  name = "fac-${version}";
+  pname = "fac";
   version = "2.0.0";
 
   goPackagePath = "github.com/mkchoi212/fac";

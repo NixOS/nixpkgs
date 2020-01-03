@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cpio, rsync, xar, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "smlnj-bootstrap-${version}";
+  pname = "smlnj-bootstrap";
 
   version = "110.91";
 

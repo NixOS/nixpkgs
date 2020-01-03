@@ -7,6 +7,7 @@ let
   apparmor = config.security.apparmor.enable;
 
   homeDir = cfg.home;
+  downloadDirPermissions = cfg.downloadDirPermissions;
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
 
@@ -16,16 +17,14 @@ let
   # for users in group "transmission" to have access to torrents
   fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 
-  # Directories transmission expects to exist and be ug+rwx.
-  directoriesToManage = [ homeDir settingsDir fullSettings.download-dir fullSettings.incomplete-dir ];
-
   preStart = pkgs.writeScript "transmission-pre-start" ''
     #!${pkgs.runtimeShell}
     set -ex
-    for DIR in ${escapeShellArgs directoriesToManage}; do
+    for DIR in "${homeDir}" "${settingsDir}" "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"; do
       mkdir -p "$DIR"
-      chmod 770 "$DIR"
     done
+    chmod 700 "${homeDir}" "${settingsDir}"
+    chmod ${downloadDirPermissions} "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"
     cp -f ${settingsFile} ${settingsDir}/settings.json
   '';
 in
@@ -71,6 +70,16 @@ in
         '';
       };
 
+      downloadDirPermissions = mkOption {
+        type = types.str;
+        default = "770";
+        example = "775";
+        description = ''
+          The permissions to set for download-dir and incomplete-dir.
+          They will be applied on every service start.
+        '';
+      };
+
       port = mkOption {
         type = types.int;
         default = 9091;
@@ -84,13 +93,25 @@ in
           The directory where transmission will create files.
         '';
       };
+
+      user = mkOption {
+        type = types.str;
+        default = "transmission";
+        description = "User account under which Transmission runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "transmission";
+        description = "Group account under which Transmission runs.";
+      };
     };
   };
 
   config = mkIf cfg.enable {
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
-      after = [ "local-fs.target" "network.target" ] ++ optional apparmor "apparmor.service";
+      after = [ "network.target" ] ++ optional apparmor "apparmor.service";
       requires = mkIf apparmor [ "apparmor.service" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -99,7 +120,8 @@ in
       serviceConfig.ExecStartPre = preStart;
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-      serviceConfig.User = "transmission";
+      serviceConfig.User = cfg.user;
+      serviceConfig.Group = cfg.group;
       # NOTE: transmission has an internal umask that also must be set (in settings.json)
       serviceConfig.UMask = "0002";
     };
@@ -107,14 +129,19 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ pkgs.transmission ];
 
-    users.groups.transmission.gid = config.ids.gids.transmission;
-    users.users.transmission = {
-      group = "transmission";
-      uid = config.ids.uids.transmission;
-      description = "Transmission BitTorrent user";
-      home = homeDir;
-      createHome = true;
-    };
+    users.users = optionalAttrs (cfg.user == "transmission") (singleton
+      { name = "transmission";
+        group = cfg.group;
+        uid = config.ids.uids.transmission;
+        description = "Transmission BitTorrent user";
+        home = homeDir;
+        createHome = true;
+      });
+
+    users.groups = optionalAttrs (cfg.group == "transmission") (singleton
+      { name = "transmission";
+        gid = config.ids.gids.transmission;
+      });
 
     # AppArmor profile
     security.apparmor.profiles = mkIf apparmor [

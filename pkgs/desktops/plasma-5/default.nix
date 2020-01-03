@@ -43,11 +43,11 @@ let
       propagate = out:
         let setupHook = { writeScript }:
               writeScript "setup-hook" ''
-                if [ "$hookName" != postHook ]; then
+                if [[ "''${hookName-}" != postHook ]]; then
                     postHooks+=("source @dev@/nix-support/setup-hook")
                 else
                     # Propagate $${out} output
-                    propagatedUserEnvPkgs="$propagatedUserEnvPkgs @${out}@"
+                    propagatedUserEnvPkgs+=" @${out}@"
 
                     if [ -z "$outputDev" ]; then
                         echo "error: \$outputDev is unset!" >&2
@@ -57,7 +57,7 @@ let
                     # Propagate $dev so that this setup hook is propagated
                     # But only if there is a separate $dev output
                     if [ "$outputDev" != out ]; then
-                        propagatedBuildInputs="$propagatedBuildInputs @dev@"
+                        propagatedBuildInputs+=" @dev@"
                     fi
                 fi
               '';
@@ -72,7 +72,7 @@ let
           let
             inherit (args) name;
             sname = args.sname or name;
-            inherit (srcs."${sname}") src version;
+            inherit (srcs.${sname}) src version;
 
             outputs = args.outputs or [ "out" ];
             hasBin = lib.elem "bin" outputs;
@@ -86,7 +86,7 @@ let
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];
               platforms = lib.platforms.linux;
-              maintainers = with lib.maintainers; [ ttuegel ];
+              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
               homepage = http://www.kde.org;
             } // (args.meta or {});
           in

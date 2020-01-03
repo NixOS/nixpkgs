@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "lean-${version}";
+  pname = "lean";
   version = "3.4.2";
 
   src = fetchFromGitHub {

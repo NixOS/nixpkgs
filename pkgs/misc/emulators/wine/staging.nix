@@ -5,7 +5,7 @@ with callPackage ./util.nix {};
 let patch = (callPackage ./sources.nix {}).staging;
     build-inputs = pkgNames: extra:
       (mkBuildInputs wineUnstable.pkgArches pkgNames) ++ extra;
-in assert (builtins.parseDrvName wineUnstable.name).version == patch.version;
+in assert stdenv.lib.getVersion wineUnstable == patch.version;
 
 stdenv.lib.overrideDerivation wineUnstable (self: {
   buildInputs = build-inputs [ "perl" "utillinux" "autoconf" libtxc_dxtn_Name ] self.buildInputs;

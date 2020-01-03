@@ -5,7 +5,7 @@
 assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
-  name = "gr-rds-${version}";
+  pname = "gr-rds";
   version = "1.1.0";
 
   src = fetchFromGitHub {

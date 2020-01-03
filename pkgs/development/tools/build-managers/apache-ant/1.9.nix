@@ -3,7 +3,8 @@
 let version = "1.9.6"; in
 
 stdenv.mkDerivation {
-  name = "ant-${version}";
+  pname = "ant";
+  inherit version;
 
   buildInputs = [ makeWrapper ];
 
@@ -45,14 +46,14 @@ stdenv.mkDerivation {
       # JRE by looking for java.  The latter allows just the JRE to be
       # used with (say) ECJ as the compiler.  Finally, allow the GNU
       # JVM.
-      if [ -z "\$JAVA_HOME" ]; then
+      if [ -z "\''${JAVA_HOME-}" ]; then
           for i in javac java gij; do
               if p="\$(type -p \$i)"; then
                   export JAVA_HOME="\$(${coreutils}/bin/dirname \$(${coreutils}/bin/dirname \$(${coreutils}/bin/readlink -f \$p)))"
                   break
               fi
           done
-          if [ -z "\$JAVA_HOME" ]; then
+          if [ -z "\''${JAVA_HOME-}" ]; then
               echo "\$0: cannot find the JDK or JRE" >&2
               exit 1
           fi

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, nasm, makeDesktopItem
-, flac, gtk2, libvorbis, libvpx, libGLU_combined
+, flac, gtk2, libvorbis, libvpx, libGLU, libGL
 , SDL2, SDL2_mixer }:
 
 let
@@ -18,25 +18,26 @@ let
   wrapper = "eduke32-wrapper";
 
 in stdenv.mkDerivation {
-  name = "eduke32-${version}";
+  pname = "eduke32";
+  inherit version;
 
   src = fetchurl {
     url = "http://dukeworld.duke4.net/eduke32/synthesis/latest/eduke32_src_${version}-${rev}.tar.xz";
     sha256 = "09a7l23i6sygicc82w1in9hjw0jvivlf7q0vw8kcx9j98lm23mkn";
   };
 
-  buildInputs = [ flac gtk2 libvorbis libvpx libGLU_combined SDL2 SDL2_mixer ];
+  buildInputs = [ flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ]
     ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
   postPatch = ''
     substituteInPlace source/build/src/glbuild.cpp \
-      --replace libGLU.so ${libGLU_combined}/lib/libGLU.so
+      --replace libGLU.so ${libGLU}/lib/libGLU.so
 
     for f in glad.c glad_wgl.c ; do
       substituteInPlace source/glad/src/$f \
-        --replace libGL.so ${libGLU_combined}/lib/libGL.so
+        --replace libGL.so ${libGL}/lib/libGL.so
     done
   '';
 

@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "liquid-dsp-${version}";
+stdenv.mkDerivation {
+  pname = "liquid-dsp";
   version = "20170307";
 
   src = fetchFromGitHub {

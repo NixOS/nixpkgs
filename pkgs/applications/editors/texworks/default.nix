@@ -4,7 +4,7 @@
 , withPython ? true, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "texworks-${version}";
+  pname = "texworks";
   version = "0.6.3";
 
   src = fetchFromGitHub {

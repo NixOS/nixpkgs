@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, makeDesktopItem
-
-, alsaLib, at-spi2-atk, atk, cairo, cups, dbus, dpkg, expat, fontconfig
-, freetype, gdk-pixbuf, glib, gtk3, hunspell, libX11, libXScrnSaver
-, libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr
-, libXrender, libXtst, libnotify, libuuid, nspr, nss, pango, pciutils
-, pulseaudio, udev, xdg_utils, xorg
-
-, cpio, xar
+{ atomEnv
+, autoPatchelfHook
+, dpkg
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, udev
+, wrapGAppsHook
+, cpio
+, xar
 }:
 
 let
@@ -18,13 +20,13 @@ let
   pname = "wire-desktop";
 
   version = {
-    "x86_64-linux" = "3.9.2895";
-    "x86_64-darwin" = "3.9.2943";
+    x86_64-darwin = "3.10.3215";
+    x86_64-linux = "3.11.2912";
   }.${system} or throwSystem;
 
   sha256 = {
-    "x86_64-linux" = "0wrn95m64j4b7ym44h9zawq13kg4m12aixlyyzp56bfyczmjq4a5";
-    "x86_64-darwin" = "1y1bzsjmjrj518q29xfx6gg1nhdbaz7y5hzaqrp241az6plp090k";
+    x86_64-darwin = "0ygm3fgy9k1dp2kjfwsrrwq1i88wgxc6k8y80yz61ivdawgph9wa";
+    x86_64-linux = "1d2wa13d750dd2vslnvzf0ibwjmf5s299pxq0rs2x98y2sabw3sl";
   }.${system} or throwSystem;
 
   meta = with stdenv.lib; {
@@ -40,11 +42,19 @@ let
         * Timed messages and chats
         * Synced across your phone, desktop and tablet
     '';
-    homepage = https://wire.com/;
-    downloadPage = https://wire.com/download/;
+    homepage = "https://wire.com/";
+    downloadPage = "https://wire.com/download/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ toonn worldofpeace ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    maintainers = with maintainers; [
+      arianvp
+      kiwi
+      toonn
+      worldofpeace
+    ];
+    platforms = [
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -52,72 +62,78 @@ let
 
     src = fetchurl {
       url = "https://wire-app.wire.com/linux/debian/pool/main/"
-        + "Wire-${version}_amd64.deb";
+      + "Wire-${version}_amd64.deb";
       inherit sha256;
     };
 
     desktopItem = makeDesktopItem {
-      name = "wire-desktop";
-      exec = "wire-desktop %U";
-      icon = "wire-desktop";
-      comment = "Secure messenger for everyone";
-      desktopName = "Wire Desktop";
-      genericName = "Secure messenger";
       categories = "Network;InstantMessaging;Chat;VideoConference";
+      comment = "Secure messenger for everyone";
+      desktopName = "Wire";
+      exec = "wire-desktop %U";
+      genericName = "Secure messenger";
+      icon = "wire-desktop";
+      name = "wire-desktop";
+      extraEntries = ''
+        StartupWMClass="Wire"
+      '';
     };
 
     dontBuild = true;
-    dontPatchELF = true;
     dontConfigure = true;
+    dontPatchELF = true;
+    dontWrapGApps = true;
 
-    nativeBuildInputs = [ dpkg ];
-    rpath = stdenv.lib.makeLibraryPath [
-      alsaLib at-spi2-atk atk cairo cups dbus expat fontconfig freetype
-      gdk-pixbuf glib gtk3 hunspell libX11 libXScrnSaver libXcomposite
-      libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-      libXtst libnotify libuuid nspr nss pango pciutils pulseaudio
-      stdenv.cc.cc udev xdg_utils xorg.libxcb
+    nativeBuildInputs = [
+      autoPatchelfHook
+      dpkg
+      makeWrapper
+      wrapGAppsHook
     ];
+
+    buildInputs = atomEnv.packages;
 
     unpackPhase = "dpkg-deb -x $src .";
 
     installPhase = ''
-      mkdir -p "$out"
+      mkdir -p "$out/bin"
       cp -R "opt" "$out"
       cp -R "usr/share" "$out/share"
       chmod -R g-w "$out"
-
-      # Patch wire-desktop
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${rpath}:$out/opt/Wire" \
-        "$out/opt/Wire/wire-desktop"
-
-      # Symlink to bin
-      mkdir -p "$out/bin"
-      ln -s "$out/opt/Wire/wire-desktop" "$out/bin/wire-desktop"
 
       # Desktop file
       mkdir -p "$out/share/applications"
       cp "${desktopItem}/share/applications/"* "$out/share/applications"
     '';
+
+    runtimeDependencies = [
+      udev.lib
+    ];
+
+    postFixup = ''
+      makeWrapper $out/opt/Wire/wire-desktop $out/bin/wire-desktop \
+        "''${gappsWrapperArgs[@]}"
+    '';
   };
 
-  darwin = stdenv.mkDerivation rec {
+  darwin = stdenv.mkDerivation {
     inherit pname version meta;
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/"
-        + "macos%2F${version}/Wire.pkg";
+      + "macos%2F${version}/Wire.pkg";
       inherit sha256;
     };
 
-    buildInputs = [ cpio xar ];
+    buildInputs = [
+      cpio
+      xar
+    ];
 
     unpackPhase = ''
       xar -xf $src
       cd com.wearezeta.zclient.mac.pkg
     '';
-
 
     buildPhase = ''
       cat Payload | gunzip -dc | cpio -i
@@ -129,6 +145,7 @@ let
     '';
   };
 
-in if stdenv.isDarwin
-  then darwin
-  else linux
+in
+if stdenv.isDarwin
+then darwin
+else linux

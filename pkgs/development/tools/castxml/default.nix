@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pythonPackages
 , cmake
 , llvmPackages
@@ -19,8 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ] ++ stdenv.lib.optionals withMan [ pythonPackages.sphinx ];
 
+  clangVersion = lib.getVersion llvmPackages.clang;
+
   cmakeFlags = [
-    "-DCLANG_RESOURCE_DIR=${llvmPackages.clang-unwrapped}"
+    "-DCLANG_RESOURCE_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${clangVersion}/"
     "-DSPHINX_MAN=${if withMan then "ON" else "OFF"}"
   ];
 

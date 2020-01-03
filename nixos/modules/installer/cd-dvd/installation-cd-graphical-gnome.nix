@@ -10,8 +10,6 @@ with lib;
 
   services.xserver.desktopManager.gnome3.enable = true;
 
-  services.xserver.displayManager.slim.enable = mkForce false;
-
   # Auto-login as root.
   services.xserver.displayManager.gdm.autoLogin = {
     enable = true;

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   version = "6.1.8";
   seafileVersion = "6.1.8";
-  name = "ccnet-${version}";
+  pname = "ccnet";
 
   src = fetchurl {
     url = "https://github.com/haiwen/ccnet/archive/v${version}.tar.gz";

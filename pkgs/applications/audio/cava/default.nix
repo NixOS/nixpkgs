@@ -2,7 +2,7 @@
   libpulseaudio, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "cava-${version}";
+  pname = "cava";
   version = "0.6.1";
 
   buildInputs = [

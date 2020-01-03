@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, scikitlearn }:
+{ stdenv, isPy27, buildPythonPackage, fetchPypi, scikitlearn }:
 
 buildPythonPackage rec {
   pname = "mlrose";
   version = "1.2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

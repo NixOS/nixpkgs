@@ -1,7 +1,7 @@
 { stdenv, fetchzip, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "libinotify-kqueue-${version}";
+  pname = "libinotify-kqueue";
   version = "20180201";
 
   src = fetchzip {

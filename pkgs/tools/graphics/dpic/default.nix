@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dpic-${version}";
-  version = "2016.01.12";
+  pname = "dpic";
+  version = "2019.11.30";
 
   src = fetchurl {
-    url = "https://ece.uwaterloo.ca/~aplevich/dpic/${name}.tar.gz";
-    sha256 = "0iwwf8shgm8n4drz8mndvk7jga93yy8plnyby3lgk8376g5ps6cz";
+    url = "https://ece.uwaterloo.ca/~aplevich/dpic/${pname}-${version}.tar.gz";
+    sha256 = "0rgd31mdbaqbm9rz49872s17n25n5ajxcn61xailz3f0kzr4f3dg";
   };
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];

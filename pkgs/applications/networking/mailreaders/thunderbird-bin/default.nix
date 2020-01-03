@@ -21,17 +21,20 @@
 , libX11
 , libXScrnSaver
 , libXcomposite
+, libXcursor
 , libXdamage
 , libXext
 , libXfixes
+, libXi
 , libXinerama
 , libXrender
 , libXt
+, libxcb
 , libcanberra-gtk2
 , libgnome
 , libgnomeui
 , gnome3
-, libGLU_combined
+, libGLU, libGL
 , nspr
 , nss
 , pango
@@ -101,16 +104,19 @@ stdenv.mkDerivation {
       libX11
       libXScrnSaver
       libXcomposite
+      libXcursor
       libXdamage
       libXext
       libXfixes
+      libXi
       libXinerama
       libXrender
       libXt
+      libxcb
       libcanberra-gtk2
       libgnome
       libgnomeui
-      libGLU_combined
+      libGLU libGL
       nspr
       nss
       pango
@@ -153,10 +159,16 @@ stdenv.mkDerivation {
       Categories=Application;Network;
       EOF
 
+      # SNAP_NAME: https://github.com/NixOS/nixpkgs/pull/61980
+      # MOZ_LEGACY_PROFILES and MOZ_ALLOW_DOWNGRADE:
+      #   commit 87e261843c4236c541ee0113988286f77d2fa1ee
       wrapProgram "$out/bin/thunderbird" \
         --argv0 "$out/bin/.thunderbird-wrapped" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
-        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS" \
+        --set SNAP_NAME "thunderbird" \
+        --set MOZ_LEGACY_PROFILES 1 \
+        --set MOZ_ALLOW_DOWNGRADE 1
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
@@ -173,7 +185,7 @@ stdenv.mkDerivation {
       free = false;
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = platforms.linux;
   };
 }

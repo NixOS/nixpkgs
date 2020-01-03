@@ -1,6 +1,6 @@
 { stdenv, xorg, fetchgit }:
 stdenv.mkDerivation rec {
-  name = "xpointerbarrier-${version}";
+  pname = "xpointerbarrier";
   version = "18.06";
   src = fetchgit {
     url = "https://www.uninformativ.de/git/xpointerbarrier.git";

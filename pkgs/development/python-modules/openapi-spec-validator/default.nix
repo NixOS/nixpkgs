@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.2.7";
+  version = "0.2.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1sz9ls6a7h056nc5q76w4xl43sr1h9in2f23qwkxazcazr3zpi3p";
+    sha256 = "1kav0jlgdpgwx4am09ja7cr8s1g8h8a7j8mcfy1cfjr8fficg2g4";
   };
 
   propagatedBuildInputs = [ jsonschema pyyaml six ]

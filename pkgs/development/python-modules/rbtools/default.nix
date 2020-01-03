@@ -3,10 +3,11 @@
 , fetchurl
 , nose
 , six
+, setuptools
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rbtools";
   version = "0.7.2";
   disabled = isPy3k;
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six setuptools ];
 
   checkPhase = "LC_ALL=C nosetests";
 

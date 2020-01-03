@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://azure.microsoft.com/en-us/develop/python/";
     license = licenses.asl20;
     maintainers = with maintainers; [ olcai ];
+    broken = true; # this should propagate over 70 azure packages, many of which are not added yet
   };
 }

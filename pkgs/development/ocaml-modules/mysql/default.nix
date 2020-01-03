@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, mysql }:
+{ stdenv, fetchurl, fetchpatch, ocaml, findlib, libmysqlclient }:
 
 # TODO: la versione stabile da' un errore di compilazione dovuto a
 # qualche cambiamento negli header .h
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  propagatedBuildInputs = [ mysql.connector-c ];
+  propagatedBuildInputs = [ libmysqlclient ];
 
   patches = [
     (fetchpatch {

@@ -25,7 +25,7 @@ in
 , doBenchmark ? false
 , doHoogle ? true
 , editedCabalFile ? null
-, enableLibraryProfiling ? true
+, enableLibraryProfiling ? !(ghc.isGhcjs or false)
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling

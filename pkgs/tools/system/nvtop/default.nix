@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, nvidia_x11, cudatoolkit, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "nvtop-${version}";
+  pname = "nvtop";
   version = "1.0.0";
 
   src = fetchFromGitHub {

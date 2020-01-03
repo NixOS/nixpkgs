@@ -5,7 +5,8 @@ let
 in
 stdenv.mkDerivation {
 
-  name = "es-${version}";
+  pname = "es";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/wryun/es-shell/releases/download/v${version}/es-${version}.tar.gz";

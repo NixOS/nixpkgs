@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, poppler, pkgconfig, gdk-pixbuf, SDL, gtk2 }:
 
-stdenv.mkDerivation rec {
-  name = "green-pdfviewer-${version}";
+stdenv.mkDerivation {
+  pname = "green-pdfviewer";
   version = "nightly-2014-04-22";
 
   src = fetchFromGitHub {

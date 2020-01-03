@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
-  name = "git-radar-${version}";
+  pname = "git-radar";
   version = "0.6";
 
   src = fetchFromGitHub {

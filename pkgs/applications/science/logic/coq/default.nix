@@ -9,6 +9,7 @@
 , ocamlPackages, ncurses
 , buildIde ? true
 , glib, gnome3, wrapGAppsHook
+, darwin
 , csdp ? null
 , version
 }:
@@ -28,8 +29,11 @@ let
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
    "8.9.1" = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
-   "8.10+beta2" = "0jk7pwydhd17ab7ii69zvi4sgrr630q2lsxhckaj3sz55cpjlhal";
-  }."${version}";
+   "8.10.0" = "138jw94wp4mg5dgjc2asn8ng09ayz1mxdznq342n0m469j803gzg";
+   "8.10.1" = "072v2zkjzf7gj48137wpr3c9j0hg9pdhlr5l8jrgrwynld8fp7i4";
+   "8.10.2" = "0znxmpy71bfw0p6x47i82jf5k7v41zbz9bdpn901ysn3ir8l3wrz";
+   "8.11+beta1" = "06dlxj6v7gd51dh6ir121z7lgqdagkq717xxxrc8bdqhz7d2z7qj";
+  }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
   ideFlags = stdenv.lib.optionalString (buildIde && !versionAtLeast "8.10")
@@ -39,7 +43,8 @@ let
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
 self = stdenv.mkDerivation {
-  name = "coq-${version}";
+  pname = "coq";
+  inherit version;
 
   passthru = {
     inherit coq-version;
@@ -100,10 +105,13 @@ self = stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [ ocaml findlib camlp5 num ])
+  buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
+  ++ [ ocamlPackages.num ]
   ++ stdenv.lib.optionals buildIde
     (if versionAtLeast "8.10"
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
+     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
      else [ ocamlPackages.lablgtk ]);
 
   postPatch = ''
@@ -118,7 +126,7 @@ self = stdenv.mkDerivation {
   setupHook = writeText "setupHook.sh" ''
     addCoqPath () {
       if test -d "''$1/lib/coq/${coq-version}/user-contrib"; then
-        export COQPATH="''${COQPATH}''${COQPATH:+:}''$1/lib/coq/${coq-version}/user-contrib/"
+        export COQPATH="''${COQPATH-}''${COQPATH:+:}''$1/lib/coq/${coq-version}/user-contrib/"
       fi
     }
 

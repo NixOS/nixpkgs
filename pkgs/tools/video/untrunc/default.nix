@@ -1,7 +1,7 @@
 { stdenv, gcc, libav_12, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "untrunc-${version}";
+stdenv.mkDerivation {
+  pname = "untrunc";
   version = "2018.01.13";
 
   src = fetchFromGitHub {

@@ -2,11 +2,11 @@
   xcbutilxrm, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
 
 stdenv.mkDerivation rec {
-  name = "i3lock-${version}";
+  pname = "i3lock";
   version = "2.12";
 
   src = fetchurl {
-    url = "https://i3wm.org/i3lock/${name}.tar.bz2";
+    url = "https://i3wm.org/i3lock/${pname}-${version}.tar.bz2";
     sha256 = "02dwaqxpclcwiwvpvq7zwz4sxcv9c15dbf17ifalj1p8djls3cnh";
   };
 

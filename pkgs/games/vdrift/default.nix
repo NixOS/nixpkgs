@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, scons, libGLU_combined, SDL2, SDL2_image
+{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, scons, libGLU, libGL, SDL2, SDL2_image
 , libvorbis, bullet, curl, gettext, writeTextFile
 
 , data ? fetchsvn {
@@ -10,7 +10,8 @@
 let
   version = "git";
   bin = stdenv.mkDerivation {
-    name = "vdrift-${version}";
+    pname = "vdrift";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "vdrift";
@@ -20,7 +21,7 @@ let
     };
 
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ scons libGLU_combined SDL2 SDL2_image libvorbis bullet curl gettext ];
+    buildInputs = [ scons libGLU libGL SDL2 SDL2_image libvorbis bullet curl gettext ];
 
     patches = [ ./0001-Ignore-missing-data-for-installation.patch ];
 

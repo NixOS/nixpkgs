@@ -2,7 +2,7 @@
 , pbr, ldap, prettytable, fixtures, testresources, testtools }:
 
 buildPythonPackage rec {
-  name = "ldappool-${version}";
+  pname = "ldappool";
   version = "2.4.1";
 
   src = fetchPypi {

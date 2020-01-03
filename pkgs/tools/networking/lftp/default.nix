@@ -1,16 +1,16 @@
 { stdenv, fetchurl, gnutls, pkgconfig, readline, zlib, libidn2, gmp, libiconv, libunistring, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "lftp-${version}";
-  version = "4.8.4";
+  pname = "lftp";
+  version = "4.9.0";
 
   src = fetchurl {
     urls = [
-      "https://lftp.tech/ftp/${name}.tar.xz"
-      "https://ftp.st.ryukoku.ac.jp/pub/network/ftp/lftp/${name}.tar.xz"
-      "https://lftp.yar.ru/ftp/${name}.tar.xz"
+      "https://lftp.tech/ftp/${pname}-${version}.tar.xz"
+      "https://ftp.st.ryukoku.ac.jp/pub/network/ftp/lftp/${pname}-${version}.tar.xz"
+      "https://lftp.yar.ru/ftp/${pname}-${version}.tar.xz"
       ];
-    sha256 = "0qks22357xv9y6ripmf5j2n5svh8j5z0yniphfk89sjwkqg2gg2f";
+    sha256 = "0km267h57mlrd7gnn9gf40znvb3irwfc0qaql8kii8v936g6afqb";
   };
 
   nativeBuildInputs = [ pkgconfig ];

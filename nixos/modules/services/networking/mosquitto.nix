@@ -49,7 +49,7 @@ in
       host = mkOption {
         default = "127.0.0.1";
         example = "0.0.0.0";
-        type = types.string;
+        type = types.str;
         description = ''
           Host to listen on without SSL.
         '';
@@ -88,7 +88,7 @@ in
         host = mkOption {
           default = "0.0.0.0";
           example = "localhost";
-          type = types.string;
+          type = types.str;
           description = ''
             Host to listen on with SSL.
           '';
@@ -135,7 +135,7 @@ in
             };
 
             acl = mkOption {
-              type = types.listOf types.string;
+              type = types.listOf types.str;
               example = [ "topic read A/B" "topic A/#" ];
               description = ''
                 Control client access to topics on the broker.

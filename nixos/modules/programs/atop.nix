@@ -30,7 +30,7 @@ in
   };
 
   config = mkIf (cfg.settings != {}) {
-    environment.etc."atoprc".text =
+    environment.etc.atoprc.text =
       concatStrings (mapAttrsToList (n: v: "${n} ${toString v}\n") cfg.settings);
   };
 }

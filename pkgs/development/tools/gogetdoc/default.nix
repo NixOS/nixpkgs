@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "gogetdoc-unstable-${version}";
+  pname = "gogetdoc-unstable";
   version = "2018-10-25";
   rev = "9098cf5fc236a5e25060730544af2ba6d65cd968";
 

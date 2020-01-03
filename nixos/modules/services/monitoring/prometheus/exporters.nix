@@ -30,10 +30,12 @@ let
     "json"
     "mail"
     "minio"
+    "nextcloud"
     "nginx"
     "node"
     "postfix"
     "postgres"
+    "rspamd"
     "snmp"
     "surfboard"
     "tor"
@@ -132,14 +134,10 @@ let
     in
     mkIf conf.enable {
       warnings = conf.warnings or [];
-      users.users = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
-        "${name}-exporter" = {
-          description = ''
-            Prometheus ${name} exporter service user
-          '';
-          isSystemUser = true;
-          inherit (conf) group;
-        };
+      users.users."${name}-exporter" = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
+        description = "Prometheus ${name} exporter service user";
+        isSystemUser = true;
+        inherit (conf) group;
       });
       users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
         "${name}-exporter" = {};
@@ -162,6 +160,24 @@ let
   };
 in
 {
+
+  imports = (lib.forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
+                   "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
+                   "snmpExporter" "unifiExporter" "varnishExporter" ]
+       (opt: lib.mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
+         The prometheus exporters are now configured using `services.prometheus.exporters'.
+         See the 18.03 release notes for more information.
+       '' ))
+
+    ++ (lib.forEach [ "enable" "substitutions" "preset" ]
+       (opt: lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
+         The fonts.fontconfig.ultimate module and configuration is obsolete.
+         The repository has since been archived and activity has ceased.
+         https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+         No action should be needed for font configuration, as the fonts.fontconfig
+         module is already used by default.
+       '' ));
+
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
       options = (mkSubModules);
@@ -197,6 +213,11 @@ in
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
     services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
+  })] ++ [(mkIf config.services.rspamd.enable {
+    services.prometheus.exporters.rspamd.url = mkDefault "http://localhost:11334/stat";
+  })] ++ [(mkIf config.services.nginx.enable {
+    systemd.services.prometheus-nginx-exporter.after = [ "nginx.service" ];
+    systemd.services.prometheus-nginx-exporter.requires = [ "nginx.service" ];
   })] ++ (mapAttrsToList (name: conf:
     mkExporterConf {
       inherit name;

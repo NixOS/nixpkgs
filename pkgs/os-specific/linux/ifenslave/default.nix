@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ifenslave-${version}";
+  pname = "ifenslave";
   version = "1.1.0";
 
   src = fetchurl {

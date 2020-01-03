@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "6.4.2";
-  name = "multitail-${version}";
+  version = "6.5.0";
+  pname = "multitail";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/multitail/${name}.tgz";
-    sha256 = "1zd1r89xkxngl1pdrvsc877838nwkfqkbcgfqm3vglwalxc587dg";
+    url = "https://www.vanheusden.com/multitail/${pname}-${version}.tgz";
+    sha256 = "1vd9vdxyxsccl64ilx542ya5vlw2bpg6gnkq1x8cfqy6vxvmx7dj";
   };
 
   buildInputs = [ ncurses ];

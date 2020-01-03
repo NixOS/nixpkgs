@@ -1,12 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, qmake
+{ stdenv, mkDerivation, lib, fetchFromGitHub
+, cmake, extra-cmake-modules, pkgconfig, qmake
 , libpthreadstubs, libxcb, libXdmcp
 , qtsvg, qttools, qtwebengine, qtx11extras
 , qtwayland
 , kwallet
 }:
 
-stdenv.mkDerivation rec {
-  name = "falkon-${version}";
+mkDerivation rec {
+  pname = "falkon";
   version = "3.1.0";
 
   src = fetchFromGitHub {

@@ -3,7 +3,8 @@
 
 let version = "1.40"; in
 stdenv.mkDerivation {
-  name = "windowlab-${version}";
+  pname = "windowlab";
+  inherit version;
 
   src = fetchurl {
     url = "http://nickgravgaard.com/windowlab/windowlab-${version}.tar";

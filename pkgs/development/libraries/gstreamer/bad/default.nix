@@ -1,16 +1,40 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja, gettext
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
 , config
-, pkgconfig, python3, gst-plugins-base, orc
+, pkgconfig
+, python3
+, gst-plugins-base
+, orc
 , gobject-introspection
 , enableZbar ? true
-, faacSupport ? false, faac ? null
-, faad2, libass, libkate, libmms, librdf, ladspaH
-, libnice, webrtc-audio-processing, lilv, lv2, serd, sord, sratom
-, libbs2b, libmodplug, mpeg2dec
-, openjpeg, libopus, librsvg
+, faacSupport ? false
+, faac ? null
+, faad2
+, libass
+, libkate
+, libmms
+, librdf
+, ladspaH
+, libnice
+, webrtc-audio-processing
+, lilv
+, lv2
+, serd
+, sord
+, sratom
+, libbs2b
+, libmodplug
+, mpeg2dec
+, openjpeg
+, libopus
+, librsvg
 , bluez
 , chromaprint
 , curl
+, darwin
 , directfb
 , fdk_aac
 , flite
@@ -27,7 +51,7 @@
 , libusb1
 , neon
 , openal
-, opencv3
+, opencv4
 , openexr
 , openh264
 , pango
@@ -38,10 +62,21 @@
 , srtp
 , zbar
 , wayland-protocols
-, wildmidi, fluidsynth, libvdpau, wayland
-, libwebp, xvidcore, gnutls, mjpegtools
-, libGLU_combined, libintl, libgme
-, openssl, x265, libxml2
+, wildmidi
+, fluidsynth
+, libvdpau
+, wayland
+, libwebp
+, xvidcore
+, gnutls
+, mjpegtools
+, libGLU
+, libGL
+, libintl
+, libgme
+, openssl
+, x265
+, libxml2
 , srt
 }:
 
@@ -49,113 +84,128 @@ assert faacSupport -> faac != null;
 
 let
   inherit (stdenv.lib) optional optionals;
-in
-stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-${version}";
-  version = "1.16.0";
-
-  meta = with stdenv.lib; {
-    description = "Gstreamer Bad Plugins";
-    homepage    = "https://gstreamer.freedesktop.org";
-    longDescription = ''
-      a set of plug-ins that aren't up to par compared to the
-      rest.  They might be close to being good quality, but they're missing
-      something - be it a good code review, some documentation, a set of tests,
-      a real live maintainer, or some actual wide use.
-    '';
-    license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
-  };
-
-  preConfigure = ''
-    patchShebangs .
-  '';
-
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-    # Remove when https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/merge_requests/312 is merged and available to us
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/99790eaad9083cce5ab2b1646489e1a1c0faad1e.patch";
-      sha256 = "11bqy4sl05qq5mj4bx5s09rq106s3j0vnpjl4np058im32j69lr3";
-    })
-    # Remove when https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/merge_requests/312 is merged and available to us
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/1872da81c48d3a719bd39955fd97deac7d037d74.patch";
-      sha256 = "11zwrr5ggflmvr0qfssj7dmhgd3ybiadmy79b4zh24022zgw3xpz";
-    })
-  ];
-
-  src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "019b0yqjrcg6jmfd4cc336h1bz5p4wxl58yz1c4sdb96avirs4r2";
-  };
+in stdenv.mkDerivation rec {
+  pname = "gst-plugins-bad";
+  version = "1.16.2";
 
   outputs = [ "out" "dev" ];
 
+  src = fetchurl {
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0x0y0hm0ga3zqi5q4090hw5sjh59y1ry9ak16qsaascm72i7mjzi";
+  };
+
+  patches = [
+    ./fix_pkgconfig_includedir.patch
+  ];
+
   nativeBuildInputs = [
-    meson ninja pkgconfig python3 gettext gobject-introspection
-  ]
-  ++ optionals stdenv.isLinux [
+    meson
+    ninja
+    pkgconfig
+    python3
+    gettext
+    gobject-introspection
+  ] ++ optionals stdenv.isLinux [
     wayland-protocols
   ];
 
   buildInputs = [
-    gst-plugins-base orc
-    faad2 libass libkate libmms
-    libnice webrtc-audio-processing # webrtc
+    gst-plugins-base
+    orc
+    faad2
+    libass
+    libkate
+    libmms
+    webrtc-audio-processing # webrtc
     libbs2b
-    ladspaH librdf # ladspa plug-in
-    lilv lv2 serd sord sratom # lv2 plug-in
-    libmodplug mpeg2dec
-    openjpeg libopus librsvg
-    bluez
-    chromaprint
+    libmodplug
+    mpeg2dec
+    openjpeg
+    libopus
+    librsvg
     curl.dev
-    directfb
     fdk_aac
-    flite
     gsm
     libaom
     libdc1394
     libde265
-    libdrm
     libdvdnav
     libdvdread
-    libgudev
-    libofa
     libsndfile
     libusb1
+    mjpegtools
     neon
     openal
-    opencv3
+    opencv4
     openexr
     openh264
     rtmpdump
     pango
-    sbc
     soundtouch
-    spandsp
     srtp
-    fluidsynth libvdpau
-    libwebp xvidcore gnutls libGLU_combined
-    libgme openssl x265 libxml2
+    fluidsynth
+    libvdpau
+    libwebp
+    xvidcore
+    gnutls
+    libGL
+    libGLU
+    libgme
+    openssl
+    x265
+    libxml2
     libintl
     srt
-  ]
-    ++ optional enableZbar zbar
-    ++ optional faacSupport faac
-    ++ optional stdenv.isLinux wayland
+  ] ++ optionals enableZbar [
+    zbar
+  ] ++ optionals faacSupport [
+    faac
+  ] ++ optionals stdenv.isLinux [
+    bluez
+    wayland
+  ] ++ optionals (!stdenv.isDarwin) [
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
-    ++ optional (!stdenv.isDarwin) wildmidi
+    wildmidi
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
-    ++ optional (!stdenv.isDarwin) mjpegtools;
+    mjpegtools
+
+    chromaprint
+    directfb
+    flite
+    libdrm
+    libgudev
+    libnice
+    libofa
+    librdf
+    sbc
+    spandsp
+
+    # ladspa plug-in
+    ladspaH
+    librdf # TODO: make build on Darwin
+
+    # lv2 plug-in
+    lilv
+    lv2
+    serd
+    sord
+    sratom
+  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    # For unknown reasons the order is important, e.g. if
+    # VideoToolbox is last, we get:
+    #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
+    VideoToolbox
+    AudioToolbox
+    AVFoundation
+    CoreMedia
+    CoreVideo
+    Foundation
+    MediaToolbox
+  ]);
 
   mesonFlags = [
-    # Enables all features, so that we know when new dependencies are necessary.
-    "-Dauto_features=enabled"
-
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
 
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
@@ -191,10 +241,50 @@ stdenv.mkDerivation rec {
     # see https://github.com/NixOS/nixpkgs/issues/54395
     "-Dnvdec=disabled"
     "-Dnvenc=disabled"
+  ]
+  ++ optionals stdenv.isDarwin [
+    "-Dbluez=disabled"
+    "-Dchromaprint=disabled"
+    "-Ddirectfb=disabled"
+    "-Dflite=disabled"
+    "-Dkms=disabled" # renders to libdrm output
+    "-Dofa=disabled"
+    "-Dlv2=disabled"
+    "-Dsbc=disabled"
+    "-Dspandsp=disabled"
+    "-Ddvb=disabled"
+    "-Dfbdev=disabled"
+    "-Duvch264=disabled" # requires gudev
+    "-Dladspa=disabled" # requires lrdf
+    "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
+    "-Dwildmidi=disabled" # see dependencies above
+  ] ++ optionals (!gst-plugins-base.glEnabled) [
+    "-Dgl=disabled"]
+  ++ optionals (!gst-plugins-base.waylandEnabled) [
+    "-Dwayland=disabled"
+  ] ++ optionals (!gst-plugins-base.glEnabled) [
+    # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
+    # but its meson build system does not declare the dependency.
+    "-Dapplemedia=disabled"
   ];
 
-  enableParallelBuilding = true;
+  # This package has some `_("string literal")` string formats
+  # that trip up clang with format security enabled.
+  hardeningDisable = [ "format" ];
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
+  meta = with stdenv.lib; {
+    description = "GStreamer Bad Plugins";
+    homepage = "https://gstreamer.freedesktop.org";
+    longDescription = ''
+      a set of plug-ins that aren't up to par compared to the
+      rest.  They might be close to being good quality, but they're missing
+      something - be it a good code review, some documentation, a set of tests,
+      a real live maintainer, or some actual wide use.
+    '';
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
+  };
 }

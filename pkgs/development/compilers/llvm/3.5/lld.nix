@@ -1,7 +1,8 @@
 { stdenv, fetch, cmake, llvm, ncurses, zlib, python, version }:
 
 stdenv.mkDerivation {
-  name = "lld-${version}";
+  pname = "lld";
+  inherit version;
 
   src = fetch "lld" "1hpqawg1sc8mdqxqaxqmlzbrn69w1pkj8rxhjgqgmwra6c0xky89";
 

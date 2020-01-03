@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "pyocr";
   version = "0.5.3";
-  name = pname + "-" + version;
   disabled = !isPy3k;
 
   # Don't fetch from PYPI because it doesn't contain tests.

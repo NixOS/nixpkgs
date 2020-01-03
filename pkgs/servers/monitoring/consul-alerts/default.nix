@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "consul-alerts-${version}";
-  version = "0.5.0";
+  pname = "consul-alerts";
+  version = "0.6.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/AcalephStorage/consul-alerts";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "AcalephStorage";
     repo = "consul-alerts";
-    sha256 = "0dff2cpk3lkgjsh97rvlrpacpka0kwm29691diyvj7lb9ydzlx3r";
+    sha256 = "0836zicv76sd6ljhbbii1mrzh65pch10w3gfa128iynaviksbgn5";
   };
 
   meta = with stdenv.lib; {

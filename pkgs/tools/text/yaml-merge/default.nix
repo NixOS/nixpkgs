@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name= "yaml-merge-2016-02-16";
 
   src = fetchFromGitHub {

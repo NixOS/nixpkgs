@@ -86,7 +86,7 @@ let
       }
 
       plugin {
-        quota_rule = *:storage=${cfg.quotaGlobalPerUser} 
+        quota_rule = *:storage=${cfg.quotaGlobalPerUser}
         quota = maildir:User quota # per virtual mail user quota # BUG/FIXME broken, we couldn't get this working
         quota_status_success = DUNNO
         quota_status_nouser = DUNNO
@@ -133,6 +133,9 @@ let
   };
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+  ];
 
   options.services.dovecot2 = {
     enable = mkEnableOption "Dovecot 2.x POP3/IMAP server";
@@ -181,7 +184,7 @@ in
     };
 
     configFile = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.path;
       default = null;
       description = "Config file used for the whole dovecot configuration.";
       apply = v: if v != null then v else pkgs.writeText "dovecot.conf" dovecotConf;
@@ -344,8 +347,7 @@ in
     systemd.services.dovecot2 = {
       description = "Dovecot IMAP/POP3 server";
 
-      after = [ "keys.target" "network.target" ];
-      wants = [ "keys.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ cfg.configFile ];
 

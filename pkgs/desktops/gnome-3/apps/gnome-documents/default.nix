@@ -1,36 +1,86 @@
-{ stdenv, meson, ninja, gettext, fetchurl, evince, gjs
-, pkgconfig, gtk3, glib, tracker, tracker-miners
-, itstool, libxslt, webkitgtk, libgdata
-, gnome-desktop, libzapojit, libgepub
-, gnome3, gdk-pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
-, gobject-introspection, inkscape, poppler_utils
-, desktop-file-utils, wrapGAppsHook, python3, gsettings-desktop-schemas }:
+{ stdenv
+, meson
+, ninja
+, gettext
+, fetchurl
+, evince
+, gjs
+, pkgconfig
+, gtk3
+, glib
+, tracker
+, tracker-miners
+, itstool
+, libxslt
+, webkitgtk
+, libgdata
+, gnome-desktop
+, libzapojit
+, libgepub
+, gnome3
+, gdk-pixbuf
+, libsoup
+, docbook_xsl
+, docbook_xml_dtd_42
+, gobject-introspection
+, inkscape
+, poppler_utils
+, desktop-file-utils
+, wrapGAppsHook
+, python3
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-documents-${version}";
-  version = "3.32.0";
+  pname = "gnome-documents";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1gqddzbr4d8s0asmrhy0sfmwggzhbmpm61mqf8rxpdjk7s26086c";
+    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1qph567mapg3s1a26k7b8y57g9bklhj2mh8xm758z9zkms20xafq";
   };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    itstool
+    libxslt
+    desktop-file-utils
+    docbook_xsl
+    docbook_xml_dtd_42
+    wrapGAppsHook
+    python3
+
+    # building getting started
+    inkscape
+    poppler_utils
+  ];
+
+  buildInputs = [
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    gnome3.adwaita-icon-theme
+    evince
+    libsoup
+    webkitgtk
+    gjs
+    gobject-introspection
+    tracker
+    tracker-miners
+    libgdata
+    gnome-desktop
+    libzapojit
+    libgepub
+  ];
 
   doCheck = true;
 
   mesonFlags = [
-    "-Dgetting-started=true"
-  ];
-
-  nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl docbook_xml_dtd_42 wrapGAppsHook python3
-    inkscape poppler_utils # building getting started
-  ];
-  buildInputs = [
-    gtk3 glib gsettings-desktop-schemas
-    gdk-pixbuf gnome3.adwaita-icon-theme evince
-    libsoup webkitgtk gjs gobject-introspection
-    tracker tracker-miners libgdata
-    gnome-desktop libzapojit libgepub
+    "-Dgetting_started=true"
   ];
 
   postPatch = ''
@@ -44,13 +94,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gnome-documents";
-      attrPath = "gnome3.gnome-documents";
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
     };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Documents;
+    homepage = "https://wiki.gnome.org/Apps/Documents";
     description = "Document manager application designed to work with GNOME 3";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

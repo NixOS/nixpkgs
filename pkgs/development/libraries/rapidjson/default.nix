@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "rapidjson-${version}";
+  pname = "rapidjson";
   version = "1.1.0";
 
   src = fetchFromGitHub {

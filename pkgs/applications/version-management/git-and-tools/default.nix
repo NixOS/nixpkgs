@@ -24,6 +24,8 @@ let
 
   darcsToGit = callPackage ./darcs-to-git { };
 
+  delta = callPackage ./delta { };
+
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
   ghq = callPackage ./ghq { };
@@ -72,6 +74,8 @@ let
 
   git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
 
+  git-annex-utils = callPackage ./git-annex-utils { };
+
   git-bug = callPackage ./git-bug { };
 
   # support for bugzilla
@@ -99,6 +103,8 @@ let
 
   git-imerge = callPackage ./git-imerge { };
 
+  git-machete = python3Packages.callPackage ./git-machete { };
+
   git-octopus = callPackage ./git-octopus { };
 
   git-open = callPackage ./git-open { };
@@ -120,6 +126,10 @@ let
   git-standup = callPackage ./git-standup { };
 
   git-stree = callPackage ./git-stree { };
+
+  git-subrepo = callPackage ./git-subrepo { };
+
+  git-subtrac = callPackage ./git-subtrac { };
 
   git-sync = callPackage ./git-sync { };
 
@@ -145,7 +155,9 @@ let
 
   lab = callPackage ./lab { };
 
-  pre-commit = callPackage ./pre-commit { };
+  lefthook = callPackage ./lefthook { };
+
+  pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 

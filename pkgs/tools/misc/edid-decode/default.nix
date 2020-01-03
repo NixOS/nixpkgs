@@ -1,8 +1,9 @@
 { stdenv, fetchgit }:
 let
   version = "2018-12-06";
-in stdenv.mkDerivation rec {
-  name = "edid-decode-unstable-${version}";
+in stdenv.mkDerivation {
+  pname = "edid-decode-unstable";
+  inherit version;
 
   src = fetchgit {
     url = "git://linuxtv.org/edid-decode.git";

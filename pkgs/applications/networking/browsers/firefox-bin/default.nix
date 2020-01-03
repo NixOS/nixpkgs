@@ -32,7 +32,7 @@
 , libgnomeui
 , libnotify
 , gnome3
-, libGLU_combined
+, libGLU, libGL
 , nspr
 , nss
 , pango
@@ -58,8 +58,8 @@ let
   inherit (generated) version sources;
 
   mozillaPlatforms = {
-    "i686-linux" = "linux-i686";
-    "x86_64-linux" = "linux-x86_64";
+    i686-linux = "linux-i686";
+    x86_64-linux = "linux-x86_64";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
@@ -126,7 +126,7 @@ stdenv.mkDerivation {
       libgnome
       libgnomeui
       libnotify
-      libGLU_combined
+      libGLU libGL
       nspr
       nss
       pango
@@ -205,6 +205,6 @@ stdenv.mkDerivation {
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
     platforms = builtins.attrNames mozillaPlatforms;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ taku0 ];
   };
 }

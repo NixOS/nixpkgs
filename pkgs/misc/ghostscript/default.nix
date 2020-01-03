@@ -10,8 +10,8 @@ assert cupsSupport -> cups != null;
 
 let
   version = "9.${ver_min}";
-  ver_min = "26";
-  sha512 = "0z2mvsh06qgnxl7p9isw7swg8jp8xcx3rnbqk727avw7ammvfh8785d2bn5i4fhz8y45ka3cpgp7b598m06yq5zawijhcnzkq187nrx";
+  ver_min = "50";
+  sha512 = "3p46kzn6kh7z4qqnqydmmvdlgzy5730z3yyvyxv6i4yb22mgihzrwqmhmvfn3b7lypwf6fdkkndarzv7ly3zndqpyvg89x436sms7iw";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -36,10 +36,11 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "ghostscript-${version}";
+  pname = "ghostscript";
+  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${name}.tar.xz";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${pname}-${version}.tar.xz";
     inherit sha512;
   };
 
@@ -47,19 +48,9 @@ stdenv.mkDerivation rec {
     ./urw-font-files.patch
     ./doc-no-ref.diff
     (fetchpatch {
-      name = "CVE-2019-6116";
-      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=d3537a54740d78c5895ec83694a07b3e4f616f61";
-      sha256 = "1hr8bpi87bbg1kvv28kflmfh1dhzxw66p9q0ddvbrj72qd86p3kx";
-    })
-    (fetchpatch {
-      name = "CVE-2019-3839-part-1";
-      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=4ec9ca74bed49f2a82acb4bf430eae0d8b3b75c9";
-      sha256 = "0gn1n9fq5msrxxzspidcnmykp1iv3yvx5485fddmgrslr52ngcf9";
-    })
-    (fetchpatch {
-      name = "CVE-2019-3839-part-2";
-      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=db24f253409d5d085c2760c814c3e1d3fa2dac59";
-      sha256 = "1h6kpwc6ryr6jlxjr6bfnvmmf8x0kqmyjlx3hggqjs23n0wsr9p9";
+      name = "CVE-2019-14869.patch";
+      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=485904772c5f0aa1140032746e5a0abfc40f4cef";
+      sha256 = "0z5gnvgpp0dlzgvpw9a1yan7qyycv3mf88l93fvb1kyay893rshp";
     })
   ];
 

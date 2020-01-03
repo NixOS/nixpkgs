@@ -7,7 +7,7 @@ let
 
 in
   
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dwarf-therapist-${dwarf-therapist.version}";
   
   wrapper = ./dwarf-therapist.in;

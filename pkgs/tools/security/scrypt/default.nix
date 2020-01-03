@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "scrypt-${version}";
-  version = "1.2.1";
+  pname = "scrypt";
+  version = "1.3.0";
 
   src = fetchurl {
-    url = "https://www.tarsnap.com/scrypt/${name}.tgz";
-    sha256 = "0xy5yhrwwv13skv9im9vm76rybh9f29j2dh4hlh2x01gvbkza8a6";
+    url = "https://www.tarsnap.com/scrypt/${pname}-${version}.tgz";
+    sha256 = "0j17yfrpi2bk5cawb4a4mzpv1vadqxh956hx0pa1gqfisknk8c16";
   };
 
   buildInputs = [ openssl ];

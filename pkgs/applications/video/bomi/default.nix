@@ -1,6 +1,6 @@
 { config, stdenv, fetchFromGitHub
 , fetchpatch, pkgconfig, perl, python, which
-, libX11, libxcb, libGLU_combined
+, libX11, libxcb, libGLU, libGL
 , qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmake, makeWrapper
 , libchardet
 , ffmpeg
@@ -30,7 +30,7 @@ assert cddaSupport -> libcdda != null;
 assert youtubeSupport -> youtube-dl != null;
 
 stdenv.mkDerivation rec {
-  name = "bomi-${version}";
+  pname = "bomi";
   version = "0.9.11";
 
   src = fetchFromGitHub {
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
                 [ libX11
                   libxcb
-                  libGLU_combined
+                  libGLU libGL
                   qtbase
                   qtx11extras
                   qtdeclarative

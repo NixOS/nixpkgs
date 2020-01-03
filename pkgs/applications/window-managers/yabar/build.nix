@@ -5,7 +5,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "yabar-${version}";
+  pname = "yabar";
+  inherit version;
 
   src = fetchFromGitHub {
     inherit rev sha256;

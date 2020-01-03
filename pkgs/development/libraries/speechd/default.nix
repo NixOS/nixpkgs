@@ -27,11 +27,11 @@ let
     else
       throw "You need to enable at least one output module.";
 in stdenv.mkDerivation rec {
-  name = "speech-dispatcher-${version}";
+  pname = "speech-dispatcher";
   version = "0.8.8";
 
   src = fetchurl {
-    url = "http://www.freebsoft.org/pub/projects/speechd/${name}.tar.gz";
+    url = "http://www.freebsoft.org/pub/projects/speechd/${pname}-${version}.tar.gz";
     sha256 = "1wvck00w9ixildaq6hlhnf6wa576y02ac96lp6932h3k1n08jaiw";
   };
 

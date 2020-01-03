@@ -1,9 +1,10 @@
-{ stdenv, fetchFromGitHub, qt5, fontconfig, freetype, libpng, zlib, libjpeg
+{ mkDerivation, lib, fetchFromGitHub, qtwebkit, qtsvg, qtxmlpatterns
+, fontconfig, freetype, libpng, zlib, libjpeg
 , openssl, libX11, libXext, libXrender }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "0.12.5";
-  name = "wkhtmltopdf-${version}";
+  pname = "wkhtmltopdf";
 
   src = fetchFromGitHub {
     owner  = "wkhtmltopdf";
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fontconfig freetype libpng zlib libjpeg openssl
     libX11 libXext libXrender
-    qt5.qtwebkit qt5.qtsvg qt5.qtxmlpatterns
+    qtwebkit qtsvg qtxmlpatterns
   ];
 
   prePatch = ''
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://wkhtmltopdf.org/;
     description = "Tools for rendering web pages to PDF or images";
     longDescription = ''

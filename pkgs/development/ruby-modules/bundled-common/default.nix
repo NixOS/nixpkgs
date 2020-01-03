@@ -52,7 +52,7 @@ let
     name
   else
     let
-      gem = gems."${pname}";
+      gem = gems.${pname};
       version = gem.version;
     in
       "${pname}-${version}";
@@ -70,7 +70,7 @@ let
 
   maybeCopyAll = pkgname: if pkgname == null then "" else
   let
-    mainGem = gems."${pkgname}" or (throw "bundlerEnv: gem ${pkgname} not found");
+    mainGem = gems.${pkgname} or (throw "bundlerEnv: gem ${pkgname} not found");
   in
     copyIfBundledByPath mainGem;
 

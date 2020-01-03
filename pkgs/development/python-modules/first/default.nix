@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "first";
   version = "2.0.2";
-  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;

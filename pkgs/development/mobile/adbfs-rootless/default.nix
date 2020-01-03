@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, fuse, adb }:
 
 stdenv.mkDerivation rec {
-  name = "adbfs-rootless-${version}";
+  pname = "adbfs-rootless";
   version = "2016-10-02";
 
   src = fetchFromGitHub {

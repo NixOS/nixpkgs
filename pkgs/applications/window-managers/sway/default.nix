@@ -3,18 +3,18 @@
 , pkgconfig, scdoc
 , wayland, libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf
-, wlroots, wayland-protocols, swaybg
+, wlroots, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
-  pname = "sway";
-  version = "1.1.1";
+  pname = "sway-unwrapped";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "0yhn9zdg9mzfhn97c440lk3pw6122nrhx0is5sqmvgr6p814f776";
+    sha256 = "0vch2zm5afc76ia78p3vg71zr2fyda67l9hd2h0x1jq3mnvfbxnd";
   };
 
   patches = [
@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
     ./load-configuration-from-etc.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja scdoc makeWrapper ];
+  nativeBuildInputs = [
+    pkgconfig meson ninja scdoc
+  ];
 
   buildInputs = [
     wayland libxkbcommon pcre json_c dbus libevdev
@@ -36,14 +38,6 @@ stdenv.mkDerivation rec {
     "-Ddefault-wallpaper=false" "-Dxwayland=enabled" "-Dgdk-pixbuf=enabled"
     "-Dtray=enabled" "-Dman-pages=enabled"
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/sway --prefix PATH : "${swaybg}/bin"
-  '';
-
-  postPatch = ''
-    sed -i "s/version: '1.0'/version: '${version}'/" meson.build
-  '';
 
   meta = with stdenv.lib; {
     description = "i3-compatible tiling Wayland compositor";

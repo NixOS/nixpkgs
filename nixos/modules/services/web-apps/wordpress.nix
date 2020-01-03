@@ -61,6 +61,19 @@ let
     ?>
   '';
 
+  secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
+  secretsScript = hostStateDir: ''
+    if ! test -e "${hostStateDir}/secret-keys.php"; then
+      umask 0177
+      echo "<?php" >> "${hostStateDir}/secret-keys.php"
+      ${concatMapStringsSep "\n" (var: ''
+        echo "define('${var}', '`tr -dc a-zA-Z0-9 </dev/urandom | head -c 64`');" >> "${hostStateDir}/secret-keys.php"
+      '') secretsVars}
+      echo "?>" >> "${hostStateDir}/secret-keys.php"
+      chmod 440 "${hostStateDir}/secret-keys.php"
+    fi
+  '';
+
   siteOpts = { lib, name, ... }:
     {
       options = {
@@ -114,7 +127,7 @@ let
             <note><para>These themes need to be packaged before use, see example.</para></note>
           '';
           example = ''
-            # For shits and giggles, let's package the responsive theme
+            # Let's package the responsive theme
             responsiveTheme = pkgs.stdenv.mkDerivation {
               name = "responsive-theme";
               # Download the theme from the wordpress site
@@ -133,7 +146,7 @@ let
           '';
         };
 
-        database = rec {
+        database = {
           host = mkOption {
             type = types.str;
             default = "localhost";
@@ -216,15 +229,15 @@ let
         };
 
         poolConfig = mkOption {
-          type = types.lines;
-          default = ''
-            pm = dynamic
-            pm.max_children = 32
-            pm.start_servers = 2
-            pm.min_spare_servers = 2
-            pm.max_spare_servers = 4
-            pm.max_requests = 500
-          '';
+          type = with types; attrsOf (oneOf [ str int bool ]);
+          default = {
+            "pm" = "dynamic";
+            "pm.max_children" = 32;
+            "pm.start_servers" = 2;
+            "pm.min_spare_servers" = 2;
+            "pm.max_spare_servers" = 4;
+            "pm.max_requests" = 500;
+          };
           description = ''
             Options for the WordPress PHP pool. See the documentation on <literal>php-fpm.conf</literal>
             for details on configuration directives.
@@ -280,15 +293,11 @@ in
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "wordpress-${hostName}" {
-        listen = "/run/phpfpm/wordpress-${hostName}.sock";
-        extraConfig = ''
-          listen.owner = ${config.services.httpd.user}
-          listen.group = ${config.services.httpd.group}
-          user = ${user}
-          group = ${group}
-
-          ${cfg.poolConfig}
-        '';
+        inherit user group;
+        settings = {
+          "listen.owner" = config.services.httpd.user;
+          "listen.group" = config.services.httpd.group;
+        } // cfg.poolConfig;
       }
     )) eachSite;
 
@@ -303,7 +312,7 @@ in
               <Directory "${pkg hostName cfg}/share/wordpress">
                 <FilesMatch "\.php$">
                   <If "-f %{REQUEST_FILENAME}">
-                    SetHandler "proxy:unix:/run/phpfpm/wordpress-${hostName}.sock|fcgi://localhost/"
+                    SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
                   </If>
                 </FilesMatch>
 
@@ -344,14 +353,7 @@ in
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-wordpress-${hostName}.service" ];
           after = optional cfg.database.createLocally "mysql.service";
-          script = ''
-            if ! test -e "${stateDir hostName}/secret-keys.php"; then
-              echo "<?php" >> "${stateDir hostName}/secret-keys.php"
-              ${pkgs.curl}/bin/curl -s https://api.wordpress.org/secret-key/1.1/salt/ >> "${stateDir hostName}/secret-keys.php"
-              echo "?>" >> "${stateDir hostName}/secret-keys.php"
-              chmod 440 "${stateDir hostName}/secret-keys.php"
-            fi
-          '';
+          script = secretsScript (stateDir hostName);
 
           serviceConfig = {
             Type = "oneshot";
@@ -365,7 +367,10 @@ in
       })
     ];
 
-    users.users.${user}.group = group;
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
 
   };
 }

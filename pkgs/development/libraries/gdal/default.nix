@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
+, postgresql, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
 , libiconv, libxml2, autoreconfHook
 , netcdfSupport ? true, netcdf, hdf5, curl
@@ -8,7 +8,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gdal-${version}";
+  pname = "gdal";
   version = "3.0.1";
 
   src = fetchFromGitHub {
@@ -20,7 +20,15 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/gdal";
 
-  patches = [ ./001.3_0_1.darwin.patch ];
+  patches = [
+    ./001.3_0_1.darwin.patch
+    (fetchpatch {
+      name = "CVE-2019-17545.patch";
+      url = "https://github.com/OSGeo/gdal/commit/148115fcc40f1651a5d15fa34c9a8c528e7147bb.patch";
+      stripLen = 1;
+      sha256 = "0hai59hhvrci9xwjw4lp3wc1brn00imngmqrbbs8v9yr3b0fzbgs";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -38,7 +46,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.connector-c or mysql}/bin/mysql_config"
+    "--with-mysql=${libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"

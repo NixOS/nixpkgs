@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.6.2";
-  name = "darktable-${version}";
+  version = "3.0.0";
+  pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "0igvgyd042j7hm4y8fcm6dc1qqjs4d1r7y6f0pzpa0x416xyzfcw";
+    sha256 = "7195a5ff7ee95ab7c5a57e4e84f8c90cc4728b2c917359203c21293ab754c0db";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = https://www.darktable.org;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ goibhniu rickynils flosse mrVanDalo ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ goibhniu flosse mrVanDalo ];
   };
 }

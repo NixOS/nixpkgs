@@ -7,11 +7,11 @@
 # required for home-assistant
 buildPythonPackage rec {
   pname = "speedtest-cli";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s3ylvkclzdsyqmpjnsd6ixrbmj7vd4bfsdplkjaz1c2czyy3j9p";
+    sha256 = "0m1fpsb318mrpliw026a7nhx8iky306rmfi565734k7r49i3h7fg";
   };
 
   # tests require working internet connection

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "scid-vs-pc-${version}";
+  pname = "scid-vs-pc";
   version = "4.20";
 
   src = fetchurl {

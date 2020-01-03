@@ -1,6 +1,6 @@
-{ stdenv, qtbase, cmake, fetchFromGitHub }:
+{ mkDerivation, lib, qtbase, cmake, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "evtest-qt";
   version = "0.2.0";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple input device tester for linux with Qt GUI";
     homepage = "https://github.com/Grumbel/evtest-qt";
     maintainers = with maintainers; [ alexarice ];

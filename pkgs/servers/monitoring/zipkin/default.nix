@@ -1,7 +1,7 @@
 {stdenv, fetchurl, makeWrapper, jre}:
 stdenv.mkDerivation rec {
   version = "1.28.1";
-  name = "zipkin-server-${version}";
+  pname = "zipkin-server";
   src = fetchurl {
     url = "https://search.maven.org/remotecontent?filepath=io/zipkin/java/zipkin-server/${version}/zipkin-server-${version}-exec.jar";
     sha256 = "02369fkv0kbl1isq6y26fh2zj5wxv3zck522m5wypsjlcfcw2apa";

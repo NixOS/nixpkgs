@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchFromGitHub, pkgconfig, libXtst, libvorbis, hunspell
 , libao, ffmpeg, libeb, lzo, xz, libtiff, opencc
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake }:
-mkDerivation rec {
+mkDerivation {
 
   name = "goldendict-2019-08-01";
   src = fetchFromGitHub {

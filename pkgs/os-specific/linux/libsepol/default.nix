@@ -1,16 +1,16 @@
 { stdenv, fetchurl, flex }:
 
 stdenv.mkDerivation rec {
-  name = "libsepol-${version}";
-  version = "2.7";
-  se_release = "20170804";
-  se_url = "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases";
+  pname = "libsepol";
+  version = "2.9";
+  se_release = "20190315";
+  se_url = "https://github.com/SELinuxProject/selinux/releases/download";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsepol-${version}.tar.gz";
-    sha256 = "1rzr90d3f1g5wy1b8sh6fgnqb9migys2zgpjmpakn6lhxkc3p7fn";
+    sha256 = "0p8x7w73jn1nysx1d7416wqrhbi0r6isrjxib7jf68fi72q14jx3";
   };
 
   nativeBuildInputs = [ flex ];

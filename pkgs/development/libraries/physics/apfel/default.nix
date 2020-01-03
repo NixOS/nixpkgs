@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, gfortran, lhapdf, python2 }:
+{ stdenv, fetchFromGitHub, gfortran, lhapdf, python2, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "apfel-${version}";
+  pname = "apfel";
   version = "3.0.4";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "13n5ygbqvskg3qq5n4sff1nbii0li0zf1vqissai7x0hynxgy7p6";
   };
 
-  buildInputs = [ gfortran lhapdf python2 ];
+  buildInputs = [ gfortran lhapdf python2 zlib ];
 
   enableParallelBuilding = true;
 

@@ -1,7 +1,7 @@
 { stdenv, python3, fetchFromGitHub, makeWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "leo-editor-${version}";
+  pname = "leo-editor";
   version = "5.7.3";
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper python3 ];
   propagatedBuildInputs = with python3.pkgs; [ pyqt5 docutils ];
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "leo-editor";
     exec = "leo %U";
     icon = "leoapp32";

@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = https://github.com/symengine/symengine.py;
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

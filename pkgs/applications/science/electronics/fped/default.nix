@@ -4,8 +4,8 @@
 }:
 
 with lib;
-stdenv.mkDerivation rec {
-  name = "fped-${version}";
+stdenv.mkDerivation {
+  pname = "fped";
   version = "unstable-2017-05-11";
 
   src = fetchgit {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   # This uses '/bin/bash', '/usr/local' and 'lex' by default
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "LEX=flex"
     "RGBDEF=${netpbm}/share/netpbm/misc/rgb.txt"
   ];

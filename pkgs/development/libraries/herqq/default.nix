@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.1.0";
-  name = "herqq-${version}";
+  pname = "herqq";
 
   nativeBuildInputs = [ qt5.qmake ];
   buildInputs = [ qt5.qtbase unzip qtmultimedia ];

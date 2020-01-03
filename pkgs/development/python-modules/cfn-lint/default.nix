@@ -8,15 +8,16 @@
 , jsonpatch
 , jsonschema
 , pathlib2
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.19.1";
+  version = "0.24.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a723ff791fc23aced78e9cde28f18f9eeae9a24f91db2b7a20f7aa837a613b3";
+    sha256 = "5aa1540ee9a7efc23ebe54a22f1a505766a4bb44f64a0f4fe79574a156a9b43e";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     jsonpatch
     jsonschema
     pathlib2
+    setuptools
   ];
 
   # No tests included in archive

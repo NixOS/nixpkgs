@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "constant-detune-chorus-${version}";
+  pname = "constant-detune-chorus";
   version = "0.1.3";
 
   src = fetchFromGitHub {

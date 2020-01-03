@@ -2,7 +2,7 @@
 , intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
 
 stdenv.mkDerivation rec {
-  name = "ecryptfs-${version}";
+  pname = "ecryptfs";
   version = "111";
 
   src = fetchurl {

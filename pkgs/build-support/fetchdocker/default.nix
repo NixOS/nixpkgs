@@ -37,8 +37,8 @@ let
 
   repositories =
     writeText "repositories" (builtins.toJSON {
-      "${repoTag1}" = {
-        "${tag}" = lib.last layers;
+      ${repoTag1} = {
+        ${tag} = lib.last layers;
       };
     });
 

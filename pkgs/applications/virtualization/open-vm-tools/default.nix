@@ -5,7 +5,7 @@
   withX ? true }:
 
 stdenv.mkDerivation rec {
-  name = "open-vm-tools-${version}";
+  pname = "open-vm-tools";
   version = "10.3.10";
 
   src = fetchFromGitHub {
@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
+
+  # igrone glib-2.62 deprecations
+  # Drop in next stable release.
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
 
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \

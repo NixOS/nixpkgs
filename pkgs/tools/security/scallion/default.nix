@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.1";
-  name = "scallion-${version}";
+  pname = "scallion";
 
   src = fetchFromGitHub {
     owner = "lachesis";

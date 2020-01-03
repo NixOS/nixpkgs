@@ -1,49 +1,68 @@
 { stdenv, makeWrapper, fetchFromBitbucket, fetchFromGitHub, pkgconfig
 , alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
-, libzip, rtaudio, rtmidi, speex }:
+, libzip, rtaudio, rtmidi, speex, libsamplerate }:
 
 let
-  glfw-git = glfw.overrideAttrs (oldAttrs: rec {
-    name = "glfw-git-${version}";
-    version = "2019-06-30";
-    src = fetchFromGitHub {
-      owner = "AndrewBelt";
-      repo = "glfw";
-      rev = "d9ab59efc781c392128a449361a381fcc93cf6f3";
-      sha256 = "1ykkq6qq8y6j5hlfj2zp1p87kr33vwhywziprz20v5avx1q7rjm8";
-    };
-    # We patch the source to export a function that was added to the glfw fork
-    # for Rack so it is present when we build glfw as a shared library.
-    # See https://github.com/AndrewBelt/glfw/pull/1 for discussion of this issue
-    # with upstream.
-    patches = [ ./glfw.patch ];
-    buildInputs = oldAttrs.buildInputs ++ [ libXext libXi ];
-  });
+  # The package repo vendors some of the package dependencies as submodules.
+  # Others are downloaded with `make deps`. Due to previous issues with the
+  # `glfw` submodule (see above) and because we can not access the network when
+  # building in a sandbox, we fetch the dependency source manually.
   pfft-source = fetchFromBitbucket {
     owner = "jpommier";
     repo = "pffft";
     rev = "29e4f76ac53bef048938754f32231d7836401f79";
     sha256 = "084csgqa6f1a270bhybjayrh3mpyi2jimc87qkdgsqcp8ycsx1l1";
   };
+  nanovg-source = fetchFromGitHub {
+    owner = "memononen";
+    repo = "nanovg";
+    rev = "1f9c8864fc556a1be4d4bf1d6bfe20cde25734b4";
+    sha256 = "08r15zrr6p1kxigxzxrg5rgya7wwbdx7d078r362qbkmws83wk27";
+  };
+  nanosvg-source = fetchFromGitHub {
+    owner = "memononen";
+    repo = "nanosvg";
+    rev = "25241c5a8f8451d41ab1b02ab2d865b01600d949";
+    sha256 = "114qgfmazsdl53rm4pgqif3gv8msdmfwi91lyc2jfadgzfd83xkg";
+  };
+  osdialog-source = fetchFromGitHub {
+    owner = "AndrewBelt";
+    repo = "osdialog";
+    rev = "e5db5de6444f4b2c4e1390c67b3efd718080c3da";
+    sha256 = "0iqxn1md053nl19hbjk8rqsdcmjwa5l5z0ci4fara77q43rc323i";
+  };
+  oui-blendish-source = fetchFromGitHub {
+    owner = "AndrewBelt";
+    repo = "oui-blendish";
+    rev = "79ec59e6bc7201017fc13a20c6e33380adca1660";
+    sha256 = "17kd0lh2x3x12bxkyhq6z8sg6vxln8m9qirf0basvcsmylr6rb64";
+  };
 in
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "VCV-Rack-${version}";
-  version = "1.1.3";
+  pname = "VCV-Rack";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "16q3x0jpwkdwwvh7rn472w7nfjf81s10z9c7bx011kk7rgk88hh2";
-    fetchSubmodules = true;
+    sha256 = "0ji64prr74qzxf5bx1sw022kbslx9nzll16lmk5in78hbl137b3i";
   };
 
-  patches = [ ./rack-minimize-vendoring.patch ];
+  patches = [
+    ./rack-minimize-vendoring.patch
+  ];
 
   prePatch = ''
-    cp -r ${pfft-source} dep/jpommier-pffft-source
-
+    # As we can't use `make dep` to set up the dependencies (as explained
+    # above), we do it here manually
     mkdir -p dep/include
+
+    cp -r ${pfft-source} dep/jpommier-pffft-source
+    cp -r ${nanovg-source}/* dep/nanovg
+    cp -r ${nanosvg-source}/* dep/nanosvg
+    cp -r ${osdialog-source}/* dep/osdialog
+    cp -r ${oui-blendish-source}/* dep/oui-blendish
 
     cp dep/jpommier-pffft-source/*.h dep/include
     cp dep/nanosvg/**/*.h dep/include
@@ -58,7 +77,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ glfw-git alsaLib curl glew gtk2-x11 jansson libjack2 libzip rtaudio rtmidi speex ];
+  buildInputs = [ alsaLib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
 
   buildFlags = "Rack";
 
@@ -78,7 +97,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
     # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or under a
     # no-derivatives clause
     license = with licenses; [ bsd3 cc-by-nc-40 unfreeRedistributable ];
-    maintainers = with maintainers; [ moredread ];
+    maintainers = with maintainers; [ moredread nathyong ];
     platforms = platforms.linux;
   };
 }

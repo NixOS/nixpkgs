@@ -9,7 +9,7 @@ let
   inherit (python3Packages) python setuptools;
 in stdenv.mkDerivation rec {
   version = "2.16.8";
-  name = "debian-devscripts-${version}";
+  pname = "debian-devscripts";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";

@@ -2,7 +2,7 @@
 , jre, makeWrapper, bash, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "confluent-platform-${version}";
+  pname = "confluent-platform";
   version = "5.3.0";
   scalaVersion = "2.12";
 

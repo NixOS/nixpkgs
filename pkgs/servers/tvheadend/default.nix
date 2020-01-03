@@ -5,8 +5,9 @@
 let
   version = "4.2.8";
 
-in stdenv.mkDerivation rec {
-  name = "tvheadend-${version}";
+in stdenv.mkDerivation {
+  pname = "tvheadend";
+  inherit version;
 
   src = fetchFromGitHub {
     owner  = "tvheadend";
@@ -23,6 +24,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
   enableParallelBuilding = true;
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
   # disable dvbscan, as having it enabled causes a network download which
   # cannot happen during build.

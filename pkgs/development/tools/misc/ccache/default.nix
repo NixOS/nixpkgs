@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, zlib, makeWrapper }:
 
 let ccache = stdenv.mkDerivation rec {
-  name = "ccache-${version}";
+  pname = "ccache";
   version = "3.4.1";
 
   src = fetchurl {
     sha256 = "1pppi4jbkkj641cdynmc35jaj40jjicw7gj75ran5qs5886jcblc";
-    url = "mirror://samba/ccache/${name}.tar.xz";
+    url = "mirror://samba/ccache/${pname}-${version}.tar.xz";
   };
 
   nativeBuildInputs = [ perl ];
@@ -30,7 +30,7 @@ let ccache = stdenv.mkDerivation rec {
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = {unwrappedCC, extraConfig}: stdenv.mkDerivation rec {
+    links = {unwrappedCC, extraConfig}: stdenv.mkDerivation {
       name = "ccache-links";
       passthru = {
         isClang = unwrappedCC.isClang or false;

@@ -3,7 +3,7 @@
 # To make use of this derivation, use the `programs.zsh.enableAutoSuggestions` option
 
 stdenv.mkDerivation rec {
-  name = "zsh-autosuggestions-${version}";
+  pname = "zsh-autosuggestions";
   version = "0.6.3";
 
   src = fetchFromGitHub {

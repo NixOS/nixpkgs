@@ -1,19 +1,23 @@
-{stdenv, fetchFromGitHub, cmake, mbedtls, bcunit, srtp}:
+{ stdenv, fetchFromGitHub, cmake, bcunit, mbedtls }:
+
 stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
-  baseName = "bctoolbox";
+  pname = "bctoolbox";
   version = "0.6.0";
-  buildInputs = [cmake mbedtls bcunit srtp];
+
+  nativeBuildInputs = [ cmake bcunit ];
+  buildInputs = [ mbedtls ];
+
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
-    repo = "${baseName}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "1cxx243wyzkd4xnvpyqf97n0rjhfckpvw1vhwnbwshq3q6fra909";
   };
 
   meta = {
     inherit version;
-    description = ''Utilities library for Linphone'';
+    description = "Utilities library for Linphone";
+    homepage = "https://github.com/BelledonneCommunications/bctoolbox";
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

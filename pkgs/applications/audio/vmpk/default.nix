@@ -5,7 +5,8 @@
 let
   version = "0.5.1";
 in stdenv.mkDerivation rec {
-  name = "vmpk-${version}";
+  pname = "vmpk";
+  inherit version;
 
   meta = with stdenv.lib; {
     description = "Virtual MIDI Piano Keyboard";
@@ -15,7 +16,7 @@ in stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/vmpk/${version}/${name}.tar.bz2";
+    url = "mirror://sourceforge/vmpk/${version}/${pname}-${version}.tar.bz2";
     sha256 = "11fqnxgs9hr9255d93n7lazxzjwn8jpmn23nywdksh0pb1ffvfrc";
   };
 

@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "audacious-${version}";
+  pname = "audacious";
   version = "3.9";
 
   src = fetchurl {

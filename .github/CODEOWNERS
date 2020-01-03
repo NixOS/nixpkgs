@@ -47,22 +47,25 @@
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
 
+# NixOS integration test driver
+/nixos/lib/test-driver  @tfc
+
 # New NixOS modules
 /nixos/modules/module-list.nix @Infinisil
 
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	@FRidh
-/pkgs/top-level/python-packages.nix     @FRidh
+/pkgs/top-level/python-packages.nix     @FRidh @jonringer
 /pkgs/development/interpreters/python   @FRidh
-/pkgs/development/python-modules        @FRidh
+/pkgs/development/python-modules        @FRidh @jonringer
 /doc/languages-frameworks/python.section.md     @FRidh
 
 # Haskell
-/pkgs/development/compilers/ghc                       @basvandijk
-/pkgs/development/haskell-modules                     @basvandijk
-/pkgs/development/haskell-modules/default.nix         @basvandijk
-/pkgs/development/haskell-modules/generic-builder.nix @basvandijk
-/pkgs/development/haskell-modules/hoogle.nix          @basvandijk
+/pkgs/development/compilers/ghc                       @basvandijk @cdepillabout
+/pkgs/development/haskell-modules                     @basvandijk @cdepillabout
+/pkgs/development/haskell-modules/default.nix         @basvandijk @cdepillabout
+/pkgs/development/haskell-modules/generic-builder.nix @basvandijk @cdepillabout
+/pkgs/development/haskell-modules/hoogle.nix          @basvandijk @cdepillabout
 
 # Perl
 /pkgs/development/interpreters/perl @volth
@@ -130,6 +133,12 @@
 /nixos/tests/hardened.nix @joachifm
 /pkgs/os-specific/linux/kernel/hardened-config.nix @joachifm
 
+# Network Time Daemons
+/pkgs/tools/networking/chrony @thoughtpolice
+/pkgs/tools/networking/ntp @thoughtpolice
+/pkgs/tools/networking/openntpd @thoughtpolice
+/nixos/modules/services/networking/ntp @thoughtpolice
+
 # Dhall
 /pkgs/development/dhall-modules      @Gabriel439 @Profpatsch
 /pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch
@@ -139,3 +148,30 @@
 
 # Bazel
 /pkgs/development/tools/build-managers/bazel @mboes @Profpatsch
+
+# NixOS modules for e-mail and dns services
+/nixos/modules/services/mail/mailman.nix    @peti
+/nixos/modules/services/mail/postfix.nix    @peti
+/nixos/modules/services/networking/bind.nix @peti
+/nixos/modules/services/mail/rspamd.nix     @peti
+
+# Emacs
+/pkgs/applications/editors/emacs-modes @adisbladis
+/pkgs/applications/editors/emacs       @adisbladis
+/pkgs/top-level/emacs-packages.nix     @adisbladis
+
+# VimPlugins
+/pkgs/misc/vim-plugins         @jonringer
+
+# VsCode Extensions
+/pkgs/misc/vscode-extensions   @jonringer
+
+# Prometheus exporter modules and tests
+/nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz
+/nixos/modules/services/monitoring/prometheus/exporters.xml  @WilliButz
+/nixos/tests/prometheus-exporters.nix                        @WilliButz
+
+# PHP
+/pkgs/development/interpreters/php  @etu
+/pkgs/top-level/php-packages.nix    @etu
+/pkgs/build-support/build-pecl.nix  @etu

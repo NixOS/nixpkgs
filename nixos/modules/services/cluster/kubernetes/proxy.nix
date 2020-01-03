@@ -7,6 +7,9 @@ let
   cfg = top.proxy;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "kubernetes" "proxy" "address" ] ["services" "kubernetes" "proxy" "bindAddress"])
+  ];
 
   ###### interface
   options.services.kubernetes.proxy = with lib.types; {
@@ -31,6 +34,12 @@ in
       type = listOf str;
     };
 
+    hostname = mkOption {
+      description = "Kubernetes proxy hostname override.";
+      default = config.networking.hostName;
+      type = str;
+    };
+
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes proxy";
 
     verbosity = mkOption {
@@ -45,28 +54,12 @@ in
   };
 
   ###### implementation
-  config = let
-
-    proxyPaths = filter (a: a != null) [
-      cfg.kubeconfig.caFile
-      cfg.kubeconfig.certFile
-      cfg.kubeconfig.keyFile
-    ];
-
-  in mkIf cfg.enable {
-    systemd.services.kube-proxy = rec {
+  config = mkIf cfg.enable {
+    systemd.services.kube-proxy = {
       description = "Kubernetes Proxy Service";
-      wantedBy = [ "kube-node-online.target" ];
-      after = [ "kubelet-online.service" ];
-      before = [ "kube-node-online.target" ];
-      environment.KUBECONFIG = top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig;
-      path = with pkgs; [ iptables conntrack_tools kubectl ];
-      preStart = ''
-        until kubectl auth can-i get nodes/${top.kubelet.hostname} -q 2>/dev/null; do
-          echo kubectl auth can-i get nodes/${top.kubelet.hostname}: exit status $?
-          sleep 2
-        done
-      '';
+      wantedBy = [ "kubernetes.target" ];
+      after = [ "kube-apiserver.service" ];
+      path = with pkgs; [ iptables conntrack_tools ];
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''${top.package}/bin/kube-proxy \
@@ -75,7 +68,8 @@ in
             "--cluster-cidr=${top.clusterCidr}"} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${environment.KUBECONFIG} \
+          --hostname-override=${cfg.hostname} \
+          --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
           ${cfg.extraOpts}
         '';
@@ -83,16 +77,9 @@ in
         Restart = "on-failure";
         RestartSec = 5;
       };
-      unitConfig.ConditionPathExists = proxyPaths;
     };
 
-    systemd.paths.kube-proxy = {
-      wantedBy = [ "kube-proxy.service" ];
-      pathConfig = {
-        PathExists = proxyPaths;
-        PathChanged = proxyPaths;
-      };
-    };
+    services.kubernetes.proxy.hostname = with config.networking; mkDefault hostName;
 
     services.kubernetes.pki.certs = {
       kubeProxyClient = top.lib.mkCert {

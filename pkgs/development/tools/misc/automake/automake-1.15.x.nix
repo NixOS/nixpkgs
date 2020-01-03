@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  patches = [ ./help2man-SOURCE_DATE_EPOCH-support.patch ];
+
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.
   preCheck = "unset NIX_INDENT_MAKE";

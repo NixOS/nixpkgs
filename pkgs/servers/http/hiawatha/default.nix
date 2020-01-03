@@ -16,7 +16,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hiawatha-${version}";
+  pname = "hiawatha";
   version = "10.9";
 
   src = fetchFromGitLab {

@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper , Security }:
 
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "racerd-${version}";
-  version = "2019-03-20";
+  pname = "racerd";
+  version = "unstable-2019-09-02";
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "racerd";
-    rev = "6f74488e58e42314a36ff000bae796fe54c1bdd1";
-    sha256 = "1lg7j2plxpn5l65jxhsm99vmy08ljdb666hm0y1nnmmzalrakrg1";
+    rev = "e3d380b9a1d3f3b67286d60465746bc89fea9098";
+    sha256 = "13jqdvjk4savcl03mrn2vzgdsd7vxv2racqbyavrxp2cm9h6cjln";
   };
 
   # a nightly compiler is required unless we use this cheat code.
@@ -17,9 +17,10 @@ buildRustPackage rec {
 
   doCheck = false;
 
-  cargoSha256 = "15894qr0kpp5kivx0p71zmmfhfh8in0ydkvfirxh2r12x0r2jhdd";
+  cargoSha256 = "07130587drrdkrk7aqb8pl8i3p485qr6xh1m86630ydlnb9z6s6i";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 

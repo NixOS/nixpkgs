@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libclthreads, libX11, libXft, xorg, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "libclxclient-${version}";
+  pname = "libclxclient";
   version = "3.9.2";
 
   src = fetchurl {

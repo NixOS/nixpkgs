@@ -2,14 +2,14 @@
 , pkgconfig, dbus, dbus-glib, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "thermald-${version}";
-  version = "1.8";
+  pname = "thermald";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "1g1l7k8yxj8bl1ysdx8v6anv1s7xk9j072y44gwki70dy48n7j92";
+    sha256 = "0iagc3jqpnh6q2fa1gx4wx6r8qg0556j60xr159zqg95djr4dv99";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--sysconfdir=$(out)/etc" "--localstatedir=/var"
-    "--with-dbus-sys-dir=$(out)/etc/dbus-1/system.d"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--sysconfdir=${placeholder "out"}/etc"
+    "--localstatedir=/var"
+    "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     ];
 
   meta = with stdenv.lib; {

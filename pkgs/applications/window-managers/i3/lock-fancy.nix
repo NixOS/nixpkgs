@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|' i3lock-fancy
     sed -i -e "s|getopt |${getopt}/bin/getopt |" i3lock-fancy
     sed -i -e "s|fc-match |${fontconfig.bin}/bin/fc-match |" i3lock-fancy
-    sed -i -e "s|shot=(import -window root)|shot=(${scrot}/bin/scrot -z)|" i3lock-fancy
+    sed -i -e "s|shot=(import -window root)|shot=(${scrot}/bin/scrot -z -o)|" i3lock-fancy
     rm Makefile
   '';
   installPhase = ''

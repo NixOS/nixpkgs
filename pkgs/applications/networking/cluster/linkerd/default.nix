@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "linkerd-unstablle";
   version = "2019-07-26";
 

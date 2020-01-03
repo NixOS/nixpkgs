@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fuse }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "9pfs-20150918";
 
   src = fetchFromGitHub {

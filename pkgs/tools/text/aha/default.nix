@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "aha-${version}";
+  pname = "aha";
   version = "0.5";
 
   src = fetchFromGitHub {

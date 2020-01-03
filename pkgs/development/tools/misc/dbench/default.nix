@@ -1,6 +1,6 @@
 { stdenv, fetchgit, autoconf, popt, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dbench-2013-01-01";
 
   src = fetchgit {

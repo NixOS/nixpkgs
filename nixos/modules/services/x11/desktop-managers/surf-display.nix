@@ -48,7 +48,7 @@ in {
       enable = mkEnableOption "surf-display as a kiosk browser session";
 
       defaultWwwUri = mkOption {
-        type = types.string;
+        type = types.str;
         default = "${pkgs.surf-display}/share/surf-display/empty-page.html";
         example = "https://www.example.com/";
         description = "Default URI to display.";
@@ -69,7 +69,7 @@ in {
       };
 
       screensaverSettings = mkOption {
-        type = types.string;
+        type = types.separatedString " ";
         default = "";
         description = ''
           Screensaver settings, see <literal>man 1 xset</literal> for possible options.
@@ -77,7 +77,7 @@ in {
       };
 
       pointerButtonMap = mkOption {
-        type = types.string;
+        type = types.str;
         default = "1 0 0 4 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
         description = ''
           Disable right and middle pointer device click in browser sessions
@@ -87,14 +87,14 @@ in {
       };
 
       hideIdlePointer = mkOption {
-        type = types.string;
+        type = types.str;
         default = "yes";
         example = "no";
         description = "Hide idle mouse pointer.";
       };
 
       extraConfig = mkOption {
-        type = types.string;
+        type = types.lines;
         default = "";
         example = ''
           # Enforce fixed resolution for all displays (default: not set):
@@ -118,7 +118,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.xserver.displayManager.extraSessionFilePackages = [
+    services.xserver.displayManager.sessionPackages = [
       pkgs.surf-display
     ];
 

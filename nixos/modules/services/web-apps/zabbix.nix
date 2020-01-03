@@ -16,7 +16,7 @@ let
     <?php
     // Zabbix GUI configuration file.
     global $DB;
-    $DB['TYPE'] = '${ { "mysql" = "MYSQL"; "pgsql" = "POSTGRESQL"; "oracle" = "ORACLE"; }.${cfg.database.type} }';
+    $DB['TYPE'] = '${ { mysql = "MYSQL"; pgsql = "POSTGRESQL"; oracle = "ORACLE"; }.${cfg.database.type} }';
     $DB['SERVER'] = '${cfg.database.host}';
     $DB['PORT'] = '${toString cfg.database.port}';
     $DB['DATABASE'] = '${cfg.database.name}';
@@ -133,15 +133,15 @@ in
       };
 
       poolConfig = mkOption {
-        type = types.lines;
-        default = ''
-          pm = dynamic
-          pm.max_children = 32
-          pm.start_servers = 2
-          pm.min_spare_servers = 2
-          pm.max_spare_servers = 4
-          pm.max_requests = 500
-        '';
+        type = with types; attrsOf (oneOf [ str int bool ]);
+        default = {
+          "pm" = "dynamic";
+          "pm.max_children" = 32;
+          "pm.start_servers" = 2;
+          "pm.min_spare_servers" = 2;
+          "pm.max_spare_servers" = 4;
+          "pm.max_requests" = 500;
+        };
         description = ''
           Options for the Zabbix PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
         '';
@@ -160,6 +160,8 @@ in
     ];
 
     services.phpfpm.pools.zabbix = {
+      inherit user;
+      group = config.services.httpd.group;
       phpOptions = ''
         # https://www.zabbix.com/documentation/current/manual/installation/install
         memory_limit = 128M
@@ -177,15 +179,11 @@ in
       '' + optionalString (cfg.database.type == "oracle") ''
         extension=${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so
       '';
-      listen = "/run/phpfpm/zabbix.sock";
-      extraConfig = ''
-        listen.owner = ${config.services.httpd.user};
-        listen.group = ${config.services.httpd.group};
-        user = ${user};
-        group = ${config.services.httpd.group};
-        env[ZABBIX_CONFIG] = ${zabbixConfig}
-        ${cfg.poolConfig}
-      '';
+      phpEnv.ZABBIX_CONFIG = "${zabbixConfig}";
+      settings = {
+        "listen.owner" = config.services.httpd.user;
+        "listen.group" = config.services.httpd.group;
+      } // cfg.poolConfig;
     };
 
     services.httpd = {
@@ -199,7 +197,7 @@ in
             <Directory "${cfg.package}/share/zabbix">
               <FilesMatch "\.php$">
                 <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.listen}|fcgi://localhost/"
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
                 </If>
               </FilesMatch>
               AllowOverride all

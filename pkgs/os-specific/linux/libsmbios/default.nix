@@ -3,7 +3,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "libsmbios-${version}";
+  pname = "libsmbios";
   version = "2.4.2";
 
   src = fetchFromGitHub {

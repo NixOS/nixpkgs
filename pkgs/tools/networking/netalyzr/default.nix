@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "netalyzr-${version}";
+stdenv.mkDerivation {
+  pname = "netalyzr";
   version = "57861";
 
   # unfortunately there is not a version specific download URL

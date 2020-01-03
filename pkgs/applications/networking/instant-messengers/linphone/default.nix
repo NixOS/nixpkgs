@@ -2,20 +2,19 @@
 , zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, libsoup, udev
 , ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip, bzrtp
 , mediastreamer-openh264, bctoolbox, makeWrapper, fetchFromGitHub, cmake
-, libmatroska, bcunit, doxygen, gdk-pixbuf, glib, cairo, pango, polarssl
-, python, graphviz, belcard
+, libmatroska, bcunit, doxygen, gdk-pixbuf, glib, cairo, pango, mbedtls
+, python, graphviz, belcard, bcg729
 , withGui ? true
 }:
 
 stdenv.mkDerivation rec {
-  baseName = "linphone";
+  pname = "linphone";
   version = "3.12.0";
-  name = "${baseName}-${version}";
 
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
-    repo = "${baseName}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "0az2ywrpx11sqfb4s4r2v726avcjf4k15bvrqj7xvhz7hdndmh0j";
   };
 
@@ -27,21 +26,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     readline openldap cyrus_sasl libupnp zlib libxml2 gtk2 libnotify speex ffmpeg libX11
-    polarssl libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
-    bctoolbox libmatroska bcunit gdk-pixbuf glib cairo pango bzrtp belcard
+    mbedtls libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
+    bctoolbox libmatroska gdk-pixbuf glib cairo pango bzrtp belcard bcg729
   ];
 
   nativeBuildInputs = [
-    intltool pkgconfig makeWrapper cmake doxygen graphviz
+    intltool pkgconfig makeWrapper cmake bcunit doxygen graphviz
     (python.withPackages (ps: [ ps.pystache ps.six ]))
   ];
 
-  NIX_CFLAGS_COMPILE = " -Wno-error -I${glib.dev}/include/glib-2.0
-    -I${glib.out}/lib/glib-2.0/include -I${gtk2.dev}/include/gtk-2.0/
-    -I${cairo.dev}/include/cairo -I${pango.dev}/include/pango-1.0
-    -I${gtk2}/lib/gtk-2.0/include
-    -DLIBLINPHONE_GIT_VERSION=\"v${version}\"
-    ";
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error"
+    "-I${glib.dev}/include/glib-2.0"
+    "-I${glib.out}/lib/glib-2.0/include"
+    "-I${gtk2.dev}/include/gtk-2.0/"
+    "-I${cairo.dev}/include/cairo"
+    "-I${pango.dev}/include/pango-1.0"
+    "-I${gtk2}/lib/gtk-2.0/include"
+    "-DLIBLINPHONE_GIT_VERSION=\"v${version}\""
+  ];
 
   postInstall = ''
     for i in $(cd $out/bin && ls); do
@@ -50,8 +53,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.linphone.org/;
-    description = "Open Source video SIP softphone";
+    homepage = https://www.linphone.org/;
+    description = "Open source SIP phone for voice/video calls and instant messaging";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

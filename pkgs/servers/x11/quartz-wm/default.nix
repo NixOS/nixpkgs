@@ -2,7 +2,8 @@
 
 let version = "1.3.1";
 in stdenv.mkDerivation {
-  name = "quartz-wm-${version}";
+  pname = "quartz-wm";
+  inherit version;
   src = fetchurl {
     url = "http://xquartz-dl.macosforge.org/src/quartz-wm-${version}.tar.xz";
     sha256 = "1j8zd3p7rhay1s3sxq6anw78k5s59mx44xpqla2ianl62346a5g9";

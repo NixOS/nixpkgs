@@ -3,7 +3,8 @@
 let version = "0.4.4"; in
 
 stdenv.mkDerivation {
-  name = "clooj-${version}";
+  pname = "clooj";
+  inherit version;
 
   jar = fetchurl {
     # mirrored as original mediafire.com source does not work without user interaction

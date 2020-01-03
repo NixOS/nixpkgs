@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "opae-${version}";
+  pname = "opae";
   version = "1.0.0";
 
   # the tag has a silly name for some reason. drop this in the future if

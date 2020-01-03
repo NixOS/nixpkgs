@@ -1,7 +1,7 @@
 {stdenv, fetchurl, jre}:
 
 stdenv.mkDerivation rec {
-  name = "antlr-${version}";
+  pname = "antlr";
   version = "3.4";
   src = fetchurl {
     url ="https://www.antlr3.org/download/antlr-${version}-complete.jar";

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, coreutils, binutils-unwrapped }:
 
 stdenv.mkDerivation rec {
-  name = "spectre-meltdown-checker-${version}";
+  pname = "spectre-meltdown-checker";
   version = "0.42";
 
   src = fetchFromGitHub {

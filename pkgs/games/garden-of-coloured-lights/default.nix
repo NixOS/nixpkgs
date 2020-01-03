@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoconf, automake, allegro }:
 
 stdenv.mkDerivation rec {
-  name = "garden-of-coloured-lights-${version}";
+  pname = "garden-of-coloured-lights";
   version = "1.0.9";
 
   buildInputs = [ allegro autoconf automake ];

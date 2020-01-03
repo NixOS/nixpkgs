@@ -3,24 +3,25 @@
 , fetchPypi
 , enum34
 , google_api_core
-, pytest
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "0.35.2";
+  version = "0.39.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "25b537d4b76305e9758fe2f57fd5929a04bf3a46cb4e8d0f731e984f46405be8";
+    sha256 = "f33aea6721d453901ded268dee61a01ab77d4cd215a76edc3cc61b6028299d3e";
   };
 
-  checkInputs = [ pytest mock ];
+  checkInputs = [ mock ];
   propagatedBuildInputs = [ enum34 google_api_core ];
 
+  # pytest seems to pick up some file which overrides PYTHONPATH
   checkPhase = ''
-    pytest tests/unit
+    cd tests/unit
+    python -m unittest discover
   '';
 
   meta = with stdenv.lib; {

@@ -11,19 +11,21 @@ let
   inherit (stdenv.lib) optionals versionAtLeast;
 
   pname = "vg";
-  version = "0.9.1";
+  version = "0.9.3";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-assert versionAtLeast ocaml.version "4.02.0";
+if !versionAtLeast ocaml.version "4.03"
+then throw "vg is not available for OCaml ${ocaml.version}"
+else
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "07h9a464v0x066mjg3ldkaq94ah47b7rvh54z4rndrg7v6bk7kyp";
+    sha256 = "0jj5hrqxdb6yyplnz0r7am4mbjzgcn876qp7sqs2x93a97fk6lwd";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
     Renderers for PDF, SVG and the HTML canvas are distributed with the
     module. An API allows to implement new renderers.
     '';
-    homepage = "${webpage}";
+    homepage = webpage;
     inherit (ocaml.meta) platforms;
     license = licenses.isc;
     maintainers = [ maintainers.jirkamarsik ];

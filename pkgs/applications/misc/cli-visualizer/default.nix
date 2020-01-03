@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.8";
-  name = "cli-visualizer-${version}";
+  pname = "cli-visualizer";
 
   src = fetchFromGitHub {
     owner = "dpayne";

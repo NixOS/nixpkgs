@@ -2,7 +2,7 @@
  bin_prot, comparelib, core, fieldslib, herelib,
  pipebang, sexplib}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "async_unix";
   hash = "03ng7f0s22wwzspakiqj442vs1a7yf834109jcj9r3g1awwfhcy7";
   propagatedBuildInputs = [ async_kernel core bin_prot comparelib

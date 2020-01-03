@@ -2,7 +2,7 @@
 , version # "12" for "1.2", "22" for "2.2" and so on
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "opencl-headers-${version}-2017-07-18";
 
   src = fetchFromGitHub {

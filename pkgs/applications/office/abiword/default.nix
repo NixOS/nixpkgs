@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "abiword-${version}";
+  pname = "abiword";
   version = "3.0.2";
 
   src = fetchurl {
-    url = "https://www.abisource.com/downloads/abiword/${version}/source/${name}.tar.gz";
+    url = "https://www.abisource.com/downloads/abiword/${version}/source/${pname}-${version}.tar.gz";
     sha256 = "08imry821g81apdwym3gcs4nss0l9j5blqk31j5rv602zmcd9gxg";
   };
 

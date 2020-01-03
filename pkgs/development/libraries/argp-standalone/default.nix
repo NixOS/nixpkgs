@@ -19,7 +19,7 @@ let
     sha256 = "1xx2zdc187a1m2x6c1qs62vcrycbycw7n0q3ks2zkxpaqzx2dgkw";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "argp-standalone-1.3";
 
   src = fetchurl {
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  makeFlags = [ "AR:=$(AR)" ];
 
   enableParallelBuilding = true;
 

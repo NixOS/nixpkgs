@@ -1,4 +1,4 @@
-{ composeAndroidPackages, stdenv, ant, jdk, gnumake, gawk }:
+{ composeAndroidPackages, stdenv, lib, ant, jdk, gnumake, gawk }:
 
 { name
 , release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
@@ -16,11 +16,11 @@ let
   extraArgs = removeAttrs args ([ "name" ] ++ builtins.attrNames androidSdkFormalArgs);
 in
 stdenv.mkDerivation ({
-  name = stdenv.lib.replaceChars [" "] [""] name; # Android APKs may contain white spaces in their names, but Nix store paths cannot
+  name = lib.replaceChars [" "] [""] name; # Android APKs may contain white spaces in their names, but Nix store paths cannot
   ANDROID_HOME = "${androidsdk}/libexec/android-sdk";
   buildInputs = [ jdk ant ];
   buildPhase = ''
-    ${stdenv.lib.optionalString release ''
+    ${lib.optionalString release ''
       # Provide key singing attributes
       ( echo "key.store=${keyStore}"
         echo "key.alias=${keyAlias}"
@@ -31,7 +31,7 @@ stdenv.mkDerivation ({
 
     export ANDROID_SDK_HOME=`pwd` # Key files cannot be stored in the user's home directory. This overrides it.
 
-    ${stdenv.lib.optionalString (args ? includeNDK && args.includeNDK) ''
+    ${lib.optionalString (args ? includeNDK && args.includeNDK) ''
       export GNUMAKE=${gnumake}/bin/make
       export NDK_HOST_AWK=${gawk}/bin/gawk
       ${androidsdk}/libexec/android-sdk/ndk-bundle/ndk-build

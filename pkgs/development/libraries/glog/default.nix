@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, perl }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, perl }:
 
 stdenv.mkDerivation rec {
-  name = "glog-${version}";
+  pname = "glog";
   version = "0.4.0";
 
   src = fetchFromGitHub {
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1xd3maiipfbxmhc9rrblc5x52nxvkwxp14npg31y5njqvkvzax9b";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # TODO: Remove at next release that includes this commit.
+    (fetchpatch {
+      name = "glog-Fix-symbolize_unittest-for-musl-builds.patch";
+      url = "https://github.com/google/glog/commit/834dd780bf1fe0704b8ed0350ca355a55f711a9f.patch";
+      sha256 = "0k4lanxg85anyvjsj3mh93bcgds8gizpiamcy2zvs3yyfjl40awn";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

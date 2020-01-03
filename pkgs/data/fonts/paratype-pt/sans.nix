@@ -1,6 +1,6 @@
 { stdenv, fetchzip }:
 
-fetchzip rec {
+fetchzip {
   name = "paratype-pt-sans";
 
   url = [

@@ -1,8 +1,8 @@
 { stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk3, libXrender, pango, gnome2, gnome3, cairo, freetype, fontconfig
+, libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
+, dpkg, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, libuuid
 , e2fsprogs, krb5
 }:
 
@@ -12,12 +12,12 @@ let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
 in
 stdenv.mkDerivation rec {
-  name = "gitkraken-${version}";
-  version = "6.1.1";
+  pname = "gitkraken";
+  version = "6.4.1";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "1ks8dscidqzmxy650xda6gvqg04iwidanidlsmgsi8365iqxvb1k";
+    sha256 = "1w8iwpbr6nwzhhf63fvr7pd66yjx3jgjy4gx5y02qxa3ip5psq5b";
   };
 
   libPath = makeLibraryPath [
@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     libXfixes
     libXrender
     gtk3
-    gnome2.GConf
     libgnome-keyring
     openssl
     at-spi2-atk
@@ -70,8 +69,8 @@ stdenv.mkDerivation rec {
     comment = "Graphical Git client from Axosoft";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
+  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 
   unpackCmd = ''
     mkdir out
@@ -79,6 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     pushd usr
     pushd share
@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
     popd
 
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -107,6 +108,6 @@ stdenv.mkDerivation rec {
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ xnwdd ];
+    maintainers = with maintainers; [ xnwdd evanjs ];
   };
 }

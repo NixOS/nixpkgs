@@ -11,7 +11,10 @@ in stdenv.mkDerivation rec {
     sha256 = "1vpxa2zjz3lkq9ldjg0fl65db9s6b4kcs8nyaqfz3jygma7ifg3w";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool desktop-file-utils ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext itstool desktop-file-utils
+  ];
+
   buildInputs = [ glib gtk3 libexif libtiff colord colord-gtk libcanberra-gtk3 lcms2 vte exiv2 ];
 
   passthru = {

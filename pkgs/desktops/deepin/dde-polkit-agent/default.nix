@@ -2,15 +2,14 @@
   dtkcore, dtkwidget, dde-qt-dbus-factory, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-polkit-agent";
-  version = "0.2.10";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0syg121slpd6d9xpifgcf85lg9ca0k96cl1g3rjvsmczs2d2ffgf";
+    sha256 = "00p8syx6rfwhq7wdsk37hm9mvwd0kwj9h0s39hii892h1psd84q9";
   };
 
   nativeBuildInputs = [
@@ -39,7 +38,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "PolicyKit agent for Deepin Desktop Environment";

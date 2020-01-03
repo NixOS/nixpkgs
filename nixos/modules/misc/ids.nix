@@ -11,6 +11,9 @@
 
 { lib, ... }:
 
+let
+  inherit (lib) types;
+in
 {
   options = {
 
@@ -19,6 +22,7 @@
       description = ''
         The user IDs used in NixOS.
       '';
+      type = types.attrsOf types.int;
     };
 
     ids.gids = lib.mkOption {
@@ -26,6 +30,7 @@
       description = ''
         The group IDs used in NixOS.
       '';
+      type = types.attrsOf types.int;
     };
 
   };
@@ -75,8 +80,8 @@
       #kdm = 39; # dropped in 17.03
       #ghostone = 40; # dropped in 18.03
       git = 41;
-      fourstore = 42;
-      fourstorehttp = 43;
+      #fourstore = 42; # dropped in 20.03
+      #fourstorehttp = 43; # dropped in 20.03
       virtuoso = 44;
       rtkit = 45;
       dovecot2 = 46;
@@ -128,7 +133,7 @@
       tcpcryptd = 93; # tcpcryptd uses a hard-coded uid. We patch it in Nixpkgs to match this choice.
       firebird = 95;
       #keys = 96; # unused
-      haproxy = 97;
+      #haproxy = 97; # DynamicUser as of 2019-11-08
       mongodb = 98;
       openldap = 99;
       #users = 100; # unused
@@ -251,7 +256,7 @@
       gale = 223;
       matrix-synapse = 224;
       rspamd = 225;
-      rmilter = 226;
+      # rmilter = 226; # unused, removed 2019-08-22
       cfdyndns = 227;
       gammu-smsd = 228;
       pdnsd = 229;
@@ -328,7 +333,7 @@
       qemu-libvirtd = 301;
       # kvm = 302; # unused
       # render = 303; # unused
-      zeronet = 304;
+      # zeronet = 304; # removed 2019-01-03
       lirc = 305;
       lidarr = 306;
       slurm = 307;
@@ -340,6 +345,7 @@
       cockroachdb = 313;
       zoneminder = 314;
       paperless = 315;
+      #mailman = 316;  # removed 2019-08-30
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -442,7 +448,7 @@
       #tcpcryptd = 93; # unused
       firebird = 95;
       keys = 96;
-      haproxy = 97;
+      #haproxy = 97; # DynamicUser as of 2019-11-08
       #mongodb = 98; # unused
       openldap = 99;
       munin = 102;
@@ -559,7 +565,7 @@
       gale = 223;
       matrix-synapse = 224;
       rspamd = 225;
-      rmilter = 226;
+      # rmilter = 226; # unused, removed 2019-08-22
       cfdyndns = 227;
       pdnsd = 229;
       octoprint = 230;
@@ -628,7 +634,7 @@
       qemu-libvirtd = 301;
       kvm = 302; # default udev rules from systemd requires these
       render = 303; # default udev rules from systemd requires these
-      zeronet = 304;
+      # zeronet = 304; # removed 2019-01-03
       lirc = 305;
       lidarr = 306;
       slurm = 307;
@@ -640,6 +646,7 @@
       cockroachdb = 313;
       zoneminder = 314;
       paperless = 315;
+      #mailman = 316;  # removed 2019-08-30
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

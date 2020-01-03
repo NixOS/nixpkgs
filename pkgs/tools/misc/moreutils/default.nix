@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "moreutils-${version}";
+  pname = "moreutils";
   version = "0.63";
 
   src = fetchgit {

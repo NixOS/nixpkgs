@@ -2,7 +2,7 @@
 let
   version = "3.12";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rp-pppoe-" + version;
   src = fetchurl {
     url = "https://www.roaringpenguin.com/files/download/rp-pppoe-${version}.tar.gz";

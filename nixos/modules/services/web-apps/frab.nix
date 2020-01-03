@@ -19,7 +19,7 @@ let
     RAILS_SERVE_STATIC_FILES = "1";
   } // cfg.extraEnvironment;
 
-  frab-rake = pkgs.stdenv.mkDerivation rec {
+  frab-rake = pkgs.stdenv.mkDerivation {
     name = "frab-rake";
     buildInputs = [ package.env pkgs.makeWrapper ];
     phases = "installPhase fixupPhase";
@@ -177,6 +177,7 @@ in
       { name = cfg.user;
         group = cfg.group;
         home = "${cfg.statePath}";
+        isSystemUser = true;
       }
     ];
 

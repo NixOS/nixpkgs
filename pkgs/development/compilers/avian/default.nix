@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, zlib, jdk, CoreServices, Foundation }:
 
 stdenv.mkDerivation rec {
-  name = "avian-${version}";
+  pname = "avian";
   version = "1.2.0";
 
   src = fetchFromGitHub {

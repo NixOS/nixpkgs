@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, xorg, xorgproto, cairo, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "GxPlugins.lv2";
   version = "0.7";
 

@@ -1,22 +1,23 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "docui-${version}";
-  version = "1.0.3";
+  pname = "docui";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "skanehira";
     repo = "docui";
     rev = version;
-    sha256 = "1kbap36hccwlj273is98cvgf5z5cl2c3s6p46nh6bnykz3zqzs71";
+    sha256 = "0rizl4rxmb3brzvqxw5llbgvq3rncix3h60pgq50djdf0jjnn5hs";
   };
 
-  modSha256 = "1qma9bnd4k594cr5dcv74xns53mhfyl4jsm01chf85dxywjjd9vd";
+  modSha256 = "0asqz9nnx80g2wi7dzxrfmppcraywrwdqi9vzr66vaihwpfpfnwz";
 
   meta = with stdenv.lib; {
     description = "TUI Client for Docker";
     homepage = https://github.com/skanehira/docui;
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ aethelz ];
   };
 }

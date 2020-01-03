@@ -2,8 +2,8 @@
 , alsaLib, fftw, flac, lame, libjack2, libmad, libpulseaudio
 , libsamplerate, libsndfile, libvorbis, portaudio, qtbase, wavpack
 }:
-stdenv.mkDerivation rec {
-  name = "traverso-${version}";
+stdenv.mkDerivation {
+  pname = "traverso";
   version = "0.49.6";
 
   src = fetchurl {

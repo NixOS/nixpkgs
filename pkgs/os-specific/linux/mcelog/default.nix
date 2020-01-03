@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "mcelog-${version}";
-  version = "162";
+  pname = "mcelog";
+  version = "166";
 
   src = fetchFromGitHub {
     owner  = "andikleen";
     repo   = "mcelog";
     rev    = "v${version}";
-    sha256 = "1zxj545wslp92npll0411grc49l53cgp8dqqn3zb4vcxrvfc4vh9";
+    sha256 = "0q76lf5yrjq7b96ynj5dbf9ll94ymiab1b9106xpb4vbiwz0ia7w";
   };
 
   postPatch = ''

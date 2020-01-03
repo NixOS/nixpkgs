@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pgrouting";
-  version = "2.6.2";
+  version = "2.6.3";
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ postgresql boost gmp cgal mpfr ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner  = "pgRouting";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "09xy5pmiwq0lxf2m8p4q5r892mfmn32vf8m75p84jnz4707z1l0j";
+    sha256 = "0jdjb8476vjgc7i26v2drcqjvhdbsk1wx243fddffg169nb664ml";
   };
 
   installPhase = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A PostgreSQL/PostGIS extension that provides geospatial routing functionality";
     homepage    = https://pgrouting.org/;
     maintainers = [ maintainers.steve-chavez ];
-    platforms   = platforms.linux;
+    platforms   = postgresql.meta.platforms;
     license     = licenses.gpl2;
   };
 }

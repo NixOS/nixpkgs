@@ -1,4 +1,4 @@
-{ wxGTK, lib, stdenv, fetchurl, fetchFromGitHub, cmake, libGLU_combined, zlib
+{ wxGTK, lib, stdenv, fetchurl, fetchFromGitHub, cmake, libGLU, libGL, zlib
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
 , wrapGAppsHook
@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "KiCad";
       repo = "kicad-${name}";
-      rev = "${version}";
+      rev = version;
       inherit sha256 name;
     };
     nativeBuildInputs = [
@@ -26,13 +26,13 @@ let
   } // attrs);
 
 in stdenv.mkDerivation rec {
-  name = "kicad-${version}";
+  pname = "kicad";
   series = "5.0";
-  version = "5.1.2";
+  version = "5.1.4";
 
   src = fetchurl {
     url = "https://launchpad.net/kicad/${series}/${version}/+download/kicad-${version}.tar.xz";
-    sha256 = "12kp82ms2dwqkhilmh3mbhg5rsj5ykk99pnkhp4sx89nni86qdw4";
+    sha256 = "1r60dgh6aalbpq1wsmpyxkz0nn4ck8ydfdjcrblpl69k5rks5k2j";
   };
 
   postPatch = ''
@@ -63,9 +63,9 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pythonPackages.wxPython ];
 
   buildInputs = [
-    libGLU_combined zlib libX11 wxGTK pcre libXdmcp glew glm libpthreadstubs
+    libGLU libGL zlib libX11 wxGTK pcre libXdmcp glew glm libpthreadstubs
     cairo curl openssl boost
-    swig python
+    swig (python.withPackages (ps: with ps; [ wxPython ]))
   ] ++ optional (oceSupport) opencascade
     ++ optional (ngspiceSupport) libngspice;
 
@@ -73,22 +73,22 @@ in stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   passthru = {
-    i18n = mkLib version "i18n" "08a8lpz2j7bhwn155s0ii538qlynnnvq6fmdw1dxjfgmfy7y3r66" {
+    i18n = mkLib version "i18n" "1dk7wis4cncmihl8fnic3jyhqcdzpifchzsp7hmf214h0vp199zr" {
       buildInputs = [
         gettext
       ];
       meta.license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
     };
-    symbols = mkLib version "symbols" "0l5r53wcv0518x2kl0fh1zi0d50cckc7z1739fp9z3k5a4ddk824" {
+    symbols = mkLib version "symbols" "1lna4xlvzrxif3569pkp6mrg7fj62z3a3ri5j97lnmnnzhiddnh3" {
       meta.license = licenses.cc-by-sa-40;
     };
-    footprints = mkLib version "footprints" "0q7y7m10pav6917ri37pzjvyh71c8lf4lh9ch258pdpl3w481zk6" {
+    footprints = mkLib version "footprints" "0c0kcywxlaihzzwp9bi0dsr2v9j46zcdr85xmfpivmrk19apss6a" {
       meta.license = licenses.cc-by-sa-40;
     };
-    templates = mkLib version "templates" "1nva4ckq0l2lrah0l05355cawlwd7qfxcagcv32m8hcrn781455q" {
+    templates = mkLib version "templates" "1bagb0b94cjh7zp9z0h23b60j45kwxbsbb7b2bdk98dmph8lmzbb" {
       meta.license = licenses.cc-by-sa-40;
     };
-    packages3d = mkLib version "packages3d" "0xla9k1rnrs00fink90y9qz766iks5lyqwnf1h2i508djqhqm5zi" {
+    packages3d = mkLib version "packages3d" "0h2qjj8vf33jz6jhqdz90c80h5i1ydgfqnns7rn0fqphlnscb45g" {
       hydraPlatforms = []; # this is a ~1 GiB download, occupies ~5 GiB in store
       meta.license = licenses.cc-by-sa-40;
     };
@@ -107,7 +107,7 @@ in stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
 
-    wrapProgram "$out/bin/kicad" "''${gappsWrapperArgs[@]}"
+    wrapGApp "$out/bin/kicad" --prefix LD_LIBRARY_PATH : "${libngspice}/lib"
   '';
 
   meta = {
@@ -116,5 +116,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; linux;
+    broken = stdenv.isAarch64;
   };
 }

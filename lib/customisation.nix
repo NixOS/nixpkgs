@@ -47,7 +47,7 @@ rec {
 
 
   /* `makeOverridable` takes a function from attribute set to attribute set and
-     injects `override` attibute which can be used to override arguments of
+     injects `override` attribute which can be used to override arguments of
      the function.
 
        nix-repl> x = {a, b}: { result = a + b; }
@@ -66,22 +66,31 @@ rec {
   */
   makeOverridable = f: origArgs:
     let
-      ff = f origArgs;
+      result = f origArgs;
+
+      # Creates a functor with the same arguments as f
+      copyArgs = g: lib.setFunctionArgs g (lib.functionArgs f);
+      # Changes the original arguments with (potentially a function that returns) a set of new attributes
       overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
+
+      # Re-call the function but with different arguments
+      overrideArgs = copyArgs (newArgs: makeOverridable f (overrideWith newArgs));
+      # Change the result of the function call by applying g to it
+      overrideResult = g: makeOverridable (copyArgs (args: g (f args))) origArgs;
     in
-      if builtins.isAttrs ff then (ff // {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
-        overrideDerivation = fdrv:
-          makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
-        ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
-          makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
-      })
-      else if lib.isFunction ff then {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
-        __functor = self: ff;
-        overrideDerivation = throw "overrideDerivation not yet supported for functors";
-      }
-      else ff;
+      if builtins.isAttrs result then
+        result // {
+          override = overrideArgs;
+          overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
+          ${if result ? overrideAttrs then "overrideAttrs" else null} = fdrv:
+            overrideResult (x: x.overrideAttrs fdrv);
+        }
+      else if lib.isFunction result then
+        # Transform the result into a functor while propagating its arguments
+        lib.setFunctionArgs result (lib.functionArgs result) // {
+          override = overrideArgs;
+        }
+      else result;
 
 
   /* Call the package function in the file `fn' with the required

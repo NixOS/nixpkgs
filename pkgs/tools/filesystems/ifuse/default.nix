@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "ifuse";
   version = "2018-10-08";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;

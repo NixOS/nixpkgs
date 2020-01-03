@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "11.1.1";
+  version = "12.4.2";
 
   src = fetchurl {
     url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/draw.io-x86_64-${version}.rpm";
-    sha256 = "1jibkxx00rma641c3xr7720qj9slqsvhbpi7nawi6f2f91gzyc10";
+    sha256 = "1mngn90cn9hixa0xkhk7mb02gjp480wnipjy2jzkq8kwpai1gm1m";
   };
 
   nativeBuildInputs = [
@@ -70,18 +70,18 @@ stdenv.mkDerivation rec {
 
     # Application icon
     mkdir -p $out/share/icons/hicolor
-    cp -r usr/share/icons/hicolor/0x0 $out/share/icons/hicolor/1024x1024
+    cp -r usr/share/icons/hicolor/* $out/share/icons/hicolor/
 
     # XDG desktop item
     cp -r usr/share/applications $out/share/applications
 
     # Symlink wrapper
     mkdir -p $out/bin
-    ln -s $out/share/draw.io/draw.io $out/bin/draw.io
+    ln -s $out/share/draw.io/drawio $out/bin/drawio
 
     # Update binary path
-    substituteInPlace $out/share/applications/draw.io.desktop \
-      --replace /opt/draw.io/draw.io $out/bin/draw.io
+    substituteInPlace $out/share/applications/drawio.desktop \
+      --replace /opt/draw.io/drawio $out/bin/drawio
   '';
 
   meta = with stdenv.lib; {

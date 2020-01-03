@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "brightnessctl-${version}";
+  pname = "brightnessctl";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "Hummer12007";
     repo = "brightnessctl";
-    rev = "${version}";
+    rev = version;
     sha256 = "1n1gb8ldgqv3vs565yhk1w4jfvrviczp94r8wqlkv5q6ab43c8w9";
   };
 

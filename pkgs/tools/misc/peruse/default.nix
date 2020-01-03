@@ -8,7 +8,7 @@ let
   pname = "peruse";
   version = "1.2.20180816";
 
-in mkDerivation rec {
+in mkDerivation {
   name = "${pname}-${version}";
 
   # The last formal release from 2016 uses kirigami1 which is deprecated
@@ -26,6 +26,8 @@ in mkDerivation rec {
   pathsToLink = [ "/etc/xdg/peruse.knsrc"];
 
   meta = with lib; {
+    homepage = "https://peruse.kde.org";
+    description = "A comic book reader";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

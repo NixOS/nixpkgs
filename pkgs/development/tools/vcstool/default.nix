@@ -4,7 +4,6 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "vcstool";
   version = "0.1.36";
 
@@ -15,7 +14,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pyyaml ];
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ git bazaar subversion ]}"];
+  makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ git bazaar subversion ])];
 
   doCheck = false; # requires network
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, yacc }:
 
 stdenv.mkDerivation rec {
-  name = "jam-2.6";
+  name = "jam-2.6.1";
 
   src = fetchurl {
     url = "https://swarm.workshop.perforce.com/projects/perforce_software-jam/download/main/${name}.tar";
-    sha256 = "0j4r7xcjz15ksnnpjw56qi99q4lpjmx097pkwwkl1hq3hqml1zhn";
+    sha256 = "19xkvkpycxfsncxvin6yqrql3x3z9ypc1j8kzls5k659q4kv5rmc";
   };
 
   nativeBuildInputs = [ yacc ];

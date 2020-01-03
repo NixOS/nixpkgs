@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, autoreconfHook, net_snmp }:
+{ stdenv, fetchurl, autoreconfHook, net-snmp }:
 
 stdenv.mkDerivation rec {
-  name = "ifstat-legacy-${version}";
+  pname = "ifstat-legacy";
   version = "1.1";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01zmv6vk5kh5xmd563xws8a1qnxjb6b6kv59yzz9r3rrghxhd6c5";
   };
 
-  buildInputs = [ net_snmp ];
+  buildInputs = [ net-snmp ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

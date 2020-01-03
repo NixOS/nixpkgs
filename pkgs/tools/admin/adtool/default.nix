@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openldap }:
 
 stdenv.mkDerivation rec {
-  name = "adtool-${version}";
+  pname = "adtool";
   version = "1.3.3";
 
   src = fetchurl {
-    url = "https://gp2x.org/adtool/${name}.tar.gz";
+    url = "https://gp2x.org/adtool/${pname}-${version}.tar.gz";
     sha256  = "1awmpjamrwivi69i0j2fyrziy9s096ckviqd9c4llc3990mfsn4n";
   };
 

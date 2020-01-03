@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python3Packages, libspatialindex, libspatialite, postgresql
 , txt2tags, openssl, libzip, hdf5, netcdf, exiv2
 , qtbase, qtwebkit, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport, qtxmlpatterns
@@ -9,8 +9,8 @@ let
   pythonBuildInputs = with python3Packages;
     [ qscintilla-qt5 gdal jinja2 numpy psycopg2
       chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip owslib six ];
-in stdenv.mkDerivation rec {
-  version = "3.8.0";
+in mkDerivation rec {
+  version = "3.10.1";
   pname = "qgis";
   name = "${pname}-unwrapped-${version}";
 
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "11jqj6lavpw9piv0rm8vvbgd99zhcxl6yfjg699wlrjlyf71xac5";
+    sha256 = "0xq0nnp7zdqaihqvh5rsi1129g23vnk5ijkpxfzaggafgmhf5hgz";
   };
 
   passthru = {
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ openssl proj geos xlibsWrapper sqlite gsl qwt exiv2
     fcgi libspatialindex libspatialite postgresql txt2tags libzip hdf5 netcdf
     qtbase qtwebkit qtsensors qca-qt5 qtkeychain qscintilla qtserialport qtxmlpatterns] ++
-    (stdenv.lib.optional withGrass grass) ++ pythonBuildInputs;
+    (lib.optional withGrass grass) ++ pythonBuildInputs;
 
   nativeBuildInputs = [ cmake flex bison ninja ];
 
@@ -45,13 +45,13 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF"
                  "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
                  "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5" ] ++
-                 stdenv.lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
+                 lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
 
   meta = {
     description = "A Free and Open Source Geographic Information System";
     homepage = http://www.qgis.org;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ lsix ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ lsix ];
   };
 }

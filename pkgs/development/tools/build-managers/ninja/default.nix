@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "ninja-${version}";
+  pname = "ninja";
   version = "1.9.0";
 
   src = fetchFromGitHub {

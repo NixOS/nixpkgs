@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "jupp-${version}";
+  pname = "jupp";
   version = "3.1";
   srcName = "joe-3.1jupp31";
 

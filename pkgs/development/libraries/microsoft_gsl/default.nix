@@ -5,7 +5,7 @@ let
   nativeBuild = stdenv.hostPlatform == stdenv.buildPlatform;
 in
 stdenv.mkDerivation rec {
-  name = "microsoft_gsl-${version}";
+  pname = "microsoft_gsl";
   version = "2.0.0";
 
   src = fetchFromGitHub {
@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
   # we're doing a cross build
   nativeBuildInputs = [ catch cmake ];
   buildPhase = if nativeBuild then "make" else "true";
+
+  # https://github.com/microsoft/GSL/issues/806
+  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-Wno-catch-value" ];
 
   installPhase = ''
     mkdir -p $out/include

@@ -4,7 +4,7 @@
 assert tlsSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "uhub-${version}";
+  pname = "uhub";
   version = "0.5.0";
 
   src = fetchFromGitHub {

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, php, which, gnused, makeWrapper, gnumake, gcc }:
 
 stdenv.mkDerivation rec {
-  name = "phoronix-test-suite-${version}";
-  version = "8.8.1";
+  pname = "phoronix-test-suite";
+  version = "9.2.0";
 
   src = fetchurl {
-    url = "https://phoronix-test-suite.com/releases/${name}.tar.gz";
-    sha256 = "1l5wnj5d652dg02j7iy7n9ab7qrpclmgvyxnh1s6cdnnnspyxznn";
+    url = "https://phoronix-test-suite.com/releases/${pname}-${version}.tar.gz";
+    sha256 = "04r4zm550kp44pzl5xgj8abncrd1rxcfs7hqm38an1lz7shiisfi";
   };
 
   buildInputs = [ php ];

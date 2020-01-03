@@ -7,14 +7,14 @@
 }:
 
 mkDerivation rec {
-  name = "mixxx-${version}";
-  version = "2.2.1";
+  pname = "mixxx";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = "release-${version}";
-    sha256 = "1q6c2wfpprsx7s7nz1w0mhm2yhikj54jxcv61kwylxx3n5k2na9r";
+    sha256 = "1h7q25fv62c5m74d4cn1m6mpanmqpbl2wqbch4qvn488jb2jw1dv";
   };
 
   buildInputs = [

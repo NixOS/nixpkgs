@@ -7,7 +7,8 @@ let
   version = "19.04.0";
 
 in stdenv.mkDerivation {
-  name = "limesuite-${version}";
+  pname = "limesuite";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "myriadrf";

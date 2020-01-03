@@ -38,7 +38,7 @@ def get_radare2_rev() -> str:
 
 def get_cutter_version() -> str:
     version_expr = """
-(with import <nixpkgs> {}; (builtins.parseDrvName (qt5.callPackage <radare2/cutter.nix> {}).name).version)
+(with import <nixpkgs> {}; lib.getVersion (qt5.callPackage <radare2/cutter.nix> {}))
 """
     return sh("nix", "eval", "--raw", version_expr.strip(), "-I", "radare2={0}".format(SCRIPT_DIR))
 

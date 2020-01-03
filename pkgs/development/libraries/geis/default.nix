@@ -21,11 +21,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "geis-${version}";
+  pname = "geis";
   version = "2.2.17";
 
   src = fetchurl {
-    url = "https://launchpad.net/geis/trunk/${version}/+download/${name}.tar.xz";
+    url = "https://launchpad.net/geis/trunk/${version}/+download/${pname}-${version}.tar.xz";
     sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
   };
 

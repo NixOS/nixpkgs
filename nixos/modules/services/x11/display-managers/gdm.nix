@@ -31,6 +31,9 @@ let
     load-module module-position-event-sounds
   '';
 
+  defaultSessionName = config.services.xserver.displayManager.defaultSession;
+
+  setSessionScript = pkgs.callPackage ./account-service-util.nix { };
 in
 
 {
@@ -42,10 +45,7 @@ in
     services.xserver.displayManager.gdm = {
 
       enable = mkEnableOption ''
-        GDM as the display manager.
-        <emphasis>GDM in NixOS is not well-tested with desktops other
-        than GNOME, so use with caution, as it could render the
-        system unusable.</emphasis>
+        GDM, the GNOME Display Manager
       '';
 
       debug = mkEnableOption ''
@@ -91,9 +91,19 @@ in
       wayland = mkOption {
         default = true;
         description = ''
-          Allow GDM run on Wayland instead of Xserver
+          Allow GDM to run on Wayland instead of Xserver.
+          Note to enable Wayland with Nvidia you need to
+          enable the <option>nvidiaWayland</option>.
         '';
         type = types.bool;
+      };
+
+      nvidiaWayland = mkOption {
+        default = false;
+        description = ''
+          Whether to allow wayland to be used with the proprietary
+          NVidia graphics driver.
+        '';
       };
 
       autoSuspend = mkOption {
@@ -141,9 +151,7 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          XDG_DATA_DIRS = "${cfg.session.desktops}/share/";
-          # Find the mouse
-          XCURSOR_PATH = "~/.icons:${pkgs.gnome3.adwaita-icon-theme}/share/icons";
+          XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
@@ -155,15 +163,40 @@ in
           mkdir -p /run/gdm/.config/pulse
           ln -sf ${pulseConfig} /run/gdm/.config/pulse/default.pa
           chown -R gdm:gdm /run/gdm/.config
+        '' + optionalString config.services.gnome3.gnome-initial-setup.enable ''
+          # Create stamp file for gnome-initial-setup to prevent run.
+          mkdir -p /run/gdm/.config
+          cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
+          yes
+          EOF
+        '' + optionalString (defaultSessionName != null) ''
+          # Set default session in session chooser to a specified values – basically ignore session history.
+          ${setSessionScript}/bin/set-session ${cfg.sessionData.autologinSession}
         '';
       };
 
-    # Because sd_login_monitor_new requires /run/systemd/machines
-    systemd.services.display-manager.wants = [ "systemd-machined.service" ];
+    systemd.services.display-manager.wants = [
+      # Because sd_login_monitor_new requires /run/systemd/machines
+      "systemd-machined.service"
+      # setSessionScript wants AccountsService
+      "accounts-daemon.service"
+    ];
+
     systemd.services.display-manager.after = [
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
+      "getty@tty${gdm.initialVT}.service"
+      "plymouth-quit.service"
+      "plymouth-start.service"
+    ];
+    systemd.services.display-manager.conflicts = [
+       "getty@tty${gdm.initialVT}.service"
+       # TODO: Add "plymouth-quit.service" so GDM can control when plymouth quits.
+       # Currently this breaks switching configurations while using plymouth.
+    ];
+    systemd.services.display-manager.onFailure = [
+      "plymouth-quit.service"
     ];
 
     systemd.services.display-manager.serviceConfig = {
@@ -173,6 +206,9 @@ in
       BusName = "org.gnome.DisplayManager";
       StandardOutput = "syslog";
       StandardError = "inherit";
+      ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
+      KeyringMode = "shared";
+      EnvironmentFile = "-/etc/locale.conf";
     };
 
     systemd.services.display-manager.path = [ pkgs.gnome3.gnome-session ];
@@ -181,6 +217,19 @@ in
     services.accounts-daemon.enable = true;
 
     services.dbus.packages = [ gdm ];
+
+    # We duplicate upstream's udev rules manually to make wayland with nvidia configurable
+    services.udev.extraRules = ''
+      # disable Wayland on Cirrus chipsets
+      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      # disable Wayland on Hi1710 chipsets
+      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ${optionalString (!cfg.gdm.nvidiaWayland) ''
+        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ''}
+      # disable Wayland when modesetting is disabled
+      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-disable-wayland"
+    '';
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
@@ -203,7 +252,7 @@ in
       customDconfDb = pkgs.stdenv.mkDerivation {
         name = "gdm-dconf-db";
         buildCommand = ''
-          ${pkgs.gnome3.dconf}/bin/dconf compile $out ${customDconf}/dconf
+          ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
         '';
       };
     in pkgs.stdenv.mkDerivation {
@@ -248,7 +297,7 @@ in
       ${optionalString cfg.gdm.debug "Enable=true"}
     '';
 
-    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.session.wrapper;
+    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.sessionData.wrapper;
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
@@ -262,7 +311,7 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = gdm
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so

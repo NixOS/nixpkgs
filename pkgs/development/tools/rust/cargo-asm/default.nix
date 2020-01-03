@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cargo-asm-${version}";
+  pname = "cargo-asm";
   version = "0.1.17";
 
   src = fetchFromGitHub {

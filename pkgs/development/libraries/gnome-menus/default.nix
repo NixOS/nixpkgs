@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [
-    "INTROSPECTION_GIRDIR=${placeholder ''out''}/share/gir-1.0/"
-    "INTROSPECTION_TYPELIBDIR=${placeholder ''out''}/lib/girepository-1.0"
+    "INTROSPECTION_GIRDIR=${placeholder "out"}/share/gir-1.0/"
+    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
   nativeBuildInputs = [ pkgconfig gettext ];

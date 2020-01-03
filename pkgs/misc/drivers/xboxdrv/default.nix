@@ -4,7 +4,8 @@
 let
   version = "0.8.8";
 in stdenv.mkDerivation {
-  name = "xboxdrv-${version}";
+  pname = "xboxdrv";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/xboxdrv/xboxdrv/archive/v${version}.tar.gz";
@@ -20,7 +21,7 @@ in stdenv.mkDerivation {
     homepage = https://pingus.seul.org/~grumbel/xboxdrv/;
     description = "Xbox/Xbox360 (and more) gamepad driver for Linux that works in userspace";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 

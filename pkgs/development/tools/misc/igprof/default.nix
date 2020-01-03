@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.9.16";
-  name = "igprof-${version}";
+  pname = "igprof";
 
   src = fetchFromGitHub {
     owner = "igprof";

@@ -3,12 +3,12 @@
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "poedit-${version}";
-  version = "2.2.1";
+  pname = "poedit";
+  version = "2.2.4";
 
   src = fetchurl {
     url = "https://github.com/vslavik/poedit/archive/v${version}-oss.tar.gz";
-    sha256 = "0brj6ysisxng2xn8l9ii2rngsj5b4rk27hzfjbp3zwb2caagd3vq";
+    sha256 = "1k5ql41g635z01s1i9bchvf72ynwsvg54gs3s40f07f9dihb23gd";
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook 

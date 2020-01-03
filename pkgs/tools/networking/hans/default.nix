@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, nettools }:
 
 stdenv.mkDerivation rec {
-  name = "hans-${version}";
+  pname = "hans";
   version = "1.0";
 
   src = fetchFromGitHub {

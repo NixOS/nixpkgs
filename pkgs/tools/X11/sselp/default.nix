@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.2";
-  name = "sselp-${version}";
+  pname = "sselp";
  
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/${name}.tar.gz";
+    url = "https://dl.suckless.org/tools/${pname}-${version}.tar.gz";
     sha256 = "08mqp00lrh1chdrbs18qr0xv63h866lkmfj87kfscwdm1vn9a3yd";
   };
  

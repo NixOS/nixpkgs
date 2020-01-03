@@ -3,11 +3,11 @@
 , garmindev, gdal, gpsd, libdmtx, libexif, libGLU, proj }:
 
 mkDerivation rec {
-  name = "qlandkartegt-${version}";
+  pname = "qlandkartegt";
   version = "1.8.1";
 
   src = fetchurl {
-    url = "https://bitbucket.org/maproom/qlandkarte-gt/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/maproom/qlandkarte-gt/downloads/${pname}-${version}.tar.gz";
     sha256 = "1rwv5ar5jv15g1cc6pp0lk69q3ip10pjazsh3ds2ggaciymha1ly";
   };
 

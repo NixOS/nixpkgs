@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, bc, perl, perlPackages, pam, libXext, libXScrnSaver, libX11
-, libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU_combined, gtk2
+, libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU, libGL, gtk2
 , libxml2, libglade, intltool, xorg, makeWrapper, gle
 , forceInstallAllHacks ? false
 }:
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1m43nfcpagv03zwlivpzp82qdv590s5c8vjjn4iirqjl6mzvdshp";
+    sha256 = "1571pj1a9998sq14y9366s2rw9wd2kq3l3dvvsk610vyd0fki3qm";
   };
 
   buildInputs =
-    [ pkgconfig bc perl libjpeg libGLU_combined gtk2 libxml2 libglade pam
+    [ pkgconfig bc perl libjpeg libGLU libGL gtk2 libxml2 libglade pam
       libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
       libXxf86misc intltool xorg.appres makeWrapper gle
     ];

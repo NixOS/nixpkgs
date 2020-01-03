@@ -3,7 +3,7 @@
 , wxGTK30, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "pcsx2-${version}";
+  pname = "pcsx2";
   version = "1.4.0";
 
   src = fetchFromGitHub {

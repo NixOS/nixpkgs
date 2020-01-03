@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, libungif, libXpm }:
 
 stdenv.mkDerivation rec {
-  name = "SDL_image-${version}";
+  pname = "SDL_image";
   version = "1.2.12";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
+    url    = "https://www.libsdl.org/projects/SDL_image/release/${pname}-${version}.tar.gz";
     sha256 = "16an9slbb8ci7d89wakkmyfvp7c0cval8xw4hkg0842nhhlp540b";
   };
 

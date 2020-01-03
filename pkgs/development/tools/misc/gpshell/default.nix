@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gpshell-${version}";
+  pname = "gpshell";
   version = "1.4.4";
 
   src = fetchurl {

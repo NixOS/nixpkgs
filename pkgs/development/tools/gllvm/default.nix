@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gllvm-${version}";
+  pname = "gllvm";
   version = "1.2.3";
 
   goPackagePath = "github.com/SRI-CSL/gllvm";

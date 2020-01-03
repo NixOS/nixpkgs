@@ -22,12 +22,12 @@ exportLuaPathsFor = luaPkgs: ''
 '';
 
 unwrapped = stdenv.mkDerivation rec {
-  name = "knot-resolver-${version}";
-  version = "4.2.0";
+  pname = "knot-resolver";
+  version = "4.3.0";
 
   src = fetchurl {
-    url = "https://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "b37ff9ceefbaa4e4527d183fb1bbb63e641d34d9889ce92715128bc1423c7ef4";
+    url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
+    sha256 = "0ca0f171ae2b2d76830967a5150eb0fa496b48b2a48f41b2be65d3743aaece25";
   };
 
   # https://gitlab.labs.nic.cz/knot/knot-resolver/issues/496

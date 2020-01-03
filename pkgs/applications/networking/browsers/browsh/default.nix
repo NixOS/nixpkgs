@@ -14,7 +14,7 @@ let
 in buildGoPackage rec {
   inherit version;
 
-  name = "browsh-${version}";
+  pname = "browsh";
 
   goPackagePath = "browsh";
 

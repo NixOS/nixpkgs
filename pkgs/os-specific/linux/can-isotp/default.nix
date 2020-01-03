@@ -1,7 +1,7 @@
 { stdenv, kernel, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "can-isotp-${version}";
+stdenv.mkDerivation {
+  pname = "can-isotp";
   version = "20180629";
 
   hardeningDisable = [ "pic" ];

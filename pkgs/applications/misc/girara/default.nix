@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "girara";
-  version = "0.3.2";
+  version = "0.3.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/girara/download/${pname}-${version}.tar.xz";
-    sha256 = "1kc6n1mxjxa7wvwnqy94qfg8l9jvx9qrvrr2kc7m4g0z20x3a00p";
+    url = "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+    sha256 = "13vr62kkkqs2xsrmsn114n6c6084ix1qyjksczqsc3s2y3bdsmj4";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext check dbus xvfb_run ];
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://pwmt.org/projects/girara/;
+    homepage = "https://git.pwmt.org/pwmt/girara";
     description = "User interface library";
     longDescription = ''
-      girara is a library that implements a GTK+ based VIM-like user interface
+      girara is a library that implements a GTK based VIM-like user interface
       that focuses on simplicity and minimalism.
     '';
     license = licenses.zlib;

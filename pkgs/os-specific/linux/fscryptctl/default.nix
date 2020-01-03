@@ -3,7 +3,7 @@
 # Don't use this for anything important yet!
 
 stdenv.mkDerivation rec {
-  name = "fscryptctl-unstable-${version}";
+  pname = "fscryptctl-unstable";
   version = "2017-10-23";
 
   goPackagePath = "github.com/google/fscrypt";

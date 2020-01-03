@@ -1,36 +1,23 @@
-{ stdenv, fetchurl, pythonPackages, gettext }:
+{ lib, fetchurl, pythonPackages, gettext }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec {
-
-  name = "cherrytree-${version}";
-  version = "0.38.8";
+pythonPackages.buildPythonApplication rec {
+  pname = "cherrytree";
+  version = "0.38.9";
 
   src = fetchurl {
-    url = "https://www.giuspen.com/software/${name}.tar.xz";
-    sha256 = "1ns87xl2sgrf3nha4xkhp0xcxlycqszlp6xdrn95lg6vzm0fa8dg";
+    url = "https://www.giuspen.com/software/${pname}-${version}.tar.xz";
+    sha256 = "0xal09ijgxbzvp003s40xbrfnpq3ald1fw8nnpqq3yg7h6g6c5pw";
   };
 
-  buildInputs = with pythonPackages;
-  [ python gettext wrapPython pygtk dbus-python pygtksourceview ];
+  nativeBuildInputs = [ gettext ];
 
-  pythonPath = with pythonPackages;
-  [ pygtk dbus-python pygtksourceview ];
+  propagatedBuildInputs = with pythonPackages; [ pygtk dbus-python pygtksourceview ];
 
   patches = [ ./subprocess.patch ];
 
-  installPhase = ''
-    python setup.py install --prefix="$out"
-
-    for file in "$out"/bin/*; do
-        wrapProgram "$file" \
-            --prefix PYTHONPATH : "$(toPythonPath $out):$PYTHONPATH"
-    done
-  '';
-
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "An hierarchical note taking application";
     longDescription = ''
       Cherrytree is an hierarchical note taking application,
@@ -42,9 +29,8 @@ stdenv.mkDerivation rec {
       around your hard drive can be conveniently placed into a
       Cherrytree document where you can easily find it.
     '';
-    homepage = http://www.giuspen.com/cherrytree;
+    homepage = "http://www.giuspen.com/cherrytree";
     license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

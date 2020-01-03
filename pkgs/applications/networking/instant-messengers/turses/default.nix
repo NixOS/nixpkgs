@@ -1,9 +1,7 @@
-{ stdenv, fetchpatch, python36Packages }:
+{ stdenv, fetchpatch, python3Packages }:
 
 with stdenv.lib;
-
-# Needs Python <3.7 for now, see https://github.com/louipc/turses/issues/4
-with python36Packages;
+with python3Packages;
 
 buildPythonPackage rec {
   pname = "turses";
@@ -14,8 +12,6 @@ buildPythonPackage rec {
     sha256 = "15mkhm3b5ka42h8qph0mhh8izfc1200v7651c62k7ldcs50ib9j6";
   };
 
-  disabled = ! python36Packages.pythonOlder "3.7";
-
   checkInputs = [ mock pytest coverage tox ];
   propagatedBuildInputs = [ urwid tweepy future ];
 
@@ -23,6 +19,11 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/louipc/turses/commit/be0961b51f502d49fd9e2e5253ac130e543a31c7.patch";
       sha256 = "17s1n0275mcj03vkf3n39dmc09niwv4y7ssrfk7k3vqx22kppzg3";
+    })
+    # python 3.7+ support
+    (fetchpatch {
+      url = "https://github.com/booxter/turses/commit/e6e285eae50fc3d2042a476185fe60daef1e758e.patch";
+      sha256 = "0g2zsrny955viwgs2l6gpiiz8m67b5sgdcxkjmfimfvvih5sg79f";
     })
   ];
 

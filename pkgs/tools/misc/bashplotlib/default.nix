@@ -1,6 +1,6 @@
 { stdenv, python3Packages, fetchFromGitHub }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "bashplotlib";
   version = "2019-01-02";
 

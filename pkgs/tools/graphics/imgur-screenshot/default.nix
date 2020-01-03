@@ -3,7 +3,7 @@
 let deps = stdenv.lib.makeBinPath [ curl gnugrep libnotify scrot which xclip ];
 in stdenv.mkDerivation rec {
   version = "1.7.4";
-  name = "imgur-screenshot-${version}";
+  pname = "imgur-screenshot";
 
   src = fetchFromGitHub {
     owner = "jomo";

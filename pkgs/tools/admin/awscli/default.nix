@@ -1,13 +1,19 @@
 { lib
-, python
+, python3
 , groff
 , less
-, fetchpatch
 }:
 
 let
-  py = python.override {
+  py = python3.override {
     packageOverrides = self: super: {
+      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d";
+        };
+      });
       rsa = super.rsa.overridePythonAttrs (oldAttrs: rec {
         version = "3.4.2";
         src = oldAttrs.src.override {
@@ -15,24 +21,16 @@ let
           sha256 = "25df4e10c263fb88b5ace923dd84bf9aa7f5019687b5e55382ffcdb8bede9db5";
         };
       });
-      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.9";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1";
-        };
-      });
-      pyyaml = super.pyyaml_3;
     };
   };
 
 in py.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.16.170"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.16.266"; # N.B: if you change this, change botocore to a matching version too
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "12kh62imdfy8whvqzdrmdq4zw70gj1g3smqldf4lqpjfzss7cy92";
+    sha256 = "9c59a5ca805f467669d471b29550ecafafb9b380a4a6926a9f8866f71cd4f7be";
   };
 
   # No tests included
@@ -49,6 +47,9 @@ in py.pkgs.buildPythonApplication rec {
     pyyaml
     groff
     less
+    urllib3
+    dateutil
+    jmespath
   ];
 
   postInstall = ''
@@ -58,6 +59,8 @@ in py.pkgs.buildPythonApplication rec {
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
     rm $out/bin/aws.cmd
   '';
+
+  passthru.python = py; # for aws_shell
 
   meta = with lib; {
     homepage = https://aws.amazon.com/cli/;

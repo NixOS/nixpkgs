@@ -58,7 +58,6 @@ in
        "crashkernel=${crashdump.reservedMemory}"
        "nmi_watchdog=panic"
        "softlockup_panic=1"
-       "idle=poll"
       ];
       kernelPatches = [ {
         name = "crashdump-config";

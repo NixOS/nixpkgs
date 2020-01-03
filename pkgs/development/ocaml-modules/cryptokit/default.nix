@@ -5,9 +5,9 @@ assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02"
   then {
-    version = "1.13";
-    url = https://github.com/xavierleroy/cryptokit/archive/release113.tar.gz;
-    sha256 = "1f4jjnp2a911nqw0hbijyv9vygkk6kw5zx75qs49hfm3by6ij8rq";
+    version = "1.14";
+    url = https://github.com/xavierleroy/cryptokit/archive/release114.tar.gz;
+    sha256 = "0wkh72idkb7dahiwyl94hhbq27cc7x9fnmxkpnbqli6wi8wd7d05";
     inherit zarith;
   } else {
     version = "1.10";
@@ -17,27 +17,27 @@ let param =
   };
 in
 
-stdenv.mkDerivation rec {
-  name = "cryptokit-${version}";
+stdenv.mkDerivation {
+  pname = "cryptokit";
   inherit (param) version;
 
   src = fetchurl {
     inherit (param) url sha256;
   };
 
-  buildInputs = [ zlib ocaml findlib ocamlbuild ncurses ];
-  propagatedBuildInputs = [ param.zarith ];
+  buildInputs = [ ocaml findlib ocamlbuild ncurses ];
+  propagatedBuildInputs = [ param.zarith zlib ];
 
   buildFlags = "setup.data build";
 
-  preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/cryptokit";
+  preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 
   meta = {
     homepage = http://pauillac.inria.fr/~xleroy/software.html;
     description = "A library of cryptographic primitives for OCaml";
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

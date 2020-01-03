@@ -7,7 +7,8 @@ let
     gemdir  = ./.;
   };
 in stdenv.mkDerivation {
-  name = "tree-from-tags-${version}";
+  pname = "tree-from-tags";
+  inherit version;
   src = fetchFromGitHub {
     owner  = "dbrock";
     repo   = "bongo";

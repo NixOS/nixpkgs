@@ -8,8 +8,8 @@ in
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "musescore-darwin-${version}";
-  version = "${concatStringsSep "." versionComponents}";
+  pname = "musescore-darwin";
+  version = concatStringsSep "." versionComponents;
 
   src = fetchurl {
     url =  "ftp://ftp.osuosl.org/pub/musescore/releases/MuseScore-${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";

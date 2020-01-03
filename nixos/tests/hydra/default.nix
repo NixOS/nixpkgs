@@ -8,8 +8,10 @@ let
   trivialJob = pkgs.writeTextDir "trivial.nix" ''
    { trivial = builtins.derivation {
        name = "trivial";
-       system = "x86_64-linux";
+       system = "${system}";
        builder = "/bin/sh";
+       allowSubstitutes = false;
+       preferLocalBuild = true;
        args = ["-c" "echo success > $out; exit 0"];
      };
    }
@@ -32,7 +34,7 @@ let
   };
 
   tests = pkgs.lib.flip pkgs.lib.mapAttrs hydraPkgs (name: nix:
-    callTest (import ../make-test.nix ({ pkgs, lib, ... }:
+    callTest (import ../make-test-python.nix ({ pkgs, lib, ... }:
       {
         name = "hydra-with-${name}";
         meta = with pkgs.stdenv.lib.maintainers; {
@@ -53,11 +55,16 @@ let
               notificationSender = "example@example.com";
 
               package = pkgs.hydra.override { inherit nix; };
+
+              extraConfig = ''
+                email_notification = 1
+              '';
             };
+            services.postfix.enable = true;
             nix = {
               buildMachines = [{
                 hostName = "localhost";
-                systems = [ "x86_64-linux" ];
+                systems = [ system ];
               }];
 
               binaryCaches = [];
@@ -66,24 +73,30 @@ let
 
         testScript = ''
           # let the system boot up
-          $machine->waitForUnit("multi-user.target");
+          machine.wait_for_unit("multi-user.target")
           # test whether the database is running
-          $machine->succeed("systemctl status postgresql.service");
+          machine.wait_for_unit("postgresql.service")
           # test whether the actual hydra daemons are running
-          $machine->succeed("systemctl status hydra-queue-runner.service");
-          $machine->succeed("systemctl status hydra-init.service");
-          $machine->succeed("systemctl status hydra-evaluator.service");
-          $machine->succeed("systemctl status hydra-send-stats.service");
+          machine.wait_for_unit("hydra-init.service")
+          machine.require_unit_state("hydra-queue-runner.service")
+          machine.require_unit_state("hydra-evaluator.service")
+          machine.require_unit_state("hydra-notify.service")
 
-          $machine->succeed("hydra-create-user admin --role admin --password admin");
+          machine.succeed("hydra-create-user admin --role admin --password admin")
 
           # create a project with a trivial job
-          $machine->waitForOpenPort(3000);
+          machine.wait_for_open_port(3000)
 
           # make sure the build as been successfully built
-          $machine->succeed("create-trivial-project.sh");
+          machine.succeed("create-trivial-project.sh")
 
-          $machine->waitUntilSucceeds('curl -L -s http://localhost:3000/build/1 -H "Accept: application/json" |  jq .buildstatus | xargs test 0 -eq');
+          machine.wait_until_succeeds(
+              'curl -L -s http://localhost:3000/build/1 -H "Accept: application/json" |  jq .buildstatus | xargs test 0 -eq'
+          )
+
+          machine.wait_until_succeeds(
+              'journalctl -eu hydra-notify.service -o cat | grep -q "sending mail notification to hydra@localhost"'
+          )
         '';
       })));
 

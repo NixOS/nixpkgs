@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "pbzx";
   version = "1.0.2";
-  name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "NiklasRosenstein";
     repo = "pbzx";

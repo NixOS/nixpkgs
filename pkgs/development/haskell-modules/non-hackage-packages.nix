@@ -12,4 +12,8 @@ self: super: {
 
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
+
+  # spago is not released to Hackage.
+  # https://github.com/spacchetti/spago/issues/512
+  spago = self.callPackage ../tools/purescript/spago { };
 }

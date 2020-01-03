@@ -1,14 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
 
 stdenv.mkDerivation rec {
-  version = "1.22.0";
-  name = "grpc-${version}";
+  version = "1.25.0"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
+  pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "10wf9sakkxpcvc09n1h91x6slwwhxblghs4zn95klyc4m6py1gfg";
+    sha256 = "02nbmbk1xpibjzvbhi8xpazmwry46ki24vks1sh2p0aqwy4hv6yb";
+    fetchSubmodules = true;
   };
+  patches = [
+    # Fix build on armv6l (https://github.com/grpc/grpc/pull/21341)
+    (fetchpatch {
+      url = "https://github.com/grpc/grpc/commit/ffb8a278389c8e3403b23a9897b65a7390c34645.patch";
+      sha256 = "1lc12a3gccg9wxqhnwgldlj3zmlm6lxg8dssvvj1x7hf655kw3w3";
+    })
+  ];
+
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags ];
 
@@ -39,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
-    maintainers = [ maintainers.lnl7 ];
+    maintainers = [ maintainers.lnl7 maintainers.marsam ];
     homepage = https://grpc.io/;
   };
 }

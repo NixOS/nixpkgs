@@ -4,8 +4,9 @@
 let
   version = "1.2.28";
 in
-stdenv.mkDerivation rec {
-  name = "xmlsec-${version}";
+stdenv.mkDerivation {
+  pname = "xmlsec";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";

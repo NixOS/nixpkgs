@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig, intltool, xorg, pcre, gst_all_1, glib
 , xosd, libnotify, enchant, wrapGAppsHook, gdk-pixbuf }:
 
-stdenv.mkDerivation rec {
-   name = "xneur-${version}";
+stdenv.mkDerivation {
+   pname = "xneur";
    version = "0.20.0";
 
   src = fetchurl {

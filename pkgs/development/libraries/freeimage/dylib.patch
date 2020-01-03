@@ -1,0 +1,16 @@
+--- a/Makefile.osx
++++ b/Makefile.osx
+@@ -60,1 +60,1 @@
+-FreeImage: $(STATICLIB)
++FreeImage: $(STATICLIB) $(SHAREDLIB)
+@@ -87,7 +87,7 @@
+-$(SHAREDLIB): $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
+-	$(LIPO) -create $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64 -output $(SHAREDLIB)
++#$(SHAREDLIB): $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
++#	$(LIPO) -create $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64 -output $(SHAREDLIB)
+ 
+ $(SHAREDLIB)-i386: $(MODULES_I386)
+ 	$(CPP_I386) -arch i386 -dynamiclib $(LIBRARIES_I386) -o $@ $(MODULES_I386)
+ 
+-$(SHAREDLIB)-x86_64: $(MODULES_X86_64)
++$(SHAREDLIB): $(MODULES_X86_64)

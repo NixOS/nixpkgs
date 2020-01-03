@@ -1,18 +1,10 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, darwin
+{ stdenv, buildPythonPackage, darwin, grpc
 , six, protobuf, enum34, futures, isPy27, pkgconfig
 , cython}:
 
 buildPythonPackage rec {
+  inherit (grpc) src version;
   pname = "grpcio";
-  version = "1.22.0";
-
-  src = fetchFromGitHub {
-    owner = "grpc";
-    repo = "grpc";
-    rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "093w8mgvl8ylqlqnfz06ijkmlnkxcjszf9zg6k5ybjw7dwal0jhz";
-  };
 
   nativeBuildInputs = [ cython pkgconfig ]
                     ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;

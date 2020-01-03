@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libarcus, stb, protobuf }:
 
 stdenv.mkDerivation rec {
-  name = "curaengine-${version}";
-  version = "4.2.0";
+  pname = "curaengine";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "CuraEngine";
     rev = version;
-    sha256 = "13hbzsx4fwrbwviyhh8z04gs9b0m8fjl8a31ci7gr2dfdmgjs6pd";
+    sha256 = "1m89bp4g0dldh7vv1clj110m29ajiaghdq7b49mb3y8ifgrf8rdi";
   };
 
   nativeBuildInputs = [ cmake ];

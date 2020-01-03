@@ -5,11 +5,13 @@
 , scipy
 , matplotlib
 , pytest
+, isPy3k
 }:
 
 buildPythonPackage rec {
   version = "1.4.5";
   pname = "filterpy";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

@@ -4,7 +4,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "intecture-agent-${version}";
+  pname = "intecture-agent";
   version = "0.3.1";
 
   src = fetchFromGitHub {

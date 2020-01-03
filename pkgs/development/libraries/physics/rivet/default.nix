@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fastjet, ghostscript, gsl, hepmc2, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
+{ stdenv, fetchurl, fetchpatch, fastjet, ghostscript, gsl, hepmc2, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "rivet-${version}";
+  pname = "rivet";
   version = "2.7.2";
 
   src = fetchurl {
@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch # configure relies on impure sw_vers to -Dunix
+    (fetchpatch {
+      url = "https://phab-files.hepforge.org/file/data/j3ja4jirrdyrovrmnbuh/PHID-FILE-6vnor4aoz3s2ejruisrg/file";
+      sha256 = "0flxv08wcd0m5di75s2zvm015k2k70nqgpcgcbq7m604z26pd6ab";
+    })
   ];
 
   latex = texlive.combine { inherit (texlive)

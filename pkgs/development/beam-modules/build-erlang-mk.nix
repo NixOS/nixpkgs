@@ -25,7 +25,7 @@ let
     };
 
   pkg = self: stdenv.mkDerivation ( attrs // {
-    app_name = "${name}";
+    app_name = name;
     name = "${name}-${version}";
     inherit version;
 

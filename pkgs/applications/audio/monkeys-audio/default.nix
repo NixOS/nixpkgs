@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   version = "3.99-u4-b5";
   pname = "monkeys-audio";
-  name = pname + "-" + version;
 
   patches = [ ./buildfix.diff ];
 

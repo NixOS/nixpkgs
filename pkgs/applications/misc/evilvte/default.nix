@@ -3,8 +3,8 @@
   configH ? ""
 }:
 
-stdenv.mkDerivation rec {
-  name = "evilvte-${version}";
+stdenv.mkDerivation {
+  pname = "evilvte";
   version = "0.5.2-20140827";
 
   src = fetchgit {

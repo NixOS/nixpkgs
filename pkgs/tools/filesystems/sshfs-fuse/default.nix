@@ -1,20 +1,26 @@
-{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, docutils
+{ stdenv, fetchFromGitHub, fetchpatch, meson, pkgconfig, ninja, docutils, makeWrapper
 , fuse3, glib
 , which, python3Packages
+, openssh
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.5.2";
-  name = "sshfs-fuse-${version}";
+  version = "3.6.0";
+  pname = "sshfs-fuse";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "0gvk8snivpi2sjidjnd9ypc66ny7lr0z9v4swl56rwjv539dkbx2";
+    sha256 = "0l4a6azsp920fhl4safxjam6821b77zxhw8mjgm33f60pksslww0";
   };
 
-  nativeBuildInputs = [ meson pkgconfig ninja docutils ];
+  patches = [ (fetchpatch {
+    url = "https://github.com/libfuse/sshfs/commit/a548abd1f33a8423bec72724a5f48eb96fa55dd2.patch";
+    sha256 = "19p94aw7nvydd7p2bd1f5cqhlhhamjhda31k22sg06xaqyl893jm";
+  }) ];
+
+  nativeBuildInputs = [ meson pkgconfig ninja docutils makeWrapper ];
   buildInputs = [ fuse3 glib ];
   checkInputs = [ which python3Packages.pytest ];
 
@@ -25,6 +31,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
+    wrapProgram $out/bin/sshfs --prefix PATH : "${openssh}/bin"
   '';
 
   #doCheck = true;

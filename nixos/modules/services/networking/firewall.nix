@@ -42,23 +42,14 @@ let
 
   kernelHasRPFilter = ((kernel.config.isEnabled or (x: false)) "IP_NF_MATCH_RPFILTER") || (kernel.features.netfilterRPFilter or false);
 
-  helpers =
-    ''
-      # Helper command to manipulate both the IPv4 and IPv6 tables.
-      ip46tables() {
-        iptables -w "$@"
-        ${optionalString config.networking.enableIPv6 ''
-          ip6tables -w "$@"
-        ''}
-      }
-    '';
+  helpers = import ./helpers.nix { inherit config lib; };
 
   writeShScript = name: text: let dir = pkgs.writeScriptBin name ''
     #! ${pkgs.runtimeShell} -e
     ${text}
   ''; in "${dir}/bin/${name}";
 
-  defaultInterface = { default = mapAttrs (name: value: cfg."${name}") commonOptions; };
+  defaultInterface = { default = mapAttrs (name: value: cfg.${name}) commonOptions; };
   allInterfaces = defaultInterface // cfg.interfaces;
 
   startScript = writeShScript "firewall-start" ''
@@ -271,7 +262,7 @@ let
       apply = canonicalizePortList;
       example = [ 22 80 ];
       description =
-        '' 
+        ''
           List of TCP ports on which incoming connections are
           accepted.
         '';
@@ -282,7 +273,7 @@ let
       default = [ ];
       example = [ { from = 8999; to = 9003; } ];
       description =
-        '' 
+        ''
           A range of TCP ports on which incoming connections are
           accepted.
         '';
@@ -328,6 +319,17 @@ in
             firewall that blocks connection attempts to unauthorised TCP
             or UDP ports on this machine.  It does not affect packet
             forwarding.
+          '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.iptables;
+        defaultText = "pkgs.iptables";
+        example = literalExample "pkgs.iptables-nftables-compat";
+        description =
+          ''
+            The iptables package to use for running the firewall service."
           '';
       };
 
@@ -536,7 +538,7 @@ in
 
     networking.firewall.trustedInterfaces = [ "lo" ];
 
-    environment.systemPackages = [ pkgs.iptables ] ++ cfg.extraPackages;
+    environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
 
     boot.kernelModules = (optional cfg.autoLoadConntrackHelpers "nf_conntrack")
       ++ map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;
@@ -555,7 +557,7 @@ in
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
 
-      path = [ pkgs.iptables ] ++ cfg.extraPackages;
+      path = [ cfg.package ] ++ cfg.extraPackages;
 
       # FIXME: this module may also try to load kernel modules, but
       # containers don't have CAP_SYS_MODULE.  So the host system had

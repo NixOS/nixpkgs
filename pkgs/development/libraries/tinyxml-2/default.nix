@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "tinyxml-2-${version}";
+  pname = "tinyxml-2";
   version = "6.0.0";
 
   src = fetchFromGitHub {

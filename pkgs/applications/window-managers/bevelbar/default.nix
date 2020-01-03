@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libX11, libXrandr, libXft }:
 
 stdenv.mkDerivation rec {
-  name = "bevelbar-${version}";
+  pname = "bevelbar";
   version = "16.11";
 
   src = fetchFromGitHub {

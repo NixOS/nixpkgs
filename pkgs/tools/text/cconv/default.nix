@@ -1,7 +1,8 @@
 { stdenv, fetchurl, autoreconfHook }:
 let version = "0.6.3"; in
   stdenv.mkDerivation {
-  name = "cconv-${version}";
+  pname = "cconv";
+  inherit version;
   
   src = fetchurl {
     url = "https://github.com/xiaoyjy/cconv/archive/v${version}.tar.gz";

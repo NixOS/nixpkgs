@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, cmake, zlib, python2}:
 
 stdenv.mkDerivation rec {
-  name = "strelka-${version}";
+  pname = "strelka";
   version = "2.9.10";
 
   src = fetchFromGitHub {
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib python2 ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
 
   preConfigure = ''
     sed -i 's|/usr/bin/env python|${python2}/bin/python|' src/python/lib/makeRunScript.py

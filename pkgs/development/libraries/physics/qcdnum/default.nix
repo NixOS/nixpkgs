@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, gfortran }:
+{ stdenv, fetchurl, gfortran, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "QCDNUM-${version}";
+  pname = "QCDNUM";
   version = "17-01-13";
 
   src = fetchurl {
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gfortran ];
+  buildInputs = [ zlib ];
 
   enableParallelBuilding = true;
 

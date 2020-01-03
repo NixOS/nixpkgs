@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
    version = "0.2";
-   name = "sutils-${version}";
+   pname = "sutils";
 
    src = fetchFromGitHub {
      owner = "baskerville";

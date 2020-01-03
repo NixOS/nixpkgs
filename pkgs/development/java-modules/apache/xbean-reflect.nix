@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   xbeanReflect_3_4 = map (obj: fetchMaven {
     version = "3.4";
     artifactId = "xbean-reflect";

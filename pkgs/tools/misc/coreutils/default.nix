@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+         # Fix failing test with musl. See https://lists.gnu.org/r/coreutils/2019-05/msg00031.html
+         # To be removed in coreutils-8.32.
+         ++ optional stdenv.hostPlatform.isMusl ./avoid-false-positive-in-date-debug-test.patch
          # Fix compilation in musl-cross environments. To be removed in coreutils-8.32.
          ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch;
 
@@ -54,10 +57,12 @@ stdenv.mkDerivation rec {
     for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
       echo "int main() { return 77; }" > "$f"
     done
-  '' + optionalString (stdenv.hostPlatform.libc == "musl") ''
-    echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
-    echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-  '';
+  '' + optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
+    ''
+      echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+      echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
+    ''
+  ]);
 
   outputs = [ "out" "info" ];
 

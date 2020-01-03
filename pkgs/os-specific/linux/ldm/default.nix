@@ -7,7 +7,8 @@ let
   git = https://github.com/LemonBoy/ldm.git;
 in
 stdenv.mkDerivation rec {
-  name = "ldm-${version}";
+  pname = "ldm";
+  inherit version;
 
   # There is a stable release, but we'll use the lvm branch, which
   # contains important fixes for LVM setups.

@@ -13,7 +13,7 @@ let param =
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "coq${coq.coq-version}-verdi-${param.version}";
 
   src = fetchFromGitHub {

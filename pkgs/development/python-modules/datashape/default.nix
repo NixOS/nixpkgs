@@ -38,6 +38,9 @@ in buildPythonPackage rec {
            --ignore datashape/tests/test_user.py
   '';
 
+  # https://github.com/blaze/datashape/issues/238
+  PYTEST_ADDOPTS = "-k 'not test_record and not test_tuple'";
+
   meta = {
     homepage = https://github.com/ContinuumIO/datashape;
     description = "A data description language";

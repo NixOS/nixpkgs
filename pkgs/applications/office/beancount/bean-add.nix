@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bean-add-2018-01-08";
 
   src = fetchFromGitHub {

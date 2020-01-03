@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "ncftp-${version}";
+  pname = "ncftp";
   version = "3.2.6";
 
   src = fetchurl {

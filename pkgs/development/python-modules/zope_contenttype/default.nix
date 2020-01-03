@@ -17,6 +17,7 @@ buildPythonPackage rec {
     description = "A utility module for content-type (MIME type) handling";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
+    broken = true;
   };
 
 }

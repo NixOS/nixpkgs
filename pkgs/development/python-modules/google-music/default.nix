@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-music";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13i9nd62wqfg0f5r7ykr15q83397vdpw0js50fy5nbgs33sbf6b7";
+    sha256 = "5c6cb11d56dfe2cfb95f3083ed4c1347dafbf15a88fc9a7aab3ed5ee4c75cc40";
   };
 
   postPatch = ''

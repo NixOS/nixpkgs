@@ -1,27 +1,32 @@
-{ stdenv, fetchurl, cmake, pcre, pkgconfig, python2
-, libX11, libXpm, libXft, libXext, libGLU_combined, zlib, libxml2, lz4, lzma, gsl, xxHash
+{ stdenv, fetchurl, cmake, gl2ps, gsl, libX11, libXpm, libXft, libXext
+, libGLU, libGL, libxml2, lz4, lzma, pcre, pkgconfig, python, xxHash, zlib
 , Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
-  name = "root-${version}";
-  version = "6.12.06";
+  pname = "root";
+  version = "6.18.04";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "1557b9sdragsx9i15qh6lq7fn056bgi87d31kxdl4vl0awigvp5f";
+    sha256 = "196ghma6g5a7sqz52wyjkgvmh4hj4vqwppm0zwdypy33hgy8anii";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake pcre python2 zlib libxml2 lz4 lzma gsl xxHash ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU_combined ]
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ gl2ps pcre python zlib libxml2 lz4 lzma gsl xxHash ]
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
+  propagatedBuildInputs = [ python.pkgs.numpy ];
 
   patches = [
     ./sw_vers.patch
   ];
 
   preConfigure = ''
+    rm -rf builtins/*
+    substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
+      --replace 'set(lcgpackages ' '#set(lcgpackages '
+
     patchShebangs build/unix/
   '' + stdenv.lib.optionalString noSplash ''
     substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
@@ -35,8 +40,10 @@ stdenv.mkDerivation rec {
     "-Dbonjour=OFF"
     "-Dcastor=OFF"
     "-Dchirp=OFF"
+    "-Dclad=OFF"
     "-Ddavix=OFF"
     "-Ddcache=OFF"
+    "-Dfail-on-missing=ON"
     "-Dfftw3=OFF"
     "-Dfitsio=OFF"
     "-Dfortran=OFF"
@@ -57,6 +64,7 @@ stdenv.mkDerivation rec {
     "-Drfio=OFF"
     "-Dsqlite=OFF"
     "-Dssl=OFF"
+    "-Dvdt=OFF"
     "-Dxml=ON"
     "-Dxrootd=OFF"
   ]

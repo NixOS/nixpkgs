@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, postgresql, wxGTK, libxml2, libxslt, openssl, zlib, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "pgadmin3-${version}";
+  pname = "pgadmin3";
   version = "1.22.2";
 
   src = fetchurl {

@@ -10,7 +10,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "bulletml-${version}";
+  pname = "bulletml";
+  inherit version;
 
   srcs = [
     (fetchurl {

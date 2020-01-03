@@ -25,14 +25,14 @@ let
   optLeveldb = shouldUsePkg leveldb;
 in
 stdenv.mkDerivation rec {
-  name = "wiredtiger-${version}";
-  version = "2.6.1";
+  pname = "wiredtiger";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     repo = "wiredtiger";
     owner = "wiredtiger";
     rev = version;
-    sha256 = "1nj319w3hvkq3za2dz9m0p1w683gycdb392v1jb910bhzpsq30pd";
+    sha256 = "04j2zw8b9jym43r682rh4kpdippxx7iw3ry16nxlbybzar9kgk83";
   };
 
   nativeBuildInputs = [ automake autoconf libtool ];
@@ -58,17 +58,10 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace api/leveldb/leveldb_wt.h --replace \
-      '#include "wiredtiger.h"' \
-      ''$'#include "wiredtiger.h"\n#include "pthread.h"'
-  '';
-
   meta = {
     homepage = http://wiredtiger.com/;
     description = "";
     license = licenses.gpl2;
     platforms = intersectLists platforms.unix platforms.x86_64;
-    broken = true; # Broken by f689a6d1c6796c4a4f116ffec6c4624379e04bc9.
   };
 }

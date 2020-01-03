@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, zlib, gmp }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "open-wbo-2.0";
 
   src = fetchFromGitHub {

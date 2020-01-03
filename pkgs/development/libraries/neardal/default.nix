@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, glib, readline, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "neardal-0.7-post-git-20150930";
 
   src = fetchFromGitHub {

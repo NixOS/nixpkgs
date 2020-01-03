@@ -7,7 +7,7 @@ let
   containerIp6 = "fc00::2/7";
 in
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "containers-bridge";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aristid aszlig eelco kampfschlaefer ];
@@ -61,43 +61,42 @@ import ./make-test.nix ({ pkgs, ...} : {
       virtualisation.pathsInNixDB = [ pkgs.stdenv ];
     };
 
-  testScript =
-    ''
-      $machine->waitForUnit("default.target");
-      $machine->succeed("nixos-container list") =~ /webserver/ or die;
+  testScript = ''
+    machine.wait_for_unit("default.target")
+    assert "webserver" in machine.succeed("nixos-container list")
 
-      # Start the webserver container.
-      $machine->succeed("nixos-container status webserver") =~ /up/ or die;
+    with subtest("Start the webserver container"):
+        assert "up" in machine.succeed("nixos-container status webserver")
 
-      # Check if bridges exist inside containers
-      $machine->succeed("nixos-container run webserver -- ip link show eth0");
-      $machine->succeed("nixos-container run web-noip -- ip link show eth0");
+    with subtest("Bridges exist inside containers"):
+        machine.succeed(
+            "nixos-container run webserver -- ip link show eth0",
+            "nixos-container run web-noip -- ip link show eth0",
+        )
 
-      "${containerIp}" =~ /([^\/]+)\/([0-9+])/;
-      my $ip = $1;
-      chomp $ip;
-      $machine->succeed("ping -n -c 1 $ip");
-      $machine->succeed("curl --fail http://$ip/ > /dev/null");
+    ip = "${containerIp}".split("/")[0]
+    machine.succeed(f"ping -n -c 1 {ip}")
+    machine.succeed(f"curl --fail http://{ip}/ > /dev/null")
 
-      "${containerIp6}" =~ /([^\/]+)\/([0-9+])/;
-      my $ip6 = $1;
-      chomp $ip6;
-      $machine->succeed("ping -n -c 1 $ip6");
-      $machine->succeed("curl --fail http://[$ip6]/ > /dev/null");
+    ip6 = "${containerIp6}".split("/")[0]
+    machine.succeed(f"ping -n -c 1 {ip6}")
+    machine.succeed(f"curl --fail http://[{ip6}]/ > /dev/null")
 
-      # Check that nixos-container show-ip works in case of an ipv4 address with
-      # subnetmask in CIDR notation.
-      my $result = $machine->succeed("nixos-container show-ip webserver");
-      chomp $result;
-      $result eq $ip or die;
+    with subtest(
+        "nixos-container show-ip works in case of an ipv4 address "
+        + "with subnetmask in CIDR notation."
+    ):
+        result = machine.succeed("nixos-container show-ip webserver").rstrip()
+        assert result == ip
 
-      # Stop the container.
-      $machine->succeed("nixos-container stop webserver");
-      $machine->fail("curl --fail --connect-timeout 2 http://$ip/ > /dev/null");
-      $machine->fail("curl --fail --connect-timeout 2 http://[$ip6]/ > /dev/null");
+    with subtest("Stop the container"):
+        machine.succeed("nixos-container stop webserver")
+        machine.fail(
+            f"curl --fail --connect-timeout 2 http://{ip}/ > /dev/null",
+            f"curl --fail --connect-timeout 2 http://[{ip6}]/ > /dev/null",
+        )
 
-      # Destroying a declarative container should fail.
-      $machine->fail("nixos-container destroy webserver");
-    '';
-
+    # Destroying a declarative container should fail.
+    machine.fail("nixos-container destroy webserver")
+  '';
 })

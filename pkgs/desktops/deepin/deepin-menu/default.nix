@@ -2,7 +2,6 @@
   qt5integration, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-menu";
   version = "3.4.8";
 
@@ -35,7 +34,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin menu service";

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, python3 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2019-02-13";
-  name = "nginx-config-formatter-${version}";
+  pname = "nginx-config-formatter";
 
   src = fetchFromGitHub {
     owner = "1connect";

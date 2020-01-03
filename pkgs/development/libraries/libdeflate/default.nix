@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "libdeflate-${version}";
-  version = "1.2";
+  pname = "libdeflate";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
     rev = "v${version}";
-    sha256 = "0kmp38s7vahvbgzzhs5v0bfyjgas1in7jn69gpyh70kl08279ly0";
+    sha256 = "019xsz5dnbpxiz29j3zqsxyi4ksjkkygi6a2zyc8fxbm8lvaa9ar";
   };
 
   postPatch = ''

@@ -3,7 +3,8 @@
 let
   version = "1.4.9";
 in stdenv.mkDerivation {
-  name = "gogui-${version}";
+  pname = "gogui";
+  inherit version;
   buildInputs = [ unzip makeWrapper ];
   src = fetchurl {
     url = "mirror://sourceforge/project/gogui/gogui/${version}/gogui-${version}.zip";

@@ -7,10 +7,9 @@ in
 stdenv.mkDerivation rec {
   pname = "spoofer";
   version = "1.4.5";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://www.caida.org/projects/spoofer/downloads/${name}.tar.gz";
+    url = "https://www.caida.org/projects/spoofer/downloads/${pname}-${version}.tar.gz";
     sha256 = "0pnim3xyfsmv6alsvhwjs4v9lp39wwiyj63rxsqyz4wx4vkmn12z";
   };
 

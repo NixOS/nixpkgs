@@ -1,11 +1,11 @@
 { stdenv, fetchurl, intltool }:
 
 stdenv.mkDerivation rec {
-  name = "mate-backgrounds-${version}";
+  pname = "mate-backgrounds";
   version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1j9ch04qi2q4mdcvb92w667ra9hpfdf2bfpi1dpw0nbph7r6qvj9";
   };
 

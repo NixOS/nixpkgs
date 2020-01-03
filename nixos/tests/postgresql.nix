@@ -3,7 +3,7 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -40,29 +40,33 @@ let
       backupName = if backup-all then "all" else "postgres";
       backupService = if backup-all then "postgresqlBackup" else "postgresqlBackup-postgres";
     in ''
-      sub check_count {
-        my ($select, $nlines) = @_;
-        return 'test $(sudo -u postgres psql postgres -tAc "' . $select . '"|wc -l) -eq ' . $nlines;
-      }
+      def check_count(statement, lines):
+          return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
+              statement, lines
+          )
 
-      $machine->start;
-      $machine->waitForUnit("postgresql");
+
+      machine.start()
+      machine.wait_for_unit("postgresql")
+
       # postgresql should be available just after unit start
-      $machine->succeed("cat ${test-sql} | sudo -u postgres psql");
-      $machine->shutdown; # make sure that postgresql survive restart (bug #1735)
-      sleep(2);
-      $machine->start;
-      $machine->waitForUnit("postgresql");
-      $machine->fail(check_count("SELECT * FROM sth;", 3));
-      $machine->succeed(check_count("SELECT * FROM sth;", 5));
-      $machine->fail(check_count("SELECT * FROM sth;", 4));
-      $machine->succeed(check_count("SELECT xpath(\'/test/text()\', doc) FROM xmltest;", 1));
+      machine.succeed(
+          "cat ${test-sql} | sudo -u postgres psql"
+      )
+      machine.shutdown()  # make sure that postgresql survive restart (bug #1735)
+      time.sleep(2)
+      machine.start()
+      machine.wait_for_unit("postgresql")
+      machine.fail(check_count("SELECT * FROM sth;", 3))
+      machine.succeed(check_count("SELECT * FROM sth;", 5))
+      machine.fail(check_count("SELECT * FROM sth;", 4))
+      machine.succeed(check_count("SELECT xpath('/test/text()', doc) FROM xmltest;", 1))
 
       # Check backup service
-      $machine->succeed("systemctl start ${backupService}.service");
-      $machine->succeed("zcat /var/backup/postgresql/${backupName}.sql.gz | grep '<test>ok</test>'");
-      $machine->succeed("stat -c '%a' /var/backup/postgresql/${backupName}.sql.gz | grep 600");
-      $machine->shutdown;
+      machine.succeed("systemctl start ${backupService}.service")
+      machine.succeed("zcat /var/backup/postgresql/${backupName}.sql.gz | grep '<test>ok</test>'")
+      machine.succeed("stat -c '%a' /var/backup/postgresql/${backupName}.sql.gz | grep 600")
+      machine.shutdown()
     '';
 
   };

@@ -1,0 +1,24 @@
+From 8ddf2697508eca514a0dde4646ad14ac3ba34b2a Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Fri, 18 Oct 2019 16:06:50 +0200
+Subject: [PATCH] pebble_artifacts: hardcode pebble location
+
+---
+ certbot-ci/certbot_integration_tests/utils/pebble_artifacts.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/certbot-ci/certbot_integration_tests/utils/pebble_artifacts.py b/certbot-ci/certbot_integration_tests/utils/pebble_artifacts.py
+index 2b1557928..d2603c51a 100644
+--- a/certbot-ci/certbot_integration_tests/utils/pebble_artifacts.py
++++ b/certbot-ci/certbot_integration_tests/utils/pebble_artifacts.py
+@@ -22,6 +22,7 @@ def fetch(workspace):
+ 
+ 
+ def _fetch_asset(asset, suffix):
++    return "@pebble@"
+     asset_path = os.path.join(ASSETS_PATH, '{0}_{1}_{2}'.format(asset, PEBBLE_VERSION, suffix))
+     if not os.path.exists(asset_path):
+         asset_url = ('https://github.com/letsencrypt/pebble/releases/download/{0}/{1}_{2}'
+-- 
+2.23.0
+

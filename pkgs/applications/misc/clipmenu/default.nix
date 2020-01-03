@@ -3,7 +3,7 @@ let
   runtimePath = lib.makeBinPath [ clipnotify xsel dmenu utillinux gawk ];
 in
 stdenv.mkDerivation rec {
-  name = "clipmenu-${version}";
+  pname = "clipmenu";
   version = "5.6.0";
 
   src = fetchFromGitHub {

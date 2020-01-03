@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libtomcrypt-${version}";
+  pname = "libtomcrypt";
   version = "1.18.2";
 
   src = fetchurl {

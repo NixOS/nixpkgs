@@ -1,13 +1,13 @@
-{ fetchurl, stdenv, pkgconfig, python, file, bc, fetchpatch
+{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc, fetchpatch
 , qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "2.3.0";
-  name = "lyx-${version}";
+  pname = "lyx";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${name}.tar.xz";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
     sha256 = "0axri2h8xkna4mkfchfyyysbjl7s486vx80p5hzj9zgsvdm5a3ri";
   };
 
@@ -30,10 +30,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # python is run during runtime to do various tasks
-  postFixup = ''
-    wrapProgram "$out/bin/lyx" \
-      --prefix PATH : '${python}/bin'
-  '';
+  qtWrapperArgs = [
+    " --prefix PATH : ${python}/bin"
+  ];
 
   patches = [
     (fetchpatch {
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = http://www.lyx.org;
     license = licenses.gpl2Plus;

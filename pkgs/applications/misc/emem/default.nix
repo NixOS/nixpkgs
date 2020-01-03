@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "emem";
   version = "0.2.50";
-  name = "${pname}-${version}";
 
   inherit jdk;
 

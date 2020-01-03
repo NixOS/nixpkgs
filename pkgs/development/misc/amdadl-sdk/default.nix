@@ -1,8 +1,8 @@
 { requireFile, stdenv, unzip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "6.0";
-  name = "amdadl-sdk-${version}";
+  pname = "amdadl-sdk";
 
   src = requireFile {
     name = "ADL_SDK_6.0.zip";

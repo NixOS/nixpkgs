@@ -1,7 +1,7 @@
 { stdenv, lib, perl, fetchurl, python2
 , pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openal, libGLU_combined, xorgproto, libX11, libXcursor, nspr, SDL2
+, openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
 , gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK ? null
 }:
@@ -9,7 +9,7 @@
 assert withEditor -> wxGTK != null;
 
 stdenv.mkDerivation rec {
-  name = "0ad-${version}";
+  pname = "0ad";
   version = "0.0.23b";
 
   src = fetchurl {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     spidermonkey_38 boost icu libxml2 libpng libjpeg
     zlib curl libogg libvorbis enet miniupnpc openal
-    libGLU_combined xorgproto libX11 libXcursor nspr SDL2 gloox
+    libGLU libGL xorgproto libX11 libXcursor nspr SDL2 gloox
     nvidia-texture-tools libsodium
   ] ++ lib.optional withEditor wxGTK;
 

@@ -5,10 +5,9 @@
 stdenv.mkDerivation rec {
   pname = "qstopmotion";
   version = "2.4.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/Version_${builtins.replaceStrings ["."] ["_"] version}/${name}-Source.tar.gz";
+    url = "mirror://sourceforge/project/${pname}/Version_${builtins.replaceStrings ["."] ["_"] version}/${pname}-${version}-Source.tar.gz";
     sha256 = "03r6jxyq0bak2vsy2b78nk27m7fm96hnl8cx11l3l17704j4iglh";
   };
 

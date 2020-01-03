@@ -50,13 +50,13 @@ let
     };
 
 in {
-  liberation_ttf_v1 = common rec {
+  liberation_ttf_v1 = common {
     repo = "liberation-1.7-fonts";
     version = "1.07.5";
     nativeBuildInputs = [ fontforge ];
     sha256 = "1ffl10mf78hx598sy9qr5m6q2b8n3mpnsj73bwixnd4985gsz56v";
   };
-  liberation_ttf_v2 = common rec {
+  liberation_ttf_v2 = common {
     repo = "liberation-fonts";
     version = "2.00.4";
     nativeBuildInputs = [ fontforge fonttools ];

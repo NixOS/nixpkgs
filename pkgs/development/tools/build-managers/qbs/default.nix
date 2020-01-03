@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, qmake, qtbase, qtscript }:
 
 stdenv.mkDerivation rec {
-  name = "qbs-${version}";
+  pname = "qbs";
 
-  version = "1.13.1";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "qbs";
     repo = "qbs";
     rev = "v${version}";
-    sha256 = "1a9mydfsax5pzbnx8g8f9blc4xpk5rdjq8fvkdaiwapdczban1ya";
+    sha256 = "0rqfnclhzln6v4gm68fn4vn6ncf5qpi90295fwm4fx6dq4l94b3v";
   };
 
   nativeBuildInputs = [ qmake ];

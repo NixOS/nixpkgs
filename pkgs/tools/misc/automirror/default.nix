@@ -1,7 +1,6 @@
 {stdenv, fetchFromGitHub, git, ronn}:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "automirror";
   version = "49";
 

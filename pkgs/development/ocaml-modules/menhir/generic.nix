@@ -1,7 +1,8 @@
 { version, src, stdenv, ocaml, findlib, ocamlbuild, ... }:
 
 stdenv.mkDerivation {
-  name = "menhir-${version}";
+  pname = "menhir";
+  inherit version;
 
   inherit src;
 
@@ -37,6 +38,6 @@ stdenv.mkDerivation {
       lgpl2 /* library */
     ];
     platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [ z77z ];
+    maintainers = with maintainers; [ maggesi ];
   };
 }

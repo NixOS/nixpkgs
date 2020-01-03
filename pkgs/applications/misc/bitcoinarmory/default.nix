@@ -10,7 +10,8 @@ let
 
 in buildPythonApplication {
 
-  name = "bitcoinarmory-${version}";
+  pname = "bitcoinarmory";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "goatpig";

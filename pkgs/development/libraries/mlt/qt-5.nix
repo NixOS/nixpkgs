@@ -6,7 +6,7 @@
 let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation rec {
-  name = "mlt-${version}";
+  pname = "mlt";
   version = "6.16.0";
 
   src = fetchFromGitHub {

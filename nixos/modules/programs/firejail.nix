@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.programs.firejail;
 
-  wrappedBins = pkgs.stdenv.mkDerivation rec {
+  wrappedBins = pkgs.stdenv.mkDerivation {
     name = "firejail-wrapped-binaries";
     nativeBuildInputs = with pkgs; [ makeWrapper ];
     buildCommand = ''

@@ -30,6 +30,10 @@ let
   '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "clamav" "updater" "config" ] [ "services" "clamav" "updater" "extraConfig" ])
+  ];
+
   options = {
     services.clamav = {
       daemon = {

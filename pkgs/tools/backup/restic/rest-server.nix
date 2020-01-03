@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "restic-rest-server-${version}";
+  pname = "restic-rest-server";
   version = "0.9.7";
 
   goPackagePath = "github.com/restic/rest-server";

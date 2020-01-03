@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, libuuid, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "taskwarrior-${version}";
+  pname = "taskwarrior";
   version = "2.5.1";
 
   src = fetchurl {

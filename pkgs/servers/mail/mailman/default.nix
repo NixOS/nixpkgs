@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
-  name = "mailman-${version}";
+  pname = "mailman";
   version = "2.1.29";
 
   src = fetchurl {
-    url = "mirror://gnu/mailman/${name}.tgz";
+    url = "mirror://gnu/mailman/${pname}-${version}.tgz";
     sha256 = "0b0dpwf6ap260791c7lg2vpw30llf19hymbf2hja3s016rqp5243";
   };
 

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 {
   name = "signal-desktop";
@@ -24,14 +24,14 @@ import ./make-test.nix ({ pkgs, ...} :
   testScript = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
   in ''
-    startAll;
-    $machine->waitForX;
+    start_all()
+    machine.wait_for_x()
 
     # start signal desktop
-    $machine->execute("su - alice -c signal-desktop &");
+    machine.execute("su - alice -c signal-desktop &")
 
     # wait for the "Link your phone to Signal Desktop" message
-    $machine->waitForText(qr/Link your phone to Signal Desktop/);
-    $machine->screenshot("signal_desktop");
+    machine.wait_for_text("Link your phone to Signal Desktop")
+    machine.screenshot("signal_desktop")
   '';
 })

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec{
 
-  name = "privoxy-${version}";
+  pname = "privoxy";
   version = "3.0.28";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${name}-stable-src.tar.gz";
+    url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
     sha256 = "0jl2yav1qzqnaqnnx8i6i53ayckkimcrs3l6ryvv7bda6v08rmxm";
   };
 

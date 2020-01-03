@@ -3,7 +3,8 @@
 let
   version = "1.8.4.2";
   drv = stdenv.mkDerivation {
-    name = "keepasshttp-${version}";
+    pname = "keepasshttp";
+    inherit version;
     src = fetchFromGitHub {
       owner = "pfn";
       repo = "keepasshttp";

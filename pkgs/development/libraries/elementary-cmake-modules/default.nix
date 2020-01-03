@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig }:
 
-stdenv.mkDerivation rec {
-  name = "elementary-cmake-modules-${version}";
+stdenv.mkDerivation {
+  pname = "elementary-cmake-modules";
   version = "0.1.0";
 
   src = fetchFromGitHub {

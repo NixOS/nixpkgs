@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication rec {
 
-  name = "odpdown-${version}";
+  pname = "odpdown";
   version = "0.4.1";
 
   src = fetchurl {

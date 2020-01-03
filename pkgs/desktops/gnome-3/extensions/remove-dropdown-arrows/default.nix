@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-remove-dropdown-arrows-${version}";
-  version = "11";
+  pname = "gnome-shell-extension-remove-dropdown-arrows";
+  version = "13";
 
   src = fetchFromGitHub {
     owner = "mpdeimos";
     repo = "gnome-shell-remove-dropdown-arrows";
     rev = "version/${version}";
-    sha256 = "1g99r9bpjdhab3xj74wkl40gdnaf2w51kswcr8mi6bq72n4wjxwh";
+    sha256 = "09b2hnfbqym20pb1sfc8xiz7gs2kbs6b1s7xl8swc8dydhsbambk";
   };
 
   # This package has a Makefile, but it's used for publishing and linting, not

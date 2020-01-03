@@ -126,7 +126,7 @@ let
 
     gpg-agent --daemon --scdaemon-program $out/bin/scdaemon > /dev/null 2> /dev/null
     ''}
-        
+
     # Disable all input echo for the whole stage. We could use read -s
     # instead but that would ocasionally leak characters between read
     # invocations.
@@ -417,6 +417,9 @@ let
 
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
+  ];
 
   options = {
 
@@ -476,7 +479,7 @@ in
 
     boot.initrd.luks.devices = mkOption {
       default = { };
-      example = { "luksroot".device = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08"; };
+      example = { luksroot.device = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08"; };
       description = ''
         The encrypted disk that should be opened before the root
         filesystem is mounted. Both LVM-over-LUKS and LUKS-over-LVM

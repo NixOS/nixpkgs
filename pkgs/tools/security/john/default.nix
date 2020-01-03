@@ -1,15 +1,15 @@
 { stdenv, fetchurl, openssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2
-, gcc, pythonPackages, perl, perlPackages, makeWrapper
+, gcc, python3Packages, perl, perlPackages, makeWrapper
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "john-${version}";
+  pname = "john";
   version = "1.9.0-jumbo-1";
 
   src = fetchurl {
-    url = "http://www.openwall.com/john/k/${name}.tar.xz";
+    url = "http://www.openwall.com/john/k/${pname}-${version}.tar.xz";
     sha256 = "0fvz3v41hnaiv1ggpxanfykyfjq79cwp9qcqqn63vic357w27lgm";
   };
 
@@ -31,10 +31,14 @@ stdenv.mkDerivation rec {
     export AS=$CC
     export LD=$CC
   '';
-  configureFlags = [ "--disable-native-macro" ];
+  configureFlags = [
+    "--disable-native-tests"
+    "--with-systemwide"
+  ];
 
-  buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 gcc pythonPackages.wrapPython perl makeWrapper ];
-  propagatedBuildInputs = (with pythonPackages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
+  buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 ];
+  nativeBuildInputs = [ gcc python3Packages.wrapPython perl makeWrapper ];
+  propagatedBuildInputs = (with python3Packages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
                           (with perlPackages; [ DigestMD4 DigestSHA1 GetoptLong # For pass_gen.pl
                                                 perlldap ]); # For sha-dump.pl
                           # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
@@ -43,14 +47,13 @@ stdenv.mkDerivation rec {
   # gcc: error: memdbg.o: No such file or directory
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = [ "-DJOHN_SYSTEMWIDE=1" ];
-
   postInstall = ''
-    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john"
+    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules"
     find -L ../run -mindepth 1 -maxdepth 1 -type f -executable \
       -exec cp -d {} "$out/bin" \;
     cp -vt "$out/etc/john" ../run/*.conf
     cp -vt "$out/share/john" ../run/*.chr ../run/password.lst
+    cp -vt "$out/share/john/rules" ../run/rules/*.rule
     cp -vrt "$out/share/doc/john" ../doc/*
   '';
 
@@ -66,7 +69,7 @@ stdenv.mkDerivation rec {
     description = "John the Ripper password cracker";
     license = licenses.gpl2;
     homepage = https://github.com/magnumripper/JohnTheRipper/;
-    maintainers = with maintainers; [ offline ];
-    platforms = [ "x86_64-linux" "x86_64-darwin"];
+    maintainers = with maintainers; [ offline matthewbauer ];
+    platforms = platforms.unix;
   };
 }

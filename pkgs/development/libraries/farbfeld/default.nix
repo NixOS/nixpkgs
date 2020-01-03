@@ -1,7 +1,7 @@
 { stdenv, fetchgit, makeWrapper, file, libpng, libjpeg }:
 
 stdenv.mkDerivation rec {
-  name = "farbfeld-${version}";
+  pname = "farbfeld";
   version = "4";
 
   src = fetchgit {

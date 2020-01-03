@@ -18,6 +18,9 @@ let
          ] ++ optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
 
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "opendkim" "keyFile" ] [ "services" "opendkim" "keyPath" ])
+  ];
 
   ###### interface
 

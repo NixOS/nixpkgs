@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cvc4-${version}";
+  pname = "cvc4";
   version = "1.6";
 
   src = fetchurl {

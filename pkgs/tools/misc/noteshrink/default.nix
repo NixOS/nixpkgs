@@ -3,7 +3,7 @@
 with python3.pkgs;
 
 buildPythonApplication rec {
-  name = "noteshrink-${version}";
+  pname = "noteshrink";
   version = "0.1.1";
 
   src = fetchFromGitHub {

@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libnet, libpcap }:
 
 stdenv.mkDerivation rec {
-  version = "2.19";
-  name = "arping-${version}";
+  version = "2.20";
+  pname = "arping";
 
   buildInputs = [ libnet libpcap ];
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";
-    repo = "arping";
-    rev = "arping-${version}";
-    sha256 = "10gpil6ic17x8v628vhz9s98rnw1k8ci2xs56i52pr103irirczw";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "0gmyip552k6mq7013cvy5yc4akn2rz28s3g4x4vdq35vnxf66cyk";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -5,7 +5,7 @@
 with builtins;
 
 stdenv.mkDerivation rec {
-  name = "libbpf-${version}";
+  pname = "libbpf";
   version = "0.0.3pre114_${substring 0 7 src.rev}";
 
   src = fetchFromGitHub {

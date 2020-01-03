@@ -2,12 +2,12 @@
 , alsaLib, asio, libjack2, libgig, libsndfile, lv2 }:
 
 stdenv.mkDerivation rec {
-  name = "linuxsampler-${version}";
-  version = "2.1.0";
+  pname = "linuxsampler";
+  version = "2.1.1";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${name}.tar.bz2";
-    sha256 = "0fdxpw7jjfi058l95131d6d8538h05z7n94l60i6mhp9xbplj2jf";
+    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
+    sha256 = "1gijf50x5xbpya5dj3v2mzj7azx4qk9p012csgddp73f0qi0n190";
   };
 
   preConfigure = ''

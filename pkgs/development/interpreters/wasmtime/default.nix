@@ -1,24 +1,24 @@
-{ rustPlatform, fetchFromGitHub, lib, python, cmake, llvmPackages, clang }:
+{ rustPlatform, fetchFromGitHub, lib, python, cmake, llvmPackages, clang, stdenv, darwin }:
 
-rustPlatform.buildRustPackage rec {
-  name = "wasmtime-${version}";
-  version = "0.1.0";
+rustPlatform.buildRustPackage {
+  pname = "wasmtime";
+  version = "20191111";
 
   src = fetchFromGitHub {
-    owner = "CraneStation";
+    owner = "bytecodealliance";
     repo = "wasmtime";
-    rev = "07a6ca8f4e1136ecd9f4af8d1f03a01aade60407";
-    sha256 = "1cq6nz90kaf023mcyblca90bpvbzhq8xjq01laa28v7r50lagcn5";
+    rev = "0006a2af954eba74c79885cb1fe8cdeb68f531c1";
+    sha256 = "0lf3pdkjxcrjmjic7xxyjl5dka3arxi809sp9hm4hih5p2fhf2gw";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0xy8vazb4nc4q1098ws92j1yfwp9w7q30z0yk2gindkn898603bc";
+  cargoSha256 = "0mnwaipa2az3vpgbz4m9siz6bfyhmzwz174k678cv158m7mxx12f";
 
   cargoPatches = [ ./cargo-lock.patch ];
 
   nativeBuildInputs = [ python cmake clang ];
-  buildInputs = [ llvmPackages.libclang ];
-
+  buildInputs = [ llvmPackages.libclang ] ++
+   lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   meta = with lib; {

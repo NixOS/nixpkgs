@@ -2,7 +2,7 @@
 
 let base = "batman-adv-2019.2"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${base}-${kernel.version}";
 
   src = fetchurl {

@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2.2.0";
+  version = "2.9.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wkiqkckwy7fv6m86cs3m3g6jdikkkw84ki9hiwp60xpk5xngnf0";
+    sha256 = "1w1hqr8vyx6ygwflj2737dcy0mmgvrc0s602gnny8pzlcbs9m76b";
   };
 
   checkInputs = [ pytest ];

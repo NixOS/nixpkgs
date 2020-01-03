@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = "result";
-    rev = "${version}";
+    rev = version;
     sha256 = "1jwzpcmxwgkfsbjz9zl59v12hf1vv4r9kiifancn9p8gm206g3g0";
   };
 

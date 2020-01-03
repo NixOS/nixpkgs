@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "ioping-${version}";
+  pname = "ioping";
   version = "1.1";
 
   src = fetchFromGitHub {

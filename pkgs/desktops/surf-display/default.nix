@@ -41,7 +41,11 @@ stdenv.mkDerivation rec {
        --prefix PATH ':' ${stdenv.lib.makeBinPath buildInputs}
   '';
 
-  makeFlags = [ "PREFIX=${placeholder ''out''}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru = {
+    providedSessions = [ "surf-display" ];
+  };
 
   meta = with stdenv.lib; {
     description = "Kiosk browser session manager based on the surf browser";

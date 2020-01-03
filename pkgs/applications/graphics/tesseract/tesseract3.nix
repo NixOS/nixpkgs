@@ -2,7 +2,7 @@
 , leptonica, libpng, libtiff, icu, pango, opencl-headers }:
 
 stdenv.mkDerivation rec {
-  name = "tesseract-${version}";
+  pname = "tesseract";
   version = "3.05.00";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
+, pythonOlder
 , tox
 , pytest
 , pylint
@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "git-revise";
-  version = "0.4.2";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mq1fh8m6jxl052d811cgpl378hiq20a8zrhdjn0i3dqmxrcb8vs";
+    sha256 = "0l3xhg00106p7ysg4gl9dna2zcrax58mzmm0ajjaxw58jfn8wsf1";
   };
 
-  disabled = !(pythonAtLeast "3.6");
+  disabled = pythonOlder "3.6";
 
   checkInputs = [ tox pytest pylint mypy black ];
 
@@ -29,6 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Efficiently update, split, and rearrange git commits";
     homepage = https://github.com/mystor/git-revise;
+    changelog = "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ emily ];
   };

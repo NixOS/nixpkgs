@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "pluginUtils-${version}";
+  pname = "pluginUtils";
   version = "1.1";
 
   src = fetchFromGitHub {

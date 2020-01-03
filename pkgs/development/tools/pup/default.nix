@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "pup-${version}";
+  pname = "pup";
   version = "0.4.0";
   rev = "v${version}";
 

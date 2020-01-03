@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "go-junit-report-unstable-${version}";
+  pname = "go-junit-report-unstable";
   version = "2018-06-14";
   rev = "385fac0ced9acaae6dc5b39144194008ded00697";
 

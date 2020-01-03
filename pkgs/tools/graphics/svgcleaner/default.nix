@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "svgcleaner-${version}";
+  pname = "svgcleaner";
   version = "0.9.2";
 
   src = fetchFromGitHub {

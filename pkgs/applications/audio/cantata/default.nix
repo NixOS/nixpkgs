@@ -35,7 +35,7 @@ let
 
   withUdisks = (withTaglib && withDevices);
 
-in mkDerivation rec {
+in mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -80,7 +80,7 @@ in mkDerivation rec {
     homepage    = https://github.com/cdrummond/cantata;
     description = "A graphical client for MPD";
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ fuuzetsu peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     # Technically Cantata can run on Windows so if someone wants to
     # bother figuring that one out, be my guest.
     platforms   = platforms.linux;

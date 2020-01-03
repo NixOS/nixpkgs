@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildDotnetPackage }:
 
-buildDotnetPackage rec {
+buildDotnetPackage {
   baseName = "pash";
   version = "git-2016-07-06";
   

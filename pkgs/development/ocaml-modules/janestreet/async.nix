@@ -1,7 +1,7 @@
 {stdenv, buildOcamlJane, async_kernel,
  async_unix, async_extra}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "async";
   version = "113.33.03";
   hash = "0wyspkp8k833fh03r3h016nbfn6kjfhvb2bg42cly6agcak59fmr";

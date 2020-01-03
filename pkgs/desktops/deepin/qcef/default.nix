@@ -39,9 +39,8 @@ let
 in
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "qcef";
-  version = "1.1.6";
+  version = "1.1.7";
 
   srcs = [
     (fetchFromGitHub {
@@ -54,8 +53,8 @@ mkDerivation rec {
     (fetchFromGitHub {
       owner = "linuxdeepin";
       repo = "cef-binary";
-      rev = "059a0c9cef4e289a50dc7a2f4c91fe69db95035e";
-      sha256 = "1h7cq63n94y2a6fprq4g63admh49rcci7avl5z9kdimkhqb2jb84";
+      rev = "fecf00339545d2819224333cc506d5aa22ae8008";
+      sha256 = "06i1zc7ciy7d0qhndiwpjrsii0x5i5hg9j6ddi4w5yf1nzgsrj4n";
       name = "cef-binary";
     })
   ];
@@ -91,7 +90,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Qt5 binding of Chromium Embedded Framework";

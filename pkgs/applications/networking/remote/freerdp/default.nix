@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "freerdp-${version}";
+  pname = "freerdp";
   version = "2.0.0-rc4";
 
   src = fetchFromGitHub {

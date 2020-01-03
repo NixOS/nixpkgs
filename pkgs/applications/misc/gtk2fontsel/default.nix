@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.1";
-  name = "gtk2fontsel-${version}";
+  pname = "gtk2fontsel";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtk2fontsel/${name}.tar.gz";
+    url = "mirror://sourceforge/gtk2fontsel/${pname}-${version}.tar.gz";
     sha256 = "0s2sj19n8ys92q9832hkn36ld91bb4qavicc6nygkry6qdpkkmjw";
   };
 
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   meta = with stdenv.lib; {
-    description = "A font selection program for X11 using the GTK2 toolkit";
+    description = "A font selection program for X11 using the GTK 2 toolkit";
     longDescription = ''
-      Font selection tool similar to xfontsel implemented using GTK+ 2.
+      Font selection tool similar to xfontsel implemented using GTK 2.
       Trivial, but useful nonetheless.
     '';
     homepage = http://gtk2fontsel.sourceforge.net/;

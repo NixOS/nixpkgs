@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "201902";
-  name = "pcm-${version}";
+  pname = "pcm";
 
   src = fetchFromGitHub {
     owner = "opcm";
     repo = "pcm";
-    rev = "${version}";
+    rev = version;
     sha256 = "15kh5ry2w1zj2mbg98hlayw8g53jy79q2ixj2wm48g8vagamv77z";
   };
 

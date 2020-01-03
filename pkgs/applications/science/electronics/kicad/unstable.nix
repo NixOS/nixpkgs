@@ -1,4 +1,4 @@
-{ wxGTK, lib, stdenv, fetchFromGitHub, cmake, libGLU_combined, zlib
+{ wxGTK, lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, zlib
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
 
@@ -11,7 +11,7 @@ assert ngspiceSupport -> libngspice != null;
 
 with lib;
 stdenv.mkDerivation rec {
-  name = "kicad-unstable-${version}";
+  pname = "kicad-unstable";
   version = "2018-06-12";
 
   src = fetchFromGitHub {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake doxygen pkgconfig ];
   buildInputs = [
-    libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
+    libGLU libGL zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
     cairo curl openssl boost
   ] ++ optional (oceSupport) opencascade
     ++ optional (ngspiceSupport) libngspice
@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

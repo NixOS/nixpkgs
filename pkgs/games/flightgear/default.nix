@@ -1,5 +1,5 @@
 { stdenv, fetchurl, wrapQtAppsHook
-, freeglut, freealut, libGLU_combined, libICE, libjpeg, openal, openscenegraph, plib
+, freeglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
 , makeDesktopItem, qtbase, qtdeclarative, glew
@@ -9,7 +9,8 @@ let
   version = "2019.1.1";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
-    name = "flightgear-base-${version}";
+    pname = "flightgear-base";
+    inherit version;
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   desktopItem = makeDesktopItem {
     name = "flightgear";
     exec = "fgfs";
-    icon = "${iconsrc}";
+    icon = iconsrc;
     comment = "FlightGear Flight Simulator";
     desktopName = "FlightGear";
     genericName = "Flight simulator";
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [
-    freeglut freealut libGLU_combined libICE libjpeg openal openscenegraph plib
+    freeglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xorgproto libXext libXi
     libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
     glew qtdeclarative

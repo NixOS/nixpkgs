@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libevent, file, qrencode, miniupnpc }:
 
 stdenv.mkDerivation rec {
-  name = "pshs-${version}";
+  pname = "pshs";
   version = "0.3.3";
 
   src = fetchFromGitHub {

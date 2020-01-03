@@ -1,40 +1,40 @@
-{ stdenv, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
-, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU_combined, alsaLib, freetype
-, perl, pkgconfig , libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
-, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2
-, linuxHeaders, fetchpatch
+{ stdenv, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
+, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsaLib, freetype
+, perl, pkgconfig , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
+, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
+, libXNVCtrl, enableXnvctrl ? false
 }:
 
-stdenv.mkDerivation rec {
-  name = "mythtv-${version}";
-  version = "29.1";
+mkDerivation rec {
+  pname = "mythtv";
+  version = "30.0";
 
   src = fetchFromGitHub {
     owner = "MythTV";
     repo = "mythtv";
     rev = "v${version}";
-    sha256 = "0pjxv4bmq8h285jsr02svgaa03614arsyk12fn9d4rndjsi2cc3x";
+    sha256 = "1pfzjb07xwd3mfgmbr4kkiyfyvwy9fkl13ik7bvqds86m0ws5bw4";
   };
 
   patches = [
     # Fixes build with exiv2 0.27.1.
-    (fetchpatch {
-      name = "004-exiv2.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/004-exiv2.patch?h=mythtv&id=76ea37f8556805b205878772ad7874e487c0d946";
-      sha256 = "0mh542f53qgky0w3s2bv0gmcxzvmb10834z3cfff40fby2ffr6k8";
-    })
+    ./exiv2.patch
+    # Disables OS detection used while checking for xnvctrl support.
+    ./disable-os-detection.patch
   ];
 
   setSourceRoot = ''sourceRoot=$(echo */mythtv)'';
 
   buildInputs = [
-    freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU_combined
-    perl alsaLib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
+    freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU libGL
+    perl libsamplerate libbluray lzo alsaLib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
     libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2
-  ];
+  ] ++ stdenv.lib.optional enableXnvctrl libXNVCtrl;
   nativeBuildInputs = [ pkgconfig which yasm libtool autoconf automake file ];
 
-  configureFlags = [ "--dvb-path=${linuxHeaders}/include" ];
+  configureFlags = 
+    [ "--dvb-path=${linuxHeaders}/include" ]
+    ++ stdenv.lib.optionals (!enableXnvctrl) [  "--disable-xnvctrl" ];
 
   meta = with stdenv.lib; {
     homepage = https://www.mythtv.org/;

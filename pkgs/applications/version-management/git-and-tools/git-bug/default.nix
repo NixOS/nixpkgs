@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "git-bug-${version}";
+  pname = "git-bug";
   version = "0.5.0";
   rev = "8d7a2c076a38c89085fd3191a2998efb659650c2";
   goPackagePath = "github.com/MichaelMure/git-bug";

@@ -13,11 +13,11 @@
 , miniupnpc
 , libmicrohttpd
 , gmp
-, libGLU_combined
+, libGLU, libGL
 , extraCmakeFlags ? []
 }:
 stdenv.mkDerivation rec {
-  name = "cpp-ethereum-${version}";
+  pname = "cpp-ethereum";
   version = "1.3.0";
 
   src = fetchFromGitHub {
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     miniupnpc
     libmicrohttpd
     gmp
-    libGLU_combined
+    libGLU libGL
   ];
 
   dontStrip = true;

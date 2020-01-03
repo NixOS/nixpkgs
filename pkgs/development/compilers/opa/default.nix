@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "opa";
   version = "4310";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "MLstate";

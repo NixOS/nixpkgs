@@ -13,10 +13,10 @@
   <link xlink:href="https://github.com/p-e-w/plotinus"/>
  </para>
  <para>
-  Plotinus is a searchable command palette in every modern GTK+ application.
+  Plotinus is a searchable command palette in every modern GTK application.
  </para>
  <para>
-  When in a GTK+3 application and Plotinus is enabled, you can press
+  When in a GTK 3 application and Plotinus is enabled, you can press
   <literal>Ctrl+Shift+P</literal> to open the command palette. The command
   palette provides a searchable list of of all menu items in the application.
  </para>

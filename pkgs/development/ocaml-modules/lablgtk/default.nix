@@ -3,9 +3,9 @@
 let param =
   let check = stdenv.lib.versionAtLeast ocaml.version; in
   if check "4.06" then {
-    version = "2.18.6";
-    url = https://forge.ocamlcore.org/frs/download.php/1726/lablgtk-2.18.6.tar.gz;
-    sha256 = "1y38fdvswy6hmppm65qvgdk4pb3ghhnvz7n4ialf46340r1s5p2d";
+    version = "2.18.8";
+    url = "https://github.com/garrigue/lablgtk/releases/download/lablgtk2188/lablgtk-2.18.8.tar.gz";
+    sha256 = "1qsd9nv96fxddc8zayqiqxw9hcyf29axckqg100fm2brs2prpxci";
   } else if check "3.12" then {
     version = "2.18.5";
     url = https://forge.ocamlcore.org/frs/download.php/1627/lablgtk-2.18.5.tar.gz;
@@ -13,8 +13,8 @@ let param =
   } else throw "lablgtk is not available for OCaml ${ocaml.version}";
 in
 
-stdenv.mkDerivation rec {
-  name = "lablgtk-${version}";
+stdenv.mkDerivation {
+  pname = "lablgtk";
   inherit (param) version;
 
   src = fetchurl {
@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
-      z77z roconnor vbgl
+      maggesi roconnor vbgl
     ];
     homepage = http://lablgtk.forge.ocamlcore.org/;
-    description = "An OCaml interface to gtk+";
+    description = "An OCaml interface to GTK";
     license = licenses.lgpl21Plus;
   };
 }

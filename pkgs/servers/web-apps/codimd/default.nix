@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitHub, fetchpatch, makeWrapper
-, which, nodejs, yarn2nix, python2, phantomjs2 }:
+, which, nodejs, mkYarnPackage, python2 }:
 
-yarn2nix.mkYarnPackage rec {
+mkYarnPackage rec {
   name = "codimd";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner  = "codimd";
     repo   = "server";
     rev    = version;
-    sha256 = "0cljgc056p19pjzphwkcfbvgp642w3r6p626w2fl6m5kdk78qd1g";
+    sha256 = "1sd7r5ws1k7dxmr57m67c1k23pzbkn25k2wvcnbrqn7gza6mhlf0";
   };
 
   nativeBuildInputs = [ which makeWrapper ];
-  extraBuildInputs = [ python2 phantomjs2 ];
+  extraBuildInputs = [ python2 ];
 
   yarnNix = ./yarn.nix;
   yarnLock = ./yarn.lock;
@@ -35,18 +35,8 @@ yarn2nix.mkYarnPackage rec {
     popd
 
     pushd node_modules/sqlite3
-    export OLD_HOME="$HOME"
-    export HOME="$PWD"
-    mkdir -p .node-gyp/${nodejs.version}
-    echo 9 > .node-gyp/${nodejs.version}/installVersion
-    ln -s ${nodejs}/include .node-gyp/${nodejs.version}
-    npm run install
-    export HOME="$OLD_HOME"
-    unset OLD_HOME
-    popd
-
-    pushd node_modules/phantomjs-prebuilt
-    npm run install
+    export CPPFLAGS="-I${nodejs}/include/node"
+    npm run install --build-from-source --nodedir=${nodejs}/include/node
     popd
 
     npm run build
@@ -77,7 +67,7 @@ yarn2nix.mkYarnPackage rec {
     description = "Realtime collaborative markdown notes on all platforms";
     license = licenses.agpl3;
     homepage = "https://github.com/codimd/server";
-    maintainers = with maintainers; [ willibutz ma27 ];
+    maintainers = with maintainers; [ willibutz ma27 globin ];
     platforms = platforms.linux;
   };
 }

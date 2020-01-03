@@ -4,7 +4,6 @@ stdenv.mkDerivation rec {
 
   pname = "ColPack";
   version = "1.0.10";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "CSCsw";

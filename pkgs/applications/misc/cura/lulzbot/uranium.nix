@@ -1,16 +1,16 @@
 { stdenv, callPackage, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python, cmake
 , pyqt5, numpy, scipy, shapely, libarcusLulzbot, doxygen, gettext, pythonOlder }:
 
-buildPythonPackage rec {
-  version = "3.6.18";
+buildPythonPackage {
+  version = "3.6.21";
   pname = "uranium";
   name = "uraniumLulzbot";
   format = "other";
 
   src = fetchgit {
     url = https://code.alephobjects.com/diffusion/U/uranium.git;
-    rev = "33df88a7414375ac924ac761113baa48d2ced2b4";
-    sha256 = "109cbv7y105crbrzfp70lmcr9n20ap5c97i5qd46fmxbx86yj7f8";
+    rev = "54d911edd2551c5875c554928896122835a0dd6c";
+    sha256 = "04bym3vwikaxw8ab0mymv9sc9n8i7yw5kfsv99ic811g9lzz3j1i";
   };
 
   disabled = pythonOlder "3.5.0";
@@ -18,9 +18,6 @@ buildPythonPackage rec {
   buildInputs = [ python gettext ];
   propagatedBuildInputs = [ pyqt5 numpy scipy shapely libarcusLulzbot ];
   nativeBuildInputs = [ cmake doxygen ];
-
-  # Qt 5.12+ support; see https://code.alephobjects.com/rU70b73ba0a270799b9eacf78e400aa8b8ab3fb2ee
-  patches = [ ./uranium-qt512-support.patch ];
 
   postPatch = ''
     sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt

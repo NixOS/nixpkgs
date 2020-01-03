@@ -1,32 +1,36 @@
 { lib
-, fetchurl
+, fetchFromGitHub
 , buildPythonPackage
 , pycrypto
 , paramiko
 , jinja2
 , pyyaml
 , httplib2
-, boto
 , six
 , netaddr
 , dnspython
 , jmespath
 , dopy
+, ncclient
 , windowsSupport ? false
 , pywinrm
 }:
 
 buildPythonPackage rec {
   pname = "ansible";
-  version = "2.8.2";
+  version = "2.8.7";
 
-  src = fetchurl {
-    url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-    sha256 = "1e5ba829ca0602c55b33da399b06f99b135a34014b661d1c36d8892a1e2d3730";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible";
+    rev = "v${version}";
+    sha256 = "08vqjk85j0g1x0iad03d7ysws433dikii8j2lr3a1mlx6d186vv8";
   };
 
   prePatch = ''
-    sed -i "s,/usr/,$out," lib/ansible/constants.py
+    # ansible-connection is wrapped, so make sure it's not passed
+    # through the python interpreter.
+    sed -i "s/\[python, /[/" lib/ansible/executor/task_executor.py
   '';
 
   postInstall = ''
@@ -36,8 +40,8 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pycrypto paramiko jinja2 pyyaml httplib2 boto
-    six netaddr dnspython jmespath dopy
+    pycrypto paramiko jinja2 pyyaml httplib2
+    six netaddr dnspython jmespath dopy ncclient
   ] ++ lib.optional windowsSupport pywinrm;
 
   # dificult to test

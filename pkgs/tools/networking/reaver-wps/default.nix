@@ -2,8 +2,8 @@
 
 stdenv.mkDerivation rec {
   version = "1.4";
-  name = "reaver-wps-${version}";
-  confdir = "/var/db/${name}"; # the sqlite database is at "${confdir}/reaver/reaver.db"
+  pname = "reaver-wps";
+  confdir = "/var/db/${pname}-${version}"; # the sqlite database is at "${confdir}/reaver/reaver.db"
 
   src = fetchurl {
     url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/reaver-wps/reaver-${version}.tar.gz";

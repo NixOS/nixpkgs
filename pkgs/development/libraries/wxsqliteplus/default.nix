@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, wxGTK, wxsqlite3, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "wxsqliteplus-${version}";
+  pname = "wxsqliteplus";
   version = "0.3.6";
 
   src = fetchFromGitHub {

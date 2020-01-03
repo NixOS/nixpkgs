@@ -11,7 +11,8 @@
 let version = "20170519";
 
 in stdenv.mkDerivation {
-  name = "dale-${version}";
+  pname = "dale";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "tomhrr";

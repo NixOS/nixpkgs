@@ -6,25 +6,27 @@ let
   dataDir  = "/var/lib/pdns-recursor";
   username = "pdns-recursor";
 
-  cfg   = config.services.pdns-recursor;
-  zones = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
+  cfg = config.services.pdns-recursor;
 
-  configFile = pkgs.writeText "recursor.conf" ''
-    local-address=${cfg.dns.address}
-    local-port=${toString cfg.dns.port}
-    allow-from=${concatStringsSep "," cfg.dns.allowFrom}
+  oneOrMore  = type: with types; either type (listOf type);
+  valueType  = with types; oneOf [ int str bool path ];
+  configType = with types; attrsOf (nullOr (oneOrMore valueType));
 
-    webserver-address=${cfg.api.address}
-    webserver-port=${toString cfg.api.port}
-    webserver-allow-from=${concatStringsSep "," cfg.api.allowFrom}
+  toBool    = val: if val then "yes" else "no";
+  serialize = val: with types;
+         if str.check       val then val
+    else if int.check       val then toString val
+    else if path.check      val then toString val
+    else if bool.check      val then toBool val
+    else if builtins.isList val then (concatMapStringsSep "," serialize val)
+    else "";
 
-    forward-zones=${concatStringsSep "," zones}
-    export-etc-hosts=${if cfg.exportHosts then "yes" else "no"}
-    dnssec=${cfg.dnssecValidation}
-    serve-rfc1918=${if cfg.serveRFC1918 then "yes" else "no"}
+  configFile = pkgs.writeText "recursor.conf"
+    (concatStringsSep "\n"
+      (flip mapAttrsToList cfg.settings
+        (name: val: "${name}=${serialize val}")));
 
-    ${cfg.extraConfig}
-  '';
+  mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
 
 in {
   options.services.pdns-recursor = {
@@ -89,10 +91,18 @@ in {
 
     forwardZones = mkOption {
       type = types.attrs;
+      default = {};
+      description = ''
+        DNS zones to be forwarded to other authoritative servers.
+      '';
+    };
+
+    forwardZonesRecurse = mkOption {
+      type = types.attrs;
       example = { eth = "127.0.0.1:5353"; };
       default = {};
       description = ''
-        DNS zones to be forwarded to other servers.
+        DNS zones to be forwarded to other recursive servers.
       '';
     };
 
@@ -117,18 +127,57 @@ in {
       '';
     };
 
-    extraConfig = mkOption {
+    settings = mkOption {
+      type = configType;
+      default = { };
+      example = literalExample ''
+        {
+          loglevel = 8;
+          log-common-errors = true;
+        }
+      '';
+      description = ''
+        PowerDNS Recursor settings. Use this option to configure Recursor
+        settings not exposed in a NixOS option or to bypass one.
+        See the full documentation at
+        <link xlink:href="https://doc.powerdns.com/recursor/settings.html"/>
+        for the available options.
+      '';
+    };
+
+    luaConfig = mkOption {
       type = types.lines;
       default = "";
       description = ''
-        Extra options to be appended to the configuration file.
+        The content Lua configuration file for PowerDNS Recursor. See
+        <link xlink:href="https://doc.powerdns.com/recursor/lua-config/index.html"/>.
       '';
     };
   };
 
   config = mkIf cfg.enable {
 
-    users.users."${username}" = {
+    services.pdns-recursor.settings = mkDefaultAttrs {
+      local-address = cfg.dns.address;
+      local-port    = cfg.dns.port;
+      allow-from    = cfg.dns.allowFrom;
+
+      webserver-address    = cfg.api.address;
+      webserver-port       = cfg.api.port;
+      webserver-allow-from = cfg.api.allowFrom;
+
+      forward-zones         = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
+      forward-zones-recurse = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZonesRecurse;
+      export-etc-hosts = cfg.exportHosts;
+      dnssec           = cfg.dnssecValidation;
+      serve-rfc1918    = cfg.serveRFC1918;
+      lua-config-file  = pkgs.writeText "recursor.lua" cfg.luaConfig;
+
+      log-timestamp  = false;
+      disable-syslog = true;
+    };
+
+    users.users.${username} = {
       home = dataDir;
       createHome = true;
       uid = config.ids.uids.pdns-recursor;
@@ -150,8 +199,7 @@ in {
         AmbientCapabilities = "cap_net_bind_service";
         ExecStart = ''${pkgs.pdns-recursor}/bin/pdns_recursor \
           --config-dir=${dataDir} \
-          --socket-dir=${dataDir} \
-          --disable-syslog
+          --socket-dir=${dataDir}
         '';
       };
 
@@ -165,4 +213,12 @@ in {
       '';
     };
   };
+
+  imports = [
+   (mkRemovedOptionModule [ "services" "pdns-recursor" "extraConfig" ]
+     "To change extra Recursor settings use services.pdns-recursor.settings instead.")
+  ];
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+
 }

@@ -1,6 +1,6 @@
 { lib, ruby, bundlerApp, bundlerUpdateScript }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "oxidized";
   gemdir = ./.;
 

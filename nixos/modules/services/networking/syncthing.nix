@@ -18,6 +18,7 @@ let
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
     ignorePerms = folder.ignorePerms;
+    versioning = folder.versioning;
   }) (filterAttrs (
     _: folder:
     folder.enable
@@ -220,6 +221,69 @@ in {
                 '';
               };
 
+              versioning = mkOption {
+                default = null;
+                description = ''
+                  How to keep changed/deleted files with syncthing.
+                  There are 4 different types of versioning with different parameters.
+                  See https://docs.syncthing.net/users/versioning.html
+                '';
+                example = [
+                  {
+                    versioning = {
+                      type = "simple";
+                      params.keep = "10";
+                    };
+                  }
+                  {
+                    versioning = {
+                      type = "trashcan";
+                      params.cleanoutDays = "1000";
+                    };
+                  }
+                  {
+                    versioning = {
+                      type = "staggered";
+                      params = {
+                        cleanInterval = "3600";
+                        maxAge = "31536000";
+                        versionsPath = "/syncthing/backup";
+                      };
+                    };
+                  }
+                  {
+                    versioning = {
+                      type = "external";
+                      params.versionsPath = pkgs.writers.writeBash "backup" ''
+                        folderpath="$1"
+                        filepath="$2"
+                        rm -rf "$folderpath/$filepath"
+                      '';
+                    };
+                  }
+                ];
+                type = with types; nullOr (submodule {
+                  options = {
+                    type = mkOption {
+                      type = enum [ "external" "simple" "staggered" "trashcan" ];
+                      description = ''
+                        Type of versioning.
+                        See https://docs.syncthing.net/users/versioning.html
+                      '';
+                    };
+                    params = mkOption {
+                      type = attrsOf (either str path);
+                      description = ''
+                        Parameters for versioning. Structure depends on versioning.type.
+                        See https://docs.syncthing.net/users/versioning.html
+                      '';
+                    };
+                  };
+                });
+              };
+
+
+
               rescanInterval = mkOption {
                 type = types.int;
                 default = 3600;
@@ -373,7 +437,7 @@ in {
     systemd.packages = [ pkgs.syncthing ];
 
     users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
-      "${defaultUser}" =
+      ${defaultUser} =
         { group = cfg.group;
           home  = cfg.dataDir;
           createHome = true;
@@ -383,7 +447,7 @@ in {
     };
 
     users.groups = mkIf (cfg.systemService && cfg.group == defaultUser) {
-      "${defaultUser}".gid =
+      ${defaultUser}.gid =
         config.ids.gids.syncthing;
     };
 

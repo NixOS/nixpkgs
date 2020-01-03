@@ -7,7 +7,7 @@
 , clize
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "zerobin";
   version = "20160108";
 

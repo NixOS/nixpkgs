@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, zlib, autoreconfHook, pkgconfig, perl }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "vcftools";
   version = "0.1.16";
 

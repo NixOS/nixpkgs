@@ -134,6 +134,10 @@ let
   };
 
 in {
+  imports = [
+    (lib.mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
+  ];
+
   options = {
     boot.binfmt = {
       registrations = mkOption {
@@ -239,7 +243,7 @@ in {
           List of systems to emulate. Will also configure Nix to
           support your new systems.
         '';
-        type = types.listOf types.string;
+        type = types.listOf types.str;
       };
     };
   };

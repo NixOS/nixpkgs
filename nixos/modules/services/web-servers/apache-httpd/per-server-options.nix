@@ -33,7 +33,7 @@ with lib;
                 description = "port to listen on";
               };
               ip = mkOption {
-                type = types.string;
+                type = types.str;
                 default = "*";
                 description = "Ip to listen on. 0.0.0.0 for ipv4 only, * for all.";
               };
@@ -131,12 +131,6 @@ with lib;
       These lines go to httpd.conf verbatim. They will go after
       directories and directory aliases defined by default.
     '';
-  };
-
-  extraSubservices = mkOption {
-    type = types.listOf types.unspecified;
-    default = [];
-    description = "Extra subservices to enable in the webserver.";
   };
 
   enableUserDir = mkOption {

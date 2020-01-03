@@ -6,7 +6,8 @@ let
   version = "0.3.0";
 
 in stdenv.mkDerivation {
-  name = "soapyrtlsdr-${version}";
+  pname = "soapyrtlsdr";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";

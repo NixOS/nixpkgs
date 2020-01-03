@@ -13,7 +13,7 @@ let
       EncodeLocale TryTiny TypesSerialiser LWPMediaTypes
     ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "shutter-0.94.3";
 
   src = fetchurl {

@@ -6,33 +6,31 @@
  <title>Installation Device</title>
 
  <para>
-  Provides a basic configuration for installation devices like CDs. This means
-  enabling hardware scans, using the <link linkend="sec-profile-clone-config">
-  Clone Config profile</link> to guarantee
-  <filename>/etc/nixos/configuration.nix</filename> exists (for
-  <command>nixos-rebuild</command> to work), a copy of the Nixpkgs channel
-  snapshot used to create the install media.
+  Provides a basic configuration for installation devices like CDs.
+  This enables redistributable firmware, includes the
+  <link linkend="sec-profile-clone-config">Clone Config profile</link>
+  and a copy of the Nixpkgs channel, so <command>nixos-install</command>
+  works out of the box.
  </para>
-
  <para>
-  Additionally, documentation for <link linkend="opt-documentation.enable">
-  Nixpkgs</link> and <link linkend="opt-documentation.nixos.enable">NixOS
-  </link> are forcefully enabled (to override the
+  Documentation for <link linkend="opt-documentation.enable">Nixpkgs</link>
+  and <link linkend="opt-documentation.nixos.enable">NixOS</link> are
+  forcefully enabled (to override the
   <link linkend="sec-profile-minimal">Minimal profile</link> preference); the
-  NixOS manual is shown automatically on TTY 8, sudo and udisks are disabled.
-  Autologin is enabled as root.
+  NixOS manual is shown automatically on TTY 8, udisks is disabled.
+  Autologin is enabled as <literal>nixos</literal> user, while passwordless
+  login as both <literal>root</literal> and <literal>nixos</literal> is possible.
+  Passwordless <command>sudo</command> is enabled too.
+  <link linkend="opt-networking.wireless.enable">wpa_supplicant</link> is
+  enabled, but configured to not autostart.
+ </para>
+ <para>
+  It is explained how to login, start the ssh server, and if available,
+  how to start the display manager.
  </para>
 
  <para>
-  A message is shown to the user to start a display manager if needed, ssh with
-  <xref linkend="opt-services.openssh.permitRootLogin"/> are enabled (but
-  doesn't autostart). WPA Supplicant is also enabled without autostart.
- </para>
-
- <para>
-  Finally, vim is installed, root is set to not have a password, the kernel is
-  made more silent for remote public IP installs, and several settings are
-  tweaked so that the installer has a better chance of succeeding under
-  low-memory environments.
+  Several settings are tweaked so that the installer has a better chance of
+  succeeding under low-memory environments.
  </para>
 </section>

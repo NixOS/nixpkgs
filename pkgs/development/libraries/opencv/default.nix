@@ -6,7 +6,7 @@
 , enablePNG ? true, libpng
 , enableTIFF ? true, libtiff
 , enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
-, enableJPEG2K ? true, jasper
+, enableJPEG2K ? false, jasper  # disable jasper by default (many CVE)
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
@@ -19,7 +19,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "opencv-${version}";
+  pname = "opencv";
   version = "2.4.13";
 
   src = fetchFromGitHub {

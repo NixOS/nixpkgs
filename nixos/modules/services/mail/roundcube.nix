@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.roundcube;
+  fpm = config.services.phpfpm.pools.roundcube;
 in
 {
   options.services.roundcube = {
@@ -105,7 +106,7 @@ in
             extraConfig = ''
               location ~* \.php$ {
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                fastcgi_pass unix:/run/phpfpm/roundcube;
+                fastcgi_pass unix:${fpm.socket};
                 include ${pkgs.nginx}/conf/fastcgi_params;
                 include ${pkgs.nginx}/conf/fastcgi.conf;
               }
@@ -119,24 +120,27 @@ in
       enable = true;
     };
 
-    services.phpfpm.poolConfigs.roundcube = ''
-      listen = /run/phpfpm/roundcube
-      listen.owner = nginx
-      listen.group = nginx
-      listen.mode = 0660
-      user = nginx
-      pm = dynamic
-      pm.max_children = 75
-      pm.start_servers = 2
-      pm.min_spare_servers = 1
-      pm.max_spare_servers = 20
-      pm.max_requests = 500
-      php_admin_value[error_log] = 'stderr'
-      php_admin_flag[log_errors] = on
-      php_admin_value[post_max_size] = 25M
-      php_admin_value[upload_max_filesize] = 25M
-      catch_workers_output = yes
-    '';
+    services.phpfpm.pools.roundcube = {
+      user = "nginx";
+      phpOptions = ''
+        error_log = 'stderr'
+        log_errors = on
+        post_max_size = 25M
+        upload_max_filesize = 25M
+      '';
+      settings = mapAttrs (name: mkDefault) {
+        "listen.owner" = "nginx";
+        "listen.group" = "nginx";
+        "listen.mode" = "0660";
+        "pm" = "dynamic";
+        "pm.max_children" = 75;
+        "pm.start_servers" = 2;
+        "pm.min_spare_servers" = 1;
+        "pm.max_spare_servers" = 20;
+        "pm.max_requests" = 500;
+        "catch_workers_output" = true;
+      };
+    };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
     systemd.services.roundcube-setup = let
@@ -156,7 +160,7 @@ in
               ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "create role ${cfg.database.username} with login password '${cfg.database.password}'";
               ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "create database ${cfg.database.dbname} with owner ${cfg.database.username}";
             fi
-            PGPASSWORD=${cfg.database.password} ${pkgs.postgresql}/bin/psql -U ${cfg.database.username} \
+            PGPASSWORD="${cfg.database.password}" ${pkgs.postgresql}/bin/psql -U ${cfg.database.username} \
               -f ${cfg.package}/SQL/postgres.initial.sql \
               -h ${cfg.database.host} ${cfg.database.dbname}
             touch /var/lib/roundcube/db-created

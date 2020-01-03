@@ -35,6 +35,9 @@ buildPythonPackage rec {
     py.test
   '';
 
+  # https://github.com/pyca/pynacl/issues/550
+  PYTEST_ADDOPTS = "-k 'not test_wrong_types'";
+
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ va1entin ];
     description = "Python binding to the Networking and Cryptography (NaCl) library";

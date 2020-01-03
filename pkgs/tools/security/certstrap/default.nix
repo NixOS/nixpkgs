@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "certstrap-${version}";
+  pname = "certstrap";
   version = "1.1.1";
 
   goPackagePath = "github.com/square/certstrap";

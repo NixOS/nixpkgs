@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "3.7.7";
-  name = "taktuk-${version}";
+  pname = "taktuk";
 
   buildInputs = [ perl ];
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/33412/${name}.tar.gz";
+    url = "https://gforge.inria.fr/frs/download.php/33412/${pname}-${version}.tar.gz";
     sha256 = "0w0h3ynlcxvq2nzm8hkj20g0805ww3vkw53g0qwj7wvp7p3gcvnr";
   };
 

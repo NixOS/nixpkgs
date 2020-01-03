@@ -3,11 +3,11 @@
 , gnome3, gtk3, glib, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-dictionary-${version}";
+  pname = "gnome-dictionary";
   version = "3.26.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-dictionary/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-dictionary/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "16b8bc248dcf68987826d5e39234b1bb7fd24a2607fcdbf4258fde88f012f300";
   };
 

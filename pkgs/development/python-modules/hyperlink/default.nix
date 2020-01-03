@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "hyperlink";
-  version = "18.0.0";
+  version = "19.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f01b4ff744f14bc5d0a22a6b9f1525ab7d6312cb0ff967f59414bbac52f0a306";
+    sha256 = "4288e34705da077fada1111a24a0aa08bb1e76699c9ce49876af722441845654";
   };
 
   propagatedBuildInputs = [ idna ];

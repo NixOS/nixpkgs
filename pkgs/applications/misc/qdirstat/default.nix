@@ -5,12 +5,13 @@
 let
   version = "1.6";
 in mkDerivation rec {
-  name = "qdirstat-${version}";
+  pname = "qdirstat";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "shundhammer";
     repo = "qdirstat";
-    rev = "${version}";
+    rev = version;
     sha256 = "0q4ccjmlbqifg251kyxwys8wspdskr8scqhacyfrs9cmnjxcjqan";
   };
 
@@ -18,7 +19,7 @@ in mkDerivation rec {
 
   buildInputs = [ perlPackages.perl ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace scripts/scripts.pro \
       --replace /bin/true ${coreutils}/bin/true
 
@@ -36,9 +37,8 @@ in mkDerivation rec {
     substituteInPlace src/StdCleanup.cpp \
       --replace /bin/bash ${bash}/bin/bash
   '';
-  postPatch = ''
-    export qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
-  '';
+
+  qmakeFlags = [ "INSTALL_PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/qdirstat-cache-writer \

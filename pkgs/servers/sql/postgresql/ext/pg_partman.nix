@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_partman";
-  version = "4.1.0";
+  version = "4.2.2";
 
   buildInputs = [ postgresql ];
 
@@ -10,12 +10,11 @@ stdenv.mkDerivation rec {
     owner  = "pgpartman";
     repo   = pname;
     rev    = "refs/tags/v${version}";
-    sha256 = "0bzv92x492jcwzhal9x4vc3vszixscdpxc6yq5rrqld26dhmsp06";
+    sha256 = "04d34b5z957imm3dndzjn474rxbgx95ha7a9x3vd0rya1pjv927r";
   };
 
   installPhase = ''
-    mkdir -p $out/bin    # For buildEnv to setup proper symlinks. See #22653
-    mkdir -p $out/{lib,share/extension}
+    mkdir -p $out/{lib,share/postgresql/extension}
 
     cp src/*.so      $out/lib
     cp updates/*     $out/share/postgresql/extension

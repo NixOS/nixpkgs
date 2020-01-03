@@ -25,7 +25,7 @@ let
     addonInfo ? null,
     preInstall ? "",
     postInstall ? "",
-    path ? (builtins.parseDrvName pluginName).name,
+    path ? lib.getName pluginName,
     dependencies ? [],
     ...
   }:
@@ -95,8 +95,8 @@ in rec {
     pluginName = "ctrlw";
     src = fetchgit {
       url = "https://github.com/eraserhd/tmux-ctrlw";
-      rev = "2354b5d56828813d0f7a4b228ca74b6134c2695f";
-      sha256 = "00hy1axmki8h2285mivsj923z327xkq89wfl2x4dxc71xjhdl216";
+      rev = "b456977125c640cd587b786c6a79cb5c7b0f900d";
+      sha256 = "1kv5pqfjczd6z7i9jf6j5xmcai50l9bn5p2p1w1l5fi6cj8cz1k1";
     };
   };
 
@@ -120,6 +120,16 @@ in rec {
       url = "https://github.com/wfxr/tmux-fzf-url";
       rev = "ecd518eec1067234598c01e655b048ff9d06ef2f";
       sha256 = "0png8hdv91y2nivq5vdii2192mb2qcrkwwn69lzxrdnbfa27qrgv";
+    };
+  };
+
+  gruvbox = mkDerivation {
+    pluginName = "gruvbox";
+    rtpFilePath = "gruvbox-tpm.tmux";
+    src = fetchgit {
+      url = "https://github.com/egel/tmux-gruvbox";
+      rev = "6149fd8b5d6924925b4d5aa6935039780e94f3d6";
+      sha256 = "1ykr4yardavd0x7yfrnshd4b0gi8p31pji7i79ib0nss134zncpb";
     };
   };
 
@@ -177,6 +187,19 @@ in rec {
     };
   };
 
+  plumb = mkDerivation {
+    pluginName = "plumb";
+    src = fetchFromGitHub {
+      owner = "eraserhd";
+      repo = "tmux-plumb";
+      rev = "v0.1.1";
+      sha256 = "1c6k4fdl0az9811r6k164mgd4w5la75xr6x7nabmy046xc0z5i2r";
+    };
+    postInstall = ''
+      sed -i -e 's,9 plumb,${pkgs.plan9port}/bin/9 plumb,' $target/scripts/plumb
+    '';
+  };
+
   prefix-highlight = mkDerivation {
     pluginName = "prefix-highlight";
     src = fetchgit {
@@ -222,6 +245,16 @@ in rec {
       url = "https://github.com/tmux-plugins/tmux-sidebar";
       rev = "23014524cab53f8d36373983500fe05a527a444d";
       sha256 = "1w363587isdip1r81h0vkp5163lpa83lvasg8l04h43sbip2y6i8";
+    };
+  };
+
+  sysstat = mkDerivation {
+    pluginName = "sysstat";
+    src = fetchFromGitHub {
+      owner = "samoshkin";
+      repo = "tmux-plugin-sysstat";
+      rev = "29e150f403151f2341f3abcb2b2487a5f011dd23";
+      sha256 = "013mv9p6r2r0ls3p60l8hdad4hm8niv3wr27vgm925gxmibi4hyq";
     };
   };
 

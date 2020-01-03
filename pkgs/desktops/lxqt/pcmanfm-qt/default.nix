@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt, qtbase, qttools,
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt, qtbase, qttools,
   qtx11extras, libfm-qt, menu-cache, lxmenu-data }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "pcmanfm-qt";
   version = "0.14.1";
 
@@ -28,14 +28,7 @@ stdenv.mkDerivation rec {
     lxmenu-data
   ];
 
-  postPatch = ''
-    for dir in autostart config; do
-      substituteInPlace $dir/CMakeLists.txt \
-        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-    done
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
     homepage = https://github.com/lxqt/pcmanfm-qt;
     license = licenses.gpl2;

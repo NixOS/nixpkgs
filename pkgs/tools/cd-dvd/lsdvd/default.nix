@@ -4,7 +4,8 @@ let
   version = "0.17";
 in
 stdenv.mkDerivation {
-  name = "lsdvd-${version}";
+  pname = "lsdvd";
+  inherit version;
   src = fetchurl {
     url = "mirror://sourceforge/lsdvd/lsdvd-${version}.tar.gz";
     sha256 = "1274d54jgca1prx106iyir7200aflr70bnb1kawndlmcckcmnb3x";

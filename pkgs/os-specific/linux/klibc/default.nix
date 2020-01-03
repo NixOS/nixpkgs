@@ -8,7 +8,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "klibc-${version}";
+  pname = "klibc";
   version = "2.0.4";
 
   src = fetchurl {

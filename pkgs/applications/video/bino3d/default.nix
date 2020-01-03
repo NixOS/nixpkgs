@@ -1,11 +1,11 @@
 { stdenv, lib, fetchurl, pkgconfig, ffmpeg, glew, libass, openal, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "bino-${version}";
+  pname = "bino";
   version = "1.6.7";
 
   src = fetchurl {
-    url = "https://bino3d.org/releases/${name}.tar.xz";
+    url = "https://bino3d.org/releases/${pname}-${version}.tar.xz";
     sha256 = "04yl7ibnhajlli4a5x77az8jxbzw6b2wjay8aa6px551nmiszn9k";
   };
 

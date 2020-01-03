@@ -6,12 +6,12 @@
 , gdk-pixbuf, tracker, nautilus, xvfb_run }:
 
 stdenv.mkDerivation rec {
-  name = "totem-${version}";
-  version = "3.32.1";
+  pname = "totem";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0yra8apc7smpwf7d1k8crhrm8d4wix24ds6i9yxbch1v11jnhr3v";
+    url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "028sc6xbyi7rs884862d8f3di6zhcm0lhvlpc3r69ifzjsq9my3b";
   };
 
   doCheck = true;
@@ -30,14 +30,6 @@ stdenv.mkDerivation rec {
     chmod +x meson_compile_python.py meson_post_install.py # patchShebangs requires executable file
     patchShebangs .
   '';
-
-  mesonFlags = [
-    "-Dwith-nautilusdir=${placeholder "out"}/lib/nautilus/extensions-3.0"
-    # https://bugs.launchpad.net/ubuntu/+source/totem/+bug/1712021
-    # https://bugzilla.gnome.org/show_bug.cgi?id=784236
-    # https://github.com/mesonbuild/meson/issues/1994
-    "-Denable-vala=no"
-  ];
 
   checkInputs = [ xvfb_run ];
 

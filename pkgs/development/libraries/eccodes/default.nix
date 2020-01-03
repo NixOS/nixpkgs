@@ -5,7 +5,7 @@
 , enableOpenMPThreads ? false}:
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "eccodes-${version}";
+  pname = "eccodes";
   version = "2.12.5";
 
   src = fetchurl {

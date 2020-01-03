@@ -45,6 +45,7 @@ buildPythonPackage rec {
     pytest trackpy --ignore trackpy/tests/test_motion.py \
                    --ignore trackpy/tests/test_feature_saving.py \
                    --ignore trackpy/tests/test_feature.py \
+                   --ignore trackpy/tests/test_plots.py \
                    --ignore trackpy/tests/test_legacy_linking.py
   '';
 

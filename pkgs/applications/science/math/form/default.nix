@@ -1,8 +1,8 @@
 { stdenv, fetchurl, gmp, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "4.2.1";
-  name = "form-${version}";
+  pname = "form";
 
   # This tarball is released by author, it is not downloaded from tag, so can't use fetchFromGitHub
   src = fetchurl {

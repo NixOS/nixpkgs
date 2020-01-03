@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "simg2img-${version}";
+  pname = "simg2img";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "anestisb";
     repo = "android-simg2img";
-    rev = "${version}";
+    rev = version;
     sha256 = "119gl9i61g2wr07hzv6mi1ihql6yd6pwq94ki2pgcpfbamv8f6si";
   };
 

@@ -3,7 +3,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "opencolorio-${version}";
+  pname = "opencolorio";
   version = "1.1.1";
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://opencolorio.org;
+    homepage = https://opencolorio.org;
     description = "A color management framework for visual effects and animation";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];

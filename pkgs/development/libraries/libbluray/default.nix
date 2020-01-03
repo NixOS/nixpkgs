@@ -18,11 +18,11 @@ assert withFonts -> freetype != null;
 # https://wiki.archlinux.org/index.php/BluRay
 
 stdenv.mkDerivation rec {
-  name = "libbluray-${version}";
+  pname = "libbluray";
   version  = "1.1.2";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libbluray/${version}/${name}.tar.bz2";
+    url = "http://get.videolan.org/libbluray/${version}/${pname}-${version}.tar.bz2";
     sha256 = "0hhbgkm11fw4pwbrklm76aiy54r6d7hk06yhl2fxq05i74i4bpd3";
   };
 

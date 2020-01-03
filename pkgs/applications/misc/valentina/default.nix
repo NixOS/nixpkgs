@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "valentina-${version}";
+  pname = "valentina";
   version = "0.6.1";
 
   src = fetchhg {

@@ -1,22 +1,29 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
+{ lib
+, python3Packages
+, fetchpatch
+, stdenv
+, writeTextDir
+, substituteAll
+, targetPackages
+}:
 
 let
   # See https://mesonbuild.com/Reference-tables.html#cpu-families
   cpuFamilies = {
-    "aarch64" = "aarch64";
-    "armv6l"  = "arm";
-    "armv7l"  = "arm";
-    "i686"    = "x86";
-    "x86_64"  = "x86_64";
+    aarch64 = "aarch64";
+    armv6l  = "arm";
+    armv7l  = "arm";
+    i686    = "x86";
+    x86_64  = "x86_64";
   };
 in
 python3Packages.buildPythonApplication rec {
   pname = "meson";
-  version = "0.50.1";
+  version = "0.52.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "05k3wsxjcnnq7a8n5kzxh2cdh5jdkh13xagigz5axs48j36zfai4";
+    sha256 = "02fnrk1fjf3yiix0ak0m9vgbpl4h97fafii5pmw7phmvnlv9fyan";
   };
 
   postFixup = ''
@@ -54,13 +61,14 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
-  ] ++ lib.optionals stdenv.isDarwin [
-    # We use custom Clang, which makes Meson think *not Apple*, while still
-    # relying on system linker. When it detects standard Clang, Meson will
-    # pass it `-Wl,-O1` flag but optimizations are not recognized by
-    # Mac linker.
-    # https://github.com/mesonbuild/meson/issues/4784
-    ./fix-objc-linking.patch
+
+    # Fix detecting incorrect compiler in the store path hash.
+    # https://github.com/NixOS/nixpkgs/issues/73417#issuecomment-554077964
+    # https://github.com/mesonbuild/meson/pull/6185
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/972ede1d14fdf17fe5bb8fb99be220f9395c2392.patch";
+      sha256 = "19bfsylhpy0b2xv3ks8ac9x3q6vvvyj1wjcy971v9d5f1455xhbb";
+    })
   ];
 
   setupHook = ./setup-hook.sh;
@@ -95,7 +103,7 @@ python3Packages.buildPythonApplication rec {
   isCross = stdenv.targetPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
-    homepage = http://mesonbuild.com;
+    homepage = https://mesonbuild.com;
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
     maintainers = with maintainers; [ mbe rasendubi ];

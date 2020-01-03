@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, librime }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "brise-unstable-2017-09-16";
 
   src = fetchFromGitHub {

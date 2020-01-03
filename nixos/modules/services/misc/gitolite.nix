@@ -147,7 +147,7 @@ in
       group           = cfg.group;
       useDefaultShell = true;
     };
-    users.groups."${cfg.group}".gid = config.ids.gids.gitolite;
+    users.groups.${cfg.group}.gid = config.ids.gids.gitolite;
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0750 ${cfg.user} ${cfg.group} - -"
@@ -157,7 +157,7 @@ in
       "Z ${cfg.dataDir} 0750 ${cfg.user} ${cfg.group} - -"
     ];
 
-    systemd.services."gitolite-init" = {
+    systemd.services.gitolite-init = {
       description = "Gitolite initialization";
       wantedBy    = [ "multi-user.target" ];
       unitConfig.RequiresMountsFor = cfg.dataDir;

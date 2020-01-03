@@ -8,7 +8,7 @@
 { stdenv, lib, fetchFromGitHub, curl, jq, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "slack-cli-${version}";
+  pname = "slack-cli";
   version = "0.18.0";
 
   src = fetchFromGitHub {

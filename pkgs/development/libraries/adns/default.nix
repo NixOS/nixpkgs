@@ -4,7 +4,8 @@ let
   version = "1.5.1";
 in
 stdenv.mkDerivation {
-  name = "adns-${version}";
+  pname = "adns";
+  inherit version;
 
   src = fetchurl {
     urls = [

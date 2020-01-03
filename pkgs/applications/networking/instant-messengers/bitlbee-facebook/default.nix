@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-facebook-${version}";
+  pname = "bitlbee-facebook";
   version = "1.2.0";
 
   src = fetchFromGitHub {

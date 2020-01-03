@@ -1,10 +1,10 @@
 { stdenv, fetchurl, openssl, perl, zlib, jam }:
 stdenv.mkDerivation rec {
   version = "3.2.0";
-  name = "archiveopteryx-${version}";
+  pname = "archiveopteryx";
 
   src = fetchurl {
-    url = "http://archiveopteryx.org/download/${name}.tar.bz2";
+    url = "http://archiveopteryx.org/download/${pname}-${version}.tar.bz2";
     sha256 = "0i0zg8di8nbh96qnyyr156ikwcsq1w9b2291bazm5whb351flmqx";
   };
 

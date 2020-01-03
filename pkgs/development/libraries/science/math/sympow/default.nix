@@ -9,15 +9,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.023.4";
-  name = "sympow-${version}";
+  version = "2.023.5";
+  pname = "sympow";
 
   src = fetchFromGitLab {
     group = "rezozer";
     owner = "forks";
     repo = "sympow";
     rev = "v${version}";
-    sha256 = "0j2qdw9csbr081h8arhlx1z7ibgi5am4ndmvyc8y4hccfa8n4w1y";
+    sha256 = "1c5a2pizgqsf3pjkf7rfj20022ym4ixhrddp8ivs2nbzxwz6qvv9";
   };
 
   postUnpack = ''

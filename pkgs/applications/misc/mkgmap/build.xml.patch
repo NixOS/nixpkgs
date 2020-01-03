@@ -1,0 +1,11 @@
+--- a/build.xml	2019-08-26 23:22:55.104829846 +0300
++++ b/build.xml	2019-08-27 00:11:07.366257594 +0300
+@@ -227,7 +227,7 @@
+ 	</target>
+ 
+ 	<!-- Compile the product itself (no tests). -->
+-	<target name="compile" depends="prepare, resolve-compile"
++	<target name="compile" depends="prepare"
+ 					description="main compilation">
+ 
+ 		<javac srcdir="${src}" destdir="${build.classes}" encoding="utf-8" debug="true" includeantruntime="false">

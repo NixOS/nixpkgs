@@ -30,7 +30,7 @@ let
   # COMPUTED using the configuration above (edit with caution) #
   ##############################################################
   default-mathcomp-version = let v = head (
-    filter (mc: mathcomp-coq-versions."${mc}" coq.coq-version)
+    filter (mc: mathcomp-coq-versions.${mc} coq.coq-version)
             mathcomp-version-preference ++ ["0.0.0"]);
      in if v == "0.0.0" then max-mathcomp-version else v;
 
@@ -73,7 +73,7 @@ let
       custom-version = if is-released then mathcomp-version else "custom";
 
       # the base set of attributes for mathcomp
-      attrs = rec {
+      attrs = {
         name = "coq${coq.coq-version}-${pkgname}-${custom-version}";
 
         # used in ssreflect
@@ -108,7 +108,7 @@ let
         '';
 
         meta = with stdenv.lib; {
-          homepage = http://ssr.msr-inria.inria.fr/;
+          homepage = "https://math-comp.github.io/";
           license = licenses.cecill-b;
           maintainers = [ maintainers.vbgl maintainers.jwiegley ];
           platforms = coq.meta.platforms;
@@ -126,9 +126,9 @@ let
         };
       };
     in
-    {"${mathcomp-pkg}" = stdenv.mkDerivation (attrs // overrides attrs);};
+    {${mathcomp-pkg} = stdenv.mkDerivation (attrs // overrides attrs);};
 
-getAttrOr = a: n: a."${n}" or (throw a.error);
+getAttrOr = a: n: a.${n} or (throw a.error);
 
 mathcompCorePkgs_1_7 = mathcompGen "1.7.0";
 mathcompCorePkgs_1_8 = mathcompGen "1.8.0";
@@ -136,7 +136,7 @@ mathcompCorePkgs_1_9 = mathcompGen "1.9.0";
 mathcompCorePkgs     = recurseIntoAttrs
   (mapDerivationAttrset dontDistribute (mathcompGen default-mathcomp-version));
 
-in rec {
+in {
 # mathcompGenSingle: given a version of mathcomp
 # generates an attribute set {single = <drv>;} with the single mathcomp derivation
 inherit mathcompGenSingle;

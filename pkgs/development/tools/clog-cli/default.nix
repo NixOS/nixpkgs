@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "clog-cli-${version}";
+  pname = "clog-cli";
   version = "0.9.3";
 
   src = fetchFromGitHub {

@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libde265, x265, libpng, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
-  name = "libheif-${version}";
+  pname = "libheif";
+  version = "1.6.0";
+
+  outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    sha256 = "0vbjknkb2ccmw3xh2j8ljz5sj9i8wv92iw7zghcc5wn64sk1xkk2";
+    sha256 = "0im9k2pqghlsppj165kh3nc26c4wx1brckmncdmpy0mcj56jjmba";
   };
-
-  patches = [ ./1.4.0-CVE-2019-11471.patch ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libde265 x265 libpng libjpeg ];

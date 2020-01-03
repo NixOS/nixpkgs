@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python3, libcap, glib
-, libssh, nghttp2, zlib, cmake, extra-cmake-modules, fetchpatch, makeWrapper
+, libssh, nghttp2, zlib, cmake, fetchpatch, makeWrapper
 , withQt ? true, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
 }:
@@ -10,7 +10,7 @@ assert withQt  -> qt5  != null;
 with stdenv.lib;
 
 let
-  version = "3.0.3";
+  version = "3.0.5";
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "0711jilp9sbgi46d105m3galw8n4wk5yncawi08031qxg2f754mg";
+    sha256 = "087qv7nd7zlbckvcs37fkkg7v0mw0hjd5yfbghqym764fpjgqlf5";
   };
 
   cmakeFlags = [
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    bison cmake extra-cmake-modules flex pkgconfig
+    bison cmake flex pkgconfig
   ] ++ optional withQt qt5.wrapQtAppsHook;
 
   buildInputs = [

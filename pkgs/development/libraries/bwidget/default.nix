@@ -1,7 +1,7 @@
 { stdenv, fetchurl, tcl }:
 
 stdenv.mkDerivation rec {
-  name = "bwidget-${version}";
+  pname = "bwidget";
   version = "1.9.13";
 
   src = fetchurl {

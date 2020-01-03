@@ -1,6 +1,6 @@
 {stdenv, buildOcamlJane, type_conv}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "typerep";
   version = "113.33.03";
 

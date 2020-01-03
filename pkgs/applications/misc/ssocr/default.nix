@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, imlib2, libX11 }:
 
-stdenv.mkDerivation rec {
-  name = "ssocr-${version}";
+stdenv.mkDerivation {
+  pname = "ssocr";
   version = "unstable-2018-08-11";
 
   src = fetchFromGitHub {

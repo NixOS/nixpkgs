@@ -17,7 +17,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "remarkjs-${version}";
+  pname = "remarkjs";
 
   version = "0.7.0";
 
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = http://remarkjs.com;
     description = "A simple, in-browser, markdown-driven slideshow tool";
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    maintainers = [];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;
     broken = true;

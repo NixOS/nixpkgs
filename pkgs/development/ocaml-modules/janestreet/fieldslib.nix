@@ -1,6 +1,6 @@
 { stdenv, type_conv, buildOcamlJane }:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "fieldslib";
   version = "113.33.03";
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, ncurses, boost }:
 
 stdenv.mkDerivation rec {
-  name = "bastet-${version}";
+  pname = "bastet";
   version = "0.43.2";
   buildInputs = [ ncurses boost ];
 

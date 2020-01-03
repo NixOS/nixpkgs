@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "seyren-${version}";
+  pname = "seyren";
   version = "1.1.0";
 
   src = fetchurl {

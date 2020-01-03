@@ -30,6 +30,12 @@ in rec {
     #                         but we don't use /usr with nix, so remove only 2 items.
     patches = [ ./irods_root_path.patch ];
 
+    NIX_CFLAGS_COMPILE = [
+      # fix build with recent llvm versions
+      "-Wno-deprecated-register"
+      "-Wno-deprecated-declarations"
+    ];
+
     preConfigure = common.preConfigure + ''
       patchShebangs ./test
       substituteInPlace plugins/database/CMakeLists.txt --replace "COMMAND cpp" "COMMAND ${gcc.cc}/bin/cpp"
@@ -81,6 +87,7 @@ in rec {
        description = common.meta.description + " CLI clients";
        longDescription = common.meta.longDescription + ''
          This package provides the CLI clients, called 'icommands'.'';
+       broken = true;
      };
   });
 }

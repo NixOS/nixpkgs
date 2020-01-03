@@ -10,8 +10,8 @@ let
 
   checkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name"
-      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port"
+      "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name" "OriginalName"
+      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port" "Advertise"
       "TCPSegmentationOffload" "TCP6SegmentationOffload" "GenericSegmentationOffload"
       "GenericReceiveOffload" "LargeReceiveOffload" "RxChannels" "TxChannels"
       "OtherChannels" "CombinedChannels"
@@ -53,6 +53,27 @@ let
     ])
     (assertByteFormat "MTUBytes")
     (assertMacAddress "MACAddress")
+  ];
+
+  # NOTE The PrivateKey directive is missing on purpose here, please
+  # do not add it to this list. The nix store is world-readable let's
+  # refrain ourselves from providing a footgun.
+  checkWireGuard = checkUnitConfig "WireGuard" [
+    (assertOnlyFields [
+      "PrivateKeyFile" "ListenPort" "FwMark"
+    ])
+    (assertRange "FwMark" 1 4294967295)
+  ];
+
+  # NOTE The PresharedKey directive is missing on purpose here, please
+  # do not add it to this list. The nix store is world-readable,let's
+  # refrain ourselves from providing a footgun.
+  checkWireGuardPeer = checkUnitConfig "WireGuardPeer" [
+    (assertOnlyFields [
+      "PublicKey" "PresharedKeyFile" "AllowedIPs"
+      "Endpoint" "PersistentKeepalive"
+    ])
+    (assertRange "PersistentKeepalive" 1 65535)
   ];
 
   checkVlan = checkUnitConfig "VLAN" [
@@ -166,7 +187,7 @@ let
     # Note: For DHCP the values both, none, v4, v6 are deprecated
     (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6"])
     (assertValueOneOf "DHCPServer" boolValues)
-    (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6"])
+    (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "ipv4-fallback" "fallback"])
     (assertValueOneOf "IPv4LLRoute" boolValues)
     (assertValueOneOf "LLMNR" ["yes" "resolve" "no"])
     (assertValueOneOf "MulticastDNS" ["yes" "resolve" "no"])
@@ -180,7 +201,7 @@ let
     (assertValueOneOf "IPv6AcceptRA" boolValues)
     (assertValueOneOf "IPv4ProxyARP" boolValues)
     (assertValueOneOf "IPv6ProxyNDP" boolValues)
-    (assertValueOneOf "IPv6PrefixDelegation" boolValues)
+    (assertValueOneOf "IPv6PrefixDelegation" (boolValues ++ [ "dhcpv6" "static" ]))
     (assertValueOneOf "ActiveSlave" boolValues)
     (assertValueOneOf "PrimarySlave" boolValues)
     (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
@@ -255,7 +276,7 @@ let
     (assertValueOneOf "ARP" boolValues)
     (assertValueOneOf "Multicast" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
-    (assertValueOneOf "RequiredForOnline" boolValues)
+    (assertValueOneOf "RequiredForOnline" (boolValues ++ ["off" "no-carrier" "dormant" "degraded-carrier" "carrier" "degraded" "enslaved" "routable"]))
   ];
 
 
@@ -317,6 +338,46 @@ let
         <literal>[Netdev]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    wireguardConfig = mkOption {
+      default = {};
+      example = {
+        PrivateKeyFile = "/etc/wireguard/secret.key";
+        ListenPort = 51820;
+        FwMark = 42;
+      };
+      type = types.addCheck (types.attrsOf unitOption) checkWireGuard;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[WireGuard]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        Use <literal>PrivateKeyFile</literal> instead of
+        <literal>PrivateKey</literal>: the nix store is
+        world-readable.
+      '';
+    };
+
+    wireguardPeers = mkOption {
+      default = [];
+      example = [ { wireguardPeerConfig={
+        Endpoint = "192.168.1.1:51820";
+        PublicKey = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
+        PresharedKeyFile = "/etc/wireguard/psk.key";
+        AllowedIPs = [ "10.0.0.1/32" ];
+        PersistentKeepalive = 15;
+      };}];
+      type = with types; listOf (submodule wireguardPeerOptions);
+      description = ''
+        Each item in this array specifies an option in the
+        <literal>[WireGuardPeer]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        Use <literal>PresharedKeyFile</literal> instead of
+        <literal>PresharedKey</literal>: the nix store is
+        world-readable.
       '';
     };
 
@@ -449,6 +510,23 @@ let
       };
     };
   };
+
+  wireguardPeerOptions = {
+    options = {
+      wireguardPeerConfig = mkOption {
+        default = {};
+        example = { };
+        type = types.addCheck (types.attrsOf unitOption) checkWireGuardPeer;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[WireGuardPeer]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
 
   networkOptions = commonNetworkOptions // {
 
@@ -732,6 +810,16 @@ let
             ${attrsToSection def.bondConfig}
 
           ''}
+          ${optionalString (def.wireguardConfig != { }) ''
+            [WireGuard]
+            ${attrsToSection def.wireguardConfig}
+
+          ''}
+          ${flip concatMapStrings def.wireguardPeers (x: ''
+            [WireGuardPeer]
+            ${attrsToSection x.wireguardPeerConfig}
+
+          '')}
           ${def.extraConfig}
         '';
     };
@@ -835,6 +923,8 @@ in
   };
 
   config = mkIf config.systemd.network.enable {
+
+    users.users.systemd-network.group = "systemd-network";
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-networkd.service" "systemd-networkd-wait-online.service"

@@ -7,7 +7,7 @@
 , numpy ? null
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "purepng";
   version = "0.2.0";
 

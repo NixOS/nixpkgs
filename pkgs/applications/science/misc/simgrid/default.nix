@@ -13,19 +13,19 @@
 with stdenv.lib;
 
 let
-  optionOnOff = option: "${if option then "on" else "off"}";
+  optionOnOff = option: if option then "on" else "off";
 in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.23";
+  version = "3.24";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "068xg5ps4j4v2sqqyl4vf83nfazp54gsy84gvlw52h94c4mj4xmp";
+    sha256 = "1r9zgfx5npjw4mk0ywxx07jyi1m1b1i06j0m60n3dsrz75492x6m";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]

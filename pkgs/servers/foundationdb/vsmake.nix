@@ -12,7 +12,7 @@ let
   # hysterical raisins dictate a version of boost this old. however,
   # we luckily do not need to build anything, we just need the header
   # files.
-  boost152 = stdenv49.mkDerivation rec {
+  boost152 = stdenv49.mkDerivation {
     name = "boost-headers-1.52.0";
 
     src = fetchurl {
@@ -45,8 +45,8 @@ let
     , officialRelease ? true
 
     , patches ? []
-    }: stdenv.mkDerivation rec {
-        name = "foundationdb-${version}";
+    }: stdenv.mkDerivation {
+        pname = "foundationdb";
         inherit version;
 
         src = fetchFromGitHub {

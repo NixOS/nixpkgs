@@ -3,20 +3,20 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "gcc-arm-embedded-${version}";
-  version = "8-2018-q4-major";
-  subdir = "8-2018q4";
+  pname = "gcc-arm-embedded";
+  version = "8-2019-q3-update";
+  subdir = "8-2019q3/RC1.1";
 
   src =
   if stdenv.isLinux then
     fetchurl {
       url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-linux.tar.bz2";
-      sha256="fb31fbdfe08406ece43eef5df623c0b2deb8b53e405e2c878300f7a1f303ee52";
+      sha256="b50b02b0a16e5aad8620e9d7c31110ef285c1dde28980b1a9448b764d77d8f92";
     }
   else if stdenv.isDarwin then
     fetchurl {
       url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-mac.tar.bz2";
-      sha256="0q44r57fizpk1z3ngcjwal3rxgsnzjyfknpgwlwzmw5r9p98wlhb";
+      sha256="fc235ce853bf3bceba46eff4b95764c5935ca07fc4998762ef5e5b7d05f37085";
     }
   else throw "unsupported platform";
 

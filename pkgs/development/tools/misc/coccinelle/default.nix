@@ -1,11 +1,11 @@
 { fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name    = "coccinelle-${version}";
+  pname = "coccinelle";
   version = "1.0.6";
 
   src = fetchurl {
-    url = "http://coccinelle.lip6.fr/distrib/${name}.tgz";
+    url = "http://coccinelle.lip6.fr/distrib/${pname}-${version}.tgz";
     sha256 = "02g9hmwkvfl838zz690yra5jzrqjg6y6ffxkrfcsx790bhkfsll4";
   };
 

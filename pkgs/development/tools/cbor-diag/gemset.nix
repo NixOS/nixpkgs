@@ -1,22 +1,38 @@
 {
   cbor-diag = {
-    dependencies = ["json" "treetop"];
+    dependencies = ["json" "neatjson" "treetop"];
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1g4pxf1ag4pyb351m06l08ig1smnf8w27ynqfxkgmwak5mh1z7w1";
+      sha256 = "0pd0k4malg1l7w3ck5glh9w0hrsvknk8rp32vrir74yww1g6yplv";
       type = "gem";
     };
-    version = "0.5.2";
+    version = "0.5.6";
   };
   json = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01v6jjpvh3gnq6sgllpfqahlgxzj50ailwhj9b3cd20hi2dx0vxp";
+      sha256 = "0sx97bm9by389rbzv8r1f43h06xcz8vwi3h5jv074gvparql7lcx";
       type = "gem";
     };
-    version = "2.1.0";
+    version = "2.2.0";
+  };
+  neatjson = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0fa2v7b6433j0iqh5iq9r71v7a5xabgjvqwsbl21vcsac7vf3ncw";
+      type = "gem";
+    };
+    version = "0.9";
   };
   polyglot = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1bqnxwyip623d8pr29rg6m8r0hdg08fpr2yb74f46rn1wgsnxmjr";
@@ -26,6 +42,8 @@
   };
   treetop = {
     dependencies = ["polyglot"];
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0g31pijhnv7z960sd09lckmw9h8rs3wmc8g4ihmppszxqm99zpv7";

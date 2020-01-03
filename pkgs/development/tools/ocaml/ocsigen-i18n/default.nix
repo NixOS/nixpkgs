@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec
 {
   pname = "ocsigen-i18n";
-  name = "${pname}-${version}";
   version = "3.4.0";
 
   buildInputs = with ocamlPackages; [ ocaml findlib ];

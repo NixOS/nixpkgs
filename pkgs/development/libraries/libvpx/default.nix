@@ -55,7 +55,7 @@ assert vp9HighbitdepthSupport -> (vp9DecoderSupport || vp9EncoderSupport);
 assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
-  name = "libvpx-${version}";
+  pname = "libvpx";
   version = "1.7.0";
 
   src = fetchFromGitHub {
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     (if isDarwin || isCygwin then
        "--enable-static --disable-shared"
      else
-       "--disable-static --enable-shared")
+       "--enable-shared")
     (enableFeature smallSupport "small")
     (enableFeature postprocVisualizerSupport "postproc-visualizer")
     (enableFeature unitTestsSupport "unit-tests")

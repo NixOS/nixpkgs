@@ -9,7 +9,7 @@
 , pythonOlder
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyScss";
   version = "1.3.5";
 

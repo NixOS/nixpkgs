@@ -5,16 +5,16 @@ let
     url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
-  version = "3.44.1";
+  version = "3.47.1";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
-  name = "nss-${version}";
+  pname = "nss";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${name}.tar.gz";
-    sha256 = "1y0jvva4s3j7cjz22kqw2lsml0an1295bgpc2raf7kc9r60cpr7w";
+    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
+    sha256 = "1yx68a1ks63s8914zmiz9h1nh0261aqzcblgg1cb4ig33p5x3qqs";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -27,7 +27,8 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ nspr ];
 
   prePatch = ''
-    xz -d < ${nssPEM} | patch -p1
+    # strip the trailing whitespace from the patch line…
+    xz -d < ${nssPEM} | sed -e '/^-DIRS = builtins $/ s/ $//' | patch -p1
   '';
 
   patches =

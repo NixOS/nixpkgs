@@ -19,7 +19,7 @@ in {
       user = mkOption {
         default = "deluge";
         example = "some_user";
-        type = types.string;
+        type = types.str;
         description = "The user under which to run flexget.";
       };
 
@@ -33,7 +33,7 @@ in {
       interval = mkOption {
         default = "10m";
         example = "1h";
-        type = types.string;
+        type = types.str;
         description = "When to perform a <command>flexget</command> run. See <command>man 7 systemd.time</command> for the format.";
       };
 

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake, coreutils, root }:
 
 stdenv.mkDerivation rec {
-  name = "hepmc3-${version}";
-  version = "3.1.1";
+  pname = "hepmc3";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "1fs8ha5issls886g03azpwamry1k633zjrcx51v7g7vg9nbckjrg";
+    sha256 = "1izcldnjbyn6myr7nv7b4jivf2vmdi64ng9gk1vjh998755hfcs1";
   };
 
   buildInputs = [ cmake root ];

@@ -121,7 +121,7 @@ in
 
     users.groups.ircd.gid = config.ids.gids.ircd;
 
-    systemd.services."ircd-hybrid" = {
+    systemd.services.ircd-hybrid = {
       description = "IRCD Hybrid server";
       after = [ "started networking" ];
       wantedBy = [ "multi-user.target" ];

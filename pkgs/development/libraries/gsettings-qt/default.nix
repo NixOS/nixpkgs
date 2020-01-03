@@ -3,8 +3,8 @@
 , glib, gobject-introspection
 }:
 
-stdenv.mkDerivation rec {
-  name = "gsettings-qt-${version}";
+stdenv.mkDerivation {
+  pname = "gsettings-qt";
   version = "0.1.20170824";
 
   src = fetchbzr {

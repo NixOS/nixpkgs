@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.44";
-  name = "frotz-${version}";
+  pname = "frotz";
 
   src = fetchFromGitHub {
     owner = "DavidGriffith";

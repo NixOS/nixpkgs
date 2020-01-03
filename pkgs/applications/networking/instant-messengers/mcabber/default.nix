@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mcabber-${version}";
+  pname = "mcabber";
   version = "1.1.0";
 
   src = fetchurl {

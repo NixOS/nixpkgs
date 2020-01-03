@@ -5,10 +5,11 @@
 let
   generic = { version, sha256, license }:
     stdenv.mkDerivation rec {
-      name = "ragel-${version}";
+      pname = "ragel";
+      inherit version;
 
       src = fetchurl {
-        url = "https://www.colm.net/files/ragel/${name}.tar.gz";
+        url = "https://www.colm.net/files/ragel/${pname}-${version}.tar.gz";
         inherit sha256;
       };
 

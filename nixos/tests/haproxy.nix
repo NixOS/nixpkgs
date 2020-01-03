@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...}: {
+import ./make-test-python.nix ({ pkgs, ...}: {
   name = "haproxy";
   nodes = {
     machine = { ... }: {
@@ -16,6 +16,8 @@ import ./make-test.nix ({ pkgs, ...}: {
           frontend http
             bind *:80
             mode http
+            option http-use-htx
+            http-request use-service prometheus-exporter if { path /metrics }
             use_backend http_server
         '';
       };
@@ -31,11 +33,13 @@ import ./make-test.nix ({ pkgs, ...}: {
     };
   };
   testScript = ''
-    startAll;
-    $machine->waitForUnit('multi-user.target');
-    $machine->waitForUnit('haproxy.service');
-    $machine->waitForUnit('httpd.service');
-    $machine->succeed('curl -k http://localhost:80/index.txt | grep "We are all good!"');
-
+    start_all()
+    machine.wait_for_unit("multi-user.target")
+    machine.wait_for_unit("haproxy.service")
+    machine.wait_for_unit("httpd.service")
+    assert "We are all good!" in machine.succeed("curl -k http://localhost:80/index.txt")
+    assert "haproxy_process_pool_allocated_bytes" in machine.succeed(
+        "curl -k http://localhost:80/metrics"
+    )
   '';
 })

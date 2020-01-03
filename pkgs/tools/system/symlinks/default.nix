@@ -1,7 +1,7 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "symlinks-${version}";
+  pname = "symlinks";
   version = "1.4.3";
 
   src = fetchurl {

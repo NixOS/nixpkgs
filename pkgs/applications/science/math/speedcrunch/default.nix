@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchgit, cmake, qtbase, qttools }:
 
 mkDerivation rec {
-  name = "speedcrunch-${version}";
+  pname = "speedcrunch";
   version = "0.12.0";
 
   src = fetchgit {

@@ -34,7 +34,7 @@ in {
       };
 
       listenAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "127.0.0.1";
         description = ''
           The host name or IP address on which to bind Airsonic.
@@ -105,7 +105,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.airsonic = {
       description = "Airsonic Media Server";
-      after = [ "local-fs.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
@@ -138,8 +138,8 @@ in {
 
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
-      virtualHosts."${cfg.virtualHost}" = {
-        locations."${cfg.contextPath}".proxyPass = "http://${cfg.listenAddress}:${toString cfg.port}";
+      virtualHosts.${cfg.virtualHost} = {
+        locations.${cfg.contextPath}.proxyPass = "http://${cfg.listenAddress}:${toString cfg.port}";
       };
     };
 
@@ -148,6 +148,7 @@ in {
       name = cfg.user;
       home = cfg.home;
       createHome = true;
+      isSystemUser = true;
     };
   };
 }

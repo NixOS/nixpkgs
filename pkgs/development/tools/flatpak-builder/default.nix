@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , substituteAll
+, nixosTests
 
 , autoreconfHook
 , docbook_xml_dtd_412
@@ -43,15 +44,16 @@
 let
   installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
-  version = "1.0.8";
+  version = "1.0.9";
 in stdenv.mkDerivation rec {
-  name = "flatpak-builder-${version}";
+  pname = "flatpak-builder";
+  inherit version;
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${name}.tar.xz";
-    sha256 = "0ns1vv2phhd3vsi2749cajwapapx7xa841kkvssixwgfa575d912";
+    url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "00qd770qjsiyd8qhhhyn7zg6jyi283ix5dhjzcfdn9yr3h53kvyn";
   };
 
   nativeBuildInputs = [
@@ -130,7 +132,16 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    installedTestsDependencies = [ gnupg ostree python2 gnumake ];
+    installedTestsDependencies = [
+      gnupg
+      ostree
+      python2
+      gnumake
+    ];
+
+    tests = {
+      installedTests = nixosTests.installed-tests.flatpak-builder;
+    };
   };
 
   meta = with stdenv.lib; {

@@ -1,16 +1,16 @@
-{stdenv, fetchurl, cmake, libGLU_combined, qt5, boost}:
+{stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost}:
 
 stdenv.mkDerivation rec {
   version = "201707";
   build_nr = "1";
-  name = "mcrl2-${version}";
+  pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
     sha256 = "1c8h94ja7271ph61zrcgnjgblxppld6v22f7f900prjgzbcfy14m";
   };
 
-  buildInputs = [ cmake libGLU_combined qt5.qtbase boost ];
+  buildInputs = [ cmake libGLU libGL qt5.qtbase boost ];
 
   enableParallelBuilding = true;
 

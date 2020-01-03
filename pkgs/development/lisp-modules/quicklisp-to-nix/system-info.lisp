@@ -265,7 +265,9 @@ parasitic systems will be tracked."
     (cond
       (source-file
        (loop :for system-name :being :the :hash-keys :of asdf/find-system::*registered-systems* :do
-          (when (and (parasitic-relationship-p system system-name)
+             ; for an unclear reason, a literal 0 which is not a key in the hash table gets observed
+          (when (and (gethash system-name asdf/find-system::*registered-systems*)
+                     (parasitic-relationship-p system system-name)
                      (not (blacklisted-parasite-p system-name)))
             (found-new-parasite system-name)
             (let ((*track-dependencies* t))
@@ -352,7 +354,10 @@ quicklisp-to-nix."
         (remove name (mapcar 'name ql-sibling-systems)
                 :test 'equal))
        (dependencies raw-dependencies)
-       (description (asdf:system-description (asdf:find-system system)))
+       (description
+         (or
+           (ignore-errors (asdf:system-description (asdf:find-system system)))
+           "System lacks description"))
        (release-name (short-description ql-release)))
     (list
      :system system

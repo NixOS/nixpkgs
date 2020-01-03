@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "stepmania-${version}";
+  pname = "stepmania";
   version = "5.1.0-b2";
 
   src = fetchFromGitHub {

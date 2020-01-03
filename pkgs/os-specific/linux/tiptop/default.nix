@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, libxml2, ncurses, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "tiptop-${version}";
+  pname = "tiptop";
   version = "2.3.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/${name}.tar.gz";
+    url = "${meta.homepage}/releases/${pname}-${version}.tar.gz";
     sha256 = "10j1138y3cj3hsmfz4w0bmk90523b0prqwi9nhb4z8xvjnf49i2i";
   };
 

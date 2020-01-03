@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.3";
-  name = "undmg-${version}";
+  pname = "undmg";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";

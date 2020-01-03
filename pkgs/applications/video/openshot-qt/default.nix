@@ -1,6 +1,13 @@
-{ stdenv, mkDerivationWith, fetchFromGitHub
+{ stdenv, mkDerivationWith, fetchFromGitHub, fetchpatch
 , doxygen, python3Packages, libopenshot
 , wrapGAppsHook, gtk3 }:
+
+let
+  fixPermissions = fetchpatch rec {
+    url = https://github.com/OpenShot/openshot-qt/pull/2973.patch;
+    sha256 = "037rh0p3k4sdzprlpyb73byjq3qhqk5zd0d4iin6bq602r8bbp0n";
+  };
+in
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "openshot-qt";
@@ -12,6 +19,8 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "0mg63v36h7l8kv2sgf6x8c1n3ygddkqqwlciz7ccxpbm4x1idqba";
   };
+
+  patches = [ fixPermissions ];
 
   nativeBuildInputs = [ doxygen wrapGAppsHook ];
 

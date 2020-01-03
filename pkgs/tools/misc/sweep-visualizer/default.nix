@@ -6,7 +6,7 @@
   libudev0-shim
 }:
   stdenv.mkDerivation rec {
-    name = "sweep-visualizer-${version}";
+    pname = "sweep-visualizer";
     version = "0.15.0";
 
     src = fetchurl {

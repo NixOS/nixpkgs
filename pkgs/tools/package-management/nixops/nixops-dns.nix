@@ -3,7 +3,7 @@
 , fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "nixops-dns-${version}";
+  pname = "nixops-dns";
   version = "1.0";
 
   goDeps = ./deps.nix;

@@ -2,11 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "jsduck";
-  name = "${pname}-${version}";
   version = (import ./gemset.nix).jsduck.version;
 
   env = bundlerEnv {
-    name = "${pname}";
+    name = pname;
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;

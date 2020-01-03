@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkgconfig, libGLU_combined, makeWrapper }:
+{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkgconfig, libGLU, libGL, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "smpeg-svn${version}";
@@ -13,11 +13,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./format.patch
     ./gcc6.patch
+    ./libx11.patch
   ];
 
   enableParallelBuilding = true;
 
-  buildInputs = [ SDL gtk2 libGLU_combined ];
+  buildInputs = [ SDL gtk2 libGLU libGL ];
 
   nativeBuildInputs = [ autoconf automake libtool m4 pkgconfig makeWrapper ];
 

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, glib, zlib, dbus, dbus-glib, gtk2, gdk-pixbuf, cairo, pango }:
 
 stdenv.mkDerivation rec {
-  name = "tixati-${version}";
-  version = "2.62";
+  pname = "tixati";
+  version = "2.64";
 
   src = fetchurl {
     url = "https://download2.tixati.com/download/tixati-${version}-1.x86_64.manualinstall.tar.gz";
-    sha256 = "18lmzllkymdigfl1xf696zqmr2b83p4rzlc8ddrcr0zpzy2z2w4a";
+    sha256 = "0xz2b2vasfc39wqv9lak2wdli7pr5b1vcm1lgpqx6kz7j5ba6jqp";
   };
 
   installPhase = ''

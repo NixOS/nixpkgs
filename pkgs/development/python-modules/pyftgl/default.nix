@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, boost, freetype, ftgl, libGLU_combined
+, boost, freetype, ftgl, libGLU, libGL
 , python
 }:
 
@@ -12,11 +12,10 @@ in
 buildPythonPackage rec {
   pname = "pyftgl";
   version = "0.4b";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "umlaeute";
-    repo = name;
+    repo = "${pname}-${version}";
     rev = version;
     sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
   };
@@ -25,7 +24,7 @@ buildPythonPackage rec {
     sed -i "s,'boost_python','boost_python${pythonVersion}',g" setup.py
   '';
 
-  buildInputs = [ boost freetype ftgl libGLU_combined ];
+  buildInputs = [ boost freetype ftgl libGLU libGL ];
 
   meta = with lib; {
     description = "Python bindings for FTGL (FreeType for OpenGL)";

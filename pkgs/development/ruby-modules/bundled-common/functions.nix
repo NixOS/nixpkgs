@@ -42,21 +42,21 @@ in rec {
       converge expandDependencies directlyMatchingGems;
 
   platformMatches = {rubyEngine, version, ...}: attrs: (
-  !(attrs ? "platforms") ||
+  !(attrs ? platforms) ||
   builtins.length attrs.platforms == 0 ||
     builtins.any (platform:
       platform.engine == rubyEngine &&
-        (!(platform ? "version") || platform.version == version.majMin)
+        (!(platform ? version) || platform.version == version.majMin)
     ) attrs.platforms
   );
 
   groupMatches = groups: attrs:
-    groups == null || !(attrs ? "groups") ||
+    groups == null || !(attrs ? groups) ||
       (intersectLists (groups ++ [ "default" ]) attrs.groups) != [];
 
   applyGemConfigs = attrs:
-    (if gemConfig ? "${attrs.gemName}"
-    then attrs // gemConfig."${attrs.gemName}" attrs
+    (if gemConfig ? ${attrs.gemName}
+    then attrs // gemConfig.${attrs.gemName} attrs
     else attrs);
 
   genStubsScript = { lib, ruby, confFiles, bundler, groups, binPaths, ... }: ''
@@ -88,6 +88,6 @@ in rec {
     inherit (attrs.source) type;
     source = removeAttrs attrs.source ["type"];
     gemName = name;
-    gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);
+    gemPath = map (gemName: gems.${gemName}) (attrs.dependencies or []);
   });
 }

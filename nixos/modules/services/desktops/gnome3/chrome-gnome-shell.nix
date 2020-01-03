@@ -23,5 +23,7 @@ with lib;
     environment.systemPackages = [ pkgs.chrome-gnome-shell ];
 
     services.dbus.packages = [ pkgs.chrome-gnome-shell ];
+
+    nixpkgs.config.firefox.enableGnomeExtensions = true;
   };
 }

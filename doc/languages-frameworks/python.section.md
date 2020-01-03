@@ -144,6 +144,24 @@ What's happening here?
 2. Then we create a Python 3.5 environment with the `withPackages` function.
 3. The `withPackages` function expects us to provide a function as an argument that takes the set of all python packages and returns a list of packages to include in the environment. Here, we select the packages `numpy` and `toolz` from the package set.
 
+To combine this with `mkShell` you can:
+
+```nix
+with import <nixpkgs> {};
+
+let
+  pythonEnv = python35.withPackages (ps: [
+    ps.numpy
+    ps.toolz
+  ]);
+in mkShell {
+  buildInputs = [
+    pythonEnv
+    hello
+  ];
+}
+```
+
 ##### Execute command with `--run`
 A convenient option with `nix-shell` is the `--run`
 option, with which you can execute a command in the `nix-shell`. We can
@@ -540,7 +558,8 @@ and the aliases
 #### `buildPythonPackage` function
 
 The `buildPythonPackage` function is implemented in
-`pkgs/development/interpreters/python/build-python-package.nix`
+`pkgs/development/interpreters/python/mk-python-derivation`
+using setup hooks.
 
 The following is an example:
 ```nix
@@ -592,7 +611,7 @@ as the interpreter unless overridden otherwise.
 All parameters from `stdenv.mkDerivation` function are still supported. The following are specific to `buildPythonPackage`:
 
 * `catchConflicts ? true`: If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
-* `disabled` ? false: If `true`, package is not build for the particular Python interpreter version.
+* `disabled` ? false: If `true`, package is not built for the particular Python interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment variable in wrapped programs.
 * `installFlags ? []`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.
@@ -797,6 +816,22 @@ such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to 
 Python 2 namespace packages may provide `__init__.py` that collide. In that case `python.buildEnv`
 should be used with `ignoreCollisions = true`.
 
+#### Setup hooks
+
+The following are setup hooks specifically for Python packages. Most of these are
+used in `buildPythonPackage`.
+
+- `flitBuildHook` to build a wheel using `flit`.
+- `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
+- `pipInstallHook` to install wheels.
+- `pytestCheckHook` to run tests with `pytest`.
+- `pythonCatchConflictsHook` to check whether a Python package is not already existing.
+- `pythonImportsCheckHook` to check whether importing the listed modules works.
+- `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
+- `setuptoolsBuildHook` to build a wheel using `setuptools`.
+- `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `wheelUnpackHook` to move a wheel to the correct folder so it can be installed with the `pipInstallHook`.
+
 ### Development mode
 
 Development or editable mode is supported. To develop Python packages
@@ -833,9 +868,8 @@ Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is in
 Packages inside nixpkgs are written by hand. However many tools exist in
 community to help save time. No tool is preferred at the moment.
 
-- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov
-- [pypi2nix](https://github.com/garbas/pypi2nix) by Rok Garbas
-- [pypi2nix](https://github.com/offlinehacker/pypi2nix) by Jaka Hudoklin
+- [pypi2nix](https://github.com/nix-community/pypi2nix): Generate Nix expressions for your Python project. Note that [sharing derivations from pypi2nix with nixpkgs is possible but not encouraged](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376).
+- [python2nix](https://github.com/proger/python2nix) by Vladimir Kirillov.
 
 ### Deterministic builds
 
@@ -1000,7 +1034,10 @@ Create this `default.nix` file, together with a `requirements.txt` and simply ex
 
 ```nix
 with import <nixpkgs> {};
-with python27Packages;
+
+let
+  pythonPackages = python27Packages;
+in
 
 stdenv.mkDerivation {
   name = "impurePythonEnv";
@@ -1010,9 +1047,8 @@ stdenv.mkDerivation {
   buildInputs = [
     # these packages are required for virtualenv and pip to work:
     #
-    python27Full
-    python27Packages.virtualenv
-    python27Packages.pip
+    pythonPackages.virtualenv
+    pythonPackages.pip
     # the following packages are related to the dependencies of your python
     # project.
     # In this particular example the python modules listed in the
@@ -1025,14 +1061,13 @@ stdenv.mkDerivation {
     libxml2
     libxslt
     libzip
-    stdenv
     zlib
   ];
 
   shellHook = ''
     # set SOURCE_DATE_EPOCH so that we can use python wheels
     SOURCE_DATE_EPOCH=$(date +%s)
-    virtualenv --no-setuptools venv
+    virtualenv --python=${pythonPackages.python.interpreter} --no-setuptools venv
     export PATH=$PWD/venv/bin:$PATH
     pip install -r requirements.txt
   '';

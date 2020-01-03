@@ -3,14 +3,14 @@
 , libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-desktop-${version}";
-  version = "3.32.2";
+  pname = "gnome-desktop";
+  version = "3.34.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0bidx4626x7k2myv6f64qv4fzmxv8v475wibiz19kj8hjfr737q9";
+    url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1v983xirwp1y6ggz97bh742ak6gff0hxb359dgn37nikjxhvm0a0";
   };
 
   nativeBuildInputs = [

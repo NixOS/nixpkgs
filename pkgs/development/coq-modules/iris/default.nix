@@ -1,15 +1,18 @@
-{ stdenv, fetchzip, coq, ssreflect, stdpp }:
+{ stdenv, fetchFromGitLab, coq, stdpp }:
 
 stdenv.mkDerivation rec {
-  version = "3.1.0";
+  version = "3.2.0";
   name = "coq${coq.coq-version}-iris-${version}";
-  src = fetchzip {
-    url = "https://gitlab.mpi-sws.org/FP/iris-coq/-/archive/iris-${version}/iris-coq-iris-${version}.tar.gz";
-    sha256 = "0ipdb061jj205avxifshxkpyxxqykigmlxk2n5nvxj62gs3rl5j1";
+  src = fetchFromGitLab {
+    domain = "gitlab.mpi-sws.org";
+    owner = "iris";
+    repo = "iris";
+    rev = "iris-${version}";
+    sha256 = "10dfi7qx6j5w6kbmbrf05xh18jwxr9iz5g7y0f6157msgvl081xs";
   };
 
   buildInputs = [ coq ];
-  propagatedBuildInputs = [ ssreflect stdpp ];
+  propagatedBuildInputs = [ stdpp ];
 
   enableParallelBuilding = true;
 
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.7" "8.8" "8.9" "8.10" ];
   };
 
 }

@@ -3,7 +3,7 @@ rec {
   baseName = ''sqlite'';
   version = ''cl-20130615-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."alexandria" args."babel" args."cffi" args."iterate" args."trivial-features" ];
 
@@ -17,7 +17,7 @@ rec {
   asdFilesToKeep = ["sqlite.asd"];
   overrides = x: x;
 }
-/* (SYSTEM sqlite DESCRIPTION NIL SHA256
+/* (SYSTEM sqlite DESCRIPTION System lacks description SHA256
     0db1fvvnsrnxmp272ycnl2kwhymjwrimr8z4djvjlg6cvjxk6lqh URL
     http://beta.quicklisp.org/archive/cl-sqlite/2013-06-15/cl-sqlite-20130615-git.tgz
     MD5 93be7c68f587d830941be55f2c2f1c8b NAME sqlite FILENAME sqlite DEPS

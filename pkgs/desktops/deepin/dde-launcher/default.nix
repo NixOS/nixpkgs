@@ -4,15 +4,14 @@
   which, xdg_utils, wrapGAppsHook }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-launcher";
-  version = "4.6.13";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1lwwn2qjbd4i7wx18mi8n7hzdh832i3kdadrivr10sbafdank7ky";
+    sha256 = "0zh6bb0r3pgjrnw9rba46ghdzza1ka1mv7r1znf8gw24wsjgjcpn";
   };
 
   nativeBuildInputs = [
@@ -64,7 +63,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin Desktop Environment launcher module";

@@ -6,10 +6,10 @@ else
 
 stdenv.mkDerivation rec {
   pname = "dune";
-  version = "1.11.1";
+  version = "1.11.4";
   src = fetchurl {
     url = "https://github.com/ocaml/dune/releases/download/${version}/dune-build-info-${version}.tbz";
-    sha256 = "0hizfaidl1bxl614i65yvyfhsjbp93y7y9qy1a8zw448w1js5bsp";
+    sha256 = "1rkc8lqw30ifjaz8d81la6i8j05ffd0whpxqsbg6dci16945zjvp";
   };
 
   buildInputs = [ ocaml findlib ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://dune.build/";
     description = "A composable build system";
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ stdenv.lib.maintainers.vbgl stdenv.lib.maintainers.marsam ];
     license = stdenv.lib.licenses.mit;
     inherit (ocaml.meta) platforms;
   };

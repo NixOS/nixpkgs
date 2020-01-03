@@ -6,7 +6,7 @@
 , scipy
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tess";
   version = "unstable-2019-05-07";
 

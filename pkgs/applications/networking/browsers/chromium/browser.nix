@@ -1,4 +1,4 @@
-{ stdenv, mkChromiumDerivation, channel }:
+{ stdenv, mkChromiumDerivation, channel, enableWideVine }:
 
 with stdenv.lib;
 
@@ -17,11 +17,6 @@ mkChromiumDerivation (base: rec {
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
-
-    if [ -e "$buildPath/libwidevinecdmadapter.so" ]; then
-      cp -v "$buildPath/libwidevinecdmadapter.so" \
-            "$libExecPath/libwidevinecdmadapter.so"
-    fi
 
     mkdir -p "$sandbox/bin"
     cp -v "$buildPath/chrome_sandbox" "$sandbox/bin/${sandboxExecutableName}"
@@ -66,8 +61,8 @@ mkChromiumDerivation (base: rec {
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ bendlas ivan ];
-    license = licenses.bsd3;
+    maintainers = with maintainers; [ bendlas ivan thefloweringash ];
+    license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
     timeout = 172800; # 48 hours

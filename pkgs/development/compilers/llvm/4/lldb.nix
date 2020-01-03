@@ -15,7 +15,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "lldb-${version}";
+  pname = "lldb";
+  inherit version;
 
   src = fetch "lldb" "0yy43a27zx3r51b6gkv3v2mdiqcq3mf0ngki47ya0i30v3gx4cl4";
 

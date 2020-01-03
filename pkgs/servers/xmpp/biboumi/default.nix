@@ -2,7 +2,7 @@
   libiconv, botan2, systemd, pkgconfig, udns, pandoc, coreutils } :
 
 stdenv.mkDerivation rec {
-  name = "biboumi-${version}";
+  pname = "biboumi";
   version = "8.3";
 
   src = fetchurl {

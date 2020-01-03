@@ -4,11 +4,11 @@
 , Security }:
 
 let
-  libc = if stdenv ? "cross" then libcCross else stdenv.cc.libc;
+  libc = if stdenv ? cross then libcCross else stdenv.cc.libc;
 in
 
 stdenv.mkDerivation rec {
-  name = "go-${version}";
+  pname = "go";
   version = "1.4-bootstrap-20161024";
   revision = "79d85a4965ea7c46db483314c3981751909d7883";
 
@@ -61,7 +61,9 @@ stdenv.mkDerivation rec {
 
     sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
-    sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
+    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
+    # that run outside a nix server
+    sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
 
     # Find the loader dynamically
     LOADER="$(find ${lib.getLib libc}/lib -name ld-linux\* | head -n 1)"

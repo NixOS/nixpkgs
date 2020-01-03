@@ -1,12 +1,12 @@
 { stdenv, fetchurl, apfel, apfelgrid, applgrid, blas, gfortran, lhapdf, liblapack, libyaml, lynx, mela, root5, qcdnum, which }:
 
 stdenv.mkDerivation rec {
-  name = "xfitter-${version}";
+  pname = "xfitter";
   version = "2.0.0";
 
   src = fetchurl {
-    name = "${name}.tgz";
-    url = "https://www.xfitter.org/xFitter/xFitter/DownloadPage?action=AttachFile&do=get&target=${name}.tgz";
+    name = "${pname}-${version}.tgz";
+    url = "https://www.xfitter.org/xFitter/xFitter/DownloadPage?action=AttachFile&do=get&target=${pname}-${version}.tgz";
     sha256 = "0j47s8laq3aqjlgp769yicvgyzqjb738a3rqss51d9fjrihi2515";
   };
 

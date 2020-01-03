@@ -4,7 +4,7 @@ if stdenv.lib.versionOlder ocaml.version "4.03"
 then throw "ocf not supported for ocaml ${ocaml.version}"
 else
 stdenv.mkDerivation rec {
-  name = "ocf-${version}";
+  pname = "ocf";
   version = "0.5.0";
   src = fetchFromGitHub {
     owner = "zoggy";

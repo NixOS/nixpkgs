@@ -2,7 +2,7 @@
 , boost, openssl, zlib, libsodium, olm, nlohmann_json }:
 
 stdenv.mkDerivation rec {
-  name = "mtxclient-${version}";
+  pname = "mtxclient";
   version = "0.2.1";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, libxml2, pidgin, pkgconfig, fetchFromGitHub } :
 
 stdenv.mkDerivation rec {
-  name = "pidgin-carbons-${version}";
+  pname = "pidgin-carbons";
   version = "0.1.3";
 
   src = fetchFromGitHub {

@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , pkgconfig, libtool
-, gtk2, libGLU_combined, readline, libX11, libXpm
+, gtk2, libGLU, libGL, readline, libX11, libXpm
 , docbook_xml_dtd_45, docbook_xsl
 , sdlSupport ? true, SDL2 ? null
 , termSupport ? true, ncurses ? null
@@ -18,18 +18,18 @@ assert curlSupport -> (curl != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "bochs-${version}";
+  pname = "bochs";
   version = "2.6.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bochs/bochs/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/bochs/bochs/${version}/${pname}-${version}.tar.gz";
     sha256 = "1379cq4cnfprhw8mgh60i0q9j8fz8d7n3d5fnn2g9fdiv5znfnzf";
   };
 
   patches = [ ./bochs-2.6.9-glibc-2.26.patch ];
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig libtool gtk2 libGLU_combined readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
+  [ pkgconfig libtool gtk2 libGLU libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
   ++ optionals termSupport [ ncurses ]
   ++ optionals sdlSupport [ SDL2 ]
   ++ optionals wxSupport [ wxGTK ]

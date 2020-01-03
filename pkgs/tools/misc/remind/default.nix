@@ -11,6 +11,9 @@ let
   tclLibraries = stdenv.lib.optionals tkremind [ tcllib tk ];
   tclLibPaths = stdenv.lib.concatStringsSep " "
     (map (p: "${p}/lib/${p.libPrefix}") tclLibraries);
+  tkremindPatch = optionalString tkremind ''
+    substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"
+  '';
 in stdenv.mkDerivation {
   name = "remind-3.1.16";
   src = fetchurl {
@@ -21,8 +24,13 @@ in stdenv.mkDerivation {
   nativeBuildInputs = optional tkremind makeWrapper;
   propagatedBuildInputs = tclLibraries;
 
-  postPatch = optionalString tkremind ''
-    substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"
+  postPatch = ''
+    substituteInPlace ./configure \
+      --replace "sleep 1" "true"
+    substituteInPlace ./src/init.c \
+      --replace "rkrphgvba(0);" "" \
+      --replace "rkrphgvba(1);" ""
+    ${tkremindPatch}
   '';
 
   postInstall = optionalString tkremind ''
@@ -34,6 +42,6 @@ in stdenv.mkDerivation {
     description = "Sophisticated calendar and alarm program for the console";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [raskin kovirobi];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

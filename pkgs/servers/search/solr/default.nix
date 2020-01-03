@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Open source enterprise search platform from the Apache Lucene project";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.rickynils maintainers.domenkozar maintainers.aanderse ];
+    maintainers = [ maintainers.domenkozar maintainers.aanderse ];
   };
 
 }

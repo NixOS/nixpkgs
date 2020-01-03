@@ -6,7 +6,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "tox-node-${version}";
+  pname = "tox-node";
   version = "0.0.8";
 
   src = fetchFromGitHub {

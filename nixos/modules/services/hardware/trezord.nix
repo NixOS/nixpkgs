@@ -4,6 +4,12 @@ with lib;
 let
   cfg = config.services.trezord;
 in {
+
+  ### docs
+
+  meta = {
+    doc = ./trezord.xml;
+  };
   
   ### interface
 
@@ -16,26 +22,29 @@ in {
           Enable Trezor bridge daemon, for use with Trezor hardware bitcoin wallets.
         '';
       };
+
+      emulator.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable Trezor emulator support.
+          '';
+       };
+
+      emulator.port = mkOption {
+        type = types.port;
+        default = 21324;
+        description = ''
+          Listening port for the Trezor emulator.
+          '';
+      };
     };
   };
   
   ### implementation
 
   config = mkIf cfg.enable {
-    services.udev.packages = lib.singleton (pkgs.writeTextFile {
-      name = "trezord-udev-rules";
-      destination = "/etc/udev/rules.d/51-trezor.rules";
-      text = ''
-        # TREZOR v1 (One)
-        SUBSYSTEM=="usb", ATTR{idVendor}=="534c", ATTR{idProduct}=="0001", MODE="0660", GROUP="trezord", TAG+="uaccess", SYMLINK+="trezor%n"
-        KERNEL=="hidraw*", ATTRS{idVendor}=="534c", ATTRS{idProduct}=="0001", MODE="0660", GROUP="trezord", TAG+="uaccess"
-
-        # TREZOR v2 (T)
-        SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="53c0", MODE="0660", GROUP="trezord", TAG+="uaccess", SYMLINK+="trezor%n"
-        SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="53c1", MODE="0660", GROUP="trezord", TAG+="uaccess", SYMLINK+="trezor%n"
-        KERNEL=="hidraw*", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="53c1", MODE="0660", GROUP="trezord", TAG+="uaccess"
-      '';
-    });
+    services.udev.packages = [ pkgs.trezor-udev-rules ];
 
     systemd.services.trezord = {
       description = "TREZOR Bridge";
@@ -44,7 +53,7 @@ in {
       path = [];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.trezord}/bin/trezord-go";
+        ExecStart = "${pkgs.trezord}/bin/trezord-go ${optionalString cfg.emulator.enable "-e ${builtins.toString cfg.emulator.port}"}";
         User = "trezord";
       };
     };
@@ -52,6 +61,7 @@ in {
     users.users.trezord = {
       group = "trezord";
       description = "Trezor bridge daemon user";
+      isSystemUser = true;
     };
 
     users.groups.trezord = {};

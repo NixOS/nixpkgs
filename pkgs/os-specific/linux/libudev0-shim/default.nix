@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, udev }:
 
 stdenv.mkDerivation rec {
-  name = "libudev0-shim-${version}";
+  pname = "libudev0-shim";
   version = "1";
 
   src = fetchFromGitHub {

@@ -5,8 +5,8 @@
 
 assert pythonSupport -> python != null && swig != null;
 
-stdenv.mkDerivation rec {
-  name = "gr-gsm-${version}";
+stdenv.mkDerivation {
+  pname = "gr-gsm";
   version = "2016-08-25";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = src.rev;
-  name = "eql-git-${version}";
+  pname = "eql-git";
   src = fetchgit {
     rev = "9097bf98446ee33c07bb155d800395775ce0d9b2";
     url = "https://gitlab.com/eql/eql.git";

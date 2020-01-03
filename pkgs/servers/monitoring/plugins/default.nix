@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, autoreconfHook
-, coreutils, gnugrep, gnused, lm_sensors, net_snmp, openssh, openssl, perl
-, dnsutils, libdbi, mysql, zlib, openldap, procps
+, coreutils, gnugrep, gnused, lm_sensors, net-snmp, openssh, openssl, perl
+, dnsutils, libdbi, libmysqlclient, zlib, openldap, procps
 , runtimeShell }:
 
 with stdenv.lib;
@@ -9,9 +9,9 @@ let
   majorVersion = "2.2";
   minorVersion = ".0";
 
-  binPath = makeBinPath [ coreutils gnugrep gnused lm_sensors net_snmp procps ];
+  binPath = makeBinPath [ coreutils gnugrep gnused lm_sensors net-snmp procps ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "monitoring-plugins-${majorVersion}${minorVersion}";
 
   src = fetchFromGitHub {
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   '';
 
   # !!! make openssh a runtime dependency only
-  buildInputs = [ dnsutils libdbi mysql net_snmp openldap openssh openssl perl procps zlib ];
+  buildInputs = [ dnsutils libdbi libmysqlclient net-snmp openldap openssh openssl perl procps zlib ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

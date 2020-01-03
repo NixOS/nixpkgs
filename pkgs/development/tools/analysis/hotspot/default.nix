@@ -1,4 +1,5 @@
 { stdenv,
+  mkDerivation,
   cmake,
   elfutils,
   extra-cmake-modules,
@@ -14,7 +15,7 @@
   threadweaver,
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "hotspot";
   version = "1.2.0";
 

@@ -105,7 +105,7 @@ let
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
 
-        % nix-shell maintainers/scripts/update.nix --argstr package garbas
+        % nix-shell maintainers/scripts/update.nix --argstr package gnome3.nautilus
 
     to run update script for specific package, or
 
@@ -126,7 +126,7 @@ let
 
   packageData = package: {
     name = package.name;
-    pname = (builtins.parseDrvName package.name).name;
+    pname = pkgs.lib.getName package;
     updateScript = map builtins.toString (pkgs.lib.toList package.updateScript);
   };
 

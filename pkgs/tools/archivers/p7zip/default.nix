@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "p7zip-${version}";
+  pname = "p7zip";
   version = "16.02";
 
   src = fetchurl {

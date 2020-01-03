@@ -1,11 +1,19 @@
 { stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
-, cpuid, ocb-stubblr
-, cstruct, zarith, ppx_sexp_conv
+, cpuid, ocb-stubblr, sexplib
+, cstruct, zarith, ppx_sexp_conv, ppx_deriving, writeScriptBin
 , cstruct-lwt ? null
 }:
 
 with stdenv.lib;
-let withLwt = cstruct-lwt != null; in
+let
+  withLwt = cstruct-lwt != null;
+  # the build system will call 'cc' with no way to override
+  # this is wrong when we're cross-compiling, so insert a wrapper
+  cc-wrapper = writeScriptBin "cc" ''
+    set -e
+    $CC "$@"
+  '';
+in
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-nocrypto-${version}";
@@ -33,10 +41,19 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/nocrypto/nocrypto.0.5.4-1/files/0004-pack-package-workaround-ocamlbuild-272.patch";
       sha256 = "16k0w78plvqhl17qiqq1mckxhhcdysqgs94l54a1bn0l6fx3rvb9";
     })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/nocrypto/nocrypto.0.5.4-1/files/0005-use-modern-cstruct-findlib.patch";
+      sha256 = "021k38zbdidw6g7j4vjxlnbsrnzq07bnavxzdjq23nbwlifs2nq9";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/nocrypto/nocrypto.0.5.4-1/files/0006-explicit-dependency-on-sexplib.patch";
+      sha256 = "15kd0qgi96yxr3qkmaqny591l0s6qmwpprxd5xdx9qwv72hq813z";
+    })
   ];
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg cpuid ocb-stubblr ];
-  propagatedBuildInputs = [ cstruct ppx_sexp_conv zarith ] ++ optional withLwt cstruct-lwt;
+  nativeBuildInputs = [ ocaml findlib ocamlbuild cc-wrapper ];
+  buildInputs = [ ocamlbuild findlib topkg cpuid ocb-stubblr ];
+  propagatedBuildInputs = [ cstruct ppx_deriving ppx_sexp_conv sexplib zarith ] ++ optional withLwt cstruct-lwt;
 
   buildPhase = "${topkg.buildPhase} --with-lwt ${boolToString withLwt}";
   inherit (topkg) installPhase;

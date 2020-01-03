@@ -1,0 +1,23 @@
+diff -ru old/webkitgtk-2.26.0/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp webkitgtk-2.26.0/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp
+--- old/webkitgtk-2.26.0/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp	2019-09-09 04:47:07.000000000 -0400
++++ webkitgtk-2.26.0/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp	2019-09-20 21:14:10.537921173 -0400
+@@ -585,7 +585,7 @@
+         { SCMP_SYS(keyctl), nullptr },
+         { SCMP_SYS(request_key), nullptr },
+ 
+-        // Scary VM/NUMA ops 
++        // Scary VM/NUMA ops
+         { SCMP_SYS(move_pages), nullptr },
+         { SCMP_SYS(mbind), nullptr },
+         { SCMP_SYS(get_mempolicy), nullptr },
+@@ -724,6 +724,10 @@
+         "--ro-bind-try", "/usr/local/lib64", "/usr/local/lib64",
+ 
+         "--ro-bind-try", PKGLIBEXECDIR, PKGLIBEXECDIR,
++
++        // Nix Directories
++        "--ro-bind", "@storeDir@", "@storeDir@",
++        "--ro-bind", "/run/current-system", "/run/current-system",
+     };
+     // We would have to parse ld config files for more info.
+     bindPathVar(sandboxArgs, "LD_LIBRARY_PATH");

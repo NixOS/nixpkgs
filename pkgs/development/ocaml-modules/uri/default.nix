@@ -1,18 +1,18 @@
-{ lib, fetchurl, buildDunePackage, ppx_sexp_conv, ounit
-, re, sexplib0, stringext
+{ lib, fetchurl, buildDunePackage, ounit
+, re, stringext
 }:
 
 buildDunePackage rec {
   pname = "uri";
-  version = "2.2.0";
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "1q0xmc93l46dilxclkmai7w952bdi745rhvsx5vissaigcj9wbwi";
+    sha256 = "1yhrgm3hbn0hh4jdmcrvxinazgg8vrm0vn425sg8ggzblvxk9cwg";
   };
 
   buildInputs = [ ounit ];
-  propagatedBuildInputs = [ ppx_sexp_conv re sexplib0 stringext ];
+  propagatedBuildInputs = [ re stringext ];
   doCheck = true;
 
   meta = {

@@ -49,6 +49,7 @@ in buildGoModule rec {
   '';
 
   postInstall = ''
+    wrapProgram $out/bin/${pname} --prefix PATH : $out/bin:${stdenv.lib.makeBinPath binPath}
     mkdir -p $out/share/bash-completion/completions/
     MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $out/bin/minikube completion bash > $out/share/bash-completion/completions/minikube
     mkdir -p $out/share/zsh/site-functions/

@@ -214,7 +214,7 @@ in rec {
 
   jvmci8 = stdenv.mkDerivation rec {
     version = "19.2-b01";
-    name = "jvmci-${version}";
+    pname = "jvmci";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
@@ -270,7 +270,7 @@ in rec {
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
     '';
     postFixup = openjdk.postFixup or null;
@@ -280,7 +280,7 @@ in rec {
 
   graalvm8 = stdenv.mkDerivation rec {
     inherit version;
-    name = "graal-${version}";
+    pname = "graal";
     src = fetchFromGitHub {
       owner  = "oracle";
       repo   = "graal";
@@ -293,7 +293,7 @@ in rec {
                     # gfortran readline bzip2 lzma pcre.dev curl ed ## WIP: fastr dependencies
                   ];
     postUnpack = ''
-      cp ${stdenv.cc.cc}/include/c++/${stdenv.cc.cc.version}/stdlib.h \
+      cp ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/stdlib.h \
         $sourceRoot/sulong/projects/com.oracle.truffle.llvm.libraries.bitcode/include
       cp ${truffleMake} $TMP && mv *truffle.make truffle.make
       rm $sourceRoot/truffle/src/libffi/patches/others/0001-Add-mx-bootstrap-Makefile.patch
@@ -318,7 +318,7 @@ in rec {
         --replace 'protected String compilerCommand = "cc";' 'protected String compilerCommand = "${stdenv.cc}/bin/cc";'
       # prevent cyclical imports caused by identical <include> names
       substituteInPlace sulong/projects/com.oracle.truffle.llvm.libraries.bitcode/include/stdlib.h \
-        --replace '# include <cstdlib>' '# include "${stdenv.cc.cc}/include/c++/${stdenv.cc.cc.version}/cstdlib"'
+        --replace '# include <cstdlib>' '# include "${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/cstdlib"'
       # dragonegg can't seem to compile on nix, so let's not require it
       substituteInPlace sulong/mx.sulong/suite.py \
         --replace '"requireDragonegg" : True,' '"requireDragonegg" : False,'

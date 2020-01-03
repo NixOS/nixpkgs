@@ -13,8 +13,6 @@
 , udev
 , wingpanel
 , libgee
-, elementary-icon-theme
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +28,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -40,12 +38,10 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
     bamf
-    elementary-icon-theme
     granite
     gtk3
     libgee
@@ -54,7 +50,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py

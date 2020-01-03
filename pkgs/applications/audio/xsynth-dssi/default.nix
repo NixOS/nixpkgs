@@ -2,11 +2,11 @@
 ladspaH, ladspaPlugins, liblo, pkgconfig }:
 
 stdenv.mkDerivation  rec {
-  name = "xsynth-dssi-${version}";
+  pname = "xsynth-dssi";
   version = "0.9.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dssi/${name}.tar.gz";
+    url = "mirror://sourceforge/dssi/${pname}-${version}.tar.gz";
     sha256 = "00nwv2pqjbmxqdc6xdm0cljq6z05lv4y6bibmhz1kih9lm0lklnk";
   };
 

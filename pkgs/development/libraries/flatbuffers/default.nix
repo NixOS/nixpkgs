@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "flatbuffers-${version}";
+  pname = "flatbuffers";
   version = "1.10.0";
 
   src = fetchFromGitHub {

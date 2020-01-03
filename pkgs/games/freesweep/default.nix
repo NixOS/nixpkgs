@@ -2,7 +2,7 @@
   updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
-  name = "freesweep-${version}";
+  pname = "freesweep";
   version = "1.0.1";
 
   src = fetchFromGitHub {

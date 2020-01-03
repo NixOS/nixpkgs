@@ -8,7 +8,7 @@
 , git
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "unstable-20160819";
   pname = "nxt-python";
   disabled = isPy3k;

@@ -18,10 +18,10 @@ index f87d8a454..b4d3f5d10 100644
  fi
  GLUSTERFS_LIBEXECDIR="$(eval echo $libexecdir)/glusterfs"
 -GLUSTERFSD_MISCDIR="$(eval echo $prefix)/var/lib/misc/glusterfsd"
-+GLUSTERFSD_MISCDIR="$(eval echo $localstatedir)/var/lib/misc/glusterfsd"
++GLUSTERFSD_MISCDIR="$(eval echo $localstatedir)/lib/misc/glusterfsd"
  prefix=$old_prefix
  exec_prefix=$old_exec_prefix
- 
--- 
+
+--
 2.12.0
 

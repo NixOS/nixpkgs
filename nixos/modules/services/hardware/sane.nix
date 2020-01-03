@@ -76,7 +76,7 @@ in
     };
 
     hardware.sane.configDir = mkOption {
-      type = types.string;
+      type = types.str;
       internal = true;
       description = "The value of SANE_CONFIG_DIR.";
     };
@@ -124,7 +124,7 @@ in
       environment.sessionVariables = env;
       services.udev.packages = backends;
 
-      users.groups."scanner".gid = config.ids.gids.scanner;
+      users.groups.scanner.gid = config.ids.gids.scanner;
     })
 
     (mkIf config.services.saned.enable {
@@ -152,7 +152,7 @@ in
         };
       };
 
-      users.users."scanner" = {
+      users.users.scanner = {
         uid = config.ids.uids.scanner;
         group = "scanner";
       };

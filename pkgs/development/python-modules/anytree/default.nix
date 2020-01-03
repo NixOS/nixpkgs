@@ -11,25 +11,19 @@
 
 buildPythonPackage rec {
   pname = "anytree";
-  version = "2.6.0";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "c0fec0de";
     repo = pname;
     rev = version;
-    sha256 = "1k3yj9h3ssjlz57r4g1qzxvprxjp7n92vms9fv0d46pigylxm5i3";
+    sha256 = "0ag5ir9h5p7rbm2pmpxlkflwigrm7z4afh24jvbhqj7pyrbjmk9w";
   };
 
   patches = [
     (substituteAll {
       src = ./graphviz.patch;
       inherit graphviz;
-    })
-    # Fix tests python3.7
-    # See: https://github.com/c0fec0de/anytree/pull/85
-    (fetchpatch {
-      url = "https://github.com/c0fec0de/anytree/commit/dd1b3d325546fef7436711e4cfea9a5fb61daaf8.patch";
-      sha256 = "1dpa2jh2kakfaapnqrz03frb67q5fwxzc8c70i6nv1b01i9xw0bn";
     })
   ];
 

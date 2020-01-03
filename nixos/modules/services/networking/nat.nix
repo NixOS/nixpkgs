@@ -7,29 +7,36 @@
 with lib;
 
 let
-
   cfg = config.networking.nat;
 
   dest = if cfg.externalIP == null then "-j MASQUERADE" else "-j SNAT --to-source ${cfg.externalIP}";
 
+  helpers = import ./helpers.nix { inherit config lib; };
+
   flushNat = ''
-    iptables -w -t nat -D PREROUTING -j nixos-nat-pre 2>/dev/null|| true
-    iptables -w -t nat -F nixos-nat-pre 2>/dev/null || true
-    iptables -w -t nat -X nixos-nat-pre 2>/dev/null || true
-    iptables -w -t nat -D POSTROUTING -j nixos-nat-post 2>/dev/null || true
-    iptables -w -t nat -F nixos-nat-post 2>/dev/null || true
-    iptables -w -t nat -X nixos-nat-post 2>/dev/null || true
+    ${helpers}
+    ip46tables -w -t nat -D PREROUTING -j nixos-nat-pre 2>/dev/null|| true
+    ip46tables -w -t nat -F nixos-nat-pre 2>/dev/null || true
+    ip46tables -w -t nat -X nixos-nat-pre 2>/dev/null || true
+    ip46tables -w -t nat -D POSTROUTING -j nixos-nat-post 2>/dev/null || true
+    ip46tables -w -t nat -F nixos-nat-post 2>/dev/null || true
+    ip46tables -w -t nat -X nixos-nat-post 2>/dev/null || true
+    ip46tables -w -t nat -D OUTPUT -j nixos-nat-out 2>/dev/null || true
+    ip46tables -w -t nat -F nixos-nat-out 2>/dev/null || true
+    ip46tables -w -t nat -X nixos-nat-out 2>/dev/null || true
 
     ${cfg.extraStopCommands}
   '';
 
   setupNat = ''
+    ${helpers}
     # Create subchain where we store rules
-    iptables -w -t nat -N nixos-nat-pre
-    iptables -w -t nat -N nixos-nat-post
+    ip46tables -w -t nat -N nixos-nat-pre
+    ip46tables -w -t nat -N nixos-nat-post
+    ip46tables -w -t nat -N nixos-nat-out
 
     # We can't match on incoming interface in POSTROUTING, so
-    # mark packets coming from the external interfaces.
+    # mark packets coming from the internal interfaces.
     ${concatMapStrings (iface: ''
       iptables -w -t nat -A nixos-nat-pre \
         -i '${iface}' -j MARK --set-mark 1
@@ -88,8 +95,9 @@ let
     ${cfg.extraCommands}
 
     # Append our chains to the nat tables
-    iptables -w -t nat -A PREROUTING -j nixos-nat-pre
-    iptables -w -t nat -A POSTROUTING -j nixos-nat-post
+    ip46tables -w -t nat -A PREROUTING -j nixos-nat-pre
+    ip46tables -w -t nat -A POSTROUTING -j nixos-nat-post
+    ip46tables -w -t nat -A OUTPUT -j nixos-nat-out
   '';
 
 in

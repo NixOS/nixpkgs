@@ -201,7 +201,7 @@ in {
 
   };
 
-  text2skin = stdenv.mkDerivation rec {
+  text2skin = stdenv.mkDerivation {
     name = "vdr-text2skin-1.3.4-20170702";
 
     src = fetchgit {

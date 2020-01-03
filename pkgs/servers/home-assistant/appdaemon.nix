@@ -52,11 +52,15 @@ in python.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python.pkgs; [
     daemonize astral requests sseclient websocket_client aiohttp yarl jinja2
-    aiohttp-jinja2 pyyaml voluptuous feedparser iso8601 bcrypt paho-mqtt
+    aiohttp-jinja2 pyyaml voluptuous feedparser iso8601 bcrypt paho-mqtt setuptools
   ];
 
   # no tests implemented
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "pyyaml==5.1" "pyyaml"
+  '';
 
   meta = with lib; {
     description = "Sandboxed python execution environment for writing automation apps for Home Assistant";

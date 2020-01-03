@@ -1,8 +1,8 @@
-{ stdenv, fetchFromBitbucket, cmake, SDL, libGLU_combined, upx, zlib }:
+{ stdenv, fetchFromBitbucket, cmake, SDL, libGLU, libGL, upx, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "libtcod-${version}";
+  pname = "libtcod";
   version = "1.5.1";
 
   src = fetchFromBitbucket {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags="-DLIBTCOD_SAMPLES=OFF";
 
-  buildInputs = [ cmake SDL libGLU_combined upx zlib ];
+  buildInputs = [ cmake SDL libGLU libGL upx zlib ];
 
   meta = {
     description = "API for roguelike games";

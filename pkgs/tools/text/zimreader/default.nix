@@ -2,7 +2,7 @@
 , zimlib, cxxtools, tntnet
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "zimreader-0.92";
 
   src = fetchFromGitHub {

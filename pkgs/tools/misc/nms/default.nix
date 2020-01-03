@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "nms-${version}";
+  pname = "nms";
   version = "0.3.3";
 
   src = fetchFromGitHub {

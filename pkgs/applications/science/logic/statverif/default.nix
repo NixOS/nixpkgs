@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml }:
 
 stdenv.mkDerivation rec {
-  name = "statverif-${version}";
+  pname = "statverif";
   version = "1.86pl4";
 
   src = fetchurl {

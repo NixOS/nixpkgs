@@ -3,15 +3,14 @@
 }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-calendar";
-  version = "1.2.10";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "00aqx24jccf88vvkpb9svyjz8knrqyjgd0152psf9dxc9q13f61h";
+    sha256 = "1zzr3crkz4l5l135y0m53vqhv7fkrbvbspk8295swz9gsm3f7ah9";
   };
 
   nativeBuildInputs = [
@@ -38,7 +37,7 @@ mkDerivation rec {
       -e "s,/usr/bin/deepin-desktop-ts-convert,deepin-desktop-ts-convert,"
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Calendar for Deepin Desktop Environment";

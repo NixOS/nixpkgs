@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, hepmc2, lhapdf, pythia, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "sacrifice-${version}";
+stdenv.mkDerivation {
+  pname = "sacrifice";
   version = "1.0.0";
 
   src = fetchurl {

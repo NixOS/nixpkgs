@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, alsaLib, cmake, libGLU_combined, makeWrapper, qt4 }:
+{ stdenv, fetchurl, alsaLib, cmake, libGLU, libGL, makeWrapper, qt4 }:
 
-stdenv.mkDerivation  rec {
-  name = "pianobooster-${version}";
+stdenv.mkDerivation  {
+  pname = "pianobooster";
   version = "0.6.4b";
 
   src = fetchurl {
@@ -16,12 +16,13 @@ stdenv.mkDerivation  rec {
 
   preConfigure = "cd src";
 
-  buildInputs = [ alsaLib cmake makeWrapper libGLU_combined qt4 ];
+  buildInputs = [ alsaLib cmake makeWrapper libGLU libGL qt4 ];
   NIX_LDFLAGS = [ "-lGL" "-lpthread" ];
 
   postInstall = ''
     wrapProgram $out/bin/pianobooster \
-      --prefix LD_LIBRARY_PATH : ${libGLU_combined}/lib
+      --prefix LD_LIBRARY_PATH : ${libGL}/lib \
+      --prefix LD_LIBRARY_PATH : ${libGLU}/lib
   '';
 
   meta = with stdenv.lib; {

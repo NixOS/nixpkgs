@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub , boost, cairomm, cmake, libsndfile, lv2, ntk, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
-  name = "sorcer-${version}";
+  pname = "sorcer";
   version = "1.1.3";
 
   src = fetchFromGitHub {

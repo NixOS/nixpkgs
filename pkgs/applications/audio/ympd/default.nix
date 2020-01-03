@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, mpd_clientlib, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "ympd-${version}";
+  pname = "ympd";
   version = "1.3.0";
 
   src = fetchFromGitHub {

@@ -1,11 +1,9 @@
-{ stdenv, makeWrapper, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2, at-spi2-atk
-, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
+{ stdenv, makeWrapper, fetchurl, dpkg, alsaLib, atk, cairo, cups, dbus, expat
+, fontconfig, freetype, gdk-pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2
+, at-spi2-atk, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
-, libudev0-shim, glibc, curl, openssl, autoPatchelfHook
-}:
+, libudev0-shim, glibc, curl, openssl, autoPatchelfHook }:
 
 let
   runtimeLibs = stdenv.lib.makeLibraryPath [
@@ -17,20 +15,17 @@ let
     stdenv.cc.cc
   ];
 in stdenv.mkDerivation rec {
-  name = "insomnia-${version}";
-  version = "6.5.3";
+  pname = "insomnia";
+  version = "7.0.5";
 
   src = fetchurl {
-    url = "https://github.com/getinsomnia/insomnia/releases/download/v${version}/insomnia_${version}_amd64.deb";
-    sha256 = "0km7anw5xpcfr6j7pwqhv26pk7nxv1jywqlz0lpvgj6w85aafcm3";
+    url =
+      "https://github.com/getinsomnia/insomnia/releases/download/v${version}/insomnia_${version}_amd64.deb";
+    sha256 = "1zcxldfi4rxg7rr6r588blhihyh7ggcdy32vwzjklgq7ihsvx5bs";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    makeWrapper
-    gobject-introspection wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ autoPatchelfHook dpkg makeWrapper gobject-introspection wrapGAppsHook ];
 
   buildInputs = [
     alsaLib
@@ -87,11 +82,11 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://insomnia.rest/;
+    homepage = "https://insomnia.rest/";
     description = "The most intuitive cross-platform REST API Client";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ markus1189 ];
+    maintainers = with maintainers; [ markus1189 babariviere ];
   };
 
 }

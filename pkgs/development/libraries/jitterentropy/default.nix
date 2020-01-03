@@ -1,19 +1,22 @@
 { stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
-  name = "jitterentropy-${version}";
-  version = "2.1.2";
+  pname = "jitterentropy";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "jitterentropy-library";
     rev = "v${version}";
-    sha256 = "10yl1hi0hysr53wzy2i8brs0qqnxh46mz3dcjh5mk0ad03wvbfsl";
+    sha256 = "0n2l1fxr7bynnarpwdjifb2fvlsq8w5wmfh31yk5nrc756cjlgyw";
   };
 
   enableParallelBuilding = true;
 
   preInstall = ''
     mkdir -p $out/include
+    substituteInPlace Makefile \
+      --replace "install -m 0755 -s" \
+                'install -m 0755 -s --strip-program $(STRIP)'
   '';
 
   installFlags = [

@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   hamcrestCore_1_3 = map (obj: fetchMaven {
     version = "1.3";
     artifactId = "hamcrest-core";

@@ -3,7 +3,7 @@
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio }:
 
 stdenv.mkDerivation rec {
-  name = "mimic-${version}";
+  pname = "mimic";
   version = "1.2.0.2";
 
   src = fetchFromGitHub {

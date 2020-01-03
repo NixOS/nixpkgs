@@ -2,11 +2,11 @@
 , serd, sord , sratom, suil, wafHook }:
 
 stdenv.mkDerivation  rec {
-  name = "jalv-${version}";
+  pname = "jalv";
   version = "1.6.2";
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${name}.tar.bz2";
+    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
     sha256 = "13al2hb9s3m7jgbg051x704bmzmcg4wb56cfh8z588kiyh0mxpaa";
   };
 

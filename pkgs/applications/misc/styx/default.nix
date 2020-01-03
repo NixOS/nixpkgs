@@ -3,7 +3,7 @@
 , perlPackages, python27 }:
 
 stdenv.mkDerivation rec {
-  name    = "styx-${version}";
+  pname = "styx";
   version = "0.7.1";
 
   src = fetchFromGitHub {

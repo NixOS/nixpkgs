@@ -14,10 +14,10 @@ let
     builtins.map
       (subsetname: {
         subsetname = subsetname;
-        functions = libDefPos toplib."${subsetname}";
+        functions = libDefPos toplib.${subsetname};
       })
       (builtins.filter
-        (name: builtins.isAttrs toplib."${name}")
+        (name: builtins.isAttrs toplib.${name})
         (builtins.attrNames toplib));
 
   nixpkgsLib = pkgs.lib;

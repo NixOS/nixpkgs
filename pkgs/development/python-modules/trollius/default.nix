@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "trollius";
-  version = "2.2";
+  version = "2.2.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "093978388qvw5hyscbbj062dbdc2761xs9yzrq26mh63g689lnxk";
+    sha256 = "06s44k6pcq35vl5j4i2pgkpb848djal818qypcvx44gyn4azjrqn";
   };
 
   checkInputs = [ mock ] ++ lib.optional (!isPy3k) unittest2;

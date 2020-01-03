@@ -1,5 +1,5 @@
 { fetchurl, ... }:
-rec {
+{
   baseName = ''eos'';
   version = ''20150608-git'';
 

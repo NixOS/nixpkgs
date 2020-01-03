@@ -1,7 +1,7 @@
 { stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
 , mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "x2goclient";
   version = "unstable-2019-07-24";
 

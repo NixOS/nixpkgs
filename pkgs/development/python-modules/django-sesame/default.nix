@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "django-sesame";
-  version = "1.4";
+  version = "1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "081q3vd9waiajiipg99flw0vlzk920sz07067v3n5774gx0qhbaa";
+    sha256 = "e68bad4a6ef44322380f1f01d009f9d3cb55d1ffef0b669574b511db5ab0c6c0";
   };
 
   checkInputs = [ django ];

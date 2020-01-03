@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU_combined
+{ stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU, libGL
 , freeglut ? null, openal ? null, SDL2 ? null }:
 
 stdenv.mkDerivation rec {
-  name = "yabause-${version}";
+  pname = "yabause";
   version = "0.9.15";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/yabause/releases/${version}/${name}.tar.gz";
+    url = "https://download.tuxfamily.org/yabause/releases/${version}/${pname}-${version}.tar.gz";
     sha256 = "1cn2rjjb7d9pkr4g5bqz55vd4pzyb7hg94cfmixjkzzkw0zw8d23";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qtbase qt5.qtmultimedia libGLU_combined freeglut openal SDL2 ];
+  buildInputs = [ qtbase qt5.qtmultimedia libGLU libGL freeglut openal SDL2 ];
 
   patches = [
     ./linkage-rwx-linux-elf.patch

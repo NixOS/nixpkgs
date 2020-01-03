@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "alchemy-${version}";
+  pname = "alchemy";
   version = "008";
 
   enableParallelBuilding = true;

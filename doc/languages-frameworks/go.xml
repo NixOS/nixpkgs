@@ -7,21 +7,16 @@
   <title>Go modules</title>
 
   <para>
-   The function <varname> buildGoModule </varname> builds Go programs managed
-   with Go modules. It builds a
-   <link xlink:href="https://github.com/golang/go/wiki/Modules">Go
-   modules</link> through a two phase build:
+   The function <varname> buildGoModule </varname> builds Go programs managed with Go modules. It builds a <link xlink:href="https://github.com/golang/go/wiki/Modules">Go modules</link> through a two phase build:
    <itemizedlist>
     <listitem>
      <para>
-      An intermediate fetcher derivation. This derivation will be used to fetch
-      all of the dependencies of the Go module.
+      An intermediate fetcher derivation. This derivation will be used to fetch all of the dependencies of the Go module.
      </para>
     </listitem>
     <listitem>
      <para>
-      A final derivation will use the output of the intermediate derivation to
-      build the binaries and produce the final output.
+      A final derivation will use the output of the intermediate derivation to build the binaries and produce the final output.
      </para>
     </listitem>
    </itemizedlist>
@@ -31,7 +26,7 @@
    <title>buildGoModule</title>
 <programlisting>
 pet = buildGoModule rec {
-  name = "pet-${version}";
+  pname = "pet";
   version = "0.3.4";
 
   src = fetchFromGitHub {
@@ -57,21 +52,16 @@ pet = buildGoModule rec {
   </example>
 
   <para>
-   <xref linkend='ex-buildGoModule'/> is an example expression using
-   buildGoModule, the following arguments are of special significance to the
-   function:
+   <xref linkend='ex-buildGoModule'/> is an example expression using buildGoModule, the following arguments are of special significance to the function:
    <calloutlist>
     <callout arearefs='ex-buildGoModule-1'>
      <para>
-      <varname>modSha256</varname> is the hash of the output of the
-      intermediate fetcher derivation.
+      <varname>modSha256</varname> is the hash of the output of the intermediate fetcher derivation.
      </para>
     </callout>
     <callout arearefs='ex-buildGoModule-2'>
      <para>
-      <varname>subPackages</varname> limits the builder from building child
-      packages that have not been listed. If <varname>subPackages</varname> is
-      not specified, all child packages will be built.
+      <varname>subPackages</varname> limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
      </para>
     </callout>
    </calloutlist>
@@ -82,15 +72,14 @@ pet = buildGoModule rec {
   <title>Go legacy</title>
 
   <para>
-   The function <varname> buildGoPackage </varname> builds legacy Go programs,
-   not supporting Go modules.
+   The function <varname> buildGoPackage </varname> builds legacy Go programs, not supporting Go modules.
   </para>
 
   <example xml:id='ex-buildGoPackage'>
    <title>buildGoPackage</title>
 <programlisting>
 deis = buildGoPackage rec {
-  name = "deis-${version}";
+  pname = "deis";
   version = "1.13.0";
 
   goPackagePath = "github.com/deis/deis"; <co xml:id='ex-buildGoPackage-1' />
@@ -111,49 +100,36 @@ deis = buildGoPackage rec {
   </example>
 
   <para>
-   <xref linkend='ex-buildGoPackage'/> is an example expression using
-   buildGoPackage, the following arguments are of special significance to the
-   function:
+   <xref linkend='ex-buildGoPackage'/> is an example expression using buildGoPackage, the following arguments are of special significance to the function:
    <calloutlist>
     <callout arearefs='ex-buildGoPackage-1'>
      <para>
-      <varname>goPackagePath</varname> specifies the package's canonical Go
-      import path.
+      <varname>goPackagePath</varname> specifies the package's canonical Go import path.
      </para>
     </callout>
     <callout arearefs='ex-buildGoPackage-2'>
      <para>
-      <varname>subPackages</varname> limits the builder from building child
-      packages that have not been listed. If <varname>subPackages</varname> is
-      not specified, all child packages will be built.
+      <varname>subPackages</varname> limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
      </para>
      <para>
-      In this example only <literal>github.com/deis/deis/client</literal> will
-      be built.
+      In this example only <literal>github.com/deis/deis/client</literal> will be built.
      </para>
     </callout>
     <callout arearefs='ex-buildGoPackage-3'>
      <para>
-      <varname>goDeps</varname> is where the Go dependencies of a Go program
-      are listed as a list of package source identified by Go import path. It
-      could be imported as a separate <varname>deps.nix</varname> file for
-      readability. The dependency data structure is described below.
+      <varname>goDeps</varname> is where the Go dependencies of a Go program are listed as a list of package source identified by Go import path. It could be imported as a separate <varname>deps.nix</varname> file for readability. The dependency data structure is described below.
      </para>
     </callout>
     <callout arearefs='ex-buildGoPackage-4'>
      <para>
-      <varname>buildFlags</varname> is a list of flags passed to the go build
-      command.
+      <varname>buildFlags</varname> is a list of flags passed to the go build command.
      </para>
     </callout>
    </calloutlist>
   </para>
 
   <para>
-   The <varname>goDeps</varname> attribute can be imported from a separate
-   <varname>nix</varname> file that defines which Go libraries are needed and
-   should be included in <varname>GOPATH</varname> for
-   <varname>buildPhase</varname>.
+   The <varname>goDeps</varname> attribute can be imported from a separate <varname>nix</varname> file that defines which Go libraries are needed and should be included in <varname>GOPATH</varname> for <varname>buildPhase</varname>.
   </para>
 
   <example xml:id='ex-goDeps'>
@@ -196,27 +172,18 @@ deis = buildGoPackage rec {
     </callout>
     <callout arearefs='ex-goDeps-3'>
      <para>
-      <varname>fetch type</varname> that needs to be used to get package
-      source. If <varname>git</varname> is used there should be
-      <varname>url</varname>, <varname>rev</varname> and
-      <varname>sha256</varname> defined next to it.
+      <varname>fetch type</varname> that needs to be used to get package source. If <varname>git</varname> is used there should be <varname>url</varname>, <varname>rev</varname> and <varname>sha256</varname> defined next to it.
      </para>
     </callout>
    </calloutlist>
   </para>
 
   <para>
-   To extract dependency information from a Go package in automated way use
-   <link xlink:href="https://github.com/kamilchm/go2nix">go2nix</link>. It can
-   produce complete derivation and <varname>goDeps</varname> file for Go
-   programs.
+   To extract dependency information from a Go package in automated way use <link xlink:href="https://github.com/kamilchm/go2nix">go2nix</link>. It can produce complete derivation and <varname>goDeps</varname> file for Go programs.
   </para>
 
   <para>
-   <varname>buildGoPackage</varname> produces
-   <xref linkend='chap-multiple-output' xrefstyle="select: title" /> where
-   <varname>bin</varname> includes program binaries. You can test build a Go
-   binary as follows:
+   <varname>buildGoPackage</varname> produces <xref linkend='chap-multiple-output' xrefstyle="select: title" /> where <varname>bin</varname> includes program binaries. You can test build a Go binary as follows:
 <screen>
 <prompt>$ </prompt>nix-build -A deis.bin
 </screen>
@@ -224,13 +191,11 @@ deis = buildGoPackage rec {
 <screen>
 <prompt>$ </prompt>nix-build -A deis.all
 </screen>
-   <varname>bin</varname> output will be installed by default with
-   <varname>nix-env -i</varname> or <varname>systemPackages</varname>.
+   <varname>bin</varname> output will be installed by default with <varname>nix-env -i</varname> or <varname>systemPackages</varname>.
   </para>
 
   <para>
-   You may use Go packages installed into the active Nix profiles by adding the
-   following to your ~/.bashrc:
+   You may use Go packages installed into the active Nix profiles by adding the following to your ~/.bashrc:
 <screen>
 for p in $NIX_PROFILES; do
     GOPATH="$p/share/go:$GOPATH"

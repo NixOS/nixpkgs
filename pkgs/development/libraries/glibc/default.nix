@@ -40,6 +40,22 @@ callPackage ./common.nix { inherit stdenv; } {
     #      limit rebuilds by only disabling pie w/musl
       ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "pie";
 
+    NIX_CFLAGS_COMPILE =
+      if !stdenv.hostPlatform.isMusl
+        # TODO: This (returning a string or `null`, instead of a list) is to
+        #       not trigger a mass rebuild due to the introduction of the
+        #       musl-specific flags below.
+        #       At next change to non-musl glibc builds, remove this `then`
+        #       and the above condition, instead keeping only the `else` below.
+        then (if withGd then "-Wno-error=stringop-truncation" else null)
+        else
+          builtins.concatLists [
+            (stdenv.lib.optional withGd "-Wno-error=stringop-truncation")
+            # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
+            # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
+            (stdenv.lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
+          ];
+
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new
     # store path than that determined when built (as a source for the

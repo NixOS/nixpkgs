@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "vrb-${version}";
+  pname = "vrb";
   version = "0.5.1";
 
   src = fetchurl {
-    url = "http://vrb.sourceforge.net/download/${name}.tar.bz2";
+    url = "http://vrb.sourceforge.net/download/${pname}-${version}.tar.bz2";
     sha256 = "d579ed1998ef2d78e2ef8481a748d26e1fa12cdda806d2e31d8ec66ffb0e289f";
   };
 

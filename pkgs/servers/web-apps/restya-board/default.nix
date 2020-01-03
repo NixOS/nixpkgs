@@ -15,7 +15,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "rstya-board-${version}";
+  pname = "rstya-board";
   version = "0.6";
 
   src = fetchurl {

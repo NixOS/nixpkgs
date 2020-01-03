@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "foremost-${version}";
+  pname = "foremost";
   version = "1.5.7";
 
   src = fetchurl {
     sha256 = "0d2zxw0ijg8cd3ksgm8cf8jg128zr5x7z779jar90g9f47pm882h";
-    url = "http://foremost.sourceforge.net/pkg/${name}.tar.gz";
+    url = "http://foremost.sourceforge.net/pkg/${pname}-${version}.tar.gz";
   };
 
   patches = [ ./makefile.patch ];

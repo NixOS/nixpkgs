@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub, keybase }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "kbfs";
 
   inherit (keybase) src version;

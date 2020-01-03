@@ -5,7 +5,7 @@
 let
 
   qt5Deps = pkgs: with pkgs.qt5; [ qtbase qtmultimedia ];
-  gnome3Deps = pkgs: with pkgs.gnome3; [ zenity gtksourceview gnome-desktop libgnome-keyring webkitgtk ];
+  gnome3Deps = pkgs: with pkgs; [ gnome3.zenity gtksourceview gnome3.gnome-desktop gnome3.libgnome-keyring webkitgtk ];
   xorgDeps = pkgs: with pkgs.xorg; [
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
@@ -23,13 +23,13 @@ in buildFHSUserEnv {
     allegro dumb
 
     # Desmume
-    lua agg soundtouch openal desktop-file-utils pangox_compat atk
+    lua agg soundtouch openal desktop-file-utils atk
 
     # DGen // TODO: libarchive is broken
 
     # Dolphin
     bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
-    wavpack gnutls-kdh orc nettle gmp pcre vulkan-loader
+    wavpack orc nettle gmp pcre vulkan-loader
 
     # DOSBox
     SDL_net SDL_sound
@@ -92,7 +92,7 @@ in buildFHSUserEnv {
   multiPkgs = pkgs: with pkgs; [
     # Common
     libsndfile libtheora libogg libvorbis libopus libGLU libpcap libpulseaudio
-    libao libusb libevdev libudev libgcrypt libxml2 libusb libpng libmpeg2 libv4l
+    libao libusb libevdev udev libgcrypt libxml2 libusb libpng libmpeg2 libv4l
     libjpeg libxkbcommon libass libcdio libjack2 libsamplerate libzip libmad libaio
     libcap libtiff libva libgphoto2 libxslt libtxc_dxtn libsndfile giflib zlib glib
     alsaLib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
@@ -104,6 +104,9 @@ in buildFHSUserEnv {
     # WINE
     cups lcms2 mpg123 cairo unixODBC samba4 sane-backends openldap
     ocl-icd utillinux
+
+    # Winetricks
+    fribidi
   ] ++ xorgDeps pkgs;
 
   extraInstallCommands = ''

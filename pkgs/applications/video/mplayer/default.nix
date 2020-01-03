@@ -2,7 +2,7 @@
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
-, x11Support ? true, libX11 ? null, libXext ? null, libGLU_combined ? null
+, x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -32,7 +32,7 @@
 assert fontconfigSupport -> (fontconfig != null);
 assert (!fontconfigSupport) -> (freefont_ttf != null);
 assert fribidiSupport -> (fribidi != null);
-assert x11Support -> (libX11 != null && libXext != null && libGLU_combined != null);
+assert x11Support -> (libX11 != null && libXext != null && libGLU != null && libGL != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
 assert alsaSupport -> alsaLib != null;
@@ -59,20 +59,21 @@ let
   codecs_src =
     let
       dir = http://www.mplayerhq.hu/MPlayer/releases/codecs/;
+      version = "20071007";
     in
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
-      url = "${dir}/essential-20071007.tar.bz2";
+      url = "${dir}/essential-${version}.tar.bz2";
       sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
     } else if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
-      url = "${dir}/essential-amd64-20071007.tar.bz2";
+      url = "${dir}/essential-amd64-${version}.tar.bz2";
       sha256 = "13xf5b92w1ra5hw00ck151lypbmnylrnznq9hhb0sj36z5wz290x";
     } else if stdenv.hostPlatform.system == "powerpc-linux" then fetchurl {
-      url = "${dir}/essential-ppc-20071007.tar.bz2";
+      url = "${dir}/essential-ppc-${version}.tar.bz2";
       sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
     } else null;
 
   codecs = if codecs_src != null then stdenv.mkDerivation {
-    name = "MPlayer-codecs-essential-20071007";
+    pname = "MPlayer-codecs-essential";
 
     src = codecs_src;
 
@@ -89,11 +90,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer-1.3.0";
+  pname = "mplayer";
+  version = "1.4";
 
   src = fetchurl {
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.3.0.tar.xz";
-    sha256 = "0hwqn04bdknb2ic88xd75smffxx63scvz0zvwvjb56nqj9n89l1s";
+    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-${version}.tar.xz";
+    sha256 = "0j5mflr0wnklxsvnpmxvk704hscyn2785hvvihj2i3a7b3anwnc2";
   };
 
   prePatch = ''
@@ -109,7 +111,7 @@ stdenv.mkDerivation rec {
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
-    ++ optionals x11Support [ libX11 libXext libGLU_combined ]
+    ++ optionals x11Support [ libX11 libXext libGLU libGL ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
     ++ optional theoraSupport libtheora
@@ -218,6 +220,6 @@ stdenv.mkDerivation rec {
     homepage = http://mplayerhq.hu;
     license = "GPL";
     maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

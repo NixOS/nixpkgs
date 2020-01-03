@@ -6,7 +6,8 @@ let
   version = "5.7";
 
 in stdenv.mkDerivation {
-  name = "globalarrays-${version}";
+  pname = "globalarrays";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";

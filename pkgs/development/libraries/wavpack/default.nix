@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libiconv, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "wavpack-${version}";
+  pname = "wavpack";
   version = "5.1.0";
 
   enableParallelBuilding = true;
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   src = fetchurl {
-    url = "http://www.wavpack.com/${name}.tar.bz2";
+    url = "http://www.wavpack.com/${pname}-${version}.tar.bz2";
     sha256 = "0i19c6krc0p9krwrqy9s5xahaafigqzxcn31piidmlaqadyn4f8r";
   };
 
@@ -68,6 +68,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/dbry/WavPack/commit/33a0025d1d63ccd05d9dbaa6923d52b1446a62fe.patch";
       name = "CVE-2019-1010319.patch";
       sha256 = "011sqdgpykilaj2c4ns298z7aad03yprpva0dqr39nx88ji6jnrb";
+    })
+    (fetchpatch {
+      url = "https://github.com/dbry/WavPack/commit/36a24c7881427d2e1e4dc1cef58f19eee0d13aec.patch";
+      name = "CVE-2018-7253.patch";
+      sha256 = "130kvmlpaj6x1pm6qzdzrmf4xzhp0pj29qrardb76zcfinx5pk2n";
+    })
+    (fetchpatch {
+      url = "https://github.com/dbry/WavPack/commit/8e3fe45a7bac31d9a3b558ae0079e2d92a04799e.patch";
+      name = "CVE-2018-7254.patch";
+      sha256 = "06fdzw2cbdj8ajf171z1g53cl6bf1cdh2czswqldrqqvv3jkzk77";
     })
   ];
 

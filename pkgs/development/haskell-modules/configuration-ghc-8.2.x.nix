@@ -43,8 +43,8 @@ self: super: {
   stm = self.stm_2_5_0_0;
   text = self.text_1_2_4_0;
 
-  # Build with the latest Cabal version, which works best albeit not perfectly.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_2_2_0_1; };
+  # Needs Cabal 3.0.x.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_0_0_0; };
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {

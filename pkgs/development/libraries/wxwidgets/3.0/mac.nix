@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.0.4";
-  name = "wxmac-${version}";
+  pname = "wxmac";
 
   src = fetchzip {
     url = "https://github.com/wxWidgets/wxWidgets/archive/v${version}.tar.gz";

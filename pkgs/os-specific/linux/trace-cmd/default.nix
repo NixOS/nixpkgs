@@ -1,7 +1,7 @@
 { stdenv, fetchgit, asciidoc, docbook_xsl, libxslt }:
-stdenv.mkDerivation rec {
-  name    = "trace-cmd-${version}";
-  version = "2.8.3";
+stdenv.mkDerivation {
+  pname = "trace-cmd";
+  version = "2.9-dev";
 
   src = fetchgit (import ./src.nix);
 
@@ -17,18 +17,14 @@ stdenv.mkDerivation rec {
 
   buildPhase = "make trace-cmd libs doc";
 
-  installTargets = [ "install_cmd" "install_libs" "install_man" ];
+  installTargets = [ "install_cmd" "install_libs" "install_doc" ];
   installFlags = [
     "bindir=${placeholder "out"}/bin"
     "man_dir=${placeholder "man"}/share/man"
     "libdir=${placeholder "lib"}/lib"
-    "includedir=${placeholder "dev"}/include/trace-cmd"
+    "includedir=${placeholder "dev"}/include"
     "BASH_COMPLETE_DIR=${placeholder "out"}/etc/bash_completion.d"
   ];
-
-  postInstall = ''
-    mv $dev/include/trace-cmd/traceevent $dev/include/traceevent
-  '';
 
   meta = with stdenv.lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";

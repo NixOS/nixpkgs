@@ -1,6 +1,6 @@
 { lib, bundlerApp, ruby, bundlerUpdateScript }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "colorls";
 
   gemdir = ./.;

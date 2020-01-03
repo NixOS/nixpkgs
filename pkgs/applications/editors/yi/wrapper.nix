@@ -8,8 +8,8 @@ let
   yiEnv = haskellPackages.ghcWithPackages
     (self: [ self.yi ] ++ extraPackages self);
 in
-stdenv.mkDerivation rec {
-  name = "yi-custom-${version}";
+stdenv.mkDerivation {
+  pname = "yi-custom";
   version = "0.0.0.1";
   dontUnpack = true;
   nativeBuildInputs = [ makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Allows Yi to find libraries and the compiler easily";
     # This wrapper and wrapper only is under PD
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
   };
 
 }

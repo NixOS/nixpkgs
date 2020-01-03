@@ -8,15 +8,11 @@ let
 
   mysql = cfg.package;
 
-  isMariaDB =
-    let
-      pName = _p: (builtins.parseDrvName (_p.name)).name;
-    in pName mysql == pName pkgs.mariadb;
+  isMariaDB = lib.getName mysql == lib.getName pkgs.mariadb;
+
   isMysqlAtLeast57 =
-    let
-      pName = _p: (builtins.parseDrvName (_p.name)).name;
-    in (pName mysql == pName pkgs.mysql57)
-       && ((builtins.compareVersions mysql.version "5.7") >= 0);
+    (lib.getName mysql == lib.getName pkgs.mysql57)
+     && (builtins.compareVersions mysql.version "5.7" >= 0);
 
   mysqldOptions =
     "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
@@ -28,6 +24,10 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd")
+    (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
+  ];
 
   ###### interface
 
@@ -272,8 +272,13 @@ in
       port = ${toString cfg.port}
       datadir = ${cfg.dataDir}
       ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
-      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
-      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
+      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave")
+      ''
+        log-bin=mysql-bin-${toString cfg.replication.serverId}
+        log-bin-index=mysql-bin-${toString cfg.replication.serverId}.index
+        relay-log=mysql-relay-bin
+        server-id = ${toString cfg.replication.serverId}
+      ''}
       ${optionalString (cfg.ensureUsers != [])
       ''
         plugin-load-add = auth_socket.so
@@ -381,6 +386,7 @@ in
 
                         ( echo "stop slave;"
                           echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
+                          echo "set global slave_exec_mode='IDEMPOTENT';"
                           echo "start slave;"
                         ) | ${mysql}/bin/mysql -u root -N
                       ''}

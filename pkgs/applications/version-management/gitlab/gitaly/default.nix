@@ -17,14 +17,14 @@ let
       };
   };
 in buildGoPackage rec {
-  version = "1.47.0";
-  name = "gitaly-${version}";
+  version = "1.72.1";
+  pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "1b8gshvwiypwl0f4963l37y7sjrn851marr77fhczx128axrniiw";
+    sha256 = "0gnhw7p8fgy3w15828qjgkkxcd4dg7gf1hpanc3xqawb8jqpfc91";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
@@ -40,7 +40,7 @@ in buildGoPackage rec {
 
   postInstall = ''
     mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib,git-hooks,gitlab-shell} $ruby
+    cp -rv $src/ruby/{bin,lib,proto,git-hooks,gitlab-shell} $ruby
 
     # gitlab-shell will try to read its config relative to the source
     # code by default which doesn't work in nixos because it's a
@@ -53,8 +53,9 @@ in buildGoPackage rec {
   outputs = [ "bin" "out" "ruby" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.gitlab.com/;
-    platforms = platforms.unix;
+    homepage = https://gitlab.com/gitlab-org/gitaly;
+    description = "A Git RPC service for handling all the git calls made by GitLab";
+    platforms = platforms.linux;
     maintainers = with maintainers; [ roblabla globin fpletz ];
     license = licenses.mit;
   };

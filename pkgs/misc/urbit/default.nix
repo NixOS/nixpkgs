@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "urbit-${version}";
+  pname = "urbit";
   version = "0.7.3";
 
   src = fetchFromGitHub {

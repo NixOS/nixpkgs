@@ -1,8 +1,8 @@
 { stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
 , apple_sdk ? null
-, cacert
-, defaultCaFile ? "${cacert}/etc/ssl/certs/ca-bundle.crt"
-, fetchurl
 , libbsd
 , libressl
 , pkgconfig
@@ -11,25 +11,23 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "acme-client-${version}";
-  version = "0.1.16";
+  pname = "acme-client";
+  version = "0.2.4";
 
-  src = fetchurl {
-    url = "https://kristaps.bsd.lv/acme-client/snapshots/acme-client-portable-${version}.tgz";
-    sha256 = "00q05b3b1dfnfp7sr1nbd212n0mqrycl3cr9lbs51m7ncaihbrz9";
+  src = fetchFromGitHub {
+    owner = "graywolf";
+    repo = "acme-client-portable";
+    rev = "v${version}";
+    sha256 = "1yq2lkrnjwjs0h9mijqysnjmr7kp4zcq1f4cxr9n1db7pw8446xb";
   };
 
-  buildInputs = [ libbsd libressl pkgconfig ]
-    ++ optional stdenv.isDarwin apple_sdk.sdk;
+  nativeBuildInputs = [ autoreconfHook bison pkgconfig ];
+  buildInputs = [ libbsd libressl ] ++ optional stdenv.isDarwin apple_sdk.sdk;
 
-  CFLAGS = "-DDEFAULT_CA_FILE='\"${defaultCaFile}\"'";
-
-  preConfigure = ''
-    export PREFIX="$out"
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
-    homepage = https://kristaps.bsd.lv/acme-client/;
+    homepage = "https://github.com/graywolf/acme-client-portable";
     description = "Secure ACME/Let's Encrypt client";
     platforms = platforms.unix;
     license = licenses.isc;

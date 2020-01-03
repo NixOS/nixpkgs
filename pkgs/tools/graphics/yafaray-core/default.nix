@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
 
-    name = "yafaray-core-${version}";
+    pname = "yafaray-core";
     version = "3.3.0";
 
     src = fetchFromGitHub {

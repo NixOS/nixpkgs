@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libevent, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "libasr-${version}";
+  pname = "libasr";
   version=  "1.0.2";
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
+    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
     sha256 = "0d4blm0kzdhb75fq8sbcpvkc25lv5dbjaxa2ldniaf39633d3xd6";
   };
 

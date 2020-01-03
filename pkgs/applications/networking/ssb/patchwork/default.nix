@@ -1,17 +1,17 @@
 { appimageTools, symlinkJoin, lib, fetchurl, makeDesktopItem }:
 
 let
-  pname = "patchwork";
-  version = "3.14.1";
-  name = "${pname}-${version}";
+  pname = "ssb-patchwork";
+  version = "3.17.1";
+  name = "Patchwork-${version}";
 
   src = fetchurl {
-    url = "https://github.com/ssbc/patchwork/releases/download/v${version}/ssb-${pname}-${version}-x86_64.AppImage";
-    sha256 = "01vsldabv9nmbx8kzlgw275zykm72s1dxglnaq4jz5vbysbyn0qd";
+    url = "https://github.com/ssbc/patchwork/releases/download/v${version}/${name}.AppImage";
+    sha256 = "06wcgdcagmh80nr8nyrnz83wgq7j8r96hn3ccka7nmn02pdgvp3k";
   };
 
   binary = appimageTools.wrapType2 {
-    name = "${pname}";
+    name = pname;
     inherit src;
   };
   # we only use this to extract the icon
@@ -20,8 +20,8 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = "patchwork";
-    exec = "${binary}/bin/patchwork";
+    name = "ssb-patchwork";
+    exec = "${binary}/bin/ssb-patchwork";
     icon = "ssb-patchwork.png";
     comment = "Decentralized messaging and sharing app";
     desktopName = "Patchwork";

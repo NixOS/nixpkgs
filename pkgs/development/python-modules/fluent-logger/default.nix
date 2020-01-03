@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fluent-logger";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09vii0iclfq6vhz37xyybksq9m3538hkr7z40sz2dlpf2rkg98mg";
+    sha256 = "814cb51892c620a00c5a6129fffaa09eeeb0c8822c9bcb4f96232ae3cbc4d8b3";
   };
 
   propagatedBuildInputs = [ msgpack ];

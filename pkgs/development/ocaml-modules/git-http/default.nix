@@ -1,6 +1,6 @@
 { buildDunePackage, git, cohttp-lwt, alcotest, mtime, nocrypto }:
 
-buildDunePackage rec {
+buildDunePackage {
 	pname = "git-http";
 	inherit (git) version src;
 

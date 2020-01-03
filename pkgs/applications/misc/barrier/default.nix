@@ -1,20 +1,25 @@
 { stdenv, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation, patchDesktopFileExecHook,
+  openssl, wrapGAppsHook,
   avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
 }:
 
 mkDerivation rec {
   pname = "barrier";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "debauchee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fy7xjwqyisapf8wv50gwpbgbv5b4ldf7766w453h5iw10d18kh0";
+    sha256 = "1gbg3p7c0vcsdzsjj1ssx6k8xpj3rpyvais12266f0xvnbvihczd";
   };
 
-  nativeBuildInputs = [ patchDesktopFileExecHook ];
-  buildInputs = [ cmake curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
+  buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
+  nativeBuildInputs = [ patchDesktopFileExecHook cmake wrapGAppsHook ];
+
+  qtWrapperArgs = [
+    ''--prefix PATH : ${stdenv.lib.makeBinPath [ openssl ]}''
+  ];
 
   meta = {
     description = "Open-source KVM software";

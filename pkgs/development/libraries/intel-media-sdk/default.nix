@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "intel-media-sdk-${version}";
-  version = "19.1.0";
+  pname = "intel-media-sdk";
+  version = "19.3.1";
 
   src = fetchurl {
     url = "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-${version}.tar.gz";
-    sha256 = "1gligrg6khzmwcy6miikljj75hhxqy0a95qzc8m61ipx5c8igdpv";
+    sha256 = "12w1f3krcrjyhax4y3hbs7galhf4rabxym2fxjyil8cszx5fh433";
   };
 
   # patchelf is needed for binaries in $out/share/samples
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Intel Media SDK.";
     license = licenses.mit;
     maintainers = with maintainers; [ midchildan ];
-    platforms = with platforms; linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

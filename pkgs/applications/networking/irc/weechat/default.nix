@@ -1,38 +1,38 @@
 { stdenv, fetchurl, lib
-, ncurses, openssl, aspell, gnutls
+, ncurses, openssl, aspell, gnutls, gettext
 , zlib, curl, pkgconfig, libgcrypt
 , cmake, makeWrapper, libobjc, libresolv, libiconv
 , asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
-, pythonSupport ? true, pythonPackages
+, pythonSupport ? true, python3Packages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
 }:
 
 let
-  inherit (pythonPackages) python;
+  inherit (python3Packages) python;
   plugins = [
     { name = "perl"; enabled = perlSupport; cmakeFlag = "ENABLE_PERL"; buildInputs = [ perl ]; }
     { name = "tcl"; enabled = tclSupport; cmakeFlag = "ENABLE_TCL"; buildInputs = [ tcl ]; }
     { name = "ruby"; enabled = rubySupport; cmakeFlag = "ENABLE_RUBY"; buildInputs = [ ruby ]; }
     { name = "guile"; enabled = guileSupport; cmakeFlag = "ENABLE_GUILE"; buildInputs = [ guile ]; }
     { name = "lua"; enabled = luaSupport; cmakeFlag = "ENABLE_LUA"; buildInputs = [ lua5 ]; }
-    { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON"; buildInputs = [ python ]; }
+    { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON3"; buildInputs = [ python ]; }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.5";
-      name = "weechat-${version}";
+      version = "2.7";
+      pname = "weechat";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "14giv8j1phmpg3i9whx45nmskan501lwcq352ps9z52rkja2qxsc";
+        sha256 = "00hzchzw1w2181kczcrrnj8ngml3bwk7qciha3higxq3qynf0h8c";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -41,13 +41,15 @@ let
       cmakeFlags = with stdenv.lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
+        "-DENABLE_JAVASCRIPT=OFF"  # Requires v8 <= 3.24.3, https://github.com/weechat/weechat/issues/360
+        "-DENABLE_PHP=OFF"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
       buildInputs = with stdenv.lib; [
-          ncurses openssl aspell gnutls zlib curl pkgconfig
+          ncurses openssl aspell gnutls gettext zlib curl pkgconfig
           libgcrypt makeWrapper cmake asciidoctor
           ]
         ++ optionals stdenv.isDarwin [ libobjc libresolv ]

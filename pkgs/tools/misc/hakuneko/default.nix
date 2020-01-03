@@ -1,7 +1,7 @@
 { stdenv, fetchurl, wxGTK30, openssl, curl }:
 
 stdenv.mkDerivation rec {
-  name = "hakuneko-${version}";
+  pname = "hakuneko";
   version = "1.4.2";
 
   src = fetchurl {

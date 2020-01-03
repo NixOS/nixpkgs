@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ricochet-${version}";
+  pname = "ricochet";
   version = "1.1.4";
 
   src = fetchurl {

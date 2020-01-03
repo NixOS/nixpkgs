@@ -5,7 +5,7 @@ assert tls -> gnutls != null;
 stdenv.mkDerivation rec {
 
   version = "2.2";
-  name = "nullmailer-${version}";
+  pname = "nullmailer";
 
   src = fetchurl {
     url = "https://untroubled.org/nullmailer/nullmailer-${version}.tar.gz";

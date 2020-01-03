@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, isPy3k
+{ stdenv, lib, buildPythonPackage, python, fetchFromGitHub, isPy3k
 , notmuch, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
 , service-identity
 , gnupg ? null, sphinx, awk ? null, procps ? null, future ? null
@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "alot";
-  version = "0.8";
+  version = "0.8.1";
   outputs = [ "out" ] ++ lib.optional withManpage "man";
 
   disabled = !isPy3k;
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
-    rev = "${version}";
-    sha256 = "1isn0p0i2a7dlbrdk5ib01xa1wgi6bi9ka4xl4vj8iw1q4i5fqv9";
+    rev = version;
+    sha256 = "1gzis6w45d860mr2qbmjhnbrhy6d9xwhw27wpmvs56vndafvv9d3";
   };
 
   nativeBuildInputs = lib.optional withManpage sphinx;
@@ -39,7 +39,9 @@ buildPythonPackage rec {
 
   checkInputs =  [ awk future mock gnupg procps ];
 
-  postInstall = lib.optionalString withManpage ''
+  postInstall = let
+    completionPython = python.withPackages (ps: [ ps.configobj ]);
+  in lib.optionalString withManpage ''
     mkdir -p $out/man
     cp -r docs/build/man $out/man
   ''
@@ -47,6 +49,8 @@ buildPythonPackage rec {
     mkdir -p $out/share/{applications,alot}
     cp -r extra/themes $out/share/alot
 
+    substituteInPlace extra/completion/alot-completion.zsh \
+      --replace "python3" "${completionPython.interpreter}"
     install -D extra/completion/alot-completion.zsh $out/share/zsh/site-functions/_alot
 
     sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
@@ -57,6 +61,6 @@ buildPythonPackage rec {
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ geistesk ];
   };
 }

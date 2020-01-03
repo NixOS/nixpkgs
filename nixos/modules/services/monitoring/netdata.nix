@@ -138,7 +138,7 @@ in {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ gawk curl ]) ++ lib.optional cfg.python.enable
+      path = (with pkgs; [ curl gawk which ]) ++ lib.optional cfg.python.enable
         (pkgs.python3.withPackages cfg.python.extraPackages);
       serviceConfig = {
         Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
@@ -155,6 +155,8 @@ in {
         LimitNOFILE = "30000";
       };
     };
+
+    systemd.enableCgroupAccounting = true;
 
     security.wrappers."apps.plugin" = {
       source = "${pkgs.netdata}/libexec/netdata/plugins.d/apps.plugin.org";
@@ -179,6 +181,7 @@ in {
 
     users.users = optional (cfg.user == defaultUser) {
       name = defaultUser;
+      isSystemUser = true;
     };
 
     users.groups = optional (cfg.group == defaultUser) {

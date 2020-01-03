@@ -1,37 +1,29 @@
-{ lib, python3Packages, fetchpatch }:
+{ buildPythonApplication, lib, fetchPypi, isPy3k
+, cli-helpers, click, configobj, humanize, prompt_toolkit, psycopg2
+, pygments, sqlparse, pgspecial, setproctitle, keyring, pytest, mock
+}:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "pgcli";
-  version = "2.0.2";
+  version = "2.2.0";
 
-  # Python 2 won't have prompt_toolkit 2.x.x
-  # See: https://github.com/NixOS/nixpkgs/blob/f49e2ad3657dede09dc998a4a98fd5033fb52243/pkgs/top-level/python-packages.nix#L3408
-  disabled = python3Packages.isPy27;
+  disabled = !isPy3k;
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "1p4j2dbcfxd3kz86qi519jkqjx1mg5wdgn1gxdjx3lk1vpsd7x04";
+    sha256 = "54138a31e6736a34c63b84a6d134c9292c9a73543cc0f66e80a0aaf79259d39b";
   };
 
-  patches = [
-    (fetchpatch {
-      # TODO: Remove with next pgcli release. Fixes TypeError in tests
-      # https://github.com/dbcli/pgcli/pull/1006
-      url = https://github.com/dbcli/pgcli/commit/351135b61ef9ad3184c49a406544708daf589fe3.patch;
-      sha256 = "08131y0lv1v760i0ypcx2hljx066ks93kp96xkv3bycxnavvcl53";
-      excludes = [ "changelog.rst" ];
-    })
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     cli-helpers click configobj humanize prompt_toolkit psycopg2
     pygments sqlparse pgspecial setproctitle keyring
   ];
 
-  checkInputs = with python3Packages; [ pytest mock ];
+  checkInputs = [ pytest mock ];
 
+  # `test_application_name_db_uri` fails: https://github.com/dbcli/pgcli/issues/1104
   checkPhase = ''
-    pytest
+    pytest --deselect=tests/test_main.py::test_application_name_db_uri
   '';
 
   meta = with lib; {

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libmx-${version}";
+  pname = "libmx";
   version = "1.4.7";
 
   src = fetchurl {

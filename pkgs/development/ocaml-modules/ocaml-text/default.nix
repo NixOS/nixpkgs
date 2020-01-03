@@ -1,7 +1,7 @@
 { stdenv, fetchzip, libiconv, ocaml, findlib, ocamlbuild, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-text-${version}";
+  pname = "ocaml-text";
   version = "0.8";
 
   src = fetchzip {

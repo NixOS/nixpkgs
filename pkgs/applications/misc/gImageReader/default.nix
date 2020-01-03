@@ -15,7 +15,7 @@ let
   pythonEnv = python3.withPackages( ps: with ps;[ pygobject3 ] );
 in
 stdenv.mkDerivation rec {
-  name = "gImageReader-${version}";
+  pname = "gImageReader";
   version = "3.3.1";
 
   src = fetchFromGitHub {

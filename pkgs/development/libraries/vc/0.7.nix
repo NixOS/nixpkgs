@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "Vc-${version}";
+  pname = "Vc";
   version = "0.7.5";
 
   src = fetchFromGitHub {

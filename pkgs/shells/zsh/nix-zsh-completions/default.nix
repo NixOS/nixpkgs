@@ -4,13 +4,14 @@ let
   version = "0.4.3";
 in
 
-stdenv.mkDerivation rec {
-  name = "nix-zsh-completions-${version}";
+stdenv.mkDerivation {
+  pname = "nix-zsh-completions";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "spwhitt";
     repo = "nix-zsh-completions";
-    rev = "${version}";
+    rev = version;
     sha256 = "0fq1zlnsj1bb7byli7mwlz7nm2yszwmyx43ccczcv51mjjfivyp3";
   };
 

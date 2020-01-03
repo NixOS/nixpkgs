@@ -1,8 +1,8 @@
 diff --git a/src/dist/component/package.rs b/src/dist/component/package.rs
-index e0fdea28..38d9d0e4 100644
+index 4b432785..fa45e87e 100644
 --- a/src/dist/component/package.rs
 +++ b/src/dist/component/package.rs
-@@ -104,10 +104,11 @@ impl Package for DirectoryPackage {
+@@ -109,10 +109,11 @@ impl Package for DirectoryPackage {
              match &*part.0 {
                  "file" => {
                      if self.copy {
@@ -16,10 +16,10 @@ index e0fdea28..38d9d0e4 100644
                  }
                  "dir" => {
                      if self.copy {
-@@ -132,6 +133,22 @@ impl Package for DirectoryPackage {
+@@ -135,6 +136,22 @@ impl Package for DirectoryPackage {
      }
  }
-
+ 
 +fn nix_patchelf_if_needed(dest_path: &Path, src_path: &Path) {
 +    let is_bin = if let Some(p) = src_path.parent() {
 +        p.ends_with("bin")
@@ -36,6 +36,6 @@ index e0fdea28..38d9d0e4 100644
 +    }
 +}
 +
- // On Unix we need to set up the file permissions correctly so
- // binaries are executable and directories readable. This shouldn't be
- // necessary: the source files *should* have the right permissions,
+ #[derive(Debug)]
+ pub struct TarPackage<'a>(DirectoryPackage, temp::Dir<'a>);
+ 

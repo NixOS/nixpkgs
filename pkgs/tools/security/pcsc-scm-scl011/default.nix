@@ -6,7 +6,7 @@ let
   else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation rec {
-  name = "pcsc-scm-scl-${version}";
+  pname = "pcsc-scm-scl";
   version = "2.09";
 
   src = fetchurl {

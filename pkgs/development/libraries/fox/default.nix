@@ -2,11 +2,11 @@
 , CoreServices ? null }:
 
 stdenv.mkDerivation rec {
-  name = "fox-${version}";
+  pname = "fox";
   version = "1.7.9";
 
   src = fetchurl {
-    url = "ftp://ftp.fox-toolkit.org/pub/${name}.tar.gz";
+    url = "ftp://ftp.fox-toolkit.org/pub/${pname}-${version}.tar.gz";
     sha256 = "1jb9368xsin3ppdf6979n5s7in3s9klbxqbwcp0z8misjixl7nzg";
   };
 

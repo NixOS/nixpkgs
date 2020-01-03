@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchFromGitHub, openssl, autoreconfHook, nettle }:
 
 stdenv.mkDerivation rec {
-  name = "radsecproxy-${version}";
-  version = "1.6.9";
+  pname = "radsecproxy";
+  version = "1.8.1";
 
-  src = fetchurl {
-    url = "https://software.nordu.net/radsecproxy/radsecproxy-${version}.tar.xz";
-    sha256 = "6f2c7030236c222782c9ac2c52778baa63540a1865b75a7a6d8c1280ce6ad816";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "12pvwd7v3iswki3riycxaiiqxingg4bqnkwc5ay3j4n2kzynr1qg";
   };
 
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl nettle ];
 
   configureFlags = [
      "--with-ssl=${openssl.dev}"

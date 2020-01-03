@@ -20,7 +20,7 @@ in
   imports = [
     ./none.nix ./xterm.nix ./xfce.nix ./plasma5.nix ./lumina.nix
     ./lxqt.nix ./enlightenment.nix ./gnome3.nix ./kodi.nix ./maxx.nix
-    ./mate.nix ./pantheon.nix ./surf-display.nix
+    ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
   ];
 
   options = {
@@ -86,23 +86,14 @@ in
       };
 
       default = mkOption {
-        type = types.str;
-        default = "";
+        type = types.nullOr types.str;
+        default = null;
         example = "none";
-        description = "Default desktop manager loaded if none have been chosen.";
-        apply = defaultDM:
-          if defaultDM == "" && cfg.session.list != [] then
-            (head cfg.session.list).name
-          else if any (w: w.name == defaultDM) cfg.session.list then
-            defaultDM
-          else
-            builtins.trace ''
-              Default desktop manager (${defaultDM}) not found at evaluation time.
-              These are the known valid session names:
-                ${concatMapStringsSep "\n  " (w: "services.xserver.desktopManager.default = \"${w.name}\";") cfg.session.list}
-              It's also possible the default can be found in one of these packages:
-                ${concatMapStringsSep "\n  " (p: p.name) config.services.xserver.displayManager.extraSessionFilePackages}
-            '' defaultDM;
+        description = ''
+          <emphasis role="strong">Deprecated</emphasis>, please use <xref linkend="opt-services.xserver.displayManager.defaultSession"/> instead.
+
+          Default desktop manager loaded if none have been chosen.
+        '';
       };
 
     };

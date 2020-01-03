@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "combinatorial_designs-${version}";
+  pname = "combinatorial_designs";
   version = "20140630";
 
   src = fetchurl {

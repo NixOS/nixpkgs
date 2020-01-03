@@ -4,12 +4,12 @@ let
   libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
 in mkDerivation rec {
   pname = "multimc";
-  version = "0.6.6";
+  version = "0.6.7";
   src = fetchFromGitHub {
     owner = "MultiMC";
     repo = "MultiMC5";
     rev = version;
-    sha256 = "0a9ciqi73ihw17qmp8l5134py5gjjrdnrk50syl2mllsc1iqj4kf";
+    sha256 = "1i160rmsdvrcnvlr6m2qjwkfx0lqnzrcifjkaklw96ina6z6cg2n";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake file makeWrapper ];

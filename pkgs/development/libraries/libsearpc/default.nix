@@ -1,14 +1,14 @@
 {stdenv, fetchFromGitHub, automake, autoconf, pkgconfig, libtool, python2Packages, glib, jansson}:
 
 stdenv.mkDerivation rec {
-  version = "3.1.0";
-  name = "libsearpc-${version}";
+  version = "3.2.0";
+  pname = "libsearpc";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "libsearpc";
     rev = "v${version}";
-    sha256 = "1zf8xxsl95wdx0372kl8s153hd8q3lhwwvwr2k96ia8scbn2ylkp";
+    sha256 = "18i5zvrp6dv6vygxx5nc93mai2p2x786n5lnf5avrin6xiz2j6hd";
   };
 
   patches = [ ./libsearpc.pc.patch ];

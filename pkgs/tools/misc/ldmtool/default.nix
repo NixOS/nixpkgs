@@ -1,8 +1,9 @@
 { stdenv, fetchFromGitHub, autoconf, automake, gtk-doc, pkgconfig, libuuid,
-  libtool, readline, gobject-introspection, json-glib, lvm2, libxslt, docbook_xsl }:
+  libtool, readline, gobject-introspection, json-glib, lvm2, libxslt, docbook_xsl
+, fetchpatch }:
 
 stdenv.mkDerivation rec {
-   name = "ldmtool-${version}";
+   pname = "ldmtool";
    version = "0.2.4";
 
    src = fetchFromGitHub {
@@ -12,13 +13,21 @@ stdenv.mkDerivation rec {
      sha256 = "1fy5wbmk8kwl86lzswq0d1z2j5y023qzfm2ppm8knzv9c47kniqk";
    };
 
+  patches = [
+    # Remove useage of deprecrated G_PARAM_PRIVATE
+    (fetchpatch {
+      url = "https://github.com/mdbooth/libldm/commit/ee1b37a034038f09d61b121cc8b3651024acc46f.patch";
+      sha256 = "02y34kbcpcpffvy1n9yqngvdldmxmvdkha1v2xjqvrnclanpigcp";
+    })
+  ];
+
    preConfigure = ''
      sed -i docs/reference/ldmtool/Makefile.am \
        -e 's|-nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl|--nonet ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl|g'
    '';
 
-   # ldm.c:951:5: error: 'g_type_class_add_private' is deprecated [-Werror=deprecated-declarations]
-   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+   # glib-2.62 deprecations
+   NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
 
    configureScript = "sh autogen.sh";
 

@@ -81,6 +81,10 @@ in
         default = "";
         description = ''
           Defines the mapping from system users to database users.
+
+          The general form is:
+
+          map-name system-username database-username
         '';
       };
 
@@ -222,9 +226,10 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
+      mkDefault (if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
+            else if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
             else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
-            else pkgs.postgresql_9_4);
+            else throw "postgresql_9_4 was removed, please upgrade your postgresql version.");
 
     services.postgresql.dataDir =
       mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"
@@ -334,9 +339,9 @@ in
             '') cfg.ensureDatabases}
           '' + ''
             ${concatMapStrings (user: ''
-              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc "CREATE USER ${user.name}"
+              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
               ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                $PSQL -tAc 'GRANT ${permission} ON ${database} TO ${user.name}'
+                $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
               '') user.ensurePermissions)}
             '') cfg.ensureUsers}
           '';

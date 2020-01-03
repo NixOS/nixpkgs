@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, expat, icu }:
 
 stdenv.mkDerivation rec {
-  name = "liblcf-${version}";
+  pname = "liblcf";
   version = "0.6.1";
 
   src = fetchFromGitHub {

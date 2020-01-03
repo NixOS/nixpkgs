@@ -1,18 +1,13 @@
 { stdenv, buildPythonPackage, fetchPypi, pip }:
+
 buildPythonPackage rec {
   pname = "setuptools_scm";
-  version = "3.2.0";
+  version = "3.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52ab47715fa0fc7d8e6cd15168d1a69ba995feb1505131c3e814eb7087b57358";
+    sha256 = "19cyndx23xmpbhz4qrwmfwsmnnaczd0dw7qg977ksq2dbvxy29dx";
   };
-
-  buildInputs = [ pip ];
-
-  # Seems to fail due to chroot and would cause circular dependency
-  # with pytest
-  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/pypa/setuptools_scm/;

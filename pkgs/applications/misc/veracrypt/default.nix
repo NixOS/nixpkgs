@@ -1,16 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, makeself, yasm, fuse, wxGTK, lvm2 }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, makeself, yasm, fuse, wxGTK, lvm2 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "veracrypt";
-  name = "${pname}-${version}";
-  version = "1.23";
+  version = "1.24-Hotfix1";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/trunk/${version}/+download/VeraCrypt_${version}_Source.tar.bz2";
-    sha256 = "009lqi43n2w272sxv7y7dz9sqx15qkx6lszkswr8mwmkpgkm0px1";
+    url = "https://launchpad.net/${pname}/trunk/${toLower version}/+download/VeraCrypt_${version}_Source.tar.bz2";
+    sha256 = "8b40ece805b216843d7a71b1a30069c4057931341b030bf65caace59263c5c8c";
   };
+
+
+  patches = [
+    # https://github.com/veracrypt/VeraCrypt/issues/529 - fix build on non-x86
+    (fetchpatch {
+      url = "https://github.com/veracrypt/VeraCrypt/commit/afe6b2f45b15393026a1159e5f3d165ac7d0b94a.patch";
+      sha256 = "1xm9cl6zinlr0vah5xr9bvh0y9gw4331zl7d2n5xvqrcdxw3ww1y";
+      stripLen = 1;
+    })
+    # https://github.com/veracrypt/VeraCrypt/issues/529 - fix build on non-x86
+    (fetchpatch {
+      url = "https://github.com/veracrypt/VeraCrypt/commit/3fa636d477119fff6e372074568edb42d038f508.patch";
+      sha256 = "0qsccilip0ksnlzxina38a052gb533r4s422lxhrj3wv9zgpp7l3";
+      stripLen = 1;
+    })
+  ];
 
   sourceRoot = "src";
 

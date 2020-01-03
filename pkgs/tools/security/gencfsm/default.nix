@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.8.19";
-  name = "gnome-encfs-manager-${version}";
+  pname = "gnome-encfs-manager";
 
   src = fetchurl {
     url = "https://launchpad.net/gencfsm/trunk/1.8/+download/gnome-encfs-manager_${version}.tar.xz";

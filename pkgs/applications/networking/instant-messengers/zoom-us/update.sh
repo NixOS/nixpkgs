@@ -3,7 +3,7 @@
 
 set -eu -o pipefail
 
-oldVersion=$(nix-instantiate --eval -E "with import ./. {}; zoom-us.version or (builtins.parseDrvName zoom-us.name).version" | tr -d '"')
+oldVersion=$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion zoom-us" | tr -d '"')
 version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcregrep -o1 '/(([0-9]\.?)+)/')"
 
 if [ ! "${oldVersion}" = "${version}" ]; then

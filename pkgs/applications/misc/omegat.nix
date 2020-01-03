@@ -1,12 +1,12 @@
 { stdenv, fetchurl, unzip, jdk, makeWrapper}:
 
-stdenv.mkDerivation rec {
-  version = "4.1.5.2";
+stdenv.mkDerivation {
+  version = "4.3.0";
   pname = "omegat";
 
   src = fetchurl {  # their zip has repeated files or something, so no fetchzip
-    url = mirror://sourceforge/project/omegat/OmegaT%20-%20Latest/OmegaT%204.1.5%20update%202/OmegaT_4.1.5_02_Beta_Without_JRE.zip;
-    sha256 = "1mdnsvjgsccpd5xwpqzgva5jjp8yd1akq9aqpild4v6k70lqql2b";
+    url = mirror://sourceforge/project/omegat/OmegaT%20-%20Standard/OmegaT%204.3.0/OmegaT_4.3.0_Without_JRE.zip;
+    sha256 = "0axz7r30p34z5hgvdglznc82g7yvm3g56dv5190jixskx6ba58rs";
   };
 
   buildInputs = [ unzip makeWrapper ];

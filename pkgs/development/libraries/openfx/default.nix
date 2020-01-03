@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, unzip }:
 
-stdenv.mkDerivation rec
-{
-  name = "openfx-${version}";
+stdenv.mkDerivation {
+  pname = "openfx";
   version = "1.4";
 
   src = fetchFromGitHub {

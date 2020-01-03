@@ -2,7 +2,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "pax-rs-${version}";
+  pname = "pax-rs";
   version = "0.4.0";
 
   meta = with stdenv.lib; {

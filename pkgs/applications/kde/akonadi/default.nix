@@ -25,6 +25,7 @@ mkDerivation {
     ''-DNIXPKGS_MYSQL_MYSQL_INSTALL_DB=\"${lib.getBin mysql}/bin/mysql_install_db\"''
     ''-DNIXPKGS_MYSQL_MYSQLCHECK=\"${lib.getBin mysql}/bin/mysqlcheck\"''
     ''-DNIXPKGS_POSTGRES_PG_CTL=\"\"''
+    ''-DNIXPKGS_POSTGRES_PG_UPGRADE=\"\"''
     ''-DNIXPKGS_POSTGRES_INITDB=\"\"''
   ];
   preConfigure = ''

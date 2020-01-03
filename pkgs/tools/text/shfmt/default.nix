@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "shfmt-${version}";
+  pname = "shfmt";
   version = "2.6.4";
 
   goPackagePath = "mvdan.cc/sh";

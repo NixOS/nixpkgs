@@ -1,7 +1,7 @@
 { stdenv, xorg, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "go-sct-${version}";
+  pname = "go-sct";
   version = "20180605-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "eb1e851f2d5017038d2b8e3653645c36d3a279f4";
 

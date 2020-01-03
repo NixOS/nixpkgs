@@ -15,7 +15,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nss-cacert-${nss.version}";
 
   src = nss.src;

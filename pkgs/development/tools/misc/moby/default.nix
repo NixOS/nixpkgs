@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "moby-${version}";
+  pname = "moby";
   version = "2017-07-06";
   rev = "d87a3f9990ed24ebbb51695879cd640cb07a4b40";
 

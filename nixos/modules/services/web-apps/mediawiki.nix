@@ -312,17 +312,17 @@ in
       };
 
       poolConfig = mkOption {
-        type = types.lines;
-        default = ''
-          pm = dynamic
-          pm.max_children = 32
-          pm.start_servers = 2
-          pm.min_spare_servers = 2
-          pm.max_spare_servers = 4
-          pm.max_requests = 500
-        '';
+        type = with types; attrsOf (oneOf [ str int bool ]);
+        default = {
+          "pm" = "dynamic";
+          "pm.max_children" = 32;
+          "pm.start_servers" = 2;
+          "pm.min_spare_servers" = 2;
+          "pm.max_spare_servers" = 4;
+          "pm.max_requests" = 500;
+        };
         description = ''
-          Options for MediaWiki's PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+          Options for the MediaWiki PHP pool. See the documentation on <literal>php-fpm.conf</literal>
           for details on configuration directives.
         '';
       };
@@ -379,17 +379,12 @@ in
     };
 
     services.phpfpm.pools.mediawiki = {
-      listen = "/run/phpfpm/mediawiki.sock";
-      extraConfig = ''
-        listen.owner = ${config.services.httpd.user}
-        listen.group = ${config.services.httpd.group}
-        user = ${user}
-        group = ${group}
-
-        env[MEDIAWIKI_CONFIG] = ${mediawikiConfig}
-
-        ${cfg.poolConfig}
-      '';
+      inherit user group;
+      phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
+      settings = {
+        "listen.owner" = config.services.httpd.user;
+        "listen.group" = config.services.httpd.group;
+      } // cfg.poolConfig;
     };
 
     services.httpd = {
@@ -403,7 +398,7 @@ in
             <Directory "${pkg}/share/mediawiki">
               <FilesMatch "\.php$">
                 <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.listen}|fcgi://localhost/"
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
                 </If>
               </FilesMatch>
 
@@ -466,7 +461,10 @@ in
 
     systemd.services.httpd.after = optional (cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service";
 
-    users.users.${user}.group = group;
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
 
     environment.systemPackages = [ mediawikiScripts ];
   };

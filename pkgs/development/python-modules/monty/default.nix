@@ -5,7 +5,7 @@
 , numpy
 , six
 , ruamel_yaml
-, msgpack-python
+, msgpack
 , coverage
 , coveralls
 , pymongo
@@ -14,17 +14,17 @@
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "1.0.4";
+  version = "3.0.2";
 
   # No tests in Pypi
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vqaaz0dw0ypl6sfwbycpb0qs3ap04c4ghbggklxih66spdlggh6";
+    sha256 = "1wxqxp0j7i6czdpr2r1imgmy3qbgn2l7d4za2h1lg3hllvx6jra1";
   };
 
-  checkInputs = [ lsof nose numpy msgpack-python coverage coveralls pymongo];
+  checkInputs = [ lsof nose numpy msgpack coverage coveralls pymongo];
   propagatedBuildInputs = [ six ruamel_yaml ];
 
   preCheck = ''

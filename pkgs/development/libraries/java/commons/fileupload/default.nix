@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.3.1";
-  name    = "commons-fileupload-${version}";
+  pname = "commons-fileupload";
 
   src = fetchurl {
-    url    = "mirror://apache/commons/fileupload/binaries/${name}-bin.tar.gz";
+    url    = "mirror://apache/commons/fileupload/binaries/${pname}-${version}-bin.tar.gz";
     sha256 = "1jy7w2j2ay56mpq4ij3331cf9zgpkm832ydr63svb35j0ymnky72";
   };
   installPhase = ''

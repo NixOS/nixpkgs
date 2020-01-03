@@ -4,7 +4,8 @@ let
   version = "4";
 in
 stdenv.mkDerivation {
-  name = "xwinwrap-${version}";
+  pname = "xwinwrap";
+  inherit version;
 
   src = fetchbzr {
     url = https://code.launchpad.net/~shantanu-goel/xwinwrap/devel;

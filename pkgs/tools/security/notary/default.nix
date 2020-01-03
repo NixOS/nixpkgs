@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage, libtool }:
 
 buildGoPackage rec {
-  name = "notary-${version}";
+  pname = "notary";
   version = "0.6.1";
   gitcommit = "d6e1431f";
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
   buildPhase = ''
     runHook preBuild
     cd go/src/github.com/theupdateframework/notary
-    make client GITCOMMIT=${gitcommit}
+    SKIPENVCHECK=1 make client GITCOMMIT=${gitcommit}
     runHook postBuild
   '';
 

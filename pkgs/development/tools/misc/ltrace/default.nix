@@ -1,6 +1,6 @@
 { stdenv, fetchurl, elfutils, libunwind }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ltrace-0.7.3";
 
   src = fetchurl {

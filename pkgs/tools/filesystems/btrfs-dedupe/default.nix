@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "btrfs-dedupe-${version}";
+  pname = "btrfs-dedupe";
   version = "1.1.0";
 
 

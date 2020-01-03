@@ -2,7 +2,8 @@
 
 let version = "0.7";
 in stdenv.mkDerivation {
-  name = "iomelt-${version}";
+  pname = "iomelt";
+  inherit version;
   src = fetchurl {
     url = "http://iomelt.com/s/iomelt-${version}.tar.gz";
     sha256 = "1jhrdm5b7f1bcbrdwcc4yzg26790jxl4d2ndqiwd9brl2g5537im";

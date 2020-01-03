@@ -73,6 +73,9 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
+  ];
 
   ###### interface
 
@@ -182,12 +185,12 @@ in
               options = {
                 username = mkOption {
                   description = "The username to store inside the credentials file.";
-                  type = types.string;
+                  type = types.str;
                 };
 
                 password = mkOption {
                   description = "The password to store inside the credentials file.";
-                  type = types.string;
+                  type = types.str;
                 };
               };
             });
