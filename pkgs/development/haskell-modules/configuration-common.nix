@@ -1361,4 +1361,8 @@ self: super: {
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
 
+  # haskellPackages prefers to present the uncompilable gtk4 version
+  # as `gi-gdkx11`, we need the working gtk3 version.
+  taffybar = super.taffybar.override { gi-gdkx11 = self.gi-gdkx11_3_0_9; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
