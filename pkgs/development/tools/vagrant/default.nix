@@ -96,13 +96,14 @@ in buildRubyGem rec {
 
   passthru = {
     inherit ruby deps;
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
     description = "A tool for building complete development environments";
     homepage = https://www.vagrantup.com/;
     license = licenses.mit;
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with maintainers; [ aneeshusa angristan ];
     platforms = with platforms; linux ++ darwin;
   };
 }
