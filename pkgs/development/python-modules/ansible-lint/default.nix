@@ -18,6 +18,8 @@ buildPythonPackage rec {
     sha256 = "eb925d8682d70563ccb80e2aca7b3edf84fb0b768cea3edc6846aac7abdc414a";
   };
 
+  format = "pyproject";
+
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ pyyaml six ansible ruamel_yaml ];
   checkInputs = [ nose ];
@@ -31,10 +33,11 @@ buildPythonPackage rec {
   # give a hint to setuptools_scm on package version
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
+    export HOME=$(mktemp -d)
   '';
 
   checkPhase = ''
-    PATH=$out/bin:$PATH HOME=$(mktemp -d) nosetests test
+    PATH=$out/bin:$PATH nosetests test
   '';
 
   meta = with lib; {
