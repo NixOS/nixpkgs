@@ -1,0 +1,14 @@
+[
+  "tar",
+  "tar.bz2",
+  "tar.gz",
+  "tar.lz",
+  "tar.lzma",
+  "tar.xz",
+  "tbz",
+  "tgz",
+  "tlz",
+  "txz",
+  "whl",
+  "zip"
+]

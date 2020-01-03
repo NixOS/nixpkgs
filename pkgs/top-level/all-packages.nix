@@ -8688,6 +8688,7 @@ in
 
   cargo-flamegraph = callPackage ../development/tools/cargo-flamegraph {
     inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (linuxPackages) perf;
   };
 
   carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix { };
@@ -9305,7 +9306,14 @@ in
   svg2tikz = python27Packages.svg2tikz;
 
   pew = callPackage ../development/tools/pew {};
-  poetry = with python3Packages; toPythonApplication poetry;
+
+  poetry = callPackage ../development/tools/poetry {
+    python = python3;
+  };
+  poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
+    inherit pkgs lib;
+  };
+
   pipenv = callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
@@ -13223,6 +13231,8 @@ in
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
   microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
+
+  micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
