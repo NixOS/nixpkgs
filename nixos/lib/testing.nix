@@ -188,6 +188,7 @@ in rec {
             networking.hostName = "client";
             nix.readOnlyStore = false;
             virtualisation.writableStore = false;
+            system.stateVersion = "19.09"; # TODO: determine automatically
           }
         ];
 
