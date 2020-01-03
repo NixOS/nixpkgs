@@ -18,6 +18,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "elementpath~=1.3.0" "elementpath~=1.3"
+  '';
+
   # Ignore broken fixtures, and tests for files which don't exist.
   # For darwin, we need to explicity say we can't reach network
   checkPhase = ''
