@@ -1,7 +1,7 @@
 let
   nginxRoot = "/run/nginx";
 in
-  import ./make-test.nix ({...}: {
+  import ./make-test-python.nix ({...}: {
     name  = "nghttpx";
     nodes = {
       webserver = {
@@ -52,10 +52,10 @@ in
     };
 
     testScript = ''
-      startAll;
+      start_all()
 
-      $webserver->waitForOpenPort("80");
-      $proxy->waitForOpenPort("80");
-      $client->waitUntilSucceeds("curl -s --fail http://proxy/hello-world.txt");
+      webserver.wait_for_open_port("80")
+      proxy.wait_for_open_port("80")
+      client.wait_until_succeeds("curl -s --fail http://proxy/hello-world.txt")
     '';
   })

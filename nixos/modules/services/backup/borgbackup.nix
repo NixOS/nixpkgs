@@ -8,7 +8,7 @@ let
     builtins.substring 0 1 x == "/"      # absolute path
     || builtins.substring 0 1 x == "."   # relative path
     || builtins.match "[.*:.*]" == null; # not machine:path
- 
+
   mkExcludeFile = cfg:
     # Write each exclude pattern to a new line
     pkgs.writeText "excludefile" (concatStringsSep "\n" cfg.exclude);
@@ -68,7 +68,7 @@ let
       { BORG_PASSPHRASE = passphrase; }
     else { };
 
-  mkBackupService = name: cfg: 
+  mkBackupService = name: cfg:
     let
       userHome = config.users.users.${cfg.user}.home;
     in nameValuePair "borgbackup-job-${name}" {
@@ -98,18 +98,35 @@ let
       inherit (cfg) startAt;
     };
 
+  # utility function around makeWrapper
+  mkWrapperDrv = {
+      original, name, set ? {}
+    }:
+    pkgs.runCommandNoCC "${name}-wrapper" {
+      buildInputs = [ pkgs.makeWrapper ];
+    } (with lib; ''
+      makeWrapper "${original}" "$out/bin/${name}" \
+        ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
+    '');
+
+  mkBorgWrapper = name: cfg: mkWrapperDrv {
+    original = "${pkgs.borgbackup}/bin/borg";
+    name = "borg-job-${name}";
+    set = { BORG_REPO = cfg.repo; } // (mkPassEnv cfg) // cfg.environment;
+  };
+
   # Paths listed in ReadWritePaths must exist before service is started
   mkActivationScript = name: cfg:
     let
       install = "install -o ${cfg.user} -g ${cfg.group}";
     in
       nameValuePair "borgbackup-job-${name}" (stringAfter [ "users" ] (''
-        # Eensure that the home directory already exists
+        # Ensure that the home directory already exists
         # We can't assert createHome == true because that's not the case for root
-        cd "${config.users.users.${cfg.user}.home}"                                                                                                         
+        cd "${config.users.users.${cfg.user}.home}"
         ${install} -d .config/borg
         ${install} -d .cache/borg
-      '' + optionalString (isLocalPath cfg.repo) ''
+      '' + optionalString (isLocalPath cfg.repo && !cfg.removableDevice) ''
         ${install} -d ${escapeShellArg cfg.repo}
       ''));
 
@@ -163,13 +180,24 @@ let
       + " without at least one public key";
   };
 
+  mkRemovableDeviceAssertions = name: cfg: {
+    assertion = !(isLocalPath cfg.repo) -> !cfg.removableDevice;
+    message = ''
+      borgbackup.repos.${name}: repo isn't a local path, thus it can't be a removable device!
+    '';
+  };
+
 in {
   meta.maintainers = with maintainers; [ dotlambda ];
 
   ###### interface
 
   options.services.borgbackup.jobs = mkOption {
-    description = "Deduplicating backups using BorgBackup.";
+    description = ''
+      Deduplicating backups using BorgBackup.
+      Adding a job will cause a borg-job-NAME wrapper to be added
+      to your system path, so that you can perform maintenance easily.
+    '';
     default = { };
     example = literalExample ''
       {
@@ -200,6 +228,12 @@ in {
             type = types.str;
             description = "Remote or local repository to back up to.";
             example = "user@machine:/path/to/repo";
+          };
+
+          removableDevice = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether the repo (which must be local) is a removable device.";
           };
 
           archiveBaseName = mkOption {
@@ -511,7 +545,6 @@ in {
     type = types.attrsOf (types.submodule (
       { ... }: {
         options = {
-          
           path = mkOption {
             type = types.path;
             description = ''
@@ -598,7 +631,8 @@ in {
     (with config.services.borgbackup; {
       assertions =
         mapAttrsToList mkPassAssertion jobs
-        ++ mapAttrsToList mkKeysAssertion repos;
+        ++ mapAttrsToList mkKeysAssertion repos
+        ++ mapAttrsToList mkRemovableDeviceAssertions jobs;
 
       system.activationScripts = mapAttrs' mkActivationScript jobs;
 
@@ -610,6 +644,6 @@ in {
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
-      environment.systemPackages = with pkgs; [ borgbackup ];
+      environment.systemPackages = with pkgs; [ borgbackup ] ++ (mapAttrsToList mkBorgWrapper jobs);
     });
 }

@@ -4,26 +4,32 @@ with lib;
 
 let
   cfg = config.programs.sway;
-  swayPackage = pkgs.sway;
 
-  swayWrapped = pkgs.writeShellScriptBin "sway" ''
-    set -o errexit
+  wrapperOptions = types.submodule {
+    options =
+      let
+        mkWrapperFeature  = default: description: mkOption {
+          type = types.bool;
+          inherit default;
+          example = !default;
+          description = "Whether to make use of the ${description}";
+        };
+      in {
+        base = mkWrapperFeature true ''
+          base wrapper to execute extra session commands and prepend a
+          dbus-run-session to the sway command.
+        '';
+        gtk = mkWrapperFeature false ''
+          wrapGAppsHook wrapper to execute sway with required environment
+          variables for GTK applications.
+        '';
+    };
+  };
 
-    if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
-      export _SWAY_WRAPPER_ALREADY_EXECUTED=1
-      ${cfg.extraSessionCommands}
-    fi
-
-    if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
-      export DBUS_SESSION_BUS_ADDRESS
-      exec ${swayPackage}/bin/sway "$@"
-    else
-      exec ${pkgs.dbus}/bin/dbus-run-session ${swayPackage}/bin/sway "$@"
-    fi
-  '';
-  swayJoined = pkgs.symlinkJoin {
-    name = "sway-joined";
-    paths = [ swayWrapped swayPackage ];
+  swayPackage = pkgs.sway.override {
+    extraSessionCommands = cfg.extraSessionCommands;
+    withBaseWrapper = cfg.wrapperFeatures.base;
+    withGtkWrapper = cfg.wrapperFeatures.gtk;
   };
 in {
   options.programs.sway = {
@@ -34,6 +40,15 @@ in {
       https://github.com/swaywm/sway/wiki and "man 5 sway" for more information.
       Please have a look at the "extraSessionCommands" example for running
       programs natively under Wayland'';
+
+    wrapperFeatures = mkOption {
+      type = wrapperOptions;
+      default = { };
+      example = { gtk = true; };
+      description = ''
+        Attribute set of features to enable in the wrapper.
+      '';
+    };
 
     extraSessionCommands = mkOption {
       type = types.lines;
@@ -75,8 +90,17 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.extraSessionCommands != "" -> cfg.wrapperFeatures.base;
+        message = ''
+          The extraSessionCommands for Sway will not be run if
+          wrapperFeatures.base is disabled.
+        '';
+      }
+    ];
     environment = {
-      systemPackages = [ swayJoined ] ++ cfg.extraPackages;
+      systemPackages = [ swayPackage ] ++ cfg.extraPackages;
       etc = {
         "sway/config".source = mkOptionDefault "${swayPackage}/etc/sway/config";
         #"sway/security.d".source = mkOptionDefault "${swayPackage}/etc/sway/security.d/";
@@ -87,6 +111,8 @@ in {
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;
     programs.dconf.enable = mkDefault true;
+    # To make a Sway session available if a display manager like SDDM is enabled:
+    services.xserver.displayManager.sessionPackages = [ swayPackage ];
   };
 
   meta.maintainers = with lib.maintainers; [ gnidorah primeos colemickens ];

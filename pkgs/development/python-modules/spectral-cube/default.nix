@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , astropy
 , radio_beam
@@ -10,11 +10,14 @@
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.4.4";
+  version = "0.4.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9051ede204b1e25b6358b5e0e573b624ec0e208c24eb03a7ed4925b745c93b5e";
+  # Fetch from GitHub instead of PyPi, as 0.4.5 isn't available in PyPi
+  src = fetchFromGitHub {
+    owner = "radio-astro-tools";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1xc1m6vpl0bm600fx9vypa7zcvwg7yvhgn0w89y6v9d1vl0qcs7z";
   };
 
   propagatedBuildInputs = [ astropy radio_beam ];
@@ -42,5 +45,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ smaret ];
   };
 }
-
 

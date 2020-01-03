@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xsecurelock";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "xsecurelock";
     rev = "v${version}";
-    sha256 = "1l9xk3hb5fxp4sqlxjldm4j6cvmxa39a7a37hw8f7vbpmcqy6n6w";
+    sha256 = "0zdwszscdw0p7kwpqqv1dywn00bq1wak2x602lb6hdmkffspi8bg";
   };
 
   nativeBuildInputs = [
@@ -30,11 +30,6 @@ stdenv.mkDerivation rec {
     cat > version.c <<'EOF'
       const char *const git_version = "${version}";
     EOF
-  '';
-
-  preInstall = ''
-    substituteInPlace helpers/saver_blank \
-      --replace 'protect xset' 'protect ${xset}/bin/xset'
   '';
 
   meta = with lib; {

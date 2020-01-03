@@ -1,0 +1,13 @@
+diff --git a/loader/icd.h b/loader/icd.h
+index a1b6969..cf4e272 100644
+--- a/loader/icd.h
++++ b/loader/icd.h
+@@ -122,7 +122,7 @@ void khrIcdContextPropertiesGetPlatform(
+     cl_platform_id *outPlatform);
+
+ // internal tracing macros
+-#if 0
++#if 1
+     #include <stdio.h>
+     #define KHR_ICD_TRACE(...) \
+     do \

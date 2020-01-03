@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, }:
+{ stdenv, fetchurl, geant_version }:
 
 let
-  mkDataset = { name, version, sha256, envvar}:
+  mkDataset = { name, version, sha256, envvar }:
     stdenv.mkDerivation {
       inherit name version;
+      inherit geant_version;
 
       src = fetchurl {
-        url = "https://geant4-data.web.cern.ch/geant4-data/datasets/${name}.${version}.tar.gz";
+        url = "https://cern.ch/geant4-data/datasets/${name}.${version}.tar.gz";
         inherit sha256;
       };
 
@@ -14,9 +15,10 @@ let
       dontBuild = true;
       dontConfigure = true;
 
+      datadir = "${placeholder "out"}/share/Geant4-${geant_version}/data/${name}${version}";
       installPhase = ''
-        mkdir -p $out/data
-        mv ./* $out/data
+        mkdir -p $datadir
+        mv ./* $datadir
       '';
 
       inherit envvar;
@@ -40,37 +42,37 @@ in
 
     {
       name = "G4EMLOW";
-      version = "7.3";
-      sha256 = "583aa7f34f67b09db7d566f904c54b21e95a9ac05b60e2bfb794efb569dba14e";
+      version = "7.7";
+      sha256 = "16dec6adda6477a97424d749688d73e9bd7d0b84d0137a67cf341f1960984663";
       envvar = "LE";
     }
 
     {
       name = "G4PhotonEvaporation";
-      version = "5.2";
-      sha256 = "83607f8d36827b2a7fca19c9c336caffbebf61a359d0ef7cee44a8bcf3fc2d1f";
+      version = "5.3";
+      sha256 = "d47ababc8cbe548065ef644e9bd88266869e75e2f9e577ebc36bc55bf7a92ec8";
       envvar = "LEVELGAMMA";
     }
 
     {
       name = "G4RadioactiveDecay";
-      version = "5.2";
-      sha256 = "99c038d89d70281316be15c3c98a66c5d0ca01ef575127b6a094063003e2af5d";
+      version = "5.3";
+      sha256 = "5c8992ac57ae56e66b064d3f5cdfe7c2fee76567520ad34a625bfb187119f8c1";
       envvar = "RADIOACTIVE";
     }
 
     {
       name = "G4SAIDDATA";
-      version = "1.1";
-      sha256 = "a38cd9a83db62311922850fe609ecd250d36adf264a88e88c82ba82b7da0ed7f";
+      version = "2.0";
+      sha256 = "1d26a8e79baa71e44d5759b9f55a67e8b7ede31751316a9e9037d80090c72e91";
       envvar = "SAIDXS";
     }
 
     {
-      name = "G4NEUTRONXS";
-      version = "1.4";
-      sha256 = "57b38868d7eb060ddd65b26283402d4f161db76ed2169437c266105cca73a8fd";
-      envvar = "NEUTRONXS";
+      name = "G4PARTICLEXS";
+      version = "1.1";
+      sha256 = "100a11c9ed961152acfadcc9b583a9f649dda4e48ab314fcd4f333412ade9d62";
+      envvar = "PARTICLEXS";
     }
 
     {
@@ -78,6 +80,13 @@ in
       version = "3.1";
       sha256 = "7698b052b58bf1b9886beacdbd6af607adc1e099fc730ab6b21cf7f090c027ed";
       envvar = "ABLA";
+    }
+
+    {
+      name = "G4INCL";
+      version = "1.0";
+      sha256 = "716161821ae9f3d0565fbf3c2cf34f4e02e3e519eb419a82236eef22c2c4367d";
+      envvar = "INCL";
     }
 
     {

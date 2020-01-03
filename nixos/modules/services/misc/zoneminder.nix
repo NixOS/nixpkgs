@@ -265,7 +265,7 @@ in {
                 }
 
                 location /cache/ {
-                  alias /var/cache/${dirName};
+                  alias /var/cache/${dirName}/;
                 }
 
                 location ~ \.php$ {

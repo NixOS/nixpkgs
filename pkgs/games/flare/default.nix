@@ -16,7 +16,7 @@ buildEnv {
 
   meta = with lib; {
     description = "Fantasy action RPG using the FLARE engine";
-    homepage = "http://flarerpg.org/";
+    homepage = "https://flarerpg.org/";
     maintainers = [ maintainers.aanderse ];
     license = [ licenses.gpl3 licenses.cc-by-sa-30 ];
     platforms = platforms.unix;

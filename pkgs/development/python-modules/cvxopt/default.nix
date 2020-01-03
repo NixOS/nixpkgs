@@ -65,7 +65,6 @@ buildPythonPackage rec {
       programming language.
     '';
     maintainers = with maintainers; [ edwtjo ];
-    broken = stdenv.targetPlatform.isDarwin;
     license = licenses.gpl3Plus;
   };
 }

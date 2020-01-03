@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "0.1.2";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "32890d1e043eb09a86ff1839096dfb49051cd436bdf1a1708299484cfd06db1a";
+    sha256 = "fa92a77fcc79032dba756b82196a29f63a7b374379bacdb78be128e09b8abc03";
   };
 
   checkInputs = [ pytest mock ];

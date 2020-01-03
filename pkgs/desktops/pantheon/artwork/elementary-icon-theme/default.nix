@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "5.0.4";
+  version = "5.1.0";
 
   repoName = "icons";
 
@@ -18,13 +18,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0ha7biqvmkv68x1gi9bfcn5z0ld067pa5czx0pyf053pa86lg3hx";
+    sha256 = "1yrf92ysjh1yfm42wznlw0lh9zsm5whghwzx3b3wcdkwdhkdg24z";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -38,6 +37,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     hicolor-icon-theme
   ];
+
+  dontDropIconThemeCache = true;
 
   mesonFlags = [
     "-Dvolume_icons=false" # Tries to install some icons to /

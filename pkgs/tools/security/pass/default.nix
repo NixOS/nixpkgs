@@ -4,6 +4,7 @@
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin
+, waylandSupport ? false, wl-clipboard ? null
 
 # For backwards-compatibility
 , tombPluginSupport ? false
@@ -14,6 +15,8 @@ with lib;
 assert x11Support -> xclip != null
                   && xdotool != null
                   && dmenu != null;
+
+assert waylandSupport -> wl-clipboard != null;
 
 let
   passExtensions = import ./extensions { inherit pkgs; };
@@ -37,8 +40,11 @@ let
       sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
     };
 
-    patches = [ ./set-correct-program-name-for-sleep.patch
-              ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
+    patches = [ ./set-correct-program-name-for-sleep.patch ]
+      ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch
+      # TODO (@Ma27) this patch adds support for wl-clipboard and can be removed during the next
+      # version bump.
+      ++ stdenv.lib.optional waylandSupport ./clip-wayland-support.patch;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -67,7 +73,8 @@ let
       qrencode
       procps
     ] ++ optional stdenv.isDarwin openssl
-      ++ ifEnable x11Support [ dmenu xclip xdotool ]);
+      ++ ifEnable x11Support [ dmenu xclip xdotool ]
+      ++ optional waylandSupport wl-clipboard);
 
     postFixup = ''
       # Link extensions env

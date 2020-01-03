@@ -8,6 +8,7 @@
 , mock
 , numpy
 , nodejs
+, packaging
 , pillow
 , pytest
 , python
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     pyyaml
     tornado
     numpy
+    packaging
   ]
   ++ lib.optionals ( !isPy3k ) [ futures ];
 

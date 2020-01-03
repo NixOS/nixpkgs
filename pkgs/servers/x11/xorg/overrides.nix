@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig, llvm_6,
+  mcpp, epoxy, openssl, pkgconfig, llvm_6, python3,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -72,13 +72,22 @@ self: super:
 
   mkfontdir = self.mkfontscale;
 
-  libxcb = super.libxcb.overrideAttrs (attrs: {
+  libxcb = (super.libxcb.override {
+    python = python3;
+  }).overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
   });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
+    patches = [
+      # Fixes an issue that happens when cross-compiling for us.
+      (fetchpatch {
+        url = "https://cgit.freedesktop.org/xorg/lib/libX11/patch/?id=0327c427d62f671eced067c6d9b69f4e216a8cac";
+        sha256 = "11k2mx56hjgw886zf1cdf2nhv7052d5rggimfshg6lq20i38vpza";
+      })
+    ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -301,6 +310,10 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ freetype fontconfig ];
   });
 
+  xcbproto = super.xcbproto.override {
+    python = python3;
+  };
+
   xcbutil = super.xcbutil.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
   });
@@ -368,6 +381,8 @@ self: super:
   xf86videoglide   = super.xf86videoglide.overrideAttrs   (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videoi128    = super.xf86videoi128.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videosavage  = super.xf86videosavage.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videotga     = super.xf86videotga.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videov4l     = super.xf86videov4l.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videovoodoo  = super.xf86videovoodoo.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
@@ -620,8 +635,8 @@ self: super:
           libAppleWM xorgproto
         ];
 
-        # XQuartz patchset
         patches = [
+          # XQuartz patchset
           (fetchpatch {
             url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
             sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";

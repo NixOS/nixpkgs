@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "ddt";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d13e6af8f36238e89d00f4ebccf2bda4f6d1878be560a6600689e42077e164e3";
+    sha256 = "9f79cf234064cf9b43492b72da35c473de3f03163d37bd13cec5bd8d200dda6b";
   };
 
   checkInputs = [ nose six pyyaml mock ];

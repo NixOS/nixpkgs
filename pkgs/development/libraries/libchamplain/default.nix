@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libchamplain";
-  version = "0.12.19";
+  version = "0.12.20";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "191aid1qsfkab5whbzj2r3g63dpdgrwp5141mfywvqyvdhr2x11n";
+    sha256 = "0rihpb0npqpihqcdz4w03rq6xl7jdckfqskvv9diq2hkrnzv8ch2";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

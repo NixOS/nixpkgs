@@ -1,6 +1,6 @@
 { stdenv, buildPackages, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
 , openssl, enableMagnet ? false, lua5_1 ? null
-, enableMysql ? false, mysql ? null
+, enableMysql ? false, libmysqlclient ? null
 , enableLdap ? false, openldap ? null
 , enableWebDAV ? false, sqlite ? null, libuuid ? null
 , enableExtendedAttrs ? false, attr ? null
@@ -8,7 +8,7 @@
 }:
 
 assert enableMagnet -> lua5_1 != null;
-assert enableMysql -> mysql != null;
+assert enableMysql -> libmysqlclient != null;
 assert enableLdap -> openldap != null;
 assert enableWebDAV -> sqlite != null;
 assert enableWebDAV -> libuuid != null;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
              ++ stdenv.lib.optional enableMagnet lua5_1
-             ++ stdenv.lib.optional enableMysql mysql.connector-c
+             ++ stdenv.lib.optional enableMysql libmysqlclient
              ++ stdenv.lib.optional enableLdap openldap
              ++ stdenv.lib.optional enableWebDAV sqlite
              ++ stdenv.lib.optional enableWebDAV libuuid;

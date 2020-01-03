@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, utilmacros, python
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, utilmacros, python3
 , libGL, libX11
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig utilmacros python ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig utilmacros python3 ];
   buildInputs = [ libGL libX11 ];
 
   preConfigure = optionalString stdenv.isDarwin ''

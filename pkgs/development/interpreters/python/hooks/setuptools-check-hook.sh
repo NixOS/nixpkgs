@@ -12,7 +12,7 @@ setuptoolsCheckPhase() {
     echo "Finished executing setuptoolsCheckPhase"
 }
 
-if [ -z "$dontUseSetuptoolsCheck" ] && [ -z "$installCheckPhase" ]; then
+if [ -z "${dontUseSetuptoolsCheck-}" ] && [ -z "${installCheckPhase-}" ]; then
     echo "Using setuptoolsCheckPhase"
     preDistPhases+=" setuptoolsCheckPhase"
 fi

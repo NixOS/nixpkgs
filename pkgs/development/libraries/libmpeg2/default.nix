@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     homepage = http://libmpeg2.sourceforge.net/;
     description = "A free library for decoding mpeg-2 and mpeg-1 video streams";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; unix;
   };
 }

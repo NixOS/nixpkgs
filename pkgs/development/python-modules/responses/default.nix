@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.10.6";
+  version = "0.10.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "502d9c0c8008439cfcdef7e251f507fcfdd503b56e8c0c87c3c3e3393953f790";
+    sha256 = "46d4e546a19fc6106bc7e804edd4551ef04690405e41e7e750ebc295d042623b";
   };
 
   propagatedBuildInputs = [ cookies mock requests six ];

@@ -89,6 +89,7 @@ in
       group = cfg.group;
       home = cfg.dataDir;
       createHome = true;
+      isSystemUser = true;
     };
 
     systemd.services.oxidized = {
@@ -110,6 +111,7 @@ in
         Restart  = "always";
         WorkingDirectory = cfg.dataDir;
         KillSignal = "SIGKILL";
+        PIDFile = "${cfg.dataDir}.config/oxidized/pid";
       };
     };
   };

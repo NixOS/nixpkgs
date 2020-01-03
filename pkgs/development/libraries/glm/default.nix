@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = http://glm.g-truc.net/;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }
 

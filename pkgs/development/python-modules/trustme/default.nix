@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "trustme";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "103f8n0c60593r0z8hh1zvk1bagxwnhrv3203xpiiddwqxalr04b";
+    sha256 = "f0f96a21b430cc29661644d3569a1112a397ca9cc8595b964d4ae71e5e957529";
   };
 
   checkInputs = [
@@ -35,6 +35,9 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest
   '';
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "High quality TLS certs while you wait, for the discerning tester";

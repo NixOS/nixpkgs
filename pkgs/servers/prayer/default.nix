@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, openssl, db, zlib, uwimap, html-tidy, pam}:
+{ stdenv, fetchurl, fetchpatch, perl, openssl, db, zlib, uwimap, html-tidy, pam}:
 
 let
   ssl = stdenv.lib.optionals uwimap.withSSL
@@ -12,7 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "135fjbxjn385b6cjys6qhbwfw61mdcl2akkll4jfpdzfvhbxlyda";
   };
 
-  patches = [ ./install.patch ];
+  patches = [
+    ./install.patch
+
+    # fix build errors which result from openssl changes
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/p/prayer/1.3.5-dfsg1-6/debian/patches/disable_ssl3.patch";
+      sha256 = "1rx4bidc9prh4gffipykp144cyi3zd6qzd990s2aad3knzv5bkdd";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/p/prayer/1.3.5-dfsg1-6/debian/patches/openssl1.1.patch";
+      sha256 = "0zinylvq3bcifdmki867gir49pbjx6qb5h019hawwif2l4jmlxw1";
+    })
+  ];
+
   postPatch = ''
     sed -i -e s/gmake/make/ -e 's/LDAP_ENABLE.*= true/LDAP_ENABLE=false/' \
       ${ssl} \

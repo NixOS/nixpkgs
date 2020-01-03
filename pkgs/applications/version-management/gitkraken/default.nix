@@ -2,7 +2,7 @@
 , libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
+, dpkg, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, libuuid
 , e2fsprogs, krb5
 }:
 
@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "6.1.4";
+  version = "6.4.1";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "10m6pwdwdxj6x64bc7mrvlvwkgqrd5prh9xx7xhvbz55q6gx4vdr";
+    sha256 = "1w8iwpbr6nwzhhf63fvr7pd66yjx3jgjy4gx5y02qxa3ip5psq5b";
   };
 
   libPath = makeLibraryPath [
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
     comment = "Graphical Git client from Axosoft";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
+  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 
   unpackCmd = ''
     mkdir out
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     pushd usr
     pushd share
@@ -89,6 +90,7 @@ stdenv.mkDerivation rec {
     popd
 
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -80,7 +80,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Google's open source JavaScript engine";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     license = licenses.bsd3;
   };
 }

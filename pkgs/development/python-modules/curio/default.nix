@@ -19,6 +19,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest sphinx ];
 
+  __darwinAllowLocalNetworking = true;
+
   # test_aside_basic times out,
   # test_aside_cancel fails because modifies PYTHONPATH and cant find pytest
   checkPhase = ''

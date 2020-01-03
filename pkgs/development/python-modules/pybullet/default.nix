@@ -1,21 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, libGLU_combined
+, libGLU, libGL
 , xorg
 }:
 
 buildPythonPackage rec {
   pname = "pybullet";
-  version = "2.4.9";
+  version = "2.5.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bcb5aaca2b8adf94a04fd5206eea113ddc1993c9f13ab39f4a37e98f92b6d7db";
+    sha256 = "5824e902e0dd8bf7177ce5d9e038c6b04be65f72621fe13f93ec15c9d9c85a49";
   };
 
   buildInputs = [
-    libGLU_combined
+    libGLU libGL
     xorg.libX11
   ];
 

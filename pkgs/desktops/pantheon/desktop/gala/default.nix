@@ -26,19 +26,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "unstable-2019-07-21"; # Is tracking https://github.com/elementary/gala/commits/stable/juno
+  version = "unstable-2019-10-31"; # Is tracking https://github.com/elementary/gala/commits/stable/juno
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = "50694796d4c8f0ca92517d5a628b0efdf748279c";
-    sha256 = "17d0hd2145mrf8y5ws3xypdbwj72qv7hrrp6p6lm4k16xd96yznr";
+    rev = "0f0724c97ad49f470f41c4a25c63103f51122997";
+    sha256 = "09cl3k2am878iiy76bijb0ykrcafh944kz027jgi1y5yk4bwfjc4";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      versionPolicy = "master";
+      attrPath = "pantheon.${pname}";
     };
   };
 

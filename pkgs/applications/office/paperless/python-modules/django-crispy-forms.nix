@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, pytest, pytest-django, django }:
+, pytest_4, pytest-django, django }:
 
 buildPythonPackage {
   pname = "django-crispy-forms";
@@ -19,7 +19,7 @@ buildPythonPackage {
     export sourceRoot=source-
   '';
 
-  checkInputs = [ pytest pytest-django django ];
+  checkInputs = [ pytest_4 pytest-django django ];
 
   checkPhase = ''
     PYTHONPATH="$(pwd):$PYTHONPATH" \

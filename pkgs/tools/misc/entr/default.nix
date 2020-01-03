@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchurl {
     url = "http://entrproject.org/code/${pname}-${version}.tar.gz";
-    sha256 = "0w2xkf77jikcjh15fp9g7661ss30pz3jbnh261vqpaqavwah4c17";
+    sha256 = "0ni34sfrssa6njiqm22q2kxv437r6vbs0a6mys8kwwn7vbdw30dh";
   };
 
   postPatch = ''
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Run arbitrary commands when files change";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub synthetica ];
   };
 }

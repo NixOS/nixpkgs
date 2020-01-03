@@ -4,7 +4,7 @@
 
 let
   pname = "atk";
-  version = "2.32.0";
+  version = "2.34.1";
 in
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1k4i817bd2w5b9z394f2yyx95591l2746wa40am0vvz4gzdgwhfb";
+    sha256 = "1jwp16r6p5z66k4b2v8zlzhyshhwlmyi27ippkrgqr8jsary7w6l";
   };
 
   outputs = [ "out" "dev" ];
@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # Required by atk.pc
     glib
+  ];
+
+  patches = [
+    # meson builds an incorrect .pc file
+    # glib should be Requires not Requires.private
+    ./fix_pc.patch
   ];
 
   doCheck = true;

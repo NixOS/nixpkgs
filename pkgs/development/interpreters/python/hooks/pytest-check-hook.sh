@@ -43,7 +43,7 @@ function pytestCheckPhase() {
     echo "Finished executing pytestCheckPhase"
 }
 
-if [ -z "$dontUsePytestCheck" ] && [ -z "$installCheckPhase" ]; then
+if [ -z "${dontUsePytestCheck-}" ] && [ -z "${installCheckPhase-}" ]; then
     echo "Using pytestCheckPhase"
     preDistPhases+=" pytestCheckPhase"
 fi

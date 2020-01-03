@@ -1,0 +1,67 @@
+diff --git a/data/gnome-welcome-tour b/data/gnome-welcome-tour
+index c479296..3dd629c 100755
+--- a/data/gnome-welcome-tour
++++ b/data/gnome-welcome-tour
+@@ -3,7 +3,7 @@
+ cfgdir=${XDG_CONFIG_DIR:-$HOME/.config}
+ 
+ # Don't do anything if yelp isn't installed
+-yelp_path=$(which yelp 2>/dev/null)
++yelp_path=@yelp@
+ if test -z "${yelp_path}"; then
+     rm -f $cfgdir/run-welcome-tour
+     exit
+@@ -17,5 +17,5 @@ geometry=(1024, 709)
+ EOF
+ fi
+ 
+-yelp help:gnome-help/getting-started
++$yelp_path help:gnome-help/getting-started
+ rm -f $cfgdir/run-welcome-tour
+diff --git a/gnome-initial-setup/pages/keyboard/cc-input-chooser.c b/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
+index 1c34ef7..a1e7f93 100644
+--- a/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
++++ b/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
+@@ -177,9 +177,9 @@ preview_cb (GtkLabel       *label,
+ 		return TRUE;
+ 
+ 	if (variant[0])
+-		commandline = g_strdup_printf ("gkbd-keyboard-display -l \"%s\t%s\"", layout, variant);
++		commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l \"%s\t%s\"", layout, variant);
+ 	else
+-		commandline = g_strdup_printf ("gkbd-keyboard-display -l %s", layout);
++		commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l %s", layout);
+ 	g_spawn_command_line_async (commandline, NULL);
+ 	g_free (commandline);
+ 
+@@ -829,7 +829,7 @@ cc_input_chooser_class_init (CcInputChooserClass *klass)
+                 g_param_spec_string ("showing-extra", "", "", "",
+                                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+ 
+-	signals[CHANGED] = 
++	signals[CHANGED] =
+ 		g_signal_new ("changed",
+ 			      G_TYPE_FROM_CLASS (object_class),
+ 			      G_SIGNAL_RUN_FIRST,
+diff --git a/gnome-initial-setup/pages/timezone/tz.h b/gnome-initial-setup/pages/timezone/tz.h
+index 93905b3..e7ee785 100644
+--- a/gnome-initial-setup/pages/timezone/tz.h
++++ b/gnome-initial-setup/pages/timezone/tz.h
+@@ -4,7 +4,7 @@
+  * Copyright (C) 2000-2001 Ximian, Inc.
+  *
+  * Authors: Hans Petter Jansson <hpj@ximian.com>
+- * 
++ *
+  * Largely based on Michael Fulbright's work on Anaconda.
+  *
+  * This program is free software; you can redistribute it and/or modify
+@@ -28,7 +28,7 @@
+ #include <glib.h>
+ 
+ #ifndef __sun
+-#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
++#  define TZ_DATA_FILE "@tzdata@/share/zoneinfo/zone.tab"
+ #else
+ #  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab"
+ #endif

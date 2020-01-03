@@ -7,8 +7,8 @@
   <refmiscinfo class="source">NixOS</refmiscinfo>
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-version</command>
-  </refname><refpurpose>show the NixOS version</refpurpose>
+  <refname><command>nixos-version</command></refname>
+  <refpurpose>show the NixOS version</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>

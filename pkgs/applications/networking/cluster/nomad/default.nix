@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "nomad";
-  version = "0.9.5";
+  version = "0.10.2";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/nomad";
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "01491470idb11z0ab4anb5caw46vy9s94a17l92j0z2f3f4k6xfl";
+    sha256 = "1kv67rkqnxiz2dkmc1v1df6qx9j5j4h7cis00v2i15sl824g22jw";
   };
 
   # ui:
@@ -36,6 +36,6 @@ buildGoPackage rec {
     description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
     platforms = platforms.unix;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem pradeepchhetri ];
+    maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes ];
   };
 }

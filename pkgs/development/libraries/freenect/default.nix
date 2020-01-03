@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libusb, pkgconfig, freeglut, libGLU_combined, libXi, libXmu
+{ stdenv, lib, fetchFromGitHub, cmake, libusb, pkgconfig, freeglut, libGLU, libGL, libXi, libXmu
 , GLUT, Cocoa
  }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vnc7z2avckh4mccqq6alsd2z7xvsh3kaslc5b0gnfxw0j269gl6";
   };
 
-  buildInputs = [ libusb freeglut libGLU_combined libXi libXmu ]
+  buildInputs = [ libusb freeglut libGLU libGL libXi libXmu ]
     ++ lib.optionals stdenv.isDarwin [ GLUT Cocoa ];
 
   nativeBuildInputs = [ cmake pkgconfig ];

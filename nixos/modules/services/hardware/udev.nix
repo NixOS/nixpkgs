@@ -221,8 +221,8 @@ in
         type = types.lines;
         description = ''
           Additional <command>hwdb</command> files. They'll be written
-          into file <filename>10-local.hwdb</filename>. Thus they are
-          read before all other files.
+          into file <filename>99-local.hwdb</filename>. Thus they are
+          read after all other files.
         '';
       };
 

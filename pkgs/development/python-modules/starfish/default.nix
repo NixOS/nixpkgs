@@ -26,11 +26,11 @@
 
 buildPythonPackage rec {
   pname = "starfish";
-  version = "0.1.3";
+  version = "0.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19bec2a869affbca0a7e3fc0aee1b9978ff7f0f1a2a8551c2d4ae148a7ddc251";
+    sha256 = "02002b908572fcd2c7471475936a6c375f143d15df871399ce86ced6d7aef865";
   };
 
   propagatedBuildInputs = [
@@ -85,5 +85,6 @@ buildPythonPackage rec {
     homepage = https://spacetx-starfish.readthedocs.io/en/latest/;
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true; # incompatible with latest python-dateutil, scikit-image
   };
 }

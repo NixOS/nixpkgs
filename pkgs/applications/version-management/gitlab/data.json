@@ -1,32 +1,13 @@
 {
-  "ce": {
-    "version": "12.1.6",
-    "repo_hash": "0zyqxzyb1m8qa94iiyqf5ivqxrg60y378r94fsixy17fbh4y7sa6",
-    "deb_hash": "14bwcmwar44pjnjr6fdn2h9y92vyfva0kb76d4pz8pqc9pfm2hmg",
-    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_12.1.6-ce.0_amd64.deb/download.deb",
-    "owner": "gitlab-org",
-    "repo": "gitlab-ce",
-    "rev": "v12.1.6",
-    "passthru": {
-      "GITALY_SERVER_VERSION": "1.53.2",
-      "GITLAB_PAGES_VERSION": "1.7.1",
-      "GITLAB_SHELL_VERSION": "9.3.0",
-      "GITLAB_WORKHORSE_VERSION": "8.7.0"
-    }
-  },
-  "ee": {
-    "version": "12.1.6",
-    "repo_hash": "1lxci1hwcccgw567c5733yl95xsxr4gnw41m48igdw9y8p6g7zbc",
-    "deb_hash": "0yjilhf4bjhl1a596x6n4cvjklfbrwhymslhx977nfjazfb5slx3",
-    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_12.1.6-ee.0_amd64.deb/download.deb",
-    "owner": "gitlab-org",
-    "repo": "gitlab-ee",
-    "rev": "v12.1.6-ee",
-    "passthru": {
-      "GITALY_SERVER_VERSION": "1.53.2",
-      "GITLAB_PAGES_VERSION": "1.7.1",
-      "GITLAB_SHELL_VERSION": "9.3.0",
-      "GITLAB_WORKHORSE_VERSION": "8.7.0"
-    }
+  "version": "12.5.5",
+  "repo_hash": "1vafy31s2sbs6xc2cp457k535yyawz630i8ks22ypyg2m2gy5n5m",
+  "owner": "gitlab-org",
+  "repo": "gitlab",
+  "rev": "v12.5.5-ee",
+  "passthru": {
+    "GITALY_SERVER_VERSION": "1.72.1",
+    "GITLAB_PAGES_VERSION": "1.12.0",
+    "GITLAB_SHELL_VERSION": "10.2.0",
+    "GITLAB_WORKHORSE_VERSION": "8.14.1"
   }
 }

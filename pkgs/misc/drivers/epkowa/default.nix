@@ -30,7 +30,15 @@ let plugins = {
     version = "2.30.4";
 
     src = fetchurl {
-      url = "https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz";
+      # To find new versions, visit
+      # http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX and search for
+      # some printer like for instance "WF-7210" to get to the most recent
+      # version.  
+      # NOTE: Don't forget to update the webarchive link too!
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz"
+      ];
       sha256 = "16iq5gmfcgkvcx5hixggxgb8lwin5gjdhnq0zabgpfqg11n2w21q";
     };
 
@@ -57,7 +65,10 @@ let plugins = {
 
     nativeBuildInputs = [ autoPatchelfHook rpm ];
     src = fetchurl {
-      url = "https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz";
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz"
+      ];
       sha256 = "1cz4z3wz216s77z185m665jcgdslil5gn4dsi118nv1fm17z3jik";
     };
     installPhase = ''
@@ -84,7 +95,10 @@ let plugins = {
     nativeBuildInputs= [ autoPatchelfHook ];
     buildInputs = [ gcc.cc.lib ];
     src = fetchurl {
-      url = "https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${version}.x64.rpm.tar.gz";
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-f720/rpm/x64/iscan-gt-f720-bundle-${version}.x64.rpm.tar.gz"
+      ];
       sha256 = "12rivh00n9mhagy5yjl1m0bv7ypbig6brqkxm0a12xy0mjq7yv8y";
     };
     installPhase = ''
@@ -111,7 +125,10 @@ let plugins = {
     nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [ gcc.cc.lib libtool ];
     src = fetchurl {
-      url = "https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${version}.x64.rpm.tar.gz";
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${version}.x64.rpm.tar.gz"
+      ];
       sha256 = "1ran75zsxcdci00jakngkz6p9lj4q483hjapmf80p68rzhpmdr5y";
     };
     installPhase = ''
@@ -145,7 +162,10 @@ let plugins = {
     nativeBuildInputs = [ autoPatchelfHook ];
 
     src = fetchurl {
-      url = "https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${version}.x64.rpm.tar.gz";
+      urls = [
+        "https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${version}.x64.rpm.tar.gz"
+      ];
       sha256 = "1l0y4dy88y91jdq66pxrxqmiwsxwy0rd7x4bh0cw08r4iyhjqprz";
     };
     installPhase = ''
@@ -179,7 +199,10 @@ let iscan-data = stdenv.mkDerivation rec {
   version = "1.39.1-2";
 
   src = fetchurl {
-    url = "http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz";
+    urls = [
+      "http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
+      "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
+    ];
     sha256 = "04zrvbnxf1k6zinrd13hwnbzscc3qhmwlvx3k2jhjys2lginw7w4";
   };
 
@@ -195,7 +218,10 @@ stdenv.mkDerivation rec {
   version = "2.30.4-2";
 
   src = fetchurl {
-    url = "http://support.epson.net/linux/src/scanner/iscan/iscan_${version}.tar.gz";
+    urls = [
+      "http://support.epson.net/linux/src/scanner/iscan/iscan_${version}.tar.gz"
+      "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan_${version}.tar.gz"
+    ];
     sha256 = "1ma76jj0k3bz0fy06fiyl4di4y77rcryb0mwjmzs5ms2vq9rjysr";
   };
 
@@ -211,7 +237,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-2.28.1.3+libpng-1.5.patch?h=b6e4c805d53b49da79a0f64ef16bb82d6d800fcf";
+      urls = [
+        "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-2.28.1.3+libpng-1.5.patch?h=b6e4c805d53b49da79a0f64ef16bb82d6d800fcf"
+        "https://web.archive.org/web/https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-2.28.1.3+libpng-1.5.patch?h=b6e4c805d53b49da79a0f64ef16bb82d6d800fcf"
+      ];
       sha256 = "04y70qjd220dpyh771fiq50lha16pms98mfigwjczdfmx6kpj1jd";
     })
     ./firmware_location.patch

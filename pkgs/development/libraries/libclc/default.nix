@@ -32,5 +32,6 @@ stdenv.mkDerivation {
     description = "Implementation of the library requirements of the OpenCL C programming language";
     license = licenses.mit;
     platforms = platforms.all;
+    broken = true;
   };
 }

@@ -1,23 +1,31 @@
-{ stdenv, fetchFromGitHub, pidgin, glib, json-glib, nss, nspr, libgnome-keyring } :
+{ stdenv, fetchFromGitHub, pkgconfig, pidgin, glib, json-glib, nss, nspr
+, libsecret
+} :
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pidgin-opensteamworks";
-  version = "unstable-2018-08-02";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "pidgin-opensteamworks";
-    rev = "b16a636d177f4a8862abdfbdb2c0994712ea0cd3";
-    sha256 = "0qyxfrfzsm43f1gmbg350znwxld1fqr9a9yziqs322bx2vglzgfh";
+    rev = version;
+    sha256 = "0zxd45g9ycw5kmm4i0800jnqg1ms2gbqcld6gkyv6n3ac1wxizpj";
   };
 
-  preConfigure = "cd steam-mobile";
+  sourceRoot = "source/steam-mobile";
+
   installFlags = [
     "PLUGIN_DIR_PURPLE=${placeholder "out"}/lib/purple-2"
     "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
   ];
 
-  buildInputs = [ pidgin glib json-glib nss nspr libgnome-keyring ];
+  nativeBuildInputs = [
+    pkgconfig
+  ];
+  buildInputs = [
+    pidgin glib json-glib nss nspr libsecret
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/EionRobb/pidgin-opensteamworks;

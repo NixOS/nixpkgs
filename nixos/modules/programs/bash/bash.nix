@@ -40,6 +40,10 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
+  ];
+
   options = {
 
     programs.bash = {

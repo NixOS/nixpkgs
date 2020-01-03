@@ -6,7 +6,8 @@
 
 let
   self = stdenv.mkDerivation ({
-    name = "clang-${version}";
+    pname = "clang";
+    inherit version;
 
     src = fetch "cfe" "0ihnbdl058gvl2wdy45p5am55bq8ifx8m9mhcsgj9ax8yxlzvvvh";
 
@@ -105,7 +106,7 @@ let
       platforms   = stdenv.lib.platforms.all;
     };
   } // stdenv.lib.optionalAttrs enableManpages {
-    name = "clang-manpages-${version}";
+    pname = "clang-manpages";
 
     buildPhase = ''
       make docs-clang-man

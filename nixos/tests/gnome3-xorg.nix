@@ -16,7 +16,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       services.xserver.displayManager.lightdm.autoLogin.enable = true;
       services.xserver.displayManager.lightdm.autoLogin.user = "alice";
       services.xserver.desktopManager.gnome3.enable = true;
-      services.xserver.desktopManager.default = "gnome-xorg";
+      services.xserver.displayManager.defaultSession = "gnome-xorg";
 
       virtualisation.memorySize = 1024;
     };
@@ -29,7 +29,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->waitForUnit("default.target","alice");
 
       # Check that logging in has given the user ownership of devices.
-      $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+      $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
 
       $machine->succeed("su - alice -c 'DISPLAY=:0.0 gnome-terminal &'");
       $machine->succeed("xauth merge ~alice/.Xauthority");

@@ -4,12 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.3.0";
+  version = "1.4.3";
   pname = "xxhash";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rhrqrlq4n3vgqd1fv1dcc5ga5dzy9qbd40p8rsqqhh5klxg48gy";
+    sha256 = "8b6b1afe7731d7d9cbb0398b4a811ebb5e6be5c174f72c68abf81f919a435de9";
   };
 
   meta = with stdenv.lib; {

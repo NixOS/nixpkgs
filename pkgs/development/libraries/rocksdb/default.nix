@@ -1,39 +1,28 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, cmake
+, cmake, ninja
 , bzip2, lz4, snappy, zlib, zstd
 , enableLite ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "6.2.4";
+  version = "6.4.6";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08077agbimm7738xrknkw6fjw9f8jv6x3igp8b5pmsj9l954ywma";
+    sha256 = "0s0n4p1b4jzmslz9d2xd4ajra0m6l9x26mjwlbgw0klxjggmy8qn";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
   patches = [
+    # https://github.com/facebook/rocksdb/pull/6076
     (fetchpatch {
-      url = "https://github.com/facebook/rocksdb/commit/6a376fc709e9d289c1be4a7d479eb460cd27a87f.diff";
-      sha256 = "1rsc1nagwica0krfkvjv21jhgfxpl9359aqqaaxqfnbvfds43ljs";
-    })
-    (fetchpatch {
-      url = "https://github.com/facebook/rocksdb/commit/3b860886c01bd880158e9a63ff970dfe9aa966cb.diff";
-      sha256 = "1b6p2ghmbawcafv4w9m8g4xv1f9xjijdbm4hj4rg3f8mylqcv7i1";
-    })
-    (fetchpatch {
-      url = "https://github.com/facebook/rocksdb/commit/31ac949de35c0e21440f851a6811304de964d22a.diff";
-      sha256 = "1316cw74cdfll51gacr9qshrwdg4j8w9n75bvfxiir8v57xaipzj";
-    })
-    (fetchpatch {
-      url = "https://github.com/facebook/rocksdb/commit/c585211cec1211ad9b977211ba5aa69853a20348.diff";
-      sha256 = "01kwnm0r4msc3b6fwx2j14p68ii7z2d6abig2093izcvbm6hq6p1";
+      url = "https://github.com/facebook/rocksdb/commit/c0be4b2ff1a5393419673fab961cb9b09ba38752.diff";
+      sha256 = "1f2wg9kqlmf2hiiihmbp8m5fr2wnn7896g6i9yg9hdgi40pw30w6";
     })
   ];
 
@@ -53,6 +42,7 @@ stdenv.mkDerivation rec {
     "-DWITH_ZLIB=1"
     "-DWITH_ZSTD=1"
     "-DWITH_GFLAGS=0"
+    "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
     (stdenv.lib.optional
         (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)

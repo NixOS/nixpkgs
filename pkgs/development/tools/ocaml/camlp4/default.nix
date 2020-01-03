@@ -1,5 +1,9 @@
 { stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.09"
+then throw "camlp4 is not available for OCaml ${ocaml.version}"
+else
+
 let param = {
   "4.02" = {
      version = "4.02+6";

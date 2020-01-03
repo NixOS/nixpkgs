@@ -28,6 +28,11 @@ let
 
 in {
 
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
+      "Set the option `virtualisation.libvirtd.qemuPackage' instead.")
+  ];
+
   ###### interface
 
   options.virtualisation.libvirtd = {
@@ -146,7 +151,8 @@ in {
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e:
         "allow ${e}") cfg.allowedBridges;
-      systemPackages = with pkgs; [ libvirt libressl.nc cfg.qemuPackage ];
+      systemPackages = with pkgs; [ libvirt libressl.nc iptables cfg.qemuPackage ];
+      etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
     boot.kernelModules = [ "tun" ];

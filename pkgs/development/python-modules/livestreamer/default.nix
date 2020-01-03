@@ -37,7 +37,7 @@ buildPythonPackage rec {
       services and pipes them into a video player of choice.
     '';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
   };
 
 }

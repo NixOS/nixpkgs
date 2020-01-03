@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.1";
+  version = "1.5.1";
   pname = "maxminddb";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04mpilsj76m29id5xfi8mmasdmh27ldn7r0dmh2rj6a8v2y5256z";
+    sha256 = "0y9giw81k4wdmpryr4k42w50z292mf364a6vs1vxf83ksc9ig6j4";
   };
 
   propagatedBuildInputs = [ ipaddress ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Reader for the MaxMind DB format";
     homepage = "https://www.maxmind.com/en/home";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
 }

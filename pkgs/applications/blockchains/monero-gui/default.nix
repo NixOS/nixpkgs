@@ -1,27 +1,27 @@
-{ mkDerivation, lib, makeDesktopItem, fetchFromGitHub
+{ stdenv, wrapQtAppsHook, makeDesktopItem, fetchFromGitHub
 , qtbase, qmake, qtmultimedia, qttools
 , qtgraphicaleffects, qtdeclarative
 , qtlocation, qtquickcontrols, qtquickcontrols2
 , qtwebchannel, qtwebengine, qtx11extras, qtxmlpatterns
 , monero, unbound, readline, boost, libunwind
 , libsodium, pcsclite, zeromq, cppzmq, pkgconfig
-, hidapi
+, hidapi, randomx
 }:
 
-with lib;
+with stdenv.lib;
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.14.1.2";
+  version = "0.15.0.1";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1rm043r6y2mzy8pclnzbjjfxgps8pkfa2b92p66k8y8rdmgq6m1k";
+    sha256 = "08j8kkncdn57xql0bhmlzjpjkdfhqbpda1p07r797q8qi0nl4w8n";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [
     qtbase qtmultimedia qtgraphicaleffects
@@ -30,7 +30,7 @@ mkDerivation rec {
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
     boost libunwind libsodium pcsclite zeromq
-    cppzmq hidapi
+    cppzmq hidapi randomx
   ];
 
   patches = [ ./move-log-file.patch ];

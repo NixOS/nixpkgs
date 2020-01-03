@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "qps";
-  version = "1.10.20";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1g8j4cjy5x33jzjkx6vwyl5qbf9i2z2w01ipgk7nrik5drf9crbf";
+    sha256 = "03rl59yk3b24j0y0k8dpdpb3yi4f1l642zn5pp5br3s2vwx1vzkg";
   };
 
   nativeBuildInputs = [ cmake lxqt-build-tools ];
@@ -17,10 +17,10 @@ mkDerivation rec {
   buildInputs = [ qtbase qtx11extras qttools ];
 
   meta = with lib; {
-    description = "The Qt process manager";
+    description = "Qt based process manager";
     homepage = https://github.com/lxqt/qps;
     license = licenses.gpl2;
+    platforms = with platforms; linux;  # does not build on darwin
     maintainers = with maintainers; [ romildo ];
-    platforms = with platforms; unix;
   };
 }

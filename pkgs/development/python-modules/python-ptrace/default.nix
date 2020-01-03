@@ -1,19 +1,22 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, six
 }:
 
 buildPythonPackage rec {
   pname = "python-ptrace";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "019jlpya2d2b3vbg037hnj4z0f564r7ibygayda7bm7qbpw0sa4g";
+    sha256 = "9885e9003e4a99c90b3bca1be9306181c9b40a33fc6e17b81027709be5e5cb87";
   };
 
   # requires distorm, which is optionally
   doCheck = false;
+
+  propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
     description = "Python binding of ptrace library";

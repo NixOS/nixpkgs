@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "jsonmerge";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03l2j1lrcwcp7af4x8agxnkib0ndybfrbhn2gi7mnk6gbxfw1aw3";
+    sha256 = "2004a421890311176136fb911c339c4bab45984808814feaed6a328c6e211ba2";
   };
 
   propagatedBuildInputs = [ jsonschema ];

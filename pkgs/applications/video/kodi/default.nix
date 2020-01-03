@@ -8,12 +8,12 @@
 , libXt, libXmu, libXext
 , libXinerama, libXrandr
 , libXtst, libXfixes, systemd
-, alsaLib, libGLU_combined, glew, fontconfig, freetype, ftgl
-, libjpeg, jasper, libpng, libtiff
+, alsaLib, libGLU, libGL, glew, fontconfig, freetype, ftgl
+, libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, libdrm
+, sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
@@ -43,15 +43,15 @@ assert vdpauSupport -> libvdpau != null;
 assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
 
 let
-  kodiReleaseDate = "20190901";
-  kodiVersion = "18.4";
+  kodiReleaseDate = "20191116";
+  kodiVersion = "18.5";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "1m0295czxabdcqyqf5m94av9d88pzhnzjvyfs1q07xqq82h313p7";
+    sha256 = "0pcrraj1ddzrd296br10yjnaxgb3iym74xzixcakaqhhp00f5hf6";
   };
 
   cmakeProto = fetchurl {
@@ -156,12 +156,12 @@ in stdenv.mkDerivation {
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xorgproto libXt libXmu libXext
       libXinerama libXrandr libXtst libXfixes
-      alsaLib libGLU_combined glew fontconfig freetype ftgl
-      libjpeg jasper libpng libtiff
+      alsaLib libGL libGLU glew fontconfig freetype ftgl
+      libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql.connector-c avahi lame
+      sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo xdpyinfo
       libcec libcec_platform dcadec libuuid
       libgcrypt libgpgerror libunistring

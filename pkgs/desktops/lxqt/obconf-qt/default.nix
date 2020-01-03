@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, qttools,
-  qtx11extras, xorg, lxqt-build-tools, openbox, hicolor-icon-theme }:
+  qtx11extras, xorg, lxqt-build-tools, openbox }:
 
 mkDerivation rec {
   pname = "obconf-qt";
@@ -27,7 +27,6 @@ mkDerivation rec {
     xorg.libXdmcp
     xorg.libSM
     openbox
-    hicolor-icon-theme
   ];
 
   meta = with lib; {

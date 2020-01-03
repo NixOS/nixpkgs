@@ -3,6 +3,7 @@
 , fetchurl
 , pkgconfig
 , expat
+, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , systemd
 , libX11 ? null
 , libICE ? null
@@ -14,6 +15,8 @@
 assert
   x11Support ->
     libX11 != null && libICE != null && libSM != null;
+
+assert enableSystemd -> systemd != null;
 
 stdenv.mkDerivation rec {
   pname = "dbus";
@@ -50,16 +53,18 @@ stdenv.mkDerivation rec {
     expat
   ];
 
-  buildInputs = lib.optionals x11Support [
-    libX11
-    libICE
-    libSM
-  ] ++ lib.optional stdenv.isLinux systemd;
+  buildInputs =
+    lib.optionals x11Support [
+      libX11
+      libICE
+      libSM
+    ] ++ lib.optional enableSystemd systemd;
   # ToDo: optional selinux?
 
   configureFlags = [
     "--enable-user-session"
     "--libexecdir=${placeholder ''out''}/libexec"
+    "--datadir=/etc"
     "--localstatedir=/var"
     "--runstatedir=/run"
     "--sysconfdir=/etc"
@@ -100,6 +105,7 @@ stdenv.mkDerivation rec {
     description = "Simple interprocess messaging system";
     homepage = http://www.freedesktop.org/wiki/Software/dbus/;
     license = licenses.gpl2Plus; # most is also under AFL-2.1
+    maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.unix;
   };
 }

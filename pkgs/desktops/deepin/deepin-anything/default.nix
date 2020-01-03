@@ -3,7 +3,7 @@
 
 mkDerivation rec {
   pname = "deepin-anything";
-  version = "0.1.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
@@ -51,7 +51,7 @@ mkDerivation rec {
     searchHardCodedPaths $modsrc  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin file search tool";

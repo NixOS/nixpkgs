@@ -251,7 +251,7 @@ let
         default = [];
         example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
-          The set of packages that should be made availabe to the user.
+          The set of packages that should be made available to the user.
           This is in contrast to <option>environment.systemPackages</option>,
           which adds packages to all users.
         '';
@@ -403,6 +403,10 @@ let
       filter types.shellPackage.check shells;
 
 in {
+  imports = [
+    (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
+    (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+  ];
 
   ###### interface
 

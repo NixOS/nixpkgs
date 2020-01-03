@@ -60,7 +60,7 @@ let
       };
       type = mkOption {
         type = types.nullOr (types.enum [
-          "normal" "controller" "fuzzy_storage" "rspamd_proxy" "lua" "proxy"
+          "normal" "controller" "fuzzy" "rspamd_proxy" "lua" "proxy"
         ]);
         description = ''
           The type of this worker. The type <literal>proxy</literal> is
@@ -68,7 +68,7 @@ let
           replaced with <literal>rspamd_proxy</literal>.
         '';
         apply = let
-            from = "services.rspamd.workers.\”${name}\".type";
+            from = "services.rspamd.workers.\"${name}\".type";
             files = options.type.files;
             warning = "The option `${from}` defined in ${showFiles files} has enum value `proxy` which has been renamed to `rspamd_proxy`";
           in x: if x == "proxy" then traceWarning warning "rspamd_proxy" else x;
@@ -220,7 +220,6 @@ let
 in
 
 {
-
   ###### interface
 
   options = {
@@ -414,5 +413,6 @@ in
 	     "Socket activation never worked correctly and could at this time not be fixed and so was removed")
     (mkRenamedOptionModule [ "services" "rspamd" "bindSocket" ] [ "services" "rspamd" "workers" "normal" "bindSockets" ])
     (mkRenamedOptionModule [ "services" "rspamd" "bindUISocket" ] [ "services" "rspamd" "workers" "controller" "bindSockets" ])
+    (mkRemovedOptionModule [ "services" "rmilter" ] "Use services.rspamd.* instead to set up milter service")
   ];
 }

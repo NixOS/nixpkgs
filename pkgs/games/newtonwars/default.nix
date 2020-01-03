@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, freeglut, libGLU_combined }:
+{ stdenv, fetchFromGitHub, makeWrapper, freeglut, libGLU, libGL }:
 
 stdenv.mkDerivation {
   pname = "newtonwars";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0g63fwfcdxxlnqlagj1fb8ngm385gmv8f7p8b4r1z5cny2znxdvs";
   };
 
-  buildInputs = [ makeWrapper freeglut libGLU_combined ];
+  buildInputs = [ makeWrapper freeglut libGL libGLU ];
 
   patchPhase = ''
     sed -i "s;font24.raw;$out/share/font24.raw;g" display.c
@@ -26,7 +26,8 @@ stdenv.mkDerivation {
 
     wrapProgram $out/bin/nw \
       --prefix LD_LIBRARY_PATH ":" ${freeglut}/lib \
-      --prefix LD_LIBRARY_PATH ":" ${libGLU_combined}/lib
+      --prefix LD_LIBRARY_PATH ":" ${libGLU}/lib \
+      --prefix LD_LIBRARY_PATH ":" ${libGL}/lib
   '';
 
   meta = with stdenv.lib; {

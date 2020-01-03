@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, libGLU_combined, freeglut, SDL
+{ fetchurl, fetchpatch, stdenv, libGLU, libGL, freeglut, SDL
 , libXi, libSM, libXmu, libXext, libX11 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    libGLU_combined freeglut SDL
+    libGLU libGL freeglut SDL
 
     # The following libs ought to be propagated build inputs of Mesa.
     libXi libSM libXmu libXext libX11

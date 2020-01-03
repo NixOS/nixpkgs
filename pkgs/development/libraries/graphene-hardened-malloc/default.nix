@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

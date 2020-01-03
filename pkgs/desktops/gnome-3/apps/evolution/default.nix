@@ -10,7 +10,7 @@
 , gtk3
 , glib
 , libnotify
-, gtkspell3
+, gspell
 , evolution-data-server
 , adwaita-icon-theme
 , gnome-desktop
@@ -38,15 +38,16 @@
 , procps
 , p11-kit
 , openldap
+, spamassassin
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.32.4";
+  version = "3.34.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00hmmg4hfns8rq9rcilmy0gi1xkksld27lfbd9zmw2xw37wjmbqh";
+    sha256 = "164vy8h432pjglafn8y2ms4gsvk3kbgc63h5qp0mk5dv4smsp29c";
   };
 
   nativeBuildInputs = [
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     gtk3
-    gtkspell3
+    gspell
     highlight
     icu
     libcanberra-gtk3
@@ -102,6 +103,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_LIBCRYPTUI=OFF"
     "-DENABLE_PST_IMPORT=OFF"
     "-DENABLE_YTNEF=OFF"
+    "-DWITH_SPAMASSASSIN=${spamassassin}/bin/spamassassin"
+    "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
+    "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
+    "-DWITH_OPENLDAP=${openldap}"
   ];
 
   requiredSystemFeatures = [

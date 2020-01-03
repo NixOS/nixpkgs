@@ -60,6 +60,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = http://meldmerge.org/;
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ jtojnar mimadrid ];
+    maintainers = with maintainers; [ jtojnar mimame ];
   };
 }

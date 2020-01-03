@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fly";
-  version = "5.4.1";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
     rev = "v${version}";
-    sha256 = "15lkhdvxqcryn5k7qflkby666ddj66gpqzga13yxjgjjp7zx2mi3";
+    sha256 = "1jhc2h00rh6lpgdq3n2d1sk7gdzmhkigyra04gf70s6kjb903igw";
   };
 
-  modSha256 = "0wz0v7w2di23cvqpg35zzqs2hvsbjgcrl7pr90ymmpsspq97fkf7";
+  modSha256 = "00qagz28iz1z5kjshs1m74bf12qlhjbkf4pbchy7lzf09bd291pg";
 
   subPackages = [ "fly" ];
 

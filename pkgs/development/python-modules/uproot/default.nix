@@ -3,6 +3,7 @@
 , backports_lzma
 , cachetools
 , lz4
+, pandas
 , pytestrunner
 , pytest
 , pkgconfig
@@ -15,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "3.8.0";
+  version = "3.10.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06s0lym5md59pj8w89acnwk0i0hh92az187h4gz22mb849h308pw";
+    sha256 = "34953903abe09bbab3ec1a9a4843b05c75b218daa6132c8275d871e88b6e3447";
   };
 
   nativeBuildInputs = [ pytestrunner ];
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   checkInputs = [
     lz4
     mock
+    pandas
     pkgconfig
     pytest
     requests

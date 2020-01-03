@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
+    description = "A toolbox designed to speak the many languages of chemical data";
+    homepage = "http://openbabel.org";
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];
     license = stdenv.lib.licenses.gpl2Plus;

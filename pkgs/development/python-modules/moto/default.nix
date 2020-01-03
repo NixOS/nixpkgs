@@ -22,6 +22,7 @@
 , sure
 , werkzeug
 , xmltodict
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0rhbjvqi1khp80gfnl3x632kwlpq3k7m8f13nidznixdpa78vm4m";
   };
+
+  # 3.8 is not yet support
+  # https://github.com/spulec/moto/pull/2519
+  disabled = isPy38;
 
   # Backported fix from 1.3.14.dev for compatibility with botocore >= 1.9.198.
   patches = [

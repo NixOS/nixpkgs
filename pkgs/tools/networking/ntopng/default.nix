@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-Undo-weird-modification-of-data_dir.patch
     ./0002-Remove-requirement-to-have-writeable-callback-dir.patch
+    ./0003-New-libpcap-defines-SOCKET.patch
   ];
 
   buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 glib geoip geolite-legacy

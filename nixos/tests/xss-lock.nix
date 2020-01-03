@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 with lib;
 
@@ -26,15 +26,19 @@ with lib;
   };
 
   testScript = ''
-    startAll;
+    def perform_xsslock_test(machine, lockCmd):
+        machine.start()
+        machine.wait_for_x()
+        machine.wait_for_unit("xss-lock.service", "alice")
+        machine.fail(f"pgrep {lockCmd}")
+        machine.succeed("su -l alice -c 'xset dpms force standby'")
+        machine.wait_until_succeeds(f"pgrep {lockCmd}")
 
-    ${concatStringsSep "\n" (mapAttrsToList (name: lockCmd: ''
-      ${"$"+name}->start;
-      ${"$"+name}->waitForX;
-      ${"$"+name}->waitForUnit("xss-lock.service", "alice");
-      ${"$"+name}->fail("pgrep ${lockCmd}");
-      ${"$"+name}->succeed("su -l alice -c 'xset dpms force standby'");
-      ${"$"+name}->waitUntilSucceeds("pgrep ${lockCmd}");
-    '') { simple = "i3lock"; custom_lockcmd = "xlock"; })}
+
+    with subtest("simple"):
+        perform_xsslock_test(simple, "i3lock")
+
+    with subtest("custom_cmd"):
+        perform_xsslock_test(custom_lockcmd, "xlock")
   '';
 })

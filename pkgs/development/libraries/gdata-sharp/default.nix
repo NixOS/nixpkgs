@@ -37,5 +37,6 @@ in stdenv.mkDerivation {
 
     license = licenses.asl20;
     platforms = platforms.linux;
+    broken = true;
   };
 }

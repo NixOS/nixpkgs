@@ -37,7 +37,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the TLP daemon.";
+        description = "Whether to enable the TLP power management daemon.";
       };
 
       extraConfig = mkOption {

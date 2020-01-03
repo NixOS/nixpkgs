@@ -1,29 +1,18 @@
-{ lib, stdenv, echo_build_heading, noisily, makeDeps }:
+{ lib, stdenv, echo_build_heading, noisily, makeDeps, rust }:
 { crateName,
   dependencies,
-  crateFeatures, libName, release, libPath,
+  crateFeatures, crateRenames, libName, release, libPath,
   crateType, metadata, crateBin, hasCrateBin,
   extraRustcOpts, verbose, colors }:
 
   let
 
-    deps = makeDeps dependencies;
+    deps = makeDeps dependencies crateRenames;
     rustcOpts =
       lib.lists.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
         (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
     rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
-
-    # Some platforms have different names for rustc.
-    rustPlatform =
-      with stdenv.hostPlatform.parsed;
-      let cpu_ = if cpu.name == "armv7a" then "armv7"
-                 else cpu.name;
-          vendor_ = vendor.name;
-          kernel_ = kernel.name;
-          abi_ = abi.name;
-      in
-      "${cpu_}-${vendor_}-${kernel_}-${abi_}";
   in ''
     runHook preBuild
     norm=""
@@ -67,7 +56,7 @@
         ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps \
         $LINK ${deps}$EXTRA_LIB --cap-lints allow \
         $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors} \
-        ${if stdenv.hostPlatform != stdenv.buildPlatform then "--target ${rustPlatform} -C linker=${stdenv.hostPlatform.config}-gcc" else ""}
+        ${if stdenv.hostPlatform != stdenv.buildPlatform then "--target ${rust.toRustTarget stdenv.hostPlatform} -C linker=${stdenv.hostPlatform.config}-gcc" else ""}
       if [ "$crate_name_" != "$crate_name" ]; then
         mv target/bin/$crate_name_ target/bin/$crate_name
       fi
@@ -91,18 +80,18 @@
 
     echo "$EXTRA_LINK_SEARCH" | while read i; do
        if [[ ! -z "$i" ]]; then
-         for lib in $i; do
-           echo "-L $lib" >> target/link
-           L=$(echo $lib | sed -e "s#$(pwd)/target/build#$out/lib#")
+         for library in $i; do
+           echo "-L $library" >> target/link
+           L=$(echo $library | sed -e "s#$(pwd)/target/build#$lib/lib#")
            echo "-L $L" >> target/link.final
          done
        fi
     done
     echo "$EXTRA_LINK" | while read i; do
        if [[ ! -z "$i" ]]; then
-         for lib in $i; do
-           echo "-l $lib" >> target/link
-           echo "-l $lib" >> target/link.final
+         for library in $i; do
+           echo "-l $library" >> target/link
+           echo "-l $library" >> target/link.final
          done
        fi
     done

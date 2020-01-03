@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rygel";
-  version = "0.38.1";
+  version = "0.38.3";
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1w8bi2rw91qyfny1zxhy32k4qn62hdjl2m38f75cp7wv6494d7w0";
+    sha256 = "003xficqb08r1dgid20i7cn889lbfwrglpx78rjd5nkvgxbimhh8";
   };
 
   nativeBuildInputs = [

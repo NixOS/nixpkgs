@@ -1,8 +1,12 @@
 { channel, pname, version, build, sha256Hash }:
 
-{ bash
+{ alsaLib
+, bash
 , buildFHSUserEnv
+, cacert
 , coreutils
+, dbus
+, expat
 , fetchurl
 , findutils
 , file
@@ -18,17 +22,26 @@
 , freetype
 , libpulseaudio
 , libGL
+, libuuid
 , libX11
+, libxcb
+, libXcomposite
+, libXcursor
+, libXdamage
 , libXext
+, libXfixes
 , libXi
 , libXrandr
 , libXrender
 , libXtst
 , makeWrapper
+, nspr
+, nss
 , pciutils
 , pkgsi686Linux
 , setxkbmap
 , stdenv
+, systemd
 , unzip
 , which
 , runCommand
@@ -99,9 +112,21 @@ let
           libXrandr
 
           # For Android emulator
+          alsaLib
+          dbus
+          expat
           libpulseaudio
+          libuuid
           libX11
+          libxcb
+          libXcomposite
+          libXcursor
+          libXdamage
+          libXfixes
           libGL
+          nspr
+          nss
+          systemd
 
           # For GTKLookAndFeel
           gtk2
@@ -130,7 +155,16 @@ let
   # environment is used as a work around for that.
   fhsEnv = buildFHSUserEnv {
     name = "${drvName}-fhs-env";
-    multiPkgs = pkgs: [ pkgs.ncurses5 ];
+    multiPkgs = pkgs: [
+      pkgs.ncurses5
+
+      # Flutter can only search for certs Fedora-way.
+      (runCommand "fedoracert" {}
+        ''
+        mkdir -p $out/etc/pki/tls/
+        ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
+        '')
+    ];
   };
 in runCommand
   drvName

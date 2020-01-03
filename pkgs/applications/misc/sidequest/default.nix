@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, buildFHSUserEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, at-spi2-atk, icu, openssl, zlib }:
 	let
 		pname = "sidequest";
-		version = "0.3.1";
-		
+		version = "0.7.6";
+
 		desktopItem = makeDesktopItem rec {
 			name = "SideQuest";
 			exec = "SideQuest";
@@ -15,17 +15,17 @@
 			inherit pname version;
 
 			src = fetchurl {
-				url = "https://github.com/the-expanse/SideQuest/releases/download/${version}/SideQuest-linux-x64.tar.gz";
-				sha256 = "1hj398zzp1x74zhp9rlhqzm9a0ck6zh9bj39g6fpvc38zab5dj1p";
+				url = "https://github.com/the-expanse/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
+				sha256 = "1yyba5495ydyyfl62pjd4hbga86k7f2a72ds2j2qzkinngyl14j8";
 			};
 
 			buildInputs = [ makeWrapper ];
 
 			buildCommand = ''
 				mkdir -p "$out/lib/SideQuest" "$out/bin"
-				tar -xzf "$src" -C "$out/lib/SideQuest" --strip-components 1
+				tar -xJf "$src" -C "$out/lib/SideQuest" --strip-components 1
 
-				ln -s "$out/lib/SideQuest/SideQuest" "$out/bin"
+				ln -s "$out/lib/SideQuest/sidequest" "$out/bin"
 
 				fixupPhase
 
@@ -35,7 +35,7 @@
 				patchelf \
 					--set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
 					--set-rpath "${atomEnv.libPath}/lib:${lib.makeLibraryPath [libuuid at-spi2-atk]}:$out/lib/SideQuest" \
-					"$out/lib/SideQuest/SideQuest"
+					"$out/lib/SideQuest/sidequest"
 			'';
 		};
 	in buildFHSUserEnv {
@@ -49,11 +49,11 @@
 				homepage = "https://github.com/the-expanse/SideQuest";
 				downloadPage = "https://github.com/the-expanse/SideQuest/releases";
 				license = licenses.mit;
-				maintainers = [ maintainers.joepie91 ];
+				maintainers = with maintainers; [ joepie91 rvolosatovs ];
 				platforms = [ "x86_64-linux" ];
 			};
 		};
-		
+
 		targetPkgs = pkgs: [
 			sidequest
 			# Needed in the environment on runtime, to make QuestSaberPatch work
@@ -62,8 +62,8 @@
 
 		extraInstallCommands = ''
 			mkdir -p "$out/share/applications"
-			ln -s "${desktopItem}/share/applications/*" "$out/share/applications"
+			ln -s ${desktopItem}/share/applications/* "$out/share/applications"
 		'';
 
-		runScript = "SideQuest";
+		runScript = "sidequest";
 	}

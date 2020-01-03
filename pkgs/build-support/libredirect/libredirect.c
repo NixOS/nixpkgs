@@ -59,6 +59,11 @@ static const char * rewrite(const char * path, char * buf)
     return path;
 }
 
+static int open_needs_mode(int flags)
+{
+    return (flags & O_CREAT) || (flags & O_TMPFILE) == O_TMPFILE;
+}
+
 /* The following set of Glibc library functions is very incomplete -
    it contains only what we needed for programs in Nixpkgs. Just add
    more functions as needed. */
@@ -67,7 +72,7 @@ int open(const char * path, int flags, ...)
 {
     int (*open_real) (const char *, int, mode_t) = dlsym(RTLD_NEXT, "open");
     mode_t mode = 0;
-    if (flags & O_CREAT) {
+    if (open_needs_mode(flags)) {
         va_list ap;
         va_start(ap, flags);
         mode = va_arg(ap, mode_t);
@@ -81,7 +86,7 @@ int open64(const char * path, int flags, ...)
 {
     int (*open64_real) (const char *, int, mode_t) = dlsym(RTLD_NEXT, "open64");
     mode_t mode = 0;
-    if (flags & O_CREAT) {
+    if (open_needs_mode(flags)) {
         va_list ap;
         va_start(ap, flags);
         mode = va_arg(ap, mode_t);
@@ -95,7 +100,7 @@ int openat(int dirfd, const char * path, int flags, ...)
 {
     int (*openat_real) (int, const char *, int, mode_t) = dlsym(RTLD_NEXT, "openat");
     mode_t mode = 0;
-    if (flags & O_CREAT) {
+    if (open_needs_mode(flags)) {
         va_list ap;
         va_start(ap, flags);
         mode = va_arg(ap, mode_t);
@@ -140,9 +145,9 @@ int stat(const char * path, struct stat * st)
     return __stat_real(rewrite(path, buf), st);
 }
 
-int * access(const char * path, int mode)
+int access(const char * path, int mode)
 {
-    int * (*access_real) (const char *, int mode) = dlsym(RTLD_NEXT, "access");
+    int (*access_real) (const char *, int mode) = dlsym(RTLD_NEXT, "access");
     char buf[PATH_MAX];
     return access_real(rewrite(path, buf), mode);
 }

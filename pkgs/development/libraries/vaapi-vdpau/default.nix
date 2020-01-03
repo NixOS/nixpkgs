@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libvdpau, libGLU_combined, libva, pkgconfig }:
+{ stdenv, fetchurl, fetchpatch, libvdpau, libGLU, libGL, libva, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "libva-vdpau-driver";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libvdpau libGLU_combined libva ];
+  buildInputs = [ libvdpau libGLU libGL libva ];
 
   postPatch = ''
     sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure

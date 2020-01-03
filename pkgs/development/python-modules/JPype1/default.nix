@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "JPype1";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6841523631874a731e1f94e1b1f130686ad3772030eaa3b6946256eeb1d10dd1";
+    sha256 = "1630439d5b0fb49e2878b43a1a1f074f9d4f46520f525569e14f1f0f9399f871";
   };
 
   patches = [ ./set-compiler-language.patch ];

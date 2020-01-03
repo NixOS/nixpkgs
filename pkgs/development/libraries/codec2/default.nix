@@ -1,15 +1,17 @@
-{ stdenv, fetchsvn, cmake } :
+{ stdenv, fetchFromGitHub, cmake } :
 
 let
-  version = "0.8";
+  version = "0.9.2";
 
 in stdenv.mkDerivation {
   pname = "codec2";
   inherit version;
 
-  src = fetchsvn {
-    url = "https://svn.code.sf.net/p/freetel/code/codec2/branches/${version}";
-    sha256 = "0qbyaqdn37253s30n6m2ric8nfdsxhkslb9h572kdx18j2yjccki";
+  src = fetchFromGitHub {
+    owner = "drowe67";
+    repo = "codec2";
+    rev = "v${version}";
+    sha256 = "1jpvr7bra8srz8jvnlbmhf8andbaavq5v01qjnp2f61za93rzwba";
   };
 
   enableParallelBuilding = true;

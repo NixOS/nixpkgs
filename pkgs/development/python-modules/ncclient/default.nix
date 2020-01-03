@@ -4,8 +4,6 @@
 , paramiko
 , selectors2
 , lxml
-, libxml2
-, libxslt
 , nose
 , rednose
 }:
@@ -22,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ nose rednose ];
 
   propagatedBuildInputs = [
-    paramiko lxml libxml2 libxslt selectors2
+    paramiko lxml selectors2
   ];
 
   checkPhase = ''
@@ -33,7 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://ncclient.org/;
+    homepage = "https://github.com/ncclient/ncclient";
     description = "Python library for NETCONF clients";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];

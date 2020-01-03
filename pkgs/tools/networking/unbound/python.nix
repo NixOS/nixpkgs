@@ -60,5 +60,6 @@ in stdenv.mkDerivation rec {
     homepage = http://www.unbound.net;
     maintainers = with maintainers; [ leenaars ];
     platforms = stdenv.lib.platforms.unix;
+    broken = true;
   };
 }

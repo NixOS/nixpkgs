@@ -58,12 +58,14 @@ prefetch_github() {
 echo_entry() {
   local owner=$1
   local repo=$2
-  local version=${3:1}
+  local rev=$3
+  local version=$(echo $3 | sed 's/^v//')
   local sha256=$4
   cat <<EOF
 {
   owner   = "$owner";
   repo    = "$repo";
+  rev     = "$rev";
   version = "$version";
   sha256  = "$sha256";
 };

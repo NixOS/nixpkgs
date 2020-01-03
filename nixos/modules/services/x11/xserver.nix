@@ -149,6 +149,8 @@ in
     [ ./display-managers/default.nix
       ./window-managers/default.nix
       ./desktop-managers/default.nix
+      (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
+        "See the 16.09 release notes for more information.")
     ];
 
 
@@ -557,7 +559,6 @@ in
           default = !( dmconf.auto.enable
                     || dmconf.gdm.enable
                     || dmconf.sddm.enable
-                    || dmconf.slim.enable
                     || dmconf.xpra.enable );
       in mkIf (default) true;
 

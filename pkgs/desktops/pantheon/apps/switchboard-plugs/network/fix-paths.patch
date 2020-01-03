@@ -1,0 +1,35 @@
+diff --git a/src/Views/VPNPage.vala b/src/Views/VPNPage.vala
+index 82e7826..cf00145 100644
+--- a/src/Views/VPNPage.vala
++++ b/src/Views/VPNPage.vala
+@@ -265,7 +265,7 @@ public class Network.VPNPage : Network.Widgets.Page {
+     private void try_connection_editor (string args) {
+         try {
+             var appinfo = AppInfo.create_from_commandline (
+-                "nm-connection-editor %s".printf (args),
++                "@networkmanagerapplet@/bin/nm-connection-editor %s".printf (args),
+                 null,
+                 GLib.AppInfoCreateFlags.NONE
+             );
+diff --git a/src/Widgets/SettingsButton.vala b/src/Widgets/SettingsButton.vala
+index ed36b38..bc71c0c 100644
+--- a/src/Widgets/SettingsButton.vala
++++ b/src/Widgets/SettingsButton.vala
+@@ -24,7 +24,7 @@
+             clicked.connect (() => {
+                 try {
+                     var appinfo = AppInfo.create_from_commandline (
+-                        "nm-connection-editor",
++                        "@networkmanagerapplet@/bin/nm-connection-editor",
+                         null,
+                         AppInfoCreateFlags.NONE
+                     );
+@@ -71,7 +71,7 @@
+         private void edit_connection_uuid (string uuid) {
+             try {
+                 var appinfo = AppInfo.create_from_commandline (
+-                    "nm-connection-editor --edit=%s".printf (uuid), null, AppInfoCreateFlags.NONE
++                    "@networkmanagerapplet@/bin/nm-connection-editor --edit=%s".printf (uuid), null, AppInfoCreateFlags.NONE
+                 );
+ 
+                 appinfo.launch (null, null);

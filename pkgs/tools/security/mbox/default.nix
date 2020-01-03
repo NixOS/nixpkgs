@@ -33,6 +33,7 @@ stdenv.mkDerivation {
       maintainers = with maintainers; [ ehmry ];
       license = licenses.bsd3;
       platforms = [ "x86_64-linux" ];
+      broken = true;
     };
 
 }

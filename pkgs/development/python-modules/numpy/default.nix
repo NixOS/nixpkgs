@@ -16,12 +16,12 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.17.2";
+  version = "1.17.4";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "73615d3edc84dd7c4aeb212fa3748fb83217e00d201875a47327f55363cef2df";
+    sha256 = "f58913e9227400f1395c7b800503ebfdb0772f1c33ff8cb4d6451c06cabdf316";
   };
 
   nativeBuildInputs = [ gfortran pytest ];
@@ -66,7 +66,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Scientific tools for Python";
-    homepage = http://numpy.scipy.org/;
+    homepage = https://numpy.org/;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

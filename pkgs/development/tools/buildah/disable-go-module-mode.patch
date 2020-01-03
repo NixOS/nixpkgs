@@ -1,0 +1,33 @@
+From e2d12e52b3638a320a8d69ea4b392b60f44ea57f Mon Sep 17 00:00:00 2001
+From: Mario Rodas <marsam@users.noreply.github.com>
+Date: Wed, 4 Dec 2019 21:07:33 -0500
+Subject: [PATCH] Do not check Go module-mode availability
+
+Since buildah vendorizes its dependencies we use buildGoPackage which
+does not uses Go module-mode.  The module-mode check will be true
+because nixpkgs uses Go 1.13 by default, and building go modules with
+buildGoPackage may lead to inconsistencies.
+---
+ Makefile | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 9d04177d..4cf9b6a2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -15,12 +15,7 @@ BUILDAH := buildah
+ GO := go
+ GO110 := 1.10
+ GOVERSION := $(findstring $(GO110),$(shell go version))
+-# test for go module support
+-ifeq ($(shell go help mod >/dev/null 2>&1 && echo true), true)
+-export GO_BUILD=GO111MODULE=on $(GO) build -mod=vendor
+-else
+ export GO_BUILD=$(GO) build
+-endif
+ 
+ GIT_COMMIT ?= $(if $(shell git rev-parse --short HEAD),$(shell git rev-parse --short HEAD),$(error "git failed"))
+ SOURCE_DATE_EPOCH ?= $(if $(shell date +%s),$(shell date +%s),$(error "date failed"))
+-- 
+2.24.0
+

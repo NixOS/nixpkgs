@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "drms";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95cac0e14532893a44eeab8e329ddb76150e6848153d8cb1e4e08ba55569e6af";
+    sha256 = "ab3ec6d072b1980f77dadf3b2cb0fe56c648eaf927ea381f606b4db66d4cbff2";
   };
 
   propagatedBuildInputs = [

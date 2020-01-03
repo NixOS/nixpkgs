@@ -3,6 +3,15 @@
 with lib;
 
 let
+
+  isMa1sd =
+    package:
+    lib.hasPrefix "ma1sd" package.name;
+
+  isMxisd =
+    package:
+    lib.hasPrefix "mxisd" package.name;
+
   cfg = config.services.mxisd;
 
   server = optionalAttrs (cfg.server.name != null) { inherit (cfg.server) name; }
@@ -12,37 +21,41 @@ let
     matrix.domain = cfg.matrix.domain;
     key.path = "${cfg.dataDir}/signing.key";
     storage = {
-      provider.sqlite.database = "${cfg.dataDir}/mxisd.db";
+      provider.sqlite.database = if isMa1sd cfg.package
+                                 then "${cfg.dataDir}/ma1sd.db"
+                                 else "${cfg.dataDir}/mxisd.db";
     };
   } // optionalAttrs (server != {}) { inherit server; };
 
   # merges baseConfig and extraConfig into a single file
   fullConfig = recursiveUpdate baseConfig cfg.extraConfig;
 
-  configFile = pkgs.writeText "mxisd-config.yaml" (builtins.toJSON fullConfig);
+  configFile = if isMa1sd cfg.package
+               then pkgs.writeText "ma1sd-config.yaml" (builtins.toJSON fullConfig)
+               else pkgs.writeText "mxisd-config.yaml" (builtins.toJSON fullConfig);
 
 in {
   options = {
     services.mxisd = {
-      enable = mkEnableOption "mxisd matrix federated identity server";
+      enable = mkEnableOption "matrix federated identity server";
 
       package = mkOption {
         type = types.package;
         default = pkgs.mxisd;
         defaultText = "pkgs.mxisd";
-        description = "The mxisd package to use";
+        description = "The mxisd/ma1sd package to use";
       };
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/mxisd";
-        description = "Where data mxisd uses resides";
+        description = "Where data mxisd/ma1sd uses resides";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        description = "Extra options merged into the mxisd configuration";
+        description = "Extra options merged into the mxisd/ma1sd configuration";
       };
 
       matrix = {
@@ -62,7 +75,7 @@ in {
           type = types.nullOr types.str;
           default = null;
           description = ''
-            Public hostname of mxisd, if different from the Matrix domain.
+            Public hostname of mxisd/ma1sd, if different from the Matrix domain.
           '';
         };
 
@@ -103,11 +116,13 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      serviceConfig = {
+      serviceConfig = let
+        executable = if isMa1sd cfg.package then "ma1sd" else "mxisd";
+      in {
         Type = "simple";
         User = "mxisd";
         Group = "mxisd";
-        ExecStart = "${cfg.package}/bin/mxisd -c ${configFile}";
+        ExecStart = "${cfg.package}/bin/${executable} -c ${configFile}";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
       };

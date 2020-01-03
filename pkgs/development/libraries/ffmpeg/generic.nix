@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
+{ stdenv, fetchurl, pkgconfig, addOpenGLRunpath, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
-, openglSupport ? false, libGLU_combined ? null
+, openglSupport ? false, libGLU ? null, libGL ? null
+, libmfxSupport ? false, intel-media-sdk ? null
+, libaomSupport ? false, libaom ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
@@ -42,7 +44,7 @@
 
 let
   inherit (stdenv) isDarwin isFreeBSD isLinux isAarch32;
-  inherit (stdenv.lib) optional optionals enableFeature;
+  inherit (stdenv.lib) optional optionals optionalString enableFeature;
 
   cmpVer = builtins.compareVersions;
   reqMin = requiredVersion: (cmpVer requiredVersion branch != 1);
@@ -61,7 +63,9 @@ let
   vpxSupport = reqMin "0.6" && !isAarch32;
 in
 
-assert openglSupport -> libGLU_combined != null;
+assert openglSupport -> libGL != null && libGLU != null;
+assert libmfxSupport -> intel-media-sdk != null;
+assert libaomSupport -> libaom != null;
 
 stdenv.mkDerivation rec {
 
@@ -135,6 +139,8 @@ stdenv.mkDerivation rec {
       (ifMinVer "0.6" (enableFeature vpxSupport "libvpx"))
       (ifMinVer "2.4" "--enable-lzma")
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
+      (ifMinVer "4.2" (enableFeature libmfxSupport "libmfx"))
+      (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
       (disDarwinOrArmFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
       (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else if sdlSupport then "--enable-sdl" else null)) # autodetected before 2.5, SDL1 support removed in 3.2 for SDL2
       (ifMinVer "1.2" "--enable-libsoxr")
@@ -157,12 +163,14 @@ stdenv.mkDerivation rec {
       "--enable-cross-compile"
   ] ++ optional stdenv.cc.isClang "--cc=clang";
 
-  nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
     libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
-  ] ++ optional openglSupport libGLU_combined
+  ] ++ optionals openglSupport [ libGL libGLU ]
+    ++ optional libmfxSupport intel-media-sdk
+    ++ optional vpxSupport libaom
     ++ optional vpxSupport libvpx
     ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
@@ -186,6 +194,10 @@ stdenv.mkDerivation rec {
       substituteInPlace $pc \
         --replace "includedir=$out" "includedir=''${!outputInclude}"
     done
+  '' + optionalString stdenv.isLinux ''
+    # Set RUNPATH so that libnvcuvid in /run/opengl-driver(-32)/lib can be found.
+    # See the explanation in addOpenGLRunpath.
+    addOpenGLRunpath $out/lib/libavcodec.so*
   '';
 
   installFlags = [ "install-man" ];
@@ -206,7 +218,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel fuuzetsu ];
+    maintainers = with maintainers; [ codyopel ];
     inherit branch;
   };
 }

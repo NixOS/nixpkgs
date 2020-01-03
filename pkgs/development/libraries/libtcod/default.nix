@@ -1,4 +1,4 @@
-{ stdenv, fetchFromBitbucket, cmake, SDL, libGLU_combined, upx, zlib }:
+{ stdenv, fetchFromBitbucket, cmake, SDL, libGLU, libGL, upx, zlib }:
 
 stdenv.mkDerivation {
 
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
     echo 'INSTALL(DIRECTORY include DESTINATION .)' >> CMakeLists.txt
   '';
 
-  cmakeFlags="-DLIBTCOD_SAMPLES=OFF";
+  cmakeFlags = [ "-DLIBTCOD_SAMPLES=OFF" ];
 
-  buildInputs = [ cmake SDL libGLU_combined upx zlib ];
+  buildInputs = [ cmake SDL libGLU libGL upx zlib ];
 
   meta = {
     description = "API for roguelike games";

@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, python3, cudatoolkit,
+{ stdenv, fetchFromGitHub, glibc, python3, cudatoolkit,
   withCuda ? true
 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "firestarter";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "tud-zih-energy";
     repo = "FIRESTARTER";
     rev = "v${version}";
-    sha256 = "1gc7kmzx9nw22lyfmpyz72p974jf1hvw5nvszcaq7x6h8cz9ip15";
+    sha256 = "161mg0h1hvp6bxfjdhyfqrljvphys896mfd36254rbgzxm38ibi7";
   };
 
   nativeBuildInputs = [ python3 ];
-  buildInputs = optionals withCuda [ cudatoolkit ];
+  buildInputs = [ glibc.static ] ++ optionals withCuda [ cudatoolkit ];
   preBuild = ''
     mkdir -p build
     cd build

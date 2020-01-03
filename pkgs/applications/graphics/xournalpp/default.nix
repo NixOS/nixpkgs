@@ -10,7 +10,6 @@
 , glib
 , gsettings-desktop-schemas
 , gtk3
-, hicolor-icon-theme
 , libsndfile
 , libxml2
 , libzip
@@ -24,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.0.12";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
-    repo = "xournalpp";
+    repo = pname;
     rev = version;
-    sha256 = "0yg70hsx58s3wb5kzccivrqa7kvmdapygxmif1j64hddah2rqcn9";
+    sha256 = "1bdmxxkcqpjvkckizmrz2839b4yspw4xv69bqkrrgkcyvxsr804w";
   };
 
   nativeBuildInputs = [ cmake gettext pkgconfig wrapGAppsHook ];
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     [ glib
       gsettings-desktop-schemas
       gtk3
-      hicolor-icon-theme
       libsndfile
       libxml2
       libzip

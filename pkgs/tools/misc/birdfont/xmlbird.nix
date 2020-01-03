@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xmlbird";
-  version = "1.2.10";
+  version = "1.2.11";
 
   src = fetchurl {
     url = "https://birdfont.org/${pname}-releases/lib${pname}-${version}.tar.xz";
-    sha256 = "0qpqpqqd4wj711jzczfsr38fgcz1rzxchrqbssxnan659ycd9c78";
+    sha256 = "1ycbgjvywnlc0garw8qjqd18s0xnrwjvssdrb410yschv3wjq1i0";
   };
 
   nativeBuildInputs = [ python3 pkgconfig vala gobject-introspection ];

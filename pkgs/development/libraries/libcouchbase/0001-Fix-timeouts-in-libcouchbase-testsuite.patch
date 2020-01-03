@@ -1,0 +1,36 @@
+From 58237e64fa77ec5cdec658b3295f71ec899175fa Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sat, 5 Oct 2019 13:47:59 +0200
+Subject: [PATCH] Fix timeouts in libcouchbase testsuite
+
+Nix-specific patch. Basically
+https://github.com/couchbase/libcouchbase/commit/b272f6ab88be523bbcf9d5c4252d07fccb023fe5, but
+rebased onto 2.10.4.
+---
+ src/ssl/ssl_e.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/ssl/ssl_e.c b/src/ssl/ssl_e.c
+index f4506cf..734a3e6 100644
+--- a/src/ssl/ssl_e.c
++++ b/src/ssl/ssl_e.c
+@@ -210,10 +210,16 @@ flush_ssl_data(lcbio_ESSL *es)
+      * calls. While we could have done this inline with the send() call this
+      * would make future optimization more difficult. */
+     GT_WRITE_DONE:
++#if !LCB_CAN_OPTIMIZE_SSL_BIO
++    BIO_get_mem_ptr(es->wbio, &wmb);
++#endif
+     while (wmb->length > (size_t)tmp_len) {
+         char dummy[4096];
+         unsigned to_read = MINIMUM(wmb->length-tmp_len, sizeof dummy);
+         BIO_read(es->wbio, dummy, to_read);
++#if !LCB_CAN_OPTIMIZE_SSL_BIO
++        BIO_get_mem_ptr(es->wbio, &wmb);
++#endif
+     }
+     BIO_clear_retry_flags(es->wbio);
+     return 0;
+-- 
+2.23.0
+

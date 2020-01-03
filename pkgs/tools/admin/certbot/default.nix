@@ -1,21 +1,27 @@
-{ stdenv, python3Packages, fetchFromGitHub, dialog }:
+{ stdenv, python37Packages, fetchFromGitHub, fetchurl, dialog, autoPatchelfHook }:
 
-python3Packages.buildPythonApplication rec {
+
+python37Packages.buildPythonApplication rec {
   pname = "certbot";
-  version = "0.31.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rwjxmkpicyc9a5janvj1lfi430nq6ha94nyfgp11ds9fyydbh1s";
+    sha256 = "180x7gcpfbrzw8k654s7b5nxdy2yg61lq513dykyn3wz4gssw465";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  patches = [
+    ./0001-Don-t-use-distutils.StrictVersion-that-cannot-handle.patch
+  ];
+
+  propagatedBuildInputs = with python37Packages; [
     ConfigArgParse
     acme
     configobj
     cryptography
+    distro
     josepy
     parsedatetime
     psutil
@@ -26,11 +32,18 @@ python3Packages.buildPythonApplication rec {
     zope_component
     zope_interface
   ];
-  buildInputs = [ dialog ] ++ (with python3Packages; [ mock gnureadline ]);
 
-  patchPhase = ''
-    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
-    substituteInPlace certbot/util.py --replace "sw_vers" "/usr/bin/sw_vers"
+  buildInputs = [ dialog ] ++ (with python37Packages; [ mock gnureadline ]);
+
+  checkInputs = with python37Packages; [
+    pytest_xdist
+    pytest
+    dateutil
+  ];
+
+  postPatch = ''
+    cd certbot
+    substituteInPlace certbot/_internal/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
   '';
 
   postInstall = ''
@@ -40,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  doCheck = !stdenv.isDarwin; # On Hydra Darwin tests fail with "Too many open files".
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = src.meta.homepage;

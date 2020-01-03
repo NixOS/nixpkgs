@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     "--disable-offline-update"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--with-dbus-sys=$(out)/etc/dbus-1/system.d"
-    "--with-systemdsystemunitdir=$(out)/lib/systemd/system/"
+    "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system/"
   ]
   ++ lib.optional enableNixBackend "--enable-nix"
   ++ lib.optional (!enableBashCompletion) "--disable-bash-completion"

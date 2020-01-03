@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-books";
-  version = "3.32.0";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1wkcywcwwszj9mldr0lngczqdz7hys08rr1nd2k6rs8ykzs2z7m4";
+    sha256 = "153vknqisjn5f105avzm933fsc3v0pjzzbwxlqxf8vjjksh1cmya";
   };
 
   nativeBuildInputs = [

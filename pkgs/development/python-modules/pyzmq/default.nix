@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "18.0.1";
+  version = "18.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k3y6k3l9dmih3qmc4vrw26dpjggdk5c6r6806qhgjgpyq2rhccb";
+    sha256 = "8c69a6cbfa94da29a34f6b16193e7c15f5d3220cb772d6d17425ff3faa063a6d";
   };
 
   checkInputs = [  pytest tornado ];
@@ -32,4 +32,7 @@ buildPythonPackage rec {
       and not test_on_recv_wake \
       and not test_monitor"
   '';
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 }

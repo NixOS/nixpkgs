@@ -1,9 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
+{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
   txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, parameterized,
-  git, glibcLocales }:
+  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
+  parameterized, git, openssh, glibcLocales }:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.4.0";
+    version = "2.5.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "141ad2g1j5y0n5cdnd18m55ss0gqjlz5ky85rb6qfn73dgw42vmz";
+      sha256 = "13ddpcbndb22zlg9gjsf2pbgad45g1w5cg4a3z83085fkgnib7sr";
     };
 
     propagatedBuildInputs = [
@@ -63,8 +63,10 @@ let
       flake8
       buildbot-worker
       buildbot-pkg
+      buildbot-plugins.www
       parameterized
       git
+      openssh
       glibcLocales
     ];
 
@@ -93,7 +95,7 @@ let
     };
 
     meta = with lib; {
-      homepage = http://buildbot.net/;
+      homepage = "https://buildbot.net/";
       description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
       maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;

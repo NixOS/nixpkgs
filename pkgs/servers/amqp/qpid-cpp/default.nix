@@ -2,11 +2,11 @@
 
 let
   name = "qpid-cpp-${version}";
-  version = "1.37.0";
+  version = "1.38.0";
 
   src = fetchurl {
     url = "mirror://apache/qpid/cpp/${version}/${name}.tar.gz";
-    sha256 = "1s4hyi867i0lqn81c1crrk6fga1gmsv61675vjv5v41skz56lrsb";
+    sha256 = "1q7nsl9g8xv81ymhpkdp9mlw3gkzba62gggp3b72f0ywpc3kc3cz";
   };
 
   meta = with stdenv.lib; {
@@ -16,7 +16,7 @@ let
     description = "An AMQP message broker and a C++ messaging API";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cpages ma27 ];
+    maintainers = with maintainers; [ cpages ];
   };
 
   qpid-cpp = stdenv.mkDerivation {

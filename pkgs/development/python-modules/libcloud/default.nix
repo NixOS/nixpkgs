@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "apache-libcloud";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1spjkw5nxhbawblj5db8izff05kjw425iyydipajb7qh73vm25r0";
+    sha256 = "fcc165f2cc2db9a379c6d3a17b3beb9081bb64ba5c0bf7bbb58da864810092f0";
   };
 
   checkInputs = [ mock pytest pytestrunner requests-mock ];

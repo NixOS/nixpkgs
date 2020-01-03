@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "toybox";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "0mi1glrqmri3v6imbf8k20ylf0kmpv9prbnbggmcqfa0pswpyl4v";
+    sha256 = "02mliqz2lry779ba6vmyaa13nxcmj91f8pyhzim9wvcnjq8vc5cj";
   };
 
   buildInputs = lib.optionals enableStatic [ stdenv.cc.libc stdenv.cc.libc.static ];

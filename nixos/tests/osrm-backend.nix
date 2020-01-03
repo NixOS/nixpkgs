@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 let
   port = 5000;
 in {
@@ -45,9 +45,13 @@ in {
   testScript = let
     query = "http://localhost:${toString port}/route/v1/driving/7.41720,43.73304;7.42463,43.73886?steps=true";
   in ''
-    $machine->waitForUnit("osrm.service");
-    $machine->waitForOpenPort(${toString port});
-    $machine->succeed("curl --silent '${query}' | jq .waypoints[0].name | grep -F 'Boulevard Rainier III'");
-    $machine->succeed("curl --silent '${query}' | jq .waypoints[1].name | grep -F 'Avenue de la Costa'");
+    machine.wait_for_unit("osrm.service")
+    machine.wait_for_open_port(${toString port})
+    assert "Boulevard Rainier III" in machine.succeed(
+        "curl --silent '${query}' | jq .waypoints[0].name"
+    )
+    assert "Avenue de la Costa" in machine.succeed(
+        "curl --silent '${query}' | jq .waypoints[1].name"
+    )
   '';
 })

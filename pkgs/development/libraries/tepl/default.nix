@@ -1,14 +1,14 @@
 { stdenv, fetchurl
 , amtk, gnome3, gtk3, gtksourceview4, libuchardet, libxml2, pkgconfig }:
 let
-  version = "4.2.0";
+  version = "4.3.1";
   pname = "tepl";
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1kcwcr72dv3xwi2ni579c9raa0cnbazfnmy6mgapzn6dir1d8fc8";
+    sha256 = "08y6vss29b65pqzv708cyqmbszgxsqqgw7g0vh6f1389ayi2lvs0";
   };
 
   nativeBuildInputs = [

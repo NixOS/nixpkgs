@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "favicon";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01jhb66nrqbf22z6ybpi8ndw6zifgysdmnh547027g96nz51669y";
+    sha256 = "6d6b5a78de2a0d0084589f687f384b2ecd6a6527093fec564403b1a30605d7a8";
   };
 
   buildInputs = [ pytestrunner ];

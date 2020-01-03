@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pytest, pytestrunner, pytestcov
 , isPy3k
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,8 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytestrunner pytestcov ];
 
   disabled = !isPy3k;
+  # pickle files needed for 3.8 https://github.com/aio-libs/multidict/pull/363
+  doCheck = !isPy38;
 
   meta = with lib; {
     description = "Multidict implementation";

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "1.6.0";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner  = "bbidulock";
     repo   = "icewm";
     rev    = version;
-    sha256 = "1l8hjmb19d7ds7z21cx207h86wkjcmmmamcnalgkwh4alvbawc2p";
+    sha256 = "0h3w718x28fd4sz36ka9wpgcb98scna6qpycxzls4cjji3rjgm0l";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl asciidoc ];

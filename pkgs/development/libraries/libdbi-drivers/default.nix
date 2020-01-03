@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libdbi
-, mysql ? null
+, libmysqlclient ? null
 , sqlite ? null
 , postgresql ? null
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0m680h8cc4428xin4p733azysamzgzcmv4psjvraykrsaz6ymlj3";
   };
 
-  buildInputs = [ libdbi sqlite postgresql ] ++ optional (mysql != null) mysql.connector-c;
+  buildInputs = [ libdbi sqlite postgresql ] ++ optional (libmysqlclient != null) libmysqlclient;
 
   postPatch = ''
     sed -i '/SQLITE3_LIBS/ s/-lsqlite/-lsqlite3/' configure;
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     "--enable-libdbi"
     "--with-dbi-incdir=${libdbi}/include"
     "--with-dbi-libdir=${libdbi}/lib"
-  ] ++ optionals (mysql != null) [
+  ] ++ optionals (libmysqlclient != null) [
     "--with-mysql"
-    "--with-mysql-incdir=${mysql.connector-c}/include/mysql"
-    "--with-mysql-libdir=${mysql.connector-c}/lib/mysql"
+    "--with-mysql-incdir=${libmysqlclient}/include/mysql"
+    "--with-mysql-libdir=${libmysqlclient}/lib/mysql"
   ] ++ optionals (sqlite != null) [
     "--with-sqlite3"
     "--with-sqlite3-incdir=${sqlite.dev}/include/sqlite"

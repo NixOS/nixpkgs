@@ -115,6 +115,7 @@ in {
       { name = "infinoted";
         description = "Infinoted user";
         group = cfg.group;
+        isSystemUser = true;
       };
     users.groups = optional (cfg.group == "infinoted")
       { name = "infinoted";

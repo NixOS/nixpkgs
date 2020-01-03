@@ -31,7 +31,7 @@ stdenv.mkDerivation (rec {
     branch = "2.14";
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
       stdenv.lib.maintainers.roconnor
     ];
     homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgtk.html;

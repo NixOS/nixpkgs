@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext, cacert
+, unbound, dns-root-data, gettext, cacert, utillinux
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withSecurity ? false, Security  # darwin Security.framework
@@ -8,7 +8,7 @@
 
 assert guileBindings -> guile != null;
 let
-  version = "3.6.9";
+  version = "3.6.11.1";
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
-    sha256 = "1jqz5s3lv8sa53348cfi9nr5pw5l55n8m40b8msdvv0pb2jzqca3";
+    sha256 = "1y1wadpsrj5ai603xv5bgssl9v0pb1si2hg14zqdnmcsvgri5fpv";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl pkgconfig ]
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
-    ++ lib.optionals doCheck [ which nettools ];
+    ++ lib.optionals doCheck [ which nettools utillinux ];
 
   propagatedBuildInputs = [ nettle ];
 

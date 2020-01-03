@@ -191,6 +191,7 @@ in
         createHome = true;
         description = "Buildkite agent user";
         extraGroups = [ "keys" ];
+        isSystemUser = true;
       };
 
     environment.systemPackages = [ cfg.package ];

@@ -1,27 +1,40 @@
-{ stdenv, fetchPypi, python, buildPythonPackage
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPy38
 , cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
 
+with stdenv.lib;
+
 buildPythonPackage rec {
-  version = "3.5.2";
+  version = "3.6.1";
   pname = "tables";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hikrki0hx94ass31pn0jyz9iy0zhnkjacfk86m21cxsc8if685j";
+    sha256 = "0j8vnxh2m5n0cyk9z3ndcj5n1zj5rdxgc1gb78bqlyn2lyw75aa9";
   };
 
-  buildInputs = [ hdf5 cython bzip2 lzo c-blosc ];
+  nativeBuildInputs = [ cython ];
+
+  buildInputs = [ hdf5 bzip2 lzo c-blosc ];
   propagatedBuildInputs = [ numpy numexpr six mock ];
+
+  # When doing `make distclean`, ignore docs
+  postPatch = ''
+    substituteInPlace Makefile --replace "src doc" "src"
+  '';
+
+  # Regenerate C code with Cython
+  preBuild = ''
+    make distclean
+  '';
 
   # The setup script complains about missing run-paths, but they are
   # actually set.
-  setupPyBuildFlags =
-    [ "--hdf5=${hdf5}"
-      "--lzo=${lzo}"
-      "--bzip2=${bzip2.dev}"
-      "--blosc=${c-blosc}"
-    ];
-
+  setupPyBuildFlags = [
+    "--hdf5=${getDev hdf5}"
+    "--lzo=${getDev lzo}"
+    "--bzip2=${getDev bzip2}"
+    "--blosc=${getDev c-blosc}"
+  ];
   # Run the test suite.
   # It requires the build path to be in the python search path.
   # These tests take quite some time.

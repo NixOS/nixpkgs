@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "2.2.3";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1hwrka0g817a4d1177vv0z13gp66bxzxhflfxswjhcdk93kaws8k";
+    sha256 = "19jg09sxy3aj4dc1yv32jjv0m62cnmhjlw02jbh4d4pk2439m4l2";
   };
 
   nativeBuildInputs = [

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.6.3";
+  version = "5.6.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "863a85c1c0a5103a12c05a35e59d336e1d665747e531256e061213e2e90f63f3";
+    sha256 = "ffad8eb2ac614518bbe3c0b8eb9dffdb3a8d2e3a7d5da51c5b974fb723a5c5aa";
   };
 
   # No tests in archive

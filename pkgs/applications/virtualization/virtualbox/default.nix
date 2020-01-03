@@ -2,7 +2,7 @@
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll
+, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
 , makeself, perl
 , javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
@@ -21,8 +21,8 @@ let
   buildType = "release";
   # Remember to change the extpackRev and version in extpack.nix and
   # guest-additions/default.nix as well.
-  main = "1y6j73axjns8ng3m8zs31zwx71wmm91n6vrhdpxphx16jf518djj";
-  version = "6.0.10";
+  main = "036x2mvkk22lbg72cz6pik9z538j1ag6mmwjjmfikgrq1i7v24jy";
+  version = "6.0.14";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
@@ -92,6 +92,26 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
+    # Kernel 5.4 fix, should be fixed with next upstream release
+    # https://www.virtualbox.org/ticket/18945
+    (fetchpatch {
+      name = "kernel-5.4-fix-1.patch";
+      url = "https://www.virtualbox.org/changeset/81586/vbox?format=diff";
+      sha256 = "0zbkc9v65pkdmjik53x29g39qyf7narkhpwpx5n1n1bfqnhf0k1r";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      name = "kernel-5.4-fix-2.patch";
+      url = "https://www.virtualbox.org/changeset/81587/vbox?format=diff";
+      sha256 = "1j98cqxj8qlqwaqr4mvwwbkmchw8jmygjwgzz82gix7fj76j2y9c";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      name = "kernel-5.4-fix-3.patch";
+      url = "https://www.virtualbox.org/changeset/81649/vbox?format=diff";
+      sha256 = "1d6p5k5dgzmjglqfkbcbvpn1x3wxila30q4gcbb7pxwfgclaw2hk";
+      stripLen = 1;
+    })
   ];
 
   postPatch = ''
@@ -211,7 +231,7 @@ in stdenv.mkDerivation {
     description = "PC emulator";
     license = licenses.gpl2;
     homepage = https://www.virtualbox.org/;
-    maintainers = with maintainers; [ flokli sander ];
+    maintainers = with maintainers; [ sander ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "75e38454757c77060ad3782bd071682d6d316de86f9aec1c2042d236f93aec7b";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ tvdb_api ];
 
   # a ton of tests fail with: IOError: tvnamer/main.py could not be found in . or ..

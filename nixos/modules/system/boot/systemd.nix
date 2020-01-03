@@ -63,6 +63,7 @@ let
       "systemd-logind.service"
       "autovt@.service"
       "systemd-user-sessions.service"
+      "dbus-org.freedesktop.import1.service"
       "dbus-org.freedesktop.machine1.service"
       "user@.service"
       "user-runtime-dir@.service"
@@ -145,6 +146,7 @@ let
       "user.slice"
       "machine.slice"
       "machines.target"
+      "systemd-importd.service"
       "systemd-machined.service"
       "systemd-nspawn@.service"
 
@@ -406,7 +408,6 @@ let
 in
 
 {
-
   ###### interface
 
   options = {
@@ -543,6 +544,16 @@ in
       type = types.bool;
       description = ''
         Whether to enable cgroup accounting.
+      '';
+    };
+
+    systemd.coredump.enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether core dumps should be processed by
+        <command>systemd-coredump</command>. If disabled, core dumps
+        appear in the current directory of the crashing process.
       '';
     };
 
@@ -858,7 +869,12 @@ in
       "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
       "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
 
+      "tmpfiles.d/journal-nocow.conf".source = "${systemd}/example/tmpfiles.d/journal-nocow.conf";
+      "tmpfiles.d/static-nodes-permissions.conf".source = "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf";
       "tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
+      "tmpfiles.d/systemd-nspawn.conf".source = "${systemd}/example/tmpfiles.d/systemd-nspawn.conf";
+      "tmpfiles.d/systemd-tmp.conf".source = "${systemd}/example/tmpfiles.d/systemd-tmp.conf";
+      "tmpfiles.d/var.conf".source = "${systemd}/example/tmpfiles.d/var.conf";
       "tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
 
       "tmpfiles.d/nixos.conf".text = ''
@@ -978,6 +994,10 @@ in
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
+
+    boot.kernel.sysctl = mkIf (!cfg.coredump.enable) {
+      "kernel.core_pattern" = "core";
+    };
   };
 
   # FIXME: Remove these eventually.
@@ -985,5 +1005,7 @@ in
     [ (mkRenamedOptionModule [ "boot" "systemd" "sockets" ] [ "systemd" "sockets" ])
       (mkRenamedOptionModule [ "boot" "systemd" "targets" ] [ "systemd" "targets" ])
       (mkRenamedOptionModule [ "boot" "systemd" "services" ] [ "systemd" "services" ])
+      (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
+      (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
     ];
 }

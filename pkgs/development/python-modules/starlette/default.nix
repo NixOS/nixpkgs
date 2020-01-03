@@ -1,6 +1,7 @@
 { lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiofiles
 , graphene
 , itsdangerous
@@ -8,20 +9,25 @@
 , pyyaml
 , requests
 , ujson
+, python-multipart
 , pytest
-, python
 , uvicorn
 , isPy27
+, darwin
+, databases
+, aiosqlite
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.12.4";
+  version = "0.12.9";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1m7qf4g5dn7n36406zbqsag71nmwp2dz91yxpplm7h7wiw2xxw93";
+  src = fetchFromGitHub {
+    owner = "encode";
+    repo = "starlette";
+    rev = version;
+    sha256 = "0w44s8ynzy8w8dgm755c8jina9i4dd87vqkcv7jc1kwkg384w9i5";
   };
 
   propagatedBuildInputs = [
@@ -33,13 +39,17 @@ buildPythonPackage rec {
     requests
     ujson
     uvicorn
+    python-multipart
+    databases
+  ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
+
+  checkInputs = [
+    pytest
+    aiosqlite
   ];
 
   checkPhase = ''
-    ${python.interpreter} -c """
-from starlette.applications import Starlette
-app = Starlette(debug=True)
-"""
+    pytest --ignore=tests/test_graphql.py
   '';
 
   meta = with lib; {

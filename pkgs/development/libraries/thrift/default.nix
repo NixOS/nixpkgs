@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "thrift";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0a04v7dgm1qzgii7v0sisnljhxc9xpq2vxkka60scrdp6aahjdn3";
+    sha256 = "0yai9c3bdsrkkjshgim7zk0i7malwfprg00l9774dbrkh2w4ilvs";
   };
 
   #enableParallelBuilding = true; problems on hydra

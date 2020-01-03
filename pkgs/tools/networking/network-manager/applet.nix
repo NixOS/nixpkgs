@@ -2,17 +2,17 @@
 , libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl, docbook_xml_dtd_43
 , mobile-broadband-provider-info, glib-networking, gsettings-desktop-schemas
 , libgudev, jansson, wrapGAppsHook, gobject-introspection, python3, gtk3
-, libappindicator-gtk3, withGnome ? false, gcr, glib }:
+, libappindicator-gtk3, withGnome ? true, gcr, glib }:
 
 let
   pname = "network-manager-applet";
-  version = "1.8.22";
+  version = "1.8.24";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1vbyhxknixyrf75pbjl3rxcy32m8y9cx5s30s3598vgza081rvzb";
+    sha256 = "1gzvz4wfqfsfclqg56y954al8x6fmz71cnxlx1i4nqr7a25bp2qi";
   };
 
   mesonFlags = [

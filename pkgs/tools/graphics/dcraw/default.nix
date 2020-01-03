@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "dcraw-9.28.0";
 
   src = fetchurl {
-    url = "https://www.cybercom.net/~dcoffin/dcraw/archive/${name}.tar.gz";
+    url = "https://www.dechifro.org/dcraw/archive/${name}.tar.gz";
     sha256 = "1fdl3xa1fbm71xzc3760rsjkvf0x5jdjrvdzyg2l9ka24vdc7418";
   };
 
@@ -23,10 +23,17 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.cybercom.net/~dcoffin/dcraw/;
+    homepage = https://www.dechifro.org/dcraw/;
     description = "Decoder for many camera raw picture formats";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
     maintainers = [ ];
+    knownVulnerabilities = [
+      "CVE-2018-19655"
+      "CVE-2018-19565"
+      "CVE-2018-19566"
+      "CVE-2018-19567"
+      "CVE-2018-19568"
+    ];
   };
 }

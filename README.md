@@ -16,7 +16,7 @@
 
 * [NixOS Manual](https://nixos.org/nixos/manual) - how to install, configure, and maintain a purely-functional Linux distribution
 * [Nixpkgs Manual](https://nixos.org/nixpkgs/manual/) - contributing to Nixpkgs and using programming-language-specific Nix expressions
-* [Nix Package Manager Manual](https://nixos.org/nix/manual) - how to write Nix expresssions (programs), and how to use Nix command line tools
+* [Nix Package Manager Manual](https://nixos.org/nix/manual) - how to write Nix expressions (programs), and how to use Nix command line tools
 
 # Community
 
@@ -27,7 +27,7 @@
 
 # Other Project Repositories
 
-The sources of all offical Nix-related projects are in the [NixOS
+The sources of all official Nix-related projects are in the [NixOS
 organization on GitHub](https://github.com/NixOS/). Here are some of
 the main ones:
 
@@ -44,16 +44,14 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 19.03 release](https://hydra.nixos.org/jobset/nixos/release-19.03)
+* [Continuous package builds for the NixOS 19.09 release](https://hydra.nixos.org/jobset/nixos/release-19.09)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 19.03 release](https://hydra.nixos.org/job/nixos/release-19.03/tested#tabs-constituents)
+* [Tests for the NixOS 19.09 release](https://hydra.nixos.org/job/nixos/release-19.09/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
 met, the Nixpkgs expressions are distributed via [Nix
-channels](https://nixos.org/nix/manual/#sec-channels). The channels
-are provided via a read-only mirror of the Nixpkgs repository called
-[nixpkgs-channels](https://github.com/NixOS/nixpkgs-channels).
+channels](https://nixos.org/nix/manual/#sec-channels).
 
 # Contributing
 

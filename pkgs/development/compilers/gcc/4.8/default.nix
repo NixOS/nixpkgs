@@ -7,6 +7,7 @@
 , profiledCompiler ? false
 , staticCompiler ? false
 , enableShared ? true
+, enableLTO ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, libmpc, gettext, which
@@ -110,7 +111,8 @@ in
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
-  name = "${crossNameAddon}${name}${if stripped then "" else "-debug"}-${version}";
+  pname = "${crossNameAddon}${name}${if stripped then "" else "-debug"}";
+  inherit version;
 
   builder = ../builder.sh;
 
@@ -198,8 +200,9 @@ stdenv.mkDerivation ({
       gmp mpfr libmpc libelf isl
       cloog
 
-      enablePlugin
+      enableLTO
       enableMultilib
+      enablePlugin
       enableShared
 
       langC

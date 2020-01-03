@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
       familiar with, such as your web browser0 or secure shell.
     '';
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

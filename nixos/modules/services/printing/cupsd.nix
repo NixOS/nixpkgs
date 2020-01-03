@@ -31,7 +31,7 @@ let
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
   # we can't update ${cups.out}/lib/cups itself, we create a symlink tree
   # here and add the additional programs.  The ServerBin directive in
-  # cupsd.conf tells cupsd to use this tree.
+  # cups-files.conf tells cupsd to use this tree.
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
@@ -111,6 +111,15 @@ let
 in
 
 {
+
+  imports = [
+    (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
+      (config:
+        let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
+        in if enabled then [ pkgs.gutenprint ] else [ ]))
+    (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ] "")
+    (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ] "")
+  ];
 
   ###### interface
 

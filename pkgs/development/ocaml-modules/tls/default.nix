@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "02wv4lia583imn3sfci4nqv6ac5nzig5j3yfdnlqa0q8bp9rfc6g";
   };
 
-  buildInputs = [ ocaml ocamlbuild findlib topkg ppx_sexp_conv ppx_cstruct ]
+  nativeBuildInputs = [ ocaml ocamlbuild findlib ];
+  buildInputs = [ findlib topkg ppx_sexp_conv ppx_cstruct ]
   ++ optionals doCheck [ ounit cstruct-unix ];
   propagatedBuildInputs = [ cstruct-sexp nocrypto result x509 ] ++
                           optional withLwt lwt;

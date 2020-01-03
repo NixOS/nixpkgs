@@ -1,8 +1,16 @@
-{ stdenv, pkgconfig, zlib, qtbase, qtsvg, qttools, qtmultimedia, qmake, fetchurl, makeWrapper
-, lib
+{ mkDerivation
+, stdenv
+, pkgconfig
+, zlib
+, qtbase
+, qtsvg
+, qttools
+, qtmultimedia
+, qmake
+, fetchurl
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "chessx";
   version = "1.5.0";
 
@@ -11,15 +19,18 @@ stdenv.mkDerivation rec {
     sha256 = "09rqyra28w3z9ldw8sx07k5ap3sjlli848p737maj7c240rasc6i";
   };
 
-  buildInputs = [
-    qtbase
-    qtsvg
-    qttools
-    qtmultimedia
-    zlib
+  nativeBuildInputs = [
+    pkgconfig
+    qmake
   ];
 
-  nativeBuildInputs = [ pkgconfig qmake makeWrapper ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    qtsvg
+    qttools
+    zlib
+  ];
 
   # RCC: Error in 'resources.qrc': Cannot find file 'i18n/chessx_da.qm'
   enableParallelBuilding = false;
@@ -39,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = http://chessx.sourceforge.net/;
     description = "ChessX allows you to browse and analyse chess games";
     license = licenses.gpl2;
-    maintainers = [maintainers.luispedro];
+    maintainers = [ maintainers.luispedro ];
     platforms = platforms.linux;
   };
 }

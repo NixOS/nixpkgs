@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "man-db-2.8.6.1";
+  name = "man-db-2.8.7";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/${name}.tar.xz";
-    sha256 = "0a1sh5gxa16k6irzf3q2lli8m204w9ik1xm62wjgf1mzknxs4xrc";
+    sha256 = "09mkpvwirv9kh2pqhfq90zl7pjdl63f4w4g1x6zhhp9hjswmpkdr";
   };
 
   outputs = [ "out" "doc" ];
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "--with-config-file=${placeholder "out"}/etc/man_db.conf"
     "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-pager=less"
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin [
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"

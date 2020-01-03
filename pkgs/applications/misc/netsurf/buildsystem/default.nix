@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Build system for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

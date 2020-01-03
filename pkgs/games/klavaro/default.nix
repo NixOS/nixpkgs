@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://klavaro.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [stdenv.lib.maintainers.mimadrid];
+    maintainers = [stdenv.lib.maintainers.mimame];
   };
 }

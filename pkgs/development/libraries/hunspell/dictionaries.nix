@@ -722,4 +722,14 @@ in rec {
       platforms = platforms.all;
     };
   };
+
+  /* RUSSIAN */
+
+  ru_RU = ru-ru;
+  ru-ru = mkDictFromLibreOffice {
+    shortName = "ru-ru";
+    dictFileName = "ru_RU";
+    shortDescription = "Russian (Russian)";
+    license = with stdenv.lib.licenses; [ mpl20 lgpl3 ];
+  };
 }

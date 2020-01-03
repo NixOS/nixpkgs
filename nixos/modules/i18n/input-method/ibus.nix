@@ -27,6 +27,10 @@ let
   };
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+  ];
+
   options = {
     i18n.inputMethod.ibus = {
       engines = mkOption {
@@ -53,9 +57,15 @@ in
   config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
     i18n.inputMethod.package = ibusPackage;
 
+    environment.systemPackages = [
+      ibusAutostart
+    ];
+
     # Without dconf enabled it is impossible to use IBus
-    environment.systemPackages = with pkgs; [
-      gnome3.dconf ibusAutostart
+    programs.dconf.enable = true;
+
+    services.dbus.packages = [
+      ibusAutostart
     ];
 
     environment.variables = {

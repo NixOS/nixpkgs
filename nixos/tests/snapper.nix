@@ -1,4 +1,4 @@
-import ./make-test.nix ({ ... }:
+import ./make-test-python.nix ({ ... }:
 {
   name = "snapper";
 
@@ -20,24 +20,16 @@ import ./make-test.nix ({ ... }:
   };
 
   testScript = ''
-    $machine->succeed("btrfs subvolume create /home/.snapshots");
-
-    $machine->succeed("snapper -c home list");
-
-    $machine->succeed("snapper -c home create --description empty");
-
-    $machine->succeed("echo test > /home/file");
-    $machine->succeed("snapper -c home create --description file");
-
-    $machine->succeed("snapper -c home status 1..2");
-
-    $machine->succeed("snapper -c home undochange 1..2");
-    $machine->fail("ls /home/file");
-
-    $machine->succeed("snapper -c home delete 2");
-
-    $machine->succeed("systemctl --wait start snapper-timeline.service");
-
-    $machine->succeed("systemctl --wait start snapper-cleanup.service");
+    machine.succeed("btrfs subvolume create /home/.snapshots")
+    machine.succeed("snapper -c home list")
+    machine.succeed("snapper -c home create --description empty")
+    machine.succeed("echo test > /home/file")
+    machine.succeed("snapper -c home create --description file")
+    machine.succeed("snapper -c home status 1..2")
+    machine.succeed("snapper -c home undochange 1..2")
+    machine.fail("ls /home/file")
+    machine.succeed("snapper -c home delete 2")
+    machine.succeed("systemctl --wait start snapper-timeline.service")
+    machine.succeed("systemctl --wait start snapper-cleanup.service")
   '';
 })

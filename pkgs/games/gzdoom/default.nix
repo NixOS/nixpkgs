@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.2.0";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "0ifc10y8pdxb6ra38m55k26wb2cwdbjrblx3s24xivmsnkpbn7f6";
+    sha256 = "1mkfpa3mx1rpd6lywdcqcf0y9ydzr1jxpk330kl9lxw59xihk0pc";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -27,12 +27,18 @@ stdenv.mkDerivation rec {
     sed -i \
       -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
       -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
-      src/sound/mididevices/music_fluidsynth_mididevice.cpp
+      libraries/zmusic/mididevices/music_fluidsynth_mididevice.cpp
   '';
 
   installPhase = ''
     install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"
     for i in *.pk3; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    for i in fm_banks/*; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    for i in soundfonts/*; do
       install -Dm644 "$i" "$out/lib/gzdoom/$i"
     done
     mkdir $out/bin
