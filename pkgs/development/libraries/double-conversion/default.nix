@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, static ? false }:
+{ stdenv, lib, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "double-conversion";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}" ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   # Case sensitivity issue
   preConfigure = lib.optionalString stdenv.isDarwin ''

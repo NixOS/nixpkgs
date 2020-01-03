@@ -184,9 +184,6 @@ in {
     static = true;
     twisted = null;
   };
-  double-conversion = super.double-conversion.override {
-    static = true;
-  };
   gmp = super.gmp.override {
     withStatic = true;
   };
