@@ -143,6 +143,9 @@ in {
     static = true;
     shared = false;
   };
+  fmt = super.fmt.override {
+    enableShared = false;
+  };
   gifsicle = super.gifsicle.override {
     static = true;
   };
