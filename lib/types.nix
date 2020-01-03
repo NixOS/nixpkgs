@@ -358,41 +358,25 @@ rec {
     };
 
     # A submodule (like typed attribute set). See NixOS manual.
-    submodule = modules: submoduleWith {
-      shorthandOnlyDefinesConfig = true;
-      modules = toList modules;
-    };
-
-    submoduleWith =
-      { modules
-      , specialArgs ? {}
-      , shorthandOnlyDefinesConfig ? false
-      }@attrs:
+    submodule = opts:
       let
+        opts' = toList opts;
         inherit (lib.modules) evalModules;
-
-        coerce = unify: value: if isFunction value
-          then setFunctionArgs (args: unify (value args)) (functionArgs value)
-          else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
-
-        allModules = defs: modules ++ imap1 (n: { value, file }:
-          # Annotate the value with the location of its definition for better error messages
-          coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
-        ) defs;
-
       in
       mkOptionType rec {
         name = "submodule";
         check = x: isAttrs x || isFunction x;
         merge = loc: defs:
-          (evalModules {
-            modules = allModules defs;
-            inherit specialArgs;
+          let
+            coerce = def: if isFunction def then def else { config = def; };
+            modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
+          in (evalModules {
+            inherit modules;
             args.name = last loc;
             prefix = loc;
           }).config;
         getSubOptions = prefix: (evalModules
-          { inherit modules prefix specialArgs;
+          { modules = opts'; inherit prefix;
             # This is a work-around due to the fact that some sub-modules,
             # such as the one included in an attribute set, expects a "args"
             # attribute to be given to the sub-module. As the option
@@ -410,29 +394,13 @@ rec {
             # It shouldn't cause an issue since this is cosmetic for the manual.
             args.name = "‹name›";
           }).options;
-        getSubModules = modules;
-        substSubModules = m: submoduleWith (attrs // {
-          modules = m;
-        });
-        functor = defaultFunctor name // {
-          type = types.submoduleWith;
-          payload = {
-            modules = modules;
-            specialArgs = specialArgs;
-            shorthandOnlyDefinesConfig = shorthandOnlyDefinesConfig;
-          };
-          binOp = lhs: rhs: {
-            modules = lhs.modules ++ rhs.modules;
-            specialArgs =
-              let intersecting = builtins.intersectAttrs lhs.specialArgs rhs.specialArgs;
-              in if intersecting == {}
-              then lhs.specialArgs // rhs.specialArgs
-              else throw "A submoduleWith option is declared multiple times with the same specialArgs \"${toString (attrNames intersecting)}\"";
-            shorthandOnlyDefinesConfig =
-              if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
-              then lhs.shorthandOnlyDefinesConfig
-              else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
-          };
+        getSubModules = opts';
+        substSubModules = m: submodule m;
+        functor = (defaultFunctor name) // {
+          # Merging of submodules is done as part of mergeOptionDecls, as we have to annotate
+          # each submodule with its location.
+          payload = [];
+          binOp = lhs: rhs: [];
         };
       };
 
