@@ -193,9 +193,6 @@ in {
   gflags = super.gflags.override {
     enableShared = false;
   };
-  glog = super.glog.override {
-    static = true;
-  };
   cdo = super.cdo.override {
     enable_all_static = true;
   };
