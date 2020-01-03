@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "9756ffdc2472";
-      sha256 = "0q7hxaaq6lp0v8qqzifvysl47z5rfdlrxkh3d29vsl3wyby3dxl8";
+      rev = "34f69633bfdc";
+      sha256 = "0169vcn9s4c851y9vm7xqnar3vdfjrp7qsvcxadpfhsmwlfhxzgg";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "ba9fcec4b297";
-      sha256 = "1hbqvy6r0s5h0dpdqw8fynl3cq0acin3iyqki9xvl5r8h33yb9bx";
+      rev = "d98b1b443823";
+      sha256 = "1vzwpy56g056dsq304xga3d55jg2cxx89bijpfwjlhwyqyskybsz";
     };
   }
   {
@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "19e00faab6ad";
-      sha256 = "0znjx9xbyjdvk8cafdc1jl22gg29asxl5yl7mi3yz6zx3h39rm8y";
+      rev = "c178f38b412c";
+      sha256 = "1r6v8xnvb4z5vdckbj6vd08kn6h4ivr9hvdpgq4drj6l1mp79rf7";
     };
   }
   {
