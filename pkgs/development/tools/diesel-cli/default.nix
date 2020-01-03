@@ -72,6 +72,6 @@ rustPlatform.buildRustPackage rec {
     homepage = https://github.com/diesel-rs/diesel/tree/master/diesel_cli;
     license = with licenses; [ mit asl20 ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with maintainers; [ ];
   };
 }
