@@ -4,19 +4,24 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.17";
+  version = "1.0.18";
   pname = "xmlschema";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "v${version}";
-    sha256 = "0wbz243q8028ljnh6nq3kxawiwpg5p2bwg1b23ibf7zbrhazcj4k";
+    sha256 = "1pwq2sfh7klcxismsqzgw80cp3cdkq9wv8x9g3h1zx1p66xpas9p";
   };
 
   propagatedBuildInputs = [ elementpath ];
 
   checkInputs = [ pytest ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "elementpath~=1.3.0" "elementpath~=1.3"
+  '';
 
   # Ignore broken fixtures, and tests for files which don't exist.
   # For darwin, we need to explicity say we can't reach network
