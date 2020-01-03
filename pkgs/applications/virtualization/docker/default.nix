@@ -213,9 +213,9 @@ rec {
   };
 
   docker_19_03 = makeOverridable dockerGen {
-    version = "19.03.2";
-    rev = "6a30dfca03664a0b6bf0646a7d389ee7d0318e6e";
-    sha256 = "0bghqwxlx4v06bwcv3c2wizbihhf983gvypx5sjcbgmiyd3bgb47";
+    version = "19.03.5";
+    rev = "633a0ea838f10e000b7c6d6eed1623e6e988b5bc";
+    sha256 = "1cs38ffh5xn8c40rln4pvd53iahvi4kys9an6kpclvvciqfc2cxs";
     runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
     runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
     containerdRev = "894b81a4b802e4eb2a91d1ce216b8817763c29fb";
