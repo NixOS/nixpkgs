@@ -108,7 +108,7 @@ in {
   inherit buildSetupcfg;
 
   inherit (callPackage ../development/interpreters/python/hooks { })
-    flitBuildHook pipBuildHook pipInstallHook pytestCheckHook pythonCatchConflictsHook pythonImportsCheckHook pythonRemoveBinBytecodeHook setuptoolsBuildHook setuptoolsCheckHook wheelUnpackHook;
+    flitBuildHook pipBuildHook pipInstallHook pytestCheckHook pythonCatchConflictsHook pythonImportsCheckHook pythonRemoveBinBytecodeHook requirementsCheckHook setuptoolsBuildHook setuptoolsCheckHook wheelUnpackHook;
 
   # helpers
 
