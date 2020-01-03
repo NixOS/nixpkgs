@@ -21642,6 +21642,8 @@ in
 
   tint2 = callPackage ../applications/misc/tint2 { };
 
+  tiny = callPackage ../applications/networking/irc/tiny { };
+
   tixati = callPackage ../applications/networking/p2p/tixati { };
 
   tkcvs = callPackage ../applications/version-management/tkcvs { };
