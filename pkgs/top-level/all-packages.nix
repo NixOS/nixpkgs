@@ -7831,7 +7831,7 @@ in
   gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { stdenv = gccStdenv; };
 
   gccFun = callPackage (if stdenv.targetPlatform.isVc4 then ../development/compilers/gcc/6 else ../development/compilers/gcc/9);
-  gcc = if stdenv.targetPlatform.isVc4 then gcc6 else gcc9;
+  gcc = if stdenv.targetPlatform.isVc4 then gcc6 else if stdenv.targetPlatform.isAarch32 then gcc8 else gcc9;
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
