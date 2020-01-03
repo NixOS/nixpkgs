@@ -1203,6 +1203,8 @@ in {
 
   simplefix = callPackage ../development/python-modules/simplefix { };
 
+  pyscrypt = callPackage ../development/python-modules/pyscrypt { };
+
   pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
     inherit (pkgs) cmake qt5;
   });
