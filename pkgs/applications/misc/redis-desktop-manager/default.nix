@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated" ];
+
   # Disable annoying update reminder
   postPatch = ''
     sed -i s/'^\s*initUpdater();'/'\/\/initUpdater():'/ src/app/app.cpp

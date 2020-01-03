@@ -18,6 +18,8 @@ buildPythonPackage rec {
     sha256 = "19ayn5w9ayxbb1m84l1s9qlb6kv7sz6sg34mzy8bnidc7qnfbn15";
   };
 
+  # zope.interface issue
+  doCheck = isPy3k;
   # Skip a failing test until fixed upstream:
   # https://github.com/meejah/txtorcon/issues/250
   checkPhase = ''

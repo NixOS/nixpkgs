@@ -103,7 +103,7 @@ deis = buildGoPackage rec {
 
   goDeps = ./deps.nix; <co xml:id='ex-buildGoPackage-3' />
 
-  buildFlags = "--tags release"; <co xml:id='ex-buildGoPackage-4' />
+  buildFlags = [ "--tags" "release" ]; <co xml:id='ex-buildGoPackage-4' />
 }
 </programlisting>
   </example>

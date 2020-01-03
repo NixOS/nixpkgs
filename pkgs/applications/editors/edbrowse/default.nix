@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = [ 
-    "-C src"
+  makeFlags = [
+    "-C" "src"
     "prefix=${placeholder "out"}"
   ];
 

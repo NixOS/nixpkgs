@@ -2,6 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , isPy27
+, isPy3k
 , numpy
 , imagecodecs-lite
 , enum34
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+  ] ++ lib.optionals isPy3k [
     imagecodecs-lite
   ] ++ lib.optionals isPy27 [
     futures
@@ -44,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Read and write image data from and to TIFF files.";
-    homepage = https://www.lfd.uci.edu/~gohlke/;
+    homepage = "https://www.lfd.uci.edu/~gohlke/";
     maintainers = [ maintainers.lebastr ];
     license = licenses.bsd3;
   };

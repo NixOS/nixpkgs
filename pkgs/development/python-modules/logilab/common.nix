@@ -1,12 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, unittest2, six }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, unittest2, six }:
 
 buildPythonPackage rec {
   pname = "logilab-common";
-  version = "1.4.4";
+  version = "1.5.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c1bf26431a3b487940cd4a7c0eefde328f5ff7098222ee695805752dae94aa6";
+    sha256 = "1n20znamai7jksimbdshy03rgw235qwa9vbx3lyajzwysblq4s4d";
   };
 
   propagatedBuildInputs = [ unittest2 six ];

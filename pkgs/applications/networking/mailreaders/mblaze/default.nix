@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     install -Dm644 -t $out/share/zsh/site-functions contrib/_mblaze

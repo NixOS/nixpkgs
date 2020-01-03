@@ -99,11 +99,9 @@ stdenv.mkDerivation rec {
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    # Default for release buildtype but passed manually because
-    # we're using plain
-    "-DG_DISABLE_CAST_CHECKS"
-  ];
+  # Default for release buildtype but passed manually because
+  # we're using plain
+  NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   # So the polkit policy can reference /run/current-system/sw/bin/gnome-settings-daemon/gsd-backlight-helper
   postFixup = ''

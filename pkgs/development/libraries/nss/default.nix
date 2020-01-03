@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
       ./ckpem.patch
     ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"

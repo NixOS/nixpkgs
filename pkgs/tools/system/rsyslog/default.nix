@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
     ++ stdenv.lib.optional stdenv.isLinux systemd;
 
-  hardeningDisable = [ "format" ];
-
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -95,9 +93,7 @@ stdenv.mkDerivation rec {
     (mkFlag (hadoop != null)          "omhdfs")
     (mkFlag (rdkafka != null)         "omkafka")
     (mkFlag (libmongo-client != null) "ommongodb")
-    (mkFlag (czmq != null)            "imzmq3")
     (mkFlag (czmq != null)            "imczmq")
-    (mkFlag (czmq != null)            "omzmq3")
     (mkFlag (czmq != null)            "omczmq")
     (mkFlag (rabbitmq-c != null)      "omrabbitmq")
     (mkFlag (hiredis != null)         "omhiredis")

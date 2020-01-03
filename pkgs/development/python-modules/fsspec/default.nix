@@ -1,14 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
+, pythonOlder
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "fsspec";
   version = "0.6.2";
-  disabled = isPy27;
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "intake";

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure lilv lv2 serd sord sratom ];
-  makeFlags = "CFLAGS=-I${lilv}/include/lilv-0 libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "CFLAGS=-I${lilv}/include/lilv-0" "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {

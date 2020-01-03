@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  installFlags = "sysconfdir=$(out)/etc localstatedir=$(TMPDIR)";
+  installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(TMPDIR)" ];
 
   meta = {
     homepage = "https://www.ucolick.org/~will/#super";

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   meta = {
     description = "GTK-based audio CD player/ripper";

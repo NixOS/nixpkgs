@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gambit rsync bash ]
     ++ buildInputs_libraries ++ buildInputs_staticLibraries;
 
-  NIX_CFLAGS_COMPILE = [ "-I${libmysqlclient}/include/mysql" "-L${libmysqlclient}/lib/mysql" ];
+  NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 
   postPatch = ''
     echo '(define (gerbil-version-string) "v${git-version}")' > src/gerbil/runtime/gx-version.scm

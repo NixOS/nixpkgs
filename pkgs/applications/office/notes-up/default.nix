@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Whether to build with contractor support (Pantheon specific)
-  cmakeFlags = if withPantheon then null else [ "-Dnoele=yes" ];
+  cmakeFlags = stdenv.lib.optional (!withPantheon) "-Dnoele=yes";
 
   passthru = {
     updateScript = pantheon.updateScript {

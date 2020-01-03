@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-DIFCONFIGPATH=\"${nettools}/bin/\"";
 
-  installFlags = "prefix=\${out}";
+  installFlags = [ "prefix=\${out}" ];
 
   meta = {
     homepage = http://code.kryo.se/iodine/;

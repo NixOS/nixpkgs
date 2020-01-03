@@ -18,7 +18,6 @@ let
 
     buildInputs = [ xar cpio python pbzx ];
 
-    phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
     outputs = [ "out" "dev" "man" ];
 
     unpackPhase = ''
@@ -52,7 +51,7 @@ let
   framework = name: deps: stdenv.mkDerivation {
     name = "apple-framework-${name}";
 
-    phases = [ "installPhase" "fixupPhase" ];
+    dontUnpack = true;
 
     # because we copy files from the system
     preferLocalBuild = true;
@@ -137,7 +136,7 @@ in rec {
   libs = {
     xpc = stdenv.mkDerivation {
       name   = "apple-lib-xpc";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       installPhase = ''
         mkdir -p $out/include
@@ -150,7 +149,7 @@ in rec {
 
     Xplugin = stdenv.mkDerivation {
       name   = "apple-lib-Xplugin";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       # Not enough
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
@@ -168,7 +167,7 @@ in rec {
 
     utmp = stdenv.mkDerivation {
       name   = "apple-lib-utmp";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       installPhase = ''
         mkdir -p $out/include

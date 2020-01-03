@@ -54,6 +54,8 @@ stdenv.mkDerivation ( rec {
 
   checkTarget = "test-ci";
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" ];
+
   preCheck = ''
     export PONYPATH="$out/lib:${stdenv.lib.makeLibraryPath [ pcre2 libressl ]}"
   '';

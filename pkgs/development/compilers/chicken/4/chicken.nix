@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
 
-  buildFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
-  installFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
+  buildFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" "VARDIR=$(out)/var/lib" ];
+  installFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" "VARDIR=$(out)/var/lib" ];
 
   # We need a bootstrap-chicken to regenerate the c-files after
   # applying a patch to add support for CHICKEN_REPOSITORY_EXTRA

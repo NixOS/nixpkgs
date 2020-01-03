@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  NIX_LDFLAGS = [ "-ldl" ];
+  NIX_LDFLAGS = "-ldl";
 
   meta = {
     description = "Prometheus Client Library for Modern C++";

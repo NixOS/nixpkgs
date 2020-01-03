@@ -8,14 +8,14 @@ let
       url = "https://github.com/xavierleroy/camlzip/archive/rel107.tar.gz";
       sha256 = "1pdz3zyiczm6c46zfgag2frwq3ljlq044p3a2y4wm2wb4pgz8k9g";
       patches = [];
-      installTargets = "install-findlib";
+      installTargets = [ "install-findlib" ];
     } else {
       version = "1.05";
       download_id = "1037";
       url = "http://forge.ocamlcore.org/frs/download.php/${param.download_id}/camlzip-${param.version}.tar.gz";
       sha256 = "930b70c736ab5a7ed1b05220102310a0a2241564786657abe418e834a538d06b";
       patches = [./makefile_1_05.patch];
-      installTargets = "install";
+      installTargets = [ "install" ];
     };
 in
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       --subst-var-by ZLIB_INCLUDE "${zlib.dev}/include"
   '';
 
-  buildFlags = "all allopt";
+  buildFlags = [ "all" "allopt" ];
 
   inherit (param) installTargets;
 

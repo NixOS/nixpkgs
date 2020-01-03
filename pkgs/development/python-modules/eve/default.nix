@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "Eve";
-  version = "0.9.2";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0191ed42ef85d747758bba29df5ff1e296b8152fefddb2f75c3d778c2e6fb9d3";
+    sha256 = "ebde455e631b8eb9d38783eedfbd7e416b4477cce3d9988880eb3e477256a11e";
   };
 
   propagatedBuildInputs = [

@@ -245,7 +245,7 @@ stdenv.mkDerivation rec {
     })
     ./firmware_location.patch
     ];
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   configureFlags = [ "--enable-dependency-reduction" "--disable-frontend"];
 

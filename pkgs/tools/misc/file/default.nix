@@ -26,8 +26,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  makeFlags = if stdenv.hostPlatform.isWindows then "FILE_COMPILE=file"
-              else null;
+  makeFlags = stdenv.lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
 
   meta = with stdenv.lib; {
     homepage = https://darwinsys.com/file;

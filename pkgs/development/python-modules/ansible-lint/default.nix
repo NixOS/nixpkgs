@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jj1vjmwgaj6d3f3xslcfq5zp16z7rxwlahfp36661fpha35v4pb";
+    sha256 = "eb925d8682d70563ccb80e2aca7b3edf84fb0b768cea3edc6846aac7abdc414a";
   };
 
   format = "pyproject";
@@ -45,5 +45,6 @@ buildPythonPackage rec {
     description = "Best practices checker for Ansible";
     license = licenses.mit;
     maintainers = [ maintainers.sengaya ];
+    broken = true; # requires new flit to build
   };
 }

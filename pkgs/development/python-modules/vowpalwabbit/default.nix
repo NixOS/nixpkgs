@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
-  version = "8.7.0.post1";
+  version = "8.8.0";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "de9529660858b380127b2bea335b41a29e8f264551315042300022eb4e6524ea";
+    sha256 = "bd4c7e49a6ddaa1afedf97b22b822c7322328d686d45151b47a5127fc409c2af";
   };
 
   # Should be fixed in next Python release after 8.5.0:

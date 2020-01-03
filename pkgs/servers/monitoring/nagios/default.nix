@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ php perl gd libpng zlib unzip ];
 
   configureFlags = [ "--localstatedir=/var/lib/nagios" ];
-  buildFlags = "all";
+  buildFlags = [ "all" ];
 
   # Do not create /var directories
   preInstall = ''

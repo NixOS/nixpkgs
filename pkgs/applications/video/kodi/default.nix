@@ -179,7 +179,7 @@ in stdenv.mkDerivation {
     ++ lib.optional  udevSupport     udev
     ++ lib.optional  usbSupport      libusb
     ++ lib.optional  vdpauSupport    libvdpau
-    ++ lib.optional  useWayland [
+    ++ lib.optionals useWayland [
       wayland waylandpp
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
@@ -192,7 +192,7 @@ in stdenv.mkDerivation {
       which
       pkgconfig gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
-    ] ++ lib.optional useWayland [ wayland-protocols ];
+    ] ++ lib.optionals useWayland [ wayland-protocols ];
 
     cmakeFlags = [
       "-Dlibdvdcss_URL=${libdvdcss.src}"

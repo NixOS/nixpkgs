@@ -17,7 +17,7 @@ stdenv.mkDerivation  {
   preConfigure = "cd src";
 
   buildInputs = [ alsaLib cmake makeWrapper libGLU libGL qt4 ];
-  NIX_LDFLAGS = [ "-lGL" "-lpthread" ];
+  NIX_LDFLAGS = "-lGL -lpthread";
 
   postInstall = ''
     wrapProgram $out/bin/pianobooster \

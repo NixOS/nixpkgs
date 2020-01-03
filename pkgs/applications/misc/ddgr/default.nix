@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   preBuild = ''
     # Version 1.7 was released as 1.6

@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./darwin-limits.patch ];
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-Wno-missing-sysroot";
-  NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework MultitouchSupport";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-missing-sysroot";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework MultitouchSupport";
 
   postPatch = ''
     substituteInPlace src/core/makefile.x/makefile.osx \
