@@ -2277,6 +2277,12 @@
     githubId = 2512008;
     name = "Even Brenden";
   };
+  evils = {
+    email = "evils.devils@protonmail.com";
+    github = "evils-devils";
+    githubId = 30512529;
+    name = "Evils";
+  };
   exfalso = {
     email = "0slemi0@gmail.com";
     github = "exfalso";
