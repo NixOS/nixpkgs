@@ -20314,6 +20314,9 @@ in
     buildGoPackage = buildGo112Package;
   };
 
+  inherit (callPackage ../tools/security/opensnitch { })
+  opensnitchd opensnitch-ui;
+
   oroborus = callPackage ../applications/window-managers/oroborus {};
 
   osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
