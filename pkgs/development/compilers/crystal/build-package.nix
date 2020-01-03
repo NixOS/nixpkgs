@@ -14,7 +14,7 @@ let
     path = fetchFromGitHub value;
   }) (import shardsFile));
 
-  defaultOptions = [ "--release" "--progress" "--no-debug" "--verbose" ];
+  defaultOptions = [ "--release" "--progress" "--verbose" ];
 
 in stdenv.mkDerivation (mkDerivationArgs // {
 

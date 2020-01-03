@@ -4139,6 +4139,8 @@ in
 
   intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
 
+  invidious = callPackage ../servers/invidious { };
+
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
   inxi = callPackage ../tools/system/inxi { };
@@ -4823,6 +4825,8 @@ in
   lsh = lowPrio (callPackage ../tools/networking/lsh { });
 
   lshw = callPackage ../tools/system/lshw { };
+
+  lsquic = callPackage ../development/libraries/lsquic { };
 
   ltris = callPackage ../games/ltris { };
 
