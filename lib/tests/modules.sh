@@ -180,7 +180,8 @@ checkConfigOutput "true" config.submodule.inner ./declare-submoduleWith-modules.
 checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.nix
 
 ## Paths should be allowed as values and work as expected
-checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
+# Temporarily disabled until https://github.com/NixOS/nixpkgs/pull/76861
+#checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
 
 cat <<EOF
 ====== module tests ======
