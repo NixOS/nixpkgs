@@ -21,48 +21,7 @@ let
   stable = pname != "kicad-unstable";
   baseName = if (stable) then "kicad" else "kicad-unstable";
 
-  versions = {
-    "kicad" = {
-      kicadVersion = {
-        version = "5.1.5";
-        src.sha256 = "15h3rwisjss3fdc9bam9n2wq94slhacc3fbg14bnzf4n5agsnv5b";
-      };
-      libVersion = {
-        version = "5.1.5";
-        libSources = {
-          i18n.sha256 = "1rfpifl8vky1gba2angizlb2n7mwmsiai3r6ip6qma60wdj8sbd3";
-          symbols.sha256 = "048b07ffsaav1ssrchw2p870lvb4rsyb5vnniy670k7q9p16qq6h";
-          templates.sha256 = "0cs3bm3zb5ngw5ldn0lzw5bvqm4kvcidyrn76438alffwiz2b15g";
-          footprints.sha256 = "1c4whgn14qhz4yqkl46w13p6rpv1k0hsc9s9h9368fxfcz9knb2j";
-          packages3d.sha256 = "0cff2ms1bsw530kqb1fr1m2pjixyxzwa81mxgac3qpbcf8fnpvaz";
-        };
-      };
-    };
-    "kicad-unstable" = {
-      kicadVersion = {
-        version = "2019-12-31";
-        src = {
-          rev = "eaaa4eb63acb289047dfbb6cc275579dea58f12b";
-          sha256 = "1v2hf2slphjdh14y56pmzlpi6mqidrd8198if1fi0cch72v37zch";
-        };
-      };
-      libVersion = {
-        version = "unstable";
-        libSources = {
-          i18n.rev = "e7439fd76f27cfc26e269c4e6c4d56245345c28b";
-          i18n.sha256 = "1nqm1kx5b4f7s0f9q8bg4rdhqnp0128yp6bgnrkia1kwmfnf5gmy";
-          symbols.rev = "1bc5ff11c76bcbfda227e534b0acf737edddde8f";
-          symbols.sha256 = "05kv93790wi4dpbn2488p587b83yz1zw9h62lkv41h7vn2r1mmb7";
-          templates.rev = "0c0490897f803ab8b7c3dad438b7eb1f80e0417c";
-          templates.sha256 = "0cs3bm3zb5ngw5ldn0lzw5bvqm4kvcidyrn76438alffwiz2b15g";
-          footprints.rev = "454126c125edd3fa8633f301421a7d9c4de61b77";
-          footprints.sha256 = "00nli4kx2i68bk852rivbirzcgpsdlpdk34g1q892952jsbh7fy6";
-          packages3d.rev = "c2b92a411adc93ddeeed74b36b542e1057f81a2a";
-          packages3d.sha256 = "05znc6y2lc31iafspg308cxdda94zg6c7mwslmys76npih1pb8qc";
-        };
-      };
-    };
-  };
+  versions =  import ./versions.nix;
   versionConfig = versions.${baseName};
 
   wxGTK = if (stable)
@@ -156,6 +115,13 @@ stdenv.mkDerivation rec {
     + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
     ''
   ;
+
+  # can't run this for each pname
+  # stable and unstable are in the same versions.nix
+  # and kicad-small reuses stable
+  # with "all" it updates both, run it manually if you don't want that
+  # and can't git commit if this could be running in parallel with other scripts
+  passthru.updateScript = [ ./update.sh "all" ];
 
   meta = {
     description = if (stable)
