@@ -1,10 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial, python27, setJavaClassPath,
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial_4, python27, setJavaClassPath,
   zlib, makeWrapper, openjdk, unzip, git, clang, llvm, which, icu, ruby, bzip2, glibc
   # gfortran, readline, bzip2, lzma, pcre, curl, ed, tree ## WIP: fastr deps
 }:
 
 let
   version = "19.1.1";
+  mercurial = mercurial_4;
   truffleMake = ./truffle.make;
   makeMxGitCache = list: out: ''
      mkdir ${out}
