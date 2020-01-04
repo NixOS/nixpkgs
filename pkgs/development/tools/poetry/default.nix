@@ -33,9 +33,13 @@ poetry2nix.mkPoetryApplication {
 
     mkdir -p $out/bin
     cat > $out/bin/poetry <<EOF
-    #!${runtimeShell}
-    export PYTHONPATH=$out/lib/${python.libPrefix}/site-packages
-    exec ${python.interpreter} -m poetry "\$@"
+    #!${python.interpreter}
+    import sys
+
+    if __name__ == '__main__':
+        sys.path.append("$out/lib/${python.libPrefix}/site-packages")
+        from poetry.console import main
+        main()
     EOF
     chmod +x $out/bin/poetry
 
