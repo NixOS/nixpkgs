@@ -182,6 +182,12 @@ checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.
 ## Paths should be allowed as values and work as expected
 checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
 
+# Check that disabledModules works recursively and correctly
+checkConfigOutput "true" config.enable ./disable-recursive/main.nix
+checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-foo.nix}
+checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-bar.nix}
+checkConfigError 'The option .* defined in .* does not exist' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
