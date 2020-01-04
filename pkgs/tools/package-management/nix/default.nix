@@ -2,7 +2,7 @@
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
-, aws-sdk-cpp, boehmgc, boost
+, boehmgc
 , stdenv, llvmPackages_6
 }:
 
@@ -170,7 +170,7 @@ in rec {
     # Nix1 has the perl bindings by default, so no need to build the manually.
     includesPerl = true;
 
-    inherit storeDir stateDir confDir stdenv aws-sdk-cpp boehmgc boost;
+    inherit storeDir stateDir confDir boehmgc;
   };
 
   nixStable = callPackage common (rec {
@@ -180,7 +180,7 @@ in rec {
       sha256 = "9fea4b52db0b296dcf05d36f7ecad9f48396af3a682bb21e31f8d04c469beef8";
     };
 
-    inherit storeDir stateDir confDir stdenv aws-sdk-cpp boehmgc boost;
+    inherit storeDir stateDir confDir boehmgc;
   } // stdenv.lib.optionalAttrs stdenv.cc.isClang {
     stdenv = llvmPackages_6.stdenv;
   });
@@ -196,7 +196,7 @@ in rec {
     };
     fromGit = true;
 
-    inherit storeDir stateDir confDir stdenv aws-sdk-cpp boehmgc boost;
+    inherit storeDir stateDir confDir boehmgc;
   });
 
   nixFlakes = lib.lowPrio (callPackage common rec {
@@ -210,7 +210,7 @@ in rec {
     };
     fromGit = true;
 
-    inherit storeDir stateDir confDir stdenv aws-sdk-cpp boehmgc boost;
+    inherit storeDir stateDir confDir boehmgc;
   });
 
 }

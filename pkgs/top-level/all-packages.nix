@@ -24764,18 +24764,6 @@ in
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
       boehmgc = boehmgc.override { enableLargeConfig = true; };
-      # Tarball evaluation fails with a gcc9 based nix-env.
-      # $ nix-build pkgs/top-level/release.nix -A tarball
-      stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
-      aws-sdk-cpp = aws-sdk-cpp.override {
-        stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
-      };
-      boost = boost.override {
-        buildPackages = buildPackages // {
-          stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
-        };
-        stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
-      };
       })
     nix
     nix1
