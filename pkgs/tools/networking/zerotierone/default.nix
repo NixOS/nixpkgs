@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, lzo, zlib, iproute, which, ronn }:
+{ stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute, ronn }:
 
 stdenv.mkDerivation rec {
   pname = "zerotierone";
@@ -20,11 +20,14 @@ stdenv.mkDerivation rec {
 
       patchShebangs ./doc/build.sh
       substituteInPlace ./doc/build.sh \
-        --replace '/usr/bin/ronn' '${ronn}/bin/ronn' \
-        --replace 'ronn -r' '${ronn}/bin/ronn -r'
+        --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
   '';
 
-  buildInputs = [ openssl lzo zlib iproute which ronn ];
+
+  nativeBuildInputs = [ ronn ];
+  buildInputs = [ openssl lzo zlib iproute ];
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     install -Dt "$out/bin/" zerotier-one
