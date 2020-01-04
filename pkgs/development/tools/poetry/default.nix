@@ -34,7 +34,7 @@ poetry2nix.mkPoetryApplication {
     mkdir -p $out/bin
     cat > $out/bin/poetry <<EOF
     #!${runtimeShell}
-    export PYTHONPATH=$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH
+    export PYTHONPATH=$out/lib/${python.libPrefix}/site-packages
     exec ${python.interpreter} -m poetry "\$@"
     EOF
     chmod +x $out/bin/poetry
