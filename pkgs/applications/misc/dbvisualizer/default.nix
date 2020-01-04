@@ -1,11 +1,12 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
-stdenv.mkDerivation {
-  name = "dbvisualizer-9.5.7";
+stdenv.mkDerivation rec {
+  pname = "dbvisualizer";
+  version = "10.0.25";
 
   src = fetchurl {
-    url = https://www.dbvis.com/product_download/dbvis-9.5.7/media/dbvis_unix_9_5_7.tar.gz;
-    sha256 = "1xv4fw7cji2ffvv7z8vjl5lap512pj60s2ynihirrqld7pmklnyr";
+    url = "https://www.dbvis.com/product_download/dbvis-${version}/media/dbvis_unix_${stdenv.lib.strings.replaceChars ["."] ["_"] version}.tar.gz";
+    sha256 = "0f9lqsvyxy0wa6hgdvc9vxvfb44xb46fgcdj5g9y013cj4nsqzf1";
   };
 
   buildInputs = [ makeWrapper ];
