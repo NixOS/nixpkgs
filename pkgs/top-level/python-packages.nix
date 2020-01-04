@@ -2864,6 +2864,8 @@ in {
 
   oset = callPackage ../development/python-modules/oset { };
 
+  oscrypto = callPackage ../development/python-modules/oscrypto { };
+
   oyaml = callPackage ../development/python-modules/oyaml { };
 
   pamela = callPackage ../development/python-modules/pamela { };
