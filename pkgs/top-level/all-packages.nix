@@ -4146,6 +4146,8 @@ in
 
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
+  hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
+
   half = callPackage ../development/libraries/half { };
 
   halibut = callPackage ../tools/typesetting/halibut { };
