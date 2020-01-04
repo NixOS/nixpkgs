@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
-  version = "0.9.6";
+  version = "0.9.17";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
     rev = "v${version}";
-    sha256 = "083il7b5kw3pc7m5p9xjpb9dlvfarc51sni92mkgm9ckc32x9vpp";
+    sha256 = "0q444wd6wz85g4zjkdsrf8z7chkjq9rxzq8l6fh37mgf7c23hv09";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkgconfig ];
@@ -18,11 +18,13 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace /usr/bin/ " "
   '';
 
-  doCheck = false;
-  # Due to
-  #io_uv_recv/success/first                                    [ ERROR ]
-  #Error: test/lib/dir.c:97: No such file or directory
+  # test fails
+  #
+  #append/finalizeSegment                                      [ ERROR ]
+  #Error: test/integration/test_uv_append.c:264: assertion failed: test_dir_has_file(f->dir, "0000000000000001-0000000000000004") is not true
   #Error: child killed by signal 6 (Aborted)
+
+  doCheck = false;
 
   outputs = [ "dev" "out" ];
 
@@ -39,6 +41,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/canonical/raft";
     license = licenses.asl20;
-    maintainers = [ maintainers.wucke13 ];
+    maintainers = with maintainers; [ wucke13 ];
   };
 }
