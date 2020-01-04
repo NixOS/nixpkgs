@@ -1,9 +1,5 @@
 { lib, python3Packages }:
 
-# Flexget have been a trouble maker in the past,
-# if you see flexget breaking when updating packages, don't worry.
-# The current state is that we have no active maintainers for this package.
-# -- Mic92
 python3Packages.buildPythonApplication rec {
   pname = "FlexGet";
   version = "3.0.31";
@@ -61,6 +57,6 @@ python3Packages.buildPythonApplication rec {
     homepage    = "https://flexget.com/";
     description = "Multipurpose automation tool for all of your media";
     license     = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ marsam ];
   };
 }
