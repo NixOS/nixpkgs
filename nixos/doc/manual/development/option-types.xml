@@ -259,11 +259,65 @@
       A set of sub options <replaceable>o</replaceable>.
       <replaceable>o</replaceable> can be an attribute set or a function
       returning an attribute set. Submodules are used in composed types to
-      create modular options. Submodule are detailed in
+      create modular options. This is equivalent to
+      <literal>types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }</literal>.
+      Submodules are detailed in
       <xref
           linkend='section-option-types-submodule' />.
      </para>
     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+       <varname>types.submoduleWith</varname> {
+        <replaceable>modules</replaceable>,
+        <replaceable>specialArgs</replaceable> ? {},
+        <replaceable>shorthandOnlyDefinesConfig</replaceable> ? false }
+     </term>
+     <listitem>
+       <para>
+         Like <varname>types.submodule</varname>, but more flexible and with better defaults.
+         It has parameters
+         <itemizedlist>
+           <listitem><para>
+             <replaceable>modules</replaceable>
+             A list of modules to use by default for this submodule type. This gets combined
+             with all option definitions to build the final list of modules that will be included.
+             <note><para>
+               Only options defined with this argument are included in rendered documentation.
+             </para></note>
+           </para></listitem>
+           <listitem><para>
+             <replaceable>specialArgs</replaceable>
+             An attribute set of extra arguments to be passed to the module functions.
+             The option <literal>_module.args</literal> should be used instead
+             for most arguments since it allows overriding. <replaceable>specialArgs</replaceable> should only be
+             used for arguments that can&apos;t go through the module fixed-point, because of
+             infinite recursion or other problems. An example is overriding the
+             <varname>lib</varname> argument, because <varname>lib</varname> itself is used
+             to define <literal>_module.args</literal>, which makes using
+             <literal>_module.args</literal> to define it impossible.
+           </para></listitem>
+           <listitem><para>
+             <replaceable>shorthandOnlyDefinesConfig</replaceable>
+             Whether definitions of this type should default to the <literal>config</literal>
+             section of a module (see <xref linkend='ex-module-syntax'/>) if it is an attribute
+             set. Enabling this only has a benefit when the submodule defines an option named
+             <literal>config</literal> or <literal>options</literal>. In such a case it would
+             allow the option to be set with <literal>the-submodule.config = "value"</literal>
+             instead of requiring <literal>the-submodule.config.config = "value"</literal>.
+             This is because only when modules <emphasis>don&apos;t</emphasis> set the
+             <literal>config</literal> or <literal>options</literal> keys, all keys are interpreted
+             as option definitions in the <literal>config</literal> section. Enabling this option
+             implicitly puts all attributes in the <literal>config</literal> section.
+           </para>
+           <para>
+             With this option enabled, defining a non-<literal>config</literal> section requires
+             using a function: <literal>the-submodule = { ... }: { options = { ... }; }</literal>.
+           </para></listitem>
+         </itemizedlist>
+       </para>
+     </listitem>
    </varlistentry>
   </variablelist>
  </section>

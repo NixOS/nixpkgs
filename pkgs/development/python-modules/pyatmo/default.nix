@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "2.3.3";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b884402c62d589a38444e8f4b3892b18312e8f9442cd8d12e7ec01c698328f54";
+    sha256 = "8fbcc3a88f8c51d190b697c80515e67530143de71f89cc6ecf99bbf2cbf3ef30";
   };
 
   propagatedBuildInputs = [ requests ];

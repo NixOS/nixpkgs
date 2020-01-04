@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     osl seexpr makeWrapper
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-I${openexr.dev}/include/OpenEXR"
     "-I${ilmbase.dev}/include/OpenEXR"
     "-I${openimageio.dev}/include/OpenImageIO"
@@ -33,6 +33,7 @@ in stdenv.mkDerivation rec {
     "-Wno-error=class-memaccess"
     "-Wno-error=maybe-uninitialized"
     "-Wno-error=catch-value"
+    "-Wno-error=stringop-truncation"
   ];
 
   cmakeFlags = [

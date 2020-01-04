@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.17.1";
+  version = "2.18";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    sha256 = "1xdy45rc3zzmf59zzszq9wpks6pvc0flmmwak39ww7laj2vgb4a7";
+    sha256 = "1bg2qjkzdawn4fnn0w7jhw1dk6191w8axnqra43z21pinfyim6da";
   };
 
-  cargoSha256 = "0db4j6y43gacazrvcmq823fzl5pdfdlg8mkjpysrw6h9fxisq83f";
+  cargoSha256 = "0q0iqd8y9rph8pwild5i2kv00h217a166c88hxpmbrigq9w960lp";
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
@@ -31,8 +31,8 @@ rustPlatform.buildRustPackage rec {
     make
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=sign-compare" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare"
+    + stdenv.lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
 
   doCheck = true;
 

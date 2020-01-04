@@ -10,7 +10,6 @@
   # Apple dependencies
 , CoreServices
 , Security
-, cf-private
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = with pkgs; [ nix direnv which ];
   buildInputs =
-    stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security cf-private ];
+    stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   passthru = {
     updater = with builtins; writeScript "copy-runtime-nix.sh" ''

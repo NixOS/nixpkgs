@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "DNS=yes"
   ];
 
-  installTargets = "install install-lib";
+  installTargets = [ "install" "install-lib" ];
 
   # Get rid of update-pciids as it won't work.
   postInstall = "rm $out/sbin/update-pciids $out/man/man8/update-pciids.8";

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sh autogen.sh --prefix=$out
     '';
 
-  makeFlags = "DESTDIR=$(out)";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   # Probably a hack, but using DESTDIR and PREFIX makes everything work!
   postInstall = ''

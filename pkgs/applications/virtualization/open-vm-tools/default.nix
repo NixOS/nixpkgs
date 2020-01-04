@@ -46,9 +46,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # igrone glib-2.62 deprecations
-  # Drop in next stable release.
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = builtins.toString [
+    # igrone glib-2.62 deprecations
+    # Drop in next stable release.
+    "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
+
+    # fix build with gcc9
+    "-Wno-error=address-of-packed-member"
+    "-Wno-error=format-overflow"
+  ];
 
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \

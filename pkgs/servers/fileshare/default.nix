@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig git ];
   buildInputs = [ libmicrohttpd ];
 
-  makeFlags = "BUILD=release";
+  makeFlags = [ "BUILD=release" ];
 
   installPhase = ''
     mkdir -p $out/bin

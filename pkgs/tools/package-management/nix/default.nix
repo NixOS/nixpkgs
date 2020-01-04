@@ -2,7 +2,7 @@
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
-, boehmgc
+, aws-sdk-cpp, boehmgc, boost
 , stdenv, llvmPackages_6
 }:
 
@@ -57,7 +57,7 @@ common =
       propagatedBuildInputs = [ boehmgc ];
 
       # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
@@ -94,9 +94,9 @@ common =
            # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
         ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
-      makeFlags = "profiledir=$(out)/etc/profile.d";
+      makeFlags = [ "profiledir=$(out)/etc/profile.d" ];
 
-      installFlags = "sysconfdir=$(out)/etc";
+      installFlags = [ "sysconfdir=$(out)/etc" ];
 
       doInstallCheck = true; # not cross
 
@@ -170,7 +170,7 @@ in rec {
     # Nix1 has the perl bindings by default, so no need to build the manually.
     includesPerl = true;
 
-    inherit storeDir stateDir confDir boehmgc;
+    inherit storeDir stateDir confDir stdenv aws-sdk-cpp boehmgc boost;
   };
 
   nixStable = callPackage common (rec {
@@ -180,7 +180,7 @@ in rec {
       sha256 = "bb6578e9f20eebab6d78469ecc59c450ac54f276e5a86a882015d98fecb1bc7b";
     };
 
-    inherit storeDir stateDir confDir boehmgc;
+    inherit storeDir stateDir confDir stdenv aws-sdk-cpp boehmgc boost;
   } // stdenv.lib.optionalAttrs stdenv.cc.isClang {
     stdenv = llvmPackages_6.stdenv;
   });
@@ -196,7 +196,7 @@ in rec {
     };
     fromGit = true;
 
-    inherit storeDir stateDir confDir boehmgc;
+    inherit storeDir stateDir confDir stdenv aws-sdk-cpp boehmgc boost;
   });
 
   nixFlakes = lib.lowPrio (callPackage common rec {
@@ -210,7 +210,7 @@ in rec {
     };
     fromGit = true;
 
-    inherit storeDir stateDir confDir boehmgc;
+    inherit storeDir stateDir confDir stdenv aws-sdk-cpp boehmgc boost;
   });
 
 }

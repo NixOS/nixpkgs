@@ -48,39 +48,38 @@ stdenv.mkDerivation rec {
     "--with-scheduler-ram"
     "--with-scheduler-stub"
 
-  ] ++ stdenv.lib.optional enablePython [
+  ] ++ stdenv.lib.optionals enablePython [
     "--with-python=${python2}"
     "--with-filter-python"
     "--with-queue-python"
     "--with-table-python"
     "--with-scheduler-python"
 
-  ] ++ stdenv.lib.optional enableLua [
+  ] ++ stdenv.lib.optionals enableLua [
     "--with-lua=${pkgconfig}"
     "--with-filter-lua"
 
-  ] ++ stdenv.lib.optional enablePerl [
+  ] ++ stdenv.lib.optionals enablePerl [
     "--with-perl=${perl}"
     "--with-filter-perl"
 
-  ] ++ stdenv.lib.optional enableMysql [
+  ] ++ stdenv.lib.optionals enableMysql [
     "--with-table-mysql"
 
-  ] ++ stdenv.lib.optional enablePostgres [
+  ] ++ stdenv.lib.optionals enablePostgres [
     "--with-table-postgres"
 
-  ] ++ stdenv.lib.optional enableSqlite [
+  ] ++ stdenv.lib.optionals enableSqlite [
     "--with-table-sqlite"
 
-  ] ++ stdenv.lib.optional enableRedis [
+  ] ++ stdenv.lib.optionals enableRedis [
     "--with-table-redis"
   ];
 
-  NIX_CFLAGS_COMPILE =
-    stdenv.lib.optional enableRedis
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString enableRedis
       "-I${hiredis}/include/hiredis -lhiredis"
-    ++ stdenv.lib.optional enableMysql
-      "-L${libmysqlclient}/lib/mysql";
+    + stdenv.lib.optionalString enableMysql
+      " -L${libmysqlclient}/lib/mysql";
 
   meta = with stdenv.lib; {
     homepage = https://www.opensmtpd.org/;

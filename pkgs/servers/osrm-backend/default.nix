@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m4hf26mgfvvx9z37qww8v8w4mhzyfl554ymdnzl99pr5ild093s";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=pessimizing-move" "-Wno-error=redundant-move" ];
+
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];
 

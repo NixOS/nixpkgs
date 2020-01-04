@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" "-Wno-error=stringop-truncation" ];
 
   # disable dvbscan, as having it enabled causes a network download which
   # cannot happen during build.

@@ -57,7 +57,7 @@ in (stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ] ++ lib.optional stdenv.isx86_64 "-mno-fma";
+  NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal";
 
   patches = [
     ./xdg-open-brief.patch
@@ -248,7 +248,7 @@ in (stdenv.mkDerivation rec {
     find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
     '';
 
-  makeFlags = "SHELL=${bash}/bin/bash";
+  makeFlags = [ "SHELL=${bash}/bin/bash" ];
 
   enableParallelBuilding = true;
 

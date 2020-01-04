@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "mozrunner";
-  version = "7.6.0";
+  version = "7.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ae84147f0fd784daa32c1d74f94b6e384967831aaf0c635bb3d9d0af3c4b112";
+    sha256 = "04s6w0sp83bn3c6ym75rnlpmcy3yr7d35jxkxhgzmy75gbcps7bi";
   };
 
   propagatedBuildInputs = [ mozdevice mozfile mozinfo mozlog mozprocess

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     mkdir release
     cd release
     if [ $CC = gcc ]; then
-            NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=format-overflow"
+            NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=format-overflow -Wno-error=address-of-packed-member"
     fi
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${stdenv.lib.getDev libxml2}/include/libxml2 -Wno-error=array-bounds -Wno-error=pointer-sign -Wno-error=deprecated-declarations -Wno-error=unused-variable"
   '';

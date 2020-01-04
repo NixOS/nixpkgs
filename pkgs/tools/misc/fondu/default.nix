@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "152prqad9jszjmm4wwqrq83zk13ypsz09n02nrk1gg0fcxfm7fr2";
   };
 
-  makeFlags = "DESTDIR=$(out)";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   hardeningDisable = [ "fortify" ];
 

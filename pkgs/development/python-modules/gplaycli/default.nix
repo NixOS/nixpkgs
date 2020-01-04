@@ -21,6 +21,6 @@ buildPythonPackage rec {
     homepage = https://github.com/matlink/gplaycli;
     description = "Google Play Downloader via Command line";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

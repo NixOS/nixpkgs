@@ -20,9 +20,9 @@ perlPackages.buildPerlPackage rec {
 
   # Enabling 'taint' mode is desirable, but that flag disables support
   # for the PERL5LIB environment variable. Needs further investigation.
-  makeFlags = "PERL_BIN=${perlPackages.perl}/bin/perl PERL_TAINT=no";
+  makeFlags = [ "PERL_BIN=${perlPackages.perl}/bin/perl" "PERL_TAINT=no" ];
 
-  makeMakerFlags = "CONFDIR=/homeless/shelter LOCALSTATEDIR=/var/lib/spamassassin";
+  makeMakerFlags = [ "CONFDIR=/homeless/shelter" "LOCALSTATEDIR=/var/lib/spamassassin" ];
 
   doCheck = false;
 

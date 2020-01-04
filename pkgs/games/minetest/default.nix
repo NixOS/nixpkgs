@@ -40,7 +40,7 @@ let
       "-DOpenGL_GL_PREFERENCE=GLVND"
     ];
 
-    NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+    NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ];
 
@@ -48,7 +48,7 @@ let
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
     ] ++ optionals buildClient [
       libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
-    ] ++ optional buildServer [
+    ] ++ optionals buildServer [
       leveldb postgresql hiredis
     ];
 

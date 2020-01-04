@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0ifg7y28s89i9gwda6fyj1jbrykbcvq8bf1m6rxmdcv5afi3arbq";
   };
 
-  buildFlags = "QMAKE=qmake";
+  buildFlags = [ "QMAKE=qmake" ];
 
   buildInputs = [ openssl pcre-cpp qt4 boost pkcs11helper ];
 

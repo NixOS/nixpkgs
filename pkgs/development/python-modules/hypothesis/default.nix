@@ -9,7 +9,7 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "4.41.0";
+  version = "4.56.1";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) [ enum34 ];
+  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) enum34;
 
   checkInputs = [ pytest pytest_xdist flaky mock pexpect ];
   inherit doCheck;

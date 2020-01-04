@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cxx243wyzkd4xnvpyqf97n0rjhfckpvw1vhwnbwshq3q6fra909";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+
   meta = {
     inherit version;
     description = "Utilities library for Linphone";

@@ -156,6 +156,8 @@ stdenv.mkDerivation rec {
     rm -rf obj-x86_64-pc-linux-gnu
   '';
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     # remove distributed configuration files
     rm -f configure

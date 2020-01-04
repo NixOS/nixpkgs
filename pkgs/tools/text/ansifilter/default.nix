@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Tool to convert ANSI to other formats";
     longDescription = ''
-      Tool to remove ANSI or convert them to another format 
+      Tool to remove ANSI or convert them to another format
       (HTML, TeX, LaTeX, RTF, Pango or BBCode)
     '';
     homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.php";

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "shodan";
-  version = "1.20.0";
+  version = "1.21.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "163fbz06xg4ncvmgsg85x2689zd1bvycc3506xqvcgh8xcz3izif";
+    sha256 = "834dfd084fed290b2b445545b0d1cac7822f3c0ed6ba09707efb1716bb485ede";
   };
 
   propagatedBuildInputs = [

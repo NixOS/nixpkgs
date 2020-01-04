@@ -71,12 +71,12 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
-  NIX_LDFLAGS = map (path: "-rpath " + path) (
+  NIX_LDFLAGS = toString (map (path: "-rpath " + path) (
       map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ buildInputs)
       # libpulsecommon.so is linked but not found otherwise
       ++ lib.optionals supportFlags.pulseaudioSupport (map (x: "${lib.getLib x}/lib/pulseaudio")
           (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ])))
-    );
+    ));
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
   # elements specified above.

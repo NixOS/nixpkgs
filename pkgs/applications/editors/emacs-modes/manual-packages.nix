@@ -113,6 +113,8 @@
   perl-completion =
     callPackage ./perl-completion { };
 
+  pod-mode = callPackage ./pod-mode { };
+
   railgun = callPackage ./railgun { };
 
   structured-haskell-mode = self.shm;

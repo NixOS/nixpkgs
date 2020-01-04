@@ -10,11 +10,12 @@
 let
   # See https://mesonbuild.com/Reference-tables.html#cpu-families
   cpuFamilies = {
-    aarch64 = "aarch64";
-    armv6l  = "arm";
-    armv7l  = "arm";
-    i686    = "x86";
-    x86_64  = "x86_64";
+    aarch64  = "aarch64";
+    armv5tel = "arm";
+    armv6l   = "arm";
+    armv7l   = "arm";
+    i686     = "x86";
+    x86_64   = "x86_64";
   };
 in
 python3Packages.buildPythonApplication rec {

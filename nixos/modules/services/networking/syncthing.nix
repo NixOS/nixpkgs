@@ -112,12 +112,12 @@ in {
               addresses = [ "tcp://192.168.0.10:51820" ];
             };
           };
-          type = types.attrsOf (types.submodule ({ config, ... }: {
+          type = types.attrsOf (types.submodule ({ name, ... }: {
             options = {
 
               name = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   Name of the device
                 '';
@@ -175,7 +175,7 @@ in {
               devices = [ "bigbox" ];
             };
           };
-          type = types.attrsOf (types.submodule ({ config, ... }: {
+          type = types.attrsOf (types.submodule ({ name, ... }: {
             options = {
 
               enable = mkOption {
@@ -190,7 +190,7 @@ in {
 
               path = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   The path to the folder which should be shared.
                 '';
@@ -198,7 +198,7 @@ in {
 
               id = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   The id of the folder. Must be the same on all devices.
                 '';
@@ -206,7 +206,7 @@ in {
 
               label = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   The label of the folder.
                 '';

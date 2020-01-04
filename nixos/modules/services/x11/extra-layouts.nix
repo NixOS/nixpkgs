@@ -141,7 +141,7 @@ in
         });
 
         xkbcomp = super.xorg.xkbcomp.overrideAttrs (old: {
-          configureFlags = "--with-xkb-config-root=${self.xkb_patched}/share/X11/xkb";
+          configureFlags = [ "--with-xkb-config-root=${self.xkb_patched}/share/X11/xkb" ];
         });
 
       };
@@ -157,6 +157,12 @@ in
       };
 
     });
+
+    environment.sessionVariables = {
+      # runtime override supported by multiple libraries e. g. libxkbcommon
+      # https://xkbcommon.org/doc/current/group__include-path.html
+      XKB_CONFIG_ROOT = "${pkgs.xkb_patched}/etc/X11/xkb";
+    };
 
     services.xserver = {
       xkbDir = "${pkgs.xkb_patched}/etc/X11/xkb";

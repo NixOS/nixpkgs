@@ -1,7 +1,7 @@
 { lib
 , bokeh
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , fsspec
 , pytest
 , pythonOlder
@@ -15,25 +15,44 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2.9.0";
+  version = "2.9.1";
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1w1hqr8vyx6ygwflj2737dcy0mmgvrc0s602gnny8pzlcbs9m76b";
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = pname;
+    rev = version;
+    sha256 = "1xayr4gkp4slvmh2ksdr0d196giz3yhknqjjg1vw2j0la9gwfwxs";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [
-    bokeh cloudpickle dill fsspec numpy pandas partd toolz ];
+  checkInputs = [
+    pytest
+  ];
 
-  checkPhase = ''
-    py.test dask
+  propagatedBuildInputs = [
+    bokeh
+    cloudpickle
+    dill
+    fsspec
+    numpy
+    pandas
+    partd
+    toolz
+  ];
+
+  postPatch = ''
+    # versioneer hack to set version of github package
+    echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
+
+    substituteInPlace setup.py \
+      --replace "version=versioneer.get_version()," "version='${version}'," \
+      --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
-  # URLError
-  doCheck = false;
+  checkPhase = ''
+    pytest
+  '';
 
   meta = {
     description = "Minimal task scheduling abstraction";

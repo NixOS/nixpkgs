@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "lr";
-  version = "1.4.1";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "chneukirchen";
     repo = "lr";
     rev = "v${version}";
-    sha256 = "0mpaqn0zfhxdf9wzs1wgdd29bjcyl3rgfdlqbwhiwcy2h3vy2h8s";
+    sha256 = "1dxla14ldyym01lhmacfwps1vim0fk67c2ik2w08gg534siyj770";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/chneukirchen/lr;

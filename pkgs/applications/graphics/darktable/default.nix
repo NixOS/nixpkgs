@@ -3,7 +3,7 @@
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
 , openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
-, ocl-icd, pcre, gtk-mac-integration, isocodes
+, ocl-icd, pcre, gtk-mac-integration, isocodes, llvmPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     libwebp libsecret gnome3.adwaita-icon-theme osm-gps-map pcre isocodes
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     colord colord-gtk libX11 ocl-icd
-  ] ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration;
+  ] ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration
+    ++ stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = https://www.darktable.org;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ goibhniu flosse mrVanDalo ];
   };
 }

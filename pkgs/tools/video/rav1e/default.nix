@@ -1,8 +1,8 @@
-{ rustPlatform, fetchFromGitHub, fetchurl, stdenv, lib, unzip, nasm }:
+{ rustPlatform, fetchFromGitHub, fetchurl, stdenv, lib, nasm }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = stdenv.mkDerivation rec {
     name = "${pname}-${version}-source";
@@ -11,24 +11,21 @@ rustPlatform.buildRustPackage rec {
       owner = "xiph";
       repo = "rav1e";
       rev = "v${version}";
-      sha256 = "0sij9hwnar27gcwvfcjbhgyrhw99zjv8gr9s9gshqi766p5dy51a";
+      sha256 = "1lv8g1vw11lanyx6lqr34hb6m4x1fvwb60kgg5nk8s8hgdr18i0y";
     };
     cargoLock = fetchurl {
-      url = "https://github.com/xiph/rav1e/releases/download/v${version}/rav1e-${version}.zip";
-      sha256 = "1i48c7mvc9q20d76p2rpxva551249m3p52q2z1g9sj4xzpyyk41m";
+      url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
+      sha256 = "1d51wcm537pzfmq48vsv87dwf035yl03qkfc0372gchpv079561w";
     };
-
-    nativeBuildInputs = [ unzip ];
 
     installPhase = ''
       mkdir -p $out
       cp -R ./* $out/
-      unzip ${cargoLock}
-      cp ./Cargo.lock $out/Cargo.lock
+      cp ${cargoLock} $out/Cargo.lock
     '';
   };
 
-  cargoSha256 = "1z0xrcq4mx6gpjyqh1csa424sxmx54z3x7ij3w2063h6s2fv9jy3";
+  cargoSha256 = "0frr4sx05pwvj9gmlvmis6lrnbwk3x579fv3kw38374jy33nrr6z";
 
   nativeBuildInputs = [ nasm ];
 

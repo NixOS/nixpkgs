@@ -50,9 +50,7 @@ stdenv.mkDerivation rec {
     Mako cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
   ];
 
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
   enableParallelBuilding = true;
 

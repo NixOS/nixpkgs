@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c4532aa683f170f40bd76f928b70bc06ff171a959e06e71bf35f2f9d6031ef9";
+    sha256 = "d3363bb5df72d74420986a435449f3c3979285941dff57d5d97ecba352a0e3e2";
   };
 
   postPatch = ''
@@ -19,9 +19,11 @@ buildPythonPackage rec {
 
   # ignore test that's incompatible with pytest5
   # test_eventlet touches network
+  # test_mongodb requires pymongo
   checkPhase = ''
-    pytest -k 'not restore_current_app_fallback' \
-      --ignore=t/unit/concurrency/test_eventlet.py
+    pytest -k 'not restore_current_app_fallback and not msgpack' \
+      --ignore=t/unit/concurrency/test_eventlet.py \
+      --ignore=t/unit/backends/test_mongodb.py
   '';
 
   checkInputs = [ case pytest boto3 moto ];

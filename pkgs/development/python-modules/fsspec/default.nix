@@ -1,26 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "0.5.2";
-
+  version = "0.6.2";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6531a5fa9ea6bf27a5180d225558a8a7aa5d7c3cbf7e8b146dd37ac699017937";
+  src = fetchFromGitHub {
+    owner = "intake";
+    repo = "filesystem_spec";
+    rev = version;
+    sha256 = "1y3d6xw14rcldz9779ir6mjaff4rk82ch6ahn4y9mya0qglpc31i";
   };
 
-  # no tests
-  doCheck = false;
+  checkInputs = [
+    pytest
+  ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
-    description = "A specification that python filesystems should adhere to.";
-    homepage = "https://github.com/intake/filesystem_spec";
+    description = "A specification that python filesystems should adhere to";
+    homepage = https://github.com/intake/filesystem_spec;
     license = licenses.bsd3;
+    maintainers = [ maintainers.costrouc ];
   };
 }

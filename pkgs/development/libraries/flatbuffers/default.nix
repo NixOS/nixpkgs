@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    sha256 = "1b32kc5jp83l43w2gs1dkw2vqm2j0wi7xfxqa86m18n3l41ca734";
+    sha256 = "1gl8pnykzifh7pnnvl80f5prmj5ga60dp44inpv9az2k9zaqx3qr";
   };
 
   preConfigure = stdenv.lib.optional stdenv.buildPlatform.isDarwin ''

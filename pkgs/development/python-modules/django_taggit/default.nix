@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "django-taggit";
-  version = "1.1.0";
+  version = "1.2.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "044fzcpmns90kaxdi49qczlam4xsi8rl73rpfwvxx1gkcqzidgq1";
+    sha256 = "4186a6ce1e1e9af5e2db8dd3479c5d31fa11a87d216a2ce5089ba3afde24a2c5";
   };
 
   propagatedBuildInputs = [ isort django ];

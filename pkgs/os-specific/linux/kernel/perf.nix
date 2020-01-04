@@ -46,22 +46,19 @@ stdenv.mkDerivation {
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
-  NIX_CFLAGS_COMPILE =
-    [ "-Wno-error=cpp"
-      "-Wno-error=bool-compare"
-      "-Wno-error=deprecated-declarations"
-      "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
-    ]
-    # gcc before 6 doesn't know these options
-    ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
-      "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
-    ];
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=cpp"
+    "-Wno-error=bool-compare"
+    "-Wno-error=deprecated-declarations"
+    "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
+    "-Wno-error=stringop-truncation"
+  ];
 
   doCheck = false; # requires "sparse"
   doInstallCheck = false; # same
 
   separateDebugInfo = true;
-  installFlags = "install install-man ASCIIDOC8=1 prefix=$(out)";
+  installFlags = [ "install" "install-man" "ASCIIDOC8=1" "prefix=$(out)" ];
 
   preFixup = ''
     wrapProgram $out/bin/perf \

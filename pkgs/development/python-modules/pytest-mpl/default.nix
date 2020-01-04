@@ -4,15 +4,16 @@
 , pytest
 , matplotlib
 , nose
+, pillow
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mpl";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7006e63bf1ca9c50bea3d189c0f862751a16ce40bb373197b218f57af5b837c0";
+    sha256 = "26c5a47a8fdbc04652f18b65c587da642c6cc0354680ee44b16c161d9800a2ce";
   };
 
   buildInputs = [ pytest ];
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     matplotlib
     nose
+    pillow
   ];
 
   checkInputs = [

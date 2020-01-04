@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ libxml2 file p7zip unrar unzip ];
-  buildFlags = if stdenv.cc.isClang then [ "CC=clang" ] else null;
-  installFlags = "PREFIX=\${out}";
+  buildFlags = stdenv.lib.optional stdenv.cc.isClang "CC=clang";
+  installFlags = [ "PREFIX=\${out}" ];
 
   patchPhase = ''
    substituteInPlace rarcrack.c --replace "file -i" "${file}/bin/file -i"

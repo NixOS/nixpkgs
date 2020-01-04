@@ -5,6 +5,14 @@
 , buildPackages
 }:
 
+let
+  gdCflags = [
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=missing-attributes"
+    "-Wno-error=array-bounds"
+  ];
+in
+
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
@@ -47,14 +55,14 @@ callPackage ./common.nix { inherit stdenv; } {
         #       musl-specific flags below.
         #       At next change to non-musl glibc builds, remove this `then`
         #       and the above condition, instead keeping only the `else` below.
-        then (if withGd then "-Wno-error=stringop-truncation" else null)
+        then (if withGd then gdCflags else null)
         else
-          builtins.concatLists [
-            (stdenv.lib.optional withGd "-Wno-error=stringop-truncation")
+          (builtins.concatLists [
+            (stdenv.lib.optionals withGd gdCflags)
             # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
             # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
             (stdenv.lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
-          ];
+          ]);
 
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new

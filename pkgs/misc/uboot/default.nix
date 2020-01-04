@@ -300,7 +300,7 @@ in {
   ubootSheevaplug = buildUBoot {
     defconfig = "sheevaplug_defconfig";
     extraMeta.platforms = ["armv5tel-linux"];
-    filesToInstall = ["u-boot.bin"];
+    filesToInstall = ["u-boot.kwb"];
   };
 
   ubootSopine = buildUBoot {
@@ -314,7 +314,7 @@ in {
     defconfig = "cm_fx6_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-with-nand-spl.imx"];
-    buildFlags = "u-boot-with-nand-spl.imx";
+    buildFlags = [ "u-boot-with-nand-spl.imx" ];
     extraConfig = ''
       CONFIG_CMD_SETEXPR=y
     '';

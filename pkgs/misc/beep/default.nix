@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0bgch6jq5cahakk3kbr9549iysf2dik09afixxy5brbxk1xfzb2r";
   };
 
-  makeFlags = "INSTALL_DIR=\${out}/bin/ MAN_DIR=\${out}/man/man1/";
+  makeFlags = [ "INSTALL_DIR=\${out}/bin/" "MAN_DIR=\${out}/man/man1/" ];
 
   preInstall = ''
     mkdir -p $out/bin

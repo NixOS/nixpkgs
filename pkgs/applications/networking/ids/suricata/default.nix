@@ -109,12 +109,12 @@ stdenv.mkDerivation rec {
     "--with-libnet-includes=${libnet}/include"
     "--with-libnet-libraries=${libnet}/lib"
   ]
-  ++ lib.optional hyperscanSupport [
+  ++ lib.optionals hyperscanSupport [
     "--with-libhs-includes=${hyperscan.dev}/include/hs"
     "--with-libhs-libraries=${hyperscan}/lib"
   ]
-  ++ lib.optional redisSupport [ "--enable-hiredis" ]
-  ++ lib.optional rustSupport [
+  ++ lib.optional redisSupport "--enable-hiredis"
+  ++ lib.optionals rustSupport [
     "--enable-rust"
     "--enable-rust-experimental"
   ];
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
   ];
 
-  installTargets = "install install-conf";
+  installTargets = [ "install" "install-conf" ];
 
   postInstall = ''
     wrapProgram "$out/bin/suricatasc" \

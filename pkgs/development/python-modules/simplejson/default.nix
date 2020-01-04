@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.16.1";
+  version = "3.17.0";
   doCheck = !stdenv.isDarwin;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1v80dbk3ajhgz7q5cc8k0dd22zj9rrlz838c90l5g3w1i280r1iq";
+    sha256 = "1b1hhh1dia673vhq3jl2br1iqwb9yjii6iak56w96s9972vjbz3z";
   };
 
   # Package does not need pytest, but its a bit easier debugging.

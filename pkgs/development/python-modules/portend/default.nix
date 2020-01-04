@@ -1,13 +1,13 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, setuptools_scm, tempora, pytest-black }:
+, pytest, setuptools_scm, tempora, pytest-black, pytestcov }:
 
 buildPythonPackage rec {
   pname = "portend";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19dc27bfb3c72471bd30a235a4d5fbefef8a7e31cab367744b5d87a205e7bfd9";
+    sha256 = "600dd54175e17e9347e5f3d4217aa8bcf4bf4fa5ffbc4df034e5ec1ba7cdaff5";
   };
 
   patches = [ ./black-19.10b0.patch ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tempora ];
 
-  checkInputs = [ pytest pytest-black ];
+  checkInputs = [ pytest pytest-black pytestcov ];
 
   checkPhase = ''
     py.test --deselect=test_portend.py::TestChecker::test_check_port_listening

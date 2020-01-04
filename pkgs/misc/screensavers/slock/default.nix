@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xorgproto libX11 libXext libXrandr ];
 
-  installFlags = "DESTDIR=\${out} PREFIX=";
+  installFlags = [ "DESTDIR=\${out}" "PREFIX=" ];
 
   postPatch = "sed -i '/chmod u+s/d' Makefile";
 

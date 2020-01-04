@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline gettext ncurses ];
 
   # Needed with GCC 8
-  NIX_CFLAGS_COMPILE = with stdenv.lib; (optionals stdenv.cc.isGNU [
+  NIX_CFLAGS_COMPILE = with stdenv.lib; toString ((optionals stdenv.cc.isGNU [
     "-Wno-error=int-in-bool-context"
     "-Wno-error=class-memaccess"
     "-Wno-error=restrict"
     "-Wno-error=format-truncation"
-   ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference";
+   ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"

@@ -1,17 +1,17 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, ocamlnet, setcore }:
+{ stdenv, buildDunePackage, fetchFromGitHub, ocamlnet, cpu }:
 
 buildDunePackage rec {
   pname = "parany";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "UnixJunkie";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0kylhgi1d4gj68x40ifli7pnrxkdc6ks5mgfvlcsigqg8i8nvc7q";
+    sha256 = "19yz1yqyqx6gawy93jlh3x6vji2p9qsy6nsbj65q5pii8p1fjlsm";
   };
 
-  propagatedBuildInputs = [ ocamlnet setcore ];
+  propagatedBuildInputs = [ ocamlnet cpu ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

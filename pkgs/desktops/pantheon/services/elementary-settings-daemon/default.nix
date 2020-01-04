@@ -148,11 +148,9 @@ stdenv.mkDerivation rec {
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
 
-  NIX_CFLAGS_COMPILE = [
     # Default for release buildtype but passed manually because
     # we're using plain
-    "-DG_DISABLE_CAST_CHECKS"
-  ];
+  NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   passthru = {
     updateScript = gnome3.updateScript {

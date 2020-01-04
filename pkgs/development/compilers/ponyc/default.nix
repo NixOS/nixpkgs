@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation ( rec {
   pname = "ponyc";
-  version = "0.33.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "0a0sw902nrayg0s1zrkhfpvrmdqw19nif67hsv0ijrckcq37bjcz";
+    sha256 = "0wqbnvxdzzwr9q4v9ha9r9jjymr6y8ba1rb2lkzrng4g9p6xqbxy";
   };
 
   buildInputs = [ llvm makeWrapper which libxml2 ];
@@ -53,6 +53,8 @@ stdenv.mkDerivation ( rec {
   doCheck = true;
 
   checkTarget = "test-ci";
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" ];
 
   preCheck = ''
     export PONYPATH="$out/lib:${stdenv.lib.makeLibraryPath [ pcre2 libressl ]}"

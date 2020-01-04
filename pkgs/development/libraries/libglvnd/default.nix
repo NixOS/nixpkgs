@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python2, pkgconfig, libX11, libXext, xorgproto, addOpenGLRunpath }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python3, pkgconfig, libX11, libXext, xorgproto, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hyywwjsmvsd7di603f7iznjlccqlc7yvz0j59gax7bljm9wb6ni";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python2 addOpenGLRunpath ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig python3 addOpenGLRunpath ];
   buildInputs = [ libX11 libXext xorgproto ];
 
   # The following 3 patches should be removed once libglvnd >1.2.0 is released
@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
       --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString ([
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
     "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
 
     "-Wno-error=array-bounds"
-  ] ++ lib.optional stdenv.cc.isClang "-Wno-error";
+  ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
 
   # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
   configureFlags  = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";

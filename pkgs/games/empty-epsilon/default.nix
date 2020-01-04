@@ -3,8 +3,8 @@
 let
 
   major = "2019";
-  minor = "05";
-  patch = "21";
+  minor = "11";
+  patch = "01";
 
   version = "${major}.${minor}.${patch}";
 
@@ -16,7 +16,7 @@ let
       owner = "daid";
       repo = "SeriousProton";
       rev = "EE-${version}";
-      sha256 = "0q6in9rfs3b3qrfj2j6aj64z110k1yall4iqpp68rpp9r1dsh26p";
+      sha256 = "1sc1z9n99jspa8jnk0pwdzynnadvcmb3pxl5cndw3z90xjwpzivw";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version}";
-    sha256 = "0v2xz1wlji6m6311r3vpkdil3a7l1w5nsz5yqd1l8bimy11rdr55";
+    sha256 = "09jizc6h7jbsp8bzv05pvb5z24zadjzjx1slj5317axsb170v81p";
   };
 
   nativeBuildInputs = [ cmake ];
