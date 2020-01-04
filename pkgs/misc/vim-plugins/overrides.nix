@@ -413,6 +413,9 @@ self: super: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
 
+  vim-terraform = super.vim-terraform.overrideAttrs(oa: {
+    patches = (oa.patches or []) ++ lib.singleton ./vim-terraform-fix-event.patch;
+  });
 
   vim-wakatime = super.vim-wakatime.overrideAttrs(old: {
     buildInputs = [ python ];
