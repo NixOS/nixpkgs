@@ -1,0 +1,23 @@
+From cad4661952ad7983ece6d6486f0f68d437037015 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Thu, 2 Jan 2020 13:31:13 -0800
+Subject: [PATCH] Put the autocmd filetypedetect in an augroup
+
+---
+ ftdetect/terraform.vim | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/ftdetect/terraform.vim b/ftdetect/terraform.vim
+index 5919422..24bc731 100644
+--- a/ftdetect/terraform.vim
++++ b/ftdetect/terraform.vim
+@@ -1,5 +1,8 @@
+ " By default, Vim associates .tf files with TinyFugue - tell it not to.
+-autocmd! filetypedetect BufRead,BufNewFile *.tf
++augroup filetypedetect
++  au BufRead,BufNewFile *.tf set filetype=terraform
++augroup END
++
+ autocmd BufRead,BufNewFile *.tf set filetype=terraform
+ autocmd BufRead,BufNewFile *.tfvars set filetype=terraform
+ autocmd BufRead,BufNewFile *.tfstate set filetype=json
