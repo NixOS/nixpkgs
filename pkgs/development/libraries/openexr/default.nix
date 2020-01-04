@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "doc" ];
 
   # Needed because there are some generated sources. Solution: just run them under QEMU.
-  postPatch = ''
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     for file in b44ExpLogTable dwaLookups
     do
       # Ecape for both sh and Automake
