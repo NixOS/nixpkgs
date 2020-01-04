@@ -12809,7 +12809,7 @@ in
   };
 
   # newer nspr version for newer firefox stable releases
-  nspr_4_23 = callPackage ../development/libraries/nspr/nspr_4_23.nix {
+  nspr_4_24 = callPackage ../development/libraries/nspr/nspr_4_24.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
