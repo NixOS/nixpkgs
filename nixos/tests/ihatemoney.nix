@@ -34,7 +34,7 @@ in map (backend: makeTest {
       die "wrong project id $return" unless "\"yay\"\n" eq $return;
       my $timestamp = $machine->succeed("stat --printf %Y /var/lib/ihatemoney/secret_key");
       my $owner = $machine->succeed("stat --printf %U:%G /var/lib/ihatemoney/secret_key");
-      die "wrong owership for the secret key: $owner, is uwsgi running as the right user ?" unless $owner eq "ihatemoney:ihatemoney";
+      die "wrong ownership for the secret key: $owner, is uwsgi running as the right user ?" unless $owner eq "ihatemoney:ihatemoney";
       $machine->shutdown();
       $machine->start();
       $machine->waitForOpenPort(8000);
