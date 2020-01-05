@@ -1,5 +1,5 @@
-{ mkDerivation, stdenv, fetchurl, qtbase, qmake, makeDesktopItem, openjpeg,
-  pkgconfig, fftw, libpulseaudio, alsaLib, hamlib, libv4l, fftwFloat }:
+{ mkDerivation, stdenv, fetchurl, qtbase, qmake, openjpeg, pkgconfig, fftw,
+  libpulseaudio, alsaLib, hamlib, libv4l, fftwFloat }:
 
 mkDerivation rec {
   version = "9.4.4";
@@ -20,25 +20,9 @@ mkDerivation rec {
   buildInputs = [ qtbase openjpeg fftw libpulseaudio alsaLib hamlib libv4l
                   fftwFloat ];
 
-  desktopItem = makeDesktopItem {
-    name = "QSSTV";
-    exec = "qsstv";
-    icon = "qsstv.png";
-    comment = "Qt-based slow-scan TV and fax";
-    desktopName = "QSSTV";
-    genericName = "qsstv";
-    categories = "Application;HamRadio;";
-  };
-
-  installPhase = ''
-    # Install binary
-    make install
-
+  postInstall = ''
     # Install desktop icon
     install -D qsstv/icons/qsstv.png $out/share/pixmaps/qsstv.png
-
-    # Install desktop item
-    cp -rv ${desktopItem}/share $out
   '';
 
   meta = with stdenv.lib; {
