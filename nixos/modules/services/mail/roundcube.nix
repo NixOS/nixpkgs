@@ -108,6 +108,7 @@ in
       $config['max_message_size'] = '25M';
       $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
       $config['des_key'] = file_get_contents('/var/lib/roundcube/des_key');
+      $config['mime_types'] = '${pkgs.nginx}/conf/mime.types';
       ${cfg.extraConfig}
     '';
 
