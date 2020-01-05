@@ -107,6 +107,7 @@ in
       $config['log_driver'] = 'syslog';
       $config['max_message_size'] = '25M';
       $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
+      $config['des_key'] = file_get_contents('/var/lib/roundcube/des_key');
       ${cfg.extraConfig}
     '';
 
@@ -190,12 +191,21 @@ in
             ${psql} -f ${cfg.package}/SQL/postgres.initial.sql
           fi
 
+          if [ ! -f /var/lib/roundcube/des_key ]; then
+            base64 /dev/urandom | head -c 24 > /var/lib/roundcube/des_key;
+            # we need to log out everyone in case change the des_key
+            # from the default when upgrading from nixos 19.09
+            ${psql} <<< 'TRUNCATE TABLE session;'
+          fi
+
           ${pkgs.php}/bin/php ${cfg.package}/bin/update.sh
         '';
         serviceConfig = {
           Type = "oneshot";
           StateDirectory = "roundcube";
           User = if localDB then user else "nginx";
+          # so that the des_key is not world readable
+          StateDirectoryMode = "0700";
         };
       }
     ];
