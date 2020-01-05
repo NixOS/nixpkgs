@@ -150,6 +150,18 @@ in
     };
   };
 
+  scalameta.metals = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "metals";
+      publisher = "scalameta";
+      version = "1.6.3";
+      sha256 = "1mc3awybzd2ql1b86inirhsw3j2c7cs0b0nvbjp38jjpq674bmj7";
+    };
+    meta = {
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
   skyapps.fish-vscode = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "fish-vscode";
