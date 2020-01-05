@@ -39,7 +39,7 @@ in map (backend: makeTest {
       $machine->start();
       $machine->waitForOpenPort(8000);
       $machine->waitForUnit("uwsgi.service");
-      # check that the database is really persitent
+      # check that the database is really persistent
       print $machine->succeed("curl --basic -u yay:yay http://localhost:8000/api/projects/yay");
       # check that the secret key is really persistent
       my $timestamp2 = $machine->succeed("stat --printf %Y /var/lib/ihatemoney/secret_key");
