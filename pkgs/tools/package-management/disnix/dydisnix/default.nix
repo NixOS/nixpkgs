@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version="unstable-2018-04-26";
-  name = "dydisnix-${version}";
+  pname = "dydisnix";
 
   src = fetchFromGitHub {
     owner = "svanderburg";
