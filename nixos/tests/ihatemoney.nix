@@ -1,22 +1,24 @@
-{ system ? builtins.currentSystem,
-config ? {},
-pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 let
   inherit (import ../lib/testing.nix { inherit system pkgs; }) makeTest;
-in map (backend: makeTest {
-  name = "ihatemoney-${backend}";
-  machine = { lib, ... }: {
-    services.ihatemoney = {
-      enable = true;
-      enablePublicProjectCreation = true;
-      inherit backend;
-      uwsgiConfig = {
-        http = ":8000";
+in
+map (
+  backend: makeTest {
+    name = "ihatemoney-${backend}";
+    machine = { lib, ... }: {
+      services.ihatemoney = {
+        enable = true;
+        enablePublicProjectCreation = true;
+        inherit backend;
+        uwsgiConfig = {
+          http = ":8000";
         };
-        };
-        boot.cleanTmpDir = true;
+      };
+      boot.cleanTmpDir = true;
       # ihatemoney needs a local smtp server otherwise project creation just crashes
       services.opensmtpd = {
         enable = true;
@@ -46,4 +48,5 @@ in map (backend: makeTest {
       die unless $timestamp eq $timestamp2;
       $machine->succeed("curl http://localhost:8000 | grep ihatemoney");
     '';
-  }) [ "sqlite" "postgresql" ]
+  }
+) [ "sqlite" "postgresql" ]
