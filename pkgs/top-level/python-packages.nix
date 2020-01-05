@@ -4997,7 +4997,7 @@ in {
 
   pyxattr = let
     pyxattr' = callPackage ../development/python-modules/pyxattr { };
-    pyxattr_2 = pyxattr'.overridePythonAttrs(oldAttrs: {
+    pyxattr_2 = pyxattr'.overridePythonAttrs(oldAttrs: rec {
       version = "0.6.1";
       src = oldAttrs.src.override {
         inherit version;
