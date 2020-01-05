@@ -50,7 +50,13 @@ stdenv.mkDerivation rec {
     ++ optional jackSupport libjack2
     ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
-    nativeBuildInputs =
+  # TODO: Currently having both `wrapGAppsHook` and `wrapQtAppsHook` causes the
+  # binaries to be wrapped twice. However, the solution to merge the two
+  # wrappers specified in the following URL does not add all the necessary
+  # wrapping parameters. Once `wrapGAppsHook` is updated (suggested in the
+  # URL), it should be possible to prevent the double wrapping.
+  # https://github.com/NixOS/nixpkgs/pull/76283#issuecomment-568801591
+  nativeBuildInputs =
       [ autoreconfHook perl pkgconfig removeReferencesTo wrapGAppsHook ]
       ++ optionals withQt5 [ wrapQtAppsHook ];
 
