@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.services.roundcube;
   fpm = config.services.phpfpm.pools.roundcube;
+  localDB = cfg.database.host == "localhost";
+  user = cfg.database.username;
 in
 {
   options.services.roundcube = {
@@ -44,7 +46,10 @@ in
       username = mkOption {
         type = types.str;
         default = "roundcube";
-        description = "Username for the postgresql connection";
+        description = ''
+          Username for the postgresql connection.
+          If <literal>database.host</literal> is set to <literal>localhost</literal>, a unix user and group of the same name will be created as well.
+        '';
       };
       host = mkOption {
         type = types.str;
@@ -58,7 +63,12 @@ in
       };
       password = mkOption {
         type = types.str;
-        description = "Password for the postgresql connection";
+        description = "Password for the postgresql connection. Do not use: the password will be stored world readable in the store; use <literal>passwordFile</literal> instead.";
+        default = "";
+      };
+      passwordFile = mkOption {
+        type = types.str;
+        description = "Password file for the postgresql connection. Must be readable by user <literal>nginx</literal>. Ignored if <literal>database.host</literal> is set to <literal>localhost</literal>, as peer authentication will be used.";
       };
       dbname = mkOption {
         type = types.str;
@@ -83,11 +93,17 @@ in
   };
 
   config = mkIf cfg.enable {
+    # backward compatibility: if password is set but not passwordFile, make one.
+    services.roundcube.database.passwordFile = mkIf (!localDB && cfg.database.password != "") (mkDefault ("${pkgs.writeText "roundcube-password" cfg.database.password}"));
+    warnings = lib.optional (!localDB && cfg.database.password != "") "services.roundcube.database.password is deprecated and insecure; use services.roundcube.database.passwordFile instead";
+
     environment.etc."roundcube/config.inc.php".text = ''
       <?php
 
+      ${lib.optionalString (!localDB) "$password = file_get_contents('${cfg.database.passwordFile}');"}
+
       $config = array();
-      $config['db_dsnw'] = 'pgsql://${cfg.database.username}:${cfg.database.password}@${cfg.database.host}/${cfg.database.dbname}';
+      $config['db_dsnw'] = 'pgsql://${cfg.database.username}${lib.optionalString (!localDB) ":' . $password . '"}@${if localDB then "unix(/run/postgresql)" else cfg.database.host}/${cfg.database.dbname}';
       $config['log_driver'] = 'syslog';
       $config['max_message_size'] = '25M';
       $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
@@ -116,12 +132,26 @@ in
       };
     };
 
-    services.postgresql = mkIf (cfg.database.host == "localhost") {
+    services.postgresql = mkIf localDB {
       enable = true;
+      ensureDatabases = [ cfg.database.dbname ];
+      ensureUsers = [ {
+        name = cfg.database.username;
+        ensurePermissions = {
+          "DATABASE ${cfg.database.username}" = "ALL PRIVILEGES";
+        };
+      } ];
     };
 
+    users.users.${user} = mkIf localDB {
+      group = user;
+      isSystemUser = true;
+      createHome = false;
+    };
+    users.groups.${user} = mkIf localDB {};
+
     services.phpfpm.pools.roundcube = {
-      user = "nginx";
+      user = if localDB then user else "nginx";
       phpOptions = ''
         error_log = 'stderr'
         log_errors = on
@@ -143,9 +173,7 @@ in
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
-    systemd.services.roundcube-setup = let
-      pgSuperUser = config.services.postgresql.superUser;
-    in mkMerge [
+    systemd.services.roundcube-setup = mkMerge [
       (mkIf (cfg.database.host == "localhost") {
         requires = [ "postgresql.service" ];
         after = [ "postgresql.service" ];
@@ -153,22 +181,22 @@ in
       })
       {
         wantedBy = [ "multi-user.target" ];
-        script = ''
-          mkdir -p /var/lib/roundcube
-          if [ ! -f /var/lib/roundcube/db-created ]; then
-            if [ "${cfg.database.host}" = "localhost" ]; then
-              ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "create role ${cfg.database.username} with login password '${cfg.database.password}'";
-              ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "create database ${cfg.database.dbname} with owner ${cfg.database.username}";
-            fi
-            PGPASSWORD="${cfg.database.password}" ${pkgs.postgresql}/bin/psql -U ${cfg.database.username} \
-              -f ${cfg.package}/SQL/postgres.initial.sql \
-              -h ${cfg.database.host} ${cfg.database.dbname}
-            touch /var/lib/roundcube/db-created
+        script = let
+          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
+        in
+        ''
+          version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
+          if ! (grep -E '[a-zA-Z0-9]' <<< "$version"); then
+            ${psql} -f ${cfg.package}/SQL/postgres.initial.sql
           fi
 
           ${pkgs.php}/bin/php ${cfg.package}/bin/update.sh
         '';
-        serviceConfig.Type = "oneshot";
+        serviceConfig = {
+          Type = "oneshot";
+          StateDirectory = "roundcube";
+          User = if localDB then user else "nginx";
+        };
       }
     ];
   };
