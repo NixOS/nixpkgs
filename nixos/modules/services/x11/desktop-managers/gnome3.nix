@@ -144,7 +144,7 @@ in
       services.gnome3.core-shell.enable = true;
       services.gnome3.core-utilities.enable = mkDefault true;
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.gnome3.gnome-session ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.gnome3.gnome-session.sessions ];
 
       environment.extraInit = ''
         ${concatMapStrings (p: ''
