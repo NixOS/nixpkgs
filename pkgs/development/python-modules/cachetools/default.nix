@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "cachetools";
   version = "4.0.0";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

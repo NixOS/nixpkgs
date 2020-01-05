@@ -159,6 +159,7 @@ in {
     enableStatic = true;
     enableShared = false;
   };
+  mkl = super.mkl.override { enableStatic = true; };
   nix = super.nix.override { withAWS = false; };
   # openssl 1.1 doesn't compile
   openssl = super.openssl_1_0_2.override {

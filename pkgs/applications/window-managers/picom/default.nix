@@ -3,15 +3,16 @@
 , xorgproto, libxcb ,xcbutilrenderutil, xcbutilimage, pixman, libev
 , dbus, libconfig, libdrm, libGL, pcre, libX11
 , libXinerama, libXext, xwininfo, libxdg_basedir }:
+
 stdenv.mkDerivation rec {
-  pname = "compton";
-  version = "7.2";
+  pname = "picom";
+  version = "7.5";
 
   src = fetchFromGitHub {
     owner  = "yshui";
-    repo   = "compton";
+    repo   = "picom";
     rev    = "v${version}";
-    sha256 = "1vwa5f0nifc1913diqd6cp5k1dlfyc2ijxbcdj1s37ywpx6c63c3";
+    sha256 = "1l48fxl04vkzr4r94sl37nbbw7a621rn8sxmkbdv4252i1gjxd4z";
     fetchSubmodules = true;
   };
 
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    wrapProgram $out/bin/compton-trans \
+    wrapProgram $out/bin/picom-trans \
       --prefix PATH : ${lib.makeBinPath [ xwininfo ]}
   '';
 
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
       well-defined and proper place.
     '';
     license = licenses.mit;
-    homepage = "https://github.com/yshui/compton";
+    homepage = "https://github.com/yshui/picom";
     maintainers = with maintainers; [ ertes enzime twey ];
     platforms = platforms.linux;
   };

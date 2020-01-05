@@ -1,7 +1,8 @@
 { stdenv, lib, lndir, makeWrapper
 , fetchFromGitHub, cmake
 , libusb, pkgconfig
-, python, swig2, numpy, ncurses
+, usePython ? false
+, python, ncurses, swig2
 , extraPackages ? []
 } :
 
@@ -24,12 +25,14 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
-  buildInputs = [ libusb ncurses numpy python swig2 ];
+  buildInputs = [ libusb ncurses ]
+    ++ lib.optionals usePython [ python swig2 ];
+
+  propagatedBuildInputs = lib.optional usePython python.pkgs.numpy;
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DUSE_PYTHON_CONFIG=ON"
-  ];
+  ] ++ lib.optional usePython "-DUSE_PYTHON_CONFIG=ON";
 
   postFixup = lib.optionalString (lib.length extraPackages != 0) ''
     # Join all plugins via symlinking

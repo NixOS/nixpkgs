@@ -388,21 +388,12 @@
     };
   }
   {
-    goPackagePath = "github.com/otiai10/curr";
-    fetch = {
-      type = "git";
-      url = "https://github.com/otiai10/curr";
-      rev = "f5a3d24e5776";
-      sha256 = "01k33ifs9n0pnhwhbfb9ws3q5sa37fi7dhir5vjakpfzdin07y4w";
-    };
-  }
-  {
     goPackagePath = "github.com/otiai10/mint";
     fetch = {
       type = "git";
       url = "https://github.com/otiai10/mint";
-      rev = "v1.2.4";
-      sha256 = "1mf7b8h3akxbpj1rf3nk0ccqk5idd6z2gh9gm31phr7ll4gykn2m";
+      rev = "v1.2.3";
+      sha256 = "00slgv9mw2m22ix5prz2a98ji6kpzr0ap6bqs568rfdmk6hm5f0k";
     };
   }
   {
@@ -662,8 +653,8 @@
     fetch = {
       type = "git";
       url = "https://gopkg.in/DataDog/dd-trace-go.v1";
-      rev = "v1.9.0";
-      sha256 = "1zfbsmm8fbcwhd6j28q3ijyswn1d3dyhydx3ckqpkkp6qiam3c2j";
+      rev = "v1.7.0";
+      sha256 = "0j45skiiayfsaw8id4g20k51zfr0raj47a03q2icka5xrh3qj6yq";
     };
   }
   {

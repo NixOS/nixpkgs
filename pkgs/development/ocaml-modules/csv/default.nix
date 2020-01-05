@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "csv";
-	version = "2.2";
+	version = "2.4";
 
 	src = fetchurl {
 		url = "https://github.com/Chris00/ocaml-${pname}/releases/download/${version}/csv-${version}.tbz";
-		sha256 = "1llwjdi14vvfy4966crapibq0djii71x47b0yxhjcl5jw4xnsaha";
+		sha256 = "13m9n8mdss6jfbiw7d5bybxn4n85vmg4zw7dc968qrgjfy0w9zhk";
 	};
 
 	meta = {

@@ -2277,6 +2277,12 @@
     githubId = 2512008;
     name = "Even Brenden";
   };
+  evils = {
+    email = "evils.devils@protonmail.com";
+    github = "evils-devils";
+    githubId = 30512529;
+    name = "Evils";
+  };
   exfalso = {
     email = "0slemi0@gmail.com";
     github = "exfalso";
@@ -3553,6 +3559,16 @@
     github = "kalbasit";
     githubId = 87115;
     name = "Wael Nasreddine";
+  };
+  kamadorueda = {
+    name = "Kevin Amado";
+    email = "kamadorueda@gmail.com";
+    github = "kamadorueda";
+    githubId = 47480384;
+    keys = [{
+      longkeyid = "rsa4096/0x04D0CEAF916A9A40";
+      fingerprint = "2BE3 BAFD 793E A349 ED1F  F00F 04D0 CEAF 916A 9A40";
+    }];
   };
   kamilchm = {
     email = "kamil.chm@gmail.com";

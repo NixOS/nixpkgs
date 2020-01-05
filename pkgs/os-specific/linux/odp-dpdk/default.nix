@@ -34,6 +34,8 @@ in stdenv.mkDerivation rec {
     jansson
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
+
   # for some reason, /build/odp-dpdk-1.22.0.0_DPDK_18.11/lib/.libs ends up in all binaries,
   # while it should be $out/lib instead.
   # prepend rpath with the proper location, the /build will get removed during rpath shrinking

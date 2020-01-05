@@ -2038,6 +2038,8 @@ in
 
   stagit = callPackage ../development/tools/stagit { };
 
+  step-ca = callPackage ../tools/security/step-ca { };
+
   step-cli = callPackage ../tools/security/step-cli { };
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
@@ -3358,7 +3360,7 @@ in
 
   freetds = callPackage ../development/libraries/freetds { };
 
-  frescobaldi = callPackage ../misc/frescobaldi {};
+  frescobaldi = python3Packages.callPackage ../misc/frescobaldi {};
 
   frostwire = callPackage ../applications/networking/p2p/frostwire { };
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
@@ -6750,6 +6752,8 @@ in
 
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
 
+  tmux-xpanes = callPackage ../tools/misc/tmux-xpanes { };
+
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
 
   tmsu = callPackage ../tools/filesystems/tmsu { };
@@ -8777,6 +8781,7 @@ in
   scala_2_13 = callPackage ../development/compilers/scala/2.13.nix { jre = jre8; };
   scala = scala_2_13;
 
+  metals = callPackage ../development/tools/metals { };
   scalafix = callPackage ../development/tools/scalafix { };
   scalafmt = callPackage ../development/tools/scalafmt { };
 
@@ -13234,6 +13239,8 @@ in
 
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
+  micropython = callPackage ../development/interpreters/micropython { };
+
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
   minizip = callPackage ../development/libraries/minizip { };
@@ -14107,12 +14114,11 @@ in
 
   soapyhackrf = callPackage ../applications/radio/soapyhackrf { };
 
-  soapysdr = callPackage ../applications/radio/soapysdr { inherit (python3Packages) python numpy; };
+  soapysdr = callPackage ../applications/radio/soapysdr { };
 
   soapyremote = callPackage ../applications/radio/soapyremote { };
 
   soapysdr-with-plugins = callPackage ../applications/radio/soapysdr {
-    inherit (python3Packages) python numpy;
     extraPackages = [
       limesuite
       soapyairspy
@@ -15465,6 +15471,8 @@ in
 
   checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
 
+  pynagsystemd = callPackage ../servers/monitoring/nagios/plugins/pynagsystemd.nix { };
+
   neo4j = callPackage ../servers/nosql/neo4j { };
 
   check-esxi-hardware = callPackage ../servers/monitoring/plugins/esxi.nix {};
@@ -16370,6 +16378,8 @@ in
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     cpupower = callPackage ../os-specific/linux/cpupower { };
+
+    ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
     deepin-anything = callPackage ../os-specific/linux/deepin-anything { };
 
@@ -20808,7 +20818,7 @@ in
 
   ps2client = callPackage ../applications/networking/ps2client { };
 
-  psi = callPackage ../applications/networking/instant-messengers/psi { };
+  psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
 
   psi-plus = libsForQt5.callPackage ../applications/networking/instant-messengers/psi-plus { };
 
@@ -22213,7 +22223,7 @@ in
 
   inherit (xorg) xcompmgr;
 
-  compton = callPackage ../applications/window-managers/compton {};
+  picom = callPackage ../applications/window-managers/picom {};
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 
@@ -24205,16 +24215,9 @@ in
 
   fped = callPackage ../applications/science/electronics/fped { };
 
-  kicad = callPackage ../applications/science/electronics/kicad {
-    wxGTK = wxGTK30;
-    boost = boost160;
-  };
-  kicad-with-packages3d = kicad.overrideAttrs (old: { modules = old.modules ++ [ old.passthru.packages3d ]; });
-
-  kicad-unstable = python.pkgs.callPackage ../applications/science/electronics/kicad/unstable.nix {
-    wxGTK = wxGTK30;
-    boost = boost160;
-  };
+  kicad = callPackage ../applications/science/electronics/kicad { };
+  kicad-small = kicad.override { pname = "kicad-small"; with3d = false; };
+  kicad-unstable = kicad.override { pname = "kicad-unstable"; debug = true; };
 
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
@@ -24760,6 +24763,18 @@ in
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
       boehmgc = boehmgc.override { enableLargeConfig = true; };
+      # Tarball evaluation fails with a gcc9 based nix-env.
+      # $ nix-build pkgs/top-level/release.nix -A tarball
+      stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
+      aws-sdk-cpp = aws-sdk-cpp.override {
+        stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
+      };
+      boost = boost.override {
+        buildPackages = buildPackages // {
+          stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
+        };
+        stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
+      };
       })
     nix
     nix1

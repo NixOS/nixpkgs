@@ -5,8 +5,6 @@
 }:
 
 assert (!libsOnly) -> kernel != null;
-# Disable for kernels 4.15 and above due to compatibility issues
-assert kernel != null -> stdenv.lib.versionOlder kernel.version "4.15";
 
 let xorgFullVer = lib.getVersion xorg.xorgserver;
     xorgVer = lib.versions.majorMinor xorgFullVer;

@@ -61,6 +61,9 @@ stdenv.mkDerivation rec {
     unix-opts
   ];
 
+  # This reference is unfortunately not detected by Nix
+  propagatedBuildInputs = [ next-gtk-webkit ];
+
   prePatch = ''
     substituteInPlace source/ports/gtk-webkit.lisp \
       --replace "next-gtk-webkit" "${next-gtk-webkit}/bin/next-gtk-webkit"

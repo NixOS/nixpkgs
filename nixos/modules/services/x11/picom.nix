@@ -5,7 +5,7 @@ with builtins;
 
 let
 
-  cfg = config.services.compton;
+  cfg = config.services.picom;
 
   pairOf = x: with types; addCheck (listOf x) (y: length y == 2);
 
@@ -31,20 +31,24 @@ let
                 (key: value: "${toString key}=${mkValueString value};")
                 v)
             + " }"
-          else abort "compton.mkValueString: unexpected type (v = ${v})";
+          else abort "picom.mkValueString: unexpected type (v = ${v})";
       in "${escape [ sep ] k}${sep}${mkValueString v};")
       attrs);
 
-  configFile = pkgs.writeText "compton.conf" (toConf cfg.settings);
+  configFile = pkgs.writeText "picom.conf" (toConf cfg.settings);
 
 in {
 
-  options.services.compton = {
+  imports = [
+    (mkAliasOptionModule [ "services" "compton" ] [ "services" "picom" ])
+  ];
+
+  options.services.picom = {
     enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
-        Whether of not to enable Compton as the X.org composite manager.
+        Whether of not to enable Picom as the X.org composite manager.
       '';
     };
 
@@ -85,7 +89,7 @@ in {
       ];
       description = ''
         List of conditions of windows that should not be faded.
-        See <literal>compton(1)</literal> man page for more examples.
+        See <literal>picom(1)</literal> man page for more examples.
       '';
     };
 
@@ -125,7 +129,7 @@ in {
       ];
       description = ''
         List of conditions of windows that should have no shadow.
-        See <literal>compton(1)</literal> man page for more examples.
+        See <literal>picom(1)</literal> man page for more examples.
       '';
     };
 
@@ -192,7 +196,7 @@ in {
       apply = x:
         let
           res = x != "none";
-          msg = "The type of services.compton.vSync has changed to bool:"
+          msg = "The type of services.picom.vSync has changed to bool:"
                 + " interpreting ${x} as ${boolToString res}";
         in
           if isBool x then x
@@ -222,13 +226,13 @@ in {
       type = loaOf (types.either configTypes (loaOf (types.either configTypes (loaOf configTypes))));
       default = {};
       description = ''
-        Additional Compton configuration.
+        Additional Picom configuration.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    services.compton.settings = let
+    services.picom.settings = let
       # Hard conversion to float, literally lib.toInt but toFloat
       toFloat = str: let
         may_be_float = builtins.fromJSON str;
@@ -264,8 +268,8 @@ in {
       refresh-rate     = mkDefault cfg.refreshRate;
     };
 
-    systemd.user.services.compton = {
-      description = "Compton composite manager";
+    systemd.user.services.picom = {
+      description = "Picom composite manager";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
 
@@ -275,13 +279,13 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.compton}/bin/compton --config ${configFile}";
+        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };
     };
 
-    environment.systemPackages = [ pkgs.compton ];
+    environment.systemPackages = [ pkgs.picom ];
   };
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
