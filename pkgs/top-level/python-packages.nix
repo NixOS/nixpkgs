@@ -3570,7 +3570,7 @@ in {
 
   google_apputils = callPackage ../development/python-modules/google_apputils { };
 
-  google_auth = callPackage ../development/python-modules/google_auth { cachetools = self.cachetools_3_1_1; };
+  google_auth = callPackage ../development/python-modules/google_auth { };
 
   google_cloud_asset = callPackage ../development/python-modules/google_cloud_asset { };
 
@@ -4393,7 +4393,6 @@ in {
   rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
   cachetools = callPackage ../development/python-modules/cachetools {};
-  cachetools_3_1_1 = callPackage ../development/python-modules/cachetools/3.1.1.nix {};
 
   cma = callPackage ../development/python-modules/cma { };
 
