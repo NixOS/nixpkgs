@@ -282,9 +282,13 @@ in {
 
   azure-graphrbac = callPackage ../development/python-modules/azure-graphrbac { };
 
+  azure-identity = callPackage ../development/python-modules/azure-identity { };
+
   azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
 
   azure-keyvault-keys = callPackage ../development/python-modules/azure-keyvault-keys { };
+
+  azure-keyvault-nspkg = callPackage ../development/python-modules/azure-keyvault-nspkg { };
 
   azure-keyvault-secrets = callPackage ../development/python-modules/azure-keyvault-secrets { };
 
@@ -833,8 +837,13 @@ in {
     mpi = pkgs.openmpi;
   };
 
-  msrestazure = callPackage ../development/python-modules/msrestazure { };
+  msal = callPackage ../development/python-modules/msal { };
+
+  msal-extensions = callPackage ../development/python-modules/msal-extensions { };
+
   msrest = callPackage ../development/python-modules/msrest { };
+
+  msrestazure = callPackage ../development/python-modules/msrestazure { };
 
   multiset = callPackage ../development/python-modules/multiset { };
 
@@ -1156,6 +1165,8 @@ in {
   pyslurm = callPackage ../development/python-modules/pyslurm {
     slurm = pkgs.slurm;
   };
+
+  pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmf = callPackage ../development/python-modules/pysmf { };
 
@@ -1670,6 +1681,8 @@ in {
   backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock {};
 
   babelfish = callPackage ../development/python-modules/babelfish {};
+
+  bandit = callPackage ../development/python-modules/bandit {};
 
   basiciw = callPackage ../development/python-modules/basiciw {
     inherit (pkgs) gcc wirelesstools;
@@ -2188,6 +2201,8 @@ in {
   pyjade = callPackage ../development/python-modules/pyjade {};
 
   pyjet = callPackage ../development/python-modules/pyjet {};
+
+  pyjks = callPackage ../development/python-modules/pyjks {};
 
   PyLD = callPackage ../development/python-modules/PyLD { };
 
@@ -2846,6 +2861,8 @@ in {
   openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
 
   oset = callPackage ../development/python-modules/oset { };
+
+  oyaml = callPackage ../development/python-modules/oyaml { };
 
   pamela = callPackage ../development/python-modules/pamela { };
 
@@ -4202,6 +4219,8 @@ in {
 
   nameparser = callPackage ../development/python-modules/nameparser { };
 
+  names = callPackage ../development/python-modules/names { };
+
   nbconvert = callPackage ../development/python-modules/nbconvert { };
 
   nbformat = callPackage ../development/python-modules/nbformat { };
@@ -5111,6 +5130,8 @@ in {
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
   requests-http-signature = callPackage ../development/python-modules/requests-http-signature { };
+
+  requirements-detector = callPackage ../development/python-modules/requirements-detector { };
 
   resampy = callPackage ../development/python-modules/resampy { };
 
@@ -6400,6 +6421,8 @@ in {
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 
+  javaobj-py3 = callPackage ../development/python-modules/javaobj-py3 { };
+
   javaproperties = callPackage ../development/python-modules/javaproperties { };
 
   tempora= callPackage ../development/python-modules/tempora { };
@@ -6471,11 +6494,15 @@ in {
 
   twilio = callPackage ../development/python-modules/twilio { };
 
+  twofish = callPackage ../development/python-modules/twofish { };
+
   uranium = callPackage ../development/python-modules/uranium { };
 
   uuid = callPackage ../development/python-modules/uuid { };
 
   versioneer = callPackage ../development/python-modules/versioneer { };
+
+  viewstate = callPackage ../development/python-modules/viewstate { };
 
   vine = callPackage ../development/python-modules/vine { };
 
