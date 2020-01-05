@@ -1261,7 +1261,7 @@ self: super: {
 
   # The LTS-14.x version of their dependencies are too old.
   cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_0; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
+  hoogle = (doJailbreak super.hoogle).override { haskell-src-exts = self.haskell-src-exts_1_23_0; };    # https://github.com/ndmitchell/hoogle/issues/334
 
   # Version bounds for http-client are too strict:
   # https://github.com/bitnomial/prometheus/issues/34
@@ -1325,7 +1325,7 @@ self: super: {
   });
 
   # Needs the corresponding version of haskell-src-exts.
-  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # https://github.com/Daniel-Diaz/HaTeX/issues/144
   HaTeX = dontCheck super.HaTeX;
