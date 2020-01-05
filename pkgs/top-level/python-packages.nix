@@ -1505,6 +1505,8 @@ in {
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
+  skorch = callPackage ../development/python-modules/skorch { };
+
   slackclient = callPackage ../development/python-modules/slackclient { };
 
   slicedimage = callPackage ../development/python-modules/slicedimage { };
