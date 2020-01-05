@@ -1,6 +1,7 @@
 { lib }:
 
-{ /* Automatically convert an attribute set to command-line options.
+rec {
+  /* Automatically convert an attribute set to command-line options.
 
      This helps protect against malformed command lines and also to reduce
      boilerplate related to command-line construction for simple use cases.
@@ -22,21 +23,24 @@
 
            verbose = true;
          };
-       => " -X 'PUT' --data '{\"id\":0}' --retry '3' --url 'https://example.com/foo' --url 'https://example.com/bar' --verbose"
+       => "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'"
   */
   encodeGNUCommandLine =
+    options: attrs: lib.escapeShellArgs (toGNUCommandLine options attrs);
+
+  toGNUCommandLine =
     { renderKey ?
         key: if builtins.stringLength key == 1 then "-${key}" else "--${key}"
 
     , renderOption ?
         key: value:
           if value == null
-          then ""
-          else " ${renderKey key} ${lib.escapeShellArg value}"
+          then []
+          else [ (renderKey key) (builtins.toString value) ]
 
-    , renderBool ? key: value: if value then " ${renderKey key}" else ""
+    , renderBool ? key: value: lib.optional value (renderKey key)
 
-    , renderList ? key: value: lib.concatMapStrings (renderOption key) value
+    , renderList ? key: value: lib.concatMap (renderOption key) value
     }:
     options:
       let
@@ -48,5 +52,5 @@
             else renderOption key value;
 
       in
-        lib.concatStrings (lib.mapAttrsToList render options);
+        builtins.concatLists (lib.mapAttrsToList render options);
 }

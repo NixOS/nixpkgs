@@ -460,6 +460,6 @@ runTests {
            verbose = true;
          };
 
-    expected = " -X 'PUT' --data '{\"id\":0}' --retry '3' --url 'https://example.com/foo' --url 'https://example.com/bar' --verbose";
+    expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
   };
 }
