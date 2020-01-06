@@ -61,6 +61,15 @@ buildEnv {
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
+    # We make changes to ghc binaries in $out/bin. buildEnv gives a
+    # symlink if only one of the paths has the subdirectory. If so,
+    # we need to remove it for our new wrappers.
+
+    if [ -L "$out/bin" ]; then
+      rm -f "$out/bin"
+      mkdir -p "$out/bin"
+    fi
+
     # wrap compiler executables with correct env variables
 
     for prg in ${ghcCommand} ${ghcCommand}i ${ghcCommand}-${ghc.version} ${ghcCommand}i-${ghc.version}; do
