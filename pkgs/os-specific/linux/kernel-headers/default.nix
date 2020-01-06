@@ -1,5 +1,5 @@
 { stdenvNoCC, lib, buildPackages
-, fetchurl, perl
+, fetchurl, perl, rsync
 , elf-header
 }:
 
@@ -16,7 +16,9 @@ let
     # We do this so we have a build->build, not build->host, C compiler.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     # `elf-header` is null when libc provides `elf.h`.
-    nativeBuildInputs = [ perl elf-header ];
+    nativeBuildInputs = [ perl elf-header ]
+      # rsync usage added in 5.3 (59b2bd05f5f4)
+      ++ lib.optionals (lib.versionAtLeast version "5.3") [ rsync ];
 
     extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
 
@@ -58,9 +60,10 @@ let
     + '' mkdir -p $out/include/config
       echo "${version}-default" > $out/include/config/kernel.release
     ''
-    # These oddly named file records the `SHELL` passed, which causes bootstrap
-    # tools run-time dependency.
-    + ''
+    # These oddly named file records the `SHELL` passed, which causes
+    # bootstrap tools run-time dependency. These files were removed in
+    # 5.3 (59b2bd05f5f4).
+    + lib.optionalString (lib.versionOlder version "5.3") ''
       find "$out" -name '..install.cmd' -print0 | xargs -0 rm
     '';
 
