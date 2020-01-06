@@ -1708,9 +1708,7 @@ in
 
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
-  filebench = callPackage ../tools/misc/filebench {
-    bison = bison2;
-  };
+  filebench = callPackage ../tools/misc/filebench { };
 
   fileshare = callPackage ../servers/fileshare {};
 
