@@ -110,7 +110,12 @@ let
       url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
       sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
     })
-  ] ++ lib.optional (lib.versionAtLeast ffversion "71") ./fix-ff71-lto.patch
+  ]
+  ++ lib.optional (lib.versionAtLeast ffversion "71") (fetchpatch {
+      name = "fix-temporary-lifetimes-in-lifetimes.patch";
+      url = "https://phabricator.services.mozilla.com/D56876?download=true";
+      sha256 = "02pb035w26rfbidl81z96gp9i23b3nrmds97li4fwi4s5abqwhlx";
+    })
   ++ patches;
 
 in
