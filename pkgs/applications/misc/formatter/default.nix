@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "formatter";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Djaler";
     repo = "Formatter";
     rev = version;
-    sha256 = "1ghxd2h0pklhlrjslfr46vza1kjsm3mr0sdzzjiqi9jd6hddnk7i";
+    sha256 = "0da1dvzsvbwg1ys19yf0n080xc0hjwin9zacjndb24jvphy3bxql";
   };
 
   patches = [
