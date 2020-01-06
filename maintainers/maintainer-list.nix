@@ -4592,6 +4592,12 @@
     githubId = 3958340;
     name = "Eshin Kunishima";
   };
+  mildlyincompetent = {
+    email = "nix@kch.dev";
+    github = "mildlyincompetent";
+    githubId = 19479662;
+    name = "Kajetan Champlewski";
+  };
   miltador = {
     email = "miltador@yandex.ua";
     name = "Vasiliy Solovey";
