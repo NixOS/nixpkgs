@@ -24,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     description = "Unit-aware calculator";
     homepage = "http://rink.tiffnix.com";
     license = with licenses; [ mpl20 gpl3 ];
-    maintainers = [ maintainers.sb0 ];
+    maintainers = with maintainers; [ sb0 filalex77 ];
   };
 }
