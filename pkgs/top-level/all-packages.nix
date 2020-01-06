@@ -3244,6 +3244,10 @@ in
 
   filet = callPackage ../applications/misc/filet { };
 
+  findomain = callPackage ../tools/networking/findomain {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   findutils = callPackage ../tools/misc/findutils { };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
