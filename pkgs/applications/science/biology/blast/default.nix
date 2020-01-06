@@ -77,17 +77,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ coreutils gawk zlib bzip2 cpio ]
+  # perl is necessary in buildInputs so that installed perl scripts get patched
+  # correctly
+  buildInputs = [ coreutils perl gawk zlib bzip2 cpio ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
   hardeningDisable = [ "format" ];
 
   patches = [ ./no_slash_bin.patch ];
-
-  postInstall = ''
-    patchShebangs $out/bin/get_species_taxids.sh
-    patchShebangs $out/bin/legacy_blast.pl
-    patchShebangs $out/bin/update_blastdb.pl
-  '';
 
   enableParallelBuilding = true;
 
