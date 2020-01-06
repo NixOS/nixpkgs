@@ -39,7 +39,7 @@ lib.makeOverridable (
 , meta ? {}
 , patches ? []
 , gemPath ? []
-, dontStrip ? true
+, dontStrip ? false
 # Assume we don't have to build unless strictly necessary (e.g. the source is a
 # git checkout).
 # If you need to apply patches, make sure to set `dontBuild = false`;
