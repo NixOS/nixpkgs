@@ -1176,6 +1176,8 @@ in {
 
   pystache = callPackage ../development/python-modules/pystache { };
 
+  pyswip = callPackage ../development/python-modules/pyswip { };
+
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
   pytest-bdd = callPackage ../development/python-modules/pytest-bdd { };
