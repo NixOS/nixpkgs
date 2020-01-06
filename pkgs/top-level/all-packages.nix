@@ -22905,6 +22905,8 @@ in
 
   gtypist = callPackage ../games/gtypist { };
 
+  gweled = callPackage ../games/gweled {};
+
   gzdoom = callPackage ../games/gzdoom { };
 
   harmonist = callPackage ../games/harmonist { };
