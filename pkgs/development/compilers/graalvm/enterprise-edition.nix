@@ -5,33 +5,33 @@ let
     let
       graalvmXXX-ee = stdenv.mkDerivation rec {
         pname = "graalvm${javaVersion}-ee";
-        version = "19.3.0";
+        version = "19.3.0.2";
         srcs = [
           (requireFile {
              name   = "graalvm-ee-java${javaVersion}-linux-amd64-${version}.tar.gz";
-             sha256 = {  "8" = "dae766424457faea3bd2d7179477bab8dc073d92755ad09c51eee55ce5cb8b78";
-                        "11" = "aced0251642e942081aa386a05656bab84984999ced296b4e001ae982ac3842d";
+             sha256 = {  "8" = "0ed34a7336abec6cf854e3b2b08d4c26a492bdf221a3cf73d31b9492a21a4f9c";
+                        "11" = "ebfcf47ed88a26eecf1e85a9d515bfc07d8dbaea5f2ca3139022f60c8193698a";
                       }.${javaVersion};
              url    = "https://www.oracle.com/technetwork/graalvm/downloads/index.html";
           })
           (requireFile {
              name   = "native-image-installable-svm-svmee-java${javaVersion}-linux-amd64-${version}.jar";
-             sha256 = {  "8" = "92fc421c8a07c7794179c96489ddf29d755d0a81ead2056fbf47fa137dbefc69";
-                        "11" = "fe6363ecfe919d3575607276ac6541a4f0d29cd740424b3ea7fadd26c5915106";
+             sha256 = {  "8" = "fa48268c56b47cbb71cd6bbe7ca25800b0d87fb9be7c201ec8587a50d231f071";
+                        "11" = "9e26a0cbd68470989e04749331196d403203dbf62c97154f81a11a9b8cad6969";
                       }.${javaVersion};
              url    = "https://www.oracle.com/technetwork/graalvm/downloads/index.html";
           })
           (requireFile {
              name   = "python-installable-svm-svmee-java${javaVersion}-linux-amd64-${version}.jar";
-             sha256 = {  "8" = "2668c44a6939393983fd941fc1c5573f49a349fc0cf919f6cd0ae98b7e8fac56";
-                        "11" = "f148e1c2b78614b77ffc8c4292f62f21377e67f7359b8505fe6331d41e5a1a75";
+             sha256 = {  "8" = "c0a6bed780077e1398c43834a27d441ea459effd92d27802ab8229b3f229b76d";
+                        "11" = "218bd9c4050e72be34de3d48bada305691fcb36e367a24871223e89f2c3067be";
                       }.${javaVersion};
              url    = "https://www.oracle.com/technetwork/graalvm/downloads/index.html";
           })
           (requireFile {
              name   = "ruby-installable-svm-svmee-java${javaVersion}-linux-amd64-${version}.jar";
-             sha256 = {  "8" = "e5f5938b9f55bde3f8b4e0f48f52cbb79a8668b53bbf96ab89b1da8d85bdfa90";
-                        "11" = "2481b6e2644d302c190a898e58a21cda1aa32e473d12775217a6dd4d919413ea";
+             sha256 = {  "8" = "76c776b8d2e61232e7d9ad8fcbe9d098908b62fec383288c07b7e37c2d6941c4";
+                        "11" = "f9a92ab69866edc4da6e2d906525a5bdd297f9ae0b01177c6752206343aefded";
                       }.${javaVersion};
              url    = "https://www.oracle.com/technetwork/graalvm/downloads/index.html";
           })
