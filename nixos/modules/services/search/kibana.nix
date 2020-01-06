@@ -198,8 +198,7 @@ in {
 
     environment.systemPackages = [ cfg.package ];
 
-    users.users = singleton {
-      name = "kibana";
+    users.users.kibana = {
       uid = config.ids.uids.kibana;
       description = "Kibana service user";
       home = cfg.dataDir;

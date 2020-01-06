@@ -49,8 +49,7 @@ in {
       };
     };
 
-    users.users = singleton {
-      name = "heapster";
+    users.users.heapsterrs = {
       uid = config.ids.uids.heapster;
       description = "Heapster user";
     };

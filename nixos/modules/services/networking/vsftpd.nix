@@ -279,21 +279,22 @@ in
         message = "vsftpd: If enableVirtualUsers is true, you need to setup both the userDbPath and localUsers options.";
       }];
 
-    users.users =
-      [ { name = "vsftpd";
-          uid = config.ids.uids.vsftpd;
-          description = "VSFTPD user";
-          home = if cfg.localRoot != null
-                   then cfg.localRoot # <= Necessary for virtual users.
-                   else "/homeless-shelter";
-        }
-      ] ++ optional cfg.anonymousUser
-        { name = "ftp";
+    users.users = {
+      "vsftpd" = {
+        uid = config.ids.uids.vsftpd;
+        description = "VSFTPD user";
+        home = if cfg.localRoot != null
+               then cfg.localRoot # <= Necessary for virtual users.
+               else "/homeless-shelter";
+      };
+    } // optionalAttrs cfg.anonymousUser {
+      "ftp" = { name = "ftp";
           uid = config.ids.uids.ftp;
           group = "ftp";
           description = "Anonymous FTP user";
           home = cfg.anonymousUserHome;
         };
+    };
 
     users.groups.ftp.gid = config.ids.gids.ftp;
 

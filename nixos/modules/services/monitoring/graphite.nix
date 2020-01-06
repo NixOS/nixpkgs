@@ -632,8 +632,7 @@ in {
       cfg.web.enable || cfg.api.enable ||
       cfg.seyren.enable || cfg.pager.enable || cfg.beacon.enable
      ) {
-      users.users = singleton {
-        name = "graphite";
+      users.users.graphite = {
         uid = config.ids.uids.graphite;
         description = "Graphite daemon user";
         home = dataDir;

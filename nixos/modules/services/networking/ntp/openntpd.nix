@@ -60,8 +60,7 @@ in
 
     environment.etc."ntpd.conf".text = configFile;
 
-    users.users = singleton {
-      name = "ntp";
+    users.users.ntp = {
       uid = config.ids.uids.ntp;
       description = "OpenNTP daemon user";
       home = "/var/empty";

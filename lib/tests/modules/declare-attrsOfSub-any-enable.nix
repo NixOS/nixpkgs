@@ -17,10 +17,10 @@ in
 
 {
   options = {
-    loaOfSub = lib.mkOption {
+    attrsOfSub = lib.mkOption {
       default = {};
       example = {};
-      type = lib.types.loaOf (lib.types.submodule [ submod ]);
+      type = lib.types.attrsOf (lib.types.submodule [ submod ]);
       description = ''
         Some descriptive text
       '';

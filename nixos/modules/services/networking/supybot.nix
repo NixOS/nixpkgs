@@ -45,8 +45,7 @@ in
 
     environment.systemPackages = [ pkgs.pythonPackages.limnoria ];
 
-    users.users = singleton {
-      name = "supybot";
+    users.users.supybotrs = {
       uid = config.ids.uids.supybot;
       group = "supybot";
       description = "Supybot IRC bot user";
@@ -55,7 +54,6 @@ in
     };
 
     users.groups.supybot = {
-      name = "supybot";
       gid = config.ids.gids.supybot;
     };
 
