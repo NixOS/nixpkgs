@@ -21704,6 +21704,9 @@ in
 
   udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
 
+  uefitoolPackages = recurseIntoAttrs (callPackage ../tools/system/uefitool/variants.nix {});
+  uefitool = uefitoolPackages.new-engine;
+
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
   inherit (ocaml-ng.ocamlPackages_4_05) unison;
