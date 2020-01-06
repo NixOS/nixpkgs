@@ -67,6 +67,10 @@ let
       find "$out" -name '..install.cmd' -print0 | xargs -0 rm
     '';
 
+    passthru = {
+      inherit makeLinuxHeaders;
+    };
+
     meta = with lib; {
       description = "Header files and scripts for Linux kernel";
       license = licenses.gpl2;
