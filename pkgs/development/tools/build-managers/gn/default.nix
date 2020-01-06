@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, darwin, writeText
-, git, ninja, python2 }:
+, git, ninja, python3 }:
 
 let
   rev = "64b846c96daeb3eaf08e26d8a84d8451c6cb712b";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     inherit rev sha256;
   };
 
-  nativeBuildInputs = [ ninja python2 git ];
+  nativeBuildInputs = [ ninja python3 git ];
   buildInputs = lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
     libobjc
     cctools

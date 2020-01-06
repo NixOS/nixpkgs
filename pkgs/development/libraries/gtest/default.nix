@@ -1,5 +1,4 @@
-{ stdenv, cmake, ninja, fetchFromGitHub
-, static ? false }:
+{ stdenv, cmake, ninja, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "gtest";
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  cmakeFlags = stdenv.lib.optional (!static) "-DBUILD_SHARED_LIBS=ON";
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with stdenv.lib; {
     description = "Google's framework for writing C++ tests";

@@ -185,20 +185,11 @@ in {
     static = true;
     twisted = null;
   };
-  double-conversion = super.double-conversion.override {
-    static = true;
-  };
   gmp = super.gmp.override {
     withStatic = true;
   };
   gflags = super.gflags.override {
     enableShared = false;
-  };
-  glog = super.glog.override {
-    static = true;
-  };
-  gtest = super.gtest.override {
-    static = true;
   };
   cdo = super.cdo.override {
     enable_all_static = true;

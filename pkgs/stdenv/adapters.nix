@@ -60,6 +60,7 @@ rec {
           "--enable-static"
           "--disable-shared"
         ];
+        cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
         mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
     };
