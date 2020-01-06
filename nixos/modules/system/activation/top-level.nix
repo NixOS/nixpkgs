@@ -4,6 +4,11 @@ with lib;
 
 let
 
+  childConfigType = mkOptionType {
+    name = "NixOS config module";
+    # merging is not implemented because this type is only
+    # found inside lists.
+  };
 
   # This attribute is responsible for creating boot entries for
   # child configuration. They are only (directly) accessible
@@ -155,6 +160,7 @@ in
 
     nesting.children = mkOption {
       default = [];
+      type = types.listOf childConfigType;
       description = ''
         Additional configurations to build.
       '';
@@ -162,6 +168,7 @@ in
 
     nesting.clone = mkOption {
       default = [];
+      type = types.listOf childConfigType;
       description = ''
         Additional configurations to build based on the current
         configuration which then has a lower priority.
