@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.2.1";
+  version = "1.2.2";
 
   outputs = [ "out" "bin" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lsn6mdkk8yb933n0c9dka89bixvwis09w5nh5wkcag2jsdbfmvb";
+    sha256 = "195hi10vrsvh6i927mm6rm1ld5sxah3h5sr3bsjm90vb8lxrxfya";
   };
 
   nativeBuildInputs = [
