@@ -909,6 +909,16 @@ in {
             rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
 
             ${pkgs.git}/bin/git config --global core.autocrlf "input"
+
+            # Create a key for the docker registry (Not finished yet)
+            ${if cfg.registry.enable != false then ''
+              mkdir /var/gitlab/certs
+              openssl req -new -newkey rsa:4096 > /var/gitlab/certs/registry.csr
+              openssl rsa -in /var/gitlab/certs/privkey.pem -out /var/gitlab/certs/registry.key
+              openssl x509 -in /var/gitlab/certs/registry.csr -out /var/gitlab/certs/registry.crt -req -signkey /var/gitlab/certs/registry.key -days 10000
+              chown -R ${cfg.user} /var/gitlab/certs
+              '' else ""
+            }
           '';
         in [
           "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}"
