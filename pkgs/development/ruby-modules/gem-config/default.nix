@@ -315,6 +315,14 @@ in
     # The ruby build script takes care of this
     dontUseCmakeConfigure = true;
 
+    postInstall = ''
+      # Reduce output size by a lot, and remove some unnecessary references.
+      # The ext directory should only be required at build time, so
+      # can be deleted now.
+      rm -r $out/${ruby.gemPath}/gems/mathematical-${attrs.version}/ext \
+            $out/${ruby.gemPath}/extensions/*/*/mathematical-${attrs.version}/gem_make.out
+    '';
+
     # For some reason 'mathematical.so' is missing cairo and glib in its RPATH, add them explicitly here
     postFixup = lib.optionalString stdenv.isLinux ''
       soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
