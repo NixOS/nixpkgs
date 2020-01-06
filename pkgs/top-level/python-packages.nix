@@ -3681,7 +3681,7 @@ in {
 
   gtts-token = callPackage ../development/python-modules/gtts-token { };
 
-  gym = callPackage ../development/python-modules/gym { };
+  gym = callPackage ../development/python-modules/gym/0.15.3.nix { };
 
   gyp = callPackage ../development/python-modules/gyp { };
 
