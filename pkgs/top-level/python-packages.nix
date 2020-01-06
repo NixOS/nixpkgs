@@ -3430,6 +3430,8 @@ in {
 
   flask-swagger = callPackage ../development/python-modules/flask-swagger { };
 
+  flask-swagger-ui = callPackage ../development/python-modules/flask-swagger-ui { };
+
   flask_testing = callPackage ../development/python-modules/flask-testing { };
 
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
