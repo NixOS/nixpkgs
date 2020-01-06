@@ -124,7 +124,7 @@ let
         enabled = cfg.registry.enable;
         host = cfg.registry.host;
         port = cfg.registry.port;
-        key = "/var/gitlab/certs/registry.key";
+        key = cfg.registry.keyFile;
         api_url = "http://localhost:5000/";
         issuer = "gitlab-issuer";
       };
@@ -405,6 +405,16 @@ in {
           default = 4567;
           description = "GitLab-Container Registry port.";
         };
+        certFile = mkOption {
+          type = types.path;
+          default = null;
+          description = "Path to registry certificate.";
+        };
+        keyFile = mkOption {
+          type = types.path;
+          default = null;
+          description = "Path to registry certificate-key.";
+        };
       };
 
       smtp = {
@@ -660,7 +670,7 @@ in {
     services.postfix.enable = mkDefault true;
 
     # Enable Docker Registry, if GitLab-Container Registry is enabled
-    dockerRegistry = {
+    services.dockerRegistry = {
       enable = cfg.registry.enable;
       listenAddress = "127.0.0.1";
       port = 5000;
@@ -670,7 +680,7 @@ in {
         REGISTRY_AUTH_TOKEN_REALM = "https://${cfg.host}/jwt/auth";
         REGISTRY_AUTH_TOKEN_SERVICE = "container_registry";
         REGISTRY_AUTH_TOKEN_ISSUER = "gitlab-issuer";
-        REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE = "/var/gitlab/certs/registry.crt";
+        REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE = cfg.registry.certFile;
         REGISTRY_STORAGE_DELETE_ENABLED = "true";
       };
     };
@@ -909,16 +919,6 @@ in {
             rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
 
             ${pkgs.git}/bin/git config --global core.autocrlf "input"
-
-            # Create a key for the docker registry (Not finished yet)
-            ${if cfg.registry.enable != false then ''
-              mkdir /var/gitlab/certs
-              openssl req -new -newkey rsa:4096 > /var/gitlab/certs/registry.csr
-              openssl rsa -in /var/gitlab/certs/privkey.pem -out /var/gitlab/certs/registry.key
-              openssl x509 -in /var/gitlab/certs/registry.csr -out /var/gitlab/certs/registry.crt -req -signkey /var/gitlab/certs/registry.key -days 10000
-              chown -R ${cfg.user} /var/gitlab/certs
-              '' else ""
-            }
           '';
         in [
           "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}"
