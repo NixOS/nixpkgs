@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, perl, static ? false }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, perl }:
 
 stdenv.mkDerivation rec {
   pname = "glog";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}" ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   checkInputs = [ perl ];
   doCheck = false; # fails with "Mangled symbols (28 out of 380) found in demangle.dm"
