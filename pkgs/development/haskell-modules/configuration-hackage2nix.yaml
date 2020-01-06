@@ -5318,7 +5318,6 @@ broken-packages:
   - hakyll-filestore
   - hakyll-ogmarkup
   - hakyll-R
-  - hakyll-sass
   - hakyll-series
   - hakyll-shakespeare
   - hakyll-shortcode
