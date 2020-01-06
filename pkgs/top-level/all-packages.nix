@@ -17163,6 +17163,8 @@ in
 
   amiri = callPackage ../data/fonts/amiri { };
 
+  anarchism = callPackage ../data/documentation/anarchism { };
+
   andagii = callPackage ../data/fonts/andagii { };
 
   andika = callPackage ../data/fonts/andika { };
