@@ -88,7 +88,7 @@ let
           wiki = true;
           snippets = true;
           builds = true;
-          container_registry = true;
+          container_registry = cfg.registry.enable;
         };
       };
       repositories.storages.default.path = "${cfg.statePath}/repositories";
@@ -119,6 +119,14 @@ let
           address = "localhost";
           port = 3807;
         };
+      };
+      registry = {
+        enabled = cfg.registry.enable;
+        host = cfg.registry.host;
+        port = cfg.registry.port;
+        key = "/var/gitlab/certs/registry.key";
+        api_url = "http://localhost:5000/";
+        issuer = "gitlab-issuer";
       };
       extra = {};
       uploads.storage_path = cfg.statePath;
@@ -381,6 +389,24 @@ in {
         '';
       };
 
+      registry = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable GitLab-Container Registry";
+        };
+        host = mkOption {
+          type = types.str;
+          default = "registry." + config.networking.hostName;
+          description = "Gitlab-Contaier Registry host name.";
+        };
+        port = mkOption {
+          type = types.int;
+          default = 4567;
+          description = "GitLab-Container Registry port.";
+        };
+      };
+
       smtp = {
         enable = mkOption {
           type = types.bool;
@@ -632,6 +658,22 @@ in {
 
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault true;
+
+    # Enable Docker Registry, if GitLab-Container Registry is enabled
+    dockerRegistry = {
+      enable = cfg.registry.enable;
+      listenAddress = "127.0.0.1";
+      port = 5000;
+      enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
+      extraConfig = {
+        REGISTRY_LOG_LEVEL = "info";
+        REGISTRY_AUTH_TOKEN_REALM = "https://${cfg.host}/jwt/auth";
+        REGISTRY_AUTH_TOKEN_SERVICE = "container_registry";
+        REGISTRY_AUTH_TOKEN_ISSUER = "gitlab-issuer";
+        REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE = "/var/gitlab/certs/registry.crt";
+        REGISTRY_STORAGE_DELETE_ENABLED = "true";
+      };
+    };
 
     users.users = [
       { name = cfg.user;
