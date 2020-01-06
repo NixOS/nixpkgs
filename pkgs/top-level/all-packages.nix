@@ -21426,9 +21426,7 @@ in
 
   inherit (ocamlPackages) stog;
 
-  stp = callPackage ../applications/science/logic/stp {
-    bison = bison2;
-  };
+  stp = callPackage ../applications/science/logic/stp { };
 
   stretchly = callPackage ../applications/misc/stretchly {
     inherit (gnome2) GConf;
