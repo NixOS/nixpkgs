@@ -261,11 +261,6 @@ self: super:
   });
 
   libXpm = super.libXpm.overrideAttrs (attrs: {
-    name = "libXpm-3.5.12";
-    src = fetchurl {
-      url = mirror://xorg/individual/lib/libXpm-3.5.12.tar.bz2;
-      sha256 = "1v5xaiw4zlhxspvx76y3hq4wpxv7mpj6parqnwdqvpj8vbinsspx";
-    };
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   });
