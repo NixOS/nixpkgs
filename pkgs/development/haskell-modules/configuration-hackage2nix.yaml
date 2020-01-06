@@ -6954,6 +6954,7 @@ broken-packages:
   - llvm-base-types
   - llvm-base-util
   - llvm-data-interop
+  - llvm-extension
   - llvm-extra
   - llvm-ffi
   - llvm-general
