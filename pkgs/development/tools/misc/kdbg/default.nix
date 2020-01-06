@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   pname = "kdbg";
-  version = "3.0.0";
+  version = "3.0.1";
   src = fetchurl {
     url = "mirror://sourceforge/kdbg/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0lxfal6jijdcrf0hc81gmapfmz0kq4569d5qzfm4p72rq9s4r5in";
+    sha256 = "1gax6xll8svmngw0z1rzhd77xysv01zp0i68x4n5pq0xgh7gi7a4";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
