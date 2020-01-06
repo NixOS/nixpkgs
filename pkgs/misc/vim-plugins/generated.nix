@@ -5679,6 +5679,17 @@ let
     };
   };
 
+  vista-vim = buildVimPluginFrom2Nix {
+    pname = "vista-vim";
+    version = "2020-01-06";
+    src = fetchFromGitHub {
+      owner = "liuchengxu";
+      repo = "vista.vim";
+      rev = "dcf134c83a6a3f9618a97cafab5b7fb1f1df3f84";
+      sha256 = "0w9q69a2k8a39b8zrd3sildisrdskbk6cgvbkmb3fqsr0zdzjxzv";
+    };
+  };
+
   vundle = buildVimPluginFrom2Nix {
     pname = "vundle";
     version = "2019-08-17";
