@@ -11,6 +11,8 @@ buildGoPackage rec {
     sha256 = "0s3hvqpz13n630yvi0476hfzrp3xcj8x61zc2hl5z70f8kvbay4i";
   };
 
+  patches = [ ./0001-Fix-darwin-build.patch ];
+
   goDeps = ./deps.nix;
 
   passthru.updateScript = ./update.sh;

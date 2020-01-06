@@ -3203,17 +3203,21 @@ in {
 
   django-postgresql-netfields = callPackage ../development/python-modules/django-postgresql-netfields { };
 
+  django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
+
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
   django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
 
-  django-storages = callPackage ../development/python-modules/django-storages { };
-
-  django-versatileimagefield = callPackage ../development/python-modules/django-versatileimagefield  { };
+  django-simple-captcha = callPackage ../development/python-modules/django-simple-captcha { };
 
   django-sites = callPackage ../development/python-modules/django-sites { };
 
   django-sr = callPackage ../development/python-modules/django-sr { };
+
+  django-storages = callPackage ../development/python-modules/django-storages { };
+
+  django-versatileimagefield = callPackage ../development/python-modules/django-versatileimagefield  { };
 
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
@@ -3425,6 +3429,8 @@ in {
   flask_sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 
   flask-swagger = callPackage ../development/python-modules/flask-swagger { };
+
+  flask-swagger-ui = callPackage ../development/python-modules/flask-swagger-ui { };
 
   flask_testing = callPackage ../development/python-modules/flask-testing { };
 
@@ -4293,6 +4299,8 @@ in {
 
   notebook = if isPy3k then callPackage ../development/python-modules/notebook { }
   else callPackage ../development/python-modules/notebook/2.nix { };
+
+  notedown = callPackage ../development/python-modules/notedown { };
 
   notify = callPackage ../development/python-modules/notify { };
 
@@ -5792,6 +5800,10 @@ in {
 
   sphinxcontrib-spelling = callPackage ../development/python-modules/sphinxcontrib-spelling { };
 
+  sphinxcontrib-tikz = callPackage ../development/python-modules/sphinxcontrib-tikz {
+    texLive = pkgs.texlive.combine { inherit (pkgs.texlive) scheme-small standalone pgfplots; };
+  };
+
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
 
   Pweave = callPackage ../development/python-modules/pweave { };
@@ -6333,6 +6345,8 @@ in {
   scrapy = callPackage ../development/python-modules/scrapy { };
 
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
+
+  pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
 
   htmltreediff = callPackage ../development/python-modules/htmltreediff { };
 

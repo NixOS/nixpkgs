@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "racer";
-  version = "2.1.27";
+  version = "2.1.28";
 
   src = fetchFromGitHub {
     owner = "racer-rust";
     repo = "racer";
     rev = "v${version}";
-    sha256 = "1ajj515ck5n0mzig77xnq1qgb2s4gf6ahgd5mab91406jvij9qf3";
+    sha256 = "1zifbcqy9hmcdbz7sl046l2631f5a3j65kyin38l7wm7vrqx9s3h";
   };
 
-  cargoSha256 = "0ki5j5gh59c92a0w43kzljpiamv2jvyk4m2w8qldfyl5kaa40dxb";
+  cargoSha256 = "1ys1yb939y144lhjr451cpqrayqn66r0zp71xm90fkqxsbv7wkqv";
 
   buildInputs = [ makeWrapper ]
                 ++ stdenv.lib.optional stdenv.isDarwin Security;
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = https://github.com/racer-rust/racer;
     license = licenses.mit;
-    maintainers = with maintainers; [ jagajaga ];
+    maintainers = with maintainers; [ jagajaga ma27 ];
     platforms = platforms.all;
   };
 }
