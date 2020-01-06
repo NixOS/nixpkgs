@@ -21704,6 +21704,9 @@ in
 
   udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
 
+  uefitoolPackages = recurseIntoAttrs (callPackage ../tools/system/uefitool/variants.nix {});
+  uefitool = uefitoolPackages.new-engine;
+
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
   inherit (ocaml-ng.ocamlPackages_4_05) unison;
@@ -22902,6 +22905,8 @@ in
 
   gtypist = callPackage ../games/gtypist { };
 
+  gweled = callPackage ../games/gweled {};
+
   gzdoom = callPackage ../games/gzdoom { };
 
   harmonist = callPackage ../games/harmonist { };
@@ -23883,6 +23888,7 @@ in
   lie = callPackage ../applications/science/math/LiE { };
 
   magma = callPackage ../development/libraries/science/math/magma { };
+  clmagma = callPackage ../development/libraries/science/math/clmagma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
@@ -24763,18 +24769,6 @@ in
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
       boehmgc = boehmgc.override { enableLargeConfig = true; };
-      # Tarball evaluation fails with a gcc9 based nix-env.
-      # $ nix-build pkgs/top-level/release.nix -A tarball
-      stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
-      aws-sdk-cpp = aws-sdk-cpp.override {
-        stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
-      };
-      boost = boost.override {
-        buildPackages = buildPackages // {
-          stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
-        };
-        stdenv = if stdenv.cc.isGNU then gcc8Stdenv else stdenv;
-      };
       })
     nix
     nix1

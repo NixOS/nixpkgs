@@ -7290,6 +7290,11 @@
     githubId = 797581;
     name = "Vincent Bernardoff";
   };
+  vcanadi = {
+    email = "vito.canadi@gmail.com";
+    github = "vcanadi";
+    name = "Vitomir Čanadi";
+  };
   vcunat = {
     name = "Vladimír Čunát";
     email = "v@cunat.cz"; # vcunat@gmail.com predominated in commits before 2019/03
