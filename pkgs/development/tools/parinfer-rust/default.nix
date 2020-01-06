@@ -1,21 +1,29 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages }:
 
 rustPlatform.buildRustPackage rec {
   pname = "parinfer-rust";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "eraserhd";
     repo = "parinfer-rust";
     rev = "v${version}";
-    sha256 = "0w7fcg33k8k16q8wzax44ck8csa2dr7bmwcz1g57dz33vhxi8ajc";
+    sha256 = "1k2kr1zlxx3w3kwb634kngzx8vl5iif1yr6zk2xh46gjwqb3223l";
   };
 
-  cargoSha256 = "17fkzpvfaxixllr9nxx7dnpqxkiighggryxf30j3lafghyrx987f";
+  cargoSha256 = "0i5wy15w985nxwl4b6rzb06hchzjwph6ygzjkkmigm9diw9jcycn";
+
+  buildInputs = [ llvmPackages.libclang llvmPackages.clang ];
+  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   postInstall = ''
     mkdir -p $out/share/kak/autoload/plugins
     cp rc/parinfer.kak $out/share/kak/autoload/plugins/
+
+    rtpPath=$out/share/vim-plugins/parinfer-rust
+    mkdir -p $rtpPath/plugin
+    sed "s,let s:libdir = .*,let s:libdir = '${placeholder "out"}/lib'," \
+      plugin/parinfer.vim >$rtpPath/plugin/parinfer.vim
   '';
 
   meta = with stdenv.lib; {
