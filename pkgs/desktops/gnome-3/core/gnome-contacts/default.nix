@@ -5,14 +5,14 @@
 , vala, meson, ninja, libhandy, gsettings-desktop-schemas }:
 
 let
-  version = "3.34";
+  version = "3.34.1";
 in stdenv.mkDerivation rec {
   pname = "gnome-contacts";
   inherit version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "04igc9xvyc4kb5xf5g2missnvyvj9zv5cqxf5k4z7hb0sv42wq4r";
+    sha256 = "1jqw5yrypvjxzgg70vjbryylwx06amg6sg85mqi14a97xbccg0qa";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];
