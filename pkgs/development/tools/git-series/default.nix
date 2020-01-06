@@ -15,7 +15,7 @@ buildRustPackage rec {
     sha256 = "07mgq5h6r1gf3jflbv2khcz32bdazw7z1s8xcsafdarnm13ps014";
   };
 
-  cargoSha256 = "09y4fvv279cm5sgbpmskascb7rrwqgya5w5wkpz1bgx6pzw3mc7y";
+  cargoSha256 = "16qjbvppc01yxk8x9jk7gs8jaag5nkfl30j3lyv3dc27vv9mckjv";
 
   cargoPatches = [
     (fetchpatch {
@@ -26,6 +26,11 @@ buildRustPackage rec {
     (fetchpatch {
       url = "https://github.com/edef1c/git-series/commit/11fe70ffcc18200e5f2a159c36aab070e8ff4228.patch";
       sha256 = "0clwllf9mrhq86dhzyyhkw1q2ggpgqpw7s05dvp3gj9zhfsyya4s";
+    })
+    # Cargo.lock: Update url, which fixes incompatibility with NLL
+    (fetchpatch {
+      url = "https://github.com/edef1c/git-series/commit/27ff2ecf2d615dae1113709eca0e43596de12ac4.patch";
+      sha256 = "1byjbdcx56nd0bbwz078bl340rk334mb34cvaa58h76byvhpkw10";
     })
   ];
 
