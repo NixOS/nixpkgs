@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "terracognita";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "cycloidio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06qw3mycgqkj2f5n6lm9xb2c21xjim2qlwizxsdc5hjrwbasl2q0";
+    sha256 = "1d5yi2jxmk04wcz8rjwa5kz9525j8s90d4rj2d4cbgd3lbbk45qq";
   };
 
-  modSha256 = "0sjs1dd8z8brxj5wwfrwimnlscy7i6flc4kq4576zwrcjg6pjvkr";
+  modSha256 = "0xlhp8pa5g6an10m56g237pixc4h6ay89hkp1ijdz45iyfn9fk91";
+
+  subPackages = [ "." ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/cycloidio/terracognita/cmd.Version=${version}" ];
 
