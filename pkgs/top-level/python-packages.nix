@@ -3932,7 +3932,7 @@ in {
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
   libplist = disabledIf isPy3k
-    (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
+    (toPythonModule (pkgs.libplist.override { enablePython = true; inherit python; })).py;
 
   libxml2 = (toPythonModule (pkgs.libxml2.override{pythonSupport=true; inherit python;})).py;
 

@@ -3,7 +3,7 @@
 , meson
 , ninja
 , pkgconfig
-, python
+, python3
 , gst-plugins-base
 , orc
 , gettext
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     pkgconfig
-    python
+    python3
   ];
 
   buildInputs = [
