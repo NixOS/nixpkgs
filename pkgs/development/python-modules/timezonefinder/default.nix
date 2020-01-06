@@ -1,6 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, isPy27
 , numba
 , numpy
 }:
@@ -8,6 +9,8 @@
 buildPythonPackage rec {
   pname = "timezonefinder";
   version = "4.2.0";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
