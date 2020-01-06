@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
 , alembic
 , click
 , cloudpickle
@@ -26,6 +26,7 @@
 buildPythonPackage rec {
   pname = "mlflow";
   version = "1.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

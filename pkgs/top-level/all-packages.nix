@@ -15416,6 +15416,8 @@ in
 
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
+  mlflow-server = callPackage ../servers/mlflow-server { };
+  
   mlmmj = callPackage ../servers/mail/mlmmj { };
 
   moodle = callPackage ../servers/web-apps/moodle { };
