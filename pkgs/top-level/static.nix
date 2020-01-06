@@ -143,6 +143,9 @@ in {
     static = true;
     shared = false;
   };
+  fmt = super.fmt.override {
+    enableShared = false;
+  };
   gifsicle = super.gifsicle.override {
     static = true;
   };
@@ -152,7 +155,10 @@ in {
   optipng = super.optipng.override {
     static = true;
   };
-  openblas = super.openblas.override { enableStatic = true; };
+  openblas = super.openblas.override {
+    enableStatic = true;
+    enableShared = false;
+  };
   mkl = super.mkl.override { enableStatic = true; };
   nix = super.nix.override { withAWS = false; };
   # openssl 1.1 doesn't compile
@@ -163,6 +169,10 @@ in {
     # --disable-shared flag
     stdenv = super.stdenv;
   };
+  arrow-cpp = super.arrow-cpp.override {
+    enableShared = false;
+    python = { pkgs = { python = null; numpy = null; }; };
+  };
   boost = super.boost.override {
     enableStatic = true;
     enableShared = false;
@@ -171,8 +181,24 @@ in {
     # --disable-shared flag
     stdenv = super.stdenv;
   };
+  thrift = super.thrift.override {
+    static = true;
+    twisted = null;
+  };
+  double-conversion = super.double-conversion.override {
+    static = true;
+  };
   gmp = super.gmp.override {
     withStatic = true;
+  };
+  gflags = super.gflags.override {
+    enableShared = false;
+  };
+  glog = super.glog.override {
+    static = true;
+  };
+  gtest = super.gtest.override {
+    static = true;
   };
   cdo = super.cdo.override {
     enable_all_static = true;
@@ -191,6 +217,12 @@ in {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
+  };
+  woff2 = super.woff2.override {
+    static = true;
+  };
+  snappy = super.snappy.override {
+    static = true;
   };
   lz4 = super.lz4.override {
     enableShared = false;
@@ -222,6 +254,10 @@ in {
 
   brotli = super.brotli.override {
     staticOnly = true;
+  };
+
+  zstd = super.zstd.override {
+    enableShared = false;
   };
 
   llvmPackages_8 = super.llvmPackages_8 // {
