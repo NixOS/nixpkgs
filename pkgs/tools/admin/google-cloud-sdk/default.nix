@@ -7,7 +7,7 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python, openssl, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
@@ -56,7 +56,8 @@ in stdenv.mkDerivation rec {
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
-            --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}"
+            --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
+            --prefix PATH : "${openssl.bin}/bin"
 
         mkdir -p $out/bin
         ln -s $programPath $binaryPath
