@@ -14,31 +14,27 @@
 
 with builtins;
 
-stdenv.mkDerivation rec {
+let
+  # NOTE: the version of abc used here is synchronized with
+  # the one in the yosys Makefile of the version above;
+  # keep them the same for quality purposes.
+  abc = fetchFromGitHub {
+    owner  = "berkeley-abc";
+    repo   = "abc";
+    rev    = "623b5e82513d076a19f864c01930ad1838498894";
+    sha256 = "1mrfqwsivflqdzc3531r6mzp33dfyl6dnqjdwfcq137arqh36m67";
+  };
+in stdenv.mkDerivation rec {
   pname = "yosys";
   version = "2019.10.18";
 
-  srcs = [
-    (fetchFromGitHub {
-      owner  = "yosyshq";
-      repo   = "yosys";
-      rev    = "3c41599ee1f62e4d77ba630fa1a245ef3fe236fa";
-      sha256 = "0jg2g8v08ax1q6qlvn8c1h147m03adzrgf21043xwbh4c7s5k137";
-      name   = "yosys";
-    })
-
-    # NOTE: the version of abc used here is synchronized with
-    # the one in the yosys Makefile of the version above;
-    # keep them the same for quality purposes.
-    (fetchFromGitHub {
-      owner  = "berkeley-abc";
-      repo   = "abc";
-      rev    = "623b5e82513d076a19f864c01930ad1838498894";
-      sha256 = "1mrfqwsivflqdzc3531r6mzp33dfyl6dnqjdwfcq137arqh36m67";
-      name   = "yosys-abc";
-    })
-  ];
-  sourceRoot = "yosys";
+  src = fetchFromGitHub {
+    owner  = "yosyshq";
+    repo   = "yosys";
+    rev    = "3c41599ee1f62e4d77ba630fa1a245ef3fe236fa";
+    sha256 = "0jg2g8v08ax1q6qlvn8c1h147m03adzrgf21043xwbh4c7s5k137";
+    name   = "yosys";
+  };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
@@ -47,22 +43,22 @@ stdenv.mkDerivation rec {
   makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
 
   patchPhase = ''
-    substituteInPlace ../yosys-abc/Makefile \
-      --replace 'CC   := gcc' "" \
-      --replace 'CXX  := g++' ""
     substituteInPlace ./Makefile \
       --replace 'CXX = clang' "" \
       --replace 'LD = clang++' 'LD = $(CXX)' \
       --replace 'CXX = gcc' "" \
       --replace 'LD = gcc' 'LD = $(CXX)' \
       --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
-      --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
+      --replace 'echo UNKNOWN' 'echo ${substring 0 10 src.rev}'
     patchShebangs tests
   '';
 
   preBuild = ''
-    chmod -R u+w ../yosys-abc
-    ln -s ../yosys-abc abc
+    cp -R ${abc} abc
+    chmod -R u+w .
+    substituteInPlace abc/Makefile \
+      --replace 'CC   := gcc' "" \
+      --replace 'CXX  := g++' ""
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCREV := default' >> Makefile.conf
 
