@@ -1,4 +1,4 @@
-{ callPackage, runCommand, writeScript, stdenv, coreutils }:
+{ callPackage, runCommandLocal, writeScript, stdenv, coreutils }:
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
@@ -23,10 +23,11 @@ let
     exec ${run} "$@"
   '';
 
-in runCommand name {
+in runCommandLocal name {
   inherit meta;
+
   passthru = passthru // {
-    env = runCommand "${name}-shell-env" {
+    env = runCommandLocal "${name}-shell-env" {
       shellHook = ''
         exec ${chrootenv}/bin/chrootenv ${init runScript} "$(pwd)"
       '';
