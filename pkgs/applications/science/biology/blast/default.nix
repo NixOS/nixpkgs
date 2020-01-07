@@ -99,7 +99,10 @@ stdenv.mkDerivation rec {
     similarity between biological sequences'';
     homepage = https://blast.ncbi.nlm.nih.gov/Blast.cgi;
     license = licenses.publicDomain;
-    platforms = platforms.unix;
+
+    # Version 2.10.0 fails on Darwin
+    # See https://github.com/NixOS/nixpkgs/pull/61430
+    platforms = platforms.linux;
     maintainers = with maintainers; [ luispedro ];
   };
 }
