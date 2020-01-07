@@ -665,9 +665,9 @@ in
 
       users.groups =
         optionalAttrs (group == "postfix")
-        { group.gid = config.ids.gids.postfix;
+        { ${group}.gid = config.ids.gids.postfix;
         }
-        ++ optionalAttrs (setgidGroup == "postdrop")
+        // optionalAttrs (setgidGroup == "postdrop")
         { ${setgidGroup}.gid = config.ids.gids.postdrop;
         };
 
