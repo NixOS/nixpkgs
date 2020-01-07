@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1mbxnqrw1fwcgraa1bgik25vdzvf97vma5pzknbwbqq5ly9fwlgw";
   };
 
-  NIX_LDFLAGS = "-lid3tag -lz";
+  env.NIX_LDFLAGS = "-lid3tag -lz";
 
   nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
   buildInputs = [

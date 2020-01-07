@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
-  ${libEnvVar} = libPath;
+  env.${libEnvVar} = libPath;
 
   postUnpack =
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib

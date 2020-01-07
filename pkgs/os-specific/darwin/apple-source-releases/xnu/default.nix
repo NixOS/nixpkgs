@@ -58,7 +58,7 @@ appleDerivation ({
   MIGCC = "cc";
   ARCHS = "x86_64";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preBuild = ''
     # This is a bit of a hack...

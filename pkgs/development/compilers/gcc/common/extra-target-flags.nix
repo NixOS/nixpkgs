@@ -5,7 +5,7 @@ let
 in
 
 {
-  EXTRA_TARGET_FLAGS = let
+  EXTRA_TARGET_FLAGS = builtins.toString (let
       mkFlags = dep: lib.optionals (targetPlatform != hostPlatform && dep != null) ([
         "-idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
       ] ++ stdenv.lib.optionals (! crossStageStatic) [
@@ -13,9 +13,9 @@ in
       ]);
     in mkFlags libcCross
     ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross)
-    ;
+    );
 
-  EXTRA_TARGET_LDFLAGS = let
+  EXTRA_TARGET_LDFLAGS = builtins.toString (let
       mkFlags = dep: lib.optionals (targetPlatform != hostPlatform && dep != null) ([
         "-Wl,-L${lib.getLib dep}${dep.libdir or "/lib"}"
       ] ++ (if crossStageStatic then [
@@ -26,5 +26,5 @@ in
       ]));
     in mkFlags libcCross
     ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross)
-    ;
+    );
 }

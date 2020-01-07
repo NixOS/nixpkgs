@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
 
   # Ignore undefined references to a bunch of libsoup symbols
-  NIX_LDFLAGS = "--unresolved-symbol=ignore-all";
+  env.NIX_LDFLAGS = "--unresolved-symbol=ignore-all";
 
   preConfigure = ''
     patchShebangs configure

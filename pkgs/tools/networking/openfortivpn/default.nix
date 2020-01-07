@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ openssl ppp ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   configureFlags = [ "--with-pppd=${ppp}/bin/pppd" ];
 

@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   GUILE_CPPFLAGS="-D_THREAD_SAFE -I${guile_1_8.dev}/include -I${guile_1_8.dev}/include/guile ";
 
-  NIX_LDFLAGS="${zlib}/lib/libz.dylib";
+  env.NIX_LDFLAGS="${zlib}/lib/libz.dylib";
 
   buildPhase = ''
     substituteInPlace Makefile \

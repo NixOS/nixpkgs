@@ -21,10 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "0y7rl603vmwlxm6ilkhc51rx2mfj14ckcz40xxgs0ljnvlhp30yp";
   };
 
-  inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
+  env = {
+    inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
+    LDFLAGS = optionalString (!stdenv.isDarwin) "-lgcc_s";
+    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
+  };
 
-  LDFLAGS = optionalString (!stdenv.isDarwin) "-lgcc_s";
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
 
   buildInputs = optionals stdenv.isDarwin [ CF configd ];
 

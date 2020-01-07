@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional pulseaudioSupport "--enable-pulse";
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = with stdenv.lib; {
     description = "MATE settings daemon";

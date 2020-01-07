@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline gettext ncurses ];
 
   # Needed with GCC 8
-  NIX_CFLAGS_COMPILE = with stdenv.lib; toString ((optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = with stdenv.lib; toString ((optionals stdenv.cc.isGNU [
     "-Wno-error=int-in-bool-context"
     "-Wno-error=class-memaccess"
     "-Wno-error=restrict"

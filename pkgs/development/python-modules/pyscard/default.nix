@@ -27,7 +27,7 @@ buildPythonPackage rec {
                 "${getLib pcsclite}/lib/libpcsclite${sharedLibrary}"
   '';
 
-  NIX_CFLAGS_COMPILE = optionalString (! withApplePCSC)
+  env.NIX_CFLAGS_COMPILE = optionalString (! withApplePCSC)
     "-I ${getDev pcsclite}/include/PCSC";
 
   propagatedBuildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];

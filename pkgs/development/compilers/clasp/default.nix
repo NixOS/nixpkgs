@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       (x: {configureFlags = (x.configureFlags or []) ++ ["--enable-static"];}))
   ];
 
-  NIX_CXXSTDLIB_COMPILE = " -frtti ";
+  env.NIX_CXXSTDLIB_COMPILE = " -frtti ";
 
   postPatch = ''
     echo "

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sha256 = "0chk6pnn365d5kcz6vfqx1d0383ksk97icc0lzg0vvb0kvyj0ff1";
   };
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = [
     # readdir_r(3) is deprecated in glibc >= 2.24
     "-Wno-error=deprecated-declarations"
     # gcc8 catching polymorphic type error

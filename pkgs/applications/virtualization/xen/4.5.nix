@@ -243,7 +243,7 @@ callPackage (import ./generic.nix (rec {
   ];
 
   # Fix build on Glibc 2.24.
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postPatch = ''
     # Avoid a glibc >= 2.25 deprecation warnings that get fatal via -Werror.

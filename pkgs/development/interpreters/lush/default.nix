@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  NIX_LDFLAGS=" -lz ";
+  env.NIX_LDFLAGS=" -lz ";
 
   meta = {
     description = "Lisp Universal SHell";

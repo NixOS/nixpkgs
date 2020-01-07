@@ -195,7 +195,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
     ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
     ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''

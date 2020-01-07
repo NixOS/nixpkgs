@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
     ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON"
     ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.
-  NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
+  env.NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
 
   enableParallelBuilding = true;
 

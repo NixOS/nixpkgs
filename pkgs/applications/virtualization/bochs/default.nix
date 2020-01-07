@@ -104,8 +104,8 @@ stdenv.mkDerivation rec {
          "--enable-es1370"
          "--enable-busmouse" ];
 
-  NIX_CFLAGS_COMPILE="-I${gtk2.dev}/include/gtk-2.0/ -I${libtool}/include/";
-  NIX_LDFLAGS="-L${libtool.lib}/lib";
+  env.NIX_CFLAGS_COMPILE="-I${gtk2.dev}/include/gtk-2.0/ -I${libtool}/include/";
+  env.NIX_LDFLAGS="-L${libtool.lib}/lib";
 
   hardeningDisable = [ "format" ];
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     wafConfigureFlagsArray+=("--mupenapi=$APIDIR" "--wxconfig=`type -P wx-config`")
   '';
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = {
     description = "GUI for the Mupen64Plus 2.0 emulator";

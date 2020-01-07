@@ -130,12 +130,14 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
-  CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
-  LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-  LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
-  NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
-  # Determinism: We fix the hashes of str, bytes and datetime objects.
-  PYTHONHASHSEED=0;
+  env = {
+    CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+    LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
+    LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
+    NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
+    # Determinism: We fix the hashes of str, bytes and datetime objects.
+    PYTHONHASHSEED = 0;
+  };
 
   configureFlags = [
     "--enable-shared"

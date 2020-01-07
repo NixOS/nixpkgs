@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
     rmdir $out/usr
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = [ "-GNinja" ];
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
-  NIX_LDFLAGS = "-lz"
+  env.NIX_LDFLAGS = "-lz"
     + stdenv.lib.optionalString (!isGdkQuartzBackend) " -lX11";
 
   desktopItem = makeDesktopItem {

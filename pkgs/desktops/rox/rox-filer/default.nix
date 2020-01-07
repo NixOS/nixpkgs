@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libxml2 gtk shared-mime-info libSM ];
-  NIX_LDFLAGS = "-ldl -lm";
+  env.NIX_LDFLAGS = "-ldl -lm";
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch

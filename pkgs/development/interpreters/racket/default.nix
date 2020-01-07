@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
-  NIX_LDFLAGS = stdenv.lib.concatStringsSep " " [
+  env.NIX_LDFLAGS = stdenv.lib.concatStringsSep " " [
     (stdenv.lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
     (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];

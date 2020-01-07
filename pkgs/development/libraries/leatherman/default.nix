@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = builtins.toString [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=ignored-qualifiers"
     "-Wno-error=class-memaccess"
     "-Wno-error=catch-value"

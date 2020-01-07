@@ -88,6 +88,8 @@ in rec {
 
     , patches ? []
 
+    , env ? {}
+
     , ... } @ attrs:
 
     let
@@ -180,13 +182,16 @@ in rec {
         lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
           (lib.concatLists propagatedDependencies));
 
+      envIsExportable = lib.isAttrs env && !lib.isDerivation env;
+
       derivationArg =
         (removeAttrs attrs
-          ["meta" "passthru" "pos"
+          (["meta" "passthru" "pos"
            "checkInputs" "installCheckInputs"
            "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
-           "sandboxProfile" "propagatedSandboxProfile"])
+           "sandboxProfile" "propagatedSandboxProfile"]
+           ++ lib.optional envIsExportable "env"))
         // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
           name = "${attrs.pname}-${attrs.version}";
         } // (lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version)))) {
@@ -310,18 +315,27 @@ in rec {
                        else true);
         };
 
+      checkedEnv = let
+        envNames = lib.attrNames env;
+        drvNames = lib.attrNames derivationArg;
+      in
+        assert lib.assertMsg (lib.mutuallyExclusive envNames drvNames) "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${lib.concatStringsSep ", " (lib.intersectLists envNames drvNames)}";
+        lib.mapAttrs
+          (n: v: assert lib.assertMsg (lib.isString v || lib.isBool v || lib.isInt v) "The ‘env’ attribute set can only contain string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+          env;
+
     in
 
       lib.extendDerivation
         validity.handled
         ({
            overrideAttrs = f: mkDerivation (attrs // (f attrs));
-           inherit meta passthru;
+           inherit meta passthru env;
          } //
          # Pass through extra attributes that are not inputs, but
          # should be made available to Nix expressions using the
          # derivation (e.g., in assertions).
          passthru)
-        (derivation derivationArg);
+        (derivation (derivationArg // lib.optionalAttrs envIsExportable checkedEnv));
 
 }

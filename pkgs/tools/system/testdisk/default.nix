@@ -41,7 +41,7 @@ assert enableQt -> qwt != null;
 
   nativeBuildInputs = [ pkgconfig ];
 
-  NIX_CFLAGS_COMPILE="-Wno-unused";
+  env.NIX_CFLAGS_COMPILE="-Wno-unused";
 
   meta = with stdenv.lib; {
     homepage = https://www.cgsecurity.org/wiki/Main_Page;

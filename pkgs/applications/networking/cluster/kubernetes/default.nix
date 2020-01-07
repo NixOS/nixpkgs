@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # go env breaks the sandbox
     substituteInPlace "hack/lib/golang.sh" \
-      --replace 'echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"' 'echo "${go.GOOS}/${go.GOARCH}"'
+      --replace 'echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"' 'echo "${go.env.GOOS}/${go.env.GOARCH}"'
 
     substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
     # hack/update-munge-docs.sh only performs some tests on the documentation.

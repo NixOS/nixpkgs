@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1iziymcbpc64d44djgqfifpblsly4sr5bxsp5g29jgxz552kjlah";
   };
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
+  env.NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
 
   preBuild = ''
     substituteInPlace src/Makefile --replace "CC=gcc" "CC?=gcc"

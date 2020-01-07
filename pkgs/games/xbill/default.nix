@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXpm libXt motif ];
 
-  NIX_CFLAGS_LINK = "-lXpm";
+  env.NIX_CFLAGS_LINK = "-lXpm";
 
   configureFlags = [
     "--with-x"

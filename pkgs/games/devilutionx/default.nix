@@ -10,10 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lx903gchda4bgr71469yn63rx5ya6xv9j1azx18nrv3sskrphn4";
   };
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2_ttf}/include/SDL2"
-    ''-DTTF_FONT_PATH="${placeholder "out"}/share/fonts/truetype/CharisSILB.ttf"''
-  ];
+  env.NIX_CFLAGS_COMPILE = ''-I${SDL2_ttf}/include/SDL2 -DTTF_FONT_PATH="${placeholder "out"}/share/fonts/truetype/CharisSILB.ttf"'';
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ libsodium SDL2 SDL2_mixer SDL2_ttf ];

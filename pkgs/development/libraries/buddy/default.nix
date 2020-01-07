@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison ];
   patches = [ ./gcc-4.3.3-fixes.patch ];
   configureFlags = [ "CFLAGS=-O3" "CXXFLAGS=-O3" ];
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
   doCheck = true;
 
   meta = {

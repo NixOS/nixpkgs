@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "--with-table-redis"
   ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString enableRedis
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString enableRedis
       "-I${hiredis}/include/hiredis -lhiredis"
     + stdenv.lib.optionalString enableMysql
       " -L${libmysqlclient}/lib/mysql";

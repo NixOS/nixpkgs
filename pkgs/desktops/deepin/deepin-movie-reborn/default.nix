@@ -46,7 +46,7 @@ mkDerivation rec {
     })
   ];
 
-  NIX_LDFLAGS = "-ldvdnav";
+  env.NIX_LDFLAGS = "-ldvdnav";
 
 
   postPatch = ''

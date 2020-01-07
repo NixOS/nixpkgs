@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     curl libjpeg libpng gettext cunit
   ];
 
-  NIX_CFLAGS_LINK = "-lgcc_s"; # to avoid occasional runtime error in finding libgcc_s.so.1
+  env.NIX_CFLAGS_LINK = "-lgcc_s"; # to avoid occasional runtime error in finding libgcc_s.so.1
 
   meta = {
     homepage = http://ufoai.org;

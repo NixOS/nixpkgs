@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp gpgstats $out/bin
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.is64bit)
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.is64bit)
     "-D_FILE_OFFSET_BITS=64 -DLARGEFILE_SOURCE=1";
 
   meta = with stdenv.lib; {

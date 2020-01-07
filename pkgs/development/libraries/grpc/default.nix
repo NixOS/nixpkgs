@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
 
   enableParallelBuilds = true;
 

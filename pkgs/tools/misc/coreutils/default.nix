@@ -15,7 +15,7 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (recursiveUpdate rec {
   pname = "coreutils";
   version = "8.31";
 
@@ -106,8 +106,10 @@ stdenv.mkDerivation rec {
   # man/sha512sum.td/sha512sum’.
   enableParallelBuilding = false;
 
-  NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
-  FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
+  env = {
+    NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
+    FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
+  };
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
@@ -144,7 +146,7 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.eelco ];
   };
 
-} // optionalAttrs stdenv.hostPlatform.isMusl {
+} (optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.
-  NIX_CFLAGS_COMPILE = "-Wno-error";
-}
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+}))

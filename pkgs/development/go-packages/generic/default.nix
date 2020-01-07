@@ -79,10 +79,10 @@ let
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
     buildInputs = buildInputs;
 
-    inherit (go) GOOS GOARCH GO386 CGO_ENABLED;
+    inherit (go.env) GOOS GOARCH GO386 CGO_ENABLED;
 
-    GOHOSTARCH = go.GOHOSTARCH or null;
-    GOHOSTOS = go.GOHOSTOS or null;
+    GOHOSTARCH = go.env.GOHOSTARCH or null;
+    GOHOSTOS = go.env.GOHOSTOS or null;
 
     GO111MODULE = "off";
 

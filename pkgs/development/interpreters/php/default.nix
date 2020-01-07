@@ -109,7 +109,7 @@ let
         ++ optional libzipSupport libzip
         ++ optional valgrindSupport valgrind;
 
-      CXXFLAGS = optionalString stdenv.cc.isClang "-std=c++11";
+      env.CXXFLAGS = optionalString stdenv.cc.isClang "-std=c++11";
 
       configureFlags = [
         "--with-config-file-scan-dir=/etc/php.d"

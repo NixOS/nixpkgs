@@ -127,7 +127,7 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
-  NIX_NO_SELF_RPATH = true;
+  env.NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
 

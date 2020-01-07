@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
   '';
 
-  NIX_LDFLAGS = "-lgcc_s";
+  env.NIX_LDFLAGS = "-lgcc_s";
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ glib libXinerama ]

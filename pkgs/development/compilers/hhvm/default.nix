@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   dontUseCmakeBuildDir = true;
-  NIX_LDFLAGS = "-lpam -L${pam}/lib";
+  env.NIX_LDFLAGS = "-lpam -L${pam}/lib";
 
   # work around broken build system
-  NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
+  env.NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
 
   # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
   # (setting it to an absolute path causes include files to go to $out/$out/include,

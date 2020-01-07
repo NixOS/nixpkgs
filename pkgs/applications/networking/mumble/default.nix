@@ -85,7 +85,7 @@ let
       "CONFIG+=no-server"
     ];
 
-    NIX_CFLAGS_COMPILE = optional speechdSupport "-I${speechd}/include/speech-dispatcher";
+    env.NIX_CFLAGS_COMPILE = optional speechdSupport "-I${speechd}/include/speech-dispatcher";
 
     installPhase = ''
       # bin stuff

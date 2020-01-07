@@ -133,7 +133,7 @@ stdenv.mkDerivation ({
   outputs = if langJava || langGo then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
-  NIX_NO_SELF_RPATH = true;
+  env.NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
 

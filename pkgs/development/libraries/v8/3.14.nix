@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   buildInputs = [ readline python icu ];
 
   # http://code.google.com/p/v8/issues/detail?id=2149
-  NIX_CFLAGS_COMPILE = concatStringsSep " " [
+  env.NIX_CFLAGS_COMPILE = concatStringsSep " " [
     "-Wno-error=strict-overflow"
     "-Wno-unused-local-typedefs"
     "-Wno-aggressive-loop-optimizations"

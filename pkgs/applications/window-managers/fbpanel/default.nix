@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  NIX_LDFLAGS="-lX11";
+  env.NIX_LDFLAGS="-lX11";
 
   meta = with stdenv.lib; {
     description = "A stand-alone panel";

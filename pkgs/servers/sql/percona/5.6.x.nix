@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
-  NIX_LDFLAGS = "-lgcc_s";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=address-of-packed-member";
+  env.NIX_LDFLAGS = "-lgcc_s";
 
   prePatch = ''
     sed -i -e "s|/usr/bin/libtool|libtool|" cmake/libutils.cmake

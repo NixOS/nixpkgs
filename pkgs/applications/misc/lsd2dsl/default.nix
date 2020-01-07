@@ -16,7 +16,7 @@ mkDerivation rec {
 
   buildInputs = [ boost libvorbis libsndfile minizip gtest ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   installPhase = ''
     install -Dm755 lsd2dsl $out/bin/lsd2dsl

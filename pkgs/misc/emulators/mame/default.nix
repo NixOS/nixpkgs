@@ -27,7 +27,7 @@ in mkDerivation {
   };
 
   hardeningDisable = [ "fortify" ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
+  env.NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
 
   makeFlags = [ "TOOLS=1" ];
 

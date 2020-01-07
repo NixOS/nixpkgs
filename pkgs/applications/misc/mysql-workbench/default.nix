@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   '';
 
     # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"

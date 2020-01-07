@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake fcitx gettext ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   ];
   configureScript = "./autogen.sh";
   configureFlags = [ "--enable-scrypt" "--enable-opencl" ];
-  NIX_LDFLAGS = "-lgcc_s -lX11 -lXext -lXinerama";
+  env.NIX_LDFLAGS = "-lgcc_s -lX11 -lXext -lXinerama";
 
   postBuild = ''
     gcc api-example.c -o cgminer-api

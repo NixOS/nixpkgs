@@ -13,7 +13,7 @@ buildPythonPackage rec {
   buildInputs = [ exiv2 boost ];
 
   # work around python distutils compiling C++ with $CC (see issue #26709)
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   # fix broken libboost_python3 detection
   patches = [

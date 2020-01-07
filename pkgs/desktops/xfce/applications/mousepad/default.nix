@@ -11,7 +11,7 @@ mkXfceDerivation {
   buildInputs = [ glib gtk3 gtksourceview3 xfconf ];
 
   # See https://github.com/NixOS/nixpkgs/issues/36468
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = {
     description = "A simple text editor for Xfce";

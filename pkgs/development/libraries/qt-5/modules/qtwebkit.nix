@@ -50,7 +50,7 @@ qtModule {
     export qmakeFlags="$qmakeFlags CONFIG+=silent"
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = [
       # with gcc7 this warning blows the log over Hydra's limit
       "-Wno-expansion-to-defined"
     ]

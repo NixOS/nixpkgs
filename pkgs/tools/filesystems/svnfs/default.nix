@@ -15,8 +15,8 @@ stdenv.mkDerivation {
     export LD_LIBRARY_PATH=${subversion.out}/lib
   '';
 
-  NIX_CFLAGS_COMPILE="-I ${subversion.dev}/include/subversion-1";
-  NIX_LDFLAGS="-lsvn_client-1 -lsvn_subr-1";
+  env.NIX_CFLAGS_COMPILE="-I ${subversion.dev}/include/subversion-1";
+  env.NIX_LDFLAGS="-lsvn_client-1 -lsvn_subr-1";
 
   meta = {
     description = "FUSE filesystem for accessing Subversion repositories";

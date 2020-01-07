@@ -12,5 +12,5 @@ qtModule {
     ++ optional (stdenv.isLinux) alsaLib;
   outputs = [ "bin" "dev" "out" ];
   qmakeFlags = [ "GST_VERSION=1.0" ];
-  NIX_LDFLAGS = optionalString (stdenv.isDarwin) "-lobjc";
+  env.NIX_LDFLAGS = optionalString (stdenv.isDarwin) "-lobjc";
 }

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ re2 texinfo ];
 
-  NIX_LDFLAGS="-lre2 -lpthread";
+  env.NIX_LDFLAGS="-lre2 -lpthread";
 
   configureFlags = [
     "--enable-maintainer-mode"

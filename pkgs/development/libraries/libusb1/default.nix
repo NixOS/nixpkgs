@@ -26,7 +26,7 @@ stdenv.mkDerivation (rec {
     stdenv.lib.optional enableSystemd systemd ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  env.NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
     sed 's,-ludev,-L${stdenv.lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la

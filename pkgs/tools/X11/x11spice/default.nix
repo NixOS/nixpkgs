@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     gtk2 spice spice-protocol
   ];
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   meta = with stdenv.lib; {
     description = ''

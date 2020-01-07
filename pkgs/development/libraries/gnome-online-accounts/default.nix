@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   postPatch = ''
     chmod +x meson_post_install.py

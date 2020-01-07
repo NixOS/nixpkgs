@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  NIX_CFLAGS_COMPILE = "-I${xorg.xorgproto}/include -I${libXft.dev}/include";
+  env.NIX_CFLAGS_COMPILE = "-I${xorg.xorgproto}/include -I${libXft.dev}/include";
 
   patchPhase = ''
     cd source

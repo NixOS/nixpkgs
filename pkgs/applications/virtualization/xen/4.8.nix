@@ -167,7 +167,7 @@ callPackage (import ./generic.nix (rec {
     xenpmdpatch
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Fix build on Glibc 2.24
     "-Wno-error=deprecated-declarations"
     # Fix build with GCC8

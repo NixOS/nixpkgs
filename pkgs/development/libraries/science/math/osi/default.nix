@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     lib.optionals withGurobi [ "--with-gurobi-incdir=${gurobi}/include" "--with-gurobi-lib=-lgurobi${gurobi.libSuffix}" ]
     ++ lib.optionals withCplex [ "--with-cplex-incdir=${cplex}/cplex/include/ilcplex" "--with-cplex-lib=-lcplex${cplex.libSuffix}" ];
 
-  NIX_LDFLAGS =
+  env.NIX_LDFLAGS =
     lib.optionalString withCplex "-L${cplex}/cplex/bin/${cplex.libArch}";
 
   # Compile errors
-  NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
+  env.NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;

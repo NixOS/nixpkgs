@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = builtins.toString [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
     # igrone glib-2.62 deprecations
     # Drop in next stable release.
     "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
