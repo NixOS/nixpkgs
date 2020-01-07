@@ -83,6 +83,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
   hardeningDisable = [ "format" ];
 
+  postInstall = ''
+    substituteInPlace $out/bin/get_species_taxids.sh \
+        --replace /bin/rm ${coreutils}/bin/rm
+  '';
   patches = [ ./no_slash_bin.patch ];
 
   enableParallelBuilding = true;
