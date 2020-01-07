@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "0sifcrqs82kg9zxqnlr1pl4cw9v9qqakyg3rkysywc9svbikd1g3";
+    sha256 = "0lh0m5wmr5a73zgqnnrrcnrywy7wjsrs839agiq9hf1yrgav3m8z";
   };
 
   # $out for the library and $examples for the example programs (in examples):
