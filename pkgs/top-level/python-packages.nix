@@ -552,6 +552,8 @@ in {
 
   codespell = callPackage ../development/python-modules/codespell { };
 
+  crc32c = callPackage ../development/python-modules/crc32c { };
+
   curio = callPackage ../development/python-modules/curio { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };
