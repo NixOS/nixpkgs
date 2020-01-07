@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcsclite";
-  version = "1.8.25";
+  version = "1.8.26";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "14l7irs1nsh8b036ag4cfy8wryyysch78scz5dw6xxqwqgnpjvfp";
+    sha256 = "1ndvvz0fgqwz70pijymsxmx25mzryb0zav1i8jjc067ndryvxdry";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
