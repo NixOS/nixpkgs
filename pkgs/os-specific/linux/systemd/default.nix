@@ -30,7 +30,7 @@ let gnupg-minimal = gnupg.override {
   bzip2 = null;
 };
 in stdenv.mkDerivation {
-  version = "243.3";
+  version = "243.4";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
