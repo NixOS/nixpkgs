@@ -1983,6 +1983,12 @@
     githubId = 50854;
     name = "edef";
   };
+  emantor = {
+    email = "rouven+nixos@czerwinskis.de";
+    github = "emantor";
+    githubId = 934284;
+    name = "Rouven Czerwinski";
+  };
   embr = {
     email = "hi@liclac.eu";
     github = "liclac";

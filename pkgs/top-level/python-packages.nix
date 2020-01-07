@@ -6294,6 +6294,8 @@ in {
 
   xlsx2csv = callPackage ../development/python-modules/xlsx2csv { };
 
+  xmodem = callPackage ../development/python-modules/xmodem {};
+
   xmpppy = callPackage ../development/python-modules/xmpppy {};
 
   xstatic = callPackage ../development/python-modules/xstatic {};
