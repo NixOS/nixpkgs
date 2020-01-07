@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "catalogue";
-  version = "0.0.8";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c407a51c22f51b0f938104b6396c489145bae234386e68eb1d56326c3b3e128e";
+    sha256 = "0zha0gzqfkazc9da0cyjys5ghf20ihyhkgd1h5zxkxlf8zhz03s3";
   };
 
   propagatedBuildInputs = [ importlib-metadata ];
