@@ -63,10 +63,9 @@ in {
       };
     };
 
-    users.users = [{
-      name = "telegraf";
+    users.users.telegraf = {
       uid = config.ids.uids.telegraf;
       description = "telegraf daemon user";
-    }];
+    };
   };
 }

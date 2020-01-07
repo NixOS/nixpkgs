@@ -240,7 +240,7 @@ let
   serviceConfig = { name, config, ... }: {
     config = mkMerge
       [ { # Default path for systemd services.  Should be quite minimal.
-          path =
+          path = mkAfter
             [ pkgs.coreutils
               pkgs.findutils
               pkgs.gnugrep

@@ -1,4 +1,4 @@
-{ stdenv, pkgs, python3, fetchpatch }:
+{ stdenv, pkgs, python3, fetchpatch, glibcLocales }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "khal";
@@ -11,11 +11,14 @@ with python3.pkgs; buildPythonApplication rec {
 
   # Include a khal.desktop file via upstream commit.
   # This patch should be removed when updating to the next version, probably.
-  patches = [ (fetchpatch {
-    name = "add-khal-dot-desktop.patch";
-    url = "https://github.com/pimutils/khal/commit/1f93d238fec7c934dd2f8e48f54925d22130e3aa.patch";
-    sha256 = "06skn3van7zd93348fc6axllx71ckkc7h2zljqlvwa339vca608c";
-  }) ];
+  patches = [
+    (fetchpatch {
+      name = "add-khal-dot-desktop.patch";
+      url = "https://github.com/pimutils/khal/commit/1f93d238fec7c934dd2f8e48f54925d22130e3aa.patch";
+      sha256 = "06skn3van7zd93348fc6axllx71ckkc7h2zljqlvwa339vca608c";
+    })
+    ./skip-broken-test.patch
+  ];
 
   propagatedBuildInputs = [
     atomicwrites
@@ -35,7 +38,8 @@ with python3.pkgs; buildPythonApplication rec {
     freezegun
   ];
   nativeBuildInputs = [ setuptools_scm sphinx sphinxcontrib_newsfeed ];
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest glibcLocales ];
+  LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     # zsh completion

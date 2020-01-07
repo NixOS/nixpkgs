@@ -42,9 +42,8 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.users = singleton
-      { name = fahUser;
-        uid = config.ids.uids.foldingathome;
+    users.users.${fahUser} =
+      { uid = config.ids.uids.foldingathome;
         description = "Folding@Home user";
         home = stateDir;
       };

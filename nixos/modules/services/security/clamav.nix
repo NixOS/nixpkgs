@@ -83,18 +83,15 @@ in
   config = mkIf (cfg.updater.enable || cfg.daemon.enable) {
     environment.systemPackages = [ pkg ];
 
-    users.users = singleton {
-      name = clamavUser;
+    users.users.${clamavUser} = {
       uid = config.ids.uids.clamav;
       group = clamavGroup;
       description = "ClamAV daemon user";
       home = stateDir;
     };
 
-    users.groups = singleton {
-      name = clamavGroup;
-      gid = config.ids.gids.clamav;
-    };
+    users.groups.${clamavGroup} =
+      { gid = config.ids.gids.clamav; };
 
     environment.etc."clamav/freshclam.conf".source = freshclamConfigFile;
     environment.etc."clamav/clamd.conf".source = clamdConfigFile;

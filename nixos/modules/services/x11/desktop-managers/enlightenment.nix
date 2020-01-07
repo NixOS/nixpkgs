@@ -68,10 +68,7 @@ in
 
     security.wrappers = (import "${e.enlightenment}/e-wrappers.nix").security.wrappers;
 
-    environment.etc = singleton
-      { source = xcfg.xkbDir;
-        target = "X11/xkb";
-      };
+    environment.etc."X11/xkb".source = xcfg.xkbDir;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
 

@@ -56,9 +56,8 @@ in
 
   config = mkIf config.services.toxBootstrapd.enable {
 
-    users.users = singleton
-      { name = "tox-bootstrapd";
-        uid = config.ids.uids.tox-bootstrapd;
+    users.users.tox-bootstrapd =
+      { uid = config.ids.uids.tox-bootstrapd;
         description = "Tox bootstrap daemon user";
         inherit home;
         createHome = true;

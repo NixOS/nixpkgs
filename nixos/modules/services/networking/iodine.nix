@@ -147,8 +147,7 @@ in
       };
     };
 
-    users.users = singleton {
-      name = iodinedUser;
+    users.users.${iodinedUser} = {
       uid = config.ids.uids.iodined;
       description = "Iodine daemon user";
     };

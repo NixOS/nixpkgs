@@ -242,8 +242,7 @@ rec {
 
     path = mkOptionType {
       name = "path";
-      # Hacky: there is no ‘isPath’ primop.
-      check = x: builtins.substring 0 1 (toString x) == "/";
+      check = x: isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
       merge = mergeEqualOption;
     };
 
@@ -295,26 +294,43 @@ rec {
     # List or attribute set of ...
     loaOf = elemType:
       let
-        convertAllLists = defs:
+        convertAllLists = loc: defs:
           let
             padWidth = stringLength (toString (length defs));
             unnamedPrefix = i: "unnamed-" + fixedWidthNumber padWidth i + ".";
           in
-            imap1 (i: convertIfList (unnamedPrefix i)) defs;
-
-        convertIfList = unnamedPrefix: def:
+            imap1 (i: convertIfList loc (unnamedPrefix i)) defs;
+        convertIfList = loc: unnamedPrefix: def:
           if isList def.value then
             let
               padWidth = stringLength (toString (length def.value));
               unnamed = i: unnamedPrefix + fixedWidthNumber padWidth i;
+              res =
+                { inherit (def) file;
+                  value = listToAttrs (
+                    imap1 (elemIdx: elem:
+                      { name  = elem.name or (unnamed elemIdx);
+                        value = elem;
+                      }) def.value);
+                };
+              option = concatStringsSep "." loc;
+              sample = take 3 def.value;
+              list = concatMapStrings (x: ''{ name = "${x.name or "unnamed"}"; ...} '') sample;
+              set = concatMapStrings (x: ''${x.name or "unnamed"} = {...}; '') sample;
+              msg = ''
+                In file ${def.file}
+                a list is being assigned to the option config.${option}.
+                This will soon be an error as type loaOf is deprecated.
+                See https://git.io/fj2zm for more information.
+                Do
+                  ${option} =
+                    { ${set}...}
+                instead of
+                  ${option} =
+                    [ ${list}...]
+              '';
             in
-              { inherit (def) file;
-                value = listToAttrs (
-                  imap1 (elemIdx: elem:
-                    { name = elem.name or (unnamed elemIdx);
-                      value = elem;
-                    }) def.value);
-              }
+              lib.warn msg res
           else
             def;
         attrOnly = attrsOf elemType;
@@ -322,7 +338,7 @@ rec {
         name = "loaOf";
         description = "list or attribute set of ${elemType.description}s";
         check = x: isList x || isAttrs x;
-        merge = loc: defs: attrOnly.merge loc (convertAllLists defs);
+        merge = loc: defs: attrOnly.merge loc (convertAllLists loc defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
         getSubModules = elemType.getSubModules;
         substSubModules = m: loaOf (elemType.substSubModules m);

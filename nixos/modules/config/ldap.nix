@@ -224,7 +224,9 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc = optional (!cfg.daemon.enable) ldapConfig;
+    environment.etc = optionalAttrs (!cfg.daemon.enable) {
+      "ldap.conf" = ldapConfig;
+    };
 
     system.activationScripts = mkIf (!cfg.daemon.enable) {
       ldap = stringAfter [ "etc" "groups" "users" ] ''

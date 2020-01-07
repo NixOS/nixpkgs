@@ -212,7 +212,7 @@ in
 
     security.pam.services.sudo = { sshAgentAuth = true; };
 
-    environment.etc = singleton
+    environment.etc.sudoers =
       { source =
           pkgs.runCommand "sudoers"
           {
@@ -222,7 +222,6 @@ in
           # Make sure that the sudoers file is syntactically valid.
           # (currently disabled - NIXOS-66)
           "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
-        target = "sudoers";
         mode = "0440";
       };
 

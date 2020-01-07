@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=incompatible-pointer-types" ];
+
   prePatch = ''
     substituteInPlace ./ddcci/Makefile \
       --replace 'SUBDIRS="$(src)"' 'M=$(PWD)' \

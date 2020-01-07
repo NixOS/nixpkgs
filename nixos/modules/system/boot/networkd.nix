@@ -872,10 +872,10 @@ let
         '';
     };
 
-  unitFiles = map (name: {
-    target = "systemd/network/${name}";
-    source = "${cfg.units.${name}.unit}/${name}";
-  }) (attrNames cfg.units);
+  unitFiles = listToAttrs (map (name: {
+    name = "systemd/network/${name}";
+    value.source = "${cfg.units.${name}.unit}/${name}";
+  }) (attrNames cfg.units));
 in
 
 {
@@ -938,7 +938,7 @@ in
 
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = map (f: f.source) (unitFiles);
+      restartTriggers = attrNames unitFiles;
       # prevent race condition with interface renaming (#39069)
       requires = [ "systemd-udev-settle.service" ];
       after = [ "systemd-udev-settle.service" ];
