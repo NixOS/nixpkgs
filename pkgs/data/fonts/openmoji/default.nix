@@ -12,13 +12,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openmoji";
-  version = "12.0.0";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
     repo = pname;
     rev = version;
-    sha256 = "0h8sr74gbdmcm8vv8pxlig50mmbf9w9lh4p8ih2lqqi5iry1dvhj";
+    sha256 = "11221xw13lsv2znxs295m61cn69wkp5934b0aaddpki2vp6q3n0r";
   };
 
   nativeBuildInputs = [
