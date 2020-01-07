@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0n2l1fxr7bynnarpwdjifb2fvlsq8w5wmfh31yk5nrc756cjlgyw";
   };
+  patches = [
+    # Can be removed when upgrading beyond 2.2.0
+    ./reproducible-manpages.patch
+  ];
 
   enableParallelBuilding = true;
 
