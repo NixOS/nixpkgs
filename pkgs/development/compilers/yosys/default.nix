@@ -1,8 +1,15 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, bison, flex
-, tcl, readline, libffi, python3
-, protobuf, zlib
+{ stdenv
+, bison
+, fetchFromGitHub
+, flex
+, libffi
+, pkgconfig
+, protobuf
+, python3
+, readline
+, tcl
 , verilog
+, zlib
 }:
 
 with builtins;
@@ -37,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ tcl readline libffi python3 bison flex protobuf zlib ];
 
-  makeFlags = [ "ENABLE_PROTOBUF=1" ];
+  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
 
   patchPhase = ''
     substituteInPlace ../yosys-abc/Makefile \
@@ -58,7 +65,6 @@ stdenv.mkDerivation rec {
     ln -s ../yosys-abc abc
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCREV := default' >> Makefile.conf
-    makeFlags="PREFIX=$out $makeFlags"
 
     # we have to do this ourselves for some reason...
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
