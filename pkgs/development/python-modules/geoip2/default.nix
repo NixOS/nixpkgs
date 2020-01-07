@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.9.0";
+  version = "3.0.0";
   pname = "geoip2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w7cay5q6zawjzivqbwz5cqx1qbdjw6kbriccb7l46p7b39fkzzp";
+    sha256 = "1q1ciqqd0qjkpgwsg9fws8wcqchkcq84gv2g4q3xgh2lpj3yjsaq";
   };
 
   propagatedBuildInputs = [ requests maxminddb ]
