@@ -15120,6 +15120,8 @@ in
 
   do-agent = callPackage ../servers/monitoring/do-agent { };
 
+  dodgy = with python3Packages; toPythonApplication dodgy;
+
   dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
 

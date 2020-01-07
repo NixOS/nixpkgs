@@ -1852,6 +1852,8 @@ in {
 
   defusedxml = callPackage ../development/python-modules/defusedxml {};
 
+  dodgy = callPackage ../development/python-modules/dodgy { };
+
   dugong = callPackage ../development/python-modules/dugong {};
 
   easysnmp = callPackage ../development/python-modules/easysnmp {
