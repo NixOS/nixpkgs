@@ -135,6 +135,7 @@
   ./programs/nm-applet.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
+  ./programs/plan9port.nix
   ./programs/plotinus.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
