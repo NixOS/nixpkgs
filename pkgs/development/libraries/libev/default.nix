@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, static ? false }:
 
 stdenv.mkDerivation rec {
   pname = "libev";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "http://dist.schmorp.de/libev/Attic/${pname}-${version}.tar.gz";
     sha256 = "0kil23cgsp0r5shvnwwbsy7fzxb62sxqzqbkbkfp5w54ipy2cm9d";
   };
+
+  configureFlags = stdenv.lib.optional (static) "LDFLAGS=-static";
 
   meta = {
     description = "A high-performance event loop/event model with lots of features";
