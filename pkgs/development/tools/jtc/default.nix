@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jtc";
-  version = "1.74";
+  version = "1.75c";
 
   src = fetchFromGitHub {
     owner = "ldn-softdev";
     repo = pname;
     rev = version;
-    sha256 = "04hzamgs4k0x58cf4dw0a46kyw79yvcd5vazbklbjl6ap3rmnrx3";
+    sha256 = "0q72vak1sbhigqq1a0s873knnm666sz1k3sdxbbi3bzq1x8mnykd";
   };
 
   buildPhase = ''
