@@ -99,7 +99,7 @@ in {
     };
 
     users.groups = optionalAttrs (cfg.group == "opendkim") {
-      opendkimgid = config.ids.gids.opendkim;
+      opendkim.gid = config.ids.gids.opendkim;
     };
 
     environment.systemPackages = [ pkgs.opendkim ];
