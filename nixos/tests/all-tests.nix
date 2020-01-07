@@ -61,6 +61,7 @@ in
   containers-portforward = handleTest ./containers-portforward.nix {};
   containers-restart_networking = handleTest ./containers-restart_networking.nix {};
   containers-tmpfs = handleTest ./containers-tmpfs.nix {};
+  corerad = handleTest ./corerad.nix {};
   couchdb = handleTest ./couchdb.nix {};
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
