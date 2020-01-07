@@ -2250,6 +2250,8 @@ in
 
   atool = callPackage ../tools/archivers/atool { };
 
+  bash_unit = callPackage ../tools/misc/bash_unit { };
+
   bsc = callPackage ../tools/compression/bsc {
     inherit (llvmPackages) openmp;
   };
