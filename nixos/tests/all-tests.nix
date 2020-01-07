@@ -91,6 +91,7 @@ in
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   fluentd = handleTest ./fluentd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
+  freeswitch = handleTest ./freeswitch.nix {};
   fsck = handleTest ./fsck.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   gitea = handleTest ./gitea.nix {};
