@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, h5py
 , nose
 }:
 
@@ -12,6 +13,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "fe2779664bd8846f2d67191a7e6010b8df890ac4586336748fd0697f31654379";
   };
+
+  nativeBuildInputs = [ h5py ];
 
   checkInputs = [
     nose

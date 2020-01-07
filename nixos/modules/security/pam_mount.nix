@@ -36,8 +36,7 @@ in
   config = mkIf (cfg.enable || anyPamMount) {
 
     environment.systemPackages = [ pkgs.pam_mount ];
-    environment.etc = [{
-      target = "security/pam_mount.conf.xml";
+    environment.etc."security/pam_mount.conf.xml" = {
       source =
         let
           extraUserVolumes = filterAttrs (n: u: u.cryptHomeLuks != null) config.users.users;
@@ -66,7 +65,7 @@ in
           ${concatStringsSep "\n" cfg.extraVolumes}
           </pam_mount>
           '';
-    }];
+    };
 
   };
 }

@@ -100,18 +100,18 @@ in
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "solr") (singleton
-      { name = "solr";
+    users.users = optionalAttrs (cfg.user == "solr") {
+      solr = {
         group = cfg.group;
         home = cfg.stateDir;
         createHome = true;
         uid = config.ids.uids.solr;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "solr") (singleton
-      { name = "solr";
-        gid = config.ids.gids.solr;
-      });
+    users.groups = optionalAttrs (cfg.group == "solr") {
+      solr.gid = config.ids.gids.solr;
+    };
 
   };
 

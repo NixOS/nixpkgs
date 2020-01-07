@@ -1,15 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, pydns }:
+{ lib, python, buildPythonPackage, fetchFromGitHub, pydns }:
 
 buildPythonPackage rec {
   pname = "pyspf";
-  version = "2.0.13"; # version 2.0.13 should not be used, see #72791
+  version = "2.0.14";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "62dc1be39519e343202d480da7ef93d834b5a50cd4f217bef9335ed15292929b";
+  src = fetchFromGitHub {
+    owner = "sdgathman";
+    repo = pname;
+    rev = "pyspf-${version}";
+    sha256 = "0bmimlmwrq9glnjc4i6pwch30n3y5wyqmkjfyayxqxkfrixqwydi";
   };
 
   propagatedBuildInputs = [ pydns ];
+
+  # requires /etc/resolv.conf to exist
+  doCheck = false;
 
   meta = with lib; {
     homepage = http://bmsi.com/python/milter.html;

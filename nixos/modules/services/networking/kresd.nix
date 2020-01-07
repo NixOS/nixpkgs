@@ -74,16 +74,12 @@ in
   config = mkIf cfg.enable {
     environment.etc."kresd.conf".source = configFile; # not required
 
-    users.users = singleton
-      { name = "kresd";
-        uid = config.ids.uids.kresd;
+    users.users.kresd =
+      { uid = config.ids.uids.kresd;
         group = "kresd";
         description = "Knot-resolver daemon user";
       };
-    users.groups = singleton
-      { name = "kresd";
-        gid = config.ids.gids.kresd;
-      };
+    users.groups.kresd.gid = config.ids.gids.kresd;
 
     systemd.sockets.kresd = rec {
       wantedBy = [ "sockets.target" ];

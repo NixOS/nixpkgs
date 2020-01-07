@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.3.0";
+  version = "2.4.0";
 
   # we're fetching from GitHub because tests weren't distributed on PyPi
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = version;
-    sha256 = "1xdm3misxwgrl87ms0vvn0h4rjwzlmmi7kcra2ahs40iaraf33ln";
+    sha256 = "1b9q027wrks0afl7l3a1wxymz3aick26b9fq2m07pc5wb9np0vvg";
   };
 
   checkInputs = [

@@ -15,20 +15,12 @@
             "https://github.com/bazelbuild/bazel-toolchains/archive/0.28.3.tar.gz"
         ]
     },
-    "0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip": {
-        "name": "0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip",
-        "sha256": "36fa66d4d49debd71d05fba55c1353b522e8caef4a20f8080a3d17cdda001d89",
+    "46993efdd33b73649796c5fc5c9efb193ae19d51.zip": {
+        "name": "46993efdd33b73649796c5fc5c9efb193ae19d51.zip",
+        "sha256": "66184688debeeefcc2a16a2f80b03f514deac8346fe888fb7e691a52c023dd88",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip",
-            "https://github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip"
-        ]
-    },
-    "441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip": {
-        "name": "441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip",
-        "sha256": "a07fe5e75964361885db725039c2ba673f0ee0313d971ae4f50c9b18cd28b0b5",
-        "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/platforms/archive/441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip",
-            "https://github.com/bazelbuild/platforms/archive/441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip"
+            "https://mirror.bazel.build/github.com/bazelbuild/platforms/archive/46993efdd33b73649796c5fc5c9efb193ae19d51.zip",
+            "https://github.com/bazelbuild/platforms/archive/46993efdd33b73649796c5fc5c9efb193ae19d51.zip"
         ]
     },
     "7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip": {
@@ -37,6 +29,14 @@
         "urls": [
             "https://mirror.bazel.build/github.com/bazelbuild/rules_java/archive/7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip",
             "https://github.com/bazelbuild/rules_java/archive/7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip"
+        ]
+    },
+    "8bd6cd75d03c01bb82561a96d9c1f9f7157b13d0.zip": {
+        "name": "8bd6cd75d03c01bb82561a96d9c1f9f7157b13d0.zip",
+        "sha256": "1d4dbbd1e1e9b57d40bb0ade51c9e882da7658d5bfbf22bbd15b68e7879d761f",
+        "urls": [
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/8bd6cd75d03c01bb82561a96d9c1f9f7157b13d0.zip",
+            "https://github.com/bazelbuild/rules_cc/archive/8bd6cd75d03c01bb82561a96d9c1f9f7157b13d0.zip"
         ]
     },
     "8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz": {
@@ -67,7 +67,7 @@
         "sha256": "8d3403b5b7db57e347c943d214577f6879e5b175c2b59b7e075c0b6453330e9b",
         "strip_prefix": "j2objc-2.5",
         "urls": [
-            "https://miirror.bazel.build/github.com/google/j2objc/releases/download/2.5/j2objc-2.5.zip",
+            "https://mirror.bazel.build/github.com/google/j2objc/releases/download/2.5/j2objc-2.5.zip",
             "https://github.com/google/j2objc/releases/download/2.5/j2objc-2.5.zip"
         ]
     },
@@ -165,25 +165,25 @@
             "https://github.com/bazelbuild/skydoc/archive/c7bbde2950769aac9a99364b0926230060a3ce04.tar.gz"
         ]
     },
-    "java_tools_javac11_darwin-v6.1.zip": {
-        "name": "java_tools_javac11_darwin-v6.1.zip",
-        "sha256": "f0c488dac18f18ab1a0d18bbd65288c7a128e90a24d9c16f65bd8243f79483a0",
+    "java_tools_javac11_darwin-v7.0.zip": {
+        "name": "java_tools_javac11_darwin-v7.0.zip",
+        "sha256": "373a4226906ae9ba908550da16e133c4cd1f01b8973af82b9a2eb6903cb4d645",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v6.1/java_tools_javac11_darwin-v6.1.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v7.0/java_tools_javac11_darwin-v7.0.zip"
         ]
     },
-    "java_tools_javac11_linux-v6.1.zip": {
-        "name": "java_tools_javac11_linux-v6.1.zip",
-        "sha256": "12f7940ed0bc4c2e82238951cdf19b4179c7dcc361d16fe40fe4266538fb4ac6",
+    "java_tools_javac11_linux-v7.0.zip": {
+        "name": "java_tools_javac11_linux-v7.0.zip",
+        "sha256": "3ff465e82954a70f49982610dd63f6f651beaa83c707dd637870b0e41cdcd2f0",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v6.1/java_tools_javac11_linux-v6.1.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v7.0/java_tools_javac11_linux-v7.0.zip"
         ]
     },
-    "java_tools_javac11_windows-v6.1.zip": {
-        "name": "java_tools_javac11_windows-v6.1.zip",
-        "sha256": "e2deb2efff684de78787e0bdc7620f9672d13f04a12856d8e7f677369a8e286b",
+    "java_tools_javac11_windows-v7.0.zip": {
+        "name": "java_tools_javac11_windows-v7.0.zip",
+        "sha256": "11d90a147919e74d11870cdd58c4ee5de3062c08d11b16aa72d3f3bbfa9497a0",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v6.1/java_tools_javac11_windows-v6.1.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v7.0/java_tools_javac11_windows-v7.0.zip"
         ]
     },
     "java_tools_langtools_javac10": {
@@ -362,20 +362,20 @@
     },
     "platforms": {
         "name": "platforms",
-        "sha256": "a07fe5e75964361885db725039c2ba673f0ee0313d971ae4f50c9b18cd28b0b5",
-        "strip_prefix": "platforms-441afe1bfdadd6236988e9cac159df6b5a9f5a98",
+        "sha256": "66184688debeeefcc2a16a2f80b03f514deac8346fe888fb7e691a52c023dd88",
+        "strip_prefix": "platforms-46993efdd33b73649796c5fc5c9efb193ae19d51",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/platforms/archive/441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip",
-            "https://github.com/bazelbuild/platforms/archive/441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip"
+            "https://mirror.bazel.build/github.com/bazelbuild/platforms/archive/46993efdd33b73649796c5fc5c9efb193ae19d51.zip",
+            "https://github.com/bazelbuild/platforms/archive/46993efdd33b73649796c5fc5c9efb193ae19d51.zip"
         ]
     },
     "rules_cc": {
         "name": "rules_cc",
-        "sha256": "36fa66d4d49debd71d05fba55c1353b522e8caef4a20f8080a3d17cdda001d89",
-        "strip_prefix": "rules_cc-0d5f3f2768c6ca2faca0079a997a97ce22997a0c",
+        "sha256": "1d4dbbd1e1e9b57d40bb0ade51c9e882da7658d5bfbf22bbd15b68e7879d761f",
+        "strip_prefix": "rules_cc-8bd6cd75d03c01bb82561a96d9c1f9f7157b13d0",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip",
-            "https://github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip"
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/8bd6cd75d03c01bb82561a96d9c1f9f7157b13d0.zip",
+            "https://github.com/bazelbuild/rules_cc/archive/8bd6cd75d03c01bb82561a96d9c1f9f7157b13d0.zip"
         ]
     },
     "rules_java": {

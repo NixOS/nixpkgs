@@ -4430,6 +4430,12 @@
     githubId = 4378377;
     name = "Matthias Devlamynck";
   };
+  mdlayher = {
+    email = "mdlayher@gmail.com";
+    github = "mdlayher";
+    githubId = 1926905;
+    name = "Matt Layher";
+  };
   meditans = {
     email = "meditans@gmail.com";
     github = "meditans";

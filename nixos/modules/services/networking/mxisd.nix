@@ -93,23 +93,20 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.users = [
+    users.users.mxisd =
       {
-        name = "mxisd";
         group = "mxisd";
         home = cfg.dataDir;
         createHome = true;
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.mxisd;
-      }
-    ];
+      };
 
-    users.groups = [
+    users.groups.mxisd =
       {
-        name = "mxisd";
+        name = "";
         gid = config.ids.gids.mxisd;
-      }
-    ];
+      };
 
     systemd.services.mxisd = {
       description = "a federated identity server for the matrix ecosystem";

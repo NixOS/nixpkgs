@@ -12,8 +12,9 @@ let
 
   isNix23 = versionAtLeast nixVersion "2.3pre";
 
-  makeNixBuildUser = nr:
-    { name = "nixbld${toString nr}";
+  makeNixBuildUser = nr: {
+    name  = "nixbld${toString nr}";
+    value = {
       description = "Nix build user ${toString nr}";
 
       /* For consistency with the setgid(2), setuid(2), and setgroups(2)
@@ -23,8 +24,9 @@ let
       group = "nixbld";
       extraGroups = [ "nixbld" ];
     };
+  };
 
-  nixbldUsers = map makeNixBuildUser (range 1 cfg.nrBuildUsers);
+  nixbldUsers = listToAttrs (map makeNixBuildUser (range 1 cfg.nrBuildUsers));
 
   nixConf =
     assert versionAtLeast nixVersion "2.2";
@@ -445,7 +447,7 @@ in
 
     users.users = nixbldUsers;
 
-    services.xserver.displayManager.hiddenUsers = map ({ name, ... }: name) nixbldUsers;
+    services.xserver.displayManager.hiddenUsers = attrNames nixbldUsers;
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''

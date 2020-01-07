@@ -146,15 +146,15 @@ in {
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "uwsgi") (singleton
-      { name = "uwsgi";
+    users.users = optionalAttrs (cfg.user == "uwsgi") {
+      uwsgi = {
         group = cfg.group;
         uid = config.ids.uids.uwsgi;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "uwsgi") (singleton
-      { name = "uwsgi";
-        gid = config.ids.gids.uwsgi;
-      });
+    users.groups = optionalAttrs (cfg.group == "uwsgi") {
+      uwsgi.gid = config.ids.gids.uwsgi;
+    };
   };
 }

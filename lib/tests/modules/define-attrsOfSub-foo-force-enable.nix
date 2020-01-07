@@ -1,7 +1,7 @@
 { lib, ... }:
 
 {
-  loaOfSub.foo = lib.mkForce {
+  attrsOfSub.foo = lib.mkForce {
     enable = false;
   };
 }

@@ -5,16 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wob";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "francma";
     repo = pname;
     rev = version;
-    sha256 = "1z8q5p5q8f0dfjzr96jldz97ycir9ip4p2cwj26nywmb8r0hznjr";
+    sha256 = "0cfglwh1inv6ng55vgznhll51m9g1lxfh37k4ridyxl64rc9jfq8";
   };
-
-  postPatch = "sed -Ei 's/Version\ 0\.[0-9]/Version ${version}/' wob.1.scd";
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland ];
   buildInputs = [ wayland-protocols ];

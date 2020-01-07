@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "opentracing";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfd231ba5c58f90bc277787e62861eb0c6e4af76e42957bec240bbdf71fb7e0e";
+    sha256 = "0rcpmhy7hm6ljlm1w455il53s1amq2vii2x1wfkrcx3sj4s0dc9k";
   };
 
   propagatedBuildInputs = lib.optional isPy27 futures;
