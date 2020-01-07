@@ -891,6 +891,8 @@ in {
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
 
+  livelossplot = callPackage ../development/python-modules/livelossplot { };
+
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   logster = callPackage ../development/python-modules/logster { };
