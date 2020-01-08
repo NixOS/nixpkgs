@@ -12809,14 +12809,14 @@ in
   };
 
   # newer nspr version for newer firefox stable releases
-  nspr_4_23 = callPackage ../development/libraries/nspr/nspr_4_23.nix {
+  nspr_4_24 = callPackage ../development/libraries/nspr/nspr_4_24.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
 
   # newer NSS version for newer firefox stable releases
-  nss_3_47_1 = callPackage ../development/libraries/nss/3_47_1.nix { };
+  nss_3_48 = callPackage ../development/libraries/nss/3_48.nix { };
 
   nssTools = nss.tools;
 
@@ -13690,7 +13690,7 @@ in
   stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
-  sqlite_3_30 = callPackage ../development/libraries/sqlite/3-30.nix { };
+  sqlite_3_30_1 = callPackage ../development/libraries/sqlite/3-30-1.nix { };
 
   sqlite-analyzer = lowPrio (callPackage ../development/libraries/sqlite/analyzer.nix { });
 
