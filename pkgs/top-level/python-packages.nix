@@ -548,6 +548,8 @@ in {
 
   connexion = callPackage ../development/python-modules/connexion { };
 
+  coordinates = callPackage ../development/python-modules/coordinates { };
+
   cozy = callPackage ../development/python-modules/cozy { };
 
   codespell = callPackage ../development/python-modules/codespell { };
