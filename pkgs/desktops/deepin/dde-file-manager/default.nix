@@ -45,8 +45,7 @@ mkDerivation rec {
     dtkwidget
     ffmpegthumbnailer
     file
-    glib.bin
-    glib.dev
+    glib
     gnugrep
     gsettings-qt
     gvfs
@@ -231,6 +230,14 @@ mkDerivation rec {
   preBuild = ''
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${zlib}/lib";
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${libX11}/lib";
+  '';
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
   '';
 
   postFixup = ''

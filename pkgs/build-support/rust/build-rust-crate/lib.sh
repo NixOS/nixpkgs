@@ -13,6 +13,7 @@ build_lib() {
     $BUILD_OUT_DIR \
     $EXTRA_BUILD \
     $EXTRA_FEATURES \
+    $EXTRA_RUSTC_FLAGS \
     --color $colors
 
   EXTRA_LIB=" --extern $CRATE_NAME=target/lib/lib$CRATE_NAME-$metadata.rlib"
@@ -22,9 +23,10 @@ build_lib() {
 }
 
 build_bin() {
-  crate_name=$1
-  crate_name_=$(echo $crate_name | tr '-' '_')
-  main_file=""
+  local crate_name=$1
+  local crate_name_=$(echo $crate_name | tr '-' '_')
+  local main_file=""
+
   if [[ ! -z $2 ]]; then
     main_file=$2
   fi
@@ -43,11 +45,30 @@ build_bin() {
     $BUILD_OUT_DIR \
     $EXTRA_BUILD \
     $EXTRA_FEATURES \
+    $EXTRA_RUSTC_FLAGS \
     --color ${colors} \
 
   if [ "$crate_name_" != "$crate_name" ]; then
     mv target/bin/$crate_name_ target/bin/$crate_name
   fi
+}
+
+build_lib_test() {
+    local file="$1"
+    EXTRA_RUSTC_FLAGS="--test $EXTRA_RUSTC_FLAGS" build_lib "$1" "$2"
+}
+
+build_bin_test() {
+    local crate="$1"
+    local file="$2"
+    EXTRA_RUSTC_FLAGS="--test $EXTRA_RUSTC_FLAGS" build_bin "$1" "$2"
+}
+
+build_bin_test_file() {
+    local file="$1"
+    local derived_crate_name="${file//\//_}"
+    derived_crate_name="${derived_crate_name%.rs}"
+    build_bin_test "$derived_crate_name" "$file"
 }
 
 setup_link_paths() {

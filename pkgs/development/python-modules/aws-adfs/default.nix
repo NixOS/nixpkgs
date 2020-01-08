@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , pytest, pytestrunner, pytestcov, mock, glibcLocales, lxml, boto3
-, requests, click, configparser, fido2, isPy27 }:
+, requests, requests-kerberos, click, configparser, fido2, isPy27 }:
 
 buildPythonPackage rec {
   pname = "aws-adfs";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
 
   checkInputs = [ glibcLocales pytest pytestrunner pytestcov mock ];
-  propagatedBuildInputs = [ lxml boto3 requests click configparser fido2 ];
+  propagatedBuildInputs = [ lxml boto3 requests requests-kerberos click configparser fido2 ];
 
   meta = with lib; {
     description = "Command line tool to ease aws cli authentication against ADFS";

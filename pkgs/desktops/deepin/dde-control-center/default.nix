@@ -93,6 +93,14 @@ mkDerivation rec {
       --replace "/bin/systemctl" "${systemd}/bin/systemctl"
   '';
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
   postFixup = ''
     # debuging
     searchForUnresolvedDLL $out
