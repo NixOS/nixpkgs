@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, libxml2, libxslt, getopt, nixUnstable, dysnomia, libintl, libiconv }:
 
 stdenv.mkDerivation {
-  name = "disnix-0.9";
+  name = "disnix-0.9.1";
 
   src = fetchurl {
-    url = https://github.com/svanderburg/disnix/releases/download/disnix-0.9/disnix-0.9.tar.gz;
-    sha256 = "1kc4520zjc1z72mknylfvrsyda9rbmm5c9mw8w13zhdwg3zbna06";
+    url = https://github.com/svanderburg/disnix/releases/download/disnix-0.9.1/disnix-0.9.1.tar.gz;
+    sha256 = "0bidln5xw3raqkvdks9aipis8aaza8asgyapmilnxkkrxgmw7rdf";
   };
 
   configureFlags = [
