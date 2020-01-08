@@ -3868,6 +3868,8 @@ in
 
   pixz = callPackage ../tools/compression/pixz { };
 
+  plplot = callPackage ../development/libraries/plplot { };
+
   pxattr = callPackage ../tools/archivers/pxattr { };
 
   pxz = callPackage ../tools/compression/pxz { };
