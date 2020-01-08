@@ -279,9 +279,9 @@ let
     (assertOnlyFields [
       "UseDNS" "RoutesToDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
       "Hostname" "UseDomains" "UseRoutes" "UseTimezone"
-      "ClientIdentifier" "VendorClassIdentifier" "UserClass" "DUIDType"
-      "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
-      "ListenPort" "RapidCommit"
+      "ClientIdentifier" "VendorClassIdentifier" "UserClass" "MaxAttempts"
+      "DUIDType" "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
+      "ListenPort" "SendRelease" "RapidCommit"
     ])
     (assertValueOneOf "UseDNS" boolValues)
     (assertValueOneOf "RoutesToDNS" boolValues)
@@ -293,9 +293,11 @@ let
     (assertValueOneOf "UseDomains" ["yes" "no" "route"])
     (assertValueOneOf "UseRoutes" boolValues)
     (assertValueOneOf "UseTimezone" boolValues)
+    (assertMinimum "MaxAttempts" 0)
     (assertValueOneOf "RequestBroadcast" boolValues)
     (assertInt "RouteTable")
     (assertMinimum "RouteTable" 0)
+    (assertValueOneOf "SendRelease" boolValues)
     (assertValueOneOf "RapidCommit" boolValues)
   ];
 
