@@ -9,6 +9,7 @@
 , libobjc, libgcrypt
 , icu
 , pkgconfig, portaudio
+, libiberty
 }:
 let
   version = "1.26.0";
@@ -30,8 +31,14 @@ gsmakeDerivation {
     libobjc libgcrypt
     icu
     portaudio
+    libiberty
   ];
   patches = [ ./fixup-paths.patch ];
+
+  # Bump to gcc9 has give missing xmemdup symbols. Need libiberty here
+  # to resolve it, unclear why. See #76927 for more info
+  NIX_LDFLAGS = "-liberty";
+
   meta = {
     description = "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
   };
