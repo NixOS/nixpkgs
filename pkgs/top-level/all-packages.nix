@@ -6112,7 +6112,9 @@ in
 
   routino = callPackage ../tools/misc/routino { };
 
-  rq = callPackage ../development/tools/rq { };
+  rq = callPackage ../development/tools/rq {
+    inherit (darwin) libiconv;
+  };
 
   rsnapshot = callPackage ../tools/backup/rsnapshot { };
 
@@ -23697,8 +23699,8 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
-  blast = callPackage ../applications/science/biology/blast { 
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices; 
+  blast = callPackage ../applications/science/biology/blast {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
   cd-hit = callPackage ../applications/science/biology/cd-hit { };
