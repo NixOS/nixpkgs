@@ -46,7 +46,7 @@ let
               jobs.go.x86_64-darwin
               jobs.mariadb.x86_64-darwin
               jobs.nix.x86_64-darwin
-              jobs.nox.x86_64-darwin
+              jobs.nixpkgs-review.x86_64-darwin
               jobs.nix-info.x86_64-darwin
               jobs.nix-info-tested.x86_64-darwin
               jobs.openssh.x86_64-darwin
@@ -97,8 +97,8 @@ let
               jobs.pandoc.x86_64-linux
               jobs.python.x86_64-linux
               jobs.python3.x86_64-linux
-              # Needed by travis-ci to test PRs
-              jobs.nox.x86_64-linux
+              # Needed by contributors to test PRs (by inclusion of the PR template)
+              jobs.nixpkgs-review.x86_64-linux
               # Needed for support
               jobs.nix-info.x86_64-linux
               jobs.nix-info-tested.x86_64-linux
@@ -134,7 +134,7 @@ let
               jobs.stdenv.x86_64-darwin
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-darwin
-              jobs.nox.x86_64-darwin
+              jobs.nixpkgs-review.x86_64-darwin
               jobs.nix-info.x86_64-darwin
               jobs.nix-info-tested.x86_64-darwin
               jobs.git.x86_64-darwin
