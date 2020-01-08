@@ -11,14 +11,14 @@ let
   depSrcs = import ./deps.nix { inherit fetchurl; };
 in mkDerivation rec {
   pname = "plex-media-player";
-  version = "2.47.0.1035";
-  vsnHash = "e74d341b";
+  version = "2.48.0.1038";
+  vsnHash = "11b21f57";
 
   src = fetchFromGitHub {
     owner = "plexinc";
     repo = "plex-media-player";
     rev = "v${version}-${vsnHash}";
-    sha256 = "1xmrbs38fm1qir52q7harmvbh4h0a5mzrfl8da0h0c32pz3kky46";
+    sha256 = "05vrzpy3xbgghybxx45f5q1cqr9xr9vljp8321qn6pwpyk4k0scc";
   };
 
   nativeBuildInputs = [ pkgconfig cmake python3 ];
