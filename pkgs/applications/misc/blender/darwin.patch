@@ -1,0 +1,105 @@
+diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platform/platform_apple.cmake
+--- a/build_files/cmake/platform/platform_apple.cmake
++++ b/build_files/cmake/platform/platform_apple.cmake
+@@ -35,7 +35,6 @@ else()
+   message(STATUS "Using pre-compiled LIBDIR: ${LIBDIR}")
+ endif()
+ if(NOT EXISTS "${LIBDIR}/")
+-  message(FATAL_ERROR "Mac OSX requires pre-compiled libs at: '${LIBDIR}'")
+ endif()
+ 
+ if(WITH_OPENAL)
+@@ -79,7 +78,7 @@ endif()
+ if(WITH_CODEC_SNDFILE)
+   set(LIBSNDFILE ${LIBDIR}/sndfile)
+   set(LIBSNDFILE_INCLUDE_DIRS ${LIBSNDFILE}/include)
+-  set(LIBSNDFILE_LIBRARIES sndfile FLAC ogg vorbis vorbisenc)
++  set(LIBSNDFILE_LIBRARIES sndfile)
+   set(LIBSNDFILE_LIBPATH ${LIBSNDFILE}/lib ${LIBDIR}/ffmpeg/lib)  # TODO, deprecate
+ endif()
+ 
+@@ -90,7 +89,7 @@ if(WITH_PYTHON)
+     # normally cached but not since we include them with blender
+     set(PYTHON_INCLUDE_DIR "${LIBDIR}/python/include/python${PYTHON_VERSION}m")
+     set(PYTHON_EXECUTABLE "${LIBDIR}/python/bin/python${PYTHON_VERSION}m")
+-    set(PYTHON_LIBRARY ${LIBDIR}/python/lib/libpython${PYTHON_VERSION}m.a)
++    set(PYTHON_LIBRARY "${LIBDIR}/python/lib/libpython${PYTHON_VERSION}m.dylib")
+     set(PYTHON_LIBPATH "${LIBDIR}/python/lib/python${PYTHON_VERSION}")
+     # set(PYTHON_LINKFLAGS "-u _PyMac_Error")  # won't  build with this enabled
+   else()
+@@ -155,10 +154,7 @@ if(WITH_CODEC_FFMPEG)
+   set(FFMPEG_INCLUDE_DIRS ${FFMPEG}/include)
+   set(FFMPEG_LIBRARIES
+     avcodec avdevice avformat avutil
+-    mp3lame swscale x264 xvidcore
+-    theora theoradec theoraenc
+-    vorbis vorbisenc vorbisfile ogg opus
+-    vpx swresample)
++    swscale swresample)
+   set(FFMPEG_LIBPATH ${FFMPEG}/lib)
+ endif()
+ 
+@@ -199,14 +195,14 @@ if(WITH_OPENCOLLADA)
+   set(OPENCOLLADA ${LIBDIR}/opencollada)
+ 
+   set(OPENCOLLADA_INCLUDE_DIRS
+-    ${LIBDIR}/opencollada/include/COLLADAStreamWriter
+-    ${LIBDIR}/opencollada/include/COLLADABaseUtils
+-    ${LIBDIR}/opencollada/include/COLLADAFramework
+-    ${LIBDIR}/opencollada/include/COLLADASaxFrameworkLoader
+-    ${LIBDIR}/opencollada/include/GeneratedSaxParser
++    ${LIBDIR}/opencollada/include/opencollada/COLLADAStreamWriter
++    ${LIBDIR}/opencollada/include/opencollada/COLLADABaseUtils
++    ${LIBDIR}/opencollada/include/opencollada/COLLADAFramework
++    ${LIBDIR}/opencollada/include/opencollada/COLLADASaxFrameworkLoader
++    ${LIBDIR}/opencollada/include/opencollada/GeneratedSaxParser
+   )
+ 
+-  set(OPENCOLLADA_LIBPATH ${OPENCOLLADA}/lib)
++  set(OPENCOLLADA_LIBPATH ${OPENCOLLADA}/lib/opencollada)
+   set(OPENCOLLADA_LIBRARIES
+     OpenCOLLADASaxFrameworkLoader
+     -lOpenCOLLADAFramework
+@@ -215,7 +211,7 @@ if(WITH_OPENCOLLADA)
+     -lMathMLSolver
+     -lGeneratedSaxParser
+     -lbuffer -lftoa -lUTF
+-    ${OPENCOLLADA_LIBPATH}/libxml2.a
++    xml2
+   )
+   # PCRE is bundled with openCollada
+   # set(PCRE ${LIBDIR}/pcre)
+@@ -276,14 +272,13 @@ if(WITH_BOOST)
+ endif()
+ 
+ if(WITH_INTERNATIONAL OR WITH_CODEC_FFMPEG)
+-  set(PLATFORM_LINKFLAGS "${PLATFORM_LINKFLAGS} -liconv") # boost_locale and ffmpeg needs it !
+ endif()
+ 
+ if(WITH_OPENIMAGEIO)
+   set(OPENIMAGEIO ${LIBDIR}/openimageio)
+   set(OPENIMAGEIO_INCLUDE_DIRS ${OPENIMAGEIO}/include)
+   set(OPENIMAGEIO_LIBRARIES
+-    ${OPENIMAGEIO}/lib/libOpenImageIO.a
++    ${OPENIMAGEIO}/lib/libOpenImageIO.dylib
+     ${PNG_LIBRARIES}
+     ${JPEG_LIBRARIES}
+     ${TIFF_LIBRARY}
+@@ -306,7 +301,7 @@ endif()
+ if(WITH_OPENCOLORIO)
+   set(OPENCOLORIO ${LIBDIR}/opencolorio)
+   set(OPENCOLORIO_INCLUDE_DIRS ${OPENCOLORIO}/include)
+-  set(OPENCOLORIO_LIBRARIES OpenColorIO tinyxml yaml-cpp)
++  set(OPENCOLORIO_LIBRARIES OpenColorIO)
+   set(OPENCOLORIO_LIBPATH ${OPENCOLORIO}/lib)
+ endif()
+ 
+@@ -443,7 +438,7 @@ else()
+   set(CMAKE_CXX_FLAGS_RELEASE "-mdynamic-no-pic -fno-strict-aliasing")
+ endif()
+ 
+-if(${XCODE_VERSION} VERSION_EQUAL 5 OR ${XCODE_VERSION} VERSION_GREATER 5)
++if(FALSE)
+   # Xcode 5 is always using CLANG, which has too low template depth of 128 for libmv
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftemplate-depth=1024")
+ endif()
