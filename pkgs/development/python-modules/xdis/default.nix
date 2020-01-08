@@ -27,6 +27,5 @@ buildPythonPackage rec {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = https://github.com/rocky/python-xdis/;
     license = licenses.gpl2;
-    broken = true; # doesn't support latest python3 interpreters
   };
 }
