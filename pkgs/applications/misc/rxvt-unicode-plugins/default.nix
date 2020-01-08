@@ -11,6 +11,8 @@
 
   perls = callPackage ./urxvt-perls { };
 
+  resize-font = callPackage ./urxvt-resize-font { };
+
   tabbedex = callPackage ./urxvt-tabbedex { };
 
   theme-switch = callPackage ./urxvt-theme-switch { };
