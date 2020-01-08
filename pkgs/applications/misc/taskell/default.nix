@@ -1,8 +1,8 @@
 { lib, haskellPackages, fetchFromGitHub }:
 
 let
-  version = "1.7.3";
-  sha256  = "1439fh79ilc6jvz894cfzhk7gy5r2sv4v79bvqmmqbzbqk9qsbvx";
+  version = "1.9.0";
+  sha256  = "1lazplchnvrxn38jfgqarwibn8azlf99dh6iiarzpgjpg2w840ch";
 
 in (haskellPackages.mkDerivation {
   pname = "taskell";
@@ -46,6 +46,7 @@ in (haskellPackages.mkDerivation {
     # text
     time
     vty
+    tz
   ];
 
   executableHaskellDepends = [];
