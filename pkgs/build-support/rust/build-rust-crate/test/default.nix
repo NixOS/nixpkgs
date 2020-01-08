@@ -29,10 +29,30 @@ let
     }
   '';
 
+  mkTestFile = name: functionName: mkFile name ''
+    #[cfg(test)]
+    #[test]
+    fn ${functionName}() {
+      assert!(true);
+    }
+  '';
+  mkTestFileWithMain = name: functionName: mkFile name ''
+    #[cfg(test)]
+    #[test]
+    fn ${functionName}() {
+      assert!(true);
+    }
+
+    fn main() {}
+  '';
+
+
   mkLib = name: mkFile name "pub fn test() -> i32 { return 23; }";
 
   mkTest = crateArgs: let
-    crate = mkCrate crateArgs;
+    crate = mkCrate (builtins.removeAttrs crateArgs ["expectedTestOutput"]);
+    hasTests = crateArgs.buildTests or false;
+    expectedTestOutputs = crateArgs.expectedTestOutputs or null;
     binaries = map (v: ''"${v.name}"'') (crateArgs.crateBin or []);
     isLib = crateArgs ? libName || crateArgs ? libPath;
     crateName = crateArgs.crateName or "nixtestcrate";
@@ -44,16 +64,28 @@ let
       src = mkBinExtern "src/main.rs" libName;
     };
 
-    in runCommand "run-buildRustCrate-${crateName}-test" {
-      nativeBuildInputs = [ crate ];
-    } ''
-      ${lib.concatStringsSep "\n" binaries}
-      ${lib.optionalString isLib ''
-          test -e ${crate}/lib/*.rlib || exit 1
-          ${libTestBinary}/bin/run-test-${crateName}
-      ''}
-      touch $out
-  '';
+    in
+      assert expectedTestOutputs != null -> hasTests;
+      assert hasTests -> expectedTestOutputs != null;
+
+      runCommand "run-buildRustCrate-${crateName}-test" {
+        nativeBuildInputs = [ crate ];
+      } (if !hasTests then ''
+          ${lib.concatStringsSep "\n" binaries}
+          ${lib.optionalString isLib ''
+              test -e ${crate}/lib/*.rlib || exit 1
+              ${libTestBinary}/bin/run-test-${crateName}
+          ''}
+          touch $out
+        '' else ''
+          for file in ${crate}/tests/*; do
+            $file 2>&1 >> $out
+          done
+          set -e
+          ${lib.concatMapStringsSep "\n" (o: "grep '${o}' $out || {  echo 'output \"${o}\" not found in:'; cat $out; exit 23; }") expectedTestOutputs}
+        ''
+      );
+
   in rec {
 
   tests = let
@@ -85,6 +117,71 @@ let
         dependencies = [ (mkCrate { crateName = "foo"; libName = "foolib"; src = mkLib "src/lib.rs"; }) ];
         crateRenames = { "foo" = "foo_renamed"; };
       };
+      rustLibTestsDefault = {
+        src = mkTestFile "src/lib.rs" "baz";
+        buildTests = true;
+        expectedTestOutputs = [ "test baz ... ok" ];
+      };
+      rustLibTestsCustomLibName = {
+        libName = "test_lib";
+        src = mkTestFile "src/test_lib.rs" "foo";
+        buildTests = true;
+        expectedTestOutputs = [ "test foo ... ok" ];
+      };
+      rustLibTestsCustomLibPath = {
+        libPath = "src/test_path.rs";
+        src = mkTestFile "src/test_path.rs" "bar";
+        buildTests = true;
+        expectedTestOutputs = [ "test bar ... ok" ];
+      };
+      rustLibTestsCustomLibPathWithTests = {
+        libPath = "src/test_path.rs";
+        src = symlinkJoin {
+          name = "rust-lib-tests-custom-lib-path-with-tests-dir";
+          paths = [
+            (mkTestFile "src/test_path.rs" "bar")
+            (mkTestFile "tests/something.rs" "something")
+          ];
+        };
+        buildTests = true;
+        expectedTestOutputs = [
+          "test bar ... ok"
+          "test something ... ok"
+        ];
+      };
+      rustBinTestsCombined = {
+        src = symlinkJoin {
+          name = "rust-bin-tests-combined";
+          paths = [
+            (mkTestFileWithMain "src/main.rs" "src_main")
+            (mkTestFile "tests/foo.rs" "tests_foo")
+            (mkTestFile "tests/bar.rs" "tests_bar")
+          ];
+        };
+        buildTests = true;
+        expectedTestOutputs = [
+          "test src_main ... ok"
+          "test tests_foo ... ok"
+          "test tests_bar ... ok"
+        ];
+      };
+      rustBinTestsSubdirCombined = {
+        src = symlinkJoin {
+          name = "rust-bin-tests-subdir-combined";
+          paths = [
+            (mkTestFileWithMain "src/main.rs" "src_main")
+            (mkTestFile "tests/foo/main.rs" "tests_foo")
+            (mkTestFile "tests/bar/main.rs" "tests_bar")
+          ];
+        };
+        buildTests = true;
+        expectedTestOutputs = [
+          "test src_main ... ok"
+          "test tests_foo ... ok"
+          "test tests_bar ... ok"
+        ];
+      };
+
     };
     brotliCrates = (callPackage ./brotli-crates.nix {});
   in lib.mapAttrs (key: value: mkTest (value // lib.optionalAttrs (!value?crateName) { crateName = key; })) cases // {
