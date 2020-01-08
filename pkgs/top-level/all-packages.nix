@@ -21233,6 +21233,8 @@ in
 
   rxvt-unicode-unwrapped = callPackage ../applications/misc/rxvt-unicode { };
 
+  rxvt-unicode-plugins = import ../applications/misc/rxvt-unicode-plugins { inherit callPackage; };
+
   uade123 = callPackage ../applications/audio/uade123 {};
 
   udevil = callPackage ../applications/misc/udevil {};

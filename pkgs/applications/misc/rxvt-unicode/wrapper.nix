@@ -3,6 +3,7 @@
 , makeWrapper
 , lib
 , rxvt-unicode-unwrapped
+, rxvt-unicode-plugins
 , perlPackages
 , configure ? { availablePlugins, ... }:
   { plugins = builtins.attrValues availablePlugins;
@@ -12,11 +13,11 @@
 }:
 
 let
-  availablePlugins = import ../rxvt-unicode-plugins { inherit callPackage; };
+  availablePlugins = rxvt-unicode-plugins;
 
   # Transform the string "self" to the plugin itself.
   # It's needed for plugins like bidi who depends on the perl
-  # package the provide themself.
+  # package they provide themself.
   mkPerlDeps = p:
     let deps = p.perlPackages or [ ];
     in map (x: if x == "self" then p else x) deps;
