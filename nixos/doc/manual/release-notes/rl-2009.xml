@@ -300,6 +300,17 @@ environment.systemPackages = [
       <manvolnum>5</manvolnum></citerefentry> for details.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>systemd-networkd</literal> option
+     <literal>systemd.network.networks._name_.dhcpConfig</literal>
+     has been renamed to
+     <xref linkend="opt-systemd.network.networks._name_.dhcpV4Config"/>
+     following upstream systemd's documentation change.
+     See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+     <manvolnum>5</manvolnum></citerefentry> for details.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
