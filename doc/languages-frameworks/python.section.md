@@ -803,6 +803,9 @@ should be used with `ignoreCollisions = true`.
 The following are setup hooks specifically for Python packages. Most of these are
 used in `buildPythonPackage`.
 
+- `eggUnpackhook` to move an egg to the correct folder so it can be installed with the `eggInstallHook`
+- `eggBuildHook` to skip building for eggs.
+- `eggInstallHook` to install eggs.
 - `flitBuildHook` to build a wheel using `flit`.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
 - `pipInstallHook` to install wheels.
