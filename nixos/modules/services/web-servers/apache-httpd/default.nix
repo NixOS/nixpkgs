@@ -629,6 +629,9 @@ in
 
     environment.systemPackages = [httpd];
 
+    # required for "apachectl configtest"
+    environment.etc."httpd/httpd.conf".source = httpdConf;
+
     services.httpd.phpOptions =
       ''
         ; Needed for PHP's mail() function.
