@@ -276,13 +276,14 @@ let
 
   checkDhcp = checkUnitConfig "DHCP" [
     (assertOnlyFields [
-      "UseDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
+      "UseDNS" "RoutesToDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
       "Hostname" "UseDomains" "UseRoutes" "UseTimezone" "CriticalConnection"
       "ClientIdentifier" "VendorClassIdentifier" "UserClass" "DUIDType"
       "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
       "ListenPort" "RapidCommit"
     ])
     (assertValueOneOf "UseDNS" boolValues)
+    (assertValueOneOf "RoutesToDNS" boolValues)
     (assertValueOneOf "UseNTP" boolValues)
     (assertValueOneOf "UseMTU" boolValues)
     (assertValueOneOf "Anonymize" boolValues)
