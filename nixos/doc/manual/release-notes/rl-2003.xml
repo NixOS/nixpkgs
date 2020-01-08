@@ -391,6 +391,16 @@ users.users.me =
      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/63103">PR #63103</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     For NixOS modules, the types <literal>types.submodule</literal> and <literal>types.submoduleWith</literal> now support
+     paths as allowed values, similar to how <literal>imports</literal> supports paths.
+     Because of this, if you have a module that defines an option of type
+     <literal>either (submodule ...) path</literal>, it will break since a path
+     is now treated as the first type instead of the second. To fix this, change
+     the type to <literal>either path (submodule ...)</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
