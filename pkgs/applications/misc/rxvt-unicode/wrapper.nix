@@ -4,24 +4,35 @@
 , lib
 , rxvt-unicode-unwrapped
 , perlPackages
+, configure ? { availablePlugins, ... }:
+  { plugins = builtins.attrValues availablePlugins;
+    extraDeps = [ ];
+    perlDeps = [ ];
+  }
 }:
 
 let
   availablePlugins = import ../rxvt-unicode-plugins { inherit callPackage; };
 
-  wrapper =
-    { configure ? { availablePlugins, ... }:
-      { plugins = builtins.attrValues availablePlugins;
-        extraDeps = [ ];
-        perlDeps = [ ];
-      }
-    }:
+  # Transform the string "self" to the plugin itself.
+  # It's needed for plugins like bidi who depends on the perl
+  # package the provide themself.
+  mkPerlDeps = p:
+    let deps = p.perlPackages or [ ];
+    in map (x: if x == "self" then p else x) deps;
 
+  # The wrapper is called with a `configure` function
+  # that takes the urxvt plugins as input and produce
+  # the configuration of the wrapper: list of plugins,
+  # extra dependencies and perl dependencies.
+  # This provides simple way to customize urxvt using
+  # the `.override` mechanism.
+  wrapper = { configure, ... }:
     let 
       config = configure { inherit availablePlugins; };
       plugins = config.plugins or (builtins.attrValues availablePlugins);
       extraDeps = config.extraDeps or [ ];
-      perlDeps = (config.perlDeps or [ ]) ++ lib.concatMap (p: p.perlPackages or [ ]) plugins;
+      perlDeps = (config.perlDeps or [ ]) ++ lib.concatMap mkPerlDeps plugins;
     in
       symlinkJoin {
         name = "rxvt-unicode-${rxvt-unicode-unwrapped.version}";
@@ -43,4 +54,4 @@ let
       };
 
 in
-  lib.makeOverridable wrapper { }
+  lib.makeOverridable wrapper { inherit configure; }
