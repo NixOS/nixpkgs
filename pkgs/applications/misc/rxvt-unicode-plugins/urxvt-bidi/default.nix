@@ -16,6 +16,8 @@ perlPackages.buildPerlPackage rec {
     install -Dm555 misc/bidi "$out/lib/urxvt/perl/bidi"
   '';
 
+  passthru.perlPackages = [ "self" ];
+
   meta = with lib; {
     description = "Text::Bidi Perl package using fribidi, providing a urxvt plugin";
     homepage = "https://github.com/mkamensky/Text-Bidi";
