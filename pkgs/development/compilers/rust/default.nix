@@ -9,7 +9,7 @@
 , newScope, callPackage
 , CoreFoundation, Security
 , llvmPackages_5
-, pkgsBuildTarget, pkgsBuildBuild
+, pkgsBuildTarget, pkgsBuildBuild, recurseIntoAttrs
 }: rec {
   toRustTarget = platform: with platform.parsed; let
     cpu_ = {
@@ -54,7 +54,7 @@
       version = bootstrapVersion;
       hashes = bootstrapHashes;
     };
-    stable = lib.makeScope newScope (self: let
+    stable = recurseIntoAttrs (lib.makeScope newScope (self: let
       # Like `buildRustPackages`, but may also contain prebuilt binaries to
       # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
       # nothing in the final package set should refer to this.
@@ -87,6 +87,6 @@
       };
       clippy = self.callPackage ./clippy.nix { inherit Security; };
       rls = self.callPackage ./rls { inherit CoreFoundation Security; };
-    });
+    }));
   };
 }
