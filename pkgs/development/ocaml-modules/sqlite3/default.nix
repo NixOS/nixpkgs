@@ -1,18 +1,16 @@
-{ stdenv, fetchurl, sqlite, ocaml, findlib, ocamlbuild, pkgconfig }:
+{ stdenv, fetchurl, sqlite, ocaml, pkgconfig, dune-configurator, buildDune2Package }:
 
-stdenv.mkDerivation rec {
-  pname = "ocaml-sqlite3";
-  version = "2.0.9";
+buildDune2Package rec {
+  pname = "sqlite3";
+  version = "5.0.1";
 
   src = fetchurl {
-    url = "https://github.com/mmottl/sqlite3-ocaml/releases/download/v${version}/sqlite3-ocaml-${version}.tar.gz";
-    sha256 = "0rwsx1nfa3xqmbygim2qx45jqm1gwf08m70wmcwkx50f1qk3l551";
+    url = "https://github.com/mmottl/sqlite3-ocaml/releases/download/${version}/sqlite3-${version}.tbz";
+    sha256 = "0iymkszrs6qwak0vadfzc8yd8jfwn06zl08ggb4jr2mgk2c8mmsn";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml findlib ocamlbuild sqlite ];
-
-  createFindlibDestdir = true;
+  buildInputs = [ dune-configurator ocaml sqlite ];
 
   meta = with stdenv.lib; {
     homepage = http://mmottl.github.io/sqlite3-ocaml/;
