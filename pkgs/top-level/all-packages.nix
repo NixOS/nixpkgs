@@ -1916,6 +1916,8 @@ in
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
+  meson-tools = callPackage ../misc/meson-tools { };
+
   metabase = callPackage ../servers/metabase { };
 
   mididings = callPackage ../tools/audio/mididings { };
@@ -15898,10 +15900,12 @@ in
 
   inherit (callPackage ../misc/arm-trusted-firmware {})
     buildArmTrustedFirmware
+    armTrustedFirmwareTools
     armTrustedFirmwareAllwinner
     armTrustedFirmwareQemu
     armTrustedFirmwareRK3328
     armTrustedFirmwareRK3399
+    armTrustedFirmwareS905
     ;
 
   microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
@@ -17056,6 +17060,7 @@ in
     ubootGuruplug
     ubootJetsonTK1
     ubootNovena
+    ubootOdroidC2
     ubootOdroidXU3
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
