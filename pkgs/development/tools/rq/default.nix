@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0km9d751jr6c5qy4af6ks7nv3xfn13iqi03wq59a1c73rnf0zinp";
   };
 
-  cargoSha256 = "0km9d751jr6c5qy4af6ks7nv3xfn13iqi03wq59a1c73rnf0zinp";
+  cargoSha256 = "0z971fpyj4v5hjp6q4yxgxv069h9idkpkcixb14gxi7kpiswprvz";
 
   buildInputs = [ llvmPackages.clang-unwrapped v8 ];
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     description = "A tool for doing record analysis and transformation";
     homepage = "https://github.com/dflemstr/rq";
     license = with licenses; [ asl20 ];
-    maintainers = [ maintainers.aristid ];
+    maintainers = with maintainers; [ aristid filalex77 ];
     platforms = platforms.all;
   };
 }
