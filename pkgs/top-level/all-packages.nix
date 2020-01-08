@@ -9815,7 +9815,7 @@ in
 
   conan = callPackage ../development/tools/build-managers/conan { };
 
-  cookiecutter = pythonPackages.cookiecutter;
+  cookiecutter = with python3Packages; toPythonApplication cookiecutter;
 
   corundum = callPackage ../development/tools/corundum { };
 
