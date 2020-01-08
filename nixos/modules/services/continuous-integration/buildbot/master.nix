@@ -222,7 +222,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = optional (cfg.group == "buildbot") {
+    users.groups = optionalAttrs (cfg.group == "buildbot") {
       buildbot = { };
     };
 
