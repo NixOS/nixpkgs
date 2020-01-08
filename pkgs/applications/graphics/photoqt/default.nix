@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, cmake, exiv2, graphicsmagick, libraw, fetchpatch
+{ mkDerivation, stdenv, fetchurl, cmake, exiv2, graphicsmagick, libraw, fetchpatch
 , qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools, qtgraphicaleffects
 , extra-cmake-modules, poppler, kimageformats, libarchive, libdevil
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "photoqt";
   version = "1.7.1";
 
