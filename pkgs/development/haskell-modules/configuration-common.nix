@@ -40,6 +40,9 @@ self: super: {
   # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
 
+  # The tests depend on an old version of warp.
+  servant-auth-server = dontCheck super.servant-auth-server;
+
   # enable using a local hoogle with extra packagages in the database
   # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
   # $ hoogle server
