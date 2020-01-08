@@ -290,6 +290,16 @@ environment.systemPackages = [
      has been set to <literal>true</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>systemd-networkd</literal> option
+      <literal>systemd.network.networks.&lt;name&gt;.dhcp.CriticalConnection</literal>
+      has been removed following upstream systemd's deprecation of the same. It is recommended to use
+      <literal>systemd.network.networks.&lt;name&gt;.networkConfig.KeepConfiguration</literal> instead.
+      See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+      <manvolnum>5</manvolnum></citerefentry> for details.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

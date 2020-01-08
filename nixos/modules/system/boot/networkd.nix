@@ -205,7 +205,7 @@ let
       "IPv6HopLimit" "IPv4ProxyARP" "IPv6ProxyNDP" "IPv6ProxyNDPAddress"
       "IPv6PrefixDelegation" "IPv6MTUBytes" "Bridge" "Bond" "VRF" "VLAN"
       "IPVLAN" "MACVLAN" "VXLAN" "Tunnel" "ActiveSlave" "PrimarySlave"
-      "ConfigureWithoutCarrier" "Xfrm"
+      "ConfigureWithoutCarrier" "Xfrm" "KeepConfiguration"
     ])
     # Note: For DHCP the values both, none, v4, v6 are deprecated
     (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6"])
@@ -228,6 +228,7 @@ let
     (assertValueOneOf "ActiveSlave" boolValues)
     (assertValueOneOf "PrimarySlave" boolValues)
     (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
+    (assertValueOneOf "KeepConfiguration" (boolValues ++ ["static" "dhcp-on-stop" "dhcp"]))
   ];
 
   checkAddress = checkUnitConfig "Address" [
@@ -277,7 +278,7 @@ let
   checkDhcp = checkUnitConfig "DHCP" [
     (assertOnlyFields [
       "UseDNS" "RoutesToDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
-      "Hostname" "UseDomains" "UseRoutes" "UseTimezone" "CriticalConnection"
+      "Hostname" "UseDomains" "UseRoutes" "UseTimezone"
       "ClientIdentifier" "VendorClassIdentifier" "UserClass" "DUIDType"
       "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
       "ListenPort" "RapidCommit"
@@ -292,7 +293,6 @@ let
     (assertValueOneOf "UseDomains" ["yes" "no" "route"])
     (assertValueOneOf "UseRoutes" boolValues)
     (assertValueOneOf "UseTimezone" boolValues)
-    (assertValueOneOf "CriticalConnection" boolValues)
     (assertValueOneOf "RequestBroadcast" boolValues)
     (assertInt "RouteTable")
     (assertMinimum "RouteTable" 0)
