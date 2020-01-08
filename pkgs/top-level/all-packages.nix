@@ -9377,6 +9377,7 @@ in
   defaultGemConfig = callPackage ../development/ruby-modules/gem-config { };
   bundix = callPackage ../development/ruby-modules/bundix { };
   bundler = callPackage ../development/ruby-modules/bundler { };
+  bundler_2 = callPackage ../development/ruby-modules/bundler_2 { };
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
   bundlerUpdateScript = callPackage ../development/ruby-modules/bundler-update-script { };
