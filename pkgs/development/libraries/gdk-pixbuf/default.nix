@@ -1,6 +1,8 @@
 { stdenv, fetchurl, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
 , docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, gobject-introspection, doCheck ? false, makeWrapper }:
+, jasper, gobject-introspection, doCheck ? false, makeWrapper
+, fetchpatch
+}:
 
 let
   pname = "gdk-pixbuf";
@@ -16,6 +18,12 @@ in stdenv.mkDerivation rec {
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
+    # Temporary until the fix is released.
+    (fetchpatch {
+      name = "tests-circular-table.patch";
+      url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/merge_requests/59.diff";
+      sha256 = "0kaflac3mrh6031hwxk7j9fhli775hc503818h8zfl6b28zyn93f";
+    })
   ];
 
   outputs = [ "out" "dev" "man" "devdoc" "installedTests" ];
