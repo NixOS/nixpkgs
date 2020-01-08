@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     substituteInPlace contrib/client-tools/torify \
       --replace 'pathfind torsocks' true          \
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
+
+    patchShebangs ./scripts/maint/checkShellScripts.sh
   '';
 
   enableParallelBuilding = true;
