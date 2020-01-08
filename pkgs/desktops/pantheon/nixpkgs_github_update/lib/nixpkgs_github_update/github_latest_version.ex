@@ -24,7 +24,7 @@ defmodule NixpkgsGitHubUpdate.GitHubLatestVersion do
     String.to_charlist("#{System.get_env("OAUTH_TOKEN")}")
   end
 
-  defp put_token(headers, token) when is_binary(token) do
+  defp put_token(headers, token) when is_list(token) do
     Map.put_new(headers, 'Authorization', 'token #{token}')
   end
 
