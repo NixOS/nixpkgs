@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kdev-python";
-  version = "5.4.5";
+  version = "5.4.6";
 
   src = fetchurl {
     url = "https://github.com/KDE/${pname}/archive/v${version}.tar.gz";
-    sha256 = "1iq4lxbl8gq4qvydyz34ild4izw21cp22adlz9dc054v0wis331j";
+    sha256 = "1xzk0zgbc4nnz8gjbhw5h6kwznzxsqrg19ggyb8ijpmgg0ncxk8l";
   };
 
   cmakeFlags = [
