@@ -11,6 +11,27 @@ let
   setuppy = ../run_setup.py;
 in rec {
 
+  eggBuildHook = callPackage ({ }:
+    makeSetupHook {
+      name = "egg-build-hook.sh";
+      deps = [ ];
+    } ./egg-build-hook.sh) {};
+
+  eggInstallHook = callPackage ({ setuptools }:
+    makeSetupHook {
+      name = "egg-install-hook.sh";
+      deps = [ setuptools ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./egg-install-hook.sh) {};
+
+  eggUnpackHook = callPackage ({ }:
+    makeSetupHook {
+      name = "egg-unpack-hook.sh";
+      deps = [ ];
+    } ./egg-unpack-hook.sh) {};
+
   flitBuildHook = callPackage ({ flit }:
     makeSetupHook {
       name = "flit-build-hook";
