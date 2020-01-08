@@ -301,6 +301,16 @@ let
     (assertValueOneOf "RapidCommit" boolValues)
   ];
 
+  checkDhcpV6 = checkUnitConfig "DHCPv6" [
+    (assertOnlyFields [
+      "UseDns" "UseNTP" "RapidCommit" "ForceDHCPv6PDOtherInformation"
+    ])
+    (assertValueOneOf "UseDNS" boolValues)
+    (assertValueOneOf "UseNTP" boolValues)
+    (assertValueOneOf "RapidCommit" boolValues)
+    (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
+  ];
+
   checkDhcpServer = checkUnitConfig "DHCPServer" [
     (assertOnlyFields [
       "PoolOffset" "PoolSize" "DefaultLeaseTimeSec" "MaxLeaseTimeSec"
@@ -651,6 +661,18 @@ let
       '';
     };
 
+    dhcpV6Config = mkOption {
+      default = {};
+      example = { UseDNS = true; UseRoutes = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkDhcpV6;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPv6]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     dhcpServerConfig = mkOption {
       default = {};
       example = { PoolOffset = 50; EmitDNS = false; };
@@ -979,6 +1001,11 @@ let
           ${optionalString (def.dhcpConfig != { }) ''
             [DHCP]
             ${attrsToSection def.dhcpConfig}
+
+          ''}
+          ${optionalString (def.dhcpV6Config != {}) ''
+            [DHCPv6]
+            ${attrsToSection def.dhcpV6Config}
 
           ''}
           ${optionalString (def.dhcpServerConfig != { }) ''
