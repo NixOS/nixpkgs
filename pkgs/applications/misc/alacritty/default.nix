@@ -5,6 +5,7 @@
 
   cmake,
   gzip,
+  installShellFiles,
   makeWrapper,
   ncurses,
   pkgconfig,
@@ -52,20 +53,21 @@ let
   ];
 in buildRustPackage rec {
   pname = "alacritty";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0adaqdbma6gskb2g14yscrgr9gch5wf2g2clchplv72c2qr1k427";
+    sha256 = "05jcg33ifngpzw2hdhgb614j87ihhhlqgar0kky183rywg0dxikg";
   };
 
-  cargoSha256 = "1r267g8f986nxh8ms5yhp50qy1yl8gly2jr78p738qqc6frlxlhv";
+  cargoSha256 = "1kc9n10kb4j87x337pzl6wpi0qj5ib2mqmrjag2yld3138dag71n";
 
   nativeBuildInputs = [
     cmake
     gzip
+    installShellFiles
     makeWrapper
     ncurses
     pkgconfig
@@ -93,9 +95,9 @@ in buildRustPackage rec {
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
   '') + ''
 
-    install -D extra/completions/_alacritty -t "$out/share/zsh/site-functions/"
-    install -D extra/completions/alacritty.bash -t "$out/etc/bash_completion.d/"
-    install -D extra/completions/alacritty.fish -t "$out/share/fish/vendor_completions.d/"
+    installShellCompletion --zsh extra/completions/_alacritty
+    installShellCompletion --bash extra/completions/alacritty.bash
+    installShellCompletion --fish extra/completions/alacritty.fish
 
     install -dm 755 "$out/share/man/man1"
     gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
@@ -112,9 +114,9 @@ in buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "GPU-accelerated terminal emulator";
-    homepage = https://github.com/jwilm/alacritty;
-    license = with licenses; [ asl20 ];
+    homepage = "https://github.com/jwilm/alacritty";
+    license = licenses.asl20;
     maintainers = with maintainers; [ filalex77 mic92 ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = platforms.unix;
   };
 }
