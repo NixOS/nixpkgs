@@ -808,6 +808,17 @@ let
     };
   };
 
+  defx-icons = buildVimPluginFrom2Nix {
+    pname = "defx-icons";
+    version = "2019-11-03";
+    src = fetchFromGitHub {
+      owner = "kristijanhusak";
+      repo = "defx-icons";
+      rev = "1412fd083eb54ffedb4f3ae32ddc7ce28613a144";
+      sha256 = "1x0xpixbmxm15g5nmsslccdngm14sg86ymy6mywg9xfbnrh1vn0p";
+    };
+  };
+
   defx-nvim = buildVimPluginFrom2Nix {
     pname = "defx-nvim";
     version = "2020-01-02";
