@@ -15159,6 +15159,8 @@ in
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
+  fresh-rss = callPackage ../servers/web-apps/fresh-rss { };
+
   fusionInventory = callPackage ../servers/monitoring/fusion-inventory { };
 
   gatling = callPackage ../servers/http/gatling { };
