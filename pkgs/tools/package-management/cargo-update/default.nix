@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     description = "A cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli ];
+    maintainers = with maintainers; [ gerschtli filalex77 ];
     platforms = platforms.all;
   };
 }
