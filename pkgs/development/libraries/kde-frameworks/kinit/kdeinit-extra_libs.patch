@@ -38,10 +38,9 @@ Index: kinit-5.32.0/src/kdeinit/kinit.cpp
      static void secondary_child_handler(int)
 @@ -1692,7 +1676,7 @@ int main(int argc, char **argv)
      if (!d.suicide && qEnvironmentVariableIsEmpty("KDE_IS_PRELINKED")) {
-         const int extrasCount = sizeof(extra_libs) / sizeof(extra_libs[0]);
-         for (int i = 0; i < extrasCount; i++) {
--            const QString extra = findSharedLib(QString::fromLatin1(extra_libs[i]));
-+            const QString extra = QString::fromLatin1(extra_libs[i]);
+         for (const char *extra_lib : extra_libs) {
+-            const QString extra = findSharedLib(QString::fromLatin1(extra_lib));
++            const QString extra = QString::fromLatin1(extra_lib);
              if (!extra.isEmpty()) {
                  QLibrary l(extra);
                  l.setLoadHints(QLibrary::ExportExternalSymbolsHint);
