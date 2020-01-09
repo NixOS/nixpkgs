@@ -13,13 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ gnupg pam ];
 
-  preAutoreconf = ''
-    mkdir m4
-  '';
-
-  configurePhase = ''
-    ./configure --prefix=$out --with-moduledir=$out/lib/security
-  '';
+  configureFlags = [ "--with-moduledir=$\{out\}/lib/security" ];
 
   meta = with stdenv.lib; {
     description = "A PAM plugin to preset GPG passphrases on login";
