@@ -1441,6 +1441,17 @@ let
     };
   };
 
+  increment-activator = buildVimPluginFrom2Nix {
+    pname = "increment-activator";
+    version = "2019-05-09";
+    src = fetchFromGitHub {
+      owner = "nishigori";
+      repo = "increment-activator";
+      rev = "f341baf93b172aee646c90ff2ce28de0f897561b";
+      sha256 = "0hda6h3qz6ynpl996rk1rm6xnxgkaz108v28qg0w6wm7qzynbmnv";
+    };
+  };
+
   incsearch-easymotion-vim = buildVimPluginFrom2Nix {
     pname = "incsearch-easymotion-vim";
     version = "2016-01-18";
