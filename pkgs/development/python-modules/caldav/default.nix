@@ -5,8 +5,8 @@ buildPythonPackage rec {
   pname = "caldav";
   version = "0.6.2";
 
-  propagatedBuildInputs = [ tzlocal requests vobject lxml nose ];
-  checkInputs = [ xandikos ];
+  propagatedBuildInputs = [ requests vobject lxml ];
+  checkInputs = [ xandikos tzlocal nose ];
 
   src = fetchPypi {
     inherit pname version;
