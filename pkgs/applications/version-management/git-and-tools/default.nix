@@ -40,6 +40,10 @@ let
 
   git-fame = callPackage ./git-fame {};
 
+  git-filter-repo = callPackage ./git-filter-repo {
+    pythonPackages = python3Packages;
+  };
+
   gita = python3Packages.callPackage ./gita {};
 
   # The full-featured Git.
