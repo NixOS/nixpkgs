@@ -6,19 +6,6 @@ let
 
   cfg = config.services.mailman;
 
-  mailmanPyEnv = pkgs.python3.withPackages (ps: with ps; [mailman mailman-hyperkitty]);
-
-  mailmanExe = with pkgs; stdenv.mkDerivation {
-    name = "mailman-" + python3Packages.mailman.version;
-    buildInputs = [makeWrapper];
-    unpackPhase = ":";
-    installPhase = ''
-      mkdir -p $out/bin
-      makeWrapper ${mailmanPyEnv}/bin/mailman $out/bin/mailman \
-        --set MAILMAN_CONFIG_FILE /etc/mailman.cfg
-   '';
-  };
-
   mailmanWeb = pkgs.python3Packages.mailman-web.override {
     serverEMail = cfg.siteOwner;
     archiverKey = cfg.hyperkittyApiKey;
@@ -189,7 +176,7 @@ in {
     users.users.mailman = { description = "GNU Mailman"; isSystemUser = true; };
 
     environment = {
-      systemPackages = [ mailmanExe mailmanWebExe pkgs.sassc ];
+      systemPackages = [ pkgs.mailman mailmanWebExe pkgs.sassc ];
       etc."mailman.cfg".text = mailmanCfg;
     };
 
@@ -205,8 +192,8 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${mailmanExe}/bin/mailman start";
-        ExecStop = "${mailmanExe}/bin/mailman stop";
+        ExecStart = "${pkgs.mailman}/bin/mailman start";
+        ExecStop = "${pkgs.mailman}/bin/mailman stop";
         User = "mailman";
         Type = "forking";
         RuntimeDirectory = "mailman";
@@ -271,7 +258,7 @@ in {
       description = "Trigger daily Mailman events";
       startAt = "daily";
       serviceConfig = {
-        ExecStart = "${mailmanExe}/bin/mailman digests --send";
+        ExecStart = "${pkgs.mailman}/bin/mailman digests --send";
         User = "mailman";
       };
     };

@@ -28,15 +28,12 @@ buildPythonPackage rec {
   '';
 
   # Mailman assumes that those scripts in $out/bin are Python scripts. Wrapping
-  # them in shell code breaks this assumption. The proper way to use mailman is
-  # to create a specialized python interpreter:
-  #
-  #   python37.withPackages (ps: [ps.mailman])
+  # them in shell code breaks this assumption. Use the wrapped version (see
+  # wrapped.nix) if you need the CLI (rather than the Python library).
   #
   # This gives a properly wrapped 'mailman' command plus an interpreter that
   # has all the necessary search paths to execute unwrapped 'master' and
-  # 'runner' scripts. The setup is a little tricky, but fortunately NixOS is
-  # about to get a OS module that takes care of those details.
+  # 'runner' scripts.
   dontWrapPythonPrograms = true;
 
   meta = {
