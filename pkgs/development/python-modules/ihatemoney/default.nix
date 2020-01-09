@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchFromGitHub, nixosTests
+{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests
 , alembic
 , aniso8601
 , Babel
@@ -20,6 +20,7 @@
 , jinja2
 , Mako
 , markupsafe
+, mock
 , python-dateutil
 , pytz
 , six
@@ -74,7 +75,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     flask_testing
-  ];
+  ] ++ lib.optionals isPy27 [ mock ];
 
   passthru.tests = {
     inherit (nixosTests) ihatemoney;
