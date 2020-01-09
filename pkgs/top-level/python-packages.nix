@@ -6837,6 +6837,9 @@ in {
 
   pony = callPackage ../development/python-modules/pony { };
 
+  xandikos = disabledIf (!isPy3k) (toPythonModule (pkgs.xandikos.override {
+    python3Packages = self;
+  }));
 });
 
 in fix' (extends overrides packages)
