@@ -1,0 +1,32 @@
+#!/bin/bash
+
+test $# -eq 2 || { echo "Usage: $0 <chroot template directory for system libs to create> <LO installation directory>"; exit 1; }
+
+CHROOT=$1
+INSTDIR=$2
+
+test -d "$INSTDIR" || { echo "No such directory: $INSTDIR"; exit 1; }
+
+mkdir -p "$CHROOT" || exit 1
+
+CHROOT=$(cd "$CHROOT" && pwd)
+INSTDIR=$(cd "$INSTDIR" && pwd)
+
+cd / || exit 1
+
+mkdir -p "$CHROOT/etc"
+cp -af \
+        /etc/static/hosts \
+        /etc/static/nsswitch.conf \
+        /etc/static/fonts \
+        /etc/resolv.conf \
+        "$CHROOT/etc"
+
+mkdir -p "$CHROOT/nix/store"
+cp -af $(nix-store --query --requisites "$INSTDIR" /etc/fonts) "$CHROOT/nix/store"
+
+mkdir -p "$CHROOT/tmp"
+
+cd "$CHROOT" || exit 1
+
+exit 0

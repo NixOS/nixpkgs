@@ -84,6 +84,64 @@
 </para>
 
  </section>
+
+ <section xml:id="module-services-nextcloud-office-suite">
+  <title>Document editing</title>
+
+  <para>
+   With Nextcloud you can collaboratively edit office documents using the
+   <link xlink:href="https://apps.nextcloud.com/apps/richdocuments">Collabora Online</link> application.
+   The application needs to connect to a backend service which can be installed either using
+   <link xlink:href="https://www.collaboraoffice.com/code/">one of the official package formats</link>,
+   or you can run it on your NixOS system directly.
+  </para>
+
+  <para>
+   To run the backend directly on your NixOS installation you need to enable the
+   <link linkend="opt-services.loolwsd.enable">LibreOffice WebSocket daemon service</link>.
+   By default the service listens on localhost on TCP port 9980 - it is recommended to use reverse proxy
+   with TLS support to access the service:
+   <programlisting>
+   { config, pkgs, ... }: {
+     services.loolwsd = {
+       <link linkend="opt-services.loolwsd.enable">enable</link> = true;
+       <link linkend="opt-services.loolwsd.proxy.enable">proxy.enable</link> = true;
+       <link linkend="opt-services.loolwsd.proxy.hostname">proxy.hostname</link> = config.services.nextcloud.hostName;
+     };
+
+     services.nginx = {
+       virtualHosts."${config.services.nextcloud.hostName}" = {
+         <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
+         <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
+       };
+     };
+   }
+   </programlisting>
+  </para>
+
+  <para>
+   Once the service is running you can proceed as follows:
+  <itemizedlist>
+   <listitem><para>Log in to your Nextcloud service as administrator and go to the <emphasis>Apps</emphasis> settings</para></listitem>
+   <listitem><para><emphasis>Download and enable</emphasis> the <link xlink:href="https://apps.nextcloud.com/apps/richdocuments">Collabora Online</link> application</para></listitem>
+   <listitem><para>Go to <emphasis>Settings > Administration > Collabora Online</emphasis></para></listitem>
+   <listitem><para>Enter <literal>https://&lt;hostname&gt;</literal> to the <emphasis>URL (and Port) of Collabora Online-server</emphasis> text field</para></listitem>
+   <listitem><para>Check <emphasis>Disable certificate verification</emphasis> if using self-signed certificate</para></listitem>
+  </itemizedlist>
+  </para>
+
+  <warning>
+   <para>Some features (such as <emphasis>Insert > Image ...</emphasis>) may not work if you are using self-signed certificate.</para>
+  </warning>
+  <warning>
+   <para>Please note that the daemon has hardcoded limit of 10 concurrent documents and 20 connections.
+   If this limit is removed, you may have to change the name of the project to not include LibreOffice
+   or Collabora, especially if you intend to make it available outside your organisation. See
+   <link xlink:href="https://www.libreoffice.org/download/libreoffice-online/">Document Foundations's trademark policy</link>
+   for details.</para>
+  </warning>
+ </section>
+
  <section xml:id="module-services-nextcloud-pitfalls-during-upgrade">
   <title>Pitfalls</title>
 
