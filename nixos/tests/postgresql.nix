@@ -76,6 +76,9 @@ let
               "stat -c '%a' /var/backup/postgresql/${backupName}.sql.gz | grep 600",
           )
 
+      with subtest("Initdb works"):
+          machine.succeed("sudo -u postgres initdb -D /tmp/testpostgres2")
+
       machine.shutdown()
     '';
 
