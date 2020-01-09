@@ -1794,6 +1794,8 @@ in {
 
   colour = callPackage ../development/python-modules/colour {};
 
+  colormath = callPackage ../development/python-modules/colormath {};
+
   configshell = callPackage ../development/python-modules/configshell { };
 
   consonance = callPackage ../development/python-modules/consonance { };
