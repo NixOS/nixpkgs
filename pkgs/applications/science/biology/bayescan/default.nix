@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Detecting natural selection from population-based genetic data";
     homepage = "http://cmpg.unibe.ch/software/BayeScan";
-    license = licenses.gpl2;
+    license = licenses.gpl3;
     maintainers = [ maintainers.bzizou ];
     platforms = stdenv.lib.platforms.all;
   };
