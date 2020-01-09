@@ -381,5 +381,12 @@ stdenv.mkDerivation (rec {
 # unfortunately we can't just set this to `false` when we do not want it.
 # See https://github.com/NixOS/nixpkgs/issues/77289 for more details
 lib.optionalAttrs (lib.versionAtLeast ffversion "72") {
+  # Ideally we would figure out how to tell the build system to not
+  # care about changed hashes as we are already doing that when we
+  # fetch the sources. Any further modifications of the source tree
+  # is on purpose by some of our tool (or by accident and a bug?).
   dontFixLibtool = true;
+
+  # on aarch64 this is also required
+  dontUpdateAutotoolsGnuConfigScripts = true;
 })
