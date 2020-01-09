@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-libcurl" ]; # optional but strongly recommended
 
-  installFlags = "prefix=$(out)";
+  installFlags = [ "prefix=$(out)" ];
 
   preCheck = ''
     patchShebangs test/
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = http://www.htslib.org/;
     platforms = platforms.unix;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }

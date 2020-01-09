@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
-, cups, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
-, net_snmp, openssl, nettools
+, cups, libjpeg, libusb1, python2Packages, sane-backends, dbus, usbutils
+, net-snmp, openssl, nettools
 , bash, coreutils, utillinux
 , qtSupport ? true
 , withPlugin ? false
@@ -45,7 +45,7 @@ in
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
-pythonPackages.buildPythonApplication {
+python2Packages.buildPythonApplication {
   inherit name src;
   format = "other";
 
@@ -55,7 +55,7 @@ pythonPackages.buildPythonApplication {
     libusb1
     sane-backends
     dbus
-    net_snmp
+    net-snmp
     openssl
   ];
 
@@ -63,7 +63,7 @@ pythonPackages.buildPythonApplication {
     pkgconfig
   ];
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python2Packages; [
     dbus
     pillow
     pygobject2

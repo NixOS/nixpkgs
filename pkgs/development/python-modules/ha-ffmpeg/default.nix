@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "ha-ffmpeg";
-  version = "1.11";
+  version = "2.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "386cc5bbec3a341d8bafec1c524bd8e64f41f9be8195808dec80f76661bf1cc3";
+    sha256 = "230f2fa990c9caaff1c67c2227b64756062248083849651a9bec7d599e519a42";
   };
 
   buildInputs = [ ffmpeg ];

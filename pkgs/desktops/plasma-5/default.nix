@@ -43,11 +43,11 @@ let
       propagate = out:
         let setupHook = { writeScript }:
               writeScript "setup-hook" ''
-                if [ "$hookName" != postHook ]; then
+                if [[ "''${hookName-}" != postHook ]]; then
                     postHooks+=("source @dev@/nix-support/setup-hook")
                 else
                     # Propagate $${out} output
-                    propagatedUserEnvPkgs="$propagatedUserEnvPkgs @${out}@"
+                    propagatedUserEnvPkgs+=" @${out}@"
 
                     if [ -z "$outputDev" ]; then
                         echo "error: \$outputDev is unset!" >&2
@@ -57,7 +57,7 @@ let
                     # Propagate $dev so that this setup hook is propagated
                     # But only if there is a separate $dev output
                     if [ "$outputDev" != out ]; then
-                        propagatedBuildInputs="$propagatedBuildInputs @dev@"
+                        propagatedBuildInputs+=" @dev@"
                     fi
                 fi
               '';

@@ -2,21 +2,21 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.7.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "instrumenta";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "0qq2kp9h91rirlhml5vyzmi7rd4v3pkqjk2bn7mvdn578jnwww24";
+    sha256 = "0lb644fj80r4igxbslbd5pksirnyf6slz4yn0mznyx8i2bd1g4ic";
   };
+
+  modSha256 = "1p7fjg1vcrcxb4f5hd00qxx4fqcl051klcjs6ljn4v46qcpn6dcn";
 
   buildFlagsArray = ''
     -ldflags=
         -X main.version=${version}
   '';
-
-  modSha256 = "0c9phka7n2cfi8lf0a3prks2pjna5dgf5lj6az82iklnq4p7177y";
 
   meta = with lib; {
     description = "Write tests against structured configuration data";

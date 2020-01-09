@@ -11,19 +11,20 @@
 , attrs
 , pyopenssl
 , service-identity
+, setuptools
 , idna
 }:
 buildPythonPackage rec {
   pname = "Twisted";
-  version = "18.9.0";
+  version = "19.10.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.bz2";
-    sha256 = "294be2c6bf84ae776df2fc98e7af7d6537e1c5e60a46d33c3ce2a197677da395";
+    sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs ];
+  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools ];
 
   passthru.extras.tls = [ pyopenssl service-identity idna ];
 
@@ -38,7 +39,9 @@ buildPythonPackage rec {
   # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
   # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
   # details.
-  postInstall = "$out/bin/twistd --help > /dev/null";
+  postFixup = ''
+    $out/bin/twistd --help > /dev/null
+  '';
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s twisted/test

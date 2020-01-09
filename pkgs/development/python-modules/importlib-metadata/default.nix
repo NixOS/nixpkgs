@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "0.18";
+  version = "1.3.0";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "cb6ee23b46173539939964df59d3d72c3e0c1b5d54b84f1d8a7e912fe43612db";
+    sha256 = "0ibvvqajphwdclbr236gikvyja0ynvqjlix38kvsabgrf0jqafh7";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -27,9 +27,6 @@ buildPythonPackage rec {
     ++ lib.optionals (!isPy3k) [ pathlib2 contextlib2 configparser ];
 
   checkInputs = [ importlib-resources packaging ];
-
-  # Two failing tests: https://gitlab.com/python-devs/importlib_metadata/issues/72
-  doCheck = false;
 
   meta = with lib; {
     description = "Read metadata from Python packages";

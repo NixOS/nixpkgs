@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus-typing-booster";
-  version = "2.6.4";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "mike-fabian";
     repo = "ibus-typing-booster";
     rev = version;
-    sha256 = "1k074y9439w8v6s71i7hhmkq9bgkl836y2a409rx3mb73vidadjr";
+    sha256 = "0wp9y6cgxsb2z1hk899q7wybl7v49vkgx6x5zl4l706jm3w9qmg8";
   };
 
   patches = [ ./hunspell-dirs.patch ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = https://mike-fabian.github.io/ibus-typing-booster/;
     license = licenses.gpl3Plus;
     description = "A typing booster engine for the IBus platform";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     isIbusEngine = true;
   };
 }

@@ -17,7 +17,7 @@ let
 
     # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
     dontFixCmake       =                     lib.versionAtLeast version "3.5";
-    NIX_CFLAGS_COMPILE = lib.optionals      (lib.versionAtLeast version "3.5") [ "-Wno-error" ];
+    NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast version "3.5") "-Wno-error";
     preConfigure       = lib.optionalString (lib.versionAtLeast version "3.5") "patchShebangs utils";
 
     postPatch = ''
@@ -53,7 +53,16 @@ let
     };
   };
 in {
-  arangodb_3_3 = common { version = "3.3.23.1";   sha256 = "0bnbiispids7jcgrgcmanf9jqgvk0vaflrvgalz587jwr2zf21k8"; };
-  arangodb_3_4 = common { version = "3.4.7";      sha256 = "1wr2xvi5lnl6f2ryyxdwn4wnfiaz0rrf58ja1k19m7b6w3264iim"; };
-  arangodb_3_5 = common { version = "3.5.0-rc.7"; sha256 = "1sdmbmyml9d3ia3706bv5901qqmh4sxk7js5b9hyfjqpcib10d1k"; };
+  arangodb_3_3 = common {
+    version = "3.3.24";
+    sha256 = "18175789j4y586qvpcsaqxmw7d6vc3s29qm1fja5c7wzimx6ilyp";
+  };
+  arangodb_3_4 = common {
+    version = "3.4.8";
+    sha256 = "0vm94lf1i1vvs04vy68bkkv9q43rsaf1y3kfs6s3jcrs3ay0h0jn";
+  };
+  arangodb_3_5 = common {
+    version = "3.5.1";
+    sha256 = "1jw3j7vaq3xgkxiqg0bafn4b2169jq7f3y0l7mrpnrpijn77rkrv";
+  };
 }

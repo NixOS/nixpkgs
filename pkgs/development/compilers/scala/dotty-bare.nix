@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.0-RC1";
+  version = "0.20.0-RC1";
   pname = "dotty-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/dotty-${version}.tar.gz";
-    sha256 = "0nrgsyhqjlpvnjqgb18pryr8q7knq3dq25jhp98s4wh76nssm1zr";
+    sha256 = "08qs3m32cbh6516gcwraa1b5k935awmjxls6kg6xll722hkdd9l6";
   };
 
   propagatedBuildInputs = [ jre ncurses.dev ] ;
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://dotty.epfl.ch/;
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [maintainers.karolchmist];
+    maintainers = [maintainers.karolchmist maintainers.virusdave];
   };
 }

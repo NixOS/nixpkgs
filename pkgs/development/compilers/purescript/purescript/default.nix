@@ -18,19 +18,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.13.0";
+  version = "0.13.5";
 
   src =
     if stdenv.isDarwin
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "0xpisy38gj6fgyyzm6fdl0v819dhjmil4634xxangvhvs7jf5il0";
+      sha256 = "19bb50m0cd738r353blgy21d842b3yj58xfbplk7bz59jawj9lym";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "06g5q69yv6c3alq9vr8zjqqzamlii7xf6vj9j52akjq5lww214ba";
+      sha256 = "016wvwypgb4859f0n1lqsqv9a8cca2y8g7d6ffvzx6rncd115gxi";
     };
 
 

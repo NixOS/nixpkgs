@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-utils";
-  version = "1.1.9";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
-    sha256 = "0fi11b7r8hg1bdjw74s8sqx8rc4qb310jaj9lsia9labvfyjrpsx";
+    sha256 = "039c19b7091is0czl9jlrfczp7pp1jpdri0vvc4k07gl3skhn48b";
   };
 
   patchPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 
-  installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
+  installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.alsa-project.org/;

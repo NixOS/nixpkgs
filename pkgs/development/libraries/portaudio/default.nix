@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ libjack2 ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
-  configureFlags = [ "--disable-mac-universal --enable-cxx" ];
+  configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays";
 

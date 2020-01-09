@@ -4,22 +4,24 @@
 , click-plugins
 , colorama
 , requests
+, setuptools
 , XlsxWriter
 }:
 
 buildPythonPackage rec {
   pname = "shodan";
-  version = "1.14.0";
+  version = "1.21.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c5x53757p6ihh1f8xqsal2gi9ikcl3464b38qinva51s0kkb58k";
+    sha256 = "834dfd084fed290b2b445545b0d1cac7822f3c0ed6ba09707efb1716bb485ede";
   };
 
   propagatedBuildInputs = [
     click-plugins
     colorama
     requests
+    setuptools
     XlsxWriter
   ];
 

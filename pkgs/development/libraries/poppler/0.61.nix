@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.61.0";
+  version = "0.61.1";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0zrbb1b77k6bm2qdnra08jnbyllv6vj29790igmp6fzs59xf3kak";
+    sha256 = "1afdrxxkaivvviazxkg5blsf2x24sjkfj92ib0d3q5pm8dihjrhj";
   };
 
   outputs = [ "out" "dev" ];
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       url = "https://cgit.freedesktop.org/poppler/poppler/patch/?id=004e3c10df0abda214f0c293f9e269fdd979c5ee";
       sha256 = "1l8713s57xc6g81bldw934rsfm140fqc7ggd50ha5mxdl1b3app2";
     })
+    ./0.61-CVE-2019-9959.patch
   ];
 
   buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;

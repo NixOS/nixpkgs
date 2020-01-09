@@ -63,20 +63,15 @@ in {
       };
     };
 
-    users.users = [
-      {
-        name = "serviio";
-        group = "serviio";
+    users.users.serviio =
+      { group = "serviio";
         home = cfg.dataDir;
         description = "Serviio Media Server User";
         createHome = true;
         isSystemUser = true;
-      }
-    ];
+      };
 
-    users.groups = [
-      { name = "serviio";}
-    ];
+    users.groups.serviio = { };
 
     networking.firewall = {
       allowedTCPPorts = [

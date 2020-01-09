@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-runner";
-  version = "4.2";
+  version = "5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d23f117be39919f00dd91bffeb4f15e031ec797501b717a245e377aee0f577be";
+    sha256 = "96c7e73ead7b93e388c5d614770d2bae6526efd997757d3543fe17b557a0942b";
   };
 
   nativeBuildInputs = [ setuptools_scm pytest ];

@@ -22,7 +22,7 @@ in rec {
       rev = "sumalib_v${version}";
       sha256 = "0hwkrxzfz7m5wdjvmrhkjg8kis378iaqr5n4nhdhkwwhn8x1jn5a";
     };
-    makeFlags = "PREFIX=$(out)";
+    makeFlags = [ "PREFIX=$(out)" ];
     inherit meta;
   };
 

@@ -3,6 +3,7 @@
 , vala
 , atk
 , cairo
+, dconf
 , glib
 , gnome3
 , gtk3
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gnome-menus
-    gnome3.dconf
+    dconf
     gtk3
     libX11
     libXfixes

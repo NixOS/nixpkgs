@@ -1,17 +1,17 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "6.4.2";
+  version = "6.5.0";
   pname = "multitail";
 
   src = fetchurl {
     url = "https://www.vanheusden.com/multitail/${pname}-${version}.tgz";
-    sha256 = "1zd1r89xkxngl1pdrvsc877838nwkfqkbcgfqm3vglwalxc587dg";
+    sha256 = "1vd9vdxyxsccl64ilx542ya5vlw2bpg6gnkq1x8cfqy6vxvmx7dj";
   };
 
   buildInputs = [ ncurses ];
 
-  makeFlags = stdenv.lib.optionalString stdenv.isDarwin "-f makefile.macosx";
+  makeFlags = stdenv.lib.optionals stdenv.isDarwin [ "-f" "makefile.macosx" ];
 
   installPhase = ''
     mkdir -p $out/bin

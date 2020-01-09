@@ -1,11 +1,9 @@
 { stdenv, fetchFromGitHub,
   fetchHex, erlang,
-  tree, hexRegistrySnapshot }:
+  tree }:
 
 let
-  version = "3.11.1";
-
-  bootstrapper = ./rebar3-nix-bootstrap;
+  version = "3.12.0";
 
   erlware_commons = fetchHex {
     pkg = "erlware_commons";
@@ -77,18 +75,12 @@ stdenv.mkDerivation rec {
     owner = "erlang";
     repo = pname;
     rev = version;
-    sha256 = "124l1alf7wx4hqjpf63l0nx70q68lilmgh582c1d413fz5ip0byd";
+    sha256 = "0936ix7lfwsamssap58b265zid7x2m97azrr2qpjcln3xysd16lg";
   };
-
-  inherit bootstrapper;
 
   buildInputs = [ erlang tree ];
 
-  # TODO: Remove registry snapshot
-  propagatedBuildInputs = [ hexRegistrySnapshot ];
-
   postPatch = ''
-    ${erlang}/bin/escript ${bootstrapper} registry-only
     mkdir -p _checkouts
     mkdir -p _build/default/lib/
 

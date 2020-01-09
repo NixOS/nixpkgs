@@ -32,7 +32,7 @@ mkDerivation rec {
     description = "Power management module for LXQt";
     homepage = https://github.com/lxqt/lxqt-powermanagement;
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

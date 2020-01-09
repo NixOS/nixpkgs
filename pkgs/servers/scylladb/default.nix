@@ -41,7 +41,7 @@ gcc8Stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  patches = [ ./seastar-configure-script-paths.patch ];
+  patches = [ ./seastar-configure-script-paths.patch ./configure-etc-osrelease.patch ];
 
   nativeBuildInputs = [
    pkgconfig
@@ -77,20 +77,26 @@ gcc8Stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs ./configure.py
+    patchShebangs seastar/json/json2code.py
   '';
 
   configurePhase = ''
     ./configure.py --mode=release
   '';
+
   installPhase = ''
     mkdir $out
     cp -r * $out/
   '';
+
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with stdenv.lib; {
     description = "NoSQL data store using the seastar framework, compatible with Apache Cassandra";
     homepage = "https://scylladb.com";
     license = licenses.agpl3;
     platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = []; # It's huge ATM, about 18 GB.
     maintainers = [ stdenv.lib.maintainers.farlion ];
   };
 }

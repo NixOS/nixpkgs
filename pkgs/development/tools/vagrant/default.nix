@@ -4,9 +4,9 @@
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.5";
+  version = "2.2.6";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "0a228f5185b24b72efcc5a3924f86fa9fabab6f7562c3c63c1d9d239aa72a7b1";
+  sha256 = "0nssq2i4riif0q72h5qp7dlxd4shqcyvm1bx9adppcacb77gpnhv";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -25,6 +25,17 @@ let
         inherit version;
       };
     } // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix));
+
+    # This replaces the gem symlinks with directories, resolving this
+    # error when running vagrant (I have no idea why):
+    # /nix/store/p4hrycs0zaa9x0gsqylbk577ppnryixr-vagrant-2.2.6/lib/ruby/gems/2.6.0/gems/i18n-1.1.1/lib/i18n/config.rb:6:in `<module:I18n>': uninitialized constant I18n::Config (NameError)
+    postBuild = ''
+      for gem in "$out"/lib/ruby/gems/*/gems/*; do
+        cp -a "$gem/" "$gem.new"
+        rm "$gem"
+        mv "$gem.new" "$gem"
+      done
+    '';
   };
 
 in buildRubyGem rec {
@@ -79,12 +90,7 @@ in buildRubyGem rec {
   '';
 
   installCheckPhase = ''
-    if [[ "$("$out/bin/vagrant" --version)" == "Vagrant ${version}" ]]; then
-      echo 'Vagrant smoke check passed'
-    else
-      echo 'Vagrant smoke check failed'
-      return 1
-    fi
+    HOME="$(mktemp -d)" $out/bin/vagrant init --output - > /dev/null
   '';
 
   # `patchShebangsAuto` patches this one script which is intended to run

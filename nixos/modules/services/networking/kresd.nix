@@ -13,6 +13,17 @@ in
 {
   meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
 
+  imports = [
+    (mkChangedOptionModule [ "services" "kresd" "interfaces" ] [ "services" "kresd" "listenPlain" ]
+      (config:
+        let value = getAttrFromPath [ "services" "kresd" "interfaces" ] config;
+        in map
+          (iface: if elem ":" (stringToCharacters iface) then "[${iface}]:53" else "${iface}:53") # Syntax depends on being IPv6 or IPv4.
+          value
+      )
+    )
+  ];
+
   ###### interface
   options.services.kresd = {
     enable = mkOption {
@@ -39,11 +50,12 @@ in
         Directory for caches.  They are intended to survive reboots.
       '';
     };
-    interfaces = mkOption {
+    listenPlain = mkOption {
       type = with types; listOf str;
-      default = [ "::1" "127.0.0.1" ];
+      default = [ "[::1]:53" "127.0.0.1:53" ];
       description = ''
-        What addresses the server should listen on. (UDP+TCP 53)
+        What addresses and ports the server should listen on.
+        For detailed syntax see ListenStream in man systemd.socket.
       '';
     };
     listenTLS = mkOption {
@@ -51,7 +63,7 @@ in
       default = [];
       example = [ "198.51.100.1:853" "[2001:db8::1]:853" "853" ];
       description = ''
-        Addresses on which kresd should provide DNS over TLS (see RFC 7858).
+        Addresses and ports on which kresd should provide DNS over TLS (see RFC 7858).
         For detailed syntax see ListenStream in man systemd.socket.
       '';
     };
@@ -62,24 +74,17 @@ in
   config = mkIf cfg.enable {
     environment.etc."kresd.conf".source = configFile; # not required
 
-    users.users = singleton
-      { name = "kresd";
-        uid = config.ids.uids.kresd;
+    users.users.kresd =
+      { uid = config.ids.uids.kresd;
         group = "kresd";
         description = "Knot-resolver daemon user";
       };
-    users.groups = singleton
-      { name = "kresd";
-        gid = config.ids.gids.kresd;
-      };
+    users.groups.kresd.gid = config.ids.gids.kresd;
 
     systemd.sockets.kresd = rec {
       wantedBy = [ "sockets.target" ];
       before = wantedBy;
-      listenStreams = map
-        # Syntax depends on being IPv6 or IPv4.
-        (iface: if elem ":" (stringToCharacters iface) then "[${iface}]:53" else "${iface}:53")
-        cfg.interfaces;
+      listenStreams = cfg.listenPlain;
       socketConfig = {
         ListenDatagram = listenStreams;
         FreeBind = true;

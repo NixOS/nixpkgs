@@ -104,10 +104,10 @@ index 84e4e88..56ca676 100644
 -	cp -rf ../include $(INSTALL_DIR)/include/Lfunction
 +	install -d $(INSTALL_DIR)/bin
 +	install -d $(INSTALL_DIR)/$(LIB_DIR)
-+	install -d $(INSTALL_DIR)/include/libLfunction
++	install -d $(INSTALL_DIR)/include/Lfunction
 +	install lcalc $(INSTALL_DIR)/bin
 +	install libLfunction.so $(INSTALL_DIR)/$(LIB_DIR)
-+	install -m 644 -t $(INSTALL_DIR)/include/libLfunction ../include/*.h
++	install -m 644 -t $(INSTALL_DIR)/include/Lfunction ../include/*.h
  
  
  SRCS = Lcommandline.cc Lcommandline_elliptic.cc Lcommandline_globals.cc Lcommandline_misc.cc Lcommandline_numbertheory.cc Lcommandline_twist.cc Lcommandline_values_zeros.cc Lgamma.cc Lglobals.cc Lmisc.cc Lriemannsiegel.cc Lriemannsiegel_blfi.cc cmdline.c

@@ -47,7 +47,7 @@ let
   ''));
 
   configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
-    user ${cfg.user} ${cfg.group};
+    pid /run/nginx/nginx.pid;
     error_log ${cfg.logError};
     daemon off;
 
@@ -61,7 +61,10 @@ let
 
     ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
     http {
-      include ${cfg.package}/conf/mime.types;
+      # The mime type definitions included with nginx are very incomplete, so
+      # we use a list of mime types from the mailcap package, which is also
+      # used by most other Linux distributions by default.
+      include ${pkgs.mailcap}/etc/nginx/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
 
@@ -94,7 +97,6 @@ let
 
       ${optionalString (cfg.recommendedGzipSettings) ''
         gzip on;
-        gzip_disable "msie6";
         gzip_proxied any;
         gzip_comp_level 5;
         gzip_types
@@ -118,6 +120,14 @@ let
         proxy_read_timeout      90;
         proxy_http_version      1.0;
         include ${recommendedProxyConfig};
+      ''}
+
+      ${optionalString (cfg.mapHashBucketSize != null) ''
+        map_hash_bucket_size ${toString cfg.mapHashBucketSize};
+      ''}
+
+      ${optionalString (cfg.mapHashMaxSize != null) ''
+        map_hash_max_size ${toString cfg.mapHashMaxSize};
       ''}
 
       # $connection_upgrade is used for websocket proxying
@@ -167,6 +177,8 @@ let
   configPath = if cfg.enableReload
     then "/etc/nginx/nginx.conf"
     else configFile;
+
+  execCommand = "${cfg.package}/bin/nginx -c '${configPath}' -p '${cfg.stateDir}'";
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
@@ -356,12 +368,7 @@ in
 
       preStart =  mkOption {
         type = types.lines;
-        default = ''
-          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs
-          test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
-          test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
-          chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
-        '';
+        default = "";
         description = "
           Shell commands executed before the service's nginx is started.
         ";
@@ -508,6 +515,23 @@ in
         '';
       };
 
+      mapHashBucketSize = mkOption {
+        type = types.nullOr (types.enum [ 32 64 128 ]);
+        default = null;
+        description = ''
+            Sets the bucket size for the map variables hash tables. Default
+            value depends on the processor’s cache line size.
+          '';
+      };
+
+      mapHashMaxSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the maximum size of the map variables hash tables.
+          '';
+      };
+
       resolver = mkOption {
         type = types.submodule {
           options = {
@@ -646,23 +670,36 @@ in
       }
     ];
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/logs' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
       wants = concatLists (map (vhostConfig: ["acme-${vhostConfig.serverName}.service" "acme-selfsigned-${vhostConfig.serverName}.service"]) acmeEnabledVhosts);
       after = [ "network.target" ] ++ map (vhostConfig: "acme-selfsigned-${vhostConfig.serverName}.service") acmeEnabledVhosts;
       stopIfChanged = false;
-      preStart =
-        ''
+      preStart = ''
         ${cfg.preStart}
-        ${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir} -t
-        '';
+        ${execCommand} -t
+      '';
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir}";
+        ExecStart = execCommand;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
+        # User and group
+        User = cfg.user;
+        Group = cfg.group;
+        # Runtime directory and mode
+        RuntimeDirectory = "nginx";
+        RuntimeDirectoryMode = "0750";
+        # Capabilities
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
       };
     };
 
@@ -671,11 +708,18 @@ in
     };
 
     systemd.services.nginx-config-reload = mkIf cfg.enableReload {
-      wantedBy = [ "nginx.service" ];
+      wants = [ "nginx.service" ];
+      wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
+      # commented, because can cause extra delays during activate for this config:
+      #      services.nginx.virtualHosts."_".locations."/".proxyPass = "http://blabla:3000";
+      # stopIfChanged = false;
+      serviceConfig.Type = "oneshot";
+      serviceConfig.TimeoutSec = 60;
       script = ''
         if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
-          ${pkgs.systemd}/bin/systemctl reload nginx.service
+          ${execCommand} -t && \
+            ${pkgs.systemd}/bin/systemctl reload nginx.service
         fi
       '';
       serviceConfig.RemainAfterExit = true;
@@ -696,15 +740,16 @@ in
         listToAttrs acmePairs
     );
 
-    users.users = optionalAttrs (cfg.user == "nginx") (singleton
-      { name = "nginx";
+    users.users = optionalAttrs (cfg.user == "nginx") {
+      nginx = {
         group = cfg.group;
         uid = config.ids.uids.nginx;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "nginx") (singleton
-      { name = "nginx";
-        gid = config.ids.gids.nginx;
-      });
+    users.groups = optionalAttrs (cfg.group == "nginx") {
+      nginx.gid = config.ids.gids.nginx;
+    };
+
   };
 }

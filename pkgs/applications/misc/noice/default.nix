@@ -4,12 +4,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "noice";
-  version = "0.6";
+  version = "0.8";
 
   src = fetchgit {
     url = "git://git.2f30.org/noice.git";
     rev = "refs/tags/v${version}";
-    sha256 = "03rwglcy47fh6rb630vws10m95bxpcfv47nxrlws2li2ljam8prw";
+    sha256 = "0975j4m93s9a21pazwdzn4gqhkngwq7q6ghp0q8a75r6c4fb7aar";
   };
 
   configFile = optionalString (conf!=null) (builtins.toFile "config.def.h" conf);

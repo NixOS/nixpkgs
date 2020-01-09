@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
       'install -m 644 $(INCLUDES) $(DESTDIR)$(INCLUDEDIR)'
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    description = "A GPL reimplementation of libdjb";
     homepage = https://www.fefe.de/libowfat/;
     license = licenses.gpl2;
     platforms = platforms.linux;

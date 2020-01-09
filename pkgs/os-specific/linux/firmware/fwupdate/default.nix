@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     ./do-not-create-sharedstatedir.patch
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${gnu-efi}/include/efi" ];
+  NIX_CFLAGS_COMPILE = "-I${gnu-efi}/include/efi -Wno-error=address-of-packed-member";
 
   # TODO: Just apply the disable to the efi subdir
   hardeningDisable = [ "stackprotector" ];

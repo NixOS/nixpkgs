@@ -1,5 +1,5 @@
 @name@ () {
-    export G4@envvar@DATA="@out@/data"
+    export G4@envvar@DATA="@datadir@"
 }
 
 postHooks+=(@name@)

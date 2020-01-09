@@ -28,9 +28,6 @@ stdenv.mkDerivation {
   # Makefiles don't include install targets for all new shared libs, yet.
   dontDisableStatic = true;
 
-  # Fixes broken format string in 1.8.2
-  hardeningDisable=[ "format" ];
-
   preConfigure = ''
     patchShebangs .
     for i in `grep -l -R '/usr/\(include\|src\)' .`; do
@@ -96,6 +93,6 @@ stdenv.mkDerivation {
     homepage = https://www.openafs.org;
     license = licenses.ipl10;
     platforms = platforms.linux;
-    maintainers = [ maintainers.z77z maintainers.spacefrogg ];
+    maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
   };
 }

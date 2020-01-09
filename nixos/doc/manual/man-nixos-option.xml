@@ -8,8 +8,8 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-option</command>
-  </refname><refpurpose>inspect a NixOS configuration</refpurpose>
+  <refname><command>nixos-option</command></refname>
+  <refpurpose>inspect a NixOS configuration</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
@@ -19,14 +19,10 @@
    </arg>
 
    <arg>
-    <option>--verbose</option>
+    <option>--all</option>
    </arg>
 
    <arg>
-    <option>--xml</option>
-   </arg>
-
-   <arg choice="plain">
     <replaceable>option.name</replaceable>
    </arg>
   </cmdsynopsis>
@@ -62,22 +58,11 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <option>--verbose</option>
+     <option>--all</option>
     </term>
     <listitem>
      <para>
-      This option enables verbose mode, which currently is just the Bash
-      <command>set</command> <option>-x</option> debug mode.
-     </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>
-     <option>--xml</option>
-    </term>
-    <listitem>
-     <para>
-      This option causes the output to be rendered as XML.
+      Print the values of all options.
      </para>
     </listitem>
    </varlistentry>
@@ -132,6 +117,15 @@ Defined by:
   <para>
    The author listed in the following section is wrong. If there is any other
    bug, please report to Nicolas Pierron.
+  </para>
+ </refsection>
+ <refsection>
+  <title>See also</title>
+  <para>
+   <citerefentry>
+    <refentrytitle>configuration.nix</refentrytitle>
+    <manvolnum>5</manvolnum>
+   </citerefentry>
   </para>
  </refsection>
 </refentry>

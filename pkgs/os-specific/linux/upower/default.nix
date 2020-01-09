@@ -52,12 +52,14 @@ stdenv.mkDerivation {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemdutildir=${placeholder "out"}/lib/systemd"
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "--sysconfdir=/etc"
   ];
 
   doCheck = false; # fails with "env: './linux/integration-test': No such file or directory"
 
   installFlags = [
     "historydir=$(TMPDIR)/foo"
+    "sysconfdir=${placeholder "out"}/etc"
   ];
 
   meta = with stdenv.lib; {

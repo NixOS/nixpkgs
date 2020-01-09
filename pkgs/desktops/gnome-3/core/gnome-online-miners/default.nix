@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-miners";
-  version = "3.30.0";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-online-miners/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0pjamwwzn5wqgihyss357dyl2q70r0bngnqmwsqawchx5f9aja9c";
+    sha256 = "1n2jz9i8a42zwxx5h8j2gdy6q1vyydh4vl00r0al7w8jzdh24p44";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];

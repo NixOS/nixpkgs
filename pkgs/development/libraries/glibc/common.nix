@@ -19,7 +19,7 @@
 
 { stdenv, lib
 , buildPackages
-, fetchurl ? null
+, fetchurl, fetchpatch
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 , bison
@@ -92,10 +92,26 @@ stdenv.mkDerivation ({
         url = "https://salsa.debian.org/glibc-team/glibc/raw/49767c9f7de4828220b691b29de0baf60d8a54ec/debian/patches/localedata/locale-C.diff";
         sha256 = "0irj60hs2i91ilwg5w7sqrxb695c93xg0ik7yhhq9irprd7fidn4";
       })
+
+      # https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=5460617d1567657621107d895ee2dd83bc1f88f2
+      ./CVE-2018-11236.patch
+      # https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=f51c8367685dc888a02f7304c729ed5277904aff
+      ./CVE-2018-11237.patch
     ]
-    ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
+    ++ lib.optionals stdenv.isx86_64 [
+      ./fix-x64-abi.patch
+      ./2.27-CVE-2019-19126.patch
+    ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
-    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
+    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
+
+    # Remove after upgrading to glibc 2.28+
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform || stdenv.hostPlatform.isMusl) (fetchpatch {
+      url = "https://sourceware.org/git/?p=glibc.git;a=patch;h=780684eb04298977bc411ebca1eadeeba4877833";
+      name = "correct-pwent-parsing-issue-and-resulting-build.patch";
+      sha256 = "08fja894vzaj8phwfhsfik6jj2pbji7kypy3q8pgxvsd508zdv1q";
+      excludes = [ "ChangeLog" ];
+    });
 
   postPatch =
     ''

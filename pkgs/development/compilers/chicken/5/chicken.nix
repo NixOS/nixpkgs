@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
 
-  buildFlags = "PLATFORM=${platform} PREFIX=$(out)";
-  installFlags = "PLATFORM=${platform} PREFIX=$(out)";
+  buildFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" ];
+  installFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" ];
 
   buildInputs = [
     makeWrapper
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.call-cc.org/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ the-kenny corngood ];
     platforms = stdenv.lib.platforms.linux; # Maybe other non-darwin Unix
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''

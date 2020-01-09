@@ -62,6 +62,7 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/betaflight/betaflight;
     license = licenses.gpl3;
     maintainers = with maintainers; [ elitak ];
+    broken = true;
   };
 
 }

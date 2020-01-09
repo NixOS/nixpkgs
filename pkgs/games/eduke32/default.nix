@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, nasm, makeDesktopItem
-, flac, gtk2, libvorbis, libvpx, libGLU_combined
+, flac, gtk2, libvorbis, libvpx, libGLU, libGL
 , SDL2, SDL2_mixer }:
 
 let
@@ -26,25 +26,22 @@ in stdenv.mkDerivation {
     sha256 = "09a7l23i6sygicc82w1in9hjw0jvivlf7q0vw8kcx9j98lm23mkn";
   };
 
-  buildInputs = [ flac gtk2 libvorbis libvpx libGLU_combined SDL2 SDL2_mixer ];
+  buildInputs = [ flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ]
     ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
   postPatch = ''
     substituteInPlace source/build/src/glbuild.cpp \
-      --replace libGLU.so ${libGLU_combined}/lib/libGLU.so
+      --replace libGLU.so ${libGLU}/lib/libGLU.so
 
     for f in glad.c glad_wgl.c ; do
       substituteInPlace source/glad/src/$f \
-        --replace libGL.so ${libGLU_combined}/lib/libGL.so
+        --replace libGL.so ${libGL}/lib/libGL.so
     done
   '';
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2.dev}/include/SDL2"
-    "-I${SDL2_mixer}/include/SDL2"
-  ];
+  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
 
   makeFlags = [
     "SDLCONFIG=${SDL2}/bin/sdl2-config"

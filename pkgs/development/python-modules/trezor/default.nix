@@ -11,20 +11,21 @@
 , libusb1
 , rlp
 , shamir-mnemonic
+, trezor-udev-rules
 }:
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.11.4";
+  version = "0.11.6";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aeb3f56a4c389495617f27bf218471b7969f636d25ddc491dfefeb8a1b3cd499";
+    sha256 = "1i73j812i0dgjw9n106pipc6qksd9cgs59d0as0b4j5iyl0087hh";
   };
 
-  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic ];
+  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic trezor-udev-rules ];
 
   checkInputs = [
     pytest
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   # disable test_tx_api.py as it requires being online
   checkPhase = ''
     runHook preCheck
-    ${python.interpreter} -m pytest --pyargs trezorlib.tests.unit_tests --ignore trezorlib/tests/unit_tests/test_tx_api.py
+    pytest --pyargs tests --ignore tests/test_tx_api.py
     runHook postCheck
   '';
 

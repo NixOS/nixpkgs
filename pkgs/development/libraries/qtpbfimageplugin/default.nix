@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
-  version = "1.4";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
     rev = version;
-    sha256 = "0d39i7rmhrmm2df49gd47zm37gnz3fmyr6hfc6hhzvk08jb6956r";
+    sha256 = "16qsax1p09gldbg83df77ixaz7bkxl8wm806lc55y19pwnid9m7p";
   };
 
   nativeBuildInputs = [ qmake ];
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
       displaying raster MBTiles maps or raster XYZ online maps to also display PBF
       vector tiles without (almost) any application modifications.
     '';
-    homepage = https://github.com/tumic0/QtPBFImagePlugin;
+    homepage = "https://github.com/tumic0/QtPBFImagePlugin";
     license = licenses.lgpl3;
-    maintainers = [ maintainers.sikmir ];
+    maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
 }

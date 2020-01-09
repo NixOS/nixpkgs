@@ -4,10 +4,7 @@ stdenv.mkDerivation {
   name = "schroedinger-1.0.11";
 
   src = fetchurl {
-    urls = [
-      http://diracvideo.org/download/schroedinger/schroedinger-1.0.11.tar.gz
-      https://download.videolan.org/contrib/schroedinger-1.0.11.tar.gz
-    ];
+    url = https://download.videolan.org/contrib/schroedinger-1.0.11.tar.gz;
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 
@@ -18,7 +15,7 @@ stdenv.mkDerivation {
 
   doCheck = (!stdenv.isDarwin);
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   patches = [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/macports/macports-ports/master/multimedia/schroedinger/files/patch-testsuite-Makefile.am.diff";
@@ -27,7 +24,8 @@ stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://diracvideo.org/;
+    description = "An implementation of the Dirac video codec in ANSI C";
+    homepage = "https://sourceforge.net/projects/schrodinger/";
     maintainers = [ maintainers.spwhitt ];
     license = [ licenses.mpl11 licenses.lgpl2 licenses.mit ];
     platforms = platforms.unix;

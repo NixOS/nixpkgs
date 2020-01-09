@@ -28,14 +28,14 @@ let
 
 in buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "8.2.3";
+  version = "9.2.0";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "1ldlyhxkav34y9d7g2kx3d4p26c2b82vnwi0ywnfynb16sav36d5";
+    sha256 = "1mvc6x5nn242z65pxv39ch71vaikgi89bb0sjbfy2jbw91vk41xa";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -51,12 +51,13 @@ in buildPythonApplication rec {
     img2pdf
     pdfminer
     pikepdf
+    pillow
     reportlab
-    ruffus
+    setuptools
+    tqdm
   ];
 
   checkInputs = with python3Packages; [
-    hocr-tools
     pypdf2
     pytest
     pytest-helpers-namespace
@@ -67,11 +68,10 @@ in buildPythonApplication rec {
     setuptools
   ] ++ runtimeDeps;
 
-
   postPatch = ''
     substituteInPlace src/ocrmypdf/leptonica.py \
-      --replace "ffi.dlopen(find_library('lept'))" \
-      'ffi.dlopen("${stdenv.lib.makeLibraryPath [leptonica]}/liblept${stdenv.hostPlatform.extensions.sharedLibrary}")'
+      --replace "lept = ffi.dlopen(_libpath)" \
+      'lept = ffi.dlopen("${stdenv.lib.makeLibraryPath [leptonica]}/liblept${stdenv.hostPlatform.extensions.sharedLibrary}")'
   '';
 
   # The tests take potentially 20+ minutes, depending on machine
@@ -92,6 +92,8 @@ in buildPythonApplication rec {
     and not test_bad_utf8 \
     and not test_old_unpaper'
   '';
+
+  makeWrapperArgs = [ "--prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";

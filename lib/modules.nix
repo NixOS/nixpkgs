@@ -103,42 +103,42 @@ rec {
       toClosureList = file: parentKey: imap1 (n: x:
         if isAttrs x || isFunction x then
           let key = "${parentKey}:anon-${toString n}"; in
-          unifyModuleSyntax file key (unpackSubmodule (applyIfFunction key) x args)
+          unifyModuleSyntax file key (applyIfFunction key x args)
         else
           let file = toString x; key = toString x; in
           unifyModuleSyntax file key (applyIfFunction key (import x) args));
     in
       builtins.genericClosure {
         startSet = toClosureList unknownModule "" modules;
-        operator = m: toClosureList m.file m.key m.imports;
+        operator = m: toClosureList m._file m.key m.imports;
       };
 
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
-    let metaSet = if m ? meta
-      then { meta = m.meta; }
-      else {};
+    let addMeta = config: if m ? meta
+      then mkMerge [ config { meta = m.meta; } ]
+      else config;
     in
     if m ? config || m ? options then
       let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta"]; in
       if badAttrs != {} then
-        throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by assignments to the top-level attributes `config' or `options'."
+        throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
-        { file = m._file or file;
+        { _file = m._file or file;
           key = toString m.key or key;
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
           options = m.options or {};
-          config = mkMerge [ (m.config or {}) metaSet ];
+          config = addMeta (m.config or {});
         }
     else
-      { file = m._file or file;
+      { _file = m._file or file;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = mkMerge [ (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]) metaSet ];
+        config = addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]);
       };
 
   applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
@@ -171,17 +171,6 @@ rec {
   else
     f;
 
-  /* We have to pack and unpack submodules. We cannot wrap the expected
-     result of the function as we would no longer be able to list the arguments
-     of the submodule. (see applyIfFunction) */
-  unpackSubmodule = unpack: m: args:
-    if isType "submodule" m then
-      { _file = m.file; } // (unpack m.submodule args)
-    else unpack m args;
-
-  packSubmodule = file: m:
-    { _type = "submodule"; file = file; submodule = m; };
-
   /* Merge a list of modules.  This will recurse over the option
      declarations in all modules, combining them into a single set.
      At the same time, for each option declaration, it will merge the
@@ -189,7 +178,7 @@ rec {
      in the ‘value’ attribute of each option. */
   mergeModules = prefix: modules:
     mergeModules' prefix modules
-      (concatMap (m: map (config: { inherit (m) file; inherit config; }) (pushDownProperties m.config)) modules);
+      (concatMap (m: map (config: { file = m._file; inherit config; }) (pushDownProperties m.config)) modules);
 
   mergeModules' = prefix: options: configs:
     let
@@ -223,7 +212,7 @@ rec {
                ) {} modules;
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName = byName "options" (module: option:
-          [{ inherit (module) file; options = option; }]
+          [{ inherit (module) _file; options = option; }]
         ) options;
       # an attrset 'name' => list of submodules that define ‘name’.
       defnsByName = byName "config" (module: value:
@@ -250,7 +239,7 @@ rec {
               firstOption = findFirst (m: isOption m.options) "" decls;
               firstNonOption = findFirst (m: !isOption m.options) "" decls;
             in
-              throw "The option `${showOption loc}' in `${firstOption.file}' is a prefix of options in `${firstNonOption.file}'."
+              throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
           else
             mergeModules' loc decls defns
       ))
@@ -267,7 +256,14 @@ rec {
 
      'opts' is a list of modules.  Each module has an options attribute which
      correspond to the definition of 'loc' in 'opt.file'. */
-  mergeOptionDecls = loc: opts:
+  mergeOptionDecls =
+   let
+    packSubmodule = file: m:
+      { _file = file; imports = [ m ]; };
+    coerceOption = file: opt:
+      if isFunction opt then packSubmodule file opt
+      else packSubmodule file { options = opt; };
+   in loc: opts:
     foldl' (res: opt:
       let t  = res.type;
           t' = opt.options.type;
@@ -284,7 +280,7 @@ rec {
          bothHave "apply" ||
          (bothHave "type" && (! typesMergeable))
       then
-        throw "The option `${showOption loc}' in `${opt.file}' is already declared in ${showFiles res.declarations}."
+        throw "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
       else
         let
           /* Add the modules of the current option to the list of modules
@@ -293,16 +289,14 @@ rec {
              current option declaration as the file use for the submodule.  If the
              submodule defines any filename, then we ignore the enclosing option file. */
           options' = toList opt.options.options;
-          coerceOption = file: opt:
-            if isFunction opt then packSubmodule file opt
-            else packSubmodule file { options = opt; };
+
           getSubModules = opt.options.type.getSubModules or null;
           submodules =
-            if getSubModules != null then map (packSubmodule opt.file) getSubModules ++ res.options
-            else if opt.options ? options then map (coerceOption opt.file) options' ++ res.options
+            if getSubModules != null then map (packSubmodule opt._file) getSubModules ++ res.options
+            else if opt.options ? options then map (coerceOption opt._file) options' ++ res.options
             else res.options;
         in opt.options // res //
-          { declarations = res.declarations ++ [opt.file];
+          { declarations = res.declarations ++ [opt._file];
             options = submodules;
           } // typeSet
     ) { inherit loc; declarations = []; options = []; } opts;
@@ -326,6 +320,8 @@ rec {
 
       # The value with a check that it is defined
       valueDefined = if res.isDefined then res.mergedValue else
+        # (nixos-option detects this specific error message and gives it special
+        # handling.  If changed here, please change it there too.)
         throw "The option `${showOption loc}' is used but not defined.";
 
       # Apply the 'apply' function to the merged value. This allows options to
@@ -591,12 +587,16 @@ rec {
     { options, ... }:
     { options = setAttrByPath optionName (mkOption {
         visible = false;
+        apply = x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
-      config.warnings =
-        let opt = getAttrFromPath optionName options; in
-        optional opt.isDefined ''
+      config.assertions =
+        let opt = getAttrFromPath optionName options; in [{
+          assertion = !opt.isDefined;
+          message = ''
             The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
-            ${replacementInstructions}'';
+            ${replacementInstructions}
+          '';
+        }];
     };
 
   /* Return a module that causes a warning to be shown if the

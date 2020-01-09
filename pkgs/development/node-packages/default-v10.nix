@@ -21,7 +21,7 @@ nodePackages // {
   };
 
   dat = nodePackages.dat.override {
-    buildInputs = [ nodePackages.node-gyp-build ];
+    buildInputs = [ nodePackages.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
   };
 
   dnschain = nodePackages.dnschain.override {
@@ -30,6 +30,10 @@ nodePackages // {
       wrapProgram $out/bin/dnschain --suffix PATH : ${pkgs.openssl.bin}/bin
     '';
   };
+
+  bitwarden-cli = pkgs.lib.overrideDerivation nodePackages."@bitwarden/cli" (drv: {
+    name = "bitwarden-cli-${drv.version}";
+  });
 
   ios-deploy = nodePackages.ios-deploy.override (drv: {
     nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.buildPackages.rsync ];

@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , cmake
 , ninja
+, vala
 , pkgconfig
 , pantheon
 , gtk3
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     cmake
     libxml2
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     wrapGAppsHook
   ];
@@ -56,6 +57,13 @@ stdenv.mkDerivation rec {
     sqlite
     webkitgtk
   ];
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
 
   meta = with stdenv.lib; {
     description = "The podcast client for the modern free desktop";

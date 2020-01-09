@@ -631,6 +631,14 @@ in
         setgid = true;
       };
 
+      security.wrappers.mailq = {
+        program = "mailq";
+        source = "${pkgs.postfix}/bin/mailq";
+        group = setgidGroup;
+        setuid = false;
+        setgid = true;
+      };
+
       security.wrappers.postqueue = {
         program = "postqueue";
         source = "${pkgs.postfix}/bin/postqueue";
@@ -647,21 +655,20 @@ in
         setgid = true;
       };
 
-      users.users = optional (user == "postfix")
-        { name = "postfix";
-          description = "Postfix mail server user";
-          uid = config.ids.uids.postfix;
-          group = group;
+      users.users = optionalAttrs (user == "postfix")
+        { postfix = {
+            description = "Postfix mail server user";
+            uid = config.ids.uids.postfix;
+            group = group;
+          };
         };
 
       users.groups =
-        optional (group == "postfix")
-        { name = group;
-          gid = config.ids.gids.postfix;
+        optionalAttrs (group == "postfix")
+        { ${group}.gid = config.ids.gids.postfix;
         }
-        ++ optional (setgidGroup == "postdrop")
-        { name = setgidGroup;
-          gid = config.ids.gids.postdrop;
+        // optionalAttrs (setgidGroup == "postdrop")
+        { ${setgidGroup}.gid = config.ids.gids.postdrop;
         };
 
       systemd.services.postfix =

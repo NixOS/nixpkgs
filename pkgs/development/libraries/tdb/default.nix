@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tdb-1.3.16";
+  name = "tdb-1.3.18";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${name}.tar.gz";
-    sha256 = "1ibcz466xwk1x6xvzlgzd5va4lyrjzm3rnjak29kkwk7cmhw4gva";
+    sha256 = "1drnsdh1w0px35r0y7l7g59yvyr67mvcsdrli4wab0mwi07b8mn1";
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];

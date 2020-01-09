@@ -118,6 +118,12 @@ rec {
     config = "avr";
   };
 
+  vc4 = {
+    config = "vc4-elf";
+    libc = "newlib";
+    platform = {};
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";
@@ -207,7 +213,7 @@ rec {
 
   # 32 bit mingw-w64
   mingw32 = {
-    config = "i686-pc-mingw32";
+    config = "i686-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
   };
@@ -215,7 +221,7 @@ rec {
   # 64 bit mingw-w64
   mingwW64 = {
     # That's the triplet they use in the mingw-w64 docs.
-    config = "x86_64-pc-mingw32";
+    config = "x86_64-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
   };

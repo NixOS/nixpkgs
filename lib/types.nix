@@ -242,8 +242,7 @@ rec {
 
     path = mkOptionType {
       name = "path";
-      # Hacky: there is no ‘isPath’ primop.
-      check = x: builtins.substring 0 1 (toString x) == "/";
+      check = x: isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
       merge = mergeEqualOption;
     };
 
@@ -295,26 +294,43 @@ rec {
     # List or attribute set of ...
     loaOf = elemType:
       let
-        convertAllLists = defs:
+        convertAllLists = loc: defs:
           let
             padWidth = stringLength (toString (length defs));
             unnamedPrefix = i: "unnamed-" + fixedWidthNumber padWidth i + ".";
           in
-            imap1 (i: convertIfList (unnamedPrefix i)) defs;
-
-        convertIfList = unnamedPrefix: def:
+            imap1 (i: convertIfList loc (unnamedPrefix i)) defs;
+        convertIfList = loc: unnamedPrefix: def:
           if isList def.value then
             let
               padWidth = stringLength (toString (length def.value));
               unnamed = i: unnamedPrefix + fixedWidthNumber padWidth i;
+              res =
+                { inherit (def) file;
+                  value = listToAttrs (
+                    imap1 (elemIdx: elem:
+                      { name  = elem.name or (unnamed elemIdx);
+                        value = elem;
+                      }) def.value);
+                };
+              option = concatStringsSep "." loc;
+              sample = take 3 def.value;
+              list = concatMapStrings (x: ''{ name = "${x.name or "unnamed"}"; ...} '') sample;
+              set = concatMapStrings (x: ''${x.name or "unnamed"} = {...}; '') sample;
+              msg = ''
+                In file ${def.file}
+                a list is being assigned to the option config.${option}.
+                This will soon be an error as type loaOf is deprecated.
+                See https://git.io/fj2zm for more information.
+                Do
+                  ${option} =
+                    { ${set}...}
+                instead of
+                  ${option} =
+                    [ ${list}...]
+              '';
             in
-              { inherit (def) file;
-                value = listToAttrs (
-                  imap1 (elemIdx: elem:
-                    { name = elem.name or (unnamed elemIdx);
-                      value = elem;
-                    }) def.value);
-              }
+              lib.warn msg res
           else
             def;
         attrOnly = attrsOf elemType;
@@ -322,7 +338,7 @@ rec {
         name = "loaOf";
         description = "list or attribute set of ${elemType.description}s";
         check = x: isList x || isAttrs x;
-        merge = loc: defs: attrOnly.merge loc (convertAllLists defs);
+        merge = loc: defs: attrOnly.merge loc (convertAllLists loc defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
         getSubModules = elemType.getSubModules;
         substSubModules = m: loaOf (elemType.substSubModules m);
@@ -358,25 +374,41 @@ rec {
     };
 
     # A submodule (like typed attribute set). See NixOS manual.
-    submodule = opts:
+    submodule = modules: submoduleWith {
+      shorthandOnlyDefinesConfig = true;
+      modules = toList modules;
+    };
+
+    submoduleWith =
+      { modules
+      , specialArgs ? {}
+      , shorthandOnlyDefinesConfig ? false
+      }@attrs:
       let
-        opts' = toList opts;
         inherit (lib.modules) evalModules;
+
+        coerce = unify: value: if isFunction value
+          then setFunctionArgs (args: unify (value args)) (functionArgs value)
+          else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
+
+        allModules = defs: modules ++ imap1 (n: { value, file }:
+          # Annotate the value with the location of its definition for better error messages
+          coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
+        ) defs;
+
       in
       mkOptionType rec {
         name = "submodule";
         check = x: isAttrs x || isFunction x;
         merge = loc: defs:
-          let
-            coerce = def: if isFunction def then def else { config = def; };
-            modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
-          in (evalModules {
-            inherit modules;
+          (evalModules {
+            modules = allModules defs;
+            inherit specialArgs;
             args.name = last loc;
             prefix = loc;
           }).config;
         getSubOptions = prefix: (evalModules
-          { modules = opts'; inherit prefix;
+          { inherit modules prefix specialArgs;
             # This is a work-around due to the fact that some sub-modules,
             # such as the one included in an attribute set, expects a "args"
             # attribute to be given to the sub-module. As the option
@@ -394,13 +426,29 @@ rec {
             # It shouldn't cause an issue since this is cosmetic for the manual.
             args.name = "‹name›";
           }).options;
-        getSubModules = opts';
-        substSubModules = m: submodule m;
-        functor = (defaultFunctor name) // {
-          # Merging of submodules is done as part of mergeOptionDecls, as we have to annotate
-          # each submodule with its location.
-          payload = [];
-          binOp = lhs: rhs: [];
+        getSubModules = modules;
+        substSubModules = m: submoduleWith (attrs // {
+          modules = m;
+        });
+        functor = defaultFunctor name // {
+          type = types.submoduleWith;
+          payload = {
+            modules = modules;
+            specialArgs = specialArgs;
+            shorthandOnlyDefinesConfig = shorthandOnlyDefinesConfig;
+          };
+          binOp = lhs: rhs: {
+            modules = lhs.modules ++ rhs.modules;
+            specialArgs =
+              let intersecting = builtins.intersectAttrs lhs.specialArgs rhs.specialArgs;
+              in if intersecting == {}
+              then lhs.specialArgs // rhs.specialArgs
+              else throw "A submoduleWith option is declared multiple times with the same specialArgs \"${toString (attrNames intersecting)}\"";
+            shorthandOnlyDefinesConfig =
+              if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
+              then lhs.shorthandOnlyDefinesConfig
+              else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
+          };
         };
       };
 

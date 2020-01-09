@@ -13,15 +13,15 @@ stdenv.mkDerivation rec {
     libao json_c libgcrypt ffmpeg curl
   ];
 
-  makeFlags="PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   CC = "gcc";
   CFLAGS = "-std=c99";
 
   meta = with stdenv.lib; {
     description = "A console front-end for Pandora.com";
-    homepage = http://6xq.net/projects/pianobar/;
-    platforms = platforms.linux;
+    homepage = "https://6xq.net/pianobar/";
+    platforms = platforms.unix;
     license = licenses.mit; # expat version
   };
 }

@@ -12,6 +12,9 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "sound" "mediaKeys" "enable" ])
+  ];
 
   ###### interface
 

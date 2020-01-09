@@ -19,7 +19,7 @@ ninjaBuildPhase() {
     runHook postBuild
 }
 
-if [ -z "$dontUseNinjaBuild" -a -z "$buildPhase" ]; then
+if [ -z "${dontUseNinjaBuild-}" -a -z "${buildPhase-}" ]; then
     buildPhase=ninjaBuildPhase
 fi
 
@@ -38,7 +38,7 @@ ninjaInstallPhase() {
     runHook postInstall
 }
 
-if [ -z "$dontUseNinjaInstall" -a -z "$installPhase" ]; then
+if [ -z "${dontUseNinjaInstall-}" -a -z "${installPhase-}" ]; then
     installPhase=ninjaInstallPhase
 fi
 
@@ -73,6 +73,6 @@ ninjaCheckPhase() {
     runHook postCheck
 }
 
-if [ -z "$dontUseNinjaCheck" -a -z "$checkPhase" ]; then
+if [ -z "${dontUseNinjaCheck-}" -a -z "${checkPhase-}" ]; then
     checkPhase=ninjaCheckPhase
 fi

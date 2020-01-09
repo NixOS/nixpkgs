@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.lgpl21;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = [ #Add your name here!
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

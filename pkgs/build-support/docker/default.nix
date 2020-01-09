@@ -1,4 +1,5 @@
 {
+  buildPackages,
   cacert,
   callPackage,
   closureInfo,
@@ -47,7 +48,7 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? "amd64"
+    , arch ? buildPackages.go.GOARCH
 
       # This is used to set name to the pulled image
     , finalImageName ? imageName
@@ -286,10 +287,16 @@ rec {
   # unless there are more paths than $maxLayers. In that case, create
   # $maxLayers-1 for the most popular layers, and smush the remainaing
   # store paths in to one final layer.
+  #
+  # NOTE: the `closures` parameter is a list of closures to include.
+  # The TOP LEVEL store paths themselves will never be present in the
+  # resulting image. At this time (2019-12-16) none of these layers
+  # are appropriate to include, as they are all created as
+  # implementation details of dockerTools.
   mkManyPureLayers = {
     name,
     # Files to add to the layer.
-    closure,
+    closures,
     configJson,
     # Docker has a 125-layer maximum, we pick 100 to ensure there is
     # plenty of room for extension.
@@ -302,10 +309,12 @@ rec {
         isExecutable = true;
         src = ./store-path-to-layer.sh;
       };
+
+      overallClosure = writeText "closure" (lib.concatStringsSep " " closures);
     in
     runCommand "${name}-granular-docker-layers" {
       inherit maxLayers;
-      paths = referencesByPopularity closure;
+      paths = referencesByPopularity overallClosure;
       nativeBuildInputs = [ jshon rsync tarsum ];
       enableParallelBuilding = true;
     }
@@ -316,15 +325,20 @@ rec {
         | jshon -d config \
         | jshon -s "1970-01-01T00:00:01Z" -i created > generic.json
 
+
       # WARNING!
       # The following code is fiddly w.r.t. ensuring every layer is
       # created, and that no paths are missed. If you change the
       # following head and tail call lines, double-check that your
       # code behaves properly when the number of layers equals:
       #      maxLayers-1, maxLayers, and maxLayers+1
-      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
-      if [ $(cat $paths | wc -l) -ge $maxLayers ]; then
-        tail -n+$maxLayers $paths | xargs ${storePathToLayer} $maxLayers
+      paths() {
+        cat $paths ${lib.concatMapStringsSep " " (path: "| grep -v ${path}") (closures ++ [ overallClosure ])}
+      }
+
+      paths | head -n $((maxLayers - 1)) | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
+      if [ $(paths | wc -l) -ge $maxLayers ]; then
+        paths | tail -n+$maxLayers | xargs ${storePathToLayer} $maxLayers
       fi
 
       echo "Finished building layer '$name'"
@@ -527,20 +541,23 @@ rec {
     created ? "1970-01-01T00:00:01Z",
     # Optional bash script to run on the files prior to fixturizing the layer.
     extraCommands ? "", uid ? 0, gid ? 0,
-    # Docker's lowest maximum layer limit is 42-layers for an old
-    # version of the AUFS graph driver. We pick 24 to ensure there is
-    # plenty of room for extension. I believe the actual maximum is
-    # 128.
-    maxLayers ? 24
+    # We pick 100 to ensure there is plenty of room for extension. I
+    # believe the actual maximum is 128.
+    maxLayers ? 100
   }:
     let
       baseName = baseNameOf name;
-      contentsEnv = symlinkJoin { name = "bulk-layers"; paths = (if builtins.isList contents then contents else [ contents ]); };
+      contentsEnv = symlinkJoin {
+        name = "bulk-layers";
+        paths = if builtins.isList contents
+          then contents
+          else [ contents ];
+      };
 
       configJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
-            architecture = "amd64";
+            architecture = buildPackages.go.GOARCH;
             os = "linux";
           });
           impure = runCommand "${baseName}-standard-dynamic-date.json"
@@ -552,7 +569,7 @@ rec {
 
       bulkLayers = mkManyPureLayers {
           name = baseName;
-          closure = writeText "closure" "${contentsEnv} ${configJson}";
+          closures = [ contentsEnv configJson ];
           # One layer will be taken up by the customisationLayer, so
           # take up one less.
           maxLayers = maxLayers - 1;
@@ -658,7 +675,7 @@ rec {
       baseJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
-            architecture = "amd64";
+            architecture = buildPackages.go.GOARCH;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
@@ -844,6 +861,9 @@ rec {
         echo "         be better to only have one layer that contains a nix store."
 
         export NIX_REMOTE=local?root=$PWD
+        # A user is required by nix
+        # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
+        export USER=nobody
         ${nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
 
         mkdir -p nix/var/nix/gcroots/docker/

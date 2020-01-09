@@ -23,7 +23,7 @@ let
 
     buildInputs = [ erlang ];
 
-    installFlags = "PREFIX=$(out)/lib/erlang/lib";
+    installFlags = [ "PREFIX=$(out)/lib/erlang/lib" ];
 
     meta = {
       description = "WebDriver implementation in Erlang";

@@ -1,24 +1,26 @@
-{ stdenv, lib, fetchurl, ncurses5, python27 }:
-
-with lib;
+{ stdenv
+, fetchurl
+, ncurses5
+, python27
+}:
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
   version = "7-2018-q2-update";
   subdir = "7-2018q2";
 
-  src =
-  if stdenv.isLinux then
-    fetchurl {
-      url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-linux.tar.bz2";
-      sha256="0sgysp3hfpgrkcbfiwkp0a7ymqs02khfbrjabm52b5z61sgi05xv";
-    }
-  else if stdenv.isDarwin then
-    fetchurl {
-      url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-mac.tar.bz2";
-      sha256="0nc7m0mpa39qyhfyydxkkyqm7spfc27xf6ygi2vd2aym4r9azi61";
-    }
-  else throw "unsupported platform";
+  suffix = {
+    x86_64-darwin = "mac";
+    x86_64-linux  = "linux";
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  src = fetchurl {
+    url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-${suffix}.tar.bz2";
+    sha256 = {
+      x86_64-darwin = "0nc7m0mpa39qyhfyydxkkyqm7spfc27xf6ygi2vd2aym4r9azi61";
+      x86_64-linux  = "0sgysp3hfpgrkcbfiwkp0a7ymqs02khfbrjabm52b5z61sgi05xv";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  };
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
@@ -39,11 +41,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
-    description = "Pre-built GNU toolchain from ARM Cortex-M & Cortex-R processors (Cortex-M0/M0+/M3/M4/M7, Cortex-R4/R5/R7/R8)";
-    homepage = https://developer.arm.com/open-source/gnu-toolchain/gnu-rm;
+  meta = with stdenv.lib; {
+    description = "Pre-built GNU toolchain from ARM Cortex-M & Cortex-R processors";
+    homepage = "https://developer.arm.com/open-source/gnu-toolchain/gnu-rm";
     license = with licenses; [ bsd2 gpl2 gpl3 lgpl21 lgpl3 mit ];
     maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

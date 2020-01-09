@@ -6,6 +6,10 @@
  which, makeWrapper, writeText
 }:
 
+if stdenv.lib.versionAtLeast core_kernel.version "0.12"
+then throw "BAP needs core_kernel-0.11 (hence OCaml ≤ 4.06)"
+else
+
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-bap-${version}";
   version = "1.6.0";
@@ -24,8 +28,8 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}-llvm-plugins/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}-llvm-plugins/"
   '';
 
   nativeBuildInputs = [ which makeWrapper ];
@@ -40,7 +44,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     export OCAMLPATH=$OCAMLPATH:$OCAMLFIND_DESTDIR;
     export PATH=$PATH:$out/bin
-    export CAML_LD_LIBRARY_PATH=$CAML_LD_LIBRARY_PATH:$OCAMLFIND_DESTDIR/bap-plugin-llvm/:$OCAMLFIND_DESTDIR/bap/
+    export CAML_LD_LIBRARY_PATH=''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}$OCAMLFIND_DESTDIR/bap-plugin-llvm/:$OCAMLFIND_DESTDIR/bap/
     mkdir -p $out/lib/bap
     make install
     rm $out/bin/baptop

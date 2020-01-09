@@ -4,13 +4,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "gandi-cli";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "Gandi";
     repo = "gandi.cli";
     rev = version;
-    sha256 = "06dc59iwxfncz61hs3lcq08c5zrp7x4n4ibk5lpqqx6rk0izzz9b";
+    sha256 = "1jcabpphlm6qajw8dz0h4gynm03g1mxi0cn900i3v7wdfww1gfab";
   };
 
   propagatedBuildInputs = [ click ipy pyyaml requests ];

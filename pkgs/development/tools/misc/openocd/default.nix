@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libftdi1, libusb1, pkgconfig, hidapi }:
+{ stdenv, lib, fetchurl, fetchpatch, libftdi1, libusb1, pkgconfig, hidapi }:
 
 stdenv.mkDerivation rec {
   pname = "openocd";
@@ -8,6 +8,15 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/openocd/openocd-${version}.tar.bz2";
     sha256 = "1bhn2c85rdz4gf23358kg050xlzh7yxbbwmqp24c0akmh3bff4kk";
   };
+
+  patches = [
+    # Fix FTDI channel configuration for SheevaPlug
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837989
+    (fetchpatch {
+      url = "https://salsa.debian.org/electronics-team/openocd/raw/9a94335daa332a37a51920f87afbad4d36fad2d5/debian/patches/fix-sheeva.patch";
+      sha256 = "01x021fagwvgxdpzk7psap7ryqiya4m4mi4nqr27asbmb3q46g5r";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libftdi1 libusb1 hidapi ];
@@ -25,12 +34,13 @@ stdenv.mkDerivation rec {
     "--enable-remote-bitbang"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-implicit-fallthrough"
     "-Wno-format-truncation"
     "-Wno-format-overflow"
     "-Wno-error=tautological-compare"
-  ];
+    "-Wno-error=array-bounds"
+  ]);
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d"

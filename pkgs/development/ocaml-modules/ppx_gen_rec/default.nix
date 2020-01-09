@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "ppx_gen_rec";
-  version = "1.0.0";
+  version = "1.1.0";
 
   minimumOCamlVersion = "4.01";
 
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "0qy0wa3rd5yh1612jijadi1yddfslpsmmmf69phi2dhr3vmkhza7";
+    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    sha256 = "0fwi4bknq8h9zgpsarjvnzdm9bm8qlyyw0lz30pihg02aiiljqbh";
   };
 
   buildInputs = [ ocaml-migrate-parsetree ];

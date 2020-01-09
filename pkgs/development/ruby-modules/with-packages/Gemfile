@@ -144,7 +144,6 @@ source 'https://rubygems.org' do
   gem 'snappy'
   gem 'sqlite3'
   gem 'taglib-ruby'
-  gem 'therubyracer'
   gem 'thrift'
   gem 'tilt'
   gem 'tiny_tds'

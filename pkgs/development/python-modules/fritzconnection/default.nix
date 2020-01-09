@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "0.6.5";
+  version = "0.8.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14g3sxprq65lxbgkf3rjgb1bjqnj2jc5p1swlq9sk9gwnl6ca3ds";
+    sha256 = "adc629a48b50700f5478f69436e4b78c8792a9260cc674cccef15ffe68eb0643";
   };
 
   prePatch = ''

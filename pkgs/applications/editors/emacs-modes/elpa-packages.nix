@@ -40,6 +40,9 @@ self: let
       cl-lib = null; # builtin
       tle = null; # builtin
       advice = null; # builtin
+      seq = if lib.versionAtLeast self.emacs.version "27"
+            then null
+            else super.seq;
     };
 
     elpaPackages = super // overrides;

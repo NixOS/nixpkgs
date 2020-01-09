@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, vte, gtk }:
+{ stdenv, fetchFromGitHub, pkgconfig, vte, gtk, pcre2 }:
 
 stdenv.mkDerivation {
   pname = "stupidterm";
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ vte gtk ];
+  buildInputs = [ vte gtk pcre2 ];
 
   src = fetchFromGitHub {
     owner = "esmil";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1f73wvqqvj5pr3fvb7jjc4bi1iwgkkknz24k8n69mdb75jnfjipp";
   };
 
-  makeFlags = "PKGCONFIG=${pkgconfig}/bin/pkg-config binary=stupidterm";
+  makeFlags = [ "PKGCONFIG=${pkgconfig}/bin/pkg-config" "binary=stupidterm" ];
 
   installPhase = ''
     install -D stupidterm $out/bin/stupidterm

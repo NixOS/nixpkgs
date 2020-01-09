@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hcxtools";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = pname;
     rev = version;
-    sha256 = "0k2qlq9hz5zc21nyc6yrnfqzga7hydn5mm0x3rpl2fhkwl81lxcn";
+    sha256 = "1pqvxncpcnwxs89imma01ry30bz7cjifm8wz1s80yclkxxf80php";
   };
 
   buildInputs = [ curl openssl zlib ];

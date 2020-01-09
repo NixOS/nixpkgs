@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vhppvy5vphipbycfilzxdly7nw12brscz4biawf3bl376yp7ljm";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   buildInputs = [ perlPackages.perl makeWrapper ];
 

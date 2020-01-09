@@ -1,16 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi, docutils, boto3 }:
+{ stdenv, buildPythonPackage, fetchPypi, docutils, boto3, fsspec }:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "0.2.2";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l3vdy3h6l03kjjzq1vq7h252749f8dg7kkz65s890y4xxvjxlyw";
+    sha256 = "504a41ecb9edf0bd7798847b61839954e50508c5235ec7ee48c539ce46b4fa18";
   };
 
   buildInputs = [ docutils ];
-  propagatedBuildInputs = [ boto3 ];
+  propagatedBuildInputs = [ boto3 fsspec ];
 
   # Depends on `moto` which has a long dependency chain with exact
   # version requirements that can't be made to work with current

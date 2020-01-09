@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gjkk4gxzqmxfdirrz2lr0bms6l9fc31vkmlywigkbdlh8wxgypp";
   };
 
-  makeFlags = ''CC=cc PREFIX=$(out) CURSES=-lncurses'';
+  makeFlags = [ "CC=cc" "PREFIX=$(out)" "CURSES=-lncurses" ];
 
   buildInputs = [ ncurses ];
 

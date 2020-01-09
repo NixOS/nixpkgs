@@ -74,6 +74,10 @@ let
 in
 
 {
+  imports = [
+    (mkAliasOptionModule [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
+    (mkAliasOptionModule [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
+  ];
 
   ###### interface
 

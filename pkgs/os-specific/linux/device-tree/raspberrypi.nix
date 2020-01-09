@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation {
 
     cp ${raspberrypifw}/share/raspberrypi/boot/bcm*.dtb .
 
-    cp bcm2708-rpi-0-w.dtb bcm2835-rpi-zero-w.dtb
+    cp bcm2708-rpi-zero-w.dtb bcm2835-rpi-zero-w.dtb
     cp bcm2708-rpi-b.dtb bcm2835-rpi-a.dtb
     cp bcm2708-rpi-b.dtb bcm2835-rpi-b.dtb
     cp bcm2708-rpi-b.dtb bcm2835-rpi-b-rev2.dtb
@@ -23,6 +23,7 @@ stdenvNoCC.mkDerivation {
     cp bcm2710-rpi-3-b.dtb bcm2837-rpi-3-b.dtb
     cp bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-b-plus.dtb
     cp bcm2710-rpi-cm3.dtb bcm2837-rpi-cm3.dtb
+    cp bcm2711-rpi-4-b.dtb bcm2838-rpi-4-b.dtb
   '';
 
   passthru = {

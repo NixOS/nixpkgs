@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
+, isPy3k
 , msrest
 , msrestazure
 , azure-common
@@ -24,13 +26,19 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
+  # this is still need when overriding to prevoius versions
+  # E.g. azure-cli
+  postInstall = lib.optionalString isPy3k ''
+    rm -f $out/${python.sitePackages}/azure/{,mgmt/}__init__.py
+  '';
+
   # has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure Key Vault Management Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/key-vault?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer mwilsoninsight ];
   };
 }

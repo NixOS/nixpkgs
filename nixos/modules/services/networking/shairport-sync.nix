@@ -55,9 +55,8 @@ in
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;
 
-    users.users = singleton
-      { name = cfg.user;
-        description = "Shairport user";
+    users.users.${cfg.user} =
+      { description = "Shairport user";
         isSystemUser = true;
         createHome = true;
         home = "/var/lib/shairport-sync";

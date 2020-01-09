@@ -30,7 +30,7 @@ mkDerivation rec {
   # Make sure libqtav finds its libGL dependency at both link and run time
   # by adding libGL to rpath. Not sure why it wasn't done automatically like
   # the other libraries as `libGL` is part of our `buildInputs`.
-  NIX_CFLAGS_LINK = [ "-Wl,-rpath,${libGL}/lib"];
+  NIX_CFLAGS_LINK = "-Wl,-rpath,${libGL}/lib";
 
   preFixup = ''
     mkdir -p "$out/bin"

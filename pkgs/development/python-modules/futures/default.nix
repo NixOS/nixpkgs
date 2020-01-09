@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "futures";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ec02aa7d674acb8618afb127e27fde7fc68994c0437ad759fa094a574adb265";
+    sha256 = "7e033af76a5e35f58e56da7a91e687706faf4e7bdfb2cbc3f2cca6b9bcda9794";
   };
 
   # This module is for backporting functionality to Python 2.x, it's builtin in py3k

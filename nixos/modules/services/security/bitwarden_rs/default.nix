@@ -74,7 +74,10 @@ in {
       webVaultEnabled = mkDefault true;
     };
 
-    users.users.bitwarden_rs = { inherit group; };
+    users.users.bitwarden_rs = {
+      inherit group;
+      isSystemUser = true;
+    };
     users.groups.bitwarden_rs = { };
 
     systemd.services.bitwarden_rs = {

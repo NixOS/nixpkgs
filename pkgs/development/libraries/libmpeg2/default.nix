@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   # Otherwise clang fails with 'duplicate symbol ___sputc'
-  buildFlags = stdenv.lib.optionalString stdenv.isDarwin "CFLAGS=-std=gnu89";
+  buildFlags = stdenv.lib.optional stdenv.isDarwin "CFLAGS=-std=gnu89";
 
   meta = {
     homepage = http://libmpeg2.sourceforge.net/;
     description = "A free library for decoding mpeg-2 and mpeg-1 video streams";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; unix;
   };
 }

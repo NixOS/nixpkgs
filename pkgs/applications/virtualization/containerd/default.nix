@@ -16,10 +16,8 @@ buildGoPackage rec {
   goPackagePath = "github.com/containerd/containerd";
   outputs = [ "bin" "out" "man" ];
 
-  hardeningDisable = [ "fortify" ];
-
   buildInputs = [ btrfs-progs go-md2man utillinux ];
-  buildFlags = "VERSION=v${version}";
+  buildFlags = [ "VERSION=v${version}" ];
 
   BUILDTAGS = []
     ++ optional (btrfs-progs == null) "no_btrfs";

@@ -6,24 +6,35 @@
 , astropy-healpix
 , astropy-helpers
 , scipy
+, pytest
+, pytest-astropy
+, cython
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.4";
-
-  doCheck = false; # tests require pytest-astropy
+  version = "0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dbbb18a8b211292c7ce61121b8538fc279540337be1c05cabc7570c5aca6d734";
+    sha256 = "484fde86d70d972d703038f138d7c2966ddf51171a6e79bd84e82ea270e27af3";
   };
 
   propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
 
+  nativeBuildInputs = [ astropy-helpers cython ];
+
   # Disable automatic update of the astropy-helper module
   postPatch = ''
     substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
+  '';
+
+  checkInputs = [ pytest pytest-astropy ];
+
+  # Tests must be run in the build directory
+  checkPhase = ''
+    cd build/lib*
+    pytest
   '';
 
   meta = with lib; {

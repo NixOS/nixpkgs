@@ -1,4 +1,4 @@
-{ stdenv, file, curl, pkgconfig, python, openssl, cmake, zlib
+{ stdenv, file, curl, pkgconfig, python3, openssl, cmake, zlib
 , makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
 , CoreFoundation, Security
 }:
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
-  buildInputs = [ cacert file curl python openssl zlib libgit2 ]
+  buildInputs = [ cacert file curl python3 openssl zlib libgit2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
   LIBGIT2_SYS_USE_PKG_CONFIG = 1;
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage {
   meta = with stdenv.lib; {
     homepage = https://crates.io;
     description = "Downloads your Rust project's dependencies and builds your project";
-    maintainers = with maintainers; [ wizeman retrry ];
+    maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
   };

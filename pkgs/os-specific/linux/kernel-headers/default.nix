@@ -58,7 +58,7 @@ let
     + '' mkdir -p $out/include/config
       echo "${version}-default" > $out/include/config/kernel.release
     ''
-    # These oddly named file records teh `SHELL` passed, which causes bootstrap
+    # These oddly named file records the `SHELL` passed, which causes bootstrap
     # tools run-time dependency.
     + ''
       find "$out" -name '..install.cmd' -print0 | xargs -0 rm

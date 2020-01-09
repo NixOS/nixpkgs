@@ -38,10 +38,10 @@ in {
   auth_sso = glPlugin rec {
     name = "graylog-auth-sso-${version}";
     pluginName = "graylog-plugin-auth-sso";
-    version = "3.0.0";
+    version = "3.1.0";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "09y1s71mk8fm6lsghla7mrh9z5y230r8zpv84klhavh2dacs8gq5";
+      sha256 = "0hwgpq1j3qk0j1zgap5f1avh2nvkcscgds81x8xr0gamphgps8y2";
     };
     meta = {
       homepage = https://github.com/Graylog2/graylog-plugin-auth-sso;

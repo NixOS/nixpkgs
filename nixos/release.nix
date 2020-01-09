@@ -180,6 +180,11 @@ in rec {
     inherit system;
   });
 
+  sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = ./modules/installer/cd-dvd/sd-image-raspberrypi4.nix;
+    inherit system;
+  });
+
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
@@ -290,6 +295,12 @@ in rec {
     xfce = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.xfce.enable = true;
+      });
+
+    gnome3 = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.gdm.enable = true;
+        services.xserver.desktopManager.gnome3.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.

@@ -2,30 +2,30 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.1.469";
+  version = "1.10.1.492";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "0hpb6rixmgllss69vl9zlpb41svm4mx4xmfbq1q7y12jsxckzgpq";
+    sha256 = "09mhy5xw9kdr10a1xpbn5v97qyyhngw5s1n1alrs45a4m3l11iky";
   };
 
   buildInputs = [ makeWrapper ];
 
-  outputs = [ "out" "prefix" ];
-
   installPhase = let
     binPath = stdenv.lib.makeBinPath [ rlwrap jdk11 ];
-  in ''
-    mkdir -p $prefix/libexec
-    cp clojure-tools-${version}.jar $prefix/libexec
-    cp example-deps.edn $prefix
+  in
+    ''
+      mkdir -p $out/libexec
+      cp clojure-tools-${version}.jar $out/libexec
+      cp example-deps.edn $out
+      cp deps.edn $out
 
-    substituteInPlace clojure --replace PREFIX $prefix
+      substituteInPlace clojure --replace PREFIX $out
 
-    install -Dt $out/bin clj clojure
-    wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
-    wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
-  '';
+      install -Dt $out/bin clj clojure
+      wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
+      wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
+    '';
 
   meta = with stdenv.lib; {
     description = "A Lisp dialect for the JVM";

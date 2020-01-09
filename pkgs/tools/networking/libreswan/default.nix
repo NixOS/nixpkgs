@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper,
   pkgconfig, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
   bash, iproute, iptables, procps, coreutils, gnused, gawk, nss, which, python,
-  docs ? false, xmlto
+  docs ? false, xmlto, libselinux, ldns
   }:
 
 let
   optional = stdenv.lib.optional;
-  version = "3.18";
+  version = "3.29";
   name = "libreswan-${version}";
   binPath = stdenv.lib.makeBinPath [
     bash iproute iptables procps coreutils gnused gawk nss.tools which python
@@ -14,6 +14,7 @@ let
 in
 
 assert docs -> xmlto != null;
+assert stdenv.isLinux -> libselinux != null;
 
 stdenv.mkDerivation {
   inherit name;
@@ -21,28 +22,35 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.libreswan.org/${name}.tar.gz";
-    sha256 = "0zginnakxw7m79zrdvfdvliaiyg78zgqfqkks9z5d1rjj5w13xig";
+    sha256 = "0gmbb1m5in5dvnbk1n31r8myrdankzvi6yk9gcqbcwijyih423nn";
   };
 
   # These flags were added to compile v3.18. Try to lift them when updating.
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral"
+  NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral"
     # these flags were added to build with gcc7
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=format-truncation"
     "-Wno-error=pointer-compare"
+    "-Wno-error=stringop-truncation"
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
-                  libcap_ng curl nspr nss python ]
-                ++ optional docs xmlto;
+                  libcap_ng curl nspr nss python ldns ]
+                ++ optional docs xmlto
+                ++ optional stdenv.isLinux libselinux;
 
   prePatch = ''
     # Correct bash path
     sed -i -e 's|/bin/bash|/usr/bin/env bash|' mk/config.mk
 
-    # Fix systemd unit directory, and prevent the makefile from trying to reload the systemd daemon
-    sed -i -e 's|UNITDIR=.*$|UNITDIR=$\{out}/etc/systemd/system/|' -e 's|systemctl --system daemon-reload|true|' initsystems/systemd/Makefile
+    # Fix systemd unit directory, and prevent the makefile from trying to reload the
+    # systemd daemon or create tmpfiles
+    sed -i -e 's|UNITDIR=.*$|UNITDIR=$\{out}/etc/systemd/system/|g' \
+      -e 's|TMPFILESDIR=.*$|TMPFILESDIR=$\{out}/tmpfiles.d/|g' \
+      -e 's|systemctl|true|g' \
+      -e 's|systemd-tmpfiles|true|g' \
+      initsystems/systemd/Makefile
 
     # Fix the ipsec program from crushing the PATH
     sed -i -e 's|\(PATH=".*"\):.*$|\1:$PATH|' programs/ipsec/ipsec.in
@@ -50,8 +58,6 @@ stdenv.mkDerivation {
     # Fix python script to use the correct python
     sed -i -e 's|#!/usr/bin/python|#!/usr/bin/env python|' -e 's/^\(\W*\)installstartcheck()/\1sscmd = "ss"\n\0/' programs/verify/verify.in
   '';
-
-  patches = [ ./libreswan-3.18-glibc-2.26.patch ];
 
   # Set appropriate paths for build
   preBuild = "export INC_USRLOCAL=\${out}";

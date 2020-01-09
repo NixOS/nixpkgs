@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.3.6";
+  version = "5.5.0";
 
   repoName = "terminal";
 
@@ -28,13 +28,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0jp21sy8k3jq3ycvng9yy2hbhcvfgiknxxa8vcg3c06vqhadmnc3";
+    sha256 = "1wna3kcg621qjyvg70dzk4lfq8si2snnlm9fnl5gj0w6b707gz2x";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

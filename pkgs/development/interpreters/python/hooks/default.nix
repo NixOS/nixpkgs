@@ -11,6 +11,27 @@ let
   setuppy = ../run_setup.py;
 in rec {
 
+  eggBuildHook = callPackage ({ }:
+    makeSetupHook {
+      name = "egg-build-hook.sh";
+      deps = [ ];
+    } ./egg-build-hook.sh) {};
+
+  eggInstallHook = callPackage ({ setuptools }:
+    makeSetupHook {
+      name = "egg-install-hook.sh";
+      deps = [ setuptools ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./egg-install-hook.sh) {};
+
+  eggUnpackHook = callPackage ({ }:
+    makeSetupHook {
+      name = "egg-unpack-hook.sh";
+      deps = [ ];
+    } ./egg-unpack-hook.sh) {};
+
   flitBuildHook = callPackage ({ flit }:
     makeSetupHook {
       name = "flit-build-hook";
@@ -20,10 +41,10 @@ in rec {
       };
     } ./flit-build-hook.sh) {};
 
-  pipBuildHook = callPackage ({ pip }:
+  pipBuildHook = callPackage ({ pip, wheel }:
     makeSetupHook {
       name = "pip-build-hook.sh";
-      deps = [ pip ];
+      deps = [ pip wheel ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
       };
@@ -88,8 +109,9 @@ in rec {
       };
     } ./setuptools-check-hook.sh) {};
 
-  wheelUnpackHook = callPackage ({ }:
+  wheelUnpackHook = callPackage ({ wheel }:
     makeSetupHook {
       name = "wheel-unpack-hook.sh";
+      deps = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
 }

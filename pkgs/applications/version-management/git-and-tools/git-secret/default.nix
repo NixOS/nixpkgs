@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, git, gnupg, gawk }:
 
 let
-  version = "0.2.6";
+  version = "0.3.2";
   repo = "git-secret";
 
 in stdenv.mkDerivation {
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     inherit repo;
     owner = "sobolevn";
     rev = "v${version}";
-    sha256 = "09p4h8mdmk0nzcd1jh1i6n29klz38n5vqqwdyzjkygmr2xqka55b";
+    sha256 = "0n268xlsd9p5f083sqwzpvsqg99fdk876mf8gihkydakrismc45b";
   };
 
   buildInputs = [ makeWrapper ];

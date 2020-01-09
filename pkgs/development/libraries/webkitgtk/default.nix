@@ -1,11 +1,56 @@
-{ stdenv, fetchurl, perl, python2, ruby, bison, gperf, cmake, ninja
-, pkgconfig, gettext, gobject-introspection, libnotify, gnutls, libgcrypt
-, gtk3, wayland, libwebp, enchant2, xorg, libxkbcommon, epoxy, at-spi2-core
-, libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11-kit
-, libidn, libedit, readline, libGLU_combined, libintl, openjpeg
-, enableGeoLocation ? true, geoclue2, sqlite
-, enableGtk2Plugins ? false, gtk2 ? null
-, gst-plugins-base, gst-plugins-bad, woff2
+{ stdenv
+, fetchurl
+, perl
+, python3
+, ruby
+, bison
+, gperf
+, cmake
+, ninja
+, pkgconfig
+, gettext
+, gobject-introspection
+, libnotify
+, gnutls
+, libgcrypt
+, gtk3
+, wayland
+, libwebp
+, enchant2
+, xorg
+, libxkbcommon
+, epoxy
+, at-spi2-core
+, libxml2
+, libsoup
+, libsecret
+, libxslt
+, harfbuzz
+, libpthreadstubs
+, pcre
+, nettle
+, libtasn1
+, p11-kit
+, libidn
+, libedit
+, readline
+, libGL
+, libGLU
+, libintl
+, openjpeg
+, enableGeoLocation ? true
+, geoclue2
+, sqlite
+, enableGtk2Plugins ? false
+, gtk2 ? null
+, gst-plugins-base
+, gst-plugins-bad
+, woff2
+, bubblewrap
+, libseccomp
+, xdg-dbus-proxy
+, substituteAll
+, gnome3
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -13,9 +58,110 @@ assert enableGtk2Plugins -> gtk2 != null;
 assert stdenv.isDarwin -> !enableGtk2Plugins;
 
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.24.4";
+  version = "2.26.2";
+
+  outputs = [ "out" "dev" ];
+
+  src = fetchurl {
+    url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "04k5h0sid9azsqz9pyq436v1rx4lnfrhvmcgmicqb0c0g9iz103b";
+  };
+
+  patches = optionals stdenv.isLinux [
+    (substituteAll {
+      src = ./fix-bubblewrap-paths.patch;
+      inherit (builtins) storeDir;
+    })
+    ./libglvnd-headers.patch
+  ];
+
+  nativeBuildInputs = [
+    bison
+    cmake
+    gettext
+    gobject-introspection
+    gperf
+    ninja
+    perl
+    pkgconfig
+    python3
+    ruby
+  ];
+
+  buildInputs = [
+    at-spi2-core
+    enchant2
+    epoxy
+    gnutls
+    gst-plugins-bad
+    gst-plugins-base
+    harfbuzz
+    libGL
+    libGLU
+    libgcrypt
+    libidn
+    libintl
+    libnotify
+    libpthreadstubs
+    libsecret
+    libtasn1
+    libwebp
+    libxkbcommon
+    libxml2
+    libxslt
+    nettle
+    openjpeg
+    p11-kit
+    pcre
+    sqlite
+    woff2
+  ] ++ (with xorg; [
+    libXdamage
+    libXdmcp
+    libXt
+    libXtst
+  ]) ++ optionals stdenv.isDarwin [
+    libedit
+    readline
+  ] ++ optionals stdenv.isLinux [
+    bubblewrap
+    libseccomp
+    wayland
+    xdg-dbus-proxy
+  ] ++ optional enableGeoLocation geoclue2
+    ++ optional enableGtk2Plugins gtk2;
+
+  propagatedBuildInputs = [
+    gtk3
+    libsoup
+  ];
+
+  cmakeFlags = [
+    "-DENABLE_INTROSPECTION=ON"
+    "-DPORT=GTK"
+    "-DUSE_LIBHYPHEN=OFF"
+    "-DUSE_WPE_RENDERER=OFF"
+  ] ++ optionals stdenv.isDarwin [
+    "-DENABLE_GRAPHICS_CONTEXT_3D=OFF"
+    "-DENABLE_GTKDOC=OFF"
+    "-DENABLE_MINIBROWSER=OFF"
+    "-DENABLE_OPENGL=OFF"
+    "-DENABLE_QUARTZ_TARGET=ON"
+    "-DENABLE_VIDEO=ON"
+    "-DENABLE_WEBGL=OFF"
+    "-DENABLE_WEB_AUDIO=OFF"
+    "-DENABLE_X11_TARGET=OFF"
+    "-DUSE_ACCELERATE=0"
+    "-DUSE_SYSTEM_MALLOC=ON"
+  ] ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
+    ++ optional stdenv.isLinux "-DENABLE_GLES2=ON";
+
+  postPatch = ''
+    patchShebangs .
+  '';
 
   meta = {
     description = "Web content rendering engine, GTK port";
@@ -23,61 +169,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ ];
+    maintainers = gnome3.maintainers;
   };
-
-  src = fetchurl {
-    url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1n3x5g1z6rg9n1ssna7wi0z6zlprjm4wzk544v14wqi6q0lv2s46";
-  };
-
-  patches = optionals stdenv.isDarwin [
-    ## TODO add necessary patches for Darwin
-  ];
-
-  postPatch = ''
-    patchShebangs .
-  '';
-
-  cmakeFlags = [
-  "-DPORT=GTK"
-  "-DUSE_LIBHYPHEN=0"
-  "-DENABLE_INTROSPECTION=ON"
-  ]
-  ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
-  ++ optional stdenv.isLinux "-DENABLE_GLES2=ON"
-  ++ optionals stdenv.isDarwin [
-  "-DUSE_SYSTEM_MALLOC=ON"
-  "-DUSE_ACCELERATE=0"
-  "-DENABLE_MINIBROWSER=OFF"
-  "-DENABLE_VIDEO=ON"
-  "-DENABLE_QUARTZ_TARGET=ON"
-  "-DENABLE_X11_TARGET=OFF"
-  "-DENABLE_OPENGL=OFF"
-  "-DENABLE_WEB_AUDIO=OFF"
-  "-DENABLE_WEBGL=OFF"
-  "-DENABLE_GRAPHICS_CONTEXT_3D=OFF"
-  "-DENABLE_GTKDOC=OFF"
-  ];
-
-  nativeBuildInputs = [
-    cmake ninja perl python2 ruby bison gperf
-    pkgconfig gettext gobject-introspection
-  ];
-
-  buildInputs = [
-    libintl libwebp enchant2 libnotify gnutls pcre nettle libidn libgcrypt woff2
-    libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11-kit openjpeg
-    sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at-spi2-core
-  ] ++ optional enableGeoLocation geoclue2
-    ++ optional enableGtk2Plugins gtk2
-    ++ (with xorg; [ libXdmcp libXt libXtst libXdamage ])
-    ++ optionals stdenv.isDarwin [ libedit readline libGLU_combined ]
-    ++ optional stdenv.isLinux wayland;
-
-  propagatedBuildInputs = [
-    libsoup gtk3
-  ];
-
-  outputs = [ "out" "dev" ];
 }

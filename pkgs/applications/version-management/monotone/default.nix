@@ -5,7 +5,7 @@
 
 let
   version = "1.1";
-  perlVersion = (builtins.parseDrvName perl.name).version;
+  perlVersion = stdenv.lib.getVersion perl;
 in
 
 assert perlVersion != "";

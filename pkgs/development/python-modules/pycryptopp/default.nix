@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , isPy3k
 , setuptoolsDarcs
 , darcsver
@@ -14,8 +15,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08ad57a1a39b7ed23c173692281da0b8d49d98ad3dcc09f8cca6d901e142699f";
+    sha256 = "17v98bhh3nd6rkw0kk1xmnc9vm5ql0fji4in2wyd4zlvlfhmgb88";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "pycryptopp-cryptopp_6.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/api_change.patch?h=pycryptopp&id=55f2973d6ca5e9e70438f2eadb7fb575b1a5048d";
+      sha256 = "0lvl2d32d2vkb0v6d39p9whda5bdrmlsjd41zy0x0znqm53a9i99";
+      stripLen = 1;
+      extraPrefix = "src/";
+    })
+  ];
 
   # Prefer crypto++ library from the Nix store over the one that's included
   # in the pycryptopp distribution.
@@ -24,7 +35,7 @@ buildPythonPackage rec {
   buildInputs = [ setuptoolsDarcs darcsver pkgs.cryptopp ];
 
   meta = with stdenv.lib; {
-    homepage = http://allmydata.org/trac/pycryptopp;
+    homepage = "https://tahoe-lafs.org/trac/pycryptopp";
     description = "Python wrappers for the Crypto++ library";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

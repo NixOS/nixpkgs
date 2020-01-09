@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   pname = "git-bug";
-  version = "0.5.0";
-  rev = "8d7a2c076a38c89085fd3191a2998efb659650c2";
+  version = "0.6.0";
+  rev = "fc568209f073b9d775a09e0dbb8289cf9e5749bf";
   goPackagePath = "github.com/MichaelMure/git-bug";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "MichaelMure";
     repo = "git-bug";
-    sha256 = "1l86m0y360lmpmpw2id0k7zc2nyq1irr26k2ik06lxhzvpbyajz6";
+    sha256 = "1s18lzip52qpf52ad6m20j306mr16vnwhz9f7rirsa6b7srmcgli";
   };
 
   buildFlagsArray = ''

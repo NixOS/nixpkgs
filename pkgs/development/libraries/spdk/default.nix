@@ -1,19 +1,21 @@
-{ stdenv, fetchFromGitHub, python, cunit, dpdk, libaio, libuuid, numactl, openssl }:
+{ stdenv, fetchFromGitHub, python, cunit, dpdk, libaio, libbsd, libuuid, numactl, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "spdk";
-  version = "19.04";
+  version = "19.10";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
     rev = "v${version}";
-    sha256 = "10mzal1hspnh26ws5d7sc54gyjfzkf6amr0gkd7b368ng2a9z8s6";
+    sha256 = "16v2vswn3rnnj7ak5w5rsak6r8f9b85gyhyll4ac1k4xpyj488hj";
   };
+
+  patches = [ ./spdk-dpdk-meson.patch ];
 
   nativeBuildInputs = [ python ];
 
-  buildInputs = [ cunit dpdk libaio libuuid numactl openssl ];
+  buildInputs = [ cunit dpdk libaio libbsd libuuid numactl openssl ];
 
   postPatch = ''
     patchShebangs .
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-dpdk=${dpdk}" ];
 
-  NIX_CFLAGS_COMPILE = [ "-mssse3" ]; # Necessary to compile.
+  NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
 
   enableParallelBuilding = true;
 

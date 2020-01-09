@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let inherit (import ./ssh-keys.nix pkgs)
       snakeOilPrivateKey snakeOilPublicKey;
@@ -58,47 +58,55 @@ in {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    my $key=`${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f key -N ""`;
+    server.wait_for_unit("sshd")
 
-    $server->waitForUnit("sshd");
+    with subtest("manual-authkey"):
+        client.succeed("mkdir -m 700 /root/.ssh")
+        client.succeed(
+            '${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f /root/.ssh/id_ed25519 -N ""'
+        )
+        public_key = client.succeed(
+            "${pkgs.openssh}/bin/ssh-keygen -y -f /root/.ssh/id_ed25519"
+        )
+        public_key = public_key.strip()
+        client.succeed("chmod 600 /root/.ssh/id_ed25519")
 
-    subtest "manual-authkey", sub {
-      $server->succeed("mkdir -m 700 /root/.ssh");
-      $server->copyFileFromHost("key.pub", "/root/.ssh/authorized_keys");
-      $server_lazy->succeed("mkdir -m 700 /root/.ssh");
-      $server_lazy->copyFileFromHost("key.pub", "/root/.ssh/authorized_keys");
+        server.succeed("mkdir -m 700 /root/.ssh")
+        server.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
+        server_lazy.succeed("mkdir -m 700 /root/.ssh")
+        server_lazy.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
 
-      $client->succeed("mkdir -m 700 /root/.ssh");
-      $client->copyFileFromHost("key", "/root/.ssh/id_ed25519");
-      $client->succeed("chmod 600 /root/.ssh/id_ed25519");
+        client.wait_for_unit("network.target")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2"
+        )
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024"
+        )
 
-      $client->waitForUnit("network.target");
-      $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2");
-      $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024");
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'echo hello world' >&2"
+        )
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'ulimit -l' | grep 1024"
+        )
 
-      $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'echo hello world' >&2");
-      $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'ulimit -l' | grep 1024");
+    with subtest("configured-authkey"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server true"
+        )
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server_lazy true"
+        )
 
-    };
-
-    subtest "configured-authkey", sub {
-      $client->succeed("cat ${snakeOilPrivateKey} > privkey.snakeoil");
-      $client->succeed("chmod 600 privkey.snakeoil");
-      $client->succeed("ssh -o UserKnownHostsFile=/dev/null" .
-                       " -o StrictHostKeyChecking=no -i privkey.snakeoil" .
-                       " server true");
-
-      $client->succeed("ssh -o UserKnownHostsFile=/dev/null" .
-                       " -o StrictHostKeyChecking=no -i privkey.snakeoil" .
-                       " server_lazy true");
-
-    };
-
-    subtest "localhost-only", sub {
-      $server_localhost_only->succeed("ss -nlt | grep '127.0.0.1:22'");
-      $server_localhost_only_lazy->succeed("ss -nlt | grep '127.0.0.1:22'");
-    }
+    with subtest("localhost-only"):
+        server_localhost_only.succeed("ss -nlt | grep '127.0.0.1:22'")
+        server_localhost_only_lazy.succeed("ss -nlt | grep '127.0.0.1:22'")
   '';
 })

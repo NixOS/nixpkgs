@@ -18,7 +18,7 @@ stdenv.mkDerivation  rec {
       --replace 'sudo ' ""
   '';
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Wordlist generator";

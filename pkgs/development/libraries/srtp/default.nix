@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ac7xs1djb03j131f1gmqyfmrplblid9qqyxahs0shdy707r5ll6";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig ];
 
   # libsrtp.pc references -lcrypto -lpcap without -L

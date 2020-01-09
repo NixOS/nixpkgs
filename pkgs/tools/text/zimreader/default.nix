@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0x529137rxy6ld64xqa6xmn93121ripxvkf3sc7hv3wg6km182sw";
   };
 
-  patchFlags = "-p2";
+  patchFlags = [ "-p2" ];
   patches = [
     (fetchpatch {
       name = "zimreader_tntnet221.patch";

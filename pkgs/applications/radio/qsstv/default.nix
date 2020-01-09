@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, qtbase, qmake, makeDesktopItem, openjpeg, pkgconfig, fftw,
+{ mkDerivation, stdenv, fetchurl, qtbase, qmake, openjpeg, pkgconfig, fftw,
   libpulseaudio, alsaLib, hamlib, libv4l, fftwFloat }:
 
-stdenv.mkDerivation rec {
-  version = "9.2.6";
+mkDerivation rec {
+  version = "9.4.4";
   pname = "qsstv";
 
   src = fetchurl {
     url = "http://users.telenet.be/on4qz/qsstv/downloads/qsstv_${version}.tar.gz";
-    sha256 = "0sx70yk389fq5djvjwnam6ics5knmg9b5x608bk2sjbfxkila108";
+    sha256 = "0f9hx6sy418cb23fadll298pqbc5l2lxsdivi4vgqbkvx7sw58zi";
   };
 
   enableParallelBuilding = true;
@@ -20,27 +20,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase openjpeg fftw libpulseaudio alsaLib hamlib libv4l
                   fftwFloat ];
 
-  desktopItem = makeDesktopItem {
-    name = "QSSTV";
-    exec = "qsstv";
-    icon = "qsstv.png";
-    comment = "Qt-based slow-scan TV and fax";
-    desktopName = "QSSTV";
-    genericName = "qsstv";
-    categories = "Application;HamRadio;";
-  };
-
-  installPhase = ''
-    # Install binary to the right location
-    make install INSTALL_ROOT=$out
-    mv $out/usr/bin $out/
-    rm -r $out/usr
-
+  postInstall = ''
     # Install desktop icon
     install -D qsstv/icons/qsstv.png $out/share/pixmaps/qsstv.png
-
-    # Install desktop item
-    cp -rv ${desktopItem}/share $out
   '';
 
   meta = with stdenv.lib; {

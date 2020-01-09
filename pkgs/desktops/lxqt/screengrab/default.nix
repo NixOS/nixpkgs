@@ -32,7 +32,7 @@ mkDerivation rec {
     description = "Crossplatform tool for fast making screenshots";
     homepage = https://github.com/lxqt/screengrab;
     license = licenses.gpl2;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

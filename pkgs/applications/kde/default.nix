@@ -138,6 +138,7 @@ let
       konquest = callPackage ./konquest.nix {};
       konqueror = callPackage ./konqueror.nix {};
       korganizer = callPackage ./korganizer.nix {};
+      kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
@@ -145,6 +146,7 @@ let
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
+      ksudoku = callPackage ./ksudoku.nix {};
       ksystemlog = callPackage ./ksystemlog.nix {};
       ktnef = callPackage ./ktnef.nix {};
       ktouch = callPackage ./ktouch.nix {};
@@ -172,6 +174,7 @@ let
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
+      rocs = callPackage ./rocs.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
       # Okteta was removed from kde applications and will now be released independently

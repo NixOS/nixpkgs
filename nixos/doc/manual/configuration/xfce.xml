@@ -7,22 +7,21 @@
  <para>
   To enable the Xfce Desktop Environment, set
 <programlisting>
-<link linkend="opt-services.xserver.desktopManager.default">services.xserver.desktopManager</link> = {
-  <link linkend="opt-services.xserver.desktopManager.xfce.enable">xfce.enable</link> = true;
-  <link linkend="opt-services.xserver.desktopManager.default">default</link> = "xfce";
+<xref linkend="opt-services.xserver.desktopManager.xfce.enable" /> = true;
+<xref linkend="opt-services.xserver.displayManager.defaultSession" /> = "xfce";
 };
 </programlisting>
  </para>
  <para>
-  Optionally, <emphasis>compton</emphasis> can be enabled for nice graphical
+  Optionally, <emphasis>picom</emphasis> can be enabled for nice graphical
   effects, some example settings:
 <programlisting>
-<link linkend="opt-services.compton.enable">services.compton</link> = {
-  <link linkend="opt-services.compton.enable">enable</link>          = true;
-  <link linkend="opt-services.compton.fade">fade</link>            = true;
-  <link linkend="opt-services.compton.inactiveOpacity">inactiveOpacity</link> = "0.9";
-  <link linkend="opt-services.compton.shadow">shadow</link>          = true;
-  <link linkend="opt-services.compton.fadeDelta">fadeDelta</link>       = 4;
+<link linkend="opt-services.picom.enable">services.picom</link> = {
+  <link linkend="opt-services.picom.enable">enable</link>          = true;
+  <link linkend="opt-services.picom.fade">fade</link>            = true;
+  <link linkend="opt-services.picom.inactiveOpacity">inactiveOpacity</link> = "0.9";
+  <link linkend="opt-services.picom.shadow">shadow</link>          = true;
+  <link linkend="opt-services.picom.fadeDelta">fadeDelta</link>       = 4;
 };
 </programlisting>
  </para>

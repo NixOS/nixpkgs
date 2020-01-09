@@ -42,6 +42,9 @@ in {
       default = false;
       description = ''
         Whether to start racoon service for openvswitch.
+        Supported only if openvswitch version is less than 2.6.0.
+        Use <literal>virtualisation.vswitch.package = pkgs.openvswitch-lts</literal>
+        for a version that supports ipsec over GRE.
       '';
     };
   };
@@ -89,6 +92,13 @@ in {
             "${cfg.package}/share/openvswitch/vswitch.ovsschema"
         fi
         chmod -R +w /var/db/openvswitch
+        if ${cfg.package}/bin/ovsdb-tool needs-conversion /var/db/openvswitch/conf.db | grep -q "yes"
+        then
+          echo "Performing database upgrade"
+          ${cfg.package}/bin/ovsdb-tool convert /var/db/openvswitch/conf.db
+        else
+          echo "Database already up to date"
+        fi
         '';
       serviceConfig = {
         ExecStart =
@@ -133,7 +143,7 @@ in {
     };
 
   }
-  (mkIf cfg.ipsec {
+  (mkIf (cfg.ipsec && (versionOlder cfg.package.version "2.6.0")) {
     services.racoon.enable = true;
     services.racoon.configPath = "${runDir}/ipsec/etc/racoon/racoon.conf";
 
@@ -172,5 +182,4 @@ in {
       '';
     };
   })]));
-
 }

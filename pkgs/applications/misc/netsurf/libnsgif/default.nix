@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "GIF Decoder for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

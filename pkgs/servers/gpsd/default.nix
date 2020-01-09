@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out/lib/udev/rules.d"
   '';
-  installTargets = "install udev-install";
+  installTargets = [ "install" "udev-install" ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"

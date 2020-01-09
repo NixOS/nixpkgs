@@ -74,6 +74,10 @@ let
   };
 in {
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
+  ];
+
   ###### interface
 
   options.services.kubernetes = {
@@ -262,8 +266,7 @@ in {
         "d /var/lib/kubernetes 0755 kubernetes kubernetes -"
       ];
 
-      users.users = singleton {
-        name = "kubernetes";
+      users.users.kubernetes = {
         uid = config.ids.uids.kubernetes;
         description = "Kubernetes user";
         extraGroups = [ "docker" ];

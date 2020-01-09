@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   pname = "bazel-buildtools";
-  version = "0.28.0";
-  rev = "d7ccc5507c6c16e04f5e362e558d70b8b179b052";
+  version = "0.29.0";
+  rev = "5bcc31df55ec1de770cb52887f2e989e7068301f";
 
   goPackagePath = "github.com/bazelbuild/buildtools";
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/bazelbuild/buildtools";
-    sha256 = "1d8zjgbg77sk27cz9pjz1h6ajwxqmvdzqgwa2jbh6iykibhpadq0";
+    sha256 = "0p2kgyawh3l46h7dzglqh9c7i16zr5mhmqlhy7qvr4skwif1l089";
   };
 
   goDeps = ./deps.nix;

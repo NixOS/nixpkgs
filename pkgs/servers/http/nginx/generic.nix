@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
-, substituteAll, gd, geoip
+, nixosTests
+, substituteAll, gd, geoip, perl
 , withDebug ? false
 , withStream ? true
 , withMail ? false
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip ]
+  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ]
     ++ mapModules "inputs";
 
   configureFlags = [
@@ -52,28 +53,30 @@ stdenv.mkDerivation {
     "--with-http_stub_status_module"
     "--with-threads"
     "--with-pcre-jit"
-    # Install destination problems
-    # "--with-http_perl_module"
-  ] ++ optional withDebug [
+  ] ++ optionals withDebug [
     "--with-debug"
-  ] ++ optional withStream [
+  ] ++ optionals withStream [
     "--with-stream"
     "--with-stream_geoip_module"
     "--with-stream_realip_module"
     "--with-stream_ssl_module"
     "--with-stream_ssl_preread_module"
-  ] ++ optional withMail [
+  ] ++ optionals withMail [
     "--with-mail"
     "--with-mail_ssl_module"
+  ] ++ optional (perl != null) [
+    "--with-http_perl_module"
+    "--with-perl=${perl}/bin/perl"
+    "--with-perl_modules_path=lib/perl5"
   ]
     ++ optional (gd != null) "--with-http_image_filter_module"
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString ([
     "-I${libxml2.dev}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
-  ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
+  ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations");
 
   configurePlatforms = [];
 
@@ -107,7 +110,10 @@ stdenv.mkDerivation {
     mv $out/sbin $out/bin
   '';
 
-  passthru.modules = modules;
+  passthru = {
+    modules = modules;
+    tests.nginx = nixosTests.nginx;
+  };
 
   meta = {
     description = "A reverse proxy and lightweight webserver";

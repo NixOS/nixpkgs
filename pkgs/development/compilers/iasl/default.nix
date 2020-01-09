@@ -2,26 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "iasl";
-  version = "20190108";
+  version = "20191213";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
+    sha256 = "1ip684is3dplf7snkn024vv6bg3dv5msx8v7pz6x9lrnk3gk0j9h";
   };
 
-  NIX_CFLAGS_COMPILE = [
-    "-O3"
-  ];
+  NIX_CFLAGS_COMPILE = "-O3";
 
-  buildFlags = "iasl";
+  buildFlags = [ "iasl" ];
 
   buildInputs = [ bison flex ];
-
-  patches = fetchpatch {
-    /* https://github.com/acpica/acpica/pull/389 */
-    url = "https://github.com/acpica/acpica/commit/935ca65f7806a3ef9bd02a947e50f3a1f586ac67.patch";
-    sha256 = "0jz4bakifphm425shbd1j99hldgy71m7scl8mwibm441d56l3ydf";
-  };
 
   installPhase =
     ''

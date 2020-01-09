@@ -27,8 +27,7 @@
     </term>
     <listitem>
      <para>
-      Condition under which the <varname>msg</varname> should
-      <emphasis>not</emphasis> be printed.
+      Condition under which the <varname>msg</varname> should <emphasis>not</emphasis> be printed.
      </para>
     </listitem>
    </varlistentry>
@@ -64,9 +63,7 @@ stderr> assert failed
   <xi:include href="./locations.xml" xpointer="lib.asserts.assertOneOf" />
 
   <para>
-   Specialized <function>asserts.assertMsg</function> for checking if
-   <varname>val</varname> is one of the elements of <varname>xs</varname>.
-   Useful for checking enums.
+   Specialized <function>asserts.assertMsg</function> for checking if <varname>val</varname> is one of the elements of <varname>xs</varname>. Useful for checking enums.
   </para>
 
   <variablelist>
@@ -76,8 +73,7 @@ stderr> assert failed
     </term>
     <listitem>
      <para>
-      The name of the variable the user entered <varname>val</varname> into,
-      for inclusion in the error message.
+      The name of the variable the user entered <varname>val</varname> into, for inclusion in the error message.
      </para>
     </listitem>
    </varlistentry>
@@ -87,8 +83,7 @@ stderr> assert failed
     </term>
     <listitem>
      <para>
-      The value of what the user provided, to be compared against the values in
-      <varname>xs</varname>.
+      The value of what the user provided, to be compared against the values in <varname>xs</varname>.
      </para>
     </listitem>
    </varlistentry>

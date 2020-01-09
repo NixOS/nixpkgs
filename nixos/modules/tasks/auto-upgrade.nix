@@ -88,7 +88,7 @@ let cfg = config.system.autoUpgrade; in
           HOME = "/root";
         } // config.networking.proxy.envVars;
 
-      path = [ pkgs.coreutils pkgs.gnutar pkgs.xz.bin pkgs.gitMinimal config.nix.package.out ];
+      path = with pkgs; [ coreutils gnutar xz.bin gzip gitMinimal config.nix.package.out ];
 
       script = let
           nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";

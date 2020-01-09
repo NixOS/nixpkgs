@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, fetchpatch, rustPlatform, pkgconfig, openssl, Security }:
+{ stdenv, python3Packages, fetchFromGitHub, fetchpatch, rustPlatform, pkgconfig, openssl, CoreServices, Security }:
 
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     inherit src;
     sourceRoot = "source/rust";
     cargoSha256 = "1n1dxq3klsry5mmbfff2jv7ih8mr5zvpncrdgba6qs93wi77qi0y";
-    buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+    buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -37,12 +37,16 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pimutils/vdirsyncer/commit/7b636e8e40d69c495901f965b9c0686513659e44.patch";
+      sha256 = "0vl942ii5iad47y63v0ngmhfp37n30nxyk4j7h64b95fk38vfwx9";
+    })
+  ];
+
   postPatch = ''
-    # Invalid argument: 'perform_health_check' is not a valid setting
-    substituteInPlace tests/conftest.py \
-      --replace "perform_health_check=False" ""
-    substituteInPlace tests/unit/test_repair.py \
-      --replace $'@settings(perform_health_check=False)  # Using the random module for UIDs\n' ""
+    # see https://github.com/pimutils/vdirsyncer/pull/805
+    substituteInPlace setup.cfg --replace --duration --durations
 
     # for setuptools_scm:
     echo 'Version: ${version}' >PKG-INFO

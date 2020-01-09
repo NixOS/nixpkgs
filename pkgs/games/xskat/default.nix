@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       -e "s|.* BINDIR .*|   BINDIR = $out/bin|" \
       -e "s|.* MANPATH .*|  MANPATH = $out/man|"
   '';
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
   meta = {
     inherit (s) version;
     description = ''Famous german card game'';

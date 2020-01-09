@@ -99,6 +99,7 @@ in
     users.users.rethinkdb = mkIf (cfg.user == "rethinkdb")
       { name = "rethinkdb";
         description = "RethinkDB server user";
+        isSystemUser = true;
       };
 
     users.groups = optionalAttrs (cfg.group == "rethinkdb") (singleton

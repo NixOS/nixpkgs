@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/wodim $out/bin/cdrecord
   '';
 
-  makeFlags = "PREFIX=\$(out)";
+  makeFlags = [ "PREFIX=\$(out)" ];
 
   meta = {
     description = "Portable command-line CD/DVD recorder software, mostly compatible with cdrtools";

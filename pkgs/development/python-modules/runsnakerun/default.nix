@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "runsnakerun";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "61d03a13f1dcb3c1829f5a146da1fe0cc0e27947558a51e848b6d469902815ef";
+    sha256 = "a66a0cdf0333dc3c0830c18e2f3d62f741dea197cd01a7e0059da4886a3a123f";
   };
 
   propagatedBuildInputs = [ squaremap wxPython ];

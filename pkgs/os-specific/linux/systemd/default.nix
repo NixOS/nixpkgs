@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
-, xz, pam, acl, libuuid, m4, utillinux, libffi
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap
+, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, iptables, gnu-efi
+, iptables, gnu-efi, bashInteractive
 , gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
@@ -15,20 +15,31 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-let
-  pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
-
+let gnupg-minimal = gnupg.override {
+  enableMinimal = true;
+  guiSupport = false;
+  pcsclite = null;
+  sqlite = null;
+  pinentry = null;
+  adns = null;
+  gnutls = null;
+  libusb = null;
+  openldap = null;
+  readline = null;
+  zlib = null;
+  bzip2 = null;
+};
 in stdenv.mkDerivation {
-  version = "243";
+  version = "243.3";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "NixOS";
+    owner = "nixos";
     repo = "systemd";
-    rev = "7019836a26ebdc1ba20c03d06dbb3a613833bd0f";
-    sha256 = "0ywaq5jfy177k4q5hwr43v66sz62l1bqhgyxs2vk9m1d5kvrjwk6";
+    rev = "d8853d39a28b9884e0acd3ae5732a1e7caaf08af";
+    sha256 = "1wqm51i2czbbb3nara11mnxzqng4na1l8fvz7qnbxcrjsqm7hz18";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -44,7 +55,7 @@ in stdenv.mkDerivation {
       (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
     ];
   buildInputs =
-    [ linuxHeaders libcap kmod xz pam acl
+    [ linuxHeaders libcap curl.dev kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
       libmicrohttpd pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
@@ -56,7 +67,7 @@ in stdenv.mkDerivation {
   #dontAddPrefix = true;
 
   mesonFlags = [
-    "-Ddbuspolicydir=${placeholder "out"}/etc/dbus-1/system.d"
+    "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
@@ -67,8 +78,10 @@ in stdenv.mkDerivation {
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
+    "-Ddebug-shell=${bashInteractive}/bin/bash"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
+    "-Dimportd=true"
     "-Dlz4=true"
     "-Dhostnamed=true"
     "-Dnetworkd=true"
@@ -79,15 +92,25 @@ in stdenv.mkDerivation {
     "-Dlocaled=true"
     "-Dresolve=true"
     "-Dsplit-usr=false"
-    "-Dlibcurl=false"
+    "-Dlibcurl=true"
     "-Dlibidn=false"
     "-Dlibidn2=true"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
     "-Db_pie=true"
-    "-Dsystem-uid-max=499" #TODO: debug why awking around in /etc/login.defs doesn't work
-    "-Dsystem-gid-max=499"
+    /*
+    As of now, systemd doesn't allow runtime configuration of these values. So
+    the settings in /etc/login.defs have no effect on it. Many people think this
+    should be supported however, see
+    - https://github.com/systemd/systemd/issues/3855
+    - https://github.com/systemd/systemd/issues/4850
+    - https://github.com/systemd/systemd/issues/9769
+    - https://github.com/systemd/systemd/issues/9843
+    - https://github.com/systemd/systemd/issues/10184
+    */
+    "-Dsystem-uid-max=999"
+    "-Dsystem-gid-max=999"
     # "-Dtime-epoch=1"
 
     (if !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
@@ -117,7 +140,7 @@ in stdenv.mkDerivation {
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
+    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c units/systemd-logind.service.in units/systemd-nspawn@.service.in; do
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
@@ -127,12 +150,21 @@ in stdenv.mkDerivation {
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
         --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
+        --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
 
     for dir in tools src/resolve test src/test; do
       patchShebangs $dir
+    done
+
+    # absolute paths to gpg & tar
+    substituteInPlace src/import/pull-common.c \
+      --replace '"gpg"' '"${gnupg-minimal}/bin/gpg"'
+    for file in src/import/{{export,import,pull}-tar,import-common}.c; do
+      substituteInPlace $file \
+        --replace '"tar"' '"${gnutar}/bin/tar"'
     done
 
     substituteInPlace src/journal/catalog.c \
@@ -148,18 +180,18 @@ in stdenv.mkDerivation {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE =
-    [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-      # lead to a cyclic dependency.
-      "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+  NIX_CFLAGS_COMPILE = toString [
+    # Can't say ${polkit.bin}/bin/pkttyagent here because that would
+    # lead to a cyclic dependency.
+    "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-      # Set the release_agent on /sys/fs/cgroup/systemd to the
-      # currently running systemd (/run/current-system/systemd) so
-      # that we don't use an obsolete/garbage-collected release agent.
-      "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    # Set the release_agent on /sys/fs/cgroup/systemd to the
+    # currently running systemd (/run/current-system/systemd) so
+    # that we don't use an obsolete/garbage-collected release agent.
+    "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-      "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
-    ];
+    "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+  ];
 
   doCheck = false; # fails a bunch of tests
 
@@ -223,7 +255,7 @@ in stdenv.mkDerivation {
   # in a backwards-incompatible way.  If the interface version of two
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 3;
+  passthru.interfaceVersion = 2;
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
@@ -231,6 +263,6 @@ in stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ eelco andir ];
+    maintainers = with maintainers; [ andir eelco flokli mic92 ];
   };
 }

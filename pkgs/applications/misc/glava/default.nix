@@ -8,7 +8,7 @@ let
   wrapperScript = writeScript "glava" ''
     #!${runtimeShell}
     case "$1" in
-      --copy-config)
+      --copy-config|-C)
         # The binary would symlink it, which won't work in Nix because the
         # garbage collector will eventually remove the original files after
         # updates
@@ -45,6 +45,14 @@ in
     ];
 
     preConfigure = ''
+      for f in $(find -type f);do
+        substituteInPlace $f \
+          --replace /etc/xdg $out/etc/xdg
+      done
+
+      substituteInPlace Makefile \
+        --replace '$(DESTDIR)$(SHADERDIR)' '$(SHADERDIR)'
+
       substituteInPlace Makefile \
         --replace 'unknown' 'v${version}'
 

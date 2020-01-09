@@ -1,5 +1,5 @@
 { stdenv
-, python2Packages
+, python3Packages
 , pkgconfig
 , librsvg
 , gobject-introspection
@@ -7,40 +7,59 @@
 , gtk3
 , gtkspell3
 , gnome3
+, glib
 , goocanvas2
+, gdk-pixbuf
+, pango
+, fontconfig
+, freetype
+, wrapGAppsHook
 }:
 
 with stdenv.lib;
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "4.8.5";
-  src = python2Packages.fetchPypi {
+  version = "5.4.1";
+
+  disabled = !python3Packages.isPy3k;
+
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "43759d22b061a7a392a534d19a045fafd442ce98a0e390ee830127367dcaf4b4";
+    sha256 = "0lk47qv944yc2b1ifhinp07af839r408w83rj8zzy8b43cwkpsxd";
   };
-  nativeBuildInputs = [ pkgconfig gobject-introspection ];
-  propagatedBuildInputs = with python2Packages; [
-    chardet
+
+  nativeBuildInputs = [
+    pkgconfig
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
     dateutil
-    pygtk
-    librsvg
     pygobject3
     goocalendar
-    cdecimal
+    pycairo
   ];
+
   buildInputs = [
     atk
-    gtk3
+    gdk-pixbuf
+    glib
     gnome3.adwaita-icon-theme
-    gtkspell3
     goocanvas2
+    fontconfig
+    freetype
+    gtk3
+    gtkspell3
+    librsvg
+    pango
   ];
-  makeWrapperArgs = [
-    ''--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"''
-    ''--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"''
-    ''--suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"''
-  ];
+
+  strictDeps = false;
+
+  doCheck = false;
+
   meta = {
     description = "The client of the Tryton application platform";
     longDescription = ''

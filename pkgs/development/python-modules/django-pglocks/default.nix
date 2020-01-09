@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "django-pglocks";
-  version = "1.0.2";
+  version = "1.0.4";
 
   meta = {
     description = "PostgreSQL locking context managers and functions for Django.";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ks4k0bk4457wfl3xgzr4v7xb0lxmnkhxwhlp0bbnmzipdafw1cl";
+    sha256 = "3c47c66fbfbd268ef46269673a0516a039539b0972b8ed2ec9cfee44c4b65523";
   };
 
   buildInputs = [ django ];

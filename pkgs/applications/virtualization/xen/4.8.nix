@@ -167,8 +167,19 @@ callPackage (import ./generic.nix (rec {
     xenpmdpatch
   ];
 
-  # Fix build on Glibc 2.24.
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = toString [
+    # Fix build on Glibc 2.24
+    "-Wno-error=deprecated-declarations"
+    # Fix build with GCC8
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=format-truncation"
+    "-Wno-error=array-bounds"
+    # Fix build with GCC9
+    "-Wno-error=address-of-packed-member"
+    "-Wno-error=format-overflow"
+    "-Wno-error=absolute-value"
+  ];
 
   postPatch = ''
     # Avoid a glibc >= 2.25 deprecation warnings that get fatal via -Werror.

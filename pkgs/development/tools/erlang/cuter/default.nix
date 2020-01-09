@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook makeWrapper which ];
   buildInputs = [ python python.pkgs.setuptools z3.python erlang ];
 
-  buildFlags = "PWD=$(out)/lib/erlang/lib/cuter-${version} cuter_target";
+  buildFlags = [ "PWD=$(out)/lib/erlang/lib/cuter-${version}" "cuter_target" ];
   configurePhase = ''
     autoconf
     ./configure --prefix $out
