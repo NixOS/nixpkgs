@@ -2190,6 +2190,17 @@ let
     };
   };
 
+  pear-tree = buildVimPluginFrom2Nix {
+    pname = "pear-tree";
+    version = "2019-12-08";
+    src = fetchFromGitHub {
+      owner = "tmsvg";
+      repo = "pear-tree";
+      rev = "3bb209d9637d6bd7506040b2fcd158c9a7917db3";
+      sha256 = "0n70rzw34lsnnprqna90ssqrka33qx3z0n2kj19ps8yp3j6lsxvk";
+    };
+  };
+
   peskcolor-vim = buildVimPluginFrom2Nix {
     pname = "peskcolor-vim";
     version = "2016-06-11";
