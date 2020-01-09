@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, isPy3k, attrs, coverage, enum34, pexpect
+, isPy3k, attrs, coverage, sortedcontainers, enum34, pexpect
 , doCheck ? true, pytest, pytest_xdist, flaky, mock
 }:
 buildPythonPackage rec {
@@ -17,12 +17,12 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "hypothesis-python-${version}";
-    sha256 = "09bpwp4kdywkmzci969m57w0yy8c31kzwg60vg4mvrmmgyi2cfzv";
+    sha256 = "04n1237cqrkka5sy6vzs4yb9vwz85vi4l1bwjddq8isxkid3grwz";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) enum34;
+  propagatedBuildInputs = [ attrs coverage sortedcontainers ] ++ lib.optional (!isPy3k) enum34;
 
   checkInputs = [ pytest pytest_xdist flaky mock pexpect ];
   inherit doCheck;
