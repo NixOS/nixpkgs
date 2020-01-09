@@ -1,38 +1,39 @@
-{ stdenv, python, hyperkitty, postorius, buildPythonPackage, isPy3k
-, serverEMail ? "postmaster@example.org"
-, archiverKey ? "SecretArchiverAPIKey"
-, allowedHosts ? []
+{ buildPythonPackage, lib, fetchgit, isPy3k
+, git, makeWrapper, sassc, hyperkitty, postorius, whoosh
 }:
 
-let
-
-  allowedHostsString = stdenv.lib.concatMapStringsSep ", " (x: "\""+x+"\"") allowedHosts;
-
-in
-
-# We turn those Djando configuration files into a make-shift Python library so
-# that Nix users can use this package as a part of their buildInputs to import
-# the code. Also, this package implicitly provides an environment in which the
-# Django app can be run.
-
-buildPythonPackage {
-  name = "mailman-web-0";
+buildPythonPackage rec {
+  pname = "mailman-web-unstable";
+  version = "2019-09-29";
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ hyperkitty postorius ];
+  src = fetchgit {
+    url = "https://gitlab.com/mailman/mailman-web";
+    rev = "d17203b4d6bdc71c2b40891757f57a32f3de53d5";
+    sha256 = "124cxr4vfi1ibgxygk4l74q4fysx0a6pga1kk9p5wq2yvzwg9z3n";
+    leaveDotGit = true;
+  };
 
-  unpackPhase = ":";
-  buildPhase = ":";
-  setuptoolsCheckPhase = ":";
-
-  installPhase = ''
-    d=$out/${python.sitePackages}
-    install -D -m 444 ${./urls.py} $d/urls.py
-    install -D -m 444 ${./wsgi.py} $d/wsgi.py
-    substitute ${./settings.py} $d/settings.py \
-      --subst-var-by SERVER_EMAIL '${serverEMail}' \
-      --subst-var-by ARCHIVER_KEY '${archiverKey}' \
-      --subst-var-by ALLOWED_HOSTS '${allowedHostsString}'
-    chmod 444 $d/settings.py
+  # This is just so people installing from pip also get uwsgi
+  # installed, AFAICT.
+  postPatch = ''
+    sed -i '/^  uwsgi$/d' setup.cfg
   '';
+
+  nativeBuildInputs = [ git makeWrapper ];
+  propagatedBuildInputs = [ hyperkitty postorius whoosh ];
+
+  # Tries to check runtime configuration.
+  doCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/mailman-web \
+        --suffix PATH : ${lib.makeBinPath [ sassc ]}
+  '';
+
+  meta = with lib; {
+    description = "Django project for Mailman 3 web interface";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ qyliss ];
+  };
 }
