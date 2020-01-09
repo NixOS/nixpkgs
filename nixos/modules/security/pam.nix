@@ -361,15 +361,15 @@ let
           # We use try_first_pass the second time to avoid prompting password twice
           (optionalString (cfg.unixAuth &&
           (config.security.pam.enableEcryptfs
-	    || config.security.pam.enableGnupg
+            || config.security.pam.enableGnupg
             || cfg.pamMount
             || cfg.enableKwallet
             || cfg.enableGnomeKeyring
             || cfg.googleAuthenticator.enable
             || cfg.duoSecurity.enable)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
-	      ${optionalString config.security.pam.enableGnupg
-	        "auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"}
+              ${optionalString config.security.pam.enableGnupg
+                "auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"}
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
               ${optionalString cfg.pamMount
@@ -441,8 +441,8 @@ let
               "session optional ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString cfg.startSession
               "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
-	  ${optionalString config.security.pam.enableGnupg
-	      "session optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"}
+          ${optionalString config.security.pam.enableGnupg
+              "session optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"}
           ${optionalString cfg.forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
           ${optionalString (cfg.limits != [])

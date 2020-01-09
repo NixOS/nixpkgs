@@ -1,7 +1,9 @@
 { stdenv, fetchgit, autoreconfHook, gnupg, pam } :
 
 stdenv.mkDerivation rec {
-  name = "pam_gnupg-fbd75b7";
+  pname = "pam_gnupg";
+  version = "unstable-2019-12-06";
+
   src = fetchgit {
     url = https://github.com/cruegge/pam-gnupg;
     rev = "fbd75b720877e4cf94e852ce7e2b811feb330bb5";
