@@ -819,6 +819,17 @@ let
     };
   };
 
+  defx-git = buildVimPluginFrom2Nix {
+    pname = "defx-git";
+    version = "2019-12-25";
+    src = fetchFromGitHub {
+      owner = "kristijanhusak";
+      repo = "defx-git";
+      rev = "6f064b7aa45491aa728f976f49012c6abe244f15";
+      sha256 = "1909f4q4b5yc2g8x8spxs7q9iq94ls2id2xa9k9cf9h93x2jla5y";
+    };
+  };
+
   defx-nvim = buildVimPluginFrom2Nix {
     pname = "defx-nvim";
     version = "2020-01-02";
