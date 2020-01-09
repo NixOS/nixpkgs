@@ -441,6 +441,7 @@ tomtom/tcomment_vim
 tomtom/tlib_vim
 tpope/vim-abolish
 tpope/vim-commentary
+tpope/vim-dadbod
 tpope/vim-dispatch
 tpope/vim-endwise
 tpope/vim-eunuch
