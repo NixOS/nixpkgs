@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, sqlite, ocaml, pkgconfig, dune-configurator, buildDune2Package }:
+{ lib, fetchurl, sqlite, pkgconfig, buildDunePackage }:
 
-buildDune2Package rec {
+buildDunePackage rec {
   pname = "sqlite3";
   version = "5.0.1";
 
@@ -10,13 +10,12 @@ buildDune2Package rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ dune-configurator ocaml sqlite ];
+  buildInputs = [ sqlite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://mmottl.github.io/sqlite3-ocaml/;
     description = "OCaml bindings to the SQLite 3 database access library";
     license = licenses.mit;
-    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
       maggesi vbgl
     ];
