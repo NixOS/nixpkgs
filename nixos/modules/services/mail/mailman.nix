@@ -161,10 +161,29 @@ in {
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      { assertion = cfg.enable -> config.services.postfix.enable;
+    assertions = let
+      inherit (config.services) postfix;
+
+      requirePostfixHash = optionPath: dataFile:
+        with lib;
+        let
+          expected = "hash:/var/lib/mailman/data/${dataFile}";
+          value = attrByPath optionPath [] postfix;
+        in
+          { assertion = postfix.enable -> isList value && elem expected value;
+            message = ''
+              services.postfix.${concatStringsSep "." optionPath} must contain
+              "${expected}".
+              See <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>.
+            '';
+          };
+    in [
+      { assertion = postfix.enable;
         message = "Mailman requires Postfix";
       }
+      (requirePostfixHash [ "relayDomains" ] "postfix_domains")
+      (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
+      (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
     ];
 
     users.users.mailman = { description = "GNU Mailman"; isSystemUser = true; };
@@ -175,11 +194,8 @@ in {
     };
 
     services.postfix = {
-      relayDomains = [ "hash:/var/lib/mailman/data/postfix_domains" ];
       recipientDelimiter = "+";         # bake recipient addresses in mail envelopes via VERP
       config = {
-        transport_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
-        local_recipient_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
         owner_request_special = "no";   # Mailman handles -owner addresses on its own
       };
     };
