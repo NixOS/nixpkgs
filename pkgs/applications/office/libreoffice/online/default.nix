@@ -3,6 +3,7 @@
 , autoconf, automake, libtool, pkgconfig
 , python3, nodejs, git
 
+, pname ? "libreoffice-online"
 , version ? "7.0.1.1"
 , rev ? "libreoffice-7.0.1.1"
 , sha256 ? "1ypglwhap4mhrz48h8xglz6qkmv8rcxgi8jhsvckryph3n7ci8gw"
@@ -24,8 +25,7 @@ let
   };
   nodeModules = nodePackages.package;
 in stdenv.mkDerivation rec {
-  pname = "libreoffice-online";
-  inherit version;
+  inherit pname version;
 
   # WARNING(2019-11-19): make sure the source directory has .git subdirectory
   # or dist_git_hash (tarballs from https://dev-www.libreoffice.org/online/ - not from github releases)
@@ -68,6 +68,13 @@ in stdenv.mkDerivation rec {
     touch systemplate/system-stamp
   '';
 
+  postInstall = ''
+    # required if we want to use the "collabora-online" name
+    if [ -d "${libreoffice-core.dev}/loolwsd-branding" ]; then
+      cp -r ${libreoffice-core.dev}/loolwsd-branding/* $out/share/loolwsd/loleaflet/dist/
+    fi
+  '';
+
   # Please note: if the 10 concurrent documents and 20 connections limit is removed, you may need
   # to change the name of the project (to not include LibreOffice or Collabora), especially if you
   # intend to make it available outside your organisation.
@@ -95,7 +102,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Office suite in your web browser";
-    homepage = "https://www.libreoffice.org/download/libreoffice-online/";
+    homepage = if pname == "collabora-online"
+      then "https://www.collaboraoffice.com/code/"
+      else "https://www.libreoffice.org/download/libreoffice-online/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ mmilata ];
     platforms = platforms.linux;

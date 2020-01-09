@@ -140,6 +140,33 @@
    <link xlink:href="https://www.libreoffice.org/download/libreoffice-online/">Document Foundations's trademark policy</link>
    for details.</para>
   </warning>
+
+  <para>
+   NixOS offers two choices of package to be used as the backend service, configurable with the <xref linkend="opt-services.loolwsd.package" /> option:
+   <variablelist>
+    <varlistentry>
+     <term>
+      <package>libreoffice-online</package>
+     </term>
+     <listitem>
+      <para>
+       LibreOffice Online is the upstream project containing the latest features.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <package>collabora-online</package>
+     </term>
+     <listitem>
+      <para>
+       Development Edition (CODE) is more stable release maintained by the <link xlink:href="https://www.collaboraoffice.com/">
+       Collabora</link> company which also offers commercial support.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
  </section>
 
  <section xml:id="module-services-nextcloud-pitfalls-during-upgrade">

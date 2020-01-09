@@ -23606,7 +23606,23 @@ in
   });
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
 
+  collabora-office = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+    libreoffice  = callPackage ../applications/office/libreoffice
+      (libreoffice-args // {
+        variant = "collabora";
+      });
+  });
+  collabora-office-unwrapped = collabora-office.libreoffice;
+
   libreoffice-online = callPackage ../applications/office/libreoffice/online { };
+  collabora-online = callPackage ../applications/office/libreoffice/online {
+    pname = "collabora-online";
+    version = "4.2.0";
+    rev = "CODE-4.2.0-3";
+    sha256 = "1pm9k9cggfnqxz4xh9mxayx1idlzg9s601100bzi9fi67kwqz6hi";
+    libreoffice-core = pkgs.collabora-office-unwrapped;
+    loleafletDeps = import ../applications/office/libreoffice/online/loleaflet-deps.nix;
+  };
 
   libvmi = callPackage ../development/libraries/libvmi { };
 

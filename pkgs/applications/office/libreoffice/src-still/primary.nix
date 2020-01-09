@@ -1,4 +1,4 @@
-{ fetchurl }:
+{ fetchurl, ... }:
 
 rec {
   fetchSrc = {name, sha256}: fetchurl {

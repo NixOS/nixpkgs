@@ -54,7 +54,7 @@ in
       type = package;
       default = pkgs.libreoffice-online;
       defaultText = "pkgs.libreoffice-online";
-      relatedPackages = [ "libreoffice-online" ];
+      relatedPackages = [ "libreoffice-online" "collabora-online" ];
       description = ''
         LibreOffice Online package.
       '';

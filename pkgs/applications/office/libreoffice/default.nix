@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
+{ stdenv, fetchurl, fetchFromGitHub, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
@@ -12,8 +12,8 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome3, glib, ncurses, epoxy, gpgme
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
+, gnome3, glib, ncurses, epoxy, gpgme, dpkg
+, langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
 , ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
@@ -21,12 +21,12 @@
 , variant ? "fresh"
 } @ args:
 
-assert builtins.elem variant [ "fresh" "still" ];
+assert builtins.elem variant [ "fresh" "still" "collabora" ];
 
 let
   importVariant = f: import (./. + "/src-${variant}/${f}");
 
-  primary-src = importVariant "primary.nix" { inherit fetchurl; };
+  primary-src = importVariant "primary.nix" { inherit fetchurl fetchFromGitHub; };
 
   inherit (primary-src) major minor subdir version;
 
@@ -50,8 +50,8 @@ let
     translations = primary-src.translations;
     help = primary-src.help;
   };
-in (mkDrv rec {
-  pname = "libreoffice";
+in (stdenv.mkDerivation rec {
+  pname = primary-src.pname or "libreoffice";
   inherit version;
 
   inherit (primary-src) src;
@@ -76,8 +76,9 @@ in (mkDrv rec {
   + ''
     ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
-    tar -xf ${srcs.help}
-    tar -xf ${srcs.translations}
+    mkdir -p $sourceRoot/helpcontent2 $sourceRoot/translations
+    tar -xf ${srcs.help} -C $sourceRoot/helpcontent2 --strip-components=${toString (srcs.help.stripLevels or 2)}
+    tar -xf ${srcs.translations} -C $sourceRoot/translations --strip-components=${toString (srcs.translations.stripLevels or 2)}
   '';
 
   ### QT/KDE
@@ -273,27 +274,27 @@ in (mkDrv rec {
 
   doCheck = true;
 
-  # It installs only things to $out/lib/libreoffice
+  # It installs only things to $out/lib/libreoffice (resp. $out/lib/collaboraoffice)
   postInstall = ''
     mkdir -p $out/bin $out/share/desktop
 
     mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
 
     for a in sbase scalc sdraw smath swriter simpress soffice unopkg; do
-      ln -s $out/lib/libreoffice/program/$a $out/bin/$a
+      ln -s $out/lib/${pname}/program/$a $out/bin/$a
     done
 
-    ln -s $out/bin/soffice $out/bin/libreoffice
-    ln -s $out/lib/libreoffice/share/xdg $out/share/applications
+    ln -s $out/bin/soffice $out/bin/${pname}
+    ln -s $out/lib/${pname}/share/xdg $out/share/applications
 
     for f in $out/share/applications/*.desktop; do
-      substituteInPlace "$f" \
-        --replace "Exec=libreofficedev${major}.${minor}" "Exec=libreoffice" \
-        --replace "Exec=libreoffice${major}.${minor}"    "Exec=libreoffice"
+      substituteInPlace "$f" --replace "Exec=libreofficedev${major}.${minor}" "Exec=${pname}"
+      substituteInPlace "$f" --replace "Exec=${pname}${major}.${minor}" "Exec=${pname}"
+      substituteInPlace "$f" --replace "Exec=${pname}" "Exec=${pname}"
     done
 
     cp -r sysui/desktop/icons  "$out/share"
-    sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
+    sed -re 's@Icon=${pname}(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
 
     mkdir -p $dev
     cp -r include $dev
@@ -302,6 +303,13 @@ in (mkDrv rec {
       do
         wrapQtApp $prog
       done
+  '' + lib.optionalString (lib.hasAttr "brandingDeb" primary-src) ''
+    # this is only needed for the collabora variant
+    mkdir branding
+    ${dpkg}/bin/dpkg-deb -x ${primary-src.brandingDeb} branding
+    cp -r branding/opt/collaboraoffice*/share/* $out/lib/${pname}/share/
+    mkdir $dev/loolwsd-branding
+    cp -r branding/usr/share/loolwsd/loleaflet/dist/* $dev/loolwsd-branding/
   '';
 
   dontWrapQtApps = true;

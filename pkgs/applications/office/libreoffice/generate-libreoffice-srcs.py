@@ -52,12 +52,13 @@ def main():
 
 
 def construct_url(x):
+    baseurl = x.get('baseurl', 'https://dev-www.libreoffice.org/src')
     if x['brief']:
-        return 'https://dev-www.libreoffice.org/src/{}{}'.format(
-            x.get('subdir', ''), x['tarball'])
+        return '{}/{}{}'.format(
+            baseurl, x.get('subdir', ''), x['tarball'])
     else:
-        return 'https://dev-www.libreoffice.org/src/{}{}-{}'.format(
-            x.get('subdir', ''), x['md5'], x['tarball'])
+        return '{}/{}{}-{}'.format(
+            baseurl, x.get('subdir', ''), x['md5'], x['tarball'])
 
 
 def download(url, name, hash, hashtype):
