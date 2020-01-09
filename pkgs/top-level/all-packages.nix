@@ -20792,6 +20792,8 @@ in
 
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
+  protonvpn-cli-ng = callPackage ../applications/networking/protonvpn-cli-ng { };
+
   ps2client = callPackage ../applications/networking/ps2client { };
 
   psi = callPackage ../applications/networking/instant-messengers/psi { };
