@@ -2811,6 +2811,8 @@ in {
 
   lpod = callPackage ../development/python-modules/lpod { };
 
+  lupa = callPackage ../development/python-modules/lupa { };
+
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
@@ -3323,6 +3325,8 @@ in {
   eventlet = callPackage ../development/python-modules/eventlet { };
 
   exifread = callPackage ../development/python-modules/exifread { };
+
+  fakeredis = callPackage ../development/python-modules/fakeredis { };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
