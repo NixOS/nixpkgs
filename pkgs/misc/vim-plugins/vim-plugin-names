@@ -439,6 +439,7 @@ tomtom/tlib_vim
 tpope/vim-abolish
 tpope/vim-commentary
 tpope/vim-dispatch
+tpope/vim-endwise
 tpope/vim-eunuch
 tpope/vim-fireplace
 tpope/vim-flagship
