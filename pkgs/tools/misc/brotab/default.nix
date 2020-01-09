@@ -19,6 +19,11 @@ python.pkgs.buildPythonApplication rec {
     psutil
   ];
 
+  # test_integration.py requires Chrome browser session
+  checkPhase = ''
+    ${python.interpreter} -m unittest brotab/tests/test_{brotab,utils}.py
+  '';
+  
   meta = with lib; {
     homepage = "https://github.com/balta2ar/brotab";
     description = "Control your browser's tabs from the command line";
@@ -26,4 +31,3 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ doronbehar ];
   };
 }
-
