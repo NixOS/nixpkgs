@@ -25423,6 +25423,8 @@ in
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
+  wasmer = callPackage ../development/interpreters/wasmer { };
+
   wasm-pack = callPackage ../development/tools/wasm-pack {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
