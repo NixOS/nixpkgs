@@ -1,9 +1,9 @@
-{stdenv, fetchurl, unzip, llvmPackages}:
+{ stdenv, fetchurl, unzip, llvmPackages }:
 
 stdenv.mkDerivation rec {
-
   pname = "bayescan";
   version = "2.1";
+
   src = fetchurl {
     url = "http://cmpg.unibe.ch/software/BayeScan/files/BayeScan${version}.zip";
     sha256 = "0ismima8j8z0zj9yc267rpf7z90w57b2pbqzjnayhc3ab8mcbfy6";
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Detecting natural selection from population-based genetic data";
-    homepage    = "http://cmpg.unibe.ch/software/BayeScan";
+    homepage = "http://cmpg.unibe.ch/software/BayeScan";
     license = licenses.gpl2;
     maintainers = [ maintainers.bzizou ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.all;
   };
 }
