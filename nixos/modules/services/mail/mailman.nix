@@ -6,24 +6,18 @@ let
 
   cfg = config.services.mailman;
 
-  mailmanWeb = pkgs.python3Packages.mailman-web.override {
-    serverEMail = cfg.siteOwner;
-    archiverKey = cfg.hyperkittyApiKey;
-    allowedHosts = cfg.webHosts;
-  };
+  # This deliberately doesn't use recursiveUpdate so users can
+  # override the defaults.
+  settings = {
+    DEFAULT_FROM_EMAIL = cfg.siteOwner;
+    SERVER_EMAIL = cfg.siteOwner;
+    ALLOWED_HOSTS = [ "localhost" "127.0.0.1" ] ++ cfg.webHosts;
+    COMPRESS_OFFLINE = true;
+    STATIC_ROOT = "/var/lib/mailman-web/static";
+    MEDIA_ROOT = "/var/lib/mailman-web/media";
+  } // cfg.webSettings;
 
-  mailmanWebPyEnv = pkgs.python3.withPackages (x: with x; [mailman-web]);
-
-  mailmanWebExe = with pkgs; stdenv.mkDerivation {
-    inherit (mailmanWeb) name;
-    buildInputs = [makeWrapper];
-    unpackPhase = ":";
-    installPhase = ''
-      mkdir -p $out/bin
-      makeWrapper ${mailmanWebPyEnv}/bin/django-admin $out/bin/mailman-web \
-        --set DJANGO_SETTINGS_MODULE settings
-    '';
-  };
+  settingsJSON = pkgs.writeText "settings.json" (builtins.toJSON settings);
 
   mailmanCfg = ''
     [mailman]
@@ -98,8 +92,8 @@ in {
 
       webRoot = mkOption {
         type = types.path;
-        default = "${mailmanWeb}/${pkgs.python3.sitePackages}";
-        defaultText = "pkgs.python3Packages.mailman-web";
+        default = "${pkgs.mailman-web}/${pkgs.python3.sitePackages}";
+        defaultText = "\${pkgs.mailman-web}/\${pkgs.python3.sitePackages}";
         description = ''
           The web root for the Hyperkity + Postorius apps provided by Mailman.
           This variable can be set, of course, but it mainly exists so that site
@@ -125,6 +119,14 @@ in {
         default = config.services.httpd.user;
         description = ''
           User to run mailman-web as
+        '';
+      };
+
+      webSettings = mkOption {
+        type = types.attrs;
+        default = {};
+        description = ''
+          Overrides for the default mailman-web Django settings.
         '';
       };
 
@@ -175,10 +177,27 @@ in {
 
     users.users.mailman = { description = "GNU Mailman"; isSystemUser = true; };
 
-    environment = {
-      systemPackages = [ pkgs.mailman mailmanWebExe pkgs.sassc ];
-      etc."mailman.cfg".text = mailmanCfg;
-    };
+    environment.etc."mailman.cfg".text = mailmanCfg;
+
+    environment.etc."mailman3/settings.py".text = ''
+      import os
+
+      # Required by mailman_web.settings, but will be overridden when
+      # settings_local.json is loaded.
+      os.environ["SECRET_KEY"] = ""
+
+      from mailman_web.settings import *
+
+      import json
+
+      with open('${settingsJSON}') as f:
+          globals().update(json.load(f))
+
+      with open('/var/lib/mailman-web/settings_local.json') as f:
+          globals().update(json.load(f))
+    '';
+
+    environment.systemPackages = [ cfg.package ] ++ (with pkgs; [ mailman-web ]);
 
     services.postfix = {
       recipientDelimiter = "+";         # bake recipient addresses in mail envelopes via VERP
@@ -201,36 +220,39 @@ in {
       };
     };
 
-    systemd.services.mailman-secrets = {
-      description = "Generate Hyperkitty API key";
+    systemd.services.mailman-settings = {
+      description = "Generate settings files (including secrets) for Mailman";
       before = [ "mailman.service" "mailman-web.service" "hyperkitty.service" "httpd.service" "uwsgi.service" ];
       requiredBy = [ "mailman.service" "mailman-web.service" "hyperkitty.service" "httpd.service" "uwsgi.service" ];
+      path = with pkgs; [ jq ];
       script = ''
         mailmanDir=/var/lib/mailman
         mailmanWebDir=/var/lib/mailman-web
 
         mailmanCfg=$mailmanDir/mailman-hyperkitty.cfg
-        hyperkittyCfg=$mailmanWebDir/settings_local.py
-
-        [ -e $mailmanCfg -o -e $hyperkittyCfg ] && exit 0
+        mailmanWebCfg=$mailmanWebDir/settings_local.json
 
         install -m 0700 -o mailman -g nogroup -d $mailmanDir
         install -m 0700 -o ${cfg.webUser} -g nogroup -d $mailmanWebDir
 
-        hyperkittyApiKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
-        secretKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
+        if [ ! -e $mailmanWebCfg ]; then
+            hyperkittyApiKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
+            secretKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
 
-        hyperkittyCfgTmp=$(mktemp)
-        echo "MAILMAN_ARCHIVER_KEY='$hyperkittyApiKey'" >>"$hyperkittyCfgTmp"
-        echo "SECRET_KEY='$secretKey'" >>"$hyperkittyCfgTmp"
-        chown ${cfg.webUser} "$hyperkittyCfgTmp"
+            mailmanWebCfgTmp=$(mktemp)
+            jq -n '.MAILMAN_ARCHIVER_KEY=$archiver_key | .SECRET_KEY=$secret_key' \
+                --arg archiver_key "$hyperkittyApiKey" \
+                --arg secret_key "$secretKey" \
+                >"$mailmanWebCfgTmp"
+            chown ${cfg.webUser} "$mailmanWebCfgTmp"
+            mv -n "$mailmanWebCfgTmp" $mailmanWebCfg
+        fi
 
+        hyperkittyApiKey="$(jq -r .MAILMAN_ARCHIVER_KEY $mailmanWebCfg)"
         mailmanCfgTmp=$(mktemp)
         sed "s/@API_KEY@/$hyperkittyApiKey/g" ${mailmanHyperkittyCfg} >"$mailmanCfgTmp"
         chown mailman "$mailmanCfgTmp"
-
-        mv -n "$hyperkittyCfgTmp" $hyperkittyCfg
-        mv -n "$mailmanCfgTmp" $mailmanCfg
+        mv "$mailmanCfgTmp" $mailmanCfg
       '';
       serviceConfig = {
         Type = "oneshot";
@@ -241,11 +263,12 @@ in {
       description = "Init Postorius DB";
       before = [ "httpd.service" "uwsgi.service" ];
       requiredBy = [ "httpd.service" "uwsgi.service" ];
+      restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
       script = ''
-        ${mailmanWebExe}/bin/mailman-web migrate
+        ${pkgs.mailman-web}/bin/mailman-web migrate
         rm -rf static
-        ${mailmanWebExe}/bin/mailman-web collectstatic
-        ${mailmanWebExe}/bin/mailman-web compress
+        ${pkgs.mailman-web}/bin/mailman-web collectstatic
+        ${pkgs.mailman-web}/bin/mailman-web compress
       '';
       serviceConfig = {
         User = cfg.webUser;
@@ -267,9 +290,10 @@ in {
       inherit (cfg.hyperkitty) enable;
       description = "GNU Hyperkitty QCluster Process";
       after = [ "network.target" ];
+      restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
       wantedBy = [ "mailman.service" "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web qcluster";
+        ExecStart = "${pkgs.mailman-web}/bin/mailman-web qcluster";
         User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -279,8 +303,9 @@ in {
       inherit (cfg.hyperkitty) enable;
       description = "Trigger minutely Hyperkitty events";
       startAt = "minutely";
+      restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs minutely";
+        ExecStart = "${pkgs.mailman-web}/bin/mailman-web runjobs minutely";
         User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -290,8 +315,9 @@ in {
       inherit (cfg.hyperkitty) enable;
       description = "Trigger quarter-hourly Hyperkitty events";
       startAt = "*:00/15";
+      restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs quarter_hourly";
+        ExecStart = "${pkgs.mailman-web}/bin/mailman-web runjobs quarter_hourly";
         User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -301,8 +327,9 @@ in {
       inherit (cfg.hyperkitty) enable;
       description = "Trigger hourly Hyperkitty events";
       startAt = "hourly";
+      restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs hourly";
+        ExecStart = "${pkgs.mailman-web}/bin/mailman-web runjobs hourly";
         User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -312,8 +339,9 @@ in {
       inherit (cfg.hyperkitty) enable;
       description = "Trigger daily Hyperkitty events";
       startAt = "daily";
+      restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs daily";
+        ExecStart = "${pkgs.mailman-web}/bin/mailman-web runjobs daily";
         User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -323,8 +351,9 @@ in {
       inherit (cfg.hyperkitty) enable;
       description = "Trigger weekly Hyperkitty events";
       startAt = "weekly";
+      restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs weekly";
+        ExecStart = "${pkgs.mailman-web}/bin/mailman-web runjobs weekly";
         User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -334,8 +363,9 @@ in {
       inherit (cfg.hyperkitty) enable;
       description = "Trigger yearly Hyperkitty events";
       startAt = "yearly";
+      restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs yearly";
+        ExecStart = "${pkgs.mailman-web}/bin/mailman-web runjobs yearly";
         User = cfg.webUser;
         WorkingDirectory = "/var/lib/mailman-web";
       };
