@@ -343,5 +343,6 @@ stdenv.mkDerivation rec {
     inherit (tor-browser-unwrapped.meta) homepage platforms license;
     hydraPlatforms = [ ];
     maintainers = with maintainers; [ joachifm ];
+    knownVulnerabilities = [ "Support ended in August 2018." ];
   };
 }

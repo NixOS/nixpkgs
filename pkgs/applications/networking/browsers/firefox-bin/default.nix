@@ -207,5 +207,9 @@ stdenv.mkDerivation {
     };
     platforms = builtins.attrNames mozillaPlatforms;
     maintainers = with maintainers; [ garbas ];
+    knownVulnerabilities = optionals (
+      versionAtLeast "68.4.1" (removeSuffix "esr" version)
+      || versionAtLeast "72.0.1" version
+    ) [ "CVE-2019-17026" "https://www.mozilla.org/en-US/security/advisories/mfsa2020-03/" ] ;
   };
 }
