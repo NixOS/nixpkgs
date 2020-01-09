@@ -19492,6 +19492,8 @@ in
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
 
+  swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
+
   waybar = callPackage ../applications/misc/waybar {
     pulseSupport = config.pulseaudio or false;
   };
