@@ -1,0 +1,40 @@
+{
+  "name": "loleaflet",
+  "version": "0.8.0-dev",
+  "description": "LibreOffice online front-end",
+  "devDependencies": {
+    "@braintree/sanitize-url": "3.0.0",
+    "@types/jquery": "2.0.40",
+    "autolinker": "1.4.3",
+    "bootstrap": "3.3.6",
+    "browserify": "13.1.0",
+    "browserify-css": "0.9.1",
+    "d3": "3.5.17",
+    "eslint": "3.0.0",
+    "exorcist": "0.4.0",
+    "hammerjs": "2.0.8",
+    "jquery": "2.2.4",
+    "jquery-contextmenu": "2.2.3",
+    "jquery-mousewheel": "3.1.3",
+    "jquery-ui": "1.10.5",
+    "json-js": "1.1.2",
+    "l10n-for-node": "0.0.1",
+    "select2": "4.0.1",
+    "shrinkpack": "1.0.0-alpha",
+    "smartmenus": "1.0.0",
+    "uglify-js": "2.4.24",
+    "uglifycss": "0.0.27",
+    "uglifyify": "3.0.2",
+    "vex-js": "4.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://gerrit.libreoffice.org/online.git"
+  },
+  "keywords": [
+    "office",
+    "libreoffice",
+    "lool"
+  ],
+  "license": "BSD-2-Clause"
+}

@@ -1,0 +1,16 @@
+diff --git a/wsd/LOOLWSD.cpp b/wsd/LOOLWSD.cpp
+index 7fa1898ec..9a3c60064 100644
+--- a/wsd/LOOLWSD.cpp
++++ b/wsd/LOOLWSD.cpp
+@@ -1645,6 +1645,11 @@ bool LOOLWSD::createForKit()
+     std::string forKitPath = "strace";
+ #else
+     std::string forKitPath = Path(Application::instance().commandPath()).parent().toString() + "loolforkit";
++
++    const char *envPath = std::getenv("LOOL_FORKIT_PATH");
++    if (envPath) {
++        forKitPath = envPath;
++    }
+ #endif
+ 
+     // Always reap first, in case we haven't done so yet.
