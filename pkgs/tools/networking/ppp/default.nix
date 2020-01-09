@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     description = "Point-to-point implementation for Linux and Solaris";
     license = with licenses; [ bsdOriginal publicDomain gpl2 lgpl2 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.falsifian ];
+    maintainers = [ ];
   };
 }
