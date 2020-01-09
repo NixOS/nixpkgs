@@ -177,6 +177,12 @@ checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.
 # Temporarily disabled until https://github.com/NixOS/nixpkgs/pull/76861
 #checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
 
+# Check that disabledModules works recursively and correctly
+checkConfigOutput "true" config.enable ./disable-recursive/main.nix
+checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-foo.nix}
+checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-bar.nix}
+checkConfigError 'The option .* defined in .* does not exist' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
