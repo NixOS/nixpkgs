@@ -15,7 +15,7 @@ rec {
     };
   }));
 
-  ansible_2_7 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
+  ansible_2_7 = with python3Packages; toPythonApplication (ansible.overrideAttrs(old: rec {
     pname = "ansible";
     version = "2.7.15";
 
@@ -25,7 +25,7 @@ rec {
     };
   }));
 
-  ansible_2_6 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
+  ansible_2_6 = with python3Packages; toPythonApplication (ansible.overrideAttrs(old: rec {
     pname = "ansible";
     version = "2.6.20";
 
