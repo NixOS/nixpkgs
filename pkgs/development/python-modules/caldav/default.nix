@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi
-, tzlocal, requests, vobject, lxml, nose }:
+, tzlocal, requests, vobject, lxml, nose, xandikos }:
 
 buildPythonPackage rec {
   pname = "caldav";
   version = "0.6.2";
 
   propagatedBuildInputs = [ tzlocal requests vobject lxml nose ];
+  checkInputs = [ xandikos ];
 
   src = fetchPypi {
     inherit pname version;
@@ -17,6 +18,5 @@ buildPythonPackage rec {
     homepage = "https://pythonhosted.org/caldav/";
     license = licenses.asl20;
     maintainers = with maintainers; [ marenz ];
-    broken = true; # missing xandikos package
   };
 }
