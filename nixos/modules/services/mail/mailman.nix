@@ -116,7 +116,8 @@ in {
         description = ''
           The web root for the Hyperkity + Postorius apps provided by Mailman.
           This variable can be set, of course, but it mainly exists so that site
-          admins can refer to it in their own hand-written httpd configuration files.
+          admins can refer to it in their own hand-written web server
+          configuration files.
         '';
       };
 
@@ -235,8 +236,8 @@ in {
 
     systemd.services.mailman-web = {
       description = "Init Postorius DB";
-      before = [ "httpd.service" ];
-      requiredBy = [ "httpd.service" ];
+      before = [ "httpd.service" "uwsgi.service" ];
+      requiredBy = [ "httpd.service" "uwsgi.service" ];
       script = ''
         ${mailmanWebExe}/bin/mailman-web migrate
         rm -rf static
