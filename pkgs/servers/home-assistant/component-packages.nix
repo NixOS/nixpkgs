@@ -583,7 +583,7 @@
     "pushsafer" = ps: with ps; [  ];
     "pvoutput" = ps: with ps; [  ];
     "pyload" = ps: with ps; [  ];
-    "python_script" = ps: with ps; [  ];
+    "python_script" = ps: with ps; [ restrictedpython ];
     "qbittorrent" = ps: with ps; [  ];
     "qld_bushfire" = ps: with ps; [  ];
     "qnap" = ps: with ps; [  ];
