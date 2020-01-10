@@ -1,7 +1,7 @@
 { config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimageio, openjpeg, python3Packages
+, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimageio2, openjpeg, python3Packages
 , openvdb, libXxf86vm, tbb
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
-      opencolorio openexr openimageio openjpeg python zlib fftw jemalloc
+      opencolorio openexr openimageio2 openjpeg python zlib fftw jemalloc
       (opensubdiv.override { inherit cudaSupport; })
       tbb
       makeWrapper
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
         --replace 'set(OPENJPEG_LIBRARIES ' \
                   'set(OPENJPEG_LIBRARIES "${openjpeg}/lib/libopenjp2.dylib") #' \
         --replace 'set(OPENIMAGEIO ' \
-                  'set(OPENIMAGEIO "${openimageio.out}") #' \
+                  'set(OPENIMAGEIO "${openimageio2.out}") #' \
         --replace 'set(OPENEXR_INCLUDE_DIRS ' \
                   'set(OPENEXR_INCLUDE_DIRS "${openexr.dev}/include/OpenEXR") #'
     '' else ''
