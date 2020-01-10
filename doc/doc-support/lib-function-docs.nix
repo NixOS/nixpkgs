@@ -1,6 +1,6 @@
 # Generates the documentation for library functons via nixdoc. To add
 # another library function file to this list, the include list in the
-# file `doc/functions/library.xml` must also be updated.
+# file `../functions/library.xml` must also be updated.
 
 { pkgs ? import ./.. {}, locationsXml }:
 
@@ -21,6 +21,7 @@ with pkgs; stdenv.mkDerivation {
     docgen trivial 'Miscellaneous functions'
     docgen lists 'List manipulation functions'
     docgen debug 'Debugging functions'
+    docgen customisation 'Manipulation of derivation functions'
     docgen options 'NixOS / nixpkgs option handling'
   '';
 }
