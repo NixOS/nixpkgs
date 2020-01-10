@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
+  passthru.providedSessions = [ "i3" "i3-with-shmlog" ];
+
   meta = with stdenv.lib; {
     description = "A tiling window manager";
     homepage    = "https://i3wm.org";
