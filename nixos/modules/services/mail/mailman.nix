@@ -80,6 +80,14 @@ in {
         description = "Enable Mailman on this host. Requires an active Postfix installation.";
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.mailman;
+        defaultText = "pkgs.mailman";
+        example = "pkgs.mailman.override { archivers = []; }";
+        description = "Mailman package to use";
+      };
+
       siteOwner = mkOption {
         type = types.str;
         example = "postmaster@example.org";
@@ -212,8 +220,8 @@ in {
       restartTriggers = [ config.environment.etc."mailman.cfg".source ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.mailman}/bin/mailman start";
-        ExecStop = "${pkgs.mailman}/bin/mailman stop";
+        ExecStart = "${cfg.package}/bin/mailman start";
+        ExecStop = "${cfg.package}/bin/mailman stop";
         User = "mailman";
         Type = "forking";
         RuntimeDirectory = "mailman";
@@ -283,7 +291,7 @@ in {
       startAt = "daily";
       restartTriggers = [ config.environment.etc."mailman.cfg".source ];
       serviceConfig = {
-        ExecStart = "${pkgs.mailman}/bin/mailman digests --send";
+        ExecStart = "${cfg.package}/bin/mailman digests --send";
         User = "mailman";
       };
     };
