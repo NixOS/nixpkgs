@@ -12,7 +12,7 @@ evalConfig() {
     local attr=$1
     shift;
     local script="import ./default.nix { modules = [ $@ ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace
+    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode
 }
 
 reportFailure() {
@@ -182,6 +182,9 @@ checkConfigOutput "true" config.enable ./disable-recursive/main.nix
 checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-foo.nix}
 checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-bar.nix}
 checkConfigError 'The option .* defined in .* does not exist' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
+
+# Check that imports can depend on derivations
+checkConfigOutput "true" config.enable ./import-from-store.nix
 
 cat <<EOF
 ====== module tests ======
