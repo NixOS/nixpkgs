@@ -4831,6 +4831,8 @@ in {
   pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
            else callPackage ../development/python-modules/pylint/1.9.nix { };
 
+  pylint-celery = callPackage ../development/python-modules/pylint-celery { };
+
   pylint-flask = callPackage ../development/python-modules/pylint-flask { };
 
   pylint-plugin-utils = callPackage ../development/python-modules/pylint-plugin-utils { };
