@@ -209,6 +209,7 @@ in {
     systemd.services.mailman = {
       description = "GNU Mailman Master Process";
       after = [ "network.target" ];
+      restartTriggers = [ config.environment.etc."mailman.cfg".source ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.mailman}/bin/mailman start";
@@ -280,6 +281,7 @@ in {
     systemd.services.mailman-daily = {
       description = "Trigger daily Mailman events";
       startAt = "daily";
+      restartTriggers = [ config.environment.etc."mailman.cfg".source ];
       serviceConfig = {
         ExecStart = "${pkgs.mailman}/bin/mailman digests --send";
         User = "mailman";
