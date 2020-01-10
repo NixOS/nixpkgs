@@ -1,6 +1,7 @@
-{ lib, stdenv }: python:
+{ lib, stdenv, poetryLib }: python:
 
 let
+  inherit (poetryLib) ireplace;
 
   # Like builtins.substring but with stop being offset instead of length
   substr = start: stop: s: builtins.substring start (stop - start) s;
@@ -142,7 +143,6 @@ let
       else builtins.fromJSON v
     );
     hasElem = needle: haystack: builtins.elem needle (builtins.filter (x: builtins.typeOf x == "string") (builtins.split " " haystack));
-    # TODO: Implement all operators
     op = {
       "<=" = x: y: (unmarshal x) <= (unmarshal y);
       "<" = x: y: (unmarshal x) < (unmarshal y);
@@ -150,8 +150,16 @@ let
       "==" = x: y: x == y;
       ">=" = x: y: (unmarshal x) >= (unmarshal y);
       ">" = x: y: (unmarshal x) > (unmarshal y);
-      "~=" = null;
-      "===" = null;
+      "~=" = v: c: let
+        parts = builtins.splitVersion c;
+        pruned = lib.take ((builtins.length parts) - 1) parts;
+        upper = builtins.toString (
+          (lib.toInt (builtins.elemAt pruned (builtins.length pruned - 1))) + 1
+        );
+        upperConstraint = builtins.concatStringsSep "." (ireplace (builtins.length pruned - 1) upper pruned);
+      in
+        op.">=" v c && op."<" v upperConstraint;
+      "===" = x: y: x == y;
       "in" = x: y: let
         values = builtins.filter (x: builtins.typeOf x == "string") (builtins.split " " (unmarshal y));
       in

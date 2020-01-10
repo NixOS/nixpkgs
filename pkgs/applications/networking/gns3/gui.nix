@@ -5,6 +5,13 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
+        version = "5.6.3";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6";
+        };
+      });
       jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
         version = "2.6.0";
         src = oldAttrs.src.override {

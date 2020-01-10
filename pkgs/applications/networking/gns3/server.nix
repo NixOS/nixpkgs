@@ -5,6 +5,13 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
+        version = "5.6.3";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6";
+        };
+      });
       jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
         version = "2.6.0";
         src = oldAttrs.src.override {
@@ -28,6 +35,8 @@ in python.pkgs.buildPythonPackage {
   postPatch = ''
     # Only 2.x is problematic:
     sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
+    # yarl 1.4+ only requires Python 3.6+
+    sed -iE "s/yarl==1.3.0//" requirements.txt
   '';
 
   propagatedBuildInputs = with python.pkgs; [
