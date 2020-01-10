@@ -14,7 +14,7 @@ let
   defaultPoetryOverrides = (import ./overrides.nix { inherit pkgs lib; });
 
   mkEvalPep508 = import ./pep508.nix {
-    inherit lib;
+    inherit lib poetryLib;
     stdenv = pkgs.stdenv;
   };
 
@@ -247,6 +247,7 @@ in
     overrideOverlay = fn: self: super: let
       defaultSet = defaultPoetryOverrides self super;
       customSet = fn self super;
-    in defaultSet // customSet;
+    in
+      defaultSet // customSet;
   };
 }
