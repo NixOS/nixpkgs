@@ -944,6 +944,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  pyicloud = callPackage ../development/python-modules/pyicloud { };
+
   pyperf = callPackage ../development/python-modules/pyperf { };
 
   pefile = callPackage ../development/python-modules/pefile { };
