@@ -123,9 +123,9 @@ in
   config = mkIf cfg.enable {
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.user} - -"
+      "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
     ] ++ (optional cfg.consumptionDirIsPublic
-      "d '${cfg.consumptionDir}' 777 ${cfg.user} ${cfg.user} - -"
+      "d '${cfg.consumptionDir}' 777 - - - -"
       # If the consumption dir is not created here, it's automatically created by
       # 'manage' with the default permissions.
     );
