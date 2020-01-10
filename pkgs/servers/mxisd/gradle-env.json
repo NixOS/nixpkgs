@@ -1,0 +1,3181 @@
+{
+  "": {
+    "name": "mxisd",
+    "version": "unspecified",
+    "path": "",
+    "gradle": {
+      "version": "5.3.1",
+      "type": "bin",
+      "url": "https://services.gradle.org/distributions/gradle-5.3.1-bin.zip",
+      "sha256": "1c59a17a054e9c82f0dd881871c9646e943ec4c71dd52ebc6137d17f82337436",
+      "nativeVersion": "0.17"
+    },
+    "dependencies": {
+      "plugin": [],
+      "buildscript": [
+        {
+          "name": "com.github.jengelman.gradle.plugins-shadow-4.0.3-jar",
+          "filename": "shadow-4.0.3.jar",
+          "path": "com/github/jengelman/gradle/plugins/shadow/4.0.3",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jengelman/gradle/plugins/shadow/4.0.3/shadow-4.0.3.jar"
+          ],
+          "sha256": "10f7c6b6e345071efdf1d5a41274ca473817e95cd604444c07ccf808f472206c"
+        },
+        {
+          "name": "org.codehaus.groovy-groovy-backports-compat23-2.4.15-jar",
+          "filename": "groovy-backports-compat23-2.4.15.jar",
+          "path": "org/codehaus/groovy/groovy-backports-compat23/2.4.15",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/groovy/groovy-backports-compat23/2.4.15/groovy-backports-compat23-2.4.15.jar"
+          ],
+          "sha256": "434d2bfce7b3b16abebc2590832cc042ebd8898eaa39df0f9192c98f2e843766"
+        },
+        {
+          "name": "com.github.jengelman.gradle.plugins-shadow-4.0.3-pom",
+          "filename": "shadow-4.0.3.pom",
+          "path": "com/github/jengelman/gradle/plugins/shadow/4.0.3",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jengelman/gradle/plugins/shadow/4.0.3/shadow-4.0.3.pom"
+          ],
+          "sha256": "3f880f0c4f413ef68fad3b85fef17e1c36be958f8840b78396de0ee3eca98d1f"
+        },
+        {
+          "name": "org.codehaus.groovy-groovy-backports-compat23-2.4.15-pom",
+          "filename": "groovy-backports-compat23-2.4.15.pom",
+          "path": "org/codehaus/groovy/groovy-backports-compat23/2.4.15",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/groovy/groovy-backports-compat23/2.4.15/groovy-backports-compat23-2.4.15.pom"
+          ],
+          "sha256": "badfde7591686a840a2dcb4b22a2d84b0633d2fdad3291c443e819eaea39dd23"
+        }
+      ],
+      "project": [
+        {
+          "name": "com.fasterxml.jackson.core-jackson-annotations-2.8.7-jar",
+          "filename": "jackson-annotations-2.8.7.jar",
+          "path": "com/fasterxml/jackson/core/jackson-annotations/2.8.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-annotations/2.8.7/jackson-annotations-2.8.7.jar",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-annotations/2.8.7/jackson-annotations-2.8.7.jar",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-annotations/2.8.7/jackson-annotations-2.8.7.jar"
+          ],
+          "sha256": "6b7802f6c22c09c4a92a2ebeb76e755c3c0a58dfbf419835fae470d89e469b86"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-annotations-2.8.7-pom",
+          "filename": "jackson-annotations-2.8.7.pom",
+          "path": "com/fasterxml/jackson/core/jackson-annotations/2.8.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-annotations/2.8.7/jackson-annotations-2.8.7.pom",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-annotations/2.8.7/jackson-annotations-2.8.7.pom",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-annotations/2.8.7/jackson-annotations-2.8.7.pom"
+          ],
+          "sha256": "5b71ceef7a173224e84bb0757fa85c66590d8b0278fb83ebdb81d098832ded0c"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-annotations-2.8.9-jar",
+          "filename": "jackson-annotations-2.8.9.jar",
+          "path": "com/fasterxml/jackson/core/jackson-annotations/2.8.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-annotations/2.8.9/jackson-annotations-2.8.9.jar",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-annotations/2.8.9/jackson-annotations-2.8.9.jar",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-annotations/2.8.9/jackson-annotations-2.8.9.jar"
+          ],
+          "sha256": "eb81a4b313af26f3048ec1bbfaca2e536bf6348220fa1ae930434303842cba6b"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-annotations-2.8.9-pom",
+          "filename": "jackson-annotations-2.8.9.pom",
+          "path": "com/fasterxml/jackson/core/jackson-annotations/2.8.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-annotations/2.8.9/jackson-annotations-2.8.9.pom",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-annotations/2.8.9/jackson-annotations-2.8.9.pom",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-annotations/2.8.9/jackson-annotations-2.8.9.pom"
+          ],
+          "sha256": "f34dad6996d95deac9b2c8c733f60a6b3bfb322002675ccb2a10e8127c1f49be"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-core-2.8.7-jar",
+          "filename": "jackson-core-2.8.7.jar",
+          "path": "com/fasterxml/jackson/core/jackson-core/2.8.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-core/2.8.7/jackson-core-2.8.7.jar",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-core/2.8.7/jackson-core-2.8.7.jar",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-core/2.8.7/jackson-core-2.8.7.jar"
+          ],
+          "sha256": "256ff34118ab292d1b4f3ee4d2c3e5e5f0f609d8e07c57e8ad1f51c46d4fbb46"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-core-2.8.7-pom",
+          "filename": "jackson-core-2.8.7.pom",
+          "path": "com/fasterxml/jackson/core/jackson-core/2.8.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-core/2.8.7/jackson-core-2.8.7.pom",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-core/2.8.7/jackson-core-2.8.7.pom",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-core/2.8.7/jackson-core-2.8.7.pom"
+          ],
+          "sha256": "0d8f415d56320fbe3883ab7adee73bbb2c9a69c2a49af3608fd6b1efa15d8b5a"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-core-2.8.9-jar",
+          "filename": "jackson-core-2.8.9.jar",
+          "path": "com/fasterxml/jackson/core/jackson-core/2.8.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-core/2.8.9/jackson-core-2.8.9.jar",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-core/2.8.9/jackson-core-2.8.9.jar",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-core/2.8.9/jackson-core-2.8.9.jar"
+          ],
+          "sha256": "fd2644e8f547115f909f678363f6e6d4f1371b450a53d37b2914cc910a425c47"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-core-2.8.9-pom",
+          "filename": "jackson-core-2.8.9.pom",
+          "path": "com/fasterxml/jackson/core/jackson-core/2.8.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-core/2.8.9/jackson-core-2.8.9.pom",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-core/2.8.9/jackson-core-2.8.9.pom",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-core/2.8.9/jackson-core-2.8.9.pom"
+          ],
+          "sha256": "8f33c25ea3daf06796d6736b12cf27072d1a39771d6eb38c4bd90fb8f5dce2dc"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-databind-2.8.7-jar",
+          "filename": "jackson-databind-2.8.7.jar",
+          "path": "com/fasterxml/jackson/core/jackson-databind/2.8.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-databind/2.8.7/jackson-databind-2.8.7.jar",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-databind/2.8.7/jackson-databind-2.8.7.jar",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-databind/2.8.7/jackson-databind-2.8.7.jar"
+          ],
+          "sha256": "4f74337b6d18664be0f5b15c6664b17aa3972c9c175092328b139b894ff66f19"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-databind-2.8.7-pom",
+          "filename": "jackson-databind-2.8.7.pom",
+          "path": "com/fasterxml/jackson/core/jackson-databind/2.8.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-databind/2.8.7/jackson-databind-2.8.7.pom",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-databind/2.8.7/jackson-databind-2.8.7.pom",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-databind/2.8.7/jackson-databind-2.8.7.pom"
+          ],
+          "sha256": "4ec7b0b0cefe68966c56948eb2ddcdfa81a5fa03e6a76c0b24df4d19cdf24496"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-databind-2.8.9-jar",
+          "filename": "jackson-databind-2.8.9.jar",
+          "path": "com/fasterxml/jackson/core/jackson-databind/2.8.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-databind/2.8.9/jackson-databind-2.8.9.jar",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-databind/2.8.9/jackson-databind-2.8.9.jar",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-databind/2.8.9/jackson-databind-2.8.9.jar"
+          ],
+          "sha256": "24a57217dadd00c19ec91aacff8e2835b07dd0fe3f71b831deaae94ac2c4fb79"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-databind-2.8.9-pom",
+          "filename": "jackson-databind-2.8.9.pom",
+          "path": "com/fasterxml/jackson/core/jackson-databind/2.8.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-databind/2.8.9/jackson-databind-2.8.9.pom",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/core/jackson-databind/2.8.9/jackson-databind-2.8.9.pom",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/core/jackson-databind/2.8.9/jackson-databind-2.8.9.pom"
+          ],
+          "sha256": "29a4969c233defa2f9b29543bbf3106b3abc804194b98481f1b867223c2dbd10"
+        },
+        {
+          "name": "com.fasterxml.jackson-jackson-parent-2.8-pom",
+          "filename": "jackson-parent-2.8.pom",
+          "path": "com/fasterxml/jackson/jackson-parent/2.8",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/jackson-parent/2.8/jackson-parent-2.8.pom",
+            "https://kamax.io/maven/releases/com/fasterxml/jackson/jackson-parent/2.8/jackson-parent-2.8.pom",
+            "https://kamax.io/maven/snapshots/com/fasterxml/jackson/jackson-parent/2.8/jackson-parent-2.8.pom"
+          ],
+          "sha256": "3b51994c1a3a29c2c89728226c0be14b69888a1bb0ef311f8d65904cdfbd9358"
+        },
+        {
+          "name": "com.fasterxml-oss-parent-27-pom",
+          "filename": "oss-parent-27.pom",
+          "path": "com/fasterxml/oss-parent/27",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/oss-parent/27/oss-parent-27.pom",
+            "https://kamax.io/maven/releases/com/fasterxml/oss-parent/27/oss-parent-27.pom",
+            "https://kamax.io/maven/snapshots/com/fasterxml/oss-parent/27/oss-parent-27.pom"
+          ],
+          "sha256": "b9b8f388fd628057b1249756468b86726c8fd5816ce14d313cb40003a509beeb"
+        },
+        {
+          "name": "com.flipkart.zjsonpatch-zjsonpatch-0.3.0-jar",
+          "filename": "zjsonpatch-0.3.0.jar",
+          "path": "com/flipkart/zjsonpatch/zjsonpatch/0.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/flipkart/zjsonpatch/zjsonpatch/0.3.0/zjsonpatch-0.3.0.jar",
+            "https://kamax.io/maven/releases/com/flipkart/zjsonpatch/zjsonpatch/0.3.0/zjsonpatch-0.3.0.jar",
+            "https://kamax.io/maven/snapshots/com/flipkart/zjsonpatch/zjsonpatch/0.3.0/zjsonpatch-0.3.0.jar"
+          ],
+          "sha256": "1c951ec833c25c63fc3ee33ee0a080379903f00aaa380b466ee797a9129e047b"
+        },
+        {
+          "name": "com.flipkart.zjsonpatch-zjsonpatch-0.3.0-pom",
+          "filename": "zjsonpatch-0.3.0.pom",
+          "path": "com/flipkart/zjsonpatch/zjsonpatch/0.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/flipkart/zjsonpatch/zjsonpatch/0.3.0/zjsonpatch-0.3.0.pom",
+            "https://kamax.io/maven/releases/com/flipkart/zjsonpatch/zjsonpatch/0.3.0/zjsonpatch-0.3.0.pom",
+            "https://kamax.io/maven/snapshots/com/flipkart/zjsonpatch/zjsonpatch/0.3.0/zjsonpatch-0.3.0.pom"
+          ],
+          "sha256": "7ab956f4f6b4c3298e24a77045d83d5d08edda4d37af63b0aa57eebcf43d34a9"
+        },
+        {
+          "name": "com.github.jknack-handlebars.java-4.0.6-pom",
+          "filename": "handlebars.java-4.0.6.pom",
+          "path": "com/github/jknack/handlebars.java/4.0.6",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jknack/handlebars.java/4.0.6/handlebars.java-4.0.6.pom",
+            "https://kamax.io/maven/releases/com/github/jknack/handlebars.java/4.0.6/handlebars.java-4.0.6.pom",
+            "https://kamax.io/maven/snapshots/com/github/jknack/handlebars.java/4.0.6/handlebars.java-4.0.6.pom"
+          ],
+          "sha256": "7959416c6cc7451d74c3ded220b92fbbdf598df60f2b32e03b5b7f23166bc4fb"
+        },
+        {
+          "name": "com.github.jknack-handlebars-4.0.6-jar",
+          "filename": "handlebars-4.0.6.jar",
+          "path": "com/github/jknack/handlebars/4.0.6",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jknack/handlebars/4.0.6/handlebars-4.0.6.jar",
+            "https://kamax.io/maven/releases/com/github/jknack/handlebars/4.0.6/handlebars-4.0.6.jar",
+            "https://kamax.io/maven/snapshots/com/github/jknack/handlebars/4.0.6/handlebars-4.0.6.jar"
+          ],
+          "sha256": "f20c47fd6572170951e83af1c11a5c12e724fa60535d62219bf2f762620d5781"
+        },
+        {
+          "name": "com.github.jknack-handlebars-4.0.6-pom",
+          "filename": "handlebars-4.0.6.pom",
+          "path": "com/github/jknack/handlebars/4.0.6",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jknack/handlebars/4.0.6/handlebars-4.0.6.pom",
+            "https://kamax.io/maven/releases/com/github/jknack/handlebars/4.0.6/handlebars-4.0.6.pom",
+            "https://kamax.io/maven/snapshots/com/github/jknack/handlebars/4.0.6/handlebars-4.0.6.pom"
+          ],
+          "sha256": "c8a2d85e28793982c6725c9864ccd1ed4443112c93086d04c9dd9d416142fae9"
+        },
+        {
+          "name": "com.github.tomakehurst-wiremock-2.8.0-jar",
+          "filename": "wiremock-2.8.0.jar",
+          "path": "com/github/tomakehurst/wiremock/2.8.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/tomakehurst/wiremock/2.8.0/wiremock-2.8.0.jar",
+            "https://kamax.io/maven/releases/com/github/tomakehurst/wiremock/2.8.0/wiremock-2.8.0.jar",
+            "https://kamax.io/maven/snapshots/com/github/tomakehurst/wiremock/2.8.0/wiremock-2.8.0.jar"
+          ],
+          "sha256": "903e8c5924b3c4300eab7bbf7ad6bfadf4ecf8f42982d7a5398cac3559bd2c2a"
+        },
+        {
+          "name": "com.github.tomakehurst-wiremock-2.8.0-pom",
+          "filename": "wiremock-2.8.0.pom",
+          "path": "com/github/tomakehurst/wiremock/2.8.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/tomakehurst/wiremock/2.8.0/wiremock-2.8.0.pom",
+            "https://kamax.io/maven/releases/com/github/tomakehurst/wiremock/2.8.0/wiremock-2.8.0.pom",
+            "https://kamax.io/maven/snapshots/com/github/tomakehurst/wiremock/2.8.0/wiremock-2.8.0.pom"
+          ],
+          "sha256": "0e5f3133c6deb00098ec8adeed2ce51c738b2ef09bd021183403f3fa8df2a70f"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-gson-1.22.0-jar",
+          "filename": "google-api-client-gson-1.22.0.jar",
+          "path": "com/google/api-client/google-api-client-gson/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client-gson/1.22.0/google-api-client-gson-1.22.0.jar",
+            "https://kamax.io/maven/releases/com/google/api-client/google-api-client-gson/1.22.0/google-api-client-gson-1.22.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/api-client/google-api-client-gson/1.22.0/google-api-client-gson-1.22.0.jar"
+          ],
+          "sha256": "25a8bfb7558cc0d1ac92c52a8f981ef63a3a1e7061ced315a8f5a92ba2d27089"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-gson-1.22.0-pom",
+          "filename": "google-api-client-gson-1.22.0.pom",
+          "path": "com/google/api-client/google-api-client-gson/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client-gson/1.22.0/google-api-client-gson-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/api-client/google-api-client-gson/1.22.0/google-api-client-gson-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/api-client/google-api-client-gson/1.22.0/google-api-client-gson-1.22.0.pom"
+          ],
+          "sha256": "6a8d1e9e391ee827b1d76ac546656fedd8c11bbdc3fca338064860ed47cea350"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-parent-1.22.0-pom",
+          "filename": "google-api-client-parent-1.22.0.pom",
+          "path": "com/google/api-client/google-api-client-parent/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client-parent/1.22.0/google-api-client-parent-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/api-client/google-api-client-parent/1.22.0/google-api-client-parent-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/api-client/google-api-client-parent/1.22.0/google-api-client-parent-1.22.0.pom"
+          ],
+          "sha256": "2bc283b1247550e6e8401d97dc7f1ac2d5b17382b9984df011d9a3564fe632ae"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-1.22.0-jar",
+          "filename": "google-api-client-1.22.0.jar",
+          "path": "com/google/api-client/google-api-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client/1.22.0/google-api-client-1.22.0.jar",
+            "https://kamax.io/maven/releases/com/google/api-client/google-api-client/1.22.0/google-api-client-1.22.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/api-client/google-api-client/1.22.0/google-api-client-1.22.0.jar"
+          ],
+          "sha256": "47c625c83a8cf97b8bbdff2acde923ff8fd3174e62aabcfc5d1b86692594ffba"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-1.22.0-pom",
+          "filename": "google-api-client-1.22.0.pom",
+          "path": "com/google/api-client/google-api-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client/1.22.0/google-api-client-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/api-client/google-api-client/1.22.0/google-api-client-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/api-client/google-api-client/1.22.0/google-api-client-1.22.0.pom"
+          ],
+          "sha256": "83175461277124a08d23d9df647912771276fed44ce60ff03847b51c98bf7459"
+        },
+        {
+          "name": "com.google.api.grpc-proto-google-common-protos-0.1.12-jar",
+          "filename": "proto-google-common-protos-0.1.12.jar",
+          "path": "com/google/api/grpc/proto-google-common-protos/0.1.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/grpc/proto-google-common-protos/0.1.12/proto-google-common-protos-0.1.12.jar",
+            "https://kamax.io/maven/releases/com/google/api/grpc/proto-google-common-protos/0.1.12/proto-google-common-protos-0.1.12.jar",
+            "https://kamax.io/maven/snapshots/com/google/api/grpc/proto-google-common-protos/0.1.12/proto-google-common-protos-0.1.12.jar"
+          ],
+          "sha256": "6ebe2a0790f9f47a84e5266f5f5bef42378d08195a3d8944afba13bfe4f1bea3"
+        },
+        {
+          "name": "com.google.api.grpc-proto-google-common-protos-0.1.12-pom",
+          "filename": "proto-google-common-protos-0.1.12.pom",
+          "path": "com/google/api/grpc/proto-google-common-protos/0.1.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/grpc/proto-google-common-protos/0.1.12/proto-google-common-protos-0.1.12.pom",
+            "https://kamax.io/maven/releases/com/google/api/grpc/proto-google-common-protos/0.1.12/proto-google-common-protos-0.1.12.pom",
+            "https://kamax.io/maven/snapshots/com/google/api/grpc/proto-google-common-protos/0.1.12/proto-google-common-protos-0.1.12.pom"
+          ],
+          "sha256": "6457a5b9289325c8d230c079ddd116bac49bdece6f80a9519b936a13cc865234"
+        },
+        {
+          "name": "com.google.api.grpc-proto-google-iam-v1-0.1.12-jar",
+          "filename": "proto-google-iam-v1-0.1.12.jar",
+          "path": "com/google/api/grpc/proto-google-iam-v1/0.1.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/grpc/proto-google-iam-v1/0.1.12/proto-google-iam-v1-0.1.12.jar",
+            "https://kamax.io/maven/releases/com/google/api/grpc/proto-google-iam-v1/0.1.12/proto-google-iam-v1-0.1.12.jar",
+            "https://kamax.io/maven/snapshots/com/google/api/grpc/proto-google-iam-v1/0.1.12/proto-google-iam-v1-0.1.12.jar"
+          ],
+          "sha256": "f5d983654bf4815c73e7d4ccec8c85466778ee9224baa59230d653cb9830a354"
+        },
+        {
+          "name": "com.google.api.grpc-proto-google-iam-v1-0.1.12-pom",
+          "filename": "proto-google-iam-v1-0.1.12.pom",
+          "path": "com/google/api/grpc/proto-google-iam-v1/0.1.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/grpc/proto-google-iam-v1/0.1.12/proto-google-iam-v1-0.1.12.pom",
+            "https://kamax.io/maven/releases/com/google/api/grpc/proto-google-iam-v1/0.1.12/proto-google-iam-v1-0.1.12.pom",
+            "https://kamax.io/maven/snapshots/com/google/api/grpc/proto-google-iam-v1/0.1.12/proto-google-iam-v1-0.1.12.pom"
+          ],
+          "sha256": "1546650112a0689cf28c3863b64bf3a1f3b344b2741f9910ab4b55786231d408"
+        },
+        {
+          "name": "com.google.api-api-common-1.1.0-jar",
+          "filename": "api-common-1.1.0.jar",
+          "path": "com/google/api/api-common/1.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/api-common/1.1.0/api-common-1.1.0.jar",
+            "https://kamax.io/maven/releases/com/google/api/api-common/1.1.0/api-common-1.1.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/api/api-common/1.1.0/api-common-1.1.0.jar"
+          ],
+          "sha256": "f15defb10b20c9d6668e198e424e5a9c68cd2cc983f648be7570c1f256bd582c"
+        },
+        {
+          "name": "com.google.api-api-common-1.1.0-pom",
+          "filename": "api-common-1.1.0.pom",
+          "path": "com/google/api/api-common/1.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/api-common/1.1.0/api-common-1.1.0.pom",
+            "https://kamax.io/maven/releases/com/google/api/api-common/1.1.0/api-common-1.1.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/api/api-common/1.1.0/api-common-1.1.0.pom"
+          ],
+          "sha256": "c5675a06b1bb72bfeda37d3070ee28609f8485d794774253adbbb18d5cb2b414"
+        },
+        {
+          "name": "com.google.api-gax-1.4.1-jar",
+          "filename": "gax-1.4.1.jar",
+          "path": "com/google/api/gax/1.4.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/gax/1.4.1/gax-1.4.1.jar",
+            "https://kamax.io/maven/releases/com/google/api/gax/1.4.1/gax-1.4.1.jar",
+            "https://kamax.io/maven/snapshots/com/google/api/gax/1.4.1/gax-1.4.1.jar"
+          ],
+          "sha256": "7627bfb4a8b17340ae1cc112415284db9c43ecfc64e6373846d2b5f866938da3"
+        },
+        {
+          "name": "com.google.api-gax-1.4.1-pom",
+          "filename": "gax-1.4.1.pom",
+          "path": "com/google/api/gax/1.4.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/gax/1.4.1/gax-1.4.1.pom",
+            "https://kamax.io/maven/releases/com/google/api/gax/1.4.1/gax-1.4.1.pom",
+            "https://kamax.io/maven/snapshots/com/google/api/gax/1.4.1/gax-1.4.1.pom"
+          ],
+          "sha256": "f94c1c57cfed721c42e56432853cffe0e577077cf3fd6d90764d0482e05a9a0a"
+        },
+        {
+          "name": "com.google.apis-google-api-services-storage-v1-rev100-1.22.0-jar",
+          "filename": "google-api-services-storage-v1-rev100-1.22.0.jar",
+          "path": "com/google/apis/google-api-services-storage/v1-rev100-1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/apis/google-api-services-storage/v1-rev100-1.22.0/google-api-services-storage-v1-rev100-1.22.0.jar",
+            "https://kamax.io/maven/releases/com/google/apis/google-api-services-storage/v1-rev100-1.22.0/google-api-services-storage-v1-rev100-1.22.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/apis/google-api-services-storage/v1-rev100-1.22.0/google-api-services-storage-v1-rev100-1.22.0.jar"
+          ],
+          "sha256": "b466464ba9ce428426e9505cc610c8fed4b35ebbf0e159bfbfaa798183800002"
+        },
+        {
+          "name": "com.google.apis-google-api-services-storage-v1-rev100-1.22.0-pom",
+          "filename": "google-api-services-storage-v1-rev100-1.22.0.pom",
+          "path": "com/google/apis/google-api-services-storage/v1-rev100-1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/apis/google-api-services-storage/v1-rev100-1.22.0/google-api-services-storage-v1-rev100-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/apis/google-api-services-storage/v1-rev100-1.22.0/google-api-services-storage-v1-rev100-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/apis/google-api-services-storage/v1-rev100-1.22.0/google-api-services-storage-v1-rev100-1.22.0.pom"
+          ],
+          "sha256": "7c1b392e4219e7a9c53bcd52567b91479eb2e337a69c9427b8438f7be397b17d"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-credentials-0.7.0-jar",
+          "filename": "google-auth-library-credentials-0.7.0.jar",
+          "path": "com/google/auth/google-auth-library-credentials/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-credentials/0.7.0/google-auth-library-credentials-0.7.0.jar",
+            "https://kamax.io/maven/releases/com/google/auth/google-auth-library-credentials/0.7.0/google-auth-library-credentials-0.7.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/auth/google-auth-library-credentials/0.7.0/google-auth-library-credentials-0.7.0.jar"
+          ],
+          "sha256": "fca7e78172a54346e3e9bc8dce432743e3a4fc8b79ef1405a189be785cde0c79"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-credentials-0.7.0-pom",
+          "filename": "google-auth-library-credentials-0.7.0.pom",
+          "path": "com/google/auth/google-auth-library-credentials/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-credentials/0.7.0/google-auth-library-credentials-0.7.0.pom",
+            "https://kamax.io/maven/releases/com/google/auth/google-auth-library-credentials/0.7.0/google-auth-library-credentials-0.7.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/auth/google-auth-library-credentials/0.7.0/google-auth-library-credentials-0.7.0.pom"
+          ],
+          "sha256": "4ac44628c73affb452c6b2e6117017045b35606d165b1c900ee42b3dfdb42dbf"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-oauth2-http-0.7.0-jar",
+          "filename": "google-auth-library-oauth2-http-0.7.0.jar",
+          "path": "com/google/auth/google-auth-library-oauth2-http/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-oauth2-http/0.7.0/google-auth-library-oauth2-http-0.7.0.jar",
+            "https://kamax.io/maven/releases/com/google/auth/google-auth-library-oauth2-http/0.7.0/google-auth-library-oauth2-http-0.7.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/auth/google-auth-library-oauth2-http/0.7.0/google-auth-library-oauth2-http-0.7.0.jar"
+          ],
+          "sha256": "dc5d9d76a623d3ea39af8b8499766542b548316154da931bdaa3177c89bc77f3"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-oauth2-http-0.7.0-pom",
+          "filename": "google-auth-library-oauth2-http-0.7.0.pom",
+          "path": "com/google/auth/google-auth-library-oauth2-http/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-oauth2-http/0.7.0/google-auth-library-oauth2-http-0.7.0.pom",
+            "https://kamax.io/maven/releases/com/google/auth/google-auth-library-oauth2-http/0.7.0/google-auth-library-oauth2-http-0.7.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/auth/google-auth-library-oauth2-http/0.7.0/google-auth-library-oauth2-http-0.7.0.pom"
+          ],
+          "sha256": "cc9c2f466a3d065350b682afbb198d74fd680c2acb22a0115c5caf0d21b513f9"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-parent-0.7.0-pom",
+          "filename": "google-auth-library-parent-0.7.0.pom",
+          "path": "com/google/auth/google-auth-library-parent/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-parent/0.7.0/google-auth-library-parent-0.7.0.pom",
+            "https://kamax.io/maven/releases/com/google/auth/google-auth-library-parent/0.7.0/google-auth-library-parent-0.7.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/auth/google-auth-library-parent/0.7.0/google-auth-library-parent-0.7.0.pom"
+          ],
+          "sha256": "29a439fb0b305d7f5eb5ddbd90db9145c69eb5c83bb494d6b08c5a0e6137274f"
+        },
+        {
+          "name": "com.google.auto.value-auto-value-1.2-jar",
+          "filename": "auto-value-1.2.jar",
+          "path": "com/google/auto/value/auto-value/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auto/value/auto-value/1.2/auto-value-1.2.jar",
+            "https://kamax.io/maven/releases/com/google/auto/value/auto-value/1.2/auto-value-1.2.jar",
+            "https://kamax.io/maven/snapshots/com/google/auto/value/auto-value/1.2/auto-value-1.2.jar"
+          ],
+          "sha256": "be6a7bb985d52b40cc00d19500735096b949255dc0a9fcd0dbbc829cffd03cec"
+        },
+        {
+          "name": "com.google.auto.value-auto-value-1.2-pom",
+          "filename": "auto-value-1.2.pom",
+          "path": "com/google/auto/value/auto-value/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auto/value/auto-value/1.2/auto-value-1.2.pom",
+            "https://kamax.io/maven/releases/com/google/auto/value/auto-value/1.2/auto-value-1.2.pom",
+            "https://kamax.io/maven/snapshots/com/google/auto/value/auto-value/1.2/auto-value-1.2.pom"
+          ],
+          "sha256": "d1b4d6c66f7c76bb97a5c584879a3dde7a6dc997a015e24c612aaba823648deb"
+        },
+        {
+          "name": "com.google.auto-auto-parent-3-pom",
+          "filename": "auto-parent-3.pom",
+          "path": "com/google/auto/auto-parent/3",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auto/auto-parent/3/auto-parent-3.pom",
+            "https://kamax.io/maven/releases/com/google/auto/auto-parent/3/auto-parent-3.pom",
+            "https://kamax.io/maven/snapshots/com/google/auto/auto-parent/3/auto-parent-3.pom"
+          ],
+          "sha256": "c98f1b0978cfd24712c27388e040c50ce0692252b3aa9448603d9efa05ebe8a8"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-core-http-1.2.1-jar",
+          "filename": "google-cloud-core-http-1.2.1.jar",
+          "path": "com/google/cloud/google-cloud-core-http/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-core-http/1.2.1/google-cloud-core-http-1.2.1.jar",
+            "https://kamax.io/maven/releases/com/google/cloud/google-cloud-core-http/1.2.1/google-cloud-core-http-1.2.1.jar",
+            "https://kamax.io/maven/snapshots/com/google/cloud/google-cloud-core-http/1.2.1/google-cloud-core-http-1.2.1.jar"
+          ],
+          "sha256": "915176954a3aa5b2a18c869081721bef3aaad21849a0451cff148a3d435b2291"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-core-http-1.2.1-pom",
+          "filename": "google-cloud-core-http-1.2.1.pom",
+          "path": "com/google/cloud/google-cloud-core-http/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-core-http/1.2.1/google-cloud-core-http-1.2.1.pom",
+            "https://kamax.io/maven/releases/com/google/cloud/google-cloud-core-http/1.2.1/google-cloud-core-http-1.2.1.pom",
+            "https://kamax.io/maven/snapshots/com/google/cloud/google-cloud-core-http/1.2.1/google-cloud-core-http-1.2.1.pom"
+          ],
+          "sha256": "8d1b83e84e58c075809e38774f1daea4ae50547c3ba018c25f8a267e527877ba"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-core-1.2.1-jar",
+          "filename": "google-cloud-core-1.2.1.jar",
+          "path": "com/google/cloud/google-cloud-core/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-core/1.2.1/google-cloud-core-1.2.1.jar",
+            "https://kamax.io/maven/releases/com/google/cloud/google-cloud-core/1.2.1/google-cloud-core-1.2.1.jar",
+            "https://kamax.io/maven/snapshots/com/google/cloud/google-cloud-core/1.2.1/google-cloud-core-1.2.1.jar"
+          ],
+          "sha256": "18adbde991d9d871abe2f4e6b134c42db88fd75a83cebe35a73bfc2f72d8af54"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-core-1.2.1-pom",
+          "filename": "google-cloud-core-1.2.1.pom",
+          "path": "com/google/cloud/google-cloud-core/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-core/1.2.1/google-cloud-core-1.2.1.pom",
+            "https://kamax.io/maven/releases/com/google/cloud/google-cloud-core/1.2.1/google-cloud-core-1.2.1.pom",
+            "https://kamax.io/maven/snapshots/com/google/cloud/google-cloud-core/1.2.1/google-cloud-core-1.2.1.pom"
+          ],
+          "sha256": "ffb7a371cdbdd93ce42e5d7d96bcf82149d34fa74ecc1226baac009549731144"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-pom-0.20.1-alpha-pom",
+          "filename": "google-cloud-pom-0.20.1-alpha.pom",
+          "path": "com/google/cloud/google-cloud-pom/0.20.1-alpha",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-pom/0.20.1-alpha/google-cloud-pom-0.20.1-alpha.pom",
+            "https://kamax.io/maven/releases/com/google/cloud/google-cloud-pom/0.20.1-alpha/google-cloud-pom-0.20.1-alpha.pom",
+            "https://kamax.io/maven/snapshots/com/google/cloud/google-cloud-pom/0.20.1-alpha/google-cloud-pom-0.20.1-alpha.pom"
+          ],
+          "sha256": "1a9c728a74a65d39d3076bcd6a741d5047a905f111276d02caa03b9ab5d3825f"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-storage-1.2.1-jar",
+          "filename": "google-cloud-storage-1.2.1.jar",
+          "path": "com/google/cloud/google-cloud-storage/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-storage/1.2.1/google-cloud-storage-1.2.1.jar",
+            "https://kamax.io/maven/releases/com/google/cloud/google-cloud-storage/1.2.1/google-cloud-storage-1.2.1.jar",
+            "https://kamax.io/maven/snapshots/com/google/cloud/google-cloud-storage/1.2.1/google-cloud-storage-1.2.1.jar"
+          ],
+          "sha256": "42304b77918ec2173bce54030d39fe91cb77a5cfc69c2de52e25fbc6c6af36d2"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-storage-1.2.1-pom",
+          "filename": "google-cloud-storage-1.2.1.pom",
+          "path": "com/google/cloud/google-cloud-storage/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-storage/1.2.1/google-cloud-storage-1.2.1.pom",
+            "https://kamax.io/maven/releases/com/google/cloud/google-cloud-storage/1.2.1/google-cloud-storage-1.2.1.pom",
+            "https://kamax.io/maven/snapshots/com/google/cloud/google-cloud-storage/1.2.1/google-cloud-storage-1.2.1.pom"
+          ],
+          "sha256": "ad73c3c0a67894e7b40ca83873ec25d3d9377d2588d5273b93785c67d4477302"
+        },
+        {
+          "name": "com.google.code.findbugs-jsr305-3.0.0-jar",
+          "filename": "jsr305-3.0.0.jar",
+          "path": "com/google/code/findbugs/jsr305/3.0.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/findbugs/jsr305/3.0.0/jsr305-3.0.0.jar",
+            "https://kamax.io/maven/releases/com/google/code/findbugs/jsr305/3.0.0/jsr305-3.0.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/code/findbugs/jsr305/3.0.0/jsr305-3.0.0.jar"
+          ],
+          "sha256": "bec0b24dcb23f9670172724826584802b80ae6cbdaba03bdebdef9327b962f6a"
+        },
+        {
+          "name": "com.google.code.findbugs-jsr305-3.0.0-pom",
+          "filename": "jsr305-3.0.0.pom",
+          "path": "com/google/code/findbugs/jsr305/3.0.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/findbugs/jsr305/3.0.0/jsr305-3.0.0.pom",
+            "https://kamax.io/maven/releases/com/google/code/findbugs/jsr305/3.0.0/jsr305-3.0.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/code/findbugs/jsr305/3.0.0/jsr305-3.0.0.pom"
+          ],
+          "sha256": "7c8a0859a3833eee5c53b0bceb2898ef56a88c7dd9a7e4f6bc5f0ff9770c95ec"
+        },
+        {
+          "name": "com.google.code.gson-gson-parent-2.8.0-pom",
+          "filename": "gson-parent-2.8.0.pom",
+          "path": "com/google/code/gson/gson-parent/2.8.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/gson/gson-parent/2.8.0/gson-parent-2.8.0.pom",
+            "https://kamax.io/maven/releases/com/google/code/gson/gson-parent/2.8.0/gson-parent-2.8.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/code/gson/gson-parent/2.8.0/gson-parent-2.8.0.pom"
+          ],
+          "sha256": "0f1d8369b1e9f1bc4b467c8dcfdd8b59733aad5b5c8419c3a59b2f9abaf04cd2"
+        },
+        {
+          "name": "com.google.code.gson-gson-2.8.0-jar",
+          "filename": "gson-2.8.0.jar",
+          "path": "com/google/code/gson/gson/2.8.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar",
+            "https://kamax.io/maven/releases/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar"
+          ],
+          "sha256": "c6221763bd79c4f1c3dc7f750b5f29a0bb38b367b81314c4f71896e340c40825"
+        },
+        {
+          "name": "com.google.code.gson-gson-2.8.0-pom",
+          "filename": "gson-2.8.0.pom",
+          "path": "com/google/code/gson/gson/2.8.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/gson/gson/2.8.0/gson-2.8.0.pom",
+            "https://kamax.io/maven/releases/com/google/code/gson/gson/2.8.0/gson-2.8.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/code/gson/gson/2.8.0/gson-2.8.0.pom"
+          ],
+          "sha256": "a5331a0ecb548f9942ab5b93c7ac43c38a21e897763dde1bcdbf0774f416ca6f"
+        },
+        {
+          "name": "com.google.firebase-firebase-admin-5.3.0-jar",
+          "filename": "firebase-admin-5.3.0.jar",
+          "path": "com/google/firebase/firebase-admin/5.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/firebase/firebase-admin/5.3.0/firebase-admin-5.3.0.jar",
+            "https://kamax.io/maven/releases/com/google/firebase/firebase-admin/5.3.0/firebase-admin-5.3.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/firebase/firebase-admin/5.3.0/firebase-admin-5.3.0.jar"
+          ],
+          "sha256": "e74285b059d693ffa0101e4fba16fd7cb8b061c92af3b8266dd4bf8a3f028fba"
+        },
+        {
+          "name": "com.google.firebase-firebase-admin-5.3.0-pom",
+          "filename": "firebase-admin-5.3.0.pom",
+          "path": "com/google/firebase/firebase-admin/5.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/firebase/firebase-admin/5.3.0/firebase-admin-5.3.0.pom",
+            "https://kamax.io/maven/releases/com/google/firebase/firebase-admin/5.3.0/firebase-admin-5.3.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/firebase/firebase-admin/5.3.0/firebase-admin-5.3.0.pom"
+          ],
+          "sha256": "c672abe617f64a27dfc5b625c33a5c860df66b07b342941a934ee086d2d54655"
+        },
+        {
+          "name": "com.google.guava-guava-jdk5-17.0-jar",
+          "filename": "guava-jdk5-17.0.jar",
+          "path": "com/google/guava/guava-jdk5/17.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.jar",
+            "https://kamax.io/maven/releases/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.jar"
+          ],
+          "sha256": "59bf456547b6dda3ced968cb56f7f2d3e14474e2de2960a32c47e31c1e456c61"
+        },
+        {
+          "name": "com.google.guava-guava-jdk5-17.0-pom",
+          "filename": "guava-jdk5-17.0.pom",
+          "path": "com/google/guava/guava-jdk5/17.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.pom",
+            "https://kamax.io/maven/releases/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.pom"
+          ],
+          "sha256": "f8c152627813d45bc4e7cc17ad6ed6a649a0231ae819ffb8e05d19b205a3db66"
+        },
+        {
+          "name": "com.google.guava-guava-parent-jdk5-17.0-pom",
+          "filename": "guava-parent-jdk5-17.0.pom",
+          "path": "com/google/guava/guava-parent-jdk5/17.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava-parent-jdk5/17.0/guava-parent-jdk5-17.0.pom",
+            "https://kamax.io/maven/releases/com/google/guava/guava-parent-jdk5/17.0/guava-parent-jdk5-17.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/guava/guava-parent-jdk5/17.0/guava-parent-jdk5-17.0.pom"
+          ],
+          "sha256": "5a9606bc27632956b3c11df887e9b3e785854068aaa4e0808ed5660f60b1fb6f"
+        },
+        {
+          "name": "com.google.guava-guava-parent-20.0-pom",
+          "filename": "guava-parent-20.0.pom",
+          "path": "com/google/guava/guava-parent/20.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava-parent/20.0/guava-parent-20.0.pom",
+            "https://kamax.io/maven/releases/com/google/guava/guava-parent/20.0/guava-parent-20.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/guava/guava-parent/20.0/guava-parent-20.0.pom"
+          ],
+          "sha256": "f1226fd07fc72af8d6232bdfa70bf31d883a1a01cbc547f23a74e9066c692df1"
+        },
+        {
+          "name": "com.google.guava-guava-20.0-jar",
+          "filename": "guava-20.0.jar",
+          "path": "com/google/guava/guava/20.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava/20.0/guava-20.0.jar",
+            "https://kamax.io/maven/releases/com/google/guava/guava/20.0/guava-20.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/guava/guava/20.0/guava-20.0.jar"
+          ],
+          "sha256": "36a666e3b71ae7f0f0dca23654b67e086e6c93d192f60ba5dfd5519db6c288c8"
+        },
+        {
+          "name": "com.google.guava-guava-20.0-pom",
+          "filename": "guava-20.0.pom",
+          "path": "com/google/guava/guava/20.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava/20.0/guava-20.0.pom",
+            "https://kamax.io/maven/releases/com/google/guava/guava/20.0/guava-20.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/guava/guava/20.0/guava-20.0.pom"
+          ],
+          "sha256": "363cc83767b760d7a564d5301e09467e6d48fc1c1c1664b1e18c50815ce19076"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-appengine-1.21.0-jar",
+          "filename": "google-http-client-appengine-1.21.0.jar",
+          "path": "com/google/http-client/google-http-client-appengine/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-appengine/1.21.0/google-http-client-appengine-1.21.0.jar",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-appengine/1.21.0/google-http-client-appengine-1.21.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-appengine/1.21.0/google-http-client-appengine-1.21.0.jar"
+          ],
+          "sha256": "5f98695d73d815243bff22495acb0a6bf3ba211e1d742ca4779cd7916f744c86"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-appengine-1.21.0-pom",
+          "filename": "google-http-client-appengine-1.21.0.pom",
+          "path": "com/google/http-client/google-http-client-appengine/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-appengine/1.21.0/google-http-client-appengine-1.21.0.pom",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-appengine/1.21.0/google-http-client-appengine-1.21.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-appengine/1.21.0/google-http-client-appengine-1.21.0.pom"
+          ],
+          "sha256": "3d8e3ea877677002b5406990a26b2b3e98d4f8d9eb3cee1ffcab23e9975d5fa4"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-gson-1.22.0-jar",
+          "filename": "google-http-client-gson-1.22.0.jar",
+          "path": "com/google/http-client/google-http-client-gson/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-gson/1.22.0/google-http-client-gson-1.22.0.jar",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-gson/1.22.0/google-http-client-gson-1.22.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-gson/1.22.0/google-http-client-gson-1.22.0.jar"
+          ],
+          "sha256": "9ffa230a158349a3c87f0da68cae6cc90d3ec0f2dbdb2f34f1f54187834799fb"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-gson-1.22.0-pom",
+          "filename": "google-http-client-gson-1.22.0.pom",
+          "path": "com/google/http-client/google-http-client-gson/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-gson/1.22.0/google-http-client-gson-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-gson/1.22.0/google-http-client-gson-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-gson/1.22.0/google-http-client-gson-1.22.0.pom"
+          ],
+          "sha256": "fd756a96ad6281fc5d184e65a6a31db7d8d91ca86301291b99179ab85a52cdc0"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-jackson2-1.22.0-jar",
+          "filename": "google-http-client-jackson2-1.22.0.jar",
+          "path": "com/google/http-client/google-http-client-jackson2/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-jackson2/1.22.0/google-http-client-jackson2-1.22.0.jar",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-jackson2/1.22.0/google-http-client-jackson2-1.22.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-jackson2/1.22.0/google-http-client-jackson2-1.22.0.jar"
+          ],
+          "sha256": "45b1e34b2dcef5cb496ef25a1223d19cf102b8c2ea4abf96491631b2faf4611c"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-jackson2-1.22.0-pom",
+          "filename": "google-http-client-jackson2-1.22.0.pom",
+          "path": "com/google/http-client/google-http-client-jackson2/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-jackson2/1.22.0/google-http-client-jackson2-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-jackson2/1.22.0/google-http-client-jackson2-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-jackson2/1.22.0/google-http-client-jackson2-1.22.0.pom"
+          ],
+          "sha256": "184c3aaa66f32be7bf592caab362becd10a80b15b077c3ebe9ae9fa9d387f41a"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-jackson-1.21.0-jar",
+          "filename": "google-http-client-jackson-1.21.0.jar",
+          "path": "com/google/http-client/google-http-client-jackson/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-jackson/1.21.0/google-http-client-jackson-1.21.0.jar",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-jackson/1.21.0/google-http-client-jackson-1.21.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-jackson/1.21.0/google-http-client-jackson-1.21.0.jar"
+          ],
+          "sha256": "afbc1bb608fc261f310dca33bc6ddb90fba4f7bbe2125fef9b53569bee36ac17"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-jackson-1.21.0-pom",
+          "filename": "google-http-client-jackson-1.21.0.pom",
+          "path": "com/google/http-client/google-http-client-jackson/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-jackson/1.21.0/google-http-client-jackson-1.21.0.pom",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-jackson/1.21.0/google-http-client-jackson-1.21.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-jackson/1.21.0/google-http-client-jackson-1.21.0.pom"
+          ],
+          "sha256": "e5291eb963671064ec3d3cfed77f7a229167b05cb3d104e51ae11e466118c3f6"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-parent-1.21.0-pom",
+          "filename": "google-http-client-parent-1.21.0.pom",
+          "path": "com/google/http-client/google-http-client-parent/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-parent/1.21.0/google-http-client-parent-1.21.0.pom",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-parent/1.21.0/google-http-client-parent-1.21.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-parent/1.21.0/google-http-client-parent-1.21.0.pom"
+          ],
+          "sha256": "d043afabfb56eb533ba5621d59c207fc7d1f88f98aef8293796988add08f9288"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-parent-1.22.0-pom",
+          "filename": "google-http-client-parent-1.22.0.pom",
+          "path": "com/google/http-client/google-http-client-parent/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-parent/1.22.0/google-http-client-parent-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client-parent/1.22.0/google-http-client-parent-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client-parent/1.22.0/google-http-client-parent-1.22.0.pom"
+          ],
+          "sha256": "3927309767100e548d1f5c20e150d75716e03a3d8a1a1b970c8a75fbddae072e"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-1.22.0-jar",
+          "filename": "google-http-client-1.22.0.jar",
+          "path": "com/google/http-client/google-http-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client/1.22.0/google-http-client-1.22.0.jar",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client/1.22.0/google-http-client-1.22.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client/1.22.0/google-http-client-1.22.0.jar"
+          ],
+          "sha256": "f88ffa329ac52fb4f2ff0eb877ef7318423ac9b791a107f886ed5c7a00e77e11"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-1.22.0-pom",
+          "filename": "google-http-client-1.22.0.pom",
+          "path": "com/google/http-client/google-http-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client/1.22.0/google-http-client-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/http-client/google-http-client/1.22.0/google-http-client-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/http-client/google-http-client/1.22.0/google-http-client-1.22.0.pom"
+          ],
+          "sha256": "30e7611df40360bdc24325caaa2f7888e847680f2e64e579c28c87a53e5bb422"
+        },
+        {
+          "name": "com.google.oauth-client-google-oauth-client-parent-1.22.0-pom",
+          "filename": "google-oauth-client-parent-1.22.0.pom",
+          "path": "com/google/oauth-client/google-oauth-client-parent/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/oauth-client/google-oauth-client-parent/1.22.0/google-oauth-client-parent-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/oauth-client/google-oauth-client-parent/1.22.0/google-oauth-client-parent-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/oauth-client/google-oauth-client-parent/1.22.0/google-oauth-client-parent-1.22.0.pom"
+          ],
+          "sha256": "2e7acb933f8c1b801b78925e4d22c32040a414dc7246bfdb777d8ad78404fa66"
+        },
+        {
+          "name": "com.google.oauth-client-google-oauth-client-1.22.0-jar",
+          "filename": "google-oauth-client-1.22.0.jar",
+          "path": "com/google/oauth-client/google-oauth-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/oauth-client/google-oauth-client/1.22.0/google-oauth-client-1.22.0.jar",
+            "https://kamax.io/maven/releases/com/google/oauth-client/google-oauth-client/1.22.0/google-oauth-client-1.22.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/oauth-client/google-oauth-client/1.22.0/google-oauth-client-1.22.0.jar"
+          ],
+          "sha256": "a4c56168b3e042105d68cf136e40e74f6e27f63ed0a948df966b332678e19022"
+        },
+        {
+          "name": "com.google.oauth-client-google-oauth-client-1.22.0-pom",
+          "filename": "google-oauth-client-1.22.0.pom",
+          "path": "com/google/oauth-client/google-oauth-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/oauth-client/google-oauth-client/1.22.0/google-oauth-client-1.22.0.pom",
+            "https://kamax.io/maven/releases/com/google/oauth-client/google-oauth-client/1.22.0/google-oauth-client-1.22.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/oauth-client/google-oauth-client/1.22.0/google-oauth-client-1.22.0.pom"
+          ],
+          "sha256": "52a2b2c1a4365668545134157ee7bb141c6b537caa29a4e51f3228ce0bbbeaf9"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-java-util-3.3.0-jar",
+          "filename": "protobuf-java-util-3.3.0.jar",
+          "path": "com/google/protobuf/protobuf-java-util/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-java-util/3.3.0/protobuf-java-util-3.3.0.jar",
+            "https://kamax.io/maven/releases/com/google/protobuf/protobuf-java-util/3.3.0/protobuf-java-util-3.3.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/protobuf/protobuf-java-util/3.3.0/protobuf-java-util-3.3.0.jar"
+          ],
+          "sha256": "4547f6d1ea08ff8d92513e1d80b91652f0e158d0a64e9402cb44507789eb3106"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-java-util-3.3.0-pom",
+          "filename": "protobuf-java-util-3.3.0.pom",
+          "path": "com/google/protobuf/protobuf-java-util/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-java-util/3.3.0/protobuf-java-util-3.3.0.pom",
+            "https://kamax.io/maven/releases/com/google/protobuf/protobuf-java-util/3.3.0/protobuf-java-util-3.3.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/protobuf/protobuf-java-util/3.3.0/protobuf-java-util-3.3.0.pom"
+          ],
+          "sha256": "5ecd05fd7927022fce646d5bd1f923e0c01a874f7ffe7b734216108c86653a45"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-java-3.3.0-jar",
+          "filename": "protobuf-java-3.3.0.jar",
+          "path": "com/google/protobuf/protobuf-java/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar",
+            "https://kamax.io/maven/releases/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar",
+            "https://kamax.io/maven/snapshots/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar"
+          ],
+          "sha256": "f3411ade77523d5f0d013d4f25c36879e66f0c5e1e4310f7096d54d0d2553554"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-java-3.3.0-pom",
+          "filename": "protobuf-java-3.3.0.pom",
+          "path": "com/google/protobuf/protobuf-java/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.pom",
+            "https://kamax.io/maven/releases/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.pom"
+          ],
+          "sha256": "163aefeb2f1db03e7abb0b5eb15b151d1ec3750b192f1bf0a35dd1f447b92bd2"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-parent-3.3.0-pom",
+          "filename": "protobuf-parent-3.3.0.pom",
+          "path": "com/google/protobuf/protobuf-parent/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-parent/3.3.0/protobuf-parent-3.3.0.pom",
+            "https://kamax.io/maven/releases/com/google/protobuf/protobuf-parent/3.3.0/protobuf-parent-3.3.0.pom",
+            "https://kamax.io/maven/snapshots/com/google/protobuf/protobuf-parent/3.3.0/protobuf-parent-3.3.0.pom"
+          ],
+          "sha256": "dd7ef4b40192af812862c00b3f13dd419bec98429fb5a553a535e03aedfc52e6"
+        },
+        {
+          "name": "com.google-google-1-pom",
+          "filename": "google-1.pom",
+          "path": "com/google/google/1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/google/1/google-1.pom",
+            "https://kamax.io/maven/releases/com/google/google/1/google-1.pom",
+            "https://kamax.io/maven/snapshots/com/google/google/1/google-1.pom"
+          ],
+          "sha256": "cd6db17a11a31ede794ccbd1df0e4d9750f640234731f21cff885a9997277e81"
+        },
+        {
+          "name": "com.googlecode.libphonenumber-libphonenumber-parent-8.7.1-pom",
+          "filename": "libphonenumber-parent-8.7.1.pom",
+          "path": "com/googlecode/libphonenumber/libphonenumber-parent/8.7.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/googlecode/libphonenumber/libphonenumber-parent/8.7.1/libphonenumber-parent-8.7.1.pom",
+            "https://kamax.io/maven/releases/com/googlecode/libphonenumber/libphonenumber-parent/8.7.1/libphonenumber-parent-8.7.1.pom",
+            "https://kamax.io/maven/snapshots/com/googlecode/libphonenumber/libphonenumber-parent/8.7.1/libphonenumber-parent-8.7.1.pom"
+          ],
+          "sha256": "217eae071129dfe139a2a9cb49917d18df716dcfe7da14427e2c62f5f379bb1f"
+        },
+        {
+          "name": "com.googlecode.libphonenumber-libphonenumber-8.7.1-jar",
+          "filename": "libphonenumber-8.7.1.jar",
+          "path": "com/googlecode/libphonenumber/libphonenumber/8.7.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/googlecode/libphonenumber/libphonenumber/8.7.1/libphonenumber-8.7.1.jar",
+            "https://kamax.io/maven/releases/com/googlecode/libphonenumber/libphonenumber/8.7.1/libphonenumber-8.7.1.jar",
+            "https://kamax.io/maven/snapshots/com/googlecode/libphonenumber/libphonenumber/8.7.1/libphonenumber-8.7.1.jar"
+          ],
+          "sha256": "25122ef56f3d0c933087e7ec88c6b57017e253a7f8756434b8a5b014054020ac"
+        },
+        {
+          "name": "com.googlecode.libphonenumber-libphonenumber-8.7.1-pom",
+          "filename": "libphonenumber-8.7.1.pom",
+          "path": "com/googlecode/libphonenumber/libphonenumber/8.7.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/googlecode/libphonenumber/libphonenumber/8.7.1/libphonenumber-8.7.1.pom",
+            "https://kamax.io/maven/releases/com/googlecode/libphonenumber/libphonenumber/8.7.1/libphonenumber-8.7.1.pom",
+            "https://kamax.io/maven/snapshots/com/googlecode/libphonenumber/libphonenumber/8.7.1/libphonenumber-8.7.1.pom"
+          ],
+          "sha256": "9ea2441043b46b73b8c52667294903b29faf87c8baa12bec01634c6cd5acec90"
+        },
+        {
+          "name": "com.icegreen-greenmail-parent-1.5.9-pom",
+          "filename": "greenmail-parent-1.5.9.pom",
+          "path": "com/icegreen/greenmail-parent/1.5.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/icegreen/greenmail-parent/1.5.9/greenmail-parent-1.5.9.pom",
+            "https://kamax.io/maven/releases/com/icegreen/greenmail-parent/1.5.9/greenmail-parent-1.5.9.pom",
+            "https://kamax.io/maven/snapshots/com/icegreen/greenmail-parent/1.5.9/greenmail-parent-1.5.9.pom"
+          ],
+          "sha256": "51114dc2b78d09287ebbd8acd563a0ba73fab35bae030454e1fd3f3a91df555c"
+        },
+        {
+          "name": "com.icegreen-greenmail-1.5.9-jar",
+          "filename": "greenmail-1.5.9.jar",
+          "path": "com/icegreen/greenmail/1.5.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/icegreen/greenmail/1.5.9/greenmail-1.5.9.jar",
+            "https://kamax.io/maven/releases/com/icegreen/greenmail/1.5.9/greenmail-1.5.9.jar",
+            "https://kamax.io/maven/snapshots/com/icegreen/greenmail/1.5.9/greenmail-1.5.9.jar"
+          ],
+          "sha256": "2f5d8050266ba7eb05f6181e680bca2ca469cc5790712bd8c88b1a320ef7e401"
+        },
+        {
+          "name": "com.icegreen-greenmail-1.5.9-pom",
+          "filename": "greenmail-1.5.9.pom",
+          "path": "com/icegreen/greenmail/1.5.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/icegreen/greenmail/1.5.9/greenmail-1.5.9.pom",
+            "https://kamax.io/maven/releases/com/icegreen/greenmail/1.5.9/greenmail-1.5.9.pom",
+            "https://kamax.io/maven/snapshots/com/icegreen/greenmail/1.5.9/greenmail-1.5.9.pom"
+          ],
+          "sha256": "201c87b828f6548993b3452f55ecf351791cf5391dd0f6b8d515f51d972767ee"
+        },
+        {
+          "name": "com.j256.ormlite-ormlite-core-5.0-jar",
+          "filename": "ormlite-core-5.0.jar",
+          "path": "com/j256/ormlite/ormlite-core/5.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/j256/ormlite/ormlite-core/5.0/ormlite-core-5.0.jar",
+            "https://kamax.io/maven/releases/com/j256/ormlite/ormlite-core/5.0/ormlite-core-5.0.jar",
+            "https://kamax.io/maven/snapshots/com/j256/ormlite/ormlite-core/5.0/ormlite-core-5.0.jar"
+          ],
+          "sha256": "5765c4c65d7084ecc2d4b638092940ed47d5c8319f1e954a62d6ad93db1faac3"
+        },
+        {
+          "name": "com.j256.ormlite-ormlite-core-5.0-pom",
+          "filename": "ormlite-core-5.0.pom",
+          "path": "com/j256/ormlite/ormlite-core/5.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/j256/ormlite/ormlite-core/5.0/ormlite-core-5.0.pom",
+            "https://kamax.io/maven/releases/com/j256/ormlite/ormlite-core/5.0/ormlite-core-5.0.pom",
+            "https://kamax.io/maven/snapshots/com/j256/ormlite/ormlite-core/5.0/ormlite-core-5.0.pom"
+          ],
+          "sha256": "f00783828ee6c4b83cae39984b02b72af3d5572417f9430e0c55db41b73d41ea"
+        },
+        {
+          "name": "com.j256.ormlite-ormlite-jdbc-5.0-jar",
+          "filename": "ormlite-jdbc-5.0.jar",
+          "path": "com/j256/ormlite/ormlite-jdbc/5.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/j256/ormlite/ormlite-jdbc/5.0/ormlite-jdbc-5.0.jar",
+            "https://kamax.io/maven/releases/com/j256/ormlite/ormlite-jdbc/5.0/ormlite-jdbc-5.0.jar",
+            "https://kamax.io/maven/snapshots/com/j256/ormlite/ormlite-jdbc/5.0/ormlite-jdbc-5.0.jar"
+          ],
+          "sha256": "4e392c59378e06351fcf01dc1d690d629dffbd305aa75689c5740ee41bd4505e"
+        },
+        {
+          "name": "com.j256.ormlite-ormlite-jdbc-5.0-pom",
+          "filename": "ormlite-jdbc-5.0.pom",
+          "path": "com/j256/ormlite/ormlite-jdbc/5.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/j256/ormlite/ormlite-jdbc/5.0/ormlite-jdbc-5.0.pom",
+            "https://kamax.io/maven/releases/com/j256/ormlite/ormlite-jdbc/5.0/ormlite-jdbc-5.0.pom",
+            "https://kamax.io/maven/snapshots/com/j256/ormlite/ormlite-jdbc/5.0/ormlite-jdbc-5.0.pom"
+          ],
+          "sha256": "18cc766d6f836382f7aa1f4cedc6e3a1cd93626a37a25fbca79ea58919b6ffe9"
+        },
+        {
+          "name": "com.jayway.jsonpath-json-path-2.4.0-jar",
+          "filename": "json-path-2.4.0.jar",
+          "path": "com/jayway/jsonpath/json-path/2.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.jar",
+            "https://kamax.io/maven/releases/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.jar",
+            "https://kamax.io/maven/snapshots/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.jar"
+          ],
+          "sha256": "60441c74fb64e5a480070f86a604941927aaf684e2b513d780fb7a38fb4c5639"
+        },
+        {
+          "name": "com.jayway.jsonpath-json-path-2.4.0-pom",
+          "filename": "json-path-2.4.0.pom",
+          "path": "com/jayway/jsonpath/json-path/2.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.pom",
+            "https://kamax.io/maven/releases/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.pom",
+            "https://kamax.io/maven/snapshots/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.pom"
+          ],
+          "sha256": "ce4885b1bc083140a14bb83d671c0261583e332e8104b4e18263b9a37efa02c1"
+        },
+        {
+          "name": "com.mchange-c3p0-0.9.5.2-jar",
+          "filename": "c3p0-0.9.5.2.jar",
+          "path": "com/mchange/c3p0/0.9.5.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/mchange/c3p0/0.9.5.2/c3p0-0.9.5.2.jar",
+            "https://kamax.io/maven/releases/com/mchange/c3p0/0.9.5.2/c3p0-0.9.5.2.jar",
+            "https://kamax.io/maven/snapshots/com/mchange/c3p0/0.9.5.2/c3p0-0.9.5.2.jar"
+          ],
+          "sha256": "a4cf6019521d1ad47862ab1e27b78e43aa8ea3fe96fcb303190fd2508ec09285"
+        },
+        {
+          "name": "com.mchange-c3p0-0.9.5.2-pom",
+          "filename": "c3p0-0.9.5.2.pom",
+          "path": "com/mchange/c3p0/0.9.5.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/mchange/c3p0/0.9.5.2/c3p0-0.9.5.2.pom",
+            "https://kamax.io/maven/releases/com/mchange/c3p0/0.9.5.2/c3p0-0.9.5.2.pom",
+            "https://kamax.io/maven/snapshots/com/mchange/c3p0/0.9.5.2/c3p0-0.9.5.2.pom"
+          ],
+          "sha256": "b702a265c1808ebeecce087f7a68295365623955de04cb7b87e44d770fbe24a3"
+        },
+        {
+          "name": "com.mchange-mchange-commons-java-0.2.11-jar",
+          "filename": "mchange-commons-java-0.2.11.jar",
+          "path": "com/mchange/mchange-commons-java/0.2.11",
+          "urls": [
+            "https://jcenter.bintray.com/com/mchange/mchange-commons-java/0.2.11/mchange-commons-java-0.2.11.jar",
+            "https://kamax.io/maven/releases/com/mchange/mchange-commons-java/0.2.11/mchange-commons-java-0.2.11.jar",
+            "https://kamax.io/maven/snapshots/com/mchange/mchange-commons-java/0.2.11/mchange-commons-java-0.2.11.jar"
+          ],
+          "sha256": "b38f9c39fbd2dfdffb40e0fc5b68caab6ccc494e47fce214e5c4ab9e39689abb"
+        },
+        {
+          "name": "com.mchange-mchange-commons-java-0.2.11-pom",
+          "filename": "mchange-commons-java-0.2.11.pom",
+          "path": "com/mchange/mchange-commons-java/0.2.11",
+          "urls": [
+            "https://jcenter.bintray.com/com/mchange/mchange-commons-java/0.2.11/mchange-commons-java-0.2.11.pom",
+            "https://kamax.io/maven/releases/com/mchange/mchange-commons-java/0.2.11/mchange-commons-java-0.2.11.pom",
+            "https://kamax.io/maven/snapshots/com/mchange/mchange-commons-java/0.2.11/mchange-commons-java-0.2.11.pom"
+          ],
+          "sha256": "e44f1579e838439da325e92531354b8a9cf70602ca057cd5eaf7c16a17012750"
+        },
+        {
+          "name": "com.sendgrid-sendgrid-java-2.2.2-jar",
+          "filename": "sendgrid-java-2.2.2.jar",
+          "path": "com/sendgrid/sendgrid-java/2.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sendgrid/sendgrid-java/2.2.2/sendgrid-java-2.2.2.jar",
+            "https://kamax.io/maven/releases/com/sendgrid/sendgrid-java/2.2.2/sendgrid-java-2.2.2.jar",
+            "https://kamax.io/maven/snapshots/com/sendgrid/sendgrid-java/2.2.2/sendgrid-java-2.2.2.jar"
+          ],
+          "sha256": "8bed943473cbb00e317d50e30dfd6f59385a5bdd95560bdd88a304432394519c"
+        },
+        {
+          "name": "com.sendgrid-sendgrid-java-2.2.2-pom",
+          "filename": "sendgrid-java-2.2.2.pom",
+          "path": "com/sendgrid/sendgrid-java/2.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sendgrid/sendgrid-java/2.2.2/sendgrid-java-2.2.2.pom",
+            "https://kamax.io/maven/releases/com/sendgrid/sendgrid-java/2.2.2/sendgrid-java-2.2.2.pom",
+            "https://kamax.io/maven/snapshots/com/sendgrid/sendgrid-java/2.2.2/sendgrid-java-2.2.2.pom"
+          ],
+          "sha256": "07134ee435f2d43286ece438e1a93581ced0ff2360372b2b432805d6835c5240"
+        },
+        {
+          "name": "com.sendgrid-smtpapi-java-1.2.0-jar",
+          "filename": "smtpapi-java-1.2.0.jar",
+          "path": "com/sendgrid/smtpapi-java/1.2.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/sendgrid/smtpapi-java/1.2.0/smtpapi-java-1.2.0.jar",
+            "https://kamax.io/maven/releases/com/sendgrid/smtpapi-java/1.2.0/smtpapi-java-1.2.0.jar",
+            "https://kamax.io/maven/snapshots/com/sendgrid/smtpapi-java/1.2.0/smtpapi-java-1.2.0.jar"
+          ],
+          "sha256": "7ec059dab2600dfe8e424223da82f1452a2d68ea9c9254c6e86983fc79b8db27"
+        },
+        {
+          "name": "com.sendgrid-smtpapi-java-1.2.0-pom",
+          "filename": "smtpapi-java-1.2.0.pom",
+          "path": "com/sendgrid/smtpapi-java/1.2.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/sendgrid/smtpapi-java/1.2.0/smtpapi-java-1.2.0.pom",
+            "https://kamax.io/maven/releases/com/sendgrid/smtpapi-java/1.2.0/smtpapi-java-1.2.0.pom",
+            "https://kamax.io/maven/snapshots/com/sendgrid/smtpapi-java/1.2.0/smtpapi-java-1.2.0.pom"
+          ],
+          "sha256": "eae852f2e8095c2c5372886305cd122c647d8246ffa2861bda92201e73ef1bf8"
+        },
+        {
+          "name": "com.squareup.okhttp3-okhttp-3.11.0-jar",
+          "filename": "okhttp-3.11.0.jar",
+          "path": "com/squareup/okhttp3/okhttp/3.11.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okhttp3/okhttp/3.11.0/okhttp-3.11.0.jar",
+            "https://kamax.io/maven/releases/com/squareup/okhttp3/okhttp/3.11.0/okhttp-3.11.0.jar",
+            "https://kamax.io/maven/snapshots/com/squareup/okhttp3/okhttp/3.11.0/okhttp-3.11.0.jar"
+          ],
+          "sha256": "e27c7742448f816da1cac72b4ca283b0d7920749e09f5dd0ac017e40714a2efe"
+        },
+        {
+          "name": "com.squareup.okhttp3-okhttp-3.11.0-pom",
+          "filename": "okhttp-3.11.0.pom",
+          "path": "com/squareup/okhttp3/okhttp/3.11.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okhttp3/okhttp/3.11.0/okhttp-3.11.0.pom",
+            "https://kamax.io/maven/releases/com/squareup/okhttp3/okhttp/3.11.0/okhttp-3.11.0.pom",
+            "https://kamax.io/maven/snapshots/com/squareup/okhttp3/okhttp/3.11.0/okhttp-3.11.0.pom"
+          ],
+          "sha256": "56a8a3f81ca1a1e27aaa4434ca133c28737b071b9baf0357098f1f556fc4f6b4"
+        },
+        {
+          "name": "com.squareup.okhttp3-parent-3.11.0-pom",
+          "filename": "parent-3.11.0.pom",
+          "path": "com/squareup/okhttp3/parent/3.11.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okhttp3/parent/3.11.0/parent-3.11.0.pom",
+            "https://kamax.io/maven/releases/com/squareup/okhttp3/parent/3.11.0/parent-3.11.0.pom",
+            "https://kamax.io/maven/snapshots/com/squareup/okhttp3/parent/3.11.0/parent-3.11.0.pom"
+          ],
+          "sha256": "9eea9af1b3bc95d38b78d126f8fe7785aa9955a7b2c76e13c17c1f1b0838a979"
+        },
+        {
+          "name": "com.squareup.okio-okio-parent-1.14.0-pom",
+          "filename": "okio-parent-1.14.0.pom",
+          "path": "com/squareup/okio/okio-parent/1.14.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okio/okio-parent/1.14.0/okio-parent-1.14.0.pom",
+            "https://kamax.io/maven/releases/com/squareup/okio/okio-parent/1.14.0/okio-parent-1.14.0.pom",
+            "https://kamax.io/maven/snapshots/com/squareup/okio/okio-parent/1.14.0/okio-parent-1.14.0.pom"
+          ],
+          "sha256": "18d1f68a7d7d03b0e935c03ae335c51b15d2ba4664964b96e07542af390aee85"
+        },
+        {
+          "name": "com.squareup.okio-okio-1.14.0-jar",
+          "filename": "okio-1.14.0.jar",
+          "path": "com/squareup/okio/okio/1.14.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okio/okio/1.14.0/okio-1.14.0.jar",
+            "https://kamax.io/maven/releases/com/squareup/okio/okio/1.14.0/okio-1.14.0.jar",
+            "https://kamax.io/maven/snapshots/com/squareup/okio/okio/1.14.0/okio-1.14.0.jar"
+          ],
+          "sha256": "4633c331f50642ebe795dc089d6a5928aff43071c9d17e7840a009eea2fe95a3"
+        },
+        {
+          "name": "com.squareup.okio-okio-1.14.0-pom",
+          "filename": "okio-1.14.0.pom",
+          "path": "com/squareup/okio/okio/1.14.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okio/okio/1.14.0/okio-1.14.0.pom",
+            "https://kamax.io/maven/releases/com/squareup/okio/okio/1.14.0/okio-1.14.0.pom",
+            "https://kamax.io/maven/snapshots/com/squareup/okio/okio/1.14.0/okio-1.14.0.pom"
+          ],
+          "sha256": "0922137559cb91f6fe88e2643f4d986f566913883f9a82ef91e5d0675466f81e"
+        },
+        {
+          "name": "com.sun.mail-all-1.6.2-pom",
+          "filename": "all-1.6.2.pom",
+          "path": "com/sun/mail/all/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sun/mail/all/1.6.2/all-1.6.2.pom",
+            "https://kamax.io/maven/releases/com/sun/mail/all/1.6.2/all-1.6.2.pom",
+            "https://kamax.io/maven/snapshots/com/sun/mail/all/1.6.2/all-1.6.2.pom"
+          ],
+          "sha256": "4b7e83aa9b77d65e007e97cb50f9b89cdb754faaf16411e5fd94d1e3dab76eb3"
+        },
+        {
+          "name": "com.sun.mail-javax.mail-1.6.2-jar",
+          "filename": "javax.mail-1.6.2.jar",
+          "path": "com/sun/mail/javax.mail/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.jar",
+            "https://kamax.io/maven/releases/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.jar",
+            "https://kamax.io/maven/snapshots/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.jar"
+          ],
+          "sha256": "45b515e7104944c09e45b9c7bb1ce5dff640486374852dd2b2e80cc3752dfa11"
+        },
+        {
+          "name": "com.sun.mail-javax.mail-1.6.2-pom",
+          "filename": "javax.mail-1.6.2.pom",
+          "path": "com/sun/mail/javax.mail/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.pom",
+            "https://kamax.io/maven/releases/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.pom",
+            "https://kamax.io/maven/snapshots/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.pom"
+          ],
+          "sha256": "c4229c05b5836f002521363d3435f3d072662744548bf17e7e7adecafe68b9fd"
+        },
+        {
+          "name": "com.twilio.sdk-twilio-7.14.5-jar",
+          "filename": "twilio-7.14.5.jar",
+          "path": "com/twilio/sdk/twilio/7.14.5",
+          "urls": [
+            "https://jcenter.bintray.com/com/twilio/sdk/twilio/7.14.5/twilio-7.14.5.jar",
+            "https://kamax.io/maven/releases/com/twilio/sdk/twilio/7.14.5/twilio-7.14.5.jar",
+            "https://kamax.io/maven/snapshots/com/twilio/sdk/twilio/7.14.5/twilio-7.14.5.jar"
+          ],
+          "sha256": "1b5f726124e936df3ecb190662e775e5ab5bdfb6ef8a2b0f9630f31177282cc0"
+        },
+        {
+          "name": "com.twilio.sdk-twilio-7.14.5-pom",
+          "filename": "twilio-7.14.5.pom",
+          "path": "com/twilio/sdk/twilio/7.14.5",
+          "urls": [
+            "https://jcenter.bintray.com/com/twilio/sdk/twilio/7.14.5/twilio-7.14.5.pom",
+            "https://kamax.io/maven/releases/com/twilio/sdk/twilio/7.14.5/twilio-7.14.5.pom",
+            "https://kamax.io/maven/snapshots/com/twilio/sdk/twilio/7.14.5/twilio-7.14.5.pom"
+          ],
+          "sha256": "8e2e7fd7d8caf3b327ed1a618fdf542623b51ba455d8f9e99eaa629519671a6e"
+        },
+        {
+          "name": "com.unboundid-unboundid-ldapsdk-4.0.9-jar",
+          "filename": "unboundid-ldapsdk-4.0.9.jar",
+          "path": "com/unboundid/unboundid-ldapsdk/4.0.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/unboundid/unboundid-ldapsdk/4.0.9/unboundid-ldapsdk-4.0.9.jar",
+            "https://kamax.io/maven/releases/com/unboundid/unboundid-ldapsdk/4.0.9/unboundid-ldapsdk-4.0.9.jar",
+            "https://kamax.io/maven/snapshots/com/unboundid/unboundid-ldapsdk/4.0.9/unboundid-ldapsdk-4.0.9.jar"
+          ],
+          "sha256": "693bc47a6d311217397f7fd78043272d8b090cec4fe1c8834b31fc9a138f8361"
+        },
+        {
+          "name": "com.unboundid-unboundid-ldapsdk-4.0.9-pom",
+          "filename": "unboundid-ldapsdk-4.0.9.pom",
+          "path": "com/unboundid/unboundid-ldapsdk/4.0.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/unboundid/unboundid-ldapsdk/4.0.9/unboundid-ldapsdk-4.0.9.pom",
+            "https://kamax.io/maven/releases/com/unboundid/unboundid-ldapsdk/4.0.9/unboundid-ldapsdk-4.0.9.pom",
+            "https://kamax.io/maven/snapshots/com/unboundid/unboundid-ldapsdk/4.0.9/unboundid-ldapsdk-4.0.9.pom"
+          ],
+          "sha256": "86034085f0cfa88ed5e4b05742d148e2d9c32b17955bebc5ce2ccc89077f990d"
+        },
+        {
+          "name": "commons-cli-commons-cli-1.4-jar",
+          "filename": "commons-cli-1.4.jar",
+          "path": "commons-cli/commons-cli/1.4",
+          "urls": [
+            "https://jcenter.bintray.com/commons-cli/commons-cli/1.4/commons-cli-1.4.jar",
+            "https://kamax.io/maven/releases/commons-cli/commons-cli/1.4/commons-cli-1.4.jar",
+            "https://kamax.io/maven/snapshots/commons-cli/commons-cli/1.4/commons-cli-1.4.jar"
+          ],
+          "sha256": "fd3c7c9545a9cdb2051d1f9155c4f76b1e4ac5a57304404a6eedb578ffba7328"
+        },
+        {
+          "name": "commons-cli-commons-cli-1.4-pom",
+          "filename": "commons-cli-1.4.pom",
+          "path": "commons-cli/commons-cli/1.4",
+          "urls": [
+            "https://jcenter.bintray.com/commons-cli/commons-cli/1.4/commons-cli-1.4.pom",
+            "https://kamax.io/maven/releases/commons-cli/commons-cli/1.4/commons-cli-1.4.pom",
+            "https://kamax.io/maven/snapshots/commons-cli/commons-cli/1.4/commons-cli-1.4.pom"
+          ],
+          "sha256": "f589bf30a98dc7497410b8eb8d86a167637577ac55cd5dd30cc4b57dbbc6f893"
+        },
+        {
+          "name": "commons-codec-commons-codec-1.11-jar",
+          "filename": "commons-codec-1.11.jar",
+          "path": "commons-codec/commons-codec/1.11",
+          "urls": [
+            "https://jcenter.bintray.com/commons-codec/commons-codec/1.11/commons-codec-1.11.jar",
+            "https://kamax.io/maven/releases/commons-codec/commons-codec/1.11/commons-codec-1.11.jar",
+            "https://kamax.io/maven/snapshots/commons-codec/commons-codec/1.11/commons-codec-1.11.jar"
+          ],
+          "sha256": "e599d5318e97aa48f42136a2927e6dfa4e8881dff0e6c8e3109ddbbff51d7b7d"
+        },
+        {
+          "name": "commons-codec-commons-codec-1.11-pom",
+          "filename": "commons-codec-1.11.pom",
+          "path": "commons-codec/commons-codec/1.11",
+          "urls": [
+            "https://jcenter.bintray.com/commons-codec/commons-codec/1.11/commons-codec-1.11.pom",
+            "https://kamax.io/maven/releases/commons-codec/commons-codec/1.11/commons-codec-1.11.pom",
+            "https://kamax.io/maven/snapshots/commons-codec/commons-codec/1.11/commons-codec-1.11.pom"
+          ],
+          "sha256": "c1e7140d1dea8fdf3528bc1e3c5444ac0b541297311f45f9806c213ec3ee9a10"
+        },
+        {
+          "name": "commons-collections-commons-collections-3.2.2-jar",
+          "filename": "commons-collections-3.2.2.jar",
+          "path": "commons-collections/commons-collections/3.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar",
+            "https://kamax.io/maven/releases/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar",
+            "https://kamax.io/maven/snapshots/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar"
+          ],
+          "sha256": "eeeae917917144a68a741d4c0dff66aa5c5c5fd85593ff217bced3fc8ca783b8"
+        },
+        {
+          "name": "commons-collections-commons-collections-3.2.2-pom",
+          "filename": "commons-collections-3.2.2.pom",
+          "path": "commons-collections/commons-collections/3.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.pom",
+            "https://kamax.io/maven/releases/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.pom",
+            "https://kamax.io/maven/snapshots/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.pom"
+          ],
+          "sha256": "d5d81fcc288c0d8c711c302007cada4aa9a226ed1a112d4baa64cb1d6322170b"
+        },
+        {
+          "name": "commons-io-commons-io-2.5-jar",
+          "filename": "commons-io-2.5.jar",
+          "path": "commons-io/commons-io/2.5",
+          "urls": [
+            "https://jcenter.bintray.com/commons-io/commons-io/2.5/commons-io-2.5.jar",
+            "https://kamax.io/maven/releases/commons-io/commons-io/2.5/commons-io-2.5.jar",
+            "https://kamax.io/maven/snapshots/commons-io/commons-io/2.5/commons-io-2.5.jar"
+          ],
+          "sha256": "a10418348d234968600ccb1d988efcbbd08716e1d96936ccc1880e7d22513474"
+        },
+        {
+          "name": "commons-io-commons-io-2.5-pom",
+          "filename": "commons-io-2.5.pom",
+          "path": "commons-io/commons-io/2.5",
+          "urls": [
+            "https://jcenter.bintray.com/commons-io/commons-io/2.5/commons-io-2.5.pom",
+            "https://kamax.io/maven/releases/commons-io/commons-io/2.5/commons-io-2.5.pom",
+            "https://kamax.io/maven/snapshots/commons-io/commons-io/2.5/commons-io-2.5.pom"
+          ],
+          "sha256": "28ebb2998bc7d7acb25078526971640892000f3413586ff42d611f1043bfec30"
+        },
+        {
+          "name": "commons-lang-commons-lang-2.6-jar",
+          "filename": "commons-lang-2.6.jar",
+          "path": "commons-lang/commons-lang/2.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-lang/commons-lang/2.6/commons-lang-2.6.jar",
+            "https://kamax.io/maven/releases/commons-lang/commons-lang/2.6/commons-lang-2.6.jar",
+            "https://kamax.io/maven/snapshots/commons-lang/commons-lang/2.6/commons-lang-2.6.jar"
+          ],
+          "sha256": "50f11b09f877c294d56f24463f47d28f929cf5044f648661c0f0cfbae9a2f49c"
+        },
+        {
+          "name": "commons-lang-commons-lang-2.6-pom",
+          "filename": "commons-lang-2.6.pom",
+          "path": "commons-lang/commons-lang/2.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-lang/commons-lang/2.6/commons-lang-2.6.pom",
+            "https://kamax.io/maven/releases/commons-lang/commons-lang/2.6/commons-lang-2.6.pom",
+            "https://kamax.io/maven/snapshots/commons-lang/commons-lang/2.6/commons-lang-2.6.pom"
+          ],
+          "sha256": "ed76b8891c30b566289c743656f8a4d435986982438d40c567c626233247e711"
+        },
+        {
+          "name": "commons-logging-commons-logging-1.2-jar",
+          "filename": "commons-logging-1.2.jar",
+          "path": "commons-logging/commons-logging/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/commons-logging/commons-logging/1.2/commons-logging-1.2.jar",
+            "https://kamax.io/maven/releases/commons-logging/commons-logging/1.2/commons-logging-1.2.jar",
+            "https://kamax.io/maven/snapshots/commons-logging/commons-logging/1.2/commons-logging-1.2.jar"
+          ],
+          "sha256": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636"
+        },
+        {
+          "name": "commons-logging-commons-logging-1.2-pom",
+          "filename": "commons-logging-1.2.pom",
+          "path": "commons-logging/commons-logging/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/commons-logging/commons-logging/1.2/commons-logging-1.2.pom",
+            "https://kamax.io/maven/releases/commons-logging/commons-logging/1.2/commons-logging-1.2.pom",
+            "https://kamax.io/maven/snapshots/commons-logging/commons-logging/1.2/commons-logging-1.2.pom"
+          ],
+          "sha256": "c91ab5aa570d86f6fd07cc158ec6bc2c50080402972ee9179fe24100739fbb20"
+        },
+        {
+          "name": "commons-pool-commons-pool-1.6-jar",
+          "filename": "commons-pool-1.6.jar",
+          "path": "commons-pool/commons-pool/1.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-pool/commons-pool/1.6/commons-pool-1.6.jar",
+            "https://kamax.io/maven/releases/commons-pool/commons-pool/1.6/commons-pool-1.6.jar",
+            "https://kamax.io/maven/snapshots/commons-pool/commons-pool/1.6/commons-pool-1.6.jar"
+          ],
+          "sha256": "46c42b4a38dc6b2db53a9ee5c92c63db103665d56694e2cfce2c95d51a6860cc"
+        },
+        {
+          "name": "commons-pool-commons-pool-1.6-pom",
+          "filename": "commons-pool-1.6.pom",
+          "path": "commons-pool/commons-pool/1.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-pool/commons-pool/1.6/commons-pool-1.6.pom",
+            "https://kamax.io/maven/releases/commons-pool/commons-pool/1.6/commons-pool-1.6.pom",
+            "https://kamax.io/maven/snapshots/commons-pool/commons-pool/1.6/commons-pool-1.6.pom"
+          ],
+          "sha256": "2dde6b76ae0f4cffd0ad7429e06557d4bfd167cf42b2041aca5ca3c01cb60ca9"
+        },
+        {
+          "name": "dnsjava-dnsjava-2.1.8-jar",
+          "filename": "dnsjava-2.1.8.jar",
+          "path": "dnsjava/dnsjava/2.1.8",
+          "urls": [
+            "https://jcenter.bintray.com/dnsjava/dnsjava/2.1.8/dnsjava-2.1.8.jar",
+            "https://kamax.io/maven/releases/dnsjava/dnsjava/2.1.8/dnsjava-2.1.8.jar",
+            "https://kamax.io/maven/snapshots/dnsjava/dnsjava/2.1.8/dnsjava-2.1.8.jar"
+          ],
+          "sha256": "52de1ff2a7556ac2cc4284abd7123bc3d6274210fc4e3b1d9ba90efad5f6a153"
+        },
+        {
+          "name": "dnsjava-dnsjava-2.1.8-pom",
+          "filename": "dnsjava-2.1.8.pom",
+          "path": "dnsjava/dnsjava/2.1.8",
+          "urls": [
+            "https://jcenter.bintray.com/dnsjava/dnsjava/2.1.8/dnsjava-2.1.8.pom",
+            "https://kamax.io/maven/releases/dnsjava/dnsjava/2.1.8/dnsjava-2.1.8.pom",
+            "https://kamax.io/maven/snapshots/dnsjava/dnsjava/2.1.8/dnsjava-2.1.8.pom"
+          ],
+          "sha256": "0833a69a600c7bb60c2c9c4c7a03e4af023e874e2d94591c2e43f985bd27a8b4"
+        },
+        {
+          "name": "io.jsonwebtoken-jjwt-0.4-jar",
+          "filename": "jjwt-0.4.jar",
+          "path": "io/jsonwebtoken/jjwt/0.4",
+          "urls": [
+            "https://jcenter.bintray.com/io/jsonwebtoken/jjwt/0.4/jjwt-0.4.jar",
+            "https://kamax.io/maven/releases/io/jsonwebtoken/jjwt/0.4/jjwt-0.4.jar",
+            "https://kamax.io/maven/snapshots/io/jsonwebtoken/jjwt/0.4/jjwt-0.4.jar"
+          ],
+          "sha256": "64f06aa7c74916036ffe3bb96b5a1aac7d4c6c6b1914b3ea828959da2117920b"
+        },
+        {
+          "name": "io.jsonwebtoken-jjwt-0.4-pom",
+          "filename": "jjwt-0.4.pom",
+          "path": "io/jsonwebtoken/jjwt/0.4",
+          "urls": [
+            "https://jcenter.bintray.com/io/jsonwebtoken/jjwt/0.4/jjwt-0.4.pom",
+            "https://kamax.io/maven/releases/io/jsonwebtoken/jjwt/0.4/jjwt-0.4.pom",
+            "https://kamax.io/maven/snapshots/io/jsonwebtoken/jjwt/0.4/jjwt-0.4.pom"
+          ],
+          "sha256": "a171ebadebc2504355dbd01fb933764163e26a18dde7ac7042b8f6244bca280e"
+        },
+        {
+          "name": "io.kamax-matrix-java-sdk-0.0.14-8-g0e57ec6-jar",
+          "filename": "matrix-java-sdk-0.0.14-8-g0e57ec6.jar",
+          "path": "io/kamax/matrix-java-sdk/0.0.14-8-g0e57ec6",
+          "urls": [
+            "https://jcenter.bintray.com/io/kamax/matrix-java-sdk/0.0.14-8-g0e57ec6/matrix-java-sdk-0.0.14-8-g0e57ec6.jar",
+            "https://kamax.io/maven/releases/io/kamax/matrix-java-sdk/0.0.14-8-g0e57ec6/matrix-java-sdk-0.0.14-8-g0e57ec6.jar",
+            "https://kamax.io/maven/snapshots/io/kamax/matrix-java-sdk/0.0.14-8-g0e57ec6/matrix-java-sdk-0.0.14-8-g0e57ec6.jar"
+          ],
+          "sha256": "ba7cf9efdb40ff9598b81f2d8808ebdc65f321a5fb1da530244911af8abf6306"
+        },
+        {
+          "name": "io.kamax-matrix-java-sdk-0.0.14-8-g0e57ec6-pom",
+          "filename": "matrix-java-sdk-0.0.14-8-g0e57ec6.pom",
+          "path": "io/kamax/matrix-java-sdk/0.0.14-8-g0e57ec6",
+          "urls": [
+            "https://jcenter.bintray.com/io/kamax/matrix-java-sdk/0.0.14-8-g0e57ec6/matrix-java-sdk-0.0.14-8-g0e57ec6.pom",
+            "https://kamax.io/maven/releases/io/kamax/matrix-java-sdk/0.0.14-8-g0e57ec6/matrix-java-sdk-0.0.14-8-g0e57ec6.pom",
+            "https://kamax.io/maven/snapshots/io/kamax/matrix-java-sdk/0.0.14-8-g0e57ec6/matrix-java-sdk-0.0.14-8-g0e57ec6.pom"
+          ],
+          "sha256": "1961142122b4ac9a0e3ea059980c37a20f68832e6fa76e824a7d87ed0fbfc396"
+        },
+        {
+          "name": "io.undertow-undertow-core-2.0.16.Final-jar",
+          "filename": "undertow-core-2.0.16.Final.jar",
+          "path": "io/undertow/undertow-core/2.0.16.Final",
+          "urls": [
+            "https://jcenter.bintray.com/io/undertow/undertow-core/2.0.16.Final/undertow-core-2.0.16.Final.jar",
+            "https://kamax.io/maven/releases/io/undertow/undertow-core/2.0.16.Final/undertow-core-2.0.16.Final.jar",
+            "https://kamax.io/maven/snapshots/io/undertow/undertow-core/2.0.16.Final/undertow-core-2.0.16.Final.jar"
+          ],
+          "sha256": "6a5c8504f867ba86ca50bb6140aeffc52c9c0043a788d23b8a40cb0a160d976c"
+        },
+        {
+          "name": "io.undertow-undertow-core-2.0.16.Final-pom",
+          "filename": "undertow-core-2.0.16.Final.pom",
+          "path": "io/undertow/undertow-core/2.0.16.Final",
+          "urls": [
+            "https://jcenter.bintray.com/io/undertow/undertow-core/2.0.16.Final/undertow-core-2.0.16.Final.pom",
+            "https://kamax.io/maven/releases/io/undertow/undertow-core/2.0.16.Final/undertow-core-2.0.16.Final.pom",
+            "https://kamax.io/maven/snapshots/io/undertow/undertow-core/2.0.16.Final/undertow-core-2.0.16.Final.pom"
+          ],
+          "sha256": "4898085ba2f856d0151efb4f36465774b17214188fdd76d342ffdd03681a57ba"
+        },
+        {
+          "name": "io.undertow-undertow-parent-2.0.16.Final-pom",
+          "filename": "undertow-parent-2.0.16.Final.pom",
+          "path": "io/undertow/undertow-parent/2.0.16.Final",
+          "urls": [
+            "https://jcenter.bintray.com/io/undertow/undertow-parent/2.0.16.Final/undertow-parent-2.0.16.Final.pom",
+            "https://kamax.io/maven/releases/io/undertow/undertow-parent/2.0.16.Final/undertow-parent-2.0.16.Final.pom",
+            "https://kamax.io/maven/snapshots/io/undertow/undertow-parent/2.0.16.Final/undertow-parent-2.0.16.Final.pom"
+          ],
+          "sha256": "e226bd780eba888f99137c028b487728c74cd15b6dda125e2777230be3d6f148"
+        },
+        {
+          "name": "javax.activation-activation-1.1-jar",
+          "filename": "activation-1.1.jar",
+          "path": "javax/activation/activation/1.1",
+          "urls": [
+            "https://jcenter.bintray.com/javax/activation/activation/1.1/activation-1.1.jar",
+            "https://kamax.io/maven/releases/javax/activation/activation/1.1/activation-1.1.jar",
+            "https://kamax.io/maven/snapshots/javax/activation/activation/1.1/activation-1.1.jar"
+          ],
+          "sha256": "2881c79c9d6ef01c58e62beea13e9d1ac8b8baa16f2fc198ad6e6776defdcdd3"
+        },
+        {
+          "name": "javax.activation-activation-1.1-pom",
+          "filename": "activation-1.1.pom",
+          "path": "javax/activation/activation/1.1",
+          "urls": [
+            "https://jcenter.bintray.com/javax/activation/activation/1.1/activation-1.1.pom",
+            "https://kamax.io/maven/releases/javax/activation/activation/1.1/activation-1.1.pom",
+            "https://kamax.io/maven/snapshots/javax/activation/activation/1.1/activation-1.1.pom"
+          ],
+          "sha256": "d490e540a11504b9d71718b1c85fef7b3de6802361290824539b076d58faa8a0"
+        },
+        {
+          "name": "javax.mail-javax.mail-api-1.6.2-jar",
+          "filename": "javax.mail-api-1.6.2.jar",
+          "path": "javax/mail/javax.mail-api/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/mail/javax.mail-api/1.6.2/javax.mail-api-1.6.2.jar",
+            "https://kamax.io/maven/releases/javax/mail/javax.mail-api/1.6.2/javax.mail-api-1.6.2.jar",
+            "https://kamax.io/maven/snapshots/javax/mail/javax.mail-api/1.6.2/javax.mail-api-1.6.2.jar"
+          ],
+          "sha256": "17489addfc8d7b43afc7775072a56bbaadf32cfb1e9d39fb4b7ece890d6698f1"
+        },
+        {
+          "name": "javax.mail-javax.mail-api-1.6.2-pom",
+          "filename": "javax.mail-api-1.6.2.pom",
+          "path": "javax/mail/javax.mail-api/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/mail/javax.mail-api/1.6.2/javax.mail-api-1.6.2.pom",
+            "https://kamax.io/maven/releases/javax/mail/javax.mail-api/1.6.2/javax.mail-api-1.6.2.pom",
+            "https://kamax.io/maven/snapshots/javax/mail/javax.mail-api/1.6.2/javax.mail-api-1.6.2.pom"
+          ],
+          "sha256": "914613b7d4769a8e57de1a0b9eddecda279a85d137c15bb427f091530a85a0eb"
+        },
+        {
+          "name": "javax.servlet-javax.servlet-api-3.1.0-jar",
+          "filename": "javax.servlet-api-3.1.0.jar",
+          "path": "javax/servlet/javax.servlet-api/3.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar",
+            "https://kamax.io/maven/releases/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar",
+            "https://kamax.io/maven/snapshots/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar"
+          ],
+          "sha256": "af456b2dd41c4e82cf54f3e743bc678973d9fe35bd4d3071fa05c7e5333b8482"
+        },
+        {
+          "name": "javax.servlet-javax.servlet-api-3.1.0-pom",
+          "filename": "javax.servlet-api-3.1.0.pom",
+          "path": "javax/servlet/javax.servlet-api/3.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.pom",
+            "https://kamax.io/maven/releases/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.pom",
+            "https://kamax.io/maven/snapshots/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.pom"
+          ],
+          "sha256": "b31109e22ea3f2df1ad7955432e718a35def50ae6c19698034afa8a0cf9e9069"
+        },
+        {
+          "name": "javax.xml.bind-jaxb-api-2.2-jar",
+          "filename": "jaxb-api-2.2.jar",
+          "path": "javax/xml/bind/jaxb-api/2.2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/xml/bind/jaxb-api/2.2/jaxb-api-2.2.jar",
+            "https://kamax.io/maven/releases/javax/xml/bind/jaxb-api/2.2/jaxb-api-2.2.jar",
+            "https://kamax.io/maven/snapshots/javax/xml/bind/jaxb-api/2.2/jaxb-api-2.2.jar"
+          ],
+          "sha256": "2e9dc899a785544e8a8262047cd370636f734ee0246e36263ee0295c3f3aed94"
+        },
+        {
+          "name": "javax.xml.bind-jaxb-api-2.2-pom",
+          "filename": "jaxb-api-2.2.pom",
+          "path": "javax/xml/bind/jaxb-api/2.2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/xml/bind/jaxb-api/2.2/jaxb-api-2.2.pom",
+            "https://kamax.io/maven/releases/javax/xml/bind/jaxb-api/2.2/jaxb-api-2.2.pom",
+            "https://kamax.io/maven/snapshots/javax/xml/bind/jaxb-api/2.2/jaxb-api-2.2.pom"
+          ],
+          "sha256": "57bd81713747e2baf96e46bb2c669b8c11b2ea7bc592729753acccb5f6e11c53"
+        },
+        {
+          "name": "javax.xml.stream-stax-api-1.0-2-jar",
+          "filename": "stax-api-1.0-2.jar",
+          "path": "javax/xml/stream/stax-api/1.0-2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar",
+            "https://kamax.io/maven/releases/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar",
+            "https://kamax.io/maven/snapshots/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar"
+          ],
+          "sha256": "e8c70ebd76f982c9582a82ef82cf6ce14a7d58a4a4dca5cb7b7fc988c80089b7"
+        },
+        {
+          "name": "javax.xml.stream-stax-api-1.0-2-pom",
+          "filename": "stax-api-1.0-2.pom",
+          "path": "javax/xml/stream/stax-api/1.0-2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.pom",
+            "https://kamax.io/maven/releases/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.pom",
+            "https://kamax.io/maven/snapshots/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.pom"
+          ],
+          "sha256": "47f02f02090fe4760c88c4570277f33586ea11500a014b35fc7855a2f0973e6d"
+        },
+        {
+          "name": "joda-time-joda-time-2.9.2-jar",
+          "filename": "joda-time-2.9.2.jar",
+          "path": "joda-time/joda-time/2.9.2",
+          "urls": [
+            "https://jcenter.bintray.com/joda-time/joda-time/2.9.2/joda-time-2.9.2.jar",
+            "https://kamax.io/maven/releases/joda-time/joda-time/2.9.2/joda-time-2.9.2.jar",
+            "https://kamax.io/maven/snapshots/joda-time/joda-time/2.9.2/joda-time-2.9.2.jar"
+          ],
+          "sha256": "0be5c40e8cdce9ec0643d76be99f276db17c45d7616a217fd1b19b7ef73ca7b1"
+        },
+        {
+          "name": "joda-time-joda-time-2.9.2-pom",
+          "filename": "joda-time-2.9.2.pom",
+          "path": "joda-time/joda-time/2.9.2",
+          "urls": [
+            "https://jcenter.bintray.com/joda-time/joda-time/2.9.2/joda-time-2.9.2.pom",
+            "https://kamax.io/maven/releases/joda-time/joda-time/2.9.2/joda-time-2.9.2.pom",
+            "https://kamax.io/maven/snapshots/joda-time/joda-time/2.9.2/joda-time-2.9.2.pom"
+          ],
+          "sha256": "6c2658aac4c246cba0c1768ad1a27e525294cf4e143d668a938eff9c29e73a88"
+        },
+        {
+          "name": "junit-junit-4.12-jar",
+          "filename": "junit-4.12.jar",
+          "path": "junit/junit/4.12",
+          "urls": [
+            "https://jcenter.bintray.com/junit/junit/4.12/junit-4.12.jar",
+            "https://kamax.io/maven/releases/junit/junit/4.12/junit-4.12.jar",
+            "https://kamax.io/maven/snapshots/junit/junit/4.12/junit-4.12.jar"
+          ],
+          "sha256": "59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a"
+        },
+        {
+          "name": "junit-junit-4.12-pom",
+          "filename": "junit-4.12.pom",
+          "path": "junit/junit/4.12",
+          "urls": [
+            "https://jcenter.bintray.com/junit/junit/4.12/junit-4.12.pom",
+            "https://kamax.io/maven/releases/junit/junit/4.12/junit-4.12.pom",
+            "https://kamax.io/maven/snapshots/junit/junit/4.12/junit-4.12.pom"
+          ],
+          "sha256": "90f163f78e3ffb6f1c7ad97de9e7eba4eea25807141b85d6d12be67ca25449c4"
+        },
+        {
+          "name": "net.i2p.crypto-eddsa-0.1.0-jar",
+          "filename": "eddsa-0.1.0.jar",
+          "path": "net/i2p/crypto/eddsa/0.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/net/i2p/crypto/eddsa/0.1.0/eddsa-0.1.0.jar",
+            "https://kamax.io/maven/releases/net/i2p/crypto/eddsa/0.1.0/eddsa-0.1.0.jar",
+            "https://kamax.io/maven/snapshots/net/i2p/crypto/eddsa/0.1.0/eddsa-0.1.0.jar"
+          ],
+          "sha256": "893e0c9029b21bcf1c63a5d83dd2cb56cc8a7f61a7ca0897c5fafaf336843bb4"
+        },
+        {
+          "name": "net.i2p.crypto-eddsa-0.1.0-pom",
+          "filename": "eddsa-0.1.0.pom",
+          "path": "net/i2p/crypto/eddsa/0.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/net/i2p/crypto/eddsa/0.1.0/eddsa-0.1.0.pom",
+            "https://kamax.io/maven/releases/net/i2p/crypto/eddsa/0.1.0/eddsa-0.1.0.pom",
+            "https://kamax.io/maven/snapshots/net/i2p/crypto/eddsa/0.1.0/eddsa-0.1.0.pom"
+          ],
+          "sha256": "de1e206a3cd7d03f12815eef3ec934d956d1453a9513c2e9f6e6f1aa12096a3b"
+        },
+        {
+          "name": "net.java-jvnet-parent-1-pom",
+          "filename": "jvnet-parent-1.pom",
+          "path": "net/java/jvnet-parent/1",
+          "urls": [
+            "https://jcenter.bintray.com/net/java/jvnet-parent/1/jvnet-parent-1.pom",
+            "https://kamax.io/maven/releases/net/java/jvnet-parent/1/jvnet-parent-1.pom",
+            "https://kamax.io/maven/snapshots/net/java/jvnet-parent/1/jvnet-parent-1.pom"
+          ],
+          "sha256": "281440811268e65d9e266b3cc898297e214e04f09740d0386ceeb4a8923d63bf"
+        },
+        {
+          "name": "net.java-jvnet-parent-3-pom",
+          "filename": "jvnet-parent-3.pom",
+          "path": "net/java/jvnet-parent/3",
+          "urls": [
+            "https://jcenter.bintray.com/net/java/jvnet-parent/3/jvnet-parent-3.pom",
+            "https://kamax.io/maven/releases/net/java/jvnet-parent/3/jvnet-parent-3.pom",
+            "https://kamax.io/maven/snapshots/net/java/jvnet-parent/3/jvnet-parent-3.pom"
+          ],
+          "sha256": "30f5789efa39ddbf96095aada3fc1260c4561faf2f714686717cb2dc5049475a"
+        },
+        {
+          "name": "net.minidev-accessors-smart-1.2-jar",
+          "filename": "accessors-smart-1.2.jar",
+          "path": "net/minidev/accessors-smart/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/accessors-smart/1.2/accessors-smart-1.2.jar",
+            "https://kamax.io/maven/releases/net/minidev/accessors-smart/1.2/accessors-smart-1.2.jar",
+            "https://kamax.io/maven/snapshots/net/minidev/accessors-smart/1.2/accessors-smart-1.2.jar"
+          ],
+          "sha256": "0c7c265d62fc007124dc32b91336e9c4272651d629bc5fa1a4e4e3bc758eb2e4"
+        },
+        {
+          "name": "net.minidev-accessors-smart-1.2-pom",
+          "filename": "accessors-smart-1.2.pom",
+          "path": "net/minidev/accessors-smart/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/accessors-smart/1.2/accessors-smart-1.2.pom",
+            "https://kamax.io/maven/releases/net/minidev/accessors-smart/1.2/accessors-smart-1.2.pom",
+            "https://kamax.io/maven/snapshots/net/minidev/accessors-smart/1.2/accessors-smart-1.2.pom"
+          ],
+          "sha256": "118e12b36edffdd0409983c8a6e24d1aefb0c2b0674bdfd0514d201f7a97aa9e"
+        },
+        {
+          "name": "net.minidev-json-smart-2.3-jar",
+          "filename": "json-smart-2.3.jar",
+          "path": "net/minidev/json-smart/2.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/json-smart/2.3/json-smart-2.3.jar",
+            "https://kamax.io/maven/releases/net/minidev/json-smart/2.3/json-smart-2.3.jar",
+            "https://kamax.io/maven/snapshots/net/minidev/json-smart/2.3/json-smart-2.3.jar"
+          ],
+          "sha256": "903f48c8aa4c3f6426440b8d32de89fa1dc23b1169abde25e4e1d068aa67708b"
+        },
+        {
+          "name": "net.minidev-json-smart-2.3-pom",
+          "filename": "json-smart-2.3.pom",
+          "path": "net/minidev/json-smart/2.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/json-smart/2.3/json-smart-2.3.pom",
+            "https://kamax.io/maven/releases/net/minidev/json-smart/2.3/json-smart-2.3.pom",
+            "https://kamax.io/maven/snapshots/net/minidev/json-smart/2.3/json-smart-2.3.pom"
+          ],
+          "sha256": "9c79015536f221d2fef2f3a17168570b5a08ea643051bd436e0985eb8a505cc9"
+        },
+        {
+          "name": "net.minidev-minidev-parent-2.3-pom",
+          "filename": "minidev-parent-2.3.pom",
+          "path": "net/minidev/minidev-parent/2.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/minidev-parent/2.3/minidev-parent-2.3.pom",
+            "https://kamax.io/maven/releases/net/minidev/minidev-parent/2.3/minidev-parent-2.3.pom",
+            "https://kamax.io/maven/snapshots/net/minidev/minidev-parent/2.3/minidev-parent-2.3.pom"
+          ],
+          "sha256": "950d8f0c02c24e4a38edde374532a42bfed55910e07ef0314905d8e34a250954"
+        },
+        {
+          "name": "net.sf.jopt-simple-jopt-simple-5.0.3-jar",
+          "filename": "jopt-simple-5.0.3.jar",
+          "path": "net/sf/jopt-simple/jopt-simple/5.0.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.jar",
+            "https://kamax.io/maven/releases/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.jar",
+            "https://kamax.io/maven/snapshots/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.jar"
+          ],
+          "sha256": "6f45c00908265947c39221035250024f2caec9a15c1c8cf553ebeecee289f342"
+        },
+        {
+          "name": "net.sf.jopt-simple-jopt-simple-5.0.3-pom",
+          "filename": "jopt-simple-5.0.3.pom",
+          "path": "net/sf/jopt-simple/jopt-simple/5.0.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.pom",
+            "https://kamax.io/maven/releases/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.pom",
+            "https://kamax.io/maven/snapshots/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.pom"
+          ],
+          "sha256": "df75c23d079c8f1a4f5b2fda4ba271ef535993d53d5664213aa2325784e50fd3"
+        },
+        {
+          "name": "org.antlr-antlr4-master-4.5.1-1-pom",
+          "filename": "antlr4-master-4.5.1-1.pom",
+          "path": "org/antlr/antlr4-master/4.5.1-1",
+          "urls": [
+            "https://jcenter.bintray.com/org/antlr/antlr4-master/4.5.1-1/antlr4-master-4.5.1-1.pom",
+            "https://kamax.io/maven/releases/org/antlr/antlr4-master/4.5.1-1/antlr4-master-4.5.1-1.pom",
+            "https://kamax.io/maven/snapshots/org/antlr/antlr4-master/4.5.1-1/antlr4-master-4.5.1-1.pom"
+          ],
+          "sha256": "1312e0436f373cbafdf398a5d442ed3ed199bbd997222470925d01b6087a0745"
+        },
+        {
+          "name": "org.antlr-antlr4-runtime-4.5.1-1-jar",
+          "filename": "antlr4-runtime-4.5.1-1.jar",
+          "path": "org/antlr/antlr4-runtime/4.5.1-1",
+          "urls": [
+            "https://jcenter.bintray.com/org/antlr/antlr4-runtime/4.5.1-1/antlr4-runtime-4.5.1-1.jar",
+            "https://kamax.io/maven/releases/org/antlr/antlr4-runtime/4.5.1-1/antlr4-runtime-4.5.1-1.jar",
+            "https://kamax.io/maven/snapshots/org/antlr/antlr4-runtime/4.5.1-1/antlr4-runtime-4.5.1-1.jar"
+          ],
+          "sha256": "ffca72bc2a25bb2b0c80a58cee60530a78be17da739bb6c91a8c2e3584ca099e"
+        },
+        {
+          "name": "org.antlr-antlr4-runtime-4.5.1-1-pom",
+          "filename": "antlr4-runtime-4.5.1-1.pom",
+          "path": "org/antlr/antlr4-runtime/4.5.1-1",
+          "urls": [
+            "https://jcenter.bintray.com/org/antlr/antlr4-runtime/4.5.1-1/antlr4-runtime-4.5.1-1.pom",
+            "https://kamax.io/maven/releases/org/antlr/antlr4-runtime/4.5.1-1/antlr4-runtime-4.5.1-1.pom",
+            "https://kamax.io/maven/snapshots/org/antlr/antlr4-runtime/4.5.1-1/antlr4-runtime-4.5.1-1.pom"
+          ],
+          "sha256": "954c8ce309f81a9e516a0eb02f726560b8c6ffea6e758cad559739cafb693b10"
+        },
+        {
+          "name": "org.apache.commons-commons-collections4-4.1-jar",
+          "filename": "commons-collections4-4.1.jar",
+          "path": "org/apache/commons/commons-collections4/4.1",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar"
+          ],
+          "sha256": "b1fe8b5968b57d8465425357ed2d9dc695504518bed2df5b565c4b8e68c1c8a5"
+        },
+        {
+          "name": "org.apache.commons-commons-collections4-4.1-pom",
+          "filename": "commons-collections4-4.1.pom",
+          "path": "org/apache/commons/commons-collections4/4.1",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.pom",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.pom",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.pom"
+          ],
+          "sha256": "c0ad42e9103537960d9a74da58ecc24dd1a37a13d1e4c48f0969be93e4018369"
+        },
+        {
+          "name": "org.apache.commons-commons-lang3-3.7-jar",
+          "filename": "commons-lang3-3.7.jar",
+          "path": "org/apache/commons/commons-lang3/3.7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar"
+          ],
+          "sha256": "6e8dc31e046508d9953c96534edf0c2e0bfe6f468966b5b842b3f87e43b6a847"
+        },
+        {
+          "name": "org.apache.commons-commons-lang3-3.7-pom",
+          "filename": "commons-lang3-3.7.pom",
+          "path": "org/apache/commons/commons-lang3/3.7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.pom",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.pom",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.pom"
+          ],
+          "sha256": "16bf63e86f5ea0404e89ed0f654b0915bea0030129aea9531d74369b71f764da"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-17-pom",
+          "filename": "commons-parent-17.pom",
+          "path": "org/apache/commons/commons-parent/17",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/17/commons-parent-17.pom",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-parent/17/commons-parent-17.pom",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-parent/17/commons-parent-17.pom"
+          ],
+          "sha256": "96e718baf534874ee62ce4d42de265f2ddacd88391a540e030d59d98fa7c4408"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-22-pom",
+          "filename": "commons-parent-22.pom",
+          "path": "org/apache/commons/commons-parent/22",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/22/commons-parent-22.pom",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-parent/22/commons-parent-22.pom",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-parent/22/commons-parent-22.pom"
+          ],
+          "sha256": "fb8c5e55e30a7addb4ff210858a0e8d2494ed6757bbe19012da99d51586c3cbb"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-34-pom",
+          "filename": "commons-parent-34.pom",
+          "path": "org/apache/commons/commons-parent/34",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/34/commons-parent-34.pom",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-parent/34/commons-parent-34.pom",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-parent/34/commons-parent-34.pom"
+          ],
+          "sha256": "3a2e69d06d641d1f3b293126dc9e2e4ea6563bf8c36c87e0ab6fa4292d04b79c"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-38-pom",
+          "filename": "commons-parent-38.pom",
+          "path": "org/apache/commons/commons-parent/38",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/38/commons-parent-38.pom",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-parent/38/commons-parent-38.pom",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-parent/38/commons-parent-38.pom"
+          ],
+          "sha256": "558d961745ebadcc5dc391cfde7d474086d4caaee24dd3e6df931ed9f6b5b495"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-39-pom",
+          "filename": "commons-parent-39.pom",
+          "path": "org/apache/commons/commons-parent/39",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/39/commons-parent-39.pom",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-parent/39/commons-parent-39.pom",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-parent/39/commons-parent-39.pom"
+          ],
+          "sha256": "87cd27e1a02a5c3eb6d85059ce98696bb1b44c2b8b650f0567c86df60fa61da7"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-42-pom",
+          "filename": "commons-parent-42.pom",
+          "path": "org/apache/commons/commons-parent/42",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/42/commons-parent-42.pom",
+            "https://kamax.io/maven/releases/org/apache/commons/commons-parent/42/commons-parent-42.pom",
+            "https://kamax.io/maven/snapshots/org/apache/commons/commons-parent/42/commons-parent-42.pom"
+          ],
+          "sha256": "cd313494c670b483ec256972af1698b330e598f807002354eb765479f604b09c"
+        },
+        {
+          "name": "org.apache.directory.api-api-all-1.0.0-jar",
+          "filename": "api-all-1.0.0.jar",
+          "path": "org/apache/directory/api/api-all/1.0.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/directory/api/api-all/1.0.0/api-all-1.0.0.jar",
+            "https://kamax.io/maven/releases/org/apache/directory/api/api-all/1.0.0/api-all-1.0.0.jar",
+            "https://kamax.io/maven/snapshots/org/apache/directory/api/api-all/1.0.0/api-all-1.0.0.jar"
+          ],
+          "sha256": "e57b8a5fe36387dcfb1357d338aabd918a6176c89e701f7a16c99af5e6f15a43"
+        },
+        {
+          "name": "org.apache.directory.api-api-all-1.0.0-pom",
+          "filename": "api-all-1.0.0.pom",
+          "path": "org/apache/directory/api/api-all/1.0.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/directory/api/api-all/1.0.0/api-all-1.0.0.pom",
+            "https://kamax.io/maven/releases/org/apache/directory/api/api-all/1.0.0/api-all-1.0.0.pom",
+            "https://kamax.io/maven/snapshots/org/apache/directory/api/api-all/1.0.0/api-all-1.0.0.pom"
+          ],
+          "sha256": "c981a8bd7b583722bdbf7084e3f1869a34f81d8b023bbc91bfa9e48732a7752c"
+        },
+        {
+          "name": "org.apache.directory.api-api-parent-1.0.0-pom",
+          "filename": "api-parent-1.0.0.pom",
+          "path": "org/apache/directory/api/api-parent/1.0.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/directory/api/api-parent/1.0.0/api-parent-1.0.0.pom",
+            "https://kamax.io/maven/releases/org/apache/directory/api/api-parent/1.0.0/api-parent-1.0.0.pom",
+            "https://kamax.io/maven/snapshots/org/apache/directory/api/api-parent/1.0.0/api-parent-1.0.0.pom"
+          ],
+          "sha256": "299544e634e869821a382edd02efcb99a1016551a7f21af262ffed43e975d05f"
+        },
+        {
+          "name": "org.apache.directory.project-project-40-pom",
+          "filename": "project-40.pom",
+          "path": "org/apache/directory/project/project/40",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/directory/project/project/40/project-40.pom",
+            "https://kamax.io/maven/releases/org/apache/directory/project/project/40/project-40.pom",
+            "https://kamax.io/maven/snapshots/org/apache/directory/project/project/40/project-40.pom"
+          ],
+          "sha256": "97d0debcc51b9eeb3d06ca33abd13bb688531da7ca8ffccc1e4a601c713c564b"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpclient-4.5.3-jar",
+          "filename": "httpclient-4.5.3.jar",
+          "path": "org/apache/httpcomponents/httpclient/4.5.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpclient/4.5.3/httpclient-4.5.3.jar",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/httpclient/4.5.3/httpclient-4.5.3.jar",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/httpclient/4.5.3/httpclient-4.5.3.jar"
+          ],
+          "sha256": "db3d1b6c2d6a5e5ad47577ad61854e2f0e0936199b8e05eb541ed52349263135"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpclient-4.5.3-pom",
+          "filename": "httpclient-4.5.3.pom",
+          "path": "org/apache/httpcomponents/httpclient/4.5.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpclient/4.5.3/httpclient-4.5.3.pom",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/httpclient/4.5.3/httpclient-4.5.3.pom",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/httpclient/4.5.3/httpclient-4.5.3.pom"
+          ],
+          "sha256": "cde5750309c07bbac140d0d981697243d3c58c2ee525c1319b9ba887d89f2c9c"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcomponents-client-4.3.4-pom",
+          "filename": "httpcomponents-client-4.3.4.pom",
+          "path": "org/apache/httpcomponents/httpcomponents-client/4.3.4",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcomponents-client/4.3.4/httpcomponents-client-4.3.4.pom",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/httpcomponents-client/4.3.4/httpcomponents-client-4.3.4.pom",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/httpcomponents-client/4.3.4/httpcomponents-client-4.3.4.pom"
+          ],
+          "sha256": "e0420ef03bd05a99752ad7441639db629c4ea31ff6311431d8e3cba086ffba68"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcomponents-client-4.5.3-pom",
+          "filename": "httpcomponents-client-4.5.3.pom",
+          "path": "org/apache/httpcomponents/httpcomponents-client/4.5.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcomponents-client/4.5.3/httpcomponents-client-4.5.3.pom",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/httpcomponents-client/4.5.3/httpcomponents-client-4.5.3.pom",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/httpcomponents-client/4.5.3/httpcomponents-client-4.5.3.pom"
+          ],
+          "sha256": "43c7d2975a1125bb00cf058a3877f549a1f1894f8b8ad47e2c3e46e3fc4623dc"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcomponents-core-4.4.6-pom",
+          "filename": "httpcomponents-core-4.4.6.pom",
+          "path": "org/apache/httpcomponents/httpcomponents-core/4.4.6",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcomponents-core/4.4.6/httpcomponents-core-4.4.6.pom",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/httpcomponents-core/4.4.6/httpcomponents-core-4.4.6.pom",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/httpcomponents-core/4.4.6/httpcomponents-core-4.4.6.pom"
+          ],
+          "sha256": "2a3cb532d0dd63f3f3f080307edd5ff84f4625253bf6b564eb72737753dd96be"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcore-4.4.6-jar",
+          "filename": "httpcore-4.4.6.jar",
+          "path": "org/apache/httpcomponents/httpcore/4.4.6",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcore/4.4.6/httpcore-4.4.6.jar",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/httpcore/4.4.6/httpcore-4.4.6.jar",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/httpcore/4.4.6/httpcore-4.4.6.jar"
+          ],
+          "sha256": "d7f853dee87680b07293d30855b39b9eb56c1297bd16ff1cd6f19ddb8fa745fb"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcore-4.4.6-pom",
+          "filename": "httpcore-4.4.6.pom",
+          "path": "org/apache/httpcomponents/httpcore/4.4.6",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcore/4.4.6/httpcore-4.4.6.pom",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/httpcore/4.4.6/httpcore-4.4.6.pom",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/httpcore/4.4.6/httpcore-4.4.6.pom"
+          ],
+          "sha256": "398285cfef554fb55b81f20c94f54bf0e28b0462ba92fa3970e933945c08f655"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpmime-4.3.4-jar",
+          "filename": "httpmime-4.3.4.jar",
+          "path": "org/apache/httpcomponents/httpmime/4.3.4",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4.jar",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4.jar",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4.jar"
+          ],
+          "sha256": "b31046b52e7543db59254a679d9a5804baaf3f3586acd41a26827c03db9caee4"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpmime-4.3.4-pom",
+          "filename": "httpmime-4.3.4.pom",
+          "path": "org/apache/httpcomponents/httpmime/4.3.4",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4.pom",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4.pom",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4.pom"
+          ],
+          "sha256": "f634d1382b635d81c41d97be0405ed70ff066eaacab2beed46996866d724e2b4"
+        },
+        {
+          "name": "org.apache.httpcomponents-project-7-pom",
+          "filename": "project-7.pom",
+          "path": "org/apache/httpcomponents/project/7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/project/7/project-7.pom",
+            "https://kamax.io/maven/releases/org/apache/httpcomponents/project/7/project-7.pom",
+            "https://kamax.io/maven/snapshots/org/apache/httpcomponents/project/7/project-7.pom"
+          ],
+          "sha256": "3d6eba428555a558de046b5d76eacc1f5a54b4f5f20b84d636ed7aff18aa48c3"
+        },
+        {
+          "name": "org.apache.mina-mina-core-2.0.16-jar",
+          "filename": "mina-core-2.0.16.jar",
+          "path": "org/apache/mina/mina-core/2.0.16",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/mina/mina-core/2.0.16/mina-core-2.0.16.jar",
+            "https://kamax.io/maven/releases/org/apache/mina/mina-core/2.0.16/mina-core-2.0.16.jar",
+            "https://kamax.io/maven/snapshots/org/apache/mina/mina-core/2.0.16/mina-core-2.0.16.jar"
+          ],
+          "sha256": "5d864fb422b9f7f6f8038e713daeb0782d6af7263fb5a339a8b5d61b5d3b692d"
+        },
+        {
+          "name": "org.apache.mina-mina-core-2.0.16-pom",
+          "filename": "mina-core-2.0.16.pom",
+          "path": "org/apache/mina/mina-core/2.0.16",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/mina/mina-core/2.0.16/mina-core-2.0.16.pom",
+            "https://kamax.io/maven/releases/org/apache/mina/mina-core/2.0.16/mina-core-2.0.16.pom",
+            "https://kamax.io/maven/snapshots/org/apache/mina/mina-core/2.0.16/mina-core-2.0.16.pom"
+          ],
+          "sha256": "012925e971ffac16ac587276fdb6e0eacb9afd6633586d522f1a382a7a3f9a82"
+        },
+        {
+          "name": "org.apache.mina-mina-parent-2.0.16-pom",
+          "filename": "mina-parent-2.0.16.pom",
+          "path": "org/apache/mina/mina-parent/2.0.16",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/mina/mina-parent/2.0.16/mina-parent-2.0.16.pom",
+            "https://kamax.io/maven/releases/org/apache/mina/mina-parent/2.0.16/mina-parent-2.0.16.pom",
+            "https://kamax.io/maven/snapshots/org/apache/mina/mina-parent/2.0.16/mina-parent-2.0.16.pom"
+          ],
+          "sha256": "9404ed7aed2cae1b14da276492634bebcee4b049319dcf6a2b5e52c1d5cfcd72"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-bundles-pom-11-pom",
+          "filename": "bundles-pom-11.pom",
+          "path": "org/apache/servicemix/bundles/bundles-pom/11",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/bundles-pom/11/bundles-pom-11.pom",
+            "https://kamax.io/maven/releases/org/apache/servicemix/bundles/bundles-pom/11/bundles-pom-11.pom",
+            "https://kamax.io/maven/snapshots/org/apache/servicemix/bundles/bundles-pom/11/bundles-pom-11.pom"
+          ],
+          "sha256": "02d97026405ebd1209bf7bd7ddd6c493bd76a88ae6031dcfcddebe5cd9873fd8"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-bundles-pom-8-pom",
+          "filename": "bundles-pom-8.pom",
+          "path": "org/apache/servicemix/bundles/bundles-pom/8",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/bundles-pom/8/bundles-pom-8.pom",
+            "https://kamax.io/maven/releases/org/apache/servicemix/bundles/bundles-pom/8/bundles-pom-8.pom",
+            "https://kamax.io/maven/snapshots/org/apache/servicemix/bundles/bundles-pom/8/bundles-pom-8.pom"
+          ],
+          "sha256": "31699f1189a8684aac0c4b1d9d03637b7f228d0cc279c69b8ba43eb99cd1f45e"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.antlr-2.7.7_5-jar",
+          "filename": "org.apache.servicemix.bundles.antlr-2.7.7_5.jar",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5/org.apache.servicemix.bundles.antlr-2.7.7_5.jar",
+            "https://kamax.io/maven/releases/org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5/org.apache.servicemix.bundles.antlr-2.7.7_5.jar",
+            "https://kamax.io/maven/snapshots/org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5/org.apache.servicemix.bundles.antlr-2.7.7_5.jar"
+          ],
+          "sha256": "3902794d36d9b81da1b7e697f21ed04ccae276cc116eecc640a4cd0fff2691f2"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.antlr-2.7.7_5-pom",
+          "filename": "org.apache.servicemix.bundles.antlr-2.7.7_5.pom",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5/org.apache.servicemix.bundles.antlr-2.7.7_5.pom",
+            "https://kamax.io/maven/releases/org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5/org.apache.servicemix.bundles.antlr-2.7.7_5.pom",
+            "https://kamax.io/maven/snapshots/org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5/org.apache.servicemix.bundles.antlr-2.7.7_5.pom"
+          ],
+          "sha256": "8e3dbe4e929bac7d6db9c73854e3090c7d87f1eaf95e3537988e1e7e9b66cc44"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.dom4j-1.6.1_5-jar",
+          "filename": "org.apache.servicemix.bundles.dom4j-1.6.1_5.jar",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar",
+            "https://kamax.io/maven/releases/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar",
+            "https://kamax.io/maven/snapshots/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar"
+          ],
+          "sha256": "15abe1ccad24f4fd71a926959f1acd64d84878348deee12dcf4928ee4f1db3d5"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.dom4j-1.6.1_5-pom",
+          "filename": "org.apache.servicemix.bundles.dom4j-1.6.1_5.pom",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.pom",
+            "https://kamax.io/maven/releases/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.pom",
+            "https://kamax.io/maven/snapshots/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.pom"
+          ],
+          "sha256": "de8a4c3e84132b4089c5e69c79d303f4125967217763c34a9c481e4af14ac86d"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.xpp3-1.1.4c_7-jar",
+          "filename": "org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar",
+            "https://kamax.io/maven/releases/org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar",
+            "https://kamax.io/maven/snapshots/org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar"
+          ],
+          "sha256": "61e106d5964f9109d7fb7462aa6b3c79b80f769fb6d95fb5f0042899471db19f"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.xpp3-1.1.4c_7-pom",
+          "filename": "org.apache.servicemix.bundles.xpp3-1.1.4c_7.pom",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7/org.apache.servicemix.bundles.xpp3-1.1.4c_7.pom",
+            "https://kamax.io/maven/releases/org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7/org.apache.servicemix.bundles.xpp3-1.1.4c_7.pom",
+            "https://kamax.io/maven/snapshots/org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7/org.apache.servicemix.bundles.xpp3-1.1.4c_7.pom"
+          ],
+          "sha256": "6cbf501ec5ed0134c3c458c573d7bd1f0aa97f9cb5e3dcb87116c9941d8737ac"
+        },
+        {
+          "name": "org.apache.servicemix-servicemix-pom-5-pom",
+          "filename": "servicemix-pom-5.pom",
+          "path": "org/apache/servicemix/servicemix-pom/5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/servicemix-pom/5/servicemix-pom-5.pom",
+            "https://kamax.io/maven/releases/org/apache/servicemix/servicemix-pom/5/servicemix-pom-5.pom",
+            "https://kamax.io/maven/snapshots/org/apache/servicemix/servicemix-pom/5/servicemix-pom-5.pom"
+          ],
+          "sha256": "00fff3d7dad849a7cee02bb2998396292858aac996457ba20f40c85f61b88252"
+        },
+        {
+          "name": "org.apache-apache-13-pom",
+          "filename": "apache-13.pom",
+          "path": "org/apache/apache/13",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/13/apache-13.pom",
+            "https://kamax.io/maven/releases/org/apache/apache/13/apache-13.pom",
+            "https://kamax.io/maven/snapshots/org/apache/apache/13/apache-13.pom"
+          ],
+          "sha256": "ff513db0361fd41237bef4784968bc15aae478d4ec0a9496f811072ccaf3841d"
+        },
+        {
+          "name": "org.apache-apache-16-pom",
+          "filename": "apache-16.pom",
+          "path": "org/apache/apache/16",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/16/apache-16.pom",
+            "https://kamax.io/maven/releases/org/apache/apache/16/apache-16.pom",
+            "https://kamax.io/maven/snapshots/org/apache/apache/16/apache-16.pom"
+          ],
+          "sha256": "9f85ff2fd7d6cb3097aa47fb419ee7f0ebe869109f98aba9f4eca3f49e74a40e"
+        },
+        {
+          "name": "org.apache-apache-17-pom",
+          "filename": "apache-17.pom",
+          "path": "org/apache/apache/17",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/17/apache-17.pom",
+            "https://kamax.io/maven/releases/org/apache/apache/17/apache-17.pom",
+            "https://kamax.io/maven/snapshots/org/apache/apache/17/apache-17.pom"
+          ],
+          "sha256": "398044b74b5a719326be218ae08124e5e2f3318ab5d78fe199d504efc2e0d43f"
+        },
+        {
+          "name": "org.apache-apache-18-pom",
+          "filename": "apache-18.pom",
+          "path": "org/apache/apache/18",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/18/apache-18.pom",
+            "https://kamax.io/maven/releases/org/apache/apache/18/apache-18.pom",
+            "https://kamax.io/maven/snapshots/org/apache/apache/18/apache-18.pom"
+          ],
+          "sha256": "7831307285fd475bbc36b20ae38e7882f11c3153b1d5930f852d44eda8f33c17"
+        },
+        {
+          "name": "org.apache-apache-7-pom",
+          "filename": "apache-7.pom",
+          "path": "org/apache/apache/7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/7/apache-7.pom",
+            "https://kamax.io/maven/releases/org/apache/apache/7/apache-7.pom",
+            "https://kamax.io/maven/snapshots/org/apache/apache/7/apache-7.pom"
+          ],
+          "sha256": "1397ce1db433adc9f223dbf07496d133681448751f4ae29e58f68e78fb4b6c25"
+        },
+        {
+          "name": "org.apache-apache-9-pom",
+          "filename": "apache-9.pom",
+          "path": "org/apache/apache/9",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/9/apache-9.pom",
+            "https://kamax.io/maven/releases/org/apache/apache/9/apache-9.pom",
+            "https://kamax.io/maven/snapshots/org/apache/apache/9/apache-9.pom"
+          ],
+          "sha256": "4946e60a547c8eda69f3bc23c5b6f0dadcf8469ea49b1d1da7de34aecfcf18dd"
+        },
+        {
+          "name": "org.codehaus.jackson-jackson-core-asl-1.9.11-jar",
+          "filename": "jackson-core-asl-1.9.11.jar",
+          "path": "org/codehaus/jackson/jackson-core-asl/1.9.11",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/jackson/jackson-core-asl/1.9.11/jackson-core-asl-1.9.11.jar",
+            "https://kamax.io/maven/releases/org/codehaus/jackson/jackson-core-asl/1.9.11/jackson-core-asl-1.9.11.jar",
+            "https://kamax.io/maven/snapshots/org/codehaus/jackson/jackson-core-asl/1.9.11/jackson-core-asl-1.9.11.jar"
+          ],
+          "sha256": "5fb6924b888550a9b0e8420747a93cc4ad24e03e724dcf4934c30cc0c4882ffc"
+        },
+        {
+          "name": "org.codehaus.jackson-jackson-core-asl-1.9.11-pom",
+          "filename": "jackson-core-asl-1.9.11.pom",
+          "path": "org/codehaus/jackson/jackson-core-asl/1.9.11",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/jackson/jackson-core-asl/1.9.11/jackson-core-asl-1.9.11.pom",
+            "https://kamax.io/maven/releases/org/codehaus/jackson/jackson-core-asl/1.9.11/jackson-core-asl-1.9.11.pom",
+            "https://kamax.io/maven/snapshots/org/codehaus/jackson/jackson-core-asl/1.9.11/jackson-core-asl-1.9.11.pom"
+          ],
+          "sha256": "2594d535b3e041bcd41dbfe05c163937abc0e3bcba448f6f92a5cf91f3fb8671"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-continuation-9.2.22.v20170606-jar",
+          "filename": "jetty-continuation-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-continuation/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-continuation/9.2.22.v20170606/jetty-continuation-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-continuation/9.2.22.v20170606/jetty-continuation-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-continuation/9.2.22.v20170606/jetty-continuation-9.2.22.v20170606.jar"
+          ],
+          "sha256": "7d6d0c391a7ff5088a204692f785e58960a803639fc0251f62b44f40fa431834"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-continuation-9.2.22.v20170606-pom",
+          "filename": "jetty-continuation-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-continuation/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-continuation/9.2.22.v20170606/jetty-continuation-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-continuation/9.2.22.v20170606/jetty-continuation-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-continuation/9.2.22.v20170606/jetty-continuation-9.2.22.v20170606.pom"
+          ],
+          "sha256": "1a19d783fb16025c028d41cfcd53e959ce76d911cba0b3764d3491aa7da72648"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-http-9.2.22.v20170606-jar",
+          "filename": "jetty-http-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-http/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-http/9.2.22.v20170606/jetty-http-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-http/9.2.22.v20170606/jetty-http-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-http/9.2.22.v20170606/jetty-http-9.2.22.v20170606.jar"
+          ],
+          "sha256": "78e7a7381037abe4a739387ea55d977a3e53c31d48b97195740ff2e2edf35303"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-http-9.2.22.v20170606-pom",
+          "filename": "jetty-http-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-http/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-http/9.2.22.v20170606/jetty-http-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-http/9.2.22.v20170606/jetty-http-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-http/9.2.22.v20170606/jetty-http-9.2.22.v20170606.pom"
+          ],
+          "sha256": "f2f5923e75d5a63b896867beccba9b29b0e5309af1367077283b0aa7194e64f7"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-io-9.2.22.v20170606-jar",
+          "filename": "jetty-io-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-io/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-io/9.2.22.v20170606/jetty-io-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-io/9.2.22.v20170606/jetty-io-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-io/9.2.22.v20170606/jetty-io-9.2.22.v20170606.jar"
+          ],
+          "sha256": "21e8797c0d1fca20509ee44cf3b013ae09c184dae1806e8995d844f857ca6799"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-io-9.2.22.v20170606-pom",
+          "filename": "jetty-io-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-io/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-io/9.2.22.v20170606/jetty-io-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-io/9.2.22.v20170606/jetty-io-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-io/9.2.22.v20170606/jetty-io-9.2.22.v20170606.pom"
+          ],
+          "sha256": "347896e67cda2c1e417a82f8847f767f1f511badcdc5e75b9aab88cf43a7552e"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-parent-23-pom",
+          "filename": "jetty-parent-23.pom",
+          "path": "org/eclipse/jetty/jetty-parent/23",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-parent/23/jetty-parent-23.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-parent/23/jetty-parent-23.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-parent/23/jetty-parent-23.pom"
+          ],
+          "sha256": "ff229d8af3732c662c623fe403f7e7ac102fe54555ad01f382432e09deda8c51"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-project-9.2.22.v20170606-pom",
+          "filename": "jetty-project-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-project/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-project/9.2.22.v20170606/jetty-project-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-project/9.2.22.v20170606/jetty-project-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-project/9.2.22.v20170606/jetty-project-9.2.22.v20170606.pom"
+          ],
+          "sha256": "c717a7e97f75381d1fb19851e3c8598eba875650a099d6ce9260a8d6af73b7f5"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-security-9.2.22.v20170606-jar",
+          "filename": "jetty-security-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-security/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-security/9.2.22.v20170606/jetty-security-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-security/9.2.22.v20170606/jetty-security-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-security/9.2.22.v20170606/jetty-security-9.2.22.v20170606.jar"
+          ],
+          "sha256": "79efe0c23455b77259f6f3a925bfa0f758ea0f50d13cfc632ac9bbd39563fc5d"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-security-9.2.22.v20170606-pom",
+          "filename": "jetty-security-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-security/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-security/9.2.22.v20170606/jetty-security-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-security/9.2.22.v20170606/jetty-security-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-security/9.2.22.v20170606/jetty-security-9.2.22.v20170606.pom"
+          ],
+          "sha256": "4bf5c01e3477c9053f72932cb06b0348b831fc56ed5e9f8c7f6dedf175ed8c9e"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-server-9.2.22.v20170606-jar",
+          "filename": "jetty-server-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-server/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-server/9.2.22.v20170606/jetty-server-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-server/9.2.22.v20170606/jetty-server-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-server/9.2.22.v20170606/jetty-server-9.2.22.v20170606.jar"
+          ],
+          "sha256": "0511ed658eac69d74c83a8d7b597d3e27053347dd887da6e81574f7fe7cfce46"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-server-9.2.22.v20170606-pom",
+          "filename": "jetty-server-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-server/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-server/9.2.22.v20170606/jetty-server-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-server/9.2.22.v20170606/jetty-server-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-server/9.2.22.v20170606/jetty-server-9.2.22.v20170606.pom"
+          ],
+          "sha256": "e73f5664f1266d7f078bf6709a7cfbfc7092ac91e08aed9dd70cdc06e9df6d1b"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-servlet-9.2.22.v20170606-jar",
+          "filename": "jetty-servlet-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-servlet/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-servlet/9.2.22.v20170606/jetty-servlet-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-servlet/9.2.22.v20170606/jetty-servlet-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-servlet/9.2.22.v20170606/jetty-servlet-9.2.22.v20170606.jar"
+          ],
+          "sha256": "9fe4551bf299f656d36d3b0085514336cb7b681fdb63ccff498fa52959419588"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-servlet-9.2.22.v20170606-pom",
+          "filename": "jetty-servlet-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-servlet/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-servlet/9.2.22.v20170606/jetty-servlet-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-servlet/9.2.22.v20170606/jetty-servlet-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-servlet/9.2.22.v20170606/jetty-servlet-9.2.22.v20170606.pom"
+          ],
+          "sha256": "8f3644bf4e6d8fda3096ed22211deba368cd171f5b1860778f1099773734e6e2"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-servlets-9.2.22.v20170606-jar",
+          "filename": "jetty-servlets-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-servlets/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-servlets/9.2.22.v20170606/jetty-servlets-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-servlets/9.2.22.v20170606/jetty-servlets-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-servlets/9.2.22.v20170606/jetty-servlets-9.2.22.v20170606.jar"
+          ],
+          "sha256": "e62948b2769bbf3e3120b6ac2a0d10a1eed52d1289865751c5dbd767cef64ec9"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-servlets-9.2.22.v20170606-pom",
+          "filename": "jetty-servlets-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-servlets/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-servlets/9.2.22.v20170606/jetty-servlets-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-servlets/9.2.22.v20170606/jetty-servlets-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-servlets/9.2.22.v20170606/jetty-servlets-9.2.22.v20170606.pom"
+          ],
+          "sha256": "fec839d27ded14ba63e1894842b87886d2bbb0525f4da2574b0d30ade0cc1f63"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-util-9.2.22.v20170606-jar",
+          "filename": "jetty-util-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-util/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-util/9.2.22.v20170606/jetty-util-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-util/9.2.22.v20170606/jetty-util-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-util/9.2.22.v20170606/jetty-util-9.2.22.v20170606.jar"
+          ],
+          "sha256": "0feed515eff6da777b98dce080be39f0509a754b47f38b1991bf1784de3b1e01"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-util-9.2.22.v20170606-pom",
+          "filename": "jetty-util-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-util/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-util/9.2.22.v20170606/jetty-util-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-util/9.2.22.v20170606/jetty-util-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-util/9.2.22.v20170606/jetty-util-9.2.22.v20170606.pom"
+          ],
+          "sha256": "e9cc92236163413afab3ae7098472635d3438ffe1c05871869ebdbcceb6a49eb"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-webapp-9.2.22.v20170606-jar",
+          "filename": "jetty-webapp-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-webapp/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-webapp/9.2.22.v20170606/jetty-webapp-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-webapp/9.2.22.v20170606/jetty-webapp-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-webapp/9.2.22.v20170606/jetty-webapp-9.2.22.v20170606.jar"
+          ],
+          "sha256": "6100c42cc82958c10c40db7a926ec1f60a67fc0a085afa38811fa77dca45b1a7"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-webapp-9.2.22.v20170606-pom",
+          "filename": "jetty-webapp-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-webapp/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-webapp/9.2.22.v20170606/jetty-webapp-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-webapp/9.2.22.v20170606/jetty-webapp-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-webapp/9.2.22.v20170606/jetty-webapp-9.2.22.v20170606.pom"
+          ],
+          "sha256": "da0c56d89bb27cd9a59c66e699e0642473c071ffcf6817cf88419e01c0ab0576"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-xml-9.2.22.v20170606-jar",
+          "filename": "jetty-xml-9.2.22.v20170606.jar",
+          "path": "org/eclipse/jetty/jetty-xml/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-xml/9.2.22.v20170606/jetty-xml-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-xml/9.2.22.v20170606/jetty-xml-9.2.22.v20170606.jar",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-xml/9.2.22.v20170606/jetty-xml-9.2.22.v20170606.jar"
+          ],
+          "sha256": "46df4c3fdb7ab77367c71d6af3cc59422b68ae9aefbd6231a32f8daafd7691c8"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-xml-9.2.22.v20170606-pom",
+          "filename": "jetty-xml-9.2.22.v20170606.pom",
+          "path": "org/eclipse/jetty/jetty-xml/9.2.22.v20170606",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-xml/9.2.22.v20170606/jetty-xml-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/releases/org/eclipse/jetty/jetty-xml/9.2.22.v20170606/jetty-xml-9.2.22.v20170606.pom",
+            "https://kamax.io/maven/snapshots/org/eclipse/jetty/jetty-xml/9.2.22.v20170606/jetty-xml-9.2.22.v20170606.pom"
+          ],
+          "sha256": "0f711a29c8fb432e86f5e25ae6bc5439600f47fd567b63a52c42ebfb5b9c72a1"
+        },
+        {
+          "name": "org.hamcrest-hamcrest-core-1.3-jar",
+          "filename": "hamcrest-core-1.3.jar",
+          "path": "org/hamcrest/hamcrest-core/1.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar",
+            "https://kamax.io/maven/releases/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar",
+            "https://kamax.io/maven/snapshots/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+          ],
+          "sha256": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9"
+        },
+        {
+          "name": "org.hamcrest-hamcrest-core-1.3-pom",
+          "filename": "hamcrest-core-1.3.pom",
+          "path": "org/hamcrest/hamcrest-core/1.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.pom",
+            "https://kamax.io/maven/releases/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.pom",
+            "https://kamax.io/maven/snapshots/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.pom"
+          ],
+          "sha256": "fde386a7905173a1b103de6ab820727584b50d0e32282e2797787c20a64ffa93"
+        },
+        {
+          "name": "org.hamcrest-hamcrest-parent-1.3-pom",
+          "filename": "hamcrest-parent-1.3.pom",
+          "path": "org/hamcrest/hamcrest-parent/1.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-parent/1.3/hamcrest-parent-1.3.pom",
+            "https://kamax.io/maven/releases/org/hamcrest/hamcrest-parent/1.3/hamcrest-parent-1.3.pom",
+            "https://kamax.io/maven/snapshots/org/hamcrest/hamcrest-parent/1.3/hamcrest-parent-1.3.pom"
+          ],
+          "sha256": "6d535f94efb663bdb682c9f27a50335394688009642ba7a9677504bc1be4129b"
+        },
+        {
+          "name": "org.jboss.logging-jboss-logging-3.3.2.Final-jar",
+          "filename": "jboss-logging-3.3.2.Final.jar",
+          "path": "org/jboss/logging/jboss-logging/3.3.2.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.jar",
+            "https://kamax.io/maven/releases/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.jar",
+            "https://kamax.io/maven/snapshots/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.jar"
+          ],
+          "sha256": "cb914bfe888da7d9162e965ac8b0d6f28f2f32eca944a00fbbf6dd3cf1aacc13"
+        },
+        {
+          "name": "org.jboss.logging-jboss-logging-3.3.2.Final-pom",
+          "filename": "jboss-logging-3.3.2.Final.pom",
+          "path": "org/jboss/logging/jboss-logging/3.3.2.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.pom",
+            "https://kamax.io/maven/releases/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.pom",
+            "https://kamax.io/maven/snapshots/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.pom"
+          ],
+          "sha256": "df3b397b802aca364f3302c20b927bd1f9ae69dd581be158748568ef51e0ac79"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-all-3.3.8.Final-pom",
+          "filename": "xnio-all-3.3.8.Final.pom",
+          "path": "org/jboss/xnio/xnio-all/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-all/3.3.8.Final/xnio-all-3.3.8.Final.pom",
+            "https://kamax.io/maven/releases/org/jboss/xnio/xnio-all/3.3.8.Final/xnio-all-3.3.8.Final.pom",
+            "https://kamax.io/maven/snapshots/org/jboss/xnio/xnio-all/3.3.8.Final/xnio-all-3.3.8.Final.pom"
+          ],
+          "sha256": "10ec499e08c1a5b8d82b4d43cb45d7ce369911b01429a46afa088a67023569fb"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-api-3.3.8.Final-jar",
+          "filename": "xnio-api-3.3.8.Final.jar",
+          "path": "org/jboss/xnio/xnio-api/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-api/3.3.8.Final/xnio-api-3.3.8.Final.jar",
+            "https://kamax.io/maven/releases/org/jboss/xnio/xnio-api/3.3.8.Final/xnio-api-3.3.8.Final.jar",
+            "https://kamax.io/maven/snapshots/org/jboss/xnio/xnio-api/3.3.8.Final/xnio-api-3.3.8.Final.jar"
+          ],
+          "sha256": "6b2e22f0afd1af1b799bf98f007a6350acf35ed37c7ee5ca1ace3df28f04f5c2"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-api-3.3.8.Final-pom",
+          "filename": "xnio-api-3.3.8.Final.pom",
+          "path": "org/jboss/xnio/xnio-api/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-api/3.3.8.Final/xnio-api-3.3.8.Final.pom",
+            "https://kamax.io/maven/releases/org/jboss/xnio/xnio-api/3.3.8.Final/xnio-api-3.3.8.Final.pom",
+            "https://kamax.io/maven/snapshots/org/jboss/xnio/xnio-api/3.3.8.Final/xnio-api-3.3.8.Final.pom"
+          ],
+          "sha256": "a6b66842630dda16cc93149fde62e39775f1525d19a8673182f33a0b86216033"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-nio-3.3.8.Final-jar",
+          "filename": "xnio-nio-3.3.8.Final.jar",
+          "path": "org/jboss/xnio/xnio-nio/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-nio/3.3.8.Final/xnio-nio-3.3.8.Final.jar",
+            "https://kamax.io/maven/releases/org/jboss/xnio/xnio-nio/3.3.8.Final/xnio-nio-3.3.8.Final.jar",
+            "https://kamax.io/maven/snapshots/org/jboss/xnio/xnio-nio/3.3.8.Final/xnio-nio-3.3.8.Final.jar"
+          ],
+          "sha256": "963c1481096076ffb7af6f76b3936508d039f70b7f6df2f7845e6b592f22edac"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-nio-3.3.8.Final-pom",
+          "filename": "xnio-nio-3.3.8.Final.pom",
+          "path": "org/jboss/xnio/xnio-nio/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-nio/3.3.8.Final/xnio-nio-3.3.8.Final.pom",
+            "https://kamax.io/maven/releases/org/jboss/xnio/xnio-nio/3.3.8.Final/xnio-nio-3.3.8.Final.pom",
+            "https://kamax.io/maven/snapshots/org/jboss/xnio/xnio-nio/3.3.8.Final/xnio-nio-3.3.8.Final.pom"
+          ],
+          "sha256": "040aaa999831046623ff54b916d8dadeb700cf96d7fe1ef98160fa3f95013ce1"
+        },
+        {
+          "name": "org.jboss-jboss-parent-15-pom",
+          "filename": "jboss-parent-15.pom",
+          "path": "org/jboss/jboss-parent/15",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/jboss-parent/15/jboss-parent-15.pom",
+            "https://kamax.io/maven/releases/org/jboss/jboss-parent/15/jboss-parent-15.pom",
+            "https://kamax.io/maven/snapshots/org/jboss/jboss-parent/15/jboss-parent-15.pom"
+          ],
+          "sha256": "2ea302319636da65ee4566f956fe9f8328caff84fb4eeb1f9f472821a7e4bc29"
+        },
+        {
+          "name": "org.jboss-jboss-parent-20-pom",
+          "filename": "jboss-parent-20.pom",
+          "path": "org/jboss/jboss-parent/20",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/jboss-parent/20/jboss-parent-20.pom",
+            "https://kamax.io/maven/releases/org/jboss/jboss-parent/20/jboss-parent-20.pom",
+            "https://kamax.io/maven/snapshots/org/jboss/jboss-parent/20/jboss-parent-20.pom"
+          ],
+          "sha256": "10f0cfc3d2048782585d0db25a4378d0102f9f4850cbfe6fd6c59fe2d23a81bf"
+        },
+        {
+          "name": "org.jboss-jboss-parent-28-pom",
+          "filename": "jboss-parent-28.pom",
+          "path": "org/jboss/jboss-parent/28",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/jboss-parent/28/jboss-parent-28.pom",
+            "https://kamax.io/maven/releases/org/jboss/jboss-parent/28/jboss-parent-28.pom",
+            "https://kamax.io/maven/snapshots/org/jboss/jboss-parent/28/jboss-parent-28.pom"
+          ],
+          "sha256": "82e03e0d53ab76b713b3eb87762a526913516c97c4302b8f8dd7908b879551ef"
+        },
+        {
+          "name": "org.json-json-20160810-jar",
+          "filename": "json-20160810.jar",
+          "path": "org/json/json/20160810",
+          "urls": [
+            "https://jcenter.bintray.com/org/json/json/20160810/json-20160810.jar",
+            "https://kamax.io/maven/releases/org/json/json/20160810/json-20160810.jar",
+            "https://kamax.io/maven/snapshots/org/json/json/20160810/json-20160810.jar"
+          ],
+          "sha256": "bf51c9013128cb15201225e51476f60ad9116813729040655a238d2829aef8b8"
+        },
+        {
+          "name": "org.json-json-20160810-pom",
+          "filename": "json-20160810.pom",
+          "path": "org/json/json/20160810",
+          "urls": [
+            "https://jcenter.bintray.com/org/json/json/20160810/json-20160810.pom",
+            "https://kamax.io/maven/releases/org/json/json/20160810/json-20160810.pom",
+            "https://kamax.io/maven/snapshots/org/json/json/20160810/json-20160810.pom"
+          ],
+          "sha256": "384b81d04f6f02ff8238eeabbf59dbae4c25e4ca6a8731368076aad5ba241c30"
+        },
+        {
+          "name": "org.mariadb.jdbc-mariadb-java-client-2.1.2-jar",
+          "filename": "mariadb-java-client-2.1.2.jar",
+          "path": "org/mariadb/jdbc/mariadb-java-client/2.1.2",
+          "urls": [
+            "https://jcenter.bintray.com/org/mariadb/jdbc/mariadb-java-client/2.1.2/mariadb-java-client-2.1.2.jar",
+            "https://kamax.io/maven/releases/org/mariadb/jdbc/mariadb-java-client/2.1.2/mariadb-java-client-2.1.2.jar",
+            "https://kamax.io/maven/snapshots/org/mariadb/jdbc/mariadb-java-client/2.1.2/mariadb-java-client-2.1.2.jar"
+          ],
+          "sha256": "2f928611fda17773aa9adff00344f0c2577e1c22b5f1a5a8b39bd60660a1f050"
+        },
+        {
+          "name": "org.mariadb.jdbc-mariadb-java-client-2.1.2-pom",
+          "filename": "mariadb-java-client-2.1.2.pom",
+          "path": "org/mariadb/jdbc/mariadb-java-client/2.1.2",
+          "urls": [
+            "https://jcenter.bintray.com/org/mariadb/jdbc/mariadb-java-client/2.1.2/mariadb-java-client-2.1.2.pom",
+            "https://kamax.io/maven/releases/org/mariadb/jdbc/mariadb-java-client/2.1.2/mariadb-java-client-2.1.2.pom",
+            "https://kamax.io/maven/snapshots/org/mariadb/jdbc/mariadb-java-client/2.1.2/mariadb-java-client-2.1.2.pom"
+          ],
+          "sha256": "4d785de12a34d39d6255dd70e373b6075b2c9d612553f15ca5f1aa1e501bd1e4"
+        },
+        {
+          "name": "org.ow2.asm-asm-parent-5.0.4-pom",
+          "filename": "asm-parent-5.0.4.pom",
+          "path": "org/ow2/asm/asm-parent/5.0.4",
+          "urls": [
+            "https://jcenter.bintray.com/org/ow2/asm/asm-parent/5.0.4/asm-parent-5.0.4.pom",
+            "https://kamax.io/maven/releases/org/ow2/asm/asm-parent/5.0.4/asm-parent-5.0.4.pom",
+            "https://kamax.io/maven/snapshots/org/ow2/asm/asm-parent/5.0.4/asm-parent-5.0.4.pom"
+          ],
+          "sha256": "fdf05b9df226573b331a7e5df01135e527dcc07c71626445732bd04379aa4a72"
+        },
+        {
+          "name": "org.ow2.asm-asm-5.0.4-jar",
+          "filename": "asm-5.0.4.jar",
+          "path": "org/ow2/asm/asm/5.0.4",
+          "urls": [
+            "https://jcenter.bintray.com/org/ow2/asm/asm/5.0.4/asm-5.0.4.jar",
+            "https://kamax.io/maven/releases/org/ow2/asm/asm/5.0.4/asm-5.0.4.jar",
+            "https://kamax.io/maven/snapshots/org/ow2/asm/asm/5.0.4/asm-5.0.4.jar"
+          ],
+          "sha256": "896618ed8ae62702521a78bc7be42b7c491a08e6920a15f89a3ecdec31e9a220"
+        },
+        {
+          "name": "org.ow2.asm-asm-5.0.4-pom",
+          "filename": "asm-5.0.4.pom",
+          "path": "org/ow2/asm/asm/5.0.4",
+          "urls": [
+            "https://jcenter.bintray.com/org/ow2/asm/asm/5.0.4/asm-5.0.4.pom",
+            "https://kamax.io/maven/releases/org/ow2/asm/asm/5.0.4/asm-5.0.4.pom",
+            "https://kamax.io/maven/snapshots/org/ow2/asm/asm/5.0.4/asm-5.0.4.pom"
+          ],
+          "sha256": "b8b2c208bd8b25f845a7a6b121582135ae18eb3f4f9e0bcd2dfd87f12ac07f10"
+        },
+        {
+          "name": "org.ow2-ow2-1.3-pom",
+          "filename": "ow2-1.3.pom",
+          "path": "org/ow2/ow2/1.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/ow2/ow2/1.3/ow2-1.3.pom",
+            "https://kamax.io/maven/releases/org/ow2/ow2/1.3/ow2-1.3.pom",
+            "https://kamax.io/maven/snapshots/org/ow2/ow2/1.3/ow2-1.3.pom"
+          ],
+          "sha256": "51215c67d2c068d8b7d2f6f80f51372a098075deccc448d4bdd7b987ba8328fb"
+        },
+        {
+          "name": "org.postgresql-pgjdbc-core-parent-1.1.5-pom",
+          "filename": "pgjdbc-core-parent-1.1.5.pom",
+          "path": "org/postgresql/pgjdbc-core-parent/1.1.5",
+          "urls": [
+            "https://jcenter.bintray.com/org/postgresql/pgjdbc-core-parent/1.1.5/pgjdbc-core-parent-1.1.5.pom",
+            "https://kamax.io/maven/releases/org/postgresql/pgjdbc-core-parent/1.1.5/pgjdbc-core-parent-1.1.5.pom",
+            "https://kamax.io/maven/snapshots/org/postgresql/pgjdbc-core-parent/1.1.5/pgjdbc-core-parent-1.1.5.pom"
+          ],
+          "sha256": "5ed2b4add885e9ee1e637a297cb34794f4ff2ed5426ffcd2b4bdcdd6e2623eb7"
+        },
+        {
+          "name": "org.postgresql-pgjdbc-versions-1.1.5-pom",
+          "filename": "pgjdbc-versions-1.1.5.pom",
+          "path": "org/postgresql/pgjdbc-versions/1.1.5",
+          "urls": [
+            "https://jcenter.bintray.com/org/postgresql/pgjdbc-versions/1.1.5/pgjdbc-versions-1.1.5.pom",
+            "https://kamax.io/maven/releases/org/postgresql/pgjdbc-versions/1.1.5/pgjdbc-versions-1.1.5.pom",
+            "https://kamax.io/maven/snapshots/org/postgresql/pgjdbc-versions/1.1.5/pgjdbc-versions-1.1.5.pom"
+          ],
+          "sha256": "7e4b687f921939018f755e93530b6f3bfa64387f732488935c0b05a363c4905c"
+        },
+        {
+          "name": "org.postgresql-postgresql-42.2.5-jar",
+          "filename": "postgresql-42.2.5.jar",
+          "path": "org/postgresql/postgresql/42.2.5",
+          "urls": [
+            "https://jcenter.bintray.com/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.jar",
+            "https://kamax.io/maven/releases/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.jar",
+            "https://kamax.io/maven/snapshots/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.jar"
+          ],
+          "sha256": "7ffa46f8c619377cdebcd17721b6b21ecf6659850179f96fec3d1035cf5a0cdc"
+        },
+        {
+          "name": "org.postgresql-postgresql-42.2.5-pom",
+          "filename": "postgresql-42.2.5.pom",
+          "path": "org/postgresql/postgresql/42.2.5",
+          "urls": [
+            "https://jcenter.bintray.com/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.pom",
+            "https://kamax.io/maven/releases/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.pom",
+            "https://kamax.io/maven/snapshots/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.pom"
+          ],
+          "sha256": "41e2c4610cfafa8fb8ea339f65e50408c0f318357a78a3f484e2a2f1b52ad1ec"
+        },
+        {
+          "name": "org.slf4j-log4j-over-slf4j-1.7.25-jar",
+          "filename": "log4j-over-slf4j-1.7.25.jar",
+          "path": "org/slf4j/log4j-over-slf4j/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/log4j-over-slf4j/1.7.25/log4j-over-slf4j-1.7.25.jar",
+            "https://kamax.io/maven/releases/org/slf4j/log4j-over-slf4j/1.7.25/log4j-over-slf4j-1.7.25.jar",
+            "https://kamax.io/maven/snapshots/org/slf4j/log4j-over-slf4j/1.7.25/log4j-over-slf4j-1.7.25.jar"
+          ],
+          "sha256": "c84c5ce4bbb661369ccd4c7b99682027598a0fb2e3d63a84259dbe5c0bf1f949"
+        },
+        {
+          "name": "org.slf4j-log4j-over-slf4j-1.7.25-pom",
+          "filename": "log4j-over-slf4j-1.7.25.pom",
+          "path": "org/slf4j/log4j-over-slf4j/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/log4j-over-slf4j/1.7.25/log4j-over-slf4j-1.7.25.pom",
+            "https://kamax.io/maven/releases/org/slf4j/log4j-over-slf4j/1.7.25/log4j-over-slf4j-1.7.25.pom",
+            "https://kamax.io/maven/snapshots/org/slf4j/log4j-over-slf4j/1.7.25/log4j-over-slf4j-1.7.25.pom"
+          ],
+          "sha256": "ab5d6007f23e131b151873de8ca10e34674e3cb63facd11464ece43de99b2e02"
+        },
+        {
+          "name": "org.slf4j-slf4j-api-1.7.25-jar",
+          "filename": "slf4j-api-1.7.25.jar",
+          "path": "org/slf4j/slf4j-api/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar",
+            "https://kamax.io/maven/releases/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar",
+            "https://kamax.io/maven/snapshots/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar"
+          ],
+          "sha256": "18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79"
+        },
+        {
+          "name": "org.slf4j-slf4j-api-1.7.25-pom",
+          "filename": "slf4j-api-1.7.25.pom",
+          "path": "org/slf4j/slf4j-api/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.pom",
+            "https://kamax.io/maven/releases/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.pom",
+            "https://kamax.io/maven/snapshots/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.pom"
+          ],
+          "sha256": "7cd9d7a0b5d93dfd461a148891b43509cf403a9c7f9fb49060d3554df1c81e1e"
+        },
+        {
+          "name": "org.slf4j-slf4j-parent-1.7.25-pom",
+          "filename": "slf4j-parent-1.7.25.pom",
+          "path": "org/slf4j/slf4j-parent/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-parent/1.7.25/slf4j-parent-1.7.25.pom",
+            "https://kamax.io/maven/releases/org/slf4j/slf4j-parent/1.7.25/slf4j-parent-1.7.25.pom",
+            "https://kamax.io/maven/snapshots/org/slf4j/slf4j-parent/1.7.25/slf4j-parent-1.7.25.pom"
+          ],
+          "sha256": "18f5c52120db036e88d6136f8839c832d074bdda95c756c6f429249d2db54ac6"
+        },
+        {
+          "name": "org.slf4j-slf4j-simple-1.7.25-jar",
+          "filename": "slf4j-simple-1.7.25.jar",
+          "path": "org/slf4j/slf4j-simple/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.jar",
+            "https://kamax.io/maven/releases/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.jar",
+            "https://kamax.io/maven/snapshots/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.jar"
+          ],
+          "sha256": "0966e86fffa5be52d3d9e7b89dd674d98a03eed0a454fbaf7c1bd9493bd9d874"
+        },
+        {
+          "name": "org.slf4j-slf4j-simple-1.7.25-pom",
+          "filename": "slf4j-simple-1.7.25.pom",
+          "path": "org/slf4j/slf4j-simple/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.pom",
+            "https://kamax.io/maven/releases/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.pom",
+            "https://kamax.io/maven/snapshots/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.pom"
+          ],
+          "sha256": "a53ca4cbfc8cc119d6906eda2b0311e72617f9c28157132a562a95464b95b1f8"
+        },
+        {
+          "name": "org.sonatype.oss-oss-parent-7-pom",
+          "filename": "oss-parent-7.pom",
+          "path": "org/sonatype/oss/oss-parent/7",
+          "urls": [
+            "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/7/oss-parent-7.pom",
+            "https://kamax.io/maven/releases/org/sonatype/oss/oss-parent/7/oss-parent-7.pom",
+            "https://kamax.io/maven/snapshots/org/sonatype/oss/oss-parent/7/oss-parent-7.pom"
+          ],
+          "sha256": "b51f8867c92b6a722499557fc3a1fdea77bdf9ef574722fe90ce436a29559454"
+        },
+        {
+          "name": "org.sonatype.oss-oss-parent-9-pom",
+          "filename": "oss-parent-9.pom",
+          "path": "org/sonatype/oss/oss-parent/9",
+          "urls": [
+            "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/9/oss-parent-9.pom",
+            "https://kamax.io/maven/releases/org/sonatype/oss/oss-parent/9/oss-parent-9.pom",
+            "https://kamax.io/maven/snapshots/org/sonatype/oss/oss-parent/9/oss-parent-9.pom"
+          ],
+          "sha256": "fb40265f982548212ff82e362e59732b2187ec6f0d80182885c14ef1f982827a"
+        },
+        {
+          "name": "org.threeten-threetenbp-1.3.3-jar",
+          "filename": "threetenbp-1.3.3.jar",
+          "path": "org/threeten/threetenbp/1.3.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/threeten/threetenbp/1.3.3/threetenbp-1.3.3.jar",
+            "https://kamax.io/maven/releases/org/threeten/threetenbp/1.3.3/threetenbp-1.3.3.jar",
+            "https://kamax.io/maven/snapshots/org/threeten/threetenbp/1.3.3/threetenbp-1.3.3.jar"
+          ],
+          "sha256": "7bbee842b0334f63627556d3c657aab82431f3a207c8dc4dcfc379d7d210a8c6"
+        },
+        {
+          "name": "org.threeten-threetenbp-1.3.3-pom",
+          "filename": "threetenbp-1.3.3.pom",
+          "path": "org/threeten/threetenbp/1.3.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/threeten/threetenbp/1.3.3/threetenbp-1.3.3.pom",
+            "https://kamax.io/maven/releases/org/threeten/threetenbp/1.3.3/threetenbp-1.3.3.pom",
+            "https://kamax.io/maven/snapshots/org/threeten/threetenbp/1.3.3/threetenbp-1.3.3.pom"
+          ],
+          "sha256": "8b78299a26b7641301e716dbf41949a46cd93ad79db7b5972fbf7705dcf0317c"
+        },
+        {
+          "name": "org.xerial-sqlite-jdbc-3.20.0-jar",
+          "filename": "sqlite-jdbc-3.20.0.jar",
+          "path": "org/xerial/sqlite-jdbc/3.20.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/xerial/sqlite-jdbc/3.20.0/sqlite-jdbc-3.20.0.jar",
+            "https://kamax.io/maven/releases/org/xerial/sqlite-jdbc/3.20.0/sqlite-jdbc-3.20.0.jar",
+            "https://kamax.io/maven/snapshots/org/xerial/sqlite-jdbc/3.20.0/sqlite-jdbc-3.20.0.jar"
+          ],
+          "sha256": "143b1c0a453c9a8f77be14209ea15391d1e0eb93348fcfabf03cc227b0edae73"
+        },
+        {
+          "name": "org.xerial-sqlite-jdbc-3.20.0-pom",
+          "filename": "sqlite-jdbc-3.20.0.pom",
+          "path": "org/xerial/sqlite-jdbc/3.20.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/xerial/sqlite-jdbc/3.20.0/sqlite-jdbc-3.20.0.pom",
+            "https://kamax.io/maven/releases/org/xerial/sqlite-jdbc/3.20.0/sqlite-jdbc-3.20.0.pom",
+            "https://kamax.io/maven/snapshots/org/xerial/sqlite-jdbc/3.20.0/sqlite-jdbc-3.20.0.pom"
+          ],
+          "sha256": "265253663b4d5ad49f3660e81b2f80d80834eca17ef0b2503f5729b1b3a0b338"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-core-2.3.0-jar",
+          "filename": "xmlunit-core-2.3.0.jar",
+          "path": "org/xmlunit/xmlunit-core/2.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-core/2.3.0/xmlunit-core-2.3.0.jar",
+            "https://kamax.io/maven/releases/org/xmlunit/xmlunit-core/2.3.0/xmlunit-core-2.3.0.jar",
+            "https://kamax.io/maven/snapshots/org/xmlunit/xmlunit-core/2.3.0/xmlunit-core-2.3.0.jar"
+          ],
+          "sha256": "6533588208d63408c827f25695a259ac36ddbf1b0cfcc4085a5c37c671681a64"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-core-2.3.0-pom",
+          "filename": "xmlunit-core-2.3.0.pom",
+          "path": "org/xmlunit/xmlunit-core/2.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-core/2.3.0/xmlunit-core-2.3.0.pom",
+            "https://kamax.io/maven/releases/org/xmlunit/xmlunit-core/2.3.0/xmlunit-core-2.3.0.pom",
+            "https://kamax.io/maven/snapshots/org/xmlunit/xmlunit-core/2.3.0/xmlunit-core-2.3.0.pom"
+          ],
+          "sha256": "ee92b43ab68a675a6633f374e6b33c927de3267ee97612e27c673cf79edf03f2"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-legacy-2.3.0-jar",
+          "filename": "xmlunit-legacy-2.3.0.jar",
+          "path": "org/xmlunit/xmlunit-legacy/2.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-legacy/2.3.0/xmlunit-legacy-2.3.0.jar",
+            "https://kamax.io/maven/releases/org/xmlunit/xmlunit-legacy/2.3.0/xmlunit-legacy-2.3.0.jar",
+            "https://kamax.io/maven/snapshots/org/xmlunit/xmlunit-legacy/2.3.0/xmlunit-legacy-2.3.0.jar"
+          ],
+          "sha256": "9a4e5ba5de08b713539c90c542dccf412055135ff2194ea6c00b3dac5ddac63f"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-legacy-2.3.0-pom",
+          "filename": "xmlunit-legacy-2.3.0.pom",
+          "path": "org/xmlunit/xmlunit-legacy/2.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-legacy/2.3.0/xmlunit-legacy-2.3.0.pom",
+            "https://kamax.io/maven/releases/org/xmlunit/xmlunit-legacy/2.3.0/xmlunit-legacy-2.3.0.pom",
+            "https://kamax.io/maven/snapshots/org/xmlunit/xmlunit-legacy/2.3.0/xmlunit-legacy-2.3.0.pom"
+          ],
+          "sha256": "06ba86bfcdce8e152fbf94f1e12da565962b3996a53ff2aaa0a44a839e4a9b0e"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-parent-2.3.0-pom",
+          "filename": "xmlunit-parent-2.3.0.pom",
+          "path": "org/xmlunit/xmlunit-parent/2.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-parent/2.3.0/xmlunit-parent-2.3.0.pom",
+            "https://kamax.io/maven/releases/org/xmlunit/xmlunit-parent/2.3.0/xmlunit-parent-2.3.0.pom",
+            "https://kamax.io/maven/snapshots/org/xmlunit/xmlunit-parent/2.3.0/xmlunit-parent-2.3.0.pom"
+          ],
+          "sha256": "741f76d67018b6cf87259f3a0ea1997dde9ba2d70a4665cd93f0d5e59ce2c932"
+        },
+        {
+          "name": "org.yaml-snakeyaml-1.23-jar",
+          "filename": "snakeyaml-1.23.jar",
+          "path": "org/yaml/snakeyaml/1.23",
+          "urls": [
+            "https://jcenter.bintray.com/org/yaml/snakeyaml/1.23/snakeyaml-1.23.jar",
+            "https://kamax.io/maven/releases/org/yaml/snakeyaml/1.23/snakeyaml-1.23.jar",
+            "https://kamax.io/maven/snapshots/org/yaml/snakeyaml/1.23/snakeyaml-1.23.jar"
+          ],
+          "sha256": "13009fb5ede3cf2be5a8d0f1602155aeaa0ce5ef5f9366892bd258d8d3d4d2b1"
+        },
+        {
+          "name": "org.yaml-snakeyaml-1.23-pom",
+          "filename": "snakeyaml-1.23.pom",
+          "path": "org/yaml/snakeyaml/1.23",
+          "urls": [
+            "https://jcenter.bintray.com/org/yaml/snakeyaml/1.23/snakeyaml-1.23.pom",
+            "https://kamax.io/maven/releases/org/yaml/snakeyaml/1.23/snakeyaml-1.23.pom",
+            "https://kamax.io/maven/snapshots/org/yaml/snakeyaml/1.23/snakeyaml-1.23.pom"
+          ],
+          "sha256": "1e1beb22ca906209700122b5cacf6f2719324538c5b1e3c27bf91564c8d31dbd"
+        },
+        {
+          "name": "org.zeroturnaround-zt-exec-1.10-jar",
+          "filename": "zt-exec-1.10.jar",
+          "path": "org/zeroturnaround/zt-exec/1.10",
+          "urls": [
+            "https://jcenter.bintray.com/org/zeroturnaround/zt-exec/1.10/zt-exec-1.10.jar",
+            "https://kamax.io/maven/releases/org/zeroturnaround/zt-exec/1.10/zt-exec-1.10.jar",
+            "https://kamax.io/maven/snapshots/org/zeroturnaround/zt-exec/1.10/zt-exec-1.10.jar"
+          ],
+          "sha256": "1f8b1bca6d0f9b9ec7f9bc8fca3b45e42039bb4ea3cdd20614104085e809ec71"
+        },
+        {
+          "name": "org.zeroturnaround-zt-exec-1.10-pom",
+          "filename": "zt-exec-1.10.pom",
+          "path": "org/zeroturnaround/zt-exec/1.10",
+          "urls": [
+            "https://jcenter.bintray.com/org/zeroturnaround/zt-exec/1.10/zt-exec-1.10.pom",
+            "https://kamax.io/maven/releases/org/zeroturnaround/zt-exec/1.10/zt-exec-1.10.pom",
+            "https://kamax.io/maven/snapshots/org/zeroturnaround/zt-exec/1.10/zt-exec-1.10.pom"
+          ],
+          "sha256": "0224aa669d96a307fcd0181d0f2a8ec4ad6e8133c66f075f4f2a8fb1faae10d2"
+        },
+        {
+          "name": "xml-apis-xml-apis-1.0.b2-jar",
+          "filename": "xml-apis-1.0.b2.jar",
+          "path": "xml-apis/xml-apis/1.0.b2",
+          "urls": [
+            "https://jcenter.bintray.com/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar",
+            "https://kamax.io/maven/releases/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar",
+            "https://kamax.io/maven/snapshots/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar"
+          ],
+          "sha256": "8232f3482c346d843e5e3fb361055771c1acc105b6d8a189eb9018c55948cf9f"
+        },
+        {
+          "name": "xml-apis-xml-apis-1.0.b2-pom",
+          "filename": "xml-apis-1.0.b2.pom",
+          "path": "xml-apis/xml-apis/1.0.b2",
+          "urls": [
+            "https://jcenter.bintray.com/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.pom",
+            "https://kamax.io/maven/releases/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.pom",
+            "https://kamax.io/maven/snapshots/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.pom"
+          ],
+          "sha256": "7bc38e7a0f8ca20b0caed607e00cbb144dc8d006ebec4aa193f55dcf391bad50"
+        }
+      ]
+    }
+  }
+}
