@@ -6,6 +6,7 @@
 , kcontacts
 , kf5gpgmepp
 , lib
+, libsecret
 , mimetic
 , mkDerivation
 , pkgconfig
@@ -30,6 +31,7 @@ mkDerivation rec {
     akonadi-contacts
     gpgme
     kcontacts
+    libsecret
     mimetic
     qgpgme
     qtbase
