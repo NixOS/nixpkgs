@@ -13653,6 +13653,10 @@ in
     buildPythonApplication click future six;
   };
 
+  prospector = callPackage ../development/tools/prospector {
+    python = python37;
+  };
+
   protobuf = protobuf3_7;
 
   protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
