@@ -175,6 +175,7 @@ in {
       ./no-buildconfig.patch
       missing-documentation-patch
     ];
+    meta.knownVulnerabilities = [ "Support ended around October 2019." ];
   };
 
   # Similarly to firefox-esr-52 above.
