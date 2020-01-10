@@ -441,7 +441,10 @@ runTests {
     expected  = "«foo»";
   };
 
-  testRenderOptions = {
+
+# CLI
+
+  testEncodeGNUCommandLine = {
     expr =
        encodeGNUCommandLine
          { }
@@ -462,4 +465,28 @@ runTests {
 
     expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
   };
+
+
+# CUSTOMISATION
+
+  testAddToPassthru = {
+    expr =
+      let
+        attrs = {
+          name = "abc";
+          passthru = { x = 41; };
+        };
+        drv = attrs // { overrideAttrs = f: attrs // f attrs; };
+      in addToPassthru
+        { name = "foo"; value = "bar"; }
+        drv;
+    expected = {
+      name = "abc";
+      passthru = {
+        x = 41;
+        foo = "bar";
+      };
+    };
+  };
+
 }
