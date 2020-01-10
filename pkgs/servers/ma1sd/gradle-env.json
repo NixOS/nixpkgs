@@ -1,0 +1,2937 @@
+{
+  "": {
+    "name": "ma1sd",
+    "version": "unspecified",
+    "path": "",
+    "gradle": {
+      "version": "6.0",
+      "type": "bin",
+      "url": "https://services.gradle.org/distributions/gradle-6.0-bin.zip",
+      "sha256": "5a3578b9f0bb162f5e08cf119f447dfb8fa950cedebb4d2a977e912a11a74b91",
+      "nativeVersion": "0.18"
+    },
+    "dependencies": {
+      "plugin": [],
+      "buildscript": [
+        {
+          "name": "com.github.ben-manes-gradle-versions-plugin-0.27.0-jar",
+          "filename": "gradle-versions-plugin-0.27.0.jar",
+          "path": "com/github/ben-manes/gradle-versions-plugin/0.27.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/ben-manes/gradle-versions-plugin/0.27.0/gradle-versions-plugin-0.27.0.jar"
+          ],
+          "sha256": "44563c412ab31448513e3c737b23801770bf675da4bf524d7e47d99f8dfd85bd"
+        },
+        {
+          "name": "com.github.jengelman.gradle.plugins-shadow-5.1.0-jar",
+          "filename": "shadow-5.1.0.jar",
+          "path": "com/github/jengelman/gradle/plugins/shadow/5.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jengelman/gradle/plugins/shadow/5.1.0/shadow-5.1.0.jar"
+          ],
+          "sha256": "a8637b57d0b4c1184680613b1813a43b9097a287fdf1783e58fd85d64f86b937"
+        },
+        {
+          "name": "com.thoughtworks.xstream-xstream-1.4.10-jar",
+          "filename": "xstream-1.4.10.jar",
+          "path": "com/thoughtworks/xstream/xstream/1.4.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/thoughtworks/xstream/xstream/1.4.10/xstream-1.4.10.jar"
+          ],
+          "sha256": "a1587f35fa617513607c86ec9e6e4de5eb8acdf9a3a6d7f7458f8a8c40b00858"
+        },
+        {
+          "name": "org.codehaus.groovy-groovy-backports-compat23-2.4.15-jar",
+          "filename": "groovy-backports-compat23-2.4.15.jar",
+          "path": "org/codehaus/groovy/groovy-backports-compat23/2.4.15",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/groovy/groovy-backports-compat23/2.4.15/groovy-backports-compat23-2.4.15.jar"
+          ],
+          "sha256": "434d2bfce7b3b16abebc2590832cc042ebd8898eaa39df0f9192c98f2e843766"
+        },
+        {
+          "name": "xmlpull-xmlpull-1.1.3.1-jar",
+          "filename": "xmlpull-1.1.3.1.jar",
+          "path": "xmlpull/xmlpull/1.1.3.1",
+          "urls": [
+            "https://jcenter.bintray.com/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar"
+          ],
+          "sha256": "34e08ee62116071cbb69c0ed70d15a7a5b208d62798c59f2120bb8929324cb63"
+        },
+        {
+          "name": "xpp3-xpp3_min-1.1.4c-jar",
+          "filename": "xpp3_min-1.1.4c.jar",
+          "path": "xpp3/xpp3_min/1.1.4c",
+          "urls": [
+            "https://jcenter.bintray.com/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar"
+          ],
+          "sha256": "bfc90e9e32d0eab1f397fb974b5f150a815188382ac41f372a7149d5bc178008"
+        },
+        {
+          "name": "com.github.ben-manes-gradle-versions-plugin-0.27.0-pom",
+          "filename": "gradle-versions-plugin-0.27.0.pom",
+          "path": "com/github/ben-manes/gradle-versions-plugin/0.27.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/ben-manes/gradle-versions-plugin/0.27.0/gradle-versions-plugin-0.27.0.pom"
+          ],
+          "sha256": "0681d620f61867f6acd1cefe00e44ce8dc4add6e2c43893db7cf5ecadfecf5f3"
+        },
+        {
+          "name": "com.github.jengelman.gradle.plugins-shadow-5.1.0-pom",
+          "filename": "shadow-5.1.0.pom",
+          "path": "com/github/jengelman/gradle/plugins/shadow/5.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jengelman/gradle/plugins/shadow/5.1.0/shadow-5.1.0.pom"
+          ],
+          "sha256": "bae20c36a954de762fd004b7105de1f0475d6da840ac52ff3b8dec3bf782e7b6"
+        },
+        {
+          "name": "com.thoughtworks.xstream-xstream-parent-1.4.10-pom",
+          "filename": "xstream-parent-1.4.10.pom",
+          "path": "com/thoughtworks/xstream/xstream-parent/1.4.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/thoughtworks/xstream/xstream-parent/1.4.10/xstream-parent-1.4.10.pom"
+          ],
+          "sha256": "46770c7e9410933bfadacebdc91e5e90b023c61a1a928dbb8576b6921d8306cc"
+        },
+        {
+          "name": "com.thoughtworks.xstream-xstream-1.4.10-pom",
+          "filename": "xstream-1.4.10.pom",
+          "path": "com/thoughtworks/xstream/xstream/1.4.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/thoughtworks/xstream/xstream/1.4.10/xstream-1.4.10.pom"
+          ],
+          "sha256": "a4a9ff688f713da3eac04412e50a0c9a5e173e6921fe446ddb07d4901d9a3417"
+        },
+        {
+          "name": "org.codehaus.groovy-groovy-backports-compat23-2.4.15-pom",
+          "filename": "groovy-backports-compat23-2.4.15.pom",
+          "path": "org/codehaus/groovy/groovy-backports-compat23/2.4.15",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/groovy/groovy-backports-compat23/2.4.15/groovy-backports-compat23-2.4.15.pom"
+          ],
+          "sha256": "badfde7591686a840a2dcb4b22a2d84b0633d2fdad3291c443e819eaea39dd23"
+        },
+        {
+          "name": "xmlpull-xmlpull-1.1.3.1-pom",
+          "filename": "xmlpull-1.1.3.1.pom",
+          "path": "xmlpull/xmlpull/1.1.3.1",
+          "urls": [
+            "https://jcenter.bintray.com/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.pom"
+          ],
+          "sha256": "8f10ffd8df0d3e9819c8cc8402709c6b248bc53a954ef6e45470d9ae3a5735fb"
+        },
+        {
+          "name": "xpp3-xpp3_min-1.1.4c-pom",
+          "filename": "xpp3_min-1.1.4c.pom",
+          "path": "xpp3/xpp3_min/1.1.4c",
+          "urls": [
+            "https://jcenter.bintray.com/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.pom"
+          ],
+          "sha256": "b5b46ac0c09da41b04dbc753456b48912856a7ffbb1490676910b510c471d13f"
+        }
+      ],
+      "project": [
+        {
+          "name": "com.fasterxml.jackson.core-jackson-annotations-2.9.10-jar",
+          "filename": "jackson-annotations-2.9.10.jar",
+          "path": "com/fasterxml/jackson/core/jackson-annotations/2.9.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-annotations/2.9.10/jackson-annotations-2.9.10.jar"
+          ],
+          "sha256": "c876f2e85d0f108a34cdd11ccc9d8d7875697367efc75bf10a89c2c26aee994c"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-annotations-2.9.10-pom",
+          "filename": "jackson-annotations-2.9.10.pom",
+          "path": "com/fasterxml/jackson/core/jackson-annotations/2.9.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-annotations/2.9.10/jackson-annotations-2.9.10.pom"
+          ],
+          "sha256": "36eb3e6fd8dc526e52f68cd94c0387d7a3adc334d33433512e3690d49701e039"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-annotations-2.9.9-jar",
+          "filename": "jackson-annotations-2.9.9.jar",
+          "path": "com/fasterxml/jackson/core/jackson-annotations/2.9.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-annotations/2.9.9/jackson-annotations-2.9.9.jar"
+          ],
+          "sha256": "1100a5884ddc4439a77165e1b9668c6063c07447cd2f6c9f69e3688ee76080c1"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-annotations-2.9.9-pom",
+          "filename": "jackson-annotations-2.9.9.pom",
+          "path": "com/fasterxml/jackson/core/jackson-annotations/2.9.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-annotations/2.9.9/jackson-annotations-2.9.9.pom"
+          ],
+          "sha256": "32819c51ec50e00fea03b60f3e4ea2223cb38b5a022c7db37c635fa3c8e1f4d0"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-core-2.9.10-jar",
+          "filename": "jackson-core-2.9.10.jar",
+          "path": "com/fasterxml/jackson/core/jackson-core/2.9.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-core/2.9.10/jackson-core-2.9.10.jar"
+          ],
+          "sha256": "65fe26d7554a4409652c86ee38f2e94bc42934326d88b3c78c61f66ff2222c53"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-core-2.9.10-pom",
+          "filename": "jackson-core-2.9.10.pom",
+          "path": "com/fasterxml/jackson/core/jackson-core/2.9.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-core/2.9.10/jackson-core-2.9.10.pom"
+          ],
+          "sha256": "eabe34fd41a3df75ee72afac561d22eed35edd5fd501a5e124ff52e83f12e6dd"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-core-2.9.9-jar",
+          "filename": "jackson-core-2.9.9.jar",
+          "path": "com/fasterxml/jackson/core/jackson-core/2.9.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-core/2.9.9/jackson-core-2.9.9.jar"
+          ],
+          "sha256": "3083079be6088db2ed0a0c6ff92204e0aa48fa1de9db5b59c468f35acf882c2c"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-core-2.9.9-pom",
+          "filename": "jackson-core-2.9.9.pom",
+          "path": "com/fasterxml/jackson/core/jackson-core/2.9.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-core/2.9.9/jackson-core-2.9.9.pom"
+          ],
+          "sha256": "c56ab2829b653cc7ca648106095f06038566d8095c01f2181355dc907b244f61"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-databind-2.9.10-jar",
+          "filename": "jackson-databind-2.9.10.jar",
+          "path": "com/fasterxml/jackson/core/jackson-databind/2.9.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-databind/2.9.10/jackson-databind-2.9.10.jar"
+          ],
+          "sha256": "49bb71a73fcdcdf59c40a1a01d7245f41d3a8ba96ea6182b720f0c6167241757"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-databind-2.9.10-pom",
+          "filename": "jackson-databind-2.9.10.pom",
+          "path": "com/fasterxml/jackson/core/jackson-databind/2.9.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-databind/2.9.10/jackson-databind-2.9.10.pom"
+          ],
+          "sha256": "b2376bd04f7219ba700759a423a2008e6864a01fe5dbb12de9e5f4093a8383d4"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-databind-2.9.9.1-jar",
+          "filename": "jackson-databind-2.9.9.1.jar",
+          "path": "com/fasterxml/jackson/core/jackson-databind/2.9.9.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-databind/2.9.9.1/jackson-databind-2.9.9.1.jar"
+          ],
+          "sha256": "68947ff0aac95854f267945129851ea0fb8afdd1a2089505f18c0e094b67fd41"
+        },
+        {
+          "name": "com.fasterxml.jackson.core-jackson-databind-2.9.9.1-pom",
+          "filename": "jackson-databind-2.9.9.1.pom",
+          "path": "com/fasterxml/jackson/core/jackson-databind/2.9.9.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/core/jackson-databind/2.9.9.1/jackson-databind-2.9.9.1.pom"
+          ],
+          "sha256": "2b1b36098dc08ade4838c58039ccda6e8b1242f1377c2f19e5bc3a3ea92c1b80"
+        },
+        {
+          "name": "com.fasterxml.jackson-jackson-base-2.9.10-pom",
+          "filename": "jackson-base-2.9.10.pom",
+          "path": "com/fasterxml/jackson/jackson-base/2.9.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/jackson-base/2.9.10/jackson-base-2.9.10.pom"
+          ],
+          "sha256": "b8293c2d45ce942520e85d3300fbe544e8d5479740ff1f02e37a6c416cb1c414"
+        },
+        {
+          "name": "com.fasterxml.jackson-jackson-base-2.9.9-pom",
+          "filename": "jackson-base-2.9.9.pom",
+          "path": "com/fasterxml/jackson/jackson-base/2.9.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/jackson-base/2.9.9/jackson-base-2.9.9.pom"
+          ],
+          "sha256": "43368867d2d8c30dc46f0cde6cb5a320bfb9fd7463728be501de61545265975d"
+        },
+        {
+          "name": "com.fasterxml.jackson-jackson-bom-2.9.10-pom",
+          "filename": "jackson-bom-2.9.10.pom",
+          "path": "com/fasterxml/jackson/jackson-bom/2.9.10",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/jackson-bom/2.9.10/jackson-bom-2.9.10.pom"
+          ],
+          "sha256": "417043dbe6445aa3f733d1bb8fbab1e7e1dfcd18cd9fb290101b03131b7d3a6c"
+        },
+        {
+          "name": "com.fasterxml.jackson-jackson-bom-2.9.9-pom",
+          "filename": "jackson-bom-2.9.9.pom",
+          "path": "com/fasterxml/jackson/jackson-bom/2.9.9",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/jackson-bom/2.9.9/jackson-bom-2.9.9.pom"
+          ],
+          "sha256": "237f58930ab02d7d52e9afcc825b2e2d8a0abdd0e86d1d5da1b579dc65809c91"
+        },
+        {
+          "name": "com.fasterxml.jackson-jackson-parent-2.9.1.2-pom",
+          "filename": "jackson-parent-2.9.1.2.pom",
+          "path": "com/fasterxml/jackson/jackson-parent/2.9.1.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/jackson/jackson-parent/2.9.1.2/jackson-parent-2.9.1.2.pom"
+          ],
+          "sha256": "9517e405c6b3b8a035215ad5727013a3519eb7591743fe1dcc04df6635683cf9"
+        },
+        {
+          "name": "com.fasterxml-oss-parent-34-pom",
+          "filename": "oss-parent-34.pom",
+          "path": "com/fasterxml/oss-parent/34",
+          "urls": [
+            "https://jcenter.bintray.com/com/fasterxml/oss-parent/34/oss-parent-34.pom"
+          ],
+          "sha256": "9a75f3e32bf9d6e00678d9447ace4de8596a2d221af5cf5bbc7f571cac795006"
+        },
+        {
+          "name": "com.flipkart.zjsonpatch-zjsonpatch-0.4.4-jar",
+          "filename": "zjsonpatch-0.4.4.jar",
+          "path": "com/flipkart/zjsonpatch/zjsonpatch/0.4.4",
+          "urls": [
+            "https://jcenter.bintray.com/com/flipkart/zjsonpatch/zjsonpatch/0.4.4/zjsonpatch-0.4.4.jar"
+          ],
+          "sha256": "ab9daea7f2def33b12063b257dad9274fac45034d0e3da1e2e0be9d2a4b4a6c7"
+        },
+        {
+          "name": "com.flipkart.zjsonpatch-zjsonpatch-0.4.4-pom",
+          "filename": "zjsonpatch-0.4.4.pom",
+          "path": "com/flipkart/zjsonpatch/zjsonpatch/0.4.4",
+          "urls": [
+            "https://jcenter.bintray.com/com/flipkart/zjsonpatch/zjsonpatch/0.4.4/zjsonpatch-0.4.4.pom"
+          ],
+          "sha256": "56bc4f63cf9f6812e0ceb66017219b545daf5fa6dd71e848336bf83a7f9d6768"
+        },
+        {
+          "name": "com.github.jknack-handlebars-helpers-4.0.7-jar",
+          "filename": "handlebars-helpers-4.0.7.jar",
+          "path": "com/github/jknack/handlebars-helpers/4.0.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jknack/handlebars-helpers/4.0.7/handlebars-helpers-4.0.7.jar"
+          ],
+          "sha256": "1001660f1e1d384df7c143a37e4ce3ba436baf4692f3fe4fd95cdb7ee9ab2a4b"
+        },
+        {
+          "name": "com.github.jknack-handlebars-helpers-4.0.7-pom",
+          "filename": "handlebars-helpers-4.0.7.pom",
+          "path": "com/github/jknack/handlebars-helpers/4.0.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jknack/handlebars-helpers/4.0.7/handlebars-helpers-4.0.7.pom"
+          ],
+          "sha256": "8e4fffe6fcf181ce5604806676b61bf925ab0e7a960a8ec2a0783edef03ad5a0"
+        },
+        {
+          "name": "com.github.jknack-handlebars.java-4.0.7-pom",
+          "filename": "handlebars.java-4.0.7.pom",
+          "path": "com/github/jknack/handlebars.java/4.0.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jknack/handlebars.java/4.0.7/handlebars.java-4.0.7.pom"
+          ],
+          "sha256": "f48a78dc6b45efa243733213596dbcc050c6594ddf802d932c106a479f5ba8cd"
+        },
+        {
+          "name": "com.github.jknack-handlebars-4.0.7-jar",
+          "filename": "handlebars-4.0.7.jar",
+          "path": "com/github/jknack/handlebars/4.0.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jknack/handlebars/4.0.7/handlebars-4.0.7.jar"
+          ],
+          "sha256": "d9b155fe8c8ddb0f9b3e5b156b5909dcd4c89d93defb2f72d0961aa633ad838f"
+        },
+        {
+          "name": "com.github.jknack-handlebars-4.0.7-pom",
+          "filename": "handlebars-4.0.7.pom",
+          "path": "com/github/jknack/handlebars/4.0.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/jknack/handlebars/4.0.7/handlebars-4.0.7.pom"
+          ],
+          "sha256": "37c17825d1a8b3c6b856c93195e098646c3a09431801f866e3b951443446d284"
+        },
+        {
+          "name": "com.github.tomakehurst-wiremock-2.25.1-jar",
+          "filename": "wiremock-2.25.1.jar",
+          "path": "com/github/tomakehurst/wiremock/2.25.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/tomakehurst/wiremock/2.25.1/wiremock-2.25.1.jar"
+          ],
+          "sha256": "37eea297a59fe0a008ba52a707eb880cddfe13af901606e62838b58c197de8b2"
+        },
+        {
+          "name": "com.github.tomakehurst-wiremock-2.25.1-pom",
+          "filename": "wiremock-2.25.1.pom",
+          "path": "com/github/tomakehurst/wiremock/2.25.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/github/tomakehurst/wiremock/2.25.1/wiremock-2.25.1.pom"
+          ],
+          "sha256": "84d0cf9b26e1bf5c7be5c3e9429f80bdea40279b0865ba75772d85caa0008f3d"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-gson-1.22.0-jar",
+          "filename": "google-api-client-gson-1.22.0.jar",
+          "path": "com/google/api-client/google-api-client-gson/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client-gson/1.22.0/google-api-client-gson-1.22.0.jar"
+          ],
+          "sha256": "25a8bfb7558cc0d1ac92c52a8f981ef63a3a1e7061ced315a8f5a92ba2d27089"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-gson-1.22.0-pom",
+          "filename": "google-api-client-gson-1.22.0.pom",
+          "path": "com/google/api-client/google-api-client-gson/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client-gson/1.22.0/google-api-client-gson-1.22.0.pom"
+          ],
+          "sha256": "6a8d1e9e391ee827b1d76ac546656fedd8c11bbdc3fca338064860ed47cea350"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-parent-1.22.0-pom",
+          "filename": "google-api-client-parent-1.22.0.pom",
+          "path": "com/google/api-client/google-api-client-parent/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client-parent/1.22.0/google-api-client-parent-1.22.0.pom"
+          ],
+          "sha256": "2bc283b1247550e6e8401d97dc7f1ac2d5b17382b9984df011d9a3564fe632ae"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-1.22.0-jar",
+          "filename": "google-api-client-1.22.0.jar",
+          "path": "com/google/api-client/google-api-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client/1.22.0/google-api-client-1.22.0.jar"
+          ],
+          "sha256": "47c625c83a8cf97b8bbdff2acde923ff8fd3174e62aabcfc5d1b86692594ffba"
+        },
+        {
+          "name": "com.google.api-client-google-api-client-1.22.0-pom",
+          "filename": "google-api-client-1.22.0.pom",
+          "path": "com/google/api-client/google-api-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api-client/google-api-client/1.22.0/google-api-client-1.22.0.pom"
+          ],
+          "sha256": "83175461277124a08d23d9df647912771276fed44ce60ff03847b51c98bf7459"
+        },
+        {
+          "name": "com.google.api.grpc-proto-google-common-protos-0.1.12-jar",
+          "filename": "proto-google-common-protos-0.1.12.jar",
+          "path": "com/google/api/grpc/proto-google-common-protos/0.1.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/grpc/proto-google-common-protos/0.1.12/proto-google-common-protos-0.1.12.jar"
+          ],
+          "sha256": "6ebe2a0790f9f47a84e5266f5f5bef42378d08195a3d8944afba13bfe4f1bea3"
+        },
+        {
+          "name": "com.google.api.grpc-proto-google-common-protos-0.1.12-pom",
+          "filename": "proto-google-common-protos-0.1.12.pom",
+          "path": "com/google/api/grpc/proto-google-common-protos/0.1.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/grpc/proto-google-common-protos/0.1.12/proto-google-common-protos-0.1.12.pom"
+          ],
+          "sha256": "6457a5b9289325c8d230c079ddd116bac49bdece6f80a9519b936a13cc865234"
+        },
+        {
+          "name": "com.google.api.grpc-proto-google-iam-v1-0.1.12-jar",
+          "filename": "proto-google-iam-v1-0.1.12.jar",
+          "path": "com/google/api/grpc/proto-google-iam-v1/0.1.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/grpc/proto-google-iam-v1/0.1.12/proto-google-iam-v1-0.1.12.jar"
+          ],
+          "sha256": "f5d983654bf4815c73e7d4ccec8c85466778ee9224baa59230d653cb9830a354"
+        },
+        {
+          "name": "com.google.api.grpc-proto-google-iam-v1-0.1.12-pom",
+          "filename": "proto-google-iam-v1-0.1.12.pom",
+          "path": "com/google/api/grpc/proto-google-iam-v1/0.1.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/grpc/proto-google-iam-v1/0.1.12/proto-google-iam-v1-0.1.12.pom"
+          ],
+          "sha256": "1546650112a0689cf28c3863b64bf3a1f3b344b2741f9910ab4b55786231d408"
+        },
+        {
+          "name": "com.google.api-api-common-1.1.0-jar",
+          "filename": "api-common-1.1.0.jar",
+          "path": "com/google/api/api-common/1.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/api-common/1.1.0/api-common-1.1.0.jar"
+          ],
+          "sha256": "f15defb10b20c9d6668e198e424e5a9c68cd2cc983f648be7570c1f256bd582c"
+        },
+        {
+          "name": "com.google.api-api-common-1.1.0-pom",
+          "filename": "api-common-1.1.0.pom",
+          "path": "com/google/api/api-common/1.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/api-common/1.1.0/api-common-1.1.0.pom"
+          ],
+          "sha256": "c5675a06b1bb72bfeda37d3070ee28609f8485d794774253adbbb18d5cb2b414"
+        },
+        {
+          "name": "com.google.api-gax-1.4.1-jar",
+          "filename": "gax-1.4.1.jar",
+          "path": "com/google/api/gax/1.4.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/gax/1.4.1/gax-1.4.1.jar"
+          ],
+          "sha256": "7627bfb4a8b17340ae1cc112415284db9c43ecfc64e6373846d2b5f866938da3"
+        },
+        {
+          "name": "com.google.api-gax-1.4.1-pom",
+          "filename": "gax-1.4.1.pom",
+          "path": "com/google/api/gax/1.4.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/api/gax/1.4.1/gax-1.4.1.pom"
+          ],
+          "sha256": "f94c1c57cfed721c42e56432853cffe0e577077cf3fd6d90764d0482e05a9a0a"
+        },
+        {
+          "name": "com.google.apis-google-api-services-storage-v1-rev100-1.22.0-jar",
+          "filename": "google-api-services-storage-v1-rev100-1.22.0.jar",
+          "path": "com/google/apis/google-api-services-storage/v1-rev100-1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/apis/google-api-services-storage/v1-rev100-1.22.0/google-api-services-storage-v1-rev100-1.22.0.jar"
+          ],
+          "sha256": "b466464ba9ce428426e9505cc610c8fed4b35ebbf0e159bfbfaa798183800002"
+        },
+        {
+          "name": "com.google.apis-google-api-services-storage-v1-rev100-1.22.0-pom",
+          "filename": "google-api-services-storage-v1-rev100-1.22.0.pom",
+          "path": "com/google/apis/google-api-services-storage/v1-rev100-1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/apis/google-api-services-storage/v1-rev100-1.22.0/google-api-services-storage-v1-rev100-1.22.0.pom"
+          ],
+          "sha256": "7c1b392e4219e7a9c53bcd52567b91479eb2e337a69c9427b8438f7be397b17d"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-credentials-0.7.0-jar",
+          "filename": "google-auth-library-credentials-0.7.0.jar",
+          "path": "com/google/auth/google-auth-library-credentials/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-credentials/0.7.0/google-auth-library-credentials-0.7.0.jar"
+          ],
+          "sha256": "fca7e78172a54346e3e9bc8dce432743e3a4fc8b79ef1405a189be785cde0c79"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-credentials-0.7.0-pom",
+          "filename": "google-auth-library-credentials-0.7.0.pom",
+          "path": "com/google/auth/google-auth-library-credentials/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-credentials/0.7.0/google-auth-library-credentials-0.7.0.pom"
+          ],
+          "sha256": "4ac44628c73affb452c6b2e6117017045b35606d165b1c900ee42b3dfdb42dbf"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-oauth2-http-0.7.0-jar",
+          "filename": "google-auth-library-oauth2-http-0.7.0.jar",
+          "path": "com/google/auth/google-auth-library-oauth2-http/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-oauth2-http/0.7.0/google-auth-library-oauth2-http-0.7.0.jar"
+          ],
+          "sha256": "dc5d9d76a623d3ea39af8b8499766542b548316154da931bdaa3177c89bc77f3"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-oauth2-http-0.7.0-pom",
+          "filename": "google-auth-library-oauth2-http-0.7.0.pom",
+          "path": "com/google/auth/google-auth-library-oauth2-http/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-oauth2-http/0.7.0/google-auth-library-oauth2-http-0.7.0.pom"
+          ],
+          "sha256": "cc9c2f466a3d065350b682afbb198d74fd680c2acb22a0115c5caf0d21b513f9"
+        },
+        {
+          "name": "com.google.auth-google-auth-library-parent-0.7.0-pom",
+          "filename": "google-auth-library-parent-0.7.0.pom",
+          "path": "com/google/auth/google-auth-library-parent/0.7.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auth/google-auth-library-parent/0.7.0/google-auth-library-parent-0.7.0.pom"
+          ],
+          "sha256": "29a439fb0b305d7f5eb5ddbd90db9145c69eb5c83bb494d6b08c5a0e6137274f"
+        },
+        {
+          "name": "com.google.auto.value-auto-value-1.2-jar",
+          "filename": "auto-value-1.2.jar",
+          "path": "com/google/auto/value/auto-value/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auto/value/auto-value/1.2/auto-value-1.2.jar"
+          ],
+          "sha256": "be6a7bb985d52b40cc00d19500735096b949255dc0a9fcd0dbbc829cffd03cec"
+        },
+        {
+          "name": "com.google.auto.value-auto-value-1.2-pom",
+          "filename": "auto-value-1.2.pom",
+          "path": "com/google/auto/value/auto-value/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auto/value/auto-value/1.2/auto-value-1.2.pom"
+          ],
+          "sha256": "d1b4d6c66f7c76bb97a5c584879a3dde7a6dc997a015e24c612aaba823648deb"
+        },
+        {
+          "name": "com.google.auto-auto-parent-3-pom",
+          "filename": "auto-parent-3.pom",
+          "path": "com/google/auto/auto-parent/3",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/auto/auto-parent/3/auto-parent-3.pom"
+          ],
+          "sha256": "c98f1b0978cfd24712c27388e040c50ce0692252b3aa9448603d9efa05ebe8a8"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-core-http-1.2.1-jar",
+          "filename": "google-cloud-core-http-1.2.1.jar",
+          "path": "com/google/cloud/google-cloud-core-http/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-core-http/1.2.1/google-cloud-core-http-1.2.1.jar"
+          ],
+          "sha256": "915176954a3aa5b2a18c869081721bef3aaad21849a0451cff148a3d435b2291"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-core-http-1.2.1-pom",
+          "filename": "google-cloud-core-http-1.2.1.pom",
+          "path": "com/google/cloud/google-cloud-core-http/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-core-http/1.2.1/google-cloud-core-http-1.2.1.pom"
+          ],
+          "sha256": "8d1b83e84e58c075809e38774f1daea4ae50547c3ba018c25f8a267e527877ba"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-core-1.2.1-jar",
+          "filename": "google-cloud-core-1.2.1.jar",
+          "path": "com/google/cloud/google-cloud-core/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-core/1.2.1/google-cloud-core-1.2.1.jar"
+          ],
+          "sha256": "18adbde991d9d871abe2f4e6b134c42db88fd75a83cebe35a73bfc2f72d8af54"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-core-1.2.1-pom",
+          "filename": "google-cloud-core-1.2.1.pom",
+          "path": "com/google/cloud/google-cloud-core/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-core/1.2.1/google-cloud-core-1.2.1.pom"
+          ],
+          "sha256": "ffb7a371cdbdd93ce42e5d7d96bcf82149d34fa74ecc1226baac009549731144"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-pom-0.20.1-alpha-pom",
+          "filename": "google-cloud-pom-0.20.1-alpha.pom",
+          "path": "com/google/cloud/google-cloud-pom/0.20.1-alpha",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-pom/0.20.1-alpha/google-cloud-pom-0.20.1-alpha.pom"
+          ],
+          "sha256": "1a9c728a74a65d39d3076bcd6a741d5047a905f111276d02caa03b9ab5d3825f"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-storage-1.2.1-jar",
+          "filename": "google-cloud-storage-1.2.1.jar",
+          "path": "com/google/cloud/google-cloud-storage/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-storage/1.2.1/google-cloud-storage-1.2.1.jar"
+          ],
+          "sha256": "42304b77918ec2173bce54030d39fe91cb77a5cfc69c2de52e25fbc6c6af36d2"
+        },
+        {
+          "name": "com.google.cloud-google-cloud-storage-1.2.1-pom",
+          "filename": "google-cloud-storage-1.2.1.pom",
+          "path": "com/google/cloud/google-cloud-storage/1.2.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/cloud/google-cloud-storage/1.2.1/google-cloud-storage-1.2.1.pom"
+          ],
+          "sha256": "ad73c3c0a67894e7b40ca83873ec25d3d9377d2588d5273b93785c67d4477302"
+        },
+        {
+          "name": "com.google.code.findbugs-jsr305-3.0.2-jar",
+          "filename": "jsr305-3.0.2.jar",
+          "path": "com/google/code/findbugs/jsr305/3.0.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"
+          ],
+          "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7"
+        },
+        {
+          "name": "com.google.code.findbugs-jsr305-3.0.2-pom",
+          "filename": "jsr305-3.0.2.pom",
+          "path": "com/google/code/findbugs/jsr305/3.0.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.pom"
+          ],
+          "sha256": "19889dbdf1b254b2601a5ee645b8147a974644882297684c798afe5d63d78dfe"
+        },
+        {
+          "name": "com.google.code.gson-gson-parent-2.7-pom",
+          "filename": "gson-parent-2.7.pom",
+          "path": "com/google/code/gson/gson-parent/2.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/gson/gson-parent/2.7/gson-parent-2.7.pom"
+          ],
+          "sha256": "871e8c737322301f0cc8acfe39a2960c4579d9d8666aeea5298bb6fcc9e4272b"
+        },
+        {
+          "name": "com.google.code.gson-gson-2.7-jar",
+          "filename": "gson-2.7.jar",
+          "path": "com/google/code/gson/gson/2.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/gson/gson/2.7/gson-2.7.jar"
+          ],
+          "sha256": "2d43eb5ea9e133d2ee2405cc14f5ee08951b8361302fdd93494a3a997b508d32"
+        },
+        {
+          "name": "com.google.code.gson-gson-2.7-pom",
+          "filename": "gson-2.7.pom",
+          "path": "com/google/code/gson/gson/2.7",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/code/gson/gson/2.7/gson-2.7.pom"
+          ],
+          "sha256": "723936ec07b87b210a44ef8058f32f56e3d56442218dfbf8f4e538a927160ede"
+        },
+        {
+          "name": "com.google.errorprone-error_prone_annotations-2.3.2-jar",
+          "filename": "error_prone_annotations-2.3.2.jar",
+          "path": "com/google/errorprone/error_prone_annotations/2.3.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/errorprone/error_prone_annotations/2.3.2/error_prone_annotations-2.3.2.jar"
+          ],
+          "sha256": "357cd6cfb067c969226c442451502aee13800a24e950fdfde77bcdb4565a668d"
+        },
+        {
+          "name": "com.google.errorprone-error_prone_annotations-2.3.2-pom",
+          "filename": "error_prone_annotations-2.3.2.pom",
+          "path": "com/google/errorprone/error_prone_annotations/2.3.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/errorprone/error_prone_annotations/2.3.2/error_prone_annotations-2.3.2.pom"
+          ],
+          "sha256": "8d175561619289a527573cfbdcf872eb5c1216cf9ab692a0ef3dba6d793f63b4"
+        },
+        {
+          "name": "com.google.errorprone-error_prone_parent-2.3.2-pom",
+          "filename": "error_prone_parent-2.3.2.pom",
+          "path": "com/google/errorprone/error_prone_parent/2.3.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/errorprone/error_prone_parent/2.3.2/error_prone_parent-2.3.2.pom"
+          ],
+          "sha256": "8d3b5b9fa211979e9c425e989825c07743d2eb4dc8c20ec61de0f5b3dc1a6333"
+        },
+        {
+          "name": "com.google.firebase-firebase-admin-5.3.0-jar",
+          "filename": "firebase-admin-5.3.0.jar",
+          "path": "com/google/firebase/firebase-admin/5.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/firebase/firebase-admin/5.3.0/firebase-admin-5.3.0.jar"
+          ],
+          "sha256": "e74285b059d693ffa0101e4fba16fd7cb8b061c92af3b8266dd4bf8a3f028fba"
+        },
+        {
+          "name": "com.google.firebase-firebase-admin-5.3.0-pom",
+          "filename": "firebase-admin-5.3.0.pom",
+          "path": "com/google/firebase/firebase-admin/5.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/firebase/firebase-admin/5.3.0/firebase-admin-5.3.0.pom"
+          ],
+          "sha256": "c672abe617f64a27dfc5b625c33a5c860df66b07b342941a934ee086d2d54655"
+        },
+        {
+          "name": "com.google.guava-failureaccess-1.0.1-jar",
+          "filename": "failureaccess-1.0.1.jar",
+          "path": "com/google/guava/failureaccess/1.0.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar"
+          ],
+          "sha256": "a171ee4c734dd2da837e4b16be9df4661afab72a41adaf31eb84dfdaf936ca26"
+        },
+        {
+          "name": "com.google.guava-failureaccess-1.0.1-pom",
+          "filename": "failureaccess-1.0.1.pom",
+          "path": "com/google/guava/failureaccess/1.0.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.pom"
+          ],
+          "sha256": "e96042ce78fecba0da2be964522947c87b40a291b5fd3cd672a434924103c4b9"
+        },
+        {
+          "name": "com.google.guava-guava-jdk5-17.0-jar",
+          "filename": "guava-jdk5-17.0.jar",
+          "path": "com/google/guava/guava-jdk5/17.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.jar"
+          ],
+          "sha256": "59bf456547b6dda3ced968cb56f7f2d3e14474e2de2960a32c47e31c1e456c61"
+        },
+        {
+          "name": "com.google.guava-guava-jdk5-17.0-pom",
+          "filename": "guava-jdk5-17.0.pom",
+          "path": "com/google/guava/guava-jdk5/17.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.pom"
+          ],
+          "sha256": "f8c152627813d45bc4e7cc17ad6ed6a649a0231ae819ffb8e05d19b205a3db66"
+        },
+        {
+          "name": "com.google.guava-guava-parent-jdk5-17.0-pom",
+          "filename": "guava-parent-jdk5-17.0.pom",
+          "path": "com/google/guava/guava-parent-jdk5/17.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava-parent-jdk5/17.0/guava-parent-jdk5-17.0.pom"
+          ],
+          "sha256": "5a9606bc27632956b3c11df887e9b3e785854068aaa4e0808ed5660f60b1fb6f"
+        },
+        {
+          "name": "com.google.guava-guava-parent-26.0-android-pom",
+          "filename": "guava-parent-26.0-android.pom",
+          "path": "com/google/guava/guava-parent/26.0-android",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava-parent/26.0-android/guava-parent-26.0-android.pom"
+          ],
+          "sha256": "f8698ab46ca996ce889c1afc8ca4f25eb8ac6b034dc898d4583742360016cc04"
+        },
+        {
+          "name": "com.google.guava-guava-parent-28.0-android-pom",
+          "filename": "guava-parent-28.0-android.pom",
+          "path": "com/google/guava/guava-parent/28.0-android",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava-parent/28.0-android/guava-parent-28.0-android.pom"
+          ],
+          "sha256": "cfe57db4777a2d1acb8630050ae2f4e23ce102658aba356c2a4a99d23d113374"
+        },
+        {
+          "name": "com.google.guava-guava-28.0-android-jar",
+          "filename": "guava-28.0-android.jar",
+          "path": "com/google/guava/guava/28.0-android",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava/28.0-android/guava-28.0-android.jar"
+          ],
+          "sha256": "aa12035fa0ce8bdab6a4ddc218c2749df9306126f6fc9171bc0d73a5af2e0549"
+        },
+        {
+          "name": "com.google.guava-guava-28.0-android-pom",
+          "filename": "guava-28.0-android.pom",
+          "path": "com/google/guava/guava/28.0-android",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/guava/28.0-android/guava-28.0-android.pom"
+          ],
+          "sha256": "b9cc4824a3973bbff1ff66ea93f61a9cfc12cefd5453889413484eaa2a74da83"
+        },
+        {
+          "name": "com.google.guava-listenablefuture-9999.0-empty-to-avoid-conflict-with-guava-jar",
+          "filename": "listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+          "path": "com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"
+          ],
+          "sha256": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99"
+        },
+        {
+          "name": "com.google.guava-listenablefuture-9999.0-empty-to-avoid-conflict-with-guava-pom",
+          "filename": "listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.pom",
+          "path": "com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.pom"
+          ],
+          "sha256": "18d4b1db26153d4e55079ce1f76bb1fe05cdb862ef9954a88cbcc4ff38b8679b"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-appengine-1.21.0-jar",
+          "filename": "google-http-client-appengine-1.21.0.jar",
+          "path": "com/google/http-client/google-http-client-appengine/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-appengine/1.21.0/google-http-client-appengine-1.21.0.jar"
+          ],
+          "sha256": "5f98695d73d815243bff22495acb0a6bf3ba211e1d742ca4779cd7916f744c86"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-appengine-1.21.0-pom",
+          "filename": "google-http-client-appengine-1.21.0.pom",
+          "path": "com/google/http-client/google-http-client-appengine/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-appengine/1.21.0/google-http-client-appengine-1.21.0.pom"
+          ],
+          "sha256": "3d8e3ea877677002b5406990a26b2b3e98d4f8d9eb3cee1ffcab23e9975d5fa4"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-gson-1.22.0-jar",
+          "filename": "google-http-client-gson-1.22.0.jar",
+          "path": "com/google/http-client/google-http-client-gson/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-gson/1.22.0/google-http-client-gson-1.22.0.jar"
+          ],
+          "sha256": "9ffa230a158349a3c87f0da68cae6cc90d3ec0f2dbdb2f34f1f54187834799fb"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-gson-1.22.0-pom",
+          "filename": "google-http-client-gson-1.22.0.pom",
+          "path": "com/google/http-client/google-http-client-gson/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-gson/1.22.0/google-http-client-gson-1.22.0.pom"
+          ],
+          "sha256": "fd756a96ad6281fc5d184e65a6a31db7d8d91ca86301291b99179ab85a52cdc0"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-jackson2-1.22.0-jar",
+          "filename": "google-http-client-jackson2-1.22.0.jar",
+          "path": "com/google/http-client/google-http-client-jackson2/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-jackson2/1.22.0/google-http-client-jackson2-1.22.0.jar"
+          ],
+          "sha256": "45b1e34b2dcef5cb496ef25a1223d19cf102b8c2ea4abf96491631b2faf4611c"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-jackson2-1.22.0-pom",
+          "filename": "google-http-client-jackson2-1.22.0.pom",
+          "path": "com/google/http-client/google-http-client-jackson2/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-jackson2/1.22.0/google-http-client-jackson2-1.22.0.pom"
+          ],
+          "sha256": "184c3aaa66f32be7bf592caab362becd10a80b15b077c3ebe9ae9fa9d387f41a"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-jackson-1.21.0-jar",
+          "filename": "google-http-client-jackson-1.21.0.jar",
+          "path": "com/google/http-client/google-http-client-jackson/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-jackson/1.21.0/google-http-client-jackson-1.21.0.jar"
+          ],
+          "sha256": "afbc1bb608fc261f310dca33bc6ddb90fba4f7bbe2125fef9b53569bee36ac17"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-jackson-1.21.0-pom",
+          "filename": "google-http-client-jackson-1.21.0.pom",
+          "path": "com/google/http-client/google-http-client-jackson/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-jackson/1.21.0/google-http-client-jackson-1.21.0.pom"
+          ],
+          "sha256": "e5291eb963671064ec3d3cfed77f7a229167b05cb3d104e51ae11e466118c3f6"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-parent-1.21.0-pom",
+          "filename": "google-http-client-parent-1.21.0.pom",
+          "path": "com/google/http-client/google-http-client-parent/1.21.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-parent/1.21.0/google-http-client-parent-1.21.0.pom"
+          ],
+          "sha256": "d043afabfb56eb533ba5621d59c207fc7d1f88f98aef8293796988add08f9288"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-parent-1.22.0-pom",
+          "filename": "google-http-client-parent-1.22.0.pom",
+          "path": "com/google/http-client/google-http-client-parent/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client-parent/1.22.0/google-http-client-parent-1.22.0.pom"
+          ],
+          "sha256": "3927309767100e548d1f5c20e150d75716e03a3d8a1a1b970c8a75fbddae072e"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-1.22.0-jar",
+          "filename": "google-http-client-1.22.0.jar",
+          "path": "com/google/http-client/google-http-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client/1.22.0/google-http-client-1.22.0.jar"
+          ],
+          "sha256": "f88ffa329ac52fb4f2ff0eb877ef7318423ac9b791a107f886ed5c7a00e77e11"
+        },
+        {
+          "name": "com.google.http-client-google-http-client-1.22.0-pom",
+          "filename": "google-http-client-1.22.0.pom",
+          "path": "com/google/http-client/google-http-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/http-client/google-http-client/1.22.0/google-http-client-1.22.0.pom"
+          ],
+          "sha256": "30e7611df40360bdc24325caaa2f7888e847680f2e64e579c28c87a53e5bb422"
+        },
+        {
+          "name": "com.google.j2objc-j2objc-annotations-1.3-jar",
+          "filename": "j2objc-annotations-1.3.jar",
+          "path": "com/google/j2objc/j2objc-annotations/1.3",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar"
+          ],
+          "sha256": "21af30c92267bd6122c0e0b4d20cccb6641a37eaf956c6540ec471d584e64a7b"
+        },
+        {
+          "name": "com.google.j2objc-j2objc-annotations-1.3-pom",
+          "filename": "j2objc-annotations-1.3.pom",
+          "path": "com/google/j2objc/j2objc-annotations/1.3",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.pom"
+          ],
+          "sha256": "5faca824ba115bee458730337dfdb2fcea46ba2fd774d4304edbf30fa6a3f055"
+        },
+        {
+          "name": "com.google.oauth-client-google-oauth-client-parent-1.22.0-pom",
+          "filename": "google-oauth-client-parent-1.22.0.pom",
+          "path": "com/google/oauth-client/google-oauth-client-parent/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/oauth-client/google-oauth-client-parent/1.22.0/google-oauth-client-parent-1.22.0.pom"
+          ],
+          "sha256": "2e7acb933f8c1b801b78925e4d22c32040a414dc7246bfdb777d8ad78404fa66"
+        },
+        {
+          "name": "com.google.oauth-client-google-oauth-client-1.22.0-jar",
+          "filename": "google-oauth-client-1.22.0.jar",
+          "path": "com/google/oauth-client/google-oauth-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/oauth-client/google-oauth-client/1.22.0/google-oauth-client-1.22.0.jar"
+          ],
+          "sha256": "a4c56168b3e042105d68cf136e40e74f6e27f63ed0a948df966b332678e19022"
+        },
+        {
+          "name": "com.google.oauth-client-google-oauth-client-1.22.0-pom",
+          "filename": "google-oauth-client-1.22.0.pom",
+          "path": "com/google/oauth-client/google-oauth-client/1.22.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/oauth-client/google-oauth-client/1.22.0/google-oauth-client-1.22.0.pom"
+          ],
+          "sha256": "52a2b2c1a4365668545134157ee7bb141c6b537caa29a4e51f3228ce0bbbeaf9"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-java-util-3.3.0-jar",
+          "filename": "protobuf-java-util-3.3.0.jar",
+          "path": "com/google/protobuf/protobuf-java-util/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-java-util/3.3.0/protobuf-java-util-3.3.0.jar"
+          ],
+          "sha256": "4547f6d1ea08ff8d92513e1d80b91652f0e158d0a64e9402cb44507789eb3106"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-java-util-3.3.0-pom",
+          "filename": "protobuf-java-util-3.3.0.pom",
+          "path": "com/google/protobuf/protobuf-java-util/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-java-util/3.3.0/protobuf-java-util-3.3.0.pom"
+          ],
+          "sha256": "5ecd05fd7927022fce646d5bd1f923e0c01a874f7ffe7b734216108c86653a45"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-java-3.3.0-jar",
+          "filename": "protobuf-java-3.3.0.jar",
+          "path": "com/google/protobuf/protobuf-java/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar"
+          ],
+          "sha256": "f3411ade77523d5f0d013d4f25c36879e66f0c5e1e4310f7096d54d0d2553554"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-java-3.3.0-pom",
+          "filename": "protobuf-java-3.3.0.pom",
+          "path": "com/google/protobuf/protobuf-java/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.pom"
+          ],
+          "sha256": "163aefeb2f1db03e7abb0b5eb15b151d1ec3750b192f1bf0a35dd1f447b92bd2"
+        },
+        {
+          "name": "com.google.protobuf-protobuf-parent-3.3.0-pom",
+          "filename": "protobuf-parent-3.3.0.pom",
+          "path": "com/google/protobuf/protobuf-parent/3.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/protobuf/protobuf-parent/3.3.0/protobuf-parent-3.3.0.pom"
+          ],
+          "sha256": "dd7ef4b40192af812862c00b3f13dd419bec98429fb5a553a535e03aedfc52e6"
+        },
+        {
+          "name": "com.google-google-1-pom",
+          "filename": "google-1.pom",
+          "path": "com/google/google/1",
+          "urls": [
+            "https://jcenter.bintray.com/com/google/google/1/google-1.pom"
+          ],
+          "sha256": "cd6db17a11a31ede794ccbd1df0e4d9750f640234731f21cff885a9997277e81"
+        },
+        {
+          "name": "com.googlecode.libphonenumber-libphonenumber-parent-8.10.22-pom",
+          "filename": "libphonenumber-parent-8.10.22.pom",
+          "path": "com/googlecode/libphonenumber/libphonenumber-parent/8.10.22",
+          "urls": [
+            "https://jcenter.bintray.com/com/googlecode/libphonenumber/libphonenumber-parent/8.10.22/libphonenumber-parent-8.10.22.pom"
+          ],
+          "sha256": "a2d695d88ba8b7a89161405da2a04e50ed393394db11470a09adc8767553d83e"
+        },
+        {
+          "name": "com.googlecode.libphonenumber-libphonenumber-8.10.22-jar",
+          "filename": "libphonenumber-8.10.22.jar",
+          "path": "com/googlecode/libphonenumber/libphonenumber/8.10.22",
+          "urls": [
+            "https://jcenter.bintray.com/com/googlecode/libphonenumber/libphonenumber/8.10.22/libphonenumber-8.10.22.jar"
+          ],
+          "sha256": "a5c5701c099ea3f4d5d24cad63364fc03b2eb8b6d44bcc4bbe43fdebb08278cc"
+        },
+        {
+          "name": "com.googlecode.libphonenumber-libphonenumber-8.10.22-pom",
+          "filename": "libphonenumber-8.10.22.pom",
+          "path": "com/googlecode/libphonenumber/libphonenumber/8.10.22",
+          "urls": [
+            "https://jcenter.bintray.com/com/googlecode/libphonenumber/libphonenumber/8.10.22/libphonenumber-8.10.22.pom"
+          ],
+          "sha256": "0f27754e8848d11cc017b2a4cbece016caf4469aee60cf27c06ff717a73ee47d"
+        },
+        {
+          "name": "com.icegreen-greenmail-parent-1.5.11-pom",
+          "filename": "greenmail-parent-1.5.11.pom",
+          "path": "com/icegreen/greenmail-parent/1.5.11",
+          "urls": [
+            "https://jcenter.bintray.com/com/icegreen/greenmail-parent/1.5.11/greenmail-parent-1.5.11.pom"
+          ],
+          "sha256": "d9c4d534f435da318a28db3b178ef49f8e3357b8b9707260af798d6b9aaab4b3"
+        },
+        {
+          "name": "com.icegreen-greenmail-1.5.11-jar",
+          "filename": "greenmail-1.5.11.jar",
+          "path": "com/icegreen/greenmail/1.5.11",
+          "urls": [
+            "https://jcenter.bintray.com/com/icegreen/greenmail/1.5.11/greenmail-1.5.11.jar"
+          ],
+          "sha256": "ca1ba5f63a44b10d8bfc96b1da55139041ddffcd8771339642e3e1a8bf89dd95"
+        },
+        {
+          "name": "com.icegreen-greenmail-1.5.11-pom",
+          "filename": "greenmail-1.5.11.pom",
+          "path": "com/icegreen/greenmail/1.5.11",
+          "urls": [
+            "https://jcenter.bintray.com/com/icegreen/greenmail/1.5.11/greenmail-1.5.11.pom"
+          ],
+          "sha256": "82a9be0189775a9ccd7bab1e7336ae8c295ede432dbb2aebf19a78e688beeae9"
+        },
+        {
+          "name": "com.j256.ormlite-ormlite-core-5.1-jar",
+          "filename": "ormlite-core-5.1.jar",
+          "path": "com/j256/ormlite/ormlite-core/5.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/j256/ormlite/ormlite-core/5.1/ormlite-core-5.1.jar"
+          ],
+          "sha256": "0a62a2e4d873006d6d4c510441cc3ee3bb58083276b3f97bc4feb13673b16499"
+        },
+        {
+          "name": "com.j256.ormlite-ormlite-core-5.1-pom",
+          "filename": "ormlite-core-5.1.pom",
+          "path": "com/j256/ormlite/ormlite-core/5.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/j256/ormlite/ormlite-core/5.1/ormlite-core-5.1.pom"
+          ],
+          "sha256": "e974e95d9fd83bb69f81993d309601c2601fb0c93d1977e110a393855c313402"
+        },
+        {
+          "name": "com.j256.ormlite-ormlite-jdbc-5.1-jar",
+          "filename": "ormlite-jdbc-5.1.jar",
+          "path": "com/j256/ormlite/ormlite-jdbc/5.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/j256/ormlite/ormlite-jdbc/5.1/ormlite-jdbc-5.1.jar"
+          ],
+          "sha256": "5e921c6b729dab93c60839e181765ab3afdbcf7e77401b1c7feac401acd40862"
+        },
+        {
+          "name": "com.j256.ormlite-ormlite-jdbc-5.1-pom",
+          "filename": "ormlite-jdbc-5.1.pom",
+          "path": "com/j256/ormlite/ormlite-jdbc/5.1",
+          "urls": [
+            "https://jcenter.bintray.com/com/j256/ormlite/ormlite-jdbc/5.1/ormlite-jdbc-5.1.pom"
+          ],
+          "sha256": "0b056a8e9ce25d8d5638141ad49b748613ff508f43c857c6ac9f4d79788786b2"
+        },
+        {
+          "name": "com.jayway.jsonpath-json-path-2.4.0-jar",
+          "filename": "json-path-2.4.0.jar",
+          "path": "com/jayway/jsonpath/json-path/2.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.jar"
+          ],
+          "sha256": "60441c74fb64e5a480070f86a604941927aaf684e2b513d780fb7a38fb4c5639"
+        },
+        {
+          "name": "com.jayway.jsonpath-json-path-2.4.0-pom",
+          "filename": "json-path-2.4.0.pom",
+          "path": "com/jayway/jsonpath/json-path/2.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.pom"
+          ],
+          "sha256": "ce4885b1bc083140a14bb83d671c0261583e332e8104b4e18263b9a37efa02c1"
+        },
+        {
+          "name": "com.mchange-c3p0-0.9.5.4-jar",
+          "filename": "c3p0-0.9.5.4.jar",
+          "path": "com/mchange/c3p0/0.9.5.4",
+          "urls": [
+            "https://jcenter.bintray.com/com/mchange/c3p0/0.9.5.4/c3p0-0.9.5.4.jar"
+          ],
+          "sha256": "60cf2906cd6ad6771f514a3e848b74b3e3da99c1806f2a63c38e2dd8da5ef11f"
+        },
+        {
+          "name": "com.mchange-c3p0-0.9.5.4-pom",
+          "filename": "c3p0-0.9.5.4.pom",
+          "path": "com/mchange/c3p0/0.9.5.4",
+          "urls": [
+            "https://jcenter.bintray.com/com/mchange/c3p0/0.9.5.4/c3p0-0.9.5.4.pom"
+          ],
+          "sha256": "d3e964d4e17f09360341237f110c988692eb2e7a7f1002bdd8e02b8c8cdf0e75"
+        },
+        {
+          "name": "com.mchange-mchange-commons-java-0.2.15-jar",
+          "filename": "mchange-commons-java-0.2.15.jar",
+          "path": "com/mchange/mchange-commons-java/0.2.15",
+          "urls": [
+            "https://jcenter.bintray.com/com/mchange/mchange-commons-java/0.2.15/mchange-commons-java-0.2.15.jar"
+          ],
+          "sha256": "2b8fce65e95a3e968d5ab3507e2833f43df3daee0635ee51c7ce33343bb3a21c"
+        },
+        {
+          "name": "com.mchange-mchange-commons-java-0.2.15-pom",
+          "filename": "mchange-commons-java-0.2.15.pom",
+          "path": "com/mchange/mchange-commons-java/0.2.15",
+          "urls": [
+            "https://jcenter.bintray.com/com/mchange/mchange-commons-java/0.2.15/mchange-commons-java-0.2.15.pom"
+          ],
+          "sha256": "ac48d55cd1fc6d576a9fede1339bd2acbf322fa345c77c13341c7ca6954a6210"
+        },
+        {
+          "name": "com.sendgrid-sendgrid-java-2.2.2-jar",
+          "filename": "sendgrid-java-2.2.2.jar",
+          "path": "com/sendgrid/sendgrid-java/2.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sendgrid/sendgrid-java/2.2.2/sendgrid-java-2.2.2.jar"
+          ],
+          "sha256": "8bed943473cbb00e317d50e30dfd6f59385a5bdd95560bdd88a304432394519c"
+        },
+        {
+          "name": "com.sendgrid-sendgrid-java-2.2.2-pom",
+          "filename": "sendgrid-java-2.2.2.pom",
+          "path": "com/sendgrid/sendgrid-java/2.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sendgrid/sendgrid-java/2.2.2/sendgrid-java-2.2.2.pom"
+          ],
+          "sha256": "07134ee435f2d43286ece438e1a93581ced0ff2360372b2b432805d6835c5240"
+        },
+        {
+          "name": "com.sendgrid-smtpapi-java-1.2.0-jar",
+          "filename": "smtpapi-java-1.2.0.jar",
+          "path": "com/sendgrid/smtpapi-java/1.2.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/sendgrid/smtpapi-java/1.2.0/smtpapi-java-1.2.0.jar"
+          ],
+          "sha256": "7ec059dab2600dfe8e424223da82f1452a2d68ea9c9254c6e86983fc79b8db27"
+        },
+        {
+          "name": "com.sendgrid-smtpapi-java-1.2.0-pom",
+          "filename": "smtpapi-java-1.2.0.pom",
+          "path": "com/sendgrid/smtpapi-java/1.2.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/sendgrid/smtpapi-java/1.2.0/smtpapi-java-1.2.0.pom"
+          ],
+          "sha256": "eae852f2e8095c2c5372886305cd122c647d8246ffa2861bda92201e73ef1bf8"
+        },
+        {
+          "name": "com.squareup.okhttp3-okhttp-4.2.2-jar",
+          "filename": "okhttp-4.2.2.jar",
+          "path": "com/squareup/okhttp3/okhttp/4.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okhttp3/okhttp/4.2.2/okhttp-4.2.2.jar"
+          ],
+          "sha256": "5064182cff40b100ce57fbf3ce985e12e38cf4433724e81b175c1843eaecbb75"
+        },
+        {
+          "name": "com.squareup.okhttp3-okhttp-4.2.2-pom",
+          "filename": "okhttp-4.2.2.pom",
+          "path": "com/squareup/okhttp3/okhttp/4.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okhttp3/okhttp/4.2.2/okhttp-4.2.2.pom"
+          ],
+          "sha256": "dea108c4f9bf47f83050095d97fba6b72877c703baea880260b87f663a1fd4ed"
+        },
+        {
+          "name": "com.squareup.okio-okio-2.2.2-jar",
+          "filename": "okio-2.2.2.jar",
+          "path": "com/squareup/okio/okio/2.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okio/okio/2.2.2/okio-2.2.2.jar"
+          ],
+          "sha256": "e58c97406a6bb1138893750299ac63c6aa04b38b6b49eae1bfcad1a63ef9ba1b"
+        },
+        {
+          "name": "com.squareup.okio-okio-2.2.2-pom",
+          "filename": "okio-2.2.2.pom",
+          "path": "com/squareup/okio/okio/2.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/squareup/okio/okio/2.2.2/okio-2.2.2.pom"
+          ],
+          "sha256": "fd621988f7f6957025735dc6dd090b00a20f3a3bb8d77ca79036077f629b140b"
+        },
+        {
+          "name": "com.sun.mail-all-1.6.2-pom",
+          "filename": "all-1.6.2.pom",
+          "path": "com/sun/mail/all/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sun/mail/all/1.6.2/all-1.6.2.pom"
+          ],
+          "sha256": "4b7e83aa9b77d65e007e97cb50f9b89cdb754faaf16411e5fd94d1e3dab76eb3"
+        },
+        {
+          "name": "com.sun.mail-javax.mail-1.6.2-jar",
+          "filename": "javax.mail-1.6.2.jar",
+          "path": "com/sun/mail/javax.mail/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.jar"
+          ],
+          "sha256": "45b515e7104944c09e45b9c7bb1ce5dff640486374852dd2b2e80cc3752dfa11"
+        },
+        {
+          "name": "com.sun.mail-javax.mail-1.6.2-pom",
+          "filename": "javax.mail-1.6.2.pom",
+          "path": "com/sun/mail/javax.mail/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.pom"
+          ],
+          "sha256": "c4229c05b5836f002521363d3435f3d072662744548bf17e7e7adecafe68b9fd"
+        },
+        {
+          "name": "com.twilio.sdk-twilio-7.45.0-jar",
+          "filename": "twilio-7.45.0.jar",
+          "path": "com/twilio/sdk/twilio/7.45.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/twilio/sdk/twilio/7.45.0/twilio-7.45.0.jar"
+          ],
+          "sha256": "c8d236069d600432ca33c8b57c184d3c659cb5ea0f08277bcc6ebaba626623b6"
+        },
+        {
+          "name": "com.twilio.sdk-twilio-7.45.0-pom",
+          "filename": "twilio-7.45.0.pom",
+          "path": "com/twilio/sdk/twilio/7.45.0",
+          "urls": [
+            "https://jcenter.bintray.com/com/twilio/sdk/twilio/7.45.0/twilio-7.45.0.pom"
+          ],
+          "sha256": "206f9c1a09c3df5392b8a322528442e8e01967c08818d1daaac150b28a741adc"
+        },
+        {
+          "name": "com.unboundid-unboundid-ldapsdk-4.0.12-jar",
+          "filename": "unboundid-ldapsdk-4.0.12.jar",
+          "path": "com/unboundid/unboundid-ldapsdk/4.0.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/unboundid/unboundid-ldapsdk/4.0.12/unboundid-ldapsdk-4.0.12.jar"
+          ],
+          "sha256": "e234ed0de21aa47d64bbbde1bc28cb058419a578416263c5d40f556cabfa70bf"
+        },
+        {
+          "name": "com.unboundid-unboundid-ldapsdk-4.0.12-pom",
+          "filename": "unboundid-ldapsdk-4.0.12.pom",
+          "path": "com/unboundid/unboundid-ldapsdk/4.0.12",
+          "urls": [
+            "https://jcenter.bintray.com/com/unboundid/unboundid-ldapsdk/4.0.12/unboundid-ldapsdk-4.0.12.pom"
+          ],
+          "sha256": "7a313ebf94be78014df7e0e6eaceac67b568a7c7717a47309ea4546622c0815c"
+        },
+        {
+          "name": "commons-cli-commons-cli-1.4-jar",
+          "filename": "commons-cli-1.4.jar",
+          "path": "commons-cli/commons-cli/1.4",
+          "urls": [
+            "https://jcenter.bintray.com/commons-cli/commons-cli/1.4/commons-cli-1.4.jar"
+          ],
+          "sha256": "fd3c7c9545a9cdb2051d1f9155c4f76b1e4ac5a57304404a6eedb578ffba7328"
+        },
+        {
+          "name": "commons-cli-commons-cli-1.4-pom",
+          "filename": "commons-cli-1.4.pom",
+          "path": "commons-cli/commons-cli/1.4",
+          "urls": [
+            "https://jcenter.bintray.com/commons-cli/commons-cli/1.4/commons-cli-1.4.pom"
+          ],
+          "sha256": "f589bf30a98dc7497410b8eb8d86a167637577ac55cd5dd30cc4b57dbbc6f893"
+        },
+        {
+          "name": "commons-codec-commons-codec-1.13-jar",
+          "filename": "commons-codec-1.13.jar",
+          "path": "commons-codec/commons-codec/1.13",
+          "urls": [
+            "https://jcenter.bintray.com/commons-codec/commons-codec/1.13/commons-codec-1.13.jar"
+          ],
+          "sha256": "61f7a3079e92b9fdd605238d0295af5fd11ac411a0a0af48deace1f6c5ffa072"
+        },
+        {
+          "name": "commons-codec-commons-codec-1.13-pom",
+          "filename": "commons-codec-1.13.pom",
+          "path": "commons-codec/commons-codec/1.13",
+          "urls": [
+            "https://jcenter.bintray.com/commons-codec/commons-codec/1.13/commons-codec-1.13.pom"
+          ],
+          "sha256": "c2e2a902d38230cf3031d0b434d5de2614fa0ff26d384b6d282aab56c7d3fc69"
+        },
+        {
+          "name": "commons-collections-commons-collections-3.2.2-jar",
+          "filename": "commons-collections-3.2.2.jar",
+          "path": "commons-collections/commons-collections/3.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar"
+          ],
+          "sha256": "eeeae917917144a68a741d4c0dff66aa5c5c5fd85593ff217bced3fc8ca783b8"
+        },
+        {
+          "name": "commons-collections-commons-collections-3.2.2-pom",
+          "filename": "commons-collections-3.2.2.pom",
+          "path": "commons-collections/commons-collections/3.2.2",
+          "urls": [
+            "https://jcenter.bintray.com/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.pom"
+          ],
+          "sha256": "d5d81fcc288c0d8c711c302007cada4aa9a226ed1a112d4baa64cb1d6322170b"
+        },
+        {
+          "name": "commons-fileupload-commons-fileupload-1.4-jar",
+          "filename": "commons-fileupload-1.4.jar",
+          "path": "commons-fileupload/commons-fileupload/1.4",
+          "urls": [
+            "https://jcenter.bintray.com/commons-fileupload/commons-fileupload/1.4/commons-fileupload-1.4.jar"
+          ],
+          "sha256": "a4ec02336f49253ea50405698b79232b8c5cbf02cb60df3a674d77a749a1def7"
+        },
+        {
+          "name": "commons-fileupload-commons-fileupload-1.4-pom",
+          "filename": "commons-fileupload-1.4.pom",
+          "path": "commons-fileupload/commons-fileupload/1.4",
+          "urls": [
+            "https://jcenter.bintray.com/commons-fileupload/commons-fileupload/1.4/commons-fileupload-1.4.pom"
+          ],
+          "sha256": "88517c5a1f8d62aaf4b8b3e2312615b9c2795db86e695bf372e362674cf3f600"
+        },
+        {
+          "name": "commons-io-commons-io-2.6-jar",
+          "filename": "commons-io-2.6.jar",
+          "path": "commons-io/commons-io/2.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-io/commons-io/2.6/commons-io-2.6.jar"
+          ],
+          "sha256": "f877d304660ac2a142f3865badfc971dec7ed73c747c7f8d5d2f5139ca736513"
+        },
+        {
+          "name": "commons-io-commons-io-2.6-pom",
+          "filename": "commons-io-2.6.pom",
+          "path": "commons-io/commons-io/2.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-io/commons-io/2.6/commons-io-2.6.pom"
+          ],
+          "sha256": "0c23863893a2291f5a7afdbd8d15923b3948afd87e563fa341cdcf6eae338a60"
+        },
+        {
+          "name": "commons-lang-commons-lang-2.6-jar",
+          "filename": "commons-lang-2.6.jar",
+          "path": "commons-lang/commons-lang/2.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-lang/commons-lang/2.6/commons-lang-2.6.jar"
+          ],
+          "sha256": "50f11b09f877c294d56f24463f47d28f929cf5044f648661c0f0cfbae9a2f49c"
+        },
+        {
+          "name": "commons-lang-commons-lang-2.6-pom",
+          "filename": "commons-lang-2.6.pom",
+          "path": "commons-lang/commons-lang/2.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-lang/commons-lang/2.6/commons-lang-2.6.pom"
+          ],
+          "sha256": "ed76b8891c30b566289c743656f8a4d435986982438d40c567c626233247e711"
+        },
+        {
+          "name": "commons-logging-commons-logging-1.2-jar",
+          "filename": "commons-logging-1.2.jar",
+          "path": "commons-logging/commons-logging/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/commons-logging/commons-logging/1.2/commons-logging-1.2.jar"
+          ],
+          "sha256": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636"
+        },
+        {
+          "name": "commons-logging-commons-logging-1.2-pom",
+          "filename": "commons-logging-1.2.pom",
+          "path": "commons-logging/commons-logging/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/commons-logging/commons-logging/1.2/commons-logging-1.2.pom"
+          ],
+          "sha256": "c91ab5aa570d86f6fd07cc158ec6bc2c50080402972ee9179fe24100739fbb20"
+        },
+        {
+          "name": "commons-pool-commons-pool-1.6-jar",
+          "filename": "commons-pool-1.6.jar",
+          "path": "commons-pool/commons-pool/1.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-pool/commons-pool/1.6/commons-pool-1.6.jar"
+          ],
+          "sha256": "46c42b4a38dc6b2db53a9ee5c92c63db103665d56694e2cfce2c95d51a6860cc"
+        },
+        {
+          "name": "commons-pool-commons-pool-1.6-pom",
+          "filename": "commons-pool-1.6.pom",
+          "path": "commons-pool/commons-pool/1.6",
+          "urls": [
+            "https://jcenter.bintray.com/commons-pool/commons-pool/1.6/commons-pool-1.6.pom"
+          ],
+          "sha256": "2dde6b76ae0f4cffd0ad7429e06557d4bfd167cf42b2041aca5ca3c01cb60ca9"
+        },
+        {
+          "name": "dnsjava-dnsjava-2.1.9-jar",
+          "filename": "dnsjava-2.1.9.jar",
+          "path": "dnsjava/dnsjava/2.1.9",
+          "urls": [
+            "https://jcenter.bintray.com/dnsjava/dnsjava/2.1.9/dnsjava-2.1.9.jar"
+          ],
+          "sha256": "072bba34267ffad8907c30a99a6b68f900782f3191454d278e395e289d478446"
+        },
+        {
+          "name": "dnsjava-dnsjava-2.1.9-pom",
+          "filename": "dnsjava-2.1.9.pom",
+          "path": "dnsjava/dnsjava/2.1.9",
+          "urls": [
+            "https://jcenter.bintray.com/dnsjava/dnsjava/2.1.9/dnsjava-2.1.9.pom"
+          ],
+          "sha256": "36ed9775f06dbe1bb06986625856b08a50649a78a6dbdaf167a547f015abbf8f"
+        },
+        {
+          "name": "io.jsonwebtoken-jjwt-0.4-jar",
+          "filename": "jjwt-0.4.jar",
+          "path": "io/jsonwebtoken/jjwt/0.4",
+          "urls": [
+            "https://jcenter.bintray.com/io/jsonwebtoken/jjwt/0.4/jjwt-0.4.jar"
+          ],
+          "sha256": "64f06aa7c74916036ffe3bb96b5a1aac7d4c6c6b1914b3ea828959da2117920b"
+        },
+        {
+          "name": "io.jsonwebtoken-jjwt-0.4-pom",
+          "filename": "jjwt-0.4.pom",
+          "path": "io/jsonwebtoken/jjwt/0.4",
+          "urls": [
+            "https://jcenter.bintray.com/io/jsonwebtoken/jjwt/0.4/jjwt-0.4.pom"
+          ],
+          "sha256": "a171ebadebc2504355dbd01fb933764163e26a18dde7ac7042b8f6244bca280e"
+        },
+        {
+          "name": "io.undertow-undertow-core-2.0.27.Final-jar",
+          "filename": "undertow-core-2.0.27.Final.jar",
+          "path": "io/undertow/undertow-core/2.0.27.Final",
+          "urls": [
+            "https://jcenter.bintray.com/io/undertow/undertow-core/2.0.27.Final/undertow-core-2.0.27.Final.jar"
+          ],
+          "sha256": "7773dee35ed9a8002144877ed08455847ef454d2de5931634d56bc948b64df4a"
+        },
+        {
+          "name": "io.undertow-undertow-core-2.0.27.Final-pom",
+          "filename": "undertow-core-2.0.27.Final.pom",
+          "path": "io/undertow/undertow-core/2.0.27.Final",
+          "urls": [
+            "https://jcenter.bintray.com/io/undertow/undertow-core/2.0.27.Final/undertow-core-2.0.27.Final.pom"
+          ],
+          "sha256": "e78338899deffa54a4c937cc939f8acf93aa2dac3e6b2d2a4411d48993ed17c8"
+        },
+        {
+          "name": "io.undertow-undertow-parent-2.0.27.Final-pom",
+          "filename": "undertow-parent-2.0.27.Final.pom",
+          "path": "io/undertow/undertow-parent/2.0.27.Final",
+          "urls": [
+            "https://jcenter.bintray.com/io/undertow/undertow-parent/2.0.27.Final/undertow-parent-2.0.27.Final.pom"
+          ],
+          "sha256": "6d4a11fc3eb20ec31e2ba025f6b8456431b8c7034cf16f5eee49490828a0eab9"
+        },
+        {
+          "name": "javax.activation-activation-1.1-jar",
+          "filename": "activation-1.1.jar",
+          "path": "javax/activation/activation/1.1",
+          "urls": [
+            "https://jcenter.bintray.com/javax/activation/activation/1.1/activation-1.1.jar"
+          ],
+          "sha256": "2881c79c9d6ef01c58e62beea13e9d1ac8b8baa16f2fc198ad6e6776defdcdd3"
+        },
+        {
+          "name": "javax.activation-activation-1.1-pom",
+          "filename": "activation-1.1.pom",
+          "path": "javax/activation/activation/1.1",
+          "urls": [
+            "https://jcenter.bintray.com/javax/activation/activation/1.1/activation-1.1.pom"
+          ],
+          "sha256": "d490e540a11504b9d71718b1c85fef7b3de6802361290824539b076d58faa8a0"
+        },
+        {
+          "name": "javax.mail-javax.mail-api-1.6.2-jar",
+          "filename": "javax.mail-api-1.6.2.jar",
+          "path": "javax/mail/javax.mail-api/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/mail/javax.mail-api/1.6.2/javax.mail-api-1.6.2.jar"
+          ],
+          "sha256": "17489addfc8d7b43afc7775072a56bbaadf32cfb1e9d39fb4b7ece890d6698f1"
+        },
+        {
+          "name": "javax.mail-javax.mail-api-1.6.2-pom",
+          "filename": "javax.mail-api-1.6.2.pom",
+          "path": "javax/mail/javax.mail-api/1.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/mail/javax.mail-api/1.6.2/javax.mail-api-1.6.2.pom"
+          ],
+          "sha256": "914613b7d4769a8e57de1a0b9eddecda279a85d137c15bb427f091530a85a0eb"
+        },
+        {
+          "name": "javax.servlet-javax.servlet-api-3.1.0-jar",
+          "filename": "javax.servlet-api-3.1.0.jar",
+          "path": "javax/servlet/javax.servlet-api/3.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar"
+          ],
+          "sha256": "af456b2dd41c4e82cf54f3e743bc678973d9fe35bd4d3071fa05c7e5333b8482"
+        },
+        {
+          "name": "javax.servlet-javax.servlet-api-3.1.0-pom",
+          "filename": "javax.servlet-api-3.1.0.pom",
+          "path": "javax/servlet/javax.servlet-api/3.1.0",
+          "urls": [
+            "https://jcenter.bintray.com/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.pom"
+          ],
+          "sha256": "b31109e22ea3f2df1ad7955432e718a35def50ae6c19698034afa8a0cf9e9069"
+        },
+        {
+          "name": "javax.xml.bind-jaxb-api-2.2-jar",
+          "filename": "jaxb-api-2.2.jar",
+          "path": "javax/xml/bind/jaxb-api/2.2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/xml/bind/jaxb-api/2.2/jaxb-api-2.2.jar"
+          ],
+          "sha256": "2e9dc899a785544e8a8262047cd370636f734ee0246e36263ee0295c3f3aed94"
+        },
+        {
+          "name": "javax.xml.bind-jaxb-api-2.2-pom",
+          "filename": "jaxb-api-2.2.pom",
+          "path": "javax/xml/bind/jaxb-api/2.2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/xml/bind/jaxb-api/2.2/jaxb-api-2.2.pom"
+          ],
+          "sha256": "57bd81713747e2baf96e46bb2c669b8c11b2ea7bc592729753acccb5f6e11c53"
+        },
+        {
+          "name": "javax.xml.stream-stax-api-1.0-2-jar",
+          "filename": "stax-api-1.0-2.jar",
+          "path": "javax/xml/stream/stax-api/1.0-2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar"
+          ],
+          "sha256": "e8c70ebd76f982c9582a82ef82cf6ce14a7d58a4a4dca5cb7b7fc988c80089b7"
+        },
+        {
+          "name": "javax.xml.stream-stax-api-1.0-2-pom",
+          "filename": "stax-api-1.0-2.pom",
+          "path": "javax/xml/stream/stax-api/1.0-2",
+          "urls": [
+            "https://jcenter.bintray.com/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.pom"
+          ],
+          "sha256": "47f02f02090fe4760c88c4570277f33586ea11500a014b35fc7855a2f0973e6d"
+        },
+        {
+          "name": "joda-time-joda-time-2.9.2-jar",
+          "filename": "joda-time-2.9.2.jar",
+          "path": "joda-time/joda-time/2.9.2",
+          "urls": [
+            "https://jcenter.bintray.com/joda-time/joda-time/2.9.2/joda-time-2.9.2.jar"
+          ],
+          "sha256": "0be5c40e8cdce9ec0643d76be99f276db17c45d7616a217fd1b19b7ef73ca7b1"
+        },
+        {
+          "name": "joda-time-joda-time-2.9.2-pom",
+          "filename": "joda-time-2.9.2.pom",
+          "path": "joda-time/joda-time/2.9.2",
+          "urls": [
+            "https://jcenter.bintray.com/joda-time/joda-time/2.9.2/joda-time-2.9.2.pom"
+          ],
+          "sha256": "6c2658aac4c246cba0c1768ad1a27e525294cf4e143d668a938eff9c29e73a88"
+        },
+        {
+          "name": "junit-junit-4.13-rc-1-jar",
+          "filename": "junit-4.13-rc-1.jar",
+          "path": "junit/junit/4.13-rc-1",
+          "urls": [
+            "https://jcenter.bintray.com/junit/junit/4.13-rc-1/junit-4.13-rc-1.jar"
+          ],
+          "sha256": "a1dc50121ca16529b8f3a0f03f8aa082edc3c2bb5a7796a8f969170049173d1c"
+        },
+        {
+          "name": "junit-junit-4.13-rc-1-pom",
+          "filename": "junit-4.13-rc-1.pom",
+          "path": "junit/junit/4.13-rc-1",
+          "urls": [
+            "https://jcenter.bintray.com/junit/junit/4.13-rc-1/junit-4.13-rc-1.pom"
+          ],
+          "sha256": "03e348758fc28f2da83e155f0f9109b57eba7856965c218556692fbcf395f907"
+        },
+        {
+          "name": "net.i2p.crypto-eddsa-0.3.0-jar",
+          "filename": "eddsa-0.3.0.jar",
+          "path": "net/i2p/crypto/eddsa/0.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/net/i2p/crypto/eddsa/0.3.0/eddsa-0.3.0.jar"
+          ],
+          "sha256": "4dda1120db856640dbec04140ed23242215a075fe127bdefa0dcfa29fb31267d"
+        },
+        {
+          "name": "net.i2p.crypto-eddsa-0.3.0-pom",
+          "filename": "eddsa-0.3.0.pom",
+          "path": "net/i2p/crypto/eddsa/0.3.0",
+          "urls": [
+            "https://jcenter.bintray.com/net/i2p/crypto/eddsa/0.3.0/eddsa-0.3.0.pom"
+          ],
+          "sha256": "b6b13878e4bae8b768d7ea5732cb4d66ab2f5e9fe707c0a1a776cde9de52051b"
+        },
+        {
+          "name": "net.java-jvnet-parent-1-pom",
+          "filename": "jvnet-parent-1.pom",
+          "path": "net/java/jvnet-parent/1",
+          "urls": [
+            "https://jcenter.bintray.com/net/java/jvnet-parent/1/jvnet-parent-1.pom"
+          ],
+          "sha256": "281440811268e65d9e266b3cc898297e214e04f09740d0386ceeb4a8923d63bf"
+        },
+        {
+          "name": "net.java-jvnet-parent-3-pom",
+          "filename": "jvnet-parent-3.pom",
+          "path": "net/java/jvnet-parent/3",
+          "urls": [
+            "https://jcenter.bintray.com/net/java/jvnet-parent/3/jvnet-parent-3.pom"
+          ],
+          "sha256": "30f5789efa39ddbf96095aada3fc1260c4561faf2f714686717cb2dc5049475a"
+        },
+        {
+          "name": "net.minidev-accessors-smart-1.2-jar",
+          "filename": "accessors-smart-1.2.jar",
+          "path": "net/minidev/accessors-smart/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/accessors-smart/1.2/accessors-smart-1.2.jar"
+          ],
+          "sha256": "0c7c265d62fc007124dc32b91336e9c4272651d629bc5fa1a4e4e3bc758eb2e4"
+        },
+        {
+          "name": "net.minidev-accessors-smart-1.2-pom",
+          "filename": "accessors-smart-1.2.pom",
+          "path": "net/minidev/accessors-smart/1.2",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/accessors-smart/1.2/accessors-smart-1.2.pom"
+          ],
+          "sha256": "118e12b36edffdd0409983c8a6e24d1aefb0c2b0674bdfd0514d201f7a97aa9e"
+        },
+        {
+          "name": "net.minidev-json-smart-2.3-jar",
+          "filename": "json-smart-2.3.jar",
+          "path": "net/minidev/json-smart/2.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/json-smart/2.3/json-smart-2.3.jar"
+          ],
+          "sha256": "903f48c8aa4c3f6426440b8d32de89fa1dc23b1169abde25e4e1d068aa67708b"
+        },
+        {
+          "name": "net.minidev-json-smart-2.3-pom",
+          "filename": "json-smart-2.3.pom",
+          "path": "net/minidev/json-smart/2.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/json-smart/2.3/json-smart-2.3.pom"
+          ],
+          "sha256": "9c79015536f221d2fef2f3a17168570b5a08ea643051bd436e0985eb8a505cc9"
+        },
+        {
+          "name": "net.minidev-minidev-parent-2.3-pom",
+          "filename": "minidev-parent-2.3.pom",
+          "path": "net/minidev/minidev-parent/2.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/minidev/minidev-parent/2.3/minidev-parent-2.3.pom"
+          ],
+          "sha256": "950d8f0c02c24e4a38edde374532a42bfed55910e07ef0314905d8e34a250954"
+        },
+        {
+          "name": "net.sf.jopt-simple-jopt-simple-5.0.3-jar",
+          "filename": "jopt-simple-5.0.3.jar",
+          "path": "net/sf/jopt-simple/jopt-simple/5.0.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.jar"
+          ],
+          "sha256": "6f45c00908265947c39221035250024f2caec9a15c1c8cf553ebeecee289f342"
+        },
+        {
+          "name": "net.sf.jopt-simple-jopt-simple-5.0.3-pom",
+          "filename": "jopt-simple-5.0.3.pom",
+          "path": "net/sf/jopt-simple/jopt-simple/5.0.3",
+          "urls": [
+            "https://jcenter.bintray.com/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.pom"
+          ],
+          "sha256": "df75c23d079c8f1a4f5b2fda4ba271ef535993d53d5664213aa2325784e50fd3"
+        },
+        {
+          "name": "org.antlr-antlr4-master-4.7.1-pom",
+          "filename": "antlr4-master-4.7.1.pom",
+          "path": "org/antlr/antlr4-master/4.7.1",
+          "urls": [
+            "https://jcenter.bintray.com/org/antlr/antlr4-master/4.7.1/antlr4-master-4.7.1.pom"
+          ],
+          "sha256": "4126f67bf413f6c8bcc1b19d87b9a7256742cfa71c250c4a99530daedea0868c"
+        },
+        {
+          "name": "org.antlr-antlr4-runtime-4.7.1-jar",
+          "filename": "antlr4-runtime-4.7.1.jar",
+          "path": "org/antlr/antlr4-runtime/4.7.1",
+          "urls": [
+            "https://jcenter.bintray.com/org/antlr/antlr4-runtime/4.7.1/antlr4-runtime-4.7.1.jar"
+          ],
+          "sha256": "43516d19beae35909e04d06af6c0c58c17bc94e0070c85e8dc9929ca640dc91d"
+        },
+        {
+          "name": "org.antlr-antlr4-runtime-4.7.1-pom",
+          "filename": "antlr4-runtime-4.7.1.pom",
+          "path": "org/antlr/antlr4-runtime/4.7.1",
+          "urls": [
+            "https://jcenter.bintray.com/org/antlr/antlr4-runtime/4.7.1/antlr4-runtime-4.7.1.pom"
+          ],
+          "sha256": "ce1386a1b90e512cb7a258b5221d42f11261ffda9a125901cdd86cdf2a59ff91"
+        },
+        {
+          "name": "org.apache.commons-commons-lang3-3.9-jar",
+          "filename": "commons-lang3-3.9.jar",
+          "path": "org/apache/commons/commons-lang3/3.9",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.jar"
+          ],
+          "sha256": "de2e1dcdcf3ef917a8ce858661a06726a9a944f28e33ad7f9e08bea44dc3c230"
+        },
+        {
+          "name": "org.apache.commons-commons-lang3-3.9-pom",
+          "filename": "commons-lang3-3.9.pom",
+          "path": "org/apache/commons/commons-lang3/3.9",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.pom"
+          ],
+          "sha256": "a4022429b98425b430181915721279a52f610f34648bdac487d4cacbbe8dfeb5"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-17-pom",
+          "filename": "commons-parent-17.pom",
+          "path": "org/apache/commons/commons-parent/17",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/17/commons-parent-17.pom"
+          ],
+          "sha256": "96e718baf534874ee62ce4d42de265f2ddacd88391a540e030d59d98fa7c4408"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-22-pom",
+          "filename": "commons-parent-22.pom",
+          "path": "org/apache/commons/commons-parent/22",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/22/commons-parent-22.pom"
+          ],
+          "sha256": "fb8c5e55e30a7addb4ff210858a0e8d2494ed6757bbe19012da99d51586c3cbb"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-34-pom",
+          "filename": "commons-parent-34.pom",
+          "path": "org/apache/commons/commons-parent/34",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/34/commons-parent-34.pom"
+          ],
+          "sha256": "3a2e69d06d641d1f3b293126dc9e2e4ea6563bf8c36c87e0ab6fa4292d04b79c"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-39-pom",
+          "filename": "commons-parent-39.pom",
+          "path": "org/apache/commons/commons-parent/39",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/39/commons-parent-39.pom"
+          ],
+          "sha256": "87cd27e1a02a5c3eb6d85059ce98696bb1b44c2b8b650f0567c86df60fa61da7"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-42-pom",
+          "filename": "commons-parent-42.pom",
+          "path": "org/apache/commons/commons-parent/42",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/42/commons-parent-42.pom"
+          ],
+          "sha256": "cd313494c670b483ec256972af1698b330e598f807002354eb765479f604b09c"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-47-pom",
+          "filename": "commons-parent-47.pom",
+          "path": "org/apache/commons/commons-parent/47",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/47/commons-parent-47.pom"
+          ],
+          "sha256": "8a8ecb570553bf9f1ffae211a8d4ca9ee630c17afe59293368fba7bd9b42fcb7"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-48-pom",
+          "filename": "commons-parent-48.pom",
+          "path": "org/apache/commons/commons-parent/48",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/48/commons-parent-48.pom"
+          ],
+          "sha256": "1e1f7de9370a7b7901f128f1dacd1422be74e3f47f9558b0f79e04c0637ca0b4"
+        },
+        {
+          "name": "org.apache.directory.api-api-all-1.0.3-jar",
+          "filename": "api-all-1.0.3.jar",
+          "path": "org/apache/directory/api/api-all/1.0.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/directory/api/api-all/1.0.3/api-all-1.0.3.jar"
+          ],
+          "sha256": "f517b023e7ea49405746226185919b98948b45e3d9f3cd6ad348533b2503aaf6"
+        },
+        {
+          "name": "org.apache.directory.api-api-all-1.0.3-pom",
+          "filename": "api-all-1.0.3.pom",
+          "path": "org/apache/directory/api/api-all/1.0.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/directory/api/api-all/1.0.3/api-all-1.0.3.pom"
+          ],
+          "sha256": "c37ce545ed3b1c543f5d664a7106a9a97e071b8f8224561da7311100b016b951"
+        },
+        {
+          "name": "org.apache.directory.api-api-parent-1.0.3-pom",
+          "filename": "api-parent-1.0.3.pom",
+          "path": "org/apache/directory/api/api-parent/1.0.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/directory/api/api-parent/1.0.3/api-parent-1.0.3.pom"
+          ],
+          "sha256": "589eff2cb9731cea73ab3ca77c918ee8ca2c01e8f529c350f347547cecc09738"
+        },
+        {
+          "name": "org.apache.directory.project-project-41-pom",
+          "filename": "project-41.pom",
+          "path": "org/apache/directory/project/project/41",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/directory/project/project/41/project-41.pom"
+          ],
+          "sha256": "edba897a7062e23978a274d0c704bdf99055b85af80be51caa4e0e8b3cb86c00"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpclient-4.5.10-jar",
+          "filename": "httpclient-4.5.10.jar",
+          "path": "org/apache/httpcomponents/httpclient/4.5.10",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpclient/4.5.10/httpclient-4.5.10.jar"
+          ],
+          "sha256": "38b9f16f504928e4db736a433b9cd10968d9ec8d6f5d0e61a64889a689172134"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpclient-4.5.10-pom",
+          "filename": "httpclient-4.5.10.pom",
+          "path": "org/apache/httpcomponents/httpclient/4.5.10",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpclient/4.5.10/httpclient-4.5.10.pom"
+          ],
+          "sha256": "f3d3aa0cfc2336288ec72e462c5cf3ec7bdc5190aadf54406067634e82e03334"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcomponents-client-4.3.4-pom",
+          "filename": "httpcomponents-client-4.3.4.pom",
+          "path": "org/apache/httpcomponents/httpcomponents-client/4.3.4",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcomponents-client/4.3.4/httpcomponents-client-4.3.4.pom"
+          ],
+          "sha256": "e0420ef03bd05a99752ad7441639db629c4ea31ff6311431d8e3cba086ffba68"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcomponents-client-4.5.10-pom",
+          "filename": "httpcomponents-client-4.5.10.pom",
+          "path": "org/apache/httpcomponents/httpcomponents-client/4.5.10",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcomponents-client/4.5.10/httpcomponents-client-4.5.10.pom"
+          ],
+          "sha256": "7389e1938708a1b48a721b272455ae344a3b08e5e01149b3b1cde89a0c213ac6"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcomponents-core-4.4.12-pom",
+          "filename": "httpcomponents-core-4.4.12.pom",
+          "path": "org/apache/httpcomponents/httpcomponents-core/4.4.12",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcomponents-core/4.4.12/httpcomponents-core-4.4.12.pom"
+          ],
+          "sha256": "c20a5581ee048c598874a913006f457887688c2596b7004b159e89df04f91479"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcomponents-parent-11-pom",
+          "filename": "httpcomponents-parent-11.pom",
+          "path": "org/apache/httpcomponents/httpcomponents-parent/11",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcomponents-parent/11/httpcomponents-parent-11.pom"
+          ],
+          "sha256": "a901f87b115c55070c7ee43efff63e20e7b02d30af2443ae292bf1f4e532d3aa"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcore-4.4.12-jar",
+          "filename": "httpcore-4.4.12.jar",
+          "path": "org/apache/httpcomponents/httpcore/4.4.12",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcore/4.4.12/httpcore-4.4.12.jar"
+          ],
+          "sha256": "ab765334beabf0ea024484a5e90a7c40e8160b145f22d199e11e27f68d57da08"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcore-4.4.12-pom",
+          "filename": "httpcore-4.4.12.pom",
+          "path": "org/apache/httpcomponents/httpcore/4.4.12",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcore/4.4.12/httpcore-4.4.12.pom"
+          ],
+          "sha256": "bbb13f8e37b39599fa7e0f8bb44806a1f65909cf1139832eff701980f3e4d9da"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpmime-4.3.4-jar",
+          "filename": "httpmime-4.3.4.jar",
+          "path": "org/apache/httpcomponents/httpmime/4.3.4",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4.jar"
+          ],
+          "sha256": "b31046b52e7543db59254a679d9a5804baaf3f3586acd41a26827c03db9caee4"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpmime-4.3.4-pom",
+          "filename": "httpmime-4.3.4.pom",
+          "path": "org/apache/httpcomponents/httpmime/4.3.4",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4.pom"
+          ],
+          "sha256": "f634d1382b635d81c41d97be0405ed70ff066eaacab2beed46996866d724e2b4"
+        },
+        {
+          "name": "org.apache.httpcomponents-project-7-pom",
+          "filename": "project-7.pom",
+          "path": "org/apache/httpcomponents/project/7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/httpcomponents/project/7/project-7.pom"
+          ],
+          "sha256": "3d6eba428555a558de046b5d76eacc1f5a54b4f5f20b84d636ed7aff18aa48c3"
+        },
+        {
+          "name": "org.apache.mina-mina-core-2.0.21-jar",
+          "filename": "mina-core-2.0.21.jar",
+          "path": "org/apache/mina/mina-core/2.0.21",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/mina/mina-core/2.0.21/mina-core-2.0.21.jar"
+          ],
+          "sha256": "e83951a4066428c41672f7181d3535c433e1ab4ed55ee4c0a7b689bc661922cf"
+        },
+        {
+          "name": "org.apache.mina-mina-core-2.0.21-pom",
+          "filename": "mina-core-2.0.21.pom",
+          "path": "org/apache/mina/mina-core/2.0.21",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/mina/mina-core/2.0.21/mina-core-2.0.21.pom"
+          ],
+          "sha256": "85565d780523b9ba8f9a583d4bcfad98e290e82383003e7267f68ff04a5cb77c"
+        },
+        {
+          "name": "org.apache.mina-mina-parent-2.0.21-pom",
+          "filename": "mina-parent-2.0.21.pom",
+          "path": "org/apache/mina/mina-parent/2.0.21",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/mina/mina-parent/2.0.21/mina-parent-2.0.21.pom"
+          ],
+          "sha256": "db5a10f7cf1b6e59bf261b29b7550f3e212b036b9cfdd5cc5d5ced5483c88df9"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-bundles-pom-11-pom",
+          "filename": "bundles-pom-11.pom",
+          "path": "org/apache/servicemix/bundles/bundles-pom/11",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/bundles-pom/11/bundles-pom-11.pom"
+          ],
+          "sha256": "02d97026405ebd1209bf7bd7ddd6c493bd76a88ae6031dcfcddebe5cd9873fd8"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-bundles-pom-8-pom",
+          "filename": "bundles-pom-8.pom",
+          "path": "org/apache/servicemix/bundles/bundles-pom/8",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/bundles-pom/8/bundles-pom-8.pom"
+          ],
+          "sha256": "31699f1189a8684aac0c4b1d9d03637b7f228d0cc279c69b8ba43eb99cd1f45e"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.antlr-2.7.7_5-jar",
+          "filename": "org.apache.servicemix.bundles.antlr-2.7.7_5.jar",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5/org.apache.servicemix.bundles.antlr-2.7.7_5.jar"
+          ],
+          "sha256": "3902794d36d9b81da1b7e697f21ed04ccae276cc116eecc640a4cd0fff2691f2"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.antlr-2.7.7_5-pom",
+          "filename": "org.apache.servicemix.bundles.antlr-2.7.7_5.pom",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.antlr/2.7.7_5/org.apache.servicemix.bundles.antlr-2.7.7_5.pom"
+          ],
+          "sha256": "8e3dbe4e929bac7d6db9c73854e3090c7d87f1eaf95e3537988e1e7e9b66cc44"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.dom4j-1.6.1_5-jar",
+          "filename": "org.apache.servicemix.bundles.dom4j-1.6.1_5.jar",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar"
+          ],
+          "sha256": "15abe1ccad24f4fd71a926959f1acd64d84878348deee12dcf4928ee4f1db3d5"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.dom4j-1.6.1_5-pom",
+          "filename": "org.apache.servicemix.bundles.dom4j-1.6.1_5.pom",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.pom"
+          ],
+          "sha256": "de8a4c3e84132b4089c5e69c79d303f4125967217763c34a9c481e4af14ac86d"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.xpp3-1.1.4c_7-jar",
+          "filename": "org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar"
+          ],
+          "sha256": "61e106d5964f9109d7fb7462aa6b3c79b80f769fb6d95fb5f0042899471db19f"
+        },
+        {
+          "name": "org.apache.servicemix.bundles-org.apache.servicemix.bundles.xpp3-1.1.4c_7-pom",
+          "filename": "org.apache.servicemix.bundles.xpp3-1.1.4c_7.pom",
+          "path": "org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/bundles/org.apache.servicemix.bundles.xpp3/1.1.4c_7/org.apache.servicemix.bundles.xpp3-1.1.4c_7.pom"
+          ],
+          "sha256": "6cbf501ec5ed0134c3c458c573d7bd1f0aa97f9cb5e3dcb87116c9941d8737ac"
+        },
+        {
+          "name": "org.apache.servicemix-servicemix-pom-5-pom",
+          "filename": "servicemix-pom-5.pom",
+          "path": "org/apache/servicemix/servicemix-pom/5",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/servicemix/servicemix-pom/5/servicemix-pom-5.pom"
+          ],
+          "sha256": "00fff3d7dad849a7cee02bb2998396292858aac996457ba20f40c85f61b88252"
+        },
+        {
+          "name": "org.apache-apache-13-pom",
+          "filename": "apache-13.pom",
+          "path": "org/apache/apache/13",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/13/apache-13.pom"
+          ],
+          "sha256": "ff513db0361fd41237bef4784968bc15aae478d4ec0a9496f811072ccaf3841d"
+        },
+        {
+          "name": "org.apache-apache-16-pom",
+          "filename": "apache-16.pom",
+          "path": "org/apache/apache/16",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/16/apache-16.pom"
+          ],
+          "sha256": "9f85ff2fd7d6cb3097aa47fb419ee7f0ebe869109f98aba9f4eca3f49e74a40e"
+        },
+        {
+          "name": "org.apache-apache-18-pom",
+          "filename": "apache-18.pom",
+          "path": "org/apache/apache/18",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/18/apache-18.pom"
+          ],
+          "sha256": "7831307285fd475bbc36b20ae38e7882f11c3153b1d5930f852d44eda8f33c17"
+        },
+        {
+          "name": "org.apache-apache-19-pom",
+          "filename": "apache-19.pom",
+          "path": "org/apache/apache/19",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/19/apache-19.pom"
+          ],
+          "sha256": "91f7a33096ea69bac2cbaf6d01feb934cac002c48d8c8cfa9c240b40f1ec21df"
+        },
+        {
+          "name": "org.apache-apache-21-pom",
+          "filename": "apache-21.pom",
+          "path": "org/apache/apache/21",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/21/apache-21.pom"
+          ],
+          "sha256": "af10c108da014f17cafac7b52b2b4b5a3a1c18265fa2af97a325d9143537b380"
+        },
+        {
+          "name": "org.apache-apache-7-pom",
+          "filename": "apache-7.pom",
+          "path": "org/apache/apache/7",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/7/apache-7.pom"
+          ],
+          "sha256": "1397ce1db433adc9f223dbf07496d133681448751f4ae29e58f68e78fb4b6c25"
+        },
+        {
+          "name": "org.apache-apache-9-pom",
+          "filename": "apache-9.pom",
+          "path": "org/apache/apache/9",
+          "urls": [
+            "https://jcenter.bintray.com/org/apache/apache/9/apache-9.pom"
+          ],
+          "sha256": "4946e60a547c8eda69f3bc23c5b6f0dadcf8469ea49b1d1da7de34aecfcf18dd"
+        },
+        {
+          "name": "org.checkerframework-checker-compat-qual-2.5.5-jar",
+          "filename": "checker-compat-qual-2.5.5.jar",
+          "path": "org/checkerframework/checker-compat-qual/2.5.5",
+          "urls": [
+            "https://jcenter.bintray.com/org/checkerframework/checker-compat-qual/2.5.5/checker-compat-qual-2.5.5.jar"
+          ],
+          "sha256": "11d134b245e9cacc474514d2d66b5b8618f8039a1465cdc55bbc0b34e0008b7a"
+        },
+        {
+          "name": "org.checkerframework-checker-compat-qual-2.5.5-pom",
+          "filename": "checker-compat-qual-2.5.5.pom",
+          "path": "org/checkerframework/checker-compat-qual/2.5.5",
+          "urls": [
+            "https://jcenter.bintray.com/org/checkerframework/checker-compat-qual/2.5.5/checker-compat-qual-2.5.5.pom"
+          ],
+          "sha256": "42f21ebd9183be049ee5afc822b345403a5da764037875734a039b0d6e0353be"
+        },
+        {
+          "name": "org.codehaus.jackson-jackson-core-asl-1.9.11-jar",
+          "filename": "jackson-core-asl-1.9.11.jar",
+          "path": "org/codehaus/jackson/jackson-core-asl/1.9.11",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/jackson/jackson-core-asl/1.9.11/jackson-core-asl-1.9.11.jar"
+          ],
+          "sha256": "5fb6924b888550a9b0e8420747a93cc4ad24e03e724dcf4934c30cc0c4882ffc"
+        },
+        {
+          "name": "org.codehaus.jackson-jackson-core-asl-1.9.11-pom",
+          "filename": "jackson-core-asl-1.9.11.pom",
+          "path": "org/codehaus/jackson/jackson-core-asl/1.9.11",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/jackson/jackson-core-asl/1.9.11/jackson-core-asl-1.9.11.pom"
+          ],
+          "sha256": "2594d535b3e041bcd41dbfe05c163937abc0e3bcba448f6f92a5cf91f3fb8671"
+        },
+        {
+          "name": "org.codehaus.mojo-animal-sniffer-annotations-1.17-jar",
+          "filename": "animal-sniffer-annotations-1.17.jar",
+          "path": "org/codehaus/mojo/animal-sniffer-annotations/1.17",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar"
+          ],
+          "sha256": "92654f493ecfec52082e76354f0ebf87648dc3d5cec2e3c3cdb947c016747a53"
+        },
+        {
+          "name": "org.codehaus.mojo-animal-sniffer-annotations-1.17-pom",
+          "filename": "animal-sniffer-annotations-1.17.pom",
+          "path": "org/codehaus/mojo/animal-sniffer-annotations/1.17",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.pom"
+          ],
+          "sha256": "e956ab5d2eb48fabae12300d0cd2d3294d4a2a41abc2068c23cb4d60ad76cbe5"
+        },
+        {
+          "name": "org.codehaus.mojo-animal-sniffer-parent-1.17-pom",
+          "filename": "animal-sniffer-parent-1.17.pom",
+          "path": "org/codehaus/mojo/animal-sniffer-parent/1.17",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/mojo/animal-sniffer-parent/1.17/animal-sniffer-parent-1.17.pom"
+          ],
+          "sha256": "18a03df16e2a184c582db7b125633c15fb7714027a84c1b532d72933dc08b81f"
+        },
+        {
+          "name": "org.codehaus.mojo-mojo-parent-40-pom",
+          "filename": "mojo-parent-40.pom",
+          "path": "org/codehaus/mojo/mojo-parent/40",
+          "urls": [
+            "https://jcenter.bintray.com/org/codehaus/mojo/mojo-parent/40/mojo-parent-40.pom"
+          ],
+          "sha256": "fc648dcdc404f8bf66e0583914ecf980176618201227bea114fae85043cb755e"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-continuation-9.2.28.v20190418-jar",
+          "filename": "jetty-continuation-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-continuation/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-continuation/9.2.28.v20190418/jetty-continuation-9.2.28.v20190418.jar"
+          ],
+          "sha256": "593dcc53c1f62f761bdb5f2982aa455d81d111f7e20a6ba9a0cac1003fb38b61"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-continuation-9.2.28.v20190418-pom",
+          "filename": "jetty-continuation-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-continuation/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-continuation/9.2.28.v20190418/jetty-continuation-9.2.28.v20190418.pom"
+          ],
+          "sha256": "0486bb36e7faeeae4cad9fee7fd566865f3fe7498617860fb4dc2d11284a4c27"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-http-9.2.28.v20190418-jar",
+          "filename": "jetty-http-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-http/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-http/9.2.28.v20190418/jetty-http-9.2.28.v20190418.jar"
+          ],
+          "sha256": "b5ccf94d576d5e488587ffc76d215efa4a91a25b88c732b632ab784adafe81d5"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-http-9.2.28.v20190418-pom",
+          "filename": "jetty-http-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-http/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-http/9.2.28.v20190418/jetty-http-9.2.28.v20190418.pom"
+          ],
+          "sha256": "77b0dbed7b18f8675c1c73d8984a64c93e2d8f862df9421cfc7f0ddf4368318f"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-io-9.2.28.v20190418-jar",
+          "filename": "jetty-io-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-io/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-io/9.2.28.v20190418/jetty-io-9.2.28.v20190418.jar"
+          ],
+          "sha256": "4bc9dbdc342937d24dcc7ace723e16ce0409ef5d2f88dc47ba7b3d35cc630ffa"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-io-9.2.28.v20190418-pom",
+          "filename": "jetty-io-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-io/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-io/9.2.28.v20190418/jetty-io-9.2.28.v20190418.pom"
+          ],
+          "sha256": "99414e557b9c8c11cadf1967c7e7decf9c615858b90b819eaf0494ebf03e7f4a"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-parent-23-pom",
+          "filename": "jetty-parent-23.pom",
+          "path": "org/eclipse/jetty/jetty-parent/23",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-parent/23/jetty-parent-23.pom"
+          ],
+          "sha256": "ff229d8af3732c662c623fe403f7e7ac102fe54555ad01f382432e09deda8c51"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-project-9.2.28.v20190418-pom",
+          "filename": "jetty-project-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-project/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-project/9.2.28.v20190418/jetty-project-9.2.28.v20190418.pom"
+          ],
+          "sha256": "35f3548c714c647bdedfe08236deccbd2a15ad1c4537e7fc949431d2c25f009c"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-security-9.2.28.v20190418-jar",
+          "filename": "jetty-security-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-security/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-security/9.2.28.v20190418/jetty-security-9.2.28.v20190418.jar"
+          ],
+          "sha256": "e55f63c3c9920c4d8a0eb192e066fc26cf45843ead52cc25c2d21ebaa6bdcb7f"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-security-9.2.28.v20190418-pom",
+          "filename": "jetty-security-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-security/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-security/9.2.28.v20190418/jetty-security-9.2.28.v20190418.pom"
+          ],
+          "sha256": "eb17eba1f92158ff0155d624890e4ffdc59cb7a6e25401c250bbabf53bbd0f84"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-server-9.2.28.v20190418-jar",
+          "filename": "jetty-server-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-server/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-server/9.2.28.v20190418/jetty-server-9.2.28.v20190418.jar"
+          ],
+          "sha256": "fc48ec1a68bb42200de242ce4aa35a0deb2531ea6695169732cf5b9eaf8b3f96"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-server-9.2.28.v20190418-pom",
+          "filename": "jetty-server-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-server/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-server/9.2.28.v20190418/jetty-server-9.2.28.v20190418.pom"
+          ],
+          "sha256": "23addd29a3b1f5d7aa2e08183baf8ecff7b26ad4cfca73198cad738f22177ec1"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-servlet-9.2.28.v20190418-jar",
+          "filename": "jetty-servlet-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-servlet/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-servlet/9.2.28.v20190418/jetty-servlet-9.2.28.v20190418.jar"
+          ],
+          "sha256": "b58fa73981dd32d7a63cdc3b3b7eb89d9aba1f7c33e5424d575eab127f1e851c"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-servlet-9.2.28.v20190418-pom",
+          "filename": "jetty-servlet-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-servlet/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-servlet/9.2.28.v20190418/jetty-servlet-9.2.28.v20190418.pom"
+          ],
+          "sha256": "dbe90c51f4a809b96c43d604c0f7c43c39e1ac9fa276c076e837cefba5d01818"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-servlets-9.2.28.v20190418-jar",
+          "filename": "jetty-servlets-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-servlets/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-servlets/9.2.28.v20190418/jetty-servlets-9.2.28.v20190418.jar"
+          ],
+          "sha256": "e76ebb433f47fb324704410d3ecb414446b03e213c21ec9039765a109c88479f"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-servlets-9.2.28.v20190418-pom",
+          "filename": "jetty-servlets-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-servlets/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-servlets/9.2.28.v20190418/jetty-servlets-9.2.28.v20190418.pom"
+          ],
+          "sha256": "c163c20d381af0f58054db135b71f55477922ebbce2c54dd39cb589cb8bfccb6"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-util-9.2.28.v20190418-jar",
+          "filename": "jetty-util-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-util/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-util/9.2.28.v20190418/jetty-util-9.2.28.v20190418.jar"
+          ],
+          "sha256": "bdb2aee14bd9bc855c51cda78071064b1077770de2b228338f00f91f9cb1de44"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-util-9.2.28.v20190418-pom",
+          "filename": "jetty-util-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-util/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-util/9.2.28.v20190418/jetty-util-9.2.28.v20190418.pom"
+          ],
+          "sha256": "619265334ad5abe3e7ed3a4f90034ae7d979cd276501ace0ba9869c0537a658d"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-webapp-9.2.28.v20190418-jar",
+          "filename": "jetty-webapp-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-webapp/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-webapp/9.2.28.v20190418/jetty-webapp-9.2.28.v20190418.jar"
+          ],
+          "sha256": "a7126946497227a93d86f2dcff727ededadfb424fa8d1bc6b47d6b55b6c41544"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-webapp-9.2.28.v20190418-pom",
+          "filename": "jetty-webapp-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-webapp/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-webapp/9.2.28.v20190418/jetty-webapp-9.2.28.v20190418.pom"
+          ],
+          "sha256": "0254a44f34e47f9a13a1a6185aa50aacab650578eb8589d6ecaea525ef8f6a33"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-xml-9.2.28.v20190418-jar",
+          "filename": "jetty-xml-9.2.28.v20190418.jar",
+          "path": "org/eclipse/jetty/jetty-xml/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-xml/9.2.28.v20190418/jetty-xml-9.2.28.v20190418.jar"
+          ],
+          "sha256": "27e53eaec5e548d3016e48bb3a4fc02bf1c230c8918d57d62d599bd2b67c560c"
+        },
+        {
+          "name": "org.eclipse.jetty-jetty-xml-9.2.28.v20190418-pom",
+          "filename": "jetty-xml-9.2.28.v20190418.pom",
+          "path": "org/eclipse/jetty/jetty-xml/9.2.28.v20190418",
+          "urls": [
+            "https://jcenter.bintray.com/org/eclipse/jetty/jetty-xml/9.2.28.v20190418/jetty-xml-9.2.28.v20190418.pom"
+          ],
+          "sha256": "b95d2d112114fa386e24361cc406725b1b7810f7b9e362e080e20ab0b872555a"
+        },
+        {
+          "name": "org.hamcrest-hamcrest-core-1.3-jar",
+          "filename": "hamcrest-core-1.3.jar",
+          "path": "org/hamcrest/hamcrest-core/1.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+          ],
+          "sha256": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9"
+        },
+        {
+          "name": "org.hamcrest-hamcrest-core-1.3-pom",
+          "filename": "hamcrest-core-1.3.pom",
+          "path": "org/hamcrest/hamcrest-core/1.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.pom"
+          ],
+          "sha256": "fde386a7905173a1b103de6ab820727584b50d0e32282e2797787c20a64ffa93"
+        },
+        {
+          "name": "org.hamcrest-hamcrest-parent-1.3-pom",
+          "filename": "hamcrest-parent-1.3.pom",
+          "path": "org/hamcrest/hamcrest-parent/1.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-parent/1.3/hamcrest-parent-1.3.pom"
+          ],
+          "sha256": "6d535f94efb663bdb682c9f27a50335394688009642ba7a9677504bc1be4129b"
+        },
+        {
+          "name": "org.jboss.logging-jboss-logging-3.4.0.Final-jar",
+          "filename": "jboss-logging-3.4.0.Final.jar",
+          "path": "org/jboss/logging/jboss-logging/3.4.0.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/logging/jboss-logging/3.4.0.Final/jboss-logging-3.4.0.Final.jar"
+          ],
+          "sha256": "5974492fbbecae31e38f8a8a86c91756303f36b3ce6d6743350a0ce41c76f3d3"
+        },
+        {
+          "name": "org.jboss.logging-jboss-logging-3.4.0.Final-pom",
+          "filename": "jboss-logging-3.4.0.Final.pom",
+          "path": "org/jboss/logging/jboss-logging/3.4.0.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/logging/jboss-logging/3.4.0.Final/jboss-logging-3.4.0.Final.pom"
+          ],
+          "sha256": "0e40a4a3543c48bf4fddb65e37358daf4495f98cc1850b3be4d194e2b59cb117"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-all-3.3.8.Final-pom",
+          "filename": "xnio-all-3.3.8.Final.pom",
+          "path": "org/jboss/xnio/xnio-all/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-all/3.3.8.Final/xnio-all-3.3.8.Final.pom"
+          ],
+          "sha256": "10ec499e08c1a5b8d82b4d43cb45d7ce369911b01429a46afa088a67023569fb"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-api-3.3.8.Final-jar",
+          "filename": "xnio-api-3.3.8.Final.jar",
+          "path": "org/jboss/xnio/xnio-api/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-api/3.3.8.Final/xnio-api-3.3.8.Final.jar"
+          ],
+          "sha256": "6b2e22f0afd1af1b799bf98f007a6350acf35ed37c7ee5ca1ace3df28f04f5c2"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-api-3.3.8.Final-pom",
+          "filename": "xnio-api-3.3.8.Final.pom",
+          "path": "org/jboss/xnio/xnio-api/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-api/3.3.8.Final/xnio-api-3.3.8.Final.pom"
+          ],
+          "sha256": "a6b66842630dda16cc93149fde62e39775f1525d19a8673182f33a0b86216033"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-nio-3.3.8.Final-jar",
+          "filename": "xnio-nio-3.3.8.Final.jar",
+          "path": "org/jboss/xnio/xnio-nio/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-nio/3.3.8.Final/xnio-nio-3.3.8.Final.jar"
+          ],
+          "sha256": "963c1481096076ffb7af6f76b3936508d039f70b7f6df2f7845e6b592f22edac"
+        },
+        {
+          "name": "org.jboss.xnio-xnio-nio-3.3.8.Final-pom",
+          "filename": "xnio-nio-3.3.8.Final.pom",
+          "path": "org/jboss/xnio/xnio-nio/3.3.8.Final",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/xnio/xnio-nio/3.3.8.Final/xnio-nio-3.3.8.Final.pom"
+          ],
+          "sha256": "040aaa999831046623ff54b916d8dadeb700cf96d7fe1ef98160fa3f95013ce1"
+        },
+        {
+          "name": "org.jboss-jboss-parent-20-pom",
+          "filename": "jboss-parent-20.pom",
+          "path": "org/jboss/jboss-parent/20",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/jboss-parent/20/jboss-parent-20.pom"
+          ],
+          "sha256": "10f0cfc3d2048782585d0db25a4378d0102f9f4850cbfe6fd6c59fe2d23a81bf"
+        },
+        {
+          "name": "org.jboss-jboss-parent-34-pom",
+          "filename": "jboss-parent-34.pom",
+          "path": "org/jboss/jboss-parent/34",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/jboss-parent/34/jboss-parent-34.pom"
+          ],
+          "sha256": "4a7c22624e01c6c45b021fc4609e8835a807c5a6a2d9615e8aae63ea20ad4859"
+        },
+        {
+          "name": "org.jboss-jboss-parent-35-pom",
+          "filename": "jboss-parent-35.pom",
+          "path": "org/jboss/jboss-parent/35",
+          "urls": [
+            "https://jcenter.bintray.com/org/jboss/jboss-parent/35/jboss-parent-35.pom"
+          ],
+          "sha256": "fc3b57aa32467b8785be6d5abd004f20a339af27ab10d60c58fc7ce972eddec7"
+        },
+        {
+          "name": "org.jetbrains.kotlin-kotlin-stdlib-common-1.3.50-jar",
+          "filename": "kotlin-stdlib-common-1.3.50.jar",
+          "path": "org/jetbrains/kotlin/kotlin-stdlib-common/1.3.50",
+          "urls": [
+            "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-common/1.3.50/kotlin-stdlib-common-1.3.50.jar"
+          ],
+          "sha256": "8ce678e88e4ba018b66dacecf952471e4d7dfee156a8a819760a5a5ff29d323c"
+        },
+        {
+          "name": "org.jetbrains.kotlin-kotlin-stdlib-common-1.3.50-pom",
+          "filename": "kotlin-stdlib-common-1.3.50.pom",
+          "path": "org/jetbrains/kotlin/kotlin-stdlib-common/1.3.50",
+          "urls": [
+            "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-common/1.3.50/kotlin-stdlib-common-1.3.50.pom"
+          ],
+          "sha256": "b6396fe802d7bc76a381485e266cb975f3b2f2d3dd9bf7213aab6ca27a561fc1"
+        },
+        {
+          "name": "org.jetbrains.kotlin-kotlin-stdlib-1.3.50-jar",
+          "filename": "kotlin-stdlib-1.3.50.jar",
+          "path": "org/jetbrains/kotlin/kotlin-stdlib/1.3.50",
+          "urls": [
+            "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib/1.3.50/kotlin-stdlib-1.3.50.jar"
+          ],
+          "sha256": "e6f05746ee0366d0b52825a090fac474dcf44082c9083bbb205bd16976488d6c"
+        },
+        {
+          "name": "org.jetbrains.kotlin-kotlin-stdlib-1.3.50-pom",
+          "filename": "kotlin-stdlib-1.3.50.pom",
+          "path": "org/jetbrains/kotlin/kotlin-stdlib/1.3.50",
+          "urls": [
+            "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib/1.3.50/kotlin-stdlib-1.3.50.pom"
+          ],
+          "sha256": "704fd78960ae046428f69bcd5b951c122e4c180c9400238a866e12cb18494a61"
+        },
+        {
+          "name": "org.jetbrains-annotations-13.0-jar",
+          "filename": "annotations-13.0.jar",
+          "path": "org/jetbrains/annotations/13.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/jetbrains/annotations/13.0/annotations-13.0.jar"
+          ],
+          "sha256": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478"
+        },
+        {
+          "name": "org.jetbrains-annotations-13.0-pom",
+          "filename": "annotations-13.0.pom",
+          "path": "org/jetbrains/annotations/13.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/jetbrains/annotations/13.0/annotations-13.0.pom"
+          ],
+          "sha256": "965aeb2bedff369819bdde1bf7a0b3b89b8247dd69c88b86375d76163bb8c397"
+        },
+        {
+          "name": "org.json-json-20160810-jar",
+          "filename": "json-20160810.jar",
+          "path": "org/json/json/20160810",
+          "urls": [
+            "https://jcenter.bintray.com/org/json/json/20160810/json-20160810.jar"
+          ],
+          "sha256": "bf51c9013128cb15201225e51476f60ad9116813729040655a238d2829aef8b8"
+        },
+        {
+          "name": "org.json-json-20160810-pom",
+          "filename": "json-20160810.pom",
+          "path": "org/json/json/20160810",
+          "urls": [
+            "https://jcenter.bintray.com/org/json/json/20160810/json-20160810.pom"
+          ],
+          "sha256": "384b81d04f6f02ff8238eeabbf59dbae4c25e4ca6a8731368076aad5ba241c30"
+        },
+        {
+          "name": "org.mariadb.jdbc-mariadb-java-client-2.5.1-jar",
+          "filename": "mariadb-java-client-2.5.1.jar",
+          "path": "org/mariadb/jdbc/mariadb-java-client/2.5.1",
+          "urls": [
+            "https://jcenter.bintray.com/org/mariadb/jdbc/mariadb-java-client/2.5.1/mariadb-java-client-2.5.1.jar"
+          ],
+          "sha256": "fc0c46d28d099c899eee19c34ced96114c60175c973e258f84c29eae65c0cd91"
+        },
+        {
+          "name": "org.mariadb.jdbc-mariadb-java-client-2.5.1-pom",
+          "filename": "mariadb-java-client-2.5.1.pom",
+          "path": "org/mariadb/jdbc/mariadb-java-client/2.5.1",
+          "urls": [
+            "https://jcenter.bintray.com/org/mariadb/jdbc/mariadb-java-client/2.5.1/mariadb-java-client-2.5.1.pom"
+          ],
+          "sha256": "19f5bf42d9887cb81ee0e0a23e534e10a940665f48c8735a2c4b10f0d4adb622"
+        },
+        {
+          "name": "org.ow2.asm-asm-7.0-jar",
+          "filename": "asm-7.0.jar",
+          "path": "org/ow2/asm/asm/7.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/ow2/asm/asm/7.0/asm-7.0.jar"
+          ],
+          "sha256": "b88ef66468b3c978ad0c97fd6e90979e56155b4ac69089ba7a44e9aa7ffe9acf"
+        },
+        {
+          "name": "org.ow2.asm-asm-7.0-pom",
+          "filename": "asm-7.0.pom",
+          "path": "org/ow2/asm/asm/7.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/ow2/asm/asm/7.0/asm-7.0.pom"
+          ],
+          "sha256": "83f65b1083d5ce4f8ba7f9545cfe9ff17824589c9a7cc82c3a4695801e4f5f68"
+        },
+        {
+          "name": "org.ow2-ow2-1.5-pom",
+          "filename": "ow2-1.5.pom",
+          "path": "org/ow2/ow2/1.5",
+          "urls": [
+            "https://jcenter.bintray.com/org/ow2/ow2/1.5/ow2-1.5.pom"
+          ],
+          "sha256": "0f8a1b116e760b8fe6389c51b84e4b07a70fc11082d4f936e453b583dd50b43b"
+        },
+        {
+          "name": "org.postgresql-pgjdbc-core-parent-1.1.6-pom",
+          "filename": "pgjdbc-core-parent-1.1.6.pom",
+          "path": "org/postgresql/pgjdbc-core-parent/1.1.6",
+          "urls": [
+            "https://jcenter.bintray.com/org/postgresql/pgjdbc-core-parent/1.1.6/pgjdbc-core-parent-1.1.6.pom"
+          ],
+          "sha256": "c3224ec0b2f5f7f1478506521c8a717cc7ce8f5c44932144d1abffdc468ed038"
+        },
+        {
+          "name": "org.postgresql-pgjdbc-versions-1.1.6-pom",
+          "filename": "pgjdbc-versions-1.1.6.pom",
+          "path": "org/postgresql/pgjdbc-versions/1.1.6",
+          "urls": [
+            "https://jcenter.bintray.com/org/postgresql/pgjdbc-versions/1.1.6/pgjdbc-versions-1.1.6.pom"
+          ],
+          "sha256": "32346be6f19c7f3b63639aafe86576f07f8769851cf0ed84d46c2f4cbd9861c8"
+        },
+        {
+          "name": "org.postgresql-postgresql-42.2.8-jar",
+          "filename": "postgresql-42.2.8.jar",
+          "path": "org/postgresql/postgresql/42.2.8",
+          "urls": [
+            "https://jcenter.bintray.com/org/postgresql/postgresql/42.2.8/postgresql-42.2.8.jar"
+          ],
+          "sha256": "7fb81e74f5c25a5c40a997d9b83333fdd3b5d63a0b3d61cba6d562c7e3a7f3f6"
+        },
+        {
+          "name": "org.postgresql-postgresql-42.2.8-pom",
+          "filename": "postgresql-42.2.8.pom",
+          "path": "org/postgresql/postgresql/42.2.8",
+          "urls": [
+            "https://jcenter.bintray.com/org/postgresql/postgresql/42.2.8/postgresql-42.2.8.pom"
+          ],
+          "sha256": "3bdf1067459343ff9d6d03c249b966e89b1e1edb4c0574c59392ce09856abc42"
+        },
+        {
+          "name": "org.slf4j-slf4j-api-1.7.26-jar",
+          "filename": "slf4j-api-1.7.26.jar",
+          "path": "org/slf4j/slf4j-api/1.7.26",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-api/1.7.26/slf4j-api-1.7.26.jar"
+          ],
+          "sha256": "6d9e5b86cfd1dd44c676899285b5bb4fa0d371cf583e8164f9c8a0366553242b"
+        },
+        {
+          "name": "org.slf4j-slf4j-api-1.7.26-pom",
+          "filename": "slf4j-api-1.7.26.pom",
+          "path": "org/slf4j/slf4j-api/1.7.26",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-api/1.7.26/slf4j-api-1.7.26.pom"
+          ],
+          "sha256": "8392b80830ed0d6a714235eb9a06cc26e46619ef4bec53a2233e1dc34b8db949"
+        },
+        {
+          "name": "org.slf4j-slf4j-parent-1.7.25-pom",
+          "filename": "slf4j-parent-1.7.25.pom",
+          "path": "org/slf4j/slf4j-parent/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-parent/1.7.25/slf4j-parent-1.7.25.pom"
+          ],
+          "sha256": "18f5c52120db036e88d6136f8839c832d074bdda95c756c6f429249d2db54ac6"
+        },
+        {
+          "name": "org.slf4j-slf4j-parent-1.7.26-pom",
+          "filename": "slf4j-parent-1.7.26.pom",
+          "path": "org/slf4j/slf4j-parent/1.7.26",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-parent/1.7.26/slf4j-parent-1.7.26.pom"
+          ],
+          "sha256": "35d115b3c99730ec8a08b0fc2cb31cfbe633e7933c4fb63805e01a120bf4175e"
+        },
+        {
+          "name": "org.slf4j-slf4j-simple-1.7.25-jar",
+          "filename": "slf4j-simple-1.7.25.jar",
+          "path": "org/slf4j/slf4j-simple/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.jar"
+          ],
+          "sha256": "0966e86fffa5be52d3d9e7b89dd674d98a03eed0a454fbaf7c1bd9493bd9d874"
+        },
+        {
+          "name": "org.slf4j-slf4j-simple-1.7.25-pom",
+          "filename": "slf4j-simple-1.7.25.pom",
+          "path": "org/slf4j/slf4j-simple/1.7.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.pom"
+          ],
+          "sha256": "a53ca4cbfc8cc119d6906eda2b0311e72617f9c28157132a562a95464b95b1f8"
+        },
+        {
+          "name": "org.sonatype.oss-oss-parent-7-pom",
+          "filename": "oss-parent-7.pom",
+          "path": "org/sonatype/oss/oss-parent/7",
+          "urls": [
+            "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/7/oss-parent-7.pom"
+          ],
+          "sha256": "b51f8867c92b6a722499557fc3a1fdea77bdf9ef574722fe90ce436a29559454"
+        },
+        {
+          "name": "org.sonatype.oss-oss-parent-9-pom",
+          "filename": "oss-parent-9.pom",
+          "path": "org/sonatype/oss/oss-parent/9",
+          "urls": [
+            "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/9/oss-parent-9.pom"
+          ],
+          "sha256": "fb40265f982548212ff82e362e59732b2187ec6f0d80182885c14ef1f982827a"
+        },
+        {
+          "name": "org.threeten-threetenbp-1.3.3-jar",
+          "filename": "threetenbp-1.3.3.jar",
+          "path": "org/threeten/threetenbp/1.3.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/threeten/threetenbp/1.3.3/threetenbp-1.3.3.jar"
+          ],
+          "sha256": "7bbee842b0334f63627556d3c657aab82431f3a207c8dc4dcfc379d7d210a8c6"
+        },
+        {
+          "name": "org.threeten-threetenbp-1.3.3-pom",
+          "filename": "threetenbp-1.3.3.pom",
+          "path": "org/threeten/threetenbp/1.3.3",
+          "urls": [
+            "https://jcenter.bintray.com/org/threeten/threetenbp/1.3.3/threetenbp-1.3.3.pom"
+          ],
+          "sha256": "8b78299a26b7641301e716dbf41949a46cd93ad79db7b5972fbf7705dcf0317c"
+        },
+        {
+          "name": "org.xerial-sqlite-jdbc-3.28.0-jar",
+          "filename": "sqlite-jdbc-3.28.0.jar",
+          "path": "org/xerial/sqlite-jdbc/3.28.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/xerial/sqlite-jdbc/3.28.0/sqlite-jdbc-3.28.0.jar"
+          ],
+          "sha256": "93784e56dbf54625e06c992cf83f70e9c1bddd5c6ad1d3f01308c87b1d961b60"
+        },
+        {
+          "name": "org.xerial-sqlite-jdbc-3.28.0-pom",
+          "filename": "sqlite-jdbc-3.28.0.pom",
+          "path": "org/xerial/sqlite-jdbc/3.28.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/xerial/sqlite-jdbc/3.28.0/sqlite-jdbc-3.28.0.pom"
+          ],
+          "sha256": "bac7f2950a805b01cb5dab6a5af7bf918519941037e71249671c2be8de0409a7"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-core-2.6.2-jar",
+          "filename": "xmlunit-core-2.6.2.jar",
+          "path": "org/xmlunit/xmlunit-core/2.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-core/2.6.2/xmlunit-core-2.6.2.jar"
+          ],
+          "sha256": "4f0e407dc9eb19582d74b9bcbeeef5117ccae42ebc4dd589db2da506a7c2e17d"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-core-2.6.2-pom",
+          "filename": "xmlunit-core-2.6.2.pom",
+          "path": "org/xmlunit/xmlunit-core/2.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-core/2.6.2/xmlunit-core-2.6.2.pom"
+          ],
+          "sha256": "9b4d54a753aa14b208ae56c5048ff2e30eebf5962af564a4b739a4a7444ce8d4"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-legacy-2.6.2-jar",
+          "filename": "xmlunit-legacy-2.6.2.jar",
+          "path": "org/xmlunit/xmlunit-legacy/2.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-legacy/2.6.2/xmlunit-legacy-2.6.2.jar"
+          ],
+          "sha256": "25359297aae5bae13167b1794ece3148caf4007f232afe4debf7540a758c5c14"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-legacy-2.6.2-pom",
+          "filename": "xmlunit-legacy-2.6.2.pom",
+          "path": "org/xmlunit/xmlunit-legacy/2.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-legacy/2.6.2/xmlunit-legacy-2.6.2.pom"
+          ],
+          "sha256": "e7fc8cdae99f04287d371adb95c6eb45274e810274d84f3628fc6c4556652a5e"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-parent-2.6.2-pom",
+          "filename": "xmlunit-parent-2.6.2.pom",
+          "path": "org/xmlunit/xmlunit-parent/2.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-parent/2.6.2/xmlunit-parent-2.6.2.pom"
+          ],
+          "sha256": "4f4b20bacda670b63bbfeabca9f2f6cf9f0d12d1305147ebe6c9b0233d0d8877"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-placeholders-2.6.2-jar",
+          "filename": "xmlunit-placeholders-2.6.2.jar",
+          "path": "org/xmlunit/xmlunit-placeholders/2.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-placeholders/2.6.2/xmlunit-placeholders-2.6.2.jar"
+          ],
+          "sha256": "b594a3c2c681fd0d2f407040b1af55153ebfbd146fb88fb7e930797de11e5733"
+        },
+        {
+          "name": "org.xmlunit-xmlunit-placeholders-2.6.2-pom",
+          "filename": "xmlunit-placeholders-2.6.2.pom",
+          "path": "org/xmlunit/xmlunit-placeholders/2.6.2",
+          "urls": [
+            "https://jcenter.bintray.com/org/xmlunit/xmlunit-placeholders/2.6.2/xmlunit-placeholders-2.6.2.pom"
+          ],
+          "sha256": "0579078d90ff6584189badaf1f96bfc414e1c456cf2097d7e4b0058c7844c0f8"
+        },
+        {
+          "name": "org.yaml-snakeyaml-1.25-jar",
+          "filename": "snakeyaml-1.25.jar",
+          "path": "org/yaml/snakeyaml/1.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/yaml/snakeyaml/1.25/snakeyaml-1.25.jar"
+          ],
+          "sha256": "b50ef33187e7dc922b26dbe4dd0fdb3a9cf349e75a08b95269901548eee546eb"
+        },
+        {
+          "name": "org.yaml-snakeyaml-1.25-pom",
+          "filename": "snakeyaml-1.25.pom",
+          "path": "org/yaml/snakeyaml/1.25",
+          "urls": [
+            "https://jcenter.bintray.com/org/yaml/snakeyaml/1.25/snakeyaml-1.25.pom"
+          ],
+          "sha256": "66b54db68b2dc7ae2f4c5b3231b34fd0149af4f0a887a9dead9d4beba0b1b09c"
+        },
+        {
+          "name": "org.zeroturnaround-zt-exec-1.11-jar",
+          "filename": "zt-exec-1.11.jar",
+          "path": "org/zeroturnaround/zt-exec/1.11",
+          "urls": [
+            "https://jcenter.bintray.com/org/zeroturnaround/zt-exec/1.11/zt-exec-1.11.jar"
+          ],
+          "sha256": "5b9131ca9de1477e3f38bb4e6ef951ed13d1edf34329d1a98d6f48e174523233"
+        },
+        {
+          "name": "org.zeroturnaround-zt-exec-1.11-pom",
+          "filename": "zt-exec-1.11.pom",
+          "path": "org/zeroturnaround/zt-exec/1.11",
+          "urls": [
+            "https://jcenter.bintray.com/org/zeroturnaround/zt-exec/1.11/zt-exec-1.11.pom"
+          ],
+          "sha256": "7046693c46f1e9f835dad6fc78d80918acfd0b6773622d5350f8a502bd5e88b2"
+        },
+        {
+          "name": "xml-apis-xml-apis-1.0.b2-jar",
+          "filename": "xml-apis-1.0.b2.jar",
+          "path": "xml-apis/xml-apis/1.0.b2",
+          "urls": [
+            "https://jcenter.bintray.com/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar"
+          ],
+          "sha256": "8232f3482c346d843e5e3fb361055771c1acc105b6d8a189eb9018c55948cf9f"
+        },
+        {
+          "name": "xml-apis-xml-apis-1.0.b2-pom",
+          "filename": "xml-apis-1.0.b2.pom",
+          "path": "xml-apis/xml-apis/1.0.b2",
+          "urls": [
+            "https://jcenter.bintray.com/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.pom"
+          ],
+          "sha256": "7bc38e7a0f8ca20b0caed607e00cbb144dc8d006ebec4aa193f55dcf391bad50"
+        }
+      ]
+    }
+  }
+}
