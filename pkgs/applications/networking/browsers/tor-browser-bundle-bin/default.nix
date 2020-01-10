@@ -54,9 +54,6 @@
 
 # Extra preferences
 , extraPrefs ? ""
-
-# For meta
-, tor-browser-bundle
 }:
 
 with stdenv.lib;
@@ -394,7 +391,15 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tor Browser Bundle built by torproject.org";
-    longDescription = tor-browser-bundle.meta.longDescription;
+    longDescription = ''
+      Tor Browser Bundle is a bundle of the Tor daemon, Tor Browser (heavily patched version of
+      Firefox), several essential extensions for Tor Browser, and some tools that glue those
+      together with a convenient UI.
+
+      `tor-browser-bundle-bin` package is the official version built by torproject.org patched with
+      `patchelf` to work under nix and with bundled scripts adapted to the read-only nature of
+      the `/nix/store`.
+    '';
     homepage = "https://www.torproject.org/";
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 cap ];
