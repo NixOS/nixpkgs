@@ -1508,6 +1508,8 @@ in
 
   crudini = callPackage ../tools/misc/crudini { };
 
+  csv2odf = callPackage ../applications/office/csv2odf { };
+
   csvkit = callPackage ../tools/text/csvkit { };
 
   csvs-to-sqlite = with python3Packages; toPythonApplication csvs-to-sqlite;
