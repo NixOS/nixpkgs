@@ -1361,4 +1361,8 @@ self: super: {
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
 
+  # Needs ghc-lib-parser 8.8.1 (does not build with 8.8.0)
+  ormolu = doJailbreak (super.ormolu.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_8_1_20191204;
+  });
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
