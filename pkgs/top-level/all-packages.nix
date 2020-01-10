@@ -9409,8 +9409,6 @@ in
     docSupport = false;
     yamlSupport = false;
     fiddleSupport = false;
-    # remove gcc from runtime closure
-    removeReferenceToCC = true;
   };
 
   ruby = ruby_2_6;
