@@ -30,8 +30,9 @@
     supportedRegex = ("^.*?(" + builtins.concatStringsSep "|" supportedExtensions + ")");
     matchesVersion = fname: builtins.match ("^.*" + builtins.replaceStrings [ "." ] [ "\\." ] version + ".*$") fname != null;
     hasSupportedExtension = fname: builtins.match supportedRegex fname != null;
+    isCompatibleEgg = fname: ! lib.strings.hasSuffix ".egg" fname || lib.strings.hasSuffix "py${python.pythonVersion}.egg" fname;
   in
-    builtins.filter (f: matchesVersion f.file && hasSupportedExtension f.file) files;
+    builtins.filter (f: matchesVersion f.file && hasSupportedExtension f.file && isCompatibleEgg f.file) files;
 
   toPath = s: pwd + "/${s}";
 
@@ -48,19 +49,35 @@
 
   fileInfo = let
     isBdist = f: lib.strings.hasSuffix "whl" f.file;
-    isSdist = f: ! isBdist f;
+    isSdist = f: ! isBdist f && ! isEgg f;
+    isEgg = f: lib.strings.hasSuffix ".egg" f.file;
+
     binaryDist = selectWheel fileCandidates;
     sourceDist = builtins.filter isSdist fileCandidates;
-    lockFileEntry = if (builtins.length sourceDist) > 0 then builtins.head sourceDist else builtins.head binaryDist;
+    eggs = builtins.filter isEgg fileCandidates;
+
+    lockFileEntry = builtins.head (sourceDist ++ binaryDist ++ eggs);
+
+    _isEgg = isEgg lockFileEntry;
+
   in
     rec {
       inherit (lockFileEntry) file hash;
       name = file;
-      format = if lib.strings.hasSuffix ".whl" name then "wheel" else "setuptools";
-      kind = if format == "setuptools" then "source" else (builtins.elemAt (lib.strings.splitString "-" name) 2);
+      format =
+        if _isEgg then "egg"
+        else if lib.strings.hasSuffix ".whl" name then "wheel"
+        else "setuptools";
+      kind =
+        if _isEgg then python.pythonVersion
+        else if format == "setuptools" then "source"
+        else (builtins.elemAt (lib.strings.splitString "-" name) 2);
     };
 
+  baseBuildInputs = lib.optional (name != "setuptools_scm" && name != "setuptools-scm") pythonPackages.setuptools_scm;
+
 in
+
 buildPythonPackage {
   pname = name;
   version = version;
@@ -70,7 +87,7 @@ buildPythonPackage {
   format = if isLocal then "pyproject" else if isGit then "setuptools" else fileInfo.format;
 
   nativeBuildInputs = if (!isSource && (getManyLinuxDeps fileInfo.name).str != null) then [ autoPatchelfHook ] else [];
-  buildInputs = if !isSource then (getManyLinuxDeps fileInfo.name).pkg else [];
+  buildInputs = baseBuildInputs ++ (if !isSource then (getManyLinuxDeps fileInfo.name).pkg else []);
 
   propagatedBuildInputs =
     let

@@ -1,13 +1,7 @@
-{ lib }:
+{ lib, ireplace }:
 
 let
   inherit (builtins) elemAt match;
-
-  # Replace a list entry at defined index with set value
-  ireplace = idx: value: list: let
-    inherit (builtins) genList length;
-  in
-    genList (i: if i == idx then value else (elemAt list i)) (length list);
 
   operators = let
     matchWildCard = s: match "([^\*])(\.[\*])" s;
@@ -37,10 +31,23 @@ let
       ">=" = v: c: operators."==" v c || operators.">" v c;
       "<=" = v: c: operators."==" v c || operators."<" v c;
       # Semver specific operators
-      "~" = mkIdxComparison 1; #
+      "~" = mkIdxComparison 1;
       "^" = mkIdxComparison 0;
+      "~=" = v: c: let
+        # Prune constraint
+        parts = builtins.splitVersion c;
+        pruned = lib.take ((builtins.length parts) - 1) parts;
+        upper = builtins.toString (
+          (lib.toInt (builtins.elemAt pruned (builtins.length pruned - 1))) + 1
+        );
+        upperConstraint = builtins.concatStringsSep "." (ireplace (builtins.length pruned - 1) upper pruned);
+      in
+        operators.">=" v c && operators."<" v upperConstraint;
       # Infix operators
       "-" = version: v: operators.">=" version v.vl && operators."<=" version v.vu;
+      # Arbitrary equality clause, just run simple comparison
+      "===" = v: c: v == c;
+      #
     };
 
   re = {
