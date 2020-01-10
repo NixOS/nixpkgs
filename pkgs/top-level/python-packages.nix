@@ -2761,6 +2761,7 @@ in {
     (p: p.overrideAttrs (super: {
       meta = super.meta // {
         outputsToInstall = [ "py" ];
+        broken = (super.meta.broken or false) || pythonAtLeast "3.8";
       };
     }))
 
