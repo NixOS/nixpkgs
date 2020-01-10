@@ -3737,6 +3737,8 @@ in {
 
   hvac = callPackage ../development/python-modules/hvac { };
 
+  hydra = callPackage ../development/python-modules/hydra { };
+
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
   colored = callPackage ../development/python-modules/colored { };
