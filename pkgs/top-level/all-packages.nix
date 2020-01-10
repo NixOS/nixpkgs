@@ -1826,6 +1826,10 @@ in
 
   gping = callPackage ../tools/networking/gping { };
 
+  inherit (callPackage ../development/tools/gradle2nix { })
+    gradle2nix
+    buildGradle;
+
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
   };
