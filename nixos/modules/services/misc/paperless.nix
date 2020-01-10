@@ -169,17 +169,15 @@ in
     };
 
     users = optionalAttrs (cfg.user == defaultUser) {
-      users = [{
-        name = defaultUser;
+      users.${defaultUser} = {
         group = defaultUser;
         uid = config.ids.uids.paperless;
         home = cfg.dataDir;
-      }];
+      };
 
-      groups = [{
-        name = defaultUser;
+      groups.${defaultUser} = {
         gid = config.ids.gids.paperless;
-      }];
+      };
     };
   };
 }
