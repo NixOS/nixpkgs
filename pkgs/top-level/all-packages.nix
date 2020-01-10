@@ -1862,6 +1862,8 @@ in
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
+  jwt-cli = callPackage ../tools/security/jwt-cli { };
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   kisslicer = callPackage ../tools/misc/kisslicer { };
