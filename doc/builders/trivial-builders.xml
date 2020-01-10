@@ -58,9 +58,11 @@
     <para>
      Variant of <literal>runCommand</literal> that forces the derivation to be built locally, it is not substituted. This is intended for very cheap commands (&lt;1s execution time). It saves on the network roundrip and can speed up a build.
     </para>
-    <note><para>
+    <note>
+     <para>
       This sets <link xlink:href="https://nixos.org/nix/manual/#adv-attr-allowSubstitutes"><literal>allowSubstitutes</literal> to <literal>false</literal></link>, so only use <literal>runCommandLocal</literal> if you are certain the user will always have a builder for the <literal>system</literal> of the derivation. This should be true for most trivial use cases (e.g. just copying some files to a different location or adding symlinks), because there the <literal>system</literal> is usually the same as <literal>builtins.currentSystem</literal>.
-    </para></note>
+     </para>
+    </note>
    </listitem>
   </varlistentry>
   <varlistentry xml:id="trivial-builder-writeText">

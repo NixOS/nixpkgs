@@ -294,17 +294,17 @@ Additional information.
 
    <para>
     review changes from pull request number 12345:
-    <screen>nix run nixpkgs.nixpkgs-review -c nixpkgs-review pr 12345</screen>
+<screen>nix run nixpkgs.nixpkgs-review -c nixpkgs-review pr 12345</screen>
    </para>
 
    <para>
     review uncommitted changes:
-    <screen>nix run nixpkgs.nixpkgs-review -c nixpkgs-review wip</screen>
+<screen>nix run nixpkgs.nixpkgs-review -c nixpkgs-review wip</screen>
    </para>
 
    <para>
     review changes from last commit:
-    <screen>nix run nixpkgs.nixpkgs-review -c nixpkgs-review rev HEAD</screen>
+<screen>nix run nixpkgs.nixpkgs-review -c nixpkgs-review rev HEAD</screen>
    </para>
   </section>
 
@@ -376,29 +376,27 @@ Additional information.
 
   <section xml:id="submitting-changes-master-branch">
    <title>Master branch</title>
+
    <para>
-    The <literal>master</literal> branch is the main development branch.
-    It should only see non-breaking commits that do not cause mass rebuilds.
+    The <literal>master</literal> branch is the main development branch. It should only see non-breaking commits that do not cause mass rebuilds.
    </para>
   </section>
 
   <section xml:id="submitting-changes-staging-branch">
    <title>Staging branch</title>
+
    <para>
-    The <literal>staging</literal> branch is a development branch where mass-rebuilds go.
-    It should only see non-breaking mass-rebuild commits.
-    That means it is not to be used for testing, and changes must have been well tested already.
-    If the branch is already in a broken state, please refrain from adding extra new breakages.
+    The <literal>staging</literal> branch is a development branch where mass-rebuilds go. It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
    </para>
   </section>
 
   <section xml:id="submitting-changes-staging-next-branch">
    <title>Staging-next branch</title>
+
    <para>
-    The <literal>staging-next</literal> branch is for stabilizing mass-rebuilds submitted to the <literal>staging</literal> branch prior to merging them into <literal>master</literal>.
-    Mass-rebuilds should go via the <literal>staging</literal> branch.
-    It should only see non-breaking commits that are fixing issues blocking it from being merged into the <literal>master </literal> branch.
+    The <literal>staging-next</literal> branch is for stabilizing mass-rebuilds submitted to the <literal>staging</literal> branch prior to merging them into <literal>master</literal>. Mass-rebuilds should go via the <literal>staging</literal> branch. It should only see non-breaking commits that are fixing issues blocking it from being merged into the <literal>master </literal> branch.
    </para>
+
    <para>
     If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days and then merge into master.
    </para>

@@ -68,14 +68,13 @@
   <title>How to Install BEAM Packages</title>
 
   <para>
-   BEAM builders are not registered at the top level, simply because they are not relevant to the vast majority of Nix users. 
-   To install any of those builders into your profile, refer to them by their attribute path <literal>beamPackages.rebar3</literal>:
+   BEAM builders are not registered at the top level, simply because they are not relevant to the vast majority of Nix users. To install any of those builders into your profile, refer to them by their attribute path <literal>beamPackages.rebar3</literal>:
   </para>
 
-  <screen>
+<screen>
   <prompt>$ </prompt>nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA beamPackages.rebar3
   </screen>
-</section>
+ </section>
 
  <section xml:id="packaging-beam-applications">
   <title>Packaging BEAM Applications</title>
@@ -101,7 +100,6 @@
     <para>
      Erlang.mk functions similarly to Rebar3, except we use <literal>buildErlangMk</literal> instead of <literal>buildRebar3</literal>.
     </para>
-
    </section>
 
    <section xml:id="mix-packages">
@@ -124,10 +122,9 @@
   <section xml:id="creating-a-shell">
    <title>Creating a Shell</title>
 
-  <para>
-    Usually, we need to create a <literal>shell.nix</literal> file and do our development inside of the environment specified therein. Just install your version of erlang and other interpreter, and then user your normal build tools.
-    As an example with elixir:
-  </para>
+   <para>
+    Usually, we need to create a <literal>shell.nix</literal> file and do our development inside of the environment specified therein. Just install your version of erlang and other interpreter, and then user your normal build tools. As an example with elixir:
+   </para>
 
 <programlisting>
 { pkgs ? import &quot;&lt;nixpkgs&quot;&gt; {} }:

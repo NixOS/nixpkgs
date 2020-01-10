@@ -664,8 +664,7 @@ args.stdenv.mkDerivation (args // {
        </varlistentry>
        <varlistentry>
         <term>
-         If it’s a <emphasis>theme</emphasis> for a <emphasis>desktop environment</emphasis>,
-         a <emphasis>window manager</emphasis> or a <emphasis>display manager</emphasis>:
+         If it’s a <emphasis>theme</emphasis> for a <emphasis>desktop environment</emphasis>, a <emphasis>window manager</emphasis> or a <emphasis>display manager</emphasis>:
         </term>
         <listitem>
          <para>

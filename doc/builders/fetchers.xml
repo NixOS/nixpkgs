@@ -111,8 +111,7 @@ stdenv.mkDerivation {
    </term>
    <listitem>
     <para>
-     This is used with Gitiles repositories. The arguments expected
-     are similar to fetchgit.
+     This is used with Gitiles repositories. The arguments expected are similar to fetchgit.
     </para>
    </listitem>
   </varlistentry>

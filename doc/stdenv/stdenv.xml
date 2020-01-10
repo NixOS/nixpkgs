@@ -1123,9 +1123,9 @@ preBuild = ''
 
    <variablelist>
     <title>Variables controlling the install phase</title>
-     <varlistentry>
+    <varlistentry>
      <term>
-       <varname>dontInstall</varname>
+      <varname>dontInstall</varname>
      </term>
      <listitem>
       <para>
