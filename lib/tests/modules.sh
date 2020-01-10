@@ -186,6 +186,15 @@ checkConfigError 'The option .* defined in .* does not exist' config.enable ./di
 # Check that imports can depend on derivations
 checkConfigOutput "true" config.enable ./import-from-store.nix
 
+# Check attrsOf and lazyAttrsOf. Only lazyAttrsOf should be lazy, and only
+# attrsOf should work with conditional definitions
+# In addition, lazyAttrsOf should honor an options emptyValue
+checkConfigError "is not lazy" config.isLazy ./declare-attrsOf.nix ./attrsOf-lazy-check.nix
+checkConfigOutput "true" config.isLazy ./declare-lazyAttrsOf.nix ./attrsOf-lazy-check.nix
+checkConfigOutput "true" config.conditionalWorks ./declare-attrsOf.nix ./attrsOf-conditional-check.nix
+checkConfigOutput "false" config.conditionalWorks ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
+checkConfigOutput "empty" config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

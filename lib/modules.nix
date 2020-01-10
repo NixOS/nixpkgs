@@ -41,7 +41,13 @@ rec {
 
         options = {
           _module.args = mkOption {
-            type = types.attrsOf types.unspecified;
+            # Because things like `mkIf` are entirely useless for
+            # `_module.args` (because there's no way modules can check which
+            # arguments were passed), we'll use `lazyAttrsOf` which drops
+            # support for that, in turn it's lazy in its values. This means e.g.
+            # a `_module.args.pkgs = import (fetchTarball { ... }) {}` won't
+            # start a download when `pkgs` wasn't evaluated.
+            type = types.lazyAttrsOf types.unspecified;
             internal = true;
             description = "Arguments passed to each module.";
           };
@@ -365,16 +371,9 @@ rec {
         else
           mergeDefinitions loc opt.type defs';
 
-
-      # The value with a check that it is defined
-      valueDefined = if res.isDefined then res.mergedValue else
-        # (nixos-option detects this specific error message and gives it special
-        # handling.  If changed here, please change it there too.)
-        throw "The option `${showOption loc}' is used but not defined.";
-
       # Apply the 'apply' function to the merged value. This allows options to
       # yield a value computed from the definitions
-      value = if opt ? apply then opt.apply valueDefined else valueDefined;
+      value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
     in opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
@@ -408,11 +407,17 @@ rec {
       };
     defsFinal = defsFinal'.values;
 
-    # Type-check the remaining definitions, and merge them.
-    mergedValue = foldl' (res: def:
-      if type.check def.value then res
-      else throw "The option value `${showOption loc}' in `${def.file}' is not of type `${type.description}'.")
-      (type.merge loc defsFinal) defsFinal;
+    # Type-check the remaining definitions, and merge them. Or throw if no definitions.
+    mergedValue =
+      if isDefined then
+        foldl' (res: def:
+          if type.check def.value then res
+          else throw "The option value `${showOption loc}' in `${def.file}' is not of type `${type.description}'."
+        ) (type.merge loc defsFinal) defsFinal
+      else
+        # (nixos-option detects this specific error message and gives it special
+        # handling.  If changed here, please change it there too.)
+        throw "The option `${showOption loc}' is used but not defined.";
 
     isDefined = defsFinal != [];
 
