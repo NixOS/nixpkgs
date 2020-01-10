@@ -808,6 +808,17 @@ let
     };
   };
 
+  defx-icons = buildVimPluginFrom2Nix {
+    pname = "defx-icons";
+    version = "2019-11-03";
+    src = fetchFromGitHub {
+      owner = "kristijanhusak";
+      repo = "defx-icons";
+      rev = "1412fd083eb54ffedb4f3ae32ddc7ce28613a144";
+      sha256 = "1x0xpixbmxm15g5nmsslccdngm14sg86ymy6mywg9xfbnrh1vn0p";
+    };
+  };
+
   defx-nvim = buildVimPluginFrom2Nix {
     pname = "defx-nvim";
     version = "2020-01-02";
@@ -2179,6 +2190,17 @@ let
     };
   };
 
+  pear-tree = buildVimPluginFrom2Nix {
+    pname = "pear-tree";
+    version = "2019-12-08";
+    src = fetchFromGitHub {
+      owner = "tmsvg";
+      repo = "pear-tree";
+      rev = "3bb209d9637d6bd7506040b2fcd158c9a7917db3";
+      sha256 = "0n70rzw34lsnnprqna90ssqrka33qx3z0n2kj19ps8yp3j6lsxvk";
+    };
+  };
+
   peskcolor-vim = buildVimPluginFrom2Nix {
     pname = "peskcolor-vim";
     version = "2016-06-11";
@@ -3489,6 +3511,17 @@ let
     };
   };
 
+  vim-dadbod = buildVimPluginFrom2Nix {
+    pname = "vim-dadbod";
+    version = "2020-01-02";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-dadbod";
+      rev = "59cc0a16970b92afa1c99182c60e35e01cdaa409";
+      sha256 = "0v3jhp33058cl7raqp59704m5ljsibpi9vs1hsiwwxf2pgdjii3f";
+    };
+  };
+
   vim-devicons = buildVimPluginFrom2Nix {
     pname = "vim-devicons";
     version = "2019-11-10";
@@ -3640,6 +3673,17 @@ let
       repo = "vim-elm-syntax";
       rev = "7ed55d9bc2c0cfd023d7cc6541634bcbf36430b5";
       sha256 = "1kq7qcw9l41q646a2ilwy94lj1qz9as14aqfmzkbi938yij18zpx";
+    };
+  };
+
+  vim-endwise = buildVimPluginFrom2Nix {
+    pname = "vim-endwise";
+    version = "2019-11-13";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-endwise";
+      rev = "bf90d8be447de667f4532b934d1a70881be56dd8";
+      sha256 = "1czx891via5783yk222mhki94wvq75hxxp1xk1d5m90vwqb3azfn";
     };
   };
 
@@ -5676,6 +5720,17 @@ let
       repo = "vissort.vim";
       rev = "75a5b08b64d2f762206bffd294066533891fa03c";
       sha256 = "0a71b22apkhicca9nkd06jlcnqkf583mlpfh2mvl4d474viavqfn";
+    };
+  };
+
+  vista-vim = buildVimPluginFrom2Nix {
+    pname = "vista-vim";
+    version = "2020-01-06";
+    src = fetchFromGitHub {
+      owner = "liuchengxu";
+      repo = "vista.vim";
+      rev = "dcf134c83a6a3f9618a97cafab5b7fb1f1df3f84";
+      sha256 = "0w9q69a2k8a39b8zrd3sildisrdskbk6cgvbkmb3fqsr0zdzjxzv";
     };
   };
 

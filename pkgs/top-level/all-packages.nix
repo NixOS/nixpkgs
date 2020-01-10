@@ -3021,7 +3021,7 @@ in
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   # When updating make sure to update all plugins or they will break!
   elk6Version = "6.8.3";
-  elk7Version = "7.3.1";
+  elk7Version = "7.5.1";
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
     utillinux = utillinuxMinimal;
@@ -5058,6 +5058,8 @@ in
   mpw = callPackage ../tools/security/mpw { };
 
   mr = callPackage ../applications/version-management/mr { };
+
+  mrsh = callPackage ../shells/mrsh { };
 
   mrtg = callPackage ../tools/misc/mrtg { };
 
@@ -8158,6 +8160,8 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
+  # Please update doc/languages-frameworks/haskell.section.md, “Our
+  # current default compiler is”, if you bump this:
   haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc865;
 
   inherit (haskellPackages) ghc;
@@ -10429,6 +10433,8 @@ in
   premake = premake4;
 
   procodile = callPackage ../tools/system/procodile { };
+
+  pry = callPackage ../development/tools/pry { };
 
   pup = callPackage ../development/tools/pup { };
 
@@ -15120,6 +15126,8 @@ in
 
   do-agent = callPackage ../servers/monitoring/do-agent { };
 
+  dodgy = with python3Packages; toPythonApplication dodgy;
+
   dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
 
@@ -19490,6 +19498,8 @@ in
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
 
+  swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
+
   waybar = callPackage ../applications/misc/waybar {
     pulseSupport = config.pulseaudio or false;
   };
@@ -23691,14 +23701,16 @@ in
     stdenv = gcc49Stdenv;
   };
 
+  bayescan = callPackage ../applications/science/biology/bayescan { };
+
   bedtools = callPackage ../applications/science/biology/bedtools { };
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
-  blast = callPackage ../applications/science/biology/blast { 
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices; 
+  blast = callPackage ../applications/science/biology/blast {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
   cd-hit = callPackage ../applications/science/biology/cd-hit { };

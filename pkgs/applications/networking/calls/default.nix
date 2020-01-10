@@ -14,6 +14,7 @@
 , libpeas
 , dbus
 , vala
+, wrapGAppsHook
 , xorg
 , xvfb_run
 , libxml2
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "unstable-2019-10-29";
+  version = "0.1.1";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "calls";
-    rev = "9fe575053d8f01c3a76a6c20d39f0816166d5afd";
+    rev = "v${version}";
     sha256 = "01inx4mvrzvklwrfryw5hw9p89v8cn78m3qmv97g7a3v0h5c0n35";
   };
 
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     desktop-file-utils
     vala
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -2,18 +2,18 @@
 , freeimage, fontconfig, pkgconfig
 , asciidoc, docbook_xsl, libxslt, cmocka
 , librsvg, pango, libxkbcommon, wayland
-, libGLU
+, libGLU, icu
 }:
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.0.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner  = "eXeC64";
     repo   = "imv";
     rev    = "v${version}";
-    sha256 = "sha256:01fbkbwwsyr00k3mwans8jfb9p4gl02v6z62vgx0pkgrzxjkcz07";
+    sha256 = "sha256:0gk8g178i961nn3bls75a8qpv6wvfvav6hd9lxca1skaikd33zdx";
   };
 
   preBuild = ''
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     pango
     pkgconfig
     wayland
+    icu
   ];
 
   installFlags = [ "PREFIX=$(out)" "CONFIGPREFIX=$(out)/etc" ];

@@ -4592,6 +4592,12 @@
     githubId = 3958340;
     name = "Eshin Kunishima";
   };
+  mildlyincompetent = {
+    email = "nix@kch.dev";
+    github = "mildlyincompetent";
+    githubId = 19479662;
+    name = "Kajetan Champlewski";
+  };
   miltador = {
     email = "miltador@yandex.ua";
     name = "Vasiliy Solovey";
@@ -6858,6 +6864,11 @@
     github = "tbenst";
     githubId = 863327;
     name = "Tyler Benster";
+  };
+  tckmn = {
+    email = "andy@tck.mn";
+    github = "tckmn";
+    name = "Andy Tockman";
   };
   teh = {
     email = "tehunger@gmail.com";

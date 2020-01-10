@@ -171,7 +171,7 @@ in
       "L+ /run/gdm/.config/pulse - - - - ${pulseConfig}"
     ] ++ optionals config.services.gnome3.gnome-initial-setup.enable [
       # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
-      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm yes"
+      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
     ];
 
     systemd.services.display-manager.wants = [

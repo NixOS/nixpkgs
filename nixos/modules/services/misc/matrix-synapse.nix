@@ -657,8 +657,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.users.matrix-synapse =
-      { name = "";
+    users.users.matrix-synapse = { 
         group = "matrix-synapse";
         home = cfg.dataDir;
         createHome = true;
