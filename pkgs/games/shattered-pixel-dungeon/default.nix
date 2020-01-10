@@ -1,15 +1,14 @@
 { stdenv
-, fetchurl
-, makeWrapper
 , fetchFromGitHub
-, gradle_5
-, perl
+, buildGradle
 , jre
+, makeWrapper
 , xorg
 , openal
+, makeDesktopItem
 }:
 
-let
+buildGradle rec {
   pname = "shattered-pixel-dungeon";
   version = "0.7.5f";
 
@@ -20,50 +19,29 @@ let
     sha256 = "05awbbc7np9li50shdbpv9dgdgry6lra8d5gibwn578m2g9srbxx";
   };
 
-  postPatch = ''
-    # disable gradle plugins with native code and their targets
-    perl -i.bak1 -pe "s#(^\s*id '.+' version '.+'$)#// \1#" build.gradle
-    perl -i.bak2 -pe "s#(.*)#// \1# if /^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar)/ ... /^}/" build.gradle
-  '';
-
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit version src postPatch;
-    nativeBuildInputs = [ gradle_5 perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon desktop:dist
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "1k0v5scadw9ziq4dw2rckmh8x2xlmxslfsxmpw79zg78n3hvwhf1";
+  desktopItem = makeDesktopItem {
+    name = pname;
+    exec = "$out/bin/shattered-pixel-dungeon";
+    icon = "shattered-pixel-dungeon";
+    comment = meta.description;
+    desktopName = "Shattered Pixel Dungeon";
+    genericName = "Roguelike Game";
+    categories = "Game;";
   };
 
-in stdenv.mkDerivation rec {
-  inherit pname version src postPatch;
-
-  nativeBuildInputs = [ gradle_5 perl makeWrapper ];
-
-  buildPhase = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-    # point to offline repo
-    sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
-    gradle --offline --no-daemon desktop:dist
-  '';
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
+  envSpec = ./gradle-env.json;
+  gradleFlags = [ "desktop:dist" ];
 
   installPhase = ''
     install -Dm644 desktop/build/libs/desktop-${version}.jar $out/share/shattered-pixel-dungeon.jar
+    install -Dm644 android/res/drawable-xxxhdpi/ic_launcher.png $out/share/icons/hicolor/192x192/apps/shattered-pixel-dungeon.png
     mkdir $out/bin
     makeWrapper ${jre}/bin/java $out/bin/shattered-pixel-dungeon \
       --prefix LD_LIBRARY_PATH : ${xorg.libXxf86vm}/lib:${openal}/lib \
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
+    ${desktopItem.buildCommand}
   '';
 
   meta = with stdenv.lib; {

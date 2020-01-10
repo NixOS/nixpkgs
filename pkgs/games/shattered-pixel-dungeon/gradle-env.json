@@ -1,0 +1,1725 @@
+{
+  "": {
+    "name": "dungeon",
+    "version": "0.7.5f",
+    "path": "",
+    "gradle": {
+      "version": "5.5.1",
+      "type": "bin",
+      "url": "https://services.gradle.org/distributions/gradle-5.5.1-bin.zip",
+      "sha256": "222a03fcf2fcaf3691767ce9549f78ebd4a77e73f9e23a396899fb70b420cd00",
+      "nativeVersion": "0.17"
+    },
+    "dependencies": {
+      "plugin": [],
+      "buildscript": [
+        {
+          "name": "asm-asm-3.3.1-jar",
+          "filename": "asm-3.3.1.jar",
+          "path": "asm/asm/3.3.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/asm/asm/3.3.1/asm-3.3.1.jar",
+            "file:/home/pbb/.m2/repository/asm/asm/3.3.1/asm-3.3.1.jar",
+            "https://jcenter.bintray.com/asm/asm/3.3.1/asm-3.3.1.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/asm/asm/3.3.1/asm-3.3.1.jar"
+          ],
+          "sha256": "c2b39275f8e951bc74750080a1266cdabc39399bc5e13d642bf2d346449df7f3"
+        },
+        {
+          "name": "cglib-cglib-2.2.2-jar",
+          "filename": "cglib-2.2.2.jar",
+          "path": "cglib/cglib/2.2.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/cglib/cglib/2.2.2/cglib-2.2.2.jar",
+            "file:/home/pbb/.m2/repository/cglib/cglib/2.2.2/cglib-2.2.2.jar",
+            "https://jcenter.bintray.com/cglib/cglib/2.2.2/cglib-2.2.2.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/cglib/cglib/2.2.2/cglib-2.2.2.jar"
+          ],
+          "sha256": "a93e4485d274277177480c4afe6ddd8355cda1cacfe356c134e25d65193935fd"
+        },
+        {
+          "name": "com.mobidevelop.robovm-robovm-dist-compiler-2.2.0-jar",
+          "filename": "robovm-dist-compiler-2.2.0.jar",
+          "path": "com/mobidevelop/robovm/robovm-dist-compiler/2.2.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/mobidevelop/robovm/robovm-dist-compiler/2.2.0/robovm-dist-compiler-2.2.0.jar",
+            "file:/home/pbb/.m2/repository/com/mobidevelop/robovm/robovm-dist-compiler/2.2.0/robovm-dist-compiler-2.2.0.jar",
+            "https://jcenter.bintray.com/com/mobidevelop/robovm/robovm-dist-compiler/2.2.0/robovm-dist-compiler-2.2.0.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/com/mobidevelop/robovm/robovm-dist-compiler/2.2.0/robovm-dist-compiler-2.2.0.jar"
+          ],
+          "sha256": "33bfd83b2e3b08daef317f1d512540f553117eca8d807b4e4b45030361601312"
+        },
+        {
+          "name": "com.mobidevelop.robovm-robovm-gradle-plugin-2.2.0-jar",
+          "filename": "robovm-gradle-plugin-2.2.0.jar",
+          "path": "com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0/robovm-gradle-plugin-2.2.0.jar",
+            "file:/home/pbb/.m2/repository/com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0/robovm-gradle-plugin-2.2.0.jar",
+            "https://jcenter.bintray.com/com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0/robovm-gradle-plugin-2.2.0.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0/robovm-gradle-plugin-2.2.0.jar"
+          ],
+          "sha256": "991a5542ba50def5cd2b546dc3f5a0ef42c018b1552d557e9cf76de1e730746b"
+        },
+        {
+          "name": "commons-codec-commons-codec-1.6-jar",
+          "filename": "commons-codec-1.6.jar",
+          "path": "commons-codec/commons-codec/1.6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.jar",
+            "file:/home/pbb/.m2/repository/commons-codec/commons-codec/1.6/commons-codec-1.6.jar",
+            "https://jcenter.bintray.com/commons-codec/commons-codec/1.6/commons-codec-1.6.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/commons-codec/commons-codec/1.6/commons-codec-1.6.jar"
+          ],
+          "sha256": "54b34e941b8e1414bd3e40d736efd3481772dc26db3296f6aa45cec9f6203d86"
+        },
+        {
+          "name": "commons-io-commons-io-2.0.1-jar",
+          "filename": "commons-io-2.0.1.jar",
+          "path": "commons-io/commons-io/2.0.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar",
+            "file:/home/pbb/.m2/repository/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar",
+            "https://jcenter.bintray.com/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar"
+          ],
+          "sha256": "2a3f5a206480863aae9dff03f53c930c3add6912f8785498d59442c7ebb98c5c"
+        },
+        {
+          "name": "commons-logging-commons-logging-1.1.1-jar",
+          "filename": "commons-logging-1.1.1.jar",
+          "path": "commons-logging/commons-logging/1.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+            "file:/home/pbb/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+            "https://jcenter.bintray.com/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"
+          ],
+          "sha256": "ce6f913cad1f0db3aad70186d65c5bc7ffcc9a99e3fe8e0b137312819f7c362f"
+        },
+        {
+          "name": "de.richsource.gradle.plugins-gwt-gradle-plugin-0.4-jar",
+          "filename": "gwt-gradle-plugin-0.4.jar",
+          "path": "de/richsource/gradle/plugins/gwt-gradle-plugin/0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/de/richsource/gradle/plugins/gwt-gradle-plugin/0.4/gwt-gradle-plugin-0.4.jar",
+            "file:/home/pbb/.m2/repository/de/richsource/gradle/plugins/gwt-gradle-plugin/0.4/gwt-gradle-plugin-0.4.jar",
+            "https://jcenter.bintray.com/de/richsource/gradle/plugins/gwt-gradle-plugin/0.4/gwt-gradle-plugin-0.4.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/de/richsource/gradle/plugins/gwt-gradle-plugin/0.4/gwt-gradle-plugin-0.4.jar"
+          ],
+          "sha256": "dbd194ee9783149829ef2c4ae4d98bbcfb7582da3328911b5422249b7384170c"
+        },
+        {
+          "name": "org.apache.commons-commons-compress-1.5-jar",
+          "filename": "commons-compress-1.5.jar",
+          "path": "org/apache/commons/commons-compress/1.5",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.5/commons-compress-1.5.jar",
+            "file:/home/pbb/.m2/repository/org/apache/commons/commons-compress/1.5/commons-compress-1.5.jar",
+            "https://jcenter.bintray.com/org/apache/commons/commons-compress/1.5/commons-compress-1.5.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/commons/commons-compress/1.5/commons-compress-1.5.jar"
+          ],
+          "sha256": "55bbfe26cee9296fd5b7c0d47ce6a00ea4dd572e235b63e9bb4eaf6f802315e4"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpclient-4.2.3-jar",
+          "filename": "httpclient-4.2.3.jar",
+          "path": "org/apache/httpcomponents/httpclient/4.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient/4.2.3/httpclient-4.2.3.jar",
+            "file:/home/pbb/.m2/repository/org/apache/httpcomponents/httpclient/4.2.3/httpclient-4.2.3.jar",
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpclient/4.2.3/httpclient-4.2.3.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/httpcomponents/httpclient/4.2.3/httpclient-4.2.3.jar"
+          ],
+          "sha256": "279ba66dbb16c39fdab9d9c211dc9ae05358283617f3bb9f3dc0156c1dca1520"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcore-4.2.3-jar",
+          "filename": "httpcore-4.2.3.jar",
+          "path": "org/apache/httpcomponents/httpcore/4.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.2.3/httpcore-4.2.3.jar",
+            "file:/home/pbb/.m2/repository/org/apache/httpcomponents/httpcore/4.2.3/httpcore-4.2.3.jar",
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcore/4.2.3/httpcore-4.2.3.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/httpcomponents/httpcore/4.2.3/httpcore-4.2.3.jar"
+          ],
+          "sha256": "17f61f533e29e90c999296c30fc28b75031cc511dc1d9b9929cd74d8b3bc2db0"
+        },
+        {
+          "name": "org.apache.maven.wagon-wagon-http-shared4-2.4-jar",
+          "filename": "wagon-http-shared4-2.4.jar",
+          "path": "org/apache/maven/wagon/wagon-http-shared4/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-http-shared4/2.4/wagon-http-shared4-2.4.jar",
+            "file:/home/pbb/.m2/repository/org/apache/maven/wagon/wagon-http-shared4/2.4/wagon-http-shared4-2.4.jar",
+            "https://jcenter.bintray.com/org/apache/maven/wagon/wagon-http-shared4/2.4/wagon-http-shared4-2.4.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/wagon/wagon-http-shared4/2.4/wagon-http-shared4-2.4.jar"
+          ],
+          "sha256": "8d9d80369811575716a638ac41a618e5ad915ee3f98890e61e03a17f783d10eb"
+        },
+        {
+          "name": "org.apache.maven.wagon-wagon-http-2.4-jar",
+          "filename": "wagon-http-2.4.jar",
+          "path": "org/apache/maven/wagon/wagon-http/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-http/2.4/wagon-http-2.4.jar",
+            "file:/home/pbb/.m2/repository/org/apache/maven/wagon/wagon-http/2.4/wagon-http-2.4.jar",
+            "https://jcenter.bintray.com/org/apache/maven/wagon/wagon-http/2.4/wagon-http-2.4.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/wagon/wagon-http/2.4/wagon-http-2.4.jar"
+          ],
+          "sha256": "2aec22bbe7f420a2dadaa1fe7198dc00b1498fed8700161d4e3fc78fde87ef74"
+        },
+        {
+          "name": "org.apache.maven.wagon-wagon-provider-api-2.4-jar",
+          "filename": "wagon-provider-api-2.4.jar",
+          "path": "org/apache/maven/wagon/wagon-provider-api/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.jar",
+            "file:/home/pbb/.m2/repository/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.jar",
+            "https://jcenter.bintray.com/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.jar"
+          ],
+          "sha256": "f65d8d59d71bca18ffa259b5a6de67697bc65b9ff1142c7bb4417ab4b1cacd92"
+        },
+        {
+          "name": "org.apache.maven-maven-aether-provider-3.0.4-jar",
+          "filename": "maven-aether-provider-3.0.4.jar",
+          "path": "org/apache/maven/maven-aether-provider/3.0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-aether-provider/3.0.4/maven-aether-provider-3.0.4.jar",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-aether-provider/3.0.4/maven-aether-provider-3.0.4.jar",
+            "https://jcenter.bintray.com/org/apache/maven/maven-aether-provider/3.0.4/maven-aether-provider-3.0.4.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-aether-provider/3.0.4/maven-aether-provider-3.0.4.jar"
+          ],
+          "sha256": "33ff4aabbd0d02e4dd8279cda8f366c69915302bc4bb97bc01814a985f5c0643"
+        },
+        {
+          "name": "org.apache.maven-maven-model-builder-3.0.4-jar",
+          "filename": "maven-model-builder-3.0.4.jar",
+          "path": "org/apache/maven/maven-model-builder/3.0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-model-builder/3.0.4/maven-model-builder-3.0.4.jar",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-model-builder/3.0.4/maven-model-builder-3.0.4.jar",
+            "https://jcenter.bintray.com/org/apache/maven/maven-model-builder/3.0.4/maven-model-builder-3.0.4.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-model-builder/3.0.4/maven-model-builder-3.0.4.jar"
+          ],
+          "sha256": "b4f1d3ae53c290e1ae45694c5ce2d17bf8d577ff5ece0f9aa0cffe151a6ef4e7"
+        },
+        {
+          "name": "org.apache.maven-maven-model-3.0.4-jar",
+          "filename": "maven-model-3.0.4.jar",
+          "path": "org/apache/maven/maven-model/3.0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-model/3.0.4/maven-model-3.0.4.jar",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-model/3.0.4/maven-model-3.0.4.jar",
+            "https://jcenter.bintray.com/org/apache/maven/maven-model/3.0.4/maven-model-3.0.4.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-model/3.0.4/maven-model-3.0.4.jar"
+          ],
+          "sha256": "26b6825ea73ac4d7b1a6f5e62ac1c11b0fc272504da6dde9ba8f894cd847e1c1"
+        },
+        {
+          "name": "org.apache.maven-maven-repository-metadata-3.0.4-jar",
+          "filename": "maven-repository-metadata-3.0.4.jar",
+          "path": "org/apache/maven/maven-repository-metadata/3.0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/3.0.4/maven-repository-metadata-3.0.4.jar",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-repository-metadata/3.0.4/maven-repository-metadata-3.0.4.jar",
+            "https://jcenter.bintray.com/org/apache/maven/maven-repository-metadata/3.0.4/maven-repository-metadata-3.0.4.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-repository-metadata/3.0.4/maven-repository-metadata-3.0.4.jar"
+          ],
+          "sha256": "a25c4db27cffda9e9229db168b1190d6a3e5439f3f67d6afec3df9470e0752d5"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-classworlds-2.4-jar",
+          "filename": "plexus-classworlds-2.4.jar",
+          "path": "org/codehaus/plexus/plexus-classworlds/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-classworlds/2.4/plexus-classworlds-2.4.jar",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-classworlds/2.4/plexus-classworlds-2.4.jar",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-classworlds/2.4/plexus-classworlds-2.4.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-classworlds/2.4/plexus-classworlds-2.4.jar"
+          ],
+          "sha256": "259d528a29722cab6349d7e7d432e3fd4877c087ffcb04985a6612e97023bba8"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-component-annotations-1.5.5-jar",
+          "filename": "plexus-component-annotations-1.5.5.jar",
+          "path": "org/codehaus/plexus/plexus-component-annotations/1.5.5",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar"
+          ],
+          "sha256": "4df7a6a7be64b35bbccf60b5c115697f9ea3421d22674ae67135dde375fcca1f"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-interpolation-1.14-jar",
+          "filename": "plexus-interpolation-1.14.jar",
+          "path": "org/codehaus/plexus/plexus-interpolation/1.14",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.jar",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.jar",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.jar"
+          ],
+          "sha256": "7fc63378d3e84663619b9bedace9f9fe78b276c2be3c62ca2245449294c84176"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-utils-3.0.8-jar",
+          "filename": "plexus-utils-3.0.8.jar",
+          "path": "org/codehaus/plexus/plexus-utils/3.0.8",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar"
+          ],
+          "sha256": "6c040032841fe6b23612c7a4b52347a4a115fdde748086c399a154b4b108e56b"
+        },
+        {
+          "name": "org.jsoup-jsoup-1.7.1-jar",
+          "filename": "jsoup-1.7.1.jar",
+          "path": "org/jsoup/jsoup/1.7.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.7.1/jsoup-1.7.1.jar",
+            "file:/home/pbb/.m2/repository/org/jsoup/jsoup/1.7.1/jsoup-1.7.1.jar",
+            "https://jcenter.bintray.com/org/jsoup/jsoup/1.7.1/jsoup-1.7.1.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/jsoup/jsoup/1.7.1/jsoup-1.7.1.jar"
+          ],
+          "sha256": "37e3b44fb9476a677a956fb684090b9b4a1e4d38bcfc30b499dbc83f109422c0"
+        },
+        {
+          "name": "org.sonatype.aether-aether-api-1.13.1-jar",
+          "filename": "aether-api-1.13.1.jar",
+          "path": "org/sonatype/aether/aether-api/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-api/1.13.1/aether-api-1.13.1.jar",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-api/1.13.1/aether-api-1.13.1.jar",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-api/1.13.1/aether-api-1.13.1.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-api/1.13.1/aether-api-1.13.1.jar"
+          ],
+          "sha256": "ae8dc80232771f8913febfa410c5719e9ba8ded81fb99788e214fd676dbbe13f"
+        },
+        {
+          "name": "org.sonatype.aether-aether-connector-wagon-1.13.1-jar",
+          "filename": "aether-connector-wagon-1.13.1.jar",
+          "path": "org/sonatype/aether/aether-connector-wagon/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-connector-wagon/1.13.1/aether-connector-wagon-1.13.1.jar",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-connector-wagon/1.13.1/aether-connector-wagon-1.13.1.jar",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-connector-wagon/1.13.1/aether-connector-wagon-1.13.1.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-connector-wagon/1.13.1/aether-connector-wagon-1.13.1.jar"
+          ],
+          "sha256": "df54e8505104228ee7e3fbdead7a7a9cb753b04ca6c9cf60a6b19aee0737f1ec"
+        },
+        {
+          "name": "org.sonatype.aether-aether-impl-1.13.1-jar",
+          "filename": "aether-impl-1.13.1.jar",
+          "path": "org/sonatype/aether/aether-impl/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-impl/1.13.1/aether-impl-1.13.1.jar",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-impl/1.13.1/aether-impl-1.13.1.jar",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-impl/1.13.1/aether-impl-1.13.1.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-impl/1.13.1/aether-impl-1.13.1.jar"
+          ],
+          "sha256": "865511994805827e88f327944a089142bb7f3d88cde271ba3dceb732cb137a93"
+        },
+        {
+          "name": "org.sonatype.aether-aether-spi-1.13.1-jar",
+          "filename": "aether-spi-1.13.1.jar",
+          "path": "org/sonatype/aether/aether-spi/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-spi/1.13.1/aether-spi-1.13.1.jar",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-spi/1.13.1/aether-spi-1.13.1.jar",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-spi/1.13.1/aether-spi-1.13.1.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-spi/1.13.1/aether-spi-1.13.1.jar"
+          ],
+          "sha256": "d5de4e299be5a79feb1dbe8ff3814034c6e44314b4c00b92ffa8d97576ded5b3"
+        },
+        {
+          "name": "org.sonatype.aether-aether-util-1.13.1-jar",
+          "filename": "aether-util-1.13.1.jar",
+          "path": "org/sonatype/aether/aether-util/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-util/1.13.1/aether-util-1.13.1.jar",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-util/1.13.1/aether-util-1.13.1.jar",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-util/1.13.1/aether-util-1.13.1.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-util/1.13.1/aether-util-1.13.1.jar"
+          ],
+          "sha256": "687799a0ce988bee9e8eb9ae0ba870300adc0114248ad4a4327bdb625d27e010"
+        },
+        {
+          "name": "org.sonatype.sisu-sisu-guice-3.0.3-no_aop-jar",
+          "filename": "sisu-guice-3.0.3-no_aop.jar",
+          "path": "org/sonatype/sisu/sisu-guice/3.0.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/sisu-guice/3.0.3/sisu-guice-3.0.3-no_aop.jar",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/sisu-guice/3.0.3/sisu-guice-3.0.3-no_aop.jar",
+            "https://jcenter.bintray.com/org/sonatype/sisu/sisu-guice/3.0.3/sisu-guice-3.0.3-no_aop.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/sisu-guice/3.0.3/sisu-guice-3.0.3-no_aop.jar"
+          ],
+          "sha256": "d59b793db4e75c40a5b41b074418010d109c895bd5dc4dc074ed1adc88e79538"
+        },
+        {
+          "name": "org.sonatype.sisu-sisu-inject-bean-2.2.3-jar",
+          "filename": "sisu-inject-bean-2.2.3.jar",
+          "path": "org/sonatype/sisu/sisu-inject-bean/2.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/sisu-inject-bean/2.2.3/sisu-inject-bean-2.2.3.jar",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/sisu-inject-bean/2.2.3/sisu-inject-bean-2.2.3.jar",
+            "https://jcenter.bintray.com/org/sonatype/sisu/sisu-inject-bean/2.2.3/sisu-inject-bean-2.2.3.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/sisu-inject-bean/2.2.3/sisu-inject-bean-2.2.3.jar"
+          ],
+          "sha256": "bf24d1c1c545f7b100b3e60e7d95250961beb1aae5216ca19bc0ceb7accbd22b"
+        },
+        {
+          "name": "org.sonatype.sisu-sisu-inject-plexus-2.2.3-jar",
+          "filename": "sisu-inject-plexus-2.2.3.jar",
+          "path": "org/sonatype/sisu/sisu-inject-plexus/2.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/sisu-inject-plexus/2.2.3/sisu-inject-plexus-2.2.3.jar",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/sisu-inject-plexus/2.2.3/sisu-inject-plexus-2.2.3.jar",
+            "https://jcenter.bintray.com/org/sonatype/sisu/sisu-inject-plexus/2.2.3/sisu-inject-plexus-2.2.3.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/sisu-inject-plexus/2.2.3/sisu-inject-plexus-2.2.3.jar"
+          ],
+          "sha256": "c2d77293b03c97c04fa0488cad4fe38f15c71fd7d0c140961f8e06002a761238"
+        },
+        {
+          "name": "org.tukaani-xz-1.2-jar",
+          "filename": "xz-1.2.jar",
+          "path": "org/tukaani/xz/1.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/tukaani/xz/1.2/xz-1.2.jar",
+            "file:/home/pbb/.m2/repository/org/tukaani/xz/1.2/xz-1.2.jar",
+            "https://jcenter.bintray.com/org/tukaani/xz/1.2/xz-1.2.jar",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/tukaani/xz/1.2/xz-1.2.jar"
+          ],
+          "sha256": "b29db8c05ec99b91b9ed46119d16b125981a39da823bc9c6db8e210be6b297b3"
+        },
+        {
+          "name": "asm-asm-parent-3.3.1-pom",
+          "filename": "asm-parent-3.3.1.pom",
+          "path": "asm/asm-parent/3.3.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/asm/asm-parent/3.3.1/asm-parent-3.3.1.pom",
+            "file:/home/pbb/.m2/repository/asm/asm-parent/3.3.1/asm-parent-3.3.1.pom",
+            "https://jcenter.bintray.com/asm/asm-parent/3.3.1/asm-parent-3.3.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/asm/asm-parent/3.3.1/asm-parent-3.3.1.pom"
+          ],
+          "sha256": "2c62f613e86db57b58fe3d5f443dccf0a51f09d1c9c2cb39776afde06d0f7ff0"
+        },
+        {
+          "name": "asm-asm-3.3.1-pom",
+          "filename": "asm-3.3.1.pom",
+          "path": "asm/asm/3.3.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/asm/asm/3.3.1/asm-3.3.1.pom",
+            "file:/home/pbb/.m2/repository/asm/asm/3.3.1/asm-3.3.1.pom",
+            "https://jcenter.bintray.com/asm/asm/3.3.1/asm-3.3.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/asm/asm/3.3.1/asm-3.3.1.pom"
+          ],
+          "sha256": "6e9dcc0313935ff11e7bea368811e48066ae3177a72ed69bceb3792096f7c2bb"
+        },
+        {
+          "name": "cglib-cglib-2.2.2-pom",
+          "filename": "cglib-2.2.2.pom",
+          "path": "cglib/cglib/2.2.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/cglib/cglib/2.2.2/cglib-2.2.2.pom",
+            "file:/home/pbb/.m2/repository/cglib/cglib/2.2.2/cglib-2.2.2.pom",
+            "https://jcenter.bintray.com/cglib/cglib/2.2.2/cglib-2.2.2.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/cglib/cglib/2.2.2/cglib-2.2.2.pom"
+          ],
+          "sha256": "9d6073c9e0d449b23b88f81976e395990878f771849a88a27bff1b2eeddcbad1"
+        },
+        {
+          "name": "com.mobidevelop.robovm-robovm-dist-compiler-2.2.0-pom",
+          "filename": "robovm-dist-compiler-2.2.0.pom",
+          "path": "com/mobidevelop/robovm/robovm-dist-compiler/2.2.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/mobidevelop/robovm/robovm-dist-compiler/2.2.0/robovm-dist-compiler-2.2.0.pom",
+            "file:/home/pbb/.m2/repository/com/mobidevelop/robovm/robovm-dist-compiler/2.2.0/robovm-dist-compiler-2.2.0.pom",
+            "https://jcenter.bintray.com/com/mobidevelop/robovm/robovm-dist-compiler/2.2.0/robovm-dist-compiler-2.2.0.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/com/mobidevelop/robovm/robovm-dist-compiler/2.2.0/robovm-dist-compiler-2.2.0.pom"
+          ],
+          "sha256": "af1be954d1b1ec9c3e270b48ea4f0b3c541e554b2fbf25477fdf08a82c88d8f0"
+        },
+        {
+          "name": "com.mobidevelop.robovm-robovm-dist-parent-2.2.0-pom",
+          "filename": "robovm-dist-parent-2.2.0.pom",
+          "path": "com/mobidevelop/robovm/robovm-dist-parent/2.2.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/mobidevelop/robovm/robovm-dist-parent/2.2.0/robovm-dist-parent-2.2.0.pom",
+            "file:/home/pbb/.m2/repository/com/mobidevelop/robovm/robovm-dist-parent/2.2.0/robovm-dist-parent-2.2.0.pom",
+            "https://jcenter.bintray.com/com/mobidevelop/robovm/robovm-dist-parent/2.2.0/robovm-dist-parent-2.2.0.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/com/mobidevelop/robovm/robovm-dist-parent/2.2.0/robovm-dist-parent-2.2.0.pom"
+          ],
+          "sha256": "3b01c27b8f97fb8b38755d15bfea5b196db97f1440d75e6373684484af079613"
+        },
+        {
+          "name": "com.mobidevelop.robovm-robovm-gradle-plugin-2.2.0-pom",
+          "filename": "robovm-gradle-plugin-2.2.0.pom",
+          "path": "com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0/robovm-gradle-plugin-2.2.0.pom",
+            "file:/home/pbb/.m2/repository/com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0/robovm-gradle-plugin-2.2.0.pom",
+            "https://jcenter.bintray.com/com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0/robovm-gradle-plugin-2.2.0.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/com/mobidevelop/robovm/robovm-gradle-plugin/2.2.0/robovm-gradle-plugin-2.2.0.pom"
+          ],
+          "sha256": "0c51d40fc142d821c97e72c12f8f235d85c7ce3044c42573dd4aac43762b2954"
+        },
+        {
+          "name": "com.mobidevelop.robovm-robovm-parent-2.2.0-pom",
+          "filename": "robovm-parent-2.2.0.pom",
+          "path": "com/mobidevelop/robovm/robovm-parent/2.2.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/mobidevelop/robovm/robovm-parent/2.2.0/robovm-parent-2.2.0.pom",
+            "file:/home/pbb/.m2/repository/com/mobidevelop/robovm/robovm-parent/2.2.0/robovm-parent-2.2.0.pom",
+            "https://jcenter.bintray.com/com/mobidevelop/robovm/robovm-parent/2.2.0/robovm-parent-2.2.0.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/com/mobidevelop/robovm/robovm-parent/2.2.0/robovm-parent-2.2.0.pom"
+          ],
+          "sha256": "f186d013dadfa6b8ce93b7383384e6da9721984854d0edb4c214fe3df3924129"
+        },
+        {
+          "name": "commons-codec-commons-codec-1.6-pom",
+          "filename": "commons-codec-1.6.pom",
+          "path": "commons-codec/commons-codec/1.6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.pom",
+            "file:/home/pbb/.m2/repository/commons-codec/commons-codec/1.6/commons-codec-1.6.pom",
+            "https://jcenter.bintray.com/commons-codec/commons-codec/1.6/commons-codec-1.6.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/commons-codec/commons-codec/1.6/commons-codec-1.6.pom"
+          ],
+          "sha256": "a06e35d3fff3a6b813d94894ebf3e498f9540c864c5b39ae783907e3a6c72889"
+        },
+        {
+          "name": "commons-io-commons-io-2.0.1-pom",
+          "filename": "commons-io-2.0.1.pom",
+          "path": "commons-io/commons-io/2.0.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom",
+            "file:/home/pbb/.m2/repository/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom",
+            "https://jcenter.bintray.com/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom"
+          ],
+          "sha256": "4275eba1fc4e5878d33ce4d8dc297342be07c0801be4841fab1f971e2c963e1b"
+        },
+        {
+          "name": "commons-logging-commons-logging-1.1.1-pom",
+          "filename": "commons-logging-1.1.1.pom",
+          "path": "commons-logging/commons-logging/1.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.pom",
+            "file:/home/pbb/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.pom",
+            "https://jcenter.bintray.com/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.pom"
+          ],
+          "sha256": "d0f2e16d054e8bb97add9ca26525eb2346f692809fcd2a28787da8ceb3c35ee8"
+        },
+        {
+          "name": "de.richsource.gradle.plugins-gwt-gradle-plugin-0.4-pom",
+          "filename": "gwt-gradle-plugin-0.4.pom",
+          "path": "de/richsource/gradle/plugins/gwt-gradle-plugin/0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/de/richsource/gradle/plugins/gwt-gradle-plugin/0.4/gwt-gradle-plugin-0.4.pom",
+            "file:/home/pbb/.m2/repository/de/richsource/gradle/plugins/gwt-gradle-plugin/0.4/gwt-gradle-plugin-0.4.pom",
+            "https://jcenter.bintray.com/de/richsource/gradle/plugins/gwt-gradle-plugin/0.4/gwt-gradle-plugin-0.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/de/richsource/gradle/plugins/gwt-gradle-plugin/0.4/gwt-gradle-plugin-0.4.pom"
+          ],
+          "sha256": "07c6519087794923c49f2271cc8859d87411f4e3520aa4e87da8b3d7cbc738df"
+        },
+        {
+          "name": "org.apache.commons-commons-compress-1.5-pom",
+          "filename": "commons-compress-1.5.pom",
+          "path": "org/apache/commons/commons-compress/1.5",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.5/commons-compress-1.5.pom",
+            "file:/home/pbb/.m2/repository/org/apache/commons/commons-compress/1.5/commons-compress-1.5.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-compress/1.5/commons-compress-1.5.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/commons/commons-compress/1.5/commons-compress-1.5.pom"
+          ],
+          "sha256": "a74468d51a888853d970d576eb67932a6ac31d902f4f54a91c374ee340cd2759"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-15-pom",
+          "filename": "commons-parent-15.pom",
+          "path": "org/apache/commons/commons-parent/15",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/15/commons-parent-15.pom",
+            "file:/home/pbb/.m2/repository/org/apache/commons/commons-parent/15/commons-parent-15.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/15/commons-parent-15.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/commons/commons-parent/15/commons-parent-15.pom"
+          ],
+          "sha256": "f4457f2b34d38fec9995b5b8db6692b71728feaaabe5a285c100bbdcabdf133d"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-22-pom",
+          "filename": "commons-parent-22.pom",
+          "path": "org/apache/commons/commons-parent/22",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/22/commons-parent-22.pom",
+            "file:/home/pbb/.m2/repository/org/apache/commons/commons-parent/22/commons-parent-22.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/22/commons-parent-22.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/commons/commons-parent/22/commons-parent-22.pom"
+          ],
+          "sha256": "fb8c5e55e30a7addb4ff210858a0e8d2494ed6757bbe19012da99d51586c3cbb"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-28-pom",
+          "filename": "commons-parent-28.pom",
+          "path": "org/apache/commons/commons-parent/28",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/28/commons-parent-28.pom",
+            "file:/home/pbb/.m2/repository/org/apache/commons/commons-parent/28/commons-parent-28.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/28/commons-parent-28.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/commons/commons-parent/28/commons-parent-28.pom"
+          ],
+          "sha256": "14733a68e8b120b69de60cd96d222146dcf32f03c1c6cc6a750b1269bafe86c7"
+        },
+        {
+          "name": "org.apache.commons-commons-parent-5-pom",
+          "filename": "commons-parent-5.pom",
+          "path": "org/apache/commons/commons-parent/5",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/5/commons-parent-5.pom",
+            "file:/home/pbb/.m2/repository/org/apache/commons/commons-parent/5/commons-parent-5.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/5/commons-parent-5.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/commons/commons-parent/5/commons-parent-5.pom"
+          ],
+          "sha256": "8bd632c00bdf80a7de36c22b60f12452c147d8eca2f00d79d66699ebe7daa02a"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpclient-4.2.3-pom",
+          "filename": "httpclient-4.2.3.pom",
+          "path": "org/apache/httpcomponents/httpclient/4.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient/4.2.3/httpclient-4.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/apache/httpcomponents/httpclient/4.2.3/httpclient-4.2.3.pom",
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpclient/4.2.3/httpclient-4.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/httpcomponents/httpclient/4.2.3/httpclient-4.2.3.pom"
+          ],
+          "sha256": "b7cfd3e67fb772209093d6a997597c7dfdf27ad7b7f6b96b0d262d8bec9e6042"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcomponents-client-4.2.3-pom",
+          "filename": "httpcomponents-client-4.2.3.pom",
+          "path": "org/apache/httpcomponents/httpcomponents-client/4.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcomponents-client/4.2.3/httpcomponents-client-4.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/apache/httpcomponents/httpcomponents-client/4.2.3/httpcomponents-client-4.2.3.pom",
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcomponents-client/4.2.3/httpcomponents-client-4.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/httpcomponents/httpcomponents-client/4.2.3/httpcomponents-client-4.2.3.pom"
+          ],
+          "sha256": "f31c40df04e48fa161a87775d368c531c52a02623f03712096c63e233a951bda"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcomponents-core-4.2.3-pom",
+          "filename": "httpcomponents-core-4.2.3.pom",
+          "path": "org/apache/httpcomponents/httpcomponents-core/4.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcomponents-core/4.2.3/httpcomponents-core-4.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/apache/httpcomponents/httpcomponents-core/4.2.3/httpcomponents-core-4.2.3.pom",
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcomponents-core/4.2.3/httpcomponents-core-4.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/httpcomponents/httpcomponents-core/4.2.3/httpcomponents-core-4.2.3.pom"
+          ],
+          "sha256": "6bf79beff2f38e33afe5662da74db8cedf3cf556bc20acf71043ecad3343d4c7"
+        },
+        {
+          "name": "org.apache.httpcomponents-httpcore-4.2.3-pom",
+          "filename": "httpcore-4.2.3.pom",
+          "path": "org/apache/httpcomponents/httpcore/4.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.2.3/httpcore-4.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/apache/httpcomponents/httpcore/4.2.3/httpcore-4.2.3.pom",
+            "https://jcenter.bintray.com/org/apache/httpcomponents/httpcore/4.2.3/httpcore-4.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/httpcomponents/httpcore/4.2.3/httpcore-4.2.3.pom"
+          ],
+          "sha256": "efea6e3c67b3111e04d33239797fc4bb77db2d6a3c647a7f3d4ba20c8c16cb1c"
+        },
+        {
+          "name": "org.apache.httpcomponents-project-6-pom",
+          "filename": "project-6.pom",
+          "path": "org/apache/httpcomponents/project/6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/project/6/project-6.pom",
+            "file:/home/pbb/.m2/repository/org/apache/httpcomponents/project/6/project-6.pom",
+            "https://jcenter.bintray.com/org/apache/httpcomponents/project/6/project-6.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/httpcomponents/project/6/project-6.pom"
+          ],
+          "sha256": "b5d9225adb8683c1d7c5514544382add004547c93694abb5bd52b87346886f42"
+        },
+        {
+          "name": "org.apache.maven.wagon-wagon-http-shared4-2.4-pom",
+          "filename": "wagon-http-shared4-2.4.pom",
+          "path": "org/apache/maven/wagon/wagon-http-shared4/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-http-shared4/2.4/wagon-http-shared4-2.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/wagon/wagon-http-shared4/2.4/wagon-http-shared4-2.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/wagon/wagon-http-shared4/2.4/wagon-http-shared4-2.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/wagon/wagon-http-shared4/2.4/wagon-http-shared4-2.4.pom"
+          ],
+          "sha256": "b69470fb909611d18ae9e82887cbb43d09d1f48883e99e5da7422d31e9704c6c"
+        },
+        {
+          "name": "org.apache.maven.wagon-wagon-http-2.4-pom",
+          "filename": "wagon-http-2.4.pom",
+          "path": "org/apache/maven/wagon/wagon-http/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-http/2.4/wagon-http-2.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/wagon/wagon-http/2.4/wagon-http-2.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/wagon/wagon-http/2.4/wagon-http-2.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/wagon/wagon-http/2.4/wagon-http-2.4.pom"
+          ],
+          "sha256": "da9fada262339b27bc41c33ce2c7203558040f9922ac6b4d096dc332e85d6825"
+        },
+        {
+          "name": "org.apache.maven.wagon-wagon-provider-api-2.4-pom",
+          "filename": "wagon-provider-api-2.4.pom",
+          "path": "org/apache/maven/wagon/wagon-provider-api/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.pom"
+          ],
+          "sha256": "d5fa8e200caabe0ea95bb805011e9870c660c55c89d4492feb842f918b7fc2e5"
+        },
+        {
+          "name": "org.apache.maven.wagon-wagon-providers-2.4-pom",
+          "filename": "wagon-providers-2.4.pom",
+          "path": "org/apache/maven/wagon/wagon-providers/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-providers/2.4/wagon-providers-2.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/wagon/wagon-providers/2.4/wagon-providers-2.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/wagon/wagon-providers/2.4/wagon-providers-2.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/wagon/wagon-providers/2.4/wagon-providers-2.4.pom"
+          ],
+          "sha256": "90a2e46f771cfb02bdcef7ee5e1cc0c432884267bff1579f6066a99e0b403766"
+        },
+        {
+          "name": "org.apache.maven.wagon-wagon-2.4-pom",
+          "filename": "wagon-2.4.pom",
+          "path": "org/apache/maven/wagon/wagon/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon/2.4/wagon-2.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/wagon/wagon/2.4/wagon-2.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/wagon/wagon/2.4/wagon-2.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/wagon/wagon/2.4/wagon-2.4.pom"
+          ],
+          "sha256": "584d149a7eb90e627d31ddbdd5f1939bc456cbeec279a1a3ef9639411f234a5e"
+        },
+        {
+          "name": "org.apache.maven-maven-aether-provider-3.0.4-pom",
+          "filename": "maven-aether-provider-3.0.4.pom",
+          "path": "org/apache/maven/maven-aether-provider/3.0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-aether-provider/3.0.4/maven-aether-provider-3.0.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-aether-provider/3.0.4/maven-aether-provider-3.0.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/maven-aether-provider/3.0.4/maven-aether-provider-3.0.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-aether-provider/3.0.4/maven-aether-provider-3.0.4.pom"
+          ],
+          "sha256": "a5082fe0a870bd361b3ecd6ab3e4641cfe775a8da19d80d8b2e277e7861f831b"
+        },
+        {
+          "name": "org.apache.maven-maven-model-builder-3.0.4-pom",
+          "filename": "maven-model-builder-3.0.4.pom",
+          "path": "org/apache/maven/maven-model-builder/3.0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-model-builder/3.0.4/maven-model-builder-3.0.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-model-builder/3.0.4/maven-model-builder-3.0.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/maven-model-builder/3.0.4/maven-model-builder-3.0.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-model-builder/3.0.4/maven-model-builder-3.0.4.pom"
+          ],
+          "sha256": "ac605e66a84dd9ee63610d650b007e3c8fbb7feef73e94bdd899e60dd475a20f"
+        },
+        {
+          "name": "org.apache.maven-maven-model-3.0.4-pom",
+          "filename": "maven-model-3.0.4.pom",
+          "path": "org/apache/maven/maven-model/3.0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-model/3.0.4/maven-model-3.0.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-model/3.0.4/maven-model-3.0.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/maven-model/3.0.4/maven-model-3.0.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-model/3.0.4/maven-model-3.0.4.pom"
+          ],
+          "sha256": "264be3f212d59f9103d3b997c9d0197ff89489d06b7d195d80ee56356b6c662e"
+        },
+        {
+          "name": "org.apache.maven-maven-parent-21-pom",
+          "filename": "maven-parent-21.pom",
+          "path": "org/apache/maven/maven-parent/21",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/21/maven-parent-21.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-parent/21/maven-parent-21.pom",
+            "https://jcenter.bintray.com/org/apache/maven/maven-parent/21/maven-parent-21.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-parent/21/maven-parent-21.pom"
+          ],
+          "sha256": "fc45af8911ea307d1b57564eef1f78b69801e9c11a5619e7eb58d5d00ae9db8e"
+        },
+        {
+          "name": "org.apache.maven-maven-parent-23-pom",
+          "filename": "maven-parent-23.pom",
+          "path": "org/apache/maven/maven-parent/23",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/23/maven-parent-23.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-parent/23/maven-parent-23.pom",
+            "https://jcenter.bintray.com/org/apache/maven/maven-parent/23/maven-parent-23.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-parent/23/maven-parent-23.pom"
+          ],
+          "sha256": "5425501edd9e0bd7b01eca53cc92e06836d24851151304f9c6759e1713541685"
+        },
+        {
+          "name": "org.apache.maven-maven-repository-metadata-3.0.4-pom",
+          "filename": "maven-repository-metadata-3.0.4.pom",
+          "path": "org/apache/maven/maven-repository-metadata/3.0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/3.0.4/maven-repository-metadata-3.0.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven-repository-metadata/3.0.4/maven-repository-metadata-3.0.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/maven-repository-metadata/3.0.4/maven-repository-metadata-3.0.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven-repository-metadata/3.0.4/maven-repository-metadata-3.0.4.pom"
+          ],
+          "sha256": "5fe2b1d87fd326c1a22aac3869da7935ad31760d978fdff9a073c3fbfd54e18d"
+        },
+        {
+          "name": "org.apache.maven-maven-3.0.4-pom",
+          "filename": "maven-3.0.4.pom",
+          "path": "org/apache/maven/maven/3.0.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/maven/maven/3.0.4/maven-3.0.4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/maven/maven/3.0.4/maven-3.0.4.pom",
+            "https://jcenter.bintray.com/org/apache/maven/maven/3.0.4/maven-3.0.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/maven/maven/3.0.4/maven-3.0.4.pom"
+          ],
+          "sha256": "4d223e01a6569d6655c1f4fce84969d45142cdbabdb118ea08c5c8c33ec632f6"
+        },
+        {
+          "name": "org.apache-apache-10-pom",
+          "filename": "apache-10.pom",
+          "path": "org/apache/apache/10",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/10/apache-10.pom",
+            "file:/home/pbb/.m2/repository/org/apache/apache/10/apache-10.pom",
+            "https://jcenter.bintray.com/org/apache/apache/10/apache-10.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/apache/10/apache-10.pom"
+          ],
+          "sha256": "802feece72852dafcbd0a425a60367c72c5cb9b6ea5aae59481128569189daf9"
+        },
+        {
+          "name": "org.apache-apache-13-pom",
+          "filename": "apache-13.pom",
+          "path": "org/apache/apache/13",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/13/apache-13.pom",
+            "file:/home/pbb/.m2/repository/org/apache/apache/13/apache-13.pom",
+            "https://jcenter.bintray.com/org/apache/apache/13/apache-13.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/apache/13/apache-13.pom"
+          ],
+          "sha256": "ff513db0361fd41237bef4784968bc15aae478d4ec0a9496f811072ccaf3841d"
+        },
+        {
+          "name": "org.apache-apache-4-pom",
+          "filename": "apache-4.pom",
+          "path": "org/apache/apache/4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/4/apache-4.pom",
+            "file:/home/pbb/.m2/repository/org/apache/apache/4/apache-4.pom",
+            "https://jcenter.bintray.com/org/apache/apache/4/apache-4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/apache/4/apache-4.pom"
+          ],
+          "sha256": "9e9323a26ba8eb2394efef0c96d31b70df570808630dc147cab1e73541cc5194"
+        },
+        {
+          "name": "org.apache-apache-7-pom",
+          "filename": "apache-7.pom",
+          "path": "org/apache/apache/7",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/7/apache-7.pom",
+            "file:/home/pbb/.m2/repository/org/apache/apache/7/apache-7.pom",
+            "https://jcenter.bintray.com/org/apache/apache/7/apache-7.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/apache/7/apache-7.pom"
+          ],
+          "sha256": "1397ce1db433adc9f223dbf07496d133681448751f4ae29e58f68e78fb4b6c25"
+        },
+        {
+          "name": "org.apache-apache-9-pom",
+          "filename": "apache-9.pom",
+          "path": "org/apache/apache/9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/9/apache-9.pom",
+            "file:/home/pbb/.m2/repository/org/apache/apache/9/apache-9.pom",
+            "https://jcenter.bintray.com/org/apache/apache/9/apache-9.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/apache/apache/9/apache-9.pom"
+          ],
+          "sha256": "4946e60a547c8eda69f3bc23c5b6f0dadcf8469ea49b1d1da7de34aecfcf18dd"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-classworlds-2.4-pom",
+          "filename": "plexus-classworlds-2.4.pom",
+          "path": "org/codehaus/plexus/plexus-classworlds/2.4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-classworlds/2.4/plexus-classworlds-2.4.pom",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-classworlds/2.4/plexus-classworlds-2.4.pom",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-classworlds/2.4/plexus-classworlds-2.4.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-classworlds/2.4/plexus-classworlds-2.4.pom"
+          ],
+          "sha256": "c0439c2b2d850488686143e2529f521b38f2abded6ac212add8f0c637eb912e9"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-component-annotations-1.5.5-pom",
+          "filename": "plexus-component-annotations-1.5.5.pom",
+          "path": "org/codehaus/plexus/plexus-component-annotations/1.5.5",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom"
+          ],
+          "sha256": "815f3ec316b8c5fa701385fdf4009bfb51e07d780e8f6a6e2afe720c52d7e292"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-components-1.1.18-pom",
+          "filename": "plexus-components-1.1.18.pom",
+          "path": "org/codehaus/plexus/plexus-components/1.1.18",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-components/1.1.18/plexus-components-1.1.18.pom",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-components/1.1.18/plexus-components-1.1.18.pom",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-components/1.1.18/plexus-components-1.1.18.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-components/1.1.18/plexus-components-1.1.18.pom"
+          ],
+          "sha256": "ef5dbc7fa918b6dbba71d27e5b3d7a00df624bcfa2549a7297f36fe275f634d7"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-containers-1.5.5-pom",
+          "filename": "plexus-containers-1.5.5.pom",
+          "path": "org/codehaus/plexus/plexus-containers/1.5.5",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom"
+          ],
+          "sha256": "1bc264824ec876b0ca6f4f5838175c541c638cbc43326a268b9aee7d4778b5ef"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-interpolation-1.14-pom",
+          "filename": "plexus-interpolation-1.14.pom",
+          "path": "org/codehaus/plexus/plexus-interpolation/1.14",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.pom",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.pom",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.pom"
+          ],
+          "sha256": "d08155c497df37b2c3d9b5b0dfdb02ec0525b2070b5be3739fffde942fcac9af"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-utils-3.0.8-pom",
+          "filename": "plexus-utils-3.0.8.pom",
+          "path": "org/codehaus/plexus/plexus-utils/3.0.8",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.pom",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.pom",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.pom"
+          ],
+          "sha256": "0f0794dc7bdd60775d1b1e9bf70c55f2e4051bcd3d5e263a56c678080db3bbc1"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-2.0.7-pom",
+          "filename": "plexus-2.0.7.pom",
+          "path": "org/codehaus/plexus/plexus/2.0.7",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus/2.0.7/plexus-2.0.7.pom",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus/2.0.7/plexus-2.0.7.pom",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus/2.0.7/plexus-2.0.7.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus/2.0.7/plexus-2.0.7.pom"
+          ],
+          "sha256": "2b59062030ab0a15c5d0977ba22421706368926488739a65f25793e715cc8a74"
+        },
+        {
+          "name": "org.codehaus.plexus-plexus-3.2-pom",
+          "filename": "plexus-3.2.pom",
+          "path": "org/codehaus/plexus/plexus/3.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus/3.2/plexus-3.2.pom",
+            "file:/home/pbb/.m2/repository/org/codehaus/plexus/plexus/3.2/plexus-3.2.pom",
+            "https://jcenter.bintray.com/org/codehaus/plexus/plexus/3.2/plexus-3.2.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/codehaus/plexus/plexus/3.2/plexus-3.2.pom"
+          ],
+          "sha256": "1c7c732fdc37e7705af76835b1589fedd9db2abe1baa76b16bd061bd7291de4f"
+        },
+        {
+          "name": "org.jsoup-jsoup-1.7.1-pom",
+          "filename": "jsoup-1.7.1.pom",
+          "path": "org/jsoup/jsoup/1.7.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.7.1/jsoup-1.7.1.pom",
+            "file:/home/pbb/.m2/repository/org/jsoup/jsoup/1.7.1/jsoup-1.7.1.pom",
+            "https://jcenter.bintray.com/org/jsoup/jsoup/1.7.1/jsoup-1.7.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/jsoup/jsoup/1.7.1/jsoup-1.7.1.pom"
+          ],
+          "sha256": "266ba5001eac7ee4b2862439ffd4f811ddcf76101ac138bcac25f2594f5cc11e"
+        },
+        {
+          "name": "org.sonatype.aether-aether-api-1.13.1-pom",
+          "filename": "aether-api-1.13.1.pom",
+          "path": "org/sonatype/aether/aether-api/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-api/1.13.1/aether-api-1.13.1.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-api/1.13.1/aether-api-1.13.1.pom",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-api/1.13.1/aether-api-1.13.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-api/1.13.1/aether-api-1.13.1.pom"
+          ],
+          "sha256": "9a58a1ddbbbe5b635674a958ac9d95d4ffaba7a40b9f800cde2cdf4986c3ef2a"
+        },
+        {
+          "name": "org.sonatype.aether-aether-connector-wagon-1.13.1-pom",
+          "filename": "aether-connector-wagon-1.13.1.pom",
+          "path": "org/sonatype/aether/aether-connector-wagon/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-connector-wagon/1.13.1/aether-connector-wagon-1.13.1.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-connector-wagon/1.13.1/aether-connector-wagon-1.13.1.pom",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-connector-wagon/1.13.1/aether-connector-wagon-1.13.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-connector-wagon/1.13.1/aether-connector-wagon-1.13.1.pom"
+          ],
+          "sha256": "68fc8c02a03db7a1708d236cc08bcb3aed3e8cee73b05a9bb6001285ce8a916c"
+        },
+        {
+          "name": "org.sonatype.aether-aether-impl-1.13.1-pom",
+          "filename": "aether-impl-1.13.1.pom",
+          "path": "org/sonatype/aether/aether-impl/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-impl/1.13.1/aether-impl-1.13.1.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-impl/1.13.1/aether-impl-1.13.1.pom",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-impl/1.13.1/aether-impl-1.13.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-impl/1.13.1/aether-impl-1.13.1.pom"
+          ],
+          "sha256": "5d85a54716b6c6fc043895b129c3c76a2b9ca922c3bd79158ef08b7960aaf330"
+        },
+        {
+          "name": "org.sonatype.aether-aether-spi-1.13.1-pom",
+          "filename": "aether-spi-1.13.1.pom",
+          "path": "org/sonatype/aether/aether-spi/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-spi/1.13.1/aether-spi-1.13.1.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-spi/1.13.1/aether-spi-1.13.1.pom",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-spi/1.13.1/aether-spi-1.13.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-spi/1.13.1/aether-spi-1.13.1.pom"
+          ],
+          "sha256": "3d0c466fe8af3983356991ca7ff01a802920e04f946675d920420e154c5edec2"
+        },
+        {
+          "name": "org.sonatype.aether-aether-util-1.13.1-pom",
+          "filename": "aether-util-1.13.1.pom",
+          "path": "org/sonatype/aether/aether-util/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether-util/1.13.1/aether-util-1.13.1.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether-util/1.13.1/aether-util-1.13.1.pom",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether-util/1.13.1/aether-util-1.13.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether-util/1.13.1/aether-util-1.13.1.pom"
+          ],
+          "sha256": "abd5e7869aa58f720d8c7301004334449351ad297aeb6ba2ebabf9b38503267b"
+        },
+        {
+          "name": "org.sonatype.aether-aether-1.13.1-pom",
+          "filename": "aether-1.13.1.pom",
+          "path": "org/sonatype/aether/aether/1.13.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/aether/aether/1.13.1/aether-1.13.1.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/aether/aether/1.13.1/aether-1.13.1.pom",
+            "https://jcenter.bintray.com/org/sonatype/aether/aether/1.13.1/aether-1.13.1.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/aether/aether/1.13.1/aether-1.13.1.pom"
+          ],
+          "sha256": "719fe091fd3fe4c6a7b8f69c8714935138b85a2b6145068a1ccfdb57d2e500d1"
+        },
+        {
+          "name": "org.sonatype.forge-forge-parent-10-pom",
+          "filename": "forge-parent-10.pom",
+          "path": "org/sonatype/forge/forge-parent/10",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/forge/forge-parent/10/forge-parent-10.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/forge/forge-parent/10/forge-parent-10.pom",
+            "https://jcenter.bintray.com/org/sonatype/forge/forge-parent/10/forge-parent-10.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/forge/forge-parent/10/forge-parent-10.pom"
+          ],
+          "sha256": "c14fb9c32b59cc03251f609416db7c0cff01f811edcccb4f6a865d6e7046bd0b"
+        },
+        {
+          "name": "org.sonatype.forge-forge-parent-9-pom",
+          "filename": "forge-parent-9.pom",
+          "path": "org/sonatype/forge/forge-parent/9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/forge/forge-parent/9/forge-parent-9.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/forge/forge-parent/9/forge-parent-9.pom",
+            "https://jcenter.bintray.com/org/sonatype/forge/forge-parent/9/forge-parent-9.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/forge/forge-parent/9/forge-parent-9.pom"
+          ],
+          "sha256": "8a19cfb90b52258cc115b28c30cb0c06c55bd7aad37b13bbec0c4332faa58ae9"
+        },
+        {
+          "name": "org.sonatype.oss-oss-parent-7-pom",
+          "filename": "oss-parent-7.pom",
+          "path": "org/sonatype/oss/oss-parent/7",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/oss/oss-parent/7/oss-parent-7.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/oss/oss-parent/7/oss-parent-7.pom",
+            "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/7/oss-parent-7.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/oss/oss-parent/7/oss-parent-7.pom"
+          ],
+          "sha256": "b51f8867c92b6a722499557fc3a1fdea77bdf9ef574722fe90ce436a29559454"
+        },
+        {
+          "name": "org.sonatype.sisu.inject-containers-2.2.3-pom",
+          "filename": "containers-2.2.3.pom",
+          "path": "org/sonatype/sisu/inject/containers/2.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/inject/containers/2.2.3/containers-2.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/inject/containers/2.2.3/containers-2.2.3.pom",
+            "https://jcenter.bintray.com/org/sonatype/sisu/inject/containers/2.2.3/containers-2.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/inject/containers/2.2.3/containers-2.2.3.pom"
+          ],
+          "sha256": "530070403af2dc54626fc4ce572d2e532689c8c2ee747458772a57d604a197f6"
+        },
+        {
+          "name": "org.sonatype.sisu.inject-guice-bean-2.2.3-pom",
+          "filename": "guice-bean-2.2.3.pom",
+          "path": "org/sonatype/sisu/inject/guice-bean/2.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/inject/guice-bean/2.2.3/guice-bean-2.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/inject/guice-bean/2.2.3/guice-bean-2.2.3.pom",
+            "https://jcenter.bintray.com/org/sonatype/sisu/inject/guice-bean/2.2.3/guice-bean-2.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/inject/guice-bean/2.2.3/guice-bean-2.2.3.pom"
+          ],
+          "sha256": "59882ad8efe16aef0cc291566f0b2e2f5d6c7ca7abc57c0ec83eeceeb6ca75f7"
+        },
+        {
+          "name": "org.sonatype.sisu.inject-guice-parent-3.0.3-pom",
+          "filename": "guice-parent-3.0.3.pom",
+          "path": "org/sonatype/sisu/inject/guice-parent/3.0.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/inject/guice-parent/3.0.3/guice-parent-3.0.3.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/inject/guice-parent/3.0.3/guice-parent-3.0.3.pom",
+            "https://jcenter.bintray.com/org/sonatype/sisu/inject/guice-parent/3.0.3/guice-parent-3.0.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/inject/guice-parent/3.0.3/guice-parent-3.0.3.pom"
+          ],
+          "sha256": "6f4206ec1234f333758c0391c399fe2a22974246b4f4b64fa0151742c352aa74"
+        },
+        {
+          "name": "org.sonatype.sisu.inject-guice-plexus-2.2.3-pom",
+          "filename": "guice-plexus-2.2.3.pom",
+          "path": "org/sonatype/sisu/inject/guice-plexus/2.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/inject/guice-plexus/2.2.3/guice-plexus-2.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/inject/guice-plexus/2.2.3/guice-plexus-2.2.3.pom",
+            "https://jcenter.bintray.com/org/sonatype/sisu/inject/guice-plexus/2.2.3/guice-plexus-2.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/inject/guice-plexus/2.2.3/guice-plexus-2.2.3.pom"
+          ],
+          "sha256": "df0bea0b5643ede6628691f4e53d036f0034e2f199012d7307c4147d85906d23"
+        },
+        {
+          "name": "org.sonatype.sisu-sisu-guice-3.0.3-pom",
+          "filename": "sisu-guice-3.0.3.pom",
+          "path": "org/sonatype/sisu/sisu-guice/3.0.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/sisu-guice/3.0.3/sisu-guice-3.0.3.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/sisu-guice/3.0.3/sisu-guice-3.0.3.pom",
+            "https://jcenter.bintray.com/org/sonatype/sisu/sisu-guice/3.0.3/sisu-guice-3.0.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/sisu-guice/3.0.3/sisu-guice-3.0.3.pom"
+          ],
+          "sha256": "a3459b4a876fb8a5c46f762097fab83a376f00a5001d64bc63ac610295c5172a"
+        },
+        {
+          "name": "org.sonatype.sisu-sisu-inject-bean-2.2.3-pom",
+          "filename": "sisu-inject-bean-2.2.3.pom",
+          "path": "org/sonatype/sisu/sisu-inject-bean/2.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/sisu-inject-bean/2.2.3/sisu-inject-bean-2.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/sisu-inject-bean/2.2.3/sisu-inject-bean-2.2.3.pom",
+            "https://jcenter.bintray.com/org/sonatype/sisu/sisu-inject-bean/2.2.3/sisu-inject-bean-2.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/sisu-inject-bean/2.2.3/sisu-inject-bean-2.2.3.pom"
+          ],
+          "sha256": "9342fae272b710508a1618d84c8b6f5cfd4657d478cd9f747087608daa43e51c"
+        },
+        {
+          "name": "org.sonatype.sisu-sisu-inject-plexus-2.2.3-pom",
+          "filename": "sisu-inject-plexus-2.2.3.pom",
+          "path": "org/sonatype/sisu/sisu-inject-plexus/2.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/sisu-inject-plexus/2.2.3/sisu-inject-plexus-2.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/sisu-inject-plexus/2.2.3/sisu-inject-plexus-2.2.3.pom",
+            "https://jcenter.bintray.com/org/sonatype/sisu/sisu-inject-plexus/2.2.3/sisu-inject-plexus-2.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/sisu-inject-plexus/2.2.3/sisu-inject-plexus-2.2.3.pom"
+          ],
+          "sha256": "402818cace82903cb15ca2f94c38592f41f7868aee350de6b6880ecd83503318"
+        },
+        {
+          "name": "org.sonatype.sisu-sisu-inject-2.2.3-pom",
+          "filename": "sisu-inject-2.2.3.pom",
+          "path": "org/sonatype/sisu/sisu-inject/2.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/sisu-inject/2.2.3/sisu-inject-2.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/sisu-inject/2.2.3/sisu-inject-2.2.3.pom",
+            "https://jcenter.bintray.com/org/sonatype/sisu/sisu-inject/2.2.3/sisu-inject-2.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/sisu-inject/2.2.3/sisu-inject-2.2.3.pom"
+          ],
+          "sha256": "787c35a621f325285036d59bf8d395dcd72b6b2607c48c03a7e030b5a9dce882"
+        },
+        {
+          "name": "org.sonatype.sisu-sisu-parent-2.2.3-pom",
+          "filename": "sisu-parent-2.2.3.pom",
+          "path": "org/sonatype/sisu/sisu-parent/2.2.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/sisu/sisu-parent/2.2.3/sisu-parent-2.2.3.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/sisu/sisu-parent/2.2.3/sisu-parent-2.2.3.pom",
+            "https://jcenter.bintray.com/org/sonatype/sisu/sisu-parent/2.2.3/sisu-parent-2.2.3.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/sisu/sisu-parent/2.2.3/sisu-parent-2.2.3.pom"
+          ],
+          "sha256": "c8ce353ab602ca45e6052f154a583670c9732dbf78187332f8ad5e8852e76c06"
+        },
+        {
+          "name": "org.sonatype.spice-spice-parent-17-pom",
+          "filename": "spice-parent-17.pom",
+          "path": "org/sonatype/spice/spice-parent/17",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/spice/spice-parent/17/spice-parent-17.pom",
+            "file:/home/pbb/.m2/repository/org/sonatype/spice/spice-parent/17/spice-parent-17.pom",
+            "https://jcenter.bintray.com/org/sonatype/spice/spice-parent/17/spice-parent-17.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/sonatype/spice/spice-parent/17/spice-parent-17.pom"
+          ],
+          "sha256": "9151f9a5b33ec36ee8778842fc56144fb0242d39cbcc42061b053b8909969bdf"
+        },
+        {
+          "name": "org.tukaani-xz-1.2-pom",
+          "filename": "xz-1.2.pom",
+          "path": "org/tukaani/xz/1.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/tukaani/xz/1.2/xz-1.2.pom",
+            "file:/home/pbb/.m2/repository/org/tukaani/xz/1.2/xz-1.2.pom",
+            "https://jcenter.bintray.com/org/tukaani/xz/1.2/xz-1.2.pom",
+            "https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/org/tukaani/xz/1.2/xz-1.2.pom"
+          ],
+          "sha256": "fb5b4aa323a09f91bee9bf03ff00ca14c49d0830dffb1c448c79e5d51af2a533"
+        }
+      ],
+      "project": [
+        {
+          "name": "com.badlogicgames.gdx-gdx-controllers-parent-1.9.10-pom",
+          "filename": "gdx-controllers-parent-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx-controllers-parent/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-controllers-parent/1.9.10/gdx-controllers-parent-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-controllers-parent/1.9.10/gdx-controllers-parent-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-controllers-parent/1.9.10/gdx-controllers-parent-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-controllers-parent/1.9.10/gdx-controllers-parent-1.9.10.pom"
+          ],
+          "sha256": "43d2895c5bd356ed3d9a84644c8084b914f9a425d04f81a7c01edc9061ef40bf"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-controllers-1.9.10-jar",
+          "filename": "gdx-controllers-1.9.10.jar",
+          "path": "com/badlogicgames/gdx/gdx-controllers/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-controllers/1.9.10/gdx-controllers-1.9.10.jar",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-controllers/1.9.10/gdx-controllers-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-controllers/1.9.10/gdx-controllers-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-controllers/1.9.10/gdx-controllers-1.9.10.jar"
+          ],
+          "sha256": "2f0fca2f240e05eac004ffa0060cfa693db6d95d16719f929a0261c15d3e1b28"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-controllers-1.9.10-pom",
+          "filename": "gdx-controllers-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx-controllers/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-controllers/1.9.10/gdx-controllers-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-controllers/1.9.10/gdx-controllers-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-controllers/1.9.10/gdx-controllers-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-controllers/1.9.10/gdx-controllers-1.9.10.pom"
+          ],
+          "sha256": "1bbc8b6b907467062c268a4c839f96c7195c534be63baa470e08d7d598d5f993"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-freetype-1.9.10-jar",
+          "filename": "gdx-freetype-1.9.10.jar",
+          "path": "com/badlogicgames/gdx/gdx-freetype/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-freetype/1.9.10/gdx-freetype-1.9.10.jar",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-freetype/1.9.10/gdx-freetype-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-freetype/1.9.10/gdx-freetype-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-freetype/1.9.10/gdx-freetype-1.9.10.jar"
+          ],
+          "sha256": "1f6e806de06f948139fd11a8cfdf7d46cec74e44e1c9cdcc3701247e44dc928a"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-freetype-1.9.10-pom",
+          "filename": "gdx-freetype-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx-freetype/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-freetype/1.9.10/gdx-freetype-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-freetype/1.9.10/gdx-freetype-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-freetype/1.9.10/gdx-freetype-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-freetype/1.9.10/gdx-freetype-1.9.10.pom"
+          ],
+          "sha256": "7a302b26a768836f68bbfdd42fe57c814da840dbeed834eb62f55a307e4bde20"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-parent-1.9.10-pom",
+          "filename": "gdx-parent-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx-parent/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-parent/1.9.10/gdx-parent-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-parent/1.9.10/gdx-parent-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-parent/1.9.10/gdx-parent-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-parent/1.9.10/gdx-parent-1.9.10.pom"
+          ],
+          "sha256": "2fb979c32fc7c347c86e1777322b13b31a21926fcf150536d173ec1e6e59bfdc"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-1.9.10-jar",
+          "filename": "gdx-1.9.10.jar",
+          "path": "com/badlogicgames/gdx/gdx/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx/1.9.10/gdx-1.9.10.jar",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx/1.9.10/gdx-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx/1.9.10/gdx-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx/1.9.10/gdx-1.9.10.jar"
+          ],
+          "sha256": "bf4ed8ba1b2878ea871eaa8ef77992d105e8f9fe9eba1e8214d741bcd3d9f437"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-1.9.10-pom",
+          "filename": "gdx-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx/1.9.10/gdx-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx/1.9.10/gdx-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx/1.9.10/gdx-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx/1.9.10/gdx-1.9.10.pom"
+          ],
+          "sha256": "160cd01c106f0a923ebbd4cb7941d0bcc9dfb27111d43d4277deed40750718bd"
+        },
+        {
+          "name": "org.json-json-20140107-jar",
+          "filename": "json-20140107.jar",
+          "path": "org/json/json/20140107",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/json/json/20140107/json-20140107.jar",
+            "https://repo.maven.apache.org/maven2/org/json/json/20140107/json-20140107.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/json/json/20140107/json-20140107.jar",
+            "https://oss.sonatype.org/content/repositories/releases/org/json/json/20140107/json-20140107.jar"
+          ],
+          "sha256": "8e5aa0a368bee60347b5a4ad861d9f68c7793f60deeea89efd449eb70d5ae622"
+        },
+        {
+          "name": "org.json-json-20140107-pom",
+          "filename": "json-20140107.pom",
+          "path": "org/json/json/20140107",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/json/json/20140107/json-20140107.pom",
+            "https://repo.maven.apache.org/maven2/org/json/json/20140107/json-20140107.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/json/json/20140107/json-20140107.pom",
+            "https://oss.sonatype.org/content/repositories/releases/org/json/json/20140107/json-20140107.pom"
+          ],
+          "sha256": "f748aaa01d23c3c799402e31e53742fb75c77576297d9b51e65024e2c80b8437"
+        },
+        {
+          "name": "org.sonatype.oss-oss-parent-5-pom",
+          "filename": "oss-parent-5.pom",
+          "path": "org/sonatype/oss/oss-parent/5",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/sonatype/oss/oss-parent/5/oss-parent-5.pom",
+            "https://repo.maven.apache.org/maven2/org/sonatype/oss/oss-parent/5/oss-parent-5.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/sonatype/oss/oss-parent/5/oss-parent-5.pom",
+            "https://oss.sonatype.org/content/repositories/releases/org/sonatype/oss/oss-parent/5/oss-parent-5.pom"
+          ],
+          "sha256": "1678d4120a585d8a630131aeec4c524d928398583b7eab616ee7d5a87f520d3d"
+        },
+        {
+          "name": "org.sonatype.oss-oss-parent-7-pom",
+          "filename": "oss-parent-7.pom",
+          "path": "org/sonatype/oss/oss-parent/7",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/sonatype/oss/oss-parent/7/oss-parent-7.pom",
+            "https://repo.maven.apache.org/maven2/org/sonatype/oss/oss-parent/7/oss-parent-7.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/sonatype/oss/oss-parent/7/oss-parent-7.pom",
+            "https://oss.sonatype.org/content/repositories/releases/org/sonatype/oss/oss-parent/7/oss-parent-7.pom"
+          ],
+          "sha256": "b51f8867c92b6a722499557fc3a1fdea77bdf9ef574722fe90ce436a29559454"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-backend-lwjgl-1.9.10-jar",
+          "filename": "gdx-backend-lwjgl-1.9.10.jar",
+          "path": "com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10/gdx-backend-lwjgl-1.9.10.jar",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10/gdx-backend-lwjgl-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10/gdx-backend-lwjgl-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10/gdx-backend-lwjgl-1.9.10.jar"
+          ],
+          "sha256": "d58c7926124ffd3960df17081646ea98cf07ee6c386d5dd89e8acce8f3a8fac1"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-backend-lwjgl-1.9.10-pom",
+          "filename": "gdx-backend-lwjgl-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10/gdx-backend-lwjgl-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10/gdx-backend-lwjgl-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10/gdx-backend-lwjgl-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-backend-lwjgl/1.9.10/gdx-backend-lwjgl-1.9.10.pom"
+          ],
+          "sha256": "555c63481956362327362a31d8ad6d9efbfa446919fee55e72a7b037b2ef23e9"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-controllers-desktop-1.9.10-jar",
+          "filename": "gdx-controllers-desktop-1.9.10.jar",
+          "path": "com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10/gdx-controllers-desktop-1.9.10.jar",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10/gdx-controllers-desktop-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10/gdx-controllers-desktop-1.9.10.jar",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10/gdx-controllers-desktop-1.9.10.jar"
+          ],
+          "sha256": "d09b650d2081b23f709155c9e740796c657e1cf66c92b75b2d42580f16f03142"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-controllers-desktop-1.9.10-pom",
+          "filename": "gdx-controllers-desktop-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10/gdx-controllers-desktop-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10/gdx-controllers-desktop-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10/gdx-controllers-desktop-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-controllers-desktop/1.9.10/gdx-controllers-desktop-1.9.10.pom"
+          ],
+          "sha256": "f2c78291cf32de83cee0ba5c658c3bc62b7915c85d63d5f4ce1459a6ed6e3226"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-controllers-platform-1.9.10-pom",
+          "filename": "gdx-controllers-platform-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx-controllers-platform/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-controllers-platform/1.9.10/gdx-controllers-platform-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-controllers-platform/1.9.10/gdx-controllers-platform-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-controllers-platform/1.9.10/gdx-controllers-platform-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-controllers-platform/1.9.10/gdx-controllers-platform-1.9.10.pom"
+          ],
+          "sha256": "bbd56707a32eb1f7fa321dc59b01b2a6da2d9e078c8d3d12f8de0ccf32ebc2e8"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-controllers-platform-1.9.10-natives-desktop-jar",
+          "filename": "gdx-controllers-platform-1.9.10-natives-desktop.jar",
+          "path": "com/badlogicgames/gdx/gdx-controllers-platform/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-controllers-platform/1.9.10/gdx-controllers-platform-1.9.10-natives-desktop.jar",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-controllers-platform/1.9.10/gdx-controllers-platform-1.9.10-natives-desktop.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-controllers-platform/1.9.10/gdx-controllers-platform-1.9.10-natives-desktop.jar",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-controllers-platform/1.9.10/gdx-controllers-platform-1.9.10-natives-desktop.jar"
+          ],
+          "sha256": "6c9a00a40b5de3ad0ad3b5b1dbd29648253294e176b807b2cbd001721d84fa83"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-freetype-platform-1.9.10-pom",
+          "filename": "gdx-freetype-platform-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx-freetype-platform/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-freetype-platform/1.9.10/gdx-freetype-platform-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-freetype-platform/1.9.10/gdx-freetype-platform-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-freetype-platform/1.9.10/gdx-freetype-platform-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-freetype-platform/1.9.10/gdx-freetype-platform-1.9.10.pom"
+          ],
+          "sha256": "1d46b356ae2a624e08174e3e5609e23b0c14cee1d36bf0d734caec5b2e8bacab"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-freetype-platform-1.9.10-natives-desktop-jar",
+          "filename": "gdx-freetype-platform-1.9.10-natives-desktop.jar",
+          "path": "com/badlogicgames/gdx/gdx-freetype-platform/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-freetype-platform/1.9.10/gdx-freetype-platform-1.9.10-natives-desktop.jar",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-freetype-platform/1.9.10/gdx-freetype-platform-1.9.10-natives-desktop.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-freetype-platform/1.9.10/gdx-freetype-platform-1.9.10-natives-desktop.jar",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-freetype-platform/1.9.10/gdx-freetype-platform-1.9.10-natives-desktop.jar"
+          ],
+          "sha256": "78790cc3a4a807054c0cd5aa128c620363a72b663b46529bcd22396e4c2ef2fb"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-platform-1.9.10-pom",
+          "filename": "gdx-platform-1.9.10.pom",
+          "path": "com/badlogicgames/gdx/gdx-platform/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-platform/1.9.10/gdx-platform-1.9.10.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-platform/1.9.10/gdx-platform-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-platform/1.9.10/gdx-platform-1.9.10.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-platform/1.9.10/gdx-platform-1.9.10.pom"
+          ],
+          "sha256": "47034c2337a5968a021be2cc8e295618d67c2c8e1b43f1c4aa833266d7573cb3"
+        },
+        {
+          "name": "com.badlogicgames.gdx-gdx-platform-1.9.10-natives-desktop-jar",
+          "filename": "gdx-platform-1.9.10-natives-desktop.jar",
+          "path": "com/badlogicgames/gdx/gdx-platform/1.9.10",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/gdx/gdx-platform/1.9.10/gdx-platform-1.9.10-natives-desktop.jar",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/gdx/gdx-platform/1.9.10/gdx-platform-1.9.10-natives-desktop.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx/gdx-platform/1.9.10/gdx-platform-1.9.10-natives-desktop.jar",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/gdx/gdx-platform/1.9.10/gdx-platform-1.9.10-natives-desktop.jar"
+          ],
+          "sha256": "596dcf209348b4d6862d17b44b5cc8f4a748104cfcd5ba814856231f5dca4d59"
+        },
+        {
+          "name": "com.badlogicgames.jlayer-jlayer-1.0.1-gdx-jar",
+          "filename": "jlayer-1.0.1-gdx.jar",
+          "path": "com/badlogicgames/jlayer/jlayer/1.0.1-gdx",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.jar",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.jar",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.jar"
+          ],
+          "sha256": "aabcdedc2e3fa41c4e138870523d743337f189931080630ba1a2285538cd00fb"
+        },
+        {
+          "name": "com.badlogicgames.jlayer-jlayer-1.0.1-gdx-pom",
+          "filename": "jlayer-1.0.1-gdx.pom",
+          "path": "com/badlogicgames/jlayer/jlayer/1.0.1-gdx",
+          "urls": [
+            "file:/home/pbb/.m2/repository/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.pom",
+            "https://repo.maven.apache.org/maven2/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.pom",
+            "https://oss.sonatype.org/content/repositories/releases/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.pom"
+          ],
+          "sha256": "9c60917b6267388bc5796a520ecc0f17c79dda154650cd0541d4c4138821bf49"
+        },
+        {
+          "name": "net.java.jinput-jinput-platform-2.0.5-pom",
+          "filename": "jinput-platform-2.0.5.pom",
+          "path": "net/java/jinput/jinput-platform/2.0.5",
+          "urls": [
+            "file:/home/pbb/.m2/repository/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5.pom",
+            "https://repo.maven.apache.org/maven2/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5.pom",
+            "https://oss.sonatype.org/content/repositories/releases/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5.pom"
+          ],
+          "sha256": "ba27597365ae85a836c1f51819903668b4a1a7490e39e530633cc8a7b40b5500"
+        },
+        {
+          "name": "net.java.jinput-jinput-platform-2.0.5-natives-linux-jar",
+          "filename": "jinput-platform-2.0.5-natives-linux.jar",
+          "path": "net/java/jinput/jinput-platform/2.0.5",
+          "urls": [
+            "file:/home/pbb/.m2/repository/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar",
+            "https://repo.maven.apache.org/maven2/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar",
+            "https://oss.sonatype.org/content/repositories/releases/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar"
+          ],
+          "sha256": "1ab4d194277816b6105253d224c8c69f1b6d720690efe7c85f3ce884f0ea273d"
+        },
+        {
+          "name": "net.java.jinput-jinput-platform-2.0.5-natives-osx-jar",
+          "filename": "jinput-platform-2.0.5-natives-osx.jar",
+          "path": "net/java/jinput/jinput-platform/2.0.5",
+          "urls": [
+            "file:/home/pbb/.m2/repository/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar",
+            "https://repo.maven.apache.org/maven2/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar",
+            "https://oss.sonatype.org/content/repositories/releases/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"
+          ],
+          "sha256": "171024b00f9a743b92388b48733dc30fd3f6d3a7da4f66f9821531fbcf1aa074"
+        },
+        {
+          "name": "net.java.jinput-jinput-platform-2.0.5-natives-windows-jar",
+          "filename": "jinput-platform-2.0.5-natives-windows.jar",
+          "path": "net/java/jinput/jinput-platform/2.0.5",
+          "urls": [
+            "file:/home/pbb/.m2/repository/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar",
+            "https://repo.maven.apache.org/maven2/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar",
+            "https://oss.sonatype.org/content/repositories/releases/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
+          ],
+          "sha256": "24afbd5e1fab17da57d16a4d3f19d53f36155ef46a9976484201a4bb9722287f"
+        },
+        {
+          "name": "net.java.jinput-jinput-2.0.5-jar",
+          "filename": "jinput-2.0.5.jar",
+          "path": "net/java/jinput/jinput/2.0.5",
+          "urls": [
+            "file:/home/pbb/.m2/repository/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar",
+            "https://repo.maven.apache.org/maven2/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar",
+            "https://oss.sonatype.org/content/repositories/releases/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar"
+          ],
+          "sha256": "79b5a4f5829e1a49a415711f7fb8eb5b9ad22defa72929fda2da96ec30d3f018"
+        },
+        {
+          "name": "net.java.jinput-jinput-2.0.5-pom",
+          "filename": "jinput-2.0.5.pom",
+          "path": "net/java/jinput/jinput/2.0.5",
+          "urls": [
+            "file:/home/pbb/.m2/repository/net/java/jinput/jinput/2.0.5/jinput-2.0.5.pom",
+            "https://repo.maven.apache.org/maven2/net/java/jinput/jinput/2.0.5/jinput-2.0.5.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/net/java/jinput/jinput/2.0.5/jinput-2.0.5.pom",
+            "https://oss.sonatype.org/content/repositories/releases/net/java/jinput/jinput/2.0.5/jinput-2.0.5.pom"
+          ],
+          "sha256": "3199d547c1275e806e0c7be19e90dcb00d9561ec3b31fb2e780e12d7d8785810"
+        },
+        {
+          "name": "net.java.jutils-jutils-1.0.0-jar",
+          "filename": "jutils-1.0.0.jar",
+          "path": "net/java/jutils/jutils/1.0.0",
+          "urls": [
+            "file:/home/pbb/.m2/repository/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar",
+            "https://repo.maven.apache.org/maven2/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar",
+            "https://oss.sonatype.org/content/repositories/releases/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar"
+          ],
+          "sha256": "c3334ff39cf0ab3b54925619101054c90098b7c733b1e7834c7b75e4c41e84a5"
+        },
+        {
+          "name": "net.java.jutils-jutils-1.0.0-pom",
+          "filename": "jutils-1.0.0.pom",
+          "path": "net/java/jutils/jutils/1.0.0",
+          "urls": [
+            "file:/home/pbb/.m2/repository/net/java/jutils/jutils/1.0.0/jutils-1.0.0.pom",
+            "https://repo.maven.apache.org/maven2/net/java/jutils/jutils/1.0.0/jutils-1.0.0.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/net/java/jutils/jutils/1.0.0/jutils-1.0.0.pom",
+            "https://oss.sonatype.org/content/repositories/releases/net/java/jutils/jutils/1.0.0/jutils-1.0.0.pom"
+          ],
+          "sha256": "af09ead4eb241473e7ec4d152a91a722ea09a717a202e20e4b385eac3217b7d6"
+        },
+        {
+          "name": "org.jcraft-jorbis-0.0.17-jar",
+          "filename": "jorbis-0.0.17.jar",
+          "path": "org/jcraft/jorbis/0.0.17",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar",
+            "https://repo.maven.apache.org/maven2/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar",
+            "https://oss.sonatype.org/content/repositories/releases/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar"
+          ],
+          "sha256": "e067f29a3701426b67ed973036949c6e58ca5bb53eef7240b2e71e286d252a9e"
+        },
+        {
+          "name": "org.jcraft-jorbis-0.0.17-pom",
+          "filename": "jorbis-0.0.17.pom",
+          "path": "org/jcraft/jorbis/0.0.17",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.pom",
+            "https://repo.maven.apache.org/maven2/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.pom",
+            "https://oss.sonatype.org/content/repositories/releases/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.pom"
+          ],
+          "sha256": "18de3b0d932af99832db4d832f683507fbdd5a0b0c24dd680e84ce6f57182e24"
+        },
+        {
+          "name": "org.lwjgl.lwjgl-lwjgl-platform-2.9.3-pom",
+          "filename": "lwjgl-platform-2.9.3.pom",
+          "path": "org/lwjgl/lwjgl/lwjgl-platform/2.9.3",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3.pom",
+            "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3.pom",
+            "https://oss.sonatype.org/content/repositories/releases/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3.pom"
+          ],
+          "sha256": "9c31cc8fc60d182a931379a594a441b2bdd8de2b7e2377558063ba0917d21f44"
+        },
+        {
+          "name": "org.lwjgl.lwjgl-lwjgl-platform-2.9.3-natives-linux-jar",
+          "filename": "lwjgl-platform-2.9.3-natives-linux.jar",
+          "path": "org/lwjgl/lwjgl/lwjgl-platform/2.9.3",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-linux.jar",
+            "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-linux.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-linux.jar",
+            "https://oss.sonatype.org/content/repositories/releases/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-linux.jar"
+          ],
+          "sha256": "bde1c15125d668f4a1a2be996c8e4cc1b299748803fe8fe9cd367d4dfa4c052a"
+        },
+        {
+          "name": "org.lwjgl.lwjgl-lwjgl-platform-2.9.3-natives-osx-jar",
+          "filename": "lwjgl-platform-2.9.3-natives-osx.jar",
+          "path": "org/lwjgl/lwjgl/lwjgl-platform/2.9.3",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-osx.jar",
+            "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-osx.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-osx.jar",
+            "https://oss.sonatype.org/content/repositories/releases/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-osx.jar"
+          ],
+          "sha256": "a7e07294da3eb6f6747c2edd4cc43f8936a0aa1b8c6be5652e8bec62045619ec"
+        },
+        {
+          "name": "org.lwjgl.lwjgl-lwjgl-platform-2.9.3-natives-windows-jar",
+          "filename": "lwjgl-platform-2.9.3-natives-windows.jar",
+          "path": "org/lwjgl/lwjgl/lwjgl-platform/2.9.3",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-windows.jar",
+            "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-windows.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-windows.jar",
+            "https://oss.sonatype.org/content/repositories/releases/org/lwjgl/lwjgl/lwjgl-platform/2.9.3/lwjgl-platform-2.9.3-natives-windows.jar"
+          ],
+          "sha256": "7d4dd95bee064d91e1110918b0a7f63a5294e2fd9a48833a13d37d68c9c06d23"
+        },
+        {
+          "name": "org.lwjgl.lwjgl-lwjgl-2.9.3-jar",
+          "filename": "lwjgl-2.9.3.jar",
+          "path": "org/lwjgl/lwjgl/lwjgl/2.9.3",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.jar",
+            "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.jar",
+            "https://oss.sonatype.org/content/repositories/releases/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.jar"
+          ],
+          "sha256": "527d509f60132e5b2653c7fc0f8cf299d6f698f4a8013342bef47705dc57ed3f"
+        },
+        {
+          "name": "org.lwjgl.lwjgl-lwjgl-2.9.3-pom",
+          "filename": "lwjgl-2.9.3.pom",
+          "path": "org/lwjgl/lwjgl/lwjgl/2.9.3",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.pom",
+            "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.pom",
+            "https://oss.sonatype.org/content/repositories/releases/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.pom"
+          ],
+          "sha256": "1bbd08ab681d9801219206b178b93953224239b307d0999fce68e9e93b841c27"
+        },
+        {
+          "name": "org.lwjgl.lwjgl-lwjgl_util-2.9.3-jar",
+          "filename": "lwjgl_util-2.9.3.jar",
+          "path": "org/lwjgl/lwjgl/lwjgl_util/2.9.3",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.jar",
+            "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.jar",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.jar",
+            "https://oss.sonatype.org/content/repositories/releases/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.jar"
+          ],
+          "sha256": "6f4a261384e1688a3359420efce5275c8693b822a8c6eaa1e20d5cc126a51571"
+        },
+        {
+          "name": "org.lwjgl.lwjgl-lwjgl_util-2.9.3-pom",
+          "filename": "lwjgl_util-2.9.3.pom",
+          "path": "org/lwjgl/lwjgl/lwjgl_util/2.9.3",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.pom",
+            "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.pom",
+            "https://oss.sonatype.org/content/repositories/releases/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.pom"
+          ],
+          "sha256": "91b49481aa0004e97fae4c2b1cc070b4ac720114071f60b36b84cbd614ab44f9"
+        },
+        {
+          "name": "org.lwjgl.lwjgl-parent-2.9.3-pom",
+          "filename": "parent-2.9.3.pom",
+          "path": "org/lwjgl/lwjgl/parent/2.9.3",
+          "urls": [
+            "file:/home/pbb/.m2/repository/org/lwjgl/lwjgl/parent/2.9.3/parent-2.9.3.pom",
+            "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/parent/2.9.3/parent-2.9.3.pom",
+            "https://oss.sonatype.org/content/repositories/snapshots/org/lwjgl/lwjgl/parent/2.9.3/parent-2.9.3.pom",
+            "https://oss.sonatype.org/content/repositories/releases/org/lwjgl/lwjgl/parent/2.9.3/parent-2.9.3.pom"
+          ],
+          "sha256": "54844db15e40daa180382c2a89dca2d124df022cc867e2e4c5ac787ea7da5450"
+        }
+      ]
+    }
+  }
+}
