@@ -16652,7 +16652,7 @@ in
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
   libselinux = callPackage ../os-specific/linux/libselinux {
-    python = python3;
+    python = python37;
   };
 
   libsemanage = callPackage ../os-specific/linux/libsemanage {
