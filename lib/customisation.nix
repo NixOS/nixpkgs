@@ -159,6 +159,27 @@ rec {
       outPath = assert condition; drv.outPath;
     };
 
+    /* Add a field to a derivation’s passthru. Will refuse to add a field that is already there.
+
+       Type: { name: string, value: any } -> drv -> drv
+
+       Example:
+         (addToPassthru
+           { name = "foo"; value = "bar"; }
+           pkgs.hello).passthru.foo
+         => "bar"
+    */
+    addToPassthru =
+      # field to add
+      {name, value}:
+      # derivation to add field to
+      drv:
+      assert (lib.assertMsg (!drv ? ${name})
+        "${lib.generators.toPretty {} drv} already has attribute `${name}`, refusing to add to passthru");
+        drv.overrideAttrs (old: {
+          passthru = old.passthru or {} // { ${name} = value; };
+        });
+
   /* Strip a derivation of all non-essential attributes, returning
      only those needed by hydra-eval-jobs. Also strictly evaluate the
      result to ensure that there are no thunks kept alive to prevent
