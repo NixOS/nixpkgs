@@ -4402,6 +4402,8 @@ in {
 
   od = callPackage ../development/python-modules/od { };
 
+  omegaconf = callPackage ../development/python-modules/omegaconf { };
+
   orderedset = callPackage ../development/python-modules/orderedset { };
 
   python-multipart = callPackage ../development/python-modules/python-multipart { };
