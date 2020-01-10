@@ -91,8 +91,8 @@ in
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual
       version = mkDefault (cfg.release + cfg.versionSuffix);
-      revision      = mkIf (pathIsDirectory gitRepo) (mkDefault            gitCommitId);
-      versionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
+      revision      = mkIf (pathExists gitRepo) (mkDefault            gitCommitId);
+      versionSuffix = mkIf (pathExists gitRepo) (mkDefault (".git." + gitCommitId));
     };
 
     # Generate /etc/os-release.  See
