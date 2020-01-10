@@ -2,13 +2,13 @@
 
 let
   pname = "jd-gui";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "java-decompiler";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yn2xcwznig941pw2f3wi8ixz1wprxcn9wl0g2ggdzx51rfwgzzi";
+    sha256 = "010bd3q2m4jy4qz5ahdx86b5f558s068gbjlbpdhq3bhh4yrjy20";
   };
 
   deps = stdenv.mkDerivation {
@@ -32,7 +32,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1rbsi4i8xihsihkmxacgawlwjyixmhm2n9mn8ykv8595iyifzw6w";
+    outputHash = "1qil12s0daxpxj5xj5dj6s2k89is0kiir2vcafkm3lasc41acmk3";
   };
 
   # Point to our local deps repo
