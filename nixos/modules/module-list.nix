@@ -116,6 +116,7 @@
   ./programs/fish.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
+  ./programs/geary.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-documents.nix
   ./programs/gnome-terminal.nix

@@ -328,7 +328,6 @@ in
         cheese
         eog
         epiphany
-        geary
         gedit
         gnome-calculator
         gnome-calendar
@@ -355,6 +354,7 @@ in
       # Enable default programs
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
+      programs.geary.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
       programs.gnome-terminal.enable = mkDefault true;
       programs.seahorse.enable = mkDefault true;
