@@ -10119,12 +10119,7 @@ in
     java = jdk;
   };
   gradle = res.gradleGen.gradle_latest;
-  gradle_2_5 = res.gradleGen.gradle_2_5;
-  gradle_2_14 = res.gradleGen.gradle_2_14;
-  gradle_3_5 = res.gradleGen.gradle_3_5;
   gradle_4_10 = res.gradleGen.gradle_4_10;
-  gradle_2 = gradle_2_14;
-  gradle_3 = gradle_3_5;
   gradle_4 = gradle_4_10;
   gradle_5 = res.gradleGen.gradle_5_6;
 
