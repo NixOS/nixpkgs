@@ -4833,6 +4833,8 @@ in {
 
   pylint-celery = callPackage ../development/python-modules/pylint-celery { };
 
+  pylint-django = callPackage ../development/python-modules/pylint-django { };
+
   pylint-flask = callPackage ../development/python-modules/pylint-flask { };
 
   pylint-plugin-utils = callPackage ../development/python-modules/pylint-plugin-utils { };
