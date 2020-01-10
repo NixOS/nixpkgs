@@ -1,5 +1,6 @@
 { boost
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , mkDerivationWith
 , muparser
@@ -16,7 +17,7 @@ let
   stdenv = gcc8Stdenv;
 in
 
-# Doesn't build with gcc9
+  # Doesn't build with gcc9
 mkDerivationWith stdenv.mkDerivation rec {
   pname = "librecad";
   version = "2.2.0-rc1";
@@ -30,6 +31,13 @@ mkDerivationWith stdenv.mkDerivation rec {
 
   patches = [
     ./fix_qt_5_11_build.patch
+    (
+      fetchpatch {
+        # Fix missing app name and icon on Wayland.
+        url = "https://github.com/LibreCAD/LibreCAD/commit/a17f8281093403f0c7c36996232665ed21906688.patch";
+        sha256 = "1x46psh4bcx2hxck4l83ki43g1252vb033i2x94h4rpai9hww4d5";
+      }
+    )
   ];
 
   postPatch = ''
