@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isort, coverage, mock
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, isort, coverage, mock
 , robot-detection, django_extensions, rjsmin, cssmin, django-mailman3
 , django-haystack, flufl_lock, networkx, dateutil, defusedxml
 , django-paintstore, djangorestframework, django, django-q
@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "HyperKitty";
   version = "1.3.2";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
