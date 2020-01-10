@@ -1365,4 +1365,8 @@ self: super: {
   ormolu = doJailbreak (super.ormolu.override {
     ghc-lib-parser = self.ghc-lib-parser_8_8_1_20191204;
   });
+
+  # krank-0.1.0 does not accept PyF-0.9.0.0.
+  krank = doJailbreak super.krank;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
