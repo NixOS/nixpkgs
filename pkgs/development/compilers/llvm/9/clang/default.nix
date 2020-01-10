@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python, bintools
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
@@ -49,6 +49,13 @@ let
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
              -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
              lib/Driver/ToolChains/*.cpp
+
+      # Patch to force correct executable path for hip (llvm-link,opt,llc,lld)
+      sed -i -e 's|SmallString<128> ExecPath(C.getDriver().Dir);|SmallString<128> ExecPath(C.getDriver().Name.find("clang") != std::string::npos ? "${llvm}/bin" : C.getDriver().Dir);|' \
+             -e 's|SmallString<128> OptPath(C.getDriver().Dir);|SmallString<128> OptPath(C.getDriver().Name.find("clang") != std::string::npos ? "${llvm}/bin" : C.getDriver().Dir);|' \
+             -e 's|SmallString<128> LlcPath(C.getDriver().Dir);|SmallString<128> LlcPath(C.getDriver().Name.find("clang") != std::string::npos ? "${llvm}/bin" : C.getDriver().Dir);|' \
+             -e 's|SmallString<128> LldPath(C.getDriver().Dir);|SmallString<128> LldPath(C.getDriver().Name.find("clang") != std::string::npos ? "${bintools}/bin" : C.getDriver().Dir);|' \
+             lib/Driver/ToolChains/HIP.cpp
 
       # Patch for standalone doc building
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
