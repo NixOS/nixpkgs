@@ -151,8 +151,8 @@ rec {
       filterModules = modulesPath: { disabled, modules }:
         let
           moduleKey = m: if isString m then toString modulesPath + "/" + m else toString m;
-          disabledKeys = listToAttrs (map (k: nameValuePair (moduleKey k) null) disabled);
-          keyFilter = filter (attrs: ! disabledKeys ? ${attrs.key});
+          disabledKeys = map moduleKey disabled;
+          keyFilter = filter (attrs: ! elem attrs.key disabledKeys);
         in map (attrs: attrs.module) (builtins.genericClosure {
           startSet = keyFilter modules;
           operator = attrs: keyFilter attrs.modules;
