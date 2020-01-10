@@ -18823,7 +18823,7 @@ in
 
   FIL-plugins = callPackage ../applications/audio/FIL-plugins { };
 
-  flacon = callPackage ../applications/audio/flacon { };
+  flacon = libsForQt5.callPackage ../applications/audio/flacon { };
 
   flexget = callPackage ../applications/networking/flexget { };
 
