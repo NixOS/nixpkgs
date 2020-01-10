@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, alembic, aiosmtpd, dnspython
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, alembic, aiosmtpd, dnspython
 , flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
 , requests, zope_configuration, click, falcon, importlib-resources
 , zope_component, lynx, postfix, authheaders, gunicorn
@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "mailman";
   version = "3.3.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
