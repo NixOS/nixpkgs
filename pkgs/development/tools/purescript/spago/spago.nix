@@ -11,11 +11,11 @@
 }:
 mkDerivation {
   pname = "spago";
-  version = "0.13.0";
+  version = "0.13.1";
   src = fetchgit {
     url = "https://github.com/spacchetti/spago.git";
-    sha256 = "158xq5zn32iwswxmpma92763hl6kzq7kb01cyvphmmlilx55b6yk";
-    rev = "426838670ba9de4593f4c533a6947efb2d8ad4ba";
+    sha256 = "0l6sy1hz5dbnrjkvb2f44afhd48nwqx5kx1h29ns93xbbd57hci8";
+    rev = "b87858609c671d8f3dc78f858ce1d8c492bd1062";
     fetchSubmodules = true;
   };
   isLibrary = true;
