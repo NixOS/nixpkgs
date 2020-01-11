@@ -2,9 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , isPy27
-, bz2file
 , mock
 , nose
 , numpy
@@ -25,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     six
-  ] ++ lib.optional (!isPy3k) bz2file;
+  ];
 
   checkInputs = [ nose mock pytest ];
 
