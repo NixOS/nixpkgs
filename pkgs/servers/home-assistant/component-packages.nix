@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.103.6";
+  version = "0.104.1";
   components = {
     "abode" = ps: with ps; [  ];
     "acer_projector" = ps: with ps; [ pyserial ];
@@ -22,7 +22,7 @@
     "almond" = ps: with ps; [ aiohttp-cors ];
     "alpha_vantage" = ps: with ps; [  ];
     "amazon_polly" = ps: with ps; [ boto3 ];
-    "ambiclimate" = ps: with ps; [  ];
+    "ambiclimate" = ps: with ps; [ aiohttp-cors ];
     "ambient_station" = ps: with ps; [  ];
     "amcrest" = ps: with ps; [ ha-ffmpeg ];
     "ampio" = ps: with ps; [  ];
@@ -85,8 +85,9 @@
     "bme680" = ps: with ps; [  ];
     "bmw_connected_drive" = ps: with ps; [  ];
     "bom" = ps: with ps; [  ];
-    "braviatv" = ps: with ps; [  ];
+    "braviatv" = ps: with ps; [ getmac ];
     "broadlink" = ps: with ps; [ broadlink ];
+    "brother" = ps: with ps; [  ];
     "brottsplatskartan" = ps: with ps; [  ];
     "browser" = ps: with ps; [  ];
     "brunt" = ps: with ps; [  ];
@@ -164,7 +165,7 @@
     "dnsip" = ps: with ps; [ aiodns ];
     "dominos" = ps: with ps; [ aiohttp-cors ];
     "doods" = ps: with ps; [ pillow ];
-    "doorbird" = ps: with ps; [  ];
+    "doorbird" = ps: with ps; [ aiohttp-cors ];
     "dovado" = ps: with ps; [  ];
     "downloader" = ps: with ps; [  ];
     "dsmr" = ps: with ps; [  ];
@@ -189,6 +190,7 @@
     "efergy" = ps: with ps; [  ];
     "egardia" = ps: with ps; [  ];
     "eight_sleep" = ps: with ps; [  ];
+    "elgato" = ps: with ps; [  ];
     "eliqonline" = ps: with ps; [  ];
     "elkm1" = ps: with ps; [  ];
     "elv" = ps: with ps; [  ];
@@ -228,7 +230,7 @@
     "fido" = ps: with ps; [  ];
     "file" = ps: with ps; [  ];
     "filesize" = ps: with ps; [  ];
-    "filter" = ps: with ps; [  ];
+    "filter" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "fints" = ps: with ps; [ fints ];
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [  ];
@@ -239,7 +241,7 @@
     "flume" = ps: with ps; [  ];
     "flunearyou" = ps: with ps; [  ];
     "flux" = ps: with ps; [  ];
-    "flux_led" = ps: with ps; [  ];
+    "flux_led" = ps: with ps; [ flux-led ];
     "folder" = ps: with ps; [  ];
     "folder_watcher" = ps: with ps; [ watchdog ];
     "foobot" = ps: with ps; [  ];
@@ -272,6 +274,7 @@
     "geofency" = ps: with ps; [ aiohttp-cors ];
     "geonetnz_quakes" = ps: with ps; [  ];
     "geonetnz_volcano" = ps: with ps; [  ];
+    "gios" = ps: with ps; [  ];
     "github" = ps: with ps; [ PyGithub ];
     "gitlab_ci" = ps: with ps; [ python-gitlab ];
     "gitter" = ps: with ps; [  ];
@@ -331,7 +334,7 @@
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
     "htu21d" = ps: with ps; [  ];
-    "huawei_lte" = ps: with ps; [ stringcase ];
+    "huawei_lte" = ps: with ps; [ getmac stringcase ];
     "huawei_router" = ps: with ps; [  ];
     "hue" = ps: with ps; [ aiohue ];
     "hunterdouglas_powerview" = ps: with ps; [  ];
@@ -359,6 +362,7 @@
     "integration" = ps: with ps; [  ];
     "intent" = ps: with ps; [ aiohttp-cors ];
     "intent_script" = ps: with ps; [  ];
+    "intesishome" = ps: with ps; [  ];
     "ios" = ps: with ps; [ aiohttp-cors zeroconf ];
     "iota" = ps: with ps; [  ];
     "iperf3" = ps: with ps; [  ];
@@ -378,6 +382,7 @@
     "kankun" = ps: with ps; [  ];
     "keba" = ps: with ps; [  ];
     "keenetic_ndms2" = ps: with ps; [  ];
+    "kef" = ps: with ps; [ getmac ];
     "keyboard" = ps: with ps; [  ];
     "keyboard_remote" = ps: with ps; [ evdev ];
     "kira" = ps: with ps; [  ];
@@ -410,13 +415,14 @@
     "liveboxplaytv" = ps: with ps; [  ];
     "llamalab_automate" = ps: with ps; [  ];
     "local_file" = ps: with ps; [  ];
+    "local_ip" = ps: with ps; [  ];
     "locative" = ps: with ps; [ aiohttp-cors ];
     "lock" = ps: with ps; [  ];
     "lockitron" = ps: with ps; [  ];
     "logbook" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "logentries" = ps: with ps; [  ];
     "logger" = ps: with ps; [  ];
-    "logi_circle" = ps: with ps; [ ha-ffmpeg ];
+    "logi_circle" = ps: with ps; [ aiohttp-cors ha-ffmpeg ];
     "london_air" = ps: with ps; [  ];
     "london_underground" = ps: with ps; [  ];
     "loopenergy" = ps: with ps; [  ];
@@ -505,7 +511,7 @@
     "niko_home_control" = ps: with ps; [  ];
     "nilu" = ps: with ps; [  ];
     "nissan_leaf" = ps: with ps; [  ];
-    "nmap_tracker" = ps: with ps; [  ];
+    "nmap_tracker" = ps: with ps; [ getmac ];
     "nmbs" = ps: with ps; [  ];
     "no_ip" = ps: with ps; [  ];
     "noaa_tides" = ps: with ps; [  ];
@@ -571,7 +577,7 @@
     "pjlink" = ps: with ps; [  ];
     "plaato" = ps: with ps; [ aiohttp-cors ];
     "plant" = ps: with ps; [  ];
-    "plex" = ps: with ps; [ aiohttp-cors ];
+    "plex" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket ];
     "plugwise" = ps: with ps; [  ];
     "plum_lightpad" = ps: with ps; [  ];
     "pocketcasts" = ps: with ps; [  ];
@@ -601,7 +607,7 @@
     "qrcode" = ps: with ps; [ pillow ];
     "quantum_gateway" = ps: with ps; [  ];
     "qwikswitch" = ps: with ps; [  ];
-    "rachio" = ps: with ps; [  ];
+    "rachio" = ps: with ps; [ aiohttp-cors ];
     "radarr" = ps: with ps; [  ];
     "radiotherm" = ps: with ps; [  ];
     "rainbird" = ps: with ps; [  ];
@@ -655,6 +661,7 @@
     "sensehat" = ps: with ps; [  ];
     "sensibo" = ps: with ps; [  ];
     "sensor" = ps: with ps; [  ];
+    "sentry" = ps: with ps; [ sentry-sdk ];
     "serial" = ps: with ps; [ pyserial-asyncio ];
     "serial_pm" = ps: with ps; [  ];
     "sesame" = ps: with ps; [  ];
@@ -666,6 +673,7 @@
     "shopping_list" = ps: with ps; [ aiohttp-cors ];
     "sht31" = ps: with ps; [  ];
     "sigfox" = ps: with ps; [  ];
+    "signal_messenger" = ps: with ps; [  ];
     "simplepush" = ps: with ps; [  ];
     "simplisafe" = ps: with ps; [  ];
     "simulated" = ps: with ps; [  ];
@@ -718,6 +726,7 @@
     "statsd" = ps: with ps; [ statsd ];
     "steam_online" = ps: with ps; [  ];
     "stiebel_eltron" = ps: with ps; [  ];
+    "stookalert" = ps: with ps; [  ];
     "stream" = ps: with ps; [ aiohttp-cors av ];
     "streamlabswater" = ps: with ps; [  ];
     "stt" = ps: with ps; [ aiohttp-cors ];
@@ -725,6 +734,7 @@
     "sun" = ps: with ps; [  ];
     "supervisord" = ps: with ps; [  ];
     "supla" = ps: with ps; [  ];
+    "surepetcare" = ps: with ps; [  ];
     "swiss_hydrological_data" = ps: with ps; [  ];
     "swiss_public_transport" = ps: with ps; [  ];
     "swisscom" = ps: with ps; [  ];
@@ -770,6 +780,7 @@
     "tile" = ps: with ps; [  ];
     "time_date" = ps: with ps; [  ];
     "timer" = ps: with ps; [  ];
+    "tmb" = ps: with ps; [  ];
     "tod" = ps: with ps; [  ];
     "todoist" = ps: with ps; [ todoist ];
     "tof" = ps: with ps; [  ];
@@ -848,11 +859,11 @@
     "weather" = ps: with ps; [  ];
     "webhook" = ps: with ps; [ aiohttp-cors ];
     "weblink" = ps: with ps; [  ];
-    "webostv" = ps: with ps; [ websockets ];
+    "webostv" = ps: with ps; [  ];
     "websocket_api" = ps: with ps; [ aiohttp-cors ];
     "wemo" = ps: with ps; [  ];
     "whois" = ps: with ps; [  ];
-    "wink" = ps: with ps; [  ];
+    "wink" = ps: with ps; [ aiohttp-cors ];
     "wirelesstag" = ps: with ps; [  ];
     "withings" = ps: with ps; [ aiohttp-cors ];
     "wled" = ps: with ps; [  ];
@@ -870,7 +881,7 @@
     "xfinity" = ps: with ps; [  ];
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
     "xiaomi_aqara" = ps: with ps; [  ];
-    "xiaomi_miio" = ps: with ps; [ construct ];
+    "xiaomi_miio" = ps: with ps; [ construct python-miio ];
     "xiaomi_tv" = ps: with ps; [  ];
     "xmpp" = ps: with ps; [ slixmpp ];
     "xs1" = ps: with ps; [  ];
