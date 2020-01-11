@@ -11394,6 +11394,8 @@ in
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
+  gensio = callPackage ../development/libraries/gensio {};
+
   geoclue2 = callPackage ../development/libraries/geoclue {};
 
   geocode-glib = callPackage ../development/libraries/geocode-glib {};
