@@ -340,18 +340,22 @@ rec {
             let
               padWidth = stringLength (toString (length def.value));
               unnamed = i: unnamedPrefix + fixedWidthNumber padWidth i;
+              nameAttrs = {
+                "environment.etc" = "target";
+              };
+              nameAttr = nameAttrs.${option} or "name";
               res =
                 { inherit (def) file;
                   value = listToAttrs (
                     imap1 (elemIdx: elem:
-                      { name  = elem.name or (unnamed elemIdx);
+                      { name  = elem.${nameAttr} or (unnamed elemIdx);
                         value = elem;
                       }) def.value);
                 };
               option = concatStringsSep "." loc;
               sample = take 3 def.value;
-              list = concatMapStrings (x: ''{ name = "${x.name or "unnamed"}"; ...} '') sample;
-              set = concatMapStrings (x: ''${x.name or "unnamed"} = {...}; '') sample;
+              list = concatMapStrings (x: ''{ ${nameAttr} = "${x.${nameAttr} or "unnamed"}"; ...} '') sample;
+              set = concatMapStrings (x: ''${x.${nameAttr} or "unnamed"} = {...}; '') sample;
               msg = ''
                 In file ${def.file}
                 a list is being assigned to the option config.${option}.
