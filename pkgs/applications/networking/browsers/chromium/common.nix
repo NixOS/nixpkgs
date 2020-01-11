@@ -127,10 +127,8 @@ let
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
-    ] ++ optionals (channel == "stable") [
-      ./patches/widevine.patch
-    ] ++ optionals (channel == "beta" || channel == "dev") [
       ./patches/widevine-79.patch
+      ./patches/dont-use-ANGLE-by-default.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:
@@ -225,6 +223,9 @@ let
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;
+      # Enabling the Widevine component here doesn't affect whether we can
+      # redistribute the chromium package; the Widevine component is either
+      # added later in the wrapped -wv build or downloaded from Google.
       enable_widevine = true;
       use_cups = cupsSupport;
 
