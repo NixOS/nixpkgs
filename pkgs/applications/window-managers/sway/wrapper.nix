@@ -3,6 +3,7 @@
 , makeWrapper, symlinkJoin, writeShellScriptBin
 , withBaseWrapper ? true, extraSessionCommands ? "", dbus
 , withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf
+, extraOptions ? [] # E.g.: [ "--verbose" ]
 }:
 
 assert extraSessionCommands != "" -> withBaseWrapper;
@@ -39,9 +40,9 @@ in symlinkJoin {
     export dontWrapGApps=true
     ${optionalString withGtkWrapper "wrapGAppsHook"}
     wrapProgram $out/bin/sway \
-      --prefix PATH : "${swaybg}/bin" ${optionalString withGtkWrapper ''\
-        "''${gappsWrapperArgs[@]}"
-      ''}
+      --prefix PATH : "${swaybg}/bin" \
+      ${optionalString withGtkWrapper ''"''${gappsWrapperArgs[@]}"''} \
+      ${optionalString (extraOptions != []) "${concatMapStrings (x: " --add-flags " + x) extraOptions}"}
   '';
 
   passthru.providedSessions = [ "sway" ];
