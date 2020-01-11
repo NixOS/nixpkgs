@@ -102,6 +102,10 @@ stdenv.mkDerivation ({
       # Change backported from upstream
       # https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=9c79cec8cd2a6996a73aa83d79b360ffd4bebde6
       ./fix-out-of-bounds-access-in-findidxwc.patch
+
+      # Remove after upgrading to glibc 2.28+
+      # https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=21526a507df8f1b2e37492193a754534d8938c0b
+      ./fix-out-of-bounds-access-in-ibm-1390-converter.patch
     ]
     ++ lib.optionals stdenv.isx86_64 [
       ./fix-x64-abi.patch
