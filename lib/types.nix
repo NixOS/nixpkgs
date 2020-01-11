@@ -354,6 +354,7 @@ rec {
                 };
               option = concatStringsSep "." loc;
               sample = take 3 def.value;
+              more = lib.optionalString (length def.value > 3) "... ";
               list = concatMapStrings (x: ''{ ${nameAttr} = "${x.${nameAttr} or "unnamed"}"; ...} '') sample;
               set = concatMapStrings (x: ''${x.${nameAttr} or "unnamed"} = {...}; '') sample;
               msg = ''
@@ -363,10 +364,10 @@ rec {
                 See https://git.io/fj2zm for more information.
                 Do
                   ${option} =
-                    { ${set}...}
+                    { ${set}${more}}
                 instead of
                   ${option} =
-                    [ ${list}...]
+                    [ ${list}${more}]
               '';
             in
               lib.warn msg res
